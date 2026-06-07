@@ -1,0 +1,36 @@
+# Derivation and license boundary
+
+`gnucobol-rs` is a **faithful derivative port**, not a clean-room reimplementation. Functions
+are ported statement-by-statement from GnuCOBOL 3.2 source with upstream line citations in the
+Rust comments (e.g. `// move.c:477`). Reading the upstream `.c` and mirroring its control flow
+makes the result a **derivative work** under copyright law. We therefore do **not** get to pick
+a permissive license — each crate inherits the copyleft of the upstream files it derives from.
+
+## Upstream licenses (verified from the 3.2 source headers)
+
+| Upstream component | Header says | Example file |
+|--------------------|-------------|--------------|
+| `libcob` (the runtime library) | GNU **Lesser** GPL, **v3 or later** | `libcob.h`, `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` |
+| `cobc` (the compiler) | GNU GPL, **v3 or later** | `cobc/cobc.c` |
+
+## Per-crate derivation map
+
+| Crate | Derives from (read + ported / driven) | Inherited license |
+|-------|----------------------------------------|-------------------|
+| `cobol-decimal-rs` | `libcob/move.c` (`cob_move_display_to_packed` @477, `cob_move_packed_to_display` @582, `store_common_region` @147, `cob_move` @1446), `libcob/numeric.c` (`cob_packed_get_sign` @967, `cob_set_packed_zero` @1128, `cob_set_packed_u64` @1373, `packed_bytes` @92), `libcob/common.c` (`cob_real_get_sign` @3712, `cob_real_put_sign` @3763, `cob_get_sign_ascii` @1450, `locate_sign` @3693), `libcob/coblocal.h` / `libcob/common.h` (macros, attr/type constants) | **LGPL-3.0-or-later** |
+| `cobc-oracle-rs` | *drives* the `cobc` binary as a subprocess; copies **no** GPL source logic — it only spawns the compiler and reads its outputs | **GPL-3.0-or-later** (conservative: it is tooling for, and tightly coupled to, the GPL compiler) |
+
+## Notices retained
+
+- [`COPYING.LESSER`](../COPYING.LESSER) — GNU LGPL v3, governing the `libcob`-derived crates.
+- [`COPYING`](../COPYING) — GNU GPL v3, governing the `cobc`-coupled crates.
+- The FSF copyright line ("Copyright (C) … Free Software Foundation, Inc.") and the original
+  author credits (Keisuke Nishida, Roger While, Simon Sobisch, et al.) are retained in the
+  header of every Rust source file that ports their code.
+
+## What this boundary forbids
+
+- Re-licensing a `libcob`-derived crate as Apache/MIT/permissive.
+- Copying `cobc` parser/codegen logic into a non-GPL crate.
+- Claiming "clean-room" or "independent reimplementation" anywhere — this is a *derivative*
+  port and says so.

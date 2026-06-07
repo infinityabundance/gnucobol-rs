@@ -1,0 +1,26 @@
+# Detached fuzz crate: an empty [workspace] makes this its own root, so the parent gate
+# (build/test/clippy/fmt) never compiles it.
+[package]
+name = "cobol-decimal-rs-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[workspace]
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.cobol-decimal-rs]
+path = ".."
+features = ["fuzzing"]
+
+[[bin]]
+name = "cob_move"
+path = "fuzz_targets/cob_move.rs"
+test = false
+doc = false
+bench = false

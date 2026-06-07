@@ -1,0 +1,472 @@
+# Future-risk register — named courts, none claimed yet
+
+Every row is a **future, separately sealed** campaign with its own oracle receipt. Listing them
+here is the point: *the strongest signal is knowing exactly what is not yet supported.* None of
+these is claimed by the current decimal slice.
+
+## Data representation & layout
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.EVENPACK.1` | even-digit packed | high/padding nibble of even-digit COMP-3 — **partly exercised now** as a named fixture family |
+| `GNURUST.SIGN.1` | sign-policy matrix | C/D/F, overpunch leading/trailing, separate sign, ±0, invalid signs — **partly exercised now** |
+| `GNURUST.INVALID.1` | invalid numeric data | invalid digit/zone/sign: tolerated vs rejected, **never silently sanitized** |
+| `GNURUST.BINARY.0` | COMP/BINARY | `-fbinary-size`/`-fbinary-byteorder`, `SYNCHRONIZED` alignment — not a portable constant |
+| `GNURUST.VALUE.0` | `VALUE` init | initial memory image: ZERO/SPACES/HIGH-/LOW-VALUES, group & signed/scaled VALUE |
+| `GNURUST.FIGCONST.0` | figurative constants | ZERO/SPACE/HIGH-/LOW-VALUE/QUOTE/ALL → exact field bytes |
+| `GNURUST.ODO.0` | `OCCURS DEPENDING ON` | allocated span vs max vs current logical count vs invalid depending value |
+| `GNURUST.REDEFINES.VARIANT.0` | active overlay | layout overlay ≠ variant-discriminator correctness; needs explicit variant evidence |
+| `GNURUST.LEVEL88.0` | condition names | 88-level predicates over storage (business-state extraction) |
+
+## Movement, comparison, text
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.CORR.0` | `MOVE CORRESPONDING` | name-matched group moves: duplicates, qualification, FILLER, REDEFINES |
+| `GNURUST.COLLATE.0` | collation | `COLLATING SEQUENCE` changes comparisons without changing storage |
+| `GNURUST.TEXTOPS.0` | text ops | `INSPECT`/`STRING`/`UNSTRING`/ref-mod/`CLASS` under encoding & collation |
+| `GNURUST.EDITED.0` | edited pictures | `Z,ZZ9.99`, floating `$`, `CR`/`DB`, `*` fill, BLANK WHEN ZERO — finance-facing output |
+
+## Source, runtime, files, diagnostics
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.SOURCEFORM.0` | source format | fixed/free/MF-variable/X-Open/ACU/COBOLX; physical vs preprocessed vs copy-expanded hashes |
+| `GNURUST.COPYMAP.0` | copybook provenance | `COPY REPLACING` source map: which bytes from which copybook / inserted by replacing |
+| `GNURUST.CALLABI.0` | CALL/CANCEL | BY REFERENCE/CONTENT/VALUE, RETURNING, dynamic load, CANCEL reinitialization |
+| `GNURUST.STORAGE-LIFETIME.0` | storage lifetimes | WORKING vs LOCAL vs LINKAGE vs FILE/SCREEN/REPORT lifetimes & aliasing |
+| `GNURUST.ACCEPTDISPLAY.0` | ACCEPT/DISPLAY | console, DATE/TIME, ENVIRONMENT, CRT STATUS — not just stdin/stdout |
+| `GNURUST.SCREEN.0` | Screen Section | ncurses/Windows console/dumb terminal — separate product |
+| `GNURUST.REPORT.0` | Report Writer / LINAGE | page breaks, control breaks, totals reset timing, advancing |
+| `GNURUST.FILESEQ.0` | sequential vs line-seq | delimiter records, trailing-blank trim, CRLF/LF, final newline, text/binary mode |
+| `GNURUST.BACKEND.0` | indexed/SORT backend | BDB/VBISAM/DISAM/no-ISAM, locking — see `backend-matrix.md` |
+| `GNURUST.ASSIGN.0` | ASSIGN resolution | `-fassign-clause` dynamic/external/IBM/MF file-name resolution |
+| `GNURUST.EBCDIC.0` | EBCDIC code pages | CP037/CP1047/CP500/euro variants — **not** one encoding; always a declared parameter |
+| `GNURUST.DIAGPHASE.0` | diagnostics | message class + **phase** + original vs expanded source span + oracle stderr hash |
+| `GNURUST.RUNTIME.0` | runtime global state | `cob_init`, env, locale, tempdir; process isolation; parallel-test ban for state tests |
+| `GNURUST.PLATFORM.0` | platform matrix | Linux first; Windows/macOS/BSD future — see `platform-matrix.md` |
+| `GNURUST.DOS.0` | resource exhaustion | copybook/layout bombs: nesting, huge OCCURS/ODO, PIC repetition, replacement loops |
+
+## Compiler / source / runtime *observation* courts
+
+> **`gnucobol-rs` treats GnuCOBOL compatibility as an admitted, build-configured,
+> dialect-configured, mode-specific observation; no generated artifact, host integer, local
+> build default, or skipped oracle test may silently become semantic authority.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.ORACLEMODE.0` | oracle modes | executable / generated-C-only / dynamic module / object / shared lib / runtime-lib harness — each a separate claim; no receipt says "compiled" without the mode |
+| `GNURUST.GENC.0` | generated C = witness | `generated_c_hash` is an identity/witness field, **never** semantic authority; semantic authority = runtime bytes/exit/file bytes |
+| `GNURUST.DIALECTCONF.0` | dialect config | `-conf=`/`-std=` effective dialect hash + command-line overrides are *input language*, recorded per parse |
+| `GNURUST.RESERVED.0` | reserved words | 1130+ default reserved words; set is dialect-dependent — never hardcode one set |
+| `GNURUST.PRECOMP.0` | precompiler boundary | the file `cobc` sees may be post-`EXEC SQL`/`EXEC CICS`; COPY ≠ precompile |
+| `GNURUST.SQLHOST.0` | SQL host vars | COMP-3/display → SQL DECIMAL: scale, NULL indicators, truncation, sign |
+| `GNURUST.SERIALIZE.0` | JSON/XML GENERATE | needs libxml2/cJSON; escaping, namespaces, numeric rendering |
+| `GNURUST.PRINTER.0` | DISPLAY UPON PRINTER | `COB_DISPLAY_PRINT_FILE`/`_PIPE` redirect — stdout parity ≠ printer-destination parity |
+| `GNURUST.FILECURSOR.0` | file cursor | `START` positions a logical pointer without filling the record buffer |
+| `GNURUST.READDIR.0` | cursor direction | READ NEXT/PRIOR carry hidden blocked-retrieval state |
+| `GNURUST.RELFILE.0` | relative files | hole/tombstone bytes, out-of-range keys, unfilled-slot contents |
+| `GNURUST.OPENMODE.0` | OPEN modes | INPUT/OUTPUT/I-O/EXTEND/OPTIONAL × shared/exclusive × file presence |
+| `GNURUST.MODSEARCH.0` | module search | `COB_LIBRARY_PATH`, suffixes, case, spaces, non-ASCII, duplicates |
+| `GNURUST.NAMES.0` | name normalization | COBOL case-folding vs C export symbol vs filesystem path |
+| `GNURUST.INTRINSIC.0` | intrinsic functions | numeric/string/date-time/financial/locale — separate from arithmetic |
+| `GNURUST.TIME.0` | clock | fixed fake clock where possible, else classify "live-clock witness"; record TZ/locale |
+| `GNURUST.TERMINATE.0` | termination | STOP RUN / GOBACK (main & sub) / runtime error exit / returned status |
+| `GNURUST.RTDIAG.0` | runtime diagnostics | stderr hash + exit + file status + exception class + signal — distinct from compile diag |
+
+## Evidence-discipline mini-courts (some active now)
+
+| Code | Discipline | Applied now? |
+|------|-----------|--------------|
+| `GNURUST.DECAPI.0` | decimal value API = {sign, digits, scale, width, sign-nibble}; `i64` is fallible convenience, never authority | **yes — `cobol-decimal-rs`** |
+| `GNURUST.BYTESTREAM.0` | all oracle comparisons are byte comparisons; hexdump binary; preserve NUL/CR/LF | **yes** |
+| `GNURUST.SENTINEL.0` | fill target with `0xA5` before MOVE; assert only the admitted span changed | **yes** |
+| `GNURUST.DECEDGE.0` | structured boundary families (digits 1/2/17/18, scale edges, all-9s, ±0, leading/trailing zeros) | **yes** |
+| `GNURUST.DIFFSHRINK.0` | on FAIL persist {input, oracle out, rust out}, minimize, add regression fixture, classify cause | **yes (sweep)** |
+| `GNURUST.ORACLEAVAIL.0` | typed verdict: available / unavailable-expected / unavailable-unexpected / version-mismatch / config-mismatch | **yes (tests)** |
+| `GNURUST.JSONCANON.0` | canonical JSON receipts: stable key order, decimal-as-string, bytes lowercase hex, explicit null policy | **yes — `cobc-oracle-rs`** |
+| `GNURUST.UNSAFE.0` | semantic crates `forbid(unsafe)`; only FFI/oracle crates may isolate unsafe with a safety contract; count reported | **yes (policy)** |
+| `GNURUST.BUILDRS.0` | no `build.rs` in core crates; cargo build never invokes `cobc`; oracle runs only via explicit test/command | **yes (policy)** |
+| `GNURUST.UPSTREAMCHECK.0` | record upstream `make check`: not_run / pass / fail-nonblocking / fail-blocking | **recorded in reports/** |
+
+## Legacy COBOL: physical records, source columns, dialect tables, runtime state
+
+> **`gnucobol-rs` treats legacy COBOL as a physical-record, source-column, dialect-table, and
+> runtime-state language; obsolete constructs, conditionally active source, shared record areas,
+> and compiler recovery behavior are admitted surfaces, not cleanup opportunities.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.LISTTABLES.0` | self-description tables | harvest+hash `cobc --list-*`; never hand-maintain — **captured now** in `reports/oracle-list-tables/` |
+| `GNURUST.VARSEQ.0` | variable sequential | physical record-length prefix (`COB_VARSEQ_FORMAT`) ≠ logical record; hash must include prefix |
+| `GNURUST.SAMEAREA.0` | shared record area | `SAME RECORD/SORT AREA` aliases buffers — a per-file Rust buffer would be wrong |
+| `GNURUST.RENAMES.0` | level-66 RENAMES | a named byte-span *view*, not a copied group; illegal 01/77/88/66 targets |
+| `GNURUST.LEVEL77.0` | level-77 | obsolete ≠ ignorable; old code still has them |
+| `GNURUST.JUSTIFY.0` | JUSTIFIED | honored in ordinary MOVE, *ignored* in CHAINING arg population; fill direction |
+| `GNURUST.CHAINING.0` | startup args | CHAINING population is a separate ABI from CALL; truncation/zero-fill/space-fill |
+| `GNURUST.RETURNCODE.0` | RETURN-CODE | COBOL status register vs OS exit code boundary |
+| `GNURUST.DECLARATIVES.0` | declaratives | `USE AFTER STANDARD ERROR`/`USE FOR DEBUGGING` control flow + FILE STATUS interaction |
+| `GNURUST.DEBUGLINE.0` | debugging lines | `D` lines / DEBUGGING MODE may be conditionally *active*, not comments |
+| `GNURUST.RECOVERY.0` | parse recovery | Area A enforcement + missing-period recovery is a compatibility axis |
+| `GNURUST.NEXTSENTENCE.0` | NEXT SENTENCE | jumps past next period — not `CONTINUE`; period-sensitive |
+| `GNURUST.LEGACYFLOW.0` | ALTER / nameless GO TO | no reliable static CFG when admitted without dynamic target tracking |
+| `GNURUST.LISTING.0` | listing directives | `EJECT`/`SKIP1-3` preserved in source map, not mistaken for comments |
+| `GNURUST.CONST78.0` | level-78 / symbolic const | constants feed PIC/OCCURS/VALUE bounds |
+| `GNURUST.PADDING.0` | PADDING CHARACTER | short-record padding byte (space/NUL/custom) |
+| `GNURUST.STOPVAR.0` | STOP variants | STOP RUN/literal/identifier/ERROR — distinct termination |
+| `GNURUST.EXCEPTIONORDER.0` | exception clause order | `NOT ON EXCEPTION` before `ON EXCEPTION` is dialect-sensitive |
+| `GNURUST.NESTED.0` | nested programs | `COMMON`/`INITIAL` visibility & reinitialization |
+| `GNURUST.EXTERNAL.0` | EXTERNAL data/files | state keyed by COBOL external name, not Rust ownership |
+| `GNURUST.TABLESORT.0` | table SORT | in-memory OCCURS sort ≠ file SORT backend; key/dup/collation |
+| `GNURUST.CHARCLASS.0` | CHARACTER CLASSIFICATION | object-computer clause changes CLASS results |
+| `GNURUST.SWITCHES.0` | switches/mnemonics | SPECIAL-NAMES switches are runtime inputs |
+| `GNURUST.EXCSTATUS.0` | EXCEPTION-STATUS | exception-name table + status after errors |
+| `GNURUST.COBCRUN.0` | cobcrun mode | running `-m` modules through the loader ≠ executing a linked binary |
+| `GNURUST.DEPS.0` | dependency output | `-MT`/`-MF` copybook-path provenance |
+| `GNURUST.COLUMNS.0` | source columns | byte offset vs physical column vs codepoint; tab expansion; Area A/B |
+| `GNURUST.WORDCONT.0` | word continuation | `-fword-continuation` splits identifiers/literals across lines |
+| `GNURUST.AUDITTRAIL.0` | audit trail | business-record transform traceability: in-bytes→interpretation→out-bytes→receipt |
+
+Deltas between the port and the oracle are classified in
+[`../reports/oracle-delta-ledger.md`](../reports/oracle-delta-ledger.md), never waved off.
+
+## Operational survivability (locks, durability, replacement, batch, audit)
+
+> **`gnucobol-rs` treats operational behaviour — locks, loader resolution, buffering, replacement
+> scope, sort order, reject handling, control totals, restartability — as compatibility surfaces;
+> success means not only matching bytes in the happy path, but making every failure, omission, and
+> host-specific witness explicit.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.LOADER.0` | loader resolution | prove the *admitted* `libcob` is loaded — **done now** (admission receipt) |
+| `GNURUST.ARCHIVE.0` | archive admission | pin lzip/tar/libarchive extractor identity — **done now** |
+| `GNURUST.BINWITNESS.0` | binary witnesses | native binary hashes are host-specific witnesses, never portable truth — **done now** |
+| `GNURUST.LOCKLIFE.0` | lock lifecycle | `READ WITH LOCK`/`REWRITE`/`UNLOCK`/`CLOSE` carry session state; fork invalidates handles |
+| `GNURUST.LOCKLAB.0` | two-process lock lab | locking needs a choreography harness; local FS vs NFS/SMB classified |
+| `GNURUST.TXN.0` | transactions | byte parity ≠ durability/isolation/rollback |
+| `GNURUST.DURABILITY.0` | durability | WRITE success ≠ flush ≠ fsync ≠ backend checkpoint |
+| `GNURUST.SORTSTABLE.0` | sort stability | `WITH DUPLICATES IN ORDER` vs unstable backend; collation interaction |
+| `GNURUST.SORTWORK.0` | sort work files | tempdir/disk/permission/cleanup on success & interruption |
+| `GNURUST.REPLACEALG.0` | COPY/REPLACE algorithm | token-stream surgery (pseudo-text, partial-word), **not** regex/substring |
+| `GNURUST.REPLACELIST.0` | replace listing scars | expanded vs listing vs diagnostic source can differ (known upstream bug #831) |
+| `GNURUST.REPLACESCOPE.0` | replace scope | `REPLACE` is temporal — applies to following source until `REPLACE OFF` |
+| `GNURUST.REPORTSUPPRESS.0` | report suppression | generated-but-suppressed ≠ not computed; counter impact |
+| `GNURUST.BATCHRESTART.0` | batch restart | checkpoint/idempotency/no double-post |
+| `GNURUST.RECON.0` | reconciliation | control totals/trailer counts/debit==credit prove the *migration*, bytes prove the *port* |
+| `GNURUST.HASHTOTAL.0` | hash totals | legacy fixed-width overflow "hash totals" (not cryptographic) |
+| `GNURUST.REJECTFILE.0` | reject files | rejected input preserved with reason code + reject control total |
+| `GNURUST.ERRORPOLICY.0` | error policy | explicit fail-fast / collect-rejects / best-effort / oracle-strict — recorded, never silent |
+| `GNURUST.DECEXC.0` | decimal exception state | observable sticky condition/status, not just result value |
+| `GNURUST.ROUND-TIES.0` | rounding ties | ±1.5/±2.5, carry→size error, rounded before/after size check |
+| `GNURUST.BUSDATE.0` | business dates | processing/posting/value dates, EOM, leap day |
+| `GNURUST.CURRENCY.0` | currency scale | minor unit 0/2/3; storage vs display vs settlement scale — never hardwire cents |
+| `GNURUST.OSERR.0` | OS errors | capture errno/backend code *below* COBOL file status |
+| `GNURUST.UMASK.0` | file modes | requested mode × umask → resulting mode |
+| `GNURUST.NEWLINECLASS.0` | newline domains | source/listing/stdout/line-seq/printer newlines are five policies, not one |
+| `GNURUST.MULTIORACLE.0` | multi-version | 3.2 is authority; 4.x/distro/vendor are future *witnesses*, not moving authority |
+| `GNURUST.DATAETHICS.0` | fixture ethics | synthetic-only; no real account numbers/names/copybooks; seeds recorded |
+
+## Runtime checking, tables, national data, platform width, evidence kind
+
+> **`gnucobol-rs` treats runtime-checking mode, table bounds, national-character storage, backend
+> operational state, platform word size, diagnostic path stability, Rust panic policy, and
+> compatibility-behaviour versioning as evidence surfaces; no safe Rust convenience, host default,
+> or successful happy-path run is allowed to erase those boundaries.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.RTCHECK.0` | runtime-checking mode | `--debug` (bounds+numeric checks+source-located diagnostics) changes observable behaviour — recorded as a witness |
+| `GNURUST.SUBSCRIPT.0` | table subscripts | 0 / -1 / max+1 / pre-SET index; **Rust panic must never be the compatibility model** — typed access layer |
+| `GNURUST.INDEXREP.0` | INDEXED BY | opaque `CobolIndex`, not `usize`; index ≠ human subscript |
+| `GNURUST.SEARCHALL.0` | SEARCH ALL | binary search assumes sortedness; do not "helpfully" detect unsorted |
+| `GNURUST.PERFORMVARY.0` | PERFORM VARYING | final counter value observable; dump WS bytes not just stdout |
+| `GNURUST.PERFORMTHRU.0` | PERFORM THRU | paragraph-range fall-through = CFG hazard |
+| `GNURUST.NAMESPACE.0` | name resolution | paragraph/section/data/file/condition namespaces + qualification |
+| `GNURUST.CALLARITY.0` | call arity | too few/many params; don't let a Rust signature imply stricter arity |
+| `GNURUST.ARGMODE.0` | BY REF/CONTENT/VALUE | post-call mutation visibility matrix |
+| `GNURUST.ADDRESS.0` | ADDRESS OF / pointers | no pointer semantics in safe crates; quarantine |
+| `GNURUST.DYNSTORAGE.0` | BASED/ALLOCATE/FREE | dynamic storage ≠ `Vec<u8>`; double-free/UAF oracle behaviour |
+| `GNURUST.ANYLENGTH.0` | ANY LENGTH | linkage items without compile-time size |
+| `GNURUST.FUNCTYPE.0` | function return category | date/time fns return alnum/national/UTF-8 — don't collapse to `String` |
+| `GNURUST.NATIONAL.0` | PIC N / national | 2-byte/char national vs 1–4-byte UTF-8 vs Rust `char` are different domains; char count ≠ byte count ≠ display width |
+| `GNURUST.LENGTHOF.0` | LENGTH OF | storage vs declared vs runtime-arg vs display length |
+| `GNURUST.LOCALECAT.0` | locale vector | pin LC_CTYPE/COLLATE/NUMERIC/MONETARY/LANG, not just LC_ALL — **recorded now** |
+| `GNURUST.BDBENV.0` | BDB env/log/config | DB_HOME/DB_CONFIG/log files are operational state, not junk |
+| `GNURUST.BDBDEADLOCK.0` | BDB deadlock | detector presence/victim policy for concurrent indexed tests |
+| `GNURUST.BDBVERSION.0` | BDB version drift | file-format/recovery version sensitivity |
+| `GNURUST.DBVERIFY.0` | backend verify | `db_verify` postcondition ≠ "program read what it wrote" |
+| `GNURUST.LOCKKIND.0` | lock kind | advisory vs mandatory OS lock vs backend record lock |
+| `GNURUST.PATHSCRUB.0` | diagnostic paths | raw vs normalized stderr; source-root placeholder; preserve line/col |
+| `GNURUST.REPROBUILD.0` | reproducible build | SOURCE_DATE_EPOCH/TZ/ar/ranlib/strip for binary witnesses |
+| `GNURUST.CROSS.0` | cross-compilation | host parity ≠ cross-target parity |
+| `GNURUST.WIDTH32.0` | 32-bit width | c_long/off_t/pointer width receipts |
+| `GNURUST.BIGENDIAN.0` | big-endian | decimal expected endian-neutral; binary/file/runtime crates not assumed so |
+| `GNURUST.PANICPOLICY.0` | panic policy | library panic-free on malformed input (fuzz-asserted); no unwind across FFI — **policy now** |
+| `GNURUST.NOSTD.0` | no_std | std unless a no_std receipt exists; no accidental implication |
+| `GNURUST.SEMVERCOMPAT.0` | compat semver | Rust-API semver separate from oracle-compatibility-behaviour semver; correctness fixes can break users of prior wrong behaviour |
+| `GNURUST.EVIDENCEKIND.0` | evidence kind | every claim tagged source_port / oracle_observation / spec_reference / generated_fixture / fuzz_negative / formal_proof / non_claim — **applied in receipts** |
+
+## Pure kernel vs executable runtime surfaces
+
+> **`gnucobol-rs` separates the pure decimal kernel from executable runtime surfaces: source
+> literals, user-defined functions, system routines, string-state statements, generated golden
+> fixtures, and unimplemented GnuCOBOL features are all separately admitted or rejected, and no
+> Rust convenience layer may collapse bytes, host effects, or oracle-generated evidence into
+> informal correctness.**
+
+| Code | Court | Core trap / non-claim | Now? |
+|------|-------|-----------------------|------|
+| `GNURUST.PUREDEC.0` | pure kernel claim | `cobol-decimal-rs`: no global mutable state, no env/locale/fs/runtime-config reads, deterministic for (bytes, attrs) | **claimed** |
+| `GNURUST.NO-FLOAT-DECIMAL.0` | no float path | decimal values never roundtrip through `f32`/`f64`; tests assert it | **claimed** |
+| `GNURUST.GOLDEN.0` | regenerable goldens | every golden fixture: generator command + oracle version + source row + output hash + regen script; manual edit forbidden | **applied** |
+| `GNURUST.SWEEPCORPUS.0` | sweep corpus | fixed seed corpus committed; failing random case promoted to fixed corpus; classified-out separate from pass count | **applied** |
+| `GNURUST.REPORTPAIR.0` | report twins | every human `.md` report has a machine-readable `.json`/yaml twin | **applied** |
+| `GNURUST.LICENSETRACE.0` | license trace | each file marks: derivative source port / oracle fixture / original harness / doc summary | **applied** |
+| `GNURUST.INITIALIZE.0` | INITIALIZE | executable reset by category ≠ VALUE; FILLER/REPLACING/REDEFINES; final bytes | future |
+| `GNURUST.STRINGSTATE.0` | STRING | pointer/overflow state, not concat | future |
+| `GNURUST.UNSTRINGSTATE.0` | UNSTRING | delimiter/count/tally/pointer/overflow outputs | future |
+| `GNURUST.REFMOD-LVALUE.0` | ref-mod l-value | `FIELD(s:l)` as target; bounds = COBOL-observed, not Rust panic | future |
+| `GNURUST.UDF.0` | user-defined functions | `FUNCTION-ID` executes a body with linkage/side-effects/failure | future |
+| `GNURUST.INTRIN-STATUS.0` | intrinsic status | implemented vs accepted-no-runtime vs unimplemented (per `--list-intrinsics`) | future |
+| `GNURUST.RANDOM.0` | FUNCTION RANDOM | seed/range/repeatability — a reproducibility hazard | future |
+| `GNURUST.FININTRIN.0` | financial intrinsics | `ANNUITY` etc.: observe oracle first, not textbook formula | future |
+| `GNURUST.BITINTRIN.0` | bit intrinsics | `BIT-OF`/`BIT-TO-CHAR` byte/bit order | future |
+| `GNURUST.BYTELEN.0` | BYTE-LENGTH | built-in byte vs char length witness | future |
+| `GNURUST.SYSROUTINE.0` | system routines | `CBL_*` host actions (per `--list-system`) — supported/stubbed/rejected/delegated | future |
+| `GNURUST.SYSTEM.0` | SYSTEM | host command execution = security boundary; disabled by default in safe tooling | future |
+| `GNURUST.GETOPT.0` | CBL_GC_GETOPT | program parses its own argv | future |
+| `GNURUST.CWD.0` | cwd mutation | `CBL_CHANGE_DIR` poisons later relative paths → child-process isolation | future |
+| `GNURUST.FS-SANDBOX.0` | fs sandbox | running COBOL fixtures is hostile: path traversal/symlink/non-UTF8 | future |
+| `GNURUST.FLOAT.0` | COMP-1/COMP-2 | float ≠ decimal: NaN/inf/-0/rounding/libm | future |
+| `GNURUST.LITERALS.0` | source literals | alnum/hex/national literal bytes ≠ Rust `&str` | future |
+| `GNURUST.HEXLIT.0` | hex literals | `X"FF"` escape hatch for dirty-byte fixtures | future |
+| `GNURUST.LITCONT.0` | literal continuation | distinct from word continuation | future |
+| `GNURUST.COPYRESOLVE.0` | copybook resolution | extension/case/include-order/relative-vs-cwd | future |
+| `GNURUST.IDENTMAP.0` | identifier mapping | `CUSTOMER-ID` vs `CUSTOMER_ID` must not silently collide | future |
+| `GNURUST.COMMENTMAP.0` | comments | provenance, not semantics; preserved in source map | future |
+| `GNURUST.OO.0` | Object COBOL | **not supported** — `CLASS-ID`/`METHOD-ID` rejected/classified | future |
+| `GNURUST.UNIMPLEMENTED.0` | unimplemented-by-GnuCOBOL | a real classification: implemented / accepted-no-runtime / parsed-warned / rejected / unimplemented / vendor-only | future |
+
+## Recursion, introspection, source columns, ABI, autotools provenance
+
+> **`gnucobol-rs` treats recursion, exception introspection, source columns, compiler
+> configuration tables, runtime.cfg behaviour switches, C ABI layouts, numeric build constants,
+> and autotools provenance as compatibility evidence; it does not infer runtime truth from Rust
+> convenience, source text alone, or a silently regenerated oracle build.**
+
+| Code | Court | Core trap / non-claim | Now? |
+|------|-------|-----------------------|------|
+| `GNURUST.CABI-FIELD.0` | C ABI layout | emit `sizeof`/`alignof`/`offsetof` of `cob_field`/`cob_field_attr` — don't guess from prose | **captured** |
+| `GNURUST.NUMCONST.0` | build constants | emit `COB_MAX_DIGITS`/type/flag/sign constants from the *built* oracle, not a header guess | **captured** |
+| `GNURUST.CMODEL.0` | C integer model | `sizeof` char/short/int/long/size_t, char signedness, endianness | **captured** |
+| `GNURUST.CLOCALE.0` | C locale | `setlocale(LC_ALL,NULL)` + `localeconv()` decimal/thousands — C runtime's own view | **captured** |
+| `GNURUST.COBINFO.0` | compiler self-desc | `cobc --info` raw+normalized hash (distro builds differ at same version) | **captured** |
+| `GNURUST.PUREDEC-SENDSYNC.0` | pure-crate threads | `cobol-decimal-rs` types `Send+Sync`, deterministic under concurrency; libcob **not** asserted thread-safe | **claimed** |
+| `GNURUST.RECURSIVE.0` | recursion | `RECURSIVE`/`LOCAL-STORAGE`-implies-recursive; stack-vs-heap; don't model as Rust recursion | future |
+| `GNURUST.THREAD.0` | multithreading | no multithreaded runtime compat; `Send+Sync` ≠ COBOL-runtime-safe | future |
+| `GNURUST.EXCINTROSPECT.0` | exception introspection | `EXCEPTION-FILE/LOCATION/STATEMENT` are branchable observability APIs |
+| `GNURUST.STMTNO.0` | statement numbering | diagnostic metadata becomes runtime data when programs inspect it | future |
+| `GNURUST.TRACE.0` | runtime tracing | trace/`--debug` output is a separate oracle surface | future |
+| `GNURUST.CONFTABLE.0` | compiler config table | mine `cobc/config.c`/`default.conf` into a machine-readable option index | future |
+| `GNURUST.WORDLEN.0` | word length | `COB_MAX_WORDLEN=63`; long-name normalized collision | future |
+| `GNURUST.TABS.0` | tab expansion | fixed-format tabs change tokens/source locations | future |
+| `GNURUST.TEXTCOL.0` | text column | source beyond column 72 (configurable) may not mean what a parser thinks | future |
+| `GNURUST.FORMATAUTO.0` | format auto-detect | matched explicit vs auto source-format selection | future |
+| `GNURUST.SHADOWORACLE.0` | shadow oracles | GnuCOBOL 4.x / GCC `gcobol` are witnesses, not authority | future |
+| `GNURUST.PERFORMOSVS.0` | runtime PERFORM | `perform_osvs` runtime.cfg switch changes control flow | future |
+| `GNURUST.CALLPATHCFG.0` | runtime call_path | runtime.cfg contributes module search paths, not just env | future |
+| `GNURUST.FILEENV.0` | filename mapping | runtime.cfg `filename-mapping`/`file-env-*` rewrite ASSIGN resolution | future |
+| `GNURUST.ECFLAGS.0` | exception-cond flags | `-fec=i-o`/`--debug` imply source-location → change exception fns | future |
+| `GNURUST.TTY.0` | tty vs pipe | `isatty` changes buffering/diagnostic ordering | future |
+| `GNURUST.SIGNAL.0` | signals | SIGINT/SIGTERM cleanup/lock/tempfile behaviour | future |
+| `GNURUST.SANITIZER.0` | sanitizer builds | ASan/UBSan are audit-only witnesses, never the semantic oracle | future |
+| `GNURUST.CTOOLCHAIN.0` | C toolchain | gcc/make/bison/flex versions for reproducible oracle build | future |
+| `GNURUST.AUTOTOOLS.0` | autotools provenance | use shipped `configure`; `autoreconf` only under its own receipt | future |
+| `GNURUST.WINSETUP.0` / `GNURUST.TOOLENV.0` | install/IDE env | `cob-config`/IDE envs are not the shell oracle env | future |
+
+## Traversal statements, sort protocols, registers, link modes, doc examples
+
+> **`gnucobol-rs` treats traversal statements, sort-procedure protocols, warning modes, special
+> registers, multi-source linking, device I/O, and documentation examples as evidence surfaces;
+> accepted syntax, clean stdout, or a successful single-source compile never imply full
+> operational compatibility.**
+
+| Code | Court | Core trap / non-claim | Now? |
+|------|-------|-----------------------|------|
+| `GNURUST.FEATURESTATUS.0` | feature status ladder | rejected / parsed-ignored / parsed-warned / runtime-functional / partial / dialect-required / backend-required — "accepted syntax ≠ supported" | applied (in delta-ledger + receipts) |
+| `GNURUST.DOCTESTPOLICY.0` | executable docs | Rust API examples compile under `cargo test`; COBOL examples oracle-tested or marked illustrative | **applied** |
+| `GNURUST.INSPECT.0` | INSPECT | TALLYING/REPLACING/CONVERTING traversal state machine, regions, counters — not `replace()` | future |
+| `GNURUST.INSPECT-CONVERT.0` | INSPECT CONVERTING | unequal-length/duplicate/overlap maps | future |
+| `GNURUST.SORTPROC.0` | sort procedure | `RELEASE`/`RETURN`/INPUT-OUTPUT PROCEDURE protocol | future |
+| `GNURUST.RELEASECOPY.0` | RELEASE copy timing | does sort copy or reference the record area? | future |
+| `GNURUST.RETURN-INTO.0` | RETURN INTO | move semantics/truncation on retrieval | future |
+| `GNURUST.MERGE.0` | MERGE | sorted-input constraints; distinct from SORT | future |
+| `GNURUST.DECL-EC.0` | declaratives EC | `AFTER EXCEPTION CONDITION` parsed-but-nonfunctional | future |
+| `GNURUST.WARNPOLICY.0` | warning policy | `-Wall`/`-Werror`/`-fmax-errors` decide whether a fixture even compiles | future |
+| `GNURUST.WARNING-RECEIPT.0` | warning receipt | warnings_count/hash/classes; `-Werror` mode; artifact created | future |
+| `GNURUST.REGISTERS.0` | special registers | capture `--list-registers`; writable/read-only | future |
+| `GNURUST.SORTRETURN.0` | SORT-RETURN | sort status register, not a hidden Rust error | future |
+| `GNURUST.WHENCOMPILED.0` | WHEN-COMPILED | compile timestamp = nondeterminism | future |
+| `GNURUST.CURRENTDATE-SHAPE.0` | CURRENT-DATE shape | byte positions for ref-mod slicing | future |
+| `GNURUST.ARGREG.0` | ARGUMENT-NUMBER/VALUE | runtime arg retrieval ≠ CHAINING | future |
+| `GNURUST.ENVCASE.0` | env name case | Unix case-sensitive vs Windows; set-but-empty vs unset | future |
+| `GNURUST.DISPLAY-DEVICE.0` | DISPLAY device | UPON CONSOLE/SYSOUT/mnemonic routing | future |
+| `GNURUST.ACCEPT-EOF.0` | ACCEPT EOF | stdin EOF/partial-line/oversize behaviour | future |
+| `GNURUST.IMPLICITCLOSE.0` | implicit close | `STOP RUN` flush/lock-release of open files | future |
+| `GNURUST.ABORTCLEANUP.0` | abort cleanup | no runtime-error/signal cleanup guarantee until admitted | future |
+| `GNURUST.TEMPNAME.0` | temp naming | per-test unique temp/SORT-FILE names under parallel runs | future |
+| `GNURUST.PROGIDMAP.0` | PROGRAM-ID mapping | name → `-x`/`-m` artifact filename; CALL-name matching | future |
+| `GNURUST.MULTISRC.0` | multi-source | `cobc a.cob b.cob`, dup PROGRAM-ID, cross-CALL link | future |
+| `GNURUST.LINKMODE.0` | link mode | static/dynamic/shared/module artifact form | future |
+| `GNURUST.EXTLIB.0` | C interop | no arbitrary C-library interop claim | future |
+| `GNURUST.DEBUGINFO.0` / `GNURUST.COPT.0` | build flags | `-g`/`-O` change binary/generated artifacts and dirty-data behaviour; audit-classified | future |
+| `GNURUST.DIAGNORM.0` | diagnostic normalization | raw bytes kept; normalized never the sole evidence | future |
+
+---
+
+*This register is **open and append-only**. New compatibility surfaces are admitted here as
+separately-sealed future courts as they are discovered; presence in this table is a non-claim
+until a dated receipt says otherwise. The sealed claims today remain exactly the two lowest
+courts — storage bytes and `MOVE` bytes for COMP-3 / zoned / display — and nothing else.*
+
+## Built-in routines, argument parsing, intrinsic quirks, hooks, archive lineage
+
+> **`gnucobol-rs` treats GnuCOBOL's built-in routine table, argument parser, mutable argument
+> cursor, file-read disambiguation, ordinal/intrinsic quirks, external entry-point naming, callback
+> hooks, host runtime exposure, and archive lineage as compatibility evidence; no Rust convenience
+> parser, iterator, function return style, or generic documentation citation may replace the
+> observed GnuCOBOL behaviour.**
+
+| Code | Court | Core trap / non-claim | Now? |
+|------|-------|-----------------------|------|
+| `GNURUST.DOCGATE.0` | doc refresh gate | `lab/check-docs.sh` fails if any doc drifts from code/receipts/oracle; run every pass | **active** |
+| `GNURUST.ACCEPT-NUMVAL.0` | ACCEPT numeric | parses via `NUMVAL` rules **except** trailing-sign forms — not one shared parser | future |
+| `GNURUST.ARGV-GLOB.0` | argv glob | shell may expand `*` before the program; record the actual argv vector | future |
+| `GNURUST.ARG-PARSER.0` | arg parser | space/tab delimit, quotes group, Windows apostrophe literal — ≠ `std::env::args()` | future |
+| `GNURUST.ARG-CURSOR.0` | mutable arg cursor | `DISPLAY UPON ARGUMENT-NUMBER` selects next `ACCEPT FROM ARGUMENT-VALUE` | future |
+| `GNURUST.READ-DYNAMIC-AMBIGUITY.0` | READ ambiguity | bare `READ file` under `ACCESS DYNAMIC` = random, not sequential | future |
+| `GNURUST.READ-PREVIOUS.0` | READ PREVIOUS | indexed-only backwards traversal | future |
+| `GNURUST.RELATIVE-KEY-AUTOFILL.0` | relative key | successful read auto-populates `RELATIVE KEY` | future |
+| `GNURUST.READ-INTO-MOVE.0` | READ INTO | FD record filled then auto-MOVE to target | future |
+| `GNURUST.SYSTEM-ARITY.0` | routine arity | capture the `CBL_*`/`C$*` arity + return-code-channel table | future |
+| `GNURUST.BITROUTINE-MUTATION.0` | bit routines | `CBL_AND/OR/XOR/NOT` mutate arg-2, not return a value | future |
+| `GNURUST.PARAMSIZE.0` / `GNURUST.C-NARG.0` | linkage introspection | `C$PARAMSIZE`/`C$NARG` via `RETURN-CODE`; caller-kind-dependent | future |
+| `GNURUST.ORD-ONE-BASED.0` | ORD | one-based ordinal, not raw byte value | future |
+| `GNURUST.ORD-MINMAX.0` | ORD-MAX/MIN | return argument position, not the character | future |
+| `GNURUST.NUMVAL-C-2.0` | NUMVAL-C(-2) | currency-source semantics differ; CR/DB/locale negativity | future |
+| `GNURUST.WHEN-COMPILED-SHADOW.0` | WHEN-COMPILED | intrinsic shadows the special register under `-fintrinsics`; different formats | future |
+| `GNURUST.EXTERNAL-ID-AS.0` / `GNURUST.ENTRY-POINTER.0` | external id / ENTRY | `PROGRAM-ID AS`/alternate `ENTRY` names are the real callable identity | future |
+| `GNURUST.PROGPOINTER-CALLBACK.0` | program pointers | `SET ptr TO ENTRY`, callbacks into/out of C | future |
+| `GNURUST.ERROR-PROC.0` / `GNURUST.EXIT-PROC.0` | hooks | `CBL_ERROR_PROC`/`CBL_EXIT_PROC` install/uninstall runtime hooks | future |
+| `GNURUST.HOSTED-C-RUNTIME.0` | host C runtime | `CBL_GC_HOSTED` exposes argc/argv/stdio/errno/tz pointers — unsafe interop | future |
+| `GNURUST.FORK-STORAGE.0` | fork | `CBL_GC_FORK` copies storage, invalidates child file handles/locks | future |
+| `GNURUST.EXCEPTION-RESET.0` | exception state | `SET LAST EXCEPTION TO OFF` clears mutable global exception object | future |
+| `GNURUST.REPORT-HOOK.0` / `GNURUST.REPORT-TERMINATE-HIERARCHY.0` | report hooks | `USE BEFORE REPORTING`, `SUPPRESS`, reverse-hierarchy footings at `TERMINATE` | future |
+| `GNURUST.CDF-PARAMETER.0` / `GNURUST.CDF-BRANCH.0` / `GNURUST.MIXED-SOURCE-MODE.0` / `GNURUST.CDF-TURN.0` | CDF | compile-time env as source; `>>IF` source elision; `>>SOURCE` fixed/free switching; `>>TURN` exception checks | future |
+| `GNURUST.RTCFG-LANGUAGE.0` / `GNURUST.ENV-MANGLE.0` | runtime.cfg | `runtime.cfg` is a mini-language (`include`/`${env}`/`setenv`/`reset`); `COB_ENV_MANGLE` | future |
+| `GNURUST.LINESEQ-BINARY.0` / `GNURUST.LS-FIXED.0` | line-seq modes | `COB_LS_NULLS/VALIDATE/SPLIT/FIXED` change record bytes | future |
+| `GNURUST.IO-RETRY.0` / `GNURUST.SYNC-MODE.0` / `GNURUST.KEYCHECK.0` | file runtime knobs | retry-forever, sync-to-disk, relaxed key matching | future |
+| `GNURUST.DISPLAY-REDIRECT.0` / `GNURUST.EXIT-WAIT.0` | output/exit | `COB_REDIRECT_DISPLAY` to stderr; `COB_EXIT_WAIT` can hang at exit | future |
+| `GNURUST.COB-CURRENT-DATE.0` / `GNURUST.DEBUG-PROCEDURE-ACTIVATION.0` / `GNURUST.TRACE-COMPILED-RUNTIME.0` | time/debug/trace | runtime date spoof; two-key `WITH DEBUGGING MODE`+`COB_SET_DEBUG`; trace needs `-ftrace`+`COB_SET_TRACE` | future |
+| `GNURUST.MODULE-METADATA-FAMILY.0` / `GNURUST.MODULE-PATH-LEAK.0` | module metadata | `MODULE-PATH/SOURCE/CALLER-ID` leak paths/build data → redaction | future |
+| `GNURUST.FEATURE-NONFUNCTIONAL.0` | parsed-but-inert | `>>LEAP-SECONDS`, `MULTIPLE FILE TAPE`, screen `COLOR/CONTROL` parsed-but-ignored | future |
+| `GNURUST.DIALECT-DIRECTIVES.0` | `$`/MF directives | `$IF/$SET/CALLFH/SOURCEFORMAT/SSRANGE` active/warned/ignored | future |
+| `GNURUST.DOC-AUTHORITY-KIND.0` / `GNURUST.ARCHIVE-LINEAGE-MINE.0` | doc/version lineage | cite by artifact (guide/sample/FAQ/grammar/Doxygen/old-forum); no 2.0 final, 2.1 mis-tag; mine the 8 MB OpenCOBOL forum archive | future |
+
+## Arithmetic policy, conventions, usages, SPECIAL-NAMES, screen attrs, doc lineage
+
+> **`gnucobol-rs` treats arithmetic policy, call/entry conventions, screen-validation attributes,
+> symbolic characters, picture-less host usages, SPECIAL-NAMES bindings, terminal capability
+> variance, and document authority age as compatibility evidence; it never assumes that a COBOL
+> keyword, usage name, or archived guide has one stable meaning until the admitted GnuCOBOL oracle
+> and artifact lineage classify it.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.DEFAULT-ROUNDED-MODE.0` | rounding policy | `OPTIONS DEFAULT ROUNDED MODE` (8 modes) + `INTERMEDIATE ROUNDING` — program-level, not one rule |
+| `GNURUST.CALL-CONVENTION-BITS.0` | call convention | `CALL-CONVENTION` is a **bitfield** (STATIC=8, STDCALL=64), not a closed enum |
+| `GNURUST.ENTRY-CONVENTION.0` | entry convention | `OPTIONS ENTRY-CONVENTION COBOL/EXTERN/STDCALL` — distinct from per-call |
+| `GNURUST.RETURNING-OMITTED.0` | procedure header | `PROCEDURE DIVISION RETURNING OMITTED`; UDFs require a header |
+| `GNURUST.CHAINING-CALL-BARRIER.0` | chaining barrier | CHAINING programs may not be CALLed by others |
+| `GNURUST.COMP-X.0` / `GNURUST.COMP-6.0` / `GNURUST.COMP-N.0` | numeric usages | never infer storage from a usage name — each needs its own oracle slice (COMP-6 is **not** COMP-3) |
+| `GNURUST.PICTURELESS-USAGE-SIZES.0` | picture-less usages | `BINARY-C-LONG`/`POINTER`/`FLOAT-DECIMAL-*` sizes are host-ABI, source-visible via `LENGTH OF` |
+| `GNURUST.CONSTANT-LENGTHOF.0` | compile-time reflect | `CONSTANT AS LENGTH OF usage` = compile-time layout reflection |
+| `GNURUST.SYMBOLIC-CHARACTERS.0` | symbolic chars | `SYMBOLIC CHARACTERS NUL IS 1` — one-based ordinal tied to alphabet, not a text alias |
+| `GNURUST.CLASSIFICATION-NATIVE.0` | classification | `OBJECT-COMPUTER CLASSIFICATION` defaults to native charset (a moving platform property) |
+| `GNURUST.CODE-SET.0` | CODE-SET | feature-status question separate from generic EBCDIC |
+| `GNURUST.SPECIAL-NAMES-LOCALE.0` / `GNURUST.CONSOLE-IS-CRT.0` | SPECIAL-NAMES bindings | named locales / `CONSOLE IS CRT` are source-level runtime bindings |
+| `GNURUST.CRT-CURSOR-EVENT-BINDINGS.0` | CRT/CURSOR/EVENT | bind terminal runtime state into user data items |
+| `GNURUST.SYSTEM-NAMES-FEATURE.0` | system names | `C01-C12`/`S01-S05`/`CSP`/`FORMFEED`/`TOP` device mnemonics |
+| `GNURUST.FALSE-CLAUSE.0` | 88-level FALSE | condition names define both TRUE and FALSE storage states |
+| `GNURUST.SCREEN-INPUT-ATTRS.0` | screen input | `REQUIRED`/`PROTECTED`/`NO-ECHO`/`PROMPT`/`EMPTY-CHECK`/`SECURE` change accepted input + privacy |
+| `GNURUST.LENGTH-CHECK-CURSES.0` / `GNURUST.AUTO-SKIP-SYNONYMS.0` / `GNURUST.BEEP-BELL-SEMANTICS.0` | screen synonyms | curses-backend-dependent; synonyms canonicalized but diagnostics keep the spelling |
+| `GNURUST.TERMINAL-ATTR-CAPABILITY.0` / `GNURUST.CENTERING-VOCAB.0` / `GNURUST.GUI-VOCAB-STATUS.0` | terminal/GUI vocab | `REVERSE-VIDEO`/`CHECK-BOX`/`CENTERED-HEADINGS` degrade silently by terminal — parsed ≠ functional |
+| `GNURUST.DATA-CLAUSE-CONTEXT.0` | keyword context | `SOURCE`/`TO`/`FROM`/`USING` mean different things in data vs procedure context |
+| `GNURUST.REPORT-SUM-OF.0` | SUM OF | report-state accumulation with control-break reset timing, not an expression |
+| `GNURUST.EXCEPTION-OBJECT-FAMILY.0` | exception object | `EXCEPTION-OBJECT`/`EXCEPTION-VALUE` widen the exception model beyond status strings |
+| `GNURUST.WIP-DOC-AUTHORITY.0` | doc authority age | grammar/C-interaction docs are WIP; old Doxygen is 2.0/2014 — the observed 3.2 oracle overrides them |
+
+## Inert-but-accepted clauses, source structure, generated registers, doc-family authority
+
+> **`gnucobol-rs` treats inert-but-accepted clauses, inherited nested-program configuration,
+> generated debug registers, switch aliases, report/page counters, LINAGE state, table-sort
+> implementation gaps, optional source boundaries, and documentation-family authority as
+> compatibility evidence; no parser or runtime layer may assume that visible syntax is functional,
+> that absent headers are errors, or that archived documentation has one uniform authority.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.MEMORY-SIZE.0` | inert clause | `MEMORY SIZE` parsed but nonfunctional — classify, don't reject or fake |
+| `GNURUST.NESTED-CONFIG-INHERIT.0` | nested config | `CONFIGURATION SECTION` forbidden in nested subprograms; inherited from parent |
+| `GNURUST.SOURCE-COMPUTER-NAME.0` | source-computer name | semantically irrelevant, may contain spaces |
+| `GNURUST.SLASH-COLUMN7.0` | `/` comment | comment but GnuCOBOL does **not** form-feed listings |
+| `GNURUST.DEBUG-ITEM-LAYOUT.0` / `GNURUST.DEBUG-TRIGGER.0` | DEBUG-ITEM | fixed generated record (DEBUG-LINE/NAME/SUB-1..3/CONTENTS); triggers on ref/proc/ALL PROCEDURES |
+| `GNURUST.SCREEN-CONTROL-INERT.0` | inert SPECIAL-NAMES | `EVENT STATUS`/`SCREEN CONTROL` parsed-but-inert |
+| `GNURUST.USER-CLASS.0` | user CLASS | `CLASS x IS lit THRU lit` custom class tests |
+| `GNURUST.EXTERNAL-SWITCH-MATRIX.0` / `GNURUST.SWITCH-CONDITION-NAMES.0` | switches | `SWITCH-0..36`, SWn/A..Z/UPSI aliases, env only 0..15; `ON/OFF STATUS` condition-name inversion |
+| `GNURUST.ALPHABET-LITERAL-SEQUENCE.0` | ALPHABET | literal `THRU`/`ALSO` sequences reused in CODE-SET/COLLATING/SYMBOLIC |
+| `GNURUST.SYNCRONIZED-SCAR.0` | spelling scar | `SYNCRONIZED`/`SYNCHRONISED`/`SYNC` intentionally accepted — don't "fix" |
+| `GNURUST.CLOSE-NO-REWIND-STATUS.0` | observable inert | `CLOSE NO REWIND` → file status `07`, no other action |
+| `GNURUST.OPEN-INERT-CLAUSES.0` | inert OPEN | `OPEN REVERSED`/`NO REWIND` parsed-but-inert (distinct from CLOSE) |
+| `GNURUST.LOCK-PHRASE-SYNONYMS.0` / `GNURUST.SHARING-DISABLES-LOCKING.0` | lock matrix | lock-phrase synonyms + statement availability; `SHARING WITH NO OTHER` *disables* record locking |
+| `GNURUST.LINAGE-COUNTER.0` / `GNURUST.PAGE-COUNTER-QUALIFICATION.0` | per-file registers | `LINAGE-COUNTER`/`PAGE-COUNTER` are special registers needing qualification |
+| `GNURUST.SUPPRESS-LINECOUNTER.0` / `GNURUST.RWCS-NO-CARRIAGE-CONTROL.0` / `GNURUST.REPORT-FORMFEED-TRICK.0` | report state | SUPPRESS freezes LINE-COUNTER; RWCS emits no carriage control; `X'0C'` heading trick |
+| `GNURUST.TABLESORT-DUPLICATES-INERT.0` / `GNURUST.TABLESORT-NOKEY-REJECT.0` / `GNURUST.SORT-SEARCHALL-KEY-AGREEMENT.0` | table sort | `DUPLICATES` inert; no-key rejected; SORT keys must agree with `SEARCH ALL` |
+| `GNURUST.PERFORM-AFTER-ORDER.0` | PERFORM VARYING | nested `AFTER` row/column-major order + final indices |
+| `GNURUST.OMITTED-DATA-DIVISION.0` / `GNURUST.OPTIONAL-END-PROGRAM.0` / `GNURUST.IMPLICIT-NESTED-PROGRAM.0` | source structure | absent `DATA DIVISION`/`END PROGRAM` is not malformed; implicit nesting |
+| `GNURUST.OPTIONAL-RESERVED-WORDS.0` | optional words | `BY/IS/KEY/ON/…` are syntax noise; semantic AST must not depend on them |
+| `GNURUST.DOC-FAMILY-AUTHORITY.0` | doc family | 3.2 guide vs shipped manual vs samples vs WIP grammar vs 2014 Doxygen vs forum scars — different authority levels |
+
+## Callable system routines, byte-stream file API, runtime-config view, defect mining
+
+> **`gnucobol-rs` treats GnuCOBOL's callable system routines, low-level byte-stream file API,
+> runtime configuration effective view, OpenCOBOL forum defect history, MinGW appliance lineage, and
+> generated reserved/system-routine tables as compatibility evidence; no hardcoded keyword list,
+> inferred config map, unsandboxed host routine, or generic file abstraction may stand in for the
+> admitted oracle's own runtime view.**
+
+| Code | Court | Core trap / non-claim | Now? |
+|------|-------|-----------------------|------|
+| `GNURUST.COBCRUN-RUNTIME-CONFIG.0` / `GNURUST.COBCRUN-INFO.0` | runtime view | capture `cobcrun --runtime-config`/`--info` — the runtime's own effective config/paths | **captured** |
+| `GNURUST.LIST-SYSTEM-GENERATED.0` / `GNURUST.RESERVED-KIND-MATRIX.0` | generated tables | `--list-system`/`--list-reserved` are generated oracle tables; reserved = words+intrinsics+mnemonics+routines | **captured** (list-tables) |
+| `GNURUST.CALLEDBY.0` | caller introspection | `C$CALLEDBY` exposes caller name + RETURN-CODE main/called/error | future |
+| `GNURUST.BYTESTREAM-ROUTINES.0` | byte-stream files | `CBL_OPEN/READ/WRITE/CLOSE/FLUSH/CREATE_FILE` bypass FD record semantics | future |
+| `GNURUST.HOST-COPY-DELETE.0` / `GNURUST.HOST-FS-MUTATION.0` | host fs mutation | `C$COPY`/`C$DELETE`/`CBL_RENAME_FILE` imitate host commands — sandbox hard | future |
+| `GNURUST.CWD-ROUTINE-FAMILY.0` | cwd routines | `C$CHDIR`/`CBL_CHANGE_DIR`/`CBL_GET_CURRENT_DIR` poison later relative paths | future |
+| `GNURUST.CSR-SCR-ROUTINES.0` / `GNURUST.RAW-KBD-ROUTINE.0` | terminal routines | cursor/screen-size/`CBL_READ_KBD_CHAR` need a pty harness | future |
+| `GNURUST.SOUND-ROUTINES.0` | sound | `CBL_ALARM_SOUND`/`CBL_BELL_SOUND` host side effects | future |
+| `GNURUST.BIT-LOGIC-FAMILY.0` | bit logic | `CBL_AND/OR/XOR/NOT/EQ/IMP/NIMP/NOR` truth-table family, mutate arg-2 | future |
+| `GNURUST.CASE-ROUTINE-LINEAGE.0` / `GNURUST.OC-GC-ROUTINE-ALIASES.0` | routine lineage | `CBL_*`/`C$*` and `CBL_GC_*`/`CBL_OC_*` pairs preserved even if aliased | future |
+| `GNURUST.CHECK-FILE-EXIST.0` / `GNURUST.CREATE-FILE-LOWLEVEL.0` | structured file routines | not `Path::exists`/`OPEN OUTPUT`; status via RETURN-CODE + arg areas | future |
+| `GNURUST.RUNTIME-ERROR-ROUTINE.0` / `GNURUST.WAITPID.0` | runtime/process | `CBL_RUNTIME_ERROR`; `CBL_GC_WAITPID` pairs with fork | future |
+| `GNURUST.RTCFG-NAME-ALIASES.0` / `GNURUST.RTCFG-ENV-DEFAULTS.0` / `GNURUST.RTCFG-USER-INCLUDE.0` / `GNURUST.RTCFG-RESET.0` / `GNURUST.RTCFG-ENV-PRECEDENCE.0` / `GNURUST.RTCFG-BOOL-ORACLE.0` / `GNURUST.RTCFG-STARTUP-COST.0` | runtime.cfg language | env/param name aliases; `${env:-default}`; `includeif ${HOME}`; `reset`; env-after-file precedence; doc-vs-parser boolean scar; startup cost | future |
+| `GNURUST.FORUM-DEFECT-MINE.0` / `GNURUST.COBOL-DEFECT-TAXONOMY.0` | defect mining | mine the 8 MB OpenCOBOL forum archive as a defect corpus; COBOL defects ≠ modern-PL defects | future |
+| `GNURUST.PORTABLE-MINGW-APPLIANCE.0` / `GNURUST.NEWS-AUTHORITY.0` | fossils / authority | MinGW run-from-USB compromises; `NEWS` is part of the authority chain, mine before blogs | future |
+
+## When arithmetic returns (`cobol-decimal-arith`, deferred)
+
+Framed as **accounting**, not "decimal math": result / ROUNDED / `ON SIZE ERROR` /
+not-on-size-error silent truncation / divide-by-zero / receiving-field fit. Ledger invariants
+(`sum(debits)==sum(credits)`, reversal restores balance, residual accounted). Negative zero
+gets an audit note: a representation fact, not necessarily an accounting fact.

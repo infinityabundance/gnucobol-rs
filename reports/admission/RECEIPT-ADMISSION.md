@@ -1,0 +1,98 @@
+# Admission receipt — GnuCOBOL 3.2 oracle
+
+The shared root of trust for `gnucobol-rs`. Every sealed slice's parity claim is "matches
+**this** built oracle".
+
+## Admitted source (pinned)
+
+| Item | Value |
+|------|-------|
+| Bundle | `research/gnucobol-3.2.tar.lz` |
+| sha256 | `8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb` |
+| Upstream | GnuCOBOL 3.2.0 (Free Software Foundation, Inc.) |
+| Re-fetch | https://sourceforge.net/projects/gnucobol/files/ |
+
+The bundle is gitignored and never vendored into a published crate.
+
+## Build command
+
+```
+./configure --prefix=<lab/oracle/prefix> --with-db \
+    BDB_CFLAGS="-I/usr/include/db5.3" BDB_LIBS="-ldb-5.3" \
+    CFLAGS="-O2 -std=gnu17 -fsigned-char -fpermissive \
+            -Wno-incompatible-pointer-types -Wno-int-conversion \
+            -Wno-implicit-function-declaration"
+make && make install
+```
+
+`-std=gnu17` is required (GnuCOBOL 3.2 uses K&R empty-paren function pointers rejected by
+GCC-16's default C23); the `-fpermissive`/`-Wno-*` flags downgrade GCC-16's promoted default
+errors. These flags affect only whether the upstream **compiles** under GCC 16 — they do not
+alter observable runtime semantics. Berkeley DB 5.3 provides INDEXED I/O (enabled per request).
+
+## Resulting oracle identity
+
+| Item | Value |
+|------|-------|
+| `cobc --version` | `cobc (GnuCOBOL) 3.2.0` |
+| `cobc` sha256 | `2d832ed22700c91d3ec78947e233b705859896587705b06359b15b2cefeefc79` |
+| `libcob.so.4.2.0` sha256 | `698565c0a4c7010229af730a6757d90abc249129254c7d03fd04abea269425b6` |
+| INDEXED I/O | Berkeley DB 5.3.28 |
+| Math | GMP 6.3 (`mpz_t`/`mpf_t`) |
+
+## Build/runtime environment (pinned/recorded)
+
+| Item | Value |
+|------|-------|
+| Compiler | gcc (GCC) 16.1.1 20260430 |
+| GMP | 6.x (`/usr/include/gmp.h`, `libgmp.so.10`) |
+| Platform | Linux 7.0.11-1-cachyos x86_64 (little-endian, ASCII host) |
+| Locale | `LC_ALL=C.UTF-8` |
+| Charset mode | ASCII (`COB_EBCDIC_MACHINE` off) — classified surface |
+
+> Hashes of the built binaries are host-specific (they depend on the local toolchain); the
+> stable pinned identity is the **source** sha256 + the GnuCOBOL version. The binary hashes are
+> recorded for this machine's reproducibility, not as a portable claim.
+
+## Configuration identity (which GnuCOBOL?)
+
+GnuCOBOL behaviour is a function of `cobc + libcob + config dir + runtime.cfg + linked
+libraries + env`, not just the version string. A "GnuCOBOL 3.2" claim is meaningless without
+this fingerprint; it is recorded here as a first-class part of the oracle identity.
+
+| Field | Value |
+|-------|-------|
+| `configure_args` | `--with-db BDB_CFLAGS=-I/usr/include/db5.3 BDB_LIBS=-ldb-5.3 CFLAGS="-O2 -std=gnu17 -fsigned-char -fpermissive -Wno-incompatible-pointer-types -Wno-int-conversion -Wno-implicit-function-declaration"` |
+| `config_dir_hash` (all `config/*`) | `0276510e40d04fb9922e6e8a0a71d52a9595691bbc8507732589829ce99990f2` |
+| `runtime_cfg_hash` (`runtime.cfg`) | `f34ad81159631d45a9f8c6e4a513c5afd3120393d4bff506a478ba0251af7494` |
+| `linked_libraries` | libc, libdb-5.3, libgmp.so.10, libicu*, libjson-c.so.5, libm, libncursesw.so.6, libstdc++, libxml2.so.16, libz |
+| `host_triplet` | `x86_64-pc-linux-gnu` |
+| `dialect` | `default` (cobc default `default.conf`) |
+| `decimal_point_policy` | period (`.`); `DECIMAL-POINT IS COMMA` **not admitted** |
+| `numeric_sign_policy` | default overpunch; `SIGN TRAILING SEPARATE` admitted as a flagged attr, EBCDIC-host sign **not admitted** |
+| `file_handler_backend` | Berkeley DB 5.3.28 (relevant only to a future indexed-file campaign, see `docs/backend-matrix.md`) |
+| `COB_CONFIG_DIR` | `<prefix>/share/gnucobol/config` (set at oracle-run time) |
+| `COB_RUNTIME_CONFIG` | unset (default `runtime.cfg`; note: last-wins, no warning on duplicate keys) |
+
+> **Config is semantics.** `COB_RUNTIME_CONFIG` can override the runtime config, and duplicate
+> settings are silently last-wins. The decimal slice's parity is claimed only under the
+> recorded config identity above; a different config dir / runtime.cfg / backend is a
+> *different oracle*.
+
+## Loader & archive identity (GNURUST.LOADER.0 / GNURUST.ARCHIVE.0 / GNURUST.BINWITNESS.0)
+
+The oracle must be the **admitted** `libcob`, not whatever the loader happens to find.
+
+| Field | Value |
+|-------|-------|
+| harness resolves `libcob.so.4` → | `<lab>/oracle/prefix/lib/libcob.so.4` (the admitted build) |
+| rpath/runpath | none — pinned via `LD_LIBRARY_PATH=<prefix>/lib` at run time |
+| system `libcob` present? | **no** (`ldconfig -p` shows none — cannot shadow the oracle) |
+| extractor | bsdtar 3.8.7 / libarchive 3.8.7 (liblzma 5.8.3); GNU tar 1.35 also present |
+| extraction policy | into gitignored `lab/admit/`; modes/timestamps as-archived; no symlink escape |
+
+**Binary-hash witness policy:** the `cobc`/`libcob`/harness binary sha256s above are
+**host- and toolchain-specific witnesses**, not portable truth — they are expected to differ on
+another machine. The portable pinned identity is the **source tarball sha256 + GnuCOBOL version
++ config identity**. Native binary hashes are even more volatile than generated C and are never
+quoted as cross-platform evidence.

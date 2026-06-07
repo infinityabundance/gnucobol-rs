@@ -1,0 +1,42 @@
+# Oracle sub-receipt — differential decimal sweep
+
+## Harness (runtime-library oracle shape)
+
+`lab/oracle/decimal_harness.c` links the **built** `libcob` (admitted), constructs `cob_field` /
+`cob_field_attr` with explicit `(type, digits, scale, flags)`, calls the real `cob_move`, and dumps
+the destination field bytes as lowercase hex — one structured line per case. The Rust mirror
+`crates/cobol-decimal-rs/examples/rows.rs` consumes the **identical** rows and emits the same
+format. Full byte streams are compared (`GNURUST.BYTESTREAM.0`): not `$(...)`-captured, not
+line-zipped.
+
+## Rows (`GNURUST.DECEDGE.0` + `GNURUST.SWEEPCORPUS.0`)
+
+Generated deterministically by `crates/cobol-decimal-rs/examples/gen_rows.rs <seed>`:
+- structured boundary families: digit counts {1,2,3,4,5,7,17,18} × scales {0,1,n-1,n} ×
+  value kinds {zero, one, all-nines, leading-zeros} × {unsigned, signed±}, for all three
+  sealed conversions (incl. odd/even-digit packed alignment — the `EVENPACK` family);
+- a seeded pseudo-random corpus of 4000 iterations × 3 conversions, including cross-(digits,scale)
+  destinations to exercise `store_common_region` alignment.
+
+Total: **13152 cases per seed.**
+
+## Reproduce
+
+```
+bash lab/oracle/sweep.sh <seed>     # builds harness + Rust rows, compares, prints PASS=n FAIL=n
+```
+
+## Result
+
+| seed | result |
+|------|--------|
+| 0, 1, 2, 7, 42, 12345, 999999 | **PASS=13152 FAIL=0** (each) |
+
+On `FAIL`, the sweep prints a replayable counterexample (label, oracle hex, rust hex, input row) —
+`GNURUST.DIFFSHRINK.0`. None occurred. Deltas, if any, are classified in
+[`../oracle-delta-ledger.md`](../oracle-delta-ledger.md) (empty).
+
+## Pinned env
+
+`LC_ALL=C.UTF-8`, `LD_LIBRARY_PATH=<prefix>/lib`, `COB_CONFIG_DIR=<prefix>/share/gnucobol/config`.
+Oracle identity: [`../admission/RECEIPT-ADMISSION.md`](../admission/RECEIPT-ADMISSION.md).

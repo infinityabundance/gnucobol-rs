@@ -1,0 +1,21 @@
+[package]
+name = "cobc-oracle-rs"
+version = "0.1.0"
+description = "Drives the GnuCOBOL cobc compiler as an oracle: builds/runs COBOL fixtures and captures deterministic, canonical-JSON receipts (oracle identity, stdout/stderr/exit, source/generated-C/binary sha256). GPL-3.0+ tooling; not published."
+license = "GPL-3.0-or-later"
+publish = false
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+exclude = ["/lab", "/reports"]
+
+[lints]
+workspace = true
+
+[dependencies]
+
+[[bin]]
+name = "cobc-oracle"
+path = "src/main.rs"

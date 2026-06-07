@@ -1,0 +1,51 @@
+# Documentation refresh gate (GNURUST.DOCGATE.0)
+
+**Doctrine: documentation is not allowed to go stale.** Every change to the code, the oracle, or
+the receipts — and **every** archaeology/foresight pass that adds future courts — must leave the
+docs consistent. The gate is the mechanism that enforces it mechanically rather than by good
+intentions.
+
+## What it is
+
+`lab/check-docs.sh` is a runnable consistency checker. It is part of the project gate alongside
+`cargo fmt --check`, `cargo clippy -D warnings`, `cargo test`, and the oracle sweep. It exits
+nonzero (and prints `STALE: …`) the moment any of these drift:
+
+1. **No placeholder rot** — no `TODO`/`FIXME`/`XXX`/`PLACEHOLDER`/`TBD` in shipped docs or src.
+2. **No dangling references** — every doc/license file linked from the README exists.
+3. **Constant consistency** — `COB_MAX_DIGITS` in `lib.rs` equals the oracle's `38`.
+4. **Type/flag constants** — `attr.rs` matches the oracle selfcheck (`0x10`/`0x12`/`0x0001`/`0x0100`).
+5. **Admission integrity** — the admission receipt's tarball sha256 equals the actual tarball.
+6. **Claim consistency** — the COMP-3 sealed claim is stated identically in README, claim-boundary,
+   and `lib.rs`.
+7. **Register integrity** — the future-risk register keeps its *open / append-only* marker and the
+   negative-claims list is non-empty.
+8. **Milestone ledger** — `CHANGELOG.md` records both `GNURUST.1` and `GNURUST.2`.
+9. **Oracle freshness (strongest)** — when the built oracle + harness are present, the selfcheck
+   constants must still match **and** a fresh differential sweep must be `FAIL=0`. If the constants
+   ever drift from the oracle, or the sweep regresses, the gate fails. When the oracle is absent the
+   check is reported as a typed *skipped*, never a silent pass.
+
+## The refresh rule (apply on every pass)
+
+When a new compatibility surface is discovered (an archaeology pass), the change is not complete —
+and must not be committed — until **all** of the following are updated together and the doc-gate is
+green:
+
+- the surface is added to [`future-risk-register.md`](future-risk-register.md) as a named
+  `GNURUST.*` future court (or marked applied/claimed if it is sealed now);
+- if it is a non-claim a user might assume, it is added to
+  [`../reports/negative-claims.md`](../reports/negative-claims.md);
+- if it changes a sealed claim, README / claim-boundary / `lib.rs` are updated in lockstep;
+- `lab/check-docs.sh` is run and prints `doc-gate PASS`.
+
+The register is explicitly **open and append-only**: presence there is a *non-claim* until a dated
+receipt says otherwise. The doc-gate guarantees that as the register grows, the *sealed* claims
+(storage bytes + `MOVE` bytes, today) stay exactly and verifiably what the code proves — nothing
+silently widens.
+
+## Running it
+
+```
+bash lab/check-docs.sh        # full gate; oracle checks run if lab/oracle is built
+```

@@ -1,0 +1,14 @@
+# cob_field/cob_field_attr C ABI (GNURUST.CABI-FIELD.0)
+sizeof_cob_field=24 alignof_cob_field=8
+offset_size=0 offset_data=8 offset_attr=16
+sizeof_cob_field_attr=16 alignof_cob_field_attr=8
+offset_type=0 offset_digits=2 offset_scale=4 offset_flags=6 offset_pic=8
+# numeric/type/flag constants (GNURUST.NUMCONST.0)
+COB_MAX_DIGITS=38
+COB_TYPE_NUMERIC_DISPLAY=0x10 COB_TYPE_NUMERIC_PACKED=0x12
+COB_FLAG_HAVE_SIGN=0x0001 COB_FLAG_SIGN_SEPARATE=0x0002 COB_FLAG_SIGN_LEADING=0x0004 COB_FLAG_NO_SIGN_NIBBLE=0x0100
+# C integer model (GNURUST.CMODEL.0)
+sizeof_char=1 sizeof_short=2 sizeof_int=4 sizeof_long=8 sizeof_longlong=8 sizeof_size_t=8 char_signed=1
+endian=little
+# C locale at process start (GNURUST.CLOCALE.0)
+setlocale_LC_ALL=LC_CTYPE=C;LC_NUMERIC=C;LC_TIME=C.UTF-8;LC_COLLATE=C.UTF-8;LC_MONETARY=C.UTF-8;LC_MESSAGES=C.UTF-8;LC_PAPER=C.UTF-8;LC_NAME=C.UTF-8;LC_ADDRESS=C.UTF-8;LC_TELEPHONE=C.UTF-8;LC_MEASUREMENT=C.UTF-8;LC_IDENTIFICATION=C.UTF-8 decimal_point=. thousands_sep=(empty)

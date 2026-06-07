@@ -1,0 +1,22 @@
+# Build artifacts
+/target
+**/target
+Cargo.lock
+
+# Admitted upstream + built oracle (re-fetchable / re-buildable, never vendored)
+/lab/admit/
+/lab/oracle/prefix/
+/lab/oracle/*.log
+/lab/oracle/build/
+/lab/**/*.o
+/lab/**/*.so
+/lab/**/decimal_harness
+
+# Admitted source bundle + local porting-method corpus (re-fetchable / private working notes;
+# never published — the method corpus is local-only and out of this project's scope).
+/research/
+
+# Fuzz
+/crates/*/fuzz/target
+/crates/*/fuzz/corpus
+/crates/*/fuzz/artifacts

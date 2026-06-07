@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/cobol-decimal-rs",
+    "crates/cobc-oracle-rs",
+]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.74"
+authors = ["infinityabundance"]
+repository = "https://github.com/infinityabundance/gnucobol-rs"
+homepage = "https://github.com/infinityabundance/gnucobol-rs"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+
+[workspace.lints.clippy]
+all = "warn"
+
+[profile.release]
+overflow-checks = true

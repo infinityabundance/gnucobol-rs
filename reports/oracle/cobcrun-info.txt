@@ -1,0 +1,38 @@
+libcob (GnuCOBOL) 3.2.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+License LGPLv3+: GNU LGPL version 3 or later <https://gnu.org/licenses/lgpl.html>
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Written by Keisuke Nishida, Roger While, Ron Norman, Simon Sobisch, Edward Hart
+Built     Jun 07 2026 01:40:16
+Packaged  Jul 28 2023 17:02:56 UTC
+
+build information
+build environment        : x86_64-pc-linux-gnu
+CC                       : gcc
+C version                : "16.1.1 20260430"
+CPPFLAGS                 : 
+CFLAGS                   : -O2 -std=gnu17 -fsigned-char -fpermissive
+                           -Wno-incompatible-pointer-types -Wno-int-conversion
+                           -Wno-implicit-function-declaration -pipe
+                           -finline-functions -fsigned-char -Wall
+                           -Wwrite-strings -Wmissing-prototypes
+                           -Wno-format-y2k
+LD                       : /usr/bin/ld -m elf_x86_64
+LDFLAGS                  :  -Wl,-z,relro,-z,now,-O1
+
+GnuCOBOL information
+COB_MODULE_EXT           : so
+dynamic loading          : system
+64bit-mode               : yes
+BINARY-C-LONG            : 8 bytes
+endianness               : little-endian
+native EBCDIC            : no
+variable file format     : 0
+sequential file handler  : built-in
+indexed file handler     : BDB, version 5.3.28
+mathematical library     : GMP, version 6.3.0
+XML library              : libxml2, version 2.15.3
+JSON library             : json-c, version 0.18.0
+extended screen I/O      : ncursesw, version 6.6.20251230 (CHTYPE=32, WIDE=1)
+mouse support            : unknown

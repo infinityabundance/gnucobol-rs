@@ -1,0 +1,25 @@
+[package]
+name = "cobol-decimal-rs"
+version = "0.1.0"
+description = "Faithful Rust port of GnuCOBOL packed-decimal (COMP-3), zoned, and display numeric byte semantics and the MOVE conversions between them, proven byte-identical against the GnuCOBOL 3.2 libcob oracle. Not a compiler; not arithmetic."
+license = "LGPL-3.0-or-later"
+keywords = ["cobol", "gnucobol", "packed-decimal", "comp-3", "decimal"]
+categories = ["encoding", "parsing"]
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+exclude = ["fuzz/", "/lab", "/reports"]
+
+[lints]
+workspace = true
+
+[dependencies]
+
+[features]
+default = []
+# Surface-only features. They MUST NOT change admitted byte semantics (see GNURUST.UNSAFE.0 /
+# the project README): they gate optional code paths, never dialect or conversion behavior.
+fuzzing = []

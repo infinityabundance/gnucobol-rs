@@ -1,0 +1,21 @@
+# Oracle runtime-view sub-receipt (GNURUST.COBCRUN-RUNTIME-CONFIG.0 / COBCRUN-INFO.0)
+
+The runtime has its own identity surface, distinct from `cobc --version`. Captured from the
+admitted, built `cobcrun (GnuCOBOL) 3.2.0` under `LC_ALL=C.UTF-8` with `COB_CONFIG_DIR` pointed at
+the lab prefix:
+
+| Artifact | `cobcrun` flag | sha256 (path-normalized) |
+|----------|----------------|--------------------------|
+| effective runtime config (66 lines) | `--runtime-config` | `c8ce17c630762cd2f32a8a4455628e9e1327561c05cabd8e21cf40f91e8972d4` |
+| runtime info / configured paths | `--info` | `a5add5f387265919bf7b1a556cc1fd945b555b920d51c1be9532dabe5b818e70` |
+
+> The committed `.txt` are **path-normalized** (`GNURUST.PATHSCRUB.0`): the host lab prefix is
+> rewritten to `<ORACLE_PREFIX>`/`<ROOT>` so no absolute path leaks. The sha256s above are of the
+> normalized files; the raw captures are host-specific and regenerable.
+
+The `.txt` captures live alongside this receipt. They record the runtime's *own* view of its
+configuration — the authoritative effective-config (env overrides are applied after file
+processing; `reset`/`includeif`/`${env}` make raw `runtime.cfg` non-monotonic, so the runtime's
+emitted view beats the rendered manual). The decimal slice does not depend on any of these settings
+(it is a pure byte kernel — `GNURUST.PUREDEC.0`); they are admitted now so future runtime courts
+cannot infer config instead of capturing it.
