@@ -14,6 +14,13 @@ oracle-first method: each entry names the slice sealed and the parity it proved.
   cobol85/2002 reject it), pre-3.2. `release_scope = GnuCOBOL 3.2 only`.
 - **Breaking (semver-minor):** `pic::Usage` gains `Comp6` **and is now `#[non_exhaustive]`** (so future
   usage variants stay additive). Downstream exhaustive `match`es on `Usage` need a wildcard arm.
+- **API future-proofing (folded into this one breaking release): every growth-prone public type is now
+  `#[non_exhaustive]`** so future courts are **patches, not minors**. Enums (variant growth): `Usage`,
+  `arith::Op` (so GNURUST.19 DIVIDE → `Op::Divide` is a patch), `arith::Round`, `init::Val`,
+  `cond::CondLit`, `cond::CondValue`. Output structs (field growth): `layout::Laid`, `pic::PicField`,
+  `edited::EditedDecode`, `copybook::{Provenance, Expanded}`, `init::ValueItem`. User-constructed value
+  types (`FieldAttr`, `Decimal`, `layout::{Item, Odo}`) are intentionally left exhaustive. **Intent: 0.7
+  is the last breaking minor for a long time — accumulate courts as 0.7.x patches.**
 
 ## [0.6.3]
 - **GNURUST.17 — cp500 EBCDIC zoned-decimal numeric DISPLAY decode.** `Decimal::from_ebcdic_zoned`

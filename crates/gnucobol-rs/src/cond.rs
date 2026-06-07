@@ -27,6 +27,7 @@ use core::cmp::Ordering;
 
 /// A single `VALUE` literal in a LEVEL-88 clause.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum CondLit {
     /// An alphanumeric literal (without quotes).
     Alpha(String),
@@ -36,6 +37,7 @@ pub enum CondLit {
 
 /// One `VALUE` entry: a single literal or a `start THRU end` range.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum CondValue {
     Lit(CondLit),
     Range(CondLit, CondLit),

@@ -26,6 +26,7 @@ use crate::value::Decimal;
 
 /// A binary decimal operation (`f1 := f1 op f2`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Op {
     Add,
     Subtract,
@@ -34,6 +35,7 @@ pub enum Op {
 
 /// Rounding when storing a result narrower than the computed scale.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Round {
     /// Default: drop low digits toward zero (`shift_decimal`).
     Truncate,

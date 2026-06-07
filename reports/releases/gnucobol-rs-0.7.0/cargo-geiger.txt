@@ -1,0 +1,7 @@
+status: fail
+generated_at: 2026-06-07T23:41:57Z
+note: every shipped crate is #![forbid(unsafe_code)]
+
+
+manifest path `/home/one/gnucobol-rs/Cargo.toml` is a virtual manifest, but this command requires running against an actual package in this workspace
+
