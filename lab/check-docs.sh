@@ -119,6 +119,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: PIC sweep $PSWEEP" ;;
     *) bad "oracle freshness: PIC sweep not clean ($PSWEEP)" ;;
   esac
+  BINSWEEP=$(bash "$ROOT/lab/oracle/binary_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$BINSWEEP" in
+    *"FAIL=0") note "oracle freshness: binary MOVE sweep $BINSWEEP" ;;
+    *) bad "oracle freshness: binary sweep not clean ($BINSWEEP)" ;;
+  esac
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

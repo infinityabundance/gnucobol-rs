@@ -17,6 +17,9 @@ claimed_now:
   - id: pic-field-model
     what: PIC clause + USAGE -> {type, digits, scale, flags, size}, matching cobc's field attrs
     scope: sealed subset 9/X/A/S/V, repeats, SIGN clause, USAGE DISPLAY/COMP-3 (GNURUST.3)
+  - id: binary-storage
+    what: COMP/BINARY/COMP-5/COMP-X field model + DISPLAY<->binary MOVE bytes, matching cobc/cob_move
+    scope: big-endian (COMP/COMP-X) / native (COMP-5), truncate/mask, two's complement, this LE host (GNURUST.14)
   - id: record-layout
     what: DATA DIVISION item byte offsets / group sizes, matching cobc's record layout
     scope: nested groups, fixed OCCURS, REDEFINES (<= target), FILLER (GNURUST.4)
@@ -62,7 +65,7 @@ not_claimed:
   - { id: synchronized-align,    note: "SYNCHRONIZED/alignment in record layout (GNURUST.BINARY.0)" }
   - { id: redefines-variant,     note: "active overlay discriminator (GNURUST.REDEFINES.VARIANT.0)" }
   - { id: level-88-false,        note: "SET cond TO FALSE + FALSE clause, condition expressions, collating-sensitive ranges (GNURUST.12b/SET88FALSE.0)" }
-  - { id: binary-comp,           note: "COMP/BINARY size/byteorder/SYNC alignment (GNURUST.BINARY.0)" }
+  - { id: binary-arith-sync,    note: "binary arithmetic, SYNCHRONIZED alignment, host-portable endian, COMP-6/float (GNURUST.BINARY-ARITH.0)" }
   - { id: source-format,         note: "fixed/free/variant parsing & preprocessing (GNURUST.SOURCEFORM.0)" }
   - { id: copy-replacing-advanced, note: "REPLACING LEADING/TRAILING/identifier operands, REPLACE directive (GNURUST.6 non-claim)" }
   - { id: copybook-advanced,     note: "inline/multi-line COPY, OF/IN library, SUPPRESS (GNURUST.COPYMAP.0)" }

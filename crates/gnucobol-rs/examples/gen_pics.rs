@@ -65,4 +65,25 @@ fn main() {
             }
         }
     }
+
+    // Binary families (`GNURUST.14`): COMP/BINARY, COMP-5, COMP-X over the 1-2-4-8 size boundaries,
+    // signed and unsigned, integer and V-scaled. Proves type/digits/scale/flags/size vs cobc.
+    for nd in [1usize, 2, 3, 4, 5, 6, 9, 10, 18] {
+        for sc in [0usize, 2] {
+            if sc >= nd {
+                continue;
+            }
+            let body = if sc == 0 {
+                format!("9({nd})")
+            } else {
+                format!("9({})V9({sc})", nd - sc)
+            };
+            for usage in ["COMP", "BINARY", "COMP-5", "COMP-X"] {
+                println!("b{id}\t{body}\t{usage}\t");
+                id += 1;
+                println!("b{id}\tS{body}\t{usage}\t");
+                id += 1;
+            }
+        }
+    }
 }

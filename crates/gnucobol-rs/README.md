@@ -103,6 +103,13 @@ parent), matching `cobc` — and its output always satisfies `eval_88` (round-tr
 `total=52 PASS=52 FAIL=0`. **TRUE only**: `SET ... TO FALSE`, the `FALSE` clause, condition
 expressions, and execution **fail closed** (`ConditionSetError`).
 
+## `GNURUST.14` — binary storage (COMP / COMP-5 / COMP-X)
+
+`build_field` admits `USAGE COMP`/`BINARY`/`COMP-5`/`COMP-X` (type/digits/scale/flags/size match `cobc`;
+PIC sweep 416/0), and `cob_move` handles DISPLAY↔binary both ways — big-endian/native two's complement,
+COMP digit-truncation, COMP-X/COMP-5 byte-masking (binary MOVE sweep 546/0). `Decimal::from_binary`
+decodes for the read path. Binary **arithmetic**, SYNCHRONIZED, and host-portable endian are non-claims.
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

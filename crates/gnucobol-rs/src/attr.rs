@@ -9,6 +9,19 @@
 pub const COB_TYPE_NUMERIC_DISPLAY: u16 = 0x10;
 /// `USAGE COMP-3` / `PACKED-DECIMAL`. `COB_TYPE_NUMERIC_PACKED`.
 pub const COB_TYPE_NUMERIC_PACKED: u16 = 0x12;
+/// `USAGE COMP`/`BINARY`/`COMP-5`/`COMP-X` — binary numeric. `COB_TYPE_NUMERIC_BINARY` (`common.h:666`).
+pub const COB_TYPE_NUMERIC_BINARY: u16 = 0x11;
+
+// --- Attribute flags --- common.h:690-701
+/// Binary field stored byte-swapped relative to the native host (big-endian on an LE host):
+/// `COMP`/`BINARY`/`COMP-X`. `COB_FLAG_BINARY_SWAP` (`common.h:695`).
+pub const COB_FLAG_BINARY_SWAP: u16 = 0x0020;
+/// "Real" binary (`COMP-5`): native byte order, full binary range (no PIC-digit truncation).
+/// `COB_FLAG_REAL_BINARY` (`common.h:696`).
+pub const COB_FLAG_REAL_BINARY: u16 = 0x0040;
+/// Binary value truncated to the PICTURE digit range (`COMP`/`BINARY` under `binary-truncate: yes`).
+/// `COB_FLAG_BINARY_TRUNC` (`common.h:701`).
+pub const COB_FLAG_BINARY_TRUNC: u16 = 0x0800;
 
 // --- Attribute flags --- common.h:690-698
 /// Field carries a sign (`S` in the PIC). `COB_FLAG_HAVE_SIGN`.

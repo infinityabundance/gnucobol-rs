@@ -63,6 +63,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.13` — packed ADD/SUBTRACT.** `cob_arith` seals ADD/SUBTRACT into a PACKED receiver (libcob's `cob_add_bcd` path), matching the receiving-field **bytes** for DISPLAY/COMP-3 operands, scales, truncate/ROUNDED, carry, overflow, and negative-zero-on-truncation. DIVIDE / SIZE ERROR / other rounding modes / bignum are non-claims. (`reports/RECEIPT-GNURUST-ADDBCD-13.md`.)
 
+**`GNURUST.14` — binary storage + MOVE.** `build_field` admits COMP/BINARY/COMP-5/COMP-X (type/digits/scale/flags/size vs `cobc`), and `cob_move` handles DISPLAY↔binary (endian, truncate/mask, two's-complement), with `Decimal::from_binary` for decode. Binary arithmetic, SYNC, host-portable endian are non-claims. (`reports/RECEIPT-GNURUST-BINARY-14.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

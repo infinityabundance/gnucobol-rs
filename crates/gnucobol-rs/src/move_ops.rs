@@ -313,6 +313,44 @@ pub fn cob_move(
     if dst.is_empty() {
         return Ok(()); // dst->size == 0 (move.c:1455)
     }
+    use crate::attr::COB_TYPE_NUMERIC_BINARY;
+    let src_bin = src_attr.field_type == COB_TYPE_NUMERIC_BINARY;
+    let dst_bin = dst_attr.field_type == COB_TYPE_NUMERIC_BINARY;
+
+    // Binary moves (`GNURUST.14`) route through a DISPLAY temp and the sealed display/packed moves:
+    // a binary side is decoded to / encoded from a zoned integer, the other side uses its court.
+    if dst_bin {
+        let signed = dst_attr.have_sign();
+        let dattr = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: dst_attr.digits,
+            scale: dst_attr.scale,
+            flags: if signed {
+                crate::attr::COB_FLAG_HAVE_SIGN
+            } else {
+                0
+            },
+        };
+        let mut dtemp = vec![b'0'; dst_attr.digits as usize];
+        if src_bin {
+            let int = crate::binary::binary_decode(src, src_attr);
+            let stemp = display_temp_from_int(int, src_attr.digits, src_attr.have_sign());
+            let sattr = display_attr(src_attr);
+            cob_move(&stemp, &sattr, &mut dtemp, &dattr)?;
+        } else {
+            cob_move(src, src_attr, &mut dtemp, &dattr)?;
+        }
+        let int = int_from_display(&dtemp, signed);
+        crate::binary::binary_encode(int, dst_attr, dst);
+        return Ok(());
+    }
+    if src_bin {
+        let int = crate::binary::binary_decode(src, src_attr);
+        let stemp = display_temp_from_int(int, src_attr.digits, src_attr.have_sign());
+        let sattr = display_attr(src_attr);
+        return cob_move(&stemp, &sattr, dst, dst_attr);
+    }
+
     match (src_attr.field_type, dst_attr.field_type) {
         (COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_DISPLAY) => {
             display_to_display(src, src_attr, dst, dst_attr);
@@ -330,5 +368,64 @@ pub fn cob_move(
             src_type: src_attr.field_type,
             dst_type: dst_attr.field_type,
         }),
+    }
+}
+
+/// A DISPLAY field-attr mirroring a binary field's digits/scale/sign (for the temp routing).
+fn display_attr(attr: &FieldAttr) -> FieldAttr {
+    FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits: attr.digits,
+        scale: attr.scale,
+        flags: if attr.have_sign() {
+            crate::attr::COB_FLAG_HAVE_SIGN
+        } else {
+            0
+        },
+    }
+}
+
+/// Build a zoned DISPLAY temp (`digits` bytes) representing the signed integer `int` (taken at the
+/// field scale, so its low `digits` digits are the stored representation).
+fn display_temp_from_int(int: i128, digits: u16, signed: bool) -> Vec<u8> {
+    let neg = int < 0;
+    let mut abs = int.unsigned_abs();
+    let modulus = 10u128.checked_pow(digits as u32).unwrap_or(u128::MAX);
+    abs %= modulus;
+    let mut d = vec![0u8; digits as usize];
+    for slot in d.iter_mut().rev() {
+        *slot = (abs % 10) as u8;
+        abs /= 10;
+    }
+    let mut temp: Vec<u8> = d.iter().map(|&x| sign::i2d(x)).collect();
+    if signed && neg {
+        if let Some(last) = temp.last_mut() {
+            *last = sign::put_sign_ascii(*last);
+        }
+    }
+    temp
+}
+
+/// Parse a zoned DISPLAY temp into a signed integer (the digit string as an integer).
+fn int_from_display(bytes: &[u8], signed: bool) -> i128 {
+    let attr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits: bytes.len() as u16,
+        scale: 0,
+        flags: if signed {
+            crate::attr::COB_FLAG_HAVE_SIGN
+        } else {
+            0
+        },
+    };
+    let d = crate::value::Decimal::from_display(bytes, &attr);
+    let mut mag: i128 = 0;
+    for &digit in &d.digits {
+        mag = mag.saturating_mul(10).saturating_add(digit as i128);
+    }
+    if d.negative {
+        -mag
+    } else {
+        mag
     }
 }

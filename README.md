@@ -23,7 +23,7 @@ byte. `gnucobol-rs` owns them first, with proof, before reaching for anything la
 |------|---------|--------|
 | **byte-layout** | a field's bytes match GnuCOBOL's exactly | **sealed** — COMP-3/zoned/display (`GNURUST.2`) |
 | **runtime** | a runtime operation (`MOVE`, …) matches `libcob` | **sealed** — decimal `MOVE` (`GNURUST.2`) |
-| **field model** | `PIC`+`USAGE` → `{type, digits, scale, flags, size}` matches `cobc` (incl. `P` scaling) | **sealed** — `pic` (`GNURUST.3`, `GNURUST.9`) |
+| **field model** | `PIC`+`USAGE` → `{type, digits, scale, flags, size}` matches `cobc` (`P`, COMP/COMP-5/COMP-X) | **sealed** — `pic` (`GNURUST.3`, `GNURUST.9`, `GNURUST.14`) |
 | **record layout** | item offsets / group sizes / `OCCURS` (incl. `DEPENDING ON` physical-max) / `REDEFINES` match `cobc` | **sealed** — `layout` (`GNURUST.4`, `GNURUST.10`) |
 | **copybook expansion** | `COPY` splice + `REPLACING` match the `cobc` preprocessor | **sealed** — `copybook` (`GNURUST.5`, `GNURUST.6`) |
 | **arithmetic** | `ADD`/`SUBTRACT`/`MULTIPLY` + ROUNDED (incl. packed receiver) match `cob_add`/`cob_mul` | **sealed** — `arith` (`GNURUST.7`, `GNURUST.13`) |
@@ -53,6 +53,7 @@ ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabili
 |-------|----------------------|--------|:------:|-------------|
 | `GNURUST.2` MOVE | field-storage + move-result bytes | `libcob cob_move` | 0.1.0 | arithmetic, edited PIC |
 | `GNURUST.3/9` PIC (+P) | `cob_field_attr` + size | `cobc -C` / `LENGTH OF` | 0.2.0/0.2.6 | edited PIC, V+P |
+| `GNURUST.14` binary | COMP/COMP-5/COMP-X storage + MOVE bytes | `cobc -C` / `cob_move` | 0.4.0 | binary arithmetic, SYNC, portable endian |
 | `GNURUST.4` layout | item offsets / sizes | `cobc -C` offsets | 0.2.1 | SYNC, REDEFINES-grow |
 | `GNURUST.5/6` COPY/REPLACING | expanded text-word stream | `cobc -P` | 0.2.2/0.2.3 | REPLACE directive |
 | `GNURUST.7/13` arithmetic | receiving-field bytes | `cob_add/sub/mul` | 0.2.4/0.3.3 | DIVIDE, SIZE ERROR, bignum |
@@ -115,7 +116,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 moves, field model, record layout, initialization, comparison, formatting, source expansion,
 runtime lifecycle, files, reports, diagnostics — and **no lower layer is allowed to imply a higher
 layer**. Sealed today: storage bytes + `MOVE` bytes (`GNURUST.2`), `PIC`→field-model (`GNURUST.3`),
-DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), and packed `ADD`/`SUBTRACT` (`GNURUST.13`). The full
+DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), packed `ADD`/`SUBTRACT` (`GNURUST.13`), and COMP/COMP-5/COMP-X binary storage+MOVE (`GNURUST.14`). The full
 taxonomy is in
 [`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
 its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the

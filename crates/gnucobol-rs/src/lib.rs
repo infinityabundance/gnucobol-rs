@@ -42,6 +42,7 @@
 
 pub mod arith;
 pub mod attr;
+mod binary;
 pub mod cond;
 pub mod copybook;
 pub mod error;
@@ -170,10 +171,10 @@ pub fn __fuzz_cob_move(data: &[u8]) {
         return;
     }
     let mk_attr = |b: &[u8]| FieldAttr {
-        field_type: if b[0] & 1 == 0 {
-            COB_TYPE_NUMERIC_DISPLAY
-        } else {
-            COB_TYPE_NUMERIC_PACKED
+        field_type: match b[0] % 3 {
+            0 => COB_TYPE_NUMERIC_DISPLAY,
+            1 => COB_TYPE_NUMERIC_PACKED,
+            _ => attr::COB_TYPE_NUMERIC_BINARY, // GNURUST.14: binary moves on the hostile surface too
         },
         digits: (b[1] % 39) as u16,
         scale: (b[2] % 39) as i16,
@@ -188,6 +189,7 @@ pub fn __fuzz_cob_move(data: &[u8]) {
     let _ = cob_move(src, &src_attr, &mut dst, &dst_attr);
     let _ = Decimal::from_packed(src, &src_attr);
     let _ = Decimal::from_display(src, &src_attr);
+    let _ = Decimal::from_binary(src, &src_attr);
 }
 
 /// Fuzz target: parse an arbitrary string as a PICTURE; asserts only panic-freedom — any hostile

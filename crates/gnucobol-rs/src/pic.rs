@@ -11,7 +11,8 @@
 //! are deferred future courts, not silently mis-parsed.
 
 use crate::attr::{
-    FieldAttr, COB_FLAG_HAVE_SIGN, COB_FLAG_SIGN_LEADING, COB_FLAG_SIGN_SEPARATE,
+    FieldAttr, COB_FLAG_BINARY_SWAP, COB_FLAG_BINARY_TRUNC, COB_FLAG_HAVE_SIGN,
+    COB_FLAG_REAL_BINARY, COB_FLAG_SIGN_LEADING, COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_BINARY,
     COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
 
@@ -25,6 +26,45 @@ pub enum Usage {
     Display,
     /// `USAGE COMP-3` / `PACKED-DECIMAL` / `COMPUTATIONAL-3`.
     Comp3,
+    /// `USAGE COMP` / `BINARY` / `COMPUTATIONAL` (`GNURUST.14`): big-endian binary, truncated to the
+    /// PIC digit range (`binary-truncate: yes`).
+    Comp,
+    /// `USAGE COMP-5` (`GNURUST.14`): native byte order, full binary range.
+    Comp5,
+    /// `USAGE COMP-X` (`GNURUST.14`): big-endian binary, full binary range (masked to the byte width).
+    CompX,
+}
+
+/// Storage bytes for `COMP`/`BINARY`/`COMP-5`, under the oracle's `binary-size: 1-2-4-8` config
+/// (sizes are powers of two; same table for both).
+pub(crate) fn binary_size(digits: u16) -> usize {
+    match digits {
+        0 => 0,
+        1..=2 => 1,
+        3..=4 => 2,
+        5..=9 => 4,
+        10..=18 => 8,
+        _ => 16, // 19..=38
+    }
+}
+
+/// Storage bytes for `COMP-X` — the **tight** byte count: the smallest `k` with `256^k >= 10^digits`
+/// (e.g. `9(6)` → 3, `9(10)` → 5), proven against `cobc`. Distinct from the `1-2-4-8` table.
+pub(crate) fn comp_x_size(digits: u16) -> usize {
+    if digits == 0 {
+        return 0;
+    }
+    let mut ten_pow: u128 = 1;
+    for _ in 0..digits {
+        ten_pow = ten_pow.saturating_mul(10);
+    }
+    let mut k = 0usize;
+    let mut cap: u128 = 1;
+    while cap < ten_pow {
+        cap = cap.saturating_mul(256);
+        k += 1;
+    }
+    k
 }
 
 /// A parsed field: the [`FieldAttr`] plus its storage `size` in bytes.
@@ -251,14 +291,32 @@ pub fn build_field(
         }
     }
 
-    let (field_type, size) = match usage {
+    let (field_type, size, bin_flags) = match usage {
         Usage::Display => {
             let sep = if has_sign && sign_separate { 1 } else { 0 };
-            (COB_TYPE_NUMERIC_DISPLAY, nines as usize + sep)
+            (COB_TYPE_NUMERIC_DISPLAY, nines as usize + sep, 0)
         }
         // COMP-3 always carries a sign nibble (0x0C/0x0D, or 0x0F for unsigned): size = n/2 + 1.
-        Usage::Comp3 => (COB_TYPE_NUMERIC_PACKED, nines as usize / 2 + 1),
+        Usage::Comp3 => (COB_TYPE_NUMERIC_PACKED, nines as usize / 2 + 1, 0),
+        // Binary families (GNURUST.14): type BINARY, size from the 1-2-4-8 table; the usage flags
+        // distinguish endian + truncation (proven against `cobc`'s emitted attrs).
+        Usage::Comp => (
+            COB_TYPE_NUMERIC_BINARY,
+            binary_size(nines),
+            COB_FLAG_BINARY_SWAP | COB_FLAG_BINARY_TRUNC,
+        ),
+        Usage::Comp5 => (
+            COB_TYPE_NUMERIC_BINARY,
+            binary_size(nines),
+            COB_FLAG_REAL_BINARY,
+        ),
+        Usage::CompX => (
+            COB_TYPE_NUMERIC_BINARY,
+            comp_x_size(nines),
+            COB_FLAG_BINARY_SWAP,
+        ),
     };
+    flags |= bin_flags;
 
     Ok(PicField {
         attr: FieldAttr {
@@ -338,6 +396,39 @@ mod tests {
             (h.attr.field_type, h.attr.digits, h.attr.scale, h.size),
             (0x12, 12, 4, 7)
         );
+    }
+
+    #[test]
+    fn binary_field_model_matches_oracle() {
+        use crate::attr::{
+            COB_FLAG_BINARY_SWAP, COB_FLAG_BINARY_TRUNC, COB_FLAG_HAVE_SIGN, COB_FLAG_REAL_BINARY,
+            COB_TYPE_NUMERIC_BINARY,
+        };
+        // COMP: type BINARY, 1-2-4-8 size, SWAP|TRUNC (+sign).
+        let c = f("9(4)", Usage::Comp, false, false);
+        assert_eq!(
+            (c.attr.field_type, c.attr.flags, c.size),
+            (
+                COB_TYPE_NUMERIC_BINARY,
+                COB_FLAG_BINARY_SWAP | COB_FLAG_BINARY_TRUNC,
+                2
+            )
+        );
+        let cs = f("S9(9)", Usage::Comp, false, false);
+        assert_eq!(
+            (cs.attr.flags, cs.size),
+            (
+                COB_FLAG_BINARY_SWAP | COB_FLAG_BINARY_TRUNC | COB_FLAG_HAVE_SIGN,
+                4
+            )
+        );
+        // COMP-5: native, full-range (REAL_BINARY), same 1-2-4-8 size.
+        let c5 = f("9(4)", Usage::Comp5, false, false);
+        assert_eq!((c5.attr.flags, c5.size), (COB_FLAG_REAL_BINARY, 2));
+        // COMP-X: SWAP, tight size (9(6) -> 3, 9(10) -> 5).
+        let cx = f("9(6)", Usage::CompX, false, false);
+        assert_eq!((cx.attr.flags, cx.size), (COB_FLAG_BINARY_SWAP, 3));
+        assert_eq!(f("9(10)", Usage::CompX, false, false).size, 5);
     }
 
     #[test]

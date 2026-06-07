@@ -66,6 +66,26 @@ impl Decimal {
         }
     }
 
+    /// Decode a binary field (`COMP`/`BINARY`/`COMP-5`/`COMP-X`, `GNURUST.14`) into a [`Decimal`].
+    /// Endianness and sign come from the field flags; the value is the two's-complement integer at
+    /// the field scale, rendered as `digits` decimal digits.
+    pub fn from_binary(data: &[u8], attr: &FieldAttr) -> Self {
+        let int = crate::binary::binary_decode(data, attr);
+        let negative = int < 0;
+        let mut abs = int.unsigned_abs();
+        let width = attr.digits.max(1) as usize;
+        let mut digits = vec![0u8; width];
+        for slot in digits.iter_mut().rev() {
+            *slot = (abs % 10) as u8;
+            abs /= 10;
+        }
+        Decimal {
+            negative,
+            digits,
+            scale: attr.scale,
+        }
+    }
+
     /// Fallible, lossless conversion to `i128` of the *unscaled* integer formed by the digits
     /// (i.e. value × 10^scale). Returns `None` on overflow. This is convenience only — the digit
     /// vector is the authority (`GNURUST.DECAPI.0`).

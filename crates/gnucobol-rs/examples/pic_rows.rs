@@ -22,6 +22,9 @@ fn main() {
         let pic = f.get(1).copied().unwrap_or("");
         let usage = match f.get(2).copied().unwrap_or("") {
             "COMP-3" | "PACKED-DECIMAL" | "COMPUTATIONAL-3" => Usage::Comp3,
+            "COMP" | "BINARY" | "COMPUTATIONAL" => Usage::Comp,
+            "COMP-5" => Usage::Comp5,
+            "COMP-X" => Usage::CompX,
             _ => Usage::Display,
         };
         let sign = f.get(3).copied().unwrap_or("").to_ascii_uppercase();

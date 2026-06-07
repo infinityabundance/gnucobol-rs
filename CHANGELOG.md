@@ -3,6 +3,20 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.4.0]
+
+### GNURUST.14 — `pic`/`cob_move`: COMP / COMP-5 / COMP-X binary storage + MOVE
+- Binary numeric **read fidelity**. `build_field` admits `USAGE COMP`/`BINARY`/`COMP-5`/`COMP-X` →
+  `{type=BINARY, digits, scale, flags, size}` matching `cobc` (PIC sweep 416/0): COMP = big-endian +
+  truncate (`SWAP|TRUNC`), COMP-X = big-endian full-range (`SWAP`, **tight** size), COMP-5 = native
+  full-range (`REAL_BINARY`); sizes `1-2-4-8` for COMP/COMP-5, tight for COMP-X.
+- `cob_move` now handles DISPLAY↔binary (and PACKED↔binary): move-result bytes match libcob —
+  endianness, COMP digit-truncation, COMP-X/COMP-5 byte-masking, two's-complement signs (binary MOVE
+  sweep 546/0). `Decimal::from_binary` added for the reconciliation read path. 10M move-fuzz clean.
+- Non-claims: binary arithmetic, SYNCHRONIZED, host-portable endian, COMP-6, float — fail closed.
+- **Breaking (semver-minor, pre-1.0):** `pic::Usage` gains `Comp`/`Comp5`/`CompX` variants (can break
+  exhaustive `match`es). Published companion crates pin `^0.3`, so they are unaffected.
+
 ## [0.3.3]
 
 ### GNURUST.13 — `arith`: packed ADD/SUBTRACT (cob_add_bcd)
