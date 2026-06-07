@@ -1,0 +1,26 @@
+{
+  "schema": "gnucobol-atlas-dialect-layout-v1",
+  "axis": "G",
+  "evidence_kind": "oracle_source (dialect .conf)",
+  "note": "binary storage config per -std dialect, resolved through the .conf include chain. data_layout_delta: COMP/binary field WIDTHS differ by dialect (1-2-4-8 vs 2-4-8 vs 1--8), so the SAME copybook decodes to different bytes. gnucobol-rs GNURUST.14 sealed the default/cobol85 table (1-2-4-8).",
+  "dialects": {
+    "default": {"binary_size": "1-2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "cobol85": {"binary_size": "1-2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "cobol2002": {"binary_size": "1-2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "cobol2014": {"binary_size": "1-2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "xopen": {"binary_size": "1-2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "ibm": {"binary_size": "2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "no"},
+    "mvs": {"binary_size": "2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "no"},
+    "mf": {"binary_size": "1--8", "binary_byteorder": "big-endian", "binary_truncate": "no"},
+    "acu": {"binary_size": "1-2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "rm": {"binary_size": "2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "bs2000": {"binary_size": "2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "gcos": {"binary_size": "2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "yes"},
+    "realia": {"binary_size": "2-4-8", "binary_byteorder": "big-endian", "binary_truncate": "no"}
+  },
+  "findings": [
+    "binary-size differs: default/cobol85/cobol2002/acu = 1-2-4-8; ibm/mvs/rm/bs2000 = 2-4-8 (NO 1-byte: PIC 9(1-4) COMP is 2 bytes, not 1-2); mf = 1--8 (every width 1-8).",
+    "Migration scar: the same `PIC 9(2) COMP` field is 1 byte under default but 2 bytes under IBM/MVS. A copybook alone does not fix binary layout -- the source dialect does.",
+    "gnucobol-rs non-claim refinement: GNURUST.14 binary sizes are the default/cobol85 1-2-4-8 table; IBM/MVS (2-4-8) and MF (1--8) binary layouts are NOT claimed."
+  ]
+}

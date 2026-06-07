@@ -63,6 +63,14 @@ binary beyond the sealed decode are **not** claimed. The non-claims are machine-
 | Fuzz (`cob_move`, binary on the surface) | **10,000,000 runs, 0 crashes** |
 | `fmt` / `clippy -D warnings` / doc-gate | clean |
 
+## Dialect-layout caveat (atlas cross-check)
+
+The `1-2-4-8` size table is the admitted oracle's **default/cobol85** `binary-size` config. The COBOL
+atlas (`archaeology/atlases/G-gnucobol-dialect-axis/dialect-layout.json`) shows other dialects differ:
+**IBM/MVS/RM/BS2000 = `2-4-8`** (no 1-byte: `PIC 9(2) COMP` is 2 bytes, not 1), **MF = `1--8`** (every
+width). So the same COMP copybook decodes to different bytes per source dialect; GNURUST.14 claims the
+default table only. This is a non-claim, recorded honestly.
+
 ## Versioning note
 
 `pic::Usage` gains `Comp`/`Comp5`/`CompX` variants — adding variants to a non-`#[non_exhaustive]`

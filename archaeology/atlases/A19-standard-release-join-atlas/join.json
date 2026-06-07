@@ -16,7 +16,8 @@
     "behavior_changed_between_releases",
     "oracle_bug_fixed_later",
     "standard_behavior_differs_from_gnucobol",
-    "physical_vs_logical_byte_domain"
+    "physical_vs_logical_byte_domain",
+    "data_layout_delta"
   ],
   "rows": [
     {
@@ -50,15 +51,17 @@
       },
       "gnucobol_axis": {
         "gnucobol_3_2": "runtime_functional",
-        "note": "COMP-X size table differs from COMP/COMP-5 (tight 256^k>=10^digits)"
+        "note": "COMP-X size table differs from COMP/COMP-5 (tight 256^k>=10^digits)",
+        "binary_size_by_dialect": "default/cobol85/acu=1-2-4-8; ibm/mvs/rm/bs2000=2-4-8; mf=1--8 (see G/dialect-layout.json)"
       },
       "gnucobol_rs_axis": {
         "status": "sealed",
         "campaign": "GNURUST.14",
-        "non_claim": "binary arithmetic; SYNC; host-portable endian"
+        "non_claim": "binary arithmetic; SYNC; host-portable endian; IBM/MVS (2-4-8) and MF (1--8) binary layouts (sealed the default 1-2-4-8 table)"
       },
       "drift": [
-        "standard_behavior_differs_from_gnucobol"
+        "standard_behavior_differs_from_gnucobol",
+        "data_layout_delta"
       ],
       "fixture_priority": "already_sealed"
     },

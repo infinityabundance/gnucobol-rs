@@ -19,7 +19,7 @@ claimed_now:
     scope: sealed subset 9/X/A/S/V, repeats, SIGN clause, USAGE DISPLAY/COMP-3 (GNURUST.3)
   - id: binary-storage
     what: COMP/BINARY/COMP-5/COMP-X field model + DISPLAY<->binary MOVE bytes, matching cobc/cob_move
-    scope: big-endian (COMP/COMP-X) / native (COMP-5), truncate/mask, two's complement, this LE host (GNURUST.14)
+    scope: big-endian (COMP/COMP-X) / native (COMP-5), truncate/mask, two's complement, this LE host; the default/cobol85 binary-size 1-2-4-8 table ONLY -- IBM/MVS (2-4-8) and MF (1--8) dialect layouts are NOT claimed (GNURUST.14; see archaeology G/dialect-layout.json)
   - id: ebcdic-cp500-display
     what: raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table (cob_load_collation)
     scope: cp500 only; alphanumeric DISPLAY decode; binary/packed pass through untouched (GNURUST.15)
