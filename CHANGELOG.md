@@ -3,6 +3,16 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.4]
+
+### GNURUST.7 — `arith`: decimal arithmetic (ADD/SUBTRACT/MULTIPLY)
+- `gnucobol_rs::cob_arith` computes `a := a (op) b` in **pure-Rust integer decimal** (i128, zero
+  deps, no float), proven byte-identical to libcob `cob_add`/`cob_sub`/`cob_mul`: ADD/SUBTRACT with
+  a DISPLAY receiving field + MULTIPLY (DISPLAY/COMP-3), truncation and ROUNDED (nearest-away),
+  cross-scale, all sign combos, negative-zero-on-overflow. Sweep PASS=1800 FAIL=0; 8M fuzz runs
+  clean. ADD/SUBTRACT into a PACKED field (libcob's separate `cob_add_bcd` path), DIVIDE, the other
+  rounding modes, ON SIZE ERROR, and >38-digit (bignum) inputs fail closed (deferred).
+
 ## [0.2.3]
 
 ### GNURUST.6 — `copybook`: COPY ... REPLACING (whole-text-word)

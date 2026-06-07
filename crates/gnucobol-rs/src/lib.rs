@@ -40,6 +40,7 @@
 
 #![forbid(unsafe_code)]
 
+pub mod arith;
 pub mod attr;
 pub mod copybook;
 pub mod error;
@@ -49,6 +50,7 @@ pub mod pic;
 mod sign;
 pub mod value;
 
+pub use arith::{cob_arith, ArithError, Op, Round};
 pub use attr::{
     FieldAttr, COB_FLAG_HAVE_SIGN, COB_FLAG_NO_SIGN_NIBBLE, COB_FLAG_SIGN_LEADING,
     COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
@@ -264,6 +266,43 @@ pub fn __fuzz_copybook(data: &[u8]) {
     }
     let main = s.split('\u{1}').next().unwrap_or("");
     let _ = copybook::expand(main, &Map(m));
+}
+
+/// Fuzz target: arithmetic over arbitrary operand bytes/attrs; asserts only panic-freedom — hostile
+/// digits/scales/values must yield a typed `ArithError`, never a panic or overflow (the i128
+/// checked arithmetic + pow10 bounds are the sharp surface).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_arith(data: &[u8]) {
+    if data.len() < 9 {
+        return;
+    }
+    let mk = |b: &[u8]| FieldAttr {
+        field_type: if b[0] & 1 == 0 {
+            COB_TYPE_NUMERIC_DISPLAY
+        } else {
+            COB_TYPE_NUMERIC_PACKED
+        },
+        digits: (b[1] % 40) as u16,
+        scale: (b[2] % 40) as i16,
+        flags: b[3] as u16,
+    };
+    let a_attr = mk(&data[0..4]);
+    let b_attr = mk(&data[4..8]);
+    let op = match data[8] % 3 {
+        0 => arith::Op::Add,
+        1 => arith::Op::Subtract,
+        _ => arith::Op::Multiply,
+    };
+    let round = if data[8] & 0x80 == 0 {
+        arith::Round::Truncate
+    } else {
+        arith::Round::NearAwayFromZero
+    };
+    let body = &data[9..];
+    let at = (data[8] as usize >> 1) % (body.len() + 1);
+    let (a, b) = body.split_at(at);
+    let _ = arith::cob_arith(op, a, &a_attr, b, &b_attr, round);
 }
 
 #[cfg(test)]

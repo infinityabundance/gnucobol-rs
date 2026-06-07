@@ -26,7 +26,8 @@ byte. `gnucobol-rs` owns them first, with proof, before reaching for anything la
 | **field model** | `PIC`+`USAGE` → `{type, digits, scale, flags, size}` matches `cobc` | **sealed** — `pic` (`GNURUST.3`) |
 | **record layout** | item byte offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc` | **sealed** — `layout` (`GNURUST.4`) |
 | **copybook expansion** | `COPY` splice + `REPLACING` match the `cobc` preprocessor | **sealed** — `copybook` (`GNURUST.5`, `GNURUST.6`) |
-| source | source-form / `COPY REPLACING` / directives | future campaign |
+| **arithmetic** | `ADD`/`SUBTRACT`/`MULTIPLY` + ROUNDED match `cob_add`/`cob_mul` | **sealed** — `arith` (`GNURUST.7`) |
+| source | source-form / directives | future campaign |
 | behavior | program stdout/stderr/exit matches `cobc -x` output | oracle harness only |
 | diagnostic | compiler messages match `cobc` | not claimed |
 | compiler-replacement | emit native code | **not claimed — requires future receipts** |
@@ -63,7 +64,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 moves, field model, record layout, initialization, comparison, formatting, source expansion,
 runtime lifecycle, files, reports, diagnostics — and **no lower layer is allowed to imply a higher
 layer**. Sealed today: storage bytes + `MOVE` bytes (`GNURUST.2`), `PIC`→field-model (`GNURUST.3`),
-DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), and `COPY ... REPLACING` (`GNURUST.6`). The full
+DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), and decimal arithmetic (`GNURUST.7`). The full
 taxonomy is in
 [`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
 its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the

@@ -26,8 +26,12 @@ claimed_now:
   - id: copy-replacing
     what: COPY ... REPLACING ==old== BY ==new== whole-text-word replacement matching cobc -P
     scope: pseudo-text operands, multiple pairs, composing across nesting (GNURUST.6)
+  - id: arithmetic-decimal
+    what: ADD/SUBTRACT (DISPLAY) + MULTIPLY (DISPLAY/COMP-3), truncate+ROUNDED, matching cob_add/cob_mul
+    scope: pure-Rust i128 integer decimal, <=38 digits, near-away rounding (GNURUST.7)
 not_claimed:
-  - { id: arithmetic,            note: "ADD/SUBTRACT/MULTIPLY/DIVIDE/ROUNDED/ON SIZE ERROR — deferred (GMP-backed)" }
+  - { id: arith-packed-addsub,  note: "ADD/SUBTRACT into PACKED (cob_add_bcd path) (GNURUST.ARITH-BCD.0)" }
+  - { id: arith-divide,         note: "DIVIDE + remainder, other rounding modes, ON SIZE ERROR, >38-digit bignum (GNURUST.ARITH-BIGNUM.0)" }
   - { id: edited-pictures,       note: "Z/$/CR/DB/*/BLANK WHEN ZERO rendering (GNURUST.EDITED.0)" }
   - { id: display-stdout,        note: "what DISPLAY prints — distinct from storage bytes" }
   - { id: comparison,            note: "IF/SEARCH ALL ordering; COLLATING SEQUENCE (GNURUST.COLLATE.0)" }

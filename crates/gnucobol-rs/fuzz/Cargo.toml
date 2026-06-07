@@ -45,3 +45,10 @@ path = "fuzz_targets/copybook.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "arith"
+path = "fuzz_targets/arith.rs"
+test = false
+doc = false
+bench = false

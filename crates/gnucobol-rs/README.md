@@ -11,8 +11,9 @@ compatibility court.
 
 ## What it does (sealed claims)
 
-Each is proven byte-identical against the GnuCOBOL 3.2 oracle: **`GNURUST.2`** decimal `MOVE` bytes
-(below), **`GNURUST.3`** PIC→field-model (`pic`), and **`GNURUST.4`** record layout (`layout`).
+Each is proven against the GnuCOBOL 3.2 oracle: **`GNURUST.2`** decimal `MOVE` bytes (below),
+**`GNURUST.3`** PIC→field-model (`pic`), **`GNURUST.4`** record layout (`layout`), **`GNURUST.5`/`6`**
+`COPY`(+`REPLACING`) expansion (`copybook`), and **`GNURUST.7`** decimal arithmetic (`arith`).
 
 ### `GNURUST.2` — decimal `MOVE` bytes
 
@@ -70,12 +71,21 @@ recursively, with cycle detection and a per-line provenance map — matching the
 closed** (typed `CopyError`) on `LEADING`/`TRAILING`/identifier operands, recursion, and
 over-deep/over-large expansion.
 
+## `GNURUST.7` — decimal arithmetic (`gnucobol_rs::cob_arith`)
+
+`cob_arith(op, a, a_attr, b, b_attr, round)` computes `a := a (op) b` in pure-Rust integer decimal
+(i128, zero deps, no float), matching libcob `cob_add`/`cob_sub`/`cob_mul`: ADD/SUBTRACT (DISPLAY) +
+MULTIPLY (DISPLAY/COMP-3), truncation and ROUNDED (nearest-away), negative-zero-on-overflow (sweep
+`PASS=1800 FAIL=0`). ADD/SUBTRACT into PACKED (libcob's separate BCD path), DIVIDE, other rounding
+modes, and >38-digit (bignum) inputs **fail closed** with a typed `ArithError`.
+
 ## What it does NOT do
 
-Not a GnuCOBOL replacement, not a compiler, not `libcob`. **No** decimal arithmetic (deferred), no
-edited pictures, no `DISPLAY`-statement output, no comparison/collation, no binary/float, no files.
-Every other `cob_move` pair **fails closed** with `UnsupportedConversion`. See the repository's
-`reports/negative-claims.md` and `docs/future-risk-register.md`.
+Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no
+`DIVIDE`, no `ADD`/`SUBTRACT` into a PACKED field (libcob's separate BCD path), no rounding modes
+other than nearest-away, no `ON SIZE ERROR`; no edited pictures, no `DISPLAY`-statement output, no
+comparison/collation, no binary/float, no files; no `P` scaling, no `OCCURS DEPENDING ON`. Each
+**fails closed** with a typed error. See `reports/negative-claims.md` and `docs/future-risk-register.md`.
 
 ## License
 

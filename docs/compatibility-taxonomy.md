@@ -14,6 +14,7 @@ as evidence for a higher one.
 | 0b | **Record layout** | do item offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc`? | **sealed** — `layout` (`GNURUST.4`) |
 | 1 | **Storage parity** | does a field hold the same bytes? | **sealed** (`GNURUST.2`) |
 | 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealed** (`GNURUST.2`) |
+| 2c | **Arithmetic parity** | do `ADD`/`SUBTRACT`/`MULTIPLY` result bytes match `cob_add`/`cob_mul`? | **sealed** — `arith` (`GNURUST.7`); DIVIDE / packed add-sub / other modes future |
 | 3 | Initialization parity | `VALUE` / figurative constants → initial bytes | future |
 | 4 | Comparison parity | `IF a < b`, `SEARCH ALL`, collation | future |
 | 5 | Display/output parity | `DISPLAY`, edited pictures, Report Writer | future |
