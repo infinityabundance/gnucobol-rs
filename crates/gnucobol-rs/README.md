@@ -9,7 +9,12 @@ is a deterministic function of its `(bytes, attrs)` inputs — no global state, 
 reads, panic-free on hostile input. It is part of the [`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs)
 compatibility court.
 
-## What it does (sealed claim)
+## What it does (sealed claims)
+
+Each is proven byte-identical against the GnuCOBOL 3.2 oracle: **`GNURUST.2`** decimal `MOVE` bytes
+(below), **`GNURUST.3`** PIC→field-model (`pic`), and **`GNURUST.4`** record layout (`layout`).
+
+### `GNURUST.2` — decimal `MOVE` bytes
 
 For three elementary `cob_move` type pairs on a little-endian ASCII host under `LC_ALL=C.UTF-8`:
 
@@ -33,7 +38,7 @@ cob_move(&src, &src_attr, &mut dst, &dst_attr).unwrap();
 assert_eq!(dst, [0x01, 0x23, 0x4d]); // COMP-3, negative sign nibble 0x0d
 ```
 
-## PIC → field model (`gnucobol_rs::pic`)
+## `GNURUST.3` — PIC → field model (`gnucobol_rs::pic`)
 
 Parse a COBOL `PIC` clause + `USAGE` into the same field model, matching the GnuCOBOL compiler's
 own `cob_field_attr` + storage-size computation (differential sweep vs `cobc`, `PASS=192 FAIL=0`):
@@ -48,6 +53,13 @@ assert_eq!((f.attr.field_type, f.attr.digits, f.attr.scale, f.size), (0x12, 7, 2
 Sealed subset: `9 X A S V`, repeats `(n)`, `SIGN [LEADING|TRAILING] [SEPARATE]`,
 `USAGE DISPLAY`/`COMP-3`. The `P` scaling symbol, edited pictures, and other usages **fail closed**
 with a typed `PicError`.
+
+## `GNURUST.4` — DATA DIVISION layout (`gnucobol_rs::layout`)
+
+`lay_out` assigns each record item its byte **offset** and **size** — nested groups, fixed
+`OCCURS n TIMES`, `REDEFINES` overlay, and `FILLER` — matching the GnuCOBOL compiler's own record
+layout (differential sweep vs `cobc`, `PASS=32 FAIL=0`). `OCCURS DEPENDING ON`, `SYNCHRONIZED`, and
+a `REDEFINES` larger than its target **fail closed** with a typed `LayoutError`.
 
 ## What it does NOT do
 

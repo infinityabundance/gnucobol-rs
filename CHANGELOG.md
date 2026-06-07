@@ -3,6 +3,17 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.1]
+
+### GNURUST.4 — `layout`: DATA DIVISION record layout
+- `gnucobol_rs::layout::lay_out` assigns each record item its byte offset and one-occurrence size
+  — level-numbered nested groups, fixed `OCCURS n TIMES`, `REDEFINES` overlay, `FILLER` — proven to
+  match the GnuCOBOL compiler's own record layout (differential sweep vs `cobc` `records=6 PASS=32
+  FAIL=0`; cross-checked by runtime `LENGTH OF`). `OCCURS DEPENDING ON`, `SYNCHRONIZED`, and a
+  `REDEFINES` larger than its target fail closed. Fuzz: 5M runs, 0 crashes.
+- Documentation refresh gate strengthened: every sealed campaign (per receipt) must now be
+  referenced in the README and all load-bearing docs, or the gate fails (anti-staleness).
+
 ## [0.2.0]
 
 ### GNURUST.3 — `pic`: PICTURE → field model

@@ -10,8 +10,10 @@ as evidence for a higher one.
 
 | # | Court | Question it answers | Status |
 |---|-------|---------------------|--------|
-| 1 | **Storage parity** | does a field hold the same bytes? | **sealing now** (`gnucobol-rs`) |
-| 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealing now** (`gnucobol-rs`) |
+| 0a | **Field model** | does `PIC`+`USAGE` → `{type,digits,scale,flags,size}` match `cobc`? | **sealed** — `pic` (`GNURUST.3`) |
+| 0b | **Record layout** | do item offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc`? | **sealed** — `layout` (`GNURUST.4`) |
+| 1 | **Storage parity** | does a field hold the same bytes? | **sealed** (`GNURUST.2`) |
+| 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealed** (`GNURUST.2`) |
 | 3 | Initialization parity | `VALUE` / figurative constants → initial bytes | future |
 | 4 | Comparison parity | `IF a < b`, `SEARCH ALL`, collation | future |
 | 5 | Display/output parity | `DISPLAY`, edited pictures, Report Writer | future |

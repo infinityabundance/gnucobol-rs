@@ -62,9 +62,34 @@ grep -q 'open.*append-only' docs/future-risk-register.md || bad "future-risk-reg
 [ -s reports/negative-claims.md ] || bad "negative-claims.md is empty"
 note "future-risk register open/append-only; negative-claims present"
 
-# 8. CHANGELOG records both milestones.
+# 8. CHANGELOG records the foundation + first sealed milestone.
 grep -q 'GNURUST.1' CHANGELOG.md && grep -q 'GNURUST.2' CHANGELOG.md || bad "CHANGELOG missing GNURUST.1/GNURUST.2"
 note "CHANGELOG records GNURUST.1 and GNURUST.2"
+
+# 8b. ANTI-STALENESS: every SEALED campaign (one receipt per campaign) must be reflected in the
+#     README and the load-bearing docs. This is what stops the README/docs drifting behind the
+#     code as new courts are sealed (every doc is covered, not just src).
+SEALED_DOCS="README.md CHANGELOG.md docs/claim-boundary.md docs/compatibility-taxonomy.md docs/future-risk-register.md crates/gnucobol-rs/README.md"
+for rc in reports/RECEIPT-GNURUST-*.md; do
+  [ -f "$rc" ] || continue
+  code=$(grep -oE 'Campaign GNURUST\.[0-9]+' "$rc" | grep -oE 'GNURUST\.[0-9]+' | head -1)
+  [ -z "$code" ] && continue
+  for doc in $SEALED_DOCS; do
+    grep -q "$code" "$doc" || bad "sealed campaign $code (from $rc) is NOT referenced in $doc — that doc is STALE"
+  done
+done
+note "every sealed campaign (per receipt) is reflected in README + all load-bearing docs"
+
+# 8c. The future-risk register's 'Sealed today' line must name each sealed campaign.
+for rc in reports/RECEIPT-GNURUST-*.md; do
+  [ -f "$rc" ] || continue
+  code=$(grep -oE 'Campaign GNURUST\.[0-9]+' "$rc" | grep -oE 'GNURUST\.[0-9]+' | head -1)
+  [ -z "$code" ] && continue
+  grep -qE "Sealed today.*$code|sealed.*\b$code\b" docs/future-risk-register.md \
+    || awk '/Sealed today/{f=1} f&&/'"$code"'/{found=1} END{exit !found}' docs/future-risk-register.md \
+    || bad "register 'Sealed today' line does not name sealed campaign $code"
+done
+note "register 'Sealed today' names each sealed campaign"
 
 # 9. Oracle-gated freshness: if the built oracle + harness are present, the selfcheck constants and
 #    a fresh sweep must still agree (the strongest anti-staleness check).
@@ -83,6 +108,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   case "$PSWEEP" in
     *"FAIL=0") note "oracle freshness: PIC sweep $PSWEEP" ;;
     *) bad "oracle freshness: PIC sweep not clean ($PSWEEP)" ;;
+  esac
+  LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$LSWEEP" in
+    *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;
+    *) bad "oracle freshness: layout sweep not clean ($LSWEEP)" ;;
   esac
 else
   note "oracle absent -> selfcheck/sweep freshness check skipped (build lab/oracle to enable)"

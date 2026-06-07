@@ -6,7 +6,8 @@ unless marked **sealed**.
 
 **Sealed today:** `GNURUST.2` (COMP-3/zoned/display `MOVE` byte semantics, `reports/RECEIPT-GNURUST-DECIMAL-1.md`)
 · `GNURUST.3` (PIC → field model for the `9 X A S V`/repeats/SIGN/DISPLAY-COMP-3 subset,
-`reports/RECEIPT-GNURUST-PIC-3.md`).
+`reports/RECEIPT-GNURUST-PIC-3.md`) · `GNURUST.4` (DATA DIVISION record layout — offsets, group
+sizes, fixed `OCCURS`, `REDEFINES`, `FILLER`, `reports/RECEIPT-GNURUST-LAYOUT-4.md`).
 
 ## Data representation & layout
 

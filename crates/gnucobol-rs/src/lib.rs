@@ -11,7 +11,10 @@
 //! admitted PICs, on a **little-endian ASCII host** under `LC_ALL=C.UTF-8`. The [`pic`] module
 //! additionally parses the sealed `PIC` subset (`9 X A S V`, repeats, `SIGN` clause,
 //! `USAGE DISPLAY`/`COMP-3`) into that same field model — matching the GnuCOBOL compiler's own
-//! field-attribute computation (`GNURUST.3`; `P` scaling and edited pictures fail closed).
+//! field-attribute computation (`GNURUST.3`; `P` scaling and edited pictures fail closed). The
+//! [`layout`] module assigns each DATA DIVISION item its byte offset/size within an `01` record
+//! (nested groups, fixed `OCCURS`, `REDEFINES`, `FILLER`), matching the compiler's record layout
+//! (`GNURUST.4`).
 //!
 //! It is **not** a GnuCOBOL replacement, **not** a COBOL compiler, and **not** `libcob`. It does
 //! **not** implement decimal arithmetic (`ADD`/`MULTIPLY`/…), edited pictures, comparison,
@@ -39,6 +42,7 @@
 
 pub mod attr;
 pub mod error;
+pub mod layout;
 mod move_ops;
 pub mod pic;
 mod sign;
@@ -49,6 +53,7 @@ pub use attr::{
     COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
 pub use error::DecimalError;
+pub use layout::{lay_out, Item, Laid, LayoutError};
 pub use move_ops::cob_move;
 pub use pic::{build_field, PicError, PicField, Usage};
 pub use value::Decimal;
@@ -188,6 +193,50 @@ pub fn __fuzz_pic(data: &[u8]) {
     let sep = data.get(1).is_some_and(|b| b & 1 == 0);
     let lead = data.get(2).is_some_and(|b| b & 1 == 0);
     let _ = pic::build_field(&s, usage, sep, lead);
+}
+
+/// Fuzz target: lay out a record built from arbitrary bytes; asserts only panic-freedom — hostile
+/// level nesting, OCCURS counts, and REDEFINES targets must yield a typed `LayoutError`, never a
+/// panic or overflow (the level-tree recursion and OCCURS `checked_mul` are the sharp surfaces).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_layout(data: &[u8]) {
+    let mut items = Vec::new();
+    // 5 bytes per item: level, name-id, pic-id, occurs, redefines-id.
+    for ch in data.chunks(5) {
+        if ch.len() < 5 {
+            break;
+        }
+        let level = (ch[0] % 50) as u16; // includes 0 and >49 nesting to stress the tree
+        let name = format!("N{}", ch[1]);
+        let pic_id = ch[2] % 5;
+        let pic = match pic_id {
+            0 => None, // group
+            1 => Some(("9(3)".to_string(), pic::Usage::Display, false, false)),
+            2 => Some(("S9(5)V99".to_string(), pic::Usage::Comp3, false, false)),
+            3 => Some(("X(7)".to_string(), pic::Usage::Display, false, false)),
+            _ => Some((
+                format!("9({})", ch[2] % 40),
+                pic::Usage::Display,
+                false,
+                false,
+            )),
+        };
+        let occurs = if ch[3] == 0 { None } else { Some(ch[3] as u32) };
+        let redefines = if ch[4] == 0 {
+            None
+        } else {
+            Some(format!("N{}", ch[4]))
+        };
+        items.push(layout::Item {
+            level,
+            name,
+            pic,
+            occurs,
+            redefines,
+        });
+    }
+    let _ = layout::lay_out(&items);
 }
 
 #[cfg(test)]

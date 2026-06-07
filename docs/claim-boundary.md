@@ -26,15 +26,25 @@ excludes is a lie of omission.
   not authorities here; the built GnuCOBOL oracle is.
 - **Not a diagnostics match.** Compiler message wording is not reproduced.
 
-## The first sealed slice — `gnucobol-rs`
+## Sealed slices
 
-**Claims:** for admitted PICs, the Rust model reproduces GnuCOBOL's exact bytes for
-packed-decimal (COMP-3 / PACKED-DECIMAL), zoned-with-sign, and display numeric fields, and
-the `MOVE` conversions between them, under `LC_ALL=C.UTF-8` on a little-endian ASCII host.
+**`GNURUST.2` — decimal byte semantics.** For admitted PICs, the Rust model reproduces GnuCOBOL's
+exact bytes for packed-decimal (COMP-3 / PACKED-DECIMAL), zoned-with-sign, and display numeric
+fields, and the `MOVE` conversions between them, under `LC_ALL=C.UTF-8` on a little-endian ASCII
+host. (`reports/RECEIPT-GNURUST-DECIMAL-1.md`.)
 
-**Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`) beyond what is sealed; no
-binary (`COMP`/`COMP-5`), float, or `COMP-6` parity beyond what a receipt explicitly records;
-no EBCDIC-host sign mode (the ASCII overpunch path is the sealed one); no file I/O.
+**`GNURUST.3` — PIC → field model.** `pic::build_field` parses the sealed PIC subset
+(`9 X A S V`, repeats, `SIGN` clause, `USAGE DISPLAY`/`COMP-3`) into the same
+`{type, digits, scale, flags, size}` the compiler emits. (`reports/RECEIPT-GNURUST-PIC-3.md`.)
+
+**`GNURUST.4` — record layout.** `layout::lay_out` assigns each DATA DIVISION item its byte offset
+and size within an `01` record (nested groups, fixed `OCCURS`, `REDEFINES` overlay, `FILLER`),
+matching the compiler's record layout. (`reports/RECEIPT-GNURUST-LAYOUT-4.md`.)
+
+**Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
+(`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
+(the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no
+`REDEFINES` larger than its target; no file I/O. See `reports/negative-claims.md`.
 
 ## Determinism: pinned or classified
 

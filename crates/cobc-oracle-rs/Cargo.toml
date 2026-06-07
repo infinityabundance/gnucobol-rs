@@ -1,9 +1,11 @@
 [package]
 name = "cobc-oracle-rs"
-version = "0.1.0"
-description = "Drives the GnuCOBOL cobc compiler as an oracle: builds/runs COBOL fixtures and captures deterministic, canonical-JSON receipts (oracle identity, stdout/stderr/exit, source/generated-C/binary sha256). GPL-3.0+ tooling; not published."
+version = "0.0.1"
+description = "Drives the GnuCOBOL cobc compiler as an oracle: builds/runs COBOL fixtures and captures deterministic, canonical-JSON receipts (oracle identity, stdout/stderr/exit, source/generated-C/binary sha256). GPL-3.0+ tooling for the gnucobol-rs compatibility court."
 license = "GPL-3.0-or-later"
-publish = false
+keywords = ["cobol", "gnucobol", "oracle", "compiler", "testing"]
+categories = ["development-tools::testing"]
+readme = "README.md"
 edition.workspace = true
 rust-version.workspace = true
 authors.workspace = true

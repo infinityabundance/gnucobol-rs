@@ -1,0 +1,48 @@
+# Curated DATA DIVISION layout records (GNURUST.4). Blocks separated by blank lines; each line is
+# name<TAB>cobol-item-text. First line of a block is the 01 record (name REC).
+# Exercises: flat records, nested groups, FILLER, OCCURS (elementary & group), REDEFINES, all
+# sealed PIC/USAGE forms. The sweep compares cobc's offsets/sizes to the Rust layout engine.
+
+REC	01 REC
+A	05 A PIC 9(3)
+B	05 B PIC X(5)
+C	05 C PIC S9(4)V99 COMP-3
+FILLER	05 FILLER PIC X(2)
+D	05 D PIC 9(4)
+G	05 G
+G1	10 G1 PIC 9(2)
+G2	10 G2 PIC X(3)
+T	05 T OCCURS 3 TIMES PIC 9(2)
+E	05 E REDEFINES T PIC X(6)
+
+REC	01 REC
+HDR	05 HDR
+HID	10 HID PIC 9(6)
+HNM	10 HNM PIC X(20)
+AMT	05 AMT PIC S9(7)V99 COMP-3
+QTY	05 QTY PIC 9(5)
+FILLER	05 FILLER PIC X(4)
+
+REC	01 REC
+K	05 K PIC X(2)
+TBL	05 TBL OCCURS 5 TIMES
+TN	10 TN PIC 9(3)
+TX	10 TX PIC X(7)
+TAIL	05 TAIL PIC S9(3) SIGN LEADING SEPARATE
+
+REC	01 REC
+RT	05 RT PIC X
+CUST	05 CUST
+CID	10 CID PIC 9(8)
+CBAL	10 CBAL PIC S9(9)V99 COMP-3
+PAY	05 PAY REDEFINES CUST
+PID	10 PID PIC 9(8)
+PCODE	10 PCODE PIC X(5)
+
+REC	01 REC
+W	05 W PIC 9(18)
+P	05 P PIC S9(18) COMP-3
+X	05 X PIC X(40)
+
+REC	01 REC
+ONLYONE	05 ONLYONE PIC 9(1)

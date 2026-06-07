@@ -17,6 +17,9 @@ claimed_now:
   - id: pic-field-model
     what: PIC clause + USAGE -> {type, digits, scale, flags, size}, matching cobc's field attrs
     scope: sealed subset 9/X/A/S/V, repeats, SIGN clause, USAGE DISPLAY/COMP-3 (GNURUST.3)
+  - id: record-layout
+    what: DATA DIVISION item byte offsets / group sizes, matching cobc's record layout
+    scope: nested groups, fixed OCCURS, REDEFINES (<= target), FILLER (GNURUST.4)
 not_claimed:
   - { id: arithmetic,            note: "ADD/SUBTRACT/MULTIPLY/DIVIDE/ROUNDED/ON SIZE ERROR — deferred (GMP-backed)" }
   - { id: edited-pictures,       note: "Z/$/CR/DB/*/BLANK WHEN ZERO rendering (GNURUST.EDITED.0)" }
@@ -28,6 +31,8 @@ not_claimed:
   - { id: figurative-constants,  note: "ZERO/SPACE/HIGH-/LOW-VALUE/QUOTE/ALL bytes (GNURUST.FIGCONST.0)" }
   - { id: move-corresponding,    note: "group name-matched moves (GNURUST.CORR.0)" }
   - { id: occurs-depending-on,   note: "logical vs physical array length (GNURUST.ODO.0)" }
+  - { id: redefines-larger,      note: "REDEFINES larger than its target — fails closed (GNURUST.4 non-claim)" }
+  - { id: synchronized-align,    note: "SYNCHRONIZED/alignment in record layout (GNURUST.BINARY.0)" }
   - { id: redefines-variant,     note: "active overlay discriminator (GNURUST.REDEFINES.VARIANT.0)" }
   - { id: level-88,              note: "condition-name predicates (GNURUST.LEVEL88.0)" }
   - { id: binary-comp,           note: "COMP/BINARY size/byteorder/SYNC alignment (GNURUST.BINARY.0)" }
