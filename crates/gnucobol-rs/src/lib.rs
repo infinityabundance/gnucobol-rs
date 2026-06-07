@@ -8,7 +8,10 @@
 //!
 //! This crate ports the *observable byte semantics* of three `cob_move` conversions —
 //! DISPLAY→DISPLAY, DISPLAY→PACKED (COMP-3 encode), and PACKED→DISPLAY (COMP-3 decode) — for
-//! admitted PICs, on a **little-endian ASCII host** under `LC_ALL=C.UTF-8`.
+//! admitted PICs, on a **little-endian ASCII host** under `LC_ALL=C.UTF-8`. The [`pic`] module
+//! additionally parses the sealed `PIC` subset (`9 X A S V`, repeats, `SIGN` clause,
+//! `USAGE DISPLAY`/`COMP-3`) into that same field model — matching the GnuCOBOL compiler's own
+//! field-attribute computation (`GNURUST.3`; `P` scaling and edited pictures fail closed).
 //!
 //! It is **not** a GnuCOBOL replacement, **not** a COBOL compiler, and **not** `libcob`. It does
 //! **not** implement decimal arithmetic (`ADD`/`MULTIPLY`/…), edited pictures, comparison,
@@ -37,6 +40,7 @@
 pub mod attr;
 pub mod error;
 mod move_ops;
+pub mod pic;
 mod sign;
 pub mod value;
 
@@ -46,6 +50,7 @@ pub use attr::{
 };
 pub use error::DecimalError;
 pub use move_ops::cob_move;
+pub use pic::{build_field, PicError, PicField, Usage};
 pub use value::Decimal;
 
 /// Maximum decimal digits, as emitted by the built oracle's `selfcheck` (`GNURUST.NUMCONST.0`):
@@ -167,6 +172,22 @@ pub fn __fuzz_cob_move(data: &[u8]) {
     let _ = cob_move(src, &src_attr, &mut dst, &dst_attr);
     let _ = Decimal::from_packed(src, &src_attr);
     let _ = Decimal::from_display(src, &src_attr);
+}
+
+/// Fuzz target: parse an arbitrary string as a PICTURE; asserts only panic-freedom — any hostile
+/// or malformed picture must yield a typed `PicError`, never a panic.
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_pic(data: &[u8]) {
+    let s = String::from_utf8_lossy(data);
+    let usage = if data.first().is_some_and(|b| b & 1 == 0) {
+        pic::Usage::Display
+    } else {
+        pic::Usage::Comp3
+    };
+    let sep = data.get(1).is_some_and(|b| b & 1 == 0);
+    let lead = data.get(2).is_some_and(|b| b & 1 == 0);
+    let _ = pic::build_field(&s, usage, sep, lead);
 }
 
 #[cfg(test)]

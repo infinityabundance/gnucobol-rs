@@ -76,8 +76,13 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   echo "$SC" | grep -q 'COB_TYPE_NUMERIC_PACKED=0x12' || bad "oracle selfcheck PACKED type drifted"
   SWEEP=$(bash "$ROOT/lab/oracle/sweep.sh" 0 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$SWEEP" in
-    *"FAIL=0") note "oracle freshness: sweep $SWEEP, selfcheck constants match" ;;
-    *) bad "oracle freshness: sweep not clean ($SWEEP)" ;;
+    *"FAIL=0") note "oracle freshness: decimal sweep $SWEEP, selfcheck constants match" ;;
+    *) bad "oracle freshness: decimal sweep not clean ($SWEEP)" ;;
+  esac
+  PSWEEP=$(bash "$ROOT/lab/oracle/pic_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$PSWEEP" in
+    *"FAIL=0") note "oracle freshness: PIC sweep $PSWEEP" ;;
+    *) bad "oracle freshness: PIC sweep not clean ($PSWEEP)" ;;
   esac
 else
   note "oracle absent -> selfcheck/sweep freshness check skipped (build lab/oracle to enable)"

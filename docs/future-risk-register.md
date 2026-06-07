@@ -1,13 +1,18 @@
-# Future-risk register — named courts, none claimed yet
+# Future-risk register — named courts
 
-Every row is a **future, separately sealed** campaign with its own oracle receipt. Listing them
-here is the point: *the strongest signal is knowing exactly what is not yet supported.* None of
-these is claimed by the current decimal slice.
+Every row is a **separately sealed** campaign with its own oracle receipt. Listing them here is the
+point: *the strongest signal is knowing exactly what is not yet supported.* Rows are non-claims
+unless marked **sealed**.
+
+**Sealed today:** `GNURUST.2` (COMP-3/zoned/display `MOVE` byte semantics, `reports/RECEIPT-GNURUST-DECIMAL-1.md`)
+· `GNURUST.3` (PIC → field model for the `9 X A S V`/repeats/SIGN/DISPLAY-COMP-3 subset,
+`reports/RECEIPT-GNURUST-PIC-3.md`).
 
 ## Data representation & layout
 
 | Code | Court | Core trap / non-claim |
 |------|-------|-----------------------|
+| `GNURUST.PIC-SCALING-P.0` | PIC `P` scaling | leading-`P` vs trailing-`P` digit/scale asymmetry (`9(3)PPP`→digits 6/scale −3; `PPP9(3)`→digits 3/scale 6) — fails closed in the sealed PIC court |
 | `GNURUST.EVENPACK.1` | even-digit packed | high/padding nibble of even-digit COMP-3 — **partly exercised now** as a named fixture family |
 | `GNURUST.SIGN.1` | sign-policy matrix | C/D/F, overpunch leading/trailing, separate sign, ±0, invalid signs — **partly exercised now** |
 | `GNURUST.INVALID.1` | invalid numeric data | invalid digit/zone/sign: tolerated vs rejected, **never silently sanitized** |

@@ -33,6 +33,22 @@ cob_move(&src, &src_attr, &mut dst, &dst_attr).unwrap();
 assert_eq!(dst, [0x01, 0x23, 0x4d]); // COMP-3, negative sign nibble 0x0d
 ```
 
+## PIC → field model (`gnucobol_rs::pic`)
+
+Parse a COBOL `PIC` clause + `USAGE` into the same field model, matching the GnuCOBOL compiler's
+own `cob_field_attr` + storage-size computation (differential sweep vs `cobc`, `PASS=192 FAIL=0`):
+
+```rust
+use gnucobol_rs::{build_field, Usage};
+
+let f = build_field("S9(5)V99", Usage::Comp3, false, false).unwrap();
+assert_eq!((f.attr.field_type, f.attr.digits, f.attr.scale, f.size), (0x12, 7, 2, 4)); // COMP-3, 4 bytes
+```
+
+Sealed subset: `9 X A S V`, repeats `(n)`, `SIGN [LEADING|TRAILING] [SEPARATE]`,
+`USAGE DISPLAY`/`COMP-3`. The `P` scaling symbol, edited pictures, and other usages **fail closed**
+with a typed `PicError`.
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. **No** decimal arithmetic (deferred), no

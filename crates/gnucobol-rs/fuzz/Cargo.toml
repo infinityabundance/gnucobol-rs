@@ -24,3 +24,10 @@ path = "fuzz_targets/cob_move.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "pic"
+path = "fuzz_targets/pic.rs"
+test = false
+doc = false
+bench = false

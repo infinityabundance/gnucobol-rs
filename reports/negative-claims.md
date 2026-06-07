@@ -14,11 +14,16 @@ claimed_now:
   - id: move-parity-decimal
     what: bytes after MOVE between COMP-3 / zoned / display
     scope: same as above
+  - id: pic-field-model
+    what: PIC clause + USAGE -> {type, digits, scale, flags, size}, matching cobc's field attrs
+    scope: sealed subset 9/X/A/S/V, repeats, SIGN clause, USAGE DISPLAY/COMP-3 (GNURUST.3)
 not_claimed:
   - { id: arithmetic,            note: "ADD/SUBTRACT/MULTIPLY/DIVIDE/ROUNDED/ON SIZE ERROR — deferred (GMP-backed)" }
   - { id: edited-pictures,       note: "Z/$/CR/DB/*/BLANK WHEN ZERO rendering (GNURUST.EDITED.0)" }
   - { id: display-stdout,        note: "what DISPLAY prints — distinct from storage bytes" }
   - { id: comparison,            note: "IF/SEARCH ALL ordering; COLLATING SEQUENCE (GNURUST.COLLATE.0)" }
+  - { id: pic-scaling-p,         note: "PIC 'P' scaling symbol — asymmetric leading/trailing rules (GNURUST.PIC-SCALING-P.0)" }
+  - { id: pic-edited,            note: "edited PIC (Z/$/CR/DB/*/.) — fails closed (GNURUST.EDITED.0)" }
   - { id: value-init,            note: "VALUE initial memory image (GNURUST.VALUE.0)" }
   - { id: figurative-constants,  note: "ZERO/SPACE/HIGH-/LOW-VALUE/QUOTE/ALL bytes (GNURUST.FIGCONST.0)" }
   - { id: move-corresponding,    note: "group name-matched moves (GNURUST.CORR.0)" }

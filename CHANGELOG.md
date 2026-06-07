@@ -3,6 +3,18 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.0]
+
+### GNURUST.3 — `pic`: PICTURE → field model
+- `gnucobol_rs::pic::build_field` parses the sealed PIC subset (`9 X A S V`, repeats,
+  `SIGN [LEADING|TRAILING] [SEPARATE]`, `USAGE DISPLAY`/`COMP-3`) into `{type, digits, scale,
+  flags, size}`, proven **byte-identical to the GnuCOBOL compiler's own field-attribute
+  computation** (differential sweep PASS=192 FAIL=0 vs `cobc`-emitted `cob_field_attr` + size;
+  cross-checked by runtime `LENGTH OF`).
+- Fails closed (typed `PicError`) on the `P` scaling symbol (deferred), edited pictures, other
+  usages, and malformed/oversized pictures. Fuzz: 5M runs, 0 crashes after fixing an OOM on giant
+  repeats (now streamed, O(1) memory, resource-bounded — `GNURUST.DOS.0`).
+
 ## [0.1.1]
 - Flagship crate published under the project name **`gnucobol-rs`** (lib `gnucobol_rs`); the
   internal decimal-court receipt id is `RECEIPT-GNURUST-DECIMAL-1`. No semantic change.
