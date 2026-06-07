@@ -151,7 +151,8 @@
       "gnucobol_axis": {
         "gnucobol_3_2": "backend_dependent",
         "backend": "cJSON/JSON-C, libxml2",
-        "note": "syntax may be parsed; runtime needs optional libs"
+        "note": "syntax may be parsed; runtime needs optional libs",
+        "first_runtime_module": "3.1.2 (mlio.c absent in 2.2)"
       },
       "gnucobol_rs_axis": {
         "status": "out_of_model",
@@ -244,14 +245,16 @@
         "note": "vendor extension (unsigned packed, no sign nibble)"
       },
       "gnucobol_axis": {
-        "gnucobol_3_2": "runtime_functional (extension)"
+        "gnucobol_3_2": "runtime_functional (extension)",
+        "first_runtime": "3.2 (absent in 2.2 and 3.1.2)"
       },
       "gnucobol_rs_axis": {
         "status": "not_admitted",
         "non_claim": "COMP-6 storage"
       },
       "drift": [
-        "vendor_extension_only"
+        "vendor_extension_only",
+        "behavior_changed_between_releases"
       ],
       "fixture_priority": "low"
     },

@@ -1,0 +1,20 @@
+{
+  "schema": "gnucobol-atlas-cross-release-drift-v1",
+  "evidence_kind": "oracle_source (extracted release source trees; not built)",
+  "note": "Source-level cross-release drift across downloaded anchors (2.2/3.1.2/3.2). Per-feature presence is by RUNTIME MODULE / source file, not a build. The temporal join fields (first_runtime_functional) come from here.",
+  "size_metrics": {
+    "2.2": {"testsuite_cases": 781, "reserved_c_entries": 915, "parser_tokens": 601, "news_lines": 625},
+    "3.1.2": {"testsuite_cases": 1135, "reserved_c_entries": 1228, "parser_tokens": 926, "news_lines": 989},
+    "3.2": {"testsuite_cases": 1346, "reserved_c_entries": 1290, "parser_tokens": 971, "news_lines": 1526}
+  },
+  "feature_first_seen": {
+    "mlio.c": {"first_release": "3.1.2", "what": "JSON/XML GENERATE runtime"},
+    "reportio.c": {"first_release": "3.1.2", "what": "Report Writer runtime"},
+    "comp6": {"first_release": "3.2", "what": "COMP-6"}
+  },
+  "findings": [
+    "JSON/XML GENERATE (libcob/mlio.c) and Report Writer (libcob/reportio.c) are ABSENT in 2.2, APPEARED in 3.1.2: a release that added whole runtime modules.",
+    "COMP-6 runtime support (numeric.c) is absent in 2.2 AND 3.1.2, appeared in 3.2: newer than typical assumption -- a behavior_changed_between_releases signal.",
+    "Monotonic growth: testsuite 781->1135->1346, parser tokens 601->926->971 (largest grammar jump 2.2->3.1)."
+  ]
+}

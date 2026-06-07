@@ -38,8 +38,13 @@ Vendor `-std` dialects add hundreds of reserved words (e.g. `mf-strict` +111 vs 
 implied runtime behavior. Recognition is not function.
 
 ## 7. Version scars
-IBM documents syntax/semantic drift OS/VS → Enterprise v6 (same syntax, different execution). Micro Focus
-behavior is a directive *family*, not a version. These are V-axis rows, deferred to shadow-witness work.
+**GnuCOBOL cross-release drift (real, source-level — `A17/cross-release-drift.json`, anchors 2.2/3.1.2/3.2
+downloaded + extracted, sha256 recorded):** JSON/XML GENERATE (`libcob/mlio.c`) and the Report Writer
+runtime (`libcob/reportio.c`) are **absent in 2.2, appeared in 3.1.2** — a release that added whole
+runtime modules. **COMP-6** runtime support (`numeric.c`) appeared only in **3.2** (absent in 2.2 *and*
+3.1.2). Monotonic growth: testsuite 781→1135→1346, parser tokens 601→926→971 (largest grammar jump
+2.2→3.1). Plus the **vendor** scars: IBM OS/VS→Enterprise v6 (same syntax, different execution); Micro
+Focus behavior is a directive *family*, not a version (V-axis).
 
 ## 8. What gnucobol-rs has sealed
 16 courts (see `reports/claim-ladder.json`): decimal MOVE, PIC/field-model (+P), layout (+ODO

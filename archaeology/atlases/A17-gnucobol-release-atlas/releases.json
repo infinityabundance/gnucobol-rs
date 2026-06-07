@@ -97,9 +97,12 @@
       "lineage": "gnucobol",
       "date": "2017-09-06",
       "artifact_kind": "source-release",
-      "evidence_kind": "reference_curated",
+      "evidence_kind": "oracle_source (downloaded + extracted; NOT built)",
       "build_status": {
-        "not_attempted": true
+        "not_attempted": false,
+        "source_extracted": true,
+        "compiled": false,
+        "note": "source admitted for drift diff; build optional"
       },
       "note": "widely packaged 2.x anchor",
       "feature_surfaces": {
@@ -108,7 +111,10 @@
         "report_writer": "unknown",
         "screen_section": "unknown",
         "level_88": "unknown"
-      }
+      },
+      "sha256": "dc18fc45c269debfe86a4bbe20a7250983cba6238ea1917e135df5926cd024a0",
+      "archive_name": "gnucobol-2.2.tar.xz",
+      "source_drift": "see cross-release-drift.json"
     },
     {
       "release_id": "gnucobol-3.1",
@@ -132,9 +138,12 @@
       "lineage": "gnucobol",
       "date": "2020-12-23",
       "artifact_kind": "source-release",
-      "evidence_kind": "reference_curated",
+      "evidence_kind": "oracle_source (downloaded + extracted; NOT built)",
       "build_status": {
-        "not_attempted": true
+        "not_attempted": false,
+        "source_extracted": true,
+        "compiled": false,
+        "note": "source admitted for drift diff; build optional"
       },
       "note": "common 3.1 packaging anchor",
       "feature_surfaces": {
@@ -143,7 +152,10 @@
         "report_writer": "unknown",
         "screen_section": "unknown",
         "level_88": "unknown"
-      }
+      },
+      "sha256": "597005d71fd7d65b90cbe42bbfecd5a9ec0445388639404662e70d53ddf22574",
+      "archive_name": "gnucobol-3.1.2.tar.xz",
+      "source_drift": "see cross-release-drift.json"
     },
     {
       "release_id": "gnucobol-3.2",
