@@ -88,3 +88,13 @@ campaign candidate.
 Do not quote ISO/standard text. Do not build every historical release. Do not flatten OpenCOBOL /
 GnuCOBOL / GnuCOBOL 4 / distro builds into one axis. Do not let a curated reference row override the
 admitted oracle in a sealed court.
+
+## Doctrine — the atlas is a roadmap generator, not a product surface
+
+> The atlas is a roadmap generator, not a product surface. When atlas scripts produce reproducible,
+> gated evidence and rank actionable semantic courts, the project returns to sealed courts rather than
+> packaging atlas tooling prematurely.
+
+The `lab/atlas/*.sh` scripts ARE the tooling (reproducible + doc-gate-gated). A `crates/gnucobol-atlas/`
+crate is deferred until the scripts outgrow shell maintainability (cross-platform replay, typed schema
+validation, a published CLI, or external contributors) — not before.
