@@ -23,9 +23,19 @@ note "no placeholder markers"
 # 2. Every doc linked from README exists.
 for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-license.md \
          docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-claims.md \
+         docs/oracle-lessons.md docs/negative-capabilities.md docs/license-boundaries.md \
+         reports/claim-ladder.json lab/verify-sealed-courts.sh \
          COPYING COPYING.LESSER; do
   [ -f "$f" ] || bad "README references missing file: $f"
 done
+# TRUST.1: the claim ladder must list every sealed campaign (per receipt), or it is stale.
+for rc in reports/RECEIPT-GNURUST-*.md; do
+  [ -f "$rc" ] || continue
+  code=$(grep -oE 'Campaign GNURUST\.[0-9]+' "$rc" | grep -oE 'GNURUST\.[0-9]+' | head -1)
+  [ -z "$code" ] && continue
+  grep -q "\"$code\"" reports/claim-ladder.json || bad "claim-ladder.json missing sealed campaign $code"
+done
+note "claim-ladder.json lists every sealed campaign"
 note "all README-referenced docs exist"
 
 # 3. COB_MAX_DIGITS constant consistent in source and equals the oracle's value (38).

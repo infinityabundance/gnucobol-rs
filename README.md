@@ -34,6 +34,55 @@ byte. `gnucobol-rs` owns them first, with proof, before reaching for anything la
 | diagnostic | compiler messages match `cobc` | not claimed |
 | compiler-replacement | emit native code | **not claimed — requires future receipts** |
 
+## Doctrine
+
+> `gnucobol-rs` and KOBOLD prioritize **migration-trust over compiler ambition**: every byte, field,
+> predicate, transformation, and audit artifact is admitted only through a sealed oracle court, while
+> unsupported COBOL surfaces remain explicit evidence instead of inferred behavior.
+
+It is **not a compiler, not `libcob`, not Procedure Division execution** — it is a sealed
+compatibility court for admitted COBOL **data** semantics.
+
+## Claim ladder (front door)
+
+Every positive claim names its byte domain, oracle, fixture count, sealing version, and what breaks
+it. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json); the human
+ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabilities.md).
+
+| Court | Proven (byte domain) | Oracle | Sealed | Not claimed |
+|-------|----------------------|--------|:------:|-------------|
+| `GNURUST.2` MOVE | field-storage + move-result bytes | `libcob cob_move` | 0.1.0 | arithmetic, edited PIC |
+| `GNURUST.3/9` PIC (+P) | `cob_field_attr` + size | `cobc -C` / `LENGTH OF` | 0.2.0/0.2.6 | edited PIC, V+P |
+| `GNURUST.4` layout | item offsets / sizes | `cobc -C` offsets | 0.2.1 | SYNC, REDEFINES-grow |
+| `GNURUST.5/6` COPY/REPLACING | expanded text-word stream | `cobc -P` | 0.2.2/0.2.3 | REPLACE directive |
+| `GNURUST.7/13` arithmetic | receiving-field bytes | `cob_add/sub/mul` | 0.2.4/0.3.3 | DIVIDE, SIZE ERROR, bignum |
+| `GNURUST.8` VALUE | record initial bytes | `cobc` DISPLAY raw | 0.2.5 | ODO/REDEFINES VALUE |
+| `GNURUST.10` ODO | **physical-max** storage size | `cobc -C` `b_REC[size]` | 0.3.0 | logical/active count |
+| `GNURUST.11` LEVEL-88 | parent bytes → bool | `cobc IF` truth | 0.3.1 | SET, expressions |
+| `GNURUST.12` SET-88-TRUE | parent bytes | `cobc SET` final bytes | 0.3.2 | SET FALSE |
+| `KOBOLD.RECON.1` | JSONL + audit bytes | sealed courts (composed) | shim 0.2.0 | write-back, business truth |
+
+Replay all of it with one command (prints a PASS table):
+
+```sh
+bash lab/verify-sealed-courts.sh
+```
+
+## Ecosystem (one diagram)
+
+```text
+cobc-oracle-rs   (GPL-3.0+)   drives cobc → oracle sweeps
+      │
+gnucobol-rs      (LGPL-3.0+)  sealed data courts (this repo)
+      │
+kobold-data-shim (Apache-2.0) fixed-record reconciliation JSON/audit
+      ├── kobold-bench         performance — only after a parity re-check
+      └── kobold-lambda-layer  deployment packaging, not semantic authority
+```
+
+The role separation is deliberate (see [`docs/license-boundaries.md`](docs/license-boundaries.md)):
+no layer invents semantics a lower court has not sealed.
+
 ## The admitted oracle
 
 Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the source of truth. Because it is not

@@ -1,0 +1,45 @@
+# License-boundary doctrine
+
+This project deliberately spans copyleft and permissive licenses. The boundary is a feature, not an
+accident: the parts that are *faithful derivatives* of GnuCOBOL inherit its copyleft, and the parts
+that merely *use* them stay permissive. Getting this right is part of being trustworthy.
+
+## The map
+
+| Crate / repo | License | Why |
+|--------------|---------|-----|
+| `gnucobol-rs` | **LGPL-3.0-or-later** | faithful, line-cited derivative port of `libcob` (`move.c`/`numeric.c`/`common.c`) |
+| `cobc-oracle-rs` | **GPL-3.0-or-later** | drives `cobc` (GPL); test/oracle harness boundary |
+| `kobold-data-shim` | **Apache-2.0** | *uses* `gnucobol-rs`; its own source is independent |
+| `kobold-bench` | **Apache-2.0** | benchmark harness; *uses* `gnucobol-rs` |
+| `kobold-lambda-layer` | **Apache-2.0** | packaging; *uses* `kobold-data-shim` |
+
+## The rules we follow
+
+1. **Faithful derivative → inherit copyleft.** Code ported statement-by-statement from `libcob` is a
+   derivative work and is **LGPL-3.0-or-later**; code that drives `cobc` is **GPL-3.0-or-later**.
+2. **Oracle-derived outputs are evidence, not implementation.** Bytes, attrs, offsets, and truth
+   values *observed* from the oracle and reproduced by independently-written Rust are facts about
+   behaviour — not copied code. They do not make the Rust a derivative of libcob's *source*; the
+   derivative status (and LGPL) comes from the **line-cited statement-by-statement porting**, which
+   we do disclose.
+3. **No GPL code copied into Apache crates.** Shared utilities that cross the license boundary must be
+   **independently written**, not copied. (Lesson learned: a self-contained SHA-256 already existed
+   in the GPL `cobc-oracle-rs`; reusing it in the Apache `kobold-data-shim` would have been a license
+   violation, so a fresh FIPS-180-4 implementation was written for the shim and verified against test
+   vectors.)
+4. **Linking obligations travel with binaries.** An Apache crate may depend on the LGPL `gnucobol-rs`
+   (a "work that uses the Library"). But any **distributed binary** (Lambda zip/layer, container,
+   executable) that statically links it is a Combined Work under LGPL-3.0 §4 — it must give prominent
+   notice, allow relinking against a modified `gnucobol-rs`, and convey the LGPL text + source. Each
+   permissive crate's `NOTICE` states this.
+5. **A clean-room permissive kernel is a separate artifact.** A from-spec reimplementation (no
+   `libcob` reading) would be permissively licensable and would remove the §4 obligation for fully
+   permissive distribution. It does not exist; the current crate is the honest LGPL derivative.
+
+## Why this matters
+
+Downstream adopters in regulated environments must reason about copyleft propagation before they can
+approve a dependency. A precise, written boundary — and the discipline of independently writing any
+shared utility — is what lets them say yes. This is not legal advice; it is the project's stated
+policy, kept consistent with each crate's `LICENSE` / `COPYING*` / `NOTICE`.

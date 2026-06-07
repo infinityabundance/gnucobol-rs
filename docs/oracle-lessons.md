@@ -1,0 +1,84 @@
+# Oracle lessons (the wrong-oracle ledger)
+
+The oracle-first method exists to catch *plausible wrong assumptions*. When it does, that is the
+method working — not an embarrassment. This file records each assumption the oracle disproved, the
+correct rule, and the test that now prevents the regression. Format per entry:
+
+> **Assumption** → **Why it looked plausible** → **Oracle that disproved it** → **Correct rule** →
+> **Test now preventing regression**
+
+A recurring meta-lesson runs through all of these: *name the byte domain*. "Byte-identical" is
+sloppy unless you say which bytes — field-storage, record-storage, generated-C storage size,
+expanded text-word stream, stdout, JSON, or audit-receipt bytes. Several lessons below are really
+byte-domain mistakes.
+
+---
+
+## L1 — Unvalued COMP-3 is a canonical packed zero, not raw `0x00` (GNURUST.8)
+
+- **Assumption:** an unvalued COMP-3 field in WORKING-STORAGE stays raw-zero `0x00…` (the static
+  C array default).
+- **Why plausible:** the first `grep` of the generated C showed `memset`/`memcpy` initializers for
+  the *valued* fields and *nothing* for one unvalued COMP-3 — so it looked uninitialized.
+- **Oracle that disproved it:** the **runtime** `DISPLAY` of the group emitted the raw record bytes,
+  which carried a proper sign nibble (`0x0C` signed / `0x0F` unsigned) in the COMP-3 field. The
+  generated-C grep had simply missed the initializer; the runtime byte domain was authoritative.
+- **Correct rule:** unvalued COMP-3 = canonical packed **zero** with the type-correct sign nibble.
+- **Regression test:** `init::tests::signed_display_overpunch_and_unvalued_packed`; the VALUE sweep
+  (`value_sweep.sh`, 392/0) exercises unvalued COMP-3 across signs.
+
+## L2 — Under ODO, `LENGTH OF` is the *logical* length, not the physical allocation (GNURUST.10)
+
+- **Assumption:** the record's physical size could be read from runtime `LENGTH OF REC`.
+- **Why plausible:** `LENGTH OF` is the obvious "how big is this record" primitive, and it is the
+  right oracle for fixed layouts (GNURUST.4 cross-checks it).
+- **Oracle that disproved it:** for an `OCCURS … DEPENDING ON` record, `LENGTH OF` returns the
+  **logical** length from the current DEPENDING value (`0` at program start) — not the physical
+  maximum allocation. The **generated-C storage size** `b_REC[size]` is the physical-max domain.
+- **Correct rule:** ODO physical-max layout is proven against `b_REC[size]` (generated-C storage),
+  and the active/logical count is an explicit non-claim.
+- **Regression test:** `odo_sweep.sh` (30/0) reads `b_REC[size]`; `layout::tests::odo_*`.
+
+## L3 — COPY REPLACING is whole-text-word, not substring replacement (GNURUST.6)
+
+- **Assumption:** `REPLACING ==AA== BY ==BB==` is a string substitution.
+- **Why plausible:** the `==…==` pseudo-text syntax reads like a find/replace.
+- **Oracle that disproved it:** `cobc -P` showed `==AA==` does **not** touch `AA-X`, `KEEP-AA`, or
+  `BAAB` (each one text word), while the `:tag:` idiom *does* fire because `:` is a non-word
+  character that splits `:PFX:` into its own text word. GnuCOBOL's `is_word` (`cobc/replace.c:603`)
+  defines the boundary.
+- **Correct rule:** replacement matches *complete text-word sequences*; adjacent words
+  re-concatenate on output.
+- **Regression test:** `copybook::tests::replacing_is_whole_text_word`; `copy_sweep.sh`.
+
+## L4 — `cob_add_bcd` rounds only with the explicit mode bit (GNURUST.7 → GNURUST.13)
+
+- **Assumption:** `ADD … ROUNDED` into a packed field passes `opt = COB_STORE_ROUND` (bit 0), so the
+  packed and decimal paths diverged and packed add/sub was deferred.
+- **Why plausible:** `COB_STORE_ROUND` is literally named "round", and the `cob_decimal` path *does*
+  round with it (its default mode is nearest-away).
+- **Oracle that disproved it:** driving `cob_add` directly, `cob_add_bcd` **truncates** with bit-0
+  alone and only rounds when the **mode** bit is also set; the real `ADD … ROUNDED` opt is
+  `COB_STORE_ROUND | COB_STORE_NEAR_AWAY_FROM_ZERO` (`0x21`). With the correct opt, the packed path
+  matches the integer-decimal port exactly.
+- **Correct rule:** test packed arithmetic with the compiler's actual opt (`0x21` for ROUNDED).
+- **Regression test:** `arith_sweep.sh` emits `opt=33` for rounded rows (5400/0).
+
+## L5 — Packed ADD/SUBTRACT keeps a negative sign on a zero result (GNURUST.13)
+
+- **Assumption:** a result that truncates to zero magnitude is `+0` (sign follows the final
+  magnitude), as on the DISPLAY path.
+- **Why plausible:** `7 + -7.6 = -0.6` truncated to scale 0 is "zero", and the DISPLAY/`cob_decimal`
+  path does yield `+0` (`mpz_sgn` of a truncated-to-zero value is 0).
+- **Oracle that disproved it:** `cob_add` into a COMP-3 receiver wrote `-0` (sign nibble `0x0D`) —
+  `cob_add_bcd` keeps the sign of the *computed* value, even when the stored magnitude is zero.
+- **Correct rule:** packed ADD/SUBTRACT carries a per-path `sign_on_zero` rule (negative zero from a
+  negative pre-truncation value); the DISPLAY path does not. (Distinct from negative-zero-on-overflow,
+  which both paths produce.)
+- **Regression test:** the two such rows that initially failed are now in `arith_sweep.sh` (5400/0);
+  `arith::tests::packed_add_sub_via_bcd`.
+
+---
+
+*New lessons are appended here as the method catches them. An entry only graduates to "Correct rule"
+when a committed test reproduces the oracle's behaviour.*
