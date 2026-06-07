@@ -44,6 +44,7 @@ pub mod arith;
 pub mod attr;
 pub mod copybook;
 pub mod error;
+pub mod init;
 pub mod layout;
 mod move_ops;
 pub mod pic;
@@ -57,6 +58,7 @@ pub use attr::{
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use error::DecimalError;
+pub use init::{value_image, InitError, Val, ValueItem};
 pub use layout::{lay_out, Item, Laid, LayoutError};
 pub use move_ops::cob_move;
 pub use pic::{build_field, PicError, PicField, Usage};
@@ -303,6 +305,53 @@ pub fn __fuzz_arith(data: &[u8]) {
     let at = (data[8] as usize >> 1) % (body.len() + 1);
     let (a, b) = body.split_at(at);
     let _ = arith::cob_arith(op, a, &a_attr, b, &b_attr, round);
+}
+
+/// Fuzz target: build a record of VALUE items from arbitrary bytes and compute its initial image;
+/// asserts only panic-freedom — hostile PICs, literals, scales, and field counts must yield a typed
+/// `InitError`, never a panic (the literal parser + zoned alignment + cob_move are the sharp surface).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_init(data: &[u8]) {
+    let mut items = vec![ValueItem {
+        level: 1,
+        name: "REC".to_string(),
+        pic: None,
+        value: None,
+    }];
+    // 4 bytes per field: pic-id, usage, value-kind, value-byte.
+    for (i, ch) in data.chunks(4).enumerate().take(16) {
+        if ch.len() < 4 {
+            break;
+        }
+        let pic = match ch[0] % 6 {
+            0 => ("9(3)", Usage::Display),
+            1 => ("S9(3)V99", Usage::Display),
+            2 => ("X(4)", Usage::Display),
+            3 => ("S9(5)V9(3)", Usage::Comp3),
+            4 => ("9(5)", Usage::Comp3),
+            _ => ("S9(4)", Usage::Display),
+        };
+        let value = match ch[2] % 5 {
+            0 => None,
+            1 => Some(Val::Zero),
+            2 => Some(Val::Space),
+            3 => Some(Val::Alpha(format!("v{}", ch[3]))),
+            _ => Some(Val::Num(format!(
+                "{}{}.{}",
+                if ch[3] & 1 == 0 { "-" } else { "" },
+                ch[3],
+                ch[1]
+            ))),
+        };
+        items.push(ValueItem {
+            level: 5,
+            name: format!("F{i}"),
+            pic: Some((pic.0.to_string(), pic.1, false, false)),
+            value,
+        });
+    }
+    let _ = value_image(&items);
 }
 
 #[cfg(test)]

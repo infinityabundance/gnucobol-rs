@@ -51,6 +51,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.7` — decimal arithmetic.** `cob_arith` computes ADD/SUBTRACT (DISPLAY) and MULTIPLY (DISPLAY/COMP-3) with truncation/ROUNDED in pure-Rust integer decimal, matching libcob `cob_add`/`cob_mul`. ADD/SUBTRACT into PACKED (cob_add_bcd), DIVIDE, other rounding modes, ON SIZE ERROR, and >38-digit inputs fail closed. (`reports/RECEIPT-GNURUST-ARITH-7.md`.)
 
+**`GNURUST.8` — VALUE initial image.** `value_image` computes an `01` record's initial WORKING-STORAGE bytes from `VALUE` clauses (alphanumeric left-justified/space-padded, numeric DISPLAY zoned+overpunch, COMP-3 packed; unvalued DISPLAY→`'0'`, alnum→spaces, COMP-3→packed zero), matching `cobc`. OCCURS/REDEFINES+VALUE, edited/`P` PICs, non-fitting literals fail closed. (`reports/RECEIPT-GNURUST-VALUE-8.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

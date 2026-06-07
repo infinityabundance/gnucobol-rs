@@ -52,3 +52,10 @@ path = "fuzz_targets/arith.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "init"
+path = "fuzz_targets/init.rs"
+test = false
+doc = false
+bench = false

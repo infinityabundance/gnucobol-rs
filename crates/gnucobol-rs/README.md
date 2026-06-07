@@ -13,7 +13,7 @@ compatibility court.
 
 Each is proven against the GnuCOBOL 3.2 oracle: **`GNURUST.2`** decimal `MOVE` bytes (below),
 **`GNURUST.3`** PIC→field-model (`pic`), **`GNURUST.4`** record layout (`layout`), **`GNURUST.5`/`6`**
-`COPY`(+`REPLACING`) expansion (`copybook`), and **`GNURUST.7`** decimal arithmetic (`arith`).
+`COPY`(+`REPLACING`) expansion (`copybook`), **`GNURUST.7`** decimal arithmetic (`arith`), and **`GNURUST.8`** VALUE images (`init`).
 
 ### `GNURUST.2` — decimal `MOVE` bytes
 
@@ -78,6 +78,14 @@ over-deep/over-large expansion.
 MULTIPLY (DISPLAY/COMP-3), truncation and ROUNDED (nearest-away), negative-zero-on-overflow (sweep
 `PASS=1800 FAIL=0`). ADD/SUBTRACT into PACKED (libcob's separate BCD path), DIVIDE, other rounding
 modes, and >38-digit (bignum) inputs **fail closed** with a typed `ArithError`.
+
+## `GNURUST.8` — VALUE initial record image (`gnucobol_rs::value_image`)
+
+`value_image(items)` computes the initial WORKING-STORAGE bytes of an `01` record from `VALUE` clauses,
+matching `cobc`: alphanumeric `VALUE` (left-justified, space-padded), numeric DISPLAY (zoned +
+overpunch), COMP-3 (packed via the sealed `cob_move`), with type-correct defaults for unvalued fields
+(DISPLAY numeric `'0'`, alnum spaces, **COMP-3 canonical packed zero**). Sweep `PASS=392 FAIL=0`.
+OCCURS/REDEFINES+VALUE, edited/`P` PICs, and non-fitting literals **fail closed** (`InitError`).
 
 ## What it does NOT do
 

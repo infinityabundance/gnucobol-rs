@@ -3,6 +3,17 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.5]
+
+### GNURUST.8 — `init`: initial record image from VALUE clauses
+- `gnucobol_rs::value_image(items)` computes the WORKING-STORAGE bytes a flat `01` record holds at
+  program start, proven byte-identical to `cobc`-initialized storage: alphanumeric `VALUE` (left-
+  justified, space-padded), numeric DISPLAY `VALUE` (zoned + overpunch sign), COMP-3 `VALUE` (packed
+  via the sealed `cob_move`), and the type-correct defaults — unvalued DISPLAY numeric → `'0'`,
+  unvalued alnum → spaces, **unvalued COMP-3 → canonical packed zero** (sign nibble `0x0C`/`0x0F`,
+  not raw `0x00`). Sweep PASS=392 FAIL=0; 3M fuzz runs clean. OCCURS/REDEFINES+VALUE, edited/`P`
+  PICs, non-fitting literals, and no-VALUE records fail closed.
+
 ## [0.2.4]
 
 ### GNURUST.7 — `arith`: decimal arithmetic (ADD/SUBTRACT/MULTIPLY)
