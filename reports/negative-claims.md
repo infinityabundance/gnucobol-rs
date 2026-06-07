@@ -23,6 +23,9 @@ claimed_now:
   - id: ebcdic-cp500-display
     what: raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table (cob_load_collation)
     scope: cp500 only; alphanumeric DISPLAY decode; binary/packed pass through untouched (GNURUST.15)
+  - id: edited-decode-16a
+    what: edited DISPLAY field bytes -> recovered numeric value + presentation text, matching cobc
+    scope: 16a subset Z 9 , . - + ; decode only; not numeric->edited; not financial decorations (GNURUST.16)
   - id: record-layout
     what: DATA DIVISION item byte offsets / group sizes, matching cobc's record layout
     scope: nested groups, fixed OCCURS, REDEFINES (<= target), FILLER (GNURUST.4)
@@ -70,6 +73,7 @@ not_claimed:
   - { id: level-88-false,        note: "SET cond TO FALSE + FALSE clause, condition expressions, collating-sensitive ranges (GNURUST.12b/SET88FALSE.0)" }
   - { id: binary-arith-sync,    note: "binary arithmetic, SYNCHRONIZED alignment, host-portable endian, COMP-6/float (GNURUST.BINARY-ARITH.0)" }
   - { id: ebcdic-beyond-cp500,  note: "cp037 and other code pages, numeric EBCDIC zoned sign, national/DBCS, collation, mixed/auto-detect encoding (GNURUST.EBCDIC-EXT.0)" }
+  - { id: edited-beyond-16a,    note: "numeric->edited formatting (16c), financial decorations $ * CR DB B 0 / (16b), report writer, locale/currency, EBCDIC edited, edited arithmetic/VALUE (GNURUST.EDITED-EXT.0)" }
   - { id: source-format,         note: "fixed/free/variant parsing & preprocessing (GNURUST.SOURCEFORM.0)" }
   - { id: copy-replacing-advanced, note: "REPLACING LEADING/TRAILING/identifier operands, REPLACE directive (GNURUST.6 non-claim)" }
   - { id: copybook-advanced,     note: "inline/multi-line COPY, OF/IN library, SUPPRESS (GNURUST.COPYMAP.0)" }

@@ -66,3 +66,9 @@ path = "fuzz_targets/cond.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "edited"
+path = "fuzz_targets/edited.rs"
+test = false
+doc = false

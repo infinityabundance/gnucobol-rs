@@ -67,6 +67,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.15` — EBCDIC code-page boundary.** `ebcdic::decode_display` decodes raw EBCDIC alphanumeric DISPLAY bytes to text under the admitted **cp500** table (byte-for-byte the oracle's `cob_load_collation` output, 256/256). cp037, numeric EBCDIC zoned sign, national/DBCS, and binary/packed conversion are non-claims. (`reports/RECEIPT-GNURUST-EBCDIC-15.md`.)
 
+**`GNURUST.16` — edited-picture decode (16a).** `edited::decode_edited` recovers an edited DISPLAY field's value + presentation text for the `Z 9 , . - +` subset (proven vs `cobc` MOVE→edited→DISPLAY, 50/50). Numeric→edited formatting, `$ * CR DB B 0 /` (16b), reports, locale, EBCDIC edited, and edited arithmetic are non-claims. (`reports/RECEIPT-GNURUST-EDITED-16.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

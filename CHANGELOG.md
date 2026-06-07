@@ -3,6 +3,17 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.6.0]
+
+### GNURUST.16 — `edited`: edited-picture DECODE (16a subset, decode-only)
+- New `edited` module: `decode_edited(pic, bytes) -> EditedDecode` recovers an edited DISPLAY field's
+  `numeric_value` + presentation `raw_text` for the admitted **16a** subset (`Z 9 , . - +`, `(n)`).
+  Proven by moving values into edited fields with `cobc` and decoding the displayed bytes back
+  (edited_sweep 50/50); 6M-run fuzz clean. `edited_size(pic)` gives the field width.
+- Decode-only: numeric→edited formatting (16c), the financial decorations `$ * CR DB B 0 /` (16b),
+  report semantics, locale/currency, EBCDIC edited, edited arithmetic, and edited `VALUE` are
+  non-claims. Corrupt bytes / wrong width / out-of-subset symbols fail closed. Additive → minor.
+
 ## [0.5.0]
 
 ### GNURUST.15 — `ebcdic`: cp500 EBCDIC decode boundary for DISPLAY-class fields

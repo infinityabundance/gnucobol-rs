@@ -117,6 +117,13 @@ text via the cp500 table — byte-for-byte the table the admitted oracle's `cob_
 (sweep 256/256). Other code pages (incl. cp037), numeric EBCDIC zoned sign, national/DBCS, and
 binary/packed conversion are non-claims (binary/packed bytes pass through untouched).
 
+## `GNURUST.16` — edited-picture decode (16a)
+
+`edited::decode_edited(pic, bytes)` recovers an edited DISPLAY field's `numeric_value` + presentation
+`raw_text` for the admitted `Z 9 , . - +` subset (proven against `cobc`'s MOVE→edited→DISPLAY, 50/50).
+Decode-only: numeric→edited formatting, `$ * CR DB B 0 /` (16b), reports, locale, EBCDIC edited, and
+edited arithmetic are non-claims; corrupt/foreign bytes fail closed.
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

@@ -129,6 +129,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: EBCDIC cp500 sweep $EBSWEEP" ;;
     *) bad "oracle freshness: EBCDIC sweep not clean ($EBSWEEP)" ;;
   esac
+  EDSWEEP=$(bash "$ROOT/lab/oracle/edited_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$EDSWEEP" in
+    *"FAIL=0") note "oracle freshness: edited decode sweep $EDSWEEP" ;;
+    *) bad "oracle freshness: edited sweep not clean ($EDSWEEP)" ;;
+  esac
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;
