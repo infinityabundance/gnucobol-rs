@@ -19,8 +19,8 @@ Byte-exact, oracle-proven **read fidelity** for fixed-record COBOL data, within 
 - **cp500 EBCDIC** DISPLAY text decode (`15`) and **zoned-decimal numeric** decode (`17`).
 - **Edited-picture** decode 16a+16b (`16`, decode-only).
 - **KOBOLD** composes these into a byte-stable reconciliation packet with an operator trust layer
-  (explain / totals / dirty-mode), binary/packed **passthrough** under EBCDIC, and edited fields'
-  presentation-vs-numeric split.
+  (explain / totals / dirty-mode), binary/packed **passthrough** under EBCDIC, **cp500 numeric DISPLAY**
+  (zoned sign) decode, and edited fields' presentation-vs-numeric split.
 
 Every one of those has a **generated receipt** (`reports/receipts/<CAMPAIGN>/receipt.json`) produced
 from a live replay, and appears green in `lab/verify-sealed-courts.sh`.
