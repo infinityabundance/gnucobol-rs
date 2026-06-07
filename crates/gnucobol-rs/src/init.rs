@@ -74,9 +74,44 @@ impl From<LayoutError> for InitError {
     }
 }
 
+/// Encode a numeric literal `(neg, digits, lit_scale)` into a field's bytes per its `attr`
+/// (DISPLAY zoned, or COMP-3 via the sealed [`cob_move`]). Shared by `value_image` and the
+/// LEVEL-88 `SET ... TO TRUE` constructor (`GNURUST.12`).
+pub(crate) fn encode_numeric(
+    attr: &FieldAttr,
+    neg: bool,
+    digits: &[u8],
+    scale: i32,
+) -> Result<Vec<u8>, InitError> {
+    let signed = attr.have_sign();
+    let z = zoned(
+        neg,
+        digits,
+        scale,
+        attr.digits as usize,
+        attr.scale as i32,
+        signed,
+        "field",
+    )?;
+    if attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
+        Ok(z)
+    } else {
+        // COMP-3 (and any other numeric target): render via the sealed cob_move from the zoned temp.
+        let zattr = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: attr.digits,
+            scale: attr.scale,
+            flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 },
+        };
+        let mut out = vec![0u8; attr.digits as usize / 2 + 1];
+        cob_move(&z, &zattr, &mut out, attr).map_err(|e| InitError::Pic(format!("{e:?}")))?;
+        Ok(out)
+    }
+}
+
 /// Parse a numeric literal into `(negative, digits, scale)` where the value is
 /// `±(digits as integer) * 10^(-scale)`.
-fn parse_num(lit: &str) -> Result<(bool, Vec<u8>, i32), InitError> {
+pub(crate) fn parse_num(lit: &str) -> Result<(bool, Vec<u8>, i32), InitError> {
     let t = lit.trim();
     let (neg, rest) = match t.strip_prefix('-') {
         Some(r) => (true, r),
@@ -205,55 +240,17 @@ pub fn value_image(items: &[ValueItem]) -> Result<Vec<u8>, InitError> {
                 }
             }
             COB_TYPE_NUMERIC_DISPLAY | crate::attr::COB_TYPE_NUMERIC_PACKED => {
-                let signed = attr.have_sign();
+                // Unvalued / ZERO -> 0; this also yields the observed defaults (DISPLAY '0'-fill,
+                // COMP-3 canonical packed zero) since encoding 0 produces exactly those bytes.
                 let (neg, digits, scale) = match &it.value {
                     Some(Val::Num(lit)) => parse_num(lit)?,
                     Some(Val::Zero) | None => (false, vec![0u8], 0),
-                    Some(Val::Space) => {
-                        // SPACE into a numeric field: cobc treats unvalued-style; spaces are invalid
-                        // for numeric, so this is out of the sealed subset.
-                        return Err(InitError::DoesNotFit(it.name.clone()));
+                    Some(Val::Space) | Some(Val::Alpha(_)) => {
+                        return Err(InitError::DoesNotFit(it.name.clone()))
                     }
-                    Some(Val::Alpha(_)) => return Err(InitError::DoesNotFit(it.name.clone())),
                 };
-                let unvalued = it.value.is_none();
-                if attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
-                    if unvalued {
-                        field.fill(b'0'); // observed: unvalued DISPLAY numeric -> '0'
-                    } else {
-                        let z = zoned(
-                            neg,
-                            &digits,
-                            scale,
-                            attr.digits as usize,
-                            attr.scale as i32,
-                            signed,
-                            &it.name,
-                        )?;
-                        field.copy_from_slice(&z);
-                    }
-                } else {
-                    // COMP-3: even unvalued is a canonical packed zero (sign nibble 0x0C signed /
-                    // 0x0F unsigned), so always encode (unvalued/ZERO -> 0) via the sealed cob_move.
-                    let _ = unvalued;
-                    let z = zoned(
-                        neg,
-                        &digits,
-                        scale,
-                        attr.digits as usize,
-                        attr.scale as i32,
-                        signed,
-                        &it.name,
-                    )?;
-                    let zattr = FieldAttr {
-                        field_type: COB_TYPE_NUMERIC_DISPLAY,
-                        digits: attr.digits,
-                        scale: attr.scale,
-                        flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 },
-                    };
-                    cob_move(&z, &zattr, field, &attr)
-                        .map_err(|e| InitError::Pic(format!("{e:?}")))?;
-                }
+                let bytes = encode_numeric(&attr, neg, &digits, scale)?;
+                field.copy_from_slice(&bytes);
             }
             _ => {
                 return Err(InitError::Pic(format!(

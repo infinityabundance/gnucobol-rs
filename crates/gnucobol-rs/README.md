@@ -95,6 +95,14 @@ length** (incl. `THRU` ranges); numeric DISPLAY/COMP-3 parents compare by **nume
 sign-aware, ranges inclusive). Sweep `total=103 PASS=103 FAIL=0`. Predicate only — `SET`, the `FALSE`
 clause, condition expressions, and collating-sensitive ranges **fail closed** (`ConditionError`).
 
+## `GNURUST.12` — SET condition-name TO TRUE (`gnucobol_rs::set_88_true`)
+
+`set_88_true(attr, size, condition)` constructs the canonical parent bytes GnuCOBOL writes for
+`SET condition-name TO TRUE` (the first `VALUE`, or a `THRU` range's lower bound, encoded into the
+parent), matching `cobc` — and its output always satisfies `eval_88` (round-trip). Sweep
+`total=52 PASS=52 FAIL=0`. **TRUE only**: `SET ... TO FALSE`, the `FALSE` clause, condition
+expressions, and execution **fail closed** (`ConditionSetError`).
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

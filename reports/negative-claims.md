@@ -26,6 +26,9 @@ claimed_now:
   - id: level-88-predicate
     what: LEVEL-88 condition-name truth vs a parent field's current bytes, matching cobc
     scope: alnum padded compare + numeric value compare, single/multi/THRU ranges (GNURUST.11)
+  - id: set-88-true
+    what: SET condition-name TO TRUE canonical parent bytes (first VALUE / range lower bound), matching cobc
+    scope: alnum/numeric/COMP-3 parents; output satisfies eval_88 (GNURUST.12)
   - id: copy-expansion
     what: COPY <name>. copybook splice matching the cobc -P preprocessor (text-word stream)
     scope: line-oriented COPY, nested, cycle-detected, provenance-mapped (GNURUST.5)
@@ -56,7 +59,7 @@ not_claimed:
   - { id: redefines-larger,      note: "REDEFINES larger than its target — fails closed (GNURUST.4 non-claim)" }
   - { id: synchronized-align,    note: "SYNCHRONIZED/alignment in record layout (GNURUST.BINARY.0)" }
   - { id: redefines-variant,     note: "active overlay discriminator (GNURUST.REDEFINES.VARIANT.0)" }
-  - { id: level-88-set,          note: "SET cond TO TRUE/FALSE, FALSE clause, condition expressions, collating-sensitive ranges (GNURUST.SET88.0)" }
+  - { id: level-88-false,        note: "SET cond TO FALSE + FALSE clause, condition expressions, collating-sensitive ranges (GNURUST.12b/SET88FALSE.0)" }
   - { id: binary-comp,           note: "COMP/BINARY size/byteorder/SYNC alignment (GNURUST.BINARY.0)" }
   - { id: source-format,         note: "fixed/free/variant parsing & preprocessing (GNURUST.SOURCEFORM.0)" }
   - { id: copy-replacing-advanced, note: "REPLACING LEADING/TRAILING/identifier operands, REPLACE directive (GNURUST.6 non-claim)" }

@@ -59,6 +59,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.11` — LEVEL-88 predicate.** `eval_88` proves whether a condition name is true for a parent field's current bytes — alphanumeric (space-padded compare, incl. ranges) and numeric DISPLAY/COMP-3 (value compare, inclusive ranges) — matching `cobc`. `SET`/`FALSE`/expressions/Procedure-Division execution and collating-sensitive ranges are non-claims. (`reports/RECEIPT-GNURUST-COND-11.md`.)
 
+**`GNURUST.12` — SET LEVEL-88 TO TRUE.** `set_88_true` constructs the canonical parent bytes for `SET condition-name TO TRUE` (first VALUE / range lower bound, encoded), matching `cobc`; its output satisfies `eval_88`. `SET TO FALSE`/the FALSE clause/expressions/execution are non-claims. (`reports/RECEIPT-GNURUST-SET88-12.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

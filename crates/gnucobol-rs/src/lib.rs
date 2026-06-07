@@ -57,7 +57,10 @@ pub use attr::{
     FieldAttr, COB_FLAG_HAVE_SIGN, COB_FLAG_NO_SIGN_NIBBLE, COB_FLAG_SIGN_LEADING,
     COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
-pub use cond::{eval_88, CondLit, CondValue, Condition, ConditionError};
+pub use cond::{
+    apply_set_88_true, eval_88, set_88_true, CondLit, CondValue, Condition, ConditionError,
+    ConditionSetError,
+};
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
@@ -417,6 +420,11 @@ pub fn __fuzz_cond(data: &[u8]) {
         values,
     };
     let _ = cond::eval_88(&attr, bytes, &c);
+    // Also fuzz the inverse constructor (SET ... TO TRUE): arbitrary size, then a round-trip eval.
+    let size = (data[2] as usize) % 24;
+    if let Ok(produced) = cond::set_88_true(&attr, size, &c) {
+        let _ = cond::eval_88(&attr, &produced, &c);
+    }
 }
 
 #[cfg(test)]

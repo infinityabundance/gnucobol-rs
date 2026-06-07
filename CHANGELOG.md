@@ -3,6 +3,19 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.3.2]
+
+### GNURUST.12 — `cond`: SET condition-name TO TRUE
+- `gnucobol_rs::set_88_true(attr, size, condition)` (and in-place `apply_set_88_true`) constructs the
+  canonical parent bytes GnuCOBOL writes for `SET condition-name TO TRUE`, matching `cobc`: the
+  **first** `VALUE` entry is chosen (a literal as-is, or a `THRU` range's **lower bound**) and encoded
+  into the parent (alnum space-padded; numeric zoned/packed via the sealed `cob_move`). The output
+  always satisfies `eval_88` (round-trip self-check). Sweep total=52 PASS=52 FAIL=0; 6M fuzz clean.
+  **TRUE-only** — `SET ... TO FALSE` / the `FALSE` clause, condition expressions, Procedure-Division
+  execution, and collating-sensitive ranges are non-claims (fail closed). New `set_88_true`/
+  `apply_set_88_true`/`ConditionSetError` (purely additive). Internally, the numeric value encoder is
+  now shared between `value_image` and the SET constructor (value sweep unchanged at 392/0).
+
 ## [0.3.1]
 
 ### GNURUST.11 — `cond`: LEVEL-88 condition-name predicate
