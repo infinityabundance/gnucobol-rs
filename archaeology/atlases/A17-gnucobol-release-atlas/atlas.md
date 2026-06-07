@@ -30,3 +30,21 @@ opencobol-1.0/1.1  →  gnucobol-1.1  →  gnucobol-2.x (2.2 anchor)  →  gnuco
 
 The `-std` **dialect** profiles of the admitted 3.2 oracle (`ibm`, `mvs`, `mf`, `acu`, `rm`, `bs2000`,
 …) *are* oracle-generated — see [`../G-gnucobol-dialect-axis/`](../G-gnucobol-dialect-axis/).
+
+
+## Phase 2 — feature clues from the admitted 3.2 (done, oracle-grounded)
+
+`lab/atlas/build-feature-index.sh` extracts feature clues from the **admitted** 3.2 tree (not curated):
+[`feature-index.json`](feature-index.json) + [`raw/`](raw/) hold the full `cobc --list-*` tables
+(`oracle_generated`) and NEWS/testsuite coverage (`oracle_source`). Reproducible findings (3.2):
+
+- `--list-*`: reserved **1001**, intrinsics **116**, system routines **65**, mnemonics **76**,
+  exceptions **2** (raw tables in `raw/cobc-list-*.txt`).
+- The admitted **testsuite has 1346 cases**, categorized by surface — e.g. `data_packed` 23,
+  `data_binary` 18, `data_display` 9, `run_file` 106, `run_extensions` 107, `listings` 36. GnuCOBOL's
+  *own* coverage concentration is a strong fixture-priority signal (cross-checks A19).
+- Reserved-word *presence* for `JSON`/`XML`/`REPORT`/`SCREEN`/`INVOKE` is `true` — but presence is
+  **recognition, not function** (those are backend/runtime-dependent; see A19 drift).
+
+This is Phase 2 for the admitted release only. Phase 3 (building historical anchors to populate the
+per-release feature map) remains `not_attempted` — loudly.

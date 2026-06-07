@@ -78,7 +78,7 @@ campaign candidate.
 ## Build phases (we are at Phase 1)
 
 1. **Index, do not build** — release metadata, the G-axis from the admitted oracle. ← *here*
-2. Extract feature clues (NEWS/reserved/testsuite) from the admitted source tree.
+2. Extract feature clues (NEWS/reserved/testsuite) from the admitted source tree. **← done for 3.2** (`lab/atlas/build-feature-index.sh` → `A17/feature-index.json` + `raw/`).
 3. Build selected historical anchors only (OpenCOBOL 1.1, GnuCOBOL 2.2/3.1.2/3.2). *Not attempted.*
 4. Curate the S/V axes (citations, no standard text).
 5. Join + rank fixture candidates → `gnucobol-rs` roadmap.

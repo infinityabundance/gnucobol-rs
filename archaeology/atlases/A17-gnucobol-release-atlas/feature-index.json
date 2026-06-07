@@ -1,0 +1,12 @@
+{
+  "schema": "gnucobol-atlas-feature-index-v1",
+  "release_id": "gnucobol-3.2",
+  "oracle": "cobc (GnuCOBOL) 3.2.0",
+  "evidence_kind": "oracle_generated (--list-*) + oracle_source (NEWS/testsuite)",
+  "lists": {"reserved": 1001, "intrinsics": 116, "system_routines": 65, "mnemonics": 76, "exceptions": 2},
+  "reserved_word_present": {"JSON": true, "XML": true, "REPORT": true, "SCREEN": true, "INVOKE_OO": true},
+  "news_mentions": {"JSON": 11, "XML": 8, "REPORT": 7, "SCREEN": 14, "EBCDIC": 10, "COMP-5": 1, "OCCURS": 7, "REDEFINES": 7},
+  "testsuite_total_cases": 1346,
+  "testsuite_by_category": {"configuration": 24, "data_binary": 18, "data_display": 9, "data_packed": 23, "data_pointer": 1, "listings": 36, "run_accept": 6, "run_extensions": 107, "run_file": 106, "run_functions": 126, "run_fundamental": 114, "run_initialize": 14, "run_manual_screen": 62, "run_misc": 180, "run_ml": 14, "run_refmod": 11, "run_reportwriter": 28, "run_returncode": 3, "run_subscripts": 13, "syn_copy": 23, "syn_definition": 64, "syn_file": 45, "syn_functions": 16, "syn_literals": 16, "syn_misc": 154, "syn_move": 18, "syn_multiply": 3, "syn_occurs": 14, "syn_redefines": 17, "syn_refmod": 5, "syn_reportwriter": 11, "syn_screen": 19, "syn_set": 2, "syn_subscripts": 6, "syn_value": 13, "used_binaries": 25},
+  "note": "reserved_word_present means the WORD is in the table, NOT that the feature is runtime-functional (the inert-syntax distinction). news_mentions/testsuite are coverage signals from the admitted 3.2 tree. Reproduce: lab/atlas/build-feature-index.sh"
+}
