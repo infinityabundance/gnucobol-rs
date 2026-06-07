@@ -1,0 +1,183 @@
+{
+  "schema": "gnucobol-atlas-court-join-v1",
+  "axis": "A19",
+  "evidence_kind": "oracle_generated (sealed) + project_status (unsealed)",
+  "note": "gnucobol_rs_status per data surface, drawn from reports/claim-ladder.json and docs/negative-capabilities.md. The unsealed rows with high fixture_priority are the next-campaign candidates.",
+  "sealed": [
+    {
+      "surface_id": "decimal MOVE",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.2",
+      "byte_domain": "field-storage bytes",
+      "readiness": 4,
+      "non_claim": "arithmetic; edited pictures; any other type pair"
+    },
+    {
+      "surface_id": "PIC field model",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.3",
+      "byte_domain": "generated-C cob_field_attr + LENGTH OF",
+      "readiness": 4,
+      "non_claim": "edited pictures; usages beyond DISPLAY/COMP-3"
+    },
+    {
+      "surface_id": "record layout",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.4",
+      "byte_domain": "generated-C field offset+size",
+      "readiness": 4,
+      "non_claim": "SYNCHRONIZED; REDEFINES larger than target"
+    },
+    {
+      "surface_id": "COPY expansion",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.5",
+      "byte_domain": "expanded source text-word stream",
+      "readiness": 4,
+      "non_claim": "inline/multi-line COPY; OF/IN library; SUPPRESS"
+    },
+    {
+      "surface_id": "COPY ... REPLACING",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.6",
+      "byte_domain": "expanded source text-word stream",
+      "readiness": 4,
+      "non_claim": "REPLACE directive; LEADING/TRAILING; identifier operands"
+    },
+    {
+      "surface_id": "arithmetic ADD/SUB/MUL",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.7",
+      "byte_domain": "receiving-field storage bytes",
+      "readiness": 3,
+      "non_claim": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum"
+    },
+    {
+      "surface_id": "VALUE initial image",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.8",
+      "byte_domain": "record-storage bytes",
+      "readiness": 4,
+      "non_claim": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE"
+    },
+    {
+      "surface_id": "PIC P-scaling",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.9",
+      "byte_domain": "generated-C cob_field_attr + LENGTH OF",
+      "readiness": 3,
+      "non_claim": "V+P; P at both ends; VALUE/MOVE on P field"
+    },
+    {
+      "surface_id": "ODO physical-max layout",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.10",
+      "byte_domain": "generated-C storage size b_REC[size] (NOT runtime LENGTH OF)",
+      "readiness": 4,
+      "non_claim": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO"
+    },
+    {
+      "surface_id": "LEVEL-88 eval",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.11",
+      "byte_domain": "parent field-storage bytes -> boolean",
+      "readiness": 4,
+      "non_claim": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution"
+    },
+    {
+      "surface_id": "SET 88 TO TRUE",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.12",
+      "byte_domain": "parent field-storage bytes",
+      "readiness": 4,
+      "non_claim": "SET TO FALSE; FALSE clause; expressions; execution"
+    },
+    {
+      "surface_id": "packed ADD/SUBTRACT (cob_add_bcd)",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.13",
+      "byte_domain": "receiving-field storage bytes",
+      "readiness": 3,
+      "non_claim": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float"
+    },
+    {
+      "surface_id": "binary storage (COMP/COMP-5/COMP-X)",
+      "family": "data_semantics",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.14",
+      "byte_domain": "field-storage + move-result bytes",
+      "readiness": 3,
+      "non_claim": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float"
+    }
+  ],
+  "unsealed": [
+    {
+      "surface_id": "edited pictures",
+      "family": "data_description",
+      "gnucobol_rs_status": "fails_closed",
+      "campaign": "GNURUST.EDITED.0",
+      "fixture_priority": "high",
+      "non_claim": "Z/$/CR/DB/* rendering"
+    },
+    {
+      "surface_id": "EBCDIC / code pages",
+      "family": "encoding",
+      "gnucobol_rs_status": "out_of_host_scope",
+      "campaign": "GNURUST.EBCDIC.0",
+      "fixture_priority": "high",
+      "non_claim": "declared parameter, never inferred"
+    },
+    {
+      "surface_id": "SET 88 TO FALSE / FALSE clause",
+      "family": "condition_names",
+      "gnucobol_rs_status": "fails_closed",
+      "campaign": "GNURUST.12b",
+      "fixture_priority": "medium",
+      "non_claim": "FALSE-clause bytes"
+    },
+    {
+      "surface_id": "DIVIDE",
+      "family": "arithmetic",
+      "gnucobol_rs_status": "fails_closed",
+      "campaign": "GNURUST.17",
+      "fixture_priority": "medium",
+      "non_claim": "quotient/remainder bytes"
+    },
+    {
+      "surface_id": "binary arithmetic / SYNCHRONIZED",
+      "family": "numeric_storage",
+      "gnucobol_rs_status": "fails_closed",
+      "campaign": "GNURUST.BINARY-ARITH.0",
+      "fixture_priority": "medium",
+      "non_claim": "alignment + binary add/mul"
+    },
+    {
+      "surface_id": "files / indexed I/O / SORT / Report Writer / Screen",
+      "family": "runtime",
+      "gnucobol_rs_status": "out_of_model",
+      "campaign": null,
+      "fixture_priority": "none",
+      "non_claim": "not a runtime / not a compiler"
+    },
+    {
+      "surface_id": "CICS / DB2 embedded SQL (preprocessor)",
+      "family": "preprocessor",
+      "gnucobol_rs_status": "out_of_model",
+      "campaign": null,
+      "fixture_priority": "none",
+      "non_claim": "source-transform artifact, not core COBOL"
+    }
+  ]
+}

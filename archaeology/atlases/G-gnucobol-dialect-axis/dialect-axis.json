@@ -1,0 +1,26 @@
+{
+  "schema": "gnucobol-atlas-dialect-axis-v1",
+  "axis": "G",
+  "oracle": "cobc (GnuCOBOL) 3.2.0",
+  "evidence_kind": "oracle_generated",
+  "note": "Counts and reserved-word deltas are produced by the admitted cobc -std=<dialect>. Reproduce with lab/atlas/build-dialect-axis.sh.",
+  "dialects": [
+    {"id": "default", "reserved_words": 995, "intrinsics": 116, "system_routines": 65, "reserved_only_in_dialect": 0, "reserved_missing_vs_default": 0    },
+    {"id": "cobol2014", "reserved_words": 485, "intrinsics": 88, "system_routines": 65, "reserved_only_in_dialect": 17, "reserved_missing_vs_default": 527    },
+    {"id": "cobol2002", "reserved_words": 477, "intrinsics": 78, "system_routines": 65, "reserved_only_in_dialect": 10, "reserved_missing_vs_default": 528    },
+    {"id": "cobol85", "reserved_words": 354, "intrinsics": 43, "system_routines": 65, "reserved_only_in_dialect": 9, "reserved_missing_vs_default": 650    },
+    {"id": "xopen", "reserved_words": 380, "intrinsics": 43, "system_routines": 65, "reserved_only_in_dialect": 9, "reserved_missing_vs_default": 624    },
+    {"id": "ibm-strict", "reserved_words": 478, "intrinsics": 74, "system_routines": 65, "reserved_only_in_dialect": 45, "reserved_missing_vs_default": 562    },
+    {"id": "ibm", "reserved_words": 1023, "intrinsics": 117, "system_routines": 65, "reserved_only_in_dialect": 46, "reserved_missing_vs_default": 18    },
+    {"id": "mvs-strict", "reserved_words": 411, "intrinsics": 46, "system_routines": 65, "reserved_only_in_dialect": 36, "reserved_missing_vs_default": 620    },
+    {"id": "mvs", "reserved_words": 1014, "intrinsics": 117, "system_routines": 65, "reserved_only_in_dialect": 37, "reserved_missing_vs_default": 18    },
+    {"id": "mf-strict", "reserved_words": 651, "intrinsics": 71, "system_routines": 65, "reserved_only_in_dialect": 111, "reserved_missing_vs_default": 455    },
+    {"id": "mf", "reserved_words": 1097, "intrinsics": 117, "system_routines": 65, "reserved_only_in_dialect": 112, "reserved_missing_vs_default": 10    },
+    {"id": "bs2000-strict", "reserved_words": 532, "intrinsics": 51, "system_routines": 65, "reserved_only_in_dialect": 35, "reserved_missing_vs_default": 498    },
+    {"id": "bs2000", "reserved_words": 1013, "intrinsics": 117, "system_routines": 65, "reserved_only_in_dialect": 36, "reserved_missing_vs_default": 18    },
+    {"id": "acu-strict", "reserved_words": 808, "intrinsics": 46, "system_routines": 65, "reserved_only_in_dialect": 94, "reserved_missing_vs_default": 281    },
+    {"id": "acu", "reserved_words": 1083, "intrinsics": 117, "system_routines": 65, "reserved_only_in_dialect": 96, "reserved_missing_vs_default": 8    },
+    {"id": "rm-strict", "reserved_words": 441, "intrinsics": 1, "system_routines": 65, "reserved_only_in_dialect": 32, "reserved_missing_vs_default": 586    },
+    {"id": "rm", "reserved_words": 1012, "intrinsics": 117, "system_routines": 65, "reserved_only_in_dialect": 33, "reserved_missing_vs_default": 16    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "gnucobol-atlas-vendor-axis-v1",
+  "axis": "V",
+  "evidence_kind": "reference_curated",
+  "warning": "Vendor generations are migration-source labels. GnuCOBOL exposes some as -std dialect profiles (see G-axis, which IS oracle-generated); the vendor rows themselves are reference-only shadow witnesses.",
+  "vendors": [
+    {"id": "ibm-os-vs-cobol", "kind": "vendor_generation", "gnucobol_std": "mvs/ibm", "note": "common legacy migration source"},
+    {"id": "ibm-vs-cobol-ii", "kind": "vendor_generation", "gnucobol_std": "mvs/ibm"},
+    {"id": "ibm-enterprise-cobol-v3..v6", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "micro-focus", "kind": "vendor_directive_family", "gnucobol_std": "mf", "note": "behavior is a DIALECT directive family, not one version"},
+    {"id": "acucobol-gt", "kind": "vendor", "gnucobol_std": "acu"},
+    {"id": "rm-cobol", "kind": "vendor", "gnucobol_std": "rm"},
+    {"id": "bs2000-cobol", "kind": "vendor", "gnucobol_std": "bs2000"},
+    {"id": "gcos-cobol", "kind": "vendor", "gnucobol_std": "gcos"},
+    {"id": "ca-realia-ii", "kind": "vendor", "note": "named in GnuCOBOL 3.2 reference-format enforcement"}
+  ]
+}

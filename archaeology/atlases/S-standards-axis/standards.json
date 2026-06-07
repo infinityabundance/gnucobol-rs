@@ -1,0 +1,19 @@
+{
+  "schema": "gnucobol-atlas-standards-axis-v1",
+  "axis": "S",
+  "evidence_kind": "reference_curated",
+  "warning": "Feature LABELS and citations only — no ISO/ANSI standard text is reproduced (paywalled/copyright). These rows are shadow witnesses and NEVER override the admitted GnuCOBOL oracle in a sealed court.",
+  "standards": [
+    {"id": "cobol-60", "kind": "historical_standard", "year": 1960, "note": "pre-ANSI; CODASYL lineage"},
+    {"id": "cobol-68", "kind": "standard", "authority": "ANSI", "common_name": "ANSI X3.23-1968", "note": "first ANSI standard"},
+    {"id": "cobol-74", "kind": "standard", "authority": "ANSI", "common_name": "ANSI X3.23-1974"},
+    {"id": "iso-1989-1985", "kind": "standard", "authority": "ISO/ANSI", "common_name": "COBOL 85"},
+    {"id": "iso-1989-1985-amd1-1992", "kind": "amendment", "common_name": "Intrinsic Function Module"},
+    {"id": "iso-1989-1985-amd2-1994", "kind": "amendment", "common_name": "correction/clarification"},
+    {"id": "iso-1989-2002", "kind": "standard", "status": "withdrawn/superseded"},
+    {"id": "iso-1989-2014", "kind": "standard"},
+    {"id": "iso-1989-2023", "kind": "standard", "status": "current"},
+    {"id": "xopen-cobol", "kind": "portability_profile", "authority": "The Open Group", "note": "based on ISO 1989:1985; cobc -std=xopen"},
+    {"id": "fips-pub-21", "kind": "government_profile", "note": "FIPS 21.x COBOL profiles"}
+  ]
+}

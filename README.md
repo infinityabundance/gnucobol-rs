@@ -84,6 +84,9 @@ kobold-data-shim (Apache-2.0) fixed-record reconciliation JSON/audit
 The role separation is deliberate (see [`docs/license-boundaries.md`](docs/license-boundaries.md)):
 no layer invents semantics a lower court has not sealed.
 
+An evidence **archaeology atlas** (standards × GnuCOBOL dialects × vendor generations, with the
+GnuCOBOL `-std` dialect axis generated from the admitted oracle) is in [`archaeology/ATLAS.md`](archaeology/ATLAS.md).
+
 ## The admitted oracle
 
 Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the source of truth. Because it is not
