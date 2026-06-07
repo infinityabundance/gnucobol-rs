@@ -1,10 +1,10 @@
 /*
- * decimal_harness.c — runtime-library oracle for gnucobol-rs / cobol-decimal-rs.
+ * decimal_harness.c — runtime-library oracle for gnucobol-rs.
  *
  * Links the *built* upstream libcob and exercises the REAL cob_move() and the
  * packed/zoned/display field helpers, dumping raw destination bytes. This is the
  * decoupled "runtime library" oracle shape: it bypasses the cobc front-end so the
- * MOVE byte-transform is tested directly. The Rust port (cobol-decimal-rs) consumes
+ * MOVE byte-transform is tested directly. The Rust port (gnucobol-rs) consumes
  * the identical input rows via examples/rows and must produce byte-identical output.
  *
  * NOT shipped in any published crate; lab/ tooling only.
