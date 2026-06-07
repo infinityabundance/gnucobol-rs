@@ -5,6 +5,7 @@
 > question: *what may a user rely on today?*
 
 _gnucobol-rs 0.7.0 · 18 sealed GNURUST courts · oracle: GnuCOBOL 3.2.0 (admitted, built in lab)._
+_(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
 
