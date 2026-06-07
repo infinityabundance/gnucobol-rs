@@ -76,6 +76,11 @@ ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabili
 | `KOBOLD.DATA.2/3` | binary + cp500 EBCDIC composed in corpus | sealed courts (composed) | shim 0.3.0/0.4.0 | binary arithmetic, numeric EBCDIC zoned |
 | `KOBOLD.OPERATOR.1` | explain / totals / dirty-mode + risk | sealed courts (composed) | shim 0.5.0 | business truth, semantic validity |
 
+**Receipts are generated evidence, not hand-written claims** (`docs/trust2-generated-receipts.md`):
+[`reports/receipts/<CAMPAIGN>/receipt.json`](reports/receipts/) is produced by **live court replay**,
+`receipt.md` is rendered from the JSON, and the doc-gate fails on stale replay drift or manual receipt
+edits — *the receipt is the replay*.
+
 Replay all of it with one command (prints a PASS table):
 
 ```sh
