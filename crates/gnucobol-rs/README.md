@@ -61,12 +61,14 @@ with a typed `PicError`.
 layout (differential sweep vs `cobc`, `PASS=32 FAIL=0`). `OCCURS DEPENDING ON`, `SYNCHRONIZED`, and
 a `REDEFINES` larger than its target **fail closed** with a typed `LayoutError`.
 
-## `GNURUST.5` — COPY copybook expansion (`gnucobol_rs::copybook`)
+## `GNURUST.5` / `GNURUST.6` — COPY (+ REPLACING) copybook expansion (`gnucobol_rs::copybook`)
 
-`expand` splices `COPY <name>.` copybooks into the source — recursively, with cycle detection and a
-per-line provenance map — matching the GnuCOBOL preprocessor (`cobc -P`) at text-word granularity
-(`PASS=3 FAIL=0`). `COPY ... REPLACING`, recursive/missing copybooks, and over-deep/over-large
-expansions **fail closed** with a typed `CopyError`.
+`expand` splices `COPY <name> [REPLACING ==old== BY ==new== …].` copybooks into the source —
+recursively, with cycle detection and a per-line provenance map — matching the GnuCOBOL preprocessor
+(`cobc -P`) at **text-word** granularity (`programs=7 PASS=7 FAIL=0`). REPLACING is whole-text-word
+(`==AA==` does not touch `AA-X`; the `:tag:` idiom works), composes across nesting, and **fails
+closed** (typed `CopyError`) on `LEADING`/`TRAILING`/identifier operands, recursion, and
+over-deep/over-large expansion.
 
 ## What it does NOT do
 

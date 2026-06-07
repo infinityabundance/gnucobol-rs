@@ -23,6 +23,9 @@ claimed_now:
   - id: copy-expansion
     what: COPY <name>. copybook splice matching the cobc -P preprocessor (text-word stream)
     scope: line-oriented COPY, nested, cycle-detected, provenance-mapped (GNURUST.5)
+  - id: copy-replacing
+    what: COPY ... REPLACING ==old== BY ==new== whole-text-word replacement matching cobc -P
+    scope: pseudo-text operands, multiple pairs, composing across nesting (GNURUST.6)
 not_claimed:
   - { id: arithmetic,            note: "ADD/SUBTRACT/MULTIPLY/DIVIDE/ROUNDED/ON SIZE ERROR — deferred (GMP-backed)" }
   - { id: edited-pictures,       note: "Z/$/CR/DB/*/BLANK WHEN ZERO rendering (GNURUST.EDITED.0)" }
@@ -40,7 +43,7 @@ not_claimed:
   - { id: level-88,              note: "condition-name predicates (GNURUST.LEVEL88.0)" }
   - { id: binary-comp,           note: "COMP/BINARY size/byteorder/SYNC alignment (GNURUST.BINARY.0)" }
   - { id: source-format,         note: "fixed/free/variant parsing & preprocessing (GNURUST.SOURCEFORM.0)" }
-  - { id: copy-replacing,        note: "COPY ... REPLACING whole-text-word algorithm (GNURUST.6/REPLACEALG.0)" }
+  - { id: copy-replacing-advanced, note: "REPLACING LEADING/TRAILING/identifier operands, REPLACE directive (GNURUST.6 non-claim)" }
   - { id: copybook-advanced,     note: "inline/multi-line COPY, OF/IN library, SUPPRESS (GNURUST.COPYMAP.0)" }
   - { id: call-cancel,           note: "CALL/linkage/CANCEL lifecycle (GNURUST.CALLABI.0)" }
   - { id: storage-lifetime,      note: "WORKING/LOCAL/LINKAGE/FILE/SCREEN/REPORT lifetimes" }

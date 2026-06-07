@@ -43,7 +43,11 @@ matching the compiler's record layout. (`reports/RECEIPT-GNURUST-LAYOUT-4.md`.)
 
 **`GNURUST.5` — COPY expansion.** `copybook::expand` splices `COPY <name>.` copybooks (recursively,
 cycle-detected, provenance-mapped) matching the GnuCOBOL preprocessor (`cobc -P`) at text-word
-granularity. `COPY ... REPLACING` is deferred. (`reports/RECEIPT-GNURUST-COPY-5.md`.)
+granularity. (`reports/RECEIPT-GNURUST-COPY-5.md`.)
+
+**`GNURUST.6` — COPY ... REPLACING.** `copybook::expand` applies `COPY name REPLACING ==p== BY ==q==`
+at whole-text-word granularity, composing across nesting, matching `cobc -P`. Non-pseudo-text forms
+(`LEADING`/`TRAILING`, identifier operands) fail closed. (`reports/RECEIPT-GNURUST-REPLACING-6.md`.)
 
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode

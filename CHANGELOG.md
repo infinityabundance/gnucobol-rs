@@ -3,6 +3,17 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.3]
+
+### GNURUST.6 — `copybook`: COPY ... REPLACING (whole-text-word)
+- `copybook::expand` now applies `COPY name REPLACING ==old== BY ==new== ….` at GnuCOBOL's
+  **text-word** granularity (not string substitution): `==AA==` does not touch `AA-X`/`KEEP-AA`,
+  the `:tag:` idiom works, multiple pairs apply per word, and a nested copy's brought-in text is
+  penetrated by the outer REPLACING (after the nested copy's own) without altering nested operands.
+  Proven against `cobc -P` (sweep `programs=7 PASS=7 FAIL=0`). Non-pseudo-text forms
+  (`LEADING`/`TRAILING`, identifier operands, unterminated `==`, the `REPLACE` directive) fail
+  closed. Fuzz: 4M runs, 0 crashes.
+
 ## [0.2.2]
 
 ### GNURUST.5 — `copybook`: COPY copybook expansion
