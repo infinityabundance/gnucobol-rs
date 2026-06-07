@@ -211,8 +211,15 @@ fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, Layou
             .pic
             .as_ref()
             .ok_or_else(|| LayoutError::ElementaryNoPic(node.item.name.clone()))?;
-        let pf = pic::build_field(pic_s, *usage, *sep, *lead).map_err(LayoutError::Pic)?;
-        pf.size
+        match pic::build_field(pic_s, *usage, *sep, *lead) {
+            Ok(pf) => pf.size,
+            // An edited DISPLAY picture has a well-defined width (`GNURUST.16`): size it via
+            // `edited_size` so edited fields lay out (their decode is the `edited` court, not `pic`).
+            Err(pe) if *usage == Usage::Display => {
+                crate::edited::edited_size(pic_s).map_err(|_| LayoutError::Pic(pe))?
+            }
+            Err(pe) => return Err(LayoutError::Pic(pe)),
+        }
     } else {
         // Group: lay out children in order; size = span of one occurrence.
         if node.item.pic.is_some() {
@@ -296,6 +303,21 @@ fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, Layou
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn edited_field_lays_out_via_edited_size() {
+        // An edited DISPLAY picture sizes via GNURUST.16 edited_size (it would fail `pic::build_field`).
+        let items = vec![
+            group(1, "R"),
+            elem(5, "A", "9(3)", Usage::Display),
+            elem(5, "PRINT-BAL", "$ZZ,ZZ9.99", Usage::Display), // 10 chars
+            elem(5, "B", "X(2)", Usage::Display),
+        ];
+        let laid = lay_out(&items).unwrap();
+        let by = |n: &str| laid.iter().find(|l| l.name == n).unwrap();
+        assert_eq!((by("PRINT-BAL").offset, by("PRINT-BAL").size), (3, 10));
+        assert_eq!((by("B").offset, by("B").size), (13, 2));
+    }
 
     fn elem(level: u16, name: &str, pic: &str, usage: Usage) -> Item {
         Item {

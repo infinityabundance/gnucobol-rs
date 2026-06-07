@@ -3,6 +3,11 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.6.2]
+- `layout::lay_out` now sizes **edited DISPLAY fields** via `edited::edited_size` (composing
+  `GNURUST.4` + `GNURUST.16`), so a record containing an edited picture lays out instead of failing
+  closed. The edited field's *decode* remains the `edited` court (not `pic`). Additive → patch.
+
 ## [0.6.1]
 - **GNURUST.16b — edited-picture financial decorations (decode-only).** `decode_edited` now admits the
   `16b` subset (`$` currency fixed/floating, `*` check-protection, `CR`/`DB` trailing sign, `B` blank,
