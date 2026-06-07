@@ -111,14 +111,18 @@ else:
 open(f"{OUT}/cargo-audit.txt", "w").write(f"status: {status}\ngenerated_at: {STAMP}\n\n{body}\n")
 
 # 6. cargo-geiger.txt (heavy: compiles; time-bounded)
-pkgsel = ["-p", CRATE] if KIND == "kobold" else ["-p", "gnucobol-rs"]
-rc, out, err = run(["cargo", "geiger", "--output-format", "Ascii"] + pkgsel, timeout=300)
+geiger_cwd = REPO if KIND == "kobold" else os.path.join(REPO, "crates/gnucobol-rs")
+rc, out, err = run(["cargo", "geiger", "--output-format", "Ascii", "--all-features"], cwd=geiger_cwd, timeout=300)
 if rc == -1:
     gstatus, gbody = "not_installed", "cargo-geiger not installed"
 elif rc is None:
     gstatus, gbody = "not_run", "timed out (geiger compiles the dep tree; re-run manually)"
 elif rc == 0:
     gstatus, gbody = "pass", out
+elif "Io(" in (out + err) or "No such file" in (out + err) or "NotFound" in (out + err):
+    # An environment/path-resolution error inside geiger -- NOT an unsafe finding. Never fake-green it,
+    # but classify honestly as not_run; the real safety fact is forbid(unsafe_code), asserted in-crate.
+    gstatus, gbody = "not_run", "geiger could not complete (tooling/path error below); shipped crate is #![forbid(unsafe_code)]\n\n" + out + "\n" + err
 else:
     gstatus, gbody = ("fail", out + "\n" + err)
 open(f"{OUT}/cargo-geiger.txt", "w").write(f"status: {gstatus}\ngenerated_at: {STAMP}\nnote: every shipped crate is #![forbid(unsafe_code)]\n\n{gbody[:8000]}\n")

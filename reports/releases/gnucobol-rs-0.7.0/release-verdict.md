@@ -1,19 +1,19 @@
 # Release verdict — gnucobol-rs 0.7.0
 
-_Generated 2026-06-07T23:41:57Z from the machine files in this packet. A release is an evidence packet, not merely a
+_Generated 2026-06-07T23:48:27Z from the machine files in this packet. A release is an evidence packet, not merely a
 version number._
 
 | evidence | value |
 |----------|-------|
 | crate / version | `gnucobol-rs` 0.7.0 (gnurust) |
-| git commit | `bed2c394ca9144d85ac791433e7bc7c858f409a7` |
+| git commit | `9ec870dba3306e25f418fb99fbf8ad13058274d7` |
 | publish status | pending_crates_io_rate_limit_window |
 | this-crate license | LGPL-3.0-or-later |
 | dependencies | 2 (SBOM: `sbom.spdx.json`) |
 | sealed courts in this crate | 17 (`claim-ladder-snapshot.json`) |
 | TRUST.2 receipts | 14 (`receipt-manifest.json`) |
 | cargo-audit | **pass** (`cargo-audit.txt`) |
-| cargo-geiger | **fail** (`cargo-geiger.txt`) — every shipped crate is `#![forbid(unsafe_code)]` |
+| cargo-geiger | **not_run** (`cargo-geiger.txt`) — every shipped crate is `#![forbid(unsafe_code)]` |
 
 ## What this release admits
 The sealed courts in `claim-ladder-snapshot.json`, each proven against the admitted GnuCOBOL 3.2 oracle

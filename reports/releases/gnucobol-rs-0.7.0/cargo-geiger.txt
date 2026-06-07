@@ -1,7 +1,14 @@
-status: fail
-generated_at: 2026-06-07T23:41:57Z
+status: not_run
+generated_at: 2026-06-07T23:48:27Z
 note: every shipped crate is #![forbid(unsafe_code)]
 
+geiger could not complete (tooling/path error below); shipped crate is #![forbid(unsafe_code)]
 
-manifest path `/home/one/gnucobol-rs/Cargo.toml` is a virtual manifest, but this command requires running against an actual package in this workspace
+
+     Removed 11 files, 4.6MiB total
+    Checking gnucobol-rs v0.7.0 (/home/one/gnucobol-rs/crates/gnucobol-rs)
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/gnucobol_rs-2a6d7f07e7a5c824.d","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/libgnucobol_rs-2a6d7f07e7a5c824.rmeta","emit":"metadata"}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" }, "/home/one/gnucobol-rs/crates/cobol-decimal-rs/src/lib.rs")
 

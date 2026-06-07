@@ -58,6 +58,15 @@ SV=$(grep -m1 '^version' crates/gnucobol-rs/Cargo.toml | grep -oE '[0-9]+\.[0-9]
 grep -q "gnucobol-rs $SV" STATUS.md || bad "STATUS.md does not name current crate version $SV (live authority stale)"
 note "STATUS.md names current crate version"
 
+# ENTERPRISE.1: every release must ship a complete evidence packet for the current version.
+RELDIR="reports/releases/gnucobol-rs-$SV"
+if [ -f "$RELDIR/release-verdict.md" ]; then
+  RELN=$(ls "$RELDIR" | wc -l)
+  if [ "$RELN" -ge 11 ]; then note "release evidence packet present for $SV ($RELN files)"; else bad "release packet for $SV incomplete ($RELN/11 files)"; fi
+else
+  bad "no release evidence packet for gnucobol-rs $SV (run lab/release/build-packet.py)"
+fi
+
 # 4. attr.rs type/flag constants match the values documented in the admission/selfcheck.
 check_const() { grep -qE "$2" crates/gnucobol-rs/src/attr.rs || bad "attr.rs missing/!= $1"; }
 check_const "COB_TYPE_NUMERIC_DISPLAY=0x10" 'COB_TYPE_NUMERIC_DISPLAY: u16 = 0x10'

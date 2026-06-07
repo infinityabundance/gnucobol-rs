@@ -37,7 +37,6 @@ pub enum Val {
 
 /// One data item, with an optional `VALUE`.
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub struct ValueItem {
     pub level: u16,
     pub name: String,

@@ -1,4 +1,4 @@
-<!-- snapshot of STATUS.md at gnucobol-rs 0.7.0 release (2026-06-07T23:41:57Z) -->
+<!-- snapshot of STATUS.md at gnucobol-rs 0.7.0 release (2026-06-07T23:48:27Z) -->
 
 # STATUS — live current-state authority
 

@@ -58,7 +58,6 @@ impl std::error::Error for EditedError {}
 /// A decoded edited field: the presentation `raw_text` exactly as stored, plus the recovered
 /// `numeric_value` (when the admitted subset can recover it).
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub struct EditedDecode {
     /// The field bytes as text (Latin-1), exactly as stored (leading suppression spaces preserved).
     pub raw_text: String,

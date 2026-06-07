@@ -27,7 +27,6 @@ pub trait CopyResolver {
 
 /// Where an expanded line came from.
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub struct Provenance {
     /// `"<main>"` for the top-level source, else the copybook name.
     pub file: String,
@@ -37,7 +36,6 @@ pub struct Provenance {
 
 /// The result of expansion: the spliced lines and a parallel provenance map.
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub struct Expanded {
     pub lines: Vec<String>,
     pub provenance: Vec<Provenance>,

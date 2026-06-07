@@ -44,7 +44,6 @@ pub struct Odo {
 
 /// A laid-out item: its byte `offset` from the record start and the `size` of **one** occurrence.
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[non_exhaustive]
 pub struct Laid {
     pub name: String,
     pub level: u16,

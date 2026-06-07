@@ -75,7 +75,6 @@ pub(crate) fn comp_x_size(digits: u16) -> usize {
 
 /// A parsed field: the [`FieldAttr`] plus its storage `size` in bytes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
 pub struct PicField {
     pub attr: FieldAttr,
     pub size: usize,
