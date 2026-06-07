@@ -44,3 +44,12 @@ json="$OUT/dialect-axis.json"
   echo '}'
 } > "$json"
 echo "wrote $json + reserved-deltas.tsv ($(echo "$DIALECTS" | wc -w) dialects)"
+
+# Actual extension WORD lists each vendor dialect adds vs default (the hidden surface, not just counts).
+DD="$OUT/deltas"; mkdir -p "$DD"
+for d in ibm mvs mf acu rm bs2000; do
+  comm -23 "$TMP/$d.rw" "$TMP/default.rw" > "$DD/$d-adds-vs-default.txt"
+done
+# Words reserved across mf AND ibm AND acu but NOT default (cross-vendor legacy extensions).
+comm -12 <(sort "$DD/mf-adds-vs-default.txt") <(sort "$DD/ibm-adds-vs-default.txt")   | comm -12 - <(sort "$DD/acu-adds-vs-default.txt") > "$DD/cross-vendor-not-default.txt"
+echo "wrote deltas/ ($(wc -l < "$DD/cross-vendor-not-default.txt" | tr -d ' ') cross-vendor words)"
