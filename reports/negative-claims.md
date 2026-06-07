@@ -20,6 +20,9 @@ claimed_now:
   - id: record-layout
     what: DATA DIVISION item byte offsets / group sizes, matching cobc's record layout
     scope: nested groups, fixed OCCURS, REDEFINES (<= target), FILLER (GNURUST.4)
+  - id: odo-physical-max
+    what: single trailing OCCURS DEPENDING ON physical-max record layout, matching cobc b_REC[size]
+    scope: physical bytes/offsets only; active/logical count NOT claimed (GNURUST.10)
   - id: copy-expansion
     what: COPY <name>. copybook splice matching the cobc -P preprocessor (text-word stream)
     scope: line-oriented COPY, nested, cycle-detected, provenance-mapped (GNURUST.5)
@@ -46,7 +49,7 @@ not_claimed:
   - { id: value-occurs-redefines, note: "VALUE under OCCURS/REDEFINES, non-fitting literals (GNURUST.VALUE-ODO.0)" }
   - { id: figurative-constants,  note: "ZERO/SPACE/HIGH-/LOW-VALUE/QUOTE/ALL bytes (GNURUST.FIGCONST.0)" }
   - { id: move-corresponding,    note: "group name-matched moves (GNURUST.CORR.0)" }
-  - { id: occurs-depending-on,   note: "logical vs physical array length (GNURUST.ODO.0)" }
+  - { id: odo-logical,           note: "ODO active/logical count, sliding, runtime validation, VALUE/multiple/nested ODO (GNURUST.ODO-LOGICAL.0)" }
   - { id: redefines-larger,      note: "REDEFINES larger than its target — fails closed (GNURUST.4 non-claim)" }
   - { id: synchronized-align,    note: "SYNCHRONIZED/alignment in record layout (GNURUST.BINARY.0)" }
   - { id: redefines-variant,     note: "active overlay discriminator (GNURUST.REDEFINES.VARIANT.0)" }

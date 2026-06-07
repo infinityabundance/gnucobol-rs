@@ -55,6 +55,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.9` — PIC `P` scaling.** `build_field` admits `P`: trailing `digits=9s+P, scale=-P`; leading `digits=9s, scale=9s+P`; `size` = stored `9`s — matching `cobc`. `V`+`P`/both-ends/P-only and VALUE/MOVE on a P field fail closed. (`reports/RECEIPT-GNURUST-PIC-SCALING-9.md`.)
 
+**`GNURUST.10` — ODO physical-max layout.** `lay_out` admits a single trailing `OCCURS min TO max DEPENDING ON` as its **physical maximum** (max occurrences), matching `cobc`'s `b_REC[size]` allocation. The active/logical count, sliding, and runtime meaning are **non-claims**; multiple/nested ODO, ODO-not-last, REDEFINES+ODO, and `max<=min` fail closed. (`reports/RECEIPT-GNURUST-ODO-10.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

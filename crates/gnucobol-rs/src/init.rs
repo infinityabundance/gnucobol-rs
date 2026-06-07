@@ -156,6 +156,7 @@ pub fn value_image(items: &[ValueItem]) -> Result<Vec<u8>, InitError> {
             pic: it.pic.clone(),
             occurs: None,
             redefines: None,
+            odo: None,
         })
         .collect();
     let laid = lay_out(&lay_items)?;

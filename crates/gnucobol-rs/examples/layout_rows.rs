@@ -2,7 +2,7 @@
 //! (the same `name<TAB>decl` lines), lays them out, and emits `name offset size` per item, so the
 //! layout sweep can compare to the compiler's offsets. Test infrastructure, not API.
 
-use gnucobol_rs::layout::{lay_out, Item};
+use gnucobol_rs::layout::{lay_out, Item, Odo};
 use gnucobol_rs::Usage;
 use std::io::{self, BufRead, Write};
 
@@ -22,6 +22,7 @@ fn parse_item(decl: &str) -> Option<Item> {
     let mut usage = Usage::Display;
     let mut occurs: Option<u32> = None;
     let mut redefines: Option<String> = None;
+    let mut odo: Option<Odo> = None;
     let mut sep = false;
     let mut lead = false;
 
@@ -42,7 +43,27 @@ fn parse_item(decl: &str) -> Option<Item> {
             "COMP-3" | "PACKED-DECIMAL" | "COMPUTATIONAL-3" => usage = Usage::Comp3,
             "DISPLAY" => usage = Usage::Display,
             "OCCURS" => {
-                if i + 1 < toks.len() {
+                // "OCCURS min TO max TIMES DEPENDING ON item" (ODO) or "OCCURS n TIMES" (fixed).
+                if i + 3 < toks.len() && toks[i + 2] == "TO" {
+                    let min = toks[i + 1].parse().unwrap_or(0);
+                    let max = toks[i + 3].parse().unwrap_or(0);
+                    let mut dep = String::new();
+                    let mut k = i + 4;
+                    while k + 2 < toks.len() {
+                        if toks[k] == "DEPENDING" && toks[k + 1] == "ON" {
+                            dep = toks[k + 2].clone();
+                            break;
+                        }
+                        k += 1;
+                    }
+                    odo = Some(Odo {
+                        min,
+                        max,
+                        depending_on: dep,
+                    });
+                    i += 4;
+                    continue;
+                } else if i + 1 < toks.len() {
                     occurs = toks[i + 1].parse().ok();
                     i += 2;
                     continue;
@@ -69,6 +90,7 @@ fn parse_item(decl: &str) -> Option<Item> {
         pic: pic.map(|p| (p, usage, sep, lead)),
         occurs,
         redefines,
+        odo,
     })
 }
 

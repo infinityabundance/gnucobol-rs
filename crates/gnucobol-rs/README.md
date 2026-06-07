@@ -60,7 +60,7 @@ with a typed `PicError`. The `P` scaling symbol is **sealed** (`GNURUST.9`): tra
 `lay_out` assigns each record item its byte **offset** and **size** — nested groups, fixed
 `OCCURS n TIMES`, `REDEFINES` overlay, and `FILLER` — matching the GnuCOBOL compiler's own record
 layout (differential sweep vs `cobc`, `PASS=32 FAIL=0`). `OCCURS DEPENDING ON`, `SYNCHRONIZED`, and
-a `REDEFINES` larger than its target **fail closed** with a typed `LayoutError`.
+a `REDEFINES` larger than its target **fail closed** with a typed `LayoutError`. A single trailing `OCCURS min TO max DEPENDING ON` is sealed (`GNURUST.10`) as its **physical maximum** (proven vs `cobc`'s `b_REC` allocation); the active/logical count is a non-claim, and multiple/nested/non-last ODO fail closed.
 
 ## `GNURUST.5` / `GNURUST.6` — COPY (+ REPLACING) copybook expansion (`gnucobol_rs::copybook`)
 

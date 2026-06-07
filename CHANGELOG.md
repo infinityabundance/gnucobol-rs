@@ -3,6 +3,19 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.3.0]
+
+### GNURUST.10 — `layout`: OCCURS DEPENDING ON physical-max
+- `lay_out` now admits a single, trailing `OCCURS min TO max TIMES DEPENDING ON <ctrl>` (elementary
+  or group) as a **physical maximum-layout fact**: the item contributes `max` occurrences, and the
+  record total is proven byte-identical to GnuCOBOL's physical allocation `b_REC[size]` (sweep
+  `records=30 PASS=30 FAIL=0`). The **active/logical occurrence count is a non-claim**; runtime
+  validation, sliding, VALUE-under-ODO, REDEFINES+ODO, multiple/nested ODO, ODO-not-last, and
+  `max <= min` fail closed. Layout fuzz with ODO rules: 0 crashes.
+- **Breaking (semver-minor, pre-1.0):** `layout::Item` gains a `pub odo: Option<Odo>` field, and a
+  new `layout::Odo { min, max, depending_on }` type is exported. Construct `Item` with `odo: None`
+  for non-ODO items. (Published companion crates pin `^0.2`, so they are unaffected.)
+
 ## [0.2.6]
 
 ### GNURUST.9 — `pic`: PIC P-scaling

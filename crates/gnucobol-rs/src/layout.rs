@@ -4,10 +4,12 @@
 //! against `cobc`'s emitted field offsets and runtime `LENGTH OF`).
 //!
 //! **Sealed subset:** level-numbered groups + elementary items whose `PIC` is in the sealed
-//! [`crate::pic`] subset; fixed `OCCURS n TIMES`; `REDEFINES <name>` where the redefining item is
-//! **no larger** than the item it redefines; `FILLER`. Everything else **fails closed** with a
-//! typed [`LayoutError`] — in particular `OCCURS DEPENDING ON`, `SYNCHRONIZED` alignment, and a
-//! `REDEFINES` larger than its target are deferred future courts, not silently mis-laid.
+//! [`crate::pic`] subset; fixed `OCCURS n TIMES`; a single trailing `OCCURS min TO max DEPENDING ON`
+//! contributing its **physical maximum** (`GNURUST.10`; the active/logical count is a non-claim);
+//! `REDEFINES <name>` where the redefining item is **no larger** than the item it redefines;
+//! `FILLER`. Everything else **fails closed** with a typed [`LayoutError`] — `SYNCHRONIZED`
+//! alignment, a `REDEFINES` larger than its target, multiple/nested ODO, and ODO combined with
+//! REDEFINES are deferred future courts, not silently mis-laid.
 
 use crate::pic::{self, Usage};
 
@@ -20,10 +22,24 @@ pub struct Item {
     pub name: String,
     /// `Some((pic, usage, sign_separate, sign_leading))` for an elementary item; `None` for a group.
     pub pic: Option<(String, Usage, bool, bool)>,
-    /// Fixed `OCCURS n TIMES` (the sealed subset; `OCCURS DEPENDING ON` is rejected upstream).
+    /// Fixed `OCCURS n TIMES`.
     pub occurs: Option<u32>,
     /// `REDEFINES <name>` target, if any.
     pub redefines: Option<String>,
+    /// `OCCURS min TO max TIMES DEPENDING ON <item>` (`GNURUST.10`). When present, the item
+    /// contributes its **physical maximum** (`max` occurrences) to the record layout. The active
+    /// (logical) occurrence count is **not** modelled here — that is an explicit non-claim.
+    pub odo: Option<Odo>,
+}
+
+/// An `OCCURS DEPENDING ON` declaration. Only its `max` drives the **physical** layout; `min` and
+/// `depending_on` are carried as metadata so a consumer never mistakes physical-max for logical length.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Odo {
+    pub min: u32,
+    pub max: u32,
+    /// The name of the `DEPENDING ON` control item (must reference a field in the record).
+    pub depending_on: String,
 }
 
 /// A laid-out item: its byte `offset` from the record start and the `size` of **one** occurrence.
@@ -55,6 +71,11 @@ pub enum LayoutError {
     BadOccurs,
     /// Malformed level nesting (a child level not under any open group).
     BadNesting,
+    /// An `OCCURS DEPENDING ON` form outside the sealed `GNURUST.10` subset: the ODO item is not the
+    /// last in its group, there is more than one ODO in the record (incl. nested ODO), it is combined
+    /// with `REDEFINES`, `max < min`/`max == 0`, or the `DEPENDING ON` item is not a field in the
+    /// record. (Only single, trailing, physical-maximum ODO is admitted.)
+    OdoUnsupported(String),
 }
 
 impl core::fmt::Display for LayoutError {
@@ -72,6 +93,7 @@ impl core::fmt::Display for LayoutError {
             LayoutError::ElementaryNoPic(n) => write!(f, "elementary item '{n}' has no PIC"),
             LayoutError::BadOccurs => write!(f, "OCCURS 0 or absurd count"),
             LayoutError::BadNesting => write!(f, "malformed level nesting"),
+            LayoutError::OdoUnsupported(e) => write!(f, "unsupported OCCURS DEPENDING ON: {e}"),
         }
     }
 }
@@ -142,6 +164,34 @@ fn node_at_mut<'a>(root: &'a mut Node, path: &[usize]) -> &'a mut Node {
 /// Lay out a record: assign every item its offset and one-occurrence size. The first element of the
 /// result is the `01` record itself (offset 0, size = total record length).
 pub fn lay_out(items: &[Item]) -> Result<Vec<Laid>, LayoutError> {
+    // Global OCCURS DEPENDING ON rules (sealed subset: a single, trailing, physical-max ODO).
+    let odo_items: Vec<&Item> = items.iter().filter(|i| i.odo.is_some()).collect();
+    if odo_items.len() > 1 {
+        return Err(LayoutError::OdoUnsupported(
+            "more than one OCCURS DEPENDING ON (incl. nested) in the record".into(),
+        ));
+    }
+    if let Some(it) = odo_items.first() {
+        let o = it.odo.as_ref().unwrap();
+        if o.max == 0 || o.max <= o.min {
+            return Err(LayoutError::OdoUnsupported(format!(
+                "{}: bad bounds {} TO {}",
+                it.name, o.min, o.max
+            )));
+        }
+        if it.redefines.is_some() || it.occurs.is_some() {
+            return Err(LayoutError::OdoUnsupported(format!(
+                "{}: ODO combined with REDEFINES/fixed OCCURS",
+                it.name
+            )));
+        }
+        if !items.iter().any(|i| i.name == o.depending_on) {
+            return Err(LayoutError::OdoUnsupported(format!(
+                "DEPENDING ON '{}' is not a field in the record",
+                o.depending_on
+            )));
+        }
+    }
     let root = build_tree(items)?;
     let mut out = Vec::new();
     let _ = compute(&root, 0, &mut out)?;
@@ -171,12 +221,35 @@ fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, Layou
         let mut cursor = base;
         // Track laid siblings (name -> (offset, total_span)) for REDEFINES resolution.
         let mut sibling: Vec<(String, usize, usize)> = Vec::new();
-        for child in &node.children {
-            let child_occurs = child.item.occurs.unwrap_or(1);
+        let last_idx = node.children.len() - 1;
+        for (idx, child) in node.children.iter().enumerate() {
+            // OCCURS DEPENDING ON contributes its physical maximum; it must be the last item in its
+            // group (GnuCOBOL forbids a field after an ODO item without complex-ODO config).
+            let child_occurs = if let Some(o) = &child.item.odo {
+                if idx != last_idx {
+                    return Err(LayoutError::OdoUnsupported(format!(
+                        "{} is not the last item in its group",
+                        child.item.name
+                    )));
+                }
+                o.max
+            } else {
+                child.item.occurs.unwrap_or(1)
+            };
             if child_occurs == 0 {
                 return Err(LayoutError::BadOccurs);
             }
             let child_base = if let Some(target) = &child.item.redefines {
+                // REDEFINES over an ODO item is not admitted.
+                if node
+                    .children
+                    .iter()
+                    .any(|c| &c.item.name == target && c.item.odo.is_some())
+                {
+                    return Err(LayoutError::OdoUnsupported(format!(
+                        "REDEFINES over ODO item '{target}'"
+                    )));
+                }
                 sibling
                     .iter()
                     .find(|(n, _, _)| n == target)
@@ -231,6 +304,7 @@ mod tests {
             pic: Some((pic.into(), usage, false, false)),
             occurs: None,
             redefines: None,
+            odo: None,
         }
     }
     fn group(level: u16, name: &str) -> Item {
@@ -240,6 +314,7 @@ mod tests {
             pic: None,
             occurs: None,
             redefines: None,
+            odo: None,
         }
     }
 
@@ -289,5 +364,76 @@ mod tests {
             lay_out(&items),
             Err(LayoutError::RedefinesLarger { .. })
         ));
+    }
+
+    fn odo(item: &mut Item, min: u32, max: u32, dep: &str) {
+        item.odo = Some(Odo {
+            min,
+            max,
+            depending_on: dep.into(),
+        });
+    }
+
+    #[test]
+    fn odo_physical_max_matches_oracle() {
+        // REC: CNT(1) + ITEM OCCURS 0 TO 5 DEPENDING ON CNT PIC X -> physical 6.
+        let mut item = elem(5, "ITEM", "X", Usage::Display);
+        odo(&mut item, 0, 5, "CNT");
+        let items = vec![group(1, "REC"), elem(5, "CNT", "9", Usage::Display), item];
+        let laid = lay_out(&items).unwrap();
+        let by = |n: &str| laid.iter().find(|l| l.name == n).unwrap();
+        assert_eq!((by("REC").offset, by("REC").size), (0, 6)); // physical max
+        assert_eq!((by("CNT").offset, by("CNT").size), (0, 1));
+        assert_eq!((by("ITEM").offset, by("ITEM").size), (1, 1)); // one occurrence
+
+        // REC2: N2(2) + GRP OCCURS 1 TO 4 DEPENDING ON N2 {A 9(3), B X(2)} -> 2 + 4*5 = 22.
+        let mut grp = group(5, "GRP");
+        odo(&mut grp, 1, 4, "N2");
+        let items2 = vec![
+            group(1, "REC2"),
+            elem(5, "N2", "99", Usage::Display),
+            grp,
+            elem(10, "A", "9(3)", Usage::Display),
+            elem(10, "B", "X(2)", Usage::Display),
+        ];
+        let laid2 = lay_out(&items2).unwrap();
+        let by2 = |n: &str| laid2.iter().find(|l| l.name == n).unwrap();
+        assert_eq!((by2("REC2").offset, by2("REC2").size), (0, 22));
+        assert_eq!((by2("GRP").offset, by2("GRP").size), (2, 5)); // one occurrence span
+    }
+
+    #[test]
+    fn odo_fails_closed() {
+        // ODO not last in its group.
+        let mut item = elem(5, "ITEM", "X", Usage::Display);
+        odo(&mut item, 0, 5, "CNT");
+        let not_last = vec![
+            group(1, "REC"),
+            elem(5, "CNT", "9", Usage::Display),
+            item.clone(),
+            elem(5, "TRAILER", "X(3)", Usage::Display),
+        ];
+        assert!(matches!(
+            lay_out(&not_last),
+            Err(LayoutError::OdoUnsupported(_))
+        ));
+
+        // DEPENDING ON a non-existent field.
+        let mut bad_dep = elem(5, "ITEM", "X", Usage::Display);
+        odo(&mut bad_dep, 0, 5, "NOPE");
+        let dep = vec![
+            group(1, "REC"),
+            elem(5, "CNT", "9", Usage::Display),
+            bad_dep,
+        ];
+        assert!(matches!(lay_out(&dep), Err(LayoutError::OdoUnsupported(_))));
+
+        // Two ODOs in one record.
+        let mut o1 = elem(5, "T1", "X", Usage::Display);
+        odo(&mut o1, 0, 3, "CNT");
+        let mut o2 = elem(5, "T2", "X", Usage::Display);
+        odo(&mut o2, 0, 3, "CNT");
+        let two = vec![group(1, "REC"), elem(5, "CNT", "9", Usage::Display), o1, o2];
+        assert!(matches!(lay_out(&two), Err(LayoutError::OdoUnsupported(_))));
     }
 }

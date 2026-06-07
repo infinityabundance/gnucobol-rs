@@ -11,7 +11,7 @@ as evidence for a higher one.
 | # | Court | Question it answers | Status |
 |---|-------|---------------------|--------|
 | 0a | **Field model** | does `PIC`+`USAGE` → `{type,digits,scale,flags,size}` match `cobc`? (incl. `P` scaling) | **sealed** — `pic` (`GNURUST.3`, `GNURUST.9`) |
-| 0b | **Record layout** | do item offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc`? | **sealed** — `layout` (`GNURUST.4`) |
+| 0b | **Record layout** | do item offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc`? (ODO physical-max) | **sealed** — `layout` (`GNURUST.4`, `GNURUST.10`) |
 | 1 | **Storage parity** | does a field hold the same bytes? | **sealed** (`GNURUST.2`) |
 | 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealed** (`GNURUST.2`) |
 | 2c | **Arithmetic parity** | do `ADD`/`SUBTRACT`/`MULTIPLY` result bytes match `cob_add`/`cob_mul`? | **sealed** — `arith` (`GNURUST.7`); DIVIDE / packed add-sub / other modes future |

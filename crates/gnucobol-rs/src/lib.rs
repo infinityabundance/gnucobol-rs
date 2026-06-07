@@ -59,7 +59,7 @@ pub use attr::{
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
-pub use layout::{lay_out, Item, Laid, LayoutError};
+pub use layout::{lay_out, Item, Laid, LayoutError, Odo};
 pub use move_ops::cob_move;
 pub use pic::{build_field, PicError, PicField, Usage};
 pub use value::Decimal;
@@ -234,12 +234,23 @@ pub fn __fuzz_layout(data: &[u8]) {
         } else {
             Some(format!("N{}", ch[4]))
         };
+        // Occasionally attach an ODO (max from a byte) so the ODO rules are fuzzed too.
+        let odo = if ch[3] & 0x40 != 0 {
+            Some(layout::Odo {
+                min: (ch[0] % 4) as u32,
+                max: (ch[3] % 8) as u32,
+                depending_on: format!("N{}", ch[1] ^ 1),
+            })
+        } else {
+            None
+        };
         items.push(layout::Item {
             level,
             name,
             pic,
             occurs,
             redefines,
+            odo,
         });
     }
     let _ = layout::lay_out(&items);
