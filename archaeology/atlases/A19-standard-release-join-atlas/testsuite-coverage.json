@@ -1,0 +1,138 @@
+{
+  "schema": "gnucobol-atlas-testsuite-coverage-v1",
+  "evidence_kind": "oracle_source (admitted 3.2 testsuite AT_SETUP counts) + project status",
+  "note": "GnuCOBOL's OWN testsuite emphasis per category (case counts) crossed with gnucobol-rs court status. The DATA-domain categories GnuCOBOL tests heavily are almost all sealed; the large categories gnucobol-rs does NOT touch (run_misc/functions/file/screen/reportwriter/ml) are Procedure-Division/runtime = out_of_model by design. Reproduce counts: grep -c AT_SETUP tests/testsuite.src/<cat>.at",
+  "rows": [
+    {
+      "category": "data_packed",
+      "testsuite_cases": 23,
+      "campaign": "GNURUST.2/13",
+      "gnucobol_rs_status": "sealed",
+      "scope": "COMP-3 storage + ADD/SUB"
+    },
+    {
+      "category": "data_binary",
+      "testsuite_cases": 18,
+      "campaign": "GNURUST.14",
+      "gnucobol_rs_status": "sealed",
+      "scope": "COMP/COMP-5/COMP-X storage+MOVE"
+    },
+    {
+      "category": "data_display",
+      "testsuite_cases": 9,
+      "campaign": "GNURUST.2",
+      "gnucobol_rs_status": "sealed",
+      "scope": "zoned/display MOVE"
+    },
+    {
+      "category": "syn_copy",
+      "testsuite_cases": 23,
+      "campaign": "GNURUST.5/6",
+      "gnucobol_rs_status": "sealed",
+      "scope": "COPY/REPLACING"
+    },
+    {
+      "category": "syn_redefines",
+      "testsuite_cases": 17,
+      "campaign": "GNURUST.4",
+      "gnucobol_rs_status": "sealed_le_target",
+      "scope": "REDEFINES <= target size"
+    },
+    {
+      "category": "syn_move",
+      "testsuite_cases": 18,
+      "campaign": "GNURUST.2",
+      "gnucobol_rs_status": "partial",
+      "scope": "admitted MOVE type pairs only"
+    },
+    {
+      "category": "syn_occurs",
+      "testsuite_cases": 14,
+      "campaign": "GNURUST.10",
+      "gnucobol_rs_status": "sealed_physical_max",
+      "scope": "ODO physical-max layout"
+    },
+    {
+      "category": "syn_value",
+      "testsuite_cases": 13,
+      "campaign": "GNURUST.8",
+      "gnucobol_rs_status": "sealed",
+      "scope": "VALUE initial image"
+    },
+    {
+      "category": "syn_definition",
+      "testsuite_cases": 64,
+      "campaign": "GNURUST.3/4",
+      "gnucobol_rs_status": "sealed",
+      "scope": "PIC field model + layout"
+    },
+    {
+      "category": "run_initialize",
+      "testsuite_cases": 14,
+      "campaign": "GNURUST.8",
+      "gnucobol_rs_status": "partial",
+      "scope": "VALUE/init bytes; INITIALIZE verb out_of_model"
+    },
+    {
+      "category": "syn_literals",
+      "testsuite_cases": 16,
+      "campaign": "-",
+      "gnucobol_rs_status": "partial",
+      "scope": "figurative/numeric literals via VALUE court"
+    },
+    {
+      "category": "syn_subscripts",
+      "testsuite_cases": 6,
+      "campaign": "GNURUST.10",
+      "gnucobol_rs_status": "layout-only",
+      "scope": "subscript runtime out_of_model"
+    },
+    {
+      "category": "run_misc",
+      "testsuite_cases": 180,
+      "campaign": "-",
+      "gnucobol_rs_status": "out_of_model",
+      "scope": "Procedure Division execution"
+    },
+    {
+      "category": "run_functions",
+      "testsuite_cases": 126,
+      "campaign": "-",
+      "gnucobol_rs_status": "out_of_model",
+      "scope": "intrinsic functions runtime"
+    },
+    {
+      "category": "run_file",
+      "testsuite_cases": 106,
+      "campaign": "-",
+      "gnucobol_rs_status": "out_of_model",
+      "scope": "file I/O"
+    },
+    {
+      "category": "run_reportwriter",
+      "testsuite_cases": 28,
+      "campaign": "-",
+      "gnucobol_rs_status": "out_of_model",
+      "scope": "report writer"
+    },
+    {
+      "category": "run_manual_screen",
+      "testsuite_cases": 62,
+      "campaign": "-",
+      "gnucobol_rs_status": "out_of_model",
+      "scope": "screen (curses)"
+    },
+    {
+      "category": "run_ml",
+      "testsuite_cases": 14,
+      "campaign": "-",
+      "gnucobol_rs_status": "out_of_model",
+      "scope": "JSON/XML (backend-dependent)"
+    }
+  ],
+  "summary": {
+    "data_domain_categories": 12,
+    "data_domain_sealed_or_partial": 12,
+    "out_of_model_runtime_categories": 6
+  }
+}
