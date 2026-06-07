@@ -3,6 +3,10 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.4.1]
+- Re-export `COB_TYPE_NUMERIC_BINARY` + binary flag constants (`COB_FLAG_BINARY_SWAP`/`REAL_BINARY`/
+  `BINARY_TRUNC`) so downstream crates can dispatch binary decode. No semantic change.
+
 ## [0.4.0]
 
 ### GNURUST.14 — `pic`/`cob_move`: COMP / COMP-5 / COMP-X binary storage + MOVE
