@@ -8,12 +8,12 @@
 |-------|-------|
 | campaign | `GNURUST.2` |
 | court | decimal MOVE (COMP-3/zoned/display) |
-| crate_version | `0.6.3` |
+| crate_version | `0.7.0` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field-storage + move-result bytes |
 | replay command | `bash lab/oracle/sweep.sh 0` |
-| generated_at | 668f832-replay |
-| git_commit | `668f832` |
+| generated_at | ee271cb-replay |
+| git_commit | `ee271cb` |
 | receipt_status | current |
 
 ## Non-claims

@@ -66,6 +66,22 @@ fn main() {
         }
     }
 
+    // COMP-6 (`GNURUST.18`): unsigned packed, ceil(digits/2) bytes. Unsigned only (signed -> COMP-3).
+    for nd in [1usize, 2, 3, 4, 5, 6, 8, 9, 18] {
+        for sc in [0usize, 2] {
+            if sc >= nd {
+                continue;
+            }
+            let body = if sc == 0 {
+                format!("9({nd})")
+            } else {
+                format!("9({})V9({sc})", nd - sc)
+            };
+            println!("c6{id}\t{body}\tCOMP-6\t");
+            id += 1;
+        }
+    }
+
     // Binary families (`GNURUST.14`): COMP/BINARY, COMP-5, COMP-X over the 1-2-4-8 size boundaries,
     // signed and unsigned, integer and V-scaled. Proves type/digits/scale/flags/size vs cobc.
     for nd in [1usize, 2, 3, 4, 5, 6, 9, 10, 18] {

@@ -4,7 +4,7 @@
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.6.3 · 17 sealed GNURUST courts · oracle: GnuCOBOL 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.0 · 18 sealed GNURUST courts · oracle: GnuCOBOL 3.2.0 (admitted, built in lab)._
 
 ## What may be relied on today
 
@@ -17,6 +17,7 @@ Byte-exact, oracle-proven **read fidelity** for fixed-record COBOL data, within 
 - **LEVEL-88** truth + SET TO TRUE (`11/12`).
 - **Binary** COMP/COMP-5/COMP-X storage+MOVE (`14`, default 1-2-4-8 table only).
 - **cp500 EBCDIC** DISPLAY text decode (`15`) and **zoned-decimal numeric** decode (`17`).
+- **COMP-6** unsigned packed-decimal storage + MOVE (`18`).
 - **Edited-picture** decode 16a+16b (`16`, decode-only).
 - **KOBOLD** composes these into a byte-stable reconciliation packet with an operator trust layer
   (explain / totals / dirty-mode), binary/packed **passthrough** under EBCDIC, **cp500 numeric DISPLAY**
@@ -47,7 +48,6 @@ python3 lab/receipt/run.py check        # receipts == live replay, no hand-edits
 ## Open debts (current)
 
 - cp037 + other code pages; numeric DISPLAY under non-cp500 — deferred.
-- COMP-6 — deferred (`GNURUST.18`).
 - File/container ingest discipline — deferred (`KOBOLD.FILE.1`).
 - Transformed-record (write) reconciliation — deferred (`KOBOLD.RECON.2`).
 - Live AWS deployment receipt — `kobold-lambda-layer` is compile-verified only.

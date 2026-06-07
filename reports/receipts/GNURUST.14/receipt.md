@@ -8,12 +8,12 @@
 |-------|-------|
 | campaign | `GNURUST.14` |
 | court | binary COMP/COMP-5/COMP-X storage + MOVE |
-| crate_version | `0.6.3` |
+| crate_version | `0.7.0` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field-storage + move-result bytes (binary) |
 | replay command | `bash lab/oracle/binary_sweep.sh` |
-| generated_at | 668f832-replay |
-| git_commit | `668f832` |
+| generated_at | ee271cb-replay |
+| git_commit | `ee271cb` |
 | receipt_status | current |
 
 ## Non-claims

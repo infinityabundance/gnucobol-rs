@@ -74,6 +74,7 @@ not_claimed:
   - { id: synchronized-align,    note: "SYNCHRONIZED/alignment in record layout (GNURUST.BINARY.0)" }
   - { id: redefines-variant,     note: "active overlay discriminator (GNURUST.REDEFINES.VARIANT.0)" }
   - { id: level-88-false,        note: "SET cond TO FALSE + FALSE clause, condition expressions, collating-sensitive ranges (GNURUST.12b/SET88FALSE.0)" }
+  - { id: comp6-signed-arith,   note: "signed COMP-6 (cobc->COMP-3), COMP-6 arithmetic, dialect portability (cobol85/2002 reject), pre-3.2 (GNURUST.COMP6-EXT.0)" }
   - { id: binary-arith-sync,    note: "binary arithmetic, SYNCHRONIZED alignment, host-portable endian, COMP-6/float (GNURUST.BINARY-ARITH.0)" }
   - { id: ebcdic-beyond-cp500,  note: "cp037 and other code pages, numeric EBCDIC zoned sign, national/DBCS, collation, mixed/auto-detect encoding (GNURUST.EBCDIC-EXT.0)" }
   - { id: edited-beyond-16a,    note: "numeric->edited formatting (16c), financial decorations $ * CR DB B 0 / (16b), report writer, locale/currency, EBCDIC edited, edited arithmetic/VALUE (GNURUST.EDITED-EXT.0)" }

@@ -1,0 +1,30 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.18",
+  "court": "COMP-6 unsigned packed storage + MOVE",
+  "generated_at": "ee271cb-replay",
+  "git_commit": "ee271cb",
+  "crate_version": "0.7.0",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/comp6_sweep.sh"
+  },
+  "byte_domain": "field-storage + move-result bytes (COMP-6, unsigned packed)",
+  "results": {
+    "sweep": "PASS=98 FAIL=0"
+  },
+  "non_claims": [
+    "signed COMP-6 (GnuCOBOL converts to COMP-3)",
+    "COMP-6 arithmetic",
+    "malformed packed bytes",
+    "dialect portability (cobol85/2002 reject it)",
+    "pre-3.2 behavior"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

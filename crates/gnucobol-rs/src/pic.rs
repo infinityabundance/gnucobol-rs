@@ -5,22 +5,24 @@
 //!
 //! **Sealed subset:** `9`, `X`, `A`, `S`, `V`, the `P` scaling symbol (`GNURUST.9`: a single
 //! contiguous run at one end, with the asymmetric leading/trailing digit/scale rule), fixed repeats
-//! `(n)`, the `SIGN [LEADING|TRAILING] [SEPARATE]` clause, and `USAGE DISPLAY` / `COMP-3`
+//! `(n)`, the `SIGN [LEADING|TRAILING] [SEPARATE]` clause,
 //! (`PACKED-DECIMAL` / `COMPUTATIONAL-3`). Everything else **fails closed** with a typed
 //! [`PicError`] — every edited symbol (`Z * $ , . + - CR DB B 0 /`), `V`+`P`, and `P` at both ends
 //! are deferred future courts, not silently mis-parsed.
 
 use crate::attr::{
     FieldAttr, COB_FLAG_BINARY_SWAP, COB_FLAG_BINARY_TRUNC, COB_FLAG_HAVE_SIGN,
-    COB_FLAG_REAL_BINARY, COB_FLAG_SIGN_LEADING, COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_BINARY,
-    COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
+    COB_FLAG_NO_SIGN_NIBBLE, COB_FLAG_REAL_BINARY, COB_FLAG_SIGN_LEADING, COB_FLAG_SIGN_SEPARATE,
+    COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
 
 /// `COB_TYPE_ALPHANUMERIC` (`common.h`): a `PIC X`/`A` field.
 pub const COB_TYPE_ALPHANUMERIC: u16 = 0x21;
 
-/// `USAGE` of a numeric field (the sealed subset).
+/// `USAGE` of a numeric field (the sealed subset). `#[non_exhaustive]`: new usages are added over time,
+/// so downstream `match`es must include a wildcard arm.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Usage {
     /// `USAGE DISPLAY` (the default): zoned/display.
     Display,
@@ -33,6 +35,10 @@ pub enum Usage {
     Comp5,
     /// `USAGE COMP-X` (`GNURUST.14`): big-endian binary, full binary range (masked to the byte width).
     CompX,
+    /// `USAGE COMP-6` (`GNURUST.18`): **unsigned** packed-decimal — two digits per byte, no sign nibble,
+    /// size `ceil(digits/2)`. (GnuCOBOL warns and converts a *signed* `S9(n)` COMP-6 to COMP-3, so
+    /// signed COMP-6 is **not** this court.)
+    Comp6,
 }
 
 /// Storage bytes for `COMP`/`BINARY`/`COMP-5`, under the oracle's `binary-size: 1-2-4-8` config
@@ -315,8 +321,19 @@ pub fn build_field(
             comp_x_size(nines),
             COB_FLAG_BINARY_SWAP,
         ),
+        // COMP-6 (GNURUST.18): unsigned packed, two digits/byte, NO sign nibble; size = ceil(n/2).
+        Usage::Comp6 => (
+            COB_TYPE_NUMERIC_PACKED,
+            (nines as usize).div_ceil(2),
+            COB_FLAG_NO_SIGN_NIBBLE,
+        ),
     };
     flags |= bin_flags;
+    // COMP-6 is unsigned regardless of a `PIC S` — clear any sign flags (GnuCOBOL converts a *signed*
+    // COMP-6 to COMP-3, which is a separate non-claim).
+    if matches!(usage, Usage::Comp6) {
+        flags &= !(COB_FLAG_HAVE_SIGN | COB_FLAG_SIGN_SEPARATE | COB_FLAG_SIGN_LEADING);
+    }
 
     Ok(PicField {
         attr: FieldAttr {
@@ -513,6 +530,61 @@ mod tests {
         assert_eq!(
             build_field("X(2000000)", Usage::Display, false, false),
             Err(PicError::BadRepeat)
+        );
+    }
+}
+
+#[cfg(test)]
+mod comp6_tests {
+    use super::*;
+    use crate::attr::{COB_FLAG_NO_SIGN_NIBBLE, COB_TYPE_NUMERIC_PACKED};
+    #[test]
+    fn comp6_field_model() {
+        // 9(3) COMP-6: PACKED, NO_SIGN_NIBBLE, ceil(3/2)=2 bytes (proven vs cobc {0x12,3,0,0x0100}).
+        let a = build_field("9(3)", Usage::Comp6, false, false).unwrap();
+        assert_eq!(
+            (a.attr.field_type, a.attr.digits, a.attr.flags, a.size),
+            (COB_TYPE_NUMERIC_PACKED, 3, COB_FLAG_NO_SIGN_NIBBLE, 2)
+        );
+        assert_eq!(
+            build_field("9(4)", Usage::Comp6, false, false)
+                .unwrap()
+                .size,
+            2
+        );
+        assert_eq!(
+            build_field("9(5)", Usage::Comp6, false, false)
+                .unwrap()
+                .size,
+            3
+        );
+        assert_eq!(
+            build_field("9(1)", Usage::Comp6, false, false)
+                .unwrap()
+                .size,
+            1
+        );
+        // S is ignored (COMP-6 is unsigned): no HAVE_SIGN.
+        assert_eq!(
+            build_field("S9(4)", Usage::Comp6, false, false)
+                .unwrap()
+                .attr
+                .flags,
+            COB_FLAG_NO_SIGN_NIBBLE
+        );
+    }
+
+    #[test]
+    fn comp6_decodes_via_from_packed() {
+        // 9(4) COMP-6 bytes 0x12 0x34 -> 1234 (unsigned, no sign nibble).
+        let pf = build_field("9(4)", Usage::Comp6, false, false).unwrap();
+        let d = crate::Decimal::from_packed(&[0x12, 0x34], &pf.attr);
+        assert_eq!(d.unscaled_i128(), Some(1234));
+        // 9(3) COMP-6 bytes 0x01 0x23 -> 123 (odd digits, leading 0 nibble).
+        let pf3 = build_field("9(3)", Usage::Comp6, false, false).unwrap();
+        assert_eq!(
+            crate::Decimal::from_packed(&[0x01, 0x23], &pf3.attr).unscaled_i128(),
+            Some(123)
         );
     }
 }

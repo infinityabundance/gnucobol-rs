@@ -8,12 +8,12 @@
 |-------|-------|
 | campaign | `GNURUST.15` |
 | court | cp500 EBCDIC DISPLAY decode |
-| crate_version | `0.6.3` |
+| crate_version | `0.7.0` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | raw EBCDIC field bytes -> decoded text |
 | replay command | `bash lab/oracle/ebcdic_sweep.sh` |
-| generated_at | 668f832-replay |
-| git_commit | `668f832` |
+| generated_at | ee271cb-replay |
+| git_commit | `ee271cb` |
 | receipt_status | current |
 
 ## Non-claims

@@ -25,6 +25,7 @@ fn main() {
             "COMP" | "BINARY" | "COMPUTATIONAL" => Usage::Comp,
             "COMP-5" => Usage::Comp5,
             "COMP-X" => Usage::CompX,
+            "COMP-6" => Usage::Comp6,
             _ => Usage::Display,
         };
         let sign = f.get(3).copied().unwrap_or("").to_ascii_uppercase();

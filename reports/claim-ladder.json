@@ -271,6 +271,19 @@
       "breaks_claim": "non-cp500 page; treating binary as EBCDIC zoned",
       "readiness": 3,
       "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+    },
+    {
+      "id": "GNURUST.18",
+      "name": "COMP-6 unsigned packed storage + MOVE",
+      "proven": "COMP-6 field model (PACKED+NO_SIGN_NIBBLE, size ceil(n/2)) + DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move",
+      "byte_domain": "field-storage + move-result bytes (COMP-6)",
+      "oracle": "cobc -C attr + libcob cob_move",
+      "fixtures": "pic sweep 432 (16 COMP-6) + comp6 MOVE sweep 98",
+      "sealed_version": "0.7.0",
+      "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2",
+      "breaks_claim": "signed COMP-6; strict cobol85/2002 (reject it)",
+      "readiness": 3,
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
     }
   ],
   "transform_vs_read": {

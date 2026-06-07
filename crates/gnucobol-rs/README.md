@@ -131,6 +131,12 @@ cp500 translate (`GNURUST.15`) + the `cob_get_sign_ebcdic` overpunch sign (final
 `'J'..'R'`=−, `'{'`/`'}'`=±0; raw zones `0xC`/`0xD`/`0xF`). Proven vs `cobc -fsign=EBCDIC` (120/0). cp037,
 edited-numeric under cp500, and binary/packed via this path are non-claims.
 
+## `GNURUST.18` — COMP-6 unsigned packed-decimal
+
+`Usage::Comp6` → `build_field` gives `{PACKED, NO_SIGN_NIBBLE, ceil(digits/2)}` (two digits/byte, no sign
+nibble), proven vs `cobc` (PIC 432/0); `cob_move` DISPLAY↔COMP-6 matches libcob (98/0); `from_packed`
+decodes it. **Unsigned only** — signed COMP-6 is converted by GnuCOBOL to COMP-3 (non-claim).
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

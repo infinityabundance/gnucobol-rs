@@ -8,12 +8,12 @@
 |-------|-------|
 | campaign | `GNURUST.7` |
 | court | arithmetic ADD/SUB/MUL (+packed receiver) |
-| crate_version | `0.6.3` |
+| crate_version | `0.7.0` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | receiving-field storage bytes |
 | replay command | `bash lab/oracle/arith_sweep.sh` |
-| generated_at | 668f832-replay |
-| git_commit | `668f832` |
+| generated_at | ee271cb-replay |
+| git_commit | `ee271cb` |
 | receipt_status | current |
 
 ## Non-claims

@@ -1,19 +1,167 @@
 {
   "schema": "gnurust-receipt-manifest-v1",
-  "note": "Authored prose per court (court name, sweep command, byte domain, non-claims). The RESULTS are NOT here — they are produced by live replay in lab/receipt/run.py. Receipts of record live in reports/receipts/<CAMPAIGN>/{receipt.json,receipt.md}; the .md is GENERATED from the .json.",
+  "note": "Authored prose per court (court name, sweep command, byte domain, non-claims). The RESULTS are NOT here \u2014 they are produced by live replay in lab/receipt/run.py. Receipts of record live in reports/receipts/<CAMPAIGN>/{receipt.json,receipt.md}; the .md is GENERATED from the .json.",
   "campaigns": {
-    "GNURUST.2":  {"court": "decimal MOVE (COMP-3/zoned/display)", "sweep": "sweep.sh", "arg": "0", "byte_domain": "field-storage + move-result bytes", "non_claims": ["arithmetic", "edited pictures", "non-ASCII host", "EBCDIC sign mode"]},
-    "GNURUST.3":  {"court": "PIC field model (+P scaling)", "sweep": "pic_sweep.sh", "byte_domain": "generated-C cob_field_attr + LENGTH OF", "non_claims": ["edited pictures", "V+P scaling", "usages beyond DISPLAY/COMP-3/binary"]},
-    "GNURUST.4":  {"court": "record layout (+ODO physical-max)", "sweep": "layout_sweep.sh", "byte_domain": "generated-C field offset+size", "non_claims": ["SYNCHRONIZED alignment", "REDEFINES larger than target", "multiple/nested ODO", "logical/active ODO count"]},
-    "GNURUST.5":  {"court": "COPY / REPLACING expansion", "sweep": "copy_sweep.sh", "byte_domain": "expanded source text-word stream", "non_claims": ["inline/multi-line COPY", "REPLACE directive", "OF/IN library", "SUPPRESS"]},
-    "GNURUST.7":  {"court": "arithmetic ADD/SUB/MUL (+packed receiver)", "sweep": "arith_sweep.sh", "byte_domain": "receiving-field storage bytes", "non_claims": ["DIVIDE", "ON SIZE ERROR", "other rounding modes", ">38-digit bignum", "float"]},
-    "GNURUST.8":  {"court": "VALUE initial-record image", "sweep": "value_sweep.sh", "byte_domain": "record-storage bytes", "non_claims": ["VALUE under OCCURS/REDEFINES", "non-fitting literals", "P-scaled parent", "edited PIC VALUE"]},
-    "GNURUST.10": {"court": "OCCURS DEPENDING ON physical-max layout", "sweep": "odo_sweep.sh", "byte_domain": "generated-C storage size b_REC[size]", "non_claims": ["active/logical occurrence count", "sliding", "runtime validation", "multiple/nested ODO"]},
-    "GNURUST.11": {"court": "LEVEL-88 condition-name truth", "sweep": "cond_sweep.sh", "byte_domain": "parent field-storage bytes -> boolean", "non_claims": ["SET", "condition expressions", "collating-sensitive ranges", "Procedure Division execution"]},
-    "GNURUST.12": {"court": "SET condition-name TO TRUE", "sweep": "set_sweep.sh", "byte_domain": "parent field-storage bytes", "non_claims": ["SET TO FALSE", "FALSE clause", "expressions", "execution"]},
-    "GNURUST.14": {"court": "binary COMP/COMP-5/COMP-X storage + MOVE", "sweep": "binary_sweep.sh", "byte_domain": "field-storage + move-result bytes (binary)", "non_claims": ["binary arithmetic", "SYNCHRONIZED", "host-portable endian", "COMP-6", "float", "IBM/MVS 2-4-8 + MF 1--8 dialect sizes"]},
-    "GNURUST.15": {"court": "cp500 EBCDIC DISPLAY decode", "sweep": "ebcdic_sweep.sh", "byte_domain": "raw EBCDIC field bytes -> decoded text", "non_claims": ["cp037 / other code pages", "numeric EBCDIC zoned sign", "national/DBCS", "collation", "mixed/auto-detect encoding"]},
-    "GNURUST.16": {"court": "edited-picture decode (16a + 16b)", "sweep": "edited_sweep.sh", "byte_domain": "edited DISPLAY field bytes -> value + presentation text", "non_claims": ["numeric->edited formatting (16c)", "report writer", "locale/currency", "EBCDIC edited", "edited arithmetic/VALUE"]},
-    "GNURUST.17": {"court": "cp500 EBCDIC zoned-decimal numeric DISPLAY decode", "sweep": "ebcdic_num_sweep.sh", "byte_domain": "raw EBCDIC zoned field bytes -> value", "non_claims": ["cp037 / other code pages", "edited-numeric under cp500", "binary/packed via this path", "mixed/auto-detect encoding", "national/DBCS"]}
+    "GNURUST.2": {
+      "court": "decimal MOVE (COMP-3/zoned/display)",
+      "sweep": "sweep.sh",
+      "arg": "0",
+      "byte_domain": "field-storage + move-result bytes",
+      "non_claims": [
+        "arithmetic",
+        "edited pictures",
+        "non-ASCII host",
+        "EBCDIC sign mode"
+      ]
+    },
+    "GNURUST.3": {
+      "court": "PIC field model (+P scaling)",
+      "sweep": "pic_sweep.sh",
+      "byte_domain": "generated-C cob_field_attr + LENGTH OF",
+      "non_claims": [
+        "edited pictures",
+        "V+P scaling",
+        "usages beyond DISPLAY/COMP-3/binary"
+      ]
+    },
+    "GNURUST.4": {
+      "court": "record layout (+ODO physical-max)",
+      "sweep": "layout_sweep.sh",
+      "byte_domain": "generated-C field offset+size",
+      "non_claims": [
+        "SYNCHRONIZED alignment",
+        "REDEFINES larger than target",
+        "multiple/nested ODO",
+        "logical/active ODO count"
+      ]
+    },
+    "GNURUST.5": {
+      "court": "COPY / REPLACING expansion",
+      "sweep": "copy_sweep.sh",
+      "byte_domain": "expanded source text-word stream",
+      "non_claims": [
+        "inline/multi-line COPY",
+        "REPLACE directive",
+        "OF/IN library",
+        "SUPPRESS"
+      ]
+    },
+    "GNURUST.7": {
+      "court": "arithmetic ADD/SUB/MUL (+packed receiver)",
+      "sweep": "arith_sweep.sh",
+      "byte_domain": "receiving-field storage bytes",
+      "non_claims": [
+        "DIVIDE",
+        "ON SIZE ERROR",
+        "other rounding modes",
+        ">38-digit bignum",
+        "float"
+      ]
+    },
+    "GNURUST.8": {
+      "court": "VALUE initial-record image",
+      "sweep": "value_sweep.sh",
+      "byte_domain": "record-storage bytes",
+      "non_claims": [
+        "VALUE under OCCURS/REDEFINES",
+        "non-fitting literals",
+        "P-scaled parent",
+        "edited PIC VALUE"
+      ]
+    },
+    "GNURUST.10": {
+      "court": "OCCURS DEPENDING ON physical-max layout",
+      "sweep": "odo_sweep.sh",
+      "byte_domain": "generated-C storage size b_REC[size]",
+      "non_claims": [
+        "active/logical occurrence count",
+        "sliding",
+        "runtime validation",
+        "multiple/nested ODO"
+      ]
+    },
+    "GNURUST.11": {
+      "court": "LEVEL-88 condition-name truth",
+      "sweep": "cond_sweep.sh",
+      "byte_domain": "parent field-storage bytes -> boolean",
+      "non_claims": [
+        "SET",
+        "condition expressions",
+        "collating-sensitive ranges",
+        "Procedure Division execution"
+      ]
+    },
+    "GNURUST.12": {
+      "court": "SET condition-name TO TRUE",
+      "sweep": "set_sweep.sh",
+      "byte_domain": "parent field-storage bytes",
+      "non_claims": [
+        "SET TO FALSE",
+        "FALSE clause",
+        "expressions",
+        "execution"
+      ]
+    },
+    "GNURUST.14": {
+      "court": "binary COMP/COMP-5/COMP-X storage + MOVE",
+      "sweep": "binary_sweep.sh",
+      "byte_domain": "field-storage + move-result bytes (binary)",
+      "non_claims": [
+        "binary arithmetic",
+        "SYNCHRONIZED",
+        "host-portable endian",
+        "COMP-6",
+        "float",
+        "IBM/MVS 2-4-8 + MF 1--8 dialect sizes"
+      ]
+    },
+    "GNURUST.15": {
+      "court": "cp500 EBCDIC DISPLAY decode",
+      "sweep": "ebcdic_sweep.sh",
+      "byte_domain": "raw EBCDIC field bytes -> decoded text",
+      "non_claims": [
+        "cp037 / other code pages",
+        "numeric EBCDIC zoned sign",
+        "national/DBCS",
+        "collation",
+        "mixed/auto-detect encoding"
+      ]
+    },
+    "GNURUST.16": {
+      "court": "edited-picture decode (16a + 16b)",
+      "sweep": "edited_sweep.sh",
+      "byte_domain": "edited DISPLAY field bytes -> value + presentation text",
+      "non_claims": [
+        "numeric->edited formatting (16c)",
+        "report writer",
+        "locale/currency",
+        "EBCDIC edited",
+        "edited arithmetic/VALUE"
+      ]
+    },
+    "GNURUST.17": {
+      "court": "cp500 EBCDIC zoned-decimal numeric DISPLAY decode",
+      "sweep": "ebcdic_num_sweep.sh",
+      "byte_domain": "raw EBCDIC zoned field bytes -> value",
+      "non_claims": [
+        "cp037 / other code pages",
+        "edited-numeric under cp500",
+        "binary/packed via this path",
+        "mixed/auto-detect encoding",
+        "national/DBCS"
+      ]
+    },
+    "GNURUST.18": {
+      "court": "COMP-6 unsigned packed storage + MOVE",
+      "sweep": "comp6_sweep.sh",
+      "byte_domain": "field-storage + move-result bytes (COMP-6, unsigned packed)",
+      "non_claims": [
+        "signed COMP-6 (GnuCOBOL converts to COMP-3)",
+        "COMP-6 arithmetic",
+        "malformed packed bytes",
+        "dialect portability (cobol85/2002 reject it)",
+        "pre-3.2 behavior"
+      ]
+    }
   }
 }

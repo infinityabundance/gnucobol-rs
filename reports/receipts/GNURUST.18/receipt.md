@@ -1,26 +1,27 @@
 <!-- GENERATED from receipt.json by lab/receipt/run.py — DO NOT EDIT BY HAND.
      Regenerate: python3 lab/receipt/run.py generate -->
-# GNURUST.5 — COPY / REPLACING expansion
+# GNURUST.18 — COMP-6 unsigned packed storage + MOVE
 
-**Verdict: FAIL** · replay `no-result`
+**Verdict: PASS** · replay `PASS=98 FAIL=0`
 
 | field | value |
 |-------|-------|
-| campaign | `GNURUST.5` |
-| court | COPY / REPLACING expansion |
+| campaign | `GNURUST.18` |
+| court | COMP-6 unsigned packed storage + MOVE |
 | crate_version | `0.7.0` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
-| byte_domain | expanded source text-word stream |
-| replay command | `bash lab/oracle/copy_sweep.sh` |
+| byte_domain | field-storage + move-result bytes (COMP-6, unsigned packed) |
+| replay command | `bash lab/oracle/comp6_sweep.sh` |
 | generated_at | ee271cb-replay |
 | git_commit | `ee271cb` |
 | receipt_status | current |
 
 ## Non-claims
-- inline/multi-line COPY
-- REPLACE directive
-- OF/IN library
-- SUPPRESS
+- signed COMP-6 (GnuCOBOL converts to COMP-3)
+- COMP-6 arithmetic
+- malformed packed bytes
+- dialect portability (cobol85/2002 reject it)
+- pre-3.2 behavior
 
 > A receipt is the reproducible output of a replayable court run, not a static claim. This `.md` is
 > generated from `receipt.json`; the binding evidence is the JSON. Regenerate with

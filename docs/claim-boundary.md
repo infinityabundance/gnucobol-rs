@@ -71,6 +71,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.17` — cp500 EBCDIC zoned numeric.** `Decimal::from_ebcdic_zoned` decodes raw cp500 zoned-decimal bytes (cp500 translate + cob_get_sign_ebcdic sign), proven vs `cobc -fsign=EBCDIC` (120/0). cp037, edited-numeric under cp500, and binary/packed via this path are non-claims. (`reports/RECEIPT-GNURUST-EBCDICNUM-17.md`.)
 
+**`GNURUST.18` — COMP-6.** `Usage::Comp6` admits unsigned packed-decimal (PACKED+NO_SIGN_NIBBLE, size ceil(n/2)) storage + DISPLAY↔COMP-6 MOVE, proven vs cobc/cob_move (432/0, 98/0). Signed COMP-6 (→COMP-3), arithmetic, malformed bytes, dialect portability are non-claims. (`reports/RECEIPT-GNURUST-COMP6-18.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

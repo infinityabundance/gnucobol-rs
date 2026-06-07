@@ -33,6 +33,7 @@ run_sweep "GNURUST.14 binary MOVE"   binary_sweep.sh
 run_sweep "GNURUST.15 EBCDIC cp500"  ebcdic_sweep.sh
 run_sweep "GNURUST.16 edited decode" edited_sweep.sh
 run_sweep "GNURUST.17 cp500 zoned-num" ebcdic_num_sweep.sh
+run_sweep "GNURUST.18 COMP-6 MOVE"    comp6_sweep.sh
 run_sweep "GNURUST.4/10 layout(+ODO)" layout_sweep.sh
 run_sweep "GNURUST.10 ODO phys-max"  odo_sweep.sh
 run_sweep "GNURUST.5  COPY"          copy_sweep.sh

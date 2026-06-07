@@ -3,6 +3,18 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.0]
+
+### GNURUST.18 — `pic`: COMP-6 unsigned packed-decimal storage + MOVE
+- `Usage::Comp6` admitted: `build_field` → `{type=PACKED, NO_SIGN_NIBBLE, size=ceil(digits/2)}` matching
+  `cobc` (`{0x12,n,0,0x0100}`; PIC sweep 432/0, +16 COMP-6). Two digits/byte, **no sign nibble**,
+  unsigned. `cob_move` DISPLAY↔COMP-6 matches libcob (comp6_sweep 98/0); `Decimal::from_packed` decodes
+  it. **Signed `S9(n)` COMP-6 is NOT this court** — GnuCOBOL warns and converts it to COMP-3.
+- Non-claims: signed COMP-6, COMP-6 arithmetic, malformed bytes, dialect portability (strict
+  cobol85/2002 reject it), pre-3.2. `release_scope = GnuCOBOL 3.2 only`.
+- **Breaking (semver-minor):** `pic::Usage` gains `Comp6` **and is now `#[non_exhaustive]`** (so future
+  usage variants stay additive). Downstream exhaustive `match`es on `Usage` need a wildcard arm.
+
 ## [0.6.3]
 - **GNURUST.17 — cp500 EBCDIC zoned-decimal numeric DISPLAY decode.** `Decimal::from_ebcdic_zoned`
   decodes raw mainframe zoned-decimal bytes: cp500 translate (`GNURUST.15`) + the `cob_get_sign_ebcdic`

@@ -154,6 +154,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: cp500 zoned-num sweep $ENSWEEP" ;;
     *) bad "oracle freshness: cp500 zoned-num sweep not clean ($ENSWEEP)" ;;
   esac
+  C6SWEEP=$(bash "$ROOT/lab/oracle/comp6_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$C6SWEEP" in
+    *"FAIL=0") note "oracle freshness: COMP-6 MOVE sweep $C6SWEEP" ;;
+    *) bad "oracle freshness: COMP-6 sweep not clean ($C6SWEEP)" ;;
+  esac
   # TRUST.2: generated receipts must be current (live replay) + .md == render(.json), no manual edits.
   if python3 "$ROOT/lab/receipt/run.py" check >/tmp/_rec_check 2>&1; then
     note "TRUST.2: receipts reproducible (generated == live replay, no hand-edits)"

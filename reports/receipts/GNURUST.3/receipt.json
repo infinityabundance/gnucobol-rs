@@ -2,9 +2,9 @@
   "schema": "gnurust-replay-receipt-v1",
   "campaign": "GNURUST.3",
   "court": "PIC field model (+P scaling)",
-  "generated_at": "668f832-replay",
-  "git_commit": "668f832",
-  "crate_version": "0.6.3",
+  "generated_at": "ee271cb-replay",
+  "git_commit": "ee271cb",
+  "crate_version": "0.7.0",
   "oracle": {
     "name": "GnuCOBOL",
     "version": "cobc (GnuCOBOL) 3.2.0"
@@ -14,7 +14,7 @@
   },
   "byte_domain": "generated-C cob_field_attr + LENGTH OF",
   "results": {
-    "sweep": "PASS=416 FAIL=0"
+    "sweep": "PASS=432 FAIL=0"
   },
   "non_claims": [
     "edited pictures",
