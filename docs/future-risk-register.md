@@ -464,6 +464,62 @@ courts — storage bytes and `MOVE` bytes for COMP-3 / zoned / display — and n
 | `GNURUST.FORUM-DEFECT-MINE.0` / `GNURUST.COBOL-DEFECT-TAXONOMY.0` | defect mining | mine the 8 MB OpenCOBOL forum archive as a defect corpus; COBOL defects ≠ modern-PL defects | future |
 | `GNURUST.PORTABLE-MINGW-APPLIANCE.0` / `GNURUST.NEWS-AUTHORITY.0` | fossils / authority | MinGW run-from-USB compromises; `NEWS` is part of the authority chain, mine before blogs | future |
 
+## Archaeology atlas system & QEMU vendor-runtime atlas (research infrastructure)
+
+> **`gnucobol-rs` treats GnuCOBOL archaeology as a set of separately admitted atlases — source
+> release, document authority, compiler options, runtime configuration, system routines,
+> directives, files, numeric representation, source forms, report/screen behaviour, platform
+> packaging, bug/forum scars, industry defect evidence, state-of-industry mapping, and fixture
+> promotion. No hidden behaviour becomes a claim until it is traced to an artifact, classified,
+> reproduced against the admitted oracle, and promoted through the fixture ladder.**
+
+A future `archaeology/` workspace turns ad-hoc foresight into a queryable evidence factory: each
+atlas emits `atlas.md` + `atlas.json` with a common record schema (`source_artifact`,
+`evidence_kind`, `status`, `risk`, `gnucobol_rs_relevance`, `promotion_rule`, `minimal_fixture`,
+`non_claim`), governed by the **fixture-promotion ladder** (raw note → source-cited item →
+candidate → oracle → golden → regression → fuzz seed → sweep row → formal invariant → sealed
+claim). **No claim enters the README until it reaches sealed status.** The doc-gate keeps the
+atlases from going stale.
+
+| Atlas | Scope | Seedable now from? |
+|-------|-------|--------------------|
+| A01 source-release | tarball inventory, NEWS behaviour-change index, testsuite categories | admitted tarball + admission receipt |
+| A02 doc-authority | guide/manual/sample/WIP-grammar/Doxygen/forum lineage, different authority levels | — |
+| A03 option/dialect | `cobc --help`/`--list-*`, `config/*.conf`, `cobc/config.c` `config_table` | **`reports/oracle-list-tables/`** (already captured) |
+| A04 runtime-config | `cobcrun --info`/`--runtime-config`, `runtime.cfg` mini-language, env precedence | **`reports/oracle/RECEIPT-RUNTIME-VIEW.md`** (already captured) |
+| A05 system-routine | `CBL_*`/`C$*` arity, return-code channels, host side effects, OC/GC aliases | `--list-system` |
+| A06 directive/preprocessor | CDF/`$` directives, COPY/REPLACE, source elision, source-map | — |
+| A07 file-backend | seq/line-seq/relative/indexed/varseq, BDB/VBISAM/no-ISAM, locking/retry/durability | — |
+| A08 decimal/numeric | every numeric usage family; protects the first crate from scope creep | `numeric.c`/`move.c` |
+| A09 source-form/parser | fixed/free/variable forms, columns, continuation, nesting | — |
+| A10 report/screen/terminal | RWCS state, screen attrs, terminal events, routing | — |
+| A11 platform/packaging | install-tree, loader, pkg-config, distro patches | — |
+| A12 bug/forum-scar | mine the 8 MB OpenCOBOL forum archive as a defect corpus | — |
+| A13 defect-benchmark | OpenCBS + COBOL defect-location literature | — |
+| A14 state-of-industry | GnuCOBOL/gcobol/SuperBOL/LSP/parsers/Rust-adjacent gap map | — |
+| A15 fixture-promotion | the promotion ladger + sealed/negative-claim indexes | — |
+
+### A16 — QEMU Vendor-Runtime Atlas (`GNURUST.QEMU.*`, external lab)
+
+> **`gnucobol-rs` does not treat operating systems as popularity targets. It admits only
+> OS/runtime rows that change the GnuCOBOL evidence surface: package provenance, runtime
+> configuration, linked libraries, indexed-file backend, terminal/screen stack, loader behaviour,
+> file semantics, or enterprise deployment relevance. QEMU captures are vendor-runtime witnesses,
+> not portability claims.**
+
+An OS earns a row only if it changes the compatibility surface. Tier-1 rows: `GNURUST.QEMU.1`
+Debian/Ubuntu (glibc/apt baseline), `.2` AlmaLinux/Rocky (enterprise RHEL ABI), `.3` FreeBSD
+(ports/locking), `.4` NetBSD/pkgsrc (portability), `.5` illumos/OmniOS (Solaris heritage), `.6`
+Windows MSYS2/UCRT64, `.7` Windows MinGW portable-appliance bundle. Each emits a
+`gnurust-qemu-vendor-runtime-receipt-v1` (platform/gnucobol/compiler/runtime identity, linked libs,
+list-table hashes, file backend, smoke-fixture verdicts, `row_is_vendor_witness:true`,
+`portable_claim:false`) via per-OS capture scripts + a tiny cross-platform probe suite
+(F00 hello … F09 runtime-config-view … F10 terminal-smoke). Tier-2 (later): Alpine/musl,
+s390x big-endian, AIX/IBM i/HP-UX as non-QEMU external-lab witnesses. This is external-lab work
+(no VM execution in the build environment); it never becomes a portability *claim* — only a row of
+vendor-runtime witnesses, each classified `available / unavailable / backend-dependent /
+platform-dependent / package-disabled / runtime-config-dependent`.
+
 ## When arithmetic returns (`cobol-decimal-arith`, deferred)
 
 Framed as **accounting**, not "decimal math": result / ROUNDED / `ON SIZE ERROR` /
