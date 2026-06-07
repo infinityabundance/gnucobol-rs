@@ -20,6 +20,9 @@ claimed_now:
   - id: binary-storage
     what: COMP/BINARY/COMP-5/COMP-X field model + DISPLAY<->binary MOVE bytes, matching cobc/cob_move
     scope: big-endian (COMP/COMP-X) / native (COMP-5), truncate/mask, two's complement, this LE host (GNURUST.14)
+  - id: ebcdic-cp500-display
+    what: raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table (cob_load_collation)
+    scope: cp500 only; alphanumeric DISPLAY decode; binary/packed pass through untouched (GNURUST.15)
   - id: record-layout
     what: DATA DIVISION item byte offsets / group sizes, matching cobc's record layout
     scope: nested groups, fixed OCCURS, REDEFINES (<= target), FILLER (GNURUST.4)
@@ -66,6 +69,7 @@ not_claimed:
   - { id: redefines-variant,     note: "active overlay discriminator (GNURUST.REDEFINES.VARIANT.0)" }
   - { id: level-88-false,        note: "SET cond TO FALSE + FALSE clause, condition expressions, collating-sensitive ranges (GNURUST.12b/SET88FALSE.0)" }
   - { id: binary-arith-sync,    note: "binary arithmetic, SYNCHRONIZED alignment, host-portable endian, COMP-6/float (GNURUST.BINARY-ARITH.0)" }
+  - { id: ebcdic-beyond-cp500,  note: "cp037 and other code pages, numeric EBCDIC zoned sign, national/DBCS, collation, mixed/auto-detect encoding (GNURUST.EBCDIC-EXT.0)" }
   - { id: source-format,         note: "fixed/free/variant parsing & preprocessing (GNURUST.SOURCEFORM.0)" }
   - { id: copy-replacing-advanced, note: "REPLACING LEADING/TRAILING/identifier operands, REPLACE directive (GNURUST.6 non-claim)" }
   - { id: copybook-advanced,     note: "inline/multi-line COPY, OF/IN library, SUPPRESS (GNURUST.COPYMAP.0)" }

@@ -110,6 +110,13 @@ PIC sweep 416/0), and `cob_move` handles DISPLAY↔binary both ways — big-endi
 COMP digit-truncation, COMP-X/COMP-5 byte-masking (binary MOVE sweep 546/0). `Decimal::from_binary`
 decodes for the read path. Binary **arithmetic**, SYNCHRONIZED, and host-portable endian are non-claims.
 
+## `GNURUST.15` — EBCDIC code-page boundary (cp500)
+
+`ebcdic::decode_display(CodePage::Cp500, bytes)` decodes raw EBCDIC **alphanumeric DISPLAY** bytes to
+text via the cp500 table — byte-for-byte the table the admitted oracle's `cob_load_collation` produces
+(sweep 256/256). Other code pages (incl. cp037), numeric EBCDIC zoned sign, national/DBCS, and
+binary/packed conversion are non-claims (binary/packed bytes pass through untouched).
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

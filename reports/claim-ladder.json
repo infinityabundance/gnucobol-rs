@@ -179,6 +179,18 @@
       "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
       "breaks_claim": "big-endian host; SYNC alignment; binary arithmetic",
       "readiness": 3
+    },
+    {
+      "id": "GNURUST.15",
+      "name": "EBCDIC cp500 DISPLAY decode",
+      "proven": "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table",
+      "byte_domain": "raw EBCDIC field bytes -> decoded text",
+      "oracle": "libcob cob_load_collation (ebcdic500_ascii8bit)",
+      "fixtures": "ebcdic sweep 256/256 (full byte range) + totality/bijection tests",
+      "sealed_version": "0.5.0",
+      "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
+      "breaks_claim": "non-cp500 page; treating EBCDIC as record-wide convert-everything",
+      "readiness": 3
     }
   ],
   "transform_vs_read": {
@@ -192,7 +204,8 @@
       "GNURUST.10",
       "GNURUST.11",
       "KOBOLD.RECON.1",
-      "GNURUST.14"
+      "GNURUST.14",
+      "GNURUST.15"
     ],
     "transform_write": [
       "GNURUST.7",

@@ -29,6 +29,7 @@ byte. `gnucobol-rs` owns them first, with proof, before reaching for anything la
 | **arithmetic** | `ADD`/`SUBTRACT`/`MULTIPLY` + ROUNDED (incl. packed receiver) match `cob_add`/`cob_mul` | **sealed** — `arith` (`GNURUST.7`, `GNURUST.13`) |
 | **condition name** | LEVEL-88 truth vs bytes + `SET TO TRUE` byte construction match `cobc` | **sealed** — `cond` (`GNURUST.11`, `GNURUST.12`) |
 | **initialization** | initial record bytes from `VALUE` match `cobc` WORKING-STORAGE | **sealed** — `init` (`GNURUST.8`) |
+| **code page** | raw EBCDIC DISPLAY bytes → text under a named table match the oracle | **sealed** — `ebcdic` cp500 (`GNURUST.15`) |
 | source | source-form / directives | future campaign |
 | behavior | program stdout/stderr/exit matches `cobc -x` output | oracle harness only |
 | diagnostic | compiler messages match `cobc` | not claimed |
@@ -61,6 +62,7 @@ ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabili
 | `GNURUST.10` ODO | **physical-max** storage size | `cobc -C` `b_REC[size]` | 0.3.0 | logical/active count |
 | `GNURUST.11` LEVEL-88 | parent bytes → bool | `cobc IF` truth | 0.3.1 | SET, expressions |
 | `GNURUST.12` SET-88-TRUE | parent bytes | `cobc SET` final bytes | 0.3.2 | SET FALSE |
+| `GNURUST.15` EBCDIC | cp500 DISPLAY decode (raw bytes → text) | `libcob cob_load_collation` | 0.5.0 | cp037, numeric-zoned, DBCS, binary |
 | `KOBOLD.RECON.1` | JSONL + audit bytes | sealed courts (composed) | shim 0.2.0 | write-back, business truth |
 
 Replay all of it with one command (prints a PASS table):
@@ -119,7 +121,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 moves, field model, record layout, initialization, comparison, formatting, source expansion,
 runtime lifecycle, files, reports, diagnostics — and **no lower layer is allowed to imply a higher
 layer**. Sealed today: storage bytes + `MOVE` bytes (`GNURUST.2`), `PIC`→field-model (`GNURUST.3`),
-DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), packed `ADD`/`SUBTRACT` (`GNURUST.13`), and COMP/COMP-5/COMP-X binary storage+MOVE (`GNURUST.14`). The full
+DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), packed `ADD`/`SUBTRACT` (`GNURUST.13`), COMP/COMP-5/COMP-X binary storage+MOVE (`GNURUST.14`), and cp500 EBCDIC DISPLAY decode (`GNURUST.15`). The full
 taxonomy is in
 [`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
 its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the

@@ -3,6 +3,19 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.5.0]
+
+### GNURUST.15 — `ebcdic`: cp500 EBCDIC decode boundary for DISPLAY-class fields
+- New `ebcdic` module: `decode_display(CodePage::Cp500, bytes) -> String` decodes raw EBCDIC
+  alphanumeric DISPLAY bytes to text via the **cp500** table. The 256-byte table is byte-for-byte the
+  one the admitted oracle's `cob_load_collation` produces for its shipped `ebcdic500_ascii8bit.ttbl`
+  (sweep 256/256); decode is a pure per-byte lookup, so the full-range match is a complete proof.
+- Oracle-faithful: GnuCOBOL 3.2 ships **cp500**, not cp037, so cp500 is admitted and **cp037 is
+  deferred** (a code page is admitted only when its table comes from the oracle).
+- Non-claims (fail closed): other code pages, **numeric EBCDIC zoned sign** processing, national/DBCS,
+  collation, mixed/auto-detected encodings, and **binary/packed conversion** (raw bytes pass through
+  untouched — EBCDIC is not a record-wide convert-everything). Additive (new module) → semver-minor.
+
 ## [0.4.1]
 - Re-export `COB_TYPE_NUMERIC_BINARY` + binary flag constants (`COB_FLAG_BINARY_SWAP`/`REAL_BINARY`/
   `BINARY_TRUNC`) so downstream crates can dispatch binary decode. No semantic change.

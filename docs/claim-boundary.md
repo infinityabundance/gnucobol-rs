@@ -65,6 +65,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.14` — binary storage + MOVE.** `build_field` admits COMP/BINARY/COMP-5/COMP-X (type/digits/scale/flags/size vs `cobc`), and `cob_move` handles DISPLAY↔binary (endian, truncate/mask, two's-complement), with `Decimal::from_binary` for decode. Binary arithmetic, SYNC, host-portable endian are non-claims. (`reports/RECEIPT-GNURUST-BINARY-14.md`.)
 
+**`GNURUST.15` — EBCDIC code-page boundary.** `ebcdic::decode_display` decodes raw EBCDIC alphanumeric DISPLAY bytes to text under the admitted **cp500** table (byte-for-byte the oracle's `cob_load_collation` output, 256/256). cp037, numeric EBCDIC zoned sign, national/DBCS, and binary/packed conversion are non-claims. (`reports/RECEIPT-GNURUST-EBCDIC-15.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

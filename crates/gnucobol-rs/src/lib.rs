@@ -45,6 +45,7 @@ pub mod attr;
 mod binary;
 pub mod cond;
 pub mod copybook;
+pub mod ebcdic;
 pub mod error;
 pub mod init;
 pub mod layout;
@@ -64,6 +65,7 @@ pub use cond::{
     ConditionSetError,
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
+pub use ebcdic::{decode_display, translate_byte, CodePage, EbcdicError};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
 pub use layout::{lay_out, Item, Laid, LayoutError, Odo};
