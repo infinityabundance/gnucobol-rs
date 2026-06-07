@@ -60,7 +60,7 @@ pub mod compat_profile {
     /// The upstream source files ported (faithful derivative, LGPL-3.0-or-later).
     pub const SOURCE_FILES: &[&str] = &["libcob/move.c", "libcob/numeric.c", "libcob/common.c"];
     /// The sealing receipt for this claim.
-    pub const RECEIPT: &str = "RECEIPT-COBOL-DECIMAL-RS-1";
+    pub const RECEIPT: &str = "RECEIPT-GNURUST-DECIMAL-1";
     /// One-line statement of what is sealed.
     pub const CLAIM: &str =
         "COMP-3 / zoned / display numeric MOVE byte semantics (storage & move-result bytes)";

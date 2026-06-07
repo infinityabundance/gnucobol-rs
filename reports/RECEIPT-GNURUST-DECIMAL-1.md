@@ -1,4 +1,4 @@
-# RECEIPT-COBOL-DECIMAL-RS-1 — sealed: COMP-3 / zoned / display MOVE byte semantics
+# RECEIPT-GNURUST-DECIMAL-1 — sealed: COMP-3 / zoned / display MOVE byte semantics
 
 **Campaign GNURUST.2.** Goal: port the observable byte semantics of GnuCOBOL's packed-decimal
 (COMP-3), zoned, and display numeric fields and the `MOVE` conversions between them into Rust, and

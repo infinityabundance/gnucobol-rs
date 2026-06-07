@@ -3,7 +3,11 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
-## [Unreleased]
+## [0.1.1]
+- Flagship crate published under the project name **`gnucobol-rs`** (lib `gnucobol_rs`); the
+  internal decimal-court receipt id is `RECEIPT-GNURUST-DECIMAL-1`. No semantic change.
+
+## [0.1.0]
 
 ### GNURUST.1 — admitted oracle + receipt harness
 - Admitted GnuCOBOL 3.2 from pinned source (`research/gnucobol-3.2.tar.lz`), built `cobc` +
