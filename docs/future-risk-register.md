@@ -555,6 +555,29 @@ platform-dependent / package-disabled / runtime-config-dependent`.
 | `GNURUST.FORUM-MINING-METHOD-VALIDATION.0` | forum mining | OpenCBS validates forum-defect mining as method, not hack |
 | `GNURUST.VALUE.0` | initial image | **queued (next-after-COPY)** — `VALUE` literal → initial record bytes, verified vs cobc-initialized WS |
 
+## Adoption, performance, supply-chain, integration (strategic — none claimed)
+
+> Product/adoption directions, registered so the ledger stays complete. None is a compatibility
+> claim; each becomes a named, separately-sealed campaign if pursued.
+
+| Code | Item | Note |
+|------|------|------|
+| `GNURUST.ARITH.0` | **arithmetic court** | `ADD`/`SUBTRACT`/`MULTIPLY`/`DIVIDE` + `ROUNDED` modes + `ON SIZE ERROR`/truncation; GMP-backed in libcob → **needs a bignum-backend decision**. "accept invalid data" = explicit typed policies, each with its own receipt (`GNURUST.INVALID.0`) |
+| `GNURUST.ODO.0` / `GNURUST.REDEFINES.VARIANT.0` | full ODO + complex REDEFINES | `OCCURS DEPENDING ON` (logical vs physical), REDEFINES-larger, variant discriminators — ubiquitous in financial files |
+| `GNURUST.RECORD-EXPLORER.0` | Record Explorer CLI | ingest copybook + sample dump → decode/validate via pic+layout+copybook+decimal; demo on anonymized production extracts |
+| `GNURUST.SERDE.0` | serde (feature-gated) | decoded records → serde for Rust services; must not change semantics (decimal-as-string, never float) |
+| `GNURUST.PERF.0` | hot-path perf | benchmark `cob_move` at millions of records; **optional gated** SIMD/`rayon` that never change bytes (parity re-proven per feature) |
+| `GNURUST.PACKAGING.0` | AWS/runtime packaging | Lambda layer / container sidecar for VSAM/flat-file → S3 + Aurora, with parity-proof reference architectures |
+| `GNURUST.SUPPLYCHAIN.0` | SBOM / CVE / SLA | CycloneDX SBOM, `cargo-audit` in the gate, MSRV/LTS policy |
+| `GNURUST.NOSTD.0` | no_std | the pure decimal/pic kernels may be `no_std`-able; conscious future goal, not implied |
+| `GNURUST.ABSTRACTION.0` | composition boundary | trait boundaries so higher runtime courts compose without inheriting LGPL where independent |
+| `GNURUST.PLAYBOOK.0` | porting playbook | formalize spec→independent-impl→equivalence-proof; foundation for any clean-room phase |
+
+> **Two tensions for the maintainer (not assumed):** (1) the shipped crate is a *faithful
+> derivative* of `libcob` → **LGPL-3.0+**; a "clean-room permissive" version is a *different
+> artifact* (from-spec, no `libcob` reading), a large separate track — not a relicense of this code.
+> (2) `GNURUST.ARITH.0` needs a bignum-backend decision before it can start.
+
 ## When arithmetic returns (`cobol-decimal-arith`, deferred)
 
 Framed as **accounting**, not "decimal math": result / ROUNDED / `ON SIZE ERROR` /
