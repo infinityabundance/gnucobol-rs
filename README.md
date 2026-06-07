@@ -45,6 +45,12 @@ byte. `gnucobol-rs` owns them first, with proof, before reaching for anything la
 It is **not a compiler, not `libcob`, not Procedure Division execution** — it is a sealed
 compatibility court for admitted COBOL **data** semantics.
 
+**Reviewer entry points:** [`STATUS.md`](STATUS.md) is the **live current-state authority** (it wins
+over README/receipts when they disagree) · [`docs/REVIEW-IN-10-MINUTES.md`](docs/REVIEW-IN-10-MINUTES.md)
+· [`docs/not-yet-ready.md`](docs/not-yet-ready.md) (refusal surfaces) ·
+[`docs/effect-boundary-map.md`](docs/effect-boundary-map.md) (what touches host/fs/process/AWS) ·
+[`audits/README.md`](audits/README.md) (a folder is not a result).
+
 ## Claim ladder (front door)
 
 Every positive claim names its byte domain, oracle, fixture count, sealing version, and what breaks

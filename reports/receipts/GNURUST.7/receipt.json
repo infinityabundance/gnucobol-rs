@@ -2,8 +2,8 @@
   "schema": "gnurust-replay-receipt-v1",
   "campaign": "GNURUST.7",
   "court": "arithmetic ADD/SUB/MUL (+packed receiver)",
-  "generated_at": "e10fc91-replay",
-  "git_commit": "e10fc91",
+  "generated_at": "668f832-replay",
+  "git_commit": "668f832",
   "crate_version": "0.6.3",
   "oracle": {
     "name": "GnuCOBOL",
@@ -23,5 +23,8 @@
     ">38-digit bignum",
     "float"
   ],
-  "verdict": "fail"
+  "verdict": "fail",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
 }

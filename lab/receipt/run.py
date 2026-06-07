@@ -63,14 +63,18 @@ def build(code, stamp, git_commit):
         "results": {"sweep": result},
         "non_claims": m["non_claims"],
         "verdict": verdict,
+        "receipt_status": m.get("receipt_status", "current"),
+        "superseded_by": m.get("superseded_by", None),
+        "current_authority": "STATUS.md",
     }
 
 def evidence(r):
     """The binding subset (drift comparison ignores volatile stamps)."""
-    return {k: r[k] for k in ("campaign", "court", "crate_version", "command", "byte_domain", "results", "non_claims", "verdict")} | {"oracle_version": r["oracle"]["version"]}
+    return {k: r[k] for k in ("campaign", "court", "crate_version", "command", "byte_domain", "results", "non_claims", "verdict", "receipt_status", "superseded_by")} | {"oracle_version": r["oracle"]["version"]}
 
 def render_md(r):
     nc = "\n".join(f"- {n}" for n in r["non_claims"])
+    sup = f" (superseded_by {r['superseded_by']})" if r.get("superseded_by") else ""
     return f"""<!-- GENERATED from receipt.json by lab/receipt/run.py — DO NOT EDIT BY HAND.
      Regenerate: python3 lab/receipt/run.py generate -->
 # {r['campaign']} — {r['court']}
@@ -87,6 +91,7 @@ def render_md(r):
 | replay command | `{r['command']['replay']}` |
 | generated_at | {r['generated_at']} |
 | git_commit | `{r['git_commit']}` |
+| receipt_status | {r['receipt_status']}{sup} |
 
 ## Non-claims
 {nc}

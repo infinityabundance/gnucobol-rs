@@ -2,8 +2,8 @@
   "schema": "gnurust-replay-receipt-v1",
   "campaign": "GNURUST.3",
   "court": "PIC field model (+P scaling)",
-  "generated_at": "e10fc91-replay",
-  "git_commit": "e10fc91",
+  "generated_at": "668f832-replay",
+  "git_commit": "668f832",
   "crate_version": "0.6.3",
   "oracle": {
     "name": "GnuCOBOL",
@@ -21,5 +21,8 @@
     "V+P scaling",
     "usages beyond DISPLAY/COMP-3/binary"
   ],
-  "verdict": "pass"
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
 }

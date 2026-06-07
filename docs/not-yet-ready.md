@@ -1,0 +1,40 @@
+# Not yet ready
+
+**This document is armor, not weakness.** It exists so no reader can quietly promote a bounded claim
+into an unbounded one. Each refusal names its owning future campaign, the current fail-closed guard,
+and the risk if it were over-promoted.
+
+| Refusal — NOT ready as… | Owning future | Current guard | Risk if over-promoted |
+|--------------------------|---------------|---------------|------------------------|
+| a COBOL **compiler** | (out of scope) | README/STATUS state it explicitly; no codegen exists | "it runs COBOL" — it does not |
+| **`libcob`** / runtime | (out of scope) | pure Rust kernel; no libcob at runtime | hidden runtime dependency |
+| **Procedure Division execution** | (out of scope) | `out_of_model` in claim-ladder | "decoded = executed" |
+| **universal COBOL** truth | shadow witnesses (future) | every claim says "GnuCOBOL 3.2 admitted oracle" | dialect data mis-decoded |
+| **business-truth** validation | (never) | KOBOLD audit non-claim; record-truth ≠ business-truth | a decoded BALANCE treated as a true balance |
+| **automatic migration** | (never as default) | KOBOLD emits evidence, not write-back | unreviewed data movement |
+| **dirty-data repair** | future repair court | `--dirty-mode evidence/strict`; never coerces | silent "fixing" of bad bytes |
+| **cp037 / arbitrary code pages** | future (once oracle-admitted) | only cp500 admitted (oracle ships it); else fail closed | wrong text/sign for a foreign page |
+| **edited-numeric under EBCDIC** | future | fails closed under cp500 | mis-decoded edited zoned |
+| **COMP-6** | `GNURUST.18` | not admitted; fails closed | unsigned packed mis-sized |
+| **binary arithmetic / SYNC / portable endian** | future | non-claims in `GNURUST.14` | wrong width on IBM/MVS (2-4-8) or aligned data |
+| **file / container ingest** parity | `KOBOLD.FILE.1` | fixed-record buffers only | record framing errors |
+| **transformed-record (write)** | `KOBOLD.RECON.2` | read/reconcile only | unaudited record rewrite |
+| **live AWS production** | `LAMBDA.LIVE.1` | lambda layer is compile-verified only | "deployed" when only built |
+
+## Replacement-readiness ladder (KRL)
+
+State the level honestly instead of "production ready / not".
+
+```
+KRL-0  research artifact
+KRL-1  oracle-proven isolated courts
+KRL-2  composed synthetic corpus
+KRL-3  operator explain/totals/dirty-mode      ← current
+KRL-4  pilot on sanitized customer-like data
+KRL-5  production shadow decode
+KRL-6  primary decode path
+```
+
+**Current: KRL-3.** Everything above KRL-3 is future and gated. Each refusal above maps to the risk
+ledger [`future-risk-register.md`](future-risk-register.md) and the per-court non-claims
+[`negative-capabilities.md`](negative-capabilities.md).

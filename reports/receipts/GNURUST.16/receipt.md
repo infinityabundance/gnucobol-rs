@@ -12,8 +12,9 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | edited DISPLAY field bytes -> value + presentation text |
 | replay command | `bash lab/oracle/edited_sweep.sh` |
-| generated_at | e10fc91-replay |
-| git_commit | `e10fc91` |
+| generated_at | 668f832-replay |
+| git_commit | `668f832` |
+| receipt_status | current |
 
 ## Non-claims
 - numeric->edited formatting (16c)

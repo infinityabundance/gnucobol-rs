@@ -22,7 +22,8 @@
       "sealed_version": "0.1.0",
       "not_proven": "arithmetic; edited pictures; any other type pair",
       "breaks_claim": "non-ASCII host; EBCDIC sign mode; locale != C.UTF-8",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
     },
     {
       "id": "GNURUST.3",
@@ -34,7 +35,8 @@
       "sealed_version": "0.2.0",
       "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3",
       "breaks_claim": "edited symbols; unsupported usage",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
     },
     {
       "id": "GNURUST.4",
@@ -46,7 +48,8 @@
       "sealed_version": "0.2.1",
       "not_proven": "SYNCHRONIZED; REDEFINES larger than target",
       "breaks_claim": "alignment/SYNC; record-growth REDEFINES",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
     },
     {
       "id": "GNURUST.5",
@@ -58,7 +61,8 @@
       "sealed_version": "0.2.2",
       "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS",
       "breaks_claim": "non-line-oriented COPY",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
     },
     {
       "id": "GNURUST.6",
@@ -70,7 +74,8 @@
       "sealed_version": "0.2.3",
       "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands",
       "breaks_claim": "substring replacement expectation; REPLACE directive",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
     },
     {
       "id": "GNURUST.7",
@@ -82,7 +87,8 @@
       "sealed_version": "0.2.4",
       "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum",
       "breaks_claim": ">38 significant digits; float fields",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
     },
     {
       "id": "GNURUST.8",
@@ -94,7 +100,8 @@
       "sealed_version": "0.2.5",
       "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE",
       "breaks_claim": "P-scaled parent; edited PIC",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
     },
     {
       "id": "GNURUST.9",
@@ -106,7 +113,8 @@
       "sealed_version": "0.2.6",
       "not_proven": "V+P; P at both ends; VALUE/MOVE on P field",
       "breaks_claim": "V combined with P",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
     },
     {
       "id": "GNURUST.10",
@@ -118,7 +126,8 @@
       "sealed_version": "0.3.0",
       "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO",
       "breaks_claim": "treating physical-max as logical length",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
     },
     {
       "id": "GNURUST.11",
@@ -130,7 +139,8 @@
       "sealed_version": "0.3.1",
       "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution",
       "breaks_claim": "collating sequence; SET semantics",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact"
     },
     {
       "id": "GNURUST.12",
@@ -142,7 +152,8 @@
       "sealed_version": "0.3.2",
       "not_proven": "SET TO FALSE; FALSE clause; expressions; execution",
       "breaks_claim": "SET FALSE expectation",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
     },
     {
       "id": "GNURUST.13",
@@ -154,7 +165,8 @@
       "sealed_version": "0.3.3",
       "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float",
       "breaks_claim": ">38 digits; SIZE ERROR control flow",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
     },
     {
       "id": "KOBOLD.RECON.1",
@@ -166,7 +178,8 @@
       "sealed_version": "kobold-data-shim 0.2.0",
       "not_proven": "transformed-record write-back; EBCDIC; edited PIC; line-sequential containers",
       "breaks_claim": "treating KOBOLD output as business truth beyond sealed fields",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
     },
     {
       "id": "GNURUST.14",
@@ -178,7 +191,8 @@
       "sealed_version": "0.4.0",
       "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
       "breaks_claim": "big-endian host; SYNC alignment; binary arithmetic",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
     },
     {
       "id": "GNURUST.15",
@@ -190,7 +204,8 @@
       "sealed_version": "0.5.0",
       "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
       "breaks_claim": "non-cp500 page; treating EBCDIC as record-wide convert-everything",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
     },
     {
       "id": "GNURUST.16",
@@ -202,7 +217,8 @@
       "sealed_version": "0.6.0/0.6.1",
       "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated"
     },
     {
       "id": "KOBOLD.DATA.2",
@@ -214,7 +230,8 @@
       "sealed_version": "kobold-data-shim 0.3.0",
       "not_proven": "binary arithmetic; business truth",
       "breaks_claim": "binary fields text-converted",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'binary fields are text under any encoding' \u2014 they are raw storage passthrough"
     },
     {
       "id": "KOBOLD.DATA.3",
@@ -226,7 +243,8 @@
       "sealed_version": "kobold-data-shim 0.4.0",
       "not_proven": "numeric DISPLAY under cp500 (EBCDIC zoned sign); business truth",
       "breaks_claim": "EBCDIC conversion touching COMP bytes",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)"
     },
     {
       "id": "KOBOLD.OPERATOR.1",
@@ -238,7 +256,8 @@
       "sealed_version": "kobold-data-shim 0.5.0",
       "not_proven": "business truth; semantic validity; INITIALIZE/repair",
       "breaks_claim": "coercing dirty bytes; silent key collision",
-      "readiness": 4
+      "readiness": 4,
+      "lie_prevented": "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
     },
     {
       "id": "GNURUST.17",
@@ -250,7 +269,8 @@
       "sealed_version": "0.6.3",
       "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS",
       "breaks_claim": "non-cp500 page; treating binary as EBCDIC zoned",
-      "readiness": 3
+      "readiness": 3,
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
     }
   ],
   "transform_vs_read": {
@@ -276,5 +296,6 @@
       "GNURUST.13"
     ],
     "note": "Decode safety does not imply write-back safety; transformation courts are admitted separately."
-  }
+  },
+  "note_lie_prevented": "Each court names the specific future OVERCLAIM it prevents (lie_prevented). A proof is a defense against a particular lie, not a vague 'compatible'."
 }

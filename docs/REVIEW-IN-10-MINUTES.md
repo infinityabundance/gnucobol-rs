@@ -1,0 +1,43 @@
+# Review in 10 minutes
+
+**This page is not evidence — it points to evidence.** It is the shortest safe path through the repo
+for an outside reviewer. Every claim below links to a receipt, a sweep, or a gate.
+
+## 1. What this is
+An oracle-first Rust compatibility **court** for GnuCOBOL 3.2 *data* semantics + a reconciliation shim
+(KOBOLD). It reproduces observable GnuCOBOL byte/runtime semantics, one narrow slice at a time, each
+proven against a locally built GnuCOBOL oracle.
+
+## 2. What this is NOT
+Not a compiler, not `libcob`, not Procedure Division execution, not universal COBOL truth, not
+business-truth validation. See [`not-yet-ready.md`](not-yet-ready.md).
+
+## 3. What you may rely on today
+The live authority is [`/STATUS.md`](../STATUS.md). If anything here or in the README disagrees with it,
+STATUS.md wins.
+
+## 4. Fastest reproduction path (~3–5 min)
+```sh
+cargo test                         # court unit tests, no oracle
+bash lab/verify-sealed-courts.sh   # sweeps + shim suite + doc-gate (needs built oracle)
+python3 lab/receipt/run.py check   # receipts are live replays, not hand-typed
+```
+
+## 5. Strongest receipts
+Generated, not authored: [`reports/receipts/`](../reports/receipts/) — one `receipt.json` per court,
+each the output of a live sweep. The machine-readable ladder with the **lie each court prevents** is
+[`reports/claim-ladder.json`](../reports/claim-ladder.json).
+
+## 6. Current audit/gate board
+[`audits/README.md`](../audits/README.md). **A folder existing is not a result** — only a current
+generated receipt or an explicit green row is a claim.
+
+## 7. Current open debts
+The "Open debts" section of [`/STATUS.md`](../STATUS.md) and the risk ledger
+[`future-risk-register.md`](future-risk-register.md).
+
+## 8. How to avoid misreading historical receipts
+The authored `reports/RECEIPT-GNURUST-*.md` are seal-time prose; the **generated** receipts in
+`reports/receipts/` are current (gated against live replay). A generated receipt may carry
+`receipt_status: historical_at_seal` + `superseded_by` — when it does, STATUS.md is the current
+authority. The doc-gate fails if a generated receipt's evidence drifts from a fresh replay.

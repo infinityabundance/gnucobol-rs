@@ -1,0 +1,46 @@
+# Effect-boundary map
+
+Classifies every module by **effect class**, so a security reviewer can answer in one read: *what
+touches the host, filesystem, process, env, or network?* The load-bearing fact: **the production
+decode path is pure** — host effects are confined to named, non-core layers, and oracle/host absence
+is **visible, never a silent pass**.
+
+## Effect classes
+
+```
+PureDataCourt        pure fn of (bytes, attrs); no I/O, env, clock, or global state
+BoundedParser        pure text→model parse, resource-bounded (no unbounded alloc)
+CopybookResolver     caller-supplied trait; the library never reads the filesystem itself
+FilesystemRead       reads files (CLI only)
+FilesystemWrite      writes files (CLI only)
+ExternalOracleProcess  spawns the built cobc/libcob (lab only, GPL boundary)
+HostEnvRead          reads env (LC_ALL/paths) — lab scripts only
+ReportRendering      formats numbers/JSON; no semantic authority
+AwsGated             AWS SDK behind a non-default feature
+LabOnly              never shipped in a published crate
+```
+
+## Map
+
+| Module / crate | Effect class | Notes |
+|----------------|--------------|-------|
+| `gnucobol-rs` `value`/`pic`/`layout`/`move_ops`/`cond`/`init`/`binary`/`ebcdic`/`edited`/`arith` | **PureDataCourt** | `#![forbid(unsafe_code)]`; deterministic; panic-free on hostile input |
+| `gnucobol-rs` `copybook` | **BoundedParser** + **CopybookResolver** | streamed terms, `MAX_POSITIONS` bound; resolver is caller-owned |
+| `kobold-data-shim` core decode/recon/operator | **PureDataCourt** + **BoundedParser** | pure over (copybook, bytes); fails closed |
+| `kobold-data-shim` `kobold-recon`/`kobold-record-dump` CLI | **FilesystemRead/Write** | the only fs I/O; resolver from `--copydir` |
+| `kobold-lambda-layer` default lib + `kobold-batch` | **PureDataCourt** | default build pulls **no AWS crates** |
+| `kobold-lambda-layer` `lambda` feature | **AwsGated** | `lambda_runtime`; off by default |
+| `kobold-bench` | **ReportRendering** | throughput only after a parity re-check; never semantic authority |
+| `cobc-oracle-rs`, `lab/oracle/*`, `lab/atlas/*`, `lab/receipt/*` | **ExternalOracleProcess** + **HostEnvRead** + **LabOnly** | drive the built cobc/libcob; **GPL** boundary; never in a published crate |
+
+## Visibility of absence
+
+Oracle-dependent gates distinguish, never collapsing "couldn't run cobc" into skipped-green:
+
+```
+pass · fail · oracle_unavailable · oracle_version_mismatch · unsupported_by_scope
+```
+
+`lab/check-docs.sh` reports `tarball absent -> admission-hash check skipped (expected without lab bundle)`
+and `oracle NOT BUILT (sweeps skipped)` explicitly; `lab/receipt/run.py` records `oracle-not-built` as a
+distinct result, not a pass.

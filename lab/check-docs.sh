@@ -25,6 +25,7 @@ for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-licen
          docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-claims.md \
          docs/oracle-lessons.md docs/negative-capabilities.md docs/license-boundaries.md docs/trust2-generated-receipts.md \
          reports/claim-ladder.json lab/verify-sealed-courts.sh \
+         STATUS.md docs/REVIEW-IN-10-MINUTES.md docs/not-yet-ready.md docs/effect-boundary-map.md audits/README.md \
          COPYING COPYING.LESSER; do
   [ -f "$f" ] || bad "README references missing file: $f"
 done
@@ -51,6 +52,11 @@ note "all README-referenced docs exist"
 RS_MAXD=$(grep -oE 'COB_MAX_DIGITS: i64 = [0-9]+' crates/gnucobol-rs/src/lib.rs | grep -oE '[0-9]+$')
 [ "$RS_MAXD" = "38" ] || bad "COB_MAX_DIGITS in lib.rs is '$RS_MAXD', expected 38 (libcob/common.h:607)"
 note "COB_MAX_DIGITS = $RS_MAXD"
+
+# TRUST.3: STATUS.md (live authority) must name the current crate version, or it is stale.
+SV=$(grep -m1 '^version' crates/gnucobol-rs/Cargo.toml | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+grep -q "gnucobol-rs $SV" STATUS.md || bad "STATUS.md does not name current crate version $SV (live authority stale)"
+note "STATUS.md names current crate version"
 
 # 4. attr.rs type/flag constants match the values documented in the admission/selfcheck.
 check_const() { grep -qE "$2" crates/gnucobol-rs/src/attr.rs || bad "attr.rs missing/!= $1"; }

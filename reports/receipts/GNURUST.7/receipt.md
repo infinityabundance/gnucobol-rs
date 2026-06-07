@@ -12,8 +12,9 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | receiving-field storage bytes |
 | replay command | `bash lab/oracle/arith_sweep.sh` |
-| generated_at | e10fc91-replay |
-| git_commit | `e10fc91` |
+| generated_at | 668f832-replay |
+| git_commit | `668f832` |
+| receipt_status | current |
 
 ## Non-claims
 - DIVIDE
