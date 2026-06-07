@@ -203,6 +203,42 @@
       "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
       "readiness": 3
+    },
+    {
+      "id": "KOBOLD.DATA.2",
+      "name": "binary fields in corpus",
+      "proven": "COMP/COMP-5/COMP-X binary fields decoded end-to-end in the reconciliation corpus (composes GNURUST.14)",
+      "byte_domain": "JSON + audit bytes",
+      "oracle": "sealed GNURUST courts (no new oracle)",
+      "fixtures": "3 families x 120 incl binary fields, byte-stable",
+      "sealed_version": "kobold-data-shim 0.3.0",
+      "not_proven": "binary arithmetic; business truth",
+      "breaks_claim": "binary fields text-converted",
+      "readiness": 4
+    },
+    {
+      "id": "KOBOLD.DATA.3",
+      "name": "cp500 EBCDIC in corpus",
+      "proven": "cp500 alphanumeric DISPLAY decoded end-to-end with binary/packed passthrough proven untouched (composes GNURUST.15)",
+      "byte_domain": "JSON + audit bytes",
+      "oracle": "sealed GNURUST courts",
+      "fixtures": "account-cp500 family (120 rec) + ebcdic_never_touches_binary test",
+      "sealed_version": "kobold-data-shim 0.4.0",
+      "not_proven": "numeric DISPLAY under cp500 (EBCDIC zoned sign); business truth",
+      "breaks_claim": "EBCDIC conversion touching COMP bytes",
+      "readiness": 4
+    },
+    {
+      "id": "KOBOLD.OPERATOR.1",
+      "name": "operator trust layer",
+      "proven": "explain-field (provenance/courts/value/non-claims), control totals, dirty-data evidence/strict, JSON key-collision refusal, stale-copybook risk in receipts",
+      "byte_domain": "operator JSON outputs + audit",
+      "oracle": "sealed GNURUST courts",
+      "fixtures": "5 operator tests (explain/totals/collision/dirty)",
+      "sealed_version": "kobold-data-shim 0.5.0",
+      "not_proven": "business truth; semantic validity; INITIALIZE/repair",
+      "breaks_claim": "coercing dirty bytes; silent key collision",
+      "readiness": 4
     }
   ],
   "transform_vs_read": {

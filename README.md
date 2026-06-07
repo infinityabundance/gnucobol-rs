@@ -66,6 +66,8 @@ ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabili
 | `GNURUST.15` EBCDIC | cp500 DISPLAY decode (raw bytes → text) | `libcob cob_load_collation` | 0.5.0 | cp037, numeric-zoned, DBCS, binary |
 | `GNURUST.16` edited | edited-PIC DECODE (16a `Z 9 , . - +` + 16b `$ * CR DB B 0 /`) → value+text | `cobc` MOVE→edited→DISPLAY | 0.6.0/0.6.1 | numeric→edited, reports, locale |
 | `KOBOLD.RECON.1` | JSONL + audit bytes | sealed courts (composed) | shim 0.2.0 | write-back, business truth |
+| `KOBOLD.DATA.2/3` | binary + cp500 EBCDIC composed in corpus | sealed courts (composed) | shim 0.3.0/0.4.0 | binary arithmetic, numeric EBCDIC zoned |
+| `KOBOLD.OPERATOR.1` | explain / totals / dirty-mode + risk | sealed courts (composed) | shim 0.5.0 | business truth, semantic validity |
 
 Replay all of it with one command (prints a PASS table):
 
@@ -102,7 +104,7 @@ here always means *matches the built oracle*, never *matches our reading of a sp
 
 | Crate | Derives from | License | Scope |
 |-------|--------------|---------|-------|
-| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` | **LGPL-3.0-or-later** | COMP-3 / zoned / display byte semantics + `MOVE` between them |
+| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` | **LGPL-3.0-or-later** | sealed COBOL data courts: MOVE/storage, PIC (+P), layout (+ODO), COPY/REPLACING, VALUE, arithmetic, LEVEL-88, binary COMP/COMP-5/COMP-X, cp500 EBCDIC decode, edited-picture decode |
 | [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | build/run `cobc` fixtures, capture deterministic JSON receipts |
 
 ## License & derivation boundary
