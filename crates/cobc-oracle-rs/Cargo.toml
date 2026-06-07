@@ -1,6 +1,6 @@
 [package]
 name = "cobc-oracle-rs"
-version = "0.0.1"
+version = "0.0.2"
 description = "Drives the GnuCOBOL cobc compiler as an oracle: builds/runs COBOL fixtures and captures deterministic, canonical-JSON receipts (oracle identity, stdout/stderr/exit, source/generated-C/binary sha256). GPL-3.0+ tooling for the gnucobol-rs compatibility court."
 license = "GPL-3.0-or-later"
 keywords = ["cobol", "gnucobol", "oracle", "compiler", "testing"]

@@ -6,7 +6,17 @@
 //!
 //! This crate copies **no** GPL compiler logic — it only spawns `cobc`/the produced binary and
 //! reads their outputs — but, being tightly coupled tooling for the GPL compiler, it is licensed
-//! **GPL-3.0-or-later** and is **not published**.
+//! **GPL-3.0-or-later** (published as GPL tooling, kept out of the LGPL/Apache decode path).
+//!
+//! ## Where this sits in the oracle ecosystem
+//!
+//! This is the **program-shape** oracle: compile a whole COBOL program with `cobc` and capture its
+//! runtime behaviour. The **runtime-library shape** (`lab/oracle/decimal_harness`, linking the built
+//! `libcob` and calling `cob_move`/field helpers directly) drives the byte-level sweeps for the
+//! sealed courts. Campaign evidence of record is the **generated replay receipt** (`lab/receipt/run.py`
+//! → `reports/receipts/<CAMPAIGN>/receipt.json`, regenerated from a live sweep; see
+//! `docs/trust2-generated-receipts.md`). This crate's per-fixture receipt is one such replayable
+//! program-shape witness.
 //!
 //! Doctrine encoded here:
 //! - **Generated C is a witness, not authority** (`GNURUST.GENC.0`): the receipt records
