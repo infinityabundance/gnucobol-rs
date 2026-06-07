@@ -44,13 +44,15 @@ run_sweep "GNURUST.12 SET 88 TRUE"   set_sweep.sh
 echo
 SHIM="$ROOT/../kobold-data-shim"
 if [ -f "$SHIM/Cargo.toml" ]; then
-  if ( cd "$SHIM" && cargo test --test recon -q >/dev/null 2>&1 ); then
-    row "KOBOLD.RECON.1" "PASS  (corpus byte-stable, CLI==lib)"; GREEN=$((GREEN+1))
+  # Run the FULL shim suite (recon + operator + lib), not just --test recon: a stale record-len in the
+  # operator tests must turn this red (the KOBOLD.DATA.4 lesson — a publish guard, not a grep).
+  if ( cd "$SHIM" && cargo test -q >/dev/null 2>&1 ); then
+    row "KOBOLD (shim: recon+operator+lib)" "PASS  (corpus byte-stable, CLI==lib)"; GREEN=$((GREEN+1))
   else
-    row "KOBOLD.RECON.1" "FAIL"; RED=$((RED+1))
+    row "KOBOLD (shim: recon+operator+lib)" "FAIL"; RED=$((RED+1))
   fi
 else
-  row "KOBOLD.RECON.1" "SKIP (sibling crate absent)"
+  row "KOBOLD (shim)" "SKIP (sibling crate absent)"
 fi
 
 # Self-contained Rust tests + the doc-staleness gate are part of "sealed".
@@ -60,4 +62,9 @@ echo
 
 echo
 echo "== $GREEN green, $RED red =="
+# PUBLISH GUARD: nonzero exit on ANY red. Treat this as the gate before every version bump / publish /
+# git tag (KOBOLD.DATA.4 lesson: assert FAILED:0 here BEFORE packaging, never grep after).
+if [ "$RED" -ne 0 ]; then
+  echo "!! $RED FAILING block(s) — DO NOT commit, version-bump, or publish until green."
+fi
 [ "$RED" -eq 0 ]
