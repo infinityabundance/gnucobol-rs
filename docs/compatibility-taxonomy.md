@@ -14,7 +14,7 @@ as evidence for a higher one.
 | 0b | **Record layout** | do item offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc`? (ODO physical-max) | **sealed** — `layout` (`GNURUST.4`, `GNURUST.10`) |
 | 1 | **Storage parity** | does a field hold the same bytes? | **sealed** (`GNURUST.2`) |
 | 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealed** (`GNURUST.2`) |
-| 2c | **Arithmetic parity** | do `ADD`/`SUBTRACT`/`MULTIPLY` result bytes match `cob_add`/`cob_mul`? | **sealed** — `arith` (`GNURUST.7`); DIVIDE / packed add-sub / other modes future |
+| 2c | **Arithmetic parity** | do `ADD`/`SUBTRACT`/`MULTIPLY` result bytes match `cob_add`/`cob_mul`? | **sealed** — `arith` (`GNURUST.7` + packed add-sub `GNURUST.13`); DIVIDE / other modes future |
 | 3 | **Initialization parity** | `VALUE` → initial record bytes | **sealed** — `init` (`GNURUST.8`); ODO/REDEFINES-VALUE, figuratives beyond ZERO/SPACE future |
 | 4 | Comparison parity | LEVEL-88 predicate (`GNURUST.11`) + `SET TO TRUE` (`GNURUST.12`) **sealed**; `IF a < b`, `SEARCH ALL`, collation future | partial |
 | 5 | Display/output parity | `DISPLAY`, edited pictures, Report Writer | future |

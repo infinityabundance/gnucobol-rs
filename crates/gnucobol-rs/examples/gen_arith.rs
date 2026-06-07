@@ -73,37 +73,43 @@ fn digits_of(rng: &mut Lcg, nd: usize, kind: u8) -> Vec<u8> {
 fn main() {
     let mut rng = Lcg(0xA5A5_1234_5678_9ABC);
     let mut id = 0u64;
-    for ut in [DISPLAY, PACKED] {
-        for op in [1u32, 2, 3] {
-            for nd in [1usize, 2, 3, 4, 6, 9] {
-                for sc in 0..=2i32 {
-                    if sc as usize >= nd {
-                        continue;
-                    }
-                    for signed in [false, true] {
-                        for (sa, sb) in [(false, false), (true, false), (false, true), (true, true)]
-                        {
-                            if !signed && (sa || sb) {
-                                continue;
-                            }
-                            for opt in [0u32, 1] {
-                                for kind in 1u8..=3 {
-                                    let ad = digits_of(&mut rng, nd, kind);
-                                    let bsc = if rng.below(2) == 0 {
-                                        sc
-                                    } else {
-                                        (sc + 1).min(nd as i32 - 1).max(0)
-                                    };
-                                    let bd = digits_of(&mut rng, nd, 3);
-                                    let (ab, asz) = enc(ut, &ad, signed, sa);
-                                    let (bb, bsz) = enc(ut, &bd, signed, sb);
-                                    let asf = if signed { HAVE_SIGN } else { 0 };
-                                    println!(
-                                        "x{id} {op} {ut} {nd} {sc} {asf} {asz} {} {ut} {nd} {bsc} {asf} {bsz} {} {opt}",
+    // Receiver (a) usage × operand (b) usage covers GNURUST.13's mixed cases — e.g. a=PACKED,
+    // b=DISPLAY is "ADD DISPLAY TO COMP-3" (the cob_add_bcd path). opt 0 = truncate, 33 =
+    // COB_STORE_ROUND|NEAR_AWAY_FROM_ZERO (the real `ADD ROUNDED` opt).
+    for a_ut in [DISPLAY, PACKED] {
+        for b_ut in [DISPLAY, PACKED] {
+            for op in [1u32, 2, 3] {
+                for nd in [1usize, 2, 3, 4, 6, 9] {
+                    for sc in 0..=2i32 {
+                        if sc as usize >= nd {
+                            continue;
+                        }
+                        for signed in [false, true] {
+                            for (sa, sb) in
+                                [(false, false), (true, false), (false, true), (true, true)]
+                            {
+                                if !signed && (sa || sb) {
+                                    continue;
+                                }
+                                for opt in [0u32, 33] {
+                                    for kind in 1u8..=3 {
+                                        let ad = digits_of(&mut rng, nd, kind);
+                                        let bsc = if rng.below(2) == 0 {
+                                            sc
+                                        } else {
+                                            (sc + 1).min(nd as i32 - 1).max(0)
+                                        };
+                                        let bd = digits_of(&mut rng, nd, 3);
+                                        let (ab, asz) = enc(a_ut, &ad, signed, sa);
+                                        let (bb, bsz) = enc(b_ut, &bd, signed, sb);
+                                        let asf = if signed { HAVE_SIGN } else { 0 };
+                                        println!(
+                                        "x{id} {op} {a_ut} {nd} {sc} {asf} {asz} {} {b_ut} {nd} {bsc} {asf} {bsz} {} {opt}",
                                         hex(&ab),
                                         hex(&bb),
                                     );
-                                    id += 1;
+                                        id += 1;
+                                    }
                                 }
                             }
                         }

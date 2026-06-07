@@ -10,7 +10,10 @@
 //! target type — reusing the sealed [`crate::cob_move`].
 //!
 //! **Sealed subset:** `op := a (op) b` for `op ∈ {ADD, SUBTRACT, MULTIPLY}`, DISPLAY / COMP-3
-//! operands and result, truncation or `ROUNDED` (nearest-away-from-zero). **Fail closed** (typed
+//! operands and receiver, truncation or `ROUNDED` (nearest-away-from-zero). `ADD`/`SUBTRACT` into a
+//! **PACKED** receiver take libcob's separate `cob_add_bcd` path (`GNURUST.13`) — the same
+//! integer-decimal `compute`/`store` produces its bytes, with one extra rule: a negative result that
+//! truncates to zero keeps its sign (`-0`), unlike the DISPLAY path. **Fail closed** (typed
 //! [`ArithError`]) when an operand or intermediate exceeds the `i128` integer-decimal range
 //! (`>38` significant digits / product overflow) — those need the GMP-grade bignum, a future court
 //! (`GNURUST.ARITH-BIGNUM.0`). `DIVIDE`, the other six rounding modes, and `ON SIZE ERROR` exception
@@ -46,9 +49,9 @@ pub enum ArithError {
     OutOfRange,
     /// A field's attributes are self-inconsistent.
     InvalidAttr,
-    /// `ADD`/`SUBTRACT` into a **PACKED** receiving field routes through libcob's separate
-    /// `cob_add_bcd` BCD path (`numeric.c:cob_addsub_optimized`), which rounds/handles overflow
-    /// differently from the `cob_decimal` path ported here — deferred to `GNURUST.ARITH-BCD.0`.
+    /// Retained for API stability. Previously signalled that `ADD`/`SUBTRACT` into a PACKED field
+    /// was deferred; that path is now sealed (`GNURUST.13`, libcob `cob_add_bcd`), so this is no
+    /// longer produced.
     PackedAddSubDeferred,
 }
 
@@ -143,9 +146,18 @@ fn tdiv_pow10(mag: i128, k: u32) -> Result<i128, ArithError> {
 /// Store `d` into the field `attr` with rounding `round`, returning the field bytes. Mirrors
 /// `cob_decimal_get_field` (`numeric.c:2055`): round (if requested) then truncate/append to the
 /// field scale, truncate overflow digits, render a DISPLAY temp, and `cob_move` to the target type.
-fn store(d: Dec, attr: &FieldAttr, round: Round) -> Result<Vec<u8>, ArithError> {
+fn store(
+    d: Dec,
+    attr: &FieldAttr,
+    round: Round,
+    sign_on_zero: bool,
+) -> Result<Vec<u8>, ArithError> {
     let target_scale = attr.scale as i32;
     let target_digits = attr.digits as usize;
+    // The computed value's sign, before any scale truncation. libcob's `cob_add_bcd` (packed
+    // ADD/SUBTRACT) keeps this sign even when the result truncates to zero magnitude
+    // (`-0.6` -> `-0`); the `cob_decimal`/DISPLAY path does not (it yields `+0`).
+    let pre_negative = d.mag < 0;
     let mut mag = d.mag;
     let mut scale = d.scale;
 
@@ -178,7 +190,12 @@ fn store(d: Dec, attr: &FieldAttr, round: Round) -> Result<Vec<u8>, ArithError> 
 
     // Overflow: keep the low `target_digits` digits (TRUNC_ON_OVERFLOW default; SIZE error is a
     // future court). magnitude is at the field scale now.
-    let negative = mag < 0;
+    let negative = if mag != 0 {
+        mag < 0
+    } else {
+        // zero magnitude: keep the pre-truncation sign only on the cob_add_bcd path.
+        sign_on_zero && pre_negative
+    };
     let mut abs = mag.unsigned_abs();
     let modulus = pow10(target_digits as u32).ok_or(ArithError::OutOfRange)? as u128;
     abs %= modulus;
@@ -230,16 +247,17 @@ pub fn cob_arith(
     round: Round,
 ) -> Result<Vec<u8>, ArithError> {
     // ADD/SUBTRACT into a PACKED receiving field take libcob's separate cob_add_bcd path
-    // (different rounding/overflow); fail closed rather than answer with cob_decimal semantics.
-    if matches!(op, Op::Add | Op::Subtract)
-        && a_attr.field_type == crate::attr::COB_TYPE_NUMERIC_PACKED
-    {
-        return Err(ArithError::PackedAddSubDeferred);
-    }
+    // (`GNURUST.13`). It computes the exact integer-decimal sum, aligns to the receiver scale,
+    // rounds (nearest-away when requested) or truncates, truncates overflow, and stores — which is
+    // exactly the integer-decimal path here, so the same `compute`/`store` produces identical bytes.
     let da = decode(a, a_attr)?;
     let db = decode(b, b_attr)?;
     let r = compute(da, db, op)?;
-    store(r, a_attr, round)
+    // Only ADD/SUBTRACT into a PACKED receiver (the cob_add_bcd path) keeps a negative sign on a
+    // zero-magnitude result.
+    let sign_on_zero = matches!(op, Op::Add | Op::Subtract)
+        && a_attr.field_type == crate::attr::COB_TYPE_NUMERIC_PACKED;
+    store(r, a_attr, round, sign_on_zero)
 }
 
 #[cfg(test)]
@@ -314,21 +332,33 @@ mod tests {
     }
 
     #[test]
-    fn packed_add_sub_fails_closed() {
-        // ADD/SUBTRACT into a PACKED field routes through libcob's cob_add_bcd path (deferred).
+    fn packed_add_sub_via_bcd() {
+        // GNURUST.13: ADD/SUBTRACT into a PACKED field (libcob cob_add_bcd path).
+        // -012.34 + -001.00 = -013.34 in S9(3)V99 COMP-3.
         let a = [0x01, 0x23, 0x4d];
         let b = [0x00, 0x10, 0x0d];
-        assert_eq!(
-            cob_arith(
-                Op::Add,
-                &a,
-                &packed(5, 2, true),
-                &b,
-                &packed(5, 2, true),
-                Round::Truncate
-            ),
-            Err(ArithError::PackedAddSubDeferred)
-        );
+        let r = cob_arith(
+            Op::Add,
+            &a,
+            &packed(5, 2, true),
+            &b,
+            &packed(5, 2, true),
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(r, vec![0x01, 0x33, 0x4d]); // -013.34
+
+        // 012.34 + 001.11 = 013.45 (unsigned-ish positive), truncation.
+        let r2 = cob_arith(
+            Op::Add,
+            &[0x01, 0x23, 0x4c],
+            &packed(5, 2, true),
+            &[0x00, 0x11, 0x1c],
+            &packed(5, 2, true),
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(r2, vec![0x01, 0x34, 0x5c]); // 013.45
     }
 
     #[test]

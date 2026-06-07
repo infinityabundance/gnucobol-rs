@@ -69,7 +69,7 @@ fn main() {
             2 => Op::Subtract,
             _ => Op::Multiply,
         };
-        let round = if opt == 1 {
+        let round = if opt & 1 != 0 {
             Round::NearAwayFromZero
         } else {
             Round::Truncate

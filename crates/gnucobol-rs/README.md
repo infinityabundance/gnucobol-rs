@@ -77,7 +77,7 @@ over-deep/over-large expansion.
 (i128, zero deps, no float), matching libcob `cob_add`/`cob_sub`/`cob_mul`: ADD/SUBTRACT (DISPLAY) +
 MULTIPLY (DISPLAY/COMP-3), truncation and ROUNDED (nearest-away), negative-zero-on-overflow (sweep
 `PASS=1800 FAIL=0`). ADD/SUBTRACT into PACKED (libcob's separate BCD path), DIVIDE, other rounding
-modes, and >38-digit (bignum) inputs **fail closed** with a typed `ArithError`.
+modes, and >38-digit (bignum) inputs **fail closed** with a typed `ArithError`. **`GNURUST.13`** additionally seals `ADD`/`SUBTRACT` into a **PACKED** receiver (libcob's `cob_add_bcd` path): byte-identical for DISPLAY/COMP-3 operands, scales, truncate/ROUNDED, carry, overflow, and negative-zero-on-truncation (sweep `5400/0`).
 
 ## `GNURUST.8` — VALUE initial record image (`gnucobol_rs::value_image`)
 

@@ -38,6 +38,9 @@ claimed_now:
   - id: arithmetic-decimal
     what: ADD/SUBTRACT (DISPLAY) + MULTIPLY (DISPLAY/COMP-3), truncate+ROUNDED, matching cob_add/cob_mul
     scope: pure-Rust i128 integer decimal, <=38 digits, near-away rounding (GNURUST.7)
+  - id: arith-packed-addsub
+    what: ADD/SUBTRACT into a PACKED (COMP-3) receiver, receiving-field bytes matching libcob cob_add_bcd
+    scope: DISPLAY/COMP-3 operands, scales, truncate+near-away, carry, overflow, neg-zero-on-truncation (GNURUST.13)
   - id: pic-p-scaling
     what: PIC P scaling-position field model (digits/scale/size) matching cobc
     scope: single contiguous P run at one end, DISPLAY/COMP-3, signed/unsigned (GNURUST.9)
@@ -45,7 +48,6 @@ claimed_now:
     what: initial WORKING-STORAGE bytes of a flat 01 record from VALUE clauses, matching cobc
     scope: 9/X/A/S/V + COMP-3 elementary items, numeric/alnum/ZERO/SPACE, type-correct defaults (GNURUST.8)
 not_claimed:
-  - { id: arith-packed-addsub,  note: "ADD/SUBTRACT into PACKED (cob_add_bcd path) (GNURUST.ARITH-BCD.0)" }
   - { id: arith-divide,         note: "DIVIDE + remainder, other rounding modes, ON SIZE ERROR, >38-digit bignum (GNURUST.ARITH-BIGNUM.0)" }
   - { id: edited-pictures,       note: "Z/$/CR/DB/*/BLANK WHEN ZERO rendering (GNURUST.EDITED.0)" }
   - { id: display-stdout,        note: "what DISPLAY prints — distinct from storage bytes" }

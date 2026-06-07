@@ -3,6 +3,21 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.3.3]
+
+### GNURUST.13 — `arith`: packed ADD/SUBTRACT (cob_add_bcd)
+- `cob_arith` now seals `ADD`/`SUBTRACT` into a **PACKED (COMP-3) receiving field** — libcob's
+  separate `cob_add_bcd` path, deferred in GNURUST.7. The receiving-field **bytes** match
+  `cob_add`/`cob_sub` for DISPLAY/COMP-3 operands, signed/unsigned, scale differences, truncation and
+  ROUNDED (nearest-away), odd/even digits, carry, and overflow. Sweep total=5400 PASS=5400 FAIL=0
+  (receiver × operand ∈ {DISPLAY,COMP-3}²); 8M fuzz runs clean.
+- Diagnosed two oracle facts: (1) GNURUST.7's deferral was an `opt` artifact — `cob_add_bcd` rounds
+  only with the explicit mode bit (`ADD ROUNDED` = `0x21`), not `COB_STORE_ROUND` alone; (2) a
+  **negative** result that truncates to **zero magnitude** keeps the negative sign (`-0`) on the
+  packed path, unlike the DISPLAY path (`+0`). DIVIDE, SIZE ERROR, other rounding modes, bignum, and
+  float remain non-claims. The `ArithError::PackedAddSubDeferred` variant is retained for API
+  stability but no longer produced.
+
 ## [0.3.2]
 
 ### GNURUST.12 — `cond`: SET condition-name TO TRUE
