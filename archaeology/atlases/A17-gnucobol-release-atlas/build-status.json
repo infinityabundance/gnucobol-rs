@@ -1,0 +1,89 @@
+{
+  "schema": "gnucobol-atlas-build-status-v1",
+  "axis": "G-release",
+  "evidence_kind": "oracle_source (3.2) + not_attempted (others)",
+  "note": "Per-release build status. Only gnucobol-3.2 is admitted+built in this lab; all others are not_attempted (Phase 3). Reproduce the 3.2 build via lab/oracle + reports/admission/.",
+  "releases": [
+    {
+      "release_id": "opencobol-1.0",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "opencobol-1.1",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "gnucobol-1.1",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "gnucobol-2.0-rc",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "gnucobol-2.2",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "gnucobol-3.1",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "gnucobol-3.1.2",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    },
+    {
+      "release_id": "gnucobol-3.2",
+      "not_attempted": false,
+      "host": "this lab (GCC-16 linux)",
+      "prefix": "lab/oracle/prefix",
+      "configure_flags": "--prefix=lab/oracle/prefix --with-db (see oracle-build-recipe)",
+      "make_check": "opportunistic",
+      "cobc_version": "cobc (GnuCOBOL) 3.2.0"
+    },
+    {
+      "release_id": "gnucobol-4.x",
+      "not_attempted": true,
+      "host": null,
+      "prefix": null,
+      "configure_flags": null,
+      "make_check": null,
+      "cobc_version": null
+    }
+  ]
+}

@@ -2,25 +2,199 @@
   "schema": "gnucobol-atlas-release-axis-v1",
   "axis": "G-release",
   "evidence_kind": "reference_curated",
-  "note": "GnuCOBOL/OpenCOBOL release lineage. Dates/anchors are curated from public project pages with citations (see citations[]); only gnucobol-3.2 is admitted+built here (oracle_source/oracle_generated). Every other release is build_status.not_attempted — a placeholder, not a claim. Reproduce the 3.2 build with lab/oracle.",
+  "note": "GnuCOBOL/OpenCOBOL release lineage. Dates/anchors are curated from public project pages with citations (see citations[]); only gnucobol-3.2 is admitted+built here (oracle_source/oracle_generated). Every other release is build_status.not_attempted \u2014 a placeholder, not a claim. Reproduce the 3.2 build with lab/oracle.",
   "citations": [
     "https://sourceforge.net/projects/gnucobol/files/gnucobol/",
     "https://gnucobol.sourceforge.io/",
     "https://gnucobol.sourceforge.io/ (3.2 released 2023-07-28; 3.1.2 2020-12-23; 2.2 2017-09-06)"
   ],
   "status_vocabulary": [
-    "not_present", "reserved_word_only", "parsed_inert", "parsed_warned", "parsed_functional",
-    "runtime_functional", "backend_dependent", "platform_dependent", "documented_not_implemented", "unknown"
+    "not_present",
+    "reserved_word_only",
+    "parsed_inert",
+    "parsed_warned",
+    "parsed_functional",
+    "runtime_functional",
+    "backend_dependent",
+    "platform_dependent",
+    "documented_not_implemented",
+    "unknown"
   ],
   "releases": [
-    {"release_id": "opencobol-1.0", "lineage": "opencobol", "date": "2009", "artifact_kind": "source-release", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}},
-    {"release_id": "opencobol-1.1", "lineage": "opencobol", "date": "2009", "artifact_kind": "source-release", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}, "note": "common legacy build anchor; pre-GnuCOBOL naming"},
-    {"release_id": "gnucobol-1.1", "lineage": "gnu-cobol", "date": "2014", "artifact_kind": "source-release", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}, "note": "OpenCOBOL -> GNU Cobol/GnuCOBOL renaming era"},
-    {"release_id": "gnucobol-2.0-rc", "lineage": "gnucobol", "date": "2016", "artifact_kind": "release-candidate", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}, "note": "2.0 line shipped as RCs; 2.2 is the stable 2.x anchor"},
-    {"release_id": "gnucobol-2.2", "lineage": "gnucobol", "date": "2017-09-06", "artifact_kind": "source-release", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}, "note": "widely packaged 2.x anchor"},
-    {"release_id": "gnucobol-3.1", "lineage": "gnucobol", "date": "2020", "artifact_kind": "source-release", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}},
-    {"release_id": "gnucobol-3.1.2", "lineage": "gnucobol", "date": "2020-12-23", "artifact_kind": "source-release", "evidence_kind": "reference_curated", "build_status": {"not_attempted": true}, "note": "common 3.1 packaging anchor"},
-    {"release_id": "gnucobol-3.2", "lineage": "gnucobol", "date": "2023-07-28", "artifact_kind": "source-release", "evidence_kind": "oracle_source", "admitted": true, "build_status": {"not_attempted": false, "host": "this lab (GCC-16 linux)", "prefix": "lab/oracle/prefix", "make_check": "opportunistic"}, "note": "THE admitted oracle for gnucobol-rs. sha256 + build recipe in reports/admission/."},
-    {"release_id": "gnucobol-4.x", "lineage": "gnucobol-dev", "date": "development", "artifact_kind": "development-line", "evidence_kind": "not_attempted", "build_status": {"not_attempted": true}, "note": "SHADOW line only; never overrides the admitted 3.2 oracle. A future shadow-witness axis, not authority."}
+    {
+      "release_id": "opencobol-1.0",
+      "lineage": "opencobol",
+      "date": "2009",
+      "artifact_kind": "source-release",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "opencobol-1.1",
+      "lineage": "opencobol",
+      "date": "2009",
+      "artifact_kind": "source-release",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "note": "common legacy build anchor; pre-GnuCOBOL naming",
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "gnucobol-1.1",
+      "lineage": "gnu-cobol",
+      "date": "2014",
+      "artifact_kind": "source-release",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "note": "OpenCOBOL -> GNU Cobol/GnuCOBOL renaming era",
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "gnucobol-2.0-rc",
+      "lineage": "gnucobol",
+      "date": "2016",
+      "artifact_kind": "release-candidate",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "note": "2.0 line shipped as RCs; 2.2 is the stable 2.x anchor",
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "gnucobol-2.2",
+      "lineage": "gnucobol",
+      "date": "2017-09-06",
+      "artifact_kind": "source-release",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "note": "widely packaged 2.x anchor",
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "gnucobol-3.1",
+      "lineage": "gnucobol",
+      "date": "2020",
+      "artifact_kind": "source-release",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "gnucobol-3.1.2",
+      "lineage": "gnucobol",
+      "date": "2020-12-23",
+      "artifact_kind": "source-release",
+      "evidence_kind": "reference_curated",
+      "build_status": {
+        "not_attempted": true
+      },
+      "note": "common 3.1 packaging anchor",
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    },
+    {
+      "release_id": "gnucobol-3.2",
+      "lineage": "gnucobol",
+      "date": "2023-07-28",
+      "artifact_kind": "source-release",
+      "evidence_kind": "oracle_source",
+      "admitted": true,
+      "build_status": {
+        "not_attempted": false,
+        "host": "this lab (GCC-16 linux)",
+        "prefix": "lab/oracle/prefix",
+        "make_check": "opportunistic"
+      },
+      "note": "THE admitted oracle for gnucobol-rs. sha256 + build recipe in reports/admission/.",
+      "feature_surfaces": {
+        "copy_replacing": "runtime_functional",
+        "level_88": "runtime_functional",
+        "occurs_depending": "runtime_functional",
+        "redefines": "runtime_functional",
+        "comp_3": "runtime_functional",
+        "comp_5": "runtime_functional",
+        "comp_6": "parsed_functional",
+        "edited_pictures": "runtime_functional",
+        "ebcdic_cp500": "runtime_functional",
+        "examine_verb": "reserved_word_only",
+        "alter_statement": "parsed_functional",
+        "json_generate": "backend_dependent",
+        "xml": "backend_dependent",
+        "report_writer": "parsed_functional",
+        "screen_section": "backend_dependent",
+        "indexed_file": "backend_dependent"
+      }
+    },
+    {
+      "release_id": "gnucobol-4.x",
+      "lineage": "gnucobol-dev",
+      "date": "development",
+      "artifact_kind": "development-line",
+      "evidence_kind": "not_attempted",
+      "build_status": {
+        "not_attempted": true
+      },
+      "note": "SHADOW line only; never overrides the admitted 3.2 oracle. A future shadow-witness axis, not authority.",
+      "feature_surfaces": {
+        "copy_replacing": "unknown",
+        "json_generate": "unknown",
+        "report_writer": "unknown",
+        "screen_section": "unknown",
+        "level_88": "unknown"
+      }
+    }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "schema": "gnucobol-atlas-standard-feature-index-v1",
+  "evidence_kind": "reference_curated",
+  "warning": "Feature LABELS only (present/absent/module/unknown), citation-backed; no standard text reproduced. Shadow witness — never overrides the admitted oracle.",
+  "legend": ["present", "absent", "module_or_amendment", "vendor_or_later", "unknown"],
+  "standards": {
+    "iso-1989-1985": {"scope_terminators": "present", "intrinsic_functions": "module_or_amendment", "nested_programs": "present", "reference_modification": "present", "object_orientation": "absent", "json_generate": "absent", "xml": "absent", "line_sequential": "vendor_or_later", "occurs_depending": "present", "redefines": "present", "report_writer": "module_or_amendment"},
+    "iso-1989-2002": {"scope_terminators": "present", "intrinsic_functions": "present", "nested_programs": "present", "object_orientation": "present", "json_generate": "absent", "xml": "present", "free_form": "present", "occurs_depending": "present", "report_writer": "present"},
+    "iso-1989-2014": {"object_orientation": "present", "json_generate": "vendor_or_later", "xml": "present", "intrinsic_functions": "present"},
+    "iso-1989-2023": {"json_generate": "present", "xml": "present", "object_orientation": "present", "intrinsic_functions": "present"},
+    "xopen-cobol": {"basis": "iso-1989-1985", "portability_profile": "present"}
+  }
+}

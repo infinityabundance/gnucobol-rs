@@ -24,3 +24,16 @@ Generated reading of `join.json` — the obscure stuff normal searches miss.
 
 Each of these is a `drift` tag in `drift-matrix.tsv`; the `fixture_priority` column says which deserve a
 `gnucobol-rs` court next.
+
+
+## Behavioral probe finding (beyond reserved words)
+
+`lab/atlas/build-dialect-behavior.sh` compiles probe snippets `-fsyntax-only` under each `-std`
+(`dialect-behavior.json`). It catches what word-counts cannot:
+
+- **`EXAMINE` is reserved under `ibm`/`mf`/`acu` but compiles under NO dialect** — a proven
+  `reserved_word_before_feature` / `inert_compatibility_syntax` case. Reserved ≠ functional.
+- **`COMP-6` and `ALTER`** are accepted by vendor dialects (`ibm`/`mvs`/`mf`/`acu`) but **rejected by
+  strict `cobol85`/`cobol2002`** — `vendor_extension_only` / `standard_behavior_differs_from_gnucobol`.
+
+This is why the join needs the behavioral axis, not just the reserved-word delta.

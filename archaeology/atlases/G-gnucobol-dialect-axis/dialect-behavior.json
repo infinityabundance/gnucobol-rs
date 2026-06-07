@@ -1,0 +1,25 @@
+{
+  "schema": "gnucobol-atlas-dialect-behavior-v1",
+  "axis": "G",
+  "oracle": "cobc (GnuCOBOL) 3.2.0",
+  "evidence_kind": "oracle_generated",
+  "probe_method": "cobc -std=<dialect> -fsyntax-only; accept=compiles, reject=diagnostic error",
+  "probes": {"examine": "EXAMINE verb (legacy, pre-INSPECT)", "comp6": "USAGE COMP-6 (vendor unsigned packed)", "comp5": "USAGE COMP-5", "altr": "ALTER statement (obsolete)"},
+  "matrix": {
+    "default": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"},
+    "cobol85": {"examine": "reject", "comp6": "reject", "comp5": "reject", "altr": "reject"},
+    "cobol2002": {"examine": "reject", "comp6": "reject", "comp5": "reject", "altr": "reject"},
+    "cobol2014": {"examine": "reject", "comp6": "reject", "comp5": "reject", "altr": "reject"},
+    "xopen": {"examine": "reject", "comp6": "reject", "comp5": "reject", "altr": "reject"},
+    "ibm": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"},
+    "mvs": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"},
+    "mf": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"},
+    "acu": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"},
+    "rm": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"},
+    "bs2000": {"examine": "reject", "comp6": "accept", "comp5": "accept", "altr": "accept"}
+  },
+  "findings": [
+    "EXAMINE is RESERVED under ibm/mf/acu (see deltas/) but compiles under NO -std: reserved_word_before_feature / inert_compatibility_syntax (word-counts alone would miss this).",
+    "COMP-6 and ALTER are accepted by vendor dialects (ibm/mvs/mf/acu) but REJECTED by strict cobol85/cobol2002: vendor_extension_only / standard_behavior_differs_from_gnucobol."
+  ]
+}
