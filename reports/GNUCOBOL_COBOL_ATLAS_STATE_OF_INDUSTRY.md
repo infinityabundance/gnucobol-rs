@@ -44,7 +44,7 @@ runtime (`libcob/reportio.c`) are **absent in 2.2, appeared in 3.1.2** — a rel
 runtime modules. **COMP-6** runtime support (`numeric.c`) appeared only in **3.2** (absent in 2.2 *and*
 3.1.2). Monotonic growth: testsuite 781→1135→1346, parser tokens 601→926→971 (largest grammar jump
 2.2→3.1). Plus the **vendor** scars: IBM OS/VS→Enterprise v6 (same syntax, different execution); Micro
-Focus behavior is a directive *family*, not a version (V-axis).
+Focus behavior is a directive *family*, not a version (V-axis). **Toolchain scar:** GnuCOBOL 3.1.2 (2020) does not compile on this GCC-16 host (configure ok; `libcob/call.c:1284` fails under C23's `()`=`(void)` function-pointer strictness) — so the runtime `--list-*` cross-release diff needs an older toolchain; the source-level drift above needs no build.
 
 ## 8. What gnucobol-rs has sealed
 16 courts (see `reports/claim-ladder.json`): decimal MOVE, PIC/field-model (+P), layout (+ODO

@@ -3,18 +3,63 @@
   "evidence_kind": "oracle_source (extracted release source trees; not built)",
   "note": "Source-level cross-release drift across downloaded anchors (2.2/3.1.2/3.2). Per-feature presence is by RUNTIME MODULE / source file, not a build. The temporal join fields (first_runtime_functional) come from here.",
   "size_metrics": {
-    "2.2": {"testsuite_cases": 781, "reserved_c_entries": 915, "parser_tokens": 601, "news_lines": 625},
-    "3.1.2": {"testsuite_cases": 1135, "reserved_c_entries": 1228, "parser_tokens": 926, "news_lines": 989},
-    "3.2": {"testsuite_cases": 1346, "reserved_c_entries": 1290, "parser_tokens": 971, "news_lines": 1526}
+    "2.2": {
+      "testsuite_cases": 781,
+      "reserved_c_entries": 915,
+      "parser_tokens": 601,
+      "news_lines": 625
+    },
+    "3.1.2": {
+      "testsuite_cases": 1135,
+      "reserved_c_entries": 1228,
+      "parser_tokens": 926,
+      "news_lines": 989
+    },
+    "3.2": {
+      "testsuite_cases": 1346,
+      "reserved_c_entries": 1290,
+      "parser_tokens": 971,
+      "news_lines": 1526
+    }
   },
   "feature_first_seen": {
-    "mlio.c": {"first_release": "3.1.2", "what": "JSON/XML GENERATE runtime"},
-    "reportio.c": {"first_release": "3.1.2", "what": "Report Writer runtime"},
-    "comp6": {"first_release": "3.2", "what": "COMP-6"}
+    "mlio.c": {
+      "first_release": "3.1.2",
+      "what": "JSON/XML GENERATE runtime"
+    },
+    "reportio.c": {
+      "first_release": "3.1.2",
+      "what": "Report Writer runtime"
+    },
+    "comp6": {
+      "first_release": "3.2",
+      "what": "COMP-6"
+    }
   },
   "findings": [
     "JSON/XML GENERATE (libcob/mlio.c) and Report Writer (libcob/reportio.c) are ABSENT in 2.2, APPEARED in 3.1.2: a release that added whole runtime modules.",
     "COMP-6 runtime support (numeric.c) is absent in 2.2 AND 3.1.2, appeared in 3.2: newer than typical assumption -- a behavior_changed_between_releases signal.",
-    "Monotonic growth: testsuite 781->1135->1346, parser tokens 601->926->971 (largest grammar jump 2.2->3.1)."
-  ]
+    "Monotonic growth: testsuite 781->1135->1346, parser tokens 601->926->971 (largest grammar jump 2.2->3.1).",
+    "PORTABILITY SCAR: GnuCOBOL 3.1.2 (2020) does NOT compile on GCC-16 (2026) -- configure succeeds but libcob/call.c:1284 fails under C23 function-pointer strictness. Source-level drift (above) needs no build; the runtime --list-* cross-release diff would need an older toolchain or a source patch. This is why only 3.2 is the admitted oracle."
+  ],
+  "build_attempts": {
+    "gnucobol-3.2": {
+      "compiled": true,
+      "host": "GCC-16",
+      "note": "the admitted oracle; builds (lab/oracle)"
+    },
+    "gnucobol-3.1.2": {
+      "compiled": false,
+      "host": "GCC-16",
+      "configure": "ok (without-db, json-c)",
+      "failed_at": "libcob/call.c:1284",
+      "reason": "C23 default: () means (void); the 2020 release's K&R-style function-pointer calls ('too many arguments to unifunc.funcint') are now hard errors on GCC-16",
+      "portability_scar": true
+    },
+    "gnucobol-2.2": {
+      "compiled": false,
+      "host": "GCC-16",
+      "note": "not attempted; older than 3.1.2, expected to fail the same/worse"
+    }
+  }
 }
