@@ -1,0 +1,7 @@
+{
+  "schema": "gnucobol-atlas-testsuite-feature-index-v1",
+  "release_id": "gnucobol-3.2",
+  "evidence_kind": "oracle_source (testsuite)",
+  "categories": {"configuration": 24, "data_binary": 18, "data_display": 9, "data_packed": 23, "data_pointer": 1, "listings": 36, "run_accept": 6, "run_extensions": 107, "run_file": 106, "run_functions": 126, "run_fundamental": 114, "run_initialize": 14, "run_manual_screen": 62, "run_misc": 180, "run_ml": 14, "run_refmod": 11, "run_reportwriter": 28, "run_returncode": 3, "run_subscripts": 13, "syn_copy": 23, "syn_definition": 64, "syn_file": 45, "syn_functions": 16, "syn_literals": 16, "syn_misc": 154, "syn_move": 18, "syn_multiply": 3, "syn_occurs": 14, "syn_redefines": 17, "syn_refmod": 5, "syn_reportwriter": 11, "syn_screen": 19, "syn_set": 2, "syn_subscripts": 6, "syn_value": 13, "used_binaries": 25},
+  "data_domain_sample_titles": ["data_packed: PACKED-DECIMAL dump", "data_packed: PACKED-DECIMAL used with DISPLAY", "data_packed: PACKED-DECIMAL used with MOVE", "data_binary: BINARY: 2-4-8 big-endian", "data_binary: BINARY: 2-4-8 native", "data_binary: BINARY: 1-2-4-8 big-endian", "data_display: DISPLAY: Sign ASCII", "data_display: DISPLAY: Sign ASCII (2)", "data_display: DISPLAY: Sign EBCDIC", "syn_redefines: REDEFINES: not following entry-name", "syn_redefines: REDEFINES: level 02 by 01", "syn_redefines: REDEFINES: level 03 by 02", "syn_occurs: OCCURS with level 01 and 77", "syn_occurs: OCCURS with level 66 / 78 / 88", "syn_occurs: OCCURS with level 66"]
+}

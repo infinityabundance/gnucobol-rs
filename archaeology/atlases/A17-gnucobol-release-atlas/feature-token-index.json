@@ -1,0 +1,21 @@
+{
+  "schema": "gnucobol-atlas-feature-token-index-v1",
+  "release_id": "gnucobol-3.2",
+  "evidence_kind": "oracle_source",
+  "method": "case-insensitive token counts in the admitted cobc/parser.y (grammar), cobc/codegen.c (codegen), and the surface runtime module. grammar-only + no-runtime => recognized-not-implemented; runtime-module hits => implemented (often backend-dependent).",
+  "tokens": {
+    "alter": {"parser_y": 25, "codegen_c": 21, "runtime_module": "(none)", "module_hits": 0, "classification": "recognized_grammar_only"},
+    "call": {"parser_y": 0, "codegen_c": 26, "runtime_module": "call.c", "module_hits": 17, "classification": "implemented"},
+    "comp_6": {"parser_y": 3, "codegen_c": 6, "runtime_module": "numeric.c", "module_hits": 5, "classification": "implemented"},
+    "examine": {"parser_y": 47, "codegen_c": 0, "runtime_module": "(none)", "module_hits": 0, "classification": "recognized_grammar_only"},
+    "file_io": {"parser_y": 12, "codegen_c": 12, "runtime_module": "fileio.c", "module_hits": 214, "classification": "implemented"},
+    "inspect": {"parser_y": 81, "codegen_c": 0, "runtime_module": "strings.c", "module_hits": 197, "classification": "runtime_module_present"},
+    "intrinsic": {"parser_y": 0, "codegen_c": 1, "runtime_module": "intrinsic.c", "module_hits": 110, "classification": "implemented"},
+    "json_generate": {"parser_y": 56, "codegen_c": 9, "runtime_module": "mlio.c", "module_hits": 114, "classification": "implemented"},
+    "report_writer": {"parser_y": 248, "codegen_c": 371, "runtime_module": "reportio.c", "module_hits": 292, "classification": "implemented"},
+    "screen_section": {"parser_y": 319, "codegen_c": 56, "runtime_module": "screenio.c", "module_hits": 370, "classification": "implemented"},
+    "string": {"parser_y": 0, "codegen_c": 0, "runtime_module": "strings.c", "module_hits": 4, "classification": "runtime_module_present"},
+    "xml": {"parser_y": 120, "codegen_c": 31, "runtime_module": "mlio.c", "module_hits": 329, "classification": "implemented"}
+  },
+  "note": "EXAMINE in parser.y but compiles under NO -std (see G/dialect-behavior.json) = grammar-present yet dialect-gated/obsolete: a sharp recognized-not-functional case."
+}

@@ -1,36 +1,292 @@
 {
   "schema": "gnucobol-atlas-surface-taxonomy-v1",
   "evidence_kind": "reference_curated",
-  "note": "The feature/SURFACE taxonomy the join (A19) ranges over. Tracking surfaces (not just 'features') is the point: a surface can be standard-present, vendor-origin, parsed-inert, backend-dependent, or sealed in gnucobol-rs — those are different facts. `gnucobol_rs_status` ties each surface to this project's sealed courts; that turns the atlas into a roadmap generator.",
+  "note": "The feature/SURFACE taxonomy the join (A19) ranges over. Tracking surfaces (not just 'features') is the point: a surface can be standard-present, vendor-origin, parsed-inert, backend-dependent, or sealed in gnucobol-rs \u2014 those are different facts. `gnucobol_rs_status` ties each surface to this project's sealed courts; that turns the atlas into a roadmap generator. Each surface carries standard_presence{}/gnucobol_release_presence{} (filled by the A19 join / Phase-3 builds).",
   "surfaces": [
-    {"surface_id": "source_form", "family": "source_form", "gnucobol_rs_status": "n/a (data court)", "fixture_priority": "low"},
-    {"surface_id": "preprocessor", "family": "preprocessor", "gnucobol_rs_status": "n/a", "fixture_priority": "low"},
-    {"surface_id": "copy_replace", "family": "preprocessor", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.5/6", "fixture_priority": "already_sealed"},
-    {"surface_id": "data_description", "family": "data_description", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.3/4", "fixture_priority": "already_sealed"},
-    {"surface_id": "numeric_storage_display", "family": "numeric_storage", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.2", "fixture_priority": "already_sealed"},
-    {"surface_id": "numeric_storage_packed", "family": "numeric_storage", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.2/13", "fixture_priority": "already_sealed"},
-    {"surface_id": "numeric_storage_binary", "family": "numeric_storage", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.14", "fixture_priority": "already_sealed"},
-    {"surface_id": "edited_pictures", "family": "data_description", "gnucobol_rs_status": "sealed_decode_16a", "campaign": "GNURUST.16", "fixture_priority": "high"},
-    {"surface_id": "p_scaling", "family": "data_description", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.9", "fixture_priority": "already_sealed"},
-    {"surface_id": "occurs_depending", "family": "data_description", "gnucobol_rs_status": "sealed_physical_max", "campaign": "GNURUST.10", "fixture_priority": "already_sealed"},
-    {"surface_id": "condition_names", "family": "condition_names", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.11/12", "fixture_priority": "already_sealed"},
-    {"surface_id": "value_clause", "family": "data_description", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.8", "fixture_priority": "already_sealed"},
-    {"surface_id": "arithmetic_add_sub_mul", "family": "arithmetic", "gnucobol_rs_status": "sealed", "campaign": "GNURUST.7/13", "fixture_priority": "already_sealed"},
-    {"surface_id": "arithmetic_divide", "family": "arithmetic", "gnucobol_rs_status": "deferred", "campaign": "GNURUST.17", "fixture_priority": "medium"},
-    {"surface_id": "code_page_ebcdic", "family": "encoding", "gnucobol_rs_status": "sealed_cp500", "campaign": "GNURUST.15", "fixture_priority": "high"},
-    {"surface_id": "synchronized_alignment", "family": "data_description", "gnucobol_rs_status": "fails_closed", "fixture_priority": "medium"},
-    {"surface_id": "redefines", "family": "data_description", "gnucobol_rs_status": "sealed_le_target", "campaign": "GNURUST.4", "fixture_priority": "already_sealed"},
-    {"surface_id": "file_io", "family": "file_io", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none"},
-    {"surface_id": "indexed_file_backend", "family": "file_io", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none", "note": "BDB/VBISAM dependency"},
-    {"surface_id": "line_sequential", "family": "file_io", "gnucobol_rs_status": "out_of_model", "fixture_priority": "low"},
-    {"surface_id": "runtime_config", "family": "runtime_config", "gnucobol_rs_status": "n/a (pure core)", "fixture_priority": "none"},
-    {"surface_id": "system_routines", "family": "system_routines", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none"},
-    {"surface_id": "screen_terminal", "family": "screen_terminal", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none", "note": "curses dependency"},
-    {"surface_id": "report_writer", "family": "report_writer", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none"},
-    {"surface_id": "json_xml_generate", "family": "json_xml", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none", "note": "cJSON/JSON-C/libxml2 dependency"},
-    {"surface_id": "call_linkage", "family": "call_linkage", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none"},
-    {"surface_id": "intrinsics", "family": "intrinsics", "gnucobol_rs_status": "out_of_model", "fixture_priority": "low"},
-    {"surface_id": "object_oriented", "family": "object_oriented", "gnucobol_rs_status": "out_of_model", "fixture_priority": "none"},
-    {"surface_id": "reserved_words", "family": "reserved_words", "gnucobol_rs_status": "oracle_indexed", "campaign": "atlas-G", "fixture_priority": "n/a"}
+    {
+      "surface_id": "source_form",
+      "family": "source_form",
+      "gnucobol_rs_status": "n/a (data court)",
+      "fixture_priority": "low",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "preprocessor",
+      "family": "preprocessor",
+      "gnucobol_rs_status": "n/a",
+      "fixture_priority": "low",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "copy_replace",
+      "family": "preprocessor",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.5/6",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "data_description",
+      "family": "data_description",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.3/4",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "numeric_storage_display",
+      "family": "numeric_storage",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.2",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "numeric_storage_packed",
+      "family": "numeric_storage",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.2/13",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "numeric_storage_binary",
+      "family": "numeric_storage",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.14",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "edited_pictures",
+      "family": "data_description",
+      "gnucobol_rs_status": "sealed_decode_16a",
+      "campaign": "GNURUST.16",
+      "fixture_priority": "high",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "p_scaling",
+      "family": "data_description",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.9",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "occurs_depending",
+      "family": "data_description",
+      "gnucobol_rs_status": "sealed_physical_max",
+      "campaign": "GNURUST.10",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "condition_names",
+      "family": "condition_names",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.11/12",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "value_clause",
+      "family": "data_description",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.8",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "arithmetic_add_sub_mul",
+      "family": "arithmetic",
+      "gnucobol_rs_status": "sealed",
+      "campaign": "GNURUST.7/13",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "arithmetic_divide",
+      "family": "arithmetic",
+      "gnucobol_rs_status": "deferred",
+      "campaign": "GNURUST.17",
+      "fixture_priority": "medium",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "code_page_ebcdic",
+      "family": "encoding",
+      "gnucobol_rs_status": "sealed_cp500",
+      "campaign": "GNURUST.15",
+      "fixture_priority": "high",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "synchronized_alignment",
+      "family": "data_description",
+      "gnucobol_rs_status": "fails_closed",
+      "fixture_priority": "medium",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "redefines",
+      "family": "data_description",
+      "gnucobol_rs_status": "sealed_le_target",
+      "campaign": "GNURUST.4",
+      "fixture_priority": "already_sealed",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "file_io",
+      "family": "file_io",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "indexed_file_backend",
+      "family": "file_io",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "note": "BDB/VBISAM dependency",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "line_sequential",
+      "family": "file_io",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "low",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "runtime_config",
+      "family": "runtime_config",
+      "gnucobol_rs_status": "n/a (pure core)",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "system_routines",
+      "family": "system_routines",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "screen_terminal",
+      "family": "screen_terminal",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "note": "curses dependency",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "report_writer",
+      "family": "report_writer",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "json_xml_generate",
+      "family": "json_xml",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "note": "cJSON/JSON-C/libxml2 dependency",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "call_linkage",
+      "family": "call_linkage",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "intrinsics",
+      "family": "intrinsics",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "low",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "object_oriented",
+      "family": "object_oriented",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "reserved_words",
+      "family": "reserved_words",
+      "gnucobol_rs_status": "oracle_indexed",
+      "campaign": "atlas-G",
+      "fixture_priority": "n/a",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "debug_trace",
+      "family": "debug_trace",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "diagnostics",
+      "family": "diagnostics",
+      "gnucobol_rs_status": "n/a",
+      "fixture_priority": "none",
+      "note": "compiler messages; cobc-oracle-rs territory",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "communication_section",
+      "family": "communication_section",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "note": "obsolete CD/comms",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    },
+    {
+      "surface_id": "segmentation",
+      "family": "segmentation",
+      "gnucobol_rs_status": "out_of_model",
+      "fixture_priority": "none",
+      "note": "obsolete SECTION priority numbers",
+      "standard_presence": {},
+      "gnucobol_release_presence": {}
+    }
   ]
 }
