@@ -8,7 +8,7 @@ prove them **byte-identical** against the built GnuCOBOL 3.2 `libcob` oracle.
 
 For the three sealed elementary `cob_move` type pairs — **DISPLAY→DISPLAY**, **DISPLAY→PACKED**
 (COMP-3 encode), **PACKED→DISPLAY** (COMP-3 decode) — on a little-endian ASCII host under
-`LC_ALL=C.UTF-8`, the Rust `cobol-decimal-rs::cob_move` produces **byte-identical** destination
+`LC_ALL=C.UTF-8`, the Rust `gnucobol-rs::cob_move` produces **byte-identical** destination
 field bytes to `libcob`'s `cob_move`, for admitted `(type, digits, scale, flags)` attributes.
 Byte domain: *field-storage* and *move-result* bytes (`GNURUST.BYTEDOMAIN.0`).
 

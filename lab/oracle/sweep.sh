@@ -19,7 +19,7 @@ if [ ! -x "$HARNESS" ]; then
 fi
 
 echo "building Rust rows + gen_rows (release)..."
-( cd "$ROOT" && cargo build --release -p cobol-decimal-rs --examples >/dev/null 2>&1 ) || exit 2
+( cd "$ROOT" && cargo build --release -p gnucobol-rs --examples >/dev/null 2>&1 ) || exit 2
 GEN="$ROOT/target/release/examples/gen_rows"
 ROWS_BIN="$ROOT/target/release/examples/rows"
 

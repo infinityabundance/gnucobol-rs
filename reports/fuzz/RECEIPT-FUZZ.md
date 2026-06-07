@@ -1,6 +1,6 @@
 # Fuzz sub-receipt — hostile bytes/attrs, fix-and-seed
 
-Detached fuzz crate (`crates/cobol-decimal-rs/fuzz/`, empty `[workspace]` → not built by the parent
+Detached fuzz crate (`crates/gnucobol-rs/fuzz/`, empty `[workspace]` → not built by the parent
 gate; verified: `cargo clippy --all-targets` from the workspace root does not compile it). Entry
 behind the `fuzzing` feature (`__fuzz_cob_move`). cargo-fuzz 0.13 on nightly.
 

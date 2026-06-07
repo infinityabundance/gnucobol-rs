@@ -4,7 +4,7 @@ Doctrine: prove the **sharpest** index/arithmetic invariants — the exact bound
 actual out-of-bounds access if a guard or the scale arithmetic regressed — not broad "the parser is
 correct" vibes. Each harness is allocation-free and converges quickly.
 
-Run: `cargo kani` in `crates/cobol-decimal-rs/` (cargo-kani 0.67).
+Run: `cargo kani` in `crates/gnucobol-rs/` (cargo-kani 0.67).
 
 | Harness | Invariant | Verdict |
 |---------|-----------|---------|

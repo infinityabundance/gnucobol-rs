@@ -1,7 +1,7 @@
 # Detached fuzz crate: an empty [workspace] makes this its own root, so the parent gate
 # (build/test/clippy/fmt) never compiles it.
 [package]
-name = "cobol-decimal-rs-fuzz"
+name = "gnucobol-rs-fuzz"
 version = "0.0.0"
 publish = false
 edition = "2021"
@@ -14,7 +14,7 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "0.4"
 
-[dependencies.cobol-decimal-rs]
+[dependencies.gnucobol-rs]
 path = ".."
 features = ["fuzzing"]
 

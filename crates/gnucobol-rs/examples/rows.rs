@@ -7,7 +7,7 @@
 //!
 //! This example is test infrastructure, not part of the crate's API.
 
-use cobol_decimal_rs::{cob_move, FieldAttr};
+use gnucobol_rs::{cob_move, FieldAttr};
 use std::io::{self, BufRead, Write};
 
 fn parse_hex(s: &str, size: usize) -> Option<Vec<u8>> {

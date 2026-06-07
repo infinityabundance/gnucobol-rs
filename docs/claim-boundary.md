@@ -26,7 +26,7 @@ excludes is a lie of omission.
   not authorities here; the built GnuCOBOL oracle is.
 - **Not a diagnostics match.** Compiler message wording is not reproduced.
 
-## The first sealed slice — `cobol-decimal-rs`
+## The first sealed slice — `gnucobol-rs`
 
 **Claims:** for admitted PICs, the Rust model reproduces GnuCOBOL's exact bytes for
 packed-decimal (COMP-3 / PACKED-DECIMAL), zoned-with-sign, and display numeric fields, and

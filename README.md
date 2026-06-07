@@ -39,7 +39,7 @@ here always means *matches the built oracle*, never *matches our reading of a sp
 
 | Crate | Derives from | License | Scope |
 |-------|--------------|---------|-------|
-| [`cobol-decimal-rs`](crates/cobol-decimal-rs) | `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` | **LGPL-3.0-or-later** | COMP-3 / zoned / display byte semantics + `MOVE` between them |
+| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` | **LGPL-3.0-or-later** | COMP-3 / zoned / display byte semantics + `MOVE` between them |
 | [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | build/run `cobc` fixtures, capture deterministic JSON receipts |
 
 ## License & derivation boundary

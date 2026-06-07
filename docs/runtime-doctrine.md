@@ -27,7 +27,7 @@ special_names_policy =
 ## Display vs storage (do not conflate)
 
 A passing `DISPLAY` stdout test is **not** storage compatibility. These are distinct artifacts
-and `cobol-decimal-rs` claims only the storage/move ones:
+and `gnucobol-rs` claims only the storage/move ones:
 
 ```
 field_storage_bytes      # the bytes a field holds      <- CLAIMED (decimal slice)

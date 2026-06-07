@@ -17,7 +17,7 @@ a permissive license — each crate inherits the copyleft of the upstream files 
 
 | Crate | Derives from (read + ported / driven) | Inherited license |
 |-------|----------------------------------------|-------------------|
-| `cobol-decimal-rs` | `libcob/move.c` (`cob_move_display_to_packed` @477, `cob_move_packed_to_display` @582, `store_common_region` @147, `cob_move` @1446), `libcob/numeric.c` (`cob_packed_get_sign` @967, `cob_set_packed_zero` @1128, `cob_set_packed_u64` @1373, `packed_bytes` @92), `libcob/common.c` (`cob_real_get_sign` @3712, `cob_real_put_sign` @3763, `cob_get_sign_ascii` @1450, `locate_sign` @3693), `libcob/coblocal.h` / `libcob/common.h` (macros, attr/type constants) | **LGPL-3.0-or-later** |
+| `gnucobol-rs` | `libcob/move.c` (`cob_move_display_to_packed` @477, `cob_move_packed_to_display` @582, `store_common_region` @147, `cob_move` @1446), `libcob/numeric.c` (`cob_packed_get_sign` @967, `cob_set_packed_zero` @1128, `cob_set_packed_u64` @1373, `packed_bytes` @92), `libcob/common.c` (`cob_real_get_sign` @3712, `cob_real_put_sign` @3763, `cob_get_sign_ascii` @1450, `locate_sign` @3693), `libcob/coblocal.h` / `libcob/common.h` (macros, attr/type constants) | **LGPL-3.0-or-later** |
 | `cobc-oracle-rs` | *drives* the `cobc` binary as a subprocess; copies **no** GPL source logic — it only spawns the compiler and reads its outputs | **GPL-3.0-or-later** (conservative: it is tooling for, and tightly coupled to, the GPL compiler) |
 
 ## Notices retained

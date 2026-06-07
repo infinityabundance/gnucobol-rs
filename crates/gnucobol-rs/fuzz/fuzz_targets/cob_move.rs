@@ -6,5 +6,5 @@
 use libfuzzer_sys::fuzz_target;
 
 fuzz_target!(|data: &[u8]| {
-    cobol_decimal_rs::__fuzz_cob_move(data);
+    gnucobol_rs::__fuzz_cob_move(data);
 });

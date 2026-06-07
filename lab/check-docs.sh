@@ -29,12 +29,12 @@ done
 note "all README-referenced docs exist"
 
 # 3. COB_MAX_DIGITS constant consistent in source and equals the oracle's value (38).
-RS_MAXD=$(grep -oE 'COB_MAX_DIGITS: i64 = [0-9]+' crates/cobol-decimal-rs/src/lib.rs | grep -oE '[0-9]+$')
+RS_MAXD=$(grep -oE 'COB_MAX_DIGITS: i64 = [0-9]+' crates/gnucobol-rs/src/lib.rs | grep -oE '[0-9]+$')
 [ "$RS_MAXD" = "38" ] || bad "COB_MAX_DIGITS in lib.rs is '$RS_MAXD', expected 38 (libcob/common.h:607)"
 note "COB_MAX_DIGITS = $RS_MAXD"
 
 # 4. attr.rs type/flag constants match the values documented in the admission/selfcheck.
-check_const() { grep -qE "$2" crates/cobol-decimal-rs/src/attr.rs || bad "attr.rs missing/!= $1"; }
+check_const() { grep -qE "$2" crates/gnucobol-rs/src/attr.rs || bad "attr.rs missing/!= $1"; }
 check_const "COB_TYPE_NUMERIC_DISPLAY=0x10" 'COB_TYPE_NUMERIC_DISPLAY: u16 = 0x10'
 check_const "COB_TYPE_NUMERIC_PACKED=0x12"  'COB_TYPE_NUMERIC_PACKED: u16 = 0x12'
 check_const "COB_FLAG_HAVE_SIGN=1"          'COB_FLAG_HAVE_SIGN: u16 = 0x0001'
@@ -52,7 +52,7 @@ else
 fi
 
 # 6. The sealed-claim statement is identical across README, claim-boundary, and lib.rs (3 conversions).
-for f in README.md docs/claim-boundary.md crates/cobol-decimal-rs/src/lib.rs; do
+for f in README.md docs/claim-boundary.md crates/gnucobol-rs/src/lib.rs; do
   grep -qiE 'COMP-3|packed' "$f" || bad "$f no longer states the COMP-3 claim"
 done
 note "sealed-claim statement present in README, claim-boundary, lib.rs"

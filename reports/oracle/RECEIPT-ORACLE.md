@@ -5,13 +5,13 @@
 `lab/oracle/decimal_harness.c` links the **built** `libcob` (admitted), constructs `cob_field` /
 `cob_field_attr` with explicit `(type, digits, scale, flags)`, calls the real `cob_move`, and dumps
 the destination field bytes as lowercase hex — one structured line per case. The Rust mirror
-`crates/cobol-decimal-rs/examples/rows.rs` consumes the **identical** rows and emits the same
+`crates/gnucobol-rs/examples/rows.rs` consumes the **identical** rows and emits the same
 format. Full byte streams are compared (`GNURUST.BYTESTREAM.0`): not `$(...)`-captured, not
 line-zipped.
 
 ## Rows (`GNURUST.DECEDGE.0` + `GNURUST.SWEEPCORPUS.0`)
 
-Generated deterministically by `crates/cobol-decimal-rs/examples/gen_rows.rs <seed>`:
+Generated deterministically by `crates/gnucobol-rs/examples/gen_rows.rs <seed>`:
 - structured boundary families: digit counts {1,2,3,4,5,7,17,18} × scales {0,1,n-1,n} ×
   value kinds {zero, one, all-nines, leading-zeros} × {unsigned, signed±}, for all three
   sealed conversions (incl. odd/even-digit packed alignment — the `EVENPACK` family);

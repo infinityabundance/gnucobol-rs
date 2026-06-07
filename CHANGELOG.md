@@ -12,7 +12,7 @@ oracle-first method: each entry names the slice sealed and the parity it proved.
   (source/stdout/stderr/exit + sha256, oracle + platform identity).
 - Project doctrine: claim boundary, porting method, derivation/license boundary.
 
-### GNURUST.2 — `cobol-decimal-rs` byte court
+### GNURUST.2 — `gnucobol-rs` byte court
 - Faithful LGPL-3.0+ port of GnuCOBOL packed-decimal (COMP-3), zoned, and display numeric
   byte semantics and the `MOVE` conversions between them, proven byte-identical against the
   built `libcob` runtime-library oracle. Kani reduced-surface proof + detached fuzz harness.

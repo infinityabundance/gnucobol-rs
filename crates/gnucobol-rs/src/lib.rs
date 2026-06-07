@@ -1,4 +1,4 @@
-//! # cobol-decimal-rs
+//! # gnucobol-rs
 //!
 //! A **faithful, line-cited port** of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 //! numeric **byte semantics** and the `MOVE` conversions between them, proven byte-identical

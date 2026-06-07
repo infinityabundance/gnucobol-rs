@@ -1,4 +1,4 @@
-# cobol-decimal-rs
+# gnucobol-rs
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -17,12 +17,12 @@ For three elementary `cob_move` type pairs on a little-endian ASCII host under `
 - **DISPLAY → PACKED** (COMP-3 encode)
 - **PACKED → DISPLAY** (COMP-3 decode)
 
-`cobol-decimal-rs::cob_move` produces **byte-identical** destination field bytes to `libcob`'s
+`gnucobol-rs::cob_move` produces **byte-identical** destination field bytes to `libcob`'s
 `cob_move`. Verified by a differential sweep of 13,152 cases/seed across 7 seeds (`FAIL=0`), two
 sharp Kani proofs, and 20M fuzz runs.
 
 ```rust
-use cobol_decimal_rs::{cob_move, FieldAttr, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED, COB_FLAG_HAVE_SIGN};
+use gnucobol_rs::{cob_move, FieldAttr, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED, COB_FLAG_HAVE_SIGN};
 
 // MOVE a signed display S9(3)V99 value -012.34 into a COMP-3 field.
 let src = [0x30, 0x31, 0x32, 0x33, 0x74]; // "0123" + overpunched '4' ('t')

@@ -10,8 +10,8 @@ as evidence for a higher one.
 
 | # | Court | Question it answers | Status |
 |---|-------|---------------------|--------|
-| 1 | **Storage parity** | does a field hold the same bytes? | **sealing now** (`cobol-decimal-rs`) |
-| 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealing now** (`cobol-decimal-rs`) |
+| 1 | **Storage parity** | does a field hold the same bytes? | **sealing now** (`gnucobol-rs`) |
+| 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealing now** (`gnucobol-rs`) |
 | 3 | Initialization parity | `VALUE` / figurative constants → initial bytes | future |
 | 4 | Comparison parity | `IF a < b`, `SEARCH ALL`, collation | future |
 | 5 | Display/output parity | `DISPLAY`, edited pictures, Report Writer | future |

@@ -78,7 +78,7 @@ these is claimed by the current decimal slice.
 
 | Code | Discipline | Applied now? |
 |------|-----------|--------------|
-| `GNURUST.DECAPI.0` | decimal value API = {sign, digits, scale, width, sign-nibble}; `i64` is fallible convenience, never authority | **yes — `cobol-decimal-rs`** |
+| `GNURUST.DECAPI.0` | decimal value API = {sign, digits, scale, width, sign-nibble}; `i64` is fallible convenience, never authority | **yes — `gnucobol-rs`** |
 | `GNURUST.BYTESTREAM.0` | all oracle comparisons are byte comparisons; hexdump binary; preserve NUL/CR/LF | **yes** |
 | `GNURUST.SENTINEL.0` | fill target with `0xA5` before MOVE; assert only the admitted span changed | **yes** |
 | `GNURUST.DECEDGE.0` | structured boundary families (digits 1/2/17/18, scale edges, all-9s, ±0, leading/trailing zeros) | **yes** |
@@ -217,7 +217,7 @@ Deltas between the port and the oracle are classified in
 
 | Code | Court | Core trap / non-claim | Now? |
 |------|-------|-----------------------|------|
-| `GNURUST.PUREDEC.0` | pure kernel claim | `cobol-decimal-rs`: no global mutable state, no env/locale/fs/runtime-config reads, deterministic for (bytes, attrs) | **claimed** |
+| `GNURUST.PUREDEC.0` | pure kernel claim | `gnucobol-rs`: no global mutable state, no env/locale/fs/runtime-config reads, deterministic for (bytes, attrs) | **claimed** |
 | `GNURUST.NO-FLOAT-DECIMAL.0` | no float path | decimal values never roundtrip through `f32`/`f64`; tests assert it | **claimed** |
 | `GNURUST.GOLDEN.0` | regenerable goldens | every golden fixture: generator command + oracle version + source row + output hash + regen script; manual edit forbidden | **applied** |
 | `GNURUST.SWEEPCORPUS.0` | sweep corpus | fixed seed corpus committed; failing random case promoted to fixed corpus; classified-out separate from pass count | **applied** |
@@ -262,7 +262,7 @@ Deltas between the port and the oracle are classified in
 | `GNURUST.CMODEL.0` | C integer model | `sizeof` char/short/int/long/size_t, char signedness, endianness | **captured** |
 | `GNURUST.CLOCALE.0` | C locale | `setlocale(LC_ALL,NULL)` + `localeconv()` decimal/thousands — C runtime's own view | **captured** |
 | `GNURUST.COBINFO.0` | compiler self-desc | `cobc --info` raw+normalized hash (distro builds differ at same version) | **captured** |
-| `GNURUST.PUREDEC-SENDSYNC.0` | pure-crate threads | `cobol-decimal-rs` types `Send+Sync`, deterministic under concurrency; libcob **not** asserted thread-safe | **claimed** |
+| `GNURUST.PUREDEC-SENDSYNC.0` | pure-crate threads | `gnucobol-rs` types `Send+Sync`, deterministic under concurrency; libcob **not** asserted thread-safe | **claimed** |
 | `GNURUST.RECURSIVE.0` | recursion | `RECURSIVE`/`LOCAL-STORAGE`-implies-recursive; stack-vs-heap; don't model as Rust recursion | future |
 | `GNURUST.THREAD.0` | multithreading | no multithreaded runtime compat; `Send+Sync` ≠ COBOL-runtime-safe | future |
 | `GNURUST.EXCINTROSPECT.0` | exception introspection | `EXCEPTION-FILE/LOCATION/STATEMENT` are branchable observability APIs |
