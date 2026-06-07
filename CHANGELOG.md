@@ -3,6 +3,13 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.6.3]
+- **GNURUST.17 — cp500 EBCDIC zoned-decimal numeric DISPLAY decode.** `Decimal::from_ebcdic_zoned`
+  decodes raw mainframe zoned-decimal bytes: cp500 translate (`GNURUST.15`) + the `cob_get_sign_ebcdic`
+  overpunch sign (final byte `'A'..'I'`=+, `'J'..'R'`=−, `'{'`/`'}'`=±0, `'0'..'9'`=unsigned; raw zones
+  `0xC`/`0xD`/`0xF`). Proven vs `cobc -fsign=EBCDIC` (ebcdic_num_sweep 120/0). Non-claims: cp037, edited
+  numeric under cp500, binary/packed via this path, mixed encodings. Additive method → patch.
+
 ## [0.6.2]
 - `layout::lay_out` now sizes **edited DISPLAY fields** via `edited::edited_size` (composing
   `GNURUST.4` + `GNURUST.16`), so a record containing an edited picture lays out instead of failing

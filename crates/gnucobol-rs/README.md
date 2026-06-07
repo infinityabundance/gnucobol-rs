@@ -124,6 +124,13 @@ binary/packed conversion are non-claims (binary/packed bytes pass through untouc
 against `cobc`'s MOVE→edited→DISPLAY (92/0). Decode-only: numeric→edited formatting, reports, locale,
 EBCDIC edited, and edited arithmetic are non-claims; corrupt/foreign bytes fail closed.
 
+## `GNURUST.17` — cp500 EBCDIC zoned numeric decode
+
+`Decimal::from_ebcdic_zoned(data, attr)` decodes raw mainframe **zoned-decimal numeric DISPLAY** bytes:
+cp500 translate (`GNURUST.15`) + the `cob_get_sign_ebcdic` overpunch sign (final byte `'A'..'I'`=+,
+`'J'..'R'`=−, `'{'`/`'}'`=±0; raw zones `0xC`/`0xD`/`0xF`). Proven vs `cobc -fsign=EBCDIC` (120/0). cp037,
+edited-numeric under cp500, and binary/packed via this path are non-claims.
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

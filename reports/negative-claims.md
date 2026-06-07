@@ -23,6 +23,9 @@ claimed_now:
   - id: ebcdic-cp500-display
     what: raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table (cob_load_collation)
     scope: cp500 only; alphanumeric DISPLAY decode; binary/packed pass through untouched (GNURUST.15)
+  - id: ebcdic-zoned-numeric
+    what: raw cp500 EBCDIC zoned-decimal numeric DISPLAY bytes -> value (cp500 + cob_get_sign_ebcdic sign)
+    scope: cp500 only; numeric DISPLAY; NOT edited-numeric, NOT binary/packed via this path (GNURUST.17)
   - id: edited-decode-16a
     what: edited DISPLAY field bytes -> recovered numeric value + presentation text, matching cobc
     scope: 16a (Z 9 , . - +) + 16b ($ * CR DB B 0 /) decode; slot-based; NOT numeric->edited (16c), reports, locale (GNURUST.16)

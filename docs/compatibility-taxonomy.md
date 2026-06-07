@@ -12,6 +12,7 @@ as evidence for a higher one.
 |---|-------|---------------------|--------|
 | 0a | **Field model** | does `PIC`+`USAGE` → `{type,digits,scale,flags,size}` match `cobc`? (`P`, COMP/COMP-5/COMP-X) | **sealed** — `pic` (`GNURUST.3`, `GNURUST.9`, `GNURUST.14`) |
 | 0c | **Code page** | do raw EBCDIC DISPLAY bytes decode to the oracle's text under a named table? | **sealed** — `ebcdic` cp500 (`GNURUST.15`); cp037/numeric-zoned/DBCS fail closed |
+| 0e | **EBCDIC numeric** | do raw cp500 zoned-decimal numeric bytes decode to the oracle's value? | **sealed** — `Decimal::from_ebcdic_zoned` (`GNURUST.17`); cp037/edited-numeric/mixed fail closed |
 | 0d | **Edited decode** | do edited DISPLAY field bytes decode to the oracle's value + text? | **sealed** — `edited` 16a (`GNURUST.16`); `$ * CR DB B 0 /` + numeric→edited fail closed |
 | 0b | **Record layout** | do item offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc`? (ODO physical-max) | **sealed** — `layout` (`GNURUST.4`, `GNURUST.10`) |
 | 1 | **Storage parity** | does a field hold the same bytes? | **sealed** (`GNURUST.2`) |
