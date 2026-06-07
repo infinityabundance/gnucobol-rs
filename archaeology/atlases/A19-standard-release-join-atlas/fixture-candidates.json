@@ -1,0 +1,52 @@
+{
+  "schema": "gnucobol-atlas-fixture-candidates-v1",
+  "note": "Unsealed/partial surfaces ranked by fixture_priority \u2014 the atlas-derived next-campaign queue for gnucobol-rs. Generated from join.json.",
+  "candidates": [
+    {
+      "surface_id": "code_page_ebcdic",
+      "family": "encoding",
+      "fixture_priority": "high",
+      "gnucobol_rs_status": "sealed_cp500_decode",
+      "campaign": "GNURUST.15",
+      "drift": [
+        "platform_dependent_feature"
+      ]
+    },
+    {
+      "surface_id": "edited_pictures",
+      "family": "data_description",
+      "fixture_priority": "high",
+      "gnucobol_rs_status": "sealed_decode_16a",
+      "campaign": "GNURUST.16",
+      "drift": []
+    },
+    {
+      "surface_id": "condition_names_false_clause",
+      "family": "condition_names",
+      "fixture_priority": "medium",
+      "gnucobol_rs_status": "TRUE sealed; FALSE fails_closed",
+      "campaign": "GNURUST.12",
+      "drift": [
+        "standard_before_gnucobol"
+      ]
+    },
+    {
+      "surface_id": "arithmetic_divide",
+      "family": "arithmetic",
+      "fixture_priority": "medium",
+      "gnucobol_rs_status": "deferred",
+      "campaign": "GNURUST.17",
+      "drift": []
+    },
+    {
+      "surface_id": "synchronized_alignment",
+      "family": "data_description",
+      "fixture_priority": "medium",
+      "gnucobol_rs_status": "fails_closed",
+      "campaign": null,
+      "drift": [
+        "platform_dependent_feature"
+      ]
+    }
+  ]
+}

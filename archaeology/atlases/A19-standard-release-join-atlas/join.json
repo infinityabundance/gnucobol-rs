@@ -1,0 +1,99 @@
+{
+  "schema": "gnucobol-atlas-join-v1",
+  "axis": "A19",
+  "evidence_kind": "mixed (gnucobol_rs_axis = oracle-grounded; standard/vendor axes = reference_curated)",
+  "doctrine": "The COBOL Atlas separates formal standards, historical CODASYL specifications, government profiles, GnuCOBOL dialect modes, vendor compiler generations, platform runtimes, and preprocessor ecosystems. A surface is not 'COBOL' in the abstract until the atlas says which axis admits it, whether it is syntax-only or runtime-functional, and which oracle or document family supports the claim.",
+  "drift_types": [
+    "standard_before_gnucobol", "gnucobol_extension_before_standard", "vendor_extension_only",
+    "parsed_before_functional", "documented_before_functional", "reserved_word_before_feature",
+    "backend_dependent_feature", "platform_dependent_feature", "inert_compatibility_syntax",
+    "behavior_changed_between_releases", "oracle_bug_fixed_later", "standard_behavior_differs_from_gnucobol",
+    "physical_vs_logical_byte_domain"
+  ],
+  "rows": [
+    {
+      "surface_id": "occurs_depending", "family": "data_description",
+      "standard_axis": {"cobol_85": "present_or_related", "cobol_2002": "present", "cobol_2014": "present", "cobol_2023": "present"},
+      "gnucobol_axis": {"gnucobol_3_2": "functional_with_logical_length_caveat"},
+      "gnucobol_rs_axis": {"status": "sealed_physical_max_only", "campaign": "GNURUST.10", "non_claim": "logical/active count"},
+      "drift": ["physical_vs_logical_byte_domain"], "fixture_priority": "already_sealed"
+    },
+    {
+      "surface_id": "numeric_storage_binary", "family": "numeric_storage",
+      "standard_axis": {"cobol_85": "present", "cobol_2014": "present"},
+      "gnucobol_axis": {"gnucobol_3_2": "runtime_functional", "note": "COMP-X size table differs from COMP/COMP-5 (tight 256^k>=10^digits)"},
+      "gnucobol_rs_axis": {"status": "sealed", "campaign": "GNURUST.14", "non_claim": "binary arithmetic; SYNC; host-portable endian"},
+      "drift": ["standard_behavior_differs_from_gnucobol"], "fixture_priority": "already_sealed"
+    },
+    {
+      "surface_id": "code_page_ebcdic", "family": "encoding",
+      "standard_axis": {"note": "code-set/alphabet present across standards; concrete tables are vendor/platform"},
+      "gnucobol_axis": {"gnucobol_3_2": "runtime_functional", "ships": "ebcdic500 (cp500) tables, NOT cp037"},
+      "gnucobol_rs_axis": {"status": "sealed_cp500_decode", "campaign": "GNURUST.15", "non_claim": "cp037; numeric EBCDIC zoned; DBCS"},
+      "drift": ["platform_dependent_feature"], "fixture_priority": "high"
+    },
+    {
+      "surface_id": "edited_pictures", "family": "data_description",
+      "standard_axis": {"cobol_85": "present", "cobol_2014": "present"},
+      "gnucobol_axis": {"gnucobol_3_2": "runtime_functional"},
+      "gnucobol_rs_axis": {"status": "sealed_decode_16a", "campaign": "GNURUST.16", "non_claim": "numeric->edited; $ * CR DB B 0 / (16b); reports"},
+      "drift": [], "fixture_priority": "high"
+    },
+    {
+      "surface_id": "condition_names_false_clause", "family": "condition_names",
+      "standard_axis": {"cobol_2002": "present (SET..TO FALSE / FALSE clause)", "cobol_85": "partial"},
+      "gnucobol_axis": {"gnucobol_3_2": "runtime_functional"},
+      "gnucobol_rs_axis": {"status": "TRUE sealed; FALSE fails_closed", "campaign": "GNURUST.12", "non_claim": "SET FALSE / FALSE clause bytes"},
+      "drift": ["standard_before_gnucobol"], "fixture_priority": "medium"
+    },
+    {
+      "surface_id": "arithmetic_divide", "family": "arithmetic",
+      "standard_axis": {"cobol_85": "present", "cobol_2014": "present"},
+      "gnucobol_axis": {"gnucobol_3_2": "runtime_functional"},
+      "gnucobol_rs_axis": {"status": "deferred", "campaign": "GNURUST.17", "non_claim": "quotient/remainder bytes"},
+      "drift": [], "fixture_priority": "medium"
+    },
+    {
+      "surface_id": "json_xml_generate", "family": "json_xml",
+      "standard_axis": {"cobol_2023": "JSON/XML GENERATE present", "earlier": "vendor/extension"},
+      "gnucobol_axis": {"gnucobol_3_2": "backend_dependent", "backend": "cJSON/JSON-C, libxml2", "note": "syntax may be parsed; runtime needs optional libs"},
+      "gnucobol_rs_axis": {"status": "out_of_model", "non_claim": "not a runtime"},
+      "drift": ["backend_dependent_feature", "gnucobol_extension_before_standard"], "fixture_priority": "none"
+    },
+    {
+      "surface_id": "indexed_file_backend", "family": "file_io",
+      "standard_axis": {"cobol_85": "present (INDEXED organization)"},
+      "gnucobol_axis": {"gnucobol_3_2": "backend_dependent", "backend": "BDB / VBISAM"},
+      "gnucobol_rs_axis": {"status": "out_of_model"},
+      "drift": ["backend_dependent_feature"], "fixture_priority": "none"
+    },
+    {
+      "surface_id": "screen_section", "family": "screen_terminal",
+      "standard_axis": {"cobol_2002": "present (extension-derived)"},
+      "gnucobol_axis": {"gnucobol_3_2": "backend_dependent", "backend": "curses"},
+      "gnucobol_rs_axis": {"status": "out_of_model"},
+      "drift": ["backend_dependent_feature", "vendor_extension_only"], "fixture_priority": "none"
+    },
+    {
+      "surface_id": "report_writer", "family": "report_writer",
+      "standard_axis": {"cobol_85": "optional module", "cobol_2002": "present"},
+      "gnucobol_axis": {"gnucobol_3_2": "parsed_functional (varies)"},
+      "gnucobol_rs_axis": {"status": "out_of_model"},
+      "drift": ["documented_before_functional"], "fixture_priority": "none"
+    },
+    {
+      "surface_id": "synchronized_alignment", "family": "data_description",
+      "standard_axis": {"cobol_85": "present (SYNCHRONIZED)"},
+      "gnucobol_axis": {"gnucobol_3_2": "platform_dependent", "note": "alignment is host/ABI sensitive"},
+      "gnucobol_rs_axis": {"status": "fails_closed", "non_claim": "alignment padding"},
+      "drift": ["platform_dependent_feature"], "fixture_priority": "medium"
+    },
+    {
+      "surface_id": "comp_6", "family": "numeric_storage",
+      "standard_axis": {"note": "vendor extension (unsigned packed, no sign nibble)"},
+      "gnucobol_axis": {"gnucobol_3_2": "runtime_functional (extension)"},
+      "gnucobol_rs_axis": {"status": "not_admitted", "non_claim": "COMP-6 storage"},
+      "drift": ["vendor_extension_only"], "fixture_priority": "low"
+    }
+  ]
+}

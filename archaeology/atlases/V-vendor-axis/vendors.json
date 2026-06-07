@@ -2,16 +2,47 @@
   "schema": "gnucobol-atlas-vendor-axis-v1",
   "axis": "V",
   "evidence_kind": "reference_curated",
-  "warning": "Vendor generations are migration-source labels. GnuCOBOL exposes some as -std dialect profiles (see G-axis, which IS oracle-generated); the vendor rows themselves are reference-only shadow witnesses.",
+  "warning": "Vendor generations are migration-SOURCE labels. GnuCOBOL exposes some as -std dialect profiles (that part IS oracle-generated; see ../G-gnucobol-dialect-axis/). The vendor rows here are reference-only shadow witnesses with citations — they NEVER override the admitted oracle.",
+  "citations": [
+    "https://manpages.debian.org/unstable/gnucobol/cobc.1 (cobc -std dialect list)",
+    "https://gnucobol.sourceforge.io/doc/gnucobol.html (-std dialect semantics)",
+    "https://sourceforge.net/projects/gnucobol/files/gnucobol/ (3.2 reference-format enforcement per dialect)",
+    "https://www.ibm.com/docs/en/cobol-zos/6.3.0?topic=programs-language-elements-that-changed-from-osvs-cobol (IBM generation drift)",
+    "https://www.microfocus.com/documentation/reuze/60d/mcdire.htm (Micro Focus DIALECT directives)"
+  ],
+  "compare_surfaces": ["reserved_words", "source_format", "numeric_storage", "ALTER/GO TO", "file_status", "debugging", "NATIONAL/DBCS"],
   "vendors": [
-    {"id": "ibm-os-vs-cobol", "kind": "vendor_generation", "gnucobol_std": "mvs/ibm", "note": "common legacy migration source"},
+    {"id": "ibm-os-vs-cobol", "kind": "vendor_generation", "gnucobol_std": "mvs/ibm", "join_value": "migration_source", "note": "very common legacy migration source"},
     {"id": "ibm-vs-cobol-ii", "kind": "vendor_generation", "gnucobol_std": "mvs/ibm"},
-    {"id": "ibm-enterprise-cobol-v3..v6", "kind": "vendor_generation", "gnucobol_std": "ibm"},
-    {"id": "micro-focus", "kind": "vendor_directive_family", "gnucobol_std": "mf", "note": "behavior is a DIALECT directive family, not one version"},
+    {"id": "ibm-cobol-370", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "ibm-cobol-mvs-vm", "kind": "vendor_generation", "gnucobol_std": "mvs"},
+    {"id": "ibm-cobol-os390-vm", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "ibm-enterprise-cobol-v3", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "ibm-enterprise-cobol-v4", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "ibm-enterprise-cobol-v5", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "ibm-enterprise-cobol-v6", "kind": "vendor_generation", "gnucobol_std": "ibm", "note": "IBM documents syntax/semantic drift from OS/VS forward"},
+    {"id": "ibm-cobol-vse-esa", "kind": "vendor_generation", "gnucobol_std": "ibm"},
+    {"id": "ibm-ile-cobol-as400", "kind": "vendor_generation", "platform": "IBM i", "note": "ILE COBOL"},
+    {"id": "micro-focus", "kind": "vendor_directive_family", "gnucobol_std": "mf", "note": "behavior is a DIALECT directive FAMILY (Net Express, Server Express, Visual COBOL, Enterprise Developer), not one version"},
     {"id": "acucobol-gt", "kind": "vendor", "gnucobol_std": "acu"},
-    {"id": "rm-cobol", "kind": "vendor", "gnucobol_std": "rm"},
-    {"id": "bs2000-cobol", "kind": "vendor", "gnucobol_std": "bs2000"},
+    {"id": "rm-cobol", "kind": "vendor", "gnucobol_std": "rm", "note": "Ryan-McFarland lineage"},
+    {"id": "bs2000-cobol", "kind": "vendor", "gnucobol_std": "bs2000", "note": "named in GnuCOBOL 3.2 reference-format enforcement"},
     {"id": "gcos-cobol", "kind": "vendor", "gnucobol_std": "gcos"},
-    {"id": "ca-realia-ii", "kind": "vendor", "note": "named in GnuCOBOL 3.2 reference-format enforcement"}
-  ]
+    {"id": "ca-realia-ii", "kind": "vendor", "note": "named in GnuCOBOL 3.2 reference-format enforcement"},
+    {"id": "fujitsu-netcobol", "kind": "vendor"},
+    {"id": "cobol-it", "kind": "vendor", "note": "OpenCOBOL-derived commercial line"},
+    {"id": "tandem-nonstop-cobol", "kind": "vendor", "platform": "HP NonStop"},
+    {"id": "unisys-cobol", "kind": "vendor", "platform": "Unisys MCP / OS2200"},
+    {"id": "dec-vax-cobol", "kind": "vendor", "platform": "OpenVMS"},
+    {"id": "icl-cobol", "kind": "vendor"},
+    {"id": "bull-cobol", "kind": "vendor"}
+  ],
+  "preprocessor_X_axis": [
+    {"id": "cics-cobol", "not_core_cobol": true, "source_transform_required": true, "host_runtime_required": true, "gnucobol_rs_nonclaim_by_default": true},
+    {"id": "ims-cobol", "not_core_cobol": true, "gnucobol_rs_nonclaim_by_default": true},
+    {"id": "db2-embedded-sql", "not_core_cobol": true, "source_transform_required": true, "gnucobol_rs_nonclaim_by_default": true},
+    {"id": "oracle-pro-cobol", "not_core_cobol": true, "gnucobol_rs_nonclaim_by_default": true},
+    {"id": "informix-esql-cobol", "not_core_cobol": true, "gnucobol_rs_nonclaim_by_default": true}
+  ],
+  "platform_P_axis": ["z/OS-batch", "z/VSE", "ibm-i-ile", "aix", "linux", "windows-mingw-gnucobol", "openvms", "tandem-nonstop", "bs2000", "gcos", "unisys-mcp"]
 }

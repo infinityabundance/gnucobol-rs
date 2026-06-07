@@ -1,0 +1,33 @@
+{
+  "schema": "gnucobol-atlas-standard-axis-v1",
+  "axis": "S+H",
+  "evidence_kind": "reference_curated",
+  "warning": "Feature LABELS and citations only — NO ISO/ANSI standard text is reproduced (paywalled/copyright). These rows are shadow witnesses; they NEVER override the admitted GnuCOBOL 3.2 oracle in a sealed court.",
+  "authority_kinds": ["historical_standard", "standard", "amendment", "portability_profile", "government_profile"],
+  "citations": [
+    "https://en.wikipedia.org/wiki/COBOL (COBOL-60/61/61-Extended/65 timeline; COBOL-68 first ANSI)",
+    "https://www.iso.org/standard/74527.html (ISO/IEC 1989:2023)",
+    "https://www.iso.org/standard/28805.html (ISO/IEC 1989:2002, withdrawn/superseded)",
+    "https://www.ibm.com/docs/ssw_ibm_i_74/rzasb/industrystandards.htm (1989 intrinsic + 1993 correction amendments)",
+    "https://pubs.opengroup.org/onlinepubs/009680799/toc.pdf (X/Open COBOL, based on ISO 1989:1985)"
+  ],
+  "standards": [
+    {"standard_id": "cobol-60", "common_name": "COBOL-60", "authority_kind": "historical_standard", "year": 1960, "note": "CODASYL pre-ANSI"},
+    {"standard_id": "cobol-61", "common_name": "COBOL-61", "authority_kind": "historical_standard", "year": 1961},
+    {"standard_id": "cobol-61-extended", "common_name": "COBOL-61 Extended", "authority_kind": "historical_standard", "year": 1963},
+    {"standard_id": "cobol-65", "common_name": "COBOL-65", "authority_kind": "historical_standard", "year": 1965},
+    {"standard_id": "codasyl-jod-1968", "common_name": "CODASYL COBOL Journal of Development 1968/1969", "authority_kind": "historical_standard", "year": 1968},
+    {"standard_id": "cobol-68", "common_name": "COBOL-68 / ANSI X3.23-1968", "authority_kind": "standard", "authority": "ANSI", "year": 1968, "note": "first ANSI standard"},
+    {"standard_id": "cobol-74", "common_name": "COBOL-74 / ANSI X3.23-1974", "authority_kind": "standard", "authority": "ANSI", "year": 1974},
+    {"standard_id": "codasyl-1978", "common_name": "CODASYL COBOL 1978 language specification", "authority_kind": "historical_standard", "year": 1978},
+    {"standard_id": "iso-1989-1985", "common_name": "COBOL 85 / ISO 1989:1985", "authority_kind": "standard", "authority": "ISO/ANSI", "year": 1985, "note": "gnucobol -std=cobol85 (strict)"},
+    {"standard_id": "iso-1989-1985-amd1-1992", "common_name": "Intrinsic Function Module (ANSI X3.23a-1989 / Amd.1:1992)", "authority_kind": "amendment", "year": 1992},
+    {"standard_id": "iso-1989-1985-amd2-1994", "common_name": "Correction/clarification (ANSI X3.23b-1993 / Amd.2:1994)", "authority_kind": "amendment", "year": 1994},
+    {"standard_id": "iso-1989-2002", "common_name": "COBOL 2002 / ISO 1989:2002", "authority_kind": "standard", "authority": "ISO", "year": 2002, "status": "withdrawn/superseded", "note": "gnucobol -std=cobol2002 (strict); added OO/free-form/intrinsics"},
+    {"standard_id": "iso-1989-2014", "common_name": "COBOL 2014 / ISO 1989:2014", "authority_kind": "standard", "authority": "ISO", "year": 2014, "note": "gnucobol -std=cobol2014 (strict)"},
+    {"standard_id": "iso-1989-2023", "common_name": "COBOL 2023 / ISO 1989:2023", "authority_kind": "standard", "authority": "ISO", "year": 2023, "status": "current"},
+    {"standard_id": "xopen-cobol", "common_name": "X/Open COBOL", "authority_kind": "portability_profile", "authority": "The Open Group", "note": "based on ISO 1989:1985; gnucobol -std=xopen (strict)"},
+    {"standard_id": "open-group-cobol", "common_name": "The Open Group Technical Standard COBOL Language", "authority_kind": "portability_profile", "authority": "The Open Group"},
+    {"standard_id": "fips-pub-21", "common_name": "FIPS PUB 21 / 21-1..21-4 COBOL profiles", "authority_kind": "government_profile", "authority": "NIST/FIPS", "note": "US government procurement profiles"}
+  ]
+}

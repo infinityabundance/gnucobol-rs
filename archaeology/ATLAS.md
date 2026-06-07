@@ -27,13 +27,22 @@ behavior in `gnucobol-rs`.** The admitted oracle is the only authority for a sea
 
 | Axis | What | Status in this atlas |
 |------|------|-----------------------|
-| **S** — Standards / amendments | COBOL-68/74/85, intrinsic-function amendment (1989), correction amendment (1993), 2002/2014/2023, X/Open, FIPS profiles | `reference_curated` stub (`S-standards-axis/`) |
-| **H** — Historical CODASYL / government | COBOL-60/61/61-Ext/65, CODASYL JoD, FIPS PUB 21.x | stub (folded into S for now) |
-| **G** — GnuCOBOL releases + `-std` dialect modes | the lineage, and `-std=` dialect profiles | **`oracle_generated`** (`G-gnucobol-dialect-axis/`) |
-| **V** — Vendor compiler generations | IBM OS/VS→VS COBOL II→Enterprise COBOL v3–v6, Micro Focus, ACU, RM, BS2000, GCOS, … | `reference_curated` stub (`V-vendor-axis/`) |
-| **P** — Platform/runtime families | z/OS, z/VSE, IBM i/ILE, AIX, Linux, Windows/MinGW, OpenVMS, NonStop, … | future |
-| **X** — Preprocessor / application | CICS, IMS, DB2 embedded SQL, Pro*COBOL, ESQL | future (default non-claim) |
-| **D** — Dataset / corpus profiles | the KOBOLD reconciliation fixture families | composed in `kobold-data-shim/recon/` |
+| **S** — Standards / amendments | COBOL-68/74/85, 1992 intrinsic + 1994 correction amendments, 2002/2014/2023, X/Open, FIPS | `reference_curated` — [`A18-cobol-standard-atlas/standards.json`](atlases/A18-cobol-standard-atlas/standards.json) (+ legacy `S-standards-axis/`) |
+| **H** — Historical CODASYL / government | COBOL-60/61/61-Ext/65, CODASYL JoD 1968/1978, FIPS PUB 21.x | `reference_curated` — folded into A18 with `authority_kind` |
+| **G** — GnuCOBOL releases + `-std` dialect modes | the release lineage; the `-std=` dialect profiles | releases: [`A17-gnucobol-release-atlas/`](atlases/A17-gnucobol-release-atlas/) · dialects: **`oracle_generated`** [`G-gnucobol-dialect-axis/`](atlases/G-gnucobol-dialect-axis/) |
+| **V** — Vendor compiler generations | IBM OS/VS→VS COBOL II→Enterprise v3–v6, Micro Focus directive family, ACU, RM, BS2000, GCOS, Fujitsu, … | `reference_curated` — [`V-vendor-axis/vendors.json`](atlases/V-vendor-axis/vendors.json) |
+| **P** — Platform/runtime families | z/OS, z/VSE, IBM i/ILE, AIX, Linux, Windows/MinGW, OpenVMS, NonStop, … | listed in `V-vendor-axis` (`platform_P_axis`); courts future |
+| **X** — Preprocessor / application | CICS, IMS, DB2 embedded SQL, Pro*COBOL, ESQL | `V-vendor-axis` (`preprocessor_X_axis`); default non-claim |
+| **D** — Dataset / corpus profiles | reconciliation fixture families | composed downstream |
+
+## The join (A19) — surface × standard × release × gnucobol-rs
+
+[`A19-standard-release-join-atlas/`](atlases/A19-standard-release-join-atlas/) crosses the
+[surface taxonomy](atlases/A18-cobol-standard-atlas/surface-taxonomy.json) with the standard, release,
+and **`gnucobol_rs`** axes (`join.json` → `drift-matrix.tsv` → `hidden-surfaces.md` →
+`fixture-candidates.json` → `gnucobol-rs-roadmap-from-atlas.md`). The `gnucobol_rs` cells are
+oracle-grounded; the rest are cited shadow witnesses. The industry reading is
+[`reports/GNUCOBOL_COBOL_ATLAS_STATE_OF_INDUSTRY.md`](../reports/GNUCOBOL_COBOL_ATLAS_STATE_OF_INDUSTRY.md).
 
 ## What the oracle already reveals (G-axis, real)
 
