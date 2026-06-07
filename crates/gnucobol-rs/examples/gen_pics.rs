@@ -46,4 +46,23 @@ fn main() {
         println!("ax{id}\tX({n})\t\t");
         id += 1;
     }
+
+    // P-scaling (`GNURUST.9`): trailing P (`9..P..`) and leading P (`P..9..`), DISPLAY and COMP-3,
+    // signed and unsigned. Storage size = the stored 9s; attr digits/scale are the asymmetric rule.
+    for nine in [1usize, 2, 3, 5] {
+        for p in [1usize, 2, 3] {
+            let nines = "9".repeat(nine);
+            let ps = "P".repeat(p);
+            let trailing = format!("{nines}{ps}");
+            let leading = format!("{ps}{nines}");
+            for body in [trailing, leading] {
+                for usage in ["DISPLAY", "COMP-3"] {
+                    println!("pp{id}\t{body}\t{usage}\t");
+                    id += 1;
+                    println!("pp{id}\tS{body}\t{usage}\t");
+                    id += 1;
+                }
+            }
+        }
+    }
 }

@@ -3,6 +3,16 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.6]
+
+### GNURUST.9 — `pic`: PIC P-scaling
+- `build_field` now admits the `P` scaling symbol, producing the same `(type, digits, scale, size)`
+  as `cobc`: **trailing P** (`999PPP`) -> `digits = 9s+P, scale = -P`; **leading P** (`PPP999`) ->
+  `digits = 9s, scale = 9s+P`; storage `size` is always the stored `9`s (COMP-3 `n/2+1`, even though
+  `digits` carries the P). Sweep PASS=288 FAIL=0. `V`+`P`, P at both ends, and P-only fail closed;
+  VALUE/MOVE on a P field is deferred (`GNURUST.VALUE-P.0`) and fails closed (no panic). 6M PIC +
+  3M VALUE fuzz runs clean.
+
 ## [0.2.5]
 
 ### GNURUST.8 — `init`: initial record image from VALUE clauses

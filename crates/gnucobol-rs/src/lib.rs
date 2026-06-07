@@ -324,12 +324,14 @@ pub fn __fuzz_init(data: &[u8]) {
         if ch.len() < 4 {
             break;
         }
-        let pic = match ch[0] % 6 {
+        let pic = match ch[0] % 8 {
             0 => ("9(3)", Usage::Display),
             1 => ("S9(3)V99", Usage::Display),
             2 => ("X(4)", Usage::Display),
             3 => ("S9(5)V9(3)", Usage::Comp3),
             4 => ("9(5)", Usage::Comp3),
+            5 => ("999PPP", Usage::Display), // P-scaled: must fail closed, not panic
+            6 => ("PPP999", Usage::Comp3),
             _ => ("S9(4)", Usage::Display),
         };
         let value = match ch[2] % 5 {

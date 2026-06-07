@@ -23,7 +23,7 @@ byte. `gnucobol-rs` owns them first, with proof, before reaching for anything la
 |------|---------|--------|
 | **byte-layout** | a field's bytes match GnuCOBOL's exactly | **sealed** — COMP-3/zoned/display (`GNURUST.2`) |
 | **runtime** | a runtime operation (`MOVE`, …) matches `libcob` | **sealed** — decimal `MOVE` (`GNURUST.2`) |
-| **field model** | `PIC`+`USAGE` → `{type, digits, scale, flags, size}` matches `cobc` | **sealed** — `pic` (`GNURUST.3`) |
+| **field model** | `PIC`+`USAGE` → `{type, digits, scale, flags, size}` matches `cobc` (incl. `P` scaling) | **sealed** — `pic` (`GNURUST.3`, `GNURUST.9`) |
 | **record layout** | item byte offsets / group sizes / `OCCURS` / `REDEFINES` match `cobc` | **sealed** — `layout` (`GNURUST.4`) |
 | **copybook expansion** | `COPY` splice + `REPLACING` match the `cobc` preprocessor | **sealed** — `copybook` (`GNURUST.5`, `GNURUST.6`) |
 | **arithmetic** | `ADD`/`SUBTRACT`/`MULTIPLY` + ROUNDED match `cob_add`/`cob_mul` | **sealed** — `arith` (`GNURUST.7`) |
@@ -65,7 +65,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 moves, field model, record layout, initialization, comparison, formatting, source expansion,
 runtime lifecycle, files, reports, diagnostics — and **no lower layer is allowed to imply a higher
 layer**. Sealed today: storage bytes + `MOVE` bytes (`GNURUST.2`), `PIC`→field-model (`GNURUST.3`),
-DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), and `VALUE` initial-record images (`GNURUST.8`). The full
+DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), and PIC `P`-scaling (`GNURUST.9`). The full
 taxonomy is in
 [`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
 its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the

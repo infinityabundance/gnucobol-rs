@@ -53,6 +53,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.8` — VALUE initial image.** `value_image` computes an `01` record's initial WORKING-STORAGE bytes from `VALUE` clauses (alphanumeric left-justified/space-padded, numeric DISPLAY zoned+overpunch, COMP-3 packed; unvalued DISPLAY→`'0'`, alnum→spaces, COMP-3→packed zero), matching `cobc`. OCCURS/REDEFINES+VALUE, edited/`P` PICs, non-fitting literals fail closed. (`reports/RECEIPT-GNURUST-VALUE-8.md`.)
 
+**`GNURUST.9` — PIC `P` scaling.** `build_field` admits `P`: trailing `digits=9s+P, scale=-P`; leading `digits=9s, scale=9s+P`; `size` = stored `9`s — matching `cobc`. `V`+`P`/both-ends/P-only and VALUE/MOVE on a P field fail closed. (`reports/RECEIPT-GNURUST-PIC-SCALING-9.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

@@ -29,6 +29,9 @@ claimed_now:
   - id: arithmetic-decimal
     what: ADD/SUBTRACT (DISPLAY) + MULTIPLY (DISPLAY/COMP-3), truncate+ROUNDED, matching cob_add/cob_mul
     scope: pure-Rust i128 integer decimal, <=38 digits, near-away rounding (GNURUST.7)
+  - id: pic-p-scaling
+    what: PIC P scaling-position field model (digits/scale/size) matching cobc
+    scope: single contiguous P run at one end, DISPLAY/COMP-3, signed/unsigned (GNURUST.9)
   - id: value-initial-image
     what: initial WORKING-STORAGE bytes of a flat 01 record from VALUE clauses, matching cobc
     scope: 9/X/A/S/V + COMP-3 elementary items, numeric/alnum/ZERO/SPACE, type-correct defaults (GNURUST.8)
@@ -38,7 +41,7 @@ not_claimed:
   - { id: edited-pictures,       note: "Z/$/CR/DB/*/BLANK WHEN ZERO rendering (GNURUST.EDITED.0)" }
   - { id: display-stdout,        note: "what DISPLAY prints — distinct from storage bytes" }
   - { id: comparison,            note: "IF/SEARCH ALL ordering; COLLATING SEQUENCE (GNURUST.COLLATE.0)" }
-  - { id: pic-scaling-p,         note: "PIC 'P' scaling symbol — asymmetric leading/trailing rules (GNURUST.PIC-SCALING-P.0)" }
+  - { id: pic-p-value-move,      note: "VALUE/MOVE on a P-scaled field — fails closed (GNURUST.VALUE-P.0)" }
   - { id: pic-edited,            note: "edited PIC (Z/$/CR/DB/*/.) — fails closed (GNURUST.EDITED.0)" }
   - { id: value-occurs-redefines, note: "VALUE under OCCURS/REDEFINES, non-fitting literals (GNURUST.VALUE-ODO.0)" }
   - { id: figurative-constants,  note: "ZERO/SPACE/HIGH-/LOW-VALUE/QUOTE/ALL bytes (GNURUST.FIGCONST.0)" }

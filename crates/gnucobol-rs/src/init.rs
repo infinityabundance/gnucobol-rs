@@ -173,6 +173,19 @@ pub fn value_image(items: &[ValueItem]) -> Result<Vec<u8>, InitError> {
         let pf =
             build_field(pic, *usage, *sep, *lead).map_err(|e| InitError::Pic(format!("{e:?}")))?;
         let attr = pf.attr;
+        // A P-scaled numeric field (scale < 0 or scale > digits) has attr.digits != stored size; its
+        // VALUE image is a separate court (`GNURUST.VALUE-P.0`). Fail closed rather than mis-place
+        // a digits-wide rendering into the smaller stored field.
+        if matches!(
+            attr.field_type,
+            COB_TYPE_NUMERIC_DISPLAY | crate::attr::COB_TYPE_NUMERIC_PACKED
+        ) && (attr.scale < 0 || attr.scale as i32 > attr.digits as i32)
+        {
+            return Err(InitError::Pic(format!(
+                "P-scaled VALUE deferred: {}",
+                it.name
+            )));
+        }
         let field = &mut buf[l.offset..l.offset + l.size];
 
         match attr.field_type {

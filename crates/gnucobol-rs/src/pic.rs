@@ -3,11 +3,12 @@
 //! matching the GnuCOBOL compiler's own field-attribute computation (verified against `cobc`'s
 //! generated `cob_field_attr` and runtime `LENGTH OF`).
 //!
-//! **Sealed subset:** `9`, `X`, `A`, `S`, `V`, fixed repeats `(n)`, the `SIGN [LEADING|TRAILING]
-//! [SEPARATE]` clause, and `USAGE DISPLAY` / `COMP-3` (`PACKED-DECIMAL` / `COMPUTATIONAL-3`).
-//! Everything else **fails closed** with a typed [`PicError`] — in particular the `P` scaling
-//! symbol (whose leading/trailing digit/scale rules are asymmetric in GnuCOBOL) and every edited
-//! symbol (`Z * $ , . + - CR DB B 0 /`) are deferred future courts, not silently mis-parsed.
+//! **Sealed subset:** `9`, `X`, `A`, `S`, `V`, the `P` scaling symbol (`GNURUST.9`: a single
+//! contiguous run at one end, with the asymmetric leading/trailing digit/scale rule), fixed repeats
+//! `(n)`, the `SIGN [LEADING|TRAILING] [SEPARATE]` clause, and `USAGE DISPLAY` / `COMP-3`
+//! (`PACKED-DECIMAL` / `COMPUTATIONAL-3`). Everything else **fails closed** with a typed
+//! [`PicError`] — every edited symbol (`Z * $ , . + - CR DB B 0 /`), `V`+`P`, and `P` at both ends
+//! are deferred future courts, not silently mis-parsed.
 
 use crate::attr::{
     FieldAttr, COB_FLAG_HAVE_SIGN, COB_FLAG_SIGN_LEADING, COB_FLAG_SIGN_SEPARATE,
@@ -41,8 +42,8 @@ pub enum PicError {
     Empty,
     /// An edited-picture or other symbol outside the sealed subset.
     UnsupportedSymbol(char),
-    /// The `P` scaling symbol — deferred (`GNURUST.PIC-SCALING-P.0`): GnuCOBOL's leading vs
-    /// trailing `P` digit/scale rules are asymmetric and not yet sealed.
+    /// A `P` scaling form outside the sealed `GNURUST.9` subset: `V` combined with `P`, or `P` at
+    /// both ends of the `9`s. (A single contiguous `P` run at one end is supported.)
     ScalingPDeferred,
     /// A `( n )` repeat count that is malformed or zero.
     BadRepeat,
@@ -62,7 +63,7 @@ impl core::fmt::Display for PicError {
             ),
             PicError::ScalingPDeferred => write!(
                 f,
-                "PICTURE scaling symbol 'P' is deferred (GNURUST.PIC-SCALING-P.0)"
+                "unsupported 'P' scaling form (V+P, or P at both ends) outside the sealed subset"
             ),
             PicError::BadRepeat => write!(f, "malformed or zero ( n ) repeat count"),
             PicError::NoDigits => write!(f, "numeric PICTURE has no 9 digit positions"),
@@ -154,6 +155,11 @@ pub fn build_field(
     let mut alnum_positions: u64 = 0;
     let mut numeric = false;
     let mut alpha = false;
+    // P scaling positions (not stored): leading P (before the 9s) vs trailing P (after).
+    let mut p_count: u64 = 0;
+    let mut p_leading = false;
+    let mut p_trailing = false;
+    let mut nine_seen = false;
 
     for t in &parsed {
         match t.sym {
@@ -161,6 +167,7 @@ pub fn build_field(
             'V' => seen_v = true,
             '9' => {
                 numeric = true;
+                nine_seen = true;
                 nines += t.count;
                 if seen_v {
                     after_v += t.count;
@@ -170,9 +177,23 @@ pub fn build_field(
                 alpha = true;
                 alnum_positions += t.count;
             }
-            'P' => return Err(PicError::ScalingPDeferred),
+            'P' => {
+                numeric = true;
+                p_count += t.count;
+                if nine_seen {
+                    p_trailing = true;
+                } else {
+                    p_leading = true;
+                }
+            }
             other => return Err(PicError::UnsupportedSymbol(other)),
         }
+    }
+
+    // P is a numeric-only scaling symbol; the sealed subset admits a single contiguous run of P at
+    // one end of the 9s, without V (V+P is deferred). Anything else fails closed.
+    if p_count > 0 && (alpha || seen_v || (p_leading && p_trailing)) {
+        return Err(PicError::ScalingPDeferred);
     }
 
     if numeric && alpha {
@@ -195,13 +216,29 @@ pub fn build_field(
     if !numeric {
         return Err(PicError::NoDigits);
     }
+    // A field with P scaling must still carry at least one stored digit (a 9).
+    if nines == 0 {
+        return Err(PicError::NoDigits);
+    }
     // A numeric field's digit count fits the field model's u16; an absurd declared count is a
     // resource reject (fail closed), not a truncated mis-claim.
-    if nines > u16::MAX as u64 || after_v > u16::MAX as u64 {
+    if nines > u16::MAX as u64 || after_v > u16::MAX as u64 || p_count > u16::MAX as u64 {
         return Err(PicError::BadRepeat);
     }
     let nines = nines as u16;
     let after_v = after_v as u16;
+    let p_count = p_count as u16;
+
+    // P-scaling overrides the attr digits/scale (the asymmetric GnuCOBOL rule, proven against
+    // `cobc`); storage `size` still uses only the stored `9`s. trailing: digits = 9s + P, scale = -P;
+    // leading: digits = 9s, scale = 9s + P.
+    let (attr_digits, attr_scale): (u16, i16) = if p_count == 0 {
+        (nines, after_v as i16)
+    } else if p_trailing {
+        (nines + p_count, -(p_count as i16))
+    } else {
+        (nines, (nines + p_count) as i16)
+    };
 
     let mut flags = 0u16;
     if has_sign {
@@ -226,8 +263,8 @@ pub fn build_field(
     Ok(PicField {
         attr: FieldAttr {
             field_type,
-            digits: nines,
-            scale: after_v as i16,
+            digits: attr_digits,
+            scale: attr_scale,
             flags,
         },
         size,
@@ -304,14 +341,50 @@ mod tests {
     }
 
     #[test]
-    fn p_scaling_fails_closed() {
+    fn p_scaling_matches_oracle() {
+        // trailing P: digits = 9s + P, scale = -P, size = 9s (proven vs cobc).
+        let a = f("999PPP", Usage::Display, false, false);
         assert_eq!(
-            build_field("99P", Usage::Comp3, false, false),
+            (a.attr.field_type, a.attr.digits, a.attr.scale, a.size),
+            (0x10, 6, -3, 3)
+        );
+        let c = f("9PPP", Usage::Display, false, false);
+        assert_eq!((c.attr.digits, c.attr.scale, c.size), (4, -3, 1));
+        let ff = f("99P", Usage::Display, false, false);
+        assert_eq!((ff.attr.digits, ff.attr.scale, ff.size), (3, -1, 2));
+        // leading P: digits = 9s, scale = 9s + P, size = 9s.
+        let b = f("PPP999", Usage::Display, false, false);
+        assert_eq!((b.attr.digits, b.attr.scale, b.size), (3, 6, 3));
+        let gg = f("P99", Usage::Display, false, false);
+        assert_eq!((gg.attr.digits, gg.attr.scale, gg.size), (2, 3, 2));
+        // COMP-3: digits carries P but size uses only the stored 9s (n/2+1).
+        let cp = f("999PPP", Usage::Comp3, false, false);
+        assert_eq!(
+            (cp.attr.field_type, cp.attr.digits, cp.attr.scale, cp.size),
+            (0x12, 6, -3, 2)
+        );
+        // signed trailing P keeps the sign flag.
+        let s = f("S999PP", Usage::Display, false, false);
+        assert_eq!(
+            (s.attr.digits, s.attr.scale, s.attr.flags, s.size),
+            (5, -2, 0x0001, 3)
+        );
+    }
+
+    #[test]
+    fn p_scaling_fails_closed() {
+        // V+P, P at both ends, and P-only (no 9) are outside the sealed subset.
+        assert_eq!(
+            build_field("9PV9", Usage::Display, false, false),
             Err(PicError::ScalingPDeferred)
         );
         assert_eq!(
-            build_field("PPP9(3)", Usage::Display, false, false),
+            build_field("P9P", Usage::Display, false, false),
             Err(PicError::ScalingPDeferred)
+        );
+        assert_eq!(
+            build_field("PPP", Usage::Display, false, false),
+            Err(PicError::NoDigits)
         );
     }
 

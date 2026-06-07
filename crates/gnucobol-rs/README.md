@@ -53,7 +53,7 @@ assert_eq!((f.attr.field_type, f.attr.digits, f.attr.scale, f.size), (0x12, 7, 2
 
 Sealed subset: `9 X A S V`, repeats `(n)`, `SIGN [LEADING|TRAILING] [SEPARATE]`,
 `USAGE DISPLAY`/`COMP-3`. The `P` scaling symbol, edited pictures, and other usages **fail closed**
-with a typed `PicError`.
+with a typed `PicError`. The `P` scaling symbol is **sealed** (`GNURUST.9`): trailing `999PPP` -> `digits 6, scale -3`; leading `PPP999` -> `digits 3, scale 6`; `size` = stored `9`s. `V`+`P` and VALUE/MOVE on a P field still fail closed.
 
 ## `GNURUST.4` — DATA DIVISION layout (`gnucobol_rs::layout`)
 
