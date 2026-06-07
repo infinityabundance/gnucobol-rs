@@ -29,7 +29,7 @@ currency, `*` check-protection, `CR`/`DB` trailing sign, `B` blank, `0` zero, `/
 with `(n)` repeats — `edited::decode_edited(pic, bytes)` recovers the field's
 `numeric_value` and presentation `raw_text` from the bytes GnuCOBOL stores for an edited field. Proven
 by moving values into the edited field with `cobc` (`MOVE numeric → edited`), capturing the displayed
-bytes, and checking the decode recovers the moved-in value (50/50) with `edited_size` matching.
+bytes, and checking the decode recovers the moved-in value (92/92) with `edited_size` matching.
 
 ## Non-claims (fail closed / deferred)
 
