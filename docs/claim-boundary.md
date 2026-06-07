@@ -41,6 +41,10 @@ host. (`reports/RECEIPT-GNURUST-DECIMAL-1.md`.)
 and size within an `01` record (nested groups, fixed `OCCURS`, `REDEFINES` overlay, `FILLER`),
 matching the compiler's record layout. (`reports/RECEIPT-GNURUST-LAYOUT-4.md`.)
 
+**`GNURUST.5` — COPY expansion.** `copybook::expand` splices `COPY <name>.` copybooks (recursively,
+cycle-detected, provenance-mapped) matching the GnuCOBOL preprocessor (`cobc -P`) at text-word
+granularity. `COPY ... REPLACING` is deferred. (`reports/RECEIPT-GNURUST-COPY-5.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no

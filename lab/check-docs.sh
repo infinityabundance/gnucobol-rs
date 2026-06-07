@@ -114,6 +114,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;
     *) bad "oracle freshness: layout sweep not clean ($LSWEEP)" ;;
   esac
+  CSWEEP=$(bash "$ROOT/lab/oracle/copy_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$CSWEEP" in
+    *"FAIL=0") note "oracle freshness: COPY sweep $CSWEEP" ;;
+    *) bad "oracle freshness: COPY sweep not clean ($CSWEEP)" ;;
+  esac
 else
   note "oracle absent -> selfcheck/sweep freshness check skipped (build lab/oracle to enable)"
 fi

@@ -41,6 +41,7 @@
 #![forbid(unsafe_code)]
 
 pub mod attr;
+pub mod copybook;
 pub mod error;
 pub mod layout;
 mod move_ops;
@@ -52,6 +53,7 @@ pub use attr::{
     FieldAttr, COB_FLAG_HAVE_SIGN, COB_FLAG_NO_SIGN_NIBBLE, COB_FLAG_SIGN_LEADING,
     COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
+pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use error::DecimalError;
 pub use layout::{lay_out, Item, Laid, LayoutError};
 pub use move_ops::cob_move;
@@ -237,6 +239,31 @@ pub fn __fuzz_layout(data: &[u8]) {
         });
     }
     let _ = layout::lay_out(&items);
+}
+
+/// Fuzz target: expand a copybook tree from arbitrary bytes; asserts only panic-freedom — cycles,
+/// missing copybooks, deep nesting, and REPLACING forms must yield a typed `CopyError`.
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_copybook(data: &[u8]) {
+    use std::collections::HashMap;
+    struct Map(HashMap<String, String>);
+    impl copybook::CopyResolver for Map {
+        fn resolve(&self, name: &str) -> Option<String> {
+            self.0.get(name).cloned()
+        }
+    }
+    // Split data: first chunk is the main source, the rest define copybooks "A".."D".
+    let s = String::from_utf8_lossy(data);
+    let mut m = HashMap::new();
+    for (i, part) in s.split('\u{1}').enumerate().skip(1).take(4) {
+        m.insert(
+            ((b'A' + (i as u8 - 1)) as char).to_string(),
+            part.to_string(),
+        );
+    }
+    let main = s.split('\u{1}').next().unwrap_or("");
+    let _ = copybook::expand(main, &Map(m));
 }
 
 #[cfg(test)]

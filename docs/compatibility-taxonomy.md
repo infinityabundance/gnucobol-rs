@@ -17,7 +17,7 @@ as evidence for a higher one.
 | 3 | Initialization parity | `VALUE` / figurative constants → initial bytes | future |
 | 4 | Comparison parity | `IF a < b`, `SEARCH ALL`, collation | future |
 | 5 | Display/output parity | `DISPLAY`, edited pictures, Report Writer | future |
-| 6 | Source/preprocess parity | source format, `COPY`/`REPLACING`, directives | future |
+| 6 | Source/preprocess parity | `COPY` splice **sealed** (`GNURUST.5`); `REPLACING`/source-format/directives future | partial |
 | 7 | Runtime-lifecycle parity | `CALL`/`CANCEL`, storage lifetimes, global state | future |
 | 8 | File-behavior parity | sequential / line-seq / relative / indexed, status codes | future |
 | 9 | Diagnostic parity | message class + phase + source span | future |

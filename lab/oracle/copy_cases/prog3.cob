@@ -1,0 +1,11 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. PROG3.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 A-REC.
+       COPY ADDR.
+       01 B-REC.
+       COPY CUSTREC.
+       COPY ADDR.
+       PROCEDURE DIVISION.
+           STOP RUN.

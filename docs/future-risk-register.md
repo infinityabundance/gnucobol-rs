@@ -7,7 +7,7 @@ unless marked **sealed**.
 **Sealed today:** `GNURUST.2` (COMP-3/zoned/display `MOVE` byte semantics, `reports/RECEIPT-GNURUST-DECIMAL-1.md`)
 · `GNURUST.3` (PIC → field model for the `9 X A S V`/repeats/SIGN/DISPLAY-COMP-3 subset,
 `reports/RECEIPT-GNURUST-PIC-3.md`) · `GNURUST.4` (DATA DIVISION record layout — offsets, group
-sizes, fixed `OCCURS`, `REDEFINES`, `FILLER`, `reports/RECEIPT-GNURUST-LAYOUT-4.md`).
+sizes, fixed `OCCURS`, `REDEFINES`, `FILLER`, `reports/RECEIPT-GNURUST-LAYOUT-4.md`) · `GNURUST.5` (COPY copybook expansion — nested, cycle-detected, provenance-mapped, `reports/RECEIPT-GNURUST-COPY-5.md`).
 
 ## Data representation & layout
 
@@ -525,6 +525,35 @@ s390x big-endian, AIX/IBM i/HP-UX as non-QEMU external-lab witnesses. This is ex
 (no VM execution in the build environment); it never becomes a portability *claim* — only a row of
 vendor-runtime witnesses, each classified `available / unavailable / backend-dependent /
 platform-dependent / package-disabled / runtime-config-dependent`.
+
+## Dependency-admitted semantics, license topology, numeric storage tables, mirror lineage
+
+> **`gnucobol-rs` treats GnuCOBOL's optional dependency graph, source-tree license topology, distro
+> build policy, diagnostic localization, C-compiler/linker phase, numeric storage tables, backend
+> licensing, and forum-mined defect methodology as compatibility evidence; no feature is "supported
+> by GnuCOBOL" in the abstract until the linked backend, build flags, license boundary, locale, and
+> admitted oracle row are named.**
+
+| Code | Court | Core trap / non-claim |
+|------|-------|-----------------------|
+| `GNURUST.DECIMAL-BIGNUM-BACKEND.0` | arithmetic backend | GMP vs MPIR identity/version/license is part of arithmetic authority (this oracle: GMP 6.3) |
+| `GNURUST.ISAM-LICENSE-MATRIX.0` / `GNURUST.ISAM-ORACLE-KIND.0` | ISAM backend | BDB (royalty/source terms) vs VBISAM (LGPL) vs DISAM (proprietary) vs none — legal + behavioural oracle row |
+| `GNURUST.SCREEN-BACKEND-KIND.0` | screen backend | ncurses/ncursesw/PDCurses(Mod)/system-curses/none family matrix |
+| `GNURUST.SERIALIZATION-BACKEND-KIND.0` | JSON/XML backend | libxml2 / cJSON / JSON-C presence+version+escaping |
+| `GNURUST.DEPENDENCY-ATLAS.0` | dependency atlas | mine `DEPENDENCIES.md` (arith/indexed/screen/xml/json) beside `cobc --info` |
+| `GNURUST.UPSTREAM-LICENSE-TOPOLOGY.0` / `GNURUST.SOURCE-TO-WORKSPACE-MAP.0` | license/source map | cobc=GPL territory, libcob/lib=LGPL territory, tests/extras/po classified separately (grounds our LGPL/GPL split) |
+| `GNURUST.UPSTREAM-TEST-GATE.0` | upstream test gate | record `make check` status as oracle admission — **applied** (recorded `not_run (full suite)`) |
+| `GNURUST.ORACLE-PREFIX-DESTDIR.0` / `GNURUST.RPATH-POLICY.0` | install/loader | `--prefix`/`DESTDIR`/`--disable-rpath` change loader evidence — **partly applied** (LOADER receipt) |
+| `GNURUST.VERSION-SCAR-REDEFINES.0` | version scar | a REDEFINES compiler infinite-loop differs across 3.0-rc/3.1.2/3.2/4.x — seed from forum, classify |
+| `GNURUST.COMP-ENDIAN-SPLIT.0` | binary endian | `COMP`/`BINARY` big-endian vs `COMP-5`/`BINARY-*` native-endian — record-layout trap |
+| `GNURUST.COMP-X-PICX-INTEGER.0` | COMP-X | `PIC X(n) COMP-X` is an *unsigned integer*, not alphanumeric |
+| `GNURUST.PACKED-STORAGE-TABLE.0` / `GNURUST.UNSIGNED-PACKED-STORAGE-TABLE.0` | storage tables | digit→byte tables for signed packed (COMP-3) and unsigned packed (COMP-6) — table + formula, not formula alone |
+| `GNURUST.BIT-USAGE-NONCLAIM.0` / `GNURUST.INDEX-STORAGE-USAGE.0` | usages | `USAGE BIT` unimplemented; `INDEX` is a 4-byte signed int, no PICTURE |
+| `GNURUST.DIAGNOSTIC-LOCALE-PO.0` / `GNURUST.STDERR-LOCALE-HASH.0` | diagnostic locale | `po` translations make stderr wording locale-specific → pin `LC_MESSAGES`, hash class not wording |
+| `GNURUST.C-COMPILER-DIAG-BOUNDARY.0` | diagnostic phase | a failed compile may be COBOL / generated-C / linker / missing-lib — receipt classifies the phase |
+| `GNURUST.GNUCOBOL4-SHADOW.0` / `GNURUST.LICENSE-LINEAGE.0` / `GNURUST.MIRROR-AUTHORITY-MATRIX.0` | version/mirror lineage | 4.x is a shadow witness; OpenCOBOL-era GPL2/LGPL2.1 lineage; SourceForge tarball = release authority |
+| `GNURUST.FORUM-MINING-METHOD-VALIDATION.0` | forum mining | OpenCBS validates forum-defect mining as method, not hack |
+| `GNURUST.VALUE.0` | initial image | **queued (next-after-COPY)** — `VALUE` literal → initial record bytes, verified vs cobc-initialized WS |
 
 ## When arithmetic returns (`cobol-decimal-arith`, deferred)
 

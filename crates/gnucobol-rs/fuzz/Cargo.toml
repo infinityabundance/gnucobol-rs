@@ -38,3 +38,10 @@ path = "fuzz_targets/layout.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "copybook"
+path = "fuzz_targets/copybook.rs"
+test = false
+doc = false
+bench = false

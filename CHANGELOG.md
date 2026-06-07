@@ -3,6 +3,15 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.2.2]
+
+### GNURUST.5 — `copybook`: COPY copybook expansion
+- `gnucobol_rs::copybook::expand` splices `COPY <name>.` copybooks into the source — recursively,
+  with cycle detection, depth/size limits, and a per-line **provenance map** — proven to match the
+  GnuCOBOL preprocessor (`cobc -P`) at text-word granularity (sweep `programs=3 PASS=3 FAIL=0`).
+  `COPY ... REPLACING` (whole-text-word replacement) is rejected as a deferred court (`GNURUST.6`);
+  recursive/missing/over-deep/over-large copies fail closed. Fuzz: 3M runs, 0 crashes.
+
 ## [0.2.1]
 
 ### GNURUST.4 — `layout`: DATA DIVISION record layout

@@ -61,6 +61,13 @@ with a typed `PicError`.
 layout (differential sweep vs `cobc`, `PASS=32 FAIL=0`). `OCCURS DEPENDING ON`, `SYNCHRONIZED`, and
 a `REDEFINES` larger than its target **fail closed** with a typed `LayoutError`.
 
+## `GNURUST.5` — COPY copybook expansion (`gnucobol_rs::copybook`)
+
+`expand` splices `COPY <name>.` copybooks into the source — recursively, with cycle detection and a
+per-line provenance map — matching the GnuCOBOL preprocessor (`cobc -P`) at text-word granularity
+(`PASS=3 FAIL=0`). `COPY ... REPLACING`, recursive/missing copybooks, and over-deep/over-large
+expansions **fail closed** with a typed `CopyError`.
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. **No** decimal arithmetic (deferred), no
