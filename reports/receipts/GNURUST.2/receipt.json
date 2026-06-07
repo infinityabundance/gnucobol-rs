@@ -1,0 +1,26 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.2",
+  "court": "decimal MOVE (COMP-3/zoned/display)",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/sweep.sh 0"
+  },
+  "byte_domain": "field-storage + move-result bytes",
+  "results": {
+    "sweep": "PASS=13152 FAIL=0"
+  },
+  "non_claims": [
+    "arithmetic",
+    "edited pictures",
+    "non-ASCII host",
+    "EBCDIC sign mode"
+  ],
+  "verdict": "pass"
+}

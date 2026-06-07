@@ -1,0 +1,26 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.11",
+  "court": "LEVEL-88 condition-name truth",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/cond_sweep.sh"
+  },
+  "byte_domain": "parent field-storage bytes -> boolean",
+  "results": {
+    "sweep": "no-result"
+  },
+  "non_claims": [
+    "SET",
+    "condition expressions",
+    "collating-sensitive ranges",
+    "Procedure Division execution"
+  ],
+  "verdict": "fail"
+}

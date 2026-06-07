@@ -1,0 +1,26 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.8",
+  "court": "VALUE initial-record image",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/value_sweep.sh"
+  },
+  "byte_domain": "record-storage bytes",
+  "results": {
+    "sweep": "no-result"
+  },
+  "non_claims": [
+    "VALUE under OCCURS/REDEFINES",
+    "non-fitting literals",
+    "P-scaled parent",
+    "edited PIC VALUE"
+  ],
+  "verdict": "fail"
+}

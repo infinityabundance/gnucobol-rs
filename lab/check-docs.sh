@@ -23,7 +23,7 @@ note "no placeholder markers"
 # 2. Every doc linked from README exists.
 for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-license.md \
          docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-claims.md \
-         docs/oracle-lessons.md docs/negative-capabilities.md docs/license-boundaries.md \
+         docs/oracle-lessons.md docs/negative-capabilities.md docs/license-boundaries.md docs/trust2-generated-receipts.md \
          reports/claim-ladder.json lab/verify-sealed-courts.sh \
          COPYING COPYING.LESSER; do
   [ -f "$f" ] || bad "README references missing file: $f"
@@ -148,6 +148,12 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: cp500 zoned-num sweep $ENSWEEP" ;;
     *) bad "oracle freshness: cp500 zoned-num sweep not clean ($ENSWEEP)" ;;
   esac
+  # TRUST.2: generated receipts must be current (live replay) + .md == render(.json), no manual edits.
+  if python3 "$ROOT/lab/receipt/run.py" check >/tmp/_rec_check 2>&1; then
+    note "TRUST.2: receipts reproducible (generated == live replay, no hand-edits)"
+  else
+    bad "TRUST.2: receipt drift"; cat /tmp/_rec_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

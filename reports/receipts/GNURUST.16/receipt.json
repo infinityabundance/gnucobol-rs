@@ -1,0 +1,27 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.16",
+  "court": "edited-picture decode (16a + 16b)",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/edited_sweep.sh"
+  },
+  "byte_domain": "edited DISPLAY field bytes -> value + presentation text",
+  "results": {
+    "sweep": "PASS=92 FAIL=0"
+  },
+  "non_claims": [
+    "numeric->edited formatting (16c)",
+    "report writer",
+    "locale/currency",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE"
+  ],
+  "verdict": "pass"
+}

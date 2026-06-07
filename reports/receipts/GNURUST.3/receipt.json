@@ -1,0 +1,25 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.3",
+  "court": "PIC field model (+P scaling)",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/pic_sweep.sh"
+  },
+  "byte_domain": "generated-C cob_field_attr + LENGTH OF",
+  "results": {
+    "sweep": "PASS=416 FAIL=0"
+  },
+  "non_claims": [
+    "edited pictures",
+    "V+P scaling",
+    "usages beyond DISPLAY/COMP-3/binary"
+  ],
+  "verdict": "pass"
+}

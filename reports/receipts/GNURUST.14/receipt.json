@@ -1,0 +1,28 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.14",
+  "court": "binary COMP/COMP-5/COMP-X storage + MOVE",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/binary_sweep.sh"
+  },
+  "byte_domain": "field-storage + move-result bytes (binary)",
+  "results": {
+    "sweep": "PASS=546 FAIL=0"
+  },
+  "non_claims": [
+    "binary arithmetic",
+    "SYNCHRONIZED",
+    "host-portable endian",
+    "COMP-6",
+    "float",
+    "IBM/MVS 2-4-8 + MF 1--8 dialect sizes"
+  ],
+  "verdict": "pass"
+}

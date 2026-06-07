@@ -1,0 +1,26 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.5",
+  "court": "COPY / REPLACING expansion",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/copy_sweep.sh"
+  },
+  "byte_domain": "expanded source text-word stream",
+  "results": {
+    "sweep": "no-result"
+  },
+  "non_claims": [
+    "inline/multi-line COPY",
+    "REPLACE directive",
+    "OF/IN library",
+    "SUPPRESS"
+  ],
+  "verdict": "fail"
+}

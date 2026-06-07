@@ -1,0 +1,26 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.10",
+  "court": "OCCURS DEPENDING ON physical-max layout",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/odo_sweep.sh"
+  },
+  "byte_domain": "generated-C storage size b_REC[size]",
+  "results": {
+    "sweep": "no-result"
+  },
+  "non_claims": [
+    "active/logical occurrence count",
+    "sliding",
+    "runtime validation",
+    "multiple/nested ODO"
+  ],
+  "verdict": "fail"
+}

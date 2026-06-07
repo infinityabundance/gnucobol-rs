@@ -1,0 +1,27 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.15",
+  "court": "cp500 EBCDIC DISPLAY decode",
+  "generated_at": "e10fc91-replay",
+  "git_commit": "e10fc91",
+  "crate_version": "0.6.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/ebcdic_sweep.sh"
+  },
+  "byte_domain": "raw EBCDIC field bytes -> decoded text",
+  "results": {
+    "sweep": "PASS=256 FAIL=0"
+  },
+  "non_claims": [
+    "cp037 / other code pages",
+    "numeric EBCDIC zoned sign",
+    "national/DBCS",
+    "collation",
+    "mixed/auto-detect encoding"
+  ],
+  "verdict": "pass"
+}
