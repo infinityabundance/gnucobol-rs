@@ -3,6 +3,18 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.3.1]
+
+### GNURUST.11 — `cond`: LEVEL-88 condition-name predicate
+- `gnucobol_rs::eval_88(attr, bytes, condition)` evaluates whether a LEVEL-88 condition name is true
+  for a parent field's current bytes, matching `cobc`: alphanumeric parents compare against the
+  literal **space-padded to the parent length** (incl. `THRU` ranges, byte-wise); numeric DISPLAY/
+  COMP-3 parents compare by **numeric value** (scale/sign-aware, `THRU` inclusive); single/multiple
+  values and ranges. Sweep total=103 PASS=103 FAIL=0; 6M fuzz runs clean. **Predicate only** —
+  `SET condition-name`, the `FALSE` clause, condition expressions, Procedure Division execution, and
+  collating-sequence-sensitive ranges are non-claims (fail closed). New `cond` module + `Condition`/
+  `CondLit`/`CondValue`/`ConditionError` types (purely additive).
+
 ## [0.3.0]
 
 ### GNURUST.10 — `layout`: OCCURS DEPENDING ON physical-max

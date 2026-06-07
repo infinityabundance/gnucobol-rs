@@ -134,6 +134,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: ODO physical-max sweep $OSWEEP" ;;
     *) bad "oracle freshness: ODO sweep not clean ($OSWEEP)" ;;
   esac
+  NSWEEP=$(bash "$ROOT/lab/oracle/cond_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$NSWEEP" in
+    *"FAIL=0") note "oracle freshness: LEVEL-88 sweep $NSWEEP" ;;
+    *) bad "oracle freshness: LEVEL-88 sweep not clean ($NSWEEP)" ;;
+  esac
 else
   note "oracle absent -> selfcheck/sweep freshness check skipped (build lab/oracle to enable)"
 fi

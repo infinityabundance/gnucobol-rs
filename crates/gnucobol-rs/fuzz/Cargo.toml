@@ -59,3 +59,10 @@ path = "fuzz_targets/init.rs"
 test = false
 doc = false
 bench = false
+
+[[bin]]
+name = "cond"
+path = "fuzz_targets/cond.rs"
+test = false
+doc = false
+bench = false

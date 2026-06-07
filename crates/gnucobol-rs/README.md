@@ -87,6 +87,14 @@ overpunch), COMP-3 (packed via the sealed `cob_move`), with type-correct default
 (DISPLAY numeric `'0'`, alnum spaces, **COMP-3 canonical packed zero**). Sweep `PASS=392 FAIL=0`.
 OCCURS/REDEFINES+VALUE, edited/`P` PICs, and non-fitting literals **fail closed** (`InitError`).
 
+## `GNURUST.11` — LEVEL-88 condition-name predicate (`gnucobol_rs::eval_88`)
+
+`eval_88(attr, bytes, condition)` proves whether a LEVEL-88 condition name is true for a parent field's
+current bytes, matching `cobc`: alphanumeric parents compare the literal **space-padded to the parent
+length** (incl. `THRU` ranges); numeric DISPLAY/COMP-3 parents compare by **numeric value** (scale/
+sign-aware, ranges inclusive). Sweep `total=103 PASS=103 FAIL=0`. Predicate only — `SET`, the `FALSE`
+clause, condition expressions, and collating-sensitive ranges **fail closed** (`ConditionError`).
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no

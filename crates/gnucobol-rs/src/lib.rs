@@ -42,6 +42,7 @@
 
 pub mod arith;
 pub mod attr;
+pub mod cond;
 pub mod copybook;
 pub mod error;
 pub mod init;
@@ -56,6 +57,7 @@ pub use attr::{
     FieldAttr, COB_FLAG_HAVE_SIGN, COB_FLAG_NO_SIGN_NIBBLE, COB_FLAG_SIGN_LEADING,
     COB_FLAG_SIGN_SEPARATE, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
+pub use cond::{eval_88, CondLit, CondValue, Condition, ConditionError};
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
@@ -365,6 +367,56 @@ pub fn __fuzz_init(data: &[u8]) {
         });
     }
     let _ = value_image(&items);
+}
+
+/// Fuzz target: evaluate a LEVEL-88 condition over arbitrary parent bytes/attrs and value tables;
+/// asserts only panic-freedom — hostile literals, scales, and ranges must yield a typed
+/// `ConditionError` or a bool, never a panic (the i128 comparison + literal parser are the surface).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_cond(data: &[u8]) {
+    if data.len() < 4 {
+        return;
+    }
+    let attr = FieldAttr {
+        field_type: match data[0] % 3 {
+            0 => COB_TYPE_NUMERIC_DISPLAY,
+            1 => pic::COB_TYPE_ALPHANUMERIC,
+            _ => COB_TYPE_NUMERIC_PACKED,
+        },
+        digits: (data[1] % 40) as u16,
+        scale: (data[2] % 40) as i16,
+        flags: data[3] as u16,
+    };
+    let body = &data[4..];
+    let cut = (data[1] as usize) % (body.len() + 1);
+    let (bytes, raw) = body.split_at(cut);
+    // Build a small value table from the remaining bytes.
+    let s = String::from_utf8_lossy(raw);
+    let mut values = Vec::new();
+    for (i, tok) in s.split(',').take(8).enumerate() {
+        let v = if i % 4 == 0 {
+            cond::CondValue::Lit(cond::CondLit::Alpha(tok.to_string()))
+        } else if i % 4 == 1 {
+            cond::CondValue::Lit(cond::CondLit::Num(tok.to_string()))
+        } else if i % 4 == 2 {
+            cond::CondValue::Range(
+                cond::CondLit::Num(tok.to_string()),
+                cond::CondLit::Num("9".into()),
+            )
+        } else {
+            cond::CondValue::Range(
+                cond::CondLit::Alpha(tok.to_string()),
+                cond::CondLit::Alpha("Z".into()),
+            )
+        };
+        values.push(v);
+    }
+    let c = cond::Condition {
+        name: "C".into(),
+        values,
+    };
+    let _ = cond::eval_88(&attr, bytes, &c);
 }
 
 #[cfg(test)]

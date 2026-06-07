@@ -57,6 +57,8 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.10` — ODO physical-max layout.** `lay_out` admits a single trailing `OCCURS min TO max DEPENDING ON` as its **physical maximum** (max occurrences), matching `cobc`'s `b_REC[size]` allocation. The active/logical count, sliding, and runtime meaning are **non-claims**; multiple/nested ODO, ODO-not-last, REDEFINES+ODO, and `max<=min` fail closed. (`reports/RECEIPT-GNURUST-ODO-10.md`.)
 
+**`GNURUST.11` — LEVEL-88 predicate.** `eval_88` proves whether a condition name is true for a parent field's current bytes — alphanumeric (space-padded compare, incl. ranges) and numeric DISPLAY/COMP-3 (value compare, inclusive ranges) — matching `cobc`. `SET`/`FALSE`/expressions/Procedure-Division execution and collating-sensitive ranges are non-claims. (`reports/RECEIPT-GNURUST-COND-11.md`.)
+
 **Non-claims:** no arithmetic; no edited pictures (`PIC $,9.99`); no `P` scaling; no binary
 (`COMP`/`COMP-5`)/float/`COMP-6` parity beyond what a receipt records; no EBCDIC-host sign mode
 (the ASCII overpunch path is the sealed one); no `OCCURS DEPENDING ON`/`SYNCHRONIZED`; no
