@@ -194,13 +194,13 @@
     },
     {
       "id": "GNURUST.16",
-      "name": "edited-picture decode (16a)",
-      "proven": "edited DISPLAY field bytes -> recovered value + presentation text for the Z 9 , . - + subset",
+      "name": "edited-picture decode (16a+16b)",
+      "proven": "edited DISPLAY field bytes -> value + presentation text for Z 9 , . - + (16a) and $ * CR DB B 0 / (16b), slot-based",
       "byte_domain": "edited DISPLAY field bytes -> value + text",
       "oracle": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
-      "fixtures": "edited sweep 50/50 + 6M fuzz",
-      "sealed_version": "0.6.0",
-      "not_proven": "numeric->edited formatting (16c); $ * CR DB B 0 / (16b); reports; locale; EBCDIC edited; edited arithmetic/VALUE",
+      "fixtures": "edited sweep 92/0 + 6M fuzz",
+      "sealed_version": "0.6.0/0.6.1",
+      "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
       "readiness": 3
     }

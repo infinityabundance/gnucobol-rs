@@ -3,6 +3,13 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.6.1]
+- **GNURUST.16b — edited-picture financial decorations (decode-only).** `decode_edited` now admits the
+  `16b` subset (`$` currency fixed/floating, `*` check-protection, `CR`/`DB` trailing sign, `B` blank,
+  `0` zero, `/` slash insertions) on top of `16a`. Decode is now **slot-based** (picture-position-aware)
+  — required so a literal inserted `0` is recognised as a fixed char, not a value digit. Proven vs `cobc`
+  MOVE→edited→DISPLAY (edited_sweep 92/0); 5M-run fuzz clean. No API change (additive behavior) → patch.
+
 ## [0.6.0]
 
 ### GNURUST.16 — `edited`: edited-picture DECODE (16a subset, decode-only)

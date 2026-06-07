@@ -37,4 +37,36 @@ fn main() {
         emit("-ZZ,ZZ9.99", v);
         emit("ZZ,ZZ9.99-", v);
     }
+
+    // 16b financial decorations.
+    for v in ["0", "5", "42", "907"] {
+        emit("$ZZ9", v); // fixed currency
+        emit("$$$9", v); // floating currency
+        emit("***9", v); // star / check protection
+        emit("9990", v); // literal '0' insertion (the slot-aware case)
+    }
+    for v in ["0.00", "5.50", "1234.56"] {
+        emit("$ZZ,ZZ9.99", v);
+        emit("$$$,$$9.99", v);
+        emit("**,**9.99", v);
+    }
+    // CR / DB trailing sign (negative shows CR/DB, positive shows blanks).
+    for v in ["0", "5", "-5", "-42"] {
+        emit("ZZ9CR", v);
+        emit("ZZ9DB", v);
+    }
+    for v in ["0.00", "12.34", "-12.34"] {
+        emit("ZZ,ZZ9.99CR", v);
+    }
+    // B / slash insertions (date/blank-shaped edits).
+    for v in ["0", "1234", "120534"] {
+        emit(
+            "99B99",
+            &format!("{:04}", v.parse::<i64>().unwrap() % 10000),
+        );
+        emit(
+            "99/99/99",
+            &format!("{:06}", v.parse::<i64>().unwrap() % 1000000),
+        );
+    }
 }

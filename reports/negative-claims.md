@@ -25,7 +25,7 @@ claimed_now:
     scope: cp500 only; alphanumeric DISPLAY decode; binary/packed pass through untouched (GNURUST.15)
   - id: edited-decode-16a
     what: edited DISPLAY field bytes -> recovered numeric value + presentation text, matching cobc
-    scope: 16a subset Z 9 , . - + ; decode only; not numeric->edited; not financial decorations (GNURUST.16)
+    scope: 16a (Z 9 , . - +) + 16b ($ * CR DB B 0 /) decode; slot-based; NOT numeric->edited (16c), reports, locale (GNURUST.16)
   - id: record-layout
     what: DATA DIVISION item byte offsets / group sizes, matching cobc's record layout
     scope: nested groups, fixed OCCURS, REDEFINES (<= target), FILLER (GNURUST.4)
