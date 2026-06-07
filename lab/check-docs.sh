@@ -36,6 +36,15 @@ for rc in reports/RECEIPT-GNURUST-*.md; do
   grep -q "\"$code\"" reports/claim-ladder.json || bad "claim-ladder.json missing sealed campaign $code"
 done
 note "claim-ladder.json lists every sealed campaign"
+
+# 2b. Atlas hygiene: every archaeology atlas JSON must parse (machine-readable evidence, not prose).
+if command -v python3 >/dev/null 2>&1; then
+  AJ=0
+  while IFS= read -r f; do
+    if python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" 2>/dev/null; then AJ=$((AJ+1)); else bad "atlas JSON invalid: $f"; fi
+  done < <(find archaeology -name '*.json' 2>/dev/null)
+  note "atlas: $AJ JSON files valid"
+fi
 note "all README-referenced docs exist"
 
 # 3. COB_MAX_DIGITS constant consistent in source and equals the oracle's value (38).
