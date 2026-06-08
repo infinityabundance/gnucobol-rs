@@ -201,6 +201,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "SUPPORT-PACKET.1: support packet drift"; cat /tmp/_supp_check
   fi
+  if python3 "$ROOT/lab/dialect/run.py" check >/tmp/_dial_check 2>&1; then
+    note "DIALECT.PROFILE.1: witness profile self-consistent, -std binds the hash"
+  else
+    bad "DIALECT.PROFILE.1: dialect profile drift"; cat /tmp/_dial_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

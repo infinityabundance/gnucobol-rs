@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 349,
+  "count": 358,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -1312,6 +1312,17 @@
       ]
     },
     {
+      "id": "NEG.DIALECT.GENERAL_COBOL",
+      "surface": "general COBOL behavior claimed from a GnuCOBOL witness",
+      "status": "not_admitted_fail_closed",
+      "guard": "evidence is GnuCOBOL 3.2.0 under the declared profile, not 'COBOL'",
+      "risk_if_guessed": "saying 'COBOL does X' from one compiler",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.DIALECT.IMPLICIT",
       "surface": "a court witness called 'COBOL' in the abstract rather than GnuCOBOL 3.2 under a declared dialect",
       "status": "not_admitted_fail_closed",
@@ -1320,6 +1331,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "archaeology/ATLAS.md"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT.RUNTIME_PORTABILITY",
+      "surface": "runtime portability across platforms claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "the witness is one build on one host; see NEG.PLATFORM.RUNTIME_NOT_CLAIMED",
+      "risk_if_guessed": "assuming portable runtime semantics",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT.VENDOR_PARITY",
+      "surface": "parity with a vendor compiler (IBM/Micro Focus/ACU/...) claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the admitted GnuCOBOL witness is evidence",
+      "risk_if_guessed": "assuming vendor-equivalent behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
       ]
     },
     {
@@ -1856,6 +1889,17 @@
       ]
     },
     {
+      "id": "NEG.GENERAL-COBOL-BEHAVIOR",
+      "surface": "general COBOL behavior",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.GNUCOBOL-FILE-ORGANIZATION",
       "surface": "GnuCOBOL file organization",
       "status": "not_admitted_fail_closed",
@@ -2169,6 +2213,17 @@
       ]
     },
     {
+      "id": "NEG.NIST-CONFORMANCE",
+      "surface": "NIST conformance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.NO-VALUE-RECORDS",
       "surface": "no-VALUE records",
       "status": "not_admitted_fail_closed",
@@ -2298,6 +2353,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.OTHER-DIALECTS",
+      "surface": "other dialects",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
       ]
     },
     {
@@ -2487,6 +2553,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.PLATFORM-RUNTIME",
+      "surface": "platform runtime",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
       ]
     },
     {
@@ -3054,6 +3131,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.RUNTIME-PORTABILITY",
+      "surface": "runtime portability",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
       ]
     },
     {
@@ -3794,6 +3882,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.VENDOR-PARITY",
+      "surface": "vendor parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "DIALECT.PROFILE.1"
       ]
     },
     {

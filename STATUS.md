@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-47-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-47-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-48-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-48-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
@@ -45,6 +45,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 
 | 🔒 court | name | verdict | casefile |
 |---|---|:---:|---|
+| `DIALECT.PROFILE.1` | declared GnuCOBOL witness profile | ✅ pass | [`reports/casefiles/DIALECT.PROFILE.1/`](reports/casefiles/DIALECT.PROFILE.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |

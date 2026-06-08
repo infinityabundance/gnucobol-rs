@@ -669,6 +669,20 @@
       "readiness": 3,
       "lie_prevented": "'here is the support packet, therefore the system is certified/compliant/approved' -- SUPPORT-PACKET.1 only collects existing generated artifacts and claims nothing new",
       "damage_if_overclaimed": "a bundle sold as certification/compliance/approval manufactures assurance that no court provides"
+    },
+    {
+      "id": "DIALECT.PROFILE.1",
+      "name": "declared GnuCOBOL witness profile",
+      "proven": "records the declared GnuCOBOL witness that produced a court's evidence: compiler+version (3.2.0), dialect/-std, source format, options, oracle identity (cobc/libcob sha256), and a stable profile_sha256 over the canonical content; changing -std changes profile_sha256; every oracle replay RECEIPT now references dialect_profile_id + dialect_profile_sha256 -> casefiles carry the witness",
+      "byte_domain": "the admitted oracle binaries + dialect -> a hashed witness profile bound into receipts/casefiles",
+      "oracle": "the admitted GnuCOBOL 3.2.0 (lab/oracle/prefix) cobc/libcob",
+      "fixtures": "lab/dialect/run.py generate/check (profile self-consistent, -std binds the hash, witness matches live oracle) -> reports/dialect-profile/default.json",
+      "sealed_version": "governance (gnucobol-rs lab)",
+      "not_proven": "general COBOL behavior; other dialects; vendor parity; runtime portability; NIST conformance; platform runtime",
+      "breaks_claim": "saying 'COBOL says' instead of 'GnuCOBOL 3.2.0 under profile X says'; claiming vendor parity / portability / NIST from the witness",
+      "readiness": 3,
+      "lie_prevented": "'COBOL behaves like this' -- DIALECT.PROFILE.1 makes every oracle-grounded claim name its exact GnuCOBOL version + dialect + binaries; dialect profile is EVIDENCE, not metadata",
+      "damage_if_overclaimed": "presenting one GnuCOBOL build's behavior as 'COBOL' or vendor-equivalent misleads a migration about what was actually witnessed"
     }
   ],
   "transform_vs_read": {

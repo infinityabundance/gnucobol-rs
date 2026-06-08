@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/DIALECT.PROFILE.1/casefile.json",
+      "digest": {
+        "sha256": "55cc78e7675f52b31f44849f477339c1019de031d6f4862edc371500f1d84110"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "DIALECT.PROFILE.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "governance (gnucobol-rs lab)",
+    "verdict": "pass",
+    "replay": {
+      "command": "the admitted GnuCOBOL 3.2.0 (lab/oracle/prefix) cobc/libcob",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "fc0fa8c83696492ba2dff6a5743998cc0edc0c10e74d4347a5fe3e83ad79d5a3",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 3,
+    "negative_claim_count": 7
+  }
+}

@@ -32,6 +32,15 @@ def oracle_version():
     except Exception:
         return "error"
 
+def dialect_ref():
+    """DIALECT.PROFILE.1: bind every oracle replay receipt to the declared witness profile (evidence,
+    not metadata) — so a casefile says GnuCOBOL 3.2.0 under profile X produced this, not 'COBOL says'."""
+    dp = os.path.join(ROOT, "reports/dialect-profile/default.json")
+    if not os.path.exists(dp):
+        return {}
+    p = json.load(open(dp))
+    return {"dialect_profile_id": p["profile_id"], "dialect_profile_sha256": p["profile_sha256"]}
+
 def run_sweep(script, arg):
     path = os.path.join(ROOT, "lab/oracle", script)
     if not os.path.exists(os.path.join(PREFIX, "bin/cobc")) or not os.path.exists(path):
@@ -57,7 +66,7 @@ def build(code, stamp, git_commit):
         "generated_at": stamp,
         "git_commit": git_commit,
         "crate_version": crate_version(),
-        "oracle": {"name": "GnuCOBOL", "version": oracle_version()},
+        "oracle": {"name": "GnuCOBOL", "version": oracle_version()} | dialect_ref(),
         "command": {"replay": f"bash lab/oracle/{m['sweep']}" + (f" {m['arg']}" if m.get('arg') else "")},
         "byte_domain": m["byte_domain"],
         "results": {"sweep": result},

@@ -1,0 +1,64 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "DIALECT.PROFILE.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "governance (gnucobol-rs lab)",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "fc0fa8c83696492ba2dff6a5743998cc0edc0c10e74d4347a5fe3e83ad79d5a3",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the admitted GnuCOBOL 3.2.0 (lab/oracle/prefix) cobc/libcob",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "lab/dialect/run.py generate/check (profile self-consistent, -std binds the hash, witness matches live oracle) -> reports/dialect-profile/default.json"
+  },
+  "positive_claims": [
+    "records the declared GnuCOBOL witness that produced a court's evidence: compiler+version (3.2.0), dialect/-std, source format, options, oracle identity (cobc/libcob sha256), and a stable profile_sha256 over the canonical content",
+    "changing -std changes profile_sha256",
+    "every oracle replay RECEIPT now references dialect_profile_id + dialect_profile_sha256 -> casefiles carry the witness"
+  ],
+  "negative_claims": [
+    "general COBOL behavior",
+    "other dialects",
+    "vendor parity",
+    "runtime portability",
+    "NIST conformance",
+    "platform runtime",
+    "lie prevented: 'COBOL behaves like this' -- DIALECT.PROFILE.1 makes every oracle-grounded claim name its exact GnuCOBOL version + dialect + binaries; dialect profile is EVIDENCE, not metadata"
+  ],
+  "negative_capability_ids": [
+    "NEG.GENERAL-COBOL-BEHAVIOR",
+    "NEG.OTHER-DIALECTS",
+    "NEG.VENDOR-PARITY",
+    "NEG.RUNTIME-PORTABILITY",
+    "NEG.NIST-CONFORMANCE",
+    "NEG.PLATFORM-RUNTIME"
+  ],
+  "byte_domains": [
+    "the admitted oracle binaries + dialect -> a hashed witness profile bound into receipts/casefiles"
+  ],
+  "lie_prevented": [
+    "'COBOL behaves like this' -- DIALECT.PROFILE.1 makes every oracle-grounded claim name its exact GnuCOBOL version + dialect + binaries; dialect profile is EVIDENCE, not metadata"
+  ],
+  "damage_if_overclaimed": "presenting one GnuCOBOL build's behavior as 'COBOL' or vendor-equivalent misleads a migration about what was actually witnessed",
+  "replay": {
+    "command": "the admitted GnuCOBOL 3.2.0 (lab/oracle/prefix) cobc/libcob",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "6a60e754fffd6815559b4dc8eaf51932831cf0b1cdc952eb68e1ead28460d74d"
+  }
+}
