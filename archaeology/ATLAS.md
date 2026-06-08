@@ -9,6 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/archaeology/ATLAS.md`._
 
+> [!IMPORTANT]
 > **Doctrine.** The COBOL Atlas separates formal standards, historical CODASYL specifications,
 > government profiles, GnuCOBOL dialect modes, vendor compiler generations, platform runtimes, and
 > preprocessor ecosystems. A surface is not "COBOL" in the abstract until the atlas says which axis

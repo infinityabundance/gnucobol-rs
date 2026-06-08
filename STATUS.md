@@ -9,6 +9,8 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-38-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-38-blueviolet)
+
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
@@ -40,46 +42,46 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 
 ### Sealed courts (generated from `reports/claim-ladder.json`)
 
-| court | name | verdict | casefile |
-|---|---|---|---|
-| `GNURUST.2` | decimal MOVE | pass | `reports/casefiles/GNURUST.2/` |
-| `GNURUST.3` | PIC field model | pass | `reports/casefiles/GNURUST.3/` |
-| `GNURUST.4` | record layout | pass | `reports/casefiles/GNURUST.4/` |
-| `GNURUST.5` | COPY expansion | pass | `reports/casefiles/GNURUST.5/` |
-| `GNURUST.6` | COPY ... REPLACING | pass | `reports/casefiles/GNURUST.6/` |
-| `GNURUST.7` | arithmetic ADD/SUB/MUL | pass | `reports/casefiles/GNURUST.7/` |
-| `GNURUST.8` | VALUE initial image | pass | `reports/casefiles/GNURUST.8/` |
-| `GNURUST.9` | PIC P-scaling | pass | `reports/casefiles/GNURUST.9/` |
-| `GNURUST.10` | ODO physical-max layout | pass | `reports/casefiles/GNURUST.10/` |
-| `GNURUST.11` | LEVEL-88 eval | pass | `reports/casefiles/GNURUST.11/` |
-| `GNURUST.12` | SET 88 TO TRUE | pass | `reports/casefiles/GNURUST.12/` |
-| `GNURUST.13` | packed ADD/SUBTRACT (cob_add_bcd) | pass | `reports/casefiles/GNURUST.13/` |
-| `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | pass | `reports/casefiles/GNURUST.14/` |
-| `GNURUST.15` | EBCDIC cp500 DISPLAY decode | pass | `reports/casefiles/GNURUST.15/` |
-| `GNURUST.16` | edited-picture decode (16a+16b) | pass | `reports/casefiles/GNURUST.16/` |
-| `GNURUST.17` | cp500 EBCDIC zoned numeric decode | pass | `reports/casefiles/GNURUST.17/` |
-| `GNURUST.18` | COMP-6 unsigned packed storage + MOVE | pass | `reports/casefiles/GNURUST.18/` |
-| `GNURUST.19` | DIVIDE receiving-field bytes | pass | `reports/casefiles/GNURUST.19/` |
-| `KOBOLD.RECON.1` | fixed-record reconciliation | pass | `reports/casefiles/KOBOLD.RECON.1/` |
-| `KOBOLD.OPERATOR.1` | operator trust layer | pass | `reports/casefiles/KOBOLD.OPERATOR.1/` |
-| `KOBOLD.FILE.1` | fixed-record container ingest | pass | `reports/casefiles/KOBOLD.FILE.1/` |
-| `KOBOLD.BANK.1` | header/detail/trailer + declared control totals | pass | `reports/casefiles/KOBOLD.BANK.1/` |
-| `KOBOLD.DB2HOST.1` | Db2 host-variable null/truncation indicator manifest | pass | `reports/casefiles/KOBOLD.DB2HOST.1/` |
-| `KOBOLD.POSTING.1` | declared posting-unit custody manifest | pass | `reports/casefiles/KOBOLD.POSTING.1/` |
-| `KOBOLD.EXTRACT.PROFILE.1` | declared extraction provenance + copybook freshness | pass | `reports/casefiles/KOBOLD.EXTRACT.PROFILE.1/` |
-| `KOBOLD.PRIVACY.REDACTION.1` | declared evidence-preserving redaction | pass | `reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/` |
-| `KOBOLD.PERF.1` | gated record-level Rayon (byte-identical to scalar) | pass | `reports/casefiles/KOBOLD.PERF.1/` |
-| `KOBOLD.BANK.RECONCILE.1` | opinionated generated banking reconciliation VIEW | pass | `reports/casefiles/KOBOLD.BANK.RECONCILE.1/` |
-| `KOBOLD.DATA.2` | binary fields in corpus | pass | `reports/casefiles/KOBOLD.DATA.2/` |
-| `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | pass | `reports/casefiles/KOBOLD.BANK.2/` |
-| `KOBOLD.RECON.2` | declared transformed-record reconciliation | pass | `reports/casefiles/KOBOLD.RECON.2/` |
-| `KOBOLD.CORPUS.2` | adversarial / banking-shaped corpus | pass | `reports/casefiles/KOBOLD.CORPUS.2/` |
-| `KOBOLD.BENCH.2` | parity-gated end-to-end scalar benchmark | pass | `reports/casefiles/KOBOLD.BENCH.2/` |
-| `KOBOLD.ENTERPRISE.2` | Rust-native signed attestation verification (DSSE/ed25519) | pass | `reports/casefiles/KOBOLD.ENTERPRISE.2/` |
-| `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | pass | `reports/casefiles/KOBOLD.DATA.3/` |
-| `KOBOLD.DATA.4` | edited-picture decode composed | pass | `reports/casefiles/KOBOLD.DATA.4/` |
-| `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | pass | `reports/casefiles/KOBOLD.DATA.5/` |
-| `KOBOLD.DATA.6` | COMP-6 composed | pass | `reports/casefiles/KOBOLD.DATA.6/` |
+| 🔒 court | name | verdict | casefile |
+|---|---|:---:|---|
+| `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
+| `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
+| `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
+| `GNURUST.5` | COPY expansion | ✅ pass | [`reports/casefiles/GNURUST.5/`](reports/casefiles/GNURUST.5/) |
+| `GNURUST.6` | COPY ... REPLACING | ✅ pass | [`reports/casefiles/GNURUST.6/`](reports/casefiles/GNURUST.6/) |
+| `GNURUST.7` | arithmetic ADD/SUB/MUL | ✅ pass | [`reports/casefiles/GNURUST.7/`](reports/casefiles/GNURUST.7/) |
+| `GNURUST.8` | VALUE initial image | ✅ pass | [`reports/casefiles/GNURUST.8/`](reports/casefiles/GNURUST.8/) |
+| `GNURUST.9` | PIC P-scaling | ✅ pass | [`reports/casefiles/GNURUST.9/`](reports/casefiles/GNURUST.9/) |
+| `GNURUST.10` | ODO physical-max layout | ✅ pass | [`reports/casefiles/GNURUST.10/`](reports/casefiles/GNURUST.10/) |
+| `GNURUST.11` | LEVEL-88 eval | ✅ pass | [`reports/casefiles/GNURUST.11/`](reports/casefiles/GNURUST.11/) |
+| `GNURUST.12` | SET 88 TO TRUE | ✅ pass | [`reports/casefiles/GNURUST.12/`](reports/casefiles/GNURUST.12/) |
+| `GNURUST.13` | packed ADD/SUBTRACT (cob_add_bcd) | ✅ pass | [`reports/casefiles/GNURUST.13/`](reports/casefiles/GNURUST.13/) |
+| `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | ✅ pass | [`reports/casefiles/GNURUST.14/`](reports/casefiles/GNURUST.14/) |
+| `GNURUST.15` | EBCDIC cp500 DISPLAY decode | ✅ pass | [`reports/casefiles/GNURUST.15/`](reports/casefiles/GNURUST.15/) |
+| `GNURUST.16` | edited-picture decode (16a+16b) | ✅ pass | [`reports/casefiles/GNURUST.16/`](reports/casefiles/GNURUST.16/) |
+| `GNURUST.17` | cp500 EBCDIC zoned numeric decode | ✅ pass | [`reports/casefiles/GNURUST.17/`](reports/casefiles/GNURUST.17/) |
+| `GNURUST.18` | COMP-6 unsigned packed storage + MOVE | ✅ pass | [`reports/casefiles/GNURUST.18/`](reports/casefiles/GNURUST.18/) |
+| `GNURUST.19` | DIVIDE receiving-field bytes | ✅ pass | [`reports/casefiles/GNURUST.19/`](reports/casefiles/GNURUST.19/) |
+| `KOBOLD.RECON.1` | fixed-record reconciliation | ✅ pass | [`reports/casefiles/KOBOLD.RECON.1/`](reports/casefiles/KOBOLD.RECON.1/) |
+| `KOBOLD.OPERATOR.1` | operator trust layer | ✅ pass | [`reports/casefiles/KOBOLD.OPERATOR.1/`](reports/casefiles/KOBOLD.OPERATOR.1/) |
+| `KOBOLD.FILE.1` | fixed-record container ingest | ✅ pass | [`reports/casefiles/KOBOLD.FILE.1/`](reports/casefiles/KOBOLD.FILE.1/) |
+| `KOBOLD.BANK.1` | header/detail/trailer + declared control totals | ✅ pass | [`reports/casefiles/KOBOLD.BANK.1/`](reports/casefiles/KOBOLD.BANK.1/) |
+| `KOBOLD.DB2HOST.1` | Db2 host-variable null/truncation indicator manifest | ✅ pass | [`reports/casefiles/KOBOLD.DB2HOST.1/`](reports/casefiles/KOBOLD.DB2HOST.1/) |
+| `KOBOLD.POSTING.1` | declared posting-unit custody manifest | ✅ pass | [`reports/casefiles/KOBOLD.POSTING.1/`](reports/casefiles/KOBOLD.POSTING.1/) |
+| `KOBOLD.EXTRACT.PROFILE.1` | declared extraction provenance + copybook freshness | ✅ pass | [`reports/casefiles/KOBOLD.EXTRACT.PROFILE.1/`](reports/casefiles/KOBOLD.EXTRACT.PROFILE.1/) |
+| `KOBOLD.PRIVACY.REDACTION.1` | declared evidence-preserving redaction | ✅ pass | [`reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/`](reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/) |
+| `KOBOLD.PERF.1` | gated record-level Rayon (byte-identical to scalar) | ✅ pass | [`reports/casefiles/KOBOLD.PERF.1/`](reports/casefiles/KOBOLD.PERF.1/) |
+| `KOBOLD.BANK.RECONCILE.1` | opinionated generated banking reconciliation VIEW | ✅ pass | [`reports/casefiles/KOBOLD.BANK.RECONCILE.1/`](reports/casefiles/KOBOLD.BANK.RECONCILE.1/) |
+| `KOBOLD.DATA.2` | binary fields in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.2/`](reports/casefiles/KOBOLD.DATA.2/) |
+| `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | ✅ pass | [`reports/casefiles/KOBOLD.BANK.2/`](reports/casefiles/KOBOLD.BANK.2/) |
+| `KOBOLD.RECON.2` | declared transformed-record reconciliation | ✅ pass | [`reports/casefiles/KOBOLD.RECON.2/`](reports/casefiles/KOBOLD.RECON.2/) |
+| `KOBOLD.CORPUS.2` | adversarial / banking-shaped corpus | ✅ pass | [`reports/casefiles/KOBOLD.CORPUS.2/`](reports/casefiles/KOBOLD.CORPUS.2/) |
+| `KOBOLD.BENCH.2` | parity-gated end-to-end scalar benchmark | ✅ pass | [`reports/casefiles/KOBOLD.BENCH.2/`](reports/casefiles/KOBOLD.BENCH.2/) |
+| `KOBOLD.ENTERPRISE.2` | Rust-native signed attestation verification (DSSE/ed25519) | ✅ pass | [`reports/casefiles/KOBOLD.ENTERPRISE.2/`](reports/casefiles/KOBOLD.ENTERPRISE.2/) |
+| `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.3/`](reports/casefiles/KOBOLD.DATA.3/) |
+| `KOBOLD.DATA.4` | edited-picture decode composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.4/`](reports/casefiles/KOBOLD.DATA.4/) |
+| `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.5/`](reports/casefiles/KOBOLD.DATA.5/) |
+| `KOBOLD.DATA.6` | COMP-6 composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.6/`](reports/casefiles/KOBOLD.DATA.6/) |
 
 ## What may NOT be relied on
 

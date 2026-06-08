@@ -13,6 +13,7 @@ A reading of the machine-readable atlas in [`archaeology/`](../archaeology/ATLAS
 traces to an atlas file; the **only authoritative axis is the admitted GnuCOBOL 3.2 oracle** — standards
 and vendor rows are cited shadow witnesses, never overrides.
 
+> [!IMPORTANT]
 > **Doctrine.** The COBOL Atlas separates formal standards, historical CODASYL specifications, government
 > profiles, GnuCOBOL dialect modes, vendor compiler generations, platform runtimes, and preprocessor
 > ecosystems. A surface is not "COBOL" in the abstract until the atlas says which axis admits it, whether

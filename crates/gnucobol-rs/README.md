@@ -9,6 +9,8 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-38-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-38-blueviolet)
+
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
 the GnuCOBOL 3.2 `libcob` oracle.**
@@ -18,11 +20,33 @@ is a deterministic function of its `(bytes, attrs)` inputs — no global state, 
 reads, panic-free on hostile input. It is part of the [`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs)
 compatibility court.
 
-## What it does (sealed claims)
+## What it does — sealed claims
 
-Each is proven against the GnuCOBOL 3.2 oracle: **`GNURUST.2`** decimal `MOVE` bytes (below),
-**`GNURUST.3`** PIC→field-model (`pic`), **`GNURUST.4`** record layout (`layout`), **`GNURUST.5`/`6`**
-`COPY`(+`REPLACING`) expansion (`copybook`), **`GNURUST.7`** decimal arithmetic (`arith`), and **`GNURUST.8`** VALUE images (`init`).
+### Sealed GnuCOBOL data/arithmetic courts
+
+| 🔒 court | name | verdict | casefile |
+|---|---|:---:|---|
+| `GNURUST.2` | decimal MOVE | ✅ pass | `reports/casefiles/GNURUST.2/` |
+| `GNURUST.3` | PIC field model | ✅ pass | `reports/casefiles/GNURUST.3/` |
+| `GNURUST.4` | record layout | ✅ pass | `reports/casefiles/GNURUST.4/` |
+| `GNURUST.5` | COPY expansion | ✅ pass | `reports/casefiles/GNURUST.5/` |
+| `GNURUST.6` | COPY ... REPLACING | ✅ pass | `reports/casefiles/GNURUST.6/` |
+| `GNURUST.7` | arithmetic ADD/SUB/MUL | ✅ pass | `reports/casefiles/GNURUST.7/` |
+| `GNURUST.8` | VALUE initial image | ✅ pass | `reports/casefiles/GNURUST.8/` |
+| `GNURUST.9` | PIC P-scaling | ✅ pass | `reports/casefiles/GNURUST.9/` |
+| `GNURUST.10` | ODO physical-max layout | ✅ pass | `reports/casefiles/GNURUST.10/` |
+| `GNURUST.11` | LEVEL-88 eval | ✅ pass | `reports/casefiles/GNURUST.11/` |
+| `GNURUST.12` | SET 88 TO TRUE | ✅ pass | `reports/casefiles/GNURUST.12/` |
+| `GNURUST.13` | packed ADD/SUBTRACT (cob_add_bcd) | ✅ pass | `reports/casefiles/GNURUST.13/` |
+| `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | ✅ pass | `reports/casefiles/GNURUST.14/` |
+| `GNURUST.15` | EBCDIC cp500 DISPLAY decode | ✅ pass | `reports/casefiles/GNURUST.15/` |
+| `GNURUST.16` | edited-picture decode (16a+16b) | ✅ pass | `reports/casefiles/GNURUST.16/` |
+| `GNURUST.17` | cp500 EBCDIC zoned numeric decode | ✅ pass | `reports/casefiles/GNURUST.17/` |
+| `GNURUST.18` | COMP-6 unsigned packed storage + MOVE | ✅ pass | `reports/casefiles/GNURUST.18/` |
+| `GNURUST.19` | DIVIDE receiving-field bytes | ✅ pass | `reports/casefiles/GNURUST.19/` |
+
+> [!NOTE]
+> Every court is proven **byte-identical** to GnuCOBOL 3.2's `libcob` under a differential sweep (`FAIL=0`). ✅ = proven against the oracle; the detailed claim for each follows below.
 
 ## `GNURUST.2` — decimal `MOVE` bytes
 
@@ -155,11 +179,19 @@ non-claims.
 
 ## What it does NOT do
 
-Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no
-`DIVIDE`, no `ADD`/`SUBTRACT` into a PACKED field (libcob's separate BCD path), no rounding modes
-other than nearest-away, no `ON SIZE ERROR`; no edited pictures, no `DISPLAY`-statement output, no
-comparison/collation, no binary/float, no files; no `P` scaling, no `OCCURS DEPENDING ON`. Each
-**fails closed** with a typed error. See `reports/negative-claims.md` and `docs/future-risk-register.md`.
+> [!CAUTION]
+> Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above, these are **refused** (each fails closed with a typed error):
+
+| ❌ not claimed | note |
+|---|---|
+| `ON SIZE ERROR` / overflow control-flow | bytes-written + branch semantics unmapped |
+| `DIVIDE ... REMAINDER` | quotient bytes are `GNURUST.19`; the remainder receiver is a future court |
+| rounding modes other than nearest-away | only `ROUNDED` nearest-away is proven |
+| comparison / collation, binary & float arithmetic | out of the admitted numeric subset |
+| `DISPLAY`-statement output, file I/O | not a runtime; see `KOBOLD.FILE.1` for container ingest only |
+| `OCCURS DEPENDING ON` arithmetic | physical-max layout only (`GNURUST.4/10`) |
+
+See [`reports/negative-capabilities.json`](reports/negative-capabilities.json) and [`docs/future-risk-register.md`](docs/future-risk-register.md) for the full machine-readable refusal set.
 
 ## License
 

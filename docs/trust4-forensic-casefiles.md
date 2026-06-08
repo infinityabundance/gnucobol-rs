@@ -9,6 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/trust4-forensic-casefiles.md`._
 
+> [!IMPORTANT]
 > **Doctrine.** TRUST.4 makes every report a generated forensic case file: claims, non-claims, negative
 > capabilities, evidence hashes, replay commands, and portable attestations are produced from court runs,
 > while human documentation is only a rendered view of machine-verifiable evidence.

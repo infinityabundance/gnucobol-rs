@@ -1,24 +1,24 @@
 {
-  "schema": "trust4-doc-model-v1",
-  "document_id": "trust2-generated-receipts",
-  "generated_path": "docs/trust2-generated-receipts.md",
-  "title": "TRUST.2 \u2014 generated receipts, not static receipts",
-  "machine_fields": [],
-  "body_template": "> **Doctrine.** A KOBOLD/GNURUST receipt is not a static claim document. It is generated evidence from\n> a replayable court run. Human documentation may summarize receipts, but only generated receipts bind\n> a claim.\n\nA receipt with a hand-typed `PASS=120 FAIL=0` is a static artifact of *confidence*. A receipt should be\na reproducible artifact of *replay*:\n\n```\noracle + fixture + gnucobol-rs court  \u2192  replay command  \u2192  machine output  \u2192  receipt.json  \u2192  receipt.md\n                                                                              (binding)        (generated)\n```\n\n## What is generated\n\n`reports/receipts/<CAMPAIGN>/receipt.json` is the **receipt of record** \u2014 produced by running the\ncourt's sweep **live** (`lab/receipt/run.py generate`). It records the campaign, court, crate version,\noracle identity, replay command, the live sweep result, byte domain, non-claims, and verdict.\n`receipt.md` is **generated from the JSON** \u2014 never hand-edited (the header says so).\n\nThe authored `reports/RECEIPT-GNURUST-*.md` files remain the human prose (doctrine / exact claim), but\ntheir stated sweep numbers are **gated against the generated receipts**, so prose cannot drift either.\n\n## The gate (`lab/receipt/run.py check`, run by the doc-gate)\n\nFails if:\n- a generated `receipt.json` evidence differs from a fresh live replay (stale results);\n- `receipt.md` != `render(receipt.json)` (a manual edit);\n- a `claim-ladder.json` campaign has no generated receipt;\n- a static `RECEIPT-*.md` does not state the current live result.\n\nSo a publish is blocked when *\u201cREADME says pass, receipt says pass, but replay would fail today.\u201d*\n**The receipt is the replay.**\n\n## Regenerate\n\n```sh\npython3 lab/receipt/run.py generate \"$(git rev-parse --short HEAD)-replay\" \"$(git rev-parse --short HEAD)\"\npython3 lab/receipt/run.py check   # what the doc-gate runs\n```\n\nFuture: a `reports/receipts/archive/` layer pinning release receipts (hash + crate version + git tag) at\npublish time, distinct from the regenerating `current` set.\n",
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/docs/trust2-generated-receipts.md"
-    ],
-    "legacy_sha256": [
-      "de20d98d57958d8598512cdfb66960dd3e288d023dc183993fd85057a07457d2"
-    ],
-    "information_superset": true,
-    "legacy_claims_carried_forward": [
-      "full original body embedded verbatim in body_template"
-    ],
-    "legacy_non_claims_carried_forward": [],
-    "legacy_notes_carried_forward": [],
-    "legacy_unstructured_notes": [],
-    "missing_items": []
-  }
+ "schema": "trust4-doc-model-v1",
+ "document_id": "trust2-generated-receipts",
+ "generated_path": "docs/trust2-generated-receipts.md",
+ "title": "TRUST.2 \u2014 generated receipts, not static receipts",
+ "machine_fields": [],
+ "body_template": "> [!IMPORTANT]\n> **Doctrine.** A KOBOLD/GNURUST receipt is not a static claim document. It is generated evidence from\n> a replayable court run. Human documentation may summarize receipts, but only generated receipts bind\n> a claim.\n\nA receipt with a hand-typed `PASS=120 FAIL=0` is a static artifact of *confidence*. A receipt should be\na reproducible artifact of *replay*:\n\n```\noracle + fixture + gnucobol-rs court  \u2192  replay command  \u2192  machine output  \u2192  receipt.json  \u2192  receipt.md\n                                                                              (binding)        (generated)\n```\n\n## What is generated\n\n`reports/receipts/<CAMPAIGN>/receipt.json` is the **receipt of record** \u2014 produced by running the\ncourt's sweep **live** (`lab/receipt/run.py generate`). It records the campaign, court, crate version,\noracle identity, replay command, the live sweep result, byte domain, non-claims, and verdict.\n`receipt.md` is **generated from the JSON** \u2014 never hand-edited (the header says so).\n\nThe authored `reports/RECEIPT-GNURUST-*.md` files remain the human prose (doctrine / exact claim), but\ntheir stated sweep numbers are **gated against the generated receipts**, so prose cannot drift either.\n\n## The gate (`lab/receipt/run.py check`, run by the doc-gate)\n\nFails if:\n- a generated `receipt.json` evidence differs from a fresh live replay (stale results);\n- `receipt.md` != `render(receipt.json)` (a manual edit);\n- a `claim-ladder.json` campaign has no generated receipt;\n- a static `RECEIPT-*.md` does not state the current live result.\n\nSo a publish is blocked when *\u201cREADME says pass, receipt says pass, but replay would fail today.\u201d*\n**The receipt is the replay.**\n\n## Regenerate\n\n```sh\npython3 lab/receipt/run.py generate \"$(git rev-parse --short HEAD)-replay\" \"$(git rev-parse --short HEAD)\"\npython3 lab/receipt/run.py check   # what the doc-gate runs\n```\n\nFuture: a `reports/receipts/archive/` layer pinning release receipts (hash + crate version + git tag) at\npublish time, distinct from the regenerating `current` set.\n",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/docs/trust2-generated-receipts.md"
+  ],
+  "legacy_sha256": [
+   "de20d98d57958d8598512cdfb66960dd3e288d023dc183993fd85057a07457d2"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
 }

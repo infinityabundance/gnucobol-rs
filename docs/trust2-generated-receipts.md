@@ -9,6 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/trust2-generated-receipts.md`._
 
+> [!IMPORTANT]
 > **Doctrine.** A KOBOLD/GNURUST receipt is not a static claim document. It is generated evidence from
 > a replayable court run. Human documentation may summarize receipts, but only generated receipts bind
 > a claim.

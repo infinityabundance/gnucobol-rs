@@ -37,21 +37,46 @@ def oracle_str():
 def machine_values():
     cl = claim_ladder()
     gnurust = [c for c in cl["courts"] if c["id"].startswith("GNURUST.")]
+    kobold = [c for c in cl["courts"] if c["id"].startswith("KOBOLD.")]
     casefiles = glob.glob(os.path.join(ROOT, "reports/casefiles/*/casefile.json"))
     def verdict(cid):
         jf = os.path.join(ROOT, "reports/casefiles", cid, "casefile.json")
-        return json.load(open(jf))["results"]["verdict"] if os.path.exists(jf) else "?"
-    rows = ["### Sealed courts (generated from `reports/claim-ladder.json`)", "",
-            "| court | name | verdict | casefile |", "|---|---|---|---|"]
-    for c in sorted(cl["courts"], key=lambda x: (x["id"].split(".")[0], int(re.sub(r'\D', '', x["id"].split(".")[-1]) or 0))):
-        rows.append(f"| `{c['id']}` | {c.get('name','')} | {verdict(c['id'])} | `reports/casefiles/{c['id']}/` |")
+        if not os.path.exists(jf):
+            return "❔ —"
+        v = json.load(open(jf))["results"]["verdict"]
+        return ("✅ " if v == "pass" else "❌ ") + v
+    cv = crate_version()
+    keyf = lambda x: (x["id"].split(".")[0], int(re.sub(r'\D', '', x["id"].split(".")[-1]) or 0))
+    def court_table(courts, title, with_links=True):
+        out = [f"### {title}", "", "| 🔒 court | name | verdict | casefile |", "|---|---|:---:|---|"]
+        for c in sorted(courts, key=keyf):
+            cf = (f"[`reports/casefiles/{c['id']}/`](reports/casefiles/{c['id']}/)" if with_links
+                  else f"`reports/casefiles/{c['id']}/`")
+            out.append(f"| `{c['id']}` | {c.get('name','')} | {verdict(c['id'])} | {cf} |")
+        return "\n".join(out)
+    rows = [court_table(cl["courts"], "Sealed courts (generated from `reports/claim-ladder.json`)")]
+    # colored shields.io badges (project-wide; crate-specific crates.io badge added per model)
+    def badge(label, msg, color):
+        esc = lambda s: s.replace('-', '--').replace(' ', '_')
+        return f"![{label}](https://img.shields.io/badge/{esc(label)}-{esc(msg)}-{color})"
+    badges = " ".join([
+        badge("license", "LGPL-3.0-or-later", "blue"),
+        badge("unsafe", "forbidden", "success"),
+        badge("oracle", "GnuCOBOL 3.2", "orange"),
+        badge("sealed courts", str(len(cl["courts"])), "brightgreen"),
+        badge("casefiles", str(len(casefiles)), "blueviolet"),
+    ])
     return {
-        "version": crate_version(),
+        "version": cv,
         "gnurust_court_count": str(len(gnurust)),
+        "kobold_court_count": str(len(kobold)),
+        "court_count": str(len(cl["courts"])),
         "oracle": oracle_str(),
         "casefile_count": str(len(casefiles)),
         "publish_note": "(The git repo is the authority; crates.io may trail by a version under publish rate limits.)",
         "sealed_courts_table": "\n".join(rows),
+        "gnurust_courts_table": court_table(gnurust, "Sealed GnuCOBOL data/arithmetic courts", with_links=False),
+        "badges": badges,
     }
 
 def header(model):
