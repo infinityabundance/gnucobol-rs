@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 252,
+  "count": 263,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -273,6 +273,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.AWS-COST",
+      "surface": "AWS cost",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
       ]
     },
     {
@@ -822,6 +833,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CORPUS.2"
+      ]
+    },
+    {
+      "id": "NEG.CUSTOMER-WORKLOAD-PERFORMANCE",
+      "surface": "customer-workload performance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
       ]
     },
     {
@@ -1672,6 +1694,17 @@
       ]
     },
     {
+      "id": "NEG.MAINFRAME-EQUIVALENCE",
+      "surface": "mainframe equivalence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
       "id": "NEG.MALFORMED-BYTES",
       "surface": "malformed bytes",
       "status": "not_admitted_fail_closed",
@@ -2167,7 +2200,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.PERF.1"
+        "KOBOLD.PERF.1",
+        "KOBOLD.SCALE.1"
       ]
     },
     {
@@ -2458,6 +2492,72 @@
       ]
     },
     {
+      "id": "NEG.SCALE.AWS_COST",
+      "surface": "local timing treated as AWS/serverless cost",
+      "status": "not_admitted_fail_closed",
+      "guard": "no AWS measurement (see LAMBDA.LIVE.1)",
+      "risk_if_guessed": "false cloud cost projection",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.SCALE.CUSTOMER_WORKLOAD",
+      "surface": "synthetic-corpus throughput treated as customer-workload performance",
+      "status": "not_admitted_fail_closed",
+      "guard": "corpus is declared synthetic mixed fixed-record; not customer data",
+      "risk_if_guessed": "promising customer-workload speed",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.SCALE.MAINFRAME_EQUIVALENCE",
+      "surface": "scale numbers treated as mainframe-equivalent throughput",
+      "status": "not_admitted_fail_closed",
+      "guard": "no mainframe comparison",
+      "risk_if_guessed": "claiming parity with mainframe batch windows",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.SCALE.PRODUCTION_SLA",
+      "surface": "a scale receipt treated as a production SLA/capacity guarantee",
+      "status": "not_admitted_fail_closed",
+      "guard": "local micro-measurement only",
+      "risk_if_guessed": "false capacity/SLA planning",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.SCALE.RANDOM_BYTES_NOT_BUSINESS_CORPUS",
+      "surface": "a synthetic corpus treated as a representative business corpus",
+      "status": "not_admitted_fail_closed",
+      "guard": "mixed fixed-record synthetic, not real distributions",
+      "risk_if_guessed": "assuming real-data shape from synthetic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.SCALE.UNIVERSAL_THROUGHPUT",
+      "surface": "one host's numbers treated as universal throughput",
+      "status": "not_admitted_fail_closed",
+      "guard": "host/rustc/profile recorded; single host",
+      "risk_if_guessed": "generalizing one machine's result",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
       "id": "NEG.SEMANTIC-VALIDITY",
       "surface": "semantic validity",
       "status": "not_admitted_fail_closed",
@@ -2670,6 +2770,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-A-SYNTHETIC-CORPUS-IS-A-REPRESENTAT",
+      "surface": "that a synthetic corpus is a representative business corpus",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
+      ]
+    },
+    {
       "id": "NEG.THAT-THE-VIEW-IS-NEW-EVIDENCE",
       "surface": "that the view is new evidence",
       "status": "not_admitted_fail_closed",
@@ -2744,6 +2855,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.UNIVERSAL-THROUGHPUT",
+      "surface": "universal throughput",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.SCALE.1"
       ]
     },
     {

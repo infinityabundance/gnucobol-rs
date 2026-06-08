@@ -220,6 +220,19 @@ ECO = [
 for (i, s2, g, r) in ECO:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["archaeology/ATLAS.md"]}
+
+# KOBOLD.SCALE.1 scale-measurement refusals.
+SCALE = [
+ ("NEG.SCALE.CUSTOMER_WORKLOAD", "synthetic-corpus throughput treated as customer-workload performance", "corpus is declared synthetic mixed fixed-record; not customer data", "promising customer-workload speed"),
+ ("NEG.SCALE.PRODUCTION_SLA", "a scale receipt treated as a production SLA/capacity guarantee", "local micro-measurement only", "false capacity/SLA planning"),
+ ("NEG.SCALE.AWS_COST", "local timing treated as AWS/serverless cost", "no AWS measurement (see LAMBDA.LIVE.1)", "false cloud cost projection"),
+ ("NEG.SCALE.MAINFRAME_EQUIVALENCE", "scale numbers treated as mainframe-equivalent throughput", "no mainframe comparison", "claiming parity with mainframe batch windows"),
+ ("NEG.SCALE.UNIVERSAL_THROUGHPUT", "one host's numbers treated as universal throughput", "host/rustc/profile recorded; single host", "generalizing one machine's result"),
+ ("NEG.SCALE.RANDOM_BYTES_NOT_BUSINESS_CORPUS", "a synthetic corpus treated as a representative business corpus", "mixed fixed-record synthetic, not real distributions", "assuming real-data shape from synthetic"),
+]
+for (i, s2, g, r) in SCALE:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.SCALE.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
