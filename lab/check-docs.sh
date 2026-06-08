@@ -181,6 +181,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.4: legacy migration drift"; cat /tmp/_mig_check
   fi
+  if python3 "$ROOT/lab/docs/generate.py" check >/tmp/_docs_check 2>&1; then
+    note "TRUST.4.DOCS: authoritative docs generated, version fresh, legacy preserved as superset"
+  else
+    bad "TRUST.4.DOCS: doc drift"; cat /tmp/_docs_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

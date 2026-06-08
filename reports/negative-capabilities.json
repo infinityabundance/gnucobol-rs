@@ -1,7 +1,7 @@
 {
   "schema": "kobold-negative-capability-registry-v1",
-  "doctrine": "Negative capability is the trust surface. Every entry is a surface this stack refuses to guess; casefiles reference these IDs.",
-  "count": 81,
+  "doctrine": "Negative capability is the trust surface. Every entry is a surface this stack refuses to guess (court non-claims) or a documentation-staleness finding it makes machine-detectable (NEG.DOC.*). Casefiles reference these IDs.",
+  "count": 89,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -218,6 +218,94 @@
       "evidence": [
         "GNURUST.7",
         "GNURUST.13"
+      ]
+    },
+    {
+      "id": "NEG.DOC.FRONTDOOR_CONFLICT",
+      "surface": "a front-door doc linking a demoted legacy report as authority",
+      "status": "machine_detected_negative_finding",
+      "guard": "lab/trust4/migrate_reports.py check",
+      "risk_if_guessed": "a reader follows a non-authoritative exhibit",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.INFORMATION_LOSS",
+      "surface": "a generated doc that is not an information superset of its legacy",
+      "status": "machine_detected_negative_finding",
+      "guard": "legacy_preservation review",
+      "risk_if_guessed": "dropped caveat/claim/context",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.LEGACY_NOT_REPLACED",
+      "surface": "a legacy doc moved without a generated replacement",
+      "status": "machine_detected_negative_finding",
+      "guard": "lab/trust4/migrate_reports.py check",
+      "risk_if_guessed": "lost authority with no successor",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.MANUAL_EDIT",
+      "surface": "a generated authoritative doc edited by hand",
+      "status": "machine_detected_negative_finding",
+      "guard": "lab/docs/generate.py check (== regenerated)",
+      "risk_if_guessed": "hand-written authority masquerading as generated",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.STALE_CLAIM",
+      "surface": "an authoritative doc claim contradicting the current casefiles",
+      "status": "machine_detected_negative_finding",
+      "guard": "lab/docs/generate.py check",
+      "risk_if_guessed": "README says future but STATUS/casefile says composed",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.STALE_NONCLAIM",
+      "surface": "a fail-closed list contradicting an admitted casefile",
+      "status": "machine_detected_negative_finding",
+      "guard": "lab/docs/generate.py check",
+      "risk_if_guessed": "a non-claim that is actually now admitted",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.STALE_RECEIPT_LINK",
+      "surface": "a doc linking a receipt/casefile that no longer exists",
+      "status": "machine_detected_negative_finding",
+      "guard": "doc-gate link check",
+      "risk_if_guessed": "a dangling evidence pointer",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DOC.STALE_VERSION",
+      "surface": "an authoritative doc naming a version other than Cargo.toml",
+      "status": "machine_detected_negative_finding",
+      "guard": "lab/docs/generate.py check",
+      "risk_if_guessed": "a reader trusts a stale version/claim",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.4.DOCS"
       ]
     },
     {
