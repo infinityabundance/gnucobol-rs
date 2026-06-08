@@ -178,8 +178,9 @@ fn compute_divide(a: Dec, b: Dec, result_scale: i32) -> Result<Dec, ArithError> 
 /// `DIVIDE` quotient into a GIVING receiver (`GNURUST.19`): `receiver := lhs / rhs`, returning the
 /// receiver's field bytes — matching libcob's `cob_div`/`cob_decimal_div` + store. Truncation toward
 /// zero by default; `ROUNDED` is nearest-away-from-zero (one guard digit, computed then rounded by
-/// [`store`]). Divide-by-zero fails closed. (For `DIVIDE a BY b GIVING c`, `lhs=a, rhs=b`; for
-/// `DIVIDE a INTO b GIVING c`, `lhs=b, rhs=a`.) **Non-claims:** `REMAINDER`, `ON SIZE ERROR`, `COMPUTE`,
+/// the store path). Divide-by-zero fails closed. (For `DIVIDE a BY b GIVING c`, `lhs=a, rhs=b`; for
+/// `DIVIDE a INTO b GIVING c`, `lhs=b, rhs=a`.) The `REMAINDER` receiver is a sealed sibling
+/// (`GNURUST.REMAINDER.1`) — see [`cob_divide_remainder`]. **Non-claims:** `ON SIZE ERROR`, `COMPUTE`,
 /// expression evaluation, binary/edited receivers, and business correctness.
 pub fn cob_divide(
     lhs: &[u8],
