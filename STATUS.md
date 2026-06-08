@@ -64,6 +64,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `KOBOLD.FILE.1` | fixed-record container ingest | pass | `reports/casefiles/KOBOLD.FILE.1/` |
 | `KOBOLD.BANK.1` | header/detail/trailer + declared control totals | pass | `reports/casefiles/KOBOLD.BANK.1/` |
 | `KOBOLD.DATA.2` | binary fields in corpus | pass | `reports/casefiles/KOBOLD.DATA.2/` |
+| `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | pass | `reports/casefiles/KOBOLD.BANK.2/` |
 | `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | pass | `reports/casefiles/KOBOLD.DATA.3/` |
 | `KOBOLD.DATA.4` | edited-picture decode composed | pass | `reports/casefiles/KOBOLD.DATA.4/` |
 | `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | pass | `reports/casefiles/KOBOLD.DATA.5/` |

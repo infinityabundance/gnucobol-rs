@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 122,
+  "count": 130,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -42,6 +42,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCOUNT-TYPE-NORMAL-BALANCE-POLARITY",
+      "surface": "account-type/normal-balance polarity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
       ]
     },
     {
@@ -379,6 +390,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY-MINOR-UNIT-CORRECTNESS",
+      "surface": "currency minor-unit correctness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
       ]
     },
     {
@@ -983,6 +1005,17 @@
       ]
     },
     {
+      "id": "NEG.NUMERIC-ROLE-FROM-PIC-OR-FIELD-NAME",
+      "surface": "numeric role from PIC or field name",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
+      ]
+    },
+    {
       "id": "NEG.NUMERIC.ENVIRONMENT.UNKNOWN",
       "surface": "arithmetic-transform parity claimed outside the admitted numeric environment (ARITH/TRUNC/sign mode)",
       "status": "not_admitted_requires_declared_profile",
@@ -1047,6 +1080,39 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.POLARITY-FROM-CR-DB-PRESENTATION",
+      "surface": "polarity from CR/DB presentation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
+      ]
+    },
+    {
+      "id": "NEG.POLARITY-FROM-NUMERIC-SIGN",
+      "surface": "polarity from numeric sign",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
+      ]
+    },
+    {
+      "id": "NEG.POSTING-LEDGER-BUSINESS-TRUTH",
+      "surface": "posting/ledger/business truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
       ]
     },
     {
@@ -1147,6 +1213,17 @@
       "evidence": [
         "GNURUST.16",
         "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.REVERSAL-FROM-NEGATIVE-SIGN",
+      "surface": "reversal from negative sign",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
       ]
     },
     {
@@ -1313,6 +1390,17 @@
       "evidence": [
         "GNURUST.4",
         "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.TRANSACTION-CODE-TABLE-UNLESS-DECLARED",
+      "surface": "transaction-code table unless declared",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.2"
       ]
     },
     {

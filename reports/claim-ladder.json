@@ -375,6 +375,20 @@
       "readiness": 3,
       "lie_prevented": "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth",
       "damage_if_overclaimed": "treating a balanced file as a correct, accepted posting moves money on an unverified batch"
+    },
+    {
+      "id": "KOBOLD.BANK.2",
+      "name": "declared accounting profile (numeric-role + debit/credit polarity)",
+      "proven": "debit/credit polarity from a declared source field + value tables only (never sign/CR-DB/name); only declared Amount-role fields are summed (identifiers/rates/codes never money); negative amount with declared D stays debit; unknown polarity fails closed",
+      "byte_domain": "declared accounting profile over banking detail records -> debit/credit totals",
+      "oracle": "composed gnucobol-rs courts + declared kobold-accounting-profile-v1",
+      "fixtures": "tests/banking.rs (5: balanced+rate-not-summed, tampered, negative-D-still-debit, unknown-fails-closed, credit-routing)",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "polarity from numeric sign; polarity from CR/DB presentation; numeric role from PIC or field name; transaction-code table unless declared; account-type/normal-balance polarity; reversal from negative sign; currency minor-unit correctness; posting/ledger/business truth",
+      "breaks_claim": "inferring polarity from sign/CR-DB/name; summing a rate or identifier as money",
+      "readiness": 3,
+      "lie_prevented": "'a numeric field is money and its sign is its posting side' -- ACCOUNTING.PROFILE.1 sums only declared Amount fields and takes polarity only from the declared source",
+      "damage_if_overclaimed": "summing a rate or account-id as money, or reading a sign as debit/credit, mis-states the ledger"
     }
   ],
   "transform_vs_read": {
