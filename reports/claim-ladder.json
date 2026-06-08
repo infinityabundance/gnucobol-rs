@@ -585,6 +585,20 @@
       "readiness": 3,
       "lie_prevented": "'more threads, so optimize everything in parallel' -- PERF.2 parallelizes ONLY record-local work, keeps custody/aggregation ordered and serial, and admits timing only after full evidence parity",
       "damage_if_overclaimed": "a parallelized custody/aggregation that diverges from scalar would corrupt evidence (reordered records, a different posting chain) while looking faster"
+    },
+    {
+      "id": "SIZE.ERROR.ATLAS.1",
+      "name": "arithmetic size-error behavior atlas (observed)",
+      "proven": "OBSERVED GnuCOBOL 3.2 size-error behavior over ADD/SUBTRACT/MULTIPLY/DIVIDE + divide-by-zero, DISPLAY + COMP-3 receivers, signed + ROUNDED-carry: with a SENTINEL-prefilled receiver, records receiver-written-vs-preserved (before/after bytes) and size_error_signaled. Finding: plain ADD/SUB/MUL/ROUNDED overflow WRITES the truncated receiver; plain divide-by-zero PRESERVES it; ON SIZE ERROR always preserves + signals",
+      "byte_domain": "observed receiver bytes (before/after) + size-error flag from the oracle",
+      "oracle": "bash lab/oracle/size_error_sweep.sh",
+      "fixtures": "lab/oracle/size_error_sweep.sh (12 cases, PASS=12 FAIL=0) -> reports/size-error-atlas.json",
+      "sealed_version": "atlas (gnucobol-rs lab)",
+      "not_proven": "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented); Procedure Division execution; which branch runs; receiver-write inference; business-arithmetic correctness",
+      "breaks_claim": "implementing ON SIZE ERROR control flow; inferring (not observing) receiver write; claiming business arithmetic correctness",
+      "readiness": 2,
+      "lie_prevented": "'KOBOLD arithmetic handles ON SIZE ERROR like GnuCOBOL' -- SIZE.ERROR.ATLAS.1 only OBSERVES whether the receiver is written/preserved and whether size error is signaled; it implements no control flow",
+      "damage_if_overclaimed": "assuming a money field was preserved (or written) on overflow when it was the opposite silently corrupts financial data"
     }
   ],
   "transform_vs_read": {

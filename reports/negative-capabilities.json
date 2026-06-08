@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 275,
+  "count": 285,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -572,6 +572,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.RECONCILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-ARITHMETIC-CORRECTNESS",
+      "surface": "business-arithmetic correctness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
       ]
     },
     {
@@ -1926,6 +1937,17 @@
       ]
     },
     {
+      "id": "NEG.ON-SIZE-ERROR-NOT-ON-SIZE-ERROR-CONTROL-",
+      "surface": "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.OTHER-ROUNDING-MODES",
       "surface": "other rounding modes",
       "status": "not_admitted_fail_closed",
@@ -2277,7 +2299,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.11",
-        "KOBOLD.RECON.2"
+        "KOBOLD.RECON.2",
+        "SIZE.ERROR.ATLAS.1"
       ]
     },
     {
@@ -2345,6 +2368,17 @@
       "owning_future_campaign": "PRIVACY.REDACTION.1 (future); corpus is synthetic only",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.RECEIVER-WRITE-INFERENCE",
+      "surface": "receiver-write inference",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
       ]
     },
     {
@@ -2802,6 +2836,72 @@
       ]
     },
     {
+      "id": "NEG.SIZE_ERROR.BRANCH_EXECUTION_NOT_CLAIMED",
+      "surface": "which branch executes claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "out of scope (no Procedure Division execution)",
+      "risk_if_guessed": "claiming control-flow outcome",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.BUSINESS_ARITHMETIC_NOT_CLAIMED",
+      "surface": "business-arithmetic correctness claimed from the atlas",
+      "status": "not_admitted_observed_only",
+      "guard": "byte-behavior observation only",
+      "risk_if_guessed": "trusting overflow handling as business-correct",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.CONTROL_FLOW",
+      "surface": "ON SIZE ERROR control-flow execution",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES oracle behavior; it does not execute control flow",
+      "risk_if_guessed": "running a branch KOBOLD never executes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NOT_ON_SIZE_ERROR_NOT_IMPLEMENTED",
+      "surface": "NOT ON SIZE ERROR imperative implemented",
+      "status": "not_admitted_observed_only",
+      "guard": "not implemented; observation only",
+      "risk_if_guessed": "assuming the not-error branch ran",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.ON_SIZE_ERROR_NOT_IMPLEMENTED",
+      "surface": "ON SIZE ERROR imperative implemented in KOBOLD",
+      "status": "not_admitted_observed_only",
+      "guard": "not implemented; observation only",
+      "risk_if_guessed": "assuming the imperative ran",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.RECEIVER_WRITE_NOT_INFERRED",
+      "surface": "receiver-written/preserved INFERRED rather than observed",
+      "status": "not_admitted_observed_only",
+      "guard": "recorded from sentinel before/after oracle bytes, never inferred",
+      "risk_if_guessed": "guessing whether a money field changed",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.SIZE_ERROR.SEMANTICS",
       "surface": "transformed-record write-back without admitted ON SIZE ERROR / truncation / rounded-carry / sign-of-zero semantics",
       "status": "not_admitted_requires_declared_profile",
@@ -3064,6 +3164,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.WHICH-BRANCH-RUNS",
+      "surface": "which branch runs",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SIZE.ERROR.ATLAS.1"
       ]
     }
   ]

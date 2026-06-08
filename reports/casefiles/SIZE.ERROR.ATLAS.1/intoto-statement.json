@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/SIZE.ERROR.ATLAS.1/casefile.json",
+      "digest": {
+        "sha256": "6efba0b1d8cffa80fff78d85d176637c9c3356a5525b5e53c9ff6d059bfc8550"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "SIZE.ERROR.ATLAS.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "0.7.1",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/size_error_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "c356a54a59f8b3b6d39e5967f4a22d11eac934b513a7eb810fefade19e802be1",
+      "receipt_sha256": "027c341c7b2f6f72d1431c958f01417769ed74b8141a39b9eb0d28bf42698e91"
+    },
+    "positive_claim_count": 5,
+    "negative_claim_count": 6
+  }
+}

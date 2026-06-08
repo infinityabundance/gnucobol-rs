@@ -12,8 +12,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field-storage + move-result bytes (binary) |
 | replay command | `bash lab/oracle/binary_sweep.sh` |
-| generated_at | 4ee991a-replay |
-| git_commit | `4ee991a` |
+| generated_at | unstamped |
+| git_commit | `unstamped` |
 | receipt_status | current |
 
 ## Non-claims

@@ -176,6 +176,18 @@
         "binary/edited receivers",
         "business correctness"
       ]
+    },
+    "SIZE.ERROR.ATLAS.1": {
+      "court": "arithmetic size-error behavior atlas",
+      "sweep": "size_error_sweep.sh",
+      "byte_domain": "observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3)",
+      "non_claims": [
+        "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",
+        "Procedure Division execution",
+        "receiver-write inference (observed, not inferred)",
+        "branch execution",
+        "business arithmetic correctness"
+      ]
     }
   }
 }

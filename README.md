@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-41-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-41-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-42-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-42-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -191,6 +191,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `KOBOLD.DATA.4` | edited-picture decode composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.4/`](reports/casefiles/KOBOLD.DATA.4/) |
 | `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.5/`](reports/casefiles/KOBOLD.DATA.5/) |
 | `KOBOLD.DATA.6` | COMP-6 composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.6/`](reports/casefiles/KOBOLD.DATA.6/) |
+| `SIZE.ERROR.ATLAS.1` | arithmetic size-error behavior atlas (observed) | ✅ pass | [`reports/casefiles/SIZE.ERROR.ATLAS.1/`](reports/casefiles/SIZE.ERROR.ATLAS.1/) |
 
 `gnucobol-rs` treats COBOL compatibility as a stack of **separately admitted courts** — bytes,
 moves, field model, record layout, initialization, comparison, formatting, source expansion,

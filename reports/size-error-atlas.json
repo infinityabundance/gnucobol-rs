@@ -1,0 +1,148 @@
+{
+  "schema": "kobold-size-error-atlas-v1",
+  "court": "SIZE.ERROR.ATLAS.1",
+  "oracle": "GnuCOBOL 3.2 (lab/oracle/prefix)",
+  "doctrine": "Observed oracle evidence only: whether size error is signaled and whether receiver bytes are written or preserved. NO ON SIZE ERROR / NOT ON SIZE ERROR control-flow implementation, no Procedure Division execution, no business-arithmetic correctness.",
+  "cases": [
+    {
+      "case": "ADDDISPP",
+      "op": "ADD",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": false,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "343939",
+      "receiver_written": true,
+      "receiver_preserved": false,
+      "size_error_signaled": false
+    },
+    {
+      "case": "ADDDISPS",
+      "op": "ADD",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": true,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "393939",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": true
+    },
+    {
+      "case": "ADDC3P",
+      "op": "ADD",
+      "receiver": "COMP-3 9(3)",
+      "on_size_error": false,
+      "receiver_before_hex": "999f",
+      "receiver_after_hex": "499f",
+      "receiver_written": true,
+      "receiver_preserved": false,
+      "size_error_signaled": false
+    },
+    {
+      "case": "ADDC3S",
+      "op": "ADD",
+      "receiver": "COMP-3 9(3)",
+      "on_size_error": true,
+      "receiver_before_hex": "999f",
+      "receiver_after_hex": "999f",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": true
+    },
+    {
+      "case": "MULDISPP",
+      "op": "MULTIPLY",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": false,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "393935",
+      "receiver_written": true,
+      "receiver_preserved": false,
+      "size_error_signaled": false
+    },
+    {
+      "case": "MULDISPS",
+      "op": "MULTIPLY",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": true,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "393939",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": true
+    },
+    {
+      "case": "SUBSIGNP",
+      "op": "SUBTRACT",
+      "receiver": "signed S9(3)",
+      "on_size_error": false,
+      "receiver_before_hex": "393979",
+      "receiver_after_hex": "343979",
+      "receiver_written": true,
+      "receiver_preserved": false,
+      "size_error_signaled": false
+    },
+    {
+      "case": "SUBSIGNS",
+      "op": "SUBTRACT",
+      "receiver": "signed S9(3)",
+      "on_size_error": true,
+      "receiver_before_hex": "393979",
+      "receiver_after_hex": "393979",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": true
+    },
+    {
+      "case": "DIV0DISPP",
+      "op": "DIVIDE-BY-ZERO",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": false,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "393939",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": false
+    },
+    {
+      "case": "DIV0DISPS",
+      "op": "DIVIDE-BY-ZERO",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": true,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "393939",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": true
+    },
+    {
+      "case": "ROUNDDISPP",
+      "op": "ADD ROUNDED carry",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": false,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "303030",
+      "receiver_written": true,
+      "receiver_preserved": false,
+      "size_error_signaled": false
+    },
+    {
+      "case": "ROUNDDISPS",
+      "op": "ADD ROUNDED carry",
+      "receiver": "DISPLAY 9(3)",
+      "on_size_error": true,
+      "receiver_before_hex": "393939",
+      "receiver_after_hex": "393939",
+      "receiver_written": false,
+      "receiver_preserved": true,
+      "size_error_signaled": true
+    }
+  ],
+  "non_claims": [
+    "NEG.SIZE_ERROR.CONTROL_FLOW",
+    "NEG.SIZE_ERROR.ON_SIZE_ERROR_NOT_IMPLEMENTED",
+    "NEG.SIZE_ERROR.NOT_ON_SIZE_ERROR_NOT_IMPLEMENTED",
+    "NEG.SIZE_ERROR.RECEIVER_WRITE_NOT_INFERRED",
+    "NEG.SIZE_ERROR.BRANCH_EXECUTION_NOT_CLAIMED",
+    "NEG.SIZE_ERROR.BUSINESS_ARITHMETIC_NOT_CLAIMED"
+  ]
+}

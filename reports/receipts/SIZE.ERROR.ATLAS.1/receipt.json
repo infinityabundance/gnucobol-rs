@@ -1,0 +1,30 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "SIZE.ERROR.ATLAS.1",
+  "court": "arithmetic size-error behavior atlas",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.1",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "command": {
+    "replay": "bash lab/oracle/size_error_sweep.sh"
+  },
+  "byte_domain": "observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3)",
+  "results": {
+    "sweep": "PASS=12 FAIL=0"
+  },
+  "non_claims": [
+    "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",
+    "Procedure Division execution",
+    "receiver-write inference (observed, not inferred)",
+    "branch execution",
+    "business arithmetic correctness"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

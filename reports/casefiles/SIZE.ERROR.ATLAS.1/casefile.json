@@ -1,0 +1,63 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "SIZE.ERROR.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "0.7.1",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "c356a54a59f8b3b6d39e5967f4a22d11eac934b513a7eb810fefade19e802be1",
+    "receipt_sha256": "027c341c7b2f6f72d1431c958f01417769ed74b8141a39b9eb0d28bf42698e91"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "bash lab/oracle/size_error_sweep.sh",
+    "upstream_court": null
+  },
+  "results": {
+    "total": 12,
+    "pass": 12,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "OBSERVED GnuCOBOL 3.2 size-error behavior over ADD/SUBTRACT/MULTIPLY/DIVIDE + divide-by-zero, DISPLAY",
+    "COMP-3 receivers, signed",
+    "ROUNDED-carry: with a SENTINEL-prefilled receiver, records receiver-written-vs-preserved (before/after bytes) and size_error_signaled. Finding: plain ADD/SUB/MUL/ROUNDED overflow WRITES the truncated receiver",
+    "plain divide-by-zero PRESERVES it",
+    "ON SIZE ERROR always preserves + signals"
+  ],
+  "negative_claims": [
+    "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",
+    "Procedure Division execution",
+    "which branch runs",
+    "receiver-write inference",
+    "business-arithmetic correctness",
+    "lie prevented: 'KOBOLD arithmetic handles ON SIZE ERROR like GnuCOBOL' -- SIZE.ERROR.ATLAS.1 only OBSERVES whether the receiver is written/preserved and whether size error is signaled; it implements no control flow"
+  ],
+  "negative_capability_ids": [
+    "NEG.ON-SIZE-ERROR-NOT-ON-SIZE-ERROR-CONTROL-",
+    "NEG.PROCEDURE-DIVISION-EXECUTION",
+    "NEG.WHICH-BRANCH-RUNS",
+    "NEG.RECEIVER-WRITE-INFERENCE",
+    "NEG.BUSINESS-ARITHMETIC-CORRECTNESS"
+  ],
+  "byte_domains": [
+    "observed receiver bytes (before/after) + size-error flag from the oracle"
+  ],
+  "lie_prevented": [
+    "'KOBOLD arithmetic handles ON SIZE ERROR like GnuCOBOL' -- SIZE.ERROR.ATLAS.1 only OBSERVES whether the receiver is written/preserved and whether size error is signaled; it implements no control flow"
+  ],
+  "damage_if_overclaimed": "assuming a money field was preserved (or written) on overflow when it was the opposite silently corrupts financial data",
+  "replay": {
+    "command": "bash lab/oracle/size_error_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "1f8654cbca6f2b2dbc6bd9fbe5f7c9f6e5f14021d32d2f62f0042f90c499bc09"
+  }
+}

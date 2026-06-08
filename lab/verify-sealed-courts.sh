@@ -39,6 +39,7 @@ run_sweep "GNURUST.10 ODO phys-max"  odo_sweep.sh
 run_sweep "GNURUST.5  COPY"          copy_sweep.sh
 run_sweep "GNURUST.7/13 arithmetic"  arith_sweep.sh
 run_sweep "GNURUST.19 DIVIDE bytes"   divide_sweep.sh
+run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_sweep.sh
 run_sweep "GNURUST.8  VALUE image"   value_sweep.sh
 run_sweep "GNURUST.11 LEVEL-88 eval" cond_sweep.sh
 run_sweep "GNURUST.12 SET 88 TRUE"   set_sweep.sh

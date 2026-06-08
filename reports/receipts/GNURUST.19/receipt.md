@@ -12,8 +12,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | DIVIDE GIVING receiver field bytes (DISPLAY/COMP-3) |
 | replay command | `bash lab/oracle/divide_sweep.sh` |
-| generated_at | 4ee991a-replay |
-| git_commit | `4ee991a` |
+| generated_at | unstamped |
+| git_commit | `unstamped` |
 | receipt_status | current |
 
 ## Non-claims

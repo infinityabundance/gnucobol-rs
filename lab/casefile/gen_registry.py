@@ -246,6 +246,19 @@ PERF2 = [
 for (i, s2, g, r) in PERF2:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PERF.2"]}
+
+# SIZE.ERROR.ATLAS.1 — observed-only; the control flow is explicitly NOT implemented.
+SIZEERR = [
+ ("NEG.SIZE_ERROR.CONTROL_FLOW", "ON SIZE ERROR control-flow execution", "the atlas OBSERVES oracle behavior; it does not execute control flow", "running a branch KOBOLD never executes"),
+ ("NEG.SIZE_ERROR.ON_SIZE_ERROR_NOT_IMPLEMENTED", "ON SIZE ERROR imperative implemented in KOBOLD", "not implemented; observation only", "assuming the imperative ran"),
+ ("NEG.SIZE_ERROR.NOT_ON_SIZE_ERROR_NOT_IMPLEMENTED", "NOT ON SIZE ERROR imperative implemented", "not implemented; observation only", "assuming the not-error branch ran"),
+ ("NEG.SIZE_ERROR.RECEIVER_WRITE_NOT_INFERRED", "receiver-written/preserved INFERRED rather than observed", "recorded from sentinel before/after oracle bytes, never inferred", "guessing whether a money field changed"),
+ ("NEG.SIZE_ERROR.BRANCH_EXECUTION_NOT_CLAIMED", "which branch executes claimed", "out of scope (no Procedure Division execution)", "claiming control-flow outcome"),
+ ("NEG.SIZE_ERROR.BUSINESS_ARITHMETIC_NOT_CLAIMED", "business-arithmetic correctness claimed from the atlas", "byte-behavior observation only", "trusting overflow handling as business-correct"),
+]
+for (i, s2, g, r) in SIZEERR:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["SIZE.ERROR.ATLAS.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

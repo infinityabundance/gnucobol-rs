@@ -12,8 +12,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | generated-C cob_field_attr + LENGTH OF |
 | replay command | `bash lab/oracle/pic_sweep.sh` |
-| generated_at | 4ee991a-replay |
-| git_commit | `4ee991a` |
+| generated_at | unstamped |
+| git_commit | `unstamped` |
 | receipt_status | current |
 
 ## Non-claims
