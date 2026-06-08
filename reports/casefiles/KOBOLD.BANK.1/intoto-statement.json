@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.BANK.1/casefile.json",
+      "digest": {
+        "sha256": "2565e0ba57cce3dc03042d06867cd0a271297c7706d2e9e873bab9240e2eebdd"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.BANK.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.6.3",
+    "verdict": "pass",
+    "replay": {
+      "command": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "274da1026f5da9ef8d38c550647cb5bea9637e60698637810185947d12cfa84d",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 8
+  }
+}

@@ -55,6 +55,23 @@ for (i, s, g, r) in BANK:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": g if "future" in g else None,
                "evidence": ["banking-truth-boundaries"]}
+
+# KOBOLD.BANK.1 truth-layer refusals: the court reconciles DECLARED vs OBSERVED control totals but never
+# promotes a balanced file into posting/ledger/business truth.
+BANK1 = [
+ ("NEG.BANKING.POSTING_TRUTH", "a balanced file proving that records form an accepted posting unit", "KOBOLD.BANK.1 control totals only; posting profile (future)", "treating a reconciled batch as a valid posting"),
+ ("NEG.BANKING.LEDGER_TRUTH", "a matched trailer proving the batch was accepted into a system of record", "out of scope (no ledger integration)", "treating a balanced file as ledger acceptance"),
+ ("NEG.BANKING.BUSINESS_TRUTH", "decoded/reconciled values proving the account/customer state is actually true", "never -- outside the project", "acting on decoded data as business reality"),
+ ("NEG.BANKING.BALANCED_FILE_IS_NOT_CORRECT_FILE", "a file whose declared==observed totals assumed to be correct", "KOBOLD.BANK.1 reports balance, not correctness", "a balanced-but-wrong file passed as correct"),
+ ("NEG.BANKING.TRAILER_MATCH_IS_NOT_LEDGER_ACCEPTANCE", "trailer reconciliation assumed to be downstream acceptance", "KOBOLD.BANK.1 reconciles totals only", "skipping ledger-acceptance verification"),
+ ("NEG.BANKING.KOBOLD_TOTAL_IS_NOT_TRAILER_TOTAL", "KOBOLD-observed totals conflated with the file's declared trailer totals", "KOBOLD.BANK.1 keeps declared and observed separate", "reporting an observed total as the declared control total"),
+ ("NEG.BANKING.SIGN_IS_NOT_POLARITY", "debit/credit polarity inferred from a numeric sign instead of the declared DR/CR field", "KOBOLD.BANK.1 polarity from declared indicator only", "wrong posting side from a numeric sign"),
+ ("NEG.BANKING.CR_DB_IS_NOT_POSTING_SIDE", "an edited CR/DB presentation marker assumed to be posting side", "ACCOUNTING.PROFILE polarity (declared)", "presentation mistaken for posting polarity"),
+ ("NEG.BANKING.UNKNOWN_RECORD_TYPE", "an undeclared record discriminator silently decoded", "KOBOLD.BANK.1 fails closed on unknown variant", "decoding a record with the wrong layout"),
+]
+for (i, s, g, r) in BANK1:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.BANK.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

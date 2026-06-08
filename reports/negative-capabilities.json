@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 107,
+  "count": 122,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -20,6 +20,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.7"
+      ]
+    },
+    {
+      "id": "NEG.A-BALANCED-FILE-BEING-A-CORRECT-FILE",
+      "surface": "a balanced file being a correct file",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.A-TRAILER-MATCH-BEING-LEDGER-ACCEPTANCE",
+      "surface": "a trailer match being ledger acceptance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
       ]
     },
     {
@@ -67,6 +89,17 @@
       ]
     },
     {
+      "id": "NEG.AUTO-DETECTED-VARIANTS",
+      "surface": "auto-detected variants",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
       "id": "NEG.AUTO-RESYNCHRONIZATION",
       "surface": "auto-resynchronization",
       "status": "not_admitted_fail_closed",
@@ -75,6 +108,105 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.BALANCED_FILE_IS_NOT_CORRECT_FILE",
+      "surface": "a file whose declared==observed totals assumed to be correct",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.BANK.1 reports balance, not correctness",
+      "risk_if_guessed": "a balanced-but-wrong file passed as correct",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.BUSINESS_TRUTH",
+      "surface": "decoded/reconciled values proving the account/customer state is actually true",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "never -- outside the project",
+      "risk_if_guessed": "acting on decoded data as business reality",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.CR_DB_IS_NOT_POSTING_SIDE",
+      "surface": "an edited CR/DB presentation marker assumed to be posting side",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "ACCOUNTING.PROFILE polarity (declared)",
+      "risk_if_guessed": "presentation mistaken for posting polarity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.KOBOLD_TOTAL_IS_NOT_TRAILER_TOTAL",
+      "surface": "KOBOLD-observed totals conflated with the file's declared trailer totals",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.BANK.1 keeps declared and observed separate",
+      "risk_if_guessed": "reporting an observed total as the declared control total",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.LEDGER_TRUTH",
+      "surface": "a matched trailer proving the batch was accepted into a system of record",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope (no ledger integration)",
+      "risk_if_guessed": "treating a balanced file as ledger acceptance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.POSTING_TRUTH",
+      "surface": "a balanced file proving that records form an accepted posting unit",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.BANK.1 control totals only; posting profile (future)",
+      "risk_if_guessed": "treating a reconciled batch as a valid posting",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.SIGN_IS_NOT_POLARITY",
+      "surface": "debit/credit polarity inferred from a numeric sign instead of the declared DR/CR field",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.BANK.1 polarity from declared indicator only",
+      "risk_if_guessed": "wrong posting side from a numeric sign",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.TRAILER_MATCH_IS_NOT_LEDGER_ACCEPTANCE",
+      "surface": "trailer reconciliation assumed to be downstream acceptance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.BANK.1 reconciles totals only",
+      "risk_if_guessed": "skipping ledger-acceptance verification",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.BANKING.UNKNOWN_RECORD_TYPE",
+      "surface": "an undeclared record discriminator silently decoded",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.BANK.1 fails closed on unknown variant",
+      "risk_if_guessed": "decoding a record with the wrong layout",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
       ]
     },
     {
@@ -144,7 +276,8 @@
       "evidence": [
         "KOBOLD.DATA.2",
         "KOBOLD.DATA.3",
-        "KOBOLD.OPERATOR.1"
+        "KOBOLD.OPERATOR.1",
+        "KOBOLD.BANK.1"
       ]
     },
     {
@@ -290,6 +423,17 @@
       "owning_future_campaign": "KOBOLD.DB2HOST.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.DEBIT-CREDIT-POLARITY-FROM-A-NUMERIC-SIG",
+      "surface": "debit/credit polarity from a numeric sign",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
       ]
     },
     {
@@ -661,6 +805,17 @@
       ]
     },
     {
+      "id": "NEG.LEDGER-TRUTH",
+      "surface": "ledger truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
+      ]
+    },
+    {
       "id": "NEG.LINE-SEQUENTIAL-CONTAINERS",
       "surface": "line-sequential containers",
       "status": "not_admitted_fail_closed",
@@ -892,6 +1047,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.POSTING-TRUTH",
+      "surface": "posting truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.1"
       ]
     },
     {

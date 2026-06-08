@@ -336,6 +336,19 @@
       "breaks_claim": "silently absorbing a partial record or resyncing on a length mismatch",
       "readiness": 3,
       "lie_prevented": "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
+    },
+    {
+      "id": "KOBOLD.BANK.1",
+      "name": "header/detail/trailer + declared control totals",
+      "proven": "variant routing by a declared discriminator (H/D/T) + declared-vs-observed control totals (count/debit/credit); balanced file reconciles, tampered trailer fails with a finding, unknown record type fails closed",
+      "byte_domain": "banking batch file -> per-variant records + control-total reconciliation",
+      "oracle": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
+      "fixtures": "recon/banking H/D/T balanced + tampered; tests/banking.rs 3 green",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "posting truth; ledger truth; business truth; debit/credit polarity from a numeric sign; a balanced file being a correct file; a trailer match being ledger acceptance; auto-detected variants",
+      "breaks_claim": "inferring polarity from sign; treating a balanced file as accepted/correct",
+      "readiness": 3,
+      "lie_prevented": "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
     }
   ],
   "transform_vs_read": {

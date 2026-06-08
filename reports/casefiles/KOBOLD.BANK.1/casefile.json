@@ -1,0 +1,64 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.BANK.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "274da1026f5da9ef8d38c550647cb5bea9637e60698637810185947d12cfa84d",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "recon/banking H/D/T balanced + tampered; tests/banking.rs 3 green"
+  },
+  "positive_claims": [
+    "variant routing by a declared discriminator (H/D/T) + declared-vs-observed control totals (count/debit/credit)",
+    "balanced file reconciles, tampered trailer fails with a finding, unknown record type fails closed"
+  ],
+  "negative_claims": [
+    "posting truth",
+    "ledger truth",
+    "business truth",
+    "debit/credit polarity from a numeric sign",
+    "a balanced file being a correct file",
+    "a trailer match being ledger acceptance",
+    "auto-detected variants",
+    "lie prevented: 'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
+  ],
+  "negative_capability_ids": [
+    "NEG.POSTING-TRUTH",
+    "NEG.LEDGER-TRUTH",
+    "NEG.BUSINESS-TRUTH",
+    "NEG.DEBIT-CREDIT-POLARITY-FROM-A-NUMERIC-SIG",
+    "NEG.A-BALANCED-FILE-BEING-A-CORRECT-FILE",
+    "NEG.A-TRAILER-MATCH-BEING-LEDGER-ACCEPTANCE",
+    "NEG.AUTO-DETECTED-VARIANTS"
+  ],
+  "byte_domains": [
+    "banking batch file -> per-variant records + control-total reconciliation"
+  ],
+  "lie_prevented": [
+    "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
+  ],
+  "replay": {
+    "command": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "df743016c0514e25341025409d7bba0fcc48de30c3b23345f9b8a3b2fe677c05"
+  }
+}
