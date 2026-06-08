@@ -315,6 +315,19 @@ CURP = [
 for (i, s2, g, r) in CURP:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.CURRENCY.PROFILE.1"]}
+
+# SUPPORT-PACKET.1 — a bundle of existing evidence; creates no new truth.
+SUPP = [
+ ("NEG.SUPPORT.NO_NEW_TRUTH", "the support packet treated as new evidence/truth", "it gathers EXISTING generated artifacts; introduces nothing", "double-counting a bundle as fresh proof"),
+ ("NEG.SUPPORT.NOT_CERTIFICATION", "the packet treated as a certification", "a bundle is not a certificate", "claiming certified status"),
+ ("NEG.SUPPORT.NOT_COMPLIANCE", "the packet treated as regulatory compliance", "out of scope", "a false compliance posture"),
+ ("NEG.SUPPORT.NOT_PRODUCTION_APPROVAL", "the packet treated as production approval", "out of scope", "deploying on a bundle"),
+ ("NEG.SUPPORT.NOT_CUSTOMER_ACCEPTANCE", "the packet treated as customer acceptance", "out of scope", "claiming acceptance"),
+ ("NEG.SUPPORT.SNAPSHOT_NOT_LIVE", "the packet treated as a live/current state", "it is a snapshot of the artifacts at generation time; STATUS/claim-ladder are the live authority", "trusting a stale snapshot"),
+]
+for (i, s2, g, r) in SUPP:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["SUPPORT-PACKET.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

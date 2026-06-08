@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-46-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-46-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-47-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-47-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
@@ -91,6 +91,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.5/`](reports/casefiles/KOBOLD.DATA.5/) |
 | `KOBOLD.DATA.6` | COMP-6 composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.6/`](reports/casefiles/KOBOLD.DATA.6/) |
 | `SIZE.ERROR.ATLAS.1` | arithmetic size-error behavior atlas (observed) | ✅ pass | [`reports/casefiles/SIZE.ERROR.ATLAS.1/`](reports/casefiles/SIZE.ERROR.ATLAS.1/) |
+| `SUPPORT-PACKET.1` | reviewer/operator evidence bundle (generated from existing artifacts) | ✅ pass | [`reports/casefiles/SUPPORT-PACKET.1/`](reports/casefiles/SUPPORT-PACKET.1/) |
 
 ## What may NOT be relied on
 

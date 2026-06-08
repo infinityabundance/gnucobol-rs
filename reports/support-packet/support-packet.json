@@ -1,0 +1,480 @@
+{
+  "schema": "kobold-support-packet-v1",
+  "court": "SUPPORT-PACKET.1",
+  "generated_from": "existing generated artifacts only; creates no new truth",
+  "crate_versions": {
+    "gnucobol-rs": "0.7.1 (this repo)",
+    "kobold-data-shim": "sibling repo (see its Cargo.toml/crates.io)",
+    "kobold-bench": "sibling repo (bench/scale receipts)",
+    "kobold-attest": "lab/attest (publish=false; Cargo.lock pinned)"
+  },
+  "truth_boundary_summary": "bytes < record < transform < custody < reconciliation evidence < privacy-preserved < generated attestation; REFUSED above: posting, ledger, settlement, account-balance, business truth, production readiness, customer-workload representativeness, regulatory compliance.",
+  "artifacts": [
+    {
+      "id": "status",
+      "path": "STATUS.md",
+      "kind": "generated_doc",
+      "present": true,
+      "sha256": "fb5f0d60fcb661898e11fd7962b0f6780e3eaf120f84839f108e76238b167797"
+    },
+    {
+      "id": "changelog",
+      "path": "CHANGELOG.md",
+      "kind": "generated_doc",
+      "present": true,
+      "sha256": "db30dca07de7d438aff69a99bd81ebbf5123c7f48465577905f18d2d8eefebb9"
+    },
+    {
+      "id": "claim_ladder",
+      "path": "reports/claim-ladder.json",
+      "kind": "machine_spine",
+      "present": true,
+      "sha256": "9734139073b48543f53675d056a40e9d57e3b1a1d7f8a8dcef8e26570485bc61"
+    },
+    {
+      "id": "negative_capabilities",
+      "path": "reports/negative-capabilities.json",
+      "kind": "refusal_registry",
+      "present": true,
+      "sha256": "1577c3d85a40d72d33ce8c25bac12e2c32df6cd9723dc8397b096501a8132303"
+    },
+    {
+      "id": "dsse_verification",
+      "path": "reports/signing/verification-report.json",
+      "kind": "attestation_report",
+      "present": true,
+      "sha256": "b9bd115999b69dc350878fec50f8d571b6390c307c52c30a905144afd60bcaf4"
+    },
+    {
+      "id": "size_error_atlas",
+      "path": "reports/size-error-atlas.json",
+      "kind": "observed_atlas",
+      "present": true,
+      "sha256": "18ae911b912353d64cc6d5a175dbf27991d655fa705d16fd777ef933050ec924"
+    },
+    {
+      "id": "truth_boundaries",
+      "path": "docs/truth-boundaries.md",
+      "kind": "doctrine_doc",
+      "present": true,
+      "sha256": "7cd5389f360d8bea2fbf973c29ed9bedc9ea88ccb4bdbf3798330adc1fba4ffb"
+    },
+    {
+      "id": "future_risk_register",
+      "path": "docs/future-risk-register.md",
+      "kind": "doctrine_doc",
+      "present": true,
+      "sha256": "feb070acd5b65503b45e31c9558ac34d9b670cdc8a7edef7d76c7c20a9d3c3f1"
+    },
+    {
+      "id": "casefile_index",
+      "kind": "casefile_index",
+      "present": true,
+      "count": 47,
+      "casefiles": [
+        {
+          "court": "GNURUST.10",
+          "casefile_sha256": "ee83a181679c3ed83f7dc19212d25fdd5341e2bab0963b279fa3b49bea4b32c3",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.11",
+          "casefile_sha256": "20bce9f6e4c3789a56c91c8d620b5cc88b7313afacb6cf17a570dc8b32aec7e4",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.12",
+          "casefile_sha256": "63911d5579878abd6e6f1c1d710c8f3bf15914ea42745d0d7258177f2ab1d6ba",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.13",
+          "casefile_sha256": "31c74691b9115034686775b9ec5577f058acc3e6445439e22b9de3e846386b9f",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.14",
+          "casefile_sha256": "5f9d9db83ec7e37e756151d4c637c41b16abb52785fa66cdfc6c15608a6b289e",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.15",
+          "casefile_sha256": "c14373f3181630b437fb3d8fda5e41899a6d978daa7f1913cdc6049f3de75e87",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.16",
+          "casefile_sha256": "67cf857e520b9d759f4dd1cfc247e7e8ee24c522e051aff7e2224aea176d9905",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.17",
+          "casefile_sha256": "554a3f8aa8f9113e2bdc0d41bd95cba113df38f98f864399683986670cb54676",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.18",
+          "casefile_sha256": "69ef18d527aa42e3d98eb7aac87c0889e92af0bd13500e9fc53940ae83fc3770",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.19",
+          "casefile_sha256": "edfbfb2dd0c5d07aceedd2f390070121cf54ffc71b8d093c8bcf183a05dbcd7a",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.2",
+          "casefile_sha256": "68fb9d943b255fd56c03166d8afd652fef8b3e86eabd20bd62927dfabb51b68e",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.3",
+          "casefile_sha256": "4596b586d9fda6a63d80143efd58ee204a3dd81491dd5f51d70cf3173c7b790a",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.4",
+          "casefile_sha256": "24ee3894c76d68c65cf2858f386d64e82064d57e2b0bb22867ac9b891aacaa10",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.5",
+          "casefile_sha256": "0bf68ec17e686809e62806823450a6848c2d0e2f81f53ef01b23e0330858c195",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.6",
+          "casefile_sha256": "dfa39bcea41c2e18cd5295c560cb9c7b7f0f05009d226306cdd34977fd931261",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.7",
+          "casefile_sha256": "a55006f9b07190f45ba0c1865338e04d11e9d4b4c0193efe8d7b509fb59399e2",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.8",
+          "casefile_sha256": "ad5ea1b3d4f8e62a756dfd5f1e747e0386169a029c7c08053bb07eaf9290361a",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.9",
+          "casefile_sha256": "f69c4cd0fb3c89592892822217214313d0a932735ced8bbf4828c31063098a5a",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.BANK.1",
+          "casefile_sha256": "624364284b149d0adc5f8f091e38efb837920a31c22da8260c5594a05e0438c8",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.BANK.2",
+          "casefile_sha256": "1cdee5b1fdb6a587dc2f5d798b456ac6bc8c7a41aa2500ef4a61be8731750598",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.BANK.RECONCILE.1",
+          "casefile_sha256": "4622a9d870fb427535799d4b77062eceefe6ee73eb6714c8b1e3001bf73d9706",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.BENCH.2",
+          "casefile_sha256": "dbde48678b5fa5b24d841269095890b9f97ca654913c8e7916d1d90a53f19c6d",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.CORPUS.2",
+          "casefile_sha256": "3f1306295d4c28bf55e7a60165cb96531122463fbaeeb02f04a07ff2faf6620d",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.CURRENCY.PROFILE.1",
+          "casefile_sha256": "44999c438674357f3c507804aeec979235af8b62667a106e518eec8b3d8df7ee",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DATA.2",
+          "casefile_sha256": "b82abe3c800870c1f0f8e202b0b72d2584e91bfe6023fbf092c85cb16ccd2cc2",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DATA.3",
+          "casefile_sha256": "6f0437cddb92e35b849031ee3b4c1c91937d96ba2f1c8d76458832b13140ff76",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DATA.4",
+          "casefile_sha256": "d35000985254c6d334bdf077f0b4c57f22bf737c325a0114565d79b45a9e83d5",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DATA.5",
+          "casefile_sha256": "6b8e93353ebda42e8a92346a75a37c0157c5ed81f4993832835e1d733d912fb4",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DATA.6",
+          "casefile_sha256": "240f50e5ded0fb47829e562b73000eafc1b15ccf8888e02f06782e9416e75e7d",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DATE.PROFILE.1",
+          "casefile_sha256": "169085a8a1e472c7a02faa02e00a4cd4b5bbfa9d6124dd8565049febb5976811",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DB2HOST.1",
+          "casefile_sha256": "c403d77b9dfaa7e2e499187e28786032c72ad5e638d3438643efa4053dee144e",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.DIFF.1",
+          "casefile_sha256": "81c225172b5c2c2099e2f0fe33c694df50260d13578c076e1e36a3a19a22cb7d",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.ENTERPRISE.2",
+          "casefile_sha256": "2087c18c1fba5ca1da111e2d9203628583815e869662a038e73e51e2e5e364fa",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.EXTRACT.PROFILE.1",
+          "casefile_sha256": "041e3eb04c7e755a82fcb45de6c28756f7a956cb1cd836a1a6b645770ec71d33",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.FILE.1",
+          "casefile_sha256": "6a2c2407486f61f9d0d80bb5049e72f7f6d880800445bbeae4531f6d06ac8830",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.LAYOUT.REDEFINES.2",
+          "casefile_sha256": "5238bcb18b7a2c87706ef26ffdf98775262b80ce185a70ad50037562ac3d7838",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.OPERATOR.1",
+          "casefile_sha256": "d940f923e68bbf744fb4aa8b2be20b2850026562edf22fbbfc0556821084d135",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.PERF.1",
+          "casefile_sha256": "5b36b20d8698d48f439348086a89e6d47340dbbe4f3690743bfacd18aad2c7c1",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.PERF.2",
+          "casefile_sha256": "213f8563be6900d9a6a5f33b3579f89b45aee3932ce5867221f28af6db340a53",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.POSTING.1",
+          "casefile_sha256": "6465c785558b12f4199b2826f2a05cd1ab68ba5a0e3964acda9df77c25371cb1",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.PRIVACY.REDACTION.1",
+          "casefile_sha256": "bea3f8aafc07450c92cb50d5783990a9b2f8415041dc016a1c155214cfe64949",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.RECON.1",
+          "casefile_sha256": "e7340163844a1093b6d770d125f275f3561dbac593fd4318e2768891482da8db",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.RECON.2",
+          "casefile_sha256": "4b8e386a4b525e5145b0cc8d939c0af5b0562a36a792d0820bfffb28221e4c43",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.SCALE.1",
+          "casefile_sha256": "c5a8e9cf2342ddcb4637a7be82b745d4c8f59b2552c3ecb77d02791a348c9086",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "KOBOLD.SENTINEL.PROFILE.1",
+          "casefile_sha256": "84a28dab46e5424a238e49dfc58f034f4ccf070c34b39c17912df80dd1e3a19e",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "SIZE.ERROR.ATLAS.1",
+          "casefile_sha256": "6efba0b1d8cffa80fff78d85d176637c9c3356a5525b5e53c9ff6d059bfc8550",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "SUPPORT-PACKET.1",
+          "casefile_sha256": "2f840cf8718424303943644ce666e28977e4bb855149f3fcfcd209f1c526099e",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        }
+      ]
+    },
+    {
+      "id": "release_packets",
+      "kind": "release_index",
+      "present": true,
+      "packets": [
+        "gnucobol-rs-0.7.0",
+        "gnucobol-rs-0.7.1"
+      ]
+    },
+    {
+      "id": "bench_receipt",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-bench reports/BENCH-2-receipt.json",
+      "produced_by": "kobold-bench2 --features rayon"
+    },
+    {
+      "id": "scale_receipt",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-bench reports/SCALE-1-receipt-*.json",
+      "produced_by": "kobold-scale 1g"
+    },
+    {
+      "id": "bank_reconcile_report",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-bank-reconcile-report-v1",
+      "produced_by": "bank_reconcile_report() at runtime"
+    },
+    {
+      "id": "diff_report",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-diff-report-v1",
+      "produced_by": "diff_artifacts() at runtime"
+    },
+    {
+      "id": "redaction_policy",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-redaction-policy-v1",
+      "produced_by": "operator-declared"
+    },
+    {
+      "id": "currency_manifest",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-currency-manifest-v1",
+      "produced_by": "currency_validate() at runtime"
+    },
+    {
+      "id": "date_manifest",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-date-manifest-v1",
+      "produced_by": "date_validate() at runtime"
+    },
+    {
+      "id": "sentinel_manifest",
+      "kind": "runtime_or_operator",
+      "present": false,
+      "pointer": "kobold-sentinel-manifest-v1",
+      "produced_by": "sentinel_scan() at runtime"
+    }
+  ],
+  "non_claims": [
+    "NEG.SUPPORT.NO_NEW_TRUTH",
+    "NEG.SUPPORT.NOT_CERTIFICATION",
+    "NEG.SUPPORT.NOT_COMPLIANCE",
+    "NEG.SUPPORT.NOT_PRODUCTION_APPROVAL",
+    "NEG.SUPPORT.NOT_CUSTOMER_ACCEPTANCE",
+    "NEG.SUPPORT.SNAPSHOT_NOT_LIVE"
+  ]
+}

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 340,
+  "count": 349,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -75,6 +75,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.A-LIVE-CURRENT-STATE-IT-IS-A-SNAPSHOT",
+      "surface": "a live/current state (it is a snapshot)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
       ]
     },
     {
@@ -680,6 +691,17 @@
       ]
     },
     {
+      "id": "NEG.CERTIFICATION",
+      "surface": "certification",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
       "id": "NEG.CICS.HANDLE.CONTROL",
       "surface": "CICS control-flow / error-handling semantics inferred from a data copybook",
       "status": "not_admitted_requires_declared_profile",
@@ -1008,7 +1030,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.ENTERPRISE.2"
+        "KOBOLD.ENTERPRISE.2",
+        "SUPPORT-PACKET.1"
       ]
     },
     {
@@ -2135,6 +2158,17 @@
       ]
     },
     {
+      "id": "NEG.NEW-TRUTH-EVIDENCE",
+      "surface": "new truth/evidence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
       "id": "NEG.NO-VALUE-RECORDS",
       "surface": "no-VALUE records",
       "status": "not_admitted_fail_closed",
@@ -2641,7 +2675,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.ENTERPRISE.2"
+        "KOBOLD.ENTERPRISE.2",
+        "SUPPORT-PACKET.1"
       ]
     },
     {
@@ -2928,7 +2963,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.ENTERPRISE.2"
+        "KOBOLD.ENTERPRISE.2",
+        "SUPPORT-PACKET.1"
       ]
     },
     {
@@ -3460,6 +3496,72 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.SUPPORT.NOT_CERTIFICATION",
+      "surface": "the packet treated as a certification",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a bundle is not a certificate",
+      "risk_if_guessed": "claiming certified status",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.SUPPORT.NOT_COMPLIANCE",
+      "surface": "the packet treated as regulatory compliance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "a false compliance posture",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.SUPPORT.NOT_CUSTOMER_ACCEPTANCE",
+      "surface": "the packet treated as customer acceptance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "claiming acceptance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.SUPPORT.NOT_PRODUCTION_APPROVAL",
+      "surface": "the packet treated as production approval",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "deploying on a bundle",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.SUPPORT.NO_NEW_TRUTH",
+      "surface": "the support packet treated as new evidence/truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it gathers EXISTING generated artifacts; introduces nothing",
+      "risk_if_guessed": "double-counting a bundle as fresh proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.SUPPORT.SNAPSHOT_NOT_LIVE",
+      "surface": "the packet treated as a live/current state",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it is a snapshot of the artifacts at generation time; STATUS/claim-ladder are the live authority",
+      "risk_if_guessed": "trusting a stale snapshot",
+      "owning_future_campaign": null,
+      "evidence": [
+        "SUPPORT-PACKET.1"
       ]
     },
     {
