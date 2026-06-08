@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.PILOT.WORKFLOW.1/casefile.json",
+      "digest": {
+        "sha256": "341770806b93c5315e8128287ea8fc5c7326d53e2b12b5051b6a889516b4caa7"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.PILOT.WORKFLOW.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.7.1",
+    "verdict": "pass",
+    "replay": {
+      "command": "the composed sealed courts (each its own authority) over synthetic bytes",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "700c4214c86a4801c0ac0486648425e152455d49bc237f358b05e3d7b632308d",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 1,
+    "negative_claim_count": 7
+  }
+}

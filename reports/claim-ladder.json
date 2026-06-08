@@ -753,6 +753,20 @@
       "readiness": 3,
       "lie_prevented": "'here is the pilot packet, therefore the migration is approved/compliant/accepted' -- PILOT-PACKET.1 bundles EXISTING hash-pinned pilot artifacts and claims pilot evidence only",
       "damage_if_overclaimed": "a pilot bundle sold as certification/compliance/production-approval/customer-acceptance manufactures pilot-to-production assurance that no court provides"
+    },
+    {
+      "id": "KOBOLD.PILOT.WORKFLOW.1",
+      "name": "end-to-end pilot workflow wiring",
+      "proven": "a declared synthetic/private-pilot-shaped banking extract flows end-to-end through EXTRACT.PROFILE.1, PRIVACY.REDACTION.1, BANK.1/2, BANK.RECONCILE.1, DIFF.1, TOOLING.EXPORT.1, and PILOT-PACKET.1, proving the workflow PLUMBING and evidence custody: the account id is tokenized before any artifact leaves the secure zone (no cleartext in the redaction, tooling export, or packet), the reconcile view is source-bound to the extract + redaction, the diff target is non-oracle, and the pilot packet hash-binds every produced artifact + the operator review-notes hash (complete:true, creates_new_truth:false)",
+      "byte_domain": "a synthetic extract -> the full court chain -> one hash-bound pilot packet",
+      "oracle": "the composed sealed courts (each its own authority) over synthetic bytes",
+      "fixtures": "tests/pilot_workflow.rs (1: the chain wires, no cleartext leaks, packet complete + binds all artifacts)",
+      "sealed_version": "kobold 0.7.1",
+      "not_proven": "customer-data coverage; production readiness; regulatory compliance; business acceptance; that the synthetic bytes are a real extract; semantic validation of each court (their own seals are the authority)",
+      "breaks_claim": "treating the workflow as customer coverage / production readiness / compliance / acceptance; leaking cleartext through any stage",
+      "readiness": 3,
+      "lie_prevented": "'the pilot workflow ran, therefore we can decode/reconcile real customer data in production' -- PILOT.WORKFLOW.1 proves only the WIRING + custody over a DECLARED SYNTHETIC extract",
+      "damage_if_overclaimed": "presenting a synthetic pilot-wiring run as customer-ready/production-ready/compliant manufactures readiness the courts do not provide, and could invite real customer data into an unproven flow"
     }
   ],
   "transform_vs_read": {

@@ -275,6 +275,19 @@ for (i, s2, g, r) in PILOT:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PILOT-PACKET.1"]}
 
+# KOBOLD.PILOT.WORKFLOW.1 — end-to-end pilot WIRING over a declared synthetic extract.
+PWF = [
+ ("NEG.PILOT_WORKFLOW.NOT_CUSTOMER_DATA_COVERAGE", "the workflow treated as proving customer-data coverage", "the extract is declared synthetic/private-pilot-shaped, not customer records", "claiming customer coverage from a synthetic run"),
+ ("NEG.PILOT_WORKFLOW.NOT_PRODUCTION_READINESS", "the workflow treated as production readiness", "it proves wiring + custody, not production operation", "deploying on a pilot-wiring proof"),
+ ("NEG.PILOT_WORKFLOW.NOT_COMPLIANCE", "the workflow treated as regulatory compliance", "out of scope", "a false compliance posture"),
+ ("NEG.PILOT_WORKFLOW.NOT_BUSINESS_ACCEPTANCE", "the workflow treated as business acceptance", "out of scope", "claiming acceptance from a pilot run"),
+ ("NEG.PILOT_WORKFLOW.SYNTHETIC_NOT_REAL_EXTRACT", "synthetic pilot bytes treated as a real extract", "the bytes are synthetic; no real PII", "assuming the pilot bytes are real data"),
+ ("NEG.PILOT_WORKFLOW.WIRING_NOT_SEMANTIC_VALIDATION", "the workflow treated as validating each court's semantics", "it proves the chain is wired + custody flows; each court's own seal is the authority", "trusting the chain over the courts"),
+]
+for (i, s2, g, r) in PWF:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PILOT.WORKFLOW.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

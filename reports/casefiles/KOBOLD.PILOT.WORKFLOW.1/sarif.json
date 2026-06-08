@@ -1,0 +1,87 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: customer-data coverage"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: production readiness"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: regulatory compliance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: business acceptance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: that the synthetic bytes are a real extract"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: semantic validation of each court (their own seals are the authority)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.WORKFLOW.1 non-claim: lie prevented: 'the pilot workflow ran, therefore we can decode/reconcile real customer data in production' -- PILOT.WORKFLOW.1 proves only the WIRING + custody over a DECLARED SYNTHETIC extract"
+          }
+        }
+      ]
+    }
+  ]
+}

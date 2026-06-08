@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-53-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-53-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-54-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-54-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
@@ -82,6 +82,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `KOBOLD.CURRENCY.PROFILE.1` | declared currency/amount-profile evidence | ✅ pass | [`reports/casefiles/KOBOLD.CURRENCY.PROFILE.1/`](reports/casefiles/KOBOLD.CURRENCY.PROFILE.1/) |
 | `KOBOLD.TOOLING.EXPORT.1` | generated evidence export for downstream tools | ✅ pass | [`reports/casefiles/KOBOLD.TOOLING.EXPORT.1/`](reports/casefiles/KOBOLD.TOOLING.EXPORT.1/) |
 | `KOBOLD.PILOT-PACKET.1` | hash-bound pilot evidence packet | ✅ pass | [`reports/casefiles/KOBOLD.PILOT-PACKET.1/`](reports/casefiles/KOBOLD.PILOT-PACKET.1/) |
+| `KOBOLD.PILOT.WORKFLOW.1` | end-to-end pilot workflow wiring | ✅ pass | [`reports/casefiles/KOBOLD.PILOT.WORKFLOW.1/`](reports/casefiles/KOBOLD.PILOT.WORKFLOW.1/) |
 | `KOBOLD.DATA.2` | binary fields in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.2/`](reports/casefiles/KOBOLD.DATA.2/) |
 | `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | ✅ pass | [`reports/casefiles/KOBOLD.BANK.2/`](reports/casefiles/KOBOLD.BANK.2/) |
 | `KOBOLD.RECON.2` | declared transformed-record reconciliation | ✅ pass | [`reports/casefiles/KOBOLD.RECON.2/`](reports/casefiles/KOBOLD.RECON.2/) |

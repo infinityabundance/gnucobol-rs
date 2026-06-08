@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 415,
+  "count": 425,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -708,6 +708,17 @@
       ]
     },
     {
+      "id": "NEG.BUSINESS-ACCEPTANCE",
+      "surface": "business acceptance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
       "id": "NEG.BUSINESS-APPROVAL",
       "surface": "business approval",
       "status": "not_admitted_fail_closed",
@@ -1170,7 +1181,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.CORPUS.2"
+        "KOBOLD.CORPUS.2",
+        "KOBOLD.PILOT.WORKFLOW.1"
       ]
     },
     {
@@ -2950,6 +2962,72 @@
       ]
     },
     {
+      "id": "NEG.PILOT_WORKFLOW.NOT_BUSINESS_ACCEPTANCE",
+      "surface": "the workflow treated as business acceptance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "claiming acceptance from a pilot run",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_WORKFLOW.NOT_COMPLIANCE",
+      "surface": "the workflow treated as regulatory compliance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "a false compliance posture",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_WORKFLOW.NOT_CUSTOMER_DATA_COVERAGE",
+      "surface": "the workflow treated as proving customer-data coverage",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the extract is declared synthetic/private-pilot-shaped, not customer records",
+      "risk_if_guessed": "claiming customer coverage from a synthetic run",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_WORKFLOW.NOT_PRODUCTION_READINESS",
+      "surface": "the workflow treated as production readiness",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it proves wiring + custody, not production operation",
+      "risk_if_guessed": "deploying on a pilot-wiring proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_WORKFLOW.SYNTHETIC_NOT_REAL_EXTRACT",
+      "surface": "synthetic pilot bytes treated as a real extract",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the bytes are synthetic; no real PII",
+      "risk_if_guessed": "assuming the pilot bytes are real data",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_WORKFLOW.WIRING_NOT_SEMANTIC_VALIDATION",
+      "surface": "the workflow treated as validating each court's semantics",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it proves the chain is wired + custody flows; each court's own seal is the authority",
+      "risk_if_guessed": "trusting the chain over the courts",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
       "id": "NEG.PLATFORM-RUNTIME",
       "surface": "platform runtime",
       "status": "not_admitted_fail_closed",
@@ -3161,6 +3239,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BENCH.2"
+      ]
+    },
+    {
+      "id": "NEG.PRODUCTION-READINESS",
+      "surface": "production readiness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
       ]
     },
     {
@@ -3449,7 +3538,8 @@
       "evidence": [
         "KOBOLD.ENTERPRISE.2",
         "SUPPORT-PACKET.1",
-        "KOBOLD.PILOT-PACKET.1"
+        "KOBOLD.PILOT-PACKET.1",
+        "KOBOLD.PILOT.WORKFLOW.1"
       ]
     },
     {
@@ -3715,6 +3805,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEMANTIC-VALIDATION-OF-EACH-COURT-THEIR-",
+      "surface": "semantic validation of each court (their own seals are the authority)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
       ]
     },
     {
@@ -4246,6 +4347,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.THAT-THE-SYNTHETIC-BYTES-ARE-A-REAL-EXTR",
+      "surface": "that the synthetic bytes are a real extract",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.WORKFLOW.1"
       ]
     },
     {
