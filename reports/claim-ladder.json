@@ -501,6 +501,20 @@
       "readiness": 3,
       "lie_prevented": "'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety",
       "damage_if_overclaimed": "publishing a 'redacted' casefile as anonymized/compliant can re-identify customers and breach regulation"
+    },
+    {
+      "id": "KOBOLD.PERF.1",
+      "name": "gated record-level Rayon (byte-identical to scalar)",
+      "proven": "optional record-level Rayon (off-by-default `rayon` feature) emits byte-identical evidence to scalar across the workload -- same JSONL, audit, unsupported ledger, decode_output_sha256, and downstream posting hash chain; the benchmark refuses Rayon timing unless the parity hash matches the scalar baseline",
+      "byte_domain": "parallel decode timing gated on byte-identical output to scalar",
+      "oracle": "the scalar reconcile output (parity baseline)",
+      "fixtures": "tests/perf1.rs (scalar==rayon across n=1..999 + posting chain) + kobold-bench2 --features rayon (parity-gated, ~2.9x on this host)",
+      "sealed_version": "kobold 0.6.3 (rayon feature) + kobold-bench",
+      "not_proven": "production SLA; AWS throughput; SIMD; deterministic scheduling beyond identical emitted artifacts; customer-workload representativeness; any semantic change",
+      "breaks_claim": "reporting Rayon timing when its output hash != scalar; enabling rayon by default; claiming production/parallel throughput",
+      "readiness": 3,
+      "lie_prevented": "'parallel is faster, so ship it' / 'faster means a different (better) answer' -- PERF.1 admits parallelism ONLY when every emitted artifact is byte-identical to scalar",
+      "damage_if_overclaimed": "a parallel path that silently differs from scalar would corrupt evidence while looking faster; a benchmark sold as an SLA sets false capacity expectations"
     }
   ],
   "transform_vs_read": {

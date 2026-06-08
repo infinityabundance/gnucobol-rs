@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 204,
+  "count": 214,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -144,6 +144,17 @@
       ]
     },
     {
+      "id": "NEG.ANY-SEMANTIC-CHANGE",
+      "surface": "any semantic change",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
+      ]
+    },
+    {
       "id": "NEG.ARITH.BINARY_RECEIVER_NOT_CLAIMED",
       "surface": "DIVIDE into a binary (COMP/COMP-5) receiver",
       "status": "not_admitted_fail_closed",
@@ -262,6 +273,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BENCH.2"
+      ]
+    },
+    {
+      "id": "NEG.AWS-THROUGHPUT",
+      "surface": "AWS throughput",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
       ]
     },
     {
@@ -656,7 +678,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.BENCH.2"
+        "KOBOLD.BENCH.2",
+        "KOBOLD.PERF.1"
       ]
     },
     {
@@ -767,6 +790,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.DETERMINISTIC-SCHEDULING-BEYOND-IDENTICA",
+      "surface": "deterministic scheduling beyond identical emitted artifacts",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
       ]
     },
     {
@@ -1518,6 +1552,61 @@
       ]
     },
     {
+      "id": "NEG.PERF.AWS_THROUGHPUT",
+      "surface": "local rayon speed treated as AWS/Lambda throughput",
+      "status": "not_admitted_fail_closed",
+      "guard": "no AWS measurement (see LAMBDA.LIVE.1)",
+      "risk_if_guessed": "false serverless capacity planning",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
+      ]
+    },
+    {
+      "id": "NEG.PERF.DETERMINISTIC_SCHEDULING",
+      "surface": "deterministic thread scheduling claimed beyond identical artifacts",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the EMITTED artifacts are guaranteed identical, not the schedule",
+      "risk_if_guessed": "depending on thread timing/order",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
+      ]
+    },
+    {
+      "id": "NEG.PERF.PRODUCTION_SLA",
+      "surface": "benchmark numbers treated as a production SLA / capacity guarantee",
+      "status": "not_admitted_fail_closed",
+      "guard": "synthetic micro-benchmark only",
+      "risk_if_guessed": "promising throughput a real deployment cannot hold",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
+      ]
+    },
+    {
+      "id": "NEG.PERF.SEMANTIC_CHANGE",
+      "surface": "parallelism assumed to change decode/finding/audit results",
+      "status": "not_admitted_fail_closed",
+      "guard": "rayon output is byte-identical to scalar (gated)",
+      "risk_if_guessed": "trusting a faster path that silently differs",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
+      ]
+    },
+    {
+      "id": "NEG.PERF.SIMD",
+      "surface": "SIMD acceleration claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "PERF.1 is record-level rayon only; no SIMD",
+      "risk_if_guessed": "assuming vectorized speed not measured",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
+      ]
+    },
+    {
       "id": "NEG.POLARITY-FROM-CR-DB-PRESENTATION",
       "surface": "polarity from CR/DB presentation",
       "status": "not_admitted_fail_closed",
@@ -1703,6 +1792,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CORPUS.2"
+      ]
+    },
+    {
+      "id": "NEG.PRODUCTION-SLA",
+      "surface": "production SLA",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
       ]
     },
     {
@@ -2067,6 +2167,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.SIMD",
+      "surface": "SIMD",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.1"
       ]
     },
     {

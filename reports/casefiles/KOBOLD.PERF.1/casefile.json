@@ -1,0 +1,63 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.PERF.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3 (rayon feature) + kobold-bench",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "9a1f32b41bf5a257a65a2a951c8de1bbf4e45925613a61143ac6974ee4573630",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the scalar reconcile output (parity baseline)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/perf1.rs (scalar==rayon across n=1..999 + posting chain) + kobold-bench2 --features rayon (parity-gated, ~2.9x on this host)"
+  },
+  "positive_claims": [
+    "optional record-level Rayon (off-by-default `rayon` feature) emits byte-identical evidence to scalar across the workload -- same JSONL, audit, unsupported ledger, decode_output_sha256, and downstream posting hash chain",
+    "the benchmark refuses Rayon timing unless the parity hash matches the scalar baseline"
+  ],
+  "negative_claims": [
+    "production SLA",
+    "AWS throughput",
+    "SIMD",
+    "deterministic scheduling beyond identical emitted artifacts",
+    "customer-workload representativeness",
+    "any semantic change",
+    "lie prevented: 'parallel is faster, so ship it' / 'faster means a different (better) answer' -- PERF.1 admits parallelism ONLY when every emitted artifact is byte-identical to scalar"
+  ],
+  "negative_capability_ids": [
+    "NEG.PRODUCTION-SLA",
+    "NEG.AWS-THROUGHPUT",
+    "NEG.SIMD",
+    "NEG.DETERMINISTIC-SCHEDULING-BEYOND-IDENTICA",
+    "NEG.CUSTOMER-WORKLOAD-REPRESENTATIVENESS",
+    "NEG.ANY-SEMANTIC-CHANGE"
+  ],
+  "byte_domains": [
+    "parallel decode timing gated on byte-identical output to scalar"
+  ],
+  "lie_prevented": [
+    "'parallel is faster, so ship it' / 'faster means a different (better) answer' -- PERF.1 admits parallelism ONLY when every emitted artifact is byte-identical to scalar"
+  ],
+  "damage_if_overclaimed": "a parallel path that silently differs from scalar would corrupt evidence while looking faster; a benchmark sold as an SLA sets false capacity expectations",
+  "replay": {
+    "command": "the scalar reconcile output (parity baseline)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "bb883d3bd8514d69ab1d562271182bddd30d0c16ae4c9d4e2453f1c329382e85"
+  }
+}
