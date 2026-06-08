@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 130,
+  "count": 140,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -426,6 +426,17 @@
       ]
     },
     {
+      "id": "NEG.DATABASE-TRUTH",
+      "surface": "database truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
       "id": "NEG.DATE.INFERENCE",
       "surface": "a PIC 9(8) field interpreted as a date / format (YYYYMMDD vs Julian vs period vs sentinel)",
       "status": "not_admitted_requires_declared_profile",
@@ -437,6 +448,39 @@
       ]
     },
     {
+      "id": "NEG.DB2-PRECOMPILER-TRANSFORMATION",
+      "surface": "Db2 precompiler transformation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.DB2.DATABASE_TRUTH_NOT_CLAIMED",
+      "surface": "decoded/indicator-evaluated values treated as current database truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "never -- database_truth claimed:false",
+      "risk_if_guessed": "treating an extract as live database state",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.DB2.HOST_VALUE_NOT_DATABASE_VALUE",
+      "surface": "a decoded host-variable value treated as the database value (ignoring its null/truncation indicator)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.DB2HOST.1 declared indicator manifest",
+      "risk_if_guessed": "acting on a value the database boundary marked null/truncated",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
       "id": "NEG.DB2.NULL.INDICATOR",
       "surface": "a decoded value treated as DB2 null-state truth without its paired null-indicator",
       "status": "not_admitted_requires_declared_profile",
@@ -445,6 +489,39 @@
       "owning_future_campaign": "KOBOLD.DB2HOST.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.DB2.PACKAGE_NOT_CLAIMED",
+      "surface": "DBRM / package / collection identity claimed as evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "asserting which package produced the data",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.DB2.SQLCA_NOT_INTERPRETED",
+      "surface": "SQLCA / SQLCODE / SQLSTATE interpreted from data",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope (no SQL execution)",
+      "risk_if_guessed": "inferring statement outcome from record bytes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.DBRM-PACKAGE-IDENTITY",
+      "surface": "DBRM/package identity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
       ]
     },
     {
@@ -1359,6 +1436,17 @@
       ]
     },
     {
+      "id": "NEG.SQL-EXECUTION",
+      "surface": "SQL execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
       "id": "NEG.SQL.PRECOMPILER",
       "surface": "COPY/layout courts claiming Db2 precompiler source transformation (DECLARE SECTION, SQLCA, INCLUDE)",
       "status": "not_admitted_requires_declared_profile",
@@ -1367,6 +1455,17 @@
       "owning_future_campaign": "SQLPRECOMP.ATLAS.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.SQLCA-SQLCODE-INTERPRETATION",
+      "surface": "SQLCA/SQLCODE interpretation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
       ]
     },
     {
@@ -1390,6 +1489,17 @@
       "evidence": [
         "GNURUST.4",
         "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.THE-HOST-VALUE-BEING-THE-DATABASE-VALUE-",
+      "surface": "the host value being the database value without its indicator",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DB2HOST.1"
       ]
     },
     {

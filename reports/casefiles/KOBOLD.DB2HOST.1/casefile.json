@@ -1,0 +1,64 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.DB2HOST.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "42fe5cec0536f902d1c642824512d8888247a832fa70b04c60ba0c57c06fb9df",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "composed gnucobol-rs courts (COMP-3/COMP-5) + declared kobold-db2host-indicator-manifest-v1",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/db2host.rs (5: null/present/truncation, missing-fails-closed, wrong-usage-fails-closed)"
+  },
+  "positive_claims": [
+    "a decoded field is marked semantic_null / truncation_evidence ONLY via a declared S9(4) COMP-5 indicator pairing (negative=null, zero=present, positive=truncation)",
+    "decoded bytes are always preserved",
+    "missing or wrong-usage indicator fails closed"
+  ],
+  "negative_claims": [
+    "SQL execution",
+    "Db2 precompiler transformation",
+    "SQLCA/SQLCODE interpretation",
+    "DBRM/package identity",
+    "the host value being the database value without its indicator",
+    "database truth",
+    "lie prevented: 'a cleanly decoded value is the database value' -- the DB2 null/truncation indicator can override it"
+  ],
+  "negative_capability_ids": [
+    "NEG.SQL-EXECUTION",
+    "NEG.DB2-PRECOMPILER-TRANSFORMATION",
+    "NEG.SQLCA-SQLCODE-INTERPRETATION",
+    "NEG.DBRM-PACKAGE-IDENTITY",
+    "NEG.THE-HOST-VALUE-BEING-THE-DATABASE-VALUE-",
+    "NEG.DATABASE-TRUTH"
+  ],
+  "byte_domains": [
+    "declared value/indicator pairing -> null/truncation state (bytes preserved)"
+  ],
+  "lie_prevented": [
+    "'a cleanly decoded value is the database value' -- the DB2 null/truncation indicator can override it"
+  ],
+  "damage_if_overclaimed": "acting on a decoded value the database marked NULL or truncated posts wrong or missing data",
+  "replay": {
+    "command": "composed gnucobol-rs courts (COMP-3/COMP-5) + declared kobold-db2host-indicator-manifest-v1",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "757b8860ec07cffb0a5b218d3cd9ec2ee171739923cf602db16627cd4cec51b3"
+  }
+}

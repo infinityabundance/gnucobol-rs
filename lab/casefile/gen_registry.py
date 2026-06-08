@@ -72,6 +72,17 @@ BANK1 = [
 for (i, s, g, r) in BANK1:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.BANK.1"]}
+
+# KOBOLD.DB2HOST.1 refusals: a clean decode is not the database semantic value.
+DB2 = [
+ ("NEG.DB2.HOST_VALUE_NOT_DATABASE_VALUE", "a decoded host-variable value treated as the database value (ignoring its null/truncation indicator)", "KOBOLD.DB2HOST.1 declared indicator manifest", "acting on a value the database boundary marked null/truncated"),
+ ("NEG.DB2.SQLCA_NOT_INTERPRETED", "SQLCA / SQLCODE / SQLSTATE interpreted from data", "out of scope (no SQL execution)", "inferring statement outcome from record bytes"),
+ ("NEG.DB2.PACKAGE_NOT_CLAIMED", "DBRM / package / collection identity claimed as evidence", "out of scope", "asserting which package produced the data"),
+ ("NEG.DB2.DATABASE_TRUTH_NOT_CLAIMED", "decoded/indicator-evaluated values treated as current database truth", "never -- database_truth claimed:false", "treating an extract as live database state"),
+]
+for (i, s, g, r) in DB2:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.DB2HOST.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

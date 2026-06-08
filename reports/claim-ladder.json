@@ -389,6 +389,20 @@
       "readiness": 3,
       "lie_prevented": "'a numeric field is money and its sign is its posting side' -- ACCOUNTING.PROFILE.1 sums only declared Amount fields and takes polarity only from the declared source",
       "damage_if_overclaimed": "summing a rate or account-id as money, or reading a sign as debit/credit, mis-states the ledger"
+    },
+    {
+      "id": "KOBOLD.DB2HOST.1",
+      "name": "Db2 host-variable null/truncation indicator manifest",
+      "proven": "a decoded field is marked semantic_null / truncation_evidence ONLY via a declared S9(4) COMP-5 indicator pairing (negative=null, zero=present, positive=truncation); decoded bytes are always preserved; missing or wrong-usage indicator fails closed",
+      "byte_domain": "declared value/indicator pairing -> null/truncation state (bytes preserved)",
+      "oracle": "composed gnucobol-rs courts (COMP-3/COMP-5) + declared kobold-db2host-indicator-manifest-v1",
+      "fixtures": "tests/db2host.rs (5: null/present/truncation, missing-fails-closed, wrong-usage-fails-closed)",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "SQL execution; Db2 precompiler transformation; SQLCA/SQLCODE interpretation; DBRM/package identity; the host value being the database value without its indicator; database truth",
+      "breaks_claim": "treating a cleanly-decoded value as present when the indicator says null",
+      "readiness": 3,
+      "lie_prevented": "'a cleanly decoded value is the database value' -- the DB2 null/truncation indicator can override it",
+      "damage_if_overclaimed": "acting on a decoded value the database marked NULL or truncated posts wrong or missing data"
     }
   ],
   "transform_vs_read": {
