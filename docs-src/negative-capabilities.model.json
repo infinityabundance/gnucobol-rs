@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "negative-capabilities",
+  "generated_path": "docs/negative-capabilities.md",
+  "title": "Negative-capability registry",
+  "machine_fields": [],
+  "body_template": "A serious reviewer trusts a project that says **\"no\"** precisely. This registry makes every\nunsupported COBOL surface visible and queryable: what is rejected, *where* it is rejected, the error\ntype, why, the future campaign that may seal it, and the risk if it were instead silently guessed.\n\nThis is the human companion to the machine-readable non-claims in\n[`reports/negative-claims.md`](../reports/negative-claims.md) and the per-court non-claims in\n[`reports/claim-ladder.json`](../reports/claim-ladder.json). The doctrine: **fail closed; unsupported\nsurfaces remain explicit evidence, never inferred behaviour.**\n\n| Unsupported surface | Where rejected | Error type | Why rejected | Future campaign | Risk if guessed |\n|---------------------|----------------|------------|--------------|-----------------|-----------------|\n| Edited PICTURE (`Z $ , . + - CR DB * B 0 /`) | `pic::build_field` | `PicError::UnsupportedSymbol` | rendering rules not yet oracle-proven | `GNURUST.EDITED.0` | wrong displayed value / wrong width |\n| `V` combined with `P` | `pic::build_field` | `PicError::ScalingPDeferred` | scale interaction not proven | `GNURUST.PIC-VP.0` | wrong scale \u2192 wrong decimal value |\n| `VALUE`/`MOVE` on a P-scaled field | `init::value_image` | `InitError::Pic` | `attr.digits != size`; would mis-place bytes | `GNURUST.VALUE-P.0` | buffer mis-fill / panic avoided by failing closed |\n| `OCCURS DEPENDING ON` **logical** length | layout court (non-claim) | n/a (only physical-max admitted) | runtime DEPENDING value not modelled | `GNURUST.ODO-LOGICAL.0` | treating physical-max as active length |\n| Multiple / nested ODO, ODO-not-last, REDEFINES+ODO | `layout::lay_out` | `LayoutError::OdoUnsupported` | complex-ODO semantics unproven | later | wrong offsets for following fields |\n| `REDEFINES` larger than target | `layout::lay_out` | `LayoutError::RedefinesLarger` | record-growth case unproven | `GNURUST.REDEFINES.GROW.0` | wrong record size |\n| `SET condition-name TO FALSE` / `FALSE` clause | `cond` (not implemented) | `ConditionSetError` | needs the FALSE clause + its own oracle | `GNURUST.12b` | wrong \"reset\" bytes |\n| Condition expressions / Procedure-Division execution | n/a (out of model) | non-claim | not a runtime / not a compiler | none (refused) | inventing control-flow semantics |\n| `DIVIDE`, `ON SIZE ERROR`, rounding modes \u2260 nearest-away | `arith::cob_arith` | `ArithError` (deferred) | each needs its own oracle pass | `GNURUST.14`, `GNURUST.15` | wrong financial result |\n| `> 38`-digit / bignum intermediates | `arith::cob_arith` | `ArithError::OutOfRange` | i128 range exceeded | `GNURUST.ARITH-BIGNUM.0` | silent overflow / wrong value |\n| `COMP`/`COMP-5`/`COMP-X`/`COMP-6`, float (`COMP-1/2`) | `pic`/decode | `PicError`/unsupported | byte/endian/size not proven | `GNURUST.BINARY.0` | wrong endianness / size |\n| EBCDIC / code-page input | (none \u2014 out of host scope) | n/a (host = ASCII) | EBCDIC is a declared parameter, never inferred | `GNURUST.EBCDIC.0` | wrong characters & signs |\n| EBCDIC-machine zoned sign mode | decode (non-claim) | n/a | `COB_EBCDIC_MACHINE` path not admitted | `GNURUST.EBCDIC.0` | wrong sign |\n| `DECIMAL-POINT IS COMMA` | (none) | non-claim | locale-dependent | later | wrong literal parsing |\n| Files / indexed I/O / SORT / Report Writer / Screen | (none \u2014 out of model) | non-claim | not data-court surfaces | far future | scope creep into runtime |\n| Malformed packed beyond sealed MOVE rules | decode | bounds-guarded, typed | tolerance is a declared policy, not a default | `GNURUST.INVALID.0` | accepting corrupt data silently |\n| Record-length mismatch (recon) | `recon::reconcile` | trailing partial \u2192 unsupported | cannot decode a short record | n/a | mis-aligned fields |\n\n## How to add a row\n\nA surface only leaves this table by becoming a **sealed court** (its own oracle sweep + receipt) or\nby an explicit, receipted policy. Until then it must fail closed with a typed error \u2014 a reviewer\nshould be able to feed an unsupported field and watch the system refuse it, not guess (see the\ncounterexample-first tests referenced in each court's receipt).\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/negative-capabilities.md"
+    ],
+    "legacy_sha256": [
+      "35e346e3192d55c660d23d9b38a96b8d7ecfee93850b7dd2acf0cf6afd30cdbd"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

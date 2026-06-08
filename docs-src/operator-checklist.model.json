@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "operator-checklist",
+  "generated_path": "docs/operator-checklist.md",
+  "title": "Operator checklist \u2014 how *not* to overtrust a receipt",
+  "machine_fields": [],
+  "body_template": "A project earns trust by teaching its users where its claims stop. Before quoting any\n`gnucobol-rs` parity result as evidence, confirm:\n\n- [ ] **Oracle availability** was a *typed verdict*, not a silent skip (`GNURUST.ORACLEAVAIL.0`):\n      `available` / `unavailable-expected` / `unavailable-unexpected` / `version-mismatch` /\n      `config-mismatch`. A green run with `unavailable-unexpected` is not green.\n- [ ] **The admitted `libcob` was loaded** \u2014 the harness resolved `<lab>/oracle/prefix/lib/libcob`,\n      not a system copy (`GNURUST.LOADER.0`).\n- [ ] **Runtime config was pinned** \u2014 config-dir/`runtime.cfg` hashes match the admission receipt;\n      `COB_RUNTIME_CONFIG` unset or recorded (config is semantics; last-wins is silent).\n- [ ] **Backend pinned** if any file surface is involved (it is **not**, today) \u2014 see\n      `backend-matrix.md`.\n- [ ] **Env whitelist pinned** \u2014 `LC_ALL=C.UTF-8`; no stray `COB_*` overrides.\n- [ ] **Process isolation** \u2014 oracle/state tests ran in fresh child processes, not in-process,\n      not relying on Rust test order (`docs/runtime-doctrine.md`).\n- [ ] **Binary hashes are marked host-specific witnesses** \u2014 never cross-platform evidence\n      (`GNURUST.BINWITNESS.0`).\n- [ ] **The claim is in the sealed court** \u2014 storage/move bytes only; not display, comparison,\n      files, arithmetic, or compilation. The full non-claims list is `reports/negative-claims.md`.\n- [ ] **Any divergence is classified**, not waved off (`reports/oracle-delta-ledger.md`).\n\nIf any box is unchecked, the result is a *witness*, not a *proof*.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/operator-checklist.md"
+    ],
+    "legacy_sha256": [
+      "f1ca77b8642856e070fca73bf14207296936e7eee67b33ed5f82cb65f0106be7"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

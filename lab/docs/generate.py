@@ -91,8 +91,9 @@ def check():
         expected = render(m)
         if actual != expected:
             print(f"NEG.DOC.MANUAL_EDIT: {m['generated_path']} != regenerated (hand-edited or stale; run lab/docs/generate.py)"); bad += 1
-        # version freshness
-        if f"gnucobol-rs {cv}" not in actual:
+        # version freshness -- only for docs that DECLARE a version field (e.g. STATUS); prose docs that
+        # never name a version are not stale for omitting it.
+        if "version" in m.get("machine_fields", []) and f"gnucobol-rs {cv}" not in actual:
             print(f"NEG.DOC.STALE_VERSION: {m['generated_path']} does not name current version {cv}"); bad += 1
         # legacy preserved as a superset
         lp = m.get("legacy_preservation")

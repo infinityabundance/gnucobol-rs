@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "reports-readme",
+  "generated_path": "reports/README.md",
+  "title": "reports/",
+  "machine_fields": [],
+  "body_template": "The evidence ledger. Nothing in `gnucobol-rs` is \"done\" without a receipt here.\n\n- `admission/` \u2014 pinned hashes (admitted tarball, built `cobc`/`libcob`), GnuCOBOL/`gcc`/`gmp`\n  versions, the exact build command, and the pinned env. The shared root of trust.\n- `oracle/` \u2014 parity sweep numbers (`PASS=n FAIL=0` + classified rows) and how to reproduce them.\n- `kani/` \u2014 the reduced-surface proof(s) run and their verdicts.\n- `fuzz/` \u2014 fuzz findings (each fixed + seeded) and run counts.\n- `RECEIPT-*.md` \u2014 the per-campaign receipt: goal, the semantics diagnosed (not guessed), the\n  gate state, and the exact non-claims.\n\nThese directories are **not** shipped in the published crates (`Cargo.toml` `exclude`); they\nare the project's audit trail, kept in the repository.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/README.md"
+    ],
+    "legacy_sha256": [
+      "6ac3eace8c819f4c1bfb4c5d9b560ed8b898e99b1f3e4f69a01d2047b3495417"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

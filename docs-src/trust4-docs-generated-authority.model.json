@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "trust4-docs-generated-authority",
+  "generated_path": "docs/trust4-docs-generated-authority.md",
+  "title": "TRUST.4.DOCS \u2014 generated documentation authority",
+  "machine_fields": [],
+  "body_template": "> **Doctrine.** TRUST.4.DOCS makes documentation a forensic artifact: every authoritative document is a\n> generated view over structured evidence, preserved legacy content, negative capabilities, and current\n> replay state; the generated document must be an information superset of the original, and **staleness\n> becomes a machine-detectable negative claim** rather than a hidden documentation bug.\n\nTRUST.2 generated receipts; TRUST.3 made proof safe to interpret; TRUST.4 made every *report* a forensic\ncasefile; **TRUST.4.DOCS** extends that to the *documentation* itself.\n\n## How it works\n\n```\ndocs-src/<id>.model.json   authored prose fragments + {{machine placeholders}} + legacy_preservation\n        +\nmachine evidence           Cargo.toml version, claim-ladder, casefiles, receipts\n        \u2193  lab/docs/generate.py\n<generated authoritative doc>.md   (header: DO NOT EDIT; machine authority; legacy source + sha)\n```\n\nThe generated doc is an **information superset**: it carries forward every legacy claim, non-claim,\ncaveat, and note (recorded in the model's `legacy_preservation`, with the original preserved byte-for-byte\nunder `research/legacyreports/docs/`), then adds machine-derived facts (current version, a generated\nsealed-courts table, casefile/receipt links) that the hand-written original could not keep fresh.\n\n## Staleness is a negative capability\n\nDocumentation drift is no longer a silent bug \u2014 it is a machine-detected finding with an ID\n(`reports/negative-capabilities.json`): `NEG.DOC.STALE_VERSION`, `NEG.DOC.STALE_CLAIM`,\n`NEG.DOC.MANUAL_EDIT`, `NEG.DOC.LEGACY_NOT_REPLACED`, `NEG.DOC.INFORMATION_LOSS`,\n`NEG.DOC.FRONTDOOR_CONFLICT`, `NEG.DOC.STALE_NONCLAIM`, `NEG.DOC.STALE_RECEIPT_LINK`.\n\n## The gate (`lab/docs/generate.py check`, run by the doc-gate)\n\nFails if a generated doc \u2260 regenerated (hand-edit / staleness), the version drifts from `Cargo.toml`,\n`legacy_preservation` is missing or its sha \u2260 the actual legacy file, the doc is not an information\nsuperset, or a claim-ladder court is absent from STATUS.\n\n## Status\n\n**STATUS.md is generated** (`docs-src/STATUS.model.json`) \u2014 the highest-staleness-risk front-door doc\n(it had a stale court count and a stale \"FILE.1 deferred\" debt; generation corrected both). The framework\nis extensible: each further authoritative doc (README, REVIEW-IN-10-MINUTES, not-yet-ready, \u2026) is migrated\nthe same way \u2014 preserve the legacy copy losslessly, author a `.model.json`, generate, gate \u2014 one batch at\na time, never moving a doc until its information-superset replacement exists.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/trust4-docs-generated-authority.md"
+    ],
+    "legacy_sha256": [
+      "1031accdd347b511ca9d38de727f951a3b777368ad89d0b29fd5d61e84c0390b"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

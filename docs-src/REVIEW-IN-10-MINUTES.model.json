@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "REVIEW-IN-10-MINUTES",
+  "generated_path": "docs/REVIEW-IN-10-MINUTES.md",
+  "title": "Review in 10 minutes",
+  "machine_fields": [],
+  "body_template": "**This page is not evidence \u2014 it points to evidence.** It is the shortest safe path through the repo\nfor an outside reviewer. Every claim below links to a receipt, a sweep, or a gate.\n\n## 1. What this is\nAn oracle-first Rust compatibility **court** for GnuCOBOL 3.2 *data* semantics + a reconciliation shim\n(KOBOLD). It reproduces observable GnuCOBOL byte/runtime semantics, one narrow slice at a time, each\nproven against a locally built GnuCOBOL oracle.\n\n## 2. What this is NOT\nNot a compiler, not `libcob`, not Procedure Division execution, not universal COBOL truth, not\nbusiness-truth validation. See [`not-yet-ready.md`](not-yet-ready.md).\n\n## 3. What you may rely on today\nThe live authority is [`/STATUS.md`](../STATUS.md). If anything here or in the README disagrees with it,\nSTATUS.md wins.\n\n## 4. Fastest reproduction path (~3\u20135 min)\n```sh\ncargo test                         # court unit tests, no oracle\nbash lab/verify-sealed-courts.sh   # sweeps + shim suite + doc-gate (needs built oracle)\npython3 lab/receipt/run.py check   # receipts are live replays, not hand-typed\n```\n\n## 5. Strongest receipts\nGenerated, not authored: [`reports/receipts/`](../reports/receipts/) \u2014 one `receipt.json` per court,\neach the output of a live sweep. The machine-readable ladder with the **lie each court prevents** is\n[`reports/claim-ladder.json`](../reports/claim-ladder.json).\n\n## 6. Current audit/gate board\n[`audits/README.md`](../audits/README.md). **A folder existing is not a result** \u2014 only a current\ngenerated receipt or an explicit green row is a claim.\n\n## 7. Current open debts\nThe \"Open debts\" section of [`/STATUS.md`](../STATUS.md) and the risk ledger\n[`future-risk-register.md`](future-risk-register.md).\n\n## 8. How to avoid misreading historical receipts\nThe authored `reports/RECEIPT-GNURUST-*.md` are seal-time prose; the **generated** receipts in\n`reports/receipts/` are current (gated against live replay). A generated receipt may carry\n`receipt_status: historical_at_seal` + `superseded_by` \u2014 when it does, STATUS.md is the current\nauthority. The doc-gate fails if a generated receipt's evidence drifts from a fresh replay.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/REVIEW-IN-10-MINUTES.md"
+    ],
+    "legacy_sha256": [
+      "efb7c2e24fc48caae8e59b7f6a1ac42d5a05832e5fb2841f95f8aa16c19a1f7f"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

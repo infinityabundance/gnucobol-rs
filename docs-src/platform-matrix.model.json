@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "platform-matrix",
+  "generated_path": "docs/platform-matrix.md",
+  "title": "Platform matrix \u2014 no silent portability claim",
+  "machine_fields": [],
+  "body_template": "GnuCOBOL runs on Linux, BSD, proprietary Unix, macOS, and Windows. `gnucobol-rs` parity is\nclaimed **only** on the platform whose oracle was built and recorded. Other platforms are\nfuture work, never silently implied.\n\n| Platform | Status |\n|----------|--------|\n| linux-glibc (`x86_64-pc-linux-gnu`) | **admitted** (this oracle) |\n| linux-musl | future |\n| macOS | future |\n| MinGW / Windows | future \u2014 distinct traps (see below) |\n| MSVC / Windows | future / likely non-claim |\n| *BSD | future |\n\n## Windows is not \"just line endings\" (future traps to receipt)\n\nCRLF source handling; console encoding; path separator + drive colon; DLL lookup;\n`COB_CONFIG_DIR` colon-in-path parsing; `.exe` suffix; file sharing/locking; text-vs-binary\nmode; MinGW-vs-MSVC build differences.\n\n## Endianness / charset\n\nThis oracle is **little-endian, ASCII host** (`COB_EBCDIC_MACHINE` off). Big-endian and\nEBCDIC-host behaviours (notably EBCDIC zoned-sign processing) are classified out of current\nclaims; binary-field byte order is a future per-attr concern.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/platform-matrix.md"
+    ],
+    "legacy_sha256": [
+      "e6f7fc97361b6c8d72515a44448a528cf418e5fb5bbc6a5374047d56ff75476b"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

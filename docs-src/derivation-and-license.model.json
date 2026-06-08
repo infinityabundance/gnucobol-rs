@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "derivation-and-license",
+  "generated_path": "docs/derivation-and-license.md",
+  "title": "Derivation and license boundary",
+  "machine_fields": [],
+  "body_template": "`gnucobol-rs` is a **faithful derivative port**, not a clean-room reimplementation. Functions\nare ported statement-by-statement from GnuCOBOL 3.2 source with upstream line citations in the\nRust comments (e.g. `// move.c:477`). Reading the upstream `.c` and mirroring its control flow\nmakes the result a **derivative work** under copyright law. We therefore do **not** get to pick\na permissive license \u2014 each crate inherits the copyleft of the upstream files it derives from.\n\n## Upstream licenses (verified from the 3.2 source headers)\n\n| Upstream component | Header says | Example file |\n|--------------------|-------------|--------------|\n| `libcob` (the runtime library) | GNU **Lesser** GPL, **v3 or later** | `libcob.h`, `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` |\n| `cobc` (the compiler) | GNU GPL, **v3 or later** | `cobc/cobc.c` |\n\n## Per-crate derivation map\n\n| Crate | Derives from (read + ported / driven) | Inherited license |\n|-------|----------------------------------------|-------------------|\n| `gnucobol-rs` | `libcob/move.c` (`cob_move_display_to_packed` @477, `cob_move_packed_to_display` @582, `store_common_region` @147, `cob_move` @1446), `libcob/numeric.c` (`cob_packed_get_sign` @967, `cob_set_packed_zero` @1128, `cob_set_packed_u64` @1373, `packed_bytes` @92), `libcob/common.c` (`cob_real_get_sign` @3712, `cob_real_put_sign` @3763, `cob_get_sign_ascii` @1450, `locate_sign` @3693), `libcob/coblocal.h` / `libcob/common.h` (macros, attr/type constants) | **LGPL-3.0-or-later** |\n| `cobc-oracle-rs` | *drives* the `cobc` binary as a subprocess; copies **no** GPL source logic \u2014 it only spawns the compiler and reads its outputs | **GPL-3.0-or-later** (conservative: it is tooling for, and tightly coupled to, the GPL compiler) |\n\n## Notices retained\n\n- [`COPYING.LESSER`](../COPYING.LESSER) \u2014 GNU LGPL v3, governing the `libcob`-derived crates.\n- [`COPYING`](../COPYING) \u2014 GNU GPL v3, governing the `cobc`-coupled crates.\n- The FSF copyright line (\"Copyright (C) \u2026 Free Software Foundation, Inc.\") and the original\n  author credits (Keisuke Nishida, Roger While, Simon Sobisch, et al.) are retained in the\n  header of every Rust source file that ports their code.\n\n## What this boundary forbids\n\n- Re-licensing a `libcob`-derived crate as Apache/MIT/permissive.\n- Copying `cobc` parser/codegen logic into a non-GPL crate.\n- Claiming \"clean-room\" or \"independent reimplementation\" anywhere \u2014 this is a *derivative*\n  port and says so.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/derivation-and-license.md"
+    ],
+    "legacy_sha256": [
+      "6c2cf11b8332a9e46a0193c3ac35233db110316594629254f95ea40a5d1e228c"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

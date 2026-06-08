@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "license-boundaries",
+  "generated_path": "docs/license-boundaries.md",
+  "title": "License-boundary doctrine",
+  "machine_fields": [],
+  "body_template": "This project deliberately spans copyleft and permissive licenses. The boundary is a feature, not an\naccident: the parts that are *faithful derivatives* of GnuCOBOL inherit its copyleft, and the parts\nthat merely *use* them stay permissive. Getting this right is part of being trustworthy.\n\n## The map\n\n| Crate / repo | License | Why |\n|--------------|---------|-----|\n| `gnucobol-rs` | **LGPL-3.0-or-later** | faithful, line-cited derivative port of `libcob` (`move.c`/`numeric.c`/`common.c`) |\n| `cobc-oracle-rs` | **GPL-3.0-or-later** | drives `cobc` (GPL); test/oracle harness boundary |\n| `kobold-data-shim` | **Apache-2.0** | *uses* `gnucobol-rs`; its own source is independent |\n| `kobold-bench` | **Apache-2.0** | benchmark harness; *uses* `gnucobol-rs` |\n| `kobold-lambda-layer` | **Apache-2.0** | packaging; *uses* `kobold-data-shim` |\n\n## The rules we follow\n\n1. **Faithful derivative \u2192 inherit copyleft.** Code ported statement-by-statement from `libcob` is a\n   derivative work and is **LGPL-3.0-or-later**; code that drives `cobc` is **GPL-3.0-or-later**.\n2. **Oracle-derived outputs are evidence, not implementation.** Bytes, attrs, offsets, and truth\n   values *observed* from the oracle and reproduced by independently-written Rust are facts about\n   behaviour \u2014 not copied code. They do not make the Rust a derivative of libcob's *source*; the\n   derivative status (and LGPL) comes from the **line-cited statement-by-statement porting**, which\n   we do disclose.\n3. **No GPL code copied into Apache crates.** Shared utilities that cross the license boundary must be\n   **independently written**, not copied. (Lesson learned: a self-contained SHA-256 already existed\n   in the GPL `cobc-oracle-rs`; reusing it in the Apache `kobold-data-shim` would have been a license\n   violation, so a fresh FIPS-180-4 implementation was written for the shim and verified against test\n   vectors.)\n4. **Linking obligations travel with binaries.** An Apache crate may depend on the LGPL `gnucobol-rs`\n   (a \"work that uses the Library\"). But any **distributed binary** (Lambda zip/layer, container,\n   executable) that statically links it is a Combined Work under LGPL-3.0 \u00a74 \u2014 it must give prominent\n   notice, allow relinking against a modified `gnucobol-rs`, and convey the LGPL text + source. Each\n   permissive crate's `NOTICE` states this.\n5. **A clean-room permissive kernel is a separate artifact.** A from-spec reimplementation (no\n   `libcob` reading) would be permissively licensable and would remove the \u00a74 obligation for fully\n   permissive distribution. It does not exist; the current crate is the honest LGPL derivative.\n\n## Why this matters\n\nDownstream adopters in regulated environments must reason about copyleft propagation before they can\napprove a dependency. A precise, written boundary \u2014 and the discipline of independently writing any\nshared utility \u2014 is what lets them say yes. This is not legal advice; it is the project's stated\npolicy, kept consistent with each crate's `LICENSE` / `COPYING*` / `NOTICE`.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/license-boundaries.md"
+    ],
+    "legacy_sha256": [
+      "6e5af5dbf505557c85babf512a876cf2c3db13cadf6238e3c776a20bd9a07c6d"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

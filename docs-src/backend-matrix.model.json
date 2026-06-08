@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "backend-matrix",
+  "generated_path": "docs/backend-matrix.md",
+  "title": "Backend matrix (indexed files, SORT/MERGE) \u2014 non-claim today",
+  "machine_fields": [],
+  "body_template": "`gnucobol-rs` makes **no** indexed-file or `SORT`/`MERGE` claim yet. This file exists to name\nthe boundary *before* any such crate, because in GnuCOBOL these surfaces depend on an ISAM\nbackend and the **same \"GnuCOBOL 3.2\"** can behave materially differently depending on it.\n\n## Why this is a minefield, not a footnote\n\n- `ORGANIZATION INDEXED` support depends on an ISAM backend (Berkeley DB, VBISAM, DISAM, or\n  none). Record locking / file sharing further depend on the OS and build options.\n- `libdb` is used by GnuCOBOL not only for indexed I/O but also for `SORT`/`MERGE` temporary\n  storage \u2014 so future runtime compatibility is **not** one blob.\n- Redistribution: Berkeley DB licensing is a known concern; VBISAM is LGPL. A future indexed\n  campaign must record `file_backend_identity` and respect redistribution constraints.\n\n## Future rows (each a separately sealed campaign, none claimed now)\n\n| Backend | Status |\n|---------|--------|\n| Berkeley DB (this oracle is built `--with-db`, BDB 5.3.28) | future \u2014 `GNURUST.BACKEND.0` |\n| VBISAM | future |\n| DISAM | future |\n| no-ISAM | future |\n\n## Runtime surfaces, separated (not one \"files\" blob)\n\n```\nsequential files \u2192 relative files \u2192 indexed files\n\u2192 SORT/MERGE temporary-storage semantics \u2192 locking / file-status / error behavior\n```\n\n## Receipt fields a future files campaign must carry\n\n- `file_backend_identity` (which ISAM, version, locking support)\n- COBOL-visible **file status codes** as the primary artifact (a typed Rust error is\n  secondary \u2014 see `docs/runtime-doctrine.md`).\n\n**Non-claim:** decimal/byte/data parity does **not** imply indexed-file or SORT/MERGE\ncompatibility. The Berkeley DB in this oracle build affects only future file work.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/backend-matrix.md"
+    ],
+    "legacy_sha256": [
+      "c43193f47ba7b98fc06b579445cbc7ff64108e9a99f273565a2720774739a778"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}

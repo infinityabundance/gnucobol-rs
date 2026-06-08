@@ -1,0 +1,24 @@
+{
+  "schema": "trust4-doc-model-v1",
+  "document_id": "runtime-doctrine",
+  "generated_path": "docs/runtime-doctrine.md",
+  "title": "Runtime & dialect doctrine \u2014 boundaries named early",
+  "machine_fields": [],
+  "body_template": "`libcob` is not a bag of pure functions; it carries global state, config, locale, and module\ncontext. And \"GnuCOBOL compatibility\" is not \"COBOL compatibility\". These boundaries are named\nnow so they can never be silently crossed.\n\n## Primary oracle vs reference dialects\n\n- **Primary oracle:** the built **GnuCOBOL 3.2** (identity in `reports/admission/`). The\n  *only* authority for parity claims.\n- **Reference dialect witnesses** (IBM Enterprise COBOL, Micro Focus, ACU, RM, \u2026): **future,\n  non-authoritative**. A dialect witness is never the project's authority unless explicitly\n  admitted with its own receipt. Matching GnuCOBOL \u2260 matching IBM.\n\n## Special-names contaminants (named, mostly not-admitted today)\n\nGnuCOBOL source can change numeric interpretation via `SPECIAL-NAMES`. Recorded as an explicit\nreceipt field so its absence is deliberate, not overlooked:\n\n```\nspecial_names_policy =\n  decimal_point: period            # comma = not_admitted (DECIMAL-POINT IS COMMA)\n  numeric_sign:  default | trailing_separate   # leading/other = per-attr, EBCDIC = not_admitted\n  currency_sign: default ('$')     # custom = not_admitted\n```\n\n## Display vs storage (do not conflate)\n\nA passing `DISPLAY` stdout test is **not** storage compatibility. These are distinct artifacts\nand `gnucobol-rs` claims only the storage/move ones:\n\n```\nfield_storage_bytes      # the bytes a field holds      <- CLAIMED (decimal slice)\nmove_conversion_bytes    # bytes after MOVE src -> dst   <- CLAIMED (decimal slice)\ndisplay_statement_stdout # what DISPLAY prints           <- NOT claimed by the decimal slice\nhuman_formatted_value / debug_dump_value                 # NOT claimed\n```\n\n## Runtime global state & test isolation (LIBCOB-RUNTIME.0, future)\n\n`cob_init`, environment, module loading, cancellation, locale, memory, and runtime config are\nprocess-global. Therefore, as policy from day one:\n\n- **Every oracle test that touches env/files/runtime state runs in a fresh child process.**\n  (The decimal oracle is already an out-of-process C harness; the Rust mirror is a separate\n  example binary \u2014 no shared in-process runtime state.)\n- Receipts record `cwd`, an env whitelist, `umask`, and tempdir policy.\n- No oracle test relies on Rust test ordering or parallelism. In-process speed is not worth a\n  false positive/negative from shared global state.\n\nA future `LIBCOB-RUNTIME.0` campaign will formalise the global-state admission; until then no\nin-process `libcob` runtime claim is made.\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/docs/runtime-doctrine.md"
+    ],
+    "legacy_sha256": [
+      "b0b941232776f2918e5b33e7e866b415e2e05740d8266091e54cc619fecf592f"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
+}
