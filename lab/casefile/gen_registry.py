@@ -175,6 +175,19 @@ ENT2 = [
 for (i, s, g, r) in ENT2:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.ENTERPRISE.2"]}
+
+# KOBOLD.BANK.RECONCILE.1 view refusals (a VIEW, never a new truth source).
+BANKREC = [
+ ("NEG.BANK_RECONCILE.NOT_LEDGER_ACCEPTANCE", "a matched reconciliation view treated as ledger acceptance", "view summarizes; ledger_truth claimed:false", "posting a batch the ledger never accepted"),
+ ("NEG.BANK_RECONCILE.NOT_SETTLEMENT_FINALITY", "the view treated as settlement finality", "out of scope; settlement_truth claimed:false", "treating unsettled data as final"),
+ ("NEG.BANK_RECONCILE.NOT_ACCOUNT_BALANCE_TRUTH", "the view treated as correct account balances", "out of scope", "trusting derived balances as truth"),
+ ("NEG.BANK_RECONCILE.NOT_BUSINESS_APPROVAL", "the view treated as business approval/sign-off", "out of scope", "claiming approval never given"),
+ ("NEG.BANK_RECONCILE.VIEW_NOT_NEW_EVIDENCE", "the view treated as new evidence rather than a summary", "introduces_new_evidence:false; every number is from a court struct", "double-counting a summary as fresh proof"),
+ ("NEG.BANK_RECONCILE.MATCH_NOT_CORRECTNESS", "a declared-vs-observed MATCH treated as business correctness", "a match proves equality to the DECLARED totals, not correctness", "trusting a balanced file as a correct file"),
+]
+for (i, s, g, r) in BANKREC:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.BANK.RECONCILE.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

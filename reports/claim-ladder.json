@@ -529,6 +529,20 @@
       "readiness": 3,
       "lie_prevented": "'it has a signature, so it is approved/compliant/trusted' -- ENTERPRISE.2 proves only that a configured key signed the exact payload; unsigned stays explicit and honest",
       "damage_if_overclaimed": "a signature sold as compliance or production approval manufactures false assurance; a fake-green verifier would pass tampered evidence"
+    },
+    {
+      "id": "KOBOLD.BANK.RECONCILE.1",
+      "name": "opinionated generated banking reconciliation VIEW",
+      "proven": "an operator view assembled ONLY from existing court structs (BANK.1/2 summary, POSTING.1 custody, DB2HOST.1 indicators, PRIVACY redaction counts): declared-vs-observed count/debit/credit + matched/mismatch verdict, custody seq min/max/gaps/dups + last_chain_hash, db2 null/truncation counts, dirty/unsupported/unknown counts, redaction counts, and refused truth layers; aggregates the EXISTING findings into one SARIF view",
+      "byte_domain": "existing court evidence -> generated operator report (json + md + sarif); introduces no new evidence",
+      "oracle": "the court result structs themselves (no recomputation that can drift)",
+      "fixtures": "tests/bank_reconcile.rs (2: matched view faithful + refuses truth; mismatch renders finding in view+SARIF)",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "ledger acceptance; settlement finality; account-balance truth; business approval; that a match is correctness; that the view is new evidence",
+      "breaks_claim": "treating the view as ledger/settlement/balance/approval truth; treating a declared-vs-observed match as business correctness",
+      "readiness": 3,
+      "lie_prevented": "'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth",
+      "damage_if_overclaimed": "an operator acting on a matched VIEW as if it were ledger acceptance posts or finalizes a batch on a summary, not a decision"
     }
   ],
   "transform_vs_read": {

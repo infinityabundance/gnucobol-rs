@@ -69,6 +69,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `KOBOLD.EXTRACT.PROFILE.1` | declared extraction provenance + copybook freshness | pass | `reports/casefiles/KOBOLD.EXTRACT.PROFILE.1/` |
 | `KOBOLD.PRIVACY.REDACTION.1` | declared evidence-preserving redaction | pass | `reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/` |
 | `KOBOLD.PERF.1` | gated record-level Rayon (byte-identical to scalar) | pass | `reports/casefiles/KOBOLD.PERF.1/` |
+| `KOBOLD.BANK.RECONCILE.1` | opinionated generated banking reconciliation VIEW | pass | `reports/casefiles/KOBOLD.BANK.RECONCILE.1/` |
 | `KOBOLD.DATA.2` | binary fields in corpus | pass | `reports/casefiles/KOBOLD.DATA.2/` |
 | `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | pass | `reports/casefiles/KOBOLD.BANK.2/` |
 | `KOBOLD.RECON.2` | declared transformed-record reconciliation | pass | `reports/casefiles/KOBOLD.RECON.2/` |

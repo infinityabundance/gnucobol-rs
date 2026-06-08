@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.BANK.RECONCILE.1/casefile.json",
+      "digest": {
+        "sha256": "4622a9d870fb427535799d4b77062eceefe6ee73eb6714c8b1e3001bf73d9706"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.BANK.RECONCILE.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.6.3",
+    "verdict": "pass",
+    "replay": {
+      "command": "the court result structs themselves (no recomputation that can drift)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "1c61589f6cc28f5068b30dc3551020770a8e17ee8cc03417eb8a66a69b4d676c",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 7
+  }
+}

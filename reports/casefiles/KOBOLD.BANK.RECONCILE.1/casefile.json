@@ -1,0 +1,63 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.BANK.RECONCILE.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "1c61589f6cc28f5068b30dc3551020770a8e17ee8cc03417eb8a66a69b4d676c",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the court result structs themselves (no recomputation that can drift)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/bank_reconcile.rs (2: matched view faithful + refuses truth; mismatch renders finding in view+SARIF)"
+  },
+  "positive_claims": [
+    "an operator view assembled ONLY from existing court structs (BANK.1/2 summary, POSTING.1 custody, DB2HOST.1 indicators, PRIVACY redaction counts): declared-vs-observed count/debit/credit + matched/mismatch verdict, custody seq min/max/gaps/dups + last_chain_hash, db2 null/truncation counts, dirty/unsupported/unknown counts, redaction counts, and refused truth layers",
+    "aggregates the EXISTING findings into one SARIF view"
+  ],
+  "negative_claims": [
+    "ledger acceptance",
+    "settlement finality",
+    "account-balance truth",
+    "business approval",
+    "that a match is correctness",
+    "that the view is new evidence",
+    "lie prevented: 'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
+  ],
+  "negative_capability_ids": [
+    "NEG.LEDGER-ACCEPTANCE",
+    "NEG.SETTLEMENT-FINALITY",
+    "NEG.ACCOUNT-BALANCE-TRUTH",
+    "NEG.BUSINESS-APPROVAL",
+    "NEG.THAT-A-MATCH-IS-CORRECTNESS",
+    "NEG.THAT-THE-VIEW-IS-NEW-EVIDENCE"
+  ],
+  "byte_domains": [
+    "existing court evidence -> generated operator report (json + md + sarif); introduces no new evidence"
+  ],
+  "lie_prevented": [
+    "'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
+  ],
+  "damage_if_overclaimed": "an operator acting on a matched VIEW as if it were ledger acceptance posts or finalizes a batch on a summary, not a decision",
+  "replay": {
+    "command": "the court result structs themselves (no recomputation that can drift)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "f6044702b2b35d7708d24fe0caec64f0b3287221607c0c5cd59b61a206fb57ae"
+  }
+}
