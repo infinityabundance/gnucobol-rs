@@ -24,7 +24,7 @@ Each is proven against the GnuCOBOL 3.2 oracle: **`GNURUST.2`** decimal `MOVE` b
 **`GNURUST.3`** PIC→field-model (`pic`), **`GNURUST.4`** record layout (`layout`), **`GNURUST.5`/`6`**
 `COPY`(+`REPLACING`) expansion (`copybook`), **`GNURUST.7`** decimal arithmetic (`arith`), and **`GNURUST.8`** VALUE images (`init`).
 
-### `GNURUST.2` — decimal `MOVE` bytes
+## `GNURUST.2` — decimal `MOVE` bytes
 
 For three elementary `cob_move` type pairs on a little-endian ASCII host under `LC_ALL=C.UTF-8`:
 
@@ -146,6 +146,13 @@ edited-numeric under cp500, and binary/packed via this path are non-claims.
 nibble), proven vs `cobc` (PIC 432/0); `cob_move` DISPLAY↔COMP-6 matches libcob (98/0); `from_packed`
 decodes it. **Unsigned only** — signed COMP-6 is converted by GnuCOBOL to COMP-3 (non-claim).
 
+## `GNURUST.19` — DIVIDE receiving-field bytes
+
+`arith::cob_divide(lhs, lhs_attr, rhs, rhs_attr, recv_attr, round)` writes `recv := lhs/rhs` byte-for-byte
+as `cobc` for `DIVIDE ... GIVING` (DISPLAY/COMP-3, truncate + ROUNDED, signed/scaled/narrowing), proven
+736/0. Divide-by-zero fails closed; REMAINDER/COMPUTE/ON SIZE ERROR/float/binary-edited receivers are
+non-claims.
+
 ## What it does NOT do
 
 Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above: no
@@ -159,12 +166,4 @@ comparison/collation, no binary/float, no files; no `P` scaling, no `OCCURS DEPE
 **LGPL-3.0-or-later** — this is a faithful derivative port of `libcob/move.c`, `libcob/numeric.c`,
 and `libcob/common.c` (GnuCOBOL 3.2, © Free Software Foundation, Inc.; authors Keisuke Nishida,
 Roger While, Simon Sobisch, et al.), and inherits their copyleft. See `COPYING.LESSER`.
-
-
-## `GNURUST.19` — DIVIDE receiving-field bytes
-
-`arith::cob_divide(lhs, lhs_attr, rhs, rhs_attr, recv_attr, round)` writes `recv := lhs/rhs` byte-for-byte
-as `cobc` for `DIVIDE ... GIVING` (DISPLAY/COMP-3, truncate + ROUNDED, signed/scaled/narrowing), proven
-736/0. Divide-by-zero fails closed; REMAINDER/COMPUTE/ON SIZE ERROR/float/binary-edited receivers are
-non-claims.
 
