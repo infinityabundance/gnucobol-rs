@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-rs-sealed-court",
     "detail": "ed25519 (ed25519-compact, pinned) over the DSSE PAE; selftest proves all states",
-    "upstream_court": null
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
   },
   "results": {
     "total": null,

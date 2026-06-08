@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
     "detail": "cobc -P",
-    "upstream_court": "GNURUST.6"
+    "upstream_court": "GNURUST.6",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
   },
   "results": {
     "total": null,

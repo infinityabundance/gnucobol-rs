@@ -129,7 +129,10 @@ def build(court):
         "inputs": {"claim_ladder_entry_sha256": sha(json.dumps(court, sort_keys=True)),
                    "receipt_sha256": sha(json.dumps(rec, sort_keys=True)) if rec else None},
         "oracle": {"oracle_kind": "gnucobol-3.2-admitted" if crate == "gnucobol-rs" else "gnucobol-rs-sealed-court",
-                   "detail": court.get("oracle", ""), "upstream_court": cid if crate == "gnucobol-rs" else None},
+                   "detail": court.get("oracle", ""), "upstream_court": cid if crate == "gnucobol-rs" else None,
+                   # DIALECT.PROFILE.1: an oracle-grounded casefile names the exact witness profile it used.
+                   "dialect_profile_id": rec["oracle"].get("dialect_profile_id") if rec and "oracle" in rec else None,
+                   "dialect_profile_sha256": rec["oracle"].get("dialect_profile_sha256") if rec and "oracle" in rec else None},
         "results": results,
         "positive_claims": positive,
         "negative_claims": negative,

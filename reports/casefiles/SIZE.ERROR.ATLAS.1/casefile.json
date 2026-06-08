@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-rs-sealed-court",
     "detail": "bash lab/oracle/size_error_sweep.sh",
-    "upstream_court": null
+    "upstream_court": null,
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
   },
   "results": {
     "total": 12,

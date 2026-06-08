@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-rs-sealed-court",
     "detail": "deterministic custody over the declared records (binds FILE.1/BANK.1/BANK.2/DB2HOST.1)",
-    "upstream_court": null
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
   },
   "results": {
     "total": null,

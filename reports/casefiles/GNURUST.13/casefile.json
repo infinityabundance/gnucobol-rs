@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
     "detail": "libcob cob_add/cob_sub (cob_add_bcd path)",
-    "upstream_court": "GNURUST.13"
+    "upstream_court": "GNURUST.13",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
   },
   "results": {
     "total": null,

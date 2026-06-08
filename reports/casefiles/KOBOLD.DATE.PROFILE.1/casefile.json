@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-rs-sealed-court",
     "detail": "the declared format + gregorian calendar validity (deterministic)",
-    "upstream_court": null
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
   },
   "results": {
     "total": null,

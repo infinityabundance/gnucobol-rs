@@ -16,7 +16,9 @@
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
     "detail": "libcob cob_load_collation (ebcdic500_ascii8bit)",
-    "upstream_court": "GNURUST.15"
+    "upstream_court": "GNURUST.15",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
   },
   "results": {
     "total": 256,
