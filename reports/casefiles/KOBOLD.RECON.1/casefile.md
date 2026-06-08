@@ -19,5 +19,8 @@
 - line-sequential containers
 - lie prevented: 'decoded JSON is business truth' — it is record truth over sealed courts only
 
+## Damage if overclaimed
+treating decoded JSON as business truth acts on record-truth as if it were account state
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

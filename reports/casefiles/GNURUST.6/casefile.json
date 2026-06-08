@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "3457c9529ca1960ea94586e4125e95e51522427c2b819ce743b723354b3b5157",
+    "claim_ladder_entry_sha256": "663f19439876544fd4eb617e955dca14f0033e7862c203dc628e25b23a988a77",
     "receipt_sha256": null
   },
   "oracle": {
@@ -45,12 +45,13 @@
   "lie_prevented": [
     "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
   ],
+  "damage_if_overclaimed": "a wrong REPLACING substitution silently changes field identities across a whole estate",
   "replay": {
     "command": "cobc -P",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "706b193ece1f1e958a5739f2aac1017a7e2bed1f47fbbe8897009b1c418e7551"
+    "inputs_sha256": "4e770d67520620228aeb10b0c336e209c1fe35e512bfbbf3be1820a244f8d1a2"
   },
   "legacy_preservation": {
     "legacy_paths": [

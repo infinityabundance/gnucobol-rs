@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "5200aac1f2798ec3fe858993dd13c77e39cd5124cacc8202e2b92a57c1aa5810",
+    "claim_ladder_entry_sha256": "50caabc6f3dce3304dca839c1aeb33f91296f05d3f3c84c0e2dd10283152be88",
     "receipt_sha256": null
   },
   "oracle": {
@@ -43,11 +43,12 @@
   "lie_prevented": [
     "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)"
   ],
+  "damage_if_overclaimed": "converting binary/packed bytes as EBCDIC text destroys numeric values",
   "replay": {
     "command": "sealed GNURUST courts",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "24112e25cca86e439ac6c8786f091bc7457ae479b78cb9c6be2008271560dcfb"
+    "inputs_sha256": "58cdff09e9d8844826445f2df0ff00c18f93420c54848b3a7d43c6005c79f663"
   }
 }

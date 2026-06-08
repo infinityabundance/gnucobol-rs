@@ -23,5 +23,8 @@
 - auto-detected variants
 - lie prevented: 'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth
 
+## Damage if overclaimed
+treating a balanced file as a correct, accepted posting moves money on an unverified batch
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

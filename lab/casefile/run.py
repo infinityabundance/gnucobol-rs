@@ -136,6 +136,7 @@ def build(court):
         "negative_capability_ids": [neg_ids(n) for n in negative if not n.startswith("lie prevented")],
         "byte_domains": [court.get("byte_domain", "")],
         "lie_prevented": [court["lie_prevented"]] if court.get("lie_prevented") else [],
+        "damage_if_overclaimed": court.get("damage_if_overclaimed", ""),
         "replay": replay,
         "hash_chain": {"inputs_sha256": sha(inputs_blob)},
     }
@@ -165,6 +166,9 @@ def render_md(c):
 
 ## Negative claims ({len(c['negative_claims'])}) — negative capability is the trust surface
 {neg}
+
+## Damage if overclaimed
+{c.get('damage_if_overclaimed','')}
 
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.
@@ -261,6 +265,8 @@ def check():
         # negative >= positive (negative capability is the trust surface)
         if len(fresh["negative_claims"]) < len(fresh["positive_claims"]):
             print(f"GATE: {cid} has fewer negative ({len(fresh['negative_claims'])}) than positive ({len(fresh['positive_claims'])}) claims"); bad += 1
+        if fresh["positive_claims"] and not fresh.get("damage_if_overclaimed"):
+            print(f"GATE: {cid} names no organizational damage_if_overclaimed for its positive claim(s)"); bad += 1
         # casefile must not reference a missing receipt when it claims one
         if fresh["inputs"]["receipt_sha256"] and not os.path.exists(os.path.join(RECDIR, cid, "receipt.json")):
             print(f"DRIFT: {cid} references a missing receipt"); bad += 1

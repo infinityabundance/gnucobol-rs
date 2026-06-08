@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "274da1026f5da9ef8d38c550647cb5bea9637e60698637810185947d12cfa84d",
+    "claim_ladder_entry_sha256": "cccb540ccd32067c28c68c1fe3a9c37924a6f24de043a8e2c55254175f4c9535",
     "receipt_sha256": null
   },
   "oracle": {
@@ -54,11 +54,12 @@
   "lie_prevented": [
     "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
   ],
+  "damage_if_overclaimed": "treating a balanced file as a correct, accepted posting moves money on an unverified batch",
   "replay": {
     "command": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "df743016c0514e25341025409d7bba0fcc48de30c3b23345f9b8a3b2fe677c05"
+    "inputs_sha256": "920640e7c9d7eb57b6fab006e2b3ab26b3e1b5d49931408e39fad00188a10d5a"
   }
 }

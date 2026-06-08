@@ -23,7 +23,8 @@
       "not_proven": "arithmetic; edited pictures; any other type pair",
       "breaks_claim": "non-ASCII host; EBCDIC sign mode; locale != C.UTF-8",
       "readiness": 4,
-      "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
+      "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven",
+      "damage_if_overclaimed": "a wrong MOVE result posted as a real value corrupts a record silently"
     },
     {
       "id": "GNURUST.3",
@@ -36,7 +37,8 @@
       "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3",
       "breaks_claim": "edited symbols; unsupported usage",
       "readiness": 4,
-      "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
+      "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs",
+      "damage_if_overclaimed": "a mis-modeled field width mis-reads every downstream field in the record"
     },
     {
       "id": "GNURUST.4",
@@ -49,7 +51,8 @@
       "not_proven": "SYNCHRONIZED; REDEFINES larger than target",
       "breaks_claim": "alignment/SYNC; record-growth REDEFINES",
       "readiness": 4,
-      "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
+      "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition",
+      "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields"
     },
     {
       "id": "GNURUST.5",
@@ -62,7 +65,8 @@
       "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS",
       "breaks_claim": "non-line-oriented COPY",
       "readiness": 4,
-      "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
+      "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word",
+      "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with"
     },
     {
       "id": "GNURUST.6",
@@ -75,7 +79,8 @@
       "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands",
       "breaks_claim": "substring replacement expectation; REPLACE directive",
       "readiness": 4,
-      "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
+      "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word",
+      "damage_if_overclaimed": "a wrong REPLACING substitution silently changes field identities across a whole estate"
     },
     {
       "id": "GNURUST.7",
@@ -88,7 +93,8 @@
       "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum",
       "breaks_claim": ">38 significant digits; float fields",
       "readiness": 3,
-      "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
+      "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly",
+      "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total"
     },
     {
       "id": "GNURUST.8",
@@ -101,7 +107,8 @@
       "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE",
       "breaks_claim": "P-scaled parent; edited PIC",
       "readiness": 4,
-      "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+      "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE",
+      "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data"
     },
     {
       "id": "GNURUST.9",
@@ -114,7 +121,8 @@
       "not_proven": "V+P; P at both ends; VALUE/MOVE on P field",
       "breaks_claim": "V combined with P",
       "readiness": 3,
-      "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
+      "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact",
+      "damage_if_overclaimed": "a wrong P-scale mis-places the decimal point, off-by-10x on money"
     },
     {
       "id": "GNURUST.10",
@@ -127,7 +135,8 @@
       "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO",
       "breaks_claim": "treating physical-max as logical length",
       "readiness": 4,
-      "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
+      "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length",
+      "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records"
     },
     {
       "id": "GNURUST.11",
@@ -140,7 +149,8 @@
       "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution",
       "breaks_claim": "collating sequence; SET semantics",
       "readiness": 4,
-      "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact"
+      "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact",
+      "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)"
     },
     {
       "id": "GNURUST.12",
@@ -153,7 +163,8 @@
       "not_proven": "SET TO FALSE; FALSE clause; expressions; execution",
       "breaks_claim": "SET FALSE expectation",
       "readiness": 4,
-      "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
+      "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes",
+      "damage_if_overclaimed": "a wrong SET writes a status the program never intended"
     },
     {
       "id": "GNURUST.13",
@@ -166,7 +177,8 @@
       "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float",
       "breaks_claim": ">38 digits; SIZE ERROR control flow",
       "readiness": 3,
-      "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
+      "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation",
+      "damage_if_overclaimed": "a wrong packed sign/rounding flips the sign of money on truncation"
     },
     {
       "id": "KOBOLD.RECON.1",
@@ -179,7 +191,8 @@
       "not_proven": "transformed-record write-back; EBCDIC; edited PIC; line-sequential containers",
       "breaks_claim": "treating KOBOLD output as business truth beyond sealed fields",
       "readiness": 4,
-      "lie_prevented": "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
+      "lie_prevented": "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only",
+      "damage_if_overclaimed": "treating decoded JSON as business truth acts on record-truth as if it were account state"
     },
     {
       "id": "GNURUST.14",
@@ -192,7 +205,8 @@
       "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
       "breaks_claim": "big-endian host; SYNC alignment; binary arithmetic",
       "readiness": 3,
-      "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
+      "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8",
+      "damage_if_overclaimed": "a wrong binary width/endian mis-reads a key, branch, or amount on the wrong platform"
     },
     {
       "id": "GNURUST.15",
@@ -205,7 +219,8 @@
       "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
       "breaks_claim": "non-cp500 page; treating EBCDIC as record-wide convert-everything",
       "readiness": 3,
-      "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+      "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw",
+      "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses"
     },
     {
       "id": "GNURUST.16",
@@ -218,7 +233,8 @@
       "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
       "readiness": 3,
-      "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated"
+      "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated",
+      "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals"
     },
     {
       "id": "KOBOLD.DATA.2",
@@ -231,7 +247,8 @@
       "not_proven": "binary arithmetic; business truth",
       "breaks_claim": "binary fields text-converted",
       "readiness": 4,
-      "lie_prevented": "'binary fields are text under any encoding' \u2014 they are raw storage passthrough"
+      "lie_prevented": "'binary fields are text under any encoding' \u2014 they are raw storage passthrough",
+      "damage_if_overclaimed": "reading a binary field as text under an encoding corrupts keys and amounts"
     },
     {
       "id": "KOBOLD.DATA.3",
@@ -244,7 +261,8 @@
       "not_proven": "numeric DISPLAY under cp500 (EBCDIC zoned sign); business truth",
       "breaks_claim": "EBCDIC conversion touching COMP bytes",
       "readiness": 4,
-      "lie_prevented": "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)"
+      "lie_prevented": "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)",
+      "damage_if_overclaimed": "converting binary/packed bytes as EBCDIC text destroys numeric values"
     },
     {
       "id": "KOBOLD.OPERATOR.1",
@@ -257,7 +275,8 @@
       "not_proven": "business truth; semantic validity; INITIALIZE/repair",
       "breaks_claim": "coercing dirty bytes; silent key collision",
       "readiness": 4,
-      "lie_prevented": "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
+      "lie_prevented": "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance",
+      "damage_if_overclaimed": "trusting a value with no provenance trail means an auditor cannot defend it"
     },
     {
       "id": "GNURUST.17",
@@ -270,7 +289,8 @@
       "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS",
       "breaks_claim": "non-cp500 page; treating binary as EBCDIC zoned",
       "readiness": 3,
-      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ",
+      "damage_if_overclaimed": "a wrong zoned sign flips the sign of mainframe money"
     },
     {
       "id": "GNURUST.18",
@@ -283,7 +303,8 @@
       "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2",
       "breaks_claim": "signed COMP-6; strict cobol85/2002 (reject it)",
       "readiness": 3,
-      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3",
+      "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely"
     },
     {
       "id": "KOBOLD.DATA.4",
@@ -296,7 +317,8 @@
       "not_proven": "numeric->edited formatting; report writer; locale/currency; edited under EBCDIC",
       "breaks_claim": "treating the presentation string as the numeric value",
       "readiness": 3,
-      "lie_prevented": "'presentation string and numeric value are the same field truth' -- they are separated"
+      "lie_prevented": "'presentation string and numeric value are the same field truth' -- they are separated",
+      "damage_if_overclaimed": "replacing the edited presentation with its numeric (or vice versa) mis-reports money"
     },
     {
       "id": "KOBOLD.DATA.5",
@@ -309,7 +331,8 @@
       "not_proven": "cp037; edited-numeric under cp500; binary/packed via this path; mixed/auto-detect encoding",
       "breaks_claim": "auto-detecting the code page; routing binary as EBCDIC zoned",
       "readiness": 3,
-      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ"
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ",
+      "damage_if_overclaimed": "auto-detecting the code page mis-decodes the whole EBCDIC file"
     },
     {
       "id": "KOBOLD.DATA.6",
@@ -322,7 +345,8 @@
       "not_proven": "signed COMP-6 (fails closed); COMP-6 arithmetic; malformed COMP-6 bytes; pre-3.2 behavior; dialect portability; EBCDIC conversion of COMP-6 bytes",
       "breaks_claim": "treating signed COMP-6 as COMP-6 instead of COMP-3",
       "readiness": 3,
-      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3",
+      "damage_if_overclaimed": "treating signed COMP-6 as unsigned mis-reads it (GnuCOBOL makes it COMP-3)"
     },
     {
       "id": "KOBOLD.FILE.1",
@@ -335,7 +359,8 @@
       "not_proven": "GnuCOBOL file organization; indexed/relative I/O; line-sequential runtime parity; auto-resynchronization; encoding auto-detection; silent repair of dirty bytes",
       "breaks_claim": "silently absorbing a partial record or resyncing on a length mismatch",
       "readiness": 3,
-      "lie_prevented": "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
+      "lie_prevented": "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior",
+      "damage_if_overclaimed": "silently absorbing a partial/extra record drops or duplicates a banking record"
     },
     {
       "id": "KOBOLD.BANK.1",
@@ -348,7 +373,8 @@
       "not_proven": "posting truth; ledger truth; business truth; debit/credit polarity from a numeric sign; a balanced file being a correct file; a trailer match being ledger acceptance; auto-detected variants",
       "breaks_claim": "inferring polarity from sign; treating a balanced file as accepted/correct",
       "readiness": 3,
-      "lie_prevented": "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
+      "lie_prevented": "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth",
+      "damage_if_overclaimed": "treating a balanced file as a correct, accepted posting moves money on an unverified batch"
     }
   ],
   "transform_vs_read": {
@@ -375,5 +401,6 @@
     ],
     "note": "Decode safety does not imply write-back safety; transformation courts are admitted separately."
   },
-  "note_lie_prevented": "Each court names the specific future OVERCLAIM it prevents (lie_prevented). A proof is a defense against a particular lie, not a vague 'compatible'."
+  "note_lie_prevented": "Each court names the specific future OVERCLAIM it prevents (lie_prevented). A proof is a defense against a particular lie, not a vague 'compatible'.",
+  "note_damage": "Point #4 (mentorship): every positive claim names the ORGANIZATIONAL DAMAGE of overclaiming it. Negative capability is the product."
 }

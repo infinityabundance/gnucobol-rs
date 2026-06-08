@@ -22,5 +22,8 @@
 - pre-3.2
 - lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3
 
+## Damage if overclaimed
+treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

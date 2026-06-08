@@ -17,5 +17,8 @@
 - REDEFINES larger than target
 - lie prevented: 'offsets are obvious' — layout matches cobc's emitted offsets, not intuition
 
+## Damage if overclaimed
+a wrong offset shifts an entire record, mis-attributing values to the wrong fields
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

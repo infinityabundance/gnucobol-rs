@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "160b357f5723c9a17a658651e128384fad0ac744822142b072c09b890b70a6aa",
+    "claim_ladder_entry_sha256": "3a5dafac7fce0c6cb75214e44d4618e42160ac72f398eaa0af584c99062981db",
     "receipt_sha256": null
   },
   "oracle": {
@@ -43,11 +43,12 @@
   "lie_prevented": [
     "'binary fields are text under any encoding' \u2014 they are raw storage passthrough"
   ],
+  "damage_if_overclaimed": "reading a binary field as text under an encoding corrupts keys and amounts",
   "replay": {
     "command": "sealed GNURUST courts (no new oracle)",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "651306543608ba511874a14c703874c2111c2f5c06259ce71aea5cf2b92fee71"
+    "inputs_sha256": "81fc1fca43ed9ef8bbb1e46367e1c016c2dfcecd1d4ad6a9ebbb446ebee7d4e3"
   }
 }

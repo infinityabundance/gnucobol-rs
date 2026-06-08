@@ -23,5 +23,8 @@
 - EBCDIC conversion of COMP-6 bytes
 - lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3
 
+## Damage if overclaimed
+treating signed COMP-6 as unsigned mis-reads it (GnuCOBOL makes it COMP-3)
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

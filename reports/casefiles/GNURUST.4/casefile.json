@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6be043cd22d03f4017be76b43943122dac7fbf6be525da96af2ba16d1c5638e8",
+    "claim_ladder_entry_sha256": "7dff21865ebfc972ee6734a3af7d5cd3778c2974c66caccfc98d7d2632b34ee1",
     "receipt_sha256": "410c9ae539b364135327d6d2c21eda440f33a49fb3a35d0008f3b0d967ca7f4e"
   },
   "oracle": {
@@ -43,12 +43,13 @@
   "lie_prevented": [
     "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
   ],
+  "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields",
   "replay": {
     "command": "bash lab/oracle/layout_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "a34fb67061d0a561a20a03a92876cb7fa5eb9115133a5104c07b2486eb418e93"
+    "inputs_sha256": "6ae639f99de788f9d103d23e6dee3705fb001d097cd1b5c192fe21361cda5053"
   },
   "legacy_preservation": {
     "legacy_paths": [

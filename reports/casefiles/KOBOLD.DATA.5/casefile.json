@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "263e099d0cfb91201fcc3c439db7ad1c9b555623d4afb52413f4616dc00668d5",
+    "claim_ladder_entry_sha256": "f35ca4503149098744ce789243bf0075db727adc2a3cb4cca625ba71a9b06865",
     "receipt_sha256": null
   },
   "oracle": {
@@ -48,11 +48,12 @@
   "lie_prevented": [
     "'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ"
   ],
+  "damage_if_overclaimed": "auto-detecting the code page mis-decodes the whole EBCDIC file",
   "replay": {
     "command": "gnucobol-rs GNURUST.17 (sealed)",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "7651d72ac527b4676d9dae17d3d01dd2431a5cb11bb4668cd441f2d0d4d24e6b"
+    "inputs_sha256": "04c772f9d637e4d9a303c1441a40cbd651f403a88f8c861eab967a687d12118a"
   }
 }

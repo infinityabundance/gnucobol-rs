@@ -20,5 +20,8 @@
 - national/DBCS
 - lie prevented: 'EBCDIC numeric decodes like ASCII zoned' — the C/D/F sign zones differ
 
+## Damage if overclaimed
+a wrong zoned sign flips the sign of mainframe money
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

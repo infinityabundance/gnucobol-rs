@@ -19,5 +19,8 @@
 - figuratives beyond ZERO/SPACE
 - lie prevented: 'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE
 
+## Damage if overclaimed
+a wrong VALUE image mis-seeds an uninitialized record read as real data
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

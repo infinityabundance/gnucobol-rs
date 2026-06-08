@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "41f252a4bb7754893600abc7a075b19065b86106753120e73c7317ad43f5cdd5",
+    "claim_ladder_entry_sha256": "c7f27bd943860d3c92ea89d87c4b0dd283e66216981ddc5a57056a59bddd7d3d",
     "receipt_sha256": null
   },
   "oracle": {
@@ -45,11 +45,12 @@
   "lie_prevented": [
     "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
   ],
+  "damage_if_overclaimed": "trusting a value with no provenance trail means an auditor cannot defend it",
   "replay": {
     "command": "sealed GNURUST courts",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "2c9f5dca09899fe6b0a25521ff78360713253b3919ccaf8af9f88507318d9567"
+    "inputs_sha256": "b214a1e092159bbc3fae0842af039c57a103176fe1d849f4fde9fa4c2f824161"
   }
 }

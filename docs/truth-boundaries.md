@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. No legacy source (bo
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Born generated (no legacy source)._
 
+> **KOBOLD does not turn COBOL data into truth. It turns legacy bytes into accountable evidence under
+> declared courts, profiles, and refusals.**
+
 > _Bytes are not record truth; record truth is not posting truth; posting truth is not accounting truth;
 > accounting truth is not extraction truth; extraction truth is not business truth._ This stack proves the
 > **lower** rungs and **refuses to cross** the upper ones unless an explicit, declared reconciliation

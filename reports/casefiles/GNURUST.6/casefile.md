@@ -18,5 +18,8 @@
 - identifier operands
 - lie prevented: 'substring replacement is close enough' — REPLACING is whole-text-word
 
+## Damage if overclaimed
+a wrong REPLACING substitution silently changes field identities across a whole estate
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

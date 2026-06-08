@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "8f941eb64ad092618a72153129570783fbedc2389958d9b1f401cc1e403f71e2",
+    "claim_ladder_entry_sha256": "9cbb999d6cd11752eda0ee1c8c4fc88aff37b49570b855a1fec9c481955037b5",
     "receipt_sha256": "07dc48b41da3cfba534e26c5a72332ef8a669cca9d382eeeabe6c540a0b67409"
   },
   "oracle": {
@@ -47,12 +47,13 @@
   "lie_prevented": [
     "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
   ],
+  "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data",
   "replay": {
     "command": "bash lab/oracle/value_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "cf484a9f81ce59f18f67f8149866886f8e36e674187550b39062fe1f16cb5017"
+    "inputs_sha256": "cbde9fe1625fdeb7e737a0754b4d8aae85e732f3cf08bc3bfa898c5607afb09a"
   },
   "legacy_preservation": {
     "legacy_paths": [

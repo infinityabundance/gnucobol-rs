@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6d4c732f79018a642762d865e07857bbe63a916c0bd46592f5ea2265439f2a99",
+    "claim_ladder_entry_sha256": "9f1ad044aa5b84e54d89582007a88be96db96a7829c2d7bcc236ea1f177c19de",
     "receipt_sha256": "c1487dd41bddb9d3f602df5b598f978b921078e73ca3d600e22c141153e57b6b"
   },
   "oracle": {
@@ -50,12 +50,13 @@
   "lie_prevented": [
     "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
   ],
+  "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely",
   "replay": {
     "command": "bash lab/oracle/comp6_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "1781071eaaff3d9f9875af6d9145797591443d6851aed9cf648bb4e425a7af74"
+    "inputs_sha256": "6866c946ea6941877974f4fcf1b300b6cf19d1a31a04d7489d509bf022ad6eac"
   },
   "legacy_preservation": {
     "legacy_paths": [

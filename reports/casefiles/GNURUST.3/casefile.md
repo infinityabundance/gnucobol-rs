@@ -18,5 +18,8 @@
 - usages beyond DISPLAY/COMP-3
 - lie prevented: 'a PIC width can be eyeballed' — the field model matches cobc's own attrs
 
+## Damage if overclaimed
+a mis-modeled field width mis-reads every downstream field in the record
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

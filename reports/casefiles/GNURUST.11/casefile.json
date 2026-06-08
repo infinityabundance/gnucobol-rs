@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "402d8dd118a7c57cd00a29d3978b26f21390ccd1453f94bfdbc410d4ebc02204",
+    "claim_ladder_entry_sha256": "7e3b813037210a4e33506e4620b21c8ed182b75ec8949faf18d05838ab8f0531",
     "receipt_sha256": "bc40de6144132d2adb1566d8822e6fac29bf7cdaca9873828538abd6db90aa3d"
   },
   "oracle": {
@@ -49,12 +49,13 @@
   "lie_prevented": [
     "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact"
   ],
+  "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)",
   "replay": {
     "command": "bash lab/oracle/cond_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "05f007d9b488089299bd81b22bca0550f8e63e5135a9111201c9bed817d28c50"
+    "inputs_sha256": "ca1aaf8f56f55351e7c28f443de9ebc38ad8a48606f75b916110a4e9c6f9e539"
   },
   "legacy_preservation": {
     "legacy_paths": [

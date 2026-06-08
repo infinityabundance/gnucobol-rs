@@ -21,5 +21,8 @@
 - edited arithmetic/VALUE
 - lie prevented: 'presentation string and numeric value are the same field truth' — they are separated
 
+## Damage if overclaimed
+reading an edited presentation string as the numeric value double-counts or mis-totals
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "b2f125ff1c34318a3ffbcb0d2bf10ad7f3f222d7dc543e1281c2bda77f90b444",
+    "claim_ladder_entry_sha256": "846cc75003b5e692c4df253373a7790f1d5200e2b21ace9be70fb1e27d37dd4f",
     "receipt_sha256": null
   },
   "oracle": {
@@ -53,11 +53,12 @@
   "lie_prevented": [
     "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
   ],
+  "damage_if_overclaimed": "treating signed COMP-6 as unsigned mis-reads it (GnuCOBOL makes it COMP-3)",
   "replay": {
     "command": "gnucobol-rs GNURUST.18 (sealed)",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "92b83d3b34b8519b7b37d9bdee26d33b4db1aea82317d43c429777b3fdbacf86"
+    "inputs_sha256": "13a0d09e0f50a4dcc34803e99dd2befc5878cee766963c4c96f4fcaed347ef73"
   }
 }

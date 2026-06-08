@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6da4776496561596146124740dd69db9db20bf7da7ec0a17e2cd2f85856a1d38",
+    "claim_ladder_entry_sha256": "b353a3e73d6be51c33ba1f9f25bce957ccc3d2dae6b57e094a5ace85721348e4",
     "receipt_sha256": null
   },
   "oracle": {
@@ -51,11 +51,12 @@
   "lie_prevented": [
     "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
   ],
+  "damage_if_overclaimed": "silently absorbing a partial/extra record drops or duplicates a banking record",
   "replay": {
     "command": "deterministic ingest invariants (not GnuCOBOL file I/O)",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "12f9fc4e7a48b5944c16ed7922130e326533ad33b28e03caba93b510ff708cd4"
+    "inputs_sha256": "108efc8ef650e8401820faaae50bb73e86a0ffa1f349a861e680f8459d1820e1"
   }
 }

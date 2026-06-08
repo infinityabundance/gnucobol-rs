@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "f9dac86fbdbb1b890b8a27ebf9e7b1b420befefb0e18a4a0e3c9ece78a0f270e",
+    "claim_ladder_entry_sha256": "fe0f8331c915ea4bba0e665fcc8e98174428f7b0ab909b3714641e54b889b57f",
     "receipt_sha256": "11c402b019906e7b5eb67e8ce42b7667a7dca910345d0106cb2dc153b4b3cf96"
   },
   "oracle": {
@@ -48,12 +48,13 @@
   "lie_prevented": [
     "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
   ],
+  "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses",
   "replay": {
     "command": "bash lab/oracle/ebcdic_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "2780e86f7a354911f73e8cc7b5d94571adc2e578b14ff510b3c9a1628a7f740d"
+    "inputs_sha256": "1be92389da9c56c967237655edd8f0438390e2afa3e4c4d3a23dce73611e4fd4"
   },
   "legacy_preservation": {
     "legacy_paths": [

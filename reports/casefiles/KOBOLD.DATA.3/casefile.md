@@ -17,5 +17,8 @@
 - business truth
 - lie prevented: 'EBCDIC touches all bytes' — binary/packed pass through untouched (proven)
 
+## Damage if overclaimed
+converting binary/packed bytes as EBCDIC text destroys numeric values
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

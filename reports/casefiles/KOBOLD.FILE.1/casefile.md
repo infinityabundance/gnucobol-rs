@@ -21,5 +21,8 @@
 - silent repair of dirty bytes
 - lie prevented: 'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior
 
+## Damage if overclaimed
+silently absorbing a partial/extra record drops or duplicates a banking record
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

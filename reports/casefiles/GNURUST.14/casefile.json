@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "b7afa5ed24237deb9f7313eb23ad079277ff1a55c904ed49b116b565cf4cc053",
+    "claim_ladder_entry_sha256": "0ec43c82f49ca700e5c3355b637f49ead31754ad37212d146147bf456515a6c8",
     "receipt_sha256": "0ef54830be02b341b2ec3d8bbcbef18b8c8b1fb325942a864c8ae2f37a9d5f96"
   },
   "oracle": {
@@ -49,12 +49,13 @@
   "lie_prevented": [
     "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
   ],
+  "damage_if_overclaimed": "a wrong binary width/endian mis-reads a key, branch, or amount on the wrong platform",
   "replay": {
     "command": "bash lab/oracle/binary_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "c6c249cfca1f2567092b4a040db7574aef4942ad25f7e719faeaa14318df72cd"
+    "inputs_sha256": "091c3a9317ba5ef7d8673965cbf7b0f30eac0922d3ceb70413339cb1b96ec5a8"
   },
   "legacy_preservation": {
     "legacy_paths": [

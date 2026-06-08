@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "dd888acba579dc540a0f48218fc752b20956d1f812ad80cf8a245f9e6157b45f",
+    "claim_ladder_entry_sha256": "58e0e4f94febd121a739de9c35cacc920aec0f6a72a9913a24bffba05ffefe24",
     "receipt_sha256": "e46a9f938939249c2d154b26458709f8e7e7da5d7cbeb8d7d70097e2d449e31f"
   },
   "oracle": {
@@ -49,12 +49,13 @@
   "lie_prevented": [
     "'presentation string and numeric value are the same field truth' \u2014 they are separated"
   ],
+  "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals",
   "replay": {
     "command": "bash lab/oracle/edited_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "2a354abbe1df9827923e20cf405db0b3581845e0272e5fa81bcf83bcb735c5f9"
+    "inputs_sha256": "5b5b1cad186a42d809c54ac31a04fa8e5a7a5ea39508aaa730c8b093ae29ee93"
   },
   "legacy_preservation": {
     "legacy_paths": [

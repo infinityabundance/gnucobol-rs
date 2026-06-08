@@ -21,5 +21,8 @@
 - float
 - lie prevented: 'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8
 
+## Damage if overclaimed
+a wrong binary width/endian mis-reads a key, branch, or amount on the wrong platform
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

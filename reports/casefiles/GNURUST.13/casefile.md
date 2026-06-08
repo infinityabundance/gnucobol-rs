@@ -20,5 +20,8 @@
 - float
 - lie prevented: 'packed add rounds like display' — cob_add_bcd keeps -0 on truncation
 
+## Damage if overclaimed
+a wrong packed sign/rounding flips the sign of money on truncation
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

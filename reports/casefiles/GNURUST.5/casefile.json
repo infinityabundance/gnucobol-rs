@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "8dbbfc8d447f67c63c8bcdb580b30723e8473901642c81141745a37a088df668",
+    "claim_ladder_entry_sha256": "2cdb0c45d233e0c00a4e9b400da4b96efa8d669a32debb95b35ebf6bfb38d9dd",
     "receipt_sha256": "33dc8d48a7e4bc12d45fbc49180b0bde0e85fbd5db7c0971e708a15d7ee34878"
   },
   "oracle": {
@@ -45,12 +45,13 @@
   "lie_prevented": [
     "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
   ],
+  "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with",
   "replay": {
     "command": "bash lab/oracle/copy_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "bba0986f9f19b784785fd725355fe82ad0cbfde1a9b7b4519b3a64ac89a2bd32"
+    "inputs_sha256": "941799c803f27638c34d6ac02ec3aeb02b0fe75012f6c53a313a67ae8cabd950"
   },
   "legacy_preservation": {
     "legacy_paths": [

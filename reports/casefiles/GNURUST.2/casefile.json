@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "cc4ba4c299f349eb8c91ff69900606fad8660db1ce8580a96ed6b1d680a71d4e",
+    "claim_ladder_entry_sha256": "65d8b619b5dd2f9fc120186beb4728e4d29429d5738aeae3c5b3bde5215b639e",
     "receipt_sha256": "b1fb98d0325fb22d6ac46a96967d73174867648a55b6e6908e3294d83298fca5"
   },
   "oracle": {
@@ -44,12 +44,13 @@
   "lie_prevented": [
     "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
   ],
+  "damage_if_overclaimed": "a wrong MOVE result posted as a real value corrupts a record silently",
   "replay": {
     "command": "bash lab/oracle/sweep.sh 0",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "2a13ad59a4849de6bf7b36391e7ffdc894e223b1e84fdb9e567c87e78deb1c63"
+    "inputs_sha256": "c1d5a8f314c19fdcac34e9930d7832acc9770e56b4f7720deaa51079d9086014"
   },
   "legacy_preservation": {
     "legacy_paths": [

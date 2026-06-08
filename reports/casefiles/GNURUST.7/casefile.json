@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "d5b6cbaa737dddbcd806f7603514a17d197f61aa4ae59464483815597c77925d",
+    "claim_ladder_entry_sha256": "98259fda548c6d15904426ac3b6107f00fd748d28ebc019ace73056d3b5d4edb",
     "receipt_sha256": "e5938d332b3c54daabf65123c24dba5ba37e38a03d230b862337f73379a84cda"
   },
   "oracle": {
@@ -47,12 +47,13 @@
   "lie_prevented": [
     "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
   ],
+  "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total",
   "replay": {
     "command": "bash lab/oracle/arith_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "5ac624a525bc19541e7a47c2a67261da387e64750e91d68758e71583d9da8850"
+    "inputs_sha256": "a129014cb9a8ba1ec501c5704618031c116cf9e710ee47d8aa9d1a3342f6fc69"
   },
   "legacy_preservation": {
     "legacy_paths": [

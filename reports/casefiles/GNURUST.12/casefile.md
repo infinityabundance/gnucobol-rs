@@ -20,5 +20,8 @@
 - execution
 - lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes
 
+## Damage if overclaimed
+a wrong SET writes a status the program never intended
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

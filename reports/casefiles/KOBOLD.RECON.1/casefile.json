@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "5ca4fc07be64f8017f60c0695d92c08d1dbea9b7c38e84184b11585d0b344af7",
+    "claim_ladder_entry_sha256": "0061936fbea870fc1db5698abcf0cf331d038ff862140d802e8e8250eb671d1d",
     "receipt_sha256": null
   },
   "oracle": {
@@ -47,11 +47,12 @@
   "lie_prevented": [
     "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
   ],
+  "damage_if_overclaimed": "treating decoded JSON as business truth acts on record-truth as if it were account state",
   "replay": {
     "command": "the sealed GNURUST courts (no new oracle)",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "381e92d82caa8253fb8ca2f8a742d8d2defa97f811c0e798d51f7987bbf7a77b"
+    "inputs_sha256": "f056559da6dbaa3b04b7f9b356ecaf835319d229fd268c892529b95e85f840b2"
   }
 }

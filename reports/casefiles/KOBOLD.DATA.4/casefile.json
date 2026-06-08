@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "f717a9e352f1ddb3da7ffcdce64139e97b6c481db2a7a3db5d147a0f559342cf",
+    "claim_ladder_entry_sha256": "d19938b9ae41611defb9b9aba9563a442fcd39a10484dc4bba2f31e0a10b0b11",
     "receipt_sha256": null
   },
   "oracle": {
@@ -48,11 +48,12 @@
   "lie_prevented": [
     "'presentation string and numeric value are the same field truth' -- they are separated"
   ],
+  "damage_if_overclaimed": "replacing the edited presentation with its numeric (or vice versa) mis-reports money",
   "replay": {
     "command": "gnucobol-rs GNURUST.16 (sealed)",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "caebdebff0ec8bd373a99ae2232f272c87ef4d1946f68f6ed76935fe0735087c"
+    "inputs_sha256": "ed1d4941f861f9549b26bf5920ac9667089681eeff1ccf13342239091f631507"
   }
 }

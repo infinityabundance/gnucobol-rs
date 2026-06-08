@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6ef46c74f926d8d753ee361aaa885feb50b7707d7e0cf4864285ccdd52b1f1bc",
+    "claim_ladder_entry_sha256": "76a15db5048a831175f122328359ed08172b547e1c5789cab655adfc2ddddd77",
     "receipt_sha256": null
   },
   "oracle": {
@@ -48,12 +48,13 @@
   "lie_prevented": [
     "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
   ],
+  "damage_if_overclaimed": "a wrong P-scale mis-places the decimal point, off-by-10x on money",
   "replay": {
     "command": "cobc -C attr witness",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "cb663dfa7c8b1e8271387ddbf9d73508e2ef203707eaf63d7912ba6bd7a221b4"
+    "inputs_sha256": "7fb6853e0a358f98c66a17a5e115d50c2b1628b38adf2ef43d67551195f13875"
   },
   "legacy_preservation": {
     "legacy_paths": [

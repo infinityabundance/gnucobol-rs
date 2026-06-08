@@ -18,5 +18,8 @@
 - any other type pair
 - lie prevented: 'a MOVE result is close enough' — every byte of the receiving field is proven
 
+## Damage if overclaimed
+a wrong MOVE result posted as a real value corrupts a record silently
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

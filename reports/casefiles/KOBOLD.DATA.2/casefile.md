@@ -17,5 +17,8 @@
 - business truth
 - lie prevented: 'binary fields are text under any encoding' — they are raw storage passthrough
 
+## Damage if overclaimed
+reading a binary field as text under an encoding corrupts keys and amounts
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

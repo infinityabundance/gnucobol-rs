@@ -20,5 +20,8 @@
 - mixed/auto-detect encoding
 - lie prevented: 'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ
 
+## Damage if overclaimed
+auto-detecting the code page mis-decodes the whole EBCDIC file
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

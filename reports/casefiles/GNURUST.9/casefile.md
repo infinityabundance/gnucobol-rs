@@ -21,5 +21,8 @@
 - VALUE/MOVE on P field
 - lie prevented: 'P-scaling is just digits' — the asymmetric P digit/scale rule is exact
 
+## Damage if overclaimed
+a wrong P-scale mis-places the decimal point, off-by-10x on money
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

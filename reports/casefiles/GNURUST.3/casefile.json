@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "d8ae529086752471eb9eb94905b334215862005e9f225e0994fbff398593bf47",
+    "claim_ladder_entry_sha256": "00693e8c5ceb1b0f167eedfa235b411adbf590677132b66ce300d0d490d91dbe",
     "receipt_sha256": "8049d5809761f26fb0c283a383b6b3eab5ec693d1d335ad8142b0d775aadde9e"
   },
   "oracle": {
@@ -43,12 +43,13 @@
   "lie_prevented": [
     "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
   ],
+  "damage_if_overclaimed": "a mis-modeled field width mis-reads every downstream field in the record",
   "replay": {
     "command": "bash lab/oracle/pic_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "b971818f8c2c6ac3e935992e0bbbdae047bf4bce07f36ba385efa54449dcc9e0"
+    "inputs_sha256": "d8413796e2453f9f21648728b7287688da5b0f70975a6409ef26e0888132753a"
   },
   "legacy_preservation": {
     "legacy_paths": [

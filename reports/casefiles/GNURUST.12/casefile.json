@@ -10,7 +10,7 @@
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "5b60831541eecc2f84790acf175eb4961d0e038e65b1d87262f10f62f24a7239",
+    "claim_ladder_entry_sha256": "a932add43c3c75af7960974cea34eebcb5db6ded8bb1b1a0d2dd1cc681d19e55",
     "receipt_sha256": "aaeba3b1ca98cee1bdffce9fbffc2f96cec85106928f8c5f160185d132796ca1"
   },
   "oracle": {
@@ -48,12 +48,13 @@
   "lie_prevented": [
     "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
   ],
+  "damage_if_overclaimed": "a wrong SET writes a status the program never intended",
   "replay": {
     "command": "bash lab/oracle/set_sweep.sh",
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "1078101c717d29121552150f1327313d5ccb46a15ee62a1dd0c464926f2397d8"
+    "inputs_sha256": "7ea17b222aaa5b1a0fd43e5f530060a49fff0529b112658f88cb7dc809fb1bd2"
   },
   "legacy_preservation": {
     "legacy_paths": [

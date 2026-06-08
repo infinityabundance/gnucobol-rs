@@ -21,5 +21,8 @@
 - Procedure Division execution
 - lie prevented: '88 truth is a string compare' — padded/numeric/THRU semantics are exact
 
+## Damage if overclaimed
+a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

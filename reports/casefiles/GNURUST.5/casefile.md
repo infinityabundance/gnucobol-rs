@@ -18,5 +18,8 @@
 - SUPPRESS
 - lie prevented: 'substring replacement is close enough' — COPY REPLACING is whole-text-word
 
+## Damage if overclaimed
+a wrong COPY expansion lays out the file against a copybook the data was never written with
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

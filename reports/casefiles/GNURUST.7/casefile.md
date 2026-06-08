@@ -19,5 +19,8 @@
 - >38-digit bignum
 - lie prevented: 'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly
 
+## Damage if overclaimed
+a wrong arithmetic result written back mis-states a balance or total
+
 > Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
 > Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.
