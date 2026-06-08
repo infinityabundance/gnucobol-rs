@@ -338,6 +338,19 @@ DIAL = [
 for (i, s2, g, r) in DIAL:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["DIALECT.PROFILE.1"]}
+
+# KOBOLD.TOOLING.EXPORT.1 — an export FOR tools; it is not the tool.
+TOOL = [
+ ("NEG.TOOLING.NOT_LSP", "the export treated as a language server", "it is a static evidence map; not an LSP", "expecting live language-service behavior"),
+ ("NEG.TOOLING.NOT_IDE", "the export treated as an IDE/editor integration", "out of scope; an IDE may CONSUME it", "treating KOBOLD as the editor"),
+ ("NEG.TOOLING.NOT_FULL_PARSER", "the export treated as a full COBOL parser", "it maps the SEALED-court decode, not a general parse", "assuming full-language parsing"),
+ ("NEG.TOOLING.NOT_SOURCE_OF_TRUTH", "the export treated as the source of truth", "STATUS/claim-ladder/casefiles are the authority; this is a downstream map", "trusting the export over the courts"),
+ ("NEG.TOOLING.NO_NEW_EVIDENCE", "the export treated as new evidence", "introduces_new_evidence:false; assembled from existing decode/provenance", "double-counting the map as proof"),
+ ("NEG.TOOLING.REDACTION_STILL_APPLIES", "a redacted field's cleartext exposed via the export", "the declared redaction policy is honored; no cleartext for a redacted field", "leaking redacted data through tooling"),
+]
+for (i, s2, g, r) in TOOL:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.TOOLING.EXPORT.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

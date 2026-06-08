@@ -683,6 +683,20 @@
       "readiness": 3,
       "lie_prevented": "'COBOL behaves like this' -- DIALECT.PROFILE.1 makes every oracle-grounded claim name its exact GnuCOBOL version + dialect + binaries; dialect profile is EVIDENCE, not metadata",
       "damage_if_overclaimed": "presenting one GnuCOBOL build's behavior as 'COBOL' or vendor-equivalent misleads a migration about what was actually witnessed"
+    },
+    {
+      "id": "KOBOLD.TOOLING.EXPORT.1",
+      "name": "generated evidence export for downstream tools",
+      "proven": "emits an IDE/tooling-friendly evidence map from the EXISTING sealed-court decode + provenance: per field the qualified name, copybook path + line, PIC, USAGE, offset, length, decoded value OR redaction status (no cleartext for a redacted field), raw_sha256, the sealed court ids that produced it, findings, the witness dialect_profile_id, and per-field non-claims; deterministic; introduces_new_evidence:false",
+      "byte_domain": "existing decode + provenance -> kobold-tooling-export-v1 field map",
+      "oracle": "the sealed-court decode + provenance (re-export equality)",
+      "fixtures": "tests/tooling.rs (3: maps provenance/courts/witness/non-claims, redacted field never leaks cleartext, deterministic)",
+      "sealed_version": "kobold 0.6.6",
+      "not_proven": "an LSP; an IDE; a full COBOL parser; a source of truth; new evidence; bypassing redaction",
+      "breaks_claim": "treating the export as an LSP/IDE/parser/source-of-truth/new-evidence; leaking redacted cleartext",
+      "readiness": 3,
+      "lie_prevented": "'KOBOLD is the IDE/LSP/parser' / 'the export is the source of truth' -- TOOLING.EXPORT.1 is a downstream evidence MAP an IDE could consume; it is not the tool and creates no new truth",
+      "damage_if_overclaimed": "a downstream tool trusting the export as authoritative (or leaking redacted data) bypasses the courts and the redaction policy"
     }
   ],
   "transform_vs_read": {

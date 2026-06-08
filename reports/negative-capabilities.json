@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 358,
+  "count": 370,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -53,6 +53,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.A-FULL-COBOL-PARSER",
+      "surface": "a full COBOL parser",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
       ]
     },
     {
@@ -108,6 +119,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.A-SOURCE-OF-TRUTH",
+      "surface": "a source of truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
       ]
     },
     {
@@ -196,6 +218,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.AN-IDE",
+      "surface": "an IDE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.AN-LSP",
+      "surface": "an LSP",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
       ]
     },
     {
@@ -688,6 +732,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.BYPASSING-REDACTION",
+      "surface": "bypassing redaction",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
       ]
     },
     {
@@ -2199,6 +2254,17 @@
       "evidence": [
         "GNURUST.15",
         "GNURUST.17"
+      ]
+    },
+    {
+      "id": "NEG.NEW-EVIDENCE",
+      "surface": "new evidence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
       ]
     },
     {
@@ -3772,6 +3838,72 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.TOOLING.NOT_FULL_PARSER",
+      "surface": "the export treated as a full COBOL parser",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it maps the SEALED-court decode, not a general parse",
+      "risk_if_guessed": "assuming full-language parsing",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.TOOLING.NOT_IDE",
+      "surface": "the export treated as an IDE/editor integration",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope; an IDE may CONSUME it",
+      "risk_if_guessed": "treating KOBOLD as the editor",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.TOOLING.NOT_LSP",
+      "surface": "the export treated as a language server",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it is a static evidence map; not an LSP",
+      "risk_if_guessed": "expecting live language-service behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.TOOLING.NOT_SOURCE_OF_TRUTH",
+      "surface": "the export treated as the source of truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "STATUS/claim-ladder/casefiles are the authority; this is a downstream map",
+      "risk_if_guessed": "trusting the export over the courts",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.TOOLING.NO_NEW_EVIDENCE",
+      "surface": "the export treated as new evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "introduces_new_evidence:false; assembled from existing decode/provenance",
+      "risk_if_guessed": "double-counting the map as proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.TOOLING.REDACTION_STILL_APPLIES",
+      "surface": "a redacted field's cleartext exposed via the export",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the declared redaction policy is honored; no cleartext for a redacted field",
+      "risk_if_guessed": "leaking redacted data through tooling",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.TOOLING.EXPORT.1"
       ]
     },
     {

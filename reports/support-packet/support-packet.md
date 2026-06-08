@@ -7,7 +7,7 @@
 
 - crate (this repo): `gnucobol-rs 0.7.1`
 - artifacts gathered: **10** committed + pointers to runtime/operator artifacts
-- casefiles: **48**
+- casefiles: **49**
 
 ## Truth boundary
 
@@ -17,11 +17,11 @@
 
 | id | path | sha256 |
 |---|---|---|
-| `status` | [`STATUS.md`](../../STATUS.md) | `4d937c04a04fe98b…` |
+| `status` | [`STATUS.md`](../../STATUS.md) | `49e25da204dd549f…` |
 | `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `db30dca07de7d438…` |
-| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `34062acf0033191f…` |
-| `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `bf2151029742fe76…` |
-| `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `fa9da451780b19fc…` |
+| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `bf8ea973b6ec47e3…` |
+| `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `d1545fb28b9b6589…` |
+| `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `4e0ea51560e1eabf…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |
 | `truth_boundaries` | [`docs/truth-boundaries.md`](../../docs/truth-boundaries.md) | `7cd5389f360d8bea…` |
 | `future_risk_register` | [`docs/future-risk-register.md`](../../docs/future-risk-register.md) | `feb070acd5b65503…` |

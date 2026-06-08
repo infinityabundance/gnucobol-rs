@@ -1,0 +1,66 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.TOOLING.EXPORT.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.6",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "1bec7d6c8c7cccfd930aa79a4889fca0012b2b0cf6680624f148f85c91f1e3b1",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the sealed-court decode + provenance (re-export equality)",
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/tooling.rs (3: maps provenance/courts/witness/non-claims, redacted field never leaks cleartext, deterministic)"
+  },
+  "positive_claims": [
+    "emits an IDE/tooling-friendly evidence map from the EXISTING sealed-court decode + provenance: per field the qualified name, copybook path + line, PIC, USAGE, offset, length, decoded value OR redaction status (no cleartext for a redacted field), raw_sha256, the sealed court ids that produced it, findings, the witness dialect_profile_id, and per-field non-claims",
+    "deterministic",
+    "introduces_new_evidence:false"
+  ],
+  "negative_claims": [
+    "an LSP",
+    "an IDE",
+    "a full COBOL parser",
+    "a source of truth",
+    "new evidence",
+    "bypassing redaction",
+    "lie prevented: 'KOBOLD is the IDE/LSP/parser' / 'the export is the source of truth' -- TOOLING.EXPORT.1 is a downstream evidence MAP an IDE could consume; it is not the tool and creates no new truth"
+  ],
+  "negative_capability_ids": [
+    "NEG.AN-LSP",
+    "NEG.AN-IDE",
+    "NEG.A-FULL-COBOL-PARSER",
+    "NEG.A-SOURCE-OF-TRUTH",
+    "NEG.NEW-EVIDENCE",
+    "NEG.BYPASSING-REDACTION"
+  ],
+  "byte_domains": [
+    "existing decode + provenance -> kobold-tooling-export-v1 field map"
+  ],
+  "lie_prevented": [
+    "'KOBOLD is the IDE/LSP/parser' / 'the export is the source of truth' -- TOOLING.EXPORT.1 is a downstream evidence MAP an IDE could consume; it is not the tool and creates no new truth"
+  ],
+  "damage_if_overclaimed": "a downstream tool trusting the export as authoritative (or leaking redacted data) bypasses the courts and the redaction policy",
+  "replay": {
+    "command": "the sealed-court decode + provenance (re-export equality)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "0eeb5ff50d5c4deb0ad5ff19823b27a5734ad4568a69560b490d541ad2f00057"
+  }
+}
