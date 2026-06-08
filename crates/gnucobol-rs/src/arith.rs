@@ -200,6 +200,34 @@ pub fn cob_divide(
     store(q, recv_attr, round, false)
 }
 
+/// `DIVIDE` with a `REMAINDER` receiver (`GNURUST.REMAINDER.1`): for `DIVIDE a BY b GIVING q REMAINDER r`
+/// (and the `INTO` form via `lhs`/`rhs` swap), returns `(quotient_bytes, remainder_bytes)`. The remainder
+/// is the COBOL definition — **dividend − (quotient-as-stored × divisor)** — so it depends on the quotient
+/// receiver's scale/truncation: the quotient is truncated toward zero to `quot_attr.scale` (the `REMAINDER`
+/// forms use the **un-rounded** quotient), then `r = a − q·b` is computed exactly and stored (truncated)
+/// into the remainder receiver. Divide-by-zero fails closed. **Non-claims:** `ON SIZE ERROR` / `NOT ON SIZE
+/// ERROR` control flow, `COMPUTE`, expression evaluation, Procedure Division execution, float, binary/edited
+/// receivers, and business correctness — the remainder's sign/scale are not inferred, they are witnessed.
+pub fn cob_divide_remainder(
+    lhs: &[u8],
+    lhs_attr: &FieldAttr,
+    rhs: &[u8],
+    rhs_attr: &FieldAttr,
+    quot_attr: &FieldAttr,
+    rem_attr: &FieldAttr,
+) -> Result<(Vec<u8>, Vec<u8>), ArithError> {
+    let dl = decode(lhs, lhs_attr)?;
+    let dr = decode(rhs, rhs_attr)?;
+    // quotient truncated toward zero to the quotient receiver's scale (the value as stored in GIVING)
+    let q = compute_divide(dl, dr, quot_attr.scale as i32)?;
+    // remainder = dividend − (stored quotient × divisor), exact, then truncated into the remainder receiver
+    let qd = compute(q, dr, Op::Multiply)?;
+    let r = compute(dl, qd, Op::Subtract)?;
+    let quot_bytes = store(q, quot_attr, Round::Truncate, false)?;
+    let rem_bytes = store(r, rem_attr, Round::Truncate, false)?;
+    Ok((quot_bytes, rem_bytes))
+}
+
 /// Truncating division of `mag` by 10^k, toward zero (`cob_div_by_pow_10`).
 fn tdiv_pow10(mag: i128, k: u32) -> Result<i128, ArithError> {
     let f = pow10(k).ok_or(ArithError::OutOfRange)?;
@@ -541,6 +569,71 @@ mod tests {
             Round::Truncate,
         );
         assert_eq!(r, Err(ArithError::DivideByZero));
+    }
+
+    // ---- GNURUST.REMAINDER.1: DIVIDE ... GIVING q REMAINDER r ----
+    #[test]
+    fn remainder_integer_quotient() {
+        // 10.00 / 3.00 GIVING q[S9(5)] REMAINDER r[S9(5)V99] -> q=3, r=1.00
+        let (q, r) = cob_divide_remainder(
+            b"0001000", &disp(7, 2, false), b"0000300", &disp(7, 2, false),
+            &disp(5, 0, false), &disp(7, 2, false)).unwrap();
+        assert_eq!(&q, b"00003");
+        assert_eq!(&r, b"0000100");
+    }
+
+    #[test]
+    fn remainder_scaled_quotient() {
+        // 10.00 / 3.00 GIVING q[S9(5)V99] REMAINDER r[S9(5)V99] -> q=3.33, r=0.01
+        let (q, r) = cob_divide_remainder(
+            b"0001000", &disp(7, 2, false), b"0000300", &disp(7, 2, false),
+            &disp(7, 2, false), &disp(7, 2, false)).unwrap();
+        assert_eq!(&q, b"0000333");
+        assert_eq!(&r, b"0000001");
+    }
+
+    #[test]
+    fn remainder_exact_is_zero() {
+        // 10.00 / 5.00 GIVING q[S9(5)] REMAINDER r[S9(5)V99] -> q=2, r=0.00
+        let (q, r) = cob_divide_remainder(
+            b"0001000", &disp(7, 2, false), b"0000500", &disp(7, 2, false),
+            &disp(5, 0, false), &disp(7, 2, false)).unwrap();
+        assert_eq!(&q, b"00002");
+        assert_eq!(&r, b"0000000");
+    }
+
+    #[test]
+    fn remainder_sign_follows_dividend() {
+        // -10.00 / 3.00 GIVING q[S9(5)] REMAINDER r[S9(5)V99] -> q=-3, r=-1.00 (truncate toward zero)
+        let mut a = b"0001000".to_vec();
+        *a.last_mut().unwrap() = 0x70; // -10.00
+        let (q, r) = cob_divide_remainder(
+            &a, &disp(7, 2, true), b"0000300", &disp(7, 2, false),
+            &disp(5, 0, true), &disp(7, 2, true)).unwrap();
+        let mut eq = b"00003".to_vec();
+        *eq.last_mut().unwrap() = 0x73; // -3
+        let mut er = b"0000100".to_vec();
+        *er.last_mut().unwrap() = 0x70; // -1.00
+        assert_eq!(q, eq);
+        assert_eq!(r, er);
+    }
+
+    #[test]
+    fn remainder_into_packed_receiver() {
+        // 10.00 / 3.00 GIVING q[S9(5)] REMAINDER r[S9(3)V99 COMP-3] -> q=3, r=001.00 packed
+        let (q, r) = cob_divide_remainder(
+            b"0001000", &disp(7, 2, false), b"0000300", &disp(7, 2, false),
+            &disp(5, 0, false), &packed(5, 2, true)).unwrap();
+        assert_eq!(&q, b"00003");
+        assert_eq!(r, vec![0x00, 0x10, 0x0c]); // 001.00
+    }
+
+    #[test]
+    fn remainder_divide_by_zero_fails_closed() {
+        let e = cob_divide_remainder(
+            b"0001000", &disp(7, 2, false), b"0000000", &disp(7, 2, false),
+            &disp(5, 0, false), &disp(7, 2, false));
+        assert_eq!(e, Err(ArithError::DivideByZero));
     }
 
     #[test]

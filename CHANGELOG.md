@@ -12,7 +12,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
-## [0.7.1]
+## [0.7.2]\n- **GNURUST.REMAINDER.1 \u2014 DIVIDE REMAINDER receiving-field bytes (PATCH).** `arith::cob_divide_remainder` returns the quotient AND remainder receiver bytes for `DIVIDE a BY/INTO b GIVING q REMAINDER r`. The remainder is the COBOL definition \u2014 dividend \u2212 (quotient-as-stored \u00d7 divisor) \u2014 so it depends on the quotient receiver's scale/truncation; sign follows the dividend. DISPLAY/COMP-3, signed/unsigned, scaled/unscaled, BY/INTO. Proven byte-identical: `remainder_sweep` 768/0 + 6 unit tests. Non-claims: ON SIZE ERROR control flow, divide-by-zero (fail-closed), COMPUTE, Procedure Division, float, binary/edited receivers, business correctness.\n\n## [0.7.1]
 - **GNURUST.19 — DIVIDE receiving-field bytes (PATCH, the first one).** `arith::cob_divide` writes
   `recv := lhs/rhs` byte-identical to `cobc` for `DIVIDE a BY b GIVING c` / `a INTO b GIVING c` over
   DISPLAY/COMP-3 operands+receivers, signed/scaled/narrowing, truncate + ROUNDED — proven `divide_sweep`

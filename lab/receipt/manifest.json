@@ -188,6 +188,20 @@
         "branch execution",
         "business arithmetic correctness"
       ]
+    },
+    "GNURUST.REMAINDER.1": {
+      "court": "DIVIDE REMAINDER receiving-field bytes",
+      "sweep": "remainder_sweep.sh",
+      "byte_domain": "DIVIDE GIVING quotient + REMAINDER receiver field bytes (DISPLAY/COMP-3)",
+      "non_claims": [
+        "ON SIZE ERROR / NOT ON SIZE ERROR control flow",
+        "divide-by-zero (fail-closed)",
+        "COMPUTE / expression evaluation",
+        "procedure control flow",
+        "float",
+        "binary/edited receivers",
+        "business correctness"
+      ]
     }
   }
 }

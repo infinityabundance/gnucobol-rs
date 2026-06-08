@@ -26,6 +26,7 @@
       "GNURUST.5",
       "GNURUST.7",
       "GNURUST.8",
+      "GNURUST.REMAINDER.1",
       "SIZE.ERROR.ATLAS.1"
     ],
     "B": [
@@ -71,7 +72,7 @@
     "F": []
   },
   "class_counts": {
-    "A": 16,
+    "A": 17,
     "B": 30,
     "C": 5,
     "D": 0,
@@ -383,6 +384,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "96 of 288 PIC sweep + fuzz",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.REMAINDER.1",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 3,
+      "negative_claims": 8,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "remainder_sweep 768/0 + 6 unit tests",
       "ceremonial_flags": []
     },
     {

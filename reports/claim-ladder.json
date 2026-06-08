@@ -725,6 +725,20 @@
       "readiness": 3,
       "lie_prevented": "'these fixtures prove NIST/COBOL conformance' -- NIST-STYLE-FIXTURE-FORMAT.1 only proves that one declared input replays to the author's expected verdict/findings/non-claims; nist_conformance:false",
       "damage_if_overclaimed": "a fixture pack sold as NIST/language conformance or certification manufactures standards assurance the project does not provide"
+    },
+    {
+      "id": "GNURUST.REMAINDER.1",
+      "name": "DIVIDE REMAINDER receiving-field bytes",
+      "proven": "DIVIDE a BY b GIVING q REMAINDER r + a INTO b GIVING q REMAINDER r quotient AND remainder receiver bytes (DISPLAY/COMP-3, signed/unsigned, scaled/unscaled quotient, positive/negative operands, exact/non-exact) matching cobc byte-for-byte; the remainder is the COBOL definition dividend-(quotient-as-stored*divisor), so it depends on the quotient receiver's truncation; sign follows the dividend",
+      "byte_domain": "DIVIDE GIVING quotient + REMAINDER receiver field bytes",
+      "oracle": "cobc DIVIDE REMAINDER (program-shape)",
+      "fixtures": "remainder_sweep 768/0 + 6 unit tests",
+      "sealed_version": "0.7.2",
+      "not_proven": "ON SIZE ERROR / NOT ON SIZE ERROR control flow; divide-by-zero (fail-closed); COMPUTE / expression evaluation; Procedure Division execution; float; binary/edited receivers; business correctness",
+      "breaks_claim": "divide-by-zero; ON SIZE ERROR control flow; COMPUTE; binary receiver",
+      "readiness": 3,
+      "lie_prevented": "'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter",
+      "damage_if_overclaimed": "a wrong remainder (wrong quotient-scale dependence, sign, or receiver bytes) misstates reconciliation residuals, allocation leftovers, or check digits while looking plausible"
     }
   ],
   "transform_vs_read": {

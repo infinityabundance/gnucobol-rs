@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 394,
+  "count": 401,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -669,7 +669,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.19"
+        "GNURUST.19",
+        "GNURUST.REMAINDER.1"
       ]
     },
     {
@@ -737,7 +738,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.19",
-        "KOBOLD.CORPUS.2"
+        "KOBOLD.CORPUS.2",
+        "GNURUST.REMAINDER.1"
       ]
     },
     {
@@ -921,7 +923,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.19"
+        "GNURUST.19",
+        "GNURUST.REMAINDER.1"
       ]
     },
     {
@@ -1535,6 +1538,17 @@
       ]
     },
     {
+      "id": "NEG.DIVIDE-BY-ZERO-FAIL-CLOSED",
+      "surface": "divide-by-zero (fail-closed)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
       "id": "NEG.DIVIDE-BY-ZERO-ON-SIZE-ERROR",
       "surface": "divide-by-zero / ON SIZE ERROR",
       "status": "not_admitted_fail_closed",
@@ -2019,7 +2033,8 @@
       "evidence": [
         "GNURUST.13",
         "GNURUST.14",
-        "GNURUST.19"
+        "GNURUST.19",
+        "GNURUST.REMAINDER.1"
       ]
     },
     {
@@ -2563,7 +2578,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "SIZE.ERROR.ATLAS.1"
+        "SIZE.ERROR.ATLAS.1",
+        "GNURUST.REMAINDER.1"
       ]
     },
     {
@@ -2985,7 +3001,8 @@
       "evidence": [
         "GNURUST.11",
         "KOBOLD.RECON.2",
-        "SIZE.ERROR.ATLAS.1"
+        "SIZE.ERROR.ATLAS.1",
+        "GNURUST.REMAINDER.1"
       ]
     },
     {
@@ -3308,6 +3325,72 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.19"
+      ]
+    },
+    {
+      "id": "NEG.REMAINDER.NOT_BUSINESS_ARITHMETIC",
+      "surface": "a remainder treated as business-correct",
+      "status": "not_admitted_fail_closed",
+      "guard": "byte fidelity is not financial correctness",
+      "risk_if_guessed": "trusting a remainder as a business result",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.REMAINDER.NOT_COMPUTE",
+      "surface": "COMPUTE / expression evaluation claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "out of scope",
+      "risk_if_guessed": "evaluating an expression",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.REMAINDER.NOT_GENERAL_DIVIDE",
+      "surface": "REMAINDER treated as covering all DIVIDE forms",
+      "status": "not_admitted_fail_closed",
+      "guard": "only DIVIDE a BY/INTO b GIVING q REMAINDER r is admitted",
+      "risk_if_guessed": "assuming general divide coverage",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.REMAINDER.NOT_PROCEDURE_DIVISION",
+      "surface": "Procedure Division execution claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the receiving-field bytes are admitted, not statement flow",
+      "risk_if_guessed": "executing a program",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.REMAINDER.NOT_SIZE_ERROR_CONTROL_FLOW",
+      "surface": "ON SIZE ERROR / NOT ON SIZE ERROR execution claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "size-error control flow is out of scope (see SIZE.ERROR.ATLAS.1)",
+      "risk_if_guessed": "relying on size-error branches",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.REMAINDER.SIGN_SCALE_NOT_INFERRED",
+      "surface": "the remainder sign/scale inferred rather than witnessed",
+      "status": "not_admitted_fail_closed",
+      "guard": "sign follows the dividend and scale follows the receivers, as witnessed by GnuCOBOL",
+      "risk_if_guessed": "guessing remainder sign/scale",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.REMAINDER.1"
       ]
     },
     {

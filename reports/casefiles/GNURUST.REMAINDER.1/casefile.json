@@ -1,0 +1,67 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.REMAINDER.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.2",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "44e4fd4fd8adb7e5d3dbff846af933fdc9ca11ed2c73657deba79c2c5c6a3df4",
+    "receipt_sha256": "dfb5ea994ec00cc368ac03cb2bce828ce4cb1581b390e9b48d3e38e3e02d94cc"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc DIVIDE REMAINDER (program-shape)",
+    "upstream_court": "GNURUST.REMAINDER.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 768,
+    "pass": 768,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "DIVIDE a BY b GIVING q REMAINDER r + a INTO b GIVING q REMAINDER r quotient AND remainder receiver bytes (DISPLAY/COMP-3, signed/unsigned, scaled/unscaled quotient, positive/negative operands, exact/non-exact) matching cobc byte-for-byte",
+    "the remainder is the COBOL definition dividend-(quotient-as-stored*divisor), so it depends on the quotient receiver's truncation",
+    "sign follows the dividend"
+  ],
+  "negative_claims": [
+    "ON SIZE ERROR / NOT ON SIZE ERROR control flow",
+    "divide-by-zero (fail-closed)",
+    "COMPUTE / expression evaluation",
+    "Procedure Division execution",
+    "float",
+    "binary/edited receivers",
+    "business correctness",
+    "lie prevented: 'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter"
+  ],
+  "negative_capability_ids": [
+    "NEG.ON-SIZE-ERROR-NOT-ON-SIZE-ERROR-CONTROL-",
+    "NEG.DIVIDE-BY-ZERO-FAIL-CLOSED",
+    "NEG.COMPUTE-EXPRESSION-EVALUATION",
+    "NEG.PROCEDURE-DIVISION-EXECUTION",
+    "NEG.FLOAT",
+    "NEG.BINARY-EDITED-RECEIVERS",
+    "NEG.BUSINESS-CORRECTNESS"
+  ],
+  "byte_domains": [
+    "DIVIDE GIVING quotient + REMAINDER receiver field bytes"
+  ],
+  "lie_prevented": [
+    "'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter"
+  ],
+  "damage_if_overclaimed": "a wrong remainder (wrong quotient-scale dependence, sign, or receiver bytes) misstates reconciliation residuals, allocation leftovers, or check digits while looking plausible",
+  "replay": {
+    "command": "bash lab/oracle/remainder_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "99ba3dc745edf780af9a3fc432a0e3efec1f4828080bde360850aedb80b72cd4"
+  }
+}

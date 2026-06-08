@@ -246,6 +246,19 @@ for (i, s2, g, r) in FIX:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["NIST-STYLE-FIXTURE-FORMAT.1"]}
 
+# GNURUST.REMAINDER.1 — DIVIDE ... REMAINDER receiving-field bytes (witnessed, not inferred).
+REM = [
+ ("NEG.REMAINDER.NOT_GENERAL_DIVIDE", "REMAINDER treated as covering all DIVIDE forms", "only DIVIDE a BY/INTO b GIVING q REMAINDER r is admitted", "assuming general divide coverage"),
+ ("NEG.REMAINDER.NOT_SIZE_ERROR_CONTROL_FLOW", "ON SIZE ERROR / NOT ON SIZE ERROR execution claimed", "size-error control flow is out of scope (see SIZE.ERROR.ATLAS.1)", "relying on size-error branches"),
+ ("NEG.REMAINDER.NOT_PROCEDURE_DIVISION", "Procedure Division execution claimed", "only the receiving-field bytes are admitted, not statement flow", "executing a program"),
+ ("NEG.REMAINDER.NOT_COMPUTE", "COMPUTE / expression evaluation claimed", "out of scope", "evaluating an expression"),
+ ("NEG.REMAINDER.NOT_BUSINESS_ARITHMETIC", "a remainder treated as business-correct", "byte fidelity is not financial correctness", "trusting a remainder as a business result"),
+ ("NEG.REMAINDER.SIGN_SCALE_NOT_INFERRED", "the remainder sign/scale inferred rather than witnessed", "sign follows the dividend and scale follows the receivers, as witnessed by GnuCOBOL", "guessing remainder sign/scale"),
+]
+for (i, s2, g, r) in REM:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.REMAINDER.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

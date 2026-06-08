@@ -1,0 +1,102 @@
+{
+  "schema": "negative-capabilities-snapshot-v1",
+  "crate": "gnucobol-rs",
+  "version": "0.7.2",
+  "negatives": [
+    {
+      "id": "GNURUST.2",
+      "not_proven": "arithmetic; edited pictures; any other type pair",
+      "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
+    },
+    {
+      "id": "GNURUST.3",
+      "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3",
+      "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
+    },
+    {
+      "id": "GNURUST.4",
+      "not_proven": "SYNCHRONIZED; REDEFINES larger than target",
+      "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
+    },
+    {
+      "id": "GNURUST.5",
+      "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS",
+      "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
+    },
+    {
+      "id": "GNURUST.6",
+      "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands",
+      "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
+    },
+    {
+      "id": "GNURUST.7",
+      "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum",
+      "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
+    },
+    {
+      "id": "GNURUST.8",
+      "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE",
+      "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+    },
+    {
+      "id": "GNURUST.9",
+      "not_proven": "V+P; P at both ends; VALUE/MOVE on P field",
+      "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
+    },
+    {
+      "id": "GNURUST.10",
+      "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO",
+      "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
+    },
+    {
+      "id": "GNURUST.11",
+      "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution",
+      "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact"
+    },
+    {
+      "id": "GNURUST.12",
+      "not_proven": "SET TO FALSE; FALSE clause; expressions; execution",
+      "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
+    },
+    {
+      "id": "GNURUST.13",
+      "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float",
+      "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
+    },
+    {
+      "id": "GNURUST.14",
+      "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
+      "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
+    },
+    {
+      "id": "GNURUST.15",
+      "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
+      "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+    },
+    {
+      "id": "GNURUST.16",
+      "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
+      "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated"
+    },
+    {
+      "id": "GNURUST.17",
+      "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS",
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+    },
+    {
+      "id": "GNURUST.18",
+      "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2",
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+    },
+    {
+      "id": "GNURUST.19",
+      "not_proven": "divide-by-zero / ON SIZE ERROR; REMAINDER; COMPUTE / expression evaluation; procedure control flow; float; binary/edited receivers; other rounding modes; business correctness",
+      "lie_prevented": "'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter"
+    },
+    {
+      "id": "GNURUST.REMAINDER.1",
+      "not_proven": "ON SIZE ERROR / NOT ON SIZE ERROR control flow; divide-by-zero (fail-closed); COMPUTE / expression evaluation; Procedure Division execution; float; binary/edited receivers; business correctness",
+      "lie_prevented": "'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter"
+    }
+  ]
+}

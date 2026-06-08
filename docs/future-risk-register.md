@@ -595,5 +595,7 @@ not-on-size-error silent truncation / divide-by-zero / receiving-field fit. Ledg
 gets an audit note: a representation fact, not necessarily an accounting fact.
 
 
+`GNURUST.REMAINDER.1` (DIVIDE REMAINDER receiving-field bytes, `remainder_sweep` 768/0) — sealed 0.7.2; the remainder depends on the quotient receiver's truncation (dividend — stored-quotient × divisor); ON SIZE ERROR / divide-by-zero stay non-claims.
+
 `GNURUST.19` (DIVIDE receiving-field bytes, `reports/RECEIPT-GNURUST-DIVIDE-19.md`) — sealed 0.7.1; divide-by-zero / SIZE ERROR / REMAINDER / COMPUTE / float / binary receiver remain deferred.
 
