@@ -417,6 +417,20 @@
       "readiness": 3,
       "lie_prevented": "'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter",
       "damage_if_overclaimed": "a divide result with wrong scale/rounding/truncation/sign/receiver-bytes misstates interest, fees, rates, allocations, or balances while looking plausible"
+    },
+    {
+      "id": "KOBOLD.RECON.2",
+      "name": "declared transformed-record reconciliation",
+      "proven": "a declared sealed transform (SET 88 TRUE / ADD / SUBTRACT) takes input bytes to output bytes; before+after decode + audit delta; byte-stable; undeclared transforms fail closed",
+      "byte_domain": "input record bytes -> declared-transform -> output record bytes + before/after decode",
+      "oracle": "composed sealed courts (GNURUST.12 SET-88-TRUE, GNURUST.7 ADD/SUBTRACT)",
+      "fixtures": "tests/recon2.rs (4: set+add compose, byte-stable, subtract, undeclared-fails-closed)",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "Procedure Division execution; production write-back; file rewrite parity; ledger acceptance; business truth; undeclared transforms; side effects beyond the declared field",
+      "breaks_claim": "treating a transformed record as written-back / accepted / business truth; applying an undeclared transform",
+      "readiness": 3,
+      "lie_prevented": "'a transformed record is a written-back, accepted, business-true record' -- RECON.2 proves only before/after bytes for a named sealed transform",
+      "damage_if_overclaimed": "treating transform evidence as a production write-back or ledger acceptance mutates or posts data that was never committed"
     }
   ],
   "transform_vs_read": {

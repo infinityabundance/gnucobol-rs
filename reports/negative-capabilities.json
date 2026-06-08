@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 153,
+  "count": 165,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -387,7 +387,8 @@
         "KOBOLD.DATA.2",
         "KOBOLD.DATA.3",
         "KOBOLD.OPERATOR.1",
-        "KOBOLD.BANK.1"
+        "KOBOLD.BANK.1",
+        "KOBOLD.RECON.2"
       ]
     },
     {
@@ -925,6 +926,17 @@
       ]
     },
     {
+      "id": "NEG.FILE-REWRITE-PARITY",
+      "surface": "file rewrite parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
       "id": "NEG.FLOAT",
       "surface": "float",
       "status": "not_admitted_fail_closed",
@@ -1023,6 +1035,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.6"
+      ]
+    },
+    {
+      "id": "NEG.LEDGER-ACCEPTANCE",
+      "surface": "ledger acceptance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
       ]
     },
     {
@@ -1378,7 +1401,19 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.11"
+        "GNURUST.11",
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.PRODUCTION-WRITE-BACK",
+      "surface": "production write-back",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
       ]
     },
     {
@@ -1390,6 +1425,83 @@
       "owning_future_campaign": "PRIVACY.REDACTION.1 (future); corpus is synthetic only",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.RECON.BUSINESS_TRUTH",
+      "surface": "transformed values treated as business truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "business_truth claimed:false",
+      "risk_if_guessed": "acting on transformed data as reality",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECON.FILE_REWRITE_PARITY",
+      "surface": "byte parity of a rewritten FILE/container",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "RECON.2 is per-record, not file-rewrite",
+      "risk_if_guessed": "assuming the whole file rewrites identically",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECON.LEDGER_ACCEPTANCE",
+      "surface": "a transformed record treated as accepted into a ledger",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "treating a transform as posting/ledger acceptance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECON.PROCEDURE_DIVISION",
+      "surface": "Procedure Division execution inferred from a declared transform",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope (no execution; sealed byte courts only)",
+      "risk_if_guessed": "assuming program control-flow side effects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECON.SIDE_EFFECTS",
+      "surface": "side effects beyond the declared field bytes",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "RECON.2 only writes the declared field",
+      "risk_if_guessed": "hidden cross-field effects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECON.UNDECLARED_TRANSFORM",
+      "surface": "any transform applied that was not explicitly declared",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "RECON.2 fails closed on undeclared targets",
+      "risk_if_guessed": "an unintended mutation",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECON.WRITE_BACK_PRODUCTION",
+      "surface": "a transformed record treated as a production write-back",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "RECON.2 produces evidence, not write-back",
+      "risk_if_guessed": "mutating a system of record on transform evidence",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
       ]
     },
     {
@@ -1501,6 +1613,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.SIDE-EFFECTS-BEYOND-THE-DECLARED-FIELD",
+      "surface": "side effects beyond the declared field",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
       ]
     },
     {
@@ -1667,6 +1790,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.UNDECLARED-TRANSFORMS",
+      "surface": "undeclared transforms",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.2"
       ]
     },
     {

@@ -97,6 +97,20 @@ ARITH = [
 for (i, s, g, r) in ARITH:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.19"]}
+
+# KOBOLD.RECON.2 transformed-record refusals.
+RECON = [
+ ("NEG.RECON.PROCEDURE_DIVISION", "Procedure Division execution inferred from a declared transform", "out of scope (no execution; sealed byte courts only)", "assuming program control-flow side effects"),
+ ("NEG.RECON.WRITE_BACK_PRODUCTION", "a transformed record treated as a production write-back", "RECON.2 produces evidence, not write-back", "mutating a system of record on transform evidence"),
+ ("NEG.RECON.BUSINESS_TRUTH", "transformed values treated as business truth", "business_truth claimed:false", "acting on transformed data as reality"),
+ ("NEG.RECON.UNDECLARED_TRANSFORM", "any transform applied that was not explicitly declared", "RECON.2 fails closed on undeclared targets", "an unintended mutation"),
+ ("NEG.RECON.SIDE_EFFECTS", "side effects beyond the declared field bytes", "RECON.2 only writes the declared field", "hidden cross-field effects"),
+ ("NEG.RECON.FILE_REWRITE_PARITY", "byte parity of a rewritten FILE/container", "RECON.2 is per-record, not file-rewrite", "assuming the whole file rewrites identically"),
+ ("NEG.RECON.LEDGER_ACCEPTANCE", "a transformed record treated as accepted into a ledger", "out of scope", "treating a transform as posting/ledger acceptance"),
+]
+for (i, s, g, r) in RECON:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.RECON.2"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
