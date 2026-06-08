@@ -52,6 +52,7 @@
       "KOBOLD.LAYOUT.REDEFINES.2",
       "KOBOLD.PERF.1",
       "KOBOLD.PERF.2",
+      "KOBOLD.PILOT.RUN.1",
       "KOBOLD.PILOT.WORKFLOW.1",
       "KOBOLD.POSTING.1",
       "KOBOLD.PRIVACY.REDACTION.1",
@@ -75,7 +76,7 @@
   },
   "class_counts": {
     "A": 17,
-    "B": 31,
+    "B": 32,
     "C": 6,
     "D": 0,
     "F": 0
@@ -754,6 +755,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "tests/pilot.rs (3: binds artifacts + hashes review notes (no cleartext leak), changed artifact changes the packet, missing required flagged)",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "KOBOLD.PILOT.RUN.1",
+      "class": "B",
+      "can_fail": true,
+      "can_fail_proof": "kobold-data-shim src/bin/pilot.rs (kobold-pilot) + reports/pilot-run/ committed packet + tests/pilot_workflow.rs + breaks_claim/not_proven (corrupt the fixture/golden -> test fails)",
+      "has_casefile": true,
+      "has_receipt": false,
+      "positive_claims": 5,
+      "negative_claims": 7,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "kobold-data-shim src/bin/pilot.rs (kobold-pilot) + reports/pilot-run/ committed packet + tests/pilot_workflow.rs",
       "ceremonial_flags": []
     },
     {

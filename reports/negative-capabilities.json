@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 425,
+  "count": 432,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -761,7 +761,8 @@
       "evidence": [
         "GNURUST.19",
         "KOBOLD.CORPUS.2",
-        "GNURUST.REMAINDER.1"
+        "GNURUST.REMAINDER.1",
+        "KOBOLD.PILOT.RUN.1"
       ]
     },
     {
@@ -1159,7 +1160,8 @@
       "evidence": [
         "KOBOLD.ENTERPRISE.2",
         "SUPPORT-PACKET.1",
-        "KOBOLD.PILOT-PACKET.1"
+        "KOBOLD.PILOT-PACKET.1",
+        "KOBOLD.PILOT.RUN.1"
       ]
     },
     {
@@ -2282,7 +2284,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.BANK.1"
+        "KOBOLD.BANK.1",
+        "KOBOLD.PILOT.RUN.1"
       ]
     },
     {
@@ -2962,6 +2965,72 @@
       ]
     },
     {
+      "id": "NEG.PILOT_RUN.NOT_BUSINESS_CORRECTNESS",
+      "surface": "a pilot run treated as business-correct",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the run is custody + redaction evidence, not business correctness",
+      "risk_if_guessed": "trusting the run as a correct result",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_RUN.NOT_CUSTOMER_ACCEPTANCE",
+      "surface": "a pilot run treated as customer acceptance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "claiming acceptance from a run",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_RUN.NOT_LEDGER_TRUTH",
+      "surface": "a pilot run treated as ledger truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "reconciliation evidence is not ledger acceptance",
+      "risk_if_guessed": "posting from a pilot run",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_RUN.NOT_PRODUCTION_READINESS",
+      "surface": "a pilot run treated as production readiness",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a single declared run is not production",
+      "risk_if_guessed": "deploying on a pilot run",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_RUN.NOT_REGULATORY_COMPLIANCE",
+      "surface": "a pilot run treated as regulatory compliance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "a false compliance posture",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT_RUN.SYNTHETIC_DEFAULT_NOT_REAL_EXTRACT",
+      "surface": "the synthetic default extract treated as a real extract",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the default is declared synthetic; a real pilot points the runner at a real private extract",
+      "risk_if_guessed": "assuming the default bytes are real data",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
       "id": "NEG.PILOT_WORKFLOW.NOT_BUSINESS_ACCEPTANCE",
       "surface": "the workflow treated as business acceptance",
       "status": "not_admitted_requires_declared_profile",
@@ -3249,7 +3318,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.PILOT.WORKFLOW.1"
+        "KOBOLD.PILOT.WORKFLOW.1",
+        "KOBOLD.PILOT.RUN.1"
       ]
     },
     {
@@ -3539,7 +3609,8 @@
         "KOBOLD.ENTERPRISE.2",
         "SUPPORT-PACKET.1",
         "KOBOLD.PILOT-PACKET.1",
-        "KOBOLD.PILOT.WORKFLOW.1"
+        "KOBOLD.PILOT.WORKFLOW.1",
+        "KOBOLD.PILOT.RUN.1"
       ]
     },
     {
@@ -4358,6 +4429,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PILOT.WORKFLOW.1"
+      ]
+    },
+    {
+      "id": "NEG.THAT-THE-SYNTHETIC-DEFAULT-IS-A-REAL-EXT",
+      "surface": "that the synthetic default is a real extract",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT.RUN.1"
       ]
     },
     {

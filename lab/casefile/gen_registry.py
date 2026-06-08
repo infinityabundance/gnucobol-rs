@@ -288,6 +288,19 @@ for (i, s2, g, r) in PWF:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PILOT.WORKFLOW.1"]}
 
+# KOBOLD.PILOT.RUN.1 — the kobold-pilot runner produces a committed REDACTED evidence packet.
+PRUN = [
+ ("NEG.PILOT_RUN.NOT_CUSTOMER_ACCEPTANCE", "a pilot run treated as customer acceptance", "out of scope", "claiming acceptance from a run"),
+ ("NEG.PILOT_RUN.NOT_BUSINESS_CORRECTNESS", "a pilot run treated as business-correct", "the run is custody + redaction evidence, not business correctness", "trusting the run as a correct result"),
+ ("NEG.PILOT_RUN.NOT_REGULATORY_COMPLIANCE", "a pilot run treated as regulatory compliance", "out of scope", "a false compliance posture"),
+ ("NEG.PILOT_RUN.NOT_PRODUCTION_READINESS", "a pilot run treated as production readiness", "a single declared run is not production", "deploying on a pilot run"),
+ ("NEG.PILOT_RUN.NOT_LEDGER_TRUTH", "a pilot run treated as ledger truth", "reconciliation evidence is not ledger acceptance", "posting from a pilot run"),
+ ("NEG.PILOT_RUN.SYNTHETIC_DEFAULT_NOT_REAL_EXTRACT", "the synthetic default extract treated as a real extract", "the default is declared synthetic; a real pilot points the runner at a real private extract", "assuming the default bytes are real data"),
+]
+for (i, s2, g, r) in PRUN:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PILOT.RUN.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

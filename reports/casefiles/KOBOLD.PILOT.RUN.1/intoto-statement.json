@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.PILOT.RUN.1/casefile.json",
+      "digest": {
+        "sha256": "aee1bc46ce1bb87fcf7a2fd123c8156e5e27934b23db403c32eb2e5b0dec9f30"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.PILOT.RUN.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.7.1 (bin; ships next batch)",
+    "verdict": "pass",
+    "replay": {
+      "command": "the composed sealed courts + the no-cleartext-leak abort (re-run equality)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "48fa76ce7fce80f789034534e3205883661e2e3dc39ebb1101d5477bebcba2f5",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 5,
+    "negative_claim_count": 7
+  }
+}

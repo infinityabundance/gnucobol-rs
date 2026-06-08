@@ -1,0 +1,87 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: customer acceptance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: business correctness"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: regulatory compliance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: production readiness"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: ledger truth"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: that the synthetic default is a real extract"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT.RUN.1 non-claim: lie prevented: 'we ran a pilot, so we can take real customer data to production / the totals are business-correct / it is compliant' -- PILOT.RUN.1 produces redacted custody evidence over a DECLARED extract and refuses every higher claim, and fails closed on a cleartext leak"
+          }
+        }
+      ]
+    }
+  ]
+}
