@@ -13,6 +13,7 @@ The oracle-first method exists to catch *plausible wrong assumptions*. When it d
 method working — not an embarrassment. This file records each assumption the oracle disproved, the
 correct rule, and the test that now prevents the regression. Format per entry:
 
+> [!CAUTION]
 > **Assumption** → **Why it looked plausible** → **Oracle that disproved it** → **Correct rule** →
 > **Test now preventing regression**
 

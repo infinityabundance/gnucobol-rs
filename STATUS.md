@@ -11,6 +11,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-38-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-38-blueviolet)
 
+> [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*

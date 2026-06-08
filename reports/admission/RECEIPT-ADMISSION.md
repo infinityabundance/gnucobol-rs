@@ -83,6 +83,7 @@ this fingerprint; it is recorded here as a first-class part of the oracle identi
 | `COB_CONFIG_DIR` | `<prefix>/share/gnucobol/config` (set at oracle-run time) |
 | `COB_RUNTIME_CONFIG` | unset (default `runtime.cfg`; note: last-wins, no warning on duplicate keys) |
 
+> [!WARNING]
 > **Config is semantics.** `COB_RUNTIME_CONFIG` can override the runtime config, and duplicate
 > settings are silently last-wins. The decimal slice's parity is claimed only under the
 > recorded config identity above; a different config dir / runtime.cfg / backend is a
