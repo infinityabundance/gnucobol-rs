@@ -459,6 +459,20 @@
       "readiness": 3,
       "lie_prevented": "'it is fast, so it is correct' / 'a hot-path number is the product throughput' -- BENCH.2 admits timing only behind a parity gate and measures the full pipeline, not just cob_move",
       "damage_if_overclaimed": "a parallel or hot-path benchmark number sold as production throughput sets false capacity/SLA expectations for a real migration"
+    },
+    {
+      "id": "KOBOLD.POSTING.1",
+      "name": "declared posting-unit custody manifest",
+      "proven": "a declared posting unit records batch identity, business date, extract metadata, a sha256 hash chain over record ORDER, sequence min/max/duplicates/(gaps when declared-contiguous), and duplicate transaction ids; reordering records changes the chain hash",
+      "byte_domain": "declared posting unit -> custody manifest (identity + order hash-chain + sequence/duplicate evidence)",
+      "oracle": "deterministic custody over the declared records (binds FILE.1/BANK.1/BANK.2/DB2HOST.1)",
+      "fixtures": "tests/posting.rs (6: clean, dup-sequence, gap-only-when-contiguous, dup-txn-id, order-mutation-changes-chain, id-required)",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "ledger acceptance; settlement finality; account balance correctness; business truth; gap detection without a declared-contiguous sequence; a technical duplicate being a business duplicate; currentness",
+      "breaks_claim": "treating a custody manifest as ledger acceptance / settlement / balance truth; flagging gaps on an undeclared-contiguous sequence",
+      "readiness": 3,
+      "lie_prevented": "'a reconciled, sequenced, de-duplicated batch is a posted, accepted, settled, business-true unit' -- POSTING.1 records custody evidence only",
+      "damage_if_overclaimed": "treating custody as ledger acceptance posts or finalizes a batch that was only inventoried, not accepted"
     }
   ],
   "transform_vs_read": {

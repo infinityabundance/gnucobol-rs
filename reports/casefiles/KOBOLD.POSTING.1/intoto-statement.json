@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.POSTING.1/casefile.json",
+      "digest": {
+        "sha256": "6465c785558b12f4199b2826f2a05cd1ab68ba5a0e3964acda9df77c25371cb1"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.POSTING.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.6.3",
+    "verdict": "pass",
+    "replay": {
+      "command": "deterministic custody over the declared records (binds FILE.1/BANK.1/BANK.2/DB2HOST.1)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "680ef017094f6cf2a9bf634a32899db029f68b42c8549da831143de93fd74201",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 8
+  }
+}

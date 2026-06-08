@@ -1,0 +1,65 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.POSTING.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "680ef017094f6cf2a9bf634a32899db029f68b42c8549da831143de93fd74201",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "deterministic custody over the declared records (binds FILE.1/BANK.1/BANK.2/DB2HOST.1)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/posting.rs (6: clean, dup-sequence, gap-only-when-contiguous, dup-txn-id, order-mutation-changes-chain, id-required)"
+  },
+  "positive_claims": [
+    "a declared posting unit records batch identity, business date, extract metadata, a sha256 hash chain over record ORDER, sequence min/max/duplicates/(gaps when declared-contiguous), and duplicate transaction ids",
+    "reordering records changes the chain hash"
+  ],
+  "negative_claims": [
+    "ledger acceptance",
+    "settlement finality",
+    "account balance correctness",
+    "business truth",
+    "gap detection without a declared-contiguous sequence",
+    "a technical duplicate being a business duplicate",
+    "currentness",
+    "lie prevented: 'a reconciled, sequenced, de-duplicated batch is a posted, accepted, settled, business-true unit' -- POSTING.1 records custody evidence only"
+  ],
+  "negative_capability_ids": [
+    "NEG.LEDGER-ACCEPTANCE",
+    "NEG.SETTLEMENT-FINALITY",
+    "NEG.ACCOUNT-BALANCE-CORRECTNESS",
+    "NEG.BUSINESS-TRUTH",
+    "NEG.GAP-DETECTION-WITHOUT-A-DECLARED-CONTIGU",
+    "NEG.A-TECHNICAL-DUPLICATE-BEING-A-BUSINESS-D",
+    "NEG.CURRENTNESS"
+  ],
+  "byte_domains": [
+    "declared posting unit -> custody manifest (identity + order hash-chain + sequence/duplicate evidence)"
+  ],
+  "lie_prevented": [
+    "'a reconciled, sequenced, de-duplicated batch is a posted, accepted, settled, business-true unit' -- POSTING.1 records custody evidence only"
+  ],
+  "damage_if_overclaimed": "treating custody as ledger acceptance posts or finalizes a batch that was only inventoried, not accepted",
+  "replay": {
+    "command": "deterministic custody over the declared records (binds FILE.1/BANK.1/BANK.2/DB2HOST.1)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "a55a6ec161d44edba8c0052f99469aa27e70ed2c10cb868053f3069a265dbe68"
+  }
+}

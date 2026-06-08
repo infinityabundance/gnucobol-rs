@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 172,
+  "count": 181,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -34,6 +34,17 @@
       ]
     },
     {
+      "id": "NEG.A-TECHNICAL-DUPLICATE-BEING-A-BUSINESS-D",
+      "surface": "a technical duplicate being a business duplicate",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
       "id": "NEG.A-TRAILER-MATCH-BEING-LEDGER-ACCEPTANCE",
       "surface": "a trailer match being ledger acceptance",
       "status": "not_admitted_fail_closed",
@@ -42,6 +53,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCOUNT-BALANCE-CORRECTNESS",
+      "surface": "account balance correctness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
       ]
     },
     {
@@ -400,7 +422,8 @@
         "KOBOLD.DATA.3",
         "KOBOLD.OPERATOR.1",
         "KOBOLD.BANK.1",
-        "KOBOLD.RECON.2"
+        "KOBOLD.RECON.2",
+        "KOBOLD.POSTING.1"
       ]
     },
     {
@@ -995,6 +1018,17 @@
       ]
     },
     {
+      "id": "NEG.GAP-DETECTION-WITHOUT-A-DECLARED-CONTIGU",
+      "surface": "gap detection without a declared-contiguous sequence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
       "id": "NEG.GNUCOBOL-FILE-ORGANIZATION",
       "surface": "GnuCOBOL file organization",
       "status": "not_admitted_fail_closed",
@@ -1090,7 +1124,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "KOBOLD.RECON.2"
+        "KOBOLD.RECON.2",
+        "KOBOLD.POSTING.1"
       ]
     },
     {
@@ -1406,6 +1441,61 @@
       ]
     },
     {
+      "id": "NEG.POSTING.ACCOUNT_BALANCE_TRUTH",
+      "surface": "posting-unit records treated as correct account balances",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope; business_truth claimed:false",
+      "risk_if_guessed": "trusting derived balances as truth",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
+      "id": "NEG.POSTING.DUPLICATE_NOT_BUSINESS_DUPLICATE",
+      "surface": "a duplicate sequence/txn-id treated as a business duplicate",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "POSTING.1 records duplicate EVIDENCE, not business meaning",
+      "risk_if_guessed": "treating a technical duplicate as a real double-post",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
+      "id": "NEG.POSTING.LEDGER_ACCEPTANCE",
+      "surface": "a declared posting unit treated as accepted into a ledger",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "POSTING.1 custody only; ledger_truth claimed:false",
+      "risk_if_guessed": "treating custody evidence as posting acceptance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
+      "id": "NEG.POSTING.SEQUENCE_CONTIGUITY_UNDECLARED",
+      "surface": "gap detection without a declared-contiguous sequence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "POSTING.1 detects gaps ONLY when sequence_contiguous is declared",
+      "risk_if_guessed": "false gap alarms / missed gaps on a non-contiguous sequence",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
+      "id": "NEG.POSTING.SETTLEMENT_FINALITY",
+      "surface": "a posting unit treated as settled/final",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "acting on unsettled data as final",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
+      ]
+    },
+    {
       "id": "NEG.POSTING.UNIT",
       "surface": "records grouped into a posting / balancing / settlement unit without a declared manifest",
       "status": "not_admitted_requires_declared_profile",
@@ -1691,6 +1781,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.SETTLEMENT-FINALITY",
+      "surface": "settlement finality",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.POSTING.1"
       ]
     },
     {

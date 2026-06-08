@@ -111,6 +111,18 @@ RECON = [
 for (i, s, g, r) in RECON:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.RECON.2"]}
+
+# KOBOLD.POSTING.1 posting-unit custody refusals.
+POSTING = [
+ ("NEG.POSTING.LEDGER_ACCEPTANCE", "a declared posting unit treated as accepted into a ledger", "POSTING.1 custody only; ledger_truth claimed:false", "treating custody evidence as posting acceptance"),
+ ("NEG.POSTING.SETTLEMENT_FINALITY", "a posting unit treated as settled/final", "out of scope", "acting on unsettled data as final"),
+ ("NEG.POSTING.ACCOUNT_BALANCE_TRUTH", "posting-unit records treated as correct account balances", "out of scope; business_truth claimed:false", "trusting derived balances as truth"),
+ ("NEG.POSTING.SEQUENCE_CONTIGUITY_UNDECLARED", "gap detection without a declared-contiguous sequence", "POSTING.1 detects gaps ONLY when sequence_contiguous is declared", "false gap alarms / missed gaps on a non-contiguous sequence"),
+ ("NEG.POSTING.DUPLICATE_NOT_BUSINESS_DUPLICATE", "a duplicate sequence/txn-id treated as a business duplicate", "POSTING.1 records duplicate EVIDENCE, not business meaning", "treating a technical duplicate as a real double-post"),
+]
+for (i, s, g, r) in POSTING:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.POSTING.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
