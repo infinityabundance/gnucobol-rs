@@ -1,7 +1,15 @@
 {
   "schema": "kobold-negative-capability-registry-v1",
-  "doctrine": "Negative capability is the trust surface. Every entry is a surface this stack refuses to guess (court non-claims) or a documentation-staleness finding it makes machine-detectable (NEG.DOC.*). Casefiles reference these IDs.",
-  "count": 89,
+  "truth_hierarchy": [
+    "bytes",
+    "record truth",
+    "posting truth",
+    "accounting truth",
+    "extraction truth",
+    "business truth"
+  ],
+  "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
+  "count": 107,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -12,6 +20,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.7"
+      ]
+    },
+    {
+      "id": "NEG.ACCOUNTING.POLARITY",
+      "surface": "debit/credit polarity inferred from sign, CR/DB marker, transaction code, or account type",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "ACCOUNTING.PROFILE.1 (future)",
+      "risk_if_guessed": "wrong money direction from a numeric sign",
+      "owning_future_campaign": "ACCOUNTING.PROFILE.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -56,6 +75,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BATCH.CONTROL.UNDECLARED",
+      "surface": "a KOBOLD.FILE.1 record count treated as a banking batch control total",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "BATCH.CONTROL.1 header/trailer manifest (future)",
+      "risk_if_guessed": "a mechanical count mistaken for a declared control-record total",
+      "owning_future_campaign": "BATCH.CONTROL.1 header/trailer manifest (future)",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -115,6 +145,28 @@
         "KOBOLD.DATA.2",
         "KOBOLD.DATA.3",
         "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.CICS.HANDLE.CONTROL",
+      "surface": "CICS control-flow / error-handling semantics inferred from a data copybook",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope (data court only)",
+      "risk_if_guessed": "assuming exceptional-path record behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.CICS.MESSAGE.SCHEMA",
+      "surface": "a copybook for CICS COMMAREA/channel data assumed to be a fixed-record FILE schema",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.CICS.ATLAS.1 (future)",
+      "risk_if_guessed": "decoding a message payload as if it were a flat file",
+      "owning_future_campaign": "KOBOLD.CICS.ATLAS.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -194,6 +246,50 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.SCALE",
+      "surface": "a copybook scale (V99) treated as currency minor-unit correctness",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "CURRENCY.PROFILE.1 (future)",
+      "risk_if_guessed": "wrong minor units for JPY/0-decimal or basis-point fields",
+      "owning_future_campaign": "CURRENCY.PROFILE.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.CURRENTNESS",
+      "surface": "decoded extracted bytes treated as the CURRENT live banking state (vs an as-of/EOD extract)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "EXTRACT.ATLAS.1 business_date/as_of (future)",
+      "risk_if_guessed": "acting on stale end-of-day data as if live",
+      "owning_future_campaign": "EXTRACT.ATLAS.1 business_date/as_of (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.DATE.INFERENCE",
+      "surface": "a PIC 9(8) field interpreted as a date / format (YYYYMMDD vs Julian vs period vs sentinel)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "DATE.PROFILE.1 (future)",
+      "risk_if_guessed": "a modernization date-format bug",
+      "owning_future_campaign": "DATE.PROFILE.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.DB2.NULL.INDICATOR",
+      "surface": "a decoded value treated as DB2 null-state truth without its paired null-indicator",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.DB2HOST.1 (future)",
+      "risk_if_guessed": "a field decodes cleanly but is semantically NULL at the DB boundary",
+      "owning_future_campaign": "KOBOLD.DB2HOST.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -443,6 +539,17 @@
       ]
     },
     {
+      "id": "NEG.FIGURATIVE.SENTINEL",
+      "surface": "LOW-VALUES / HIGH-VALUES / ZEROES / SPACES in raw records given sentinel meaning",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "SENTINEL.PROFILE.1 (future); bytes preserved verbatim",
+      "risk_if_guessed": "treating an uninitialized/sentinel field as a real value",
+      "owning_future_campaign": "SENTINEL.PROFILE.1 (future); bytes preserved verbatim",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
       "id": "NEG.FIGURATIVES-BEYOND-ZERO-SPACE",
       "surface": "figuratives beyond ZERO/SPACE",
       "status": "not_admitted_fail_closed",
@@ -496,6 +603,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.6"
+      ]
+    },
+    {
+      "id": "NEG.IDENTIFIER.NUMERIC_COERCION",
+      "surface": "a PIC 9(n) identifier coerced to a JSON number (leading zeros are material)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "values stay strings by default (serde Serialize-only)",
+      "risk_if_guessed": "lost leading zeros on account/branch/routing numbers",
+      "owning_future_campaign": null,
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -710,6 +828,28 @@
       ]
     },
     {
+      "id": "NEG.NUMERIC.ENVIRONMENT.UNKNOWN",
+      "surface": "arithmetic-transform parity claimed outside the admitted numeric environment (ARITH/TRUNC/sign mode)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "NUMERIC.ENVIRONMENT.1 manifest (future)",
+      "risk_if_guessed": "wrong intermediate/truncation results on write-back",
+      "owning_future_campaign": "NUMERIC.ENVIRONMENT.1 manifest (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC.ROLE",
+      "surface": "a numeric field assumed to be an amount (vs a rate, identifier, code, or count)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "ACCOUNTING.PROFILE.2 numeric-role (future)",
+      "risk_if_guessed": "summing account IDs / branch numbers / rates into a money total",
+      "owning_future_campaign": "ACCOUNTING.PROFILE.2 numeric-role (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
       "id": "NEG.OF-IN-LIBRARY",
       "surface": "OF/IN library",
       "status": "not_admitted_fail_closed",
@@ -755,6 +895,17 @@
       ]
     },
     {
+      "id": "NEG.POSTING.UNIT",
+      "surface": "records grouped into a posting / balancing / settlement unit without a declared manifest",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.POSTING.1 (future)",
+      "risk_if_guessed": "treating independent records as a balanced bundle (or vice versa)",
+      "owning_future_campaign": "KOBOLD.POSTING.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
       "id": "NEG.PRE-3-2",
       "surface": "pre-3.2",
       "status": "not_admitted_fail_closed",
@@ -785,6 +936,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC.CUSTOMER.DATA",
+      "surface": "real customer/account/PII data appearing in a public casefile or audit",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "PRIVACY.REDACTION.1 (future); corpus is synthetic only",
+      "risk_if_guessed": "leaking regulated data into public evidence",
+      "owning_future_campaign": "PRIVACY.REDACTION.1 (future); corpus is synthetic only",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -819,6 +981,17 @@
       "evidence": [
         "GNURUST.16",
         "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.REVERSAL.INFERENCE",
+      "surface": "a reversal/chargeback/correction inferred from a negative sign alone",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "REVERSAL.PROFILE.1 (future)",
+      "risk_if_guessed": "mis-pairing a debit as a reversal of an unrelated entry",
+      "owning_future_campaign": "REVERSAL.PROFILE.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
@@ -899,6 +1072,17 @@
       ]
     },
     {
+      "id": "NEG.SINGLE_LAYOUT_ASSUMPTION",
+      "surface": "one layout assumed per file when records carry a header/detail/trailer discriminator",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "KOBOLD.VARIANT.1 (future)",
+      "risk_if_guessed": "decoding every record with the wrong (single) copybook",
+      "owning_future_campaign": "KOBOLD.VARIANT.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
       "id": "NEG.SIZE-ERROR",
       "surface": "SIZE ERROR",
       "status": "not_admitted_fail_closed",
@@ -910,6 +1094,17 @@
       ]
     },
     {
+      "id": "NEG.SIZE_ERROR.SEMANTICS",
+      "surface": "transformed-record write-back without admitted ON SIZE ERROR / truncation / rounded-carry / sign-of-zero semantics",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "SIZE.ERROR.ATLAS.1 + KOBOLD.RECON.2 (future)",
+      "risk_if_guessed": "silently corrupting money on overflow",
+      "owning_future_campaign": "SIZE.ERROR.ATLAS.1 + KOBOLD.RECON.2 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
+      ]
+    },
+    {
       "id": "NEG.SLIDING",
       "surface": "sliding",
       "status": "not_admitted_fail_closed",
@@ -918,6 +1113,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.SQL.PRECOMPILER",
+      "surface": "COPY/layout courts claiming Db2 precompiler source transformation (DECLARE SECTION, SQLCA, INCLUDE)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "SQLPRECOMP.ATLAS.1 (future)",
+      "risk_if_guessed": "mis-modeling embedded-SQL host structures",
+      "owning_future_campaign": "SQLPRECOMP.ATLAS.1 (future)",
+      "evidence": [
+        "banking-truth-boundaries"
       ]
     },
     {
