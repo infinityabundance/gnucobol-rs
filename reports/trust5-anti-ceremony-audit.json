@@ -65,6 +65,7 @@
       "KOBOLD.BANK.RECONCILE.1",
       "KOBOLD.DIFF.1",
       "KOBOLD.OPERATOR.1",
+      "KOBOLD.PILOT-PACKET.1",
       "KOBOLD.TOOLING.EXPORT.1",
       "SUPPORT-PACKET.1"
     ],
@@ -74,7 +75,7 @@
   "class_counts": {
     "A": 17,
     "B": 30,
-    "C": 5,
+    "C": 6,
     "D": 0,
     "F": 0
   },
@@ -736,6 +737,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "tests/perf2.rs (profile-preserves-output + stages-populated; full-custody scalar==rayon) + bench2 perf2_stage_profile (bottleneck=per_record)",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "KOBOLD.PILOT-PACKET.1",
+      "class": "C",
+      "can_fail": true,
+      "can_fail_proof": "regenerate-and-compare freshness + no-new-truth refusal (mutate a source artifact -> stale check fails)",
+      "has_casefile": true,
+      "has_receipt": false,
+      "positive_claims": 2,
+      "negative_claims": 10,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "tests/pilot.rs (3: binds artifacts + hashes review notes (no cleartext leak), changed artifact changes the packet, missing required flagged)",
       "ceremonial_flags": []
     },
     {

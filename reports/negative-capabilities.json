@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 401,
+  "count": 415,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -97,6 +97,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.A-LIVE-OR-CURRENT-STATE-IT-IS-A-SNAPSHOT",
+      "surface": "a live or current state (it is a snapshot)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {
@@ -790,7 +801,19 @@
       "evidence": [
         "SUPPORT-PACKET.1",
         "TRUST.5",
-        "NIST-STYLE-FIXTURE-FORMAT.1"
+        "NIST-STYLE-FIXTURE-FORMAT.1",
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.CHECKLIST-COMPLETION-THE-CHECKLIST-IS-A-",
+      "surface": "checklist completion (the checklist is a template, not proof it was done)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {
@@ -1124,7 +1147,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.ENTERPRISE.2",
-        "SUPPORT-PACKET.1"
+        "SUPPORT-PACKET.1",
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {
@@ -2428,6 +2452,17 @@
       ]
     },
     {
+      "id": "NEG.NEW-TRUTH-OR-NEW-EVIDENCE",
+      "surface": "new truth or new evidence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
       "id": "NEG.NIST-COBOL-CONFORMANCE",
       "surface": "NIST COBOL conformance",
       "status": "not_admitted_fail_closed",
@@ -2816,6 +2851,105 @@
       ]
     },
     {
+      "id": "NEG.PILOT.ARTIFACT_NOT_REVALIDATED",
+      "surface": "a bundled artifact treated as re-validated by the packet",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "artifacts are pinned by sha, not re-run; their own courts are the authority",
+      "risk_if_guessed": "assuming the packet re-proved an artifact",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.CHECKLIST_NOT_COMPLETION",
+      "surface": "the operator checklist treated as proof it was completed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the checklist is a template; completion is captured in the review notes (hash-pinned)",
+      "risk_if_guessed": "assuming the checklist was satisfied",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.NOT_CERTIFICATION",
+      "surface": "the pilot packet treated as a certification",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a bundle of pilot artifacts is not a certificate",
+      "risk_if_guessed": "claiming certified status from a pilot",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.NOT_COMPLIANCE",
+      "surface": "the pilot packet treated as regulatory compliance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "a false compliance posture",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.NOT_CUSTOMER_ACCEPTANCE",
+      "surface": "the pilot packet treated as customer acceptance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "claiming acceptance from a pilot",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.NOT_PRODUCTION_APPROVAL",
+      "surface": "the pilot packet treated as production approval",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a pilot is not production",
+      "risk_if_guessed": "deploying on a pilot packet",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.NO_NEW_TRUTH",
+      "surface": "the pilot packet treated as new evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it bundles EXISTING hash-pinned court artifacts; creates_new_truth:false",
+      "risk_if_guessed": "double-counting the packet as proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.REVIEW_NOTES_NOT_VERIFIED",
+      "surface": "the review-notes hash treated as verification of the notes content",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the hash pins the notes; it does not validate what they say",
+      "risk_if_guessed": "trusting unreviewed notes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.PILOT.SNAPSHOT_NOT_LIVE",
+      "surface": "the pilot packet treated as a live state",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "snapshot of the pilot artifacts at generation; the courts are the live authority",
+      "risk_if_guessed": "trusting a stale pilot snapshot",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
       "id": "NEG.PLATFORM-RUNTIME",
       "surface": "platform runtime",
       "status": "not_admitted_fail_closed",
@@ -3014,7 +3148,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.ENTERPRISE.2",
-        "SUPPORT-PACKET.1"
+        "SUPPORT-PACKET.1",
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {
@@ -3071,6 +3206,17 @@
       "owning_future_campaign": "PRIVACY.REDACTION.1 (future); corpus is synthetic only",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.RE-VALIDATION-OF-THE-BUNDLED-ARTIFACTS-T",
+      "surface": "re-validation of the bundled artifacts (they are pinned, not re-run)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {
@@ -3302,7 +3448,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.ENTERPRISE.2",
-        "SUPPORT-PACKET.1"
+        "SUPPORT-PACKET.1",
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {
@@ -3447,6 +3594,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.REVIEW-NOTES-CONTENT-VERIFICATION-ONLY-T",
+      "surface": "review-notes content verification (only their hash is pinned)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PILOT-PACKET.1"
       ]
     },
     {

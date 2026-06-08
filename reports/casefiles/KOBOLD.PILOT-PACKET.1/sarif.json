@@ -1,0 +1,108 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: certification"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: regulatory compliance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: production approval"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: customer acceptance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: a live or current state (it is a snapshot)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: new truth or new evidence"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: checklist completion (the checklist is a template, not proof it was done)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: review-notes content verification (only their hash is pinned)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: re-validation of the bundled artifacts (they are pinned, not re-run)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PILOT-PACKET.1 non-claim: lie prevented: 'here is the pilot packet, therefore the migration is approved/compliant/accepted' -- PILOT-PACKET.1 bundles EXISTING hash-pinned pilot artifacts and claims pilot evidence only"
+          }
+        }
+      ]
+    }
+  ]
+}

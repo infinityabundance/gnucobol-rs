@@ -576,8 +576,14 @@ mod tests {
     fn remainder_integer_quotient() {
         // 10.00 / 3.00 GIVING q[S9(5)] REMAINDER r[S9(5)V99] -> q=3, r=1.00
         let (q, r) = cob_divide_remainder(
-            b"0001000", &disp(7, 2, false), b"0000300", &disp(7, 2, false),
-            &disp(5, 0, false), &disp(7, 2, false)).unwrap();
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(5, 0, false),
+            &disp(7, 2, false),
+        )
+        .unwrap();
         assert_eq!(&q, b"00003");
         assert_eq!(&r, b"0000100");
     }
@@ -586,8 +592,14 @@ mod tests {
     fn remainder_scaled_quotient() {
         // 10.00 / 3.00 GIVING q[S9(5)V99] REMAINDER r[S9(5)V99] -> q=3.33, r=0.01
         let (q, r) = cob_divide_remainder(
-            b"0001000", &disp(7, 2, false), b"0000300", &disp(7, 2, false),
-            &disp(7, 2, false), &disp(7, 2, false)).unwrap();
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+        )
+        .unwrap();
         assert_eq!(&q, b"0000333");
         assert_eq!(&r, b"0000001");
     }
@@ -596,8 +608,14 @@ mod tests {
     fn remainder_exact_is_zero() {
         // 10.00 / 5.00 GIVING q[S9(5)] REMAINDER r[S9(5)V99] -> q=2, r=0.00
         let (q, r) = cob_divide_remainder(
-            b"0001000", &disp(7, 2, false), b"0000500", &disp(7, 2, false),
-            &disp(5, 0, false), &disp(7, 2, false)).unwrap();
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000500",
+            &disp(7, 2, false),
+            &disp(5, 0, false),
+            &disp(7, 2, false),
+        )
+        .unwrap();
         assert_eq!(&q, b"00002");
         assert_eq!(&r, b"0000000");
     }
@@ -608,8 +626,14 @@ mod tests {
         let mut a = b"0001000".to_vec();
         *a.last_mut().unwrap() = 0x70; // -10.00
         let (q, r) = cob_divide_remainder(
-            &a, &disp(7, 2, true), b"0000300", &disp(7, 2, false),
-            &disp(5, 0, true), &disp(7, 2, true)).unwrap();
+            &a,
+            &disp(7, 2, true),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(5, 0, true),
+            &disp(7, 2, true),
+        )
+        .unwrap();
         let mut eq = b"00003".to_vec();
         *eq.last_mut().unwrap() = 0x73; // -3
         let mut er = b"0000100".to_vec();
@@ -622,8 +646,14 @@ mod tests {
     fn remainder_into_packed_receiver() {
         // 10.00 / 3.00 GIVING q[S9(5)] REMAINDER r[S9(3)V99 COMP-3] -> q=3, r=001.00 packed
         let (q, r) = cob_divide_remainder(
-            b"0001000", &disp(7, 2, false), b"0000300", &disp(7, 2, false),
-            &disp(5, 0, false), &packed(5, 2, true)).unwrap();
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(5, 0, false),
+            &packed(5, 2, true),
+        )
+        .unwrap();
         assert_eq!(&q, b"00003");
         assert_eq!(r, vec![0x00, 0x10, 0x0c]); // 001.00
     }
@@ -631,8 +661,13 @@ mod tests {
     #[test]
     fn remainder_divide_by_zero_fails_closed() {
         let e = cob_divide_remainder(
-            b"0001000", &disp(7, 2, false), b"0000000", &disp(7, 2, false),
-            &disp(5, 0, false), &disp(7, 2, false));
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000000",
+            &disp(7, 2, false),
+            &disp(5, 0, false),
+            &disp(7, 2, false),
+        );
         assert_eq!(e, Err(ArithError::DivideByZero));
     }
 

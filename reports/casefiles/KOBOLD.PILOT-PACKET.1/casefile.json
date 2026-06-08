@@ -1,0 +1,71 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.PILOT-PACKET.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.7.1",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "d49de5a2a65a0ef4d49da54fc55c324a2e39cb1e7ccc5f5486ff71e525c1975e",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the pilot run's existing court artifacts (re-derive equality)",
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/pilot.rs (3: binds artifacts + hashes review notes (no cleartext leak), changed artifact changes the packet, missing required flagged)"
+  },
+  "positive_claims": [
+    "a generated derived view over a pilot run's existing hash-pinned court artifacts (EXTRACT.PROFILE.1, the redaction policy, BANK.RECONCILE.1, DIFF.1, TOOLING.EXPORT.1, the SCALE receipt, DSSE verification), the copybook sha, an operator review checklist, and a review-notes hash (the notes are hashed, never embedded)",
+    "derived_view true and creates_new_truth false, so a changed source artifact changes the packet hash and missing required artifacts (extract/redaction/bank_reconcile) are flagged complete:false"
+  ],
+  "negative_claims": [
+    "certification",
+    "regulatory compliance",
+    "production approval",
+    "customer acceptance",
+    "a live or current state (it is a snapshot)",
+    "new truth or new evidence",
+    "checklist completion (the checklist is a template, not proof it was done)",
+    "review-notes content verification (only their hash is pinned)",
+    "re-validation of the bundled artifacts (they are pinned, not re-run)",
+    "lie prevented: 'here is the pilot packet, therefore the migration is approved/compliant/accepted' -- PILOT-PACKET.1 bundles EXISTING hash-pinned pilot artifacts and claims pilot evidence only"
+  ],
+  "negative_capability_ids": [
+    "NEG.CERTIFICATION",
+    "NEG.REGULATORY-COMPLIANCE",
+    "NEG.PRODUCTION-APPROVAL",
+    "NEG.CUSTOMER-ACCEPTANCE",
+    "NEG.A-LIVE-OR-CURRENT-STATE-IT-IS-A-SNAPSHOT",
+    "NEG.NEW-TRUTH-OR-NEW-EVIDENCE",
+    "NEG.CHECKLIST-COMPLETION-THE-CHECKLIST-IS-A-",
+    "NEG.REVIEW-NOTES-CONTENT-VERIFICATION-ONLY-T",
+    "NEG.RE-VALIDATION-OF-THE-BUNDLED-ARTIFACTS-T"
+  ],
+  "byte_domains": [
+    "a pilot run's existing court artifacts -> one hash-pinned packet + operator checklist"
+  ],
+  "lie_prevented": [
+    "'here is the pilot packet, therefore the migration is approved/compliant/accepted' -- PILOT-PACKET.1 bundles EXISTING hash-pinned pilot artifacts and claims pilot evidence only"
+  ],
+  "damage_if_overclaimed": "a pilot bundle sold as certification/compliance/production-approval/customer-acceptance manufactures pilot-to-production assurance that no court provides",
+  "replay": {
+    "command": "the pilot run's existing court artifacts (re-derive equality)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "d67fbd1bf7acde163014489c7bacc0a11d627550b14b59a35c44e87c569d950c"
+  }
+}

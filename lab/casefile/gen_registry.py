@@ -259,6 +259,22 @@ for (i, s2, g, r) in REM:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.REMAINDER.1"]}
 
+# KOBOLD.PILOT-PACKET.1 — a hash-bound pilot evidence bundle; pilot evidence only.
+PILOT = [
+ ("NEG.PILOT.NOT_CERTIFICATION", "the pilot packet treated as a certification", "a bundle of pilot artifacts is not a certificate", "claiming certified status from a pilot"),
+ ("NEG.PILOT.NOT_COMPLIANCE", "the pilot packet treated as regulatory compliance", "out of scope", "a false compliance posture"),
+ ("NEG.PILOT.NOT_PRODUCTION_APPROVAL", "the pilot packet treated as production approval", "a pilot is not production", "deploying on a pilot packet"),
+ ("NEG.PILOT.NOT_CUSTOMER_ACCEPTANCE", "the pilot packet treated as customer acceptance", "out of scope", "claiming acceptance from a pilot"),
+ ("NEG.PILOT.SNAPSHOT_NOT_LIVE", "the pilot packet treated as a live state", "snapshot of the pilot artifacts at generation; the courts are the live authority", "trusting a stale pilot snapshot"),
+ ("NEG.PILOT.NO_NEW_TRUTH", "the pilot packet treated as new evidence", "it bundles EXISTING hash-pinned court artifacts; creates_new_truth:false", "double-counting the packet as proof"),
+ ("NEG.PILOT.CHECKLIST_NOT_COMPLETION", "the operator checklist treated as proof it was completed", "the checklist is a template; completion is captured in the review notes (hash-pinned)", "assuming the checklist was satisfied"),
+ ("NEG.PILOT.REVIEW_NOTES_NOT_VERIFIED", "the review-notes hash treated as verification of the notes content", "the hash pins the notes; it does not validate what they say", "trusting unreviewed notes"),
+ ("NEG.PILOT.ARTIFACT_NOT_REVALIDATED", "a bundled artifact treated as re-validated by the packet", "artifacts are pinned by sha, not re-run; their own courts are the authority", "assuming the packet re-proved an artifact"),
+]
+for (i, s2, g, r) in PILOT:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PILOT-PACKET.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

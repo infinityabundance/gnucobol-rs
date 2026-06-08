@@ -16,7 +16,7 @@ import glob, json, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Courts whose job is to SUMMARIZE existing evidence (must be hash-bound + no-new-truth).
-VIEWS = {"KOBOLD.BANK.RECONCILE.1", "KOBOLD.DIFF.1", "SUPPORT-PACKET.1", "KOBOLD.OPERATOR.1", "KOBOLD.TOOLING.EXPORT.1"}
+VIEWS = {"KOBOLD.BANK.RECONCILE.1", "KOBOLD.DIFF.1", "SUPPORT-PACKET.1", "KOBOLD.OPERATOR.1", "KOBOLD.TOOLING.EXPORT.1", "KOBOLD.PILOT-PACKET.1"}
 # Courts that are staged pending external proof (must NOT be green without it). LAMBDA.LIVE.1 lives in the
 # sibling lambda repo (awaiting_live_invocation) and is not in this claim-ladder; noted in the audit.
 STAGED = set()

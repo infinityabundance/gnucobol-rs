@@ -739,6 +739,20 @@
       "readiness": 3,
       "lie_prevented": "'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter",
       "damage_if_overclaimed": "a wrong remainder (wrong quotient-scale dependence, sign, or receiver bytes) misstates reconciliation residuals, allocation leftovers, or check digits while looking plausible"
+    },
+    {
+      "id": "KOBOLD.PILOT-PACKET.1",
+      "name": "hash-bound pilot evidence packet",
+      "proven": "a generated derived view over a pilot run's existing hash-pinned court artifacts (EXTRACT.PROFILE.1, the redaction policy, BANK.RECONCILE.1, DIFF.1, TOOLING.EXPORT.1, the SCALE receipt, DSSE verification), the copybook sha, an operator review checklist, and a review-notes hash (the notes are hashed, never embedded); derived_view true and creates_new_truth false, so a changed source artifact changes the packet hash and missing required artifacts (extract/redaction/bank_reconcile) are flagged complete:false",
+      "byte_domain": "a pilot run's existing court artifacts -> one hash-pinned packet + operator checklist",
+      "oracle": "the pilot run's existing court artifacts (re-derive equality)",
+      "fixtures": "tests/pilot.rs (3: binds artifacts + hashes review notes (no cleartext leak), changed artifact changes the packet, missing required flagged)",
+      "sealed_version": "kobold 0.7.1",
+      "not_proven": "certification; regulatory compliance; production approval; customer acceptance; a live or current state (it is a snapshot); new truth or new evidence; checklist completion (the checklist is a template, not proof it was done); review-notes content verification (only their hash is pinned); re-validation of the bundled artifacts (they are pinned, not re-run)",
+      "breaks_claim": "treating the packet as certification/compliance/approval/acceptance/new-evidence; leaking review-notes cleartext",
+      "readiness": 3,
+      "lie_prevented": "'here is the pilot packet, therefore the migration is approved/compliant/accepted' -- PILOT-PACKET.1 bundles EXISTING hash-pinned pilot artifacts and claims pilot evidence only",
+      "damage_if_overclaimed": "a pilot bundle sold as certification/compliance/production-approval/customer-acceptance manufactures pilot-to-production assurance that no court provides"
     }
   ],
   "transform_vs_read": {
