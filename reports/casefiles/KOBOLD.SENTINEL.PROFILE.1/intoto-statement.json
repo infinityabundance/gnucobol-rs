@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.SENTINEL.PROFILE.1/casefile.json",
+      "digest": {
+        "sha256": "84a28dab46e5424a238e49dfc58f034f4ccf070c34b39c17912df80dd1e3a19e"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.SENTINEL.PROFILE.1",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.6.4",
+    "verdict": "pass",
+    "replay": {
+      "command": "the declared profile (deterministic match of decoded value / raw bytes)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "d5b7ab21295f94e1976ce685108d3775c5640abd7caebda7723d84a9d36cb674",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 3,
+    "negative_claim_count": 8
+  }
+}

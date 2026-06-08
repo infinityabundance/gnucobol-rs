@@ -1,0 +1,66 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.SENTINEL.PROFILE.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.4",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "d5b7ab21295f94e1976ce685108d3775c5640abd7caebda7723d84a9d36cb674",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the declared profile (deterministic match of decoded value / raw bytes)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/sentinel.rs (3: declared raw_hex+decoded_value markers match as evidence-only, undeclared zeroes not inferred, missing declared field fails closed)"
+  },
+  "positive_claims": [
+    "declared byte/value patterns (raw_hex or decoded_value) are labeled as named markers for named fields and recorded as EVIDENCE ONLY",
+    "an undeclared sentinel-looking value is never inferred (undeclared_inference:false)",
+    "nullness/date/missingness/business-status/account-state/default-meaning stay claimed:false"
+  ],
+  "negative_claims": [
+    "LOW-VALUES=null",
+    "HIGH-VALUES=max-date",
+    "SPACES=missing",
+    "ZEROES=absent",
+    "zero-date=a date",
+    "a marker=business status/account state",
+    "an undeclared marker",
+    "lie prevented: 'this field is LOW-VALUES, so it is null / HIGH-VALUES, so it is the max date / spaces, so it is missing' -- SENTINEL.PROFILE.1 records DECLARED markers as evidence only and refuses every meaning"
+  ],
+  "negative_capability_ids": [
+    "NEG.LOW-VALUES-NULL",
+    "NEG.HIGH-VALUES-MAX-DATE",
+    "NEG.SPACES-MISSING",
+    "NEG.ZEROES-ABSENT",
+    "NEG.ZERO-DATE-A-DATE",
+    "NEG.A-MARKER-BUSINESS-STATUS-ACCOUNT-STATE",
+    "NEG.AN-UNDECLARED-MARKER"
+  ],
+  "byte_domains": [
+    "declared sentinel rules -> matched-marker evidence per field"
+  ],
+  "lie_prevented": [
+    "'this field is LOW-VALUES, so it is null / HIGH-VALUES, so it is the max date / spaces, so it is missing' -- SENTINEL.PROFILE.1 records DECLARED markers as evidence only and refuses every meaning"
+  ],
+  "damage_if_overclaimed": "treating a sentinel as null/date/missing silently mis-handles closed accounts, open dates, and absent data across a whole file",
+  "replay": {
+    "command": "the declared profile (deterministic match of decoded value / raw bytes)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "d00454daad4b24e78a40fb58e9747e01c8c6e6ee7d6806482c65691c90c2556a"
+  }
+}

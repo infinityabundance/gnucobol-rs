@@ -271,6 +271,20 @@ REDEF = [
 for (i, s2, g, r) in REDEF:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.LAYOUT.REDEFINES.2"]}
+
+# KOBOLD.SENTINEL.PROFILE.1 — declared markers as evidence; nothing inferred.
+SENT = [
+ ("NEG.SENTINEL.LOW_VALUES_NOT_NULL", "LOW-VALUES / 0x00 treated as NULL", "a declared marker is evidence only; nullness needs DB2HOST.1/a declared profile", "treating a binary-zero field as database null"),
+ ("NEG.SENTINEL.HIGH_VALUES_NOT_MAX_DATE", "HIGH-VALUES / 0xFF treated as a max-date", "marker evidence only; date meaning needs DATE.PROFILE", "reading 0xFF as 9999-12-31"),
+ ("NEG.SENTINEL.SPACES_NOT_MISSING", "SPACES treated as missing", "marker evidence only", "treating blanks as absent data"),
+ ("NEG.SENTINEL.ZEROES_NOT_ABSENT", "ZEROES treated as absent/zero-meaning", "marker evidence only", "treating zero as no-value"),
+ ("NEG.SENTINEL.ZERO_DATE_NOT_DATE", "a zero-date (00000000) treated as a date value", "marker evidence only; date meaning needs DATE.PROFILE", "computing on a zero-date"),
+ ("NEG.SENTINEL.MARKER_NOT_BUSINESS_STATUS", "a declared marker treated as a business status/account state", "business_status claimed:false", "deriving account state from a marker"),
+ ("NEG.SENTINEL.UNDECLARED_NOT_INFERRED", "an UNDECLARED sentinel-looking value inferred as a marker", "only DECLARED rules match; undeclared_inference:false", "guessing a sentinel that was not declared"),
+]
+for (i, s2, g, r) in SENT:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.SENTINEL.PROFILE.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

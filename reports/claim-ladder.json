@@ -613,6 +613,20 @@
       "readiness": 3,
       "lie_prevented": "'this REDEFINES decodes cleanly, therefore it is the record' -- LAYOUT.REDEFINES.2 proves overlapping byte VIEWS, not which view is active; active_view is admitted only by a declared discriminator",
       "damage_if_overclaimed": "promoting a layout-valid overlay (a loan view over an account record) into truth misreads the entire record"
+    },
+    {
+      "id": "KOBOLD.SENTINEL.PROFILE.1",
+      "name": "declared sentinel-marker evidence",
+      "proven": "declared byte/value patterns (raw_hex or decoded_value) are labeled as named markers for named fields and recorded as EVIDENCE ONLY; an undeclared sentinel-looking value is never inferred (undeclared_inference:false); nullness/date/missingness/business-status/account-state/default-meaning stay claimed:false",
+      "byte_domain": "declared sentinel rules -> matched-marker evidence per field",
+      "oracle": "the declared profile (deterministic match of decoded value / raw bytes)",
+      "fixtures": "tests/sentinel.rs (3: declared raw_hex+decoded_value markers match as evidence-only, undeclared zeroes not inferred, missing declared field fails closed)",
+      "sealed_version": "kobold 0.6.4",
+      "not_proven": "LOW-VALUES=null; HIGH-VALUES=max-date; SPACES=missing; ZEROES=absent; zero-date=a date; a marker=business status/account state; an undeclared marker",
+      "breaks_claim": "inferring nullness/date/missingness/business status from a marker; inferring an undeclared sentinel",
+      "readiness": 3,
+      "lie_prevented": "'this field is LOW-VALUES, so it is null / HIGH-VALUES, so it is the max date / spaces, so it is missing' -- SENTINEL.PROFILE.1 records DECLARED markers as evidence only and refuses every meaning",
+      "damage_if_overclaimed": "treating a sentinel as null/date/missing silently mis-handles closed accounts, open dates, and absent data across a whole file"
     }
   ],
   "transform_vs_read": {
