@@ -61,6 +61,7 @@ fi
 # Self-contained Rust tests + the doc-staleness gate are part of "sealed".
 echo
 ( cd "$ROOT" && cargo test -q >/dev/null 2>&1 ) && row "cargo test (self-contained)" "PASS" || { row "cargo test (self-contained)" "FAIL"; RED=$((RED+1)); }
+( cd "$ROOT/lab/attest" && cargo build --release --offline >/dev/null 2>&1 && ./target/release/kobold-attest selftest >/dev/null 2>&1 ) && row "ENTERPRISE.2 kobold-attest selftest (rust ed25519, 6 states)" "PASS" || { row "ENTERPRISE.2 kobold-attest selftest" "FAIL"; RED=$((RED+1)); }
 ( cd "$ROOT" && bash lab/check-docs.sh >/dev/null 2>&1 ) && row "doc-gate (anti-staleness)" "PASS" || { row "doc-gate (anti-staleness)" "FAIL"; RED=$((RED+1)); }
 
 echo

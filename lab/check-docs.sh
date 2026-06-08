@@ -191,6 +191,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.4.DOCS: doc drift"; cat /tmp/_docs_check
   fi
+  if python3 "$ROOT/lab/attest/run.py" check >/tmp/_ent2_check 2>&1; then
+    note "ENTERPRISE.2: DSSE verification report fresh, no integrity failure (rust kobold-attest)"
+  else
+    bad "ENTERPRISE.2: attestation verification drift"; cat /tmp/_ent2_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

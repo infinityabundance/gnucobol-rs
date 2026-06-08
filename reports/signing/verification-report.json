@@ -1,0 +1,170 @@
+{
+  "schema": "kobold-enterprise2-verification-report-v1",
+  "court": "KOBOLD.ENTERPRISE.2",
+  "signing_mode": "unsigned",
+  "tool": "kobold-attest (rust, ed25519-compact)",
+  "tool_available": true,
+  "selftest_passed": true,
+  "casefiles": 37,
+  "summary": {
+    "unsigned_no_key_configured": 37
+  },
+  "entries": [
+    {
+      "court": "GNURUST.10",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.11",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.12",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.13",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.14",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.15",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.16",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.17",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.18",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.19",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.3",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.4",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.5",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.6",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.7",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.8",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.9",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.BANK.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.BANK.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.BENCH.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.CORPUS.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.DATA.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.DATA.3",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.DATA.4",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.DATA.5",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.DATA.6",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.DB2HOST.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.ENTERPRISE.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.EXTRACT.PROFILE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.FILE.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.OPERATOR.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.PERF.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.POSTING.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.PRIVACY.REDACTION.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.RECON.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.RECON.2",
+      "signature_status": "unsigned_no_key_configured"
+    }
+  ],
+  "non_claims": [
+    "NEG.ENTERPRISE2.NOT_REGULATORY_COMPLIANCE",
+    "NEG.ENTERPRISE2.NOT_PRODUCTION_APPROVAL",
+    "NEG.ENTERPRISE2.NOT_CUSTOMER_ACCEPTANCE",
+    "NEG.ENTERPRISE2.NO_LONG_TERM_KEY_CUSTODY",
+    "NEG.ENTERPRISE2.NO_IDENTITY_TRUST_BEYOND_KEY",
+    "NEG.ENTERPRISE2.NO_SUPPLY_CHAIN_COMPLETENESS"
+  ]
+}

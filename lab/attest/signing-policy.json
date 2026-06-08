@@ -1,0 +1,6 @@
+{
+  "schema": "kobold-signing-policy-v1",
+  "mode": "unsigned",
+  "key": { "type": "ed25519", "public_key_hex": null, "keyid": null, "identity": null },
+  "note": "Default open-source state is UNSIGNED (signature_status=unsigned_no_key_configured) -- explicit and honest, never a failure. Set mode=signed + key to verify signed DSSE envelopes. All crypto is the Rust `kobold-attest` binary; this file is configuration only."
+}

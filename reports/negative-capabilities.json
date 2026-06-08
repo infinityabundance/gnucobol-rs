@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 214,
+  "count": 226,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -571,6 +571,17 @@
       ]
     },
     {
+      "id": "NEG.COMPLETE-SUPPLY-CHAIN-ASSURANCE-BEYOND-L",
+      "surface": "complete supply-chain assurance beyond listed materials",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
       "id": "NEG.COMPUTE-EXPRESSION-EVALUATION",
       "surface": "COMPUTE / expression evaluation",
       "status": "not_admitted_fail_closed",
@@ -657,6 +668,17 @@
       "owning_future_campaign": "EXTRACT.ATLAS.1 business_date/as_of (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.CUSTOMER-ACCEPTANCE",
+      "surface": "customer acceptance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
       ]
     },
     {
@@ -1028,6 +1050,72 @@
       ]
     },
     {
+      "id": "NEG.ENTERPRISE2.NOT_CUSTOMER_ACCEPTANCE",
+      "surface": "a verified signature treated as customer acceptance/sign-off",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "claiming acceptance never given",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.ENTERPRISE2.NOT_PRODUCTION_APPROVAL",
+      "surface": "a verified signature treated as production go-live approval",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "deploying on an attestation, not a decision",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.ENTERPRISE2.NOT_REGULATORY_COMPLIANCE",
+      "surface": "a verified signature treated as regulatory compliance (GDPR/PCI/SOX)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "ENTERPRISE.2 proves a key signed a payload, nothing more",
+      "risk_if_guessed": "a false compliance posture",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.ENTERPRISE2.NO_IDENTITY_TRUST_BEYOND_KEY",
+      "surface": "identity trust beyond the configured key (no PKI/transparency log)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the key is the only trust root; no identity binding",
+      "risk_if_guessed": "believing a signer identity that was never bound",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.ENTERPRISE2.NO_LONG_TERM_KEY_CUSTODY",
+      "surface": "long-term key governance / rotation / revocation claimed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "ENTERPRISE.2 verifies under a CONFIGURED key only; no key lifecycle",
+      "risk_if_guessed": "trusting a compromised/rotated key",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.ENTERPRISE2.NO_SUPPLY_CHAIN_COMPLETENESS",
+      "surface": "complete supply-chain assurance beyond the listed materials/products",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "in-toto subjects/materials are those listed, not exhaustive",
+      "risk_if_guessed": "assuming an unlisted artifact is covered",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
       "id": "NEG.EXECUTION",
       "surface": "execution",
       "status": "not_admitted_fail_closed",
@@ -1228,6 +1316,17 @@
       ]
     },
     {
+      "id": "NEG.IDENTITY-TRUST-BEYOND-THE-CONFIGURED-KEY",
+      "surface": "identity trust beyond the configured key",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
       "id": "NEG.INDEXED-RELATIVE-I-O",
       "surface": "indexed/relative I/O",
       "status": "not_admitted_fail_closed",
@@ -1326,6 +1425,17 @@
       "evidence": [
         "GNURUST.16",
         "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.LONG-TERM-KEY-CUSTODY-ROTATION-REVOCATIO",
+      "surface": "long-term key custody/rotation/revocation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
       ]
     },
     {
@@ -1773,6 +1883,17 @@
       ]
     },
     {
+      "id": "NEG.PRODUCTION-APPROVAL",
+      "surface": "production approval",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
       "id": "NEG.PRODUCTION-PERFORMANCE",
       "surface": "production performance",
       "status": "not_admitted_fail_closed",
@@ -1979,6 +2100,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.4"
+      ]
+    },
+    {
+      "id": "NEG.REGULATORY-COMPLIANCE",
+      "surface": "regulatory compliance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.ENTERPRISE.2"
       ]
     },
     {

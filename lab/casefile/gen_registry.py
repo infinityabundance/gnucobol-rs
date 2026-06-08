@@ -162,6 +162,19 @@ PERF = [
 for (i, s, g, r) in PERF:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PERF.1"]}
+
+# KOBOLD.ENTERPRISE.2 signed-attestation refusals.
+ENT2 = [
+ ("NEG.ENTERPRISE2.NOT_REGULATORY_COMPLIANCE", "a verified signature treated as regulatory compliance (GDPR/PCI/SOX)", "ENTERPRISE.2 proves a key signed a payload, nothing more", "a false compliance posture"),
+ ("NEG.ENTERPRISE2.NOT_PRODUCTION_APPROVAL", "a verified signature treated as production go-live approval", "out of scope", "deploying on an attestation, not a decision"),
+ ("NEG.ENTERPRISE2.NOT_CUSTOMER_ACCEPTANCE", "a verified signature treated as customer acceptance/sign-off", "out of scope", "claiming acceptance never given"),
+ ("NEG.ENTERPRISE2.NO_LONG_TERM_KEY_CUSTODY", "long-term key governance / rotation / revocation claimed", "ENTERPRISE.2 verifies under a CONFIGURED key only; no key lifecycle", "trusting a compromised/rotated key"),
+ ("NEG.ENTERPRISE2.NO_IDENTITY_TRUST_BEYOND_KEY", "identity trust beyond the configured key (no PKI/transparency log)", "the key is the only trust root; no identity binding", "believing a signer identity that was never bound"),
+ ("NEG.ENTERPRISE2.NO_SUPPLY_CHAIN_COMPLETENESS", "complete supply-chain assurance beyond the listed materials/products", "in-toto subjects/materials are those listed, not exhaustive", "assuming an unlisted artifact is covered"),
+]
+for (i, s, g, r) in ENT2:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.ENTERPRISE.2"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

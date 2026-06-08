@@ -74,6 +74,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `KOBOLD.RECON.2` | declared transformed-record reconciliation | pass | `reports/casefiles/KOBOLD.RECON.2/` |
 | `KOBOLD.CORPUS.2` | adversarial / banking-shaped corpus | pass | `reports/casefiles/KOBOLD.CORPUS.2/` |
 | `KOBOLD.BENCH.2` | parity-gated end-to-end scalar benchmark | pass | `reports/casefiles/KOBOLD.BENCH.2/` |
+| `KOBOLD.ENTERPRISE.2` | Rust-native signed attestation verification (DSSE/ed25519) | pass | `reports/casefiles/KOBOLD.ENTERPRISE.2/` |
 | `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | pass | `reports/casefiles/KOBOLD.DATA.3/` |
 | `KOBOLD.DATA.4` | edited-picture decode composed | pass | `reports/casefiles/KOBOLD.DATA.4/` |
 | `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | pass | `reports/casefiles/KOBOLD.DATA.5/` |

@@ -1,0 +1,10 @@
+# ENTERPRISE.2 — signed attestation verification (generated; do not edit)
+
+Verification of every casefile DSSE envelope against its in-toto payload, by the **Rust** `kobold-attest` tool (ed25519; no Python crypto). Regenerate with `python3 lab/attest/run.py verify`.
+
+- signing mode: **unsigned**
+- tool available: True  ·  selftest passed: True
+- casefiles: 37
+- status summary: `{"unsigned_no_key_configured": 37}`
+
+`unsigned_no_key_configured` is the **honest default** — not a failure. Set a signed policy + key to produce `signed_verified`. No regulatory/production/customer-acceptance/key-custody/supply-chain claim.

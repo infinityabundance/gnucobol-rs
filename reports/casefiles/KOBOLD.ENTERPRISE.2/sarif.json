@@ -1,0 +1,87 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: regulatory compliance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: production approval"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: customer acceptance"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: long-term key custody/rotation/revocation"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: identity trust beyond the configured key"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: complete supply-chain assurance beyond listed materials"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.ENTERPRISE.2 non-claim: lie prevented: 'it has a signature, so it is approved/compliant/trusted' -- ENTERPRISE.2 proves only that a configured key signed the exact payload; unsigned stays explicit and honest"
+          }
+        }
+      ]
+    }
+  ]
+}
