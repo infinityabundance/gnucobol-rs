@@ -1,0 +1,63 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.PRIVACY.REDACTION.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5cad59aeb2cd9eb6e532ea948bb0dbf3fca55ea1c348489390d49097c2b374d2",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the declared redaction policy (deterministic; verified by hash preservation)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/privacy.rs (3: redact+tokenize+allow keep hashes/provenance, deterministic-token stable-not-reversible, unlisted-fails-closed)"
+  },
+  "positive_claims": [
+    "declared field-level redaction for generated evidence: values are withheld (redact) or tokenized (deterministic, scope-stable) while value_sha256/raw_sha256, offset/size, court identity, and audit structure are preserved",
+    "unlisted fields fail closed under a deny-unlisted policy"
+  ],
+  "negative_claims": [
+    "anonymization",
+    "regulatory compliance (GDPR/PCI)",
+    "reversibility",
+    "safe public release of customer data",
+    "a token being an identity",
+    "a hash being the business value",
+    "lie prevented: 'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
+  ],
+  "negative_capability_ids": [
+    "NEG.ANONYMIZATION",
+    "NEG.REGULATORY-COMPLIANCE-GDPR-PCI",
+    "NEG.REVERSIBILITY",
+    "NEG.SAFE-PUBLIC-RELEASE-OF-CUSTOMER-DATA",
+    "NEG.A-TOKEN-BEING-AN-IDENTITY",
+    "NEG.A-HASH-BEING-THE-BUSINESS-VALUE"
+  ],
+  "byte_domains": [
+    "decoded record + declared policy -> redacted evidence (hashes/provenance preserved)"
+  ],
+  "lie_prevented": [
+    "'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
+  ],
+  "damage_if_overclaimed": "publishing a 'redacted' casefile as anonymized/compliant can re-identify customers and breach regulation",
+  "replay": {
+    "command": "the declared redaction policy (deterministic; verified by hash preservation)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "7d524e5e54405eb11e834e6629e7e6283286991dc0e024ad0ab893d3a80a2c3f"
+  }
+}

@@ -136,6 +136,20 @@ EXTRACT = [
 for (i, s, g, r) in EXTRACT:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.EXTRACT.PROFILE.1"]}
+
+# KOBOLD.PRIVACY.REDACTION.1 refusals.
+PRIVACY = [
+ ("NEG.PRIVACY.NO_REAL_CUSTOMER_DATA_PUBLIC", "real customer/account/PII data in a public casefile/audit", "corpus is synthetic; redaction withholds declared sensitive values", "leaking regulated data publicly"),
+ ("NEG.REDACTION.NOT_ANONYMIZATION", "redaction treated as anonymization", "PRIVACY.REDACTION.1 hides declared values; not an anonymization guarantee", "re-identification from residual fields"),
+ ("NEG.REDACTION.NOT_REGULATORY_COMPLIANCE", "redaction treated as GDPR/PCI/regulatory compliance", "evidence-preserving redaction only", "a false compliance posture"),
+ ("NEG.REDACTION.HASH_NOT_BUSINESS_VALUE", "a preserved value/raw hash treated as the business value", "hashes are for verification, not value recovery", "using a hash as the field value"),
+ ("NEG.REDACTION.TOKEN_NOT_IDENTITY", "a deterministic token treated as an identity / reversible", "tokens are scope-stable, never claimed reversible", "joining tokens as if they were the real identity"),
+ ("NEG.REDACTION.REVERSIBILITY_NOT_CLAIMED", "redaction/tokenization assumed reversible", "no reversibility (no key management in v1)", "expecting to recover the original from the casefile"),
+ ("NEG.REDACTION.UNLISTED_SENSITIVE_FIELD", "an unlisted sensitive field silently shown under a strict policy", "deny-unlisted withholds + fails closed", "leaking an undeclared sensitive field"),
+]
+for (i, s, g, r) in PRIVACY:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PRIVACY.REDACTION.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

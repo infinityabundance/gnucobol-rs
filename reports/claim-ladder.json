@@ -487,6 +487,20 @@
       "readiness": 3,
       "lie_prevented": "'the bytes decoded, so the extract is complete/correct and the copybook is the production one' -- EXTRACT.PROFILE.1 records DECLARED provenance + holds copybook freshness as a permanent uncertainty",
       "damage_if_overclaimed": "acting on an incomplete/wrong extract or a stale copybook that decodes plausibly wrong corrupts a whole migration silently"
+    },
+    {
+      "id": "KOBOLD.PRIVACY.REDACTION.1",
+      "name": "declared evidence-preserving redaction",
+      "proven": "declared field-level redaction for generated evidence: values are withheld (redact) or tokenized (deterministic, scope-stable) while value_sha256/raw_sha256, offset/size, court identity, and audit structure are preserved; unlisted fields fail closed under a deny-unlisted policy",
+      "byte_domain": "decoded record + declared policy -> redacted evidence (hashes/provenance preserved)",
+      "oracle": "the declared redaction policy (deterministic; verified by hash preservation)",
+      "fixtures": "tests/privacy.rs (3: redact+tokenize+allow keep hashes/provenance, deterministic-token stable-not-reversible, unlisted-fails-closed)",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "anonymization; regulatory compliance (GDPR/PCI); reversibility; safe public release of customer data; a token being an identity; a hash being the business value",
+      "breaks_claim": "treating redaction as anonymization/compliance; treating a token as reversible identity; showing an unlisted sensitive field",
+      "readiness": 3,
+      "lie_prevented": "'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety",
+      "damage_if_overclaimed": "publishing a 'redacted' casefile as anonymized/compliant can re-identify customers and breach regulation"
     }
   ],
   "transform_vs_read": {

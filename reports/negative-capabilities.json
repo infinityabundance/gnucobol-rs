@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 191,
+  "count": 204,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -34,6 +34,17 @@
       ]
     },
     {
+      "id": "NEG.A-HASH-BEING-THE-BUSINESS-VALUE",
+      "surface": "a hash being the business value",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
       "id": "NEG.A-TECHNICAL-DUPLICATE-BEING-A-BUSINESS-D",
       "surface": "a technical duplicate being a business duplicate",
       "status": "not_admitted_fail_closed",
@@ -42,6 +53,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.POSTING.1"
+      ]
+    },
+    {
+      "id": "NEG.A-TOKEN-BEING-AN-IDENTITY",
+      "surface": "a token being an identity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
       ]
     },
     {
@@ -97,6 +119,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.ANONYMIZATION",
+      "surface": "anonymization",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
       ]
     },
     {
@@ -1617,6 +1650,17 @@
       ]
     },
     {
+      "id": "NEG.PRIVACY.NO_REAL_CUSTOMER_DATA_PUBLIC",
+      "surface": "real customer/account/PII data in a public casefile/audit",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "corpus is synthetic; redaction withholds declared sensitive values",
+      "risk_if_guessed": "leaking regulated data publicly",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
       "id": "NEG.PROCEDURE-CONTROL-FLOW",
       "surface": "procedure control flow",
       "status": "not_admitted_fail_closed",
@@ -1761,6 +1805,72 @@
       ]
     },
     {
+      "id": "NEG.REDACTION.HASH_NOT_BUSINESS_VALUE",
+      "surface": "a preserved value/raw hash treated as the business value",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "hashes are for verification, not value recovery",
+      "risk_if_guessed": "using a hash as the field value",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.REDACTION.NOT_ANONYMIZATION",
+      "surface": "redaction treated as anonymization",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "PRIVACY.REDACTION.1 hides declared values; not an anonymization guarantee",
+      "risk_if_guessed": "re-identification from residual fields",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.REDACTION.NOT_REGULATORY_COMPLIANCE",
+      "surface": "redaction treated as GDPR/PCI/regulatory compliance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "evidence-preserving redaction only",
+      "risk_if_guessed": "a false compliance posture",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.REDACTION.REVERSIBILITY_NOT_CLAIMED",
+      "surface": "redaction/tokenization assumed reversible",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "no reversibility (no key management in v1)",
+      "risk_if_guessed": "expecting to recover the original from the casefile",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.REDACTION.TOKEN_NOT_IDENTITY",
+      "surface": "a deterministic token treated as an identity / reversible",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "tokens are scope-stable, never claimed reversible",
+      "risk_if_guessed": "joining tokens as if they were the real identity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.REDACTION.UNLISTED_SENSITIVE_FIELD",
+      "surface": "an unlisted sensitive field silently shown under a strict policy",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "deny-unlisted withholds + fails closed",
+      "risk_if_guessed": "leaking an undeclared sensitive field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
       "id": "NEG.REDEFINES-LARGER-THAN-TARGET",
       "surface": "REDEFINES larger than target",
       "status": "not_admitted_fail_closed",
@@ -1769,6 +1879,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.4"
+      ]
+    },
+    {
+      "id": "NEG.REGULATORY-COMPLIANCE-GDPR-PCI",
+      "surface": "regulatory compliance (GDPR/PCI)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
       ]
     },
     {
@@ -1828,6 +1949,17 @@
       ]
     },
     {
+      "id": "NEG.REVERSIBILITY",
+      "surface": "reversibility",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
       "id": "NEG.RUNTIME-VALIDATION",
       "surface": "runtime validation",
       "status": "not_admitted_fail_closed",
@@ -1836,6 +1968,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.SAFE-PUBLIC-RELEASE-OF-CUSTOMER-DATA",
+      "surface": "safe public release of customer data",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PRIVACY.REDACTION.1"
       ]
     },
     {
