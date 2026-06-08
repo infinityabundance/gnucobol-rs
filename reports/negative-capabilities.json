@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 263,
+  "count": 275,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -34,6 +34,17 @@
       ]
     },
     {
+      "id": "NEG.A-CUSTOMER-SLA",
+      "surface": "a customer SLA",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
       "id": "NEG.A-HASH-BEING-THE-BUSINESS-VALUE",
       "surface": "a hash being the business value",
       "status": "not_admitted_fail_closed",
@@ -42,6 +53,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.A-JSON-FAST-PATH-AS-AUTHORITY",
+      "surface": "a JSON fast-path as authority",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
       ]
     },
     {
@@ -1503,6 +1525,17 @@
       ]
     },
     {
+      "id": "NEG.FLOAT-PARALLEL-TOTALS",
+      "surface": "float parallel totals",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
       "id": "NEG.GAP-DETECTION-WITHOUT-A-DECLARED-CONTIGU",
       "surface": "gap detection without a declared-contiguous sequence",
       "status": "not_admitted_fail_closed",
@@ -1917,6 +1950,28 @@
       ]
     },
     {
+      "id": "NEG.PARALLEL-ORDER-BEING-OPTIONAL",
+      "surface": "parallel order being optional",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.PARALLEL-POSTING-CHAIN",
+      "surface": "parallel posting-chain",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
       "id": "NEG.PARALLEL-RAYON-SIMD-THROUGHPUT",
       "surface": "parallel/Rayon/SIMD throughput",
       "status": "not_admitted_fail_closed",
@@ -1939,6 +1994,17 @@
       ]
     },
     {
+      "id": "NEG.PERF.CUSTOMER_SLA_NOT_CLAIMED",
+      "surface": "a PERF.2 timing treated as a customer SLA",
+      "status": "not_admitted_fail_closed",
+      "guard": "micro-measurement only",
+      "risk_if_guessed": "false SLA from a benchmark",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
       "id": "NEG.PERF.DETERMINISTIC_SCHEDULING",
       "surface": "deterministic thread scheduling claimed beyond identical artifacts",
       "status": "not_admitted_fail_closed",
@@ -1947,6 +2013,50 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.1"
+      ]
+    },
+    {
+      "id": "NEG.PERF.JSON_FAST_PATH_NOT_SEMANTIC_AUTHORITY",
+      "surface": "a faster JSON/render path treated as semantic authority",
+      "status": "not_admitted_fail_closed",
+      "guard": "rendering is a derived artifact; the courts are the authority",
+      "risk_if_guessed": "trusting a fast path that differs",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.PERF.ORDERED_OUTPUT_NOT_OPTIONAL",
+      "surface": "record/finding/JSONL order treated as optional under parallelism",
+      "status": "not_admitted_fail_closed",
+      "guard": "order-sensitive output is byte-identical to scalar; ordering is never relaxed for speed",
+      "risk_if_guessed": "reordered records/findings under threads",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.PERF.PARALLEL_TOTALS_FLOAT_NOT_ALLOWED",
+      "surface": "floating-point parallel reduction of totals",
+      "status": "not_admitted_fail_closed",
+      "guard": "totals are i128 cents (associative/deterministic); float reduction is forbidden",
+      "risk_if_guessed": "non-deterministic float totals under parallel reduction",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.PERF.POSTING_CHAIN_PARALLEL_NOT_CLAIMED",
+      "surface": "the POSTING.1 hash chain computed in parallel",
+      "status": "not_admitted_fail_closed",
+      "guard": "the chain is sequential over ordered record hashes (h_i=sha(h_{i-1}||r_i)); only record-local work is parallel",
+      "risk_if_guessed": "a parallel chain that diverges from the sequential one",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
       ]
     },
     {
@@ -1980,6 +2090,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.1"
+      ]
+    },
+    {
+      "id": "NEG.PERF.THREAD_SCHEDULE_NOT_EVIDENCE",
+      "surface": "thread scheduling/timing treated as evidence",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the EMITTED bytes are guaranteed; the schedule is not",
+      "risk_if_guessed": "depending on thread timing/order",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
       ]
     },
     {
@@ -2822,6 +2943,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.THREAD-SCHEDULE-AS-EVIDENCE",
+      "surface": "thread schedule as evidence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.PERF.2"
       ]
     },
     {

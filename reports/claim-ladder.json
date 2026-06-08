@@ -571,6 +571,20 @@
       "readiness": 3,
       "lie_prevented": "'it does 2.5M records/sec, so it will handle your production batch on AWS' -- SCALE.1 measures a declared synthetic corpus on one host, parity-gated, and refuses every production/cost/representativeness generalization",
       "damage_if_overclaimed": "a synthetic scale number sold as production/AWS capacity sets false batch-window and cost expectations for a real migration"
+    },
+    {
+      "id": "KOBOLD.PERF.2",
+      "name": "deterministic multithreaded pipeline + per-stage profiling",
+      "proven": "the reconcile pipeline is a 3-stage shape -- (1) parse/prepare once, (2) parallel record-local evidence, (3) ordered aggregation -- with reconcile_profile() exposing per-stage wall-clock (StageProfile parse_ns/record_ns/aggregate_ns) WITHOUT changing the emitted bytes; profiling identifies the per-record stage as the bottleneck (~75%) that PERF.1's Rayon already parallelizes byte-identically, with aggregation (~25%) kept serial; the full custody workload (reconcile + POSTING.1 chain + PRIVACY.REDACTION.1) is byte-identical scalar vs rayon",
+      "byte_domain": "per-stage timing of the reconcile pipeline; parallel record-local work, ordered aggregation",
+      "oracle": "the scalar reconcile output (PERF.1 parity) + reconcile_profile == reconcile_encoded bytes",
+      "fixtures": "tests/perf2.rs (profile-preserves-output + stages-populated; full-custody scalar==rayon) + bench2 perf2_stage_profile (bottleneck=per_record)",
+      "sealed_version": "kobold 0.6.4",
+      "not_proven": "parallel posting-chain; parallel order being optional; a JSON fast-path as authority; thread schedule as evidence; float parallel totals; a customer SLA",
+      "breaks_claim": "any order-sensitive/custody/rendering/attestation artifact differing from scalar; reporting timing before parity passes",
+      "readiness": 3,
+      "lie_prevented": "'more threads, so optimize everything in parallel' -- PERF.2 parallelizes ONLY record-local work, keeps custody/aggregation ordered and serial, and admits timing only after full evidence parity",
+      "damage_if_overclaimed": "a parallelized custody/aggregation that diverges from scalar would corrupt evidence (reordered records, a different posting chain) while looking faster"
     }
   ],
   "transform_vs_read": {

@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-40-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-40-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-41-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-41-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -186,6 +186,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `KOBOLD.CORPUS.2` | adversarial / banking-shaped corpus | ✅ pass | [`reports/casefiles/KOBOLD.CORPUS.2/`](reports/casefiles/KOBOLD.CORPUS.2/) |
 | `KOBOLD.BENCH.2` | parity-gated end-to-end scalar benchmark | ✅ pass | [`reports/casefiles/KOBOLD.BENCH.2/`](reports/casefiles/KOBOLD.BENCH.2/) |
 | `KOBOLD.ENTERPRISE.2` | Rust-native signed attestation verification (DSSE/ed25519) | ✅ pass | [`reports/casefiles/KOBOLD.ENTERPRISE.2/`](reports/casefiles/KOBOLD.ENTERPRISE.2/) |
+| `KOBOLD.PERF.2` | deterministic multithreaded pipeline + per-stage profiling | ✅ pass | [`reports/casefiles/KOBOLD.PERF.2/`](reports/casefiles/KOBOLD.PERF.2/) |
 | `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.3/`](reports/casefiles/KOBOLD.DATA.3/) |
 | `KOBOLD.DATA.4` | edited-picture decode composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.4/`](reports/casefiles/KOBOLD.DATA.4/) |
 | `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.5/`](reports/casefiles/KOBOLD.DATA.5/) |

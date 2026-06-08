@@ -233,6 +233,19 @@ SCALE = [
 for (i, s2, g, r) in SCALE:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.SCALE.1"]}
+
+# KOBOLD.PERF.2 multithreaded-pipeline refusals.
+PERF2 = [
+ ("NEG.PERF.ORDERED_OUTPUT_NOT_OPTIONAL", "record/finding/JSONL order treated as optional under parallelism", "order-sensitive output is byte-identical to scalar; ordering is never relaxed for speed", "reordered records/findings under threads"),
+ ("NEG.PERF.POSTING_CHAIN_PARALLEL_NOT_CLAIMED", "the POSTING.1 hash chain computed in parallel", "the chain is sequential over ordered record hashes (h_i=sha(h_{i-1}||r_i)); only record-local work is parallel", "a parallel chain that diverges from the sequential one"),
+ ("NEG.PERF.JSON_FAST_PATH_NOT_SEMANTIC_AUTHORITY", "a faster JSON/render path treated as semantic authority", "rendering is a derived artifact; the courts are the authority", "trusting a fast path that differs"),
+ ("NEG.PERF.THREAD_SCHEDULE_NOT_EVIDENCE", "thread scheduling/timing treated as evidence", "only the EMITTED bytes are guaranteed; the schedule is not", "depending on thread timing/order"),
+ ("NEG.PERF.PARALLEL_TOTALS_FLOAT_NOT_ALLOWED", "floating-point parallel reduction of totals", "totals are i128 cents (associative/deterministic); float reduction is forbidden", "non-deterministic float totals under parallel reduction"),
+ ("NEG.PERF.CUSTOMER_SLA_NOT_CLAIMED", "a PERF.2 timing treated as a customer SLA", "micro-measurement only", "false SLA from a benchmark"),
+]
+for (i, s2, g, r) in PERF2:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PERF.2"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

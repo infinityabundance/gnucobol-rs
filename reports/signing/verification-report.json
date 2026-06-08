@@ -5,9 +5,9 @@
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true,
   "selftest_passed": true,
-  "casefiles": 40,
+  "casefiles": 41,
   "summary": {
-    "unsigned_no_key_configured": 40
+    "unsigned_no_key_configured": 41
   },
   "entries": [
     {
@@ -148,6 +148,10 @@
     },
     {
       "court": "KOBOLD.PERF.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "KOBOLD.PERF.2",
       "signature_status": "unsigned_no_key_configured"
     },
     {
