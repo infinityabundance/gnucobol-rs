@@ -123,6 +123,19 @@ POSTING = [
 for (i, s, g, r) in POSTING:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.POSTING.1"]}
+
+# KOBOLD.EXTRACT.PROFILE.1 / CUSTODY.1 extraction-provenance refusals.
+EXTRACT = [
+ ("NEG.EXTRACT.EXTRACTION_TRUTH", "decoded extracted bytes treated as extraction truth (how/when/whence)", "EXTRACT.PROFILE.1 records DECLARED provenance only", "trusting an extract's origin/completeness without provenance"),
+ ("NEG.EXTRACT.VSAM_NOT_CLAIMED", "VSAM file-organization semantics claimed", "declared, not interpreted", "mis-modeling a VSAM extract"),
+ ("NEG.EXTRACT.INDEXED_BACKEND_NOT_CLAIMED", "indexed-file backend (BDB/VBISAM/VSAM) behavior claimed", "out of scope", "assuming index/key semantics"),
+ ("NEG.EXTRACT.FILE_STATUS_NOT_INTERPRETED", "COBOL FILE STATUS / VSAM feedback interpreted", "out of scope", "inferring I/O outcome from data"),
+ ("NEG.CODESET.FILE_IO_CONVERSION", "field-level cp500 decode treated as COBOL CODE-SET file-I/O conversion parity", "declared code_set_conversion_before_kobold, not executed", "double-converting or mis-attributing a pre-KOBOLD conversion"),
+ ("NEG.COPYBOOK.STALE", "an accepted copybook treated as the production-truth copybook", "EXTRACT.PROFILE.1 copybook_freshness claimed:false (hash+provenance evidence only)", "a stale copybook decoding bytes plausibly wrong"),
+]
+for (i, s, g, r) in EXTRACT:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.EXTRACT.PROFILE.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

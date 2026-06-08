@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 181,
+  "count": 191,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -449,6 +449,28 @@
       ]
     },
     {
+      "id": "NEG.CODE-SET-FILE-I-O-CONVERSION-PARITY",
+      "surface": "CODE-SET file-I/O conversion parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CODESET.FILE_IO_CONVERSION",
+      "surface": "field-level cp500 decode treated as COBOL CODE-SET file-I/O conversion parity",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "declared code_set_conversion_before_kobold, not executed",
+      "risk_if_guessed": "double-converting or mis-attributing a pre-KOBOLD conversion",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.COLLATING-SENSITIVE-RANGES",
       "surface": "collating-sensitive ranges",
       "status": "not_admitted_fail_closed",
@@ -513,6 +535,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.COPYBOOK.STALE",
+      "surface": "an accepted copybook treated as the production-truth copybook",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "EXTRACT.PROFILE.1 copybook_freshness claimed:false (hash+provenance evidence only)",
+      "risk_if_guessed": "a stale copybook decoding bytes plausibly wrong",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
       ]
     },
     {
@@ -958,6 +991,61 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.EXTRACT.EXTRACTION_TRUTH",
+      "surface": "decoded extracted bytes treated as extraction truth (how/when/whence)",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "EXTRACT.PROFILE.1 records DECLARED provenance only",
+      "risk_if_guessed": "trusting an extract's origin/completeness without provenance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.EXTRACT.FILE_STATUS_NOT_INTERPRETED",
+      "surface": "COBOL FILE STATUS / VSAM feedback interpreted",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "inferring I/O outcome from data",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.EXTRACT.INDEXED_BACKEND_NOT_CLAIMED",
+      "surface": "indexed-file backend (BDB/VBISAM/VSAM) behavior claimed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "assuming index/key semantics",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.EXTRACT.VSAM_NOT_CLAIMED",
+      "surface": "VSAM file-organization semantics claimed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "declared, not interpreted",
+      "risk_if_guessed": "mis-modeling a VSAM extract",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.EXTRACTION-TRUTH-HOW-WHEN-WHENCE-THE-BYT",
+      "surface": "extraction truth (how/when/whence the bytes were obtained)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
       ]
     },
     {
@@ -1939,6 +2027,17 @@
       ]
     },
     {
+      "id": "NEG.THE-COPYBOOK-BEING-PRODUCTION-TRUTH",
+      "surface": "the copybook being production truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.THE-HOST-VALUE-BEING-THE-DATABASE-VALUE-",
       "surface": "the host value being the database value without its indicator",
       "status": "not_admitted_fail_closed",
@@ -2024,6 +2123,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.VSAM-INDEXED-BACKEND-FILE-STATUS-SEMANTI",
+      "surface": "VSAM/indexed-backend/file-status semantics",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.EXTRACT.PROFILE.1"
       ]
     }
   ]
