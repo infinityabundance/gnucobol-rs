@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.CORPUS.2/casefile.json",
+      "digest": {
+        "sha256": "3f1306295d4c28bf55e7a60165cb96531122463fbaeeb02f04a07ff2faf6620d"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.CORPUS.2",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.6.3",
+    "verdict": "pass",
+    "replay": {
+      "command": "the sealed courts' own fail-closed behavior (FILE.1/BANK.1/BANK.2/DB2HOST.1/RECON.2/operator dirty-mode)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "962bebbcb09475e9546f0e7fd026a3b63856cebab9df42510d2e881dedc2ff7a",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 5
+  }
+}

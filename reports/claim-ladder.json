@@ -431,6 +431,20 @@
       "readiness": 3,
       "lie_prevented": "'a transformed record is a written-back, accepted, business-true record' -- RECON.2 proves only before/after bytes for a named sealed transform",
       "damage_if_overclaimed": "treating transform evidence as a production write-back or ledger acceptance mutates or posts data that was never committed"
+    },
+    {
+      "id": "KOBOLD.CORPUS.2",
+      "name": "adversarial / banking-shaped corpus",
+      "proven": "hostile fixtures across 5 buckets (file/container, storage, banking, database, transform) each produce the expected fail-closed finding/behavior; no hostile fixture silently decodes as clean",
+      "byte_domain": "adversarial fixtures -> expected fail-closed findings across all courts",
+      "oracle": "the sealed courts' own fail-closed behavior (FILE.1/BANK.1/BANK.2/DB2HOST.1/RECON.2/operator dirty-mode)",
+      "fixtures": "tests/corpus2.rs (6 bucket tests) + recon/corpus2-manifest.json",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "production representativeness; customer-data coverage; business correctness; exhaustive adversarial coverage",
+      "breaks_claim": "a hostile fixture silently decoding as clean",
+      "readiness": 3,
+      "lie_prevented": "'the courts handle the happy path, so they handle real (dirty, hostile, mis-routed) data' -- CORPUS.2 proves each hostile shape fails closed with a named finding",
+      "damage_if_overclaimed": "trusting the stack on a happy-path corpus alone misses the mis-routed/mis-counted/null/dirty records that cause real banking incidents"
     }
   ],
   "transform_vs_read": {

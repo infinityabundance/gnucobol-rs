@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 165,
+  "count": 168,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -373,7 +373,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.19"
+        "GNURUST.19",
+        "KOBOLD.CORPUS.2"
       ]
     },
     {
@@ -534,6 +535,17 @@
       "owning_future_campaign": "EXTRACT.ATLAS.1 business_date/as_of (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.CUSTOMER-DATA-COVERAGE",
+      "surface": "customer-data coverage",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CORPUS.2"
       ]
     },
     {
@@ -879,6 +891,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.EXHAUSTIVE-ADVERSARIAL-COVERAGE",
+      "surface": "exhaustive adversarial coverage",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CORPUS.2"
       ]
     },
     {
@@ -1403,6 +1426,17 @@
       "evidence": [
         "GNURUST.11",
         "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.PRODUCTION-REPRESENTATIVENESS",
+      "surface": "production representativeness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CORPUS.2"
       ]
     },
     {

@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.CORPUS.2",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "962bebbcb09475e9546f0e7fd026a3b63856cebab9df42510d2e881dedc2ff7a",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the sealed courts' own fail-closed behavior (FILE.1/BANK.1/BANK.2/DB2HOST.1/RECON.2/operator dirty-mode)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/corpus2.rs (6 bucket tests) + recon/corpus2-manifest.json"
+  },
+  "positive_claims": [
+    "hostile fixtures across 5 buckets (file/container, storage, banking, database, transform) each produce the expected fail-closed finding/behavior",
+    "no hostile fixture silently decodes as clean"
+  ],
+  "negative_claims": [
+    "production representativeness",
+    "customer-data coverage",
+    "business correctness",
+    "exhaustive adversarial coverage",
+    "lie prevented: 'the courts handle the happy path, so they handle real (dirty, hostile, mis-routed) data' -- CORPUS.2 proves each hostile shape fails closed with a named finding"
+  ],
+  "negative_capability_ids": [
+    "NEG.PRODUCTION-REPRESENTATIVENESS",
+    "NEG.CUSTOMER-DATA-COVERAGE",
+    "NEG.BUSINESS-CORRECTNESS",
+    "NEG.EXHAUSTIVE-ADVERSARIAL-COVERAGE"
+  ],
+  "byte_domains": [
+    "adversarial fixtures -> expected fail-closed findings across all courts"
+  ],
+  "lie_prevented": [
+    "'the courts handle the happy path, so they handle real (dirty, hostile, mis-routed) data' -- CORPUS.2 proves each hostile shape fails closed with a named finding"
+  ],
+  "damage_if_overclaimed": "trusting the stack on a happy-path corpus alone misses the mis-routed/mis-counted/null/dirty records that cause real banking incidents",
+  "replay": {
+    "command": "the sealed courts' own fail-closed behavior (FILE.1/BANK.1/BANK.2/DB2HOST.1/RECON.2/operator dirty-mode)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "5ec360fb0e1adf43005ec37216a2f0f135d23fdd5bfd54d0621c555a1bacf56d"
+  }
+}
