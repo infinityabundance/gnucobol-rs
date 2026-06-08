@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.LAYOUT.REDEFINES.2",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.4",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f208fa3c30d09c6dcd84e8e2bb136d0d633fb5982d05a16db73ae21720503b29",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the shim's own REDEFINES layout (overlapping offsets) + decode",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/redefines.rs (4: overlapping views + active_view false by default, deterministic+shared raw hash, declared discriminator admits active view, unknown discriminator keeps it false)"
+  },
+  "positive_claims": [
+    "records explicit overlapping byte VIEWS created by REDEFINES: which fields share storage (offset/length/raw_sha256), each view decoded INDEPENDENTLY over the SAME bytes, and whether an active view was declared by a discriminator",
+    "active_view stays claimed:false by default and is admitted only by a declared discriminator (unknown -> false)"
+  ],
+  "negative_claims": [
+    "which view is semantically active (without a declared discriminator)",
+    "that a layout-valid view is business-meaningful",
+    "that multiple views are simultaneously true",
+    "write-back",
+    "lie prevented: 'this REDEFINES decodes cleanly, therefore it is the record' -- LAYOUT.REDEFINES.2 proves overlapping byte VIEWS, not which view is active; active_view is admitted only by a declared discriminator"
+  ],
+  "negative_capability_ids": [
+    "NEG.WHICH-VIEW-IS-SEMANTICALLY-ACTIVE-WITHOU",
+    "NEG.THAT-A-LAYOUT-VALID-VIEW-IS-BUSINESS-MEA",
+    "NEG.THAT-MULTIPLE-VIEWS-ARE-SIMULTANEOUSLY-T",
+    "NEG.WRITE-BACK"
+  ],
+  "byte_domains": [
+    "shared storage region -> multiple decoded views + declared-or-refused active view"
+  ],
+  "lie_prevented": [
+    "'this REDEFINES decodes cleanly, therefore it is the record' -- LAYOUT.REDEFINES.2 proves overlapping byte VIEWS, not which view is active; active_view is admitted only by a declared discriminator"
+  ],
+  "damage_if_overclaimed": "promoting a layout-valid overlay (a loan view over an account record) into truth misreads the entire record",
+  "replay": {
+    "command": "the shim's own REDEFINES layout (overlapping offsets) + decode",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "ba84687fd0abe612c716ae440072a9d921cf1d1db323b6000fb8008edd7bbd51"
+  }
+}

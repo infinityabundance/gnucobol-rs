@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 285,
+  "count": 294,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -2536,6 +2536,61 @@
       ]
     },
     {
+      "id": "NEG.REDEFINES.ACTIVE_VIEW_NOT_INFERRED",
+      "surface": "which REDEFINES view is semantically active inferred",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "active_view stays claimed:false unless a declared discriminator admits it",
+      "risk_if_guessed": "promoting a layout-valid overlay into truth",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.REDEFINES.DISCRIMINATOR_REQUIRED",
+      "surface": "an active view without a declared discriminator",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "active view requires a declared discriminator/profile; unknown -> false",
+      "risk_if_guessed": "guessing the active view",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.REDEFINES.LAYOUT_VALID_NOT_BUSINESS_MEANING",
+      "surface": "a layout-valid view treated as business-meaningful",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "byte_view_truth only; business_meaning claimed:false",
+      "risk_if_guessed": "trusting a valid overlay as the meaning",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.REDEFINES.MULTI_VIEW_TRUTH_NOT_CLAIMED",
+      "surface": "multiple overlapping views treated as simultaneously true",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "views are alternative byte interpretations of the SAME bytes",
+      "risk_if_guessed": "double-reading shared storage as multiple records",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.REDEFINES.WRITE_BACK_NOT_CLAIMED",
+      "surface": "a decoded view treated as a write-back",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "decode/evidence only",
+      "risk_if_guessed": "mutating shared storage on a view",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
       "id": "NEG.REGULATORY-COMPLIANCE",
       "surface": "regulatory compliance",
       "status": "not_admitted_fail_closed",
@@ -2980,6 +3035,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-A-LAYOUT-VALID-VIEW-IS-BUSINESS-MEA",
+      "surface": "that a layout-valid view is business-meaningful",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
       "id": "NEG.THAT-A-MATCH-IS-CORRECTNESS",
       "surface": "that a match is correctness",
       "status": "not_admitted_fail_closed",
@@ -2999,6 +3065,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.THAT-MULTIPLE-VIEWS-ARE-SIMULTANEOUSLY-T",
+      "surface": "that multiple views are simultaneously true",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
       ]
     },
     {
@@ -3175,6 +3252,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.WHICH-VIEW-IS-SEMANTICALLY-ACTIVE-WITHOU",
+      "surface": "which view is semantically active (without a declared discriminator)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.WRITE-BACK",
+      "surface": "write-back",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.LAYOUT.REDEFINES.2"
       ]
     }
   ]

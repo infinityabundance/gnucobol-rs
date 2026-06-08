@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-42-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-42-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-43-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-43-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
@@ -82,6 +82,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `KOBOLD.BENCH.2` | parity-gated end-to-end scalar benchmark | ✅ pass | [`reports/casefiles/KOBOLD.BENCH.2/`](reports/casefiles/KOBOLD.BENCH.2/) |
 | `KOBOLD.ENTERPRISE.2` | Rust-native signed attestation verification (DSSE/ed25519) | ✅ pass | [`reports/casefiles/KOBOLD.ENTERPRISE.2/`](reports/casefiles/KOBOLD.ENTERPRISE.2/) |
 | `KOBOLD.PERF.2` | deterministic multithreaded pipeline + per-stage profiling | ✅ pass | [`reports/casefiles/KOBOLD.PERF.2/`](reports/casefiles/KOBOLD.PERF.2/) |
+| `KOBOLD.LAYOUT.REDEFINES.2` | overlapping REDEFINES view manifest | ✅ pass | [`reports/casefiles/KOBOLD.LAYOUT.REDEFINES.2/`](reports/casefiles/KOBOLD.LAYOUT.REDEFINES.2/) |
 | `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.3/`](reports/casefiles/KOBOLD.DATA.3/) |
 | `KOBOLD.DATA.4` | edited-picture decode composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.4/`](reports/casefiles/KOBOLD.DATA.4/) |
 | `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.5/`](reports/casefiles/KOBOLD.DATA.5/) |

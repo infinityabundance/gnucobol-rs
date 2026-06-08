@@ -259,6 +259,18 @@ SIZEERR = [
 for (i, s2, g, r) in SIZEERR:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["SIZE.ERROR.ATLAS.1"]}
+
+# KOBOLD.LAYOUT.REDEFINES.2 — overlapping byte VIEWS, never the active view unless declared.
+REDEF = [
+ ("NEG.REDEFINES.ACTIVE_VIEW_NOT_INFERRED", "which REDEFINES view is semantically active inferred", "active_view stays claimed:false unless a declared discriminator admits it", "promoting a layout-valid overlay into truth"),
+ ("NEG.REDEFINES.LAYOUT_VALID_NOT_BUSINESS_MEANING", "a layout-valid view treated as business-meaningful", "byte_view_truth only; business_meaning claimed:false", "trusting a valid overlay as the meaning"),
+ ("NEG.REDEFINES.MULTI_VIEW_TRUTH_NOT_CLAIMED", "multiple overlapping views treated as simultaneously true", "views are alternative byte interpretations of the SAME bytes", "double-reading shared storage as multiple records"),
+ ("NEG.REDEFINES.DISCRIMINATOR_REQUIRED", "an active view without a declared discriminator", "active view requires a declared discriminator/profile; unknown -> false", "guessing the active view"),
+ ("NEG.REDEFINES.WRITE_BACK_NOT_CLAIMED", "a decoded view treated as a write-back", "decode/evidence only", "mutating shared storage on a view"),
+]
+for (i, s2, g, r) in REDEF:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.LAYOUT.REDEFINES.2"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

@@ -599,6 +599,20 @@
       "readiness": 2,
       "lie_prevented": "'KOBOLD arithmetic handles ON SIZE ERROR like GnuCOBOL' -- SIZE.ERROR.ATLAS.1 only OBSERVES whether the receiver is written/preserved and whether size error is signaled; it implements no control flow",
       "damage_if_overclaimed": "assuming a money field was preserved (or written) on overflow when it was the opposite silently corrupts financial data"
+    },
+    {
+      "id": "KOBOLD.LAYOUT.REDEFINES.2",
+      "name": "overlapping REDEFINES view manifest",
+      "proven": "records explicit overlapping byte VIEWS created by REDEFINES: which fields share storage (offset/length/raw_sha256), each view decoded INDEPENDENTLY over the SAME bytes, and whether an active view was declared by a discriminator; active_view stays claimed:false by default and is admitted only by a declared discriminator (unknown -> false)",
+      "byte_domain": "shared storage region -> multiple decoded views + declared-or-refused active view",
+      "oracle": "the shim's own REDEFINES layout (overlapping offsets) + decode",
+      "fixtures": "tests/redefines.rs (4: overlapping views + active_view false by default, deterministic+shared raw hash, declared discriminator admits active view, unknown discriminator keeps it false)",
+      "sealed_version": "kobold 0.6.4",
+      "not_proven": "which view is semantically active (without a declared discriminator); that a layout-valid view is business-meaningful; that multiple views are simultaneously true; write-back",
+      "breaks_claim": "inferring the active view; treating a valid overlay as business meaning; double-reading shared storage as multiple simultaneous records",
+      "readiness": 3,
+      "lie_prevented": "'this REDEFINES decodes cleanly, therefore it is the record' -- LAYOUT.REDEFINES.2 proves overlapping byte VIEWS, not which view is active; active_view is admitted only by a declared discriminator",
+      "damage_if_overclaimed": "promoting a layout-valid overlay (a loan view over an account record) into truth misreads the entire record"
     }
   ],
   "transform_vs_read": {

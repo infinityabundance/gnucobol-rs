@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/KOBOLD.LAYOUT.REDEFINES.2/casefile.json",
+      "digest": {
+        "sha256": "5238bcb18b7a2c87706ef26ffdf98775262b80ce185a70ad50037562ac3d7838"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "KOBOLD.LAYOUT.REDEFINES.2",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "kobold 0.6.4",
+    "verdict": "pass",
+    "replay": {
+      "command": "the shim's own REDEFINES layout (overlapping offsets) + decode",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "f208fa3c30d09c6dcd84e8e2bb136d0d633fb5982d05a16db73ae21720503b29",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 5
+  }
+}
