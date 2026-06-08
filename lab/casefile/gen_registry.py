@@ -300,6 +300,21 @@ DATEP = [
 for (i, s2, g, r) in DATEP:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.DATE.PROFILE.1"]}
+
+# KOBOLD.CURRENCY.PROFILE.1 — declared currency/amount profile; no money inference.
+CURP = [
+ ("NEG.CURRENCY.V99_NOT_MONEY", "a PIC V99 field treated as money without a declared profile", "only declared amount fields are admitted; V99 scale alone is no money claim", "summing a V99 rate/id as money"),
+ ("NEG.CURRENCY.MINOR_UNIT_NOT_INFERRED", "the minor-unit scale inferred from PIC", "scale comes from the declared profile, compared to observed", "assuming 2 decimals for a 0/3-decimal currency"),
+ ("NEG.CURRENCY.CODE_NOT_LEGAL_TENDER_TRUTH", "a currency-code field treated as legal-tender truth", "the code is preserved as EVIDENCE only; legal_tender:false", "trusting a code as the legal currency"),
+ ("NEG.CURRENCY.FX_CONVERSION_NOT_CLAIMED", "FX conversion claimed", "out of scope", "converting across currencies"),
+ ("NEG.CURRENCY.ROUNDING_POLICY_NOT_CLAIMED", "a rounding policy claimed", "out of scope", "assuming half-up/banker's rounding"),
+ ("NEG.CURRENCY.SIGN_NOT_POLARITY", "a numeric sign treated as debit/credit polarity", "sign is not polarity; BANK.2 owns the side", "deriving DR/CR from a minus sign"),
+ ("NEG.CURRENCY.RATE_NOT_AMOUNT", "a rate/percent field admitted as money", "role!=amount -> not admitted as money", "summing a rate into a money total"),
+ ("NEG.CURRENCY.BUSINESS_VALUE_NOT_CLAIMED", "a validated amount treated as business value", "amount_scale_evidence only; business_value:false", "trusting a decoded amount as the real value"),
+]
+for (i, s2, g, r) in CURP:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.CURRENCY.PROFILE.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 324,
+  "count": 340,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -45,6 +45,17 @@
       ]
     },
     {
+      "id": "NEG.A-DECODED-AMOUNT-BUSINESS-VALUE",
+      "surface": "a decoded amount = business value",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.A-HASH-BEING-THE-BUSINESS-VALUE",
       "surface": "a hash being the business value",
       "status": "not_admitted_fail_closed",
@@ -75,6 +86,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SENTINEL.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.A-RATE-AN-AMOUNT",
+      "surface": "a rate = an amount",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
       ]
     },
     {
@@ -836,6 +858,17 @@
       ]
     },
     {
+      "id": "NEG.CURRENCY-CODE-LEGAL-TENDER",
+      "surface": "currency code = legal tender",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.CURRENCY-MINOR-UNIT-CORRECTNESS",
       "surface": "currency minor-unit correctness",
       "status": "not_admitted_fail_closed",
@@ -847,6 +880,72 @@
       ]
     },
     {
+      "id": "NEG.CURRENCY.BUSINESS_VALUE_NOT_CLAIMED",
+      "surface": "a validated amount treated as business value",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "amount_scale_evidence only; business_value:false",
+      "risk_if_guessed": "trusting a decoded amount as the real value",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.CODE_NOT_LEGAL_TENDER_TRUTH",
+      "surface": "a currency-code field treated as legal-tender truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the code is preserved as EVIDENCE only; legal_tender:false",
+      "risk_if_guessed": "trusting a code as the legal currency",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.FX_CONVERSION_NOT_CLAIMED",
+      "surface": "FX conversion claimed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "converting across currencies",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.MINOR_UNIT_NOT_INFERRED",
+      "surface": "the minor-unit scale inferred from PIC",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "scale comes from the declared profile, compared to observed",
+      "risk_if_guessed": "assuming 2 decimals for a 0/3-decimal currency",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.RATE_NOT_AMOUNT",
+      "surface": "a rate/percent field admitted as money",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "role!=amount -> not admitted as money",
+      "risk_if_guessed": "summing a rate into a money total",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.ROUNDING_POLICY_NOT_CLAIMED",
+      "surface": "a rounding policy claimed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "assuming half-up/banker's rounding",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.CURRENCY.SCALE",
       "surface": "a copybook scale (V99) treated as currency minor-unit correctness",
       "status": "not_admitted_requires_declared_profile",
@@ -855,6 +954,28 @@
       "owning_future_campaign": "CURRENCY.PROFILE.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.SIGN_NOT_POLARITY",
+      "surface": "a numeric sign treated as debit/credit polarity",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "sign is not polarity; BANK.2 owns the side",
+      "risk_if_guessed": "deriving DR/CR from a minus sign",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENCY.V99_NOT_MONEY",
+      "surface": "a PIC V99 field treated as money without a declared profile",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "only declared amount fields are admitted; V99 scale alone is no money claim",
+      "risk_if_guessed": "summing a V99 rate/id as money",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
       ]
     },
     {
@@ -1690,6 +1811,17 @@
       ]
     },
     {
+      "id": "NEG.FX-CONVERSION",
+      "surface": "FX conversion",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.GAP-DETECTION-WITHOUT-A-DECLARED-CONTIGU",
       "surface": "gap detection without a declared-contiguous sequence",
       "status": "not_admitted_fail_closed",
@@ -1944,6 +2076,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.MINOR-UNIT-INFERRED-FROM-PIC",
+      "surface": "minor-unit inferred from PIC",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
       ]
     },
     {
@@ -2867,6 +3010,17 @@
       ]
     },
     {
+      "id": "NEG.ROUNDING-POLICY",
+      "surface": "rounding policy",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.RUNTIME-VALIDATION",
       "surface": "runtime validation",
       "status": "not_admitted_fail_closed",
@@ -3097,6 +3251,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.SIGN-POLARITY",
+      "surface": "sign = polarity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
       ]
     },
     {
@@ -3483,6 +3648,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.V99-MONEY",
+      "surface": "V99 = money",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.CURRENCY.PROFILE.1"
       ]
     },
     {
