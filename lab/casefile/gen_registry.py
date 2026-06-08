@@ -195,6 +195,31 @@ seen["NEG.PLATFORM.RUNTIME_NOT_CLAIMED"] = {"id": "NEG.PLATFORM.RUNTIME_NOT_CLAI
     "status": "not_admitted_fail_closed", "guard": "P-platform-axis lists platforms as a curated axis; no platform runtime court is admitted",
     "risk_if_guessed": "assuming a platform's runtime behavior (file I/O, EBCDIC, sort, sign) without an oracle",
     "owning_future_campaign": None, "evidence": ["archaeology/atlases/P-platform-axis"]}
+
+# KOBOLD.DIFF.1 declared-target comparison refusals.
+DIFF = [
+ ("NEG.DIFF.MATCH_NOT_BUSINESS_TRUTH", "a diff MATCH treated as business truth/correctness", "a match proves equality to the declared target under selected rules only", "trusting a matched diff as a correct result"),
+ ("NEG.DIFF.EXPECTED_OUTPUT_NOT_ORACLE", "a declared expected artifact treated as an oracle", "oracle_status defaults to not_oracle; never an oracle unless declared by a stronger authority", "treating a golden/previous-run as ground truth"),
+ ("NEG.DIFF.SYSTEM_OF_RECORD_NOT_VALIDATED", "a system-of-record export treated as validated truth", "system_of_record_export_unvalidated is explicit; not validated", "trusting an unvalidated SoR export"),
+ ("NEG.DIFF.NO_LEDGER_ACCEPTANCE", "a diff match treated as ledger acceptance", "out of scope", "posting on a diff match"),
+ ("NEG.DIFF.NO_SETTLEMENT_FINALITY", "a diff match treated as settlement finality", "out of scope", "treating a match as final"),
+ ("NEG.DIFF.NO_CUSTOMER_APPROVAL", "a diff match treated as customer approval", "out of scope", "claiming approval from a match"),
+]
+for (i, s2, g, r) in DIFF:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.DIFF.1"]}
+
+# Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
+ECO = [
+ ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),
+ ("NEG.COBOL.NIST_CONFORMANCE", "NIST COBOL-85 language conformance claimed", "KOBOLD claims selected fixed-record DATA-court conformance under admitted witnesses, not language conformance", "implying NIST/compiler conformance"),
+ ("NEG.FFI.C_API_PARITY", "COBOL<->C FFI / API-boundary parity claimed (the SuperBOL/translator lane)", "KOBOLD is a data-evidence layer, not a translator/FFI checker", "assuming generated-C / FFI behavior"),
+ ("NEG.IDE.LSP_PARSER", "a full COBOL parser / LSP / IDE navigation claimed (the SuperBOL lane)", "KOBOLD emits evidence artifacts an IDE COULD consume; it is not the parser/editor", "treating KOBOLD as a language server"),
+ ("NEG.DIALECT.IMPLICIT", "a court witness called 'COBOL' in the abstract rather than GnuCOBOL 3.2 under a declared dialect", "dialect profile is EVIDENCE, not metadata; every witness names its dialect/profile", "saying 'COBOL says' when the witness is one dialect"),
+]
+for (i, s2, g, r) in ECO:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["archaeology/ATLAS.md"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

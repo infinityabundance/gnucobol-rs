@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-38-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-38-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-39-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-39-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -178,6 +178,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `KOBOLD.PRIVACY.REDACTION.1` | declared evidence-preserving redaction | ✅ pass | [`reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/`](reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/) |
 | `KOBOLD.PERF.1` | gated record-level Rayon (byte-identical to scalar) | ✅ pass | [`reports/casefiles/KOBOLD.PERF.1/`](reports/casefiles/KOBOLD.PERF.1/) |
 | `KOBOLD.BANK.RECONCILE.1` | opinionated generated banking reconciliation VIEW | ✅ pass | [`reports/casefiles/KOBOLD.BANK.RECONCILE.1/`](reports/casefiles/KOBOLD.BANK.RECONCILE.1/) |
+| `KOBOLD.DIFF.1` | structural diff against a declared expected artifact | ✅ pass | [`reports/casefiles/KOBOLD.DIFF.1/`](reports/casefiles/KOBOLD.DIFF.1/) |
 | `KOBOLD.DATA.2` | binary fields in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.2/`](reports/casefiles/KOBOLD.DATA.2/) |
 | `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | ✅ pass | [`reports/casefiles/KOBOLD.BANK.2/`](reports/casefiles/KOBOLD.BANK.2/) |
 | `KOBOLD.RECON.2` | declared transformed-record reconciliation | ✅ pass | [`reports/casefiles/KOBOLD.RECON.2/`](reports/casefiles/KOBOLD.RECON.2/) |

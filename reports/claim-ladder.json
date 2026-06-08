@@ -543,6 +543,20 @@
       "readiness": 3,
       "lie_prevented": "'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth",
       "damage_if_overclaimed": "an operator acting on a matched VIEW as if it were ledger acceptance posts or finalizes a batch on a summary, not a decision"
+    },
+    {
+      "id": "KOBOLD.DIFF.1",
+      "name": "structural diff against a declared expected artifact",
+      "proven": "structural comparison of KOBOLD output against a DECLARED expected artifact over selected dimensions (field values, audit hashes, finding-id set, control totals): exact match passes; field/missing/extra/finding-set/control-total/hash drift each emit a named finding; deterministic; the target is NEVER called an oracle unless oracle_status permits (default not_oracle)",
+      "byte_domain": "actual vs declared-expected artifact -> named structural-diff findings + SARIF",
+      "oracle": "the DECLARED target (oracle_status gated; default not_oracle -- not an oracle)",
+      "fixtures": "tests/diff.rs (6: identical-passes+target-not-oracle, field/missing/extra, finding-set+control+hash drift, admitted-oracle claims authority, deterministic, allowed_comparisons gate)",
+      "sealed_version": "kobold 0.6.4",
+      "not_proven": "business truth/correctness; the target being an oracle (unless declared); validated system-of-record truth; ledger acceptance; settlement finality; customer approval",
+      "breaks_claim": "treating a diff match as correctness/oracle/ledger/settlement/approval; calling the target an oracle when oracle_status forbids",
+      "readiness": 3,
+      "lie_prevented": "'KOBOLD output matches the expected file, therefore the old system was correct' -- DIFF.1 proves equality to a DECLARED target under selected rules, nothing more",
+      "damage_if_overclaimed": "a matched diff sold as correctness/approval ratifies a wrong legacy system or an unvalidated export as truth"
     }
   ],
   "transform_vs_read": {

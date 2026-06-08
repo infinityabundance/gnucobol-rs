@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 237,
+  "count": 252,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -570,6 +570,17 @@
       ]
     },
     {
+      "id": "NEG.BUSINESS-TRUTH-CORRECTNESS",
+      "surface": "business truth/correctness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
       "id": "NEG.CICS.HANDLE.CONTROL",
       "surface": "CICS control-flow / error-handling semantics inferred from a data copybook",
       "status": "not_admitted_requires_declared_profile",
@@ -589,6 +600,28 @@
       "owning_future_campaign": "KOBOLD.CICS.ATLAS.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.COBOL.NIST_CONFORMANCE",
+      "surface": "NIST COBOL-85 language conformance claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "KOBOLD claims selected fixed-record DATA-court conformance under admitted witnesses, not language conformance",
+      "risk_if_guessed": "implying NIST/compiler conformance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "archaeology/ATLAS.md"
+      ]
+    },
+    {
+      "id": "NEG.COBOL.OBJECTS_MESSAGES",
+      "surface": "COBOL object/message (OO) semantics admitted by a data court",
+      "status": "not_admitted_fail_closed",
+      "guard": "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses",
+      "risk_if_guessed": "decoding/inferring object or message state",
+      "owning_future_campaign": null,
+      "evidence": [
+        "archaeology/ATLAS.md"
       ]
     },
     {
@@ -770,6 +803,17 @@
       ]
     },
     {
+      "id": "NEG.CUSTOMER-APPROVAL",
+      "surface": "customer approval",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
       "id": "NEG.CUSTOMER-DATA-COVERAGE",
       "surface": "customer-data coverage",
       "status": "not_admitted_fail_closed",
@@ -923,6 +967,83 @@
       "evidence": [
         "GNURUST.18",
         "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT.IMPLICIT",
+      "surface": "a court witness called 'COBOL' in the abstract rather than GnuCOBOL 3.2 under a declared dialect",
+      "status": "not_admitted_fail_closed",
+      "guard": "dialect profile is EVIDENCE, not metadata; every witness names its dialect/profile",
+      "risk_if_guessed": "saying 'COBOL says' when the witness is one dialect",
+      "owning_future_campaign": null,
+      "evidence": [
+        "archaeology/ATLAS.md"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.EXPECTED_OUTPUT_NOT_ORACLE",
+      "surface": "a declared expected artifact treated as an oracle",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "oracle_status defaults to not_oracle; never an oracle unless declared by a stronger authority",
+      "risk_if_guessed": "treating a golden/previous-run as ground truth",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.MATCH_NOT_BUSINESS_TRUTH",
+      "surface": "a diff MATCH treated as business truth/correctness",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a match proves equality to the declared target under selected rules only",
+      "risk_if_guessed": "trusting a matched diff as a correct result",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.NO_CUSTOMER_APPROVAL",
+      "surface": "a diff match treated as customer approval",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "claiming approval from a match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.NO_LEDGER_ACCEPTANCE",
+      "surface": "a diff match treated as ledger acceptance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "posting on a diff match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.NO_SETTLEMENT_FINALITY",
+      "surface": "a diff match treated as settlement finality",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "treating a match as final",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.SYSTEM_OF_RECORD_NOT_VALIDATED",
+      "surface": "a system-of-record export treated as validated truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "system_of_record_export_unvalidated is explicit; not validated",
+      "risk_if_guessed": "trusting an unvalidated SoR export",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
       ]
     },
     {
@@ -1303,6 +1424,17 @@
       ]
     },
     {
+      "id": "NEG.FFI.C_API_PARITY",
+      "surface": "COBOL<->C FFI / API-boundary parity claimed (the SuperBOL/translator lane)",
+      "status": "not_admitted_fail_closed",
+      "guard": "KOBOLD is a data-evidence layer, not a translator/FFI checker",
+      "risk_if_guessed": "assuming generated-C / FFI behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "archaeology/ATLAS.md"
+      ]
+    },
+    {
       "id": "NEG.FIGURATIVE.SENTINEL",
       "surface": "LOW-VALUES / HIGH-VALUES / ZEROES / SPACES in raw records given sentinel meaning",
       "status": "not_admitted_requires_declared_profile",
@@ -1379,6 +1511,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.IDE.LSP_PARSER",
+      "surface": "a full COBOL parser / LSP / IDE navigation claimed (the SuperBOL lane)",
+      "status": "not_admitted_fail_closed",
+      "guard": "KOBOLD emits evidence artifacts an IDE COULD consume; it is not the parser/editor",
+      "risk_if_guessed": "treating KOBOLD as a language server",
+      "owning_future_campaign": null,
+      "evidence": [
+        "archaeology/ATLAS.md"
       ]
     },
     {
@@ -1468,7 +1611,8 @@
       "evidence": [
         "KOBOLD.RECON.2",
         "KOBOLD.POSTING.1",
-        "KOBOLD.BANK.RECONCILE.1"
+        "KOBOLD.BANK.RECONCILE.1",
+        "KOBOLD.DIFF.1"
       ]
     },
     {
@@ -2355,7 +2499,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.POSTING.1",
-        "KOBOLD.BANK.RECONCILE.1"
+        "KOBOLD.BANK.RECONCILE.1",
+        "KOBOLD.DIFF.1"
       ]
     },
     {
@@ -2558,6 +2703,17 @@
       ]
     },
     {
+      "id": "NEG.THE-TARGET-BEING-AN-ORACLE-UNLESS-DECLAR",
+      "surface": "the target being an oracle (unless declared)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
       "id": "NEG.TRANSACTION-CODE-TABLE-UNLESS-DECLARED",
       "surface": "transaction-code table unless declared",
       "status": "not_admitted_fail_closed",
@@ -2610,6 +2766,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.VALIDATED-SYSTEM-OF-RECORD-TRUTH",
+      "surface": "validated system-of-record truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
       ]
     },
     {

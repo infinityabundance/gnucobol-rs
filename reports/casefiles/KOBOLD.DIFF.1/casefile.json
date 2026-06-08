@@ -1,0 +1,65 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.DIFF.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.4",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "015f93fd16229856b27a3a01bc2bd7d5d2be947b5b5d14d88fe2fa831436009a",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the DECLARED target (oracle_status gated; default not_oracle -- not an oracle)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/diff.rs (6: identical-passes+target-not-oracle, field/missing/extra, finding-set+control+hash drift, admitted-oracle claims authority, deterministic, allowed_comparisons gate)"
+  },
+  "positive_claims": [
+    "structural comparison of KOBOLD output against a DECLARED expected artifact over selected dimensions (field values, audit hashes, finding-id set, control totals): exact match passes",
+    "field/missing/extra/finding-set/control-total/hash drift each emit a named finding",
+    "deterministic",
+    "the target is NEVER called an oracle unless oracle_status permits (default not_oracle)"
+  ],
+  "negative_claims": [
+    "business truth/correctness",
+    "the target being an oracle (unless declared)",
+    "validated system-of-record truth",
+    "ledger acceptance",
+    "settlement finality",
+    "customer approval",
+    "lie prevented: 'KOBOLD output matches the expected file, therefore the old system was correct' -- DIFF.1 proves equality to a DECLARED target under selected rules, nothing more"
+  ],
+  "negative_capability_ids": [
+    "NEG.BUSINESS-TRUTH-CORRECTNESS",
+    "NEG.THE-TARGET-BEING-AN-ORACLE-UNLESS-DECLAR",
+    "NEG.VALIDATED-SYSTEM-OF-RECORD-TRUTH",
+    "NEG.LEDGER-ACCEPTANCE",
+    "NEG.SETTLEMENT-FINALITY",
+    "NEG.CUSTOMER-APPROVAL"
+  ],
+  "byte_domains": [
+    "actual vs declared-expected artifact -> named structural-diff findings + SARIF"
+  ],
+  "lie_prevented": [
+    "'KOBOLD output matches the expected file, therefore the old system was correct' -- DIFF.1 proves equality to a DECLARED target under selected rules, nothing more"
+  ],
+  "damage_if_overclaimed": "a matched diff sold as correctness/approval ratifies a wrong legacy system or an unvalidated export as truth",
+  "replay": {
+    "command": "the DECLARED target (oracle_status gated; default not_oracle -- not an oracle)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "3c120bb3713134f9a03196c10ea15c57238626cfe63c3c778f32b2a033fab290"
+  }
+}
