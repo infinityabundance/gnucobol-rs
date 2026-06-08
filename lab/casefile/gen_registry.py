@@ -184,6 +184,8 @@ BANKREC = [
  ("NEG.BANK_RECONCILE.NOT_BUSINESS_APPROVAL", "the view treated as business approval/sign-off", "out of scope", "claiming approval never given"),
  ("NEG.BANK_RECONCILE.VIEW_NOT_NEW_EVIDENCE", "the view treated as new evidence rather than a summary", "introduces_new_evidence:false; every number is from a court struct", "double-counting a summary as fresh proof"),
  ("NEG.BANK_RECONCILE.MATCH_NOT_CORRECTNESS", "a declared-vs-observed MATCH treated as business correctness", "a match proves equality to the DECLARED totals, not correctness", "trusting a balanced file as a correct file"),
+ ("NEG.BANK_RECONCILE.SOURCE_CASEFILE_REQUIRED", "a reconciliation view without its named source casefiles", "the view binds BANK.1/2 + POSTING.1 (+ DB2HOST.1/EXTRACT/PRIVACY) source casefiles by sha256", "a view with no provable source evidence"),
+ ("NEG.BANK_RECONCILE.SOURCE_HASH_MISMATCH", "a view whose source sha256 no longer matches the on-disk casefile", "source_evidence pins each source by sha; a verifier fails on mismatch", "a stale view over changed evidence"),
 ]
 for (i, s, g, r) in BANKREC:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,

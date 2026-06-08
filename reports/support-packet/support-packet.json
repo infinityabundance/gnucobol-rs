@@ -29,14 +29,14 @@
       "path": "reports/claim-ladder.json",
       "kind": "machine_spine",
       "present": true,
-      "sha256": "6060e4e32134c63390d8e9e9ff37802ddca67c21b560086ad896bb7d7acdd0ee"
+      "sha256": "81db59fda3b7ad85c23c1dafd5a73c0df04ae72a84f3445b587ac7df1b0841c6"
     },
     {
       "id": "negative_capabilities",
       "path": "reports/negative-capabilities.json",
       "kind": "refusal_registry",
       "present": true,
-      "sha256": "392c75bf317a351ff1524ee66582c4105d4ebb52850f53e8b739e8df228f4dcb"
+      "sha256": "6aa7ba695e4d9c33f4810ff6ef70f832e77a4b8d0632a229d8ff8bb64e90e017"
     },
     {
       "id": "dsse_verification",
@@ -221,7 +221,7 @@
         },
         {
           "court": "KOBOLD.BANK.RECONCILE.1",
-          "casefile_sha256": "ec2cbd7279f1af0db1a33d5c46eb2062057e8199bd536e688df607b484368cc2",
+          "casefile_sha256": "1f5377a91766d9a5efe94e5bc135d081a5440181ea3e36be5042eb4efc95a746",
           "sarif": true,
           "intoto": true,
           "dsse": true

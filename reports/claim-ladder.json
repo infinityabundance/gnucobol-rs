@@ -533,16 +533,16 @@
     {
       "id": "KOBOLD.BANK.RECONCILE.1",
       "name": "opinionated generated banking reconciliation VIEW",
-      "proven": "an operator view assembled ONLY from existing court structs (BANK.1/2 summary, POSTING.1 custody, DB2HOST.1 indicators, PRIVACY redaction counts): declared-vs-observed count/debit/credit + matched/mismatch verdict, custody seq min/max/gaps/dups + last_chain_hash, db2 null/truncation counts, dirty/unsupported/unknown counts, redaction counts, and refused truth layers; aggregates the EXISTING findings into one SARIF view",
+      "proven": "an operator view assembled ONLY from existing court structs AND provably DERIVED from named, hash-pinned source casefiles (source_evidence: BANK.1/BANK.2 + POSTING.1 + DB2HOST.1 + any extra EXTRACT.PROFILE.1/PRIVACY.REDACTION.1/DIFF.1, each by sha256; derived_view:true, creates_new_truth:false): declared-vs-observed count/debit/credit + matched/mismatch verdict from banking.balanced, custody seq/gaps/dups + last_chain_hash, db2 counts, dirty/unsupported counts, redaction counts, refused truth layers; aggregates the EXISTING findings into one SARIF; a changed source casefile changes the report hash",
       "byte_domain": "existing court evidence -> generated operator report (json + md + sarif); introduces no new evidence",
       "oracle": "the court result structs themselves (no recomputation that can drift)",
       "fixtures": "tests/bank_reconcile.rs (2: matched view faithful + refuses truth; mismatch renders finding in view+SARIF)",
       "sealed_version": "kobold 0.6.3",
       "not_proven": "ledger acceptance; settlement finality; account-balance truth; business approval; that a match is correctness; that the view is new evidence",
-      "breaks_claim": "treating the view as ledger/settlement/balance/approval truth; treating a declared-vs-observed match as business correctness",
+      "breaks_claim": "treating the view as ledger/settlement/balance/approval truth; a match as business correctness; the view as new evidence; or presenting a view whose source sha no longer matches the on-disk casefile",
       "readiness": 3,
       "lie_prevented": "'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth",
-      "damage_if_overclaimed": "an operator acting on a matched VIEW as if it were ledger acceptance posts or finalizes a batch on a summary, not a decision"
+      "damage_if_overclaimed": "an operator acting on a matched VIEW as ledger acceptance posts a batch on a summary; a STALE view over changed source casefiles misreports the evidence it claims to derive from"
     },
     {
       "id": "KOBOLD.DIFF.1",

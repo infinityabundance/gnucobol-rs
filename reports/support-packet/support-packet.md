@@ -19,8 +19,8 @@
 |---|---|---|
 | `status` | [`STATUS.md`](../../STATUS.md) | `42f2d5567b826a5e…` |
 | `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `db30dca07de7d438…` |
-| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `6060e4e32134c633…` |
-| `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `392c75bf317a351f…` |
+| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `81db59fda3b7ad85…` |
+| `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `6aa7ba695e4d9c33…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `a9f4e7b159796872…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |
 | `truth_boundaries` | [`docs/truth-boundaries.md`](../../docs/truth-boundaries.md) | `7cd5389f360d8bea…` |

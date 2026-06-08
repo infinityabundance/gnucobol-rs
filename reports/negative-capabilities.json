@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 381,
+  "count": 383,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -589,6 +589,28 @@
       "status": "not_admitted_requires_declared_profile",
       "guard": "out of scope; settlement_truth claimed:false",
       "risk_if_guessed": "treating unsettled data as final",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.RECONCILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BANK_RECONCILE.SOURCE_CASEFILE_REQUIRED",
+      "surface": "a reconciliation view without its named source casefiles",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "the view binds BANK.1/2 + POSTING.1 (+ DB2HOST.1/EXTRACT/PRIVACY) source casefiles by sha256",
+      "risk_if_guessed": "a view with no provable source evidence",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BANK.RECONCILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BANK_RECONCILE.SOURCE_HASH_MISMATCH",
+      "surface": "a view whose source sha256 no longer matches the on-disk casefile",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "source_evidence pins each source by sha; a verifier fails on mismatch",
+      "risk_if_guessed": "a stale view over changed evidence",
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.RECONCILE.1"
