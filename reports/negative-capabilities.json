@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 370,
+  "count": 381,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -97,6 +97,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.A-LIVE-STATE-SNAPSHOT",
+      "surface": "a live state (snapshot)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
       ]
     },
     {
@@ -753,7 +764,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "SUPPORT-PACKET.1"
+        "SUPPORT-PACKET.1",
+        "TRUST.5"
       ]
     },
     {
@@ -1449,6 +1461,17 @@
       "status": "not_admitted_requires_declared_profile",
       "guard": "out of scope",
       "risk_if_guessed": "posting on a diff match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIFF.NO_NEW_EVIDENCE",
+      "surface": "the diff report treated as new evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a diff summarizes actual-vs-declared; it creates no new evidence",
+      "risk_if_guessed": "double-counting a diff as fresh proof",
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
@@ -2268,6 +2291,17 @@
       ]
     },
     {
+      "id": "NEG.NEW-TRUTH",
+      "surface": "new truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
+      ]
+    },
+    {
       "id": "NEG.NEW-TRUTH-EVIDENCE",
       "surface": "new truth/evidence",
       "status": "not_admitted_fail_closed",
@@ -2419,6 +2453,39 @@
       "owning_future_campaign": null,
       "evidence": [
         "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.OPERATOR.DIRTY_NOT_REPAIRED",
+      "surface": "dirty data in dirty-mode treated as repaired/clean",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "dirty bytes are preserved as evidence, never coerced",
+      "risk_if_guessed": "trusting dirty data as clean",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.OPERATOR.NOT_BUSINESS_TRUTH",
+      "surface": "an operator view treated as business truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "provenance/totals are record-level evidence, not business truth",
+      "risk_if_guessed": "acting on a view as reality",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.OPERATOR.NO_NEW_EVIDENCE",
+      "surface": "an operator view (explain/totals) treated as new evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it is a view over the sealed-court decode; creates no new evidence",
+      "risk_if_guessed": "double-counting a view as proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.OPERATOR.1"
       ]
     },
     {
@@ -3775,6 +3842,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-CLASS-IS-A-QUALITY-SCORE",
+      "surface": "that class is a quality score",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
+      ]
+    },
+    {
       "id": "NEG.THAT-MULTIPLE-VIEWS-ARE-SIMULTANEOUSLY-T",
       "surface": "that multiple views are simultaneously true",
       "status": "not_admitted_fail_closed",
@@ -3926,6 +4004,50 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.TRUST5.AUDIT_NOT_CERTIFICATION",
+      "surface": "the audit treated as a certification",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it proves each court CAN FAIL; it is not a certificate",
+      "risk_if_guessed": "claiming certified status",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
+      ]
+    },
+    {
+      "id": "NEG.TRUST5.CLASS_NOT_QUALITY_SCORE",
+      "surface": "the A/B/C/D class treated as a quality score",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "class is evidence-shape (oracle/composed/view/staged), not quality",
+      "risk_if_guessed": "ranking courts by class",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
+      ]
+    },
+    {
+      "id": "NEG.TRUST5.NO_NEW_TRUTH",
+      "surface": "the audit treated as new truth/evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it re-derives from existing evidence; creates nothing",
+      "risk_if_guessed": "double-counting the audit as proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
+      ]
+    },
+    {
+      "id": "NEG.TRUST5.SNAPSHOT_NOT_LIVE",
+      "surface": "the audit treated as a live state",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "snapshot at generation; STATUS/claim-ladder are live",
+      "risk_if_guessed": "trusting a stale audit",
+      "owning_future_campaign": null,
+      "evidence": [
+        "TRUST.5"
       ]
     },
     {

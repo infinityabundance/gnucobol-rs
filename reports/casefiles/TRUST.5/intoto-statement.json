@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/TRUST.5/casefile.json",
+      "digest": {
+        "sha256": "aa857782645c5f683a37654abde0c8c756e4d8b86be562bb656f08ab38ead3d4"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "TRUST.5",
+    "kind": "court-casefile",
+    "crate": "kobold-data-shim",
+    "crate_version": "governance (gnucobol-rs lab)",
+    "verdict": "pass",
+    "replay": {
+      "command": "the claim-ladder + casefiles + receipts + negative-capabilities (re-audit equality)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "bc628ce150c7926c3ebc3f6c973ddfc31a7f18417c1443423b757a5554142587",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 5
+  }
+}

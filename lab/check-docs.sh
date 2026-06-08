@@ -206,6 +206,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "DIALECT.PROFILE.1: dialect profile drift"; cat /tmp/_dial_check
   fi
+  if python3 "$ROOT/lab/trust5/run.py" check >/tmp/_t5_check 2>&1; then
+    note "TRUST.5: anti-ceremony audit fresh; no class-F court; views are no-new-truth"
+  else
+    bad "TRUST.5: anti-ceremony audit failure"; cat /tmp/_t5_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

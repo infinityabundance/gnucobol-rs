@@ -697,6 +697,20 @@
       "readiness": 3,
       "lie_prevented": "'KOBOLD is the IDE/LSP/parser' / 'the export is the source of truth' -- TOOLING.EXPORT.1 is a downstream evidence MAP an IDE could consume; it is not the tool and creates no new truth",
       "damage_if_overclaimed": "a downstream tool trusting the export as authoritative (or leaking redacted data) bypasses the courts and the redaction policy"
+    },
+    {
+      "id": "TRUST.5",
+      "name": "anti-ceremony audit (every court can fail)",
+      "proven": "classifies every claim-ladder court (A hard oracle/byte, B composed fail-closed, C view, D staged, F ceremonial) and gates that NO court is class F: each court must be generated from named evidence, carry a concrete drift/mutation detector (oracle sweep, fixture, or regenerate-and-compare), create no new truth (every VIEW court has a no-new-truth refusal), have damage_if_overclaimed + negatives>=positives; the audit itself re-derives and fails on stale/hand-edit",
+      "byte_domain": "every court -> {class, can_fail proof, no-new-truth, neg>=pos}; F-set must be empty",
+      "oracle": "the claim-ladder + casefiles + receipts + negative-capabilities (re-audit equality)",
+      "fixtures": "lab/trust5/run.py audit/check (A=16 B=28 C=5 D=0 F=0; gates F-empty + view no-new-truth + audit freshness)",
+      "sealed_version": "governance (gnucobol-rs lab)",
+      "not_proven": "certification; that class is a quality score; a live state (snapshot); new truth",
+      "breaks_claim": "a ceremonial court (class F) existing; a view court creating new truth; the audit going stale without detection",
+      "readiness": 3,
+      "lie_prevented": "'all these courts are real' -- TRUST.5 forces each court to PROVE it can fail (corrupt its evidence -> a gate goes red), and refuses to let a prose-only court count as a court",
+      "damage_if_overclaimed": "presenting the audit as certification/compliance, or its class letters as a quality score, manufactures assurance the courts do not provide"
     }
   ],
   "transform_vs_read": {

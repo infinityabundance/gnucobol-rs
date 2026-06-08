@@ -1,0 +1,61 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "TRUST.5",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "governance (gnucobol-rs lab)",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "bc628ce150c7926c3ebc3f6c973ddfc31a7f18417c1443423b757a5554142587",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the claim-ladder + casefiles + receipts + negative-capabilities (re-audit equality)",
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "lab/trust5/run.py audit/check (A=16 B=28 C=5 D=0 F=0; gates F-empty + view no-new-truth + audit freshness)"
+  },
+  "positive_claims": [
+    "classifies every claim-ladder court (A hard oracle/byte, B composed fail-closed, C view, D staged, F ceremonial) and gates that NO court is class F: each court must be generated from named evidence, carry a concrete drift/mutation detector (oracle sweep, fixture, or regenerate-and-compare), create no new truth (every VIEW court has a no-new-truth refusal), have damage_if_overclaimed + negatives>=positives",
+    "the audit itself re-derives and fails on stale/hand-edit"
+  ],
+  "negative_claims": [
+    "certification",
+    "that class is a quality score",
+    "a live state (snapshot)",
+    "new truth",
+    "lie prevented: 'all these courts are real' -- TRUST.5 forces each court to PROVE it can fail (corrupt its evidence -> a gate goes red), and refuses to let a prose-only court count as a court"
+  ],
+  "negative_capability_ids": [
+    "NEG.CERTIFICATION",
+    "NEG.THAT-CLASS-IS-A-QUALITY-SCORE",
+    "NEG.A-LIVE-STATE-SNAPSHOT",
+    "NEG.NEW-TRUTH"
+  ],
+  "byte_domains": [
+    "every court -> {class, can_fail proof, no-new-truth, neg>=pos}; F-set must be empty"
+  ],
+  "lie_prevented": [
+    "'all these courts are real' -- TRUST.5 forces each court to PROVE it can fail (corrupt its evidence -> a gate goes red), and refuses to let a prose-only court count as a court"
+  ],
+  "damage_if_overclaimed": "presenting the audit as certification/compliance, or its class letters as a quality score, manufactures assurance the courts do not provide",
+  "replay": {
+    "command": "the claim-ladder + casefiles + receipts + negative-capabilities (re-audit equality)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "04084a00c6e3d46bd344976f1707251e1e409c3a7b43875af72709a69dcd2f8e"
+  }
+}

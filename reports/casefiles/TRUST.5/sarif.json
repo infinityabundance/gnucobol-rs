@@ -1,0 +1,73 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "TRUST.5 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "TRUST.5 non-claim: certification"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "TRUST.5 non-claim: that class is a quality score"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "TRUST.5 non-claim: a live state (snapshot)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "TRUST.5 non-claim: new truth"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "TRUST.5 non-claim: lie prevented: 'all these courts are real' -- TRUST.5 forces each court to PROVE it can fail (corrupt its evidence -> a gate goes red), and refuses to let a prose-only court count as a court"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -204,10 +204,32 @@ DIFF = [
  ("NEG.DIFF.NO_LEDGER_ACCEPTANCE", "a diff match treated as ledger acceptance", "out of scope", "posting on a diff match"),
  ("NEG.DIFF.NO_SETTLEMENT_FINALITY", "a diff match treated as settlement finality", "out of scope", "treating a match as final"),
  ("NEG.DIFF.NO_CUSTOMER_APPROVAL", "a diff match treated as customer approval", "out of scope", "claiming approval from a match"),
+ ("NEG.DIFF.NO_NEW_EVIDENCE", "the diff report treated as new evidence", "a diff summarizes actual-vs-declared; it creates no new evidence", "double-counting a diff as fresh proof"),
 ]
 for (i, s2, g, r) in DIFF:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.DIFF.1"]}
+
+# KOBOLD.OPERATOR.1 — explain/totals/dirty-mode are VIEWS over the sealed decode; no new truth.
+OPER = [
+ ("NEG.OPERATOR.NO_NEW_EVIDENCE", "an operator view (explain/totals) treated as new evidence", "it is a view over the sealed-court decode; creates no new evidence", "double-counting a view as proof"),
+ ("NEG.OPERATOR.NOT_BUSINESS_TRUTH", "an operator view treated as business truth", "provenance/totals are record-level evidence, not business truth", "acting on a view as reality"),
+ ("NEG.OPERATOR.DIRTY_NOT_REPAIRED", "dirty data in dirty-mode treated as repaired/clean", "dirty bytes are preserved as evidence, never coerced", "trusting dirty data as clean"),
+]
+for (i, s2, g, r) in OPER:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.OPERATOR.1"]}
+
+# TRUST.5 — the anti-ceremony audit's own non-claims (it must not become ceremony itself).
+TRUST5 = [
+ ("NEG.TRUST5.AUDIT_NOT_CERTIFICATION", "the audit treated as a certification", "it proves each court CAN FAIL; it is not a certificate", "claiming certified status"),
+ ("NEG.TRUST5.CLASS_NOT_QUALITY_SCORE", "the A/B/C/D class treated as a quality score", "class is evidence-shape (oracle/composed/view/staged), not quality", "ranking courts by class"),
+ ("NEG.TRUST5.SNAPSHOT_NOT_LIVE", "the audit treated as a live state", "snapshot at generation; STATUS/claim-ladder are live", "trusting a stale audit"),
+ ("NEG.TRUST5.NO_NEW_TRUTH", "the audit treated as new truth/evidence", "it re-derives from existing evidence; creates nothing", "double-counting the audit as proof"),
+]
+for (i, s2, g, r) in TRUST5:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["TRUST.5"]}
 
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
