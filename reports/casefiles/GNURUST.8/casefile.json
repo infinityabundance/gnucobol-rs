@@ -1,0 +1,57 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.8",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "8f941eb64ad092618a72153129570783fbedc2389958d9b1f401cc1e403f71e2",
+    "receipt_sha256": "07dc48b41da3cfba534e26c5a72332ef8a669cca9d382eeeabe6c540a0b67409"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc DISPLAY of group (raw bytes)",
+    "upstream_court": "GNURUST.8"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "392 sweep + 3M fuzz"
+  },
+  "positive_claims": [
+    "01 record initial WORKING-STORAGE bytes from VALUE matching cobc"
+  ],
+  "negative_claims": [
+    "VALUE under OCCURS/REDEFINES",
+    "non-fitting literals",
+    "no-VALUE records",
+    "figuratives beyond ZERO/SPACE",
+    "lie prevented: 'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+  ],
+  "negative_capability_ids": [
+    "NEG.VALUE-UNDER-OCCURS-REDEFINES",
+    "NEG.NON-FITTING-LITERALS",
+    "NEG.NO-VALUE-RECORDS",
+    "NEG.FIGURATIVES-BEYOND-ZERO-SPACE"
+  ],
+  "byte_domains": [
+    "record-storage bytes"
+  ],
+  "lie_prevented": [
+    "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/value_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "cf484a9f81ce59f18f67f8149866886f8e36e674187550b39062fe1f16cb5017"
+  }
+}

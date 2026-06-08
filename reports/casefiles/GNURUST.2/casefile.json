@@ -1,0 +1,54 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.2",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "cc4ba4c299f349eb8c91ff69900606fad8660db1ce8580a96ed6b1d680a71d4e",
+    "receipt_sha256": "b1fb98d0325fb22d6ac46a96967d73174867648a55b6e6908e3294d83298fca5"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "libcob cob_move (runtime harness)",
+    "upstream_court": "GNURUST.2"
+  },
+  "results": {
+    "total": 13152,
+    "pass": 13152,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "COMP-3/zoned/display field-storage bytes + cob_move result bytes"
+  ],
+  "negative_claims": [
+    "arithmetic",
+    "edited pictures",
+    "any other type pair",
+    "lie prevented: 'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
+  ],
+  "negative_capability_ids": [
+    "NEG.ARITHMETIC",
+    "NEG.EDITED-PICTURES",
+    "NEG.ANY-OTHER-TYPE-PAIR"
+  ],
+  "byte_domains": [
+    "field-storage bytes"
+  ],
+  "lie_prevented": [
+    "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/sweep.sh 0",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "2a13ad59a4849de6bf7b36391e7ffdc894e223b1e84fdb9e567c87e78deb1c63"
+  }
+}

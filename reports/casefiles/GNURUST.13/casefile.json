@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.13",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.3.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e01c5eb5644dc43d8b45a5bfe3e5ee1639d0a667dd8b682de15ca95d0d57ae6a",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "libcob cob_add/cob_sub (cob_add_bcd path)",
+    "upstream_court": "GNURUST.13"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "within 5400 arith sweep + 8M fuzz"
+  },
+  "positive_claims": [
+    "ADD/SUBTRACT into a PACKED receiver, receiving-field bytes matching libcob cob_add_bcd"
+  ],
+  "negative_claims": [
+    "DIVIDE",
+    "SIZE ERROR",
+    "other rounding modes",
+    "bignum",
+    "float",
+    "lie prevented: 'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
+  ],
+  "negative_capability_ids": [
+    "NEG.DIVIDE",
+    "NEG.SIZE-ERROR",
+    "NEG.OTHER-ROUNDING-MODES",
+    "NEG.BIGNUM",
+    "NEG.FLOAT"
+  ],
+  "byte_domains": [
+    "receiving-field storage bytes"
+  ],
+  "lie_prevented": [
+    "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
+  ],
+  "replay": {
+    "command": "libcob cob_add/cob_sub (cob_add_bcd path)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "cd1c87ecd49fab52e697433e9b456a2091bf037cb7d12402c2acd996a58d3f99"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.FILE.1",
+  "kind": "operator-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "6da4776496561596146124740dd69db9db20bf7da7ec0a17e2cd2f85856a1d38",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "deterministic ingest invariants (not GnuCOBOL file I/O)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/file.rs 10 green; ingest==reconcile offsets"
+  },
+  "positive_claims": [
+    "raw stream splits into fixed-length records with true offsets, named trailing/partial policies, byte-stable file audit, stable exit codes"
+  ],
+  "negative_claims": [
+    "GnuCOBOL file organization",
+    "indexed/relative I/O",
+    "line-sequential runtime parity",
+    "auto-resynchronization",
+    "encoding auto-detection",
+    "silent repair of dirty bytes",
+    "lie prevented: 'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
+  ],
+  "negative_capability_ids": [
+    "NEG.GNUCOBOL-FILE-ORGANIZATION",
+    "NEG.INDEXED-RELATIVE-I-O",
+    "NEG.LINE-SEQUENTIAL-RUNTIME-PARITY",
+    "NEG.AUTO-RESYNCHRONIZATION",
+    "NEG.ENCODING-AUTO-DETECTION",
+    "NEG.SILENT-REPAIR-OF-DIRTY-BYTES"
+  ],
+  "byte_domains": [
+    "raw byte stream -> record spans (offset,len)"
+  ],
+  "lie_prevented": [
+    "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
+  ],
+  "replay": {
+    "command": "deterministic ingest invariants (not GnuCOBOL file I/O)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "12f9fc4e7a48b5944c16ed7922130e326533ad33b28e03caba93b510ff708cd4"
+  }
+}

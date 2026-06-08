@@ -1,0 +1,58 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.15",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f9dac86fbdbb1b890b8a27ebf9e7b1b420befefb0e18a4a0e3c9ece78a0f270e",
+    "receipt_sha256": "11c402b019906e7b5eb67e8ce42b7667a7dca910345d0106cb2dc153b4b3cf96"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "libcob cob_load_collation (ebcdic500_ascii8bit)",
+    "upstream_court": "GNURUST.15"
+  },
+  "results": {
+    "total": 256,
+    "pass": 256,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table"
+  ],
+  "negative_claims": [
+    "cp037/other code pages",
+    "numeric EBCDIC zoned sign",
+    "national/DBCS",
+    "collation",
+    "binary/packed conversion",
+    "lie prevented: 'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+  ],
+  "negative_capability_ids": [
+    "NEG.CP037-OTHER-CODE-PAGES",
+    "NEG.NUMERIC-EBCDIC-ZONED-SIGN",
+    "NEG.NATIONAL-DBCS",
+    "NEG.COLLATION",
+    "NEG.BINARY-PACKED-CONVERSION"
+  ],
+  "byte_domains": [
+    "raw EBCDIC field bytes -> decoded text"
+  ],
+  "lie_prevented": [
+    "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/ebcdic_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "2780e86f7a354911f73e8cc7b5d94571adc2e578b14ff510b3c9a1628a7f740d"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.4",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "6be043cd22d03f4017be76b43943122dac7fbf6be525da96af2ba16d1c5638e8",
+    "receipt_sha256": "410c9ae539b364135327d6d2c21eda440f33a49fb3a35d0008f3b0d967ca7f4e"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -C f_M witness + LENGTH OF",
+    "upstream_court": "GNURUST.4"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "32 sweep + 4M+ fuzz"
+  },
+  "positive_claims": [
+    "item byte offsets / group sizes / fixed OCCURS / REDEFINES(<=target) / FILLER matching cobc"
+  ],
+  "negative_claims": [
+    "SYNCHRONIZED",
+    "REDEFINES larger than target",
+    "lie prevented: 'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
+  ],
+  "negative_capability_ids": [
+    "NEG.SYNCHRONIZED",
+    "NEG.REDEFINES-LARGER-THAN-TARGET"
+  ],
+  "byte_domains": [
+    "generated-C field offset+size"
+  ],
+  "lie_prevented": [
+    "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/layout_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "a34fb67061d0a561a20a03a92876cb7fa5eb9115133a5104c07b2486eb418e93"
+  }
+}

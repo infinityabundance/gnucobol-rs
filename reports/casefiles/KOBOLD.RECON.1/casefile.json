@@ -1,0 +1,57 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.RECON.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-data-shim 0.2.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5ca4fc07be64f8017f60c0695d92c08d1dbea9b7c38e84184b11585d0b344af7",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the sealed GNURUST courts (no new oracle)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "3 families / 360 records, byte-stable, CLI==lib"
+  },
+  "positive_claims": [
+    "end-to-end decode of fixed-record data -> byte-stable JSONL + audit receipt + explicit unsupported, over sealed courts only"
+  ],
+  "negative_claims": [
+    "transformed-record write-back",
+    "EBCDIC",
+    "edited PIC",
+    "line-sequential containers",
+    "lie prevented: 'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
+  ],
+  "negative_capability_ids": [
+    "NEG.TRANSFORMED-RECORD-WRITE-BACK",
+    "NEG.EBCDIC",
+    "NEG.EDITED-PIC",
+    "NEG.LINE-SEQUENTIAL-CONTAINERS"
+  ],
+  "byte_domains": [
+    "JSON bytes + audit-receipt bytes (composing field/record/text-word/predicate domains)"
+  ],
+  "lie_prevented": [
+    "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
+  ],
+  "replay": {
+    "command": "the sealed GNURUST courts (no new oracle)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "381e92d82caa8253fb8ca2f8a742d8d2defa97f811c0e798d51f7987bbf7a77b"
+  }
+}

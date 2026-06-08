@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.16",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "dd888acba579dc540a0f48218fc752b20956d1f812ad80cf8a245f9e6157b45f",
+    "receipt_sha256": "e46a9f938939249c2d154b26458709f8e7e7da5d7cbeb8d7d70097e2d449e31f"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
+    "upstream_court": "GNURUST.16"
+  },
+  "results": {
+    "total": 92,
+    "pass": 92,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "edited DISPLAY field bytes -> value + presentation text for Z 9 , . -",
+    "(16a) and $ * CR DB B 0 / (16b), slot-based"
+  ],
+  "negative_claims": [
+    "numeric->edited formatting (16c)",
+    "report writer",
+    "locale/currency",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE",
+    "lie prevented: 'presentation string and numeric value are the same field truth' \u2014 they are separated"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMERIC-EDITED-FORMATTING-16C",
+    "NEG.REPORT-WRITER",
+    "NEG.LOCALE-CURRENCY",
+    "NEG.EBCDIC-EDITED",
+    "NEG.EDITED-ARITHMETIC-VALUE"
+  ],
+  "byte_domains": [
+    "edited DISPLAY field bytes -> value + text"
+  ],
+  "lie_prevented": [
+    "'presentation string and numeric value are the same field truth' \u2014 they are separated"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/edited_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "2a354abbe1df9827923e20cf405db0b3581845e0272e5fa81bcf83bcb735c5f9"
+  }
+}

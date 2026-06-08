@@ -1,0 +1,58 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.12",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5b60831541eecc2f84790acf175eb4961d0e038e65b1d87262f10f62f24a7239",
+    "receipt_sha256": "aaeba3b1ca98cee1bdffce9fbffc2f96cec85106928f8c5f160185d132796ca1"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc SET final bytes",
+    "upstream_court": "GNURUST.12"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "52 sweep + fuzz"
+  },
+  "positive_claims": [
+    "canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc",
+    "output satisfies eval_88"
+  ],
+  "negative_claims": [
+    "SET TO FALSE",
+    "FALSE clause",
+    "expressions",
+    "execution",
+    "lie prevented: 'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
+  ],
+  "negative_capability_ids": [
+    "NEG.SET-TO-FALSE",
+    "NEG.FALSE-CLAUSE",
+    "NEG.EXPRESSIONS",
+    "NEG.EXECUTION"
+  ],
+  "byte_domains": [
+    "parent field-storage bytes"
+  ],
+  "lie_prevented": [
+    "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/set_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "1078101c717d29121552150f1327313d5ccb46a15ee62a1dd0c464926f2397d8"
+  }
+}

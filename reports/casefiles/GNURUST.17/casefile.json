@@ -1,0 +1,58 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.17",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "bf1081c8041be8d3de4931d190daab75cb967bc861d5a30968126b5009e42552",
+    "receipt_sha256": "5c8efc57fb1b0e93a81c749c8ec09a20c82bbd604fce2191fcc7647eaa3cde21"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -fsign=EBCDIC via edited intermediary",
+    "upstream_court": "GNURUST.17"
+  },
+  "results": {
+    "total": 120,
+    "pass": 120,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "raw cp500 EBCDIC zoned-decimal numeric DISPLAY bytes -> value (cp500 translate + cob_get_sign_ebcdic overpunch sign)"
+  ],
+  "negative_claims": [
+    "cp037",
+    "edited numeric under cp500",
+    "binary/packed via this path",
+    "mixed/auto-detect encodings",
+    "national/DBCS",
+    "lie prevented: 'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+  ],
+  "negative_capability_ids": [
+    "NEG.CP037",
+    "NEG.EDITED-NUMERIC-UNDER-CP500",
+    "NEG.BINARY-PACKED-VIA-THIS-PATH",
+    "NEG.MIXED-AUTO-DETECT-ENCODINGS",
+    "NEG.NATIONAL-DBCS"
+  ],
+  "byte_domains": [
+    "raw EBCDIC zoned field bytes -> value"
+  ],
+  "lie_prevented": [
+    "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/ebcdic_num_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "7bcc9b708803d0aa3faa3fec6e17d16bf13a7a766a2a9806fe66891f445e130a"
+  }
+}

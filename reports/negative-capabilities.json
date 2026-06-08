@@ -1,0 +1,914 @@
+{
+  "schema": "kobold-negative-capability-registry-v1",
+  "doctrine": "Negative capability is the trust surface. Every entry is a surface this stack refuses to guess; casefiles reference these IDs.",
+  "count": 81,
+  "negative_capabilities": [
+    {
+      "id": "NEG.38-DIGIT-BIGNUM",
+      "surface": ">38-digit bignum",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.7"
+      ]
+    },
+    {
+      "id": "NEG.ACTIVE-LOGICAL-OCCURRENCE-COUNT",
+      "surface": "active/logical occurrence count",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.ANY-OTHER-TYPE-PAIR",
+      "surface": "any other type pair",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.2"
+      ]
+    },
+    {
+      "id": "NEG.ARITHMETIC",
+      "surface": "arithmetic",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.2"
+      ]
+    },
+    {
+      "id": "NEG.AUTO-RESYNCHRONIZATION",
+      "surface": "auto-resynchronization",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BIGNUM",
+      "surface": "bignum",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.13"
+      ]
+    },
+    {
+      "id": "NEG.BINARY-ARITHMETIC",
+      "surface": "binary arithmetic",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.14",
+        "KOBOLD.DATA.2"
+      ]
+    },
+    {
+      "id": "NEG.BINARY-PACKED-CONVERSION",
+      "surface": "binary/packed conversion",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.BINARY-PACKED-VIA-THIS-PATH",
+      "surface": "binary/packed via this path",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.17",
+        "KOBOLD.DATA.5"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-TRUTH",
+      "surface": "business truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.2",
+        "KOBOLD.DATA.3",
+        "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.COLLATING-SENSITIVE-RANGES",
+      "surface": "collating-sensitive ranges",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.COLLATION",
+      "surface": "collation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.COMP-6",
+      "surface": "COMP-6",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.COMP-6-ARITHMETIC",
+      "surface": "COMP-6 arithmetic",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.18",
+        "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.CONDITION-EXPRESSIONS",
+      "surface": "condition expressions",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.CP037",
+      "surface": "cp037",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.17",
+        "KOBOLD.DATA.5"
+      ]
+    },
+    {
+      "id": "NEG.CP037-OTHER-CODE-PAGES",
+      "surface": "cp037/other code pages",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT-PORTABILITY",
+      "surface": "dialect portability",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.18",
+        "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.DIVIDE",
+      "surface": "DIVIDE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.7",
+        "GNURUST.13"
+      ]
+    },
+    {
+      "id": "NEG.EBCDIC",
+      "surface": "EBCDIC",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.EBCDIC-CONVERSION-OF-COMP-6-BYTES",
+      "surface": "EBCDIC conversion of COMP-6 bytes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.EBCDIC-EDITED",
+      "surface": "EBCDIC edited",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.16"
+      ]
+    },
+    {
+      "id": "NEG.EDITED-ARITHMETIC-VALUE",
+      "surface": "edited arithmetic/VALUE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.16"
+      ]
+    },
+    {
+      "id": "NEG.EDITED-NUMERIC-UNDER-CP500",
+      "surface": "edited numeric under cp500",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.17",
+        "KOBOLD.DATA.5"
+      ]
+    },
+    {
+      "id": "NEG.EDITED-PIC",
+      "surface": "edited PIC",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.EDITED-PICTURES",
+      "surface": "edited pictures",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.2",
+        "GNURUST.3"
+      ]
+    },
+    {
+      "id": "NEG.EDITED-UNDER-EBCDIC",
+      "surface": "edited under EBCDIC",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.ENCODING-AUTO-DETECTION",
+      "surface": "encoding auto-detection",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.EXECUTION",
+      "surface": "execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.EXPRESSIONS",
+      "surface": "expressions",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.FALSE-CLAUSE",
+      "surface": "FALSE clause",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.FIGURATIVES-BEYOND-ZERO-SPACE",
+      "surface": "figuratives beyond ZERO/SPACE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.FLOAT",
+      "surface": "float",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.13",
+        "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.GNUCOBOL-FILE-ORGANIZATION",
+      "surface": "GnuCOBOL file organization",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.HOST-PORTABLE-ENDIAN",
+      "surface": "host-portable endian",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.IDENTIFIER-OPERANDS",
+      "surface": "identifier operands",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.6"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED-RELATIVE-I-O",
+      "surface": "indexed/relative I/O",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE-REPAIR",
+      "surface": "INITIALIZE/repair",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.INLINE-MULTI-LINE-COPY",
+      "surface": "inline/multi-line COPY",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.5"
+      ]
+    },
+    {
+      "id": "NEG.LEADING-TRAILING",
+      "surface": "LEADING/TRAILING",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.6"
+      ]
+    },
+    {
+      "id": "NEG.LINE-SEQUENTIAL-CONTAINERS",
+      "surface": "line-sequential containers",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.LINE-SEQUENTIAL-RUNTIME-PARITY",
+      "surface": "line-sequential runtime parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.LOCALE-CURRENCY",
+      "surface": "locale/currency",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.16",
+        "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.MALFORMED-BYTES",
+      "surface": "malformed bytes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.18"
+      ]
+    },
+    {
+      "id": "NEG.MALFORMED-COMP-6-BYTES",
+      "surface": "malformed COMP-6 bytes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.MIXED-AUTO-DETECT-ENCODING",
+      "surface": "mixed/auto-detect encoding",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.5"
+      ]
+    },
+    {
+      "id": "NEG.MIXED-AUTO-DETECT-ENCODINGS",
+      "surface": "mixed/auto-detect encodings",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.17"
+      ]
+    },
+    {
+      "id": "NEG.MULTIPLE-NESTED-ODO",
+      "surface": "multiple/nested ODO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.NATIONAL-DBCS",
+      "surface": "national/DBCS",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.15",
+        "GNURUST.17"
+      ]
+    },
+    {
+      "id": "NEG.NO-VALUE-RECORDS",
+      "surface": "no-VALUE records",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.NON-FITTING-LITERALS",
+      "surface": "non-fitting literals",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-DISPLAY-UNDER-CP500-EBCDIC-ZONED",
+      "surface": "numeric DISPLAY under cp500 (EBCDIC zoned sign)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.3"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-EBCDIC-ZONED-SIGN",
+      "surface": "numeric EBCDIC zoned sign",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-EDITED-FORMATTING",
+      "surface": "numeric->edited formatting",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-EDITED-FORMATTING-16C",
+      "surface": "numeric->edited formatting (16c)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.16"
+      ]
+    },
+    {
+      "id": "NEG.OF-IN-LIBRARY",
+      "surface": "OF/IN library",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.5"
+      ]
+    },
+    {
+      "id": "NEG.ON-SIZE-ERROR",
+      "surface": "ON SIZE ERROR",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.7"
+      ]
+    },
+    {
+      "id": "NEG.OTHER-ROUNDING-MODES",
+      "surface": "other rounding modes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.7",
+        "GNURUST.13"
+      ]
+    },
+    {
+      "id": "NEG.P-AT-BOTH-ENDS",
+      "surface": "P at both ends",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.PRE-3-2",
+      "surface": "pre-3.2",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.18"
+      ]
+    },
+    {
+      "id": "NEG.PRE-3-2-BEHAVIOR",
+      "surface": "pre-3.2 behavior",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE-DIVISION-EXECUTION",
+      "surface": "Procedure Division execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.REDEFINES-LARGER-THAN-TARGET",
+      "surface": "REDEFINES larger than target",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.4"
+      ]
+    },
+    {
+      "id": "NEG.REPLACE-DIRECTIVE",
+      "surface": "REPLACE directive",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.6"
+      ]
+    },
+    {
+      "id": "NEG.REPORT-WRITER",
+      "surface": "report writer",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.16",
+        "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.RUNTIME-VALIDATION",
+      "surface": "runtime validation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.SEMANTIC-VALIDITY",
+      "surface": "semantic validity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.SET",
+      "surface": "SET",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.SET-TO-FALSE",
+      "surface": "SET TO FALSE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.12"
+      ]
+    },
+    {
+      "id": "NEG.SIGNED-COMP-6-COBC-CONVERTS-TO-COMP-3",
+      "surface": "signed COMP-6 (cobc converts to COMP-3)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.18"
+      ]
+    },
+    {
+      "id": "NEG.SIGNED-COMP-6-FAILS-CLOSED",
+      "surface": "signed COMP-6 (fails closed)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.SILENT-REPAIR-OF-DIRTY-BYTES",
+      "surface": "silent repair of dirty bytes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE-ERROR",
+      "surface": "SIZE ERROR",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.13"
+      ]
+    },
+    {
+      "id": "NEG.SLIDING",
+      "surface": "sliding",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.SUPPRESS",
+      "surface": "SUPPRESS",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.5"
+      ]
+    },
+    {
+      "id": "NEG.SYNCHRONIZED",
+      "surface": "SYNCHRONIZED",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.4",
+        "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.TRANSFORMED-RECORD-WRITE-BACK",
+      "surface": "transformed-record write-back",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.USAGES-BEYOND-DISPLAY-COMP-3",
+      "surface": "usages beyond DISPLAY/COMP-3",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.3"
+      ]
+    },
+    {
+      "id": "NEG.V-P",
+      "surface": "V+P",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.VALUE-MOVE-ON-P-FIELD",
+      "surface": "VALUE/MOVE on P field",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.9"
+      ]
+    },
+    {
+      "id": "NEG.VALUE-UNDER-OCCURS-REDEFINES",
+      "surface": "VALUE under OCCURS/REDEFINES",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.8"
+      ]
+    }
+  ]
+}

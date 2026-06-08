@@ -1,0 +1,53 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.DATA.3",
+  "kind": "composition-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-data-shim 0.4.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5200aac1f2798ec3fe858993dd13c77e39cd5124cacc8202e2b92a57c1aa5810",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "sealed GNURUST courts",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "account-cp500 family (120 rec) + ebcdic_never_touches_binary test"
+  },
+  "positive_claims": [
+    "cp500 alphanumeric DISPLAY decoded end-to-end with binary/packed passthrough proven untouched (composes GNURUST.15)"
+  ],
+  "negative_claims": [
+    "numeric DISPLAY under cp500 (EBCDIC zoned sign)",
+    "business truth",
+    "lie prevented: 'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMERIC-DISPLAY-UNDER-CP500-EBCDIC-ZONED",
+    "NEG.BUSINESS-TRUTH"
+  ],
+  "byte_domains": [
+    "JSON + audit bytes"
+  ],
+  "lie_prevented": [
+    "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)"
+  ],
+  "replay": {
+    "command": "sealed GNURUST courts",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "24112e25cca86e439ac6c8786f091bc7457ae479b78cb9c6be2008271560dcfb"
+  }
+}

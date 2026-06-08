@@ -1,0 +1,58 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.DATA.4",
+  "kind": "composition-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f717a9e352f1ddb3da7ffcdce64139e97b6c481db2a7a3db5d147a0f559342cf",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "gnucobol-rs GNURUST.16 (sealed)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "account/payroll/insurance corpus byte-stable"
+  },
+  "positive_claims": [
+    "edited DISPLAY fields decode in the corpus",
+    "JSON keeps the presentation string, audit carries the GNURUST.16 numeric"
+  ],
+  "negative_claims": [
+    "numeric->edited formatting",
+    "report writer",
+    "locale/currency",
+    "edited under EBCDIC",
+    "lie prevented: 'presentation string and numeric value are the same field truth' -- they are separated"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMERIC-EDITED-FORMATTING",
+    "NEG.REPORT-WRITER",
+    "NEG.LOCALE-CURRENCY",
+    "NEG.EDITED-UNDER-EBCDIC"
+  ],
+  "byte_domains": [
+    "edited DISPLAY field bytes -> presentation + numeric"
+  ],
+  "lie_prevented": [
+    "'presentation string and numeric value are the same field truth' -- they are separated"
+  ],
+  "replay": {
+    "command": "gnucobol-rs GNURUST.16 (sealed)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "caebdebff0ec8bd373a99ae2232f272c87ef4d1946f68f6ed76935fe0735087c"
+  }
+}

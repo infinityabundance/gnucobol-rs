@@ -1,0 +1,58 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.9",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.2.6",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "6ef46c74f926d8d753ee361aaa885feb50b7707d7e0cf4864285ccdd52b1f1bc",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -C attr witness",
+    "upstream_court": "GNURUST.9"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "96 of 288 PIC sweep + fuzz"
+  },
+  "positive_claims": [
+    "P scaling field model (digits/scale/size) matching cobc",
+    "trailing digits=9s",
+    "P scale=-P, leading digits=9s scale=9s",
+    "P"
+  ],
+  "negative_claims": [
+    "V+P",
+    "P at both ends",
+    "VALUE/MOVE on P field",
+    "lie prevented: 'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
+  ],
+  "negative_capability_ids": [
+    "NEG.V-P",
+    "NEG.P-AT-BOTH-ENDS",
+    "NEG.VALUE-MOVE-ON-P-FIELD"
+  ],
+  "byte_domains": [
+    "generated-C cob_field_attr + LENGTH OF"
+  ],
+  "lie_prevented": [
+    "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
+  ],
+  "replay": {
+    "command": "cobc -C attr witness",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "cb663dfa7c8b1e8271387ddbf9d73508e2ef203707eaf63d7912ba6bd7a221b4"
+  }
+}

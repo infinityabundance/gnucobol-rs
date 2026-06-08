@@ -1,0 +1,55 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.6",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.2.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "3457c9529ca1960ea94586e4125e95e51522427c2b819ce743b723354b3b5157",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -P",
+    "upstream_court": "GNURUST.6"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "within COPY sweep + 4M fuzz"
+  },
+  "positive_claims": [
+    "whole-text-word pseudo-text replacement matching cobc -P (composes across nesting)"
+  ],
+  "negative_claims": [
+    "REPLACE directive",
+    "LEADING/TRAILING",
+    "identifier operands",
+    "lie prevented: 'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
+  ],
+  "negative_capability_ids": [
+    "NEG.REPLACE-DIRECTIVE",
+    "NEG.LEADING-TRAILING",
+    "NEG.IDENTIFIER-OPERANDS"
+  ],
+  "byte_domains": [
+    "expanded source text-word stream"
+  ],
+  "lie_prevented": [
+    "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
+  ],
+  "replay": {
+    "command": "cobc -P",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "706b193ece1f1e958a5739f2aac1017a7e2bed1f47fbbe8897009b1c418e7551"
+  }
+}

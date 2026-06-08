@@ -174,6 +174,12 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.2: receipt drift"; cat /tmp/_rec_check
   fi
+  # TRUST.4: every court has a generated forensic casefile; generated views match; negatives >= positives.
+  if python3 "$ROOT/lab/casefile/run.py" check >/tmp/_case_check 2>&1; then
+    note "TRUST.4: forensic casefiles current (generated views match, negatives >= positives)"
+  else
+    bad "TRUST.4: casefile drift"; cat /tmp/_case_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;

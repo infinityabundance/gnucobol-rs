@@ -284,6 +284,58 @@
       "breaks_claim": "signed COMP-6; strict cobol85/2002 (reject it)",
       "readiness": 3,
       "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+    },
+    {
+      "id": "KOBOLD.DATA.4",
+      "name": "edited-picture decode composed",
+      "proven": "edited DISPLAY fields decode in the corpus; JSON keeps the presentation string, audit carries the GNURUST.16 numeric",
+      "byte_domain": "edited DISPLAY field bytes -> presentation + numeric",
+      "oracle": "gnucobol-rs GNURUST.16 (sealed)",
+      "fixtures": "account/payroll/insurance corpus byte-stable",
+      "sealed_version": "kobold 0.6.0",
+      "not_proven": "numeric->edited formatting; report writer; locale/currency; edited under EBCDIC",
+      "breaks_claim": "treating the presentation string as the numeric value",
+      "readiness": 3,
+      "lie_prevented": "'presentation string and numeric value are the same field truth' -- they are separated"
+    },
+    {
+      "id": "KOBOLD.DATA.5",
+      "name": "cp500 numeric DISPLAY composed",
+      "proven": "cp500 EBCDIC zoned numeric DISPLAY fields decode via GNURUST.17 in the corpus; audit names the court",
+      "byte_domain": "raw EBCDIC zoned field bytes -> value",
+      "oracle": "gnucobol-rs GNURUST.17 (sealed)",
+      "fixtures": "account-cp500 corpus byte-stable, 0 unsupported",
+      "sealed_version": "kobold 0.6.2",
+      "not_proven": "cp037; edited-numeric under cp500; binary/packed via this path; mixed/auto-detect encoding",
+      "breaks_claim": "auto-detecting the code page; routing binary as EBCDIC zoned",
+      "readiness": 3,
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ"
+    },
+    {
+      "id": "KOBOLD.DATA.6",
+      "name": "COMP-6 composed",
+      "proven": "unsigned COMP-6 fields decode via GNURUST.18 in the corpus; audit names the court; cp500 passthrough proven",
+      "byte_domain": "COMP-6 field-storage bytes -> value",
+      "oracle": "gnucobol-rs GNURUST.18 (sealed)",
+      "fixtures": "account/payroll/insurance + account-cp500 corpus byte-stable, 0 unsupported",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "signed COMP-6 (fails closed); COMP-6 arithmetic; malformed COMP-6 bytes; pre-3.2 behavior; dialect portability; EBCDIC conversion of COMP-6 bytes",
+      "breaks_claim": "treating signed COMP-6 as COMP-6 instead of COMP-3",
+      "readiness": 3,
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
+    },
+    {
+      "id": "KOBOLD.FILE.1",
+      "name": "fixed-record container ingest",
+      "proven": "raw stream splits into fixed-length records with true offsets, named trailing/partial policies, byte-stable file audit, stable exit codes",
+      "byte_domain": "raw byte stream -> record spans (offset,len)",
+      "oracle": "deterministic ingest invariants (not GnuCOBOL file I/O)",
+      "fixtures": "tests/file.rs 10 green; ingest==reconcile offsets",
+      "sealed_version": "kobold 0.6.3",
+      "not_proven": "GnuCOBOL file organization; indexed/relative I/O; line-sequential runtime parity; auto-resynchronization; encoding auto-detection; silent repair of dirty bytes",
+      "breaks_claim": "silently absorbing a partial record or resyncing on a length mismatch",
+      "readiness": 3,
+      "lie_prevented": "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
     }
   ],
   "transform_vs_read": {

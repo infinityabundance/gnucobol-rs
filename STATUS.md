@@ -25,7 +25,8 @@ Byte-exact, oracle-proven **read fidelity** for fixed-record COBOL data, within 
   (zoned sign) decode, and edited fields' presentation-vs-numeric split.
 
 Every one of those has a **generated receipt** (`reports/receipts/<CAMPAIGN>/receipt.json`) produced
-from a live replay, and appears green in `lab/verify-sealed-courts.sh`.
+from a live replay, a **forensic casefile** (`reports/casefiles/<CAMPAIGN>/` — `casefile.json` + SARIF +
+in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 
 ## What may NOT be relied on
 

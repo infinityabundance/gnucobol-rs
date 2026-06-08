@@ -1,0 +1,60 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.18",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "6d4c732f79018a642762d865e07857bbe63a916c0bd46592f5ea2265439f2a99",
+    "receipt_sha256": "c1487dd41bddb9d3f602df5b598f978b921078e73ca3d600e22c141153e57b6b"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -C attr + libcob cob_move",
+    "upstream_court": "GNURUST.18"
+  },
+  "results": {
+    "total": 98,
+    "pass": 98,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "COMP-6 field model (PACKED",
+    "NO_SIGN_NIBBLE, size ceil(n/2))",
+    "DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move"
+  ],
+  "negative_claims": [
+    "signed COMP-6 (cobc converts to COMP-3)",
+    "COMP-6 arithmetic",
+    "malformed bytes",
+    "dialect portability",
+    "pre-3.2",
+    "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+  ],
+  "negative_capability_ids": [
+    "NEG.SIGNED-COMP-6-COBC-CONVERTS-TO-COMP-3",
+    "NEG.COMP-6-ARITHMETIC",
+    "NEG.MALFORMED-BYTES",
+    "NEG.DIALECT-PORTABILITY",
+    "NEG.PRE-3-2"
+  ],
+  "byte_domains": [
+    "field-storage + move-result bytes (COMP-6)"
+  ],
+  "lie_prevented": [
+    "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/comp6_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "1781071eaaff3d9f9875af6d9145797591443d6851aed9cf648bb4e425a7af74"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.14",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "b7afa5ed24237deb9f7313eb23ad079277ff1a55c904ed49b116b565cf4cc053",
+    "receipt_sha256": "0ef54830be02b341b2ec3d8bbcbef18b8c8b1fb325942a864c8ae2f37a9d5f96"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -C attr witness + libcob cob_move",
+    "upstream_court": "GNURUST.14"
+  },
+  "results": {
+    "total": 546,
+    "pass": 546,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "binary field model",
+    "DISPLAY<->binary MOVE bytes matching cobc/cob_move"
+  ],
+  "negative_claims": [
+    "binary arithmetic",
+    "SYNCHRONIZED",
+    "host-portable endian",
+    "COMP-6",
+    "float",
+    "lie prevented: 'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
+  ],
+  "negative_capability_ids": [
+    "NEG.BINARY-ARITHMETIC",
+    "NEG.SYNCHRONIZED",
+    "NEG.HOST-PORTABLE-ENDIAN",
+    "NEG.COMP-6",
+    "NEG.FLOAT"
+  ],
+  "byte_domains": [
+    "field-storage + move-result bytes"
+  ],
+  "lie_prevented": [
+    "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/binary_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "c6c249cfca1f2567092b4a040db7574aef4942ad25f7e719faeaa14318df72cd"
+  }
+}

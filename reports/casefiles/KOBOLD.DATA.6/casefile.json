@@ -1,0 +1,63 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.DATA.6",
+  "kind": "composition-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "b2f125ff1c34318a3ffbcb0d2bf10ad7f3f222d7dc543e1281c2bda77f90b444",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "gnucobol-rs GNURUST.18 (sealed)",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "account/payroll/insurance + account-cp500 corpus byte-stable, 0 unsupported"
+  },
+  "positive_claims": [
+    "unsigned COMP-6 fields decode via GNURUST.18 in the corpus",
+    "audit names the court",
+    "cp500 passthrough proven"
+  ],
+  "negative_claims": [
+    "signed COMP-6 (fails closed)",
+    "COMP-6 arithmetic",
+    "malformed COMP-6 bytes",
+    "pre-3.2 behavior",
+    "dialect portability",
+    "EBCDIC conversion of COMP-6 bytes",
+    "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
+  ],
+  "negative_capability_ids": [
+    "NEG.SIGNED-COMP-6-FAILS-CLOSED",
+    "NEG.COMP-6-ARITHMETIC",
+    "NEG.MALFORMED-COMP-6-BYTES",
+    "NEG.PRE-3-2-BEHAVIOR",
+    "NEG.DIALECT-PORTABILITY",
+    "NEG.EBCDIC-CONVERSION-OF-COMP-6-BYTES"
+  ],
+  "byte_domains": [
+    "COMP-6 field-storage bytes -> value"
+  ],
+  "lie_prevented": [
+    "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
+  ],
+  "replay": {
+    "command": "gnucobol-rs GNURUST.18 (sealed)",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "92b83d3b34b8519b7b37d9bdee26d33b4db1aea82317d43c429777b3fdbacf86"
+  }
+}

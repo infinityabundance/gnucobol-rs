@@ -1,0 +1,55 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.5",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "8dbbfc8d447f67c63c8bcdb580b30723e8473901642c81141745a37a088df668",
+    "receipt_sha256": "33dc8d48a7e4bc12d45fbc49180b0bde0e85fbd5db7c0971e708a15d7ee34878"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -P",
+    "upstream_court": "GNURUST.5"
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "7 programs sweep + 4M fuzz"
+  },
+  "positive_claims": [
+    "COPY <name>. splice matching cobc -P text-word stream (nested, cycle-detected, provenance-mapped)"
+  ],
+  "negative_claims": [
+    "inline/multi-line COPY",
+    "OF/IN library",
+    "SUPPRESS",
+    "lie prevented: 'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
+  ],
+  "negative_capability_ids": [
+    "NEG.INLINE-MULTI-LINE-COPY",
+    "NEG.OF-IN-LIBRARY",
+    "NEG.SUPPRESS"
+  ],
+  "byte_domains": [
+    "expanded source text-word stream"
+  ],
+  "lie_prevented": [
+    "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/copy_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "bba0986f9f19b784785fd725355fe82ad0cbfde1a9b7b4519b3a64ac89a2bd32"
+  }
+}

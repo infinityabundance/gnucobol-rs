@@ -1,0 +1,55 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "KOBOLD.OPERATOR.1",
+  "kind": "operator-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-data-shim 0.5.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "41f252a4bb7754893600abc7a075b19065b86106753120e73c7317ad43f5cdd5",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "sealed GNURUST courts",
+    "upstream_court": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "5 operator tests (explain/totals/collision/dirty)"
+  },
+  "positive_claims": [
+    "explain-field (provenance/courts/value/non-claims), control totals, dirty-data evidence/strict, JSON key-collision refusal, stale-copybook risk in receipts"
+  ],
+  "negative_claims": [
+    "business truth",
+    "semantic validity",
+    "INITIALIZE/repair",
+    "lie prevented: 'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
+  ],
+  "negative_capability_ids": [
+    "NEG.BUSINESS-TRUTH",
+    "NEG.SEMANTIC-VALIDITY",
+    "NEG.INITIALIZE-REPAIR"
+  ],
+  "byte_domains": [
+    "operator JSON outputs + audit"
+  ],
+  "lie_prevented": [
+    "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
+  ],
+  "replay": {
+    "command": "sealed GNURUST courts",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "2c9f5dca09899fe6b0a25521ff78360713253b3919ccaf8af9f88507318d9567"
+  }
+}

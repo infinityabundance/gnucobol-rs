@@ -1,0 +1,53 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.3",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "d8ae529086752471eb9eb94905b334215862005e9f225e0994fbff398593bf47",
+    "receipt_sha256": "8049d5809761f26fb0c283a383b6b3eab5ec693d1d335ad8142b0d775aadde9e"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -C attr witness",
+    "upstream_court": "GNURUST.3"
+  },
+  "results": {
+    "total": 432,
+    "pass": 432,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "PIC",
+    "USAGE -> {type,digits,scale,flags,size} matching cobc"
+  ],
+  "negative_claims": [
+    "edited pictures",
+    "usages beyond DISPLAY/COMP-3",
+    "lie prevented: 'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
+  ],
+  "negative_capability_ids": [
+    "NEG.EDITED-PICTURES",
+    "NEG.USAGES-BEYOND-DISPLAY-COMP-3"
+  ],
+  "byte_domains": [
+    "generated-C cob_field_attr + LENGTH OF"
+  ],
+  "lie_prevented": [
+    "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/pic_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "b971818f8c2c6ac3e935992e0bbbdae047bf4bce07f36ba385efa54449dcc9e0"
+  }
+}
