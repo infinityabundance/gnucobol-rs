@@ -100,3 +100,6 @@ Every confounder is either pinned to a reproducible value or classified out of t
 
 No silent third state: a surface is sealed, pinned, or classified — never blurred.
 
+
+**`GNURUST.19` — DIVIDE.** `arith::cob_divide` writes `recv := lhs/rhs` byte-for-byte as `cobc` for `DIVIDE ... GIVING` (DISPLAY/COMP-3, truncate + ROUNDED), proven 736/0. Divide-by-zero, REMAINDER, COMPUTE, ON SIZE ERROR, float, and binary/edited receivers are non-claims. (`reports/RECEIPT-GNURUST-DIVIDE-19.md`.)
+

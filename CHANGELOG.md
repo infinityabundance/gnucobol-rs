@@ -3,6 +3,15 @@
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.1]
+- **GNURUST.19 — DIVIDE receiving-field bytes (PATCH, the first one).** `arith::cob_divide` writes
+  `recv := lhs/rhs` byte-identical to `cobc` for `DIVIDE a BY b GIVING c` / `a INTO b GIVING c` over
+  DISPLAY/COMP-3 operands+receivers, signed/scaled/narrowing, truncate + ROUNDED — proven `divide_sweep`
+  736/0. `Op::Divide` + `cob_divide` + `ArithError::DivideByZero` are all **additive** (both enums are
+  `#[non_exhaustive]` since 0.7.0) → **semver-patch**, the first patch demonstrating the future-proofing.
+  Non-claims: divide-by-zero/`ON SIZE ERROR` (fail closed), `REMAINDER`, `COMPUTE`, procedure flow, float,
+  binary/edited receivers, other rounding modes, business correctness.
+
 ## [0.7.0]
 
 ### GNURUST.18 — `pic`: COMP-6 unsigned packed-decimal storage + MOVE

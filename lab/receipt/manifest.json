@@ -162,6 +162,20 @@
         "dialect portability (cobol85/2002 reject it)",
         "pre-3.2 behavior"
       ]
+    },
+    "GNURUST.19": {
+      "court": "DIVIDE receiving-field bytes",
+      "sweep": "divide_sweep.sh",
+      "byte_domain": "DIVIDE GIVING receiver field bytes (DISPLAY/COMP-3)",
+      "non_claims": [
+        "divide-by-zero / ON SIZE ERROR",
+        "REMAINDER",
+        "COMPUTE / expression evaluation",
+        "procedure control flow",
+        "float",
+        "binary/edited receivers",
+        "business correctness"
+      ]
     }
   }
 }

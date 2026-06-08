@@ -160,3 +160,11 @@ comparison/collation, no binary/float, no files; no `P` scaling, no `OCCURS DEPE
 and `libcob/common.c` (GnuCOBOL 3.2, © Free Software Foundation, Inc.; authors Keisuke Nishida,
 Roger While, Simon Sobisch, et al.), and inherits their copyleft. See `COPYING.LESSER`.
 
+
+## `GNURUST.19` — DIVIDE receiving-field bytes
+
+`arith::cob_divide(lhs, lhs_attr, rhs, rhs_attr, recv_attr, round)` writes `recv := lhs/rhs` byte-for-byte
+as `cobc` for `DIVIDE ... GIVING` (DISPLAY/COMP-3, truncate + ROUNDED, signed/scaled/narrowing), proven
+736/0. Divide-by-zero fails closed; REMAINDER/COMPUTE/ON SIZE ERROR/float/binary-edited receivers are
+non-claims.
+

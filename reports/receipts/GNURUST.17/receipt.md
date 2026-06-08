@@ -8,12 +8,12 @@
 |-------|-------|
 | campaign | `GNURUST.17` |
 | court | cp500 EBCDIC zoned-decimal numeric DISPLAY decode |
-| crate_version | `0.7.0` |
+| crate_version | `0.7.1` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | raw EBCDIC zoned field bytes -> value |
 | replay command | `bash lab/oracle/ebcdic_num_sweep.sh` |
-| generated_at | ee271cb-replay |
-| git_commit | `ee271cb` |
+| generated_at | 4ee991a-replay |
+| git_commit | `4ee991a` |
 | receipt_status | current |
 
 ## Non-claims

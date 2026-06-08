@@ -82,6 +82,7 @@ ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabili
 | `GNURUST.16` edited | edited-PIC DECODE (16a `Z 9 , . - +` + 16b `$ * CR DB B 0 /`) → value+text | `cobc` MOVE→edited→DISPLAY | 0.6.0/0.6.1 | numeric→edited, reports, locale |
 | `GNURUST.17` cp500 zoned-num | raw EBCDIC zoned-decimal → value | `cobc -fsign=EBCDIC` | 0.6.3 | cp037, edited-numeric, mixed encodings |
 | `GNURUST.18` COMP-6 | unsigned packed storage + MOVE | `cobc -C` / `cob_move` | 0.7.0 | signed COMP-6, arithmetic, dialect portability |
+| `GNURUST.19` DIVIDE | DIVIDE GIVING receiver bytes | `cobc` DIVIDE GIVING | 0.7.1 | divide-by-zero, REMAINDER, COMPUTE, float, binary receiver |
 | `KOBOLD.RECON.1` | JSONL + audit bytes | sealed courts (composed) | shim 0.2.0 | write-back, business truth |
 | `KOBOLD.DATA.2/3` | binary + cp500 EBCDIC composed in corpus | sealed courts (composed) | shim 0.3.0/0.4.0 | binary arithmetic, numeric EBCDIC zoned |
 | `KOBOLD.OPERATOR.1` | explain / totals / dirty-mode + risk | sealed courts (composed) | shim 0.5.0 | business truth, semantic validity |

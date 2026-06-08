@@ -49,3 +49,5 @@ The full enumerated future courts and their explicit non-claims live in
 [`future-risk-register.md`](future-risk-register.md); the machine-readable list of every
 current non-claim lives in [`../reports/negative-claims.md`](../reports/negative-claims.md).
 
+| 0g | **DIVIDE** | do DIVIDE GIVING receiver bytes match the oracle? | **sealed** — `arith::cob_divide` (`GNURUST.19`); divide-by-zero/REMAINDER/COMPUTE/float/binary-receiver fail closed |
+

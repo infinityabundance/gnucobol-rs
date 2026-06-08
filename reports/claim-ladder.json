@@ -403,6 +403,20 @@
       "readiness": 3,
       "lie_prevented": "'a cleanly decoded value is the database value' -- the DB2 null/truncation indicator can override it",
       "damage_if_overclaimed": "acting on a decoded value the database marked NULL or truncated posts wrong or missing data"
+    },
+    {
+      "id": "GNURUST.19",
+      "name": "DIVIDE receiving-field bytes",
+      "proven": "DIVIDE a BY b GIVING c + a INTO b GIVING c receiver bytes (DISPLAY/COMP-3, signed/scaled/narrowing, truncate + ROUNDED) matching cobc",
+      "byte_domain": "DIVIDE GIVING receiver field bytes",
+      "oracle": "cobc DIVIDE GIVING (program-shape)",
+      "fixtures": "divide_sweep 736/0 + 6 unit tests",
+      "sealed_version": "0.7.1",
+      "not_proven": "divide-by-zero / ON SIZE ERROR; REMAINDER; COMPUTE / expression evaluation; procedure control flow; float; binary/edited receivers; other rounding modes; business correctness",
+      "breaks_claim": "divide-by-zero; COMPUTE; binary receiver",
+      "readiness": 3,
+      "lie_prevented": "'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter",
+      "damage_if_overclaimed": "a divide result with wrong scale/rounding/truncation/sign/receiver-bytes misstates interest, fees, rates, allocations, or balances while looking plausible"
     }
   ],
   "transform_vs_read": {
@@ -419,7 +433,8 @@
       "GNURUST.14",
       "GNURUST.15",
       "GNURUST.16",
-      "GNURUST.17"
+      "GNURUST.17",
+      "GNURUST.19"
     ],
     "transform_write": [
       "GNURUST.7",

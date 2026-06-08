@@ -594,3 +594,6 @@ not-on-size-error silent truncation / divide-by-zero / receiving-field fit. Ledg
 (`sum(debits)==sum(credits)`, reversal restores balance, residual accounted). Negative zero
 gets an audit note: a representation fact, not necessarily an accounting fact.
 
+
+`GNURUST.19` (DIVIDE receiving-field bytes, `reports/RECEIPT-GNURUST-DIVIDE-19.md`) — sealed 0.7.1; divide-by-zero / SIZE ERROR / REMAINDER / COMPUTE / float / binary receiver remain deferred.
+

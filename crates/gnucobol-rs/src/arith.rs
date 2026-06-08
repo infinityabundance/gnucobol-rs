@@ -31,6 +31,9 @@ pub enum Op {
     Add,
     Subtract,
     Multiply,
+    /// `DIVIDE` (`GNURUST.19`): quotient into a **GIVING** receiver — use [`cob_divide`], not
+    /// [`cob_arith`] (division needs an explicit receiving field + scale, not `f1 := f1 / f2`).
+    Divide,
 }
 
 /// Rounding when storing a result narrower than the computed scale.
@@ -55,6 +58,9 @@ pub enum ArithError {
     /// was deferred; that path is now sealed (`GNURUST.13`, libcob `cob_add_bcd`), so this is no
     /// longer produced.
     PackedAddSubDeferred,
+    /// `DIVIDE` by zero (`GNURUST.19`): fail closed. `ON SIZE ERROR` exception semantics are a
+    /// separate future court, so division by zero is rejected rather than signalled.
+    DivideByZero,
 }
 
 impl core::fmt::Display for ArithError {
@@ -63,6 +69,7 @@ impl core::fmt::Display for ArithError {
             ArithError::OutOfRange => write!(f, "operand/intermediate exceeds i128 decimal range (needs bignum; deferred)"),
             ArithError::InvalidAttr => write!(f, "invalid field attribute"),
             ArithError::PackedAddSubDeferred => write!(f, "ADD/SUBTRACT into a PACKED field uses libcob's cob_add_bcd path (deferred, GNURUST.ARITH-BCD.0)"),
+            ArithError::DivideByZero => write!(f, "DIVIDE by zero (fail closed; ON SIZE ERROR is a future court)"),
         }
     }
 }
@@ -136,7 +143,61 @@ fn compute(a: Dec, b: Dec, op: Op) -> Result<Dec, ArithError> {
                 scale: a.scale + b.scale,
             })
         }
+        // DIVIDE has no exact Dec (the quotient depends on the receiving scale) — use cob_divide.
+        Op::Divide => Err(ArithError::InvalidAttr),
     }
+}
+
+/// `a / b` evaluated at exactly `result_scale` fractional digits, truncating toward zero (the COBOL
+/// DIVIDE truncation). `result_scale = a/b * 10^result_scale = a.mag * 10^(result_scale+b.scale-a.scale)
+/// / b.mag`. Fails closed on divide-by-zero (`GNURUST.19`; `ON SIZE ERROR` is a future court).
+fn compute_divide(a: Dec, b: Dec, result_scale: i32) -> Result<Dec, ArithError> {
+    if b.mag == 0 {
+        return Err(ArithError::DivideByZero);
+    }
+    let k = result_scale + b.scale - a.scale;
+    let mag = if k >= 0 {
+        let num = a
+            .mag
+            .checked_mul(pow10(k as u32).ok_or(ArithError::OutOfRange)?)
+            .ok_or(ArithError::OutOfRange)?;
+        num / b.mag // i128 division truncates toward zero (sign = sign(num)*sign(b))
+    } else {
+        let den = b
+            .mag
+            .checked_mul(pow10((-k) as u32).ok_or(ArithError::OutOfRange)?)
+            .ok_or(ArithError::OutOfRange)?;
+        a.mag / den
+    };
+    Ok(Dec {
+        mag,
+        scale: result_scale,
+    })
+}
+
+/// `DIVIDE` quotient into a GIVING receiver (`GNURUST.19`): `receiver := lhs / rhs`, returning the
+/// receiver's field bytes — matching libcob's `cob_div`/`cob_decimal_div` + store. Truncation toward
+/// zero by default; `ROUNDED` is nearest-away-from-zero (one guard digit, computed then rounded by
+/// [`store`]). Divide-by-zero fails closed. (For `DIVIDE a BY b GIVING c`, `lhs=a, rhs=b`; for
+/// `DIVIDE a INTO b GIVING c`, `lhs=b, rhs=a`.) **Non-claims:** `REMAINDER`, `ON SIZE ERROR`, `COMPUTE`,
+/// expression evaluation, binary/edited receivers, and business correctness.
+pub fn cob_divide(
+    lhs: &[u8],
+    lhs_attr: &FieldAttr,
+    rhs: &[u8],
+    rhs_attr: &FieldAttr,
+    recv_attr: &FieldAttr,
+    round: Round,
+) -> Result<Vec<u8>, ArithError> {
+    let dl = decode(lhs, lhs_attr)?;
+    let dr = decode(rhs, rhs_attr)?;
+    let guard = if round == Round::NearAwayFromZero {
+        1
+    } else {
+        0
+    };
+    let q = compute_divide(dl, dr, recv_attr.scale as i32 + guard)?;
+    store(q, recv_attr, round, false)
 }
 
 /// Truncating division of `mag` by 10^k, toward zero (`cob_div_by_pow_10`).
@@ -378,6 +439,108 @@ mod tests {
         )
         .unwrap();
         assert_eq!(r, vec![0x00, 0x30, 0x0c]); // 003.00
+    }
+
+    #[test]
+    fn divide_truncates() {
+        // 10.00 / 3.00 = 3.333... -> S9(5)V99 truncate = 3.33
+        let r = cob_divide(
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(&r, b"0000333");
+    }
+
+    #[test]
+    fn divide_rounded_half_away() {
+        // 20.00 / 3.00 = 6.666... -> trunc 6.66 ; ROUNDED 6.67
+        let t = cob_divide(
+            b"0002000",
+            &disp(7, 2, false),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(&t, b"0000666");
+        let rr = cob_divide(
+            b"0002000",
+            &disp(7, 2, false),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+            Round::NearAwayFromZero,
+        )
+        .unwrap();
+        assert_eq!(&rr, b"0000667");
+    }
+
+    #[test]
+    fn divide_negative_truncates_toward_zero() {
+        // -10.00 / 3.00 = -3.33 (truncate toward zero, not -3.34)
+        let mut a = b"0001000".to_vec();
+        *a.last_mut().unwrap() = 0x70; // -10.00 (last '0' -> negative overpunch)
+        let r = cob_divide(
+            &a,
+            &disp(7, 2, true),
+            b"0000300",
+            &disp(7, 2, false),
+            &disp(7, 2, true),
+            Round::Truncate,
+        )
+        .unwrap();
+        let mut exp = b"0000333".to_vec();
+        *exp.last_mut().unwrap() = 0x73; // -3.33 ('3' negative overpunch)
+        assert_eq!(r, exp);
+    }
+
+    #[test]
+    fn divide_half_scale() {
+        // 1.00 / 2.00 = 0.50
+        let r = cob_divide(
+            b"0000100",
+            &disp(7, 2, false),
+            b"0000200",
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(&r, b"0000050");
+    }
+
+    #[test]
+    fn divide_into_packed_receiver() {
+        // DIVIDE into a COMP-3 receiver: 9.00 / 2.00 = 4.50 in S9(3)V99 COMP-3.
+        let r = cob_divide(
+            b"0000900",
+            &disp(7, 2, false),
+            b"0000200",
+            &disp(7, 2, false),
+            &packed(5, 2, true),
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(r, vec![0x00, 0x45, 0x0c]); // 004.50
+    }
+
+    #[test]
+    fn divide_by_zero_fails_closed() {
+        let r = cob_divide(
+            b"0001000",
+            &disp(7, 2, false),
+            b"0000000",
+            &disp(7, 2, false),
+            &disp(7, 2, false),
+            Round::Truncate,
+        );
+        assert_eq!(r, Err(ArithError::DivideByZero));
     }
 
     #[test]

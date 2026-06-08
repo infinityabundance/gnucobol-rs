@@ -117,6 +117,8 @@ def migrate():
     manifest = []
     for f in sorted(glob.glob(os.path.join(LEGACY, "reports", "*"))):
         name = os.path.basename(f)
+        if not (name.startswith("RECEIPT-") or name == "negative-claims.md"):
+            continue  # docs-legacy (README etc.) belongs to lab/docs, not the report migration
         txt = open(f).read()
         if name.startswith("RECEIPT-"):
             court = court_of(f, txt)
@@ -135,7 +137,7 @@ def migrate():
         })
     json.dump({"schema": "trust4-legacy-manifest-v1", "count": len(manifest), "moved": manifest},
               open(os.path.join(LEGACY, "MANIFEST.json"), "w"), indent=2)
-    open(os.path.join(LEGACY, "README.md"), "w").write(
+    open(os.path.join(LEGACY, "INDEX.md"), "w").write(
         "# Legacy reports (historical exhibits — NOT authoritative)\n\n"
         "> These hand-written reports were superseded by generated TRUST.4 casefiles. They are preserved "
         "byte-for-byte as historical research material; the authoritative, machine-verifiable evidence of "

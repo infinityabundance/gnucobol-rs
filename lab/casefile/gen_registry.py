@@ -83,6 +83,20 @@ DB2 = [
 for (i, s, g, r) in DB2:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.DB2HOST.1"]}
+
+# GNURUST.19 DIVIDE refusals.
+ARITH = [
+ ("NEG.ARITH.DIVIDE_BY_ZERO_SIZE_ERROR", "divide-by-zero handled (vs fail closed) without an ON SIZE ERROR court", "GNURUST.19 fails closed (ArithError::DivideByZero)", "silently producing a value on n/0"),
+ ("NEG.ARITH.REMAINDER_NOT_CLAIMED", "DIVIDE ... REMAINDER", "future court", "wrong remainder bytes"),
+ ("NEG.ARITH.COMPUTE_NOT_CLAIMED", "COMPUTE / arithmetic expression evaluation", "out of scope (single-op courts only)", "mis-evaluating an expression"),
+ ("NEG.ARITH.PROCEDURE_FLOW_NOT_CLAIMED", "procedure-division control flow / ON SIZE ERROR branch", "out of scope (no execution)", "assuming control-flow side effects"),
+ ("NEG.ARITH.FLOAT_NOT_CLAIMED", "floating-point (COMP-1/COMP-2) arithmetic", "out of scope (integer-decimal only)", "float rounding error in money"),
+ ("NEG.ARITH.BINARY_RECEIVER_NOT_CLAIMED", "DIVIDE into a binary (COMP/COMP-5) receiver", "future court", "wrong binary receiver bytes"),
+ ("NEG.ARITH.BUSINESS_CALCULATION_NOT_CLAIMED", "a divide result treated as a correct business calculation", "byte semantics only", "a plausible but wrong fee/interest/allocation"),
+]
+for (i, s, g, r) in ARITH:
+    seen[i] = {"id": i, "surface": s, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.19"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

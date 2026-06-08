@@ -13,7 +13,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.0 · 17 sealed GNURUST courts · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.1 · 18 sealed GNURUST courts · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -59,6 +59,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.16` | edited-picture decode (16a+16b) | pass | `reports/casefiles/GNURUST.16/` |
 | `GNURUST.17` | cp500 EBCDIC zoned numeric decode | pass | `reports/casefiles/GNURUST.17/` |
 | `GNURUST.18` | COMP-6 unsigned packed storage + MOVE | pass | `reports/casefiles/GNURUST.18/` |
+| `GNURUST.19` | DIVIDE receiving-field bytes | pass | `reports/casefiles/GNURUST.19/` |
 | `KOBOLD.RECON.1` | fixed-record reconciliation | pass | `reports/casefiles/KOBOLD.RECON.1/` |
 | `KOBOLD.OPERATOR.1` | operator trust layer | pass | `reports/casefiles/KOBOLD.OPERATOR.1/` |
 | `KOBOLD.FILE.1` | fixed-record container ingest | pass | `reports/casefiles/KOBOLD.FILE.1/` |
