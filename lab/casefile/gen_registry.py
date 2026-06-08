@@ -285,6 +285,21 @@ SENT = [
 for (i, s2, g, r) in SENT:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.SENTINEL.PROFILE.1"]}
+
+# KOBOLD.DATE.PROFILE.1 — declared date format; no date inference.
+DATEP = [
+ ("NEG.DATE.PIC9_NOT_DATE", "a PIC 9(n) field treated as a date without a declared profile", "only declared date fields are validated; PIC shape alone gets no date claim", "reading a numeric id as a date"),
+ ("NEG.DATE.ZERO_DATE_NOT_NULL", "00000000 treated as null", "sentinels delegated to SENTINEL.PROFILE.1; nullness needs DB2HOST.1", "treating a zero-date as null"),
+ ("NEG.DATE.HIGH_DATE_NOT_MAX_DATE", "99999999 treated as a max/open date", "declared sentinel only; no max-date inference", "reading 99999999 as forever-open"),
+ ("NEG.DATE.Y2K_WINDOW_NOT_INFERRED", "a 2-digit year windowed to a century", "no Y2K window inference", "guessing 19xx vs 20xx"),
+ ("NEG.DATE.BUSINESS_CALENDAR_NOT_CLAIMED", "a valid date treated as a business-calendar date", "format_valid_only; business_calendar claimed:false", "assuming a business day / holiday calendar"),
+ ("NEG.DATE.SETTLEMENT_DATE_NOT_CLAIMED", "a date treated as settlement/maturity meaning", "out of scope", "deriving settlement from a date field"),
+ ("NEG.DATE.ARITHMETIC_NOT_CLAIMED", "date arithmetic (age, term, days-between) claimed", "format validation only", "computing on dates"),
+ ("NEG.DATE.CURRENTNESS_NOT_CLAIMED", "a date treated as current / timezone-resolved", "no currentness/timezone", "assuming as-of/current meaning"),
+]
+for (i, s2, g, r) in DATEP:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.DATE.PROFILE.1"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

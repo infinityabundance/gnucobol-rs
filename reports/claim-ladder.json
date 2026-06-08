@@ -627,6 +627,20 @@
       "readiness": 3,
       "lie_prevented": "'this field is LOW-VALUES, so it is null / HIGH-VALUES, so it is the max date / spaces, so it is missing' -- SENTINEL.PROFILE.1 records DECLARED markers as evidence only and refuses every meaning",
       "damage_if_overclaimed": "treating a sentinel as null/date/missing silently mis-handles closed accounts, open dates, and absent data across a whole file"
+    },
+    {
+      "id": "KOBOLD.DATE.PROFILE.1",
+      "name": "declared date-format evidence",
+      "proven": "a named field is validated against an EXPLICIT declared format (YYYYMMDD / YYDDD) on its RAW digit string (leading zeros preserved); sentinel values are delegated to SENTINEL.PROFILE.1 (a declared sentinel is not validated as a date); the strongest claim is format_valid_only",
+      "byte_domain": "declared date format -> per-field valid|invalid_format|invalid_calendar|declared_sentinel",
+      "oracle": "the declared format + gregorian calendar validity (deterministic)",
+      "fixtures": "tests/date_profile.rs (3: valid/invalid-calendar/delegated-sentinel + PIC9-no-claim, undeclared zero-date flags sentinel-required, missing field fails closed)",
+      "sealed_version": "kobold 0.6.4",
+      "not_proven": "PIC shape = a date; zero-date = null; high-date = max/open date; Y2K window; business calendar; settlement/maturity meaning; currentness/timezone; date arithmetic",
+      "breaks_claim": "inferring a date from PIC shape; inferring null/max/Y2K/business meaning; doing date arithmetic",
+      "readiness": 3,
+      "lie_prevented": "'PIC 9(8) so it is a date / 00000000 so it is null / 99999999 so it is forever-open / a 2-digit year so it is 19xx' -- DATE.PROFILE.1 validates only DECLARED formats and refuses all date meaning",
+      "damage_if_overclaimed": "misreading a numeric id as a date, or a zero/high sentinel as null/forever-open, mis-handles maturities, settlements, and closures across a whole portfolio"
     }
   ],
   "transform_vs_read": {

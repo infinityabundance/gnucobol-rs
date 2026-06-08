@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 308,
+  "count": 324,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -608,6 +608,17 @@
       ]
     },
     {
+      "id": "NEG.BUSINESS-CALENDAR",
+      "surface": "business calendar",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.BUSINESS-CORRECTNESS",
       "surface": "business correctness",
       "status": "not_admitted_fail_closed",
@@ -858,6 +869,17 @@
       ]
     },
     {
+      "id": "NEG.CURRENTNESS-TIMEZONE",
+      "surface": "currentness/timezone",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.CUSTOMER-ACCEPTANCE",
       "surface": "customer acceptance",
       "status": "not_admitted_fail_closed",
@@ -925,6 +947,61 @@
       ]
     },
     {
+      "id": "NEG.DATE-ARITHMETIC",
+      "surface": "date arithmetic",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.ARITHMETIC_NOT_CLAIMED",
+      "surface": "date arithmetic (age, term, days-between) claimed",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "format validation only",
+      "risk_if_guessed": "computing on dates",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.BUSINESS_CALENDAR_NOT_CLAIMED",
+      "surface": "a valid date treated as a business-calendar date",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "format_valid_only; business_calendar claimed:false",
+      "risk_if_guessed": "assuming a business day / holiday calendar",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.CURRENTNESS_NOT_CLAIMED",
+      "surface": "a date treated as current / timezone-resolved",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "no currentness/timezone",
+      "risk_if_guessed": "assuming as-of/current meaning",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.HIGH_DATE_NOT_MAX_DATE",
+      "surface": "99999999 treated as a max/open date",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "declared sentinel only; no max-date inference",
+      "risk_if_guessed": "reading 99999999 as forever-open",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.DATE.INFERENCE",
       "surface": "a PIC 9(8) field interpreted as a date / format (YYYYMMDD vs Julian vs period vs sentinel)",
       "status": "not_admitted_requires_declared_profile",
@@ -933,6 +1010,50 @@
       "owning_future_campaign": "DATE.PROFILE.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.DATE.PIC9_NOT_DATE",
+      "surface": "a PIC 9(n) field treated as a date without a declared profile",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "only declared date fields are validated; PIC shape alone gets no date claim",
+      "risk_if_guessed": "reading a numeric id as a date",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.SETTLEMENT_DATE_NOT_CLAIMED",
+      "surface": "a date treated as settlement/maturity meaning",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "out of scope",
+      "risk_if_guessed": "deriving settlement from a date field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.Y2K_WINDOW_NOT_INFERRED",
+      "surface": "a 2-digit year windowed to a century",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "no Y2K window inference",
+      "risk_if_guessed": "guessing 19xx vs 20xx",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DATE.ZERO_DATE_NOT_NULL",
+      "surface": "00000000 treated as null",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "sentinels delegated to SENTINEL.PROFILE.1; nullness needs DB2HOST.1",
+      "risk_if_guessed": "treating a zero-date as null",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
       ]
     },
     {
@@ -1591,6 +1712,17 @@
       ]
     },
     {
+      "id": "NEG.HIGH-DATE-MAX-OPEN-DATE",
+      "surface": "high-date = max/open date",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.HIGH-VALUES-MAX-DATE",
       "surface": "HIGH-VALUES=max-date",
       "status": "not_admitted_fail_closed",
@@ -2167,6 +2299,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.PIC-SHAPE-A-DATE",
+      "surface": "PIC shape = a date",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
       ]
     },
     {
@@ -2935,6 +3078,17 @@
       ]
     },
     {
+      "id": "NEG.SETTLEMENT-MATURITY-MEANING",
+      "surface": "settlement/maturity meaning",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.SIDE-EFFECTS-BEYOND-THE-DECLARED-FIELD",
       "surface": "side effects beyond the declared field",
       "status": "not_admitted_fail_closed",
@@ -3409,6 +3563,17 @@
       ]
     },
     {
+      "id": "NEG.Y2K-WINDOW",
+      "surface": "Y2K window",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.ZERO-DATE-A-DATE",
       "surface": "zero-date=a date",
       "status": "not_admitted_fail_closed",
@@ -3417,6 +3582,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SENTINEL.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.ZERO-DATE-NULL",
+      "surface": "zero-date = null",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.DATE.PROFILE.1"
       ]
     },
     {
