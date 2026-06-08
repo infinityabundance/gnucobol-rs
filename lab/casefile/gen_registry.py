@@ -188,6 +188,13 @@ BANKREC = [
 for (i, s, g, r) in BANKREC:
     seen[i] = {"id": i, "surface": s, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.BANK.RECONCILE.1"]}
+
+# Atlas P-axis (platform/runtime) refusal.
+seen["NEG.PLATFORM.RUNTIME_NOT_CLAIMED"] = {"id": "NEG.PLATFORM.RUNTIME_NOT_CLAIMED",
+    "surface": "platform/runtime COBOL semantics (z/OS, z/VSE, IBM i, AIX, OpenVMS, NonStop, ...) claimed",
+    "status": "not_admitted_fail_closed", "guard": "P-platform-axis lists platforms as a curated axis; no platform runtime court is admitted",
+    "risk_if_guessed": "assuming a platform's runtime behavior (file I/O, EBCDIC, sort, sign) without an oracle",
+    "owning_future_campaign": None, "evidence": ["archaeology/atlases/P-platform-axis"]}
 out = {"schema": "kobold-negative-capability-registry-v1",
        "truth_hierarchy": ["bytes", "record truth", "posting truth", "accounting truth", "extraction truth", "business truth"],
        "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",

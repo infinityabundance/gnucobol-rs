@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "archaeology-atlases-j-standard-release-join-atlas-atlas",
+ "generated_path": "archaeology/atlases/J-standard-release-join-atlas/atlas.md",
+ "title": "A19 \u2014 standard \u00d7 release \u00d7 surface JOIN atlas",
+ "machine_fields": [],
+ "body_template": "The payoff axis. [`join.json`](join.json) crosses the **surface taxonomy** (A18) with the **standard\naxis** (A18), the **GnuCOBOL release/dialect axis** (A17 + G), and \u2014 the move that makes this a roadmap\ngenerator \u2014 the **`gnucobol_rs` axis** (this project's sealed courts). [`drift-matrix.tsv`](drift-matrix.tsv)\nis the flat view; [`fixture-candidates.json`](fixture-candidates.json) is the ranked next-campaign queue;\n[`hidden-surfaces.md`](hidden-surfaces.md) is the human reading.\n\n## How to read a join row\n\n```\nsurface  \u00d7  {what the STANDARD says}  \u00d7  {what GnuCOBOL 3.2 DOES}  \u00d7  {what gnucobol-rs SEALED}  \u2192  drift\n```\n\nThe interesting cells are the **disagreements** \u2014 the `drift` column:\n\n- `physical_vs_logical_byte_domain` \u2014 `OCCURS DEPENDING`: GnuCOBOL's generated-C allocates the\n  physical maximum; the *logical* length is a different byte domain. `gnucobol-rs` sealed physical-max\n  only (`GNURUST.10`) and says so.\n- `standard_behavior_differs_from_gnucobol` \u2014 `COMP-X` sizing: GnuCOBOL's tight `256^k>=10^digits`\n  table differs from the `1-2-4-8` table of `COMP`/`COMP-5` (a real catch, `GNURUST.14`).\n- `backend_dependent_feature` \u2014 `JSON GENERATE`, indexed I/O, screen: parsed, but runtime needs\n  cJSON/JSON-C, BDB/VBISAM, curses. Syntax presence \u2260 functional.\n- `standard_before_gnucobol` \u2014 `SET..TO FALSE`: in the 2002 standard; `gnucobol-rs` seals TRUE and\n  **fails closed** on FALSE (`GNURUST.12`).\n- `platform_dependent_feature` \u2014 `SYNCHRONIZED`, EBCDIC code page: follow host/ABI/table, not the\n  abstract standard.\n\n## The discipline (unchanged)\n\n`gnucobol_rs_axis` cells are **oracle-grounded** (every sealed campaign is proven against the admitted\n3.2 oracle). `standard_axis` / vendor cells are **`reference_curated`** \u2014 citations, never copied text,\nand they **never override** the oracle in a sealed court.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/archaeology/atlases/J-standard-release-join-atlas/atlas.md"
+  ],
+  "legacy_sha256": [
+   "f264c5e3c1ea9a03730ec1d358948a0b3b3530719db46be7c8efe66b425ec20d"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

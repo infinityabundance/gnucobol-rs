@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "archaeology-atlases-j-standard-release-join-atlas-gnucobol-rs-roadmap-from-atlas",
+ "generated_path": "archaeology/atlases/J-standard-release-join-atlas/gnucobol-rs-roadmap-from-atlas.md",
+ "title": "gnucobol-rs roadmap, generated from the atlas join",
+ "machine_fields": [],
+ "body_template": "Ranked from `fixture-candidates.json` (unsealed/partial surfaces, by `fixture_priority` then real-\ncopybook likelihood + oracle-testability). The atlas IS the roadmap generator.\n\n| rank | surface | fixture_priority | gnucobol-rs status | next court |\n|------|---------|------------------|--------------------|------------|\n| 1 | code_page_ebcdic (numeric zoned) | high | cp500 text sealed; numeric zoned deferred | GNURUST.EBCDIC-NUM |\n| 2 | edited_pictures (financial decorations) | high | 16a decode sealed | GNURUST.16b ($ * CR DB B 0 /) |\n| 3 | condition_names_false_clause | medium | SET TRUE sealed; FALSE fails closed | GNURUST.12b |\n| 4 | arithmetic_divide | medium | deferred | GNURUST.17 |\n| 5 | synchronized_alignment | medium | fails closed | (defer \u2014 platform-dependent) |\n\nRule: a surface graduates to a court only when it is **real in copybooks**, **oracle-testable**, and\n**raises migration trust** \u2014 never because the standard mentions it. `out_of_model` surfaces\n(files, reports, screen, JSON/XML, CALL, OO) stay out until they directly improve migration evidence.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/archaeology/atlases/J-standard-release-join-atlas/gnucobol-rs-roadmap-from-atlas.md"
+  ],
+  "legacy_sha256": [
+   "89315817a0635de730238fd5aaf0e71eaab058d8b9e8a682949e883db3ac0033"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

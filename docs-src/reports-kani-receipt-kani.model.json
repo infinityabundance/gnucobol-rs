@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "reports-kani-receipt-kani",
+ "generated_path": "reports/kani/RECEIPT-KANI.md",
+ "title": "Kani sub-receipt \u2014 sharp reduced-surface proofs",
+ "machine_fields": [],
+ "body_template": "Doctrine: prove the **sharpest** index/arithmetic invariants \u2014 the exact bounds that would be the\nactual out-of-bounds access if a guard or the scale arithmetic regressed \u2014 not broad \"the parser is\ncorrect\" vibes. Each harness is allocation-free and converges quickly.\n\nRun: `cargo kani` in `crates/gnucobol-rs/` (cargo-kani 0.67).\n\n| Harness | Invariant | Verdict |\n|---------|-----------|---------|\n| `store_window_is_in_bounds` | The scale-alignment copy window of `store_common_region` (extracted as the pure `region_window`) lies entirely within **both** buffers for *all* integer inputs: when `Some((d,s,n))`, `n>0 \u2227 0\u2264d \u2227 d+n\u2264fsize \u2227 0\u2264s \u2227 s+n\u2264size`. This is the one place a regression in `gcf=min(hf1,hf2)`/`lcf=max(lf1,lf2)` would silently index past a field. Proved unbounded in the inputs (full i64 reasoning over the bounded field model), so it is the strongest form of the bound, not a sample. | **SUCCESSFUL** |\n| `packed_unpack_buffer_sufficient` | For any packed field with `1 \u2264 digits \u2264 COB_MAX_DIGITS`, decoding any nibble content via `cob_move` PACKED\u2192DISPLAY never panics or indexes past the fixed `[u8; COB_MAX_DIGITS+1]` unpack buffer \u2014 the buffer is exactly sized and the push-guard never silently truncates a valid field. | **SUCCESSFUL** |\n\n`Complete - 2 successfully verified harnesses, 0 failures, 2 total.`\n\nBoth proofs reference the production code paths directly (`move_ops::region_window`, `cob_move`),\nso they are single-source-of-truth: the proved arithmetic is the same arithmetic the sweep\nexercises against the oracle.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/reports/kani/RECEIPT-KANI.md"
+  ],
+  "legacy_sha256": [
+   "7d543a948abe32aadebb05d015bd79a268477f14a9398040dbf92735e3838bb6"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

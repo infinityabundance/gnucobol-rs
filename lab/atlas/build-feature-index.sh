@@ -7,7 +7,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PREFIX="$ROOT/lab/oracle/prefix"; SRC="$ROOT/lab/admit/gnucobol-3.2"
 [ -x "$PREFIX/bin/cobc" ] || { echo "oracle not built"; exit 2; }
 export PATH="$PREFIX/bin:$PATH" LD_LIBRARY_PATH="$PREFIX/lib" COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" LC_ALL=C.UTF-8
-OUT="$ROOT/archaeology/atlases/A17-gnucobol-release-atlas"; RAW="$OUT/raw"; mkdir -p "$RAW"
+OUT="$ROOT/archaeology/atlases/G-gnucobol-release-atlas"; RAW="$OUT/raw"; mkdir -p "$RAW"
 VER=$(cobc --version 2>/dev/null | head -1)
 
 # 1. Full --list-* tables (oracle_generated) -> raw/

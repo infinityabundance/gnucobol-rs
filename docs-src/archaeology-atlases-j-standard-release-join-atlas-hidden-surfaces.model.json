@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "archaeology-atlases-j-standard-release-join-atlas-hidden-surfaces",
+ "generated_path": "archaeology/atlases/J-standard-release-join-atlas/hidden-surfaces.md",
+ "title": "Hidden / not-well-known surfaces the join surfaces",
+ "machine_fields": [],
+ "body_template": "Generated reading of `join.json` \u2014 the obscure stuff normal searches miss.\n\n1. **Syntax recognized for compatibility but nonfunctional at runtime** \u2014 the `-std` vendor dialects add\n   *hundreds* of reserved words (e.g. `mf-strict` carries 111 not in `default`; see G-axis) without\n   implying any of those features are functional. Reserved-word presence is recognition, not behavior.\n2. **Backend-dependent features** \u2014 `JSON/XML GENERATE` (cJSON/JSON-C/libxml2), indexed files\n   (BDB/VBISAM), screen section (curses): the syntax can parse while the runtime is optional. A build\n   without the lib changes the answer.\n3. **Physical vs logical byte domains** \u2014 `OCCURS DEPENDING ON` allocates the physical maximum in\n   generated C; the active/logical length is a *different* fact. Conflating them is a classic migration\n   bug (`gnucobol-rs` seals physical-max only).\n4. **GnuCOBOL-vs-standard storage drift** \u2014 `COMP-X` uses a tighter byte table than `COMP`/`COMP-5`.\n   \"Binary numeric\" is not one rule.\n5. **Standard-before-GnuCOBOL gaps** \u2014 `SET..TO FALSE` / FALSE clause: standardized, but a court must\n   still prove the exact bytes; `gnucobol-rs` fails closed rather than guess.\n6. **Vendor-only extensions** \u2014 `COMP-6` (unsigned packed, no sign nibble): never standard; real in\n   legacy data. Admit only when oracle-witnessed.\n7. **EBCDIC is platform/table-specific** \u2014 GnuCOBOL 3.2 ships `ebcdic500` (cp500), *not* cp037. Admit\n   the table the oracle ships, defer the one it doesn't.\n8. **Reserved-word-before-feature** \u2014 a word can be reserved across dialects long before (or without)\n   the feature being functional in any build.\n\nEach of these is a `drift` tag in `drift-matrix.tsv`; the `fixture_priority` column says which deserve a\n`gnucobol-rs` court next.\n\n\n## Behavioral probe finding (beyond reserved words)\n\n`lab/atlas/build-dialect-behavior.sh` compiles probe snippets `-fsyntax-only` under each `-std`\n(`dialect-behavior.json`). It catches what word-counts cannot:\n\n- **`EXAMINE` is reserved under `ibm`/`mf`/`acu` but compiles under NO dialect** \u2014 a proven\n  `reserved_word_before_feature` / `inert_compatibility_syntax` case. Reserved \u2260 functional.\n- **`COMP-6` and `ALTER`** are accepted by vendor dialects (`ibm`/`mvs`/`mf`/`acu`) but **rejected by\n  strict `cobol85`/`cobol2002`** \u2014 `vendor_extension_only` / `standard_behavior_differs_from_gnucobol`.\n\nThis is why the join needs the behavioral axis, not just the reserved-word delta.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/archaeology/atlases/J-standard-release-join-atlas/hidden-surfaces.md"
+  ],
+  "legacy_sha256": [
+   "749eff08e5bc70fbab5322799352deb899664bc49ac875f332818a6234b08ca7"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

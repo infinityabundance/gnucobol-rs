@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "archaeology-atlases-g-gnucobol-release-atlas-atlas",
+ "generated_path": "archaeology/atlases/G-gnucobol-release-atlas/atlas.md",
+ "title": "A17 \u2014 GnuCOBOL / OpenCOBOL release atlas",
+ "machine_fields": [],
+ "body_template": "The **release axis**: the OpenCOBOL \u2192 GNU Cobol \u2192 GnuCOBOL lineage, as machine-readable\n[`releases.json`](releases.json). Phase 1 is *index, do not build*: dates and anchors are curated from\npublic project pages (citations in the JSON), and **only `gnucobol-3.2` is admitted and built** here \u2014\nit is the oracle every `gnucobol-rs` court is proven against. Every other release is\n`build_status.not_attempted`: a placeholder, never a behavior claim.\n\n## Lineage anchors\n\n```\nopencobol-1.0/1.1  \u2192  gnucobol-1.1  \u2192  gnucobol-2.x (2.2 anchor)  \u2192  gnucobol-3.1/3.1.2  \u2192  gnucobol-3.2 [ADMITTED]  \u2192  gnucobol-4.x (shadow only)\n```\n\n## Discipline\n\n- `gnucobol-3.2` = `oracle_source` (admitted, built; sha256 + recipe in `reports/admission/`). It is the\n  **only** authority for a sealed court.\n- `gnucobol-4.x` is a **shadow line**: a future comparison witness, never an override of 3.2.\n- The status vocabulary (`not_present \u2026 runtime_functional \u2026 backend_dependent \u2026 unknown`) is the heart\n  of the per-release feature map; populating it for historical releases is **Phase 3 (build selected\n  anchors)** and is *not attempted* yet \u2014 loudly, not silently.\n\n## What is real today vs. placeholder\n\n| Release | evidence_kind | built? |\n|---------|---------------|:------:|\n| gnucobol-3.2 | `oracle_source` | **yes** (this lab) |\n| all others | `reference_curated` / `not_attempted` | no |\n\nThe `-std` **dialect** profiles of the admitted 3.2 oracle (`ibm`, `mvs`, `mf`, `acu`, `rm`, `bs2000`,\n\u2026) *are* oracle-generated \u2014 see [`../G-gnucobol-dialect-axis/`](../G-gnucobol-dialect-axis/).\n\n\n## Phase 2 \u2014 feature clues from the admitted 3.2 (done, oracle-grounded)\n\n`lab/atlas/build-feature-index.sh` extracts feature clues from the **admitted** 3.2 tree (not curated):\n[`feature-index.json`](feature-index.json) + [`raw/`](raw/) hold the full `cobc --list-*` tables\n(`oracle_generated`) and NEWS/testsuite coverage (`oracle_source`). Reproducible findings (3.2):\n\n- `--list-*`: reserved **1001**, intrinsics **116**, system routines **65**, mnemonics **76**,\n  exceptions **2** (raw tables in `raw/cobc-list-*.txt`).\n- The admitted **testsuite has 1346 cases**, categorized by surface \u2014 e.g. `data_packed` 23,\n  `data_binary` 18, `data_display` 9, `run_file` 106, `run_extensions` 107, `listings` 36. GnuCOBOL's\n  *own* coverage concentration is a strong fixture-priority signal (cross-checks A19).\n- Reserved-word *presence* for `JSON`/`XML`/`REPORT`/`SCREEN`/`INVOKE` is `true` \u2014 but presence is\n  **recognition, not function** (those are backend/runtime-dependent; see A19 drift).\n\nThis is Phase 2 for the admitted release only. Phase 3 (building historical anchors to populate the\nper-release feature map) remains `not_attempted` \u2014 loudly.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/archaeology/atlases/G-gnucobol-release-atlas/atlas.md"
+  ],
+  "legacy_sha256": [
+   "45d880ba4ad5ae5c5a7a42946619c319a440d4d4f8fea004ebc022add5058aba"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

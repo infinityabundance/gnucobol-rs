@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "fixtures-readme",
+ "generated_path": "fixtures/README.md",
+ "title": "fixtures/",
+ "machine_fields": [],
+ "body_template": "Small, committed inputs and oracle-generated expected outputs, so `cargo test` proves parity\n**without** the admitted bundle or built oracle present.\n\n- `hello/` \u2014 minimal COBOL programs for the `cobc-oracle-rs` program-oracle smoke.\n- `decimal/` \u2014 `(PIC, value)` rows and the libcob-harness byte dumps they must match, used by\n  `gnucobol-rs`' self-contained golden tests.\n\nEvery `expected` value here was produced by the **real** built GnuCOBOL 3.2 oracle, not by the\nRust port. Regenerate with the sweep scripts under `lab/oracle/` when the pinned oracle changes.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/fixtures/README.md"
+  ],
+  "legacy_sha256": [
+   "6279a781786a043864a60b85882380d6f477c54a609355dce80e2542eee3ce6a"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

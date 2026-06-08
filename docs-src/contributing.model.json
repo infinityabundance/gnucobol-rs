@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "contributing",
+ "generated_path": "CONTRIBUTING.md",
+ "title": "Contributing to gnucobol-rs",
+ "machine_fields": [],
+ "body_template": "This project has an unusually strict contribution contract because its entire value is\n**provable fidelity to GnuCOBOL**. A patch that loosens any of the following is not welcome,\nhowever convenient.\n\n## The derivation rule (read first)\n\n`gnucobol-rs` is a **faithful derivative port** (see [`docs/derivation-and-license.md`](docs/derivation-and-license.md)).\n\n- Code ported from **`libcob`** must live in an **LGPL-3.0-or-later** crate and cite the\n  upstream lines it mirrors (`// move.c:477`).\n- Code derived from or tightly coupled to **`cobc`** must live in a **GPL-3.0-or-later** crate.\n- **No untraced copied logic.** If you read upstream `.c` to write a function, cite it and\n  carry its license. Do not relabel a derivative as \"clean-room\".\n\n## The method (non-negotiable)\n\nEvery semantic claim is oracle-first and receipt-backed (see [`docs/porting-method.md`](docs/porting-method.md)):\n\n1. Build the GnuCOBOL 3.2 oracle from pinned source into `lab/oracle/prefix`.\n2. Port faithfully \u2014 **faithful, not improved**. A \"nicer\" divergence from the oracle is a bug.\n3. Prove byte/verdict parity over fixtures + a differential sweep; print `PASS=n FAIL=0`.\n4. Pin or classify every confounder; never blur the claim.\n5. Add a Kani reduced-surface proof and fuzz the hostile surface; fix what it finds.\n\n## Engineering constraints\n\n- `#![forbid(unsafe_code)]` in every crate.\n- `overflow-checks = true` in release; checked/saturating arithmetic at byte/parse choke points.\n- Typed errors, **never panic on hostile input**.\n- Zero runtime dependencies where practical.\n- Gate locally before proposing: `cargo fmt --check`, `cargo clippy --all-targets -D warnings`,\n  `cargo test`, and the oracle sweep.\n\n## What not to add\n\nNo \"ergonomic\" wrappers, no feature/dialect supersets, no policy engines, no broad\ncompiler-replacement claims. Breadth arrives only as new, separately sealed campaigns.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/CONTRIBUTING.md"
+  ],
+  "legacy_sha256": [
+   "96af44147feaaa273387a6addea43c05cde6b83ec1f370af5f77be7da70ea00c"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

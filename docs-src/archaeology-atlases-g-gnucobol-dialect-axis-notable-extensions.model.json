@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "archaeology-atlases-g-gnucobol-dialect-axis-notable-extensions",
+ "generated_path": "archaeology/atlases/G-gnucobol-dialect-axis/notable-extensions.md",
+ "title": "Notable vendor-dialect reserved-word extensions (oracle-generated archaeology)",
+ "machine_fields": [],
+ "body_template": "From `deltas/` (reproducible via `lab/atlas/build-dialect-axis.sh`): the *specific* reserved words each\n`-std` vendor dialect adds beyond `default`. Presence is **recognition, not function** \u2014 but it maps the\nvendor surface a migration is likely to hit.\n\n## Cross-vendor legacy verbs (in mf \u2227 ibm \u2227 acu, NOT in default)\n\n```\nENTER \u00b7 EXAMINE \u00b7 TERMINAL\n```\n\nThese are exactly the *old* COBOL surfaces every vendor preserved for back-compat but GnuCOBOL's\n`default` dialect drops: `EXAMINE` (the pre-COBOL-85 ancestor of `INSPECT`), `ENTER` (inter-language\nlinkage), `TERMINAL` (communications). If a legacy program uses them, it parses under `-std=ibm/mvs/mf`\nbut not `default` \u2014 a real, easily-missed migration scar. (`deltas/cross-vendor-not-default.txt`.)\n\n## Per-dialect flavor (samples \u2014 full lists in `deltas/*.txt`)\n\n- **mf** (+112): `BLOB`, `BLOB-FILE`, `B-EXOR`, `AUTO-HYPHEN-SKIP`, `ABSTRACT`, `ACQUIRE` \u2014 OO + DB +\n  screen extensions.\n- **ibm** (+46): `BASIS`, `CBL`, `COM-REG`, `DBCS`, `DEBUG-CONTENTS`, `CLOCK-UNITS`, `BEGINNING` \u2014\n  mainframe preprocessor + DBCS + debug surfaces.\n- **acu** (+96): `ASSEMBLY-NAME`, `BITMAP-*`, `AX-EVENT-LIST` \u2014 Windows/GUI/ActiveX surfaces.\n\nEach is a candidate `gnucobol-rs` **non-claim** by default, and a fixture-priority signal only if it\nappears in real fixed-record copybooks (most of these are Procedure-Division/screen, out of model).",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/archaeology/atlases/G-gnucobol-dialect-axis/notable-extensions.md"
+  ],
+  "legacy_sha256": [
+   "24d1f9d32ce8ff626fb41a61a8c1058dda705ab99a82e2ce5fff12973d729b7a"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

@@ -5,7 +5,7 @@
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; SRC="$ROOT/lab/admit/gnucobol-3.2"
 [ -d "$SRC/cobc" ] || { echo "admitted source absent"; exit 2; }
-OUT="$ROOT/archaeology/atlases/A17-gnucobol-release-atlas"
+OUT="$ROOT/archaeology/atlases/G-gnucobol-release-atlas"
 g() { local n; n=$(grep -ic "$1" "$2" 2>/dev/null); echo "${n:-0}"; }
 
 # surface : runtime-module  (where it would be IMPLEMENTED if functional)

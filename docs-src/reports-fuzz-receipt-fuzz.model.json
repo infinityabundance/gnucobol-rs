@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "reports-fuzz-receipt-fuzz",
+ "generated_path": "reports/fuzz/RECEIPT-FUZZ.md",
+ "title": "Fuzz sub-receipt \u2014 hostile bytes/attrs, fix-and-seed",
+ "machine_fields": [],
+ "body_template": "Detached fuzz crate (`crates/gnucobol-rs/fuzz/`, empty `[workspace]` \u2192 not built by the parent\ngate; verified: `cargo clippy --all-targets` from the workspace root does not compile it). Entry\nbehind the `fuzzing` feature (`__fuzz_cob_move`). cargo-fuzz 0.13 on nightly.\n\nTarget: arbitrary bytes + arbitrary `(type, digits, scale, flags)` attributes driven through\n`cob_move` and the value decoders. The only assertion is **panic-freedom** (`GNURUST.PANICPOLICY.0`):\na corrupt/oversized field must yield a typed result or guarded bytes \u2014 never a panic, OOB index, or\narithmetic overflow.\n\n## Findings (the fuzzer earned its keep)\n\n| # | Finding | Fix | Regression seed |\n|---|---------|-----|-----------------|\n| 1 | Harness-internal `split - 9` underflow in `__fuzz_cob_move` (not library code). | Robust `body.split_at(at % (len+1))`. | `corpus/cob_move/regression-harness-split-underflow` |\n| 2 | **Real library OOB**: `&src_full[s_off..]` panicked when `s_off=1` (leading-separate sign) but the source field was empty (`move_ops.rs` display\u2192packed/display\u2192display). The upstream C reads OOB here (UB); the port must fail closed. | Bounds-guarded slice `src.get(s_off..).unwrap_or(&[])` in both move functions. | `corpus/cob_move/regression-leadsep-empty-src` |\n\nEach crash was fixed, committed as a regression corpus seed, and verified to replay cleanly.\n\n## Run\n\n`cargo +nightly fuzz run cob_move -- -runs=20000000 -max_len=80` \u2192\n**`#20000000 DONE`, 0 crashes**, after the fixes. Parity (the differential sweep) re-checked\n**PASS=13152 FAIL=0** afterward \u2014 the guards only affect degenerate inputs the sweep does not feed.\n\nBounded clean run; not claimed as \"saturation\".",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/reports/fuzz/RECEIPT-FUZZ.md"
+  ],
+  "legacy_sha256": [
+   "879f7a68713a9d771701198d0a0a8a339d25eb9132913ac543e75005bdda43ae"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

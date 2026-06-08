@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "reports-oracle-delta-ledger",
+ "generated_path": "reports/oracle-delta-ledger.md",
+ "title": "Oracle delta ledger",
+ "machine_fields": [],
+ "body_template": "Not every mismatch is a port bug. When the differential sweep or a fixture diverges from the\noracle, the divergence is **classified here**, never waved off informally. Empty today (the\nsealed decimal slice is `FAIL=0`); the schema exists so the first real delta has a home.\n\n```yaml\nschema: gnucobol-rs-oracle-delta-v1\ncolumns: [case, oracle_version, input, observed_oracle, rust_behavior, classification, status, future_campaign]\nclassifications:\n  - port_bug                      # our error \u2014 fix it\n  - unsupported_surface           # outside the sealed claim \u2014 fail closed, named\n  - gnucobol_build_option_diff    # different --configure / flags\n  - dialect_config_diff           # different -conf / -std / runtime.cfg\n  - platform_diff                 # endianness / charset / OS\n  - known_upstream_bug            # cite the upstream ticket\n  - intentional_safety_rejection  # Rust rejects hostile input the C would UB on\n  - unclassified                  # must not stay here \u2014 triage to one of the above\nentries: []   # decimal slice: PASS, no deltas\n```",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/reports/oracle-delta-ledger.md"
+  ],
+  "legacy_sha256": [
+   "d4f7b977c9677f204c6fb96aed581ed79483eef4fd5e52e7482a82a95a8e1201"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

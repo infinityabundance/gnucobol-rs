@@ -1,0 +1,21 @@
+{
+ "schema": "atlas-platform-axis-v1",
+ "axis": "P",
+ "evidence_kind": "reference_curated",
+ "warning": "Curated from public docs with citations; no standard/vendor text copied. Platform/runtime families are listed as a first-class axis; their COBOL runtime semantics are NOT admitted courts (default non-claim) until an oracle or declared profile supports them.",
+ "folded_from": "V-vendor-axis (platform_P_axis) \u2014 promoted to a first-class P-axis folder",
+ "platforms": [
+  "z/OS-batch",
+  "z/VSE",
+  "ibm-i-ile",
+  "aix",
+  "linux",
+  "windows-mingw-gnucobol",
+  "openvms",
+  "tandem-nonstop",
+  "bs2000",
+  "gcos",
+  "unisys-mcp"
+ ],
+ "courts": "future (no platform runtime court is admitted; see NEG.PLATFORM.RUNTIME_NOT_CLAIMED)"
+}

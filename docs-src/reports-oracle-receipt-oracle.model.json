@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "reports-oracle-receipt-oracle",
+ "generated_path": "reports/oracle/RECEIPT-ORACLE.md",
+ "title": "Oracle sub-receipt \u2014 differential decimal sweep",
+ "machine_fields": [],
+ "body_template": "## Harness (runtime-library oracle shape)\n\n`lab/oracle/decimal_harness.c` links the **built** `libcob` (admitted), constructs `cob_field` /\n`cob_field_attr` with explicit `(type, digits, scale, flags)`, calls the real `cob_move`, and dumps\nthe destination field bytes as lowercase hex \u2014 one structured line per case. The Rust mirror\n`crates/gnucobol-rs/examples/rows.rs` consumes the **identical** rows and emits the same\nformat. Full byte streams are compared (`GNURUST.BYTESTREAM.0`): not `$(...)`-captured, not\nline-zipped.\n\n## Rows (`GNURUST.DECEDGE.0` + `GNURUST.SWEEPCORPUS.0`)\n\nGenerated deterministically by `crates/gnucobol-rs/examples/gen_rows.rs <seed>`:\n- structured boundary families: digit counts {1,2,3,4,5,7,17,18} \u00d7 scales {0,1,n-1,n} \u00d7\n  value kinds {zero, one, all-nines, leading-zeros} \u00d7 {unsigned, signed\u00b1}, for all three\n  sealed conversions (incl. odd/even-digit packed alignment \u2014 the `EVENPACK` family);\n- a seeded pseudo-random corpus of 4000 iterations \u00d7 3 conversions, including cross-(digits,scale)\n  destinations to exercise `store_common_region` alignment.\n\nTotal: **13152 cases per seed.**\n\n## Reproduce\n\n```\nbash lab/oracle/sweep.sh <seed>     # builds harness + Rust rows, compares, prints PASS=n FAIL=n\n```\n\n## Result\n\n| seed | result |\n|------|--------|\n| 0, 1, 2, 7, 42, 12345, 999999 | **PASS=13152 FAIL=0** (each) |\n\nOn `FAIL`, the sweep prints a replayable counterexample (label, oracle hex, rust hex, input row) \u2014\n`GNURUST.DIFFSHRINK.0`. None occurred. Deltas, if any, are classified in\n[`../oracle-delta-ledger.md`](../oracle-delta-ledger.md) (empty).\n\n## Pinned env\n\n`LC_ALL=C.UTF-8`, `LD_LIBRARY_PATH=<prefix>/lib`, `COB_CONFIG_DIR=<prefix>/share/gnucobol/config`.\nOracle identity: [`../admission/RECEIPT-ADMISSION.md`](../admission/RECEIPT-ADMISSION.md).",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/reports/oracle/RECEIPT-ORACLE.md"
+  ],
+  "legacy_sha256": [
+   "87aa67559d491b6b40548a0c622895c0aa1d1b53984034f671a377b8d46272a6"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "archaeology-atlases-s-cobol-standard-atlas-atlas",
+ "generated_path": "archaeology/atlases/S-cobol-standard-atlas/atlas.md",
+ "title": "A18 \u2014 COBOL standard atlas (+ historical / government axes)",
+ "machine_fields": [],
+ "body_template": "The **standard axis**: formal ISO/ANSI standards, the pre-ANSI historical specs, amendments, and\nportability/government profiles \u2014 as [`standards.json`](standards.json). **No standard text is\nreproduced** (ISO texts are paywalled/copyright); rows store *feature labels + citations* only, tagged\nwith `authority_kind` (`historical_standard` / `standard` / `amendment` / `portability_profile` /\n`government_profile`). These are **`reference_curated` shadow witnesses** \u2014 they never override the\nadmitted GnuCOBOL 3.2 oracle in a sealed court.\n\n## Lineage (labels only)\n```\nCOBOL-60/61/61-Ext/65 (historical)  \u2192  COBOL-68 (first ANSI)  \u2192  74  \u2192  85\n  (+ 1992 intrinsic, +1994 correction amendments)  \u2192  2002  \u2192  2014  \u2192  2023 (current)\nX/Open COBOL \u00b7 The Open Group profile \u00b7 FIPS PUB 21.x (government)\n```\n\n## Files\n- [`standards.json`](standards.json) \u2014 the standard/historical/amendment/profile rows.\n- [`surface-taxonomy.json`](surface-taxonomy.json) \u2014 the ~29 feature *surfaces* the join ranges over,\n  each carrying `gnucobol_rs_status` (the roadmap hook).\n- [`feature-index.json`](feature-index.json) \u2014 per-standard surface presence (`present`/`absent`/\n  `unknown`), `reference_curated`.\n\n## Discipline\nStandard presence is a *citation-backed label*, not a behavior claim. The join (A19) is where these\nlabels are crossed with what GnuCOBOL 3.2 actually **does** (oracle-grounded) \u2014 and the disagreements\n(`drift`) are the point.",
+ "legacy_preservation": {
+  "legacy_paths": [
+   "research/legacyreports/archaeology/atlases/S-cobol-standard-atlas/atlas.md"
+  ],
+  "legacy_sha256": [
+   "f223a6068463e0f3f267814b81d0723ef0c8b72ed27d0ac21a8256cade5a52e6"
+  ],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [
+   "full original body embedded verbatim in body_template"
+  ],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

@@ -4,7 +4,7 @@
 # presence WITHOUT building (build is optional, separate). oracle_source. ROOT from path.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; ADMIT="$ROOT/lab/admit"
-OUT="$ROOT/archaeology/atlases/A17-gnucobol-release-atlas"
+OUT="$ROOT/archaeology/atlases/G-gnucobol-release-atlas"
 RELS=""
 for d in "$ADMIT"/gnucobol-2.2 "$ADMIT"/gnucobol-3.1.2 "$ADMIT"/gnucobol-3.2; do [ -d "$d" ] && RELS="$RELS $d"; done
 [ -z "$RELS" ] && { echo "no historical source trees in lab/admit (download 2.2/3.1.2 tarballs first)"; exit 2; }
