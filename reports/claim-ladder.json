@@ -711,6 +711,20 @@
       "readiness": 3,
       "lie_prevented": "'all these courts are real' -- TRUST.5 forces each court to PROVE it can fail (corrupt its evidence -> a gate goes red), and refuses to let a prose-only court count as a court",
       "damage_if_overclaimed": "presenting the audit as certification/compliance, or its class letters as a quality score, manufactures assurance the courts do not provide"
+    },
+    {
+      "id": "NIST-STYLE-FIXTURE-FORMAT.1",
+      "name": "named replayable fixture format",
+      "proven": "a small named fixture format (kobold-fixture-v1) declares input bytes + copybook/profile + expected verdict + expected findings + expected non-claims + input hashes; replay_fixture runs the NAMED court for real, captures its ACTUAL outcome, and compares actual-vs-expected so a wrong expected verdict or finding genuinely fails (matched:false); negative (fail-closed) fixtures are first-class and a risk-bearing fixture with no non-claims is rejected; a changed input record changes record_sha256; nist_conformance is hard-false",
+      "byte_domain": "declared fixture + real court replay -> matched/mismatch evidence (kobold-fixture-v1)",
+      "oracle": "the named court's real outcome (replay), compared to the author-declared expected",
+      "fixtures": "tests/fixture.rs (4: positive replays+matches, negative first-class, wrong-expectation fails, risk-without-non-claims fails + changed-record-changes-hash)",
+      "sealed_version": "kobold 0.7.0",
+      "not_proven": "NIST COBOL conformance; language-suite parity; certification; that expected output is oracle authority; that a pass is business truth; that fixture bytes are customer data",
+      "breaks_claim": "treating a fixture as NIST conformance/certification/oracle authority/business truth; a green fixture as correctness",
+      "readiness": 3,
+      "lie_prevented": "'these fixtures prove NIST/COBOL conformance' -- NIST-STYLE-FIXTURE-FORMAT.1 only proves that one declared input replays to the author's expected verdict/findings/non-claims; nist_conformance:false",
+      "damage_if_overclaimed": "a fixture pack sold as NIST/language conformance or certification manufactures standards assurance the project does not provide"
     }
   ],
   "transform_vs_read": {

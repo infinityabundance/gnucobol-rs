@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 16  ·  **B** composed: 29  ·  **C** view: 5  ·  **D** staged: 0  ·  **F** ceremonial: **0**
+- **A** hard (oracle/byte): 16  ·  **B** composed: 30  ·  **C** view: 5  ·  **D** staged: 0  ·  **F** ceremonial: **0**
 
 ## Classification
 
@@ -58,6 +58,7 @@
 | `KOBOLD.SCALE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.SENTINEL.PROFILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.TOOLING.EXPORT.1` | C | ✅ | ✅ | ✅ no |
+| `NIST-STYLE-FIXTURE-FORMAT.1` | B | ✅ | ✅ | ✅ no |
 | `SIZE.ERROR.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `SUPPORT-PACKET.1` | C | ✅ | ✅ | ✅ no |
 | `TRUST.5` | B | ✅ | ✅ | ✅ no |

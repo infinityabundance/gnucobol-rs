@@ -233,6 +233,19 @@ for (i, s2, g, r) in TRUST5:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["TRUST.5"]}
 
+# NIST-STYLE-FIXTURE-FORMAT.1 — named replayable fixtures; "NIST-style" is a SHAPE, not conformance.
+FIX = [
+ ("NEG.FIXTURE.NOT_NIST_CONFORMANCE", "a fixture treated as NIST COBOL conformance", "'NIST-style' names the shape (named replayable cases); nist_conformance:false", "claiming NIST conformance"),
+ ("NEG.FIXTURE.NOT_LANGUAGE_SUITE", "a fixture set treated as a COBOL language test suite", "fixtures cover sealed DATA courts, not the language", "claiming language-suite parity"),
+ ("NEG.FIXTURE.NOT_CERTIFICATION", "a passing fixture treated as certification", "a fixture proves one case replays to expected; not a certificate", "claiming certified status"),
+ ("NEG.FIXTURE.EXPECTED_NOT_ORACLE", "the fixture's expected output treated as oracle authority", "expected is the AUTHOR's declaration, not the GnuCOBOL oracle", "trusting expected as oracle truth"),
+ ("NEG.FIXTURE.PASS_NOT_BUSINESS_TRUTH", "a passing fixture treated as business truth", "a replay match is not business correctness", "acting on a green fixture as reality"),
+ ("NEG.FIXTURE.SYNTHETIC_NOT_CUSTOMER_DATA", "fixture bytes treated as representative customer data", "fixtures are synthetic risk shapes", "assuming customer representativeness"),
+]
+for (i, s2, g, r) in FIX:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["NIST-STYLE-FIXTURE-FORMAT.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

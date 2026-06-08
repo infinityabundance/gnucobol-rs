@@ -1,0 +1,68 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "NIST-STYLE-FIXTURE-FORMAT.1",
+  "kind": "court-casefile",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.7.0",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "no-trust2-receipt",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "45041fed7a2a5560449de825f6cdfad7595a3de132fac85d8d8d94f7e8b21902",
+    "receipt_sha256": null
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "detail": "the named court's real outcome (replay), compared to the author-declared expected",
+    "upstream_court": null,
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null
+  },
+  "results": {
+    "total": null,
+    "pass": null,
+    "fail": 0,
+    "verdict": "pass",
+    "note": "tests/fixture.rs (4: positive replays+matches, negative first-class, wrong-expectation fails, risk-without-non-claims fails + changed-record-changes-hash)"
+  },
+  "positive_claims": [
+    "a small named fixture format (kobold-fixture-v1) declares input bytes + copybook/profile + expected verdict + expected findings + expected non-claims + input hashes",
+    "replay_fixture runs the NAMED court for real, captures its ACTUAL outcome, and compares actual-vs-expected so a wrong expected verdict or finding genuinely fails (matched:false)",
+    "negative (fail-closed) fixtures are first-class and a risk-bearing fixture with no non-claims is rejected",
+    "a changed input record changes record_sha256",
+    "nist_conformance is hard-false"
+  ],
+  "negative_claims": [
+    "NIST COBOL conformance",
+    "language-suite parity",
+    "certification",
+    "that expected output is oracle authority",
+    "that a pass is business truth",
+    "that fixture bytes are customer data",
+    "lie prevented: 'these fixtures prove NIST/COBOL conformance' -- NIST-STYLE-FIXTURE-FORMAT.1 only proves that one declared input replays to the author's expected verdict/findings/non-claims; nist_conformance:false"
+  ],
+  "negative_capability_ids": [
+    "NEG.NIST-COBOL-CONFORMANCE",
+    "NEG.LANGUAGE-SUITE-PARITY",
+    "NEG.CERTIFICATION",
+    "NEG.THAT-EXPECTED-OUTPUT-IS-ORACLE-AUTHORITY",
+    "NEG.THAT-A-PASS-IS-BUSINESS-TRUTH",
+    "NEG.THAT-FIXTURE-BYTES-ARE-CUSTOMER-DATA"
+  ],
+  "byte_domains": [
+    "declared fixture + real court replay -> matched/mismatch evidence (kobold-fixture-v1)"
+  ],
+  "lie_prevented": [
+    "'these fixtures prove NIST/COBOL conformance' -- NIST-STYLE-FIXTURE-FORMAT.1 only proves that one declared input replays to the author's expected verdict/findings/non-claims; nist_conformance:false"
+  ],
+  "damage_if_overclaimed": "a fixture pack sold as NIST/language conformance or certification manufactures standards assurance the project does not provide",
+  "replay": {
+    "command": "the named court's real outcome (replay), compared to the author-declared expected",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "19676525dd82c7135dd943b590dac357fef9948d00ddc9700e968fa729278ea7"
+  }
+}

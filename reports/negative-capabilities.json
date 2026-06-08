@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 383,
+  "count": 394,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -787,7 +787,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "SUPPORT-PACKET.1",
-        "TRUST.5"
+        "TRUST.5",
+        "NIST-STYLE-FIXTURE-FORMAT.1"
       ]
     },
     {
@@ -1943,6 +1944,72 @@
       ]
     },
     {
+      "id": "NEG.FIXTURE.EXPECTED_NOT_ORACLE",
+      "surface": "the fixture's expected output treated as oracle authority",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "expected is the AUTHOR's declaration, not the GnuCOBOL oracle",
+      "risk_if_guessed": "trusting expected as oracle truth",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
+      "id": "NEG.FIXTURE.NOT_CERTIFICATION",
+      "surface": "a passing fixture treated as certification",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a fixture proves one case replays to expected; not a certificate",
+      "risk_if_guessed": "claiming certified status",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
+      "id": "NEG.FIXTURE.NOT_LANGUAGE_SUITE",
+      "surface": "a fixture set treated as a COBOL language test suite",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "fixtures cover sealed DATA courts, not the language",
+      "risk_if_guessed": "claiming language-suite parity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
+      "id": "NEG.FIXTURE.NOT_NIST_CONFORMANCE",
+      "surface": "a fixture treated as NIST COBOL conformance",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "'NIST-style' names the shape (named replayable cases); nist_conformance:false",
+      "risk_if_guessed": "claiming NIST conformance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
+      "id": "NEG.FIXTURE.PASS_NOT_BUSINESS_TRUTH",
+      "surface": "a passing fixture treated as business truth",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "a replay match is not business correctness",
+      "risk_if_guessed": "acting on a green fixture as reality",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
+      "id": "NEG.FIXTURE.SYNTHETIC_NOT_CUSTOMER_DATA",
+      "surface": "fixture bytes treated as representative customer data",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "fixtures are synthetic risk shapes",
+      "risk_if_guessed": "assuming customer representativeness",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
       "id": "NEG.FLOAT",
       "surface": "float",
       "status": "not_admitted_fail_closed",
@@ -2118,6 +2185,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.5"
+      ]
+    },
+    {
+      "id": "NEG.LANGUAGE-SUITE-PARITY",
+      "surface": "language-suite parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
       ]
     },
     {
@@ -2332,6 +2410,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "SUPPORT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.NIST-COBOL-CONFORMANCE",
+      "surface": "NIST COBOL conformance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
       ]
     },
     {
@@ -3853,6 +3942,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-A-PASS-IS-BUSINESS-TRUTH",
+      "surface": "that a pass is business truth",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
       "id": "NEG.THAT-A-SYNTHETIC-CORPUS-IS-A-REPRESENTAT",
       "surface": "that a synthetic corpus is a representative business corpus",
       "status": "not_admitted_fail_closed",
@@ -3872,6 +3972,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "TRUST.5"
+      ]
+    },
+    {
+      "id": "NEG.THAT-EXPECTED-OUTPUT-IS-ORACLE-AUTHORITY",
+      "surface": "that expected output is oracle authority",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
+      ]
+    },
+    {
+      "id": "NEG.THAT-FIXTURE-BYTES-ARE-CUSTOMER-DATA",
+      "surface": "that fixture bytes are customer data",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "NIST-STYLE-FIXTURE-FORMAT.1"
       ]
     },
     {
