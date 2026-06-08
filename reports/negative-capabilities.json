@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 168,
+  "count": 172,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -196,6 +196,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.AWS-PERFORMANCE",
+      "surface": "AWS performance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BENCH.2"
       ]
     },
     {
@@ -546,6 +557,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CORPUS.2"
+      ]
+    },
+    {
+      "id": "NEG.CUSTOMER-WORKLOAD-REPRESENTATIVENESS",
+      "surface": "customer-workload representativeness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BENCH.2"
       ]
     },
     {
@@ -1329,6 +1351,17 @@
       ]
     },
     {
+      "id": "NEG.PARALLEL-RAYON-SIMD-THROUGHPUT",
+      "surface": "parallel/Rayon/SIMD throughput",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BENCH.2"
+      ]
+    },
+    {
       "id": "NEG.POLARITY-FROM-CR-DB-PRESENTATION",
       "surface": "polarity from CR/DB presentation",
       "status": "not_admitted_fail_closed",
@@ -1426,6 +1459,17 @@
       "evidence": [
         "GNURUST.11",
         "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.PRODUCTION-PERFORMANCE",
+      "surface": "production performance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "KOBOLD.BENCH.2"
       ]
     },
     {

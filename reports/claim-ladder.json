@@ -445,6 +445,20 @@
       "readiness": 3,
       "lie_prevented": "'the courts handle the happy path, so they handle real (dirty, hostile, mis-routed) data' -- CORPUS.2 proves each hostile shape fails closed with a named finding",
       "damage_if_overclaimed": "trusting the stack on a happy-path corpus alone misses the mis-routed/mis-counted/null/dirty records that cause real banking incidents"
+    },
+    {
+      "id": "KOBOLD.BENCH.2",
+      "name": "parity-gated end-to-end scalar benchmark",
+      "proven": "the full reconciliation pipeline (FILE.1 ingest+decode+LEVEL-88+audit) is measured in scalar mode ONLY after the output/audit hash matches the pinned baseline; a mismatch aborts with no timing admitted",
+      "byte_domain": "end-to-end pipeline timing gated on byte-stable output hash",
+      "oracle": "the shim's own byte-stable reconcile output (parity baseline)",
+      "fixtures": "kobold-bench2 (parity-gated; tampered baseline aborts, verified) + reports/BENCH-2-receipt.json",
+      "sealed_version": "kobold-bench (path: gnucobol-rs 0.7 + kobold-data-shim 0.6)",
+      "not_proven": "production performance; AWS performance; parallel/Rayon/SIMD throughput; customer-workload representativeness",
+      "breaks_claim": "reporting timing when the output hash != baseline; enabling Rayon/SIMD",
+      "readiness": 3,
+      "lie_prevented": "'it is fast, so it is correct' / 'a hot-path number is the product throughput' -- BENCH.2 admits timing only behind a parity gate and measures the full pipeline, not just cob_move",
+      "damage_if_overclaimed": "a parallel or hot-path benchmark number sold as production throughput sets false capacity/SLA expectations for a real migration"
     }
   ],
   "transform_vs_read": {
