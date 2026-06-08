@@ -55,5 +55,40 @@
   },
   "hash_chain": {
     "inputs_sha256": "cd1c87ecd49fab52e697433e9b456a2091bf037cb7d12402c2acd996a58d3f99"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-ADDBCD-13.md"
+    ],
+    "legacy_sha256": [
+      "df384622e921d602ae1cf07d5ea41c98926f8d4ecf796eae59714eec72e086ef"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "ADD/SUBTRACT into a PACKED receiver, receiving-field bytes matching libcob cob_add_bcd"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "DIVIDE",
+      "SIZE ERROR",
+      "other rounding modes",
+      "bignum",
+      "float",
+      "lie prevented: 'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.13 admits packed ADD/SUBTRACT only as receiving-field byte semantics for the admitted",
+      "DISPLAY and COMP-3 operands; it does not claim DIVIDE, SIZE ERROR control flow, COMPUTE expression",
+      "semantics, all rounding modes, bignum behavior, or malformed packed-decimal tolerance beyond the",
+      "sealed MOVE courts."
+    ],
+    "legacy_unstructured_notes": [
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cob_add`/`cob_sub`/`cob_mul` (receiving-field bytes) | **total=5400 PASS=5400 FAIL=0** (`lab/oracle/arith_sweep.sh`): receiver \u00d7 operand \u2208 {DISPLAY, COMP-3}\u00b2, ADD/SUB/MUL, signed/unsigned, scale L>R/R>L/=, truncate/ROUNDED(`0x21`), odd/even digits, carry, overflow, negative-zero-on-truncation | | Self-contained `cargo test` | arith: 6/6 (incl. `packed_add_sub_via_bcd`) | | Fuzz (`arith`) | **8,000,000 runs, 0 crashes** | | GNURUST.7 regression | subsumed \u2014 the prior 1800 rows are within this 5400 (no DISPLAY/MUL change) | | `fmt` /"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

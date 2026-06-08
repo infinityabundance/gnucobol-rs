@@ -54,5 +54,39 @@
   },
   "hash_chain": {
     "inputs_sha256": "cb663dfa7c8b1e8271387ddbf9d73508e2ef203707eaf63d7912ba6bd7a221b4"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-PIC-SCALING-9.md"
+    ],
+    "legacy_sha256": [
+      "061b6a00264b9315b2b048e84d4ac3af31a20b5004de65bddbe6d0ceabdef975"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "P scaling field model (digits/scale/size) matching cobc",
+      "trailing digits=9s",
+      "P scale=-P, leading digits=9s scale=9s",
+      "P"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "V+P",
+      "P at both ends",
+      "VALUE/MOVE on P field",
+      "lie prevented: 'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/pic_harness.sh` (generated-C `cob_field_attr` witness + `LENGTH OF`) \u2014 the compiler's own PICTURE\u2192attribute decision. The Rust `build_field` mirror is compared field-for-field.",
+      "[Evidence] | Check | Result | |-------|--------| | PIC differential sweep vs `cobc` | **PASS=288 FAIL=0** (`lab/oracle/pic_sweep.sh`): the prior 192 + 96 P cases \u2014 trailing/leading \u00d7 DISPLAY/COMP-3 \u00d7 signed/unsigned \u00d7 `n\u2208{1,2,3,5}` `p\u2208{1,2,3}` | | Self-contained `cargo test` | pic: 5/5 (P matches-oracle for both ends + COMP-3 + signed; V+P / both-ends / P-only fail closed) | | Fuzz (`pic` 6M, `init` 3M incl. P shapes) | **0 crashes** \u2014 P fields fail closed in the VALUE court, never panic | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

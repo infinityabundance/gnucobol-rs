@@ -1,0 +1,52 @@
+{
+  "schema": "trust4-report-inventory-v1",
+  "doctrine": "No report is authoritative unless generated. Legacy static reports move to research/legacyreports/ only after an information-superset casefile exists; nothing is deleted.",
+  "count": 5,
+  "reports": [
+    {
+      "path": "reports/GNUCOBOL_COBOL_ATLAS_STATE_OF_INDUSTRY.md",
+      "kind": "research_doc",
+      "current_authority": false,
+      "replacement_required": false,
+      "replacement_path": null,
+      "move_allowed": false,
+      "classification": "historical_reference_keep_in_place_non_authoritative"
+    },
+    {
+      "path": "reports/README.md",
+      "kind": "index_or_generated",
+      "current_authority": true,
+      "replacement_required": false,
+      "replacement_path": null,
+      "move_allowed": false,
+      "classification": "generated_or_index_keep_in_place"
+    },
+    {
+      "path": "reports/claim-ladder.json",
+      "kind": "index_or_generated",
+      "current_authority": true,
+      "replacement_required": false,
+      "replacement_path": null,
+      "move_allowed": false,
+      "classification": "generated_or_index_keep_in_place"
+    },
+    {
+      "path": "reports/negative-capabilities.json",
+      "kind": "index_or_generated",
+      "current_authority": true,
+      "replacement_required": false,
+      "replacement_path": null,
+      "move_allowed": false,
+      "classification": "generated_or_index_keep_in_place"
+    },
+    {
+      "path": "reports/oracle-delta-ledger.md",
+      "kind": "research_doc",
+      "current_authority": false,
+      "replacement_required": false,
+      "replacement_path": null,
+      "move_allowed": false,
+      "classification": "historical_reference_keep_in_place_non_authoritative"
+    }
+  ]
+}

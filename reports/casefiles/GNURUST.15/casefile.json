@@ -54,5 +54,42 @@
   },
   "hash_chain": {
     "inputs_sha256": "2780e86f7a354911f73e8cc7b5d94571adc2e578b14ff510b3c9a1628a7f740d"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-EBCDIC-15.md"
+    ],
+    "legacy_sha256": [
+      "2397de8528b915fb7adce872c3ef13b51820ea2ecc30dc16166eed1c5cbb91d5"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "cp037/other code pages",
+      "numeric EBCDIC zoned sign",
+      "national/DBCS",
+      "collation",
+      "binary/packed conversion",
+      "lie prevented: 'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.15 admits EBCDIC only as an explicit code-page boundary for DISPLAY-class field decoding:",
+      "text bytes are decoded under a named table, binary and packed fields remain raw storage domains,",
+      "and no mixed-encoding, auto-detection, collation, national/DBCS, or business-meaning claim is made."
+    ],
+    "legacy_unstructured_notes": [
+      "[Versioning note] New public capability module `ebcdic` (+ `CodePage`/`EbcdicError`/`decode_display`/`translate_byte`) \u2014 purely additive, so a **semver-minor** bump to **0.5.0**.",
+      "[Versioning] New public capability module `ebcdic` (+ `CodePage`/`EbcdicError`/`decode_display`/`translate_byte`) \u2014 purely additive, so a **semver-minor** bump to **0.5.0**.",
+      "[Oracle] The admitted GnuCOBOL 3.2 oracle **ships cp500** (`ebcdic500_*` tables), loadable via the exported `cob_load_collation` \u2014 the same function `cobc` uses to embed translation tables in generated code. It does **not** ship cp037. Per the project doctrine (the oracle, never a spec, is the authority), a code page is admitted only when its table comes from the oracle \u2014 so **cp500 is admitted and cp037 is deferred** until a cp037 table is admitted into the oracle. (This is a deliberate, surfaced deviation from the suggested starting page.)",
+      "[Evidence] | Check | Result | |-------|--------| | cp500 table vs `cob_load_collation` | **PASS=256 FAIL=0** (`ebcdic_sweep.sh`) \u2014 every byte | | `cargo test` (anchors, text, totality/bijection) | 3 ebcdic tests green | | Decode totality | `decode_display` is total over all 256 bytes, length-preserving, table is a bijection | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

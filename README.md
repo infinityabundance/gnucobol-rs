@@ -142,7 +142,7 @@ DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5
 taxonomy is in
 [`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
 its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the
-machine-readable list of every non-claim is in [`reports/negative-claims.md`](reports/negative-claims.md).
+machine-readable registry of every non-claim is [`reports/negative-capabilities.json`](reports/negative-capabilities.json), and each court's full forensic record (claims, non-claims, SARIF/in-toto/DSSE, lossless legacy preservation) is its [`reports/casefiles/<court>/`](reports/casefiles/) case file.
 
 ## Project status, features, and MSRV
 

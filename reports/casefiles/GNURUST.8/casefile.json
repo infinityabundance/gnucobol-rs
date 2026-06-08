@@ -53,5 +53,37 @@
   },
   "hash_chain": {
     "inputs_sha256": "cf484a9f81ce59f18f67f8149866886f8e36e674187550b39062fe1f16cb5017"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-VALUE-8.md"
+    ],
+    "legacy_sha256": [
+      "374fd0c9d2b24df23713e904db1491d01a1111af35580310b06e70d1acc6dc78"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "01 record initial WORKING-STORAGE bytes from VALUE matching cobc"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "VALUE under OCCURS/REDEFINES",
+      "non-fitting literals",
+      "no-VALUE records",
+      "figuratives beyond ZERO/SPACE",
+      "lie prevented: 'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/value_sweep.sh` builds one COBOL program per case from a `gen_value` spec, compiles with the built `cobc`, runs it, and captures **`DISPLAY REC WITH NO ADVANCING`** \u2014 a group `DISPLAY` emits the record's raw initial bytes. The Rust mirror (`examples/value_rows`) consumes identical specs.",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc`-initialized storage | **PASS=392 FAIL=0** (`lab/oracle/value_sweep.sh`): DISPLAY/COMP-3, signed/unsigned, integer & `V`-scaled, valued / unvalued / `ZERO`, mixed alnum lead+trail per record | | Self-contained `cargo test` | init: 2/2 (the probed `val.cob` record; signed overpunch + unvalued-packed canonical zero) | | Fuzz (`init` target, arbitrary record specs) | 3,000,000 runs, 0 crashes (literal parser + zoned alignment + `cob_move` surface) | | `fmt` / `clippy -D warnings` / doc-gate (now runs the VALUE sweep) | clean |"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

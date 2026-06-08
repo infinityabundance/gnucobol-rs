@@ -54,5 +54,43 @@
   },
   "hash_chain": {
     "inputs_sha256": "7bcc9b708803d0aa3faa3fec6e17d16bf13a7a766a2a9806fe66891f445e130a"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-EBCDICNUM-17.md"
+    ],
+    "legacy_sha256": [
+      "f2dc5d76b34bb6370fc711d7e3c87a817a8b36d2193bcc2a699167958778dc04"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "raw cp500 EBCDIC zoned-decimal numeric DISPLAY bytes -> value (cp500 translate + cob_get_sign_ebcdic overpunch sign)"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "cp037",
+      "edited numeric under cp500",
+      "binary/packed via this path",
+      "mixed/auto-detect encodings",
+      "national/DBCS",
+      "lie prevented: 'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.17 admits cp500 numeric DISPLAY only as an explicit zoned-decimal byte decoding court: EBCDIC",
+      "digit and sign bytes are interpreted under the admitted oracle table, while binary/packed storage,",
+      "edited pictures, mixed encodings, auto-detection, national/DBCS, and business truth remain outside",
+      "the claim."
+    ],
+    "legacy_unstructured_notes": [
+      "[Versioning note] New method `Decimal::from_ebcdic_zoned` (additive) \u2014 **semver-patch** to **0.6.3** (minor reserved for breaking changes).",
+      "[Versioning] New method `Decimal::from_ebcdic_zoned` (additive) \u2014 **semver-patch** to **0.6.3** (minor reserved for breaking changes).",
+      "[Oracle] `ebcdic_num_sweep.sh` builds one program compiled **`-fsign=EBCDIC`**: each case `MOVE`s the cp500-translated overpunch bytes into a signed zoned field, then into an **edited** field, and `DISPLAY`s the edited bytes. The Rust mirror decodes the **raw** EBCDIC via `from_ebcdic_zoned` and checks it equals both the expected value **and** GnuCOBOL's own decode (the edited output, via the sealed `decode_edited` \u2014 no DISPLAY-format ambiguity).",
+      "[Evidence] | Check | Result | |-------|--------| | cp500 zoned decode vs `cobc -fsign=EBCDIC` | **PASS=120 FAIL=0** (`ebcdic_num_sweep.sh`): S9/9, V-scale, +/\u2212/0, unsigned | | `cargo test` (`cp500_zoned_sign`: zones, \u22120, scale) | green | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

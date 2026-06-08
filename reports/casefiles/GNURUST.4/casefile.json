@@ -49,5 +49,35 @@
   },
   "hash_chain": {
     "inputs_sha256": "a34fb67061d0a561a20a03a92876cb7fa5eb9115133a5104c07b2486eb418e93"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-LAYOUT-4.md"
+    ],
+    "legacy_sha256": [
+      "b9e517475cc20c1528a9498d3eaa586d29121816d7f083128e41499ddea2ce0d"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "item byte offsets / group sizes / fixed OCCURS / REDEFINES(<=target) / FILLER matching cobc"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "SYNCHRONIZED",
+      "REDEFINES larger than target",
+      "lie prevented: 'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/layout_harness.sh` generates a program for one `01` record, runs `cobc -C`, and parses the emitted `cob_field f_M = {size, b_REC + OFFSET, &attr}; /* name */` for each statically- addressable item \u2014 the compiler's own offset/size decision (`GNURUST.GENC.0`), cross-checked by runtime `LENGTH OF`. Items that are OCCURS tables or nested under an OCCURS ancestor have runtime-computed (non-static) offsets and are skipped at the oracle; their effect is checked via the following field's offset and the record total.",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc` offsets/sizes | **records=6, PASS=32 FAIL=0** (`lab/oracle/layout_sweep.sh`): flat records, nested groups (to level 10), FILLER, `OCCURS` on elementary & group, `REDEFINES` of elementary & group, all sealed PIC/USAGE forms | | Self-contained `cargo test` | layout: 2/2 (oracle record REC=29; `REDEFINES`-larger fails closed) | | Fuzz (`layout` target, arbitrary items) | **5,000,000 runs, 0 crashes** \u2014 hostile level nesting / OCCURS counts / REDEFINES targets all yield typed `LayoutError`; the level-tree recursion and OCCURS `ch"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

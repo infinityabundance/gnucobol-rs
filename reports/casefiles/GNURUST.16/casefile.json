@@ -55,5 +55,44 @@
   },
   "hash_chain": {
     "inputs_sha256": "2a354abbe1df9827923e20cf405db0b3581845e0272e5fa81bcf83bcb735c5f9"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-EDITED-16.md"
+    ],
+    "legacy_sha256": [
+      "2834e5195c1c0879cfa3838ff3a29077bcf4a699c400d852f42776ed2d6c42df"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "edited DISPLAY field bytes -> value + presentation text for Z 9 , . -",
+      "(16a) and $ * CR DB B 0 / (16b), slot-based"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "numeric->edited formatting (16c)",
+      "report writer",
+      "locale/currency",
+      "EBCDIC edited",
+      "edited arithmetic/VALUE",
+      "lie prevented: 'presentation string and numeric value are the same field truth' \u2014 they are separated"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.16 admits edited pictures only as an oracle-proven decode boundary for DISPLAY-shaped edited",
+      "fields: it interprets admitted edited bytes and presentation markers without claiming report",
+      "execution, numeric-to-edited formatting, locale/currency generality, EBCDIC zoned editing, or",
+      "arithmetic semantics."
+    ],
+    "legacy_unstructured_notes": [
+      "[Versioning note] `16b` adds no public API (the existing `decode_edited`/`edited_size` accept more symbols) \u2014 purely additive behavior, so a **semver-patch** bump to **0.6.1** (minor reserved for breaking changes).",
+      "[Versioning] `16b` adds no public API (the existing `decode_edited`/`edited_size` accept more symbols) \u2014 purely additive behavior, so a **semver-patch** bump to **0.6.1** (minor reserved for breaking changes).",
+      "[Oracle] `edited_sweep.sh` builds one COBOL program (`MOVE <value> TO <edited>` + bracketed `DISPLAY`), compiles+runs it with the built `cobc`, and the Rust `edited_rows` mirror decodes the displayed bytes and checks the recovered value (scale-normalized) + size.",
+      "[Evidence] | Check | Result | |-------|--------| | Edited decode vs `cobc` MOVE\u2192edited\u2192DISPLAY | **PASS=92 FAIL=0** (`edited_sweep.sh`): 16a + 16b (`$ * CR DB B 0 /`, floating currency, literal-`0` insertion) | | `cargo test` (sizes, decode, fail-closed) | 4 edited tests green | | Fuzz (edited target) | **6,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

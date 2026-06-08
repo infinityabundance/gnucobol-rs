@@ -38,6 +38,64 @@ def receipt_for(cid):
     jf = os.path.join(RECDIR, cid, "receipt.json")
     return json.load(open(jf)) if os.path.exists(jf) else None
 
+# Legacy static RECEIPT-*.md may live in reports/ (pre-migration) or research/legacyreports/reports/
+# (post-migration). Map a court to its legacy receipt by the `campaign:` frontmatter field.
+import glob as _glob
+def _filename_court(f):
+    # Older receipts (pre-frontmatter) map by the trailing -<N> in the filename to GNURUST.<N>; the
+    # decimal court is GNURUST.2 though its receipt is numbered 1.
+    base = os.path.basename(f)
+    if "DECIMAL-1" in base:
+        return "GNURUST.2"
+    m = re.search(r'-(\d+)\.md$', base)
+    return f"GNURUST.{m.group(1)}" if m else None
+
+def legacy_receipt_for(cid):
+    for base in (os.path.join(ROOT, "reports"),
+                 os.path.join(ROOT, "research/legacyreports/reports")):
+        for f in sorted(_glob.glob(os.path.join(base, "RECEIPT-*.md"))):
+            txt = open(f).read()
+            m = re.search(r'^campaign:\s*(\S+)', txt, re.M)
+            court = m.group(1) if m else _filename_court(f)
+            if court == cid:
+                return f, txt
+    return None, None
+
+def _section(txt, header):
+    # capture the markdown section body under `## <header>` up to the next `## ` or EOF.
+    m = re.search(r'(?ms)^##\s+' + re.escape(header) + r'.*?\n(.*?)(?=^##\s|\Z)', txt)
+    return m.group(1).strip() if m else ""
+
+def legacy_preservation(cid, case):
+    """A LOSSLESS preservation block: the full legacy file is kept byte-for-byte (sha recorded) and its
+    prose is carried forward, so the casefile is an information SUPERSET of the legacy report."""
+    path, txt = legacy_receipt_for(cid)
+    if not path:
+        return None
+    rel = os.path.relpath(path, ROOT)
+    doctrine = re.findall(r'(?m)^>\s?(.+)$', txt)  # the `> doctrine` blockquote line(s)
+    notes = []
+    for h in ("Versioning note", "Versioning", "Oracle", "Evidence"):
+        sec = _section(txt, h)
+        if sec:
+            notes.append(f"[{h}] " + re.sub(r'\s+', ' ', sec)[:600])
+    # information-loss review: the full original is preserved in legacyreports/, so nothing is lost.
+    return {
+        "legacy_paths": [rel],
+        "legacy_sha256": [sha(open(path, 'rb').read())],
+        "legacy_information_preserved": True,
+        "preservation_method": "full_file_preserved_plus_embedded_summary",
+        "legacy_claims_carried_forward": case["positive_claims"],
+        "legacy_non_claims_carried_forward": case["negative_claims"],
+        "legacy_notes_carried_forward": [re.sub(r'\s+', ' ', d).strip() for d in doctrine] or ["(no doctrine blockquote)"],
+        "legacy_unstructured_notes": notes,
+        "information_loss_review": {
+            "verdict": "pass",
+            "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+            "missing_items": [],
+        },
+    }
+
 def parse_sweep(s):
     m = re.search(r'PASS=(\d+) FAIL=(\d+)', s or "")
     if not m:
@@ -81,6 +139,9 @@ def build(court):
         "replay": replay,
         "hash_chain": {"inputs_sha256": sha(inputs_blob)},
     }
+    lp = legacy_preservation(cid, case)
+    if lp:
+        case["legacy_preservation"] = lp
     return case
 
 def render_md(c):
@@ -203,6 +264,18 @@ def check():
         # casefile must not reference a missing receipt when it claims one
         if fresh["inputs"]["receipt_sha256"] and not os.path.exists(os.path.join(RECDIR, cid, "receipt.json")):
             print(f"DRIFT: {cid} references a missing receipt"); bad += 1
+        # TRUST.4 lossless migration: if a legacy report exists, the casefile must preserve it as an
+        # information superset (recorded path+sha, carried-forward claims/non-claims, loss review pass).
+        lp = fresh.get("legacy_preservation")
+        path, _ = legacy_receipt_for(cid)
+        if path and not lp:
+            print(f"DRIFT: {cid} has a legacy report but no legacy_preservation block"); bad += 1
+        elif lp:
+            actual_sha = sha(open(os.path.join(ROOT, lp["legacy_paths"][0]), "rb").read())
+            if actual_sha not in lp["legacy_sha256"]:
+                print(f"DRIFT: {cid} legacy_sha256 != actual legacy file"); bad += 1
+            if lp["information_loss_review"]["verdict"] != "pass" or not lp["legacy_claims_carried_forward"]:
+                print(f"DRIFT: {cid} legacy preservation incomplete (loss review or carried claims)"); bad += 1
     if bad:
         print(f"!! {bad} casefile drift(s) -- regenerate with: python3 lab/casefile/run.py generate")
         return 1

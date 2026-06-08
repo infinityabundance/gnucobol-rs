@@ -53,5 +53,37 @@
   },
   "hash_chain": {
     "inputs_sha256": "5ac624a525bc19541e7a47c2a67261da387e64750e91d68758e71583d9da8850"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-ARITH-7.md"
+    ],
+    "legacy_sha256": [
+      "b69ce435dcd2d56a80bb9f6c9b9e9098e13071206f344338ee72ef20422c1f84"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "result bytes matching cob_add/cob_sub/cob_mul (cob_decimal path), truncate + nearest-away"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "DIVIDE",
+      "other rounding modes",
+      "ON SIZE ERROR",
+      ">38-digit bignum",
+      "lie prevented: 'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/arith_harness.c` links the built libcob, constructs `cob_field`s, calls the real `cob_add`/`cob_sub`/`cob_mul(f1, f2, opt)` (opt `0`=truncate, `COB_STORE_ROUND`=nearest-away), and dumps `f1`. The Rust mirror (`examples/arith_rows`) consumes identical rows.",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cob_add`/`cob_sub`/`cob_mul` | **PASS=1800 FAIL=0** (`lab/oracle/arith_sweep.sh`), with **900** packed-add/sub rows classified out to the deferred BCD sub-court. ADD/SUB/MUL \u00d7 DISPLAY/COMP-3 \u00d7 signed/unsigned (4 sign combos) \u00d7 digits/scales \u00d7 truncate/ROUNDED \u00d7 rounding-tie & overflow values | | Self-contained `cargo test` | arith: 6/6 (add/multiply/rounded; packed add/sub fails closed; packed multiply ok) | | Fuzz (`arith` target, arbitrary operands/attrs/op) | **8,000,000 runs, 0 crashes** \u2014 i128 `checked_*` + `pow10` bounds hold"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }

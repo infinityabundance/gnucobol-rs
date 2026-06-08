@@ -22,21 +22,20 @@ note "no placeholder markers"
 
 # 2. Every doc linked from README exists.
 for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-license.md \
-         docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-claims.md \
+         docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-capabilities.json \
          docs/oracle-lessons.md docs/negative-capabilities.md docs/license-boundaries.md docs/trust2-generated-receipts.md \
          reports/claim-ladder.json lab/verify-sealed-courts.sh \
          STATUS.md docs/REVIEW-IN-10-MINUTES.md docs/not-yet-ready.md docs/effect-boundary-map.md audits/README.md \
          COPYING COPYING.LESSER; do
   [ -f "$f" ] || bad "README references missing file: $f"
 done
-# TRUST.1: the claim ladder must list every sealed campaign (per receipt), or it is stale.
-for rc in reports/RECEIPT-GNURUST-*.md; do
-  [ -f "$rc" ] || continue
-  code=$(grep -oE 'Campaign GNURUST\.[0-9]+' "$rc" | grep -oE 'GNURUST\.[0-9]+' | head -1)
-  [ -z "$code" ] && continue
-  grep -q "\"$code\"" reports/claim-ladder.json || bad "claim-ladder.json missing sealed campaign $code"
+# TRUST.1/TRUST.4: every GNURUST court in the claim-ladder must have a generated forensic casefile
+# (legacy hand-written receipts are now non-authoritative exhibits under research/legacyreports/).
+GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.')))")
+for code in $GCODES; do
+  [ -f "reports/casefiles/$code/casefile.json" ] || bad "claim-ladder court $code has no generated casefile"
 done
-note "claim-ladder.json lists every sealed campaign"
+note "every GNURUST claim-ladder court has a generated casefile"
 
 # 2b. Atlas hygiene: every archaeology atlas JSON must parse (machine-readable evidence, not prose).
 if command -v python3 >/dev/null 2>&1; then
@@ -93,8 +92,8 @@ note "sealed-claim statement present in README, claim-boundary, lib.rs"
 
 # 7. Future-risk register is the append-only open ledger and non-empty; negative-claims non-empty.
 grep -q 'open.*append-only' docs/future-risk-register.md || bad "future-risk-register lost its open/append-only marker"
-[ -s reports/negative-claims.md ] || bad "negative-claims.md is empty"
-note "future-risk register open/append-only; negative-claims present"
+[ -s reports/negative-capabilities.json ] || bad "negative-capabilities.json is empty"
+note "future-risk register open/append-only; negative-capabilities registry present"
 
 # 8. CHANGELOG records the foundation + first sealed milestone.
 grep -q 'GNURUST.1' CHANGELOG.md && grep -q 'GNURUST.2' CHANGELOG.md || bad "CHANGELOG missing GNURUST.1/GNURUST.2"
@@ -104,15 +103,12 @@ note "CHANGELOG records GNURUST.1 and GNURUST.2"
 #     README and the load-bearing docs. This is what stops the README/docs drifting behind the
 #     code as new courts are sealed (every doc is covered, not just src).
 SEALED_DOCS="README.md CHANGELOG.md docs/claim-boundary.md docs/compatibility-taxonomy.md docs/future-risk-register.md crates/gnucobol-rs/README.md"
-for rc in reports/RECEIPT-GNURUST-*.md; do
-  [ -f "$rc" ] || continue
-  code=$(grep -oE 'Campaign GNURUST\.[0-9]+' "$rc" | grep -oE 'GNURUST\.[0-9]+' | head -1)
-  [ -z "$code" ] && continue
+for code in $GCODES; do
   for doc in $SEALED_DOCS; do
-    grep -q "$code" "$doc" || bad "sealed campaign $code (from $rc) is NOT referenced in $doc — that doc is STALE"
+    grep -q "$code" "$doc" || bad "sealed campaign $code is NOT referenced in $doc — that doc is STALE"
   done
 done
-note "every sealed campaign (per receipt) is reflected in README + all load-bearing docs"
+note "every sealed campaign (from the claim-ladder) is reflected in README + all load-bearing docs"
 
 # 8c. The future-risk register's 'Sealed today' line must name each sealed campaign.
 for rc in reports/RECEIPT-GNURUST-*.md; do
@@ -179,6 +175,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     note "TRUST.4: forensic casefiles current (generated views match, negatives >= positives)"
   else
     bad "TRUST.4: casefile drift"; cat /tmp/_case_check
+  fi
+  if python3 "$ROOT/lab/trust4/migrate_reports.py" check >/tmp/_mig_check 2>&1; then
+    note "TRUST.4: legacy migration intact (no static report in reports/, manifest preserved)"
+  else
+    bad "TRUST.4: legacy migration drift"; cat /tmp/_mig_check
   fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in

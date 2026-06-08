@@ -50,5 +50,35 @@
   },
   "hash_chain": {
     "inputs_sha256": "2a13ad59a4849de6bf7b36391e7ffdc894e223b1e84fdb9e567c87e78deb1c63"
+  },
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-DECIMAL-1.md"
+    ],
+    "legacy_sha256": [
+      "b687e11fbc1a1af1326febc8fffd47870847d4a034c48e1d0d49525d9ff95c6a"
+    ],
+    "legacy_information_preserved": true,
+    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "legacy_claims_carried_forward": [
+      "COMP-3/zoned/display field-storage bytes + cob_move result bytes"
+    ],
+    "legacy_non_claims_carried_forward": [
+      "arithmetic",
+      "edited pictures",
+      "any other type pair",
+      "lie prevented: 'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_unstructured_notes": [
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `libcob` oracle | **PASS=13152 FAIL=0** per seed, across seeds 0,1,2,7,42,12345,999999 (~92k cases) | | Canonical roundtrip | `decode\u2192encode` byte-identical (unit + sweep) | | Structured edge families (`GNURUST.DECEDGE.0`) | digits 1/2/3/4/5/7/17/18 \u00d7 scale {0,1,n-1,n} \u00d7 {zero,one,all-9s,leading-zeros} \u00d7 signed/unsigned \u00d7 \u00b1, all directions | | Self-contained `cargo test` (no `lab/`) | 6/6 pass (golden + fail-closed + negative-zero + hostile-attr) | | Kani (sharp invariants) | **2/2 SUCCESSFUL** \u2014 `store_window_is_in_bounds` (scale-a"
+    ],
+    "information_loss_review": {
+      "verdict": "pass",
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "missing_items": []
+    }
   }
 }
