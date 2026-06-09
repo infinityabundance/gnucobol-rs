@@ -366,6 +366,19 @@ for (i, s2, g, r) in INSP:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INSPECT.1"]}
 
+# GNURUST.STRING.UNSTRING.1 — STRING/UNSTRING byte effects.
+SU = [
+ ("NEG.STRING_UNSTRING.NO_FULL_PROCEDURE_FLOW", "full Procedure Division execution claimed", "only the STRING/UNSTRING receiver bytes are sealed", "executing program logic"),
+ ("NEG.STRING_UNSTRING.NO_NATIONAL_UTF8", "national/UTF-8 multibyte STRING/UNSTRING claimed", "single-octet byte level only", "splitting multibyte text"),
+ ("NEG.STRING_UNSTRING.NO_MULTI_DELIMITER_GENERALIZATION", "multi-delimiter / ALL / OR-delimiter generalized", "single declared delimiter per fixture", "assuming multi-delimiter behavior"),
+ ("NEG.STRING_UNSTRING.NO_LOCALE_COLLATION", "locale/collation in delimiter matching claimed", "matching is exact bytes", "locale-aware splitting"),
+ ("NEG.STRING_UNSTRING.NO_BUSINESS_PARSING", "STRING/UNSTRING treated as business-correct parsing", "byte assembly/splitting is not parsing correctness", "trusting a split as a valid parse"),
+ ("NEG.STRING_UNSTRING.NO_ALL_DIALECTS", "all-dialect STRING/UNSTRING behavior claimed", "witnessed under gnucobol-3.2.0-default only", "assuming other dialects match"),
+]
+for (i, s2, g, r) in SU:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.STRING.UNSTRING.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

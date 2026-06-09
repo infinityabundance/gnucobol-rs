@@ -851,6 +851,20 @@
       "readiness": 3,
       "lie_prevented": "'INSPECT counts/replaces are obvious' -- ALL counts NON-OVERLAPPING left-to-right (AAAAAA FOR ALL AA = 3 not 5), LEADING stops at the first non-match, BEFORE/AFTER restrict the region (BEFORE an absent delimiter = the whole field), matching is exact bytes with no case folding",
       "damage_if_overclaimed": "a wrong overlap/leading/region/case assumption in an INSPECT-based cleanup or validation transform silently mis-counts or mis-mutates a field"
+    },
+    {
+      "id": "GNURUST.STRING.UNSTRING.1",
+      "name": "STRING/UNSTRING byte effects",
+      "proven": "the receiver bytes + pointer/count/delimiter/tally/overflow of narrow STRING and UNSTRING statements, matching cobc/libcob byte-for-byte: STRING concatenates sources left-to-right at a 1-based POINTER (DELIMITED BY SIZE = whole operand, DELIMITED BY lit = operand up to the first lit), PRESERVES the unwritten target tail (no space-fill), keeps partial writes on ON OVERFLOW; UNSTRING splits the source by a delimiter into fields where COUNT IN is the SOURCE-FIELD LENGTH BEFORE TRUNCATION, DELIMITER IN is the ending delimiter (SPACE when ended at source exhaustion), an empty field between adjacent delimiters has count 0, TALLYING IN counts filled fields, the POINTER is 1-based, and leftover source after the last field is overflow",
+      "byte_domain": "STRING/UNSTRING receiver + pointer/count/delimiter/tally bytes",
+      "oracle": "cobc STRING/UNSTRING (program-shape, FUNCTION HEX-OF result-record dump)",
+      "fixtures": "string_unstring_sweep 7/0 + 7 unit tests",
+      "sealed_version": "0.7.6",
+      "not_proven": "full Procedure Division execution; national/UTF-8 multibyte; multi-delimiter/ALL generalization; locale/collation; business parsing correctness; all dialects",
+      "breaks_claim": "multibyte STRING/UNSTRING; multi-delimiter generalization; locale-aware matching; treating a split as a valid parse",
+      "readiness": 3,
+      "lie_prevented": "'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion",
+      "damage_if_overclaimed": "a wrong pointer base, count-vs-truncation, tail-preservation, or delimiter assumption in a STRING/UNSTRING transform silently corrupts assembled/split fields"
     }
   ],
   "transform_vs_read": {

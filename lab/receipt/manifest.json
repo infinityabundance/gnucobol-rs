@@ -256,6 +256,19 @@
         "business validation",
         "all dialects"
       ]
+    },
+    "GNURUST.STRING.UNSTRING.1": {
+      "court": "STRING/UNSTRING byte effects",
+      "sweep": "string_unstring_sweep.sh",
+      "byte_domain": "STRING target+pointer+overflow; UNSTRING field+count+delimiter+tally+pointer+overflow bytes",
+      "non_claims": [
+        "full Procedure Division execution",
+        "national/UTF-8 multibyte",
+        "multi-delimiter/ALL generalization",
+        "locale/collation",
+        "business parsing correctness",
+        "all dialects"
+      ]
     }
   }
 }

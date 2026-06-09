@@ -1,0 +1,64 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.STRING.UNSTRING.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.6",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "338a62dac4c86e1529188ca8c754eecbbae3952289039c5b5b23935d0f5f2bfb",
+    "receipt_sha256": "c1814669cb97b491760e421fba130e998fd79b4c8a365ecac36cc2a8a0a565d5"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc STRING/UNSTRING (program-shape, FUNCTION HEX-OF result-record dump)",
+    "upstream_court": "GNURUST.STRING.UNSTRING.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 7,
+    "pass": 7,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the receiver bytes + pointer/count/delimiter/tally/overflow of narrow STRING and UNSTRING statements, matching cobc/libcob byte-for-byte: STRING concatenates sources left-to-right at a 1-based POINTER (DELIMITED BY SIZE = whole operand, DELIMITED BY lit = operand up to the first lit), PRESERVES the unwritten target tail (no space-fill), keeps partial writes on ON OVERFLOW",
+    "UNSTRING splits the source by a delimiter into fields where COUNT IN is the SOURCE-FIELD LENGTH BEFORE TRUNCATION, DELIMITER IN is the ending delimiter (SPACE when ended at source exhaustion), an empty field between adjacent delimiters has count 0, TALLYING IN counts filled fields, the POINTER is 1-based, and leftover source after the last field is overflow"
+  ],
+  "negative_claims": [
+    "full Procedure Division execution",
+    "national/UTF-8 multibyte",
+    "multi-delimiter/ALL generalization",
+    "locale/collation",
+    "business parsing correctness",
+    "all dialects",
+    "lie prevented: 'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion"
+  ],
+  "negative_capability_ids": [
+    "NEG.FULL-PROCEDURE-DIVISION-EXECUTION",
+    "NEG.NATIONAL-UTF-8-MULTIBYTE",
+    "NEG.MULTI-DELIMITER-ALL-GENERALIZATION",
+    "NEG.LOCALE-COLLATION",
+    "NEG.BUSINESS-PARSING-CORRECTNESS",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "STRING/UNSTRING receiver + pointer/count/delimiter/tally bytes"
+  ],
+  "lie_prevented": [
+    "'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion"
+  ],
+  "damage_if_overclaimed": "a wrong pointer base, count-vs-truncation, tail-preservation, or delimiter assumption in a STRING/UNSTRING transform silently corrupts assembled/split fields",
+  "replay": {
+    "command": "bash lab/oracle/string_unstring_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "524bfee7b08528fde0db009b73ccf8f50bbc3518cad88e9f84b854cc44de9297"
+  }
+}

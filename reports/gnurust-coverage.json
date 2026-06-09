@@ -5,12 +5,12 @@
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "surface_count": 27,
   "status_counts": {
-    "sealed": 14,
+    "sealed": 15,
     "observed": 2,
     "negative": 7,
-    "missing": 4
+    "missing": 3
   },
-  "sealed_fraction": "14/27",
+  "sealed_fraction": "15/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -261,9 +261,11 @@
         "libcob/strings.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.STRING.UNSTRING.1",
+      "status": "sealed",
+      "courts": [
+        "GNURUST.STRING.UNSTRING.1"
+      ],
+      "future_campaign": null,
       "risk_if_unported": "STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value"
     },
     {

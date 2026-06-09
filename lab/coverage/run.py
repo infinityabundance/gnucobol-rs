@@ -51,7 +51,7 @@ SURFACES = [
    "INITIALIZE group/FILLER/REDEFINES/OCCURS defaults are easy to get wrong"),
  ("inspect", "MOVE/storage", ["libcob/strings.c"], "sealed", ["GNURUST.INSPECT.1"], None,
    "INSPECT TALLYING/REPLACING/CONVERTING is classic data-munging with real byte effects"),
- ("string-unstring", "MOVE/storage", ["libcob/strings.c"], "missing", [], "GNURUST.STRING.UNSTRING.1",
+ ("string-unstring", "MOVE/storage", ["libcob/strings.c"], "sealed", ["GNURUST.STRING.UNSTRING.1"], None,
    "STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value"),
  ("intrinsics", "intrinsics", ["libcob/intrinsic.c"], "missing", [], "GNURUST.INTRINSIC.1",
    "NUMVAL/LENGTH/MOD/CURRENT-DATE etc. hide many migration errors"),

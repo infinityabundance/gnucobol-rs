@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **27**  ·  sealed ✅ **14**  ·  observed 🟡 2  ·  refused ⛔ 7  ·  **missing ❌ 4**
+- surfaces: **27**  ·  sealed ✅ **15**  ·  observed 🟡 2  ·  refused ⛔ 7  ·  **missing ❌ 3**
 
-- sealed fraction (data-representation spine): **14/27**
+- sealed fraction (data-representation spine): **15/27**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -27,7 +27,7 @@
 | `file-status` | file I/O | `fileio.c` | 🟡 observed | GNURUST.FILE.STATUS.1 |
 | `initialize` | MOVE/storage | `typeck.c` | ✅ sealed | GNURUST.INITIALIZE.1 |
 | `inspect` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.INSPECT.1 |
-| `string-unstring` | MOVE/storage | `strings.c` | ❌ missing | GNURUST.STRING.UNSTRING.1 |
+| `string-unstring` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.STRING.UNSTRING.1 |
 | `intrinsics` | intrinsics | `intrinsic.c` | ❌ missing | GNURUST.INTRINSIC.1 |
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ❌ missing | GNURUST.ACCEPT_DISPLAY.1 |
 | `procedure-flow` | control flow | `typeck.c, codegen.c` | ❌ missing | GNURUST.PROCEDURE.STATEMENT.ATLAS.1 |
@@ -41,7 +41,6 @@
 
 ## Risk of the unported surfaces (missing ❌)
 
-- **`string-unstring`** → `GNURUST.STRING.UNSTRING.1`: STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value
 - **`intrinsics`** → `GNURUST.INTRINSIC.1`: NUMVAL/LENGTH/MOD/CURRENT-DATE etc. hide many migration errors
 - **`accept-display`** → `GNURUST.ACCEPT_DISPLAY.1`: emitted DISPLAY text + ACCEPT is runtime evidence too
 - **`procedure-flow`** → `GNURUST.PROCEDURE.STATEMENT.ATLAS.1`: IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division

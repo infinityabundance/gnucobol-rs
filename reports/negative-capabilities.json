@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 489,
+  "count": 498,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -262,7 +262,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INITIALIZE.1",
-        "GNURUST.INSPECT.1"
+        "GNURUST.INSPECT.1",
+        "GNURUST.STRING.UNSTRING.1"
       ]
     },
     {
@@ -819,6 +820,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-PARSING-CORRECTNESS",
+      "surface": "business parsing correctness",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
       ]
     },
     {
@@ -2371,7 +2383,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INITIALIZE.1",
-        "GNURUST.INSPECT.1"
+        "GNURUST.INSPECT.1",
+        "GNURUST.STRING.UNSTRING.1"
       ]
     },
     {
@@ -2798,6 +2811,17 @@
       ]
     },
     {
+      "id": "NEG.LOCALE-COLLATION",
+      "surface": "locale/collation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
       "id": "NEG.LOCALE-CURRENCY",
       "surface": "locale/currency",
       "status": "not_admitted_fail_closed",
@@ -2909,6 +2933,17 @@
       ]
     },
     {
+      "id": "NEG.MULTI-DELIMITER-ALL-GENERALIZATION",
+      "surface": "multi-delimiter/ALL generalization",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
       "id": "NEG.MULTIPLE-NESTED-ODO",
       "surface": "multiple/nested ODO",
       "status": "not_admitted_fail_closed",
@@ -2939,7 +2974,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.INSPECT.1"
+        "GNURUST.INSPECT.1",
+        "GNURUST.STRING.UNSTRING.1"
       ]
     },
     {
@@ -4818,6 +4854,72 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.STRING_UNSTRING.NO_ALL_DIALECTS",
+      "surface": "all-dialect STRING/UNSTRING behavior claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "witnessed under gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.STRING_UNSTRING.NO_BUSINESS_PARSING",
+      "surface": "STRING/UNSTRING treated as business-correct parsing",
+      "status": "not_admitted_fail_closed",
+      "guard": "byte assembly/splitting is not parsing correctness",
+      "risk_if_guessed": "trusting a split as a valid parse",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.STRING_UNSTRING.NO_FULL_PROCEDURE_FLOW",
+      "surface": "full Procedure Division execution claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the STRING/UNSTRING receiver bytes are sealed",
+      "risk_if_guessed": "executing program logic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.STRING_UNSTRING.NO_LOCALE_COLLATION",
+      "surface": "locale/collation in delimiter matching claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "matching is exact bytes",
+      "risk_if_guessed": "locale-aware splitting",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.STRING_UNSTRING.NO_MULTI_DELIMITER_GENERALIZATION",
+      "surface": "multi-delimiter / ALL / OR-delimiter generalized",
+      "status": "not_admitted_fail_closed",
+      "guard": "single declared delimiter per fixture",
+      "risk_if_guessed": "assuming multi-delimiter behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.STRING_UNSTRING.NO_NATIONAL_UTF8",
+      "surface": "national/UTF-8 multibyte STRING/UNSTRING claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single-octet byte level only",
+      "risk_if_guessed": "splitting multibyte text",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.STRING.UNSTRING.1"
       ]
     },
     {
