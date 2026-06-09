@@ -1131,6 +1131,20 @@
       "readiness": 2,
       "lie_prevented": "filtering is the same whether the field is numeric or text -- NO: a NUMERIC filter compares VALUES (R-AMT>=50 keeps 100 and 200) while an ALPHANUMERIC filter compares BYTES (where '5' > '10'), so applying the wrong comparison kind silently selects the wrong records",
       "damage_if_overclaimed": "using byte comparison on a numeric amount filter (or vice versa) selects the wrong record set, corrupting every conditional total/extract"
+    },
+    {
+      "id": "GNURUST.IF.NUMERIC.SLICE.1",
+      "name": "numeric IF/EVALUATE execution slice",
+      "proven": "the numeric counterpart of GNURUST.IF.EVALUATE.SLICE.1 (which is alphanumeric): a narrow interpreter EXECUTES an IF/EVALUATE over unsigned 9(n) numeric fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 7/0). The condition compares the field's decoded VALUE to a literal (= NOT= > < >= <=) -- so the comparison is numeric (N=50, N>100 false) not byte-wise; EVALUATE matches a numeric subject against WHEN literals else WHEN OTHER; branches MOVE a literal into the numeric field width. Completes the conditional-logic slice for BOTH data classes",
+      "byte_domain": "execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes",
+      "oracle": "cobc numeric IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob)",
+      "fixtures": "if_numeric_sweep 7/0 + 2 unit tests",
+      "sealed_version": "0.7.24",
+      "not_proven": "signed/packed/V-scaled numerics; MOVE field TO field; numeric SIZE ERROR; compound/class conditions; 88-level; range/THRU WHEN; non-MOVE branches; nested flow; all dialects",
+      "breaks_claim": "a signed/V numeric IF; a field-to-field branch MOVE; a compound condition; a range WHEN",
+      "readiness": 2,
+      "lie_prevented": "a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch",
+      "damage_if_overclaimed": "comparing numeric amounts as bytes (or vice versa) takes the wrong IF/EVALUATE branch, corrupting derived flags and classifications"
     }
   ],
   "transform_vs_read": {

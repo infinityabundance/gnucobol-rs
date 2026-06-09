@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 680,
+  "count": 695,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -20,6 +20,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.7"
+      ]
+    },
+    {
+      "id": "NEG.88-LEVEL",
+      "surface": "88-level",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
       ]
     },
     {
@@ -414,7 +425,8 @@
         "GNURUST.IF.EVALUATE.SLICE.1",
         "GNURUST.PERFORM.SLICE.1",
         "GNURUST.FILE.FLOW.SLICE.1",
-        "GNURUST.FILE.FILTER.SLICE.1"
+        "GNURUST.FILE.FILTER.SLICE.1",
+        "GNURUST.IF.NUMERIC.SLICE.1"
       ]
     },
     {
@@ -1265,7 +1277,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.PERFORM.SLICE.1"
+        "GNURUST.PERFORM.SLICE.1",
+        "GNURUST.IF.NUMERIC.SLICE.1"
       ]
     },
     {
@@ -3265,6 +3278,94 @@
       ]
     },
     {
+      "id": "NEG.IF_NUMERIC.NO_88_LEVEL",
+      "surface": "88-level condition names claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "those are GNURUST.11",
+      "risk_if_guessed": "IF N-IS-VALID",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_ALL_DIALECTS",
+      "surface": "all-dialect numeric IF claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_COMPOUND_CLASS_COND",
+      "surface": "compound/class conditions claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a single numeric relation only",
+      "risk_if_guessed": "IF N>1 AND M<2",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_FIELD_TO_FIELD_MOVE",
+      "surface": "MOVE field TO field in the branch claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "MOVE literal TO field only",
+      "risk_if_guessed": "MOVE A TO B in a branch",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_NESTED_FLOW",
+      "surface": "nested IF / non-MOVE branch / loop claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a flat single-level fragment only",
+      "risk_if_guessed": "nested IF",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_RANGE_WHEN",
+      "surface": "range/THRU WHEN claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single-value WHEN only",
+      "risk_if_guessed": "WHEN 1 THRU 10",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_SIGNED_PACKED_V",
+      "surface": "signed/packed/V-scaled numeric IF claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "unsigned 9(n) integer comparison only",
+      "risk_if_guessed": "IF on a S9(3)V99 field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_NUMERIC.NO_SIZE_ERROR",
+      "surface": "numeric SIZE ERROR on the branch MOVE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "value encoded low-order into the field width; overflow is GNURUST.SIZE.ERROR.1",
+      "risk_if_guessed": "a branch overflow",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.INDEXED-RELATIVE",
       "surface": "indexed/relative",
       "status": "not_admitted_fail_closed",
@@ -4296,6 +4397,17 @@
       ]
     },
     {
+      "id": "NEG.MOVE-FIELD-TO-FIELD",
+      "surface": "MOVE field TO field",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.MULTI-BRANCH-EVALUATE-FILTER",
       "surface": "multi-branch EVALUATE filter",
       "status": "not_admitted_fail_closed",
@@ -4397,6 +4509,17 @@
       "evidence": [
         "GNURUST.INSPECT.1",
         "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.NESTED-FLOW",
+      "surface": "nested flow",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
       ]
     },
     {
@@ -4577,6 +4700,17 @@
       ]
     },
     {
+      "id": "NEG.NON-MOVE-BRANCHES",
+      "surface": "non-MOVE branches",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.NON-NUMERIC-ARGUMENTS",
       "surface": "non-numeric arguments",
       "status": "not_admitted_fail_closed",
@@ -4673,6 +4807,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.2"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-SIZE-ERROR",
+      "surface": "numeric SIZE ERROR",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
       ]
     },
     {
@@ -5733,6 +5878,17 @@
       ]
     },
     {
+      "id": "NEG.RANGE-THRU-WHEN",
+      "surface": "range/THRU WHEN",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.RE-VALIDATION-OF-THE-BUNDLED-ARTIFACTS-T",
       "surface": "re-validation of the bundled artifacts (they are pinned, not re-run)",
       "status": "not_admitted_fail_closed",
@@ -6529,6 +6685,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.FILTER.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.SIGNED-PACKED-V-SCALED-NUMERICS",
+      "surface": "signed/packed/V-scaled numerics",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.NUMERIC.SLICE.1"
       ]
     },
     {

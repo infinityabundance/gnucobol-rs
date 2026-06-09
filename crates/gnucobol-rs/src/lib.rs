@@ -45,6 +45,7 @@ pub mod file_flow_slice;
 pub mod file_seq;
 pub mod initialize;
 pub mod if_eval;
+pub mod if_numeric;
 pub mod inspect;
 pub mod accept_display;
 pub mod intrinsic;

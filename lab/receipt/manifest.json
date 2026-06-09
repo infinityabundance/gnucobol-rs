@@ -507,6 +507,22 @@
         "indexed/relative",
         "all dialects"
       ]
+    },
+    "GNURUST.IF.NUMERIC.SLICE.1": {
+      "court": "numeric IF/EVALUATE execution slice",
+      "sweep": "if_numeric_sweep.sh",
+      "byte_domain": "execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes",
+      "non_claims": [
+        "signed/packed/V-scaled numerics",
+        "MOVE field TO field (literals only)",
+        "numeric SIZE ERROR",
+        "compound/class conditions",
+        "88-level (GNURUST.11)",
+        "range/THRU WHEN",
+        "non-MOVE branches",
+        "nested flow",
+        "all dialects"
+      ]
     }
   }
 }

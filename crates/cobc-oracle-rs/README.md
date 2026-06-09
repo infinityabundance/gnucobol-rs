@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/cobc-oracle-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/cobc-oracle-rs.svg)](https://crates.io/crates/cobc-oracle-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-80-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-80-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/cobc-oracle-rs.svg)](https://crates.io/crates/cobc-oracle-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-81-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-81-blueviolet)
 
 **Drives the GnuCOBOL `cobc` compiler as an oracle for the [`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs)
 compatibility court.** It builds and runs a COBOL fixture and records a deterministic, canonical-JSON

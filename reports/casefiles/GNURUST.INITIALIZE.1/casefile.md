@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INITIALIZE.1 (court-casefile)
 
-**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.23
+**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.24
 
 - **Oracle:** cobc INITIALIZE (program-shape, sentinel-prefill + REDEFINES dump)
 - **Byte domain(s):** INITIALIZE record -> changed/preserved receiver bytes

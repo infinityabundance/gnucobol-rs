@@ -573,6 +573,21 @@ for (i, s2, g, r) in IFE:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.IF.EVALUATE.SLICE.1"]}
 
+# GNURUST.IF.NUMERIC.SLICE.1 — numeric IF/EVALUATE slice.
+IFN = [
+ ("NEG.IF_NUMERIC.NO_SIGNED_PACKED_V", "signed/packed/V-scaled numeric IF claimed", "unsigned 9(n) integer comparison only", "IF on a S9(3)V99 field"),
+ ("NEG.IF_NUMERIC.NO_FIELD_TO_FIELD_MOVE", "MOVE field TO field in the branch claimed", "MOVE literal TO field only", "MOVE A TO B in a branch"),
+ ("NEG.IF_NUMERIC.NO_SIZE_ERROR", "numeric SIZE ERROR on the branch MOVE claimed", "value encoded low-order into the field width; overflow is GNURUST.SIZE.ERROR.1", "a branch overflow"),
+ ("NEG.IF_NUMERIC.NO_COMPOUND_CLASS_COND", "compound/class conditions claimed", "a single numeric relation only", "IF N>1 AND M<2"),
+ ("NEG.IF_NUMERIC.NO_88_LEVEL", "88-level condition names claimed", "those are GNURUST.11", "IF N-IS-VALID"),
+ ("NEG.IF_NUMERIC.NO_RANGE_WHEN", "range/THRU WHEN claimed", "single-value WHEN only", "WHEN 1 THRU 10"),
+ ("NEG.IF_NUMERIC.NO_NESTED_FLOW", "nested IF / non-MOVE branch / loop claimed", "a flat single-level fragment only", "nested IF"),
+ ("NEG.IF_NUMERIC.NO_ALL_DIALECTS", "all-dialect numeric IF claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in IFN:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.IF.NUMERIC.SLICE.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

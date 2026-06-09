@@ -15,7 +15,7 @@ Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 17**, observed 3, refuse
 | **3** | statement byte court — a Procedure-Division statement's receiver bytes are reproduced byte-for-byte | `GNURUST.12`, `GNURUST.13`, `GNURUST.19`, `GNURUST.7`, `GNURUST.ACCEPT.DISPLAY.1`, `GNURUST.ACCEPT.DISPLAY.2`, `GNURUST.FILE.REWRITE.1`, `GNURUST.FILE.SEQUENTIAL.1`, `GNURUST.FILE.WRITE.1`, `GNURUST.INITIALIZE.1`, `GNURUST.INSPECT.1`, `GNURUST.REMAINDER.1`, `GNURUST.SIZE.ERROR.1`, `GNURUST.STRING.UNSTRING.1` |
 | **4** | file/runtime-status court — file/runtime status observation bound to declared conditions | `GNURUST.FILE.STATUS.1` |
 | **5** | control-flow fragment — control-flow surface OBSERVED as an atlas; execution is not claimed | `GNURUST.PROCEDURE.FLOW.ATLAS.1` |
-| **6** | program-execution slice — executing a bounded control-flow fragment over the sealed primitives | `GNURUST.FILE.FILTER.SLICE.1`, `GNURUST.FILE.FLOW.SLICE.1`, `GNURUST.IF.EVALUATE.SLICE.1`, `GNURUST.PERFORM.SLICE.1` |
+| **6** | program-execution slice — executing a bounded control-flow fragment over the sealed primitives | `GNURUST.FILE.FILTER.SLICE.1`, `GNURUST.FILE.FLOW.SLICE.1`, `GNURUST.IF.EVALUATE.SLICE.1`, `GNURUST.IF.NUMERIC.SLICE.1`, `GNURUST.PERFORM.SLICE.1` |
 | **7** | compiler/runtime replacement — NOT CLAIMED — gnucobol-rs is a compatibility court, not a compiler | — |
 
 ## Downstream composition

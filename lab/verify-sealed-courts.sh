@@ -60,6 +60,7 @@ run_sweep "GNURUST.ACCEPT.DISPLAY.1" accept_display_sweep.sh
 run_sweep "GNURUST.ACCEPT.DISPLAY.2" accept_display2_sweep.sh
 run_sweep "GNURUST.PROCEDURE.FLOW.ATLAS.1 (observed)" procedure_flow_atlas_sweep.sh
 run_sweep "GNURUST.IF.EVALUATE.SLICE.1" if_eval_sweep.sh
+run_sweep "GNURUST.IF.NUMERIC.SLICE.1" if_numeric_sweep.sh
 run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh
 run_sweep "GNURUST.FILE.FLOW.SLICE.1" file_flow_sweep.sh
 run_sweep "GNURUST.FILE.FILTER.SLICE.1" file_filter_sweep.sh
