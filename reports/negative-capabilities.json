@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 463,
+  "count": 477,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -240,6 +240,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.ACTIVE-REDEFINES-VIEW",
+      "surface": "active REDEFINES view",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.ALL-DIALECTS",
+      "surface": "all dialects",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
       ]
     },
     {
@@ -785,6 +807,17 @@
         "KOBOLD.CORPUS.2",
         "GNURUST.REMAINDER.1",
         "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-DEFAULTS",
+      "surface": "business defaults",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
       ]
     },
     {
@@ -2318,6 +2351,17 @@
       ]
     },
     {
+      "id": "NEG.FULL-PROCEDURE-DIVISION-EXECUTION",
+      "surface": "full Procedure Division execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
       "id": "NEG.FX-CONVERSION",
       "surface": "FX conversion",
       "status": "not_admitted_fail_closed",
@@ -2481,6 +2525,94 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE-REPLACING-TO-VALUE-WITH-FILLE",
+      "surface": "INITIALIZE REPLACING/TO VALUE/WITH FILLER",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_ALL_DIALECTS",
+      "surface": "all-dialect INITIALIZE behavior claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "witnessed under gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_BUSINESS_DEFAULTS",
+      "surface": "category defaults treated as business defaults",
+      "status": "not_admitted_fail_closed",
+      "guard": "spaces/zero are category defaults, not business values",
+      "risk_if_guessed": "trusting a default as a real value",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_FULL_PROCEDURE_FLOW",
+      "surface": "full Procedure Division execution claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the INITIALIZE receiver bytes are sealed",
+      "risk_if_guessed": "executing program logic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_ODO_RUNTIME_ACTIVE_COUNT",
+      "surface": "ODO runtime active-count meaning claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only physical-max layout is used; active count not modelled",
+      "risk_if_guessed": "initializing by logical length",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_REDEFINES_ACTIVE_VIEW_CLAIM",
+      "surface": "the initialized REDEFINES base treated as the active view",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the first definition is initialized; active view is not claimed",
+      "risk_if_guessed": "treating the base as semantically active",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_SCREEN_REPORT_SQL",
+      "surface": "screen/report/SQL initialization claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "out of the fixed-record lane",
+      "risk_if_guessed": "assuming screen/report init",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.INITIALIZE.NO_VALUE_REINITIALIZATION_UNLESS_OBSERVED",
+      "surface": "plain INITIALIZE restores VALUE",
+      "status": "not_admitted_fail_closed",
+      "guard": "witnessed: plain INITIALIZE sets category defaults, NOT VALUE",
+      "risk_if_guessed": "expecting VALUE restoration",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
       ]
     },
     {
@@ -2832,6 +2964,17 @@
       ]
     },
     {
+      "id": "NEG.NUMERIC-EDITED-JUSTIFIED-BLANK-WHEN-ZERO",
+      "surface": "numeric-edited/JUSTIFIED/BLANK WHEN ZERO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
       "id": "NEG.NUMERIC-ROLE-FROM-PIC-OR-FIELD-NAME",
       "surface": "numeric role from PIC or field name",
       "status": "not_admitted_fail_closed",
@@ -2862,6 +3005,17 @@
       "owning_future_campaign": "ACCOUNTING.PROFILE.2 numeric-role (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.ODO-RUNTIME-ACTIVE-COUNT",
+      "surface": "ODO runtime active count",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INITIALIZE.1"
       ]
     },
     {

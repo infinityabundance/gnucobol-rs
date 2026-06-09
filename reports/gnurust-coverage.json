@@ -5,12 +5,12 @@
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "surface_count": 27,
   "status_counts": {
-    "sealed": 12,
+    "sealed": 13,
     "observed": 2,
     "negative": 7,
-    "missing": 6
+    "missing": 5
   },
-  "sealed_fraction": "12/27",
+  "sealed_fraction": "13/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -233,9 +233,11 @@
         "cobc/typeck.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.INITIALIZE.1",
+      "status": "sealed",
+      "courts": [
+        "GNURUST.INITIALIZE.1"
+      ],
+      "future_campaign": null,
       "risk_if_unported": "INITIALIZE group/FILLER/REDEFINES/OCCURS defaults are easy to get wrong"
     },
     {

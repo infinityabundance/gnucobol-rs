@@ -229,6 +229,19 @@
         "Procedure Division control flow",
         "business completeness"
       ]
+    },
+    "GNURUST.INITIALIZE.1": {
+      "court": "INITIALIZE receiver byte effects",
+      "sweep": "initialize_sweep.sh",
+      "byte_domain": "INITIALIZE record -> changed/preserved receiver bytes (elementary/group/FILLER/REDEFINES/OCCURS/VALUE)",
+      "non_claims": [
+        "full Procedure Division execution",
+        "INITIALIZE REPLACING/TO VALUE/WITH FILLER",
+        "numeric-edited/JUSTIFIED/BLANK WHEN ZERO",
+        "ODO runtime active count",
+        "active REDEFINES view",
+        "all dialects"
+      ]
     }
   }
 }

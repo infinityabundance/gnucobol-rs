@@ -1,0 +1,94 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: full Procedure Division execution"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: INITIALIZE REPLACING/TO VALUE/WITH FILLER"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: numeric-edited/JUSTIFIED/BLANK WHEN ZERO"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: ODO runtime active count"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: active REDEFINES view"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: all dialects"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: business defaults"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INITIALIZE.1 non-claim: lie prevented: 'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -823,6 +823,20 @@
       "readiness": 3,
       "lie_prevented": "'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses",
       "damage_if_overclaimed": "assuming a status value that the host did not actually produce (e.g. generalizing 30, or guessing 39) sends a migration's error-handling branches down the wrong path"
+    },
+    {
+      "id": "GNURUST.INITIALIZE.1",
+      "name": "INITIALIZE receiver byte effects",
+      "proven": "the bytes a plain INITIALIZE <record> changes or preserves, matching cobc/libcob byte-for-byte: each ELEMENTARY item gets its category default -- X(n) spaces (0x20), numeric DISPLAY 9/S9 '0' digits (0x30, no sign overpunch on +0), COMP-3 packed zero with sign nibble C (signed) / F (unsigned), binary COMP/COMP-5/COMP-X zero bytes -- while FILLER is PRESERVED, a REDEFINES redefiner is SKIPPED (only the base definition is initialized), every OCCURS element is initialized, and a VALUE clause is NOT restored (the category default wins). Proven from a sentinel prefill (MOVE ALL) so changed-vs-preserved is visible",
+      "byte_domain": "INITIALIZE record -> changed/preserved receiver bytes",
+      "oracle": "cobc INITIALIZE (program-shape, sentinel-prefill + REDEFINES dump)",
+      "fixtures": "initialize_sweep 6/0 + 3 unit tests",
+      "sealed_version": "0.7.4",
+      "not_proven": "full Procedure Division execution; INITIALIZE REPLACING/TO VALUE/WITH FILLER; numeric-edited/JUSTIFIED/BLANK WHEN ZERO; ODO runtime active count; active REDEFINES view; all dialects; business defaults",
+      "breaks_claim": "executing program flow; expecting VALUE restoration; edited/justified receivers; treating the base as the active view",
+      "readiness": 3,
+      "lie_prevented": "'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY",
+      "damage_if_overclaimed": "assuming INITIALIZE cleared a FILLER/redefiner, restored a VALUE, or used low-values/spaces wrongly silently corrupts a record before it is written or compared"
     }
   ],
   "transform_vs_read": {

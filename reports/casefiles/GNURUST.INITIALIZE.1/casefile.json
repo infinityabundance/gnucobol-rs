@@ -1,0 +1,65 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INITIALIZE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.4",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "25038765b3f1500b6b1466ec3acf99468927ee1a7628626c09ca04acfd9fe0c9",
+    "receipt_sha256": "1e7c21af89c0e7fcd9195a6adafdda9535b0e15d3ed9434eff7b00f2cc8b5af7"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc INITIALIZE (program-shape, sentinel-prefill + REDEFINES dump)",
+    "upstream_court": "GNURUST.INITIALIZE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the bytes a plain INITIALIZE <record> changes or preserves, matching cobc/libcob byte-for-byte: each ELEMENTARY item gets its category default -- X(n) spaces (0x20), numeric DISPLAY 9/S9 '0' digits (0x30, no sign overpunch on +0), COMP-3 packed zero with sign nibble C (signed) / F (unsigned), binary COMP/COMP-5/COMP-X zero bytes -- while FILLER is PRESERVED, a REDEFINES redefiner is SKIPPED (only the base definition is initialized), every OCCURS element is initialized, and a VALUE clause is NOT restored (the category default wins). Proven from a sentinel prefill (MOVE ALL) so changed-vs-preserved is visible"
+  ],
+  "negative_claims": [
+    "full Procedure Division execution",
+    "INITIALIZE REPLACING/TO VALUE/WITH FILLER",
+    "numeric-edited/JUSTIFIED/BLANK WHEN ZERO",
+    "ODO runtime active count",
+    "active REDEFINES view",
+    "all dialects",
+    "business defaults",
+    "lie prevented: 'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY"
+  ],
+  "negative_capability_ids": [
+    "NEG.FULL-PROCEDURE-DIVISION-EXECUTION",
+    "NEG.INITIALIZE-REPLACING-TO-VALUE-WITH-FILLE",
+    "NEG.NUMERIC-EDITED-JUSTIFIED-BLANK-WHEN-ZERO",
+    "NEG.ODO-RUNTIME-ACTIVE-COUNT",
+    "NEG.ACTIVE-REDEFINES-VIEW",
+    "NEG.ALL-DIALECTS",
+    "NEG.BUSINESS-DEFAULTS"
+  ],
+  "byte_domains": [
+    "INITIALIZE record -> changed/preserved receiver bytes"
+  ],
+  "lie_prevented": [
+    "'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY"
+  ],
+  "damage_if_overclaimed": "assuming INITIALIZE cleared a FILLER/redefiner, restored a VALUE, or used low-values/spaces wrongly silently corrupts a record before it is written or compared",
+  "replay": {
+    "command": "bash lab/oracle/initialize_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "d5f2d8859dcc04eb4920948806c68cd52e0eb025d891aed8afd8b1f001268c9a"
+  }
+}

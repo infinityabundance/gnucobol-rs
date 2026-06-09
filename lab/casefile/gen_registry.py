@@ -338,6 +338,20 @@ for (i, s2, g, r) in FST:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.STATUS.1"]}
 
+# GNURUST.INITIALIZE.1 — INITIALIZE byte effects; flow/value/edited fail closed.
+INIT = [
+ ("NEG.INITIALIZE.NO_FULL_PROCEDURE_FLOW", "full Procedure Division execution claimed", "only the INITIALIZE receiver bytes are sealed", "executing program logic"),
+ ("NEG.INITIALIZE.NO_ODO_RUNTIME_ACTIVE_COUNT", "ODO runtime active-count meaning claimed", "only physical-max layout is used; active count not modelled", "initializing by logical length"),
+ ("NEG.INITIALIZE.NO_BUSINESS_DEFAULTS", "category defaults treated as business defaults", "spaces/zero are category defaults, not business values", "trusting a default as a real value"),
+ ("NEG.INITIALIZE.NO_SCREEN_REPORT_SQL", "screen/report/SQL initialization claimed", "out of the fixed-record lane", "assuming screen/report init"),
+ ("NEG.INITIALIZE.NO_ALL_DIALECTS", "all-dialect INITIALIZE behavior claimed", "witnessed under gnucobol-3.2.0-default only", "assuming other dialects match"),
+ ("NEG.INITIALIZE.NO_VALUE_REINITIALIZATION_UNLESS_OBSERVED", "plain INITIALIZE restores VALUE", "witnessed: plain INITIALIZE sets category defaults, NOT VALUE", "expecting VALUE restoration"),
+ ("NEG.INITIALIZE.NO_REDEFINES_ACTIVE_VIEW_CLAIM", "the initialized REDEFINES base treated as the active view", "only the first definition is initialized; active view is not claimed", "treating the base as semantically active"),
+]
+for (i, s2, g, r) in INIT:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INITIALIZE.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

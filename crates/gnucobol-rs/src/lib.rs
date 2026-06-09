@@ -42,6 +42,7 @@
 
 pub mod arith;
 pub mod file_seq;
+pub mod initialize;
 pub mod attr;
 mod binary;
 pub mod cond;

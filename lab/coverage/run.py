@@ -47,7 +47,7 @@ SURFACES = [
    "sequential/line READ record bytes + AT END drive most batch COBOL logic"),
  ("file-status", "file I/O", ["libcob/fileio.c"], "observed", ["GNURUST.FILE.STATUS.1"], None,
    "real COBOL branches on file-status codes (00/10/35/...); observed atlas of which status arises from which condition"),
- ("initialize", "MOVE/storage", ["cobc/typeck.c"], "missing", [], "GNURUST.INITIALIZE.1",
+ ("initialize", "MOVE/storage", ["cobc/typeck.c"], "sealed", ["GNURUST.INITIALIZE.1"], None,
    "INITIALIZE group/FILLER/REDEFINES/OCCURS defaults are easy to get wrong"),
  ("inspect", "MOVE/storage", ["libcob/strings.c"], "missing", [], "GNURUST.INSPECT.1",
    "INSPECT TALLYING/REPLACING/CONVERTING is classic data-munging with real byte effects"),
