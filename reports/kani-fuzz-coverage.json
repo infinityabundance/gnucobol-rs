@@ -1,11 +1,11 @@
 {
   "schema": "gnurust-kani-fuzz-coverage-v1",
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "total_courts": 87,
+  "total_courts": 88,
   "na_courts": 45,
-  "impl_courts": 42,
-  "kani_covered": 42,
-  "fuzz_covered": 42,
+  "impl_courts": 43,
+  "kani_covered": 43,
+  "fuzz_covered": 43,
   "rows": [
     {
       "court": "GNURUST.2",
@@ -654,6 +654,15 @@
       "kani": "n/a",
       "fuzz": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
+    },
+    {
+      "court": "GNURUST.SEARCH.TABLE.1",
+      "kani": [
+        "search.rs"
+      ],
+      "fuzz": [
+        "search.rs"
+      ]
     }
   ]
 }

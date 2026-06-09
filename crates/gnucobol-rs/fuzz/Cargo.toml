@@ -156,3 +156,9 @@ name = "value"
 path = "fuzz_targets/value.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "search"
+path = "fuzz_targets/search.rs"
+test = false
+doc = false

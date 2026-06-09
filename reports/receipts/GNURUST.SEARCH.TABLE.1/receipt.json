@@ -1,0 +1,33 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.SEARCH.TABLE.1",
+  "court": "SEARCH / SEARCH ALL table lookup",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.26",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/search_sweep.sh"
+  },
+  "byte_domain": "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)",
+  "results": {
+    "sweep": "PASS=6 FAIL=0"
+  },
+  "non_claims": [
+    "multi-key/DESCENDING keys",
+    "alphanumeric/signed/V keys",
+    "VARYING/AT END/WHEN control flow (only the landing index)",
+    "SEARCH ALL on an unsorted table",
+    "OCCURS DEPENDING ON",
+    "all dialects"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

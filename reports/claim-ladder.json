@@ -1229,6 +1229,20 @@
       "readiness": 3,
       "lie_prevented": "an indexed file is records in insertion order with an index on the side -- NO: records are RETRIEVED IN KEY ORDER (AAA,BBB,CCC even though inserted CCC,BBB), a duplicate primary key is REJECTED (status 22), and the on-disk format is a BACKEND-SPECIFIC ISAM/BDB structure (not the fixed-record bytes) -- so KOBOLD's fixed-record evidence does NOT cover indexed files, and the on-disk index/page integrity is a separate (unbuilt) storage court",
       "damage_if_overclaimed": "treating an indexed file as a flat fixed-record file (insertion order, no key uniqueness) corrupts every keyed read; assuming the on-disk index is portable across backends silently breaks migration"
+    },
+    {
+      "id": "GNURUST.SEARCH.TABLE.1",
+      "name": "SEARCH / SEARCH ALL table lookup",
+      "proven": "the 1-based landing index of a COBOL table SEARCH, matching cobc/libcob (verified 6/0) -- a REAL byte court (not an atlas) composing the sealed 1-based subscript/decode model, the #2 surface gap (SEARCH 74x). SEARCH (serial) scans FORWARD ONLY from the current index for the first key match (a target before the start index is NOT FOUND -- SET IX TO 3 then searching a key at index 1 yields AT END); SEARCH ALL binary-searches the ASCENDING key, finding a match anywhere independent of the start index. search_serial / search_all over a keyed OCCURS table return the matching 1-based index or None",
+      "byte_domain": "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)",
+      "oracle": "cobc SEARCH/SEARCH ALL (cobc/typeck.c + codegen.c)",
+      "fixtures": "search_sweep 6/0 + 2 unit tests + kani soundness proof",
+      "sealed_version": "0.7.26",
+      "not_proven": "multi-key/DESCENDING keys; alphanumeric/signed/V-scaled keys; VARYING/AT END/WHEN control flow (only the landing index); SEARCH ALL on an unsorted table (undefined); OCCURS DEPENDING ON; all dialects",
+      "breaks_claim": "a DESCENDING/multi-key search; an alphanumeric key; SEARCH ALL on unsorted data; the WHEN/AT END bodies",
+      "readiness": 3,
+      "lie_prevented": "SEARCH and SEARCH ALL are interchangeable lookups -- NO: serial SEARCH scans FORWARD FROM THE CURRENT INDEX (so it MISSES a match before the start index), while SEARCH ALL is a BINARY search that requires the table sorted ASCENDING and finds the key anywhere; using one for the other (or SEARCH ALL on unsorted data) returns the wrong index or AT END",
+      "damage_if_overclaimed": "treating serial SEARCH as position-independent (or running SEARCH ALL on an unsorted table) silently returns the wrong table element in a lookup"
     }
   ],
   "transform_vs_read": {

@@ -63,6 +63,7 @@ pub mod init;
 pub mod layout;
 mod move_ops;
 pub mod perform_slice;
+pub mod search;
 pub mod pic;
 mod sign;
 pub mod value;
@@ -732,4 +733,16 @@ pub fn __fuzz_value(data: &[u8]) {
             let _ = Decimal::from_ebcdic_zoned(data, &f.attr);
         }
     }
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_search(data: &[u8]) {
+    use search::SearchTable;
+    let occurs = (data.first().copied().unwrap_or(1) as usize % 8) + 1;
+    let t = SearchTable { base_offset: 0, elem_size: 3, key_offset: 0, key_size: 3, occurs };
+    let target = data.get(1).copied().unwrap_or(0) as i64;
+    let from = (data.get(2).copied().unwrap_or(0) as usize % (occurs + 2)) + 1;
+    let _ = search::search_serial(data, &t, from, target);
+    let _ = search::search_all(data, &t, target);
 }

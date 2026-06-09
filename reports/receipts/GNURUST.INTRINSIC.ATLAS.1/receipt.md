@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.ATLAS.1` |
 | court | observed intrinsic-function atlas |
-| crate_version | `0.7.25` |
+| crate_version | `0.7.26` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive) |
 | replay command | `bash lab/oracle/intrinsic_atlas_sweep.sh` |

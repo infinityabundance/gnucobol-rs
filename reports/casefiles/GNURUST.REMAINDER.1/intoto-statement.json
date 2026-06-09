@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.REMAINDER.1/casefile.json",
       "digest": {
-        "sha256": "c3cdb647ff9d411a642ef30eca08f780bdce3f526306e458aec8e3be7eb127d7"
+        "sha256": "da92bfd58f70b4f95db5d6acfd2bc13c0df6e34a2a74d27d0d4ceb06d380fb4f"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.REMAINDER.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.25",
+    "crate_version": "0.7.26",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/remainder_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "44e4fd4fd8adb7e5d3dbff846af933fdc9ca11ed2c73657deba79c2c5c6a3df4",
-      "receipt_sha256": "eecb63f2fe69126d0adf9b2e345cc2382b834ebf69f4b72b4db818a8ce71ccc2"
+      "receipt_sha256": "82498b494a1c69b72eb02de711ea61aedc6e77604b5f43d4ad970f00cfa9c03e"
     },
     "positive_claim_count": 3,
     "negative_claim_count": 8

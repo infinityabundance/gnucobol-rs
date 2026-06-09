@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.STRING.UNSTRING.1/casefile.json",
       "digest": {
-        "sha256": "f4d59f2e0b9bcc8afe8805d4544f782ee1b6cc733a3c3869dab458037567e2d6"
+        "sha256": "2386c57739b3228013a0807488ca10774fc233704fb7b6020fad1856d3666a56"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.STRING.UNSTRING.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.25",
+    "crate_version": "0.7.26",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/string_unstring_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "338a62dac4c86e1529188ca8c754eecbbae3952289039c5b5b23935d0f5f2bfb",
-      "receipt_sha256": "c9cb686539671a104643f907111deb4cd2d9ce99976968ebf89b4bb2ba2a0f34"
+      "receipt_sha256": "7f6437b76d250a3e1f6e3d8be0a8c798bb724722392f5ec070de1694eead8e7c"
     },
     "positive_claim_count": 2,
     "negative_claim_count": 7

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 765,
+  "count": 775,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -430,7 +430,8 @@
         "GNURUST.TABLE.PERFORM.SLICE.1",
         "GNURUST.BUILD.PROFILE.1",
         "GNURUST.CALL.EXTENSION.ATLAS.1",
-        "GNURUST.INDEXED.FILE.ATLAS.1"
+        "GNURUST.INDEXED.FILE.ATLAS.1",
+        "GNURUST.SEARCH.TABLE.1"
       ]
     },
     {
@@ -442,6 +443,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.ALPHANUMERIC-SIGNED-V-SCALED-KEYS",
+      "surface": "alphanumeric/signed/V-scaled keys",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
       ]
     },
     {
@@ -4819,6 +4831,17 @@
       ]
     },
     {
+      "id": "NEG.MULTI-KEY-DESCENDING-KEYS",
+      "surface": "multi-key/DESCENDING keys",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
       "id": "NEG.MULTIBYTE-UTF-8-REVERSE",
       "surface": "multibyte/UTF-8 REVERSE",
       "status": "not_admitted_fail_closed",
@@ -5273,7 +5296,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.TABLE.PERFORM.SLICE.1"
+        "GNURUST.TABLE.PERFORM.SLICE.1",
+        "GNURUST.SEARCH.TABLE.1"
       ]
     },
     {
@@ -7043,6 +7067,83 @@
       ]
     },
     {
+      "id": "NEG.SEARCH-ALL-ON-AN-UNSORTED-TABLE-UNDEFINE",
+      "surface": "SEARCH ALL on an unsorted table (undefined)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEARCH.NO_ALL_DIALECTS",
+      "surface": "all-dialect SEARCH claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEARCH.NO_CONTROL_FLOW",
+      "surface": "VARYING/AT END/WHEN imperative control flow claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the landing index is sealed",
+      "risk_if_guessed": "the AT END/WHEN bodies",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEARCH.NO_MULTI_DESCENDING_KEY",
+      "surface": "multi-key / DESCENDING-key SEARCH ALL claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single ascending key only",
+      "risk_if_guessed": "DESCENDING KEY or two keys",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEARCH.NO_NON_NUMERIC_KEY",
+      "surface": "alphanumeric/signed/V-scaled keys claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "unsigned 9(n) keys only",
+      "risk_if_guessed": "an alphanumeric key",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEARCH.NO_ODO",
+      "surface": "OCCURS DEPENDING ON claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "fixed occurs only",
+      "risk_if_guessed": "a variable-length table",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEARCH.NO_UNSORTED_SEARCH_ALL",
+      "surface": "SEARCH ALL on an unsorted table claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "ascending-sorted table required (undefined otherwise)",
+      "risk_if_guessed": "binary search on unsorted data",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
       "id": "NEG.SEMANTIC-VALIDATION-OF-EACH-COURT-THEIR-",
       "surface": "semantic validation of each court (their own seals are the authority)",
       "status": "not_admitted_fail_closed",
@@ -8374,6 +8475,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.VARYING-AT-END-WHEN-CONTROL-FLOW-ONLY-TH",
+      "surface": "VARYING/AT END/WHEN control flow (only the landing index)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SEARCH.TABLE.1"
       ]
     },
     {

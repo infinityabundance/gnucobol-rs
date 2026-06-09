@@ -59,7 +59,7 @@ SURFACES = [
    "NUMVAL/LENGTH/MOD/CURRENT-DATE etc.; observed atlas + per-intrinsic implementation courts (LENGTH sealed)"),
  ("accept-display", "ACCEPT/DISPLAY", ["libcob/termio.c"], "sealed", ["GNURUST.ACCEPT.DISPLAY.1", "GNURUST.ACCEPT.DISPLAY.2"], None,
    "emitted DISPLAY text + ACCEPT is runtime evidence too"),
- ("procedure-flow", "control flow", ["cobc/typeck.c","cobc/codegen.c"], "observed", ["GNURUST.PROCEDURE.FLOW.ATLAS.1", "GNURUST.IF.EVALUATE.SLICE.1", "GNURUST.IF.NUMERIC.SLICE.1", "GNURUST.PERFORM.SLICE.1", "GNURUST.TABLE.PERFORM.SLICE.1", "GNURUST.FILE.FLOW.SLICE.1", "GNURUST.FILE.FILTER.SLICE.1"], None,
+ ("procedure-flow", "control flow", ["cobc/typeck.c","cobc/codegen.c"], "observed", ["GNURUST.PROCEDURE.FLOW.ATLAS.1", "GNURUST.IF.EVALUATE.SLICE.1", "GNURUST.IF.NUMERIC.SLICE.1", "GNURUST.PERFORM.SLICE.1", "GNURUST.TABLE.PERFORM.SLICE.1", "GNURUST.SEARCH.TABLE.1", "GNURUST.FILE.FLOW.SLICE.1", "GNURUST.FILE.FILTER.SLICE.1"], None,
    "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, execution NOT claimed"),
  ("call-linkage", "CALL/linkage", ["libcob/call.c"], "observed", ["GNURUST.CALL.EXTENSION.ATLAS.1"], None,
    "CALL/linkage/USING is a large surface; refused until receipt-backed"),

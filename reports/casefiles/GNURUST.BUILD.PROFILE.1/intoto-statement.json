@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.BUILD.PROFILE.1/casefile.json",
       "digest": {
-        "sha256": "3015037cc7ad7832271f24c5fa5ed79bfd8f41d0aefa02457cc0482d07e8ffed"
+        "sha256": "a79fb2d88f59fbabab55562c282d4d81d085b0e61696c702d0b158a28fffa093"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.BUILD.PROFILE.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.25",
+    "crate_version": "0.7.26",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/build_profile_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "fafb34871386190bd64df16ca6bb61acc2e692c4fb89c7b6402c96e9da6543a8",
-      "receipt_sha256": "ee6f92be17f7f2dbe908429ee1da174bb3f6a869cea3beccb073c441464e0022"
+      "receipt_sha256": "89a815e609d373eefaff05218da4113d38369e9d0fd86c8760ca3ad9317018e2"
     },
     "positive_claim_count": 3,
     "negative_claim_count": 6

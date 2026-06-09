@@ -683,6 +683,19 @@ for (i, s2, g, r) in TBL:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.TABLE.PERFORM.SLICE.1"]}
 
+# GNURUST.SEARCH.TABLE.1 -- SEARCH / SEARCH ALL table lookup.
+SRCH = [
+ ("NEG.SEARCH.NO_MULTI_DESCENDING_KEY", "multi-key / DESCENDING-key SEARCH ALL claimed", "single ascending key only", "DESCENDING KEY or two keys"),
+ ("NEG.SEARCH.NO_NON_NUMERIC_KEY", "alphanumeric/signed/V-scaled keys claimed", "unsigned 9(n) keys only", "an alphanumeric key"),
+ ("NEG.SEARCH.NO_CONTROL_FLOW", "VARYING/AT END/WHEN imperative control flow claimed", "only the landing index is sealed", "the AT END/WHEN bodies"),
+ ("NEG.SEARCH.NO_UNSORTED_SEARCH_ALL", "SEARCH ALL on an unsorted table claimed", "ascending-sorted table required (undefined otherwise)", "binary search on unsorted data"),
+ ("NEG.SEARCH.NO_ODO", "OCCURS DEPENDING ON claimed", "fixed occurs only", "a variable-length table"),
+ ("NEG.SEARCH.NO_ALL_DIALECTS", "all-dialect SEARCH claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in SRCH:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.SEARCH.TABLE.1"]}
+
 # GNURUST.FILE.FLOW.SLICE.1 — read-loop (file x control flow).
 FFL = [
  ("NEG.FILE_FLOW.NO_INDEXED_RELATIVE", "indexed/relative read-loop claimed", "sequential organizations only (the sealed read)", "an indexed read-loop"),

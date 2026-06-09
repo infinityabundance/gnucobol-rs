@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INDEXED.FILE.ATLAS.1` |
 | court | observed indexed-file atlas |
-| crate_version | `0.7.25` |
+| crate_version | `0.7.26` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | INDEXED keyed access: random READ by key, key-order retrieval, dup/not-found status, START, DELETE |
 | replay command | `bash lab/oracle/indexed_file_atlas_sweep.sh` |

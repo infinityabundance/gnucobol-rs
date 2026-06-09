@@ -5,21 +5,16 @@
   "scope": "surface-frequency scan of .at run/syn tests -- NOT compilation/execution/parity",
   "files_scanned": 29,
   "counts": {
-    "sealed": 13,
+    "sealed": 14,
     "observed": 6,
     "refused": 4,
-    "missing": 3
+    "missing": 2
   },
   "missing_court_board": [
     {
       "surface": "SORT / MERGE",
       "occurrences": 145,
       "proposed_court": "GNURUST.SORT.MERGE.ATLAS.1 (proposed)"
-    },
-    {
-      "surface": "SEARCH (table lookup)",
-      "occurrences": 74,
-      "proposed_court": "GNURUST.SEARCH.TABLE.1 (proposed)"
     },
     {
       "surface": "relative file org",
@@ -133,8 +128,8 @@
     {
       "surface": "SEARCH (table lookup)",
       "occurrences": 74,
-      "status": "missing",
-      "court": "GNURUST.SEARCH.TABLE.1 (proposed)"
+      "status": "sealed",
+      "court": "GNURUST.SEARCH.TABLE.1"
     },
     {
       "surface": "SCREEN SECTION",

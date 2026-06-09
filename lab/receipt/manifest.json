@@ -578,6 +578,19 @@
         "relative files",
         "all dialects"
       ]
+    },
+    "GNURUST.SEARCH.TABLE.1": {
+      "court": "SEARCH / SEARCH ALL table lookup",
+      "sweep": "search_sweep.sh",
+      "byte_domain": "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)",
+      "non_claims": [
+        "multi-key/DESCENDING keys",
+        "alphanumeric/signed/V keys",
+        "VARYING/AT END/WHEN control flow (only the landing index)",
+        "SEARCH ALL on an unsorted table",
+        "OCCURS DEPENDING ON",
+        "all dialects"
+      ]
     }
   }
 }
