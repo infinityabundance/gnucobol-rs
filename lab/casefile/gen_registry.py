@@ -312,6 +312,19 @@ for (i, s2, g, r) in COV:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.COVERAGE.1"]}
 
+# GNURUST.FILE.SEQUENTIAL.1 — sequential READ bytes+status; everything else fails closed.
+FSEQ = [
+ ("NEG.FILE_SEQ.NOT_INDEXED_RELATIVE_VSAM", "indexed/relative/VSAM organizations claimed", "only RECORD/LINE SEQUENTIAL is sealed", "reading an indexed file as sequential"),
+ ("NEG.FILE_SEQ.NOT_WRITE_REWRITE", "WRITE/REWRITE/START/DELETE claimed", "only OPEN INPUT + READ NEXT is sealed", "writing a file via this court"),
+ ("NEG.FILE_SEQ.NOT_OPEN_IO_EXTEND", "OPEN I-O / EXTEND modes claimed", "only OPEN INPUT is sealed", "assuming update/append modes"),
+ ("NEG.FILE_SEQ.NOT_FULL_FILE_STATUS", "file-status codes beyond 00/06/10 claimed", "only those three are witnessed here (see GNURUST.FILE.STATUS.1 future)", "branching on unproven status codes"),
+ ("NEG.FILE_SEQ.NOT_LOCKING", "record/file locking semantics claimed", "out of scope", "assuming lock behavior"),
+ ("NEG.FILE_SEQ.NOT_PROCEDURE_FLOW", "Procedure Division control flow around READ claimed", "only the per-READ bytes+status are sealed", "executing program logic"),
+]
+for (i, s2, g, r) in FSEQ:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.SEQUENTIAL.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 440,
+  "count": 452,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -2051,6 +2051,83 @@
       ]
     },
     {
+      "id": "NEG.FILE-STATUS-CODES-BEYOND-00-06-10",
+      "surface": "file-status codes beyond 00/06/10",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_SEQ.NOT_FULL_FILE_STATUS",
+      "surface": "file-status codes beyond 00/06/10 claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only those three are witnessed here (see GNURUST.FILE.STATUS.1 future)",
+      "risk_if_guessed": "branching on unproven status codes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_SEQ.NOT_INDEXED_RELATIVE_VSAM",
+      "surface": "indexed/relative/VSAM organizations claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only RECORD/LINE SEQUENTIAL is sealed",
+      "risk_if_guessed": "reading an indexed file as sequential",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_SEQ.NOT_LOCKING",
+      "surface": "record/file locking semantics claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "out of scope",
+      "risk_if_guessed": "assuming lock behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_SEQ.NOT_OPEN_IO_EXTEND",
+      "surface": "OPEN I-O / EXTEND modes claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only OPEN INPUT is sealed",
+      "risk_if_guessed": "assuming update/append modes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_SEQ.NOT_PROCEDURE_FLOW",
+      "surface": "Procedure Division control flow around READ claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the per-READ bytes+status are sealed",
+      "risk_if_guessed": "executing program logic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_SEQ.NOT_WRITE_REWRITE",
+      "surface": "WRITE/REWRITE/START/DELETE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only OPEN INPUT + READ NEXT is sealed",
+      "risk_if_guessed": "writing a file via this court",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
       "id": "NEG.FIXTURE.EXPECTED_NOT_ORACLE",
       "surface": "the fixture's expected output treated as oracle authority",
       "status": "not_admitted_requires_declared_profile",
@@ -2271,6 +2348,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED-RELATIVE-VSAM",
+      "surface": "indexed/relative/VSAM",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
       ]
     },
     {
@@ -2686,6 +2774,17 @@
       "evidence": [
         "SIZE.ERROR.ATLAS.1",
         "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.OPEN-I-O-EXTEND",
+      "surface": "OPEN I-O/EXTEND",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
       ]
     },
     {
@@ -3329,6 +3428,17 @@
       ]
     },
     {
+      "id": "NEG.PROCEDURE-DIVISION-CONTROL-FLOW",
+      "surface": "Procedure Division control flow",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
       "id": "NEG.PROCEDURE-DIVISION-EXECUTION",
       "surface": "Procedure Division execution",
       "status": "not_admitted_fail_closed",
@@ -3520,6 +3630,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.RECORD-LOCKING",
+      "surface": "record locking",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
       ]
     },
     {
@@ -4859,6 +4980,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.WRITE-REWRITE-START-DELETE",
+      "surface": "WRITE/REWRITE/START/DELETE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.SEQUENTIAL.1"
       ]
     },
     {

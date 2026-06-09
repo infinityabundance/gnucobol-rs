@@ -1,0 +1,69 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.FILE.SEQUENTIAL.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "a2dee1eb34600c0335b87f5db10c9d12aafe72b45e5f7e48d3bfafcbb4a07518",
+    "receipt_sha256": "d8d208edd13e321c14966acc37bb7c1bfa63fcbf90e16086703d7fb504523625"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc OPEN INPUT/READ NEXT (libcob/fileio.c, program-shape)",
+    "upstream_court": "GNURUST.FILE.SEQUENTIAL.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 10,
+    "pass": 10,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "OPEN INPUT + repeated READ NEXT RECORD",
+    "AT END over a flat byte buffer at a declared fixed record length, for ORGANIZATION RECORD SEQUENTIAL (fixed binary: record_len chunks status 00",
+    "the FD buffer PERSISTS so a short final record overlays only the available bytes and LEAVES the prior record's tail",
+    "the initial buffer is low-values 0x00) and LINE SEQUENTIAL (newline-delimited: short line space-padded 00",
+    "a line longer than the record delivered record_len bytes at a time with status 06 until the remainder fits 00",
+    "a trailing newline yields NO empty record",
+    "a mid-file empty line IS a record), with file status 00/06/10 -- matching cobc/libcob byte-for-byte"
+  ],
+  "negative_claims": [
+    "indexed/relative/VSAM",
+    "WRITE/REWRITE/START/DELETE",
+    "OPEN I-O/EXTEND",
+    "file-status codes beyond 00/06/10",
+    "record locking",
+    "Procedure Division control flow",
+    "lie prevented: 'a sequential READ just gives you the record' -- a short final RECORD SEQUENTIAL read LEAKS the prior record's tail bytes (not spaces, not zeros), a long LINE SEQUENTIAL line is split across reads with status 06, and the initial buffer is low-values; the bytes and status both matter"
+  ],
+  "negative_capability_ids": [
+    "NEG.INDEXED-RELATIVE-VSAM",
+    "NEG.WRITE-REWRITE-START-DELETE",
+    "NEG.OPEN-I-O-EXTEND",
+    "NEG.FILE-STATUS-CODES-BEYOND-00-06-10",
+    "NEG.RECORD-LOCKING",
+    "NEG.PROCEDURE-DIVISION-CONTROL-FLOW"
+  ],
+  "byte_domains": [
+    "sequential READ record buffer bytes + file status"
+  ],
+  "lie_prevented": [
+    "'a sequential READ just gives you the record' -- a short final RECORD SEQUENTIAL read LEAKS the prior record's tail bytes (not spaces, not zeros), a long LINE SEQUENTIAL line is split across reads with status 06, and the initial buffer is low-values; the bytes and status both matter"
+  ],
+  "damage_if_overclaimed": "misreading a short final record (leaked prior-record tail) or a chunked long line, or branching on an unproven file status, silently corrupts a batch file pipeline",
+  "replay": {
+    "command": "bash lab/oracle/seqfile_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "23ab812bd5e0a48e2e1a27c99b33db4da247a6ef80d972ad59c3b1f20f81f05e"
+  }
+}

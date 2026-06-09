@@ -5,12 +5,12 @@
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "surface_count": 27,
   "status_counts": {
-    "sealed": 11,
+    "sealed": 12,
     "observed": 1,
     "negative": 7,
-    "missing": 8
+    "missing": 7
   },
-  "sealed_fraction": "11/27",
+  "sealed_fraction": "12/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -205,10 +205,12 @@
         "libcob/fileio.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.FILE.SEQUENTIAL.1",
-      "risk_if_unported": "sequential/line READ record bytes + AT END drive most batch COBOL logic; unported = no file pipeline"
+      "status": "sealed",
+      "courts": [
+        "GNURUST.FILE.SEQUENTIAL.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "sequential/line READ record bytes + AT END drive most batch COBOL logic"
     },
     {
       "surface": "file-status",

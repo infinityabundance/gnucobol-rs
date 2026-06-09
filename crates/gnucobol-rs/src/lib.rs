@@ -41,6 +41,7 @@
 #![forbid(unsafe_code)]
 
 pub mod arith;
+pub mod file_seq;
 pub mod attr;
 mod binary;
 pub mod cond;

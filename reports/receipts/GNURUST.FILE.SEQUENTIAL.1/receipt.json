@@ -1,0 +1,33 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.FILE.SEQUENTIAL.1",
+  "court": "sequential file READ record bytes + file status",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.3",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/seqfile_sweep.sh"
+  },
+  "byte_domain": "OPEN INPUT / READ NEXT / AT END record bytes + status for RECORD/LINE SEQUENTIAL",
+  "results": {
+    "sweep": "PASS=10 FAIL=0"
+  },
+  "non_claims": [
+    "indexed / relative / VSAM",
+    "WRITE / REWRITE / START / DELETE",
+    "OPEN I-O / EXTEND",
+    "file-status codes beyond 00/06/10",
+    "record locking",
+    "Procedure Division control flow"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

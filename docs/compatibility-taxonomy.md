@@ -49,5 +49,5 @@ The full enumerated future courts and their explicit non-claims live in
 [`future-risk-register.md`](future-risk-register.md); the machine-readable list of every
 current non-claim lives in [`../reports/negative-claims.md`](../reports/negative-claims.md).
 
-| 0g | **DIVIDE** | do DIVIDE GIVING receiver bytes match the oracle? | **sealed** — `arith::cob_divide` (`GNURUST.19`) + `cob_divide_remainder` (`GNURUST.REMAINDER.1`, quotient+remainder bytes); divide-by-zero/ON SIZE ERROR/COMPUTE/float/binary-receiver fail closed`arith::cob_divide` (`GNURUST.19`); divide-by-zero/REMAINDER/COMPUTE/float/binary-receiver fail closed |
+| 0g | **DIVIDE** | do DIVIDE GIVING receiver bytes match the oracle? | **sealed** — sequential `READ NEXT` record bytes + file status (00/06/10) for RECORD/LINE SEQUENTIAL match the oracle? | **sealed** — `file_seq` (`GNURUST.FILE.SEQUENTIAL.1`); indexed/relative/VSAM, WRITE/REWRITE, OPEN I-O fail closed |\n| `arith::cob_divide` (`GNURUST.19`)`arith::cob_divide` (`GNURUST.19`) + `cob_divide_remainder` (`GNURUST.REMAINDER.1`, quotient+remainder bytes); divide-by-zero/ON SIZE ERROR/COMPUTE/float/binary-receiver fail closed`arith::cob_divide` (`GNURUST.19`); divide-by-zero/REMAINDER/COMPUTE/float/binary-receiver fail closed |
 

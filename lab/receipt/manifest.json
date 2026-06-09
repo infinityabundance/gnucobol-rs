@@ -202,6 +202,19 @@
         "binary/edited receivers",
         "business correctness"
       ]
+    },
+    "GNURUST.FILE.SEQUENTIAL.1": {
+      "court": "sequential file READ record bytes + file status",
+      "sweep": "seqfile_sweep.sh",
+      "byte_domain": "OPEN INPUT / READ NEXT / AT END record bytes + status for RECORD/LINE SEQUENTIAL",
+      "non_claims": [
+        "indexed / relative / VSAM",
+        "WRITE / REWRITE / START / DELETE",
+        "OPEN I-O / EXTEND",
+        "file-status codes beyond 00/06/10",
+        "record locking",
+        "Procedure Division control flow"
+      ]
     }
   }
 }

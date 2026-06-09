@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **27**  ·  sealed ✅ **11**  ·  observed 🟡 1  ·  refused ⛔ 7  ·  **missing ❌ 8**
+- surfaces: **27**  ·  sealed ✅ **12**  ·  observed 🟡 1  ·  refused ⛔ 7  ·  **missing ❌ 7**
 
-- sealed fraction (data-representation spine): **11/27**
+- sealed fraction (data-representation spine): **12/27**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -23,7 +23,7 @@
 | `edited-pictures` | MOVE/storage | `move.c` | ✅ sealed | GNURUST.16 |
 | `dialect-options` | compiler dialect options | `config.c` | ✅ sealed | DIALECT.PROFILE.1 |
 | `size-error` | runtime exceptions | `numeric.c` | 🟡 observed | SIZE.ERROR.ATLAS.1 |
-| `file-io-sequential` | file I/O | `fileio.c` | ❌ missing | GNURUST.FILE.SEQUENTIAL.1 |
+| `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1 |
 | `file-status` | file I/O | `fileio.c` | ❌ missing | GNURUST.FILE.STATUS.1 |
 | `initialize` | MOVE/storage | `typeck.c` | ❌ missing | GNURUST.INITIALIZE.1 |
 | `inspect` | MOVE/storage | `strings.c` | ❌ missing | GNURUST.INSPECT.1 |
@@ -41,7 +41,6 @@
 
 ## Risk of the unported surfaces (missing ❌)
 
-- **`file-io-sequential`** → `GNURUST.FILE.SEQUENTIAL.1`: sequential/line READ record bytes + AT END drive most batch COBOL logic; unported = no file pipeline
 - **`file-status`** → `GNURUST.FILE.STATUS.1`: real COBOL branches on file-status codes (00/10/35/...); unported = wrong control flow
 - **`initialize`** → `GNURUST.INITIALIZE.1`: INITIALIZE group/FILLER/REDEFINES/OCCURS defaults are easy to get wrong
 - **`inspect`** → `GNURUST.INSPECT.1`: INSPECT TALLYING/REPLACING/CONVERTING is classic data-munging with real byte effects

@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-56-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-56-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-57-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-57-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -86,6 +86,7 @@ ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabili
 | `GNURUST.18` COMP-6 | unsigned packed storage + MOVE | `cobc -C` / `cob_move` | 0.7.0 | signed COMP-6, arithmetic, dialect portability |
 | `GNURUST.19` DIVIDE | DIVIDE GIVING quotient bytes | `cobc` DIVIDE GIVING | 0.7.1 | divide-by-zero, ON SIZE ERROR, COMPUTE, float, binary receiver |
 | `GNURUST.REMAINDER.1` DIVIDE REMAINDER | quotient + REMAINDER receiver bytes (dividend − stored-quotient × divisor; sign follows dividend) | `cobc` DIVIDE REMAINDER | 0.7.2 | divide-by-zero, ON SIZE ERROR, COMPUTE, float, binary receiver |
+| `GNURUST.FILE.SEQUENTIAL.1` sequential READ | READ NEXT record bytes + file status (00/06/10) | `cobc` OPEN/READ | 0.7.3 | indexed/relative/VSAM, WRITE, status beyond 00/06/10 |
 | `KOBOLD.RECON.1` | JSONL + audit bytes | sealed courts (composed) | shim 0.2.0 | write-back, business truth |
 | `KOBOLD.DATA.2/3` | binary + cp500 EBCDIC composed in corpus | sealed courts (composed) | shim 0.3.0/0.4.0 | binary arithmetic, numeric EBCDIC zoned |
 | `KOBOLD.OPERATOR.1` | explain / totals / dirty-mode + risk | sealed courts (composed) | shim 0.5.0 | business truth, semantic validity |
@@ -154,6 +155,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `DIALECT.PROFILE.1` | declared GnuCOBOL witness profile | ✅ pass | [`reports/casefiles/DIALECT.PROFILE.1/`](reports/casefiles/DIALECT.PROFILE.1/) |
 | `GNURUST.REMAINDER.1` | DIVIDE REMAINDER receiving-field bytes | ✅ pass | [`reports/casefiles/GNURUST.REMAINDER.1/`](reports/casefiles/GNURUST.REMAINDER.1/) |
 | `GNURUST.COVERAGE.1` | forensic coverage map of the GnuCOBOL semantic surface | ✅ pass | [`reports/casefiles/GNURUST.COVERAGE.1/`](reports/casefiles/GNURUST.COVERAGE.1/) |
+| `GNURUST.FILE.SEQUENTIAL.1` | sequential file READ record bytes + file status | ✅ pass | [`reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/`](reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
@@ -212,7 +214,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 moves, field model, record layout, initialization, comparison, formatting, source expansion,
 runtime lifecycle, files, reports, diagnostics — and **no lower layer is allowed to imply a higher
 layer**. Sealed today: storage bytes + `MOVE` bytes (`GNURUST.2`), `PIC`→field-model (`GNURUST.3`),
-DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), packed `ADD`/`SUBTRACT` (`GNURUST.13`), COMP/COMP-5/COMP-X binary storage+MOVE (`GNURUST.14`), cp500 EBCDIC DISPLAY decode (`GNURUST.15`), edited-picture decode (`GNURUST.16` 16a+16b), cp500 EBCDIC zoned-decimal numeric decode (`GNURUST.17`), COMP-6 unsigned packed storage+MOVE (`GNURUST.18`), DIVIDE GIVING quotient bytes (`GNURUST.19`), and DIVIDE…REMAINDER quotient+remainder bytes (`GNURUST.REMAINDER.1`). The full
+DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), packed `ADD`/`SUBTRACT` (`GNURUST.13`), COMP/COMP-5/COMP-X binary storage+MOVE (`GNURUST.14`), cp500 EBCDIC DISPLAY decode (`GNURUST.15`), edited-picture decode (`GNURUST.16` 16a+16b), cp500 EBCDIC zoned-decimal numeric decode (`GNURUST.17`), COMP-6 unsigned packed storage+MOVE (`GNURUST.18`), DIVIDE GIVING quotient bytes (`GNURUST.19`), and DIVIDE…REMAINDER quotient+remainder bytes (`GNURUST.REMAINDER.1`).DIVIDE…REMAINDER quotient+remainder bytes (`GNURUST.REMAINDER.1`), and sequential file READ record bytes + status (`GNURUST.FILE.SEQUENTIAL.1`). The full
 taxonomy is in
 [`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
 its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the
