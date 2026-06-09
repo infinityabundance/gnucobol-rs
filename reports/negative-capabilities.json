@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 477,
+  "count": 489,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -261,7 +261,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.INITIALIZE.1"
+        "GNURUST.INITIALIZE.1",
+        "GNURUST.INSPECT.1"
       ]
     },
     {
@@ -845,6 +846,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-VALIDATION",
+      "surface": "business validation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
       ]
     },
     {
@@ -2358,7 +2370,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.INITIALIZE.1"
+        "GNURUST.INITIALIZE.1",
+        "GNURUST.INSPECT.1"
       ]
     },
     {
@@ -2627,6 +2640,83 @@
       ]
     },
     {
+      "id": "NEG.INSPECT.NO_ALL_DIALECTS",
+      "surface": "all-dialect INSPECT behavior claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "witnessed under gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
+      "id": "NEG.INSPECT.NO_BUSINESS_VALIDATION",
+      "surface": "an INSPECT tally/replace treated as business validation",
+      "status": "not_admitted_fail_closed",
+      "guard": "byte counting/mutation is not validation",
+      "risk_if_guessed": "trusting a tally as a business check",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
+      "id": "NEG.INSPECT.NO_FULL_PROCEDURE_FLOW",
+      "surface": "full Procedure Division execution claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the INSPECT byte effects + tally bytes are sealed",
+      "risk_if_guessed": "executing program logic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
+      "id": "NEG.INSPECT.NO_LOCALE_CASEFOLDING",
+      "surface": "locale/case-folding INSPECT claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "matching is exact bytes, no case folding",
+      "risk_if_guessed": "case-insensitive matching",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
+      "id": "NEG.INSPECT.NO_MULTI_CLAUSE_GENERALIZATION_UNLESS_ADMITTED",
+      "surface": "multi-clause INSPECT ordering generalized",
+      "status": "not_admitted_fail_closed",
+      "guard": "single declared clause per fixture; multi-clause not admitted",
+      "risk_if_guessed": "assuming clause interaction",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
+      "id": "NEG.INSPECT.NO_NATIONAL_OR_UTF8_SEMANTICS",
+      "surface": "national/UTF-8 multibyte INSPECT claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "byte-level single-octet only",
+      "risk_if_guessed": "inspecting multibyte text",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
+      "id": "NEG.INSPECT.NO_REGEX_OR_PATTERN_LANGUAGE",
+      "surface": "regex/pattern-language matching claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "INSPECT matches literal byte sequences only",
+      "risk_if_guessed": "treating items as patterns",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
       "id": "NEG.LANGUAGE-SUITE-PARITY",
       "surface": "language-suite parity",
       "status": "not_admitted_fail_closed",
@@ -2694,6 +2784,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.LOCALE-CASE-FOLDING",
+      "surface": "locale/case-folding",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
       ]
     },
     {
@@ -2828,6 +2929,17 @@
       "evidence": [
         "GNURUST.15",
         "GNURUST.17"
+      ]
+    },
+    {
+      "id": "NEG.NATIONAL-UTF-8-MULTIBYTE",
+      "surface": "national/UTF-8 multibyte",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
       ]
     },
     {
@@ -4053,6 +4165,17 @@
       ]
     },
     {
+      "id": "NEG.REGEX-PATTERN-SEMANTICS",
+      "surface": "regex/pattern semantics",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
+      ]
+    },
+    {
       "id": "NEG.REGULATORY-COMPLIANCE",
       "surface": "regulatory compliance",
       "status": "not_admitted_fail_closed",
@@ -5114,6 +5237,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "TRUST.5"
+      ]
+    },
+    {
+      "id": "NEG.UNADMITTED-MULTI-CLAUSE-ORDERING",
+      "surface": "unadmitted multi-clause ordering",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INSPECT.1"
       ]
     },
     {

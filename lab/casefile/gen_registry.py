@@ -352,6 +352,20 @@ for (i, s2, g, r) in INIT:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INITIALIZE.1"]}
 
+# GNURUST.INSPECT.1 — INSPECT byte effects; flow/locale/regex/national fail closed.
+INSP = [
+ ("NEG.INSPECT.NO_FULL_PROCEDURE_FLOW", "full Procedure Division execution claimed", "only the INSPECT byte effects + tally bytes are sealed", "executing program logic"),
+ ("NEG.INSPECT.NO_NATIONAL_OR_UTF8_SEMANTICS", "national/UTF-8 multibyte INSPECT claimed", "byte-level single-octet only", "inspecting multibyte text"),
+ ("NEG.INSPECT.NO_MULTI_CLAUSE_GENERALIZATION_UNLESS_ADMITTED", "multi-clause INSPECT ordering generalized", "single declared clause per fixture; multi-clause not admitted", "assuming clause interaction"),
+ ("NEG.INSPECT.NO_LOCALE_CASEFOLDING", "locale/case-folding INSPECT claimed", "matching is exact bytes, no case folding", "case-insensitive matching"),
+ ("NEG.INSPECT.NO_REGEX_OR_PATTERN_LANGUAGE", "regex/pattern-language matching claimed", "INSPECT matches literal byte sequences only", "treating items as patterns"),
+ ("NEG.INSPECT.NO_BUSINESS_VALIDATION", "an INSPECT tally/replace treated as business validation", "byte counting/mutation is not validation", "trusting a tally as a business check"),
+ ("NEG.INSPECT.NO_ALL_DIALECTS", "all-dialect INSPECT behavior claimed", "witnessed under gnucobol-3.2.0-default only", "assuming other dialects match"),
+]
+for (i, s2, g, r) in INSP:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INSPECT.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.14` |
 | court | binary COMP/COMP-5/COMP-X storage + MOVE |
-| crate_version | `0.7.4` |
+| crate_version | `0.7.5` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field-storage + move-result bytes (binary) |
 | replay command | `bash lab/oracle/binary_sweep.sh` |

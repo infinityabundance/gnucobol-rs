@@ -837,6 +837,20 @@
       "readiness": 3,
       "lie_prevented": "'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY",
       "damage_if_overclaimed": "assuming INITIALIZE cleared a FILLER/redefiner, restored a VALUE, or used low-values/spaces wrongly silently corrupts a record before it is written or compared"
+    },
+    {
+      "id": "GNURUST.INSPECT.1",
+      "name": "INSPECT byte effects + tally bytes",
+      "proven": "the target bytes and tally receiver bytes of narrow INSPECT statements, matching cobc/libcob byte-for-byte: TALLYING FOR ALL (every NON-OVERLAPPING occurrence, left-to-right consume), LEADING (run from the region start), CHARACTERS (every position); REPLACING ALL/LEADING/FIRST (equal-length operands); CONVERTING (per-byte translation); and BEFORE/AFTER INITIAL region restriction (BEFORE absent = whole region, AFTER absent = empty). Scanning is left-to-right non-overlapping; matching is exact bytes (no case folding)",
+      "byte_domain": "INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes",
+      "oracle": "cobc INSPECT (program-shape, target + count-redefines dump)",
+      "fixtures": "inspect_sweep 12/0 + 4 unit tests",
+      "sealed_version": "0.7.5",
+      "not_proven": "full Procedure Division execution; locale/case-folding; regex/pattern semantics; national/UTF-8 multibyte; unadmitted multi-clause ordering; business validation; all dialects",
+      "breaks_claim": "case-insensitive matching; overlapping counts; multibyte INSPECT; multi-clause interaction; treating a tally as validation",
+      "readiness": 3,
+      "lie_prevented": "'INSPECT counts/replaces are obvious' -- ALL counts NON-OVERLAPPING left-to-right (AAAAAA FOR ALL AA = 3 not 5), LEADING stops at the first non-match, BEFORE/AFTER restrict the region (BEFORE an absent delimiter = the whole field), matching is exact bytes with no case folding",
+      "damage_if_overclaimed": "a wrong overlap/leading/region/case assumption in an INSPECT-based cleanup or validation transform silently mis-counts or mis-mutates a field"
     }
   ],
   "transform_vs_read": {

@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-59-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-59-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-60-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-60-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.4 · 23 sealed GNURUST courts · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.5 · 24 sealed GNURUST courts · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -51,6 +51,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.FILE.SEQUENTIAL.1` | sequential file READ record bytes + file status | ✅ pass | [`reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/`](reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/) |
 | `GNURUST.FILE.STATUS.1` | observed FILE STATUS atlas | ✅ pass | [`reports/casefiles/GNURUST.FILE.STATUS.1/`](reports/casefiles/GNURUST.FILE.STATUS.1/) |
 | `GNURUST.INITIALIZE.1` | INITIALIZE receiver byte effects | ✅ pass | [`reports/casefiles/GNURUST.INITIALIZE.1/`](reports/casefiles/GNURUST.INITIALIZE.1/) |
+| `GNURUST.INSPECT.1` | INSPECT byte effects + tally bytes | ✅ pass | [`reports/casefiles/GNURUST.INSPECT.1/`](reports/casefiles/GNURUST.INSPECT.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |

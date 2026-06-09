@@ -242,6 +242,20 @@
         "active REDEFINES view",
         "all dialects"
       ]
+    },
+    "GNURUST.INSPECT.1": {
+      "court": "INSPECT byte effects + tally bytes",
+      "sweep": "inspect_sweep.sh",
+      "byte_domain": "INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes",
+      "non_claims": [
+        "full Procedure Division execution",
+        "locale/case-folding",
+        "regex/pattern semantics",
+        "national/UTF-8 multibyte",
+        "unadmitted multi-clause ordering",
+        "business validation",
+        "all dialects"
+      ]
     }
   }
 }

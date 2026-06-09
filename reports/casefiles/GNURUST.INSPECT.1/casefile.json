@@ -1,0 +1,69 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INSPECT.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.5",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "0dcedaab7830b756fa5731cb4353c450b13da4ee3cdd34f3a3647d4c1329d266",
+    "receipt_sha256": "749b40637446c86b3597ad284dc99db5727bfcbe23ed91a861efdf5957816cbd"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc INSPECT (program-shape, target + count-redefines dump)",
+    "upstream_court": "GNURUST.INSPECT.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 12,
+    "pass": 12,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the target bytes and tally receiver bytes of narrow INSPECT statements, matching cobc/libcob byte-for-byte: TALLYING FOR ALL (every NON-OVERLAPPING occurrence, left-to-right consume), LEADING (run from the region start), CHARACTERS (every position)",
+    "REPLACING ALL/LEADING/FIRST (equal-length operands)",
+    "CONVERTING (per-byte translation)",
+    "and BEFORE/AFTER INITIAL region restriction (BEFORE absent = whole region, AFTER absent = empty). Scanning is left-to-right non-overlapping",
+    "matching is exact bytes (no case folding)"
+  ],
+  "negative_claims": [
+    "full Procedure Division execution",
+    "locale/case-folding",
+    "regex/pattern semantics",
+    "national/UTF-8 multibyte",
+    "unadmitted multi-clause ordering",
+    "business validation",
+    "all dialects",
+    "lie prevented: 'INSPECT counts/replaces are obvious' -- ALL counts NON-OVERLAPPING left-to-right (AAAAAA FOR ALL AA = 3 not 5), LEADING stops at the first non-match, BEFORE/AFTER restrict the region (BEFORE an absent delimiter = the whole field), matching is exact bytes with no case folding"
+  ],
+  "negative_capability_ids": [
+    "NEG.FULL-PROCEDURE-DIVISION-EXECUTION",
+    "NEG.LOCALE-CASE-FOLDING",
+    "NEG.REGEX-PATTERN-SEMANTICS",
+    "NEG.NATIONAL-UTF-8-MULTIBYTE",
+    "NEG.UNADMITTED-MULTI-CLAUSE-ORDERING",
+    "NEG.BUSINESS-VALIDATION",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes"
+  ],
+  "lie_prevented": [
+    "'INSPECT counts/replaces are obvious' -- ALL counts NON-OVERLAPPING left-to-right (AAAAAA FOR ALL AA = 3 not 5), LEADING stops at the first non-match, BEFORE/AFTER restrict the region (BEFORE an absent delimiter = the whole field), matching is exact bytes with no case folding"
+  ],
+  "damage_if_overclaimed": "a wrong overlap/leading/region/case assumption in an INSPECT-based cleanup or validation transform silently mis-counts or mis-mutates a field",
+  "replay": {
+    "command": "bash lab/oracle/inspect_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "16773f26d004a11d46895b7b40fb403937d255ffeedb10fed4e17e3a52173ad8"
+  }
+}

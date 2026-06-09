@@ -49,7 +49,7 @@ SURFACES = [
    "real COBOL branches on file-status codes (00/10/35/...); observed atlas of which status arises from which condition"),
  ("initialize", "MOVE/storage", ["cobc/typeck.c"], "sealed", ["GNURUST.INITIALIZE.1"], None,
    "INITIALIZE group/FILLER/REDEFINES/OCCURS defaults are easy to get wrong"),
- ("inspect", "MOVE/storage", ["libcob/strings.c"], "missing", [], "GNURUST.INSPECT.1",
+ ("inspect", "MOVE/storage", ["libcob/strings.c"], "sealed", ["GNURUST.INSPECT.1"], None,
    "INSPECT TALLYING/REPLACING/CONVERTING is classic data-munging with real byte effects"),
  ("string-unstring", "MOVE/storage", ["libcob/strings.c"], "missing", [], "GNURUST.STRING.UNSTRING.1",
    "STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value"),

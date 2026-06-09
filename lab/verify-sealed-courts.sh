@@ -43,6 +43,7 @@ run_sweep "GNURUST.REMAINDER.1 bytes" remainder_sweep.sh
 run_sweep "GNURUST.FILE.SEQUENTIAL.1" seqfile_sweep.sh
 run_sweep "GNURUST.FILE.STATUS.1 (observed)" file_status_sweep.sh
 run_sweep "GNURUST.INITIALIZE.1 bytes" initialize_sweep.sh
+run_sweep "GNURUST.INSPECT.1 bytes" inspect_sweep.sh
 run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_sweep.sh
 run_sweep "GNURUST.8  VALUE image"   value_sweep.sh
 run_sweep "GNURUST.11 LEVEL-88 eval" cond_sweep.sh
