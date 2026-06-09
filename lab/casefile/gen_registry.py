@@ -680,6 +680,20 @@ for (i, s2, g, r) in REL:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.RELATIVE.FILE.ATLAS.1"]}
 
+# GNURUST.DIALECT.RUNTIME.ATLAS.1 -- observed cross-dialect runtime divergence atlas.
+DRT = [
+ ("NEG.DIALECT_RUNTIME.NO_NONDEFAULT_IMPLEMENTATION", "execution under a non-default -std dialect claimed", "the atlas OBSERVES; gnucobol-rs runs only the default dialect", "running an ibm/mf/mvs dialect"),
+ ("NEG.DIALECT_RUNTIME.NO_VENDOR_PARITY", "parity with a vendor compiler (IBM Enterprise / Micro Focus / ...) claimed", "the -std modes are GnuCOBOL approximations, not the vendor compilers", "assuming -std=ibm equals IBM Enterprise COBOL"),
+ ("NEG.DIALECT_RUNTIME.NO_STD_IS_VENDOR", "a -std mode treated as the vendor dialect itself", "the witness is GnuCOBOL 3.2.0 under -std, never the vendor toolchain", "trusting -std=mf as Micro Focus runtime"),
+ ("NEG.DIALECT_RUNTIME.NO_FULL_DIVERGENCE_ENUMERATION", "a complete enumeration of every cross-dialect divergence claimed", "this samples sign placement, presentation, and compile-acceptance only", "assuming the atlas lists all dialect differences"),
+ ("NEG.DIALECT_RUNTIME.NO_PRESENTATION_DECODE", "decoding the DISPLAY presentation form back to a value claimed", "presentation (trailing/leading sign) is observed, not decoded", "parsing a presentation string as a stored field"),
+ ("NEG.DIALECT_RUNTIME.NO_SCREEN_DIALECTS", "the screen-routed dialects (acu/realia) observed", "those route DISPLAY through a terminal and are out of the byte-evidence lane", "running acu/realia screen DISPLAY"),
+ ("NEG.DIALECT_RUNTIME.NO_RUNTIME_PORTABILITY", "runtime portability across platforms claimed", "one build on one host; see NEG.PLATFORM.RUNTIME_NOT_CLAIMED", "assuming portable runtime semantics"),
+]
+for (i, s2, g, r) in DRT:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.DIALECT.RUNTIME.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

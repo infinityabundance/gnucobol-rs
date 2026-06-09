@@ -1,0 +1,34 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+  "court": "observed dialect-runtime divergence atlas",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.26",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/dialect_runtime_atlas_sweep.sh"
+  },
+  "byte_domain": "cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions",
+  "results": {
+    "sweep": "PASS=7 FAIL=0"
+  },
+  "non_claims": [
+    "non-default dialect implementation",
+    "vendor-compiler parity (IBM/MF/MVS/BS2000/RM/GCOS)",
+    "a -std mode being the vendor dialect itself",
+    "complete enumeration of every cross-dialect divergence",
+    "decoding the DISPLAY presentation form back to a value",
+    "screen-routed dialects (acu/realia)",
+    "runtime portability across platforms"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

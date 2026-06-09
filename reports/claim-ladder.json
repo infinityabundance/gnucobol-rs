@@ -1271,6 +1271,20 @@
       "readiness": 3,
       "lie_prevented": "a relative file is records in order with a number -- NO: records sit at FIXED SLOTS by relative number (an unwritten slot reads status 23, gaps are real), distinct from indexed (key-sorted) and sequential (insertion order); and gnucobol-rs runs no relative I/O",
       "damage_if_overclaimed": "treating relative slots as a dense sequential file ignores empty-slot gaps (status 23) and the by-number addressing"
+    },
+    {
+      "id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+      "name": "observed dialect-runtime divergence atlas",
+      "proven": "observed where GnuCOBOL RUNTIME behavior diverges across its own -std dialects under the gnucobol-3.2.0 witness, verified by the sweep (7/0): the STORED zoned-sign bytes of S9(4)=-123 are dialect-INVARIANT (30 31 32 73 across default/cobol85/cobol2014/ibm-strict/mvs-strict/mf-strict/bs2000-strict/rm-strict/gcos-strict) so the record-decode lane is NOT dialect-sensitive for zoned sign; the DISPLAY presentation of a signed field DIVERGES into a LEADING-sign camp (default/cobol85/cobol2014/mf-strict render -0123) and a TRAILING-sign camp (ibm-strict/mvs-strict/bs2000-strict/rm-strict/gcos-strict render 0123-), a presentation difference only; and compile-acceptance of extensions diverges (COMP-5 rejected by cobol85/cobol2014, FUNCTION TRIM rejected by cobol85, USAGE BINARY-LONG rejected by cobol85 and ibm-strict)",
+      "byte_domain": "cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions",
+      "oracle": "cobc -std=<dialect> compile + run (cobc/config/*.conf dialect engine + libcob display)",
+      "fixtures": "dialect_runtime_atlas_sweep 7/0 -> reports/dialect-runtime-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "non-default dialect implementation (gnucobol-rs runs only the default dialect); vendor-compiler parity (the -std modes are GnuCOBOL approximations of IBM/Micro Focus/MVS/BS2000/RM/GCOS, never the vendor compilers); the -std mode being the vendor dialect itself; a complete enumeration of every cross-dialect divergence (this samples sign placement, presentation, and compile-acceptance); decoding the DISPLAY presentation form back to a value; the screen-routed dialects (acu/realia route DISPLAY through a terminal); runtime portability across platforms",
+      "breaks_claim": "running a non-default dialect; claiming IBM/MF/vendor parity; treating a -std mode as the vendor compiler; decoding a presentation string as storage",
+      "readiness": 3,
+      "lie_prevented": "COBOL dialect changes the record bytes -- NO: the STORED zoned-sign bytes are dialect-INVARIANT (so a record decode is not dialect-sensitive for zoned sign); what DIVERGES is the DISPLAY *presentation* (IBM/MVS/BS2000/RM/GCOS put the sign TRAILING '0123-' while default/MF put it LEADING '-0123') and the COMPILE-acceptance of extensions -- and 'GnuCOBOL -std=ibm' is NOT IBM Enterprise COBOL, only GnuCOBOL's approximation of it",
+      "damage_if_overclaimed": "assuming a non-default -std mode is the real vendor compiler imports a false parity claim; conversely, assuming the stored record bytes shift with dialect would wrongly re-decode every zoned field; confusing the DISPLAY presentation (trailing sign) with the stored field corrupts both"
     }
   ],
   "transform_vs_read": {

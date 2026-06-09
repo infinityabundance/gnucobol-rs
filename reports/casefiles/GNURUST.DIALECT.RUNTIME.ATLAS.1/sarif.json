@@ -1,0 +1,94 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: non-default dialect implementation (gnucobol-rs runs only the default dialect)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: vendor-compiler parity (the -std modes are GnuCOBOL approximations of IBM/Micro Focus/MVS/BS2000/RM/GCOS, never the vendor compilers)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: the -std mode being the vendor dialect itself"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: a complete enumeration of every cross-dialect divergence (this samples sign placement, presentation, and compile-acceptance)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: decoding the DISPLAY presentation form back to a value"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: the screen-routed dialects (acu/realia route DISPLAY through a terminal)"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: runtime portability across platforms"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIALECT.RUNTIME.ATLAS.1 non-claim: lie prevented: COBOL dialect changes the record bytes -- NO: the STORED zoned-sign bytes are dialect-INVARIANT (so a record decode is not dialect-sensitive for zoned sign); what DIVERGES is the DISPLAY *presentation* (IBM/MVS/BS2000/RM/GCOS put the sign TRAILING '0123-' while default/MF put it LEADING '-0123') and the COMPILE-acceptance of extensions -- and 'GnuCOBOL -std=ibm' is NOT IBM Enterprise COBOL, only GnuCOBOL's approximation of it"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **29**  ·  sealed ✅ **17**  ·  observed 🟡 7  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **30**  ·  sealed ✅ **17**  ·  observed 🟡 8  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **17/29**
+- sealed fraction (data-representation spine): **17/30**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -22,6 +22,7 @@
 | `codepage-ebcdic` | data representation | `common.c, move.c` | ✅ sealed | GNURUST.15, GNURUST.17 |
 | `edited-pictures` | MOVE/storage | `move.c` | ✅ sealed | GNURUST.16 |
 | `dialect-options` | compiler dialect options | `config.c` | ✅ sealed | DIALECT.PROFILE.1 |
+| `dialect-runtime` | compiler dialect options | `config.c, default.conf, move.c` | 🟡 observed | GNURUST.DIALECT.RUNTIME.ATLAS.1 |
 | `size-error` | runtime exceptions | `numeric.c` | ✅ sealed | SIZE.ERROR.ATLAS.1, GNURUST.SIZE.ERROR.1 |
 | `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1, GNURUST.FILE.REWRITE.1 |
 | `file-io-indexed` | file I/O (keyed) | `fileio.c` | 🟡 observed | GNURUST.INDEXED.FILE.ATLAS.1 |

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 799,
+  "count": 813,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -53,6 +53,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.A-COMPLETE-ENUMERATION-OF-EVERY-CROSS-DI",
+      "surface": "a complete enumeration of every cross-dialect divergence (this samples sign placement, presentation, and compile-acceptance)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
       ]
     },
     {
@@ -2099,6 +2110,17 @@
       ]
     },
     {
+      "id": "NEG.DECODING-THE-DISPLAY-PRESENTATION-FORM-B",
+      "surface": "decoding the DISPLAY presentation form back to a value",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.DELETE",
       "surface": "DELETE",
       "status": "not_admitted_fail_closed",
@@ -2185,6 +2207,83 @@
       "owning_future_campaign": null,
       "evidence": [
         "DIALECT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_FULL_DIVERGENCE_ENUMERATION",
+      "surface": "a complete enumeration of every cross-dialect divergence claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "this samples sign placement, presentation, and compile-acceptance only",
+      "risk_if_guessed": "assuming the atlas lists all dialect differences",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_NONDEFAULT_IMPLEMENTATION",
+      "surface": "execution under a non-default -std dialect claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; gnucobol-rs runs only the default dialect",
+      "risk_if_guessed": "running an ibm/mf/mvs dialect",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_PRESENTATION_DECODE",
+      "surface": "decoding the DISPLAY presentation form back to a value claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "presentation (trailing/leading sign) is observed, not decoded",
+      "risk_if_guessed": "parsing a presentation string as a stored field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_RUNTIME_PORTABILITY",
+      "surface": "runtime portability across platforms claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "one build on one host; see NEG.PLATFORM.RUNTIME_NOT_CLAIMED",
+      "risk_if_guessed": "assuming portable runtime semantics",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_SCREEN_DIALECTS",
+      "surface": "the screen-routed dialects (acu/realia) observed",
+      "status": "not_admitted_observed_only",
+      "guard": "those route DISPLAY through a terminal and are out of the byte-evidence lane",
+      "risk_if_guessed": "running acu/realia screen DISPLAY",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_STD_IS_VENDOR",
+      "surface": "a -std mode treated as the vendor dialect itself",
+      "status": "not_admitted_observed_only",
+      "guard": "the witness is GnuCOBOL 3.2.0 under -std, never the vendor toolchain",
+      "risk_if_guessed": "trusting -std=mf as Micro Focus runtime",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIALECT_RUNTIME.NO_VENDOR_PARITY",
+      "surface": "parity with a vendor compiler (IBM Enterprise / Micro Focus / ...) claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the -std modes are GnuCOBOL approximations, not the vendor compilers",
+      "risk_if_guessed": "assuming -std=ibm equals IBM Enterprise COBOL",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
       ]
     },
     {
@@ -5114,6 +5213,17 @@
       ]
     },
     {
+      "id": "NEG.NON-DEFAULT-DIALECT-IMPLEMENTATION-GNUCO",
+      "surface": "non-default dialect implementation (gnucobol-rs runs only the default dialect)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.NON-FITTING-LITERALS",
       "surface": "non-fitting literals",
       "status": "not_admitted_fail_closed",
@@ -7124,6 +7234,17 @@
       ]
     },
     {
+      "id": "NEG.RUNTIME-PORTABILITY-ACROSS-PLATFORMS",
+      "surface": "runtime portability across platforms",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.RUNTIME-VALIDATION",
       "surface": "runtime validation",
       "status": "not_admitted_fail_closed",
@@ -8458,6 +8579,28 @@
       ]
     },
     {
+      "id": "NEG.THE-SCREEN-ROUTED-DIALECTS-ACU-REALIA-RO",
+      "surface": "the screen-routed dialects (acu/realia route DISPLAY through a terminal)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-STD-MODE-BEING-THE-VENDOR-DIALECT-IT",
+      "surface": "the -std mode being the vendor dialect itself",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.THE-TARGET-BEING-AN-ORACLE-UNLESS-DECLAR",
       "surface": "the target being an oracle (unless declared)",
       "status": "not_admitted_fail_closed",
@@ -8752,6 +8895,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.SEARCH.TABLE.1"
+      ]
+    },
+    {
+      "id": "NEG.VENDOR-COMPILER-PARITY-THE-STD-MODES-ARE",
+      "surface": "vendor-compiler parity (the -std modes are GnuCOBOL approximations of IBM/Micro Focus/MVS/BS2000/RM/GCOS, never the vendor compilers)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1"
       ]
     },
     {

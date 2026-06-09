@@ -44,6 +44,7 @@
     "GNURUST.INDEXED.FILE.ATLAS.1": 1,
     "GNURUST.SORT.MERGE.ATLAS.1": 1,
     "GNURUST.RELATIVE.FILE.ATLAS.1": 1,
+    "GNURUST.DIALECT.RUNTIME.ATLAS.1": 1,
     "GNURUST.FILE.STATUS.1": 4,
     "GNURUST.PROCEDURE.FLOW.ATLAS.1": 5,
     "GNURUST.IF.EVALUATE.SLICE.1": 6,
@@ -67,6 +68,7 @@
       "description": "behavior is recorded as observed evidence (a sweep), not a pure-kernel implementation",
       "courts": [
         "GNURUST.CALL.EXTENSION.ATLAS.1",
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1",
         "GNURUST.INDEXED.FILE.ATLAS.1",
         "GNURUST.INTRINSIC.ATLAS.1",
         "GNURUST.RELATIVE.FILE.ATLAS.1",
@@ -163,7 +165,7 @@
   ],
   "coverage_status_counts": {
     "sealed": 17,
-    "observed": 7,
+    "observed": 8,
     "negative": 5,
     "missing": 0
   },

@@ -1,0 +1,67 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.26",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f1408188083eeb4e7521d0aaada08048da346a907a517cf7d678808388b613bd",
+    "receipt_sha256": "d548eddc7e429241e3ff5439a005a43b0037945424128e1ac0d22ac011224f2c"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -std=<dialect> compile + run (cobc/config/*.conf dialect engine + libcob display)",
+    "upstream_court": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 7,
+    "pass": 7,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed where GnuCOBOL RUNTIME behavior diverges across its own -std dialects under the gnucobol-3.2.0 witness, verified by the sweep (7/0): the STORED zoned-sign bytes of S9(4)=-123 are dialect-INVARIANT (30 31 32 73 across default/cobol85/cobol2014/ibm-strict/mvs-strict/mf-strict/bs2000-strict/rm-strict/gcos-strict) so the record-decode lane is NOT dialect-sensitive for zoned sign",
+    "the DISPLAY presentation of a signed field DIVERGES into a LEADING-sign camp (default/cobol85/cobol2014/mf-strict render -0123) and a TRAILING-sign camp (ibm-strict/mvs-strict/bs2000-strict/rm-strict/gcos-strict render 0123-), a presentation difference only",
+    "and compile-acceptance of extensions diverges (COMP-5 rejected by cobol85/cobol2014, FUNCTION TRIM rejected by cobol85, USAGE BINARY-LONG rejected by cobol85 and ibm-strict)"
+  ],
+  "negative_claims": [
+    "non-default dialect implementation (gnucobol-rs runs only the default dialect)",
+    "vendor-compiler parity (the -std modes are GnuCOBOL approximations of IBM/Micro Focus/MVS/BS2000/RM/GCOS, never the vendor compilers)",
+    "the -std mode being the vendor dialect itself",
+    "a complete enumeration of every cross-dialect divergence (this samples sign placement, presentation, and compile-acceptance)",
+    "decoding the DISPLAY presentation form back to a value",
+    "the screen-routed dialects (acu/realia route DISPLAY through a terminal)",
+    "runtime portability across platforms",
+    "lie prevented: COBOL dialect changes the record bytes -- NO: the STORED zoned-sign bytes are dialect-INVARIANT (so a record decode is not dialect-sensitive for zoned sign); what DIVERGES is the DISPLAY *presentation* (IBM/MVS/BS2000/RM/GCOS put the sign TRAILING '0123-' while default/MF put it LEADING '-0123') and the COMPILE-acceptance of extensions -- and 'GnuCOBOL -std=ibm' is NOT IBM Enterprise COBOL, only GnuCOBOL's approximation of it"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-DEFAULT-DIALECT-IMPLEMENTATION-GNUCO",
+    "NEG.VENDOR-COMPILER-PARITY-THE-STD-MODES-ARE",
+    "NEG.THE-STD-MODE-BEING-THE-VENDOR-DIALECT-IT",
+    "NEG.A-COMPLETE-ENUMERATION-OF-EVERY-CROSS-DI",
+    "NEG.DECODING-THE-DISPLAY-PRESENTATION-FORM-B",
+    "NEG.THE-SCREEN-ROUTED-DIALECTS-ACU-REALIA-RO",
+    "NEG.RUNTIME-PORTABILITY-ACROSS-PLATFORMS"
+  ],
+  "byte_domains": [
+    "cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions"
+  ],
+  "lie_prevented": [
+    "COBOL dialect changes the record bytes -- NO: the STORED zoned-sign bytes are dialect-INVARIANT (so a record decode is not dialect-sensitive for zoned sign); what DIVERGES is the DISPLAY *presentation* (IBM/MVS/BS2000/RM/GCOS put the sign TRAILING '0123-' while default/MF put it LEADING '-0123') and the COMPILE-acceptance of extensions -- and 'GnuCOBOL -std=ibm' is NOT IBM Enterprise COBOL, only GnuCOBOL's approximation of it"
+  ],
+  "damage_if_overclaimed": "assuming a non-default -std mode is the real vendor compiler imports a false parity claim; conversely, assuming the stored record bytes shift with dialect would wrongly re-decode every zoned field; confusing the DISPLAY presentation (trailing sign) with the stored field corrupts both",
+  "replay": {
+    "command": "bash lab/oracle/dialect_runtime_atlas_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "243db07733d675d02dc5e981f6676c105d3a1eec2cf8af1643f0bab90038853f"
+  }
+}

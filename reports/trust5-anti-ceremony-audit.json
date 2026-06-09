@@ -30,6 +30,7 @@
       "GNURUST.ACCEPT.DISPLAY.2",
       "GNURUST.BUILD.PROFILE.1",
       "GNURUST.CALL.EXTENSION.ATLAS.1",
+      "GNURUST.DIALECT.RUNTIME.ATLAS.1",
       "GNURUST.FILE.FILTER.SLICE.1",
       "GNURUST.FILE.FLOW.SLICE.1",
       "GNURUST.FILE.REWRITE.1",
@@ -110,7 +111,7 @@
     "F": []
   },
   "class_counts": {
-    "A": 49,
+    "A": 50,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -502,6 +503,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "lab/coverage/run.py generate/check -> reports/gnurust-coverage.{json,md} (27 surfaces; every admitted court mapped)",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 3,
+      "negative_claims": 8,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "dialect_runtime_atlas_sweep 7/0 -> reports/dialect-runtime-atlas.json",
       "ceremonial_flags": []
     },
     {

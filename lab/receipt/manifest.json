@@ -618,6 +618,20 @@
         "indexed files",
         "all dialects"
       ]
+    },
+    "GNURUST.DIALECT.RUNTIME.ATLAS.1": {
+      "court": "observed dialect-runtime divergence atlas",
+      "sweep": "dialect_runtime_atlas_sweep.sh",
+      "byte_domain": "cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions",
+      "non_claims": [
+        "non-default dialect implementation",
+        "vendor-compiler parity (IBM/MF/MVS/BS2000/RM/GCOS)",
+        "a -std mode being the vendor dialect itself",
+        "complete enumeration of every cross-dialect divergence",
+        "decoding the DISPLAY presentation form back to a value",
+        "screen-routed dialects (acu/realia)",
+        "runtime portability across platforms"
+      ]
     }
   }
 }

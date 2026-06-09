@@ -64,6 +64,7 @@ run_sweep "GNURUST.CALL.EXTENSION.ATLAS.1 (observed)" call_atlas_sweep.sh
 run_sweep "GNURUST.INDEXED.FILE.ATLAS.1 (observed)" indexed_file_atlas_sweep.sh
 run_sweep "GNURUST.SORT.MERGE.ATLAS.1 (observed)" sort_merge_atlas_sweep.sh
 run_sweep "GNURUST.RELATIVE.FILE.ATLAS.1 (observed)" relative_file_atlas_sweep.sh
+run_sweep "GNURUST.DIALECT.RUNTIME.ATLAS.1 (observed)" dialect_runtime_atlas_sweep.sh
 run_sweep "GNURUST.IF.EVALUATE.SLICE.1" if_eval_sweep.sh
 run_sweep "GNURUST.IF.NUMERIC.SLICE.1" if_numeric_sweep.sh
 run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh
