@@ -809,6 +809,20 @@
       "readiness": 3,
       "lie_prevented": "'a sequential READ just gives you the record' -- a short final RECORD SEQUENTIAL read LEAKS the prior record's tail bytes (not spaces, not zeros), a long LINE SEQUENTIAL line is split across reads with status 06, and the initial buffer is low-values; the bytes and status both matter",
       "damage_if_overclaimed": "misreading a short final record (leaked prior-record tail) or a chunked long line, or branching on an unproven file status, silently corrupts a batch file pipeline"
+    },
+    {
+      "id": "GNURUST.FILE.STATUS.1",
+      "name": "observed FILE STATUS atlas",
+      "proven": "observed GnuCOBOL FILE STATUS bytes for a narrow set of declared file-operation fixtures under the gnucobol-3.2.0-default witness: 00 (OPEN INPUT / successful READ), 06 (LINE SEQUENTIAL line longer than the record, via GNURUST.FILE.SEQUENTIAL.1), 10 (READ at EOF), 35 (OPEN INPUT of a missing file), 42 (CLOSE of a file not open after a failed OPEN), 46 (READ NEXT past EOF / no valid next record), each bound to its triggering condition and verified by the sweep (7/0); 30 (host I/O error) and 39 (attribute conflict) are explicitly not_admitted (environment-weather / not reproducible on flat sequential files). OBSERVED court: the pure kernel does no I/O, so it does not produce open/close statuses",
+      "byte_domain": "declared OPEN/READ/CLOSE condition -> observed FILE STATUS byte",
+      "oracle": "cobc OPEN INPUT/READ NEXT/CLOSE (libcob/fileio.c)",
+      "fixtures": "file_status_sweep 7/0 -> reports/file-status-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "full file I/O parity; indexed/relative/VSAM; locking/sharing; host I/O error (30) generalization; attribute conflict (39); Procedure Division control flow; business completeness of the status set",
+      "breaks_claim": "claiming a file-I/O engine; branching on indexed/relative status; treating 30/39 as deterministic; full status coverage",
+      "readiness": 3,
+      "lie_prevented": "'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses",
+      "damage_if_overclaimed": "assuming a status value that the host did not actually produce (e.g. generalizing 30, or guessing 39) sends a migration's error-handling branches down the wrong path"
     }
   ],
   "transform_vs_read": {

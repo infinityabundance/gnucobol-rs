@@ -325,6 +325,19 @@ for (i, s2, g, r) in FSEQ:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.SEQUENTIAL.1"]}
 
+# GNURUST.FILE.STATUS.1 — observed FILE STATUS atlas.
+FST = [
+ ("NEG.FILE_STATUS.NOT_FULL_FILE_IO", "full file I/O parity claimed from a status atlas", "it records which status arises from which condition, not a file-I/O implementation", "assuming a file engine"),
+ ("NEG.FILE_STATUS.NO_INDEXED_RELATIVE_VSAM", "indexed/relative/VSAM status semantics claimed", "only flat sequential conditions are observed", "branching on indexed status"),
+ ("NEG.FILE_STATUS.NO_LOCKING_SHARING", "locking/sharing status semantics claimed", "out of scope", "assuming lock/share status"),
+ ("NEG.FILE_STATUS.NO_HOST_ERROR_GENERALIZATION", "host I/O error status (30) generalized", "30 is environment-weather; not admitted", "treating 30 as deterministic"),
+ ("NEG.FILE_STATUS.NO_PROCEDURE_FLOW", "Procedure Division control flow on status claimed", "only the status byte for a condition is recorded", "executing branch logic"),
+ ("NEG.FILE_STATUS.NO_BUSINESS_COMPLETENESS", "the status set treated as business-complete", "a narrow declared fixture set, not every status", "assuming full status coverage"),
+]
+for (i, s2, g, r) in FST:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.STATUS.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

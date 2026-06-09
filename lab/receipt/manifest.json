@@ -215,6 +215,20 @@
         "record locking",
         "Procedure Division control flow"
       ]
+    },
+    "GNURUST.FILE.STATUS.1": {
+      "court": "observed FILE STATUS bytes for declared file-operation fixtures",
+      "sweep": "file_status_sweep.sh",
+      "byte_domain": "declared OPEN/READ/CLOSE condition -> observed FILE STATUS byte (00/06/10/35/42/46)",
+      "non_claims": [
+        "full file I/O parity",
+        "indexed/relative/VSAM",
+        "locking/sharing",
+        "host I/O error (30) generalization",
+        "attribute conflict (39)",
+        "Procedure Division control flow",
+        "business completeness"
+      ]
     }
   }
 }

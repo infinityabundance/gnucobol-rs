@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 452,
+  "count": 463,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -397,6 +397,17 @@
       ]
     },
     {
+      "id": "NEG.ATTRIBUTE-CONFLICT-39",
+      "surface": "attribute conflict (39)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
       "id": "NEG.AUTO-DETECTED-VARIANTS",
       "surface": "auto-detected variants",
       "status": "not_admitted_fail_closed",
@@ -749,6 +760,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-COMPLETENESS-OF-THE-STATUS-SET",
+      "surface": "business completeness of the status set",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
       ]
     },
     {
@@ -2128,6 +2150,72 @@
       ]
     },
     {
+      "id": "NEG.FILE_STATUS.NOT_FULL_FILE_IO",
+      "surface": "full file I/O parity claimed from a status atlas",
+      "status": "not_admitted_observed_only",
+      "guard": "it records which status arises from which condition, not a file-I/O implementation",
+      "risk_if_guessed": "assuming a file engine",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_STATUS.NO_BUSINESS_COMPLETENESS",
+      "surface": "the status set treated as business-complete",
+      "status": "not_admitted_observed_only",
+      "guard": "a narrow declared fixture set, not every status",
+      "risk_if_guessed": "assuming full status coverage",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_STATUS.NO_HOST_ERROR_GENERALIZATION",
+      "surface": "host I/O error status (30) generalized",
+      "status": "not_admitted_observed_only",
+      "guard": "30 is environment-weather; not admitted",
+      "risk_if_guessed": "treating 30 as deterministic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_STATUS.NO_INDEXED_RELATIVE_VSAM",
+      "surface": "indexed/relative/VSAM status semantics claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only flat sequential conditions are observed",
+      "risk_if_guessed": "branching on indexed status",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_STATUS.NO_LOCKING_SHARING",
+      "surface": "locking/sharing status semantics claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "out of scope",
+      "risk_if_guessed": "assuming lock/share status",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_STATUS.NO_PROCEDURE_FLOW",
+      "surface": "Procedure Division control flow on status claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only the status byte for a condition is recorded",
+      "risk_if_guessed": "executing branch logic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
       "id": "NEG.FIXTURE.EXPECTED_NOT_ORACLE",
       "surface": "the fixture's expected output treated as oracle authority",
       "status": "not_admitted_requires_declared_profile",
@@ -2219,6 +2307,17 @@
       ]
     },
     {
+      "id": "NEG.FULL-FILE-I-O-PARITY",
+      "surface": "full file I/O parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
       "id": "NEG.FX-CONVERSION",
       "surface": "FX conversion",
       "status": "not_admitted_fail_closed",
@@ -2282,6 +2381,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SENTINEL.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.HOST-I-O-ERROR-30-GENERALIZATION",
+      "surface": "host I/O error (30) generalization",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
       ]
     },
     {
@@ -2358,7 +2468,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.FILE.SEQUENTIAL.1"
+        "GNURUST.FILE.SEQUENTIAL.1",
+        "GNURUST.FILE.STATUS.1"
       ]
     },
     {
@@ -2463,6 +2574,17 @@
       "evidence": [
         "GNURUST.16",
         "KOBOLD.DATA.4"
+      ]
+    },
+    {
+      "id": "NEG.LOCKING-SHARING",
+      "surface": "locking/sharing",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.STATUS.1"
       ]
     },
     {
@@ -3435,7 +3557,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.FILE.SEQUENTIAL.1"
+        "GNURUST.FILE.SEQUENTIAL.1",
+        "GNURUST.FILE.STATUS.1"
       ]
     },
     {

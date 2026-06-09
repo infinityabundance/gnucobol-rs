@@ -6,9 +6,9 @@
   "surface_count": 27,
   "status_counts": {
     "sealed": 12,
-    "observed": 1,
+    "observed": 2,
     "negative": 7,
-    "missing": 7
+    "missing": 6
   },
   "sealed_fraction": "12/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
@@ -219,10 +219,12 @@
         "libcob/fileio.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.FILE.STATUS.1",
-      "risk_if_unported": "real COBOL branches on file-status codes (00/10/35/...); unported = wrong control flow"
+      "status": "observed",
+      "courts": [
+        "GNURUST.FILE.STATUS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "real COBOL branches on file-status codes (00/10/35/...); observed atlas of which status arises from which condition"
     },
     {
       "surface": "initialize",

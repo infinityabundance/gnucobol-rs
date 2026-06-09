@@ -1,0 +1,66 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.FILE.STATUS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.3",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "7b7948a2357245a62d8b41af541978c1daf68fd30a7fc6266deadcd6602c2ba3",
+    "receipt_sha256": "5f5be5a14ed6f017a9ef4044512ceb0f82c4e31adaa819479557fc891b649c3f"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc OPEN INPUT/READ NEXT/CLOSE (libcob/fileio.c)",
+    "upstream_court": "GNURUST.FILE.STATUS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 7,
+    "pass": 7,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL FILE STATUS bytes for a narrow set of declared file-operation fixtures under the gnucobol-3.2.0-default witness: 00 (OPEN INPUT / successful READ), 06 (LINE SEQUENTIAL line longer than the record, via GNURUST.FILE.SEQUENTIAL.1), 10 (READ at EOF), 35 (OPEN INPUT of a missing file), 42 (CLOSE of a file not open after a failed OPEN), 46 (READ NEXT past EOF / no valid next record), each bound to its triggering condition and verified by the sweep (7/0)",
+    "30 (host I/O error) and 39 (attribute conflict) are explicitly not_admitted (environment-weather / not reproducible on flat sequential files). OBSERVED court: the pure kernel does no I/O, so it does not produce open/close statuses"
+  ],
+  "negative_claims": [
+    "full file I/O parity",
+    "indexed/relative/VSAM",
+    "locking/sharing",
+    "host I/O error (30) generalization",
+    "attribute conflict (39)",
+    "Procedure Division control flow",
+    "business completeness of the status set",
+    "lie prevented: 'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses"
+  ],
+  "negative_capability_ids": [
+    "NEG.FULL-FILE-I-O-PARITY",
+    "NEG.INDEXED-RELATIVE-VSAM",
+    "NEG.LOCKING-SHARING",
+    "NEG.HOST-I-O-ERROR-30-GENERALIZATION",
+    "NEG.ATTRIBUTE-CONFLICT-39",
+    "NEG.PROCEDURE-DIVISION-CONTROL-FLOW",
+    "NEG.BUSINESS-COMPLETENESS-OF-THE-STATUS-SET"
+  ],
+  "byte_domains": [
+    "declared OPEN/READ/CLOSE condition -> observed FILE STATUS byte"
+  ],
+  "lie_prevented": [
+    "'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses"
+  ],
+  "damage_if_overclaimed": "assuming a status value that the host did not actually produce (e.g. generalizing 30, or guessing 39) sends a migration's error-handling branches down the wrong path",
+  "replay": {
+    "command": "bash lab/oracle/file_status_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "3911c367ecca1751fc9e1e4b0b61216b948d48158b17a1426ad5e299f11e0dd9"
+  }
+}

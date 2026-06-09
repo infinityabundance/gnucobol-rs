@@ -1,0 +1,62 @@
+{
+  "schema": "gnurust-file-status-atlas-v1",
+  "court": "GNURUST.FILE.STATUS.1",
+  "oracle": "cobc OPEN INPUT/READ NEXT/CLOSE (libcob/fileio.c)",
+  "dialect": "gnucobol-3.2.0-default",
+  "admitted_statuses": [
+    {
+      "code": "00",
+      "meaning": "success",
+      "condition": "OPEN INPUT of an existing file; a successful READ NEXT",
+      "observed_in": "valid"
+    },
+    {
+      "code": "06",
+      "meaning": "LINE SEQUENTIAL record truncated (line longer than the record); delivered in chunks",
+      "condition": "READ NEXT of a line longer than the record length",
+      "observed_in": "GNURUST.FILE.SEQUENTIAL.1"
+    },
+    {
+      "code": "10",
+      "meaning": "end of file",
+      "condition": "READ NEXT at end of file",
+      "observed_in": "valid"
+    },
+    {
+      "code": "35",
+      "meaning": "file not found",
+      "condition": "OPEN INPUT of a non-existent file",
+      "observed_in": "missing"
+    },
+    {
+      "code": "42",
+      "meaning": "CLOSE attempted on a file not open",
+      "condition": "CLOSE after a failed OPEN",
+      "observed_in": "missing"
+    },
+    {
+      "code": "46",
+      "meaning": "READ NEXT with no valid next record",
+      "condition": "READ NEXT after AT END (past EOF)",
+      "observed_in": "valid"
+    }
+  ],
+  "not_admitted_statuses": [
+    {
+      "code": "30",
+      "reason": "permanent host I/O error is environment-weather (filesystem-dependent); not deterministically reproducible in the sealed flat-file sequential subset"
+    },
+    {
+      "code": "39",
+      "reason": "OPEN attribute conflict does not arise on flat Unix sequential files (no stored record/organization metadata); not reproducible here"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.FILE_STATUS.NOT_FULL_FILE_IO",
+    "NEG.FILE_STATUS.NO_INDEXED_RELATIVE_VSAM",
+    "NEG.FILE_STATUS.NO_LOCKING_SHARING",
+    "NEG.FILE_STATUS.NO_HOST_ERROR_GENERALIZATION",
+    "NEG.FILE_STATUS.NO_PROCEDURE_FLOW",
+    "NEG.FILE_STATUS.NO_BUSINESS_COMPLETENESS"
+  ]
+}
