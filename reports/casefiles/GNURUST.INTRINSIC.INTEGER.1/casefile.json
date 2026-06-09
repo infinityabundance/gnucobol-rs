@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.INTEGER.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.11",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "6fd9a51938d00da63e5f322862f31d5616980045f3677395f1cfe6826efe0cf1",
+    "receipt_sha256": "e8fd70c248e323b95008aa0dc1722646bc1e24283b6349d643e0c2116594f844"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION INTEGER/INTEGER-PART (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.INTEGER.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 20,
+    "pass": 20,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION INTEGER(x) returns the greatest integer NOT GREATER THAN x (FLOOR) and FUNCTION INTEGER-PART(x) returns the integer part TRUNCATED toward zero, matching cobc/libcob (verified 20/0): they AGREE for positives and exact integers but DIFFER for negatives with a fractional part -- INTEGER(-3.7)=-4 (floor) vs INTEGER-PART(-3.7)=-3 (truncate). The pair of implemented rounding intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
+  ],
+  "negative_claims": [
+    "non-numeric arguments",
+    "i128 out-of-range magnitudes",
+    "INTEGER and INTEGER-PART interchangeable",
+    "all dialects",
+    "lie prevented: INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-NUMERIC-ARGUMENTS",
+    "NEG.I128-OUT-OF-RANGE-MAGNITUDES",
+    "NEG.INTEGER-AND-INTEGER-PART-INTERCHANGEABLE",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc"
+  ],
+  "lie_prevented": [
+    "INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
+  ],
+  "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math",
+  "replay": {
+    "command": "bash lab/oracle/integer_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "36a6e2495c2a263876b9bf0aba8d60854ad85758f93eae8a3ce46fdff23c0fbd"
+  }
+}

@@ -32,6 +32,7 @@
       "GNURUST.INITIALIZE.1",
       "GNURUST.INSPECT.1",
       "GNURUST.INTRINSIC.ATLAS.1",
+      "GNURUST.INTRINSIC.INTEGER.1",
       "GNURUST.INTRINSIC.LENGTH.1",
       "GNURUST.INTRINSIC.MOD-REM.1",
       "GNURUST.INTRINSIC.NUMVAL.1",
@@ -87,7 +88,7 @@
     "F": []
   },
   "class_counts": {
-    "A": 28,
+    "A": 29,
     "B": 33,
     "C": 6,
     "D": 0,
@@ -511,6 +512,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "intrinsic_atlas_sweep 19/0 -> reports/intrinsic-atlas.json",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.INTRINSIC.INTEGER.1",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 1,
+      "negative_claims": 5,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "integer_sweep 20/0 + 1 unit test",
       "ceremonial_flags": []
     },
     {

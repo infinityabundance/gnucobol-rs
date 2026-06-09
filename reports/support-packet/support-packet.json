@@ -3,7 +3,7 @@
   "court": "SUPPORT-PACKET.1",
   "generated_from": "existing generated artifacts only; creates no new truth",
   "crate_versions": {
-    "gnucobol-rs": "0.7.10 (this repo)",
+    "gnucobol-rs": "0.7.11 (this repo)",
     "kobold-data-shim": "sibling repo (see its Cargo.toml/crates.io)",
     "kobold-bench": "sibling repo (bench/scale receipts)",
     "kobold-attest": "lab/attest (publish=false; Cargo.lock pinned)"
@@ -15,35 +15,35 @@
       "path": "STATUS.md",
       "kind": "generated_doc",
       "present": true,
-      "sha256": "4a9430c02358dba17c67b58c997b7d00b7c74f940f280f3ba99703d63b747283"
+      "sha256": "19523d475dcc5d96b1ca076275a156ebbf0dac28709042174f6f7130c2afce15"
     },
     {
       "id": "changelog",
       "path": "CHANGELOG.md",
       "kind": "generated_doc",
       "present": true,
-      "sha256": "4ff07d7622fe35f0f7dfe930d1928cccf09c5deb30f37e4416d85ca967a656bd"
+      "sha256": "cf8d1060203d64ad971f4a20a9535bdb3be52277ef1f6bc8be5465941f83b45e"
     },
     {
       "id": "claim_ladder",
       "path": "reports/claim-ladder.json",
       "kind": "machine_spine",
       "present": true,
-      "sha256": "ea340d67f8cf94764626d5734d0ae7c66bae8ed4456c159d98c16b4436556bd9"
+      "sha256": "53d9d6f9e69cb97093ddb8163794aea54a2c9ed3fc2982983d4ae4ebef1d55ee"
     },
     {
       "id": "negative_capabilities",
       "path": "reports/negative-capabilities.json",
       "kind": "refusal_registry",
       "present": true,
-      "sha256": "a0acbb60657862be90c176af6029a13de1544e1eec052c96168afd5445e84755"
+      "sha256": "53f2cdfb8cbb6b9151d9cc7d8b262cd47e1c7ef09ae23c8b3d0359eaf3f074a6"
     },
     {
       "id": "dsse_verification",
       "path": "reports/signing/verification-report.json",
       "kind": "attestation_report",
       "present": true,
-      "sha256": "9ea4d9856c582f5f5d2c6059647cb8ca9ffc1ecf0c7a7d707f97a56000135ac9"
+      "sha256": "124039646ff9512bee045a0426779f1060cd1cfafeb35dcc62a57cbbf84e2683"
     },
     {
       "id": "size_error_atlas",
@@ -64,13 +64,13 @@
       "path": "docs/future-risk-register.md",
       "kind": "doctrine_doc",
       "present": true,
-      "sha256": "1d220bc772c4767e862ff188d301d639401992b64cf9dc49c700d885bb05c090"
+      "sha256": "7aaeb4a62ce3c70edca5935d58d2fd10738f1dbecf97e1af8582d91c31a8b19c"
     },
     {
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true,
-      "count": 67,
+      "count": 68,
       "casefiles": [
         {
           "court": "DIALECT.PROFILE.1",
@@ -81,21 +81,21 @@
         },
         {
           "court": "GNURUST.10",
-          "casefile_sha256": "b943601717d742ae167462e844ce37074adbef555ba425f7e0edc6e79707472e",
+          "casefile_sha256": "0d9c56377f49230a304f272df1f21a5e3fce5da0395b44853b4173569366c737",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.11",
-          "casefile_sha256": "a7f12ce9b26eec6eac1e58acf86c8c2aba3ed5cf2d4eb34e1f164fb2220282c6",
+          "casefile_sha256": "4db63b371f690e589c069e94ba8d4240ab6432761ed87578d56249dd525c0456",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.12",
-          "casefile_sha256": "ab3f2dc21a470e799b7ea9a9629481838c2913e17632eb6bcee81ec74def92c2",
+          "casefile_sha256": "54fd54c0ada6f37d86cc5d8b71b8f6192fd3810291798a63b7ea7d35b5fd6e46",
           "sarif": true,
           "intoto": true,
           "dsse": true
@@ -109,70 +109,70 @@
         },
         {
           "court": "GNURUST.14",
-          "casefile_sha256": "0db3e1aa06c13c8fea2841ac7e5f1aec61d41d19e1d1a8bb167b7f12a88c86e4",
+          "casefile_sha256": "c6dcac8d1848649264b60b0cdb44aa66513137b49f08e05423040a9670274c00",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.15",
-          "casefile_sha256": "749f69c2355702d7755f0a26e7a23fbf52706712766888b2ef5f5e85943bd58f",
+          "casefile_sha256": "8de324f3a50ed82af554a78f6ae62d4c16ff0f3c43ac0c9af03e54c5d8cdb0da",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.16",
-          "casefile_sha256": "a209316b907f9e18ecf0d3f32bb18e142f1795d28468981e9cf74ae048f45c7e",
+          "casefile_sha256": "6bf01f449d2d4d802579762b6e5258d821e0dd40cabde9004a5b380785539ddd",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.17",
-          "casefile_sha256": "8c70e3fbd83aa6439920a4a0e271f1a7d7102f5346b0aefdc5c915ca1b9f04ec",
+          "casefile_sha256": "cd2778e49a8c23fb2cfddefcac6b10126fbb4d94e6286b237efb51a8d732d5b6",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.18",
-          "casefile_sha256": "6f701c2bfc1ed270698f2b7ce017e737f9aeb6de2a00ea0b1ef88a085fa2dba5",
+          "casefile_sha256": "a44ca8364de1e8c5345627d5edea55e1e79a7f422d662874d52cee5c9437fca2",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.19",
-          "casefile_sha256": "1832fe7fafa0e37b797382b216be1b379ff12741a905f7fa1c470de965699bba",
+          "casefile_sha256": "4e039fa9933a898d12fa81a9f264e32c278ad7543ae4ee206e24408bd4f24280",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.2",
-          "casefile_sha256": "0451a883e9a21a6271fde5b1d54a43ba338e16ffccb9f4e40fbec32860ac16e3",
+          "casefile_sha256": "f71e937ac99679dfbe7e72b16fa013ddd77ce1c58971455c84c1388a5ea012fa",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.3",
-          "casefile_sha256": "ee82ec8acb7124f4702dfc12c828e84093d6b5539ad61ca7163ed6bcc1c0b9ce",
+          "casefile_sha256": "6fd60375b48ea2b54a22bb0e574606f191c66df662e5086c91741621e967ea57",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.4",
-          "casefile_sha256": "b19601b6a4ebb15044c0fd93d92c9ea47685270c54524d32b5d64025e411bc50",
+          "casefile_sha256": "1d956bfaaf3d859439ec86786783df07fd819fb54e6d2bde557995842458684a",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.5",
-          "casefile_sha256": "6256981c8ee0baa197d065632fb60571964a35cf6d28ae380bc638860c89ac87",
+          "casefile_sha256": "3328399ec73490203f707bf7c76479c1f382d0c6a37abf1633e04e90b9bbc6b2",
           "sarif": true,
           "intoto": true,
           "dsse": true
@@ -186,14 +186,14 @@
         },
         {
           "court": "GNURUST.7",
-          "casefile_sha256": "95ffa7921790466fe5de3e1116e985823a70f2068a3d7ba38640cec61102b55d",
+          "casefile_sha256": "54358b09295c0d0383a9d5e4f9ddd9aa59f40786e81c40c2a0be29362a779ef9",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.8",
-          "casefile_sha256": "f71d63b644138f61cc3b0414c1f7d68ec4bcfac8bf3f9a91883bc9b083de848c",
+          "casefile_sha256": "27d0564dd469465d6f6f82d9a85d94d20c90fc0856e821145128a54858773398",
           "sarif": true,
           "intoto": true,
           "dsse": true
@@ -207,7 +207,7 @@
         },
         {
           "court": "GNURUST.ACCEPT.DISPLAY.1",
-          "casefile_sha256": "25bd551f870b22c711be36d199624ca443df10179e03eba49092b8ccfd59ddfa",
+          "casefile_sha256": "9fe783b86816a912c14b7f67500b25fe230125d66c32f7916f0865839b32faf1",
           "sarif": true,
           "intoto": true,
           "dsse": true
@@ -221,77 +221,84 @@
         },
         {
           "court": "GNURUST.FILE.SEQUENTIAL.1",
-          "casefile_sha256": "0c4ed3193f7988ee6449a44f416d449f3cb06d39a393a28fee7976b8320051f2",
+          "casefile_sha256": "6f542a407171ef749d7eec290c1663052f4f0840ad7779b55cc126c9a30676f6",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.FILE.STATUS.1",
-          "casefile_sha256": "19d7e92e0fa1f09f40c5508aee3fe92e59cd1ae1f75511dbd6ef3f6562f1d47e",
+          "casefile_sha256": "e1c20bf44839a772949d5dcec496b0573caf8db456363183e858464e1831a896",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.INITIALIZE.1",
-          "casefile_sha256": "f91668eaf3525d12437ba1792c55fefcfc34c9bbd3313f542142acd3cb14aa33",
+          "casefile_sha256": "66fe0828b9b0e902e1dc0f1c527524f042f504a0484ca35324f32be7d9aaa829",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.INSPECT.1",
-          "casefile_sha256": "59e499a0a0743a27b17f2fe322a797e759535c3a7a91619ad2aabe9fc6a1868d",
+          "casefile_sha256": "6e1886995c1258511a2e8f37e4c25ea68970eabffaf99e3e162500f80693e004",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.INTRINSIC.ATLAS.1",
-          "casefile_sha256": "59bad2e4b621f9796e66faf54722f10bb16b1da8c6f0c5857bacb622831f0bcd",
+          "casefile_sha256": "d1dc08ce082b63c44d849e27e07b0a9ef3c112070c2556fd3fccec62e3a0d4bf",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.INTRINSIC.INTEGER.1",
+          "casefile_sha256": "907db9a8b4f633be1d3199b401c7be5bfdcbc7ddf6d39956054746eaa6bd8e80",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.INTRINSIC.LENGTH.1",
-          "casefile_sha256": "24b6ad40b10c98fbfa933ca1f2501a3c0b1259ac802bba66f097e964e33be50c",
+          "casefile_sha256": "87b87d192617fea35d9ebc9f90a4cd387f077266e472a0e935510952794d3fab",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.INTRINSIC.MOD-REM.1",
-          "casefile_sha256": "59a40ab314f7d9eb3c0deb08282b3a8709fc88343d9b720bf9109dad21e0f670",
+          "casefile_sha256": "b471e687e77a32e7bb808e2b4612b5146fbb9e3dced02b16e0a67317cd3cc0ac",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.INTRINSIC.NUMVAL.1",
-          "casefile_sha256": "007a1f72a6d9df4d2c8b8d7f847d3b47312c386f890aa69092cf000f78d74fbc",
+          "casefile_sha256": "f4dbf4ba75eb01f44d1b1fbfaa9f62853993d42aed692a03c0362bcf7b5fd952",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
-          "casefile_sha256": "a0bd7ce3ccc84067278203fdbe3816d6817db2e2216c5732df274287f70ee0d4",
+          "casefile_sha256": "74c989c33b584d56daf5075d2c68090c8772f62a94927d625428b517e108d3fc",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.REMAINDER.1",
-          "casefile_sha256": "246569d03566e4f98155506a4864a34aba7538fb4f7e6ee091270b0e18bfef0a",
+          "casefile_sha256": "b9a2d40cb108156c6b8245e3f1417a7b2c290ffedf22e2a9c24a1866cca02ed9",
           "sarif": true,
           "intoto": true,
           "dsse": true
         },
         {
           "court": "GNURUST.STRING.UNSTRING.1",
-          "casefile_sha256": "8defe2da4ed78c9cc8a3d670c66bf694415b2d9c8f01959e07dd84d12ca8fba4",
+          "casefile_sha256": "70ca6b912438e3232abcc26754304f540f0bea1022e3c2a5c649d0622b2817ef",
           "sarif": true,
           "intoto": true,
           "dsse": true
@@ -522,7 +529,7 @@
         },
         {
           "court": "SIZE.ERROR.ATLAS.1",
-          "casefile_sha256": "8279f20d29f1248a8d26529a9b0445206b9aa0a452ca0642a73d22ea7d23b539",
+          "casefile_sha256": "0f07786a2e29eab91526b8d0f1ffc08235187c9c3e0d4099c6cdb91db15d993e",
           "sarif": true,
           "intoto": true,
           "dsse": true
@@ -551,6 +558,7 @@
         "gnucobol-rs-0.7.0",
         "gnucobol-rs-0.7.1",
         "gnucobol-rs-0.7.10",
+        "gnucobol-rs-0.7.11",
         "gnucobol-rs-0.7.2",
         "gnucobol-rs-0.7.3",
         "gnucobol-rs-0.7.4",

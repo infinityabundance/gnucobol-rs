@@ -342,6 +342,17 @@
         "MOD and REM interchangeable",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.INTEGER.1": {
+      "court": "FUNCTION INTEGER (floor) / INTEGER-PART (truncate)",
+      "sweep": "integer_sweep.sh",
+      "byte_domain": "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc-toward-zero",
+      "non_claims": [
+        "non-numeric argument",
+        "i128 out-of-range magnitudes",
+        "INTEGER and INTEGER-PART interchangeable",
+        "all dialects"
+      ]
     }
   }
 }

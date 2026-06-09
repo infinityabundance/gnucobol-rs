@@ -46,8 +46,8 @@
       "input": "3.7 / -3.7",
       "observed": "3 / -4",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "FLOOR (greatest integer <= arg); differs from INTEGER-PART on negatives"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.INTEGER.1 -- FLOOR"
     },
     {
       "name": "INTEGER-PART",
@@ -55,8 +55,8 @@
       "input": "3.7 / -3.7",
       "observed": "3 / -3",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "TRUNCATE toward zero"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.INTEGER.1 -- TRUNCATE toward zero"
     },
     {
       "name": "MOD",

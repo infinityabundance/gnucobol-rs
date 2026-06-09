@@ -88,6 +88,36 @@ pub fn numval_display(nv: &Numval, int_digits: usize, frac_digits: usize) -> Str
     format!("{sign}{int_str}.{frac_str}")
 }
 
+impl Numval {
+    /// The signed unscaled magnitude as an `i128` (`value = signed_mag * 10^(-scale)`).
+    pub fn signed_mag(&self) -> i128 {
+        if self.negative {
+            -(self.scaled as i128)
+        } else {
+            self.scaled as i128
+        }
+    }
+}
+
+/// `FUNCTION INTEGER-PART(x)`: the integer part, **truncated toward zero** (`GNURUST.INTRINSIC.INTEGER.1`).
+/// `x = signed_mag * 10^(-scale)`. INTEGER-PART(-3.7) = -3.
+pub fn intrinsic_integer_part(signed_mag: i128, scale: u32) -> i128 {
+    signed_mag / (pow10_u128(scale) as i128)
+}
+
+/// `FUNCTION INTEGER(x)`: the greatest integer **not greater than** `x` (floor) — differs from
+/// [`intrinsic_integer_part`] on negatives with a fractional part: INTEGER(-3.7) = -4.
+pub fn intrinsic_integer(signed_mag: i128, scale: u32) -> i128 {
+    let d = pow10_u128(scale) as i128;
+    let q = signed_mag / d;
+    let r = signed_mag % d;
+    if r != 0 && signed_mag < 0 {
+        q - 1
+    } else {
+        q
+    }
+}
+
 /// `FUNCTION REM(a, b)` for integers: the C-style remainder `a - b * trunc(a/b)` — the result takes the
 /// **dividend** sign (`GNURUST.INTRINSIC.MOD-REM.1`). `b == 0` is a non-claim (returns 0 rather than panic).
 pub fn intrinsic_rem(a: i128, b: i128) -> i128 {
@@ -119,6 +149,15 @@ mod tests {
     }
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
+    }
+    #[test]
+    fn integer_is_floor_integer_part_truncates() {
+        let im = |s: &str| intrinsic_integer(intrinsic_numval(s).signed_mag(), intrinsic_numval(s).scale);
+        let ip = |s: &str| intrinsic_integer_part(intrinsic_numval(s).signed_mag(), intrinsic_numval(s).scale);
+        // INTEGER (floor): 3.7->3, -3.7->-4, 2.5->2, -2.5->-3, -3.0->-3, -0.1->-1
+        assert_eq!([im("3.7"), im("-3.7"), im("2.5"), im("-2.5"), im("-3.0"), im("-0.1")], [3, -4, 2, -3, -3, -1]);
+        // INTEGER-PART (truncate): 3.7->3, -3.7->-3, 2.5->2, -2.5->-2, 0.9->0
+        assert_eq!([ip("3.7"), ip("-3.7"), ip("2.5"), ip("-2.5"), ip("0.9")], [3, -3, 2, -2, 0]);
     }
     #[test]
     fn mod_takes_divisor_sign_rem_takes_dividend_sign() {

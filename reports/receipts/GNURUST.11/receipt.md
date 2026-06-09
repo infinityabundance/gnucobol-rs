@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.11` |
 | court | LEVEL-88 condition-name truth |
-| crate_version | `0.7.10` |
+| crate_version | `0.7.11` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | parent field-storage bytes -> boolean |
 | replay command | `bash lab/oracle/cond_sweep.sh` |

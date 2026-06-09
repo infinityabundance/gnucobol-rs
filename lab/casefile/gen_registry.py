@@ -427,6 +427,17 @@ for (i, s2, g, r) in IMR:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.MOD-REM.1"]}
 
+# GNURUST.INTRINSIC.INTEGER.1 — INTEGER (floor) / INTEGER-PART (truncate).
+IINT = [
+ ("NEG.INTRINSIC_INTEGER.NOT_INTERCHANGEABLE", "INTEGER and INTEGER-PART treated as the same", "INTEGER is FLOOR, INTEGER-PART TRUNCATES; they differ on negatives", "swapping them on negatives"),
+ ("NEG.INTRINSIC_INTEGER.NO_OUT_OF_RANGE", "i128 out-of-range magnitudes claimed", "very large values overflow the integer-decimal range", "huge arguments"),
+ ("NEG.INTRINSIC_INTEGER.NO_NON_NUMERIC_ARG", "non-numeric argument handling claimed", "numeric argument only", "INTEGER of a non-numeric"),
+ ("NEG.INTRINSIC_INTEGER.NO_ALL_DIALECTS", "all-dialect INTEGER claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in IINT:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.INTEGER.1"]}
+
 # GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
 AD = [
  ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),

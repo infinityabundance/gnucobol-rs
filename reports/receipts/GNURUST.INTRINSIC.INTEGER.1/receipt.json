@@ -1,0 +1,31 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.INTRINSIC.INTEGER.1",
+  "court": "FUNCTION INTEGER (floor) / INTEGER-PART (truncate)",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.11",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/integer_sweep.sh"
+  },
+  "byte_domain": "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc-toward-zero",
+  "results": {
+    "sweep": "PASS=20 FAIL=0"
+  },
+  "non_claims": [
+    "non-numeric argument",
+    "i128 out-of-range magnitudes",
+    "INTEGER and INTEGER-PART interchangeable",
+    "all dialects"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

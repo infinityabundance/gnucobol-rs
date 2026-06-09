@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 554,
+  "count": 561,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -346,7 +346,8 @@
         "GNURUST.INTRINSIC.NUMVAL.1",
         "GNURUST.ACCEPT.DISPLAY.1",
         "GNURUST.PROCEDURE.FLOW.ATLAS.1",
-        "GNURUST.INTRINSIC.MOD-REM.1"
+        "GNURUST.INTRINSIC.MOD-REM.1",
+        "GNURUST.INTRINSIC.INTEGER.1"
       ]
     },
     {
@@ -2647,6 +2648,17 @@
       ]
     },
     {
+      "id": "NEG.I128-OUT-OF-RANGE-MAGNITUDES",
+      "surface": "i128 out-of-range magnitudes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
+      ]
+    },
+    {
       "id": "NEG.IDE.LSP_PARSER",
       "surface": "a full COBOL parser / LSP / IDE navigation claimed (the SuperBOL lane)",
       "status": "not_admitted_fail_closed",
@@ -2901,6 +2913,17 @@
       ]
     },
     {
+      "id": "NEG.INTEGER-AND-INTEGER-PART-INTERCHANGEABLE",
+      "surface": "INTEGER and INTEGER-PART interchangeable",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
+      ]
+    },
+    {
       "id": "NEG.INTRINSIC.NOT_ALL_INTRINSICS",
       "surface": "the atlas treated as covering all intrinsics",
       "status": "not_admitted_observed_only",
@@ -2964,6 +2987,50 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_INTEGER.NOT_INTERCHANGEABLE",
+      "surface": "INTEGER and INTEGER-PART treated as the same",
+      "status": "not_admitted_fail_closed",
+      "guard": "INTEGER is FLOOR, INTEGER-PART TRUNCATES; they differ on negatives",
+      "risk_if_guessed": "swapping them on negatives",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_INTEGER.NO_ALL_DIALECTS",
+      "surface": "all-dialect INTEGER claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_INTEGER.NO_NON_NUMERIC_ARG",
+      "surface": "non-numeric argument handling claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "numeric argument only",
+      "risk_if_guessed": "INTEGER of a non-numeric",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_INTEGER.NO_OUT_OF_RANGE",
+      "surface": "i128 out-of-range magnitudes claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "very large values overflow the integer-decimal range",
+      "risk_if_guessed": "huge arguments",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
       ]
     },
     {
@@ -3578,6 +3645,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
+      "id": "NEG.NON-NUMERIC-ARGUMENTS",
+      "surface": "non-numeric arguments",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.INTEGER.1"
       ]
     },
     {

@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-67-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-67-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-68-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-68-blueviolet)
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -39,6 +39,7 @@ compatibility court.
 | `GNURUST.ACCEPT.DISPLAY.1` | DISPLAY emitted text + ACCEPT field bytes | ✅ pass | `reports/casefiles/GNURUST.ACCEPT.DISPLAY.1/` |
 | `GNURUST.PROCEDURE.FLOW.ATLAS.1` | observed control-flow atlas | ✅ pass | `reports/casefiles/GNURUST.PROCEDURE.FLOW.ATLAS.1/` |
 | `GNURUST.INTRINSIC.MOD-REM.1` | FUNCTION MOD/REM integer modulo and remainder | ✅ pass | `reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/` |
+| `GNURUST.INTRINSIC.INTEGER.1` | FUNCTION INTEGER (floor) and INTEGER-PART (truncate) | ✅ pass | `reports/casefiles/GNURUST.INTRINSIC.INTEGER.1/` |
 | `GNURUST.2` | decimal MOVE | ✅ pass | `reports/casefiles/GNURUST.2/` |
 | `GNURUST.3` | PIC field model | ✅ pass | `reports/casefiles/GNURUST.3/` |
 | `GNURUST.4` | record layout | ✅ pass | `reports/casefiles/GNURUST.4/` |

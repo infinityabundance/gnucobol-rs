@@ -949,6 +949,20 @@
       "readiness": 3,
       "lie_prevented": "MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result",
       "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.INTEGER.1",
+      "name": "FUNCTION INTEGER (floor) and INTEGER-PART (truncate)",
+      "proven": "FUNCTION INTEGER(x) returns the greatest integer NOT GREATER THAN x (FLOOR) and FUNCTION INTEGER-PART(x) returns the integer part TRUNCATED toward zero, matching cobc/libcob (verified 20/0): they AGREE for positives and exact integers but DIFFER for negatives with a fractional part -- INTEGER(-3.7)=-4 (floor) vs INTEGER-PART(-3.7)=-3 (truncate). The pair of implemented rounding intrinsics, split from GNURUST.INTRINSIC.ATLAS.1",
+      "byte_domain": "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc",
+      "oracle": "cobc FUNCTION INTEGER/INTEGER-PART (libcob/intrinsic.c)",
+      "fixtures": "integer_sweep 20/0 + 1 unit test",
+      "sealed_version": "0.7.11",
+      "not_proven": "non-numeric arguments; i128 out-of-range magnitudes; INTEGER and INTEGER-PART interchangeable; all dialects",
+      "breaks_claim": "swapping INTEGER/INTEGER-PART on negatives; huge arguments; non-numeric input",
+      "readiness": 3,
+      "lie_prevented": "INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward",
+      "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math"
     }
   ],
   "transform_vs_read": {
