@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 578,
+  "count": 585,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -265,6 +265,50 @@
       ]
     },
     {
+      "id": "NEG.ACCEPT_DISPLAY2.NO_ALL_DIALECTS",
+      "surface": "all-dialect DISPLAY-numeric claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY2.NO_BLANK_WHEN_ZERO",
+      "surface": "BLANK WHEN ZERO claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "not admitted",
+      "risk_if_guessed": "a BLANK WHEN ZERO field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY2.NO_JUSTIFIED_FLOAT",
+      "surface": "JUSTIFIED / floating-point USAGE DISPLAY claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "fixed DISPLAY/packed-decimal magnitude only",
+      "risk_if_guessed": "COMP-1/COMP-2 display",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY2.NO_NUMERIC_EDITED",
+      "surface": "DISPLAY of a numeric-edited PIC claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "Z/,/*/$/CR/DB editing is GNURUST.16, not this court",
+      "risk_if_guessed": "displaying an edited field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
+      ]
+    },
+    {
       "id": "NEG.ACCOUNT-BALANCE-CORRECTNESS",
       "surface": "account balance correctness",
       "status": "not_admitted_fail_closed",
@@ -350,7 +394,8 @@
         "GNURUST.INTRINSIC.INTEGER.1",
         "GNURUST.INTRINSIC.CASE.1",
         "GNURUST.INTRINSIC.ORD-CHAR.1",
-        "GNURUST.INTRINSIC.NUMVAL-C.1"
+        "GNURUST.INTRINSIC.NUMVAL-C.1",
+        "GNURUST.ACCEPT.DISPLAY.2"
       ]
     },
     {
@@ -838,6 +883,17 @@
       "evidence": [
         "GNURUST.17",
         "KOBOLD.DATA.5"
+      ]
+    },
+    {
+      "id": "NEG.BLANK-WHEN-ZERO",
+      "surface": "BLANK WHEN ZERO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
       ]
     },
     {
@@ -3334,6 +3390,17 @@
       ]
     },
     {
+      "id": "NEG.JUSTIFIED-FLOATING-POINT-USAGE",
+      "surface": "JUSTIFIED / floating-point USAGE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
+      ]
+    },
+    {
       "id": "NEG.LANGUAGE-SUITE-PARITY",
       "surface": "language-suite parity",
       "status": "not_admitted_fail_closed",
@@ -3903,6 +3970,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INITIALIZE.1"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-EDITED-PICS-Z-CR-DB-THAT-IS-GNUR",
+      "surface": "numeric-edited PICs (Z/,/*/$/CR/DB -- that is GNURUST.16)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.2"
       ]
     },
     {

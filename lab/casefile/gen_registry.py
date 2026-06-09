@@ -483,6 +483,17 @@ for (i, s2, g, r) in AD:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.ACCEPT.DISPLAY.1"]}
 
+# GNURUST.ACCEPT.DISPLAY.2 — DISPLAY of signed/V-scaled numeric.
+AD2 = [
+ ("NEG.ACCEPT_DISPLAY2.NO_NUMERIC_EDITED", "DISPLAY of a numeric-edited PIC claimed", "Z/,/*/$/CR/DB editing is GNURUST.16, not this court", "displaying an edited field"),
+ ("NEG.ACCEPT_DISPLAY2.NO_BLANK_WHEN_ZERO", "BLANK WHEN ZERO claimed", "not admitted", "a BLANK WHEN ZERO field"),
+ ("NEG.ACCEPT_DISPLAY2.NO_JUSTIFIED_FLOAT", "JUSTIFIED / floating-point USAGE DISPLAY claimed", "fixed DISPLAY/packed-decimal magnitude only", "COMP-1/COMP-2 display"),
+ ("NEG.ACCEPT_DISPLAY2.NO_ALL_DIALECTS", "all-dialect DISPLAY-numeric claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in AD2:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.ACCEPT.DISPLAY.2"]}
+
 # GNURUST.PROCEDURE.FLOW.ATLAS.1 — observed control-flow atlas; EXECUTION is the loudest non-claim.
 PF = [
  ("NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION", "Procedure Division EXECUTION claimed", "the atlas OBSERVES control flow; gnucobol-rs runs no programs", "executing a COBOL program"),

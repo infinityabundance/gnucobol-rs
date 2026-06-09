@@ -386,6 +386,17 @@
         "national/UTF-8",
         "all dialects"
       ]
+    },
+    "GNURUST.ACCEPT.DISPLAY.2": {
+      "court": "DISPLAY of signed/V-scaled numeric",
+      "sweep": "accept_display2_sweep.sh",
+      "byte_domain": "DISPLAY numeric: signed +/- prefix + V decimal point",
+      "non_claims": [
+        "numeric-edited PICs (Z/,/*/$/CR/DB -> GNURUST.16)",
+        "BLANK WHEN ZERO",
+        "JUSTIFIED / floating-point USAGE",
+        "all dialects"
+      ]
     }
   }
 }

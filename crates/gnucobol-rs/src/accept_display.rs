@@ -31,6 +31,30 @@ pub fn accept_field(line: &[u8], field_size: usize) -> Vec<u8> {
     out
 }
 
+/// `DISPLAY <numeric>` — the emitted text of a numeric field (`GNURUST.ACCEPT.DISPLAY.2`). GnuCOBOL reformats
+/// a numeric on DISPLAY: a **signed** field (`S9`) gets a leading `+`/`-` (positive zero is `+`), and a
+/// `V`-scaled field gets a `.` inserted at the implied decimal point. `digits` are the `n` magnitude digit
+/// bytes (`'0'..'9'`, e.g. `b"01234"` for `S9(3)V99 = 12.34`), `scale` the number of fractional digits,
+/// `signed` whether the PIC has `S`, and `negative` the sign of the value.
+///
+/// Examples: `S9(3) = -42` → `-042`; `S9(3) = 0` → `+000`; `9(3)V99 = 12.34` → `012.34`;
+/// `S9(3)V99 = -12.34` → `-012.34`. (An unsigned non-`V` field emits its digits unchanged — see
+/// [`display_line`].) **Non-claims:** numeric-edited PICs (`Z`/`,`/`*`/`$`/`CR`/`DB` — see `GNURUST.16`),
+/// `BLANK WHEN ZERO`, `JUSTIFIED`, floating-point `USAGE`, and all dialects.
+pub fn display_numeric(digits: &[u8], scale: usize, signed: bool, negative: bool) -> Vec<u8> {
+    let mut out = Vec::new();
+    if signed {
+        out.push(if negative { b'-' } else { b'+' });
+    }
+    let split = digits.len() - scale;
+    out.extend_from_slice(&digits[..split]);
+    if scale > 0 {
+        out.push(b'.');
+        out.extend_from_slice(&digits[split..]);
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -47,5 +71,14 @@ mod tests {
         assert_eq!(accept_field(b"HI", 6), b"HI    "); // short -> space-padded
         assert_eq!(accept_field(b"ABCDEFGH", 6), b"ABCDEF"); // long -> truncated
         assert_eq!(accept_field(b"EXACT6", 6), b"EXACT6");
+    }
+    #[test]
+    fn display_numeric_signed_and_v_scaled() {
+        assert_eq!(display_numeric(b"042", 0, true, true), b"-042"); // S9(3) = -42
+        assert_eq!(display_numeric(b"042", 0, true, false), b"+042"); // S9(3) = +42
+        assert_eq!(display_numeric(b"000", 0, true, false), b"+000"); // S9(3) = 0 -> +
+        assert_eq!(display_numeric(b"01234", 2, false, false), b"012.34"); // 9(3)V99
+        assert_eq!(display_numeric(b"01234", 2, true, true), b"-012.34"); // S9(3)V99 = -12.34
+        assert_eq!(display_numeric(b"01234", 2, true, false), b"+012.34"); // S9(3)V99 = +12.34
     }
 }

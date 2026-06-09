@@ -1005,6 +1005,20 @@
       "readiness": 3,
       "lie_prevented": "NUMVAL and NUMVAL-C are the same -- NO: NUMVAL-C additionally strips the currency symbol and thousands commas (NUMVAL would NOT parse a $1,234.56 string), while still honoring the trailing-sign/CR/DB negative convention",
       "damage_if_overclaimed": "using NUMVAL on currency-formatted input (or assuming a non-$ symbol/European decimal) misparses monetary amounts"
+    },
+    {
+      "id": "GNURUST.ACCEPT.DISPLAY.2",
+      "name": "DISPLAY of signed and V-scaled numeric fields",
+      "proven": "DISPLAY reformats a numeric field, matching cobc/libcob byte-for-byte (verified 8/0): a SIGNED field (S9) gets a leading sign char (- negative, + positive, and + for ZERO -> S9(3)=0 displays as +000), and a V-scaled field gets a . inserted at the implied decimal point (9(3)V99=12.34 -> 012.34, S9(3)V99=-12.34 -> -012.34). Seals the signed/V DISPLAY formatting that GNURUST.ACCEPT.DISPLAY.1 deferred",
+      "byte_domain": "DISPLAY numeric: signed +/- prefix + V decimal point",
+      "oracle": "cobc DISPLAY of numeric (libcob/termio.c)",
+      "fixtures": "accept_display2_sweep 8/0 + 1 unit test",
+      "sealed_version": "0.7.15",
+      "not_proven": "numeric-edited PICs (Z/,/*/$/CR/DB -- that is GNURUST.16); BLANK WHEN ZERO; JUSTIFIED / floating-point USAGE; all dialects",
+      "breaks_claim": "displaying a numeric-edited or BLANK-WHEN-ZERO field; COMP-1/COMP-2 display; dialect variance",
+      "readiness": 3,
+      "lie_prevented": "DISPLAY shows the stored bytes -- NO: for a SIGNED numeric it prints a +/- SIGN CHARACTER (not the overpunched last byte) so the width grows by one, and a positive/zero value shows +; a V-scaled field shows a . that is not stored",
+      "damage_if_overclaimed": "assuming DISPLAY of a signed field equals its stored zoned bytes (it does not -- it de-overpunches to a sign prefix) mis-sizes and mis-reads captured DISPLAY output"
     }
   ],
   "transform_vs_read": {
