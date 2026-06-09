@@ -34,6 +34,7 @@
       "GNURUST.13",
       "GNURUST.6",
       "GNURUST.9",
+      "GNURUST.COVERAGE.1",
       "KOBOLD.BANK.1",
       "KOBOLD.BANK.2",
       "KOBOLD.BENCH.2",
@@ -76,7 +77,7 @@
   },
   "class_counts": {
     "A": 17,
-    "B": 32,
+    "B": 33,
     "C": 6,
     "D": 0,
     "F": 0
@@ -387,6 +388,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "96 of 288 PIC sweep + fuzz",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.COVERAGE.1",
+      "class": "B",
+      "can_fail": true,
+      "can_fail_proof": "lab/coverage/run.py generate/check -> reports/gnurust-coverage.{json,md} (27 surfaces; every admitted court mapped) + breaks_claim/not_proven (corrupt the fixture/golden -> test fails)",
+      "has_casefile": true,
+      "has_receipt": false,
+      "positive_claims": 3,
+      "negative_claims": 6,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "lab/coverage/run.py generate/check -> reports/gnurust-coverage.{json,md} (27 surfaces; every admitted court mapped)",
       "ceremonial_flags": []
     },
     {

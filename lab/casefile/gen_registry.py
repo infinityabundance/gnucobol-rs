@@ -301,6 +301,17 @@ for (i, s2, g, r) in PRUN:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["KOBOLD.PILOT.RUN.1"]}
 
+# GNURUST.COVERAGE.1 — the honest map of the forensic port.
+COV = [
+ ("NEG.COVERAGE.NOT_A_COMPLETENESS_CLAIM", "the coverage map read as 'GnuCOBOL is ported'", "sealed surfaces are the data-representation spine; file I/O, intrinsics, and most Procedure Division are MISSING", "assuming the port is near-complete"),
+ ("NEG.COVERAGE.SURFACE_LIST_NOT_EXHAUSTIVE", "the surface list treated as every GnuCOBOL surface", "it is the declared set of major surfaces, not an exhaustive enumeration", "assuming nothing exists outside the list"),
+ ("NEG.COVERAGE.STATUS_NOT_QUALITY", "a surface status treated as a quality score", "status is sealed/observed/negative/missing -- evidence shape, not quality", "ranking by status"),
+ ("NEG.COVERAGE.NO_NEW_TRUTH", "the map treated as new evidence", "it re-derives from the claim-ladder + admitted source; creates nothing", "double-counting the map as proof"),
+]
+for (i, s2, g, r) in COV:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_requires_declared_profile", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.COVERAGE.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 432,
+  "count": 440,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -982,6 +982,50 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.COVERAGE.NOT_A_COMPLETENESS_CLAIM",
+      "surface": "the coverage map read as 'GnuCOBOL is ported'",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "sealed surfaces are the data-representation spine; file I/O, intrinsics, and most Procedure Division are MISSING",
+      "risk_if_guessed": "assuming the port is near-complete",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
+      ]
+    },
+    {
+      "id": "NEG.COVERAGE.NO_NEW_TRUTH",
+      "surface": "the map treated as new evidence",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it re-derives from the claim-ladder + admitted source; creates nothing",
+      "risk_if_guessed": "double-counting the map as proof",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
+      ]
+    },
+    {
+      "id": "NEG.COVERAGE.STATUS_NOT_QUALITY",
+      "surface": "a surface status treated as a quality score",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "status is sealed/observed/negative/missing -- evidence shape, not quality",
+      "risk_if_guessed": "ranking by status",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
+      ]
+    },
+    {
+      "id": "NEG.COVERAGE.SURFACE_LIST_NOT_EXHAUSTIVE",
+      "surface": "the surface list treated as every GnuCOBOL surface",
+      "status": "not_admitted_requires_declared_profile",
+      "guard": "it is the declared set of major surfaces, not an exhaustive enumeration",
+      "risk_if_guessed": "assuming nothing exists outside the list",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
       ]
     },
     {
@@ -1985,6 +2029,17 @@
       ]
     },
     {
+      "id": "NEG.FILE-I-O-INTRINSICS-PROCEDURE-DIVISION-M",
+      "surface": "file I/O, intrinsics, Procedure Division mostly MISSING)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
+      ]
+    },
+    {
       "id": "NEG.FILE-REWRITE-PARITY",
       "surface": "file rewrite parity",
       "status": "not_admitted_fail_closed",
@@ -2452,7 +2507,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "TRUST.5"
+        "TRUST.5",
+        "GNURUST.COVERAGE.1"
       ]
     },
     {
@@ -4366,6 +4422,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-A-STATUS-IS-A-QUALITY-SCORE",
+      "surface": "that a status is a quality score",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
+      ]
+    },
+    {
       "id": "NEG.THAT-A-SYNTHETIC-CORPUS-IS-A-REPRESENTAT",
       "surface": "that a synthetic corpus is a representative business corpus",
       "status": "not_admitted_fail_closed",
@@ -4410,6 +4477,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-GNUCOBOL-IS-PORTED-SEALED-IS-ONLY-T",
+      "surface": "that GnuCOBOL is ported (sealed is only the data-representation spine",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
+      ]
+    },
+    {
       "id": "NEG.THAT-MULTIPLE-VIEWS-ARE-SIMULTANEOUSLY-T",
       "surface": "that multiple views are simultaneously true",
       "status": "not_admitted_fail_closed",
@@ -4418,6 +4496,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.THAT-THE-SURFACE-LIST-IS-EXHAUSTIVE",
+      "surface": "that the surface list is exhaustive",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.COVERAGE.1"
       ]
     },
     {

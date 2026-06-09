@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.COVERAGE.1/casefile.json",
+      "digest": {
+        "sha256": "e12b68be487c36d068285d8037394457660da51c2d570e7184a22237b4e0a696"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.COVERAGE.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "governance (gnucobol-rs lab)",
+    "verdict": "pass",
+    "replay": {
+      "command": "the admitted GnuCOBOL 3.2 source + the claim-ladder (re-derive equality + mapping completeness)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "58ca260b16d48ed7e5070913e49228249d9ff84bce1377056af8a13b4442b1af",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 3,
+    "negative_claim_count": 6
+  }
+}

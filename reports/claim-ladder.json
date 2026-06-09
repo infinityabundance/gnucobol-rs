@@ -781,6 +781,20 @@
       "readiness": 3,
       "lie_prevented": "'we ran a pilot, so we can take real customer data to production / the totals are business-correct / it is compliant' -- PILOT.RUN.1 produces redacted custody evidence over a DECLARED extract and refuses every higher claim, and fails closed on a cleartext leak",
       "damage_if_overclaimed": "presenting a single declared pilot run as customer-accepted/compliant/production-ready, or shipping a packet that leaked real account ids, would expose customers and manufacture readiness the courts do not provide"
+    },
+    {
+      "id": "GNURUST.COVERAGE.1",
+      "name": "forensic coverage map of the GnuCOBOL semantic surface",
+      "proven": "a generated map of 27 declared GnuCOBOL semantic surfaces, each bound to admitted GnuCOBOL 3.2 source module(s) (lab/admit/gnucobol-3.2) and to its current court(s) / refusal / future campaign with a status (sealed/observed/negative/missing) and a risk-if-unported; the gate FAILS if an admitted claim-ladder GNURUST/atlas court is not mapped to a surface, if a surface declares a court not in the claim-ladder, if a sealed surface has no court, if a surface binds to a missing source module, or if the map is stale; current honest state: 11 sealed (the data-representation spine), 1 observed, 7 refused, 8 MISSING",
+      "byte_domain": "GnuCOBOL source surfaces -> {status, court/refusal/future, risk} with admitted-court mapping enforced",
+      "oracle": "the admitted GnuCOBOL 3.2 source + the claim-ladder (re-derive equality + mapping completeness)",
+      "fixtures": "lab/coverage/run.py generate/check -> reports/gnurust-coverage.{json,md} (27 surfaces; every admitted court mapped)",
+      "sealed_version": "governance (gnucobol-rs lab)",
+      "not_proven": "that GnuCOBOL is ported (sealed is only the data-representation spine; file I/O, intrinsics, Procedure Division mostly MISSING); that the surface list is exhaustive; that a status is a quality score; new truth",
+      "breaks_claim": "reading the map as a completeness/near-done claim; an admitted court going unmapped without the gate firing",
+      "readiness": 3,
+      "lie_prevented": "'the data-representation courts are green, so GnuCOBOL is mostly ported' -- COVERAGE.1 shows 8 MISSING surfaces (file I/O, file status, intrinsics, INITIALIZE, INSPECT, STRING/UNSTRING, ACCEPT/DISPLAY, Procedure Division flow) and refuses the completeness reading",
+      "damage_if_overclaimed": "presenting the fixed-record spine as a complete GnuCOBOL port would send migrations into unported file-I/O, intrinsic, and control-flow behavior with no evidence"
     }
   ],
   "transform_vs_read": {

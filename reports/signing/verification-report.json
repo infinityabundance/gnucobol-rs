@@ -5,9 +5,9 @@
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true,
   "selftest_passed": true,
-  "casefiles": 55,
+  "casefiles": 56,
   "summary": {
-    "unsigned_no_key_configured": 55
+    "unsigned_no_key_configured": 56
   },
   "entries": [
     {
@@ -84,6 +84,10 @@
     },
     {
       "court": "GNURUST.9",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.COVERAGE.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
