@@ -1,0 +1,122 @@
+{
+  "schema": "gnurust-porting-ladder-v1",
+  "court": "PORTING-LADDER",
+  "placed": {
+    "GNURUST.2": 2,
+    "GNURUST.3": 2,
+    "GNURUST.4": 2,
+    "GNURUST.5": 2,
+    "GNURUST.6": 2,
+    "GNURUST.8": 2,
+    "GNURUST.9": 2,
+    "GNURUST.10": 2,
+    "GNURUST.11": 2,
+    "GNURUST.14": 2,
+    "GNURUST.15": 2,
+    "GNURUST.16": 2,
+    "GNURUST.17": 2,
+    "GNURUST.18": 2,
+    "GNURUST.7": 3,
+    "GNURUST.13": 3,
+    "GNURUST.19": 3,
+    "GNURUST.REMAINDER.1": 3,
+    "GNURUST.FILE.SEQUENTIAL.1": 3,
+    "GNURUST.12": 3,
+    "GNURUST.INITIALIZE.1": 3,
+    "GNURUST.INSPECT.1": 3,
+    "GNURUST.STRING.UNSTRING.1": 3,
+    "SIZE.ERROR.ATLAS.1": 1,
+    "GNURUST.FILE.STATUS.1": 4
+  },
+  "levels": [
+    {
+      "level": 0,
+      "name": "refused subsystem",
+      "description": "out of the data-evidence lane; refused with negative capabilities, never guessed",
+      "courts": []
+    },
+    {
+      "level": 1,
+      "name": "observed atlas",
+      "description": "behavior is recorded as observed evidence (a sweep), not a pure-kernel implementation",
+      "courts": [
+        "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "level": 2,
+      "name": "byte-equivalent helper",
+      "description": "a pure Rust function reproduces a storage/field/representation byte result",
+      "courts": [
+        "GNURUST.10",
+        "GNURUST.11",
+        "GNURUST.14",
+        "GNURUST.15",
+        "GNURUST.16",
+        "GNURUST.17",
+        "GNURUST.18",
+        "GNURUST.2",
+        "GNURUST.3",
+        "GNURUST.4",
+        "GNURUST.5",
+        "GNURUST.6",
+        "GNURUST.8",
+        "GNURUST.9"
+      ]
+    },
+    {
+      "level": 3,
+      "name": "statement byte court",
+      "description": "a Procedure-Division statement's receiver bytes are reproduced byte-for-byte",
+      "courts": [
+        "GNURUST.12",
+        "GNURUST.13",
+        "GNURUST.19",
+        "GNURUST.7",
+        "GNURUST.FILE.SEQUENTIAL.1",
+        "GNURUST.INITIALIZE.1",
+        "GNURUST.INSPECT.1",
+        "GNURUST.REMAINDER.1",
+        "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "level": 4,
+      "name": "file/runtime-status court",
+      "description": "file/runtime status observation bound to declared conditions",
+      "courts": [
+        "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "level": 5,
+      "name": "control-flow fragment",
+      "description": "control-flow byte/branch effects (not yet started)",
+      "courts": []
+    },
+    {
+      "level": 6,
+      "name": "program-execution slice",
+      "description": "executing a program slice end-to-end (not yet started)",
+      "courts": []
+    },
+    {
+      "level": 7,
+      "name": "compiler/runtime replacement",
+      "description": "NOT CLAIMED \u2014 gnucobol-rs is a compatibility court, not a compiler",
+      "courts": []
+    }
+  ],
+  "coverage_status_counts": {
+    "sealed": 15,
+    "observed": 2,
+    "negative": 7,
+    "missing": 3
+  },
+  "downstream": "KOBOLD (kobold-data-shim) composes the sealed gnucobol-rs courts into a fixed-record migration-evidence layer; it adds no semantics a lower court has not sealed.",
+  "non_claims": [
+    "NEG.LADDER.LEVEL_NOT_QUALITY",
+    "NEG.LADDER.NOT_A_COMPLETENESS_CLAIM",
+    "NEG.LADDER.NO_NEW_TRUTH"
+  ]
+}

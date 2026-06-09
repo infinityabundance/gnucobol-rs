@@ -216,6 +216,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "GNURUST.COVERAGE.1: coverage drift / unmapped court"; cat /tmp/_cov_check
   fi
+  if python3 "$ROOT/lab/ladder/run.py" check >/tmp/_lad_check 2>&1; then
+    note "PORTING-LADDER: every court placed on the forensic-port hierarchy; fresh"
+  else
+    bad "PORTING-LADDER: drift / unplaced court"; cat /tmp/_lad_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;
