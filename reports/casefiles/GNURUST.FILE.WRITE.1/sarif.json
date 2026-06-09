@@ -1,0 +1,87 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: COB_LS_FIXED/COB_LS_NULLS line modes"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: variable-length records"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: WRITE ADVANCING/BEFORE/AFTER"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: REWRITE"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: indexed/relative organizations"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: all dialects"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.WRITE.1 non-claim: lie prevented: WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record"
+          }
+        }
+      ]
+    }
+  ]
+}

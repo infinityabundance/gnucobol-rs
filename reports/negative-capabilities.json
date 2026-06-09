@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 596,
+  "count": 607,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -396,7 +396,8 @@
         "GNURUST.INTRINSIC.ORD-CHAR.1",
         "GNURUST.INTRINSIC.NUMVAL-C.1",
         "GNURUST.ACCEPT.DISPLAY.2",
-        "GNURUST.SIZE.ERROR.1"
+        "GNURUST.SIZE.ERROR.1",
+        "GNURUST.FILE.WRITE.1"
       ]
     },
     {
@@ -1104,6 +1105,17 @@
       "owning_future_campaign": "KOBOLD.CICS.ATLAS.1 (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.COB-LS-FIXED-COB-LS-NULLS-LINE-MODES",
+      "surface": "COB_LS_FIXED/COB_LS_NULLS line modes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
       ]
     },
     {
@@ -2516,6 +2528,72 @@
       ]
     },
     {
+      "id": "NEG.FILE_WRITE.NO_ALL_DIALECTS",
+      "surface": "all-dialect WRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_WRITE.NO_INDEXED_RELATIVE",
+      "surface": "indexed/relative WRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "sequential organizations only",
+      "risk_if_guessed": "an indexed WRITE",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_WRITE.NO_LS_LINE_MODES",
+      "surface": "COB_LS_FIXED/COB_LS_NULLS line modes claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "default LINE SEQ (trailing-space strip + LF) only",
+      "risk_if_guessed": "a fixed/nulls line mode",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_WRITE.NO_REWRITE",
+      "surface": "REWRITE / update claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "OPEN OUTPUT append only",
+      "risk_if_guessed": "REWRITE a record",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_WRITE.NO_VARIABLE_LENGTH",
+      "surface": "variable-length record WRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "fixed record_len only",
+      "risk_if_guessed": "an OCCURS DEPENDING record",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_WRITE.NO_WRITE_ADVANCING",
+      "surface": "WRITE ADVANCING/BEFORE/AFTER claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "plain WRITE only",
+      "risk_if_guessed": "WRITE AFTER ADVANCING",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
       "id": "NEG.FIXTURE.EXPECTED_NOT_ORACLE",
       "surface": "the fixture's expected output treated as oracle authority",
       "status": "not_admitted_requires_declared_profile",
@@ -2804,6 +2882,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
+      "surface": "indexed/relative organizations",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
       ]
     },
     {
@@ -5355,6 +5444,17 @@
       ]
     },
     {
+      "id": "NEG.REWRITE",
+      "surface": "REWRITE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
       "id": "NEG.ROUNDED",
       "surface": "ROUNDED",
       "status": "not_admitted_fail_closed",
@@ -6535,6 +6635,17 @@
       ]
     },
     {
+      "id": "NEG.VARIABLE-LENGTH-RECORDS",
+      "surface": "variable-length records",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
       "id": "NEG.VENDOR-PARITY",
       "surface": "vendor parity",
       "status": "not_admitted_fail_closed",
@@ -6576,6 +6687,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.WRITE-ADVANCING-BEFORE-AFTER",
+      "surface": "WRITE ADVANCING/BEFORE/AFTER",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.WRITE.1"
       ]
     },
     {

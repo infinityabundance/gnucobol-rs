@@ -410,6 +410,19 @@
         "floating-point receivers",
         "all dialects"
       ]
+    },
+    "GNURUST.FILE.WRITE.1": {
+      "court": "sequential WRITE byte effects",
+      "sweep": "write_seq_sweep.sh",
+      "byte_domain": "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)",
+      "non_claims": [
+        "COB_LS_FIXED/COB_LS_NULLS line modes",
+        "variable-length records",
+        "WRITE ADVANCING/BEFORE/AFTER",
+        "REWRITE",
+        "indexed/relative organizations",
+        "all dialects"
+      ]
     }
   }
 }

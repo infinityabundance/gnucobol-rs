@@ -23,7 +23,7 @@
 | `edited-pictures` | MOVE/storage | `move.c` | ✅ sealed | GNURUST.16 |
 | `dialect-options` | compiler dialect options | `config.c` | ✅ sealed | DIALECT.PROFILE.1 |
 | `size-error` | runtime exceptions | `numeric.c` | ✅ sealed | SIZE.ERROR.ATLAS.1, GNURUST.SIZE.ERROR.1 |
-| `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1 |
+| `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1 |
 | `file-status` | file I/O | `fileio.c` | 🟡 observed | GNURUST.FILE.STATUS.1 |
 | `initialize` | MOVE/storage | `typeck.c` | ✅ sealed | GNURUST.INITIALIZE.1 |
 | `inspect` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.INSPECT.1 |

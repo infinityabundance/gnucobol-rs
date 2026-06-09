@@ -1033,6 +1033,20 @@
       "readiness": 3,
       "lie_prevented": "overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result",
       "damage_if_overclaimed": "assuming overflow keeps the high digits (or that ON SIZE ERROR still stores something) corrupts amounts silently when a computed value exceeds its PICTURE"
+    },
+    {
+      "id": "GNURUST.FILE.WRITE.1",
+      "name": "sequential WRITE byte effects",
+      "proven": "the file bytes produced by OPEN OUTPUT + repeated WRITE over fixed records, matching cobc/libcob fileio.c (verified 2/0): RECORD SEQUENTIAL writes the full fixed record_len-wide record area (space-padded) with NO delimiter; LINE SEQUENTIAL STRIPS trailing spaces and appends a newline (an all-spaces record writes just a newline). The WRITE side of GNURUST.FILE.SEQUENTIAL.1 (the READ court)",
+      "byte_domain": "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)",
+      "oracle": "cobc OPEN OUTPUT/WRITE (libcob/fileio.c)",
+      "fixtures": "write_seq_sweep 2/0 + 2 unit tests",
+      "sealed_version": "0.7.17",
+      "not_proven": "COB_LS_FIXED/COB_LS_NULLS line modes; variable-length records; WRITE ADVANCING/BEFORE/AFTER; REWRITE; indexed/relative organizations; all dialects",
+      "breaks_claim": "a configured line mode; variable-length / ODO records; WRITE ADVANCING; REWRITE; indexed WRITE",
+      "readiness": 3,
+      "lie_prevented": "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record",
+      "damage_if_overclaimed": "assuming LINE SEQUENTIAL preserves trailing spaces (or that RECORD SEQUENTIAL adds a newline) corrupts every written record's framing"
     }
   ],
   "transform_vs_read": {

@@ -87,6 +87,35 @@ pub fn read_sequential(data: &[u8], org: FileOrg, record_len: usize) -> Vec<SeqR
     out
 }
 
+/// Replay `OPEN OUTPUT` + repeated `WRITE` over `records` for the declared organization and fixed
+/// `record_len`, returning the file bytes byte-for-byte as GnuCOBOL's `libcob/fileio.c`
+/// (`GNURUST.FILE.WRITE.1`). Each record is laid into the `record_len`-wide FD record area (space-padded /
+/// truncated):
+/// - **RECORD SEQUENTIAL** — the full fixed `record_len` bytes are written, no delimiter.
+/// - **LINE SEQUENTIAL** — **trailing spaces are stripped** and a `\n` is appended (an all-spaces record
+///   writes just `\n`).
+///
+/// **Non-claims:** `COB_LS_FIXED` / `COB_LS_NULLS` and other runtime-configured line modes, variable-length
+/// records, `WRITE ... ADVANCING` / `BEFORE`/`AFTER`, `REWRITE`, indexed/relative organizations, and any
+/// Procedure Division control flow.
+pub fn write_sequential(records: &[&[u8]], org: FileOrg, record_len: usize) -> Vec<u8> {
+    let mut out = Vec::new();
+    for &rec in records {
+        // the FD record area: the record content padded/truncated to record_len with spaces.
+        let mut area: Vec<u8> = rec.iter().take(record_len).copied().collect();
+        area.resize(record_len, b' ');
+        match org {
+            FileOrg::RecordSequential => out.extend_from_slice(&area),
+            FileOrg::LineSequential => {
+                let end = area.iter().rposition(|&b| b != b' ').map_or(0, |p| p + 1);
+                out.extend_from_slice(&area[..end]);
+                out.push(b'\n');
+            }
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -129,5 +158,20 @@ mod tests {
     fn record_seq_partial_final_leaks_prior_tail() {
         // oracle: the 4-byte final record overlays only WXYZ, leaving EFGH from the prior record.
         assert_eq!(recs(b"01234567ABCDEFGHWXYZ", FileOrg::RecordSequential), vec![("01234567".into(), "00"), ("ABCDEFGH".into(), "00"), ("WXYZEFGH".into(), "00"), (String::new(), "10")]);
+    }
+
+    #[test]
+    fn write_record_seq_is_full_padded_records() {
+        // oracle: WRITE "AB" then "HELLO123" into X(8) RECORD SEQUENTIAL -> "AB      HELLO123" (no delimiter)
+        assert_eq!(write_sequential(&[b"AB", b"HELLO123"], FileOrg::RecordSequential, 8), b"AB      HELLO123");
+    }
+
+    #[test]
+    fn write_line_seq_strips_trailing_spaces_and_adds_newline() {
+        // oracle: WRITE "AB", "HELLO123", SPACES into X(8) LINE SEQUENTIAL -> "AB\nHELLO123\n\n"
+        assert_eq!(
+            write_sequential(&[b"AB", b"HELLO123", b""], FileOrg::LineSequential, 8),
+            b"AB\nHELLO123\n\n"
+        );
     }
 }

@@ -1,0 +1,64 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.FILE.WRITE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.17",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "8a6180bdceaef24fcf79372fc603d26a788b649266a6f7819663a9d03bba0025",
+    "receipt_sha256": "75329d1c008e208614e207a69c604c35284e4d37b18a9d6f6b3c350190f54cd6"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc OPEN OUTPUT/WRITE (libcob/fileio.c)",
+    "upstream_court": "GNURUST.FILE.WRITE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 2,
+    "pass": 2,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the file bytes produced by OPEN OUTPUT + repeated WRITE over fixed records, matching cobc/libcob fileio.c (verified 2/0): RECORD SEQUENTIAL writes the full fixed record_len-wide record area (space-padded) with NO delimiter",
+    "LINE SEQUENTIAL STRIPS trailing spaces and appends a newline (an all-spaces record writes just a newline). The WRITE side of GNURUST.FILE.SEQUENTIAL.1 (the READ court)"
+  ],
+  "negative_claims": [
+    "COB_LS_FIXED/COB_LS_NULLS line modes",
+    "variable-length records",
+    "WRITE ADVANCING/BEFORE/AFTER",
+    "REWRITE",
+    "indexed/relative organizations",
+    "all dialects",
+    "lie prevented: WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record"
+  ],
+  "negative_capability_ids": [
+    "NEG.COB-LS-FIXED-COB-LS-NULLS-LINE-MODES",
+    "NEG.VARIABLE-LENGTH-RECORDS",
+    "NEG.WRITE-ADVANCING-BEFORE-AFTER",
+    "NEG.REWRITE",
+    "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)"
+  ],
+  "lie_prevented": [
+    "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record"
+  ],
+  "damage_if_overclaimed": "assuming LINE SEQUENTIAL preserves trailing spaces (or that RECORD SEQUENTIAL adds a newline) corrupts every written record's framing",
+  "replay": {
+    "command": "bash lab/oracle/write_seq_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "5e0b0ecba911fae31e95af4e0f5d1e71399966cca3ad4d381ae750c825fbfaad"
+  }
+}

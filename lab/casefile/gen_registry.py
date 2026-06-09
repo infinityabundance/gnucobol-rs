@@ -507,6 +507,19 @@ for (i, s2, g, r) in SE:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.SIZE.ERROR.1"]}
 
+# GNURUST.FILE.WRITE.1 — sequential WRITE byte effects.
+FW = [
+ ("NEG.FILE_WRITE.NO_LS_LINE_MODES", "COB_LS_FIXED/COB_LS_NULLS line modes claimed", "default LINE SEQ (trailing-space strip + LF) only", "a fixed/nulls line mode"),
+ ("NEG.FILE_WRITE.NO_VARIABLE_LENGTH", "variable-length record WRITE claimed", "fixed record_len only", "an OCCURS DEPENDING record"),
+ ("NEG.FILE_WRITE.NO_WRITE_ADVANCING", "WRITE ADVANCING/BEFORE/AFTER claimed", "plain WRITE only", "WRITE AFTER ADVANCING"),
+ ("NEG.FILE_WRITE.NO_REWRITE", "REWRITE / update claimed", "OPEN OUTPUT append only", "REWRITE a record"),
+ ("NEG.FILE_WRITE.NO_INDEXED_RELATIVE", "indexed/relative WRITE claimed", "sequential organizations only", "an indexed WRITE"),
+ ("NEG.FILE_WRITE.NO_ALL_DIALECTS", "all-dialect WRITE claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in FW:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.WRITE.1"]}
+
 # GNURUST.PROCEDURE.FLOW.ATLAS.1 — observed control-flow atlas; EXECUTION is the loudest non-claim.
 PF = [
  ("NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION", "Procedure Division EXECUTION claimed", "the atlas OBSERVES control flow; gnucobol-rs runs no programs", "executing a COBOL program"),
