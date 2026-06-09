@@ -1187,6 +1187,20 @@
       "readiness": 3,
       "lie_prevented": "COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes",
       "damage_if_overclaimed": "presenting byte parity as build-independent silently breaks on any oracle rebuilt with a different binary-byteorder / char-signedness / dialect -- the ABI abyss"
+    },
+    {
+      "id": "GNURUST.PUBLIC.GAP.1",
+      "name": "surface gap board over the admitted GnuCOBOL testsuite",
+      "proven": "a surface-frequency GAP BOARD over the ADMITTED GnuCOBOL 3.2.0 upstream testsuite (29 run/syn .at files, ZERO network -- the authoritative corpus #1). Classifies each COBOL surface as sealed (13) / observed (2) / refused (4) / MISSING (7) against the court map, and ranks the missing-court board by occurrence: CALL/linkage (959x -- the LARGEST gap), START/DELETE/indexed-org (indexed files), SORT/MERGE (145x), SEARCH (74x), relative files. Turns we-sealed-courts into we-know-our-blind-spots-against-the-authoritative-corpus. The companion to GNURUST.PUBLIC.CORPUS.1, run on corpus #1",
+      "byte_domain": "verb/feature frequency scan of the admitted testsuite -> sealed/observed/refused/missing surface board",
+      "oracle": "GnuCOBOL upstream testsuite (admitted in lab/admit)",
+      "fixtures": "lab/gap/run.py 29 files -> reports/public-gap-board.json",
+      "sealed_version": "meta board (gnucobol-rs lab)",
+      "not_proven": "compilation/execution/parity over any test; that a verb's presence proves a court is needed for full behavior; that the missing set is a roadmap commitment (candidates); multi-corpus coverage (one corpus); exhaustiveness of surfaces",
+      "breaks_claim": "treating the scan as test-pass coverage; assuming a missing surface is committed; assuming one corpus is the universe",
+      "readiness": 2,
+      "lie_prevented": "we cover the GnuCOBOL testsuite -- NO: this is a VERB-PRESENCE scan that finds 7 MISSING surfaces (CALL the biggest at 959x); it compiles/runs/proves NOTHING and the missing-court board is a candidate set, not a roadmap commitment",
+      "damage_if_overclaimed": "presenting a surface scan as test-pass / parity coverage fabricates execution evidence the project has not produced"
     }
   ],
   "transform_vs_read": {

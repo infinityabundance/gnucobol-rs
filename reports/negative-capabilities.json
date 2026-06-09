@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 729,
+  "count": 739,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -1316,6 +1316,17 @@
       ]
     },
     {
+      "id": "NEG.COMPILATION-EXECUTION-PARITY-OVER-ANY-TE",
+      "surface": "compilation/execution/parity over any test",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
       "id": "NEG.COMPILER-INTERNAL-STRUCT-LAYOUT-BEYOND-T",
       "surface": "compiler-internal struct layout beyond the recorded fields",
       "status": "not_admitted_fail_closed",
@@ -2436,6 +2447,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CORPUS.2"
+      ]
+    },
+    {
+      "id": "NEG.EXHAUSTIVENESS-OF-SURFACES",
+      "surface": "exhaustiveness of surfaces",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
       ]
     },
     {
@@ -4520,6 +4542,17 @@
       ]
     },
     {
+      "id": "NEG.MULTI-CORPUS-COVERAGE-ONE-CORPUS",
+      "surface": "multi-corpus coverage (one corpus)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
       "id": "NEG.MULTI-DELIMITER-ALL-GENERALIZATION",
       "surface": "multi-delimiter/ALL generalization",
       "status": "not_admitted_fail_closed",
@@ -6101,6 +6134,61 @@
       ]
     },
     {
+      "id": "NEG.PUBLIC_GAP.MISSING_IS_CANDIDATE_NOT_COMMITMENT",
+      "surface": "the missing board treated as a roadmap commitment",
+      "status": "not_admitted_scan_only",
+      "guard": "candidate courts, prioritized by frequency, not promised",
+      "risk_if_guessed": "assuming the missing courts will ship",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_GAP.NOT_EXECUTION",
+      "surface": "the gap board treated as compilation/execution",
+      "status": "not_admitted_scan_only",
+      "guard": "a static verb/feature scan; nothing is compiled or run",
+      "risk_if_guessed": "trusting it as test results",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_GAP.NOT_PARITY",
+      "surface": "the gap board treated as parity coverage",
+      "status": "not_admitted_scan_only",
+      "guard": "surface presence, not byte/behavior parity",
+      "risk_if_guessed": "claiming corpus parity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_GAP.SINGLE_CORPUS",
+      "surface": "the board treated as multi-corpus",
+      "status": "not_admitted_scan_only",
+      "guard": "the admitted GnuCOBOL testsuite only (corpus #1)",
+      "risk_if_guessed": "assuming all corpora scanned",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_GAP.VERB_PRESENCE_NOT_COURT_NEED",
+      "surface": "verb presence treated as proof a court is needed",
+      "status": "not_admitted_scan_only",
+      "guard": "a heuristic signal, not a requirement",
+      "risk_if_guessed": "auto-committing every missing surface",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
       "id": "NEG.RANGE-THRU-WHEN",
       "surface": "range/THRU WHEN",
       "status": "not_admitted_fail_closed",
@@ -7506,6 +7594,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-A-VERB-S-PRESENCE-PROVES-A-COURT-IS",
+      "surface": "that a verb's presence proves a court is needed for full behavior",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
+      ]
+    },
+    {
       "id": "NEG.THAT-AN-OBSERVED-STATEMENT-IS-IMPLEMENTE",
       "surface": "that an observed statement is implemented",
       "status": "not_admitted_fail_closed",
@@ -7591,6 +7690,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.THAT-THE-MISSING-SET-IS-A-ROADMAP-COMMIT",
+      "surface": "that the missing set is a roadmap commitment (candidates)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.GAP.1"
       ]
     },
     {

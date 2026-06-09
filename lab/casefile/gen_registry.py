@@ -613,6 +613,18 @@ for (i, s2, g, r) in BP:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_profile_scoped", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.BUILD.PROFILE.1"]}
 
+# GNURUST.PUBLIC.GAP.1 -- surface gap board (scan, not execution).
+PG = [
+ ("NEG.PUBLIC_GAP.NOT_EXECUTION", "the gap board treated as compilation/execution", "a static verb/feature scan; nothing is compiled or run", "trusting it as test results"),
+ ("NEG.PUBLIC_GAP.NOT_PARITY", "the gap board treated as parity coverage", "surface presence, not byte/behavior parity", "claiming corpus parity"),
+ ("NEG.PUBLIC_GAP.SINGLE_CORPUS", "the board treated as multi-corpus", "the admitted GnuCOBOL testsuite only (corpus #1)", "assuming all corpora scanned"),
+ ("NEG.PUBLIC_GAP.VERB_PRESENCE_NOT_COURT_NEED", "verb presence treated as proof a court is needed", "a heuristic signal, not a requirement", "auto-committing every missing surface"),
+ ("NEG.PUBLIC_GAP.MISSING_IS_CANDIDATE_NOT_COMMITMENT", "the missing board treated as a roadmap commitment", "candidate courts, prioritized by frequency, not promised", "assuming the missing courts will ship"),
+]
+for (i, s2, g, r) in PG:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_scan_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PUBLIC.GAP.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

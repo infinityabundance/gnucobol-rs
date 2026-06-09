@@ -31,7 +31,7 @@ for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-licen
 done
 # TRUST.1/TRUST.4: every GNURUST court in the claim-ladder must have a generated forensic casefile
 # (legacy hand-written receipts are now non-authoritative exhibits under research/legacyreports/).
-GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1','GNURUST.PUBLIC.CORPUS.1','GNURUST.BUILD.PROFILE.1')))")
+GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1','GNURUST.PUBLIC.CORPUS.1','GNURUST.BUILD.PROFILE.1','GNURUST.PUBLIC.GAP.1')))")
 for code in $GCODES; do
   [ -f "reports/casefiles/$code/casefile.json" ] || bad "claim-ladder court $code has no generated casefile"
 done
@@ -230,6 +230,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     note "GNURUST.PUBLIC.CORPUS.1: public-COBOL corpus index fresh (gap discovery, index-only)"
   else
     bad "GNURUST.PUBLIC.CORPUS.1: corpus index drift"; cat /tmp/_corpus_check
+  fi
+  if python3 "$ROOT/lab/gap/run.py" check >/tmp/_gap_check 2>&1; then
+    note "GNURUST.PUBLIC.GAP.1: surface gap board over the admitted GnuCOBOL testsuite fresh"
+  else
+    bad "GNURUST.PUBLIC.GAP.1: gap board drift"; cat /tmp/_gap_check
   fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in

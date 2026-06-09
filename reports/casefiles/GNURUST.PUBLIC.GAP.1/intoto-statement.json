@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.PUBLIC.GAP.1/casefile.json",
+      "digest": {
+        "sha256": "b43d526a0f9f4bee7e4b0d9e3cd2a6a601f48b4f25b21eb3fe17647ec21fc16b"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.PUBLIC.GAP.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "meta board (gnucobol-rs lab)",
+    "verdict": "pass",
+    "replay": {
+      "command": "GnuCOBOL upstream testsuite (admitted in lab/admit)",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "e5f8d8d6ebcd50cebda54e314e8104a98176dab603ddafde0e0c869144aa82aa",
+      "receipt_sha256": null
+    },
+    "positive_claim_count": 1,
+    "negative_claim_count": 6
+  }
+}

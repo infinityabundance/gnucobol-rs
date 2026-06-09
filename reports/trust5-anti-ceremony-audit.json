@@ -63,6 +63,7 @@
       "GNURUST.9",
       "GNURUST.COVERAGE.1",
       "GNURUST.PUBLIC.CORPUS.1",
+      "GNURUST.PUBLIC.GAP.1",
       "KOBOLD.BANK.1",
       "KOBOLD.BANK.2",
       "KOBOLD.BENCH.2",
@@ -105,7 +106,7 @@
   },
   "class_counts": {
     "A": 44,
-    "B": 34,
+    "B": 35,
     "C": 6,
     "D": 0,
     "F": 0
@@ -832,6 +833,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "lab/corpus/run.py 25 corpora -> reports/public-corpus-index.json",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.PUBLIC.GAP.1",
+      "class": "B",
+      "can_fail": true,
+      "can_fail_proof": "lab/gap/run.py 29 files -> reports/public-gap-board.json + breaks_claim/not_proven (corrupt the fixture/golden -> test fails)",
+      "has_casefile": true,
+      "has_receipt": false,
+      "positive_claims": 1,
+      "negative_claims": 6,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "lab/gap/run.py 29 files -> reports/public-gap-board.json",
       "ceremonial_flags": []
     },
     {
