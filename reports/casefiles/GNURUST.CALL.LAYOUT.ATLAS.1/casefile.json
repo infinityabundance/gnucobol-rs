@@ -1,0 +1,67 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.CALL.LAYOUT.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.26",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "2788c8c77a90d720ab01babaf01b3a016446f3d00bd351a6d71bfc5c82505f99",
+    "receipt_sha256": "1f19c5b0f44fde8cd76a67609c5514009687734514809804100d61a45a8c4d39"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc CALL USING + LINKAGE parameter layout (libcob/call.c address passing)",
+    "upstream_court": "GNURUST.CALL.LAYOUT.ATLAS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 5,
+    "pass": 5,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed the BYTE-EXACT CALL USING parameter layout and length-mismatch behavior under the gnucobol-3.2.0-default witness, verified by the sweep (5/0), deepening GNURUST.CALL.EXTENSION.ATLAS.1: BY REFERENCE is a pure ADDRESS OVERLAY so a callee LINKAGE item LARGER than the caller's field reads PAST it into ADJACENT caller storage (X(5) over X(3) 'ABC' beside 'XYZ' -> the callee sees 'ABCXY', no truncation/padding/bounds) and the callee's write lands back in the caller's bytes ('ABC' -> 'ZBC')",
+    "BY CONTENT passes a SIZED COPY leaving the caller UNCHANGED ('DEF')",
+    "and a numeric LINKAGE 9(2) over a caller 9(4)=1234 overlays the LEADING display bytes positionally ('12')"
+  ],
+  "negative_claims": [
+    "subprogram execution (gnucobol-rs runs no subprograms -- multi-module runtime is L8)",
+    "the value of a BY CONTENT over-read past the copy (undefined / uninitialized memory)",
+    "BY VALUE byte layout",
+    "OCCURS DEPENDING ON across the linkage boundary",
+    "OPTIONAL / OMITTED parameters",
+    "the RETURNING phrase",
+    "all dialects",
+    "lie prevented: a CALL parameter is length-checked and a mismatch is truncated or padded -- NO: BY REFERENCE is a raw ADDRESS OVERLAY with NO bounds, so a callee item longer than the caller's field silently reads (and a write corrupts) ADJACENT caller storage -- a mismatched-length copybook does not error, it reads the neighboring field; BY CONTENT instead copies (caller safe) and an over-read past that copy is UNDEFINED, not space-padded"
+  ],
+  "negative_capability_ids": [
+    "NEG.SUBPROGRAM-EXECUTION-GNUCOBOL-RS-RUNS-NO",
+    "NEG.THE-VALUE-OF-A-BY-CONTENT-OVER-READ-PAST",
+    "NEG.BY-VALUE-BYTE-LAYOUT",
+    "NEG.OCCURS-DEPENDING-ON-ACROSS-THE-LINKAGE-B",
+    "NEG.OPTIONAL-OMITTED-PARAMETERS",
+    "NEG.THE-RETURNING-PHRASE",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "CALL USING parameter byte layout: BY REFERENCE address overlay (into adjacent storage), BY CONTENT sized copy, numeric length-mismatch leading-byte overlay"
+  ],
+  "lie_prevented": [
+    "a CALL parameter is length-checked and a mismatch is truncated or padded -- NO: BY REFERENCE is a raw ADDRESS OVERLAY with NO bounds, so a callee item longer than the caller's field silently reads (and a write corrupts) ADJACENT caller storage -- a mismatched-length copybook does not error, it reads the neighboring field; BY CONTENT instead copies (caller safe) and an over-read past that copy is UNDEFINED, not space-padded"
+  ],
+  "damage_if_overclaimed": "assuming CALL parameters are length-checked/truncated hides the real hazard -- a LINKAGE length that disagrees with the caller silently overlays adjacent storage (read and write); trusting a BY CONTENT over-read value reads uninitialized memory",
+  "replay": {
+    "command": "bash lab/oracle/call_layout_atlas_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "0532140ffbbf61402d824fecaec47afdc7dd2189aa7576e66b66b63820a34900"
+  }
+}

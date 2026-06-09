@@ -1313,6 +1313,20 @@
       "readiness": 3,
       "lie_prevented": "a file error aborts the COBOL program (or is silently ignored) -- NO: a failing I/O INVOKES the file's USE AFTER STANDARD ERROR declarative with the FILE STATUS visible inside it, and then execution RESUMES at the next statement (the program does NOT abort, rc=0); the handler is bound PER FILE and a successful op fires nothing -- so the error path is a structured, resumable, per-file branch, not a crash and not a no-op",
       "damage_if_overclaimed": "assuming a file error crashes (or is ignored) misreads the control flow of every batch program with declaratives; treating the atlas as an execution engine would run unsealed Procedure-Division control flow inside the handler"
+    },
+    {
+      "id": "GNURUST.CALL.LAYOUT.ATLAS.1",
+      "name": "observed CALL parameter byte-layout atlas",
+      "proven": "observed the BYTE-EXACT CALL USING parameter layout and length-mismatch behavior under the gnucobol-3.2.0-default witness, verified by the sweep (5/0), deepening GNURUST.CALL.EXTENSION.ATLAS.1: BY REFERENCE is a pure ADDRESS OVERLAY so a callee LINKAGE item LARGER than the caller's field reads PAST it into ADJACENT caller storage (X(5) over X(3) 'ABC' beside 'XYZ' -> the callee sees 'ABCXY', no truncation/padding/bounds) and the callee's write lands back in the caller's bytes ('ABC' -> 'ZBC'); BY CONTENT passes a SIZED COPY leaving the caller UNCHANGED ('DEF'); and a numeric LINKAGE 9(2) over a caller 9(4)=1234 overlays the LEADING display bytes positionally ('12')",
+      "byte_domain": "CALL USING parameter byte layout: BY REFERENCE address overlay (into adjacent storage), BY CONTENT sized copy, numeric length-mismatch leading-byte overlay",
+      "oracle": "cobc CALL USING + LINKAGE parameter layout (libcob/call.c address passing)",
+      "fixtures": "call_layout_atlas_sweep 5/0 -> reports/call-layout-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "subprogram execution (gnucobol-rs runs no subprograms -- multi-module runtime is L8); the value of a BY CONTENT over-read past the copy (undefined / uninitialized memory); BY VALUE byte layout; OCCURS DEPENDING ON across the linkage boundary; OPTIONAL / OMITTED parameters; the RETURNING phrase; all dialects",
+      "breaks_claim": "executing a CALLed program; asserting a value for an over-read past a BY CONTENT copy; a BY VALUE layout; an ODO LINKAGE item; a RETURNING result",
+      "readiness": 3,
+      "lie_prevented": "a CALL parameter is length-checked and a mismatch is truncated or padded -- NO: BY REFERENCE is a raw ADDRESS OVERLAY with NO bounds, so a callee item longer than the caller's field silently reads (and a write corrupts) ADJACENT caller storage -- a mismatched-length copybook does not error, it reads the neighboring field; BY CONTENT instead copies (caller safe) and an over-read past that copy is UNDEFINED, not space-padded",
+      "damage_if_overclaimed": "assuming CALL parameters are length-checked/truncated hides the real hazard -- a LINKAGE length that disagrees with the caller silently overlays adjacent storage (read and write); trusting a BY CONTENT over-read value reads uninitialized memory"
     }
   ],
   "transform_vs_read": {

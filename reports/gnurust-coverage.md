@@ -36,7 +36,7 @@
 | `intrinsics` | intrinsics | `intrinsic.c` | 🟡 observed | GNURUST.INTRINSIC.ATLAS.1, GNURUST.INTRINSIC.LENGTH.1, GNURUST.INTRINSIC.NUMVAL.1, GNURUST.INTRINSIC.MOD-REM.1, GNURUST.INTRINSIC.INTEGER.1, GNURUST.INTRINSIC.CASE.1, GNURUST.INTRINSIC.ORD-CHAR.1, GNURUST.INTRINSIC.NUMVAL-C.1, GNURUST.INTRINSIC.DATE.1 |
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ✅ sealed | GNURUST.ACCEPT.DISPLAY.1, GNURUST.ACCEPT.DISPLAY.2 |
 | `procedure-flow` | control flow | `typeck.c, codegen.c` | 🟡 observed | GNURUST.PROCEDURE.FLOW.ATLAS.1, GNURUST.IF.EVALUATE.SLICE.1, GNURUST.IF.NUMERIC.SLICE.1, GNURUST.PERFORM.SLICE.1, GNURUST.TABLE.PERFORM.SLICE.1, GNURUST.SEARCH.TABLE.1, GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1 |
-| `call-linkage` | CALL/linkage | `call.c` | 🟡 observed | GNURUST.CALL.EXTENSION.ATLAS.1 |
+| `call-linkage` | CALL/linkage | `call.c` | 🟡 observed | GNURUST.CALL.EXTENSION.ATLAS.1, GNURUST.CALL.LAYOUT.ATLAS.1 |
 | `sort-merge` | SORT/MERGE | `fileio.c` | 🟡 observed | GNURUST.SORT.MERGE.ATLAS.1 |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |
 | `report-writer` | screen/report/CICS/SQL unsupported | `reportio.c` | ⛔ negative | — |

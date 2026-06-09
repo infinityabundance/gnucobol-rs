@@ -67,6 +67,7 @@ run_sweep "GNURUST.RELATIVE.FILE.ATLAS.1 (observed)" relative_file_atlas_sweep.s
 run_sweep "GNURUST.DIALECT.RUNTIME.ATLAS.1 (observed)" dialect_runtime_atlas_sweep.sh
 run_sweep "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 (observed)" directive_variance_atlas_sweep.sh
 run_sweep "GNURUST.DECLARATIVES.ATLAS.1 (observed)" declaratives_atlas_sweep.sh
+run_sweep "GNURUST.CALL.LAYOUT.ATLAS.1 (observed)" call_layout_atlas_sweep.sh
 run_sweep "GNURUST.IF.EVALUATE.SLICE.1" if_eval_sweep.sh
 run_sweep "GNURUST.IF.NUMERIC.SLICE.1" if_numeric_sweep.sh
 run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh

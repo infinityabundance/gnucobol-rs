@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 840,
+  "count": 853,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -456,7 +456,8 @@
         "GNURUST.SEARCH.TABLE.1",
         "GNURUST.SORT.MERGE.ATLAS.1",
         "GNURUST.RELATIVE.FILE.ATLAS.1",
-        "GNURUST.DECLARATIVES.ATLAS.1"
+        "GNURUST.DECLARATIVES.ATLAS.1",
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
       ]
     },
     {
@@ -1197,6 +1198,17 @@
       ]
     },
     {
+      "id": "NEG.BY-VALUE-BYTE-LAYOUT",
+      "surface": "BY VALUE byte layout",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.BY-VALUE-TO-A-REFERENCE-PARAM-UNDEFINED",
       "surface": "BY VALUE to a reference param (undefined)",
       "status": "not_admitted_fail_closed",
@@ -1304,6 +1316,83 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_ALL_DIALECTS",
+      "surface": "all-dialect CALL layout claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_BOUNDS_ON_OVERLAY",
+      "surface": "a BY CONTENT over-read value claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "an over-read past the copy is undefined/uninitialized memory; refused",
+      "risk_if_guessed": "trusting an over-read past a BY CONTENT temp",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_BY_VALUE_LAYOUT",
+      "surface": "BY VALUE byte layout claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "BY REFERENCE/CONTENT observed; BY VALUE layout not modeled",
+      "risk_if_guessed": "a BY VALUE parameter layout",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_ODO_ACROSS_LINKAGE",
+      "surface": "OCCURS DEPENDING ON across the linkage boundary claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "fixed LINKAGE items observed only",
+      "risk_if_guessed": "an ODO LINKAGE item",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_OPTIONAL_OMITTED_PARAMS",
+      "surface": "OPTIONAL / OMITTED parameters claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "present USING parameters observed only",
+      "risk_if_guessed": "an OMITTED argument",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_RETURNING_PHRASE",
+      "surface": "the RETURNING phrase claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "USING parameters observed; RETURNING not modeled",
+      "risk_if_guessed": "a CALL ... RETURNING result",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL_LAYOUT.NO_SUBPROGRAM_EXECUTION",
+      "surface": "subprogram execution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; gnucobol-rs runs no subprograms (L8)",
+      "risk_if_guessed": "running a CALLed program",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
       ]
     },
     {
@@ -5711,6 +5800,17 @@
       ]
     },
     {
+      "id": "NEG.OCCURS-DEPENDING-ON-ACROSS-THE-LINKAGE-B",
+      "surface": "OCCURS DEPENDING ON across the linkage boundary",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.ODO-RUNTIME-ACTIVE-COUNT",
       "surface": "ODO runtime active count",
       "status": "not_admitted_fail_closed",
@@ -5797,6 +5897,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.OPERATOR.1"
+      ]
+    },
+    {
+      "id": "NEG.OPTIONAL-OMITTED-PARAMETERS",
+      "surface": "OPTIONAL / OMITTED parameters",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
       ]
     },
     {
@@ -8348,6 +8459,17 @@
       ]
     },
     {
+      "id": "NEG.SUBPROGRAM-EXECUTION-GNUCOBOL-RS-RUNS-NO",
+      "surface": "subprogram execution (gnucobol-rs runs no subprograms -- multi-module runtime is L8)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.SUBSCRIPT-OUT-OF-BOUNDS",
       "surface": "subscript out-of-bounds",
       "status": "not_admitted_fail_closed",
@@ -8844,6 +8966,17 @@
       ]
     },
     {
+      "id": "NEG.THE-RETURNING-PHRASE",
+      "surface": "the RETURNING phrase",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.THE-SCREEN-ROUTED-DIALECTS-ACU-REALIA-RO",
       "surface": "the screen-routed dialects (acu/realia route DISPLAY through a terminal)",
       "status": "not_admitted_fail_closed",
@@ -8874,6 +9007,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-VALUE-OF-A-BY-CONTENT-OVER-READ-PAST",
+      "surface": "the value of a BY CONTENT over-read past the copy (undefined / uninitialized memory)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.LAYOUT.ATLAS.1"
       ]
     },
     {

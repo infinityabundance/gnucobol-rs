@@ -722,6 +722,20 @@ for (i, s2, g, r) in DEC:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.DECLARATIVES.ATLAS.1"]}
 
+# GNURUST.CALL.LAYOUT.ATLAS.1 -- observed CALL parameter byte-layout atlas (deepens CALL.EXTENSION).
+CLY = [
+ ("NEG.CALL_LAYOUT.NO_SUBPROGRAM_EXECUTION", "subprogram execution claimed", "the atlas OBSERVES; gnucobol-rs runs no subprograms (L8)", "running a CALLed program"),
+ ("NEG.CALL_LAYOUT.NO_BOUNDS_ON_OVERLAY", "a BY CONTENT over-read value claimed", "an over-read past the copy is undefined/uninitialized memory; refused", "trusting an over-read past a BY CONTENT temp"),
+ ("NEG.CALL_LAYOUT.NO_BY_VALUE_LAYOUT", "BY VALUE byte layout claimed", "BY REFERENCE/CONTENT observed; BY VALUE layout not modeled", "a BY VALUE parameter layout"),
+ ("NEG.CALL_LAYOUT.NO_ODO_ACROSS_LINKAGE", "OCCURS DEPENDING ON across the linkage boundary claimed", "fixed LINKAGE items observed only", "an ODO LINKAGE item"),
+ ("NEG.CALL_LAYOUT.NO_OPTIONAL_OMITTED_PARAMS", "OPTIONAL / OMITTED parameters claimed", "present USING parameters observed only", "an OMITTED argument"),
+ ("NEG.CALL_LAYOUT.NO_RETURNING_PHRASE", "the RETURNING phrase claimed", "USING parameters observed; RETURNING not modeled", "a CALL ... RETURNING result"),
+ ("NEG.CALL_LAYOUT.NO_ALL_DIALECTS", "all-dialect CALL layout claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in CLY:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.CALL.LAYOUT.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

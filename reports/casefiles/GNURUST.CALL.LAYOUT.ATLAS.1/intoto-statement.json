@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/casefile.json",
+      "digest": {
+        "sha256": "6d00853253b3e88deacc93a6f9465370fb51309194c0a6a144f4f64a3b9fea04"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.CALL.LAYOUT.ATLAS.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.26",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/call_layout_atlas_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "2788c8c77a90d720ab01babaf01b3a016446f3d00bd351a6d71bfc5c82505f99",
+      "receipt_sha256": "1f19c5b0f44fde8cd76a67609c5514009687734514809804100d61a45a8c4d39"
+    },
+    "positive_claim_count": 3,
+    "negative_claim_count": 8
+  }
+}
