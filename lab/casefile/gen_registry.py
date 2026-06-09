@@ -588,6 +588,20 @@ for (i, s2, g, r) in PFM:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PERFORM.SLICE.1"]}
 
+# GNURUST.FILE.FLOW.SLICE.1 — read-loop (file x control flow).
+FFL = [
+ ("NEG.FILE_FLOW.NO_INDEXED_RELATIVE", "indexed/relative read-loop claimed", "sequential organizations only (the sealed read)", "an indexed read-loop"),
+ ("NEG.FILE_FLOW.NO_SIGNED_PACKED_ACCUM", "signed/packed accumulators claimed", "unsigned 9(n) accumulators only", "a COMP-3 total"),
+ ("NEG.FILE_FLOW.NO_SIZE_ERROR", "numeric SIZE ERROR on accumulators claimed", "accumulators assumed to fit (wrap); overflow is GNURUST.SIZE.ERROR.1", "an accumulator overflow"),
+ ("NEG.FILE_FLOW.NO_PER_RECORD_LOGIC", "per-record IF/MOVE/general statements claimed", "Count/SumField accumulation only; compose if_eval for per-record logic", "an IF inside the loop"),
+ ("NEG.FILE_FLOW.NO_WRITE_IN_LOOP", "WRITE/REWRITE inside the loop claimed", "read-only accumulation", "writing an output record"),
+ ("NEG.FILE_FLOW.NO_MULTI_FILE", "multi-file / matched-read loops claimed", "a single input file only", "a two-file match-merge"),
+ ("NEG.FILE_FLOW.NO_ALL_DIALECTS", "all-dialect read-loop claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in FFL:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.FLOW.SLICE.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

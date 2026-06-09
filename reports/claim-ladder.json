@@ -1103,6 +1103,20 @@
       "readiness": 2,
       "lie_prevented": "PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation",
       "damage_if_overclaimed": "assuming the control variable stops at the limit (or that the body always runs at least once) is an off-by-one in iteration counts and post-loop variable values"
+    },
+    {
+      "id": "GNURUST.FILE.FLOW.SLICE.1",
+      "name": "read-loop execution slice (file x control flow)",
+      "proven": "the read-loop where file I/O meets control flow -- the shape of essentially every COBOL batch program -- executed to oracle-identical WORKING-STORAGE (verified 2/2: record count + control total). The slice runs the canonical OPEN INPUT / priming READ / PERFORM UNTIL EOF (ADD 1 TO count, ADD record-field TO sum, READ at bottom) / CLOSE, composing the sealed sequential READ (GNURUST.FILE.SEQUENTIAL.1) with looped numeric accumulation: each record is processed EXACTLY ONCE. Completes the spine from bytes (decimal MOVE) to a running program (read-process-accumulate)",
+      "byte_domain": "OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE",
+      "oracle": "cobc file read-loop (libcob/fileio.c + cobc control flow)",
+      "fixtures": "file_flow_sweep 2/2 + 2 unit tests",
+      "sealed_version": "0.7.22",
+      "not_proven": "indexed/relative organizations; signed/packed accumulators; numeric SIZE ERROR on accumulators; per-record IF/MOVE/general statements; WRITE/REWRITE in the loop; multi-file loops; file-status beyond AT END; READ INTO; all dialects",
+      "breaks_claim": "an indexed read-loop; a packed total; an accumulator overflow; per-record IF; a WRITE in the loop; a two-file match-merge",
+      "readiness": 2,
+      "lie_prevented": "a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END",
+      "damage_if_overclaimed": "treating this narrow read-accumulate slice as a general batch engine would run unsealed per-record logic / writes / multi-file joins whose semantics are not oracle-bound"
     }
   ],
   "transform_vs_read": {

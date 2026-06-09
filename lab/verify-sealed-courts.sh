@@ -61,6 +61,7 @@ run_sweep "GNURUST.ACCEPT.DISPLAY.2" accept_display2_sweep.sh
 run_sweep "GNURUST.PROCEDURE.FLOW.ATLAS.1 (observed)" procedure_flow_atlas_sweep.sh
 run_sweep "GNURUST.IF.EVALUATE.SLICE.1" if_eval_sweep.sh
 run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh
+run_sweep "GNURUST.FILE.FLOW.SLICE.1" file_flow_sweep.sh
 run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_atlas_sweep.sh
 run_sweep "GNURUST.SIZE.ERROR.1" size_error_sweep.sh
 run_sweep "GNURUST.8  VALUE image"   value_sweep.sh

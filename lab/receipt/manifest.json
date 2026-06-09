@@ -478,6 +478,22 @@
         "nested PERFORM / GO TO",
         "all dialects"
       ]
+    },
+    "GNURUST.FILE.FLOW.SLICE.1": {
+      "court": "read-loop execution slice (file x control flow)",
+      "sweep": "file_flow_sweep.sh",
+      "byte_domain": "OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE",
+      "non_claims": [
+        "indexed/relative organizations",
+        "signed/packed accumulators",
+        "numeric SIZE ERROR on accumulators",
+        "per-record IF/MOVE/general statements",
+        "WRITE/REWRITE in the loop",
+        "multi-file loops",
+        "file-status beyond AT END",
+        "READ INTO",
+        "all dialects"
+      ]
     }
   }
 }

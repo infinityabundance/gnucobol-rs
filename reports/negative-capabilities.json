@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 655,
+  "count": 669,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -412,7 +412,8 @@
         "GNURUST.FILE.REWRITE.1",
         "GNURUST.INTRINSIC.DATE.1",
         "GNURUST.IF.EVALUATE.SLICE.1",
-        "GNURUST.PERFORM.SLICE.1"
+        "GNURUST.PERFORM.SLICE.1",
+        "GNURUST.FILE.FLOW.SLICE.1"
       ]
     },
     {
@@ -2466,6 +2467,17 @@
       ]
     },
     {
+      "id": "NEG.FILE-STATUS-BEYOND-AT-END",
+      "surface": "file-status beyond AT END",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.FILE-STATUS-CODES-BEYOND-00-06-10",
       "surface": "file-status codes beyond 00/06/10",
       "status": "not_admitted_fail_closed",
@@ -2474,6 +2486,83 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.SEQUENTIAL.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_ALL_DIALECTS",
+      "surface": "all-dialect read-loop claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_INDEXED_RELATIVE",
+      "surface": "indexed/relative read-loop claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "sequential organizations only (the sealed read)",
+      "risk_if_guessed": "an indexed read-loop",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_MULTI_FILE",
+      "surface": "multi-file / matched-read loops claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a single input file only",
+      "risk_if_guessed": "a two-file match-merge",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_PER_RECORD_LOGIC",
+      "surface": "per-record IF/MOVE/general statements claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "Count/SumField accumulation only; compose if_eval for per-record logic",
+      "risk_if_guessed": "an IF inside the loop",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_SIGNED_PACKED_ACCUM",
+      "surface": "signed/packed accumulators claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "unsigned 9(n) accumulators only",
+      "risk_if_guessed": "a COMP-3 total",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_SIZE_ERROR",
+      "surface": "numeric SIZE ERROR on accumulators claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "accumulators assumed to fit (wrap); overflow is GNURUST.SIZE.ERROR.1",
+      "risk_if_guessed": "an accumulator overflow",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_FLOW.NO_WRITE_IN_LOOP",
+      "surface": "WRITE/REWRITE inside the loop claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "read-only accumulation",
+      "risk_if_guessed": "writing an output record",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
       ]
     },
     {
@@ -3117,7 +3206,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.WRITE.1",
-        "GNURUST.FILE.REWRITE.1"
+        "GNURUST.FILE.REWRITE.1",
+        "GNURUST.FILE.FLOW.SLICE.1"
       ]
     },
     {
@@ -4128,6 +4218,17 @@
       ]
     },
     {
+      "id": "NEG.MULTI-FILE-LOOPS",
+      "surface": "multi-file loops",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.MULTIBYTE-UTF-8-REVERSE",
       "surface": "multibyte/UTF-8 REVERSE",
       "status": "not_admitted_fail_closed",
@@ -4475,6 +4576,17 @@
       ]
     },
     {
+      "id": "NEG.NUMERIC-SIZE-ERROR-ON-ACCUMULATORS",
+      "surface": "numeric SIZE ERROR on accumulators",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.NUMERIC-SIZE-ERROR-ON-THE-BODY",
       "surface": "numeric SIZE ERROR on the body",
       "status": "not_admitted_fail_closed",
@@ -4673,6 +4785,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BENCH.2"
+      ]
+    },
+    {
+      "id": "NEG.PER-RECORD-IF-MOVE-GENERAL-STATEMENTS",
+      "surface": "per-record IF/MOVE/general statements",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
       ]
     },
     {
@@ -5521,6 +5644,17 @@
       ]
     },
     {
+      "id": "NEG.READ-INTO",
+      "surface": "READ INTO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.RECEIVER-WRITE-INFERENCE",
       "surface": "receiver-write inference",
       "status": "not_admitted_fail_closed",
@@ -6251,6 +6385,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.SIGNED-PACKED-ACCUMULATORS",
+      "surface": "signed/packed accumulators",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
       ]
     },
     {
@@ -7242,6 +7387,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.WRITE-REWRITE-IN-THE-LOOP",
+      "surface": "WRITE/REWRITE in the loop",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.FLOW.SLICE.1"
       ]
     },
     {

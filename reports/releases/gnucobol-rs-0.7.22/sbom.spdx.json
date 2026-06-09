@@ -1,0 +1,30 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "gnucobol-rs-0.7.22",
+  "documentNamespace": "https://github.com/infinityabundance/gnucobol-rs#0.7.22",
+  "creationInfo": {
+    "created": "2026-06-09T09:54:40Z",
+    "creators": [
+      "Tool: kobold-release-packet (from cargo metadata)"
+    ]
+  },
+  "comment": "Derived from `cargo metadata`; no SPDX generator (cargo-sbom/cyclonedx) installed.",
+  "packages": [
+    {
+      "name": "cobc-oracle-rs",
+      "SPDXID": "SPDXRef-cobc-oracle-rs-0-0-2",
+      "versionInfo": "0.0.2",
+      "licenseConcluded": "GPL-3.0-or-later",
+      "downloadLocation": "https://crates.io/crates/cobc-oracle-rs/0.0.2"
+    },
+    {
+      "name": "gnucobol-rs",
+      "SPDXID": "SPDXRef-gnucobol-rs-0-7-22",
+      "versionInfo": "0.7.22",
+      "licenseConcluded": "LGPL-3.0-or-later",
+      "downloadLocation": "https://crates.io/crates/gnucobol-rs/0.7.22"
+    }
+  ]
+}

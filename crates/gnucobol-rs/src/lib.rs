@@ -41,6 +41,7 @@
 #![forbid(unsafe_code)]
 
 pub mod arith;
+pub mod file_flow_slice;
 pub mod file_seq;
 pub mod initialize;
 pub mod if_eval;

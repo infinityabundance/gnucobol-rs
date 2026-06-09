@@ -1,0 +1,108 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: indexed/relative organizations"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: signed/packed accumulators"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: numeric SIZE ERROR on accumulators"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: per-record IF/MOVE/general statements"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: WRITE/REWRITE in the loop"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: multi-file loops"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: file-status beyond AT END"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: READ INTO"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: all dialects"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.FLOW.SLICE.1 non-claim: lie prevented: a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END"
+          }
+        }
+      ]
+    }
+  ]
+}
