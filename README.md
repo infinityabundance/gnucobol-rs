@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-86-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-86-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-87-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-87-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -184,6 +184,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.BUILD.PROFILE.1` | oracle ABI / dialect / config profile | ✅ pass | [`reports/casefiles/GNURUST.BUILD.PROFILE.1/`](reports/casefiles/GNURUST.BUILD.PROFILE.1/) |
 | `GNURUST.PUBLIC.GAP.1` | surface gap board over the admitted GnuCOBOL testsuite | ✅ pass | [`reports/casefiles/GNURUST.PUBLIC.GAP.1/`](reports/casefiles/GNURUST.PUBLIC.GAP.1/) |
 | `GNURUST.CALL.EXTENSION.ATLAS.1` | observed CALL / linkage atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.EXTENSION.ATLAS.1/`](reports/casefiles/GNURUST.CALL.EXTENSION.ATLAS.1/) |
+| `GNURUST.INDEXED.FILE.ATLAS.1` | observed indexed-file atlas | ✅ pass | [`reports/casefiles/GNURUST.INDEXED.FILE.ATLAS.1/`](reports/casefiles/GNURUST.INDEXED.FILE.ATLAS.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |

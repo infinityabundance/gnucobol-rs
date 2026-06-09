@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **27**  ·  sealed ✅ **17**  ·  observed 🟡 4  ·  refused ⛔ 6  ·  **missing ❌ 0**
+- surfaces: **28**  ·  sealed ✅ **17**  ·  observed 🟡 5  ·  refused ⛔ 6  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **17/27**
+- sealed fraction (data-representation spine): **17/28**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -24,6 +24,7 @@
 | `dialect-options` | compiler dialect options | `config.c` | ✅ sealed | DIALECT.PROFILE.1 |
 | `size-error` | runtime exceptions | `numeric.c` | ✅ sealed | SIZE.ERROR.ATLAS.1, GNURUST.SIZE.ERROR.1 |
 | `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1, GNURUST.FILE.REWRITE.1 |
+| `file-io-indexed` | file I/O (keyed) | `fileio.c` | 🟡 observed | GNURUST.INDEXED.FILE.ATLAS.1 |
 | `file-status` | file I/O | `fileio.c` | 🟡 observed | GNURUST.FILE.STATUS.1 |
 | `initialize` | MOVE/storage | `typeck.c` | ✅ sealed | GNURUST.INITIALIZE.1 |
 | `inspect` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.INSPECT.1 |

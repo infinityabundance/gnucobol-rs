@@ -639,6 +639,20 @@ for (i, s2, g, r) in CALL:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.CALL.EXTENSION.ATLAS.1"]}
 
+# GNURUST.INDEXED.FILE.ATLAS.1 -- observed indexed-file atlas; the on-disk ISAM/BDB format + atomicity are the loud non-claims.
+IDX = [
+ ("NEG.INDEXED_FILE.NO_ISAM_BACKEND_FORMAT", "the on-disk ISAM/BDB/VBISAM index format claimed", "the keyed SEMANTICS are observed; the backend-specific on-disk format is not modeled", "parsing a BDB/VBISAM index file"),
+ ("NEG.INDEXED_FILE.NO_PAGE_CHECKSUM_ATOMICITY", "page-checksum / atomic-write guarantees claimed", "no page integrity or atomicity is modeled (a separate storage court if BDB becomes a target)", "trusting db_recover / page atomicity"),
+ ("NEG.INDEXED_FILE.NO_ALTERNATE_KEYS", "alternate record keys / DUPLICATES claimed", "only the primary RECORD KEY is observed", "an ALTERNATE RECORD KEY"),
+ ("NEG.INDEXED_FILE.NO_CONCURRENT_ACCESS", "concurrent access / record locking / sharing claimed", "single-process observation only", "shared/locked access"),
+ ("NEG.INDEXED_FILE.NO_FILE_EXECUTION", "indexed file I/O execution claimed", "the atlas OBSERVES; gnucobol-rs implements no indexed file I/O", "running indexed reads/writes"),
+ ("NEG.INDEXED_FILE.NO_RELATIVE_FILES", "RELATIVE organization claimed", "indexed only; relative is a separate surface", "a RELATIVE file"),
+ ("NEG.INDEXED_FILE.NO_ALL_DIALECTS", "all-dialect indexed I/O claimed", "gnucobol-3.2.0-default only", "assuming other dialects/backends"),
+]
+for (i, s2, g, r) in IDX:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INDEXED.FILE.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

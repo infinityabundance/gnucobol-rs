@@ -1,8 +1,8 @@
 {
   "schema": "gnurust-kani-fuzz-coverage-v1",
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "total_courts": 86,
-  "na_courts": 44,
+  "total_courts": 87,
+  "na_courts": 45,
   "impl_courts": 42,
   "kani_covered": 42,
   "fuzz_covered": 42,
@@ -645,6 +645,12 @@
     },
     {
       "court": "GNURUST.CALL.EXTENSION.ATLAS.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "observed atlas / meta: no Rust byte kernel"
+    },
+    {
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1",
       "kani": "n/a",
       "fuzz": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"

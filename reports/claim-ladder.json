@@ -1215,6 +1215,20 @@
       "readiness": 3,
       "lie_prevented": "CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed",
       "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow"
+    },
+    {
+      "id": "GNURUST.INDEXED.FILE.ATLAS.1",
+      "name": "observed indexed-file atlas",
+      "proven": "observed GnuCOBOL INDEXED-file keyed-access behavior under the gnucobol-3.2.0-default witness, verified by the sweep (9/0) -- the largest remaining gap cluster (START 238x + DELETE 118x + indexed-org per GNURUST.PUBLIC.GAP.1): a random READ by RECORD KEY returns the record (status 00) or 23 not-found; records are stored/retrieved in KEY ORDER (AAA,BBB,CCC) NOT insertion order (the index sorts); a duplicate primary key WRITE is rejected with status 22; START KEY >= k positions for READ NEXT in key order; DELETE removes the keyed record (00) and a later READ returns 23. OBSERVED court: gnucobol-rs does NOT implement indexed files -- the on-disk ISAM/BDB/VBISAM index format is backend-specific and outside the fixed-record evidence lane -- this MAPS the surface, it does no indexed I/O",
+      "byte_domain": "INDEXED keyed access: random READ by key, key-order retrieval, dup(22)/not-found(23) status, START, DELETE",
+      "oracle": "cobc INDEXED file I/O (libcob/fileio.c + ISAM backend)",
+      "fixtures": "indexed_file_atlas_sweep 9/0 -> reports/indexed-file-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "the on-disk ISAM/BDB/VBISAM index format; page checksum / atomicity; alternate keys / DUPLICATES; concurrent access / locking; indexed file execution; relative files; all dialects",
+      "breaks_claim": "parsing a BDB/VBISAM index file; trusting page atomicity; an ALTERNATE RECORD KEY; running indexed I/O",
+      "readiness": 3,
+      "lie_prevented": "an indexed file is records in insertion order with an index on the side -- NO: records are RETRIEVED IN KEY ORDER (AAA,BBB,CCC even though inserted CCC,BBB), a duplicate primary key is REJECTED (status 22), and the on-disk format is a BACKEND-SPECIFIC ISAM/BDB structure (not the fixed-record bytes) -- so KOBOLD's fixed-record evidence does NOT cover indexed files, and the on-disk index/page integrity is a separate (unbuilt) storage court",
+      "damage_if_overclaimed": "treating an indexed file as a flat fixed-record file (insertion order, no key uniqueness) corrupts every keyed read; assuming the on-disk index is portable across backends silently breaks migration"
     }
   ],
   "transform_vs_read": {

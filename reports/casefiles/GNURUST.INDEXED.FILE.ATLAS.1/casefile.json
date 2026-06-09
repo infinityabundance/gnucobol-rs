@@ -1,0 +1,70 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INDEXED.FILE.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.25",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "16b9a2dc910a3a7fd483290d5971d44ced794220b63907007314f389d94acaa1",
+    "receipt_sha256": "6b670c47fcb1bd17be1c30973ab96ee9dd844a29d4f3621d2a5222033f7c9e90"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc INDEXED file I/O (libcob/fileio.c + ISAM backend)",
+    "upstream_court": "GNURUST.INDEXED.FILE.ATLAS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 9,
+    "pass": 9,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL INDEXED-file keyed-access behavior under the gnucobol-3.2.0-default witness, verified by the sweep (9/0) -- the largest remaining gap cluster (START 238x",
+    "DELETE 118x + indexed-org per GNURUST.PUBLIC.GAP.1): a random READ by RECORD KEY returns the record (status 00) or 23 not-found",
+    "records are stored/retrieved in KEY ORDER (AAA,BBB,CCC) NOT insertion order (the index sorts)",
+    "a duplicate primary key WRITE is rejected with status 22",
+    "START KEY >= k positions for READ NEXT in key order",
+    "DELETE removes the keyed record (00) and a later READ returns 23. OBSERVED court: gnucobol-rs does NOT implement indexed files -- the on-disk ISAM/BDB/VBISAM index format is backend-specific and outside the fixed-record evidence lane -- this MAPS the surface, it does no indexed I/O"
+  ],
+  "negative_claims": [
+    "the on-disk ISAM/BDB/VBISAM index format",
+    "page checksum / atomicity",
+    "alternate keys / DUPLICATES",
+    "concurrent access / locking",
+    "indexed file execution",
+    "relative files",
+    "all dialects",
+    "lie prevented: an indexed file is records in insertion order with an index on the side -- NO: records are RETRIEVED IN KEY ORDER (AAA,BBB,CCC even though inserted CCC,BBB), a duplicate primary key is REJECTED (status 22), and the on-disk format is a BACKEND-SPECIFIC ISAM/BDB structure (not the fixed-record bytes) -- so KOBOLD's fixed-record evidence does NOT cover indexed files, and the on-disk index/page integrity is a separate (unbuilt) storage court"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-ON-DISK-ISAM-BDB-VBISAM-INDEX-FORMAT",
+    "NEG.PAGE-CHECKSUM-ATOMICITY",
+    "NEG.ALTERNATE-KEYS-DUPLICATES",
+    "NEG.CONCURRENT-ACCESS-LOCKING",
+    "NEG.INDEXED-FILE-EXECUTION",
+    "NEG.RELATIVE-FILES",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "INDEXED keyed access: random READ by key, key-order retrieval, dup(22)/not-found(23) status, START, DELETE"
+  ],
+  "lie_prevented": [
+    "an indexed file is records in insertion order with an index on the side -- NO: records are RETRIEVED IN KEY ORDER (AAA,BBB,CCC even though inserted CCC,BBB), a duplicate primary key is REJECTED (status 22), and the on-disk format is a BACKEND-SPECIFIC ISAM/BDB structure (not the fixed-record bytes) -- so KOBOLD's fixed-record evidence does NOT cover indexed files, and the on-disk index/page integrity is a separate (unbuilt) storage court"
+  ],
+  "damage_if_overclaimed": "treating an indexed file as a flat fixed-record file (insertion order, no key uniqueness) corrupts every keyed read; assuming the on-disk index is portable across backends silently breaks migration",
+  "replay": {
+    "command": "bash lab/oracle/indexed_file_atlas_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "4f76ba540a972fe0da4bc5c0ada80110ac77e46969537628862b848045cc7183"
+  }
+}

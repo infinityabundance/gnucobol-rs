@@ -6,35 +6,20 @@
   "files_scanned": 29,
   "counts": {
     "sealed": 13,
-    "observed": 3,
+    "observed": 6,
     "refused": 4,
-    "missing": 6
+    "missing": 3
   },
   "missing_court_board": [
-    {
-      "surface": "START (indexed/relative key positioning)",
-      "occurrences": 238,
-      "proposed_court": "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"
-    },
     {
       "surface": "SORT / MERGE",
       "occurrences": 145,
       "proposed_court": "GNURUST.SORT.MERGE.ATLAS.1 (proposed)"
     },
     {
-      "surface": "DELETE (indexed/relative)",
-      "occurrences": 118,
-      "proposed_court": "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"
-    },
-    {
       "surface": "SEARCH (table lookup)",
       "occurrences": 74,
       "proposed_court": "GNURUST.SEARCH.TABLE.1 (proposed)"
-    },
-    {
-      "surface": "indexed file org",
-      "occurrences": 24,
-      "proposed_court": "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"
     },
     {
       "surface": "relative file org",
@@ -94,8 +79,8 @@
     {
       "surface": "START (indexed/relative key positioning)",
       "occurrences": 238,
-      "status": "missing",
-      "court": "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"
+      "status": "observed",
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1"
     },
     {
       "surface": "INITIALIZE",
@@ -130,8 +115,8 @@
     {
       "surface": "DELETE (indexed/relative)",
       "occurrences": 118,
-      "status": "missing",
-      "court": "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"
+      "status": "observed",
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1"
     },
     {
       "surface": "GO TO / procedure flow",
@@ -178,8 +163,8 @@
     {
       "surface": "indexed file org",
       "occurrences": 24,
-      "status": "missing",
-      "court": "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"
+      "status": "observed",
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1"
     },
     {
       "surface": "relative file org",

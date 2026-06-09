@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 752,
+  "count": 765,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -429,7 +429,8 @@
         "GNURUST.IF.NUMERIC.SLICE.1",
         "GNURUST.TABLE.PERFORM.SLICE.1",
         "GNURUST.BUILD.PROFILE.1",
-        "GNURUST.CALL.EXTENSION.ATLAS.1"
+        "GNURUST.CALL.EXTENSION.ATLAS.1",
+        "GNURUST.INDEXED.FILE.ATLAS.1"
       ]
     },
     {
@@ -441,6 +442,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.ALTERNATE-KEYS-DUPLICATES",
+      "surface": "alternate keys / DUPLICATES",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
       ]
     },
     {
@@ -1503,6 +1515,17 @@
       "evidence": [
         "GNURUST.19",
         "GNURUST.REMAINDER.1"
+      ]
+    },
+    {
+      "id": "NEG.CONCURRENT-ACCESS-LOCKING",
+      "surface": "concurrent access / locking",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
       ]
     },
     {
@@ -3611,6 +3634,17 @@
       ]
     },
     {
+      "id": "NEG.INDEXED-FILE-EXECUTION",
+      "surface": "indexed file execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.INDEXED-RELATIVE",
       "surface": "indexed/relative",
       "status": "not_admitted_fail_closed",
@@ -3655,6 +3689,83 @@
       "evidence": [
         "GNURUST.FILE.SEQUENTIAL.1",
         "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_ALL_DIALECTS",
+      "surface": "all-dialect indexed I/O claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects/backends",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_ALTERNATE_KEYS",
+      "surface": "alternate record keys / DUPLICATES claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only the primary RECORD KEY is observed",
+      "risk_if_guessed": "an ALTERNATE RECORD KEY",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_CONCURRENT_ACCESS",
+      "surface": "concurrent access / record locking / sharing claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "single-process observation only",
+      "risk_if_guessed": "shared/locked access",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_FILE_EXECUTION",
+      "surface": "indexed file I/O execution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; gnucobol-rs implements no indexed file I/O",
+      "risk_if_guessed": "running indexed reads/writes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_ISAM_BACKEND_FORMAT",
+      "surface": "the on-disk ISAM/BDB/VBISAM index format claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the keyed SEMANTICS are observed; the backend-specific on-disk format is not modeled",
+      "risk_if_guessed": "parsing a BDB/VBISAM index file",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_PAGE_CHECKSUM_ATOMICITY",
+      "surface": "page-checksum / atomic-write guarantees claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "no page integrity or atomicity is modeled (a separate storage court if BDB becomes a target)",
+      "risk_if_guessed": "trusting db_recover / page atomicity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INDEXED_FILE.NO_RELATIVE_FILES",
+      "surface": "RELATIVE organization claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "indexed only; relative is a separate surface",
+      "risk_if_guessed": "a RELATIVE file",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
       ]
     },
     {
@@ -5301,6 +5412,17 @@
       ]
     },
     {
+      "id": "NEG.PAGE-CHECKSUM-ATOMICITY",
+      "surface": "page checksum / atomicity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.PARALLEL-ORDER-BEING-OPTIONAL",
       "surface": "parallel order being optional",
       "status": "not_admitted_fail_closed",
@@ -6634,6 +6756,17 @@
       ]
     },
     {
+      "id": "NEG.RELATIVE-FILES",
+      "surface": "relative files",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.REMAINDER",
       "surface": "REMAINDER",
       "status": "not_admitted_fail_closed",
@@ -7933,6 +8066,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-ON-DISK-ISAM-BDB-VBISAM-INDEX-FORMAT",
+      "surface": "the on-disk ISAM/BDB/VBISAM index format",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
       ]
     },
     {

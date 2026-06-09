@@ -3,14 +3,14 @@
   "court": "GNURUST.COVERAGE.1",
   "doctrine": "Forensic port: every GnuCOBOL semantic surface is bound to admitted source + a court/refusal/future campaign with a status. This is the honest map of the port -- the data-representation spine is sealed; file I/O, intrinsics, and most of Procedure Division are not.",
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
-  "surface_count": 27,
+  "surface_count": 28,
   "status_counts": {
     "sealed": 17,
-    "observed": 4,
+    "observed": 5,
     "negative": 6,
     "missing": 0
   },
-  "sealed_fraction": "17/27",
+  "sealed_fraction": "17/28",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -214,6 +214,20 @@
       ],
       "future_campaign": null,
       "risk_if_unported": "sequential/line READ record bytes + AT END drive most batch COBOL logic"
+    },
+    {
+      "surface": "file-io-indexed",
+      "category": "file I/O (keyed)",
+      "source_modules": [
+        "libcob/fileio.c"
+      ],
+      "source_modules_present": true,
+      "status": "observed",
+      "courts": [
+        "GNURUST.INDEXED.FILE.ATLAS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "indexed/keyed file I/O -- the largest remaining gap cluster; backend-specific on-disk ISAM/BDB format observed, not implemented"
     },
     {
       "surface": "file-status",

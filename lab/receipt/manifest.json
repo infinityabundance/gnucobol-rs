@@ -564,6 +564,20 @@
         "CANCEL state machine",
         "all dialects"
       ]
+    },
+    "GNURUST.INDEXED.FILE.ATLAS.1": {
+      "court": "observed indexed-file atlas",
+      "sweep": "indexed_file_atlas_sweep.sh",
+      "byte_domain": "INDEXED keyed access: random READ by key, key-order retrieval, dup/not-found status, START, DELETE",
+      "non_claims": [
+        "ISAM/BDB/VBISAM on-disk format",
+        "page checksum / atomicity",
+        "alternate keys",
+        "concurrent access/locking",
+        "indexed file execution",
+        "relative files",
+        "all dialects"
+      ]
     }
   }
 }
