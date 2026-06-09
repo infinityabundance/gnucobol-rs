@@ -603,6 +603,21 @@ for (i, s2, g, r) in PFM:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PERFORM.SLICE.1"]}
 
+# GNURUST.TABLE.PERFORM.SLICE.1 — table (OCCURS) PERFORM VARYING.
+TBL = [
+ ("NEG.TABLE_PERFORM.NO_MULTI_DIM", "multi-dimensional/nested OCCURS claimed", "single-dimension table only", "TABLE(I,J)"),
+ ("NEG.TABLE_PERFORM.NO_ODO", "OCCURS DEPENDING ON claimed", "fixed occurs count only", "a variable-length table"),
+ ("NEG.TABLE_PERFORM.NO_OUT_OF_BOUNDS", "subscript out-of-bounds behavior claimed", "only in-bounds 1..occurs contribute; OOB is undefined", "TABLE(0) or TABLE(occurs+1)"),
+ ("NEG.TABLE_PERFORM.NO_INDEXED_SEARCH", "INDEXED BY / SEARCH / SET index claimed", "numeric subscript only", "SEARCH ALL"),
+ ("NEG.TABLE_PERFORM.NO_SIGNED_PACKED_V_ELEMS", "signed/packed/V-scaled elements claimed", "unsigned 9(n) elements only", "a COMP-3 table"),
+ ("NEG.TABLE_PERFORM.NO_SIZE_ERROR", "numeric SIZE ERROR on the accumulator claimed", "accumulator assumed to fit; overflow is GNURUST.SIZE.ERROR.1", "an accumulator overflow"),
+ ("NEG.TABLE_PERFORM.NO_NON_SUM_BODY", "non-sum per-element bodies claimed", "sum/count accumulation only", "a per-element MOVE/transform"),
+ ("NEG.TABLE_PERFORM.NO_ALL_DIALECTS", "all-dialect table PERFORM claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in TBL:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.TABLE.PERFORM.SLICE.1"]}
+
 # GNURUST.FILE.FLOW.SLICE.1 — read-loop (file x control flow).
 FFL = [
  ("NEG.FILE_FLOW.NO_INDEXED_RELATIVE", "indexed/relative read-loop claimed", "sequential organizations only (the sealed read)", "an indexed read-loop"),

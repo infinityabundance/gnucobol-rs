@@ -52,6 +52,7 @@
       "GNURUST.REMAINDER.1",
       "GNURUST.SIZE.ERROR.1",
       "GNURUST.STRING.UNSTRING.1",
+      "GNURUST.TABLE.PERFORM.SLICE.1",
       "SIZE.ERROR.ATLAS.1"
     ],
     "B": [
@@ -101,7 +102,7 @@
     "F": []
   },
   "class_counts": {
-    "A": 42,
+    "A": 43,
     "B": 33,
     "C": 6,
     "D": 0,
@@ -845,6 +846,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "string_unstring_sweep 7/0 + 7 unit tests",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.TABLE.PERFORM.SLICE.1",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 3,
+      "negative_claims": 9,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "table_sweep 3/0 + 3 unit tests",
       "ceremonial_flags": []
     },
     {

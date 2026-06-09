@@ -1145,6 +1145,20 @@
       "readiness": 2,
       "lie_prevented": "a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch",
       "damage_if_overclaimed": "comparing numeric amounts as bytes (or vice versa) takes the wrong IF/EVALUATE branch, corrupting derived flags and classifications"
+    },
+    {
+      "id": "GNURUST.TABLE.PERFORM.SLICE.1",
+      "name": "table (OCCURS) PERFORM VARYING execution slice",
+      "proven": "PERFORM VARYING over a subscripted OCCURS table -- the core of COBOL table processing -- executed to oracle-identical accumulation (verified 3/0: whole-table sum, filtered count, strided BY-2 sum). PERFORM VARYING I FROM a BY b UNTIL I > limit accumulates TABLE(I), where TABLE(I) is 1-BASED (element I at base + (I-1)*elem_size). An optional per-element IF TABLE(I) <op> literal gates the accumulation. Deepens the execution slices with subscript access; reuses the witnessed PERFORM VARYING (test-before, I ends one past the limit)",
+      "byte_domain": "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)",
+      "oracle": "cobc PERFORM VARYING + subscript (cobc/typeck.c + codegen.c)",
+      "fixtures": "table_sweep 3/0 + 3 unit tests",
+      "sealed_version": "0.7.25",
+      "not_proven": "multi-dimensional/nested OCCURS; OCCURS DEPENDING ON; subscript out-of-bounds; INDEXED BY / SEARCH / SET; signed/packed/V elements; numeric SIZE ERROR; non-sum bodies; all dialects",
+      "breaks_claim": "a 2-D table; OCCURS DEPENDING ON; an out-of-bounds subscript; SEARCH; a packed table",
+      "readiness": 2,
+      "lie_prevented": "COBOL subscripts are 0-based like C -- NO: TABLE(I) is 1-BASED, so TABLE(1) is the FIRST element (at offset 0) and TABLE(0) is out of range; an off-by-one in the subscript reads the wrong element or past the table",
+      "damage_if_overclaimed": "using 0-based subscript arithmetic on a COBOL table reads the wrong element (or adjacent storage), corrupting every table-driven total or lookup"
     }
   ],
   "transform_vs_read": {

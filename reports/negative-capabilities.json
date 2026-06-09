@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 695,
+  "count": 709,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -426,7 +426,8 @@
         "GNURUST.PERFORM.SLICE.1",
         "GNURUST.FILE.FLOW.SLICE.1",
         "GNURUST.FILE.FILTER.SLICE.1",
-        "GNURUST.IF.NUMERIC.SLICE.1"
+        "GNURUST.IF.NUMERIC.SLICE.1",
+        "GNURUST.TABLE.PERFORM.SLICE.1"
       ]
     },
     {
@@ -3366,6 +3367,17 @@
       ]
     },
     {
+      "id": "NEG.INDEXED-BY-SEARCH-SET",
+      "surface": "INDEXED BY / SEARCH / SET",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.INDEXED-RELATIVE",
       "surface": "indexed/relative",
       "status": "not_admitted_fail_closed",
@@ -4430,6 +4442,17 @@
       ]
     },
     {
+      "id": "NEG.MULTI-DIMENSIONAL-NESTED-OCCURS",
+      "surface": "multi-dimensional/nested OCCURS",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.MULTI-FILE-LOOPS",
       "surface": "multi-file loops",
       "status": "not_admitted_fail_closed",
@@ -4722,6 +4745,17 @@
       ]
     },
     {
+      "id": "NEG.NON-SUM-BODIES",
+      "surface": "non-sum bodies",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.NUMERIC-DISPLAY-UNDER-CP500-EBCDIC-ZONED",
       "surface": "numeric DISPLAY under cp500 (EBCDIC zoned sign)",
       "status": "not_admitted_fail_closed",
@@ -4817,7 +4851,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.IF.NUMERIC.SLICE.1"
+        "GNURUST.IF.NUMERIC.SLICE.1",
+        "GNURUST.TABLE.PERFORM.SLICE.1"
       ]
     },
     {
@@ -4873,6 +4908,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
+      "id": "NEG.OCCURS-DEPENDING-ON",
+      "surface": "OCCURS DEPENDING ON",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
       ]
     },
     {
@@ -6688,6 +6734,17 @@
       ]
     },
     {
+      "id": "NEG.SIGNED-PACKED-V-ELEMENTS",
+      "surface": "signed/packed/V elements",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.SIGNED-PACKED-V-SCALED-NUMERICS",
       "surface": "signed/packed/V-scaled numerics",
       "status": "not_admitted_fail_closed",
@@ -7018,6 +7075,17 @@
       ]
     },
     {
+      "id": "NEG.SUBSCRIPT-OUT-OF-BOUNDS",
+      "surface": "subscript out-of-bounds",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.SUPPORT.NOT_CERTIFICATION",
       "surface": "the packet treated as a certification",
       "status": "not_admitted_requires_declared_profile",
@@ -7104,6 +7172,94 @@
       "evidence": [
         "GNURUST.4",
         "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_ALL_DIALECTS",
+      "surface": "all-dialect table PERFORM claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_INDEXED_SEARCH",
+      "surface": "INDEXED BY / SEARCH / SET index claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "numeric subscript only",
+      "risk_if_guessed": "SEARCH ALL",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_MULTI_DIM",
+      "surface": "multi-dimensional/nested OCCURS claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single-dimension table only",
+      "risk_if_guessed": "TABLE(I,J)",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_NON_SUM_BODY",
+      "surface": "non-sum per-element bodies claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "sum/count accumulation only",
+      "risk_if_guessed": "a per-element MOVE/transform",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_ODO",
+      "surface": "OCCURS DEPENDING ON claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "fixed occurs count only",
+      "risk_if_guessed": "a variable-length table",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_OUT_OF_BOUNDS",
+      "surface": "subscript out-of-bounds behavior claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only in-bounds 1..occurs contribute; OOB is undefined",
+      "risk_if_guessed": "TABLE(0) or TABLE(occurs+1)",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_SIGNED_PACKED_V_ELEMS",
+      "surface": "signed/packed/V-scaled elements claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "unsigned 9(n) elements only",
+      "risk_if_guessed": "a COMP-3 table",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.TABLE_PERFORM.NO_SIZE_ERROR",
+      "surface": "numeric SIZE ERROR on the accumulator claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "accumulator assumed to fit; overflow is GNURUST.SIZE.ERROR.1",
+      "risk_if_guessed": "an accumulator overflow",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.TABLE.PERFORM.SLICE.1"
       ]
     },
     {

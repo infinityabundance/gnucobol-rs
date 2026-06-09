@@ -51,6 +51,7 @@ pub mod accept_display;
 pub mod intrinsic;
 pub mod size_error;
 pub mod string_ops;
+pub mod table_slice;
 pub mod attr;
 mod binary;
 pub mod cond;

@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.SIZE.ERROR.1/casefile.json",
       "digest": {
-        "sha256": "cb1fd40a0660b7a20aa9ffde2d0a2a0e7cbdd5865b2e35e152bf8593fcdea237"
+        "sha256": "5a2cc33b21c418524b0ee63db331c2bb13283a2fe02a367dcf619c5c121fe519"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.SIZE.ERROR.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.24",
+    "crate_version": "0.7.25",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/size_error_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "6b3f199fec8ca0f6094c32ce1e96d20c5d29cdb7ff03081ae9b031a2853ba96e",
-      "receipt_sha256": "9d9ec5f6fc1ecb906765a3e4c90504afd4396053dd9a7eb28a61cf57ad6b4213"
+      "receipt_sha256": "780fc6f79d53a64858b754357cefbb6e4fd1c19fc72e022db1a23b210be7cb46"
     },
     "positive_claim_count": 4,
     "negative_claim_count": 7

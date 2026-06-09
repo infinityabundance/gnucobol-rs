@@ -1,0 +1,69 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.TABLE.PERFORM.SLICE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.25",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "43acf32258626bc4713c3274d74d1bfe218b6bac5bed5cfc3e9287665b4f18d9",
+    "receipt_sha256": "b6af7f2e7a960a122d6976e4683073cbc39d1aa830a4fa70771ee680ae0b548b"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc PERFORM VARYING + subscript (cobc/typeck.c + codegen.c)",
+    "upstream_court": "GNURUST.TABLE.PERFORM.SLICE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 3,
+    "pass": 3,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "PERFORM VARYING over a subscripted OCCURS table -- the core of COBOL table processing -- executed to oracle-identical accumulation (verified 3/0: whole-table sum, filtered count, strided BY-2 sum). PERFORM VARYING I FROM a BY b UNTIL I > limit accumulates TABLE(I), where TABLE(I) is 1-BASED (element I at base",
+    "(I-1)*elem_size). An optional per-element IF TABLE(I) <op> literal gates the accumulation. Deepens the execution slices with subscript access",
+    "reuses the witnessed PERFORM VARYING (test-before, I ends one past the limit)"
+  ],
+  "negative_claims": [
+    "multi-dimensional/nested OCCURS",
+    "OCCURS DEPENDING ON",
+    "subscript out-of-bounds",
+    "INDEXED BY / SEARCH / SET",
+    "signed/packed/V elements",
+    "numeric SIZE ERROR",
+    "non-sum bodies",
+    "all dialects",
+    "lie prevented: COBOL subscripts are 0-based like C -- NO: TABLE(I) is 1-BASED, so TABLE(1) is the FIRST element (at offset 0) and TABLE(0) is out of range; an off-by-one in the subscript reads the wrong element or past the table"
+  ],
+  "negative_capability_ids": [
+    "NEG.MULTI-DIMENSIONAL-NESTED-OCCURS",
+    "NEG.OCCURS-DEPENDING-ON",
+    "NEG.SUBSCRIPT-OUT-OF-BOUNDS",
+    "NEG.INDEXED-BY-SEARCH-SET",
+    "NEG.SIGNED-PACKED-V-ELEMENTS",
+    "NEG.NUMERIC-SIZE-ERROR",
+    "NEG.NON-SUM-BODIES",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)"
+  ],
+  "lie_prevented": [
+    "COBOL subscripts are 0-based like C -- NO: TABLE(I) is 1-BASED, so TABLE(1) is the FIRST element (at offset 0) and TABLE(0) is out of range; an off-by-one in the subscript reads the wrong element or past the table"
+  ],
+  "damage_if_overclaimed": "using 0-based subscript arithmetic on a COBOL table reads the wrong element (or adjacent storage), corrupting every table-driven total or lookup",
+  "replay": {
+    "command": "bash lab/oracle/table_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "47e01bfd90ec61b7922b46d39362fe684464140f5352523ae6a87a8e5fe925af"
+  }
+}

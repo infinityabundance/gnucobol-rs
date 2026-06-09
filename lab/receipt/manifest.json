@@ -523,6 +523,21 @@
         "nested flow",
         "all dialects"
       ]
+    },
+    "GNURUST.TABLE.PERFORM.SLICE.1": {
+      "court": "table (OCCURS) PERFORM VARYING slice",
+      "sweep": "table_sweep.sh",
+      "byte_domain": "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)",
+      "non_claims": [
+        "multi-dimensional/nested OCCURS",
+        "OCCURS DEPENDING ON",
+        "subscript out-of-bounds",
+        "INDEXED BY / SEARCH / SET",
+        "signed/packed/V elements",
+        "numeric SIZE ERROR",
+        "non-sum per-element bodies",
+        "all dialects"
+      ]
     }
   }
 }

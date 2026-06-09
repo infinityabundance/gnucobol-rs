@@ -30,7 +30,7 @@
 | `string-unstring` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.STRING.UNSTRING.1 |
 | `intrinsics` | intrinsics | `intrinsic.c` | 🟡 observed | GNURUST.INTRINSIC.ATLAS.1, GNURUST.INTRINSIC.LENGTH.1, GNURUST.INTRINSIC.NUMVAL.1, GNURUST.INTRINSIC.MOD-REM.1, GNURUST.INTRINSIC.INTEGER.1, GNURUST.INTRINSIC.CASE.1, GNURUST.INTRINSIC.ORD-CHAR.1, GNURUST.INTRINSIC.NUMVAL-C.1, GNURUST.INTRINSIC.DATE.1 |
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ✅ sealed | GNURUST.ACCEPT.DISPLAY.1, GNURUST.ACCEPT.DISPLAY.2 |
-| `procedure-flow` | control flow | `typeck.c, codegen.c` | 🟡 observed | GNURUST.PROCEDURE.FLOW.ATLAS.1, GNURUST.IF.EVALUATE.SLICE.1, GNURUST.IF.NUMERIC.SLICE.1, GNURUST.PERFORM.SLICE.1, GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1 |
+| `procedure-flow` | control flow | `typeck.c, codegen.c` | 🟡 observed | GNURUST.PROCEDURE.FLOW.ATLAS.1, GNURUST.IF.EVALUATE.SLICE.1, GNURUST.IF.NUMERIC.SLICE.1, GNURUST.PERFORM.SLICE.1, GNURUST.TABLE.PERFORM.SLICE.1, GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1 |
 | `call-linkage` | CALL/linkage | `call.c` | ⛔ negative | GNURUST.CALL.1 (future) |
 | `sort-merge` | SORT/MERGE | `fileio.c` | ⛔ negative | GNURUST.SORT.1 (future) |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |

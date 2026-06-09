@@ -3,7 +3,7 @@
   "case_id": "GNURUST.FILE.FLOW.SLICE.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.24",
+  "crate_version": "0.7.25",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7cc3ea87330b37d51a6c25c30165384651f43bdb3047950f32f9d003add3cc8a",
-    "receipt_sha256": "5a6209a4f46d964cf4b7efb90a9a0c1dd47f9de9f211ad971e79a6bf8bd49488"
+    "receipt_sha256": "da11525f167aec6794986486f02395a4f0afe1d26d3520de607d22a5697e3073"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -64,6 +64,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "7eb6232a7a27aefcfd27fa4c2c37e8c3ed2faa8dbbfe332b20154f1e5cb10c17"
+    "inputs_sha256": "684a074f69afe869403beef195e6097c5c325a38cd6333b28f6da1cdd97c5f6c"
   }
 }
