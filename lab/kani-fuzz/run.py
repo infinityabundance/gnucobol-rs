@@ -47,14 +47,16 @@ def build():
     rows = []
     for c in cl:
         cid = c["id"]
-        if cid in NA_REASON:
-            rows.append({"court": cid, "kani": "n/a", "fuzz": "n/a", "reason": NA_REASON[cid]})
+        is_atlas = ("ATLAS" in cid) or cid in ("GNURUST.COVERAGE.1", "GNURUST.FILE.STATUS.1")
+        # Only GNURUST byte courts carry a gnucobol-rs kernel -> need kani + fuzz here. KOBOLD courts compose
+        # the sealed courts (fuzzed in the shim crate); governance/view/atlas courts have no byte kernel.
+        if not cid.startswith("GNURUST.") or is_atlas:
+            reason = NA_REASON.get(cid) or (
+                "observed atlas / meta: no Rust byte kernel" if is_atlas
+                else "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)")
+            rows.append({"court": cid, "kani": "n/a", "fuzz": "n/a", "reason": reason})
         else:
-            rows.append({
-                "court": cid,
-                "kani": kani.get(cid, []),
-                "fuzz": fz.get(cid, []),
-            })
+            rows.append({"court": cid, "kani": kani.get(cid, []), "fuzz": fz.get(cid, [])})
     impl = [r for r in rows if r["kani"] != "n/a"]
     return {
         "schema": "gnurust-kani-fuzz-coverage-v1", "court": "GNURUST.VERIFY.KANI-FUZZ.1",

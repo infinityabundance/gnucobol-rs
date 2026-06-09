@@ -718,3 +718,17 @@ pub fn __fuzz_table_slice(data: &[u8]) {
         let _ = table_slice::table_elem(data, &t, i);
     }
 }
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_value(data: &[u8]) {
+    use crate::value::Decimal;
+    for (pic, usage) in [("S9(5)", Usage::Comp), ("S9(5)", Usage::Comp5), ("S9(7)", Usage::Comp3), ("S9(5)", Usage::Display)] {
+        if let Ok(f) = pic::build_field(pic, usage, false, false) {
+            let _ = Decimal::from_binary(data, &f.attr);
+            let _ = Decimal::from_packed(data, &f.attr);
+            let _ = Decimal::from_display(data, &f.attr);
+            let _ = Decimal::from_ebcdic_zoned(data, &f.attr);
+        }
+    }
+}

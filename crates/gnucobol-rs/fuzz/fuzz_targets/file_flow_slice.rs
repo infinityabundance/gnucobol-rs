@@ -1,5 +1,6 @@
 #![no_main]
 //! Fuzz the `file_flow_slice` court: arbitrary bytes as input. The assertion is panic-freedom
+//! FUZZFOR: GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1
 //! (`GNURUST.PANICPOLICY.0`) -- any hostile/malformed input yields a typed result or a value, never a panic.
 
 use libfuzzer_sys::fuzz_target;

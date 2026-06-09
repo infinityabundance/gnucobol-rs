@@ -1,5 +1,6 @@
 #![no_main]
 //! Fuzz the `perform_slice` court: arbitrary bytes as input. The assertion is panic-freedom
+//! FUZZFOR: GNURUST.PERFORM.SLICE.1
 //! (`GNURUST.PANICPOLICY.0`) -- any hostile/malformed input yields a typed result or a value, never a panic.
 
 use libfuzzer_sys::fuzz_target;

@@ -1,5 +1,6 @@
 #![no_main]
 //! Fuzz the record layout engine: arbitrary items (levels/PICs/OCCURS/REDEFINES). Asserts only
+//! FUZZFOR: GNURUST.4, GNURUST.10
 //! panic-freedom (`GNURUST.PANICPOLICY.0`): hostile nesting/counts yield a typed `LayoutError`.
 
 use libfuzzer_sys::fuzz_target;

@@ -144,3 +144,15 @@ name = "table_slice"
 path = "fuzz_targets/table_slice.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "ebcdic"
+path = "fuzz_targets/ebcdic.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "value"
+path = "fuzz_targets/value.rs"
+test = false
+doc = false

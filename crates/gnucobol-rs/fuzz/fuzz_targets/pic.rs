@@ -1,5 +1,6 @@
 #![no_main]
 //! Fuzz the PIC parser: arbitrary bytes as a PICTURE string. The only assertion is panic-freedom
+//! FUZZFOR: GNURUST.3, GNURUST.9
 //! (`GNURUST.PANICPOLICY.0`): any hostile/malformed picture yields a typed `PicError`, never a panic.
 
 use libfuzzer_sys::fuzz_target;

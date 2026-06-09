@@ -1,5 +1,6 @@
 #![no_main]
 //! Fuzz LEVEL-88 evaluation: arbitrary parent bytes/attrs + value tables. Asserts only
+//! FUZZFOR: GNURUST.11, GNURUST.12
 //! panic-freedom (`GNURUST.PANICPOLICY.0`): hostile inputs yield a typed `ConditionError`/bool.
 
 use libfuzzer_sys::fuzz_target;

@@ -1,5 +1,6 @@
 #![no_main]
 //! Fuzz the hostile surface: arbitrary bytes + attributes through `cob_move` and the value
+//! FUZZFOR: GNURUST.2
 //! decoders. The only assertion is panic-freedom (`GNURUST.PANICPOLICY.0`): a corrupt/oversized
 //! field must yield a typed result or guarded bytes, never a panic, OOB index, or overflow.
 
