@@ -221,6 +221,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "PORTING-LADDER: drift / unplaced court"; cat /tmp/_lad_check
   fi
+  if python3 "$ROOT/lab/kani-fuzz/run.py" check >/tmp/_kf_check 2>&1; then
+    note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
+  else
+    bad "KANI+FUZZ: a byte court is missing a Kani proof or fuzz target"; cat /tmp/_kf_check
+  fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
     *"FAIL=0") note "oracle freshness: layout sweep $LSWEEP" ;;
