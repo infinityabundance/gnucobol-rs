@@ -1,0 +1,62 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.DATE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.19",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "0e614532a728c86bd3f2a572a77dc9d2a777be782256dfa048423b994265b3e5",
+    "receipt_sha256": "7f40d778bfdfe5b21fb4eea447d353661c6d9b550a3240ad9592177a94f19517"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.DATE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 30,
+    "pass": 30,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day",
+    "the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine"
+  ],
+  "negative_claims": [
+    "validation of malformed dates",
+    "environment-sensitive CURRENT-DATE/WHEN-COMPILED",
+    "business date arithmetic / Y2K windowing",
+    "non-Gregorian calendars",
+    "all dialects",
+    "lie prevented: COBOL dates use a Unix or 1900 epoch -- NO: the integer date counts days from 1600-12-31 so 1601-01-01 is 1, and it is PROLEPTIC GREGORIAN (no Julian-calendar cutover), so a wrong epoch or calendar offsets every converted date"
+  ],
+  "negative_capability_ids": [
+    "NEG.VALIDATION-OF-MALFORMED-DATES",
+    "NEG.ENVIRONMENT-SENSITIVE-CURRENT-DATE-WHEN-",
+    "NEG.BUSINESS-DATE-ARITHMETIC-Y2K-WINDOWING",
+    "NEG.NON-GREGORIAN-CALENDARS",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "YYYYMMDD/YYYYDDD <-> integer day number (proleptic Gregorian, 1601-01-01=1)"
+  ],
+  "lie_prevented": [
+    "COBOL dates use a Unix or 1900 epoch -- NO: the integer date counts days from 1600-12-31 so 1601-01-01 is 1, and it is PROLEPTIC GREGORIAN (no Julian-calendar cutover), so a wrong epoch or calendar offsets every converted date"
+  ],
+  "damage_if_overclaimed": "using a Unix/1900 epoch or a Julian-calendar model shifts every INTEGER-OF-DATE/DATE-OF-INTEGER result, corrupting date arithmetic in a ported program",
+  "replay": {
+    "command": "bash lab/oracle/date_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "03c4b866c1af70a0a3600b92b6a8f2aaba53e6dc4e2d80cb6fd5c567807518a2"
+  }
+}

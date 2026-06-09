@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.INTRINSIC.NUMVAL.1/casefile.json",
       "digest": {
-        "sha256": "8d725588090e82c94a9f7effe6c7e3161034719ada47dc0995c769338a2b6a8a"
+        "sha256": "75deac47afd16052d85d4650b5a65909593b7c6e987033630748eb26854af63b"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.INTRINSIC.NUMVAL.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.18",
+    "crate_version": "0.7.19",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/numval_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "4d891dc18cd8ac7a86616e2ca842e55c1640f7f74913741e690e680e209da6b8",
-      "receipt_sha256": "ce148ec1dbd1d14d36bf178684932d977c2f96eeb9f4f154b7df8ad7e973e4d9"
+      "receipt_sha256": "0546c2b1e3966f4f132cec9a21d7caa53fafea89ec5c8a939557f2ce434d18a3"
     },
     "positive_claim_count": 2,
     "negative_claim_count": 6

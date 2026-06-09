@@ -470,6 +470,18 @@ for (i, s2, g, r) in INC:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.NUMVAL-C.1"]}
 
+# GNURUST.INTRINSIC.DATE.1 — date-conversion intrinsics.
+IDATE = [
+ ("NEG.INTRINSIC_DATE.NO_DATE_VALIDATION", "validation of malformed dates claimed", "well-formed Gregorian dates only; invalid YYYYMMDD/YYYYDDD are not admitted", "INTEGER-OF-DATE of an invalid date"),
+ ("NEG.INTRINSIC_DATE.NO_ENV_SENSITIVE", "CURRENT-DATE/WHEN-COMPILED claimed", "those are environment-sensitive and stay refused (shape only)", "trusting a current-date value"),
+ ("NEG.INTRINSIC_DATE.NO_BUSINESS_DATE_LOGIC", "business date arithmetic / Y2K windowing claimed", "pure day-number conversion only", "two-digit-year windowing"),
+ ("NEG.INTRINSIC_DATE.NO_NON_GREGORIAN", "non-Gregorian calendars claimed", "proleptic Gregorian only", "a Julian/lunar calendar"),
+ ("NEG.INTRINSIC_DATE.NO_ALL_DIALECTS", "all-dialect date intrinsics claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in IDATE:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.DATE.1"]}
+
 # GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
 AD = [
  ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),

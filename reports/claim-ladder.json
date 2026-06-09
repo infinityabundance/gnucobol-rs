@@ -1061,6 +1061,20 @@
       "readiness": 3,
       "lie_prevented": "REWRITE rewrites the whole file -- NO: it overwrites ONLY the current record in place (same length); the bytes of every other record are untouched, so a REWRITE is a surgical single-record update not a file rewrite",
       "damage_if_overclaimed": "assuming REWRITE can change a record's length (it cannot for fixed records) or rewrites surrounding records corrupts a sequential file"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.DATE.1",
+      "name": "date-conversion intrinsics",
+      "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",
+      "byte_domain": "YYYYMMDD/YYYYDDD <-> integer day number (proleptic Gregorian, 1601-01-01=1)",
+      "oracle": "cobc FUNCTION INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (libcob/intrinsic.c)",
+      "fixtures": "date_sweep 30/0 + 1 unit test (200000-day round-trip)",
+      "sealed_version": "0.7.19",
+      "not_proven": "validation of malformed dates; environment-sensitive CURRENT-DATE/WHEN-COMPILED; business date arithmetic / Y2K windowing; non-Gregorian calendars; all dialects",
+      "breaks_claim": "an invalid YYYYMMDD/YYYYDDD; current-date values; two-digit-year windowing; non-Gregorian calendars",
+      "readiness": 3,
+      "lie_prevented": "COBOL dates use a Unix or 1900 epoch -- NO: the integer date counts days from 1600-12-31 so 1601-01-01 is 1, and it is PROLEPTIC GREGORIAN (no Julian-calendar cutover), so a wrong epoch or calendar offsets every converted date",
+      "damage_if_overclaimed": "using a Unix/1900 epoch or a Julian-calendar model shifts every INTEGER-OF-DATE/DATE-OF-INTEGER result, corrupting date arithmetic in a ported program"
     }
   ],
   "transform_vs_read": {

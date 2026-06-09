@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/casefile.json",
       "digest": {
-        "sha256": "c057b547e0026f42a31217f295c6ebe1b913a279abab44ede53c79de0435b7eb"
+        "sha256": "5b0f481af84a36ce9c5392047b76a7d9afaa8809493d8af5072bc118ffd7a0ac"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.18",
+    "crate_version": "0.7.19",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/modrem_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "93cba8f3fca39fd3c7199f1e1aa728834f19abb2c5e978d982c11decfc21b20a",
-      "receipt_sha256": "1b0af265a72ad2f982f7375841fac86dd9e1875404863258a7502c3fe97ea5bc"
+      "receipt_sha256": "145e9167073b8f1fb9105ec3238486506ff510df58c2ddadfc6b893be64b84ef"
     },
     "positive_claim_count": 1,
     "negative_claim_count": 5

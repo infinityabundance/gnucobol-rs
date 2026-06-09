@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 617,
+  "count": 626,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -398,7 +398,8 @@
         "GNURUST.ACCEPT.DISPLAY.2",
         "GNURUST.SIZE.ERROR.1",
         "GNURUST.FILE.WRITE.1",
-        "GNURUST.FILE.REWRITE.1"
+        "GNURUST.FILE.REWRITE.1",
+        "GNURUST.INTRINSIC.DATE.1"
       ]
     },
     {
@@ -977,6 +978,17 @@
         "KOBOLD.CORPUS.2",
         "GNURUST.REMAINDER.1",
         "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.BUSINESS-DATE-ARITHMETIC-Y2K-WINDOWING",
+      "surface": "business date arithmetic / Y2K windowing",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
       ]
     },
     {
@@ -2243,6 +2255,17 @@
       ]
     },
     {
+      "id": "NEG.ENVIRONMENT-SENSITIVE-CURRENT-DATE-WHEN-",
+      "surface": "environment-sensitive CURRENT-DATE/WHEN-COMPILED",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
       "id": "NEG.EXECUTION",
       "surface": "execution",
       "status": "not_admitted_fail_closed",
@@ -3295,6 +3318,61 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_DATE.NO_ALL_DIALECTS",
+      "surface": "all-dialect date intrinsics claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_DATE.NO_BUSINESS_DATE_LOGIC",
+      "surface": "business date arithmetic / Y2K windowing claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "pure day-number conversion only",
+      "risk_if_guessed": "two-digit-year windowing",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_DATE.NO_DATE_VALIDATION",
+      "surface": "validation of malformed dates claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "well-formed Gregorian dates only; invalid YYYYMMDD/YYYYDDD are not admitted",
+      "risk_if_guessed": "INTEGER-OF-DATE of an invalid date",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_DATE.NO_ENV_SENSITIVE",
+      "surface": "CURRENT-DATE/WHEN-COMPILED claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "those are environment-sensitive and stay refused (shape only)",
+      "risk_if_guessed": "trusting a current-date value",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_DATE.NO_NON_GREGORIAN",
+      "surface": "non-Gregorian calendars claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "proleptic Gregorian only",
+      "risk_if_guessed": "a Julian/lunar calendar",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
       "id": "NEG.INTRINSIC_INTEGER.NOT_INTERCHANGEABLE",
       "surface": "INTEGER and INTEGER-PART treated as the same",
       "status": "not_admitted_fail_closed",
@@ -4106,6 +4184,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.NON-GREGORIAN-CALENDARS",
+      "surface": "non-Gregorian calendars",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
       ]
     },
     {
@@ -6722,6 +6811,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.VALIDATION-OF-MALFORMED-DATES",
+      "surface": "validation of malformed dates",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.DATE.1"
       ]
     },
     {

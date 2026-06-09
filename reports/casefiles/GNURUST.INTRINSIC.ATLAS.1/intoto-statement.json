@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.INTRINSIC.ATLAS.1/casefile.json",
       "digest": {
-        "sha256": "aca6cae051254397b5687b77e5964da9dc57f323aa8e8e6083f0128f0f57d50a"
+        "sha256": "05209fc578a6dd6ac160626e61323ebc4480438c88e522541ffe4745f113f395"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.INTRINSIC.ATLAS.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.18",
+    "crate_version": "0.7.19",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/intrinsic_atlas_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "4485011ce26459a5f35105995ddafcbc899a9cb580d54827ab21ab76028d3873",
-      "receipt_sha256": "be7ea8004e06c9b0b2f8923b53d3929ce491d13438e24314a838cf187ae6133b"
+      "receipt_sha256": "c42e7fa504ad12fef52e3e485f65bfa77e79ef457ad92ac61497e8e5c606338d"
     },
     "positive_claim_count": 3,
     "negative_claim_count": 7

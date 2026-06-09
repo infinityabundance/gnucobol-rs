@@ -179,6 +179,67 @@ pub fn intrinsic_char(n: u32) -> u8 {
     n.saturating_sub(1) as u8
 }
 
+// --- Date-conversion intrinsics (`GNURUST.INTRINSIC.DATE.1`) -----------------------------------------------
+// COBOL integer dates count days in the proleptic Gregorian calendar from a fixed epoch: 1601-01-01 is day 1
+// (so the reference is 1600-12-31). These are DETERMINISTIC (pure calendar math) -- unlike the env-sensitive
+// CURRENT-DATE / WHEN-COMPILED, which stay refused. Algorithm: Howard Hinnant's days_from_civil / civil_from_days.
+
+/// Days since 1970-01-01 for a proleptic-Gregorian `(y, m, d)` (Hinnant).
+fn days_from_civil(y: i64, m: i64, d: i64) -> i64 {
+    let y = if m <= 2 { y - 1 } else { y };
+    let era = (if y >= 0 { y } else { y - 399 }) / 400;
+    let yoe = y - era * 400;
+    let doy = (153 * (if m > 2 { m - 3 } else { m + 9 }) + 2) / 5 + d - 1;
+    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    era * 146097 + doe - 719468
+}
+
+/// The proleptic-Gregorian `(y, m, d)` for `z` days since 1970-01-01 (Hinnant; inverse of [`days_from_civil`]).
+fn civil_from_days(z: i64) -> (i64, i64, i64) {
+    let z = z + 719468;
+    let era = (if z >= 0 { z } else { z - 146096 }) / 146097;
+    let doe = z - era * 146097;
+    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    let y = yoe + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    (if m <= 2 { y + 1 } else { y }, m, d)
+}
+
+/// The COBOL day-1 reference (1600-12-31) as days since 1970-01-01.
+fn cobol_epoch() -> i64 {
+    days_from_civil(1601, 1, 1) - 1
+}
+
+/// `FUNCTION INTEGER-OF-DATE(YYYYMMDD)` — the integer day number (1601-01-01 = 1) for a Gregorian date.
+pub fn intrinsic_integer_of_date(yyyymmdd: u32) -> i64 {
+    let (y, m, d) = ((yyyymmdd / 10000) as i64, ((yyyymmdd / 100) % 100) as i64, (yyyymmdd % 100) as i64);
+    days_from_civil(y, m, d) - cobol_epoch()
+}
+
+/// `FUNCTION DATE-OF-INTEGER(n)` — the Gregorian date `YYYYMMDD` for integer day number `n` (inverse of
+/// [`intrinsic_integer_of_date`]).
+pub fn intrinsic_date_of_integer(n: i64) -> u32 {
+    let (y, m, d) = civil_from_days(cobol_epoch() + n);
+    (y * 10000 + m * 100 + d) as u32
+}
+
+/// `FUNCTION INTEGER-OF-DAY(YYYYDDD)` — the integer day number for an ordinal (Julian) date.
+pub fn intrinsic_integer_of_day(yyyyddd: u32) -> i64 {
+    let (y, ddd) = ((yyyyddd / 1000) as i64, (yyyyddd % 1000) as i64);
+    days_from_civil(y, 1, 1) - cobol_epoch() + ddd - 1
+}
+
+/// `FUNCTION DAY-OF-INTEGER(n)` — the ordinal date `YYYYDDD` for integer day number `n` (inverse of
+/// [`intrinsic_integer_of_day`]).
+pub fn intrinsic_day_of_integer(n: i64) -> u32 {
+    let (y, _, _) = civil_from_days(cobol_epoch() + n);
+    let ddd = n - (days_from_civil(y, 1, 1) - cobol_epoch()) + 1;
+    (y as u32) * 1000 + ddd as u32
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -198,6 +259,25 @@ mod tests {
         assert_eq!(nvc("-$1,234.56"), "-00001234.5600");
         assert_eq!(nvc("$1,234.56CR"), "-00001234.5600");
         assert_eq!(nvc("  $42.00  "), "+00000042.0000");
+    }
+    #[test]
+    fn date_conversion_intrinsics_match_oracle() {
+        // INTEGER-OF-DATE: 1601-01-01=1, 2000-01-01=145732, 2024-02-29=154557 (leap), 1999-12-31=145731
+        assert_eq!(intrinsic_integer_of_date(16010101), 1);
+        assert_eq!(intrinsic_integer_of_date(20000101), 145732);
+        assert_eq!(intrinsic_integer_of_date(20240229), 154557);
+        assert_eq!(intrinsic_integer_of_date(19991231), 145731);
+        // DATE-OF-INTEGER (inverse)
+        assert_eq!(intrinsic_date_of_integer(1), 16010101);
+        assert_eq!(intrinsic_date_of_integer(145732), 20000101);
+        // INTEGER-OF-DAY / DAY-OF-INTEGER (ordinal dates)
+        assert_eq!(intrinsic_integer_of_day(2000001), 145732);
+        assert_eq!(intrinsic_integer_of_day(2024060), 154557);
+        assert_eq!(intrinsic_day_of_integer(145732), 2000001);
+        // round-trip over a range
+        for n in 1..=200000i64 {
+            assert_eq!(intrinsic_integer_of_date(intrinsic_date_of_integer(n)), n);
+        }
     }
     #[test]
     fn ord_char_are_one_based_inverses() {

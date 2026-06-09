@@ -3,7 +3,7 @@
   "case_id": "SIZE.ERROR.ATLAS.1",
   "kind": "court-casefile",
   "crate": "kobold-data-shim",
-  "crate_version": "0.7.18",
+  "crate_version": "0.7.19",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "9e9754edffc06b9dc33d4906a68298da5133b6c0aa9f0b4ca505c9a2c7df145e",
-    "receipt_sha256": "7f85b41de2030eb79469b8f656452b46a8192bc0aeb9651aacc9511e913ff4d3"
+    "receipt_sha256": "0bb70929fd9cd823897bf52928a539220e522befb4550377a7f5b383c4764fe8"
   },
   "oracle": {
     "oracle_kind": "gnucobol-rs-sealed-court",
@@ -60,6 +60,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "5de65f160e522aebc2a1aa173b142df2c6c7411d2a0ad3bfec78f72e14fae52a"
+    "inputs_sha256": "f2b7acad25cd70e7694fa9cadd03d419b54573f602af5a2e23045df8bcf93a02"
   }
 }

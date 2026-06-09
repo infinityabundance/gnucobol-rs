@@ -436,6 +436,18 @@
         "read-before-rewrite sequencing",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.DATE.1": {
+      "court": "date-conversion intrinsics",
+      "sweep": "date_sweep.sh",
+      "byte_domain": "INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (proleptic Gregorian, 1601-01-01=1)",
+      "non_claims": [
+        "invalid-date validation",
+        "environment-sensitive CURRENT-DATE/WHEN-COMPILED",
+        "business date arithmetic/Y2K windowing",
+        "non-Gregorian calendars",
+        "all dialects"
+      ]
     }
   }
 }
