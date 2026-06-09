@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 561,
+  "count": 566,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -347,7 +347,8 @@
         "GNURUST.ACCEPT.DISPLAY.1",
         "GNURUST.PROCEDURE.FLOW.ATLAS.1",
         "GNURUST.INTRINSIC.MOD-REM.1",
-        "GNURUST.INTRINSIC.INTEGER.1"
+        "GNURUST.INTRINSIC.INTEGER.1",
+        "GNURUST.INTRINSIC.CASE.1"
       ]
     },
     {
@@ -2990,6 +2991,39 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_CASE.NO_ALL_DIALECTS",
+      "surface": "all-dialect case/reverse claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.CASE.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_CASE.NO_LOCALE_NATIONAL_CASE",
+      "surface": "locale/national case folding claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "ASCII a-z<->A-Z only; non-ASCII unchanged",
+      "risk_if_guessed": "case-folding accented letters",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.CASE.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_CASE.NO_MULTIBYTE_REVERSE",
+      "surface": "multibyte/national REVERSE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "byte reversal single-octet only",
+      "risk_if_guessed": "reversing UTF-8 text",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.CASE.1"
+      ]
+    },
+    {
       "id": "NEG.INTRINSIC_INTEGER.NOT_INTERCHANGEABLE",
       "surface": "INTEGER and INTEGER-PART treated as the same",
       "status": "not_admitted_fail_closed",
@@ -3336,6 +3370,17 @@
       ]
     },
     {
+      "id": "NEG.LOCALE-NATIONAL-CASE-FOLDING-NON-ASCII",
+      "surface": "locale/national case folding (non-ASCII)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.CASE.1"
+      ]
+    },
+    {
       "id": "NEG.LOCKING-SHARING",
       "surface": "locking/sharing",
       "status": "not_admitted_fail_closed",
@@ -3487,6 +3532,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.MULTIBYTE-UTF-8-REVERSE",
+      "surface": "multibyte/UTF-8 REVERSE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.CASE.1"
       ]
     },
     {

@@ -963,6 +963,20 @@
       "readiness": 3,
       "lie_prevented": "INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward",
       "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.CASE.1",
+      "name": "FUNCTION UPPER-CASE / LOWER-CASE / REVERSE",
+      "proven": "FUNCTION UPPER-CASE (ASCII a..z -> A..Z), LOWER-CASE (A..Z -> a..z), and REVERSE (byte reversal) match cobc/libcob byte-for-byte (verified 10/0): non-alphabetic bytes (digits, spaces, punctuation) are UNCHANGED by case folding, the result is the SAME LENGTH as the input, and REVERSE reverses ALL bytes including spaces. The implemented string-transform intrinsics, split from GNURUST.INTRINSIC.ATLAS.1",
+      "byte_domain": "ASCII case fold + byte reversal",
+      "oracle": "cobc FUNCTION UPPER-CASE/LOWER-CASE/REVERSE (libcob/intrinsic.c)",
+      "fixtures": "case_sweep 10/0 + 1 unit test",
+      "sealed_version": "0.7.12",
+      "not_proven": "locale/national case folding (non-ASCII); multibyte/UTF-8 REVERSE; all dialects",
+      "breaks_claim": "case-folding accented/non-ASCII letters; reversing multibyte text; dialect variance",
+      "readiness": 3,
+      "lie_prevented": "UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)",
+      "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program"
     }
   ],
   "transform_vs_read": {

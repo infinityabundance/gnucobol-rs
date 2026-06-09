@@ -141,6 +141,22 @@ pub fn intrinsic_mod(a: i128, b: i128) -> i128 {
     }
 }
 
+/// `FUNCTION UPPER-CASE(s)` — ASCII `a..z` → `A..Z`, every other byte unchanged, same length
+/// (`GNURUST.INTRINSIC.CASE.1`). Non-claims: locale/national case folding (non-ASCII).
+pub fn intrinsic_upper_case(s: &[u8]) -> Vec<u8> {
+    s.iter().map(|b| b.to_ascii_uppercase()).collect()
+}
+
+/// `FUNCTION LOWER-CASE(s)` — ASCII `A..Z` → `a..z`, every other byte unchanged, same length.
+pub fn intrinsic_lower_case(s: &[u8]) -> Vec<u8> {
+    s.iter().map(|b| b.to_ascii_lowercase()).collect()
+}
+
+/// `FUNCTION REVERSE(s)` — the bytes in reverse order (including spaces), same length.
+pub fn intrinsic_reverse(s: &[u8]) -> Vec<u8> {
+    s.iter().rev().copied().collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -149,6 +165,13 @@ mod tests {
     }
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
+    }
+    #[test]
+    fn case_and_reverse_transforms() {
+        assert_eq!(intrinsic_upper_case(b"aB3 z!"), b"AB3 Z!"); // non-alpha unchanged
+        assert_eq!(intrinsic_lower_case(b"Ab3 Z!"), b"ab3 z!");
+        assert_eq!(intrinsic_reverse(b"ab c"), b"c ba"); // spaces reversed too
+        assert_eq!(intrinsic_reverse(b"12345"), b"54321");
     }
     #[test]
     fn integer_is_floor_integer_part_truncates() {

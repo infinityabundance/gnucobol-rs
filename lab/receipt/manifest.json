@@ -353,6 +353,17 @@
         "INTEGER and INTEGER-PART interchangeable",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.CASE.1": {
+      "court": "FUNCTION UPPER-CASE/LOWER-CASE/REVERSE",
+      "sweep": "case_sweep.sh",
+      "byte_domain": "ASCII case fold + byte reversal",
+      "non_claims": [
+        "locale/national case folding",
+        "non-ASCII bytes folded",
+        "multibyte REVERSE",
+        "all dialects"
+      ]
     }
   }
 }

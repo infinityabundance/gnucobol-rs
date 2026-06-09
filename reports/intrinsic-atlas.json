@@ -82,8 +82,8 @@
       "input": "\"abc\"",
       "observed": "ABC",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "ASCII fold; locale-sensitive for non-ASCII (refused)"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.CASE.1 -- ASCII fold"
     },
     {
       "name": "LOWER-CASE",
@@ -91,8 +91,8 @@
       "input": "\"ABC\"",
       "observed": "abc",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "ASCII fold"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.CASE.1 -- ASCII fold"
     },
     {
       "name": "REVERSE",
@@ -100,8 +100,8 @@
       "input": "\"abcd\"",
       "observed": "dcba",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "byte reversal"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.CASE.1 -- byte reversal"
     },
     {
       "name": "ORD",

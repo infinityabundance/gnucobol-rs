@@ -3,7 +3,7 @@
   "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.11",
+  "crate_version": "0.7.12",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e4cd73c0807b1f411bb838d9b5e75bf9d91d23728bcfdc4e0549469df674413a",
-    "receipt_sha256": "c09ecc04c673a1909de7b463908ca77f4073e48c8a420b22c71ccea55fce46d6"
+    "receipt_sha256": "a5856ec87b03293173485356599a6650cb2847d3bc7bfbde8170d5015f979aa9"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -60,6 +60,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "8814baab615cb63deaf692bcd8f8cab1f5dd47daa31ad627ddf9a47c5e627a03"
+    "inputs_sha256": "cef6d26ead660ee94b92faf3d5efc81a814e73d42a9238631c64c72920dcc686"
   }
 }

@@ -1,0 +1,57 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.CASE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.12",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "be53826e3b21a70291188fe2bf8e142a304984d1e50c3aac9549e488fcec1778",
+    "receipt_sha256": "97bbf1a637235392e6ec8dec065598cbf02f7d800f120840ce6ff9a9fddff37d"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION UPPER-CASE/LOWER-CASE/REVERSE (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.CASE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 10,
+    "pass": 10,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION UPPER-CASE (ASCII a..z -> A..Z), LOWER-CASE (A..Z -> a..z), and REVERSE (byte reversal) match cobc/libcob byte-for-byte (verified 10/0): non-alphabetic bytes (digits, spaces, punctuation) are UNCHANGED by case folding, the result is the SAME LENGTH as the input, and REVERSE reverses ALL bytes including spaces. The implemented string-transform intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
+  ],
+  "negative_claims": [
+    "locale/national case folding (non-ASCII)",
+    "multibyte/UTF-8 REVERSE",
+    "all dialects",
+    "lie prevented: UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)"
+  ],
+  "negative_capability_ids": [
+    "NEG.LOCALE-NATIONAL-CASE-FOLDING-NON-ASCII",
+    "NEG.MULTIBYTE-UTF-8-REVERSE",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "ASCII case fold + byte reversal"
+  ],
+  "lie_prevented": [
+    "UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)"
+  ],
+  "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program",
+  "replay": {
+    "command": "bash lab/oracle/case_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "5eacbe167d954729d1922c7d60bcf5d761a2507c5403e71bc98684beae488473"
+  }
+}

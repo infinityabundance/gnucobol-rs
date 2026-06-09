@@ -438,6 +438,16 @@ for (i, s2, g, r) in IINT:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.INTEGER.1"]}
 
+# GNURUST.INTRINSIC.CASE.1 — UPPER-CASE/LOWER-CASE/REVERSE.
+ICASE = [
+ ("NEG.INTRINSIC_CASE.NO_LOCALE_NATIONAL_CASE", "locale/national case folding claimed", "ASCII a-z<->A-Z only; non-ASCII unchanged", "case-folding accented letters"),
+ ("NEG.INTRINSIC_CASE.NO_MULTIBYTE_REVERSE", "multibyte/national REVERSE claimed", "byte reversal single-octet only", "reversing UTF-8 text"),
+ ("NEG.INTRINSIC_CASE.NO_ALL_DIALECTS", "all-dialect case/reverse claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in ICASE:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.CASE.1"]}
+
 # GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
 AD = [
  ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),
