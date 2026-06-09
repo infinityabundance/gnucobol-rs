@@ -471,3 +471,24 @@ mod tests {
         );
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    struct Empty;
+    impl CopyResolver for Empty {
+        fn resolve(&self, _name: &str) -> Option<String> {
+            None
+        }
+    }
+    // KANIFOR: GNURUST.5, GNURUST.6
+    /// COPY expansion is total over a bounded symbolic source: Ok(expanded) or a typed CopyError, never a panic.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn expand_is_total() {
+        let raw: [u8; 4] = kani::any();
+        if let Ok(src) = core::str::from_utf8(&raw) {
+            let _ = expand(src, &Empty);
+        }
+    }
+}

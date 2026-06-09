@@ -688,3 +688,25 @@ mod tests {
         assert!(r.is_ok());
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1
+    /// The arithmetic ops are total over symbolic operand bytes for fixed field attrs: Ok(bytes) or a typed
+    /// ArithError, never a panic (incl. divide-by-zero, which fails closed).
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn arith_is_total() {
+        let a: [u8; 3] = kani::any();
+        let b: [u8; 3] = kani::any();
+        let fa = crate::pic::build_field("9(3)", crate::Usage::Display, false, false);
+        let fr = crate::pic::build_field("9(5)", crate::Usage::Display, false, false);
+        if let (Ok(fa), Ok(fr)) = (fa, fr) {
+            let _ = cob_arith(Op::Add, &a, &fa.attr, &b, &fa.attr, Round::Truncate);
+            let _ = cob_arith(Op::Subtract, &a, &fa.attr, &b, &fa.attr, Round::Truncate);
+            let _ = cob_arith(Op::Multiply, &a, &fa.attr, &b, &fa.attr, Round::Truncate);
+            let _ = cob_divide(&a, &fa.attr, &b, &fa.attr, &fr.attr, Round::Truncate);
+        }
+    }
+}

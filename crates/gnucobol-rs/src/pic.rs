@@ -588,3 +588,23 @@ mod comp6_tests {
         );
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.3, GNURUST.9
+    /// build_field is TOTAL over a bounded symbolic PICTURE string + usage: it returns Ok or a typed PicError,
+    /// never a panic; and a valid Ok field has a positive size.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn build_field_is_total() {
+        let raw: [u8; 4] = kani::any();
+        if let Ok(pic) = core::str::from_utf8(&raw) {
+            let u: u8 = kani::any();
+            let usage = match u % 5 { 0 => Usage::Display, 1 => Usage::Comp3, 2 => Usage::Comp, 3 => Usage::Comp5, _ => Usage::CompX };
+            if let Ok(f) = build_field(pic, usage, kani::any(), kani::any()) {
+                assert!(f.size >= 1);
+            }
+        }
+    }
+}

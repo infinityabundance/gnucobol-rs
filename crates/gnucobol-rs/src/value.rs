@@ -175,3 +175,22 @@ mod ebcdic_zoned_tests {
         );
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.8, GNURUST.14, GNURUST.17, GNURUST.18
+    /// Every decode path (binary / packed / display / EBCDIC-zoned) is total over symbolic field bytes and
+    /// yields only valid decimal digits (0..=9), never a panic.
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn decode_digits_are_valid() {
+        let bytes: [u8; 4] = kani::any();
+        if let Ok(f) = crate::pic::build_field("S9(5)", crate::Usage::Comp, false, false) {
+            for d in Decimal::from_binary(&bytes, &f.attr).digits { assert!(d <= 9); }
+            for d in Decimal::from_packed(&bytes, &f.attr).digits { assert!(d <= 9); }
+            for d in Decimal::from_display(&bytes, &f.attr).digits { assert!(d <= 9); }
+            for d in Decimal::from_ebcdic_zoned(&bytes, &f.attr).digits { assert!(d <= 9); }
+        }
+    }
+}

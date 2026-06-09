@@ -142,3 +142,18 @@ pub fn __fuzz_ebcdic(data: &[u8]) {
         debug_assert_eq!(s.chars().count(), data.len());
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.15
+    /// EBCDIC cp500 translation/decoding is total over any byte: Ok or typed error, never a panic.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn ebcdic_decode_is_total() {
+        let b: u8 = kani::any();
+        let _ = translate_byte(CodePage::Cp500, b);
+        let bytes: [u8; 4] = kani::any();
+        let _ = decode_display(CodePage::Cp500, &bytes);
+    }
+}

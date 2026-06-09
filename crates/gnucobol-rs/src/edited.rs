@@ -355,3 +355,17 @@ pub fn __fuzz_edited(data: &[u8]) {
     let pic = String::from_utf8_lossy(&data[1..=split]);
     let _ = decode_edited(&pic, &data[split..]);
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.16
+    /// decode_edited over symbolic field bytes for a fixed edited PICTURE is total (Ok or typed error).
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn decode_edited_is_total() {
+        let bytes: [u8; 6] = kani::any();
+        let _ = decode_edited("ZZ9.99", &bytes);
+        let _ = edited_size("ZZ9.99");
+    }
+}

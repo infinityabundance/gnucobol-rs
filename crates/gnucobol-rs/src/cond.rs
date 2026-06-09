@@ -398,3 +398,19 @@ mod tests {
         assert!(eval_88(&packed, &pb, &pr).unwrap());
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.11, GNURUST.12
+    /// eval_88 is total over symbolic parent bytes for a fixed declared 88-condition: Ok(bool) or typed error.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn eval_88_is_total() {
+        let bytes: [u8; 3] = kani::any();
+        if let Ok(f) = crate::pic::build_field("9(3)", crate::Usage::Display, false, false) {
+            let cond = Condition { name: "C".into(), values: vec![CondValue::Lit(CondLit::Num("5".into()))] };
+            let _ = eval_88(&f.attr, &bytes, &cond);
+        }
+    }
+}

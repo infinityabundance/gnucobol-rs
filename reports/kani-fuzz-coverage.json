@@ -4,7 +4,7 @@
   "total_courts": 82,
   "na_courts": 40,
   "impl_courts": 42,
-  "kani_covered": 24,
+  "kani_covered": 42,
   "fuzz_covered": 42,
   "rows": [
     {
@@ -18,77 +18,99 @@
     },
     {
       "court": "GNURUST.3",
-      "kani": [],
+      "kani": [
+        "pic.rs"
+      ],
       "fuzz": [
         "pic.rs"
       ]
     },
     {
       "court": "GNURUST.4",
-      "kani": [],
+      "kani": [
+        "layout.rs"
+      ],
       "fuzz": [
         "layout.rs"
       ]
     },
     {
       "court": "GNURUST.5",
-      "kani": [],
+      "kani": [
+        "copybook.rs"
+      ],
       "fuzz": [
         "copybook.rs"
       ]
     },
     {
       "court": "GNURUST.6",
-      "kani": [],
+      "kani": [
+        "copybook.rs"
+      ],
       "fuzz": [
         "copybook.rs"
       ]
     },
     {
       "court": "GNURUST.7",
-      "kani": [],
+      "kani": [
+        "arith.rs"
+      ],
       "fuzz": [
         "arith.rs"
       ]
     },
     {
       "court": "GNURUST.8",
-      "kani": [],
+      "kani": [
+        "value.rs"
+      ],
       "fuzz": [
         "init.rs"
       ]
     },
     {
       "court": "GNURUST.9",
-      "kani": [],
+      "kani": [
+        "pic.rs"
+      ],
       "fuzz": [
         "pic.rs"
       ]
     },
     {
       "court": "GNURUST.10",
-      "kani": [],
+      "kani": [
+        "layout.rs"
+      ],
       "fuzz": [
         "layout.rs"
       ]
     },
     {
       "court": "GNURUST.11",
-      "kani": [],
+      "kani": [
+        "cond.rs"
+      ],
       "fuzz": [
         "cond.rs"
       ]
     },
     {
       "court": "GNURUST.12",
-      "kani": [],
+      "kani": [
+        "cond.rs"
+      ],
       "fuzz": [
         "cond.rs"
       ]
     },
     {
       "court": "GNURUST.13",
-      "kani": [],
+      "kani": [
+        "arith.rs"
+      ],
       "fuzz": [
         "arith.rs"
       ]
@@ -101,21 +123,27 @@
     },
     {
       "court": "GNURUST.14",
-      "kani": [],
+      "kani": [
+        "value.rs"
+      ],
       "fuzz": [
         "value.rs"
       ]
     },
     {
       "court": "GNURUST.15",
-      "kani": [],
+      "kani": [
+        "ebcdic.rs"
+      ],
       "fuzz": [
         "ebcdic.rs"
       ]
     },
     {
       "court": "GNURUST.16",
-      "kani": [],
+      "kani": [
+        "edited.rs"
+      ],
       "fuzz": [
         "edited.rs"
       ]
@@ -140,14 +168,18 @@
     },
     {
       "court": "GNURUST.17",
-      "kani": [],
+      "kani": [
+        "value.rs"
+      ],
       "fuzz": [
         "value.rs"
       ]
     },
     {
       "court": "GNURUST.18",
-      "kani": [],
+      "kani": [
+        "value.rs"
+      ],
       "fuzz": [
         "value.rs"
       ]
@@ -196,7 +228,9 @@
     },
     {
       "court": "GNURUST.19",
-      "kani": [],
+      "kani": [
+        "arith.rs"
+      ],
       "fuzz": [
         "arith.rs"
       ]
@@ -335,7 +369,9 @@
     },
     {
       "court": "GNURUST.REMAINDER.1",
-      "kani": [],
+      "kani": [
+        "arith.rs"
+      ],
       "fuzz": [
         "arith.rs"
       ]

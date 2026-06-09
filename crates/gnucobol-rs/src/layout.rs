@@ -459,3 +459,22 @@ mod tests {
         assert!(matches!(lay_out(&two), Err(LayoutError::OdoUnsupported(_))));
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.4, GNURUST.10
+    /// lay_out is total over a record whose elementary usage is symbolic: Ok(layout) or a typed LayoutError.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn layout_is_total() {
+        let u: u8 = kani::any();
+        let usage = match u % 3 { 0 => Usage::Display, 1 => Usage::Comp3, _ => Usage::Comp };
+        let items = vec![
+            Item { level: 1, name: "R".into(), pic: None, occurs: None, redefines: None, odo: None },
+            Item { level: 5, name: "A".into(), pic: Some(("X(3)".into(), Usage::Display, false, false)), occurs: None, redefines: None, odo: None },
+            Item { level: 5, name: "B".into(), pic: Some(("9(4)".into(), usage, false, false)), occurs: None, redefines: None, odo: None },
+        ];
+        let _ = lay_out(&items);
+    }
+}
