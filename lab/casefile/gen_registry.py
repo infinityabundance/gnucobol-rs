@@ -379,6 +379,19 @@ for (i, s2, g, r) in SU:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.STRING.UNSTRING.1"]}
 
+# GNURUST.INTRINSIC.ATLAS.1 — observed intrinsic atlas (map before implement).
+INTR = [
+ ("NEG.INTRINSIC.NOT_ALL_INTRINSICS", "the atlas treated as covering all intrinsics", "a declared high-use set, not exhaustive", "assuming an unlisted intrinsic is admitted"),
+ ("NEG.INTRINSIC.NO_ENV_SENSITIVE_VALUES", "CURRENT-DATE/WHEN-COMPILED values claimed", "only the 21-char SHAPE is admitted; the value is wall-clock/compile-time", "trusting a captured date value"),
+ ("NEG.INTRINSIC.NO_LOCALE_COLLATION", "locale/collation in UPPER/LOWER/ORD/CHAR claimed", "ASCII single-octet observed only", "locale-aware case/ordinal"),
+ ("NEG.INTRINSIC.NO_NATIONAL_UTF8", "national/UTF-8 intrinsic behavior claimed", "single-octet only", "multibyte intrinsics"),
+ ("NEG.INTRINSIC.STATUS_NOT_IMPLEMENTATION", "an atlas candidate-court treated as implemented", "the atlas OBSERVES; per-intrinsic implementation courts (LENGTH/NUMVAL) are future", "calling the Rust kernel for an unimplemented intrinsic"),
+ ("NEG.INTRINSIC.NO_ALL_DIALECTS", "all-dialect intrinsic behavior claimed", "witnessed under gnucobol-3.2.0-default only", "assuming other dialects match"),
+]
+for (i, s2, g, r) in INTR:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.ATLAS.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

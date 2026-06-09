@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 498,
+  "count": 509,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -263,7 +263,19 @@
       "evidence": [
         "GNURUST.INITIALIZE.1",
         "GNURUST.INSPECT.1",
-        "GNURUST.STRING.UNSTRING.1"
+        "GNURUST.STRING.UNSTRING.1",
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.ALL-INTRINSICS-A-DECLARED-SUBSET",
+      "surface": "all intrinsics (a declared subset)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
       ]
     },
     {
@@ -1249,6 +1261,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CURRENCY.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CURRENT-DATE-WHEN-COMPILED-VALUES",
+      "surface": "CURRENT-DATE/WHEN-COMPILED values",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
       ]
     },
     {
@@ -2730,6 +2753,72 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC.NOT_ALL_INTRINSICS",
+      "surface": "the atlas treated as covering all intrinsics",
+      "status": "not_admitted_observed_only",
+      "guard": "a declared high-use set, not exhaustive",
+      "risk_if_guessed": "assuming an unlisted intrinsic is admitted",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC.NO_ALL_DIALECTS",
+      "surface": "all-dialect intrinsic behavior claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "witnessed under gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects match",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC.NO_ENV_SENSITIVE_VALUES",
+      "surface": "CURRENT-DATE/WHEN-COMPILED values claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only the 21-char SHAPE is admitted; the value is wall-clock/compile-time",
+      "risk_if_guessed": "trusting a captured date value",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC.NO_LOCALE_COLLATION",
+      "surface": "locale/collation in UPPER/LOWER/ORD/CHAR claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "ASCII single-octet observed only",
+      "risk_if_guessed": "locale-aware case/ordinal",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC.NO_NATIONAL_UTF8",
+      "surface": "national/UTF-8 intrinsic behavior claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "single-octet only",
+      "risk_if_guessed": "multibyte intrinsics",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC.STATUS_NOT_IMPLEMENTATION",
+      "surface": "an atlas candidate-court treated as implemented",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; per-intrinsic implementation courts (LENGTH/NUMVAL) are future",
+      "risk_if_guessed": "calling the Rust kernel for an unimplemented intrinsic",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.LANGUAGE-SUITE-PARITY",
       "surface": "language-suite parity",
       "status": "not_admitted_fail_closed",
@@ -2819,6 +2908,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.LOCALE-COLLATION-IN-CASE-ORDINAL",
+      "surface": "locale/collation in case/ordinal",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
       ]
     },
     {
@@ -2964,6 +3064,17 @@
       "evidence": [
         "GNURUST.15",
         "GNURUST.17"
+      ]
+    },
+    {
+      "id": "NEG.NATIONAL-UTF-8",
+      "surface": "national/UTF-8",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
       ]
     },
     {
@@ -5009,6 +5120,17 @@
       "evidence": [
         "GNURUST.4",
         "GNURUST.14"
+      ]
+    },
+    {
+      "id": "NEG.THAT-A-CANDIDATE-COURT-IS-IMPLEMENTED",
+      "surface": "that a candidate-court is implemented",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ATLAS.1"
       ]
     },
     {

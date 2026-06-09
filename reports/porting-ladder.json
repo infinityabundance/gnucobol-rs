@@ -26,6 +26,7 @@
     "GNURUST.INSPECT.1": 3,
     "GNURUST.STRING.UNSTRING.1": 3,
     "SIZE.ERROR.ATLAS.1": 1,
+    "GNURUST.INTRINSIC.ATLAS.1": 1,
     "GNURUST.FILE.STATUS.1": 4
   },
   "levels": [
@@ -40,6 +41,7 @@
       "name": "observed atlas",
       "description": "behavior is recorded as observed evidence (a sweep), not a pure-kernel implementation",
       "courts": [
+        "GNURUST.INTRINSIC.ATLAS.1",
         "SIZE.ERROR.ATLAS.1"
       ]
     },
@@ -109,9 +111,9 @@
   ],
   "coverage_status_counts": {
     "sealed": 15,
-    "observed": 2,
+    "observed": 3,
     "negative": 7,
-    "missing": 3
+    "missing": 2
   },
   "downstream": "KOBOLD (kobold-data-shim) composes the sealed gnucobol-rs courts into a fixed-record migration-evidence layer; it adds no semantics a lower court has not sealed.",
   "non_claims": [

@@ -1,0 +1,151 @@
+{
+  "schema": "gnurust-intrinsic-atlas-v1",
+  "court": "GNURUST.INTRINSIC.ATLAS.1",
+  "dialect": "gnucobol-3.2.0-default",
+  "oracle": "cobc FUNCTION intrinsics (libcob/intrinsic.c)",
+  "intrinsics": [
+    {
+      "name": "LENGTH",
+      "category": "length",
+      "input": "X(5)",
+      "observed": "5",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "byte length of the operand"
+    },
+    {
+      "name": "BYTE-LENGTH",
+      "category": "length",
+      "input": "X(5)",
+      "observed": "5",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "= LENGTH for single-octet"
+    },
+    {
+      "name": "NUMVAL",
+      "category": "numeric-parse",
+      "input": "\"123.45\"",
+      "observed": "123.45",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "swamp of edge cases (signs, spaces, CR/DB); seal narrowly"
+    },
+    {
+      "name": "NUMVAL-C",
+      "category": "numeric-parse",
+      "input": "\"$1,234.56\"",
+      "observed": "1234.56",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "currency/thousands stripping; locale-sensitive"
+    },
+    {
+      "name": "INTEGER",
+      "category": "rounding",
+      "input": "3.7 / -3.7",
+      "observed": "3 / -4",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "FLOOR (greatest integer <= arg); differs from INTEGER-PART on negatives"
+    },
+    {
+      "name": "INTEGER-PART",
+      "category": "rounding",
+      "input": "3.7 / -3.7",
+      "observed": "3 / -3",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "TRUNCATE toward zero"
+    },
+    {
+      "name": "MOD",
+      "category": "modulo",
+      "input": "17,5 / -17,5",
+      "observed": "2 / 3",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "result takes the DIVISOR sign (mathematical modulo)"
+    },
+    {
+      "name": "REM",
+      "category": "modulo",
+      "input": "17,5 / -17,5",
+      "observed": "2 / -2",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "result takes the DIVIDEND sign (C-style remainder)"
+    },
+    {
+      "name": "UPPER-CASE",
+      "category": "string",
+      "input": "\"abc\"",
+      "observed": "ABC",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "ASCII fold; locale-sensitive for non-ASCII (refused)"
+    },
+    {
+      "name": "LOWER-CASE",
+      "category": "string",
+      "input": "\"ABC\"",
+      "observed": "abc",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "ASCII fold"
+    },
+    {
+      "name": "REVERSE",
+      "category": "string",
+      "input": "\"abcd\"",
+      "observed": "dcba",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "byte reversal"
+    },
+    {
+      "name": "ORD",
+      "category": "char",
+      "input": "\"A\"",
+      "observed": "66",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "1-based position in the collating sequence (ASCII 'A'=65 -> 66)"
+    },
+    {
+      "name": "CHAR",
+      "category": "char",
+      "input": "66",
+      "observed": "A",
+      "determinism": "deterministic",
+      "status": "candidate-court",
+      "note": "1-based inverse of ORD"
+    },
+    {
+      "name": "CURRENT-DATE",
+      "category": "date-time",
+      "input": "(none)",
+      "observed": "21-char string (value time-dependent)",
+      "determinism": "environment-sensitive",
+      "status": "atlas-only-shape",
+      "note": "value is the wall clock; only the 21-char SHAPE is admitted, never the value"
+    },
+    {
+      "name": "WHEN-COMPILED",
+      "category": "date-time",
+      "input": "(none)",
+      "observed": "21-char string (value compile-time-dependent)",
+      "determinism": "environment-sensitive",
+      "status": "atlas-only-shape",
+      "note": "compile timestamp; only the shape is admitted"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.INTRINSIC.NOT_ALL_INTRINSICS",
+    "NEG.INTRINSIC.NO_ENV_SENSITIVE_VALUES",
+    "NEG.INTRINSIC.NO_LOCALE_COLLATION",
+    "NEG.INTRINSIC.NO_NATIONAL_UTF8",
+    "NEG.INTRINSIC.STATUS_NOT_IMPLEMENTATION",
+    "NEG.INTRINSIC.NO_ALL_DIALECTS"
+  ]
+}

@@ -45,6 +45,7 @@ run_sweep "GNURUST.FILE.STATUS.1 (observed)" file_status_sweep.sh
 run_sweep "GNURUST.INITIALIZE.1 bytes" initialize_sweep.sh
 run_sweep "GNURUST.INSPECT.1 bytes" inspect_sweep.sh
 run_sweep "GNURUST.STRING.UNSTRING.1" string_unstring_sweep.sh
+run_sweep "GNURUST.INTRINSIC.ATLAS.1 (observed)" intrinsic_atlas_sweep.sh
 run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_sweep.sh
 run_sweep "GNURUST.8  VALUE image"   value_sweep.sh
 run_sweep "GNURUST.11 LEVEL-88 eval" cond_sweep.sh

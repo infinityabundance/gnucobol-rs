@@ -6,9 +6,9 @@
   "surface_count": 27,
   "status_counts": {
     "sealed": 15,
-    "observed": 2,
+    "observed": 3,
     "negative": 7,
-    "missing": 3
+    "missing": 2
   },
   "sealed_fraction": "15/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
@@ -275,10 +275,12 @@
         "libcob/intrinsic.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.INTRINSIC.1",
-      "risk_if_unported": "NUMVAL/LENGTH/MOD/CURRENT-DATE etc. hide many migration errors"
+      "status": "observed",
+      "courts": [
+        "GNURUST.INTRINSIC.ATLAS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "NUMVAL/LENGTH/MOD/CURRENT-DATE etc. hide many migration errors; observed atlas before per-intrinsic courts"
     },
     {
       "surface": "accept-display",

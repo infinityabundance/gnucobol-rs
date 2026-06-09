@@ -269,6 +269,19 @@
         "business parsing correctness",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.ATLAS.1": {
+      "court": "observed intrinsic-function atlas",
+      "sweep": "intrinsic_atlas_sweep.sh",
+      "byte_domain": "declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive)",
+      "non_claims": [
+        "not all intrinsics",
+        "environment-sensitive values (CURRENT-DATE/WHEN-COMPILED)",
+        "locale/collation",
+        "national/UTF-8",
+        "status is not an implementation",
+        "all dialects"
+      ]
     }
   }
 }
