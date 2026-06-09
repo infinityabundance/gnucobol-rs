@@ -1173,6 +1173,20 @@
       "readiness": 2,
       "lie_prevented": "we tested 25 public COBOL datasets -- NO: this court admits the SOURCES for gap discovery, fetches/compiles/runs NOTHING, and claims NO parity; the running + failure-classification is the future GNURUST.PUBLIC.GAP.1, and behavioral parity is reached by court admission up the ladder, never by a speculative interpreter",
       "damage_if_overclaimed": "presenting a corpus index as parity/test coverage fabricates evidence the project has not produced -- the exact overclaim the method exists to prevent"
+    },
+    {
+      "id": "GNURUST.BUILD.PROFILE.1",
+      "name": "oracle ABI / dialect / config profile",
+      "proven": "binds the EXACT build profile of the oracle that produced every witness, as first-class citable evidence: GnuCOBOL 3.2.0 built with GCC 16.1.1 on x86_64-pc-linux-gnu, host LITTLE-endian, char SIGNED (-fsigned-char), BINARY-C-LONG 8 bytes, and the dialect config (binary-byteorder=BIG-endian, binary-size=1-2-4-8, binary-truncate=yes, binary-comp-1=no, numeric-pointer=no), each with a sha256 of cobc/libcob/config. The byte parity of every ABI-SENSITIVE court (GNURUST.14 binary COMP/COMP-5/COMP-X; GNURUST.15/17 EBCDIC) is SCOPED TO THIS PROFILE; the sweep PASS=1 iff the live profile matches the committed golden, so a rebuild that changes the ABI is flagged",
+      "byte_domain": "cobc/libcob/config build profile (version, endianness, binary-byteorder, char signedness, C-long, sha256)",
+      "oracle": "cobc --version / cobc -info / default.conf / libcob sha256",
+      "fixtures": "build_profile_sweep 1/0 -> reports/build-profile.json",
+      "sealed_version": "profile (gnucobol-rs lab)",
+      "not_proven": "other builds/dialects/configs; cross-architecture ABI; that the profile transfers to a different binary-byteorder; compiler-internal struct layout beyond the recorded fields; all dialects",
+      "breaks_claim": "a build with binary-byteorder=native; a different char signedness; a different target arch; another dialect config",
+      "readiness": 3,
+      "lie_prevented": "COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes",
+      "damage_if_overclaimed": "presenting byte parity as build-independent silently breaks on any oracle rebuilt with a different binary-byteorder / char-signedness / dialect -- the ABI abyss"
     }
   ],
   "transform_vs_read": {

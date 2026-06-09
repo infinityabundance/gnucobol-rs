@@ -601,6 +601,18 @@ for (i, s2, g, r) in PC:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_index_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": "GNURUST.PUBLIC.GAP.1", "evidence": ["GNURUST.PUBLIC.CORPUS.1"]}
 
+# GNURUST.BUILD.PROFILE.1 -- oracle ABI/dialect/config profile.
+BP = [
+ ("NEG.BUILD_PROFILE.NO_OTHER_BUILDS", "other builds/dialects/configs claimed", "the profile is of THIS cobc 3.2.0/GCC build only", "assuming another build matches"),
+ ("NEG.BUILD_PROFILE.NO_CROSS_ARCH", "cross-architecture ABI claimed", "x86_64 little-endian host only", "an s390x/big-endian host"),
+ ("NEG.BUILD_PROFILE.NO_BYTEORDER_TRANSFER", "byte parity transfers across binary-byteorder claimed", "COMP is binary-byteorder=big-endian here; native changes the bytes", "a binary-byteorder=native build"),
+ ("NEG.BUILD_PROFILE.NO_INTERNAL_LAYOUT", "compiler-internal struct layout/padding beyond the recorded fields claimed", "only the recorded profile fields are admitted", "assuming a C struct layout"),
+ ("NEG.BUILD_PROFILE.NO_ALL_DIALECTS", "all-dialect build profile claimed", "the gnucobol-3.2.0-default config only", "assuming another dialect config"),
+]
+for (i, s2, g, r) in BP:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_profile_scoped", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.BUILD.PROFILE.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 720,
+  "count": 729,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -427,7 +427,8 @@
         "GNURUST.FILE.FLOW.SLICE.1",
         "GNURUST.FILE.FILTER.SLICE.1",
         "GNURUST.IF.NUMERIC.SLICE.1",
-        "GNURUST.TABLE.PERFORM.SLICE.1"
+        "GNURUST.TABLE.PERFORM.SLICE.1",
+        "GNURUST.BUILD.PROFILE.1"
       ]
     },
     {
@@ -940,6 +941,61 @@
       ]
     },
     {
+      "id": "NEG.BUILD_PROFILE.NO_ALL_DIALECTS",
+      "surface": "all-dialect build profile claimed",
+      "status": "not_admitted_profile_scoped",
+      "guard": "the gnucobol-3.2.0-default config only",
+      "risk_if_guessed": "assuming another dialect config",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUILD_PROFILE.NO_BYTEORDER_TRANSFER",
+      "surface": "byte parity transfers across binary-byteorder claimed",
+      "status": "not_admitted_profile_scoped",
+      "guard": "COMP is binary-byteorder=big-endian here; native changes the bytes",
+      "risk_if_guessed": "a binary-byteorder=native build",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUILD_PROFILE.NO_CROSS_ARCH",
+      "surface": "cross-architecture ABI claimed",
+      "status": "not_admitted_profile_scoped",
+      "guard": "x86_64 little-endian host only",
+      "risk_if_guessed": "an s390x/big-endian host",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUILD_PROFILE.NO_INTERNAL_LAYOUT",
+      "surface": "compiler-internal struct layout/padding beyond the recorded fields claimed",
+      "status": "not_admitted_profile_scoped",
+      "guard": "only the recorded profile fields are admitted",
+      "risk_if_guessed": "assuming a C struct layout",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.BUILD_PROFILE.NO_OTHER_BUILDS",
+      "surface": "other builds/dialects/configs claimed",
+      "status": "not_admitted_profile_scoped",
+      "guard": "the profile is of THIS cobc 3.2.0/GCC build only",
+      "risk_if_guessed": "assuming another build matches",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.BUSINESS-ACCEPTANCE",
       "surface": "business acceptance",
       "status": "not_admitted_fail_closed",
@@ -1260,6 +1316,17 @@
       ]
     },
     {
+      "id": "NEG.COMPILER-INTERNAL-STRUCT-LAYOUT-BEYOND-T",
+      "surface": "compiler-internal struct layout beyond the recorded fields",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.COMPLETE-SUPPLY-CHAIN-ASSURANCE-BEYOND-L",
       "surface": "complete supply-chain assurance beyond listed materials",
       "status": "not_admitted_fail_closed",
@@ -1414,6 +1481,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.15"
+      ]
+    },
+    {
+      "id": "NEG.CROSS-ARCHITECTURE-ABI",
+      "surface": "cross-architecture ABI",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
       ]
     },
     {
@@ -5022,6 +5100,17 @@
       ]
     },
     {
+      "id": "NEG.OTHER-BUILDS-DIALECTS-CONFIGS",
+      "surface": "other builds/dialects/configs",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
       "id": "NEG.OTHER-DIALECTS",
       "surface": "other dialects",
       "status": "not_admitted_fail_closed",
@@ -7502,6 +7591,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.THAT-THE-PROFILE-TRANSFERS-TO-A-DIFFEREN",
+      "surface": "that the profile transfers to a different binary-byteorder",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.BUILD.PROFILE.1"
       ]
     },
     {

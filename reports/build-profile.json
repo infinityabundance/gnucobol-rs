@@ -1,0 +1,29 @@
+{
+  "schema": "gnurust-build-profile-v1",
+  "court": "GNURUST.BUILD.PROFILE.1",
+  "gnucobol_version": "3.2.0",
+  "c_compiler": "C version 16.1.1 20260430",
+  "build_environment": "x86_64-pc-linux-gnu",
+  "host_endianness": "little-endian",
+  "char_signedness": "signed",
+  "binary_c_long_bytes": "8",
+  "config": {
+    "binary_byteorder": "big-endian",
+    "binary_size": "1-2-4-8",
+    "binary_truncate": "yes",
+    "binary_comp_1": "no",
+    "numeric_pointer": "no"
+  },
+  "hashes": {
+    "cobc_sha256": "2d832ed22700c91d3ec78947e233b705859896587705b06359b15b2cefeefc79",
+    "libcob_sha256": "2f6bd6c3164ffa775eff94e3ac9b986fbc2760c2f168702a93707649ef6199dc",
+    "config_sha256": "d736c8d5386b245f3ebcbfa76e82626ea0b3807fe93d098085379185d094e2fe"
+  },
+  "abi_sensitive_courts": [
+    "GNURUST.14",
+    "GNURUST.15",
+    "GNURUST.17",
+    "GNURUST.18"
+  ],
+  "note": "COMP is big-endian (binary-byteorder) regardless of the little-endian host; COMP-5/COMP-X follow native byte order. The byte parity of every abi_sensitive_court is scoped to THIS profile."
+}

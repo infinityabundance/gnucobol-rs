@@ -538,6 +538,18 @@
         "non-sum per-element bodies",
         "all dialects"
       ]
+    },
+    "GNURUST.BUILD.PROFILE.1": {
+      "court": "oracle ABI/dialect/config profile",
+      "sweep": "build_profile_sweep.sh",
+      "byte_domain": "cobc/libcob/config build profile (version, endianness, binary-byteorder, char signedness, C-long, sha256)",
+      "non_claims": [
+        "other builds/dialects/configs",
+        "cross-architecture ABI",
+        "that the profile transfers to a different binary-byteorder",
+        "compiler-internal layout beyond the recorded fields",
+        "all dialects"
+      ]
     }
   }
 }

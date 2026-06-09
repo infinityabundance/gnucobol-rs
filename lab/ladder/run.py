@@ -35,7 +35,7 @@ PLACE = {
 def claim_ids():
     return {c["id"] for c in json.load(open(os.path.join(ROOT,"reports/claim-ladder.json")))["courts"]}
 def gnucobol_courts():
-    return {c for c in claim_ids() if c.startswith("GNURUST.") or "ATLAS" in c} - {"GNURUST.COVERAGE.1", "GNURUST.PUBLIC.CORPUS.1"}
+    return {c for c in claim_ids() if c.startswith("GNURUST.") or "ATLAS" in c} - {"GNURUST.COVERAGE.1", "GNURUST.PUBLIC.CORPUS.1", "GNURUST.BUILD.PROFILE.1"}
 def coverage():
     return json.load(open(os.path.join(ROOT,"reports/gnurust-coverage.json")))
 

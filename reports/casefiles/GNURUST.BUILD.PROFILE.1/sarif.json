@@ -1,0 +1,80 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "kobold-casefile",
+          "informationUri": "https://github.com/infinityabundance",
+          "version": "1",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "VERDICT",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 verdict=pass"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 non-claim: other builds/dialects/configs"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 non-claim: cross-architecture ABI"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 non-claim: that the profile transfers to a different binary-byteorder"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 non-claim: compiler-internal struct layout beyond the recorded fields"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 non-claim: all dialects"
+          }
+        },
+        {
+          "ruleId": "NONCLAIM",
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BUILD.PROFILE.1 non-claim: lie prevented: COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes"
+          }
+        }
+      ]
+    }
+  ]
+}
