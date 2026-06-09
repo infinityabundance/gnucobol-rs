@@ -59,6 +59,7 @@ pub mod error;
 pub mod init;
 pub mod layout;
 mod move_ops;
+pub mod perform_slice;
 pub mod pic;
 mod sign;
 pub mod value;

@@ -573,6 +573,21 @@ for (i, s2, g, r) in IFE:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.IF.EVALUATE.SLICE.1"]}
 
+# GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
+PFM = [
+ ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),
+ ("NEG.PERFORM_SLICE.NO_SIZE_ERROR", "numeric SIZE ERROR on the loop body claimed", "increments are assumed to fit (wrap); overflow is GNURUST.SIZE.ERROR.1", "a counter overflow in the body"),
+ ("NEG.PERFORM_SLICE.NO_NON_ADD_BODY", "non-ADD body statements claimed", "ADD literal TO field bodies only", "a MOVE/COMPUTE body"),
+ ("NEG.PERFORM_SLICE.NO_COMPOUND_CLASS_COND", "compound/class UNTIL conditions claimed", "a single numeric relation only", "UNTIL A>1 AND B<2"),
+ ("NEG.PERFORM_SLICE.NO_THRU_PARAGRAPH", "PERFORM THRU / out-of-line paragraph performs claimed", "inline-body loops only", "PERFORM PARA THRU PARA-END"),
+ ("NEG.PERFORM_SLICE.NO_TEST_AFTER", "WITH TEST AFTER claimed", "test-before only", "a TEST AFTER loop"),
+ ("NEG.PERFORM_SLICE.NO_NESTED_FLOW", "nested PERFORM / GO TO claimed", "a flat single loop only", "nested PERFORM"),
+ ("NEG.PERFORM_SLICE.NO_ALL_DIALECTS", "all-dialect PERFORM claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in PFM:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PERFORM.SLICE.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

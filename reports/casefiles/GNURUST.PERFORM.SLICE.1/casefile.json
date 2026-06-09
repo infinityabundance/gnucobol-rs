@@ -1,0 +1,69 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.PERFORM.SLICE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.21",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "0695c09fa39061a020278dacaa1f5b71d257e0c0bec71d2f5b2ab25b2353bc25",
+    "receipt_sha256": "a718890234f57bfa94929a0b0341670c5dcf80af0e50f9c312e3e524ae917d5b"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc PERFORM (cobc/typeck.c + codegen.c, libcob)",
+    "upstream_court": "GNURUST.PERFORM.SLICE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 10,
+    "pass": 10,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the second execution slice: a narrow interpreter EXECUTES a PERFORM loop over unsigned 9(n) counter fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 10/0). PERFORM n TIMES runs the body n times (n<=0 -> none)",
+    "PERFORM UNTIL tests BEFORE each iteration (a satisfied condition runs the body zero times)",
+    "PERFORM VARYING v FROM a BY b UNTIL sets v=a then test-before, running the body and adding b to v, so the control variable ends ONE STEP PAST the limit when the loop ran (FROM 2 BY 3 UNTIL I>10 ends I=11) or stays at a if never entered. Composes ADD + numeric comparison under the witnessed PROCEDURE.FLOW.ATLAS.1 loop semantics"
+  ],
+  "negative_claims": [
+    "signed/packed/binary counters",
+    "numeric SIZE ERROR on the body",
+    "non-ADD body statements",
+    "compound/class conditions",
+    "PERFORM THRU / out-of-line paragraph",
+    "WITH TEST AFTER",
+    "nested PERFORM/GO TO",
+    "all dialects",
+    "lie prevented: PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation"
+  ],
+  "negative_capability_ids": [
+    "NEG.SIGNED-PACKED-BINARY-COUNTERS",
+    "NEG.NUMERIC-SIZE-ERROR-ON-THE-BODY",
+    "NEG.NON-ADD-BODY-STATEMENTS",
+    "NEG.COMPOUND-CLASS-CONDITIONS",
+    "NEG.PERFORM-THRU-OUT-OF-LINE-PARAGRAPH",
+    "NEG.WITH-TEST-AFTER",
+    "NEG.NESTED-PERFORM-GO-TO",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "execute PERFORM loop over numeric counters -> resulting storage bytes"
+  ],
+  "lie_prevented": [
+    "PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation"
+  ],
+  "damage_if_overclaimed": "assuming the control variable stops at the limit (or that the body always runs at least once) is an off-by-one in iteration counts and post-loop variable values",
+  "replay": {
+    "command": "bash lab/oracle/perform_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "831726f7c6553f29e56ec9f0729dd9c41f47fedd6d631be85963f15fc303beba"
+  }
+}

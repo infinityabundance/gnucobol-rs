@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 640,
+  "count": 655,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -411,7 +411,8 @@
         "GNURUST.FILE.WRITE.1",
         "GNURUST.FILE.REWRITE.1",
         "GNURUST.INTRINSIC.DATE.1",
-        "GNURUST.IF.EVALUATE.SLICE.1"
+        "GNURUST.IF.EVALUATE.SLICE.1",
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {
@@ -1252,6 +1253,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.COMPOUND-CLASS-CONDITIONS",
+      "surface": "compound/class conditions",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {
@@ -4198,6 +4210,17 @@
       ]
     },
     {
+      "id": "NEG.NESTED-PERFORM-GO-TO",
+      "surface": "nested PERFORM/GO TO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.NEW-EVIDENCE",
       "surface": "new evidence",
       "status": "not_admitted_fail_closed",
@@ -4273,6 +4296,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.NON-ADD-BODY-STATEMENTS",
+      "surface": "non-ADD body statements",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {
@@ -4438,6 +4472,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.2"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-SIZE-ERROR-ON-THE-BODY",
+      "surface": "numeric SIZE ERROR on the body",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {
@@ -4749,6 +4794,105 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM-THRU-OUT-OF-LINE-PARAGRAPH",
+      "surface": "PERFORM THRU / out-of-line paragraph",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_ALL_DIALECTS",
+      "surface": "all-dialect PERFORM claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_COMPOUND_CLASS_COND",
+      "surface": "compound/class UNTIL conditions claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a single numeric relation only",
+      "risk_if_guessed": "UNTIL A>1 AND B<2",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_NESTED_FLOW",
+      "surface": "nested PERFORM / GO TO claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a flat single loop only",
+      "risk_if_guessed": "nested PERFORM",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_NON_ADD_BODY",
+      "surface": "non-ADD body statements claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "ADD literal TO field bodies only",
+      "risk_if_guessed": "a MOVE/COMPUTE body",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS",
+      "surface": "signed/packed/binary counters claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "unsigned 9(n) DISPLAY counters only",
+      "risk_if_guessed": "a COMP-3 counter",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_SIZE_ERROR",
+      "surface": "numeric SIZE ERROR on the loop body claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "increments are assumed to fit (wrap); overflow is GNURUST.SIZE.ERROR.1",
+      "risk_if_guessed": "a counter overflow in the body",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_TEST_AFTER",
+      "surface": "WITH TEST AFTER claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "test-before only",
+      "risk_if_guessed": "a TEST AFTER loop",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.PERFORM_SLICE.NO_THRU_PARAGRAPH",
+      "surface": "PERFORM THRU / out-of-line paragraph performs claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "inline-body loops only",
+      "risk_if_guessed": "PERFORM PARA THRU PARA-END",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {
@@ -6110,6 +6254,17 @@
       ]
     },
     {
+      "id": "NEG.SIGNED-PACKED-BINARY-COUNTERS",
+      "surface": "signed/packed/binary counters",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.SILENT-REPAIR-OF-DIRTY-BYTES",
       "surface": "silent repair of dirty bytes",
       "status": "not_admitted_fail_closed",
@@ -7054,6 +7209,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.WITH-TEST-AFTER",
+      "surface": "WITH TEST AFTER",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {

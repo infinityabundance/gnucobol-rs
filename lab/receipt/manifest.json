@@ -463,6 +463,21 @@
         "THRU/range WHEN",
         "all dialects"
       ]
+    },
+    "GNURUST.PERFORM.SLICE.1": {
+      "court": "PERFORM execution slice (TIMES/UNTIL/VARYING)",
+      "sweep": "perform_sweep.sh",
+      "byte_domain": "execute PERFORM loop over numeric counters -> resulting storage bytes",
+      "non_claims": [
+        "signed/packed/binary counters",
+        "numeric SIZE ERROR on the body",
+        "non-ADD body statements",
+        "compound/class conditions",
+        "PERFORM THRU / out-of-line paragraph",
+        "WITH TEST AFTER",
+        "nested PERFORM / GO TO",
+        "all dialects"
+      ]
     }
   }
 }

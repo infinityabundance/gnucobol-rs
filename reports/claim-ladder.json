@@ -1089,6 +1089,20 @@
       "readiness": 2,
       "lie_prevented": "a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed",
       "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound"
+    },
+    {
+      "id": "GNURUST.PERFORM.SLICE.1",
+      "name": "PERFORM execution slice (TIMES/UNTIL/VARYING)",
+      "proven": "the second execution slice: a narrow interpreter EXECUTES a PERFORM loop over unsigned 9(n) counter fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 10/0). PERFORM n TIMES runs the body n times (n<=0 -> none); PERFORM UNTIL tests BEFORE each iteration (a satisfied condition runs the body zero times); PERFORM VARYING v FROM a BY b UNTIL sets v=a then test-before, running the body and adding b to v, so the control variable ends ONE STEP PAST the limit when the loop ran (FROM 2 BY 3 UNTIL I>10 ends I=11) or stays at a if never entered. Composes ADD + numeric comparison under the witnessed PROCEDURE.FLOW.ATLAS.1 loop semantics",
+      "byte_domain": "execute PERFORM loop over numeric counters -> resulting storage bytes",
+      "oracle": "cobc PERFORM (cobc/typeck.c + codegen.c, libcob)",
+      "fixtures": "perform_sweep 10/0 + 3 unit tests",
+      "sealed_version": "0.7.21",
+      "not_proven": "signed/packed/binary counters; numeric SIZE ERROR on the body; non-ADD body statements; compound/class conditions; PERFORM THRU / out-of-line paragraph; WITH TEST AFTER; nested PERFORM/GO TO; all dialects",
+      "breaks_claim": "a packed counter; a body overflow; a non-ADD body; TEST AFTER; nested PERFORM",
+      "readiness": 2,
+      "lie_prevented": "PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation",
+      "damage_if_overclaimed": "assuming the control variable stops at the limit (or that the body always runs at least once) is an off-by-one in iteration counts and post-loop variable values"
     }
   ],
   "transform_vs_read": {

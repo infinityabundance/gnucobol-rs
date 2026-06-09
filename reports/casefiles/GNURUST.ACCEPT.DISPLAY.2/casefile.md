@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.ACCEPT.DISPLAY.2 (court-casefile)
 
-**Verdict: PASS** · 8/8 pass, 0 fail · crate `gnucobol-rs` 0.7.20
+**Verdict: PASS** · 8/8 pass, 0 fail · crate `gnucobol-rs` 0.7.21
 
 - **Oracle:** cobc DISPLAY of numeric (libcob/termio.c)
 - **Byte domain(s):** DISPLAY numeric: signed +/- prefix + V decimal point

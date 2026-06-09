@@ -42,7 +42,8 @@
     "GNURUST.INTRINSIC.ATLAS.1": 1,
     "GNURUST.FILE.STATUS.1": 4,
     "GNURUST.PROCEDURE.FLOW.ATLAS.1": 5,
-    "GNURUST.IF.EVALUATE.SLICE.1": 6
+    "GNURUST.IF.EVALUATE.SLICE.1": 6,
+    "GNURUST.PERFORM.SLICE.1": 6
   },
   "levels": [
     {
@@ -131,7 +132,8 @@
       "name": "program-execution slice",
       "description": "executing a bounded control-flow fragment over the sealed primitives",
       "courts": [
-        "GNURUST.IF.EVALUATE.SLICE.1"
+        "GNURUST.IF.EVALUATE.SLICE.1",
+        "GNURUST.PERFORM.SLICE.1"
       ]
     },
     {
