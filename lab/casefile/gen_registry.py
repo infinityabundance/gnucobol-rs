@@ -459,6 +459,17 @@ for (i, s2, g, r) in IOC:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.ORD-CHAR.1"]}
 
+# GNURUST.INTRINSIC.NUMVAL-C.1 — currency parse.
+INC = [
+ ("NEG.INTRINSIC_NUMVALC.NO_NON_DEFAULT_CURRENCY", "non-default currency symbol claimed", "default $ only; the 2-arg currency form is not admitted", "NUMVAL-C with a EUR/GBP symbol"),
+ ("NEG.INTRINSIC_NUMVALC.NO_LOCALE_DECIMAL_COMMA", "DECIMAL-POINT IS COMMA / locale comma-decimal claimed", "decimal is '.', thousands is ','", "European comma-decimal"),
+ ("NEG.INTRINSIC_NUMVALC.NO_NATIONAL_UTF8", "national/UTF-8 NUMVAL-C claimed", "single-octet ASCII only", "multibyte currency"),
+ ("NEG.INTRINSIC_NUMVALC.NO_ALL_DIALECTS", "all-dialect NUMVAL-C claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in INC:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.NUMVAL-C.1"]}
+
 # GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
 AD = [
  ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),

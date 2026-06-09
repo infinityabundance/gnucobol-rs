@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.INTRINSIC.NUMVAL-C.1/casefile.json",
+      "digest": {
+        "sha256": "680426d3ae3f51ffa6fe9e79a5a426552b91d32d5f4e4bd3b53073a08d35dfbd"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.INTRINSIC.NUMVAL-C.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.14",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/numvalc_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "fc888addadc4c941a66202d8182838389184bbecc9efc576f3f4c7d39e60eaa3",
+      "receipt_sha256": "55a722f27b471ac362cf947b04b01b88eabaecfbaed4218f6e8d381f0f227963"
+    },
+    "positive_claim_count": 1,
+    "negative_claim_count": 5
+  }
+}

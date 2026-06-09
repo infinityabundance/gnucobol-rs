@@ -66,7 +66,7 @@ atlas = {
   {"name":"LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.LENGTH.1 -- storage byte length"},
   {"name":"BYTE-LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"candidate-court","note":"= LENGTH for single-octet"},
   {"name":"NUMVAL","category":"numeric-parse","input":"\"123.45\"","observed":"123.45","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.NUMVAL.1 -- narrow form (sign, spaces, CR/DB, decimal)"},
-  {"name":"NUMVAL-C","category":"numeric-parse","input":"\"$1,234.56\"","observed":"1234.56","determinism":"deterministic","status":"candidate-court","note":"currency/thousands stripping; locale-sensitive"},
+  {"name":"NUMVAL-C","category":"numeric-parse","input":"\"$1,234.56\"","observed":"1234.56","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.NUMVAL-C.1 -- strip $ + thousands commas"},
   {"name":"INTEGER","category":"rounding","input":"3.7 / -3.7","observed":"3 / -4","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.INTEGER.1 -- FLOOR"},
   {"name":"INTEGER-PART","category":"rounding","input":"3.7 / -3.7","observed":"3 / -3","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.INTEGER.1 -- TRUNCATE toward zero"},
   {"name":"MOD","category":"modulo","input":"17,5 / -17,5","observed":"2 / 3","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.MOD-REM.1 -- DIVISOR sign (mathematical modulo)"},

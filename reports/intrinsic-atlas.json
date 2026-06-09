@@ -37,8 +37,8 @@
       "input": "\"$1,234.56\"",
       "observed": "1234.56",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "currency/thousands stripping; locale-sensitive"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.NUMVAL-C.1 -- strip $ + thousands commas"
     },
     {
       "name": "INTEGER",

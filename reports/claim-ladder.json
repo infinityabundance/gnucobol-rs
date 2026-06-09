@@ -991,6 +991,20 @@
       "readiness": 3,
       "lie_prevented": "ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap",
       "damage_if_overclaimed": "treating ORD as the raw byte value (or CHAR as 0-based) is a silent off-by-one in every character-code computation"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.NUMVAL-C.1",
+      "name": "FUNCTION NUMVAL-C currency-string parse",
+      "proven": "FUNCTION NUMVAL-C(s) for the narrow admitted form parses to the same value as cobc/libcob: like NUMVAL but first STRIPS the default currency symbol $ and thousands-separator commas, then applies the NUMVAL sign/space/decimal rules (verified 10/0): NUMVAL-C of $1,234.56 = 1234.56, NUMVAL-C of $1,234.56CR = -1234.56. Implemented as intrinsic_numval after removing $ and comma -- completing the NUMVAL family, split from GNURUST.INTRINSIC.ATLAS.1",
+      "byte_domain": "FUNCTION NUMVAL-C(currency string) -> value",
+      "oracle": "cobc FUNCTION NUMVAL-C (libcob/intrinsic.c)",
+      "fixtures": "numvalc_sweep 10/0 + 1 unit test",
+      "sealed_version": "0.7.14",
+      "not_proven": "non-default currency symbol (2-arg form); DECIMAL-POINT IS COMMA / locale comma-decimal; national/UTF-8; all dialects",
+      "breaks_claim": "non-$ currency symbol; European comma-decimal; multibyte currency",
+      "readiness": 3,
+      "lie_prevented": "NUMVAL and NUMVAL-C are the same -- NO: NUMVAL-C additionally strips the currency symbol and thousands commas (NUMVAL would NOT parse a $1,234.56 string), while still honoring the trailing-sign/CR/DB negative convention",
+      "damage_if_overclaimed": "using NUMVAL on currency-formatted input (or assuming a non-$ symbol/European decimal) misparses monetary amounts"
     }
   ],
   "transform_vs_read": {

@@ -1,0 +1,195 @@
+{
+  "schema": "kobold-release-receipt-manifest-v1",
+  "crate": "gnucobol-rs",
+  "version": "0.7.14",
+  "trust2_doctrine": "receipts are generated from live replay; see docs/trust2-generated-receipts.md",
+  "receipts": [
+    {
+      "campaign": "GNURUST.10",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "OCCURS DEPENDING ON physical-max layout"
+    },
+    {
+      "campaign": "GNURUST.11",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "LEVEL-88 condition-name truth"
+    },
+    {
+      "campaign": "GNURUST.12",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "SET condition-name TO TRUE"
+    },
+    {
+      "campaign": "GNURUST.14",
+      "verdict": "pass",
+      "result": "PASS=546 FAIL=0",
+      "court": "binary COMP/COMP-5/COMP-X storage + MOVE"
+    },
+    {
+      "campaign": "GNURUST.15",
+      "verdict": "pass",
+      "result": "PASS=256 FAIL=0",
+      "court": "cp500 EBCDIC DISPLAY decode"
+    },
+    {
+      "campaign": "GNURUST.16",
+      "verdict": "pass",
+      "result": "PASS=92 FAIL=0",
+      "court": "edited-picture decode (16a + 16b)"
+    },
+    {
+      "campaign": "GNURUST.17",
+      "verdict": "pass",
+      "result": "PASS=120 FAIL=0",
+      "court": "cp500 EBCDIC zoned-decimal numeric DISPLAY decode"
+    },
+    {
+      "campaign": "GNURUST.18",
+      "verdict": "pass",
+      "result": "PASS=98 FAIL=0",
+      "court": "COMP-6 unsigned packed storage + MOVE"
+    },
+    {
+      "campaign": "GNURUST.19",
+      "verdict": "pass",
+      "result": "PASS=736 FAIL=0",
+      "court": "DIVIDE receiving-field bytes"
+    },
+    {
+      "campaign": "GNURUST.2",
+      "verdict": "pass",
+      "result": "PASS=13152 FAIL=0",
+      "court": "decimal MOVE (COMP-3/zoned/display)"
+    },
+    {
+      "campaign": "GNURUST.3",
+      "verdict": "pass",
+      "result": "PASS=432 FAIL=0",
+      "court": "PIC field model (+P scaling)"
+    },
+    {
+      "campaign": "GNURUST.4",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "record layout (+ODO physical-max)"
+    },
+    {
+      "campaign": "GNURUST.5",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "COPY / REPLACING expansion"
+    },
+    {
+      "campaign": "GNURUST.7",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "arithmetic ADD/SUB/MUL (+packed receiver)"
+    },
+    {
+      "campaign": "GNURUST.8",
+      "verdict": "fail",
+      "result": "no-result",
+      "court": "VALUE initial-record image"
+    },
+    {
+      "campaign": "GNURUST.ACCEPT.DISPLAY.1",
+      "verdict": "pass",
+      "result": "PASS=7 FAIL=0",
+      "court": "DISPLAY emitted text + ACCEPT field bytes"
+    },
+    {
+      "campaign": "GNURUST.FILE.SEQUENTIAL.1",
+      "verdict": "pass",
+      "result": "PASS=10 FAIL=0",
+      "court": "sequential file READ record bytes + file status"
+    },
+    {
+      "campaign": "GNURUST.FILE.STATUS.1",
+      "verdict": "pass",
+      "result": "PASS=7 FAIL=0",
+      "court": "observed FILE STATUS bytes for declared file-operation fixtures"
+    },
+    {
+      "campaign": "GNURUST.INITIALIZE.1",
+      "verdict": "pass",
+      "result": "PASS=6 FAIL=0",
+      "court": "INITIALIZE receiver byte effects"
+    },
+    {
+      "campaign": "GNURUST.INSPECT.1",
+      "verdict": "pass",
+      "result": "PASS=12 FAIL=0",
+      "court": "INSPECT byte effects + tally bytes"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.ATLAS.1",
+      "verdict": "pass",
+      "result": "PASS=19 FAIL=0",
+      "court": "observed intrinsic-function atlas"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.CASE.1",
+      "verdict": "pass",
+      "result": "PASS=10 FAIL=0",
+      "court": "FUNCTION UPPER-CASE/LOWER-CASE/REVERSE"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.INTEGER.1",
+      "verdict": "pass",
+      "result": "PASS=20 FAIL=0",
+      "court": "FUNCTION INTEGER (floor) / INTEGER-PART (truncate)"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.LENGTH.1",
+      "verdict": "pass",
+      "result": "PASS=12 FAIL=0",
+      "court": "FUNCTION LENGTH storage byte length"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.MOD-REM.1",
+      "verdict": "pass",
+      "result": "PASS=20 FAIL=0",
+      "court": "FUNCTION MOD/REM integer modulo/remainder"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.NUMVAL-C.1",
+      "verdict": "pass",
+      "result": "PASS=10 FAIL=0",
+      "court": "FUNCTION NUMVAL-C currency parse"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.NUMVAL.1",
+      "verdict": "pass",
+      "result": "PASS=14 FAIL=0",
+      "court": "FUNCTION NUMVAL numeric parse"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.ORD-CHAR.1",
+      "verdict": "pass",
+      "result": "PASS=15 FAIL=0",
+      "court": "FUNCTION ORD/CHAR 1-based ordinal/char"
+    },
+    {
+      "campaign": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+      "verdict": "pass",
+      "result": "PASS=8 FAIL=0",
+      "court": "observed control-flow atlas"
+    },
+    {
+      "campaign": "GNURUST.REMAINDER.1",
+      "verdict": "pass",
+      "result": "PASS=768 FAIL=0",
+      "court": "DIVIDE REMAINDER receiving-field bytes"
+    },
+    {
+      "campaign": "GNURUST.STRING.UNSTRING.1",
+      "verdict": "pass",
+      "result": "PASS=7 FAIL=0",
+      "court": "STRING/UNSTRING byte effects"
+    }
+  ],
+  "count": 31
+}

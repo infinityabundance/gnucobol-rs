@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 572,
+  "count": 578,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -349,7 +349,8 @@
         "GNURUST.INTRINSIC.MOD-REM.1",
         "GNURUST.INTRINSIC.INTEGER.1",
         "GNURUST.INTRINSIC.CASE.1",
-        "GNURUST.INTRINSIC.ORD-CHAR.1"
+        "GNURUST.INTRINSIC.ORD-CHAR.1",
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
       ]
     },
     {
@@ -1681,6 +1682,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.DECIMAL-POINT-IS-COMMA-LOCALE-COMMA-DECI",
+      "surface": "DECIMAL-POINT IS COMMA / locale comma-decimal",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
       ]
     },
     {
@@ -3234,6 +3246,50 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_NUMVALC.NO_ALL_DIALECTS",
+      "surface": "all-dialect NUMVAL-C claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVALC.NO_LOCALE_DECIMAL_COMMA",
+      "surface": "DECIMAL-POINT IS COMMA / locale comma-decimal claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "decimal is '.', thousands is ','",
+      "risk_if_guessed": "European comma-decimal",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVALC.NO_NATIONAL_UTF8",
+      "surface": "national/UTF-8 NUMVAL-C claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single-octet ASCII only",
+      "risk_if_guessed": "multibyte currency",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVALC.NO_NON_DEFAULT_CURRENCY",
+      "surface": "non-default currency symbol claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "default $ only; the 2-arg currency form is not admitted",
+      "risk_if_guessed": "NUMVAL-C with a EUR/GBP symbol",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
+      ]
+    },
+    {
       "id": "NEG.INTRINSIC_ORDCHAR.NO_ALL_DIALECTS",
       "surface": "all-dialect ORD/CHAR claimed",
       "status": "not_admitted_fail_closed",
@@ -3634,7 +3690,8 @@
       "evidence": [
         "GNURUST.INTRINSIC.ATLAS.1",
         "GNURUST.INTRINSIC.NUMVAL.1",
-        "GNURUST.INTRINSIC.ORD-CHAR.1"
+        "GNURUST.INTRINSIC.ORD-CHAR.1",
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
       ]
     },
     {
@@ -3747,6 +3804,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.ORD-CHAR.1"
+      ]
+    },
+    {
+      "id": "NEG.NON-DEFAULT-CURRENCY-SYMBOL-2-ARG-FORM",
+      "surface": "non-default currency symbol (2-arg form)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL-C.1"
       ]
     },
     {

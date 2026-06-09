@@ -375,6 +375,17 @@
         "CHAR(n) out of 1..256",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.NUMVAL-C.1": {
+      "court": "FUNCTION NUMVAL-C currency parse",
+      "sweep": "numvalc_sweep.sh",
+      "byte_domain": "FUNCTION NUMVAL-C(currency string) -> value (strip $ + thousands commas)",
+      "non_claims": [
+        "non-default currency symbol (2-arg form)",
+        "DECIMAL-POINT IS COMMA / locale comma-decimal",
+        "national/UTF-8",
+        "all dialects"
+      ]
     }
   }
 }

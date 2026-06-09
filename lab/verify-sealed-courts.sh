@@ -48,6 +48,7 @@ run_sweep "GNURUST.STRING.UNSTRING.1" string_unstring_sweep.sh
 run_sweep "GNURUST.INTRINSIC.ATLAS.1 (observed)" intrinsic_atlas_sweep.sh
 run_sweep "GNURUST.INTRINSIC.LENGTH.1" length_sweep.sh
 run_sweep "GNURUST.INTRINSIC.NUMVAL.1" numval_sweep.sh
+run_sweep "GNURUST.INTRINSIC.NUMVAL-C.1" numvalc_sweep.sh
 run_sweep "GNURUST.INTRINSIC.MOD-REM.1" modrem_sweep.sh
 run_sweep "GNURUST.INTRINSIC.INTEGER.1" integer_sweep.sh
 run_sweep "GNURUST.INTRINSIC.CASE.1" case_sweep.sh

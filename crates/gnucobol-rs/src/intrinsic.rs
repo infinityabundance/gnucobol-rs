@@ -65,6 +65,15 @@ pub fn intrinsic_numval(s: &str) -> Numval {
     Numval { negative, scaled, scale: frac_digits.len() as u32 }
 }
 
+/// `FUNCTION NUMVAL-C(s)` for the narrow admitted form: like [`intrinsic_numval`] but first strips the
+/// default currency symbol `$` and thousands-separator commas (`GNURUST.INTRINSIC.NUMVAL-C.1`). So
+/// `NUMVAL-C("$1,234.56") = 1234.56`. **Non-claims:** a non-default currency symbol (the 2-arg form),
+/// `DECIMAL-POINT IS COMMA` / locale comma-decimal, national/UTF-8, and all dialects.
+pub fn intrinsic_numval_c(s: &str) -> Numval {
+    let cleaned: String = s.chars().filter(|&c| c != '$' && c != ',').collect();
+    intrinsic_numval(&cleaned)
+}
+
 /// Render a [`Numval`] as a signed fixed `S9(int_digits)V9(frac_digits)` display string (the bytes a `MOVE`
 /// into such a receiver produces): `sign + int_digits + "." + frac_digits`, truncating toward zero.
 pub fn numval_display(nv: &Numval, int_digits: usize, frac_digits: usize) -> String {
@@ -178,6 +187,17 @@ mod tests {
     }
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
+    }
+    fn nvc(s: &str) -> String {
+        numval_display(&intrinsic_numval_c(s), 8, 4)
+    }
+    #[test]
+    fn numval_c_strips_currency_and_commas() {
+        assert_eq!(nvc("$1,234.56"), "+00001234.5600");
+        assert_eq!(nvc("1,234,567"), "+01234567.0000");
+        assert_eq!(nvc("-$1,234.56"), "-00001234.5600");
+        assert_eq!(nvc("$1,234.56CR"), "-00001234.5600");
+        assert_eq!(nvc("  $42.00  "), "+00000042.0000");
     }
     #[test]
     fn ord_char_are_one_based_inverses() {
