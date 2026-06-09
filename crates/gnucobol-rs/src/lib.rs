@@ -528,3 +528,193 @@ mod tests {
         );
     }
 }
+
+// ===========================================================================================================
+// Fuzz entries for the byte-court + execution-slice modules added after the original 8 targets. Each asserts
+// panic-freedom (GNURUST.PANICPOLICY.0) on arbitrary input; a few assert a round-trip invariant in-bounds.
+// ===========================================================================================================
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_string_ops(data: &[u8]) {
+    let p = (data.first().copied().unwrap_or(1) as usize % 8) + 1;
+    let prefill = vec![b'~'; p];
+    let body: &[u8] = data.get(1..).unwrap_or(&[]);
+    let _ = string_ops::string_into(&prefill, &[string_ops::StringSource::Size(body)], (data.first().copied().unwrap_or(1) as usize % (p + 2)).max(1));
+    let delim = data.first().map(std::slice::from_ref);
+    let _ = string_ops::unstring(body, delim, &[2usize, 3, 1], 1);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_initialize(data: &[u8]) {
+    use initialize::{InitCategory, InitField};
+    let mut fields = Vec::new();
+    let mut off = 0usize;
+    for ch in data.chunks(2).take(8) {
+        let size = (ch[0] as usize % 4) + 1;
+        let category = match ch[0] % 4 { 0 => InitCategory::Alphanumeric, 1 => InitCategory::NumericDisplay, 2 => InitCategory::Packed, _ => InitCategory::Binary };
+        fields.push(InitField { offset: off, size, category, signed: ch[0] & 8 == 0, is_filler: ch[0] & 16 == 0, is_redefiner: ch.get(1).is_some_and(|b| b & 1 == 0) });
+        off += size;
+    }
+    let prefill = vec![0xAAu8; off];
+    let _ = initialize::initialize_record(&fields, &prefill);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_inspect(data: &[u8]) {
+    if data.len() < 3 { return; }
+    let pat = &data[0..1];
+    let to = &data[1..2];
+    let target = &data[2..];
+    let _ = inspect::inspect_tallying(target, inspect::TallyMode::All(pat), inspect::Region::All);
+    let _ = inspect::inspect_tallying(target, inspect::TallyMode::Leading(pat), inspect::Region::Before(to));
+    let _ = inspect::inspect_tallying(target, inspect::TallyMode::Characters, inspect::Region::After(pat));
+    let _ = inspect::inspect_replacing(target, inspect::ReplaceMode::All(pat, to), inspect::Region::All);
+    let _ = inspect::inspect_converting(target, pat, to, inspect::Region::After(pat));
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_file_seq(data: &[u8]) {
+    let rl = (data.first().copied().unwrap_or(1) as usize % 7) + 1;
+    let body = data.get(1..).unwrap_or(&[]);
+    let _ = file_seq::read_sequential(body, file_seq::FileOrg::RecordSequential, rl);
+    let _ = file_seq::read_sequential(body, file_seq::FileOrg::LineSequential, rl);
+    let recs: Vec<&[u8]> = body.chunks(rl).collect();
+    let _ = file_seq::write_sequential(&recs, file_seq::FileOrg::RecordSequential, rl);
+    let _ = file_seq::write_sequential(&recs, file_seq::FileOrg::LineSequential, rl);
+    let rw: Vec<(usize, &[u8])> = vec![(0, body), (data.len(), body)];
+    let _ = file_seq::rewrite_records(body, rl, &rw);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_intrinsic(data: &[u8]) {
+    let s = String::from_utf8_lossy(data);
+    let _ = intrinsic::intrinsic_numval(&s);
+    let _ = intrinsic::intrinsic_numval_c(&s);
+    let _ = intrinsic::intrinsic_upper_case(data);
+    let _ = intrinsic::intrinsic_lower_case(data);
+    let _ = intrinsic::intrinsic_reverse(data);
+    let _ = intrinsic::intrinsic_length("X(5)", Usage::Display);
+    if let Some(&b0) = data.first() {
+        let a = b0 as i128;
+        let b = data.get(1).map_or(1, |&x| x as i128);
+        let _ = intrinsic::intrinsic_mod(a, b);
+        let _ = intrinsic::intrinsic_rem(a, b);
+        let sc = (b0 % 4) as u32;
+        let _ = intrinsic::intrinsic_integer(a, sc);
+        let _ = intrinsic::intrinsic_integer_part(a, sc);
+        // round-trip invariants (in-bounds): ord(char(n))==n, integer_of_date(date_of_integer(d))==d
+        let n = (b0 as u32 % 256) + 1;
+        assert_eq!(intrinsic::intrinsic_ord(intrinsic::intrinsic_char(n)), n);
+        let d = (b0 as i64) + 1;
+        assert_eq!(intrinsic::intrinsic_integer_of_date(intrinsic::intrinsic_date_of_integer(d)), d);
+    }
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_accept_display(data: &[u8]) {
+    let (a, b) = data.split_at(data.len() / 2);
+    let _ = accept_display::display_line(&[a, b]);
+    let _ = accept_display::accept_field(data, (data.first().copied().unwrap_or(0) as usize % 16) + 1);
+    let digits: Vec<u8> = data.iter().map(|&c| b'0' + (c % 10)).take(6).collect();
+    let scale = if digits.is_empty() { 0 } else { data.first().copied().unwrap_or(0) as usize % digits.len() };
+    let _ = accept_display::display_numeric(&digits, scale, data.len() % 2 == 0, data.len() % 3 == 0);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_size_error(data: &[u8]) {
+    let int_digits: Vec<u8> = data.iter().map(|&c| b'0' + (c % 10)).take(8).collect();
+    let frac_digits: Vec<u8> = data.iter().rev().map(|&c| b'0' + (c % 10)).take(4).collect();
+    let ri = (data.first().copied().unwrap_or(0) as usize % 6) + 1;
+    let rs = data.get(1).copied().unwrap_or(0) as usize % 4;
+    let _ = size_error::arith_size_error(&int_digits, &frac_digits, ri, rs);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_if_eval(data: &[u8]) {
+    use if_eval::{Condition, MoveStmt, Operand, Relop, SliceField};
+    let fields = [SliceField { name: "A", offset: 0, size: 3 }, SliceField { name: "T", offset: 3, size: 4 }];
+    let mut rec = vec![b' '; 7];
+    for (i, &b) in data.iter().take(7).enumerate() { rec[i] = b; }
+    let op = match data.first().copied().unwrap_or(0) % 6 { 0 => Relop::Eq, 1 => Relop::Ne, 2 => Relop::Gt, 3 => Relop::Lt, 4 => Relop::Ge, _ => Relop::Le };
+    let lit = data.get(1..3).unwrap_or(b"AB");
+    let cond = Condition { left: Operand::Field("A"), op, right: Operand::Literal(lit) };
+    let then = [MoveStmt { source: Operand::Literal(b"YES"), target: "T" }];
+    let els = [MoveStmt { source: Operand::Field("A"), target: "T" }];
+    let _ = if_eval::eval_if(&rec, &fields, &cond, &then, &els);
+    let whens: Vec<(&[u8], &[MoveStmt])> = vec![(lit, &then[..])];
+    let _ = if_eval::eval_evaluate(&rec, &fields, "A", &whens, &els);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_if_numeric(data: &[u8]) {
+    use if_eval::{Relop, SliceField};
+    use if_numeric::MoveNum;
+    use perform_slice::NumCond;
+    let fields = [SliceField { name: "N", offset: 0, size: 3 }, SliceField { name: "F", offset: 3, size: 2 }];
+    let mut rec = vec![b'0'; 5];
+    for (i, &b) in data.iter().take(5).enumerate() { rec[i] = b'0' + (b % 10); }
+    let op = match data.first().copied().unwrap_or(0) % 6 { 0 => Relop::Eq, 1 => Relop::Ne, 2 => Relop::Gt, 3 => Relop::Lt, 4 => Relop::Ge, _ => Relop::Le };
+    let v = data.get(1).copied().unwrap_or(0) as i64;
+    let cond = NumCond { field: "N", op, value: v };
+    let then = [MoveNum { value: 1, target: "F" }];
+    let els = [MoveNum { value: 9, target: "F" }];
+    let _ = if_numeric::eval_if_numeric(&rec, &fields, &cond, &then, &els);
+    let whens: Vec<(i64, &[MoveNum])> = vec![(v, &then[..])];
+    let _ = if_numeric::eval_evaluate_numeric(&rec, &fields, "N", &whens, &els);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_perform_slice(data: &[u8]) {
+    use if_eval::{Relop, SliceField};
+    use perform_slice::{AddOp, NumCond, PerformForm};
+    let fields = [SliceField { name: "C", offset: 0, size: 3 }, SliceField { name: "I", offset: 3, size: 3 }];
+    let rec = vec![b'0'; 6];
+    // body always makes progress (amount >= 1) and bounds are small -> guaranteed termination.
+    let body = [AddOp { target: "C", amount: (data.get(1).copied().unwrap_or(0) as i64 % 4) + 1 }];
+    let n = data.first().copied().unwrap_or(0) as i64 % 20;
+    let _ = perform_slice::eval_perform(&rec, &fields, &PerformForm::Times(n), &body);
+    let _ = perform_slice::eval_perform(&rec, &fields, &PerformForm::Until(NumCond { field: "C", op: Relop::Ge, value: n }), &body);
+    let by = (data.get(2).copied().unwrap_or(0) as i64 % 3) + 1;
+    let _ = perform_slice::eval_perform(&rec, &fields, &PerformForm::Varying { var: "I", from: 1, by, until: NumCond { field: "I", op: Relop::Gt, value: n } }, &body);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_file_flow_slice(data: &[u8]) {
+    use file_flow_slice::{FilterCond, LoopOp};
+    use if_eval::{Relop, SliceField};
+    let rf = [SliceField { name: "R-ST", offset: 0, size: 1 }, SliceField { name: "R-AMT", offset: 1, size: 3 }];
+    let wf = [SliceField { name: "CNT", offset: 0, size: 3 }, SliceField { name: "SM", offset: 3, size: 5 }];
+    let body = [LoopOp::Count("CNT"), LoopOp::SumField { field: "R-AMT", into: "SM" }];
+    let _ = file_flow_slice::eval_read_loop(data, file_seq::FileOrg::RecordSequential, 4, &rf, b"00000000", &wf, &body);
+    let cn = FilterCond::Numeric { field: "R-AMT", op: Relop::Ge, value: data.first().copied().unwrap_or(0) as i64 };
+    let _ = file_flow_slice::eval_filter_loop(data, file_seq::FileOrg::RecordSequential, 4, &rf, b"00000000", &wf, &cn, &body);
+    let ca = FilterCond::Alpha { field: "R-ST", op: Relop::Eq, value: data.get(0..1).unwrap_or(b"A") };
+    let _ = file_flow_slice::eval_filter_loop(data, file_seq::FileOrg::LineSequential, 4, &rf, b"00000000", &wf, &ca, &body);
+}
+
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_table_slice(data: &[u8]) {
+    use if_eval::Relop;
+    use table_slice::Table;
+    let occurs = (data.first().copied().unwrap_or(1) as usize % 8) + 1;
+    let t = Table { base_offset: 0, elem_size: 3, occurs };
+    let by = (data.get(1).copied().unwrap_or(0) as i64 % 3) + 1;
+    let limit = data.get(2).copied().unwrap_or(0) as i64 % 10;
+    let _ = table_slice::eval_table_loop(data, &t, 1, by, limit, None);
+    let _ = table_slice::eval_table_loop(data, &t, 1, by, limit, Some((Relop::Ge, 50)));
+    for i in 0..occurs + 2 {
+        let _ = table_slice::table_elem(data, &t, i);
+    }
+}

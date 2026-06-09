@@ -72,3 +72,75 @@ name = "edited"
 path = "fuzz_targets/edited.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "string_ops"
+path = "fuzz_targets/string_ops.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "initialize"
+path = "fuzz_targets/initialize.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "inspect"
+path = "fuzz_targets/inspect.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "file_seq"
+path = "fuzz_targets/file_seq.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "intrinsic"
+path = "fuzz_targets/intrinsic.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "accept_display"
+path = "fuzz_targets/accept_display.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "size_error"
+path = "fuzz_targets/size_error.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "if_eval"
+path = "fuzz_targets/if_eval.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "if_numeric"
+path = "fuzz_targets/if_numeric.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "perform_slice"
+path = "fuzz_targets/perform_slice.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "file_flow_slice"
+path = "fuzz_targets/file_flow_slice.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "table_slice"
+path = "fuzz_targets/table_slice.rs"
+test = false
+doc = false
