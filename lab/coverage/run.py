@@ -45,6 +45,8 @@ SURFACES = [
    "stored zoned-sign bytes are dialect-invariant but DISPLAY presentation (leading vs trailing sign) and compile-acceptance of extensions diverge across -std modes; -std is not vendor parity"),
  ("directive-variance", "compiler dialect options", ["cobc/config.c","libcob/move.c"], "observed", ["GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"], None,
    "compiler directives shift the record bytes: -fbinary-size changes COMP layout, -fbinary-byteorder flips endianness, -fbinary-truncate changes MOVE results; a correct decode needs the producer's build profile (BUILD.PROFILE.1)"),
+ ("declaratives-use", "runtime exceptions", ["cobc/typeck.c","libcob/fileio.c"], "observed", ["GNURUST.DECLARATIVES.ATLAS.1"], None,
+   "a failing file op fires its USE AFTER STANDARD ERROR declarative with FILE STATUS visible, then RESUMES; per-file binding; misreading this as a crash or a no-op corrupts batch-program control-flow analysis"),
  ("size-error", "runtime exceptions", ["libcob/numeric.c"], "sealed", ["SIZE.ERROR.ATLAS.1", "GNURUST.SIZE.ERROR.1"], None,
    "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal — silent corruption"),
  ("file-io-sequential", "file I/O", ["libcob/fileio.c"], "sealed", ["GNURUST.FILE.SEQUENTIAL.1", "GNURUST.FILE.WRITE.1", "GNURUST.FILE.REWRITE.1"], None,

@@ -41,6 +41,7 @@ SURFACES = [
  (r"\bDELETE\b", "DELETE (indexed/relative)", "observed", "GNURUST.INDEXED.FILE.ATLAS.1"),
  (r"ORGANIZATION\s+IS\s+INDEXED", "indexed file org", "observed", "GNURUST.INDEXED.FILE.ATLAS.1"),
  (r"ORGANIZATION\s+IS\s+RELATIVE", "relative file org", "observed", "GNURUST.RELATIVE.FILE.ATLAS.1"),
+ (r"\bDECLARATIVES\b|USE\s+AFTER\s+STANDARD\s+ERROR", "DECLARATIVES / USE error handler", "observed", "GNURUST.DECLARATIVES.ATLAS.1"),
  (r"\bSCREEN\s+SECTION\b", "SCREEN SECTION", "refused", "NEG (screen I/O out of the data-evidence lane)"),
  (r"\bRD\b|REPORT\s+SECTION", "REPORT WRITER", "refused", "NEG (report writer out of scope)"),
  (r"EXEC\s+SQL", "embedded SQL / DB2", "refused", "NEG.DB2.* / NEG.SQL.PRECOMPILER"),

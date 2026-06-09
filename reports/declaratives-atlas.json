@@ -1,0 +1,44 @@
+{
+  "schema": "gnurust-declaratives-atlas-v1",
+  "court": "GNURUST.DECLARATIVES.ATLAS.1",
+  "dialect": "gnucobol-3.2.0-default",
+  "oracle": "cobc DECLARATIVES / USE AFTER STANDARD ERROR PROCEDURE (cobc/typeck.c + libcob/fileio.c error path)",
+  "doctrine": "OBSERVED map of the runtime behavior of a USE AFTER STANDARD ERROR PROCEDURE declarative on file I/O -- one of COBOL's most under-specified corners. gnucobol-rs executes NO Procedure Division and runs NO declaratives (the L8 multi-statement-execution summit, NOT CLAIMED); this records the witnessed semantics: which op fires it, per-file binding, FILE STATUS visibility, and resume-after.",
+  "trace": [
+    "DECL-F fs=35",
+    "DECL-F fs=42",
+    "REACHED-END"
+  ],
+  "return_code": "0",
+  "observations": [
+    {
+      "name": "failing I/O invokes the file's USE declarative",
+      "observed": "a failing file op runs that file's USE AFTER STANDARD ERROR section (OPEN of a missing file -> status 35 fires it; CLOSE of a not-open file -> status 42 re-fires it); a SUCCESSFUL op fires nothing",
+      "status": "observed-only"
+    },
+    {
+      "name": "per-file binding",
+      "observed": "the declarative is bound PER FILE -- file F's errors run F's ERR-F section, never G's ERR-G; the successful file G never triggers its own section",
+      "status": "observed-only"
+    },
+    {
+      "name": "FILE STATUS visible inside",
+      "observed": "inside the declarative the file's FILE STATUS data item holds the current per-op code (35 then 42), so the handler can branch on it",
+      "status": "observed-only"
+    },
+    {
+      "name": "resume after declarative",
+      "observed": "after the declarative returns, execution RESUMES at the statement following the failed I/O (it does NOT abort); the program reaches its end and terminates rc=0",
+      "status": "observed-only"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.DECLARATIVES.NO_DECLARATIVE_EXECUTION",
+    "NEG.DECLARATIVES.NO_USE_FOR_DEBUGGING",
+    "NEG.DECLARATIVES.NO_NONFILE_EXCEPTIONS",
+    "NEG.DECLARATIVES.NO_GLOBAL_DECLARATIVES",
+    "NEG.DECLARATIVES.NO_MULTI_DECLARATIVE_PRECEDENCE",
+    "NEG.DECLARATIVES.NO_RESUME_FOR_NONFILE",
+    "NEG.DECLARATIVES.NO_ALL_DIALECTS"
+  ]
+}

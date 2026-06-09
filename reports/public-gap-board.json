@@ -6,7 +6,7 @@
   "files_scanned": 29,
   "counts": {
     "sealed": 14,
-    "observed": 8,
+    "observed": 9,
     "refused": 4,
     "missing": 0
   },
@@ -107,6 +107,12 @@
       "occurrences": 109,
       "status": "observed",
       "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+    },
+    {
+      "surface": "DECLARATIVES / USE error handler",
+      "occurrences": 89,
+      "status": "observed",
+      "court": "GNURUST.DECLARATIVES.ATLAS.1"
     },
     {
       "surface": "REPORT WRITER",

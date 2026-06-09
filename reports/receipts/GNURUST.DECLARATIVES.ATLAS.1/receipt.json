@@ -1,0 +1,34 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.DECLARATIVES.ATLAS.1",
+  "court": "observed DECLARATIVES / USE error-handler atlas",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.26",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/declaratives_atlas_sweep.sh"
+  },
+  "byte_domain": "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler",
+  "results": {
+    "sweep": "PASS=5 FAIL=0"
+  },
+  "non_claims": [
+    "executing a declarative",
+    "USE FOR DEBUGGING",
+    "non-file (arithmetic) exceptions",
+    "GLOBAL declaratives across nested programs",
+    "multi-declarative precedence ordering",
+    "resume-vs-terminate for non-file exceptions",
+    "all dialects"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

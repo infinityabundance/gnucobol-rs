@@ -646,6 +646,20 @@
         "runtime environment variables (COB_*)",
         "vendor-specific directives"
       ]
+    },
+    "GNURUST.DECLARATIVES.ATLAS.1": {
+      "court": "observed DECLARATIVES / USE error-handler atlas",
+      "sweep": "declaratives_atlas_sweep.sh",
+      "byte_domain": "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler",
+      "non_claims": [
+        "executing a declarative",
+        "USE FOR DEBUGGING",
+        "non-file (arithmetic) exceptions",
+        "GLOBAL declaratives across nested programs",
+        "multi-declarative precedence ordering",
+        "resume-vs-terminate for non-file exceptions",
+        "all dialects"
+      ]
     }
   }
 }

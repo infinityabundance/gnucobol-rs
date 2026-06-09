@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 827,
+  "count": 840,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -455,7 +455,8 @@
         "GNURUST.INDEXED.FILE.ATLAS.1",
         "GNURUST.SEARCH.TABLE.1",
         "GNURUST.SORT.MERGE.ATLAS.1",
-        "GNURUST.RELATIVE.FILE.ATLAS.1"
+        "GNURUST.RELATIVE.FILE.ATLAS.1",
+        "GNURUST.DECLARATIVES.ATLAS.1"
       ]
     },
     {
@@ -2143,6 +2144,83 @@
       ]
     },
     {
+      "id": "NEG.DECLARATIVES.NO_ALL_DIALECTS",
+      "surface": "all-dialect declarative behavior claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DECLARATIVES.NO_DECLARATIVE_EXECUTION",
+      "surface": "executing a declarative claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; gnucobol-rs runs no Procedure Division / declaratives",
+      "risk_if_guessed": "running a USE handler paragraph",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DECLARATIVES.NO_GLOBAL_DECLARATIVES",
+      "surface": "GLOBAL declaratives across nested programs claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "single-program per-file declaratives observed",
+      "risk_if_guessed": "a GLOBAL USE across CALLs",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DECLARATIVES.NO_MULTI_DECLARATIVE_PRECEDENCE",
+      "surface": "the precedence among multiple matching declaratives claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "per-file binding observed; multi-match ordering not modeled",
+      "risk_if_guessed": "assuming a precedence rule",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DECLARATIVES.NO_NONFILE_EXCEPTIONS",
+      "surface": "non-file (arithmetic/SIZE ERROR) declaratives claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "file-I/O error declaratives observed only",
+      "risk_if_guessed": "an arithmetic-exception handler",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DECLARATIVES.NO_RESUME_FOR_NONFILE",
+      "surface": "resume-vs-terminate for non-file exceptions claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "resume-after observed for file I/O only",
+      "risk_if_guessed": "assuming all exceptions resume",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DECLARATIVES.NO_USE_FOR_DEBUGGING",
+      "surface": "USE FOR DEBUGGING claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only USE AFTER STANDARD ERROR on file I/O is observed",
+      "risk_if_guessed": "a debugging-line trace",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.DECODING-THE-DISPLAY-PRESENTATION-FORM-B",
       "surface": "decoding the DISPLAY presentation form back to a value",
       "status": "not_admitted_fail_closed",
@@ -2815,6 +2893,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.DATE.1"
+      ]
+    },
+    {
+      "id": "NEG.EXECUTING-A-DECLARATIVE-GNUCOBOL-RS-RUNS",
+      "surface": "executing a declarative (gnucobol-rs runs NO Procedure Division / declaratives -- the L8 multi-statement summit)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
       ]
     },
     {
@@ -3590,6 +3679,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.GLOBAL-DECLARATIVES-ACROSS-NESTED-PROGRA",
+      "surface": "GLOBAL declaratives across nested programs",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
       ]
     },
     {
@@ -5353,6 +5453,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.NON-FILE-EXCEPTIONS-ARITHMETIC-SIZE-ERRO",
+      "surface": "non-file exceptions (arithmetic/SIZE ERROR declaratives)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
       ]
     },
     {
@@ -8711,6 +8822,17 @@
       ]
     },
     {
+      "id": "NEG.THE-PRECEDENCE-ORDERING-WHEN-MULTIPLE-DE",
+      "surface": "the precedence ordering when multiple declaratives could match",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.THE-RECORDED-COMMIT-HASHES-OR-LICENSES-U",
       "surface": "the recorded commit hashes or licenses (unverified at index time)",
       "status": "not_admitted_fail_closed",
@@ -8953,6 +9075,17 @@
       ]
     },
     {
+      "id": "NEG.USE-FOR-DEBUGGING",
+      "surface": "USE FOR DEBUGGING",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.V-P",
       "surface": "V+P",
       "status": "not_admitted_fail_closed",
@@ -9082,6 +9215,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.EXTRACT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.WHETHER-NON-FILE-EXCEPTIONS-RESUME-OR-TE",
+      "surface": "whether non-file exceptions resume or terminate",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
       ]
     },
     {

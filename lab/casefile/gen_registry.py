@@ -708,6 +708,20 @@ for (i, s2, g, r) in DVA:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"]}
 
+# GNURUST.DECLARATIVES.ATLAS.1 -- observed DECLARATIVES / USE error-handler atlas.
+DEC = [
+ ("NEG.DECLARATIVES.NO_DECLARATIVE_EXECUTION", "executing a declarative claimed", "the atlas OBSERVES; gnucobol-rs runs no Procedure Division / declaratives", "running a USE handler paragraph"),
+ ("NEG.DECLARATIVES.NO_USE_FOR_DEBUGGING", "USE FOR DEBUGGING claimed", "only USE AFTER STANDARD ERROR on file I/O is observed", "a debugging-line trace"),
+ ("NEG.DECLARATIVES.NO_NONFILE_EXCEPTIONS", "non-file (arithmetic/SIZE ERROR) declaratives claimed", "file-I/O error declaratives observed only", "an arithmetic-exception handler"),
+ ("NEG.DECLARATIVES.NO_GLOBAL_DECLARATIVES", "GLOBAL declaratives across nested programs claimed", "single-program per-file declaratives observed", "a GLOBAL USE across CALLs"),
+ ("NEG.DECLARATIVES.NO_MULTI_DECLARATIVE_PRECEDENCE", "the precedence among multiple matching declaratives claimed", "per-file binding observed; multi-match ordering not modeled", "assuming a precedence rule"),
+ ("NEG.DECLARATIVES.NO_RESUME_FOR_NONFILE", "resume-vs-terminate for non-file exceptions claimed", "resume-after observed for file I/O only", "assuming all exceptions resume"),
+ ("NEG.DECLARATIVES.NO_ALL_DIALECTS", "all-dialect declarative behavior claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in DEC:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.DECLARATIVES.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

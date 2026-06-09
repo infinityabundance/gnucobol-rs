@@ -1299,6 +1299,20 @@
       "readiness": 3,
       "lie_prevented": "a COBOL binary's record bytes are fixed by the copybook alone -- NO: a COMPILER DIRECTIVE shifts them: -fbinary-size=2-4-8 makes a small COMP field 2 bytes (mis-offsetting every later field), -fbinary-byteorder=native flips multi-byte COMP endianness, and -fno-binary-truncate changes what a MOVE stores -- so a correct decode REQUIRES the producer's build profile (BUILD.PROFILE.1), it cannot be inferred from the copybook",
       "damage_if_overclaimed": "decoding a record produced under a non-default binary-size/byteorder/truncate with the default profile silently mis-offsets fields, reverses binary values, or mis-rounds MOVEs; assuming the profile can be auto-detected from bytes invents a build environment that was never recorded"
+    },
+    {
+      "id": "GNURUST.DECLARATIVES.ATLAS.1",
+      "name": "observed DECLARATIVES / USE error-handler atlas",
+      "proven": "observed the runtime behavior of a USE AFTER STANDARD ERROR PROCEDURE declarative on file I/O under the gnucobol-3.2.0-default witness, verified by the sweep (5/0): a FAILING file op invokes that file's USE declarative (OPEN of a missing file fires it with status 35, CLOSE of a not-open file re-fires it with status 42) while a SUCCESSFUL op invokes nothing; the binding is PER-FILE (file F's errors run F's section, never another file's); FILE STATUS is VISIBLE inside the declarative (the per-op code); and after the declarative returns, execution RESUMES at the statement following the failed I/O (the program reaches its end, rc=0)",
+      "byte_domain": "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler",
+      "oracle": "cobc DECLARATIVES / USE AFTER STANDARD ERROR PROCEDURE (cobc/typeck.c + libcob/fileio.c error path)",
+      "fixtures": "declaratives_atlas_sweep 5/0 -> reports/declaratives-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "executing a declarative (gnucobol-rs runs NO Procedure Division / declaratives -- the L8 multi-statement summit); USE FOR DEBUGGING; non-file exceptions (arithmetic/SIZE ERROR declaratives); GLOBAL declaratives across nested programs; the precedence ordering when multiple declaratives could match; whether non-file exceptions resume or terminate; all dialects",
+      "breaks_claim": "running a declarative paragraph; handling a non-file (arithmetic) exception declarative; resolving multi-declarative precedence; a USE FOR DEBUGGING trace",
+      "readiness": 3,
+      "lie_prevented": "a file error aborts the COBOL program (or is silently ignored) -- NO: a failing I/O INVOKES the file's USE AFTER STANDARD ERROR declarative with the FILE STATUS visible inside it, and then execution RESUMES at the next statement (the program does NOT abort, rc=0); the handler is bound PER FILE and a successful op fires nothing -- so the error path is a structured, resumable, per-file branch, not a crash and not a no-op",
+      "damage_if_overclaimed": "assuming a file error crashes (or is ignored) misreads the control flow of every batch program with declaratives; treating the atlas as an execution engine would run unsealed Procedure-Division control flow inside the handler"
     }
   ],
   "transform_vs_read": {

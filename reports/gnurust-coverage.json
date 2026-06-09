@@ -3,14 +3,14 @@
   "court": "GNURUST.COVERAGE.1",
   "doctrine": "Forensic port: every GnuCOBOL semantic surface is bound to admitted source + a court/refusal/future campaign with a status. This is the honest map of the port -- the data-representation spine is sealed; file I/O, intrinsics, and most of Procedure Division are not.",
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
-  "surface_count": 31,
+  "surface_count": 32,
   "status_counts": {
     "sealed": 17,
-    "observed": 9,
+    "observed": 10,
     "negative": 5,
     "missing": 0
   },
-  "sealed_fraction": "17/31",
+  "sealed_fraction": "17/32",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -214,6 +214,21 @@
       ],
       "future_campaign": null,
       "risk_if_unported": "compiler directives shift the record bytes: -fbinary-size changes COMP layout, -fbinary-byteorder flips endianness, -fbinary-truncate changes MOVE results; a correct decode needs the producer's build profile (BUILD.PROFILE.1)"
+    },
+    {
+      "surface": "declaratives-use",
+      "category": "runtime exceptions",
+      "source_modules": [
+        "cobc/typeck.c",
+        "libcob/fileio.c"
+      ],
+      "source_modules_present": true,
+      "status": "observed",
+      "courts": [
+        "GNURUST.DECLARATIVES.ATLAS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "a failing file op fires its USE AFTER STANDARD ERROR declarative with FILE STATUS visible, then RESUMES; per-file binding; misreading this as a crash or a no-op corrupts batch-program control-flow analysis"
     },
     {
       "surface": "size-error",
