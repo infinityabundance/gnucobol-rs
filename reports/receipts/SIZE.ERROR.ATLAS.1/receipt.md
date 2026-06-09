@@ -11,7 +11,7 @@
 | crate_version | `0.7.16` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3) |
-| replay command | `bash lab/oracle/size_error_sweep.sh` |
+| replay command | `bash lab/oracle/size_error_atlas_sweep.sh` |
 | generated_at | unstamped |
 | git_commit | `unstamped` |
 | receipt_status | current |

@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/SIZE.ERROR.ATLAS.1/casefile.json",
       "digest": {
-        "sha256": "15c5d8cb0110e81a5d8b45df80d58dae1b944783ad24d1103ac46a179a901004"
+        "sha256": "55617c3b14a12bf80f83a2f76d6caf3e6a4956df7621b56c9ad25c349a1ee08d"
       }
     }
   ],
@@ -16,12 +16,12 @@
     "crate_version": "0.7.16",
     "verdict": "pass",
     "replay": {
-      "command": "bash lab/oracle/size_error_sweep.sh",
+      "command": "bash lab/oracle/size_error_atlas_sweep.sh",
       "exit_code": 0
     },
     "materials": {
-      "claim_ladder_entry_sha256": "c356a54a59f8b3b6d39e5967f4a22d11eac934b513a7eb810fefade19e802be1",
-      "receipt_sha256": "878c88402bcc34d064ea5e2e0fc438c0d379d81adbdebe78f820f6c31129c131"
+      "claim_ladder_entry_sha256": "9e9754edffc06b9dc33d4906a68298da5133b6c0aa9f0b4ca505c9a2c7df145e",
+      "receipt_sha256": "444c4d7e667656b2f88375986ffd407cadc0068595a2f3ec98a99c450a67397c"
     },
     "positive_claim_count": 5,
     "negative_claim_count": 6

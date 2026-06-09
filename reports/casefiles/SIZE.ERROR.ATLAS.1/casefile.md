@@ -6,7 +6,7 @@
 
 - **Oracle:** bash lab/oracle/size_error_sweep.sh
 - **Byte domain(s):** observed receiver bytes (before/after) + size-error flag from the oracle
-- **Replay:** `bash lab/oracle/size_error_sweep.sh`
+- **Replay:** `bash lab/oracle/size_error_atlas_sweep.sh`
 - **Authority:** STATUS.md · receipt_status: current
 
 ## Positive claims (5)

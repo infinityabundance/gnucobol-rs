@@ -56,7 +56,8 @@ run_sweep "GNURUST.INTRINSIC.ORD-CHAR.1" ordchar_sweep.sh
 run_sweep "GNURUST.ACCEPT.DISPLAY.1" accept_display_sweep.sh
 run_sweep "GNURUST.ACCEPT.DISPLAY.2" accept_display2_sweep.sh
 run_sweep "GNURUST.PROCEDURE.FLOW.ATLAS.1 (observed)" procedure_flow_atlas_sweep.sh
-run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_sweep.sh
+run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_atlas_sweep.sh
+run_sweep "GNURUST.SIZE.ERROR.1" size_error_sweep.sh
 run_sweep "GNURUST.8  VALUE image"   value_sweep.sh
 run_sweep "GNURUST.11 LEVEL-88 eval" cond_sweep.sh
 run_sweep "GNURUST.12 SET 88 TRUE"   set_sweep.sh

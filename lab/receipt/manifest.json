@@ -179,7 +179,7 @@
     },
     "SIZE.ERROR.ATLAS.1": {
       "court": "arithmetic size-error behavior atlas",
-      "sweep": "size_error_sweep.sh",
+      "sweep": "size_error_atlas_sweep.sh",
       "byte_domain": "observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3)",
       "non_claims": [
         "ON SIZE ERROR / NOT ON SIZE ERROR control flow (not implemented)",

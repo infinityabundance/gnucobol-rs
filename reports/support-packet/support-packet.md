@@ -19,7 +19,7 @@
 |---|---|---|
 | `status` | [`STATUS.md`](../../STATUS.md) | `0d080995b98d4a2c…` |
 | `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `c39ea414260db979…` |
-| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `396cbaa674d27ef0…` |
+| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `eb1bfb7609599e55…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `59ebcb265cefe8da…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `6062cdc5500289af…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |

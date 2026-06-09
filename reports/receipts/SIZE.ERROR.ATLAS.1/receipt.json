@@ -12,7 +12,7 @@
     "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
   },
   "command": {
-    "replay": "bash lab/oracle/size_error_sweep.sh"
+    "replay": "bash lab/oracle/size_error_atlas_sweep.sh"
   },
   "byte_domain": "observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3)",
   "results": {
