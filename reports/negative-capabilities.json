@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 775,
+  "count": 788,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -431,7 +431,8 @@
         "GNURUST.BUILD.PROFILE.1",
         "GNURUST.CALL.EXTENSION.ATLAS.1",
         "GNURUST.INDEXED.FILE.ATLAS.1",
-        "GNURUST.SEARCH.TABLE.1"
+        "GNURUST.SEARCH.TABLE.1",
+        "GNURUST.SORT.MERGE.ATLAS.1"
       ]
     },
     {
@@ -1803,6 +1804,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DATE.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.CUSTOM-COLLATING-SEQUENCE",
+      "surface": "custom collating sequence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
       ]
     },
     {
@@ -3891,6 +3903,17 @@
       ]
     },
     {
+      "id": "NEG.INPUT-OUTPUT-PROCEDURE-RELEASE-RETURN",
+      "surface": "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.INSPECT.NO_ALL_DIALECTS",
       "surface": "all-dialect INSPECT behavior claimed",
       "status": "not_admitted_fail_closed",
@@ -4710,6 +4733,17 @@
       ]
     },
     {
+      "id": "NEG.MERGE",
+      "surface": "MERGE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.MINOR-UNIT-INFERRED-FROM-PIC",
       "surface": "minor-unit inferred from PIC",
       "status": "not_admitted_fail_closed",
@@ -4850,6 +4884,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.CASE.1"
+      ]
+    },
+    {
+      "id": "NEG.MULTIPLE-KEYS",
+      "surface": "multiple keys",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
       ]
     },
     {
@@ -7594,6 +7639,105 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.10"
+      ]
+    },
+    {
+      "id": "NEG.SORT-EXECUTION",
+      "surface": "SORT execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT-STABILITY-FOR-EQUAL-KEYS",
+      "surface": "sort stability for equal keys",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_ALL_DIALECTS",
+      "surface": "all-dialect SORT claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_COLLATING_SEQUENCE",
+      "surface": "custom collating sequence claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "native order only",
+      "risk_if_guessed": "a PROGRAM COLLATING SEQUENCE sort",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_INPUT_OUTPUT_PROCEDURE",
+      "surface": "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN) claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only the USING/GIVING reordering is observed",
+      "risk_if_guessed": "a SORT INPUT PROCEDURE",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_MERGE",
+      "surface": "MERGE of pre-sorted files claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "SORT observed; MERGE not",
+      "risk_if_guessed": "a MERGE statement",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_MULTI_KEY",
+      "surface": "multiple SORT keys claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "single key observed",
+      "risk_if_guessed": "SORT on two keys",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_SORT_EXECUTION",
+      "surface": "SORT execution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES reordering; gnucobol-rs runs no sort engine",
+      "risk_if_guessed": "executing a SORT",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SORT_MERGE.NO_STABILITY_GUARANTEE",
+      "surface": "sort stability for equal keys claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "GnuCOBOL runs an external sort; stability not modeled",
+      "risk_if_guessed": "relying on stable order for equal keys",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
       ]
     },
     {

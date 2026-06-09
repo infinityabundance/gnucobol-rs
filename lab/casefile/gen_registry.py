@@ -653,6 +653,20 @@ for (i, s2, g, r) in IDX:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INDEXED.FILE.ATLAS.1"]}
 
+# GNURUST.SORT.MERGE.ATLAS.1 -- observed SORT/MERGE atlas; SORT EXECUTION is the loud non-claim.
+SM = [
+ ("NEG.SORT_MERGE.NO_SORT_EXECUTION", "SORT execution claimed", "the atlas OBSERVES reordering; gnucobol-rs runs no sort engine", "executing a SORT"),
+ ("NEG.SORT_MERGE.NO_INPUT_OUTPUT_PROCEDURE", "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN) claimed", "only the USING/GIVING reordering is observed", "a SORT INPUT PROCEDURE"),
+ ("NEG.SORT_MERGE.NO_MERGE", "MERGE of pre-sorted files claimed", "SORT observed; MERGE not", "a MERGE statement"),
+ ("NEG.SORT_MERGE.NO_MULTI_KEY", "multiple SORT keys claimed", "single key observed", "SORT on two keys"),
+ ("NEG.SORT_MERGE.NO_STABILITY_GUARANTEE", "sort stability for equal keys claimed", "GnuCOBOL runs an external sort; stability not modeled", "relying on stable order for equal keys"),
+ ("NEG.SORT_MERGE.NO_COLLATING_SEQUENCE", "custom collating sequence claimed", "native order only", "a PROGRAM COLLATING SEQUENCE sort"),
+ ("NEG.SORT_MERGE.NO_ALL_DIALECTS", "all-dialect SORT claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in SM:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.SORT.MERGE.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

@@ -31,7 +31,7 @@ for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-licen
 done
 # TRUST.1/TRUST.4: every GNURUST court in the claim-ladder must have a generated forensic casefile
 # (legacy hand-written receipts are now non-authoritative exhibits under research/legacyreports/).
-GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1','GNURUST.PUBLIC.CORPUS.1','GNURUST.BUILD.PROFILE.1','GNURUST.PUBLIC.GAP.1','GNURUST.CALL.EXTENSION.ATLAS.1','GNURUST.INDEXED.FILE.ATLAS.1')))")
+GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1','GNURUST.PUBLIC.CORPUS.1','GNURUST.BUILD.PROFILE.1','GNURUST.PUBLIC.GAP.1','GNURUST.CALL.EXTENSION.ATLAS.1','GNURUST.INDEXED.FILE.ATLAS.1','GNURUST.SORT.MERGE.ATLAS.1')))")
 for code in $GCODES; do
   [ -f "reports/casefiles/$code/casefile.json" ] || bad "claim-ladder court $code has no generated casefile"
 done

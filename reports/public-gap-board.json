@@ -6,16 +6,11 @@
   "files_scanned": 29,
   "counts": {
     "sealed": 14,
-    "observed": 6,
+    "observed": 7,
     "refused": 4,
-    "missing": 2
+    "missing": 1
   },
   "missing_court_board": [
-    {
-      "surface": "SORT / MERGE",
-      "occurrences": 145,
-      "proposed_court": "GNURUST.SORT.MERGE.ATLAS.1 (proposed)"
-    },
     {
       "surface": "relative file org",
       "occurrences": 5,
@@ -92,8 +87,8 @@
     {
       "surface": "SORT / MERGE",
       "occurrences": 145,
-      "status": "missing",
-      "court": "GNURUST.SORT.MERGE.ATLAS.1 (proposed)"
+      "status": "observed",
+      "court": "GNURUST.SORT.MERGE.ATLAS.1"
     },
     {
       "surface": "INSPECT",

@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **28**  ·  sealed ✅ **17**  ·  observed 🟡 5  ·  refused ⛔ 6  ·  **missing ❌ 0**
+- surfaces: **28**  ·  sealed ✅ **17**  ·  observed 🟡 6  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
 - sealed fraction (data-representation spine): **17/28**
 
@@ -33,7 +33,7 @@
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ✅ sealed | GNURUST.ACCEPT.DISPLAY.1, GNURUST.ACCEPT.DISPLAY.2 |
 | `procedure-flow` | control flow | `typeck.c, codegen.c` | 🟡 observed | GNURUST.PROCEDURE.FLOW.ATLAS.1, GNURUST.IF.EVALUATE.SLICE.1, GNURUST.IF.NUMERIC.SLICE.1, GNURUST.PERFORM.SLICE.1, GNURUST.TABLE.PERFORM.SLICE.1, GNURUST.SEARCH.TABLE.1, GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1 |
 | `call-linkage` | CALL/linkage | `call.c` | 🟡 observed | GNURUST.CALL.EXTENSION.ATLAS.1 |
-| `sort-merge` | SORT/MERGE | `fileio.c` | ⛔ negative | GNURUST.SORT.1 (future) |
+| `sort-merge` | SORT/MERGE | `fileio.c` | 🟡 observed | GNURUST.SORT.MERGE.ATLAS.1 |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |
 | `report-writer` | screen/report/CICS/SQL unsupported | `reportio.c` | ⛔ negative | — |
 | `ml-io-xml-json` | screen/report/CICS/SQL unsupported | `mlio.c` | ⛔ negative | — |

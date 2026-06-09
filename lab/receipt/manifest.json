@@ -591,6 +591,20 @@
         "OCCURS DEPENDING ON",
         "all dialects"
       ]
+    },
+    "GNURUST.SORT.MERGE.ATLAS.1": {
+      "court": "observed SORT/MERGE atlas",
+      "sweep": "sort_merge_atlas_sweep.sh",
+      "byte_domain": "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file",
+      "non_claims": [
+        "SORT execution",
+        "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+        "MERGE",
+        "multiple keys",
+        "sort stability",
+        "custom collating sequence",
+        "all dialects"
+      ]
     }
   }
 }

@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-88-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-88-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-89-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-89-blueviolet)
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -59,6 +59,7 @@ compatibility court.
 | `GNURUST.CALL.EXTENSION.ATLAS.1` | observed CALL / linkage atlas | ✅ pass | `reports/casefiles/GNURUST.CALL.EXTENSION.ATLAS.1/` |
 | `GNURUST.INDEXED.FILE.ATLAS.1` | observed indexed-file atlas | ✅ pass | `reports/casefiles/GNURUST.INDEXED.FILE.ATLAS.1/` |
 | `GNURUST.SEARCH.TABLE.1` | SEARCH / SEARCH ALL table lookup | ✅ pass | `reports/casefiles/GNURUST.SEARCH.TABLE.1/` |
+| `GNURUST.SORT.MERGE.ATLAS.1` | observed SORT / MERGE atlas | ✅ pass | `reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/` |
 | `GNURUST.2` | decimal MOVE | ✅ pass | `reports/casefiles/GNURUST.2/` |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | `reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/` |
 | `GNURUST.3` | PIC field model | ✅ pass | `reports/casefiles/GNURUST.3/` |

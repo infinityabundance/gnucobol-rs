@@ -6,8 +6,8 @@
   "surface_count": 28,
   "status_counts": {
     "sealed": 17,
-    "observed": 5,
-    "negative": 6,
+    "observed": 6,
+    "negative": 5,
     "missing": 0
   },
   "sealed_fraction": "17/28",
@@ -365,9 +365,11 @@
         "libcob/fileio.c"
       ],
       "source_modules_present": true,
-      "status": "negative",
-      "courts": [],
-      "future_campaign": "GNURUST.SORT.1 (future)",
+      "status": "observed",
+      "courts": [
+        "GNURUST.SORT.MERGE.ATLAS.1"
+      ],
+      "future_campaign": null,
       "risk_if_unported": "SORT/MERGE is its own runtime; refused until receipt-backed"
     },
     {

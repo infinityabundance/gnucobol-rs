@@ -63,7 +63,7 @@ SURFACES = [
    "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, execution NOT claimed"),
  ("call-linkage", "CALL/linkage", ["libcob/call.c"], "observed", ["GNURUST.CALL.EXTENSION.ATLAS.1"], None,
    "CALL/linkage/USING is a large surface; refused until receipt-backed"),
- ("sort-merge", "SORT/MERGE", ["libcob/fileio.c"], "negative", [], "GNURUST.SORT.1 (future)",
+ ("sort-merge", "SORT/MERGE", ["libcob/fileio.c"], "observed", ["GNURUST.SORT.MERGE.ATLAS.1"], None,
    "SORT/MERGE is its own runtime; refused until receipt-backed"),
  ("screen-section", "screen/report/CICS/SQL unsupported", ["libcob/screenio.c"], "negative", [], None,
    "SCREEN SECTION is terminal UI; out of the data-evidence lane"),

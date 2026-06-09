@@ -55,6 +55,7 @@
       "GNURUST.REMAINDER.1",
       "GNURUST.SEARCH.TABLE.1",
       "GNURUST.SIZE.ERROR.1",
+      "GNURUST.SORT.MERGE.ATLAS.1",
       "GNURUST.STRING.UNSTRING.1",
       "GNURUST.TABLE.PERFORM.SLICE.1",
       "SIZE.ERROR.ATLAS.1"
@@ -108,7 +109,7 @@
     "F": []
   },
   "class_counts": {
-    "A": 47,
+    "A": 48,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -932,6 +933,22 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "size_error_sweep 12/0 + 2 unit tests",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.SORT.MERGE.ATLAS.1",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 2,
+      "negative_claims": 8,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "sort_merge_atlas_sweep 2/0 -> reports/sort-merge-atlas.json",
       "ceremonial_flags": []
     },
     {
