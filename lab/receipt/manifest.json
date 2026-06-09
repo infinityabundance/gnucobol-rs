@@ -331,6 +331,17 @@
         "status is not implementation",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.MOD-REM.1": {
+      "court": "FUNCTION MOD/REM integer modulo/remainder",
+      "sweep": "modrem_sweep.sh",
+      "byte_domain": "FUNCTION MOD(a,b) (divisor sign) / REM(a,b) (dividend sign) for integers",
+      "non_claims": [
+        "non-integer operands",
+        "MOD/REM by zero",
+        "MOD and REM interchangeable",
+        "all dialects"
+      ]
     }
   }
 }

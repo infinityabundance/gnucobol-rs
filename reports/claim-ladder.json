@@ -935,6 +935,20 @@
       "readiness": 3,
       "lie_prevented": "gnucobol-rs ports COBOL -- NO: it does NOT execute Procedure Division; this atlas OBSERVES control-flow semantics (PERFORM VARYING leaves the control variable one step PAST the limit; GO TO skips intervening statements) but runs no program. Execution is the loudest non-claim of the whole project",
       "damage_if_overclaimed": "treating an observed control-flow fact as an execution engine would invite running real programs through a kernel that does no Procedure Division execution"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.MOD-REM.1",
+      "name": "FUNCTION MOD/REM integer modulo and remainder",
+      "proven": "FUNCTION MOD(a,b) and FUNCTION REM(a,b) for integer operands match cobc/libcob across the full sign matrix (verified 20/0): MOD = a - b*floor(a/b) so the result takes the DIVISOR sign (MOD(-17,5)=3, MOD(17,-5)=-3), REM = a - b*trunc(a/b) = a%b so the result takes the DIVIDEND sign (REM(-17,5)=-2, REM(17,-5)=2). The third pair of implemented intrinsics, split from GNURUST.INTRINSIC.ATLAS.1",
+      "byte_domain": "FUNCTION MOD/REM(integer a, b) -> value",
+      "oracle": "cobc FUNCTION MOD/REM (libcob/intrinsic.c)",
+      "fixtures": "modrem_sweep 20/0 + 1 unit test",
+      "sealed_version": "0.7.10",
+      "not_proven": "non-integer operands; MOD/REM by zero; MOD and REM interchangeable; all dialects",
+      "breaks_claim": "non-integer MOD/REM; divide-by-zero; swapping MOD/REM on negatives",
+      "readiness": 3,
+      "lie_prevented": "MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result",
+      "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values"
     }
   ],
   "transform_vs_read": {

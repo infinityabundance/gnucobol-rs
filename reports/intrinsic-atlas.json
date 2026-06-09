@@ -64,8 +64,8 @@
       "input": "17,5 / -17,5",
       "observed": "2 / 3",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "result takes the DIVISOR sign (mathematical modulo)"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.MOD-REM.1 -- DIVISOR sign (mathematical modulo)"
     },
     {
       "name": "REM",
@@ -73,8 +73,8 @@
       "input": "17,5 / -17,5",
       "observed": "2 / -2",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "result takes the DIVIDEND sign (C-style remainder)"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.MOD-REM.1 -- DIVIDEND sign (C-style remainder)"
     },
     {
       "name": "UPPER-CASE",

@@ -416,6 +416,17 @@ for (i, s2, g, r) in INUM:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.NUMVAL.1"]}
 
+# GNURUST.INTRINSIC.MOD-REM.1 — integer MOD (divisor sign) / REM (dividend sign).
+IMR = [
+ ("NEG.INTRINSIC_MODREM.NO_NON_INTEGER_OPERANDS", "non-integer MOD/REM claimed", "only integer operands are sealed", "MOD(7.5, 2)"),
+ ("NEG.INTRINSIC_MODREM.NO_DIVIDE_BY_ZERO", "MOD/REM by zero claimed", "b=0 is a non-claim (returns 0)", "relying on MOD(a,0)"),
+ ("NEG.INTRINSIC_MODREM.NOT_INTERCHANGEABLE", "MOD and REM treated as the same", "MOD takes the DIVISOR sign, REM the DIVIDEND sign", "swapping MOD/REM on negatives"),
+ ("NEG.INTRINSIC_MODREM.NO_ALL_DIALECTS", "all-dialect MOD/REM claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in IMR:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.MOD-REM.1"]}
+
 # GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
 AD = [
  ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),

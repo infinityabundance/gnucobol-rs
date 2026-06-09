@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/casefile.json",
+      "digest": {
+        "sha256": "59a40ab314f7d9eb3c0deb08282b3a8709fc88343d9b720bf9109dad21e0f670"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.10",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/modrem_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "93cba8f3fca39fd3c7199f1e1aa728834f19abb2c5e978d982c11decfc21b20a",
+      "receipt_sha256": "4059794fc45cf64faebfc6c65b7c869185cfd4a7f8eb68b84f00d5b4747da106"
+    },
+    "positive_claim_count": 1,
+    "negative_claim_count": 5
+  }
+}

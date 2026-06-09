@@ -1,0 +1,59 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.10",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "93cba8f3fca39fd3c7199f1e1aa728834f19abb2c5e978d982c11decfc21b20a",
+    "receipt_sha256": "4059794fc45cf64faebfc6c65b7c869185cfd4a7f8eb68b84f00d5b4747da106"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION MOD/REM (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.MOD-REM.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 20,
+    "pass": 20,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION MOD(a,b) and FUNCTION REM(a,b) for integer operands match cobc/libcob across the full sign matrix (verified 20/0): MOD = a - b*floor(a/b) so the result takes the DIVISOR sign (MOD(-17,5)=3, MOD(17,-5)=-3), REM = a - b*trunc(a/b) = a%b so the result takes the DIVIDEND sign (REM(-17,5)=-2, REM(17,-5)=2). The third pair of implemented intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
+  ],
+  "negative_claims": [
+    "non-integer operands",
+    "MOD/REM by zero",
+    "MOD and REM interchangeable",
+    "all dialects",
+    "lie prevented: MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-INTEGER-OPERANDS",
+    "NEG.MOD-REM-BY-ZERO",
+    "NEG.MOD-AND-REM-INTERCHANGEABLE",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "FUNCTION MOD/REM(integer a, b) -> value"
+  ],
+  "lie_prevented": [
+    "MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result"
+  ],
+  "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values",
+  "replay": {
+    "command": "bash lab/oracle/modrem_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "cbc384590546d1e90830e9f6035731311d3db6b974cd89a436d02bb3ddefb625"
+  }
+}

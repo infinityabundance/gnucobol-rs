@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 547,
+  "count": 554,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -345,7 +345,8 @@
         "GNURUST.INTRINSIC.LENGTH.1",
         "GNURUST.INTRINSIC.NUMVAL.1",
         "GNURUST.ACCEPT.DISPLAY.1",
-        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+        "GNURUST.INTRINSIC.MOD-REM.1"
       ]
     },
     {
@@ -3021,6 +3022,50 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_MODREM.NOT_INTERCHANGEABLE",
+      "surface": "MOD and REM treated as the same",
+      "status": "not_admitted_fail_closed",
+      "guard": "MOD takes the DIVISOR sign, REM the DIVIDEND sign",
+      "risk_if_guessed": "swapping MOD/REM on negatives",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_MODREM.NO_ALL_DIALECTS",
+      "surface": "all-dialect MOD/REM claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_MODREM.NO_DIVIDE_BY_ZERO",
+      "surface": "MOD/REM by zero claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "b=0 is a non-claim (returns 0)",
+      "risk_if_guessed": "relying on MOD(a,0)",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_MODREM.NO_NON_INTEGER_OPERANDS",
+      "surface": "non-integer MOD/REM claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only integer operands are sealed",
+      "risk_if_guessed": "MOD(7.5, 2)",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
       "id": "NEG.INTRINSIC_NUMVAL.NO_ALL_DIALECTS",
       "surface": "all-dialect NUMVAL claimed",
       "status": "not_admitted_fail_closed",
@@ -3345,6 +3390,28 @@
       ]
     },
     {
+      "id": "NEG.MOD-AND-REM-INTERCHANGEABLE",
+      "surface": "MOD and REM interchangeable",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
+      "id": "NEG.MOD-REM-BY-ZERO",
+      "surface": "MOD/REM by zero",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
+      ]
+    },
+    {
       "id": "NEG.MULTI-DELIMITER-ALL-GENERALIZATION",
       "surface": "multi-delimiter/ALL generalization",
       "status": "not_admitted_fail_closed",
@@ -3500,6 +3567,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.NON-INTEGER-OPERANDS",
+      "surface": "non-integer operands",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.MOD-REM.1"
       ]
     },
     {

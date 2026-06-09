@@ -88,6 +88,29 @@ pub fn numval_display(nv: &Numval, int_digits: usize, frac_digits: usize) -> Str
     format!("{sign}{int_str}.{frac_str}")
 }
 
+/// `FUNCTION REM(a, b)` for integers: the C-style remainder `a - b * trunc(a/b)` — the result takes the
+/// **dividend** sign (`GNURUST.INTRINSIC.MOD-REM.1`). `b == 0` is a non-claim (returns 0 rather than panic).
+pub fn intrinsic_rem(a: i128, b: i128) -> i128 {
+    if b == 0 {
+        return 0;
+    }
+    a % b
+}
+
+/// `FUNCTION MOD(a, b)` for integers: `a - b * floor(a/b)` — the result takes the **divisor** sign
+/// (mathematical modulo), unlike [`intrinsic_rem`]. `b == 0` is a non-claim (returns 0).
+pub fn intrinsic_mod(a: i128, b: i128) -> i128 {
+    if b == 0 {
+        return 0;
+    }
+    let r = a % b;
+    if r != 0 && (r < 0) != (b < 0) {
+        r + b
+    } else {
+        r
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -96,6 +119,14 @@ mod tests {
     }
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
+    }
+    #[test]
+    fn mod_takes_divisor_sign_rem_takes_dividend_sign() {
+        // MOD -> divisor sign: (17,5)=2 (-17,5)=3 (17,-5)=-3 (-17,-5)=-2
+        assert_eq!([intrinsic_mod(17, 5), intrinsic_mod(-17, 5), intrinsic_mod(17, -5), intrinsic_mod(-17, -5)], [2, 3, -3, -2]);
+        assert_eq!([intrinsic_mod(15, 5), intrinsic_mod(0, 5)], [0, 0]);
+        // REM -> dividend sign: (17,5)=2 (-17,5)=-2 (17,-5)=2 (-17,-5)=-2
+        assert_eq!([intrinsic_rem(17, 5), intrinsic_rem(-17, 5), intrinsic_rem(17, -5), intrinsic_rem(-17, -5)], [2, -2, 2, -2]);
     }
     #[test]
     fn numval_matches_oracle() {
