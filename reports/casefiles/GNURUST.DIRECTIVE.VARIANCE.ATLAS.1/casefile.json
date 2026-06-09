@@ -1,0 +1,67 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.26",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "cf24701ea57bddae35fd59c5230044bbb684763991fc74ba2d441fe6255f803f",
+    "receipt_sha256": "e046c38587a882fe737952147bdd00256b9f04047437ba12b2181f59d56a28ec"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc -f<directive> compile + run (cobc/config.c directive engine + libcob/move.c binary codec)",
+    "upstream_court": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 6,
+    "pass": 6,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed how COMPILER DIRECTIVES change the record bytes under the gnucobol-3.2.0 witness, verified by the sweep (6/0): -fbinary-size=2-4-8 allocates 9(2) COMP as 2 bytes instead of 1 so a record's COMP offsets and total length SHIFT (group LENGTH 7 -> 8)",
+    "-fbinary-byteorder=native stores a COMP field host-little-endian (4660 -> 34 12) vs the default config big-endian (12 34)",
+    "and -fbinary-truncate (default, ANSI) truncates a COMP MOVE to the PIC digits (MOVE 300 TO 9(2)COMP -> 00) while -fno-binary-truncate keeps the raw binary value (-> 44) -- the byte-level delta from the BUILD.PROFILE.1 default profile"
+  ],
+  "negative_claims": [
+    "implementation of non-default directives (gnucobol-rs decodes under the BUILD.PROFILE.1 default only)",
+    "auto-detection of a binary's build profile from its bytes",
+    "a complete enumeration of every cobc directive",
+    "dialect-selection flags (-std, owned by GNURUST.DIALECT.RUNTIME.ATLAS.1)",
+    "code-generation/optimization directives",
+    "runtime environment variables (COB_*)",
+    "vendor-specific directives",
+    "lie prevented: a COBOL binary's record bytes are fixed by the copybook alone -- NO: a COMPILER DIRECTIVE shifts them: -fbinary-size=2-4-8 makes a small COMP field 2 bytes (mis-offsetting every later field), -fbinary-byteorder=native flips multi-byte COMP endianness, and -fno-binary-truncate changes what a MOVE stores -- so a correct decode REQUIRES the producer's build profile (BUILD.PROFILE.1), it cannot be inferred from the copybook"
+  ],
+  "negative_capability_ids": [
+    "NEG.IMPLEMENTATION-OF-NON-DEFAULT-DIRECTIVES",
+    "NEG.AUTO-DETECTION-OF-A-BINARY-S-BUILD-PROFI",
+    "NEG.A-COMPLETE-ENUMERATION-OF-EVERY-COBC-DIR",
+    "NEG.DIALECT-SELECTION-FLAGS-STD-OWNED-BY-GNU",
+    "NEG.CODE-GENERATION-OPTIMIZATION-DIRECTIVES",
+    "NEG.RUNTIME-ENVIRONMENT-VARIABLES-COB",
+    "NEG.VENDOR-SPECIFIC-DIRECTIVES"
+  ],
+  "byte_domains": [
+    "compiler-directive byte delta from the default profile: -fbinary-size (layout), -fbinary-byteorder (endianness), -fbinary-truncate (MOVE result)"
+  ],
+  "lie_prevented": [
+    "a COBOL binary's record bytes are fixed by the copybook alone -- NO: a COMPILER DIRECTIVE shifts them: -fbinary-size=2-4-8 makes a small COMP field 2 bytes (mis-offsetting every later field), -fbinary-byteorder=native flips multi-byte COMP endianness, and -fno-binary-truncate changes what a MOVE stores -- so a correct decode REQUIRES the producer's build profile (BUILD.PROFILE.1), it cannot be inferred from the copybook"
+  ],
+  "damage_if_overclaimed": "decoding a record produced under a non-default binary-size/byteorder/truncate with the default profile silently mis-offsets fields, reverses binary values, or mis-rounds MOVEs; assuming the profile can be auto-detected from bytes invents a build environment that was never recorded",
+  "replay": {
+    "command": "bash lab/oracle/directive_variance_atlas_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "a54bd42111f20394fcf43b214a2e7a260324406f8c13a8f8c5f6b7de5692f630"
+  }
+}

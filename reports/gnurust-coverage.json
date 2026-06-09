@@ -3,14 +3,14 @@
   "court": "GNURUST.COVERAGE.1",
   "doctrine": "Forensic port: every GnuCOBOL semantic surface is bound to admitted source + a court/refusal/future campaign with a status. This is the honest map of the port -- the data-representation spine is sealed; file I/O, intrinsics, and most of Procedure Division are not.",
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
-  "surface_count": 30,
+  "surface_count": 31,
   "status_counts": {
     "sealed": 17,
-    "observed": 8,
+    "observed": 9,
     "negative": 5,
     "missing": 0
   },
-  "sealed_fraction": "17/30",
+  "sealed_fraction": "17/31",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -199,6 +199,21 @@
       ],
       "future_campaign": null,
       "risk_if_unported": "stored zoned-sign bytes are dialect-invariant but DISPLAY presentation (leading vs trailing sign) and compile-acceptance of extensions diverge across -std modes; -std is not vendor parity"
+    },
+    {
+      "surface": "directive-variance",
+      "category": "compiler dialect options",
+      "source_modules": [
+        "cobc/config.c",
+        "libcob/move.c"
+      ],
+      "source_modules_present": true,
+      "status": "observed",
+      "courts": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "compiler directives shift the record bytes: -fbinary-size changes COMP layout, -fbinary-byteorder flips endianness, -fbinary-truncate changes MOVE results; a correct decode needs the producer's build profile (BUILD.PROFILE.1)"
     },
     {
       "surface": "size-error",

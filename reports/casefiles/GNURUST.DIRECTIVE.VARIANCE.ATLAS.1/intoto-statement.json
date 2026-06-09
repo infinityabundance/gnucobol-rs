@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.DIRECTIVE.VARIANCE.ATLAS.1/casefile.json",
+      "digest": {
+        "sha256": "b5158102fec1af4ceccdc84759cc6da7bad9993dd69a72f7edca05c3001f5ca3"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.26",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/directive_variance_atlas_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "cf24701ea57bddae35fd59c5230044bbb684763991fc74ba2d441fe6255f803f",
+      "receipt_sha256": "e046c38587a882fe737952147bdd00256b9f04047437ba12b2181f59d56a28ec"
+    },
+    "positive_claim_count": 3,
+    "negative_claim_count": 8
+  }
+}

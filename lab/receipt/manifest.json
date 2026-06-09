@@ -632,6 +632,20 @@
         "screen-routed dialects (acu/realia)",
         "runtime portability across platforms"
       ]
+    },
+    "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1": {
+      "court": "observed compiler-directive byte-variance atlas",
+      "sweep": "directive_variance_atlas_sweep.sh",
+      "byte_domain": "compiler-directive byte delta from the default profile: -fbinary-size (layout), -fbinary-byteorder (endianness), -fbinary-truncate (MOVE result)",
+      "non_claims": [
+        "implementation of non-default directives",
+        "auto-detection of a binary's build profile",
+        "complete enumeration of every cobc directive",
+        "dialect-selection (-std) flags",
+        "code-generation/optimization directives",
+        "runtime environment variables (COB_*)",
+        "vendor-specific directives"
+      ]
     }
   }
 }

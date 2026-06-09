@@ -1,0 +1,50 @@
+{
+  "schema": "gnurust-directive-variance-atlas-v1",
+  "court": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+  "witness_default_profile": "GNURUST.BUILD.PROFILE.1 (binary-size 1-2-4-8, binary-byteorder big-endian, binary-truncate yes)",
+  "oracle": "cobc -f<directive> compile + run (cobc/config.c directive engine + libcob/move.c binary codec)",
+  "doctrine": "OBSERVED map of how COMPILER DIRECTIVES change the record bytes. The sealed binary courts (GNURUST.14/18) are witnessed under the DEFAULT build profile (BUILD.PROFILE.1). This records the BYTE-LEVEL DELTA when a NON-default directive is used -- the 'configure the decoder to your exact build environment' surface. gnucobol-rs decodes under ONE profile and does NOT auto-detect or implement non-default directives; the atlas shows what would shift.",
+  "directive_variance": {
+    "binary-size": {
+      "1-2-4-8(default)": "group LENGTH 7",
+      "2-4-8": "group LENGTH 8",
+      "delta": "9(2)COMP 1 byte -> 2 bytes"
+    },
+    "binary-byteorder": {
+      "big-endian(default)": "1234",
+      "native": "3412",
+      "delta": "COMP byte order flips (big 12 34 vs host-little 34 12)"
+    },
+    "binary-truncate": {
+      "yes(default,ANSI)": "00",
+      "no": "44",
+      "delta": "MOVE 300 TO 9(2)COMP: 00 (truncated) vs 44 (raw binary)"
+    }
+  },
+  "observations": [
+    {
+      "name": "binary-size record layout",
+      "observed": "-fbinary-size=2-4-8 allocates 9(2) COMP as 2 bytes (vs 1 under the default 1-2-4-8), so a record's COMP-field offsets and total length SHIFT (group LENGTH 7 -> 8) -- a wrong binary-size silently mis-offsets every field after a small COMP",
+      "status": "observed-only"
+    },
+    {
+      "name": "binary-byteorder",
+      "observed": "-fbinary-byteorder=native stores a COMP field in the HOST byte order (34 12 little-endian on this x86_64 host) vs the default config's big-endian (12 34) -- decoding under the wrong byteorder reverses every multi-byte binary value",
+      "status": "observed-only"
+    },
+    {
+      "name": "binary-truncate",
+      "observed": "the default -fbinary-truncate (ANSI) truncates a COMP MOVE to the PIC digit count (300 -> 00) while -fno-binary-truncate keeps the raw binary value (displays 44) -- the same MOVE yields different stored/observed values",
+      "status": "observed-only"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.DIRECTIVE_VARIANCE.NO_NONDEFAULT_IMPLEMENTATION",
+    "NEG.DIRECTIVE_VARIANCE.NO_PROFILE_AUTODETECT",
+    "NEG.DIRECTIVE_VARIANCE.NO_FULL_DIRECTIVE_ENUMERATION",
+    "NEG.DIRECTIVE_VARIANCE.NO_DIALECT_FLAGS",
+    "NEG.DIRECTIVE_VARIANCE.NO_CODEGEN_DIRECTIVES",
+    "NEG.DIRECTIVE_VARIANCE.NO_RUNTIME_ENV_VARS",
+    "NEG.DIRECTIVE_VARIANCE.NO_VENDOR_DIRECTIVES"
+  ]
+}

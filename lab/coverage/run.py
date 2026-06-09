@@ -43,6 +43,8 @@ SURFACES = [
    "an unrecorded dialect makes 'GnuCOBOL says' ambiguous"),
  ("dialect-runtime", "compiler dialect options", ["cobc/config.c","config/default.conf","libcob/move.c"], "observed", ["GNURUST.DIALECT.RUNTIME.ATLAS.1"], None,
    "stored zoned-sign bytes are dialect-invariant but DISPLAY presentation (leading vs trailing sign) and compile-acceptance of extensions diverge across -std modes; -std is not vendor parity"),
+ ("directive-variance", "compiler dialect options", ["cobc/config.c","libcob/move.c"], "observed", ["GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"], None,
+   "compiler directives shift the record bytes: -fbinary-size changes COMP layout, -fbinary-byteorder flips endianness, -fbinary-truncate changes MOVE results; a correct decode needs the producer's build profile (BUILD.PROFILE.1)"),
  ("size-error", "runtime exceptions", ["libcob/numeric.c"], "sealed", ["SIZE.ERROR.ATLAS.1", "GNURUST.SIZE.ERROR.1"], None,
    "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal — silent corruption"),
  ("file-io-sequential", "file I/O", ["libcob/fileio.c"], "sealed", ["GNURUST.FILE.SEQUENTIAL.1", "GNURUST.FILE.WRITE.1", "GNURUST.FILE.REWRITE.1"], None,

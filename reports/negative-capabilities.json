@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 813,
+  "count": 827,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -53,6 +53,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.A-COMPLETE-ENUMERATION-OF-EVERY-COBC-DIR",
+      "surface": "a complete enumeration of every cobc directive",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
       ]
     },
     {
@@ -654,6 +665,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.1"
+      ]
+    },
+    {
+      "id": "NEG.AUTO-DETECTION-OF-A-BINARY-S-BUILD-PROFI",
+      "surface": "auto-detection of a binary's build profile from its bytes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
       ]
     },
     {
@@ -1394,6 +1416,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "archaeology/ATLAS.md"
+      ]
+    },
+    {
+      "id": "NEG.CODE-GENERATION-OPTIMIZATION-DIRECTIVES",
+      "surface": "code-generation/optimization directives",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
       ]
     },
     {
@@ -2166,6 +2199,17 @@
       ]
     },
     {
+      "id": "NEG.DIALECT-SELECTION-FLAGS-STD-OWNED-BY-GNU",
+      "surface": "dialect-selection flags (-std, owned by GNURUST.DIALECT.RUNTIME.ATLAS.1)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.DIALECT.GENERAL_COBOL",
       "surface": "general COBOL behavior claimed from a GnuCOBOL witness",
       "status": "not_admitted_fail_closed",
@@ -2361,6 +2405,83 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_CODEGEN_DIRECTIVES",
+      "surface": "code-generation/optimization directives claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only byte-affecting binary directives are observed",
+      "risk_if_guessed": "a -O/-fnotrunc codegen assumption",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_DIALECT_FLAGS",
+      "surface": "dialect-selection (-std) flags claimed here",
+      "status": "not_admitted_observed_only",
+      "guard": "those are GNURUST.DIALECT.RUNTIME.ATLAS.1",
+      "risk_if_guessed": "mixing -std with -f directives",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_FULL_DIRECTIVE_ENUMERATION",
+      "surface": "a complete enumeration of every cobc directive claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "binary-size/byteorder/truncate are sampled; not all -f flags",
+      "risk_if_guessed": "assuming the atlas covers every directive",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_NONDEFAULT_IMPLEMENTATION",
+      "surface": "decoding under a non-default directive claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; gnucobol-rs decodes under the BUILD.PROFILE.1 default only",
+      "risk_if_guessed": "decoding a 2-4-8 / native-endian record",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_PROFILE_AUTODETECT",
+      "surface": "auto-detecting a binary's build profile from its bytes claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the profile must be declared (BUILD.PROFILE.1); it is not inferred from record bytes",
+      "risk_if_guessed": "guessing binary-size from a record",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_RUNTIME_ENV_VARS",
+      "surface": "runtime COB_* environment variables claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "compile-time directives observed; runtime env is separate",
+      "risk_if_guessed": "a COB_* runtime toggle",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.DIRECTIVE_VARIANCE.NO_VENDOR_DIRECTIVES",
+      "surface": "vendor-specific compiler directives claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "GnuCOBOL -f directives only",
+      "risk_if_guessed": "an IBM/MF compiler option",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
       ]
     },
     {
@@ -3744,6 +3865,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.IF.NUMERIC.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IMPLEMENTATION-OF-NON-DEFAULT-DIRECTIVES",
+      "surface": "implementation of non-default directives (gnucobol-rs decodes under the BUILD.PROFILE.1 default only)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
       ]
     },
     {
@@ -7223,6 +7355,17 @@
       ]
     },
     {
+      "id": "NEG.RUNTIME-ENVIRONMENT-VARIABLES-COB",
+      "surface": "runtime environment variables (COB_*)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.RUNTIME-PORTABILITY",
       "surface": "runtime portability",
       "status": "not_admitted_fail_closed",
@@ -8917,6 +9060,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "DIALECT.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.VENDOR-SPECIFIC-DIRECTIVES",
+      "surface": "vendor-specific directives",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
       ]
     },
     {

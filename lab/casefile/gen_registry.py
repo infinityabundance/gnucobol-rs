@@ -694,6 +694,20 @@ for (i, s2, g, r) in DRT:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.DIALECT.RUNTIME.ATLAS.1"]}
 
+# GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 -- observed compiler-directive byte-variance atlas.
+DVA = [
+ ("NEG.DIRECTIVE_VARIANCE.NO_NONDEFAULT_IMPLEMENTATION", "decoding under a non-default directive claimed", "the atlas OBSERVES; gnucobol-rs decodes under the BUILD.PROFILE.1 default only", "decoding a 2-4-8 / native-endian record"),
+ ("NEG.DIRECTIVE_VARIANCE.NO_PROFILE_AUTODETECT", "auto-detecting a binary's build profile from its bytes claimed", "the profile must be declared (BUILD.PROFILE.1); it is not inferred from record bytes", "guessing binary-size from a record"),
+ ("NEG.DIRECTIVE_VARIANCE.NO_FULL_DIRECTIVE_ENUMERATION", "a complete enumeration of every cobc directive claimed", "binary-size/byteorder/truncate are sampled; not all -f flags", "assuming the atlas covers every directive"),
+ ("NEG.DIRECTIVE_VARIANCE.NO_DIALECT_FLAGS", "dialect-selection (-std) flags claimed here", "those are GNURUST.DIALECT.RUNTIME.ATLAS.1", "mixing -std with -f directives"),
+ ("NEG.DIRECTIVE_VARIANCE.NO_CODEGEN_DIRECTIVES", "code-generation/optimization directives claimed", "only byte-affecting binary directives are observed", "a -O/-fnotrunc codegen assumption"),
+ ("NEG.DIRECTIVE_VARIANCE.NO_RUNTIME_ENV_VARS", "runtime COB_* environment variables claimed", "compile-time directives observed; runtime env is separate", "a COB_* runtime toggle"),
+ ("NEG.DIRECTIVE_VARIANCE.NO_VENDOR_DIRECTIVES", "vendor-specific compiler directives claimed", "GnuCOBOL -f directives only", "an IBM/MF compiler option"),
+]
+for (i, s2, g, r) in DVA:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),
