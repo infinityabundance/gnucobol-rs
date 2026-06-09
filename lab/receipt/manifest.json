@@ -494,6 +494,19 @@
         "READ INTO",
         "all dialects"
       ]
+    },
+    "GNURUST.FILE.FILTER.SLICE.1": {
+      "court": "filter (conditional) read-loop",
+      "sweep": "file_filter_sweep.sh",
+      "byte_domain": "read-loop with a per-record IF gating the accumulation -> resulting WORKING-STORAGE",
+      "non_claims": [
+        "compound conditions (AND/OR)",
+        "signed/packed numeric filter",
+        "per-record mutation/transform (only accumulate)",
+        "multi-branch EVALUATE filter",
+        "indexed/relative",
+        "all dialects"
+      ]
     }
   }
 }

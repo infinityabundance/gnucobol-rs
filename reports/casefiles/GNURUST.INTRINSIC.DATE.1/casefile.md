@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.DATE.1 (court-casefile)
 
-**Verdict: PASS** · 30/30 pass, 0 fail · crate `gnucobol-rs` 0.7.22
+**Verdict: PASS** · 30/30 pass, 0 fail · crate `gnucobol-rs` 0.7.23
 
 - **Oracle:** cobc FUNCTION INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (libcob/intrinsic.c)
 - **Byte domain(s):** YYYYMMDD/YYYYDDD <-> integer day number (proleptic Gregorian, 1601-01-01=1)

@@ -3,7 +3,7 @@
   "case_id": "GNURUST.10",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.22",
+  "crate_version": "0.7.23",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "94b06934a464d6312461446cc193ac0a1f5703354948f265f601e8efd264637e",
-    "receipt_sha256": "75252f1d826a2ee248b0515f61b0d701e2342ed7824886373817a583d032ace2"
+    "receipt_sha256": "bec594b5e12c046aafb9af387cc1eed800298e9bbef6f89e11bd60c7f6dcc67f"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -55,7 +55,7 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "f0a83adcff026f9f301f2d118af9a35c5a7509ee6885c0cdec52e4d376fd5494"
+    "inputs_sha256": "30480f37aab96dca3f459dfc2bd92ffc6f8468172a594a54098ebeee381da7ef"
   },
   "legacy_preservation": {
     "legacy_paths": [

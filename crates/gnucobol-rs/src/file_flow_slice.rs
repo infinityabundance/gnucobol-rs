@@ -16,7 +16,8 @@
 //! dialects.
 
 use crate::file_seq::{read_sequential, FileOrg};
-use crate::if_eval::SliceField;
+use crate::if_eval::{Relop, SliceField};
+use std::cmp::Ordering;
 
 /// One per-record accumulation into WORKING-STORAGE.
 pub enum LoopOp<'a> {
@@ -85,6 +86,96 @@ pub fn eval_read_loop(
     ReadLoopResult { ws, records_processed: processed }
 }
 
+/// A per-record filter condition (`GNURUST.FILE.FILTER.SLICE.1`): a single relation on a record field, either
+/// **numeric** (compare the field's decoded unsigned value to an integer) or **alphanumeric** (compare the
+/// field bytes, space-padded, in the ASCII collating sequence) — the choice that makes `5 < 10` numerically
+/// but `"5" > "10"` alphanumerically.
+pub enum FilterCond<'a> {
+    Numeric { field: &'a str, op: Relop, value: i64 },
+    Alpha { field: &'a str, op: Relop, value: &'a [u8] },
+}
+
+fn relop_int(a: i64, op: &Relop, b: i64) -> bool {
+    match op {
+        Relop::Eq => a == b,
+        Relop::Ne => a != b,
+        Relop::Gt => a > b,
+        Relop::Lt => a < b,
+        Relop::Ge => a >= b,
+        Relop::Le => a <= b,
+    }
+}
+
+fn relop_ord(ord: Ordering, op: &Relop) -> bool {
+    match op {
+        Relop::Eq => ord == Ordering::Equal,
+        Relop::Ne => ord != Ordering::Equal,
+        Relop::Gt => ord == Ordering::Greater,
+        Relop::Lt => ord == Ordering::Less,
+        Relop::Ge => ord != Ordering::Less,
+        Relop::Le => ord != Ordering::Greater,
+    }
+}
+
+fn alnum_cmp(a: &[u8], b: &[u8]) -> Ordering {
+    let n = a.len().max(b.len());
+    for i in 0..n {
+        let av = a.get(i).copied().unwrap_or(b' ');
+        let bv = b.get(i).copied().unwrap_or(b' ');
+        match av.cmp(&bv) {
+            Ordering::Equal => continue,
+            o => return o,
+        }
+    }
+    Ordering::Equal
+}
+
+fn passes(record: &[u8], record_fields: &[SliceField], cond: &FilterCond) -> bool {
+    match cond {
+        FilterCond::Numeric { field: fname, op, value } => relop_int(read_num(record, record_fields, fname), op, *value),
+        FilterCond::Alpha { field: fname, op, value } => {
+            let b = field(record_fields, fname)
+                .and_then(|f| record.get(f.offset..f.offset + f.size))
+                .unwrap_or(&[]);
+            relop_ord(alnum_cmp(b, value), op)
+        }
+    }
+}
+
+/// Execute the **filter** read-loop: the canonical read-loop, but each record's `body` accumulation is gated by
+/// a per-record condition (`IF <cond> ... END-IF`). `records_processed` is the count of records that **passed**
+/// the filter (had the body applied). This is the selective-accumulation workhorse of COBOL batch.
+#[allow(clippy::too_many_arguments)]
+pub fn eval_filter_loop(
+    file: &[u8],
+    org: FileOrg,
+    record_len: usize,
+    record_fields: &[SliceField],
+    ws_init: &[u8],
+    ws_fields: &[SliceField],
+    cond: &FilterCond,
+    body: &[LoopOp],
+) -> ReadLoopResult {
+    let mut ws = ws_init.to_vec();
+    let mut processed = 0usize;
+    for r in read_sequential(file, org, record_len) {
+        if r.at_end || !passes(&r.record, record_fields, cond) {
+            continue;
+        }
+        processed += 1;
+        for op in body {
+            match op {
+                LoopOp::Count(acc) => add_num(&mut ws, ws_fields, acc, 1),
+                LoopOp::SumField { field, into } => {
+                    let v = read_num(&r.record, record_fields, field);
+                    add_num(&mut ws, ws_fields, into, v);
+                }
+            }
+        }
+    }
+    ReadLoopResult { ws, records_processed: processed }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -116,5 +207,23 @@ mod tests {
         let r = eval_read_loop(b"", FileOrg::RecordSequential, 5, &[], b"000", &ws_fields, &[LoopOp::Count("CNT")]);
         assert_eq!(r.records_processed, 0);
         assert_eq!(&r.ws, b"000");
+    }
+
+    #[test]
+    fn filter_loop_numeric_and_alpha() {
+        // file: A100 B025 A050 A200 B007 (record_len 4); R-ST X(1)@0, R-AMT 9(3)@1
+        let file = b"A100B025A050A200B007";
+        let rf = [
+            SliceField { name: "R-ST", offset: 0, size: 1 },
+            SliceField { name: "R-AMT", offset: 1, size: 3 },
+        ];
+        let wf = [SliceField { name: "CNT", offset: 0, size: 3 }, SliceField { name: "SM", offset: 3, size: 5 }];
+        let body = [LoopOp::Count("CNT"), LoopOp::SumField { field: "R-AMT", into: "SM" }];
+        // numeric: R-AMT >= 50 -> 100, 50, 200 -> count 3, sum 350 (25 and 7 excluded -- a numeric test, not "5">"50")
+        let num = eval_filter_loop(file, FileOrg::RecordSequential, 4, &rf, b"00000000", &wf, &FilterCond::Numeric { field: "R-AMT", op: Relop::Ge, value: 50 }, &body);
+        assert_eq!((num.records_processed, read_num(&num.ws, &wf, "CNT"), read_num(&num.ws, &wf, "SM")), (3, 3, 350));
+        // alphanumeric: R-ST = "A" -> A100, A050, A200 -> count 3, sum 350
+        let alpha = eval_filter_loop(file, FileOrg::RecordSequential, 4, &rf, b"00000000", &wf, &FilterCond::Alpha { field: "R-ST", op: Relop::Eq, value: b"A" }, &body);
+        assert_eq!((alpha.records_processed, read_num(&alpha.ws, &wf, "SM")), (3, 350));
     }
 }

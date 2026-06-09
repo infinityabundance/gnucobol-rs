@@ -1117,6 +1117,20 @@
       "readiness": 2,
       "lie_prevented": "a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END",
       "damage_if_overclaimed": "treating this narrow read-accumulate slice as a general batch engine would run unsealed per-record logic / writes / multi-file joins whose semantics are not oracle-bound"
+    },
+    {
+      "id": "GNURUST.FILE.FILTER.SLICE.1",
+      "name": "filter (conditional) read-loop",
+      "proven": "the SELECTIVE-accumulation read-loop -- the workhorse of COBOL batch -- executed to oracle-identical WORKING-STORAGE (verified 4/4). Each record's accumulation is gated by a per-record IF: a NUMERIC relation (compare the field's decoded unsigned value -- so R-AMT>=50 keeps 100/50/200, excludes 25/7) or an ALPHANUMERIC relation (space-padded byte compare in the ASCII collating sequence -- R-ST=A). Deepens GNURUST.FILE.FLOW.SLICE.1 with the per-record condition the read-loop court refused, distinguishing numeric (5<10) from alphanumeric ('5'>'10') comparison",
+      "byte_domain": "read-loop with a per-record IF gating the accumulation -> resulting WORKING-STORAGE",
+      "oracle": "cobc filter read-loop (libcob/fileio.c + cobc control flow)",
+      "fixtures": "file_filter_sweep 4/4 + 1 unit test",
+      "sealed_version": "0.7.23",
+      "not_proven": "compound conditions (AND/OR); signed/packed numeric filter; per-record MOVE/transform; multi-branch EVALUATE filter; indexed/relative; all dialects",
+      "breaks_claim": "a compound AND/OR filter; a signed-amount filter; per-record mutation; an EVALUATE classifier; an indexed filter loop",
+      "readiness": 2,
+      "lie_prevented": "filtering is the same whether the field is numeric or text -- NO: a NUMERIC filter compares VALUES (R-AMT>=50 keeps 100 and 200) while an ALPHANUMERIC filter compares BYTES (where '5' > '10'), so applying the wrong comparison kind silently selects the wrong records",
+      "damage_if_overclaimed": "using byte comparison on a numeric amount filter (or vice versa) selects the wrong record set, corrupting every conditional total/extract"
     }
   ],
   "transform_vs_read": {

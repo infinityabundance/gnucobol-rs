@@ -602,6 +602,19 @@ for (i, s2, g, r) in FFL:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.FLOW.SLICE.1"]}
 
+# GNURUST.FILE.FILTER.SLICE.1 — filter (conditional) read-loop.
+FFI = [
+ ("NEG.FILE_FILTER.NO_COMPOUND_CONDITION", "compound AND/OR filter conditions claimed", "a single relation gate only", "WHERE A>1 AND B<2"),
+ ("NEG.FILE_FILTER.NO_SIGNED_NUMERIC", "signed/packed numeric filter claimed", "unsigned 9(n) numeric compare (or alphanumeric byte compare) only", "filtering on a signed amount"),
+ ("NEG.FILE_FILTER.NO_PER_RECORD_MUTATION", "per-record MOVE/transform claimed", "Count/SumField accumulation only", "rewriting a field in the loop"),
+ ("NEG.FILE_FILTER.NO_MULTI_BRANCH", "multi-branch EVALUATE filter claimed", "a single IF gate only", "an EVALUATE classifier"),
+ ("NEG.FILE_FILTER.NO_INDEXED_RELATIVE", "indexed/relative filter loop claimed", "sequential only", "an indexed filter"),
+ ("NEG.FILE_FILTER.NO_ALL_DIALECTS", "all-dialect filter claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in FFI:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.FILTER.SLICE.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

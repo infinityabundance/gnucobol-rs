@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/casefile.json",
       "digest": {
-        "sha256": "5dc60ce8e274b5d8cc788de45a434fee0647cd61b92e5acff303719765127d24"
+        "sha256": "ad5619a642e5ae83e472a4642bd958ff8438129d70c762a469cccd169fcfa6bb"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.ACCEPT.DISPLAY.2",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.22",
+    "crate_version": "0.7.23",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/accept_display2_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "850d8e800bc37de4af5d66207ec2a64cb1495ec06a0885ba627f161a8242b841",
-      "receipt_sha256": "a12689b8619df72555201ef21a11a7abb1fa72f582c91350797a34b32a3b24f0"
+      "receipt_sha256": "a4f3ca8f457ca6bf44f238e88bdc83f0526d53a931c162b39c4058d959b3bb51"
     },
     "positive_claim_count": 1,
     "negative_claim_count": 5
