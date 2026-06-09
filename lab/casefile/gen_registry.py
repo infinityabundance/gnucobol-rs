@@ -520,6 +520,19 @@ for (i, s2, g, r) in FW:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.WRITE.1"]}
 
+# GNURUST.FILE.REWRITE.1 — sequential REWRITE in-place update.
+FRW = [
+ ("NEG.FILE_REWRITE.NO_LINE_SEQ_REWRITE", "LINE SEQUENTIAL REWRITE claimed", "RECORD SEQUENTIAL fixed-length only", "REWRITE on a line-sequential file"),
+ ("NEG.FILE_REWRITE.NO_LENGTH_CHANGE", "length-changing REWRITE claimed", "same-length in-place overwrite only", "a longer/shorter rewrite"),
+ ("NEG.FILE_REWRITE.NO_DELETE", "DELETE claimed", "REWRITE only, no record removal", "DELETE a record"),
+ ("NEG.FILE_REWRITE.NO_INDEXED_RELATIVE", "indexed/relative REWRITE claimed", "sequential only", "an indexed REWRITE"),
+ ("NEG.FILE_REWRITE.NO_READ_SEQUENCING", "read-before-rewrite sequencing/status rules claimed", "only the byte effect of an in-place update", "REWRITE without a prior READ"),
+ ("NEG.FILE_REWRITE.NO_ALL_DIALECTS", "all-dialect REWRITE claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in FRW:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.FILE.REWRITE.1"]}
+
 # GNURUST.PROCEDURE.FLOW.ATLAS.1 — observed control-flow atlas; EXECUTION is the loudest non-claim.
 PF = [
  ("NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION", "Procedure Division EXECUTION claimed", "the atlas OBSERVES control flow; gnucobol-rs runs no programs", "executing a COBOL program"),

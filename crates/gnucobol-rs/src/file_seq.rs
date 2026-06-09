@@ -116,6 +116,29 @@ pub fn write_sequential(records: &[&[u8]], org: FileOrg, record_len: usize) -> V
     out
 }
 
+/// Replay `OPEN I-O` + `READ`/`REWRITE` over a fixed `record_len` `RECORD SEQUENTIAL` file
+/// (`GNURUST.FILE.REWRITE.1`): each `(index, new_content)` in `rewrites` replaces the record at that 0-based
+/// index **in place** with `new_content` (space-padded / truncated to `record_len`), leaving every other
+/// record's bytes unchanged — byte-for-byte as GnuCOBOL's `libcob/fileio.c`. A `REWRITE` of the same length is
+/// the only admitted form; an index past the end is ignored.
+///
+/// **Non-claims:** `LINE SEQUENTIAL` `REWRITE` (variable-length), length-changing rewrites, `DELETE`, indexed/
+/// relative organizations, the read-before-rewrite sequencing rules, file status beyond a successful update,
+/// and all dialects.
+pub fn rewrite_records(file: &[u8], record_len: usize, rewrites: &[(usize, &[u8])]) -> Vec<u8> {
+    let mut out = file.to_vec();
+    for &(idx, content) in rewrites {
+        let off = idx * record_len;
+        if record_len == 0 || off + record_len > out.len() {
+            continue;
+        }
+        let mut area: Vec<u8> = content.iter().take(record_len).copied().collect();
+        area.resize(record_len, b' ');
+        out[off..off + record_len].copy_from_slice(&area);
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -173,5 +196,16 @@ mod tests {
             write_sequential(&[b"AB", b"HELLO123", b""], FileOrg::LineSequential, 8),
             b"AB\nHELLO123\n\n"
         );
+    }
+
+    #[test]
+    fn rewrite_updates_records_in_place() {
+        // oracle: AAAABBBBCCCC, OPEN I-O, REWRITE record 0 -> X1X1 and record 2 -> Z3Z3 -> "X1X1BBBBZ3Z3"
+        assert_eq!(
+            rewrite_records(b"AAAABBBBCCCC", 4, &[(0, b"X1X1"), (2, b"Z3Z3")]),
+            b"X1X1BBBBZ3Z3"
+        );
+        // an out-of-range index is ignored; a short rewrite is space-padded to the record length
+        assert_eq!(rewrite_records(b"AAAABBBB", 4, &[(9, b"ZZ"), (1, b"C")]), b"AAAAC   ");
     }
 }

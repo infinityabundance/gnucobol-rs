@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 607,
+  "count": 617,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -397,7 +397,8 @@
         "GNURUST.INTRINSIC.NUMVAL-C.1",
         "GNURUST.ACCEPT.DISPLAY.2",
         "GNURUST.SIZE.ERROR.1",
-        "GNURUST.FILE.WRITE.1"
+        "GNURUST.FILE.WRITE.1",
+        "GNURUST.FILE.REWRITE.1"
       ]
     },
     {
@@ -1765,6 +1766,17 @@
       ]
     },
     {
+      "id": "NEG.DELETE",
+      "surface": "DELETE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
       "id": "NEG.DETERMINISTIC-SCHEDULING-BEYOND-IDENTICA",
       "surface": "deterministic scheduling beyond identical emitted artifacts",
       "status": "not_admitted_fail_closed",
@@ -2396,6 +2408,72 @@
       ]
     },
     {
+      "id": "NEG.FILE_REWRITE.NO_ALL_DIALECTS",
+      "surface": "all-dialect REWRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_REWRITE.NO_DELETE",
+      "surface": "DELETE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "REWRITE only, no record removal",
+      "risk_if_guessed": "DELETE a record",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_REWRITE.NO_INDEXED_RELATIVE",
+      "surface": "indexed/relative REWRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "sequential only",
+      "risk_if_guessed": "an indexed REWRITE",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_REWRITE.NO_LENGTH_CHANGE",
+      "surface": "length-changing REWRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "same-length in-place overwrite only",
+      "risk_if_guessed": "a longer/shorter rewrite",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_REWRITE.NO_LINE_SEQ_REWRITE",
+      "surface": "LINE SEQUENTIAL REWRITE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "RECORD SEQUENTIAL fixed-length only",
+      "risk_if_guessed": "REWRITE on a line-sequential file",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.FILE_REWRITE.NO_READ_SEQUENCING",
+      "surface": "read-before-rewrite sequencing/status rules claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the byte effect of an in-place update",
+      "risk_if_guessed": "REWRITE without a prior READ",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
       "id": "NEG.FILE_SEQ.NOT_FULL_FILE_STATUS",
       "surface": "file-status codes beyond 00/06/10 claimed",
       "status": "not_admitted_fail_closed",
@@ -2892,7 +2970,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.FILE.WRITE.1"
+        "GNURUST.FILE.WRITE.1",
+        "GNURUST.FILE.REWRITE.1"
       ]
     },
     {
@@ -3561,6 +3640,17 @@
       ]
     },
     {
+      "id": "NEG.LENGTH-CHANGING-REWRITES",
+      "surface": "length-changing rewrites",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
+      ]
+    },
+    {
       "id": "NEG.LENGTH-OF-GROUP-TABLE-REFERENCE-MODIFIED",
       "surface": "LENGTH of group/table/reference-modified operand",
       "status": "not_admitted_fail_closed",
@@ -3591,6 +3681,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.1"
+      ]
+    },
+    {
+      "id": "NEG.LINE-SEQUENTIAL-REWRITE",
+      "surface": "LINE SEQUENTIAL REWRITE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
       ]
     },
     {
@@ -5029,6 +5130,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.READ-BEFORE-REWRITE-SEQUENCING-STATUS",
+      "surface": "read-before-rewrite sequencing/status",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.FILE.REWRITE.1"
       ]
     },
     {

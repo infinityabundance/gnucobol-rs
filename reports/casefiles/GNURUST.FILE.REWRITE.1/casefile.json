@@ -1,0 +1,64 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.FILE.REWRITE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.18",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e509af1a110286285f852effbbc42ad5ccb2100ddd28c2b2bd9b067a3a56dbc2",
+    "receipt_sha256": "08f8709a113a94238290c506942866569416c1f641bd6dcc4eb903106b912f34"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc OPEN I-O/REWRITE (libcob/fileio.c)",
+    "upstream_court": "GNURUST.FILE.REWRITE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 1,
+    "pass": 1,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the byte effect of OPEN I-O",
+    "REWRITE on a fixed RECORD SEQUENTIAL file, matching cobc/libcob fileio.c (verified 1/0): REWRITE replaces the just-read record IN PLACE with the new content (space-padded to the record length), leaving every other record's bytes UNCHANGED -- rewriting records 0 and 2 of AAAABBBBCCCC yields X1X1BBBBZ3Z3. The in-place-update side of the file court (GNURUST.FILE.SEQUENTIAL.1 read, GNURUST.FILE.WRITE.1 write)"
+  ],
+  "negative_claims": [
+    "LINE SEQUENTIAL REWRITE",
+    "length-changing rewrites",
+    "DELETE",
+    "indexed/relative organizations",
+    "read-before-rewrite sequencing/status",
+    "all dialects",
+    "lie prevented: REWRITE rewrites the whole file -- NO: it overwrites ONLY the current record in place (same length); the bytes of every other record are untouched, so a REWRITE is a surgical single-record update not a file rewrite"
+  ],
+  "negative_capability_ids": [
+    "NEG.LINE-SEQUENTIAL-REWRITE",
+    "NEG.LENGTH-CHANGING-REWRITES",
+    "NEG.DELETE",
+    "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
+    "NEG.READ-BEFORE-REWRITE-SEQUENCING-STATUS",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged"
+  ],
+  "lie_prevented": [
+    "REWRITE rewrites the whole file -- NO: it overwrites ONLY the current record in place (same length); the bytes of every other record are untouched, so a REWRITE is a surgical single-record update not a file rewrite"
+  ],
+  "damage_if_overclaimed": "assuming REWRITE can change a record's length (it cannot for fixed records) or rewrites surrounding records corrupts a sequential file",
+  "replay": {
+    "command": "bash lab/oracle/rewrite_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "97ca0400ddb94a161f3003e022973aa366e695ba43a509bb841badca131085f9"
+  }
+}

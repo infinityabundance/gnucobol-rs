@@ -42,6 +42,7 @@ run_sweep "GNURUST.19 DIVIDE bytes"   divide_sweep.sh
 run_sweep "GNURUST.REMAINDER.1 bytes" remainder_sweep.sh
 run_sweep "GNURUST.FILE.SEQUENTIAL.1" seqfile_sweep.sh
 run_sweep "GNURUST.FILE.WRITE.1" write_seq_sweep.sh
+run_sweep "GNURUST.FILE.REWRITE.1" rewrite_sweep.sh
 run_sweep "GNURUST.FILE.STATUS.1 (observed)" file_status_sweep.sh
 run_sweep "GNURUST.INITIALIZE.1 bytes" initialize_sweep.sh
 run_sweep "GNURUST.INSPECT.1 bytes" inspect_sweep.sh

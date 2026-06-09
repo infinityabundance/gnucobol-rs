@@ -43,7 +43,7 @@ SURFACES = [
    "an unrecorded dialect makes 'GnuCOBOL says' ambiguous"),
  ("size-error", "runtime exceptions", ["libcob/numeric.c"], "sealed", ["SIZE.ERROR.ATLAS.1", "GNURUST.SIZE.ERROR.1"], None,
    "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal — silent corruption"),
- ("file-io-sequential", "file I/O", ["libcob/fileio.c"], "sealed", ["GNURUST.FILE.SEQUENTIAL.1", "GNURUST.FILE.WRITE.1"], None,
+ ("file-io-sequential", "file I/O", ["libcob/fileio.c"], "sealed", ["GNURUST.FILE.SEQUENTIAL.1", "GNURUST.FILE.WRITE.1", "GNURUST.FILE.REWRITE.1"], None,
    "sequential/line READ record bytes + AT END drive most batch COBOL logic"),
  ("file-status", "file I/O", ["libcob/fileio.c"], "observed", ["GNURUST.FILE.STATUS.1"], None,
    "real COBOL branches on file-status codes (00/10/35/...); observed atlas of which status arises from which condition"),

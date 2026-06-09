@@ -423,6 +423,19 @@
         "indexed/relative organizations",
         "all dialects"
       ]
+    },
+    "GNURUST.FILE.REWRITE.1": {
+      "court": "sequential REWRITE in-place update",
+      "sweep": "rewrite_sweep.sh",
+      "byte_domain": "OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged",
+      "non_claims": [
+        "LINE SEQUENTIAL REWRITE",
+        "length-changing rewrites",
+        "DELETE",
+        "indexed/relative",
+        "read-before-rewrite sequencing",
+        "all dialects"
+      ]
     }
   }
 }

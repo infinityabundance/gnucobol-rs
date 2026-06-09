@@ -1047,6 +1047,20 @@
       "readiness": 3,
       "lie_prevented": "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record",
       "damage_if_overclaimed": "assuming LINE SEQUENTIAL preserves trailing spaces (or that RECORD SEQUENTIAL adds a newline) corrupts every written record's framing"
+    },
+    {
+      "id": "GNURUST.FILE.REWRITE.1",
+      "name": "sequential REWRITE in-place update",
+      "proven": "the byte effect of OPEN I-O + REWRITE on a fixed RECORD SEQUENTIAL file, matching cobc/libcob fileio.c (verified 1/0): REWRITE replaces the just-read record IN PLACE with the new content (space-padded to the record length), leaving every other record's bytes UNCHANGED -- rewriting records 0 and 2 of AAAABBBBCCCC yields X1X1BBBBZ3Z3. The in-place-update side of the file court (GNURUST.FILE.SEQUENTIAL.1 read, GNURUST.FILE.WRITE.1 write)",
+      "byte_domain": "OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged",
+      "oracle": "cobc OPEN I-O/REWRITE (libcob/fileio.c)",
+      "fixtures": "rewrite_sweep 1/0 + 1 unit test",
+      "sealed_version": "0.7.18",
+      "not_proven": "LINE SEQUENTIAL REWRITE; length-changing rewrites; DELETE; indexed/relative organizations; read-before-rewrite sequencing/status; all dialects",
+      "breaks_claim": "line-sequential REWRITE; a length-changing rewrite; DELETE; indexed REWRITE",
+      "readiness": 3,
+      "lie_prevented": "REWRITE rewrites the whole file -- NO: it overwrites ONLY the current record in place (same length); the bytes of every other record are untouched, so a REWRITE is a surgical single-record update not a file rewrite",
+      "damage_if_overclaimed": "assuming REWRITE can change a record's length (it cannot for fixed records) or rewrites surrounding records corrupts a sequential file"
     }
   ],
   "transform_vs_read": {
