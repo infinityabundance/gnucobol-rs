@@ -1257,6 +1257,20 @@
       "readiness": 3,
       "lie_prevented": "SORT is a simple in-memory reorder -- NO: it is a RUNTIME SORT ENGINE over a sort-merge work file (SD) driven by USING/GIVING or INPUT/OUTPUT PROCEDUREs, gnucobol-rs executes none of it, and the order of EQUAL keys is not a modeled guarantee; the atlas observes the key-ordered output, not the sort",
       "damage_if_overclaimed": "assuming a deterministic in-place / stable sort where GnuCOBOL runs an external sort engine misreads record order for equal keys and ignores the work-file/procedure machinery"
+    },
+    {
+      "id": "GNURUST.RELATIVE.FILE.ATLAS.1",
+      "name": "observed relative-file atlas",
+      "proven": "observed GnuCOBOL RELATIVE-file random access (3/0): READ/WRITE address a record by its 1-based RELATIVE record number (slot) -- a WRITE at slot 3 then READ at slot 3 returns it; reading an UNWRITTEN slot returns status 23 (not found); records sit at FIXED POSITIONS by relative number (NOT key-sorted like indexed). OBSERVED court: gnucobol-rs implements no relative file I/O (the on-disk slotted format is backend-specific) -- this MAPS the surface",
+      "byte_domain": "RELATIVE random access by record number + status (23 empty slot)",
+      "oracle": "cobc RELATIVE file I/O (libcob/fileio.c)",
+      "fixtures": "relative_file_atlas_sweep 3/0 -> reports/relative-file-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "relative file execution; the on-disk slotted format; sequential/dynamic access modes; REWRITE/DELETE/START; indexed files; all dialects",
+      "breaks_claim": "running relative I/O; parsing a relative file; a relative REWRITE/DELETE; an indexed file",
+      "readiness": 3,
+      "lie_prevented": "a relative file is records in order with a number -- NO: records sit at FIXED SLOTS by relative number (an unwritten slot reads status 23, gaps are real), distinct from indexed (key-sorted) and sequential (insertion order); and gnucobol-rs runs no relative I/O",
+      "damage_if_overclaimed": "treating relative slots as a dense sequential file ignores empty-slot gaps (status 23) and the by-number addressing"
     }
   ],
   "transform_vs_read": {

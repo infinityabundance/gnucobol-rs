@@ -15,7 +15,7 @@
       "path": "STATUS.md",
       "kind": "generated_doc",
       "present": true,
-      "sha256": "7f31237a3be3dbcb9d59c4a3636db85eef2c0a969dc29de84f75cc692238cefc"
+      "sha256": "0e839d8a7f35358fd5627a78be759f413971dcc6e0b5f1f72e50f1edcfc96223"
     },
     {
       "id": "changelog",
@@ -29,21 +29,21 @@
       "path": "reports/claim-ladder.json",
       "kind": "machine_spine",
       "present": true,
-      "sha256": "d0f89a17b4cfc159f33469e5faf0b3f89b7ab910d1789fb9f6f8caacae688d88"
+      "sha256": "0fbd6e72f292e1354125164b799b9217ca7e5a58724c5484f0d40c95c8c5c555"
     },
     {
       "id": "negative_capabilities",
       "path": "reports/negative-capabilities.json",
       "kind": "refusal_registry",
       "present": true,
-      "sha256": "de92c1ee1f61aa45eaf713cf02fcd5ffc6c90fb9feb3c8aa9948f98f63b9f56e"
+      "sha256": "3bd0993451d697c6c928567383a624d294c6c585754685cccb5df7867abf8a50"
     },
     {
       "id": "dsse_verification",
       "path": "reports/signing/verification-report.json",
       "kind": "attestation_report",
       "present": true,
-      "sha256": "c853eddcd4aaf44556947504ffeab16744d6eafe268e48f74e1e400c3369c8cb"
+      "sha256": "2322ac70f5f4ae93da23f76a5ec8f4cf23e26d09562e39fa376cbcf0f9de502e"
     },
     {
       "id": "size_error_atlas",
@@ -70,7 +70,7 @@
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true,
-      "count": 89,
+      "count": 90,
       "casefiles": [
         {
           "court": "DIALECT.PROFILE.1",
@@ -404,6 +404,13 @@
         {
           "court": "GNURUST.PUBLIC.GAP.1",
           "casefile_sha256": "b43d526a0f9f4bee7e4b0d9e3cd2a6a601f48b4f25b21eb3fe17647ec21fc16b",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.RELATIVE.FILE.ATLAS.1",
+          "casefile_sha256": "80bb25206569af276bf3cc0adeb367d585ddd5d5da5bc265cc10c1488ef0cbe6",
           "sarif": true,
           "intoto": true,
           "dsse": true

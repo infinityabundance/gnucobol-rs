@@ -605,6 +605,19 @@
         "custom collating sequence",
         "all dialects"
       ]
+    },
+    "GNURUST.RELATIVE.FILE.ATLAS.1": {
+      "court": "observed relative-file atlas",
+      "sweep": "relative_file_atlas_sweep.sh",
+      "byte_domain": "RELATIVE random access by record number + status (23 empty slot)",
+      "non_claims": [
+        "relative file execution",
+        "on-disk slotted format",
+        "sequential/dynamic access modes",
+        "REWRITE/DELETE/START",
+        "indexed files",
+        "all dialects"
+      ]
     }
   }
 }

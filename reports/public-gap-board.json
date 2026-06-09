@@ -6,17 +6,11 @@
   "files_scanned": 29,
   "counts": {
     "sealed": 14,
-    "observed": 7,
+    "observed": 8,
     "refused": 4,
-    "missing": 1
+    "missing": 0
   },
-  "missing_court_board": [
-    {
-      "surface": "relative file org",
-      "occurrences": 5,
-      "proposed_court": "GNURUST.RELATIVE.FILE.ATLAS.1 (proposed)"
-    }
-  ],
+  "missing_court_board": [],
   "surfaces": [
     {
       "surface": "ACCEPT/DISPLAY",
@@ -159,8 +153,8 @@
     {
       "surface": "relative file org",
       "occurrences": 5,
-      "status": "missing",
-      "court": "GNURUST.RELATIVE.FILE.ATLAS.1 (proposed)"
+      "status": "observed",
+      "court": "GNURUST.RELATIVE.FILE.ATLAS.1"
     },
     {
       "surface": "embedded SQL / DB2",

@@ -667,6 +667,19 @@ for (i, s2, g, r) in SM:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.SORT.MERGE.ATLAS.1"]}
 
+# GNURUST.RELATIVE.FILE.ATLAS.1 -- observed relative-file atlas.
+REL = [
+ ("NEG.RELATIVE_FILE.NO_FILE_EXECUTION", "relative file I/O execution claimed", "the atlas OBSERVES; gnucobol-rs implements no relative I/O", "running relative reads/writes"),
+ ("NEG.RELATIVE_FILE.NO_ON_DISK_FORMAT", "the on-disk slotted format claimed", "the random-access SEMANTICS are observed; the slot file format is not modeled", "parsing a relative file"),
+ ("NEG.RELATIVE_FILE.NO_SEQUENTIAL_DYNAMIC_MODES", "sequential/dynamic access modes claimed", "RANDOM by RELATIVE KEY observed only", "ACCESS SEQUENTIAL/DYNAMIC"),
+ ("NEG.RELATIVE_FILE.NO_REWRITE_DELETE_START", "REWRITE/DELETE/START claimed", "READ/WRITE observed only", "a relative REWRITE/DELETE"),
+ ("NEG.RELATIVE_FILE.NO_INDEXED_FILES", "indexed organization claimed", "relative only; indexed is GNURUST.INDEXED.FILE.ATLAS.1", "an indexed file"),
+ ("NEG.RELATIVE_FILE.NO_ALL_DIALECTS", "all-dialect relative I/O claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in REL:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.RELATIVE.FILE.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

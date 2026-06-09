@@ -47,6 +47,8 @@ SURFACES = [
    "sequential/line READ record bytes + AT END drive most batch COBOL logic"),
   ("file-io-indexed", "file I/O (keyed)", ["libcob/fileio.c"], "observed", ["GNURUST.INDEXED.FILE.ATLAS.1"], None,
    "indexed/keyed file I/O -- the largest remaining gap cluster; backend-specific on-disk ISAM/BDB format observed, not implemented"),
+ ("file-io-relative", "file I/O (relative)", ["libcob/fileio.c"], "observed", ["GNURUST.RELATIVE.FILE.ATLAS.1"], None,
+   "relative (by record number) file I/O observed; backend slotted format not implemented"),
 ("file-status", "file I/O", ["libcob/fileio.c"], "observed", ["GNURUST.FILE.STATUS.1"], None,
    "real COBOL branches on file-status codes (00/10/35/...); observed atlas of which status arises from which condition"),
  ("initialize", "MOVE/storage", ["cobc/typeck.c"], "sealed", ["GNURUST.INITIALIZE.1"], None,

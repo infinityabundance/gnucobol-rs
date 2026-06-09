@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 788,
+  "count": 799,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -432,7 +432,8 @@
         "GNURUST.CALL.EXTENSION.ATLAS.1",
         "GNURUST.INDEXED.FILE.ATLAS.1",
         "GNURUST.SEARCH.TABLE.1",
-        "GNURUST.SORT.MERGE.ATLAS.1"
+        "GNURUST.SORT.MERGE.ATLAS.1",
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
       ]
     },
     {
@@ -3669,6 +3670,17 @@
       ]
     },
     {
+      "id": "NEG.INDEXED-FILES",
+      "surface": "indexed files",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.INDEXED-RELATIVE",
       "surface": "indexed/relative",
       "status": "not_admitted_fail_closed",
@@ -6825,6 +6837,17 @@
       ]
     },
     {
+      "id": "NEG.RELATIVE-FILE-EXECUTION",
+      "surface": "relative file execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.RELATIVE-FILES",
       "surface": "relative files",
       "status": "not_admitted_fail_closed",
@@ -6833,6 +6856,72 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.RELATIVE_FILE.NO_ALL_DIALECTS",
+      "surface": "all-dialect relative I/O claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.RELATIVE_FILE.NO_FILE_EXECUTION",
+      "surface": "relative file I/O execution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES; gnucobol-rs implements no relative I/O",
+      "risk_if_guessed": "running relative reads/writes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.RELATIVE_FILE.NO_INDEXED_FILES",
+      "surface": "indexed organization claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "relative only; indexed is GNURUST.INDEXED.FILE.ATLAS.1",
+      "risk_if_guessed": "an indexed file",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.RELATIVE_FILE.NO_ON_DISK_FORMAT",
+      "surface": "the on-disk slotted format claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the random-access SEMANTICS are observed; the slot file format is not modeled",
+      "risk_if_guessed": "parsing a relative file",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.RELATIVE_FILE.NO_REWRITE_DELETE_START",
+      "surface": "REWRITE/DELETE/START claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "READ/WRITE observed only",
+      "risk_if_guessed": "a relative REWRITE/DELETE",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.RELATIVE_FILE.NO_SEQUENTIAL_DYNAMIC_MODES",
+      "surface": "sequential/dynamic access modes claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "RANDOM by RELATIVE KEY observed only",
+      "risk_if_guessed": "ACCESS SEQUENTIAL/DYNAMIC",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
       ]
     },
     {
@@ -6988,6 +7077,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.WRITE.1"
+      ]
+    },
+    {
+      "id": "NEG.REWRITE-DELETE-START",
+      "surface": "REWRITE/DELETE/START",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
       ]
     },
     {
@@ -7285,6 +7385,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SENTINEL.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.SEQUENTIAL-DYNAMIC-ACCESS-MODES",
+      "surface": "sequential/dynamic access modes",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
       ]
     },
     {
@@ -8322,6 +8433,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INDEXED.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-ON-DISK-SLOTTED-FORMAT",
+      "surface": "the on-disk slotted format",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.RELATIVE.FILE.ATLAS.1"
       ]
     },
     {

@@ -40,7 +40,7 @@ SURFACES = [
  (r"\bSTART\b", "START (indexed/relative key positioning)", "observed", "GNURUST.INDEXED.FILE.ATLAS.1"),
  (r"\bDELETE\b", "DELETE (indexed/relative)", "observed", "GNURUST.INDEXED.FILE.ATLAS.1"),
  (r"ORGANIZATION\s+IS\s+INDEXED", "indexed file org", "observed", "GNURUST.INDEXED.FILE.ATLAS.1"),
- (r"ORGANIZATION\s+IS\s+RELATIVE", "relative file org", "missing", "GNURUST.RELATIVE.FILE.ATLAS.1 (proposed)"),
+ (r"ORGANIZATION\s+IS\s+RELATIVE", "relative file org", "observed", "GNURUST.RELATIVE.FILE.ATLAS.1"),
  (r"\bSCREEN\s+SECTION\b", "SCREEN SECTION", "refused", "NEG (screen I/O out of the data-evidence lane)"),
  (r"\bRD\b|REPORT\s+SECTION", "REPORT WRITER", "refused", "NEG (report writer out of scope)"),
  (r"EXEC\s+SQL", "embedded SQL / DB2", "refused", "NEG.DB2.* / NEG.SQL.PRECOMPILER"),
@@ -89,9 +89,7 @@ def check():
     b = build()
     if b["files_scanned"] == 0:
         print("GATE: admitted GnuCOBOL testsuite not found"); return 1
-    if not b["missing_court_board"]:
-        print("GATE: gap board empty -- the scan found no missing surfaces (suspicious; check the corpus path)"); return 1
-    print(f"GNURUST.PUBLIC.GAP.1: {b['files_scanned']} testsuite files scanned; {len(b['missing_court_board'])} missing surfaces on the board; surface-scan only")
+    print(f"GNURUST.PUBLIC.GAP.1: {b['files_scanned']} testsuite files scanned; {len(b['missing_court_board'])} missing surfaces on the board (0 = every exercised surface is sealed/observed/refused); surface-scan only")
     return 0
 
 if __name__ == "__main__":

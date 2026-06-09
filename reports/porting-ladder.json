@@ -43,6 +43,7 @@
     "GNURUST.CALL.EXTENSION.ATLAS.1": 1,
     "GNURUST.INDEXED.FILE.ATLAS.1": 1,
     "GNURUST.SORT.MERGE.ATLAS.1": 1,
+    "GNURUST.RELATIVE.FILE.ATLAS.1": 1,
     "GNURUST.FILE.STATUS.1": 4,
     "GNURUST.PROCEDURE.FLOW.ATLAS.1": 5,
     "GNURUST.IF.EVALUATE.SLICE.1": 6,
@@ -68,6 +69,7 @@
         "GNURUST.CALL.EXTENSION.ATLAS.1",
         "GNURUST.INDEXED.FILE.ATLAS.1",
         "GNURUST.INTRINSIC.ATLAS.1",
+        "GNURUST.RELATIVE.FILE.ATLAS.1",
         "GNURUST.SORT.MERGE.ATLAS.1",
         "SIZE.ERROR.ATLAS.1"
       ]
@@ -161,7 +163,7 @@
   ],
   "coverage_status_counts": {
     "sealed": 17,
-    "observed": 6,
+    "observed": 7,
     "negative": 5,
     "missing": 0
   },

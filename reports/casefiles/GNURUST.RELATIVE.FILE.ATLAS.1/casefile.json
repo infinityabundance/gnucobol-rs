@@ -1,0 +1,65 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.RELATIVE.FILE.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.26",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "82d5b6bfaa818d60afefbaea0efe311203c5c99c5eb3c281074f0fcbb8b4f595",
+    "receipt_sha256": "dda65858f6559a6adcfba6ab6160418df19fcf0c4623bb41f148384bb4e2b8d4"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc RELATIVE file I/O (libcob/fileio.c)",
+    "upstream_court": "GNURUST.RELATIVE.FILE.ATLAS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 3,
+    "pass": 3,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL RELATIVE-file random access (3/0): READ/WRITE address a record by its 1-based RELATIVE record number (slot) -- a WRITE at slot 3 then READ at slot 3 returns it",
+    "reading an UNWRITTEN slot returns status 23 (not found)",
+    "records sit at FIXED POSITIONS by relative number (NOT key-sorted like indexed). OBSERVED court: gnucobol-rs implements no relative file I/O (the on-disk slotted format is backend-specific) -- this MAPS the surface"
+  ],
+  "negative_claims": [
+    "relative file execution",
+    "the on-disk slotted format",
+    "sequential/dynamic access modes",
+    "REWRITE/DELETE/START",
+    "indexed files",
+    "all dialects",
+    "lie prevented: a relative file is records in order with a number -- NO: records sit at FIXED SLOTS by relative number (an unwritten slot reads status 23, gaps are real), distinct from indexed (key-sorted) and sequential (insertion order); and gnucobol-rs runs no relative I/O"
+  ],
+  "negative_capability_ids": [
+    "NEG.RELATIVE-FILE-EXECUTION",
+    "NEG.THE-ON-DISK-SLOTTED-FORMAT",
+    "NEG.SEQUENTIAL-DYNAMIC-ACCESS-MODES",
+    "NEG.REWRITE-DELETE-START",
+    "NEG.INDEXED-FILES",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "RELATIVE random access by record number + status (23 empty slot)"
+  ],
+  "lie_prevented": [
+    "a relative file is records in order with a number -- NO: records sit at FIXED SLOTS by relative number (an unwritten slot reads status 23, gaps are real), distinct from indexed (key-sorted) and sequential (insertion order); and gnucobol-rs runs no relative I/O"
+  ],
+  "damage_if_overclaimed": "treating relative slots as a dense sequential file ignores empty-slot gaps (status 23) and the by-number addressing",
+  "replay": {
+    "command": "bash lab/oracle/relative_file_atlas_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "5a8ad73fa60967ac012b42f5bbcc14793ff7574fb140d50d756de4bd9baed676"
+  }
+}
