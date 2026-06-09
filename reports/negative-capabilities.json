@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 517,
+  "count": 525,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -265,7 +265,8 @@
         "GNURUST.INSPECT.1",
         "GNURUST.STRING.UNSTRING.1",
         "GNURUST.INTRINSIC.ATLAS.1",
-        "GNURUST.INTRINSIC.LENGTH.1"
+        "GNURUST.INTRINSIC.LENGTH.1",
+        "GNURUST.INTRINSIC.NUMVAL.1"
       ]
     },
     {
@@ -2875,6 +2876,61 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_NUMVAL.NO_ALL_DIALECTS",
+      "surface": "all-dialect NUMVAL claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVAL.NO_LOCALE_DECIMAL",
+      "surface": "locale decimal/comma swap claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "the decimal point is '.'; no locale comma-decimal",
+      "risk_if_guessed": "parsing 123,45 as 123.45",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVAL.NO_MALFORMED_ERROR_SEMANTICS",
+      "surface": "malformed-input error/exception semantics claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only well-formed narrow inputs are admitted",
+      "risk_if_guessed": "relying on NUMVAL error behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVAL.NO_NATIONAL_UTF8",
+      "surface": "national/UTF-8 NUMVAL claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single-octet ASCII digits only",
+      "risk_if_guessed": "multibyte digits",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_NUMVAL.NO_NUMVAL_C_CURRENCY",
+      "surface": "NUMVAL-C currency/thousands parsing claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only plain NUMVAL (no currency symbol / comma grouping)",
+      "risk_if_guessed": "parsing $1,234.56 as NUMVAL",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
       "id": "NEG.LANGUAGE-SUITE-PARITY",
       "surface": "language-suite parity",
       "status": "not_admitted_fail_closed",
@@ -3012,6 +3068,17 @@
       ]
     },
     {
+      "id": "NEG.LOCALE-DECIMAL-COMMA-SWAP",
+      "surface": "locale decimal/comma swap",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
+      ]
+    },
+    {
       "id": "NEG.LOCKING-SHARING",
       "surface": "locking/sharing",
       "status": "not_admitted_fail_closed",
@@ -3075,6 +3142,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DATA.6"
+      ]
+    },
+    {
+      "id": "NEG.MALFORMED-INPUT-ERROR-SEMANTICS",
+      "surface": "malformed-input error semantics",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
       ]
     },
     {
@@ -3152,7 +3230,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.INTRINSIC.ATLAS.1"
+        "GNURUST.INTRINSIC.ATLAS.1",
+        "GNURUST.INTRINSIC.NUMVAL.1"
       ]
     },
     {
@@ -3353,6 +3432,17 @@
       "owning_future_campaign": "ACCOUNTING.PROFILE.2 numeric-role (future)",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.NUMVAL-C-CURRENCY-THOUSANDS",
+      "surface": "NUMVAL-C (currency/thousands)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.NUMVAL.1"
       ]
     },
     {

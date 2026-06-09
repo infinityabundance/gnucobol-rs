@@ -404,6 +404,18 @@ for (i, s2, g, r) in ILEN:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.LENGTH.1"]}
 
+# GNURUST.INTRINSIC.NUMVAL.1 — FUNCTION NUMVAL narrow numeric parse.
+INUM = [
+ ("NEG.INTRINSIC_NUMVAL.NO_NUMVAL_C_CURRENCY", "NUMVAL-C currency/thousands parsing claimed", "only plain NUMVAL (no currency symbol / comma grouping)", "parsing $1,234.56 as NUMVAL"),
+ ("NEG.INTRINSIC_NUMVAL.NO_LOCALE_DECIMAL", "locale decimal/comma swap claimed", "the decimal point is '.'; no locale comma-decimal", "parsing 123,45 as 123.45"),
+ ("NEG.INTRINSIC_NUMVAL.NO_NATIONAL_UTF8", "national/UTF-8 NUMVAL claimed", "single-octet ASCII digits only", "multibyte digits"),
+ ("NEG.INTRINSIC_NUMVAL.NO_MALFORMED_ERROR_SEMANTICS", "malformed-input error/exception semantics claimed", "only well-formed narrow inputs are admitted", "relying on NUMVAL error behavior"),
+ ("NEG.INTRINSIC_NUMVAL.NO_ALL_DIALECTS", "all-dialect NUMVAL claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in INUM:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.NUMVAL.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

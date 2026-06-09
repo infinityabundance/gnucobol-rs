@@ -893,6 +893,20 @@
       "readiness": 3,
       "lie_prevented": "'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte",
       "damage_if_overclaimed": "using a digit count where the storage byte length is meant (COMP-3/binary fields) mis-sizes buffers and offsets"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.NUMVAL.1",
+      "name": "FUNCTION NUMVAL numeric parse",
+      "proven": "FUNCTION NUMVAL(s) for the NARROW admitted form parses to the same value as cobc/libcob: optional leading/trailing spaces, an optional sign (leading +/-, or trailing +/-/CR/DB -- all of -, CR, DB mean NEGATIVE), digits, and an optional decimal point; verified by moving NUMVAL into S9(8)V9(4) and matching the receiver display byte-for-byte. The second IMPLEMENTED intrinsic, split narrowly out of GNURUST.INTRINSIC.ATLAS.1",
+      "byte_domain": "FUNCTION NUMVAL(narrow string) -> parsed value (S9(8)V9(4) display)",
+      "oracle": "cobc FUNCTION NUMVAL (libcob/intrinsic.c)",
+      "fixtures": "numval_sweep 14/0 + 1 unit test",
+      "sealed_version": "0.7.8",
+      "not_proven": "NUMVAL-C (currency/thousands); locale decimal/comma swap; national/UTF-8; malformed-input error semantics; all dialects",
+      "breaks_claim": "parsing currency/comma-grouped strings; locale comma-decimal; multibyte digits; relying on error behavior",
+      "readiness": 3,
+      "lie_prevented": "NUMVAL just reads the number -- a TRAILING sign and CR/DB both mean NEGATIVE (NUMVAL of 123.45 CR = -123.45), leading/trailing spaces are stripped, and a leading dot is allowed; currency/comma grouping is NUMVAL-C, NOT admitted here",
+      "damage_if_overclaimed": "missing the trailing-sign/CR/DB negative convention flips the sign of a parsed amount; assuming NUMVAL strips commas mis-parses NUMVAL-C-shaped input"
     }
   ],
   "transform_vs_read": {

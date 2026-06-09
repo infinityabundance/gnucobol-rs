@@ -293,6 +293,18 @@
         "national/UTF-8 character length",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.NUMVAL.1": {
+      "court": "FUNCTION NUMVAL numeric parse",
+      "sweep": "numval_sweep.sh",
+      "byte_domain": "FUNCTION NUMVAL(narrow numeric string) -> parsed value",
+      "non_claims": [
+        "NUMVAL-C (currency/thousands)",
+        "locale decimal/comma swap",
+        "national/UTF-8",
+        "malformed-input error semantics",
+        "all dialects"
+      ]
     }
   }
 }

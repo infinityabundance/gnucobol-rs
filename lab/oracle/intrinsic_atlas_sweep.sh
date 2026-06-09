@@ -65,7 +65,7 @@ atlas = {
  "intrinsics":[
   {"name":"LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.LENGTH.1 -- storage byte length"},
   {"name":"BYTE-LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"candidate-court","note":"= LENGTH for single-octet"},
-  {"name":"NUMVAL","category":"numeric-parse","input":"\"123.45\"","observed":"123.45","determinism":"deterministic","status":"candidate-court","note":"swamp of edge cases (signs, spaces, CR/DB); seal narrowly"},
+  {"name":"NUMVAL","category":"numeric-parse","input":"\"123.45\"","observed":"123.45","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.NUMVAL.1 -- narrow form (sign, spaces, CR/DB, decimal)"},
   {"name":"NUMVAL-C","category":"numeric-parse","input":"\"$1,234.56\"","observed":"1234.56","determinism":"deterministic","status":"candidate-court","note":"currency/thousands stripping; locale-sensitive"},
   {"name":"INTEGER","category":"rounding","input":"3.7 / -3.7","observed":"3 / -4","determinism":"deterministic","status":"candidate-court","note":"FLOOR (greatest integer <= arg); differs from INTEGER-PART on negatives"},
   {"name":"INTEGER-PART","category":"rounding","input":"3.7 / -3.7","observed":"3 / -3","determinism":"deterministic","status":"candidate-court","note":"TRUNCATE toward zero"},

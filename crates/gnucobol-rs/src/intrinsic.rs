@@ -18,11 +18,99 @@ pub fn intrinsic_length(pic: &str, usage: Usage) -> Result<usize, PicError> {
     build_field(pic, usage, false, false).map(|f| f.size)
 }
 
+/// A parsed `FUNCTION NUMVAL` value: `value = scaled * 10^(-scale)`, with the sign in `negative`.
+///
+/// `GNURUST.INTRINSIC.NUMVAL.1` admits the narrow form: optional leading/trailing spaces, an optional sign
+/// (leading `+`/`-`, or trailing `+`/`-`/`CR`/`DB` — all of `-`/`CR`/`DB` mean negative), digits, and an
+/// optional decimal point. **Non-claims:** `NUMVAL-C` (currency / thousands separators), national/UTF-8,
+/// locale decimal/comma swap, malformed-input error semantics, and all dialects.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Numval {
+    pub negative: bool,
+    pub scaled: u128,
+    pub scale: u32,
+}
+
+fn pow10_u128(n: u32) -> u128 {
+    (0..n).fold(1u128, |a, _| a * 10)
+}
+
+/// `FUNCTION NUMVAL(s)` for the narrow admitted form (see [`Numval`]).
+pub fn intrinsic_numval(s: &str) -> Numval {
+    let mut negative = false;
+    let mut core = s.trim().to_string();
+    let upper = core.to_ascii_uppercase();
+    if upper.ends_with("CR") || upper.ends_with("DB") {
+        negative = true;
+        core = core[..core.len() - 2].trim().to_string();
+    }
+    if let Some(r) = core.strip_prefix('-') {
+        negative = true;
+        core = r.trim().to_string();
+    } else if let Some(r) = core.strip_prefix('+') {
+        core = r.trim().to_string();
+    } else if let Some(r) = core.strip_suffix('-') {
+        negative = true;
+        core = r.trim().to_string();
+    } else if let Some(r) = core.strip_suffix('+') {
+        core = r.trim().to_string();
+    }
+    let (ip, fp) = core.split_once('.').unwrap_or((core.as_str(), ""));
+    let int_digits: String = ip.chars().filter(|c| c.is_ascii_digit()).collect();
+    let frac_digits: String = fp.chars().filter(|c| c.is_ascii_digit()).collect();
+    let scaled: u128 = format!("{int_digits}{frac_digits}").parse().unwrap_or(0);
+    if scaled == 0 {
+        negative = false; // +0
+    }
+    Numval { negative, scaled, scale: frac_digits.len() as u32 }
+}
+
+/// Render a [`Numval`] as a signed fixed `S9(int_digits)V9(frac_digits)` display string (the bytes a `MOVE`
+/// into such a receiver produces): `sign + int_digits + "." + frac_digits`, truncating toward zero.
+pub fn numval_display(nv: &Numval, int_digits: usize, frac_digits: usize) -> String {
+    let target = frac_digits as u32;
+    let v = if nv.scale <= target {
+        nv.scaled * pow10_u128(target - nv.scale)
+    } else {
+        nv.scaled / pow10_u128(nv.scale - target)
+    };
+    let modulus = pow10_u128(frac_digits as u32);
+    let int_part = v / modulus;
+    let frac_part = v % modulus;
+    let mut int_str = format!("{int_part}");
+    if int_str.len() < int_digits {
+        int_str = format!("{:0>width$}", int_str, width = int_digits);
+    } else if int_str.len() > int_digits {
+        int_str = int_str[int_str.len() - int_digits..].to_string(); // keep low int_digits (overflow trunc)
+    }
+    let frac_str = format!("{:0>width$}", frac_part, width = frac_digits);
+    let sign = if nv.negative { '-' } else { '+' };
+    format!("{sign}{int_str}.{frac_str}")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     fn len(pic: &str, u: Usage) -> usize {
         intrinsic_length(pic, u).unwrap()
+    }
+    fn nv(s: &str) -> String {
+        numval_display(&intrinsic_numval(s), 8, 4)
+    }
+    #[test]
+    fn numval_matches_oracle() {
+        // oracle MOVE FUNCTION NUMVAL(...) TO S9(8)V9(4)
+        assert_eq!(nv("123.45"), "+00000123.4500");
+        assert_eq!(nv("  123  "), "+00000123.0000");
+        assert_eq!(nv("-123.45"), "-00000123.4500");
+        assert_eq!(nv("+123.45"), "+00000123.4500");
+        assert_eq!(nv("123.45-"), "-00000123.4500");
+        assert_eq!(nv("  -42 "), "-00000042.0000");
+        assert_eq!(nv("123.45 CR"), "-00000123.4500");
+        assert_eq!(nv("123.45 DB"), "-00000123.4500");
+        assert_eq!(nv(".5"), "+00000000.5000");
+        assert_eq!(nv("007"), "+00000007.0000");
+        assert_eq!(nv("0"), "+00000000.0000");
     }
     #[test]
     fn length_matches_storage_bytes() {

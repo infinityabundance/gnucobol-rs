@@ -53,7 +53,7 @@ SURFACES = [
    "INSPECT TALLYING/REPLACING/CONVERTING is classic data-munging with real byte effects"),
  ("string-unstring", "MOVE/storage", ["libcob/strings.c"], "sealed", ["GNURUST.STRING.UNSTRING.1"], None,
    "STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value"),
- ("intrinsics", "intrinsics", ["libcob/intrinsic.c"], "observed", ["GNURUST.INTRINSIC.ATLAS.1", "GNURUST.INTRINSIC.LENGTH.1"], None,
+ ("intrinsics", "intrinsics", ["libcob/intrinsic.c"], "observed", ["GNURUST.INTRINSIC.ATLAS.1", "GNURUST.INTRINSIC.LENGTH.1", "GNURUST.INTRINSIC.NUMVAL.1"], None,
    "NUMVAL/LENGTH/MOD/CURRENT-DATE etc.; observed atlas + per-intrinsic implementation courts (LENGTH sealed)"),
  ("accept-display", "ACCEPT/DISPLAY", ["libcob/termio.c"], "missing", [], "GNURUST.ACCEPT_DISPLAY.1",
    "emitted DISPLAY text + ACCEPT is runtime evidence too"),

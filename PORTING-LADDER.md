@@ -11,7 +11,7 @@ Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 15**, observed 3, refuse
 |:---:|---|---|
 | **0** | refused subsystem — out of the data-evidence lane; refused with negative capabilities, never guessed | — |
 | **1** | observed atlas — behavior is recorded as observed evidence (a sweep), not a pure-kernel implementation | `GNURUST.INTRINSIC.ATLAS.1`, `SIZE.ERROR.ATLAS.1` |
-| **2** | byte-equivalent helper — a pure Rust function reproduces a storage/field/representation byte result | `GNURUST.10`, `GNURUST.11`, `GNURUST.14`, `GNURUST.15`, `GNURUST.16`, `GNURUST.17`, `GNURUST.18`, `GNURUST.2`, `GNURUST.3`, `GNURUST.4`, `GNURUST.5`, `GNURUST.6`, `GNURUST.8`, `GNURUST.9`, `GNURUST.INTRINSIC.LENGTH.1` |
+| **2** | byte-equivalent helper — a pure Rust function reproduces a storage/field/representation byte result | `GNURUST.10`, `GNURUST.11`, `GNURUST.14`, `GNURUST.15`, `GNURUST.16`, `GNURUST.17`, `GNURUST.18`, `GNURUST.2`, `GNURUST.3`, `GNURUST.4`, `GNURUST.5`, `GNURUST.6`, `GNURUST.8`, `GNURUST.9`, `GNURUST.INTRINSIC.LENGTH.1`, `GNURUST.INTRINSIC.NUMVAL.1` |
 | **3** | statement byte court — a Procedure-Division statement's receiver bytes are reproduced byte-for-byte | `GNURUST.12`, `GNURUST.13`, `GNURUST.19`, `GNURUST.7`, `GNURUST.FILE.SEQUENTIAL.1`, `GNURUST.INITIALIZE.1`, `GNURUST.INSPECT.1`, `GNURUST.REMAINDER.1`, `GNURUST.STRING.UNSTRING.1` |
 | **4** | file/runtime-status court — file/runtime status observation bound to declared conditions | `GNURUST.FILE.STATUS.1` |
 | **5** | control-flow fragment — control-flow byte/branch effects (not yet started) | — |

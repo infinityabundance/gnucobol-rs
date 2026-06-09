@@ -28,8 +28,8 @@
       "input": "\"123.45\"",
       "observed": "123.45",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "swamp of edge cases (signs, spaces, CR/DB); seal narrowly"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.NUMVAL.1 -- narrow form (sign, spaces, CR/DB, decimal)"
     },
     {
       "name": "NUMVAL-C",

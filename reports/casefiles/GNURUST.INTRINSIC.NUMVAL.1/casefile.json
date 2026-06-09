@@ -1,0 +1,62 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.NUMVAL.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.8",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "4d891dc18cd8ac7a86616e2ca842e55c1640f7f74913741e690e680e209da6b8",
+    "receipt_sha256": "172ddac07661620636754aa2db0281116f25415b52a55ab1ad690506e48f06a2"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION NUMVAL (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.NUMVAL.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 14,
+    "pass": 14,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION NUMVAL(s) for the NARROW admitted form parses to the same value as cobc/libcob: optional leading/trailing spaces, an optional sign (leading +/-, or trailing +/-/CR/DB -- all of -, CR, DB mean NEGATIVE), digits, and an optional decimal point",
+    "verified by moving NUMVAL into S9(8)V9(4) and matching the receiver display byte-for-byte. The second IMPLEMENTED intrinsic, split narrowly out of GNURUST.INTRINSIC.ATLAS.1"
+  ],
+  "negative_claims": [
+    "NUMVAL-C (currency/thousands)",
+    "locale decimal/comma swap",
+    "national/UTF-8",
+    "malformed-input error semantics",
+    "all dialects",
+    "lie prevented: NUMVAL just reads the number -- a TRAILING sign and CR/DB both mean NEGATIVE (NUMVAL of 123.45 CR = -123.45), leading/trailing spaces are stripped, and a leading dot is allowed; currency/comma grouping is NUMVAL-C, NOT admitted here"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMVAL-C-CURRENCY-THOUSANDS",
+    "NEG.LOCALE-DECIMAL-COMMA-SWAP",
+    "NEG.NATIONAL-UTF-8",
+    "NEG.MALFORMED-INPUT-ERROR-SEMANTICS",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "FUNCTION NUMVAL(narrow string) -> parsed value (S9(8)V9(4) display)"
+  ],
+  "lie_prevented": [
+    "NUMVAL just reads the number -- a TRAILING sign and CR/DB both mean NEGATIVE (NUMVAL of 123.45 CR = -123.45), leading/trailing spaces are stripped, and a leading dot is allowed; currency/comma grouping is NUMVAL-C, NOT admitted here"
+  ],
+  "damage_if_overclaimed": "missing the trailing-sign/CR/DB negative convention flips the sign of a parsed amount; assuming NUMVAL strips commas mis-parses NUMVAL-C-shaped input",
+  "replay": {
+    "command": "bash lab/oracle/numval_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "ee4cbd3bc399148e0c7afcca3bf12f70bcfb0a0fb6d4cbd01a2a05e626efcb19"
+  }
+}
