@@ -5,12 +5,12 @@
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "surface_count": 27,
   "status_counts": {
-    "sealed": 15,
+    "sealed": 16,
     "observed": 3,
     "negative": 7,
-    "missing": 2
+    "missing": 1
   },
-  "sealed_fraction": "15/27",
+  "sealed_fraction": "16/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -291,9 +291,11 @@
         "libcob/termio.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.ACCEPT_DISPLAY.1",
+      "status": "sealed",
+      "courts": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ],
+      "future_campaign": null,
       "risk_if_unported": "emitted DISPLAY text + ACCEPT is runtime evidence too"
     },
     {

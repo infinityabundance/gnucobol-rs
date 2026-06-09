@@ -1,0 +1,32 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.ACCEPT.DISPLAY.1",
+  "court": "DISPLAY emitted text + ACCEPT field bytes",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.9",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/accept_display_sweep.sh"
+  },
+  "byte_domain": "DISPLAY operand concatenation + newline; ACCEPT field move bytes",
+  "results": {
+    "sweep": "PASS=7 FAIL=0"
+  },
+  "non_claims": [
+    "DISPLAY of signed/V/edited numeric (reformats)",
+    "DISPLAY UPON / WITH NO ADVANCING",
+    "ACCEPT FROM DATE/TIME/environment/screen",
+    "device/console specifics",
+    "all dialects"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

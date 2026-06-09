@@ -416,6 +416,19 @@ for (i, s2, g, r) in INUM:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.NUMVAL.1"]}
 
+# GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
+AD = [
+ ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),
+ ("NEG.ACCEPT_DISPLAY.NO_V_EDITED_NUMERIC", "DISPLAY of a V-scaled/edited numeric claimed", "it inserts a '.' and reformats; deferred (see GNURUST.16)", "displaying a V/edited field"),
+ ("NEG.ACCEPT_DISPLAY.NO_DISPLAY_VARIANTS", "DISPLAY UPON / WITH NO ADVANCING claimed", "only plain DISPLAY + newline is sealed", "relying on UPON/NO ADVANCING"),
+ ("NEG.ACCEPT_DISPLAY.NO_ACCEPT_DATE_TIME_ENV", "ACCEPT FROM DATE/TIME/environment/screen claimed", "only ACCEPT FROM CONSOLE line move is sealed", "ACCEPT FROM DATE"),
+ ("NEG.ACCEPT_DISPLAY.NO_DEVICE_CONSOLE_SPECIFICS", "device/console/terminal specifics claimed", "only the field move/emitted bytes are sealed", "assuming terminal behavior"),
+ ("NEG.ACCEPT_DISPLAY.NO_ALL_DIALECTS", "all-dialect ACCEPT/DISPLAY claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in AD:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.ACCEPT.DISPLAY.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

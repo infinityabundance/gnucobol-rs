@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 525,
+  "count": 535,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -188,6 +188,83 @@
       ]
     },
     {
+      "id": "NEG.ACCEPT-FROM-DATE-TIME-ENVIRONMENT-SCREEN",
+      "surface": "ACCEPT FROM DATE/TIME/environment/screen",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY.NO_ACCEPT_DATE_TIME_ENV",
+      "surface": "ACCEPT FROM DATE/TIME/environment/screen claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only ACCEPT FROM CONSOLE line move is sealed",
+      "risk_if_guessed": "ACCEPT FROM DATE",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY.NO_ALL_DIALECTS",
+      "surface": "all-dialect ACCEPT/DISPLAY claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY.NO_DEVICE_CONSOLE_SPECIFICS",
+      "surface": "device/console/terminal specifics claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only the field move/emitted bytes are sealed",
+      "risk_if_guessed": "assuming terminal behavior",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY.NO_DISPLAY_VARIANTS",
+      "surface": "DISPLAY UPON / WITH NO ADVANCING claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only plain DISPLAY + newline is sealed",
+      "risk_if_guessed": "relying on UPON/NO ADVANCING",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT",
+      "surface": "DISPLAY of a signed numeric claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "GnuCOBOL prefixes +/- (reformats); deferred",
+      "risk_if_guessed": "displaying a signed field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.ACCEPT_DISPLAY.NO_V_EDITED_NUMERIC",
+      "surface": "DISPLAY of a V-scaled/edited numeric claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "it inserts a '.' and reformats; deferred (see GNURUST.16)",
+      "risk_if_guessed": "displaying a V/edited field",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
       "id": "NEG.ACCOUNT-BALANCE-CORRECTNESS",
       "surface": "account balance correctness",
       "status": "not_admitted_fail_closed",
@@ -266,7 +343,8 @@
         "GNURUST.STRING.UNSTRING.1",
         "GNURUST.INTRINSIC.ATLAS.1",
         "GNURUST.INTRINSIC.LENGTH.1",
-        "GNURUST.INTRINSIC.NUMVAL.1"
+        "GNURUST.INTRINSIC.NUMVAL.1",
+        "GNURUST.ACCEPT.DISPLAY.1"
       ]
     },
     {
@@ -1579,6 +1657,17 @@
       ]
     },
     {
+      "id": "NEG.DEVICE-CONSOLE-SPECIFICS",
+      "surface": "device/console specifics",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
       "id": "NEG.DIALECT-PORTABILITY",
       "surface": "dialect portability",
       "status": "not_admitted_fail_closed",
@@ -1709,6 +1798,28 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DIFF.1"
+      ]
+    },
+    {
+      "id": "NEG.DISPLAY-OF-SIGNED-NUMERIC-GNUCOBOL-PREFI",
+      "surface": "DISPLAY of signed numeric (GnuCOBOL prefixes +/-) or V-scaled/edited numeric (reformats)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
+      ]
+    },
+    {
+      "id": "NEG.DISPLAY-UPON-WITH-NO-ADVANCING",
+      "surface": "DISPLAY UPON / WITH NO ADVANCING",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.ACCEPT.DISPLAY.1"
       ]
     },
     {

@@ -305,6 +305,18 @@
         "malformed-input error semantics",
         "all dialects"
       ]
+    },
+    "GNURUST.ACCEPT.DISPLAY.1": {
+      "court": "DISPLAY emitted text + ACCEPT field bytes",
+      "sweep": "accept_display_sweep.sh",
+      "byte_domain": "DISPLAY operand concatenation + newline; ACCEPT field move bytes",
+      "non_claims": [
+        "DISPLAY of signed/V/edited numeric (reformats)",
+        "DISPLAY UPON / WITH NO ADVANCING",
+        "ACCEPT FROM DATE/TIME/environment/screen",
+        "device/console specifics",
+        "all dialects"
+      ]
     }
   }
 }

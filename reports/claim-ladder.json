@@ -907,6 +907,20 @@
       "readiness": 3,
       "lie_prevented": "NUMVAL just reads the number -- a TRAILING sign and CR/DB both mean NEGATIVE (NUMVAL of 123.45 CR = -123.45), leading/trailing spaces are stripped, and a leading dot is allowed; currency/comma grouping is NUMVAL-C, NOT admitted here",
       "damage_if_overclaimed": "missing the trailing-sign/CR/DB negative convention flips the sign of a parsed amount; assuming NUMVAL strips commas mis-parses NUMVAL-C-shaped input"
+    },
+    {
+      "id": "GNURUST.ACCEPT.DISPLAY.1",
+      "name": "DISPLAY emitted text + ACCEPT field bytes",
+      "proven": "DISPLAY emits its operands' bytes CONCATENATED with no separator + one trailing newline (a literal -> its text, an alphanumeric field -> its space-padded bytes, an unsigned 9(n) field -> its zoned digit bytes), and ACCEPT field FROM CONSOLE moves one input line into the field left-justified, space-padded, truncated to the field width -- matching cobc/libcob byte-for-byte. Emitted text is admitted as evidence",
+      "byte_domain": "DISPLAY operand concatenation + newline; ACCEPT field move bytes",
+      "oracle": "cobc DISPLAY/ACCEPT (libcob/termio.c)",
+      "fixtures": "accept_display_sweep 7/0 + 2 unit tests",
+      "sealed_version": "0.7.9",
+      "not_proven": "DISPLAY of signed numeric (GnuCOBOL prefixes +/-) or V-scaled/edited numeric (reformats); DISPLAY UPON / WITH NO ADVANCING; ACCEPT FROM DATE/TIME/environment/screen; device/console specifics; all dialects",
+      "breaks_claim": "displaying a signed/V/edited numeric; DISPLAY variants; ACCEPT FROM DATE; terminal behavior",
+      "readiness": 3,
+      "lie_prevented": "DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here",
+      "damage_if_overclaimed": "assuming DISPLAY separates operands (it does not) or that ACCEPT preserves an over-length line (it truncates) corrupts emitted/captured text in a ported program"
     }
   ],
   "transform_vs_read": {

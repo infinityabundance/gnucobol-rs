@@ -1,0 +1,61 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.ACCEPT.DISPLAY.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.9",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e3547cafb497192cd029f6e25e737e745ae5bdcc4efdd85513c1bbd82929d00e",
+    "receipt_sha256": "1330a4809fdeda73d25c750ec5e0cb98fe7b99153ae52981e1e461c5af4bb08a"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc DISPLAY/ACCEPT (libcob/termio.c)",
+    "upstream_court": "GNURUST.ACCEPT.DISPLAY.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 7,
+    "pass": 7,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "DISPLAY emits its operands' bytes CONCATENATED with no separator + one trailing newline (a literal -> its text, an alphanumeric field -> its space-padded bytes, an unsigned 9(n) field -> its zoned digit bytes), and ACCEPT field FROM CONSOLE moves one input line into the field left-justified, space-padded, truncated to the field width -- matching cobc/libcob byte-for-byte. Emitted text is admitted as evidence"
+  ],
+  "negative_claims": [
+    "DISPLAY of signed numeric (GnuCOBOL prefixes +/-) or V-scaled/edited numeric (reformats)",
+    "DISPLAY UPON / WITH NO ADVANCING",
+    "ACCEPT FROM DATE/TIME/environment/screen",
+    "device/console specifics",
+    "all dialects",
+    "lie prevented: DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here"
+  ],
+  "negative_capability_ids": [
+    "NEG.DISPLAY-OF-SIGNED-NUMERIC-GNUCOBOL-PREFI",
+    "NEG.DISPLAY-UPON-WITH-NO-ADVANCING",
+    "NEG.ACCEPT-FROM-DATE-TIME-ENVIRONMENT-SCREEN",
+    "NEG.DEVICE-CONSOLE-SPECIFICS",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "DISPLAY operand concatenation + newline; ACCEPT field move bytes"
+  ],
+  "lie_prevented": [
+    "DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here"
+  ],
+  "damage_if_overclaimed": "assuming DISPLAY separates operands (it does not) or that ACCEPT preserves an over-length line (it truncates) corrupts emitted/captured text in a ported program",
+  "replay": {
+    "command": "bash lab/oracle/accept_display_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "4c2844cbcf4215899a3e768fac8aa4e9bb4d97ca9cf2d9ce87ed5216cf096abd"
+  }
+}

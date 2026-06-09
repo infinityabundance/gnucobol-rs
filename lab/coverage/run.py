@@ -55,7 +55,7 @@ SURFACES = [
    "STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value"),
  ("intrinsics", "intrinsics", ["libcob/intrinsic.c"], "observed", ["GNURUST.INTRINSIC.ATLAS.1", "GNURUST.INTRINSIC.LENGTH.1", "GNURUST.INTRINSIC.NUMVAL.1"], None,
    "NUMVAL/LENGTH/MOD/CURRENT-DATE etc.; observed atlas + per-intrinsic implementation courts (LENGTH sealed)"),
- ("accept-display", "ACCEPT/DISPLAY", ["libcob/termio.c"], "missing", [], "GNURUST.ACCEPT_DISPLAY.1",
+ ("accept-display", "ACCEPT/DISPLAY", ["libcob/termio.c"], "sealed", ["GNURUST.ACCEPT.DISPLAY.1"], None,
    "emitted DISPLAY text + ACCEPT is runtime evidence too"),
  ("procedure-flow", "control flow", ["cobc/typeck.c","cobc/codegen.c"], "missing", [],
    "GNURUST.PROCEDURE.STATEMENT.ATLAS.1", "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division"),
