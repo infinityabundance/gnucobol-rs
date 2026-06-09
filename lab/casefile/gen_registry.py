@@ -625,6 +625,20 @@ for (i, s2, g, r) in PG:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_scan_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PUBLIC.GAP.1"]}
 
+# GNURUST.CALL.EXTENSION.ATLAS.1 -- observed CALL/linkage atlas; subprogram EXECUTION is the loudest non-claim.
+CALL = [
+ ("NEG.CALL.NO_SUBPROGRAM_EXECUTION", "subprogram CALL execution claimed", "the atlas OBSERVES linkage; gnucobol-rs runs no subprograms (multi-module runtime = behavioral L8)", "executing a CALLed program"),
+ ("NEG.CALL.NO_DYNAMIC_LINKING", "dynamic linking / .so resolution claimed", "no dynamic CALL resolution / library loading", "resolving a dynamic CALL"),
+ ("NEG.CALL.NO_C_EXTENSION_IMPL", "C$ system-routine implementation claimed", "C$TOUPPER etc. observed, not implemented", "calling a C$ routine in the kernel"),
+ ("NEG.CALL.NO_BY_VALUE_REFERENCE_MISMATCH", "BY VALUE to a reference-expecting param claimed", "that is undefined (segfaults) and refused", "passing BY VALUE to a LINKAGE reference"),
+ ("NEG.CALL.NO_RECURSION_REENTRANCY", "recursive/reentrant call semantics claimed", "not modeled", "a recursive CALL"),
+ ("NEG.CALL.NO_CANCEL_STATE", "CANCEL state-machine semantics claimed", "CANCEL observed, its state not modeled", "relying on CANCEL re-init"),
+ ("NEG.CALL.NO_ALL_DIALECTS", "all-dialect CALL claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in CALL:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.CALL.EXTENSION.ATLAS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

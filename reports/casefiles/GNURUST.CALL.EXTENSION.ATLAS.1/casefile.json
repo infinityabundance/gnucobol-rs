@@ -1,0 +1,65 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.CALL.EXTENSION.ATLAS.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.25",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "c06c6005344fa904358f797878dad5d928fc0a3836cacc8b670edb3a3b256289",
+    "receipt_sha256": "2f22e5696429369b9eba1b63e566e32476bef4309e5478c03bcf3b431c164f42"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines",
+    "upstream_court": "GNURUST.CALL.EXTENSION.ATLAS.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 5,
+    "pass": 5,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL CALL / linkage / C$ extension behavior under the gnucobol-3.2.0-default witness, verified by the sweep (5/0) -- the #1 gap by frequency (CALL 959x in the admitted testsuite per GNURUST.PUBLIC.GAP.1): USING BY REFERENCE SHARES the caller's storage so callee mutation is visible in the caller (A 100 -> 101), USING BY CONTENT passes a COPY so the caller is UNCHANGED (B stays 100), a C$ extension (C$TOUPPER) mutates in place, an unresolved CALL fires ON EXCEPTION gracefully, and CANCEL unloads. OBSERVED court: gnucobol-rs does NOT execute subprogram CALLs (multi-module runtime is behavioral-ladder L8, NOT CLAIMED) -- this MAPS the surface, it runs no subprograms"
+  ],
+  "negative_claims": [
+    "subprogram execution",
+    "dynamic linking / .so loading",
+    "C$ extension implementation",
+    "BY VALUE to a reference param (undefined)",
+    "recursion/reentrancy",
+    "CANCEL state machine",
+    "all dialects",
+    "lie prevented: CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed"
+  ],
+  "negative_capability_ids": [
+    "NEG.SUBPROGRAM-EXECUTION",
+    "NEG.DYNAMIC-LINKING-SO-LOADING",
+    "NEG.C-EXTENSION-IMPLEMENTATION",
+    "NEG.BY-VALUE-TO-A-REFERENCE-PARAM-UNDEFINED",
+    "NEG.RECURSION-REENTRANCY",
+    "NEG.CANCEL-STATE-MACHINE",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION"
+  ],
+  "lie_prevented": [
+    "CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed"
+  ],
+  "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow",
+  "replay": {
+    "command": "bash lab/oracle/call_atlas_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "8c4edcc9fb90c04fa1e9706b6c631e16240d7439599b5866f94457331cdb90c5"
+  }
+}

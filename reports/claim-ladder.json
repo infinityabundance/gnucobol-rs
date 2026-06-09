@@ -1201,6 +1201,20 @@
       "readiness": 2,
       "lie_prevented": "we cover the GnuCOBOL testsuite -- NO: this is a VERB-PRESENCE scan that finds 7 MISSING surfaces (CALL the biggest at 959x); it compiles/runs/proves NOTHING and the missing-court board is a candidate set, not a roadmap commitment",
       "damage_if_overclaimed": "presenting a surface scan as test-pass / parity coverage fabricates execution evidence the project has not produced"
+    },
+    {
+      "id": "GNURUST.CALL.EXTENSION.ATLAS.1",
+      "name": "observed CALL / linkage atlas",
+      "proven": "observed GnuCOBOL CALL / linkage / C$ extension behavior under the gnucobol-3.2.0-default witness, verified by the sweep (5/0) -- the #1 gap by frequency (CALL 959x in the admitted testsuite per GNURUST.PUBLIC.GAP.1): USING BY REFERENCE SHARES the caller's storage so callee mutation is visible in the caller (A 100 -> 101), USING BY CONTENT passes a COPY so the caller is UNCHANGED (B stays 100), a C$ extension (C$TOUPPER) mutates in place, an unresolved CALL fires ON EXCEPTION gracefully, and CANCEL unloads. OBSERVED court: gnucobol-rs does NOT execute subprogram CALLs (multi-module runtime is behavioral-ladder L8, NOT CLAIMED) -- this MAPS the surface, it runs no subprograms",
+      "byte_domain": "CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION",
+      "oracle": "cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines",
+      "fixtures": "call_atlas_sweep 5/0 -> reports/call-atlas.json",
+      "sealed_version": "observed atlas (gnucobol-rs lab)",
+      "not_proven": "subprogram execution; dynamic linking / .so loading; C$ extension implementation; BY VALUE to a reference param (undefined); recursion/reentrancy; CANCEL state machine; all dialects",
+      "breaks_claim": "executing a CALLed program; resolving a dynamic CALL; implementing a C$ routine; a recursive CALL",
+      "readiness": 3,
+      "lie_prevented": "CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed",
+      "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow"
     }
   ],
   "transform_vs_read": {

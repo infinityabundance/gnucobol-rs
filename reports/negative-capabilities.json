@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 739,
+  "count": 752,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -428,7 +428,8 @@
         "GNURUST.FILE.FILTER.SLICE.1",
         "GNURUST.IF.NUMERIC.SLICE.1",
         "GNURUST.TABLE.PERFORM.SLICE.1",
-        "GNURUST.BUILD.PROFILE.1"
+        "GNURUST.BUILD.PROFILE.1",
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
       ]
     },
     {
@@ -1136,6 +1137,17 @@
       ]
     },
     {
+      "id": "NEG.BY-VALUE-TO-A-REFERENCE-PARAM-UNDEFINED",
+      "surface": "BY VALUE to a reference param (undefined)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.BYPASSING-REDACTION",
       "surface": "bypassing redaction",
       "status": "not_admitted_fail_closed",
@@ -1144,6 +1156,105 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.TOOLING.EXPORT.1"
+      ]
+    },
+    {
+      "id": "NEG.C-EXTENSION-IMPLEMENTATION",
+      "surface": "C$ extension implementation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_ALL_DIALECTS",
+      "surface": "all-dialect CALL claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_BY_VALUE_REFERENCE_MISMATCH",
+      "surface": "BY VALUE to a reference-expecting param claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "that is undefined (segfaults) and refused",
+      "risk_if_guessed": "passing BY VALUE to a LINKAGE reference",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_CANCEL_STATE",
+      "surface": "CANCEL state-machine semantics claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "CANCEL observed, its state not modeled",
+      "risk_if_guessed": "relying on CANCEL re-init",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_C_EXTENSION_IMPL",
+      "surface": "C$ system-routine implementation claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "C$TOUPPER etc. observed, not implemented",
+      "risk_if_guessed": "calling a C$ routine in the kernel",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_DYNAMIC_LINKING",
+      "surface": "dynamic linking / .so resolution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "no dynamic CALL resolution / library loading",
+      "risk_if_guessed": "resolving a dynamic CALL",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_RECURSION_REENTRANCY",
+      "surface": "recursive/reentrant call semantics claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "not modeled",
+      "risk_if_guessed": "a recursive CALL",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CALL.NO_SUBPROGRAM_EXECUTION",
+      "surface": "subprogram CALL execution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES linkage; gnucobol-rs runs no subprograms (multi-module runtime = behavioral L8)",
+      "risk_if_guessed": "executing a CALLed program",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.CANCEL-STATE-MACHINE",
+      "surface": "CANCEL state machine",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
       ]
     },
     {
@@ -2247,6 +2358,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "TRUST.4.DOCS"
+      ]
+    },
+    {
+      "id": "NEG.DYNAMIC-LINKING-SO-LOADING",
+      "surface": "dynamic linking / .so loading",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
       ]
     },
     {
@@ -6332,6 +6454,17 @@
       ]
     },
     {
+      "id": "NEG.RECURSION-REENTRANCY",
+      "surface": "recursion/reentrancy",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.REDACTION.HASH_NOT_BUSINESS_VALUE",
       "surface": "a preserved value/raw hash treated as the business value",
       "status": "not_admitted_requires_declared_profile",
@@ -7337,6 +7470,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.STRING.UNSTRING.1"
+      ]
+    },
+    {
+      "id": "NEG.SUBPROGRAM-EXECUTION",
+      "surface": "subprogram execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
       ]
     },
     {

@@ -34,7 +34,7 @@ SURFACES = [
  (r"FILE\s+STATUS", "file status", "observed", "GNURUST.FILE.STATUS.1"),
  (r"ON\s+SIZE\s+ERROR", "SIZE ERROR", "sealed", "GNURUST.SIZE.ERROR.1"),
  # --- MISSING surfaces (exercised by the authoritative corpus, no court yet) ---
- (r"\bCALL\b", "CALL / linkage", "missing", "GNURUST.CALL.EXTENSION.ATLAS.1 (proposed)"),
+ (r"\bCALL\b", "CALL / linkage", "observed", "GNURUST.CALL.EXTENSION.ATLAS.1"),
  (r"\b(SORT|MERGE)\b", "SORT / MERGE", "missing", "GNURUST.SORT.MERGE.ATLAS.1 (proposed)"),
  (r"\bSEARCH\b", "SEARCH (table lookup)", "missing", "GNURUST.SEARCH.TABLE.1 (proposed)"),
  (r"\bSTART\b", "START (indexed/relative key positioning)", "missing", "GNURUST.INDEXED.FILE.ATLAS.1 (proposed)"),

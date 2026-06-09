@@ -6,16 +6,11 @@
   "files_scanned": 29,
   "counts": {
     "sealed": 13,
-    "observed": 2,
+    "observed": 3,
     "refused": 4,
-    "missing": 7
+    "missing": 6
   },
   "missing_court_board": [
-    {
-      "surface": "CALL / linkage",
-      "occurrences": 959,
-      "proposed_court": "GNURUST.CALL.EXTENSION.ATLAS.1 (proposed)"
-    },
     {
       "surface": "START (indexed/relative key positioning)",
       "occurrences": 238,
@@ -81,8 +76,8 @@
     {
       "surface": "CALL / linkage",
       "occurrences": 959,
-      "status": "missing",
-      "court": "GNURUST.CALL.EXTENSION.ATLAS.1 (proposed)"
+      "status": "observed",
+      "court": "GNURUST.CALL.EXTENSION.ATLAS.1"
     },
     {
       "surface": "PERFORM",

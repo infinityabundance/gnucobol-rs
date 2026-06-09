@@ -550,6 +550,20 @@
         "compiler-internal layout beyond the recorded fields",
         "all dialects"
       ]
+    },
+    "GNURUST.CALL.EXTENSION.ATLAS.1": {
+      "court": "observed CALL/linkage atlas",
+      "sweep": "call_atlas_sweep.sh",
+      "byte_domain": "CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION",
+      "non_claims": [
+        "subprogram execution",
+        "dynamic linking/.so loading",
+        "C$ extension implementation",
+        "BY VALUE to a reference param",
+        "recursion/reentrancy",
+        "CANCEL state machine",
+        "all dialects"
+      ]
     }
   }
 }

@@ -6,8 +6,8 @@
   "surface_count": 27,
   "status_counts": {
     "sealed": 17,
-    "observed": 3,
-    "negative": 7,
+    "observed": 4,
+    "negative": 6,
     "missing": 0
   },
   "sealed_fraction": "17/27",
@@ -336,9 +336,11 @@
         "libcob/call.c"
       ],
       "source_modules_present": true,
-      "status": "negative",
-      "courts": [],
-      "future_campaign": "GNURUST.CALL.1 (future)",
+      "status": "observed",
+      "courts": [
+        "GNURUST.CALL.EXTENSION.ATLAS.1"
+      ],
+      "future_campaign": null,
       "risk_if_unported": "CALL/linkage/USING is a large surface; refused until receipt-backed"
     },
     {
