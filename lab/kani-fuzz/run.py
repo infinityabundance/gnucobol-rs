@@ -47,7 +47,7 @@ def build():
     rows = []
     for c in cl:
         cid = c["id"]
-        is_atlas = ("ATLAS" in cid) or cid in ("GNURUST.COVERAGE.1", "GNURUST.FILE.STATUS.1")
+        is_atlas = ("ATLAS" in cid) or cid in ("GNURUST.COVERAGE.1", "GNURUST.FILE.STATUS.1", "GNURUST.PUBLIC.CORPUS.1")
         # Only GNURUST byte courts carry a gnucobol-rs kernel -> need kani + fuzz here. KOBOLD courts compose
         # the sealed courts (fuzzed in the shim crate); governance/view/atlas courts have no byte kernel.
         if not cid.startswith("GNURUST.") or is_atlas:

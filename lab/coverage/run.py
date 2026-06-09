@@ -80,7 +80,7 @@ def claim_ladder_ids():
     return {c["id"] for c in json.load(open(os.path.join(ROOT, "reports/claim-ladder.json")))["courts"]}
 
 def admitted_gnucobol_courts():
-    return {c for c in claim_ladder_ids() if (c.startswith("GNURUST.") or "ATLAS" in c) and c != "GNURUST.COVERAGE.1"}
+    return {c for c in claim_ladder_ids() if (c.startswith("GNURUST.") or "ATLAS" in c) and c not in ("GNURUST.COVERAGE.1", "GNURUST.PUBLIC.CORPUS.1")}
 
 def build():
     cl = claim_ladder_ids()

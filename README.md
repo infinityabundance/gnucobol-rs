@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-82-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-82-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-83-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-83-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -180,6 +180,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.FILE.FILTER.SLICE.1` | filter (conditional) read-loop | ✅ pass | [`reports/casefiles/GNURUST.FILE.FILTER.SLICE.1/`](reports/casefiles/GNURUST.FILE.FILTER.SLICE.1/) |
 | `GNURUST.IF.NUMERIC.SLICE.1` | numeric IF/EVALUATE execution slice | ✅ pass | [`reports/casefiles/GNURUST.IF.NUMERIC.SLICE.1/`](reports/casefiles/GNURUST.IF.NUMERIC.SLICE.1/) |
 | `GNURUST.TABLE.PERFORM.SLICE.1` | table (OCCURS) PERFORM VARYING execution slice | ✅ pass | [`reports/casefiles/GNURUST.TABLE.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.TABLE.PERFORM.SLICE.1/) |
+| `GNURUST.PUBLIC.CORPUS.1` | public-COBOL corpus index (gap discovery) | ✅ pass | [`reports/casefiles/GNURUST.PUBLIC.CORPUS.1/`](reports/casefiles/GNURUST.PUBLIC.CORPUS.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |

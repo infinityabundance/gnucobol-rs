@@ -588,6 +588,19 @@ for (i, s2, g, r) in IFN:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.IF.NUMERIC.SLICE.1"]}
 
+# GNURUST.PUBLIC.CORPUS.1 -- public-COBOL corpus index (gap discovery, not parity).
+PC = [
+ ("NEG.PUBLIC_CORPUS.NOT_PARITY", "the corpus index treated as parity/test coverage", "an index for GAP DISCOVERY only; no parity is claimed over any corpus", "presenting it as test results"),
+ ("NEG.PUBLIC_CORPUS.NOT_FETCHED", "the corpora treated as fetched/vendored", "only sources are recorded; nothing is downloaded at index time", "assuming local copies exist"),
+ ("NEG.PUBLIC_CORPUS.NOT_RUN", "the corpora treated as compiled/run", "no corpus is compiled or executed here (that is GNURUST.PUBLIC.GAP.1)", "trusting pass/fail results"),
+ ("NEG.PUBLIC_CORPUS.LICENSE_NOT_LEGAL_ADVICE", "the license flags treated as legal clearance", "each corpus license governs its use; the flag is unverified at index time", "reusing a corpus on the flag alone"),
+ ("NEG.PUBLIC_CORPUS.FEATURES_DECLARED_NOT_VERIFIED", "the feature flags treated as a verified code scan", "features are from descriptions, not a scan", "assuming a corpus has/omits a feature"),
+ ("NEG.PUBLIC_CORPUS.NOT_EXHAUSTIVE", "the index treated as the universe of public COBOL", "a curated 25-corpus seed, not exhaustive", "assuming full terrain coverage"),
+]
+for (i, s2, g, r) in PC:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_index_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": "GNURUST.PUBLIC.GAP.1", "evidence": ["GNURUST.PUBLIC.CORPUS.1"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

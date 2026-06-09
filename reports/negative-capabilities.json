@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 709,
+  "count": 720,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -2358,6 +2358,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.CORPUS.2"
+      ]
+    },
+    {
+      "id": "NEG.EXHAUSTIVENESS-OF-THE-PUBLIC-COBOL-UNIVE",
+      "surface": "exhaustiveness of the public-COBOL universe",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
       ]
     },
     {
@@ -5079,6 +5090,17 @@
       ]
     },
     {
+      "id": "NEG.PARITY-OVER-ANY-CORPUS",
+      "surface": "parity over any corpus",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
       "id": "NEG.PER-RECORD-IF-MOVE-GENERAL-STATEMENTS",
       "surface": "per-record IF/MOVE/general statements",
       "status": "not_admitted_fail_closed",
@@ -5921,6 +5943,72 @@
       "owning_future_campaign": "PRIVACY.REDACTION.1 (future); corpus is synthetic only",
       "evidence": [
         "banking-truth-boundaries"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_CORPUS.FEATURES_DECLARED_NOT_VERIFIED",
+      "surface": "the feature flags treated as a verified code scan",
+      "status": "not_admitted_index_only",
+      "guard": "features are from descriptions, not a scan",
+      "risk_if_guessed": "assuming a corpus has/omits a feature",
+      "owning_future_campaign": "GNURUST.PUBLIC.GAP.1",
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_CORPUS.LICENSE_NOT_LEGAL_ADVICE",
+      "surface": "the license flags treated as legal clearance",
+      "status": "not_admitted_index_only",
+      "guard": "each corpus license governs its use; the flag is unverified at index time",
+      "risk_if_guessed": "reusing a corpus on the flag alone",
+      "owning_future_campaign": "GNURUST.PUBLIC.GAP.1",
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_CORPUS.NOT_EXHAUSTIVE",
+      "surface": "the index treated as the universe of public COBOL",
+      "status": "not_admitted_index_only",
+      "guard": "a curated 25-corpus seed, not exhaustive",
+      "risk_if_guessed": "assuming full terrain coverage",
+      "owning_future_campaign": "GNURUST.PUBLIC.GAP.1",
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_CORPUS.NOT_FETCHED",
+      "surface": "the corpora treated as fetched/vendored",
+      "status": "not_admitted_index_only",
+      "guard": "only sources are recorded; nothing is downloaded at index time",
+      "risk_if_guessed": "assuming local copies exist",
+      "owning_future_campaign": "GNURUST.PUBLIC.GAP.1",
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_CORPUS.NOT_PARITY",
+      "surface": "the corpus index treated as parity/test coverage",
+      "status": "not_admitted_index_only",
+      "guard": "an index for GAP DISCOVERY only; no parity is claimed over any corpus",
+      "risk_if_guessed": "presenting it as test results",
+      "owning_future_campaign": "GNURUST.PUBLIC.GAP.1",
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC_CORPUS.NOT_RUN",
+      "surface": "the corpora treated as compiled/run",
+      "status": "not_admitted_index_only",
+      "guard": "no corpus is compiled or executed here (that is GNURUST.PUBLIC.GAP.1)",
+      "risk_if_guessed": "trusting pass/fail results",
+      "owning_future_campaign": "GNURUST.PUBLIC.GAP.1",
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
       ]
     },
     {
@@ -7340,6 +7428,17 @@
       ]
     },
     {
+      "id": "NEG.THAT-ANY-CORPUS-WAS-FETCHED-COMPILED-RUN",
+      "surface": "that any corpus was fetched/compiled/run",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
+      ]
+    },
+    {
       "id": "NEG.THAT-CLASS-IS-A-QUALITY-SCORE",
       "surface": "that class is a quality score",
       "status": "not_admitted_fail_closed",
@@ -7392,6 +7491,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.LAYOUT.REDEFINES.2"
+      ]
+    },
+    {
+      "id": "NEG.THAT-THE-DECLARED-FEATURE-FLAGS-WERE-VER",
+      "surface": "that the declared feature flags were verified by a code scan",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
       ]
     },
     {
@@ -7469,6 +7579,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-RECORDED-COMMIT-HASHES-OR-LICENSES-U",
+      "surface": "the recorded commit hashes or licenses (unverified at index time)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PUBLIC.CORPUS.1"
       ]
     },
     {

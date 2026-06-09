@@ -31,7 +31,7 @@ for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-licen
 done
 # TRUST.1/TRUST.4: every GNURUST court in the claim-ladder must have a generated forensic casefile
 # (legacy hand-written receipts are now non-authoritative exhibits under research/legacyreports/).
-GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1')))")
+GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1','GNURUST.PUBLIC.CORPUS.1')))")
 for code in $GCODES; do
   [ -f "reports/casefiles/$code/casefile.json" ] || bad "claim-ladder court $code has no generated casefile"
 done
@@ -225,6 +225,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
   else
     bad "KANI+FUZZ: a byte court is missing a Kani proof or fuzz target"; cat /tmp/_kf_check
+  fi
+  if python3 "$ROOT/lab/corpus/run.py" check >/tmp/_corpus_check 2>&1; then
+    note "GNURUST.PUBLIC.CORPUS.1: public-COBOL corpus index fresh (gap discovery, index-only)"
+  else
+    bad "GNURUST.PUBLIC.CORPUS.1: corpus index drift"; cat /tmp/_corpus_check
   fi
   LSWEEP=$(bash "$ROOT/lab/oracle/layout_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
   case "$LSWEEP" in
