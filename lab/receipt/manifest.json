@@ -397,6 +397,19 @@
         "JUSTIFIED / floating-point USAGE",
         "all dialects"
       ]
+    },
+    "GNURUST.SIZE.ERROR.1": {
+      "court": "arithmetic SIZE ERROR truncation + condition",
+      "sweep": "size_error_sweep.sh",
+      "byte_domain": "overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition",
+      "non_claims": [
+        "the arithmetic itself (GNURUST.7/13/19)",
+        "ROUNDED",
+        "intermediate-result precision",
+        "SIZE ERROR on MOVE",
+        "floating-point receivers",
+        "all dialects"
+      ]
     }
   }
 }

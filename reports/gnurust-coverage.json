@@ -5,12 +5,12 @@
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "surface_count": 27,
   "status_counts": {
-    "sealed": 16,
-    "observed": 4,
+    "sealed": 17,
+    "observed": 3,
     "negative": 7,
     "missing": 0
   },
-  "sealed_fraction": "16/27",
+  "sealed_fraction": "17/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -191,9 +191,10 @@
         "libcob/numeric.c"
       ],
       "source_modules_present": true,
-      "status": "observed",
+      "status": "sealed",
       "courts": [
-        "SIZE.ERROR.ATLAS.1"
+        "SIZE.ERROR.ATLAS.1",
+        "GNURUST.SIZE.ERROR.1"
       ],
       "future_campaign": null,
       "risk_if_unported": "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal \u2014 silent corruption"

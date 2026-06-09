@@ -494,6 +494,19 @@ for (i, s2, g, r) in AD2:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.ACCEPT.DISPLAY.2"]}
 
+# GNURUST.SIZE.ERROR.1 — arithmetic SIZE ERROR truncation + condition.
+SE = [
+ ("NEG.SIZE_ERROR.NO_ARITHMETIC", "the arithmetic itself claimed here", "the add/subtract/multiply/divide is GNURUST.7/13/19; this court is only the overflow store + condition", "computing the result here"),
+ ("NEG.SIZE_ERROR.NO_ROUNDED", "ROUNDED interaction claimed", "truncation toward zero only; ROUNDED is not admitted", "a ROUNDED receiver"),
+ ("NEG.SIZE_ERROR.NO_INTERMEDIATE_PRECISION", "intermediate-result precision rules claimed", "the caller supplies the exact result digits", "relying on intermediate rounding"),
+ ("NEG.SIZE_ERROR.NO_MOVE_SIZE_ERROR", "SIZE ERROR on MOVE claimed", "only arithmetic-statement SIZE ERROR", "MOVE overflow semantics"),
+ ("NEG.SIZE_ERROR.NO_FLOAT", "floating-point receiver SIZE ERROR claimed", "fixed display/packed receivers only", "COMP-1/COMP-2 overflow"),
+ ("NEG.SIZE_ERROR.NO_ALL_DIALECTS", "all-dialect SIZE ERROR claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in SE:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.SIZE.ERROR.1"]}
+
 # GNURUST.PROCEDURE.FLOW.ATLAS.1 — observed control-flow atlas; EXECUTION is the loudest non-claim.
 PF = [
  ("NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION", "Procedure Division EXECUTION claimed", "the atlas OBSERVES control flow; gnucobol-rs runs no programs", "executing a COBOL program"),

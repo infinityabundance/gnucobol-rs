@@ -41,7 +41,7 @@ SURFACES = [
    "a wrong edited decode mis-recovers a presentation value"),
  ("dialect-options", "compiler dialect options", ["cobc/config.c"], "sealed", ["DIALECT.PROFILE.1"], None,
    "an unrecorded dialect makes 'GnuCOBOL says' ambiguous"),
- ("size-error", "runtime exceptions", ["libcob/numeric.c"], "observed", ["SIZE.ERROR.ATLAS.1"], None,
+ ("size-error", "runtime exceptions", ["libcob/numeric.c"], "sealed", ["SIZE.ERROR.ATLAS.1", "GNURUST.SIZE.ERROR.1"], None,
    "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal — silent corruption"),
  ("file-io-sequential", "file I/O", ["libcob/fileio.c"], "sealed", ["GNURUST.FILE.SEQUENTIAL.1"], None,
    "sequential/line READ record bytes + AT END drive most batch COBOL logic"),

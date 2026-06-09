@@ -1019,6 +1019,20 @@
       "readiness": 3,
       "lie_prevented": "DISPLAY shows the stored bytes -- NO: for a SIGNED numeric it prints a +/- SIGN CHARACTER (not the overpunched last byte) so the width grows by one, and a positive/zero value shows +; a V-scaled field shows a . that is not stored",
       "damage_if_overclaimed": "assuming DISPLAY of a signed field equals its stored zoned bytes (it does not -- it de-overpunches to a sign prefix) mis-sizes and mis-reads captured DISPLAY output"
+    },
+    {
+      "id": "GNURUST.SIZE.ERROR.1",
+      "name": "arithmetic SIZE ERROR truncation and condition",
+      "proven": "the byte effect of an arithmetic result that does not fit a fixed numeric receiver, matching cobc/libcob (verified 12/0): a SIZE ERROR condition occurs when the result integer part has MORE significant digits than the receiver integer capacity (overflow) or on divide-by-zero; WITHOUT ON SIZE ERROR the receiver stores the TRUNCATED result -- low-order integer digits (most-significant DROPPED) with the fraction truncated toward zero to the receiver scale (999+999=1998 into 9(3) stores 998; 1234.567 into 9(3)V99 stores 234.56); WITH ON SIZE ERROR the receiver is LEFT UNCHANGED and the imperative runs. Implements the observed SIZE.ERROR.ATLAS.1",
+      "byte_domain": "overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition",
+      "oracle": "cobc arithmetic SIZE ERROR (libcob/numeric.c)",
+      "fixtures": "size_error_sweep 12/0 + 2 unit tests",
+      "sealed_version": "0.7.16",
+      "not_proven": "the arithmetic itself (GNURUST.7/13/19); ROUNDED; intermediate-result precision; SIZE ERROR on MOVE; floating-point receivers; all dialects",
+      "breaks_claim": "ROUNDED receivers; MOVE overflow; float receivers; relying on this court for the arithmetic value",
+      "readiness": 3,
+      "lie_prevented": "overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result",
+      "damage_if_overclaimed": "assuming overflow keeps the high digits (or that ON SIZE ERROR still stores something) corrupts amounts silently when a computed value exceeds its PICTURE"
     }
   ],
   "transform_vs_read": {

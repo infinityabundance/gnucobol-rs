@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 585,
+  "count": 596,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -395,7 +395,8 @@
         "GNURUST.INTRINSIC.CASE.1",
         "GNURUST.INTRINSIC.ORD-CHAR.1",
         "GNURUST.INTRINSIC.NUMVAL-C.1",
-        "GNURUST.ACCEPT.DISPLAY.2"
+        "GNURUST.ACCEPT.DISPLAY.2",
+        "GNURUST.SIZE.ERROR.1"
       ]
     },
     {
@@ -2606,6 +2607,17 @@
       ]
     },
     {
+      "id": "NEG.FLOATING-POINT-RECEIVERS",
+      "surface": "floating-point receivers",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
       "id": "NEG.FULL-FILE-I-O-PARITY",
       "surface": "full file I/O parity",
       "status": "not_admitted_fail_closed",
@@ -3002,6 +3014,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.INTEGER.1"
+      ]
+    },
+    {
+      "id": "NEG.INTERMEDIATE-RESULT-PRECISION",
+      "surface": "intermediate-result precision",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
       ]
     },
     {
@@ -5332,6 +5355,17 @@
       ]
     },
     {
+      "id": "NEG.ROUNDED",
+      "surface": "ROUNDED",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
       "id": "NEG.ROUNDING-POLICY",
       "surface": "rounding policy",
       "status": "not_admitted_fail_closed",
@@ -5675,6 +5709,17 @@
       ]
     },
     {
+      "id": "NEG.SIZE-ERROR-ON-MOVE",
+      "surface": "SIZE ERROR on MOVE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
       "id": "NEG.SIZE_ERROR.BRANCH_EXECUTION_NOT_CLAIMED",
       "surface": "which branch executes claimed",
       "status": "not_admitted_observed_only",
@@ -5716,6 +5761,72 @@
       "owning_future_campaign": null,
       "evidence": [
         "SIZE.ERROR.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NO_ALL_DIALECTS",
+      "surface": "all-dialect SIZE ERROR claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NO_ARITHMETIC",
+      "surface": "the arithmetic itself claimed here",
+      "status": "not_admitted_fail_closed",
+      "guard": "the add/subtract/multiply/divide is GNURUST.7/13/19; this court is only the overflow store + condition",
+      "risk_if_guessed": "computing the result here",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NO_FLOAT",
+      "surface": "floating-point receiver SIZE ERROR claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "fixed display/packed receivers only",
+      "risk_if_guessed": "COMP-1/COMP-2 overflow",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NO_INTERMEDIATE_PRECISION",
+      "surface": "intermediate-result precision rules claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "the caller supplies the exact result digits",
+      "risk_if_guessed": "relying on intermediate rounding",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NO_MOVE_SIZE_ERROR",
+      "surface": "SIZE ERROR on MOVE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only arithmetic-statement SIZE ERROR",
+      "risk_if_guessed": "MOVE overflow semantics",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
+      ]
+    },
+    {
+      "id": "NEG.SIZE_ERROR.NO_ROUNDED",
+      "surface": "ROUNDED interaction claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "truncation toward zero only; ROUNDED is not admitted",
+      "risk_if_guessed": "a ROUNDED receiver",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
       ]
     },
     {
@@ -6135,6 +6246,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.BANK.RECONCILE.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-ARITHMETIC-ITSELF-GNURUST-7-13-19",
+      "surface": "the arithmetic itself (GNURUST.7/13/19)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.SIZE.ERROR.1"
       ]
     },
     {
