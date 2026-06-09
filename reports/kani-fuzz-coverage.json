@@ -1,0 +1,426 @@
+{
+  "schema": "gnurust-kani-fuzz-coverage-v1",
+  "court": "GNURUST.VERIFY.KANI-FUZZ.1",
+  "total_courts": 82,
+  "na_courts": 5,
+  "impl_courts": 77,
+  "kani_covered": 0,
+  "fuzz_covered": 0,
+  "rows": [
+    {
+      "court": "GNURUST.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.3",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.4",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.5",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.6",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.7",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.8",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.9",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.10",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.11",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.12",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.13",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.RECON.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.14",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.15",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.16",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DATA.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DATA.3",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.OPERATOR.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.17",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.18",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DATA.4",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DATA.5",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DATA.6",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.FILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.BANK.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.BANK.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DB2HOST.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.19",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.RECON.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.CORPUS.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.BENCH.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.POSTING.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.EXTRACT.PROFILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.PRIVACY.REDACTION.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.PERF.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.ENTERPRISE.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.BANK.RECONCILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DIFF.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.SCALE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.PERF.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "SIZE.ERROR.ATLAS.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "observed atlas: size-error observation, no Rust implementation"
+    },
+    {
+      "court": "KOBOLD.LAYOUT.REDEFINES.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.SENTINEL.PROFILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.DATE.PROFILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.CURRENCY.PROFILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "SUPPORT-PACKET.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "DIALECT.PROFILE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.TOOLING.EXPORT.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "TRUST.5",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "NIST-STYLE-FIXTURE-FORMAT.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.REMAINDER.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.PILOT-PACKET.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.PILOT.WORKFLOW.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "KOBOLD.PILOT.RUN.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.COVERAGE.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "meta: the coverage map itself (a generated receipt, not a byte kernel)"
+    },
+    {
+      "court": "GNURUST.FILE.SEQUENTIAL.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.FILE.STATUS.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "observed atlas: file-status observation, no Rust implementation"
+    },
+    {
+      "court": "GNURUST.INITIALIZE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INSPECT.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.STRING.UNSTRING.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.ATLAS.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "observed atlas: records oracle behavior, no Rust implementation to prove/fuzz"
+    },
+    {
+      "court": "GNURUST.INTRINSIC.LENGTH.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.NUMVAL.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.ACCEPT.DISPLAY.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "observed atlas: control-flow observation, no execution kernel"
+    },
+    {
+      "court": "GNURUST.INTRINSIC.MOD-REM.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.INTEGER.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.CASE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.ORD-CHAR.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.NUMVAL-C.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.ACCEPT.DISPLAY.2",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.SIZE.ERROR.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.FILE.WRITE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.FILE.REWRITE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.INTRINSIC.DATE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.IF.EVALUATE.SLICE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.PERFORM.SLICE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.FILE.FLOW.SLICE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.FILE.FILTER.SLICE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.IF.NUMERIC.SLICE.1",
+      "kani": [],
+      "fuzz": []
+    },
+    {
+      "court": "GNURUST.TABLE.PERFORM.SLICE.1",
+      "kani": [],
+      "fuzz": []
+    }
+  ]
+}
