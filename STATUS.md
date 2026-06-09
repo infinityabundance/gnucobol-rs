@@ -16,7 +16,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.26 · 54 sealed GNURUST courts · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.26 · 54 GNURUST courts (43 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -32,6 +32,11 @@ Byte-exact, oracle-proven **read fidelity** for fixed-record COBOL data, within 
 - **cp500 EBCDIC** DISPLAY text decode (`15`) and **zoned-decimal numeric** decode (`17`).
 - **COMP-6** unsigned packed-decimal storage + MOVE (`18`).
 - **Edited-picture** decode 16a+16b (`16`, decode-only).
+- **DIVIDE / REMAINDER** receiver bytes (`19` / `REMAINDER.1`).
+- **Intrinsics** — LENGTH / NUMVAL / NUMVAL-C / INTEGER / INTEGER-PART / MOD / REM / UPPER-LOWER-REVERSE / ORD-CHAR / date conversion (`GNURUST.INTRINSIC.*`).
+- **Procedure-Division statement bytes** — INITIALIZE, INSPECT, STRING / UNSTRING, ACCEPT / DISPLAY (incl. signed / V-scaled numeric), arithmetic SIZE ERROR truncation.
+- **Sequential file I/O** — READ + WRITE + REWRITE for RECORD / LINE SEQUENTIAL, with file status.
+- **Bounded execution slices** — IF / EVALUATE (alphanumeric + numeric), PERFORM (TIMES / UNTIL / VARYING), table PERFORM VARYING (1-based subscript), the read-loop + conditional read-loop, and SEARCH / SEARCH ALL — each *runs* a tightly-bounded fragment to oracle-identical storage; everything outside fails closed.
 - **KOBOLD** composes these into a byte-stable reconciliation packet with an operator trust layer
   (explain / totals / dirty-mode), binary/packed **passthrough** under EBCDIC, **cp500 numeric DISPLAY**
   (zoned sign) decode, edited fields' presentation-vs-numeric split, and **fixed-record container ingest**
@@ -136,12 +141,15 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `SUPPORT-PACKET.1` | reviewer/operator evidence bundle (generated from existing artifacts) | ✅ pass | [`reports/casefiles/SUPPORT-PACKET.1/`](reports/casefiles/SUPPORT-PACKET.1/) |
 | `TRUST.5` | anti-ceremony audit (every court can fail) | ✅ pass | [`reports/casefiles/TRUST.5/`](reports/casefiles/TRUST.5/) |
 
+
+Every byte court additionally carries a **Kani proof** of its sharp invariant and a **fuzz target** (panic-freedom), gate-enforced. The oracle's **ABI / dialect / config** is bound as evidence (`GNURUST.BUILD.PROFILE.1`: GnuCOBOL 3.2.0, COMP `binary-byteorder=big-endian`, host little-endian, signed char), and a **public-corpus gap board** (`GNURUST.PUBLIC.GAP.1`) over the admitted GnuCOBOL testsuite is at **0 missing surfaces** — every surface the corpus exercises is sealed, observed (an atlas), or refused. Inter-program **CALL** execution, **indexed / relative / SORT** runtime engines, and full Procedure Division execution remain **observed atlases or explicit refusals**, never claimed.
+
 ## What may NOT be relied on
 
 See [`docs/not-yet-ready.md`](docs/not-yet-ready.md). Headline: this is **not** a compiler, not
 `libcob`, not Procedure Division execution, not universal COBOL truth, not business-truth validation,
 not automatic migration, not dirty-data repair, not a proven AWS deployment. The full machine-readable
-non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (107 surfaces, incl.
+non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (799 surfaces, incl.
 18 banking operating-semantics refusals), and the **truth hierarchy** — bytes / record / posting /
 accounting / extraction / business — is [`docs/truth-boundaries.md`](docs/truth-boundaries.md).
 

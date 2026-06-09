@@ -39,6 +39,10 @@ def machine_values():
     gnurust = [c for c in cl["courts"] if c["id"].startswith("GNURUST.")]
     kobold = [c for c in cl["courts"] if c["id"].startswith("KOBOLD.")]
     casefiles = glob.glob(os.path.join(ROOT, "reports/casefiles/*/casefile.json"))
+    _negf = os.path.join(ROOT, "reports/negative-capabilities.json")
+    neg_count = json.load(open(_negf)).get("count", 0) if os.path.exists(_negf) else 0
+    _kff = os.path.join(ROOT, "reports/kani-fuzz-coverage.json")
+    sealed_byte_courts = json.load(open(_kff)).get("impl_courts", 0) if os.path.exists(_kff) else 0
     def verdict(cid):
         jf = os.path.join(ROOT, "reports/casefiles", cid, "casefile.json")
         if not os.path.exists(jf):
@@ -73,6 +77,8 @@ def machine_values():
         "court_count": str(len(cl["courts"])),
         "oracle": oracle_str(),
         "casefile_count": str(len(casefiles)),
+        "neg_count": str(neg_count),
+        "sealed_byte_court_count": str(sealed_byte_courts),
         "publish_note": "(The git repo is the authority; crates.io may trail by a version under publish rate limits.)",
         "sealed_courts_table": "\n".join(rows),
         "gnurust_courts_table": court_table(gnurust, "Sealed GnuCOBOL data/arithmetic courts", with_links=False),
