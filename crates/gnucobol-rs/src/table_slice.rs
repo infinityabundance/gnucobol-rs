@@ -116,3 +116,18 @@ mod tests {
         assert_eq!(table_elem(b"100025050200007", &table(), 6), 0); // out of range
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.TABLE.PERFORM.SLICE.1
+    /// The 1-based subscript is bounds-safe: any index outside 1..=occurs yields 0 (never an out-of-bounds read).
+    #[kani::proof]
+    fn table_elem_one_based_bounds() {
+        let rec: [u8; 15] = kani::any();
+        let t = Table { base_offset: 0, elem_size: 3, occurs: 5 };
+        let i: usize = kani::any();
+        kani::assume(!(1..=5).contains(&i));
+        assert_eq!(table_elem(&rec, &t, i), 0);
+    }
+}

@@ -227,3 +227,22 @@ mod tests {
         assert_eq!(t_of(&eval_evaluate(&rec("Z", "----"), &f, "A", &whens, &other)), "OTH ");
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::Operand::*;
+    use super::*;
+    // KANIFOR: GNURUST.IF.EVALUATE.SLICE.1
+    /// Executing an IF over a record never changes the record's storage length (MOVE overwrites in place).
+    #[kani::proof]
+    #[kani::unwind(9)]
+    fn eval_if_preserves_storage_length() {
+        let rec: [u8; 7] = kani::any();
+        let fields = [SliceField { name: "A", offset: 0, size: 3 }, SliceField { name: "T", offset: 3, size: 4 }];
+        let lit: [u8; 2] = kani::any();
+        let cond = Condition { left: Field("A"), op: Relop::Gt, right: Literal(&lit) };
+        let then = [MoveStmt { source: Literal(&lit), target: "T" }];
+        let els = [MoveStmt { source: Field("A"), target: "T" }];
+        assert_eq!(eval_if(&rec, &fields, &cond, &then, &els).len(), 7);
+    }
+}

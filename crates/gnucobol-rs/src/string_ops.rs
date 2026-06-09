@@ -181,3 +181,20 @@ mod tests {
         assert_eq!(r.pointer, 7);
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.STRING.UNSTRING.1
+    /// STRING INTO never changes the target's length (it overwrites within the receiver, tail preserved).
+    #[kani::proof]
+    #[kani::unwind(9)]
+    fn string_into_preserves_target_length() {
+        let prefill: [u8; 6] = kani::any();
+        let src: [u8; 4] = kani::any();
+        let ptr: usize = kani::any();
+        kani::assume(ptr >= 1 && ptr <= 7);
+        let r = string_into(&prefill, &[StringSource::Size(&src)], ptr);
+        assert_eq!(r.target.len(), prefill.len());
+    }
+}

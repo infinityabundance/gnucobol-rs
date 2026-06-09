@@ -82,3 +82,35 @@ mod tests {
         assert_eq!(display_numeric(b"01234", 2, true, false), b"+012.34"); // S9(3)V99 = +12.34
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.ACCEPT.DISPLAY.1
+    /// DISPLAY emits exactly the concatenated operand bytes plus one newline; ACCEPT fills exactly the width.
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn display_and_accept_lengths() {
+        let a: [u8; 3] = kani::any();
+        let b: [u8; 2] = kani::any();
+        let out = display_line(&[&a, &b]);
+        assert_eq!(out.len(), a.len() + b.len() + 1);
+        let size: usize = kani::any();
+        kani::assume(size <= 8);
+        assert_eq!(accept_field(&a, size).len(), size);
+    }
+    // KANIFOR: GNURUST.ACCEPT.DISPLAY.2
+    /// DISPLAY of a signed/V numeric has width = sign? + int_digits + (scale>0 ? 1+scale : 0).
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn display_numeric_width() {
+        let digits: [u8; 5] = kani::any();
+        let scale: usize = kani::any();
+        let signed: bool = kani::any();
+        let negative: bool = kani::any();
+        kani::assume(scale < digits.len());
+        let out = display_numeric(&digits, scale, signed, negative);
+        let expect = (signed as usize) + (digits.len() - scale) + if scale > 0 { 1 + scale } else { 0 };
+        assert_eq!(out.len(), expect);
+    }
+}

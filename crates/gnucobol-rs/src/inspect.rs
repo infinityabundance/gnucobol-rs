@@ -174,3 +174,19 @@ mod tests {
         assert_eq!(inspect_tallying(b"ABAB", TallyMode::All(b"A"), Region::After(b"Q")), 0);
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.INSPECT.1
+    /// INSPECT REPLACING with an equal-length from/to never changes the target length.
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn inspect_replacing_equal_len_preserves_length() {
+        let target: [u8; 5] = kani::any();
+        let from: [u8; 1] = kani::any();
+        let to: [u8; 1] = kani::any();
+        let out = inspect_replacing(&target, ReplaceMode::All(&from, &to), Region::All);
+        assert_eq!(out.len(), target.len());
+    }
+}

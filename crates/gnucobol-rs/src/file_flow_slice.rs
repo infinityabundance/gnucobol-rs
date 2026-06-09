@@ -227,3 +227,22 @@ mod tests {
         assert_eq!((alpha.records_processed, read_num(&alpha.ws, &wf, "SM")), (3, 350));
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    use crate::if_eval::SliceField;
+    // KANIFOR: GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1
+    /// The read-loop never changes the WORKING-STORAGE length, whatever the file contents.
+    #[kani::proof]
+    #[kani::unwind(5)]
+    fn read_loop_preserves_ws_length() {
+        let file: [u8; 8] = kani::any();
+        let rf = [SliceField { name: "R-AMT", offset: 1, size: 3 }];
+        let wf = [SliceField { name: "CNT", offset: 0, size: 3 }, SliceField { name: "SM", offset: 3, size: 5 }];
+        let ws = [b'0'; 8];
+        let body = [LoopOp::Count("CNT")];
+        let r = eval_read_loop(&file, crate::file_seq::FileOrg::RecordSequential, 4, &rf, &ws, &wf, &body);
+        assert_eq!(r.ws.len(), 8);
+    }
+}

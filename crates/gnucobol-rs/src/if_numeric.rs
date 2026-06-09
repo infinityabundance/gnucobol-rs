@@ -146,3 +146,23 @@ mod tests {
         assert_eq!(f_of(&eval_evaluate_numeric(&rec(99), &fl, "N", &whens, &other)), 8);
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    use crate::if_eval::{Relop, SliceField};
+    use crate::perform_slice::NumCond;
+    // KANIFOR: GNURUST.IF.NUMERIC.SLICE.1
+    /// A numeric IF never changes the record length.
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn eval_if_numeric_preserves_length() {
+        let rec: [u8; 5] = kani::any();
+        let fields = [SliceField { name: "N", offset: 0, size: 3 }, SliceField { name: "F", offset: 3, size: 2 }];
+        let v: i64 = kani::any();
+        let cond = NumCond { field: "N", op: Relop::Gt, value: v };
+        let then = [MoveNum { value: 1, target: "F" }];
+        let els = [MoveNum { value: 9, target: "F" }];
+        assert_eq!(eval_if_numeric(&rec, &fields, &cond, &then, &els).len(), 5);
+    }
+}

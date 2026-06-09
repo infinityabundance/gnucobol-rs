@@ -78,3 +78,21 @@ mod tests {
         assert_eq!(se(b"7", b"89", 1, 1), SizeErrorResult { size_error: false, truncated: b"78".to_vec() });
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.SIZE.ERROR.1
+    /// The no-ON-SIZE-ERROR truncated store is ALWAYS exactly `recv_int + recv_scale` digit bytes.
+    #[kani::proof]
+    #[kani::unwind(13)]
+    fn truncated_width_is_recv_width() {
+        let int_digits: [u8; 6] = kani::any();
+        let frac_digits: [u8; 4] = kani::any();
+        let recv_int: usize = kani::any();
+        let recv_scale: usize = kani::any();
+        kani::assume(recv_int <= 8 && recv_scale <= 4);
+        let r = arith_size_error(&int_digits, &frac_digits, recv_int, recv_scale);
+        assert_eq!(r.truncated.len(), recv_int + recv_scale);
+    }
+}

@@ -338,3 +338,91 @@ mod tests {
         assert_eq!(len("X(1)", Usage::Display), 1);
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+
+    // KANIFOR: GNURUST.INTRINSIC.ORD-CHAR.1
+    /// ORD and CHAR are exact 1-based inverses over the whole collating sequence (unbounded).
+    #[kani::proof]
+    fn ord_char_round_trip() {
+        let n: u32 = kani::any();
+        kani::assume((1..=256).contains(&n));
+        assert_eq!(intrinsic_ord(intrinsic_char(n)), n);
+    }
+
+    // KANIFOR: GNURUST.INTRINSIC.MOD-REM.1
+    /// MOD is a valid residue with the DIVISOR sign and |MOD| < |b|; REM is the truncated remainder.
+    #[kani::proof]
+    fn mod_rem_invariants() {
+        let a: i64 = kani::any();
+        let b: i64 = kani::any();
+        kani::assume(b != 0);
+        let (a, b) = (a as i128, b as i128);
+        let m = intrinsic_mod(a, b);
+        let r = intrinsic_rem(a, b);
+        assert_eq!(r, a % b);
+        assert_eq!((a - m) % b, 0); // m is a residue of a mod b
+        assert!(m == 0 || (m > 0) == (b > 0)); // divisor sign
+        assert!(m.unsigned_abs() < b.unsigned_abs());
+    }
+
+    // KANIFOR: GNURUST.INTRINSIC.INTEGER.1
+    /// INTEGER (floor) <= INTEGER-PART (truncate), and they differ by at most 1.
+    #[kani::proof]
+    fn integer_floor_le_part_trunc() {
+        let mag: i64 = kani::any();
+        let scale: u32 = kani::any();
+        kani::assume(scale <= 9);
+        let mag = mag as i128;
+        let fl = intrinsic_integer(mag, scale);
+        let tr = intrinsic_integer_part(mag, scale);
+        assert!(fl <= tr);
+        assert!(tr - fl <= 1);
+    }
+
+    // KANIFOR: GNURUST.INTRINSIC.DATE.1
+    /// DATE-OF-INTEGER and INTEGER-OF-DATE are exact inverses across the admitted range.
+    #[kani::proof]
+    fn date_round_trip() {
+        let d: i64 = kani::any();
+        kani::assume(d >= 1 && d <= 3_000_000); // ~ years 1601..9999
+        assert_eq!(intrinsic_integer_of_date(intrinsic_date_of_integer(d)), d);
+    }
+
+    // KANIFOR: GNURUST.INTRINSIC.CASE.1
+    /// Case folding and REVERSE preserve length; REVERSE is an involution.
+    #[kani::proof]
+    fn case_reverse_preserve_length() {
+        let s: [u8; 4] = kani::any();
+        assert_eq!(intrinsic_upper_case(&s).len(), s.len());
+        assert_eq!(intrinsic_lower_case(&s).len(), s.len());
+        let r = intrinsic_reverse(&s);
+        assert_eq!(r.len(), s.len());
+        assert_eq!(intrinsic_reverse(&r), s.to_vec());
+    }
+
+    // KANIFOR: GNURUST.INTRINSIC.NUMVAL.1, GNURUST.INTRINSIC.NUMVAL-C.1
+    /// NUMVAL / NUMVAL-C never panic on symbolic input and the scale is bounded by the input length.
+    #[kani::proof]
+    fn numval_no_panic_bounded_scale() {
+        let s: [u8; 6] = kani::any();
+        let st = core::str::from_utf8(&s);
+        if let Ok(txt) = st {
+            let nv = intrinsic_numval(txt);
+            assert!(nv.scale as usize <= txt.len());
+            let _ = intrinsic_numval_c(txt);
+        }
+    }
+
+    // KANIFOR: GNURUST.INTRINSIC.LENGTH.1
+    /// FUNCTION LENGTH equals the field model's storage size (here: X(n) is n bytes), never panics.
+    #[kani::proof]
+    fn length_of_alpha_is_n() {
+        let n: usize = kani::any();
+        kani::assume(n >= 1 && n <= 9);
+        let pic = match n { 1=>"X(1)",2=>"X(2)",3=>"X(3)",4=>"X(4)",5=>"X(5)",6=>"X(6)",7=>"X(7)",8=>"X(8)",_=>"X(9)" };
+        assert_eq!(intrinsic_length(pic, Usage::Display).unwrap(), n);
+    }
+}

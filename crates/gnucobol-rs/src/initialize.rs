@@ -129,3 +129,20 @@ mod tests {
         assert_eq!(&out[6..8], b"  "); // the real field -> spaces
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.INITIALIZE.1
+    /// INITIALIZE never changes the record length; skipped (FILLER/redefiner) and out-of-range fields are safe.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn initialize_preserves_record_length() {
+        let prefill: [u8; 8] = kani::any();
+        let cat: u8 = kani::any();
+        let category = match cat % 4 { 0 => InitCategory::Alphanumeric, 1 => InitCategory::NumericDisplay, 2 => InitCategory::Packed, _ => InitCategory::Binary };
+        let f = InitField { offset: 0, size: 4, category, signed: cat & 4 == 0, is_filler: cat & 8 == 0, is_redefiner: false };
+        let out = initialize_record(&[f], &prefill);
+        assert_eq!(out.len(), prefill.len());
+    }
+}

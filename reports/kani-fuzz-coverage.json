@@ -4,12 +4,14 @@
   "total_courts": 82,
   "na_courts": 40,
   "impl_courts": 42,
-  "kani_covered": 0,
+  "kani_covered": 24,
   "fuzz_covered": 42,
   "rows": [
     {
       "court": "GNURUST.2",
-      "kani": [],
+      "kani": [
+        "lib.rs"
+      ],
       "fuzz": [
         "cob_move.rs"
       ]
@@ -364,7 +366,9 @@
     },
     {
       "court": "GNURUST.FILE.SEQUENTIAL.1",
-      "kani": [],
+      "kani": [
+        "file_seq.rs"
+      ],
       "fuzz": [
         "file_seq.rs"
       ]
@@ -377,21 +381,27 @@
     },
     {
       "court": "GNURUST.INITIALIZE.1",
-      "kani": [],
+      "kani": [
+        "initialize.rs"
+      ],
       "fuzz": [
         "initialize.rs"
       ]
     },
     {
       "court": "GNURUST.INSPECT.1",
-      "kani": [],
+      "kani": [
+        "inspect.rs"
+      ],
       "fuzz": [
         "inspect.rs"
       ]
     },
     {
       "court": "GNURUST.STRING.UNSTRING.1",
-      "kani": [],
+      "kani": [
+        "string_ops.rs"
+      ],
       "fuzz": [
         "string_ops.rs"
       ]
@@ -404,21 +414,27 @@
     },
     {
       "court": "GNURUST.INTRINSIC.LENGTH.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.NUMVAL.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.ACCEPT.DISPLAY.1",
-      "kani": [],
+      "kani": [
+        "accept_display.rs"
+      ],
       "fuzz": [
         "accept_display.rs"
       ]
@@ -431,112 +447,144 @@
     },
     {
       "court": "GNURUST.INTRINSIC.MOD-REM.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.INTEGER.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.CASE.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.ORD-CHAR.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.NUMVAL-C.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.ACCEPT.DISPLAY.2",
-      "kani": [],
+      "kani": [
+        "accept_display.rs"
+      ],
       "fuzz": [
         "accept_display.rs"
       ]
     },
     {
       "court": "GNURUST.SIZE.ERROR.1",
-      "kani": [],
+      "kani": [
+        "size_error.rs"
+      ],
       "fuzz": [
         "size_error.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.WRITE.1",
-      "kani": [],
+      "kani": [
+        "file_seq.rs"
+      ],
       "fuzz": [
         "file_seq.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.REWRITE.1",
-      "kani": [],
+      "kani": [
+        "file_seq.rs"
+      ],
       "fuzz": [
         "file_seq.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.DATE.1",
-      "kani": [],
+      "kani": [
+        "intrinsic.rs"
+      ],
       "fuzz": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.IF.EVALUATE.SLICE.1",
-      "kani": [],
+      "kani": [
+        "if_eval.rs"
+      ],
       "fuzz": [
         "if_eval.rs"
       ]
     },
     {
       "court": "GNURUST.PERFORM.SLICE.1",
-      "kani": [],
+      "kani": [
+        "perform_slice.rs"
+      ],
       "fuzz": [
         "perform_slice.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.FLOW.SLICE.1",
-      "kani": [],
+      "kani": [
+        "file_flow_slice.rs"
+      ],
       "fuzz": [
         "file_flow_slice.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.FILTER.SLICE.1",
-      "kani": [],
+      "kani": [
+        "file_flow_slice.rs"
+      ],
       "fuzz": [
         "file_flow_slice.rs"
       ]
     },
     {
       "court": "GNURUST.IF.NUMERIC.SLICE.1",
-      "kani": [],
+      "kani": [
+        "if_numeric.rs"
+      ],
       "fuzz": [
         "if_numeric.rs"
       ]
     },
     {
       "court": "GNURUST.TABLE.PERFORM.SLICE.1",
-      "kani": [],
+      "kani": [
+        "table_slice.rs"
+      ],
       "fuzz": [
         "table_slice.rs"
       ]

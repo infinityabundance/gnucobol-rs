@@ -121,6 +121,7 @@ pub mod kani_harness {
     /// entirely within the destination field (`0 <= d`, `d+n <= fsize`) and the source
     /// (`0 <= s`, `s+n <= size`). Unbounded in the inputs (full i64 reasoning), so it is the
     /// strongest possible statement of the bound, not a sampled one.
+    // KANIFOR: GNURUST.2
     #[kani::proof]
     fn store_window_is_in_bounds() {
         let size: i64 = kani::any();

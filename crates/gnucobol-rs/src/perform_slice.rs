@@ -173,3 +173,21 @@ mod tests {
         assert_eq!(nums(&out), (0, 5));
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    use crate::if_eval::SliceField;
+    // KANIFOR: GNURUST.PERFORM.SLICE.1
+    /// A bounded PERFORM n TIMES never changes the record length.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn perform_times_preserves_length() {
+        let rec: [u8; 6] = kani::any();
+        let fields = [SliceField { name: "C", offset: 0, size: 3 }, SliceField { name: "I", offset: 3, size: 3 }];
+        let n: i64 = kani::any();
+        kani::assume((0..=4).contains(&n));
+        let body = [AddOp { target: "C", amount: 1 }];
+        assert_eq!(eval_perform(&rec, &fields, &PerformForm::Times(n), &body).len(), 6);
+    }
+}

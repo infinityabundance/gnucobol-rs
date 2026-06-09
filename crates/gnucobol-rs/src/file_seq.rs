@@ -209,3 +209,37 @@ mod tests {
         assert_eq!(rewrite_records(b"AAAABBBB", 4, &[(9, b"ZZ"), (1, b"C")]), b"AAAAC   ");
     }
 }
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.FILE.WRITE.1
+    /// RECORD SEQUENTIAL WRITE emits exactly record_len bytes per record (padded), no delimiter.
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn write_record_seq_total_length() {
+        let r0: [u8; 3] = kani::any();
+        let r1: [u8; 5] = kani::any();
+        let recs: [&[u8]; 2] = [&r0, &r1];
+        assert_eq!(write_sequential(&recs, FileOrg::RecordSequential, 4).len(), 8);
+    }
+    // KANIFOR: GNURUST.FILE.REWRITE.1
+    /// REWRITE overwrites in place and never changes the file length.
+    #[kani::proof]
+    #[kani::unwind(14)]
+    fn rewrite_preserves_file_length() {
+        let file: [u8; 12] = kani::any();
+        let content: [u8; 2] = kani::any();
+        assert_eq!(rewrite_records(&file, 4, &[(1, &content)]).len(), file.len());
+    }
+    // KANIFOR: GNURUST.FILE.SEQUENTIAL.1
+    /// Every non-AT-END RECORD SEQUENTIAL read delivers exactly record_len bytes.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn read_seq_record_width() {
+        let data: [u8; 8] = kani::any();
+        for r in &read_sequential(&data, FileOrg::RecordSequential, 4) {
+            assert!(r.at_end || r.record.len() == 4);
+        }
+    }
+}
