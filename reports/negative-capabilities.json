@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 626,
+  "count": 640,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -20,6 +20,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.7"
+      ]
+    },
+    {
+      "id": "NEG.88-LEVEL-GNURUST-11",
+      "surface": "88-level (GNURUST.11)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
       ]
     },
     {
@@ -399,7 +410,8 @@
         "GNURUST.SIZE.ERROR.1",
         "GNURUST.FILE.WRITE.1",
         "GNURUST.FILE.REWRITE.1",
-        "GNURUST.INTRINSIC.DATE.1"
+        "GNURUST.INTRINSIC.DATE.1",
+        "GNURUST.IF.EVALUATE.SLICE.1"
       ]
     },
     {
@@ -1121,6 +1133,17 @@
       ]
     },
     {
+      "id": "NEG.CLASS-CONDITIONS-NUMERIC-ALPHABETIC",
+      "surface": "class conditions (NUMERIC/ALPHABETIC)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.COB-LS-FIXED-COB-LS-NULLS-LINE-MODES",
       "surface": "COB_LS_FIXED/COB_LS_NULLS line modes",
       "status": "not_admitted_fail_closed",
@@ -1229,6 +1252,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.COMPOUND-CONDITIONS-AND-OR-NOT",
+      "surface": "compound conditions (AND/OR/NOT)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
       ]
     },
     {
@@ -2975,6 +3009,83 @@
       ]
     },
     {
+      "id": "NEG.IF_EVAL.NO_88_LEVEL",
+      "surface": "88-level condition names in the slice claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "those are GNURUST.11",
+      "risk_if_guessed": "IF A-IS-VALID",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_EVAL.NO_ALL_DIALECTS",
+      "surface": "all-dialect IF/EVALUATE claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_EVAL.NO_CLASS_CONDITIONS",
+      "surface": "class conditions (NUMERIC/ALPHABETIC) claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "relational comparison only",
+      "risk_if_guessed": "IF A IS NUMERIC",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_EVAL.NO_COMPOUND_CONDITIONS",
+      "surface": "compound AND/OR/NOT conditions claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a single relation only",
+      "risk_if_guessed": "IF A=1 AND B=2",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_EVAL.NO_NESTED_FLOW",
+      "surface": "nested IF / PERFORM / GO TO / THRU-range WHEN claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "a flat single-level fragment only",
+      "risk_if_guessed": "nested IF",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_EVAL.NO_NON_MOVE_BRANCH",
+      "surface": "non-MOVE branch statements claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "MOVE branches only",
+      "risk_if_guessed": "a COMPUTE/PERFORM branch",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
+      "id": "NEG.IF_EVAL.NO_NUMERIC_COMPARISON",
+      "surface": "numeric/packed comparison or numeric MOVE in the slice claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "alphanumeric (byte) comparison + alphanumeric MOVE only",
+      "risk_if_guessed": "comparing packed-decimal fields",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.INDEXED-RELATIVE-I-O",
       "surface": "indexed/relative I/O",
       "status": "not_admitted_fail_closed",
@@ -4076,6 +4187,17 @@
       ]
     },
     {
+      "id": "NEG.NESTED-IF-PERFORM-GO-TO",
+      "surface": "nested IF/PERFORM/GO TO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.NEW-EVIDENCE",
       "surface": "new evidence",
       "status": "not_admitted_fail_closed",
@@ -4209,6 +4331,17 @@
       ]
     },
     {
+      "id": "NEG.NON-MOVE-BRANCH-STATEMENTS",
+      "surface": "non-MOVE branch statements",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
+    },
+    {
       "id": "NEG.NON-NUMERIC-ARGUMENTS",
       "surface": "non-numeric arguments",
       "status": "not_admitted_fail_closed",
@@ -4283,6 +4416,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.ACCEPT.DISPLAY.2"
+      ]
+    },
+    {
+      "id": "NEG.NUMERIC-PACKED-COMPARISON-AND-NUMERIC-MO",
+      "surface": "numeric/packed comparison and numeric MOVE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
       ]
     },
     {
@@ -6602,6 +6746,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PERF.2"
+      ]
+    },
+    {
+      "id": "NEG.THRU-RANGE-WHEN",
+      "surface": "THRU/range WHEN",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
       ]
     },
     {

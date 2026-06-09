@@ -1075,6 +1075,20 @@
       "readiness": 3,
       "lie_prevented": "COBOL dates use a Unix or 1900 epoch -- NO: the integer date counts days from 1600-12-31 so 1601-01-01 is 1, and it is PROLEPTIC GREGORIAN (no Julian-calendar cutover), so a wrong epoch or calendar offsets every converted date",
       "damage_if_overclaimed": "using a Unix/1900 epoch or a Julian-calendar model shifts every INTEGER-OF-DATE/DATE-OF-INTEGER result, corrupting date arithmetic in a ported program"
+    },
+    {
+      "id": "GNURUST.IF.EVALUATE.SLICE.1",
+      "name": "IF/EVALUATE execution slice (alphanumeric)",
+      "proven": "the FIRST execution slice: a narrow interpreter EXECUTES an IF/EVALUATE fragment over alphanumeric PIC X(n) fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 9/0). IF evaluates a single relation (= NOT= > < >= <=) using the COBOL alphanumeric comparison (pad the shorter operand with spaces, compare byte-by-byte in the ASCII collating sequence), selects the THEN/ELSE branch, and applies its MOVE statements (alphanumeric MOVE: left-justify, space-pad/truncate). EVALUATE selects the first WHEN whose literal equals the subject, else WHEN OTHER. Composes the sealed compare + MOVE semantics under control flow -- it EXECUTES the fragment, where PROCEDURE.FLOW.ATLAS.1 only OBSERVED control flow",
+      "byte_domain": "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes",
+      "oracle": "cobc IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob/move.c)",
+      "fixtures": "if_eval_sweep 9/0 + 4 unit tests",
+      "sealed_version": "0.7.20",
+      "not_proven": "numeric/packed comparison and numeric MOVE; compound conditions (AND/OR/NOT); class conditions (NUMERIC/ALPHABETIC); 88-level (GNURUST.11); non-MOVE branch statements; nested IF/PERFORM/GO TO; THRU/range WHEN; all dialects",
+      "breaks_claim": "numeric comparison; compound/class conditions; a non-MOVE branch; nested control flow",
+      "readiness": 2,
+      "lie_prevented": "a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed",
+      "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound"
     }
   ],
   "transform_vs_read": {

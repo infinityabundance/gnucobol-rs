@@ -17,7 +17,7 @@ LEVELS = [
  (3, "statement byte court", "a Procedure-Division statement's receiver bytes are reproduced byte-for-byte"),
  (4, "file/runtime-status court", "file/runtime status observation bound to declared conditions"),
  (5, "control-flow fragment", "control-flow surface OBSERVED as an atlas; execution is not claimed"),
- (6, "program-execution slice", "executing a program slice end-to-end (not yet started)"),
+ (6, "program-execution slice", "executing a bounded control-flow fragment over the sealed primitives"),
  (7, "compiler/runtime replacement", "NOT CLAIMED — gnucobol-rs is a compatibility court, not a compiler"),
 ]
 # declared placement of each GNURUST/atlas court (cross-checked against the claim-ladder)
@@ -29,6 +29,7 @@ PLACE = {
  1:["SIZE.ERROR.ATLAS.1","GNURUST.INTRINSIC.ATLAS.1"],
  4:["GNURUST.FILE.STATUS.1"],
  5:["GNURUST.PROCEDURE.FLOW.ATLAS.1"],
+ 6:["GNURUST.IF.EVALUATE.SLICE.1"],
 }
 
 def claim_ids():

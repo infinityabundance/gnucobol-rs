@@ -43,6 +43,7 @@
 pub mod arith;
 pub mod file_seq;
 pub mod initialize;
+pub mod if_eval;
 pub mod inspect;
 pub mod accept_display;
 pub mod intrinsic;

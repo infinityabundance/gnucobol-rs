@@ -41,7 +41,8 @@
     "SIZE.ERROR.ATLAS.1": 1,
     "GNURUST.INTRINSIC.ATLAS.1": 1,
     "GNURUST.FILE.STATUS.1": 4,
-    "GNURUST.PROCEDURE.FLOW.ATLAS.1": 5
+    "GNURUST.PROCEDURE.FLOW.ATLAS.1": 5,
+    "GNURUST.IF.EVALUATE.SLICE.1": 6
   },
   "levels": [
     {
@@ -128,8 +129,10 @@
     {
       "level": 6,
       "name": "program-execution slice",
-      "description": "executing a program slice end-to-end (not yet started)",
-      "courts": []
+      "description": "executing a bounded control-flow fragment over the sealed primitives",
+      "courts": [
+        "GNURUST.IF.EVALUATE.SLICE.1"
+      ]
     },
     {
       "level": 7,

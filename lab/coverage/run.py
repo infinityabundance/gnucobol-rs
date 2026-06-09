@@ -57,7 +57,7 @@ SURFACES = [
    "NUMVAL/LENGTH/MOD/CURRENT-DATE etc.; observed atlas + per-intrinsic implementation courts (LENGTH sealed)"),
  ("accept-display", "ACCEPT/DISPLAY", ["libcob/termio.c"], "sealed", ["GNURUST.ACCEPT.DISPLAY.1", "GNURUST.ACCEPT.DISPLAY.2"], None,
    "emitted DISPLAY text + ACCEPT is runtime evidence too"),
- ("procedure-flow", "control flow", ["cobc/typeck.c","cobc/codegen.c"], "observed", ["GNURUST.PROCEDURE.FLOW.ATLAS.1"], None,
+ ("procedure-flow", "control flow", ["cobc/typeck.c","cobc/codegen.c"], "observed", ["GNURUST.PROCEDURE.FLOW.ATLAS.1", "GNURUST.IF.EVALUATE.SLICE.1"], None,
    "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, execution NOT claimed"),
  ("call-linkage", "CALL/linkage", ["libcob/call.c"], "negative", [], "GNURUST.CALL.1 (future)",
    "CALL/linkage/USING is a large surface; refused until receipt-backed"),

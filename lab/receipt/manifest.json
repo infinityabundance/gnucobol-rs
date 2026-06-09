@@ -448,6 +448,21 @@
         "non-Gregorian calendars",
         "all dialects"
       ]
+    },
+    "GNURUST.IF.EVALUATE.SLICE.1": {
+      "court": "IF/EVALUATE execution slice (alphanumeric)",
+      "sweep": "if_eval_sweep.sh",
+      "byte_domain": "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes",
+      "non_claims": [
+        "numeric/packed comparison + numeric MOVE",
+        "compound conditions (AND/OR/NOT)",
+        "class conditions",
+        "88-level (GNURUST.11)",
+        "non-MOVE branches",
+        "nested IF/PERFORM/GO TO",
+        "THRU/range WHEN",
+        "all dialects"
+      ]
     }
   }
 }

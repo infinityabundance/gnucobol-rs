@@ -1,0 +1,68 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.IF.EVALUATE.SLICE.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.20",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "53baeb772ab07e314603ab267fc94c0eb137255ec10843d3634cdda20bb88720",
+    "receipt_sha256": "e9b18a1f39ade98e71864252ed9313a76d5545c0c0f51bbd76f7d69d12a2a758"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob/move.c)",
+    "upstream_court": "GNURUST.IF.EVALUATE.SLICE.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 9,
+    "pass": 9,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "the FIRST execution slice: a narrow interpreter EXECUTES an IF/EVALUATE fragment over alphanumeric PIC X(n) fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 9/0). IF evaluates a single relation (= NOT= > < >= <=) using the COBOL alphanumeric comparison (pad the shorter operand with spaces, compare byte-by-byte in the ASCII collating sequence), selects the THEN/ELSE branch, and applies its MOVE statements (alphanumeric MOVE: left-justify, space-pad/truncate). EVALUATE selects the first WHEN whose literal equals the subject, else WHEN OTHER. Composes the sealed compare",
+    "MOVE semantics under control flow -- it EXECUTES the fragment, where PROCEDURE.FLOW.ATLAS.1 only OBSERVED control flow"
+  ],
+  "negative_claims": [
+    "numeric/packed comparison and numeric MOVE",
+    "compound conditions (AND/OR/NOT)",
+    "class conditions (NUMERIC/ALPHABETIC)",
+    "88-level (GNURUST.11)",
+    "non-MOVE branch statements",
+    "nested IF/PERFORM/GO TO",
+    "THRU/range WHEN",
+    "all dialects",
+    "lie prevented: a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMERIC-PACKED-COMPARISON-AND-NUMERIC-MO",
+    "NEG.COMPOUND-CONDITIONS-AND-OR-NOT",
+    "NEG.CLASS-CONDITIONS-NUMERIC-ALPHABETIC",
+    "NEG.88-LEVEL-GNURUST-11",
+    "NEG.NON-MOVE-BRANCH-STATEMENTS",
+    "NEG.NESTED-IF-PERFORM-GO-TO",
+    "NEG.THRU-RANGE-WHEN",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes"
+  ],
+  "lie_prevented": [
+    "a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed"
+  ],
+  "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound",
+  "replay": {
+    "command": "bash lab/oracle/if_eval_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "367b96d2eef8865f0da205252a4e6a4bfb13c0a85d1e16e6e8af7616dda3b8b9"
+  }
+}

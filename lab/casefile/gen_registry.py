@@ -559,6 +559,20 @@ for (i, s2, g, r) in PF:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PROCEDURE.FLOW.ATLAS.1"]}
 
+# GNURUST.IF.EVALUATE.SLICE.1 — first execution slice (alphanumeric IF/EVALUATE).
+IFE = [
+ ("NEG.IF_EVAL.NO_NUMERIC_COMPARISON", "numeric/packed comparison or numeric MOVE in the slice claimed", "alphanumeric (byte) comparison + alphanumeric MOVE only", "comparing packed-decimal fields"),
+ ("NEG.IF_EVAL.NO_COMPOUND_CONDITIONS", "compound AND/OR/NOT conditions claimed", "a single relation only", "IF A=1 AND B=2"),
+ ("NEG.IF_EVAL.NO_CLASS_CONDITIONS", "class conditions (NUMERIC/ALPHABETIC) claimed", "relational comparison only", "IF A IS NUMERIC"),
+ ("NEG.IF_EVAL.NO_88_LEVEL", "88-level condition names in the slice claimed", "those are GNURUST.11", "IF A-IS-VALID"),
+ ("NEG.IF_EVAL.NO_NON_MOVE_BRANCH", "non-MOVE branch statements claimed", "MOVE branches only", "a COMPUTE/PERFORM branch"),
+ ("NEG.IF_EVAL.NO_NESTED_FLOW", "nested IF / PERFORM / GO TO / THRU-range WHEN claimed", "a flat single-level fragment only", "nested IF"),
+ ("NEG.IF_EVAL.NO_ALL_DIALECTS", "all-dialect IF/EVALUATE claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in IFE:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.IF.EVALUATE.SLICE.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),
