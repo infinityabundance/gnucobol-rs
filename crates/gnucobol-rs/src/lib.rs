@@ -44,6 +44,7 @@ pub mod arith;
 pub mod file_seq;
 pub mod initialize;
 pub mod inspect;
+pub mod intrinsic;
 pub mod string_ops;
 pub mod attr;
 mod binary;

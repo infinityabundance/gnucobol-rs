@@ -63,7 +63,7 @@ atlas = {
  "schema":"gnurust-intrinsic-atlas-v1","court":"GNURUST.INTRINSIC.ATLAS.1","dialect":"gnucobol-3.2.0-default",
  "oracle":"cobc FUNCTION intrinsics (libcob/intrinsic.c)",
  "intrinsics":[
-  {"name":"LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"candidate-court","note":"byte length of the operand"},
+  {"name":"LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"implemented","note":"GNURUST.INTRINSIC.LENGTH.1 -- storage byte length"},
   {"name":"BYTE-LENGTH","category":"length","input":"X(5)","observed":"5","determinism":"deterministic","status":"candidate-court","note":"= LENGTH for single-octet"},
   {"name":"NUMVAL","category":"numeric-parse","input":"\"123.45\"","observed":"123.45","determinism":"deterministic","status":"candidate-court","note":"swamp of edge cases (signs, spaces, CR/DB); seal narrowly"},
   {"name":"NUMVAL-C","category":"numeric-parse","input":"\"$1,234.56\"","observed":"1234.56","determinism":"deterministic","status":"candidate-court","note":"currency/thousands stripping; locale-sensitive"},

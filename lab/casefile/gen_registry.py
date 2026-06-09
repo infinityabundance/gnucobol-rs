@@ -392,6 +392,18 @@ for (i, s2, g, r) in INTR:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.ATLAS.1"]}
 
+# GNURUST.INTRINSIC.LENGTH.1 — FUNCTION LENGTH storage byte length.
+ILEN = [
+ ("NEG.INTRINSIC_LENGTH.NO_GROUP_TABLE", "LENGTH of a group/table/OCCURS claimed", "only elementary items are sealed here", "LENGTH of a group"),
+ ("NEG.INTRINSIC_LENGTH.NO_REFMOD", "LENGTH of a reference-modified operand claimed", "out of scope", "LENGTH of x(2:3)"),
+ ("NEG.INTRINSIC_LENGTH.NO_LENGTH_OF_VARIANT", "LENGTH OF treated as identical to FUNCTION LENGTH", "only FUNCTION LENGTH is sealed", "assuming LENGTH OF equivalence"),
+ ("NEG.INTRINSIC_LENGTH.NO_NATIONAL_UTF8", "national/UTF-8 character length claimed", "byte length single-octet only", "character vs byte length"),
+ ("NEG.INTRINSIC_LENGTH.NO_ALL_DIALECTS", "all-dialect LENGTH claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in ILEN:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.LENGTH.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

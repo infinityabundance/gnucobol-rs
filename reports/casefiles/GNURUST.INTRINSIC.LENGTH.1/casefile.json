@@ -1,0 +1,60 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.LENGTH.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.7",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5b551d24784e6e66d04e736d4e103647eed4e0fb99951d1a7e9745227094347b",
+    "receipt_sha256": "4fa3d87cb54cc81d9d24b2bcd98a5561ea67332e5fa075fa0c4f0a3fa48078e8"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION LENGTH (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.LENGTH.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 12,
+    "pass": 12,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION LENGTH(elementary field) returns the storage byte length, matching cobc/libcob across DISPLAY (X(n)=n, numeric 9/S9 = digit count incl V implied), COMP-3 (packed byte count), and binary COMP/COMP-5 (storage width) -- the same byte count the sealed field model build_field (GNURUST.3/9/14) computes",
+    "the first IMPLEMENTED intrinsic, split out of GNURUST.INTRINSIC.ATLAS.1"
+  ],
+  "negative_claims": [
+    "LENGTH of group/table/reference-modified operand",
+    "LENGTH OF variant",
+    "national/UTF-8 character length",
+    "all dialects",
+    "lie prevented: 'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte"
+  ],
+  "negative_capability_ids": [
+    "NEG.LENGTH-OF-GROUP-TABLE-REFERENCE-MODIFIED",
+    "NEG.LENGTH-OF-VARIANT",
+    "NEG.NATIONAL-UTF-8-CHARACTER-LENGTH",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "FUNCTION LENGTH(field) -> storage byte length"
+  ],
+  "lie_prevented": [
+    "'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte"
+  ],
+  "damage_if_overclaimed": "using a digit count where the storage byte length is meant (COMP-3/binary fields) mis-sizes buffers and offsets",
+  "replay": {
+    "command": "bash lab/oracle/length_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "0e784a22329f07823f06de4ec34edf0aec9bb0fe17a2d0f8cfed5320af5db3c8"
+  }
+}

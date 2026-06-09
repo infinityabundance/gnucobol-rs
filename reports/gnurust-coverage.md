@@ -28,7 +28,7 @@
 | `initialize` | MOVE/storage | `typeck.c` | ✅ sealed | GNURUST.INITIALIZE.1 |
 | `inspect` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.INSPECT.1 |
 | `string-unstring` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.STRING.UNSTRING.1 |
-| `intrinsics` | intrinsics | `intrinsic.c` | 🟡 observed | GNURUST.INTRINSIC.ATLAS.1 |
+| `intrinsics` | intrinsics | `intrinsic.c` | 🟡 observed | GNURUST.INTRINSIC.ATLAS.1, GNURUST.INTRINSIC.LENGTH.1 |
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ❌ missing | GNURUST.ACCEPT_DISPLAY.1 |
 | `procedure-flow` | control flow | `typeck.c, codegen.c` | ❌ missing | GNURUST.PROCEDURE.STATEMENT.ATLAS.1 |
 | `call-linkage` | CALL/linkage | `call.c` | ⛔ negative | GNURUST.CALL.1 (future) |

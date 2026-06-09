@@ -10,8 +10,8 @@
       "input": "X(5)",
       "observed": "5",
       "determinism": "deterministic",
-      "status": "candidate-court",
-      "note": "byte length of the operand"
+      "status": "implemented",
+      "note": "GNURUST.INTRINSIC.LENGTH.1 -- storage byte length"
     },
     {
       "name": "BYTE-LENGTH",

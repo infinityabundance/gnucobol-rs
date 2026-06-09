@@ -282,6 +282,17 @@
         "status is not an implementation",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.LENGTH.1": {
+      "court": "FUNCTION LENGTH storage byte length",
+      "sweep": "length_sweep.sh",
+      "byte_domain": "FUNCTION LENGTH(elementary field) -> storage byte length",
+      "non_claims": [
+        "LENGTH of group/table/reference-modified",
+        "LENGTH OF variant",
+        "national/UTF-8 character length",
+        "all dialects"
+      ]
     }
   }
 }

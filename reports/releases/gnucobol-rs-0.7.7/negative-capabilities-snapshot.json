@@ -1,0 +1,142 @@
+{
+  "schema": "negative-capabilities-snapshot-v1",
+  "crate": "gnucobol-rs",
+  "version": "0.7.7",
+  "negatives": [
+    {
+      "id": "GNURUST.2",
+      "not_proven": "arithmetic; edited pictures; any other type pair",
+      "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven"
+    },
+    {
+      "id": "GNURUST.3",
+      "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3",
+      "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs"
+    },
+    {
+      "id": "GNURUST.4",
+      "not_proven": "SYNCHRONIZED; REDEFINES larger than target",
+      "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
+    },
+    {
+      "id": "GNURUST.5",
+      "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS",
+      "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
+    },
+    {
+      "id": "GNURUST.6",
+      "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands",
+      "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
+    },
+    {
+      "id": "GNURUST.7",
+      "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum",
+      "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
+    },
+    {
+      "id": "GNURUST.8",
+      "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE",
+      "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+    },
+    {
+      "id": "GNURUST.9",
+      "not_proven": "V+P; P at both ends; VALUE/MOVE on P field",
+      "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
+    },
+    {
+      "id": "GNURUST.10",
+      "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO",
+      "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
+    },
+    {
+      "id": "GNURUST.11",
+      "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution",
+      "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact"
+    },
+    {
+      "id": "GNURUST.12",
+      "not_proven": "SET TO FALSE; FALSE clause; expressions; execution",
+      "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
+    },
+    {
+      "id": "GNURUST.13",
+      "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float",
+      "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
+    },
+    {
+      "id": "GNURUST.14",
+      "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
+      "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
+    },
+    {
+      "id": "GNURUST.15",
+      "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
+      "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+    },
+    {
+      "id": "GNURUST.16",
+      "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
+      "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated"
+    },
+    {
+      "id": "GNURUST.17",
+      "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS",
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ"
+    },
+    {
+      "id": "GNURUST.18",
+      "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2",
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+    },
+    {
+      "id": "GNURUST.19",
+      "not_proven": "divide-by-zero / ON SIZE ERROR; REMAINDER; COMPUTE / expression evaluation; procedure control flow; float; binary/edited receivers; other rounding modes; business correctness",
+      "lie_prevented": "'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter"
+    },
+    {
+      "id": "GNURUST.REMAINDER.1",
+      "not_proven": "ON SIZE ERROR / NOT ON SIZE ERROR control flow; divide-by-zero (fail-closed); COMPUTE / expression evaluation; Procedure Division execution; float; binary/edited receivers; business correctness",
+      "lie_prevented": "'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter"
+    },
+    {
+      "id": "GNURUST.COVERAGE.1",
+      "not_proven": "that GnuCOBOL is ported (sealed is only the data-representation spine; file I/O, intrinsics, Procedure Division mostly MISSING); that the surface list is exhaustive; that a status is a quality score; new truth",
+      "lie_prevented": "'the data-representation courts are green, so GnuCOBOL is mostly ported' -- COVERAGE.1 shows 8 MISSING surfaces (file I/O, file status, intrinsics, INITIALIZE, INSPECT, STRING/UNSTRING, ACCEPT/DISPLAY, Procedure Division flow) and refuses the completeness reading"
+    },
+    {
+      "id": "GNURUST.FILE.SEQUENTIAL.1",
+      "not_proven": "indexed/relative/VSAM; WRITE/REWRITE/START/DELETE; OPEN I-O/EXTEND; file-status codes beyond 00/06/10; record locking; Procedure Division control flow",
+      "lie_prevented": "'a sequential READ just gives you the record' -- a short final RECORD SEQUENTIAL read LEAKS the prior record's tail bytes (not spaces, not zeros), a long LINE SEQUENTIAL line is split across reads with status 06, and the initial buffer is low-values; the bytes and status both matter"
+    },
+    {
+      "id": "GNURUST.FILE.STATUS.1",
+      "not_proven": "full file I/O parity; indexed/relative/VSAM; locking/sharing; host I/O error (30) generalization; attribute conflict (39); Procedure Division control flow; business completeness of the status set",
+      "lie_prevented": "'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses"
+    },
+    {
+      "id": "GNURUST.INITIALIZE.1",
+      "not_proven": "full Procedure Division execution; INITIALIZE REPLACING/TO VALUE/WITH FILLER; numeric-edited/JUSTIFIED/BLANK WHEN ZERO; ODO runtime active count; active REDEFINES view; all dialects; business defaults",
+      "lie_prevented": "'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY"
+    },
+    {
+      "id": "GNURUST.INSPECT.1",
+      "not_proven": "full Procedure Division execution; locale/case-folding; regex/pattern semantics; national/UTF-8 multibyte; unadmitted multi-clause ordering; business validation; all dialects",
+      "lie_prevented": "'INSPECT counts/replaces are obvious' -- ALL counts NON-OVERLAPPING left-to-right (AAAAAA FOR ALL AA = 3 not 5), LEADING stops at the first non-match, BEFORE/AFTER restrict the region (BEFORE an absent delimiter = the whole field), matching is exact bytes with no case folding"
+    },
+    {
+      "id": "GNURUST.STRING.UNSTRING.1",
+      "not_proven": "full Procedure Division execution; national/UTF-8 multibyte; multi-delimiter/ALL generalization; locale/collation; business parsing correctness; all dialects",
+      "lie_prevented": "'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.ATLAS.1",
+      "not_proven": "all intrinsics (a declared subset); CURRENT-DATE/WHEN-COMPILED values; locale/collation in case/ordinal; national/UTF-8; that a candidate-court is implemented; all dialects",
+      "lie_prevented": "'intrinsics are obvious' -- INTEGER is FLOOR not truncation (so INTEGER(-3.7)=-4 not -3), MOD takes the DIVISOR sign while REM takes the DIVIDEND sign (so MOD(-17,5)=+3 but REM(-17,5)=-2), ORD/CHAR are 1-based, and CURRENT-DATE/WHEN-COMPILED have only an admitted SHAPE not a value"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.LENGTH.1",
+      "not_proven": "LENGTH of group/table/reference-modified operand; LENGTH OF variant; national/UTF-8 character length; all dialects",
+      "lie_prevented": "'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte"
+    }
+  ]
+}

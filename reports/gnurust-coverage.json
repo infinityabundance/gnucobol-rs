@@ -277,10 +277,11 @@
       "source_modules_present": true,
       "status": "observed",
       "courts": [
-        "GNURUST.INTRINSIC.ATLAS.1"
+        "GNURUST.INTRINSIC.ATLAS.1",
+        "GNURUST.INTRINSIC.LENGTH.1"
       ],
       "future_campaign": null,
-      "risk_if_unported": "NUMVAL/LENGTH/MOD/CURRENT-DATE etc. hide many migration errors; observed atlas before per-intrinsic courts"
+      "risk_if_unported": "NUMVAL/LENGTH/MOD/CURRENT-DATE etc.; observed atlas + per-intrinsic implementation courts (LENGTH sealed)"
     },
     {
       "surface": "accept-display",

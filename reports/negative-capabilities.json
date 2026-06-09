@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 509,
+  "count": 517,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -264,7 +264,8 @@
         "GNURUST.INITIALIZE.1",
         "GNURUST.INSPECT.1",
         "GNURUST.STRING.UNSTRING.1",
-        "GNURUST.INTRINSIC.ATLAS.1"
+        "GNURUST.INTRINSIC.ATLAS.1",
+        "GNURUST.INTRINSIC.LENGTH.1"
       ]
     },
     {
@@ -2819,6 +2820,61 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_LENGTH.NO_ALL_DIALECTS",
+      "surface": "all-dialect LENGTH claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_LENGTH.NO_GROUP_TABLE",
+      "surface": "LENGTH of a group/table/OCCURS claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "only elementary items are sealed here",
+      "risk_if_guessed": "LENGTH of a group",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_LENGTH.NO_LENGTH_OF_VARIANT",
+      "surface": "LENGTH OF treated as identical to FUNCTION LENGTH",
+      "status": "not_admitted_fail_closed",
+      "guard": "only FUNCTION LENGTH is sealed",
+      "risk_if_guessed": "assuming LENGTH OF equivalence",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_LENGTH.NO_NATIONAL_UTF8",
+      "surface": "national/UTF-8 character length claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "byte length single-octet only",
+      "risk_if_guessed": "character vs byte length",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_LENGTH.NO_REFMOD",
+      "surface": "LENGTH of a reference-modified operand claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "out of scope",
+      "risk_if_guessed": "LENGTH of x(2:3)",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
+      ]
+    },
+    {
       "id": "NEG.LANGUAGE-SUITE-PARITY",
       "surface": "language-suite parity",
       "status": "not_admitted_fail_closed",
@@ -2864,6 +2920,28 @@
       "evidence": [
         "KOBOLD.BANK.1",
         "KOBOLD.PILOT.RUN.1"
+      ]
+    },
+    {
+      "id": "NEG.LENGTH-OF-GROUP-TABLE-REFERENCE-MODIFIED",
+      "surface": "LENGTH of group/table/reference-modified operand",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
+      ]
+    },
+    {
+      "id": "NEG.LENGTH-OF-VARIANT",
+      "surface": "LENGTH OF variant",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
       ]
     },
     {
@@ -3075,6 +3153,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.NATIONAL-UTF-8-CHARACTER-LENGTH",
+      "surface": "national/UTF-8 character length",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.LENGTH.1"
       ]
     },
     {
