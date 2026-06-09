@@ -109,7 +109,7 @@
       "input": "\"A\"",
       "observed": "66",
       "determinism": "deterministic",
-      "status": "candidate-court",
+      "status": "implemented",
       "note": "1-based position in the collating sequence (ASCII 'A'=65 -> 66)"
     },
     {
@@ -118,7 +118,7 @@
       "input": "66",
       "observed": "A",
       "determinism": "deterministic",
-      "status": "candidate-court",
+      "status": "implemented",
       "note": "1-based inverse of ORD"
     },
     {

@@ -1,0 +1,60 @@
+{
+  "schema": "kobold-forensic-casefile-v1",
+  "case_id": "GNURUST.INTRINSIC.ORD-CHAR.1",
+  "kind": "court-casefile",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.13",
+  "authority": {
+    "current_authority": "STATUS.md",
+    "receipt_status": "current",
+    "generated_by": "lab/casefile/run.py"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "8467f9e447dbd16344806526d1810871556bd4536e95aed723b102a66654fe26",
+    "receipt_sha256": "a57c16fb750500b52e12d0fba07d99b51d2591c64e899f1976441caf7dcbadc6"
+  },
+  "oracle": {
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "detail": "cobc FUNCTION ORD/CHAR (libcob/intrinsic.c)",
+    "upstream_court": "GNURUST.INTRINSIC.ORD-CHAR.1",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "results": {
+    "total": 15,
+    "pass": 15,
+    "fail": 0,
+    "verdict": "pass"
+  },
+  "positive_claims": [
+    "FUNCTION ORD(c) returns the 1-BASED position of byte c in the native ASCII collating sequence (ORD(c)=c+1, so ORD('A')=66 not 65) and FUNCTION CHAR(n) returns the byte at 1-based position n (CHAR(n)=n-1, CHAR(66)='A'), matching cobc/libcob (verified 15/0 incl the full ORD(CHAR(n))=n round-trip over 1..256). The 1-based inverses",
+    "the last deterministic intrinsic split from GNURUST.INTRINSIC.ATLAS.1"
+  ],
+  "negative_claims": [
+    "non-default collating sequences",
+    "national/UTF-8",
+    "CHAR(n) outside 1..256",
+    "all dialects",
+    "lie prevented: ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-DEFAULT-COLLATING-SEQUENCES",
+    "NEG.NATIONAL-UTF-8",
+    "NEG.CHAR-N-OUTSIDE-1-256",
+    "NEG.ALL-DIALECTS"
+  ],
+  "byte_domains": [
+    "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)"
+  ],
+  "lie_prevented": [
+    "ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap"
+  ],
+  "damage_if_overclaimed": "treating ORD as the raw byte value (or CHAR as 0-based) is a silent off-by-one in every character-code computation",
+  "replay": {
+    "command": "bash lab/oracle/ordchar_sweep.sh",
+    "exit_code": 0
+  },
+  "hash_chain": {
+    "inputs_sha256": "7c5f48505aa975f0e3ffc7721172b9693e3ee091b5f46a8b279b10c03d70259d"
+  }
+}

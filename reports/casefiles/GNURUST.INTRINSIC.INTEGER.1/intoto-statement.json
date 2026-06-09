@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.INTRINSIC.INTEGER.1/casefile.json",
       "digest": {
-        "sha256": "5519070b9e04de0e63b9da39b7494398b37bbb8e97f7be9ff71c8a62dbd0d35c"
+        "sha256": "70d4c09464fd07bd650897ba771e05036f71873f60c80fa4b433bf1f099345dc"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.INTRINSIC.INTEGER.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.12",
+    "crate_version": "0.7.13",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/integer_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "6fd9a51938d00da63e5f322862f31d5616980045f3677395f1cfe6826efe0cf1",
-      "receipt_sha256": "2fc37054f6a97d8bfb9835d7503d52eb2875463028e4085110d2280b2ca4b7e9"
+      "receipt_sha256": "9a4996e79d0de3cf6508fd7975d93ca1f2d432cdbf5f873505163921cfc41af1"
     },
     "positive_claim_count": 1,
     "negative_claim_count": 5

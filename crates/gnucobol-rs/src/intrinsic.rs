@@ -157,6 +157,19 @@ pub fn intrinsic_reverse(s: &[u8]) -> Vec<u8> {
     s.iter().rev().copied().collect()
 }
 
+/// `FUNCTION ORD(c)` — the **1-based** position of byte `c` in the (native ASCII) collating sequence:
+/// `ORD(c) = c + 1` (`GNURUST.INTRINSIC.ORD-CHAR.1`). ORD('A') = 66, not 65. Non-claims: national/UTF-8,
+/// non-default collating sequences, all dialects.
+pub fn intrinsic_ord(c: u8) -> u32 {
+    c as u32 + 1
+}
+
+/// `FUNCTION CHAR(n)` — the byte at **1-based** position `n` (`n` in `1..=256`): `CHAR(n) = n - 1`. The
+/// 1-based inverse of [`intrinsic_ord`]: CHAR(66) = 'A'. `n` outside `1..=256` is a non-claim.
+pub fn intrinsic_char(n: u32) -> u8 {
+    n.saturating_sub(1) as u8
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -165,6 +178,12 @@ mod tests {
     }
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
+    }
+    #[test]
+    fn ord_char_are_one_based_inverses() {
+        assert_eq!([intrinsic_ord(b'A'), intrinsic_ord(b'0'), intrinsic_ord(b' '), intrinsic_ord(b'z')], [66, 49, 33, 123]);
+        assert_eq!([intrinsic_char(66), intrinsic_char(49), intrinsic_char(1), intrinsic_char(256)], [b'A', b'0', 0, 255]);
+        for n in 1u32..=256 { assert_eq!(intrinsic_ord(intrinsic_char(n)), n); } // round-trip
     }
     #[test]
     fn case_and_reverse_transforms() {

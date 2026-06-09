@@ -51,6 +51,7 @@ run_sweep "GNURUST.INTRINSIC.NUMVAL.1" numval_sweep.sh
 run_sweep "GNURUST.INTRINSIC.MOD-REM.1" modrem_sweep.sh
 run_sweep "GNURUST.INTRINSIC.INTEGER.1" integer_sweep.sh
 run_sweep "GNURUST.INTRINSIC.CASE.1" case_sweep.sh
+run_sweep "GNURUST.INTRINSIC.ORD-CHAR.1" ordchar_sweep.sh
 run_sweep "GNURUST.ACCEPT.DISPLAY.1" accept_display_sweep.sh
 run_sweep "GNURUST.PROCEDURE.FLOW.ATLAS.1 (observed)" procedure_flow_atlas_sweep.sh
 run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_sweep.sh

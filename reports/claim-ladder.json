@@ -977,6 +977,20 @@
       "readiness": 3,
       "lie_prevented": "UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)",
       "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.ORD-CHAR.1",
+      "name": "FUNCTION ORD / CHAR 1-based ordinal and character",
+      "proven": "FUNCTION ORD(c) returns the 1-BASED position of byte c in the native ASCII collating sequence (ORD(c)=c+1, so ORD('A')=66 not 65) and FUNCTION CHAR(n) returns the byte at 1-based position n (CHAR(n)=n-1, CHAR(66)='A'), matching cobc/libcob (verified 15/0 incl the full ORD(CHAR(n))=n round-trip over 1..256). The 1-based inverses; the last deterministic intrinsic split from GNURUST.INTRINSIC.ATLAS.1",
+      "byte_domain": "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)",
+      "oracle": "cobc FUNCTION ORD/CHAR (libcob/intrinsic.c)",
+      "fixtures": "ordchar_sweep 15/0 + 1 unit test (256-position round-trip)",
+      "sealed_version": "0.7.13",
+      "not_proven": "non-default collating sequences; national/UTF-8; CHAR(n) outside 1..256; all dialects",
+      "breaks_claim": "custom PROGRAM COLLATING SEQUENCE; multibyte ORD; CHAR out of range",
+      "readiness": 3,
+      "lie_prevented": "ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap",
+      "damage_if_overclaimed": "treating ORD as the raw byte value (or CHAR as 0-based) is a silent off-by-one in every character-code computation"
     }
   ],
   "transform_vs_read": {

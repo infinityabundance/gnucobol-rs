@@ -364,6 +364,17 @@
         "multibyte REVERSE",
         "all dialects"
       ]
+    },
+    "GNURUST.INTRINSIC.ORD-CHAR.1": {
+      "court": "FUNCTION ORD/CHAR 1-based ordinal/char",
+      "sweep": "ordchar_sweep.sh",
+      "byte_domain": "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)",
+      "non_claims": [
+        "non-default collating sequence",
+        "national/UTF-8",
+        "CHAR(n) out of 1..256",
+        "all dialects"
+      ]
     }
   }
 }

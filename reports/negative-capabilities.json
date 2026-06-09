@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 566,
+  "count": 572,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -348,7 +348,8 @@
         "GNURUST.PROCEDURE.FLOW.ATLAS.1",
         "GNURUST.INTRINSIC.MOD-REM.1",
         "GNURUST.INTRINSIC.INTEGER.1",
-        "GNURUST.INTRINSIC.CASE.1"
+        "GNURUST.INTRINSIC.CASE.1",
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
       ]
     },
     {
@@ -1001,6 +1002,17 @@
         "TRUST.5",
         "NIST-STYLE-FIXTURE-FORMAT.1",
         "KOBOLD.PILOT-PACKET.1"
+      ]
+    },
+    {
+      "id": "NEG.CHAR-N-OUTSIDE-1-256",
+      "surface": "CHAR(n) outside 1..256",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
       ]
     },
     {
@@ -3222,6 +3234,50 @@
       ]
     },
     {
+      "id": "NEG.INTRINSIC_ORDCHAR.NO_ALL_DIALECTS",
+      "surface": "all-dialect ORD/CHAR claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_ORDCHAR.NO_CHAR_OUT_OF_RANGE",
+      "surface": "CHAR(n) outside 1..256 claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "n must be 1..256 (byte 0..255)",
+      "risk_if_guessed": "CHAR(0) or CHAR(300)",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_ORDCHAR.NO_NATIONAL_UTF8",
+      "surface": "national/UTF-8 ORD/CHAR claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "single-octet only",
+      "risk_if_guessed": "ORD of a multibyte char",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
+      ]
+    },
+    {
+      "id": "NEG.INTRINSIC_ORDCHAR.NO_NON_DEFAULT_COLLATION",
+      "surface": "non-default collating-sequence ORD/CHAR claimed",
+      "status": "not_admitted_fail_closed",
+      "guard": "native ASCII collating sequence only",
+      "risk_if_guessed": "ORD under a custom PROGRAM COLLATING SEQUENCE",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
+      ]
+    },
+    {
       "id": "NEG.LANGUAGE-SUITE-PARITY",
       "surface": "language-suite parity",
       "status": "not_admitted_fail_closed",
@@ -3577,7 +3633,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.INTRINSIC.ATLAS.1",
-        "GNURUST.INTRINSIC.NUMVAL.1"
+        "GNURUST.INTRINSIC.NUMVAL.1",
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
       ]
     },
     {
@@ -3679,6 +3736,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.8"
+      ]
+    },
+    {
+      "id": "NEG.NON-DEFAULT-COLLATING-SEQUENCES",
+      "surface": "non-default collating sequences",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.INTRINSIC.ORD-CHAR.1"
       ]
     },
     {

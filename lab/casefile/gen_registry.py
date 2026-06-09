@@ -448,6 +448,17 @@ for (i, s2, g, r) in ICASE:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.CASE.1"]}
 
+# GNURUST.INTRINSIC.ORD-CHAR.1 — 1-based ordinal/char.
+IOC = [
+ ("NEG.INTRINSIC_ORDCHAR.NO_NON_DEFAULT_COLLATION", "non-default collating-sequence ORD/CHAR claimed", "native ASCII collating sequence only", "ORD under a custom PROGRAM COLLATING SEQUENCE"),
+ ("NEG.INTRINSIC_ORDCHAR.NO_NATIONAL_UTF8", "national/UTF-8 ORD/CHAR claimed", "single-octet only", "ORD of a multibyte char"),
+ ("NEG.INTRINSIC_ORDCHAR.NO_CHAR_OUT_OF_RANGE", "CHAR(n) outside 1..256 claimed", "n must be 1..256 (byte 0..255)", "CHAR(0) or CHAR(300)"),
+ ("NEG.INTRINSIC_ORDCHAR.NO_ALL_DIALECTS", "all-dialect ORD/CHAR claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in IOC:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.INTRINSIC.ORD-CHAR.1"]}
+
 # GNURUST.ACCEPT.DISPLAY.1 — DISPLAY emitted text + ACCEPT field bytes.
 AD = [
  ("NEG.ACCEPT_DISPLAY.NO_SIGNED_NUMERIC_FORMAT", "DISPLAY of a signed numeric claimed", "GnuCOBOL prefixes +/- (reformats); deferred", "displaying a signed field"),

@@ -1,0 +1,14 @@
+status: not_run
+generated_at: 2026-06-09T05:34:07Z
+note: every shipped crate is #![forbid(unsafe_code)]
+
+geiger could not complete (tooling/path error below); shipped crate is #![forbid(unsafe_code)]
+
+
+     Removed 3363 files, 631.2MiB total
+    Checking gnucobol-rs v0.7.13 (/home/one/gnucobol-rs/crates/gnucobol-rs)
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/gnucobol_rs-38ee2b4499f71d1a.d","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/libgnucobol_rs-38ee2b4499f71d1a.rmeta","emit":"metadata"}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.26s
+error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" }, "/home/one/gnucobol-rs/crates/cobol-decimal-rs/src/lib.rs")
+
