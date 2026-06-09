@@ -429,6 +429,20 @@ for (i, s2, g, r) in AD:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_fail_closed", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.ACCEPT.DISPLAY.1"]}
 
+# GNURUST.PROCEDURE.FLOW.ATLAS.1 — observed control-flow atlas; EXECUTION is the loudest non-claim.
+PF = [
+ ("NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION", "Procedure Division EXECUTION claimed", "the atlas OBSERVES control flow; gnucobol-rs runs no programs", "executing a COBOL program"),
+ ("NEG.PROCEDURE_FLOW.NO_CONTROL_FLOW_EXECUTION", "control-flow execution claimed", "only the observed semantics are recorded, not run", "branching/looping at runtime"),
+ ("NEG.PROCEDURE_FLOW.NO_BRANCH_COVERAGE", "branch/path coverage claimed", "a few declared probes, not coverage", "assuming all paths observed"),
+ ("NEG.PROCEDURE_FLOW.NO_TERMINATION_ANALYSIS", "loop termination/halting analysis claimed", "out of scope", "proving a loop ends"),
+ ("NEG.PROCEDURE_FLOW.NO_GENERAL_CONDITION_EVAL", "general condition evaluation claimed", "LEVEL-88 byte predicates are GNURUST.11; general IF/EVALUATE eval is future", "evaluating arbitrary conditions"),
+ ("NEG.PROCEDURE_FLOW.STATUS_NOT_IMPLEMENTATION", "an observed statement treated as implemented", "the atlas maps; control-flow implementation is a future court", "calling the kernel to run control flow"),
+ ("NEG.PROCEDURE_FLOW.NO_ALL_DIALECTS", "all-dialect control flow claimed", "gnucobol-3.2.0-default only", "assuming other dialects"),
+]
+for (i, s2, g, r) in PF:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.PROCEDURE.FLOW.ATLAS.1"]}
+
 # Ecosystem refusals (GnuCOBOL industrial-posture deck): keep KOBOLD in the forensic-evidence lane.
 ECO = [
  ("NEG.COBOL.OBJECTS_MESSAGES", "COBOL object/message (OO) semantics admitted by a data court", "out of scope; GnuCOBOL itself lists OO/messages as not-yet; KOBOLD refuses", "decoding/inferring object or message state"),

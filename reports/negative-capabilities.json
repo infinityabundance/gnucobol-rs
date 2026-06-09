@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 535,
+  "count": 547,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -344,7 +344,8 @@
         "GNURUST.INTRINSIC.ATLAS.1",
         "GNURUST.INTRINSIC.LENGTH.1",
         "GNURUST.INTRINSIC.NUMVAL.1",
-        "GNURUST.ACCEPT.DISPLAY.1"
+        "GNURUST.ACCEPT.DISPLAY.1",
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
       ]
     },
     {
@@ -835,6 +836,17 @@
       ]
     },
     {
+      "id": "NEG.BRANCH-PATH-COVERAGE",
+      "surface": "branch/path coverage",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.BUSINESS-ACCEPTANCE",
       "surface": "business acceptance",
       "status": "not_admitted_fail_closed",
@@ -1142,6 +1154,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.11"
+      ]
+    },
+    {
+      "id": "NEG.CONTROL-FLOW-EXECUTION",
+      "surface": "control-flow execution",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
       ]
     },
     {
@@ -2557,6 +2580,17 @@
       ]
     },
     {
+      "id": "NEG.GENERAL-CONDITION-EVALUATION",
+      "surface": "general condition evaluation",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
       "id": "NEG.GNUCOBOL-FILE-ORGANIZATION",
       "surface": "GnuCOBOL file organization",
       "status": "not_admitted_fail_closed",
@@ -3209,6 +3243,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.ENTERPRISE.2"
+      ]
+    },
+    {
+      "id": "NEG.LOOP-TERMINATION-ANALYSIS",
+      "surface": "loop termination analysis",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
       ]
     },
     {
@@ -4275,7 +4320,85 @@
         "GNURUST.11",
         "KOBOLD.RECON.2",
         "SIZE.ERROR.ATLAS.1",
-        "GNURUST.REMAINDER.1"
+        "GNURUST.REMAINDER.1",
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.NO_ALL_DIALECTS",
+      "surface": "all-dialect control flow claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "gnucobol-3.2.0-default only",
+      "risk_if_guessed": "assuming other dialects",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.NO_BRANCH_COVERAGE",
+      "surface": "branch/path coverage claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "a few declared probes, not coverage",
+      "risk_if_guessed": "assuming all paths observed",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.NO_CONTROL_FLOW_EXECUTION",
+      "surface": "control-flow execution claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "only the observed semantics are recorded, not run",
+      "risk_if_guessed": "branching/looping at runtime",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.NO_GENERAL_CONDITION_EVAL",
+      "surface": "general condition evaluation claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "LEVEL-88 byte predicates are GNURUST.11; general IF/EVALUATE eval is future",
+      "risk_if_guessed": "evaluating arbitrary conditions",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION",
+      "surface": "Procedure Division EXECUTION claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas OBSERVES control flow; gnucobol-rs runs no programs",
+      "risk_if_guessed": "executing a COBOL program",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.NO_TERMINATION_ANALYSIS",
+      "surface": "loop termination/halting analysis claimed",
+      "status": "not_admitted_observed_only",
+      "guard": "out of scope",
+      "risk_if_guessed": "proving a loop ends",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.PROCEDURE_FLOW.STATUS_NOT_IMPLEMENTATION",
+      "surface": "an observed statement treated as implemented",
+      "status": "not_admitted_observed_only",
+      "guard": "the atlas maps; control-flow implementation is a future court",
+      "risk_if_guessed": "calling the kernel to run control flow",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
       ]
     },
     {
@@ -5476,6 +5599,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.SCALE.1"
+      ]
+    },
+    {
+      "id": "NEG.THAT-AN-OBSERVED-STATEMENT-IS-IMPLEMENTE",
+      "surface": "that an observed statement is implemented",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
       ]
     },
     {

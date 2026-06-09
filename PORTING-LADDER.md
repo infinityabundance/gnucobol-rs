@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > Not marketing. A hard map of where each admitted GnuCOBOL surface sits. We are not adding random courts — we are climbing the GnuCOBOL semantic stack, level by level, with oracle receipts.
 
-Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 16**, observed 3, refused 7, **missing 1**.
+Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 16**, observed 4, refused 7, **missing 0**.
 
 | level | meaning | courts |
 |:---:|---|---|
@@ -14,7 +14,7 @@ Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 16**, observed 3, refuse
 | **2** | byte-equivalent helper — a pure Rust function reproduces a storage/field/representation byte result | `GNURUST.10`, `GNURUST.11`, `GNURUST.14`, `GNURUST.15`, `GNURUST.16`, `GNURUST.17`, `GNURUST.18`, `GNURUST.2`, `GNURUST.3`, `GNURUST.4`, `GNURUST.5`, `GNURUST.6`, `GNURUST.8`, `GNURUST.9`, `GNURUST.INTRINSIC.LENGTH.1`, `GNURUST.INTRINSIC.NUMVAL.1` |
 | **3** | statement byte court — a Procedure-Division statement's receiver bytes are reproduced byte-for-byte | `GNURUST.12`, `GNURUST.13`, `GNURUST.19`, `GNURUST.7`, `GNURUST.ACCEPT.DISPLAY.1`, `GNURUST.FILE.SEQUENTIAL.1`, `GNURUST.INITIALIZE.1`, `GNURUST.INSPECT.1`, `GNURUST.REMAINDER.1`, `GNURUST.STRING.UNSTRING.1` |
 | **4** | file/runtime-status court — file/runtime status observation bound to declared conditions | `GNURUST.FILE.STATUS.1` |
-| **5** | control-flow fragment — control-flow byte/branch effects (not yet started) | — |
+| **5** | control-flow fragment — control-flow surface OBSERVED as an atlas; execution is not claimed | `GNURUST.PROCEDURE.FLOW.ATLAS.1` |
 | **6** | program-execution slice — executing a program slice end-to-end (not yet started) | — |
 | **7** | compiler/runtime replacement — NOT CLAIMED — gnucobol-rs is a compatibility court, not a compiler | — |
 

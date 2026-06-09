@@ -317,6 +317,20 @@
         "device/console specifics",
         "all dialects"
       ]
+    },
+    "GNURUST.PROCEDURE.FLOW.ATLAS.1": {
+      "court": "observed control-flow atlas",
+      "sweep": "procedure_flow_atlas_sweep.sh",
+      "byte_domain": "control-flow statement class -> observed behavior (IF/EVALUATE/PERFORM/GO TO)",
+      "non_claims": [
+        "Procedure Division execution",
+        "control-flow execution",
+        "branch coverage",
+        "termination analysis",
+        "general condition evaluation",
+        "status is not implementation",
+        "all dialects"
+      ]
     }
   }
 }

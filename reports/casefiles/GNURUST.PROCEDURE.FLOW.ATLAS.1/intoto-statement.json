@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.PROCEDURE.FLOW.ATLAS.1/casefile.json",
+      "digest": {
+        "sha256": "9f8f73876ef79e9d7540b576b8f228ff660de1ca6647630374c39b8440312364"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.9",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/procedure_flow_atlas_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "e4cd73c0807b1f411bb838d9b5e75bf9d91d23728bcfdc4e0549469df674413a",
+      "receipt_sha256": "8cfbc9125db1711965c41deb86d0d2c4aa4e4626c1587f7128ef7faabc29d492"
+    },
+    "positive_claim_count": 1,
+    "negative_claim_count": 8
+  }
+}

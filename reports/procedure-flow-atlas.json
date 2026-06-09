@@ -1,0 +1,74 @@
+{
+  "schema": "gnurust-procedure-flow-atlas-v1",
+  "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+  "dialect": "gnucobol-3.2.0-default",
+  "oracle": "cobc Procedure Division control flow (cobc/typeck.c + codegen.c)",
+  "doctrine": "OBSERVED map of the control-flow surface. gnucobol-rs does NOT execute Procedure Division; this records what each control-flow statement DOES, it does not run programs.",
+  "statements": [
+    {
+      "name": "IF / ELSE",
+      "category": "conditional",
+      "observed": "IF 5>3 -> THEN branch",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "general condition evaluation is a future court; LEVEL-88 byte predicates are GNURUST.11"
+    },
+    {
+      "name": "EVALUATE",
+      "category": "multi-way select",
+      "observed": "EVALUATE 2 -> WHEN 2 (first match)",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "selection semantics observed; not executed"
+    },
+    {
+      "name": "PERFORM n TIMES",
+      "category": "loop",
+      "observed": "PERFORM 3 TIMES -> body runs 3x",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "iteration count observed"
+    },
+    {
+      "name": "PERFORM VARYING",
+      "category": "loop",
+      "observed": "VARYING I FROM 1 BY 1 UNTIL I>4 -> body 4x, I ends at 5 (incremented PAST the limit)",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "the control variable ends one step past the limit"
+    },
+    {
+      "name": "PERFORM UNTIL",
+      "category": "loop",
+      "observed": "PERFORM UNTIL C>=5 -> 5 iterations",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "test-before (with-test BEFORE default)"
+    },
+    {
+      "name": "PERFORM paragraph",
+      "category": "out-of-line",
+      "observed": "PERFORM SUB-PARA -> executes the paragraph then returns",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "out-of-line call + return"
+    },
+    {
+      "name": "GO TO",
+      "category": "unconditional branch",
+      "observed": "GO TO SKIP-IT -> skips the intervening statement",
+      "determinism": "deterministic",
+      "status": "observed-only",
+      "note": "unconditional jump"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.PROCEDURE_FLOW.NO_PROCEDURE_DIVISION_EXECUTION",
+    "NEG.PROCEDURE_FLOW.NO_CONTROL_FLOW_EXECUTION",
+    "NEG.PROCEDURE_FLOW.NO_BRANCH_COVERAGE",
+    "NEG.PROCEDURE_FLOW.NO_TERMINATION_ANALYSIS",
+    "NEG.PROCEDURE_FLOW.NO_GENERAL_CONDITION_EVAL",
+    "NEG.PROCEDURE_FLOW.STATUS_NOT_IMPLEMENTATION",
+    "NEG.PROCEDURE_FLOW.NO_ALL_DIALECTS"
+  ]
+}

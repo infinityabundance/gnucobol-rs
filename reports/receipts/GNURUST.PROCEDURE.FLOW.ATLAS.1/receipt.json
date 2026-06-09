@@ -1,0 +1,34 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+  "court": "observed control-flow atlas",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.9",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/procedure_flow_atlas_sweep.sh"
+  },
+  "byte_domain": "control-flow statement class -> observed behavior (IF/EVALUATE/PERFORM/GO TO)",
+  "results": {
+    "sweep": "PASS=8 FAIL=0"
+  },
+  "non_claims": [
+    "Procedure Division execution",
+    "control-flow execution",
+    "branch coverage",
+    "termination analysis",
+    "general condition evaluation",
+    "status is not implementation",
+    "all dialects"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

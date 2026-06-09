@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **27**  ·  sealed ✅ **16**  ·  observed 🟡 3  ·  refused ⛔ 7  ·  **missing ❌ 1**
+- surfaces: **27**  ·  sealed ✅ **16**  ·  observed 🟡 4  ·  refused ⛔ 7  ·  **missing ❌ 0**
 
 - sealed fraction (data-representation spine): **16/27**
 
@@ -30,7 +30,7 @@
 | `string-unstring` | MOVE/storage | `strings.c` | ✅ sealed | GNURUST.STRING.UNSTRING.1 |
 | `intrinsics` | intrinsics | `intrinsic.c` | 🟡 observed | GNURUST.INTRINSIC.ATLAS.1, GNURUST.INTRINSIC.LENGTH.1, GNURUST.INTRINSIC.NUMVAL.1 |
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ✅ sealed | GNURUST.ACCEPT.DISPLAY.1 |
-| `procedure-flow` | control flow | `typeck.c, codegen.c` | ❌ missing | GNURUST.PROCEDURE.STATEMENT.ATLAS.1 |
+| `procedure-flow` | control flow | `typeck.c, codegen.c` | 🟡 observed | GNURUST.PROCEDURE.FLOW.ATLAS.1 |
 | `call-linkage` | CALL/linkage | `call.c` | ⛔ negative | GNURUST.CALL.1 (future) |
 | `sort-merge` | SORT/MERGE | `fileio.c` | ⛔ negative | GNURUST.SORT.1 (future) |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |
@@ -41,7 +41,6 @@
 
 ## Risk of the unported surfaces (missing ❌)
 
-- **`procedure-flow`** → `GNURUST.PROCEDURE.STATEMENT.ATLAS.1`: IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division
 
 ## Non-claims
 

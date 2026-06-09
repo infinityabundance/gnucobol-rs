@@ -6,9 +6,9 @@
   "surface_count": 27,
   "status_counts": {
     "sealed": 16,
-    "observed": 3,
+    "observed": 4,
     "negative": 7,
-    "missing": 1
+    "missing": 0
   },
   "sealed_fraction": "16/27",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
@@ -306,10 +306,12 @@
         "cobc/codegen.c"
       ],
       "source_modules_present": true,
-      "status": "missing",
-      "courts": [],
-      "future_campaign": "GNURUST.PROCEDURE.STATEMENT.ATLAS.1",
-      "risk_if_unported": "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division"
+      "status": "observed",
+      "courts": [
+        "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, execution NOT claimed"
     },
     {
       "surface": "call-linkage",

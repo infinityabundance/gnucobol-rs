@@ -16,7 +16,7 @@ LEVELS = [
  (2, "byte-equivalent helper", "a pure Rust function reproduces a storage/field/representation byte result"),
  (3, "statement byte court", "a Procedure-Division statement's receiver bytes are reproduced byte-for-byte"),
  (4, "file/runtime-status court", "file/runtime status observation bound to declared conditions"),
- (5, "control-flow fragment", "control-flow byte/branch effects (not yet started)"),
+ (5, "control-flow fragment", "control-flow surface OBSERVED as an atlas; execution is not claimed"),
  (6, "program-execution slice", "executing a program slice end-to-end (not yet started)"),
  (7, "compiler/runtime replacement", "NOT CLAIMED — gnucobol-rs is a compatibility court, not a compiler"),
 ]
@@ -28,6 +28,7 @@ PLACE = {
     "GNURUST.12","GNURUST.INITIALIZE.1","GNURUST.INSPECT.1","GNURUST.STRING.UNSTRING.1","GNURUST.ACCEPT.DISPLAY.1"],
  1:["SIZE.ERROR.ATLAS.1","GNURUST.INTRINSIC.ATLAS.1"],
  4:["GNURUST.FILE.STATUS.1"],
+ 5:["GNURUST.PROCEDURE.FLOW.ATLAS.1"],
 }
 
 def claim_ids():
