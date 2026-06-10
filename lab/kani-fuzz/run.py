@@ -25,6 +25,7 @@ NA_REASON = {
     "GNURUST.LINEAGE.CORPUS.20M.0": "meta: differential corpus engine (drives the real cobc oracle); no single Rust byte kernel -- its own seal-grade gate is replay+Merkle+isolation",
     "GNURUST.LINEAGE.CORPUS.20M.SMOKE": "meta: 200K real-cobc witness burn classified by the engine; no single Rust byte kernel",
     "GNURUST.LINEAGE.CORPUS.20M.1": "meta: completed 4M real-cobc witness run; no single Rust byte kernel",
+    "GNURUST.VALUE.NEGZERO.EDGE.1": "characterization/regression-lock of the VALUE -0 oracle rule; exercises value_image which is kani+fuzz-covered under GNURUST.8",
 }
 
 def scan_tags(pattern_files, tag):
@@ -50,7 +51,7 @@ def build():
     rows = []
     for c in cl:
         cid = c["id"]
-        is_atlas = ("ATLAS" in cid) or cid in ("GNURUST.COVERAGE.1", "GNURUST.FILE.STATUS.1", "GNURUST.PUBLIC.CORPUS.1", "GNURUST.BUILD.PROFILE.1", "GNURUST.PUBLIC.GAP.1", "GNURUST.LINEAGE.CORPUS.20M.0", "GNURUST.LINEAGE.CORPUS.20M.SMOKE", "GNURUST.LINEAGE.CORPUS.20M.1")
+        is_atlas = ("ATLAS" in cid) or cid in ("GNURUST.COVERAGE.1", "GNURUST.FILE.STATUS.1", "GNURUST.PUBLIC.CORPUS.1", "GNURUST.BUILD.PROFILE.1", "GNURUST.PUBLIC.GAP.1", "GNURUST.LINEAGE.CORPUS.20M.0", "GNURUST.LINEAGE.CORPUS.20M.SMOKE", "GNURUST.LINEAGE.CORPUS.20M.1", "GNURUST.VALUE.NEGZERO.EDGE.1")
         # Only GNURUST byte courts carry a gnucobol-rs kernel -> need kani + fuzz here. KOBOLD courts compose
         # the sealed courts (fuzzed in the shim crate); governance/view/atlas courts have no byte kernel.
         if not cid.startswith("GNURUST.") or is_atlas:

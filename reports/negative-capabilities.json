@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 878,
+  "count": 884,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -3190,6 +3190,17 @@
       ]
     },
     {
+      "id": "NEG.FIGURATIVE-ZERO",
+      "surface": "figurative ZERO",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
+      ]
+    },
+    {
       "id": "NEG.FIGURATIVE.SENTINEL",
       "surface": "LOW-VALUES / HIGH-VALUES / ZEROES / SPACES in raw records given sentinel meaning",
       "status": "not_admitted_requires_declared_profile",
@@ -5586,6 +5597,17 @@
       ]
     },
     {
+      "id": "NEG.NEGATIVE-ZERO-UNDER-ARITHMETIC-MOVE-COMP",
+      "surface": "negative-zero under arithmetic/MOVE/COMPUTE (the arithmetic -0 path is GNURUST.13, separate and deliberate)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
+      ]
+    },
+    {
       "id": "NEG.NESTED-FLOW",
       "surface": "nested flow",
       "status": "not_admitted_fail_closed",
@@ -6139,6 +6161,17 @@
         "GNURUST.7",
         "GNURUST.13",
         "GNURUST.19"
+      ]
+    },
+    {
+      "id": "NEG.OTHER-USAGES-DIALECTS",
+      "surface": "other usages/dialects",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
       ]
     },
     {
@@ -9109,6 +9142,17 @@
       ]
     },
     {
+      "id": "NEG.THE-BROADER-SIGNED-ZERO-SPACE-BEYOND-VAL",
+      "surface": "the broader signed-zero space beyond VALUE initialization",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
+      ]
+    },
+    {
       "id": "NEG.THE-COPYBOOK-BEING-PRODUCTION-TRUTH",
       "surface": "the copybook being production truth",
       "status": "not_admitted_fail_closed",
@@ -9128,6 +9172,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.THE-FIX-THIS-COURT-CHARACTERIZES-LOCKS-T",
+      "surface": "the FIX (this court CHARACTERIZES + locks the divergence",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
       ]
     },
     {
@@ -9228,6 +9283,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.LINEAGE.CORPUS.20M.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-PATCH-CANONICALIZE-THE-PACKED-SIGN-N",
+      "surface": "the patch -- canonicalize the PACKED sign nibble for integer-form zero, scoped to lit_scale==0, never the zoned/DISPLAY or decimal-form path -- is a SEPARATE decided step, NOT applied here, since a blanket parse_num canonicalization already regressed value_sweep)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
       ]
     },
     {

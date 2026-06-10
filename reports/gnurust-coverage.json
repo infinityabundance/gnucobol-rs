@@ -120,7 +120,8 @@
       "source_modules_present": true,
       "status": "sealed",
       "courts": [
-        "GNURUST.8"
+        "GNURUST.8",
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
       ],
       "future_campaign": null,
       "risk_if_unported": "a wrong VALUE image gives a record the wrong initial bytes"

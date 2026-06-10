@@ -31,7 +31,7 @@ SURFACES = [
  ("arithmetic", "arithmetic", ["libcob/numeric.c"], "sealed",
    ["GNURUST.7","GNURUST.13","GNURUST.19","GNURUST.REMAINDER.1"], None,
    "a wrong receiver scale/rounding/sign misstates money"),
- ("value-initialization", "data representation", ["cobc/field.c"], "sealed", ["GNURUST.8"], None,
+ ("value-initialization", "data representation", ["cobc/field.c"], "sealed", ["GNURUST.8", "GNURUST.VALUE.NEGZERO.EDGE.1"], None,
    "a wrong VALUE image gives a record the wrong initial bytes"),
  ("conditions-level88", "conditions", ["cobc/typeck.c"], "sealed", ["GNURUST.11","GNURUST.12"], None,
    "a wrong LEVEL-88 truth or SET flips a branch"),

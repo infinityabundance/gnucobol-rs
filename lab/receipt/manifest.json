@@ -714,6 +714,18 @@
         "the not-yet-emitting families (4M of 20M = storage+directive only; 13 families dropped, not covered)",
         "the 16M dropped indices being witnesses"
       ]
+    },
+    "GNURUST.VALUE.NEGZERO.EDGE.1": {
+      "court": "negative-zero VALUE sign edge (oracle-characterized)",
+      "sweep": "edge_negzero_sweep.sh",
+      "byte_domain": "VALUE-image negative-zero sign matrix; oracle rule + locked gnucobol-rs divergence (COMP-3 integer-form)",
+      "non_claims": [
+        "the fix (characterizes + locks; patch is separate, not applied)",
+        "arithmetic/MOVE negative-zero (GNURUST.13)",
+        "figurative ZERO",
+        "other usages/dialects",
+        "broader signed-zero space"
+      ]
     }
   }
 }

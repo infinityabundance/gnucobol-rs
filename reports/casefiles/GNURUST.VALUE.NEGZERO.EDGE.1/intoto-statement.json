@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/casefile.json",
+      "digest": {
+        "sha256": "eaa5b9e4eafcb35adcc19c6f3da083831e710de0274e5736117344d451b1e343"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.26",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/edge_negzero_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "5d6212efc4c28fa4926de72f68f8ad23a6a86471764bec1eba1d3453ed56447b",
+      "receipt_sha256": "066b2c2c542d5bd35f3a055ae0e5f44b9e6cb0f4690ade246188e4f447091da5"
+    },
+    "positive_claim_count": 2,
+    "negative_claim_count": 7
+  }
+}

@@ -1,8 +1,8 @@
 {
   "schema": "gnurust-kani-fuzz-coverage-v1",
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "total_courts": 97,
-  "na_courts": 54,
+  "total_courts": 98,
+  "na_courts": 55,
   "impl_courts": 43,
   "kani_covered": 43,
   "fuzz_covered": 43,
@@ -717,6 +717,12 @@
       "kani": "n/a",
       "fuzz": "n/a",
       "reason": "meta: completed 4M real-cobc witness run; no single Rust byte kernel"
+    },
+    {
+      "court": "GNURUST.VALUE.NEGZERO.EDGE.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "characterization/regression-lock of the VALUE -0 oracle rule; exercises value_image which is kani+fuzz-covered under GNURUST.8"
     }
   ]
 }
