@@ -476,6 +476,22 @@ def cmd_verify_merkle(args):
            "generator_manifest_sha256": generator_manifest_sha(),
            "build_profile_sha256": build_profile_lock()["build_profile_sha256"]}
     json.dump(man, open(os.path.join(OUT, "manifest.json"), "w"), indent=2)
+    # FINALIZE finding counts AUTHORITATIVELY from ALL shard receipts (per-shard burn counts overwrite
+    # across shards: a finding lives in some shards but the last shard to run resets its count -- so the
+    # true witness-hit count is only knowable after every shard exists). This is the multi-shard finalize.
+    findings = _load_findings()
+    if findings:
+        hits = {}
+        for r in recs:
+            for row in r.get("nonpass_rows", []):
+                fid = row.get("finding_root_cause")
+                if fid:
+                    hits[fid] = hits.get(fid, 0) + 1
+        for fid, f in findings.items():
+            f["count"] = hits.get(fid, 0)
+        _save_findings(findings)
+        print(f"  finalized finding counts from {len(recs)} shards: " +
+              ", ".join(f"{fid.split('.')[-1]}={f['count']}" for fid, f in findings.items()))
     print(f"verify-merkle: {len(recs)} shards root_of_roots={ror[:16]} (manifest written)")
     return 0
 

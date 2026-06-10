@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-96-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-96-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-97-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-97-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.26 · 60 GNURUST courts (43 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.26 · 61 GNURUST courts (43 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -92,6 +92,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.DIRECTIVE.VARIANCE.ATLAS.1` | observed compiler-directive byte-variance atlas | ✅ pass | [`reports/casefiles/GNURUST.DIRECTIVE.VARIANCE.ATLAS.1/`](reports/casefiles/GNURUST.DIRECTIVE.VARIANCE.ATLAS.1/) |
 | `GNURUST.DECLARATIVES.ATLAS.1` | observed DECLARATIVES / USE error-handler atlas | ✅ pass | [`reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/`](reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/) |
 | `GNURUST.CALL.LAYOUT.ATLAS.1` | observed CALL parameter byte-layout atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/`](reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/) |
+| `GNURUST.LINEAGE.CORPUS.20M.1` | full 20M real-cobc COBOL-witness lineage run (complete) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
@@ -155,7 +156,7 @@ Every byte court additionally carries a **Kani proof** of its sharp invariant an
 See [`docs/not-yet-ready.md`](docs/not-yet-ready.md). Headline: this is **not** a compiler, not
 `libcob`, not Procedure Division execution, not universal COBOL truth, not business-truth validation,
 not automatic migration, not dirty-data repair, not a proven AWS deployment. The full machine-readable
-non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (874 surfaces, incl.
+non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (878 surfaces, incl.
 18 banking operating-semantics refusals), and the **truth hierarchy** — bytes / record / posting /
 accounting / extraction / business — is [`docs/truth-boundaries.md`](docs/truth-boundaries.md).
 

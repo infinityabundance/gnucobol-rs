@@ -1,8 +1,8 @@
 {
   "schema": "gnurust-kani-fuzz-coverage-v1",
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "total_courts": 96,
-  "na_courts": 53,
+  "total_courts": 97,
+  "na_courts": 54,
   "impl_courts": 43,
   "kani_covered": 43,
   "fuzz_covered": 43,
@@ -711,6 +711,12 @@
       "kani": "n/a",
       "fuzz": "n/a",
       "reason": "meta: 200K real-cobc witness burn classified by the engine; no single Rust byte kernel"
+    },
+    {
+      "court": "GNURUST.LINEAGE.CORPUS.20M.1",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "meta: completed 4M real-cobc witness run; no single Rust byte kernel"
     }
   ]
 }

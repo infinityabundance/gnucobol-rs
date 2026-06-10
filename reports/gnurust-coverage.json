@@ -226,7 +226,8 @@
       "status": "observed",
       "courts": [
         "GNURUST.LINEAGE.CORPUS.20M.0",
-        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ],
       "future_campaign": null,
       "risk_if_unported": "deterministic 20M real-cobc COBOL-witness lineage corpus: generate->compile/run->three-way differential->shrink->classify->replay->Merkle; reveals the oracle's observed behavioral topology, not parity"

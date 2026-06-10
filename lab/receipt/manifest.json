@@ -701,6 +701,19 @@
         "the negative-zero finding being fixed",
         "families not yet emitting (storage + directive only)"
       ]
+    },
+    "GNURUST.LINEAGE.CORPUS.20M.1": {
+      "court": "full 20M real-cobc COBOL-witness lineage run (complete)",
+      "sweep": "lineage_fullrun_sweep.sh",
+      "byte_domain": "completed 4M real-cobc witness run; evidence-of-record reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)",
+      "non_claims": [
+        "full GnuCOBOL parity / standard conformance",
+        "all dialects / public-corpus parity",
+        "business correctness / compiler replacement",
+        "the negative-zero finding being fixed",
+        "the not-yet-emitting families (4M of 20M = storage+directive only; 13 families dropped, not covered)",
+        "the 16M dropped indices being witnesses"
+      ]
     }
   }
 }

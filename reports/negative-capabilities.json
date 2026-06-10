@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 874,
+  "count": 878,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -459,7 +459,8 @@
         "GNURUST.DECLARATIVES.ATLAS.1",
         "GNURUST.CALL.LAYOUT.ATLAS.1",
         "GNURUST.LINEAGE.CORPUS.20M.0",
-        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -669,6 +670,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.AUTO-BUILD-PROFILE-DETECTION",
+      "surface": "auto build-profile detection",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -1149,7 +1161,8 @@
         "GNURUST.REMAINDER.1",
         "KOBOLD.PILOT.RUN.1",
         "GNURUST.LINEAGE.CORPUS.20M.0",
-        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -1642,7 +1655,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.LINEAGE.CORPUS.20M.0"
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -3770,7 +3784,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.LINEAGE.CORPUS.20M.0",
-        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -7035,7 +7050,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.LINEAGE.CORPUS.20M.0",
-        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -9149,6 +9165,17 @@
       ]
     },
     {
+      "id": "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-CA",
+      "surface": "the negative-zero finding being FIXED (candidate GNURUST.VALUE.NEGZERO.EDGE.1, not patched)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.1"
+      ]
+    },
+    {
       "id": "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-FI",
       "surface": "the negative-zero finding being FIXED (filed as a candidate edge court, a blanket fix was reverted as shape-sensitive)",
       "status": "not_admitted_fail_closed",
@@ -9157,6 +9184,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+      ]
+    },
+    {
+      "id": "NEG.THE-NOT-YET-EMITTING-FAMILIES-4M-OF-20M-",
+      "surface": "the not-yet-emitting families (4M of 20M = storage+directive only",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {
@@ -9179,6 +9217,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.RELATIVE.FILE.ATLAS.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-OTHER-13-FAMILIES-ARE-DROPPED-BUCKET",
+      "surface": "the other 13 families are dropped buckets, NOT covered)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.1"
       ]
     },
     {

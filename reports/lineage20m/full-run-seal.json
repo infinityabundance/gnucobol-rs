@@ -1,0 +1,38 @@
+{
+  "schema": "gnurust-lineage20m-fullrun-seal-v1",
+  "court": "GNURUST.LINEAGE.CORPUS.20M.1",
+  "status": "complete",
+  "witnesses": 4000000,
+  "dropped_total": 16000000,
+  "shards": 1024,
+  "root_of_roots": "9673654d846d07fd4b9d490260d87a9e6af4bf8c5f255e159c86dfb128656cae",
+  "generator_manifest_sha256": "5c3e9783eb882d54a3b9d3f02e507a4b12d8ac90bac436d005e0eca4db2add15",
+  "build_profile_sha256": "2d147a1a8ab23894cbfa1dd44fb4735b3a7b74aab5a8d35e248e205832034903",
+  "untriaged": 0,
+  "reddening": 1056,
+  "class_distribution": {
+    "default_mismatch": 1056,
+    "variant_same_as_default": 71976,
+    "default_match": 1998944,
+    "variant_differs_from_default": 1928024
+  },
+  "confirmed_findings": [
+    {
+      "id": "VALUE.NEGATIVE_ZERO.COMP3.INTEGER_CANONICALIZES_POSITIVE",
+      "count": 1056,
+      "oracle_hex": "0c",
+      "rust_hex": "0d",
+      "status": "confirmed_harvested",
+      "candidate_court": "GNURUST.VALUE.NEGZERO.EDGE.1"
+    }
+  ],
+  "gate": {
+    "merkle": "PASS",
+    "stratified_replay": "PASS",
+    "harness_isolation": "PASS",
+    "finding_collapse": "aliases=0; witness_hits==reddening_covered",
+    "injected_faults": "proven load-bearing by GNURUST.LINEAGE.CORPUS.20M.SMOKE (same gate code, 4/4)",
+    "verdict": "PASS"
+  },
+  "note": "4M real-cobc witnesses of the 20M index space (v0 emits storage+directive of 15 families; the other 13 logged as dropped buckets). The 1024 shard receipts are regenerable from seed and gitignored; this committed seal is the evidence-of-record (root-of-roots binds them)."
+}

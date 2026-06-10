@@ -1355,6 +1355,20 @@
       "readiness": 3,
       "lie_prevented": "'we ran 20M COBOL tests' is the cheap claim -- this is a 200K REAL-cobc pilot whose every mismatch is shrunk+filed and whose evidence is Merkle-bound + replay-deterministic + injected-fault-guarded; the 200K counts real compiled COBOL witnesses, not Rust iterations, and the one harvested divergence is shown, not hidden",
       "damage_if_overclaimed": "treating the 200K pilot as the full 20M, or as a parity proof, or the negative-zero finding as fixed, each overclaims"
+    },
+    {
+      "id": "GNURUST.LINEAGE.CORPUS.20M.1",
+      "name": "full 20M real-cobc COBOL-witness lineage run (complete)",
+      "proven": "ran the FULL 20M-index lineage corpus to completion under the real pinned GnuCOBOL 3.2 oracle: 4,000,000 DISTINCT real-cobc COBOL witnesses compiled+run+classified (the other ~16M of the 20M index space are the not-yet-emitting families, logged as dropped buckets, not silently covered), and the run PASSED ITS OWN seal-grade gate -- untriaged=0 across all 4M, Merkle root-of-roots 9673654d binds all 1024 shards, stratified replay byte-identical, parallel-vs-serial harness isolation PASS, and the finding-collapse invariant holds (aliases=0, witness_hits==reddening_covered); the run scaled the single confirmed harvested finding (COMP-3 integer VALUE -0: cobc 0c vs gnucobol-rs 0d) to 1,056 witness hits collapsing to ONE finding (GNURUST.VALUE.NEGZERO.EDGE.1 candidate) with ZERO new untriaged surprises across 4M witnesses",
+      "byte_domain": "completed 4M real-cobc witness run: storage differential + directive variant lineage; evidence-of-record = reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)",
+      "oracle": "real cobc/libcob compile+run over 4M generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
+      "fixtures": "lineage_fullrun_sweep (asserts the committed seal + gate=PASS) -> reports/lineage20m/full-run-seal.json",
+      "sealed_version": "completed full run (gnucobol-rs lab)",
+      "not_proven": "full GnuCOBOL parity / standard conformance; all dialects; public-corpus execution parity; business correctness; compiler replacement; auto build-profile detection; the negative-zero finding being FIXED (candidate GNURUST.VALUE.NEGZERO.EDGE.1, not patched); the not-yet-emitting families (4M of 20M = storage+directive only; the other 13 families are dropped buckets, NOT covered)",
+      "breaks_claim": "claiming parity/conformance; treating the negative-zero finding as fixed; claiming the 13 dropped families are covered; claiming the 16M dropped indices are witnesses",
+      "readiness": 3,
+      "lie_prevented": "'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)",
+      "damage_if_overclaimed": "treating 20M index sweep as 20M witnesses inflates the corpus 5x; treating the run as parity, or the negzero finding as fixed, overclaims; the 13 dropped families are future work, not coverage"
     }
   ],
   "transform_vs_read": {
