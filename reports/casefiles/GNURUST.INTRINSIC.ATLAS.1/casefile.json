@@ -3,7 +3,7 @@
   "case_id": "GNURUST.INTRINSIC.ATLAS.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.26",
+  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4485011ce26459a5f35105995ddafcbc899a9cb580d54827ab21ab76028d3873",
-    "receipt_sha256": "6d728dfc8eaf7bfe8612dcae7b8d2e3aac995ed0fbf17cd3920de05417e5a27b"
+    "receipt_sha256": "ad3c4f9cd9f4cd274293aab76c4dbced535ec5a6b4c92024cbd3ef29b48df447"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -60,6 +60,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "ae8ffc5091e64734c67dec40fe420b684a179ac06407d53ee84b1501a5c34ed2"
+    "inputs_sha256": "29ffd16ce82afe98b017d03656675b1d8e87d50c1741cb0f807548d556320e37"
   }
 }

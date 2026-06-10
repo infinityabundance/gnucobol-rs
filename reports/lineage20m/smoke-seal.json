@@ -1,0 +1,36 @@
+{
+  "schema": "gnurust-lineage20m-smoke-seal-v1",
+  "court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+  "status": "complete",
+  "run_kind": "historical discovery burn (sealed at the pre-patch commit fc6fd00)",
+  "witnesses": 200000,
+  "shards": 2,
+  "root_of_roots": "cf68906d3c7aac31a8e408177387921e2e28569af9c2a66889b0b2540f9bfc5d",
+  "untriaged": 0,
+  "reddening": 56,
+  "class_distribution": {
+    "variant_differs_from_default": 77199,
+    "default_mismatch": 56,
+    "default_match": 119944,
+    "variant_same_as_default": 2801
+  },
+  "confirmed_findings": [
+    {
+      "id": "VALUE.NEGATIVE_ZERO.COMP3.INTEGER_CANONICALIZES_POSITIVE",
+      "count": 56,
+      "oracle_hex": "0c",
+      "rust_hex": "0d",
+      "status": "confirmed_harvested",
+      "candidate_court": "GNURUST.VALUE.NEGZERO.EDGE.1"
+    }
+  ],
+  "gate_at_seal": {
+    "merkle": "PASS",
+    "stratified_replay": "PASS",
+    "harness_isolation": "PASS",
+    "finding_collapse": "aliases=0; witness_hits==reddening_covered",
+    "injected_faults": "4/4 forced red",
+    "verdict": "PASS"
+  },
+  "resolved_by": "GNURUST.VALUE.NEGZERO.EDGE.1 patch (gnucobol-rs 0.7.27): the 56-hit COMP-3 integer-form negative-zero finding this burn discovered is now FIXED in value_image; a post-patch re-burn would show 0 reddening. This seal is the HISTORICAL discovery record at the pre-patch commit; the merkle root-of-roots over the committed shard receipts is code-independent (witnesses + oracle bytes), so it stays verifiable forever."
+}

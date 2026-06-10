@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/casefile.json",
       "digest": {
-        "sha256": "fe622c7649c9d238f8e7bebe1f386ad27592577123325c3e31ba1ad96dfa625b"
+        "sha256": "f659a9952e671c9793873fdd3f57db44526cedf77fc75f551d2317300fa0868d"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.26",
+    "crate_version": "0.7.27",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/dialect_runtime_atlas_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "f1408188083eeb4e7521d0aaada08048da346a907a517cf7d678808388b613bd",
-      "receipt_sha256": "d548eddc7e429241e3ff5439a005a43b0037945424128e1ac0d22ac011224f2c"
+      "receipt_sha256": "aa35477c7c9dd61f7fed72a0db58417e8f530d4c86fcc0361c4576ac47629f2e"
     },
     "positive_claim_count": 3,
     "negative_claim_count": 8

@@ -123,9 +123,11 @@ A("oracle_unsigned_negzero_rejected",
   all(c["oracle_hex"] == "REJECT" for c in g("unsigned")),
   "unsigned 9(n) VALUE -0 -> compile reject")
 div = [c["cell"] for c in cells if c["classification"] == "known_diverge"]
-A("rust_diverges_only_comp3_integer_form_negzero",
-  all(C[d]["group"] == "comp3_int" and C[d]["literal_text"] != "0" for d in div) and len(div) >= 1,
-  f"divergence set = {div}")
+# POST-PATCH lock: the COMP-3 integer-form cells must now MATCH (under-fix -> these diverge -> RED), while
+# DISPLAY + decimal-form must remain match (over-fix -> those diverge -> the assertions below go RED).
+A("rust_matches_comp3_integer_form_negzero",
+  all(c["classification"] == "match" for c in g("comp3_int")) and len(div) == 0,
+  f"all COMP-3 integer-form cells match post-patch; divergence set = {div}")
 A("rust_matches_display_negzero",
   all(c["classification"] == "match" for c in g("display")), "all DISPLAY cells match")
 A("rust_matches_comp3_decimal_form_negzero",
@@ -141,13 +143,16 @@ atlas = {
           "literals and for all DISPLAY zoned negative-zero; gnucobol-rs value_image currently diverges "
           "ONLY on the COMP-3 integer-form cells (oracle 0C vs rust 0D).",
  "discriminator": "literal form (integer vs decimal-point), NOT field scale",
+ "status": "PATCHED -- gnucobol-rs value_image now byte-exact with cobc on the COMP-3 integer-form cells; "
+           "the divergence set is EMPTY. The court now LOCKS PARITY: an under-fix (a COMP-3 integer cell "
+           "diverges again) OR an over-fix (a DISPLAY or decimal-form cell starts diverging) turns it RED.",
  "named_assertions": asserts,
  "rust_divergence_set": div,
- "patch_scope_if_chosen": "canonicalize the PACKED sign nibble to positive ONLY when magnitude==0 AND the "
-          "literal is integer-form (lit_scale==0); MUST NOT touch the zoned/DISPLAY path or decimal-form "
-          "literals (a blanket parse_num fix already regressed value_sweep 391/392). After patch the COMP-3 "
-          "integer cells flip known_diverge->match; DISPLAY + decimal-form MUST remain unchanged or this "
-          "court goes RED.",
+ "patch_applied": "value_image (init::encode_numeric, packed branch): canonicalize the PACKED sign nibble "
+          "to positive ONLY when magnitude==0 AND the literal is integer-form (scale==0). The zoned/DISPLAY "
+          "path and decimal-form literals are untouched by construction (DISPLAY returns the zoned temp; the "
+          "packed branch only rebuilds it for the zero-magnitude integer-form case). VALUE initialization "
+          "only -- NOT negative-zero semantics generally (arithmetic/MOVE -0 = GNURUST.13, unchanged).",
  "cells": cells,
 }
 json.dump(atlas, open(os.path.join(ROOT, "reports/negzero-edge-atlas.json"), "w"), indent=2)

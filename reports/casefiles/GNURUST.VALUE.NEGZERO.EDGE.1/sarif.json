@@ -36,14 +36,14 @@
           "ruleId": "NONCLAIM",
           "level": "note",
           "message": {
-            "text": "GNURUST.VALUE.NEGZERO.EDGE.1 non-claim: the FIX (this court CHARACTERIZES + locks the divergence"
+            "text": "GNURUST.VALUE.NEGZERO.EDGE.1 non-claim: negative-zero semantics GENERALLY (the patch fixes VALUE INITIALIZATION only -- the COMP-3 integer-form packed sign nibble"
           }
         },
         {
           "ruleId": "NONCLAIM",
           "level": "note",
           "message": {
-            "text": "GNURUST.VALUE.NEGZERO.EDGE.1 non-claim: the patch -- canonicalize the PACKED sign nibble for integer-form zero, scoped to lit_scale==0, never the zoned/DISPLAY or decimal-form path -- is a SEPARATE decided step, NOT applied here, since a blanket parse_num canonicalization already regressed value_sweep)"
+            "text": "GNURUST.VALUE.NEGZERO.EDGE.1 non-claim: a blanket parse_num canonicalization was tried first and REVERTED because it would wrongly canonicalize the decimal-form and DISPLAY cells)"
           }
         },
         {

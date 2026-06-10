@@ -195,7 +195,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.DECLARATIVES.ATLAS.1` | observed DECLARATIVES / USE error-handler atlas | ✅ pass | [`reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/`](reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/) |
 | `GNURUST.CALL.LAYOUT.ATLAS.1` | observed CALL parameter byte-layout atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/`](reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/) |
 | `GNURUST.LINEAGE.CORPUS.20M.1` | full 20M real-cobc COBOL-witness lineage run (complete) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/) |
-| `GNURUST.VALUE.NEGZERO.EDGE.1` | negative-zero VALUE sign edge (oracle-characterized, locks the divergence) | ✅ pass | [`reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/`](reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/) |
+| `GNURUST.VALUE.NEGZERO.EDGE.1` | negative-zero VALUE sign edge (oracle-characterized + PATCHED to parity, locks both ways) | ✅ pass | [`reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/`](reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |

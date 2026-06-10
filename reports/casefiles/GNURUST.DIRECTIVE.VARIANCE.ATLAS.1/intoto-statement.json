@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.DIRECTIVE.VARIANCE.ATLAS.1/casefile.json",
       "digest": {
-        "sha256": "b5158102fec1af4ceccdc84759cc6da7bad9993dd69a72f7edca05c3001f5ca3"
+        "sha256": "e692fb2b6be5fcca0296966b56e950dbc7f8dfacbfcd551ad9676614b4a2e0d8"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.26",
+    "crate_version": "0.7.27",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/directive_variance_atlas_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "cf24701ea57bddae35fd59c5230044bbb684763991fc74ba2d441fe6255f803f",
-      "receipt_sha256": "e046c38587a882fe737952147bdd00256b9f04047437ba12b2181f59d56a28ec"
+      "receipt_sha256": "1abc0c51ac4505f86d415c0c9d640ba1ad3f5a76ec633fe5bed5afe396cd0f71"
     },
     "positive_claim_count": 3,
     "negative_claim_count": 8

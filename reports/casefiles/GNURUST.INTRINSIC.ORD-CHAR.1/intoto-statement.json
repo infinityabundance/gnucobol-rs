@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.INTRINSIC.ORD-CHAR.1/casefile.json",
       "digest": {
-        "sha256": "8d3860ac840e675f6e0cb9ab341e1f53331594afd396541638e3032382049246"
+        "sha256": "bf86af6f1437b4cf7f5d5a0fd0f24d819720273a2228070e245722f4c147265f"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.INTRINSIC.ORD-CHAR.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.26",
+    "crate_version": "0.7.27",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/ordchar_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "8467f9e447dbd16344806526d1810871556bd4536e95aed723b102a66654fe26",
-      "receipt_sha256": "bd4e83c311f32216011db080df83b932cb166dd78cce1fad836acf562c39ddfa"
+      "receipt_sha256": "4532649db45e64191c844e9f28a29b9307cc17448e72636055299b49d62fc4fe"
     },
     "positive_claim_count": 2,
     "negative_claim_count": 5

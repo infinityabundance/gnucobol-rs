@@ -3,15 +3,15 @@
   "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.26",
+  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
     "generated_by": "lab/casefile/run.py"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "5d6212efc4c28fa4926de72f68f8ad23a6a86471764bec1eba1d3453ed56447b",
-    "receipt_sha256": "066b2c2c542d5bd35f3a055ae0e5f44b9e6cb0f4690ade246188e4f447091da5"
+    "claim_ladder_entry_sha256": "e122812499c95bb4c45b516c7c98a39c20e07015cb1da97f5f9e60b88dc1c7cd",
+    "receipt_sha256": "d6bf7e83ecd5c9456150bc869db3186e4d45c9bd2fb908cdb2a8980ee5862b1d"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -28,11 +28,13 @@
   },
   "positive_claims": [
     "characterized the negative-zero VALUE-image sign rule across the full matrix (usage x literal-form x sign x scale) under the gnucobol-3.2.0 oracle, sweep 11/0, harvested by GNURUST.LINEAGE.CORPUS.20M (1056 hits): cobc's rule is SHAPE-SENSITIVE ON THE LITERAL FORM, not the field scale -- COMP-3 + integer-form literal (no decimal point) CANONICALIZES negative-zero to the POSITIVE packed sign nibble 0C, COMP-3 + decimal-form literal (has a '.') PRESERVES negative 0D even in a V99 field, DISPLAY always PRESERVES negative as overpunch 0x70, signed binary stores all-zero with no sign nibble, and unsigned VALUE -0 is a compile error",
-    "this BOUNDS GNURUST.8 (which did not test negative-zero) and LOCKS the exact gnucobol-rs divergence: value_image diverges from cobc ONLY for COMP-3 packed integer-form negative-zero (oracle 0C vs rust 0D) -- the 4 cells comp3-int-0/-00/-000 + comp3v99-int0 -- while DISPLAY and decimal-form COMP-3 MATCH"
+    "this BOUNDS GNURUST.8 (which did not test negative-zero) and LOCKS the exact gnucobol-rs divergence: value_image diverges from cobc ONLY for COMP-3 packed integer-form negative-zero (oracle 0C vs rust 0D) -- the 4 cells comp3-int-0/-00/-000 + comp3v99-int0 -- while DISPLAY and decimal-form COMP-3 MATCH",
+    "the well-scoped PATCH WAS THEN APPLIED (value_image, init::encode_numeric packed branch: canonicalize the packed sign nibble for integer-form zero ONLY, scale==0) -- the 4 COMP-3 integer cells flipped known_diverge->match, value_image is now BYTE-EXACT with cobc, the divergence set is EMPTY, and the court now LOCKS PARITY (an under-fix re-diverges a COMP-3 integer cell, an over-fix diverges a DISPLAY/decimal cell -- either turns it RED)",
+    "value_sweep stays 392/0 and set_sweep 52/0 (no regression)"
   ],
   "negative_claims": [
-    "the FIX (this court CHARACTERIZES + locks the divergence",
-    "the patch -- canonicalize the PACKED sign nibble for integer-form zero, scoped to lit_scale==0, never the zoned/DISPLAY or decimal-form path -- is a SEPARATE decided step, NOT applied here, since a blanket parse_num canonicalization already regressed value_sweep)",
+    "negative-zero semantics GENERALLY (the patch fixes VALUE INITIALIZATION only -- the COMP-3 integer-form packed sign nibble",
+    "a blanket parse_num canonicalization was tried first and REVERTED because it would wrongly canonicalize the decimal-form and DISPLAY cells)",
     "negative-zero under arithmetic/MOVE/COMPUTE (the arithmetic -0 path is GNURUST.13, separate and deliberate)",
     "figurative ZERO",
     "other usages/dialects",
@@ -40,8 +42,8 @@
     "lie prevented: 'just canonicalize negative zero' is WRONG and was proven so (the blanket parse_num fix regressed value_sweep 391/392) -- the rule is shape-sensitive ON THE LITERAL FORM: cobc canonicalizes -0 to positive ONLY for COMP-3 integer-form literals, while PRESERVING the sign for decimal-form COMP-3 and for ALL DISPLAY; so the divergence is a narrow, exactly-located edge (4 cells), not a blanket bug, and GNURUST.8 is bounded accordingly"
   ],
   "negative_capability_ids": [
-    "NEG.THE-FIX-THIS-COURT-CHARACTERIZES-LOCKS-T",
-    "NEG.THE-PATCH-CANONICALIZE-THE-PACKED-SIGN-N",
+    "NEG.NEGATIVE-ZERO-SEMANTICS-GENERALLY-THE-PA",
+    "NEG.A-BLANKET-PARSE-NUM-CANONICALIZATION-WAS",
     "NEG.NEGATIVE-ZERO-UNDER-ARITHMETIC-MOVE-COMP",
     "NEG.FIGURATIVE-ZERO",
     "NEG.OTHER-USAGES-DIALECTS",
@@ -59,6 +61,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "7a1c2f06687fab1a7992c375c8dae5511d5903dd99626cd8a403064356dd4697"
+    "inputs_sha256": "40aac136c97d6f1e27b2639492ee9f91db2e5c1a722ded4796668ba5b5445a85"
   }
 }

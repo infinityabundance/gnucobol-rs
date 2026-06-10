@@ -16,7 +16,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.26 · 62 GNURUST courts (43 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.27 · 62 GNURUST courts (43 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -93,7 +93,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.DECLARATIVES.ATLAS.1` | observed DECLARATIVES / USE error-handler atlas | ✅ pass | [`reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/`](reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/) |
 | `GNURUST.CALL.LAYOUT.ATLAS.1` | observed CALL parameter byte-layout atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/`](reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/) |
 | `GNURUST.LINEAGE.CORPUS.20M.1` | full 20M real-cobc COBOL-witness lineage run (complete) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/) |
-| `GNURUST.VALUE.NEGZERO.EDGE.1` | negative-zero VALUE sign edge (oracle-characterized, locks the divergence) | ✅ pass | [`reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/`](reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/) |
+| `GNURUST.VALUE.NEGZERO.EDGE.1` | negative-zero VALUE sign edge (oracle-characterized + PATCHED to parity, locks both ways) | ✅ pass | [`reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/`](reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |

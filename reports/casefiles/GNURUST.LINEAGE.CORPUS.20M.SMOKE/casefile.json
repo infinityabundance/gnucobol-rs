@@ -3,7 +3,7 @@
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.26",
+  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "552b037fc37e9cd3471387247ae4c13c215f8875cc5be66c7029e4ffadc1164e",
-    "receipt_sha256": "da85f212eea86aa95c112c8aad27a3654bdc1f4829e4858591a8cbb68c230618"
+    "receipt_sha256": "0b2944fb1821ddd580c09a5b6d179723ac51789ce0ab5f08e58995aa072ac21a"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -64,6 +64,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "b4a4f8152b9fbe50d9b649b7555d12a65015c79694e31ce0cf01da52706ef052"
+    "inputs_sha256": "d971243211bd4de2e0aa5b1c8e7d0e838986014a48dafb5b1e8cb36f9c025bc9"
   }
 }

@@ -3,7 +3,7 @@
   "case_id": "GNURUST.SORT.MERGE.ATLAS.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.26",
+  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "06711397d57e4d9715592a9616b9b0a13200d766ca907c7650a949e62a72df33",
-    "receipt_sha256": "3fc4f3884e2952485db98efc166c3d442596ae8f7331f82ff997e0a65c8c5403"
+    "receipt_sha256": "a7df4ea7b8375e7df15edf3feca382a2db9b8925ff54cd83e076289947179fde"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -61,6 +61,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "6dc117a0b00a0299069dceea0c742f0e2d2e4225cdeda693aca30eae10710c67"
+    "inputs_sha256": "c86e3053e8b9af94fb684bafdc4cb3fb1148ff4df2e49e974cb06cdf44f63714"
   }
 }

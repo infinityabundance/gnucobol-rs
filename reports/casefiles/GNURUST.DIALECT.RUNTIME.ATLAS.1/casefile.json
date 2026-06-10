@@ -3,7 +3,7 @@
   "case_id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.26",
+  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "f1408188083eeb4e7521d0aaada08048da346a907a517cf7d678808388b613bd",
-    "receipt_sha256": "d548eddc7e429241e3ff5439a005a43b0037945424128e1ac0d22ac011224f2c"
+    "receipt_sha256": "aa35477c7c9dd61f7fed72a0db58417e8f530d4c86fcc0361c4576ac47629f2e"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -62,6 +62,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "243db07733d675d02dc5e981f6676c105d3a1eec2cf8af1643f0bab90038853f"
+    "inputs_sha256": "f0a234261ad56311d6f5c6c5dd360e9483d61f99fbd83bc5b265b6186879e12e"
   }
 }

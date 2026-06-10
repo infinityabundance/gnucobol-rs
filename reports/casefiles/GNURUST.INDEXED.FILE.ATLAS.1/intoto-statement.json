@@ -4,7 +4,7 @@
     {
       "name": "reports/casefiles/GNURUST.INDEXED.FILE.ATLAS.1/casefile.json",
       "digest": {
-        "sha256": "67f5fe798b46f063afbefe79571a684e7eaebb0696ebd6e0e18c5b78d996eeb7"
+        "sha256": "28e3f2ac949c96b828c894488c1f7e7f4b4ff9785965f8b022aaa9ca02ba8d47"
       }
     }
   ],
@@ -13,7 +13,7 @@
     "case_id": "GNURUST.INDEXED.FILE.ATLAS.1",
     "kind": "court-casefile",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.26",
+    "crate_version": "0.7.27",
     "verdict": "pass",
     "replay": {
       "command": "bash lab/oracle/indexed_file_atlas_sweep.sh",
@@ -21,7 +21,7 @@
     },
     "materials": {
       "claim_ladder_entry_sha256": "16b9a2dc910a3a7fd483290d5971d44ced794220b63907007314f389d94acaa1",
-      "receipt_sha256": "1e1c75fae165ff832de99564b3eb2f2409d2ea3e53a4f3f26c7804b23fcb40ae"
+      "receipt_sha256": "842e43ecc574fb30f08794f040222f46224fa33896d9549fdd6f9bc15dfc6c4f"
     },
     "positive_claim_count": 6,
     "negative_claim_count": 8

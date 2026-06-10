@@ -3,7 +3,7 @@
   "case_id": "GNURUST.CALL.EXTENSION.ATLAS.1",
   "kind": "court-casefile",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.26",
+  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
     "receipt_status": "current",
@@ -11,7 +11,7 @@
   },
   "inputs": {
     "claim_ladder_entry_sha256": "c06c6005344fa904358f797878dad5d928fc0a3836cacc8b670edb3a3b256289",
-    "receipt_sha256": "650db91a13fad7dd6218d6c0cd423e7c25f654bd2921288576cb7c1fbab56871"
+    "receipt_sha256": "f3163785c8a9a74ff426f0ab9a2e9f054c495724ab16549c9e5e3fc7aea3ade4"
   },
   "oracle": {
     "oracle_kind": "gnucobol-3.2-admitted",
@@ -60,6 +60,6 @@
     "exit_code": 0
   },
   "hash_chain": {
-    "inputs_sha256": "09e10d63ff952c431499282066da897fcc0f0657143d847f772eb30fe690f176"
+    "inputs_sha256": "60802df58324b41e48879c6598c0a80862ca0d0d1fd970f6fb20eb259e1e0472"
   }
 }

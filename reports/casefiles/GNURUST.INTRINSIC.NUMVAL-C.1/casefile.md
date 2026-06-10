@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.NUMVAL-C.1 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.26
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.27
 
 - **Oracle:** cobc FUNCTION NUMVAL-C (libcob/intrinsic.c)
 - **Byte domain(s):** FUNCTION NUMVAL-C(currency string) -> value

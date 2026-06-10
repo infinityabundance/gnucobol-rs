@@ -98,6 +98,19 @@ pub(crate) fn encode_numeric(
         Ok(z)
     } else {
         // COMP-3 (and any other numeric target): render via the sealed cob_move from the zoned temp.
+        // NEGATIVE-ZERO CANONICALIZATION (VALUE-image only; GNURUST.VALUE.NEGZERO.EDGE.1): cobc stores a
+        // signed COMP-3 *integer-form* negative-zero literal with the POSITIVE packed sign nibble (0x0C),
+        // canonicalizing -0 to +0. This is LITERAL-FORM-SENSITIVE: it applies only when the literal is
+        // integer-form (`scale == 0`, no decimal point) with zero magnitude. A *decimal-form* literal
+        // (`-0.0`, scale > 0) and the DISPLAY/zoned path PRESERVE the negative sign and are NOT touched
+        // here (the DISPLAY branch returns `z` above; this branch rebuilds the zoned temp only for the
+        // zero-magnitude integer-form case). Arithmetic/MOVE negative zero (GNURUST.13) is a separate path.
+        let neg_packed = neg && !(scale == 0 && digits.iter().all(|&d| d == 0));
+        let zp = if neg_packed == neg {
+            z
+        } else {
+            zoned(neg_packed, digits, scale, attr.digits as usize, attr.scale as i32, signed, "field")?
+        };
         let zattr = FieldAttr {
             field_type: COB_TYPE_NUMERIC_DISPLAY,
             digits: attr.digits,
@@ -105,7 +118,7 @@ pub(crate) fn encode_numeric(
             flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 },
         };
         let mut out = vec![0u8; attr.digits as usize / 2 + 1];
-        cob_move(&z, &zattr, &mut out, attr).map_err(|e| InitError::Pic(format!("{e:?}")))?;
+        cob_move(&zp, &zattr, &mut out, attr).map_err(|e| InitError::Pic(format!("{e:?}")))?;
         Ok(out)
     }
 }

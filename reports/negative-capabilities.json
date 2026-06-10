@@ -56,6 +56,17 @@
       ]
     },
     {
+      "id": "NEG.A-BLANKET-PARSE-NUM-CANONICALIZATION-WAS",
+      "surface": "a blanket parse_num canonicalization was tried first and REVERTED because it would wrongly canonicalize the decimal-form and DISPLAY cells)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
+      ]
+    },
+    {
       "id": "NEG.A-COMPLETE-ENUMERATION-OF-EVERY-COBC-DIR",
       "surface": "a complete enumeration of every cobc directive",
       "status": "not_admitted_fail_closed",
@@ -5597,6 +5608,17 @@
       ]
     },
     {
+      "id": "NEG.NEGATIVE-ZERO-SEMANTICS-GENERALLY-THE-PA",
+      "surface": "negative-zero semantics GENERALLY (the patch fixes VALUE INITIALIZATION only -- the COMP-3 integer-form packed sign nibble",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.VALUE.NEGZERO.EDGE.1"
+      ]
+    },
+    {
       "id": "NEG.NEGATIVE-ZERO-UNDER-ARITHMETIC-MOVE-COMP",
       "surface": "negative-zero under arithmetic/MOVE/COMPUTE (the arithmetic -0 path is GNURUST.13, separate and deliberate)",
       "status": "not_admitted_fail_closed",
@@ -9175,17 +9197,6 @@
       ]
     },
     {
-      "id": "NEG.THE-FIX-THIS-COURT-CHARACTERIZES-LOCKS-T",
-      "surface": "the FIX (this court CHARACTERIZES + locks the divergence",
-      "status": "not_admitted_fail_closed",
-      "guard": "fails closed / outside the sealed subset",
-      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
-      "owning_future_campaign": null,
-      "evidence": [
-        "GNURUST.VALUE.NEGZERO.EDGE.1"
-      ]
-    },
-    {
       "id": "NEG.THE-FULL-20M-IS-GNURUST-LINEAGE-CORPUS-2",
       "surface": "the full 20M is GNURUST.LINEAGE.CORPUS.20M.1, launched detached)",
       "status": "not_admitted_fail_closed",
@@ -9283,17 +9294,6 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.LINEAGE.CORPUS.20M.1"
-      ]
-    },
-    {
-      "id": "NEG.THE-PATCH-CANONICALIZE-THE-PACKED-SIGN-N",
-      "surface": "the patch -- canonicalize the PACKED sign nibble for integer-form zero, scoped to lit_scale==0, never the zoned/DISPLAY or decimal-form path -- is a SEPARATE decided step, NOT applied here, since a blanket parse_num canonicalization already regressed value_sweep)",
-      "status": "not_admitted_fail_closed",
-      "guard": "fails closed / outside the sealed subset",
-      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
-      "owning_future_campaign": null,
-      "evidence": [
-        "GNURUST.VALUE.NEGZERO.EDGE.1"
       ]
     },
     {
