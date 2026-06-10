@@ -26,7 +26,12 @@ from lineage20m import rustbridge
 from lineage20m import shrink as shrinkmod
 from lineage20m.generators import storage, directive_matrix
 
-OUT = os.path.join(ROOT, "reports", "lineage20m")
+# Single output root. Default = the sealed smoke tree; LINEAGE20M_OUT redirects EVERYTHING (shards,
+# clusters, findings, shrunk, manifest, state, replay) to a separate root (e.g. the detached full-run/),
+# so the full 20M run NEVER touches the sealed .SMOKE artifacts. Every path helper derives from OUT.
+_OUT_ENV = os.environ.get("LINEAGE20M_OUT")
+OUT = (_OUT_ENV if (_OUT_ENV and os.path.isabs(_OUT_ENV)) else
+       os.path.join(ROOT, _OUT_ENV) if _OUT_ENV else os.path.join(ROOT, "reports", "lineage20m"))
 GEN_FILES = ["lcg.py", "plan.py", "schema.py", "classify.py", "merkle.py", "oracle.py",
              "rustbridge.py", "generators/storage.py", "generators/directive_matrix.py"]
 GENERATORS = {"storage": storage.gen, "directive_matrix": directive_matrix.gen}
@@ -284,7 +289,7 @@ def _write_finding(root_cause, minf, mcob, oracle_hex, rust_hex, court_target, c
     fid = _precise_finding_id(root_cause)
     fdir = os.path.join(OUT, "findings", fid)
     os.makedirs(fdir, exist_ok=True)
-    repro_rel = os.path.join("reports", "lineage20m", "findings", fid, "minimal.cob")
+    repro_rel = os.path.relpath(os.path.join(fdir, "minimal.cob"), ROOT)  # derives from OUT, never hardcoded
     with open(os.path.join(ROOT, repro_rel), "w") as f:
         f.write(mcob)
     open(os.path.join(fdir, "oracle-default.hex"), "w").write(oracle_hex or "")
