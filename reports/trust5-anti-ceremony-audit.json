@@ -54,6 +54,8 @@
       "GNURUST.INTRINSIC.NUMVAL-C.1",
       "GNURUST.INTRINSIC.NUMVAL.1",
       "GNURUST.INTRINSIC.ORD-CHAR.1",
+      "GNURUST.LINEAGE.CORPUS.20M.0",
+      "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
       "GNURUST.PERFORM.SLICE.1",
       "GNURUST.PROCEDURE.FLOW.ATLAS.1",
       "GNURUST.RELATIVE.FILE.ATLAS.1",
@@ -114,7 +116,7 @@
     "F": []
   },
   "class_counts": {
-    "A": 53,
+    "A": 55,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -890,6 +892,38 @@
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
       "fixtures": "ordchar_sweep 15/0 + 1 unit test (256-position round-trip)",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.LINEAGE.CORPUS.20M.0",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 3,
+      "negative_claims": 10,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "lineage_engine_sweep (self-test) + lineage_corpus_sweep gate -> reports/lineage20m/",
+      "ceremonial_flags": []
+    },
+    {
+      "id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+      "class": "A",
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "has_casefile": true,
+      "has_receipt": true,
+      "positive_claims": 3,
+      "negative_claims": 9,
+      "negatives_ge_positives": true,
+      "generated_from_named_evidence": true,
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "lineage_corpus_sweep (run.py check) gate-GREEN over the 200K pilot -> reports/lineage20m/",
       "ceremonial_flags": []
     },
     {

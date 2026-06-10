@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > Not marketing. A hard map of where each admitted GnuCOBOL surface sits. We are not adding random courts — we are climbing the GnuCOBOL semantic stack, level by level, with oracle receipts.
 
-Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 17**, observed 10, refused 5, **missing 0**.
+Coverage frontier (from `GNURUST.COVERAGE.1`): **sealed 17**, observed 11, refused 5, **missing 0**.
 
 | level | meaning | courts |
 |:---:|---|---|

@@ -1,0 +1,12 @@
+{
+  "schema": "gnurust-lineage20m-manifest-v1",
+  "court": "GNURUST.LINEAGE.CORPUS.20M",
+  "n_shards": 2,
+  "shard_roots": [
+    "87c0929dfd5445af316e4b76d5d8aea34e89cc50187607a8fcbe7a0f4ba767b5",
+    "ca3116353621686c08db2004531366992cb9b8a7fc9b17cc1f2e882328d4737f"
+  ],
+  "root_of_roots": "cf68906d3c7aac31a8e408177387921e2e28569af9c2a66889b0b2540f9bfc5d",
+  "generator_manifest_sha256": "5c3e9783eb882d54a3b9d3f02e507a4b12d8ac90bac436d005e0eca4db2add15",
+  "build_profile_sha256": "2d147a1a8ab23894cbfa1dd44fb4735b3a7b74aab5a8d35e248e205832034903"
+}

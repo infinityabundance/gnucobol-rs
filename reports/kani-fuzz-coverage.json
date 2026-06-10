@@ -1,8 +1,8 @@
 {
   "schema": "gnurust-kani-fuzz-coverage-v1",
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "total_courts": 94,
-  "na_courts": 51,
+  "total_courts": 96,
+  "na_courts": 53,
   "impl_courts": 43,
   "kani_covered": 43,
   "fuzz_covered": 43,
@@ -699,6 +699,18 @@
       "kani": "n/a",
       "fuzz": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
+    },
+    {
+      "court": "GNURUST.LINEAGE.CORPUS.20M.0",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "meta: differential corpus engine (drives the real cobc oracle); no single Rust byte kernel -- its own seal-grade gate is replay+Merkle+isolation"
+    },
+    {
+      "court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+      "kani": "n/a",
+      "fuzz": "n/a",
+      "reason": "meta: 200K real-cobc witness burn classified by the engine; no single Rust byte kernel"
     }
   ]
 }

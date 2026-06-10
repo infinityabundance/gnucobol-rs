@@ -736,6 +736,24 @@ for (i, s2, g, r) in CLY:
     seen[i] = {"id": i, "surface": s2, "status": "not_admitted_observed_only", "guard": g,
                "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.CALL.LAYOUT.ATLAS.1"]}
 
+# GNURUST.LINEAGE.CORPUS.20M.0 -- the 20M real-cobc lineage corpus engine (meta court).
+LIN = [
+ ("NEG.LINEAGE20M.NOT_FULL_GNUCOBOL_PARITY", "full GnuCOBOL parity claimed from the corpus", "the corpus reveals the oracle's observed behavioral shape + files divergences; it is not a parity proof", "treating a green corpus as full parity"),
+ ("NEG.LINEAGE20M.NOT_STANDARD_CONFORMANCE", "ISO/standard conformance claimed", "the witness is GnuCOBOL 3.2.0 under one profile, not a standard", "claiming standard conformance"),
+ ("NEG.LINEAGE20M.NOT_ALL_DIALECTS", "all-dialect coverage claimed", "default + a directive variant subset only", "assuming all dialects exercised"),
+ ("NEG.LINEAGE20M.NOT_PUBLIC_CORPUS_PARITY", "public-corpus execution parity claimed", "public corpora are shape-mined Level-A only; nothing fetched/run for parity", "claiming public-repo parity"),
+ ("NEG.LINEAGE20M.NOT_BUSINESS_CORRECTNESS", "business correctness claimed", "byte/record truth only; never posting/accounting/business truth", "trusting a decoded value as business-correct"),
+ ("NEG.LINEAGE20M.NOT_COMPILER_REPLACEMENT", "the engine treated as a compiler/runtime replacement", "it drives the real cobc oracle; it replaces nothing", "running programs through the engine instead of cobc"),
+ ("NEG.LINEAGE20M.NOT_AUTO_PROFILE_DETECTION", "auto-detection of a binary's build profile claimed", "profiles are declared (BUILD.PROFILE.1); variants are applied, not inferred", "guessing a build profile from bytes"),
+ ("NEG.LINEAGE20M.NOT_RANDOM_COMPLETENESS", "random-fuzz completeness claimed", "coverage is structured + capped + dropped-bucket-logged, not exhaustive", "assuming 20M random covers everything"),
+ ("NEG.LINEAGE20M.FULL_20M_NOT_YET_SEALED", "the full 20M run claimed as complete", "the engine + a 200K pilot are sealed; the full 20M is launched detached (GNURUST.LINEAGE.CORPUS.20M.1)", "claiming 20M witnesses already run"),
+ ("NEG.LINEAGE20M.NEGZERO_NOT_FIXED", "the VALUE negative-zero divergence claimed as fixed", "it is shrunk + filed as the GNURUST.VALUE.NEGZERO.EDGE.1 candidate; a blanket fix was reverted (shape-sensitive)", "patching value_image before the edge court is oracle-characterized"),
+ ("NEG.LINEAGE20M.FAMILIES_NOT_ALL_EMITTING", "all 15 families claimed as generating", "the v0 engine emits storage + directive; the other 13 are logged dropped buckets", "claiming families that do not yet emit"),
+]
+for (i, s2, g, r) in LIN:
+    seen[i] = {"id": i, "surface": s2, "status": "not_admitted_meta", "guard": g,
+               "risk_if_guessed": r, "owning_future_campaign": None, "evidence": ["GNURUST.LINEAGE.CORPUS.20M.0"]}
+
 # GNURUST.PERFORM.SLICE.1 — PERFORM execution slice.
 PFM = [
  ("NEG.PERFORM_SLICE.NO_SIGNED_PACKED_COUNTERS", "signed/packed/binary counters claimed", "unsigned 9(n) DISPLAY counters only", "a COMP-3 counter"),

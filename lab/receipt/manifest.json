@@ -674,6 +674,33 @@
         "the RETURNING phrase",
         "all dialects"
       ]
+    },
+    "GNURUST.LINEAGE.CORPUS.20M.0": {
+      "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
+      "sweep": "lineage_engine_sweep.sh",
+      "byte_domain": "meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn)",
+      "non_claims": [
+        "full GnuCOBOL parity / standard conformance",
+        "all dialects / public-corpus execution parity",
+        "business correctness / compiler replacement",
+        "automatic build-profile detection",
+        "the full 20M run (engine + 200K pilot sealed; full 20M detached as .20M.1)",
+        "the negative-zero finding being fixed (filed as GNURUST.VALUE.NEGZERO.EDGE.1 candidate)",
+        "families not yet emitting (v0 emits storage + directive of 15 planned)"
+      ]
+    },
+    "GNURUST.LINEAGE.CORPUS.20M.SMOKE": {
+      "court": "200K real-cobc COBOL-witness lineage burn (pilot)",
+      "sweep": "lineage_corpus_sweep.sh",
+      "byte_domain": "200K real-cobc witnesses: storage differential + directive variant; gate=Merkle+replay+isolation+findings",
+      "non_claims": [
+        "the full 20M run (200K pilot; full 20M is .20M.1 detached)",
+        "full parity / conformance",
+        "all dialects / public-corpus parity",
+        "business correctness",
+        "the negative-zero finding being fixed",
+        "families not yet emitting (storage + directive only)"
+      ]
     }
   }
 }

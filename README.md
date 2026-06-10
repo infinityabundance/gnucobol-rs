@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-94-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-94-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-96-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-96-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -153,6 +153,8 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | 🔒 court | name | verdict | casefile |
 |---|---|:---:|---|
 | `DIALECT.PROFILE.1` | declared GnuCOBOL witness profile | ✅ pass | [`reports/casefiles/DIALECT.PROFILE.1/`](reports/casefiles/DIALECT.PROFILE.1/) |
+| `GNURUST.LINEAGE.CORPUS.20M.0` | deterministic COBOL lineage corpus ENGINE (schema/Merkle/replay/isolation/findings) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/) |
+| `GNURUST.LINEAGE.CORPUS.20M.SMOKE` | 200K real-cobc COBOL-witness lineage burn (pilot) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.SMOKE/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.SMOKE/) |
 | `GNURUST.REMAINDER.1` | DIVIDE REMAINDER receiving-field bytes | ✅ pass | [`reports/casefiles/GNURUST.REMAINDER.1/`](reports/casefiles/GNURUST.REMAINDER.1/) |
 | `GNURUST.COVERAGE.1` | forensic coverage map of the GnuCOBOL semantic surface | ✅ pass | [`reports/casefiles/GNURUST.COVERAGE.1/`](reports/casefiles/GNURUST.COVERAGE.1/) |
 | `GNURUST.FILE.SEQUENTIAL.1` | sequential file READ record bytes + file status | ✅ pass | [`reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/`](reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/) |

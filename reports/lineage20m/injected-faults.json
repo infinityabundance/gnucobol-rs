@@ -1,0 +1,12 @@
+{
+  "schema": "gnurust-lineage20m-injected-faults-v1",
+  "court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+  "manifest_mutation_forces_red": true,
+  "build_profile_mutation_forces_red": true,
+  "receipt_tamper_forces_red": true,
+  "finding_or_refusal_removed_forces_red": true,
+  "baseline_green": true,
+  "restored_green": true,
+  "passed": 4,
+  "total": 4
+}

@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **32**  ·  sealed ✅ **17**  ·  observed 🟡 10  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **33**  ·  sealed ✅ **17**  ·  observed 🟡 11  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **17/32**
+- sealed fraction (data-representation spine): **17/33**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -24,6 +24,7 @@
 | `dialect-options` | compiler dialect options | `config.c` | ✅ sealed | DIALECT.PROFILE.1 |
 | `dialect-runtime` | compiler dialect options | `config.c, default.conf, move.c` | 🟡 observed | GNURUST.DIALECT.RUNTIME.ATLAS.1 |
 | `directive-variance` | compiler dialect options | `config.c, move.c` | 🟡 observed | GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 |
+| `lineage-corpus` | meta/differential | `move.c, typeck.c` | 🟡 observed | GNURUST.LINEAGE.CORPUS.20M.0, GNURUST.LINEAGE.CORPUS.20M.SMOKE |
 | `declaratives-use` | runtime exceptions | `typeck.c, fileio.c` | 🟡 observed | GNURUST.DECLARATIVES.ATLAS.1 |
 | `size-error` | runtime exceptions | `numeric.c` | ✅ sealed | SIZE.ERROR.ATLAS.1, GNURUST.SIZE.ERROR.1 |
 | `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1, GNURUST.FILE.REWRITE.1 |

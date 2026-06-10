@@ -15,7 +15,7 @@
       "path": "STATUS.md",
       "kind": "generated_doc",
       "present": true,
-      "sha256": "b9a9c4cdc96ca2b61095f821d2dd24f044243e440f90adbdbbc252b1007dad57"
+      "sha256": "0b6db94b846c5db8523356d61adcd7a93dbec0288dfcfad0f495ae0df2f4861c"
     },
     {
       "id": "changelog",
@@ -29,21 +29,21 @@
       "path": "reports/claim-ladder.json",
       "kind": "machine_spine",
       "present": true,
-      "sha256": "bd7d3a9528b035b15d8c279964b4ee7510456273aa4703779feb9094e2f4a980"
+      "sha256": "82b4b03be5115506f9e874c1124ceab9278432ee496db9de8a0fe60b9f93d929"
     },
     {
       "id": "negative_capabilities",
       "path": "reports/negative-capabilities.json",
       "kind": "refusal_registry",
       "present": true,
-      "sha256": "eb1051ca26ec67ff79bf961f27d12585babf3074ac512654c1d52db22cebd3c3"
+      "sha256": "595d1b45c4d44587b6aa863adb0af27acf4c0c45b1046ff7cefee9d9bcde7eb3"
     },
     {
       "id": "dsse_verification",
       "path": "reports/signing/verification-report.json",
       "kind": "attestation_report",
       "present": true,
-      "sha256": "b01669873bd837ed18ac3a5de44fa5a221cd331921bf6a917f948bbdd03a0452"
+      "sha256": "1af8b4e7be33f46ef35588a7b1a7b96d3a42be2e45d93096cc93b0d053cde5a8"
     },
     {
       "id": "size_error_atlas",
@@ -70,7 +70,7 @@
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true,
-      "count": 94,
+      "count": 96,
       "casefiles": [
         {
           "court": "DIALECT.PROFILE.1",
@@ -404,6 +404,20 @@
         {
           "court": "GNURUST.INTRINSIC.ORD-CHAR.1",
           "casefile_sha256": "8d3860ac840e675f6e0cb9ab341e1f53331594afd396541638e3032382049246",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.LINEAGE.CORPUS.20M.0",
+          "casefile_sha256": "1e8e99fd8344f504e22bbd805352eec1a777109611cc378c86881dd0382481ce",
+          "sarif": true,
+          "intoto": true,
+          "dsse": true
+        },
+        {
+          "court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+          "casefile_sha256": "6b633f4e2fd962387f735dcc30f41ee0bda6b10e616a39aaa5fbcdaf89a6e1db",
           "sarif": true,
           "intoto": true,
           "dsse": true

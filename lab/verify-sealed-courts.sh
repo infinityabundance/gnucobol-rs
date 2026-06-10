@@ -68,6 +68,8 @@ run_sweep "GNURUST.DIALECT.RUNTIME.ATLAS.1 (observed)" dialect_runtime_atlas_swe
 run_sweep "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 (observed)" directive_variance_atlas_sweep.sh
 run_sweep "GNURUST.DECLARATIVES.ATLAS.1 (observed)" declaratives_atlas_sweep.sh
 run_sweep "GNURUST.CALL.LAYOUT.ATLAS.1 (observed)" call_layout_atlas_sweep.sh
+run_sweep "GNURUST.LINEAGE.CORPUS.20M.0 (engine)" lineage_engine_sweep.sh
+run_sweep "GNURUST.LINEAGE.CORPUS.20M.SMOKE (burn)" lineage_corpus_sweep.sh
 run_sweep "GNURUST.IF.EVALUATE.SLICE.1" if_eval_sweep.sh
 run_sweep "GNURUST.IF.NUMERIC.SLICE.1" if_numeric_sweep.sh
 run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh

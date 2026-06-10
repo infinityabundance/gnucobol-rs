@@ -3,14 +3,14 @@
   "court": "GNURUST.COVERAGE.1",
   "doctrine": "Forensic port: every GnuCOBOL semantic surface is bound to admitted source + a court/refusal/future campaign with a status. This is the honest map of the port -- the data-representation spine is sealed; file I/O, intrinsics, and most of Procedure Division are not.",
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
-  "surface_count": 32,
+  "surface_count": 33,
   "status_counts": {
     "sealed": 17,
-    "observed": 10,
+    "observed": 11,
     "negative": 5,
     "missing": 0
   },
-  "sealed_fraction": "17/32",
+  "sealed_fraction": "17/33",
   "honest_note": "sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.",
   "surfaces": [
     {
@@ -214,6 +214,22 @@
       ],
       "future_campaign": null,
       "risk_if_unported": "compiler directives shift the record bytes: -fbinary-size changes COMP layout, -fbinary-byteorder flips endianness, -fbinary-truncate changes MOVE results; a correct decode needs the producer's build profile (BUILD.PROFILE.1)"
+    },
+    {
+      "surface": "lineage-corpus",
+      "category": "meta/differential",
+      "source_modules": [
+        "libcob/move.c",
+        "cobc/typeck.c"
+      ],
+      "source_modules_present": true,
+      "status": "observed",
+      "courts": [
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "deterministic 20M real-cobc COBOL-witness lineage corpus: generate->compile/run->three-way differential->shrink->classify->replay->Merkle; reveals the oracle's observed behavioral topology, not parity"
     },
     {
       "surface": "declaratives-use",

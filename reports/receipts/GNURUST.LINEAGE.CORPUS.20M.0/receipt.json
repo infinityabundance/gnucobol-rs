@@ -1,0 +1,34 @@
+{
+  "schema": "gnurust-replay-receipt-v1",
+  "campaign": "GNURUST.LINEAGE.CORPUS.20M.0",
+  "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "crate_version": "0.7.26",
+  "oracle": {
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  },
+  "command": {
+    "replay": "bash lab/oracle/lineage_engine_sweep.sh"
+  },
+  "byte_domain": "meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn)",
+  "results": {
+    "sweep": "PASS=10 FAIL=0"
+  },
+  "non_claims": [
+    "full GnuCOBOL parity / standard conformance",
+    "all dialects / public-corpus execution parity",
+    "business correctness / compiler replacement",
+    "automatic build-profile detection",
+    "the full 20M run (engine + 200K pilot sealed; full 20M detached as .20M.1)",
+    "the negative-zero finding being fixed (filed as GNURUST.VALUE.NEGZERO.EDGE.1 candidate)",
+    "families not yet emitting (v0 emits storage + directive of 15 planned)"
+  ],
+  "verdict": "pass",
+  "receipt_status": "current",
+  "superseded_by": null,
+  "current_authority": "STATUS.md"
+}

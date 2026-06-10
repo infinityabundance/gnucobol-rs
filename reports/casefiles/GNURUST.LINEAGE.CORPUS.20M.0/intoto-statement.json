@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/casefile.json",
+      "digest": {
+        "sha256": "1e8e99fd8344f504e22bbd805352eec1a777109611cc378c86881dd0382481ce"
+      }
+    }
+  ],
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "predicate": {
+    "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
+    "kind": "court-casefile",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.26",
+    "verdict": "pass",
+    "replay": {
+      "command": "bash lab/oracle/lineage_engine_sweep.sh",
+      "exit_code": 0
+    },
+    "materials": {
+      "claim_ladder_entry_sha256": "262f8f94e3e886aa1eca760fe94ed49615aeb4f1f699c9e5c96c8d4f7f1565e0",
+      "receipt_sha256": "f1694f886a8b1cec489f8ed9bcca5497fbf0a3d58ca5aecbff14306f5144e12a"
+    },
+    "positive_claim_count": 3,
+    "negative_claim_count": 10
+  }
+}

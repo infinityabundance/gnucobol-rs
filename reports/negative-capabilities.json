@@ -9,7 +9,7 @@
     "business truth"
   ],
   "doctrine": "Negative capability is the trust surface. Banking COBOL data is not merely decoded; it is reconciled under declared control boundaries. This stack preserves the difference between bytes, record truth, posting truth, accounting truth, extraction truth, and business truth -- and refuses to cross those boundaries (NEG.ACCOUNTING.*/NEG.DB2.*/NEG.DATE.*/NEG.POSTING.*/...) unless an explicit declared reconciliation profile admits it. Entries are court non-claims, machine-detectable doc-staleness (NEG.DOC.*), or banking operating-semantics refusals registered before their courts exist.",
-  "count": 853,
+  "count": 874,
   "negative_capabilities": [
     {
       "id": "NEG.38-DIGIT-BIGNUM",
@@ -457,7 +457,9 @@
         "GNURUST.SORT.MERGE.ATLAS.1",
         "GNURUST.RELATIVE.FILE.ATLAS.1",
         "GNURUST.DECLARATIVES.ATLAS.1",
-        "GNURUST.CALL.LAYOUT.ATLAS.1"
+        "GNURUST.CALL.LAYOUT.ATLAS.1",
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
       ]
     },
     {
@@ -535,6 +537,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.PRIVACY.REDACTION.1"
+      ]
+    },
+    {
+      "id": "NEG.ANY-BURN-RESULT-THE-200K-BURN-IS-GNURUST",
+      "surface": "any BURN result (the 200K burn is GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
       ]
     },
     {
@@ -689,6 +702,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.AUTOMATIC-BUILD-PROFILE-DETECTION",
+      "surface": "automatic build-profile detection",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
       ]
     },
     {
@@ -1123,7 +1147,9 @@
         "GNURUST.19",
         "KOBOLD.CORPUS.2",
         "GNURUST.REMAINDER.1",
-        "KOBOLD.PILOT.RUN.1"
+        "KOBOLD.PILOT.RUN.1",
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
       ]
     },
     {
@@ -1606,6 +1632,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.BUILD.PROFILE.1"
+      ]
+    },
+    {
+      "id": "NEG.COMPILER-REPLACEMENT",
+      "surface": "compiler replacement",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
       ]
     },
     {
@@ -3117,6 +3154,17 @@
       ]
     },
     {
+      "id": "NEG.FAMILIES-NOT-YET-EMITTING-STORAGE-DIRECT",
+      "surface": "families not yet emitting (storage + directive only in v0)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+      ]
+    },
+    {
       "id": "NEG.FFI.C_API_PARITY",
       "surface": "COBOL<->C FFI / API-boundary parity claimed (the SuperBOL/translator lane)",
       "status": "not_admitted_fail_closed",
@@ -3711,6 +3759,18 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.FILE.STATUS.1"
+      ]
+    },
+    {
+      "id": "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
+      "surface": "full GnuCOBOL parity / standard conformance",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
       ]
     },
     {
@@ -5007,6 +5067,127 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.FILE.1"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.FAMILIES_NOT_ALL_EMITTING",
+      "surface": "all 15 families claimed as generating",
+      "status": "not_admitted_meta",
+      "guard": "the v0 engine emits storage + directive; the other 13 are logged dropped buckets",
+      "risk_if_guessed": "claiming families that do not yet emit",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.FULL_20M_NOT_YET_SEALED",
+      "surface": "the full 20M run claimed as complete",
+      "status": "not_admitted_meta",
+      "guard": "the engine + a 200K pilot are sealed; the full 20M is launched detached (GNURUST.LINEAGE.CORPUS.20M.1)",
+      "risk_if_guessed": "claiming 20M witnesses already run",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NEGZERO_NOT_FIXED",
+      "surface": "the VALUE negative-zero divergence claimed as fixed",
+      "status": "not_admitted_meta",
+      "guard": "it is shrunk + filed as the GNURUST.VALUE.NEGZERO.EDGE.1 candidate; a blanket fix was reverted (shape-sensitive)",
+      "risk_if_guessed": "patching value_image before the edge court is oracle-characterized",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_ALL_DIALECTS",
+      "surface": "all-dialect coverage claimed",
+      "status": "not_admitted_meta",
+      "guard": "default + a directive variant subset only",
+      "risk_if_guessed": "assuming all dialects exercised",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_AUTO_PROFILE_DETECTION",
+      "surface": "auto-detection of a binary's build profile claimed",
+      "status": "not_admitted_meta",
+      "guard": "profiles are declared (BUILD.PROFILE.1); variants are applied, not inferred",
+      "risk_if_guessed": "guessing a build profile from bytes",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_BUSINESS_CORRECTNESS",
+      "surface": "business correctness claimed",
+      "status": "not_admitted_meta",
+      "guard": "byte/record truth only; never posting/accounting/business truth",
+      "risk_if_guessed": "trusting a decoded value as business-correct",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_COMPILER_REPLACEMENT",
+      "surface": "the engine treated as a compiler/runtime replacement",
+      "status": "not_admitted_meta",
+      "guard": "it drives the real cobc oracle; it replaces nothing",
+      "risk_if_guessed": "running programs through the engine instead of cobc",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_FULL_GNUCOBOL_PARITY",
+      "surface": "full GnuCOBOL parity claimed from the corpus",
+      "status": "not_admitted_meta",
+      "guard": "the corpus reveals the oracle's observed behavioral shape + files divergences; it is not a parity proof",
+      "risk_if_guessed": "treating a green corpus as full parity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_PUBLIC_CORPUS_PARITY",
+      "surface": "public-corpus execution parity claimed",
+      "status": "not_admitted_meta",
+      "guard": "public corpora are shape-mined Level-A only; nothing fetched/run for parity",
+      "risk_if_guessed": "claiming public-repo parity",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_RANDOM_COMPLETENESS",
+      "surface": "random-fuzz completeness claimed",
+      "status": "not_admitted_meta",
+      "guard": "coverage is structured + capped + dropped-bucket-logged, not exhaustive",
+      "risk_if_guessed": "assuming 20M random covers everything",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.LINEAGE20M.NOT_STANDARD_CONFORMANCE",
+      "surface": "ISO/standard conformance claimed",
+      "status": "not_admitted_meta",
+      "guard": "the witness is GnuCOBOL 3.2.0 under one profile, not a standard",
+      "risk_if_guessed": "claiming standard conformance",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
       ]
     },
     {
@@ -6843,6 +7024,18 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.RECON.2"
+      ]
+    },
+    {
+      "id": "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
+      "surface": "public-corpus execution parity",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
       ]
     },
     {
@@ -8911,6 +9104,40 @@
       ]
     },
     {
+      "id": "NEG.THE-FAMILIES-NOT-YET-EMITTING-V0-EMITS-S",
+      "surface": "the families not yet emitting (v0 emits storage + directive of 15 planned, the rest logged as dropped buckets)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0"
+      ]
+    },
+    {
+      "id": "NEG.THE-FULL-20M-IS-GNURUST-LINEAGE-CORPUS-2",
+      "surface": "the full 20M is GNURUST.LINEAGE.CORPUS.20M.1, launched detached)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.0",
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+      ]
+    },
+    {
+      "id": "NEG.THE-FULL-20M-RUN-THIS-IS-A-200K-PILOT",
+      "surface": "the full 20M run (this is a 200K PILOT",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+      ]
+    },
+    {
       "id": "NEG.THE-HOST-VALUE-BEING-THE-DATABASE-VALUE-",
       "surface": "the host value being the database value without its indicator",
       "status": "not_admitted_fail_closed",
@@ -8919,6 +9146,17 @@
       "owning_future_campaign": null,
       "evidence": [
         "KOBOLD.DB2HOST.1"
+      ]
+    },
+    {
+      "id": "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-FI",
+      "surface": "the negative-zero finding being FIXED (filed as a candidate edge court, a blanket fix was reverted as shape-sensitive)",
+      "status": "not_admitted_fail_closed",
+      "guard": "fails closed / outside the sealed subset",
+      "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
+      "owning_future_campaign": null,
+      "evidence": [
+        "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
       ]
     },
     {

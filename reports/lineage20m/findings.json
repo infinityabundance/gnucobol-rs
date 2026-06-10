@@ -1,0 +1,29 @@
+{
+  "VALUE.NEGATIVE_ZERO.COMP3.INTEGER_CANONICALIZES_POSITIVE": {
+    "action": "candidate_court_or_value_edge_regression",
+    "affected_surface": "VALUE initial image",
+    "candidate_court": "GNURUST.VALUE.NEGZERO.EDGE.1",
+    "classification_after_triage": "confirmed_harvested",
+    "classification_before_triage": "default_mismatch",
+    "count": 56,
+    "court_target": "GNURUST.8/2/14",
+    "id": "VALUE.NEGATIVE_ZERO.COMP3.INTEGER_CANONICALIZES_POSITIVE",
+    "minimal_spec": [
+      "05:F:S9(1):C:N-0"
+    ],
+    "not_a_fix_yet": true,
+    "oracle_hex": "0c",
+    "oracle_profile": "GNURUST.BUILD.PROFILE.1",
+    "root_cause": "value-negzero|S9(1)|comp3|N-0",
+    "rust_hex": "0d",
+    "schema": "gnurust-lineage20m-finding-v1",
+    "shrunk_reproducer": "reports/lineage20m/findings/VALUE.NEGATIVE_ZERO.COMP3.INTEGER_CANONICALIZES_POSITIVE/minimal.cob",
+    "sibling_observations": [
+      "VALUE.NEGATIVE_ZERO.COMP3.INTEGER_CANONICALIZES_POSITIVE",
+      "VALUE.NEGATIVE_ZERO.COMP3.SCALED_PRESERVES_NEGATIVE",
+      "VALUE.NEGATIVE_ZERO.DISPLAY.PRESERVES_NEGATIVE_OVERPUNCH"
+    ],
+    "source": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+    "status": "confirmed_harvested"
+  }
+}
