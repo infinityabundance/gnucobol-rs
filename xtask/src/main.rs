@@ -45,6 +45,9 @@ fn main() {
         "sweep-ordchar" => sweeps::ordchar(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
         "atlas-file-status" => atlas::file_status(&root),
         "atlas-intrinsic" => atlas::intrinsic(&root),
+        "atlas-indexed" => atlas::indexed_file(&root),
+        "atlas-relative" => atlas::relative_file(&root),
+        "atlas-sort-merge" => atlas::sort_merge(&root),
         "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");

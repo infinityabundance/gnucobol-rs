@@ -57,3 +57,38 @@ pub fn intrinsic(root: &str) -> i32 {
     for f in &fails { println!("  MISMATCH {f}"); }
     if fails.is_empty() { 0 } else { 1 }
 }
+
+const INDEXED_ATLAS: &str = include_str!("data/indexed-file-atlas.json");
+const RELATIVE_ATLAS: &str = include_str!("data/relative-file-atlas.json");
+const SORT_MERGE_ATLAS: &str = include_str!("data/sort-merge-atlas.json");
+
+fn kv_compare(root: &str, atlas_rel: &str, embedded: &str, expect: &[(&str, &str)]) -> i32 {
+    let kvm = kv(&std::env::var("OUT").unwrap_or_default());
+    let mut fails = Vec::new();
+    for (k, e) in expect { if kvm.get(*k).map(String::as_str) != Some(e) { fails.push(format!("({k}, {e}, {:?})", kvm.get(*k))); } }
+    writeatlas(root, atlas_rel, embedded);
+    println!("PASS={} FAIL={}", expect.len() - fails.len(), fails.len());
+    for f in &fails { println!("  MISMATCH {f}"); }
+    if fails.is_empty() { 0 } else { 1 }
+}
+
+pub fn indexed_file(root: &str) -> i32 {
+    kv_compare(root, "reports/indexed-file-atlas.json", INDEXED_ATLAS,
+        &[("dup","22"),("read_hit","00/beta"),("read_miss","23"),("start","00"),("n1","AAA"),("n2","BBB"),("n3","CCC"),("del","00"),("read_del","23")])
+}
+pub fn relative_file(root: &str) -> i32 {
+    kv_compare(root, "reports/relative-file-atlas.json", RELATIVE_ATLAS, &[("r3","00/three"),("r2","23"),("r1","00/one")])
+}
+pub fn sort_merge(root: &str) -> i32 {
+    let out = std::env::var("OUT").unwrap_or_default();
+    let take3 = |pfx: &str| -> Vec<String> { out.lines().filter(|l| l.starts_with(pfx)).filter_map(|l| l.split_once('=').map(|(_, v)| v.chars().take(3).collect())).collect() };
+    let asc = take3("asc=");
+    let desc = take3("desc=");
+    let mut fails = Vec::new();
+    if asc != ["010","020","050","099"] { fails.push(format!("(ascending, {asc:?})")); }
+    if desc != ["099","050","020","010"] { fails.push(format!("(descending, {desc:?})")); }
+    writeatlas(root, "reports/sort-merge-atlas.json", SORT_MERGE_ATLAS);
+    println!("PASS={} FAIL={}", 2 - fails.len(), fails.len());
+    for f in &fails { println!("  MISMATCH {f}"); }
+    if fails.is_empty() { 0 } else { 1 }
+}

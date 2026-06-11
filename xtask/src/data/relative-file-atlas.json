@@ -1,0 +1,32 @@
+{
+  "schema": "gnurust-relative-file-atlas-v1",
+  "court": "GNURUST.RELATIVE.FILE.ATLAS.1",
+  "dialect": "gnucobol-3.2.0-default",
+  "oracle": "cobc RELATIVE file I/O (libcob/fileio.c)",
+  "doctrine": "OBSERVED map of the RELATIVE-file surface. gnucobol-rs implements no relative file I/O -- the on-disk slotted format is backend-specific. This records the random-access-by-record-number semantics + status.",
+  "observations": [
+    {
+      "name": "RELATIVE KEY random access",
+      "observed": "READ/WRITE address a record by its 1-based RELATIVE record number (slot); R3 reads the record written at slot 3",
+      "status": "observed-only"
+    },
+    {
+      "name": "empty slot",
+      "observed": "reading an unwritten slot returns status 23 (record not found)",
+      "status": "observed-only"
+    },
+    {
+      "name": "position by number",
+      "observed": "records sit at fixed positions by relative number (NOT key-sorted like indexed)",
+      "status": "observed-only"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.RELATIVE_FILE.NO_FILE_EXECUTION",
+    "NEG.RELATIVE_FILE.NO_ON_DISK_FORMAT",
+    "NEG.RELATIVE_FILE.NO_SEQUENTIAL_DYNAMIC_MODES",
+    "NEG.RELATIVE_FILE.NO_REWRITE_DELETE_START",
+    "NEG.RELATIVE_FILE.NO_INDEXED_FILES",
+    "NEG.RELATIVE_FILE.NO_ALL_DIALECTS"
+  ]
+}
