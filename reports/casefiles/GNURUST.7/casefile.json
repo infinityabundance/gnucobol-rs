@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.7",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.30",
+  "crate_version": "0.7.31",
   "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total",
   "hash_chain": {
-    "inputs_sha256": "d1b2cc189ed58384098d5ba3bf0521324218445363f4c397e73140ab995635a3"
+    "inputs_sha256": "a178de8e0eea2007153f8edbcd8dc4bfc6635e74fe5d17d1d7eddaf45edd04ca"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0313c6579ee7bc8fc7c70dc25e43145eb9ea4c2dbb51bea457b7d4a8696b2e96",
-    "receipt_sha256": "80be055fd91315ff72a0754fc04b8cf2b3ea16d6075e4ca6264e8541b26aa353"
+    "receipt_sha256": "e25e84a1b7c682543a19ae9e77965da0b4382adc9942eb0251a07fd20624f1bf"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

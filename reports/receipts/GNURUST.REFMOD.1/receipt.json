@@ -1,0 +1,31 @@
+{
+  "byte_domain": "field bytes + (start,length) -> substring / overwritten field",
+  "campaign": "GNURUST.REFMOD.1",
+  "command": {
+    "replay": "bash lab/oracle/refmod_sweep.sh"
+  },
+  "court": "reference modification field(start:length)",
+  "crate_version": "0.7.31",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "out-of-bounds refmod (fail-closed)",
+    "subscripted/table refmod",
+    "numeric-edited/national operands",
+    "refmod inside arithmetic"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=16 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

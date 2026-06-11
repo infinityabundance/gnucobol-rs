@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "18/34",
+  "sealed_fraction": "19/35",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 18
+    "sealed": 19
   },
-  "surface_count": 34,
+  "surface_count": 35,
   "surfaces": [
     {
       "category": "data representation",
@@ -532,6 +532,21 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "class-conditions"
+    },
+    {
+      "category": "data handling",
+      "courts": [
+        "GNURUST.REFMOD.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "an out-of-bounds substring reads or corrupts a neighbouring field",
+      "source_modules": [
+        "libcob/move.c",
+        "cobc/typeck.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "reference-modification"
     }
   ]
 }

@@ -478,5 +478,19 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "a wrong IS NUMERIC/ALPHABETIC mis-validates input data"
+ },
+ {
+  "surface": "reference-modification",
+  "category": "data handling",
+  "source_modules": [
+   "libcob/move.c",
+   "cobc/typeck.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.REFMOD.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "an out-of-bounds substring reads or corrupts a neighbouring field"
  }
 ]

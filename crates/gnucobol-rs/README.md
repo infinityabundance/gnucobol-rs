@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-101-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-101-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-102-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-102-blueviolet)
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -35,6 +35,7 @@ compatibility court.
 | `GNURUST.FILE.STATUS.1` | observed FILE STATUS atlas | ✅ pass | `reports/casefiles/GNURUST.FILE.STATUS.1/` |
 | `GNURUST.INITIALIZE.1` | INITIALIZE receiver byte effects | ✅ pass | `reports/casefiles/GNURUST.INITIALIZE.1/` |
 | `GNURUST.INSPECT.1` | INSPECT byte effects + tally bytes | ✅ pass | `reports/casefiles/GNURUST.INSPECT.1/` |
+| `GNURUST.REFMOD.1` | reference modification (substring) | ✅ pass | `reports/casefiles/GNURUST.REFMOD.1/` |
 | `GNURUST.STRING.UNSTRING.1` | STRING/UNSTRING byte effects | ✅ pass | `reports/casefiles/GNURUST.STRING.UNSTRING.1/` |
 | `GNURUST.INTRINSIC.ATLAS.1` | observed intrinsic-function atlas | ✅ pass | `reports/casefiles/GNURUST.INTRINSIC.ATLAS.1/` |
 | `GNURUST.INTRINSIC.LENGTH.1` | FUNCTION LENGTH storage byte length | ✅ pass | `reports/casefiles/GNURUST.INTRINSIC.LENGTH.1/` |

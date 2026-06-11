@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.SORT.MERGE.ATLAS.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.30",
+    "crate_version": "0.7.31",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "7dfcaa0e76b5c17c99e32fd0e5cfdcdc1f928d6ad2cfee8327078e9ad643be89",
-      "receipt_sha256": "417a744521270f8b9b27b9dc1f40c01563c1cbb14a225fe889a351684b1c4657"
+      "receipt_sha256": "bd8cf57f94d43a7b77caca287125994e5c3f652c056018fe8891ea1a2bb5965c"
     },
     "negative_claim_count": 8,
     "positive_claim_count": 2,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "6a29ddcff603f2d14ee6bdaf5195b934ddcb4fd6c132a5070227fc349d29bcc3"
+        "sha256": "14f858bd8e7a5524e6abba5a190cdf37426bdb3bc53ba1f7167c50bf324d8069"
       },
       "name": "reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/casefile.json"
     }

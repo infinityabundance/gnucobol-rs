@@ -174,3 +174,9 @@ name = "class"
 path = "fuzz_targets/class.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "refmod"
+path = "fuzz_targets/refmod.rs"
+test = false
+doc = false

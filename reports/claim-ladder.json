@@ -895,6 +895,20 @@
       "damage_if_overclaimed": "a wrong overlap/leading/region/case assumption in an INSPECT-based cleanup or validation transform silently mis-counts or mis-mutates a field"
     },
     {
+      "id": "GNURUST.REFMOD.1",
+      "name": "reference modification (substring)",
+      "proven": "field(start:length) substring extraction, field(start:) to-end, and the receiver MOVE src TO field(start:length) (1-based start, alphanumeric overwrite) matching cobc in bounds",
+      "byte_domain": "field bytes + (start,length) -> substring bytes / overwritten field",
+      "oracle": "cobc DISPLAY field(start:length) / MOVE TO field(start:length)",
+      "fixtures": "refmod sweep 16/0 + fuzz",
+      "sealed_version": "0.7.31",
+      "not_proven": "out-of-bounds refmod (fail-closed by design, NOT cobc's flag-dependent read-past); subscripted/table refmod; numeric-edited or national operands; refmod inside arithmetic",
+      "breaks_claim": "out-of-bounds read/write; table subscripts; national/UTF-8",
+      "readiness": 4,
+      "lie_prevented": "'refmod is just a slice cobc and we agree on everywhere' -- out of bounds we FAIL CLOSED rather than read adjacent storage like cobc may",
+      "damage_if_overclaimed": "an out-of-bounds substring silently reads or corrupts neighbouring fields"
+    },
+    {
       "id": "GNURUST.STRING.UNSTRING.1",
       "name": "STRING/UNSTRING byte effects",
       "proven": "the receiver bytes + pointer/count/delimiter/tally/overflow of narrow STRING and UNSTRING statements, matching cobc/libcob byte-for-byte: STRING concatenates sources left-to-right at a 1-based POINTER (DELIMITED BY SIZE = whole operand, DELIMITED BY lit = operand up to the first lit), PRESERVES the unwritten target tail (no space-fill), keeps partial writes on ON OVERFLOW; UNSTRING splits the source by a delimiter into fields where COUNT IN is the SOURCE-FIELD LENGTH BEFORE TRUNCATION, DELIMITER IN is the ending delimiter (SPACE when ended at source exhaustion), an empty field between adjacent delimiters has count 0, TALLYING IN counts filled fields, the POINTER is 1-based, and leftover source after the last field is overflow",

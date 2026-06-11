@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.CALL.LAYOUT.ATLAS.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.30",
+    "crate_version": "0.7.31",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "7e8d7fb0cd27994d959d2ed3ddef173cb8b96b7112cc83e5673d89790e19d214",
-      "receipt_sha256": "5f0e43039a2c6548a59f51bf02818ae37d3352718da315d13dd31646100717ae"
+      "receipt_sha256": "55b5c9c64f87121ba14d62ea44a0b539d7a827b6cdf5f79138cc88e7f13b0e8c"
     },
     "negative_claim_count": 8,
     "positive_claim_count": 3,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "0631efb4a61c4892749ae4acdaa5da6f9c818d721afcdc7ac670674219079314"
+        "sha256": "050b786c3491eb34eaf384a67a5d818baf8c75264069e4286d0842853fb61909"
       },
       "name": "reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/casefile.json"
     }

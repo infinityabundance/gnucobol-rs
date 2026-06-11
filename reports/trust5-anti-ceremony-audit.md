@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 60  ·  **B** composed: 35  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
+- **A** hard (oracle/byte): 61  ·  **B** composed: 35  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
 
 ## Classification
 
@@ -69,6 +69,7 @@
 | `GNURUST.PROCEDURE.FLOW.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PUBLIC.CORPUS.1` | B | ✅ | ✅ | ✅ no |
 | `GNURUST.PUBLIC.GAP.1` | B | ✅ | ✅ | ✅ no |
+| `GNURUST.REFMOD.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.RELATIVE.FILE.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.REMAINDER.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.SEARCH.TABLE.1` | A | ✅ | ✅ | ✅ no |

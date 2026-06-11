@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.DECLARATIVES.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.30",
+  "crate_version": "0.7.31",
   "damage_if_overclaimed": "assuming a file error crashes (or is ignored) misreads the control flow of every batch program with declaratives; treating the atlas as an execution engine would run unsealed Procedure-Division control flow inside the handler",
   "hash_chain": {
-    "inputs_sha256": "005c29fa293d1ff8767634e4b44a68c6562581e930c8ba557552d93e6b679b62"
+    "inputs_sha256": "82b63d4ea3b16d0b449a877bcd374634354d570136aafa91763a3486bb5fbd2d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "86ea95f4dcacbcf7aaa405b77464fb73bcafd7fdf5c7602047ffdbb71055f875",
-    "receipt_sha256": "e3fcaf758facdf21082c4c13797ded06636e4fdb032aa2eef3c9f7f3770937a2"
+    "receipt_sha256": "bf860ae4081d7ea9c7be12b1ed016ea8344f13971914445aa5f7630b900b73c7"
   },
   "kind": "court-casefile",
   "lie_prevented": [

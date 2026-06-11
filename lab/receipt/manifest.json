@@ -757,6 +757,17 @@
         "national/UTF-8/DBCS classes",
         "locale collating sequence"
       ]
+    },
+    "GNURUST.REFMOD.1": {
+      "court": "reference modification field(start:length)",
+      "sweep": "refmod_sweep.sh",
+      "byte_domain": "field bytes + (start,length) -> substring / overwritten field",
+      "non_claims": [
+        "out-of-bounds refmod (fail-closed)",
+        "subscripted/table refmod",
+        "numeric-edited/national operands",
+        "refmod inside arithmetic"
+      ]
     }
   }
 }

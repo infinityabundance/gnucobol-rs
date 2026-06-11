@@ -1,0 +1,59 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "field bytes + (start,length) -> substring bytes / overwritten field"
+  ],
+  "case_id": "GNURUST.REFMOD.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.31",
+  "damage_if_overclaimed": "an out-of-bounds substring silently reads or corrupts neighbouring fields",
+  "hash_chain": {
+    "inputs_sha256": "21e9308edcb91e8a7af0dfca307ac7ae71fc01d16ab6b1fc866b3257c9c8923f"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "408bf9bfea8eefe8a3c95d86692ab960d8485c2f9aa78f8c7026f360bc961eb1",
+    "receipt_sha256": "a1d189f624c7720226238a73ac87a45531742d3bdddc6f50eeaf993e5b23e57d"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'refmod is just a slice cobc and we agree on everywhere' -- out of bounds we FAIL CLOSED rather than read adjacent storage like cobc may"
+  ],
+  "negative_capability_ids": [
+    "NEG.OUT-OF-BOUNDS-REFMOD-FAIL-CLOSED-BY-DESI",
+    "NEG.SUBSCRIPTED-TABLE-REFMOD",
+    "NEG.NUMERIC-EDITED-OR-NATIONAL-OPERANDS",
+    "NEG.REFMOD-INSIDE-ARITHMETIC"
+  ],
+  "negative_claims": [
+    "out-of-bounds refmod (fail-closed by design, NOT cobc's flag-dependent read-past)",
+    "subscripted/table refmod",
+    "numeric-edited or national operands",
+    "refmod inside arithmetic",
+    "lie prevented: 'refmod is just a slice cobc and we agree on everywhere' -- out of bounds we FAIL CLOSED rather than read adjacent storage like cobc may"
+  ],
+  "oracle": {
+    "detail": "cobc DISPLAY field(start:length) / MOVE TO field(start:length)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.REFMOD.1"
+  },
+  "positive_claims": [
+    "field(start:length) substring extraction, field(start:) to-end, and the receiver MOVE src TO field(start:length) (1-based start, alphanumeric overwrite) matching cobc in bounds"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/refmod_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 16,
+    "total": 16,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

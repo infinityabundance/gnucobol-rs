@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.PROCEDURE.FLOW.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 8/8 pass, 0 fail · crate `gnucobol-rs` 0.7.30
+**Verdict: PASS** · 8/8 pass, 0 fail · crate `gnucobol-rs` 0.7.31
 
 - **Oracle:** cobc Procedure Division control flow (cobc/typeck.c + codegen.c)
 - **Byte domain(s):** control-flow statement class -> observed behavior
