@@ -17,6 +17,7 @@ mod misc;
 mod lineage;
 mod release;
 mod sweeps;
+mod atlas;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -42,6 +43,8 @@ fn main() {
         "sweep-extract" => sweeps::extract(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or(""), args.get(4).map(String::as_str).unwrap_or("")),
         "sweep-remainder" => sweeps::remainder(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
         "sweep-ordchar" => sweeps::ordchar(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
+        "atlas-file-status" => atlas::file_status(&root),
+        "atlas-intrinsic" => atlas::intrinsic(&root),
         "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
