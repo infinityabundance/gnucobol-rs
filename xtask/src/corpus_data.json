@@ -1,0 +1,399 @@
+{
+ "corpora": [
+  {
+   "id": "gnucobol-testsuite",
+   "name": "GnuCOBOL upstream testsuite",
+   "url": "gnucobol (sourceforge) tests/testsuite.src",
+   "tier": 1,
+   "priority": 1,
+   "features": [
+    "sequential",
+    "line-sequential",
+    "file-status",
+    "reports",
+    "accept-display",
+    "intrinsics",
+    "linage",
+    "edge-cases"
+   ],
+   "note": "source-of-truth behavior mine; oracle-authoritative witnesses (run_file.at etc.)"
+  },
+  {
+   "id": "dsc-gnu-indexed",
+   "name": "dscobol/dsc-gnu-Indexed",
+   "url": "github.com/dscobol/dsc-gnu-Indexed",
+   "tier": 1,
+   "priority": 2,
+   "features": [
+    "indexed",
+    "sequential",
+    "copybooks",
+    "crud"
+   ],
+   "note": "indexed-file atlas seed (GNURUST.INDEXED.FILE.ATLAS.1)"
+  },
+  {
+   "id": "cobol-unit-test",
+   "name": "neopragma/cobol-unit-test",
+   "url": "github.com/neopragma/cobol-unit-test",
+   "tier": 1,
+   "priority": 3,
+   "features": [
+    "line-sequential",
+    "copybooks",
+    "string-unstring",
+    "search",
+    "call-linkage",
+    "table-redefines-occurs"
+   ],
+   "note": "UNSTRING + CALL extensions (C$TOUPPER/C$JUSTIFY) + SEARCH ALL + table REDEFINES/OCCURS witness"
+  },
+  {
+   "id": "gc-examples",
+   "name": "dinodev76/GC-Examples",
+   "url": "github.com/dinodev76/GC-Examples",
+   "tier": 1,
+   "priority": 4,
+   "features": [
+    "copybooks",
+    "sample-data",
+    "indexed",
+    "relative",
+    "rdw-variable-length"
+   ],
+   "note": "GnuCOBOL file formats; relative/indexed/RDW"
+  },
+  {
+   "id": "writ3it-examples",
+   "name": "writ3it/cobol-examples",
+   "url": "github.com/writ3it/cobol-examples",
+   "tier": 1,
+   "priority": 5,
+   "features": [
+    "line-sequential",
+    "indexed",
+    "dynamic-access",
+    "record-key"
+   ],
+   "note": "simple GnuCOBOL file/indexed workflows"
+  },
+  {
+   "id": "gnucobol-samples",
+   "name": "JohnDovey/GNUCobol-Samples",
+   "url": "github.com/JohnDovey/GNUCobol-Samples",
+   "tier": 1,
+   "priority": 6,
+   "features": [
+    "intrinsics",
+    "file-status",
+    "screen-section",
+    "copybooks"
+   ],
+   "note": "intrinsics / file-status / screen refusal witnesses"
+  },
+  {
+   "id": "dscobol-cobol-code",
+   "name": "dscobol/Cobol-Code",
+   "url": "github.com/dscobol/Cobol-Code",
+   "tier": 1,
+   "priority": 7,
+   "features": [
+    "sql-db2",
+    "indexed",
+    "internal-sort",
+    "copybooks",
+    "mixed-dialect"
+   ],
+   "note": "GnuCOBOL vs IBM Enterprise comparative corpus"
+  },
+  {
+   "id": "aws-carddemo",
+   "name": "AWS CardDemo",
+   "url": "github.com/aws-samples/aws-mainframe-modernization-carddemo",
+   "tier": 2,
+   "priority": 8,
+   "features": [
+    "jcl",
+    "sql-db2",
+    "mq",
+    "ims",
+    "sample-data",
+    "copybooks",
+    "reports",
+    "call-linkage"
+   ],
+   "note": "flagship realistic modernization corpus"
+  },
+  {
+   "id": "ibm-cbsa",
+   "name": "IBM CICS Banking Sample (CBSA)",
+   "url": "github.com/cicsdev/cics-banking-sample-application-cbsa",
+   "tier": 2,
+   "priority": 9,
+   "features": [
+    "cics",
+    "bms",
+    "sql-db2",
+    "copybooks",
+    "call-linkage"
+   ],
+   "note": "serious CICS/banking application; limits of static data courts"
+  },
+  {
+   "id": "ibm-zopeneditor",
+   "name": "IBM/zopeneditor-sample",
+   "url": "github.com/IBM/zopeneditor-sample",
+   "tier": 2,
+   "priority": 10,
+   "features": [
+    "jcl",
+    "sample-data",
+    "pli",
+    "hlasm",
+    "rexx",
+    "copybooks"
+   ],
+   "note": "COBOL/JCL/data + IBM tooling assumptions"
+  },
+  {
+   "id": "zbank",
+   "name": "Nantero1/zBANK",
+   "url": "github.com/Nantero1/zBANK",
+   "tier": 2,
+   "priority": null,
+   "features": [
+    "cics",
+    "bms",
+    "vsam-ksds"
+   ],
+   "note": "VSAM/CICS refusal + future atlas target"
+  },
+  {
+   "id": "dscobol-projects",
+   "name": "dscobol/Cobol-Projects",
+   "url": "github.com/dscobol/Cobol-Projects",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "vsam",
+    "tk4",
+    "mixed-dialect"
+   ],
+   "note": "archaeology / feature mining"
+  },
+  {
+   "id": "gem-gnu-db2",
+   "name": "dscobol/gem-gnu-DB2",
+   "url": "github.com/dscobol/gem-gnu-DB2",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "sql-db2",
+    "host-variables"
+   ],
+   "note": "DB2 host-variable / SQL precompiler refusal seed"
+  },
+  {
+   "id": "michelou-examples",
+   "name": "michelou/cobol-examples",
+   "url": "github.com/michelou/cobol-examples",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "build-profile-variance",
+    "windows-file-semantics"
+   ],
+   "note": "GnuCOBOL 3.2 dialect/build variance"
+  },
+  {
+   "id": "shamrice-examples",
+   "name": "shamrice/COBOL-Examples",
+   "url": "github.com/shamrice/COBOL-Examples",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "syntax",
+    "features"
+   ],
+   "note": "lightweight smoke corpus"
+  },
+  {
+   "id": "neopragma-samples",
+   "name": "neopragma/cobol-samples",
+   "url": "github.com/neopragma/cobol-samples",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "small-tasks"
+   ],
+   "note": "isolated court probes"
+  },
+  {
+   "id": "accounting-system",
+   "name": "tjsingh85/cobol-accounting-system",
+   "url": "github.com/tjsingh85/cobol-accounting-system",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "accounting",
+    "control-totals",
+    "numeric-role"
+   ],
+   "note": "numeric-shape-is-not-money checks"
+  },
+  {
+   "id": "core-banking",
+   "name": "fzn0x/core-banking-system",
+   "url": "github.com/fzn0x/core-banking-system",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "copybooks",
+    "fixed-record",
+    "accounts"
+   ],
+   "note": "fixed-record banking/account decode"
+  },
+  {
+   "id": "payroll-mgmt",
+   "name": "Payroll_Management_System",
+   "url": "github.com/JAGADISHSUNILPEDNEKAR/Payroll_Management_System",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "accept-display",
+    "reports",
+    "numeric-rounding"
+   ],
+   "note": "salary calc / rounding / reports"
+  },
+  {
+   "id": "legacy-ledger",
+   "name": "COBOL Legacy Ledger",
+   "url": "github.com/albertdobmeyer/cobol-legacy-ledger",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "ledger",
+    "settlement",
+    "integrity-wrapper"
+   ],
+   "note": "transaction/ledger refusal-boundary tests (treat cautiously)"
+  },
+  {
+   "id": "benchmark-suite",
+   "name": "COBOL Legacy Benchmark Suite (Investment Portfolio)",
+   "url": "github.com/sentientsergio/COBOL-Legacy-Benchmark-Suite",
+   "tier": 1,
+   "priority": null,
+   "features": [
+    "generated",
+    "app-shape-stress"
+   ],
+   "note": "broad app-shape stress (lower authority)"
+  },
+  {
+   "id": "datastage-mainframe",
+   "name": "IBM DataStage standalone workshop (mainframe example)",
+   "url": "ibm.github.io/datastage-standalone-workshop",
+   "tier": 2,
+   "priority": null,
+   "features": [
+    "ebcdic",
+    "binary",
+    "copybooks",
+    "mainframe-binary-data"
+   ],
+   "note": "EBCDIC/binary/copybook fixed-record decode comparator"
+  },
+  {
+   "id": "aws-data-utilities",
+   "name": "AWS mainframe-data-utilities",
+   "url": "github.com/aws-samples/mainframe-data-utilities",
+   "tier": 3,
+   "priority": null,
+   "features": [
+    "copybook-ebcdic-utility"
+   ],
+   "note": "adversarial comparator for KOBOLD decode (not a program corpus)"
+  },
+  {
+   "id": "x-cobol",
+   "name": "X-COBOL dataset",
+   "url": "arxiv.org/abs/2306.04892",
+   "tier": 3,
+   "priority": null,
+   "features": [
+    "84-repos",
+    "1255-files",
+    "surface-mining"
+   ],
+   "note": "statistical surface mining: unsupported verbs / COPY patterns / dialect clues"
+  },
+  {
+   "id": "opencbs",
+   "name": "OpenCBS defect benchmark",
+   "url": "arxiv.org/abs/2206.06260",
+   "tier": 3,
+   "priority": null,
+   "features": [
+    "defects",
+    "behavioral-traps"
+   ],
+   "note": "behavioral-trap discovery, not just syntax"
+  }
+ ],
+ "future_campaigns": {
+  "GNURUST.PUBLIC.GAP.1": "run the tools over the corpus + classify every failure (missing/refused/parser/dialect/build-profile/file-runtime/data-custody gap)",
+  "GNURUST.BUILD.PROFILE.1": "bind cobc version/config/binary-byteorder/binary-size/COMP-5/COMP-X/libcob sha/target-triple/endianness as first-class ABI evidence; every ABI-sensitive court cites it",
+  "GNURUST.INDEXED.FILE.ATLAS.1": "observed indexed-file (ISAM/BDB/VBISAM) atlas -- later, after the Procedure Division spine"
+ },
+ "behavioral_parity_ladder": [
+  {
+   "level": 0,
+   "name": "static layout / representation",
+   "current": "GNURUST.3/4/9/10"
+  },
+  {
+   "level": 1,
+   "name": "storage decode / encode",
+   "current": "GNURUST.2/8/14/15/16/17/18"
+  },
+  {
+   "level": 2,
+   "name": "expression / arithmetic receiver bytes",
+   "current": "GNURUST.7/13/19/REMAINDER.1, INTRINSIC.*"
+  },
+  {
+   "level": 3,
+   "name": "isolated Procedure Division statement byte effects",
+   "current": "INITIALIZE/INSPECT/STRING-UNSTRING/ACCEPT-DISPLAY/SIZE.ERROR"
+  },
+  {
+   "level": 4,
+   "name": "file / status / runtime side effects",
+   "current": "FILE.SEQUENTIAL/WRITE/REWRITE/STATUS"
+  },
+  {
+   "level": 5,
+   "name": "procedure-flow branch atlas",
+   "current": "PROCEDURE.FLOW.ATLAS.1"
+  },
+  {
+   "level": 6,
+   "name": "bounded trace replay",
+   "current": "IF/EVALUATE + PERFORM + TABLE + FILE.FLOW/FILTER slices (current frontier)"
+  },
+  {
+   "level": 7,
+   "name": "bounded interpreter slice",
+   "current": "(composing the slices -- next)"
+  },
+  {
+   "level": 8,
+   "name": "multi-module runtime parity",
+   "current": "(not started; the summit)"
+  }
+ ],
+ "doctrine": "An admitted index of public COBOL/GnuCOBOL corpora as a hostile witness set for GAP DISCOVERY. Admits the INDEX ONLY: no corpus is fetched, compiled, run, or claimed for parity here. Running + classifying is the future campaign GNURUST.PUBLIC.GAP.1."
+}

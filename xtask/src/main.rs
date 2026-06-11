@@ -6,6 +6,8 @@ mod ladder;
 mod kani_fuzz;
 mod gap;
 mod coverage;
+mod corpus;
+mod dialect;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -17,6 +19,8 @@ fn main() {
         "kani-fuzz" => kani_fuzz::run(cmd, &root),
         "gap" => gap::run(cmd, &root),
         "coverage" => coverage::run(cmd, &root),
+        "corpus" => corpus::run(cmd, &root),
+        "dialect" => dialect::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2

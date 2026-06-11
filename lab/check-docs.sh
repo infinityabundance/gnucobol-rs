@@ -205,7 +205,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "SUPPORT-PACKET.1: support packet drift"; cat /tmp/_supp_check
   fi
-  if python3 "$ROOT/lab/dialect/run.py" check >/tmp/_dial_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- dialect check ) >/tmp/_dial_check 2>&1; then
     note "DIALECT.PROFILE.1: witness profile self-consistent, -std binds the hash"
   else
     bad "DIALECT.PROFILE.1: dialect profile drift"; cat /tmp/_dial_check
@@ -230,7 +230,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "KANI+FUZZ: a byte court is missing a Kani proof or fuzz target"; cat /tmp/_kf_check
   fi
-  if python3 "$ROOT/lab/corpus/run.py" check >/tmp/_corpus_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- corpus check ) >/tmp/_corpus_check 2>&1; then
     note "GNURUST.PUBLIC.CORPUS.1: public-COBOL corpus index fresh (gap discovery, index-only)"
   else
     bad "GNURUST.PUBLIC.CORPUS.1: corpus index drift"; cat /tmp/_corpus_check
