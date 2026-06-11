@@ -40,10 +40,28 @@ pub enum Op {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Round {
-    /// Default: drop low digits toward zero (`shift_decimal`).
+    /// Default (no `ROUNDED`): drop low digits toward zero (`COB_STORE_TRUNCATION`, also the
+    /// explicit `ROUNDED MODE IS TRUNCATION`).
     Truncate,
     /// `ROUNDED` default mode: nearest, ties away from zero (`COB_STORE_NEAR_AWAY_FROM_ZERO`).
     NearAwayFromZero,
+    /// `ROUNDED MODE IS AWAY-FROM-ZERO`: round magnitude up whenever any digit is dropped
+    /// (`COB_STORE_AWAY_FROM_ZERO`).
+    AwayFromZero,
+    /// `ROUNDED MODE IS NEAREST-TOWARD-ZERO`: nearest, exact ties truncate toward zero
+    /// (`COB_STORE_NEAR_TOWARD_ZERO`).
+    NearTowardZero,
+    /// `ROUNDED MODE IS NEAREST-EVEN` (banker's rounding): nearest, exact ties go to the even digit
+    /// (`COB_STORE_NEAR_EVEN`).
+    NearEven,
+    /// `ROUNDED MODE IS TOWARD-GREATER` (ceiling): round toward +infinity
+    /// (`COB_STORE_TOWARD_GREATER`).
+    TowardGreater,
+    /// `ROUNDED MODE IS TOWARD-LESSER` (floor): round toward -infinity (`COB_STORE_TOWARD_LESSER`).
+    TowardLesser,
+    /// `ROUNDED MODE IS PROHIBITED`: any dropped non-zero digit is a size error
+    /// (`COB_STORE_PROHIBITED`); fail closed.
+    Prohibited,
 }
 
 /// Why an operation could not be performed within the sealed (i128) range.
@@ -61,6 +79,9 @@ pub enum ArithError {
     /// `DIVIDE` by zero (`GNURUST.19`): fail closed. `ON SIZE ERROR` exception semantics are a
     /// separate future court, so division by zero is rejected rather than signalled.
     DivideByZero,
+    /// `ROUNDED MODE IS PROHIBITED` with a dropped non-zero digit: libcob raises
+    /// `COB_EC_SIZE_TRUNCATION` (`cob_decimal_do_round` returns 1). Fail closed.
+    RoundingProhibited,
 }
 
 impl core::fmt::Display for ArithError {
@@ -70,6 +91,7 @@ impl core::fmt::Display for ArithError {
             ArithError::InvalidAttr => write!(f, "invalid field attribute"),
             ArithError::PackedAddSubDeferred => write!(f, "ADD/SUBTRACT into a PACKED field uses libcob's cob_add_bcd path (deferred, GNURUST.ARITH-BCD.0)"),
             ArithError::DivideByZero => write!(f, "DIVIDE by zero (fail closed; ON SIZE ERROR is a future court)"),
+            ArithError::RoundingProhibited => write!(f, "ROUNDED MODE IS PROHIBITED: dropped a non-zero digit (size error, fail closed)"),
         }
     }
 }
@@ -235,6 +257,110 @@ fn tdiv_pow10(mag: i128, k: u32) -> Result<i128, ArithError> {
     Ok(mag / f) // i128 division truncates toward zero
 }
 
+/// Truncated remainder of `mag` by 10^k (`mpz_tdiv_r`): the dropped low-`k`-digit part, with the
+/// sign of `mag`. Used by the rounding modes to decide whether the value is exact.
+fn trem_pow10(mag: i128, k: u32) -> Result<i128, ArithError> {
+    let f = pow10(k).ok_or(ArithError::OutOfRange)?;
+    Ok(mag % f) // i128 remainder follows the dividend's sign, like mpz_tdiv_r
+}
+
+/// `5 * 10^k`, checked.
+fn five_pow10(k: u32) -> Result<i128, ArithError> {
+    pow10(k)
+        .and_then(|p| p.checked_mul(5))
+        .ok_or(ArithError::OutOfRange)
+}
+
+/// Faithful port of `cob_decimal_do_round` (numeric.c:1936): round `(mag, scale)` toward the target
+/// `tgt` scale per `round`, returning the adjusted `(mag, scale)`. The caller then truncates to the
+/// field scale (matching libcob's post-round `shift_decimal` to `COB_FIELD_SCALE`). Only invoked
+/// when the value is non-zero and actually narrows (`tgt < scale`); other cases are a no-op upstream.
+fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32), ArithError> {
+    let sign: i128 = if mag > 0 { 1 } else { -1 };
+    match round {
+        // COB_STORE_TRUNCATION: drop the low digits (handled by the caller's adjust step).
+        Round::Truncate => Ok((mag, scale)),
+        // COB_STORE_PROHIBITED: a dropped non-zero digit is a size error.
+        Round::Prohibited => {
+            if trem_pow10(mag, (scale - tgt) as u32)? != 0 {
+                Err(ArithError::RoundingProhibited)
+            } else {
+                Ok((mag, scale))
+            }
+        }
+        // COB_STORE_AWAY_FROM_ZERO: if inexact, push the magnitude past the boundary.
+        Round::AwayFromZero => {
+            let divisor = pow10((scale - tgt) as u32).ok_or(ArithError::OutOfRange)?;
+            let mag = if mag % divisor != 0 {
+                mag.checked_add(sign * divisor).ok_or(ArithError::OutOfRange)?
+            } else {
+                mag
+            };
+            Ok((mag, scale))
+        }
+        // COB_STORE_TOWARD_GREATER (ceiling): only positive inexact values move up.
+        Round::TowardGreater => {
+            let divisor = pow10((scale - tgt) as u32).ok_or(ArithError::OutOfRange)?;
+            let mag = if mag % divisor != 0 && sign == 1 {
+                mag.checked_add(divisor).ok_or(ArithError::OutOfRange)?
+            } else {
+                mag
+            };
+            Ok((mag, scale))
+        }
+        // COB_STORE_TOWARD_LESSER (floor): only negative inexact values move down.
+        Round::TowardLesser => {
+            let divisor = pow10((scale - tgt) as u32).ok_or(ArithError::OutOfRange)?;
+            let mag = if mag % divisor != 0 && sign == -1 {
+                mag.checked_sub(divisor).ok_or(ArithError::OutOfRange)?
+            } else {
+                mag
+            };
+            Ok((mag, scale))
+        }
+        // COB_STORE_NEAR_TOWARD_ZERO: nearest, exact ties truncate toward zero. libcob's `exact`
+        // test is `value mod (5*10^(cur-tgt-1)) == 0` (true for both an exact value and an exact
+        // half), computed on the value *before* the shift.
+        Round::NearTowardZero => {
+            let exact = mag % five_pow10((scale - tgt - 1) as u32)? == 0;
+            let k = (scale - tgt - 1) as u32;
+            let mut mag = if k > 0 { tdiv_pow10(mag, k)? } else { mag };
+            let scale = tgt + 1;
+            if !exact {
+                mag = mag.checked_add(sign * 5).ok_or(ArithError::OutOfRange)?;
+            }
+            Ok((mag, scale))
+        }
+        // COB_STORE_NEAR_EVEN (banker's): nearest, exact ties go to the even kept digit. Same
+        // `exact` test, then the kept (post-shift) digit pair {05,25,45,65,85} = even kept digit.
+        Round::NearEven => {
+            let exact = mag % five_pow10((scale - tgt - 1) as u32)? == 0;
+            let k = (scale - tgt - 1) as u32;
+            let mut mag = if k > 0 { tdiv_pow10(mag, k)? } else { mag };
+            let scale = tgt + 1;
+            // On an exact tie, only round up when the kept digit is odd (so the result lands even).
+            let round_up = if exact {
+                let last_two = (mag % 100).unsigned_abs(); // |value| mod 100, like mpz_tdiv_ui
+                !matches!(last_two, 5 | 25 | 45 | 65 | 85)
+            } else {
+                true
+            };
+            if round_up {
+                mag = mag.checked_add(sign * 5).ok_or(ArithError::OutOfRange)?;
+            }
+            Ok((mag, scale))
+        }
+        // COB_STORE_NEAR_AWAY_FROM_ZERO (default ROUNDED): nearest, ties away from zero.
+        Round::NearAwayFromZero => {
+            let k = (scale - tgt - 1) as u32;
+            let mut mag = if k > 0 { tdiv_pow10(mag, k)? } else { mag };
+            let scale = tgt + 1;
+            mag = mag.checked_add(sign * 5).ok_or(ArithError::OutOfRange)?;
+            Ok((mag, scale))
+        }
+    }
+}
+
 /// Store `d` into the field `attr` with rounding `round`, returning the field bytes. Mirrors
 /// `cob_decimal_get_field` (`numeric.c:2055`): round (if requested) then truncate/append to the
 /// field scale, truncate overflow digits, render a DISPLAY temp, and `cob_move` to the target type.
@@ -253,21 +379,13 @@ fn store(
     let mut mag = d.mag;
     let mut scale = d.scale;
 
-    // ROUNDED, nearest-away-from-zero (cob_decimal_do_round, NEAR_AWAY_FROM_ZERO default).
-    if round == Round::NearAwayFromZero && mag != 0 && target_scale < scale {
-        // shift to (target_scale + 1), truncating
-        let k = (scale - target_scale - 1) as u32;
-        if k > 0 {
-            mag = tdiv_pow10(mag, k)?;
-        }
-        scale = target_scale + 1;
-        // +/- 5 toward away from zero
-        mag = if mag >= 0 {
-            mag.checked_add(5)
-        } else {
-            mag.checked_sub(5)
-        }
-        .ok_or(ArithError::OutOfRange)?;
+    // ROUNDED (cob_decimal_do_round, numeric.c:1936). Only narrowing a non-zero value rounds; the
+    // mode dispatch lives in `do_round`. TRUNCATION is a no-op here (the adjust step below drops the
+    // low digits toward zero, matching COB_STORE_TRUNCATION).
+    if mag != 0 && target_scale < scale {
+        let (m, s) = do_round(mag, scale, target_scale, round)?;
+        mag = m;
+        scale = s;
     }
 
     // Adjust to the field scale (truncating shift for narrowing; append zeros for widening).
@@ -372,6 +490,67 @@ mod tests {
             scale: s,
             flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 },
         }
+    }
+
+    /// Store `mag * 10^-scale` into a signed S9(6) DISPLAY field with `mode`, then decode the stored
+    /// integer back. Exercises the full do_round + scale-adjust + cob_move path (GNURUST.ROUND.1).
+    fn round_int(mag: i128, scale: i32, mode: Round) -> Result<i128, ArithError> {
+        let attr = disp(6, 0, true);
+        let bytes = store(Dec { mag, scale }, &attr, mode, false)?;
+        Ok(decode(&bytes, &attr)?.mag)
+    }
+
+    #[test]
+    fn rounding_modes_exact_half() {
+        use Round::*;
+        // 2.5: the modes diverge exactly at the tie.
+        assert_eq!(round_int(25, 1, NearAwayFromZero).unwrap(), 3);
+        assert_eq!(round_int(25, 1, NearTowardZero).unwrap(), 2);
+        assert_eq!(round_int(25, 1, NearEven).unwrap(), 2); // 2 is even
+        assert_eq!(round_int(25, 1, AwayFromZero).unwrap(), 3);
+        assert_eq!(round_int(25, 1, TowardGreater).unwrap(), 3);
+        assert_eq!(round_int(25, 1, TowardLesser).unwrap(), 2);
+        assert_eq!(round_int(25, 1, Truncate).unwrap(), 2);
+        // 3.5: nearest-even rounds UP to the even 4.
+        assert_eq!(round_int(35, 1, NearEven).unwrap(), 4);
+        assert_eq!(round_int(35, 1, NearAwayFromZero).unwrap(), 4);
+        assert_eq!(round_int(35, 1, NearTowardZero).unwrap(), 3);
+    }
+
+    #[test]
+    fn rounding_modes_signed_half() {
+        use Round::*;
+        // -2.5: ceiling/floor follow +/-infinity, not magnitude.
+        assert_eq!(round_int(-25, 1, NearAwayFromZero).unwrap(), -3);
+        assert_eq!(round_int(-25, 1, NearTowardZero).unwrap(), -2);
+        assert_eq!(round_int(-25, 1, NearEven).unwrap(), -2);
+        assert_eq!(round_int(-25, 1, TowardGreater).unwrap(), -2); // toward +inf
+        assert_eq!(round_int(-25, 1, TowardLesser).unwrap(), -3); // toward -inf
+        assert_eq!(round_int(-25, 1, AwayFromZero).unwrap(), -3);
+    }
+
+    #[test]
+    fn rounding_modes_nonhalf_and_multidigit() {
+        use Round::*;
+        // below/above the half -> nearest is unambiguous.
+        assert_eq!(round_int(24, 1, NearAwayFromZero).unwrap(), 2);
+        assert_eq!(round_int(26, 1, NearAwayFromZero).unwrap(), 3);
+        // any dropped fraction -> away/ceiling round the magnitude up; floor/truncate keep it.
+        assert_eq!(round_int(24, 1, AwayFromZero).unwrap(), 3);
+        assert_eq!(round_int(24, 1, TowardGreater).unwrap(), 3);
+        assert_eq!(round_int(24, 1, TowardLesser).unwrap(), 2);
+        assert_eq!(round_int(24, 1, Truncate).unwrap(), 2);
+        // two dropped digits: 2.45 is below the half -> nearest 2, away 3.
+        assert_eq!(round_int(245, 2, NearAwayFromZero).unwrap(), 2);
+        assert_eq!(round_int(245, 2, AwayFromZero).unwrap(), 3);
+        // an exact value never rounds, whatever the mode (and PROHIBITED accepts it).
+        assert_eq!(round_int(20, 1, AwayFromZero).unwrap(), 2);
+        assert_eq!(round_int(20, 1, Prohibited).unwrap(), 2);
+    }
+
+    #[test]
+    fn prohibited_inexact_is_size_error() {
+        assert_eq!(round_int(25, 1, Round::Prohibited), Err(ArithError::RoundingProhibited));
     }
 
     #[test]

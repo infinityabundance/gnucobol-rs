@@ -69,10 +69,26 @@ fn main() {
             2 => Op::Subtract,
             _ => Op::Multiply,
         };
-        let round = if opt & 1 != 0 {
-            Round::NearAwayFromZero
-        } else {
+        // opt is the libcob COB_STORE_* flag word: ROUND(1) plus a mode bit (numeric.c:1949).
+        // No ROUND bit => truncate. Used by both the arith sweep (opt 0/33) and the round sweep.
+        let round = if opt & 1 == 0 {
             Round::Truncate
+        } else if opt & 16 != 0 {
+            Round::AwayFromZero
+        } else if opt & 64 != 0 {
+            Round::NearEven
+        } else if opt & 128 != 0 {
+            Round::NearTowardZero
+        } else if opt & 256 != 0 {
+            Round::Prohibited
+        } else if opt & 512 != 0 {
+            Round::TowardGreater
+        } else if opt & 1024 != 0 {
+            Round::TowardLesser
+        } else if opt & 2048 != 0 {
+            Round::Truncate // explicit ROUNDED MODE IS TRUNCATION
+        } else {
+            Round::NearAwayFromZero // ROUND with NEAR_AWAY_FROM_ZERO (32) or no mode bit = default
         };
         match cob_arith(op, &a, &a_attr, &b, &b_attr, round) {
             Ok(r) => {
