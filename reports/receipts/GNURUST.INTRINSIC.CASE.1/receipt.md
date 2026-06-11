@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.CASE.1` |
 | court | FUNCTION UPPER-CASE/LOWER-CASE/REVERSE |
-| crate_version | `0.7.35` |
+| crate_version | `0.7.36` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | ASCII case fold + byte reversal |
 | replay command | `bash lab/oracle/case_sweep.sh` |

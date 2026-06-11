@@ -3,14 +3,14 @@
   "predicate": {
     "case_id": "GNURUST.ROUND.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.35",
+    "crate_version": "0.7.36",
     "kind": "court-casefile",
     "materials": {
-      "claim_ladder_entry_sha256": "1d834728e1f9420723c6626afdf37cfb6f3249c08245236ed6d440143a234d54",
-      "receipt_sha256": "73de7ed3c4d4168fac61f9a3481092684ea8c5879cc0acc4104ed65c0aa4b4ab"
+      "claim_ladder_entry_sha256": "81cab46306b58d020adde3c300fa9faa94cb07f3cc9a9acc86a15ee1c8f60511",
+      "receipt_sha256": "bbf21529d0f4c7b31af88bc8e87ccabf6f24ba40bea9d03d2e576d1e34be914f"
     },
     "negative_claim_count": 4,
-    "positive_claim_count": 1,
+    "positive_claim_count": 2,
     "replay": {
       "command": "bash lab/oracle/round_sweep.sh",
       "exit_code": 0
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c94912ffb0973241e617a40c9c6ca6c2d12b9f00f18e299724f3db1c9b280a9e"
+        "sha256": "af6d285f4a8e217b2da4323f8ecadc736d145e7e1e23f421f3029460e399cd1c"
       },
       "name": "reports/casefiles/GNURUST.ROUND.1/casefile.json"
     }

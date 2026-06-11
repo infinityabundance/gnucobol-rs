@@ -1,17 +1,16 @@
 {
-  "byte_domain": "value + target scale + ROUNDED mode -> stored field bytes",
+  "byte_domain": "value + target scale + ROUNDED mode + receiver path -> stored field bytes",
   "campaign": "GNURUST.ROUND.1",
   "command": {
     "replay": "bash lab/oracle/round_sweep.sh"
   },
-  "court": "ROUNDED MODE IS (all eight rounding modes)",
-  "crate_version": "0.7.35",
+  "court": "ROUNDED MODE IS (all eight rounding modes, cob_decimal + packed BCD paths)",
+  "crate_version": "0.7.36",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "packed ADD/SUBTRACT cob_add_bcd nibble rounding (GNURUST.13's surface)",
-    "bignum values beyond i128",
+    "bignum values beyond i128 (38-digit intermediates)",
     "floating-point COMP-1/COMP-2 rounding",
     "PROHIBITED size error returns a typed error, not bytes"
   ],

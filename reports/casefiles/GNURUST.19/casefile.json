@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.19",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.35",
+  "crate_version": "0.7.36",
   "damage_if_overclaimed": "a divide result with wrong scale/rounding/truncation/sign/receiver-bytes misstates interest, fees, rates, allocations, or balances while looking plausible",
   "hash_chain": {
-    "inputs_sha256": "504c3e26b01a61fc97094a79e5809122a36482aa12e2efccd232ff8ec41a059d"
+    "inputs_sha256": "902470efea9ba5c7afe1abbedafd5813525142e1bd951385186e9f423c03faa4"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "fb6b56df1ee2d190f6e33422171a73f6c25e6eef9b74ec4abe390da769e2c85e",
-    "receipt_sha256": "6203e37a67be2c0e9215083fb3783e09f7926b0a0c58e7c14f4e1d0d89852bb1"
+    "receipt_sha256": "0a399fa708dae1cbb34dd665e6077efacbf5b2d9f3c72332f0d3dde03e8a66dc"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

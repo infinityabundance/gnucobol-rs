@@ -62,11 +62,10 @@ fn main() {
     let mut id = 0u64;
     // Receiver `a` = 0, 9 digits, scale = tgt. Value `b` = 7-digit mantissa at scale s = tgt+drop.
     // ROUND.1 covers the cob_decimal store path (cob_decimal_do_round): COMPUTE / MOVE / a DISPLAY
-    // receiver. ADD/SUBTRACT *into a packed field* take the separate cob_add_bcd nibble-rounding
-    // (numeric.c:2907; GNURUST.13's surface), whose NEAR_EVEN tie resolves differently -- that path
-    // is a loud non-claim here, NOT modelled by this court.
-    for &a_ut in &[DISPLAY] {
-        let _ = PACKED;
+    // receiver. ROUND.2 adds the packed receiver: ADD/SUBTRACT *into a packed field* take the separate
+    // cob_add_bcd nibble-rounding (numeric.c:2826+), which matches cob_decimal except NEAREST-EVEN
+    // (resolved away-from-zero). Both receivers are swept here.
+    for &a_ut in &[DISPLAY, PACKED] {
         let (a_bytes, a_size) = if a_ut == DISPLAY {
             (enc_display(&vec![0u8; 9], false), 9usize)
         } else {
@@ -79,8 +78,9 @@ fn main() {
                 let half = 5 * 10i64.pow((drop - 1) as u32);
                 // Dropped-part cases: below half, exactly half, above half, and exact (zero).
                 let dropped: Vec<i64> = vec![half - 5, half, (half + 5).min(dpow - 1), 0];
-                // Kept units digit: even (2) and odd (3) to exercise NEAR_EVEN at the tie.
-                for kept in [2i64, 3] {
+                // Kept units digit 0-9: exercises NEAR_EVEN at the tie for every even/odd kept digit
+                // (the packed cob_add_bcd path diverges here -- GNURUST.ROUND.2).
+                for kept in 0..=9i64 {
                     for d in &dropped {
                         let m = (kept * dpow + d) as u64; // mantissa < 1000
                         for neg in [false, true] {

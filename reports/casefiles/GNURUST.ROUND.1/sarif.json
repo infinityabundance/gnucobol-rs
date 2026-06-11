@@ -13,14 +13,7 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.ROUND.1 non-claim: ADD/SUBTRACT directly INTO a packed field (the cob_add_bcd nibble-rounding path, numeric.c:2907, resolves NEAREST-EVEN ties differently -- that is GNURUST.13's surface, a loud non-claim here)"
-          },
-          "ruleId": "NONCLAIM"
-        },
-        {
-          "level": "note",
-          "message": {
-            "text": "GNURUST.ROUND.1 non-claim: bignum values beyond i128"
+            "text": "GNURUST.ROUND.1 non-claim: bignum values beyond i128 (38-digit COMPUTE intermediates)"
           },
           "ruleId": "NONCLAIM"
         },
@@ -28,6 +21,13 @@
           "level": "note",
           "message": {
             "text": "GNURUST.ROUND.1 non-claim: floating-point COMP-1/COMP-2 rounding"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.ROUND.1 non-claim: intermediate-result rounding rules"
           },
           "ruleId": "NONCLAIM"
         },

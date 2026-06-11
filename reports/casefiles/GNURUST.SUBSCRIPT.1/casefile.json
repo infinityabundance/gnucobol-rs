@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SUBSCRIPT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.35",
+  "crate_version": "0.7.36",
   "damage_if_overclaimed": "a wrong subscript offset reads the wrong table element or adjacent storage, corrupting every table lookup",
   "hash_chain": {
-    "inputs_sha256": "4392891643e6ac1b479a556ef4f71c54fcd4c59edee83ad4f793c1d65d524222"
+    "inputs_sha256": "99fc0c2c443970b88d15e2be8d9b3ea3e7b0af6f57db206222134d4d1a5963d3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "500a0afd1cd03ddbd0c6258f7098112caa67586c5a6f82fab3e2b78f05b7d0ae",
-    "receipt_sha256": "9b1fbd0d98819b2db02069b8d7f464a81be74357ea126fc55e2d50818a935b25"
+    "receipt_sha256": "3aa55d3e48a202205aa01d2c542859829d16d2cd8b57eaebcddb4687247b98d9"
   },
   "kind": "court-casefile",
   "lie_prevented": [

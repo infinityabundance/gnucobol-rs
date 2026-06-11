@@ -12,6 +12,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.36]
+- **GNURUST.ROUND.1 (ROUND.2 extension)** packed `ROUNDED MODE IS` sealed: ADD/SUBTRACT into a COMP-3 receiver takes libcob's `cob_add_bcd` nibble rounding (numeric.c:2826+), which matches the cob_decimal path for every mode except NEAREST-EVEN -- the BCD path resolves that tie away-from-zero (no to-even). Fixes a divergence 0.7.35 shipped (e.g. `ADD ... ROUNDED MODE IS NEAREST-EVEN` of 2.5 into packed = 3, not 2). `round_sweep` broadened to DISPLAY + packed receivers across kept digits 0-9, 6720/0, mutation-verified. Non-claims unchanged: bignum >i128, float COMP-1/2.
+
 ## [0.7.35]
 - **GNURUST.ROUND.1** ROUNDED MODE IS (all eight rounding modes) sealed: a value narrowed to a smaller scale under each `ROUNDED MODE IS` setting on the cob_decimal store path -- NEAREST-AWAY-FROM-ZERO (the default ROUNDED), AWAY-FROM-ZERO, NEAREST-EVEN (banker's), NEAREST-TOWARD-ZERO, TOWARD-GREATER (ceiling), TOWARD-LESSER (floor), PROHIBITED (size error on a dropped non-zero digit), and TRUNCATION -- byte-faithful to cobc (`cob_decimal_do_round`); `round_sweep` 672/0 + fuzz + Kani. Non-claims: ADD/SUBTRACT into a packed field (cob_add_bcd nibble rounding, GNURUST.13's surface), bignum beyond i128, floating-point COMP-1/COMP-2.
 

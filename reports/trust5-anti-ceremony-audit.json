@@ -1139,14 +1139,14 @@
       "class": "A",
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
-      "fixtures": "round sweep 672/0 (seven byte-producing modes) + unit matrix + fuzz",
+      "fixtures": "round sweep 6720/0 (DISPLAY + packed receivers, seven byte-producing modes, kept digits 0-9) + unit matrix + fuzz + Kani",
       "generated_from_named_evidence": true,
       "has_casefile": true,
       "has_receipt": true,
       "id": "GNURUST.ROUND.1",
       "negative_claims": 4,
       "negatives_ge_positives": true,
-      "positive_claims": 1
+      "positive_claims": 2
     },
     {
       "can_fail": true,

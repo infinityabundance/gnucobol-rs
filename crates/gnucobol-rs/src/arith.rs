@@ -364,11 +364,22 @@ fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32)
 /// Store `d` into the field `attr` with rounding `round`, returning the field bytes. Mirrors
 /// `cob_decimal_get_field` (`numeric.c:2055`): round (if requested) then truncate/append to the
 /// field scale, truncate overflow digits, render a DISPLAY temp, and `cob_move` to the target type.
+/// Remap a rounding mode for the packed `cob_add_bcd` path (numeric.c:2826+, GNURUST.ROUND.2). That
+/// nibble-level rounding matches `cob_decimal_do_round` for every mode except NEAREST-EVEN, which it
+/// resolves away from zero (it does *not* round ties to even); so on this path NEAREST-EVEN behaves
+/// as NEAREST-AWAY-FROM-ZERO. Proven by `round_sweep` over packed receivers.
+fn bcd_round_mode(round: Round) -> Round {
+    match round {
+        Round::NearEven => Round::NearAwayFromZero,
+        other => other,
+    }
+}
+
 fn store(
     d: Dec,
     attr: &FieldAttr,
     round: Round,
-    sign_on_zero: bool,
+    bcd_path: bool,
 ) -> Result<Vec<u8>, ArithError> {
     let target_scale = attr.scale as i32;
     let target_digits = attr.digits as usize;
@@ -381,9 +392,12 @@ fn store(
 
     // ROUNDED (cob_decimal_do_round, numeric.c:1936). Only narrowing a non-zero value rounds; the
     // mode dispatch lives in `do_round`. TRUNCATION is a no-op here (the adjust step below drops the
-    // low digits toward zero, matching COB_STORE_TRUNCATION).
+    // low digits toward zero, matching COB_STORE_TRUNCATION). On the packed ADD/SUBTRACT cob_add_bcd
+    // path the rounding mode is remapped (GNURUST.ROUND.2): that nibble-rounding (numeric.c:2826+)
+    // diverges from cob_decimal only at NEAREST-EVEN, which it resolves away-from-zero (no to-even).
     if mag != 0 && target_scale < scale {
-        let (m, s) = do_round(mag, scale, target_scale, round)?;
+        let eff = if bcd_path { bcd_round_mode(round) } else { round };
+        let (m, s) = do_round(mag, scale, target_scale, eff)?;
         mag = m;
         scale = s;
     }
@@ -404,7 +418,7 @@ fn store(
         mag < 0
     } else {
         // zero magnitude: keep the pre-truncation sign only on the cob_add_bcd path.
-        sign_on_zero && pre_negative
+        bcd_path && pre_negative
     };
     let mut abs = mag.unsigned_abs();
     let modulus = pow10(target_digits as u32).ok_or(ArithError::OutOfRange)? as u128;
@@ -463,11 +477,11 @@ pub fn cob_arith(
     let da = decode(a, a_attr)?;
     let db = decode(b, b_attr)?;
     let r = compute(da, db, op)?;
-    // Only ADD/SUBTRACT into a PACKED receiver (the cob_add_bcd path) keeps a negative sign on a
-    // zero-magnitude result.
-    let sign_on_zero = matches!(op, Op::Add | Op::Subtract)
+    // ADD/SUBTRACT into a PACKED receiver take libcob's cob_add_bcd path: it keeps a negative sign on
+    // a zero-magnitude result AND rounds with the BCD nibble rules (NEAREST-EVEN away, GNURUST.ROUND.2).
+    let bcd_path = matches!(op, Op::Add | Op::Subtract)
         && a_attr.field_type == crate::attr::COB_TYPE_NUMERIC_PACKED;
-    store(r, a_attr, round, sign_on_zero)
+    store(r, a_attr, round, bcd_path)
 }
 
 #[cfg(test)]
