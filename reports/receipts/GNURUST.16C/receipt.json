@@ -10,9 +10,8 @@
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "floating +/- sign strings",
     "report writer",
-    "locale/currency",
+    "locale/currency CURRENCY SIGN",
     "EBCDIC edited",
     "edited arithmetic/VALUE"
   ],
@@ -24,7 +23,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=92 FAIL=0"
+    "sweep": "PASS=141 FAIL=0"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,

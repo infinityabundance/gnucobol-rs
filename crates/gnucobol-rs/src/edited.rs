@@ -276,8 +276,13 @@ fn align(value: &Decimal, int_cap: usize, frac_cap: usize) -> (Vec<u8>, Vec<u8>)
 /// first float position being the floating symbol's reserved slot), then zero-suppress the leading zone
 /// (`Z`/float -> space, `*` -> star, commas in the zone -> the suppression char) and float the symbol to
 /// the position immediately left of the first significant digit (or the first forced `9`).
-fn emit_int(syms: &[char], digits: &[u8], float_char: Option<char>) -> String {
+fn emit_int(syms: &[char], digits: &[u8], float_char: Option<char>, neg: bool) -> String {
     let supp = if syms.contains(&'*') { '*' } else { ' ' };
+    // a floating `+`/`-` shows a sign-aware glyph (`+`→`+`/`-`, `-`→` `/`-`); a floating `$` is literal.
+    let float_glyph = float_char.map(|fc| match fc {
+        '+' | '-' => sign_char(fc, neg),
+        other => other,
+    });
     let mut out: Vec<char> = vec![' '; syms.len()];
     let mut di = 0usize;
     let mut first_float = true;
@@ -312,7 +317,7 @@ fn emit_int(syms: &[char], digits: &[u8], float_char: Option<char>) -> String {
     let float_target = float_char.and_then(|fc| (0..stop).rev().find(|&k| syms[k] == fc));
     for (k, slot) in out.iter_mut().enumerate().take(stop) {
         *slot = if Some(k) == float_target {
-            float_char.unwrap()
+            float_glyph.unwrap()
         } else {
             supp
         };
@@ -401,7 +406,7 @@ pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError>
 
     let mut out = String::new();
     out.push_str(&prefix);
-    out.push_str(&emit_int(int_syms, &int_d, float_char));
+    out.push_str(&emit_int(int_syms, &int_d, float_char, neg));
     if dot.is_some() {
         out.push('.');
     }

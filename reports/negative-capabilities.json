@@ -5910,9 +5910,9 @@
     },
     {
       "id": "NEG.NUMERIC-EDITED-FORMATTING-16C",
-      "surface": "floating +/- sign strings in numeric->edited (16c residual)",
+      "surface": "CURRENCY SIGN / locale floating symbols + national/UTF-8 edited (16c residual)",
       "status": "not_admitted_fail_closed",
-      "guard": "16c encode is sealed (GNURUST.16C); floating sign strings remain fail-closed",
+      "guard": "16c encode incl. floating +/- and $ is sealed (GNURUST.16C); locale CURRENCY + national stay fail-closed",
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [

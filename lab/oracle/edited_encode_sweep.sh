@@ -9,8 +9,8 @@ export PATH="$PREFIX/bin:$PATH" LD_LIBRARY_PATH="$PREFIX/lib" \
   COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" LC_ALL=C.UTF-8
 command -v cobc >/dev/null 2>&1 || { echo "cobc not built"; exit 2; }
 ( cd "$ROOT" && cargo build --release -p gnucobol-rs --examples >/dev/null 2>&1 ) || exit 2
-GEN="$ROOT/target/release/examples/gen_edited"
-ROWS="$ROOT/target/release/examples/edited_rows"
+GEN="$ROOT/target/release/examples/gen_edited_encode"
+ROWS="$ROOT/target/release/examples/edited_encode_rows"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 
 "$GEN" > "$TMP/cases.tsv"

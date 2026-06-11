@@ -1,7 +1,6 @@
 //! Emit numeric->edited ENCODE cases (`GNURUST.16c`) as `label<TAB>pic<TAB>value` TSV. The sweep MOVEs
 //! each value into the edited field and DISPLAYs its bytes; the Rust `edited_encode_rows` mirror calls
-//! `encode_edited` and checks it reproduces those oracle bytes EXACTLY. Test infra. (No floating +/-:
-//! sign-aware floating strings are a separate slice, deliberately out of the admitted 16c subset.)
+//! `encode_edited` and checks it reproduces those oracle bytes EXACTLY. Test infra. Includes floating +/- sign strings (sign-aware glyph).
 fn main() {
     let mut id = 0u32;
     let mut emit = |pic: &str, value: &str| {
@@ -67,5 +66,16 @@ fn main() {
     for v in ["0", "1234", "120534"] {
         emit("99B99", &format!("{:04}", v.parse::<i64>().unwrap() % 10000));
         emit("99/99/99", &format!("{:06}", v.parse::<i64>().unwrap() % 1000000));
+    }
+    // floating +/- sign strings (sign-aware: + shows +/-, - shows space/-).
+    for v in ["0", "5", "-5", "12.5", "-12.5"] {
+        let val = if v.contains('.') { v.to_string() } else { format!("{v}.00") };
+        emit("++++9.99", &val);
+        emit("----9.99", &val);
+    }
+    for v in ["0", "7", "-7", "42", "-42"] {
+        emit("++++9", v);
+        emit("----9", v);
+        emit("$$$$9", v);
     }
 }

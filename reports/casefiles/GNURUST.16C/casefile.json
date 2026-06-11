@@ -12,25 +12,23 @@
   "crate_version": "0.7.29",
   "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports",
   "hash_chain": {
-    "inputs_sha256": "f81641e78692694996b69b953383bea9195fbd17d543619501ba48599fd5dbf1"
+    "inputs_sha256": "0489e6f320f1937828e590fa8c7ff338b97e3adfbe5e4a2ee17dfdd04beb055d"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "b6f9fb9ba8a33788185cadb1dcd19ce0c84c78a0df000637cc35b4e68311c7c7",
-    "receipt_sha256": "b5e31ec610c4a7c8cd4a1df1aa29091b2b1b69a9970f8c2f129687bf57a14a51"
+    "claim_ladder_entry_sha256": "3e304107a6930356e716c941141b4cbce366c608d7b01a4a962828313739b965",
+    "receipt_sha256": "329cb092e9bea963d50fd897440e4c5361d7e13217e666f0b86f43749ff21295"
   },
   "kind": "court-casefile",
   "lie_prevented": [
     "'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle"
   ],
   "negative_capability_ids": [
-    "NEG.FLOATING-SIGN-STRINGS",
     "NEG.REPORT-WRITER",
     "NEG.LOCALE-CURRENCY-CURRENCY-SIGN",
     "NEG.EBCDIC-EDITED",
     "NEG.EDITED-ARITHMETIC-VALUE"
   ],
   "negative_claims": [
-    "floating +/- sign strings",
     "report writer",
     "locale/currency CURRENCY SIGN",
     "EBCDIC edited",
@@ -45,7 +43,7 @@
     "upstream_court": "GNURUST.16C"
   },
   "positive_claims": [
-    "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed-sign +/- fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency, sign placement, insertion), slot-based"
+    "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based"
   ],
   "replay": {
     "command": "bash lab/oracle/edited_encode_sweep.sh",
@@ -53,8 +51,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 92,
-    "total": 92,
+    "pass": 141,
+    "total": 141,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

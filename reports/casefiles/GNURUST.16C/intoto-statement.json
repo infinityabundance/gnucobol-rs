@@ -6,10 +6,10 @@
     "crate_version": "0.7.29",
     "kind": "court-casefile",
     "materials": {
-      "claim_ladder_entry_sha256": "b6f9fb9ba8a33788185cadb1dcd19ce0c84c78a0df000637cc35b4e68311c7c7",
-      "receipt_sha256": "b5e31ec610c4a7c8cd4a1df1aa29091b2b1b69a9970f8c2f129687bf57a14a51"
+      "claim_ladder_entry_sha256": "3e304107a6930356e716c941141b4cbce366c608d7b01a4a962828313739b965",
+      "receipt_sha256": "329cb092e9bea963d50fd897440e4c5361d7e13217e666f0b86f43749ff21295"
     },
-    "negative_claim_count": 6,
+    "negative_claim_count": 5,
     "positive_claim_count": 1,
     "replay": {
       "command": "bash lab/oracle/edited_encode_sweep.sh",
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "bae1fe93f6f25c199ccc0512f5f6304f0dfff5056467dd0ae3e679fb573a4ac3"
+        "sha256": "b919a4c6929d4279f5ef6b742f6f7211e66c3f25afb75da2e89618430111c86b"
       },
       "name": "reports/casefiles/GNURUST.16C/casefile.json"
     }

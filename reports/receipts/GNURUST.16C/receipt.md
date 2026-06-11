@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.16C — edited-picture encode (numeric->edited 16c)
 
-**Verdict: PASS** · replay `PASS=92 FAIL=0`
+**Verdict: PASS** · replay `PASS=141 FAIL=0`
 
 | field | value |
 |-------|-------|
@@ -17,9 +17,8 @@
 | receipt_status | current |
 
 ## Non-claims
-- floating +/- sign strings
 - report writer
-- locale/currency
+- locale/currency CURRENCY SIGN
 - EBCDIC edited
 - edited arithmetic/VALUE
 

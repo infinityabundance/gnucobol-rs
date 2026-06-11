@@ -253,13 +253,13 @@
     {
       "id": "GNURUST.16C",
       "name": "edited-picture encode (numeric->edited, 16c)",
-      "proven": "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed-sign +/- fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency, sign placement, insertion), slot-based",
+      "proven": "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based",
       "byte_domain": "numeric value -> edited DISPLAY field bytes",
       "oracle": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
-      "fixtures": "edited encode sweep 92/0",
+      "fixtures": "edited encode sweep 141/0",
       "sealed_version": "0.7.28",
-      "not_proven": "floating +/- sign strings; report writer; locale/currency CURRENCY SIGN; EBCDIC edited; edited arithmetic/VALUE",
-      "breaks_claim": "floating sign editing; CURRENCY/locale symbols; edited under COMP/cp500; numeric->edited under EBCDIC",
+      "not_proven": "report writer; locale/currency CURRENCY SIGN; EBCDIC edited; edited arithmetic/VALUE",
+      "breaks_claim": "CURRENCY/locale symbols; edited under COMP/cp500; numeric->edited under EBCDIC",
       "readiness": 3,
       "lie_prevented": "'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle",
       "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports"

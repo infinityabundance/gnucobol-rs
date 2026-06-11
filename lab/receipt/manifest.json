@@ -732,9 +732,8 @@
       "sweep": "edited_encode_sweep.sh",
       "byte_domain": "numeric value -> edited DISPLAY field bytes",
       "non_claims": [
-        "floating +/- sign strings",
         "report writer",
-        "locale/currency",
+        "locale/currency CURRENCY SIGN",
         "EBCDIC edited",
         "edited arithmetic/VALUE"
       ]

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.16C (court-casefile)
 
-**Verdict: PASS** · 92/92 pass, 0 fail · crate `gnucobol-rs` 0.7.29
+**Verdict: PASS** · 141/141 pass, 0 fail · crate `gnucobol-rs` 0.7.29
 
 - **Oracle:** cobc MOVE numeric -> edited, DISPLAY edited bytes
 - **Byte domain(s):** numeric value -> edited DISPLAY field bytes
@@ -10,10 +10,9 @@
 - **Authority:** STATUS.md · receipt_status: current
 
 ## Positive claims (1)
-- numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed-sign +/- fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency, sign placement, insertion), slot-based
+- numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based
 
-## Negative claims (6) — negative capability is the trust surface
-- floating +/- sign strings
+## Negative claims (5) — negative capability is the trust surface
 - report writer
 - locale/currency CURRENCY SIGN
 - EBCDIC edited
