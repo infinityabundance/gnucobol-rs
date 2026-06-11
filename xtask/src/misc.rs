@@ -35,3 +35,17 @@ pub fn atlas_check(root: &str) -> i32 {
     println!("atlas: {ok} JSON files valid");
     if bad > 0 { 1 } else { 0 }
 }
+
+/// Generic sweep glue: join cobc `label=value` output (arg2) into the cases TSV (arg1), appending the
+/// oracle value as the last column per row (replaces the shared inline-python join in the *_sweep.sh).
+pub fn sweep_join(cases: &str, out: &str) -> i32 {
+    let mut map = std::collections::HashMap::new();
+    for line in std::fs::read_to_string(out).unwrap_or_default().lines() {
+        if let Some(eq) = line.find('=') { map.insert(line[..eq].to_string(), line[eq + 1..].to_string()); }
+    }
+    for line in std::fs::read_to_string(cases).unwrap_or_default().lines() {
+        let label = line.split('\t').next().unwrap_or("");
+        println!("{}\t{}", line, map.get(label).map(String::as_str).unwrap_or(""));
+    }
+    0
+}

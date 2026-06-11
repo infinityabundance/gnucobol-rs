@@ -37,6 +37,7 @@ fn main() {
         "docs" => docs::run(cmd, &root),
         "gcodes" => misc::gcodes(&root),
         "atlas-check" => misc::atlas_check(&root),
+        "sweep-join" => misc::sweep_join(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
         "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");

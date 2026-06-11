@@ -21,12 +21,4 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 } > "$TMP/p.cob"
 cobc -free -x -o "$TMP/p" "$TMP/p.cob" 2>"$TMP/err" || { echo "compile failed"; cat "$TMP/err"; exit 2; }
 "$TMP/p" > "$TMP/out.txt"
-python3 - "$TMP/cases.tsv" "$TMP/out.txt" <<'PY' | "$ROWS"
-import sys
-vals = {}
-for line in open(sys.argv[2]):
-    if "=" in line: k,v = line.rstrip("\n").split("=",1); vals[k]=v
-for line in open(sys.argv[1]):
-    label, op, a, b = line.rstrip("\n").split("\t")
-    print("\t".join([label, op, a, b, vals.get(label,"")]))
-PY
+( cd "$ROOT" && cargo run -q -p xtask -- sweep-join "$TMP/cases.tsv" "$TMP/out.txt" ) | "$ROWS"
