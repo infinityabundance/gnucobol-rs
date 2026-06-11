@@ -53,18 +53,4 @@ fi
 
 # Join in Python: NUL bytes + a packed sign byte == ']' make delimiter/shell capture unsafe. We know
 # each receiver's exact size, so we take exactly csz bytes after each "label[" marker (searched in order).
-python3 - "$TMP/cases.tsv" "$TMP/out.txt" <<'PYJOIN' | "$ROWS"
-import sys
-cases = [l.rstrip("\n").split("\t") for l in open(sys.argv[1])]
-out = open(sys.argv[2], "rb").read()
-cur = 0
-for c in cases:
-    label, csz = c[0], int(c[11])
-    m = out.find(b"%b[" % label.encode(), cur)
-    ohex = ""
-    if m >= 0:
-        start = m + len(label) + 1
-        ohex = out[start:start + csz].hex()
-        cur = start + csz
-    print("\t".join(c) + "\t" + ohex)
-PYJOIN
+( cd "$ROOT" && cargo run -q -p xtask -- sweep-extract "$TMP/cases.tsv" "$TMP/out.txt" col:11 ) | "$ROWS"

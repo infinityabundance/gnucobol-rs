@@ -16,6 +16,7 @@ mod docs;
 mod misc;
 mod lineage;
 mod release;
+mod sweeps;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -38,6 +39,9 @@ fn main() {
         "gcodes" => misc::gcodes(&root),
         "atlas-check" => misc::atlas_check(&root),
         "sweep-join" => misc::sweep_join(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
+        "sweep-extract" => sweeps::extract(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or(""), args.get(4).map(String::as_str).unwrap_or("")),
+        "sweep-remainder" => sweeps::remainder(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
+        "sweep-ordchar" => sweeps::ordchar(args.get(2).map(String::as_str).unwrap_or(""), args.get(3).map(String::as_str).unwrap_or("")),
         "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");

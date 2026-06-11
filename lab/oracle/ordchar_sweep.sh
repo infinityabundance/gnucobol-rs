@@ -24,24 +24,4 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 } > "$TMP/p.cob"
 cobc -free -x -o "$TMP/p" "$TMP/p.cob" 2>"$TMP/err" || { echo "compile failed"; cat "$TMP/err"; exit 2; }
 "$TMP/p" > "$TMP/out.txt"
-python3 - "$TMP/cases.tsv" "$TMP/out.txt" <<'PY' | "$ROWS"
-import sys
-out = open(sys.argv[2], "rb").read()
-cur = 0
-rows = []
-for line in open(sys.argv[1]):
-    label, op, arg = line.rstrip("\n").split("\t")
-    if op == "ORD":
-        marker = (label + "=").encode()
-        m = out.find(marker, cur); val = ""
-        if m >= 0:
-            s = m + len(marker); val = out[s:s+4].decode("latin1"); cur = s + 4
-        rows.append("\t".join([label, op, arg, val]))
-    else:
-        marker = (label + "[").encode()
-        m = out.find(marker, cur); val = ""
-        if m >= 0:
-            s = m + len(marker); val = out[s:s+1].hex(); cur = s + 1
-        rows.append("\t".join([label, op, arg, val]))
-print("\n".join(rows))
-PY
+( cd "$ROOT" && cargo run -q -p xtask -- sweep-ordchar "$TMP/cases.tsv" "$TMP/out.txt" ) | "$ROWS"

@@ -20,17 +20,4 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 } > "$TMP/p.cob"
 cobc -free -x -o "$TMP/p" "$TMP/p.cob" 2>"$TMP/err" || { echo "compile failed"; cat "$TMP/err"; exit 2; }
 "$TMP/p" > "$TMP/out.txt"
-python3 - "$TMP/cases.tsv" "$TMP/out.txt" <<'PY' | "$ROWS"
-import sys
-out = open(sys.argv[2], "rb").read()
-rows = []
-cur = 0
-for line in open(sys.argv[1]):
-    label, op, inp = line.rstrip("\n").split("\t")
-    m = out.find(b"%b[" % label.encode(), cur)
-    hexb = ""
-    if m >= 0:
-        s = m + len(label) + 1; hexb = out[s:s+8].hex(); cur = s + 8
-    rows.append("\t".join([label, op, inp, hexb]))
-print("\n".join(rows))
-PY
+( cd "$ROOT" && cargo run -q -p xtask -- sweep-extract "$TMP/cases.tsv" "$TMP/out.txt" 8 ) | "$ROWS"

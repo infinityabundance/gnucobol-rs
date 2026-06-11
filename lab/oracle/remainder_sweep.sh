@@ -54,21 +54,4 @@ if ! cobc -free -x -o "$TMP/rem" "$TMP/rem.cob" 2> "$TMP/cobc.err"; then
 fi
 "$TMP/rem" > "$TMP/out.txt" 2>/dev/null
 
-python3 - "$TMP/cases.tsv" "$TMP/out.txt" <<'PYJOIN' | "$ROWS"
-import sys
-cases = [l.rstrip("\n").split("\t") for l in open(sys.argv[1])]
-out = open(sys.argv[2], "rb").read()
-cur = 0
-for c in cases:
-    label, csz, dsz = c[0], int(c[10]), int(c[13])
-    qhex = rhex = ""
-    mq = out.find(b"%bQ[" % label.encode(), cur)
-    if mq >= 0:
-        s = mq + len(label) + 2
-        qhex = out[s:s + csz].hex(); cur = s + csz
-    mr = out.find(b"%bR[" % label.encode(), cur)
-    if mr >= 0:
-        s = mr + len(label) + 2
-        rhex = out[s:s + dsz].hex(); cur = s + dsz
-    print("\t".join(c) + "\t" + qhex + "\t" + rhex)
-PYJOIN
+( cd "$ROOT" && cargo run -q -p xtask -- sweep-remainder "$TMP/cases.tsv" "$TMP/out.txt" ) | "$ROWS"
