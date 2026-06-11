@@ -1,0 +1,15 @@
+# gnucobol-rs license posture, verified by the INDEPENDENT external auditor `gpl-license-guard`
+# (github.com/infinityabundance/gpl-license-guard). gnucobol-rs does not own this logic; it consumes the
+# tool and commits the receipt as evidence (reports/license/gpl-license-guard-receipt.json).
+[policy]
+name = "lgpl-faithful-derivative"
+rationale = """
+gnucobol-rs is an honest LGPL-3.0-or-later faithful derivative of libcob (see docs/derivation-and-license.md);
+it legitimately vendors the admitted GnuCOBOL oracle for testing. Under a COMMERCIAL policy this correctly
+FAILS (GnuSourceVendored) -- which is the point: gnucobol-rs is NOT a commercial closed crate. It is the open
+copyleft credibility layer. The commercial KOBOLD layer is separate and uses the commercial-boundary policy.
+"""
+
+[verify]
+command = "gpl-license-guard check --root . --policy lgpl-faithful-derivative"
+receipt = "reports/license/gpl-license-guard-receipt.json"
