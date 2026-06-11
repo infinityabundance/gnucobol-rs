@@ -465,5 +465,18 @@
   "courts": [],
   "future_campaign": null,
   "risk_if_unported": "EXEC CICS / EXEC SQL are precompiler surfaces; refused (NEG.CICS.*, NEG.SQL.PRECOMPILER)"
+ },
+ {
+  "surface": "class-conditions",
+  "category": "condition",
+  "source_modules": [
+   "libcob/common.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.CLASS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong IS NUMERIC/ALPHABETIC mis-validates input data"
  }
 ]

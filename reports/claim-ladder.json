@@ -153,6 +153,20 @@
       "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)"
     },
     {
+      "id": "GNURUST.CLASS.1",
+      "name": "class conditions (NUMERIC/ALPHABETIC)",
+      "proven": "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER byte predicates over an alphanumeric field matching cobc (digits-only / letters-or-space / upper-or-space / lower-or-space)",
+      "byte_domain": "alphanumeric field bytes -> class-condition truth",
+      "oracle": "cobc IF data-item IS <class> branch",
+      "fixtures": "class sweep 26/0 + fuzz",
+      "sealed_version": "0.7.30",
+      "not_proven": "signed-numeric (overpunch) NUMERIC on PIC S9; user-defined CLASS names; national/UTF-8/DBCS classes; locale collating sequence",
+      "breaks_claim": "signed-numeric class test; national/DBCS; user CLASS",
+      "readiness": 4,
+      "lie_prevented": "'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)",
+      "damage_if_overclaimed": "treating a space-padded or signed field as NUMERIC mis-validates input and lets bad data through"
+    },
+    {
       "id": "GNURUST.12",
       "name": "SET 88 TO TRUE",
       "proven": "canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc; output satisfies eval_88",

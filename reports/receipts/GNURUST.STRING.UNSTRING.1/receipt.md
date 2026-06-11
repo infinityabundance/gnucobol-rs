@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.STRING.UNSTRING.1` |
 | court | STRING/UNSTRING byte effects |
-| crate_version | `0.7.29` |
+| crate_version | `0.7.30` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | STRING target+pointer+overflow; UNSTRING field+count+delimiter+tally+pointer+overflow bytes |
 | replay command | `bash lab/oracle/string_unstring_sweep.sh` |

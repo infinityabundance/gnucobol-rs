@@ -747,6 +747,17 @@
         "collating-sensitive ranges",
         "Procedure Division execution"
       ]
+    },
+    "GNURUST.CLASS.1": {
+      "court": "class conditions IS NUMERIC/ALPHABETIC",
+      "sweep": "class_sweep.sh",
+      "byte_domain": "alphanumeric field bytes -> class-condition truth",
+      "non_claims": [
+        "signed-numeric overpunch NUMERIC",
+        "user-defined CLASS names",
+        "national/UTF-8/DBCS classes",
+        "locale collating sequence"
+      ]
     }
   }
 }

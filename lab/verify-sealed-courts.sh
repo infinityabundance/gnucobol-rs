@@ -84,6 +84,7 @@ run_sweep "GNURUST.SIZE.ERROR.1" size_error_sweep.sh
 run_sweep "GNURUST.8  VALUE image"   value_sweep.sh
 run_sweep "GNURUST.VALUE.NEGZERO.EDGE.1" edge_negzero_sweep.sh
 run_sweep "GNURUST.11 LEVEL-88 eval" cond_sweep.sh
+run_sweep "GNURUST.CLASS.1 class cond"  class_sweep.sh
 run_sweep "GNURUST.12 SET 88 TRUE"   set_sweep.sh
 run_sweep "GNURUST.12B SET 88 FALSE"  set_false_sweep.sh
 

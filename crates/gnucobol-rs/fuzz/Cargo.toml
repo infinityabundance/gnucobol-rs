@@ -168,3 +168,9 @@ name = "edited_encode"
 path = "fuzz_targets/edited_encode.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "class"
+path = "fuzz_targets/class.rs"
+test = false
+doc = false

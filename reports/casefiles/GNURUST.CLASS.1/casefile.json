@@ -1,0 +1,59 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "alphanumeric field bytes -> class-condition truth"
+  ],
+  "case_id": "GNURUST.CLASS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.30",
+  "damage_if_overclaimed": "treating a space-padded or signed field as NUMERIC mis-validates input and lets bad data through",
+  "hash_chain": {
+    "inputs_sha256": "7ef5f1e8eb3abd57d28a282d5fbfac433f8ede1e21fbe0749f1c4355df255346"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "4bf84373d80e0c58fdffa649aebbcfb2690374ca26e337aedfef294df01e9343",
+    "receipt_sha256": "ae5c72dcd6f93e9cf5c79a623b0526dae9c4fbad59537e4a533d86a8a41b4e02"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)"
+  ],
+  "negative_capability_ids": [
+    "NEG.SIGNED-NUMERIC-OVERPUNCH-NUMERIC-ON-PIC",
+    "NEG.USER-DEFINED-CLASS-NAMES",
+    "NEG.NATIONAL-UTF-8-DBCS-CLASSES",
+    "NEG.LOCALE-COLLATING-SEQUENCE"
+  ],
+  "negative_claims": [
+    "signed-numeric (overpunch) NUMERIC on PIC S9",
+    "user-defined CLASS names",
+    "national/UTF-8/DBCS classes",
+    "locale collating sequence",
+    "lie prevented: 'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)"
+  ],
+  "oracle": {
+    "detail": "cobc IF data-item IS <class> branch",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CLASS.1"
+  },
+  "positive_claims": [
+    "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER byte predicates over an alphanumeric field matching cobc (digits-only / letters-or-space / upper-or-space / lower-or-space)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/class_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 26,
+    "total": 26,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

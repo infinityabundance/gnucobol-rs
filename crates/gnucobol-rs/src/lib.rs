@@ -55,6 +55,7 @@ pub mod table_slice;
 pub mod attr;
 mod binary;
 pub mod cond;
+pub mod class;
 pub mod copybook;
 pub mod ebcdic;
 pub mod edited;
@@ -80,6 +81,7 @@ pub use cond::{
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use ebcdic::{decode_display, translate_byte, CodePage, EbcdicError};
+pub use class::{is_alphabetic, is_alphabetic_lower, is_alphabetic_upper, is_numeric};
 pub use edited::{decode_edited, edited_size, encode_edited, EditedDecode, EditedError};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};

@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "17/33",
+  "sealed_fraction": "18/34",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 17
+    "sealed": 18
   },
-  "surface_count": 33,
+  "surface_count": 34,
   "surfaces": [
     {
       "category": "data representation",
@@ -518,6 +518,20 @@
       "source_modules_present": true,
       "status": "negative",
       "surface": "cics-sql-preprocessor"
+    },
+    {
+      "category": "condition",
+      "courts": [
+        "GNURUST.CLASS.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "a wrong IS NUMERIC/ALPHABETIC mis-validates input data",
+      "source_modules": [
+        "libcob/common.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "class-conditions"
     }
   ]
 }

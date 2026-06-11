@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **33**  ·  sealed ✅ **17**  ·  observed 🟡 11  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **34**  ·  sealed ✅ **18**  ·  observed 🟡 11  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **17/33**
+- sealed fraction (data-representation spine): **18/34**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -44,6 +44,7 @@
 | `ml-io-xml-json` | screen/report/CICS/SQL unsupported | `mlio.c` | ⛔ negative | — |
 | `diagnostics` | diagnostics | `error.c` | ⛔ negative | — |
 | `cics-sql-preprocessor` | screen/report/CICS/SQL unsupported | `ppparse.c` | ⛔ negative | — |
+| `class-conditions` | condition | `common.c` | ✅ sealed | GNURUST.CLASS.1 |
 
 ## Risk of the unported surfaces (missing ❌)
 
