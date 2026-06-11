@@ -220,7 +220,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "GNURUST.COVERAGE.1: coverage drift / unmapped court"; cat /tmp/_cov_check
   fi
-  if python3 "$ROOT/lab/ladder/run.py" check >/tmp/_lad_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- ladder check ) >/tmp/_lad_check 2>&1; then
     note "PORTING-LADDER: every court placed on the forensic-port hierarchy; fresh"
   else
     bad "PORTING-LADDER: drift / unplaced court"; cat /tmp/_lad_check

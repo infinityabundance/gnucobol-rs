@@ -1,0 +1,20 @@
+//! gnucobol-rs governance tooling in Rust (replaces the lab/*.py scripts). Subcommands mirror the former
+//! Python tools: `<tool> generate|check`. Run from the repo root (cwd) or set GNURUST_ROOT.
+use std::process::exit;
+
+mod ladder;
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let tool = args.get(1).map(String::as_str).unwrap_or("");
+    let cmd = args.get(2).map(String::as_str).unwrap_or("check");
+    let root = std::env::var("GNURUST_ROOT").unwrap_or_else(|_| ".".into());
+    let code = match tool {
+        "ladder" => ladder::run(cmd, &root),
+        _ => {
+            eprintln!("usage: xtask <ladder> <generate|check>");
+            2
+        }
+    };
+    exit(code);
+}
