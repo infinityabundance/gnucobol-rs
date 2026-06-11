@@ -180,3 +180,9 @@ name = "refmod"
 path = "fuzz_targets/refmod.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "subscript"
+path = "fuzz_targets/subscript.rs"
+test = false
+doc = false

@@ -492,5 +492,19 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "an out-of-bounds substring reads or corrupts a neighbouring field"
+ },
+ {
+  "surface": "table-subscript",
+  "category": "data handling",
+  "source_modules": [
+   "cobc/typeck.c",
+   "libcob/move.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.SUBSCRIPT.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong subscript offset reads the wrong table element"
  }
 ]

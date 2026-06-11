@@ -768,6 +768,17 @@
         "numeric-edited/national operands",
         "refmod inside arithmetic"
       ]
+    },
+    "GNURUST.SUBSCRIPT.1": {
+      "court": "table subscript TABLE(i[,j])",
+      "sweep": "subscript_sweep.sh",
+      "byte_domain": "OCCURS table bytes + subscripts -> element bytes",
+      "non_claims": [
+        "out-of-bounds subscript (fail-closed)",
+        "OCCURS DEPENDING ON",
+        "INDEXED BY index-names",
+        "subscript arithmetic expressions"
+      ]
     }
   }
 }

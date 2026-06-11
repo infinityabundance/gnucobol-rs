@@ -1,8 +1,8 @@
 {
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "fuzz_covered": 47,
-  "impl_courts": 47,
-  "kani_covered": 47,
+  "fuzz_covered": 48,
+  "impl_courts": 48,
+  "kani_covered": 48,
   "na_courts": 55,
   "rows": [
     {
@@ -699,6 +699,15 @@
       ]
     },
     {
+      "court": "GNURUST.SUBSCRIPT.1",
+      "fuzz": [
+        "subscript.rs"
+      ],
+      "kani": [
+        "subscript.rs"
+      ]
+    },
+    {
       "court": "GNURUST.SORT.MERGE.ATLAS.1",
       "fuzz": "n/a",
       "kani": "n/a",
@@ -760,5 +769,5 @@
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 102
+  "total_courts": 103
 }

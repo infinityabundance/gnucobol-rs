@@ -1,0 +1,31 @@
+{
+  "byte_domain": "OCCURS table bytes + subscripts -> element bytes",
+  "campaign": "GNURUST.SUBSCRIPT.1",
+  "command": {
+    "replay": "bash lab/oracle/subscript_sweep.sh"
+  },
+  "court": "table subscript TABLE(i[,j])",
+  "crate_version": "0.7.32",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "out-of-bounds subscript (fail-closed)",
+    "OCCURS DEPENDING ON",
+    "INDEXED BY index-names",
+    "subscript arithmetic expressions"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=17 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

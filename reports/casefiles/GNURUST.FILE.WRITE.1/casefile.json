@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.WRITE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.31",
+  "crate_version": "0.7.32",
   "damage_if_overclaimed": "assuming LINE SEQUENTIAL preserves trailing spaces (or that RECORD SEQUENTIAL adds a newline) corrupts every written record's framing",
   "hash_chain": {
-    "inputs_sha256": "bb32bab5b21230e62f641fc1d3930900b800a44a1677eda2e492054b51f562bc"
+    "inputs_sha256": "b352c0e5eff047356b5acbd5209da5ad04d59e9699e479e842787a5d553ff2b0"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "577ab7bad6b73c2a88a7b7f0acef14589d4d7a36ffc4216691723d722645574a",
-    "receipt_sha256": "3f4c722665637c8bbe102a96d5c0c0659d1b8a0d5ef6488bf75c053d31eb8970"
+    "receipt_sha256": "1b8c58af330c9ba2315cb27a6b7481b1346f8b3ea542e5cd027f46297fdabaf2"
   },
   "kind": "court-casefile",
   "lie_prevented": [

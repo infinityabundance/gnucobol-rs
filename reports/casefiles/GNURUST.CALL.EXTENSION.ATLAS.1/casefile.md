@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.CALL.EXTENSION.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.31
+**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.32
 
 - **Oracle:** cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines
 - **Byte domain(s):** CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION

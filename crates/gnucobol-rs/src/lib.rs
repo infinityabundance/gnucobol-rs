@@ -57,6 +57,7 @@ mod binary;
 pub mod cond;
 pub mod class;
 pub mod refmod;
+pub mod subscript;
 pub mod copybook;
 pub mod ebcdic;
 pub mod edited;
@@ -83,6 +84,7 @@ pub use cond::{
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use ebcdic::{decode_display, translate_byte, CodePage, EbcdicError};
 pub use refmod::{apply_ref_mod, ref_mod, ref_mod_to_end, RefModError};
+pub use subscript::{element_1d, element_2d, table_element, SubscriptError};
 pub use class::{is_alphabetic, is_alphabetic_lower, is_alphabetic_upper, is_numeric, is_numeric_sign_leading, is_numeric_sign_leading_separate, is_numeric_sign_trailing_separate, is_numeric_signed_trailing};
 pub use edited::{decode_edited, edited_size, encode_edited, EditedDecode, EditedError};
 pub use error::DecimalError;

@@ -1301,6 +1301,20 @@
       "damage_if_overclaimed": "treating serial SEARCH as position-independent (or running SEARCH ALL on an unsorted table) silently returns the wrong table element in a lookup"
     },
     {
+      "id": "GNURUST.SUBSCRIPT.1",
+      "name": "table subscript access (multi-dimensional)",
+      "proven": "1-based direct table subscript TABLE(i) and multi-dimensional TABLE(i,j) element extraction (offset = sum (idx-1)*stride, innermost stride = element size) matching cobc in bounds",
+      "byte_domain": "OCCURS table bytes + subscripts -> element bytes",
+      "oracle": "cobc DISPLAY TABLE(i[,j]) subscript",
+      "fixtures": "subscript sweep 17/0 + fuzz",
+      "sealed_version": "0.7.32",
+      "not_proven": "out-of-bounds subscript (fail-closed by design, NOT cobc's flag-dependent read); OCCURS DEPENDING ON variable length; INDEXED BY index-names; subscript arithmetic expressions; signed/packed element decode",
+      "breaks_claim": "out-of-bounds subscript; ODO; INDEXED BY; deep nesting untested",
+      "readiness": 4,
+      "lie_prevented": "'COBOL subscripts are 0-based like C' -- NO, TABLE(1) is the FIRST element at offset 0; an off-by-one reads the wrong element",
+      "damage_if_overclaimed": "a wrong subscript offset reads the wrong table element or adjacent storage, corrupting every table lookup"
+    },
+    {
       "id": "GNURUST.SORT.MERGE.ATLAS.1",
       "name": "observed SORT / MERGE atlas",
       "proven": "observed GnuCOBOL SORT byte-effect (2/0) -- the last big surface gap (SORT/MERGE 145x per GNURUST.PUBLIC.GAP.1): SORT ASCENDING KEY reorders records into KEY-ASCENDING order (input 050,010,099,020 -> 010,020,050,099) and SORT DESCENDING into key-descending order, via USING the input file + GIVING the sorted output, over a sort-merge work file (SD). OBSERVED court: gnucobol-rs does NOT execute SORT -- it is a runtime sort engine over a work file -- this MAPS the reordering byte-effect, it sorts nothing",

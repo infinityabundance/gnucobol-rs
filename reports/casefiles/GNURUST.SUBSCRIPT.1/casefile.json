@@ -1,0 +1,61 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "OCCURS table bytes + subscripts -> element bytes"
+  ],
+  "case_id": "GNURUST.SUBSCRIPT.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.32",
+  "damage_if_overclaimed": "a wrong subscript offset reads the wrong table element or adjacent storage, corrupting every table lookup",
+  "hash_chain": {
+    "inputs_sha256": "1524b976711eada3d82e60663810880cb33df7bea599b42b5a0d876d58d648df"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "500a0afd1cd03ddbd0c6258f7098112caa67586c5a6f82fab3e2b78f05b7d0ae",
+    "receipt_sha256": "ce82dbae3d587056fd2a51cae1660943cc0534969b1bd1ca4f069da319080612"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'COBOL subscripts are 0-based like C' -- NO, TABLE(1) is the FIRST element at offset 0; an off-by-one reads the wrong element"
+  ],
+  "negative_capability_ids": [
+    "NEG.OUT-OF-BOUNDS-SUBSCRIPT-FAIL-CLOSED-BY-D",
+    "NEG.OCCURS-DEPENDING-ON-VARIABLE-LENGTH",
+    "NEG.INDEXED-BY-INDEX-NAMES",
+    "NEG.SUBSCRIPT-ARITHMETIC-EXPRESSIONS",
+    "NEG.SIGNED-PACKED-ELEMENT-DECODE"
+  ],
+  "negative_claims": [
+    "out-of-bounds subscript (fail-closed by design, NOT cobc's flag-dependent read)",
+    "OCCURS DEPENDING ON variable length",
+    "INDEXED BY index-names",
+    "subscript arithmetic expressions",
+    "signed/packed element decode",
+    "lie prevented: 'COBOL subscripts are 0-based like C' -- NO, TABLE(1) is the FIRST element at offset 0; an off-by-one reads the wrong element"
+  ],
+  "oracle": {
+    "detail": "cobc DISPLAY TABLE(i[,j]) subscript",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SUBSCRIPT.1"
+  },
+  "positive_claims": [
+    "1-based direct table subscript TABLE(i) and multi-dimensional TABLE(i,j) element extraction (offset = sum (idx-1)*stride, innermost stride = element size) matching cobc in bounds"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/subscript_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 17,
+    "total": 17,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

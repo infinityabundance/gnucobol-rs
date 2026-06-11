@@ -78,6 +78,7 @@ run_sweep "GNURUST.IF.NUMERIC.SLICE.1" if_numeric_sweep.sh
 run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh
 run_sweep "GNURUST.TABLE.PERFORM.SLICE.1" table_sweep.sh
 run_sweep "GNURUST.SEARCH.TABLE.1" search_sweep.sh
+run_sweep "GNURUST.SUBSCRIPT.1 subscript" subscript_sweep.sh
 run_sweep "GNURUST.FILE.FLOW.SLICE.1" file_flow_sweep.sh
 run_sweep "GNURUST.FILE.FILTER.SLICE.1" file_filter_sweep.sh
 run_sweep "SIZE.ERROR.ATLAS.1 (observed)" size_error_atlas_sweep.sh
