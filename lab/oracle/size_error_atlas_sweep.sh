@@ -51,45 +51,4 @@ gen SUBSIGN  "S9(3)" ""            3 -999 "SUBTRACT 500 FROM RCV"
 gen DIV0DISP "9(3)" ""             3 999  "DIVIDE RCV BY ZERO-V GIVING RCV"
 gen ROUNDDISP "9(3)" ""            3 999  "ADD 0.6 TO RCV ROUNDED"
 
-python3 - "$TMP" "$ROOT" <<'PY'
-import sys, os, json, glob
-tmp, root = sys.argv[1], sys.argv[2]
-def grab(buf, marker, n):
-    i = buf.find(marker)
-    if i < 0: return None
-    s = i + len(marker); return buf[s:s+n]
-SCEN = {  # base -> (op, recv, narrative)
- "ADDDISP": ("ADD","DISPLAY 9(3)"), "ADDC3": ("ADD","COMP-3 9(3)"),
- "MULDISP": ("MULTIPLY","DISPLAY 9(3)"), "SUBSIGN": ("SUBTRACT","signed S9(3)"),
- "DIV0DISP": ("DIVIDE-BY-ZERO","DISPLAY 9(3)"), "ROUNDDISP": ("ADD ROUNDED carry","DISPLAY 9(3)"),
-}
-SIZE = {"ADDDISP":3,"ADDC3":2,"MULDISP":3,"SUBSIGN":3,"DIV0DISP":3,"ROUNDDISP":3}
-rows=[]; pf=0; fl=0
-for base,(op,recv) in SCEN.items():
-    for var in ("P","S"):
-        f=os.path.join(tmp,f"{base}{var}.out")
-        if not os.path.exists(f): print(f"NO-OUTPUT {base}{var}"); fl+=1; continue
-        buf=open(f,"rb").read(); n=SIZE[base]
-        before=grab(buf,b"BEFORE[",n); after=grab(buf,b"AFTER[",n); se=grab(buf,b"SE[",1)
-        if before is None or after is None or se is None: print(f"PARSE-FAIL {base}{var}"); fl+=1; continue
-        written = before != after
-        signaled = (se == b"Y")
-        rows.append({"case":f"{base}{var}","op":op,"receiver":recv,
-                     "on_size_error": var=="S",
-                     "receiver_before_hex":before.hex(),"receiver_after_hex":after.hex(),
-                     "receiver_written":written,"receiver_preserved":not written,
-                     "size_error_signaled":signaled})
-        # ASSERT the well-defined behaviors:
-        if var=="S":
-            ok = signaled and (not written)            # ON SIZE ERROR -> preserved + signaled
-        else:
-            ok = (not signaled)                         # plain -> no SE flag (no clause); record write/preserve
-        (globals().__setitem__('pf', pf+1) if ok else (print(f"MISMATCH {base}{var}: written={written} signaled={signaled}"), globals().__setitem__('fl', fl+1)))
-atlas={"schema":"kobold-size-error-atlas-v1","court":"SIZE.ERROR.ATLAS.1","oracle":"GnuCOBOL 3.2 (lab/oracle/prefix)",
- "doctrine":"Observed oracle evidence only: whether size error is signaled and whether receiver bytes are written or preserved. NO ON SIZE ERROR / NOT ON SIZE ERROR control-flow implementation, no Procedure Division execution, no business-arithmetic correctness.",
- "cases":rows,
- "non_claims":["NEG.SIZE_ERROR.CONTROL_FLOW","NEG.SIZE_ERROR.ON_SIZE_ERROR_NOT_IMPLEMENTED","NEG.SIZE_ERROR.NOT_ON_SIZE_ERROR_NOT_IMPLEMENTED","NEG.SIZE_ERROR.RECEIVER_WRITE_NOT_INFERRED","NEG.SIZE_ERROR.BRANCH_EXECUTION_NOT_CLAIMED","NEG.SIZE_ERROR.BUSINESS_ARITHMETIC_NOT_CLAIMED"]}
-os.makedirs(os.path.join(root,"reports"),exist_ok=True)
-json.dump(atlas, open(os.path.join(root,"reports","size-error-atlas.json"),"w"), indent=2)
-print(f"PASS={pf} FAIL={fl}")
-PY
+( cd "$ROOT" && cargo run -q -p xtask -- atlas-size-error "$TMP" )

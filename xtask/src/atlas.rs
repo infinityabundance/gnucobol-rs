@@ -191,3 +191,29 @@ pub fn dialect_runtime(root: &str) -> i32 {
         ("binary-long-rejected-by-ibm", e("BL_IBM") == "REJ" && e("BL_DEF") == "OK"),
     ])
 }
+
+const SIZE_ERROR_ATLAS: &str = include_str!("data/size-error-atlas.json");
+
+pub fn size_error(root: &str, tmp: &str) -> i32 {
+    let scen: [(&str, usize); 6] = [("ADDDISP",3),("ADDC3",2),("MULDISP",3),("SUBSIGN",3),("DIV0DISP",3),("ROUNDDISP",3)];
+    let grab = |buf: &[u8], marker: &[u8], n: usize| -> Option<Vec<u8>> {
+        buf.windows(marker.len()).position(|w| w == marker).map(|i| { let s = i + marker.len(); buf[s..(s + n).min(buf.len())].to_vec() })
+    };
+    let (mut pf, mut fl) = (0, 0);
+    for (base, n) in scen {
+        for var in ["P", "S"] {
+            let f = Path::new(tmp).join(format!("{base}{var}.out"));
+            if !f.exists() { println!("NO-OUTPUT {base}{var}"); fl += 1; continue; }
+            let buf = std::fs::read(&f).unwrap_or_default();
+            let (before, after, se) = (grab(&buf, b"BEFORE[", n), grab(&buf, b"AFTER[", n), grab(&buf, b"SE[", 1));
+            if before.is_none() || after.is_none() || se.is_none() { println!("PARSE-FAIL {base}{var}"); fl += 1; continue; }
+            let written = before != after;
+            let signaled = se.as_deref() == Some(b"Y");
+            let ok = if var == "S" { signaled && !written } else { !signaled };
+            if ok { pf += 1; } else { println!("MISMATCH {base}{var}: written={written} signaled={signaled}"); fl += 1; }
+        }
+    }
+    writeatlas(root, "reports/size-error-atlas.json", SIZE_ERROR_ATLAS);
+    println!("PASS={pf} FAIL={fl}");
+    if fl > 0 { 1 } else { 0 }
+}

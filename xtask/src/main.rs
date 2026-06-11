@@ -54,6 +54,7 @@ fn main() {
         "atlas-call-layout" => atlas::call_layout(&root),
         "atlas-directive-variance" => atlas::directive_variance(&root),
         "atlas-dialect-runtime" => atlas::dialect_runtime(&root),
+        "atlas-size-error" => atlas::size_error(&root, args.get(2).map(String::as_str).unwrap_or("")),
         "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
