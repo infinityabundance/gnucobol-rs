@@ -1,5 +1,7 @@
-//! Rust mirror of the USAGE INDEX oracle (`GNURUST.INDEX.1`): reads `label|start|op|k`, runs
-//! set_index_to / set_index_up_by / set_index_down_by, prints `label <hex of the 4 index bytes>`.
+//! Rust mirror of the USAGE INDEX oracle (`GNURUST.INDEX.1`): reads `label|start|op|k|stride`, runs
+//! set_index_to / set_index_up_by / set_index_down_by, prints `label <hex of the 4 index bytes>`. The
+//! trailing `stride` field is intentionally IGNORED: the Rust model stores the occurrence number with no
+//! element-size input, so identical bytes across strides ARE the element-size-independence proof.
 use gnucobol_rs::{set_index_down_by, set_index_to, set_index_up_by};
 use std::io::{self, BufRead, Write};
 
@@ -17,7 +19,7 @@ fn main() {
             continue;
         }
         let f: Vec<&str> = line.split('|').collect();
-        if f.len() != 4 {
+        if f.len() != 5 {
             continue;
         }
         let label = f[0];

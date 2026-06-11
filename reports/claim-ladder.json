@@ -1334,7 +1334,7 @@
       "proven": "the bytes a USAGE INDEX / INDEXED BY index item holds: a 4-byte native-endian (little-endian on the admitted x86-64 oracle) signed two's-complement word storing the OCCURRENCE NUMBER (element-size independent -- SET IDX TO 5 stores 5, never 5*element_size), and SET IDX TO/UP BY/DOWN BY as plain integer arithmetic on that word (DOWN past zero stores the negative two's-complement value; cobc does not clamp)",
       "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
       "oracle": "cobc SET index-item TO/UP BY/DOWN BY; dumped via REDEFINES + FUNCTION ORD",
-      "fixtures": "index sweep 29/0 + fuzz",
+      "fixtures": "index sweep 41/0 + fuzz",
       "sealed_version": "0.7.34",
       "not_proven": "8-byte INDEX on LP64 builds where cob index width != 4; SEARCH/SEARCH ALL execution (observed separately); index used as a subscript (the (idx-1)*stride multiply lives in GNURUST.SUBSCRIPT.1); relation conditions between index items; SET index TO pointer/address",
       "breaks_claim": "non-4-byte index width; big-endian host; treating the stored value as a byte offset",

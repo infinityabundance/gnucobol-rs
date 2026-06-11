@@ -12,11 +12,11 @@
   "crate_version": "0.7.34",
   "damage_if_overclaimed": "mis-modelling an index as an offset (or wrong endianness) corrupts every SET/SEARCH and every index-driven table access",
   "hash_chain": {
-    "inputs_sha256": "a9ab14d4720082274b1e005f1afd0193af6bdf49d9d5488f0d1456988e87ac21"
+    "inputs_sha256": "720a75b28ae12aa6623f09d1e22e0018d8403660225f5b345f99a82e0b805453"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "b8d0d661050110154c55a37c068a1a1d461a505c0f2315f773b164dce409551a",
-    "receipt_sha256": "4fe6c901cc928bb2979e5471c4728531ae30a8787557feab748d1e52bcbff9de"
+    "claim_ladder_entry_sha256": "32390f4a24cda27370ddf89bed9f19e3fd8c17a616ed67004019fd22e2d2976f",
+    "receipt_sha256": "9130dabba1b25d496ddac36ada72251e720baa16e0df39639fe48a6c7988f9d7"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -54,8 +54,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 29,
-    "total": 29,
+    "pass": 41,
+    "total": 41,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

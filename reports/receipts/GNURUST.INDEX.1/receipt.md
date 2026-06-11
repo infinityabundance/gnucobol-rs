@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.INDEX.1 — USAGE INDEX storage + SET arithmetic
 
-**Verdict: PASS** · replay `PASS=29 FAIL=0`
+**Verdict: PASS** · replay `PASS=41 FAIL=0`
 
 | field | value |
 |-------|-------|

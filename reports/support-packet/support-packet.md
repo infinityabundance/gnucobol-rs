@@ -18,8 +18,8 @@
 | id | path | sha256 |
 |---|---|---|
 | `status` | [`STATUS.md`](../../STATUS.md) | `c511a56bc47674b3…` |
-| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `5a45063bf92118ee…` |
-| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `65ea96fe1b75c891…` |
+| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `36ae7c0faea40358…` |
+| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `b0782aa1d224b67f…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `8657a3bda9e269d1…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `07eccedc93704954…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |

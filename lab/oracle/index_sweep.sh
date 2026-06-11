@@ -21,6 +21,10 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
   echo "PROGRAM-ID. IDXPROG."
   echo "DATA DIVISION."
   echo "WORKING-STORAGE SECTION."
+  echo "01 T4."
+  echo "   05 E4  PIC X(4)  OCCURS 10 INDEXED BY I4."
+  echo "01 T17."
+  echo "   05 E17 PIC X(17) OCCURS 10 INDEXED BY I17."
   echo "01 IXS USAGE INDEX."
   echo "01 RAW REDEFINES IXS."
   echo "   05 BB PIC X OCCURS 4."
@@ -29,13 +33,21 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
   echo "01 O3 PIC 9(3)."
   echo "01 O4 PIC 9(3)."
   echo "PROCEDURE DIVISION."
-  while IFS='|' read -r label start op k; do
+  while IFS='|' read -r label start op k stride; do
     [ -z "$label" ] && continue
-    echo "SET IXS TO $start."
-    case "$op" in
-      up)   echo "SET IXS UP BY $k.";;
-      down) echo "SET IXS DOWN BY $k.";;
+    # stride 0 = standalone USAGE INDEX; >0 = INDEXED BY index-name over PIC X(stride), copied into IXS
+    # to dump its bytes (index-names cannot be REDEFINES'd; MOVE index-name TO USAGE INDEX is byte-exact).
+    case "$stride" in
+      4)  IX="I4";;
+      17) IX="I17";;
+      *)  IX="IXS";;
     esac
+    echo "SET $IX TO $start."
+    case "$op" in
+      up)   echo "SET $IX UP BY $k.";;
+      down) echo "SET $IX DOWN BY $k.";;
+    esac
+    [ "$IX" != "IXS" ] && echo "MOVE $IX TO IXS."
     echo "MOVE FUNCTION ORD(BB(1)) TO O1."
     echo "MOVE FUNCTION ORD(BB(2)) TO O2."
     echo "MOVE FUNCTION ORD(BB(3)) TO O3."
@@ -51,7 +63,7 @@ fi
 "$TMP/idxprog" > "$TMP/out.txt" 2>/dev/null
 
 # FUNCTION ORD is 1-based (byte value + 1); subtract 1 and render the 4 bytes as hex.
-while IFS='|' read -r label start op k; do
+while IFS='|' read -r label start op k stride; do
   [ -z "$label" ] && continue
   line=$(grep -m1 "^$label\[" "$TMP/out.txt")
   inner="${line#*[}"; inner="${inner%]*}"

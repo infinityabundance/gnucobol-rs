@@ -816,7 +816,7 @@
       "breaks_claim": "non-4-byte index width; big-endian host; treating the stored value as a byte offset",
       "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
       "damage_if_overclaimed": "mis-modelling an index as an offset (or wrong endianness) corrupts every SET/SEARCH and every index-driven table access",
-      "fixtures": "index sweep 29/0 + fuzz",
+      "fixtures": "index sweep 41/0 + fuzz",
       "id": "GNURUST.INDEX.1",
       "lie_prevented": "'an INDEX item stores a byte offset (occurrence*element_size)' -- NO, it stores the plain occurrence number; the stride multiply happens at subscript time, not in the index word",
       "name": "USAGE INDEX storage + SET arithmetic",
@@ -968,7 +968,7 @@
     }
   ],
   "crate": "gnucobol-rs",
-  "generated_at_utc": "2026-06-11T13:31:38Z",
+  "generated_at_utc": "2026-06-11T13:51:45Z",
   "schema": "claim-ladder-snapshot-v1",
   "version": "0.7.34"
 }

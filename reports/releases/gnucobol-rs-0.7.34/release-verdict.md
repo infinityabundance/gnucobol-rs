@@ -1,11 +1,11 @@
 # Release verdict — gnucobol-rs 0.7.34
 
-_Generated 2026-06-11T13:31:38Z from the machine files in this packet. A release is an evidence packet, not merely a version number._
+_Generated 2026-06-11T13:51:45Z from the machine files in this packet. A release is an evidence packet, not merely a version number._
 
 | evidence | value |
 |----------|-------|
 | crate / version | `gnucobol-rs` 0.7.34 (gnurust) |
-| git commit | `f7e1356a85dc202a07464dbb58809be22fe409ae` |
+| git commit | `4223abc3346243f9824fc43a2ef482b957ef46c1` |
 | dependencies | 28 |
 | sealed courts in this crate | 69 |
 | TRUST.2 receipts | 63 |
