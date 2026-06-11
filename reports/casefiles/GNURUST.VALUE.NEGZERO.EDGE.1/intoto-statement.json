@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/casefile.json",
-      "digest": {
-        "sha256": "49286e6fe4291ed75db52fdbaaf1a6cdc4fa383b79af98d5ace9f396bc50eee0"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "26013d00cc571ff1da6a4284cabdaec345496c8a218e90fa0645f509f8b47f91",
+      "receipt_sha256": "d55a607667d1d19f35124b128caa837745e20a6d161603f74d45be5bf421fd3e"
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 4,
     "replay": {
       "command": "bash lab/oracle/edge_negzero_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "e122812499c95bb4c45b516c7c98a39c20e07015cb1da97f5f9e60b88dc1c7cd",
-      "receipt_sha256": "d6bf7e83ecd5c9456150bc869db3186e4d45c9bd2fb908cdb2a8980ee5862b1d"
-    },
-    "positive_claim_count": 4,
-    "negative_claim_count": 7
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4ffcf656c3525026d3a919d2c962fa63a6e11ba39771cb68ef29c64b6cebc954"
+      },
+      "name": "reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/casefile.json"
+    }
+  ]
 }

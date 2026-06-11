@@ -1,35 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.DATA.5",
-  "kind": "composition-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.2",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "raw EBCDIC zoned field bytes -> value"
+  ],
+  "case_id": "KOBOLD.DATA.5",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.2",
+  "damage_if_overclaimed": "auto-detecting the code page mis-decodes the whole EBCDIC file",
+  "hash_chain": {
+    "inputs_sha256": "6f9d277b31cb2775edd87a5c32c0a93e9474add0b6de83c5732a2ba7984dd00b"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "f35ca4503149098744ce789243bf0075db727adc2a3cb4cca625ba71a9b06865",
+    "claim_ladder_entry_sha256": "69e35f461139318f2a3c7172769addbe6eaf9926ebd911c8e1cdcfbb5aeb740b",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "gnucobol-rs GNURUST.17 (sealed)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "account-cp500 corpus byte-stable, 0 unsupported"
-  },
-  "positive_claims": [
-    "cp500 EBCDIC zoned numeric DISPLAY fields decode via GNURUST.17 in the corpus",
-    "audit names the court"
+  "kind": "composition-casefile",
+  "lie_prevented": [
+    "'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ"
+  ],
+  "negative_capability_ids": [
+    "NEG.CP037",
+    "NEG.EDITED-NUMERIC-UNDER-CP500",
+    "NEG.BINARY-PACKED-VIA-THIS-PATH",
+    "NEG.MIXED-AUTO-DETECT-ENCODING"
   ],
   "negative_claims": [
     "cp037",
@@ -38,24 +35,27 @@
     "mixed/auto-detect encoding",
     "lie prevented: 'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ"
   ],
-  "negative_capability_ids": [
-    "NEG.CP037",
-    "NEG.EDITED-NUMERIC-UNDER-CP500",
-    "NEG.BINARY-PACKED-VIA-THIS-PATH",
-    "NEG.MIXED-AUTO-DETECT-ENCODING"
+  "oracle": {
+    "detail": "gnucobol-rs GNURUST.17 (sealed)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "cp500 EBCDIC zoned numeric DISPLAY fields decode via GNURUST.17 in the corpus",
+    "audit names the court"
   ],
-  "byte_domains": [
-    "raw EBCDIC zoned field bytes -> value"
-  ],
-  "lie_prevented": [
-    "'EBCDIC numeric decodes like ASCII zoned' -- the C/D/F sign zones differ"
-  ],
-  "damage_if_overclaimed": "auto-detecting the code page mis-decodes the whole EBCDIC file",
   "replay": {
     "command": "gnucobol-rs GNURUST.17 (sealed)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "04c772f9d637e4d9a303c1441a40cbd651f403a88f8c861eab967a687d12118a"
-  }
+  "results": {
+    "fail": 0,
+    "note": "account-cp500 corpus byte-stable, 0 unsupported",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

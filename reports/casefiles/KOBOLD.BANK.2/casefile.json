@@ -1,37 +1,36 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.BANK.2",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "declared accounting profile over banking detail records -> debit/credit totals"
+  ],
+  "case_id": "KOBOLD.BANK.2",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "summing a rate or account-id as money, or reading a sign as debit/credit, mis-states the ledger",
+  "hash_chain": {
+    "inputs_sha256": "3a64723b5e88d8bfce5201b98dd42bed8a971c1417032f92196b42983f28514f"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "ad4aed3a2f37b074dea8aca4f2d30827a84ef77cf66c0afc49ae5e6144ced589",
+    "claim_ladder_entry_sha256": "a72cd2cbc2a283c4cd8275710ee920a09a37800829aea6422dfe5c8f89e6045b",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "composed gnucobol-rs courts + declared kobold-accounting-profile-v1",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/banking.rs (5: balanced+rate-not-summed, tampered, negative-D-still-debit, unknown-fails-closed, credit-routing)"
-  },
-  "positive_claims": [
-    "debit/credit polarity from a declared source field + value tables only (never sign/CR-DB/name)",
-    "only declared Amount-role fields are summed (identifiers/rates/codes never money)",
-    "negative amount with declared D stays debit",
-    "unknown polarity fails closed"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'a numeric field is money and its sign is its posting side' -- ACCOUNTING.PROFILE.1 sums only declared Amount fields and takes polarity only from the declared source"
+  ],
+  "negative_capability_ids": [
+    "NEG.POLARITY-FROM-NUMERIC-SIGN",
+    "NEG.POLARITY-FROM-CR-DB-PRESENTATION",
+    "NEG.NUMERIC-ROLE-FROM-PIC-OR-FIELD-NAME",
+    "NEG.TRANSACTION-CODE-TABLE-UNLESS-DECLARED",
+    "NEG.ACCOUNT-TYPE-NORMAL-BALANCE-POLARITY",
+    "NEG.REVERSAL-FROM-NEGATIVE-SIGN",
+    "NEG.CURRENCY-MINOR-UNIT-CORRECTNESS",
+    "NEG.POSTING-LEDGER-BUSINESS-TRUTH"
   ],
   "negative_claims": [
     "polarity from numeric sign",
@@ -44,28 +43,29 @@
     "posting/ledger/business truth",
     "lie prevented: 'a numeric field is money and its sign is its posting side' -- ACCOUNTING.PROFILE.1 sums only declared Amount fields and takes polarity only from the declared source"
   ],
-  "negative_capability_ids": [
-    "NEG.POLARITY-FROM-NUMERIC-SIGN",
-    "NEG.POLARITY-FROM-CR-DB-PRESENTATION",
-    "NEG.NUMERIC-ROLE-FROM-PIC-OR-FIELD-NAME",
-    "NEG.TRANSACTION-CODE-TABLE-UNLESS-DECLARED",
-    "NEG.ACCOUNT-TYPE-NORMAL-BALANCE-POLARITY",
-    "NEG.REVERSAL-FROM-NEGATIVE-SIGN",
-    "NEG.CURRENCY-MINOR-UNIT-CORRECTNESS",
-    "NEG.POSTING-LEDGER-BUSINESS-TRUTH"
+  "oracle": {
+    "detail": "composed gnucobol-rs courts + declared kobold-accounting-profile-v1",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "debit/credit polarity from a declared source field + value tables only (never sign/CR-DB/name)",
+    "only declared Amount-role fields are summed (identifiers/rates/codes never money)",
+    "negative amount with declared D stays debit",
+    "unknown polarity fails closed"
   ],
-  "byte_domains": [
-    "declared accounting profile over banking detail records -> debit/credit totals"
-  ],
-  "lie_prevented": [
-    "'a numeric field is money and its sign is its posting side' -- ACCOUNTING.PROFILE.1 sums only declared Amount fields and takes polarity only from the declared source"
-  ],
-  "damage_if_overclaimed": "summing a rate or account-id as money, or reading a sign as debit/credit, mis-states the ledger",
   "replay": {
     "command": "composed gnucobol-rs courts + declared kobold-accounting-profile-v1",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "c49a3981e3966304cfb056ed159fcc35328377da9fc9725bd2251dc2e476441a"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/banking.rs (5: balanced+rate-not-summed, tampered, negative-D-still-debit, unknown-fails-closed, credit-routing)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

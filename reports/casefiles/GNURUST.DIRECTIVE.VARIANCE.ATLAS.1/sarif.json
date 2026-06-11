@@ -1,13 +1,76 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: implementation of non-default directives (gnucobol-rs decodes under the BUILD.PROFILE.1 default only)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: auto-detection of a binary's build profile from its bytes"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: a complete enumeration of every cobc directive"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: dialect-selection flags (-std, owned by GNURUST.DIALECT.RUNTIME.ATLAS.1)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: code-generation/optimization directives"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: runtime environment variables (COB_*)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: vendor-specific directives"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: lie prevented: a COBOL binary's record bytes are fixed by the copybook alone -- NO: a COMPILER DIRECTIVE shifts them: -fbinary-size=2-4-8 makes a small COMP field 2 bytes (mis-offsetting every later field), -fbinary-byteorder=native flips multi-byte COMP endianness, and -fno-binary-truncate changes what a MOVE stores -- so a correct decode REQUIRES the producer's build profile (BUILD.PROFILE.1), it cannot be inferred from the copybook"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,74 +84,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: implementation of non-default directives (gnucobol-rs decodes under the BUILD.PROFILE.1 default only)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: auto-detection of a binary's build profile from its bytes"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: a complete enumeration of every cobc directive"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: dialect-selection flags (-std, owned by GNURUST.DIALECT.RUNTIME.ATLAS.1)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: code-generation/optimization directives"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: runtime environment variables (COB_*)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: vendor-specific directives"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 non-claim: lie prevented: a COBOL binary's record bytes are fixed by the copybook alone -- NO: a COMPILER DIRECTIVE shifts them: -fbinary-size=2-4-8 makes a small COMP field 2 bytes (mis-offsetting every later field), -fbinary-byteorder=native flips multi-byte COMP endianness, and -fno-binary-truncate changes what a MOVE stores -- so a correct decode REQUIRES the producer's build profile (BUILD.PROFILE.1), it cannot be inferred from the copybook"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

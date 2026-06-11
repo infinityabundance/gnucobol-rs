@@ -1,58 +1,58 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.OPERATOR.1",
-  "kind": "operator-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold-data-shim 0.5.0",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "operator JSON outputs + audit"
+  ],
+  "case_id": "KOBOLD.OPERATOR.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-data-shim 0.5.0",
+  "damage_if_overclaimed": "trusting a value with no provenance trail means an auditor cannot defend it",
+  "hash_chain": {
+    "inputs_sha256": "943c27b8b0dd8e3cafecd68fc66ccc80478ffe8777ebb94a06d1f2d5959641f2"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "c7f27bd943860d3c92ea89d87c4b0dd283e66216981ddc5a57056a59bddd7d3d",
+    "claim_ladder_entry_sha256": "4d6b1299d97bbd73c41ce4d43303a3f3661e2e208a790a85c8255d9873bd435e",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "sealed GNURUST courts",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "5 operator tests (explain/totals/collision/dirty)"
-  },
-  "positive_claims": [
-    "explain-field (provenance/courts/value/non-claims), control totals, dirty-data evidence/strict, JSON key-collision refusal, stale-copybook risk in receipts"
-  ],
-  "negative_claims": [
-    "business truth",
-    "semantic validity",
-    "INITIALIZE/repair",
-    "lie prevented: 'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
+  "kind": "operator-casefile",
+  "lie_prevented": [
+    "'a hand-written PASS table is evidence' — every value names its court + provenance"
   ],
   "negative_capability_ids": [
     "NEG.BUSINESS-TRUTH",
     "NEG.SEMANTIC-VALIDITY",
     "NEG.INITIALIZE-REPAIR"
   ],
-  "byte_domains": [
-    "operator JSON outputs + audit"
+  "negative_claims": [
+    "business truth",
+    "semantic validity",
+    "INITIALIZE/repair",
+    "lie prevented: 'a hand-written PASS table is evidence' — every value names its court + provenance"
   ],
-  "lie_prevented": [
-    "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance"
+  "oracle": {
+    "detail": "sealed GNURUST courts",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "explain-field (provenance/courts/value/non-claims), control totals, dirty-data evidence/strict, JSON key-collision refusal, stale-copybook risk in receipts"
   ],
-  "damage_if_overclaimed": "trusting a value with no provenance trail means an auditor cannot defend it",
   "replay": {
     "command": "sealed GNURUST courts",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "b214a1e092159bbc3fae0842af039c57a103176fe1d849f4fde9fa4c2f824161"
-  }
+  "results": {
+    "fail": 0,
+    "note": "5 operator tests (explain/totals/collision/dirty)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/SIZE.ERROR.ATLAS.1/casefile.json",
-      "digest": {
-        "sha256": "d70060f890612c26a3fd265b9131f9ea3c4d9184ccec49937d7475676fe184ce"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "SIZE.ERROR.ATLAS.1",
-    "kind": "court-casefile",
     "crate": "kobold-data-shim",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "d54824e5ac390c4c03f9ff62308349c15779303464667e721e8c0458fb8be36e",
+      "receipt_sha256": "b27bf998f12db59384115e2c34043ec5cdc818ebd08c0c2c8c4bb7ef81a8b0c8"
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 5,
     "replay": {
       "command": "bash lab/oracle/size_error_atlas_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "9e9754edffc06b9dc33d4906a68298da5133b6c0aa9f0b4ca505c9a2c7df145e",
-      "receipt_sha256": "adeca1b51fb2bb36e82b9117f54abca6a857f5f9b620302771ad9b060e232142"
-    },
-    "positive_claim_count": 5,
-    "negative_claim_count": 6
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "7c6173e8d61716a6021ca924bde2734c348c05cc0e7bf7381fb84dddcbc2f159"
+      },
+      "name": "reports/casefiles/SIZE.ERROR.ATLAS.1/casefile.json"
+    }
+  ]
 }

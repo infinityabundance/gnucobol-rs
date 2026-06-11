@@ -1,4 +1,4 @@
-<!-- DO NOT EDIT BY HAND. Generated from casefile.json by lab/casefile/run.py.
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.9 (court-casefile)
 
@@ -9,11 +9,9 @@
 - **Replay:** `cobc -C attr witness`
 - **Authority:** STATUS.md · receipt_status: no-trust2-receipt
 
-## Positive claims (4)
+## Positive claims (2)
 - P scaling field model (digits/scale/size) matching cobc
-- trailing digits=9s
-- P scale=-P, leading digits=9s scale=9s
-- P
+- trailing digits=9s+P scale=-P, leading digits=9s scale=9s+P
 
 ## Negative claims (4) — negative capability is the trust surface
 - V+P

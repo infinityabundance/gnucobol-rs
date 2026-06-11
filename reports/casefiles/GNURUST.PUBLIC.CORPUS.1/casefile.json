@@ -1,35 +1,33 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.PUBLIC.CORPUS.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "meta index (gnucobol-rs lab)",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "a curated index of public corpora + metadata (no bytes admitted)"
+  ],
+  "case_id": "GNURUST.PUBLIC.CORPUS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "meta index (gnucobol-rs lab)",
+  "damage_if_overclaimed": "presenting a corpus index as parity/test coverage fabricates evidence the project has not produced -- the exact overclaim the method exists to prevent",
+  "hash_chain": {
+    "inputs_sha256": "db2b7deb0d50b8337ea6c1f49c32732a2ab2484724b1df30a8592ec891e232fe"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6df7ec44d6d30870877ff2b4a35bd2c64bb2d13e2c4b41c9cfb10961185baff9",
+    "claim_ladder_entry_sha256": "213634678b8440156634d76314537f2dddaa4482fb57656edee92acd3ce84333",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "none -- a reference/meta court (like GNURUST.COVERAGE.1)",
-    "upstream_court": "GNURUST.PUBLIC.CORPUS.1",
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "lab/corpus/run.py 25 corpora -> reports/public-corpus-index.json"
-  },
-  "positive_claims": [
-    "an admitted INDEX of 25 public COBOL/GnuCOBOL corpora (17 GnuCOBOL-runnable, 5 mainframe-realistic, 3 research-mining) as a HOSTILE WITNESS SET for gap discovery -- real public terrain to grow the court map against. Records per corpus: source URL, tier, declared features, note, status",
-    "plus a best-first-10 ingestion order, the future companion campaigns (GNURUST.PUBLIC.GAP.1 run+classify, GNURUST.BUILD.PROFILE.1 ABI/config binding, GNURUST.INDEXED.FILE.ATLAS.1), and a behavioral-parity ladder (Level 0 static layout .. Level 8 multi-module runtime parity) locating the current frontier at Level 6 (bounded trace replay via the IF/EVALUATE/PERFORM/TABLE/FILE-FLOW slices). INDEX ONLY"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "we tested 25 public COBOL datasets -- NO: this court admits the SOURCES for gap discovery, fetches/compiles/runs NOTHING, and claims NO parity; the running + failure-classification is the future GNURUST.PUBLIC.GAP.1, and behavioral parity is reached by court admission up the ladder, never by a speculative interpreter"
+  ],
+  "negative_capability_ids": [
+    "NEG.PARITY-OVER-ANY-CORPUS",
+    "NEG.THAT-ANY-CORPUS-WAS-FETCHED-COMPILED-RUN",
+    "NEG.THE-RECORDED-COMMIT-HASHES-OR-LICENSES-U",
+    "NEG.THAT-THE-DECLARED-FEATURE-FLAGS-WERE-VER",
+    "NEG.EXHAUSTIVENESS-OF-THE-PUBLIC-COBOL-UNIVE"
   ],
   "negative_claims": [
     "parity over any corpus",
@@ -39,25 +37,27 @@
     "exhaustiveness of the public-COBOL universe",
     "lie prevented: we tested 25 public COBOL datasets -- NO: this court admits the SOURCES for gap discovery, fetches/compiles/runs NOTHING, and claims NO parity; the running + failure-classification is the future GNURUST.PUBLIC.GAP.1, and behavioral parity is reached by court admission up the ladder, never by a speculative interpreter"
   ],
-  "negative_capability_ids": [
-    "NEG.PARITY-OVER-ANY-CORPUS",
-    "NEG.THAT-ANY-CORPUS-WAS-FETCHED-COMPILED-RUN",
-    "NEG.THE-RECORDED-COMMIT-HASHES-OR-LICENSES-U",
-    "NEG.THAT-THE-DECLARED-FEATURE-FLAGS-WERE-VER",
-    "NEG.EXHAUSTIVENESS-OF-THE-PUBLIC-COBOL-UNIVE"
+  "oracle": {
+    "detail": "none -- a reference/meta court (like GNURUST.COVERAGE.1)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PUBLIC.CORPUS.1"
+  },
+  "positive_claims": [
+    "an admitted INDEX of 25 public COBOL/GnuCOBOL corpora (17 GnuCOBOL-runnable, 5 mainframe-realistic, 3 research-mining) as a HOSTILE WITNESS SET for gap discovery -- real public terrain to grow the court map against. Records per corpus: source URL, tier, declared features, note, status",
+    "plus a best-first-10 ingestion order, the future companion campaigns (GNURUST.PUBLIC.GAP.1 run+classify, GNURUST.BUILD.PROFILE.1 ABI/config binding, GNURUST.INDEXED.FILE.ATLAS.1), and a behavioral-parity ladder (Level 0 static layout .. Level 8 multi-module runtime parity) locating the current frontier at Level 6 (bounded trace replay via the IF/EVALUATE/PERFORM/TABLE/FILE-FLOW slices). INDEX ONLY"
   ],
-  "byte_domains": [
-    "a curated index of public corpora + metadata (no bytes admitted)"
-  ],
-  "lie_prevented": [
-    "we tested 25 public COBOL datasets -- NO: this court admits the SOURCES for gap discovery, fetches/compiles/runs NOTHING, and claims NO parity; the running + failure-classification is the future GNURUST.PUBLIC.GAP.1, and behavioral parity is reached by court admission up the ladder, never by a speculative interpreter"
-  ],
-  "damage_if_overclaimed": "presenting a corpus index as parity/test coverage fabricates evidence the project has not produced -- the exact overclaim the method exists to prevent",
   "replay": {
     "command": "none -- a reference/meta court (like GNURUST.COVERAGE.1)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "4ddca060ca5127c4b743272009c60b489f41889125054fe4e9d24eb384111fc0"
-  }
+  "results": {
+    "fail": 0,
+    "note": "lab/corpus/run.py 25 corpora -> reports/public-corpus-index.json",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

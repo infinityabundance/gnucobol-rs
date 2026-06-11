@@ -1,35 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.ATLAS.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive)"
+  ],
+  "case_id": "GNURUST.INTRINSIC.ATLAS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "using INTEGER where INTEGER-PART is meant (or MOD/REM interchangeably) on negative values flips results; trusting a CURRENT-DATE value bakes wall-clock time into evidence",
+  "hash_chain": {
+    "inputs_sha256": "a6f7069cc4f5ecf0012cb2d2840dcefd8b7092c3e315c1104ef7dd8235a42ae6"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "4485011ce26459a5f35105995ddafcbc899a9cb580d54827ab21ab76028d3873",
-    "receipt_sha256": "ad3c4f9cd9f4cd274293aab76c4dbced535ec5a6b4c92024cbd3ef29b48df447"
+    "claim_ladder_entry_sha256": "ae64d103e1d66aa7a8de6df7a2c13d0e07ce2ad09d202bba96b5688be0b3270a",
+    "receipt_sha256": "2279901f124d349c88a4844e21274e99de4f6f718857fe2da7468fa1dbba85ff"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION intrinsics (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.ATLAS.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 19,
-    "pass": 19,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "observed GnuCOBOL results for a declared set of 15 high-use intrinsics under the gnucobol-3.2.0-default witness, each bound to its input and verified by the sweep (19/0): LENGTH/BYTE-LENGTH (byte length), NUMVAL/NUMVAL-C (numeric parse), INTEGER (FLOOR: INTEGER(-3.7)=-4) vs INTEGER-PART (TRUNCATE toward zero: -3), MOD (result takes the DIVISOR sign: MOD(-17,5)=+3) vs REM (DIVIDEND sign: REM(-17,5)=-2), UPPER-CASE/LOWER-CASE/REVERSE, ORD/CHAR (1-based, ORD('A')=66). 13 are deterministic candidate-courts",
-    "CURRENT-DATE",
-    "WHEN-COMPILED are environment-sensitive and admitted as a 21-char SHAPE only, never the value. OBSERVED court (the pure kernel implements none of these yet)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'intrinsics are obvious' -- INTEGER is FLOOR not truncation (so INTEGER(-3.7)=-4 not -3), MOD takes the DIVISOR sign while REM takes the DIVIDEND sign (so MOD(-17,5)=+3 but REM(-17,5)=-2), ORD/CHAR are 1-based, and CURRENT-DATE/WHEN-COMPILED have only an admitted SHAPE not a value"
+  ],
+  "negative_capability_ids": [
+    "NEG.ALL-INTRINSICS-A-DECLARED-SUBSET",
+    "NEG.CURRENT-DATE-WHEN-COMPILED-VALUES",
+    "NEG.LOCALE-COLLATION-IN-CASE-ORDINAL",
+    "NEG.NATIONAL-UTF-8",
+    "NEG.THAT-A-CANDIDATE-COURT-IS-IMPLEMENTED",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "all intrinsics (a declared subset)",
@@ -40,26 +39,27 @@
     "all dialects",
     "lie prevented: 'intrinsics are obvious' -- INTEGER is FLOOR not truncation (so INTEGER(-3.7)=-4 not -3), MOD takes the DIVISOR sign while REM takes the DIVIDEND sign (so MOD(-17,5)=+3 but REM(-17,5)=-2), ORD/CHAR are 1-based, and CURRENT-DATE/WHEN-COMPILED have only an admitted SHAPE not a value"
   ],
-  "negative_capability_ids": [
-    "NEG.ALL-INTRINSICS-A-DECLARED-SUBSET",
-    "NEG.CURRENT-DATE-WHEN-COMPILED-VALUES",
-    "NEG.LOCALE-COLLATION-IN-CASE-ORDINAL",
-    "NEG.NATIONAL-UTF-8",
-    "NEG.THAT-A-CANDIDATE-COURT-IS-IMPLEMENTED",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION intrinsics (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.ATLAS.1"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL results for a declared set of 15 high-use intrinsics under the gnucobol-3.2.0-default witness, each bound to its input and verified by the sweep (19/0): LENGTH/BYTE-LENGTH (byte length), NUMVAL/NUMVAL-C (numeric parse), INTEGER (FLOOR: INTEGER(-3.7)=-4) vs INTEGER-PART (TRUNCATE toward zero: -3), MOD (result takes the DIVISOR sign: MOD(-17,5)=+3) vs REM (DIVIDEND sign: REM(-17,5)=-2), UPPER-CASE/LOWER-CASE/REVERSE, ORD/CHAR (1-based, ORD('A')=66). 13 are deterministic candidate-courts",
+    "CURRENT-DATE",
+    "WHEN-COMPILED are environment-sensitive and admitted as a 21-char SHAPE only, never the value. OBSERVED court (the pure kernel implements none of these yet)"
   ],
-  "byte_domains": [
-    "declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive)"
-  ],
-  "lie_prevented": [
-    "'intrinsics are obvious' -- INTEGER is FLOOR not truncation (so INTEGER(-3.7)=-4 not -3), MOD takes the DIVISOR sign while REM takes the DIVIDEND sign (so MOD(-17,5)=+3 but REM(-17,5)=-2), ORD/CHAR are 1-based, and CURRENT-DATE/WHEN-COMPILED have only an admitted SHAPE not a value"
-  ],
-  "damage_if_overclaimed": "using INTEGER where INTEGER-PART is meant (or MOD/REM interchangeably) on negative values flips results; trusting a CURRENT-DATE value bakes wall-clock time into evidence",
   "replay": {
     "command": "bash lab/oracle/intrinsic_atlas_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "29ffd16ce82afe98b017d03656675b1d8e87d50c1741cb0f807548d556320e37"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 19,
+    "total": 19,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

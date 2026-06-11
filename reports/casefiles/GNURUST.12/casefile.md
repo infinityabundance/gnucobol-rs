@@ -1,4 +1,4 @@
-<!-- DO NOT EDIT BY HAND. Generated from casefile.json by lab/casefile/run.py.
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.12 (court-casefile)
 

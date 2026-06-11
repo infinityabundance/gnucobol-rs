@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.COVERAGE.1/casefile.json",
-      "digest": {
-        "sha256": "e12b68be487c36d068285d8037394457660da51c2d570e7184a22237b4e0a696"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.COVERAGE.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "governance (gnucobol-rs lab)",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "fc25fdf161e381155e4723d9d05bfcf5a7aad59649ed60bd8176e7dfec2a6ca5",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 3,
     "replay": {
       "command": "the admitted GnuCOBOL 3.2 source + the claim-ladder (re-derive equality + mapping completeness)",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "58ca260b16d48ed7e5070913e49228249d9ff84bce1377056af8a13b4442b1af",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 3,
-    "negative_claim_count": 6
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "d96f75251d6ee5fae5773ec5522e151e9ef46428077fa26a6dab5cc13ed946f7"
+      },
+      "name": "reports/casefiles/GNURUST.COVERAGE.1/casefile.json"
+    }
+  ]
 }

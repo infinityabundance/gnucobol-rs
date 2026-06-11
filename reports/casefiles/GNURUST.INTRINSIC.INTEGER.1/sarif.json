@@ -1,13 +1,55 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTRINSIC.INTEGER.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: non-numeric arguments"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: i128 out-of-range magnitudes"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: INTEGER and INTEGER-PART interchangeable"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: all dialects"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: lie prevented: INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,53 +63,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.INTRINSIC.INTEGER.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: non-numeric arguments"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: i128 out-of-range magnitudes"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: INTEGER and INTEGER-PART interchangeable"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: all dialects"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.INTRINSIC.INTEGER.1 non-claim: lie prevented: INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

@@ -1,13 +1,55 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.12 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.12 non-claim: SET TO FALSE"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.12 non-claim: FALSE clause"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.12 non-claim: expressions"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.12 non-claim: execution"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.12 non-claim: lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,53 +63,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 non-claim: SET TO FALSE"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 non-claim: FALSE clause"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 non-claim: expressions"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 non-claim: execution"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 non-claim: lie prevented: 'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

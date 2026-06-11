@@ -1,38 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.PILOT.RUN.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.7.1 (bin; ships next batch)",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "a declared extract -> a redacted, hash-bound pilot evidence packet on disk"
+  ],
+  "case_id": "KOBOLD.PILOT.RUN.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.7.1 (bin; ships next batch)",
+  "damage_if_overclaimed": "presenting a single declared pilot run as customer-accepted/compliant/production-ready, or shipping a packet that leaked real account ids, would expose customers and manufacture readiness the courts do not provide",
+  "hash_chain": {
+    "inputs_sha256": "a8bb5a836ee2ee79e262d7276579e11c3679eaeed1cf18e4f07f0a524eb08838"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "48fa76ce7fce80f789034534e3205883661e2e3dc39ebb1101d5477bebcba2f5",
+    "claim_ladder_entry_sha256": "d3014426a5ed5749873672785321ca99807632fcb3989eb2a79e3236e449706d",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the composed sealed courts + the no-cleartext-leak abort (re-run equality)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "kobold-data-shim src/bin/pilot.rs (kobold-pilot) + reports/pilot-run/ committed packet + tests/pilot_workflow.rs"
-  },
-  "positive_claims": [
-    "the kobold-pilot runner executes the full pilot chain (EXTRACT.PROFILE.1 -> PRIVACY.REDACTION.1 -> BANK.1/2",
-    "BANK.RECONCILE.1 -> DIFF.1 -> TOOLING.EXPORT.1 -> PILOT-PACKET.1) over a DECLARED extract and writes a redacted, hash-bound evidence packet to disk",
-    "sensitive fields are tokenized BEFORE any artifact is written and the runner ABORTS (exit 4) if a redacted value leaks into any output, so the packet is safe to share",
-    "the committed example run (kobold-data-shim reports/pilot-run/) is complete, derived_view, creates_new_truth:false with verified zero cleartext",
-    "an operator points the runner at a real private extract for a real pilot"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'we ran a pilot, so we can take real customer data to production / the totals are business-correct / it is compliant' -- PILOT.RUN.1 produces redacted custody evidence over a DECLARED extract and refuses every higher claim, and fails closed on a cleartext leak"
+  ],
+  "negative_capability_ids": [
+    "NEG.CUSTOMER-ACCEPTANCE",
+    "NEG.BUSINESS-CORRECTNESS",
+    "NEG.REGULATORY-COMPLIANCE",
+    "NEG.PRODUCTION-READINESS",
+    "NEG.LEDGER-TRUTH",
+    "NEG.THAT-THE-SYNTHETIC-DEFAULT-IS-A-REAL-EXT"
   ],
   "negative_claims": [
     "customer acceptance",
@@ -43,26 +39,30 @@
     "that the synthetic default is a real extract",
     "lie prevented: 'we ran a pilot, so we can take real customer data to production / the totals are business-correct / it is compliant' -- PILOT.RUN.1 produces redacted custody evidence over a DECLARED extract and refuses every higher claim, and fails closed on a cleartext leak"
   ],
-  "negative_capability_ids": [
-    "NEG.CUSTOMER-ACCEPTANCE",
-    "NEG.BUSINESS-CORRECTNESS",
-    "NEG.REGULATORY-COMPLIANCE",
-    "NEG.PRODUCTION-READINESS",
-    "NEG.LEDGER-TRUTH",
-    "NEG.THAT-THE-SYNTHETIC-DEFAULT-IS-A-REAL-EXT"
+  "oracle": {
+    "detail": "the composed sealed courts + the no-cleartext-leak abort (re-run equality)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "the kobold-pilot runner executes the full pilot chain (EXTRACT.PROFILE.1 -> PRIVACY.REDACTION.1 -> BANK.1/2",
+    "BANK.RECONCILE.1 -> DIFF.1 -> TOOLING.EXPORT.1 -> PILOT-PACKET.1) over a DECLARED extract and writes a redacted, hash-bound evidence packet to disk",
+    "sensitive fields are tokenized BEFORE any artifact is written and the runner ABORTS (exit 4) if a redacted value leaks into any output, so the packet is safe to share",
+    "the committed example run (kobold-data-shim reports/pilot-run/) is complete, derived_view, creates_new_truth:false with verified zero cleartext",
+    "an operator points the runner at a real private extract for a real pilot"
   ],
-  "byte_domains": [
-    "a declared extract -> a redacted, hash-bound pilot evidence packet on disk"
-  ],
-  "lie_prevented": [
-    "'we ran a pilot, so we can take real customer data to production / the totals are business-correct / it is compliant' -- PILOT.RUN.1 produces redacted custody evidence over a DECLARED extract and refuses every higher claim, and fails closed on a cleartext leak"
-  ],
-  "damage_if_overclaimed": "presenting a single declared pilot run as customer-accepted/compliant/production-ready, or shipping a packet that leaked real account ids, would expose customers and manufacture readiness the courts do not provide",
   "replay": {
     "command": "the composed sealed courts + the no-cleartext-leak abort (re-run equality)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "3a70aa65080ad804c7f72fb78b3d458a7324ff8a8b7195babe1a1362384a2ac6"
-  }
+  "results": {
+    "fail": 0,
+    "note": "kobold-data-shim src/bin/pilot.rs (kobold-pilot) + reports/pilot-run/ committed packet + tests/pilot_workflow.rs",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

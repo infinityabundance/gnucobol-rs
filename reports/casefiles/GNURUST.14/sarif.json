@@ -1,13 +1,62 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 non-claim: binary arithmetic"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 non-claim: SYNCHRONIZED"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 non-claim: host-portable endian"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 non-claim: COMP-6"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 non-claim: float"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.14 non-claim: lie prevented: 'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,60 +70,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 non-claim: binary arithmetic"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 non-claim: SYNCHRONIZED"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 non-claim: host-portable endian"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 non-claim: COMP-6"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 non-claim: float"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.14 non-claim: lie prevented: 'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

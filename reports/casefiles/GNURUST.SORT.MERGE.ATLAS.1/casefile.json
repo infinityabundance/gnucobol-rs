@@ -1,34 +1,35 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.SORT.MERGE.ATLAS.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file"
+  ],
+  "case_id": "GNURUST.SORT.MERGE.ATLAS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming a deterministic in-place / stable sort where GnuCOBOL runs an external sort engine misreads record order for equal keys and ignores the work-file/procedure machinery",
+  "hash_chain": {
+    "inputs_sha256": "67a116bf5590b423b8cbc31ba4397291947a405adfa8b310adb9f190d121a8d8"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "06711397d57e4d9715592a9616b9b0a13200d766ca907c7650a949e62a72df33",
-    "receipt_sha256": "a7df4ea7b8375e7df15edf3feca382a2db9b8925ff54cd83e076289947179fde"
+    "claim_ladder_entry_sha256": "7dfcaa0e76b5c17c99e32fd0e5cfdcdc1f928d6ad2cfee8327078e9ad643be89",
+    "receipt_sha256": "3d1788fb24c8cdd5a84bfba1b50881a4e6eebc3b72e03fb504b3c6dc705b3e3d"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc SORT/MERGE (libcob/fileio.c sort engine + work file)",
-    "upstream_court": "GNURUST.SORT.MERGE.ATLAS.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 2,
-    "pass": 2,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "observed GnuCOBOL SORT byte-effect (2/0) -- the last big surface gap (SORT/MERGE 145x per GNURUST.PUBLIC.GAP.1): SORT ASCENDING KEY reorders records into KEY-ASCENDING order (input 050,010,099,020 -> 010,020,050,099) and SORT DESCENDING into key-descending order, via USING the input file",
-    "GIVING the sorted output, over a sort-merge work file (SD). OBSERVED court: gnucobol-rs does NOT execute SORT -- it is a runtime sort engine over a work file -- this MAPS the reordering byte-effect, it sorts nothing"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "SORT is a simple in-memory reorder -- NO: it is a RUNTIME SORT ENGINE over a sort-merge work file (SD) driven by USING/GIVING or INPUT/OUTPUT PROCEDUREs, gnucobol-rs executes none of it, and the order of EQUAL keys is not a modeled guarantee; the atlas observes the key-ordered output, not the sort"
+  ],
+  "negative_capability_ids": [
+    "NEG.SORT-EXECUTION",
+    "NEG.INPUT-OUTPUT-PROCEDURE-RELEASE-RETURN",
+    "NEG.MERGE",
+    "NEG.MULTIPLE-KEYS",
+    "NEG.SORT-STABILITY-FOR-EQUAL-KEYS",
+    "NEG.CUSTOM-COLLATING-SEQUENCE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "SORT execution",
@@ -40,27 +41,26 @@
     "all dialects",
     "lie prevented: SORT is a simple in-memory reorder -- NO: it is a RUNTIME SORT ENGINE over a sort-merge work file (SD) driven by USING/GIVING or INPUT/OUTPUT PROCEDUREs, gnucobol-rs executes none of it, and the order of EQUAL keys is not a modeled guarantee; the atlas observes the key-ordered output, not the sort"
   ],
-  "negative_capability_ids": [
-    "NEG.SORT-EXECUTION",
-    "NEG.INPUT-OUTPUT-PROCEDURE-RELEASE-RETURN",
-    "NEG.MERGE",
-    "NEG.MULTIPLE-KEYS",
-    "NEG.SORT-STABILITY-FOR-EQUAL-KEYS",
-    "NEG.CUSTOM-COLLATING-SEQUENCE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc SORT/MERGE (libcob/fileio.c sort engine + work file)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SORT.MERGE.ATLAS.1"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL SORT byte-effect (2/0) -- the last big surface gap (SORT/MERGE 145x per GNURUST.PUBLIC.GAP.1): SORT ASCENDING KEY reorders records into KEY-ASCENDING order (input 050,010,099,020 -> 010,020,050,099) and SORT DESCENDING into key-descending order, via USING the input file",
+    "GIVING the sorted output, over a sort-merge work file (SD). OBSERVED court: gnucobol-rs does NOT execute SORT -- it is a runtime sort engine over a work file -- this MAPS the reordering byte-effect, it sorts nothing"
   ],
-  "byte_domains": [
-    "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file"
-  ],
-  "lie_prevented": [
-    "SORT is a simple in-memory reorder -- NO: it is a RUNTIME SORT ENGINE over a sort-merge work file (SD) driven by USING/GIVING or INPUT/OUTPUT PROCEDUREs, gnucobol-rs executes none of it, and the order of EQUAL keys is not a modeled guarantee; the atlas observes the key-ordered output, not the sort"
-  ],
-  "damage_if_overclaimed": "assuming a deterministic in-place / stable sort where GnuCOBOL runs an external sort engine misreads record order for equal keys and ignores the work-file/procedure machinery",
   "replay": {
     "command": "bash lab/oracle/sort_merge_atlas_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "c86e3053e8b9af94fb684bafdc4cb3fb1148ff4df2e49e974cb06cdf44f63714"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

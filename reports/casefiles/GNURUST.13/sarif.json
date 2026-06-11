@@ -1,13 +1,62 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 non-claim: DIVIDE"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 non-claim: SIZE ERROR"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 non-claim: other rounding modes"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 non-claim: bignum"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 non-claim: float"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.13 non-claim: lie prevented: 'packed add rounds like display' — cob_add_bcd keeps -0 on truncation"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,60 +70,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 non-claim: DIVIDE"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 non-claim: SIZE ERROR"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 non-claim: other rounding modes"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 non-claim: bignum"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 non-claim: float"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.13 non-claim: lie prevented: 'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

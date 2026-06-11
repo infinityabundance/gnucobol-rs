@@ -1,89 +1,89 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.6",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.2.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
   },
-  "inputs": {
-    "claim_ladder_entry_sha256": "663f19439876544fd4eb617e955dca14f0033e7862c203dc628e25b23a988a77",
-    "receipt_sha256": null
-  },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc -P",
-    "upstream_court": "GNURUST.6",
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "within COPY sweep + 4M fuzz"
-  },
-  "positive_claims": [
-    "whole-text-word pseudo-text replacement matching cobc -P (composes across nesting)"
-  ],
-  "negative_claims": [
-    "REPLACE directive",
-    "LEADING/TRAILING",
-    "identifier operands",
-    "lie prevented: 'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
-  ],
-  "negative_capability_ids": [
-    "NEG.REPLACE-DIRECTIVE",
-    "NEG.LEADING-TRAILING",
-    "NEG.IDENTIFIER-OPERANDS"
-  ],
   "byte_domains": [
     "expanded source text-word stream"
   ],
-  "lie_prevented": [
-    "'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
-  ],
+  "case_id": "GNURUST.6",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.2.3",
   "damage_if_overclaimed": "a wrong REPLACING substitution silently changes field identities across a whole estate",
-  "replay": {
-    "command": "cobc -P",
-    "exit_code": 0
-  },
   "hash_chain": {
-    "inputs_sha256": "4e770d67520620228aeb10b0c336e209c1fe35e512bfbbf3be1820a244f8d1a2"
+    "inputs_sha256": "27ece095c1ced46cdab8aaf121613bdc42137442f72d700aa59e06151e86f1d7"
   },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e5b019a4604019d230ca37ed3963c0193f217c804fe529ccd6af689cb73140b5",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
   "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "whole-text-word pseudo-text replacement matching cobc -P (composes across nesting)"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "REPLACE directive",
+      "LEADING/TRAILING",
+      "identifier operands",
+      "lie prevented: 'substring replacement is close enough' — REPLACING is whole-text-word"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
     "legacy_paths": [
       "research/legacyreports/reports/RECEIPT-GNURUST-REPLACING-6.md"
     ],
     "legacy_sha256": [
       "80a1ad44d0e0a220c116cbe8face7b125c2ad97f88b58f98abdbc3e47f92be19"
     ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "whole-text-word pseudo-text replacement matching cobc -P (composes across nesting)"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "REPLACE directive",
-      "LEADING/TRAILING",
-      "identifier operands",
-      "lie prevented: 'substring replacement is close enough' \u2014 REPLACING is whole-text-word"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
     "legacy_unstructured_notes": [
       "[Oracle] `cobc -P` (the GnuCOBOL preprocessor) expands `COPY ... REPLACING`; the sweep strips its line-number column and tokenizes to text-words. The Rust mirror tokenizes its expansion identically.",
       "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc -P` | **programs=7, PASS=7 FAIL=0** (`lab/oracle/copy_sweep.sh`): plain COPY, nested COPY, multiple COPYs (GNURUST.5) + simple replacement, multiple pairs with whole-word non-match, nested composing replacement, multi-line REPLACING statement (GNURUST.6) | | Self-contained `cargo test` | copybook: 4/4 (whole-text-word; nested compose-but-not-operands; fail-closed forms) | | Fuzz (`copybook` target, arbitrary source+copybooks incl. REPLACING) | **4,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
     ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
+  },
+  "lie_prevented": [
+    "'substring replacement is close enough' — REPLACING is whole-text-word"
+  ],
+  "negative_capability_ids": [
+    "NEG.REPLACE-DIRECTIVE",
+    "NEG.LEADING-TRAILING",
+    "NEG.IDENTIFIER-OPERANDS"
+  ],
+  "negative_claims": [
+    "REPLACE directive",
+    "LEADING/TRAILING",
+    "identifier operands",
+    "lie prevented: 'substring replacement is close enough' — REPLACING is whole-text-word"
+  ],
+  "oracle": {
+    "detail": "cobc -P",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.6"
+  },
+  "positive_claims": [
+    "whole-text-word pseudo-text replacement matching cobc -P (composes across nesting)"
+  ],
+  "replay": {
+    "command": "cobc -P",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "within COPY sweep + 4M fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

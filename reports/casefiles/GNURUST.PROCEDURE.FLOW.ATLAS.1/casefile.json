@@ -1,33 +1,35 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "control-flow statement class -> observed behavior"
+  ],
+  "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating an observed control-flow fact as an execution engine would invite running real programs through a kernel that does no Procedure Division execution",
+  "hash_chain": {
+    "inputs_sha256": "df72c44581ab8ba234f6915740d566828e9b7f1a6189b9e08b8b6ee5d6709587"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "e4cd73c0807b1f411bb838d9b5e75bf9d91d23728bcfdc4e0549469df674413a",
-    "receipt_sha256": "23d9716b8253db1f2e5f2c311f5a05b8a5222fab483c0baaa6460fc71c827129"
+    "claim_ladder_entry_sha256": "7034f04de5f8f7011b4c3808f34250d5ad8e158332e49e6ba223f40fd8730689",
+    "receipt_sha256": "440355c73b4538c857e2ef13a1438d639166b45fbe9403a3865ee64466484abb"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc Procedure Division control flow (cobc/typeck.c + codegen.c)",
-    "upstream_court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 8,
-    "pass": 8,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "observed GnuCOBOL behavior of the control-flow statement classes under the gnucobol-3.2.0-default witness, each verified by the sweep (8/0): IF/ELSE (selects the branch), EVALUATE (first-match WHEN), PERFORM n TIMES (n iterations), PERFORM VARYING (body runs while the condition is false, the control variable ends ONE step past the limit -- I ends at 5 for UNTIL I>4), PERFORM UNTIL (test-before), PERFORM paragraph (out-of-line call + return), GO TO (unconditional jump skipping intervening statements). OBSERVED court: gnucobol-rs does NOT execute Procedure Division -- this MAPS the control-flow surface, it does not run programs"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "gnucobol-rs ports COBOL -- NO: it does NOT execute Procedure Division; this atlas OBSERVES control-flow semantics (PERFORM VARYING leaves the control variable one step PAST the limit; GO TO skips intervening statements) but runs no program. Execution is the loudest non-claim of the whole project"
+  ],
+  "negative_capability_ids": [
+    "NEG.PROCEDURE-DIVISION-EXECUTION",
+    "NEG.CONTROL-FLOW-EXECUTION",
+    "NEG.BRANCH-PATH-COVERAGE",
+    "NEG.LOOP-TERMINATION-ANALYSIS",
+    "NEG.GENERAL-CONDITION-EVALUATION",
+    "NEG.THAT-AN-OBSERVED-STATEMENT-IS-IMPLEMENTE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "Procedure Division execution",
@@ -39,27 +41,25 @@
     "all dialects",
     "lie prevented: gnucobol-rs ports COBOL -- NO: it does NOT execute Procedure Division; this atlas OBSERVES control-flow semantics (PERFORM VARYING leaves the control variable one step PAST the limit; GO TO skips intervening statements) but runs no program. Execution is the loudest non-claim of the whole project"
   ],
-  "negative_capability_ids": [
-    "NEG.PROCEDURE-DIVISION-EXECUTION",
-    "NEG.CONTROL-FLOW-EXECUTION",
-    "NEG.BRANCH-PATH-COVERAGE",
-    "NEG.LOOP-TERMINATION-ANALYSIS",
-    "NEG.GENERAL-CONDITION-EVALUATION",
-    "NEG.THAT-AN-OBSERVED-STATEMENT-IS-IMPLEMENTE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc Procedure Division control flow (cobc/typeck.c + codegen.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PROCEDURE.FLOW.ATLAS.1"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL behavior of the control-flow statement classes under the gnucobol-3.2.0-default witness, each verified by the sweep (8/0): IF/ELSE (selects the branch), EVALUATE (first-match WHEN), PERFORM n TIMES (n iterations), PERFORM VARYING (body runs while the condition is false, the control variable ends ONE step past the limit -- I ends at 5 for UNTIL I>4), PERFORM UNTIL (test-before), PERFORM paragraph (out-of-line call + return), GO TO (unconditional jump skipping intervening statements). OBSERVED court: gnucobol-rs does NOT execute Procedure Division -- this MAPS the control-flow surface, it does not run programs"
   ],
-  "byte_domains": [
-    "control-flow statement class -> observed behavior"
-  ],
-  "lie_prevented": [
-    "gnucobol-rs ports COBOL -- NO: it does NOT execute Procedure Division; this atlas OBSERVES control-flow semantics (PERFORM VARYING leaves the control variable one step PAST the limit; GO TO skips intervening statements) but runs no program. Execution is the loudest non-claim of the whole project"
-  ],
-  "damage_if_overclaimed": "treating an observed control-flow fact as an execution engine would invite running real programs through a kernel that does no Procedure Division execution",
   "replay": {
     "command": "bash lab/oracle/procedure_flow_atlas_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "3a087c881ec6a257bbac429dc1d00800d4bed750894fd87002cc43c73bca64ac"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 8,
+    "total": 8,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

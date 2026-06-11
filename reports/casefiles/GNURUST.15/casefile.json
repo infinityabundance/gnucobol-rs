@@ -1,41 +1,63 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.15",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "raw EBCDIC field bytes -> decoded text"
+  ],
+  "case_id": "GNURUST.15",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses",
+  "hash_chain": {
+    "inputs_sha256": "362134be0ba9cb2a6149eb6d6f4ecc2a3cdd561e9bffa6d9618f5ef016dbbfc4"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "fe0f8331c915ea4bba0e665fcc8e98174428f7b0ab909b3714641e54b889b57f",
-    "receipt_sha256": "921295aa9b0c803983bdb2e5759436dff727ceb4c7122f79762c69dd997b7910"
+    "claim_ladder_entry_sha256": "b0b3fddad503ceb95a15c12ef8681255a0269deaecc3285d9fd587234fd60532",
+    "receipt_sha256": "61edb1587023fb3b6414e48a0e053a71658233949fd08986196500110c022bf8"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "libcob cob_load_collation (ebcdic500_ascii8bit)",
-    "upstream_court": "GNURUST.15",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "kind": "court-casefile",
+  "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "cp037/other code pages",
+      "numeric EBCDIC zoned sign",
+      "national/DBCS",
+      "collation",
+      "binary/packed conversion",
+      "lie prevented: 'EBCDIC conversion can be record-wide' — it is per-DISPLAY-field; binary/packed raw"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.15 admits EBCDIC only as an explicit code-page boundary for DISPLAY-class field decoding:",
+      "text bytes are decoded under a named table, binary and packed fields remain raw storage domains,",
+      "and no mixed-encoding, auto-detection, collation, national/DBCS, or business-meaning claim is made."
+    ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-EBCDIC-15.md"
+    ],
+    "legacy_sha256": [
+      "2397de8528b915fb7adce872c3ef13b51820ea2ecc30dc16166eed1c5cbb91d5"
+    ],
+    "legacy_unstructured_notes": [
+      "[Versioning note] New public capability module `ebcdic` (+ `CodePage`/`EbcdicError`/`decode_display`/`translate_byte`) — purely additive, so a **semver-minor** bump to **0.5.0**.",
+      "[Versioning] New public capability module `ebcdic` (+ `CodePage`/`EbcdicError`/`decode_display`/`translate_byte`) — purely additive, so a **semver-minor** bump to **0.5.0**.",
+      "[Oracle] The admitted GnuCOBOL 3.2 oracle **ships cp500** (`ebcdic500_*` tables), loadable via the exported `cob_load_collation` — the same function `cobc` uses to embed translation tables in generated code. It does **not** ship cp037. Per the project doctrine (the oracle, never a spec, is the authority), a code page is admitted only when its table comes from the oracle — so **cp500 is admitted and cp037 is deferred** until a cp037 table is admitted into the oracle. (This is a deliberate, surfaced deviation from the suggested starting page.)",
+      "[Evidence] | Check | Result | |-------|--------| | cp500 table vs `cob_load_collation` | **PASS=256 FAIL=0** (`ebcdic_sweep.sh`) — every byte | | `cargo test` (anchors, text, totality/bijection) | 3 ebcdic tests green | | Decode totality | `decode_display` is total over all 256 bytes, length-preserving, table is a bijection | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+    ],
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
   },
-  "results": {
-    "total": 256,
-    "pass": 256,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table"
-  ],
-  "negative_claims": [
-    "cp037/other code pages",
-    "numeric EBCDIC zoned sign",
-    "national/DBCS",
-    "collation",
-    "binary/packed conversion",
-    "lie prevented: 'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+  "lie_prevented": [
+    "'EBCDIC conversion can be record-wide' — it is per-DISPLAY-field; binary/packed raw"
   ],
   "negative_capability_ids": [
     "NEG.CP037-OTHER-CODE-PAGES",
@@ -44,55 +66,33 @@
     "NEG.COLLATION",
     "NEG.BINARY-PACKED-CONVERSION"
   ],
-  "byte_domains": [
-    "raw EBCDIC field bytes -> decoded text"
+  "negative_claims": [
+    "cp037/other code pages",
+    "numeric EBCDIC zoned sign",
+    "national/DBCS",
+    "collation",
+    "binary/packed conversion",
+    "lie prevented: 'EBCDIC conversion can be record-wide' — it is per-DISPLAY-field; binary/packed raw"
   ],
-  "lie_prevented": [
-    "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
+  "oracle": {
+    "detail": "libcob cob_load_collation (ebcdic500_ascii8bit)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.15"
+  },
+  "positive_claims": [
+    "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table"
   ],
-  "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses",
   "replay": {
     "command": "bash lab/oracle/ebcdic_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "e39ddd7ec3d9a0663b5151b30e0303f5446bbcc8f4fd53fb9594744077c4d0ed"
+  "results": {
+    "fail": 0,
+    "pass": 256,
+    "total": 256,
+    "verdict": "pass"
   },
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-EBCDIC-15.md"
-    ],
-    "legacy_sha256": [
-      "2397de8528b915fb7adce872c3ef13b51820ea2ecc30dc16166eed1c5cbb91d5"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "raw EBCDIC alphanumeric DISPLAY bytes -> text under the admitted cp500 table"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "cp037/other code pages",
-      "numeric EBCDIC zoned sign",
-      "national/DBCS",
-      "collation",
-      "binary/packed conversion",
-      "lie prevented: 'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.15 admits EBCDIC only as an explicit code-page boundary for DISPLAY-class field decoding:",
-      "text bytes are decoded under a named table, binary and packed fields remain raw storage domains,",
-      "and no mixed-encoding, auto-detection, collation, national/DBCS, or business-meaning claim is made."
-    ],
-    "legacy_unstructured_notes": [
-      "[Versioning note] New public capability module `ebcdic` (+ `CodePage`/`EbcdicError`/`decode_display`/`translate_byte`) \u2014 purely additive, so a **semver-minor** bump to **0.5.0**.",
-      "[Versioning] New public capability module `ebcdic` (+ `CodePage`/`EbcdicError`/`decode_display`/`translate_byte`) \u2014 purely additive, so a **semver-minor** bump to **0.5.0**.",
-      "[Oracle] The admitted GnuCOBOL 3.2 oracle **ships cp500** (`ebcdic500_*` tables), loadable via the exported `cob_load_collation` \u2014 the same function `cobc` uses to embed translation tables in generated code. It does **not** ship cp037. Per the project doctrine (the oracle, never a spec, is the authority), a code page is admitted only when its table comes from the oracle \u2014 so **cp500 is admitted and cp037 is deferred** until a cp037 table is admitted into the oracle. (This is a deliberate, surfaced deviation from the suggested starting page.)",
-      "[Evidence] | Check | Result | |-------|--------| | cp500 table vs `cob_load_collation` | **PASS=256 FAIL=0** (`ebcdic_sweep.sh`) \u2014 every byte | | `cargo test` (anchors, text, totality/bijection) | 3 ebcdic tests green | | Decode totality | `decode_display` is total over all 256 bytes, length-preserving, table is a bijection | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
-    ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+  "schema": "kobold-forensic-casefile-v1"
 }

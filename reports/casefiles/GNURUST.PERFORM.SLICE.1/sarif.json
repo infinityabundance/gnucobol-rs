@@ -1,13 +1,83 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: signed/packed/binary counters"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: numeric SIZE ERROR on the body"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: non-ADD body statements"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: compound/class conditions"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: PERFORM THRU / out-of-line paragraph"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: WITH TEST AFTER"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: nested PERFORM/GO TO"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: all dialects"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.PERFORM.SLICE.1 non-claim: lie prevented: PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,81 +91,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: signed/packed/binary counters"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: numeric SIZE ERROR on the body"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: non-ADD body statements"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: compound/class conditions"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: PERFORM THRU / out-of-line paragraph"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: WITH TEST AFTER"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: nested PERFORM/GO TO"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: all dialects"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.PERFORM.SLICE.1 non-claim: lie prevented: PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

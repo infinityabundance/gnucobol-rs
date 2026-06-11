@@ -1,36 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.DATA.6",
-  "kind": "composition-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "COMP-6 field-storage bytes -> value"
+  ],
+  "case_id": "KOBOLD.DATA.6",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "treating signed COMP-6 as unsigned mis-reads it (GnuCOBOL makes it COMP-3)",
+  "hash_chain": {
+    "inputs_sha256": "151c60b46369a78daafd90cc67c1390b97823362dc523e3c85f2feb0076a5478"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "846cc75003b5e692c4df253373a7790f1d5200e2b21ace9be70fb1e27d37dd4f",
+    "claim_ladder_entry_sha256": "d4920cc9d239cbb1f9d429d9b382ab9240ebe567971cd3406f8732093039617d",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "gnucobol-rs GNURUST.18 (sealed)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "account/payroll/insurance + account-cp500 corpus byte-stable, 0 unsupported"
-  },
-  "positive_claims": [
-    "unsigned COMP-6 fields decode via GNURUST.18 in the corpus",
-    "audit names the court",
-    "cp500 passthrough proven"
+  "kind": "composition-casefile",
+  "lie_prevented": [
+    "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
+  ],
+  "negative_capability_ids": [
+    "NEG.SIGNED-COMP-6-FAILS-CLOSED",
+    "NEG.COMP-6-ARITHMETIC",
+    "NEG.MALFORMED-COMP-6-BYTES",
+    "NEG.PRE-3-2-BEHAVIOR",
+    "NEG.DIALECT-PORTABILITY",
+    "NEG.EBCDIC-CONVERSION-OF-COMP-6-BYTES"
   ],
   "negative_claims": [
     "signed COMP-6 (fails closed)",
@@ -41,26 +39,28 @@
     "EBCDIC conversion of COMP-6 bytes",
     "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
   ],
-  "negative_capability_ids": [
-    "NEG.SIGNED-COMP-6-FAILS-CLOSED",
-    "NEG.COMP-6-ARITHMETIC",
-    "NEG.MALFORMED-COMP-6-BYTES",
-    "NEG.PRE-3-2-BEHAVIOR",
-    "NEG.DIALECT-PORTABILITY",
-    "NEG.EBCDIC-CONVERSION-OF-COMP-6-BYTES"
+  "oracle": {
+    "detail": "gnucobol-rs GNURUST.18 (sealed)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "unsigned COMP-6 fields decode via GNURUST.18 in the corpus",
+    "audit names the court",
+    "cp500 passthrough proven"
   ],
-  "byte_domains": [
-    "COMP-6 field-storage bytes -> value"
-  ],
-  "lie_prevented": [
-    "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' -- COMP-6 has no sign nibble and signed COMP-6 is really COMP-3"
-  ],
-  "damage_if_overclaimed": "treating signed COMP-6 as unsigned mis-reads it (GnuCOBOL makes it COMP-3)",
   "replay": {
     "command": "gnucobol-rs GNURUST.18 (sealed)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "13a0d09e0f50a4dcc34803e99dd2befc5878cee766963c4c96f4fcaed347ef73"
-  }
+  "results": {
+    "fail": 0,
+    "note": "account/payroll/insurance + account-cp500 corpus byte-stable, 0 unsupported",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

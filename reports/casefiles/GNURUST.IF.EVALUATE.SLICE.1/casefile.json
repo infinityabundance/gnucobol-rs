@@ -1,34 +1,36 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.IF.EVALUATE.SLICE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes"
+  ],
+  "case_id": "GNURUST.IF.EVALUATE.SLICE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound",
+  "hash_chain": {
+    "inputs_sha256": "359fca86e077b7ceb7dcc97ec0965f47e6c5b73a9b95c11d405df2b35301cfac"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "53baeb772ab07e314603ab267fc94c0eb137255ec10843d3634cdda20bb88720",
-    "receipt_sha256": "820a294145b5212df3508465cc2c703fbc17d9b09afb3b918aaa4a557829086e"
+    "claim_ladder_entry_sha256": "d0ef429f7fcdb528152cf28f8cd15d8d908f57ecd67cbdac514d548c288b0eda",
+    "receipt_sha256": "6f9cf66c1fcc6d33bbdd457defc39578db55effcb9ac3965cab000e278574dca"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob/move.c)",
-    "upstream_court": "GNURUST.IF.EVALUATE.SLICE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 9,
-    "pass": 9,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the FIRST execution slice: a narrow interpreter EXECUTES an IF/EVALUATE fragment over alphanumeric PIC X(n) fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 9/0). IF evaluates a single relation (= NOT= > < >= <=) using the COBOL alphanumeric comparison (pad the shorter operand with spaces, compare byte-by-byte in the ASCII collating sequence), selects the THEN/ELSE branch, and applies its MOVE statements (alphanumeric MOVE: left-justify, space-pad/truncate). EVALUATE selects the first WHEN whose literal equals the subject, else WHEN OTHER. Composes the sealed compare",
-    "MOVE semantics under control flow -- it EXECUTES the fragment, where PROCEDURE.FLOW.ATLAS.1 only OBSERVED control flow"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMERIC-PACKED-COMPARISON-AND-NUMERIC-MO",
+    "NEG.COMPOUND-CONDITIONS-AND-OR-NOT",
+    "NEG.CLASS-CONDITIONS-NUMERIC-ALPHABETIC",
+    "NEG.88-LEVEL-GNURUST-11",
+    "NEG.NON-MOVE-BRANCH-STATEMENTS",
+    "NEG.NESTED-IF-PERFORM-GO-TO",
+    "NEG.THRU-RANGE-WHEN",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "numeric/packed comparison and numeric MOVE",
@@ -41,28 +43,26 @@
     "all dialects",
     "lie prevented: a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed"
   ],
-  "negative_capability_ids": [
-    "NEG.NUMERIC-PACKED-COMPARISON-AND-NUMERIC-MO",
-    "NEG.COMPOUND-CONDITIONS-AND-OR-NOT",
-    "NEG.CLASS-CONDITIONS-NUMERIC-ALPHABETIC",
-    "NEG.88-LEVEL-GNURUST-11",
-    "NEG.NON-MOVE-BRANCH-STATEMENTS",
-    "NEG.NESTED-IF-PERFORM-GO-TO",
-    "NEG.THRU-RANGE-WHEN",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob/move.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.IF.EVALUATE.SLICE.1"
+  },
+  "positive_claims": [
+    "the FIRST execution slice: a narrow interpreter EXECUTES an IF/EVALUATE fragment over alphanumeric PIC X(n) fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 9/0). IF evaluates a single relation (= NOT= > < >= <=) using the COBOL alphanumeric comparison (pad the shorter operand with spaces, compare byte-by-byte in the ASCII collating sequence), selects the THEN/ELSE branch, and applies its MOVE statements (alphanumeric MOVE: left-justify, space-pad/truncate). EVALUATE selects the first WHEN whose literal equals the subject, else WHEN OTHER. Composes the sealed compare",
+    "MOVE semantics under control flow -- it EXECUTES the fragment, where PROCEDURE.FLOW.ATLAS.1 only OBSERVED control flow"
   ],
-  "byte_domains": [
-    "execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes"
-  ],
-  "lie_prevented": [
-    "a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed"
-  ],
-  "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound",
   "replay": {
     "command": "bash lab/oracle/if_eval_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "f6f12c02cf01e18770fdd6e547e02bac32fb355365174cc3746fb335e88ea364"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 9,
+    "total": 9,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

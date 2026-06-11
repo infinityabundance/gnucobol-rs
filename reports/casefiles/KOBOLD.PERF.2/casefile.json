@@ -1,38 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.PERF.2",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.4",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "per-stage timing of the reconcile pipeline; parallel record-local work, ordered aggregation"
+  ],
+  "case_id": "KOBOLD.PERF.2",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.4",
+  "damage_if_overclaimed": "a parallelized custody/aggregation that diverges from scalar would corrupt evidence (reordered records, a different posting chain) while looking faster",
+  "hash_chain": {
+    "inputs_sha256": "a07f099126b7c970a20511bbe1ec221e95581431e49b7a4dc44f08c99166ccf8"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "08375e658d132a2aaa79bcb9c88ed3b1ba7fe71bb4678f5c05e5757eb60c0adb",
+    "claim_ladder_entry_sha256": "fae4a9d660dddd2346f311b22864806babbb55546f0d4b0f9bec482b49ca6314",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the scalar reconcile output (PERF.1 parity) + reconcile_profile == reconcile_encoded bytes",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/perf2.rs (profile-preserves-output + stages-populated; full-custody scalar==rayon) + bench2 perf2_stage_profile (bottleneck=per_record)"
-  },
-  "positive_claims": [
-    "the reconcile pipeline is a 3-stage shape -- (1) parse/prepare once, (2) parallel record-local evidence, (3) ordered aggregation -- with reconcile_profile() exposing per-stage wall-clock (StageProfile parse_ns/record_ns/aggregate_ns) WITHOUT changing the emitted bytes",
-    "profiling identifies the per-record stage as the bottleneck (~75%) that PERF.1's Rayon already parallelizes byte-identically, with aggregation (~25%) kept serial",
-    "the full custody workload (reconcile",
-    "POSTING.1 chain",
-    "PRIVACY.REDACTION.1) is byte-identical scalar vs rayon"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'more threads, so optimize everything in parallel' -- PERF.2 parallelizes ONLY record-local work, keeps custody/aggregation ordered and serial, and admits timing only after full evidence parity"
+  ],
+  "negative_capability_ids": [
+    "NEG.PARALLEL-POSTING-CHAIN",
+    "NEG.PARALLEL-ORDER-BEING-OPTIONAL",
+    "NEG.A-JSON-FAST-PATH-AS-AUTHORITY",
+    "NEG.THREAD-SCHEDULE-AS-EVIDENCE",
+    "NEG.FLOAT-PARALLEL-TOTALS",
+    "NEG.A-CUSTOMER-SLA"
   ],
   "negative_claims": [
     "parallel posting-chain",
@@ -43,26 +39,30 @@
     "a customer SLA",
     "lie prevented: 'more threads, so optimize everything in parallel' -- PERF.2 parallelizes ONLY record-local work, keeps custody/aggregation ordered and serial, and admits timing only after full evidence parity"
   ],
-  "negative_capability_ids": [
-    "NEG.PARALLEL-POSTING-CHAIN",
-    "NEG.PARALLEL-ORDER-BEING-OPTIONAL",
-    "NEG.A-JSON-FAST-PATH-AS-AUTHORITY",
-    "NEG.THREAD-SCHEDULE-AS-EVIDENCE",
-    "NEG.FLOAT-PARALLEL-TOTALS",
-    "NEG.A-CUSTOMER-SLA"
+  "oracle": {
+    "detail": "the scalar reconcile output (PERF.1 parity) + reconcile_profile == reconcile_encoded bytes",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "the reconcile pipeline is a 3-stage shape -- (1) parse/prepare once, (2) parallel record-local evidence, (3) ordered aggregation -- with reconcile_profile() exposing per-stage wall-clock (StageProfile parse_ns/record_ns/aggregate_ns) WITHOUT changing the emitted bytes",
+    "profiling identifies the per-record stage as the bottleneck (~75%) that PERF.1's Rayon already parallelizes byte-identically, with aggregation (~25%) kept serial",
+    "the full custody workload (reconcile",
+    "POSTING.1 chain",
+    "PRIVACY.REDACTION.1) is byte-identical scalar vs rayon"
   ],
-  "byte_domains": [
-    "per-stage timing of the reconcile pipeline; parallel record-local work, ordered aggregation"
-  ],
-  "lie_prevented": [
-    "'more threads, so optimize everything in parallel' -- PERF.2 parallelizes ONLY record-local work, keeps custody/aggregation ordered and serial, and admits timing only after full evidence parity"
-  ],
-  "damage_if_overclaimed": "a parallelized custody/aggregation that diverges from scalar would corrupt evidence (reordered records, a different posting chain) while looking faster",
   "replay": {
     "command": "the scalar reconcile output (PERF.1 parity) + reconcile_profile == reconcile_encoded bytes",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "91a178f6773a1d6c8a2bcc3e84432321ad089868bbd372327b9a201372310944"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/perf2.rs (profile-preserves-output + stages-populated; full-custody scalar==rayon) + bench2 perf2_stage_profile (bottleneck=per_record)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

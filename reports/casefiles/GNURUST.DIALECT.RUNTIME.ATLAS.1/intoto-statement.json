@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/casefile.json",
-      "digest": {
-        "sha256": "f659a9952e671c9793873fdd3f57db44526cedf77fc75f551d2317300fa0868d"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "7b16be0b81c7c35b03bb86516a099b04de76c1a8c2ec7c6c26d64892b3287195",
+      "receipt_sha256": "e2dadbcabc8d46120ad73ba386be479ae04d8c2bb1bd837675eeaa331b19fb19"
+    },
+    "negative_claim_count": 8,
+    "positive_claim_count": 3,
     "replay": {
       "command": "bash lab/oracle/dialect_runtime_atlas_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "f1408188083eeb4e7521d0aaada08048da346a907a517cf7d678808388b613bd",
-      "receipt_sha256": "aa35477c7c9dd61f7fed72a0db58417e8f530d4c86fcc0361c4576ac47629f2e"
-    },
-    "positive_claim_count": 3,
-    "negative_claim_count": 8
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "234f0407aee99d71203712077cd65e715f5ebff938d7f8b196218941cfa28fef"
+      },
+      "name": "reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/casefile.json"
+    }
+  ]
 }

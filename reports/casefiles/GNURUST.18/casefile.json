@@ -1,43 +1,63 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.18",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "field-storage + move-result bytes (COMP-6)"
+  ],
+  "case_id": "GNURUST.18",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely",
+  "hash_chain": {
+    "inputs_sha256": "c4c990ec5ae5ee10739b4331e70faff9063f481a3093d31fbf0eacf01fd8b0b5"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "9f1ad044aa5b84e54d89582007a88be96db96a7829c2d7bcc236ea1f177c19de",
-    "receipt_sha256": "b30e5feb22c19ec8f3c8a02b643e306d2facbfe545d22507bd846d0c919f17ae"
+    "claim_ladder_entry_sha256": "3803ff335f62b1b037e7fa176314167a5f252cfa2f1876033aa6e46c949e042f",
+    "receipt_sha256": "f56aafbd06d912e668ffb4d33a5a8483f3cd2293933b77e5b778a892156d9480"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc -C attr + libcob cob_move",
-    "upstream_court": "GNURUST.18",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "kind": "court-casefile",
+  "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "COMP-6 field model (PACKED+NO_SIGN_NIBBLE, size ceil(n/2))",
+      "DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "signed COMP-6 (cobc converts to COMP-3)",
+      "COMP-6 arithmetic",
+      "malformed bytes",
+      "dialect portability",
+      "pre-3.2",
+      "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.18 admits COMP-6 only as GnuCOBOL 3.2 unsigned packed-decimal storage and MOVE byte",
+      "semantics: storage size, raw bytes, and DISPLAY round-trip are oracle-proven, while signed forms,",
+      "arithmetic, malformed bytes, dialect portability, and pre-3.2 behavior remain outside the claim."
+    ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-COMP6-18.md"
+    ],
+    "legacy_sha256": [
+      "8c68cbfda83e573d70d801c51714e49c368b94b7614f07e907d8e485793f1360"
+    ],
+    "legacy_unstructured_notes": [
+      "[Versioning note] `pic::Usage` gains a `Comp6` variant — breaking for exhaustive downstream `match`es — so a **semver-minor** bump to **0.7.0**. `Usage` is now `#[non_exhaustive]`, so future usage variants are additive (patch).",
+      "[Versioning] `pic::Usage` gains a `Comp6` variant — breaking for exhaustive downstream `match`es — so a **semver-minor** bump to **0.7.0**. `Usage` is now `#[non_exhaustive]`, so future usage variants are additive (patch).",
+      "[Evidence] | Check | Result | |-------|--------| | COMP-6 field model vs `cobc` | **PASS=432 FAIL=0** (`pic_sweep.sh`; 16 COMP-6 cases over digit widths × scales) | | DISPLAY↔COMP-6 MOVE vs `cob_move` | **PASS=98 FAIL=0** (`comp6_sweep.sh`, both directions) | | `cargo test` (`comp6_field_model`) | green |"
+    ],
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
   },
-  "results": {
-    "total": 98,
-    "pass": 98,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "COMP-6 field model (PACKED",
-    "NO_SIGN_NIBBLE, size ceil(n/2))",
-    "DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move"
-  ],
-  "negative_claims": [
-    "signed COMP-6 (cobc converts to COMP-3)",
-    "COMP-6 arithmetic",
-    "malformed bytes",
-    "dialect portability",
-    "pre-3.2",
-    "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+  "lie_prevented": [
+    "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
   ],
   "negative_capability_ids": [
     "NEG.SIGNED-COMP-6-COBC-CONVERTS-TO-COMP-3",
@@ -46,56 +66,34 @@
     "NEG.DIALECT-PORTABILITY",
     "NEG.PRE-3-2"
   ],
-  "byte_domains": [
-    "field-storage + move-result bytes (COMP-6)"
+  "negative_claims": [
+    "signed COMP-6 (cobc converts to COMP-3)",
+    "COMP-6 arithmetic",
+    "malformed bytes",
+    "dialect portability",
+    "pre-3.2",
+    "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
   ],
-  "lie_prevented": [
-    "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
+  "oracle": {
+    "detail": "cobc -C attr + libcob cob_move",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.18"
+  },
+  "positive_claims": [
+    "COMP-6 field model (PACKED+NO_SIGN_NIBBLE, size ceil(n/2))",
+    "DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move"
   ],
-  "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely",
   "replay": {
     "command": "bash lab/oracle/comp6_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "b5f155beaa3332bb68bf213515ff6324f59dfcdef5d966418d1c8df7ba40cdde"
+  "results": {
+    "fail": 0,
+    "pass": 98,
+    "total": 98,
+    "verdict": "pass"
   },
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-COMP6-18.md"
-    ],
-    "legacy_sha256": [
-      "8c68cbfda83e573d70d801c51714e49c368b94b7614f07e907d8e485793f1360"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "COMP-6 field model (PACKED",
-      "NO_SIGN_NIBBLE, size ceil(n/2))",
-      "DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "signed COMP-6 (cobc converts to COMP-3)",
-      "COMP-6 arithmetic",
-      "malformed bytes",
-      "dialect portability",
-      "pre-3.2",
-      "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.18 admits COMP-6 only as GnuCOBOL 3.2 unsigned packed-decimal storage and MOVE byte",
-      "semantics: storage size, raw bytes, and DISPLAY round-trip are oracle-proven, while signed forms,",
-      "arithmetic, malformed bytes, dialect portability, and pre-3.2 behavior remain outside the claim."
-    ],
-    "legacy_unstructured_notes": [
-      "[Versioning note] `pic::Usage` gains a `Comp6` variant \u2014 breaking for exhaustive downstream `match`es \u2014 so a **semver-minor** bump to **0.7.0**. `Usage` is now `#[non_exhaustive]`, so future usage variants are additive (patch).",
-      "[Versioning] `pic::Usage` gains a `Comp6` variant \u2014 breaking for exhaustive downstream `match`es \u2014 so a **semver-minor** bump to **0.7.0**. `Usage` is now `#[non_exhaustive]`, so future usage variants are additive (patch).",
-      "[Evidence] | Check | Result | |-------|--------| | COMP-6 field model vs `cobc` | **PASS=432 FAIL=0** (`pic_sweep.sh`; 16 COMP-6 cases over digit widths \u00d7 scales) | | DISPLAY\u2194COMP-6 MOVE vs `cob_move` | **PASS=98 FAIL=0** (`comp6_sweep.sh`, both directions) | | `cargo test` (`comp6_field_model`) | green |"
-    ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+  "schema": "kobold-forensic-casefile-v1"
 }

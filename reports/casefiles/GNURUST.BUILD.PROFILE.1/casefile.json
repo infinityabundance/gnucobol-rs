@@ -1,35 +1,33 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.BUILD.PROFILE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "cobc/libcob/config build profile (version, endianness, binary-byteorder, char signedness, C-long, sha256)"
+  ],
+  "case_id": "GNURUST.BUILD.PROFILE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "presenting byte parity as build-independent silently breaks on any oracle rebuilt with a different binary-byteorder / char-signedness / dialect -- the ABI abyss",
+  "hash_chain": {
+    "inputs_sha256": "d73980f9d96c29a7958159e49146682fd6372b82c08b2d02e4179699a7330611"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "fafb34871386190bd64df16ca6bb61acc2e692c4fb89c7b6402c96e9da6543a8",
-    "receipt_sha256": "abc5059df5454433f926d8315d1cd11bf21d9840f58a3fda67accac412a8b5a2"
+    "claim_ladder_entry_sha256": "028db19fe3aef3c0ed31096ab254a6f56a6f21a4d246be4a5c37a641f9c389d4",
+    "receipt_sha256": "2bb0cace63e4d5b728a7c0a525638028e7f329bf1a4a3ef1f470a1c94a4ef2fc"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc --version / cobc -info / default.conf / libcob sha256",
-    "upstream_court": "GNURUST.BUILD.PROFILE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 1,
-    "pass": 1,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "binds the EXACT build profile of the oracle that produced every witness, as first-class citable evidence: GnuCOBOL 3.2.0 built with GCC 16.1.1 on x86_64-pc-linux-gnu, host LITTLE-endian, char SIGNED (-fsigned-char), BINARY-C-LONG 8 bytes, and the dialect config (binary-byteorder=BIG-endian, binary-size=1-2-4-8, binary-truncate=yes, binary-comp-1=no, numeric-pointer=no), each with a sha256 of cobc/libcob/config. The byte parity of every ABI-SENSITIVE court (GNURUST.14 binary COMP/COMP-5/COMP-X",
-    "GNURUST.15/17 EBCDIC) is SCOPED TO THIS PROFILE",
-    "the sweep PASS=1 iff the live profile matches the committed golden, so a rebuild that changes the ABI is flagged"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes"
+  ],
+  "negative_capability_ids": [
+    "NEG.OTHER-BUILDS-DIALECTS-CONFIGS",
+    "NEG.CROSS-ARCHITECTURE-ABI",
+    "NEG.THAT-THE-PROFILE-TRANSFERS-TO-A-DIFFEREN",
+    "NEG.COMPILER-INTERNAL-STRUCT-LAYOUT-BEYOND-T",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "other builds/dialects/configs",
@@ -39,25 +37,27 @@
     "all dialects",
     "lie prevented: COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes"
   ],
-  "negative_capability_ids": [
-    "NEG.OTHER-BUILDS-DIALECTS-CONFIGS",
-    "NEG.CROSS-ARCHITECTURE-ABI",
-    "NEG.THAT-THE-PROFILE-TRANSFERS-TO-A-DIFFEREN",
-    "NEG.COMPILER-INTERNAL-STRUCT-LAYOUT-BEYOND-T",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc --version / cobc -info / default.conf / libcob sha256",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.BUILD.PROFILE.1"
+  },
+  "positive_claims": [
+    "binds the EXACT build profile of the oracle that produced every witness, as first-class citable evidence: GnuCOBOL 3.2.0 built with GCC 16.1.1 on x86_64-pc-linux-gnu, host LITTLE-endian, char SIGNED (-fsigned-char), BINARY-C-LONG 8 bytes, and the dialect config (binary-byteorder=BIG-endian, binary-size=1-2-4-8, binary-truncate=yes, binary-comp-1=no, numeric-pointer=no), each with a sha256 of cobc/libcob/config. The byte parity of every ABI-SENSITIVE court (GNURUST.14 binary COMP/COMP-5/COMP-X",
+    "GNURUST.15/17 EBCDIC) is SCOPED TO THIS PROFILE",
+    "the sweep PASS=1 iff the live profile matches the committed golden, so a rebuild that changes the ABI is flagged"
   ],
-  "byte_domains": [
-    "cobc/libcob/config build profile (version, endianness, binary-byteorder, char signedness, C-long, sha256)"
-  ],
-  "lie_prevented": [
-    "COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes"
-  ],
-  "damage_if_overclaimed": "presenting byte parity as build-independent silently breaks on any oracle rebuilt with a different binary-byteorder / char-signedness / dialect -- the ABI abyss",
   "replay": {
     "command": "bash lab/oracle/build_profile_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "6bf124176421437911a690d1e2b743bb38515e39edd69a71eb9393c62471eed2"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

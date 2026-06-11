@@ -1,13 +1,69 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: customer-workload performance"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: production SLA"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: AWS cost"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: mainframe equivalence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: universal throughput"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: that a synthetic corpus is a representative business corpus"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.SCALE.1 non-claim: lie prevented: 'it does 2.5M records/sec, so it will handle your production batch on AWS' -- SCALE.1 measures a declared synthetic corpus on one host, parity-gated, and refuses every production/cost/representativeness generalization"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,67 +77,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: customer-workload performance"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: production SLA"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: AWS cost"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: mainframe equivalence"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: universal throughput"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: that a synthetic corpus is a representative business corpus"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.SCALE.1 non-claim: lie prevented: 'it does 2.5M records/sec, so it will handle your production batch on AWS' -- SCALE.1 measures a declared synthetic corpus on one host, parity-gated, and refuses every production/cost/representativeness generalization"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

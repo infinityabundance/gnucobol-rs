@@ -1,36 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.SIZE.ERROR.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition"
+  ],
+  "case_id": "GNURUST.SIZE.ERROR.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming overflow keeps the high digits (or that ON SIZE ERROR still stores something) corrupts amounts silently when a computed value exceeds its PICTURE",
+  "hash_chain": {
+    "inputs_sha256": "5cce90fc5050a27265f609acfe416eb2a4f28180933ee01bf75f0d5d4df2e73a"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6b3f199fec8ca0f6094c32ce1e96d20c5d29cdb7ff03081ae9b031a2853ba96e",
-    "receipt_sha256": "652245a8c8e8f14b91c7e5b88d7767bfad6868b58cbee1fedf2871a8776be6f0"
+    "claim_ladder_entry_sha256": "2fb1c70dfb1fe0e46a7455925ca0718731e1e3b150fa7a566e0241e5468fd766",
+    "receipt_sha256": "2f503cbc39a50fbcd36a50b3abef89ddeb3955290db1f3829ad42c2a87f3d344"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc arithmetic SIZE ERROR (libcob/numeric.c)",
-    "upstream_court": "GNURUST.SIZE.ERROR.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 12,
-    "pass": 12,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the byte effect of an arithmetic result that does not fit a fixed numeric receiver, matching cobc/libcob (verified 12/0): a SIZE ERROR condition occurs when the result integer part has MORE significant digits than the receiver integer capacity (overflow) or on divide-by-zero",
-    "WITHOUT ON SIZE ERROR the receiver stores the TRUNCATED result -- low-order integer digits (most-significant DROPPED) with the fraction truncated toward zero to the receiver scale (999+999=1998 into 9(3) stores 998",
-    "1234.567 into 9(3)V99 stores 234.56)",
-    "WITH ON SIZE ERROR the receiver is LEFT UNCHANGED and the imperative runs. Implements the observed SIZE.ERROR.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-ARITHMETIC-ITSELF-GNURUST-7-13-19",
+    "NEG.ROUNDED",
+    "NEG.INTERMEDIATE-RESULT-PRECISION",
+    "NEG.SIZE-ERROR-ON-MOVE",
+    "NEG.FLOATING-POINT-RECEIVERS",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "the arithmetic itself (GNURUST.7/13/19)",
@@ -41,26 +39,28 @@
     "all dialects",
     "lie prevented: overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result"
   ],
-  "negative_capability_ids": [
-    "NEG.THE-ARITHMETIC-ITSELF-GNURUST-7-13-19",
-    "NEG.ROUNDED",
-    "NEG.INTERMEDIATE-RESULT-PRECISION",
-    "NEG.SIZE-ERROR-ON-MOVE",
-    "NEG.FLOATING-POINT-RECEIVERS",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc arithmetic SIZE ERROR (libcob/numeric.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SIZE.ERROR.1"
+  },
+  "positive_claims": [
+    "the byte effect of an arithmetic result that does not fit a fixed numeric receiver, matching cobc/libcob (verified 12/0): a SIZE ERROR condition occurs when the result integer part has MORE significant digits than the receiver integer capacity (overflow) or on divide-by-zero",
+    "WITHOUT ON SIZE ERROR the receiver stores the TRUNCATED result -- low-order integer digits (most-significant DROPPED) with the fraction truncated toward zero to the receiver scale (999+999=1998 into 9(3) stores 998",
+    "1234.567 into 9(3)V99 stores 234.56)",
+    "WITH ON SIZE ERROR the receiver is LEFT UNCHANGED and the imperative runs. Implements the observed SIZE.ERROR.ATLAS.1"
   ],
-  "byte_domains": [
-    "overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition"
-  ],
-  "lie_prevented": [
-    "overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result"
-  ],
-  "damage_if_overclaimed": "assuming overflow keeps the high digits (or that ON SIZE ERROR still stores something) corrupts amounts silently when a computed value exceeds its PICTURE",
   "replay": {
     "command": "bash lab/oracle/size_error_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "988bac6ab30d0afe2e02cbb9490ad07d0606cbf98d9b0a299c31a0109e8f1d2c"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 12,
+    "total": 12,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

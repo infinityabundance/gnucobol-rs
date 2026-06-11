@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/casefile.json",
-      "digest": {
-        "sha256": "6de2ede8c241c1d1ac2715d09bfdf508665c9c5d572b371c10d63c963f5b4897"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.SORT.MERGE.ATLAS.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "7dfcaa0e76b5c17c99e32fd0e5cfdcdc1f928d6ad2cfee8327078e9ad643be89",
+      "receipt_sha256": "3d1788fb24c8cdd5a84bfba1b50881a4e6eebc3b72e03fb504b3c6dc705b3e3d"
+    },
+    "negative_claim_count": 8,
+    "positive_claim_count": 2,
     "replay": {
       "command": "bash lab/oracle/sort_merge_atlas_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "06711397d57e4d9715592a9616b9b0a13200d766ca907c7650a949e62a72df33",
-      "receipt_sha256": "a7df4ea7b8375e7df15edf3feca382a2db9b8925ff54cd83e076289947179fde"
-    },
-    "positive_claim_count": 2,
-    "negative_claim_count": 8
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c68b09bf850f5aea4e2467fc0161d492e124de152d044bcdaad89be77ba550e3"
+      },
+      "name": "reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/casefile.json"
+    }
+  ]
 }

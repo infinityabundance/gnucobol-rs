@@ -1,34 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.STRING.UNSTRING.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "STRING/UNSTRING receiver + pointer/count/delimiter/tally bytes"
+  ],
+  "case_id": "GNURUST.STRING.UNSTRING.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "a wrong pointer base, count-vs-truncation, tail-preservation, or delimiter assumption in a STRING/UNSTRING transform silently corrupts assembled/split fields",
+  "hash_chain": {
+    "inputs_sha256": "e581545d635d541536205a6551265e189256fc35b54d76dc2034e5aeaeeb5722"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "338a62dac4c86e1529188ca8c754eecbbae3952289039c5b5b23935d0f5f2bfb",
-    "receipt_sha256": "59c82d3bb9d7b1e1165e4fe08d01fdd7f6bf988bb2f75f81d9fcac9e88b90c67"
+    "claim_ladder_entry_sha256": "14e648782542b508f7b522c3ff19fdb931fe8b4b4ffe734e88f784d25f235503",
+    "receipt_sha256": "fb307024bfa8bec0d5c026e724ab21c56c011b7cd554ef3fad9b3eb0fc25cfaa"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc STRING/UNSTRING (program-shape, FUNCTION HEX-OF result-record dump)",
-    "upstream_court": "GNURUST.STRING.UNSTRING.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 7,
-    "pass": 7,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the receiver bytes + pointer/count/delimiter/tally/overflow of narrow STRING and UNSTRING statements, matching cobc/libcob byte-for-byte: STRING concatenates sources left-to-right at a 1-based POINTER (DELIMITED BY SIZE = whole operand, DELIMITED BY lit = operand up to the first lit), PRESERVES the unwritten target tail (no space-fill), keeps partial writes on ON OVERFLOW",
-    "UNSTRING splits the source by a delimiter into fields where COUNT IN is the SOURCE-FIELD LENGTH BEFORE TRUNCATION, DELIMITER IN is the ending delimiter (SPACE when ended at source exhaustion), an empty field between adjacent delimiters has count 0, TALLYING IN counts filled fields, the POINTER is 1-based, and leftover source after the last field is overflow"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion"
+  ],
+  "negative_capability_ids": [
+    "NEG.FULL-PROCEDURE-DIVISION-EXECUTION",
+    "NEG.NATIONAL-UTF-8-MULTIBYTE",
+    "NEG.MULTI-DELIMITER-ALL-GENERALIZATION",
+    "NEG.LOCALE-COLLATION",
+    "NEG.BUSINESS-PARSING-CORRECTNESS",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "full Procedure Division execution",
@@ -39,26 +39,26 @@
     "all dialects",
     "lie prevented: 'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion"
   ],
-  "negative_capability_ids": [
-    "NEG.FULL-PROCEDURE-DIVISION-EXECUTION",
-    "NEG.NATIONAL-UTF-8-MULTIBYTE",
-    "NEG.MULTI-DELIMITER-ALL-GENERALIZATION",
-    "NEG.LOCALE-COLLATION",
-    "NEG.BUSINESS-PARSING-CORRECTNESS",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc STRING/UNSTRING (program-shape, FUNCTION HEX-OF result-record dump)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.STRING.UNSTRING.1"
+  },
+  "positive_claims": [
+    "the receiver bytes + pointer/count/delimiter/tally/overflow of narrow STRING and UNSTRING statements, matching cobc/libcob byte-for-byte: STRING concatenates sources left-to-right at a 1-based POINTER (DELIMITED BY SIZE = whole operand, DELIMITED BY lit = operand up to the first lit), PRESERVES the unwritten target tail (no space-fill), keeps partial writes on ON OVERFLOW",
+    "UNSTRING splits the source by a delimiter into fields where COUNT IN is the SOURCE-FIELD LENGTH BEFORE TRUNCATION, DELIMITER IN is the ending delimiter (SPACE when ended at source exhaustion), an empty field between adjacent delimiters has count 0, TALLYING IN counts filled fields, the POINTER is 1-based, and leftover source after the last field is overflow"
   ],
-  "byte_domains": [
-    "STRING/UNSTRING receiver + pointer/count/delimiter/tally bytes"
-  ],
-  "lie_prevented": [
-    "'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion"
-  ],
-  "damage_if_overclaimed": "a wrong pointer base, count-vs-truncation, tail-preservation, or delimiter assumption in a STRING/UNSTRING transform silently corrupts assembled/split fields",
   "replay": {
     "command": "bash lab/oracle/string_unstring_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "10d405816c34a2ecca3f4fc250fa3d57d4a8c705156f3eef4eb97810b0bbc517"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 7,
+    "total": 7,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

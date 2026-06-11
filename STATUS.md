@@ -172,7 +172,7 @@ on sanitized customer-like data). See the ladder in [`docs/not-yet-ready.md`](do
 cargo test                              # self-contained court tests (no oracle needed)
 bash lab/verify-sealed-courts.sh        # all sweeps + shim suite + doc-gate (needs built oracle)
 python3 lab/receipt/run.py check        # receipts == live replay, no hand-edits
-python3 lab/casefile/run.py check       # forensic casefiles == regenerated, negatives >= positives
+kobold-courts casefile check --root .         # forensic casefiles == regenerated, negatives >= positives
 ```
 
 ## Open debts (current)

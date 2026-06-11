@@ -1,34 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.FILE.WRITE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)"
+  ],
+  "case_id": "GNURUST.FILE.WRITE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming LINE SEQUENTIAL preserves trailing spaces (or that RECORD SEQUENTIAL adds a newline) corrupts every written record's framing",
+  "hash_chain": {
+    "inputs_sha256": "aafa7d4b556265a9fc0c1bdd60e0a4a2b5b390b985bdd10047d9dd5c2039b13d"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "8a6180bdceaef24fcf79372fc603d26a788b649266a6f7819663a9d03bba0025",
-    "receipt_sha256": "558ae5cbacfb45e6eda50c1434fa346110da5aea2dda2d157c23dcdc3caa8a77"
+    "claim_ladder_entry_sha256": "577ab7bad6b73c2a88a7b7f0acef14589d4d7a36ffc4216691723d722645574a",
+    "receipt_sha256": "a55e2e6bd57cee1d689445d562fe16d45dc6690ff3ac2c8046a2eef4a3918338"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc OPEN OUTPUT/WRITE (libcob/fileio.c)",
-    "upstream_court": "GNURUST.FILE.WRITE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 2,
-    "pass": 2,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the file bytes produced by OPEN OUTPUT + repeated WRITE over fixed records, matching cobc/libcob fileio.c (verified 2/0): RECORD SEQUENTIAL writes the full fixed record_len-wide record area (space-padded) with NO delimiter",
-    "LINE SEQUENTIAL STRIPS trailing spaces and appends a newline (an all-spaces record writes just a newline). The WRITE side of GNURUST.FILE.SEQUENTIAL.1 (the READ court)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record"
+  ],
+  "negative_capability_ids": [
+    "NEG.COB-LS-FIXED-COB-LS-NULLS-LINE-MODES",
+    "NEG.VARIABLE-LENGTH-RECORDS",
+    "NEG.WRITE-ADVANCING-BEFORE-AFTER",
+    "NEG.REWRITE",
+    "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "COB_LS_FIXED/COB_LS_NULLS line modes",
@@ -39,26 +39,26 @@
     "all dialects",
     "lie prevented: WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record"
   ],
-  "negative_capability_ids": [
-    "NEG.COB-LS-FIXED-COB-LS-NULLS-LINE-MODES",
-    "NEG.VARIABLE-LENGTH-RECORDS",
-    "NEG.WRITE-ADVANCING-BEFORE-AFTER",
-    "NEG.REWRITE",
-    "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc OPEN OUTPUT/WRITE (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILE.WRITE.1"
+  },
+  "positive_claims": [
+    "the file bytes produced by OPEN OUTPUT + repeated WRITE over fixed records, matching cobc/libcob fileio.c (verified 2/0): RECORD SEQUENTIAL writes the full fixed record_len-wide record area (space-padded) with NO delimiter",
+    "LINE SEQUENTIAL STRIPS trailing spaces and appends a newline (an all-spaces record writes just a newline). The WRITE side of GNURUST.FILE.SEQUENTIAL.1 (the READ court)"
   ],
-  "byte_domains": [
-    "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)"
-  ],
-  "lie_prevented": [
-    "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record"
-  ],
-  "damage_if_overclaimed": "assuming LINE SEQUENTIAL preserves trailing spaces (or that RECORD SEQUENTIAL adds a newline) corrupts every written record's framing",
   "replay": {
     "command": "bash lab/oracle/write_seq_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "9a61dd63ce8128727602b6c917540ea19038db81f8970a37b35d21b747e366c4"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

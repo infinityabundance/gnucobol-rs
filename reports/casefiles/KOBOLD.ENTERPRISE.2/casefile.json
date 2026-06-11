@@ -1,34 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.ENTERPRISE.2",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold-attest 0.1.0 (lab tool)",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "DSSE PAE over the in-toto payload, verified by ed25519 under a configured key"
+  ],
+  "case_id": "KOBOLD.ENTERPRISE.2",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-attest 0.1.0 (lab tool)",
+  "damage_if_overclaimed": "a signature sold as compliance or production approval manufactures false assurance; a fake-green verifier would pass tampered evidence",
+  "hash_chain": {
+    "inputs_sha256": "94cc160d2823a703d18dff778d68fc96f6d6e3f904b17e88f7930c55a89ab030"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "60fc95f3a655f9f48677f9c9a3040348f47a5b194ad8da7198f9fac811559c01",
+    "claim_ladder_entry_sha256": "03081c3cc511ca8ba7e7066511c25c24b27791e427e7df30efcb2b25f5d39828",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "ed25519 (ed25519-compact, pinned) over the DSSE PAE; selftest proves all states",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "lab/attest (rust) selftest (6 states) + lab/attest/run.py over all casefiles -> reports/signing/verification-report.json"
-  },
-  "positive_claims": [
-    "optional cryptographic verification of generated DSSE/in-toto artifacts by the Rust `kobold-attest` tool (ed25519): unsigned is an EXPLICIT honest state (unsigned_no_key_configured), signed verifies under a configured key, and tampered payload / tampered signature / wrong key / payload mismatch each yield a DISTINCT status (no fake green)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'it has a signature, so it is approved/compliant/trusted' -- ENTERPRISE.2 proves only that a configured key signed the exact payload; unsigned stays explicit and honest"
+  ],
+  "negative_capability_ids": [
+    "NEG.REGULATORY-COMPLIANCE",
+    "NEG.PRODUCTION-APPROVAL",
+    "NEG.CUSTOMER-ACCEPTANCE",
+    "NEG.LONG-TERM-KEY-CUSTODY-ROTATION-REVOCATIO",
+    "NEG.IDENTITY-TRUST-BEYOND-THE-CONFIGURED-KEY",
+    "NEG.COMPLETE-SUPPLY-CHAIN-ASSURANCE-BEYOND-L"
   ],
   "negative_claims": [
     "regulatory compliance",
@@ -39,26 +39,26 @@
     "complete supply-chain assurance beyond listed materials",
     "lie prevented: 'it has a signature, so it is approved/compliant/trusted' -- ENTERPRISE.2 proves only that a configured key signed the exact payload; unsigned stays explicit and honest"
   ],
-  "negative_capability_ids": [
-    "NEG.REGULATORY-COMPLIANCE",
-    "NEG.PRODUCTION-APPROVAL",
-    "NEG.CUSTOMER-ACCEPTANCE",
-    "NEG.LONG-TERM-KEY-CUSTODY-ROTATION-REVOCATIO",
-    "NEG.IDENTITY-TRUST-BEYOND-THE-CONFIGURED-KEY",
-    "NEG.COMPLETE-SUPPLY-CHAIN-ASSURANCE-BEYOND-L"
+  "oracle": {
+    "detail": "ed25519 (ed25519-compact, pinned) over the DSSE PAE; selftest proves all states",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "optional cryptographic verification of generated DSSE/in-toto artifacts by the Rust `kobold-attest` tool (ed25519): unsigned is an EXPLICIT honest state (unsigned_no_key_configured), signed verifies under a configured key, and tampered payload / tampered signature / wrong key / payload mismatch each yield a DISTINCT status (no fake green)"
   ],
-  "byte_domains": [
-    "DSSE PAE over the in-toto payload, verified by ed25519 under a configured key"
-  ],
-  "lie_prevented": [
-    "'it has a signature, so it is approved/compliant/trusted' -- ENTERPRISE.2 proves only that a configured key signed the exact payload; unsigned stays explicit and honest"
-  ],
-  "damage_if_overclaimed": "a signature sold as compliance or production approval manufactures false assurance; a fake-green verifier would pass tampered evidence",
   "replay": {
     "command": "ed25519 (ed25519-compact, pinned) over the DSSE PAE; selftest proves all states",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "cdc01387726c792c3a89843f77930c14752b5c226969e5e3346e4ec651b1068f"
-  }
+  "results": {
+    "fail": 0,
+    "note": "kobold-attest (external rust, ed25519) selftest (6 states) + kobold-attest check over all casefiles -> reports/signing/verification-report.json",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

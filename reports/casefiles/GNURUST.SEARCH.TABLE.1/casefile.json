@@ -1,34 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.SEARCH.TABLE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)"
+  ],
+  "case_id": "GNURUST.SEARCH.TABLE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating serial SEARCH as position-independent (or running SEARCH ALL on an unsorted table) silently returns the wrong table element in a lookup",
+  "hash_chain": {
+    "inputs_sha256": "9957eecbeb82c5a46ac34dd7482c29ee59108ca3bda11ccd594ff22b91a6ea6c"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6c01a1f5ad45a330b7508d7a2e51a7490e71b47678b7d6fc25fe69fbf475a28d",
-    "receipt_sha256": "a46d3d3236ad45703f7c7ea3b3d10e9745951bc59ba365a00c95e5a2928e0cbe"
+    "claim_ladder_entry_sha256": "752cd5c23ee3e8a788d9a04d63116018e0b17b8987d1e48b393c403ac12104ea",
+    "receipt_sha256": "be7150c797ee2c372ce494e54f52ac661229602c55b849c1f41e6cdd6d81f1ea"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc SEARCH/SEARCH ALL (cobc/typeck.c + codegen.c)",
-    "upstream_court": "GNURUST.SEARCH.TABLE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 6,
-    "pass": 6,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the 1-based landing index of a COBOL table SEARCH, matching cobc/libcob (verified 6/0) -- a REAL byte court (not an atlas) composing the sealed 1-based subscript/decode model, the #2 surface gap (SEARCH 74x). SEARCH (serial) scans FORWARD ONLY from the current index for the first key match (a target before the start index is NOT FOUND -- SET IX TO 3 then searching a key at index 1 yields AT END)",
-    "SEARCH ALL binary-searches the ASCENDING key, finding a match anywhere independent of the start index. search_serial / search_all over a keyed OCCURS table return the matching 1-based index or None"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "SEARCH and SEARCH ALL are interchangeable lookups -- NO: serial SEARCH scans FORWARD FROM THE CURRENT INDEX (so it MISSES a match before the start index), while SEARCH ALL is a BINARY search that requires the table sorted ASCENDING and finds the key anywhere; using one for the other (or SEARCH ALL on unsorted data) returns the wrong index or AT END"
+  ],
+  "negative_capability_ids": [
+    "NEG.MULTI-KEY-DESCENDING-KEYS",
+    "NEG.ALPHANUMERIC-SIGNED-V-SCALED-KEYS",
+    "NEG.VARYING-AT-END-WHEN-CONTROL-FLOW-ONLY-TH",
+    "NEG.SEARCH-ALL-ON-AN-UNSORTED-TABLE-UNDEFINE",
+    "NEG.OCCURS-DEPENDING-ON",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "multi-key/DESCENDING keys",
@@ -39,26 +39,26 @@
     "all dialects",
     "lie prevented: SEARCH and SEARCH ALL are interchangeable lookups -- NO: serial SEARCH scans FORWARD FROM THE CURRENT INDEX (so it MISSES a match before the start index), while SEARCH ALL is a BINARY search that requires the table sorted ASCENDING and finds the key anywhere; using one for the other (or SEARCH ALL on unsorted data) returns the wrong index or AT END"
   ],
-  "negative_capability_ids": [
-    "NEG.MULTI-KEY-DESCENDING-KEYS",
-    "NEG.ALPHANUMERIC-SIGNED-V-SCALED-KEYS",
-    "NEG.VARYING-AT-END-WHEN-CONTROL-FLOW-ONLY-TH",
-    "NEG.SEARCH-ALL-ON-AN-UNSORTED-TABLE-UNDEFINE",
-    "NEG.OCCURS-DEPENDING-ON",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc SEARCH/SEARCH ALL (cobc/typeck.c + codegen.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SEARCH.TABLE.1"
+  },
+  "positive_claims": [
+    "the 1-based landing index of a COBOL table SEARCH, matching cobc/libcob (verified 6/0) -- a REAL byte court (not an atlas) composing the sealed 1-based subscript/decode model, the #2 surface gap (SEARCH 74x). SEARCH (serial) scans FORWARD ONLY from the current index for the first key match (a target before the start index is NOT FOUND -- SET IX TO 3 then searching a key at index 1 yields AT END)",
+    "SEARCH ALL binary-searches the ASCENDING key, finding a match anywhere independent of the start index. search_serial / search_all over a keyed OCCURS table return the matching 1-based index or None"
   ],
-  "byte_domains": [
-    "the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)"
-  ],
-  "lie_prevented": [
-    "SEARCH and SEARCH ALL are interchangeable lookups -- NO: serial SEARCH scans FORWARD FROM THE CURRENT INDEX (so it MISSES a match before the start index), while SEARCH ALL is a BINARY search that requires the table sorted ASCENDING and finds the key anywhere; using one for the other (or SEARCH ALL on unsorted data) returns the wrong index or AT END"
-  ],
-  "damage_if_overclaimed": "treating serial SEARCH as position-independent (or running SEARCH ALL on an unsorted table) silently returns the wrong table element in a lookup",
   "replay": {
     "command": "bash lab/oracle/search_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "84ab0beed489ad81ea20c04918050e79693d7b02296bcab01ffc1e1af66c3135"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 6,
+    "total": 6,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

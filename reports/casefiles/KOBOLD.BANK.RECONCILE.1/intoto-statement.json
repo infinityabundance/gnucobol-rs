@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/KOBOLD.BANK.RECONCILE.1/casefile.json",
-      "digest": {
-        "sha256": "1f5377a91766d9a5efe94e5bc135d081a5440181ea3e36be5042eb4efc95a746"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "KOBOLD.BANK.RECONCILE.1",
-    "kind": "court-casefile",
     "crate": "kobold-data-shim",
     "crate_version": "kobold 0.6.3",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "c0951b59621d73aa6b212c74704577625ff1c17d357a93b0e18364a400a63548",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 6,
     "replay": {
       "command": "the court result structs themselves (no recomputation that can drift)",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "2abaf5e76713364ee4b576ca8501355642e4a6aa90bb75da24cff76d8635d21a",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 6,
-    "negative_claim_count": 7
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "6688bc47219308dc921d250d859679a6f01c08cf1c8b39d9134a664cb5865887"
+      },
+      "name": "reports/casefiles/KOBOLD.BANK.RECONCILE.1/casefile.json"
+    }
+  ]
 }

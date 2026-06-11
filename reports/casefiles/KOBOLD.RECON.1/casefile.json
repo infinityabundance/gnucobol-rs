@@ -1,41 +1,26 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.RECON.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold-data-shim 0.2.0",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "JSON bytes + audit-receipt bytes (composing field/record/text-word/predicate domains)"
+  ],
+  "case_id": "KOBOLD.RECON.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-data-shim 0.2.0",
+  "damage_if_overclaimed": "treating decoded JSON as business truth acts on record-truth as if it were account state",
+  "hash_chain": {
+    "inputs_sha256": "54dcb6ea05f62c8b294f132d999769bb1f721c7dd174ad6255d7774f7cd47d10"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "0061936fbea870fc1db5698abcf0cf331d038ff862140d802e8e8250eb671d1d",
+    "claim_ladder_entry_sha256": "cf65a52d5a0cfa257e41d4f563ada07abc5cd9071f6f4f1f773daa4405d7ff53",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the sealed GNURUST courts (no new oracle)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "3 families / 360 records, byte-stable, CLI==lib"
-  },
-  "positive_claims": [
-    "end-to-end decode of fixed-record data -> byte-stable JSONL + audit receipt + explicit unsupported, over sealed courts only"
-  ],
-  "negative_claims": [
-    "transformed-record write-back",
-    "EBCDIC",
-    "edited PIC",
-    "line-sequential containers",
-    "lie prevented: 'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'decoded JSON is business truth' — it is record truth over sealed courts only"
   ],
   "negative_capability_ids": [
     "NEG.TRANSFORMED-RECORD-WRITE-BACK",
@@ -43,18 +28,33 @@
     "NEG.EDITED-PIC",
     "NEG.LINE-SEQUENTIAL-CONTAINERS"
   ],
-  "byte_domains": [
-    "JSON bytes + audit-receipt bytes (composing field/record/text-word/predicate domains)"
+  "negative_claims": [
+    "transformed-record write-back",
+    "EBCDIC",
+    "edited PIC",
+    "line-sequential containers",
+    "lie prevented: 'decoded JSON is business truth' — it is record truth over sealed courts only"
   ],
-  "lie_prevented": [
-    "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only"
+  "oracle": {
+    "detail": "the sealed GNURUST courts (no new oracle)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "end-to-end decode of fixed-record data -> byte-stable JSONL + audit receipt + explicit unsupported, over sealed courts only"
   ],
-  "damage_if_overclaimed": "treating decoded JSON as business truth acts on record-truth as if it were account state",
   "replay": {
     "command": "the sealed GNURUST courts (no new oracle)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "f056559da6dbaa3b04b7f9b356ecaf835319d229fd268c892529b95e85f840b2"
-  }
+  "results": {
+    "fail": 0,
+    "note": "3 families / 360 records, byte-stable, CLI==lib",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

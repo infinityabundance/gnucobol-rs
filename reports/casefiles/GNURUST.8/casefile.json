@@ -1,41 +1,58 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.8",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "record-storage bytes"
+  ],
+  "case_id": "GNURUST.8",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data",
+  "hash_chain": {
+    "inputs_sha256": "5d09a765b6735a102b8e3fc2a5dca43616292ce38dc85d028e220035271e78fd"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "9cbb999d6cd11752eda0ee1c8c4fc88aff37b49570b855a1fec9c481955037b5",
-    "receipt_sha256": "9a546ed2be98b6f800f77a50004a5364de0f00928ce966c7927f83ea6d4aaa58"
+    "claim_ladder_entry_sha256": "31540327f4b14b96cbfc995418bf813f702aaecd43fa0ecada689a11d3937d14",
+    "receipt_sha256": "79806a9c5c076b4339bb4a2d023626088062a3268744d8c76094d3c5d6d89597"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc DISPLAY of group (raw bytes)",
-    "upstream_court": "GNURUST.8",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "kind": "court-casefile",
+  "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "01 record initial WORKING-STORAGE bytes from VALUE matching cobc"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "VALUE under OCCURS/REDEFINES",
+      "non-fitting literals",
+      "no-VALUE records",
+      "figuratives beyond ZERO/SPACE",
+      "lie prevented: 'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-VALUE-8.md"
+    ],
+    "legacy_sha256": [
+      "374fd0c9d2b24df23713e904db1491d01a1111af35580310b06e70d1acc6dc78"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/value_sweep.sh` builds one COBOL program per case from a `gen_value` spec, compiles with the built `cobc`, runs it, and captures **`DISPLAY REC WITH NO ADVANCING`** — a group `DISPLAY` emits the record's raw initial bytes. The Rust mirror (`examples/value_rows`) consumes identical specs.",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc`-initialized storage | **PASS=392 FAIL=0** (`lab/oracle/value_sweep.sh`): DISPLAY/COMP-3, signed/unsigned, integer & `V`-scaled, valued / unvalued / `ZERO`, mixed alnum lead+trail per record | | Self-contained `cargo test` | init: 2/2 (the probed `val.cob` record; signed overpunch + unvalued-packed canonical zero) | | Fuzz (`init` target, arbitrary record specs) | 3,000,000 runs, 0 crashes (literal parser + zoned alignment + `cob_move` surface) | | `fmt` / `clippy -D warnings` / doc-gate (now runs the VALUE sweep) | clean |"
+    ],
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
   },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "392 sweep + 3M fuzz"
-  },
-  "positive_claims": [
-    "01 record initial WORKING-STORAGE bytes from VALUE matching cobc"
-  ],
-  "negative_claims": [
-    "VALUE under OCCURS/REDEFINES",
-    "non-fitting literals",
-    "no-VALUE records",
-    "figuratives beyond ZERO/SPACE",
-    "lie prevented: 'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+  "lie_prevented": [
+    "'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE"
   ],
   "negative_capability_ids": [
     "NEG.VALUE-UNDER-OCCURS-REDEFINES",
@@ -43,50 +60,33 @@
     "NEG.NO-VALUE-RECORDS",
     "NEG.FIGURATIVES-BEYOND-ZERO-SPACE"
   ],
-  "byte_domains": [
-    "record-storage bytes"
+  "negative_claims": [
+    "VALUE under OCCURS/REDEFINES",
+    "non-fitting literals",
+    "no-VALUE records",
+    "figuratives beyond ZERO/SPACE",
+    "lie prevented: 'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE"
   ],
-  "lie_prevented": [
-    "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
+  "oracle": {
+    "detail": "cobc DISPLAY of group (raw bytes)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.8"
+  },
+  "positive_claims": [
+    "01 record initial WORKING-STORAGE bytes from VALUE matching cobc"
   ],
-  "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data",
   "replay": {
     "command": "bash lab/oracle/value_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "33c2839b632f1244a4c6b852aaad41b34f14e35614f679914c5fdc682ad341ab"
+  "results": {
+    "fail": 0,
+    "note": "392 sweep + 3M fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
   },
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-VALUE-8.md"
-    ],
-    "legacy_sha256": [
-      "374fd0c9d2b24df23713e904db1491d01a1111af35580310b06e70d1acc6dc78"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "01 record initial WORKING-STORAGE bytes from VALUE matching cobc"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "VALUE under OCCURS/REDEFINES",
-      "non-fitting literals",
-      "no-VALUE records",
-      "figuratives beyond ZERO/SPACE",
-      "lie prevented: 'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/value_sweep.sh` builds one COBOL program per case from a `gen_value` spec, compiles with the built `cobc`, runs it, and captures **`DISPLAY REC WITH NO ADVANCING`** \u2014 a group `DISPLAY` emits the record's raw initial bytes. The Rust mirror (`examples/value_rows`) consumes identical specs.",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc`-initialized storage | **PASS=392 FAIL=0** (`lab/oracle/value_sweep.sh`): DISPLAY/COMP-3, signed/unsigned, integer & `V`-scaled, valued / unvalued / `ZERO`, mixed alnum lead+trail per record | | Self-contained `cargo test` | init: 2/2 (the probed `val.cob` record; signed overpunch + unvalued-packed canonical zero) | | Fuzz (`init` target, arbitrary record specs) | 3,000,000 runs, 0 crashes (literal parser + zoned alignment + `cob_move` surface) | | `fmt` / `clippy -D warnings` / doc-gate (now runs the VALUE sweep) | clean |"
-    ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,56 +1,56 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.DATA.2",
-  "kind": "composition-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold-data-shim 0.3.0",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "JSON + audit bytes"
+  ],
+  "case_id": "KOBOLD.DATA.2",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-data-shim 0.3.0",
+  "damage_if_overclaimed": "reading a binary field as text under an encoding corrupts keys and amounts",
+  "hash_chain": {
+    "inputs_sha256": "a42d937105a3a013607ec06de584630ab18f40a4f1ba42309e267c0b9d115d0f"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "3a5dafac7fce0c6cb75214e44d4618e42160ac72f398eaa0af584c99062981db",
+    "claim_ladder_entry_sha256": "b19c03bcfc05287ea37520fcd6850aebbc6e5742172ad195ef1862c703424922",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "sealed GNURUST courts (no new oracle)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "3 families x 120 incl binary fields, byte-stable"
-  },
-  "positive_claims": [
-    "COMP/COMP-5/COMP-X binary fields decoded end-to-end in the reconciliation corpus (composes GNURUST.14)"
-  ],
-  "negative_claims": [
-    "binary arithmetic",
-    "business truth",
-    "lie prevented: 'binary fields are text under any encoding' \u2014 they are raw storage passthrough"
+  "kind": "composition-casefile",
+  "lie_prevented": [
+    "'binary fields are text under any encoding' — they are raw storage passthrough"
   ],
   "negative_capability_ids": [
     "NEG.BINARY-ARITHMETIC",
     "NEG.BUSINESS-TRUTH"
   ],
-  "byte_domains": [
-    "JSON + audit bytes"
+  "negative_claims": [
+    "binary arithmetic",
+    "business truth",
+    "lie prevented: 'binary fields are text under any encoding' — they are raw storage passthrough"
   ],
-  "lie_prevented": [
-    "'binary fields are text under any encoding' \u2014 they are raw storage passthrough"
+  "oracle": {
+    "detail": "sealed GNURUST courts (no new oracle)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "COMP/COMP-5/COMP-X binary fields decoded end-to-end in the reconciliation corpus (composes GNURUST.14)"
   ],
-  "damage_if_overclaimed": "reading a binary field as text under an encoding corrupts keys and amounts",
   "replay": {
     "command": "sealed GNURUST courts (no new oracle)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "81fc1fca43ed9ef8bbb1e46367e1c016c2dfcecd1d4ad6a9ebbb446ebee7d4e3"
-  }
+  "results": {
+    "fail": 0,
+    "note": "3 families x 120 incl binary fields, byte-stable",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

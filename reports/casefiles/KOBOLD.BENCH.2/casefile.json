@@ -1,36 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.BENCH.2",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold-bench (path: gnucobol-rs 0.7 + kobold-data-shim 0.6)",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "end-to-end pipeline timing gated on byte-stable output hash"
+  ],
+  "case_id": "KOBOLD.BENCH.2",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-bench (path: gnucobol-rs 0.7 + kobold-data-shim 0.6)",
+  "damage_if_overclaimed": "a parallel or hot-path benchmark number sold as production throughput sets false capacity/SLA expectations for a real migration",
+  "hash_chain": {
+    "inputs_sha256": "71aad0ecce06aecdb3aa1aa392c90483dd24ef270541a453f557da3b0c04aab0"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "a9e861e128686b46f00d48983bef52d3e803eb51dee5c11841b4db42fbabbe50",
+    "claim_ladder_entry_sha256": "cb0f1898cbc37296c98cdad86be9be7ce325a383727a88cc334318a8d0a53912",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the shim's own byte-stable reconcile output (parity baseline)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "kobold-bench2 (parity-gated; tampered baseline aborts, verified) + reports/BENCH-2-receipt.json"
-  },
-  "positive_claims": [
-    "the full reconciliation pipeline (FILE.1 ingest+decode",
-    "LEVEL-88+audit) is measured in scalar mode ONLY after the output/audit hash matches the pinned baseline",
-    "a mismatch aborts with no timing admitted"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'it is fast, so it is correct' / 'a hot-path number is the product throughput' -- BENCH.2 admits timing only behind a parity gate and measures the full pipeline, not just cob_move"
+  ],
+  "negative_capability_ids": [
+    "NEG.PRODUCTION-PERFORMANCE",
+    "NEG.AWS-PERFORMANCE",
+    "NEG.PARALLEL-RAYON-SIMD-THROUGHPUT",
+    "NEG.CUSTOMER-WORKLOAD-REPRESENTATIVENESS"
   ],
   "negative_claims": [
     "production performance",
@@ -39,24 +35,27 @@
     "customer-workload representativeness",
     "lie prevented: 'it is fast, so it is correct' / 'a hot-path number is the product throughput' -- BENCH.2 admits timing only behind a parity gate and measures the full pipeline, not just cob_move"
   ],
-  "negative_capability_ids": [
-    "NEG.PRODUCTION-PERFORMANCE",
-    "NEG.AWS-PERFORMANCE",
-    "NEG.PARALLEL-RAYON-SIMD-THROUGHPUT",
-    "NEG.CUSTOMER-WORKLOAD-REPRESENTATIVENESS"
+  "oracle": {
+    "detail": "the shim's own byte-stable reconcile output (parity baseline)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "the full reconciliation pipeline (FILE.1 ingest+decode+LEVEL-88+audit) is measured in scalar mode ONLY after the output/audit hash matches the pinned baseline",
+    "a mismatch aborts with no timing admitted"
   ],
-  "byte_domains": [
-    "end-to-end pipeline timing gated on byte-stable output hash"
-  ],
-  "lie_prevented": [
-    "'it is fast, so it is correct' / 'a hot-path number is the product throughput' -- BENCH.2 admits timing only behind a parity gate and measures the full pipeline, not just cob_move"
-  ],
-  "damage_if_overclaimed": "a parallel or hot-path benchmark number sold as production throughput sets false capacity/SLA expectations for a real migration",
   "replay": {
     "command": "the shim's own byte-stable reconcile output (parity baseline)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "2c01e57600e9cc7b58e707e36c815d35b6d1f56884e63d7710f7cff39369a913"
-  }
+  "results": {
+    "fail": 0,
+    "note": "kobold-bench2 (parity-gated; tampered baseline aborts, verified) + reports/BENCH-2-receipt.json",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

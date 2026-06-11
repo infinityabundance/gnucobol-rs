@@ -1,4 +1,4 @@
-<!-- DO NOT EDIT BY HAND. Generated from casefile.json by lab/casefile/run.py.
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — KOBOLD.SCALE.1 (court-casefile)
 
@@ -9,12 +9,8 @@
 - **Replay:** `the scalar reconcile output (pinned per-size baseline)`
 - **Authority:** STATUS.md · receipt_status: no-trust2-receipt
 
-## Positive claims (7)
-- streams a declared synthetic mixed fixed-record corpus (DISPLAY
-- COMP-3
-- COMP
-- COMP-X
-- LEVEL-88) through the sealed reconcile pipeline in fixed reconcile-blocks with BOUNDED memory
+## Positive claims (3)
+- streams a declared synthetic mixed fixed-record corpus (DISPLAY+COMP-3+COMP+COMP-X+LEVEL-88) through the sealed reconcile pipeline in fixed reconcile-blocks with BOUNDED memory
 - scalar and Rayon use the same block unit so their output hashes are byte-identical, and Rayon timing is admitted only after that match + a pinned baseline
 - records wall time, throughput, peak RSS, temp disk, and the POSTING.1 hash chain
 

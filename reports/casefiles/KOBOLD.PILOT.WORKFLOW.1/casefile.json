@@ -1,34 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.PILOT.WORKFLOW.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.7.1",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "a synthetic extract -> the full court chain -> one hash-bound pilot packet"
+  ],
+  "case_id": "KOBOLD.PILOT.WORKFLOW.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.7.1",
+  "damage_if_overclaimed": "presenting a synthetic pilot-wiring run as customer-ready/production-ready/compliant manufactures readiness the courts do not provide, and could invite real customer data into an unproven flow",
+  "hash_chain": {
+    "inputs_sha256": "43026012965b71c047623501988daad011220c6645434b85521f06879c289024"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "700c4214c86a4801c0ac0486648425e152455d49bc237f358b05e3d7b632308d",
+    "claim_ladder_entry_sha256": "d839d5ad27d69b8d4a741d83305ac45a66d27ca795dd942c0fd25f060fbb201f",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the composed sealed courts (each its own authority) over synthetic bytes",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/pilot_workflow.rs (1: the chain wires, no cleartext leaks, packet complete + binds all artifacts)"
-  },
-  "positive_claims": [
-    "a declared synthetic/private-pilot-shaped banking extract flows end-to-end through EXTRACT.PROFILE.1, PRIVACY.REDACTION.1, BANK.1/2, BANK.RECONCILE.1, DIFF.1, TOOLING.EXPORT.1, and PILOT-PACKET.1, proving the workflow PLUMBING and evidence custody: the account id is tokenized before any artifact leaves the secure zone (no cleartext in the redaction, tooling export, or packet), the reconcile view is source-bound to the extract + redaction, the diff target is non-oracle, and the pilot packet hash-binds every produced artifact + the operator review-notes hash (complete:true, creates_new_truth:false)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the pilot workflow ran, therefore we can decode/reconcile real customer data in production' -- PILOT.WORKFLOW.1 proves only the WIRING + custody over a DECLARED SYNTHETIC extract"
+  ],
+  "negative_capability_ids": [
+    "NEG.CUSTOMER-DATA-COVERAGE",
+    "NEG.PRODUCTION-READINESS",
+    "NEG.REGULATORY-COMPLIANCE",
+    "NEG.BUSINESS-ACCEPTANCE",
+    "NEG.THAT-THE-SYNTHETIC-BYTES-ARE-A-REAL-EXTR",
+    "NEG.SEMANTIC-VALIDATION-OF-EACH-COURT-THEIR"
   ],
   "negative_claims": [
     "customer-data coverage",
@@ -39,26 +39,26 @@
     "semantic validation of each court (their own seals are the authority)",
     "lie prevented: 'the pilot workflow ran, therefore we can decode/reconcile real customer data in production' -- PILOT.WORKFLOW.1 proves only the WIRING + custody over a DECLARED SYNTHETIC extract"
   ],
-  "negative_capability_ids": [
-    "NEG.CUSTOMER-DATA-COVERAGE",
-    "NEG.PRODUCTION-READINESS",
-    "NEG.REGULATORY-COMPLIANCE",
-    "NEG.BUSINESS-ACCEPTANCE",
-    "NEG.THAT-THE-SYNTHETIC-BYTES-ARE-A-REAL-EXTR",
-    "NEG.SEMANTIC-VALIDATION-OF-EACH-COURT-THEIR-"
+  "oracle": {
+    "detail": "the composed sealed courts (each its own authority) over synthetic bytes",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "a declared synthetic/private-pilot-shaped banking extract flows end-to-end through EXTRACT.PROFILE.1, PRIVACY.REDACTION.1, BANK.1/2, BANK.RECONCILE.1, DIFF.1, TOOLING.EXPORT.1, and PILOT-PACKET.1, proving the workflow PLUMBING and evidence custody: the account id is tokenized before any artifact leaves the secure zone (no cleartext in the redaction, tooling export, or packet), the reconcile view is source-bound to the extract + redaction, the diff target is non-oracle, and the pilot packet hash-binds every produced artifact + the operator review-notes hash (complete:true, creates_new_truth:false)"
   ],
-  "byte_domains": [
-    "a synthetic extract -> the full court chain -> one hash-bound pilot packet"
-  ],
-  "lie_prevented": [
-    "'the pilot workflow ran, therefore we can decode/reconcile real customer data in production' -- PILOT.WORKFLOW.1 proves only the WIRING + custody over a DECLARED SYNTHETIC extract"
-  ],
-  "damage_if_overclaimed": "presenting a synthetic pilot-wiring run as customer-ready/production-ready/compliant manufactures readiness the courts do not provide, and could invite real customer data into an unproven flow",
   "replay": {
     "command": "the composed sealed courts (each its own authority) over synthetic bytes",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "c2f46212cbc764ae2ac3c4f73ee1fc6c189e5fb2b74000280a047738068dae5b"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/pilot_workflow.rs (1: the chain wires, no cleartext leaks, packet complete + binds all artifacts)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

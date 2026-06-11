@@ -1,34 +1,33 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.PUBLIC.GAP.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "meta board (gnucobol-rs lab)",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "verb/feature frequency scan of the admitted testsuite -> sealed/observed/refused/missing surface board"
+  ],
+  "case_id": "GNURUST.PUBLIC.GAP.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "meta board (gnucobol-rs lab)",
+  "damage_if_overclaimed": "presenting a surface scan as test-pass / parity coverage fabricates execution evidence the project has not produced",
+  "hash_chain": {
+    "inputs_sha256": "14d2df16bb5f29d27ec1f3f7275146729c31ba4dbf7b0f25868d25d037cd52c5"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "e5f8d8d6ebcd50cebda54e314e8104a98176dab603ddafde0e0c869144aa82aa",
+    "claim_ladder_entry_sha256": "b8161c0a79adba051f6f8a0430645cf1106ebe17c92e091a559950ae4ad15d3f",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "GnuCOBOL upstream testsuite (admitted in lab/admit)",
-    "upstream_court": "GNURUST.PUBLIC.GAP.1",
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "lab/gap/run.py 29 files -> reports/public-gap-board.json"
-  },
-  "positive_claims": [
-    "a surface-frequency GAP BOARD over the ADMITTED GnuCOBOL 3.2.0 upstream testsuite (29 run/syn .at files, ZERO network -- the authoritative corpus #1). Classifies each COBOL surface as sealed (13) / observed (2) / refused (4) / MISSING (7) against the court map, and ranks the missing-court board by occurrence: CALL/linkage (959x -- the LARGEST gap), START/DELETE/indexed-org (indexed files), SORT/MERGE (145x), SEARCH (74x), relative files. Turns we-sealed-courts into we-know-our-blind-spots-against-the-authoritative-corpus. The companion to GNURUST.PUBLIC.CORPUS.1, run on corpus #1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "we cover the GnuCOBOL testsuite -- NO: this is a VERB-PRESENCE scan that finds 7 MISSING surfaces (CALL the biggest at 959x); it compiles/runs/proves NOTHING and the missing-court board is a candidate set, not a roadmap commitment"
+  ],
+  "negative_capability_ids": [
+    "NEG.COMPILATION-EXECUTION-PARITY-OVER-ANY-TE",
+    "NEG.THAT-A-VERB-S-PRESENCE-PROVES-A-COURT-IS",
+    "NEG.THAT-THE-MISSING-SET-IS-A-ROADMAP-COMMIT",
+    "NEG.MULTI-CORPUS-COVERAGE-ONE-CORPUS",
+    "NEG.EXHAUSTIVENESS-OF-SURFACES"
   ],
   "negative_claims": [
     "compilation/execution/parity over any test",
@@ -38,25 +37,26 @@
     "exhaustiveness of surfaces",
     "lie prevented: we cover the GnuCOBOL testsuite -- NO: this is a VERB-PRESENCE scan that finds 7 MISSING surfaces (CALL the biggest at 959x); it compiles/runs/proves NOTHING and the missing-court board is a candidate set, not a roadmap commitment"
   ],
-  "negative_capability_ids": [
-    "NEG.COMPILATION-EXECUTION-PARITY-OVER-ANY-TE",
-    "NEG.THAT-A-VERB-S-PRESENCE-PROVES-A-COURT-IS",
-    "NEG.THAT-THE-MISSING-SET-IS-A-ROADMAP-COMMIT",
-    "NEG.MULTI-CORPUS-COVERAGE-ONE-CORPUS",
-    "NEG.EXHAUSTIVENESS-OF-SURFACES"
+  "oracle": {
+    "detail": "GnuCOBOL upstream testsuite (admitted in lab/admit)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.PUBLIC.GAP.1"
+  },
+  "positive_claims": [
+    "a surface-frequency GAP BOARD over the ADMITTED GnuCOBOL 3.2.0 upstream testsuite (29 run/syn .at files, ZERO network -- the authoritative corpus #1). Classifies each COBOL surface as sealed (13) / observed (2) / refused (4) / MISSING (7) against the court map, and ranks the missing-court board by occurrence: CALL/linkage (959x -- the LARGEST gap), START/DELETE/indexed-org (indexed files), SORT/MERGE (145x), SEARCH (74x), relative files. Turns we-sealed-courts into we-know-our-blind-spots-against-the-authoritative-corpus. The companion to GNURUST.PUBLIC.CORPUS.1, run on corpus #1"
   ],
-  "byte_domains": [
-    "verb/feature frequency scan of the admitted testsuite -> sealed/observed/refused/missing surface board"
-  ],
-  "lie_prevented": [
-    "we cover the GnuCOBOL testsuite -- NO: this is a VERB-PRESENCE scan that finds 7 MISSING surfaces (CALL the biggest at 959x); it compiles/runs/proves NOTHING and the missing-court board is a candidate set, not a roadmap commitment"
-  ],
-  "damage_if_overclaimed": "presenting a surface scan as test-pass / parity coverage fabricates execution evidence the project has not produced",
   "replay": {
     "command": "GnuCOBOL upstream testsuite (admitted in lab/admit)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "06a946c4515fae7b182ff2565118b57ad23f839aa7325b232ee1bb4582558279"
-  }
+  "results": {
+    "fail": 0,
+    "note": "lab/gap/run.py 29 files -> reports/public-gap-board.json",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

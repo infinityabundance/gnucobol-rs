@@ -1,35 +1,35 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.BANK.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "banking batch file -> per-variant records + control-total reconciliation"
+  ],
+  "case_id": "KOBOLD.BANK.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "treating a balanced file as a correct, accepted posting moves money on an unverified batch",
+  "hash_chain": {
+    "inputs_sha256": "dad921ed8e02e7f3cbe93f693e3465a8917c70b02a95dc09065b51c8f96417dc"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "cccb540ccd32067c28c68c1fe3a9c37924a6f24de043a8e2c55254175f4c9535",
+    "claim_ladder_entry_sha256": "bdf4af0fa37cbc859300fa37f69fc0e9f5e0e0a8edc7887edd3faa8bf9b4318e",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "recon/banking H/D/T balanced + tampered; tests/banking.rs 3 green"
-  },
-  "positive_claims": [
-    "variant routing by a declared discriminator (H/D/T) + declared-vs-observed control totals (count/debit/credit)",
-    "balanced file reconciles, tampered trailer fails with a finding, unknown record type fails closed"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
+  ],
+  "negative_capability_ids": [
+    "NEG.POSTING-TRUTH",
+    "NEG.LEDGER-TRUTH",
+    "NEG.BUSINESS-TRUTH",
+    "NEG.DEBIT-CREDIT-POLARITY-FROM-A-NUMERIC-SIG",
+    "NEG.A-BALANCED-FILE-BEING-A-CORRECT-FILE",
+    "NEG.A-TRAILER-MATCH-BEING-LEDGER-ACCEPTANCE",
+    "NEG.AUTO-DETECTED-VARIANTS"
   ],
   "negative_claims": [
     "posting truth",
@@ -41,27 +41,27 @@
     "auto-detected variants",
     "lie prevented: 'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
   ],
-  "negative_capability_ids": [
-    "NEG.POSTING-TRUTH",
-    "NEG.LEDGER-TRUTH",
-    "NEG.BUSINESS-TRUTH",
-    "NEG.DEBIT-CREDIT-POLARITY-FROM-A-NUMERIC-SIG",
-    "NEG.A-BALANCED-FILE-BEING-A-CORRECT-FILE",
-    "NEG.A-TRAILER-MATCH-BEING-LEDGER-ACCEPTANCE",
-    "NEG.AUTO-DETECTED-VARIANTS"
+  "oracle": {
+    "detail": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "variant routing by a declared discriminator (H/D/T) + declared-vs-observed control totals (count/debit/credit)",
+    "balanced file reconciles, tampered trailer fails with a finding, unknown record type fails closed"
   ],
-  "byte_domains": [
-    "banking batch file -> per-variant records + control-total reconciliation"
-  ],
-  "lie_prevented": [
-    "'a balanced file is a correct, accepted posting' -- KOBOLD.BANK.1 proves declared==observed totals only, never posting/ledger/business truth"
-  ],
-  "damage_if_overclaimed": "treating a balanced file as a correct, accepted posting moves money on an unverified batch",
   "replay": {
     "command": "composed gnucobol-rs courts (COMP-3/display/layout) + declared profile",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "920640e7c9d7eb57b6fab006e2b3ab26b3e1b5d49931408e39fad00188a10d5a"
-  }
+  "results": {
+    "fail": 0,
+    "note": "recon/banking H/D/T balanced + tampered; tests/banking.rs 3 green",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,13 +1,90 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: full GnuCOBOL parity / standard conformance"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: all dialects"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: public-corpus execution parity"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: business correctness"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: compiler replacement"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: auto build-profile detection"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: the negative-zero finding being FIXED (candidate GNURUST.VALUE.NEGZERO.EDGE.1, not patched)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: the not-yet-emitting families (4M of 20M = storage+directive only"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: the other 13 families are dropped buckets, NOT covered)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: lie prevented: 'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,88 +98,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: full GnuCOBOL parity / standard conformance"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: all dialects"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: public-corpus execution parity"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: business correctness"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: compiler replacement"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: auto build-profile detection"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: the negative-zero finding being FIXED (candidate GNURUST.VALUE.NEGZERO.EDGE.1, not patched)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: the not-yet-emitting families (4M of 20M = storage+directive only"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: the other 13 families are dropped buckets, NOT covered)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.LINEAGE.CORPUS.20M.1 non-claim: lie prevented: 'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

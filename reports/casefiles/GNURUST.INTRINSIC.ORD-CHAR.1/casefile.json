@@ -1,34 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.ORD-CHAR.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)"
+  ],
+  "case_id": "GNURUST.INTRINSIC.ORD-CHAR.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating ORD as the raw byte value (or CHAR as 0-based) is a silent off-by-one in every character-code computation",
+  "hash_chain": {
+    "inputs_sha256": "fba31b3352feaf63477789e16225549e203f93981ad496cef5c5619840bd50aa"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "8467f9e447dbd16344806526d1810871556bd4536e95aed723b102a66654fe26",
-    "receipt_sha256": "4532649db45e64191c844e9f28a29b9307cc17448e72636055299b49d62fc4fe"
+    "claim_ladder_entry_sha256": "eb42ad9130eb549a3061d37f0eefcfb2763ffc62762677129fa17127b1885747",
+    "receipt_sha256": "75f6ff36578b09e198a8fc1fd713240507744726fd05f8cbb385d96ca8a9e13f"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION ORD/CHAR (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.ORD-CHAR.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 15,
-    "pass": 15,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "FUNCTION ORD(c) returns the 1-BASED position of byte c in the native ASCII collating sequence (ORD(c)=c+1, so ORD('A')=66 not 65) and FUNCTION CHAR(n) returns the byte at 1-based position n (CHAR(n)=n-1, CHAR(66)='A'), matching cobc/libcob (verified 15/0 incl the full ORD(CHAR(n))=n round-trip over 1..256). The 1-based inverses",
-    "the last deterministic intrinsic split from GNURUST.INTRINSIC.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-DEFAULT-COLLATING-SEQUENCES",
+    "NEG.NATIONAL-UTF-8",
+    "NEG.CHAR-N-OUTSIDE-1-256",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "non-default collating sequences",
@@ -37,24 +35,26 @@
     "all dialects",
     "lie prevented: ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap"
   ],
-  "negative_capability_ids": [
-    "NEG.NON-DEFAULT-COLLATING-SEQUENCES",
-    "NEG.NATIONAL-UTF-8",
-    "NEG.CHAR-N-OUTSIDE-1-256",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION ORD/CHAR (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.ORD-CHAR.1"
+  },
+  "positive_claims": [
+    "FUNCTION ORD(c) returns the 1-BASED position of byte c in the native ASCII collating sequence (ORD(c)=c+1, so ORD('A')=66 not 65) and FUNCTION CHAR(n) returns the byte at 1-based position n (CHAR(n)=n-1, CHAR(66)='A'), matching cobc/libcob (verified 15/0 incl the full ORD(CHAR(n))=n round-trip over 1..256). The 1-based inverses",
+    "the last deterministic intrinsic split from GNURUST.INTRINSIC.ATLAS.1"
   ],
-  "byte_domains": [
-    "ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)"
-  ],
-  "lie_prevented": [
-    "ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap"
-  ],
-  "damage_if_overclaimed": "treating ORD as the raw byte value (or CHAR as 0-based) is a silent off-by-one in every character-code computation",
   "replay": {
     "command": "bash lab/oracle/ordchar_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "74ad7eb6becb2f537c41a77e01a3d58cfbdcffc9ad9b3141443d5a36c0103b66"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 15,
+    "total": 15,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

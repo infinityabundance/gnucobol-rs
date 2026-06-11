@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/KOBOLD.DB2HOST.1/casefile.json",
-      "digest": {
-        "sha256": "5777664ef1dd6e4d874e540f0829154b349b95840f75b9f5ec24c87249045bc0"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "KOBOLD.DB2HOST.1",
-    "kind": "court-casefile",
     "crate": "kobold-data-shim",
     "crate_version": "kobold 0.6.3",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "e31eb0ae7721fab3e79cbe13712e6f25c2a8b3eaf72ee0093a3eaad8b4f1038b",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 3,
     "replay": {
       "command": "composed gnucobol-rs courts (COMP-3/COMP-5) + declared kobold-db2host-indicator-manifest-v1",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "42fe5cec0536f902d1c642824512d8888247a832fa70b04c60ba0c57c06fb9df",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 3,
-    "negative_claim_count": 7
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "e1a3c4d02ebfcee8804d41acf3d1fd786721f78fc7d5c0c6abf432e5aed72f42"
+      },
+      "name": "reports/casefiles/KOBOLD.DB2HOST.1/casefile.json"
+    }
+  ]
 }

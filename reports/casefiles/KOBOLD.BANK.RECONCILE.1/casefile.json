@@ -1,39 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.BANK.RECONCILE.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "existing court evidence -> generated operator report (json + md + sarif); introduces no new evidence"
+  ],
+  "case_id": "KOBOLD.BANK.RECONCILE.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "an operator acting on a matched VIEW as ledger acceptance posts a batch on a summary; a STALE view over changed source casefiles misreports the evidence it claims to derive from",
+  "hash_chain": {
+    "inputs_sha256": "a67f0b4d9320f80fd1d807791ab83ca82ca08455636c4e70fa8b58739e9a2726"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "2abaf5e76713364ee4b576ca8501355642e4a6aa90bb75da24cff76d8635d21a",
+    "claim_ladder_entry_sha256": "c0951b59621d73aa6b212c74704577625ff1c17d357a93b0e18364a400a63548",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the court result structs themselves (no recomputation that can drift)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/bank_reconcile.rs (2: matched view faithful + refuses truth; mismatch renders finding in view+SARIF)"
-  },
-  "positive_claims": [
-    "an operator view assembled ONLY from existing court structs AND provably DERIVED from named, hash-pinned source casefiles (source_evidence: BANK.1/BANK.2",
-    "POSTING.1",
-    "DB2HOST.1 + any extra EXTRACT.PROFILE.1/PRIVACY.REDACTION.1/DIFF.1, each by sha256",
-    "derived_view:true, creates_new_truth:false): declared-vs-observed count/debit/credit + matched/mismatch verdict from banking.balanced, custody seq/gaps/dups + last_chain_hash, db2 counts, dirty/unsupported counts, redaction counts, refused truth layers",
-    "aggregates the EXISTING findings into one SARIF",
-    "a changed source casefile changes the report hash"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
+  ],
+  "negative_capability_ids": [
+    "NEG.LEDGER-ACCEPTANCE",
+    "NEG.SETTLEMENT-FINALITY",
+    "NEG.ACCOUNT-BALANCE-TRUTH",
+    "NEG.BUSINESS-APPROVAL",
+    "NEG.THAT-A-MATCH-IS-CORRECTNESS",
+    "NEG.THAT-THE-VIEW-IS-NEW-EVIDENCE"
   ],
   "negative_claims": [
     "ledger acceptance",
@@ -44,26 +39,31 @@
     "that the view is new evidence",
     "lie prevented: 'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
   ],
-  "negative_capability_ids": [
-    "NEG.LEDGER-ACCEPTANCE",
-    "NEG.SETTLEMENT-FINALITY",
-    "NEG.ACCOUNT-BALANCE-TRUTH",
-    "NEG.BUSINESS-APPROVAL",
-    "NEG.THAT-A-MATCH-IS-CORRECTNESS",
-    "NEG.THAT-THE-VIEW-IS-NEW-EVIDENCE"
+  "oracle": {
+    "detail": "the court result structs themselves (no recomputation that can drift)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "an operator view assembled ONLY from existing court structs AND provably DERIVED from named, hash-pinned source casefiles (source_evidence: BANK.1/BANK.2",
+    "POSTING.1",
+    "DB2HOST.1 + any extra EXTRACT.PROFILE.1/PRIVACY.REDACTION.1/DIFF.1, each by sha256",
+    "derived_view:true, creates_new_truth:false): declared-vs-observed count/debit/credit + matched/mismatch verdict from banking.balanced, custody seq/gaps/dups + last_chain_hash, db2 counts, dirty/unsupported counts, redaction counts, refused truth layers",
+    "aggregates the EXISTING findings into one SARIF",
+    "a changed source casefile changes the report hash"
   ],
-  "byte_domains": [
-    "existing court evidence -> generated operator report (json + md + sarif); introduces no new evidence"
-  ],
-  "lie_prevented": [
-    "'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
-  ],
-  "damage_if_overclaimed": "an operator acting on a matched VIEW as ledger acceptance posts a batch on a summary; a STALE view over changed source casefiles misreports the evidence it claims to derive from",
   "replay": {
     "command": "the court result structs themselves (no recomputation that can drift)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "4cc415a48fc40e695de17202b41c0e8681b0887f42b464ba7968474c97d8f20f"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/bank_reconcile.rs (2: matched view faithful + refuses truth; mismatch renders finding in view+SARIF)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

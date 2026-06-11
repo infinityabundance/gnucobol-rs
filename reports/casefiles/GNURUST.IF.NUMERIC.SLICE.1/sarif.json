@@ -1,13 +1,90 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: signed/packed/V-scaled numerics"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: MOVE field TO field"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: numeric SIZE ERROR"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: compound/class conditions"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: 88-level"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: range/THRU WHEN"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: non-MOVE branches"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: nested flow"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: all dialects"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: lie prevented: a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,88 +98,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: signed/packed/V-scaled numerics"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: MOVE field TO field"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: numeric SIZE ERROR"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: compound/class conditions"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: 88-level"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: range/THRU WHEN"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: non-MOVE branches"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: nested flow"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: all dialects"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.IF.NUMERIC.SLICE.1 non-claim: lie prevented: a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

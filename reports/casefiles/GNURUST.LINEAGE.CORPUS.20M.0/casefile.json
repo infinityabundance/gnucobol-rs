@@ -1,35 +1,37 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "meta-engine: deterministic generate + canonical hashing + Merkle + stratified replay + parallel isolation + shrink/file findings path"
+  ],
+  "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating the lineage corpus as a parity/conformance proof, or the negative-zero finding as a fixed bug, or the engine as covering all 15 families, would each overclaim; the corpus reveals the oracle's observed shape and files divergences, it does not certify gnucobol-rs against all of GnuCOBOL",
+  "hash_chain": {
+    "inputs_sha256": "530230e81681cbb823c8f8635f86bec103294db28a1c69c82f999c544dd54397"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "262f8f94e3e886aa1eca760fe94ed49615aeb4f1f699c9e5c96c8d4f7f1565e0",
-    "receipt_sha256": "d6ab98efdb631058894796cb7a89bc07bf8ec790b08f303fb858ea48040cd29e"
+    "claim_ladder_entry_sha256": "78af8b4414996ec714b3f4fb11ffbc65fe9d590e74a11c3c6788c70e7fb46b44",
+    "receipt_sha256": "408e3a61ae15239f077adb43db27d3afe883314e17b55f007172b7b8f4f314e4"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
-    "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.0",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 10,
-    "pass": 10,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "built the deterministic COBOL lineage atlas ENGINE: witnesses are GENERATED FROM SEED (the generator IS the corpus -- regenerable from generator_version+shard_seed+index, no .cob stored), the schema is canonical-hashed, a Merkle root-of-roots binds every shard, a STRATIFIED replay regenerates+re-runs sampled+nonpass witnesses to byte-identical leaves, parallel-vs-serial harness isolation is proven (LINEAGE20M.HARNESS.ISOLATION.1, per-call COB_TMPDIR), and the shrink->file->confirm findings path collapses raw mismatches to minimal reproducers",
-    "the plan budgets sum to exactly 20M across 15 families each owned by a court/atlas/refusal",
-    "verified by the engine self-test + the seal-grade gate (Merkle + stratified replay + isolation + findings-completeness, all GREEN)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "an engine that 'works' is not the same as one whose evidence is REPLAYABLE -- this engine's rows are Merkle-bound and byte-identical on stratified replay, and a parallel-compile race that poisoned replay was caught BY the replay gate before any scale; the engine seals NO burn results, only the machinery"
+  ],
+  "negative_capability_ids": [
+    "NEG.ANY-BURN-RESULT-THE-200K-BURN-IS-GNURUST",
+    "NEG.THE-FULL-20M-IS-GNURUST-LINEAGE-CORPUS-2",
+    "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
+    "NEG.ALL-DIALECTS",
+    "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
+    "NEG.BUSINESS-CORRECTNESS",
+    "NEG.COMPILER-REPLACEMENT",
+    "NEG.AUTOMATIC-BUILD-PROFILE-DETECTION",
+    "NEG.THE-FAMILIES-NOT-YET-EMITTING-V0-EMITS-S"
   ],
   "negative_claims": [
     "any BURN result (the 200K burn is GNURUST.LINEAGE.CORPUS.20M.SMOKE",
@@ -43,29 +45,27 @@
     "the families not yet emitting (v0 emits storage + directive of 15 planned, the rest logged as dropped buckets)",
     "lie prevented: an engine that 'works' is not the same as one whose evidence is REPLAYABLE -- this engine's rows are Merkle-bound and byte-identical on stratified replay, and a parallel-compile race that poisoned replay was caught BY the replay gate before any scale; the engine seals NO burn results, only the machinery"
   ],
-  "negative_capability_ids": [
-    "NEG.ANY-BURN-RESULT-THE-200K-BURN-IS-GNURUST",
-    "NEG.THE-FULL-20M-IS-GNURUST-LINEAGE-CORPUS-2",
-    "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
-    "NEG.ALL-DIALECTS",
-    "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
-    "NEG.BUSINESS-CORRECTNESS",
-    "NEG.COMPILER-REPLACEMENT",
-    "NEG.AUTOMATIC-BUILD-PROFILE-DETECTION",
-    "NEG.THE-FAMILIES-NOT-YET-EMITTING-V0-EMITS-S"
+  "oracle": {
+    "detail": "real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.0"
+  },
+  "positive_claims": [
+    "built the deterministic COBOL lineage atlas ENGINE: witnesses are GENERATED FROM SEED (the generator IS the corpus -- regenerable from generator_version+shard_seed+index, no .cob stored), the schema is canonical-hashed, a Merkle root-of-roots binds every shard, a STRATIFIED replay regenerates+re-runs sampled+nonpass witnesses to byte-identical leaves, parallel-vs-serial harness isolation is proven (LINEAGE20M.HARNESS.ISOLATION.1, per-call COB_TMPDIR), and the shrink->file->confirm findings path collapses raw mismatches to minimal reproducers",
+    "the plan budgets sum to exactly 20M across 15 families each owned by a court/atlas/refusal",
+    "verified by the engine self-test + the seal-grade gate (Merkle + stratified replay + isolation + findings-completeness, all GREEN)"
   ],
-  "byte_domains": [
-    "meta-engine: deterministic generate + canonical hashing + Merkle + stratified replay + parallel isolation + shrink/file findings path"
-  ],
-  "lie_prevented": [
-    "an engine that 'works' is not the same as one whose evidence is REPLAYABLE -- this engine's rows are Merkle-bound and byte-identical on stratified replay, and a parallel-compile race that poisoned replay was caught BY the replay gate before any scale; the engine seals NO burn results, only the machinery"
-  ],
-  "damage_if_overclaimed": "treating the lineage corpus as a parity/conformance proof, or the negative-zero finding as a fixed bug, or the engine as covering all 15 families, would each overclaim; the corpus reveals the oracle's observed shape and files divergences, it does not certify gnucobol-rs against all of GnuCOBOL",
   "replay": {
     "command": "bash lab/oracle/lineage_engine_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "7255061842d4cf73598897f268e8ad7928ad8802afc16ccc8d51acc68ba2f372"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 10,
+    "total": 10,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

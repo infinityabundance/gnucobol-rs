@@ -1,33 +1,35 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.CALL.EXTENSION.ATLAS.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION"
+  ],
+  "case_id": "GNURUST.CALL.EXTENSION.ATLAS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow",
+  "hash_chain": {
+    "inputs_sha256": "ce93ae24180140812c2bc95f1167af168bc5b97ef0d25aa0cac7e7accd57978d"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "c06c6005344fa904358f797878dad5d928fc0a3836cacc8b670edb3a3b256289",
-    "receipt_sha256": "f3163785c8a9a74ff426f0ab9a2e9f054c495724ab16549c9e5e3fc7aea3ade4"
+    "claim_ladder_entry_sha256": "31883b825d49a15de5862db4c93153f9397abc2f30ea9e478bdf2570f2f7c643",
+    "receipt_sha256": "e51293efd5f038c78d62f879200aa2befde24cedc1cc93b9ccd2af57ea2c15be"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines",
-    "upstream_court": "GNURUST.CALL.EXTENSION.ATLAS.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 5,
-    "pass": 5,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "observed GnuCOBOL CALL / linkage / C$ extension behavior under the gnucobol-3.2.0-default witness, verified by the sweep (5/0) -- the #1 gap by frequency (CALL 959x in the admitted testsuite per GNURUST.PUBLIC.GAP.1): USING BY REFERENCE SHARES the caller's storage so callee mutation is visible in the caller (A 100 -> 101), USING BY CONTENT passes a COPY so the caller is UNCHANGED (B stays 100), a C$ extension (C$TOUPPER) mutates in place, an unresolved CALL fires ON EXCEPTION gracefully, and CANCEL unloads. OBSERVED court: gnucobol-rs does NOT execute subprogram CALLs (multi-module runtime is behavioral-ladder L8, NOT CLAIMED) -- this MAPS the surface, it runs no subprograms"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed"
+  ],
+  "negative_capability_ids": [
+    "NEG.SUBPROGRAM-EXECUTION",
+    "NEG.DYNAMIC-LINKING-SO-LOADING",
+    "NEG.C-EXTENSION-IMPLEMENTATION",
+    "NEG.BY-VALUE-TO-A-REFERENCE-PARAM-UNDEFINED",
+    "NEG.RECURSION-REENTRANCY",
+    "NEG.CANCEL-STATE-MACHINE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "subprogram execution",
@@ -39,27 +41,25 @@
     "all dialects",
     "lie prevented: CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed"
   ],
-  "negative_capability_ids": [
-    "NEG.SUBPROGRAM-EXECUTION",
-    "NEG.DYNAMIC-LINKING-SO-LOADING",
-    "NEG.C-EXTENSION-IMPLEMENTATION",
-    "NEG.BY-VALUE-TO-A-REFERENCE-PARAM-UNDEFINED",
-    "NEG.RECURSION-REENTRANCY",
-    "NEG.CANCEL-STATE-MACHINE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CALL.EXTENSION.ATLAS.1"
+  },
+  "positive_claims": [
+    "observed GnuCOBOL CALL / linkage / C$ extension behavior under the gnucobol-3.2.0-default witness, verified by the sweep (5/0) -- the #1 gap by frequency (CALL 959x in the admitted testsuite per GNURUST.PUBLIC.GAP.1): USING BY REFERENCE SHARES the caller's storage so callee mutation is visible in the caller (A 100 -> 101), USING BY CONTENT passes a COPY so the caller is UNCHANGED (B stays 100), a C$ extension (C$TOUPPER) mutates in place, an unresolved CALL fires ON EXCEPTION gracefully, and CANCEL unloads. OBSERVED court: gnucobol-rs does NOT execute subprogram CALLs (multi-module runtime is behavioral-ladder L8, NOT CLAIMED) -- this MAPS the surface, it runs no subprograms"
   ],
-  "byte_domains": [
-    "CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION"
-  ],
-  "lie_prevented": [
-    "CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed"
-  ],
-  "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow",
   "replay": {
     "command": "bash lab/oracle/call_atlas_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "60802df58324b41e48879c6598c0a80862ca0d0d1fd970f6fb20eb259e1e0472"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 5,
+    "total": 5,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

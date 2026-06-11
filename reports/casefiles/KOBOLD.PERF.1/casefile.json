@@ -1,35 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.PERF.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3 (rayon feature) + kobold-bench",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "parallel decode timing gated on byte-identical output to scalar"
+  ],
+  "case_id": "KOBOLD.PERF.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3 (rayon feature) + kobold-bench",
+  "damage_if_overclaimed": "a parallel path that silently differs from scalar would corrupt evidence while looking faster; a benchmark sold as an SLA sets false capacity expectations",
+  "hash_chain": {
+    "inputs_sha256": "a6bb5d5ee68296e63095359e35a2551450d596f8ee1baae1daeac95788560160"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "9a1f32b41bf5a257a65a2a951c8de1bbf4e45925613a61143ac6974ee4573630",
+    "claim_ladder_entry_sha256": "96c0b8df14e7d10d12e5488b885d14a4148dbd0c5f1906956088e55bd1f11b0d",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the scalar reconcile output (parity baseline)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/perf1.rs (scalar==rayon across n=1..999 + posting chain) + kobold-bench2 --features rayon (parity-gated, ~2.9x on this host)"
-  },
-  "positive_claims": [
-    "optional record-level Rayon (off-by-default `rayon` feature) emits byte-identical evidence to scalar across the workload -- same JSONL, audit, unsupported ledger, decode_output_sha256, and downstream posting hash chain",
-    "the benchmark refuses Rayon timing unless the parity hash matches the scalar baseline"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'parallel is faster, so ship it' / 'faster means a different (better) answer' -- PERF.1 admits parallelism ONLY when every emitted artifact is byte-identical to scalar"
+  ],
+  "negative_capability_ids": [
+    "NEG.PRODUCTION-SLA",
+    "NEG.AWS-THROUGHPUT",
+    "NEG.SIMD",
+    "NEG.DETERMINISTIC-SCHEDULING-BEYOND-IDENTICA",
+    "NEG.CUSTOMER-WORKLOAD-REPRESENTATIVENESS",
+    "NEG.ANY-SEMANTIC-CHANGE"
   ],
   "negative_claims": [
     "production SLA",
@@ -40,26 +39,27 @@
     "any semantic change",
     "lie prevented: 'parallel is faster, so ship it' / 'faster means a different (better) answer' -- PERF.1 admits parallelism ONLY when every emitted artifact is byte-identical to scalar"
   ],
-  "negative_capability_ids": [
-    "NEG.PRODUCTION-SLA",
-    "NEG.AWS-THROUGHPUT",
-    "NEG.SIMD",
-    "NEG.DETERMINISTIC-SCHEDULING-BEYOND-IDENTICA",
-    "NEG.CUSTOMER-WORKLOAD-REPRESENTATIVENESS",
-    "NEG.ANY-SEMANTIC-CHANGE"
+  "oracle": {
+    "detail": "the scalar reconcile output (parity baseline)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "optional record-level Rayon (off-by-default `rayon` feature) emits byte-identical evidence to scalar across the workload -- same JSONL, audit, unsupported ledger, decode_output_sha256, and downstream posting hash chain",
+    "the benchmark refuses Rayon timing unless the parity hash matches the scalar baseline"
   ],
-  "byte_domains": [
-    "parallel decode timing gated on byte-identical output to scalar"
-  ],
-  "lie_prevented": [
-    "'parallel is faster, so ship it' / 'faster means a different (better) answer' -- PERF.1 admits parallelism ONLY when every emitted artifact is byte-identical to scalar"
-  ],
-  "damage_if_overclaimed": "a parallel path that silently differs from scalar would corrupt evidence while looking faster; a benchmark sold as an SLA sets false capacity expectations",
   "replay": {
     "command": "the scalar reconcile output (parity baseline)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "bb883d3bd8514d69ab1d562271182bddd30d0c16ae4c9d4e2453f1c329382e85"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/perf1.rs (scalar==rayon across n=1..999 + posting chain) + kobold-bench2 --features rayon (parity-gated, ~2.9x on this host)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

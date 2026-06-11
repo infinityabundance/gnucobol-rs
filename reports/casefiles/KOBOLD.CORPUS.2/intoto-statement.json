@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/KOBOLD.CORPUS.2/casefile.json",
-      "digest": {
-        "sha256": "bb69791e7d68b584a388a884b189aa8a6dfa14e52362022c9742bc178e1a0fe9"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "KOBOLD.CORPUS.2",
-    "kind": "court-casefile",
     "crate": "kobold-data-shim",
     "crate_version": "kobold 0.6.3",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "36d8e49ac90046a420d2d59b850681ca9046b33259edbc34c85142c7d34e7898",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 2,
     "replay": {
       "command": "the sealed courts' own fail-closed behavior (FILE.1/BANK.1/BANK.2/DB2HOST.1/RECON.2/operator dirty-mode)",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "962bebbcb09475e9546f0e7fd026a3b63856cebab9df42510d2e881dedc2ff7a",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 2,
-    "negative_claim_count": 5
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "5c4e034b13c085ab06d3c6560957a8cc71d77897be4cc53884315eddf1ae6db0"
+      },
+      "name": "reports/casefiles/KOBOLD.CORPUS.2/casefile.json"
+    }
+  ]
 }

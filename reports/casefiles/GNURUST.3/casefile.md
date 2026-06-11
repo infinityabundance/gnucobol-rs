@@ -1,4 +1,4 @@
-<!-- DO NOT EDIT BY HAND. Generated from casefile.json by lab/casefile/run.py.
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.3 (court-casefile)
 
@@ -9,9 +9,8 @@
 - **Replay:** `bash lab/oracle/pic_sweep.sh`
 - **Authority:** STATUS.md · receipt_status: current
 
-## Positive claims (2)
-- PIC
-- USAGE -> {type,digits,scale,flags,size} matching cobc
+## Positive claims (1)
+- PIC+USAGE -> {type,digits,scale,flags,size} matching cobc
 
 ## Negative claims (3) — negative capability is the trust surface
 - edited pictures

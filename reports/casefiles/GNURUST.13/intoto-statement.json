@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.13/casefile.json",
-      "digest": {
-        "sha256": "7688ba787985963e13b949d7cd822097c86eb412678f26f16dfe649ac08a3e83"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.13",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.3.3",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "bab8c42f81867c9ad2131688830271ca228dbae1564b9180f6bd61a00346953f",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 1,
     "replay": {
       "command": "libcob cob_add/cob_sub (cob_add_bcd path)",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "d57e951ecbdc6b12e9f32ef0e209be49cf38805cbc085e63df44c0f617011e4a",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 1,
-    "negative_claim_count": 6
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "d827ecf810174c4dff64ce4f06d0a7804a5194c3b1b84ed27ceb8040d41fd941"
+      },
+      "name": "reports/casefiles/GNURUST.13/casefile.json"
+    }
+  ]
 }

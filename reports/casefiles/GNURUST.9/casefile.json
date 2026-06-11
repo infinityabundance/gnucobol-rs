@@ -1,95 +1,91 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.9",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.2.6",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
   },
-  "inputs": {
-    "claim_ladder_entry_sha256": "76a15db5048a831175f122328359ed08172b547e1c5789cab655adfc2ddddd77",
-    "receipt_sha256": null
-  },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc -C attr witness",
-    "upstream_court": "GNURUST.9",
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "96 of 288 PIC sweep + fuzz"
-  },
-  "positive_claims": [
-    "P scaling field model (digits/scale/size) matching cobc",
-    "trailing digits=9s",
-    "P scale=-P, leading digits=9s scale=9s",
-    "P"
-  ],
-  "negative_claims": [
-    "V+P",
-    "P at both ends",
-    "VALUE/MOVE on P field",
-    "lie prevented: 'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
-  ],
-  "negative_capability_ids": [
-    "NEG.V-P",
-    "NEG.P-AT-BOTH-ENDS",
-    "NEG.VALUE-MOVE-ON-P-FIELD"
-  ],
   "byte_domains": [
     "generated-C cob_field_attr + LENGTH OF"
   ],
-  "lie_prevented": [
-    "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
-  ],
+  "case_id": "GNURUST.9",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.2.6",
   "damage_if_overclaimed": "a wrong P-scale mis-places the decimal point, off-by-10x on money",
-  "replay": {
-    "command": "cobc -C attr witness",
-    "exit_code": 0
-  },
   "hash_chain": {
-    "inputs_sha256": "7fb6853e0a358f98c66a17a5e115d50c2b1628b38adf2ef43d67551195f13875"
+    "inputs_sha256": "f6d4f43c37b463249efe6fa93e9cc6bdc33440481135a8427eddaf00eb82bacf"
   },
+  "inputs": {
+    "claim_ladder_entry_sha256": "2b1cf7b858a17071511904fcff067df7f7cf18f2679029c2058a330eb86f889e",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
   "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "P scaling field model (digits/scale/size) matching cobc",
+      "trailing digits=9s+P scale=-P, leading digits=9s scale=9s+P"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "V+P",
+      "P at both ends",
+      "VALUE/MOVE on P field",
+      "lie prevented: 'P-scaling is just digits' — the asymmetric P digit/scale rule is exact"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
     "legacy_paths": [
       "research/legacyreports/reports/RECEIPT-GNURUST-PIC-SCALING-9.md"
     ],
     "legacy_sha256": [
       "061b6a00264b9315b2b048e84d4ac3af31a20b5004de65bddbe6d0ceabdef975"
     ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "P scaling field model (digits/scale/size) matching cobc",
-      "trailing digits=9s",
-      "P scale=-P, leading digits=9s scale=9s",
-      "P"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "V+P",
-      "P at both ends",
-      "VALUE/MOVE on P field",
-      "lie prevented: 'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
     "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/pic_harness.sh` (generated-C `cob_field_attr` witness + `LENGTH OF`) \u2014 the compiler's own PICTURE\u2192attribute decision. The Rust `build_field` mirror is compared field-for-field.",
-      "[Evidence] | Check | Result | |-------|--------| | PIC differential sweep vs `cobc` | **PASS=288 FAIL=0** (`lab/oracle/pic_sweep.sh`): the prior 192 + 96 P cases \u2014 trailing/leading \u00d7 DISPLAY/COMP-3 \u00d7 signed/unsigned \u00d7 `n\u2208{1,2,3,5}` `p\u2208{1,2,3}` | | Self-contained `cargo test` | pic: 5/5 (P matches-oracle for both ends + COMP-3 + signed; V+P / both-ends / P-only fail closed) | | Fuzz (`pic` 6M, `init` 3M incl. P shapes) | **0 crashes** \u2014 P fields fail closed in the VALUE court, never panic | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+      "[Oracle] `lab/oracle/pic_harness.sh` (generated-C `cob_field_attr` witness + `LENGTH OF`) — the compiler's own PICTURE→attribute decision. The Rust `build_field` mirror is compared field-for-field.",
+      "[Evidence] | Check | Result | |-------|--------| | PIC differential sweep vs `cobc` | **PASS=288 FAIL=0** (`lab/oracle/pic_sweep.sh`): the prior 192 + 96 P cases — trailing/leading × DISPLAY/COMP-3 × signed/unsigned × `n∈{1,2,3,5}` `p∈{1,2,3}` | | Self-contained `cargo test` | pic: 5/5 (P matches-oracle for both ends + COMP-3 + signed; V+P / both-ends / P-only fail closed) | | Fuzz (`pic` 6M, `init` 3M incl. P shapes) | **0 crashes** — P fields fail closed in the VALUE court, never panic | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
     ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
+  },
+  "lie_prevented": [
+    "'P-scaling is just digits' — the asymmetric P digit/scale rule is exact"
+  ],
+  "negative_capability_ids": [
+    "NEG.V-P",
+    "NEG.P-AT-BOTH-ENDS",
+    "NEG.VALUE-MOVE-ON-P-FIELD"
+  ],
+  "negative_claims": [
+    "V+P",
+    "P at both ends",
+    "VALUE/MOVE on P field",
+    "lie prevented: 'P-scaling is just digits' — the asymmetric P digit/scale rule is exact"
+  ],
+  "oracle": {
+    "detail": "cobc -C attr witness",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.9"
+  },
+  "positive_claims": [
+    "P scaling field model (digits/scale/size) matching cobc",
+    "trailing digits=9s+P scale=-P, leading digits=9s scale=9s+P"
+  ],
+  "replay": {
+    "command": "cobc -C attr witness",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "96 of 288 PIC sweep + fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

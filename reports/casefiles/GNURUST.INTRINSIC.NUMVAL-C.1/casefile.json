@@ -1,33 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.NUMVAL-C.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "FUNCTION NUMVAL-C(currency string) -> value"
+  ],
+  "case_id": "GNURUST.INTRINSIC.NUMVAL-C.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "using NUMVAL on currency-formatted input (or assuming a non-$ symbol/European decimal) misparses monetary amounts",
+  "hash_chain": {
+    "inputs_sha256": "6c56cd778f01991a4a0be1344cce9c52e01533ef8155a331d01a4fa3f44b3c24"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "fc888addadc4c941a66202d8182838389184bbecc9efc576f3f4c7d39e60eaa3",
-    "receipt_sha256": "7ecaa75abf051eff12e7d6cbc5158b4dabb247cafa26463a88ae8c8bb4c5ed97"
+    "claim_ladder_entry_sha256": "acb9c6266030014c1a687887f1b867c54fd9cded870433a227e9be7e01770ba6",
+    "receipt_sha256": "63d72d3c8a518fe89fc785ac5387cff8822bdb2b227ad0138162f744eb96a7a0"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION NUMVAL-C (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.NUMVAL-C.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 10,
-    "pass": 10,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "FUNCTION NUMVAL-C(s) for the narrow admitted form parses to the same value as cobc/libcob: like NUMVAL but first STRIPS the default currency symbol $ and thousands-separator commas, then applies the NUMVAL sign/space/decimal rules (verified 10/0): NUMVAL-C of $1,234.56 = 1234.56, NUMVAL-C of $1,234.56CR = -1234.56. Implemented as intrinsic_numval after removing $ and comma -- completing the NUMVAL family, split from GNURUST.INTRINSIC.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "NUMVAL and NUMVAL-C are the same -- NO: NUMVAL-C additionally strips the currency symbol and thousands commas (NUMVAL would NOT parse a $1,234.56 string), while still honoring the trailing-sign/CR/DB negative convention"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-DEFAULT-CURRENCY-SYMBOL-2-ARG-FORM",
+    "NEG.DECIMAL-POINT-IS-COMMA-LOCALE-COMMA-DECI",
+    "NEG.NATIONAL-UTF-8",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "non-default currency symbol (2-arg form)",
@@ -36,24 +35,25 @@
     "all dialects",
     "lie prevented: NUMVAL and NUMVAL-C are the same -- NO: NUMVAL-C additionally strips the currency symbol and thousands commas (NUMVAL would NOT parse a $1,234.56 string), while still honoring the trailing-sign/CR/DB negative convention"
   ],
-  "negative_capability_ids": [
-    "NEG.NON-DEFAULT-CURRENCY-SYMBOL-2-ARG-FORM",
-    "NEG.DECIMAL-POINT-IS-COMMA-LOCALE-COMMA-DECI",
-    "NEG.NATIONAL-UTF-8",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION NUMVAL-C (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.NUMVAL-C.1"
+  },
+  "positive_claims": [
+    "FUNCTION NUMVAL-C(s) for the narrow admitted form parses to the same value as cobc/libcob: like NUMVAL but first STRIPS the default currency symbol $ and thousands-separator commas, then applies the NUMVAL sign/space/decimal rules (verified 10/0): NUMVAL-C of $1,234.56 = 1234.56, NUMVAL-C of $1,234.56CR = -1234.56. Implemented as intrinsic_numval after removing $ and comma -- completing the NUMVAL family, split from GNURUST.INTRINSIC.ATLAS.1"
   ],
-  "byte_domains": [
-    "FUNCTION NUMVAL-C(currency string) -> value"
-  ],
-  "lie_prevented": [
-    "NUMVAL and NUMVAL-C are the same -- NO: NUMVAL-C additionally strips the currency symbol and thousands commas (NUMVAL would NOT parse a $1,234.56 string), while still honoring the trailing-sign/CR/DB negative convention"
-  ],
-  "damage_if_overclaimed": "using NUMVAL on currency-formatted input (or assuming a non-$ symbol/European decimal) misparses monetary amounts",
   "replay": {
     "command": "bash lab/oracle/numvalc_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "ea20ed644e7c663ab6086b2a163813e4feae165ff5d243628fb2579014404d75"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 10,
+    "total": 10,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

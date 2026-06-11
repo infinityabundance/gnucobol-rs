@@ -1,34 +1,37 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.LINEAGE.CORPUS.20M.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "completed 4M real-cobc witness run: storage differential + directive variant lineage; evidence-of-record = reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)"
+  ],
+  "case_id": "GNURUST.LINEAGE.CORPUS.20M.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating 20M index sweep as 20M witnesses inflates the corpus 5x; treating the run as parity, or the negzero finding as fixed, overclaims; the 13 dropped families are future work, not coverage",
+  "hash_chain": {
+    "inputs_sha256": "7a27b9b26668150736577786d718c9becdfd68416c4d6c253bcde55fddd1bb69"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "e9290f1b025aadf87b8a5630c0c73524084647dc34b5a23b3d9478e4c97ca25c",
-    "receipt_sha256": "2eae57d8df7ff73b3f67e1b0e6f9f60d3fc194ab2eee9c4e89193731a1e8f8e4"
+    "claim_ladder_entry_sha256": "23aafd03662819084a420f8893079745eef88fb0d50b0a2a404c0e8fd6b11687",
+    "receipt_sha256": "be4e74965cae8b8dcffc774d0f2223a175f0f6690775f6cb02afa8753e4e8acc"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "real cobc/libcob compile+run over 4M generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
-    "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 4000000,
-    "pass": 4000000,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "ran the FULL 20M-index lineage corpus to completion under the real pinned GnuCOBOL 3.2 oracle: 4,000,000 DISTINCT real-cobc COBOL witnesses compiled+run+classified (the other ~16M of the 20M index space are the not-yet-emitting families, logged as dropped buckets, not silently covered), and the run PASSED ITS OWN seal-grade gate -- untriaged=0 across all 4M, Merkle root-of-roots 9673654d binds all 1024 shards, stratified replay byte-identical, parallel-vs-serial harness isolation PASS, and the finding-collapse invariant holds (aliases=0, witness_hits==reddening_covered)",
-    "the run scaled the single confirmed harvested finding (COMP-3 integer VALUE -0: cobc 0c vs gnucobol-rs 0d) to 1,056 witness hits collapsing to ONE finding (GNURUST.VALUE.NEGZERO.EDGE.1 candidate) with ZERO new untriaged surprises across 4M witnesses"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)"
+  ],
+  "negative_capability_ids": [
+    "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
+    "NEG.ALL-DIALECTS",
+    "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
+    "NEG.BUSINESS-CORRECTNESS",
+    "NEG.COMPILER-REPLACEMENT",
+    "NEG.AUTO-BUILD-PROFILE-DETECTION",
+    "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-CA",
+    "NEG.THE-NOT-YET-EMITTING-FAMILIES-4M-OF-20M",
+    "NEG.THE-OTHER-13-FAMILIES-ARE-DROPPED-BUCKET"
   ],
   "negative_claims": [
     "full GnuCOBOL parity / standard conformance",
@@ -42,29 +45,26 @@
     "the other 13 families are dropped buckets, NOT covered)",
     "lie prevented: 'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)"
   ],
-  "negative_capability_ids": [
-    "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
-    "NEG.ALL-DIALECTS",
-    "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
-    "NEG.BUSINESS-CORRECTNESS",
-    "NEG.COMPILER-REPLACEMENT",
-    "NEG.AUTO-BUILD-PROFILE-DETECTION",
-    "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-CA",
-    "NEG.THE-NOT-YET-EMITTING-FAMILIES-4M-OF-20M-",
-    "NEG.THE-OTHER-13-FAMILIES-ARE-DROPPED-BUCKET"
+  "oracle": {
+    "detail": "real cobc/libcob compile+run over 4M generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.1"
+  },
+  "positive_claims": [
+    "ran the FULL 20M-index lineage corpus to completion under the real pinned GnuCOBOL 3.2 oracle: 4,000,000 DISTINCT real-cobc COBOL witnesses compiled+run+classified (the other ~16M of the 20M index space are the not-yet-emitting families, logged as dropped buckets, not silently covered), and the run PASSED ITS OWN seal-grade gate -- untriaged=0 across all 4M, Merkle root-of-roots 9673654d binds all 1024 shards, stratified replay byte-identical, parallel-vs-serial harness isolation PASS, and the finding-collapse invariant holds (aliases=0, witness_hits==reddening_covered)",
+    "the run scaled the single confirmed harvested finding (COMP-3 integer VALUE -0: cobc 0c vs gnucobol-rs 0d) to 1,056 witness hits collapsing to ONE finding (GNURUST.VALUE.NEGZERO.EDGE.1 candidate) with ZERO new untriaged surprises across 4M witnesses"
   ],
-  "byte_domains": [
-    "completed 4M real-cobc witness run: storage differential + directive variant lineage; evidence-of-record = reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)"
-  ],
-  "lie_prevented": [
-    "'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)"
-  ],
-  "damage_if_overclaimed": "treating 20M index sweep as 20M witnesses inflates the corpus 5x; treating the run as parity, or the negzero finding as fixed, overclaims; the 13 dropped families are future work, not coverage",
   "replay": {
     "command": "bash lab/oracle/lineage_fullrun_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "e2e15f9021203fffab53a7855e22eb338f4da5be22c47cddeed9cd926f5d572a"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 4000000,
+    "total": 4000000,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

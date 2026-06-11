@@ -1,36 +1,35 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.DECLARATIVES.ATLAS.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler"
+  ],
+  "case_id": "GNURUST.DECLARATIVES.ATLAS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming a file error crashes (or is ignored) misreads the control flow of every batch program with declaratives; treating the atlas as an execution engine would run unsealed Procedure-Division control flow inside the handler",
+  "hash_chain": {
+    "inputs_sha256": "e72ddcaccf3c4aa9bba2674d885760752442b1475e9cc20867154c28edae1ff4"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "dcda47128dc11afecf129e237801c882086a88bd32362d85a385a70763cd42cb",
-    "receipt_sha256": "8fc48d181a91152a92c5f3dc6eb11c85983ac711d487372785c9002fc7b709e3"
+    "claim_ladder_entry_sha256": "86ea95f4dcacbcf7aaa405b77464fb73bcafd7fdf5c7602047ffdbb71055f875",
+    "receipt_sha256": "42c43c263c0a9d2c43db216fb3979a14feeaa6df4ba716a55955b03b7f0b2435"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc DECLARATIVES / USE AFTER STANDARD ERROR PROCEDURE (cobc/typeck.c + libcob/fileio.c error path)",
-    "upstream_court": "GNURUST.DECLARATIVES.ATLAS.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 5,
-    "pass": 5,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "observed the runtime behavior of a USE AFTER STANDARD ERROR PROCEDURE declarative on file I/O under the gnucobol-3.2.0-default witness, verified by the sweep (5/0): a FAILING file op invokes that file's USE declarative (OPEN of a missing file fires it with status 35, CLOSE of a not-open file re-fires it with status 42) while a SUCCESSFUL op invokes nothing",
-    "the binding is PER-FILE (file F's errors run F's section, never another file's)",
-    "FILE STATUS is VISIBLE inside the declarative (the per-op code)",
-    "and after the declarative returns, execution RESUMES at the statement following the failed I/O (the program reaches its end, rc=0)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a file error aborts the COBOL program (or is silently ignored) -- NO: a failing I/O INVOKES the file's USE AFTER STANDARD ERROR declarative with the FILE STATUS visible inside it, and then execution RESUMES at the next statement (the program does NOT abort, rc=0); the handler is bound PER FILE and a successful op fires nothing -- so the error path is a structured, resumable, per-file branch, not a crash and not a no-op"
+  ],
+  "negative_capability_ids": [
+    "NEG.EXECUTING-A-DECLARATIVE-GNUCOBOL-RS-RUNS",
+    "NEG.USE-FOR-DEBUGGING",
+    "NEG.NON-FILE-EXCEPTIONS-ARITHMETIC-SIZE-ERRO",
+    "NEG.GLOBAL-DECLARATIVES-ACROSS-NESTED-PROGRA",
+    "NEG.THE-PRECEDENCE-ORDERING-WHEN-MULTIPLE-DE",
+    "NEG.WHETHER-NON-FILE-EXCEPTIONS-RESUME-OR-TE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "executing a declarative (gnucobol-rs runs NO Procedure Division / declaratives -- the L8 multi-statement summit)",
@@ -42,27 +41,28 @@
     "all dialects",
     "lie prevented: a file error aborts the COBOL program (or is silently ignored) -- NO: a failing I/O INVOKES the file's USE AFTER STANDARD ERROR declarative with the FILE STATUS visible inside it, and then execution RESUMES at the next statement (the program does NOT abort, rc=0); the handler is bound PER FILE and a successful op fires nothing -- so the error path is a structured, resumable, per-file branch, not a crash and not a no-op"
   ],
-  "negative_capability_ids": [
-    "NEG.EXECUTING-A-DECLARATIVE-GNUCOBOL-RS-RUNS",
-    "NEG.USE-FOR-DEBUGGING",
-    "NEG.NON-FILE-EXCEPTIONS-ARITHMETIC-SIZE-ERRO",
-    "NEG.GLOBAL-DECLARATIVES-ACROSS-NESTED-PROGRA",
-    "NEG.THE-PRECEDENCE-ORDERING-WHEN-MULTIPLE-DE",
-    "NEG.WHETHER-NON-FILE-EXCEPTIONS-RESUME-OR-TE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc DECLARATIVES / USE AFTER STANDARD ERROR PROCEDURE (cobc/typeck.c + libcob/fileio.c error path)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.DECLARATIVES.ATLAS.1"
+  },
+  "positive_claims": [
+    "observed the runtime behavior of a USE AFTER STANDARD ERROR PROCEDURE declarative on file I/O under the gnucobol-3.2.0-default witness, verified by the sweep (5/0): a FAILING file op invokes that file's USE declarative (OPEN of a missing file fires it with status 35, CLOSE of a not-open file re-fires it with status 42) while a SUCCESSFUL op invokes nothing",
+    "the binding is PER-FILE (file F's errors run F's section, never another file's)",
+    "FILE STATUS is VISIBLE inside the declarative (the per-op code)",
+    "and after the declarative returns, execution RESUMES at the statement following the failed I/O (the program reaches its end, rc=0)"
   ],
-  "byte_domains": [
-    "DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler"
-  ],
-  "lie_prevented": [
-    "a file error aborts the COBOL program (or is silently ignored) -- NO: a failing I/O INVOKES the file's USE AFTER STANDARD ERROR declarative with the FILE STATUS visible inside it, and then execution RESUMES at the next statement (the program does NOT abort, rc=0); the handler is bound PER FILE and a successful op fires nothing -- so the error path is a structured, resumable, per-file branch, not a crash and not a no-op"
-  ],
-  "damage_if_overclaimed": "assuming a file error crashes (or is ignored) misreads the control flow of every batch program with declaratives; treating the atlas as an execution engine would run unsealed Procedure-Division control flow inside the handler",
   "replay": {
     "command": "bash lab/oracle/declaratives_atlas_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "87a26709919de73aee9572fd05299af4e8cc75c0042b16bafc879b4e518557d9"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 5,
+    "total": 5,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

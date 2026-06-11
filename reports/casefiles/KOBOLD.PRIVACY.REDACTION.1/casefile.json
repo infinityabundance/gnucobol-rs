@@ -1,35 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.PRIVACY.REDACTION.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "decoded record + declared policy -> redacted evidence (hashes/provenance preserved)"
+  ],
+  "case_id": "KOBOLD.PRIVACY.REDACTION.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "publishing a 'redacted' casefile as anonymized/compliant can re-identify customers and breach regulation",
+  "hash_chain": {
+    "inputs_sha256": "e19bd7a440ec160b57fd815443c2716d0717a32187ec763a76f92bf1908981ca"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "5cad59aeb2cd9eb6e532ea948bb0dbf3fca55ea1c348489390d49097c2b374d2",
+    "claim_ladder_entry_sha256": "65f459ccd5ccb079d7957250d086beb54c6c4c0769155903cbad95b6d146a8d8",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the declared redaction policy (deterministic; verified by hash preservation)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/privacy.rs (3: redact+tokenize+allow keep hashes/provenance, deterministic-token stable-not-reversible, unlisted-fails-closed)"
-  },
-  "positive_claims": [
-    "declared field-level redaction for generated evidence: values are withheld (redact) or tokenized (deterministic, scope-stable) while value_sha256/raw_sha256, offset/size, court identity, and audit structure are preserved",
-    "unlisted fields fail closed under a deny-unlisted policy"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
+  ],
+  "negative_capability_ids": [
+    "NEG.ANONYMIZATION",
+    "NEG.REGULATORY-COMPLIANCE-GDPR-PCI",
+    "NEG.REVERSIBILITY",
+    "NEG.SAFE-PUBLIC-RELEASE-OF-CUSTOMER-DATA",
+    "NEG.A-TOKEN-BEING-AN-IDENTITY",
+    "NEG.A-HASH-BEING-THE-BUSINESS-VALUE"
   ],
   "negative_claims": [
     "anonymization",
@@ -40,26 +39,27 @@
     "a hash being the business value",
     "lie prevented: 'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
   ],
-  "negative_capability_ids": [
-    "NEG.ANONYMIZATION",
-    "NEG.REGULATORY-COMPLIANCE-GDPR-PCI",
-    "NEG.REVERSIBILITY",
-    "NEG.SAFE-PUBLIC-RELEASE-OF-CUSTOMER-DATA",
-    "NEG.A-TOKEN-BEING-AN-IDENTITY",
-    "NEG.A-HASH-BEING-THE-BUSINESS-VALUE"
+  "oracle": {
+    "detail": "the declared redaction policy (deterministic; verified by hash preservation)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "declared field-level redaction for generated evidence: values are withheld (redact) or tokenized (deterministic, scope-stable) while value_sha256/raw_sha256, offset/size, court identity, and audit structure are preserved",
+    "unlisted fields fail closed under a deny-unlisted policy"
   ],
-  "byte_domains": [
-    "decoded record + declared policy -> redacted evidence (hashes/provenance preserved)"
-  ],
-  "lie_prevented": [
-    "'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
-  ],
-  "damage_if_overclaimed": "publishing a 'redacted' casefile as anonymized/compliant can re-identify customers and breach regulation",
   "replay": {
     "command": "the declared redaction policy (deterministic; verified by hash preservation)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "7d524e5e54405eb11e834e6629e7e6283286991dc0e024ad0ab893d3a80a2c3f"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/privacy.rs (3: redact+tokenize+allow keep hashes/provenance, deterministic-token stable-not-reversible, unlisted-fails-closed)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

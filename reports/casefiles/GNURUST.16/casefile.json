@@ -1,42 +1,65 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.16",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "edited DISPLAY field bytes -> value + text"
+  ],
+  "case_id": "GNURUST.16",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals",
+  "hash_chain": {
+    "inputs_sha256": "71d8481ebfe56b37e15fbe56c165cac0762c8309bd9e1ea98cdf7d11843796c5"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "58e0e4f94febd121a739de9c35cacc920aec0f6a72a9913a24bffba05ffefe24",
-    "receipt_sha256": "b9aef1d3dfe89179c1aaefe1b4513a57fe34c5b40325e9d9a548fa5a48fa11ad"
+    "claim_ladder_entry_sha256": "e5bc4d240ab980b77013ca18f6eb5de8d4c9c5e9aabf39f9431c562e7be004d3",
+    "receipt_sha256": "8a0ee48acd2880a871a53e10116b33fabe230afa350c85445236485ec69fa703"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
-    "upstream_court": "GNURUST.16",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "kind": "court-casefile",
+  "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "edited DISPLAY field bytes -> value + presentation text for Z 9 , . -",
+      "(16a) and $ * CR DB B 0 / (16b), slot-based"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "numeric->edited formatting (16c)",
+      "report writer",
+      "locale/currency",
+      "EBCDIC edited",
+      "edited arithmetic/VALUE",
+      "lie prevented: 'presentation string and numeric value are the same field truth' — they are separated"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.16 admits edited pictures only as an oracle-proven decode boundary for DISPLAY-shaped edited",
+      "fields: it interprets admitted edited bytes and presentation markers without claiming report",
+      "execution, numeric-to-edited formatting, locale/currency generality, EBCDIC zoned editing, or",
+      "arithmetic semantics."
+    ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-EDITED-16.md"
+    ],
+    "legacy_sha256": [
+      "2834e5195c1c0879cfa3838ff3a29077bcf4a699c400d852f42776ed2d6c42df"
+    ],
+    "legacy_unstructured_notes": [
+      "[Versioning note] `16b` adds no public API (the existing `decode_edited`/`edited_size` accept more symbols) — purely additive behavior, so a **semver-patch** bump to **0.6.1** (minor reserved for breaking changes).",
+      "[Versioning] `16b` adds no public API (the existing `decode_edited`/`edited_size` accept more symbols) — purely additive behavior, so a **semver-patch** bump to **0.6.1** (minor reserved for breaking changes).",
+      "[Oracle] `edited_sweep.sh` builds one COBOL program (`MOVE <value> TO <edited>` + bracketed `DISPLAY`), compiles+runs it with the built `cobc`, and the Rust `edited_rows` mirror decodes the displayed bytes and checks the recovered value (scale-normalized) + size.",
+      "[Evidence] | Check | Result | |-------|--------| | Edited decode vs `cobc` MOVE→edited→DISPLAY | **PASS=92 FAIL=0** (`edited_sweep.sh`): 16a + 16b (`$ * CR DB B 0 /`, floating currency, literal-`0` insertion) | | `cargo test` (sizes, decode, fail-closed) | 4 edited tests green | | Fuzz (edited target) | **6,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+    ],
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
   },
-  "results": {
-    "total": 92,
-    "pass": 92,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "edited DISPLAY field bytes -> value + presentation text for Z 9 , . -",
-    "(16a) and $ * CR DB B 0 / (16b), slot-based"
-  ],
-  "negative_claims": [
-    "numeric->edited formatting (16c)",
-    "report writer",
-    "locale/currency",
-    "EBCDIC edited",
-    "edited arithmetic/VALUE",
-    "lie prevented: 'presentation string and numeric value are the same field truth' \u2014 they are separated"
+  "lie_prevented": [
+    "'presentation string and numeric value are the same field truth' — they are separated"
   ],
   "negative_capability_ids": [
     "NEG.NUMERIC-EDITED-FORMATTING-16C",
@@ -45,57 +68,34 @@
     "NEG.EBCDIC-EDITED",
     "NEG.EDITED-ARITHMETIC-VALUE"
   ],
-  "byte_domains": [
-    "edited DISPLAY field bytes -> value + text"
+  "negative_claims": [
+    "numeric->edited formatting (16c)",
+    "report writer",
+    "locale/currency",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE",
+    "lie prevented: 'presentation string and numeric value are the same field truth' — they are separated"
   ],
-  "lie_prevented": [
-    "'presentation string and numeric value are the same field truth' \u2014 they are separated"
+  "oracle": {
+    "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.16"
+  },
+  "positive_claims": [
+    "edited DISPLAY field bytes -> value + presentation text for Z 9 , . -",
+    "(16a) and $ * CR DB B 0 / (16b), slot-based"
   ],
-  "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals",
   "replay": {
     "command": "bash lab/oracle/edited_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "d446f3ba1164c03bbcd0cd3455c70106c7de31d2b9f7e673a28cedc21f95b6fe"
+  "results": {
+    "fail": 0,
+    "pass": 92,
+    "total": 92,
+    "verdict": "pass"
   },
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-EDITED-16.md"
-    ],
-    "legacy_sha256": [
-      "2834e5195c1c0879cfa3838ff3a29077bcf4a699c400d852f42776ed2d6c42df"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "edited DISPLAY field bytes -> value + presentation text for Z 9 , . -",
-      "(16a) and $ * CR DB B 0 / (16b), slot-based"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "numeric->edited formatting (16c)",
-      "report writer",
-      "locale/currency",
-      "EBCDIC edited",
-      "edited arithmetic/VALUE",
-      "lie prevented: 'presentation string and numeric value are the same field truth' \u2014 they are separated"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.16 admits edited pictures only as an oracle-proven decode boundary for DISPLAY-shaped edited",
-      "fields: it interprets admitted edited bytes and presentation markers without claiming report",
-      "execution, numeric-to-edited formatting, locale/currency generality, EBCDIC zoned editing, or",
-      "arithmetic semantics."
-    ],
-    "legacy_unstructured_notes": [
-      "[Versioning note] `16b` adds no public API (the existing `decode_edited`/`edited_size` accept more symbols) \u2014 purely additive behavior, so a **semver-patch** bump to **0.6.1** (minor reserved for breaking changes).",
-      "[Versioning] `16b` adds no public API (the existing `decode_edited`/`edited_size` accept more symbols) \u2014 purely additive behavior, so a **semver-patch** bump to **0.6.1** (minor reserved for breaking changes).",
-      "[Oracle] `edited_sweep.sh` builds one COBOL program (`MOVE <value> TO <edited>` + bracketed `DISPLAY`), compiles+runs it with the built `cobc`, and the Rust `edited_rows` mirror decodes the displayed bytes and checks the recovered value (scale-normalized) + size.",
-      "[Evidence] | Check | Result | |-------|--------| | Edited decode vs `cobc` MOVE\u2192edited\u2192DISPLAY | **PASS=92 FAIL=0** (`edited_sweep.sh`): 16a + 16b (`$ * CR DB B 0 /`, floating currency, literal-`0` insertion) | | `cargo test` (sizes, decode, fail-closed) | 4 edited tests green | | Fuzz (edited target) | **6,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
-    ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+  "schema": "kobold-forensic-casefile-v1"
 }

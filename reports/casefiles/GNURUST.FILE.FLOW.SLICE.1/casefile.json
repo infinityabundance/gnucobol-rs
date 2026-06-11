@@ -1,33 +1,37 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.FILE.FLOW.SLICE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE"
+  ],
+  "case_id": "GNURUST.FILE.FLOW.SLICE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating this narrow read-accumulate slice as a general batch engine would run unsealed per-record logic / writes / multi-file joins whose semantics are not oracle-bound",
+  "hash_chain": {
+    "inputs_sha256": "d358558b61c1f171c24ea16fd207f4384bf6a8c69e56c1d0d32626ff1072681e"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "7cc3ea87330b37d51a6c25c30165384651f43bdb3047950f32f9d003add3cc8a",
-    "receipt_sha256": "2fb5570704b12962f8525e11dab5ddf2d5fee32bfc24c1e467eda138db9c7fbd"
+    "claim_ladder_entry_sha256": "93141d699417787d53a680a0c6d1fe43f89d92babfde5501bc34bcb042c1c65d",
+    "receipt_sha256": "b463634d54994f9ab24741c5f12eca9aa52596930a0dfb177361e28af9f4e2bb"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc file read-loop (libcob/fileio.c + cobc control flow)",
-    "upstream_court": "GNURUST.FILE.FLOW.SLICE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 2,
-    "pass": 2,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the read-loop where file I/O meets control flow -- the shape of essentially every COBOL batch program -- executed to oracle-identical WORKING-STORAGE (verified 2/2: record count + control total). The slice runs the canonical OPEN INPUT / priming READ / PERFORM UNTIL EOF (ADD 1 TO count, ADD record-field TO sum, READ at bottom) / CLOSE, composing the sealed sequential READ (GNURUST.FILE.SEQUENTIAL.1) with looped numeric accumulation: each record is processed EXACTLY ONCE. Completes the spine from bytes (decimal MOVE) to a running program (read-process-accumulate)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END"
+  ],
+  "negative_capability_ids": [
+    "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
+    "NEG.SIGNED-PACKED-ACCUMULATORS",
+    "NEG.NUMERIC-SIZE-ERROR-ON-ACCUMULATORS",
+    "NEG.PER-RECORD-IF-MOVE-GENERAL-STATEMENTS",
+    "NEG.WRITE-REWRITE-IN-THE-LOOP",
+    "NEG.MULTI-FILE-LOOPS",
+    "NEG.FILE-STATUS-BEYOND-AT-END",
+    "NEG.READ-INTO",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "indexed/relative organizations",
@@ -41,29 +45,25 @@
     "all dialects",
     "lie prevented: a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END"
   ],
-  "negative_capability_ids": [
-    "NEG.INDEXED-RELATIVE-ORGANIZATIONS",
-    "NEG.SIGNED-PACKED-ACCUMULATORS",
-    "NEG.NUMERIC-SIZE-ERROR-ON-ACCUMULATORS",
-    "NEG.PER-RECORD-IF-MOVE-GENERAL-STATEMENTS",
-    "NEG.WRITE-REWRITE-IN-THE-LOOP",
-    "NEG.MULTI-FILE-LOOPS",
-    "NEG.FILE-STATUS-BEYOND-AT-END",
-    "NEG.READ-INTO",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc file read-loop (libcob/fileio.c + cobc control flow)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILE.FLOW.SLICE.1"
+  },
+  "positive_claims": [
+    "the read-loop where file I/O meets control flow -- the shape of essentially every COBOL batch program -- executed to oracle-identical WORKING-STORAGE (verified 2/2: record count + control total). The slice runs the canonical OPEN INPUT / priming READ / PERFORM UNTIL EOF (ADD 1 TO count, ADD record-field TO sum, READ at bottom) / CLOSE, composing the sealed sequential READ (GNURUST.FILE.SEQUENTIAL.1) with looped numeric accumulation: each record is processed EXACTLY ONCE. Completes the spine from bytes (decimal MOVE) to a running program (read-process-accumulate)"
   ],
-  "byte_domains": [
-    "OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE"
-  ],
-  "lie_prevented": [
-    "a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END"
-  ],
-  "damage_if_overclaimed": "treating this narrow read-accumulate slice as a general batch engine would run unsealed per-record logic / writes / multi-file joins whose semantics are not oracle-bound",
   "replay": {
     "command": "bash lab/oracle/file_flow_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "4c7ce43a407e6554d749f7f18b7c58ca515dac87ba8f84f7566d3f43f0acda9a"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,13 +1,69 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: the arithmetic itself (GNURUST.7/13/19)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: ROUNDED"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: intermediate-result precision"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: SIZE ERROR on MOVE"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: floating-point receivers"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: all dialects"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SIZE.ERROR.1 non-claim: lie prevented: overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,67 +77,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: the arithmetic itself (GNURUST.7/13/19)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: ROUNDED"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: intermediate-result precision"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: SIZE ERROR on MOVE"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: floating-point receivers"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: all dialects"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.SIZE.ERROR.1 non-claim: lie prevented: overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

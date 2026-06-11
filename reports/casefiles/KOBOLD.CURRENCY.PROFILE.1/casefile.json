@@ -1,36 +1,36 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.CURRENCY.PROFILE.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.5",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "declared amount profile -> per-field scale-match evidence + currency-code evidence"
+  ],
+  "case_id": "KOBOLD.CURRENCY.PROFILE.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.5",
+  "damage_if_overclaimed": "summing rates as money, assuming a 2-decimal minor unit on a 0/3-decimal currency, or reading a sign as a credit, mis-states totals across an entire ledger extract",
+  "hash_chain": {
+    "inputs_sha256": "e49daa5ef4c2c3c2fe8bb5ef684790f2165f784dab3007c0d5c618fa80addcb7"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "730ce0f527424d72ecfa9d1de31894c46a9a6d1ae5c4329c401e31668791f776",
+    "claim_ladder_entry_sha256": "02efe627f52f0fbdfcde5f21ba2503860ceee484c9e84bb9cb8f3b65d10d4291",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the declared profile + the decoded implied scale (deterministic)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/currency.rs (3: amount validates + code evidence-only, scale-mismatch + rate-not-money, missing field/code fail closed)"
-  },
-  "positive_claims": [
-    "a named numeric field declared role=amount is checked against an explicit declared scale (observed implied scale vs declared -> scale-match or finding) with an optional currency-code field preserved as EVIDENCE (never legal-tender truth)",
-    "a non-amount role (rate/percent/id) is not admitted as money",
-    "sign is NOT polarity (BANK.2 owns debit/credit)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'PIC V99 so it is money / there is a CCY field so it is legal tender / it is negative so it is a credit' -- CURRENCY.PROFILE.1 admits declared amount-scale evidence only and refuses every money meaning"
+  ],
+  "negative_capability_ids": [
+    "NEG.V99-MONEY",
+    "NEG.MINOR-UNIT-INFERRED-FROM-PIC",
+    "NEG.CURRENCY-CODE-LEGAL-TENDER",
+    "NEG.FX-CONVERSION",
+    "NEG.ROUNDING-POLICY",
+    "NEG.SIGN-POLARITY",
+    "NEG.A-RATE-AN-AMOUNT",
+    "NEG.A-DECODED-AMOUNT-BUSINESS-VALUE"
   ],
   "negative_claims": [
     "V99 = money",
@@ -43,28 +43,28 @@
     "a decoded amount = business value",
     "lie prevented: 'PIC V99 so it is money / there is a CCY field so it is legal tender / it is negative so it is a credit' -- CURRENCY.PROFILE.1 admits declared amount-scale evidence only and refuses every money meaning"
   ],
-  "negative_capability_ids": [
-    "NEG.V99-MONEY",
-    "NEG.MINOR-UNIT-INFERRED-FROM-PIC",
-    "NEG.CURRENCY-CODE-LEGAL-TENDER",
-    "NEG.FX-CONVERSION",
-    "NEG.ROUNDING-POLICY",
-    "NEG.SIGN-POLARITY",
-    "NEG.A-RATE-AN-AMOUNT",
-    "NEG.A-DECODED-AMOUNT-BUSINESS-VALUE"
+  "oracle": {
+    "detail": "the declared profile + the decoded implied scale (deterministic)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "a named numeric field declared role=amount is checked against an explicit declared scale (observed implied scale vs declared -> scale-match or finding) with an optional currency-code field preserved as EVIDENCE (never legal-tender truth)",
+    "a non-amount role (rate/percent/id) is not admitted as money",
+    "sign is NOT polarity (BANK.2 owns debit/credit)"
   ],
-  "byte_domains": [
-    "declared amount profile -> per-field scale-match evidence + currency-code evidence"
-  ],
-  "lie_prevented": [
-    "'PIC V99 so it is money / there is a CCY field so it is legal tender / it is negative so it is a credit' -- CURRENCY.PROFILE.1 admits declared amount-scale evidence only and refuses every money meaning"
-  ],
-  "damage_if_overclaimed": "summing rates as money, assuming a 2-decimal minor unit on a 0/3-decimal currency, or reading a sign as a credit, mis-states totals across an entire ledger extract",
   "replay": {
     "command": "the declared profile + the decoded implied scale (deterministic)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "1baef96defd9add836aa3fbc5c97412d326e02f72c488d814fc4fa270561fcb2"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/currency.rs (3: amount validates + code evidence-only, scale-mismatch + rate-not-money, missing field/code fail closed)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/DIALECT.PROFILE.1/casefile.json",
-      "digest": {
-        "sha256": "2bdd79baa1c23b1a2b9ac6a78f5c2cbf09c09ff120140821c722a34fe2684abd"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "DIALECT.PROFILE.1",
-    "kind": "court-casefile",
     "crate": "kobold-data-shim",
     "crate_version": "governance (gnucobol-rs lab)",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "aeb30c53e96c842f5b6f9d34d2f0b1df942ba3349392c2d9f6af006690d1d80c",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 3,
     "replay": {
       "command": "the admitted GnuCOBOL 3.2.0 (lab/oracle/prefix) cobc/libcob",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "fc0fa8c83696492ba2dff6a5743998cc0edc0c10e74d4347a5fe3e83ad79d5a3",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 3,
-    "negative_claim_count": 7
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "8ac8ce5b6143ecbb86b99d2d2fe574a96fb92359ee673a82807aee546b7547f1"
+      },
+      "name": "reports/casefiles/DIALECT.PROFILE.1/casefile.json"
+    }
+  ]
 }

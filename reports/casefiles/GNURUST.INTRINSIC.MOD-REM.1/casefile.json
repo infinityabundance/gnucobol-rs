@@ -1,33 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "FUNCTION MOD/REM(integer a, b) -> value"
+  ],
+  "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values",
+  "hash_chain": {
+    "inputs_sha256": "2218fd742267525e26fc63e2db6cabf15c8705ec85f259093797dc58cdd63818"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "93cba8f3fca39fd3c7199f1e1aa728834f19abb2c5e978d982c11decfc21b20a",
-    "receipt_sha256": "f2f6c38e752f05a7c808fb360380b1c9841aabb8bc9f93ff6ff2ff7af44db823"
+    "claim_ladder_entry_sha256": "18e5c80cc60e2db693972f6dd3f474d9641b3c52b5ceb09f0b21689ff3bf389a",
+    "receipt_sha256": "4aae0367be92be89891d5b2c42972ed5518e4d9dc09975d29a7a51b7c7dea350"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION MOD/REM (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.MOD-REM.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 20,
-    "pass": 20,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "FUNCTION MOD(a,b) and FUNCTION REM(a,b) for integer operands match cobc/libcob across the full sign matrix (verified 20/0): MOD = a - b*floor(a/b) so the result takes the DIVISOR sign (MOD(-17,5)=3, MOD(17,-5)=-3), REM = a - b*trunc(a/b) = a%b so the result takes the DIVIDEND sign (REM(-17,5)=-2, REM(17,-5)=2). The third pair of implemented intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-INTEGER-OPERANDS",
+    "NEG.MOD-REM-BY-ZERO",
+    "NEG.MOD-AND-REM-INTERCHANGEABLE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "non-integer operands",
@@ -36,24 +35,25 @@
     "all dialects",
     "lie prevented: MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result"
   ],
-  "negative_capability_ids": [
-    "NEG.NON-INTEGER-OPERANDS",
-    "NEG.MOD-REM-BY-ZERO",
-    "NEG.MOD-AND-REM-INTERCHANGEABLE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION MOD/REM (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.MOD-REM.1"
+  },
+  "positive_claims": [
+    "FUNCTION MOD(a,b) and FUNCTION REM(a,b) for integer operands match cobc/libcob across the full sign matrix (verified 20/0): MOD = a - b*floor(a/b) so the result takes the DIVISOR sign (MOD(-17,5)=3, MOD(17,-5)=-3), REM = a - b*trunc(a/b) = a%b so the result takes the DIVIDEND sign (REM(-17,5)=-2, REM(17,-5)=2). The third pair of implemented intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
   ],
-  "byte_domains": [
-    "FUNCTION MOD/REM(integer a, b) -> value"
-  ],
-  "lie_prevented": [
-    "MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result"
-  ],
-  "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values",
   "replay": {
     "command": "bash lab/oracle/modrem_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "5b955440d043447b7cecf17ee591837982d7ffa76898503703ed6fa263f5d060"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 20,
+    "total": 20,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

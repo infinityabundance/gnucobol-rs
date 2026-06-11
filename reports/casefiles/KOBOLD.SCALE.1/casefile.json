@@ -1,40 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.SCALE.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold-bench",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "multi-GB synthetic corpus -> streamed scalar/rayon decode timing gated on identical output hash"
+  ],
+  "case_id": "KOBOLD.SCALE.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold-bench",
+  "damage_if_overclaimed": "a synthetic scale number sold as production/AWS capacity sets false batch-window and cost expectations for a real migration",
+  "hash_chain": {
+    "inputs_sha256": "09ddba4c850f43e96ed7f7b6e935d0fb3f1856eb726b63b6c3f403f5f7295454"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "7b94062cf1466776ad754693e81834c23555e1e557d05f87d9cf2369b2d73216",
+    "claim_ladder_entry_sha256": "3065c35922402172ec4700a064d89b93d4333249b208b688bfec9d0850005fa7",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "the scalar reconcile output (pinned per-size baseline)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "kobold-scale (100m smoke + 1g admitted receipt; parity-gated; ~bounded RSS) + reports/SCALE-1-*.json"
-  },
-  "positive_claims": [
-    "streams a declared synthetic mixed fixed-record corpus (DISPLAY",
-    "COMP-3",
-    "COMP",
-    "COMP-X",
-    "LEVEL-88) through the sealed reconcile pipeline in fixed reconcile-blocks with BOUNDED memory",
-    "scalar and Rayon use the same block unit so their output hashes are byte-identical, and Rayon timing is admitted only after that match + a pinned baseline",
-    "records wall time, throughput, peak RSS, temp disk, and the POSTING.1 hash chain"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'it does 2.5M records/sec, so it will handle your production batch on AWS' -- SCALE.1 measures a declared synthetic corpus on one host, parity-gated, and refuses every production/cost/representativeness generalization"
+  ],
+  "negative_capability_ids": [
+    "NEG.CUSTOMER-WORKLOAD-PERFORMANCE",
+    "NEG.PRODUCTION-SLA",
+    "NEG.AWS-COST",
+    "NEG.MAINFRAME-EQUIVALENCE",
+    "NEG.UNIVERSAL-THROUGHPUT",
+    "NEG.THAT-A-SYNTHETIC-CORPUS-IS-A-REPRESENTAT"
   ],
   "negative_claims": [
     "customer-workload performance",
@@ -45,26 +39,28 @@
     "that a synthetic corpus is a representative business corpus",
     "lie prevented: 'it does 2.5M records/sec, so it will handle your production batch on AWS' -- SCALE.1 measures a declared synthetic corpus on one host, parity-gated, and refuses every production/cost/representativeness generalization"
   ],
-  "negative_capability_ids": [
-    "NEG.CUSTOMER-WORKLOAD-PERFORMANCE",
-    "NEG.PRODUCTION-SLA",
-    "NEG.AWS-COST",
-    "NEG.MAINFRAME-EQUIVALENCE",
-    "NEG.UNIVERSAL-THROUGHPUT",
-    "NEG.THAT-A-SYNTHETIC-CORPUS-IS-A-REPRESENTAT"
+  "oracle": {
+    "detail": "the scalar reconcile output (pinned per-size baseline)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "streams a declared synthetic mixed fixed-record corpus (DISPLAY+COMP-3+COMP+COMP-X+LEVEL-88) through the sealed reconcile pipeline in fixed reconcile-blocks with BOUNDED memory",
+    "scalar and Rayon use the same block unit so their output hashes are byte-identical, and Rayon timing is admitted only after that match + a pinned baseline",
+    "records wall time, throughput, peak RSS, temp disk, and the POSTING.1 hash chain"
   ],
-  "byte_domains": [
-    "multi-GB synthetic corpus -> streamed scalar/rayon decode timing gated on identical output hash"
-  ],
-  "lie_prevented": [
-    "'it does 2.5M records/sec, so it will handle your production batch on AWS' -- SCALE.1 measures a declared synthetic corpus on one host, parity-gated, and refuses every production/cost/representativeness generalization"
-  ],
-  "damage_if_overclaimed": "a synthetic scale number sold as production/AWS capacity sets false batch-window and cost expectations for a real migration",
   "replay": {
     "command": "the scalar reconcile output (pinned per-size baseline)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "2de4af3663ee3c2b61b839c0d071d7f8e01bb7f41bbc73ce53b1cc73e52c939c"
-  }
+  "results": {
+    "fail": 0,
+    "note": "kobold-scale (100m smoke + 1g admitted receipt; parity-gated; ~bounded RSS) + reports/SCALE-1-*.json",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

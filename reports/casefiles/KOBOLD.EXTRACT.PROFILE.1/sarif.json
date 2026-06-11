@@ -1,13 +1,62 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: extraction truth (how/when/whence the bytes were obtained)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: VSAM/indexed-backend/file-status semantics"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: CODE-SET file-I/O conversion parity"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: the copybook being production truth"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: currentness"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: lie prevented: 'the bytes decoded, so the extract is complete/correct and the copybook is the production one' -- EXTRACT.PROFILE.1 records DECLARED provenance + holds copybook freshness as a permanent uncertainty"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,60 +70,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: extraction truth (how/when/whence the bytes were obtained)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: VSAM/indexed-backend/file-status semantics"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: CODE-SET file-I/O conversion parity"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: the copybook being production truth"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: currentness"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.EXTRACT.PROFILE.1 non-claim: lie prevented: 'the bytes decoded, so the extract is complete/correct and the copybook is the production one' -- EXTRACT.PROFILE.1 records DECLARED provenance + holds copybook freshness as a permanent uncertainty"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

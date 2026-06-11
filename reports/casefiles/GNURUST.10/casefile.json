@@ -1,41 +1,59 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.10",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "generated-C storage size b_REC[size] (NOT runtime LENGTH OF)"
+  ],
+  "case_id": "GNURUST.10",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records",
+  "hash_chain": {
+    "inputs_sha256": "ffe14ebc66332ad3db81161fd7545264cdc419af5312a0535e915a220ea14a3b"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "94b06934a464d6312461446cc193ac0a1f5703354948f265f601e8efd264637e",
-    "receipt_sha256": "96087dc1668c4fa1749a8ea9af264e1ee9fecac30f17d212de7ca4babf890006"
+    "claim_ladder_entry_sha256": "bdbe903da1b51576ce5cdb50da4a818cd2dd0817b1e9e457e37af8082d855717",
+    "receipt_sha256": "608d9ae64e9b7dedc33f08d89e99627551731f57bf28b35b67930a9392598f92"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc -C storage allocation",
-    "upstream_court": "GNURUST.10",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "kind": "court-casefile",
+  "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "single trailing OCCURS DEPENDING ON physical maximum record size matching cobc allocation"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "active/logical occurrence count",
+      "sliding",
+      "runtime validation",
+      "multiple/nested ODO",
+      "lie prevented: 'LENGTH OF proves physical allocation' — ODO physical-max != logical length"
+    ],
+    "legacy_notes_carried_forward": [
+      "GNURUST.10 admits ODO only as a physical maximum-layout fact: bytes and offsets are proven, the",
+      "active occurrence count and runtime record meaning remain non-claimed."
+    ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-ODO-10.md"
+    ],
+    "legacy_sha256": [
+      "31487a262898adf5bf55f10564bee151c372c3253c2c5418a902bca952688676"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/odo_sweep.sh` builds one program per case and reads the record's **physical** storage allocation `b_REC[size]` from `cobc -free -C` — deliberately *not* runtime `LENGTH OF`, which returns the unclaimed **logical** length (it reflects the `DEPENDING ON` value, e.g. `0` at init). The Rust `lay_out` total is compared field-for-field.",
+      "[Evidence] | Check | Result | |-------|--------| | ODO physical-max differential sweep vs `cobc b_REC[size]` | **records=30 PASS=30 FAIL=0** (`lab/oracle/odo_sweep.sh`): elementary & group ODO, DISPLAY/COMP-3 elements, bounds `0..5/1..4/0..10/2..3/3..7`, with/without pre-ODO fixed fields | | GNURUST.4 fixed-layout regression sweep | **records=6 PASS=32 FAIL=0** (unchanged) | | Self-contained `cargo test` | layout: 4/4 (ODO physical-max for elementary + group; not-last / bad-depending / multiple-ODO fail closed) | | Fuzz (`layout`, now with ODO rules) | 4M+ runs, 0 crashes | | `fmt` / `clippy -D warnings`"
+    ],
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
   },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "30 sweep + 4M fuzz"
-  },
-  "positive_claims": [
-    "single trailing OCCURS DEPENDING ON physical maximum record size matching cobc allocation"
-  ],
-  "negative_claims": [
-    "active/logical occurrence count",
-    "sliding",
-    "runtime validation",
-    "multiple/nested ODO",
-    "lie prevented: 'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
+  "lie_prevented": [
+    "'LENGTH OF proves physical allocation' — ODO physical-max != logical length"
   ],
   "negative_capability_ids": [
     "NEG.ACTIVE-LOGICAL-OCCURRENCE-COUNT",
@@ -43,51 +61,33 @@
     "NEG.RUNTIME-VALIDATION",
     "NEG.MULTIPLE-NESTED-ODO"
   ],
-  "byte_domains": [
-    "generated-C storage size b_REC[size] (NOT runtime LENGTH OF)"
+  "negative_claims": [
+    "active/logical occurrence count",
+    "sliding",
+    "runtime validation",
+    "multiple/nested ODO",
+    "lie prevented: 'LENGTH OF proves physical allocation' — ODO physical-max != logical length"
   ],
-  "lie_prevented": [
-    "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
+  "oracle": {
+    "detail": "cobc -C storage allocation",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.10"
+  },
+  "positive_claims": [
+    "single trailing OCCURS DEPENDING ON physical maximum record size matching cobc allocation"
   ],
-  "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records",
   "replay": {
     "command": "bash lab/oracle/odo_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "e0ff3b2599cc4f1b08df4131f9394714c2192da594cf77469eb5b4e91b8cfbff"
+  "results": {
+    "fail": 0,
+    "note": "30 sweep + 4M fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
   },
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-ODO-10.md"
-    ],
-    "legacy_sha256": [
-      "31487a262898adf5bf55f10564bee151c372c3253c2c5418a902bca952688676"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "single trailing OCCURS DEPENDING ON physical maximum record size matching cobc allocation"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "active/logical occurrence count",
-      "sliding",
-      "runtime validation",
-      "multiple/nested ODO",
-      "lie prevented: 'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.10 admits ODO only as a physical maximum-layout fact: bytes and offsets are proven, the",
-      "active occurrence count and runtime record meaning remain non-claimed."
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/odo_sweep.sh` builds one program per case and reads the record's **physical** storage allocation `b_REC[size]` from `cobc -free -C` \u2014 deliberately *not* runtime `LENGTH OF`, which returns the unclaimed **logical** length (it reflects the `DEPENDING ON` value, e.g. `0` at init). The Rust `lay_out` total is compared field-for-field.",
-      "[Evidence] | Check | Result | |-------|--------| | ODO physical-max differential sweep vs `cobc b_REC[size]` | **records=30 PASS=30 FAIL=0** (`lab/oracle/odo_sweep.sh`): elementary & group ODO, DISPLAY/COMP-3 elements, bounds `0..5/1..4/0..10/2..3/3..7`, with/without pre-ODO fixed fields | | GNURUST.4 fixed-layout regression sweep | **records=6 PASS=32 FAIL=0** (unchanged) | | Self-contained `cargo test` | layout: 4/4 (ODO physical-max for elementary + group; not-last / bad-depending / multiple-ODO fail closed) | | Fuzz (`layout`, now with ODO rules) | 4M+ runs, 0 crashes | | `fmt` / `clippy -D warnings`"
-    ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+  "schema": "kobold-forensic-casefile-v1"
 }

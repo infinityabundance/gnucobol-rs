@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.SIZE.ERROR.1/casefile.json",
-      "digest": {
-        "sha256": "bb87fdfdfba6b852d990c67f261248013b33407b7603b648b82d814642b3352f"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.SIZE.ERROR.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "2fb1c70dfb1fe0e46a7455925ca0718731e1e3b150fa7a566e0241e5468fd766",
+      "receipt_sha256": "2f503cbc39a50fbcd36a50b3abef89ddeb3955290db1f3829ad42c2a87f3d344"
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 4,
     "replay": {
       "command": "bash lab/oracle/size_error_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "6b3f199fec8ca0f6094c32ce1e96d20c5d29cdb7ff03081ae9b031a2853ba96e",
-      "receipt_sha256": "652245a8c8e8f14b91c7e5b88d7767bfad6868b58cbee1fedf2871a8776be6f0"
-    },
-    "positive_claim_count": 4,
-    "negative_claim_count": 7
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "d8783f1ac2263c6ed05c7a6cbe2dbedb2cfdac2990cf2bb1135557d3a40073b9"
+      },
+      "name": "reports/casefiles/GNURUST.SIZE.ERROR.1/casefile.json"
+    }
+  ]
 }

@@ -1,13 +1,69 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: ledger acceptance"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: settlement finality"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: account-balance truth"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: business approval"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: that a match is correctness"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: that the view is new evidence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: lie prevented: 'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,67 +77,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: ledger acceptance"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: settlement finality"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: account-balance truth"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: business approval"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: that a match is correctness"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: that the view is new evidence"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.BANK.RECONCILE.1 non-claim: lie prevented: 'the reconciliation view says matched, so the batch is posted/accepted/correct' -- BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

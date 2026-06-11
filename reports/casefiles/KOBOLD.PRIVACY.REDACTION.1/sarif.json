@@ -1,13 +1,69 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: anonymization"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: regulatory compliance (GDPR/PCI)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: reversibility"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: safe public release of customer data"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: a token being an identity"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: a hash being the business value"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: lie prevented: 'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,67 +77,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: anonymization"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: regulatory compliance (GDPR/PCI)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: reversibility"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: safe public release of customer data"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: a token being an identity"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: a hash being the business value"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "KOBOLD.PRIVACY.REDACTION.1 non-claim: lie prevented: 'redacted = anonymized = safe to publish'  -- PRIVACY.REDACTION.1 withholds declared values and preserves auditability, but claims no anonymization, compliance, reversibility, or public-release safety"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

@@ -1,33 +1,33 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.ACCEPT.DISPLAY.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "DISPLAY operand concatenation + newline; ACCEPT field move bytes"
+  ],
+  "case_id": "GNURUST.ACCEPT.DISPLAY.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming DISPLAY separates operands (it does not) or that ACCEPT preserves an over-length line (it truncates) corrupts emitted/captured text in a ported program",
+  "hash_chain": {
+    "inputs_sha256": "df05d690c5fb766f4bf9ee72acad8cad625689e034623e00ee2a8852e9888327"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "e3547cafb497192cd029f6e25e737e745ae5bdcc4efdd85513c1bbd82929d00e",
-    "receipt_sha256": "060879515fbbc4df24e0b36afe4856726ce8b800026f42383abfeaaac86b1df8"
+    "claim_ladder_entry_sha256": "9f30da8477cf484cb44a4a43fa408742b957cce6234fe44f0920fdb302699e91",
+    "receipt_sha256": "0b40ae87096c6ca014d8cbfb11bbe819734515209dbcca78290d624529586797"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc DISPLAY/ACCEPT (libcob/termio.c)",
-    "upstream_court": "GNURUST.ACCEPT.DISPLAY.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 7,
-    "pass": 7,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "DISPLAY emits its operands' bytes CONCATENATED with no separator + one trailing newline (a literal -> its text, an alphanumeric field -> its space-padded bytes, an unsigned 9(n) field -> its zoned digit bytes), and ACCEPT field FROM CONSOLE moves one input line into the field left-justified, space-padded, truncated to the field width -- matching cobc/libcob byte-for-byte. Emitted text is admitted as evidence"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here"
+  ],
+  "negative_capability_ids": [
+    "NEG.DISPLAY-OF-SIGNED-NUMERIC-GNUCOBOL-PREFI",
+    "NEG.DISPLAY-UPON-WITH-NO-ADVANCING",
+    "NEG.ACCEPT-FROM-DATE-TIME-ENVIRONMENT-SCREEN",
+    "NEG.DEVICE-CONSOLE-SPECIFICS",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "DISPLAY of signed numeric (GnuCOBOL prefixes +/-) or V-scaled/edited numeric (reformats)",
@@ -37,25 +37,25 @@
     "all dialects",
     "lie prevented: DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here"
   ],
-  "negative_capability_ids": [
-    "NEG.DISPLAY-OF-SIGNED-NUMERIC-GNUCOBOL-PREFI",
-    "NEG.DISPLAY-UPON-WITH-NO-ADVANCING",
-    "NEG.ACCEPT-FROM-DATE-TIME-ENVIRONMENT-SCREEN",
-    "NEG.DEVICE-CONSOLE-SPECIFICS",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc DISPLAY/ACCEPT (libcob/termio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.ACCEPT.DISPLAY.1"
+  },
+  "positive_claims": [
+    "DISPLAY emits its operands' bytes CONCATENATED with no separator + one trailing newline (a literal -> its text, an alphanumeric field -> its space-padded bytes, an unsigned 9(n) field -> its zoned digit bytes), and ACCEPT field FROM CONSOLE moves one input line into the field left-justified, space-padded, truncated to the field width -- matching cobc/libcob byte-for-byte. Emitted text is admitted as evidence"
   ],
-  "byte_domains": [
-    "DISPLAY operand concatenation + newline; ACCEPT field move bytes"
-  ],
-  "lie_prevented": [
-    "DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here"
-  ],
-  "damage_if_overclaimed": "assuming DISPLAY separates operands (it does not) or that ACCEPT preserves an over-length line (it truncates) corrupts emitted/captured text in a ported program",
   "replay": {
     "command": "bash lab/oracle/accept_display_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "751d55a170961c3c2e26939c4c03ba5ba4f7b80d9ed3c422d55b066c50f22b52"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 7,
+    "total": 7,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

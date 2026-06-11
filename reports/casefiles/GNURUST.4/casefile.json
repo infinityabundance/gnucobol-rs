@@ -1,86 +1,86 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.4",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
   },
-  "inputs": {
-    "claim_ladder_entry_sha256": "7dff21865ebfc972ee6734a3af7d5cd3778c2974c66caccfc98d7d2632b34ee1",
-    "receipt_sha256": "48f09afbf798ac8899557f7df391c7a3b1cb6c8f5463c695e33ca241db5d0ce8"
-  },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc -C f_M witness + LENGTH OF",
-    "upstream_court": "GNURUST.4",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "32 sweep + 4M+ fuzz"
-  },
-  "positive_claims": [
-    "item byte offsets / group sizes / fixed OCCURS / REDEFINES(<=target) / FILLER matching cobc"
-  ],
-  "negative_claims": [
-    "SYNCHRONIZED",
-    "REDEFINES larger than target",
-    "lie prevented: 'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
-  ],
-  "negative_capability_ids": [
-    "NEG.SYNCHRONIZED",
-    "NEG.REDEFINES-LARGER-THAN-TARGET"
-  ],
   "byte_domains": [
     "generated-C field offset+size"
   ],
-  "lie_prevented": [
-    "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
-  ],
+  "case_id": "GNURUST.4",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
   "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields",
-  "replay": {
-    "command": "bash lab/oracle/layout_sweep.sh",
-    "exit_code": 0
-  },
   "hash_chain": {
-    "inputs_sha256": "8246915d098872be02a26e65728722ee37e293e63d2292599fa4ee4fef4d37fc"
+    "inputs_sha256": "d18ab27a859a72524568f7bf8beeb673b9ea55ddb40365622021affea54f2f47"
   },
+  "inputs": {
+    "claim_ladder_entry_sha256": "77e59de252280871d807046cf1fc8a85c1081d2f074dc2235d477ce821d10855",
+    "receipt_sha256": "666b7ccd9f357c4a42132c46259aad69ee8e63f275545b9c73b02c72f761d289"
+  },
+  "kind": "court-casefile",
   "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "item byte offsets / group sizes / fixed OCCURS / REDEFINES(<=target) / FILLER matching cobc"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "SYNCHRONIZED",
+      "REDEFINES larger than target",
+      "lie prevented: 'offsets are obvious' — layout matches cobc's emitted offsets, not intuition"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
     "legacy_paths": [
       "research/legacyreports/reports/RECEIPT-GNURUST-LAYOUT-4.md"
     ],
     "legacy_sha256": [
       "b9e517475cc20c1528a9498d3eaa586d29121816d7f083128e41499ddea2ce0d"
     ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "item byte offsets / group sizes / fixed OCCURS / REDEFINES(<=target) / FILLER matching cobc"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "SYNCHRONIZED",
-      "REDEFINES larger than target",
-      "lie prevented: 'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
     "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/layout_harness.sh` generates a program for one `01` record, runs `cobc -C`, and parses the emitted `cob_field f_M = {size, b_REC + OFFSET, &attr}; /* name */` for each statically- addressable item \u2014 the compiler's own offset/size decision (`GNURUST.GENC.0`), cross-checked by runtime `LENGTH OF`. Items that are OCCURS tables or nested under an OCCURS ancestor have runtime-computed (non-static) offsets and are skipped at the oracle; their effect is checked via the following field's offset and the record total.",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc` offsets/sizes | **records=6, PASS=32 FAIL=0** (`lab/oracle/layout_sweep.sh`): flat records, nested groups (to level 10), FILLER, `OCCURS` on elementary & group, `REDEFINES` of elementary & group, all sealed PIC/USAGE forms | | Self-contained `cargo test` | layout: 2/2 (oracle record REC=29; `REDEFINES`-larger fails closed) | | Fuzz (`layout` target, arbitrary items) | **5,000,000 runs, 0 crashes** \u2014 hostile level nesting / OCCURS counts / REDEFINES targets all yield typed `LayoutError`; the level-tree recursion and OCCURS `ch"
+      "[Oracle] `lab/oracle/layout_harness.sh` generates a program for one `01` record, runs `cobc -C`, and parses the emitted `cob_field f_M = {size, b_REC + OFFSET, &attr}; /* name */` for each statically- addressable item — the compiler's own offset/size decision (`GNURUST.GENC.0`), cross-checked by runtime `LENGTH OF`. Items that are OCCURS tables or nested under an OCCURS ancestor have runtime-computed (non-static) offsets and are skipped at the oracle; their effect is checked via the following field's offset and the record total.",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc` offsets/sizes | **records=6, PASS=32 FAIL=0** (`lab/oracle/layout_sweep.sh`): flat records, nested groups (to level 10), FILLER, `OCCURS` on elementary & group, `REDEFINES` of elementary & group, all sealed PIC/USAGE forms | | Self-contained `cargo test` | layout: 2/2 (oracle record REC=29; `REDEFINES`-larger fails closed) | | Fuzz (`layout` target, arbitrary items) | **5,000,000 runs, 0 crashes** — hostile level nesting / OCCURS counts / REDEFINES targets all yield typed `LayoutError`; the level-tree recursion and OCCURS `ch"
     ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
+  },
+  "lie_prevented": [
+    "'offsets are obvious' — layout matches cobc's emitted offsets, not intuition"
+  ],
+  "negative_capability_ids": [
+    "NEG.SYNCHRONIZED",
+    "NEG.REDEFINES-LARGER-THAN-TARGET"
+  ],
+  "negative_claims": [
+    "SYNCHRONIZED",
+    "REDEFINES larger than target",
+    "lie prevented: 'offsets are obvious' — layout matches cobc's emitted offsets, not intuition"
+  ],
+  "oracle": {
+    "detail": "cobc -C f_M witness + LENGTH OF",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.4"
+  },
+  "positive_claims": [
+    "item byte offsets / group sizes / fixed OCCURS / REDEFINES(<=target) / FILLER matching cobc"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/layout_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "32 sweep + 4M+ fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

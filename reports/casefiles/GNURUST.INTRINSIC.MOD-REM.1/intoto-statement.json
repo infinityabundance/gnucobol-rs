@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/casefile.json",
-      "digest": {
-        "sha256": "74adfd498b4b9743261325f7e60511bea9135195a3930429bf43405ec1a4d437"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "18e5c80cc60e2db693972f6dd3f474d9641b3c52b5ceb09f0b21689ff3bf389a",
+      "receipt_sha256": "4aae0367be92be89891d5b2c42972ed5518e4d9dc09975d29a7a51b7c7dea350"
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 1,
     "replay": {
       "command": "bash lab/oracle/modrem_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "93cba8f3fca39fd3c7199f1e1aa728834f19abb2c5e978d982c11decfc21b20a",
-      "receipt_sha256": "f2f6c38e752f05a7c808fb360380b1c9841aabb8bc9f93ff6ff2ff7af44db823"
-    },
-    "positive_claim_count": 1,
-    "negative_claim_count": 5
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "bfed3bb1fed84df5e543659b299bee36b312c912b90ca3d1775db7c0e0742b5f"
+      },
+      "name": "reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/casefile.json"
+    }
+  ]
 }

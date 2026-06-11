@@ -1,41 +1,58 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.7",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "receiving-field storage bytes"
+  ],
+  "case_id": "GNURUST.7",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total",
+  "hash_chain": {
+    "inputs_sha256": "f85191c3233566b757ef5e34a211c6c90f3ca5e487fb974ee696026deb5a8c3a"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "98259fda548c6d15904426ac3b6107f00fd748d28ebc019ace73056d3b5d4edb",
-    "receipt_sha256": "0e96fa1fa862c8c133855d9bf66f6f2af3b03455fa473d1857edf25ffc2033bd"
+    "claim_ladder_entry_sha256": "0313c6579ee7bc8fc7c70dc25e43145eb9ea4c2dbb51bea457b7d4a8696b2e96",
+    "receipt_sha256": "8a64bb4161527ebba9f5c2dae7b5131a58ea025d037862ac2b8ed750b422aa27"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "libcob cob_add/cob_sub/cob_mul",
-    "upstream_court": "GNURUST.7",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "kind": "court-casefile",
+  "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "result bytes matching cob_add/cob_sub/cob_mul (cob_decimal path), truncate + nearest-away"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "DIVIDE",
+      "other rounding modes",
+      "ON SIZE ERROR",
+      ">38-digit bignum",
+      "lie prevented: 'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-ARITH-7.md"
+    ],
+    "legacy_sha256": [
+      "b69ce435dcd2d56a80bb9f6c9b9e9098e13071206f344338ee72ef20422c1f84"
+    ],
+    "legacy_unstructured_notes": [
+      "[Oracle] `lab/oracle/arith_harness.c` links the built libcob, constructs `cob_field`s, calls the real `cob_add`/`cob_sub`/`cob_mul(f1, f2, opt)` (opt `0`=truncate, `COB_STORE_ROUND`=nearest-away), and dumps `f1`. The Rust mirror (`examples/arith_rows`) consumes identical rows.",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cob_add`/`cob_sub`/`cob_mul` | **PASS=1800 FAIL=0** (`lab/oracle/arith_sweep.sh`), with **900** packed-add/sub rows classified out to the deferred BCD sub-court. ADD/SUB/MUL × DISPLAY/COMP-3 × signed/unsigned (4 sign combos) × digits/scales × truncate/ROUNDED × rounding-tie & overflow values | | Self-contained `cargo test` | arith: 6/6 (add/multiply/rounded; packed add/sub fails closed; packed multiply ok) | | Fuzz (`arith` target, arbitrary operands/attrs/op) | **8,000,000 runs, 0 crashes** — i128 `checked_*` + `pow10` bounds hold"
+    ],
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
   },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "within 5400 arith sweep + 8M fuzz"
-  },
-  "positive_claims": [
-    "result bytes matching cob_add/cob_sub/cob_mul (cob_decimal path), truncate + nearest-away"
-  ],
-  "negative_claims": [
-    "DIVIDE",
-    "other rounding modes",
-    "ON SIZE ERROR",
-    ">38-digit bignum",
-    "lie prevented: 'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
+  "lie_prevented": [
+    "'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly"
   ],
   "negative_capability_ids": [
     "NEG.DIVIDE",
@@ -43,50 +60,33 @@
     "NEG.ON-SIZE-ERROR",
     "NEG.38-DIGIT-BIGNUM"
   ],
-  "byte_domains": [
-    "receiving-field storage bytes"
+  "negative_claims": [
+    "DIVIDE",
+    "other rounding modes",
+    "ON SIZE ERROR",
+    ">38-digit bignum",
+    "lie prevented: 'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly"
   ],
-  "lie_prevented": [
-    "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
+  "oracle": {
+    "detail": "libcob cob_add/cob_sub/cob_mul",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.7"
+  },
+  "positive_claims": [
+    "result bytes matching cob_add/cob_sub/cob_mul (cob_decimal path), truncate + nearest-away"
   ],
-  "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total",
   "replay": {
     "command": "bash lab/oracle/arith_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "bfe9ba51f45060c9441129faec3fff60cb4645a539704c5bb03d92e0fb4a7f3f"
+  "results": {
+    "fail": 0,
+    "note": "within 5400 arith sweep + 8M fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
   },
-  "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-ARITH-7.md"
-    ],
-    "legacy_sha256": [
-      "b69ce435dcd2d56a80bb9f6c9b9e9098e13071206f344338ee72ef20422c1f84"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "result bytes matching cob_add/cob_sub/cob_mul (cob_decimal path), truncate + nearest-away"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "DIVIDE",
-      "other rounding modes",
-      "ON SIZE ERROR",
-      ">38-digit bignum",
-      "lie prevented: 'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/arith_harness.c` links the built libcob, constructs `cob_field`s, calls the real `cob_add`/`cob_sub`/`cob_mul(f1, f2, opt)` (opt `0`=truncate, `COB_STORE_ROUND`=nearest-away), and dumps `f1`. The Rust mirror (`examples/arith_rows`) consumes identical rows.",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cob_add`/`cob_sub`/`cob_mul` | **PASS=1800 FAIL=0** (`lab/oracle/arith_sweep.sh`), with **900** packed-add/sub rows classified out to the deferred BCD sub-court. ADD/SUB/MUL \u00d7 DISPLAY/COMP-3 \u00d7 signed/unsigned (4 sign combos) \u00d7 digits/scales \u00d7 truncate/ROUNDED \u00d7 rounding-tie & overflow values | | Self-contained `cargo test` | arith: 6/6 (add/multiply/rounded; packed add/sub fails closed; packed multiply ok) | | Fuzz (`arith` target, arbitrary operands/attrs/op) | **8,000,000 runs, 0 crashes** \u2014 i128 `checked_*` + `pow10` bounds hold"
-    ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+  "schema": "kobold-forensic-casefile-v1"
 }

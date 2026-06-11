@@ -1,33 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.INTEGER.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc"
+  ],
+  "case_id": "GNURUST.INTRINSIC.INTEGER.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math",
+  "hash_chain": {
+    "inputs_sha256": "09a923ee0a1c665490526ce943f694103cf7df89bab6a4962db08b925586c371"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6fd9a51938d00da63e5f322862f31d5616980045f3677395f1cfe6826efe0cf1",
-    "receipt_sha256": "39be491bdbd5fd38773e0ba5af9a0b4c3fd49d9054c1ae102d31cac6ee4b5c83"
+    "claim_ladder_entry_sha256": "48a86be899dd7018dc39756602d711c730cbd44fe3883aaeb53c046c7934da15",
+    "receipt_sha256": "bfb4ccfe618b81fa5cbf2b7af4216db11b6f1504493bc9165acc8ff1ed18dd5f"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION INTEGER/INTEGER-PART (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.INTEGER.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 20,
-    "pass": 20,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "FUNCTION INTEGER(x) returns the greatest integer NOT GREATER THAN x (FLOOR) and FUNCTION INTEGER-PART(x) returns the integer part TRUNCATED toward zero, matching cobc/libcob (verified 20/0): they AGREE for positives and exact integers but DIFFER for negatives with a fractional part -- INTEGER(-3.7)=-4 (floor) vs INTEGER-PART(-3.7)=-3 (truncate). The pair of implemented rounding intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
+  ],
+  "negative_capability_ids": [
+    "NEG.NON-NUMERIC-ARGUMENTS",
+    "NEG.I128-OUT-OF-RANGE-MAGNITUDES",
+    "NEG.INTEGER-AND-INTEGER-PART-INTERCHANGEABLE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "non-numeric arguments",
@@ -36,24 +35,25 @@
     "all dialects",
     "lie prevented: INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
   ],
-  "negative_capability_ids": [
-    "NEG.NON-NUMERIC-ARGUMENTS",
-    "NEG.I128-OUT-OF-RANGE-MAGNITUDES",
-    "NEG.INTEGER-AND-INTEGER-PART-INTERCHANGEABLE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION INTEGER/INTEGER-PART (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.INTEGER.1"
+  },
+  "positive_claims": [
+    "FUNCTION INTEGER(x) returns the greatest integer NOT GREATER THAN x (FLOOR) and FUNCTION INTEGER-PART(x) returns the integer part TRUNCATED toward zero, matching cobc/libcob (verified 20/0): they AGREE for positives and exact integers but DIFFER for negatives with a fractional part -- INTEGER(-3.7)=-4 (floor) vs INTEGER-PART(-3.7)=-3 (truncate). The pair of implemented rounding intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
   ],
-  "byte_domains": [
-    "FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc"
-  ],
-  "lie_prevented": [
-    "INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward"
-  ],
-  "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math",
   "replay": {
     "command": "bash lab/oracle/integer_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "3710de251ee91db604b493447073fd1fbc95a4dfb678d76dab1abdaddf6fe144"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 20,
+    "total": 20,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,4 +1,4 @@
-<!-- DO NOT EDIT BY HAND. Generated from casefile.json by lab/casefile/run.py.
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.18 (court-casefile)
 
@@ -9,9 +9,8 @@
 - **Replay:** `bash lab/oracle/comp6_sweep.sh`
 - **Authority:** STATUS.md · receipt_status: current
 
-## Positive claims (3)
-- COMP-6 field model (PACKED
-- NO_SIGN_NIBBLE, size ceil(n/2))
+## Positive claims (2)
+- COMP-6 field model (PACKED+NO_SIGN_NIBBLE, size ceil(n/2))
 - DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move
 
 ## Negative claims (6) — negative capability is the trust surface

@@ -1,13 +1,76 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: full file I/O parity"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: indexed/relative/VSAM"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: locking/sharing"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: host I/O error (30) generalization"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: attribute conflict (39)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: Procedure Division control flow"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: business completeness of the status set"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILE.STATUS.1 non-claim: lie prevented: 'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,74 +84,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: full file I/O parity"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: indexed/relative/VSAM"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: locking/sharing"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: host I/O error (30) generalization"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: attribute conflict (39)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: Procedure Division control flow"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: business completeness of the status set"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILE.STATUS.1 non-claim: lie prevented: 'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

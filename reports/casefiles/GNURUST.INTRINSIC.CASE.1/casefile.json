@@ -1,33 +1,31 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.CASE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "ASCII case fold + byte reversal"
+  ],
+  "case_id": "GNURUST.INTRINSIC.CASE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program",
+  "hash_chain": {
+    "inputs_sha256": "91af89ce3fd3909e75ecaa287a01d5280a71c4011e7e2fd2dc4114d3b659c55c"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "be53826e3b21a70291188fe2bf8e142a304984d1e50c3aac9549e488fcec1778",
-    "receipt_sha256": "b36ad5c323a1962d56b8796d48a73975ea8dddb008d9497da0498c4290be7a99"
+    "claim_ladder_entry_sha256": "4521552e098e8dada0feb3fe54c24a0903b5b9ef6a291ac3c3f3f129294d79a1",
+    "receipt_sha256": "f90f6d4eef048d255f5cc5f2845bf492f35eeb94ae492bb6d4ea1e183e251873"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION UPPER-CASE/LOWER-CASE/REVERSE (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.CASE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 10,
-    "pass": 10,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "FUNCTION UPPER-CASE (ASCII a..z -> A..Z), LOWER-CASE (A..Z -> a..z), and REVERSE (byte reversal) match cobc/libcob byte-for-byte (verified 10/0): non-alphabetic bytes (digits, spaces, punctuation) are UNCHANGED by case folding, the result is the SAME LENGTH as the input, and REVERSE reverses ALL bytes including spaces. The implemented string-transform intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)"
+  ],
+  "negative_capability_ids": [
+    "NEG.LOCALE-NATIONAL-CASE-FOLDING-NON-ASCII",
+    "NEG.MULTIBYTE-UTF-8-REVERSE",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "locale/national case folding (non-ASCII)",
@@ -35,23 +33,25 @@
     "all dialects",
     "lie prevented: UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)"
   ],
-  "negative_capability_ids": [
-    "NEG.LOCALE-NATIONAL-CASE-FOLDING-NON-ASCII",
-    "NEG.MULTIBYTE-UTF-8-REVERSE",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION UPPER-CASE/LOWER-CASE/REVERSE (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.CASE.1"
+  },
+  "positive_claims": [
+    "FUNCTION UPPER-CASE (ASCII a..z -> A..Z), LOWER-CASE (A..Z -> a..z), and REVERSE (byte reversal) match cobc/libcob byte-for-byte (verified 10/0): non-alphabetic bytes (digits, spaces, punctuation) are UNCHANGED by case folding, the result is the SAME LENGTH as the input, and REVERSE reverses ALL bytes including spaces. The implemented string-transform intrinsics, split from GNURUST.INTRINSIC.ATLAS.1"
   ],
-  "byte_domains": [
-    "ASCII case fold + byte reversal"
-  ],
-  "lie_prevented": [
-    "UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)"
-  ],
-  "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program",
   "replay": {
     "command": "bash lab/oracle/case_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "790bc26df99927cb4d12ad1238ed422a95c1519b0af038f27181e3624a8a3268"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 10,
+    "total": 10,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

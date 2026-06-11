@@ -1,13 +1,69 @@
 {
-  "version": "2.1.0",
   "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
   "runs": [
     {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: new truth/evidence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: certification"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: regulatory compliance"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: production approval"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: customer acceptance"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: a live/current state (it is a snapshot)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "SUPPORT-PACKET.1 non-claim: lie prevented: 'here is the support packet, therefore the system is certified/compliant/approved' -- SUPPORT-PACKET.1 only collects existing generated artifacts and claims nothing new"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
       "tool": {
         "driver": {
-          "name": "kobold-casefile",
           "informationUri": "https://github.com/infinityabundance",
-          "version": "1",
+          "name": "kobold-casefile",
           "rules": [
             {
               "id": "NONCLAIM",
@@ -21,67 +77,11 @@
                 "text": "The court's replay verdict."
               }
             }
-          ]
+          ],
+          "version": "1"
         }
-      },
-      "results": [
-        {
-          "ruleId": "VERDICT",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 verdict=pass"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: new truth/evidence"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: certification"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: regulatory compliance"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: production approval"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: customer acceptance"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: a live/current state (it is a snapshot)"
-          }
-        },
-        {
-          "ruleId": "NONCLAIM",
-          "level": "note",
-          "message": {
-            "text": "SUPPORT-PACKET.1 non-claim: lie prevented: 'here is the support packet, therefore the system is certified/compliant/approved' -- SUPPORT-PACKET.1 only collects existing generated artifacts and claims nothing new"
-          }
-        }
-      ]
+      }
     }
-  ]
+  ],
+  "version": "2.1.0"
 }

@@ -1,35 +1,33 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.EXTRACT.PROFILE.1",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "declared extraction metadata -> provenance manifest bound to data/copybook hashes"
+  ],
+  "case_id": "KOBOLD.EXTRACT.PROFILE.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "acting on an incomplete/wrong extract or a stale copybook that decodes plausibly wrong corrupts a whole migration silently",
+  "hash_chain": {
+    "inputs_sha256": "21ecc2b31b97510f77d3ce7ebd2662684428875da29c11833fb0c6a0c51a6001"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "2ab18b9404362d5d6c2de643eaaf36e2f7b208eff2a66043de987eb9ca38c37a",
+    "claim_ladder_entry_sha256": "7addfbb52b95a4e7e8cf6c006d840b4c65745769a052f67fa436cce185172734",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "declared operator provenance (not detected)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/extract.rs (2: records provenance + refuses extraction truth; optional fields null)"
-  },
-  "positive_claims": [
-    "records the declared extraction provenance (file organization, extract method, record-length source, copybook source, pre-KOBOLD code-set conversion, source-system cutoff, operator assumptions) bound to the data + copybook sha256",
-    "copybook freshness and extraction truth are explicit non-claims"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the bytes decoded, so the extract is complete/correct and the copybook is the production one' -- EXTRACT.PROFILE.1 records DECLARED provenance + holds copybook freshness as a permanent uncertainty"
+  ],
+  "negative_capability_ids": [
+    "NEG.EXTRACTION-TRUTH-HOW-WHEN-WHENCE-THE-BYT",
+    "NEG.VSAM-INDEXED-BACKEND-FILE-STATUS-SEMANTI",
+    "NEG.CODE-SET-FILE-I-O-CONVERSION-PARITY",
+    "NEG.THE-COPYBOOK-BEING-PRODUCTION-TRUTH",
+    "NEG.CURRENTNESS"
   ],
   "negative_claims": [
     "extraction truth (how/when/whence the bytes were obtained)",
@@ -39,25 +37,27 @@
     "currentness",
     "lie prevented: 'the bytes decoded, so the extract is complete/correct and the copybook is the production one' -- EXTRACT.PROFILE.1 records DECLARED provenance + holds copybook freshness as a permanent uncertainty"
   ],
-  "negative_capability_ids": [
-    "NEG.EXTRACTION-TRUTH-HOW-WHEN-WHENCE-THE-BYT",
-    "NEG.VSAM-INDEXED-BACKEND-FILE-STATUS-SEMANTI",
-    "NEG.CODE-SET-FILE-I-O-CONVERSION-PARITY",
-    "NEG.THE-COPYBOOK-BEING-PRODUCTION-TRUTH",
-    "NEG.CURRENTNESS"
+  "oracle": {
+    "detail": "declared operator provenance (not detected)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "records the declared extraction provenance (file organization, extract method, record-length source, copybook source, pre-KOBOLD code-set conversion, source-system cutoff, operator assumptions) bound to the data + copybook sha256",
+    "copybook freshness and extraction truth are explicit non-claims"
   ],
-  "byte_domains": [
-    "declared extraction metadata -> provenance manifest bound to data/copybook hashes"
-  ],
-  "lie_prevented": [
-    "'the bytes decoded, so the extract is complete/correct and the copybook is the production one' -- EXTRACT.PROFILE.1 records DECLARED provenance + holds copybook freshness as a permanent uncertainty"
-  ],
-  "damage_if_overclaimed": "acting on an incomplete/wrong extract or a stale copybook that decodes plausibly wrong corrupts a whole migration silently",
   "replay": {
     "command": "declared operator provenance (not detected)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "c0dad56e4ce906c7b70c64935b6678d24c420e603151b73bebc9cfe427a54186"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/extract.rs (2: records provenance + refuses extraction truth; optional fields null)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

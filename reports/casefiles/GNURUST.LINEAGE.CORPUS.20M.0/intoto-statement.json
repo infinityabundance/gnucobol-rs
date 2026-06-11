@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/casefile.json",
-      "digest": {
-        "sha256": "1e6c22cb536c2e40d6f5b6490a5fb4cdcf427f6b94e1bef78c030d12eeab8374"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "78af8b4414996ec714b3f4fb11ffbc65fe9d590e74a11c3c6788c70e7fb46b44",
+      "receipt_sha256": "408e3a61ae15239f077adb43db27d3afe883314e17b55f007172b7b8f4f314e4"
+    },
+    "negative_claim_count": 10,
+    "positive_claim_count": 3,
     "replay": {
       "command": "bash lab/oracle/lineage_engine_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "262f8f94e3e886aa1eca760fe94ed49615aeb4f1f699c9e5c96c8d4f7f1565e0",
-      "receipt_sha256": "d6ab98efdb631058894796cb7a89bc07bf8ec790b08f303fb858ea48040cd29e"
-    },
-    "positive_claim_count": 3,
-    "negative_claim_count": 10
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "393f04f6f4e50b2196a869cc7f149ed88ddf57f4cf652c0565c0ea936494231a"
+      },
+      "name": "reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/casefile.json"
+    }
+  ]
 }

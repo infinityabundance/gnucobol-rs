@@ -1,37 +1,35 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.RECON.2",
-  "kind": "court-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "input record bytes -> declared-transform -> output record bytes + before/after decode"
+  ],
+  "case_id": "KOBOLD.RECON.2",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "treating transform evidence as a production write-back or ledger acceptance mutates or posts data that was never committed",
+  "hash_chain": {
+    "inputs_sha256": "61bf02531301e720806d27f1cdaa6212730e8af32841ad8884dc46ffa10dfb5a"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "8e6adf14778948785740017dfd0940523d2f921e8da2a396306510542530e399",
+    "claim_ladder_entry_sha256": "959fc4705fc2bb86542053d52cec839bf7bc23095c6ac412a2f84ca249b786f7",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "composed sealed courts (GNURUST.12 SET-88-TRUE, GNURUST.7 ADD/SUBTRACT)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/recon2.rs (4: set+add compose, byte-stable, subtract, undeclared-fails-closed)"
-  },
-  "positive_claims": [
-    "a declared sealed transform (SET 88 TRUE / ADD / SUBTRACT) takes input bytes to output bytes",
-    "before+after decode + audit delta",
-    "byte-stable",
-    "undeclared transforms fail closed"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'a transformed record is a written-back, accepted, business-true record' -- RECON.2 proves only before/after bytes for a named sealed transform"
+  ],
+  "negative_capability_ids": [
+    "NEG.PROCEDURE-DIVISION-EXECUTION",
+    "NEG.PRODUCTION-WRITE-BACK",
+    "NEG.FILE-REWRITE-PARITY",
+    "NEG.LEDGER-ACCEPTANCE",
+    "NEG.BUSINESS-TRUTH",
+    "NEG.UNDECLARED-TRANSFORMS",
+    "NEG.SIDE-EFFECTS-BEYOND-THE-DECLARED-FIELD"
   ],
   "negative_claims": [
     "Procedure Division execution",
@@ -43,27 +41,29 @@
     "side effects beyond the declared field",
     "lie prevented: 'a transformed record is a written-back, accepted, business-true record' -- RECON.2 proves only before/after bytes for a named sealed transform"
   ],
-  "negative_capability_ids": [
-    "NEG.PROCEDURE-DIVISION-EXECUTION",
-    "NEG.PRODUCTION-WRITE-BACK",
-    "NEG.FILE-REWRITE-PARITY",
-    "NEG.LEDGER-ACCEPTANCE",
-    "NEG.BUSINESS-TRUTH",
-    "NEG.UNDECLARED-TRANSFORMS",
-    "NEG.SIDE-EFFECTS-BEYOND-THE-DECLARED-FIELD"
+  "oracle": {
+    "detail": "composed sealed courts (GNURUST.12 SET-88-TRUE, GNURUST.7 ADD/SUBTRACT)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "a declared sealed transform (SET 88 TRUE / ADD / SUBTRACT) takes input bytes to output bytes",
+    "before+after decode + audit delta",
+    "byte-stable",
+    "undeclared transforms fail closed"
   ],
-  "byte_domains": [
-    "input record bytes -> declared-transform -> output record bytes + before/after decode"
-  ],
-  "lie_prevented": [
-    "'a transformed record is a written-back, accepted, business-true record' -- RECON.2 proves only before/after bytes for a named sealed transform"
-  ],
-  "damage_if_overclaimed": "treating transform evidence as a production write-back or ledger acceptance mutates or posts data that was never committed",
   "replay": {
     "command": "composed sealed courts (GNURUST.12 SET-88-TRUE, GNURUST.7 ADD/SUBTRACT)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "286b2bb3a8376203a65a3d80346c635b72847000484b526bc97d1b9a9ed10520"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/recon2.rs (4: set+add compose, byte-stable, subtract, undeclared-fails-closed)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,34 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "KOBOLD.FILE.1",
-  "kind": "operator-casefile",
-  "crate": "kobold-data-shim",
-  "crate_version": "kobold 0.6.3",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "no-trust2-receipt",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "raw byte stream -> record spans (offset,len)"
+  ],
+  "case_id": "KOBOLD.FILE.1",
+  "crate": "kobold-data-shim",
+  "crate_version": "kobold 0.6.3",
+  "damage_if_overclaimed": "silently absorbing a partial/extra record drops or duplicates a banking record",
+  "hash_chain": {
+    "inputs_sha256": "3d5c2c869b9295ee3474994ee99d9285312f71aec4d244127665e0325a61cf85"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "b353a3e73d6be51c33ba1f9f25bce957ccc3d2dae6b57e094a5ace85721348e4",
+    "claim_ladder_entry_sha256": "07705dad295c2a981c2cdaa2827ee146d54dba08ca7e39122778b32c7cf4d110",
     "receipt_sha256": null
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-rs-sealed-court",
-    "detail": "deterministic ingest invariants (not GnuCOBOL file I/O)",
-    "upstream_court": null,
-    "dialect_profile_id": null,
-    "dialect_profile_sha256": null
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "tests/file.rs 10 green; ingest==reconcile offsets"
-  },
-  "positive_claims": [
-    "raw stream splits into fixed-length records with true offsets, named trailing/partial policies, byte-stable file audit, stable exit codes"
+  "kind": "operator-casefile",
+  "lie_prevented": [
+    "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
+  ],
+  "negative_capability_ids": [
+    "NEG.GNUCOBOL-FILE-ORGANIZATION",
+    "NEG.INDEXED-RELATIVE-I-O",
+    "NEG.LINE-SEQUENTIAL-RUNTIME-PARITY",
+    "NEG.AUTO-RESYNCHRONIZATION",
+    "NEG.ENCODING-AUTO-DETECTION",
+    "NEG.SILENT-REPAIR-OF-DIRTY-BYTES"
   ],
   "negative_claims": [
     "GnuCOBOL file organization",
@@ -39,26 +39,26 @@
     "silent repair of dirty bytes",
     "lie prevented: 'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
   ],
-  "negative_capability_ids": [
-    "NEG.GNUCOBOL-FILE-ORGANIZATION",
-    "NEG.INDEXED-RELATIVE-I-O",
-    "NEG.LINE-SEQUENTIAL-RUNTIME-PARITY",
-    "NEG.AUTO-RESYNCHRONIZATION",
-    "NEG.ENCODING-AUTO-DETECTION",
-    "NEG.SILENT-REPAIR-OF-DIRTY-BYTES"
+  "oracle": {
+    "detail": "deterministic ingest invariants (not GnuCOBOL file I/O)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-rs-sealed-court",
+    "upstream_court": null
+  },
+  "positive_claims": [
+    "raw stream splits into fixed-length records with true offsets, named trailing/partial policies, byte-stable file audit, stable exit codes"
   ],
-  "byte_domains": [
-    "raw byte stream -> record spans (offset,len)"
-  ],
-  "lie_prevented": [
-    "'a fixed-record file just chunks cleanly' -- partial/trailing-newline shapes are policy decisions, not silent behavior"
-  ],
-  "damage_if_overclaimed": "silently absorbing a partial/extra record drops or duplicates a banking record",
   "replay": {
     "command": "deterministic ingest invariants (not GnuCOBOL file I/O)",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "108efc8ef650e8401820faaae50bb73e86a0ffa1f349a861e680f8459d1820e1"
-  }
+  "results": {
+    "fail": 0,
+    "note": "tests/file.rs 10 green; ingest==reconcile offsets",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -522,7 +522,7 @@
       "proven": "optional cryptographic verification of generated DSSE/in-toto artifacts by the Rust `kobold-attest` tool (ed25519): unsigned is an EXPLICIT honest state (unsigned_no_key_configured), signed verifies under a configured key, and tampered payload / tampered signature / wrong key / payload mismatch each yield a DISTINCT status (no fake green)",
       "byte_domain": "DSSE PAE over the in-toto payload, verified by ed25519 under a configured key",
       "oracle": "ed25519 (ed25519-compact, pinned) over the DSSE PAE; selftest proves all states",
-      "fixtures": "lab/attest (rust) selftest (6 states) + lab/attest/run.py over all casefiles -> reports/signing/verification-report.json",
+      "fixtures": "kobold-attest (external rust, ed25519) selftest (6 states) + kobold-attest check over all casefiles -> reports/signing/verification-report.json",
       "sealed_version": "kobold-attest 0.1.0 (lab tool)",
       "not_proven": "regulatory compliance; production approval; customer acceptance; long-term key custody/rotation/revocation; identity trust beyond the configured key; complete supply-chain assurance beyond listed materials",
       "breaks_claim": "treating a verified signature as compliance/approval/acceptance; claiming key governance or identity trust not configured; reporting signed_verified without an actual verification",

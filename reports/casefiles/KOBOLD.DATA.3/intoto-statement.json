@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/KOBOLD.DATA.3/casefile.json",
-      "digest": {
-        "sha256": "e54b29b4f1b917111bfd7c5bd0f75dd351e1cc14bf362c1abdd6222b2279edec"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "KOBOLD.DATA.3",
-    "kind": "composition-casefile",
     "crate": "kobold-data-shim",
     "crate_version": "kobold-data-shim 0.4.0",
-    "verdict": "pass",
+    "kind": "composition-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "e5ea397a2fb38e250612fefa8ddf1d227b5b1c4030372938f23d153ac779fd3e",
+      "receipt_sha256": null
+    },
+    "negative_claim_count": 3,
+    "positive_claim_count": 1,
     "replay": {
       "command": "sealed GNURUST courts",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "50caabc6f3dce3304dca839c1aeb33f91296f05d3f3c84c0e2dd10283152be88",
-      "receipt_sha256": null
-    },
-    "positive_claim_count": 1,
-    "negative_claim_count": 3
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "4ce2a0a91aaa871e35b04e53f14138555337e0df984430ef10355e3612ce57aa"
+      },
+      "name": "reports/casefiles/KOBOLD.DATA.3/casefile.json"
+    }
+  ]
 }

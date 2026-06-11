@@ -146,7 +146,7 @@ def migrate():
     print(f"migrated {moved} legacy reports -> research/legacyreports/ (manifest: {len(manifest)} entries)")
     # regenerate casefiles so legacy_preservation.legacy_paths now point at the quarantine location.
     import subprocess
-    subprocess.run(["python3", os.path.join(ROOT, "lab/casefile/run.py"), "generate"], cwd=ROOT)
+    subprocess.run(["kobold-courts", "casefile", "generate", "--root", ROOT], cwd=ROOT)
 
 def check():
     bad = 0

@@ -1,8 +1,8 @@
-<!-- DO NOT EDIT BY HAND. Generated from casefile.json by lab/casefile/run.py.
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — KOBOLD.ENTERPRISE.2 (court-casefile)
 
-**Verdict: PASS** · lab/attest (rust) selftest (6 states) + lab/attest/run.py over all casefiles -> reports/signing/verification-report.json · crate `kobold-data-shim` kobold-attest 0.1.0 (lab tool)
+**Verdict: PASS** · kobold-attest (external rust, ed25519) selftest (6 states) + kobold-attest check over all casefiles -> reports/signing/verification-report.json · crate `kobold-data-shim` kobold-attest 0.1.0 (lab tool)
 
 - **Oracle:** ed25519 (ed25519-compact, pinned) over the DSSE PAE; selftest proves all states
 - **Byte domain(s):** DSSE PAE over the in-toto payload, verified by ed25519 under a configured key

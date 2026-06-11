@@ -1,82 +1,41 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.12",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
   },
-  "inputs": {
-    "claim_ladder_entry_sha256": "a932add43c3c75af7960974cea34eebcb5db6ded8bb1b1a0d2dd1cc681d19e55",
-    "receipt_sha256": "9f648ccf1544c2e33cb6f13aa698f30b56ef20f170e9a358b2a26f53684ca01b"
-  },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc SET final bytes",
-    "upstream_court": "GNURUST.12",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "52 sweep + fuzz"
-  },
-  "positive_claims": [
-    "canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc",
-    "output satisfies eval_88"
-  ],
-  "negative_claims": [
-    "SET TO FALSE",
-    "FALSE clause",
-    "expressions",
-    "execution",
-    "lie prevented: 'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
-  ],
-  "negative_capability_ids": [
-    "NEG.SET-TO-FALSE",
-    "NEG.FALSE-CLAUSE",
-    "NEG.EXPRESSIONS",
-    "NEG.EXECUTION"
-  ],
   "byte_domains": [
     "parent field-storage bytes"
   ],
-  "lie_prevented": [
-    "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
-  ],
+  "case_id": "GNURUST.12",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
   "damage_if_overclaimed": "a wrong SET writes a status the program never intended",
-  "replay": {
-    "command": "bash lab/oracle/set_sweep.sh",
-    "exit_code": 0
-  },
   "hash_chain": {
-    "inputs_sha256": "a36078e17313655a3d2200a5c686627b691ca6c69f518d7f5391a61fc3b449ac"
+    "inputs_sha256": "15ed4f0add8c0fcc79b9d13c009f403744a20d65bdaf2140cf7dca8ef8fba0b0"
   },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e5527662402ed3dd543dd48f116eb4f34703e6c7dac0afb15aa848cab039dcb6",
+    "receipt_sha256": "5321456a4903cbac7273bfa37713e33c193a3d5d0853845cdb357d0e1ffb63e0"
+  },
+  "kind": "court-casefile",
   "legacy_preservation": {
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-SET88-12.md"
-    ],
-    "legacy_sha256": [
-      "1adf117e1b4ac341b2103dd2478ae203b26dee6198c522aae952a5f369b19250"
-    ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
     "legacy_claims_carried_forward": [
       "canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc",
       "output satisfies eval_88"
     ],
+    "legacy_information_preserved": true,
     "legacy_non_claims_carried_forward": [
       "SET TO FALSE",
       "FALSE clause",
       "expressions",
       "execution",
-      "lie prevented: 'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes"
+      "lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
     ],
     "legacy_notes_carried_forward": [
       "GNURUST.12 admits `SET condition-name TO TRUE` only as an oracle-proven parent-byte construction:",
@@ -84,14 +43,55 @@
       "without claiming Procedure Division execution, FALSE-clause behavior, condition expressions, or",
       "business validity beyond the selected `VALUE` clause."
     ],
+    "legacy_paths": [
+      "research/legacyreports/reports/RECEIPT-GNURUST-SET88-12.md"
+    ],
+    "legacy_sha256": [
+      "1adf117e1b4ac341b2103dd2478ae203b26dee6198c522aae952a5f369b19250"
+    ],
     "legacy_unstructured_notes": [
       "[Oracle] `lab/oracle/set_sweep.sh` builds one program per case that `SET`s the condition TRUE and dumps the parent's raw bytes via a `REDEFINES X(size)` (`-free` to avoid the 72-column margin). The Rust mirror runs `set_88_true` and **also self-checks `eval_88`** on its own output before the byte comparison.",
       "[Evidence] | Check | Result | |-------|--------| | `SET ... TO TRUE` differential sweep vs `cobc` final parent bytes | **total=52 PASS=52 FAIL=0** (`lab/oracle/set_sweep.sh`): alphanumeric single/multi(first)/range(lower); numeric DISPLAY single/multi/range, signed, `V`-scaled; COMP-3 single/range; every Rust output also passes the `eval_88` self-check | | Self-contained `cargo test` | cond: 4/4 (incl. `set_true_picks_first_and_round_trips`) | | Value-court regression after the shared `encode_numeric` refactor | value sweep `PASS=392 FAIL=0` (unchanged) | | Fuzz (`cond`, now also `set_88_true` + round-tr"
     ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
+  },
+  "lie_prevented": [
+    "'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
+  ],
+  "negative_capability_ids": [
+    "NEG.SET-TO-FALSE",
+    "NEG.FALSE-CLAUSE",
+    "NEG.EXPRESSIONS",
+    "NEG.EXECUTION"
+  ],
+  "negative_claims": [
+    "SET TO FALSE",
+    "FALSE clause",
+    "expressions",
+    "execution",
+    "lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
+  ],
+  "oracle": {
+    "detail": "cobc SET final bytes",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.12"
+  },
+  "positive_claims": [
+    "canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc",
+    "output satisfies eval_88"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/set_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "52 sweep + fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

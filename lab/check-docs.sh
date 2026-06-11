@@ -176,7 +176,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     bad "TRUST.2: receipt drift"; cat /tmp/_rec_check
   fi
   # TRUST.4: every court has a generated forensic casefile; generated views match; negatives >= positives.
-  if python3 "$ROOT/lab/casefile/run.py" check >/tmp/_case_check 2>&1; then
+  if command -v kobold-courts >/dev/null 2>&1 && kobold-courts casefile check --root "$ROOT" >/tmp/_case_check 2>&1; then
     note "TRUST.4: forensic casefiles current (generated views match, negatives >= positives)"
   else
     bad "TRUST.4: casefile drift"; cat /tmp/_case_check

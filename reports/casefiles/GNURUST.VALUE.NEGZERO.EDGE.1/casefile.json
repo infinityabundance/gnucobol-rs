@@ -1,36 +1,34 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "VALUE-image negative-zero sign across usage x literal-form x scale; oracle rule + the locked gnucobol-rs divergence set (COMP-3 integer-form only)"
+  ],
+  "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "a blanket negative-zero fix corrupts the decimal-form and DISPLAY cells (which are correct); treating this as a broad VALUE bug overstates a 4-cell edge; conflating it with arithmetic -0 breaks GNURUST.13's deliberate sign-on-zero",
+  "hash_chain": {
+    "inputs_sha256": "e1d04d85a93cc4c755ee5f19a3a22a9a745de9d2dd23e90a150a91882acd2106"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "e122812499c95bb4c45b516c7c98a39c20e07015cb1da97f5f9e60b88dc1c7cd",
-    "receipt_sha256": "d6bf7e83ecd5c9456150bc869db3186e4d45c9bd2fb908cdb2a8980ee5862b1d"
+    "claim_ladder_entry_sha256": "26013d00cc571ff1da6a4284cabdaec345496c8a218e90fa0645f509f8b47f91",
+    "receipt_sha256": "d55a607667d1d19f35124b128caa837745e20a6d161603f74d45be5bf421fd3e"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc VALUE initial image (cobc/typeck.c + libcob packed/zoned encode)",
-    "upstream_court": "GNURUST.VALUE.NEGZERO.EDGE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 8,
-    "pass": 8,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "characterized the negative-zero VALUE-image sign rule across the full matrix (usage x literal-form x sign x scale) under the gnucobol-3.2.0 oracle, sweep 11/0, harvested by GNURUST.LINEAGE.CORPUS.20M (1056 hits): cobc's rule is SHAPE-SENSITIVE ON THE LITERAL FORM, not the field scale -- COMP-3 + integer-form literal (no decimal point) CANONICALIZES negative-zero to the POSITIVE packed sign nibble 0C, COMP-3 + decimal-form literal (has a '.') PRESERVES negative 0D even in a V99 field, DISPLAY always PRESERVES negative as overpunch 0x70, signed binary stores all-zero with no sign nibble, and unsigned VALUE -0 is a compile error",
-    "this BOUNDS GNURUST.8 (which did not test negative-zero) and LOCKS the exact gnucobol-rs divergence: value_image diverges from cobc ONLY for COMP-3 packed integer-form negative-zero (oracle 0C vs rust 0D) -- the 4 cells comp3-int-0/-00/-000 + comp3v99-int0 -- while DISPLAY and decimal-form COMP-3 MATCH",
-    "the well-scoped PATCH WAS THEN APPLIED (value_image, init::encode_numeric packed branch: canonicalize the packed sign nibble for integer-form zero ONLY, scale==0) -- the 4 COMP-3 integer cells flipped known_diverge->match, value_image is now BYTE-EXACT with cobc, the divergence set is EMPTY, and the court now LOCKS PARITY (an under-fix re-diverges a COMP-3 integer cell, an over-fix diverges a DISPLAY/decimal cell -- either turns it RED)",
-    "value_sweep stays 392/0 and set_sweep 52/0 (no regression)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'just canonicalize negative zero' is WRONG and was proven so (the blanket parse_num fix regressed value_sweep 391/392) -- the rule is shape-sensitive ON THE LITERAL FORM: cobc canonicalizes -0 to positive ONLY for COMP-3 integer-form literals, while PRESERVING the sign for decimal-form COMP-3 and for ALL DISPLAY; so the divergence is a narrow, exactly-located edge (4 cells), not a blanket bug, and GNURUST.8 is bounded accordingly"
+  ],
+  "negative_capability_ids": [
+    "NEG.NEGATIVE-ZERO-SEMANTICS-GENERALLY-THE-PA",
+    "NEG.A-BLANKET-PARSE-NUM-CANONICALIZATION-WAS",
+    "NEG.NEGATIVE-ZERO-UNDER-ARITHMETIC-MOVE-COMP",
+    "NEG.FIGURATIVE-ZERO",
+    "NEG.OTHER-USAGES-DIALECTS",
+    "NEG.THE-BROADER-SIGNED-ZERO-SPACE-BEYOND-VAL"
   ],
   "negative_claims": [
     "negative-zero semantics GENERALLY (the patch fixes VALUE INITIALIZATION only -- the COMP-3 integer-form packed sign nibble",
@@ -41,26 +39,28 @@
     "the broader signed-zero space beyond VALUE initialization",
     "lie prevented: 'just canonicalize negative zero' is WRONG and was proven so (the blanket parse_num fix regressed value_sweep 391/392) -- the rule is shape-sensitive ON THE LITERAL FORM: cobc canonicalizes -0 to positive ONLY for COMP-3 integer-form literals, while PRESERVING the sign for decimal-form COMP-3 and for ALL DISPLAY; so the divergence is a narrow, exactly-located edge (4 cells), not a blanket bug, and GNURUST.8 is bounded accordingly"
   ],
-  "negative_capability_ids": [
-    "NEG.NEGATIVE-ZERO-SEMANTICS-GENERALLY-THE-PA",
-    "NEG.A-BLANKET-PARSE-NUM-CANONICALIZATION-WAS",
-    "NEG.NEGATIVE-ZERO-UNDER-ARITHMETIC-MOVE-COMP",
-    "NEG.FIGURATIVE-ZERO",
-    "NEG.OTHER-USAGES-DIALECTS",
-    "NEG.THE-BROADER-SIGNED-ZERO-SPACE-BEYOND-VAL"
+  "oracle": {
+    "detail": "cobc VALUE initial image (cobc/typeck.c + libcob packed/zoned encode)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.VALUE.NEGZERO.EDGE.1"
+  },
+  "positive_claims": [
+    "characterized the negative-zero VALUE-image sign rule across the full matrix (usage x literal-form x sign x scale) under the gnucobol-3.2.0 oracle, sweep 11/0, harvested by GNURUST.LINEAGE.CORPUS.20M (1056 hits): cobc's rule is SHAPE-SENSITIVE ON THE LITERAL FORM, not the field scale -- COMP-3 + integer-form literal (no decimal point) CANONICALIZES negative-zero to the POSITIVE packed sign nibble 0C, COMP-3 + decimal-form literal (has a '.') PRESERVES negative 0D even in a V99 field, DISPLAY always PRESERVES negative as overpunch 0x70, signed binary stores all-zero with no sign nibble, and unsigned VALUE -0 is a compile error",
+    "this BOUNDS GNURUST.8 (which did not test negative-zero) and LOCKS the exact gnucobol-rs divergence: value_image diverges from cobc ONLY for COMP-3 packed integer-form negative-zero (oracle 0C vs rust 0D) -- the 4 cells comp3-int-0/-00/-000 + comp3v99-int0 -- while DISPLAY and decimal-form COMP-3 MATCH",
+    "the well-scoped PATCH WAS THEN APPLIED (value_image, init::encode_numeric packed branch: canonicalize the packed sign nibble for integer-form zero ONLY, scale==0) -- the 4 COMP-3 integer cells flipped known_diverge->match, value_image is now BYTE-EXACT with cobc, the divergence set is EMPTY, and the court now LOCKS PARITY (an under-fix re-diverges a COMP-3 integer cell, an over-fix diverges a DISPLAY/decimal cell -- either turns it RED)",
+    "value_sweep stays 392/0 and set_sweep 52/0 (no regression)"
   ],
-  "byte_domains": [
-    "VALUE-image negative-zero sign across usage x literal-form x scale; oracle rule + the locked gnucobol-rs divergence set (COMP-3 integer-form only)"
-  ],
-  "lie_prevented": [
-    "'just canonicalize negative zero' is WRONG and was proven so (the blanket parse_num fix regressed value_sweep 391/392) -- the rule is shape-sensitive ON THE LITERAL FORM: cobc canonicalizes -0 to positive ONLY for COMP-3 integer-form literals, while PRESERVING the sign for decimal-form COMP-3 and for ALL DISPLAY; so the divergence is a narrow, exactly-located edge (4 cells), not a blanket bug, and GNURUST.8 is bounded accordingly"
-  ],
-  "damage_if_overclaimed": "a blanket negative-zero fix corrupts the decimal-form and DISPLAY cells (which are correct); treating this as a broad VALUE bug overstates a 4-cell edge; conflating it with arithmetic -0 breaks GNURUST.13's deliberate sign-on-zero",
   "replay": {
     "command": "bash lab/oracle/edge_negzero_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "40aac136c97d6f1e27b2639492ee9f91db2e5c1a722ded4796668ba5b5445a85"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 8,
+    "total": 8,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

@@ -1,35 +1,37 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.IF.NUMERIC.SLICE.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes"
+  ],
+  "case_id": "GNURUST.IF.NUMERIC.SLICE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "comparing numeric amounts as bytes (or vice versa) takes the wrong IF/EVALUATE branch, corrupting derived flags and classifications",
+  "hash_chain": {
+    "inputs_sha256": "ff3e7257f22426d57e25707f860df4f9531946ee7d860e0faf169e1af51bd9f8"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "b9965ce092a8cebce5dedbaa0af629b9e636ad44d2d402edc36fb7fc3f0f9ed0",
-    "receipt_sha256": "78f380fca20ed689f132afce598f8510f83510c9cda01d9f378d8d0e50a3de88"
+    "claim_ladder_entry_sha256": "b2c2a5ff8f93c8e64d19510ec82ff46a639a74e97c203db33884525628a16065",
+    "receipt_sha256": "bb4ac77276181f26fe98662c648cb9636fbfb7bd7de756dd448a0d6be702de55"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc numeric IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob)",
-    "upstream_court": "GNURUST.IF.NUMERIC.SLICE.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 7,
-    "pass": 7,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "the numeric counterpart of GNURUST.IF.EVALUATE.SLICE.1 (which is alphanumeric): a narrow interpreter EXECUTES an IF/EVALUATE over unsigned 9(n) numeric fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 7/0). The condition compares the field's decoded VALUE to a literal (= NOT= > < >= <=) -- so the comparison is numeric (N=50, N>100 false) not byte-wise",
-    "EVALUATE matches a numeric subject against WHEN literals else WHEN OTHER",
-    "branches MOVE a literal into the numeric field width. Completes the conditional-logic slice for BOTH data classes"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch"
+  ],
+  "negative_capability_ids": [
+    "NEG.SIGNED-PACKED-V-SCALED-NUMERICS",
+    "NEG.MOVE-FIELD-TO-FIELD",
+    "NEG.NUMERIC-SIZE-ERROR",
+    "NEG.COMPOUND-CLASS-CONDITIONS",
+    "NEG.88-LEVEL",
+    "NEG.RANGE-THRU-WHEN",
+    "NEG.NON-MOVE-BRANCHES",
+    "NEG.NESTED-FLOW",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "signed/packed/V-scaled numerics",
@@ -43,29 +45,27 @@
     "all dialects",
     "lie prevented: a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch"
   ],
-  "negative_capability_ids": [
-    "NEG.SIGNED-PACKED-V-SCALED-NUMERICS",
-    "NEG.MOVE-FIELD-TO-FIELD",
-    "NEG.NUMERIC-SIZE-ERROR",
-    "NEG.COMPOUND-CLASS-CONDITIONS",
-    "NEG.88-LEVEL",
-    "NEG.RANGE-THRU-WHEN",
-    "NEG.NON-MOVE-BRANCHES",
-    "NEG.NESTED-FLOW",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc numeric IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.IF.NUMERIC.SLICE.1"
+  },
+  "positive_claims": [
+    "the numeric counterpart of GNURUST.IF.EVALUATE.SLICE.1 (which is alphanumeric): a narrow interpreter EXECUTES an IF/EVALUATE over unsigned 9(n) numeric fields and produces the same resulting STORAGE BYTES as cobc/libcob (verified 7/0). The condition compares the field's decoded VALUE to a literal (= NOT= > < >= <=) -- so the comparison is numeric (N=50, N>100 false) not byte-wise",
+    "EVALUATE matches a numeric subject against WHEN literals else WHEN OTHER",
+    "branches MOVE a literal into the numeric field width. Completes the conditional-logic slice for BOTH data classes"
   ],
-  "byte_domains": [
-    "execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes"
-  ],
-  "lie_prevented": [
-    "a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch"
-  ],
-  "damage_if_overclaimed": "comparing numeric amounts as bytes (or vice versa) takes the wrong IF/EVALUATE branch, corrupting derived flags and classifications",
   "replay": {
     "command": "bash lab/oracle/if_numeric_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "7498d73ee283430dc61246bad27735bec682ff64be45f17f60961e95b2edaddf"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 7,
+    "total": 7,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

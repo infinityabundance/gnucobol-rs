@@ -1,14 +1,6 @@
 {
-  "schema": "kobold-enterprise2-verification-report-v1",
-  "court": "KOBOLD.ENTERPRISE.2",
-  "signing_mode": "unsigned",
-  "tool": "kobold-attest (rust, ed25519-compact)",
-  "tool_available": true,
-  "selftest_passed": true,
   "casefiles": 98,
-  "summary": {
-    "unsigned_no_key_configured": 98
-  },
+  "court": "KOBOLD.ENTERPRISE.2",
   "entries": [
     {
       "court": "DIALECT.PROFILE.1",
@@ -410,5 +402,13 @@
     "NEG.ENTERPRISE2.NO_LONG_TERM_KEY_CUSTODY",
     "NEG.ENTERPRISE2.NO_IDENTITY_TRUST_BEYOND_KEY",
     "NEG.ENTERPRISE2.NO_SUPPLY_CHAIN_COMPLETENESS"
-  ]
+  ],
+  "schema": "kobold-enterprise2-verification-report-v1",
+  "selftest_passed": true,
+  "signing_mode": "unsigned",
+  "summary": {
+    "unsigned_no_key_configured": 98
+  },
+  "tool": "kobold-attest (rust, ed25519-compact)",
+  "tool_available": true
 }

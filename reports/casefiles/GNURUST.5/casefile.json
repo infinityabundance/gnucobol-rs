@@ -1,89 +1,89 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.5",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
   },
-  "inputs": {
-    "claim_ladder_entry_sha256": "2cdb0c45d233e0c00a4e9b400da4b96efa8d669a32debb95b35ebf6bfb38d9dd",
-    "receipt_sha256": "f7ca8a4c174c36bcca571f96a22b5b79afcb0edea6aa07857cadac8510e346cd"
-  },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc -P",
-    "upstream_court": "GNURUST.5",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": null,
-    "pass": null,
-    "fail": 0,
-    "verdict": "pass",
-    "note": "7 programs sweep + 4M fuzz"
-  },
-  "positive_claims": [
-    "COPY <name>. splice matching cobc -P text-word stream (nested, cycle-detected, provenance-mapped)"
-  ],
-  "negative_claims": [
-    "inline/multi-line COPY",
-    "OF/IN library",
-    "SUPPRESS",
-    "lie prevented: 'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
-  ],
-  "negative_capability_ids": [
-    "NEG.INLINE-MULTI-LINE-COPY",
-    "NEG.OF-IN-LIBRARY",
-    "NEG.SUPPRESS"
-  ],
   "byte_domains": [
     "expanded source text-word stream"
   ],
-  "lie_prevented": [
-    "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
-  ],
+  "case_id": "GNURUST.5",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
   "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with",
-  "replay": {
-    "command": "bash lab/oracle/copy_sweep.sh",
-    "exit_code": 0
-  },
   "hash_chain": {
-    "inputs_sha256": "5880ec8da2702758d30f0f0a00ccaea26e7b5a47b8c6e72901d10f062bb09954"
+    "inputs_sha256": "62b76802c4637bd5869323a98cc0efaa7d9cef4221149a04d1e7e3b8b62f7149"
   },
+  "inputs": {
+    "claim_ladder_entry_sha256": "8711eec34ed5583cd9cb0e1c455de87258c4d7b71e0f8799a2e5292ad9de7953",
+    "receipt_sha256": "16e465badafad3c451f6ea812ffb776389bae3037204e5c8ee17156c75cf33cc"
+  },
+  "kind": "court-casefile",
   "legacy_preservation": {
+    "information_loss_review": {
+      "missing_items": [],
+      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
+      "verdict": "pass"
+    },
+    "legacy_claims_carried_forward": [
+      "COPY <name>. splice matching cobc -P text-word stream (nested, cycle-detected, provenance-mapped)"
+    ],
+    "legacy_information_preserved": true,
+    "legacy_non_claims_carried_forward": [
+      "inline/multi-line COPY",
+      "OF/IN library",
+      "SUPPRESS",
+      "lie prevented: 'substring replacement is close enough' — COPY REPLACING is whole-text-word"
+    ],
+    "legacy_notes_carried_forward": [
+      "(no doctrine blockquote)"
+    ],
     "legacy_paths": [
       "research/legacyreports/reports/RECEIPT-GNURUST-COPY-5.md"
     ],
     "legacy_sha256": [
       "580c9237cf167d07da986b4c7bc01293fd8ea029a99b119e43daca0a1ab766d7"
     ],
-    "legacy_information_preserved": true,
-    "preservation_method": "full_file_preserved_plus_embedded_summary",
-    "legacy_claims_carried_forward": [
-      "COPY <name>. splice matching cobc -P text-word stream (nested, cycle-detected, provenance-mapped)"
-    ],
-    "legacy_non_claims_carried_forward": [
-      "inline/multi-line COPY",
-      "OF/IN library",
-      "SUPPRESS",
-      "lie prevented: 'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
     "legacy_unstructured_notes": [
-      "[Oracle] `cobc -P=<file> -I <copydir> -fsyntax-only <prog.cob>` writes the preprocessed (COPY-expanded) source; the sweep strips its line-number column and tokenizes to text-words. The Rust mirror (`examples/copy_rows`) resolves copybooks from the same directory (mirroring `cobc`'s name+extension search) and tokenizes its expansion. (`cobc -P` is the GnuCOBOL preprocessor's own output \u2014 `GNURUST.GENC.0`-style witness of the COPY phase.)",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc -P` | **programs=3, PASS=3 FAIL=0** (`lab/oracle/copy_sweep.sh`): simple COPY, nested COPY (a copybook copying two others), multiple sequential COPYs | | Self-contained `cargo test` | copybook: 3/3 (splice + provenance; nested; recursive/missing/REPLACING fail closed) | | Fuzz (`copybook` target, arbitrary source+copybooks) | **3,000,000 runs, 0 crashes** \u2014 cycles / missing / deep nesting all yield typed `CopyError` | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
+      "[Oracle] `cobc -P=<file> -I <copydir> -fsyntax-only <prog.cob>` writes the preprocessed (COPY-expanded) source; the sweep strips its line-number column and tokenizes to text-words. The Rust mirror (`examples/copy_rows`) resolves copybooks from the same directory (mirroring `cobc`'s name+extension search) and tokenizes its expansion. (`cobc -P` is the GnuCOBOL preprocessor's own output — `GNURUST.GENC.0`-style witness of the COPY phase.)",
+      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc -P` | **programs=3, PASS=3 FAIL=0** (`lab/oracle/copy_sweep.sh`): simple COPY, nested COPY (a copybook copying two others), multiple sequential COPYs | | Self-contained `cargo test` | copybook: 3/3 (splice + provenance; nested; recursive/missing/REPLACING fail closed) | | Fuzz (`copybook` target, arbitrary source+copybooks) | **3,000,000 runs, 0 crashes** — cycles / missing / deep nesting all yield typed `CopyError` | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
     ],
-    "information_loss_review": {
-      "verdict": "pass",
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "missing_items": []
-    }
-  }
+    "preservation_method": "full_file_preserved_plus_embedded_summary"
+  },
+  "lie_prevented": [
+    "'substring replacement is close enough' — COPY REPLACING is whole-text-word"
+  ],
+  "negative_capability_ids": [
+    "NEG.INLINE-MULTI-LINE-COPY",
+    "NEG.OF-IN-LIBRARY",
+    "NEG.SUPPRESS"
+  ],
+  "negative_claims": [
+    "inline/multi-line COPY",
+    "OF/IN library",
+    "SUPPRESS",
+    "lie prevented: 'substring replacement is close enough' — COPY REPLACING is whole-text-word"
+  ],
+  "oracle": {
+    "detail": "cobc -P",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.5"
+  },
+  "positive_claims": [
+    "COPY <name>. splice matching cobc -P text-word stream (nested, cycle-detected, provenance-mapped)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/copy_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "7 programs sweep + 4M fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

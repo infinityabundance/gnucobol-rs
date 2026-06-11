@@ -1,35 +1,36 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "200K real-cobc witnesses: storage differential (oracle-default vs value_image) + directive variant (default vs -fbinary-* lineage delta)"
+  ],
+  "case_id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "treating the 200K pilot as the full 20M, or as a parity proof, or the negative-zero finding as fixed, each overclaims",
+  "hash_chain": {
+    "inputs_sha256": "739db4d0dc5b42db9ebe28ae39eeaca91544023bb56a024ac60247202dba4c36"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "552b037fc37e9cd3471387247ae4c13c215f8875cc5be66c7029e4ffadc1164e",
-    "receipt_sha256": "0b2944fb1821ddd580c09a5b6d179723ac51789ce0ab5f08e58995aa072ac21a"
+    "claim_ladder_entry_sha256": "957f3a305073436c3a4f05415a94efc5ebc0dfe15e9998ec1aae7f094a00e930",
+    "receipt_sha256": "acca7c2897b6f28a695911b694cff887256c00053f9e56dc8156211e1218bafd"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
-    "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 200000,
-    "pass": 200000,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "ran a 200K-witness pilot burn of DISTINCT generated COBOL programs COMPILED",
-    "RUN under the real pinned GnuCOBOL 3.2 oracle (NOT Rust fuzz iterations) and classified them by the three-way differential into a behavioral-cluster atlas, gate-GREEN: 0 untriaged, every reddening row covered by a CONFIRMED shrunk finding, Merkle root-of-roots intact, stratified replay byte-identical, harness isolation proven, and the four injected-fault tests (generator-manifest mutation / build-profile mutation / receipt tamper / finding-removal) each FORCE red",
-    "the burn HARVESTED a real oracle/Rust VALUE negative-zero divergence (S9(n) COMP-3 VALUE -0: cobc 0c vs gnucobol-rs 0d) -- shrunk to a 1-field minimal reproducer, classified confirmed_harvested, filed as the GNURUST.VALUE.NEGZERO.EDGE.1 candidate, and NOT hidden (it stays visible in the receipt as reddening_covered_by_confirmed_findings)"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'we ran 20M COBOL tests' is the cheap claim -- this is a 200K REAL-cobc pilot whose every mismatch is shrunk+filed and whose evidence is Merkle-bound + replay-deterministic + injected-fault-guarded; the 200K counts real compiled COBOL witnesses, not Rust iterations, and the one harvested divergence is shown, not hidden"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-FULL-20M-RUN-THIS-IS-A-200K-PILOT",
+    "NEG.THE-FULL-20M-IS-GNURUST-LINEAGE-CORPUS-2",
+    "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
+    "NEG.ALL-DIALECTS",
+    "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
+    "NEG.BUSINESS-CORRECTNESS",
+    "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-FI",
+    "NEG.FAMILIES-NOT-YET-EMITTING-STORAGE-DIRECT"
   ],
   "negative_claims": [
     "the full 20M run (this is a 200K PILOT",
@@ -42,28 +43,26 @@
     "families not yet emitting (storage + directive only in v0)",
     "lie prevented: 'we ran 20M COBOL tests' is the cheap claim -- this is a 200K REAL-cobc pilot whose every mismatch is shrunk+filed and whose evidence is Merkle-bound + replay-deterministic + injected-fault-guarded; the 200K counts real compiled COBOL witnesses, not Rust iterations, and the one harvested divergence is shown, not hidden"
   ],
-  "negative_capability_ids": [
-    "NEG.THE-FULL-20M-RUN-THIS-IS-A-200K-PILOT",
-    "NEG.THE-FULL-20M-IS-GNURUST-LINEAGE-CORPUS-2",
-    "NEG.FULL-GNUCOBOL-PARITY-STANDARD-CONFORMANC",
-    "NEG.ALL-DIALECTS",
-    "NEG.PUBLIC-CORPUS-EXECUTION-PARITY",
-    "NEG.BUSINESS-CORRECTNESS",
-    "NEG.THE-NEGATIVE-ZERO-FINDING-BEING-FIXED-FI",
-    "NEG.FAMILIES-NOT-YET-EMITTING-STORAGE-DIRECT"
+  "oracle": {
+    "detail": "real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
+  },
+  "positive_claims": [
+    "ran a 200K-witness pilot burn of DISTINCT generated COBOL programs COMPILED+RUN under the real pinned GnuCOBOL 3.2 oracle (NOT Rust fuzz iterations) and classified them by the three-way differential into a behavioral-cluster atlas, gate-GREEN: 0 untriaged, every reddening row covered by a CONFIRMED shrunk finding, Merkle root-of-roots intact, stratified replay byte-identical, harness isolation proven, and the four injected-fault tests (generator-manifest mutation / build-profile mutation / receipt tamper / finding-removal) each FORCE red",
+    "the burn HARVESTED a real oracle/Rust VALUE negative-zero divergence (S9(n) COMP-3 VALUE -0: cobc 0c vs gnucobol-rs 0d) -- shrunk to a 1-field minimal reproducer, classified confirmed_harvested, filed as the GNURUST.VALUE.NEGZERO.EDGE.1 candidate, and NOT hidden (it stays visible in the receipt as reddening_covered_by_confirmed_findings)"
   ],
-  "byte_domains": [
-    "200K real-cobc witnesses: storage differential (oracle-default vs value_image) + directive variant (default vs -fbinary-* lineage delta)"
-  ],
-  "lie_prevented": [
-    "'we ran 20M COBOL tests' is the cheap claim -- this is a 200K REAL-cobc pilot whose every mismatch is shrunk+filed and whose evidence is Merkle-bound + replay-deterministic + injected-fault-guarded; the 200K counts real compiled COBOL witnesses, not Rust iterations, and the one harvested divergence is shown, not hidden"
-  ],
-  "damage_if_overclaimed": "treating the 200K pilot as the full 20M, or as a parity proof, or the negative-zero finding as fixed, each overclaims",
   "replay": {
     "command": "bash lab/oracle/lineage_corpus_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "d971243211bd4de2e0aa5b1c8e7d0e838986014a48dafb5b1e8cb36f9c025bc9"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 200000,
+    "total": 200000,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }

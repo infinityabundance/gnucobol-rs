@@ -1,29 +1,29 @@
 {
   "_type": "https://in-toto.io/Statement/v1",
-  "subject": [
-    {
-      "name": "reports/casefiles/GNURUST.INTRINSIC.NUMVAL.1/casefile.json",
-      "digest": {
-        "sha256": "4c2307559e7139823d57665965b1c5048600121338ee48afe687dbec641c537f"
-      }
-    }
-  ],
-  "predicateType": "https://kobold/forensic-casefile/v1",
   "predicate": {
     "case_id": "GNURUST.INTRINSIC.NUMVAL.1",
-    "kind": "court-casefile",
     "crate": "gnucobol-rs",
     "crate_version": "0.7.27",
-    "verdict": "pass",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "b7f476117be9108c093210cdb3b018fe0a6d2cda40b74e0e55b0db40dddf86c9",
+      "receipt_sha256": "2780519f9436c3e469e3a4ecaba1d9d68fe46932f086bcdf33bd9fb8710afb4b"
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 2,
     "replay": {
       "command": "bash lab/oracle/numval_sweep.sh",
       "exit_code": 0
     },
-    "materials": {
-      "claim_ladder_entry_sha256": "4d891dc18cd8ac7a86616e2ca842e55c1640f7f74913741e690e680e209da6b8",
-      "receipt_sha256": "0c09d30d7370157a988504fc8798947dae98237aa1be2454abae4161f964b301"
-    },
-    "positive_claim_count": 2,
-    "negative_claim_count": 6
-  }
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "513cf4c275b93d973e4eeca6c5a02c446fcfd42c7eabf6fd608f148c9916eeb7"
+      },
+      "name": "reports/casefiles/GNURUST.INTRINSIC.NUMVAL.1/casefile.json"
+    }
+  ]
 }

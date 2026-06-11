@@ -1,34 +1,32 @@
 {
-  "schema": "kobold-forensic-casefile-v1",
-  "case_id": "GNURUST.INTRINSIC.LENGTH.1",
-  "kind": "court-casefile",
-  "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
   "authority": {
     "current_authority": "STATUS.md",
-    "receipt_status": "current",
-    "generated_by": "lab/casefile/run.py"
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "FUNCTION LENGTH(field) -> storage byte length"
+  ],
+  "case_id": "GNURUST.INTRINSIC.LENGTH.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.27",
+  "damage_if_overclaimed": "using a digit count where the storage byte length is meant (COMP-3/binary fields) mis-sizes buffers and offsets",
+  "hash_chain": {
+    "inputs_sha256": "7bed15ad5702717f2387fd746af148af867f59ac6aadd629d50a63f7bf79822e"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "5b551d24784e6e66d04e736d4e103647eed4e0fb99951d1a7e9745227094347b",
-    "receipt_sha256": "21e6631c1ba0eeb4afbb1ad864519d7fd2bccf2a43dc6ae9967d198b95080c69"
+    "claim_ladder_entry_sha256": "5376cc4743baf70a20e01ceb42865d1fe30aa8b099ca0c495f9600cdf1b14b59",
+    "receipt_sha256": "776875503e3a3331f9eaa82591a7a15871ccdd890bbd2621dd2983bec5bdc4f3"
   },
-  "oracle": {
-    "oracle_kind": "gnucobol-3.2-admitted",
-    "detail": "cobc FUNCTION LENGTH (libcob/intrinsic.c)",
-    "upstream_court": "GNURUST.INTRINSIC.LENGTH.1",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
-  "results": {
-    "total": 12,
-    "pass": 12,
-    "fail": 0,
-    "verdict": "pass"
-  },
-  "positive_claims": [
-    "FUNCTION LENGTH(elementary field) returns the storage byte length, matching cobc/libcob across DISPLAY (X(n)=n, numeric 9/S9 = digit count incl V implied), COMP-3 (packed byte count), and binary COMP/COMP-5 (storage width) -- the same byte count the sealed field model build_field (GNURUST.3/9/14) computes",
-    "the first IMPLEMENTED intrinsic, split out of GNURUST.INTRINSIC.ATLAS.1"
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte"
+  ],
+  "negative_capability_ids": [
+    "NEG.LENGTH-OF-GROUP-TABLE-REFERENCE-MODIFIED",
+    "NEG.LENGTH-OF-VARIANT",
+    "NEG.NATIONAL-UTF-8-CHARACTER-LENGTH",
+    "NEG.ALL-DIALECTS"
   ],
   "negative_claims": [
     "LENGTH of group/table/reference-modified operand",
@@ -37,24 +35,26 @@
     "all dialects",
     "lie prevented: 'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte"
   ],
-  "negative_capability_ids": [
-    "NEG.LENGTH-OF-GROUP-TABLE-REFERENCE-MODIFIED",
-    "NEG.LENGTH-OF-VARIANT",
-    "NEG.NATIONAL-UTF-8-CHARACTER-LENGTH",
-    "NEG.ALL-DIALECTS"
+  "oracle": {
+    "detail": "cobc FUNCTION LENGTH (libcob/intrinsic.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTRINSIC.LENGTH.1"
+  },
+  "positive_claims": [
+    "FUNCTION LENGTH(elementary field) returns the storage byte length, matching cobc/libcob across DISPLAY (X(n)=n, numeric 9/S9 = digit count incl V implied), COMP-3 (packed byte count), and binary COMP/COMP-5 (storage width) -- the same byte count the sealed field model build_field (GNURUST.3/9/14) computes",
+    "the first IMPLEMENTED intrinsic, split out of GNURUST.INTRINSIC.ATLAS.1"
   ],
-  "byte_domains": [
-    "FUNCTION LENGTH(field) -> storage byte length"
-  ],
-  "lie_prevented": [
-    "'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte"
-  ],
-  "damage_if_overclaimed": "using a digit count where the storage byte length is meant (COMP-3/binary fields) mis-sizes buffers and offsets",
   "replay": {
     "command": "bash lab/oracle/length_sweep.sh",
     "exit_code": 0
   },
-  "hash_chain": {
-    "inputs_sha256": "64a65878af2d4c4b2d4e244a0c5e704fc3fc61c7594efca7e27e31d0af2023b3"
-  }
+  "results": {
+    "fail": 0,
+    "pass": 12,
+    "total": 12,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
 }
