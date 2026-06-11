@@ -240,3 +240,49 @@ pub fn build_profile(root: &str) -> i32 {
     if ok { println!("PASS=1 FAIL=0"); 0 }
     else { println!("PASS=0 FAIL=1  (BUILD PROFILE DRIFT -- re-examine every ABI-sensitive court)"); 1 }
 }
+
+const NEGZERO_ATLAS: &str = include_str!("data/negzero-edge-atlas.json");
+
+pub fn negzero(root: &str, specs: &[String]) -> i32 {
+    let tmp = std::env::var("TMP").unwrap_or_default();
+    let orc: std::collections::HashMap<String, String> =
+        serde_json::from_str(&std::fs::read_to_string(Path::new(&tmp).join("oracle.json")).unwrap_or_default()).unwrap_or_default();
+    let mut rust = std::collections::HashMap::new();
+    for ln in std::fs::read_to_string(Path::new(&tmp).join("rust.txt")).unwrap_or_default().lines() {
+        let p: Vec<&str> = ln.split_whitespace().collect();
+        if p.len() == 2 { rust.insert(p[0].to_string(), p[1].to_lowercase()); }
+    }
+    struct Cell { group: String, literal_text: String, oracle_hex: String, classification: String }
+    let mut cells = Vec::new();
+    for spec in specs {
+        let f: Vec<&str> = spec.split('|').collect();
+        if f.len() < 6 { continue; }
+        let (lbl, val, grp, rc) = (f[0], f[3], f[4], f[5]);
+        let o = orc.get(lbl).cloned().unwrap_or_default();
+        let r = if rc == "1" { rust.get(lbl).cloned() } else { None };
+        let classification = match &r {
+            Some(rv) if *rv == o => "match",
+            Some(_) => "known_diverge",
+            None if o == "REJECT" => "compile_reject",
+            None => "oracle_only",
+        };
+        cells.push(Cell { group: grp.into(), literal_text: val.into(), oracle_hex: o, classification: classification.into() });
+    }
+    let g = |grp: &str| cells.iter().filter(|c| c.group == grp).collect::<Vec<_>>();
+    let div_empty = !cells.iter().any(|c| c.classification == "known_diverge");
+    let asserts: Vec<(&str, bool)> = vec![
+        ("oracle_comp3_integer_negzero_canonicalizes_positive", g("comp3_int").iter().filter(|c| c.literal_text.trim_start_matches(|ch| ch == '-' || ch == '+').trim_end_matches('0').is_empty()).all(|c| c.oracle_hex.ends_with('c'))),
+        ("oracle_comp3_decimal_negzero_preserves_negative", g("comp3_dec").iter().all(|c| c.oracle_hex.ends_with('d'))),
+        ("oracle_display_negzero_preserves_overpunch", g("display").iter().filter(|c| c.literal_text != "0").all(|c| c.oracle_hex.ends_with("70"))),
+        ("oracle_binary_negzero_collapses_to_zero_bytes", g("binary").iter().all(|c| c.oracle_hex.chars().all(|ch| ch == '0'))),
+        ("oracle_unsigned_negzero_rejected", g("unsigned").iter().all(|c| c.oracle_hex == "REJECT")),
+        ("rust_matches_comp3_integer_form_negzero", g("comp3_int").iter().all(|c| c.classification == "match") && div_empty),
+        ("rust_matches_display_negzero", g("display").iter().all(|c| c.classification == "match")),
+        ("rust_matches_comp3_decimal_form_negzero", g("comp3_dec").iter().all(|c| c.classification == "match")),
+    ];
+    let fails: Vec<&str> = asserts.iter().filter(|(_, ok)| !ok).map(|(n, _)| *n).collect();
+    writeatlas(root, "reports/negzero-edge-atlas.json", NEGZERO_ATLAS);
+    println!("PASS={} FAIL={}", asserts.len() - fails.len(), fails.len());
+    for n in &fails { println!("  FAIL {n}"); }
+    if fails.is_empty() { 0 } else { 1 }
+}
