@@ -170,7 +170,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *) bad "oracle freshness: DIVIDE sweep not clean ($DIVSWEEP)" ;;
   esac
   # TRUST.2: generated receipts must be current (live replay) + .md == render(.json), no manual edits.
-  if python3 "$ROOT/lab/receipt/run.py" check >/tmp/_rec_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- receipt check ) >/tmp/_rec_check 2>&1; then
     note "TRUST.2: receipts reproducible (generated == live replay, no hand-edits)"
   else
     bad "TRUST.2: receipt drift"; cat /tmp/_rec_check

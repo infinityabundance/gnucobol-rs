@@ -1,5 +1,5 @@
-<!-- GENERATED from receipt.json by lab/receipt/run.py — DO NOT EDIT BY HAND.
-     Regenerate: python3 lab/receipt/run.py generate -->
+<!-- GENERATED from receipt.json by xtask receipt — DO NOT EDIT BY HAND.
+     Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.7 — arithmetic ADD/SUB/MUL (+packed receiver)
 
 **Verdict: FAIL** · replay `no-result`
@@ -25,4 +25,4 @@
 
 > A receipt is the reproducible output of a replayable court run, not a static claim. This `.md` is
 > generated from `receipt.json`; the binding evidence is the JSON. Regenerate with
-> `python3 lab/receipt/run.py generate`.
+> `cargo run -p xtask -- receipt generate`.

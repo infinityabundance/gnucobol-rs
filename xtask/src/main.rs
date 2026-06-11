@@ -8,6 +8,7 @@ mod gap;
 mod coverage;
 mod corpus;
 mod dialect;
+mod receipt;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -21,6 +22,7 @@ fn main() {
         "coverage" => coverage::run(cmd, &root),
         "corpus" => corpus::run(cmd, &root),
         "dialect" => dialect::run(cmd, &root),
+        "receipt" => receipt::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2
