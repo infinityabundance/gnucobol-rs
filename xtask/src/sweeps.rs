@@ -70,3 +70,98 @@ pub fn ordchar(cases: &str, out: &str) -> i32 {
 }
 
 pub fn _unused(_: &Path) {}
+
+use std::process::Command;
+fn unhex2(s: &str) -> Vec<u8> {
+    let b = s.as_bytes(); let mut o = Vec::new(); let mut i = 0;
+    while i + 1 < b.len() { if let (Some(h), Some(l)) = ((b[i] as char).to_digit(16), (b[i+1] as char).to_digit(16)) { o.push((h*16+l) as u8); } i += 2; }
+    o
+}
+fn compile_run(tmp: &str, label: &str, prog: &str) -> Option<Vec<u8>> {
+    let cob = Path::new(tmp).join("p.cob");
+    let exe = Path::new(tmp).join("p");
+    let _ = std::fs::write(&cob, prog);
+    match Command::new("cobc").args(["-free", "-x", "-o"]).arg(&exe).arg(&cob).output() {
+        Ok(o) if o.status.success() => {}
+        Ok(o) => { eprintln!("compile {label} failed: {}", String::from_utf8_lossy(&o.stderr).chars().take(200).collect::<String>()); return None; }
+        Err(_) => return None,
+    }
+    Some(Command::new(&exe).output().map(|x| x.stdout).unwrap_or_default())
+}
+
+/// INITIALIZE: gen REC+REDEFINES, MOVE ALL "~", INITIALIZE, DISPLAY POST[REDF] -> reclen bytes hex.
+pub fn initialize(cases: &str, tmp: &str) -> i32 {
+    for line in read(cases).lines() {
+        let c: Vec<&str> = line.split('\t').collect();
+        if c.len() < 3 { continue; }
+        let (label, reclen, lines_) = (c[0], c[1], c[2]);
+        let decls = lines_.split('|').map(|d| format!("       {d}")).collect::<Vec<_>>().join("\n");
+        let prog = format!("       >>SOURCE FORMAT FREE\nIDENTIFICATION DIVISION.\nPROGRAM-ID. INIT.\nDATA DIVISION.\nWORKING-STORAGE SECTION.\n01 REC.\n{decls}\n01 REDF REDEFINES REC PIC X({reclen}).\nPROCEDURE DIVISION.\n    MOVE ALL \"~\" TO REDF.\n    INITIALIZE REC.\n    DISPLAY \"POST[\" REDF \"]\".\n    STOP RUN.\n");
+        let o = match compile_run(tmp, label, &prog) { Some(o) => o, None => continue };
+        let n: usize = reclen.parse().unwrap_or(0);
+        let posthex = match o.windows(5).position(|w| w == b"POST[") { Some(m) => { let s = m + 5; hexd(&o[s..(s + n).min(o.len())]) } None => String::new() };
+        println!("{label}\t{reclen}\t{lines_}\t{posthex}");
+    }
+    0
+}
+
+/// INSPECT TALLYING/REPLACING/CONVERTING: gen per case, parse OUT[ -> cap bytes hex.
+pub fn inspect(cases: &str, tmp: &str) -> i32 {
+    let reg = |spec: &str| -> String {
+        if let Some(s) = spec.strip_prefix("before:") { format!(" BEFORE INITIAL \"{s}\"") }
+        else if let Some(s) = spec.strip_prefix("after:") { format!(" AFTER INITIAL \"{s}\"") }
+        else { String::new() }
+    };
+    for line in read(cases).lines() {
+        let c: Vec<&str> = line.split('\t').collect();
+        if c.len() < 7 { continue; }
+        let (label, op, target, mode, a1, a2, rspec) = (c[0], c[1], c[2], c[3], c[4], c[5], c[6]);
+        let n = target.len();
+        let (stmt, disp) = if op == "TALLY" {
+            let m = match mode { "all" => format!("ALL \"{a1}\""), "leading" => format!("LEADING \"{a1}\""), _ => "CHARACTERS".to_string() };
+            (format!("INSPECT T TALLYING C FOR {m}{}", reg(rspec)), "DISPLAY \"OUT[\" CX \"]\"")
+        } else if op == "REPL" {
+            let m = match mode { "all" => format!("ALL \"{a1}\" BY \"{a2}\""), "leading" => format!("LEADING \"{a1}\" BY \"{a2}\""), _ => format!("FIRST \"{a1}\" BY \"{a2}\"") };
+            (format!("INSPECT T REPLACING {m}{}", reg(rspec)), "DISPLAY \"OUT[\" T \"]\"")
+        } else {
+            (format!("INSPECT T CONVERTING \"{a1}\" TO \"{a2}\"{}", reg(rspec)), "DISPLAY \"OUT[\" T \"]\"")
+        };
+        let prog = format!("       >>SOURCE FORMAT FREE\nIDENTIFICATION DIVISION.\nPROGRAM-ID. INSP.\nDATA DIVISION.\nWORKING-STORAGE SECTION.\n01 T PIC X({n}).\n01 C PIC 9(3).\n01 CX REDEFINES C PIC X(3).\nPROCEDURE DIVISION.\n    MOVE \"{target}\" TO T. MOVE 0 TO C.\n    {stmt}.\n    {disp}.\n    STOP RUN.\n");
+        let o = match compile_run(tmp, label, &prog) { Some(o) => o, None => continue };
+        let cap = if op == "TALLY" { 3 } else { n };
+        let oraclehex = match o.windows(4).position(|w| w == b"OUT[") { Some(m) => { let s = m + 4; hexd(&o[s..(s + cap).min(o.len())]) } None => String::new() };
+        println!("{label}\t{op}\t{target}\t{mode}\t{a1}\t{a2}\t{rspec}\t{oraclehex}");
+    }
+    0
+}
+
+/// sequential READ: write input file, run the pre-compiled org reader, parse REC[..][..]/END[..] events.
+pub fn seqfile(cases: &str, tmp: &str) -> i32 {
+    for line in read(cases).lines() {
+        let c: Vec<&str> = line.split('\t').collect();
+        if c.len() < 4 { continue; }
+        let (label, org, reclen_s, filehex) = (c[0], c[1], c[2], c[3]);
+        let reclen: usize = reclen_s.parse().unwrap_or(0);
+        let fp = Path::new(tmp).join("in.dat");
+        let _ = std::fs::write(&fp, unhex2(filehex));
+        let prog = Path::new(tmp).join(if org == "RECORD" { "rec" } else { "lin" });
+        let out = Command::new(&prog).env("DDIN", &fp).output().map(|x| x.stdout).unwrap_or_default();
+        let mut events = Vec::new();
+        let mut i = 0;
+        while i < out.len() {
+            if out[i..].starts_with(b"REC[") {
+                let rec = &out[i + 4..(i + 4 + reclen).min(out.len())];
+                let j = i + 4 + reclen;
+                let st = &out[(j + 2).min(out.len())..(j + 4).min(out.len())];
+                events.push(format!("R:{}:{}", hexd(rec), String::from_utf8_lossy(st)));
+                i = j + 5;
+            } else if out[i..].starts_with(b"END[") {
+                let st = &out[(i + 4).min(out.len())..(i + 6).min(out.len())];
+                events.push(format!("E:{}", String::from_utf8_lossy(st)));
+                i += 7;
+            } else { i += 1; }
+        }
+        println!("{label}\t{org}\t{reclen}\t{filehex}\t{}", events.join(";"));
+    }
+    0
+}

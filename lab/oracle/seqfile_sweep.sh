@@ -44,30 +44,4 @@ prog rec "RECORD SEQUENTIAL"
 prog lin "LINE SEQUENTIAL"
 
 # per case: write file, run the org program, extract events, append to the row
-python3 - "$TMP/cases.tsv" "$TMP" <<'PY' | "$ROWS"
-import subprocess, sys, os
-tmp = sys.argv[2]
-for line in open(sys.argv[1]):
-    label, org, reclen, filehex = line.rstrip("\n").split("\t")
-    reclen = int(reclen)
-    fb = bytes.fromhex(filehex)
-    fp = os.path.join(tmp, "in.dat"); open(fp, "wb").write(fb)
-    prog = os.path.join(tmp, "rec" if org == "RECORD" else "lin")
-    env = dict(os.environ, DDIN=fp)
-    out = subprocess.run([prog], capture_output=True, env=env).stdout
-    # parse REC[<reclen bytes>][<2>] and END[<2>] events in order
-    events = []
-    i = 0
-    while i < len(out):
-        if out[i:i+4] == b"REC[":
-            rec = out[i+4:i+4+reclen]; j = i+4+reclen
-            assert out[j:j+2] == b"][", (label, out[i:i+40])
-            st = out[j+2:j+4]
-            events.append("R:" + rec.hex() + ":" + st.decode())
-            i = j+5
-        elif out[i:i+4] == b"END[":
-            st = out[i+4:i+6]; events.append("E:" + st.decode()); i = i+7
-        else:
-            i += 1
-    print("\t".join([label, org, str(reclen), filehex, ";".join(events)]))
-PY
+( cd "$ROOT" && cargo run -q -p xtask -- sweep-seqfile "$TMP/cases.tsv" "$TMP" ) | "$ROWS"
