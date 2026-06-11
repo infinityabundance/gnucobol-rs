@@ -191,10 +191,14 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.4.DOCS: doc drift"; cat /tmp/_docs_check
   fi
-  if python3 "$ROOT/lab/attest/run.py" check >/tmp/_ent2_check 2>&1; then
-    note "ENTERPRISE.2: DSSE verification report fresh, no integrity failure (rust kobold-attest)"
+  if command -v kobold-attest >/dev/null 2>&1; then
+    if kobold-attest check --root "$ROOT" >/tmp/_ent2_check 2>&1; then
+      note "ENTERPRISE.2: DSSE verification report fresh, no integrity failure (external kobold-attest)"
+    else
+      bad "ENTERPRISE.2: attestation verification drift"; cat /tmp/_ent2_check
+    fi
   else
-    bad "ENTERPRISE.2: attestation verification drift"; cat /tmp/_ent2_check
+    note "ENTERPRISE.2: kobold-attest not installed -> skipped (honest; cargo install kobold-attest to enable)"
   fi
   if python3 "$ROOT/lab/support/run.py" check >/tmp/_supp_check 2>&1; then
     note "SUPPORT-PACKET.1: evidence bundle fresh (re-gather equality)"

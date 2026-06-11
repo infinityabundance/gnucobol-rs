@@ -73,7 +73,7 @@ def gather():
         "crate_versions": {"gnucobol-rs": crate_version() + " (this repo)",
                            "kobold-data-shim": "sibling repo (see its Cargo.toml/crates.io)",
                            "kobold-bench": "sibling repo (bench/scale receipts)",
-                           "kobold-attest": "lab/attest (publish=false; Cargo.lock pinned)"},
+                           "kobold-attest": "external repo: github.com/infinityabundance/kobold-attest (Apache-2.0; cargo install kobold-attest)"},
         "truth_boundary_summary": "bytes < record < transform < custody < reconciliation evidence < privacy-preserved < generated attestation; REFUSED above: posting, ledger, settlement, account-balance, business truth, production readiness, customer-workload representativeness, regulatory compliance.",
         "artifacts": artifacts,
         "non_claims": ["NEG.SUPPORT.NO_NEW_TRUTH", "NEG.SUPPORT.NOT_CERTIFICATION", "NEG.SUPPORT.NOT_COMPLIANCE",
