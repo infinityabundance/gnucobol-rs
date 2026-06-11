@@ -1,23 +1,14 @@
 {
-  "schema": "gnurust-replay-receipt-v1",
+  "byte_domain": "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file",
   "campaign": "GNURUST.SORT.MERGE.ATLAS.1",
-  "court": "observed SORT/MERGE atlas",
-  "generated_at": "unstamped",
-  "git_commit": "unstamped",
-  "crate_version": "0.7.27",
-  "oracle": {
-    "name": "GnuCOBOL",
-    "version": "cobc (GnuCOBOL) 3.2.0",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
   "command": {
     "replay": "bash lab/oracle/sort_merge_atlas_sweep.sh"
   },
-  "byte_domain": "SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file",
-  "results": {
-    "sweep": "PASS=2 FAIL=0"
-  },
+  "court": "observed SORT/MERGE atlas",
+  "crate_version": "0.7.28",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
   "non_claims": [
     "SORT execution",
     "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
@@ -27,8 +18,17 @@
     "custom collating sequence",
     "all dialects"
   ],
-  "verdict": "pass",
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
   "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=2 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,
-  "current_authority": "STATUS.md"
+  "verdict": "pass"
 }

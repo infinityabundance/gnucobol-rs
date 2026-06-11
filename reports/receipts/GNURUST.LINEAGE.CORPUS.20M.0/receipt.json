@@ -1,23 +1,14 @@
 {
-  "schema": "gnurust-replay-receipt-v1",
+  "byte_domain": "meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn)",
   "campaign": "GNURUST.LINEAGE.CORPUS.20M.0",
-  "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
-  "generated_at": "unstamped",
-  "git_commit": "unstamped",
-  "crate_version": "0.7.27",
-  "oracle": {
-    "name": "GnuCOBOL",
-    "version": "cobc (GnuCOBOL) 3.2.0",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
   "command": {
     "replay": "bash lab/oracle/lineage_engine_sweep.sh"
   },
-  "byte_domain": "meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn)",
-  "results": {
-    "sweep": "PASS=10 FAIL=0"
-  },
+  "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
+  "crate_version": "0.7.28",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
   "non_claims": [
     "full GnuCOBOL parity / standard conformance",
     "all dialects / public-corpus execution parity",
@@ -27,8 +18,17 @@
     "the negative-zero finding being fixed (filed as GNURUST.VALUE.NEGZERO.EDGE.1 candidate)",
     "families not yet emitting (v0 emits storage + directive of 15 planned)"
   ],
-  "verdict": "pass",
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
   "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=10 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,
-  "current_authority": "STATUS.md"
+  "verdict": "pass"
 }

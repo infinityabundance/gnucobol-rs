@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-98-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-98-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-99-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-99-blueviolet)
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -85,6 +85,7 @@ compatibility court.
 | `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | ✅ pass | `reports/casefiles/GNURUST.14/` |
 | `GNURUST.15` | EBCDIC cp500 DISPLAY decode | ✅ pass | `reports/casefiles/GNURUST.15/` |
 | `GNURUST.16` | edited-picture decode (16a+16b) | ✅ pass | `reports/casefiles/GNURUST.16/` |
+| `GNURUST.16C` | edited-picture encode (numeric->edited, 16c) | ✅ pass | `reports/casefiles/GNURUST.16C/` |
 | `GNURUST.17` | cp500 EBCDIC zoned numeric decode | ✅ pass | `reports/casefiles/GNURUST.17/` |
 | `GNURUST.18` | COMP-6 unsigned packed storage + MOVE | ✅ pass | `reports/casefiles/GNURUST.18/` |
 | `GNURUST.19` | DIVIDE receiving-field bytes | ✅ pass | `reports/casefiles/GNURUST.19/` |

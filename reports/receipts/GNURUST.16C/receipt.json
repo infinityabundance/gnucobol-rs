@@ -1,0 +1,32 @@
+{
+  "byte_domain": "numeric value -> edited DISPLAY field bytes",
+  "campaign": "GNURUST.16C",
+  "command": {
+    "replay": "bash lab/oracle/edited_encode_sweep.sh"
+  },
+  "court": "edited-picture encode (numeric->edited 16c)",
+  "crate_version": "0.7.28",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "floating +/- sign strings",
+    "report writer",
+    "locale/currency",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=92 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

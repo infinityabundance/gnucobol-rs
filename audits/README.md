@@ -18,7 +18,7 @@ Not everything is green by design — `not-run` is a valid, honest state.
 
 | Audit | State | How to reproduce |
 |-------|-------|------------------|
-| oracle sweeps (62 GNURUST courts) | **green** | `bash lab/verify-sealed-courts.sh` (needs built oracle) |
+| oracle sweeps (63 GNURUST courts) | **green** | `bash lab/verify-sealed-courts.sh` (needs built oracle) |
 | receipt replay (TRUST.2) | **green** | `python3 lab/receipt/run.py check` |
 | doc-staleness gate | **green** | `bash lab/check-docs.sh` |
 | self-contained court tests | **green** | `cargo test` |

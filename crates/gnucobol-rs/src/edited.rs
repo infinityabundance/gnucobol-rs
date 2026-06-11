@@ -205,6 +205,220 @@ pub fn decode_edited(pic: &str, bytes: &[u8]) -> Result<EditedDecode, EditedErro
     })
 }
 
+// ---- GNURUST.16c: numeric -> edited ENCODE (the inverse direction of decode_edited) ----------------
+
+fn sign_char(sym: char, neg: bool) -> char {
+    match (sym, neg) {
+        ('+', false) => '+',
+        ('+', true) => '-',
+        ('-', true) => '-',
+        _ => ' ', // '-' positive shows a space
+    }
+}
+
+/// Expand `(n)` repeats and validate every symbol is in the admitted edited subset.
+fn expand_repeats(chars: &[char]) -> Result<Vec<char>, EditedError> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < chars.len() {
+        let c = chars[i];
+        if !matches!(c, '9' | 'Z' | '*' | '$' | '+' | '-' | ',' | '.' | 'B' | '0' | '/') {
+            return Err(EditedError::UnsupportedSymbol(c));
+        }
+        i += 1;
+        let mut count = 1usize;
+        if i < chars.len() && chars[i] == '(' {
+            let mut j = i + 1;
+            let mut num = String::new();
+            while j < chars.len() && chars[j] != ')' {
+                if !chars[j].is_ascii_digit() || num.len() > 6 {
+                    return Err(EditedError::UnsupportedSymbol('('));
+                }
+                num.push(chars[j]);
+                j += 1;
+            }
+            if j >= chars.len() || num.is_empty() {
+                return Err(EditedError::UnsupportedSymbol('('));
+            }
+            count = num.parse().map_err(|_| EditedError::UnsupportedSymbol('('))?;
+            i = j + 1;
+        }
+        for _ in 0..count {
+            out.push(c);
+        }
+    }
+    Ok(out)
+}
+
+/// Right-justify the integer digits and left-justify the fraction digits of `value` into the picture's
+/// digit capacities (pad with zeros, truncate overflow — matching a fixed-width COBOL receiving field).
+fn align(value: &Decimal, int_cap: usize, frac_cap: usize) -> (Vec<u8>, Vec<u8>) {
+    let scale = value.scale.max(0) as usize;
+    let int_len = value.digits.len().saturating_sub(scale);
+    let int_part = &value.digits[..int_len];
+    let frac_part = &value.digits[int_len..];
+    let mut int_d = vec![0u8; int_cap];
+    for (k, &d) in int_part.iter().rev().enumerate() {
+        if k < int_cap {
+            int_d[int_cap - 1 - k] = d;
+        }
+    }
+    let mut frac_d = vec![0u8; frac_cap];
+    for (k, &d) in frac_part.iter().enumerate() {
+        if k < frac_cap {
+            frac_d[k] = d;
+        }
+    }
+    (int_d, frac_d)
+}
+
+/// Emit the integer field: assign digits to digit-bearing positions (`9 Z *` and float positions, the
+/// first float position being the floating symbol's reserved slot), then zero-suppress the leading zone
+/// (`Z`/float -> space, `*` -> star, commas in the zone -> the suppression char) and float the symbol to
+/// the position immediately left of the first significant digit (or the first forced `9`).
+fn emit_int(syms: &[char], digits: &[u8], float_char: Option<char>) -> String {
+    let supp = if syms.contains(&'*') { '*' } else { ' ' };
+    let mut out: Vec<char> = vec![' '; syms.len()];
+    let mut di = 0usize;
+    let mut first_float = true;
+    for (k, &s) in syms.iter().enumerate() {
+        if s == '9' || s == 'Z' || s == '*' {
+            out[k] = (b'0' + digits.get(di).copied().unwrap_or(0)) as char;
+            di += 1;
+        } else if Some(s) == float_char {
+            if first_float {
+                first_float = false;
+                out[k] = ' ';
+            } else {
+                out[k] = (b'0' + digits.get(di).copied().unwrap_or(0)) as char;
+                di += 1;
+            }
+        } else if matches!(s, ',' | 'B' | '0' | '/') {
+            out[k] = if s == 'B' { ' ' } else { s };
+        }
+    }
+    let mut stop = syms.len();
+    for (k, &s) in syms.iter().enumerate() {
+        if s == '9' {
+            stop = k;
+            break;
+        }
+        let suppressible = s == 'Z' || s == '*' || Some(s) == float_char;
+        if suppressible && out[k].is_ascii_digit() && out[k] != '0' {
+            stop = k;
+            break;
+        }
+    }
+    let float_target = float_char.and_then(|fc| (0..stop).rev().find(|&k| syms[k] == fc));
+    for (k, slot) in out.iter_mut().enumerate().take(stop) {
+        *slot = if Some(k) == float_target {
+            float_char.unwrap()
+        } else {
+            supp
+        };
+    }
+    out.into_iter().collect()
+}
+
+/// Emit the fraction field: digit positions show their digit, `B` is a space, `0`/`/`/`,` are literal.
+fn emit_frac(syms: &[char], digits: &[u8]) -> String {
+    let mut di = 0usize;
+    let mut out = String::new();
+    for &s in syms {
+        match s {
+            '9' | 'Z' | '*' => {
+                out.push((b'0' + digits.get(di).copied().unwrap_or(0)) as char);
+                di += 1;
+            }
+            'B' => out.push(' '),
+            '0' | '/' | ',' => out.push(s),
+            _ => {}
+        }
+    }
+    out
+}
+
+/// Encode (`GNURUST.16c`) a numeric `value` into an edited DISPLAY field, byte-faithful to cobc's
+/// `MOVE numeric TO edited-field` for the admitted `16a`+`16b` subset (the inverse of [`decode_edited`]).
+/// Fail closed on any symbol outside the subset.
+pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError> {
+    let mut chars: Vec<char> = pic
+        .trim()
+        .chars()
+        .filter(|c| !c.is_whitespace())
+        .map(|c| c.to_ascii_uppercase())
+        .collect();
+    if chars.is_empty() {
+        return Err(EditedError::Empty);
+    }
+    let neg = value.negative && !value.digits.iter().all(|&d| d == 0);
+
+    // trailing CR / DB
+    let mut suffix = String::new();
+    if chars.len() >= 2 {
+        let last2: String = chars[chars.len() - 2..].iter().collect();
+        if last2 == "CR" || last2 == "DB" {
+            suffix = if neg { last2 } else { "  ".into() };
+            chars.truncate(chars.len() - 2);
+        }
+    }
+    // trailing fixed sign (single + / -)
+    if suffix.is_empty() {
+        if let Some(&last) = chars.last() {
+            if (last == '+' || last == '-') && chars.iter().filter(|&&c| c == last).count() == 1 {
+                suffix = sign_char(last, neg).to_string();
+                chars.pop();
+            }
+        }
+    }
+    // leading fixed sign (single + / -) or fixed currency (single $)
+    let mut prefix = String::new();
+    if let Some(&first) = chars.first() {
+        if (first == '+' || first == '-') && chars.iter().filter(|&&c| c == first).count() == 1 {
+            prefix = sign_char(first, neg).to_string();
+            chars.remove(0);
+        } else if first == '$' && chars.iter().filter(|&&c| c == '$').count() == 1 {
+            prefix = "$".into();
+            chars.remove(0);
+        }
+    }
+
+    let syms = expand_repeats(&chars)?;
+    let float_char = ['$', '+', '-']
+        .into_iter()
+        .find(|&c| syms.iter().filter(|&&x| x == c).count() >= 2);
+    let dot = syms.iter().position(|&c| c == '.');
+    let (int_syms, frac_syms): (&[char], &[char]) = match dot {
+        Some(d) => (&syms[..d], &syms[d + 1..]),
+        None => (&syms[..], &[]),
+    };
+    let count_digits = |sl: &[char]| -> usize {
+        let plain = sl.iter().filter(|&&c| matches!(c, '9' | 'Z' | '*')).count();
+        let nf = float_char.map_or(0, |fc| sl.iter().filter(|&&c| c == fc).count());
+        plain + nf.saturating_sub(1)
+    };
+    let (int_d, frac_d) = align(value, count_digits(int_syms), count_digits(frac_syms));
+
+    let mut out = String::new();
+    out.push_str(&prefix);
+    out.push_str(&emit_int(int_syms, &int_d, float_char));
+    if dot.is_some() {
+        out.push('.');
+    }
+    out.push_str(&emit_frac(frac_syms, &frac_d));
+    out.push_str(&suffix);
+
+    let bytes = out.into_bytes();
+    let expected = edited_size(pic)?;
+    if bytes.len() != expected {
+        return Err(EditedError::SizeMismatch {
+            expected,
+            got: bytes.len(),
+        });
+    }
+    Ok(bytes)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -356,6 +570,22 @@ pub fn __fuzz_edited(data: &[u8]) {
     let _ = decode_edited(&pic, &data[split..]);
 }
 
+/// Fuzz entry for the encode direction (`GNURUST.16c`): any picture + any value yields bytes or a typed
+/// `EditedError`, never a panic.
+pub fn __fuzz_edited_encode(data: &[u8]) {
+    if data.len() < 2 {
+        return;
+    }
+    let split = (data[0] as usize) % data.len();
+    let pic = String::from_utf8_lossy(&data[1..=split]);
+    let value = Decimal {
+        negative: data[1] & 1 == 1,
+        digits: data[split..].iter().map(|b| b % 10).collect(),
+        scale: (data[1] % 4) as i16,
+    };
+    let _ = encode_edited(&pic, &value);
+}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
@@ -367,5 +597,19 @@ mod kani_proofs {
         let bytes: [u8; 6] = kani::any();
         let _ = decode_edited("ZZ9.99", &bytes);
         let _ = edited_size("ZZ9.99");
+    }
+
+    // KANIFOR: GNURUST.16C
+    /// encode_edited over a symbolic small value for a fixed edited PICTURE is total (Ok or typed error).
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn encode_edited_is_total() {
+        let d: [u8; 4] = kani::any();
+        let value = Decimal {
+            negative: d[0] & 1 == 1,
+            digits: d[1..].iter().map(|b| b % 10).collect(),
+            scale: 1,
+        };
+        let _ = encode_edited("$$,$$9.99", &value);
     }
 }

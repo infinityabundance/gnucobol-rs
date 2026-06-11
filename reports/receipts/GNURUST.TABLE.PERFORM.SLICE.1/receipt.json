@@ -1,23 +1,14 @@
 {
-  "schema": "gnurust-replay-receipt-v1",
+  "byte_domain": "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)",
   "campaign": "GNURUST.TABLE.PERFORM.SLICE.1",
-  "court": "table (OCCURS) PERFORM VARYING slice",
-  "generated_at": "unstamped",
-  "git_commit": "unstamped",
-  "crate_version": "0.7.27",
-  "oracle": {
-    "name": "GnuCOBOL",
-    "version": "cobc (GnuCOBOL) 3.2.0",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
   "command": {
     "replay": "bash lab/oracle/table_sweep.sh"
   },
-  "byte_domain": "PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)",
-  "results": {
-    "sweep": "PASS=3 FAIL=0"
-  },
+  "court": "table (OCCURS) PERFORM VARYING slice",
+  "crate_version": "0.7.28",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
   "non_claims": [
     "multi-dimensional/nested OCCURS",
     "OCCURS DEPENDING ON",
@@ -28,8 +19,17 @@
     "non-sum per-element bodies",
     "all dialects"
   ],
-  "verdict": "pass",
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
   "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=3 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,
-  "current_authority": "STATUS.md"
+  "verdict": "pass"
 }

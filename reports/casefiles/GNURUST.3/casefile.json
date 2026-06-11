@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.3",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.27",
+  "crate_version": "0.7.28",
   "damage_if_overclaimed": "a mis-modeled field width mis-reads every downstream field in the record",
   "hash_chain": {
-    "inputs_sha256": "cf078adde3b213ab5410bc7971c45761ad19918637eba2dec6f89c2f240cab9a"
+    "inputs_sha256": "f929a00e237c3bb0fedfd3b02dc2d3912808e72b899e4ed3b840c719378cc7ac"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "5ad0e03f99d99067cf345dd1cc75bd9274ded915419a7cc7faa45712b9d6ac28",
-    "receipt_sha256": "bac3997c1d66ea9c42f5666e5af6b3ea1451c90bc2c26bef31c01eab50eb3366"
+    "receipt_sha256": "4d34c73ada917a4db88a034166061038a1b4d12ad84420f6623ae0614e9fe18a"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

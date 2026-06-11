@@ -1,0 +1,27 @@
+<!-- DO NOT EDIT BY HAND. Generated from casefile.json by kobold-courts.
+     Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
+# Forensic case file — GNURUST.16C (court-casefile)
+
+**Verdict: PASS** · 92/92 pass, 0 fail · crate `gnucobol-rs` 0.7.28
+
+- **Oracle:** cobc MOVE numeric -> edited, DISPLAY edited bytes
+- **Byte domain(s):** numeric value -> edited DISPLAY field bytes
+- **Replay:** `bash lab/oracle/edited_encode_sweep.sh`
+- **Authority:** STATUS.md · receipt_status: current
+
+## Positive claims (1)
+- numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed-sign +/- fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency, sign placement, insertion), slot-based
+
+## Negative claims (6) — negative capability is the trust surface
+- floating +/- sign strings
+- report writer
+- locale/currency CURRENCY SIGN
+- EBCDIC edited
+- edited arithmetic/VALUE
+- lie prevented: 'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle
+
+## Damage if overclaimed
+a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports
+
+> Generated forensic evidence (TRUST.4). The binding record is `casefile.json`; this `.md` is a rendering.
+> Portable attestations: `sarif.json` (findings), `intoto-statement.json` (provenance), `dsse-envelope.json`.

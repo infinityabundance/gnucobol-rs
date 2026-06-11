@@ -20,7 +20,7 @@
 | `value-initialization` | data representation | `field.c` | ✅ sealed | GNURUST.8, GNURUST.VALUE.NEGZERO.EDGE.1 |
 | `conditions-level88` | conditions | `typeck.c` | ✅ sealed | GNURUST.11, GNURUST.12 |
 | `codepage-ebcdic` | data representation | `common.c, move.c` | ✅ sealed | GNURUST.15, GNURUST.17 |
-| `edited-pictures` | MOVE/storage | `move.c` | ✅ sealed | GNURUST.16 |
+| `edited-pictures` | MOVE/storage | `move.c` | ✅ sealed | GNURUST.16, GNURUST.16C |
 | `dialect-options` | compiler dialect options | `config.c` | ✅ sealed | DIALECT.PROFILE.1 |
 | `dialect-runtime` | compiler dialect options | `config.c, default.conf, move.c` | 🟡 observed | GNURUST.DIALECT.RUNTIME.ATLAS.1 |
 | `directive-variance` | compiler dialect options | `config.c, move.c` | 🟡 observed | GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 |

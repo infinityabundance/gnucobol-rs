@@ -230,11 +230,25 @@
       "oracle": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
       "fixtures": "edited sweep 92/0 + 6M fuzz",
       "sealed_version": "0.6.0/0.6.1",
-      "not_proven": "numeric->edited formatting (16c); report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
+      "not_proven": "report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
       "readiness": 3,
       "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated",
       "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals"
+    },
+    {
+      "id": "GNURUST.16C",
+      "name": "edited-picture encode (numeric->edited, 16c)",
+      "proven": "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed-sign +/- fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency, sign placement, insertion), slot-based",
+      "byte_domain": "numeric value -> edited DISPLAY field bytes",
+      "oracle": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
+      "fixtures": "edited encode sweep 92/0",
+      "sealed_version": "0.7.28",
+      "not_proven": "floating +/- sign strings; report writer; locale/currency CURRENCY SIGN; EBCDIC edited; edited arithmetic/VALUE",
+      "breaks_claim": "floating sign editing; CURRENCY/locale symbols; edited under COMP/cp500; numeric->edited under EBCDIC",
+      "readiness": 3,
+      "lie_prevented": "'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle",
+      "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports"
     },
     {
       "id": "KOBOLD.DATA.2",

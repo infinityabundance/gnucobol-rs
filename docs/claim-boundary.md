@@ -76,7 +76,7 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.15` — EBCDIC code-page boundary.** `ebcdic::decode_display` decodes raw EBCDIC alphanumeric DISPLAY bytes to text under the admitted **cp500** table (byte-for-byte the oracle's `cob_load_collation` output, 256/256). cp037, numeric EBCDIC zoned sign, national/DBCS, and binary/packed conversion are non-claims. (`reports/RECEIPT-GNURUST-EBCDIC-15.md`.)
 
-**`GNURUST.16` — edited-picture decode (16a).** `edited::decode_edited` recovers an edited DISPLAY field's value + presentation text for the `Z 9 , . - +` subset (proven vs `cobc` MOVE→edited→DISPLAY, 50/50). Numeric→edited formatting, `$ * CR DB B 0 /` (16b), reports, locale, EBCDIC edited, and edited arithmetic are non-claims. (`reports/RECEIPT-GNURUST-EDITED-16.md`.)
+**`GNURUST.16C` — numeric→edited encode.** `edited::encode_edited` formats a numeric value into edited DISPLAY bytes byte-faithful to cobc (the inverse direction of decode); `edited_encode_sweep` 92/0. **`GNURUST.16` — edited-picture decode (16a).** `edited::decode_edited` recovers an edited DISPLAY field's value + presentation text for the `Z 9 , . - +` subset (proven vs `cobc` MOVE→edited→DISPLAY, 50/50). Numeric→edited formatting, `$ * CR DB B 0 /` (16b), reports, locale, EBCDIC edited, and edited arithmetic are non-claims. (`reports/RECEIPT-GNURUST-EDITED-16.md`.)
 
 **`GNURUST.17` — cp500 EBCDIC zoned numeric.** `Decimal::from_ebcdic_zoned` decodes raw cp500 zoned-decimal bytes (cp500 translate + cob_get_sign_ebcdic sign), proven vs `cobc -fsign=EBCDIC` (120/0). cp037, edited-numeric under cp500, and binary/packed via this path are non-claims. (`reports/RECEIPT-GNURUST-EBCDICNUM-17.md`.)
 

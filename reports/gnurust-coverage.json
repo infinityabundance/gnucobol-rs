@@ -166,10 +166,11 @@
     {
       "category": "MOVE/storage",
       "courts": [
-        "GNURUST.16"
+        "GNURUST.16",
+        "GNURUST.16C"
       ],
       "future_campaign": null,
-      "risk_if_unported": "a wrong edited decode mis-recovers a presentation value",
+      "risk_if_unported": "a wrong edited decode mis-recovers a value, or a wrong encode mis-prints one",
       "source_modules": [
         "libcob/move.c"
       ],

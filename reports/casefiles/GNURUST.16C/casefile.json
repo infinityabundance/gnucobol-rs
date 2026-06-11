@@ -1,0 +1,61 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "numeric value -> edited DISPLAY field bytes"
+  ],
+  "case_id": "GNURUST.16C",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.28",
+  "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports",
+  "hash_chain": {
+    "inputs_sha256": "48704c6e555af99d3f5e1443fa7db0965a13977a4a80d3b2e203985397529f63"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "b6f9fb9ba8a33788185cadb1dcd19ce0c84c78a0df000637cc35b4e68311c7c7",
+    "receipt_sha256": "1ad0ac95782c7e46df9d293f77006419dace3dd4bf3a3fe0784666cd2ff1a238"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle"
+  ],
+  "negative_capability_ids": [
+    "NEG.FLOATING-SIGN-STRINGS",
+    "NEG.REPORT-WRITER",
+    "NEG.LOCALE-CURRENCY-CURRENCY-SIGN",
+    "NEG.EBCDIC-EDITED",
+    "NEG.EDITED-ARITHMETIC-VALUE"
+  ],
+  "negative_claims": [
+    "floating +/- sign strings",
+    "report writer",
+    "locale/currency CURRENCY SIGN",
+    "EBCDIC edited",
+    "edited arithmetic/VALUE",
+    "lie prevented: 'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle"
+  ],
+  "oracle": {
+    "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.16C"
+  },
+  "positive_claims": [
+    "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed-sign +/- fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency, sign placement, insertion), slot-based"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/edited_encode_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 92,
+    "total": 92,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

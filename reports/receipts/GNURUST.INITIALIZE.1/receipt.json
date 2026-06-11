@@ -1,23 +1,14 @@
 {
-  "schema": "gnurust-replay-receipt-v1",
+  "byte_domain": "INITIALIZE record -> changed/preserved receiver bytes (elementary/group/FILLER/REDEFINES/OCCURS/VALUE)",
   "campaign": "GNURUST.INITIALIZE.1",
-  "court": "INITIALIZE receiver byte effects",
-  "generated_at": "unstamped",
-  "git_commit": "unstamped",
-  "crate_version": "0.7.27",
-  "oracle": {
-    "name": "GnuCOBOL",
-    "version": "cobc (GnuCOBOL) 3.2.0",
-    "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
-  },
   "command": {
     "replay": "bash lab/oracle/initialize_sweep.sh"
   },
-  "byte_domain": "INITIALIZE record -> changed/preserved receiver bytes (elementary/group/FILLER/REDEFINES/OCCURS/VALUE)",
-  "results": {
-    "sweep": "PASS=6 FAIL=0"
-  },
+  "court": "INITIALIZE receiver byte effects",
+  "crate_version": "0.7.28",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
   "non_claims": [
     "full Procedure Division execution",
     "INITIALIZE REPLACING/TO VALUE/WITH FILLER",
@@ -26,8 +17,17 @@
     "active REDEFINES view",
     "all dialects"
   ],
-  "verdict": "pass",
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
   "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=6 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,
-  "current_authority": "STATUS.md"
+  "verdict": "pass"
 }

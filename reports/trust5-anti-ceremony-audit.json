@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 57,
+    "A": 58,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -14,6 +14,7 @@
       "GNURUST.14",
       "GNURUST.15",
       "GNURUST.16",
+      "GNURUST.16C",
       "GNURUST.17",
       "GNURUST.18",
       "GNURUST.19",
@@ -240,9 +241,25 @@
       "has_casefile": true,
       "has_receipt": true,
       "id": "GNURUST.16",
-      "negative_claims": 6,
+      "negative_claims": 5,
       "negatives_ge_positives": true,
       "positive_claims": 2
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "edited encode sweep 92/0",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.16C",
+      "negative_claims": 6,
+      "negatives_ge_positives": true,
+      "positive_claims": 1
     },
     {
       "can_fail": true,

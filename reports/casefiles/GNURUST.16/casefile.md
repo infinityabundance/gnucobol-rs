@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.16 (court-casefile)
 
-**Verdict: PASS** · 92/92 pass, 0 fail · crate `gnucobol-rs` 0.7.27
+**Verdict: PASS** · 92/92 pass, 0 fail · crate `gnucobol-rs` 0.7.28
 
 - **Oracle:** cobc MOVE numeric -> edited, DISPLAY edited bytes
 - **Byte domain(s):** edited DISPLAY field bytes -> value + text
@@ -13,8 +13,7 @@
 - edited DISPLAY field bytes -> value + presentation text for Z 9 , . -
 - (16a) and $ * CR DB B 0 / (16b), slot-based
 
-## Negative claims (6) — negative capability is the trust surface
-- numeric->edited formatting (16c)
+## Negative claims (5) — negative capability is the trust surface
 - report writer
 - locale/currency
 - EBCDIC edited

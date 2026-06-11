@@ -80,7 +80,7 @@ pub use cond::{
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
 pub use ebcdic::{decode_display, translate_byte, CodePage, EbcdicError};
-pub use edited::{decode_edited, edited_size, EditedDecode, EditedError};
+pub use edited::{decode_edited, edited_size, encode_edited, EditedDecode, EditedError};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
 pub use layout::{lay_out, Item, Laid, LayoutError, Odo};

@@ -2898,7 +2898,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.16"
+        "GNURUST.16",
+        "GNURUST.16C"
       ]
     },
     {
@@ -2909,7 +2910,8 @@
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.16"
+        "GNURUST.16",
+        "GNURUST.16C"
       ]
     },
     {
@@ -5269,7 +5271,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.16",
-        "KOBOLD.DATA.4"
+        "KOBOLD.DATA.4",
+        "GNURUST.16C"
       ]
     },
     {
@@ -5907,13 +5910,13 @@
     },
     {
       "id": "NEG.NUMERIC-EDITED-FORMATTING-16C",
-      "surface": "numeric->edited formatting (16c)",
+      "surface": "floating +/- sign strings in numeric->edited (16c residual)",
       "status": "not_admitted_fail_closed",
-      "guard": "fails closed / outside the sealed subset",
+      "guard": "16c encode is sealed (GNURUST.16C); floating sign strings remain fail-closed",
       "risk_if_guessed": "silent mis-decode of a surface this court does not prove",
       "owning_future_campaign": null,
       "evidence": [
-        "GNURUST.16"
+        "GNURUST.16C"
       ]
     },
     {
@@ -7749,7 +7752,8 @@
       "owning_future_campaign": null,
       "evidence": [
         "GNURUST.16",
-        "KOBOLD.DATA.4"
+        "KOBOLD.DATA.4",
+        "GNURUST.16C"
       ]
     },
     {

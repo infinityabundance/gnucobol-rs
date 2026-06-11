@@ -162,3 +162,9 @@ name = "search"
 path = "fuzz_targets/search.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "edited_encode"
+path = "fuzz_targets/edited_encode.rs"
+test = false
+doc = false
