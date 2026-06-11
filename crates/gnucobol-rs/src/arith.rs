@@ -871,7 +871,32 @@ mod tests {
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
-    // KANIFOR: GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1
+    // KANIFOR: GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1, GNURUST.ROUND.1
+    /// Every ROUNDED MODE IS setting (GNURUST.ROUND.1) is total over a symbolic value: `do_round`
+    /// returns Ok or a typed ArithError, never a panic/overflow (checked arithmetic + pow10 bounds).
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn round_is_total() {
+        let mag: i64 = kani::any();
+        let scale: u8 = kani::any();
+        let tgt: u8 = kani::any();
+        let mode = match kani::any::<u8>() % 8 {
+            0 => Round::Truncate,
+            1 => Round::NearAwayFromZero,
+            2 => Round::AwayFromZero,
+            3 => Round::NearEven,
+            4 => Round::NearTowardZero,
+            5 => Round::TowardGreater,
+            6 => Round::TowardLesser,
+            _ => Round::Prohibited,
+        };
+        // do_round's precondition (set by its caller): non-zero value actually narrowing. Small scales
+        // bound the pow10 loop; larger scales only widen the (checked) pow10 overflow -> Err path, no
+        // new panic surface.
+        kani::assume(mag != 0 && tgt < scale && scale < 6);
+        let _ = do_round(mag as i128, scale as i32, tgt as i32, mode);
+    }
+
     /// The arithmetic ops are total over symbolic operand bytes for fixed field attrs: Ok(bytes) or a typed
     /// ArithError, never a panic (incl. divide-by-zero, which fails closed).
     #[kani::proof]

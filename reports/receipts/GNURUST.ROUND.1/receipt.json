@@ -1,0 +1,31 @@
+{
+  "byte_domain": "value + target scale + ROUNDED mode -> stored field bytes",
+  "campaign": "GNURUST.ROUND.1",
+  "command": {
+    "replay": "bash lab/oracle/round_sweep.sh"
+  },
+  "court": "ROUNDED MODE IS (all eight rounding modes)",
+  "crate_version": "0.7.35",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "packed ADD/SUBTRACT cob_add_bcd nibble rounding (GNURUST.13's surface)",
+    "bignum values beyond i128",
+    "floating-point COMP-1/COMP-2 rounding",
+    "PROHIBITED size error returns a typed error, not bytes"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "no-result"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

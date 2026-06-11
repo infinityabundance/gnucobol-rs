@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-105-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-105-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-106-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-106-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -193,6 +193,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.SUBSCRIPT.1` | table subscript access (multi-dimensional) | ✅ pass | [`reports/casefiles/GNURUST.SUBSCRIPT.1/`](reports/casefiles/GNURUST.SUBSCRIPT.1/) |
 | `GNURUST.ODO.1` | OCCURS DEPENDING ON (variable length) | ✅ pass | [`reports/casefiles/GNURUST.ODO.1/`](reports/casefiles/GNURUST.ODO.1/) |
 | `GNURUST.INDEX.1` | USAGE INDEX storage + SET arithmetic | ✅ pass | [`reports/casefiles/GNURUST.INDEX.1/`](reports/casefiles/GNURUST.INDEX.1/) |
+| `GNURUST.ROUND.1` | ROUNDED MODE IS (all eight rounding modes) | ✅ pass | [`reports/casefiles/GNURUST.ROUND.1/`](reports/casefiles/GNURUST.ROUND.1/) |
 | `GNURUST.SORT.MERGE.ATLAS.1` | observed SORT / MERGE atlas | ✅ pass | [`reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/`](reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/) |
 | `GNURUST.RELATIVE.FILE.ATLAS.1` | observed relative-file atlas | ✅ pass | [`reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/`](reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/) |
 | `GNURUST.DIALECT.RUNTIME.ATLAS.1` | observed dialect-runtime divergence atlas | ✅ pass | [`reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/`](reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/) |

@@ -345,10 +345,17 @@ pub fn __fuzz_arith(data: &[u8]) {
         1 => arith::Op::Subtract,
         _ => arith::Op::Multiply,
     };
-    let round = if data[8] & 0x80 == 0 {
-        arith::Round::Truncate
-    } else {
-        arith::Round::NearAwayFromZero
+    // Drive every ROUNDED MODE IS setting (GNURUST.ROUND.1): hostile values under any mode must
+    // still yield a typed ArithError, never a panic.
+    let round = match data[8] >> 5 {
+        0 => arith::Round::Truncate,
+        1 => arith::Round::NearAwayFromZero,
+        2 => arith::Round::AwayFromZero,
+        3 => arith::Round::NearEven,
+        4 => arith::Round::NearTowardZero,
+        5 => arith::Round::TowardGreater,
+        6 => arith::Round::TowardLesser,
+        _ => arith::Round::Prohibited,
     };
     let body = &data[9..];
     let at = (data[8] as usize >> 1) % (body.len() + 1);

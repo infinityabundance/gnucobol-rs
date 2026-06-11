@@ -1,5 +1,5 @@
 {
-  "casefiles": 104,
+  "casefiles": 106,
   "court": "KOBOLD.ENTERPRISE.2",
   "entries": [
     {
@@ -159,6 +159,10 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.INDEX.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.INDEXED.FILE.ATLAS.1",
       "signature_status": "unsigned_no_key_configured"
     },
@@ -248,6 +252,10 @@
     },
     {
       "court": "GNURUST.REMAINDER.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.ROUND.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -431,7 +439,7 @@
   "selftest_passed": true,
   "signing_mode": "unsigned",
   "summary": {
-    "unsigned_no_key_configured": 104
+    "unsigned_no_key_configured": 106
   },
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true

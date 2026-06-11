@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.ROUND.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.ROUND.1 non-claim: ADD/SUBTRACT directly INTO a packed field (the cob_add_bcd nibble-rounding path, numeric.c:2907, resolves NEAREST-EVEN ties differently -- that is GNURUST.13's surface, a loud non-claim here)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.ROUND.1 non-claim: bignum values beyond i128"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.ROUND.1 non-claim: floating-point COMP-1/COMP-2 rounding"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.ROUND.1 non-claim: lie prevented: 'ROUNDED always means round-half-up' -- NO, COBOL has eight distinct ROUNDED MODE IS settings; NEAREST-EVEN rounds 2.5 to 2 while the default rounds 2.5 to 3, and ceiling/floor follow +/-infinity not magnitude"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

@@ -16,7 +16,7 @@
 | `record-layout` | data representation | `typeck.c, tree.c` | ✅ sealed | GNURUST.4, GNURUST.10 |
 | `copybook-expansion` | source | `pplex.c, ppparse.c, replace.c` | ✅ sealed | GNURUST.5, GNURUST.6 |
 | `move-storage` | MOVE/storage | `move.c` | ✅ sealed | GNURUST.2 |
-| `arithmetic` | arithmetic | `numeric.c` | ✅ sealed | GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1 |
+| `arithmetic` | arithmetic | `numeric.c` | ✅ sealed | GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1, GNURUST.ROUND.1 |
 | `value-initialization` | data representation | `field.c` | ✅ sealed | GNURUST.8, GNURUST.VALUE.NEGZERO.EDGE.1 |
 | `conditions-level88` | conditions | `typeck.c` | ✅ sealed | GNURUST.11, GNURUST.12, GNURUST.12B |
 | `codepage-ebcdic` | data representation | `common.c, move.c` | ✅ sealed | GNURUST.15, GNURUST.17 |

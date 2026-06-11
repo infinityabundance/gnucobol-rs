@@ -802,6 +802,17 @@
         "big-endian host",
         "SET index TO pointer/address"
       ]
+    },
+    "GNURUST.ROUND.1": {
+      "court": "ROUNDED MODE IS (all eight rounding modes)",
+      "sweep": "round_sweep.sh",
+      "byte_domain": "value + target scale + ROUNDED mode -> stored field bytes",
+      "non_claims": [
+        "packed ADD/SUBTRACT cob_add_bcd nibble rounding (GNURUST.13's surface)",
+        "bignum values beyond i128",
+        "floating-point COMP-1/COMP-2 rounding",
+        "PROHIBITED size error returns a typed error, not bytes"
+      ]
     }
   }
 }

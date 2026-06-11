@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SORT.MERGE.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.34
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.35
 
 - **Oracle:** cobc SORT/MERGE (libcob/fileio.c sort engine + work file)
 - **Byte domain(s):** SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file
