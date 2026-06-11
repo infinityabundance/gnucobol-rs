@@ -48,6 +48,9 @@ fn main() {
         "atlas-indexed" => atlas::indexed_file(&root),
         "atlas-relative" => atlas::relative_file(&root),
         "atlas-sort-merge" => atlas::sort_merge(&root),
+        "atlas-procedure-flow" => atlas::procedure_flow(&root),
+        "atlas-call" => atlas::call_atlas(&root),
+        "atlas-declaratives" => atlas::declaratives(&root),
         "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");

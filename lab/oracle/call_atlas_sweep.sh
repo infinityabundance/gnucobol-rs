@@ -37,31 +37,4 @@ END PROGRAM SUBP.
 COB
 cobc -free -x -o "$TMP/p" "$TMP/p.cob" 2>"$TMP/err" || { echo "compile failed"; cat "$TMP/err"; exit 2; }
 OUT=$("$TMP/p")
-python3 - "$ROOT/reports/call-atlas.json" "$OUT" <<'PY'
-import json, sys
-kv = {}
-for line in sys.argv[2].splitlines():
-    if "=" in line: k, v = line.split("=", 1); kv[k.strip()] = v.strip()
-expect = {"ref_A":"101","content_B":"100","toupper":"[ABCDE]","exception":"caught","cancel":"ok"}
-fails = [(k, e, kv.get(k)) for k, e in expect.items() if kv.get(k) != e]
-atlas = {
- "schema":"gnurust-call-atlas-v1","court":"GNURUST.CALL.EXTENSION.ATLAS.1","dialect":"gnucobol-3.2.0-default",
- "oracle":"cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines",
- "doctrine":"OBSERVED map of the CALL/linkage surface -- the #1 gap by frequency (CALL 959x in the admitted testsuite). gnucobol-rs does NOT execute subprogram CALLs; this records the observed parameter-passing byte-effect and linkage conventions, it runs no subprograms.",
- "observations":[
-  {"name":"USING BY REFERENCE","observed":"the callee SHARES the caller's storage; callee mutation is visible in the caller (A: 100 -> 101)","status":"observed-only"},
-  {"name":"USING BY CONTENT","observed":"the callee gets a COPY; the caller's storage is UNCHANGED (B stays 100)","status":"observed-only"},
-  {"name":"USING BY VALUE","observed":"passes the value; BY VALUE to a reference-expecting LINKAGE param is undefined (segfaults) -- refused","status":"refused"},
-  {"name":"C$ extension (C$TOUPPER)","observed":"a built-in system routine mutating in place (abcde -> ABCDE)","status":"observed-only"},
-  {"name":"ON EXCEPTION","observed":"a missing/unresolved subprogram fires ON EXCEPTION (graceful, no crash)","status":"observed-only"},
-  {"name":"CANCEL","observed":"CANCEL unloads a (dynamically-called) subprogram","status":"observed-only"},
-  {"name":"RETURN-CODE","observed":"a conventional integer call status register","status":"observed-only"},
- ],
- "negative_capabilities":["NEG.CALL.NO_SUBPROGRAM_EXECUTION","NEG.CALL.NO_DYNAMIC_LINKING",
-   "NEG.CALL.NO_C_EXTENSION_IMPL","NEG.CALL.NO_BY_VALUE_REFERENCE_MISMATCH",
-   "NEG.CALL.NO_RECURSION_REENTRANCY","NEG.CALL.NO_CANCEL_STATE","NEG.CALL.NO_ALL_DIALECTS"],
-}
-json.dump(atlas, open(sys.argv[1],"w"), indent=2)
-print(f"PASS={len(expect)-len(fails)} FAIL={len(fails)}")
-for f in fails: print("  MISMATCH", f)
-PY
+( cd "$ROOT" && OUT="$OUT" cargo run -q -p xtask -- atlas-call )

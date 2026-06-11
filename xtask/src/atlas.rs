@@ -92,3 +92,32 @@ pub fn sort_merge(root: &str) -> i32 {
     for f in &fails { println!("  MISMATCH {f}"); }
     if fails.is_empty() { 0 } else { 1 }
 }
+
+const PROCEDURE_FLOW_ATLAS: &str = include_str!("data/procedure-flow-atlas.json");
+const CALL_ATLAS: &str = include_str!("data/call-atlas.json");
+const DECLARATIVES_ATLAS: &str = include_str!("data/declaratives-atlas.json");
+
+pub fn procedure_flow(root: &str) -> i32 {
+    kv_compare(root, "reports/procedure-flow-atlas.json", PROCEDURE_FLOW_ATLAS,
+        &[("if","THEN"),("eval","2"),("perform_times","003"),("varying_body","004"),("varying_ends","005"),("until","005"),("perform_para","007"),("goto_skipped","007")])
+}
+pub fn call_atlas(root: &str) -> i32 {
+    kv_compare(root, "reports/call-atlas.json", CALL_ATLAS,
+        &[("ref_A","101"),("content_B","100"),("toupper","[ABCDE]"),("exception","caught"),("cancel","ok")])
+}
+pub fn declaratives(root: &str) -> i32 {
+    let out = std::env::var("OUT").unwrap_or_default();
+    let rc = std::env::var("RC").unwrap_or_default();
+    let checks: [(&str, bool); 5] = [
+        ("open-failure-fires-decl", out.contains("DECL-F fs=35")),
+        ("close-failure-fires-decl", out.contains("DECL-F fs=42")),
+        ("success-fires-nothing", !out.contains("DECL-G")),
+        ("status-visible-inside", out.contains("fs=35") && out.contains("fs=42")),
+        ("execution-resumes", out.contains("REACHED-END") && rc == "0"),
+    ];
+    let fails: Vec<&str> = checks.iter().filter(|(_, ok)| !ok).map(|(n, _)| *n).collect();
+    writeatlas(root, "reports/declaratives-atlas.json", DECLARATIVES_ATLAS);
+    println!("PASS={} FAIL={}", checks.len() - fails.len(), fails.len());
+    for n in &fails { println!("  MISMATCH {n}"); }
+    if fails.is_empty() { 0 } else { 1 }
+}
