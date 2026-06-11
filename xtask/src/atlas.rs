@@ -121,3 +121,42 @@ pub fn declaratives(root: &str) -> i32 {
     for n in &fails { println!("  MISMATCH {n}"); }
     if fails.is_empty() { 0 } else { 1 }
 }
+
+const CALL_LAYOUT_ATLAS: &str = include_str!("data/call-layout-atlas.json");
+const DIRECTIVE_VARIANCE_ATLAS: &str = include_str!("data/directive-variance-atlas.json");
+
+fn report(root: &str, atlas_rel: &str, embedded: &str, checks: &[(&str, bool)]) -> i32 {
+    let fails: Vec<&str> = checks.iter().filter(|(_, ok)| !ok).map(|(n, _)| *n).collect();
+    writeatlas(root, atlas_rel, embedded);
+    println!("PASS={} FAIL={}", checks.len() - fails.len(), fails.len());
+    for n in &fails { println!("  MISMATCH {n}"); }
+    if fails.is_empty() { 0 } else { 1 }
+}
+
+pub fn call_layout(root: &str) -> i32 {
+    let out = std::env::var("OUT").unwrap_or_default();
+    let kvre = regex::Regex::new(r"^([A-Z0-9-]+)=\[?(.*?)\]?$").unwrap();
+    let mut kvm = std::collections::HashMap::new();
+    for ln in out.lines() { if let Some(c) = kvre.captures(ln) { kvm.insert(c[1].to_string(), c[2].to_string()); } }
+    let see5: Vec<String> = regex::Regex::new(r"SEE5=\[(.*?)\]").unwrap().captures_iter(&out).map(|c| c[1].to_string()).collect();
+    let g = |k: &str| kvm.get(k).map(String::as_str);
+    report(root, "reports/call-layout-atlas.json", CALL_LAYOUT_ATLAS, &[
+        ("byref-overlay-adjacent", !see5.is_empty() && see5[0] == "ABCXY"),
+        ("byref-callee-write-visible", g("REF-CALLER") == Some("ZBC")),
+        ("bycontent-clean-copy", g("SEE3") == Some("DEF")),
+        ("bycontent-caller-untouched", g("CONTENT-CALLER") == Some("DEF")),
+        ("numeric-narrower-leading-bytes", g("SEEN2") == Some("12")),
+    ])
+}
+
+pub fn directive_variance(root: &str) -> i32 {
+    let g = |k: &str| std::env::var(k).unwrap_or_default();
+    report(root, "reports/directive-variance-atlas.json", DIRECTIVE_VARIANCE_ATLAS, &[
+        ("binary-size-default-len7", g("SZ_DEF") == "7"),
+        ("binary-size-248-grows-to-8", g("SZ_248") == "8"),
+        ("byteorder-default-big", g("OD_DEF") == "1234"),
+        ("byteorder-native-host-little", g("OD_NAT") == "3412"),
+        ("truncate-default-ansi", g("TR_DEF") == "00"),
+        ("no-truncate-keeps-binary", g("TR_NO") == "44"),
+    ])
+}

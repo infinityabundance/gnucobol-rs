@@ -1,0 +1,41 @@
+{
+  "schema": "gnurust-call-layout-atlas-v1",
+  "court": "GNURUST.CALL.LAYOUT.ATLAS.1",
+  "dialect": "gnucobol-3.2.0-default",
+  "extends": "GNURUST.CALL.EXTENSION.ATLAS.1",
+  "oracle": "cobc CALL USING + LINKAGE parameter layout (libcob/call.c address passing)",
+  "doctrine": "OBSERVED deepening of the CALL atlas to the BYTE-EXACT parameter layout and length-mismatch behavior. The migration hazard is a copybook whose LINKAGE length disagrees with the caller's field. gnucobol-rs executes NO subprograms (multi-module runtime is behavioral-ladder L8, NOT CLAIMED); this records the witnessed passing-mode byte layout, it runs nothing.",
+  "trace": [
+    "SEE5=[ABCXY]",
+    "REF-CALLER=ZBC",
+    "SEE3=[DEF]",
+    "CONTENT-CALLER=DEF",
+    "SEEN2=[12]"
+  ],
+  "observations": [
+    {
+      "name": "BY REFERENCE address overlay",
+      "observed": "BY REFERENCE passes the ADDRESS; a callee LINKAGE item LARGER than the caller's field reads PAST it into ADJACENT caller storage (X(5) over X(3) 'ABC' next to 'XYZ' -> the callee sees 'ABCXY') -- NO truncation, NO padding, NO bounds check; a callee write lands back in the caller's bytes",
+      "status": "observed-only"
+    },
+    {
+      "name": "BY CONTENT sized copy",
+      "observed": "BY CONTENT passes a COPY: the caller's field is UNCHANGED ('DEF'), and a callee whose LINKAGE item matches the content size sees the clean copy ('DEF'). A callee view LARGER than the content over-reads past the temporary into UNINITIALIZED memory (a null-byte read here) -- that over-read is undefined and is a refusal, not a claim",
+      "status": "observed-only"
+    },
+    {
+      "name": "numeric length-mismatch overlay",
+      "observed": "a numeric LINKAGE item NARROWER than the caller's field overlays the LEADING bytes positionally (9(2) over 9(4)=1234 -> '12'), it is a byte overlay, not a numeric re-scaling",
+      "status": "observed-only"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.CALL_LAYOUT.NO_SUBPROGRAM_EXECUTION",
+    "NEG.CALL_LAYOUT.NO_BOUNDS_ON_OVERLAY",
+    "NEG.CALL_LAYOUT.NO_BY_VALUE_LAYOUT",
+    "NEG.CALL_LAYOUT.NO_ODO_ACROSS_LINKAGE",
+    "NEG.CALL_LAYOUT.NO_OPTIONAL_OMITTED_PARAMS",
+    "NEG.CALL_LAYOUT.NO_RETURNING_PHRASE",
+    "NEG.CALL_LAYOUT.NO_ALL_DIALECTS"
+  ]
+}
