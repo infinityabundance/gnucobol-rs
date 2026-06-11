@@ -13,6 +13,7 @@ mod trust5;
 mod support;
 mod trust4;
 mod docs;
+mod misc;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -31,6 +32,8 @@ fn main() {
         "support" => support::run(cmd, &root),
         "trust4" => trust4::run(cmd, &root),
         "docs" => docs::run(cmd, &root),
+        "gcodes" => misc::gcodes(&root),
+        "atlas-check" => misc::atlas_check(&root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2

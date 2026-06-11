@@ -1,6 +1,6 @@
 //! TRUST.4.DOCS — generated documentation authority. Port of lab/docs/generate.py. Renders docs from
 //! docs-src/<id>.model.json + machine evidence; check = regenerate-and-diff + version/legacy/court freshness.
-use serde_json::{json, Value};
+use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 use std::path::Path;

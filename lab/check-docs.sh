@@ -31,19 +31,17 @@ for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-licen
 done
 # TRUST.1/TRUST.4: every GNURUST court in the claim-ladder must have a generated forensic casefile
 # (legacy hand-written receipts are now non-authoritative exhibits under research/legacyreports/).
-GCODES=$(python3 -c "import json;print(' '.join(c['id'] for c in json.load(open('reports/claim-ladder.json'))['courts'] if c['id'].startswith('GNURUST.') and c['id'] not in ('GNURUST.COVERAGE.1','GNURUST.FILE.STATUS.1','GNURUST.INTRINSIC.ATLAS.1','GNURUST.PROCEDURE.FLOW.ATLAS.1','GNURUST.PUBLIC.CORPUS.1','GNURUST.BUILD.PROFILE.1','GNURUST.PUBLIC.GAP.1','GNURUST.CALL.EXTENSION.ATLAS.1','GNURUST.INDEXED.FILE.ATLAS.1','GNURUST.SORT.MERGE.ATLAS.1','GNURUST.RELATIVE.FILE.ATLAS.1','GNURUST.DIALECT.RUNTIME.ATLAS.1','GNURUST.DIRECTIVE.VARIANCE.ATLAS.1','GNURUST.DECLARATIVES.ATLAS.1','GNURUST.CALL.LAYOUT.ATLAS.1','GNURUST.LINEAGE.CORPUS.20M.0','GNURUST.LINEAGE.CORPUS.20M.SMOKE','GNURUST.LINEAGE.CORPUS.20M.1','GNURUST.VALUE.NEGZERO.EDGE.1')))")
+GCODES=$(cd "$ROOT" && cargo run -q -p xtask -- gcodes)
 for code in $GCODES; do
   [ -f "reports/casefiles/$code/casefile.json" ] || bad "claim-ladder court $code has no generated casefile"
 done
 note "every GNURUST claim-ladder court has a generated casefile"
 
 # 2b. Atlas hygiene: every archaeology atlas JSON must parse (machine-readable evidence, not prose).
-if command -v python3 >/dev/null 2>&1; then
-  AJ=0
-  while IFS= read -r f; do
-    if python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f" 2>/dev/null; then AJ=$((AJ+1)); else bad "atlas JSON invalid: $f"; fi
-  done < <(find archaeology -name '*.json' 2>/dev/null)
-  note "atlas: $AJ JSON files valid"
+if ( cd "$ROOT" && cargo run -q -p xtask -- atlas-check ) >/tmp/_atlas 2>&1; then
+  note "$(tail -1 /tmp/_atlas)"
+else
+  bad "atlas JSON invalid"; cat /tmp/_atlas
 fi
 note "all README-referenced docs exist"
 
