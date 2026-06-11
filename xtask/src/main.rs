@@ -9,6 +9,7 @@ mod coverage;
 mod corpus;
 mod dialect;
 mod receipt;
+mod trust5;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -23,6 +24,7 @@ fn main() {
         "corpus" => corpus::run(cmd, &root),
         "dialect" => dialect::run(cmd, &root),
         "receipt" => receipt::run(cmd, &root),
+        "trust5" => trust5::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2

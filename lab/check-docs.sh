@@ -210,7 +210,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "DIALECT.PROFILE.1: dialect profile drift"; cat /tmp/_dial_check
   fi
-  if python3 "$ROOT/lab/trust5/run.py" check >/tmp/_t5_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- trust5 check ) >/tmp/_t5_check 2>&1; then
     note "TRUST.5: anti-ceremony audit fresh; no class-F court; views are no-new-truth"
   else
     bad "TRUST.5: anti-ceremony audit failure"; cat /tmp/_t5_check
