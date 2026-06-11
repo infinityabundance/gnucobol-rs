@@ -1,0 +1,63 @@
+{
+  "schema": "gnurust-dialect-runtime-atlas-v1",
+  "court": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+  "dialect": "gnucobol-3.2.0 across -std modes",
+  "witness_default": "gnucobol-3.2.0-default",
+  "oracle": "cobc -std=<dialect> compile + run (cobc/config/*.conf dialect engine + libcob display)",
+  "doctrine": "OBSERVED map of where RUNTIME behavior diverges across GnuCOBOL's OWN -std dialects. The sealed courts are all witnessed under the DEFAULT dialect; this records the boundary of that single witness. KEY FACT: the STORED record bytes (what KOBOLD decodes) are dialect-INVARIANT for zoned sign; only the DISPLAY *presentation* and the COMPILE-acceptance of extensions diverge. gnucobol-rs runs ONE dialect (default) and claims NO vendor parity -- the -std modes are GnuCOBOL approximations of vendor dialects, never the vendor compilers.",
+  "stored_sign_bytes_by_dialect": {
+    "default": "30313273",
+    "cobol85": "30313273",
+    "cobol2014": "30313273",
+    "ibm-strict": "30313273",
+    "mvs-strict": "30313273",
+    "mf-strict": "30313273",
+    "bs2000-strict": "30313273",
+    "rm-strict": "30313273",
+    "gcos-strict": "30313273"
+  },
+  "display_presentation_by_dialect": {
+    "default": "-0123",
+    "cobol85": "-0123",
+    "cobol2014": "-0123",
+    "ibm-strict": "0123-",
+    "mvs-strict": "0123-",
+    "mf-strict": "-0123",
+    "bs2000-strict": "0123-",
+    "rm-strict": "0123-",
+    "gcos-strict": "0123-"
+  },
+  "compile_acceptance": {
+    "COMP-5@cobol85": "REJ",
+    "COMP-5@default": "OK",
+    "FUNCTION-TRIM@cobol85": "REJ",
+    "BINARY-LONG@ibm-strict": "REJ",
+    "BINARY-LONG@default": "OK"
+  },
+  "observations": [
+    {
+      "name": "stored zoned-sign bytes",
+      "observed": "the STORED bytes of S9(4)=-123 are IDENTICAL (30 31 32 73, overpunch in the last byte) across default/cobol85/cobol2014/ibm-strict/mvs-strict/mf-strict/bs2000-strict/rm-strict/gcos-strict -- the record-decode lane is NOT dialect-sensitive for zoned sign",
+      "status": "observed-only"
+    },
+    {
+      "name": "DISPLAY presentation sign placement",
+      "observed": "DISPLAY of a signed field DIVERGES into two camps: LEADING '-0123' (default, cobol85, cobol2014, mf-strict) vs TRAILING '0123-' (ibm-strict, mvs-strict, bs2000-strict, rm-strict, gcos-strict) -- a presentation difference only, NOT a storage difference",
+      "status": "observed-only"
+    },
+    {
+      "name": "compile-acceptance of extensions",
+      "observed": "COMP-5 is rejected by cobol85/cobol2014 (accepted by default/ibm/mf); FUNCTION TRIM is rejected by cobol85 (a 2014 intrinsic); USAGE BINARY-LONG is rejected by cobol85 and ibm-strict -- the same source is accepted or refused depending on dialect",
+      "status": "observed-only"
+    }
+  ],
+  "negative_capabilities": [
+    "NEG.DIALECT_RUNTIME.NO_NONDEFAULT_IMPLEMENTATION",
+    "NEG.DIALECT_RUNTIME.NO_VENDOR_PARITY",
+    "NEG.DIALECT_RUNTIME.NO_STD_IS_VENDOR",
+    "NEG.DIALECT_RUNTIME.NO_FULL_DIVERGENCE_ENUMERATION",
+    "NEG.DIALECT_RUNTIME.NO_PRESENTATION_DECODE",
+    "NEG.DIALECT_RUNTIME.NO_SCREEN_DIALECTS",
+    "NEG.DIALECT_RUNTIME.NO_RUNTIME_PORTABILITY"
+  ]
+}

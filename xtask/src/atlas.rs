@@ -160,3 +160,34 @@ pub fn directive_variance(root: &str) -> i32 {
         ("no-truncate-keeps-binary", g("TR_NO") == "44"),
     ])
 }
+
+const DIALECT_RUNTIME_ATLAS: &str = include_str!("data/dialect-runtime-atlas.json");
+
+pub fn dialect_runtime(root: &str) -> i32 {
+    let load = |envk: &str| -> std::collections::HashMap<String, String> {
+        let mut d = std::collections::HashMap::new();
+        for ln in std::fs::read_to_string(std::env::var(envk).unwrap_or_default()).unwrap_or_default().lines() {
+            let parts: Vec<&str> = ln.split_whitespace().collect();
+            if !parts.is_empty() { d.insert(parts[0].to_string(), parts.get(1).copied().unwrap_or("").to_string()); }
+        }
+        d
+    };
+    let store = load("STORE_TXT");
+    let disp = load("DISP_TXT");
+    let e = |k: &str| std::env::var(k).unwrap_or_default();
+    let store_vals: std::collections::HashSet<String> = store.values().filter(|v| *v != "REJECT").cloned().collect();
+    let leading: std::collections::HashSet<&String> = disp.iter().filter(|(_, v)| *v == "-0123").map(|(k, _)| k).collect();
+    let trailing: std::collections::HashSet<&String> = disp.iter().filter(|(_, v)| *v == "0123-").map(|(k, _)| k).collect();
+    let dl = |d: &str| disp.get(d).map(String::as_str);
+    let lead_ok = ["default", "mf-strict"].iter().all(|d| leading.contains(&d.to_string()));
+    let trail_ok = ["ibm-strict", "mvs-strict", "bs2000-strict", "rm-strict"].iter().all(|d| trailing.contains(&d.to_string()));
+    report(root, "reports/dialect-runtime-atlas.json", DIALECT_RUNTIME_ATLAS, &[
+        ("stored-sign-bytes-invariant", store_vals.len() == 1 && store_vals.contains("30313273")),
+        ("present-default-leading", dl("default") == Some("-0123")),
+        ("present-ibm-trailing", dl("ibm-strict") == Some("0123-")),
+        ("present-two-camps", lead_ok && trail_ok),
+        ("comp5-rejected-by-strict-std", e("C5_85") == "REJ" && e("C5_DEF") == "OK"),
+        ("trim-rejected-by-cobol85", e("TRIM_85") == "REJ"),
+        ("binary-long-rejected-by-ibm", e("BL_IBM") == "REJ" && e("BL_DEF") == "OK"),
+    ])
+}
