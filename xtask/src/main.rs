@@ -14,6 +14,7 @@ mod support;
 mod trust4;
 mod docs;
 mod misc;
+mod lineage;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -34,6 +35,7 @@ fn main() {
         "docs" => docs::run(cmd, &root),
         "gcodes" => misc::gcodes(&root),
         "atlas-check" => misc::atlas_check(&root),
+        "lineage" => lineage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2
