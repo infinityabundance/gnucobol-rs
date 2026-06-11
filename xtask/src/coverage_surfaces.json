@@ -1,0 +1,467 @@
+[
+ {
+  "surface": "data-representation",
+  "category": "data representation",
+  "source_modules": [
+   "libcob/move.c",
+   "libcob/numeric.c",
+   "libcob/common.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.2",
+   "GNURUST.14",
+   "GNURUST.18"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "wrong decoded bytes silently corrupt every downstream value"
+ },
+ {
+  "surface": "field-model",
+  "category": "data representation",
+  "source_modules": [
+   "cobc/field.c",
+   "cobc/typeck.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.3",
+   "GNURUST.9"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong PIC->{type,digits,scale,size} mislays every field"
+ },
+ {
+  "surface": "record-layout",
+  "category": "data representation",
+  "source_modules": [
+   "cobc/typeck.c",
+   "cobc/tree.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.4",
+   "GNURUST.10"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong offset/ODO size shifts the whole record"
+ },
+ {
+  "surface": "copybook-expansion",
+  "category": "source",
+  "source_modules": [
+   "cobc/pplex.c",
+   "cobc/ppparse.c",
+   "cobc/replace.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.5",
+   "GNURUST.6"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong COPY/REPLACING expansion changes the layout before decode"
+ },
+ {
+  "surface": "move-storage",
+  "category": "MOVE/storage",
+  "source_modules": [
+   "libcob/move.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.2"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong MOVE store/truncation/sign corrupts the destination bytes"
+ },
+ {
+  "surface": "arithmetic",
+  "category": "arithmetic",
+  "source_modules": [
+   "libcob/numeric.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.7",
+   "GNURUST.13",
+   "GNURUST.19",
+   "GNURUST.REMAINDER.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong receiver scale/rounding/sign misstates money"
+ },
+ {
+  "surface": "value-initialization",
+  "category": "data representation",
+  "source_modules": [
+   "cobc/field.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.8",
+   "GNURUST.VALUE.NEGZERO.EDGE.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong VALUE image gives a record the wrong initial bytes"
+ },
+ {
+  "surface": "conditions-level88",
+  "category": "conditions",
+  "source_modules": [
+   "cobc/typeck.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.11",
+   "GNURUST.12"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong LEVEL-88 truth or SET flips a branch"
+ },
+ {
+  "surface": "codepage-ebcdic",
+  "category": "data representation",
+  "source_modules": [
+   "libcob/common.c",
+   "libcob/move.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.15",
+   "GNURUST.17"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong EBCDIC table mis-decodes text and zoned numerics"
+ },
+ {
+  "surface": "edited-pictures",
+  "category": "MOVE/storage",
+  "source_modules": [
+   "libcob/move.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.16"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong edited decode mis-recovers a presentation value"
+ },
+ {
+  "surface": "dialect-options",
+  "category": "compiler dialect options",
+  "source_modules": [
+   "cobc/config.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "DIALECT.PROFILE.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "an unrecorded dialect makes 'GnuCOBOL says' ambiguous"
+ },
+ {
+  "surface": "dialect-runtime",
+  "category": "compiler dialect options",
+  "source_modules": [
+   "cobc/config.c",
+   "config/default.conf",
+   "libcob/move.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.DIALECT.RUNTIME.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "stored zoned-sign bytes are dialect-invariant but DISPLAY presentation (leading vs trailing sign) and compile-acceptance of extensions diverge across -std modes; -std is not vendor parity"
+ },
+ {
+  "surface": "directive-variance",
+  "category": "compiler dialect options",
+  "source_modules": [
+   "cobc/config.c",
+   "libcob/move.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "compiler directives shift the record bytes: -fbinary-size changes COMP layout, -fbinary-byteorder flips endianness, -fbinary-truncate changes MOVE results; a correct decode needs the producer's build profile (BUILD.PROFILE.1)"
+ },
+ {
+  "surface": "lineage-corpus",
+  "category": "meta/differential",
+  "source_modules": [
+   "libcob/move.c",
+   "cobc/typeck.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.LINEAGE.CORPUS.20M.0",
+   "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+   "GNURUST.LINEAGE.CORPUS.20M.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "deterministic 20M real-cobc COBOL-witness lineage corpus: generate->compile/run->three-way differential->shrink->classify->replay->Merkle; reveals the oracle's observed behavioral topology, not parity"
+ },
+ {
+  "surface": "declaratives-use",
+  "category": "runtime exceptions",
+  "source_modules": [
+   "cobc/typeck.c",
+   "libcob/fileio.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.DECLARATIVES.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a failing file op fires its USE AFTER STANDARD ERROR declarative with FILE STATUS visible, then RESUMES; per-file binding; misreading this as a crash or a no-op corrupts batch-program control-flow analysis"
+ },
+ {
+  "surface": "size-error",
+  "category": "runtime exceptions",
+  "source_modules": [
+   "libcob/numeric.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "SIZE.ERROR.ATLAS.1",
+   "GNURUST.SIZE.ERROR.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal \u2014 silent corruption"
+ },
+ {
+  "surface": "file-io-sequential",
+  "category": "file I/O",
+  "source_modules": [
+   "libcob/fileio.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.FILE.SEQUENTIAL.1",
+   "GNURUST.FILE.WRITE.1",
+   "GNURUST.FILE.REWRITE.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "sequential/line READ record bytes + AT END drive most batch COBOL logic"
+ },
+ {
+  "surface": "file-io-indexed",
+  "category": "file I/O (keyed)",
+  "source_modules": [
+   "libcob/fileio.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.INDEXED.FILE.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "indexed/keyed file I/O -- the largest remaining gap cluster; backend-specific on-disk ISAM/BDB format observed, not implemented"
+ },
+ {
+  "surface": "file-io-relative",
+  "category": "file I/O (relative)",
+  "source_modules": [
+   "libcob/fileio.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.RELATIVE.FILE.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "relative (by record number) file I/O observed; backend slotted format not implemented"
+ },
+ {
+  "surface": "file-status",
+  "category": "file I/O",
+  "source_modules": [
+   "libcob/fileio.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.FILE.STATUS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "real COBOL branches on file-status codes (00/10/35/...); observed atlas of which status arises from which condition"
+ },
+ {
+  "surface": "initialize",
+  "category": "MOVE/storage",
+  "source_modules": [
+   "cobc/typeck.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.INITIALIZE.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "INITIALIZE group/FILLER/REDEFINES/OCCURS defaults are easy to get wrong"
+ },
+ {
+  "surface": "inspect",
+  "category": "MOVE/storage",
+  "source_modules": [
+   "libcob/strings.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.INSPECT.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "INSPECT TALLYING/REPLACING/CONVERTING is classic data-munging with real byte effects"
+ },
+ {
+  "surface": "string-unstring",
+  "category": "MOVE/storage",
+  "source_modules": [
+   "libcob/strings.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.STRING.UNSTRING.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "STRING/UNSTRING pointer/overflow/delimiter byte effects are high migration value"
+ },
+ {
+  "surface": "intrinsics",
+  "category": "intrinsics",
+  "source_modules": [
+   "libcob/intrinsic.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.INTRINSIC.ATLAS.1",
+   "GNURUST.INTRINSIC.LENGTH.1",
+   "GNURUST.INTRINSIC.NUMVAL.1",
+   "GNURUST.INTRINSIC.MOD-REM.1",
+   "GNURUST.INTRINSIC.INTEGER.1",
+   "GNURUST.INTRINSIC.CASE.1",
+   "GNURUST.INTRINSIC.ORD-CHAR.1",
+   "GNURUST.INTRINSIC.NUMVAL-C.1",
+   "GNURUST.INTRINSIC.DATE.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "NUMVAL/LENGTH/MOD/CURRENT-DATE etc.; observed atlas + per-intrinsic implementation courts (LENGTH sealed)"
+ },
+ {
+  "surface": "accept-display",
+  "category": "ACCEPT/DISPLAY",
+  "source_modules": [
+   "libcob/termio.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.ACCEPT.DISPLAY.1",
+   "GNURUST.ACCEPT.DISPLAY.2"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "emitted DISPLAY text + ACCEPT is runtime evidence too"
+ },
+ {
+  "surface": "procedure-flow",
+  "category": "control flow",
+  "source_modules": [
+   "cobc/typeck.c",
+   "cobc/codegen.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+   "GNURUST.IF.EVALUATE.SLICE.1",
+   "GNURUST.IF.NUMERIC.SLICE.1",
+   "GNURUST.PERFORM.SLICE.1",
+   "GNURUST.TABLE.PERFORM.SLICE.1",
+   "GNURUST.SEARCH.TABLE.1",
+   "GNURUST.FILE.FLOW.SLICE.1",
+   "GNURUST.FILE.FILTER.SLICE.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, execution NOT claimed"
+ },
+ {
+  "surface": "call-linkage",
+  "category": "CALL/linkage",
+  "source_modules": [
+   "libcob/call.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.CALL.EXTENSION.ATLAS.1",
+   "GNURUST.CALL.LAYOUT.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "CALL/linkage/USING is a large surface; refused until receipt-backed"
+ },
+ {
+  "surface": "sort-merge",
+  "category": "SORT/MERGE",
+  "source_modules": [
+   "libcob/fileio.c"
+  ],
+  "status": "observed",
+  "courts": [
+   "GNURUST.SORT.MERGE.ATLAS.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "SORT/MERGE is its own runtime; refused until receipt-backed"
+ },
+ {
+  "surface": "screen-section",
+  "category": "screen/report/CICS/SQL unsupported",
+  "source_modules": [
+   "libcob/screenio.c"
+  ],
+  "status": "negative",
+  "courts": [],
+  "future_campaign": null,
+  "risk_if_unported": "SCREEN SECTION is terminal UI; out of the data-evidence lane"
+ },
+ {
+  "surface": "report-writer",
+  "category": "screen/report/CICS/SQL unsupported",
+  "source_modules": [
+   "libcob/reportio.c"
+  ],
+  "status": "negative",
+  "courts": [],
+  "future_campaign": null,
+  "risk_if_unported": "REPORT WRITER is a presentation engine; out of lane"
+ },
+ {
+  "surface": "ml-io-xml-json",
+  "category": "screen/report/CICS/SQL unsupported",
+  "source_modules": [
+   "libcob/mlio.c"
+  ],
+  "status": "negative",
+  "courts": [],
+  "future_campaign": null,
+  "risk_if_unported": "XML/JSON GENERATE/PARSE is out of the fixed-record lane"
+ },
+ {
+  "surface": "diagnostics",
+  "category": "diagnostics",
+  "source_modules": [
+   "cobc/error.c"
+  ],
+  "status": "negative",
+  "courts": [],
+  "future_campaign": null,
+  "risk_if_unported": "compiler message parity is not claimed"
+ },
+ {
+  "surface": "cics-sql-preprocessor",
+  "category": "screen/report/CICS/SQL unsupported",
+  "source_modules": [
+   "cobc/ppparse.c"
+  ],
+  "status": "negative",
+  "courts": [],
+  "future_campaign": null,
+  "risk_if_unported": "EXEC CICS / EXEC SQL are precompiler surfaces; refused (NEG.CICS.*, NEG.SQL.PRECOMPILER)"
+ }
+]

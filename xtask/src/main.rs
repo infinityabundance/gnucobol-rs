@@ -5,6 +5,7 @@ use std::process::exit;
 mod ladder;
 mod kani_fuzz;
 mod gap;
+mod coverage;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -15,6 +16,7 @@ fn main() {
         "ladder" => ladder::run(cmd, &root),
         "kani-fuzz" => kani_fuzz::run(cmd, &root),
         "gap" => gap::run(cmd, &root),
+        "coverage" => coverage::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2

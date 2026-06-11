@@ -215,7 +215,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.5: anti-ceremony audit failure"; cat /tmp/_t5_check
   fi
-  if python3 "$ROOT/lab/coverage/run.py" check >/tmp/_cov_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- coverage check ) >/tmp/_cov_check 2>&1; then
     note "GNURUST.COVERAGE.1: every admitted court mapped to a GnuCOBOL surface; map fresh"
   else
     bad "GNURUST.COVERAGE.1: coverage drift / unmapped court"; cat /tmp/_cov_check
