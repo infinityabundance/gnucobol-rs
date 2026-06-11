@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.32",
+  "crate_version": "0.7.33",
   "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values",
   "hash_chain": {
-    "inputs_sha256": "9ec14264d2c1a31f0fa328273a5353485c776576f275ee40f7ead9a23c6db227"
+    "inputs_sha256": "0117b07c4932294e206a81b731bd2e480bd8d3cd74abb84f7f8096e947182232"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "18e5c80cc60e2db693972f6dd3f474d9641b3c52b5ceb09f0b21689ff3bf389a",
-    "receipt_sha256": "c487e643e82c4c5a0ccd1bcff2ef6798588fe82e8877a882736e3674cdf6536c"
+    "receipt_sha256": "c9cb2debbbf2a92a0a0344fa1d72c92b5d286ec99953413eb03c468e54cac983"
   },
   "kind": "court-casefile",
   "lie_prevented": [

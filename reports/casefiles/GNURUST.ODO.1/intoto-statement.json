@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.ODO.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.33",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "ba60036feb8647f177bedb48b23ce748e9193a988e08d971d5a0a05c5f19141a",
+      "receipt_sha256": "c597ba10e1a39c499611040f3bd70531b88ea1a15f7b992151c5c0a59167a8b8"
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/odo_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "a2c0e191e9b6ac2abd666800ce5b9158d0ecf9b01a44b4a41ff9ec4d750e4c60"
+      },
+      "name": "reports/casefiles/GNURUST.ODO.1/casefile.json"
+    }
+  ]
+}

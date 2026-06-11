@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.10",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.32",
+  "crate_version": "0.7.33",
   "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records",
   "hash_chain": {
-    "inputs_sha256": "73927b1828f1c5ab34ffd7615fd5ae44ced5e8e0be66dea18d1e8aa150513223"
+    "inputs_sha256": "e6d6cd1788eb65a4e411f7b9105994c2f2d25ba1d90e1f7656daed9960621909"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "bdbe903da1b51576ce5cdb50da4a818cd2dd0817b1e9e457e37af8082d855717",
-    "receipt_sha256": "736fff182656103226fc1d3f2ed56c2efd408ae0075df8c1f316c190126f253e"
+    "receipt_sha256": "c597ba10e1a39c499611040f3bd70531b88ea1a15f7b992151c5c0a59167a8b8"
   },
   "kind": "court-casefile",
   "legacy_preservation": {
@@ -84,9 +84,8 @@
   },
   "results": {
     "fail": 0,
-    "note": "30 sweep + 4M fuzz",
-    "pass": null,
-    "total": null,
+    "pass": 10,
+    "total": 10,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

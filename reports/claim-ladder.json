@@ -1315,6 +1315,20 @@
       "damage_if_overclaimed": "a wrong subscript offset reads the wrong table element or adjacent storage, corrupting every table lookup"
     },
     {
+      "id": "GNURUST.ODO.1",
+      "name": "OCCURS DEPENDING ON (variable length)",
+      "proven": "the used byte length of an OCCURS 1 TO max DEPENDING ON N group (fixed_prefix + N*element_size, matching cobc LENGTH OF) and bounded element access E(i) for 1<=i<=N",
+      "byte_domain": "controlling value + table -> used length / active element bytes",
+      "oracle": "cobc LENGTH OF / E(i) over an OCCURS DEPENDING ON group",
+      "fixtures": "odo sweep 10/0 + fuzz",
+      "sealed_version": "0.7.33",
+      "not_proven": "element access beyond the active count (fail-closed by design); nested/2-D ODO; ODO in a file record with VARYING; SET of the controlling field mid-access; signed/packed elements",
+      "breaks_claim": "access beyond N; nested ODO; multiple ODO in one group",
+      "readiness": 4,
+      "lie_prevented": "'an ODO group is always its maximum length' -- NO, its used length is fixed_prefix + N*element_size and only N elements are active",
+      "damage_if_overclaimed": "treating an ODO record as max-length over-reads or over-writes a variable-length record, corrupting the next record or trailing data"
+    },
+    {
       "id": "GNURUST.SORT.MERGE.ATLAS.1",
       "name": "observed SORT / MERGE atlas",
       "proven": "observed GnuCOBOL SORT byte-effect (2/0) -- the last big surface gap (SORT/MERGE 145x per GNURUST.PUBLIC.GAP.1): SORT ASCENDING KEY reorders records into KEY-ASCENDING order (input 050,010,099,020 -> 010,020,050,099) and SORT DESCENDING into key-descending order, via USING the input file + GIVING the sorted output, over a sort-merge work file (SD). OBSERVED court: gnucobol-rs does NOT execute SORT -- it is a runtime sort engine over a work file -- this MAPS the reordering byte-effect, it sorts nothing",

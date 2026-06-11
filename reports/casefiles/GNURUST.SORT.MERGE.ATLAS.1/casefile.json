@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SORT.MERGE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.32",
+  "crate_version": "0.7.33",
   "damage_if_overclaimed": "assuming a deterministic in-place / stable sort where GnuCOBOL runs an external sort engine misreads record order for equal keys and ignores the work-file/procedure machinery",
   "hash_chain": {
-    "inputs_sha256": "3e6e4a5f3f1698bf896d1cb6636b3460e6e264ec2740c8066b21bbe35742e787"
+    "inputs_sha256": "5402f708a40f51845489b161d0f16d1ef91fb81d049baa5605d62df06bfe4e5a"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7dfcaa0e76b5c17c99e32fd0e5cfdcdc1f928d6ad2cfee8327078e9ad643be89",
-    "receipt_sha256": "30a4073b5509783bfa08d805fbbe7bfe3de5830741dbf18fe126a3d8c88a6d4f"
+    "receipt_sha256": "3f286fcbd7329435e06a1ac6a380b03def3feaf755ed1de1ac72f82ef161b435"
   },
   "kind": "court-casefile",
   "lie_prevented": [

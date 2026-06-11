@@ -186,3 +186,9 @@ name = "subscript"
 path = "fuzz_targets/subscript.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "odo"
+path = "fuzz_targets/odo.rs"
+test = false
+doc = false

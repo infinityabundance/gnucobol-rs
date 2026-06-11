@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "20/36",
+  "sealed_fraction": "21/37",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 20
+    "sealed": 21
   },
-  "surface_count": 36,
+  "surface_count": 37,
   "surfaces": [
     {
       "category": "data representation",
@@ -562,6 +562,21 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "table-subscript"
+    },
+    {
+      "category": "data handling",
+      "courts": [
+        "GNURUST.ODO.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "treating an ODO record as max-length over-reads/writes a variable-length record",
+      "source_modules": [
+        "cobc/typeck.c",
+        "libcob/move.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "occurs-depending-on"
     }
   ]
 }

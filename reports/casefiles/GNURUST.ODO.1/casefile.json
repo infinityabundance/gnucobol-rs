@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "controlling value + table -> used length / active element bytes"
+  ],
+  "case_id": "GNURUST.ODO.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.33",
+  "damage_if_overclaimed": "treating an ODO record as max-length over-reads or over-writes a variable-length record, corrupting the next record or trailing data",
+  "hash_chain": {
+    "inputs_sha256": "bd38a2f6f6a412e503b1780b646e1dbbcd6f1f1406610633c03e00941de6d5cd"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "ba60036feb8647f177bedb48b23ce748e9193a988e08d971d5a0a05c5f19141a",
+    "receipt_sha256": "c597ba10e1a39c499611040f3bd70531b88ea1a15f7b992151c5c0a59167a8b8"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'an ODO group is always its maximum length' -- NO, its used length is fixed_prefix + N*element_size and only N elements are active"
+  ],
+  "negative_capability_ids": [
+    "NEG.ELEMENT-ACCESS-BEYOND-THE-ACTIVE-COUNT-F",
+    "NEG.NESTED-2-D-ODO",
+    "NEG.ODO-IN-A-FILE-RECORD-WITH-VARYING",
+    "NEG.SET-OF-THE-CONTROLLING-FIELD-MID-ACCESS",
+    "NEG.SIGNED-PACKED-ELEMENTS"
+  ],
+  "negative_claims": [
+    "element access beyond the active count (fail-closed by design)",
+    "nested/2-D ODO",
+    "ODO in a file record with VARYING",
+    "SET of the controlling field mid-access",
+    "signed/packed elements",
+    "lie prevented: 'an ODO group is always its maximum length' -- NO, its used length is fixed_prefix + N*element_size and only N elements are active"
+  ],
+  "oracle": {
+    "detail": "cobc LENGTH OF / E(i) over an OCCURS DEPENDING ON group",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.ODO.1"
+  },
+  "positive_claims": [
+    "the used byte length of an OCCURS 1 TO max DEPENDING ON N group (fixed_prefix",
+    "N*element_size, matching cobc LENGTH OF) and bounded element access E(i) for 1<=i<=N"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/odo_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 10,
+    "total": 10,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

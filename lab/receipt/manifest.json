@@ -779,6 +779,17 @@
         "INDEXED BY index-names",
         "subscript arithmetic expressions"
       ]
+    },
+    "GNURUST.ODO.1": {
+      "court": "OCCURS DEPENDING ON used length + bounded access",
+      "sweep": "odo_sweep.sh",
+      "byte_domain": "controlling value + table -> used length / active element bytes",
+      "non_claims": [
+        "access beyond active count (fail-closed)",
+        "nested/2-D ODO",
+        "SET controlling mid-access",
+        "signed/packed elements"
+      ]
     }
   }
 }

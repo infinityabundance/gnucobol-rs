@@ -1,70 +1,60 @@
 #!/usr/bin/env bash
-# ODO physical-max layout differential sweep (GNURUST.10). For each gen_odo case (a record whose
-# last item is OCCURS ... DEPENDING ON), build a program, run `cobc -C`, and read the record's
-# **physical** storage allocation `b_REC[size]` (the max-occurrence layout — NOT runtime LENGTH OF,
-# which is the unclaimed logical length). Compare to the Rust lay_out total (via layout_rows) and to
-# the pre-ODO field offsets. Prints PASS=n FAIL=n. ROOT derived from script path.
+# OCCURS DEPENDING ON sweep (GNURUST.ODO.1): a variable-length REC; per case COMPUTE L = LENGTH OF REC (at N)
+# or DISPLAY E(i); compare cobc to odo_used_length / odo_element. PASS=n FAIL=n.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PREFIX="$ROOT/lab/oracle/prefix"
 export PATH="$PREFIX/bin:$PATH" LD_LIBRARY_PATH="$PREFIX/lib" \
-  COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" COB_COPY_DIR="$PREFIX/share/gnucobol/copy" LC_ALL=C.UTF-8
-
+  COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" LC_ALL=C.UTF-8
+command -v cobc >/dev/null 2>&1 || { echo "cobc not built"; exit 2; }
 ( cd "$ROOT" && cargo build --release -p gnucobol-rs --examples >/dev/null 2>&1 ) || exit 2
 GEN="$ROOT/target/release/examples/gen_odo"
-ROWS="$ROOT/target/release/examples/layout_rows"
+ROWS="$ROOT/target/release/examples/odo_rows"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 
-"$GEN" > "$TMP/cases.txt"
+"$GEN" > "$TMP/specs.txt"
+"$ROWS" < "$TMP/specs.txt" | sort > "$TMP/rust.txt"
 
-PASS=0; FAIL=0; TOTAL=0
-label=""; decls=()
-process() {
-  [ -z "$label" ] && return
-  TOTAL=$((TOTAL+1))
-  # Rust physical total = REC size from layout_rows.
-  rust_total=$(printf '%s\n' "${decls[@]}" | "$ROWS" | awk '$1=="REC"{print $3}')
-  # Build the program and read b_REC[size] from generated C.
-  local prog="$TMP/$label.cob"
-  {
-    echo "       IDENTIFICATION DIVISION."
-    echo "       PROGRAM-ID. P$label."
-    echo "       DATA DIVISION."
-    echo "       WORKING-STORAGE SECTION."
-    for d in "${decls[@]}"; do
-      local decl="${d#*$'\t'}"
-      printf '       %s.\n' "$decl"
-    done
-    echo "       PROCEDURE DIVISION."
-    echo "           DISPLAY LENGTH OF REC."
-    echo "           STOP RUN."
-  } > "$prog"
-  # -free: no 72-column margin (long ODO declarations would otherwise truncate). Source format does
-  # not affect data layout, so the physical b_REC[size] is unchanged.
-  if ( cd "$TMP" && cobc -free -C "$label.cob" 2>>"$TMP/cobc.err" ); then
-    # physical allocation of the record: the `static ... b_N[SIZE] ...;  /* REC */` storage line.
-    oracle_total=$(grep -h '/\* REC \*/' "$TMP/$label".c.l.h "$TMP/$label".c.h 2>/dev/null \
-      | grep -oE 'b_[0-9]+\[[0-9]+\]' | head -1 | grep -oE '[0-9]+\]' | tr -d ']')
-    if [ -n "$oracle_total" ] && [ "$oracle_total" = "$rust_total" ]; then
-      PASS=$((PASS+1))
-    else
-      FAIL=$((FAIL+1))
-      [ "$FAIL" -le 15 ] && echo "MISMATCH $label oracle_phys=$oracle_total rust=$rust_total" >&2
-    fi
-  else
-    FAIL=$((FAIL+1))
-    [ "$FAIL" -le 15 ] && echo "COMPILE_FAIL $label" >&2
+{
+  echo ">>SOURCE FORMAT FREE"
+  echo "IDENTIFICATION DIVISION."
+  echo "PROGRAM-ID. ODOPROG."
+  echo "DATA DIVISION."
+  echo "WORKING-STORAGE SECTION."
+  echo "01 REC."
+  echo "   05 N PIC 9."
+  echo "   05 E OCCURS 1 TO 5 DEPENDING ON N PIC X(3)."
+  echo "01 L PIC 9(3)."
+  echo "PROCEDURE DIVISION."
+  while IFS='|' read -r label ty n i hex; do
+    [ -z "$label" ] && continue
+    case "$ty" in
+      len)  echo "MOVE $n TO N. COMPUTE L = LENGTH OF REC. DISPLAY \"$label[\" L \"]\".";;
+      elem) echo "MOVE 5 TO N. MOVE \"AAA\" TO E(1). MOVE \"BBB\" TO E(2). MOVE \"CCC\" TO E(3). MOVE \"DDD\" TO E(4). MOVE \"EEE\" TO E(5). DISPLAY \"$label[\" E($i) \"]\".";;
+    esac
+  done < "$TMP/specs.txt"
+  echo "STOP RUN."
+} > "$TMP/odoprog.cob"
+
+if ! cobc -free -x -o "$TMP/odoprog" "$TMP/odoprog.cob" 2>"$TMP/cobc.err"; then
+  echo "compile failed:"; cat "$TMP/cobc.err"; exit 2
+fi
+"$TMP/odoprog" > "$TMP/out.txt" 2>/dev/null
+
+while IFS='|' read -r label ty n i hex; do
+  [ -z "$label" ] && continue
+  line=$(grep -m1 "^$label\[" "$TMP/out.txt")
+  inner="${line#*[}"; inner="${inner%]*}"
+  hx=$(printf '%s' "$inner" | od -An -tx1 | tr -d ' \n')
+  echo "$label $hx"
+done < "$TMP/specs.txt" | sort > "$TMP/oracle.txt"
+
+PASS=0; FAIL=0
+while read -r label r; do
+  o=$(grep -m1 "^$label " "$TMP/oracle.txt" | awk '{print $2}')
+  if [ "$r" = "$o" ]; then PASS=$((PASS+1)); else
+    FAIL=$((FAIL+1)); [ "$FAIL" -le 10 ] && echo "MISMATCH $label rust=$r oracle=$o" >&2
   fi
-}
-
-while IFS= read -r line; do
-  case "$line" in
-    "#CASE "*) process; label="${line#\#CASE }"; decls=() ;;
-    "") : ;;  # keep accumulating until next #CASE
-    *) decls+=("$line") ;;
-  esac
-done < "$TMP/cases.txt"
-process
-
-echo "records=$TOTAL  PASS=$PASS FAIL=$FAIL"
+done < "$TMP/rust.txt"
+echo "PASS=$PASS FAIL=$FAIL"
 [ "$FAIL" -eq 0 ]

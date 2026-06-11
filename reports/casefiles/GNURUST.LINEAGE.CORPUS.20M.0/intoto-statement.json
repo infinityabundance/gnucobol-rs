@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.32",
+    "crate_version": "0.7.33",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "78af8b4414996ec714b3f4fb11ffbc65fe9d590e74a11c3c6788c70e7fb46b44",
-      "receipt_sha256": "b610ba9f6fdd036a774abef4746d9075c0e439a941fc5d8147b2a9073f7e61f7"
+      "receipt_sha256": "fee658ae9bbb4c644e2599fa7c608589f623be3c6395b2a814ecfeaad7f353ee"
     },
     "negative_claim_count": 10,
     "positive_claim_count": 3,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "e52d8246b9b6ec36f180141955b1ac0b79654eb7c5da2d8bfa07e1d6e993d028"
+        "sha256": "fac26e21ae8f28712aff10fa6f13828073a1bf63dd86e94e2c88d7859bf4f6ae"
       },
       "name": "reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/casefile.json"
     }

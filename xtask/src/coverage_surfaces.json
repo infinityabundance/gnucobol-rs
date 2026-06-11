@@ -506,5 +506,19 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "a wrong subscript offset reads the wrong table element"
+ },
+ {
+  "surface": "occurs-depending-on",
+  "category": "data handling",
+  "source_modules": [
+   "cobc/typeck.c",
+   "libcob/move.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.ODO.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "treating an ODO record as max-length over-reads/writes a variable-length record"
  }
 ]

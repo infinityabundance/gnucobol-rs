@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **36**  ·  sealed ✅ **20**  ·  observed 🟡 11  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **37**  ·  sealed ✅ **21**  ·  observed 🟡 11  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **20/36**
+- sealed fraction (data-representation spine): **21/37**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -47,6 +47,7 @@
 | `class-conditions` | condition | `common.c` | ✅ sealed | GNURUST.CLASS.1 |
 | `reference-modification` | data handling | `move.c, typeck.c` | ✅ sealed | GNURUST.REFMOD.1 |
 | `table-subscript` | data handling | `typeck.c, move.c` | ✅ sealed | GNURUST.SUBSCRIPT.1 |
+| `occurs-depending-on` | data handling | `typeck.c, move.c` | ✅ sealed | GNURUST.ODO.1 |
 
 ## Risk of the unported surfaces (missing ❌)
 

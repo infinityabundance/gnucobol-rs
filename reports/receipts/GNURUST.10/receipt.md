@@ -2,13 +2,13 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.10 — OCCURS DEPENDING ON physical-max layout
 
-**Verdict: FAIL** · replay `no-result`
+**Verdict: PASS** · replay `PASS=10 FAIL=0`
 
 | field | value |
 |-------|-------|
 | campaign | `GNURUST.10` |
 | court | OCCURS DEPENDING ON physical-max layout |
-| crate_version | `0.7.32` |
+| crate_version | `0.7.33` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | generated-C storage size b_REC[size] |
 | replay command | `bash lab/oracle/odo_sweep.sh` |
