@@ -738,6 +738,16 @@
         "EBCDIC edited",
         "edited arithmetic/VALUE"
       ]
+    },
+    "GNURUST.12B": {
+      "court": "SET 88 condition-name TO FALSE",
+      "sweep": "set_false_sweep.sh",
+      "byte_domain": "parent field-storage bytes",
+      "non_claims": [
+        "condition-name expressions",
+        "collating-sensitive ranges",
+        "Procedure Division execution"
+      ]
     }
   }
 }

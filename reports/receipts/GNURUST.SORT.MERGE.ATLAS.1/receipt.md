@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SORT.MERGE.ATLAS.1` |
 | court | observed SORT/MERGE atlas |
-| crate_version | `0.7.28` |
+| crate_version | `0.7.29` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | SORT reordering byte-effect: ASCENDING/DESCENDING KEY, USING/GIVING over an SD work file |
 | replay command | `bash lab/oracle/sort_merge_atlas_sweep.sh` |

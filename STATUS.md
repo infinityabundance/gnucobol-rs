@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-99-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-99-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-100-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-100-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.28 · 63 GNURUST courts (44 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.29 · 64 GNURUST courts (45 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -106,6 +106,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.10` | ODO physical-max layout | ✅ pass | [`reports/casefiles/GNURUST.10/`](reports/casefiles/GNURUST.10/) |
 | `GNURUST.11` | LEVEL-88 eval | ✅ pass | [`reports/casefiles/GNURUST.11/`](reports/casefiles/GNURUST.11/) |
 | `GNURUST.12` | SET 88 TO TRUE | ✅ pass | [`reports/casefiles/GNURUST.12/`](reports/casefiles/GNURUST.12/) |
+| `GNURUST.12B` | SET 88 TO FALSE | ✅ pass | [`reports/casefiles/GNURUST.12B/`](reports/casefiles/GNURUST.12B/) |
 | `GNURUST.13` | packed ADD/SUBTRACT (cob_add_bcd) | ✅ pass | [`reports/casefiles/GNURUST.13/`](reports/casefiles/GNURUST.13/) |
 | `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | ✅ pass | [`reports/casefiles/GNURUST.14/`](reports/casefiles/GNURUST.14/) |
 | `GNURUST.15` | EBCDIC cp500 DISPLAY decode | ✅ pass | [`reports/casefiles/GNURUST.15/`](reports/casefiles/GNURUST.15/) |

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.12 (court-casefile)
 
-**Verdict: PASS** · 52 sweep + fuzz · crate `gnucobol-rs` 0.7.28
+**Verdict: PASS** · 52 sweep + fuzz · crate `gnucobol-rs` 0.7.29
 
 - **Oracle:** cobc SET final bytes
 - **Byte domain(s):** parent field-storage bytes
@@ -13,11 +13,10 @@
 - canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc
 - output satisfies eval_88
 
-## Negative claims (5) — negative capability is the trust surface
-- SET TO FALSE
-- FALSE clause
-- expressions
-- execution
+## Negative claims (4) — negative capability is the trust surface
+- condition expressions
+- collating-sensitive ranges
+- Procedure Division execution
 - lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes
 
 ## Damage if overclaimed

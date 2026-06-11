@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.12",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.28",
+  "crate_version": "0.7.29",
   "damage_if_overclaimed": "a wrong SET writes a status the program never intended",
   "hash_chain": {
-    "inputs_sha256": "df6b5942adcdc1b1de2143f40ed52909dcc2c95bdb672dd5ed48df50b929d88c"
+    "inputs_sha256": "0bc15f3385ba2aec8f1ef2dbcc9cfd99a3d627bf464a77a785e694b30006b126"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "e5527662402ed3dd543dd48f116eb4f34703e6c7dac0afb15aa848cab039dcb6",
-    "receipt_sha256": "62665a0b27385d3c11a80426ffaea18aabcaaabc588f3820b30a9c2300f5fb8e"
+    "claim_ladder_entry_sha256": "4d99ddacc0678adf56018ec4b65db8cc9e60731133ef2f52c013e9eea886f253",
+    "receipt_sha256": "fbe3bfc26f6a2101a2023857fdc44044d4f97adc4c65d9cb5309322f6e222490"
   },
   "kind": "court-casefile",
   "legacy_preservation": {
@@ -31,10 +31,9 @@
     ],
     "legacy_information_preserved": true,
     "legacy_non_claims_carried_forward": [
-      "SET TO FALSE",
-      "FALSE clause",
-      "expressions",
-      "execution",
+      "condition expressions",
+      "collating-sensitive ranges",
+      "Procedure Division execution",
       "lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
     ],
     "legacy_notes_carried_forward": [
@@ -59,16 +58,14 @@
     "'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
   ],
   "negative_capability_ids": [
-    "NEG.SET-TO-FALSE",
-    "NEG.FALSE-CLAUSE",
-    "NEG.EXPRESSIONS",
-    "NEG.EXECUTION"
+    "NEG.CONDITION-EXPRESSIONS",
+    "NEG.COLLATING-SENSITIVE-RANGES",
+    "NEG.PROCEDURE-DIVISION-EXECUTION"
   ],
   "negative_claims": [
-    "SET TO FALSE",
-    "FALSE clause",
-    "expressions",
-    "execution",
+    "condition expressions",
+    "collating-sensitive ranges",
+    "Procedure Division execution",
     "lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
   ],
   "oracle": {

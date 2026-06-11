@@ -74,6 +74,7 @@ fn main() {
         let cond = Condition {
             name: label.to_string(),
             values: parse_def(def),
+            false_value: None,
         };
         match eval_88(&attr, &bytes, &cond) {
             Ok(true) => {

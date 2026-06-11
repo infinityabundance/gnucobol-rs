@@ -75,7 +75,7 @@ pub use attr::{
     COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
 pub use cond::{
-    apply_set_88_true, eval_88, set_88_true, CondLit, CondValue, Condition, ConditionError,
+    apply_set_88_true, eval_88, set_88_true, set_88_false, CondLit, CondValue, Condition, ConditionError,
     ConditionSetError,
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
@@ -439,12 +439,22 @@ pub fn __fuzz_cond(data: &[u8]) {
     let c = cond::Condition {
         name: "C".into(),
         values,
+        false_value: None,
     };
     let _ = cond::eval_88(&attr, bytes, &c);
     // Also fuzz the inverse constructor (SET ... TO TRUE): arbitrary size, then a round-trip eval.
     let size = (data[2] as usize) % 24;
     if let Ok(produced) = cond::set_88_true(&attr, size, &c) {
         let _ = cond::eval_88(&attr, &produced, &c);
+    }
+    // Also fuzz SET ... TO FALSE with a false-clause literal (GNURUST.12B).
+    let cf = cond::Condition {
+        name: "C".into(),
+        values: c.values.clone(),
+        false_value: Some(cond::CondLit::Num("0".into())),
+    };
+    if let Ok(produced) = cond::set_88_false(&attr, size, &cf) {
+        let _ = cond::eval_88(&attr, &produced, &cf);
     }
 }
 

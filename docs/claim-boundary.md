@@ -68,7 +68,7 @@ at whole-text-word granularity, composing across nesting, matching `cobc -P`. No
 
 **`GNURUST.11` — LEVEL-88 predicate.** `eval_88` proves whether a condition name is true for a parent field's current bytes — alphanumeric (space-padded compare, incl. ranges) and numeric DISPLAY/COMP-3 (value compare, inclusive ranges) — matching `cobc`. `SET`/`FALSE`/expressions/Procedure-Division execution and collating-sensitive ranges are non-claims. (`reports/RECEIPT-GNURUST-COND-11.md`.)
 
-**`GNURUST.12` — SET LEVEL-88 TO TRUE.** `set_88_true` constructs the canonical parent bytes for `SET condition-name TO TRUE` (first VALUE / range lower bound, encoded), matching `cobc`; its output satisfies `eval_88`. `SET TO FALSE`/the FALSE clause/expressions/execution are non-claims. (`reports/RECEIPT-GNURUST-SET88-12.md`.)
+**`GNURUST.12B` — SET LEVEL-88 TO FALSE.** `set_88_false` writes the `WHEN SET TO FALSE IS` literal into the parent (byte-faithful to cobc). **`GNURUST.12` — SET LEVEL-88 TO TRUE.** `set_88_true` constructs the canonical parent bytes for `SET condition-name TO TRUE` (first VALUE / range lower bound, encoded), matching `cobc`; its output satisfies `eval_88`. `SET TO FALSE`/the FALSE clause/expressions/execution are non-claims. (`reports/RECEIPT-GNURUST-SET88-12.md`.)
 
 **`GNURUST.13` — packed ADD/SUBTRACT.** `cob_arith` seals ADD/SUBTRACT into a PACKED receiver (libcob's `cob_add_bcd` path), matching the receiving-field **bytes** for DISPLAY/COMP-3 operands, scales, truncate/ROUNDED, carry, overflow, and negative-zero-on-truncation. DIVIDE / SIZE ERROR / other rounding modes / bignum are non-claims. (`reports/RECEIPT-GNURUST-ADDBCD-13.md`.)
 

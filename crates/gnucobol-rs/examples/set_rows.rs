@@ -54,6 +54,7 @@ fn main() {
         let cond = Condition {
             name: label.to_string(),
             values: parse_def(def),
+            false_value: None,
         };
         match set_88_true(&pf.attr, pf.size, &cond) {
             Ok(bytes) => {

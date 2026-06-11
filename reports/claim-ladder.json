@@ -160,11 +160,25 @@
       "oracle": "cobc SET final bytes",
       "fixtures": "52 sweep + fuzz",
       "sealed_version": "0.3.2",
-      "not_proven": "SET TO FALSE; FALSE clause; expressions; execution",
+      "not_proven": "condition expressions; collating-sensitive ranges; Procedure Division execution",
       "breaks_claim": "SET FALSE expectation",
       "readiness": 4,
       "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes",
       "damage_if_overclaimed": "a wrong SET writes a status the program never intended"
+    },
+    {
+      "id": "GNURUST.12B",
+      "name": "SET 88 TO FALSE",
+      "proven": "canonical parent bytes for SET condition-name TO FALSE (the WHEN SET TO FALSE IS literal) matching cobc; output does not satisfy eval_88",
+      "byte_domain": "parent field-storage bytes",
+      "oracle": "cobc SET ... TO FALSE final bytes",
+      "fixtures": "set-false sweep 37/0 + fuzz",
+      "sealed_version": "0.7.29",
+      "not_proven": "condition-name expressions; collating-sensitive ranges; Procedure Division execution",
+      "breaks_claim": "SET TO FALSE without a WHEN SET TO FALSE IS clause; expressions",
+      "readiness": 4,
+      "lie_prevented": "'SET FALSE writes any non-satisfying bytes' -- it writes cobc's canonical WHEN SET TO FALSE IS literal",
+      "damage_if_overclaimed": "a wrong SET FALSE writes a status the program never intended"
     },
     {
       "id": "GNURUST.13",

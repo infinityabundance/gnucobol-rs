@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.ORD-CHAR.1 (court-casefile)
 
-**Verdict: PASS** · 15/15 pass, 0 fail · crate `gnucobol-rs` 0.7.28
+**Verdict: PASS** · 15/15 pass, 0 fail · crate `gnucobol-rs` 0.7.29
 
 - **Oracle:** cobc FUNCTION ORD/CHAR (libcob/intrinsic.c)
 - **Byte domain(s):** ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1)

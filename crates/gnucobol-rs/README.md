@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-99-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-99-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-100-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-100-blueviolet)
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -81,6 +81,7 @@ compatibility court.
 | `GNURUST.10` | ODO physical-max layout | ✅ pass | `reports/casefiles/GNURUST.10/` |
 | `GNURUST.11` | LEVEL-88 eval | ✅ pass | `reports/casefiles/GNURUST.11/` |
 | `GNURUST.12` | SET 88 TO TRUE | ✅ pass | `reports/casefiles/GNURUST.12/` |
+| `GNURUST.12B` | SET 88 TO FALSE | ✅ pass | `reports/casefiles/GNURUST.12B/` |
 | `GNURUST.13` | packed ADD/SUBTRACT (cob_add_bcd) | ✅ pass | `reports/casefiles/GNURUST.13/` |
 | `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | ✅ pass | `reports/casefiles/GNURUST.14/` |
 | `GNURUST.15` | EBCDIC cp500 DISPLAY decode | ✅ pass | `reports/casefiles/GNURUST.15/` |

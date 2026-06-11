@@ -13,28 +13,21 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.12 non-claim: SET TO FALSE"
+            "text": "GNURUST.12 non-claim: condition expressions"
           },
           "ruleId": "NONCLAIM"
         },
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.12 non-claim: FALSE clause"
+            "text": "GNURUST.12 non-claim: collating-sensitive ranges"
           },
           "ruleId": "NONCLAIM"
         },
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.12 non-claim: expressions"
-          },
-          "ruleId": "NONCLAIM"
-        },
-        {
-          "level": "note",
-          "message": {
-            "text": "GNURUST.12 non-claim: execution"
+            "text": "GNURUST.12 non-claim: Procedure Division execution"
           },
           "ruleId": "NONCLAIM"
         },

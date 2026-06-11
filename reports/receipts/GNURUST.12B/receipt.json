@@ -1,0 +1,30 @@
+{
+  "byte_domain": "parent field-storage bytes",
+  "campaign": "GNURUST.12B",
+  "command": {
+    "replay": "bash lab/oracle/set_false_sweep.sh"
+  },
+  "court": "SET 88 condition-name TO FALSE",
+  "crate_version": "0.7.29",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "condition-name expressions",
+    "collating-sensitive ranges",
+    "Procedure Division execution"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "no-result"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

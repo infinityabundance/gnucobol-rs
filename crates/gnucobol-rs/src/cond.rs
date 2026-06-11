@@ -13,12 +13,11 @@
 //!   and sign-aware); a range is inclusive.
 //!
 //! **Sealed subset:** single/multiple literal values and a single `THRU` range, alphanumeric or
-//! numeric, over an admitted DISPLAY/COMP-3 parent. The inverse — `SET condition-name TO TRUE`
-//! ([`set_88_true`], `GNURUST.12`) — constructs the canonical parent bytes (first `VALUE` / range
-//! lower bound). **Fails closed** (typed [`ConditionError`]/[`ConditionSetError`]) on a literal whose
+//! numeric, over an admitted DISPLAY/COMP-3 parent. The inverses — `SET condition-name TO TRUE`
+//! ([`set_88_true`], `GNURUST.12`, first `VALUE` / range lower bound) and `SET condition-name TO FALSE`
+//! ([`set_88_false`], `GNURUST.12B`, the `WHEN SET TO FALSE IS` literal) — construct the canonical parent bytes. **Fails closed** (typed [`ConditionError`]/[`ConditionSetError`]) on a literal whose
 //! category mismatches the parent, an unsupported parent category, and values beyond the i128
-//! numeric range. `SET ... TO FALSE`, the `FALSE` clause, condition-name expressions, and Procedure
-//! Division execution are **not** modelled.
+//! numeric range. Condition-name expressions and Procedure Division execution are **not** modelled.
 
 use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED};
 use crate::pic::COB_TYPE_ALPHANUMERIC;
@@ -48,6 +47,9 @@ pub enum CondValue {
 pub struct Condition {
     pub name: String,
     pub values: Vec<CondValue>,
+    /// The `WHEN SET TO FALSE IS <literal>` clause value, if the 88 declares one. `SET ... TO FALSE`
+    /// writes this literal into the parent (`GNURUST.12B`); `None` means `SET ... TO FALSE` is not allowed.
+    pub false_value: Option<CondLit>,
 }
 
 /// Why a condition could not be evaluated (fail closed).
@@ -207,6 +209,8 @@ pub enum ConditionSetError {
     UnsupportedParent,
     /// The literal could not be encoded into the field (parse/fit/usage).
     Encode(String),
+    /// `SET ... TO FALSE` on an 88 with no `WHEN SET TO FALSE IS` clause.
+    NoFalseValue,
 }
 
 impl core::fmt::Display for ConditionSetError {
@@ -221,6 +225,9 @@ impl core::fmt::Display for ConditionSetError {
             }
             ConditionSetError::UnsupportedParent => write!(f, "unsupported parent field category"),
             ConditionSetError::Encode(e) => write!(f, "could not encode SET value: {e}"),
+            ConditionSetError::NoFalseValue => {
+                write!(f, "SET ... TO FALSE on an 88 with no WHEN SET TO FALSE IS clause")
+            }
         }
     }
 }
@@ -256,6 +263,16 @@ pub fn apply_set_88_true(
         CondValue::Lit(l) => l,
         CondValue::Range(start, _) => start, // SET TO TRUE picks the range lower bound (proven)
     };
+    write_cond_literal(attr, parent, lit)
+}
+
+/// Write one condition literal into `parent` (DISPLAY/COMP-3 numeric or alphanumeric), shared by
+/// `SET ... TO TRUE` and `SET ... TO FALSE`.
+fn write_cond_literal(
+    attr: &FieldAttr,
+    parent: &mut [u8],
+    lit: &CondLit,
+) -> Result<(), ConditionSetError> {
     let is_alpha = attr.field_type == COB_TYPE_ALPHANUMERIC;
     let is_num =
         attr.field_type == COB_TYPE_NUMERIC_DISPLAY || attr.field_type == COB_TYPE_NUMERIC_PACKED;
@@ -280,6 +297,32 @@ pub fn apply_set_88_true(
         _ => return Err(ConditionSetError::LiteralCategoryMismatch),
     }
     Ok(())
+}
+
+/// `SET condition-name TO FALSE` (`GNURUST.12B`): the canonical parent bytes from the 88's
+/// `WHEN SET TO FALSE IS <literal>` clause. Errors with [`ConditionSetError::NoFalseValue`] if the 88
+/// declares no such clause. Pure byte producer; see [`apply_set_88_false`] for the mutating form.
+pub fn set_88_false(
+    attr: &FieldAttr,
+    size: usize,
+    cond: &Condition,
+) -> Result<Vec<u8>, ConditionSetError> {
+    let mut buf = vec![0u8; size];
+    apply_set_88_false(attr, &mut buf, cond)?;
+    Ok(buf)
+}
+
+/// `SET condition-name TO FALSE`, writing the `WHEN SET TO FALSE IS` literal into `parent` in place.
+pub fn apply_set_88_false(
+    attr: &FieldAttr,
+    parent: &mut [u8],
+    cond: &Condition,
+) -> Result<(), ConditionSetError> {
+    let lit = cond
+        .false_value
+        .as_ref()
+        .ok_or(ConditionSetError::NoFalseValue)?;
+    write_cond_literal(attr, parent, lit)
 }
 
 #[cfg(test)]
@@ -310,10 +353,29 @@ mod tests {
     fn lit_n(s: &str) -> CondValue {
         CondValue::Lit(CondLit::Num(s.into()))
     }
+    fn cond_false(values: Vec<CondValue>, false_lit: CondLit) -> Condition {
+        Condition { name: "C".into(), values, false_value: Some(false_lit) }
+    }
+
+    #[test]
+    fn set_88_false_writes_the_false_clause_literal() {
+        // PIC 9, 88 DONE VALUE 1 WHEN SET TO FALSE IS 0  ->  SET DONE TO FALSE writes "0" (oracle: 0x30).
+        let attr = num(1, 0, false);
+        let c = cond_false(vec![CondValue::Lit(CondLit::Num("1".into()))], CondLit::Num("0".into()));
+        assert_eq!(set_88_false(&attr, 1, &c).unwrap(), b"0");
+        // range 88 with WHEN SET TO FALSE IS 9 -> "9".
+        let c2 = cond_false(vec![CondValue::Range(CondLit::Num("3".into()), CondLit::Num("5".into()))], CondLit::Num("9".into()));
+        assert_eq!(set_88_false(&attr, 1, &c2).unwrap(), b"9");
+        // no FALSE clause -> NoFalseValue error.
+        let c3 = cond(vec![CondValue::Lit(CondLit::Num("1".into()))]);
+        assert!(matches!(set_88_false(&attr, 1, &c3), Err(ConditionSetError::NoFalseValue)));
+    }
+
     fn cond(values: Vec<CondValue>) -> Condition {
         Condition {
             name: "C".into(),
             values,
+            false_value: None,
         }
     }
 
@@ -402,15 +464,29 @@ mod tests {
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
-    // KANIFOR: GNURUST.11, GNURUST.12
+    // KANIFOR: GNURUST.11, GNURUST.12, GNURUST.12B
     /// eval_88 is total over symbolic parent bytes for a fixed declared 88-condition: Ok(bool) or typed error.
     #[kani::proof]
     #[kani::unwind(6)]
     fn eval_88_is_total() {
         let bytes: [u8; 3] = kani::any();
         if let Ok(f) = crate::pic::build_field("9(3)", crate::Usage::Display, false, false) {
-            let cond = Condition { name: "C".into(), values: vec![CondValue::Lit(CondLit::Num("5".into()))] };
+            let cond = Condition { name: "C".into(), values: vec![CondValue::Lit(CondLit::Num("5".into()))], false_value: None };
             let _ = eval_88(&f.attr, &bytes, &cond);
+        }
+    }
+
+    /// set_88_false is total: Ok(bytes) or a typed error for the WHEN SET TO FALSE IS literal.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn set_88_false_is_total() {
+        if let Ok(f) = crate::pic::build_field("9(3)", crate::Usage::Display, false, false) {
+            let cond = Condition {
+                name: "C".into(),
+                values: vec![CondValue::Lit(CondLit::Num("5".into()))],
+                false_value: Some(CondLit::Num("0".into())),
+            };
+            let _ = set_88_false(&f.attr, 3, &cond);
         }
     }
 }

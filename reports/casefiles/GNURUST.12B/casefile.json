@@ -1,0 +1,59 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "parent field-storage bytes"
+  ],
+  "case_id": "GNURUST.12B",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.29",
+  "damage_if_overclaimed": "a wrong SET FALSE writes a status the program never intended",
+  "hash_chain": {
+    "inputs_sha256": "10d218e430203f53fd22366b8e37990f539f660ac90e62833779147986ee5c4e"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "3095bc7f78e4ebfde4dd63cba344ed92bf70dc9315c3e667e06d6e7aaf8cc4e9",
+    "receipt_sha256": "3190643804b1e34259d390121a526a005bb5dda3786bb1e5798e4af4113c643e"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'SET FALSE writes any non-satisfying bytes' -- it writes cobc's canonical WHEN SET TO FALSE IS literal"
+  ],
+  "negative_capability_ids": [
+    "NEG.CONDITION-NAME-EXPRESSIONS",
+    "NEG.COLLATING-SENSITIVE-RANGES",
+    "NEG.PROCEDURE-DIVISION-EXECUTION"
+  ],
+  "negative_claims": [
+    "condition-name expressions",
+    "collating-sensitive ranges",
+    "Procedure Division execution",
+    "lie prevented: 'SET FALSE writes any non-satisfying bytes' -- it writes cobc's canonical WHEN SET TO FALSE IS literal"
+  ],
+  "oracle": {
+    "detail": "cobc SET ... TO FALSE final bytes",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.12B"
+  },
+  "positive_claims": [
+    "canonical parent bytes for SET condition-name TO FALSE (the WHEN SET TO FALSE IS literal) matching cobc",
+    "output does not satisfy eval_88"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/set_false_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "set-false sweep 37/0 + fuzz",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}
