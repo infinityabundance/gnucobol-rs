@@ -15,12 +15,14 @@ mod trust4;
 mod docs;
 mod misc;
 mod lineage;
+mod release;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let tool = args.get(1).map(String::as_str).unwrap_or("");
     let cmd = args.get(2).map(String::as_str).unwrap_or("check");
     let root = std::env::var("GNURUST_ROOT").unwrap_or_else(|_| ".".into());
+    if tool == "release" { std::process::exit(release::run_main(&args)); }
     let code = match tool {
         "ladder" => ladder::run(cmd, &root),
         "kani-fuzz" => kani_fuzz::run(cmd, &root),
