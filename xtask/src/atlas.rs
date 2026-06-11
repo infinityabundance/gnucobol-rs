@@ -217,3 +217,26 @@ pub fn size_error(root: &str, tmp: &str) -> i32 {
     println!("PASS={pf} FAIL={fl}");
     if fl > 0 { 1 } else { 0 }
 }
+
+/// build_profile: assert the committed golden build-profile's volatile-free key set still matches the live
+/// oracle (env). Keeps the committed golden (deterministic) -> court is the no-drift assert.
+pub fn build_profile(root: &str) -> i32 {
+    let golden: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(Path::new(root).join("reports/build-profile.json")).unwrap_or_default()).unwrap_or(serde_json::Value::Null);
+    let e = |k: &str| std::env::var(k).unwrap_or_default();
+    let (ver, end, cs, cl, lib) = (e("VER"), e("END"), e("CHARSIGN"), e("CLONG"), e("LIBSHA"));
+    let (bo, sz, tr, c1, np) = (e("CFG_BO"), e("CFG_SZ"), e("CFG_TR"), e("CFG_C1"), e("CFG_NP"));
+    let g = |path: &[&str]| -> Option<String> { let mut v = &golden; for k in path { v = &v[k]; } v.as_str().map(String::from) };
+    let cfg_ok = g(&["config","binary_byteorder"]).as_deref() == Some(&bo)
+        && g(&["config","binary_size"]).as_deref() == Some(&sz)
+        && g(&["config","binary_truncate"]).as_deref() == Some(&tr)
+        && g(&["config","binary_comp_1"]).as_deref() == Some(&c1)
+        && g(&["config","numeric_pointer"]).as_deref() == Some(&np);
+    let ok = g(&["gnucobol_version"]).as_deref() == Some(&ver)
+        && g(&["host_endianness"]).as_deref() == Some(&end)
+        && g(&["char_signedness"]).as_deref() == Some(&cs)
+        && g(&["binary_c_long_bytes"]).as_deref() == Some(&cl)
+        && cfg_ok
+        && g(&["hashes","libcob_sha256"]).as_deref() == Some(&lib);
+    if ok { println!("PASS=1 FAIL=0"); 0 }
+    else { println!("PASS=0 FAIL=1  (BUILD PROFILE DRIFT -- re-examine every ABI-sensitive court)"); 1 }
+}
