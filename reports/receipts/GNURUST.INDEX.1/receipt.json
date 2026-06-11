@@ -1,0 +1,32 @@
+{
+  "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
+  "campaign": "GNURUST.INDEX.1",
+  "command": {
+    "replay": "bash lab/oracle/index_sweep.sh"
+  },
+  "court": "USAGE INDEX storage + SET arithmetic",
+  "crate_version": "0.7.34",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "8-byte LP64 index width",
+    "SEARCH / SEARCH ALL execution",
+    "index used as a subscript (stride multiply lives in GNURUST.SUBSCRIPT.1)",
+    "big-endian host",
+    "SET index TO pointer/address"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=29 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

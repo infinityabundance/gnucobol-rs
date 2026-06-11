@@ -29,7 +29,7 @@ as evidence for a higher one.
 | 2 | **Move parity** | do bytes after `MOVE src→dst` match? | **sealed** (`GNURUST.2`) |
 | 2c | **Arithmetic parity** | do `ADD`/`SUBTRACT`/`MULTIPLY` result bytes match `cob_add`/`cob_mul`? | **sealed** — `arith` (`GNURUST.7` + packed add-sub `GNURUST.13`); DIVIDE / other modes future |
 | 3 | **Initialization parity** | `VALUE` → initial record bytes | **sealed** — `init` (`GNURUST.8`); ODO/REDEFINES-VALUE, figuratives beyond ZERO/SPACE future |
-| 4 | Comparison parity | LEVEL-88 predicate (`GNURUST.11`) + class conditions (`GNURUST.CLASS.1`) + reference modification (`GNURUST.REFMOD.1`) + table subscripts (`GNURUST.SUBSCRIPT.1`) + OCCURS DEPENDING ON (`GNURUST.ODO.1`) + `SET TO TRUE` (`GNURUST.12`) + `SET TO FALSE` (`GNURUST.12B`) **sealed**; `IF a < b`, `SEARCH ALL`, collation future | partial |
+| 4 | Comparison parity | LEVEL-88 predicate (`GNURUST.11`) + class conditions (`GNURUST.CLASS.1`) + reference modification (`GNURUST.REFMOD.1`) + table subscripts (`GNURUST.SUBSCRIPT.1`) + OCCURS DEPENDING ON (`GNURUST.ODO.1`) + `USAGE INDEX` storage/`SET` (`GNURUST.INDEX.1`) + `SET TO TRUE` (`GNURUST.12`) + `SET TO FALSE` (`GNURUST.12B`) **sealed**; `IF a < b`, `SEARCH ALL`, collation future | partial |
 | 5 | Display/output parity | `DISPLAY`, edited pictures, Report Writer | future |
 | 6 | Source/preprocess parity | `COPY` splice (`GNURUST.5`) + `REPLACING` (`GNURUST.6`) **sealed**; source-format/`REPLACE`-directive future | partial |
 | 7 | Runtime-lifecycle parity | `CALL`/`CANCEL`, storage lifetimes, global state | future |

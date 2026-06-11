@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "occurrence value + SET op -> 4 native-endian index bytes"
+  ],
+  "case_id": "GNURUST.INDEX.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.34",
+  "damage_if_overclaimed": "mis-modelling an index as an offset (or wrong endianness) corrupts every SET/SEARCH and every index-driven table access",
+  "hash_chain": {
+    "inputs_sha256": "a9ab14d4720082274b1e005f1afd0193af6bdf49d9d5488f0d1456988e87ac21"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "b8d0d661050110154c55a37c068a1a1d461a505c0f2315f773b164dce409551a",
+    "receipt_sha256": "4fe6c901cc928bb2979e5471c4728531ae30a8787557feab748d1e52bcbff9de"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'an INDEX item stores a byte offset (occurrence*element_size)' -- NO, it stores the plain occurrence number; the stride multiply happens at subscript time, not in the index word"
+  ],
+  "negative_capability_ids": [
+    "NEG.8-BYTE-INDEX-ON-LP64-BUILDS-WHERE-COB-IN",
+    "NEG.SEARCH-SEARCH-ALL-EXECUTION-OBSERVED-SEP",
+    "NEG.INDEX-USED-AS-A-SUBSCRIPT-THE-IDX-1-STRI",
+    "NEG.RELATION-CONDITIONS-BETWEEN-INDEX-ITEMS",
+    "NEG.SET-INDEX-TO-POINTER-ADDRESS"
+  ],
+  "negative_claims": [
+    "8-byte INDEX on LP64 builds where cob index width != 4",
+    "SEARCH/SEARCH ALL execution (observed separately)",
+    "index used as a subscript (the (idx-1)*stride multiply lives in GNURUST.SUBSCRIPT.1)",
+    "relation conditions between index items",
+    "SET index TO pointer/address",
+    "lie prevented: 'an INDEX item stores a byte offset (occurrence*element_size)' -- NO, it stores the plain occurrence number; the stride multiply happens at subscript time, not in the index word"
+  ],
+  "oracle": {
+    "detail": "cobc SET index-item TO/UP BY/DOWN BY; dumped via REDEFINES + FUNCTION ORD",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INDEX.1"
+  },
+  "positive_claims": [
+    "the bytes a USAGE INDEX / INDEXED BY index item holds: a 4-byte native-endian (little-endian on the admitted x86-64 oracle) signed two's-complement word storing the OCCURRENCE NUMBER (element-size independent -- SET IDX TO 5 stores 5, never 5*element_size), and SET IDX TO/UP BY/DOWN BY as plain integer arithmetic on that word (DOWN past zero stores the negative two's-complement value",
+    "cobc does not clamp)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/index_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 29,
+    "total": 29,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

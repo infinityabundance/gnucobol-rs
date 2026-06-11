@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-104-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-104-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-105-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-105-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.33 · 68 GNURUST courts (49 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.34 · 69 GNURUST courts (50 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -90,6 +90,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.SEARCH.TABLE.1` | SEARCH / SEARCH ALL table lookup | ✅ pass | [`reports/casefiles/GNURUST.SEARCH.TABLE.1/`](reports/casefiles/GNURUST.SEARCH.TABLE.1/) |
 | `GNURUST.SUBSCRIPT.1` | table subscript access (multi-dimensional) | ✅ pass | [`reports/casefiles/GNURUST.SUBSCRIPT.1/`](reports/casefiles/GNURUST.SUBSCRIPT.1/) |
 | `GNURUST.ODO.1` | OCCURS DEPENDING ON (variable length) | ✅ pass | [`reports/casefiles/GNURUST.ODO.1/`](reports/casefiles/GNURUST.ODO.1/) |
+| `GNURUST.INDEX.1` | USAGE INDEX storage + SET arithmetic | ✅ pass | [`reports/casefiles/GNURUST.INDEX.1/`](reports/casefiles/GNURUST.INDEX.1/) |
 | `GNURUST.SORT.MERGE.ATLAS.1` | observed SORT / MERGE atlas | ✅ pass | [`reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/`](reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/) |
 | `GNURUST.RELATIVE.FILE.ATLAS.1` | observed relative-file atlas | ✅ pass | [`reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/`](reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/) |
 | `GNURUST.DIALECT.RUNTIME.ATLAS.1` | observed dialect-runtime divergence atlas | ✅ pass | [`reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/`](reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/) |

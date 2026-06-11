@@ -1329,6 +1329,20 @@
       "damage_if_overclaimed": "treating an ODO record as max-length over-reads or over-writes a variable-length record, corrupting the next record or trailing data"
     },
     {
+      "id": "GNURUST.INDEX.1",
+      "name": "USAGE INDEX storage + SET arithmetic",
+      "proven": "the bytes a USAGE INDEX / INDEXED BY index item holds: a 4-byte native-endian (little-endian on the admitted x86-64 oracle) signed two's-complement word storing the OCCURRENCE NUMBER (element-size independent -- SET IDX TO 5 stores 5, never 5*element_size), and SET IDX TO/UP BY/DOWN BY as plain integer arithmetic on that word (DOWN past zero stores the negative two's-complement value; cobc does not clamp)",
+      "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
+      "oracle": "cobc SET index-item TO/UP BY/DOWN BY; dumped via REDEFINES + FUNCTION ORD",
+      "fixtures": "index sweep 29/0 + fuzz",
+      "sealed_version": "0.7.34",
+      "not_proven": "8-byte INDEX on LP64 builds where cob index width != 4; SEARCH/SEARCH ALL execution (observed separately); index used as a subscript (the (idx-1)*stride multiply lives in GNURUST.SUBSCRIPT.1); relation conditions between index items; SET index TO pointer/address",
+      "breaks_claim": "non-4-byte index width; big-endian host; treating the stored value as a byte offset",
+      "readiness": 2,
+      "lie_prevented": "'an INDEX item stores a byte offset (occurrence*element_size)' -- NO, it stores the plain occurrence number; the stride multiply happens at subscript time, not in the index word",
+      "damage_if_overclaimed": "mis-modelling an index as an offset (or wrong endianness) corrupts every SET/SEARCH and every index-driven table access"
+    },
+    {
       "id": "GNURUST.SORT.MERGE.ATLAS.1",
       "name": "observed SORT / MERGE atlas",
       "proven": "observed GnuCOBOL SORT byte-effect (2/0) -- the last big surface gap (SORT/MERGE 145x per GNURUST.PUBLIC.GAP.1): SORT ASCENDING KEY reorders records into KEY-ASCENDING order (input 050,010,099,020 -> 010,020,050,099) and SORT DESCENDING into key-descending order, via USING the input file + GIVING the sorted output, over a sort-merge work file (SD). OBSERVED court: gnucobol-rs does NOT execute SORT -- it is a runtime sort engine over a work file -- this MAPS the reordering byte-effect, it sorts nothing",

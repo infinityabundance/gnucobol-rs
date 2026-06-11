@@ -520,5 +520,19 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "treating an ODO record as max-length over-reads/writes a variable-length record"
+ },
+ {
+  "surface": "usage-index",
+  "category": "data handling",
+  "source_modules": [
+   "cobc/typeck.c",
+   "libcob/move.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.INDEX.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "mis-modelling an INDEX item as a byte offset (or wrong endianness) corrupts every SET/SEARCH and index-driven table access"
  }
 ]

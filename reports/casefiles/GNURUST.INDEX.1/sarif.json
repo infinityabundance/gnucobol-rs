@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 non-claim: 8-byte INDEX on LP64 builds where cob index width != 4"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 non-claim: SEARCH/SEARCH ALL execution (observed separately)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 non-claim: index used as a subscript (the (idx-1)*stride multiply lives in GNURUST.SUBSCRIPT.1)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 non-claim: relation conditions between index items"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 non-claim: SET index TO pointer/address"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INDEX.1 non-claim: lie prevented: 'an INDEX item stores a byte offset (occurrence*element_size)' -- NO, it stores the plain occurrence number; the stride multiply happens at subscript time, not in the index word"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

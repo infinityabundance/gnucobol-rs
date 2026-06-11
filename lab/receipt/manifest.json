@@ -790,6 +790,18 @@
         "SET controlling mid-access",
         "signed/packed elements"
       ]
+    },
+    "GNURUST.INDEX.1": {
+      "court": "USAGE INDEX storage + SET arithmetic",
+      "sweep": "index_sweep.sh",
+      "byte_domain": "occurrence value + SET op -> 4 native-endian index bytes",
+      "non_claims": [
+        "8-byte LP64 index width",
+        "SEARCH / SEARCH ALL execution",
+        "index used as a subscript (stride multiply lives in GNURUST.SUBSCRIPT.1)",
+        "big-endian host",
+        "SET index TO pointer/address"
+      ]
     }
   }
 }

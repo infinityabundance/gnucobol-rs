@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "21/37",
+  "sealed_fraction": "22/38",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 21
+    "sealed": 22
   },
-  "surface_count": 37,
+  "surface_count": 38,
   "surfaces": [
     {
       "category": "data representation",
@@ -577,6 +577,21 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "occurs-depending-on"
+    },
+    {
+      "category": "data handling",
+      "courts": [
+        "GNURUST.INDEX.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "mis-modelling an INDEX item as a byte offset (or wrong endianness) corrupts every SET/SEARCH and index-driven table access",
+      "source_modules": [
+        "cobc/typeck.c",
+        "libcob/move.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "usage-index"
     }
   ]
 }
