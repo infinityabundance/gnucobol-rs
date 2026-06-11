@@ -753,7 +753,7 @@
       "sweep": "class_sweep.sh",
       "byte_domain": "alphanumeric field bytes -> class-condition truth",
       "non_claims": [
-        "signed-numeric overpunch NUMERIC",
+        "leading-sign / SIGN SEPARATE numeric class test",
         "user-defined CLASS names",
         "national/UTF-8/DBCS classes",
         "locale collating sequence"

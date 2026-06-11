@@ -17,6 +17,19 @@ pub fn is_numeric(bytes: &[u8]) -> bool {
     !bytes.is_empty() && bytes.iter().all(u8::is_ascii_digit)
 }
 
+/// `IS NUMERIC` for a signed DISPLAY field with the **default trailing sign** (`PIC S9(n)`): every byte but
+/// the last is an ASCII digit, and the last byte is a digit (`0x30..=0x39`, positive) or an ASCII negative
+/// overpunch (`0x70..=0x79`, `p`..`y`). cobc rejects the `{`/`A-I`/`}`/`J-R` overpunch forms here, and any
+/// space/letter/punctuation.
+pub fn is_numeric_signed_trailing(bytes: &[u8]) -> bool {
+    match bytes.split_last() {
+        Some((last, rest)) => {
+            rest.iter().all(u8::is_ascii_digit) && (last.is_ascii_digit() || (0x70..=0x79).contains(last))
+        }
+        None => false,
+    }
+}
+
 /// `IS ALPHABETIC`: every byte an ASCII letter or space.
 pub fn is_alphabetic(bytes: &[u8]) -> bool {
     bytes.iter().all(|b| b.is_ascii_alphabetic() || *b == b' ')
@@ -36,6 +49,7 @@ pub fn is_alphabetic_lower(bytes: &[u8]) -> bool {
 pub fn __fuzz_class(data: &[u8]) {
     let _ = (
         is_numeric(data),
+        is_numeric_signed_trailing(data),
         is_alphabetic(data),
         is_alphabetic_upper(data),
         is_alphabetic_lower(data),
@@ -61,6 +75,13 @@ mod tests {
         assert!(is_alphabetic_lower(b"abcd"));
         assert!(!is_alphabetic_lower(b"ABCD"));
         assert!(is_alphabetic_upper(b"AB  ") && is_alphabetic_lower(b"ab  "));
+        // signed-numeric (trailing overpunch) on a PIC S9 field:
+        assert!(is_numeric_signed_trailing(b"012")); // positive plain digit
+        assert!(is_numeric_signed_trailing(b"01r")); // 'r'=0x72 negative overpunch (-2)
+        assert!(is_numeric_signed_trailing(b"01p") && is_numeric_signed_trailing(b"01y")); // p..y
+        assert!(!is_numeric_signed_trailing(b"01A")); // 0x41 NOT accepted
+        assert!(!is_numeric_signed_trailing(b"01z")); // 0x7a out of p..y
+        assert!(!is_numeric_signed_trailing(b"01 ")); // space
     }
 }
 
@@ -74,6 +95,7 @@ mod kani_proofs {
     fn class_predicates_are_total() {
         let bytes: [u8; 4] = kani::any();
         let _ = is_numeric(&bytes);
+        let _ = is_numeric_signed_trailing(&bytes);
         let _ = is_alphabetic(&bytes);
         let _ = is_alphabetic_upper(&bytes);
         let _ = is_alphabetic_lower(&bytes);

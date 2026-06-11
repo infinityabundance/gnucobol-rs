@@ -155,13 +155,13 @@
     {
       "id": "GNURUST.CLASS.1",
       "name": "class conditions (NUMERIC/ALPHABETIC)",
-      "proven": "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER byte predicates over an alphanumeric field matching cobc (digits-only / letters-or-space / upper-or-space / lower-or-space)",
+      "proven": "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER over an alphanumeric field, plus IS NUMERIC on a signed PIC S9 field with the default trailing overpunch (last byte 0-9 or p-y), matching cobc",
       "byte_domain": "alphanumeric field bytes -> class-condition truth",
       "oracle": "cobc IF data-item IS <class> branch",
-      "fixtures": "class sweep 26/0 + fuzz",
+      "fixtures": "class sweep 36/0 + fuzz",
       "sealed_version": "0.7.30",
-      "not_proven": "signed-numeric (overpunch) NUMERIC on PIC S9; user-defined CLASS names; national/UTF-8/DBCS classes; locale collating sequence",
-      "breaks_claim": "signed-numeric class test; national/DBCS; user CLASS",
+      "not_proven": "leading-sign / SIGN SEPARATE / SIGN LEADING numeric class test; user-defined CLASS names; national/UTF-8/DBCS classes; locale collating sequence",
+      "breaks_claim": "leading/separate-sign class test; national/DBCS; user CLASS",
       "readiness": 4,
       "lie_prevented": "'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)",
       "damage_if_overclaimed": "treating a space-padded or signed field as NUMERIC mis-validates input and lets bad data through"

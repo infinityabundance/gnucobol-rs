@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.CLASS.1 — class conditions IS NUMERIC/ALPHABETIC
 
-**Verdict: PASS** · replay `PASS=26 FAIL=0`
+**Verdict: PASS** · replay `PASS=36 FAIL=0`
 
 | field | value |
 |-------|-------|
@@ -17,7 +17,7 @@
 | receipt_status | current |
 
 ## Non-claims
-- signed-numeric overpunch NUMERIC
+- leading-sign / SIGN SEPARATE numeric class test
 - user-defined CLASS names
 - national/UTF-8/DBCS classes
 - locale collating sequence

@@ -15,7 +15,7 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 "$GEN" > "$TMP/specs.txt"
 "$ROWS" < "$TMP/specs.txt" | sort > "$TMP/rust.txt"
 
-cls_of() { case "$1" in num) echo NUMERIC;; alp) echo ALPHABETIC;; upr) echo "ALPHABETIC-UPPER";; lwr) echo "ALPHABETIC-LOWER";; esac; }
+cls_of() { case "$1" in num|snum) echo NUMERIC;; alp) echo ALPHABETIC;; upr) echo "ALPHABETIC-UPPER";; lwr) echo "ALPHABETIC-LOWER";; esac; }
 
 {
   echo ">>SOURCE FORMAT FREE"
@@ -23,15 +23,17 @@ cls_of() { case "$1" in num) echo NUMERIC;; alp) echo ALPHABETIC;; upr) echo "AL
   echo "PROGRAM-ID. CLPROG."
   echo "DATA DIVISION."
   echo "WORKING-STORAGE SECTION."
-  while IFS='|' read -r label len test hex; do
+  while IFS='|' read -r label pic test hex; do
     [ -z "$label" ] && continue
-    echo "01 F-$label PIC X($len)."
+    bl=$(( ${#hex} / 2 ))
+    echo "01 F-$label PIC $pic."
+    echo "01 FX-$label REDEFINES F-$label PIC X($bl)."
   done < "$TMP/specs.txt"
   echo "PROCEDURE DIVISION."
-  while IFS='|' read -r label len test hex; do
+  while IFS='|' read -r label pic test hex; do
     [ -z "$label" ] && continue
     cls=$(cls_of "$test")
-    echo "MOVE X\"$hex\" TO F-$label."
+    echo "MOVE X\"$hex\" TO FX-$label."
     echo "IF F-$label IS $cls THEN DISPLAY \"$label[Y]\" ELSE DISPLAY \"$label[N]\" END-IF."
   done < "$TMP/specs.txt"
   echo "STOP RUN."
@@ -43,7 +45,7 @@ fi
 "$TMP/clprog" > "$TMP/out.txt" 2>/dev/null
 
 # oracle Y/N per label
-while IFS='|' read -r label len test hex; do
+while IFS='|' read -r label pic test hex; do
   [ -z "$label" ] && continue
   line=$(grep -m1 "^$label\[" "$TMP/out.txt")
   yn="${line#*[}"; yn="${yn%]*}"

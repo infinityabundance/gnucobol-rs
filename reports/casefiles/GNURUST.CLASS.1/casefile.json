@@ -12,24 +12,24 @@
   "crate_version": "0.7.30",
   "damage_if_overclaimed": "treating a space-padded or signed field as NUMERIC mis-validates input and lets bad data through",
   "hash_chain": {
-    "inputs_sha256": "7ef5f1e8eb3abd57d28a282d5fbfac433f8ede1e21fbe0749f1c4355df255346"
+    "inputs_sha256": "990976c2aaec0918fbf1e2553fe938b156898fd07978efda019cb511e3ba68c5"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "4bf84373d80e0c58fdffa649aebbcfb2690374ca26e337aedfef294df01e9343",
-    "receipt_sha256": "ae5c72dcd6f93e9cf5c79a623b0526dae9c4fbad59537e4a533d86a8a41b4e02"
+    "claim_ladder_entry_sha256": "6e551ef320a0a1f1d8717343bcd689c70d3a304efb426fafb440994681fe6001",
+    "receipt_sha256": "ca31a76658066aed0cfaf39415d7caf38f84c8f9ea8e070a5338a31a2a2c3d5e"
   },
   "kind": "court-casefile",
   "lie_prevented": [
     "'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)"
   ],
   "negative_capability_ids": [
-    "NEG.SIGNED-NUMERIC-OVERPUNCH-NUMERIC-ON-PIC",
+    "NEG.LEADING-SIGN-SIGN-SEPARATE-SIGN-LEADING",
     "NEG.USER-DEFINED-CLASS-NAMES",
     "NEG.NATIONAL-UTF-8-DBCS-CLASSES",
     "NEG.LOCALE-COLLATING-SEQUENCE"
   ],
   "negative_claims": [
-    "signed-numeric (overpunch) NUMERIC on PIC S9",
+    "leading-sign / SIGN SEPARATE / SIGN LEADING numeric class test",
     "user-defined CLASS names",
     "national/UTF-8/DBCS classes",
     "locale collating sequence",
@@ -43,7 +43,7 @@
     "upstream_court": "GNURUST.CLASS.1"
   },
   "positive_claims": [
-    "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER byte predicates over an alphanumeric field matching cobc (digits-only / letters-or-space / upper-or-space / lower-or-space)"
+    "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER over an alphanumeric field, plus IS NUMERIC on a signed PIC S9 field with the default trailing overpunch (last byte 0-9 or p-y), matching cobc"
   ],
   "replay": {
     "command": "bash lab/oracle/class_sweep.sh",
@@ -51,8 +51,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 26,
-    "total": 26,
+    "pass": 36,
+    "total": 36,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

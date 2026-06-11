@@ -10,7 +10,7 @@
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "signed-numeric overpunch NUMERIC",
+    "leading-sign / SIGN SEPARATE numeric class test",
     "user-defined CLASS names",
     "national/UTF-8/DBCS classes",
     "locale collating sequence"
@@ -23,7 +23,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=26 FAIL=0"
+    "sweep": "PASS=36 FAIL=0"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,
