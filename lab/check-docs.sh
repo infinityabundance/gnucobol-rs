@@ -181,7 +181,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.4: casefile drift"; cat /tmp/_case_check
   fi
-  if python3 "$ROOT/lab/trust4/migrate_reports.py" check >/tmp/_mig_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- trust4 check ) >/tmp/_mig_check 2>&1; then
     note "TRUST.4: legacy migration intact (no static report in reports/, manifest preserved)"
   else
     bad "TRUST.4: legacy migration drift"; cat /tmp/_mig_check
@@ -200,7 +200,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     note "ENTERPRISE.2: kobold-attest not installed -> skipped (honest; cargo install kobold-attest to enable)"
   fi
-  if python3 "$ROOT/lab/support/run.py" check >/tmp/_supp_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- support check ) >/tmp/_supp_check 2>&1; then
     note "SUPPORT-PACKET.1: evidence bundle fresh (re-gather equality)"
   else
     bad "SUPPORT-PACKET.1: support packet drift"; cat /tmp/_supp_check
