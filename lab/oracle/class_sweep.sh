@@ -15,7 +15,7 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 "$GEN" > "$TMP/specs.txt"
 "$ROWS" < "$TMP/specs.txt" | sort > "$TMP/rust.txt"
 
-cls_of() { case "$1" in num|snum) echo NUMERIC;; alp) echo ALPHABETIC;; upr) echo "ALPHABETIC-UPPER";; lwr) echo "ALPHABETIC-LOWER";; esac; }
+cls_of() { case "$1" in num|snum|lsep|tsep|lovp) echo NUMERIC;; alp) echo ALPHABETIC;; upr) echo "ALPHABETIC-UPPER";; lwr) echo "ALPHABETIC-LOWER";; esac; }
 
 {
   echo ">>SOURCE FORMAT FREE"

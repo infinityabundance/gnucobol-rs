@@ -14,6 +14,15 @@ fn main() {
     for s in [&b"012"[..], b"01r", b"01p", b"01y", b"01A", b"01z", b"01 ", b"999", b"r00", b"01/"] {
         emit("S9(3)", "snum", s);
     }
+    for s in [&b"+123"[..], b"-123", b" 123", b"3123"] {
+        emit("S9(3) SIGN LEADING SEPARATE", "lsep", s);
+    }
+    for s in [&b"123+"[..], b"123-", b"123 "] {
+        emit("S9(3) SIGN TRAILING SEPARATE", "tsep", s);
+    }
+    for s in [&b"123"[..], b"q23", b"A23"] {
+        emit("S9(3) SIGN LEADING", "lovp", s);
+    }
     for s in [&b"ABCD"[..], b"AB12", b"AB  ", b"abcd", b"    ", b"a1", b"Hello", b"MiXeD"] {
         emit(&format!("X({})", s.len()), "alp", s);
     }

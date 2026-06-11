@@ -30,6 +30,30 @@ pub fn is_numeric_signed_trailing(bytes: &[u8]) -> bool {
     }
 }
 
+/// `IS NUMERIC` for `SIGN LEADING SEPARATE` (`+`/`-` byte, then digits).
+pub fn is_numeric_sign_leading_separate(bytes: &[u8]) -> bool {
+    match bytes.split_first() {
+        Some((f, rest)) => (*f == b'+' || *f == b'-') && !rest.is_empty() && rest.iter().all(u8::is_ascii_digit),
+        None => false,
+    }
+}
+
+/// `IS NUMERIC` for `SIGN TRAILING SEPARATE` (digits, then a `+`/`-` byte).
+pub fn is_numeric_sign_trailing_separate(bytes: &[u8]) -> bool {
+    match bytes.split_last() {
+        Some((l, rest)) => (*l == b'+' || *l == b'-') && !rest.is_empty() && rest.iter().all(u8::is_ascii_digit),
+        None => false,
+    }
+}
+
+/// `IS NUMERIC` for `SIGN LEADING` (overpunch on the FIRST digit: `0x30..=0x39` or `0x70..=0x79`).
+pub fn is_numeric_sign_leading(bytes: &[u8]) -> bool {
+    match bytes.split_first() {
+        Some((f, rest)) => (f.is_ascii_digit() || (0x70..=0x79).contains(f)) && rest.iter().all(u8::is_ascii_digit),
+        None => false,
+    }
+}
+
 /// `IS ALPHABETIC`: every byte an ASCII letter or space.
 pub fn is_alphabetic(bytes: &[u8]) -> bool {
     bytes.iter().all(|b| b.is_ascii_alphabetic() || *b == b' ')
@@ -50,6 +74,9 @@ pub fn __fuzz_class(data: &[u8]) {
     let _ = (
         is_numeric(data),
         is_numeric_signed_trailing(data),
+        is_numeric_sign_leading_separate(data),
+        is_numeric_sign_trailing_separate(data),
+        is_numeric_sign_leading(data),
         is_alphabetic(data),
         is_alphabetic_upper(data),
         is_alphabetic_lower(data),
@@ -82,6 +109,13 @@ mod tests {
         assert!(!is_numeric_signed_trailing(b"01A")); // 0x41 NOT accepted
         assert!(!is_numeric_signed_trailing(b"01z")); // 0x7a out of p..y
         assert!(!is_numeric_signed_trailing(b"01 ")); // space
+        // sign separate + leading overpunch (observed):
+        assert!(is_numeric_sign_leading_separate(b"+123") && is_numeric_sign_leading_separate(b"-123"));
+        assert!(!is_numeric_sign_leading_separate(b" 123")); // space sign
+        assert!(is_numeric_sign_trailing_separate(b"123+") && is_numeric_sign_trailing_separate(b"123-"));
+        assert!(!is_numeric_sign_trailing_separate(b"123 "));
+        assert!(is_numeric_sign_leading(b"123") && is_numeric_sign_leading(b"q23")); // q=0x71 (-1) leads
+        assert!(!is_numeric_sign_leading(b"A23")); // 0x41 not accepted
     }
 }
 
@@ -96,6 +130,9 @@ mod kani_proofs {
         let bytes: [u8; 4] = kani::any();
         let _ = is_numeric(&bytes);
         let _ = is_numeric_signed_trailing(&bytes);
+        let _ = is_numeric_sign_leading_separate(&bytes);
+        let _ = is_numeric_sign_trailing_separate(&bytes);
+        let _ = is_numeric_sign_leading(&bytes);
         let _ = is_alphabetic(&bytes);
         let _ = is_alphabetic_upper(&bytes);
         let _ = is_alphabetic_lower(&bytes);

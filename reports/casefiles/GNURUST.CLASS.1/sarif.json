@@ -13,13 +13,6 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.CLASS.1 non-claim: leading-sign / SIGN SEPARATE / SIGN LEADING numeric class test"
-          },
-          "ruleId": "NONCLAIM"
-        },
-        {
-          "level": "note",
-          "message": {
             "text": "GNURUST.CLASS.1 non-claim: user-defined CLASS names"
           },
           "ruleId": "NONCLAIM"
@@ -35,6 +28,13 @@
           "level": "note",
           "message": {
             "text": "GNURUST.CLASS.1 non-claim: locale collating sequence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CLASS.1 non-claim: user-defined class-name on a group/numeric-edited item"
           },
           "ruleId": "NONCLAIM"
         },

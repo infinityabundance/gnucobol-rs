@@ -12,27 +12,27 @@
   "crate_version": "0.7.30",
   "damage_if_overclaimed": "treating a space-padded or signed field as NUMERIC mis-validates input and lets bad data through",
   "hash_chain": {
-    "inputs_sha256": "990976c2aaec0918fbf1e2553fe938b156898fd07978efda019cb511e3ba68c5"
+    "inputs_sha256": "91a6bb855b12b408b9ee45f762cd64adf6a51eef1d67f98046eadb628dc560b0"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "6e551ef320a0a1f1d8717343bcd689c70d3a304efb426fafb440994681fe6001",
-    "receipt_sha256": "ca31a76658066aed0cfaf39415d7caf38f84c8f9ea8e070a5338a31a2a2c3d5e"
+    "claim_ladder_entry_sha256": "acb099cd456512f1742214cf22ef34a067819b13f86791ade699f0cf6b3875f8",
+    "receipt_sha256": "80d109fc072cf06cfb3e9668b6b9f76b1505902cfb2b5be71ea290bc5e0244ee"
   },
   "kind": "court-casefile",
   "lie_prevented": [
     "'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)"
   ],
   "negative_capability_ids": [
-    "NEG.LEADING-SIGN-SIGN-SEPARATE-SIGN-LEADING",
     "NEG.USER-DEFINED-CLASS-NAMES",
     "NEG.NATIONAL-UTF-8-DBCS-CLASSES",
-    "NEG.LOCALE-COLLATING-SEQUENCE"
+    "NEG.LOCALE-COLLATING-SEQUENCE",
+    "NEG.USER-DEFINED-CLASS-NAME-ON-A-GROUP-NUMER"
   ],
   "negative_claims": [
-    "leading-sign / SIGN SEPARATE / SIGN LEADING numeric class test",
     "user-defined CLASS names",
     "national/UTF-8/DBCS classes",
     "locale collating sequence",
+    "user-defined class-name on a group/numeric-edited item",
     "lie prevented: 'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)"
   ],
   "oracle": {
@@ -43,7 +43,7 @@
     "upstream_court": "GNURUST.CLASS.1"
   },
   "positive_claims": [
-    "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER over an alphanumeric field, plus IS NUMERIC on a signed PIC S9 field with the default trailing overpunch (last byte 0-9 or p-y), matching cobc"
+    "IS NUMERIC / ALPHABETIC / ALPHABETIC-UPPER / ALPHABETIC-LOWER over an alphanumeric field, and IS NUMERIC on a signed PIC S9 field across all sign representations -- trailing overpunch (0-9/p-y), SIGN LEADING/TRAILING SEPARATE (+/-), and SIGN LEADING overpunch -- matching cobc"
   ],
   "replay": {
     "command": "bash lab/oracle/class_sweep.sh",
@@ -51,8 +51,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 36,
-    "total": 36,
+    "pass": 46,
+    "total": 46,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"
