@@ -225,7 +225,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "PORTING-LADDER: drift / unplaced court"; cat /tmp/_lad_check
   fi
-  if python3 "$ROOT/lab/kani-fuzz/run.py" check >/tmp/_kf_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- kani-fuzz check ) >/tmp/_kf_check 2>&1; then
     note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
   else
     bad "KANI+FUZZ: a byte court is missing a Kani proof or fuzz target"; cat /tmp/_kf_check
@@ -235,7 +235,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "GNURUST.PUBLIC.CORPUS.1: corpus index drift"; cat /tmp/_corpus_check
   fi
-  if python3 "$ROOT/lab/gap/run.py" check >/tmp/_gap_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- gap check ) >/tmp/_gap_check 2>&1; then
     note "GNURUST.PUBLIC.GAP.1: surface gap board over the admitted GnuCOBOL testsuite fresh"
   else
     bad "GNURUST.PUBLIC.GAP.1: gap board drift"; cat /tmp/_gap_check

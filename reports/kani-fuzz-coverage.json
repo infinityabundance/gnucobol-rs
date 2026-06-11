@@ -1,728 +1,728 @@
 {
-  "schema": "gnurust-kani-fuzz-coverage-v1",
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "total_courts": 98,
-  "na_courts": 55,
+  "fuzz_covered": 43,
   "impl_courts": 43,
   "kani_covered": 43,
-  "fuzz_covered": 43,
+  "na_courts": 55,
   "rows": [
     {
       "court": "GNURUST.2",
-      "kani": [
-        "lib.rs"
-      ],
       "fuzz": [
         "cob_move.rs"
+      ],
+      "kani": [
+        "lib.rs"
       ]
     },
     {
       "court": "GNURUST.3",
-      "kani": [
+      "fuzz": [
         "pic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "pic.rs"
       ]
     },
     {
       "court": "GNURUST.4",
-      "kani": [
+      "fuzz": [
         "layout.rs"
       ],
-      "fuzz": [
+      "kani": [
         "layout.rs"
       ]
     },
     {
       "court": "GNURUST.5",
-      "kani": [
+      "fuzz": [
         "copybook.rs"
       ],
-      "fuzz": [
+      "kani": [
         "copybook.rs"
       ]
     },
     {
       "court": "GNURUST.6",
-      "kani": [
+      "fuzz": [
         "copybook.rs"
       ],
-      "fuzz": [
+      "kani": [
         "copybook.rs"
       ]
     },
     {
       "court": "GNURUST.7",
-      "kani": [
+      "fuzz": [
         "arith.rs"
       ],
-      "fuzz": [
+      "kani": [
         "arith.rs"
       ]
     },
     {
       "court": "GNURUST.8",
-      "kani": [
-        "value.rs"
-      ],
       "fuzz": [
         "init.rs"
+      ],
+      "kani": [
+        "value.rs"
       ]
     },
     {
       "court": "GNURUST.9",
-      "kani": [
+      "fuzz": [
         "pic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "pic.rs"
       ]
     },
     {
       "court": "GNURUST.10",
-      "kani": [
+      "fuzz": [
         "layout.rs"
       ],
-      "fuzz": [
+      "kani": [
         "layout.rs"
       ]
     },
     {
       "court": "GNURUST.11",
-      "kani": [
+      "fuzz": [
         "cond.rs"
       ],
-      "fuzz": [
+      "kani": [
         "cond.rs"
       ]
     },
     {
       "court": "GNURUST.12",
-      "kani": [
+      "fuzz": [
         "cond.rs"
       ],
-      "fuzz": [
+      "kani": [
         "cond.rs"
       ]
     },
     {
       "court": "GNURUST.13",
-      "kani": [
+      "fuzz": [
         "arith.rs"
       ],
-      "fuzz": [
+      "kani": [
         "arith.rs"
       ]
     },
     {
       "court": "KOBOLD.RECON.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "GNURUST.14",
-      "kani": [
+      "fuzz": [
         "value.rs"
       ],
-      "fuzz": [
+      "kani": [
         "value.rs"
       ]
     },
     {
       "court": "GNURUST.15",
-      "kani": [
+      "fuzz": [
         "ebcdic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "ebcdic.rs"
       ]
     },
     {
       "court": "GNURUST.16",
-      "kani": [
+      "fuzz": [
         "edited.rs"
       ],
-      "fuzz": [
+      "kani": [
         "edited.rs"
       ]
     },
     {
       "court": "KOBOLD.DATA.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.DATA.3",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.OPERATOR.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "GNURUST.17",
-      "kani": [
+      "fuzz": [
         "value.rs"
       ],
-      "fuzz": [
+      "kani": [
         "value.rs"
       ]
     },
     {
       "court": "GNURUST.18",
-      "kani": [
+      "fuzz": [
         "value.rs"
       ],
-      "fuzz": [
+      "kani": [
         "value.rs"
       ]
     },
     {
       "court": "KOBOLD.DATA.4",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.DATA.5",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.DATA.6",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.FILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.BANK.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.BANK.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.DB2HOST.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "GNURUST.19",
-      "kani": [
+      "fuzz": [
         "arith.rs"
       ],
-      "fuzz": [
+      "kani": [
         "arith.rs"
       ]
     },
     {
       "court": "KOBOLD.RECON.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.CORPUS.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.BENCH.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.POSTING.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.EXTRACT.PROFILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.PRIVACY.REDACTION.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.PERF.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.ENTERPRISE.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.BANK.RECONCILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.DIFF.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.SCALE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.PERF.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "SIZE.ERROR.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas: size-error observation, no Rust implementation"
     },
     {
       "court": "KOBOLD.LAYOUT.REDEFINES.2",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.SENTINEL.PROFILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.DATE.PROFILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.CURRENCY.PROFILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "SUPPORT-PACKET.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "DIALECT.PROFILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.TOOLING.EXPORT.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "TRUST.5",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "NIST-STYLE-FIXTURE-FORMAT.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "GNURUST.REMAINDER.1",
-      "kani": [
+      "fuzz": [
         "arith.rs"
       ],
-      "fuzz": [
+      "kani": [
         "arith.rs"
       ]
     },
     {
       "court": "KOBOLD.PILOT-PACKET.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.PILOT.WORKFLOW.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "KOBOLD.PILOT.RUN.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "KOBOLD composition / governance / view court: no gnucobol-rs byte kernel (composes sealed courts)"
     },
     {
       "court": "GNURUST.COVERAGE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "meta: the coverage map itself (a generated receipt, not a byte kernel)"
     },
     {
       "court": "GNURUST.FILE.SEQUENTIAL.1",
-      "kani": [
+      "fuzz": [
         "file_seq.rs"
       ],
-      "fuzz": [
+      "kani": [
         "file_seq.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.STATUS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas: file-status observation, no Rust implementation"
     },
     {
       "court": "GNURUST.INITIALIZE.1",
-      "kani": [
+      "fuzz": [
         "initialize.rs"
       ],
-      "fuzz": [
+      "kani": [
         "initialize.rs"
       ]
     },
     {
       "court": "GNURUST.INSPECT.1",
-      "kani": [
+      "fuzz": [
         "inspect.rs"
       ],
-      "fuzz": [
+      "kani": [
         "inspect.rs"
       ]
     },
     {
       "court": "GNURUST.STRING.UNSTRING.1",
-      "kani": [
+      "fuzz": [
         "string_ops.rs"
       ],
-      "fuzz": [
+      "kani": [
         "string_ops.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas: records oracle behavior, no Rust implementation to prove/fuzz"
     },
     {
       "court": "GNURUST.INTRINSIC.LENGTH.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.NUMVAL.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.ACCEPT.DISPLAY.1",
-      "kani": [
+      "fuzz": [
         "accept_display.rs"
       ],
-      "fuzz": [
+      "kani": [
         "accept_display.rs"
       ]
     },
     {
       "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas: control-flow observation, no execution kernel"
     },
     {
       "court": "GNURUST.INTRINSIC.MOD-REM.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.INTEGER.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.CASE.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.ORD-CHAR.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.NUMVAL-C.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.ACCEPT.DISPLAY.2",
-      "kani": [
+      "fuzz": [
         "accept_display.rs"
       ],
-      "fuzz": [
+      "kani": [
         "accept_display.rs"
       ]
     },
     {
       "court": "GNURUST.SIZE.ERROR.1",
-      "kani": [
+      "fuzz": [
         "size_error.rs"
       ],
-      "fuzz": [
+      "kani": [
         "size_error.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.WRITE.1",
-      "kani": [
+      "fuzz": [
         "file_seq.rs"
       ],
-      "fuzz": [
+      "kani": [
         "file_seq.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.REWRITE.1",
-      "kani": [
+      "fuzz": [
         "file_seq.rs"
       ],
-      "fuzz": [
+      "kani": [
         "file_seq.rs"
       ]
     },
     {
       "court": "GNURUST.INTRINSIC.DATE.1",
-      "kani": [
+      "fuzz": [
         "intrinsic.rs"
       ],
-      "fuzz": [
+      "kani": [
         "intrinsic.rs"
       ]
     },
     {
       "court": "GNURUST.IF.EVALUATE.SLICE.1",
-      "kani": [
+      "fuzz": [
         "if_eval.rs"
       ],
-      "fuzz": [
+      "kani": [
         "if_eval.rs"
       ]
     },
     {
       "court": "GNURUST.PERFORM.SLICE.1",
-      "kani": [
+      "fuzz": [
         "perform_slice.rs"
       ],
-      "fuzz": [
+      "kani": [
         "perform_slice.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.FLOW.SLICE.1",
-      "kani": [
+      "fuzz": [
         "file_flow_slice.rs"
       ],
-      "fuzz": [
+      "kani": [
         "file_flow_slice.rs"
       ]
     },
     {
       "court": "GNURUST.FILE.FILTER.SLICE.1",
-      "kani": [
+      "fuzz": [
         "file_flow_slice.rs"
       ],
-      "fuzz": [
+      "kani": [
         "file_flow_slice.rs"
       ]
     },
     {
       "court": "GNURUST.IF.NUMERIC.SLICE.1",
-      "kani": [
+      "fuzz": [
         "if_numeric.rs"
       ],
-      "fuzz": [
+      "kani": [
         "if_numeric.rs"
       ]
     },
     {
       "court": "GNURUST.TABLE.PERFORM.SLICE.1",
-      "kani": [
+      "fuzz": [
         "table_slice.rs"
       ],
-      "fuzz": [
+      "kani": [
         "table_slice.rs"
       ]
     },
     {
       "court": "GNURUST.PUBLIC.CORPUS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.BUILD.PROFILE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.PUBLIC.GAP.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.CALL.EXTENSION.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.INDEXED.FILE.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.SEARCH.TABLE.1",
-      "kani": [
+      "fuzz": [
         "search.rs"
       ],
-      "fuzz": [
+      "kani": [
         "search.rs"
       ]
     },
     {
       "court": "GNURUST.SORT.MERGE.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.RELATIVE.FILE.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.DECLARATIVES.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.CALL.LAYOUT.ATLAS.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "observed atlas / meta: no Rust byte kernel"
     },
     {
       "court": "GNURUST.LINEAGE.CORPUS.20M.0",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "meta: differential corpus engine (drives the real cobc oracle); no single Rust byte kernel -- its own seal-grade gate is replay+Merkle+isolation"
     },
     {
       "court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "meta: 200K real-cobc witness burn classified by the engine; no single Rust byte kernel"
     },
     {
       "court": "GNURUST.LINEAGE.CORPUS.20M.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "meta: completed 4M real-cobc witness run; no single Rust byte kernel"
     },
     {
       "court": "GNURUST.VALUE.NEGZERO.EDGE.1",
-      "kani": "n/a",
       "fuzz": "n/a",
+      "kani": "n/a",
       "reason": "characterization/regression-lock of the VALUE -0 oracle rule; exercises value_image which is kani+fuzz-covered under GNURUST.8"
     }
-  ]
+  ],
+  "schema": "gnurust-kani-fuzz-coverage-v1",
+  "total_courts": 98
 }

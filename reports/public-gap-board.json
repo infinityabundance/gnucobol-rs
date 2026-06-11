@@ -1,185 +1,185 @@
 {
-  "schema": "gnurust-public-gap-board-v1",
-  "court": "GNURUST.PUBLIC.GAP.1",
   "corpus": "GnuCOBOL 3.2.0 upstream testsuite (admitted, lab/admit)",
-  "scope": "surface-frequency scan of .at run/syn tests -- NOT compilation/execution/parity",
-  "files_scanned": 29,
   "counts": {
-    "sealed": 14,
+    "missing": 0,
     "observed": 9,
     "refused": 4,
-    "missing": 0
+    "sealed": 14
   },
+  "court": "GNURUST.PUBLIC.GAP.1",
+  "files_scanned": 29,
   "missing_court_board": [],
-  "surfaces": [
-    {
-      "surface": "ACCEPT/DISPLAY",
-      "occurrences": 5951,
-      "status": "sealed",
-      "court": "GNURUST.ACCEPT.DISPLAY.1/.2"
-    },
-    {
-      "surface": "MOVE",
-      "occurrences": 3953,
-      "status": "sealed",
-      "court": "GNURUST.2 (decimal/display) + slices"
-    },
-    {
-      "surface": "sequential file I/O",
-      "occurrences": 2472,
-      "status": "sealed",
-      "court": "GNURUST.FILE.SEQUENTIAL.1/WRITE.1"
-    },
-    {
-      "surface": "arithmetic",
-      "occurrences": 1115,
-      "status": "sealed",
-      "court": "GNURUST.7/13"
-    },
-    {
-      "surface": "intrinsics",
-      "occurrences": 991,
-      "status": "sealed",
-      "court": "GNURUST.INTRINSIC.* (LENGTH/NUMVAL/INTEGER/MOD/REM/DATE/CASE/ORD-CHAR)"
-    },
-    {
-      "surface": "CALL / linkage",
-      "occurrences": 959,
-      "status": "observed",
-      "court": "GNURUST.CALL.EXTENSION.ATLAS.1"
-    },
-    {
-      "surface": "PERFORM",
-      "occurrences": 882,
-      "status": "sealed",
-      "court": "GNURUST.PERFORM.SLICE.1 + TABLE.PERFORM.SLICE.1 (bounded slices)"
-    },
-    {
-      "surface": "STRING/UNSTRING",
-      "occurrences": 303,
-      "status": "sealed",
-      "court": "GNURUST.STRING.UNSTRING.1"
-    },
-    {
-      "surface": "START (indexed/relative key positioning)",
-      "occurrences": 238,
-      "status": "observed",
-      "court": "GNURUST.INDEXED.FILE.ATLAS.1"
-    },
-    {
-      "surface": "INITIALIZE",
-      "occurrences": 180,
-      "status": "sealed",
-      "court": "GNURUST.INITIALIZE.1"
-    },
-    {
-      "surface": "file status",
-      "occurrences": 173,
-      "status": "observed",
-      "court": "GNURUST.FILE.STATUS.1"
-    },
-    {
-      "surface": "SORT / MERGE",
-      "occurrences": 145,
-      "status": "observed",
-      "court": "GNURUST.SORT.MERGE.ATLAS.1"
-    },
-    {
-      "surface": "INSPECT",
-      "occurrences": 133,
-      "status": "sealed",
-      "court": "GNURUST.INSPECT.1"
-    },
-    {
-      "surface": "EVALUATE",
-      "occurrences": 122,
-      "status": "sealed",
-      "court": "GNURUST.IF.EVALUATE.SLICE.1 (bounded slice)"
-    },
-    {
-      "surface": "DELETE (indexed/relative)",
-      "occurrences": 118,
-      "status": "observed",
-      "court": "GNURUST.INDEXED.FILE.ATLAS.1"
-    },
-    {
-      "surface": "GO TO / procedure flow",
-      "occurrences": 109,
-      "status": "observed",
-      "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1"
-    },
-    {
-      "surface": "DECLARATIVES / USE error handler",
-      "occurrences": 89,
-      "status": "observed",
-      "court": "GNURUST.DECLARATIVES.ATLAS.1"
-    },
-    {
-      "surface": "REPORT WRITER",
-      "occurrences": 83,
-      "status": "refused",
-      "court": "NEG (report writer out of scope)"
-    },
-    {
-      "surface": "SEARCH (table lookup)",
-      "occurrences": 74,
-      "status": "sealed",
-      "court": "GNURUST.SEARCH.TABLE.1"
-    },
-    {
-      "surface": "SCREEN SECTION",
-      "occurrences": 68,
-      "status": "refused",
-      "court": "NEG (screen I/O out of the data-evidence lane)"
-    },
-    {
-      "surface": "DIVIDE",
-      "occurrences": 59,
-      "status": "sealed",
-      "court": "GNURUST.19/REMAINDER.1"
-    },
-    {
-      "surface": "SIZE ERROR",
-      "occurrences": 48,
-      "status": "sealed",
-      "court": "GNURUST.SIZE.ERROR.1"
-    },
-    {
-      "surface": "sequential org",
-      "occurrences": 40,
-      "status": "sealed",
-      "court": "GNURUST.FILE.SEQUENTIAL.1"
-    },
-    {
-      "surface": "indexed file org",
-      "occurrences": 24,
-      "status": "observed",
-      "court": "GNURUST.INDEXED.FILE.ATLAS.1"
-    },
-    {
-      "surface": "relative file org",
-      "occurrences": 5,
-      "status": "observed",
-      "court": "GNURUST.RELATIVE.FILE.ATLAS.1"
-    },
-    {
-      "surface": "embedded SQL / DB2",
-      "occurrences": 0,
-      "status": "refused",
-      "court": "NEG.DB2.* / NEG.SQL.PRECOMPILER"
-    },
-    {
-      "surface": "CICS",
-      "occurrences": 0,
-      "status": "refused",
-      "court": "NEG.CICS.*"
-    }
-  ],
   "negative_capabilities": [
     "NEG.PUBLIC_GAP.NOT_EXECUTION",
     "NEG.PUBLIC_GAP.NOT_PARITY",
     "NEG.PUBLIC_GAP.SINGLE_CORPUS",
     "NEG.PUBLIC_GAP.VERB_PRESENCE_NOT_COURT_NEED",
     "NEG.PUBLIC_GAP.MISSING_IS_CANDIDATE_NOT_COMMITMENT"
+  ],
+  "schema": "gnurust-public-gap-board-v1",
+  "scope": "surface-frequency scan of .at run/syn tests -- NOT compilation/execution/parity",
+  "surfaces": [
+    {
+      "court": "GNURUST.ACCEPT.DISPLAY.1/.2",
+      "occurrences": 5951,
+      "status": "sealed",
+      "surface": "ACCEPT/DISPLAY"
+    },
+    {
+      "court": "GNURUST.2 (decimal/display) + slices",
+      "occurrences": 3953,
+      "status": "sealed",
+      "surface": "MOVE"
+    },
+    {
+      "court": "GNURUST.FILE.SEQUENTIAL.1/WRITE.1",
+      "occurrences": 2472,
+      "status": "sealed",
+      "surface": "sequential file I/O"
+    },
+    {
+      "court": "GNURUST.7/13",
+      "occurrences": 1115,
+      "status": "sealed",
+      "surface": "arithmetic"
+    },
+    {
+      "court": "GNURUST.INTRINSIC.* (LENGTH/NUMVAL/INTEGER/MOD/REM/DATE/CASE/ORD-CHAR)",
+      "occurrences": 991,
+      "status": "sealed",
+      "surface": "intrinsics"
+    },
+    {
+      "court": "GNURUST.CALL.EXTENSION.ATLAS.1",
+      "occurrences": 959,
+      "status": "observed",
+      "surface": "CALL / linkage"
+    },
+    {
+      "court": "GNURUST.PERFORM.SLICE.1 + TABLE.PERFORM.SLICE.1 (bounded slices)",
+      "occurrences": 882,
+      "status": "sealed",
+      "surface": "PERFORM"
+    },
+    {
+      "court": "GNURUST.STRING.UNSTRING.1",
+      "occurrences": 303,
+      "status": "sealed",
+      "surface": "STRING/UNSTRING"
+    },
+    {
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1",
+      "occurrences": 238,
+      "status": "observed",
+      "surface": "START (indexed/relative key positioning)"
+    },
+    {
+      "court": "GNURUST.INITIALIZE.1",
+      "occurrences": 180,
+      "status": "sealed",
+      "surface": "INITIALIZE"
+    },
+    {
+      "court": "GNURUST.FILE.STATUS.1",
+      "occurrences": 173,
+      "status": "observed",
+      "surface": "file status"
+    },
+    {
+      "court": "GNURUST.SORT.MERGE.ATLAS.1",
+      "occurrences": 145,
+      "status": "observed",
+      "surface": "SORT / MERGE"
+    },
+    {
+      "court": "GNURUST.INSPECT.1",
+      "occurrences": 133,
+      "status": "sealed",
+      "surface": "INSPECT"
+    },
+    {
+      "court": "GNURUST.IF.EVALUATE.SLICE.1 (bounded slice)",
+      "occurrences": 122,
+      "status": "sealed",
+      "surface": "EVALUATE"
+    },
+    {
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1",
+      "occurrences": 118,
+      "status": "observed",
+      "surface": "DELETE (indexed/relative)"
+    },
+    {
+      "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+      "occurrences": 109,
+      "status": "observed",
+      "surface": "GO TO / procedure flow"
+    },
+    {
+      "court": "GNURUST.DECLARATIVES.ATLAS.1",
+      "occurrences": 89,
+      "status": "observed",
+      "surface": "DECLARATIVES / USE error handler"
+    },
+    {
+      "court": "NEG (report writer out of scope)",
+      "occurrences": 83,
+      "status": "refused",
+      "surface": "REPORT WRITER"
+    },
+    {
+      "court": "GNURUST.SEARCH.TABLE.1",
+      "occurrences": 74,
+      "status": "sealed",
+      "surface": "SEARCH (table lookup)"
+    },
+    {
+      "court": "NEG (screen I/O out of the data-evidence lane)",
+      "occurrences": 68,
+      "status": "refused",
+      "surface": "SCREEN SECTION"
+    },
+    {
+      "court": "GNURUST.19/REMAINDER.1",
+      "occurrences": 59,
+      "status": "sealed",
+      "surface": "DIVIDE"
+    },
+    {
+      "court": "GNURUST.SIZE.ERROR.1",
+      "occurrences": 48,
+      "status": "sealed",
+      "surface": "SIZE ERROR"
+    },
+    {
+      "court": "GNURUST.FILE.SEQUENTIAL.1",
+      "occurrences": 40,
+      "status": "sealed",
+      "surface": "sequential org"
+    },
+    {
+      "court": "GNURUST.INDEXED.FILE.ATLAS.1",
+      "occurrences": 24,
+      "status": "observed",
+      "surface": "indexed file org"
+    },
+    {
+      "court": "GNURUST.RELATIVE.FILE.ATLAS.1",
+      "occurrences": 5,
+      "status": "observed",
+      "surface": "relative file org"
+    },
+    {
+      "court": "NEG.DB2.* / NEG.SQL.PRECOMPILER",
+      "occurrences": 0,
+      "status": "refused",
+      "surface": "embedded SQL / DB2"
+    },
+    {
+      "court": "NEG.CICS.*",
+      "occurrences": 0,
+      "status": "refused",
+      "surface": "CICS"
+    }
   ]
 }

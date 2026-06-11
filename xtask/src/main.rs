@@ -3,6 +3,8 @@
 use std::process::exit;
 
 mod ladder;
+mod kani_fuzz;
+mod gap;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -11,6 +13,8 @@ fn main() {
     let root = std::env::var("GNURUST_ROOT").unwrap_or_else(|_| ".".into());
     let code = match tool {
         "ladder" => ladder::run(cmd, &root),
+        "kani-fuzz" => kani_fuzz::run(cmd, &root),
+        "gap" => gap::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2
