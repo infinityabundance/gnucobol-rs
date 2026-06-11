@@ -12,6 +12,7 @@ mod receipt;
 mod trust5;
 mod support;
 mod trust4;
+mod docs;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -29,6 +30,7 @@ fn main() {
         "trust5" => trust5::run(cmd, &root),
         "support" => support::run(cmd, &root),
         "trust4" => trust4::run(cmd, &root),
+        "docs" => docs::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2

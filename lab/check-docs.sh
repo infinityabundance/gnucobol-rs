@@ -186,7 +186,7 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "TRUST.4: legacy migration drift"; cat /tmp/_mig_check
   fi
-  if python3 "$ROOT/lab/docs/generate.py" check >/tmp/_docs_check 2>&1; then
+  if ( cd "$ROOT" && cargo run -q -p xtask -- docs check ) >/tmp/_docs_check 2>&1; then
     note "TRUST.4.DOCS: authoritative docs generated, version fresh, legacy preserved as superset"
   else
     bad "TRUST.4.DOCS: doc drift"; cat /tmp/_docs_check

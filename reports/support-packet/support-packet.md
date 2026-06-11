@@ -17,14 +17,14 @@
 
 | id | path | sha256 |
 |---|---|---|
-| `status` | [`STATUS.md`](../../STATUS.md) | `1d61328fcf983185…` |
-| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `0cdd14b764022065…` |
+| `status` | [`STATUS.md`](../../STATUS.md) | `41f7ec5019792f8a…` |
+| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `665b0c3162fd5981…` |
 | `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `018f83d76fa3a822…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `da52d8c1c73e6d36…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `4f31b74ef5795300…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |
-| `truth_boundaries` | [`docs/truth-boundaries.md`](../../docs/truth-boundaries.md) | `7cd5389f360d8bea…` |
-| `future_risk_register` | [`docs/future-risk-register.md`](../../docs/future-risk-register.md) | `c362057db3be28dd…` |
+| `truth_boundaries` | [`docs/truth-boundaries.md`](../../docs/truth-boundaries.md) | `86ce4f9182e75e63…` |
+| `future_risk_register` | [`docs/future-risk-register.md`](../../docs/future-risk-register.md) | `3223c28e6f3b6e1d…` |
 
 ## Runtime / operator artifacts (pointers — not embedded)
 
