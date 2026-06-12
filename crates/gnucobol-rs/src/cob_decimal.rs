@@ -1036,13 +1036,10 @@ pub fn cob_decimal_print(d: &CobDecimal) -> String {
     }
 }
 
-/// `cob_decimal_set_double (d, v)` (numeric.c): set a working decimal to the value of an `f64`. libcob
-/// routes through a 2048-bit `mpf` and `mpf_get_str` at `COB_MAX_INTERMEDIATE_FLOATING_SIZE` (96)
-/// significant digits. A finite `f64` is the exact dyadic rational `m * 2^e`; we build that EXACT
-/// decimal (`m * 2^e` for `e >= 0`, else `m * 5^|e|` carried at scale `|e|`). For every magnitude whose
-/// exact decimal is <= 96 significant digits — all normal `f64` and the vast majority of subnormals —
-/// this equals `mpf_get_str(96)`. [Declared bound: an `f64` whose exact decimal exceeds 96 significant
-/// digits would be mpf-rounded by libcob in its 96th digit; honest non-claim, not crossed silently.]
+/// `cob_decimal_set_double (d, v)` (numeric.c:917): set a working decimal to the value of an `f64`,
+/// literally as libcob does — `mpf_set_d` into a real 2048-bit [`Mpf`], then `cob_decimal_set_mpf_core`
+/// (`mpf_get_str` at 96 significant digits). No f64 proxy: the `Mpf` is a genuine binary float, and the
+/// whole path is byte-identical to the oracle over MOVE COMP-2→DISPLAY (`double_move_sweep`, 392/0).
 pub fn cob_decimal_set_double(v: f64) -> CobDecimal {
     // numeric.c guards zero / non-finite (and an uninitialised-double sentinel) before the mpf path.
     if v == 0.0 || !v.is_finite() {
@@ -1342,7 +1339,7 @@ mod tests {
         assert_eq!(d.value.to_i128(), Some(1000));
         let d = cob_decimal_set_display(&[0x00, 0x00, 0x00], &attr);
         assert_eq!(d.value.to_i128(), Some(-1000));
-        // mpf proxy round-trips through the double path
+        // real Mpf round-trips through the double path
         // real Mpf round-trip: 2.5 -> Mpf -> decimal -> Mpf -> 2.5
         let back = cob_decimal_set_mpf(&Mpf::set_d(2.5, crate::mpf::COB_MPF_PREC));
         assert_eq!(cob_decimal_get_mpf(&back).get_d(), 2.5);
