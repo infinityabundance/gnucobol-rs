@@ -402,6 +402,14 @@ pub fn cob_numeric_cmp(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr) -> 
             _ => 0,
         };
     }
+    // BCD fast path (numeric.c:4047): both PACKED with non-negative scale -> in-place nibble compare.
+    if a1.field_type == COB_TYPE_NUMERIC_PACKED
+        && a2.field_type == COB_TYPE_NUMERIC_PACKED
+        && a1.scale >= 0
+        && a2.scale >= 0
+    {
+        return crate::packed::cob_bcd_cmp(f1, a1, f2, a2);
+    }
     let d1 = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
     cob_decimal_cmp(&d1, &d2)

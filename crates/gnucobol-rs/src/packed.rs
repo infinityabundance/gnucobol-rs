@@ -258,6 +258,212 @@ fn overflow_code() -> i32 {
     0x0501
 }
 
+// ---------------------------------------------------------------------------------------------------
+// PACKED comparison family (numeric.c, `#ifndef NO_BCD_COMPARE`): the in-place BCD comparators reached
+// by cob_numeric_cmp / cob_cmp_packed for COMP-3 operands. Verdict-equivalent to the sealed decimal
+// comparison (GNURUST.NUMCMP.1); ported as the actual nibble algorithm.
+// ---------------------------------------------------------------------------------------------------
+
+/// `memcmp`-style sign of the first differing byte over equal-length slices.
+#[inline]
+fn memcmp(a: &[u8], b: &[u8]) -> i32 {
+    for (x, y) in a.iter().zip(b.iter()) {
+        if x != y {
+            return *x as i32 - *y as i32;
+        }
+    }
+    0
+}
+
+/// `packed_is_negative (f)` (numeric.c:3794): a `0x0D` sign nibble counts as negative ONLY if the
+/// magnitude is nonzero — a negative-zero BCD image compares equal to positive zero.
+pub fn packed_is_negative(data: &[u8], attr: &FieldAttr) -> i32 {
+    if cob_packed_get_sign(data, attr) == -1 {
+        let end = data.len() - 1;
+        if data[end] != 0x0D {
+            return 1; // the sign byte carries a nonzero digit
+        }
+        for i in (0..end).rev() {
+            if data[i] != 0 {
+                return 1;
+            }
+        }
+        0
+    } else {
+        0
+    }
+}
+
+/// `insert_packed_aligned (...)` (numeric.c:3819): place `f1` (scale-shifted to align with `f2`) and
+/// `f2` into two 48-byte buffers, right-justified, with sign nibbles cleared, returning the byte length
+/// to compare. Uses the source's own portable `ALTERNATIVE_PACKED_SWAP` one-nibble left shift.
+#[allow(clippy::too_many_arguments)]
+fn insert_packed_aligned(
+    f1: &[u8],
+    no_sign1: bool,
+    scale1: i32,
+    f2: &[u8],
+    no_sign2: bool,
+    scale2: i32,
+    buff1: &mut [u8; 48],
+    buff2: &mut [u8; 48],
+) -> usize {
+    let len1 = f1.len();
+    let len2 = f2.len();
+    let mut nibble_cntr = scale2 - scale1;
+    if no_sign1 && !no_sign2 {
+        nibble_cntr += 1;
+    }
+    let byte_cntr = (nibble_cntr >> 1) as usize;
+    nibble_cntr &= 1;
+
+    let start1 = 48 - (len1 + byte_cntr);
+    buff1[start1..start1 + len1].copy_from_slice(f1);
+    if !no_sign1 {
+        buff1[start1 + len1 - 1] &= 0xF0; // clear sign nibble
+    }
+
+    let compare_len = if nibble_cntr != 0 {
+        // shift the filled buffer one nibble left (ALTERNATIVE_PACKED_SWAP)
+        buff1[start1 - 1] = buff1[start1] >> 4;
+        for i in start1..start1 + len1 {
+            let next = if i + 1 < 48 { buff1[i + 1] } else { 0 };
+            buff1[i] = (buff1[i] << 4) | (next >> 4);
+        }
+        len1 + byte_cntr + nibble_cntr as usize
+    } else {
+        len1 + byte_cntr
+    };
+
+    let start2 = 48 - len2;
+    buff2[start2..start2 + len2].copy_from_slice(f2);
+    if !no_sign2 {
+        buff2[start2 + len2 - 1] &= 0xF0;
+    }
+
+    if len2 > compare_len {
+        len2
+    } else {
+        compare_len
+    }
+}
+
+/// `decimal_convert_scale (...)` (numeric.c:3914): align two same-sign packed operands by scale into
+/// scratch buffers and `memcmp` them (operands swapped for the both-negative case).
+#[allow(clippy::too_many_arguments)]
+fn decimal_convert_scale(
+    f1: &[u8],
+    no_sign1: bool,
+    scale1: i32,
+    f2: &[u8],
+    no_sign2: bool,
+    scale2: i32,
+    both_negative: bool,
+) -> i32 {
+    let mut buff1 = [0u8; 48];
+    let mut buff2 = [0u8; 48];
+    let compare_len = if scale1 < scale2 || (scale1 == scale2 && no_sign1) {
+        insert_packed_aligned(f1, no_sign1, scale1, f2, no_sign2, scale2, &mut buff1, &mut buff2)
+    } else {
+        insert_packed_aligned(f2, no_sign2, scale2, f1, no_sign1, scale1, &mut buff2, &mut buff1)
+    };
+    let a = 48 - compare_len;
+    if both_negative {
+        memcmp(&buff2[a..a + compare_len], &buff1[a..a + compare_len])
+    } else {
+        memcmp(&buff1[a..a + compare_len], &buff2[a..a + compare_len])
+    }
+}
+
+/// `cob_bcd_cmp (f1, f2)` (numeric.c:3962): compare two PACKED fields, returning the sign of the
+/// ordering. Sign-disjoint cases short-circuit; equal layout/scale compares directly (sign nibble
+/// last); otherwise scales are aligned via [`decimal_convert_scale`].
+pub fn cob_bcd_cmp(d1: &[u8], a1: &FieldAttr, d2: &[u8], a2: &FieldAttr) -> i32 {
+    let f1_neg = packed_is_negative(d1, a1) != 0;
+    let f2_neg = packed_is_negative(d2, a2) != 0;
+    if f1_neg && !f2_neg {
+        return -1;
+    }
+    if !f1_neg && f2_neg {
+        return 1;
+    }
+    let no_sign1 = a1.no_sign_nibble();
+    let no_sign2 = a2.no_sign_nibble();
+    let scale1 = a1.scale as i32;
+    let scale2 = a2.scale as i32;
+    if d1.len() == d2.len() && no_sign1 == no_sign2 && scale1 == scale2 {
+        let ret = if no_sign1 {
+            memcmp(d1, d2)
+        } else {
+            let len = d1.len() - 1;
+            let mut r = memcmp(&d1[..len], &d2[..len]);
+            if r == 0 {
+                r = (d1[len] & 0xF0) as i32 - (d2[len] & 0xF0) as i32;
+            }
+            r
+        };
+        let ret = if !no_sign1 && f1_neg { -ret } else { ret };
+        return ret.signum();
+    }
+    decimal_convert_scale(d1, no_sign1, scale1, d2, no_sign2, scale2, f1_neg).signum()
+}
+
+/// `cmp_packed_intern (f, n, both_are_negative)` (numeric.c:4089): re-pack the field and the unsigned
+/// magnitude `n` into 20-byte buffers (sign nibble dropped) and compare byte-wise.
+fn cmp_packed_intern(data: &[u8], attr: &FieldAttr, n: u64, both_negative: bool) -> i32 {
+    let mut val1 = [0u8; 20];
+    let first_pos = 20 - data.len();
+    val1[first_pos..].copy_from_slice(data);
+    if !attr.no_sign_nibble() {
+        val1[19] &= 0xF0;
+    }
+    let mut packed_value = [0u8; 20];
+    let mut nn = n;
+    if nn != 0 {
+        let mut p: isize = 19;
+        if !attr.no_sign_nibble() {
+            packed_value[19] = ((nn % 10) as u8) << 4;
+            p -= 1;
+            nn /= 10;
+        }
+        while nn != 0 && p >= 0 {
+            let s = (nn % 100) as u8;
+            packed_value[p as usize] = (s % 10) | ((s / 10) << 4);
+            nn /= 100;
+            p -= 1;
+        }
+    }
+    for i in 0..20 {
+        let ret = val1[i] as i32 - packed_value[i] as i32;
+        if ret != 0 {
+            return if both_negative { (-ret).signum() } else { ret.signum() };
+        }
+    }
+    0
+}
+
+/// `cob_cmp_packed (f, val)` (numeric.c:4156): compare a PACKED field with a signed integer. For
+/// >=19-digit fields the sign-aware `cmp_packed_intern` is used; smaller fields decode to an integer.
+pub fn cob_cmp_packed(data: &[u8], attr: &FieldAttr, val: i64) -> i32 {
+    if attr.digits >= 19 {
+        let is_negative = packed_is_negative(data, attr) != 0;
+        if is_negative && val >= 0 {
+            return -1;
+        }
+        if !is_negative && val < 0 {
+            return 1;
+        }
+        if val < 0 {
+            cmp_packed_intern(data, attr, (-(val as i128)) as u64, true)
+        } else {
+            cmp_packed_intern(data, attr, val as u64, false)
+        }
+    } else {
+        let n = cob_decimal_set_packed(data, attr).value.to_i128().unwrap_or(0) as i64;
+        (n > val) as i32 - (n < val) as i32
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -345,6 +551,56 @@ mod tests {
                 let sealed = dec_to_i128(&Decimal::from_packed(&img, &attr));
                 assert_eq!(mine, sealed, "v={v} digits={digits} scale={scale} comp6={comp6} img={img:02x?}");
                 assert_eq!(mine, v as i128);
+            }
+        }
+    }
+
+    #[test]
+    fn bcd_cmp_agrees_with_sealed_numeric_cmp() {
+        // cob_bcd_cmp is the COMP-3 fast path; its verdict must match the sealed cob_numeric_cmp
+        // (GNURUST.NUMCMP.1, oracle 1024/0) for every packed-vs-packed pair.
+        use crate::cob_decimal::cob_numeric_cmp;
+        let cases: &[(u16, i16)] = &[(5, 0), (7, 2), (9, 0), (4, 1), (6, 0)];
+        for &(dg1, sc1) in cases {
+            for &(dg2, sc2) in cases {
+                let a1 = packed(dg1, sc1, true, false);
+                let a2 = packed(dg2, sc2, true, false);
+                for &v1 in &[0i64, 1, -1, 42, -42, 999, -999, 12345, -12345] {
+                    for &v2 in &[0i64, 1, -1, 42, -42, 999, -999] {
+                        let lim1 = 10i64.pow((dg1 as i32 - sc1.max(0) as i32).max(0) as u32);
+                        let lim2 = 10i64.pow((dg2 as i32 - sc2.max(0) as i32).max(0) as u32);
+                        if v1.abs() >= lim1 || v2.abs() >= lim2 {
+                            continue;
+                        }
+                        let b1 = bytes_for(&a1, v1);
+                        let b2 = bytes_for(&a2, v2);
+                        let bcd = cob_bcd_cmp(&b1, &a1, &b2, &a2);
+                        let sealed = cob_numeric_cmp(&b1, &a1, &b2, &a2);
+                        assert_eq!(
+                            bcd, sealed,
+                            "bcd_cmp({v1}@{dg1}.{sc1}, {v2}@{dg2}.{sc2}) = {bcd} but numeric_cmp = {sealed}"
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn cmp_packed_agrees_with_value() {
+        // cob_cmp_packed (field vs int) over both the >=19-digit cmp_packed_intern path and the small path.
+        for &dg in &[5u16, 9, 18, 19, 20] {
+            let attr = packed(dg, 0, true, false);
+            for &fv in &[0i64, 1, -1, 42, -42, 9999, -9999] {
+                let lim = 10i128.pow(dg as u32);
+                if (fv.abs() as i128) >= lim {
+                    continue;
+                }
+                let img = bytes_for(&attr, fv);
+                for &val in &[0i64, 1, -1, 42, -42, 9999, -9999] {
+                    let want = (fv > val) as i32 - (fv < val) as i32;
+                    assert_eq!(cob_cmp_packed(&img, &attr, val), want, "cmp_packed fld={fv} val={val} dg={dg}");
+                }
             }
         }
     }
