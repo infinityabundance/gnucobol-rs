@@ -29,6 +29,7 @@ echo
 
 run_sweep "GNURUST.2  decimal MOVE"  sweep.sh 0
 run_sweep "move.c alphanumeric MOVE"  alnum_move_sweep.sh
+run_sweep "move.c cob_get_int/llint"  get_int_sweep.sh
 run_sweep "GNURUST.3/9 PIC (+P)"     pic_sweep.sh
 run_sweep "GNURUST.14 binary MOVE"   binary_sweep.sh
 run_sweep "GNURUST.15 EBCDIC cp500"  ebcdic_sweep.sh

@@ -16,11 +16,8 @@
         "cob_binary_mget_uint64",
         "cob_binary_mset_sint64",
         "cob_binary_mset_uint64",
-        "cob_display_get_int",
         "cob_get_comp1",
         "cob_get_comp2",
-        "cob_get_int",
-        "cob_get_llint",
         "cob_get_picx",
         "cob_get_s64_comp3",
         "cob_get_s64_comp5",
@@ -31,7 +28,6 @@
         "cob_get_u64_comp6",
         "cob_get_u64_compx",
         "cob_get_u64_pic9",
-        "cob_init_move",
         "cob_init_table",
         "cob_move_all",
         "cob_move_alphanum_to_edited",
@@ -42,7 +38,6 @@
         "cob_move_edited_to_display",
         "cob_move_fp_to_fp",
         "cob_move_ibm",
-        "cob_packed_get_int",
         "cob_put_comp1",
         "cob_put_comp2",
         "cob_put_picx",
@@ -56,13 +51,10 @@
         "cob_put_u64_comp6",
         "cob_put_u64_compx",
         "cob_put_u64_pic9",
-        "cob_set_llint",
-        "display_get_long_long",
-        "indirect_move",
-        "packed_get_long_long"
+        "indirect_move"
       ],
-      "parity_pct": 15.8,
-      "ported": 9
+      "parity_pct": 29.8,
+      "ported": 17
     },
     {
       "file": "strings.c",
@@ -1137,7 +1129,7 @@
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
     "functions": 1152,
-    "parity_pct": 11.3,
-    "ported": 130
+    "parity_pct": 12.0,
+    "ported": 138
   }
 }
