@@ -116,16 +116,21 @@ pub fn cob_decimal_set_llint(d: &mut CobDecimal, n: i64) {
     d.scale = 0;
 }
 
+/// `cob_decimal_set_binary (d, f)` (numeric.c:1637): decode a BINARY/COMP-5 field into the working
+/// decimal. On the admitted 64-bit oracle this is `mpz_set_si/ui(cob_binary_get_sint64/uint64(f))` —
+/// i.e. the field's two's-complement integer (endianness + sign from the flags) carried at the field
+/// scale, exactly what [`crate::binary::binary_decode`] produces (sealed `GNURUST.14`).
+pub fn cob_decimal_set_binary(data: &[u8], attr: &FieldAttr) -> CobDecimal {
+    CobDecimal { value: Mpz::from_i128(crate::binary::binary_decode(data, attr)), scale: attr.scale as i32 }
+}
+
 /// `cob_decimal_set_field (d, f)`: decode a numeric field into the working decimal. Uses the sealed
 /// per-usage decoders ([`Decimal::from_display`] / [`Decimal::from_packed`] / binary decode).
 pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
     match attr.field_type {
         COB_TYPE_NUMERIC_DISPLAY => CobDecimal::from_value_decimal(&Decimal::from_display(data, attr)),
         COB_TYPE_NUMERIC_PACKED => crate::packed::cob_decimal_set_packed(data, attr),
-        COB_TYPE_NUMERIC_BINARY => {
-            let int = crate::binary::binary_decode(data, attr);
-            CobDecimal { value: Mpz::from_i128(int), scale: attr.scale as i32 }
-        }
+        COB_TYPE_NUMERIC_BINARY => cob_decimal_set_binary(data, attr),
         _ => {
             // COMP-1/COMP-2/FLOAT-DECIMAL handled by the float path; fall back to a zero decimal here
             // (the comparison dispatcher routes float fields to the float comparison, GNURUST.FLOAT.1).
