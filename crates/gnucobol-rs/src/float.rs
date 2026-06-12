@@ -155,7 +155,7 @@ impl BigU {
 
 /// Decompose a finite, non-zero, positive `f64` into `(m, e)` with `value = m * 2^e`, `m` a 53-bit
 /// (or smaller, for subnormals) integer.
-fn decompose_f64(v: f64) -> (u64, i32) {
+pub fn decompose_f64(v: f64) -> (u64, i32) {
     let bits = v.to_bits();
     let exp_field = ((bits >> 52) & 0x7FF) as i32;
     let frac = bits & 0x000F_FFFF_FFFF_FFFF;

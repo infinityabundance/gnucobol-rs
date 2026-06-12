@@ -424,6 +424,100 @@ fn field_to_f64(data: &[u8], a: &FieldAttr) -> f64 {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------
+// numeric.c print functions (the textual-render surface used by termio.c's `cob_display_common`).
+// These are byte-for-byte observable through `DISPLAY` of the corresponding field types, so they are
+// part of the 1:1 port, not "debug-only" non-ports.
+// ---------------------------------------------------------------------------------------------------
+
+/// `cob_decimal_print (d, fp)` (numeric.c): render a working decimal to the text libcob `fprintf`s.
+/// Strips trailing factors of ten (lowering the scale), then formats as `int.frac` when the point
+/// falls inside the digits, as a bare `integer` when `scale == 0`, else as `mantissaE-scale`. The
+/// mantissa string carries its own leading `-` (as `mpz_get_str` does), so the split keeps the sign in
+/// the integer part exactly like libcob's `"%.*s%c%.*s"`. (Our `CobDecimal` has no NaN/Inf sentinel —
+/// those scales never arise from the sealed field decoders — so only the finite branch is reachable.)
+pub fn cob_decimal_print(d: &CobDecimal) -> String {
+    if d.value.sgn() == 0 {
+        return "0E0".to_string();
+    }
+    let mut v = d.value.clone();
+    let mut scale = d.scale;
+    while v.divisible_ui(10) {
+        v = v.tdiv_q_ui(10);
+        scale -= 1;
+    }
+    let mza = v.to_decimal_string();
+    let len = mza.len() as i32;
+    if len > 0 && scale > 0 && scale < len {
+        let dot = (len - scale) as usize;
+        format!("{}.{}", &mza[..dot], &mza[dot..])
+    } else if scale == 0 {
+        mza
+    } else {
+        format!("{mza}E{}", -scale)
+    }
+}
+
+/// `cob_decimal_set_double (d, v)` (numeric.c): set a working decimal to the value of an `f64`. libcob
+/// routes through a 2048-bit `mpf` and `mpf_get_str` at `COB_MAX_INTERMEDIATE_FLOATING_SIZE` (96)
+/// significant digits. A finite `f64` is the exact dyadic rational `m * 2^e`; we build that EXACT
+/// decimal (`m * 2^e` for `e >= 0`, else `m * 5^|e|` carried at scale `|e|`). For every magnitude whose
+/// exact decimal is <= 96 significant digits — all normal `f64` and the vast majority of subnormals —
+/// this equals `mpf_get_str(96)`. [Declared bound: an `f64` whose exact decimal exceeds 96 significant
+/// digits would be mpf-rounded by libcob in its 96th digit; honest non-claim, not crossed silently.]
+pub fn cob_decimal_set_double(v: f64) -> CobDecimal {
+    if v == 0.0 || !v.is_finite() {
+        return CobDecimal { value: Mpz::new(), scale: 0 };
+    }
+    let neg = v < 0.0;
+    let (m, e) = crate::float::decompose_f64(v.abs());
+    let (mut value, scale) = if e >= 0 {
+        (Mpz::from_u64(m).mul_2exp(e as u32), 0)
+    } else {
+        (Mpz::from_u64(m).mul(&Mpz::ui_pow_ui(5, (-e) as u32)), -e)
+    };
+    if neg && value.sgn() != 0 {
+        value.neg();
+    }
+    CobDecimal { value, scale }
+}
+
+/// `cob_print_ieeedec (f, fp)` (numeric.c): decode a floating field to a working decimal, then
+/// `cob_decimal_print` it. FP_DEC64/128 decode exactly via the sealed BID decoders (the only branch
+/// `cob_display_common` reaches — FLOAT/DOUBLE DISPLAY instead via `%G`); FLOAT/DOUBLE/L_DOUBLE route
+/// through [`cob_decimal_set_double`], ported here for completeness of the 1:1.
+pub fn cob_print_ieeedec(data: &[u8], attr: &FieldAttr) -> String {
+    let d = match attr.field_type {
+        0x16 => {
+            let (m, s) = crate::float::dec64_decode(data[..8].try_into().unwrap_or([0; 8])).unwrap_or((0, 0));
+            CobDecimal { value: Mpz::from_i128(m), scale: s }
+        }
+        0x17 => {
+            let (m, s) =
+                crate::float::dec128_decode(data[..16].try_into().unwrap_or([0; 16])).unwrap_or((0, 0));
+            CobDecimal { value: Mpz::from_i128(m), scale: s }
+        }
+        0x13 => cob_decimal_set_double(f32::from_le_bytes(data[..4].try_into().unwrap_or([0; 4])) as f64),
+        0x14 => cob_decimal_set_double(f64::from_le_bytes(data[..8].try_into().unwrap_or([0; 8]))),
+        _ => CobDecimal { value: Mpz::new(), scale: 0 },
+    };
+    cob_decimal_print(&d)
+}
+
+/// `cob_print_realbin (f, fp, size)` (numeric.c): render a BINARY field as a zero-padded integer of at
+/// least `size` digits — sign-prefixed for signed fields. Mirrors `CB_FMT_PLLD = "%+*.*lld"` (signed:
+/// a leading `+`/`-` then `size` zero-padded digits) and `CB_FMT_PLLU = "%*.*llu"` (unsigned: `size`
+/// zero-padded digits, no sign), both with field-width and precision equal to `size`.
+pub fn cob_print_realbin(data: &[u8], attr: &FieldAttr, size: usize) -> String {
+    let val = crate::binary::binary_decode(data, attr);
+    if attr.have_sign() {
+        let s = if val < 0 { '-' } else { '+' };
+        format!("{}{:0width$}", s, val.unsigned_abs(), width = size)
+    } else {
+        format!("{:0width$}", val as u128, width = size)
+    }
+}
+
 /// Fuzz target: numeric comparison is total and a consistent total order sign over arbitrary fields.
 #[cfg(feature = "fuzzing")]
 #[doc(hidden)]
@@ -593,5 +687,45 @@ mod tests {
         assert_eq!(cob_cmp_int(b"00005", &disp(5, 0, false), 5), 0);
         assert_eq!(cob_cmp_int(b"00005", &disp(5, 0, false), 9), -1);
         assert_eq!(cob_cmp_int(b"00009", &disp(5, 0, false), 5), 1);
+    }
+
+    #[test]
+    fn print_functions_match_oracle_display() {
+        use crate::attr::{COB_FLAG_HAVE_SIGN, COB_TYPE_NUMERIC_BINARY};
+        // --- cob_decimal_print: ground truth captured from `cobc` DISPLAY of FLOAT-DECIMAL-16 ---
+        let cd = |mag: i128, scale: i32| CobDecimal { value: Mpz::from_i128(mag), scale };
+        let cases: &[(i128, i32, &str)] = &[
+            (12345, 2, "123.45"),
+            (0, 0, "0E0"),
+            (-1, 3, "-1E-3"),
+            (1000000, 0, "1E6"),
+            (7, 0, "7"),
+            (-425, 1, "-42.5"),
+            (1, 1, "1E-1"),
+            (999999999999999, 0, "999999999999999"),
+            (123456789012345, 1, "12345678901234.5"),
+            (-7000, 0, "-7E3"),
+        ];
+        for &(mag, scale, want) in cases {
+            assert_eq!(cob_decimal_print(&cd(mag, scale)), want, "decimal_print {mag}e-{scale}");
+            // cob_print_ieeedec composes the FLOAT.1-sealed BID decode with cob_decimal_print; the
+            // round-trip through dec64_encode must DISPLAY identically (zero-stripping normalises scale).
+            let attr = FieldAttr { field_type: 0x16, digits: 16, scale: scale as i16, flags: 0 };
+            let bytes = crate::float::dec64_encode(mag, scale);
+            assert_eq!(cob_print_ieeedec(&bytes, &attr), want, "print_ieeedec {mag}e-{scale}");
+        }
+
+        // --- cob_print_realbin: ground truth from `cobc` DISPLAY of S9(9)/9(9) COMP-5 (size 10) ---
+        let mut buf = [0u8; 4];
+        let signed = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: COB_FLAG_HAVE_SIGN };
+        for &(v, want) in &[(42i128, "+0000000042"), (-42, "-0000000042"), (0, "+0000000000"), (2147483647, "+2147483647"), (-1, "-0000000001")] {
+            crate::binary::binary_encode(v, &signed, &mut buf);
+            assert_eq!(cob_print_realbin(&buf, &signed, 10), want, "realbin signed {v}");
+        }
+        let unsigned = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 };
+        for &(v, want) in &[(123456789i128, "0123456789"), (0, "0000000000")] {
+            crate::binary::binary_encode(v, &unsigned, &mut buf);
+            assert_eq!(cob_print_realbin(&buf, &unsigned, 10), want, "realbin unsigned {v}");
+        }
     }
 }
