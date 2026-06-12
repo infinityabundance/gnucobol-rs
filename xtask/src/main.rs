@@ -3,6 +3,7 @@
 use std::process::exit;
 
 mod ladder;
+mod parity;
 mod kani_fuzz;
 mod gap;
 mod coverage;
@@ -27,6 +28,7 @@ fn main() {
     if tool == "release" { std::process::exit(release::run_main(&args)); }
     let code = match tool {
         "ladder" => ladder::run(cmd, &root),
+        "parity" => parity::run(cmd, &root),
         "kani-fuzz" => kani_fuzz::run(cmd, &root),
         "gap" => gap::run(cmd, &root),
         "coverage" => coverage::run(cmd, &root),

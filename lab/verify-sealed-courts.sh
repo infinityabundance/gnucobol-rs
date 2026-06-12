@@ -128,6 +128,9 @@ fi
 # Forensic claim-ladder gate: the hand-authored claim-ladder must still match machine reality (every
 # verified court declared, schema-complete, oracle == admitted 3.2 build, PORTING-LADDER.md fresh).
 ( cd "$ROOT" && cargo run -q -p xtask -- ladder check >/dev/null 2>&1 ) && row "claim-ladder gate (forensic)" "PASS" || { row "claim-ladder gate (forensic)" "FAIL"; RED=$((RED+1)); }
+# LIBCOB.PARITY: the forensic 1:1 porting-parity doc must match a fresh re-derivation from the admitted
+# libcob source + the Rust src (source-gated: skips cleanly when the source is not extracted).
+( cd "$ROOT" && cargo run -q -p xtask -- parity check >/dev/null 2>&1 ) && row "libcob-parity gate (forensic)" "PASS" || { row "libcob-parity gate (forensic)" "FAIL"; RED=$((RED+1)); }
 
 echo
 echo "== $GREEN green, $RED red =="
