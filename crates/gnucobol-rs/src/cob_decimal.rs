@@ -413,6 +413,53 @@ pub fn cob_div(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Roun
     cob_decimal_get_field(d, a1, f1.len(), round, false)
 }
 
+/// `cob_div_quotient (dividend, divisor, quotient, opt)` (numeric.c:2423): store `dividend / divisor`
+/// into the quotient receiver and return the COBOL `REMAINDER` working decimal (`dividend − (quotient
+/// truncated to the quotient's scale) × divisor`) for a following [`cob_div_remainder`]. `Err` on
+/// divide-by-zero. The remainder uses the *truncated* quotient, matching `DIVIDE … GIVING … REMAINDER`.
+pub fn cob_div_quotient(
+    dividend: &[u8],
+    a_dvd: &FieldAttr,
+    divisor: &[u8],
+    a_dvs: &FieldAttr,
+    quot_attr: &FieldAttr,
+    quot_len: usize,
+    round: Round,
+) -> Result<(Vec<u8>, CobDecimal), ()> {
+    let mut d1 = cob_decimal_set_field(dividend, a_dvd);
+    let d2 = cob_decimal_set_field(divisor, a_dvs);
+    let mut remainder = d1.clone(); // save the dividend (cob_d_remainder)
+    cob_decimal_div(&mut d1, &d2)?;
+    let mut d3 = d1.clone(); // save the full-precision quotient (cob_d3)
+    let quot_bytes = cob_decimal_get_field(d1, quot_attr, quot_len, round, false)?;
+    // truncate the quotient to its receiver scale, then remainder = dividend − quotient·divisor
+    let n = quot_attr.scale as i32 - d3.scale;
+    if n != 0 {
+        if d3.value.sgn() == 0 {
+            d3.scale = 0;
+        } else {
+            shift_decimal(&mut d3, n);
+        }
+    }
+    cob_decimal_mul(&mut d3, &d2);
+    cob_decimal_sub(&mut remainder, &d3);
+    Ok((quot_bytes, remainder))
+}
+
+/// `cob_div_remainder (fld_remainder, opt)` (numeric.c:2468): store the `REMAINDER` working decimal
+/// produced by [`cob_div_quotient`] into the remainder receiver.
+pub fn cob_div_remainder(remainder: CobDecimal, rem_attr: &FieldAttr, rem_len: usize, round: Round) -> Result<Vec<u8>, ()> {
+    cob_decimal_get_field(remainder, rem_attr, rem_len, round, false)
+}
+
+/// `cob_decimal_setget_fld (src, dst, opt)` (numeric.c:2480): the generic numeric MOVE — decode `src`
+/// to a working decimal, then store it into `dst` (with `COB_STORE_NO_SIZE_ERROR`, so it truncates
+/// rather than raising). Returns the receiver bytes.
+pub fn cob_decimal_setget_fld(src: &[u8], a_src: &FieldAttr, dst_attr: &FieldAttr, dst_len: usize, round: Round) -> Result<Vec<u8>, ()> {
+    let d = cob_decimal_set_field(src, a_src);
+    cob_decimal_get_field(d, dst_attr, dst_len, round, false)
+}
+
 /// `cob_decimal_cmp (d1, d2)` (numeric.c): align scales then compare. Returns -1/0/1.
 pub fn cob_decimal_cmp(d1: &CobDecimal, d2: &CobDecimal) -> i32 {
     let ord = if d1.scale != d2.scale {
@@ -953,6 +1000,41 @@ mod tests {
         d = 0;
         assert_eq!(cob_get_long_ebcdic_sign(b'R', &mut d), 1);
         assert_eq!(d, 9);
+    }
+
+    #[test]
+    fn div_quotient_remainder_matches_proven_divide() {
+        // cob_div_quotient/remainder must match the sealed arith::cob_divide_remainder (GNURUST.REMAINDER.1).
+        use crate::arith::{cob_divide_remainder, Round};
+        fn d(digits: usize, val: i64) -> Vec<u8> {
+            let neg = val < 0;
+            let mut s: Vec<u8> = format!("{:0width$}", val.unsigned_abs(), width = digits).into_bytes();
+            if neg {
+                let l = s.len() - 1;
+                s[l] |= 0x40;
+            }
+            s
+        }
+        let qa = disp(7, 2, true);
+        let ra = disp(7, 4, true);
+        for &dvd in &[1000i64, 12345, -700, 9999999, 1, -50000] {
+            for &dvs in &[7i64, 3, -11, 100, 999, -25] {
+                let dvdb = d(7, dvd);
+                let dvsb = d(5, dvs.rem_euclid(100000));
+                let a_dvd = disp(7, 2, true);
+                let a_dvs = disp(5, 2, true);
+                let proven = cob_divide_remainder(&dvdb, &a_dvd, &dvsb, &a_dvs, &qa, &ra);
+                let mine = cob_div_quotient(&dvdb, &a_dvd, &dvsb, &a_dvs, &qa, 7, Round::Truncate)
+                    .and_then(|(q, rem)| cob_div_remainder(rem, &ra, 7, Round::Truncate).map(|r| (q, r)));
+                match (proven, mine) {
+                    (Ok((pq, pr)), Ok((mq, mr))) => {
+                        assert_eq!(mq, pq, "quotient dvd={dvd} dvs={dvs}");
+                        assert_eq!(mr, pr, "remainder dvd={dvd} dvs={dvs}");
+                    }
+                    (Err(_), _) | (_, Err(_)) => {}
+                }
+            }
+        }
     }
 
     #[test]
