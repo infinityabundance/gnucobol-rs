@@ -73,6 +73,66 @@ pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
     }
 }
 
+/// `COB_MAX_DIGITS` (coblocal.h): the maximum COBOL numeric precision.
+pub const COB_MAX_DIGITS: i32 = 38;
+
+/// `cob_decimal_add (d1, d2)` (numeric.c): `d1 += d2`, aligning scales.
+pub fn cob_decimal_add(d1: &mut CobDecimal, d2: &CobDecimal) {
+    if d1.scale != d2.scale {
+        if d2.value.sgn() == 0 {
+            return;
+        }
+        if d1.value.sgn() == 0 {
+            *d1 = d2.clone();
+            return;
+        }
+        let mut t2 = d2.clone();
+        align_decimal(d1, &mut t2);
+        d1.value = d1.value.add(&t2.value);
+    } else {
+        d1.value = d1.value.add(&d2.value);
+    }
+}
+
+/// `cob_decimal_sub (d1, d2)` (numeric.c): `d1 -= d2`, aligning scales.
+pub fn cob_decimal_sub(d1: &mut CobDecimal, d2: &CobDecimal) {
+    if d1.scale != d2.scale {
+        if d2.value.sgn() == 0 {
+            return;
+        }
+        let mut t2 = d2.clone();
+        align_decimal(d1, &mut t2);
+        d1.value = d1.value.sub(&t2.value);
+    } else {
+        d1.value = d1.value.sub(&d2.value);
+    }
+}
+
+/// `cob_decimal_mul (d1, d2)` (numeric.c): `d1 *= d2`; scales add.
+pub fn cob_decimal_mul(d1: &mut CobDecimal, d2: &CobDecimal) {
+    d1.scale += d2.scale;
+    d1.value = d1.value.mul(&d2.value);
+}
+
+/// `cob_decimal_div (d1, d2)` (numeric.c): `d1 /= d2`. Returns `Err` on divide-by-zero (libcob sets
+/// the scale to NaN + raises `COB_EC_SIZE_ZERO_DIVIDE`). Scales the dividend up by `COB_MAX_DIGITS`
+/// (plus the borrow for a negative result scale) before the truncating integer divide, so the
+/// quotient carries full COBOL precision for the receiving store to round/truncate.
+pub fn cob_decimal_div(d1: &mut CobDecimal, d2: &CobDecimal) -> Result<(), ()> {
+    if d2.value.sgn() == 0 {
+        return Err(());
+    }
+    if d1.value.sgn() == 0 {
+        d1.scale = 0;
+        return Ok(());
+    }
+    d1.scale -= d2.scale;
+    let extra = COB_MAX_DIGITS + if d1.scale < 0 { -d1.scale } else { 0 };
+    shift_decimal(d1, extra);
+    d1.value = d1.value.tdiv_q(&d2.value);
+    Ok(())
+}
+
 /// `cob_decimal_cmp (d1, d2)` (numeric.c): align scales then compare. Returns -1/0/1.
 pub fn cob_decimal_cmp(d1: &CobDecimal, d2: &CobDecimal) -> i32 {
     let ord = if d1.scale != d2.scale {
@@ -175,6 +235,49 @@ mod tests {
         assert_eq!(cob_numeric_cmp(a, &disp(3, 1, false), c, &disp(5, 2, false)), -1);
         // 99 vs 12 -> greater
         assert_eq!(cob_numeric_cmp(b"99", &disp(2, 0, false), b"12", &disp(2, 0, false)), 1);
+    }
+
+    fn dec(value: &str, scale: i32) -> CobDecimal {
+        CobDecimal { value: Mpz::from_decimal_string(value), scale }
+    }
+    /// Render as an exact decimal string `value * 10^-scale` (for test assertions).
+    fn render(d: &CobDecimal) -> String {
+        if d.scale <= 0 {
+            let mut v = d.value.clone();
+            if d.scale < 0 {
+                v = v.mul(&Mpz::ui_pow_ui(10, (-d.scale) as u32));
+            }
+            return v.to_decimal_string();
+        }
+        let s = d.value.to_decimal_string();
+        let (neg, digs) = match s.strip_prefix('-') {
+            Some(x) => ("-", x.to_string()),
+            None => ("", s),
+        };
+        let sc = d.scale as usize;
+        let digs = if digs.len() <= sc { format!("{:0>width$}", digs, width = sc + 1) } else { digs };
+        let dot = digs.len() - sc;
+        format!("{neg}{}.{}", &digs[..dot], &digs[dot..])
+    }
+
+    #[test]
+    fn decimal_arithmetic() {
+        let mut a = dec("1234", 2); // 12.34
+        cob_decimal_add(&mut a, &dec("111", 2)); // + 1.11
+        assert_eq!(render(&a), "13.45");
+        let mut m = dec("150", 2); // 1.50
+        cob_decimal_mul(&mut m, &dec("150", 2)); // * 1.50
+        assert_eq!(render(&m), "2.2500");
+        let mut s = dec("1000", 0); // 1000
+        cob_decimal_sub(&mut s, &dec("1", 0));
+        assert_eq!(render(&s), "999");
+        // 10 / 3 -> quotient scaled to 38 digits of precision, truncated
+        let mut q = dec("10", 0);
+        assert!(cob_decimal_div(&mut q, &dec("3", 0)).is_ok());
+        assert!(render(&q).starts_with("3.3333333333333333333333333333333333333"));
+        // divide by zero
+        let mut z = dec("5", 0);
+        assert!(cob_decimal_div(&mut z, &dec("0", 0)).is_err());
     }
 
     #[test]
