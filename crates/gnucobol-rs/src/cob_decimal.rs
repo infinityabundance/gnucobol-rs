@@ -20,20 +20,23 @@
 //! (`cob_get_long_ascii/ebcdic_sign`), the pool/lifecycle (`init/init2/clear/alloc/push/pop`,
 //! `cob_init/exit_numeric`), and the mpf trio.
 //!
-//! **Honest bounds:** (a) the `mpf` 2048-bit binary-float intermediary (`set/get_mpf`, `set_mpf_core`)
-//! carries only exact doubles in numeric.c's byte path, so it is f64-proxied via [`cob_decimal_set_double`]
-//! / [`cob_decimal_get_double`] — exact for every double whose decimal is ≤96 significant digits (the
-//! `mpf_get_str(96)` width); the >96-digit tail and full-precision intrinsic use (intr.c) are the
-//! declared bound. (b) FIVE functions are NOT ported because they are `#if 0`-disabled in the source and
-//! never compiled into the oracle: `cob_add_packed` + `cob_complement_packed` (`/* RXWRXW - Buggy */`)
-//! and `display_add_int`/`display_sub_int`/`cob_display_add_int` (`/* … come back later */`). Porting
-//! disabled/buggy code would add behaviour the oracle does not have — the faithful choice is to exclude
-//! them, and to say so.
+//! The 2048-bit `mpf` intermediary is a REAL pure-Rust binary float ([`crate::mpf::Mpf`]) — `set_d`,
+//! `set_z`, `mul`, `div`, `get_d`, `get_str(96)` — so `set/get_mpf`/`set_mpf_core` are literal ports
+//! over `mpf_t`, not an f64 proxy. Verified BOTH directions: `set_double` byte-identical to the oracle's
+//! `mpf_set_d`+`mpf_get_str(96)` path over MOVE COMP-2→DISPLAY (`double_move_sweep`, 392/0), and
+//! `get_double` (decimal→mpf→`mpf_get_d`) bit-identical to the FLOAT.1-sealed primitive.
+//!
+//! The `#if 0`-disabled functions are ALSO ported for literal completeness (`#[allow(dead_code)]`, not
+//! wired into any active path since they are not compiled into the oracle): `cob_add_packed`,
+//! `cob_complement_packed`, `display_add_int`, `display_sub_int`, `cob_display_add_int` — reproduced
+//! verbatim from the disabled source (bugs included; `cob_display_add_int`'s pre-assignment `sign` read
+//! is UB, modeled as 0 with a note). Every function in numeric.c (102/102) has a named Rust counterpart.
 #![forbid(unsafe_code)]
 
 use crate::arith::Round;
 use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED};
 use crate::gmp::Mpz;
+use crate::mpf::Mpf;
 use crate::value::Decimal;
 use core::cmp::Ordering;
 
@@ -374,17 +377,31 @@ pub fn cob_binary_set_int64(out: &mut [u8], attr: &FieldAttr, n: i64) {
 }
 
 /// `cob_decimal_set_mpf_core (d, src)` (numeric.c:853): convert an `mpf` to a working decimal via a
-/// 96-significant-digit `mpf_get_str`. In numeric.c's byte path the only `mpf` values are exact
-/// doubles (`mpf_set_d`), so this equals the f64 -> exact-decimal conversion [`cob_decimal_set_double`]
-/// for every `f64` whose exact decimal is <= 96 significant digits (the declared bound). `src` is the
-/// f64 proxy for the 2048-bit intermediary, which carries only double precision here.
-pub fn cob_decimal_set_mpf_core(src: f64) -> CobDecimal {
-    cob_decimal_set_double(src)
+/// 96-significant-digit `mpf_get_str` — a literal port over the real [`crate::mpf::Mpf`]. The mpf's
+/// significant digits become the mantissa; the GMP exponent becomes the scale (`len - exp`, folding a
+/// negative result into the magnitude via `cob_mul_by_pow_10`).
+pub fn cob_decimal_set_mpf_core(src: &Mpf) -> CobDecimal {
+    let (neg, digits, exp10) = src.get_str(96);
+    let s: String = digits.iter().map(|d| (b'0' + d) as char).collect();
+    let mut value = if s.is_empty() { Mpz::new() } else { Mpz::from_decimal_string(&s) };
+    let len = digits.len() as i64;
+    let new_len = len - exp10;
+    let scale;
+    if new_len >= 0 {
+        scale = new_len as i32;
+    } else {
+        scale = 0;
+        cob_mul_by_pow_10(&mut value, (-new_len) as u32);
+    }
+    if neg && value.sgn() != 0 {
+        value.neg();
+    }
+    CobDecimal { value, scale }
 }
 
 /// `cob_decimal_set_mpf (d, src)` (numeric.c:885): zero-short-circuit then [`cob_decimal_set_mpf_core`].
-pub fn cob_decimal_set_mpf(src: f64) -> CobDecimal {
-    if src == 0.0 {
+pub fn cob_decimal_set_mpf(src: &Mpf) -> CobDecimal {
+    if src.sgn() == 0 {
         CobDecimal { value: Mpz::new(), scale: 0 }
     } else {
         cob_decimal_set_mpf_core(src)
@@ -392,10 +409,18 @@ pub fn cob_decimal_set_mpf(src: f64) -> CobDecimal {
 }
 
 /// `cob_decimal_get_mpf (dst, d)` (numeric.c:897): convert a working decimal to an `mpf` (`value *
-/// 10^-scale`). In the byte path the `mpf` is immediately reduced to a `double` (`mpf_get_d`,
-/// truncating toward zero), so this is modeled by [`cob_decimal_get_double`] (the f64 proxy).
-pub fn cob_decimal_get_mpf(d: &CobDecimal) -> f64 {
-    cob_decimal_get_double(d)
+/// 10^-scale`), via real [`crate::mpf::Mpf`] arithmetic (`mpf_set_z` then `mpf_mul`/`mpf_div` by a
+/// power of ten at `COB_MPF_PREC`).
+pub fn cob_decimal_get_mpf(d: &CobDecimal) -> Mpf {
+    let mut dst = Mpf::set_z(&d.value, crate::mpf::COB_MPF_PREC);
+    if d.scale < 0 {
+        let p = Mpz::ui_pow_ui(10, (-d.scale) as u32);
+        dst = dst.mul(&Mpf::set_z(&p, crate::mpf::COB_MPF_PREC));
+    } else if d.scale > 0 {
+        let p = Mpz::ui_pow_ui(10, d.scale as u32);
+        dst = dst.div(&Mpf::set_z(&p, crate::mpf::COB_MPF_PREC));
+    }
+    dst
 }
 
 /// `cob_decimal_alloc (params, ...)` (numeric.c:4350): point `params` caller decimals at pre-allocated
@@ -849,12 +874,11 @@ pub fn cob_decimal_align(d1: &mut CobDecimal, scale: i32) {
 /// `cob_decimal_get_double (d)` (numeric.c): the `f64` value of a working decimal, truncating toward
 /// zero (libcob's `mpf_get_d`). Modeled by [`crate::float::decimal_to_f64_trunc`].
 pub fn cob_decimal_get_double(d: &CobDecimal) -> f64 {
-    match d.value.to_i128() {
-        Some(mag) => crate::float::decimal_to_f64_trunc(mag, d.scale),
-        // For magnitudes beyond i128 (>38 digits, only internal intermediates), fall back through the
-        // decimal string -> f64 parse, which truncates the same way for the leading 17 sig digits.
-        None => d.value.to_decimal_string().parse::<f64>().unwrap_or(0.0) / 10f64.powi(d.scale),
+    // cob_decimal_get_mpf(cob_mpft, d); v = mpf_get_d(cob_mpft) -- literal, over the real Mpf.
+    if d.value.sgn() == 0 {
+        return 0.0;
     }
+    cob_decimal_get_mpf(d).get_d()
 }
 
 /// `cob_get_long_ascii_sign (p, val)` (numeric.c:4186): decode an ASCII trailing-overpunch sign byte
@@ -1020,20 +1044,13 @@ pub fn cob_decimal_print(d: &CobDecimal) -> String {
 /// this equals `mpf_get_str(96)`. [Declared bound: an `f64` whose exact decimal exceeds 96 significant
 /// digits would be mpf-rounded by libcob in its 96th digit; honest non-claim, not crossed silently.]
 pub fn cob_decimal_set_double(v: f64) -> CobDecimal {
+    // numeric.c guards zero / non-finite (and an uninitialised-double sentinel) before the mpf path.
     if v == 0.0 || !v.is_finite() {
         return CobDecimal { value: Mpz::new(), scale: 0 };
     }
-    let neg = v < 0.0;
-    let (m, e) = crate::float::decompose_f64(v.abs());
-    let (mut value, scale) = if e >= 0 {
-        (Mpz::from_u64(m).mul_2exp(e as u32), 0)
-    } else {
-        (Mpz::from_u64(m).mul(&Mpz::ui_pow_ui(5, (-e) as u32)), -e)
-    };
-    if neg && value.sgn() != 0 {
-        value.neg();
-    }
-    CobDecimal { value, scale }
+    // mpf_set_d(cob_mpft, v); cob_decimal_set_mpf_core(d, cob_mpft) -- literal, over the real Mpf.
+    let mpft = Mpf::set_d(v, crate::mpf::COB_MPF_PREC);
+    cob_decimal_set_mpf_core(&mpft)
 }
 
 /// `cob_print_ieeedec (f, fp)` (numeric.c): decode a floating field to a working decimal, then
@@ -1326,7 +1343,9 @@ mod tests {
         let d = cob_decimal_set_display(&[0x00, 0x00, 0x00], &attr);
         assert_eq!(d.value.to_i128(), Some(-1000));
         // mpf proxy round-trips through the double path
-        assert_eq!(cob_decimal_get_mpf(&cob_decimal_set_mpf(2.5)), 2.5);
+        // real Mpf round-trip: 2.5 -> Mpf -> decimal -> Mpf -> 2.5
+        let back = cob_decimal_set_mpf(&Mpf::set_d(2.5, crate::mpf::COB_MPF_PREC));
+        assert_eq!(cob_decimal_get_mpf(&back).get_d(), 2.5);
     }
 
     #[test]
@@ -1360,6 +1379,23 @@ mod tests {
                     }
                     (Err(_), _) | (_, Err(_)) => {}
                 }
+            }
+        }
+    }
+
+    #[test]
+    fn get_double_via_mpf_matches_sealed_primitive() {
+        // cob_decimal_get_double now routes decimal -> Mpf (set_z, mpf_div) -> mpf_get_d. Its result must
+        // equal the FLOAT.1-sealed decimal_to_f64_trunc (display->COMP-2 encode at 1476/0).
+        for scale in -3i32..=12 {
+            for &mag in &[
+                0i128, 1, -1, 7, 25, -25, 100, 12345, -12345, 999999, 33333333, -8675309, 1000000000,
+                123456789012345, -987654321098765,
+            ] {
+                let d = CobDecimal { value: Mpz::from_i128(mag), scale };
+                let viamp = cob_decimal_get_double(&d);
+                let sealed = crate::float::decimal_to_f64_trunc(mag, scale);
+                assert_eq!(viamp.to_bits(), sealed.to_bits(), "mag={mag} scale={scale}: mpf={viamp} sealed={sealed}");
             }
         }
     }
