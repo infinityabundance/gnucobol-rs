@@ -51,6 +51,6 @@ pass · fail · oracle_unavailable · oracle_version_mismatch · unsupported_by_
 ```
 
 `lab/check-docs.sh` reports `tarball absent -> admission-hash check skipped (expected without lab bundle)`
-and `oracle NOT BUILT (sweeps skipped)` explicitly; `lab/receipt/run.py` records `oracle-not-built` as a
+and `oracle NOT BUILT (sweeps skipped)` explicitly; `xtask receipt` records `oracle-not-built` as a
 distinct result, not a pass.
 

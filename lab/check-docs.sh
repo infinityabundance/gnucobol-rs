@@ -20,6 +20,15 @@ if grep -RInE '\b(TODO|FIXME|XXX|PLACEHOLDER|TBD)\b' docs README.md CONTRIBUTING
 fi
 note "no placeholder markers"
 
+# 1b. No reference to the retired python tooling. The lab/*/run.py + build-packet.py scripts were ported
+# to Rust (xtask); user-facing docs/scripts must point at `cargo run -p xtask -- ...`, never a deleted
+# .py. (xtask/src/*.rs provenance comments — "Port of lab/X/run.py" — are allowed; they are not commands.)
+if grep -RInoE 'lab/[a-z]+/[a-z_]+\.py' docs-src docs README.md STATUS.md CONTRIBUTING.md \
+      lab/*.sh crates/*/README.md 2>/dev/null >/tmp/_docgate_py 2>/dev/null; then
+  if [ -s /tmp/_docgate_py ]; then bad "retired python tooling referenced (use the xtask Rust command):"; cat /tmp/_docgate_py; fi
+fi
+note "no references to retired python tooling"
+
 # 2. Every doc linked from README exists.
 for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-license.md \
          docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-capabilities.json \
@@ -61,7 +70,7 @@ if [ -f "$RELDIR/release-verdict.md" ]; then
   RELN=$(ls "$RELDIR" | wc -l)
   if [ "$RELN" -ge 11 ]; then note "release evidence packet present for $SV ($RELN files)"; else bad "release packet for $SV incomplete ($RELN/11 files)"; fi
 else
-  bad "no release evidence packet for gnucobol-rs $SV (run lab/release/build-packet.py)"
+  bad "no release evidence packet for gnucobol-rs $SV (run cargo run -p xtask -- release)"
 fi
 
 # 4. attr.rs type/flag constants match the values documented in the admission/selfcheck.

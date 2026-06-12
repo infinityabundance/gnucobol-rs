@@ -124,6 +124,9 @@ else
   row "ENTERPRISE.2 kobold-attest selftest (external; not installed -> skipped)" "PASS"
 fi
 ( cd "$ROOT" && bash lab/check-docs.sh >/dev/null 2>&1 ) && row "doc-gate (anti-staleness)" "PASS" || { row "doc-gate (anti-staleness)" "FAIL"; RED=$((RED+1)); }
+# Forensic claim-ladder gate: the hand-authored claim-ladder must still match machine reality (every
+# verified court declared, schema-complete, oracle == admitted 3.2 build, PORTING-LADDER.md fresh).
+( cd "$ROOT" && cargo run -q -p xtask -- ladder check >/dev/null 2>&1 ) && row "claim-ladder gate (forensic)" "PASS" || { row "claim-ladder gate (forensic)" "FAIL"; RED=$((RED+1)); }
 
 echo
 echo "== $GREEN green, $RED red =="

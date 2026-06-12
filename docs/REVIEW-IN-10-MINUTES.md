@@ -29,7 +29,7 @@ STATUS.md wins.
 ```sh
 cargo test                         # court unit tests, no oracle
 bash lab/verify-sealed-courts.sh   # sweeps + shim suite + doc-gate (needs built oracle)
-python3 lab/receipt/run.py check   # receipts are live replays, not hand-typed
+cargo run -p xtask -- receipt check   # receipts are live replays, not hand-typed
 ```
 
 ## 5. Strongest receipts

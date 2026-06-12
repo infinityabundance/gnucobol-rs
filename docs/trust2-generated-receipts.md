@@ -25,14 +25,14 @@ oracle + fixture + gnucobol-rs court  →  replay command  →  machine output  
 ## What is generated
 
 `reports/receipts/<CAMPAIGN>/receipt.json` is the **receipt of record** — produced by running the
-court's sweep **live** (`lab/receipt/run.py generate`). It records the campaign, court, crate version,
+court's sweep **live** (`cargo run -p xtask -- receipt generate`). It records the campaign, court, crate version,
 oracle identity, replay command, the live sweep result, byte domain, non-claims, and verdict.
 `receipt.md` is **generated from the JSON** — never hand-edited (the header says so).
 
 The authored `reports/RECEIPT-GNURUST-*.md` files remain the human prose (doctrine / exact claim), but
 their stated sweep numbers are **gated against the generated receipts**, so prose cannot drift either.
 
-## The gate (`lab/receipt/run.py check`, run by the doc-gate)
+## The gate (`cargo run -p xtask -- receipt check`, run by the doc-gate)
 
 Fails if:
 - a generated `receipt.json` evidence differs from a fresh live replay (stale results);
@@ -46,8 +46,8 @@ So a publish is blocked when *“README says pass, receipt says pass, but replay
 ## Regenerate
 
 ```sh
-python3 lab/receipt/run.py generate "$(git rev-parse --short HEAD)-replay" "$(git rev-parse --short HEAD)"
-python3 lab/receipt/run.py check   # what the doc-gate runs
+cargo run -p xtask -- receipt generate "$(git rev-parse --short HEAD)-replay" "$(git rev-parse --short HEAD)"
+cargo run -p xtask -- receipt check   # what the doc-gate runs
 ```
 
 Future: a `reports/receipts/archive/` layer pinning release receipts (hash + crate version + git tag) at

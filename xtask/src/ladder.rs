@@ -85,6 +85,75 @@ fn render_md(b: &Value) -> String {
     l.join("\n") + "\n"
 }
 
+/// Extract court-id token(s) from a `verify-sealed-courts.sh` run_sweep label. The leading token is the
+/// court id; `X/Y` shorthand (e.g. `GNURUST.7/13`) expands to both. Non-court labels (descriptive
+/// sub-court sweeps) return empty and are not gated.
+fn court_ids_in_label(label: &str) -> Vec<String> {
+    let tok = label.split_whitespace().next().unwrap_or("");
+    if !tok.contains('.') || !tok.chars().next().map(|c| c.is_ascii_uppercase()).unwrap_or(false) {
+        return vec![];
+    }
+    if let Some(slash) = tok.find('/') {
+        let head = &tok[..slash]; // "GNURUST.7"
+        let suffix = &tok[slash + 1..]; // "13"
+        let prefix = &head[..head.rfind('.').map(|i| i + 1).unwrap_or(0)]; // "GNURUST."
+        return vec![head.to_string(), format!("{prefix}{suffix}")];
+    }
+    vec![tok.to_string()]
+}
+
+/// The forensic anti-staleness gate: the claim-ladder is a *source* document, so this proves it still
+/// matches machine reality. (1) every court a sweep in `verify-sealed-courts.sh` verifies must be
+/// declared in the claim-ladder (no orphan/renamed sweep silently leaving a court unbacked); (2) every
+/// court carries the core forensic fields; (3) ids are unique; (4) the declared oracle matches the
+/// admission receipt's GnuCOBOL version.
+fn forensic_findings(root: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let cl = read_json(&Path::new(root).join("reports/claim-ladder.json"));
+    let courts = cl["courts"].as_array().cloned().unwrap_or_default();
+    let ids: std::collections::HashSet<String> =
+        courts.iter().filter_map(|c| c["id"].as_str().map(String::from)).collect();
+
+    // (1) verifier-courts ⊆ ladder-courts
+    let verifier = std::fs::read_to_string(Path::new(root).join("lab/verify-sealed-courts.sh")).unwrap_or_default();
+    for line in verifier.lines() {
+        let line = line.trim_start();
+        if !line.starts_with("run_sweep ") {
+            continue;
+        }
+        let Some(open) = line.find('"') else { continue };
+        let Some(close) = line[open + 1..].find('"') else { continue };
+        let label = &line[open + 1..open + 1 + close];
+        for id in court_ids_in_label(label) {
+            // EXCLUDED courts are intentionally off-ladder (coverage meta etc.)
+            if !ids.contains(&id) && !EXCLUDED.contains(&id.as_str()) {
+                out.push(format!("verify-sealed-courts.sh verifies '{id}' but it is not declared in claim-ladder.json (stale)"));
+            }
+        }
+    }
+
+    // (2) + (3) forensic field completeness and unique ids
+    let mut seen = std::collections::HashSet::new();
+    for c in &courts {
+        let id = c["id"].as_str().unwrap_or("<no-id>");
+        if !seen.insert(id.to_string()) {
+            out.push(format!("duplicate court id '{id}'"));
+        }
+        for field in ["id", "name", "proven", "oracle", "fixtures", "readiness"] {
+            if c[field].is_null() {
+                out.push(format!("court '{id}' is missing forensic field '{field}'"));
+            }
+        }
+    }
+
+    // (4) declared oracle matches the admitted GnuCOBOL version
+    let oracle = cl["oracle"].as_str().unwrap_or("");
+    if !oracle.contains("3.2") {
+        out.push(format!("claim-ladder oracle '{oracle}' does not name the admitted GnuCOBOL 3.2 build"));
+    }
+    out
+}
+
 pub fn run(cmd: &str, root: &str) -> i32 {
     match cmd {
         "generate" => {
@@ -118,6 +187,11 @@ pub fn run(cmd: &str, root: &str) -> i32 {
             }
             if std::fs::read_to_string(&md_path).unwrap_or_default() != render_md(&fresh) {
                 println!("GATE: PORTING-LADDER.md != regenerated");
+                bad += 1;
+            }
+            // --- forensic anti-staleness gate: the claim-ladder must match reality ---
+            for f in forensic_findings(root) {
+                println!("GATE: {f}");
                 bad += 1;
             }
             if bad > 0 {

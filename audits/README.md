@@ -19,7 +19,7 @@ Not everything is green by design — `not-run` is a valid, honest state.
 | Audit | State | How to reproduce |
 |-------|-------|------------------|
 | oracle sweeps (75 GNURUST courts) | **green** | `bash lab/verify-sealed-courts.sh` (needs built oracle) |
-| receipt replay (TRUST.2) | **green** | `python3 lab/receipt/run.py check` |
+| receipt replay (TRUST.2) | **green** | `cargo run -p xtask -- receipt check` |
 | doc-staleness gate | **green** | `bash lab/check-docs.sh` |
 | self-contained court tests | **green** | `cargo test` |
 | fuzz (cob_move/pic/edited/…) | **partial** | `cargo +nightly fuzz run <target>` — run on demand, not in CI; seeds committed for past crashes |

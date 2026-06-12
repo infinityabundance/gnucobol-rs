@@ -23,7 +23,7 @@ path. Still `0.x`: the API may change.
 
 It is the **program-shape** oracle (compile a whole program, capture runtime behaviour). The byte-level
 sealed courts are driven by the **runtime-library shape** (`lab/oracle/decimal_harness`, linking the
-built `libcob`); campaign evidence of record is the **generated replay receipt** (`lab/receipt/run.py`
+built `libcob`); campaign evidence of record is the **generated replay receipt** (`xtask receipt`
 → `reports/receipts/<CAMPAIGN>/receipt.json`, see `docs/trust2-generated-receipts.md`). This crate emits
 one such replayable, canonical-JSON program-shape witness.
 
