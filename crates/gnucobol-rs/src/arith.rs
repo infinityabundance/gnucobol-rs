@@ -271,6 +271,169 @@ fn five_pow10(k: u32) -> Result<i128, ArithError> {
         .ok_or(ArithError::OutOfRange)
 }
 
+/// Full 256-bit product of two `u128` (schoolbook over 64-bit halves). Returns `(hi, lo)` with
+/// `a*b = hi*2^128 + lo`. Used by the bignum MULTIPLY fallback (GNURUST.BIGNUM.1) when the i128
+/// product overflows; libcob computes the exact product in GMP.
+fn mul_u256(a: u128, b: u128) -> (u128, u128) {
+    let (a0, a1) = (a & u64::MAX as u128, a >> 64);
+    let (b0, b1) = (b & u64::MAX as u128, b >> 64);
+    let p00 = a0 * b0;
+    let p01 = a0 * b1;
+    let p10 = a1 * b0;
+    let p11 = a1 * b1;
+    let (mid, carry1) = p01.overflowing_add(p10); // mid = a0*b1 + a1*b0 (may carry into bit 192)
+    let (lo, carry2) = p00.overflowing_add(mid << 64);
+    // hi = p11 + (mid >> 64) + carry2 + (carry1 << 64); the true product's hi 128 bits, so it fits.
+    let hi = p11
+        .wrapping_add(mid >> 64)
+        .wrapping_add(carry2 as u128)
+        .wrapping_add((carry1 as u128) << 64);
+    (hi, lo)
+}
+
+/// `(hi*2^128 + lo) / d` and remainder, by binary long division. `d` is a power of ten <= 10^18
+/// (< 2^60), so `rem << 1` never overflows `u128`. Returns `(q_hi, q_lo, rem)`.
+fn u256_divmod_u128(hi: u128, lo: u128, d: u128) -> (u128, u128, u128) {
+    let mut rem: u128 = 0;
+    let (mut q_hi, mut q_lo): (u128, u128) = (0, 0);
+    let mut i = 256;
+    while i > 0 {
+        i -= 1;
+        q_hi = (q_hi << 1) | (q_lo >> 127);
+        q_lo <<= 1;
+        let bit = if i >= 128 { (hi >> (i - 128)) & 1 } else { (lo >> i) & 1 };
+        rem = (rem << 1) | bit;
+        if rem >= d {
+            rem -= d;
+            q_lo |= 1;
+        }
+    }
+    (q_hi, q_lo, rem)
+}
+
+/// The exact decimal digits of a 256-bit magnitude, most-significant first (no leading zeros; `0`
+/// renders as `[0]`). Peels 18 digits at a time via [`u256_divmod_u128`].
+fn u256_to_decimal(mut hi: u128, mut lo: u128) -> Vec<u8> {
+    if hi == 0 && lo == 0 {
+        return vec![0];
+    }
+    const BASE: u128 = 1_000_000_000_000_000_000; // 10^18
+    let mut chunks: Vec<u64> = Vec::new(); // 18-digit chunks, least-significant first
+    while hi != 0 || lo != 0 {
+        let (qh, ql, r) = u256_divmod_u128(hi, lo, BASE);
+        chunks.push(r as u64);
+        hi = qh;
+        lo = ql;
+    }
+    let mut out = Vec::new();
+    for (idx, &c) in chunks.iter().rev().enumerate() {
+        let s = if idx == 0 { format!("{c}") } else { format!("{c:018}") };
+        out.extend(s.bytes().map(|b| b - b'0'));
+    }
+    out
+}
+
+/// Whether to round the magnitude up by one, given the first dropped digit, whether anything below
+/// it is non-zero (sticky), and the last kept digit — a digit-form restatement of `do_round` (and
+/// proven equal to it by the round sweep). PROHIBITED with a dropped non-zero digit is an error.
+fn round_up_decimal(
+    mode: Round,
+    positive: bool,
+    round_digit: u8,
+    sticky: bool,
+    last_keep: u8,
+) -> Result<bool, ArithError> {
+    let any = round_digit != 0 || sticky;
+    Ok(match mode {
+        Round::Truncate => false,
+        Round::Prohibited => {
+            if any {
+                return Err(ArithError::RoundingProhibited);
+            }
+            false
+        }
+        Round::AwayFromZero => any,
+        Round::TowardGreater => positive && any,
+        Round::TowardLesser => !positive && any,
+        Round::NearAwayFromZero => round_digit >= 5,
+        Round::NearTowardZero => round_digit > 5 || (round_digit == 5 && sticky),
+        Round::NearEven => {
+            round_digit > 5 || (round_digit == 5 && (sticky || last_keep % 2 == 1))
+        }
+    })
+}
+
+/// Increment a most-significant-first decimal digit vector by one, propagating the carry.
+fn decimal_inc(d: &mut Vec<u8>) {
+    let mut i = d.len();
+    loop {
+        if i == 0 {
+            d.insert(0, 1);
+            return;
+        }
+        i -= 1;
+        if d[i] == 9 {
+            d[i] = 0;
+        } else {
+            d[i] += 1;
+            return;
+        }
+    }
+}
+
+/// MULTIPLY when `a.mag * b.mag` overflows i128. libcob keeps the exact product in GMP; gnucobol-rs
+/// carries it as the full 256-bit product (sufficient: two <=38-digit operands give a <=76-digit
+/// product < 2^256), converts to exact decimal, rounds to the receiver scale and truncates to its
+/// low `digits` digits (all digit-array work, no big-int arithmetic), then hands the <=38-digit
+/// result to the unchanged `store()`. No deferral within the binary-multiply domain (GNURUST.BIGNUM.1).
+fn mul_store_big(
+    a: Dec,
+    b: Dec,
+    recv: &FieldAttr,
+    round: Round,
+    bcd_path: bool,
+) -> Result<Vec<u8>, ArithError> {
+    let positive = (a.mag < 0) == (b.mag < 0);
+    let (hi, lo) = mul_u256(a.mag.unsigned_abs(), b.mag.unsigned_abs());
+    let digits = u256_to_decimal(hi, lo);
+    let ps = a.scale + b.scale; // product scale
+    let tr = recv.scale as i32; // receiver scale
+    let eff = if bcd_path { bcd_round_mode(round) } else { round };
+
+    // Round the exact decimal to `tr` fractional digits.
+    let keep: Vec<u8> = if ps <= tr {
+        // widen: append (tr - ps) zero fractional digits, no rounding.
+        let mut k = digits;
+        for _ in 0..(tr - ps) {
+            k.push(0);
+        }
+        k
+    } else {
+        let drop = (ps - tr) as usize;
+        let total = digits.len();
+        let keep_count = total.saturating_sub(drop);
+        let mut k = digits[..keep_count].to_vec();
+        let round_digit = if keep_count < total { digits[keep_count] } else { 0 };
+        let sticky = keep_count + 1 < total && digits[keep_count + 1..].iter().any(|&x| x != 0);
+        let last_keep = k.last().copied().unwrap_or(0);
+        if round_up_decimal(eff, positive, round_digit, sticky, last_keep)? {
+            decimal_inc(&mut k);
+        }
+        k
+    };
+
+    // Low `recv.digits` digits -> i128 (<=38 digits, so < 10^38 < i128::MAX; the store re-applies the
+    // modulus and renders). Building MSB->LSB never overflows because each prefix is < 10^38.
+    let dg = recv.digits as usize;
+    let start = keep.len().saturating_sub(dg);
+    let mut mag: i128 = 0;
+    for &d in &keep[start..] {
+        mag = mag * 10 + d as i128;
+    }
+    let mag = if positive { mag } else { -mag };
+    store(Dec { mag, scale: tr }, recv, Round::Truncate, bcd_path)
+}
+
 /// Faithful port of `cob_decimal_do_round` (numeric.c:1936): round `(mag, scale)` toward the target
 /// `tgt` scale per `round`, returning the adjusted `(mag, scale)`. The caller then truncates to the
 /// field scale (matching libcob's post-round `shift_decimal` to `COB_FIELD_SCALE`). Only invoked
@@ -476,12 +639,19 @@ pub fn cob_arith(
     // exactly the integer-decimal path here, so the same `compute`/`store` produces identical bytes.
     let da = decode(a, a_attr)?;
     let db = decode(b, b_attr)?;
-    let r = compute(da, db, op)?;
     // ADD/SUBTRACT into a PACKED receiver take libcob's cob_add_bcd path: it keeps a negative sign on
     // a zero-magnitude result AND rounds with the BCD nibble rules (NEAREST-EVEN away, GNURUST.ROUND.2).
     let bcd_path = matches!(op, Op::Add | Op::Subtract)
         && a_attr.field_type == crate::attr::COB_TYPE_NUMERIC_PACKED;
-    store(r, a_attr, round, bcd_path)
+    match compute(da, db, op) {
+        Ok(r) => store(r, a_attr, round, bcd_path),
+        // A MULTIPLY whose i128 product overflows: carry the exact 256-bit product (GNURUST.BIGNUM.1)
+        // instead of failing closed, matching libcob's GMP product + low-digit truncating store.
+        Err(ArithError::OutOfRange) if matches!(op, Op::Multiply) => {
+            mul_store_big(da, db, a_attr, round, bcd_path)
+        }
+        Err(e) => Err(e),
+    }
 }
 
 #[cfg(test)]
@@ -560,6 +730,54 @@ mod tests {
         // an exact value never rounds, whatever the mode (and PROHIBITED accepts it).
         assert_eq!(round_int(20, 1, AwayFromZero).unwrap(), 2);
         assert_eq!(round_int(20, 1, Prohibited).unwrap(), 2);
+    }
+
+    #[test]
+    fn bignum_multiply_overflow_matches_oracle() {
+        // 9(20) * 9(20) = (10^20-1)^2 = 9999999999999999999800000000000000000001 (40 digits, overflows
+        // i128); stored into a 20-digit receiver keeps the low 20 = 00000000000000000001 (oracle-verified).
+        let nines = b"99999999999999999999";
+        let attr = disp(20, 0, false);
+        let r = cob_arith(Op::Multiply, nines, &attr, nines, &attr, Round::Truncate).unwrap();
+        assert_eq!(&r, b"00000000000000000001");
+    }
+
+    #[test]
+    fn bignum_multiply_signed_and_scaled() {
+        // -9(18)V9 * 9(18)V9 style: ensure sign + scale narrowing work through the bignum path.
+        // 12 nines . 1 digit each: magnitudes ~1.0e19, product ~1.2e38 (may overflow), narrowed.
+        let a = b"9999999999999999999"; // 19 digits
+        let aattr = disp(19, 0, true);
+        let r = cob_arith(Op::Multiply, a, &aattr, a, &aattr, Round::Truncate);
+        // 19-nine squared = 39 digits, overflows i128 -> bignum path; low 19 digits stored.
+        assert!(r.is_ok());
+        // (10^19-1)^2 = ...80000000000000000001 ; low 19 = 0000000000000000001
+        assert_eq!(r.unwrap().as_slice(), b"0000000000000000001");
+    }
+
+    #[test]
+    fn mul_u256_full_range_incl_carry() {
+        // 5 * 7 = 35
+        assert_eq!(mul_u256(5, 7), (0, 35));
+        // u128::MAX^2 = 2^256 - 2^129 + 1 -> hi = 2^128 - 2 = u128::MAX-1, lo = 1. Exercises the
+        // bit-192 carry (carry1), which never fires for <=38-digit COBOL operands but must be correct.
+        assert_eq!(mul_u256(u128::MAX, u128::MAX), (u128::MAX - 1, 1));
+        // exact decimal of a known overflow product
+        let (hi, lo) = mul_u256(10u128.pow(20) - 1, 10u128.pow(20) - 1);
+        let d: String = u256_to_decimal(hi, lo).iter().map(|&x| (x + b'0') as char).collect();
+        assert_eq!(d, "9999999999999999999800000000000000000001");
+    }
+
+    #[test]
+    fn bignum_multiply_high_combined_scale_no_defer() {
+        // 9(20) * V9(20) into 9(20): K = digits + drop = 20 + 20 = 40 (> 38, the case an early
+        // mod-10^K reduction would defer). The full-product path handles it: (10^20-1)^2 / 10^20
+        // truncated = 99999999999999999998 (oracle-verified).
+        let nines = b"99999999999999999999";
+        let recv = disp(20, 0, false);
+        let frac = disp(20, 20, false); // V9(20): all 20 digits fractional
+        let r = cob_arith(Op::Multiply, nines, &recv, nines, &frac, Round::Truncate).unwrap();
+        assert_eq!(&r, b"99999999999999999998");
     }
 
     #[test]
