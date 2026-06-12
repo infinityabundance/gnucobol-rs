@@ -466,6 +466,194 @@ fn alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
     sign::display_put_sign(dst, dst_attr, sign);
 }
 
+/// `cob_binary_mget_sint64 (f)` (move.c:196): read a BINARY field as a signed 64-bit integer (endian
+/// from `COB_FLAG_BINARY_SWAP`, sign-extended for signed fields). Equals [`crate::binary::binary_decode`].
+pub fn cob_binary_mget_sint64(data: &[u8], attr: &FieldAttr) -> i64 {
+    crate::binary::binary_decode(data, attr) as i64
+}
+
+/// `cob_binary_mget_uint64 (f)` (move.c:231): read a BINARY field as an unsigned 64-bit integer
+/// (no sign extension), honoring `COB_FLAG_BINARY_SWAP`.
+pub fn cob_binary_mget_uint64(data: &[u8], attr: &FieldAttr) -> u64 {
+    let n = data.len().min(8);
+    let swap = attr.flags & crate::attr::COB_FLAG_BINARY_SWAP != 0;
+    let mut u: u64 = 0;
+    if swap {
+        for &b in data.iter().take(n) {
+            u = (u << 8) | b as u64;
+        }
+    } else {
+        for &b in data.iter().take(n).rev() {
+            u = (u << 8) | b as u64;
+        }
+    }
+    u
+}
+
+/// `cob_binary_mset_sint64 (f, n)` (move.c:254): write the low `f.size` bytes of `n` into a BINARY
+/// field with the field's endianness (a raw store — no PIC-digit truncation).
+pub fn cob_binary_mset_sint64(out: &mut [u8], attr: &FieldAttr, n: i64) {
+    let size = out.len().min(8);
+    let swap = attr.flags & crate::attr::COB_FLAG_BINARY_SWAP != 0;
+    if swap {
+        out[..size].copy_from_slice(&n.to_be_bytes()[8 - size..]);
+    } else {
+        out[..size].copy_from_slice(&n.to_le_bytes()[..size]);
+    }
+}
+
+/// `cob_binary_mset_uint64 (f, n)` (move.c:284): unsigned form of [`cob_binary_mset_sint64`].
+pub fn cob_binary_mset_uint64(out: &mut [u8], attr: &FieldAttr, n: u64) {
+    cob_binary_mset_sint64(out, attr, n as i64);
+}
+
+fn pow10_ll(n: i32) -> i64 {
+    10i64.checked_pow(n.max(0) as u32).unwrap_or(i64::MAX)
+}
+
+fn bin_trunc_digits(attr: &FieldAttr) -> i32 {
+    let scale = attr.scale as i32;
+    if scale >= 0 {
+        attr.digits as i32
+    } else {
+        attr.digits as i32 + scale
+    }
+}
+
+/// `cob_move_binary_to_binary (f1, f2)` (move.c:709): binary -> binary, value-preserving (scale
+/// ignored), with optional PIC-digit truncation on the receiver.
+fn binary_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
+    let trunc = da.flags & crate::attr::COB_FLAG_BINARY_TRUNC != 0;
+    if sa.have_sign() {
+        let mut sval = cob_binary_mget_sint64(s, sa);
+        let sign = sval < 0;
+        if trunc {
+            sval %= pow10_ll(bin_trunc_digits(da));
+        }
+        if da.have_sign() {
+            cob_binary_mset_sint64(d, da, sval);
+        } else if sign {
+            cob_binary_mset_uint64(d, da, (sval as i128).unsigned_abs() as u64);
+        } else {
+            cob_binary_mset_uint64(d, da, sval as u64);
+        }
+    } else {
+        let mut uval = cob_binary_mget_uint64(s, sa);
+        if trunc {
+            uval %= pow10_ll(bin_trunc_digits(da)) as u64;
+        }
+        if da.have_sign() {
+            cob_binary_mset_sint64(d, da, uval as i64);
+        } else {
+            cob_binary_mset_uint64(d, da, uval);
+        }
+    }
+}
+
+/// `cob_move_display_to_binary (f1, f2)` (move.c:763): parse the zoned digits (scale-aligned to the
+/// receiver) into an integer, then store it in the binary receiver. Overflow (>19 digits) routes
+/// through the decimal layer.
+fn display_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) -> Result<(), DecimalError> {
+    let off = sa.data_offset();
+    let size1 = sa.data_size(s.len());
+    let data1 = s.get(off..off + size1).unwrap_or(&[]);
+    let size = (size1 as i64 - sa.scale as i64 + da.scale as i64).max(0) as usize;
+    let trunc = da.flags & crate::attr::COB_FLAG_BINARY_TRUNC != 0;
+    let mut target_digits: i64 = if trunc {
+        let scale = da.scale as i32;
+        let digits = da.digits as i32;
+        let t = if scale > digits {
+            digits
+        } else if scale > 0 {
+            digits
+        } else {
+            digits + scale
+        };
+        (t as i64).min(size as i64)
+    } else {
+        size as i64
+    };
+    let mut i = (size as i64 - target_digits).max(0) as usize;
+    while i < size1 {
+        if sign::d2i(data1[i]) != 0 {
+            break;
+        }
+        target_digits -= 1;
+        i += 1;
+    }
+    if target_digits > 19 {
+        // overflow -> decimal layer
+        let bytes = crate::cob_decimal::cob_decimal_setget_fld(s, sa, da, d.len(), crate::arith::Round::Truncate).map_err(|_| DecimalError::UnsupportedConversion { src_type: sa.field_type, dst_type: da.field_type })?;
+        d.copy_from_slice(&bytes);
+        return Ok(());
+    }
+    let mut tmp = s.to_vec();
+    let sgn = sign::display_get_sign_strip(&mut tmp, sa); // COB_GET_SIGN_ADJUST (value re-read below)
+    let data1 = tmp.get(off..off + size1).unwrap_or(&[]);
+    let mut val: u64 = 0;
+    while i < size {
+        if i < size1 {
+            val = val * 10 + sign::d2i(data1[i]) as u64;
+        } else {
+            val *= 10;
+        }
+        i += 1;
+    }
+    if da.have_sign() {
+        let v2 = if sgn < 0 { -(val as i64) } else { val as i64 };
+        cob_binary_mset_sint64(d, da, v2);
+    } else {
+        cob_binary_mset_uint64(d, da, val);
+    }
+    Ok(())
+}
+
+/// `cob_move_binary_to_display (f1, f2)` (move.c:836): decode the binary value to a digit string and
+/// store it (scale-aligned) into the display receiver, with sign.
+fn binary_to_display(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
+    let mut sign = 1i32;
+    let val: u64 = if sa.have_sign() {
+        let v2 = cob_binary_mget_sint64(s, sa);
+        if v2 < 0 {
+            sign = -1;
+            (v2 as i128).unsigned_abs() as u64
+        } else {
+            v2 as u64
+        }
+    } else {
+        cob_binary_mget_uint64(s, sa)
+    };
+    let mut buff = [0u8; 32];
+    let mut i = 20usize;
+    let mut v = val;
+    while v > 0 {
+        i -= 1;
+        buff[i] = sign::i2d((v % 10) as u8);
+        v /= 10;
+    }
+    store_common_region(d, da, &buff[i..20], (20 - i) as i64, sa.scale as i64, true);
+    sign::display_put_sign(d, da, sign);
+}
+
+/// `cob_move_fp_to_fp (src, dst)` (move.c:673): convert between FLOAT (f32) / DOUBLE (f64) /
+/// L_DOUBLE (x87 80-bit) by widening to the largest then narrowing to the target.
+fn fp_to_fp(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
+    let dval: f64 = match sa.field_type {
+        0x13 => f32::from_le_bytes(s[..4].try_into().unwrap_or([0; 4])) as f64,
+        0x14 => f64::from_le_bytes(s[..8].try_into().unwrap_or([0; 8])),
+        _ => crate::cob_decimal::extended80_to_f64(s),
+    };
+    match da.field_type {
+        0x13 => d[..4].copy_from_slice(&(dval as f32).to_le_bytes()),
+        0x14 => d[..8].copy_from_slice(&dval.to_le_bytes()),
+        _ => {
+            let e = crate::cob_decimal::f64_to_extended80(dval);
+            let n = d.len().min(e.len());
+            d[..n].copy_from_slice(&e[..n]);
+        }
+    }
+}
+
 /// `cob_move` (`move.c:1446`), restricted to the sealed elementary type pairs. Any other pair
 /// **fails closed** with [`DecimalError::UnsupportedConversion`] rather than guessing.
 ///
@@ -489,38 +677,31 @@ pub fn cob_move(
     let src_bin = src_attr.field_type == COB_TYPE_NUMERIC_BINARY;
     let dst_bin = dst_attr.field_type == COB_TYPE_NUMERIC_BINARY;
 
-    // Binary moves (`GNURUST.14`) route through a DISPLAY temp and the sealed display/packed moves:
-    // a binary side is decoded to / encoded from a zoned integer, the other side uses its court.
+    // Binary MOVE leaves (move.c): the named per-pair routines. DISPLAY<->BINARY and BINARY<->BINARY
+    // are direct; BINARY<->PACKED (and other numeric pairs) route through the decimal layer, as the
+    // C dispatch does via cob_decimal_setget_fld.
+    if src_bin && dst_bin {
+        binary_to_binary(src, src_attr, dst, dst_attr);
+        return Ok(());
+    }
     if dst_bin {
-        let signed = dst_attr.have_sign();
-        let dattr = FieldAttr {
-            field_type: COB_TYPE_NUMERIC_DISPLAY,
-            digits: dst_attr.digits,
-            scale: dst_attr.scale,
-            flags: if signed {
-                crate::attr::COB_FLAG_HAVE_SIGN
-            } else {
-                0
-            },
-        };
-        let mut dtemp = vec![b'0'; dst_attr.digits as usize];
-        if src_bin {
-            let int = crate::binary::binary_decode(src, src_attr);
-            let stemp = display_temp_from_int(int, src_attr.digits, src_attr.have_sign());
-            let sattr = display_attr(src_attr);
-            cob_move(&stemp, &sattr, &mut dtemp, &dattr)?;
-        } else {
-            cob_move(src, src_attr, &mut dtemp, &dattr)?;
+        if src_attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
+            return display_to_binary(src, src_attr, dst, dst_attr);
         }
-        let int = int_from_display(&dtemp, signed);
-        crate::binary::binary_encode(int, dst_attr, dst);
+        let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
+            .map_err(|_| DecimalError::UnsupportedConversion { src_type: src_attr.field_type, dst_type: dst_attr.field_type })?;
+        dst.copy_from_slice(&bytes);
         return Ok(());
     }
     if src_bin {
-        let int = crate::binary::binary_decode(src, src_attr);
-        let stemp = display_temp_from_int(int, src_attr.digits, src_attr.have_sign());
-        let sattr = display_attr(src_attr);
-        return cob_move(&stemp, &sattr, dst, dst_attr);
+        if dst_attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
+            binary_to_display(src, src_attr, dst, dst_attr);
+            return Ok(());
+        }
+        let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
+            .map_err(|_| DecimalError::UnsupportedConversion { src_type: src_attr.field_type, dst_type: dst_attr.field_type })?;
+        dst.copy_from_slice(&bytes);
+        return Ok(());
     }
 
     match (src_attr.field_type, dst_attr.field_type) {

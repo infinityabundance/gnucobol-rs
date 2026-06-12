@@ -956,7 +956,7 @@ pub fn cob_cmp_numdisp(data: &[u8], n: i64, has_sign: bool, ebcdic_sign: bool) -
 /// Decode an x86 80-bit extended-precision `long double` (16-byte storage, low 10 bytes used) to `f64`,
 /// matching the C cast `(double)ld`. Sign + 15-bit exponent + 64-bit mantissa with an explicit integer
 /// bit; ported so `cob_cmp_float`'s L_DOUBLE branch has no platform bound.
-fn extended80_to_f64(b: &[u8]) -> f64 {
+pub fn extended80_to_f64(b: &[u8]) -> f64 {
     if b.len() < 10 {
         return 0.0;
     }
@@ -972,6 +972,33 @@ fn extended80_to_f64(b: &[u8]) -> f64 {
     }
     // value = mantissa * 2^(exp - 16383 - 63); the explicit integer bit makes mantissa the full 64-bit.
     sign * (mantissa as f64) * 2f64.powi(exp - 16383 - 63)
+}
+
+/// Encode a finite `f64` as an x87 80-bit extended `long double` (16-byte storage, low 10 bytes used) —
+/// the inverse of [`extended80_to_f64`], for `cob_move_fp_to_fp`'s L_DOUBLE receiver.
+pub fn f64_to_extended80(v: f64) -> [u8; 16] {
+    let mut out = [0u8; 16];
+    if v == 0.0 {
+        if v.is_sign_negative() {
+            out[9] = 0x80;
+        }
+        return out;
+    }
+    let neg = v < 0.0;
+    if !v.is_finite() {
+        let se: u16 = (if neg { 0x8000 } else { 0 }) | 0x7FFF;
+        out[8..10].copy_from_slice(&se.to_le_bytes());
+        out[7] = if v.is_nan() { 0xC0 } else { 0x80 }; // integer bit (+ QNaN bit for NaN)
+        return out;
+    }
+    let (m, e) = crate::float::decompose_f64(v.abs());
+    let lead = m.leading_zeros() as i32;
+    let mant64 = m << lead; // normalize so the integer (top) bit is set
+    let expo = (e - lead + 16383 + 63) as u16;
+    out[..8].copy_from_slice(&mant64.to_le_bytes());
+    let se = (if neg { 0x8000u16 } else { 0 }) | (expo & 0x7FFF);
+    out[8..10].copy_from_slice(&se.to_le_bytes());
+    out
 }
 
 /// `cob_cmp_float (f1, f2)` (numeric.c): compare two numeric fields as `double`, returning `0` when
@@ -1449,6 +1476,19 @@ mod tests {
         for &(v, want) in &[(123456789i128, "0123456789"), (0, "0000000000")] {
             crate::binary::binary_encode(v, &unsigned, &mut buf);
             assert_eq!(cob_print_realbin(&buf, &unsigned, 10), want, "realbin unsigned {v}");
+        }
+    }
+}
+
+#[cfg(test)]
+mod ext80_tests {
+    use super::{extended80_to_f64, f64_to_extended80};
+    #[test]
+    fn extended80_round_trip() {
+        for &v in &[0.0f64, 1.0, -1.0, 3.14159265358979, 1e10, -2.5, 1e-7, 12345.678, -0.001] {
+            let e = f64_to_extended80(v);
+            let back = extended80_to_f64(&e);
+            assert_eq!(back, v, "ext80 round-trip {v}");
         }
     }
 }

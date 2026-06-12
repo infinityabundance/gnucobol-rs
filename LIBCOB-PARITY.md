@@ -9,7 +9,7 @@
 | libcob file | functions | ported | parity |
 |---|---:|---:|---:|
 | `numeric.c` | 104 | 104 | 100.0% |
-| `move.c` | 57 | 42 | 73.7% |
+| `move.c` | 57 | 50 | 87.7% |
 | `strings.c` | 34 | 0 | 0.0% |
 | `intrinsic.c` | 237 | 2 | 0.8% |
 | `cconv.c` | 9 | 1 | 11.1% |
@@ -21,7 +21,7 @@
 | `reportio.c` | 39 | 0 | 0.0% |
 | `common.c` | 253 | 9 | 3.6% |
 | `cobgetopt.c` | 4 | 0 | 0.0% |
-| **total** | **1152** | **163** | **14.1%** |
+| **total** | **1152** | **171** | **14.8%** |
 
 _Method: A libcob function counts as PORTED when its exact name appears as a whole word in crates/gnucobol-rs/src/**/*.rs (the port names Rust functions/docstrings after their C analog). This is NAME-level parity; BYTE parity is proven separately by the per-court oracle sweeps (lab/verify-sealed-courts.sh)._
 

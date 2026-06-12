@@ -12,24 +12,16 @@
       "file": "move.c",
       "functions": 57,
       "missing": [
-        "cob_binary_mget_sint64",
-        "cob_binary_mget_uint64",
-        "cob_binary_mset_sint64",
-        "cob_binary_mset_uint64",
         "cob_init_table",
         "cob_move_all",
         "cob_move_alphanum_to_edited",
-        "cob_move_binary_to_binary",
-        "cob_move_binary_to_display",
-        "cob_move_display_to_binary",
         "cob_move_display_to_edited",
         "cob_move_edited_to_display",
-        "cob_move_fp_to_fp",
         "cob_move_ibm",
         "indirect_move"
       ],
-      "parity_pct": 73.7,
-      "ported": 42
+      "parity_pct": 87.7,
+      "ported": 50
     },
     {
       "file": "strings.c",
@@ -1104,7 +1096,7 @@
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
     "functions": 1152,
-    "parity_pct": 14.1,
-    "ported": 163
+    "parity_pct": 14.8,
+    "ported": 171
   }
 }
