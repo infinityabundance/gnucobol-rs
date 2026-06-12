@@ -34,6 +34,7 @@ for f in docs/claim-boundary.md docs/porting-method.md docs/derivation-and-licen
          docs/compatibility-taxonomy.md docs/future-risk-register.md reports/negative-capabilities.json \
          docs/oracle-lessons.md docs/negative-capabilities.md docs/license-boundaries.md docs/trust2-generated-receipts.md \
          reports/claim-ladder.json lab/verify-sealed-courts.sh \
+         DOXYGEN-PARITY.md reports/doxygen-parity.json LIBCOB-PARITY.md \
          STATUS.md docs/REVIEW-IN-10-MINUTES.md docs/not-yet-ready.md docs/effect-boundary-map.md audits/README.md \
          COPYING COPYING.LESSER; do
   [ -f "$f" ] || bad "README references missing file: $f"
@@ -284,6 +285,23 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   esac
 else
   note "oracle absent -> selfcheck/sweep freshness check skipped (build lab/oracle to enable)"
+fi
+
+# 10. DOXYGEN-PARITY (C-vs-Rust function coverage) — the archaeology artifact that proves each libcob file
+#     is truly ported. Generated end-to-end in Rust (xtask doxygen-compare) from doxygen's preprocessed C
+#     parse; reproducible recipe is documented in DOXYGEN-PARITY.md itself. Here we (a) regenerate the
+#     authoritative C-side XML inventory from the pinned libcob (fast, XML-only), then (b) assert the
+#     committed coverage doc is a fresh re-derivation AND that no awk-complete file has a doxygen-found
+#     function with no Rust counterpart. Source-gated on doxygen + the pinned source being present.
+if command -v doxygen >/dev/null 2>&1 && [ -f lab/admit/gnucobol-3.2/libcob/numeric.c ]; then
+  ( cd "$ROOT" && doxygen lab/doxygen/Doxyfile-c-xml ) >/dev/null 2>&1
+  if ( cd "$ROOT" && cargo run -q -p xtask -- doxygen-compare check ) >/tmp/_doxparity_check 2>&1; then
+    note "DOXYGEN-PARITY: C-vs-Rust coverage fresh; no awk-missed functions in completed files"
+  else
+    bad "DOXYGEN-PARITY: coverage doc stale or a completed file has an un-ported doxygen function"; cat /tmp/_doxparity_check
+  fi
+else
+  note "DOXYGEN-PARITY: doxygen or pinned libcob absent -> skipped (source-gated)"
 fi
 
 echo "== doc-gate $( [ $FAIL -eq 0 ] && echo PASS || echo FAIL ) =="

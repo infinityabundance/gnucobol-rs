@@ -60,6 +60,7 @@ run_sweep "GNURUST.INITIALIZE.1 bytes" initialize_sweep.sh
 run_sweep "GNURUST.INSPECT.1 bytes" inspect_sweep.sh
 run_sweep "GNURUST.REFMOD.1 refmod"  refmod_sweep.sh
 run_sweep "GNURUST.STRING.UNSTRING.1" string_unstring_sweep.sh
+run_sweep "cobgetopt.c getopt_long_long" getopt_sweep.sh
 run_sweep "GNURUST.INTRINSIC.ATLAS.1 (observed)" intrinsic_atlas_sweep.sh
 run_sweep "GNURUST.INTRINSIC.LENGTH.1" length_sweep.sh
 run_sweep "GNURUST.INTRINSIC.NUMVAL.1" numval_sweep.sh
@@ -141,6 +142,12 @@ if command -v doxygen >/dev/null 2>&1; then
   ( cd "$ROOT" && rm -rf lab/doxygen/out-rust && doxygen lab/doxygen/Doxyfile-rust >/dev/null 2>&1 )
   RFNS=$(grep -rhoE 'kind="function"' "$ROOT"/lab/doxygen/out-rust/xml/*8rs.xml 2>/dev/null | wc -l)
   if [ "${RFNS:-0}" -gt 200 ]; then row "rust-port doxygen (clean, $RFNS fns)" "PASS"; else row "rust-port doxygen (clean refresh)" "FAIL"; RED=$((RED+1)); fi
+  # DOXYGEN.PARITY: the AUTHORITATIVE C-vs-Rust coverage compare. Regenerate the C-side XML inventory
+  # (fast, XML-only) from the pinned libcob, then assert the committed coverage doc is fresh AND that no
+  # libcob file the awk parity reports complete has a doxygen-found function with no Rust counterpart
+  # ("did we miss anything"). This is the gate that proves each file is truly done.
+  ( cd "$ROOT" && doxygen lab/doxygen/Doxyfile-c-xml >/dev/null 2>&1 )
+  ( cd "$ROOT" && cargo run -q -p xtask -- doxygen-compare check >/dev/null 2>&1 ) && row "C-vs-Rust doxygen parity (did-we-miss)" "PASS" || { row "C-vs-Rust doxygen parity (did-we-miss)" "FAIL"; RED=$((RED+1)); }
 else
   row "rust-port doxygen (doxygen absent -> skipped)" "PASS"
 fi

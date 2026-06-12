@@ -49,6 +49,24 @@ mean "matches the oracle."
     oracle sweep; fuzz smoke; no `lab/`/`reports/`/`fuzz/` leakage in `cargo package --list`.
     Ship the receipts in the same commit.
 
+## Knowing a libcob file is _done_ (the doxygen C-vs-Rust diff)
+
+A function-for-function port needs an authoritative answer to "did we miss a function?". The
+line-based name inventory (`LIBCOB-PARITY.md`) can miss comment-decorated or macro-wrapped
+signatures, so the **authoritative** inventory comes from **doxygen's preprocessed C parse** of the
+pinned libcob:
+
+- `doxygen lab/doxygen/Doxyfile-c-xml` emits a machine-readable `<memberdef kind="function">` list
+  per `libcob/*.c` (XML-only, ~0.2 s; `EXTRACT_ALL`/`EXTRACT_STATIC`, GMP path predefined).
+- `cargo run -p xtask -- doxygen-compare generate` (Rust, not Python) cross-checks every doxygen
+  function against `crates/gnucobol-rs/src` and writes `DOXYGEN-PARITY.md` +
+  `reports/doxygen-parity.json`. A file is **done** only when its `missing` list is empty.
+- `doxygen-compare check` is the gate — anti-staleness (regenerate-and-diff) plus a hard
+  "did we miss anything" failure if any file the awk parity calls complete still has a
+  doxygen-found function with no Rust counterpart. It runs in both `lab/verify-sealed-courts.sh`
+  and the docs staleness gate `lab/check-docs.sh`. Regenerate everything with
+  `bash lab/doxygen/refresh-rust.sh`.
+
 ## Non-negotiable disciplines
 
 - **Faithful, not improved.** A nicer divergence is a bug.

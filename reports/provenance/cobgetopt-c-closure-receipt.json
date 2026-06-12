@@ -1,0 +1,53 @@
+{
+  "schema": "gnurust-file-closure-receipt-v1",
+  "id": "GNURUST.COBGETOPT.CLOSE.1",
+  "file": "libcob/cobgetopt.c",
+  "file_index": "of 13 libcob source files (smallest-first pass, < 70 functions)",
+  "statement": "cobgetopt.c — GnuCOBOL's vendored GNU getopt_long (originally GNU C Library / gnulib) — ported function-for-function into gnucobol-rs. All 4 functions have a named Rust counterpart, confirmed by doxygen's preprocessed C parse (DOXYGEN.PARITY 4/4) and the awk inventory (LIBCOB.PARITY 4/4). Not clean-room: an openly-licensed, provenance-documented, oracle-verified Rust port of the admitted GnuCOBOL 3.2 command-line option scanner.",
+  "oracle": {
+    "upstream": "GnuCOBOL 3.2.0 (Free Software Foundation, Inc.); cobgetopt.c from the GNU C Library / gnulib",
+    "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+    "source_tarball_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
+    "cobgetopt_c_sha256": "b48af3697f58efadda2b476ebc89bc1201636dc6c585a308e78deacfcf783244",
+    "cobgetopt_h_sha256": "e70d0200164cfd1d991d8ebae66915b3ce9e506f17679f16bde08a29718ee281",
+    "admission_receipt": "reports/admission/RECEIPT-ADMISSION.md"
+  },
+  "commit_range": {
+    "first": "(this batch) port the GNU getopt_long scanner (CobGetopt) 1:1",
+    "last": "(this batch) GNURUST.COBGETOPT.CLOSE.1 closure receipt"
+  },
+  "coverage": {
+    "functions_total": 4,
+    "functions_ported_named": 4,
+    "functions": [
+      "exchange",
+      "process_long_option",
+      "_getopt_initialize",
+      "cob_getopt_long_long"
+    ],
+    "inventory_confirmed_by": "doxygen preprocessed C parse (4 <memberdef kind=function>; DOXYGEN-PARITY.md cobgetopt.c 4/4) + awk inventory (LIBCOB-PARITY.md 4/4) + C-side grep (exactly 4 top-level definitions)",
+    "rust_modules": [
+      "crates/gnucobol-rs/src/cobgetopt.rs (CobGetopt: new + cob_getopt_long_long + process_long_option + getopt_initialize + exchange + Ptr/OptionDef model)"
+    ],
+    "state_model": "The C file-static globals (optind/optarg/opterr/optopt/nextchar/ordering/first_nonopt/last_nonopt/getopt_initialized) become explicit CobGetopt fields (no global mutable state, #![forbid(unsafe_code)]). The char* scan pointer nextchar becomes a (elem, off) index into the owned, permutable argv. The struct option int* flag is modelled as an opaque slot id recorded in flag_writes (GnuCOBOL's own long_options tables always pass flag = NULL)."
+  },
+  "differential_verification": {
+    "note": "All against the admitted GnuCOBOL 3.2 oracle's real cob_getopt_long_long (getopt_harness.c linked against the built libcob). FAIL=0.",
+    "sweeps": {
+      "cobgetopt.c getopt_long_long (getopt_sweep)": "35/0"
+    },
+    "scenario_coverage": "short options (required/optional/missing args, clustering, unknown), the leading +/-/: ordering modes (REQUIRE_ORDER / RETURN_IN_ORDER / leading-':' silent), PERMUTE reordering, the '--' terminator, long options (exact / unique-abbreviation / ambiguous / '=arg' / separate-arg / no-arg-with-'='), getopt_long_only (single-dash long + short fallback), and the '-W foo' convenience form. The compared stream is the per-call (return, optarg, optind, optopt) tuple; opterr forced to 0 on both sides.",
+    "self_contained": "6 in-crate unit tests (cargo test) cover the same semantics without the oracle."
+  },
+  "non_claims": [
+    "stderr diagnostic TEXT is not part of the court (opterr is forced to 0); the port emits the same messages but only the parse result tuple is differentially verified.",
+    "The struct option int* flag write-through is modelled as a recorded (slot, val) pair rather than a raw pointer store; GnuCOBOL's own long_options tables never use a non-NULL flag, so this path is exercised only by a unit test, not the oracle sweep.",
+    "POSIXLY_CORRECT is read from the process environment exactly as the C does; the sweep does not set it."
+  ],
+  "license_boundary": {
+    "crate_license": "LGPL-3.0-or-later",
+    "clean_room": false,
+    "statement": "Faithful DERIVATIVE PORT of GnuCOBOL 3.2 cobgetopt.c (itself LGPL-2.1-or-later GNU C Library / gnulib code), NOT clean-room. Licensed LGPL-3.0-or-later to honour the copyleft; the Apache-2.0 KOBOLD layer never mixes (gpl-license-guard-receipt.json).",
+    "gpl_partition_guard": "reports/license/gpl-license-guard-receipt.json"
+  }
+}

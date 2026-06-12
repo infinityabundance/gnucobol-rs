@@ -29,6 +29,10 @@ MAX_DOT_GRAPH_DEPTH    = 3
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
 HTML_OUTPUT            = html
+# machine-readable inventory for the C-vs-Rust function-coverage compare (xtask doxygen-compare)
+GENERATE_XML           = YES
+XML_OUTPUT             = xml
+XML_PROGRAMLISTING     = NO
 QUIET                  = YES
 WARN_IF_UNDOCUMENTED   = NO
 # preprocessor: libcob uses HAVE_* macros; predefine the GMP path so the real code is parsed
