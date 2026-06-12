@@ -1,0 +1,37 @@
+# Doxygen config for the PINNED GnuCOBOL 3.2 libcob source (the byte-truth oracle).
+# Generates full call + caller graphs to map the 1:1 Rust port. Run: doxygen lab/doxygen/Doxyfile
+PROJECT_NAME           = "GnuCOBOL 3.2 libcob (pinned oracle)"
+PROJECT_BRIEF          = "Reference map for the gnucobol-rs 1:1 port"
+OUTPUT_DIRECTORY       = lab/doxygen/out
+INPUT                  = lab/admit/gnucobol-3.2/libcob
+FILE_PATTERNS          = *.c *.h
+RECURSIVE              = YES
+# document everything, including the static helpers the port must reproduce
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_LOCAL_METHODS  = YES
+# source browsing + cross-references (who calls / who is called by)
+SOURCE_BROWSER         = YES
+REFERENCED_BY_RELATION = YES
+REFERENCES_RELATION    = YES
+REFERENCES_LINK_SOURCE = YES
+# call graphs via graphviz dot (already installed)
+HAVE_DOT               = YES
+DOT_PATH               = /usr/bin
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+DOT_GRAPH_MAX_NODES    = 100
+MAX_DOT_GRAPH_DEPTH    = 3
+# output
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HTML_OUTPUT            = html
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO
+# preprocessor: libcob uses HAVE_* macros; predefine the GMP path so the real code is parsed
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = NO
+PREDEFINED             = HAVE_GMP_H=1 COB_LIB_EXPIMP= COB_EXPIMP= COB_A_INLINE= COB_INLINE=
