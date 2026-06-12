@@ -441,6 +441,27 @@ impl Mpz {
         self
     }
 
+    /// The value as `i128` if it fits (≤ 2 limbs and in range), else `None`. Used where the port has
+    /// already reduced a value to a field's ≤38-digit precision (which always fits i128).
+    pub fn to_i128(&self) -> Option<i128> {
+        if self.mag.len() > 2 {
+            return None;
+        }
+        let u = self.mag.first().copied().unwrap_or(0) as u128
+            | ((self.mag.get(1).copied().unwrap_or(0) as u128) << 64);
+        if self.sign < 0 {
+            if u <= i128::MAX as u128 + 1 {
+                Some((u as i128).wrapping_neg())
+            } else {
+                None
+            }
+        } else if u <= i128::MAX as u128 {
+            Some(u as i128)
+        } else {
+            None
+        }
+    }
+
     /// `mpz_get_str(_, 10, _)`: decimal string.
     pub fn to_decimal_string(&self) -> String {
         if self.sign == 0 {
@@ -474,7 +495,6 @@ impl Mpz {
             None => (false, s.strip_prefix('+').unwrap_or(s)),
         };
         let mut r = Mpz::new();
-        let ten18 = Mpz::from_u64(1_000_000_000_000_000_000);
         let bytes = digits.as_bytes();
         let mut i = 0;
         while i < bytes.len() {
