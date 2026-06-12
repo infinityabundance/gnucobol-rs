@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "two numeric field byte images -> the -1/0/1 ordering verdict"
+  ],
+  "case_id": "GNURUST.NUMCMP.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.39",
+  "damage_if_overclaimed": "a wrong comparison flips IF/EVALUATE branches, mis-orders SORT keys, and breaks SEARCH ALL binary search -- silent control-flow and data corruption",
+  "hash_chain": {
+    "inputs_sha256": "8d93469ad254fe853a6d8e0a138a72535697e8de4dcd86a1121d62d5bd91fbf0"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "a1b998e2be35e83770ca381efefad81d5ad06ef041ccdc088ea20d2dd48d7fbb",
+    "receipt_sha256": "ac1694b87232b2fc66e5839f5fa788dd0e9cdbe77ba5874e6b4bd57ec3796a04"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'comparing two COBOL numerics is just comparing their raw bytes' -- NO, fields of different usage/scale must be decoded to a common decimal and scale-aligned first; a byte compare gives the wrong verdict whenever usages or scales differ"
+  ],
+  "negative_capability_ids": [
+    "NEG.FLOAT-VS-FLOAT-EPSILON-COMPARISON-EDGE-C",
+    "NEG.THE-OPTIMIZED-COB-CMP-PACKED-CMP-UINT-CM",
+    "NEG.NEGATIVE-SCALE-PACKED-COMPARE",
+    "NEG.NATIONAL-DBCS-COMPARISON"
+  ],
+  "negative_claims": [
+    "float-vs-float epsilon comparison edge cases (cob_cmp_float specifics)",
+    "the optimized cob_cmp_packed/cmp_uint/cmp_llint fast-path code (verified only that the verdict matches)",
+    "negative scale packed compare",
+    "National/DBCS comparison",
+    "lie prevented: 'comparing two COBOL numerics is just comparing their raw bytes' -- NO, fields of different usage/scale must be decoded to a common decimal and scale-aligned first; a byte compare gives the wrong verdict whenever usages or scales differ"
+  ],
+  "oracle": {
+    "detail": "libcob cob_numeric_cmp (numeric.c) over real cob_fields (cmp_harness)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.NUMCMP.1"
+  },
+  "positive_claims": [
+    "the signed -1/0/1 verdict of comparing two numeric fields, byte/verdict-identical to libcob cob_numeric_cmp across DISPLAY x PACKED receivers, differing scales (aligned), and all sign combinations -- the first 1:1 port on the new pure-Rust GMP-mpz subset (gmp::Mpz) and cob_decimal layer (cob_decimal_set_field -> align_decimal/shift_decimal -> cob_decimal_cmp)",
+    "the libcob fast paths (bcd compare, integer compare via cob_get_llint) all yield the same verdict as the general decimal comparison reproduced here",
+    "float operands route to the float (f64) comparison"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/numcmp_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "numcmp_sweep 1024/0 (DISPLAY/PACKED x scales 0-3 x signs x magnitudes incl. -0) + unit cases",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

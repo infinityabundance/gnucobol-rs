@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.NUMCMP.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.39",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "a1b998e2be35e83770ca381efefad81d5ad06ef041ccdc088ea20d2dd48d7fbb",
+      "receipt_sha256": "ac1694b87232b2fc66e5839f5fa788dd0e9cdbe77ba5874e6b4bd57ec3796a04"
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 3,
+    "replay": {
+      "command": "bash lab/oracle/numcmp_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "5fe24c02d106e097a2a99ccd7b18d4abbc83a2f93d50d5625725c09665a66023"
+      },
+      "name": "reports/casefiles/GNURUST.NUMCMP.1/casefile.json"
+    }
+  ]
+}

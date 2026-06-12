@@ -575,5 +575,18 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "a round-to-nearest decimal->float conversion writes COMP-2/FLOAT-DECIMAL bytes 1 ULP off GnuCOBOL's truncate-toward-zero on most inexact values"
+ },
+ {
+  "surface": "numeric-comparison",
+  "category": "arithmetic",
+  "source_modules": [
+   "libcob/numeric.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.NUMCMP.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a byte compare gives the wrong verdict when usages/scales differ -> flipped branches, mis-ordered SORT keys"
  }
 ]

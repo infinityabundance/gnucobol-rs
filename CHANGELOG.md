@@ -12,6 +12,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.39]
+- **GNURUST.NUMCMP.1** numeric comparison sealed -- and the first court of a true 1:1 port of numeric.c onto a pure-Rust GMP subset. New `gmp::Mpz` (arbitrary-precision signed integer, the ~40 mpz_* ops numeric.c uses, zero deps) + `cob_decimal` layer (set_field/align/shift/add/sub/mul/div/do_round/get_field/cmp). cob_numeric_cmp's -1/0/1 verdict is byte-identical to libcob across DISPLAY/PACKED x scales x signs (incl. -0): numcmp_sweep 1024/0. The cob_decimal MULTIPLY path is also oracle-verified (1800/0 + bignum 16128/0 -- the arbitrary-precision Mpz subsumes the i128+u256 special-casing) and DIVIDE cross-checks the proven path.
+
 ## [0.7.38]
 - **GNURUST.FLOAT.1** floating-point fields sealed: COMP-1 (IEEE single), COMP-2 (IEEE double), and FLOAT-DECIMAL-16/34 (IEEE-754-2008 decimal64/128, BID), both directions, byte-exact vs cob_move (`float_sweep` 1476/0). The forensic finding: GnuCOBOL converts decimal->binary-float by TRUNCATING TOWARD ZERO (GMP mpf_get_d), so an inexact decimal lands 1 ULP below a correctly-rounded parse; COMP-1 truncates to double then narrows round-to-nearest (the C (float) cast). Reproduced with exact big-integer comparisons (new BigU), no float roundtrips of decimal data (NO-FLOAT-DECIMAL.0 refined, not retired). Non-claims: float arithmetic, cob_cmp_float, long double, FP_BIN32/64/128, Inf/NaN beyond decode-refusal.
 

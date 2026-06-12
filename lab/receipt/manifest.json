@@ -854,6 +854,17 @@
         "long double / FP_BIN32/64/128 usages",
         "Inf/NaN beyond decode-refusal"
       ]
+    },
+    "GNURUST.NUMCMP.1": {
+      "court": "numeric comparison cob_numeric_cmp (on the Mpz/cob_decimal 1:1 layer)",
+      "sweep": "numcmp_sweep.sh",
+      "byte_domain": "two numeric field byte images -> -1/0/1 ordering verdict",
+      "non_claims": [
+        "float-vs-float epsilon edges",
+        "optimized cmp_packed/uint/llint fast-path code (verdict only)",
+        "negative-scale packed compare",
+        "National/DBCS comparison"
+      ]
     }
   }
 }

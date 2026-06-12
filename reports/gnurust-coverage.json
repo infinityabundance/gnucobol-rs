@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "25/41",
+  "sealed_fraction": "26/42",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 25
+    "sealed": 26
   },
-  "surface_count": 41,
+  "surface_count": 42,
   "surfaces": [
     {
       "category": "data representation",
@@ -636,6 +636,20 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "float-fields"
+    },
+    {
+      "category": "arithmetic",
+      "courts": [
+        "GNURUST.NUMCMP.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "a byte compare gives the wrong verdict when usages/scales differ -> flipped branches, mis-ordered SORT keys",
+      "source_modules": [
+        "libcob/numeric.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "numeric-comparison"
     }
   ]
 }

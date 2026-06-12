@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.DECLARATIVES.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.38
+**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.39
 
 - **Oracle:** cobc DECLARATIVES / USE AFTER STANDARD ERROR PROCEDURE (cobc/typeck.c + libcob/fileio.c error path)
 - **Byte domain(s):** DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler

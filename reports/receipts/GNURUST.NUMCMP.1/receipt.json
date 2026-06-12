@@ -1,0 +1,31 @@
+{
+  "byte_domain": "two numeric field byte images -> -1/0/1 ordering verdict",
+  "campaign": "GNURUST.NUMCMP.1",
+  "command": {
+    "replay": "bash lab/oracle/numcmp_sweep.sh"
+  },
+  "court": "numeric comparison cob_numeric_cmp (on the Mpz/cob_decimal 1:1 layer)",
+  "crate_version": "0.7.39",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "float-vs-float epsilon edges",
+    "optimized cmp_packed/uint/llint fast-path code (verdict only)",
+    "negative-scale packed compare",
+    "National/DBCS comparison"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "no-result"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

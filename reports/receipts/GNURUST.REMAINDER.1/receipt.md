@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.REMAINDER.1` |
 | court | DIVIDE REMAINDER receiving-field bytes |
-| crate_version | `0.7.38` |
+| crate_version | `0.7.39` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | DIVIDE GIVING quotient + REMAINDER receiver field bytes (DISPLAY/COMP-3) |
 | replay command | `bash lab/oracle/remainder_sweep.sh` |

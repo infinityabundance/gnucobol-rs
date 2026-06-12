@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 69,
+    "A": 70,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -62,6 +62,7 @@
       "GNURUST.LINEAGE.CORPUS.20M.1",
       "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
       "GNURUST.LOGICAL.1",
+      "GNURUST.NUMCMP.1",
       "GNURUST.ODO.1",
       "GNURUST.PERFORM.SLICE.1",
       "GNURUST.PROCEDURE.FLOW.ATLAS.1",
@@ -1071,6 +1072,22 @@
       "negative_claims": 5,
       "negatives_ge_positives": true,
       "positive_claims": 1
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "numcmp_sweep 1024/0 (DISPLAY/PACKED x scales 0-3 x signs x magnitudes incl. -0) + unit cases",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.NUMCMP.1",
+      "negative_claims": 5,
+      "negatives_ge_positives": true,
+      "positive_claims": 3
     },
     {
       "can_fail": true,

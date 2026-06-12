@@ -355,6 +355,26 @@ pub fn __fuzz_numcmp(data: &[u8]) {
     let _ = cob_numeric_cmp(x, &a1, y, &a2);
 }
 
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.NUMCMP.1
+    /// Numeric comparison is a total order sign over symbolic decimals: always -1/0/1, never a panic.
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn numeric_cmp_total() {
+        let v1: i64 = kani::any();
+        let v2: i64 = kani::any();
+        let s1: i32 = kani::any();
+        let s2: i32 = kani::any();
+        kani::assume((-4..=4).contains(&s1) && (-4..=4).contains(&s2));
+        let d1 = CobDecimal { value: Mpz::from_i64(v1), scale: s1 };
+        let d2 = CobDecimal { value: Mpz::from_i64(v2), scale: s2 };
+        let r = cob_decimal_cmp(&d1, &d2);
+        assert!(r == -1 || r == 0 || r == 1);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

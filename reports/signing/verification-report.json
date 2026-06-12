@@ -1,5 +1,5 @@
 {
-  "casefiles": 110,
+  "casefiles": 111,
   "court": "KOBOLD.ENTERPRISE.2",
   "entries": [
     {
@@ -239,6 +239,10 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.NUMCMP.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.ODO.1",
       "signature_status": "unsigned_no_key_configured"
     },
@@ -455,7 +459,7 @@
   "selftest_passed": true,
   "signing_mode": "unsigned",
   "summary": {
-    "unsigned_no_key_configured": 110
+    "unsigned_no_key_configured": 111
   },
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true

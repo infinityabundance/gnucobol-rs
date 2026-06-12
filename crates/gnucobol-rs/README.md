@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-110-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-110-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-111-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-111-blueviolet)
 
 **A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
 numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
@@ -79,6 +79,7 @@ compatibility court.
 | `GNURUST.INTPOW.1` | integer exponentiation (cob_s32_pow / cob_s64_pow) | ✅ pass | `reports/casefiles/GNURUST.INTPOW.1/` |
 | `GNURUST.LOGICAL.1` | bit-logical operations (B-AND/B-OR/B-XOR/B-NOT, bit shifts) | ✅ pass | `reports/casefiles/GNURUST.LOGICAL.1/` |
 | `GNURUST.FLOAT.1` | floating-point fields: COMP-1/COMP-2 + FLOAT-DECIMAL-16/34 | ✅ pass | `reports/casefiles/GNURUST.FLOAT.1/` |
+| `GNURUST.NUMCMP.1` | numeric comparison (cob_numeric_cmp) across type pairs | ✅ pass | `reports/casefiles/GNURUST.NUMCMP.1/` |
 | `GNURUST.2` | decimal MOVE | ✅ pass | `reports/casefiles/GNURUST.2/` |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | `reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/` |
 | `GNURUST.3` | PIC field model | ✅ pass | `reports/casefiles/GNURUST.3/` |

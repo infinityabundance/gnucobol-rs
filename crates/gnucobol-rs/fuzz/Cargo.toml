@@ -216,3 +216,9 @@ name = "float"
 path = "fuzz_targets/float.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "numcmp"
+path = "fuzz_targets/numcmp.rs"
+test = false
+doc = false

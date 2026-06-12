@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.38",
+  "crate_version": "0.7.39",
   "damage_if_overclaimed": "a blanket negative-zero fix corrupts the decimal-form and DISPLAY cells (which are correct); treating this as a broad VALUE bug overstates a 4-cell edge; conflating it with arithmetic -0 breaks GNURUST.13's deliberate sign-on-zero",
   "hash_chain": {
-    "inputs_sha256": "2bf5af1d9dfebc28874db45e7699f69b2cbfe7493d10c819ba109caf490828f0"
+    "inputs_sha256": "120d7da556d8119f16265c3301bf41b793bf9e9658117c44137be06f17f234ac"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "26013d00cc571ff1da6a4284cabdaec345496c8a218e90fa0645f509f8b47f91",
-    "receipt_sha256": "d16ab0ae30e50180b1054de19d39a06c46e11dfdd4f315a70ef1320f0fd7c887"
+    "receipt_sha256": "eac8aeed21c3966de9ece522f0f4f8420f279d0306902d6da2741c4faddd7749"
   },
   "kind": "court-casefile",
   "lie_prevented": [

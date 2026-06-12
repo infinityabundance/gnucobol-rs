@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.STRING.UNSTRING.1 (court-casefile)
 
-**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.38
+**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.39
 
 - **Oracle:** cobc STRING/UNSTRING (program-shape, FUNCTION HEX-OF result-record dump)
 - **Byte domain(s):** STRING/UNSTRING receiver + pointer/count/delimiter/tally bytes

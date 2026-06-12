@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.4` |
 | court | record layout (+ODO physical-max) |
-| crate_version | `0.7.38` |
+| crate_version | `0.7.39` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | generated-C field offset+size |
 | replay command | `bash lab/oracle/layout_sweep.sh` |
