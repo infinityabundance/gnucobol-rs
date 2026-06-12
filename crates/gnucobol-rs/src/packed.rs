@@ -1077,6 +1077,133 @@ pub fn cob_addsub_optimized(d1: &mut [u8], a1: &FieldAttr, s2: &[u8], a2: &Field
     None
 }
 
+// ---------------------------------------------------------------------------------------------------
+// `#if 0`-disabled functions, ported for literal 1:1 completeness of numeric.c. These are NOT compiled
+// into the admitted oracle (GnuCOBOL marks them "RXWRXW - Buggy") and are NOT wired into any active
+// path here -- they exist so every function in the source has a Rust counterpart. Behaviour mirrors the
+// disabled source verbatim (bugs included); it is therefore NOT oracle-verified, by definition.
+// ---------------------------------------------------------------------------------------------------
+
+/// `cob_complement_packed (f)` (numeric.c:977, `#if 0` "Buggy"): ten's-complement a packed field in
+/// place. Disabled in the oracle; ported verbatim for completeness.
+#[allow(dead_code)]
+pub fn cob_complement_packed(data: &mut [u8], attr: &FieldAttr) {
+    let scale = attr.scale as i32;
+    let mut ndigs = attr.digits as i32 - scale;
+    let mut msn: i32 = if attr.no_sign_nibble() { scale % 2 } else { 1 - (scale % 2) };
+    let mut carry = 0i32;
+    let mut p: isize = (ndigs as isize / 2) - (1 - msn) as isize;
+    while ndigs > 0 {
+        ndigs -= 1;
+        let mut tval = if msn == 0 { (data[p as usize] & 0x0F) as i32 } else { ((data[p as usize] & 0xF0) >> 4) as i32 };
+        tval += carry;
+        if tval > 0 {
+            carry = 1;
+            tval = 10 - tval;
+        } else {
+            carry = 0;
+        }
+        if msn == 0 {
+            data[p as usize] = (data[p as usize] & 0xF0) | tval as u8;
+            msn = 1;
+        } else {
+            data[p as usize] = (data[p as usize] & 0x0F) | ((tval as u8) << 4);
+            msn = 0;
+            p -= 1;
+        }
+    }
+}
+
+/// `cob_add_packed (f, val, opt)` (numeric.c:1018, `#if 0` "Buggy"): in-place BCD add of an `int` to a
+/// packed field. Disabled in the oracle; ported verbatim for completeness. Returns a status code.
+#[allow(dead_code)]
+pub fn cob_add_packed(data: &mut [u8], attr: &FieldAttr, mut val: i32, opt: i32) -> i32 {
+    let scale = attr.scale as i32;
+    let mut ndigs = attr.digits as i32 - scale;
+    if ndigs <= 0 {
+        return 0;
+    }
+    let savedata = data.to_vec();
+    let (sign, mut msn) = if attr.no_sign_nibble() {
+        (0i32, scale % 2)
+    } else {
+        (cob_packed_get_sign(data, attr), 1 - (scale % 2))
+    };
+    if sign == -1 {
+        val = -val;
+    }
+    let mut subtr = 0i32;
+    if val < 0 {
+        val = -val;
+        subtr = 1;
+    }
+    let mut p: isize = (ndigs as isize / 2) - (1 - msn) as isize;
+    let origdigs = ndigs;
+    let mut carry = 0i32;
+    let mut zeroes = 0i32;
+    while ndigs > 0 {
+        ndigs -= 1;
+        if val != 0 {
+            carry += val % 10;
+            val /= 10;
+        }
+        let mut tval = if msn == 0 { (data[p as usize] & 0x0F) as i32 } else { ((data[p as usize] & 0xF0) >> 4) as i32 };
+        if subtr != 0 {
+            tval -= carry;
+            if tval < 0 {
+                tval += 10;
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+        } else {
+            tval += carry;
+            if tval > 9 {
+                tval = (tval + 6) & 0x0F;
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+        }
+        if tval == 0 {
+            zeroes += 1;
+        }
+        if msn == 0 {
+            data[p as usize] = (data[p as usize] & 0xF0) | tval as u8;
+            msn = 1;
+        } else {
+            data[p as usize] = (data[p as usize] & 0x0F) | ((tval as u8) << 4);
+            msn = 0;
+            p -= 1;
+        }
+    }
+    if sign != 0 {
+        let last = data.len() - 1;
+        if origdigs == zeroes {
+            data[last] = (data[last] & 0xF0) | 0x0C;
+        } else if subtr != 0 && carry != 0 {
+            cob_complement_packed(data, attr);
+            let sign = -sign;
+            let last = data.len() - 1;
+            if sign == -1 {
+                data[last] = (data[last] & 0xF0) | 0x0D;
+            } else {
+                data[last] = (data[last] & 0xF0) | 0x0C;
+            }
+        }
+    } else if subtr != 0 && carry != 0 {
+        cob_complement_packed(data, attr);
+    }
+    if opt != 0 && (carry != 0 || val != 0) {
+        if opt & (1 << 1) != 0 {
+            // COB_STORE_KEEP_ON_OVERFLOW
+            data.copy_from_slice(&savedata);
+            return 0x0501; // size-overflow exception code
+        }
+    }
+    0
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

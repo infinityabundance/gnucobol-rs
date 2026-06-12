@@ -182,6 +182,147 @@ pub fn cob_decimal_get_ieee128dec(d: &CobDecimal) -> [u8; 16] {
     crate::float::dec128_encode(d.value.to_i128().unwrap_or(0), d.scale)
 }
 
+// `#if 0`-disabled DISPLAY in-place arithmetic (numeric.c:3403, marked "Buggy"). NOT compiled into the
+// oracle and NOT wired into any active path -- ported verbatim so every source function has a Rust
+// counterpart. `cob_display_add_int` even reads `sign` before assignment in the source (undefined
+// behaviour -- the bug that disabled it); reproduced as `sign = 0` with a note. NOT oracle-verifiable.
+
+/// `display_add_int (data, size, n, opt)` (numeric.c:3403, `#if 0`): add `n` to a zoned field in place.
+#[allow(dead_code)]
+fn display_add_int(data: &mut [u8], size: usize, mut n: i32, opt: i32) -> i32 {
+    let mut sp = size; // points one past the active region; pre-decremented before use
+    let mut carry = 0i32;
+    while n > 0 {
+        let i = n % 10;
+        n /= 10;
+        if sp == 0 {
+            return opt;
+        }
+        sp -= 1;
+        let is = (data[sp] & 0x0F) as i32 + i + carry;
+        if is > 9 {
+            carry = 1;
+            data[sp] = b'0' + ((is + 6) & 0x0F) as u8;
+        } else {
+            carry = 0;
+            data[sp] = b'0' + is as u8;
+        }
+    }
+    if carry == 0 {
+        return 0;
+    }
+    while sp > 0 {
+        sp -= 1;
+        data[sp] += 1;
+        if data[sp] <= b'9' {
+            return 0;
+        }
+        data[sp] = b'0';
+    }
+    opt
+}
+
+/// `display_sub_int (data, size, n, opt)` (numeric.c:3445, `#if 0`): subtract `n` from a zoned field.
+#[allow(dead_code)]
+fn display_sub_int(data: &mut [u8], size: usize, mut n: i32, _opt: i32) -> i32 {
+    let mut sp = size;
+    let mut carry = 0i32;
+    while n > 0 {
+        let i = n % 10;
+        n /= 10;
+        if sp == 0 {
+            return 1;
+        }
+        sp -= 1;
+        let v = data[sp] as i32 - (i + carry);
+        if v < b'0' as i32 {
+            carry = 1;
+            data[sp] = (v + 10) as u8;
+        } else {
+            carry = 0;
+            data[sp] = v as u8;
+        }
+    }
+    if carry == 0 {
+        return 0;
+    }
+    while sp > 0 {
+        sp -= 1;
+        let v = data[sp] as i32 - 1;
+        if v >= b'0' as i32 {
+            data[sp] = v as u8;
+            return 0;
+        }
+        data[sp] = b'9';
+    }
+    1
+}
+
+/// `cob_display_add_int (f, n, opt)` (numeric.c:3494, `#if 0` "Buggy"): in-place add of an `int` to a
+/// DISPLAY field. The source reads `sign` *before* it is assigned (UB — the reason it is disabled);
+/// reproduced here with `sign = 0`. Disabled in the oracle, not wired, not oracle-verifiable.
+#[allow(dead_code)]
+pub fn cob_display_add_int(data: &mut [u8], attr: &FieldAttr, mut n: i32, opt: i32) -> i32 {
+    let osize = data.len();
+    let mut size = attr.data_size(osize);
+    let mut scale = attr.scale as i32;
+    let tfield = data.to_vec();
+    // numeric.c reads `sign` uninitialised here before the COB_GET_SIGN_ADJUST below (UB); model as 0.
+    let mut sign = 0i32;
+    if sign == -1 {
+        n = -n;
+    }
+    if scale < 0 {
+        if -scale < 10 {
+            while scale != 0 {
+                scale += 1;
+                n /= 10;
+            }
+        } else {
+            n = 0;
+        }
+        scale = 0;
+        if n == 0 {
+            return 0;
+        }
+    } else {
+        size -= scale as usize;
+        if size == 0 {
+            return if opt & (1 << 1) != 0 { 0x0501 } else { 0 };
+        }
+    }
+    sign = if attr.have_sign() && !data.is_empty() && (data[osize - 1] & 0x40) != 0 { -1 } else { 0 };
+    if n > 0 {
+        if display_add_int(data, size, n, opt) != 0 && opt & (1 << 1) != 0 {
+            data.copy_from_slice(&tfield);
+            return 0x0501;
+        }
+    } else if n < 0 {
+        if display_sub_int(data, size, -n, opt) != 0 {
+            for b in data.iter_mut().take(size) {
+                *b = b'0' + (9 - (*b & 0x0F)) % 10;
+            }
+            if scale != 0 {
+                for i in size..size + scale as usize {
+                    if (data[i] & 0x0F) > 0 {
+                        data[i] = b'0' + (10 - (data[i] & 0x0F));
+                    }
+                }
+            } else {
+                let _ = display_add_int(data, size, 1, 0);
+            }
+            sign = -sign;
+        }
+    }
+    let _ = sign;
+    0
+}
+
+/// `cob_gmp_free (ptr)` (numeric.c:260): free a string allocated by `mpz_get_str`/`mpf_get_str`. In
+/// this port those conversions return owned Rust `String`s, so freeing is taking ownership and
+/// dropping — the RAII analog of the C free.
+pub fn cob_gmp_free(_s: String) {}
+
 /// `cob_pow_10_uli (n)` (numeric.c:517): `10^n` as a host unsigned integer (the pre-stored table value).
 pub fn cob_pow_10_uli(n: u32) -> u64 {
     10u64.pow(n)
