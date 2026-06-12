@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BIGNUM.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BIGNUM.1 non-claim: ADD/SUBTRACT operand upscale overflow (a separate path)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BIGNUM.1 non-claim: DIVIDE overflow"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BIGNUM.1 non-claim: chained-COMPUTE single-expression GMP precision (gnucobol-rs evaluates op-by-op)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BIGNUM.1 non-claim: a single operand exceeding 38 digits (not valid COBOL)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.BIGNUM.1 non-claim: lie prevented: '38-digit COBOL arithmetic always fits a 128-bit integer' -- NO, a single MULTIPLY of two large operands yields up to 76 digits; failing closed there silently drops results libcob computes"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

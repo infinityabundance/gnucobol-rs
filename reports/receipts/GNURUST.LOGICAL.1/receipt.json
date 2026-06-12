@@ -1,0 +1,30 @@
+{
+  "byte_domain": "(value0, value1) -> u64 bitwise via |value| mod 2^64",
+  "campaign": "GNURUST.LOGICAL.1",
+  "command": {
+    "replay": "bash lab/oracle/logical_sweep.sh"
+  },
+  "court": "bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts",
+  "crate_version": "0.7.37",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "fractional operands (scale dropped)",
+    "operands beyond 64 bits (truncated)",
+    "cob_logical_left_c/right_c size-bounded variants"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "no-result"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

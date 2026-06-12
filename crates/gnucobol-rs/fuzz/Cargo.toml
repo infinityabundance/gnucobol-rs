@@ -198,3 +198,15 @@ name = "index"
 path = "fuzz_targets/index.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "int_pow"
+path = "fuzz_targets/int_pow.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "logical"
+path = "fuzz_targets/logical.rs"
+test = false
+doc = false

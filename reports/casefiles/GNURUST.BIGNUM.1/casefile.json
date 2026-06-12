@@ -1,0 +1,61 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "two numeric operands whose i128 product overflows -> receiver bytes (low-digit truncation + ROUNDED)"
+  ],
+  "case_id": "GNURUST.BIGNUM.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.37",
+  "damage_if_overclaimed": "treating an overflowing product as unsupported (or wrapping it) silently corrupts large-value multiplications that libcob handles exactly",
+  "hash_chain": {
+    "inputs_sha256": "cc57f1c6efbe56bc5662256fc981d766427029d47c2cb9e5aba0b9f9e45727ed"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "808cb61a588dbe4283b64e969feaad4b128f4cd839de5e06bef9f836e50b33ac",
+    "receipt_sha256": "86d03537389d0217877d4393bdb8bdc6a552b410080eeac8befb3f4019da1ab2"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'38-digit COBOL arithmetic always fits a 128-bit integer' -- NO, a single MULTIPLY of two large operands yields up to 76 digits; failing closed there silently drops results libcob computes"
+  ],
+  "negative_capability_ids": [
+    "NEG.ADD-SUBTRACT-OPERAND-UPSCALE-OVERFLOW-A",
+    "NEG.DIVIDE-OVERFLOW",
+    "NEG.CHAINED-COMPUTE-SINGLE-EXPRESSION-GMP-PR",
+    "NEG.A-SINGLE-OPERAND-EXCEEDING-38-DIGITS-NOT"
+  ],
+  "negative_claims": [
+    "ADD/SUBTRACT operand upscale overflow (a separate path)",
+    "DIVIDE overflow",
+    "chained-COMPUTE single-expression GMP precision (gnucobol-rs evaluates op-by-op)",
+    "a single operand exceeding 38 digits (not valid COBOL)",
+    "lie prevented: '38-digit COBOL arithmetic always fits a 128-bit integer' -- NO, a single MULTIPLY of two large operands yields up to 76 digits; failing closed there silently drops results libcob computes"
+  ],
+  "oracle": {
+    "detail": "libcob cob_mul (GMP product) + cob_decimal_get_field truncating store",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.BIGNUM.1"
+  },
+  "positive_claims": [
+    "a MULTIPLY whose exact product exceeds i128 no longer fails closed: the port carries the full 256-bit product (two operands of <=38 digits give a <=76-digit product < 2^256), converts it to exact decimal, rounds to the receiver scale and truncates to the receiver's low digits -- byte-identical to libcob (which keeps the product in GMP and stores the low-order digits). round-trips through the UNCHANGED store()",
+    "covers the full binary-multiply domain including K = receiver_digits + dropped_digits > 38 (which an early mod-10^K reduction would lose)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/bignum_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "bignum_sweep 16128/0 (15-20 digit operands x signs x scales x ROUNDED modes) + K=40 + mul_u256 carry unit tests",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

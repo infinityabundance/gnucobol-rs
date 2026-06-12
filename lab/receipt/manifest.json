@@ -812,6 +812,37 @@
         "floating-point COMP-1/COMP-2 rounding",
         "PROHIBITED size error returns a typed error, not bytes"
       ]
+    },
+    "GNURUST.BIGNUM.1": {
+      "court": "MULTIPLY beyond i128 (exact 256-bit product)",
+      "sweep": "bignum_sweep.sh",
+      "byte_domain": "overflowing i128 product -> receiver bytes (low-digit truncation + ROUNDED)",
+      "non_claims": [
+        "ADD/SUBTRACT upscale overflow",
+        "DIVIDE overflow",
+        "chained-COMPUTE single-expression GMP precision",
+        "a single operand exceeding 38 digits"
+      ]
+    },
+    "GNURUST.INTPOW.1": {
+      "court": "integer exponentiation cob_s32_pow/cob_s64_pow",
+      "sweep": "pow_sweep.sh",
+      "byte_domain": "(base, power, width) -> integer result (wrapping)",
+      "non_claims": [
+        "decimal ** (cob_decimal_pow is intrinsic.c)",
+        "fractional exponents",
+        "0 ** negative (fails closed instead of SIGFPE)"
+      ]
+    },
+    "GNURUST.LOGICAL.1": {
+      "court": "bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts",
+      "sweep": "logical_sweep.sh",
+      "byte_domain": "(value0, value1) -> u64 bitwise via |value| mod 2^64",
+      "non_claims": [
+        "fractional operands (scale dropped)",
+        "operands beyond 64 bits (truncated)",
+        "cob_logical_left_c/right_c size-bounded variants"
+      ]
     }
   }
 }

@@ -68,6 +68,23 @@ pub fn __fuzz_int_pow(data: &[u8]) {
     let _ = cob_s32_pow(base as i32, power as i32);
 }
 
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.INTPOW.1
+    /// Integer power is total: any base with a bounded power yields a value or a typed error, never a
+    /// panic (wrapping_mul cannot overflow-panic; the loop is bounded for the proof).
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn pow_total() {
+        let base: i64 = kani::any();
+        let power: i64 = kani::any();
+        kani::assume((-2..=4).contains(&power)); // bound the repeated-multiply loop
+        let _ = cob_s64_pow(base, power);
+        let _ = cob_s32_pow(base as i32, power as i32);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

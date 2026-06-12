@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.CLASS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.36",
+  "crate_version": "0.7.37",
   "damage_if_overclaimed": "treating a space-padded or signed field as NUMERIC mis-validates input and lets bad data through",
   "hash_chain": {
-    "inputs_sha256": "797e095c01304b645c1f14d089bb2ac4ae08b5364456a94b93d2ff97571c1ea7"
+    "inputs_sha256": "eb9887874068408634aa4879fdf077ea684efd89523adf7f57dab91cbfd2812b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "acb099cd456512f1742214cf22ef34a067819b13f86791ade699f0cf6b3875f8",
-    "receipt_sha256": "9afefd2337f7046be83aa6c4e653c026d113f8cff1af21e60025e8dcbd1d5a90"
+    "receipt_sha256": "298ab4ab255d342f8aaed209a7e6159db977c95199a15b7d496b332706d8640c"
   },
   "kind": "court-casefile",
   "lie_prevented": [

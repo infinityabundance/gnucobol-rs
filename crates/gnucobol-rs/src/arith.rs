@@ -1103,7 +1103,14 @@ mod tests {
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
-    // KANIFOR: GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1, GNURUST.ROUND.1
+    // KANIFOR: GNURUST.7, GNURUST.13, GNURUST.19, GNURUST.REMAINDER.1, GNURUST.ROUND.1, GNURUST.BIGNUM.1
+    /// The 256-bit product helper (GNURUST.BIGNUM.1) is total over any operand pair — no panic/overflow.
+    #[kani::proof]
+    fn mul_u256_total() {
+        let a: u128 = kani::any();
+        let b: u128 = kani::any();
+        let (_hi, _lo) = mul_u256(a, b);
+    }
     /// Every ROUNDED MODE IS setting (GNURUST.ROUND.1) is total over a symbolic value: `do_round`
     /// returns Ok or a typed ArithError, never a panic/overflow (checked arithmetic + pow10 bounds).
     #[kani::proof]

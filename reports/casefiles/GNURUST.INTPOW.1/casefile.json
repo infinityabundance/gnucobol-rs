@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "(base, power, width 32/64) -> integer result (two's-complement wrapping)"
+  ],
+  "case_id": "GNURUST.INTPOW.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.37",
+  "damage_if_overclaimed": "a 'nicer' power (correct sign, saturating instead of wrapping) diverges from generated GnuCOBOL code on every integer ** with a -1 base or an overflowing result",
+  "hash_chain": {
+    "inputs_sha256": "f43de9fa13818184b4cb1d41d51fdcf2322a384c596cb7d9551bff63e5804403"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "db4bc7327361ff94e3ea6833484223c2ab738da0667099a0dfa05c6b429d3db2",
+    "receipt_sha256": "400f7e6cce049cb9e8d351526330988c11d9d8940599c4084199357a1a8aee4e"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'(-1) ** odd = -1' -- NO, libcob's POW_IMPL returns 1 for base==-1 regardless of the power; a 'correct' math result is a divergence from the oracle"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-DECIMAL-OPERATOR-COB-DECIMAL-POW-LIV",
+    "NEG.FRACTIONAL-EXPONENTS",
+    "NEG.0-NEGATIVE-FAILS-CLOSED-RATHER-THAN-SIGF"
+  ],
+  "negative_claims": [
+    "the decimal `**` operator (cob_decimal_pow lives in intrinsic.c, a separate court)",
+    "fractional exponents",
+    "0 ** negative (fails closed rather than SIGFPE-crashing)",
+    "lie prevented: '(-1) ** odd = -1' -- NO, libcob's POW_IMPL returns 1 for base==-1 regardless of the power; a 'correct' math result is a divergence from the oracle"
+  ],
+  "oracle": {
+    "detail": "libcob cob_s32_pow / cob_s64_pow",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.INTPOW.1"
+  },
+  "positive_claims": [
+    "the integer `**` power that cobc lowers to cob_s32_pow/cob_s64_pow (numeric.c POW_IMPL), byte-faithful incl. the exact edge cases: power 0 or |base|==1 -> 1 (base==-1 returns 1 for ANY power, a libcob quirk, so (-1)**3 = 1 not -1)",
+    "negative power -> 0 (0 ** negative raises SIGFPE in libcob -> fail closed)",
+    "otherwise repeated multiply WRAPPING in the target integer width"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/pow_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "pow_sweep 588/0 (bases incl 0/1/-1/overflowing x powers incl 0/negative/overflowing, both widths)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

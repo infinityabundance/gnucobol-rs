@@ -12,6 +12,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.37]
+- **numeric.c completion (3 courts): GNURUST.BIGNUM.1 + GNURUST.INTPOW.1 + GNURUST.LOGICAL.1.** MULTIPLY beyond i128 now carries the exact 256-bit product and truncates to the receiver's low digits instead of failing closed (full binary-multiply domain incl. combined-scale >38; bignum_sweep 16128/0). Integer `**` via cob_s32_pow/cob_s64_pow with libcob's exact edges (base==-1->1, negative power->0, wrapping overflow; pow_sweep 588/0). Bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts over `|value| mod 2^64` (sign discarded, shift mod 64; logical_sweep 2400/0). All proven byte/value-identical vs the real libcob.
+
 ## [0.7.36]
 - **GNURUST.ROUND.1 (ROUND.2 extension)** packed `ROUNDED MODE IS` sealed: ADD/SUBTRACT into a COMP-3 receiver takes libcob's `cob_add_bcd` nibble rounding (numeric.c:2826+), which matches the cob_decimal path for every mode except NEAREST-EVEN -- the BCD path resolves that tie away-from-zero (no to-even). Fixes a divergence 0.7.35 shipped (e.g. `ADD ... ROUNDED MODE IS NEAREST-EVEN` of 2.5 into packed = 3, not 2). `round_sweep` broadened to DISPLAY + packed receivers across kept digits 0-9, 6720/0, mutation-verified. Non-claims unchanged: bignum >i128, float COMP-1/2.
 

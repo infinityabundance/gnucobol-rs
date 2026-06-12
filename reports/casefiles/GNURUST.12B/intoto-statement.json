@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.12B",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.36",
+    "crate_version": "0.7.37",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "3095bc7f78e4ebfde4dd63cba344ed92bf70dc9315c3e667e06d6e7aaf8cc4e9",
-      "receipt_sha256": "37c132b02f9ece9cc0dec995e23ee4aa997ae18c038e8426715dfca20b4fd703"
+      "receipt_sha256": "8cc3f1f606cb8b275d8536dbc3823a79d793a231357079418b54cf8bb1c6e812"
     },
     "negative_claim_count": 4,
     "positive_claim_count": 2,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "6213e56424d6cbe3fa9f9e988100f644c0690981d8310a30b5149118f8d137f0"
+        "sha256": "f0a39bad977810ffea55f6de5e2455819bddbe7660f8866b2afc721e4950a490"
       },
       "name": "reports/casefiles/GNURUST.12B/casefile.json"
     }

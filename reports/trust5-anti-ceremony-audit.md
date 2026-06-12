@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 65  ·  **B** composed: 35  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
+- **A** hard (oracle/byte): 68  ·  **B** composed: 35  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
 
 ## Classification
 
@@ -34,6 +34,7 @@
 | `GNURUST.9` | B | ✅ | ✅ | ✅ no |
 | `GNURUST.ACCEPT.DISPLAY.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.ACCEPT.DISPLAY.2` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.BIGNUM.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.BUILD.PROFILE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.CALL.EXTENSION.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.CALL.LAYOUT.ATLAS.1` | A | ✅ | ✅ | ✅ no |
@@ -54,6 +55,7 @@
 | `GNURUST.INDEXED.FILE.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.INITIALIZE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.INSPECT.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.INTPOW.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.INTRINSIC.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.INTRINSIC.CASE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.INTRINSIC.DATE.1` | A | ✅ | ✅ | ✅ no |
@@ -66,6 +68,7 @@
 | `GNURUST.LINEAGE.CORPUS.20M.0` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.LINEAGE.CORPUS.20M.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.LINEAGE.CORPUS.20M.SMOKE` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.LOGICAL.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.ODO.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PERFORM.SLICE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PROCEDURE.FLOW.ATLAS.1` | A | ✅ | ✅ | ✅ no |

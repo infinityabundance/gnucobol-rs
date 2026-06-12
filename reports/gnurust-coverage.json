@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "22/38",
+  "sealed_fraction": "24/40",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 22
+    "sealed": 24
   },
-  "surface_count": 38,
+  "surface_count": 40,
   "surfaces": [
     {
       "category": "data representation",
@@ -107,7 +107,8 @@
         "GNURUST.13",
         "GNURUST.19",
         "GNURUST.REMAINDER.1",
-        "GNURUST.ROUND.1"
+        "GNURUST.ROUND.1",
+        "GNURUST.BIGNUM.1"
       ],
       "future_campaign": null,
       "risk_if_unported": "a wrong receiver scale/rounding/sign misstates money",
@@ -593,6 +594,34 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "usage-index"
+    },
+    {
+      "category": "arithmetic",
+      "courts": [
+        "GNURUST.INTPOW.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "a wrong integer ** (sign of -1 base, no wrapping) diverges from generated code",
+      "source_modules": [
+        "libcob/numeric.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "integer-power"
+    },
+    {
+      "category": "arithmetic",
+      "courts": [
+        "GNURUST.LOGICAL.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "a two's-complement bit model diverges on negative operands and wide shifts",
+      "source_modules": [
+        "libcob/numeric.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "bit-logical"
     }
   ]
 }

@@ -1495,6 +1495,48 @@
       "readiness": 3,
       "lie_prevented": "'just canonicalize negative zero' is WRONG and was proven so (the blanket parse_num fix regressed value_sweep 391/392) -- the rule is shape-sensitive ON THE LITERAL FORM: cobc canonicalizes -0 to positive ONLY for COMP-3 integer-form literals, while PRESERVING the sign for decimal-form COMP-3 and for ALL DISPLAY; so the divergence is a narrow, exactly-located edge (4 cells), not a blanket bug, and GNURUST.8 is bounded accordingly",
       "damage_if_overclaimed": "a blanket negative-zero fix corrupts the decimal-form and DISPLAY cells (which are correct); treating this as a broad VALUE bug overstates a 4-cell edge; conflating it with arithmetic -0 breaks GNURUST.13's deliberate sign-on-zero"
+    },
+    {
+      "id": "GNURUST.BIGNUM.1",
+      "name": "MULTIPLY beyond i128 (exact 256-bit product)",
+      "proven": "a MULTIPLY whose exact product exceeds i128 no longer fails closed: the port carries the full 256-bit product (two operands of <=38 digits give a <=76-digit product < 2^256), converts it to exact decimal, rounds to the receiver scale and truncates to the receiver's low digits -- byte-identical to libcob (which keeps the product in GMP and stores the low-order digits). round-trips through the UNCHANGED store(); covers the full binary-multiply domain including K = receiver_digits + dropped_digits > 38 (which an early mod-10^K reduction would lose)",
+      "byte_domain": "two numeric operands whose i128 product overflows -> receiver bytes (low-digit truncation + ROUNDED)",
+      "oracle": "libcob cob_mul (GMP product) + cob_decimal_get_field truncating store",
+      "fixtures": "bignum_sweep 16128/0 (15-20 digit operands x signs x scales x ROUNDED modes) + K=40 + mul_u256 carry unit tests",
+      "sealed_version": "0.7.37",
+      "not_proven": "ADD/SUBTRACT operand upscale overflow (a separate path); DIVIDE overflow; chained-COMPUTE single-expression GMP precision (gnucobol-rs evaluates op-by-op); a single operand exceeding 38 digits (not valid COBOL)",
+      "breaks_claim": "reducing mod 10^K before rounding (loses K>38); assuming the i128 product never overflows",
+      "readiness": 4,
+      "lie_prevented": "'38-digit COBOL arithmetic always fits a 128-bit integer' -- NO, a single MULTIPLY of two large operands yields up to 76 digits; failing closed there silently drops results libcob computes",
+      "damage_if_overclaimed": "treating an overflowing product as unsupported (or wrapping it) silently corrupts large-value multiplications that libcob handles exactly"
+    },
+    {
+      "id": "GNURUST.INTPOW.1",
+      "name": "integer exponentiation (cob_s32_pow / cob_s64_pow)",
+      "proven": "the integer `**` power that cobc lowers to cob_s32_pow/cob_s64_pow (numeric.c POW_IMPL), byte-faithful incl. the exact edge cases: power 0 or |base|==1 -> 1 (base==-1 returns 1 for ANY power, a libcob quirk, so (-1)**3 = 1 not -1); negative power -> 0 (0 ** negative raises SIGFPE in libcob -> fail closed); otherwise repeated multiply WRAPPING in the target integer width",
+      "byte_domain": "(base, power, width 32/64) -> integer result (two's-complement wrapping)",
+      "oracle": "libcob cob_s32_pow / cob_s64_pow",
+      "fixtures": "pow_sweep 588/0 (bases incl 0/1/-1/overflowing x powers incl 0/negative/overflowing, both widths)",
+      "sealed_version": "0.7.37",
+      "not_proven": "the decimal `**` operator (cob_decimal_pow lives in intrinsic.c, a separate court); fractional exponents; 0 ** negative (fails closed rather than SIGFPE-crashing)",
+      "breaks_claim": "treating (-1)**odd as -1; round-tripping a negative power as a real fraction; not wrapping on overflow",
+      "readiness": 4,
+      "lie_prevented": "'(-1) ** odd = -1' -- NO, libcob's POW_IMPL returns 1 for base==-1 regardless of the power; a 'correct' math result is a divergence from the oracle",
+      "damage_if_overclaimed": "a 'nicer' power (correct sign, saturating instead of wrapping) diverges from generated GnuCOBOL code on every integer ** with a -1 base or an overflowing result"
+    },
+    {
+      "id": "GNURUST.LOGICAL.1",
+      "name": "bit-logical operations (B-AND/B-OR/B-XOR/B-NOT, bit shifts)",
+      "proven": "the bit operations libcob exposes as cob_logical_and/or/xor/not/left/right: each operand is reduced to the LOW 64 BITS OF ITS ABSOLUTE VALUE (mpz_get_ui ignores the sign, so B-AND(-1, 255) = 1, NOT 255), the C bitwise operator is applied over 64 bits, shifts take the count modulo 64, and the unsigned 64-bit result is the value -- byte-faithful to libcob",
+      "byte_domain": "(value0, value1) -> u64 bitwise result via |value| mod 2^64",
+      "oracle": "libcob cob_logical_and/or/xor/not/left/right (over cob_decimal)",
+      "fixtures": "logical_sweep 2400/0 (incl. negative operands, shift counts >= 64, full-width values)",
+      "sealed_version": "0.7.37",
+      "not_proven": "fractional operands (the scale is dropped, only the unscaled magnitude's low 64 bits are used); operands beyond 64 bits (truncated); cob_logical_left_c/right_c size-bounded variants; boolean/bit data items as such",
+      "breaks_claim": "using two's-complement for a negative operand (libcob uses |value|); not masking the shift count mod 64",
+      "readiness": 4,
+      "lie_prevented": "'B-AND(-1, x) = x because -1 is all-ones' -- NO, mpz_get_ui takes |-1| = 1, so the result is 1 & x; the sign is discarded, not sign-extended",
+      "damage_if_overclaimed": "a two's-complement bit model diverges from GnuCOBOL on every negative operand and on shift counts at/above the word width"
     }
   ],
   "transform_vs_read": {

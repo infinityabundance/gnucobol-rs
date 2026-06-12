@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.ORD-CHAR.1` |
 | court | FUNCTION ORD/CHAR 1-based ordinal/char |
-| crate_version | `0.7.36` |
+| crate_version | `0.7.37` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | ORD(c)=byte+1 (1-based) / CHAR(n)=byte(n-1) |
 | replay command | `bash lab/oracle/ordchar_sweep.sh` |

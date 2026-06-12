@@ -1,8 +1,8 @@
 {
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "fuzz_covered": 51,
-  "impl_courts": 51,
-  "kani_covered": 51,
+  "fuzz_covered": 54,
+  "impl_courts": 54,
+  "kani_covered": 54,
   "na_courts": 55,
   "rows": [
     {
@@ -793,8 +793,35 @@
       "fuzz": "n/a",
       "kani": "n/a",
       "reason": "characterization/regression-lock of the VALUE -0 oracle rule; exercises value_image which is kani+fuzz-covered under GNURUST.8"
+    },
+    {
+      "court": "GNURUST.BIGNUM.1",
+      "fuzz": [
+        "arith.rs"
+      ],
+      "kani": [
+        "arith.rs"
+      ]
+    },
+    {
+      "court": "GNURUST.INTPOW.1",
+      "fuzz": [
+        "int_pow.rs"
+      ],
+      "kani": [
+        "int_pow.rs"
+      ]
+    },
+    {
+      "court": "GNURUST.LOGICAL.1",
+      "fuzz": [
+        "logical.rs"
+      ],
+      "kani": [
+        "logical.rs"
+      ]
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 106
+  "total_courts": 109
 }

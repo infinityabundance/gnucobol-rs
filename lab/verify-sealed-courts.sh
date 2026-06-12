@@ -42,6 +42,9 @@ run_sweep "GNURUST.7/13 arithmetic"  arith_sweep.sh
 run_sweep "GNURUST.19 DIVIDE bytes"   divide_sweep.sh
 run_sweep "GNURUST.REMAINDER.1 bytes" remainder_sweep.sh
 run_sweep "GNURUST.ROUND.1 modes"     round_sweep.sh
+run_sweep "GNURUST.BIGNUM.1 mul>i128" bignum_sweep.sh
+run_sweep "GNURUST.INTPOW.1 int pow"  pow_sweep.sh
+run_sweep "GNURUST.LOGICAL.1 bit ops" logical_sweep.sh
 run_sweep "GNURUST.FILE.SEQUENTIAL.1" seqfile_sweep.sh
 run_sweep "GNURUST.FILE.WRITE.1" write_seq_sweep.sh
 run_sweep "GNURUST.FILE.REWRITE.1" rewrite_sweep.sh

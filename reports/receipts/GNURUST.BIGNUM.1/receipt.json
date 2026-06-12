@@ -1,0 +1,31 @@
+{
+  "byte_domain": "overflowing i128 product -> receiver bytes (low-digit truncation + ROUNDED)",
+  "campaign": "GNURUST.BIGNUM.1",
+  "command": {
+    "replay": "bash lab/oracle/bignum_sweep.sh"
+  },
+  "court": "MULTIPLY beyond i128 (exact 256-bit product)",
+  "crate_version": "0.7.37",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "ADD/SUBTRACT upscale overflow",
+    "DIVIDE overflow",
+    "chained-COMPUTE single-expression GMP precision",
+    "a single operand exceeding 38 digits"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "no-result"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

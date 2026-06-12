@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-106-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-106-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-109-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-109-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -202,6 +202,9 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.CALL.LAYOUT.ATLAS.1` | observed CALL parameter byte-layout atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/`](reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/) |
 | `GNURUST.LINEAGE.CORPUS.20M.1` | full 20M real-cobc COBOL-witness lineage run (complete) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/) |
 | `GNURUST.VALUE.NEGZERO.EDGE.1` | negative-zero VALUE sign edge (oracle-characterized + PATCHED to parity, locks both ways) | ✅ pass | [`reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/`](reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/) |
+| `GNURUST.BIGNUM.1` | MULTIPLY beyond i128 (exact 256-bit product) | ✅ pass | [`reports/casefiles/GNURUST.BIGNUM.1/`](reports/casefiles/GNURUST.BIGNUM.1/) |
+| `GNURUST.INTPOW.1` | integer exponentiation (cob_s32_pow / cob_s64_pow) | ✅ pass | [`reports/casefiles/GNURUST.INTPOW.1/`](reports/casefiles/GNURUST.INTPOW.1/) |
+| `GNURUST.LOGICAL.1` | bit-logical operations (B-AND/B-OR/B-XOR/B-NOT, bit shifts) | ✅ pass | [`reports/casefiles/GNURUST.LOGICAL.1/`](reports/casefiles/GNURUST.LOGICAL.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |

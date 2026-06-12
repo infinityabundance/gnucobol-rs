@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "(value0, value1) -> u64 bitwise result via |value| mod 2^64"
+  ],
+  "case_id": "GNURUST.LOGICAL.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.37",
+  "damage_if_overclaimed": "a two's-complement bit model diverges from GnuCOBOL on every negative operand and on shift counts at/above the word width",
+  "hash_chain": {
+    "inputs_sha256": "a3664586f5b2b976d569d9b5a769b5394f867b0e259e5720f413bde750a16c35"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "0d7fc28a773ad4232845ce178266152fd339f71efe05407e795e2adc5ce5d148",
+    "receipt_sha256": "161ddc20ed2101c53a5c8b7a2fa41730942d59259d8c96761b6114f79ed5494e"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'B-AND(-1, x) = x because -1 is all-ones' -- NO, mpz_get_ui takes |-1| = 1, so the result is 1 & x; the sign is discarded, not sign-extended"
+  ],
+  "negative_capability_ids": [
+    "NEG.FRACTIONAL-OPERANDS-THE-SCALE-IS-DROPPED",
+    "NEG.OPERANDS-BEYOND-64-BITS-TRUNCATED",
+    "NEG.COB-LOGICAL-LEFT-C-RIGHT-C-SIZE-BOUNDED",
+    "NEG.BOOLEAN-BIT-DATA-ITEMS-AS-SUCH"
+  ],
+  "negative_claims": [
+    "fractional operands (the scale is dropped, only the unscaled magnitude's low 64 bits are used)",
+    "operands beyond 64 bits (truncated)",
+    "cob_logical_left_c/right_c size-bounded variants",
+    "boolean/bit data items as such",
+    "lie prevented: 'B-AND(-1, x) = x because -1 is all-ones' -- NO, mpz_get_ui takes |-1| = 1, so the result is 1 & x; the sign is discarded, not sign-extended"
+  ],
+  "oracle": {
+    "detail": "libcob cob_logical_and/or/xor/not/left/right (over cob_decimal)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.LOGICAL.1"
+  },
+  "positive_claims": [
+    "the bit operations libcob exposes as cob_logical_and/or/xor/not/left/right: each operand is reduced to the LOW 64 BITS OF ITS ABSOLUTE VALUE (mpz_get_ui ignores the sign, so B-AND(-1, 255) = 1, NOT 255), the C bitwise operator is applied over 64 bits, shifts take the count modulo 64, and the unsigned 64-bit result is the value -- byte-faithful to libcob"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/logical_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "logical_sweep 2400/0 (incl. negative operands, shift counts >= 64, full-width values)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

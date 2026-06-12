@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.BIGNUM.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.37",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "808cb61a588dbe4283b64e969feaad4b128f4cd839de5e06bef9f836e50b33ac",
+      "receipt_sha256": "86d03537389d0217877d4393bdb8bdc6a552b410080eeac8befb3f4019da1ab2"
+    },
+    "negative_claim_count": 5,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/bignum_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "c5d896bc67f6f31a3e10a0a81eade1ecd80fde74dcfc5005199ad6cecf0154ec"
+      },
+      "name": "reports/casefiles/GNURUST.BIGNUM.1/casefile.json"
+    }
+  ]
+}

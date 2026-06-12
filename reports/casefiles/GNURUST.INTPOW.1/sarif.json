@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTPOW.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTPOW.1 non-claim: the decimal `**` operator (cob_decimal_pow lives in intrinsic.c, a separate court)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTPOW.1 non-claim: fractional exponents"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTPOW.1 non-claim: 0 ** negative (fails closed rather than SIGFPE-crashing)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.INTPOW.1 non-claim: lie prevented: '(-1) ** odd = -1' -- NO, libcob's POW_IMPL returns 1 for base==-1 regardless of the power; a 'correct' math result is a divergence from the oracle"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

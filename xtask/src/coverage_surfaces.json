@@ -87,7 +87,8 @@
    "GNURUST.13",
    "GNURUST.19",
    "GNURUST.REMAINDER.1",
-   "GNURUST.ROUND.1"
+   "GNURUST.ROUND.1",
+   "GNURUST.BIGNUM.1"
   ],
   "future_campaign": null,
   "risk_if_unported": "a wrong receiver scale/rounding/sign misstates money"
@@ -535,5 +536,31 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "mis-modelling an INDEX item as a byte offset (or wrong endianness) corrupts every SET/SEARCH and index-driven table access"
+ },
+ {
+  "surface": "integer-power",
+  "category": "arithmetic",
+  "source_modules": [
+   "libcob/numeric.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.INTPOW.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a wrong integer ** (sign of -1 base, no wrapping) diverges from generated code"
+ },
+ {
+  "surface": "bit-logical",
+  "category": "arithmetic",
+  "source_modules": [
+   "libcob/numeric.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.LOGICAL.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a two's-complement bit model diverges on negative operands and wide shifts"
  }
 ]

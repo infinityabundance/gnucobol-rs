@@ -62,6 +62,26 @@ pub fn __fuzz_logical(data: &[u8]) {
     );
 }
 
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.LOGICAL.1
+    /// Every bit-logical op is total over any operand pair (incl. shift counts >= 64) — no panic.
+    #[kani::proof]
+    fn logical_total() {
+        let a: i128 = kani::any();
+        let b: i128 = kani::any();
+        let _ = (
+            logical_and(a, b),
+            logical_or(a, b),
+            logical_xor(a, b),
+            logical_not(b),
+            logical_left(a, b),
+            logical_right(a, b),
+        );
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
