@@ -116,6 +116,28 @@ pub fn cob_decimal_set_llint(d: &mut CobDecimal, n: i64) {
     d.scale = 0;
 }
 
+/// `cob_decimal_set_display (d, f)` (numeric.c:1444): decode a DISPLAY (zoned) field into a working
+/// decimal. Two sentinels for uninitialised/invalid data come first: a leading data byte of `0xFF`
+/// yields `+10^size`, `0x00` yields `-10^size` (both at the field scale) — valid zoned digits are
+/// `0x30..=0x39` so these never arise from conforming data. Otherwise the digits + sign are the
+/// FLOAT-sealed [`Decimal::from_display`] decode (`GNURUST.2/9`).
+pub fn cob_decimal_set_display(data: &[u8], attr: &FieldAttr) -> CobDecimal {
+    let off = attr.data_offset();
+    let size = attr.data_size(data.len());
+    if size > 0 && off < data.len() {
+        match data[off] {
+            255 => return CobDecimal { value: Mpz::ui_pow_ui(10, size as u32), scale: attr.scale as i32 },
+            0 => {
+                let mut v = Mpz::ui_pow_ui(10, size as u32);
+                v.neg();
+                return CobDecimal { value: v, scale: attr.scale as i32 };
+            }
+            _ => {}
+        }
+    }
+    CobDecimal::from_value_decimal(&Decimal::from_display(data, attr))
+}
+
 /// `cob_decimal_set_binary (d, f)` (numeric.c:1637): decode a BINARY/COMP-5 field into the working
 /// decimal. On the admitted 64-bit oracle this is `mpz_set_si/ui(cob_binary_get_sint64/uint64(f))` —
 /// i.e. the field's two's-complement integer (endianness + sign from the flags) carried at the field
@@ -153,11 +175,61 @@ pub fn cob_decimal_get_ieee128dec(d: &CobDecimal) -> [u8; 16] {
     crate::float::dec128_encode(d.value.to_i128().unwrap_or(0), d.scale)
 }
 
+/// `cob_decimal_set_mpf_core (d, src)` (numeric.c:853): convert an `mpf` to a working decimal via a
+/// 96-significant-digit `mpf_get_str`. In numeric.c's byte path the only `mpf` values are exact
+/// doubles (`mpf_set_d`), so this equals the f64 -> exact-decimal conversion [`cob_decimal_set_double`]
+/// for every `f64` whose exact decimal is <= 96 significant digits (the declared bound). `src` is the
+/// f64 proxy for the 2048-bit intermediary, which carries only double precision here.
+pub fn cob_decimal_set_mpf_core(src: f64) -> CobDecimal {
+    cob_decimal_set_double(src)
+}
+
+/// `cob_decimal_set_mpf (d, src)` (numeric.c:885): zero-short-circuit then [`cob_decimal_set_mpf_core`].
+pub fn cob_decimal_set_mpf(src: f64) -> CobDecimal {
+    if src == 0.0 {
+        CobDecimal { value: Mpz::new(), scale: 0 }
+    } else {
+        cob_decimal_set_mpf_core(src)
+    }
+}
+
+/// `cob_decimal_get_mpf (dst, d)` (numeric.c:897): convert a working decimal to an `mpf` (`value *
+/// 10^-scale`). In the byte path the `mpf` is immediately reduced to a `double` (`mpf_get_d`,
+/// truncating toward zero), so this is modeled by [`cob_decimal_get_double`] (the f64 proxy).
+pub fn cob_decimal_get_mpf(d: &CobDecimal) -> f64 {
+    cob_decimal_get_double(d)
+}
+
+/// `cob_decimal_alloc (params, ...)` (numeric.c:4350): point `params` caller decimals at pre-allocated
+/// pool slots. Rust has no manual GMP pool (working decimals are created on demand, RAII), so this
+/// returns `params` fresh zero decimals — the faithful analog of the pool slots.
+pub fn cob_decimal_alloc(params: u32) -> Vec<CobDecimal> {
+    (0..params).map(|_| cob_decimal_init()).collect()
+}
+
+/// `cob_decimal_push (params, ...)` (numeric.c:4368): allocate + init `params` temporary decimals.
+pub fn cob_decimal_push(params: u32) -> Vec<CobDecimal> {
+    (0..params).map(|_| cob_decimal_init()).collect()
+}
+
+/// `cob_decimal_pop (params, ...)` (numeric.c:4385): release temporaries from [`cob_decimal_push`] — a
+/// no-op in Rust (the elements are freed on drop); takes them by value to mirror the release.
+pub fn cob_decimal_pop(_decs: Vec<CobDecimal>) {}
+
+/// `cob_init_numeric (lptr)` (numeric.c:4482): module init — preallocates the static GMP power-of-ten
+/// tables and decimal pool. Those are computed on demand here ([`Mpz::ui_pow_ui`]), so init is a no-op
+/// kept for the 1:1 surface.
+pub fn cob_init_numeric() {}
+
+/// `cob_exit_numeric (void)` (numeric.c:4446): module teardown — frees the static GMP tables/pool. A
+/// no-op in Rust (RAII).
+pub fn cob_exit_numeric() {}
+
 /// `cob_decimal_set_field (d, f)`: decode a numeric field into the working decimal. Uses the sealed
 /// per-usage decoders ([`Decimal::from_display`] / [`Decimal::from_packed`] / binary decode).
 pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
     match attr.field_type {
-        COB_TYPE_NUMERIC_DISPLAY => CobDecimal::from_value_decimal(&Decimal::from_display(data, attr)),
+        COB_TYPE_NUMERIC_DISPLAY => cob_decimal_set_display(data, attr),
         COB_TYPE_NUMERIC_PACKED => crate::packed::cob_decimal_set_packed(data, attr),
         COB_TYPE_NUMERIC_BINARY => cob_decimal_set_binary(data, attr),
         0x16 => cob_decimal_set_ieee64dec(data),
@@ -333,6 +405,24 @@ pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, r
     let low = d.value.tdiv_r(&modulus);
     let abs_mag = low.to_i128().unwrap_or(0).unsigned_abs();
     Ok(render_numeric(neg, abs_mag, attr, size))
+}
+
+/// `cob_decimal_get_display (d, f, opt)` (numeric.c:1548): store an (already scale-aligned) working
+/// decimal into a DISPLAY (zoned) field — overflow keeps the low `digits` digits, left-padded with
+/// `'0'`, sign applied. Shares the sealed renderer that backs [`cob_decimal_get_field`].
+pub fn cob_decimal_get_display(d: &CobDecimal, attr: &FieldAttr, size: usize) -> Vec<u8> {
+    let neg = d.value.sgn() < 0;
+    let low = d.value.tdiv_r(&Mpz::ui_pow_ui(10, attr.digits as u32));
+    render_numeric(neg, low.to_i128().unwrap_or(0).unsigned_abs(), attr, size)
+}
+
+/// `cob_decimal_get_binary (d, f, opt)` (numeric.c:1720): store an (already scale-aligned) working
+/// decimal into a BINARY/COMP-5 field, truncating to the field's bit/digit capacity. Shares the sealed
+/// renderer (`cob_move` -> [`crate::binary::binary_encode`]) that backs [`cob_decimal_get_field`].
+pub fn cob_decimal_get_binary(d: &CobDecimal, attr: &FieldAttr, size: usize) -> Vec<u8> {
+    let neg = d.value.sgn() < 0;
+    let low = d.value.tdiv_r(&Mpz::ui_pow_ui(10, attr.digits as u32));
+    render_numeric(neg, low.to_i128().unwrap_or(0).unsigned_abs(), attr, size)
 }
 
 /// Render a sign + non-negative magnitude (already at the field scale, low `digits` digits) to the
@@ -1000,6 +1090,45 @@ mod tests {
         d = 0;
         assert_eq!(cob_get_long_ebcdic_sign(b'R', &mut d), 1);
         assert_eq!(d, 9);
+    }
+
+    #[test]
+    fn get_display_binary_leaves_match_get_field() {
+        // The named leaves must equal the sealed get_field for an already-scale-aligned decimal.
+        for &(ft, digits, scale, flags) in &[
+            (COB_TYPE_NUMERIC_DISPLAY, 5u16, 2i16, crate::attr::COB_FLAG_HAVE_SIGN),
+            (COB_TYPE_NUMERIC_DISPLAY, 7, 0, 0),
+            (COB_TYPE_NUMERIC_BINARY, 9, 0, crate::attr::COB_FLAG_HAVE_SIGN),
+            (COB_TYPE_NUMERIC_BINARY, 4, 2, 0),
+        ] {
+            let attr = FieldAttr { field_type: ft, digits, scale, flags };
+            let size = if ft == COB_TYPE_NUMERIC_DISPLAY { digits as usize } else { 4 };
+            for &v in &[0i128, 1, -1, 42, -42, 1234, -1234, 99999, -99999] {
+                if flags == 0 && v < 0 {
+                    continue;
+                }
+                let d = CobDecimal { value: Mpz::from_i128(v), scale: scale as i32 };
+                let leaf = if ft == COB_TYPE_NUMERIC_DISPLAY {
+                    cob_decimal_get_display(&d, &attr, size)
+                } else {
+                    cob_decimal_get_binary(&d, &attr, size)
+                };
+                let field = cob_decimal_get_field(d, &attr, size, Round::Truncate, false).unwrap();
+                assert_eq!(leaf, field, "leaf vs get_field ft={ft} v={v}");
+            }
+        }
+    }
+
+    #[test]
+    fn set_display_sentinels() {
+        // First data byte 0xFF -> +10^size, 0x00 -> -10^size (uninitialised-data sentinels).
+        let attr = disp(3, 0, true);
+        let d = cob_decimal_set_display(&[0xFF, 0xFF, 0xFF], &attr);
+        assert_eq!(d.value.to_i128(), Some(1000));
+        let d = cob_decimal_set_display(&[0x00, 0x00, 0x00], &attr);
+        assert_eq!(d.value.to_i128(), Some(-1000));
+        // mpf proxy round-trips through the double path
+        assert_eq!(cob_decimal_get_mpf(&cob_decimal_set_mpf(2.5)), 2.5);
     }
 
     #[test]
