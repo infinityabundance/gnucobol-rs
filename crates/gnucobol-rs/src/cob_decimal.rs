@@ -124,6 +124,35 @@ pub fn cob_decimal_set_binary(data: &[u8], attr: &FieldAttr) -> CobDecimal {
     CobDecimal { value: Mpz::from_i128(crate::binary::binary_decode(data, attr)), scale: attr.scale as i32 }
 }
 
+/// `cob_decimal_set_ieee64dec (d, f)` (numeric.c:667): decode an IEEE-754 decimal64 (BID) field into a
+/// working decimal. The BID decode + value is the FLOAT.1-sealed [`crate::float::dec64_decode`]; the
+/// `(mag, scale)` it returns represents the same value the C builds (with positive exponents folded in).
+pub fn cob_decimal_set_ieee64dec(data: &[u8]) -> CobDecimal {
+    match crate::float::dec64_decode(data[..8].try_into().unwrap_or([0; 8])) {
+        Some((m, s)) => CobDecimal { value: Mpz::from_i128(m), scale: s },
+        None => CobDecimal { value: Mpz::new(), scale: 0 }, // Inf/NaN: libcob marks NaN; we carry zero
+    }
+}
+
+/// `cob_decimal_set_ieee128dec (d, f)` (numeric.c:781): decode an IEEE-754 decimal128 (BID) field.
+pub fn cob_decimal_set_ieee128dec(data: &[u8]) -> CobDecimal {
+    match crate::float::dec128_decode(data[..16].try_into().unwrap_or([0; 16])) {
+        Some((m, s)) => CobDecimal { value: Mpz::from_i128(m), scale: s },
+        None => CobDecimal { value: Mpz::new(), scale: 0 },
+    }
+}
+
+/// `cob_decimal_get_ieee64dec (d, f, opt)` (numeric.c:613): encode a working decimal into an IEEE-754
+/// decimal64 (BID) field, via the FLOAT.1-sealed [`crate::float::dec64_encode`].
+pub fn cob_decimal_get_ieee64dec(d: &CobDecimal) -> [u8; 8] {
+    crate::float::dec64_encode(d.value.to_i128().unwrap_or(0), d.scale)
+}
+
+/// `cob_decimal_get_ieee128dec (d, f, opt)` (numeric.c:731): encode into an IEEE-754 decimal128 field.
+pub fn cob_decimal_get_ieee128dec(d: &CobDecimal) -> [u8; 16] {
+    crate::float::dec128_encode(d.value.to_i128().unwrap_or(0), d.scale)
+}
+
 /// `cob_decimal_set_field (d, f)`: decode a numeric field into the working decimal. Uses the sealed
 /// per-usage decoders ([`Decimal::from_display`] / [`Decimal::from_packed`] / binary decode).
 pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
@@ -131,11 +160,18 @@ pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
         COB_TYPE_NUMERIC_DISPLAY => CobDecimal::from_value_decimal(&Decimal::from_display(data, attr)),
         COB_TYPE_NUMERIC_PACKED => crate::packed::cob_decimal_set_packed(data, attr),
         COB_TYPE_NUMERIC_BINARY => cob_decimal_set_binary(data, attr),
-        _ => {
-            // COMP-1/COMP-2/FLOAT-DECIMAL handled by the float path; fall back to a zero decimal here
-            // (the comparison dispatcher routes float fields to the float comparison, GNURUST.FLOAT.1).
-            CobDecimal { value: Mpz::new(), scale: 0 }
+        0x16 => cob_decimal_set_ieee64dec(data),
+        0x17 => cob_decimal_set_ieee128dec(data),
+        0x13 | 0x14 | 0x15 => {
+            // binary float (COMP-1/COMP-2/L_DOUBLE): decode to f64, then to a decimal (exact dyadic)
+            let v = match attr.field_type {
+                0x13 => f32::from_le_bytes(data[..4].try_into().unwrap_or([0; 4])) as f64,
+                0x14 => f64::from_le_bytes(data[..8].try_into().unwrap_or([0; 8])),
+                _ => extended80_to_f64(data),
+            };
+            cob_decimal_set_double(v)
         }
+        _ => CobDecimal { value: Mpz::new(), scale: 0 },
     }
 }
 
@@ -398,14 +434,11 @@ pub fn cob_decimal_cmp(d1: &CobDecimal, d2: &CobDecimal) -> i32 {
 /// libcob dispatcher uses fast paths (bcd compare, integer compare) that all yield the same verdict
 /// as the general decimal comparison reproduced here; float operands route to the float comparison.
 pub fn cob_numeric_cmp(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr) -> i32 {
-    if is_float(a1) || is_float(a2) {
-        let v1 = field_to_f64(f1, a1);
-        let v2 = field_to_f64(f2, a2);
-        return match v1.partial_cmp(&v2) {
-            Some(Ordering::Less) => -1,
-            Some(Ordering::Greater) => 1,
-            _ => 0,
-        };
+    // numeric.c:4036 routes only FLOAT/DOUBLE/L_DOUBLE through cob_cmp_float; FP_DEC64/128 fall to the
+    // decimal compare (cob_decimal_set_field now decodes them via the sealed BID decoders).
+    let is_bin_float = |a: &FieldAttr| matches!(a.field_type, 0x13 | 0x14 | 0x15);
+    if is_bin_float(a1) || is_bin_float(a2) {
+        return cob_cmp_float(f1, a1, f2, a2);
     }
     // BCD fast path (numeric.c:4047): both PACKED with non-negative scale -> in-place nibble compare.
     if a1.field_type == COB_TYPE_NUMERIC_PACKED
@@ -467,21 +500,146 @@ pub fn cob_set_int(f1: &[u8], a1: &FieldAttr, n: i32) -> Result<Vec<u8>, ()> {
     cob_decimal_get_field(d, a1, f1.len(), Round::Truncate, false)
 }
 
-fn is_float(a: &FieldAttr) -> bool {
-    matches!(a.field_type, 0x13 | 0x14 | 0x15 | 0x16 | 0x17)
+/// `cob_decimal_align (d1, scale)` (numeric.c:2282): shift `d1` toward the target `scale`. Ported
+/// verbatim, including the source's second branch which shifts by `d1.scale - scale` (the same sign as
+/// the first branch) — a faithful 1:1 of GnuCOBOL 3.2, quirk included.
+pub fn cob_decimal_align(d1: &mut CobDecimal, scale: i32) {
+    if d1.scale > scale {
+        shift_decimal(d1, scale - d1.scale);
+    } else if d1.scale < scale {
+        shift_decimal(d1, d1.scale - scale);
+    }
 }
 
-fn field_to_f64(data: &[u8], a: &FieldAttr) -> f64 {
-    match a.field_type {
-        0x13 => f32::from_le_bytes(data[..4].try_into().unwrap_or([0; 4])) as f64,
-        0x14 => f64::from_le_bytes(data[..8].try_into().unwrap_or([0; 8])),
-        0x16 => crate::float::dec64_decode(data[..8].try_into().unwrap_or([0; 8]))
-            .map(|(m, s)| m as f64 * 10f64.powi(-s))
-            .unwrap_or(0.0),
-        0x17 => crate::float::dec128_decode(data[..16].try_into().unwrap_or([0; 16]))
-            .map(|(m, s)| m as f64 * 10f64.powi(-s))
-            .unwrap_or(0.0),
-        _ => 0.0,
+/// `cob_decimal_get_double (d)` (numeric.c): the `f64` value of a working decimal, truncating toward
+/// zero (libcob's `mpf_get_d`). Modeled by [`crate::float::decimal_to_f64_trunc`].
+pub fn cob_decimal_get_double(d: &CobDecimal) -> f64 {
+    match d.value.to_i128() {
+        Some(mag) => crate::float::decimal_to_f64_trunc(mag, d.scale),
+        // For magnitudes beyond i128 (>38 digits, only internal intermediates), fall back through the
+        // decimal string -> f64 parse, which truncates the same way for the leading 17 sig digits.
+        None => d.value.to_decimal_string().parse::<f64>().unwrap_or(0.0) / 10f64.powi(d.scale),
+    }
+}
+
+/// `cob_get_long_ascii_sign (p, val)` (numeric.c:4186): decode an ASCII trailing-overpunch sign byte
+/// (`p`..`y` => digit 0..9, all negative). Writes the digit into `val`, returns 1 if negative.
+pub fn cob_get_long_ascii_sign(p: u8, val: &mut i32) -> i32 {
+    match p {
+        b'p' => 1,
+        b'q'..=b'y' => {
+            *val = (p - b'p') as i32;
+            1
+        }
+        _ => 0,
+    }
+}
+
+/// `cob_get_long_ebcdic_sign (p, val)` (numeric.c:4224): decode an EBCDIC trailing-overpunch sign byte
+/// (`{`/`A`..`I` positive 0..9, `}`/`J`..`R` negative 0..9). Writes the digit into `val`, returns 1 if
+/// negative.
+pub fn cob_get_long_ebcdic_sign(p: u8, val: &mut i32) -> i32 {
+    match p {
+        b'{' => 0,
+        b'A'..=b'I' => {
+            *val = (p - b'A' + 1) as i32;
+            0
+        }
+        b'}' => 1,
+        b'J'..=b'R' => {
+            *val = (p - b'J' + 1) as i32;
+            1
+        }
+        _ => 0,
+    }
+}
+
+/// `cob_cmp_numdisp (data, size, n, has_sign)` (numeric.c:4182): compare an unedited DISPLAY field's
+/// value with a signed integer `n`. Mirrors libcob: unsigned builds the magnitude directly; signed
+/// reads the trailing (possibly overpunched) sign digit, including the EBCDIC/ASCII overpunch tables.
+pub fn cob_cmp_numdisp(data: &[u8], n: i64, has_sign: bool, ebcdic_sign: bool) -> i32 {
+    let size = data.len();
+    if !has_sign {
+        if n < 0 {
+            return 1;
+        }
+        let mut val: i64 = 0;
+        for &b in data {
+            val = val * 10 + (b & 0x0F) as i64;
+        }
+        return (val > n) as i32 - (val < n) as i32;
+    }
+    if size == 0 {
+        return 0;
+    }
+    let mut val: i64 = 0;
+    for &b in &data[..size - 1] {
+        val = val * 10 + (b & 0x0F) as i64;
+    }
+    val *= 10;
+    let p = data[size - 1];
+    if p.is_ascii_digit() {
+        val += (p & 0x0F) as i64;
+    } else if ebcdic_sign {
+        let mut sv = 0i32;
+        let neg = cob_get_long_ebcdic_sign(p, &mut sv);
+        val += sv as i64;
+        if neg == 1 {
+            val = -val;
+        }
+    } else if (b'p'..=b'y').contains(&p) {
+        val += (p - b'p') as i64;
+        val = -val;
+    }
+    (val > n) as i32 - (val < n) as i32
+}
+
+/// Decode an x86 80-bit extended-precision `long double` (16-byte storage, low 10 bytes used) to `f64`,
+/// matching the C cast `(double)ld`. Sign + 15-bit exponent + 64-bit mantissa with an explicit integer
+/// bit; ported so `cob_cmp_float`'s L_DOUBLE branch has no platform bound.
+fn extended80_to_f64(b: &[u8]) -> f64 {
+    if b.len() < 10 {
+        return 0.0;
+    }
+    let mantissa = u64::from_le_bytes(b[..8].try_into().unwrap_or([0; 8]));
+    let se = u16::from_le_bytes(b[8..10].try_into().unwrap_or([0; 2]));
+    let sign = if se & 0x8000 != 0 { -1.0 } else { 1.0 };
+    let exp = (se & 0x7FFF) as i32;
+    if exp == 0 && mantissa == 0 {
+        return 0.0 * sign;
+    }
+    if exp == 0x7FFF {
+        return if mantissa << 1 == 0 { sign * f64::INFINITY } else { f64::NAN };
+    }
+    // value = mantissa * 2^(exp - 16383 - 63); the explicit integer bit makes mantissa the full 64-bit.
+    sign * (mantissa as f64) * 2f64.powi(exp - 16383 - 63)
+}
+
+/// `cob_cmp_float (f1, f2)` (numeric.c): compare two numeric fields as `double`, returning `0` when
+/// equal within libcob's relative `TOLERANCE` (`1e-7`), else `-1`/`1`. Float/double/long-double
+/// operands are read directly; any other operand decodes to a decimal then to `double`.
+pub fn cob_cmp_float(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr) -> i32 {
+    const TOLERANCE: f64 = 0.0000001;
+    fn operand(data: &[u8], attr: &FieldAttr) -> f64 {
+        match attr.field_type {
+            0x13 => f32::from_le_bytes(data[..4].try_into().unwrap_or([0; 4])) as f64,
+            0x14 => f64::from_le_bytes(data[..8].try_into().unwrap_or([0; 8])),
+            0x15 => extended80_to_f64(data),
+            _ => cob_decimal_get_double(&cob_decimal_set_field(data, attr)),
+        }
+    }
+    let d1 = operand(f1, a1);
+    let d2 = operand(f2, a2);
+    if d1 == d2 {
+        return 0;
+    }
+    if d1 != 0.0 && ((d1 - d2) / d1).abs() < TOLERANCE {
+        return 0;
+    }
+    if d1 < d2 {
+        -1
+    } else {
+        1
     }
 }
 
@@ -748,6 +906,68 @@ mod tests {
         assert_eq!(cob_cmp_int(b"00005", &disp(5, 0, false), 5), 0);
         assert_eq!(cob_cmp_int(b"00005", &disp(5, 0, false), 9), -1);
         assert_eq!(cob_cmp_int(b"00009", &disp(5, 0, false), 5), 1);
+    }
+
+    #[test]
+    fn cmp_numdisp_and_sign_helpers() {
+        // cob_cmp_numdisp must agree with cob_cmp_int over DISPLAY fields, and the overpunch helpers
+        // must decode the ASCII/EBCDIC trailing-sign tables.
+        for &(digits, signed) in &[(5u16, false), (5, true), (3, true), (7, true)] {
+            let attr = disp(digits, 0, signed);
+            for v in [0i64, 1, 7, 42, 999, 12345] {
+                if v >= 10i64.pow(digits as u32) {
+                    continue;
+                }
+                for neg in [false, true] {
+                    if neg && (!signed || v == 0) {
+                        continue;
+                    }
+                    // build a DISPLAY image of +/- v
+                    let mut img: Vec<u8> = format!("{v:0width$}", width = digits as usize).into_bytes();
+                    if neg {
+                        let last = img.len() - 1;
+                        img[last] = b"p qrstuvwxy"[(img[last] - b'0' + 1) as usize]; // ASCII overpunch
+                        if img[last] == b' ' {
+                            img[last] = b'p';
+                        }
+                    }
+                    let sv = if neg { -v } else { v };
+                    for n in [-1i64, 0, 7, 42, 12345, -12345] {
+                        let got = cob_cmp_numdisp(&img, n, signed, false);
+                        let want = (sv > n) as i32 - (sv < n) as i32;
+                        assert_eq!(got, want, "numdisp v={sv} n={n} img={img:?}");
+                    }
+                }
+            }
+        }
+        // sign helper tables
+        let mut d = 0;
+        assert_eq!(cob_get_long_ascii_sign(b'p', &mut d), 1);
+        assert_eq!(d, 0);
+        d = 0;
+        assert_eq!(cob_get_long_ascii_sign(b'y', &mut d), 1);
+        assert_eq!(d, 9);
+        d = 0;
+        assert_eq!(cob_get_long_ebcdic_sign(b'A', &mut d), 0);
+        assert_eq!(d, 1);
+        d = 0;
+        assert_eq!(cob_get_long_ebcdic_sign(b'R', &mut d), 1);
+        assert_eq!(d, 9);
+    }
+
+    #[test]
+    fn cmp_float_orders_and_tolerates() {
+        // COMP-2 (0x14) field comparison with libcob's relative tolerance.
+        let f = |v: f64| (FieldAttr { field_type: 0x14, digits: 0, scale: 0, flags: 0 }, v.to_le_bytes().to_vec());
+        let (a1, b1) = f(1.5);
+        let (a2, b2) = f(2.5);
+        assert_eq!(cob_cmp_float(&b1, &a1, &b2, &a2), -1);
+        assert_eq!(cob_cmp_float(&b2, &a2, &b1, &a1), 1);
+        let (a3, b3) = f(2.5);
+        assert_eq!(cob_cmp_float(&b2, &a2, &b3, &a3), 0);
+        // within relative tolerance 1e-7 -> equal
+        let (a4, b4) = f(2.5 + 2.5 * 1e-9);
+        assert_eq!(cob_cmp_float(&b2, &a2, &b4, &a4), 0);
     }
 
     #[test]
