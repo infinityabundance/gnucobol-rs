@@ -20,8 +20,6 @@
       "functions": 34,
       "missing": [
         "alloc_figurative",
-        "cob_exit_strings",
-        "cob_init_strings",
         "cob_inspect_after",
         "cob_inspect_all",
         "cob_inspect_before",
@@ -35,11 +33,6 @@
         "cob_inspect_leading",
         "cob_inspect_start",
         "cob_inspect_trailing",
-        "cob_str_memcpy",
-        "cob_string_append",
-        "cob_string_delimited",
-        "cob_string_finish",
-        "cob_string_init",
         "cob_unstring_delimited",
         "cob_unstring_finish",
         "cob_unstring_init",
@@ -54,8 +47,8 @@
         "set_inspect_mark",
         "setup_repdata"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 20.6,
+      "ported": 7
     },
     {
       "file": "intrinsic.c",
@@ -1088,7 +1081,7 @@
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
     "functions": 1152,
-    "parity_pct": 15.5,
-    "ported": 178
+    "parity_pct": 16.1,
+    "ported": 185
   }
 }

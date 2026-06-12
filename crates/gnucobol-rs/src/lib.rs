@@ -47,6 +47,7 @@ pub mod gmp;
 pub mod int_pow;
 pub mod logical;
 pub mod accessors;
+pub mod strings;
 pub mod mpf;
 pub mod packed;
 pub mod file_flow_slice;
