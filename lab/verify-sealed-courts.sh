@@ -39,6 +39,7 @@ run_sweep "GNURUST.4/10 layout(+ODO)" layout_sweep.sh
 run_sweep "GNURUST.10 ODO phys-max"  odo_sweep.sh
 run_sweep "GNURUST.5  COPY"          copy_sweep.sh
 run_sweep "GNURUST.7/13 arithmetic"  arith_sweep.sh
+run_sweep "numeric.c cob_add_bcd (packed)" packed_arith_sweep.sh
 run_sweep "GNURUST.19 DIVIDE bytes"   divide_sweep.sh
 run_sweep "GNURUST.REMAINDER.1 bytes" remainder_sweep.sh
 run_sweep "GNURUST.ROUND.1 modes"     round_sweep.sh

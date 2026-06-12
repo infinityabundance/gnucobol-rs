@@ -464,6 +464,526 @@ pub fn cob_cmp_packed(data: &[u8], attr: &FieldAttr, val: i64) -> i32 {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------
+// In-place BCD ARITHMETIC (numeric.c "Optimized arithmetic for BCD fields"): the COMP-3 ADD/SUBTRACT
+// fast path reached by cob_add/cob_sub via cob_addsub_optimized. Result is byte-identical to the
+// general decimal path (sealed at arith 5400/0); this ports the actual nibble algorithm, including the
+// 8 rounding modes (handle_bcd_rounding) and overflow/sign finalisation (check_overflow_and_set_sign).
+// ---------------------------------------------------------------------------------------------------
+
+/// `h2b` (numeric.c:2764): packed BCD byte -> 0..=99 (valid), 255 for an invalid (>9) nibble, 0 for
+/// byte values 0xA0..=0xFF (C zero-fills the unspecified tail).
+static H2B: [u8; 256] = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 255, 255, 255, 255, 255, 255,
+    10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 255, 255, 255, 255, 255, 255,
+    20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 255, 255, 255, 255, 255, 255,
+    30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 255, 255, 255, 255, 255, 255,
+    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 255, 255, 255, 255, 255, 255,
+    50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 255, 255, 255, 255, 255, 255,
+    60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 255, 255, 255, 255, 255, 255,
+    70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 255, 255, 255, 255, 255, 255,
+    80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 255, 255, 255, 255, 255, 255,
+    90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 255, 255, 255, 255, 255, 255,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
+
+/// `b2h` (numeric.c:2776): 0..=99 -> packed BCD byte; 0xff for out-of-range indices.
+static B2H: [u8; 256] = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 48, 49,
+    50, 51, 52, 53, 54, 55, 56, 57, 64, 65, 66, 67, 68, 69, 70, 71,
+    72, 73, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 96, 97, 98, 99,
+    100, 101, 102, 103, 104, 105, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 144, 145, 146, 147, 148, 149,
+    150, 151, 152, 153, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+];
+
+// COB_STORE_* flags (common.h:949). `opt & !COB_STORE_MASK` isolates the rounding-mode bits.
+const COB_STORE_ROUND: i32 = 1 << 0;
+const COB_STORE_KEEP_ON_OVERFLOW: i32 = 1 << 1;
+const COB_STORE_TRUNC_ON_OVERFLOW: i32 = 1 << 2;
+const COB_STORE_AWAY_FROM_ZERO: i32 = 1 << 4;
+const COB_STORE_NEAR_AWAY_FROM_ZERO: i32 = 1 << 5;
+const COB_STORE_NEAR_EVEN: i32 = 1 << 6;
+const COB_STORE_NEAR_TOWARD_ZERO: i32 = 1 << 7;
+const COB_STORE_PROHIBITED: i32 = 1 << 8;
+const COB_STORE_TOWARD_GREATER: i32 = 1 << 9;
+const COB_STORE_TOWARD_LESSER: i32 = 1 << 10;
+const COB_STORE_TRUNCATION: i32 = 1 << 11;
+const COB_STORE_NO_SIZE_ERROR: i32 = 1 << 15;
+const COB_STORE_MASK: i32 =
+    COB_STORE_ROUND | COB_STORE_KEEP_ON_OVERFLOW | COB_STORE_TRUNC_ON_OVERFLOW | COB_STORE_NO_SIZE_ERROR;
+
+/// `handle_bcd_rounding (byte, round_half_nibble, all_zeros, final_positive, opt)` (numeric.c:2811):
+/// adjust the two-digit `byte` straddling the rounding position per the requested mode. Returns `-1`
+/// (rounding complete), `-2` (NEAR_EVEN exact-half: caller must check the next byte), or `1`
+/// (rounding prohibited / size-truncation exception).
+#[allow(clippy::manual_range_contains)]
+fn handle_bcd_rounding(byte: &mut i32, round_half_nibble: bool, all_zeros: bool, final_positive: bool, opt: i32) -> i32 {
+    let round: u8 = if *byte < 0 {
+        B2H[(*byte + 100) as usize]
+    } else if *byte >= 100 {
+        B2H[(*byte - 100) as usize]
+    } else {
+        B2H[*byte as usize]
+    };
+    let mode = opt & !COB_STORE_MASK;
+    if round_half_nibble {
+        if mode == COB_STORE_PROHIBITED {
+            if opt & COB_STORE_NO_SIZE_ERROR == 0 && (!all_zeros || (round & 0x0F) != 0) {
+                return 1;
+            }
+        } else if mode == COB_STORE_AWAY_FROM_ZERO {
+            if !all_zeros || (round & 0x0F) != 0 {
+                *byte += 10;
+            }
+        } else if mode == COB_STORE_NEAR_TOWARD_ZERO {
+            if (round & 0x0F) > 0x05 || ((round & 0x0F) == 0x05 && !all_zeros) {
+                *byte += 10;
+            }
+        } else if mode == COB_STORE_TOWARD_GREATER {
+            if final_positive && (!all_zeros || (round & 0x0F) != 0) {
+                *byte += 10;
+            }
+        } else if mode == COB_STORE_TOWARD_LESSER {
+            if !final_positive && (!all_zeros || (round & 0x0F) != 0) {
+                *byte += 10;
+            }
+        } else if mode == COB_STORE_NEAR_EVEN {
+            if all_zeros && (round & 0x0F) == 0x05 {
+                if round & 0x10 != 0 {
+                    *byte += 5;
+                }
+            } else {
+                *byte += 5;
+            }
+        } else {
+            // COB_STORE_NEAR_AWAY_FROM_ZERO and default
+            *byte += 5;
+        }
+    } else if mode == COB_STORE_PROHIBITED {
+        if opt & COB_STORE_NO_SIZE_ERROR == 0 && (!all_zeros || round != 0) {
+            return 1;
+        }
+    } else if mode == COB_STORE_AWAY_FROM_ZERO {
+        if !all_zeros || round != 0 {
+            *byte += 100;
+        }
+    } else if mode == COB_STORE_NEAR_TOWARD_ZERO {
+        if round > 0x50 || (round == 0x50 && !all_zeros) {
+            *byte += 100;
+        }
+    } else if mode == COB_STORE_TOWARD_GREATER {
+        if final_positive && (!all_zeros || round != 0) {
+            *byte += 100;
+        }
+    } else if mode == COB_STORE_TOWARD_LESSER {
+        if !final_positive && (!all_zeros || round != 0) {
+            *byte += 100;
+        }
+    } else if mode == COB_STORE_NEAR_EVEN {
+        if all_zeros && round == 0x50 {
+            return -2;
+        } else {
+            *byte += 50;
+        }
+    } else {
+        // COB_STORE_NEAR_AWAY_FROM_ZERO and default
+        *byte += 50;
+    }
+    -1
+}
+
+/// `count_leading_zeros (ptr, len)` (numeric.c:2924).
+fn count_leading_zeros(buff: &[u8; 48], mut idx: usize, len: usize) -> i32 {
+    let mut cntr = 0i32;
+    while idx < 48 && buff[idx] == 0x00 && (cntr as usize) < len {
+        cntr += 1;
+        idx += 1;
+    }
+    cntr
+}
+
+/// `cob_shift_left_nibble` (numeric.c:2492): shift the 48-byte buffer one nibble toward index 0 (more
+/// significant). The data above the start is zero, so a whole-buffer shift is behaviorally identical
+/// to the C's register-windowed shift, without the unsafe `cob_u64_t*`/`COB_BSWAP_64` machinery.
+fn cob_shift_left_nibble(buff: &mut [u8; 48]) {
+    for i in 0..47 {
+        buff[i] = (buff[i] << 4) | (buff[i + 1] >> 4);
+    }
+    buff[47] <<= 4;
+}
+
+/// `cob_shift_right_nibble` (numeric.c:2549): shift the 48-byte buffer one nibble toward index 47.
+fn cob_shift_right_nibble(buff: &mut [u8; 48]) {
+    for i in (1..48).rev() {
+        buff[i] = (buff[i - 1] << 4) | (buff[i] >> 4);
+    }
+    buff[0] >>= 4;
+}
+
+/// `check_overflow_and_set_sign (f, opt, final_positive, buff, pos)` (numeric.c:2932): detect digits
+/// that won't fit the receiver, mask the pad nibble, and write the final sign nibble. Returns `1` on a
+/// kept-on-overflow size error, else `0`.
+fn check_overflow_and_set_sign(attr: &FieldAttr, opt: i32, final_positive: bool, buff: &mut [u8; 48], pos: usize) -> i32 {
+    let buff_size = 48 - pos as i32;
+    let fsize = field_byte_size(attr) as i32;
+    let mut cmp_size = buff_size - fsize;
+    let no_sign = attr.no_sign_nibble();
+    let digits = attr.digits as i32;
+
+    if !no_sign {
+        buff[47] &= 0xF0;
+    }
+
+    if cmp_size >= 0 {
+        let lead_zeros = count_leading_zeros(buff, pos, buff_size as usize);
+        let has_pad_digit = (digits % 2 == 1 && no_sign) || (digits % 2 == 0 && !no_sign);
+        cmp_size -= lead_zeros;
+        if cmp_size > 0 || (cmp_size == 0 && has_pad_digit && buff[pos + lead_zeros as usize] > 0x0F) {
+            // overflow
+            if opt & COB_STORE_NO_SIZE_ERROR == 0 && opt & COB_STORE_KEEP_ON_OVERFLOW != 0 {
+                return 1;
+            }
+            if has_pad_digit {
+                buff[48 - fsize as usize] &= 0x0F;
+            }
+        }
+    }
+
+    if !no_sign {
+        if !attr.have_sign() {
+            buff[47] |= 0x0F;
+        } else if final_positive {
+            buff[47] |= 0x0C;
+        } else {
+            buff[47] |= 0x0D;
+        }
+    }
+    0
+}
+
+/// The packed field's byte length (`f->size`): COMP-6 is `ceil(digits/2)`; COMP-3 is `digits/2 + 1`.
+fn field_byte_size(attr: &FieldAttr) -> usize {
+    let digits = attr.digits as usize;
+    if attr.no_sign_nibble() {
+        digits.div_ceil(2)
+    } else {
+        digits / 2 + 1
+    }
+}
+
+/// `cob_add_bcd (fdst, fsrc1, fsrc2, opt, stmt)` (numeric.c:3021): in-place BCD ADD/SUBTRACT with the
+/// receiver possibly aliasing a source. `subtract == true` is `STMT_SUBTRACT`. Writes the result into
+/// `dst_out` (left unchanged on a kept-on-overflow size error) and returns `0`, `1` (size error), or
+/// `2` (rounding prohibited). The sources are copied into scratch buffers first, so aliasing is safe.
+#[allow(clippy::too_many_arguments)]
+pub fn cob_add_bcd(
+    dst_attr: &FieldAttr,
+    dst_out: &mut [u8],
+    s1: &[u8],
+    a1: &FieldAttr,
+    s2: &[u8],
+    a2: &FieldAttr,
+    opt: i32,
+    subtract: bool,
+) -> i32 {
+    let mut fld1_buff = [0u8; 48];
+    let mut fld2_buff = [0u8; 48];
+    let fld1_size = s1.len();
+    let fld2_size = s2.len();
+    let dest_size = dst_out.len();
+
+    let mut fld1_sign = if a1.no_sign_nibble() { 0x00 } else { s1[fld1_size - 1] & 0x0F };
+    let fld2_sign = if a2.no_sign_nibble() { 0x00 } else { s2[fld2_size - 1] & 0x0F };
+
+    let src1_scale = a1.scale as i32;
+    let src2_scale = a2.scale as i32;
+    let dst_scale = dst_attr.scale as i32;
+    let used_original_scale = src1_scale.max(src2_scale);
+    let fld1_scale = if fld1_sign == 0 { src1_scale } else { src1_scale + 1 };
+    let fld2_scale = if fld2_sign == 0 { src2_scale } else { src2_scale + 1 };
+    let dest_scale = if dst_attr.no_sign_nibble() { dst_scale } else { dst_scale + 1 };
+    let used_scale = fld1_scale.max(fld2_scale);
+
+    let mut rounding_digit = 0i32;
+    let mut rounding_byte = 0i32;
+    let mut final_positive = true;
+    let mut check_rounding = false;
+    let mut check_all_zeros = false;
+    let mut all_zeros = false;
+    if used_original_scale <= dst_scale || used_scale < dest_scale || (opt & COB_STORE_TRUNCATION) != 0 || (opt & !COB_STORE_MASK) == 0 {
+        // no rounding
+    } else {
+        if opt & (COB_STORE_AWAY_FROM_ZERO | COB_STORE_PROHIBITED | COB_STORE_TOWARD_GREATER | COB_STORE_TOWARD_LESSER | COB_STORE_NEAR_TOWARD_ZERO) != 0 {
+            check_all_zeros = true;
+            all_zeros = true;
+        }
+        rounding_digit = used_scale - dest_scale;
+        if !dst_attr.no_sign_nibble() {
+            rounding_digit += 1;
+        }
+        rounding_byte = (rounding_digit + 1) / 2 - 1;
+        check_rounding = true;
+    }
+
+    // place src data into the buffers, right-justified, sign nibble cleared, scales aligned
+    let (mut fld1, mut fld2): (usize, usize);
+    if fld1_scale == fld2_scale {
+        fld1 = 48 - fld1_size;
+        fld1_buff[fld1..].copy_from_slice(s1);
+        if fld1_sign != 0 {
+            fld1_buff[47] &= 0xF0;
+        }
+        fld2 = 48 - fld2_size;
+        fld2_buff[fld2..].copy_from_slice(s2);
+        if fld2_sign != 0 {
+            fld2_buff[47] &= 0xF0;
+        }
+    } else if fld1_scale < fld2_scale {
+        let diff = fld2_scale - fld1_scale;
+        let offset = (diff >> 1) as usize;
+        fld2 = 48 - fld2_size;
+        fld2_buff[fld2..].copy_from_slice(s2);
+        if fld2_sign != 0 {
+            fld2_buff[47] &= 0xF0;
+        }
+        fld1 = 48 - fld1_size - offset;
+        fld1_buff[fld1..fld1 + fld1_size].copy_from_slice(s1);
+        if fld1_sign != 0 {
+            fld1_buff[48 - 1 - offset] &= 0xF0;
+        }
+        if diff % 2 == 1 {
+            cob_shift_left_nibble(&mut fld1_buff);
+            fld1 -= 1;
+        }
+    } else {
+        let diff = fld1_scale - fld2_scale;
+        let offset = (diff >> 1) as usize;
+        fld1 = 48 - fld1_size;
+        fld1_buff[fld1..].copy_from_slice(s1);
+        if fld1_sign != 0 {
+            fld1_buff[47] &= 0xF0;
+        }
+        fld2 = 48 - fld2_size - offset;
+        fld2_buff[fld2..fld2 + fld2_size].copy_from_slice(s2);
+        if fld2_sign != 0 {
+            fld2_buff[48 - 1 - offset] &= 0xF0;
+        }
+        if diff % 2 == 1 {
+            cob_shift_left_nibble(&mut fld2_buff);
+            fld2 -= 1;
+        }
+    }
+
+    let loop_limit = if fld1 > fld2 { 48 - fld2 + 1 } else { 48 - fld1 + 1 };
+
+    // SUBTRACT flips field-1's sign
+    if subtract {
+        fld1_sign = if fld1_sign == 0x0D { 0x0C } else { 0x0D };
+    }
+
+    let same_sign_add = fld1_sign == fld2_sign || (fld1_sign != 0x0D && fld2_sign != 0x0D);
+
+    let mut carry = 0i32;
+    if same_sign_add {
+        let mut check_next_byte = false;
+        if fld1_sign == 0x0D {
+            final_positive = false;
+        }
+        let mut f1 = 47isize;
+        let mut f2 = 47isize;
+        let mut rslt = 47isize;
+        for cntr in 0..loop_limit {
+            let mut byte = carry + H2B[fld1_buff[f1 as usize] as usize] as i32 + H2B[fld2_buff[f2 as usize] as usize] as i32;
+            if check_rounding {
+                if check_next_byte {
+                    if byte % 2 == 1 {
+                        byte += 1;
+                    }
+                    check_rounding = false;
+                } else if cntr as i32 == rounding_byte {
+                    let mut byte_adj = byte;
+                    let rtn = handle_bcd_rounding(&mut byte_adj, rounding_digit % 2 == 1, all_zeros, final_positive, opt);
+                    if rtn == -1 {
+                        byte = byte_adj;
+                        check_rounding = false;
+                        check_all_zeros = false;
+                    } else if rtn == -2 {
+                        check_next_byte = true;
+                        check_all_zeros = false;
+                    } else {
+                        return 2;
+                    }
+                }
+            }
+            if byte >= 200 {
+                byte -= 200;
+                carry = 2;
+            } else if byte >= 100 {
+                byte -= 100;
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+            if check_all_zeros && byte != 0 {
+                check_all_zeros = false;
+                all_zeros = false;
+            }
+            fld2_buff[rslt as usize] = B2H[byte as usize];
+            f1 -= 1;
+            f2 -= 1;
+            rslt -= 1;
+        }
+    } else {
+        let a = 48 - loop_limit;
+        let compare_result = memcmp(&fld1_buff[a..48], &fld2_buff[a..48]);
+        if compare_result == 0 {
+            // identical magnitude, opposite sign -> result is zero
+            cob_set_packed_zero(dst_out, dst_attr);
+            return 0;
+        }
+        // subtract the smaller magnitude from the larger; neg=fld1/pos=fld2 when |fld1|<|fld2|
+        let neg_is_fld1 = compare_result < 0;
+        if compare_result < 0 {
+            if fld1_sign != 0x0D {
+                final_positive = false;
+            }
+        } else if fld1_sign == 0x0D {
+            final_positive = false;
+        }
+        let mut np = 47isize; // index into the "neg" buffer
+        let mut pp = 47isize; // index into the "pos" buffer
+        let mut rslt = 47isize;
+        let mut check_next_byte = false;
+        for cntr in 0..loop_limit {
+            let (pos_byte, neg_byte) = if neg_is_fld1 {
+                (H2B[fld2_buff[pp as usize] as usize] as i32, H2B[fld1_buff[np as usize] as usize] as i32)
+            } else {
+                (H2B[fld1_buff[pp as usize] as usize] as i32, H2B[fld2_buff[np as usize] as usize] as i32)
+            };
+            let mut byte = carry + pos_byte - neg_byte;
+            if check_rounding {
+                if check_next_byte {
+                    if byte % 2 == 1 {
+                        byte += 1;
+                    }
+                    check_rounding = false;
+                } else if cntr as i32 == rounding_byte {
+                    let mut byte_adj = byte;
+                    let rtn = handle_bcd_rounding(&mut byte_adj, rounding_digit % 2 == 1, all_zeros, final_positive, opt);
+                    if rtn == -1 {
+                        byte = byte_adj;
+                        check_rounding = false;
+                        check_all_zeros = false;
+                    } else if rtn == -2 {
+                        check_next_byte = true;
+                        check_all_zeros = false;
+                    } else {
+                        return 2;
+                    }
+                }
+            }
+            if byte < 0 {
+                byte += 100;
+                carry = -1;
+            } else if byte >= 100 {
+                byte -= 100;
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+            if check_all_zeros && byte != 0 && byte != 100 && byte != 200 {
+                check_all_zeros = false;
+                all_zeros = false;
+            }
+            fld2_buff[rslt as usize] = B2H[byte as usize];
+            np -= 1;
+            pp -= 1;
+            rslt -= 1;
+        }
+    }
+
+    // move result (in fld2_buff) to dest scale
+    let mut fld2 = 48 - loop_limit;
+    if used_scale == dest_scale {
+        // identical scale
+    } else if used_scale > dest_scale {
+        let diff = used_scale - dest_scale;
+        let offset = (diff / 2) as usize;
+        fld2_buff.copy_within(fld2..fld2 + (loop_limit - offset), fld2 + offset);
+        for b in fld2_buff[fld2..fld2 + offset].iter_mut() {
+            *b = 0;
+        }
+        fld2 += offset;
+        if diff & 1 != 0 {
+            cob_shift_right_nibble(&mut fld2_buff);
+        }
+    } else {
+        let diff = dest_scale - used_scale;
+        let offset = (diff / 2) as usize;
+        fld2_buff.copy_within(fld2..fld2 + loop_limit, fld2 - offset);
+        for b in fld2_buff[48 - offset..48].iter_mut() {
+            *b = 0;
+        }
+        if diff % 2 == 1 {
+            cob_shift_left_nibble(&mut fld2_buff);
+        }
+    }
+
+    if check_overflow_and_set_sign(dst_attr, opt, final_positive, &mut fld2_buff, fld2) != 0 {
+        return 1;
+    }
+    dst_out.copy_from_slice(&fld2_buff[48 - dest_size..48]);
+    0
+}
+
+/// `cob_addsub_optimized (f1, f2, opt, stmt)` (numeric.c:2299): the BCD fast-path dispatcher. Returns
+/// `Some(status)` when it handled the operation (f1 is PACKED and f2 is PACKED / DISPLAY<=38 / BINARY /
+/// COMP5, converted to a temp packed field), else `None` (caller runs the general decimal path).
+pub fn cob_addsub_optimized(d1: &mut [u8], a1: &FieldAttr, s2: &[u8], a2: &FieldAttr, opt: i32, subtract: bool) -> Option<i32> {
+    use crate::attr::{COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED};
+    if a1.field_type != COB_TYPE_NUMERIC_PACKED {
+        return None;
+    }
+    // numeric.c calls cob_add_bcd(fdst=f1, fsrc1=f2, fsrc2=f1): the OPERAND is fsrc1 (its sign is the
+    // one flipped for SUBTRACT), the RECEIVER is fsrc2. Result = fsrc2 - fsrc1 = f1 - f2.
+    let recv = d1.to_vec();
+    if a2.field_type == COB_TYPE_NUMERIC_PACKED {
+        return Some(cob_add_bcd(a1, d1, s2, a2, &recv, a1, opt, subtract));
+    }
+    let f2_comp5 = a2.flags & crate::attr::COB_FLAG_REAL_BINARY != 0;
+    if (a2.field_type == COB_TYPE_NUMERIC_DISPLAY && a2.digits <= 38) || a2.field_type == COB_TYPE_NUMERIC_BINARY || f2_comp5 {
+        // convert f2 to a temp PACKED field (signed) at f2's scale
+        let tmp_attr = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_PACKED,
+            digits: a2.digits,
+            scale: a2.scale,
+            flags: crate::attr::COB_FLAG_HAVE_SIGN,
+        };
+        let tmp_len = a2.digits as usize / 2 + 1;
+        let mut tmp = vec![0u8; tmp_len];
+        let d2 = crate::cob_decimal::cob_decimal_set_field(s2, a2);
+        cob_decimal_get_packed(d2, &tmp_attr, 0, &mut tmp);
+        return Some(cob_add_bcd(a1, d1, &tmp, &tmp_attr, &recv, a1, opt, subtract));
+    }
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -603,6 +1123,76 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn add_bcd_matches_oracle_verified_general_path() {
+        // cob_decimal::cob_add/cob_sub for PACKED receivers is oracle-verified at arith 5400/0 (gen_arith
+        // emits a_ut=PACKED cases). The new in-place cob_add_bcd must produce byte-identical results.
+        use crate::arith::Round;
+        use crate::cob_decimal::{cob_add, cob_sub};
+        fn opt_of(r: Round) -> i32 {
+            const ROUND: i32 = 1; // COB_STORE_ROUND companion bit, as cobc emits with the mode
+            match r {
+                Round::Truncate => 0,
+                Round::NearAwayFromZero => ROUND | COB_STORE_NEAR_AWAY_FROM_ZERO,
+                Round::AwayFromZero => ROUND | COB_STORE_AWAY_FROM_ZERO,
+                Round::NearEven => ROUND | COB_STORE_NEAR_EVEN,
+                Round::NearTowardZero => ROUND | COB_STORE_NEAR_TOWARD_ZERO,
+                Round::TowardGreater => ROUND | COB_STORE_TOWARD_GREATER,
+                Round::TowardLesser => ROUND | COB_STORE_TOWARD_LESSER,
+                Round::Prohibited => ROUND | COB_STORE_PROHIBITED,
+                _ => 0,
+            }
+        }
+        let shapes: &[(u16, i16)] = &[(5, 0), (7, 2), (9, 0), (6, 3), (4, 1), (3, 0)];
+        let vals: &[i64] = &[0, 1, -1, 5, -5, 42, -42, 125, -125, 999, -999, 4321, -4321];
+        let rounds = [Round::Truncate, Round::NearAwayFromZero, Round::NearEven, Round::AwayFromZero, Round::NearTowardZero];
+        let mut checked = 0u64;
+        for &(dg1, sc1) in shapes {
+            let recv = packed(dg1, sc1, true, false);
+            let lim1 = 10i64.pow(dg1 as u32);
+            for &(dg2, sc2) in shapes {
+                let a2 = packed(dg2, sc2, true, false);
+                let lim2 = 10i64.pow(dg2 as u32);
+                for &v1 in vals {
+                    if v1.abs() >= lim1 {
+                        continue;
+                    }
+                    for &v2 in vals {
+                        if v2.abs() >= lim2 {
+                            continue;
+                        }
+                        let s1 = bytes_for(&recv, v1 as i32 as i64);
+                        let s2 = bytes_for(&a2, v2);
+                        for &round in &rounds {
+                            for (subtract, genf) in
+                                [(false, cob_add as fn(&[u8], &FieldAttr, &[u8], &FieldAttr, Round) -> Result<Vec<u8>, ()>), (true, cob_sub)]
+                            {
+                                let gen = genf(&s1, &recv, &s2, &a2, round);
+                                let mut bcd = s1.clone();
+                                // C convention: cob_add_bcd(fdst, fsrc1=operand, fsrc2=receiver) => f1 - f2
+                                let st = cob_add_bcd(&recv, &mut bcd, &s2, &a2, &s1, &recv, opt_of(round), subtract);
+                                match gen {
+                                    Ok(g) => {
+                                        if st == 0 {
+                                            assert_eq!(
+                                                bcd, g,
+                                                "{} v1={v1}@{dg1}.{sc1} v2={v2}@{dg2}.{sc2} round={round:?}: bcd={bcd:02x?} gen={g:02x?}",
+                                                if subtract { "SUB" } else { "ADD" }
+                                            );
+                                            checked += 1;
+                                        }
+                                    }
+                                    Err(_) => { /* prohibited/overflow: general path errored; skip */ }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        assert!(checked > 5000, "expected a broad sweep, only checked {checked}");
     }
 
     #[test]
