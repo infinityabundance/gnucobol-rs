@@ -206,7 +206,10 @@ pub fn cob_decimal_do_round(d: &mut CobDecimal, tgt: i32, round: Round) -> Resul
 /// `cob_decimal_get_field (d, f, opt)` (numeric.c:2055) on `Mpz`: round (if requested), adjust to the
 /// field scale, truncate to the field digits, and store as DISPLAY/PACKED/BINARY bytes (via the sealed
 /// [`crate::cob_move`] encoders). Returns the field byte image. `Err` on a Prohibited size error.
-pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, round: Round) -> Result<Vec<u8>, ()> {
+pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, round: Round, sign_on_zero: bool) -> Result<Vec<u8>, ()> {
+    // sign before rounding: the packed cob_add_bcd path keeps a negative sign on a result that
+    // *rounds* to zero (e.g. -0.1 into an integer -> -0); the general path does not (GNURUST.13).
+    let pre_neg = d.value.sgn() < 0;
     let tgt = attr.scale as i32;
     if round != Round::Truncate {
         cob_decimal_do_round(&mut d, tgt, round)?;
@@ -216,9 +219,14 @@ pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, r
         let n = tgt - d.scale;
         shift_decimal(&mut d, n);
     }
-    // The stored sign follows the *pre-truncation* value (so an overflowed negative result stores
-    // negative zero, e.g. -40 into 1 digit -> -0), matching cob_decimal_get_display.
-    let neg = d.value.sgn() < 0;
+    // The stored sign follows the *pre-truncation* value (so an overflowed negative result -- e.g.
+    // -40 into 1 digit -- stores negative zero); a value that ROUNDED to zero keeps the pre-round
+    // sign only on the cob_add_bcd path. Matches cob_decimal_get_display / cob_add_bcd.
+    let neg = if d.value.sgn() != 0 {
+        d.value.sgn() < 0
+    } else {
+        sign_on_zero && pre_neg
+    };
     // truncate to the field's digit count (overflow keeps the low digits), then to i128
     let modulus = Mpz::ui_pow_ui(10, attr.digits as u32);
     let low = d.value.tdiv_r(&modulus);
@@ -256,13 +264,44 @@ fn render_numeric(neg: bool, mag_abs: u128, attr: &FieldAttr, size: usize) -> Ve
     out
 }
 
+/// Round-mode mapping for the packed `cob_add_bcd` path (GNURUST.ROUND.2): NEAREST-EVEN resolves
+/// away-from-zero there (no to-even); every other mode matches the cob_decimal path.
+fn bcd_round_mode(round: Round) -> Round {
+    match round {
+        Round::NearEven => Round::NearAwayFromZero,
+        other => other,
+    }
+}
+
+/// `cob_add (f1, f2, opt)` (numeric.c): `f1 := f1 + f2`. A PACKED receiver takes the `cob_add_bcd`
+/// fast path (cob_addsub_optimized): same sum as the general cob_decimal path, but BCD-rounded
+/// (NEAREST-EVEN -> away) and keeping a negative sign on a zero result. Returns f1's new bytes.
+pub fn cob_add(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
+    let bcd = a1.field_type == COB_TYPE_NUMERIC_PACKED;
+    let mut d = cob_decimal_set_field(f1, a1);
+    let d2 = cob_decimal_set_field(f2, a2);
+    cob_decimal_add(&mut d, &d2);
+    let eff = if bcd { bcd_round_mode(round) } else { round };
+    cob_decimal_get_field(d, a1, f1.len(), eff, bcd)
+}
+
+/// `cob_sub (f1, f2, opt)` (numeric.c): `f1 := f1 - f2`. PACKED receiver -> cob_add_bcd fast path.
+pub fn cob_sub(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
+    let bcd = a1.field_type == COB_TYPE_NUMERIC_PACKED;
+    let mut d = cob_decimal_set_field(f1, a1);
+    let d2 = cob_decimal_set_field(f2, a2);
+    cob_decimal_sub(&mut d, &d2);
+    let eff = if bcd { bcd_round_mode(round) } else { round };
+    cob_decimal_get_field(d, a1, f1.len(), eff, bcd)
+}
+
 /// `cob_mul (f1, f2, opt)` (numeric.c): `f1 := f1 * f2`, via the general cob_decimal path. The
 /// receiver's byte length is `f1.len()`. Returns f1's new byte image.
 pub fn cob_mul(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Round) -> Result<Vec<u8>, ()> {
     let mut d = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
     cob_decimal_mul(&mut d, &d2);
-    cob_decimal_get_field(d, a1, f1.len(), round)
+    cob_decimal_get_field(d, a1, f1.len(), round, false)
 }
 
 /// `cob_div (f1, f2, opt)` (numeric.c): `f1 := f1 / f2`. `Err` on divide-by-zero.
@@ -270,7 +309,7 @@ pub fn cob_div(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, round: Roun
     let mut d = cob_decimal_set_field(f1, a1);
     let d2 = cob_decimal_set_field(f2, a2);
     cob_decimal_div(&mut d, &d2)?;
-    cob_decimal_get_field(d, a1, f1.len(), round)
+    cob_decimal_get_field(d, a1, f1.len(), round, false)
 }
 
 /// `cob_decimal_cmp (d1, d2)` (numeric.c): align scales then compare. Returns -1/0/1.

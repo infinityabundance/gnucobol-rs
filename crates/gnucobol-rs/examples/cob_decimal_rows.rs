@@ -1,6 +1,6 @@
 //! Rust mirror routing MULTIPLY through the 1:1 cob_decimal path (cob_mul on Mpz). Same arith row
 //! format as arith_harness; only op=3 (MUL) is evaluated here (the general cob_decimal path).
-use gnucobol_rs::cob_decimal::cob_mul;
+use gnucobol_rs::cob_decimal::{cob_add, cob_sub, cob_mul};
 use gnucobol_rs::{FieldAttr, Round};
 use std::io::{self, BufRead, Write};
 fn ph(s: &str, n: usize) -> Option<Vec<u8>> {
@@ -14,7 +14,7 @@ fn main() {
         if f.len() != 15 { continue; }
         let g = |i: usize| f[i].parse::<i64>().unwrap();
         let label = f[0];
-        if g(1) != 3 { let _ = writeln!(o, "{label} UNSUPPORTED"); continue; } // MUL only
+        let op = g(1);
         let a1 = FieldAttr { field_type: g(2) as u16, digits: g(3) as u16, scale: g(4) as i16, flags: g(5) as u16 };
         let a2 = FieldAttr { field_type: g(8) as u16, digits: g(9) as u16, scale: g(10) as i16, flags: g(11) as u16 };
         let (Some(a), Some(b)) = (ph(f[7], g(6) as usize), ph(f[13], g(12) as usize)) else { continue; };
@@ -28,7 +28,8 @@ fn main() {
             else if opt & 1024 != 0 { Round::TowardLesser }
             else if opt & 2048 != 0 { Round::Truncate }
             else { Round::NearAwayFromZero };
-        match cob_mul(&a, &a1, &b, &a2, round) {
+        let res = match op { 1 => cob_add(&a, &a1, &b, &a2, round), 2 => cob_sub(&a, &a1, &b, &a2, round), _ => cob_mul(&a, &a1, &b, &a2, round) };
+        match res {
             Ok(r) => { let hx: String = r.iter().map(|x| format!("{x:02x}")).collect(); let _ = writeln!(o, "{label} {hx}"); }
             Err(_) => { let _ = writeln!(o, "{label} UNSUPPORTED"); }
         }
