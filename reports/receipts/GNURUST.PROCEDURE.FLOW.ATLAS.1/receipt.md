@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.PROCEDURE.FLOW.ATLAS.1` |
 | court | observed control-flow atlas |
-| crate_version | `0.7.37` |
+| crate_version | `0.7.38` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | control-flow statement class -> observed behavior (IF/EVALUATE/PERFORM/GO TO) |
 | replay command | `bash lab/oracle/procedure_flow_atlas_sweep.sh` |

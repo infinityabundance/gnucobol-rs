@@ -1537,6 +1537,20 @@
       "readiness": 4,
       "lie_prevented": "'B-AND(-1, x) = x because -1 is all-ones' -- NO, mpz_get_ui takes |-1| = 1, so the result is 1 & x; the sign is discarded, not sign-extended",
       "damage_if_overclaimed": "a two's-complement bit model diverges from GnuCOBOL on every negative operand and on shift counts at/above the word width"
+    },
+    {
+      "id": "GNURUST.FLOAT.1",
+      "name": "floating-point fields: COMP-1/COMP-2 + FLOAT-DECIMAL-16/34",
+      "proven": "the field bytes and decimal<->float conversions of all four GnuCOBOL float usages, both directions, byte-identical to cob_move: COMP-2 (IEEE-754 double) -- a decimal is converted by TRUNCATING TOWARD ZERO to the nearest representable double (libcob goes through a 2048-bit GMP mpf then mpf_get_d, which rounds toward zero; an inexact decimal lands 1 ULP below a correctly-rounded parse), reproduced via a round-to-nearest parse + exact big-integer comparison + step-toward-zero; COMP-1 (IEEE-754 single) -- (float)double: truncate-to-double THEN round-to-nearest-float (the C cast), NOT a second truncation; float -> decimal -- the exact double value floor-truncated to the receiver scale (floor(|v| * 10^scale), low digits); FLOAT-DECIMAL-16/34 (IEEE-754-2008 decimal64/decimal128, BID encoding) -- sign bit + combination field + extended-exponent form + binary-integer significand (<=16/<=34 digits, biases 398/6176), encode canonicalizes by stripping trailing zeros then truncating low digits to fit",
+      "byte_domain": "decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL-16/FLOAT-DECIMAL-34 field bytes, both directions",
+      "oracle": "libcob cob_move via cob_decimal_get/set_double + get/set_ieee64dec/ieee128dec (numeric.c; constants coblocal.h:165-198)",
+      "fixtures": "float_sweep 1476/0 (all four usages x both directions x signs/scales/magnitudes) + oracle-pinned unit bit-patterns",
+      "sealed_version": "0.7.38",
+      "not_proven": "float ARITHMETIC (cob_add over float receivers -- a separate composition); cob_cmp_float epsilon comparison; long double (COMP-2 extended) and binary FP_BIN32/64/128 usages; Inf/NaN handling beyond decode-refusal; locale-dependent display of floats; the mpf 2048-bit intermediate itself (only its observable truncate-toward-zero result)",
+      "breaks_claim": "round-to-nearest decimal->double (1 ULP high on inexact values); double-truncating COMP-1; assuming DPD (densely-packed-decimal) encoding for FLOAT-DECIMAL (GnuCOBOL uses BID)",
+      "readiness": 4,
+      "lie_prevented": "'decimal-to-float conversion rounds to nearest like every modern parser' -- NO, libcob TRUNCATES TOWARD ZERO through GMP mpf_get_d, so 0.1 in a COMP-2 is 1 ULP BELOW Rust's/C's correctly-rounded 0.1; assuming round-to-nearest silently diverges on most inexact decimals",
+      "damage_if_overclaimed": "a correctly-rounded conversion writes a different COMP-2 byte image than GnuCOBOL for most non-representable decimals -- checksums, comparisons, and downstream arithmetic diverge one ULP at a time"
     }
   ],
   "transform_vs_read": {

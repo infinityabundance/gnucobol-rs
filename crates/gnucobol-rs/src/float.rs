@@ -466,15 +466,15 @@ pub fn __fuzz_float(data: &[u8]) {
 mod kani_proofs {
     use super::*;
     // KANIFOR: GNURUST.FLOAT.1
-    /// IEEE-decimal encode/decode are total over symbolic input -- no panic.
+    /// IEEE-decimal DECODE is total over any 8/16 field bytes -- no panic, for every bit pattern
+    /// (special/extended/normal forms, any exponent/significand). Loop-free, so fully unwound.
+    /// (The encode-side loops are exercised for panic-freedom by the float fuzz target.)
     #[kani::proof]
-    fn float_codec_total() {
-        let mag: i128 = kani::any();
-        let scale: i32 = kani::any();
-        kani::assume((-300..=300).contains(&scale));
-        let _ = dec64_encode(mag, scale);
+    fn float_decode_total() {
         let b8: [u8; 8] = kani::any();
         let _ = dec64_decode(b8);
+        let b16: [u8; 16] = kani::any();
+        let _ = dec128_decode(b16);
     }
 }
 

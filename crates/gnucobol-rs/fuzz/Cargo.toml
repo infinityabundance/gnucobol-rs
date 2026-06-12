@@ -210,3 +210,9 @@ name = "logical"
 path = "fuzz_targets/logical.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "float"
+path = "fuzz_targets/float.rs"
+test = false
+doc = false

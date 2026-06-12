@@ -1,0 +1,31 @@
+{
+  "byte_domain": "decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL field bytes (truncate-toward-zero)",
+  "campaign": "GNURUST.FLOAT.1",
+  "command": {
+    "replay": "bash lab/oracle/float_sweep.sh"
+  },
+  "court": "float fields COMP-1/COMP-2 + FLOAT-DECIMAL-16/34, both directions",
+  "crate_version": "0.7.38",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "float arithmetic (composition; separate)",
+    "cob_cmp_float epsilon comparison",
+    "long double / FP_BIN32/64/128 usages",
+    "Inf/NaN beyond decode-refusal"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "no-result"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

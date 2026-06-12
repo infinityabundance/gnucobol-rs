@@ -562,5 +562,18 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "a two's-complement bit model diverges on negative operands and wide shifts"
+ },
+ {
+  "surface": "float-fields",
+  "category": "data representation",
+  "source_modules": [
+   "libcob/numeric.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.FLOAT.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "a round-to-nearest decimal->float conversion writes COMP-2/FLOAT-DECIMAL bytes 1 ULP off GnuCOBOL's truncate-toward-zero on most inexact values"
  }
 ]

@@ -843,6 +843,17 @@
         "operands beyond 64 bits (truncated)",
         "cob_logical_left_c/right_c size-bounded variants"
       ]
+    },
+    "GNURUST.FLOAT.1": {
+      "court": "float fields COMP-1/COMP-2 + FLOAT-DECIMAL-16/34, both directions",
+      "sweep": "float_sweep.sh",
+      "byte_domain": "decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL field bytes (truncate-toward-zero)",
+      "non_claims": [
+        "float arithmetic (composition; separate)",
+        "cob_cmp_float epsilon comparison",
+        "long double / FP_BIN32/64/128 usages",
+        "Inf/NaN beyond decode-refusal"
+      ]
     }
   }
 }

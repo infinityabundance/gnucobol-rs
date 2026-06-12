@@ -2,6 +2,11 @@
 //! COBOL numeric field's *value*, never narrowed through `f32`/`f64` (`GNURUST.NO-FLOAT-DECIMAL.0`)
 //! and only fallibly through host integers. This is a convenience decode/encode layer over the
 //! byte semantics; the sealed parity claim is the byte-level [`crate::cob_move`], not this type.
+//!
+//! Boundary: `NO-FLOAT-DECIMAL.0` governs DECIMAL-typed fields. Fields whose data type IS a float
+//! (`COMP-1`/`COMP-2`/`FLOAT-DECIMAL-16/34`) are handled by [`crate::float`] (`GNURUST.FLOAT.1`),
+//! whose decimal<->float conversions go through exact big-integer math -- the decimal side is never
+//! narrowed through a float on that path either; the float is the *destination/source type itself*.
 
 use crate::attr::FieldAttr;
 use crate::sign;

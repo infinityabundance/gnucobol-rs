@@ -12,6 +12,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.38]
+- **GNURUST.FLOAT.1** floating-point fields sealed: COMP-1 (IEEE single), COMP-2 (IEEE double), and FLOAT-DECIMAL-16/34 (IEEE-754-2008 decimal64/128, BID), both directions, byte-exact vs cob_move (`float_sweep` 1476/0). The forensic finding: GnuCOBOL converts decimal->binary-float by TRUNCATING TOWARD ZERO (GMP mpf_get_d), so an inexact decimal lands 1 ULP below a correctly-rounded parse; COMP-1 truncates to double then narrows round-to-nearest (the C (float) cast). Reproduced with exact big-integer comparisons (new BigU), no float roundtrips of decimal data (NO-FLOAT-DECIMAL.0 refined, not retired). Non-claims: float arithmetic, cob_cmp_float, long double, FP_BIN32/64/128, Inf/NaN beyond decode-refusal.
+
 ## [0.7.37]
 - **numeric.c completion (3 courts): GNURUST.BIGNUM.1 + GNURUST.INTPOW.1 + GNURUST.LOGICAL.1.** MULTIPLY beyond i128 now carries the exact 256-bit product and truncates to the receiver's low digits instead of failing closed (full binary-multiply domain incl. combined-scale >38; bignum_sweep 16128/0). Integer `**` via cob_s32_pow/cob_s64_pow with libcob's exact edges (base==-1->1, negative power->0, wrapping overflow; pow_sweep 588/0). Bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts over `|value| mod 2^64` (sign discarded, shift mod 64; logical_sweep 2400/0). All proven byte/value-identical vs the real libcob.
 

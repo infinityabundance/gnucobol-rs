@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "24/40",
+  "sealed_fraction": "25/41",
   "status_counts": {
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 24
+    "sealed": 25
   },
-  "surface_count": 40,
+  "surface_count": 41,
   "surfaces": [
     {
       "category": "data representation",
@@ -622,6 +622,20 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "bit-logical"
+    },
+    {
+      "category": "data representation",
+      "courts": [
+        "GNURUST.FLOAT.1"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "a round-to-nearest decimal->float conversion writes COMP-2/FLOAT-DECIMAL bytes 1 ULP off GnuCOBOL's truncate-toward-zero on most inexact values",
+      "source_modules": [
+        "libcob/numeric.c"
+      ],
+      "source_modules_present": true,
+      "status": "sealed",
+      "surface": "float-fields"
     }
   ]
 }

@@ -4,7 +4,7 @@
     "missing": 0,
     "negative": 5,
     "observed": 11,
-    "sealed": 24
+    "sealed": 25
   },
   "downstream": "KOBOLD (kobold-data-shim) composes the sealed gnucobol-rs courts into a fixed-record migration-evidence layer; it adds no semantics a lower court has not sealed.",
   "levels": [
@@ -50,6 +50,7 @@
         "GNURUST.8",
         "GNURUST.9",
         "GNURUST.CLASS.1",
+        "GNURUST.FLOAT.1",
         "GNURUST.INDEX.1",
         "GNURUST.INTRINSIC.CASE.1",
         "GNURUST.INTRINSIC.DATE.1",
@@ -171,6 +172,7 @@
     "GNURUST.FILE.SEQUENTIAL.1": 3,
     "GNURUST.FILE.STATUS.1": 4,
     "GNURUST.FILE.WRITE.1": 3,
+    "GNURUST.FLOAT.1": 2,
     "GNURUST.IF.EVALUATE.SLICE.1": 6,
     "GNURUST.IF.NUMERIC.SLICE.1": 6,
     "GNURUST.INDEX.1": 2,

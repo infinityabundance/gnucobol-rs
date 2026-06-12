@@ -1,0 +1,68 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL-16/FLOAT-DECIMAL-34 field bytes, both directions"
+  ],
+  "case_id": "GNURUST.FLOAT.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.38",
+  "damage_if_overclaimed": "a correctly-rounded conversion writes a different COMP-2 byte image than GnuCOBOL for most non-representable decimals -- checksums, comparisons, and downstream arithmetic diverge one ULP at a time",
+  "hash_chain": {
+    "inputs_sha256": "59b6053d6cbae89e0f8f658236be923328ce9db7ecaaa2571da985aaf8e9f74e"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "1e126e572345eca7489107bd255069c83b35be3895c7cc9c7b895b6233b11cdf",
+    "receipt_sha256": "c4eb7c3d5926c8bcce63692087da1ff0be60a1c8b6b734e07aaf0cd3dd311c27"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'decimal-to-float conversion rounds to nearest like every modern parser' -- NO, libcob TRUNCATES TOWARD ZERO through GMP mpf_get_d, so 0.1 in a COMP-2 is 1 ULP BELOW Rust's/C's correctly-rounded 0.1; assuming round-to-nearest silently diverges on most inexact decimals"
+  ],
+  "negative_capability_ids": [
+    "NEG.FLOAT-ARITHMETIC-COB-ADD-OVER-FLOAT-RECE",
+    "NEG.COB-CMP-FLOAT-EPSILON-COMPARISON",
+    "NEG.LONG-DOUBLE-COMP-2-EXTENDED-AND-BINARY-F",
+    "NEG.INF-NAN-HANDLING-BEYOND-DECODE-REFUSAL",
+    "NEG.LOCALE-DEPENDENT-DISPLAY-OF-FLOATS",
+    "NEG.THE-MPF-2048-BIT-INTERMEDIATE-ITSELF-ONL"
+  ],
+  "negative_claims": [
+    "float ARITHMETIC (cob_add over float receivers -- a separate composition)",
+    "cob_cmp_float epsilon comparison",
+    "long double (COMP-2 extended) and binary FP_BIN32/64/128 usages",
+    "Inf/NaN handling beyond decode-refusal",
+    "locale-dependent display of floats",
+    "the mpf 2048-bit intermediate itself (only its observable truncate-toward-zero result)",
+    "lie prevented: 'decimal-to-float conversion rounds to nearest like every modern parser' -- NO, libcob TRUNCATES TOWARD ZERO through GMP mpf_get_d, so 0.1 in a COMP-2 is 1 ULP BELOW Rust's/C's correctly-rounded 0.1; assuming round-to-nearest silently diverges on most inexact decimals"
+  ],
+  "oracle": {
+    "detail": "libcob cob_move via cob_decimal_get/set_double + get/set_ieee64dec/ieee128dec (numeric.c; constants coblocal.h:165-198)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FLOAT.1"
+  },
+  "positive_claims": [
+    "the field bytes and decimal<->float conversions of all four GnuCOBOL float usages, both directions, byte-identical to cob_move: COMP-2 (IEEE-754 double) -- a decimal is converted by TRUNCATING TOWARD ZERO to the nearest representable double (libcob goes through a 2048-bit GMP mpf then mpf_get_d, which rounds toward zero",
+    "an inexact decimal lands 1 ULP below a correctly-rounded parse), reproduced via a round-to-nearest parse + exact big-integer comparison + step-toward-zero",
+    "COMP-1 (IEEE-754 single) -- (float)double: truncate-to-double THEN round-to-nearest-float (the C cast), NOT a second truncation",
+    "float -> decimal -- the exact double value floor-truncated to the receiver scale (floor(|v| * 10^scale), low digits)",
+    "FLOAT-DECIMAL-16/34 (IEEE-754-2008 decimal64/decimal128, BID encoding) -- sign bit + combination field + extended-exponent form + binary-integer significand (<=16/<=34 digits, biases 398/6176), encode canonicalizes by stripping trailing zeros then truncating low digits to fit"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/float_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "float_sweep 1476/0 (all four usages x both directions x signs/scales/magnitudes) + oracle-pinned unit bit-patterns",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

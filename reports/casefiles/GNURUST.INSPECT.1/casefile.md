@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INSPECT.1 (court-casefile)
 
-**Verdict: PASS** · 12/12 pass, 0 fail · crate `gnucobol-rs` 0.7.37
+**Verdict: PASS** · 12/12 pass, 0 fail · crate `gnucobol-rs` 0.7.38
 
 - **Oracle:** cobc INSPECT (program-shape, target + count-redefines dump)
 - **Byte domain(s):** INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes
