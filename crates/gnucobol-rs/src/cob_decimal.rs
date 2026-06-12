@@ -421,6 +421,43 @@ mod tests {
     }
 
     #[test]
+    fn cob_div_matches_proven_divide() {
+        // cob_div (f1 := f1/f2 on the Mpz path) must equal the proven arith::cob_divide for a/b into
+        // a's attr, across a matrix of display values x scales x signs x round modes.
+        use crate::arith::cob_divide;
+        fn disp_bytes(digits: usize, val: u64, neg: bool) -> Vec<u8> {
+            let mut v = val;
+            let mut d = vec![0u8; digits];
+            for s in d.iter_mut().rev() { *s = (v % 10) as u8; v /= 10; }
+            let mut o: Vec<u8> = d.iter().map(|x| b'0' + x).collect();
+            if neg { if let Some(l) = o.last_mut() { *l |= 0x40; } }
+            o
+        }
+        let mut checked = 0;
+        for adig in [3usize, 5] {
+            for ascale in 0..=2i16 {
+                for bval in [1u64, 3, 7, 11, 99] {
+                    for aval in [0u64, 1, 100, 12345 % 10u64.pow(adig as u32)] {
+                        for (an, bn) in [(false, false), (true, false), (false, true), (true, true)] {
+                            for round in [Round::Truncate, Round::NearAwayFromZero] {
+                                let a1 = disp(adig as u16, ascale, true);
+                                let a2 = disp(3, 0, true);
+                                let a = disp_bytes(adig, aval, an);
+                                let b = disp_bytes(3, bval, bn);
+                                let mine = cob_div(&a, &a1, &b, &a2, round).unwrap();
+                                let proven = cob_divide(&a, &a1, &b, &a2, &a1, round).unwrap();
+                                assert_eq!(mine, proven, "a={aval}(s{ascale},n{an}) b={bval}(n{bn}) {round:?}");
+                                checked += 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        assert!(checked > 400);
+    }
+
+    #[test]
     fn signed_compare() {
         // -5 vs +3 -> less ; -0 vs 0 -> equal
         let neg5 = b"5\x40"; // '5' then overpunch on... build via signed display: last byte sign
