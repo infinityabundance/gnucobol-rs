@@ -195,10 +195,325 @@ pub fn cob_set_llint(out: &mut [u8], attr: &FieldAttr, n: i64) -> Result<(), cra
 /// port (no mutable runtime globals; module config is passed explicitly).
 pub fn cob_init_move() {}
 
+// ---------------------------------------------------------------------------------------------------
+// Typed raw-memory accessors (move.c:2148+): the `cob_get/put_<u64|s64>_<compx|comp5|comp3|comp6|pic9>`
+// + comp1/comp2/picx/pointer routines C application code uses to read/write a value at a byte address.
+// COMP-X is big-endian, COMP-5 native little-endian (this is a little-endian host). `ebcdic_sign` (a
+// module global in C) is an explicit parameter here.
+// ---------------------------------------------------------------------------------------------------
+
+/// Sign-extend the low `len*8` bits of `u` to `i64`.
+fn sign_extend(u: u64, len: usize) -> i64 {
+    let bits = len * 8;
+    if bits < 64 && (u >> (bits - 1)) & 1 == 1 {
+        (u | (!0u64 << bits)) as i64
+    } else {
+        u as i64
+    }
+}
+
+/// `cob_put_u64_compx` (move.c:2149): write `val`'s low `len` bytes big-endian.
+pub fn cob_put_u64_compx(val: u64, mem: &mut [u8], len: usize) {
+    let be = val.to_be_bytes();
+    mem[..len].copy_from_slice(&be[8 - len..]);
+}
+/// `cob_put_u64_comp5` (move.c:2209): write `val`'s low `len` bytes native little-endian.
+pub fn cob_put_u64_comp5(val: u64, mem: &mut [u8], len: usize) {
+    let le = val.to_le_bytes();
+    mem[..len].copy_from_slice(&le[..len]);
+}
+/// `cob_put_s64_compx` (move.c:2243): signed value, big-endian (same two's-complement bytes).
+pub fn cob_put_s64_compx(val: i64, mem: &mut [u8], len: usize) {
+    cob_put_u64_compx(val as u64, mem, len);
+}
+/// `cob_put_s64_comp5` (move.c:2303): signed value, native little-endian.
+pub fn cob_put_s64_comp5(val: i64, mem: &mut [u8], len: usize) {
+    cob_put_u64_comp5(val as u64, mem, len);
+}
+/// `cob_get_u64_compx` (move.c:2337): read `len` big-endian bytes as unsigned.
+pub fn cob_get_u64_compx(mem: &[u8], len: usize) -> u64 {
+    let mut b = [0u8; 8];
+    b[8 - len..].copy_from_slice(&mem[..len]);
+    u64::from_be_bytes(b)
+}
+/// `cob_get_u64_comp5` (move.c:2392): read `len` little-endian bytes as unsigned.
+pub fn cob_get_u64_comp5(mem: &[u8], len: usize) -> u64 {
+    let mut b = [0u8; 8];
+    b[..len].copy_from_slice(&mem[..len]);
+    u64::from_le_bytes(b)
+}
+/// `cob_get_s64_compx` (move.c:2466): read `len` big-endian bytes, sign-extended.
+pub fn cob_get_s64_compx(mem: &[u8], len: usize) -> i64 {
+    sign_extend(cob_get_u64_compx(mem, len), len)
+}
+/// `cob_get_s64_comp5` (move.c:2426): read `len` little-endian bytes, sign-extended.
+pub fn cob_get_s64_comp5(mem: &[u8], len: usize) -> i64 {
+    sign_extend(cob_get_u64_comp5(mem, len), len)
+}
+
+/// `cob_put_s64_comp3` (move.c:2531): pack a signed value into `len` BCD bytes (trailing sign nibble
+/// `0x0C`/`0x0D`).
+pub fn cob_put_s64_comp3(val: i64, mem: &mut [u8], len: usize) {
+    let (mut num, sign) = if val < 0 { ((val as i128).unsigned_abs() as u64, 0x0Du8) } else { (val as u64, 0x0C) };
+    for b in mem[..len].iter_mut() {
+        *b = 0;
+    }
+    let mut l = len;
+    l -= 1;
+    mem[l] = (((num % 10) << 4) as u8) | sign;
+    num /= 10;
+    while num > 0 && l > 0 {
+        l -= 1;
+        let dig1 = (num % 10) as u8;
+        num /= 10;
+        let dig2 = (num % 10) as u8;
+        num /= 10;
+        mem[l] = (dig2 << 4) | dig1;
+    }
+}
+/// `cob_put_u64_comp3` (move.c:2558): pack an unsigned value into `len` BCD bytes (sign nibble `0x0F`).
+pub fn cob_put_u64_comp3(val: u64, mem: &mut [u8], len: usize) {
+    let mut num = val;
+    for b in mem[..len].iter_mut() {
+        *b = 0;
+    }
+    let mut l = len - 1;
+    mem[l] = (((num % 10) << 4) as u8) | 0x0F;
+    num /= 10;
+    while num > 0 && l > 0 {
+        l -= 1;
+        let dig1 = (num % 10) as u8;
+        num /= 10;
+        let dig2 = (num % 10) as u8;
+        num /= 10;
+        mem[l] = (dig2 << 4) | dig1;
+    }
+}
+/// `cob_get_s64_comp3` (move.c:2578): unpack `len` BCD bytes to a signed value.
+pub fn cob_get_s64_comp3(mem: &[u8], len: usize) -> i64 {
+    let sign: i64 = if (mem[len - 1] & 0x0F) == 0x0D { -1 } else { 1 };
+    let mut val: i64 = 0;
+    for &b in &mem[..len - 1] {
+        val = val * 10 + (b >> 4) as i64;
+        val = val * 10 + (b & 0x0F) as i64;
+    }
+    val = val * 10 + (mem[len - 1] >> 4) as i64;
+    val * sign
+}
+/// `cob_get_u64_comp3` (move.c:2599): unpack `len` BCD bytes to an unsigned value.
+pub fn cob_get_u64_comp3(mem: &[u8], len: usize) -> u64 {
+    let mut val: u64 = 0;
+    for &b in &mem[..len - 1] {
+        val = val * 10 + (b >> 4) as u64;
+        val = val * 10 + (b & 0x0F) as u64;
+    }
+    val * 10 + (mem[len - 1] >> 4) as u64
+}
+
+/// `cob_put_u64_comp6` (move.c:2615): pack into `len` COMP-6 BCD bytes (no sign nibble).
+pub fn cob_put_u64_comp6(val: u64, mem: &mut [u8], len: usize) {
+    let mut num = val;
+    for b in mem[..len].iter_mut() {
+        *b = 0;
+    }
+    let mut l = len;
+    while num > 0 && l > 0 {
+        l -= 1;
+        let dig1 = (num % 10) as u8;
+        num /= 10;
+        let dig2 = (num % 10) as u8;
+        num /= 10;
+        mem[l] = (dig2 << 4) | dig1;
+    }
+}
+/// `cob_get_u64_comp6` (move.c:2632): unpack `len` COMP-6 BCD bytes.
+pub fn cob_get_u64_comp6(mem: &[u8], len: usize) -> u64 {
+    let mut val: u64 = 0;
+    for &b in &mem[..len] {
+        val = val * 10 + (b >> 4) as u64;
+        val = val * 10 + (b & 0x0F) as u64;
+    }
+    val
+}
+
+const EBCDIC_POS: &[u8; 10] = b"{ABCDEFGHI";
+const EBCDIC_NEG: &[u8; 10] = b"}JKLMNOPQR";
+
+/// `cob_put_s64_pic9` (move.c:2652): store a signed value as `len` zoned ASCII digits (trailing
+/// overpunch for the sign, or EBCDIC sign glyph when `ebcdic`).
+pub fn cob_put_s64_pic9(val: i64, mem: &mut [u8], len: usize, ebcdic: bool) {
+    for b in mem[..len].iter_mut() {
+        *b = b'0';
+    }
+    let mut num;
+    let mut l = len;
+    if val < 0 {
+        num = (val as i128).unsigned_abs() as u64;
+        l -= 1;
+        mem[l] = if ebcdic { EBCDIC_NEG[(num % 10) as usize] } else { (b'0' + (num % 10) as u8) | 0x40 };
+    } else {
+        num = val as u64;
+        l -= 1;
+        mem[l] = if ebcdic { EBCDIC_POS[(num % 10) as usize] } else { b'0' + (num % 10) as u8 };
+    }
+    num /= 10;
+    while num > 0 && l > 0 {
+        l -= 1;
+        mem[l] = b'0' + (num % 10) as u8;
+        num /= 10;
+    }
+}
+/// `cob_get_s64_pic9` (move.c:2685): read `len` zoned ASCII digits to a signed value (`-`/`+`,
+/// overpunch, or EBCDIC sign in the last byte).
+pub fn cob_get_s64_pic9(mem: &[u8], len: usize, ebcdic: bool) -> i64 {
+    let mut val: i64 = 0;
+    let mut sign: i64 = 1;
+    for &p in &mem[..len - 1] {
+        if p.is_ascii_digit() {
+            val = val * 10 + (p & 0x0F) as i64;
+        } else if p == b'-' {
+            sign = -1;
+        }
+    }
+    let p = mem[len - 1];
+    if p.is_ascii_digit() {
+        val = val * 10 + (p & 0x0F) as i64;
+    } else if p == b'-' {
+        sign = -1;
+    } else if p == b'+' {
+        sign = 1;
+    } else if ebcdic {
+        if let Some(i) = EBCDIC_POS.iter().position(|&c| c == p) {
+            val = val * 10 + i as i64;
+            sign = 1;
+        } else if let Some(i) = EBCDIC_NEG.iter().position(|&c| c == p) {
+            val = val * 10 + i as i64;
+            sign = -1;
+        }
+    } else {
+        let dig = p & 0x3F;
+        if dig.is_ascii_digit() {
+            val = val * 10 + (dig & 0x0F) as i64;
+        }
+        if p & 0x40 != 0 {
+            sign = -1;
+        }
+    }
+    val * sign
+}
+/// `cob_put_u64_pic9` (move.c:2754): store an unsigned value as `len` zoned ASCII digits.
+pub fn cob_put_u64_pic9(val: u64, mem: &mut [u8], len: usize) {
+    let mut num = val;
+    for b in mem[..len].iter_mut() {
+        *b = b'0';
+    }
+    let mut l = len;
+    while num > 0 && l > 0 {
+        l -= 1;
+        mem[l] = b'0' + (num % 10) as u8;
+        num /= 10;
+    }
+}
+/// `cob_get_u64_pic9` (move.c:2767): read `len` zoned ASCII digits to an unsigned value.
+pub fn cob_get_u64_pic9(mem: &[u8], len: usize) -> u64 {
+    let mut val: u64 = 0;
+    for &p in &mem[..len] {
+        val = val * 10 + (p & 0x0F) as u64;
+    }
+    val
+}
+
+/// `cob_put_comp1` (move.c:2782): store a `float` as its 4 native bytes.
+pub fn cob_put_comp1(val: f32, mem: &mut [u8]) {
+    mem[..4].copy_from_slice(&val.to_ne_bytes());
+}
+/// `cob_put_comp2` (move.c:2787): store a `double` as its 8 native bytes.
+pub fn cob_put_comp2(val: f64, mem: &mut [u8]) {
+    mem[..8].copy_from_slice(&val.to_ne_bytes());
+}
+/// `cob_get_comp1` (move.c:2791): read 4 native bytes as a `float`.
+pub fn cob_get_comp1(mem: &[u8]) -> f32 {
+    f32::from_ne_bytes(mem[..4].try_into().unwrap_or([0; 4]))
+}
+/// `cob_get_comp2` (move.c:2798): read 8 native bytes as a `double`.
+pub fn cob_get_comp2(mem: &[u8]) -> f64 {
+    f64::from_ne_bytes(mem[..8].try_into().unwrap_or([0; 8]))
+}
+/// `cob_put_pointer` (move.c:2806): store a pointer value as 8 native bytes.
+pub fn cob_put_pointer(val: u64, mem: &mut [u8]) {
+    mem[..8].copy_from_slice(&val.to_ne_bytes());
+}
+
+/// `cob_get_picx (cbl_data, len, char_field, num_chars)` (move.c:2812): copy the alphanumeric field's
+/// content (trailing spaces/NULs trimmed) into a NUL-terminated buffer. Returns the bytes (without the
+/// terminator), the Rust-idiomatic form of the C out-pointer/allocation contract.
+pub fn cob_get_picx(cbl_data: &[u8], len: usize, num_chars: Option<usize>) -> Vec<u8> {
+    let mut i = len;
+    while i != 0 && (cbl_data[i - 1] == b' ' || cbl_data[i - 1] == 0) {
+        i -= 1;
+    }
+    let cap = num_chars.unwrap_or(i + 1);
+    if i > cap - 1 {
+        i = cap - 1;
+    }
+    cbl_data[..i].to_vec()
+}
+/// `cob_put_picx (cbl_data, len, string)` (move.c:2834): copy `string` into the `len`-byte alphanumeric
+/// field, space-padding the remainder (truncating if longer).
+pub fn cob_put_picx(cbl_data: &mut [u8], len: usize, string: &[u8]) {
+    let j = string.len().min(len);
+    cbl_data[..j].copy_from_slice(&string[..j]);
+    for b in cbl_data[j..len].iter_mut() {
+        *b = b' ';
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::attr::{COB_FLAG_HAVE_SIGN, COB_TYPE_NUMERIC_PACKED};
+
+    #[test]
+    fn typed_accessor_round_trips() {
+        for &len in &[1usize, 2, 3, 4, 5, 6, 7, 8] {
+            let cap = if len >= 8 { i64::MAX } else { 1i64 << (len * 8 - 1) };
+            for &v in &[0i64, 1, 127, -1, -128, 1000, -1000, 65535] {
+                if v.unsigned_abs() as i128 >= cap as i128 {
+                    continue;
+                }
+                let mut m = vec![0u8; 8];
+                cob_put_s64_compx(v, &mut m, len);
+                assert_eq!(cob_get_s64_compx(&m, len), v, "compx len={len} v={v}");
+                cob_put_s64_comp5(v, &mut m, len);
+                assert_eq!(cob_get_s64_comp5(&m, len), v, "comp5 len={len} v={v}");
+            }
+        }
+        // BCD comp3 round-trip
+        for &len in &[2usize, 3, 4, 5] {
+            for &v in &[0i64, 1, 42, -42, 9999, -9999] {
+                if v.unsigned_abs() >= 10u64.pow((len * 2 - 1) as u32) {
+                    continue;
+                }
+                let mut m = vec![0u8; len];
+                cob_put_s64_comp3(v, &mut m, len);
+                assert_eq!(cob_get_s64_comp3(&m, len), v, "comp3 len={len} v={v}");
+            }
+        }
+        // pic9 round-trip (ASCII overpunch)
+        for &v in &[0i64, 5, -5, 12345, -12345] {
+            let mut m = vec![0u8; 6];
+            cob_put_s64_pic9(v, &mut m, 6, false);
+            assert_eq!(cob_get_s64_pic9(&m, 6, false), v, "pic9 v={v}");
+        }
+        // comp1/comp2 + picx
+        let mut m = vec![0u8; 8];
+        cob_put_comp2(3.5, &mut m);
+        assert_eq!(cob_get_comp2(&m), 3.5);
+        let mut x = vec![0u8; 8];
+        cob_put_picx(&mut x, 8, b"HI");
+        assert_eq!(&x, b"HI      ");
+        assert_eq!(cob_get_picx(&x, 8, None), b"HI");
+    }
 
     fn disp(digits: u16, scale: i16, signed: bool) -> FieldAttr {
         FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits, scale, flags: if signed { COB_FLAG_HAVE_SIGN } else { 0 } }
