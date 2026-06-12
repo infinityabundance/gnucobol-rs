@@ -304,5 +304,19 @@ else
   note "DOXYGEN-PARITY: doxygen or pinned libcob absent -> skipped (source-gated)"
 fi
 
+# 11. PORT-INDEX.1 (typed C↔Rust symbol parity) — the authoritative parity map (gnucobol-rs-port-index)
+#     must be a fresh re-derivation. It separates real Rust `fn`s from doc-only false hits and classifies
+#     #if 0 / config-gated C functions, so a doc-comment mention can never falsely count as a port.
+#     Source-gated on the pinned libcob being present.
+if [ -f lab/admit/gnucobol-3.2/libcob/numeric.c ]; then
+  if ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- check ) >/tmp/_portindex_check 2>&1; then
+    note "PORT-INDEX.1: typed C↔Rust symbol parity fresh (LIBCOB-PARITY.md + reports/libcob-parity.json)"
+  else
+    bad "PORT-INDEX.1: parity map stale (run: cargo run -p gnucobol-rs-port-index -- parity)"; cat /tmp/_portindex_check
+  fi
+else
+  note "PORT-INDEX.1: pinned libcob absent -> skipped (source-gated)"
+fi
+
 echo "== doc-gate $( [ $FAIL -eq 0 ] && echo PASS || echo FAIL ) =="
 exit $FAIL

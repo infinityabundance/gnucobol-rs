@@ -52,7 +52,7 @@ impl Mpz {
 
     /// `mpz_set_sll (dest, val)` (numeric.c:198, COB_EXPERIMENTAL): set to a signed 64-bit host integer
     /// — magnitude `|val|` in one limb, `_mp_size` carrying the sign of `val`.
-    pub fn set_sll(val: i64) -> Self {
+    pub fn mpz_set_sll(val: i64) -> Self {
         let mag = (val as i128).unsigned_abs() as u64;
         if mag == 0 {
             Mpz::new()
@@ -63,14 +63,14 @@ impl Mpz {
 
     /// `mpz_get_ull (src)` (numeric.c:216, COB_EXPERIMENTAL): the low 64-bit limb of the magnitude
     /// (`_mp_d[0]`), or 0 when the value is zero — wrapping past 64 bits exactly as the C does.
-    pub fn get_ull(&self) -> u64 {
+    pub fn mpz_get_ull(&self) -> u64 {
         self.mag.first().copied().unwrap_or(0)
     }
 
     /// `mpz_get_sll (src)` (numeric.c:236, COB_EXPERIMENTAL): reconstruct a signed 64-bit host integer
     /// from the low limb and the sign. Mirrors the C bit-for-bit: positive yields `vtmp & COB_MAX_LL`,
     /// negative yields `~((vtmp - 1) & COB_MAX_LL)`, with `COB_MAX_LL == i64::MAX`.
-    pub fn get_sll(&self) -> i64 {
+    pub fn mpz_get_sll(&self) -> i64 {
         if self.sign == 0 {
             return 0;
         }

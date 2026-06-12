@@ -3,7 +3,6 @@
 use std::process::exit;
 
 mod ladder;
-mod parity;
 mod doxygen_compare;
 mod kani_fuzz;
 mod gap;
@@ -29,7 +28,10 @@ fn main() {
     if tool == "release" { std::process::exit(release::run_main(&args)); }
     let code = match tool {
         "ladder" => ladder::run(cmd, &root),
-        "parity" => parity::run(cmd, &root),
+        "parity" => {
+            eprintln!("`xtask parity` is removed — use `cargo run -p gnucobol-rs-port-index -- parity` (typed C↔Rust symbol parity)");
+            2
+        }
         "doxygen-compare" => doxygen_compare::run(cmd, &root),
         "kani-fuzz" => kani_fuzz::run(cmd, &root),
         "gap" => gap::run(cmd, &root),

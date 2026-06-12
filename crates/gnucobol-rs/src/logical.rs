@@ -19,27 +19,27 @@ fn to_u64(v: i128) -> u64 {
 }
 
 /// `B-AND`: `cob_logical_and`.
-pub fn logical_and(a: i128, b: i128) -> u64 {
+pub fn cob_logical_and(a: i128, b: i128) -> u64 {
     to_u64(a) & to_u64(b)
 }
 /// `B-OR`: `cob_logical_or`.
-pub fn logical_or(a: i128, b: i128) -> u64 {
+pub fn cob_logical_or(a: i128, b: i128) -> u64 {
     to_u64(a) | to_u64(b)
 }
 /// `B-XOR`: `cob_logical_xor`.
-pub fn logical_xor(a: i128, b: i128) -> u64 {
+pub fn cob_logical_xor(a: i128, b: i128) -> u64 {
     to_u64(a) ^ to_u64(b)
 }
 /// `B-NOT`: `cob_logical_not` (one's complement of the low 64 bits).
-pub fn logical_not(b: i128) -> u64 {
+pub fn cob_logical_not(b: i128) -> u64 {
     !to_u64(b)
 }
 /// Left bit shift: `cob_logical_left` (`u0 << u1`, count mod 64).
-pub fn logical_left(a: i128, b: i128) -> u64 {
+pub fn cob_logical_left(a: i128, b: i128) -> u64 {
     to_u64(a).wrapping_shl(to_u64(b) as u32)
 }
 /// Right bit shift: `cob_logical_right` (`u0 >> u1`, count mod 64).
-pub fn logical_right(a: i128, b: i128) -> u64 {
+pub fn cob_logical_right(a: i128, b: i128) -> u64 {
     to_u64(a).wrapping_shr(to_u64(b) as u32)
 }
 /// Circular LEFT shift: `cob_logical_left_c` (numeric.c:4577) — rotate `u0` left by `u1` within a
@@ -66,12 +66,12 @@ pub fn __fuzz_logical(data: &[u8]) {
     let a = i64::from_le_bytes(data[0..8].try_into().unwrap()) as i128;
     let b = i64::from_le_bytes(data[8..16].try_into().unwrap()) as i128;
     let _ = (
-        logical_and(a, b),
-        logical_or(a, b),
-        logical_xor(a, b),
-        logical_not(b),
-        logical_left(a, b),
-        logical_right(a, b),
+        cob_logical_and(a, b),
+        cob_logical_or(a, b),
+        cob_logical_xor(a, b),
+        cob_logical_not(b),
+        cob_logical_left(a, b),
+        cob_logical_right(a, b),
     );
 }
 
@@ -85,12 +85,12 @@ mod kani_proofs {
         let a: i128 = kani::any();
         let b: i128 = kani::any();
         let _ = (
-            logical_and(a, b),
-            logical_or(a, b),
-            logical_xor(a, b),
-            logical_not(b),
-            logical_left(a, b),
-            logical_right(a, b),
+            cob_logical_and(a, b),
+            cob_logical_or(a, b),
+            cob_logical_xor(a, b),
+            cob_logical_not(b),
+            cob_logical_left(a, b),
+            cob_logical_right(a, b),
         );
     }
 }
@@ -101,12 +101,12 @@ mod tests {
 
     #[test]
     fn basic_bit_ops() {
-        assert_eq!(logical_and(0b1100, 0b1010), 0b1000);
-        assert_eq!(logical_or(0b1100, 0b1010), 0b1110);
-        assert_eq!(logical_xor(0b1100, 0b1010), 0b0110);
-        assert_eq!(logical_not(0), u64::MAX);
-        assert_eq!(logical_left(1, 4), 16);
-        assert_eq!(logical_right(256, 4), 16);
+        assert_eq!(cob_logical_and(0b1100, 0b1010), 0b1000);
+        assert_eq!(cob_logical_or(0b1100, 0b1010), 0b1110);
+        assert_eq!(cob_logical_xor(0b1100, 0b1010), 0b0110);
+        assert_eq!(cob_logical_not(0), u64::MAX);
+        assert_eq!(cob_logical_left(1, 4), 16);
+        assert_eq!(cob_logical_right(256, 4), 16);
     }
 
     #[test]
@@ -114,15 +114,15 @@ mod tests {
         // mpz_get_ui uses the ABSOLUTE value's low 64 bits (sign ignored), NOT two's complement:
         // so B-AND(-1, 0xFF) = (|-1| & 0xFF) = 1, not 0xFF. (Verified against the libcob oracle by
         // the logical sweep, not assumed.)
-        assert_eq!(logical_and(-1, 0xFF), 1);
-        assert_eq!(logical_and(-255, 0xFF), 255); // |-255| = 0xFF
-        assert_eq!(logical_not(-1), u64::MAX - 1); // !(|-1|=1) = ...FFFE
+        assert_eq!(cob_logical_and(-1, 0xFF), 1);
+        assert_eq!(cob_logical_and(-255, 0xFF), 255); // |-255| = 0xFF
+        assert_eq!(cob_logical_not(-1), u64::MAX - 1); // !(|-1|=1) = ...FFFE
     }
 
     #[test]
     fn shift_count_is_mod_64() {
-        assert_eq!(logical_left(1, 64), 1); // 64 mod 64 = 0 -> no shift
-        assert_eq!(logical_left(1, 65), 2); // 65 mod 64 = 1
-        assert_eq!(logical_right(0x8000_0000_0000_0000, 63), 1);
+        assert_eq!(cob_logical_left(1, 64), 1); // 64 mod 64 = 0 -> no shift
+        assert_eq!(cob_logical_left(1, 65), 2); // 65 mod 64 = 1
+        assert_eq!(cob_logical_right(0x8000_0000_0000_0000, 63), 1);
     }
 }

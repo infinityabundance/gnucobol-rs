@@ -3,9 +3,9 @@
   "files": [
     {
       "file": "numeric.c",
-      "functions": 104,
+      "functions": 105,
       "missing": [],
-      "parity_pct": 100.0,
+      "parity_pct": 99.0,
       "ported": 104
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "file": "intrinsic.c",
-      "functions": 237,
+      "functions": 238,
       "missing": [
         "add_decimal_digits",
         "add_offset_time",
@@ -174,6 +174,7 @@
         "cob_valid_time_format",
         "comp_field",
         "copy_data_to_null_terminated_str",
+        "date_of_integer",
         "day_of_integer",
         "days_in_year",
         "days_up_to_year",
@@ -198,6 +199,7 @@
         "has_bit_checked",
         "in_range",
         "int_strncasecmp",
+        "integer_of_date",
         "integer_of_day",
         "integer_of_ddd",
         "integer_of_formatted_date",
@@ -262,8 +264,8 @@
         "valid_time",
         "valid_year"
       ],
-      "parity_pct": 0.8,
-      "ported": 2
+      "parity_pct": 0.0,
+      "ported": 0
     },
     {
       "file": "cconv.c",
@@ -273,13 +275,14 @@
         "cob_convert_hex_digit",
         "cob_field_to_string",
         "cob_init_cconv",
+        "cob_load_collation",
         "cob_skip_blanks",
         "cob_tolower",
         "cob_toupper",
         "init_upper_lower"
       ],
-      "parity_pct": 11.1,
-      "ported": 1
+      "parity_pct": 0.0,
+      "ported": 0
     },
     {
       "file": "termio.c",
@@ -288,6 +291,7 @@
         "clean_double",
         "cob_accept",
         "cob_display",
+        "cob_display_common",
         "cob_dump_field",
         "cob_dump_field_ext",
         "cob_dump_file",
@@ -302,12 +306,12 @@
         "setup_lvlwrk_and_dump_null_adrs",
         "setup_varname_with_indices"
       ],
-      "parity_pct": 11.1,
-      "ported": 2
+      "parity_pct": 5.6,
+      "ported": 1
     },
     {
       "file": "screenio.c",
-      "functions": 105,
+      "functions": 116,
       "missing": [
         "adjust_attr_from_color_field",
         "adjust_attr_from_control_field",
@@ -483,13 +487,15 @@
         "cob_set_library_path",
         "do_cancel_module",
         "hash",
+        "insert",
+        "lookup",
         "lt_dlerror",
         "lt_dlopen",
         "lt_dlsym",
         "set_resolve_error"
       ],
-      "parity_pct": 3.0,
-      "ported": 2
+      "parity_pct": 0.0,
+      "ported": 0
     },
     {
       "file": "fileio.c",
@@ -683,7 +689,7 @@
     },
     {
       "file": "mlio.c",
-      "functions": 43,
+      "functions": 47,
       "missing": [
         "cob_exit_mlio",
         "cob_init_mlio",
@@ -717,6 +723,7 @@
         "get_xml_num",
         "has_invalid_xml_char",
         "int_to_hex",
+        "is_empty",
         "is_valid_xml_name",
         "json_strndup",
         "set_json_code",
@@ -728,8 +735,8 @@
         "xmlCharStrndup_void",
         "xml_generate"
       ],
-      "parity_pct": 2.3,
-      "ported": 1
+      "parity_pct": 0.0,
+      "ported": 0
     },
     {
       "file": "reportio.c",
@@ -780,7 +787,7 @@
     },
     {
       "file": "common.c",
-      "functions": 253,
+      "functions": 254,
       "missing": [
         "call_exit_handlers_and_terminate",
         "cb_config_entry",
@@ -829,6 +836,7 @@
         "cob_cmp_all",
         "cob_cmp_alnum",
         "cob_command_line",
+        "cob_common_init",
         "cob_continue_after",
         "cob_correct_numeric",
         "cob_debug_dump",
@@ -864,6 +872,8 @@
         "cob_get_settings_ptr",
         "cob_get_sig_description",
         "cob_get_sig_name",
+        "cob_get_sign_ascii",
+        "cob_get_sign_ebcdic",
         "cob_get_source_line",
         "cob_get_strerror",
         "cob_get_switch",
@@ -873,6 +883,7 @@
         "cob_hard_failure",
         "cob_hard_failure_internal",
         "cob_incr_temp_iteration",
+        "cob_init",
         "cob_init_nomain",
         "cob_init_sig_descriptions",
         "cob_int_to_formatted_bytestring",
@@ -899,9 +910,13 @@
         "cob_nop",
         "cob_open_logfile",
         "cob_parameter_check",
+        "cob_put_sign_ascii",
         "cob_put_sign_ebcdic",
         "cob_putenv",
+        "cob_raise",
         "cob_ready_trace",
+        "cob_real_get_sign",
+        "cob_real_put_sign",
         "cob_realloc",
         "cob_reg_sighnd",
         "cob_rescan_env_vals",
@@ -915,6 +930,7 @@
         "cob_save_func",
         "cob_set_date_from_epoch",
         "cob_set_environment",
+        "cob_set_exception",
         "cob_set_locale",
         "cob_set_location",
         "cob_set_runtime_option",
@@ -1001,6 +1017,7 @@
         "init_statement_hashlist",
         "init_statement_list",
         "internal_nanosleep",
+        "locate_sign",
         "one_indexed_day_of_week_from_monday",
         "output_procedure_stack_entry",
         "output_source_location",
@@ -1026,8 +1043,8 @@
         "var_print",
         "version_bitstring"
       ],
-      "parity_pct": 4.0,
-      "ported": 10
+      "parity_pct": 0.0,
+      "ported": 0
     },
     {
       "file": "cobgetopt.c",
@@ -1037,17 +1054,13 @@
       "ported": 4
     }
   ],
-  "method": "A libcob function counts as PORTED when its exact name appears as a whole word in crates/gnucobol-rs/src/**/*.rs (the port names Rust functions/docstrings after their C analog). This is NAME-level parity; BYTE parity is proven separately by the per-court oracle sweeps (lab/verify-sealed-courts.sh).",
-  "non_claims": [
-    "Name-level parity is not byte-parity (see the oracle sweeps).",
-    "#if 0-disabled functions ported for completeness count as ported; their behaviour is not oracle-verifiable."
-  ],
+  "generator": "gnucobol-rs-port-index (PORT-INDEX.1)",
+  "method": "Typed symbol parity: a libcob function is PORTED only when a real Rust fn of that name exists in crates/gnucobol-rs/src (comment/string-aware; a doc-comment mention is a doc_only false hit, listed under missing). BYTE parity is proven separately by the per-court oracle sweeps.",
   "oracle": "GnuCOBOL 3.2.0 (admitted; see reports/admission/RECEIPT-ADMISSION.md)",
   "schema": "libcob-porting-parity-v1",
-  "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
-    "functions": 1152,
-    "parity_pct": 18.8,
-    "ported": 217
+    "functions": 1170,
+    "parity_pct": 17.1,
+    "ported": 200
   }
 }

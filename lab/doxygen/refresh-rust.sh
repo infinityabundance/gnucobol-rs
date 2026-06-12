@@ -12,7 +12,7 @@ if ! command -v doxygen >/dev/null 2>&1; then
 fi
 rm -rf "$ROOT/lab/doxygen/out-rust"            # wipe the previous run (no space accumulation)
 ( cd "$ROOT" && doxygen lab/doxygen/Doxyfile-rust ) >/dev/null 2>&1 || { echo "doxygen run failed"; exit 1; }
-( cd "$ROOT" && cargo run -q -p xtask -- parity generate ) >/dev/null 2>&1
+( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- parity ) >/dev/null 2>&1
 # Refresh the authoritative C-side XML inventory + the C-vs-Rust coverage compare (DOXYGEN-PARITY.md).
 ( cd "$ROOT" && doxygen lab/doxygen/Doxyfile-c-xml ) >/dev/null 2>&1 && \
   ( cd "$ROOT" && cargo run -q -p xtask -- doxygen-compare generate ) >/dev/null 2>&1

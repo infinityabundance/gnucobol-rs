@@ -109,7 +109,7 @@ fn store_common_region(
 /// `cob_move_display_to_display` (`move.c:372`): strip the source sign, store the clean digits,
 /// re-apply the sign to the destination. (Upstream also restores `f1`; that is invisible to the
 /// destination bytes, so the port works on a copy of the source.)
-fn display_to_display(
+fn cob_move_display_to_display(
     src_full: &[u8],
     src_attr: &FieldAttr,
     dst_full: &mut [u8],
@@ -133,7 +133,7 @@ fn display_to_display(
 /// `cob_move_display_to_packed` (`move.c:477`): pack zoned/display digits into COMP-3 nibbles,
 /// then set the sign nibble. PACKED fields have no leading-separate offset, so the destination is
 /// addressed via the full slice (`f2->data`, `f2->size`), exactly as upstream.
-fn display_to_packed(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], dst_attr: &FieldAttr) {
+fn cob_move_display_to_packed(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], dst_attr: &FieldAttr) {
     let s_off = src_attr.data_offset();
     let data1 = src_full.get(s_off..).unwrap_or(&[]); // fail closed on degenerate size < offset
     let s = sign::display_get_sign_adjust_readonly(src_full, src_attr); // COB_GET_SIGN_ADJUST (move.c:480)
@@ -221,7 +221,7 @@ fn display_to_packed(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], dst_
 
 /// `cob_move_packed_to_display` (`move.c:582`): unpack COMP-3 / COMP-6 nibbles to display digits
 /// (skipping leading zeros exactly as upstream), store, then set the destination sign.
-fn packed_to_display(src: &[u8], src_attr: &FieldAttr, dst_full: &mut [u8], dst_attr: &FieldAttr) {
+fn cob_move_packed_to_display(src: &[u8], src_attr: &FieldAttr, dst_full: &mut [u8], dst_attr: &FieldAttr) {
     let mut buff = [0u8; (crate::COB_MAX_DIGITS + 1) as usize];
     let mut b: usize = 0;
     let mut di: i64 = 0;
@@ -303,7 +303,7 @@ fn packed_to_display(src: &[u8], src_attr: &FieldAttr, dst_full: &mut [u8], dst_
 
 /// `cob_move_alphanum_to_alphanum` (`move.c:444`): the classic string MOVE — left-justified by
 /// default (truncate/space-pad on the right), or `JUSTIFIED RIGHT` (truncate/space-pad on the left).
-fn alphanum_to_alphanum(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
+fn cob_move_alphanum_to_alphanum(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
     let size1 = data1.len();
     let size2 = dst.len();
     if size1 >= size2 {
@@ -329,7 +329,7 @@ fn alphanum_to_alphanum(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
 /// `cob_move_display_to_alphanum` (`move.c:384`): numeric DISPLAY -> alphanumeric. The overpunch sign
 /// is cleaned to a plain digit (`COB_GET_SIGN`), implied `P` positions become `'0'`, and the result is
 /// left- or right-justified with space padding. (`f1`'s sign is restored in C; invisible to `dst`.)
-fn display_to_alphanum(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], dst_attr: &FieldAttr) {
+fn cob_move_display_to_alphanum(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], dst_attr: &FieldAttr) {
     let mut tmp = src_full.to_vec();
     let _ = sign::display_get_sign_strip(&mut tmp, src_attr); // COB_GET_SIGN: de-overpunch the digits
     let off = src_attr.data_offset();
@@ -388,7 +388,7 @@ fn display_to_alphanum(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], ds
 /// DISPLAY field — skip leading whitespace, optional `+`/`-`, count integer digits, right-align by
 /// the receiver scale, copy digits (ignoring whitespace and the thousands separator), and on any
 /// invalid character zero-fill the receiver. `dec_pt`/`num_sep` default to `'.'`/`','`.
-fn alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
+fn cob_move_alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
     const DEC_PT: u8 = b'.';
     const NUM_SEP: u8 = b',';
     let off = dst_attr.data_offset();
@@ -617,7 +617,7 @@ fn bin_trunc_digits(attr: &FieldAttr) -> i32 {
 
 /// `cob_move_binary_to_binary (f1, f2)` (move.c:709): binary -> binary, value-preserving (scale
 /// ignored), with optional PIC-digit truncation on the receiver.
-fn binary_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
+fn cob_move_binary_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
     let trunc = da.flags & crate::attr::COB_FLAG_BINARY_TRUNC != 0;
     if sa.have_sign() {
         let mut sval = cob_binary_mget_sint64(s, sa);
@@ -648,7 +648,7 @@ fn binary_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
 /// `cob_move_display_to_binary (f1, f2)` (move.c:763): parse the zoned digits (scale-aligned to the
 /// receiver) into an integer, then store it in the binary receiver. Overflow (>19 digits) routes
 /// through the decimal layer.
-fn display_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) -> Result<(), DecimalError> {
+fn cob_move_display_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) -> Result<(), DecimalError> {
     let off = sa.data_offset();
     let size1 = sa.data_size(s.len());
     let data1 = s.get(off..off + size1).unwrap_or(&[]);
@@ -705,7 +705,7 @@ fn display_to_binary(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) -> 
 
 /// `cob_move_binary_to_display (f1, f2)` (move.c:836): decode the binary value to a digit string and
 /// store it (scale-aligned) into the display receiver, with sign.
-fn binary_to_display(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
+fn cob_move_binary_to_display(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
     let mut sign = 1i32;
     let val: u64 = if sa.have_sign() {
         let v2 = cob_binary_mget_sint64(s, sa);
@@ -732,7 +732,7 @@ fn binary_to_display(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
 
 /// `cob_move_fp_to_fp (src, dst)` (move.c:673): convert between FLOAT (f32) / DOUBLE (f64) /
 /// L_DOUBLE (x87 80-bit) by widening to the largest then narrowing to the target.
-fn fp_to_fp(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
+fn cob_move_fp_to_fp(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
     let dval: f64 = match sa.field_type {
         0x13 => f32::from_le_bytes(s[..4].try_into().unwrap_or([0; 4])) as f64,
         0x14 => f64::from_le_bytes(s[..8].try_into().unwrap_or([0; 8])),
@@ -769,7 +769,7 @@ pub fn cob_move(
     }
     // Non-elementary move: a GROUP on either side is a raw alphanumeric copy (move.c:1473).
     if src_attr.field_type == COB_TYPE_GROUP || dst_attr.field_type == COB_TYPE_GROUP {
-        alphanum_to_alphanum(src, dst, dst_attr);
+        cob_move_alphanum_to_alphanum(src, dst, dst_attr);
         return Ok(());
     }
     use crate::attr::COB_TYPE_NUMERIC_BINARY;
@@ -780,12 +780,12 @@ pub fn cob_move(
     // are direct; BINARY<->PACKED (and other numeric pairs) route through the decimal layer, as the
     // C dispatch does via cob_decimal_setget_fld.
     if src_bin && dst_bin {
-        binary_to_binary(src, src_attr, dst, dst_attr);
+        cob_move_binary_to_binary(src, src_attr, dst, dst_attr);
         return Ok(());
     }
     if dst_bin {
         if src_attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
-            return display_to_binary(src, src_attr, dst, dst_attr);
+            return cob_move_display_to_binary(src, src_attr, dst, dst_attr);
         }
         let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
             .map_err(|_| DecimalError::UnsupportedConversion { src_type: src_attr.field_type, dst_type: dst_attr.field_type })?;
@@ -794,7 +794,7 @@ pub fn cob_move(
     }
     if src_bin {
         if dst_attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
-            binary_to_display(src, src_attr, dst, dst_attr);
+            cob_move_binary_to_display(src, src_attr, dst, dst_attr);
             return Ok(());
         }
         let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
@@ -806,7 +806,7 @@ pub fn cob_move(
     // Floating-point leaves (move.c): float<->float widen/narrow; float<->decimal via the decimal layer.
     let is_fp = |a: &FieldAttr| matches!(a.field_type, 0x13 | 0x14 | 0x15);
     if is_fp(src_attr) && is_fp(dst_attr) {
-        fp_to_fp(src, src_attr, dst, dst_attr);
+        cob_move_fp_to_fp(src, src_attr, dst, dst_attr);
         return Ok(());
     }
     if is_fp(dst_attr) {
@@ -833,28 +833,28 @@ pub fn cob_move(
 
     match (src_attr.field_type, dst_attr.field_type) {
         (COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_DISPLAY) => {
-            display_to_display(src, src_attr, dst, dst_attr);
+            cob_move_display_to_display(src, src_attr, dst, dst_attr);
             Ok(())
         }
         (COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED) => {
-            display_to_packed(src, src_attr, dst, dst_attr);
+            cob_move_display_to_packed(src, src_attr, dst, dst_attr);
             Ok(())
         }
         (COB_TYPE_NUMERIC_PACKED, COB_TYPE_NUMERIC_DISPLAY) => {
-            packed_to_display(src, src_attr, dst, dst_attr);
+            cob_move_packed_to_display(src, src_attr, dst, dst_attr);
             Ok(())
         }
         // Alphanumeric leaves (move.c default src/dst dispatch).
         (COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_ALPHANUMERIC) => {
-            display_to_alphanum(src, src_attr, dst, dst_attr);
+            cob_move_display_to_alphanum(src, src_attr, dst, dst_attr);
             Ok(())
         }
         (COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_DISPLAY) => {
-            alphanum_to_display(src, dst, dst_attr);
+            cob_move_alphanum_to_display(src, dst, dst_attr);
             Ok(())
         }
         (COB_TYPE_ALPHANUMERIC, COB_TYPE_ALPHANUMERIC) => {
-            alphanum_to_alphanum(src, dst, dst_attr);
+            cob_move_alphanum_to_alphanum(src, dst, dst_attr);
             Ok(())
         }
         _ => Err(DecimalError::UnsupportedConversion {

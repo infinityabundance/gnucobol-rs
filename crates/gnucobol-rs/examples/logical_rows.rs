@@ -10,8 +10,8 @@ fn main() {
         let a = f[2].parse::<i64>().unwrap() as i128;
         let b = f[3].parse::<i64>().unwrap() as i128;
         let r: u64 = match op {
-            "and" => logical_and(a, b), "or" => logical_or(a, b), "xor" => logical_xor(a, b),
-            "not" => logical_not(b), "shl" => logical_left(a, b), "shr" => logical_right(a, b),
+            "and" => cob_logical_and(a, b), "or" => cob_logical_or(a, b), "xor" => cob_logical_xor(a, b),
+            "not" => cob_logical_not(b), "shl" => cob_logical_left(a, b), "shr" => cob_logical_right(a, b),
             _ => continue,
         };
         let _ = writeln!(out, "{label} {r}");

@@ -131,9 +131,10 @@ fi
 # Forensic claim-ladder gate: the hand-authored claim-ladder must still match machine reality (every
 # verified court declared, schema-complete, oracle == admitted 3.2 build, PORTING-LADDER.md fresh).
 ( cd "$ROOT" && cargo run -q -p xtask -- ladder check >/dev/null 2>&1 ) && row "claim-ladder gate (forensic)" "PASS" || { row "claim-ladder gate (forensic)" "FAIL"; RED=$((RED+1)); }
-# LIBCOB.PARITY: the forensic 1:1 porting-parity doc must match a fresh re-derivation from the admitted
-# libcob source + the Rust src (source-gated: skips cleanly when the source is not extracted).
-( cd "$ROOT" && cargo run -q -p xtask -- parity check >/dev/null 2>&1 ) && row "libcob-parity gate (forensic)" "PASS" || { row "libcob-parity gate (forensic)" "FAIL"; RED=$((RED+1)); }
+# PORT-INDEX.1: the TYPED C↔Rust symbol parity (gnucobol-rs-port-index) must match a fresh re-derivation
+# from the admitted libcob source + the Rust src. This is the authoritative parity (real `fn`s vs doc-only
+# false hits, with #if 0 / config classification) that replaced grep name-matching. Source-gated.
+( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- check >/dev/null 2>&1 ) && row "libcob-parity gate (port-index, typed)" "PASS" || { row "libcob-parity gate (port-index, typed)" "FAIL"; RED=$((RED+1)); }
 # Rust-port doxygen: run doxygen on crates/gnucobol-rs/src as a CLEAN refresh (the previous run is wiped
 # first, so it never accumulates), and assert it documented the port. The authoritative per-function
 # coverage ("did we miss anything") is the parity gate above; this proves the browsable native-Rust

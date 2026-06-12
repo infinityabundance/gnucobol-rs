@@ -174,7 +174,7 @@ impl CobGetopt {
     /// `_getopt_initialize (optstring)` (cobgetopt.c:440): first-call setup — pick the ordering from a
     /// leading `-`/`+`, `POSIXLY_CORRECT`, or default PERMUTE, reset the non-option window, and return the
     /// optstring advanced past any leading `-`/`+`.
-    fn getopt_initialize(&mut self) {
+    fn _getopt_initialize(&mut self) {
         // cob_common_init(NULL) in the C is a no-op for the scanner's observable behaviour.
         if self.optind == 0 {
             self.optind = 1;
@@ -404,7 +404,7 @@ impl CobGetopt {
         self.optarg = None;
 
         if self.optind == 0 || !self.getopt_initialized {
-            self.getopt_initialize();
+            self._getopt_initialize();
         } else if self.optstring.first() == Some(&b'-') || self.optstring.first() == Some(&b'+') {
             self.optstring.remove(0);
         }

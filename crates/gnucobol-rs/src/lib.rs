@@ -165,7 +165,7 @@ pub mod kani_harness {
         }
     }
 
-    /// **Sharpest invariant #2 — the fixed unpack buffer is sufficient.** `packed_to_display`
+    /// **Sharpest invariant #2 — the fixed unpack buffer is sufficient.** `cob_move_packed_to_display`
     /// unpacks nibbles into a fixed `[u8; COB_MAX_DIGITS + 1]`. Prove that for any packed field
     /// whose declared digit count is within `COB_MAX_DIGITS`, decoding cannot panic or index out of
     /// that buffer — i.e. the buffer is exactly sized and the push-guard is never the thing that

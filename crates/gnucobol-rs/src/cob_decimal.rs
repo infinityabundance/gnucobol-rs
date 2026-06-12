@@ -15,7 +15,7 @@
 //! verbs, `cob_add_int/sub_int/set_int`, `cob_div_quotient/remainder`, the in-place `cob_add_bcd`),
 //! rounding (`cob_decimal_do_round` + `handle_bcd_rounding`, 8 modes), comparison
 //! (`cob_numeric_cmp`/`cob_decimal_cmp`/`cob_bcd_cmp`/`cob_cmp_int/llint/uint/packed/float/numdisp`),
-//! the print family, the host-int boundary (`set/get_llint/ullint`, `mpz_set/get_sll/ull`,
+//! the print family, the host-int boundary (`set/get_llint/ullint`, `mpz_set/mpz_get_sll/ull`,
 //! `cob_binary_get/set_sint64/uint64`), the pow helpers, the sign helpers
 //! (`cob_get_long_ascii/ebcdic_sign`), the pool/lifecycle (`init/init2/clear/alloc/push/pop`,
 //! `cob_init/exit_numeric`), and the mpf trio.
@@ -116,6 +116,13 @@ pub fn cob_decimal_clear(d: &mut CobDecimal) {
 pub fn cob_decimal_set_ullint(d: &mut CobDecimal, n: u64) {
     d.value = Mpz::from_u64(n);
     d.scale = 0;
+}
+
+/// `cob_decimal_set (dst, src)` (numeric.c:2225): copy `src` into `dst` (`mpz_set (dst->value,
+/// src->value); dst->scale = src->scale;`). `CobDecimal` is `Clone`, so this is the faithful copy.
+pub fn cob_decimal_set(dst: &mut CobDecimal, src: &CobDecimal) {
+    dst.value = src.value.clone();
+    dst.scale = src.scale;
 }
 
 /// `cob_decimal_set_llint (d, n)` (numeric.c:389): set a working decimal to a signed 64-bit host
@@ -334,6 +341,40 @@ pub fn cob_pow_10_uli(n: u32) -> u64 {
 /// `cob_mul_by_pow_10 (mexp, n)` (numeric.c:532): scale an integer up by `10^n` (`mexp *= 10^n`).
 pub fn cob_mul_by_pow_10(v: &mut Mpz, n: u32) {
     *v = v.mul(&Mpz::ui_pow_ui(10, n));
+}
+
+/// `cob_pow_10 (mexp, n)` (numeric.c:468): `mexp = 10^n` as an arbitrary-precision integer. The C
+/// short-circuits `n <= COB_MAX_BINARY` to a pre-stored `cob_mpze10[n]` table value; the result is the
+/// same number ([`Mpz::ui_pow_ui`]).
+pub fn cob_pow_10(n: u32) -> Mpz {
+    Mpz::ui_pow_ui(10, n)
+}
+
+/// `cob_div_by_pow_10 (mexp, n)` (numeric.c:547): `mexp = mexp / 10^n` (truncating). The C's small-`n`
+/// `cob_pow_10_uli` fast path computes the same quotient as the arbitrary-precision path.
+pub fn cob_div_by_pow_10(mexp: &mut Mpz, n: u32) {
+    *mexp = mexp.tdiv_q(&cob_pow_10(n));
+}
+
+/// `cob_decimal_adjust (d, max_value, min_exp, max_exp)` (numeric.c:586): normalise `d` for an IEEE
+/// decimal encode — strip trailing zeros (raising the scale), then shift the comma left until the
+/// magnitude fits `max_value` (or the scale floor is hit). Returns `true` on `COB_EC_SIZE_OVERFLOW`
+/// (value still too large, or the scale escaped `[min_exp, max_exp]`).
+pub fn cob_decimal_adjust(d: &mut CobDecimal, max_value: &Mpz, min_exp: i32, max_exp: i32) -> bool {
+    // Remove trailing ZEROS (mpz_remove by 10; scale drops by the count removed).
+    let power_of_ten = d.value.remove_pow10();
+    if power_of_ten != 0 {
+        d.scale -= power_of_ten as i32;
+    }
+    // Move the comma to the left while the magnitude exceeds max_value.
+    while d.value.cmpabs(max_value) == std::cmp::Ordering::Greater {
+        if d.scale < min_exp {
+            break;
+        }
+        d.value = d.value.tdiv_q_ui(10);
+        d.scale -= 1;
+    }
+    d.value.cmpabs(max_value) == std::cmp::Ordering::Greater || d.scale < min_exp || d.scale > max_exp
 }
 
 /// `cob_binary_get_uint64 (f)` (numeric.c:294): read a BINARY field's bytes as an unsigned 64-bit

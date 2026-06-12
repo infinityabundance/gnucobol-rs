@@ -25,3 +25,7 @@ lab/oracle/getopt_harness
 reports/lineage20m/full-run/
 lab/doxygen/out/
 lab/doxygen/out-rust/
+# port-index line-numbered symbol indexes are regenerable intermediates (churn on every source edit);
+# the stable joined verdict reports/port-index/parity-detailed.json IS tracked.
+reports/port-index/libcob-symbols.json
+reports/port-index/rust-symbols.json
