@@ -11,6 +11,16 @@ pub const COB_TYPE_NUMERIC_DISPLAY: u16 = 0x10;
 pub const COB_TYPE_NUMERIC_PACKED: u16 = 0x12;
 /// `USAGE COMP`/`BINARY`/`COMP-5`/`COMP-X` — binary numeric. `COB_TYPE_NUMERIC_BINARY` (`common.h:666`).
 pub const COB_TYPE_NUMERIC_BINARY: u16 = 0x11;
+/// A group (record) item. `COB_TYPE_GROUP` (`common.h:661`).
+pub const COB_TYPE_GROUP: u16 = 0x01;
+/// `NUMERIC-EDITED` (edited numeric picture). `COB_TYPE_NUMERIC_EDITED` (`common.h:678`).
+pub const COB_TYPE_NUMERIC_EDITED: u16 = 0x24;
+/// `USAGE DISPLAY` alphanumeric (`PIC X`). `COB_TYPE_ALPHANUMERIC` (`common.h:681`).
+pub const COB_TYPE_ALPHANUMERIC: u16 = 0x21;
+/// A figurative-constant `ALL` source. `COB_TYPE_ALPHANUMERIC_ALL` (`common.h:682`).
+pub const COB_TYPE_ALPHANUMERIC_ALL: u16 = 0x22;
+/// `ALPHANUMERIC-EDITED` (edited alphanumeric picture). `COB_TYPE_ALPHANUMERIC_EDITED` (`common.h:683`).
+pub const COB_TYPE_ALPHANUMERIC_EDITED: u16 = 0x23;
 
 // --- Attribute flags --- common.h:690-701
 /// Binary field stored byte-swapped relative to the native host (big-endian on an LE host):
@@ -32,6 +42,8 @@ pub const COB_FLAG_SIGN_SEPARATE: u16 = 0x0002;
 pub const COB_FLAG_SIGN_LEADING: u16 = 0x0004;
 /// `COMP-6`-style packed with no sign nibble. `COB_FLAG_NO_SIGN_NIBBLE`.
 pub const COB_FLAG_NO_SIGN_NIBBLE: u16 = 0x0100;
+/// `JUSTIFIED RIGHT` — alphanumeric right-justification. `COB_FLAG_JUSTIFIED` (`common.h:694`).
+pub const COB_FLAG_JUSTIFIED: u16 = 0x0010;
 
 /// A field's attributes: type, digit count, scale, and flags.
 ///
@@ -70,6 +82,11 @@ impl FieldAttr {
     #[inline]
     pub const fn no_sign_nibble(&self) -> bool {
         self.flags & COB_FLAG_NO_SIGN_NIBBLE != 0
+    }
+    /// `COB_FIELD_JUSTIFIED` — `JUSTIFIED RIGHT` (`common.h:708`).
+    #[inline]
+    pub const fn justified(&self) -> bool {
+        self.flags & COB_FLAG_JUSTIFIED != 0
     }
     /// `COB_FIELD_SIGN_LEADSEP` — leading **and** separate (the only case that shifts
     /// `COB_FIELD_DATA` forward by one byte; `common.h:730`).

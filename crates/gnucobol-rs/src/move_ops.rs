@@ -8,7 +8,9 @@
 //! reproduced) — here every such read is **bounds-guarded** to a `0`, which yields the identical
 //! result because that nibble is always cleaned. Evidence kind: **source_port**.
 
-use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED};
+use crate::attr::{
+    FieldAttr, COB_TYPE_ALPHANUMERIC, COB_TYPE_GROUP, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
+};
 use crate::error::DecimalError;
 use crate::sign;
 
@@ -299,6 +301,171 @@ fn packed_to_display(src: &[u8], src_attr: &FieldAttr, dst_full: &mut [u8], dst_
     }
 }
 
+/// `cob_move_alphanum_to_alphanum` (`move.c:444`): the classic string MOVE — left-justified by
+/// default (truncate/space-pad on the right), or `JUSTIFIED RIGHT` (truncate/space-pad on the left).
+fn alphanum_to_alphanum(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
+    let size1 = data1.len();
+    let size2 = dst.len();
+    if size1 >= size2 {
+        if dst_attr.justified() {
+            dst.copy_from_slice(&data1[size1 - size2..]);
+        } else {
+            dst.copy_from_slice(&data1[..size2]);
+        }
+    } else if dst_attr.justified() {
+        let pad = size2 - size1;
+        for b in &mut dst[..pad] {
+            *b = b' ';
+        }
+        dst[pad..].copy_from_slice(data1);
+    } else {
+        dst[..size1].copy_from_slice(data1);
+        for b in &mut dst[size1..] {
+            *b = b' ';
+        }
+    }
+}
+
+/// `cob_move_display_to_alphanum` (`move.c:384`): numeric DISPLAY -> alphanumeric. The overpunch sign
+/// is cleaned to a plain digit (`COB_GET_SIGN`), implied `P` positions become `'0'`, and the result is
+/// left- or right-justified with space padding. (`f1`'s sign is restored in C; invisible to `dst`.)
+fn display_to_alphanum(src_full: &[u8], src_attr: &FieldAttr, dst: &mut [u8], dst_attr: &FieldAttr) {
+    let mut tmp = src_full.to_vec();
+    let _ = sign::display_get_sign_strip(&mut tmp, src_attr); // COB_GET_SIGN: de-overpunch the digits
+    let off = src_attr.data_offset();
+    let size1 = src_attr.data_size(src_full.len());
+    let data1 = tmp.get(off..off + size1).unwrap_or(&[]);
+    let size1 = data1.len();
+    let mut size2 = dst.len();
+    let zero_size = if (src_attr.scale as i32) < 0 { (-(src_attr.scale as i32)) as usize } else { 0 };
+
+    if dst_attr.justified() {
+        let mut zs = zero_size;
+        if zs != 0 {
+            zs = zs.min(size2);
+            size2 -= zs;
+            for b in &mut dst[size2..size2 + zs] {
+                *b = b'0';
+            }
+        }
+        if size2 != 0 {
+            let diff = size2 as i64 - size1 as i64;
+            let (d2, s2) = if diff > 0 {
+                for b in &mut dst[..diff as usize] {
+                    *b = b' ';
+                }
+                (diff as usize, size2 - diff as usize)
+            } else {
+                (0usize, size2)
+            };
+            dst[d2..d2 + s2].copy_from_slice(&data1[size1 - s2..size1]);
+        }
+    } else {
+        let diff = size2 as i64 - size1 as i64;
+        if diff < 0 {
+            dst[..size2].copy_from_slice(&data1[..size2]);
+        } else {
+            dst[..size1].copy_from_slice(data1);
+            let mut diff = diff as usize;
+            let mut zs = 0usize;
+            if zero_size != 0 {
+                zs = zero_size.min(diff);
+                for b in &mut dst[size1..size1 + zs] {
+                    *b = b'0';
+                }
+                diff -= zs;
+            }
+            if diff != 0 {
+                for b in &mut dst[size1 + zs..size1 + zs + diff] {
+                    *b = b' ';
+                }
+            }
+        }
+    }
+}
+
+/// `cob_move_alphanum_to_display` (`move.c:293`): parse free-form alphanumeric text into a numeric
+/// DISPLAY field — skip leading whitespace, optional `+`/`-`, count integer digits, right-align by
+/// the receiver scale, copy digits (ignoring whitespace and the thousands separator), and on any
+/// invalid character zero-fill the receiver. `dec_pt`/`num_sep` default to `'.'`/`','`.
+fn alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
+    const DEC_PT: u8 = b'.';
+    const NUM_SEP: u8 = b',';
+    let off = dst_attr.data_offset();
+    let fsize = dst_attr.data_size(dst.len());
+    // memset(f2->data, '0', f2->size)
+    for b in dst.iter_mut() {
+        *b = b'0';
+    }
+    let e1 = data1.len();
+    let mut s1 = 0usize;
+    // skip whitespace
+    while s1 < e1 && data1[s1].is_ascii_whitespace() {
+        s1 += 1;
+    }
+    // sign
+    let mut sign = 0i32;
+    if s1 != e1 && (data1[s1] == b'+' || data1[s1] == b'-') {
+        sign = if data1[s1] == b'+' { 1 } else { -1 };
+        s1 += 1;
+    }
+    // count integer digits (before decimal point)
+    let mut count = 0i64;
+    {
+        let mut p = s1;
+        while p < e1 && data1[p] != DEC_PT {
+            if data1[p].is_ascii_digit() {
+                count += 1;
+            }
+            p += 1;
+        }
+    }
+    // destination digit window [off .. off+fsize); s2 walks it
+    let mut s2 = off;
+    let e2 = off + fsize;
+    let size = fsize as i64 - dst_attr.scale as i64;
+    if count < size {
+        s2 += (size - count) as usize;
+    } else {
+        let mut c = count;
+        while c > size {
+            c -= 1;
+            while s1 < e1 && !data1[s1].is_ascii_digit() {
+                s1 += 1;
+            }
+            s1 += 1;
+        }
+    }
+    // move
+    let mut dpcount = 0i32;
+    let mut error = false;
+    while s1 < e1 && s2 < e2 {
+        let ch = data1[s1];
+        if ch.is_ascii_digit() {
+            wr(dst, s2 as i64, ch);
+            s2 += 1;
+        } else if ch == DEC_PT {
+            dpcount += 1;
+            if dpcount > 1 {
+                error = true;
+                break;
+            }
+        } else if !(ch.is_ascii_whitespace() || ch == NUM_SEP) {
+            error = true;
+            break;
+        }
+        s1 += 1;
+    }
+    if error {
+        for b in dst.iter_mut() {
+            *b = b'0';
+        }
+        sign::display_put_sign(dst, dst_attr, 0);
+        return;
+    }
+    sign::display_put_sign(dst, dst_attr, sign);
+}
+
 /// `cob_move` (`move.c:1446`), restricted to the sealed elementary type pairs. Any other pair
 /// **fails closed** with [`DecimalError::UnsupportedConversion`] rather than guessing.
 ///
@@ -312,6 +479,11 @@ pub fn cob_move(
 ) -> Result<(), DecimalError> {
     if dst.is_empty() {
         return Ok(()); // dst->size == 0 (move.c:1455)
+    }
+    // Non-elementary move: a GROUP on either side is a raw alphanumeric copy (move.c:1473).
+    if src_attr.field_type == COB_TYPE_GROUP || dst_attr.field_type == COB_TYPE_GROUP {
+        alphanum_to_alphanum(src, dst, dst_attr);
+        return Ok(());
     }
     use crate::attr::COB_TYPE_NUMERIC_BINARY;
     let src_bin = src_attr.field_type == COB_TYPE_NUMERIC_BINARY;
@@ -362,6 +534,19 @@ pub fn cob_move(
         }
         (COB_TYPE_NUMERIC_PACKED, COB_TYPE_NUMERIC_DISPLAY) => {
             packed_to_display(src, src_attr, dst, dst_attr);
+            Ok(())
+        }
+        // Alphanumeric leaves (move.c default src/dst dispatch).
+        (COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_ALPHANUMERIC) => {
+            display_to_alphanum(src, src_attr, dst, dst_attr);
+            Ok(())
+        }
+        (COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_DISPLAY) => {
+            alphanum_to_display(src, dst, dst_attr);
+            Ok(())
+        }
+        (COB_TYPE_ALPHANUMERIC, COB_TYPE_ALPHANUMERIC) => {
+            alphanum_to_alphanum(src, dst, dst_attr);
             Ok(())
         }
         _ => Err(DecimalError::UnsupportedConversion {
