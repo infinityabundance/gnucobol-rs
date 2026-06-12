@@ -33,11 +33,6 @@
         "cob_inspect_leading",
         "cob_inspect_start",
         "cob_inspect_trailing",
-        "cob_unstring_delimited",
-        "cob_unstring_finish",
-        "cob_unstring_init",
-        "cob_unstring_into",
-        "cob_unstring_tallying",
         "do_mark",
         "inspect_common",
         "inspect_common_no_replace",
@@ -47,8 +42,8 @@
         "set_inspect_mark",
         "setup_repdata"
       ],
-      "parity_pct": 20.6,
-      "ported": 7
+      "parity_pct": 35.3,
+      "ported": 12
     },
     {
       "file": "intrinsic.c",
@@ -1081,7 +1076,7 @@
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
     "functions": 1152,
-    "parity_pct": 16.1,
-    "ported": 185
+    "parity_pct": 16.5,
+    "ported": 190
   }
 }

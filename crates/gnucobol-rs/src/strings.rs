@@ -102,6 +102,134 @@ impl CobString {
     }
 }
 
+fn is_numeric(attr: &FieldAttr) -> bool {
+    matches!(attr.field_type, 0x10..=0x1B | 0x24)
+}
+
+/// The UNSTRING-statement state machine (strings.c:828-1018): `cob_unstring_init`, then
+/// `cob_unstring_delimited` per `DELIMITED BY`, then `cob_unstring_into` per receiver, then optionally
+/// `cob_unstring_tallying`, then `cob_unstring_finish`.
+pub struct CobUnstring {
+    src: Vec<u8>,
+    ptr: Option<(Vec<u8>, FieldAttr)>,
+    dlms: Vec<(Vec<u8>, bool)>, // (delimiter, ALL)
+    offset: i32,
+    count: i32,
+    /// `COB_EC_OVERFLOW_UNSTRING` raised.
+    pub overflow: bool,
+}
+
+impl CobUnstring {
+    /// `cob_unstring_init (src, ptr, num_dlm)` (strings.c:828): capture the source + optional
+    /// `WITH POINTER` (seeding the offset), reset counters; `num_dlm` is a C allocation hint (unused).
+    pub fn cob_unstring_init(src: &[u8], ptr: Option<(&[u8], &FieldAttr)>, _num_dlm: usize) -> Self {
+        let ptrv = ptr.map(|(d, a)| (d.to_vec(), *a));
+        let mut offset = 0i32;
+        let mut overflow = false;
+        if let Some((pd, pa)) = &ptrv {
+            offset = crate::accessors::cob_get_int(pd, pa) - 1;
+            if offset < 0 || offset >= src.len() as i32 {
+                overflow = true;
+            }
+        }
+        CobUnstring { src: src.to_vec(), ptr: ptrv, dlms: Vec::new(), offset, count: 0, overflow }
+    }
+
+    /// `cob_unstring_delimited (dlm, all)` (strings.c:863): register a `DELIMITED BY [ALL]` delimiter.
+    pub fn cob_unstring_delimited(&mut self, dlm: &[u8], all: bool) {
+        self.dlms.push((dlm.to_vec(), all));
+    }
+
+    /// `cob_unstring_into (dst, dlm, cnt)` (strings.c:871): extract the next sub-field (up to the first
+    /// matching delimiter, or `DELIMITED BY SIZE`) into `dst`, set `DELIMITER IN`/`COUNT IN`, advance.
+    pub fn cob_unstring_into(
+        &mut self,
+        dst: &mut [u8],
+        dst_attr: &FieldAttr,
+        dlm_out: Option<(&mut [u8], &FieldAttr)>,
+        cnt: Option<(&mut [u8], &FieldAttr)>,
+    ) {
+        if self.overflow || self.offset >= self.src.len() as i32 {
+            return;
+        }
+        let start = self.offset as usize;
+        let srsize = self.src.len();
+        let mut dlm_data: Option<Vec<u8>> = None;
+        let mut match_size: i32;
+        if self.dlms.is_empty() {
+            // DELIMITED BY SIZE
+            match_size = (dst.len() as i32).min(srsize as i32 - self.offset);
+            cob_str_memcpy(dst, dst_attr, &self.src[start..], match_size as usize);
+            self.offset += match_size;
+        } else {
+            let mut found = false;
+            match_size = 0;
+            let mut p = start;
+            'outer: while p < srsize {
+                for (dlm, all) in &self.dlms {
+                    let dlsize = dlm.len();
+                    if dlsize == 0 || p + dlsize > srsize {
+                        continue;
+                    }
+                    if &self.src[p..p + dlsize] == dlm.as_slice() {
+                        match_size = (p - start) as i32;
+                        cob_str_memcpy(dst, dst_attr, &self.src[start..], match_size as usize);
+                        self.offset += match_size + dlsize as i32;
+                        dlm_data = Some(dlm.clone());
+                        if *all {
+                            let mut q = p + dlsize;
+                            while q + dlsize <= srsize && &self.src[q..q + dlsize] == dlm.as_slice() {
+                                self.offset += dlsize as i32;
+                                q += dlsize;
+                            }
+                        }
+                        found = true;
+                        break 'outer;
+                    }
+                }
+                p += 1;
+            }
+            if !found {
+                match_size = srsize as i32 - self.offset;
+                cob_str_memcpy(dst, dst_attr, &self.src[start..], match_size as usize);
+                self.offset = srsize as i32;
+            }
+        }
+        self.count += 1;
+        if let Some((dd, da)) = dlm_out {
+            if let Some(ddata) = &dlm_data {
+                cob_str_memcpy(dd, da, ddata, ddata.len());
+            } else if is_numeric(da) {
+                let _ = crate::accessors::cob_set_int(dd, da, 0);
+            } else {
+                for b in dd.iter_mut() {
+                    *b = b' ';
+                }
+            }
+        }
+        if let Some((cd, ca)) = cnt {
+            let _ = crate::accessors::cob_set_int(cd, ca, match_size);
+        }
+    }
+
+    /// `cob_unstring_tallying (f)` (strings.c:1006): add the number of receivers filled to `TALLYING`.
+    pub fn cob_unstring_tallying(&self, f: &mut [u8], attr: &FieldAttr) {
+        let cur = crate::accessors::cob_get_int(f, attr);
+        let _ = crate::accessors::cob_set_int(f, attr, cur + self.count);
+    }
+
+    /// `cob_unstring_finish ()` (strings.c:1012): flag `OVERFLOW` if the source was not exhausted, and
+    /// write the final position back to `WITH POINTER`.
+    pub fn cob_unstring_finish(&mut self) {
+        if self.offset < self.src.len() as i32 {
+            self.overflow = true;
+        }
+        if let Some((pd, pa)) = &mut self.ptr {
+            let _ = crate::accessors::cob_set_int(pd, pa, self.offset + 1);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -109,6 +237,42 @@ mod tests {
     fn alnum(n: usize) -> FieldAttr {
         let _ = n;
         FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 }
+    }
+
+    #[test]
+    fn unstring_splits_by_delimiter() {
+        let a3 = alnum(3);
+        // UNSTRING "AB,CD,EF" DELIMITED BY "," INTO d1 d2 d3
+        let mut u = CobUnstring::cob_unstring_init(b"AB,CD,EF", None, 1);
+        u.cob_unstring_delimited(b",", false);
+        let outs: &[&[u8]] = &[b"AB ", b"CD ", b"EF "];
+        for &want in outs {
+            let mut d = vec![b' '; 3];
+            let mut cnt = 9i32.to_le_bytes();
+            let ca = FieldAttr { field_type: crate::attr::COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: crate::attr::COB_FLAG_HAVE_SIGN | crate::attr::COB_FLAG_REAL_BINARY };
+            u.cob_unstring_into(&mut d, &a3, None, Some((&mut cnt, &ca)));
+            assert_eq!(&d, want, "unstring field");
+        }
+        u.cob_unstring_finish();
+        assert!(!u.overflow);
+
+        // DELIMITED BY SIZE: fixed 3-byte chunks
+        let mut u = CobUnstring::cob_unstring_init(b"ABCDEF", None, 0);
+        let mut d = vec![0u8; 3];
+        u.cob_unstring_into(&mut d, &a3, None, None);
+        assert_eq!(&d, b"ABC");
+        u.cob_unstring_into(&mut d, &a3, None, None);
+        assert_eq!(&d, b"DEF");
+
+        // DELIMITED BY ALL " ": collapse runs of spaces (cob_move space-pads the receiver)
+        let mut u = CobUnstring::cob_unstring_init(b"A   B", None, 1);
+        u.cob_unstring_delimited(b" ", true);
+        let mut d = vec![b'.'; 3];
+        u.cob_unstring_into(&mut d, &a3, None, None);
+        assert_eq!(&d, b"A  ");
+        let mut d2 = vec![b'.'; 3];
+        u.cob_unstring_into(&mut d2, &a3, None, None);
+        assert_eq!(&d2, b"B  ");
     }
 
     #[test]
