@@ -4,7 +4,7 @@
 //! results are the sealed `GNURUST.STRING.UNSTRING.1` / `GNURUST.INSPECT.1` byte courts.
 #![forbid(unsafe_code)]
 
-use crate::attr::{FieldAttr, COB_TYPE_ALPHANUMERIC};
+use crate::attr::{FieldAttr, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_DISPLAY};
 
 /// `cob_str_memcpy (dst, src, size)` (strings.c:104): move `size` alphanumeric bytes into `dst` via
 /// `cob_move` (so the receiver's JUSTIFIED/padding semantics apply).
@@ -23,7 +23,6 @@ pub fn cob_exit_strings() {}
 /// module globals (`string_dst`, `string_ptr`, `string_dlm`, `string_offset`) lives here.
 pub struct CobString {
     dst: Vec<u8>,
-    dst_attr: FieldAttr,
     ptr: Option<(Vec<u8>, FieldAttr)>,
     dlm: Option<Vec<u8>>,
     offset: i32,
@@ -34,7 +33,7 @@ pub struct CobString {
 impl CobString {
     /// `cob_string_init (dst, ptr)` (strings.c:739): capture the receiver and optional `WITH POINTER`,
     /// seed the offset from the pointer (`-1` for 1-based), and flag overflow if it is out of range.
-    pub fn cob_string_init(dst: &[u8], dst_attr: &FieldAttr, ptr: Option<(&[u8], &FieldAttr)>) -> Self {
+    pub fn cob_string_init(dst: &[u8], _dst_attr: &FieldAttr, ptr: Option<(&[u8], &FieldAttr)>) -> Self {
         let ptrv = ptr.map(|(d, a)| (d.to_vec(), *a));
         let mut offset = 0i32;
         let mut overflow = false;
@@ -44,7 +43,7 @@ impl CobString {
                 overflow = true;
             }
         }
-        CobString { dst: dst.to_vec(), dst_attr: *dst_attr, ptr: ptrv, dlm: None, offset, overflow }
+        CobString { dst: dst.to_vec(), ptr: ptrv, dlm: None, offset, overflow }
     }
 
     /// `cob_string_delimited (dlm)` (strings.c:761): set the active `DELIMITED BY` (or `None` for SIZE).
@@ -104,6 +103,426 @@ impl CobString {
 
 fn is_numeric(attr: &FieldAttr) -> bool {
     matches!(attr.field_type, 0x10..=0x1B | 0x24)
+}
+
+/// Add `n` to an integer receiver field (the `cob_add_int` used by INSPECT TALLYING / UNSTRING; tally
+/// counters are integer fields, so get + set is the faithful integer behaviour).
+fn add_int_field(f: &mut [u8], attr: &FieldAttr, n: i32) {
+    let cur = crate::accessors::cob_get_int(f, attr);
+    let _ = crate::accessors::cob_set_int(f, attr, cur + n);
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum InspectType {
+    All,
+    Leading,
+    First,
+    Trailing,
+}
+
+/// The INSPECT-statement state machine (strings.c:391-734): `cob_inspect_init[_converting]`, then per
+/// clause `cob_inspect_start` + optional `before`/`after`, then a verb
+/// (`characters`/`all`/`leading`/`first`/`trailing`/`converting`), then `cob_inspect_finish`. The
+/// position marker (`mark`) and deferred replacement buffer (`repdata`) are carried here, not in globals.
+pub struct CobInspect {
+    data: Vec<u8>,
+    off: usize, // data region offset within the field (sign-leading-separate)
+    size: usize,
+    start: usize,
+    end: usize,
+    mark: Vec<u8>,
+    mark_min: usize,
+    mark_max: usize,
+    repdata: Vec<u8>,
+    replacing: bool,
+    // signed-numeric-display: strip the overpunch sign on init, restore on finish.
+    sign: i32,
+    var_attr: FieldAttr,
+}
+
+/// Expand a figurative `ALL x` pattern (`f` is a 1+ byte pattern) to `target_len` bytes (the
+/// `alloc_figurative` behaviour for INSPECT REPLACING / CONVERTING).
+fn alloc_figurative(f: &[u8], target_len: usize) -> Vec<u8> {
+    if f.is_empty() {
+        return vec![b' '; target_len];
+    }
+    (0..target_len).map(|i| f[i % f.len()]).collect()
+}
+
+impl CobInspect {
+    /// `cob_inspect_init_common (var)` (strings.c:443): capture the field, strip a numeric-DISPLAY
+    /// overpunch sign (restored at finish), and reset the window. The `replacing` flag selects the
+    /// TALLYING vs REPLACING verb behaviour (the C uses the module-global `inspect_replacing`).
+    fn cob_inspect_init_common(var: &[u8], var_attr: &FieldAttr, replacing: bool) -> Self {
+        let mut data = var.to_vec();
+        let off = var_attr.data_offset();
+        let size = var_attr.data_size(var.len());
+        // signed numeric DISPLAY (non-separate): strip the overpunch sign, restore at finish
+        let mut sign = 0;
+        if var_attr.have_sign() && !var_attr.sign_separate() && var_attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
+            sign = crate::sign::display_get_sign_strip(&mut data, var_attr);
+        }
+        CobInspect {
+            data,
+            off,
+            size,
+            start: 0,
+            end: 0,
+            mark: vec![0u8; size],
+            mark_min: 0,
+            mark_max: 0,
+            repdata: vec![0u8; size],
+            replacing,
+            sign,
+            var_attr: *var_attr,
+        }
+    }
+
+    /// `cob_inspect_init (var, replacing)` (strings.c:471).
+    pub fn cob_inspect_init(var: &[u8], var_attr: &FieldAttr, replacing: bool) -> Self {
+        Self::cob_inspect_init_common(var, var_attr, replacing)
+    }
+
+    /// `cob_inspect_init_converting (var)` (strings.c:504).
+    pub fn cob_inspect_init_converting(var: &[u8], var_attr: &FieldAttr) -> Self {
+        Self::cob_inspect_init_common(var, var_attr, false)
+    }
+
+    /// `cob_inspect_start ()` (strings.c:510): the inspect window is the whole field.
+    pub fn cob_inspect_start(&mut self) {
+        self.start = 0;
+        self.end = self.size;
+    }
+
+    /// Find `needle` in the data window `[start, end)`; returns the absolute index or `None`.
+    fn inspect_find_data(&self, needle: &[u8]) -> Option<usize> {
+        let len = needle.len();
+        if len == 0 || self.start + len > self.end {
+            return None;
+        }
+        let a = self.off;
+        (self.start..=self.end - len).find(|&p| &self.data[a + p..a + p + len] == needle)
+    }
+
+    /// `cob_inspect_before (str)` (strings.c:518): bound the window before `str`.
+    pub fn cob_inspect_before(&mut self, s: &[u8]) {
+        if let Some(p) = self.inspect_find_data(s) {
+            self.end = p;
+        }
+    }
+
+    /// `cob_inspect_after (str)` (strings.c:527): bound the window after `str`.
+    pub fn cob_inspect_after(&mut self, s: &[u8]) {
+        if let Some(p) = self.inspect_find_data(s) {
+            self.start = p + s.len();
+        } else {
+            self.start = self.end;
+        }
+    }
+
+    fn is_marked(&self, pos: usize, length: usize) -> bool {
+        if self.mark[self.mark_min] == 0 || self.mark_max < pos || self.mark_min >= pos + length {
+            return false;
+        }
+        if self.mark_min >= pos || self.mark_max < pos + length {
+            return true;
+        }
+        self.mark[pos..pos + length].iter().any(|&m| m != 0)
+    }
+
+    fn set_inspect_mark(&mut self, pos: usize, length: usize) {
+        // strings.c `set_inspect_mark`: `pos_end = pos + length - 1`. C `size_t` underflows to SIZE_MAX
+        // when called with length 0 (the LEADING `last_marker == 0` path), with a length-0 `memset`
+        // writing nothing; `wrapping_sub` reproduces that exact behaviour (the empty slice is a no-op).
+        let pos_end = (pos + length).wrapping_sub(1);
+        for m in &mut self.mark[pos..pos + length] {
+            *m = 1;
+        }
+        if (self.mark_min == 0 && self.mark[self.mark_min] == 0) || pos < self.mark_min {
+            self.mark_min = pos;
+        }
+        if pos_end > self.mark_max {
+            self.mark_max = pos_end;
+        }
+    }
+
+    /// `setup_repdata ()` (strings.c:163): lazily ensure the deferred-replacement buffer is large enough.
+    /// This port allocates `repdata` eagerly at `cob_inspect_init_common` (RAII sizing to the field), so
+    /// the C's grow-on-first-use is already satisfied; kept as a named 1:1 counterpart. The C note confirms
+    /// the buffer content "does not matter as we only used marked positions at end" — matching this port.
+    fn setup_repdata(&mut self) {
+        if self.repdata.len() < self.size {
+            self.repdata.resize(self.size, 0);
+        }
+    }
+
+    fn do_mark(&mut self, pos: usize, length: usize, replace: &[u8]) -> bool {
+        if self.is_marked(pos, length) {
+            return false;
+        }
+        self.setup_repdata();
+        self.repdata[pos..pos + length].copy_from_slice(&replace[..length]);
+        self.set_inspect_mark(pos, length);
+        true
+    }
+
+    /// `cob_inspect_characters (f1)` (strings.c:538): TALLYING ... CHARACTERS (count unmarked) or
+    /// REPLACING CHARACTERS BY (set repdata at unmarked positions).
+    pub fn cob_inspect_characters(&mut self, f1: &mut [u8], f1_attr: &FieldAttr) {
+        let pos = self.start;
+        let inspect_len = self.end - self.start;
+        if inspect_len == 0 {
+            return;
+        }
+        if self.replacing {
+            let repl_by = f1[0];
+            if self.is_marked(pos, inspect_len) {
+                for i in 0..inspect_len {
+                    if self.mark[pos + i] == 0 {
+                        self.repdata[pos + i] = repl_by;
+                    }
+                }
+            } else {
+                for b in &mut self.repdata[pos..pos + inspect_len] {
+                    *b = repl_by;
+                }
+            }
+        } else if self.is_marked(pos, inspect_len) {
+            let n = self.mark[pos..pos + inspect_len].iter().filter(|&&m| m == 0).count() as i32;
+            if n > 0 {
+                add_int_field(f1, f1_attr, n);
+            }
+        } else {
+            add_int_field(f1, f1_attr, inspect_len as i32);
+        }
+        self.set_inspect_mark(pos, inspect_len);
+    }
+
+    /// `inspect_common_no_replace (f1, f2, type, pos, inspect_len)` (strings.c:241): the TALLYING half —
+    /// count non-overlapping `f2` matches in the window (marking to avoid double-count) and add the total
+    /// to the counter `f1`.
+    fn inspect_common_no_replace(&mut self, f1: &mut [u8], f1_attr: &FieldAttr, f2: &[u8], typ: InspectType) {
+        let pos = self.start;
+        let inspect_len = self.end - self.start;
+        if inspect_len == 0 || f2.is_empty() || f2.len() > inspect_len {
+            return;
+        }
+        let a = self.off;
+        let f2s = f2.len();
+        let mut n = 0i32;
+        match typ {
+            InspectType::Trailing => {
+                let i_max = inspect_len - f2s;
+                let mut first_marker = 0;
+                let mut i = i_max as isize;
+                loop {
+                    let ii = i as usize;
+                    if &self.data[a + self.start + ii..a + self.start + ii + f2s] == f2 {
+                        if !self.is_marked(pos + ii, f2s) {
+                            n += 1;
+                            first_marker = ii;
+                            i -= f2s as isize - 1;
+                        }
+                        if i == 0 {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                    i -= 1;
+                    if i < 0 {
+                        break;
+                    }
+                }
+                if n != 0 {
+                    self.set_inspect_mark(pos + first_marker, inspect_len - first_marker);
+                }
+            }
+            InspectType::Leading => {
+                let i_max = inspect_len - f2s + 1;
+                let mut last_marker = 0;
+                let mut i = 0;
+                while i < i_max {
+                    if &self.data[a + self.start + i..a + self.start + i + f2s] == f2 {
+                        if !self.is_marked(pos + i, f2s) {
+                            n += 1;
+                            i += f2s - 1;
+                            last_marker = i;
+                        }
+                    } else {
+                        break;
+                    }
+                    i += 1;
+                }
+                if n != 0 {
+                    self.set_inspect_mark(pos, last_marker);
+                }
+            }
+            _ => {
+                let i_max = inspect_len - f2s + 1;
+                let mut i = 0;
+                while i < i_max {
+                    if &self.data[a + self.start + i..a + self.start + i + f2s] == f2 {
+                        let checked = pos + i;
+                        if !self.is_marked(checked, f2s) {
+                            n += 1;
+                            self.set_inspect_mark(checked, f2s);
+                            if typ == InspectType::First {
+                                break;
+                            }
+                            i += f2s - 1;
+                        }
+                    }
+                    i += 1;
+                }
+            }
+        }
+        if n != 0 {
+            add_int_field(f1, f1_attr, n);
+        }
+    }
+
+    /// `inspect_common_replacing (f1, f2, type, pos, inspect_len)` (strings.c:340): the REPLACING half —
+    /// `f1` is the BY value, deferred into `repdata` via `do_mark` at each non-overlapping `f2` match.
+    fn inspect_common_replacing(&mut self, f1: &[u8], f2: &[u8], typ: InspectType) {
+        let pos = self.start;
+        let inspect_len = self.end - self.start;
+        if inspect_len == 0 || f2.is_empty() || f2.len() > inspect_len {
+            return;
+        }
+        let a = self.off;
+        let f2s = f2.len();
+        let repl = if f1.len() != f2s { alloc_figurative(f1, f2s) } else { f1.to_vec() };
+        match typ {
+            InspectType::Trailing => {
+                let i_max = inspect_len - f2s;
+                let mut i = i_max as isize;
+                loop {
+                    let ii = i as usize;
+                    if &self.data[a + self.start + ii..a + self.start + ii + f2s] == f2 {
+                        if self.do_mark(pos + ii, f2s, &repl) {
+                            i -= f2s as isize - 1;
+                        }
+                        if i == 0 {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                    i -= 1;
+                    if i < 0 {
+                        break;
+                    }
+                }
+            }
+            InspectType::Leading => {
+                let i_max = inspect_len - f2s + 1;
+                let mut i = 0;
+                while i < i_max {
+                    if &self.data[a + self.start + i..a + self.start + i + f2s] == f2 {
+                        if self.do_mark(pos + i, f2s, &repl) {
+                            i += f2s - 1;
+                        }
+                    } else {
+                        break;
+                    }
+                    i += 1;
+                }
+            }
+            _ => {
+                let i_max = inspect_len - f2s + 1;
+                let mut i = 0;
+                while i < i_max {
+                    if &self.data[a + self.start + i..a + self.start + i + f2s] == f2
+                        && self.do_mark(pos + i, f2s, &repl)
+                    {
+                        if typ == InspectType::First {
+                            break;
+                        }
+                        i += f2s - 1;
+                    }
+                    i += 1;
+                }
+            }
+        }
+    }
+
+    /// `cob_inspect_all/leading/first/trailing (f1, f2)` (strings.c:594-616). In TALLYING `f1` is the
+    /// count receiver and `f2` the search; in REPLACING `f1` is the BY value and `f2` the search.
+    pub fn cob_inspect_all(&mut self, f1: &mut [u8], f1_attr: &FieldAttr, f2: &[u8]) {
+        self.inspect_common(f1, f1_attr, f2, InspectType::All);
+    }
+    pub fn cob_inspect_leading(&mut self, f1: &mut [u8], f1_attr: &FieldAttr, f2: &[u8]) {
+        self.inspect_common(f1, f1_attr, f2, InspectType::Leading);
+    }
+    pub fn cob_inspect_first(&mut self, f1: &mut [u8], f1_attr: &FieldAttr, f2: &[u8]) {
+        self.inspect_common(f1, f1_attr, f2, InspectType::First);
+    }
+    pub fn cob_inspect_trailing(&mut self, f1: &mut [u8], f1_attr: &FieldAttr, f2: &[u8]) {
+        self.inspect_common(f1, f1_attr, f2, InspectType::Trailing);
+    }
+
+    /// `inspect_common (f1, f2, type)` (strings.c:392): the shared dispatcher for the
+    /// ALL/LEADING/FIRST/TRAILING verbs — short-circuit on an empty window, then route to the TALLYING
+    /// (`no_replace`) or REPLACING half (the C uses the module-global `inspect_replacing`). The
+    /// `f2->size > inspect_len` precondition is enforced inside each half (kept there for safety under
+    /// `#![forbid(unsafe_code)]`).
+    fn inspect_common(&mut self, f1: &mut [u8], f1_attr: &FieldAttr, f2: &[u8], typ: InspectType) {
+        if self.end - self.start == 0 {
+            return;
+        }
+        if self.replacing {
+            self.inspect_common_replacing(f1, f2, typ);
+        } else {
+            self.inspect_common_no_replace(f1, f1_attr, f2, typ);
+        }
+    }
+
+    /// `cob_inspect_converting (f1, f2)` (strings.c:619): translate every byte in the window per the
+    /// `CONVERTING f1 TO f2` table.
+    pub fn cob_inspect_converting(&mut self, f1: &[u8], f2: &[u8]) {
+        let inspect_len = self.end - self.start;
+        if inspect_len == 0 {
+            return;
+        }
+        let f2v = if f1.len() != f2.len() { alloc_figurative(f2, f1.len()) } else { f2.to_vec() };
+        let mut conv_set = [false; 256];
+        let mut conv_tab = [0u8; 256];
+        for k in 0..f1.len() {
+            let from = f1[k] as usize;
+            if !conv_set[from] {
+                conv_set[from] = true;
+                conv_tab[from] = f2v[k];
+            }
+        }
+        let a = self.off;
+        for i in self.start..self.end {
+            let c = self.data[a + i] as usize;
+            if conv_set[c] {
+                self.data[a + i] = conv_tab[c];
+            }
+        }
+    }
+
+    /// `cob_inspect_finish ()` (strings.c:706): apply the deferred REPLACING data and restore the sign.
+    pub fn cob_inspect_finish(&mut self) {
+        if self.replacing && self.mark[self.mark_min] != 0 {
+            let a = self.off;
+            for i in self.mark_min..=self.mark_max {
+                if self.mark[i] != 0 {
+                    self.data[a + i] = self.repdata[i];
+                }
+            }
+        }
+        if self.var_attr.have_sign() && !self.var_attr.sign_separate() && self.var_attr.field_type == COB_TYPE_NUMERIC_DISPLAY {
+            crate::sign::display_put_sign(&mut self.data, &self.var_attr, self.sign);
+        }
+    }
+
+    /// The inspected variable's bytes after the INSPECT.
+    pub fn result(&self) -> &[u8] {
+        &self.data
+    }
 }
 
 /// The UNSTRING-statement state machine (strings.c:828-1018): `cob_unstring_init`, then
@@ -237,6 +656,158 @@ mod tests {
     fn alnum(n: usize) -> FieldAttr {
         let _ = n;
         FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 }
+    }
+
+    #[test]
+    fn inspect_tally_replace_convert() {
+        let a = alnum(5);
+        let cnt_attr = FieldAttr { field_type: crate::attr::COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: crate::attr::COB_FLAG_HAVE_SIGN | crate::attr::COB_FLAG_REAL_BINARY };
+
+        // TALLYING n FOR ALL "A" in "AABAA" -> 4
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, false);
+        ins.cob_inspect_start();
+        let mut n = 0i32.to_le_bytes();
+        ins.cob_inspect_all(&mut n, &cnt_attr, b"A");
+        ins.cob_inspect_finish();
+        assert_eq!(crate::accessors::cob_get_int(&n, &cnt_attr), 4);
+
+        // TALLYING LEADING "A" in "AABAA" -> 2
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, false);
+        ins.cob_inspect_start();
+        let mut n = 0i32.to_le_bytes();
+        ins.cob_inspect_leading(&mut n, &cnt_attr, b"A");
+        assert_eq!(crate::accessors::cob_get_int(&n, &cnt_attr), 2);
+
+        // REPLACING ALL "A" BY "X" in "AABAA" -> "XXBXX"
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, true);
+        ins.cob_inspect_start();
+        let mut by = *b"X";
+        ins.cob_inspect_all(&mut by, &a, b"A");
+        ins.cob_inspect_finish();
+        assert_eq!(ins.result(), b"XXBXX");
+
+        // CONVERTING "ABC" TO "XYZ" in "CAB" -> "ZXY"
+        let mut ins = CobInspect::cob_inspect_init_converting(b"CAB", &alnum(3));
+        ins.cob_inspect_start();
+        ins.cob_inspect_converting(b"ABC", b"XYZ");
+        ins.cob_inspect_finish();
+        assert_eq!(ins.result(), b"ZXY");
+
+        // REPLACING ALL "A" BY "Z" AFTER "X" in "AXAA" -> only A's after X: "AXZZ"
+        let mut ins = CobInspect::cob_inspect_init(b"AXAA", &alnum(4), true);
+        ins.cob_inspect_start();
+        ins.cob_inspect_after(b"X");
+        let mut by = *b"Z";
+        ins.cob_inspect_all(&mut by, &alnum(4), b"A");
+        ins.cob_inspect_finish();
+        assert_eq!(ins.result(), b"AXZZ");
+
+        // REPLACING CHARACTERS BY "*" BEFORE "B" in "AABAA" -> "**BAA"
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, true);
+        ins.cob_inspect_start();
+        ins.cob_inspect_before(b"B");
+        let mut star = *b"*";
+        ins.cob_inspect_characters(&mut star, &a);
+        ins.cob_inspect_finish();
+        assert_eq!(ins.result(), b"**BAA");
+    }
+
+    #[test]
+    fn inspect_crosscheck_against_sealed_court() {
+        // CobInspect is the 1:1 stateful port of strings.c's INSPECT functions; inspect.rs is the
+        // result-oriented byte-effect court already sealed against the GnuCOBOL 3.2 oracle. Driving a
+        // broad grid through both and asserting identical results transitively oracle-verifies the port.
+        use crate::inspect::{self, Region, TallyMode, ReplaceMode};
+        let cnt_attr = FieldAttr {
+            field_type: crate::attr::COB_TYPE_NUMERIC_BINARY,
+            digits: 9,
+            scale: 0,
+            flags: crate::attr::COB_FLAG_HAVE_SIGN | crate::attr::COB_FLAG_REAL_BINARY,
+        };
+        let targets: &[&[u8]] = &[b"AABAA", b"XAXAAX", b"ABCABC", b"BBBBB", b"AXAA", b"A", b"ABAB"];
+        let pats: &[&[u8]] = &[b"A", b"AB", b"X", b"AA"];
+        let mut cases = 0u64;
+        for &t in targets {
+            let a = alnum(t.len());
+            let regions: &[(Option<&[u8]>, Option<&[u8]>)] =
+                &[(None, None), (Some(b"X"), None), (None, Some(b"X")), (Some(b"B"), None), (None, Some(b"B"))];
+            for &(before, after) in regions {
+                let r = match (before, after) {
+                    (Some(d), None) => Region::Before(d),
+                    (None, Some(d)) => Region::After(d),
+                    _ => Region::All,
+                };
+                let setup = |ins: &mut CobInspect| {
+                    ins.cob_inspect_start();
+                    if let Some(d) = before { ins.cob_inspect_before(d); }
+                    if let Some(d) = after { ins.cob_inspect_after(d); }
+                };
+                for &p in pats {
+                    // TALLYING ALL
+                    let mut ins = CobInspect::cob_inspect_init(t, &a, false);
+                    setup(&mut ins);
+                    let mut n = 0i32.to_le_bytes();
+                    ins.cob_inspect_all(&mut n, &cnt_attr, p);
+                    ins.cob_inspect_finish();
+                    assert_eq!(crate::accessors::cob_get_int(&n, &cnt_attr) as u64,
+                        inspect::inspect_tallying(t, TallyMode::All(p), r), "tally ALL {t:?} {p:?} {before:?}/{after:?}");
+                    // TALLYING LEADING
+                    let mut ins = CobInspect::cob_inspect_init(t, &a, false);
+                    setup(&mut ins);
+                    let mut n = 0i32.to_le_bytes();
+                    ins.cob_inspect_leading(&mut n, &cnt_attr, p);
+                    ins.cob_inspect_finish();
+                    assert_eq!(crate::accessors::cob_get_int(&n, &cnt_attr) as u64,
+                        inspect::inspect_tallying(t, TallyMode::Leading(p), r), "tally LEADING {t:?} {p:?}");
+                    // REPLACING ALL (equal-length BY)
+                    let by = vec![b'*'; p.len()];
+                    let mut ins = CobInspect::cob_inspect_init(t, &a, true);
+                    setup(&mut ins);
+                    let mut byb = by.clone();
+                    ins.cob_inspect_all(&mut byb, &alnum(by.len()), p);
+                    ins.cob_inspect_finish();
+                    assert_eq!(ins.result(), inspect::inspect_replacing(t, ReplaceMode::All(p, &by), r).as_slice(),
+                        "repl ALL {t:?} {p:?}");
+                    // REPLACING LEADING
+                    let mut ins = CobInspect::cob_inspect_init(t, &a, true);
+                    setup(&mut ins);
+                    let mut byb = by.clone();
+                    ins.cob_inspect_leading(&mut byb, &alnum(by.len()), p);
+                    ins.cob_inspect_finish();
+                    assert_eq!(ins.result(), inspect::inspect_replacing(t, ReplaceMode::Leading(p, &by), r).as_slice(),
+                        "repl LEADING {t:?} {p:?}");
+                    // REPLACING FIRST
+                    let mut ins = CobInspect::cob_inspect_init(t, &a, true);
+                    setup(&mut ins);
+                    let mut byb = by.clone();
+                    ins.cob_inspect_first(&mut byb, &alnum(by.len()), p);
+                    ins.cob_inspect_finish();
+                    assert_eq!(ins.result(), inspect::inspect_replacing(t, ReplaceMode::First(p, &by), r).as_slice(),
+                        "repl FIRST {t:?} {p:?}");
+                    cases += 5;
+                }
+                // TALLYING CHARACTERS
+                let mut ins = CobInspect::cob_inspect_init(t, &a, false);
+                setup(&mut ins);
+                let mut n = 0i32.to_le_bytes();
+                ins.cob_inspect_characters(&mut n, &cnt_attr);
+                ins.cob_inspect_finish();
+                assert_eq!(crate::accessors::cob_get_int(&n, &cnt_attr) as u64,
+                    inspect::inspect_tallying(t, TallyMode::Characters, r), "tally CHARS {t:?} {before:?}/{after:?}");
+                cases += 1;
+            }
+            // CONVERTING over the whole target
+            for &(from, to) in &[(&b"AB"[..], &b"XY"[..]), (&b"ABC"[..], &b"123"[..]), (&b"X"[..], &b"Q"[..])] {
+                let mut ins = CobInspect::cob_inspect_init_converting(t, &a);
+                ins.cob_inspect_start();
+                ins.cob_inspect_converting(from, to);
+                ins.cob_inspect_finish();
+                assert_eq!(ins.result(), inspect::inspect_converting(t, from, to, Region::All).as_slice(),
+                    "convert {t:?} {from:?}->{to:?}");
+                cases += 1;
+            }
+        }
+        assert!(cases > 200, "expected a broad grid, got {cases}");
     }
 
     #[test]

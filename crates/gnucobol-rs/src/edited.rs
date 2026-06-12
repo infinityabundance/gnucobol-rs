@@ -607,7 +607,8 @@ pub fn cob_move_alphanum_to_edited(src_data: &[u8], dst_pic: &str) -> Vec<u8> {
     out
 }
 
-/// Parse a PICTURE string into `(symbol, repeat)` pairs, handling both `XXX` runs and `X(3)` counts.
+/// Parse a PICTURE string into `(symbol, repeat)` pairs, handling both consecutive-symbol runs (e.g.
+/// `X` `X` `X`) and parenthesised `X(3)` repeat counts.
 fn pic_symbols(pic: &str) -> Vec<(char, usize)> {
     let chars: Vec<char> = pic.trim().chars().filter(|c| !c.is_whitespace()).map(|c| c.to_ascii_uppercase()).collect();
     let mut out = Vec::new();

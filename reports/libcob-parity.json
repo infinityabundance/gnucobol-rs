@@ -18,32 +18,9 @@
     {
       "file": "strings.c",
       "functions": 34,
-      "missing": [
-        "alloc_figurative",
-        "cob_inspect_after",
-        "cob_inspect_all",
-        "cob_inspect_before",
-        "cob_inspect_characters",
-        "cob_inspect_converting",
-        "cob_inspect_finish",
-        "cob_inspect_first",
-        "cob_inspect_init",
-        "cob_inspect_init_common",
-        "cob_inspect_init_converting",
-        "cob_inspect_leading",
-        "cob_inspect_start",
-        "cob_inspect_trailing",
-        "do_mark",
-        "inspect_common",
-        "inspect_common_no_replace",
-        "inspect_common_replacing",
-        "inspect_find_data",
-        "is_marked",
-        "set_inspect_mark",
-        "setup_repdata"
-      ],
-      "parity_pct": 35.3,
-      "ported": 12
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 34
     },
     {
       "file": "intrinsic.c",
@@ -1076,7 +1053,7 @@
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
     "functions": 1152,
-    "parity_pct": 16.5,
-    "ported": 190
+    "parity_pct": 18.4,
+    "ported": 212
   }
 }
