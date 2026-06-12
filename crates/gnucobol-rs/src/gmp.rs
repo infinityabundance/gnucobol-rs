@@ -39,6 +39,49 @@ impl Mpz {
         Mpz { sign: 0, mag: Vec::new() }
     }
 
+    /// `mpz_set_ull (dest, val)` (numeric.c:182, COB_EXPERIMENTAL): set to an unsigned 64-bit host
+    /// integer. GnuCOBOL writes `_mp_d[0] = val & GMP_NUMB_MASK` and `_mp_size = (val != 0)` (a single
+    /// limb where `GMP_LIMB_BITS >= 64`, which holds here); the magnitude is one 64-bit limb of `val`.
+    pub fn set_ull(val: u64) -> Self {
+        if val == 0 {
+            Mpz::new()
+        } else {
+            Mpz { sign: 1, mag: vec![val] }
+        }
+    }
+
+    /// `mpz_set_sll (dest, val)` (numeric.c:198, COB_EXPERIMENTAL): set to a signed 64-bit host integer
+    /// — magnitude `|val|` in one limb, `_mp_size` carrying the sign of `val`.
+    pub fn set_sll(val: i64) -> Self {
+        let mag = (val as i128).unsigned_abs() as u64;
+        if mag == 0 {
+            Mpz::new()
+        } else {
+            Mpz { sign: if val < 0 { -1 } else { 1 }, mag: vec![mag] }
+        }
+    }
+
+    /// `mpz_get_ull (src)` (numeric.c:216, COB_EXPERIMENTAL): the low 64-bit limb of the magnitude
+    /// (`_mp_d[0]`), or 0 when the value is zero — wrapping past 64 bits exactly as the C does.
+    pub fn get_ull(&self) -> u64 {
+        self.mag.first().copied().unwrap_or(0)
+    }
+
+    /// `mpz_get_sll (src)` (numeric.c:236, COB_EXPERIMENTAL): reconstruct a signed 64-bit host integer
+    /// from the low limb and the sign. Mirrors the C bit-for-bit: positive yields `vtmp & COB_MAX_LL`,
+    /// negative yields `~((vtmp - 1) & COB_MAX_LL)`, with `COB_MAX_LL == i64::MAX`.
+    pub fn get_sll(&self) -> i64 {
+        if self.sign == 0 {
+            return 0;
+        }
+        let vtmp = self.mag.first().copied().unwrap_or(0);
+        if self.sign > 0 {
+            (vtmp as i64) & i64::MAX
+        } else {
+            !(((vtmp as i64).wrapping_sub(1)) & i64::MAX)
+        }
+    }
+
     fn trim(mag: &mut Vec<u64>) {
         while mag.last() == Some(&0) {
             mag.pop();

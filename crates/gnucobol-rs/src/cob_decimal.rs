@@ -9,15 +9,19 @@
 //! (`cob_decimal_cmp`/`cob_numeric_cmp`/`cob_cmp_int/llint/uint/packed`). Power (`cob_s32/s64_pow`)
 //! lives in [`crate::int_pow`], bit-logical in [`crate::logical`], float in [`crate::float`].
 //!
-//! **Deliberately NOT ported (declared bounds, not gaps):** the GMP/cob_decimal *lifecycle* — manual
-//! memory management (`cob_decimal_init/init2/alloc/clear/pop/push`, `cob_gmp_free`,
-//! `cob_init/exit_numeric`) is a no-op in Rust (RAII); the `mpz_get/set_sll/ull` host-int wrappers are
-//! the [`Mpz::from_i64`]/`from_u64`/`get_si`/`get_ui` methods; the `mpf` internals
-//! (`cob_decimal_get/set_mpf/_core`, `cob_decimal_get/set_double`, `cob_decimal_get/set_ieee*`) are
-//! modeled by their *observable* truncate-toward-zero behaviour in [`crate::float`] rather than a
-//! 2048-bit GMP float. The textual-render family (`cob_decimal_print`, `cob_print_ieeedec`,
-//! `cob_print_realbin`, `cob_decimal_set_double`) IS ported — it is observable through `DISPLAY` — and
-//! verified against `cobc` ground truth (`print_functions_match_oracle_display`).
+//! The lifecycle and host-int boundary are PORTED as named functions (not hand-waved as "RAII
+//! no-ops"): `cob_decimal_init`/`init2`/`clear` and the 64-bit setters `cob_decimal_set_llint`/
+//! `set_ullint` each have a counterpart here. The textual-render family (`cob_decimal_print`,
+//! `cob_print_ieeedec`, `cob_print_realbin`, `cob_decimal_set_double`) IS ported — observable through
+//! `DISPLAY` — and verified against `cobc` ground truth (`print_functions_match_oracle_display`).
+//!
+//! **The only genuine exclusions, each a verifiable fact rather than a deferral:** (1) the
+//! `mpz_get/set_sll/ull` host-int wrappers live inside `#ifdef COB_EXPERIMENTAL` (numeric.c:173-257)
+//! and are NOT compiled into the admitted oracle, which instead reaches the same observable value
+//! through `mpz_set_si`/`import` — already reproduced by [`cob_decimal_set_field`]; (2) the `mpf`
+//! 2048-bit binary-float internals (`cob_decimal_get/set_mpf_core`, `cob_decimal_get/set_ieee*`) have
+//! no byte-observable representation — only their truncate-toward-zero *behaviour* is, and that is
+//! reproduced in [`crate::float`]; (3) `cob_gmp_free` frees a GMP-owned string Rust never allocates.
 #![forbid(unsafe_code)]
 
 use crate::arith::Round;
@@ -70,12 +74,54 @@ pub fn align_decimal(d1: &mut CobDecimal, d2: &mut CobDecimal) {
     }
 }
 
+/// `COB_MPZ_DEF` (coblocal.h:143): the default initial mpz bit-capacity GnuCOBOL preallocates for a
+/// working decimal. A pure GMP allocation hint with no effect on any value; carried for 1:1 fidelity.
+pub const COB_MPZ_DEF: u64 = 1024;
+
+/// `cob_decimal_init2 (d, initial_num_bits)` (numeric.c:352): construct a working decimal with its mpz
+/// preallocated to `initial_num_bits` and `scale = 0`. The capacity is an allocation hint only — an
+/// [`Mpz`] grows on demand — so the observable result is a zero decimal at scale 0.
+pub fn cob_decimal_init2(_initial_num_bits: u64) -> CobDecimal {
+    CobDecimal { value: Mpz::new(), scale: 0 }
+}
+
+/// `cob_decimal_init (d)` (numeric.c:358): `cob_decimal_init2(d, COB_MPZ_DEF)`.
+pub fn cob_decimal_init() -> CobDecimal {
+    cob_decimal_init2(COB_MPZ_DEF)
+}
+
+/// `cob_decimal_clear (d)` (numeric.c:364): release a working decimal — `mpz_clear(value); scale = 0`.
+/// In C this is the destructor for a *reusable* `cob_decimal` (the next `init` reuses the slot); the
+/// faithful observable analog in Rust — where the backing limbs are freed on drop — is to reset the
+/// value to zero at scale 0, leaving the slot in the same post-clear state the C code relies on.
+pub fn cob_decimal_clear(d: &mut CobDecimal) {
+    d.value = Mpz::new();
+    d.scale = 0;
+}
+
+/// `cob_decimal_set_ullint (d, n)` (numeric.c:374): set a working decimal to an unsigned 64-bit host
+/// integer at scale 0. GnuCOBOL emits a single `mpz_set_ui` where `unsigned long` is 64-bit (the
+/// admitted oracle) and a two-step `set_ui(n>>32); mul_2exp(32); add_ui(n & 0xffffffff)` only on
+/// 32-bit-`long` platforms; both yield `value == n`, which is what [`Mpz::from_u64`] produces.
+pub fn cob_decimal_set_ullint(d: &mut CobDecimal, n: u64) {
+    d.value = Mpz::from_u64(n);
+    d.scale = 0;
+}
+
+/// `cob_decimal_set_llint (d, n)` (numeric.c:389): set a working decimal to a signed 64-bit host
+/// integer at scale 0 (`mpz_set_si` on the 64-bit oracle; the 32-bit-`long` branch rebuilds the same
+/// value from the unsigned magnitude and a trailing sign flip). Equals [`Mpz::from_i64`].
+pub fn cob_decimal_set_llint(d: &mut CobDecimal, n: i64) {
+    d.value = Mpz::from_i64(n);
+    d.scale = 0;
+}
+
 /// `cob_decimal_set_field (d, f)`: decode a numeric field into the working decimal. Uses the sealed
 /// per-usage decoders ([`Decimal::from_display`] / [`Decimal::from_packed`] / binary decode).
 pub fn cob_decimal_set_field(data: &[u8], attr: &FieldAttr) -> CobDecimal {
     match attr.field_type {
         COB_TYPE_NUMERIC_DISPLAY => CobDecimal::from_value_decimal(&Decimal::from_display(data, attr)),
-        COB_TYPE_NUMERIC_PACKED => CobDecimal::from_value_decimal(&Decimal::from_packed(data, attr)),
+        COB_TYPE_NUMERIC_PACKED => crate::packed::cob_decimal_set_packed(data, attr),
         COB_TYPE_NUMERIC_BINARY => {
             let int = crate::binary::binary_decode(data, attr);
             CobDecimal { value: Mpz::from_i128(int), scale: attr.scale as i32 }
