@@ -952,6 +952,99 @@ pub fn cob_add_bcd(
     0
 }
 
+/// `cob_move_bcd (f1, f2)` (numeric.c:2608): optimized MOVE between BCD fields of any attributes,
+/// aligning `f1`'s value to `f2`'s scale (shifting by whole bytes, plus a one-nibble shift when the
+/// scale difference is odd), then writing `f2`'s sign / pad nibble. Truncates to `f2`'s capacity.
+pub fn cob_move_bcd(src: &[u8], src_attr: &FieldAttr, dst_out: &mut [u8], dst_attr: &FieldAttr) {
+    let fld1_size = src.len();
+    let fld2_size = dst_out.len();
+    let f2_no_sign = dst_attr.no_sign_nibble();
+    let fld1_sign = if src_attr.no_sign_nibble() { 0x00 } else { src[fld1_size - 1] & 0x0F };
+    // scale +1 for a sign nibble (it becomes a zero digit during the move; sign re-applied at the end)
+    let fld1_scale = if fld1_sign == 0 { src_attr.scale as i32 } else { src_attr.scale as i32 + 1 };
+    let fld2_scale = if f2_no_sign { dst_attr.scale as i32 } else { dst_attr.scale as i32 + 1 };
+    let (move_left, diff) = if fld1_scale > fld2_scale {
+        (false, fld1_scale - fld2_scale)
+    } else {
+        (true, fld2_scale - fld1_scale)
+    };
+
+    if diff & 1 == 0 {
+        // no nibble shift required
+        let offset = (diff >> 1) as usize;
+        for b in dst_out.iter_mut() {
+            *b = 0;
+        }
+        if move_left {
+            let llen = fld2_size - offset;
+            if fld1_size <= llen {
+                let p = llen - fld1_size;
+                dst_out[p..p + fld1_size].copy_from_slice(src);
+                if fld1_sign != 0 {
+                    dst_out[fld2_size - offset - 1] &= 0xF0;
+                }
+            } else {
+                dst_out[..llen].copy_from_slice(&src[fld1_size - llen..]);
+                if fld1_sign != 0 {
+                    dst_out[llen - 1] &= 0xF0;
+                }
+            }
+        } else {
+            let llen = fld1_size - offset;
+            if llen <= fld2_size {
+                let p = fld2_size - llen;
+                dst_out[p..].copy_from_slice(&src[..llen]);
+            } else {
+                let s = fld1_size - offset - fld2_size;
+                dst_out.copy_from_slice(&src[s..s + fld2_size]);
+            }
+        }
+    } else {
+        // one-nibble shift via a scratch buffer
+        let mut buff = [0u8; 48];
+        let offset = (diff >> 1) as usize;
+        if move_left {
+            let llen = 48 - offset;
+            let pos = llen - fld1_size;
+            buff[pos..pos + fld1_size].copy_from_slice(src);
+            if fld1_sign != 0 {
+                buff[llen - 1] &= 0xF0;
+            }
+            cob_shift_left_nibble(&mut buff);
+        } else {
+            let llen = fld1_size - offset;
+            let pos = 48 - llen;
+            buff[pos..pos + llen].copy_from_slice(&src[..llen]);
+            if fld1_sign != 0 {
+                buff[llen - 1] &= 0xF0;
+            }
+            cob_shift_right_nibble(&mut buff);
+        }
+        dst_out.copy_from_slice(&buff[48 - fld2_size..]);
+    }
+
+    // sign / pad nibble of the receiver
+    if f2_no_sign {
+        if dst_attr.digits & 1 == 1 {
+            dst_out[0] &= 0x0F;
+        }
+    } else {
+        let pos = fld2_size - 1;
+        if dst_attr.have_sign() {
+            if fld1_sign == 0 {
+                dst_out[pos] = (dst_out[pos] & 0xF0) | 0x0C;
+            } else {
+                dst_out[pos] = (dst_out[pos] & 0xF0) | fld1_sign;
+            }
+        } else {
+            dst_out[pos] = (dst_out[pos] & 0xF0) | 0x0F;
+        }
+        if dst_attr.digits & 1 == 0 {
+            dst_out[0] &= 0x0F;
+        }
+    }
+}
+
 /// `cob_addsub_optimized (f1, f2, opt, stmt)` (numeric.c:2299): the BCD fast-path dispatcher. Returns
 /// `Some(status)` when it handled the operation (f1 is PACKED and f2 is PACKED / DISPLAY<=38 / BINARY /
 /// COMP5, converted to a temp packed field), else `None` (caller runs the general decimal path).
@@ -1193,6 +1286,61 @@ mod tests {
             }
         }
         assert!(checked > 5000, "expected a broad sweep, only checked {checked}");
+    }
+
+    #[test]
+    fn move_bcd_matches_decode_rescale_encode() {
+        // cob_move_bcd must equal the verified path: decode -> shift to dst scale -> get_packed.
+        use crate::cob_decimal::shift_decimal;
+        let shapes: &[(u16, i16)] = &[(5, 0), (7, 2), (9, 0), (6, 3), (4, 1), (8, 4)];
+        for &(dg1, sc1) in shapes {
+            let src_attr = packed(dg1, sc1, true, false);
+            let lim1 = 10i64.pow(dg1 as u32);
+            for &(dg2, sc2) in shapes {
+                let dst_attr = packed(dg2, sc2, true, false);
+                let dst_len = dg2 as usize / 2 + 1;
+                let int_cap = (dg2 as i32 - sc2 as i32).max(0); // integer digits the receiver holds
+                for &v in &[0i64, 1, -1, 7, -7, 42, -42, 1234, -1234, 9999, -9999, 54321, -54321] {
+                    if v.abs() >= lim1 {
+                        continue;
+                    }
+                    // integer part of (v at sc1) must fit the receiver's integer capacity
+                    let int_part = (v.abs() as i128) / 10i128.pow(sc1.max(0) as u32);
+                    if int_part >= 10i128.pow(int_cap as u32) {
+                        continue;
+                    }
+                    let src = bytes_for(&src_attr, v);
+                    let mut mine = vec![0u8; dst_len];
+                    cob_move_bcd(&src, &src_attr, &mut mine, &dst_attr);
+
+                    let mut d = cob_decimal_set_packed(&src, &src_attr);
+                    let nshift = sc2 as i32 - d.scale;
+                    shift_decimal(&mut d, nshift);
+                    // The decimal reference normalises negative-zero to +0; cob_move_bcd (correctly,
+                    // per the oracle) preserves the source sign on truncate-to-zero. Skip that case
+                    // here -- it is asserted directly against oracle ground truth below.
+                    if d.value.sgn() == 0 {
+                        continue;
+                    }
+                    let mut want = vec![0u8; dst_len];
+                    cob_decimal_get_packed(d, &dst_attr, 0, &mut want);
+
+                    assert_eq!(mine, want, "move {v}@{dg1}.{sc1} -> {dg2}.{sc2}: bcd={mine:02x?} ref={want:02x?}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn move_bcd_preserves_negative_zero_on_truncation() {
+        // Oracle ground truth: `MOVE -0.01 TO S9(5) COMP-3` yields a 0x0D (negative) sign nibble even
+        // though the value truncates to zero -- verified directly against cobc. cob_move_bcd must too.
+        let src_attr = packed(7, 2, true, false); // S9(5)V99 COMP-3
+        let dst_attr = packed(5, 0, true, false); // S9(5)   COMP-3
+        let src = bytes_for(&src_attr, -1); // -0.01
+        let mut dst = vec![0u8; 3];
+        cob_move_bcd(&src, &src_attr, &mut dst, &dst_attr);
+        assert_eq!(dst, vec![0x00, 0x00, 0x0d], "negative-zero sign must survive truncation");
     }
 
     #[test]
