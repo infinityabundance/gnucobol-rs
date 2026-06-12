@@ -11,13 +11,9 @@
     {
       "file": "move.c",
       "functions": 57,
-      "missing": [
-        "cob_move_alphanum_to_edited",
-        "cob_move_display_to_edited",
-        "cob_move_edited_to_display"
-      ],
-      "parity_pct": 94.7,
-      "ported": 54
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 57
     },
     {
       "file": "strings.c",
@@ -1092,7 +1088,7 @@
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
     "functions": 1152,
-    "parity_pct": 15.2,
-    "ported": 175
+    "parity_pct": 15.5,
+    "ported": 178
   }
 }

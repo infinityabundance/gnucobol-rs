@@ -564,6 +564,75 @@ mod tests {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------
+// move.c edited-MOVE leaves (the named entry points; the FieldAttr model carries digits/scale, so the
+// receiver/source PICTURE is passed explicitly). The numeric leaves are the sealed encode/decode
+// (GNURUST.16C / GNURUST.16); the alphanumeric leaf is the picture-walk.
+// ---------------------------------------------------------------------------------------------------
+
+/// `cob_move_display_to_edited (f1, f2)` (move.c:878): edit a numeric DISPLAY value into a
+/// NUMERIC-EDITED picture. The faithful port is [`encode_edited`] (sealed `GNURUST.16C`).
+pub fn cob_move_display_to_edited(src: &[u8], src_attr: &crate::attr::FieldAttr, dst_pic: &str) -> Result<Vec<u8>, EditedError> {
+    encode_edited(dst_pic, &Decimal::from_display(src, src_attr))
+}
+
+/// `cob_move_edited_to_display (f1, f2)` (move.c:1214): de-edit a NUMERIC-EDITED field back to its
+/// numeric value — [`decode_edited`] (sealed `GNURUST.16`).
+pub fn cob_move_edited_to_display(src_pic: &str, src: &[u8]) -> Result<EditedDecode, EditedError> {
+    decode_edited(src_pic, src)
+}
+
+/// `cob_move_alphanum_to_edited (f1, f2)` (move.c:1293): fill an ALPHANUMERIC-EDITED picture from an
+/// alphanumeric source — `A`/`X`/`9` copy a source byte (space once exhausted), `0`/`/` insert the
+/// literal, `B` inserts a space, any other symbol yields `'?'` (invalid PIC).
+pub fn cob_move_alphanum_to_edited(src_data: &[u8], dst_pic: &str) -> Vec<u8> {
+    let mut out = Vec::new();
+    let mut si = 0usize;
+    for (sym, n) in pic_symbols(dst_pic) {
+        for _ in 0..n {
+            match sym {
+                'A' | 'X' | '9' => out.push(if si < src_data.len() {
+                    let b = src_data[si];
+                    si += 1;
+                    b
+                } else {
+                    b' '
+                }),
+                '0' | '/' => out.push(sym as u8),
+                'B' => out.push(b' '),
+                _ => out.push(b'?'),
+            }
+        }
+    }
+    out
+}
+
+/// Parse a PICTURE string into `(symbol, repeat)` pairs, handling both `XXX` runs and `X(3)` counts.
+fn pic_symbols(pic: &str) -> Vec<(char, usize)> {
+    let chars: Vec<char> = pic.trim().chars().filter(|c| !c.is_whitespace()).map(|c| c.to_ascii_uppercase()).collect();
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < chars.len() {
+        let c = chars[i];
+        i += 1;
+        let mut count = 1usize;
+        if i < chars.len() && chars[i] == '(' {
+            let mut n = 0usize;
+            i += 1;
+            while i < chars.len() && chars[i].is_ascii_digit() {
+                n = n * 10 + (chars[i] as usize - '0' as usize);
+                i += 1;
+            }
+            if i < chars.len() && chars[i] == ')' {
+                i += 1;
+            }
+            count = n;
+        }
+        out.push((c, count));
+    }
+    out
+}
+
 /// Fuzz entry: edited decode is panic-free over arbitrary picture/byte pairs.
 #[cfg(feature = "fuzzing")]
 pub fn __fuzz_edited(data: &[u8]) {
