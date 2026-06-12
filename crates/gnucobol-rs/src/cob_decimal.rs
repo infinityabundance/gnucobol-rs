@@ -15,7 +15,9 @@
 //! the [`Mpz::from_i64`]/`from_u64`/`get_si`/`get_ui` methods; the `mpf` internals
 //! (`cob_decimal_get/set_mpf/_core`, `cob_decimal_get/set_double`, `cob_decimal_get/set_ieee*`) are
 //! modeled by their *observable* truncate-toward-zero behaviour in [`crate::float`] rather than a
-//! 2048-bit GMP float; and `cob_decimal_print`/`cob_print_*` are debug I/O, not byte semantics.
+//! 2048-bit GMP float. The textual-render family (`cob_decimal_print`, `cob_print_ieeedec`,
+//! `cob_print_realbin`, `cob_decimal_set_double`) IS ported — it is observable through `DISPLAY` — and
+//! verified against `cobc` ground truth (`print_functions_match_oracle_display`).
 #![forbid(unsafe_code)]
 
 use crate::arith::Round;
