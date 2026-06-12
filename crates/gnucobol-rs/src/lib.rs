@@ -74,7 +74,7 @@ pub mod edited;
 pub mod error;
 pub mod init;
 pub mod layout;
-mod move_ops;
+pub mod move_ops;
 pub mod perform_slice;
 pub mod search;
 pub mod pic;

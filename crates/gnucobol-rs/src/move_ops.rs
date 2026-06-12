@@ -466,6 +466,101 @@ fn alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
     sign::display_put_sign(dst, dst_attr, sign);
 }
 
+/// `cob_move_ibm (dst, src, len)` (move.c:1411): copy `len` bytes left-to-right (the IBM `MVC`
+/// instruction). For non-aliasing Rust slices this is a plain copy.
+pub fn cob_move_ibm(dst: &mut [u8], src: &[u8], len: usize) {
+    dst[..len].copy_from_slice(&src[..len]);
+}
+
+/// `cob_init_table (tbl, len, occ)` (move.c:1426): propagate the first `len`-byte element through an
+/// `occ`-occurrence table by doubling copies (used by `INITIALIZE`). `tbl` is the full `len*occ` buffer
+/// with the seed element in `tbl[..len]`.
+pub fn cob_init_table(tbl: &mut [u8], len: usize, occ: usize) {
+    if occ < 1 {
+        return;
+    }
+    let mut m = len;
+    let mut i = len;
+    let mut j = 1usize;
+    loop {
+        j *= 2;
+        let (front, rest) = tbl.split_at_mut(m);
+        rest[..i].copy_from_slice(&front[..i]);
+        m += i;
+        i *= 2;
+        if j * 2 >= occ {
+            break;
+        }
+    }
+    if j < occ {
+        let copy = len * (occ - j);
+        let (front, rest) = tbl.split_at_mut(m);
+        rest[..copy].copy_from_slice(&front[..copy]);
+    }
+}
+
+/// `cob_move_all (src, dst)` (move.c:1356): the figurative `MOVE ALL pattern` — fill `dst` by repeating
+/// the source bytes. Alphanumeric/edited receivers fill directly; numeric receivers fill a display temp
+/// and re-`cob_move`. `src` is the (1+ byte) pattern.
+fn cob_move_all(src: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) -> Result<(), DecimalError> {
+    use crate::attr::{COB_TYPE_ALPHANUMERIC, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_BINARY};
+    let ft = dst_attr.field_type;
+    let is_alnum = matches!(ft, COB_TYPE_ALPHANUMERIC | COB_TYPE_ALPHANUMERIC_EDITED | COB_TYPE_GROUP | crate::attr::COB_TYPE_ALPHANUMERIC_ALL);
+    if is_alnum {
+        if src.len() == 1 {
+            for b in dst.iter_mut() {
+                *b = src[0];
+            }
+        } else {
+            for i in 0..dst.len() {
+                dst[i] = src[i % src.len()];
+            }
+        }
+        return Ok(());
+    }
+    let is_numeric = matches!(ft, COB_TYPE_NUMERIC_DISPLAY | COB_TYPE_NUMERIC_PACKED | COB_TYPE_NUMERIC_BINARY | 0x13..=0x1B);
+    let max = crate::COB_MAX_DIGITS as usize;
+    if !is_numeric {
+        // numeric-edited: MOVE ALL is an alphanumeric fill into a display temp, then move
+        let digcount = dst.len();
+        let mut p = vec![0u8; digcount];
+        fill(&mut p, src);
+        let tattr = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: digcount as u16, scale: 0, flags: 0 };
+        return cob_move(&p, &tattr, dst, dst_attr);
+    }
+    let digcount = if src.len() == 1 { max } else { max };
+    let mut p = vec![0u8; digcount];
+    fill(&mut p, src);
+    let tattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: digcount as u16, scale: 0, flags: crate::attr::COB_FLAG_HAVE_SIGN };
+    cob_move(&p, &tattr, dst, dst_attr)
+}
+
+fn fill(buf: &mut [u8], src: &[u8]) {
+    if src.len() == 1 {
+        for b in buf.iter_mut() {
+            *b = src[0];
+        }
+    } else {
+        for i in 0..buf.len() {
+            buf[i] = src[i % src.len()];
+        }
+    }
+}
+
+/// `indirect_move (func, src, dst, size, scale)` (move.c:1332): route `src` through a `size`/`scale`
+/// signed-DISPLAY intermediate (produced by `func`) before `cob_move`-ing into `dst` — used when a
+/// non-display source must be edited/stored via the display path.
+#[allow(dead_code)] // wired by the edited-MOVE batch (display_to_edited / edited_to_display routing)
+fn indirect_move<F>(func: F, src: &[u8], sa: &FieldAttr, dst: &mut [u8], da: &FieldAttr, size: usize, scale: i32) -> Result<(), DecimalError>
+where
+    F: FnOnce(&[u8], &FieldAttr, &mut [u8], &FieldAttr),
+{
+    let mut buff = vec![0u8; size];
+    let tattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: size as u16, scale: scale as i16, flags: crate::attr::COB_FLAG_HAVE_SIGN };
+    func(src, sa, &mut buff, &tattr);
+    cob_move(&buff, &tattr, dst, da)
+}
+
 /// `cob_binary_mget_sint64 (f)` (move.c:196): read a BINARY field as a signed 64-bit integer (endian
 /// from `COB_FLAG_BINARY_SWAP`, sign-extended for signed fields). Equals [`crate::binary::binary_decode`].
 pub fn cob_binary_mget_sint64(data: &[u8], attr: &FieldAttr) -> i64 {
@@ -668,6 +763,10 @@ pub fn cob_move(
     if dst.is_empty() {
         return Ok(()); // dst->size == 0 (move.c:1455)
     }
+    // Figurative `ALL` source (move.c:1469): repeat the pattern across the receiver.
+    if src_attr.field_type == crate::attr::COB_TYPE_ALPHANUMERIC_ALL {
+        return cob_move_all(src, dst, dst_attr);
+    }
     // Non-elementary move: a GROUP on either side is a raw alphanumeric copy (move.c:1473).
     if src_attr.field_type == COB_TYPE_GROUP || dst_attr.field_type == COB_TYPE_GROUP {
         alphanum_to_alphanum(src, dst, dst_attr);
@@ -698,6 +797,34 @@ pub fn cob_move(
             binary_to_display(src, src_attr, dst, dst_attr);
             return Ok(());
         }
+        let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
+            .map_err(|_| DecimalError::UnsupportedConversion { src_type: src_attr.field_type, dst_type: dst_attr.field_type })?;
+        dst.copy_from_slice(&bytes);
+        return Ok(());
+    }
+
+    // Floating-point leaves (move.c): float<->float widen/narrow; float<->decimal via the decimal layer.
+    let is_fp = |a: &FieldAttr| matches!(a.field_type, 0x13 | 0x14 | 0x15);
+    if is_fp(src_attr) && is_fp(dst_attr) {
+        fp_to_fp(src, src_attr, dst, dst_attr);
+        return Ok(());
+    }
+    if is_fp(dst_attr) {
+        // encode: src -> decimal -> the float receiver (no recursion through cob_move)
+        let d = crate::cob_decimal::cob_decimal_set_field(src, src_attr);
+        let v = crate::cob_decimal::cob_decimal_get_double(&d);
+        match dst_attr.field_type {
+            0x13 => dst[..4].copy_from_slice(&(v as f32).to_le_bytes()),
+            0x14 => dst[..8].copy_from_slice(&v.to_le_bytes()),
+            _ => {
+                let e = crate::cob_decimal::f64_to_extended80(v);
+                let n = dst.len().min(10);
+                dst[..n].copy_from_slice(&e[..n]);
+            }
+        }
+        return Ok(());
+    }
+    if is_fp(src_attr) {
         let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
             .map_err(|_| DecimalError::UnsupportedConversion { src_type: src_attr.field_type, dst_type: dst_attr.field_type })?;
         dst.copy_from_slice(&bytes);
@@ -737,61 +864,5 @@ pub fn cob_move(
     }
 }
 
-/// A DISPLAY field-attr mirroring a binary field's digits/scale/sign (for the temp routing).
-fn display_attr(attr: &FieldAttr) -> FieldAttr {
-    FieldAttr {
-        field_type: COB_TYPE_NUMERIC_DISPLAY,
-        digits: attr.digits,
-        scale: attr.scale,
-        flags: if attr.have_sign() {
-            crate::attr::COB_FLAG_HAVE_SIGN
-        } else {
-            0
-        },
-    }
-}
 
-/// Build a zoned DISPLAY temp (`digits` bytes) representing the signed integer `int` (taken at the
-/// field scale, so its low `digits` digits are the stored representation).
-fn display_temp_from_int(int: i128, digits: u16, signed: bool) -> Vec<u8> {
-    let neg = int < 0;
-    let mut abs = int.unsigned_abs();
-    let modulus = 10u128.checked_pow(digits as u32).unwrap_or(u128::MAX);
-    abs %= modulus;
-    let mut d = vec![0u8; digits as usize];
-    for slot in d.iter_mut().rev() {
-        *slot = (abs % 10) as u8;
-        abs /= 10;
-    }
-    let mut temp: Vec<u8> = d.iter().map(|&x| sign::i2d(x)).collect();
-    if signed && neg {
-        if let Some(last) = temp.last_mut() {
-            *last = sign::put_sign_ascii(*last);
-        }
-    }
-    temp
-}
 
-/// Parse a zoned DISPLAY temp into a signed integer (the digit string as an integer).
-fn int_from_display(bytes: &[u8], signed: bool) -> i128 {
-    let attr = FieldAttr {
-        field_type: COB_TYPE_NUMERIC_DISPLAY,
-        digits: bytes.len() as u16,
-        scale: 0,
-        flags: if signed {
-            crate::attr::COB_FLAG_HAVE_SIGN
-        } else {
-            0
-        },
-    };
-    let d = crate::value::Decimal::from_display(bytes, &attr);
-    let mut mag: i128 = 0;
-    for &digit in &d.digits {
-        mag = mag.saturating_mul(10).saturating_add(digit as i128);
-    }
-    if d.negative {
-        -mag
-    } else {
-        mag
-    }
-}
