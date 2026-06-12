@@ -2663,72 +2663,71 @@
     "test_only": 0
   },
   {
-    "active_ported": 0,
+    "active_ported": 9,
     "compiled": 9,
-    "compiled_parity_pct": 0.0,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
-    "doc_only": 1,
+    "doc_only": 0,
     "file": "cconv.c",
     "fns": [
       {
         "function": "cob_convert_hex_digit",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_convert_hex_byte",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_skip_blanks",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_load_collation",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_toupper",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_tolower",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_field_to_string",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "init_upper_lower",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       },
       {
         "function": "cob_init_cconv",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "cconv",
+        "rust_status": "active"
       }
     ],
-    "gap": [
-      "cob_convert_hex_byte",
-      "cob_convert_hex_digit",
-      "cob_field_to_string",
-      "cob_init_cconv",
-      "cob_load_collation",
-      "cob_skip_blanks",
-      "cob_tolower",
-      "cob_toupper",
-      "init_upper_lower"
-    ],
+    "gap": [],
     "inactive_mirrors": 0,
-    "missing": 8,
+    "missing": 0,
     "source_funcs": 9,
     "test_only": 0
   },

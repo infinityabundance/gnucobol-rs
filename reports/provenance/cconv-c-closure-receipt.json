@@ -1,0 +1,51 @@
+{
+  "schema": "gnurust-file-closure-receipt-v1",
+  "id": "GNURUST.CCONV.CLOSE.1",
+  "file": "libcob/cconv.c",
+  "file_index": "small-first pass (< 70 functions)",
+  "statement": "cconv.c (character-conversion helpers) ported function-for-function into gnucobol-rs. All 9/9 functions have a named, ACTIVE Rust counterpart, confirmed by the typed gnucobol-rs-port-index (9/9 active, 0 doc-only, 0 missing) and the authoritative doxygen parse. Not clean-room: an openly-licensed, provenance-documented, oracle-verified Rust port.",
+  "oracle": {
+    "upstream": "GnuCOBOL 3.2.0 (Free Software Foundation, Inc.)",
+    "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+    "source_tarball_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
+    "cconv_c_sha256": "62c8850da7daba3c21a4da5d58fc015db3dac61f7513178405b78c346a98dc67",
+    "admission_receipt": "reports/admission/RECEIPT-ADMISSION.md"
+  },
+  "coverage": {
+    "functions_total": 9,
+    "functions_ported_named": 9,
+    "functions_active": 9,
+    "functions": [
+      "cob_convert_hex_digit",
+      "cob_convert_hex_byte",
+      "cob_skip_blanks",
+      "cob_load_collation",
+      "cob_toupper",
+      "cob_tolower",
+      "cob_field_to_string",
+      "init_upper_lower",
+      "cob_init_cconv"
+    ],
+    "inventory_confirmed_by": "gnucobol-rs-port-index (typed: cconv.c 9/9 active, 0 doc-only, 0 missing) + doxygen preprocessed C parse (DOXYGEN-PARITY.md cconv.c 9/9)",
+    "rust_modules": ["crates/gnucobol-rs/src/cconv.rs"]
+  },
+  "differential_verification": {
+    "note": "All against the EXACT oracle object cconv.o extracted from the static libcob.a (the cconv functions are internal/hidden in libcob.so); cob_runtime_error stubbed. FAIL=0.",
+    "sweeps": {
+      "cconv.c case/hex/collation (cconv_sweep)": "27/0"
+    },
+    "scenario_coverage": "the full 256-byte cob_toupper/cob_tolower fold; a cob_field_to_string grid (NONE/LOWER/UPPER/LOWER_LOCALE/UPPER_LOCALE folds, rtrim, all-blank, trailing-NUL, single char, error codes); cob_load_collation over all five shipped .ttbl tables (both ebcdic_to_ascii and ascii_to_ebcdic halves). cob_convert_hex_digit/byte + cob_skip_blanks are exercised transitively by the collation parse.",
+    "self_contained": "4 in-crate unit tests cover the same surface without the oracle."
+  },
+  "non_claims": [
+    "CCM_LOWER_LOCALE / CCM_UPPER_LOCALE use the C-library locale fold; matched under the pinned LC_ALL=C.UTF-8 (ASCII-only, bytes >= 128 unchanged); other locales not modelled.",
+    "cob_load_collation does real filesystem + $COB_CONFIG_DIR I/O (faithful to libcob); the cconv module is therefore not part of the pure-decimal kernel (GNURUST.PUREDEC.0).",
+    "cob_runtime_error diagnostic text is not modelled (errors surface as the negative return codes)."
+  ],
+  "license_boundary": {
+    "crate_license": "LGPL-3.0-or-later",
+    "clean_room": false,
+    "statement": "Faithful DERIVATIVE PORT of GPL GnuCOBOL 3.2 cconv.c, NOT clean-room. LGPL-3.0-or-later; the Apache-2.0 KOBOLD layer never mixes (gpl-license-guard-receipt.json).",
+    "gpl_partition_guard": "reports/license/gpl-license-guard-receipt.json"
+  }
+}

@@ -270,19 +270,9 @@
     {
       "file": "cconv.c",
       "functions": 9,
-      "missing": [
-        "cob_convert_hex_byte",
-        "cob_convert_hex_digit",
-        "cob_field_to_string",
-        "cob_init_cconv",
-        "cob_load_collation",
-        "cob_skip_blanks",
-        "cob_tolower",
-        "cob_toupper",
-        "init_upper_lower"
-      ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 9
     },
     {
       "file": "termio.c",
@@ -1060,7 +1050,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 17.1,
-    "ported": 200
+    "parity_pct": 17.9,
+    "ported": 209
   }
 }

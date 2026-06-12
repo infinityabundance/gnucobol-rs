@@ -268,18 +268,9 @@
     {
       "doxygen_functions": 9,
       "file": "cconv.c",
-      "missing": [
-        "cob_convert_hex_byte",
-        "cob_convert_hex_digit",
-        "cob_field_to_string",
-        "cob_init_cconv",
-        "cob_skip_blanks",
-        "cob_tolower",
-        "cob_toupper",
-        "init_upper_lower"
-      ],
-      "parity_pct": 11.1,
-      "ported": 1
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 9
     },
     {
       "doxygen_functions": 18,
@@ -898,8 +889,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 20.7,
-    "ported": 207
+    "parity_pct": 21.5,
+    "ported": 215
   },
   "xml_root": "lab/doxygen/out/xml"
 }

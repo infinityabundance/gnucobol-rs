@@ -61,6 +61,7 @@ run_sweep "GNURUST.INSPECT.1 bytes" inspect_sweep.sh
 run_sweep "GNURUST.REFMOD.1 refmod"  refmod_sweep.sh
 run_sweep "GNURUST.STRING.UNSTRING.1" string_unstring_sweep.sh
 run_sweep "cobgetopt.c getopt_long_long" getopt_sweep.sh
+run_sweep "cconv.c case/hex/collation" cconv_sweep.sh
 run_sweep "GNURUST.INTRINSIC.ATLAS.1 (observed)" intrinsic_atlas_sweep.sh
 run_sweep "GNURUST.INTRINSIC.LENGTH.1" length_sweep.sh
 run_sweep "GNURUST.INTRINSIC.NUMVAL.1" numval_sweep.sh

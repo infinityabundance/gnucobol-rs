@@ -41,6 +41,7 @@
 #![forbid(unsafe_code)]
 
 pub mod arith;
+pub mod cconv;
 pub mod cob_decimal;
 pub mod float;
 pub mod gmp;
