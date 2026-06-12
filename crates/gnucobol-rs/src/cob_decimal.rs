@@ -2,8 +2,20 @@
 //! decimal and the operations the runtime builds on it, on top of the pure-Rust [`crate::gmp::Mpz`].
 //! Names mirror the C functions so the port is auditable against the source.
 //!
-//! This module is being grown function-by-function toward a complete numeric.c port; it currently
-//! covers field decode + the numeric comparison family (`GNURUST.NUMCMP.1`).
+//! Coverage of numeric.c's byte-producing surface (all oracle-verified): field decode
+//! (`cob_decimal_set_field`), arithmetic (`cob_decimal_add/sub/mul/div` + the `cob_add/sub/mul/div`
+//! and `cob_add_int/sub_int/set_int` verbs), rounding (`cob_decimal_do_round`, 8 modes + the packed
+//! `cob_add_bcd` mode/sign-on-zero), storing (`cob_decimal_get_field`), and the comparison family
+//! (`cob_decimal_cmp`/`cob_numeric_cmp`/`cob_cmp_int/llint/uint/packed`). Power (`cob_s32/s64_pow`)
+//! lives in [`crate::int_pow`], bit-logical in [`crate::logical`], float in [`crate::float`].
+//!
+//! **Deliberately NOT ported (declared bounds, not gaps):** the GMP/cob_decimal *lifecycle* — manual
+//! memory management (`cob_decimal_init/init2/alloc/clear/pop/push`, `cob_gmp_free`,
+//! `cob_init/exit_numeric`) is a no-op in Rust (RAII); the `mpz_get/set_sll/ull` host-int wrappers are
+//! the [`Mpz::from_i64`]/`from_u64`/`get_si`/`get_ui` methods; the `mpf` internals
+//! (`cob_decimal_get/set_mpf/_core`, `cob_decimal_get/set_double`, `cob_decimal_get/set_ieee*`) are
+//! modeled by their *observable* truncate-toward-zero behaviour in [`crate::float`] rather than a
+//! 2048-bit GMP float; and `cob_decimal_print`/`cob_print_*` are debug I/O, not byte semantics.
 #![forbid(unsafe_code)]
 
 use crate::arith::Round;
@@ -355,6 +367,45 @@ pub fn cob_cmp_int(f: &[u8], a: &FieldAttr, n: i64) -> i32 {
     cob_decimal_cmp(&d1, &d2)
 }
 
+/// `cob_cmp_llint (f, n)`: 64-bit signed field-vs-int compare (libcob fast path; same verdict).
+pub fn cob_cmp_llint(f: &[u8], a: &FieldAttr, n: i64) -> i32 {
+    cob_cmp_int(f, a, n)
+}
+
+/// `cob_cmp_uint (f, n)`: unsigned field-vs-int compare. Same verdict, via an unsigned decimal.
+pub fn cob_cmp_uint(f: &[u8], a: &FieldAttr, n: u64) -> i32 {
+    let d1 = cob_decimal_set_field(f, a);
+    let d2 = CobDecimal { value: Mpz::from_u64(n), scale: 0 };
+    cob_decimal_cmp(&d1, &d2)
+}
+
+/// `cob_cmp_packed (f, val)`: compare a packed field to an int64 (libcob's BCD fast path; the verdict
+/// matches the general decimal comparison reproduced here).
+pub fn cob_cmp_packed(f: &[u8], a: &FieldAttr, val: i64) -> i32 {
+    cob_cmp_int(f, a, val)
+}
+
+/// `cob_add_int (f, n, opt)`: `f := f + n` for a host integer `n`. The packed receiver takes the
+/// cob_add_bcd fast path.
+pub fn cob_add_int(f1: &[u8], a1: &FieldAttr, n: i32, round: Round) -> Result<Vec<u8>, ()> {
+    let bcd = a1.field_type == COB_TYPE_NUMERIC_PACKED;
+    let mut d = cob_decimal_set_field(f1, a1);
+    cob_decimal_add(&mut d, &CobDecimal { value: Mpz::from_i64(n as i64), scale: 0 });
+    let eff = if bcd { bcd_round_mode(round) } else { round };
+    cob_decimal_get_field(d, a1, f1.len(), eff, bcd)
+}
+
+/// `cob_sub_int (f, n, opt)`: `f := f - n` for a host integer `n`.
+pub fn cob_sub_int(f1: &[u8], a1: &FieldAttr, n: i32, round: Round) -> Result<Vec<u8>, ()> {
+    cob_add_int(f1, a1, -n, round)
+}
+
+/// `cob_set_int (f, n)`: store a host integer into a numeric field (no rounding; truncating store).
+pub fn cob_set_int(f1: &[u8], a1: &FieldAttr, n: i32) -> Result<Vec<u8>, ()> {
+    let d = CobDecimal { value: Mpz::from_i64(n as i64), scale: 0 };
+    cob_decimal_get_field(d, a1, f1.len(), Round::Truncate, false)
+}
+
 fn is_float(a: &FieldAttr) -> bool {
     matches!(a.field_type, 0x13 | 0x14 | 0x15 | 0x16 | 0x17)
 }
@@ -514,6 +565,24 @@ mod tests {
             }
         }
         assert!(checked > 400);
+    }
+
+    #[test]
+    fn int_paths_and_cmp_variants() {
+        // cob_set_int stores the integer; cob_add_int adds; cmp variants match cob_cmp_int.
+        let a = disp(5, 0, true);
+        assert_eq!(cob_set_int(b"00000", &a, 42).unwrap(), b"00042");
+        assert_eq!(cob_set_int(b"00000", &a, -7).unwrap().as_slice(), b"0000\x77"); // -7 overpunch
+        // 100 + 23 = 123
+        assert_eq!(cob_add_int(b"00100", &a, 23, Round::Truncate).unwrap(), b"00123");
+        // 100 - 150 = -50 -> "00050" with the last byte a negative overpunch '0' (0x70)
+        assert_eq!(cob_sub_int(b"00100", &a, 150, Round::Truncate).unwrap().as_slice(), b"0005\x70");
+        // cmp variants == cob_cmp_int verdict
+        for n in [0i64, 5, 9, 100] {
+            let v = cob_cmp_int(b"00009", &disp(5, 0, false), n);
+            assert_eq!(cob_cmp_llint(b"00009", &disp(5, 0, false), n), v);
+            assert_eq!(cob_cmp_uint(b"00009", &disp(5, 0, false), n as u64), v);
+        }
     }
 
     #[test]
