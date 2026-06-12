@@ -50,4 +50,24 @@ fn main() {
             }
         }
     }
+
+    // IEEE-decimal: DISPLAY <-> FLOAT-DECIMAL-16 (FP_DEC64=22, 8 bytes) / -34 (FP_DEC128=23, 16 bytes)
+    const FP_DEC64: u32 = 22;
+    const FP_DEC128: u32 = 23;
+    for nd in [1usize, 4, 8, 12, 16] {
+        for scale in 0..=(nd.min(6) as i32) {
+            for neg in [false, true] {
+                for _ in 0..4 {
+                    let digits: Vec<u8> = (0..nd).map(|_| (rng.next() % 10) as u8).collect();
+                    let mut a: Vec<u8> = digits.iter().map(|d| b'0' + d).collect();
+                    if neg { if let Some(l) = a.last_mut() { *l |= 0x40; } }
+                    // ENCODE: DISPLAY -> FP_DEC64 / FP_DEC128
+                    println!("p{id} {DISPLAY} {nd} {scale} {HAVE_SIGN} {nd} {} {FP_DEC64} 0 0 {IS_FP} 8", hex(&a));
+                    id += 1;
+                    println!("p{id} {DISPLAY} {nd} {scale} {HAVE_SIGN} {nd} {} {FP_DEC128} 0 0 {IS_FP} 16", hex(&a));
+                    id += 1;
+                }
+            }
+        }
+    }
 }

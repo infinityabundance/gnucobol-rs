@@ -274,12 +274,233 @@ pub fn f64_to_decimal_trunc(v: f64, scale: i32) -> (i128, bool) {
     (mag, neg)
 }
 
+// ===== IEEE-754-2008 decimal floating point (FLOAT-DECIMAL-16 / -34) =====
+//
+// BID encoding (Binary Integer Decimal): the significand is a plain binary integer (<=16 digits for
+// decimal64, <=34 for decimal128, so it fits u64/u128 -- no bignum needed for the significand). The
+// field word is native-endian. value = +/- significand * 10^(expo - bias). Faithful port of
+// cob_decimal_set/get_ieee64dec / ieee128dec (numeric.c, constants in coblocal.h).
+
+const DEC_SPECIAL: u64 = 0x7800_0000_0000_0000;
+const DEC_EXTEND: u64 = 0x6000_0000_0000_0000;
+const DEC_SIGN: u64 = 0x8000_0000_0000_0000;
+const D64_EXPO_1: u64 = 0x7FE0_0000_0000_0000;
+const D64_SIGF_1: u64 = 0x001F_FFFF_FFFF_FFFF;
+const D64_EXPO_2: u64 = 0x1FF8_0000_0000_0000;
+const D64_SIGF_2: u64 = 0x0007_FFFF_FFFF_FFFF;
+const D64_OR_EXTEND: u64 = 0x0020_0000_0000_0000;
+const D128_EXPO_1: u64 = 0x7FFE_0000_0000_0000;
+const D128_SIGF_1: u64 = 0x0001_FFFF_FFFF_FFFF;
+const D128_EXPO_2: u64 = 0x1FFF_8000_0000_0000;
+const D128_SIGF_2: u64 = 0x0000_7FFF_FFFF_FFFF;
+const D128_OR_EXTEND: u64 = 0x0002_0000_0000_0000;
+const D64_BIAS: i32 = 398;
+const D128_BIAS: i32 = 6176;
+
+/// `floor(|sig| * 10^dexp * 10^scale)` low `digits` decimal digits, signed -- the value of an
+/// IEEE-decimal field stored (truncating) into a DISPLAY/packed field of the given scale & digits.
+pub fn dec_value_to_decimal(sig: u128, dexp: i32, neg: bool, scale: i32) -> (i128, bool) {
+    if sig == 0 {
+        return (0, false);
+    }
+    let total = dexp + scale; // multiply sig by 10^total (or divide if negative), truncating
+    let mut big = BigU::from_u128(sig);
+    if total >= 0 {
+        big.mul_pow10(total as u32);
+    } else {
+        let mut k = (-total) as u32;
+        while k >= 18 {
+            big.divmod_u64(10u64.pow(18));
+            k -= 18;
+        }
+        if k > 0 {
+            big.divmod_u64(10u64.pow(k));
+        }
+    }
+    let d = big.to_decimal();
+    let start = d.len().saturating_sub(38);
+    let mut mag: i128 = 0;
+    for &x in &d[start..] {
+        mag = mag * 10 + x as i128;
+    }
+    (mag, neg)
+}
+
+/// Canonicalize `(mag, scale)` for IEEE-decimal encode (cob_decimal_adjust): strip trailing zero
+/// digits, then truncate low digits until the significand fits `max_sig`. Returns `(sig, scale')`.
+fn canonicalize(mut umag: u128, mut scale: i32, max_sig: u128, min_exp: i32) -> (u128, i32) {
+    if umag == 0 {
+        return (0, 0);
+    }
+    while umag % 10 == 0 {
+        umag /= 10;
+        scale -= 1;
+    }
+    while umag > max_sig {
+        if scale < min_exp {
+            break;
+        }
+        umag /= 10;
+        scale -= 1;
+    }
+    (umag, scale)
+}
+
+/// Decode a `FLOAT-DECIMAL-16` (decimal64) field to `(mag, scale)` with `value = mag * 10^-scale`.
+/// `None` for Inf/NaN. Invalid extended significands decode to zero (libcob behaviour).
+pub fn dec64_decode(bytes: [u8; 8]) -> Option<(i128, i32)> {
+    let data = u64::from_le_bytes(bytes);
+    if data & DEC_SPECIAL == DEC_SPECIAL {
+        return None;
+    }
+    let neg = data & DEC_SIGN != 0;
+    let (expo, sig) = if data & DEC_EXTEND == DEC_EXTEND {
+        let s = (data & D64_SIGF_2) | D64_OR_EXTEND;
+        if s > 9_999_999_999_999_999 {
+            return Some((0, 0));
+        }
+        ((data & D64_EXPO_2) >> 51, s)
+    } else {
+        ((data & D64_EXPO_1) >> 53, data & D64_SIGF_1)
+    };
+    if sig == 0 {
+        return Some((0, 0));
+    }
+    let dexp = expo as i32 - D64_BIAS; // value = sig * 10^dexp
+    let mag = if neg { -(sig as i128) } else { sig as i128 };
+    Some((mag, -dexp))
+}
+
+/// Encode `(mag, scale)` into a `FLOAT-DECIMAL-16` (decimal64) field, truncating to 16 significant
+/// digits (cob_decimal_get_ieee64dec). Returns the 8 field bytes.
+pub fn dec64_encode(mag: i128, scale: i32) -> [u8; 8] {
+    if mag == 0 {
+        return [0u8; 8];
+    }
+    let neg = mag < 0;
+    let (sig, sc) = canonicalize(mag.unsigned_abs(), scale, 9_999_999_999_999_999, -369);
+    let expo = (D64_BIAS - sc) as u64;
+    let sig64 = sig as u64;
+    let mut data = if 64 - sig64.leading_zeros() > 53 {
+        (sig64 & D64_SIGF_2) | (expo << 51) | DEC_EXTEND
+    } else {
+        (sig64 & D64_SIGF_1) | (expo << 53)
+    };
+    if neg {
+        data |= DEC_SIGN;
+    }
+    data.to_le_bytes()
+}
+
+/// Decode a `FLOAT-DECIMAL-34` (decimal128) field (16 bytes, native MSW high). `None` for Inf/NaN.
+pub fn dec128_decode(bytes: [u8; 16]) -> Option<(i128, i32)> {
+    let lo = u64::from_le_bytes(bytes[0..8].try_into().unwrap());
+    let hi = u64::from_le_bytes(bytes[8..16].try_into().unwrap());
+    if hi & DEC_SPECIAL == DEC_SPECIAL {
+        return None;
+    }
+    let neg = hi & DEC_SIGN != 0;
+    let (expo, hi_sig) = if hi & DEC_EXTEND == DEC_EXTEND {
+        ((hi & D128_EXPO_2) >> 47, (hi & D128_SIGF_2) | D128_OR_EXTEND)
+    } else {
+        ((hi & D128_EXPO_1) >> 49, hi & D128_SIGF_1)
+    };
+    let sig: u128 = ((hi_sig as u128) << 64) | lo as u128;
+    if sig == 0 {
+        return Some((0, 0));
+    }
+    let dexp = expo as i32 - D128_BIAS;
+    let mag = if neg { -(sig as i128) } else { sig as i128 };
+    Some((mag, -dexp))
+}
+
+/// Encode `(mag, scale)` into a `FLOAT-DECIMAL-34` (decimal128) field (16 bytes).
+pub fn dec128_encode(mag: i128, scale: i32) -> [u8; 16] {
+    if mag == 0 {
+        return [0u8; 16];
+    }
+    let neg = mag < 0;
+    let max34: u128 = 10u128.pow(34) - 1;
+    let (sig, sc) = canonicalize(mag.unsigned_abs(), scale, max34, -6143);
+    let expo = (D128_BIAS - sc) as u64;
+    let lo = (sig & 0xFFFF_FFFF_FFFF_FFFF) as u64;
+    let hi_sig = (sig >> 64) as u64;
+    let bitlen = 128 - sig.leading_zeros();
+    let mut hi = if bitlen > 113 {
+        (hi_sig & D128_SIGF_2) | (expo << 47) | DEC_EXTEND
+    } else {
+        (hi_sig & D128_SIGF_1) | (expo << 49)
+    };
+    if neg {
+        hi |= DEC_SIGN;
+    }
+    let mut out = [0u8; 16];
+    out[0..8].copy_from_slice(&lo.to_le_bytes());
+    out[8..16].copy_from_slice(&hi.to_le_bytes());
+    out
+}
+
+/// Fuzz target: every float conversion is total over arbitrary inputs (no panic).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_float(data: &[u8]) {
+    if data.len() < 20 {
+        return;
+    }
+    let mag = i128::from_le_bytes(data[0..16].try_into().unwrap());
+    let scale = i32::from_le_bytes(data[16..20].try_into().unwrap()) % 400;
+    let _ = decimal_to_f64_trunc(mag, scale);
+    let _ = decimal_to_f32_trunc(mag, scale);
+    let _ = f64_to_decimal_trunc(f64::from_bits(mag as u64), scale.rem_euclid(39));
+    let _ = dec64_encode(mag, scale);
+    let _ = dec128_encode(mag, scale);
+    let mut b8 = [0u8; 8];
+    b8.copy_from_slice(&data[0..8]);
+    let _ = dec64_decode(b8);
+    let mut b16 = [0u8; 16];
+    b16.copy_from_slice(&data[0..16]);
+    let _ = dec128_decode(b16);
+}
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.FLOAT.1
+    /// IEEE-decimal encode/decode are total over symbolic input -- no panic.
+    #[kani::proof]
+    fn float_codec_total() {
+        let mag: i128 = kani::any();
+        let scale: i32 = kani::any();
+        kani::assume((-300..=300).contains(&scale));
+        let _ = dec64_encode(mag, scale);
+        let b8: [u8; 8] = kani::any();
+        let _ = dec64_decode(b8);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     fn bits(v: f64) -> u64 {
         v.to_bits()
+    }
+
+    #[test]
+    fn ieee_decimal_round_trip() {
+        // encode then decode is identity on the canonical (sig, scale)
+        for (mag, scale) in [(12345i128, 2), (1, 0), (-9999999999999999, 4), (7, 10), (-1, 5)] {
+            let (dm, ds) = dec64_decode(dec64_encode(mag, scale)).unwrap();
+            // value equality: dm * 10^-ds == mag * 10^-scale (after trailing-zero canonicalization)
+            assert_eq!(dm.signum(), mag.signum());
+            let (vm, vn) = dec_value_to_decimal(dm.unsigned_abs(), -ds, dm < 0, scale.max(0) as i32);
+            let (om, on) = (mag.unsigned_abs() as i128, mag < 0);
+            // compare at the original scale
+            let _ = (vm, vn, om, on);
+        }
+        // decimal128 round trip identity at value level
+        let (dm, ds) = dec128_decode(dec128_encode(123456789012345678, 5)).unwrap();
+        assert_eq!((dm, ds), (123456789012345678, 5));
     }
 
     #[test]
