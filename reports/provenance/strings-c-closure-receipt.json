@@ -1,0 +1,85 @@
+{
+  "schema": "gnurust-file-closure-receipt-v1",
+  "id": "GNURUST.STRINGS.CLOSE.1",
+  "file": "libcob/strings.c",
+  "file_index": "3 of 13 libcob source files",
+  "statement": "strings.c is the THIRD GnuCOBOL libcob source file ported function-for-function into gnucobol-rs. All 34 functions have a named Rust counterpart (C-side inventory cross-checked: exactly 34 top-level function definitions). Not clean-room: an openly-licensed, provenance-documented, oracle-verified Rust port/reconstruction of the admitted GnuCOBOL 3.2 STRING / UNSTRING / INSPECT runtime API.",
+  "oracle": {
+    "upstream": "GnuCOBOL 3.2.0 (Free Software Foundation, Inc.)",
+    "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+    "source_tarball_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
+    "strings_c_sha256": "5717f26682305f1b12a05d643ec921a1f672398fe4fa088b25ab62cb8377afa7",
+    "admission_receipt": "reports/admission/RECEIPT-ADMISSION.md"
+  },
+  "commit_range": {
+    "first": "2f1906b8 (STRING state machine)",
+    "last": "ac48fd13 (INSPECT state machine; 34/34)"
+  },
+  "coverage": {
+    "functions_total": 34,
+    "functions_ported_named": 34,
+    "functions": [
+      "alloc_figurative",
+      "cob_exit_strings",
+      "cob_init_strings",
+      "cob_inspect_after",
+      "cob_inspect_all",
+      "cob_inspect_before",
+      "cob_inspect_characters",
+      "cob_inspect_converting",
+      "cob_inspect_finish",
+      "cob_inspect_first",
+      "cob_inspect_init",
+      "cob_inspect_init_common",
+      "cob_inspect_init_converting",
+      "cob_inspect_leading",
+      "cob_inspect_start",
+      "cob_inspect_trailing",
+      "cob_str_memcpy",
+      "cob_string_append",
+      "cob_string_delimited",
+      "cob_string_finish",
+      "cob_string_init",
+      "cob_unstring_delimited",
+      "cob_unstring_finish",
+      "cob_unstring_init",
+      "cob_unstring_into",
+      "cob_unstring_tallying",
+      "do_mark",
+      "inspect_common",
+      "inspect_common_no_replace",
+      "inspect_common_replacing",
+      "inspect_find_data",
+      "is_marked",
+      "set_inspect_mark",
+      "setup_repdata"
+    ],
+    "inventory_confirmed_by": "C-side grep of top-level function definitions (exactly 34) + libcob-parity gate (34/34, missing []) + rust-port doxygen clean refresh",
+    "rust_modules": [
+      "crates/gnucobol-rs/src/strings.rs (CobString / CobUnstring / CobInspect state machines + the static helpers)"
+    ]
+  },
+  "differential_verification": {
+    "note": "All against the admitted GnuCOBOL 3.2 oracle. FAIL=0.",
+    "sweeps": {
+      "GNURUST.INSPECT.1 bytes (inspect_sweep)": "12/0",
+      "GNURUST.STRING.UNSTRING.1 (string_unstring_sweep)": "7/0"
+    },
+    "transitive_verification": "CobInspect (the 1:1 stateful port of the strings.c INSPECT functions) is cross-checked in-crate against the oracle-sealed inspect.rs byte court over a 200+ case grid (ALL/LEADING/FIRST/CHARACTERS tally, REPLACING ALL/LEADING/FIRST, CONVERTING, BEFORE/AFTER region restriction); since inspect.rs is itself sealed against the oracle, identical results transitively oracle-verify the stateful port.",
+    "fidelity_notes": [
+      "set_inspect_mark reproduces the C size_t underflow on the LEADING last_marker==0 path (pos_end = (pos+length).wrapping_sub(1); the length-0 memset writes nothing) so the marker bookkeeping matches the oracle byte-for-byte."
+    ]
+  },
+  "non_claims": [
+    "The byte courts witness narrow, single-clause INSPECT / STRING / UNSTRING statements; un-admitted multi-clause ordering and locale/case-folding are not claimed.",
+    "National/DBCS and UTF-8 multibyte INSPECT behaviour is out of scope (the courts are single-byte).",
+    "The REPLACING size-mismatch path expands a figurative operand (alloc_figurative); the C RANGE_INSPECT_SIZE exception on a non-figurative mismatch is not modelled at the byte-court level.",
+    "Procedure-Division execution, screen/report I/O, and business correctness are other files/courts."
+  ],
+  "license_boundary": {
+    "crate_license": "LGPL-3.0-or-later",
+    "clean_room": false,
+    "statement": "Faithful DERIVATIVE PORT of GPL GnuCOBOL 3.2 strings.c, NOT clean-room. LGPL-3.0-or-later to honour the copyleft; the Apache-2.0 KOBOLD layer never mixes (gpl-license-guard-receipt.json).",
+    "gpl_partition_guard": "reports/license/gpl-license-guard-receipt.json"
+  }
+}
