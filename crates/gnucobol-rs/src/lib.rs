@@ -41,6 +41,7 @@
 #![forbid(unsafe_code)]
 
 pub mod arith;
+pub mod float;
 pub mod int_pow;
 pub mod logical;
 pub mod file_flow_slice;
