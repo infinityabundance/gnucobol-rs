@@ -3,10 +3,10 @@
   "files": [
     {
       "file": "numeric.c",
-      "functions": 102,
+      "functions": 104,
       "missing": [],
       "parity_pct": 100.0,
-      "ported": 102
+      "ported": 104
     },
     {
       "file": "move.c",
@@ -864,7 +864,7 @@
     },
     {
       "file": "common.c",
-      "functions": 250,
+      "functions": 253,
       "missing": [
         "call_exit_handlers_and_terminate",
         "cb_config_entry",
@@ -1095,7 +1095,10 @@
         "print_version",
         "print_version_summary",
         "raise_arg_mismatch",
+        "repeatWord",
         "set_cob_time_ns_from_filetime",
+        "set_config_val",
+        "set_config_val_by_name",
         "set_source_location",
         "set_value",
         "setenv",
@@ -1133,8 +1136,8 @@
   "schema": "libcob-porting-parity-v1",
   "source_root": "lab/admit/gnucobol-3.2/libcob",
   "totals": {
-    "functions": 1147,
-    "parity_pct": 11.2,
-    "ported": 128
+    "functions": 1152,
+    "parity_pct": 11.3,
+    "ported": 130
   }
 }

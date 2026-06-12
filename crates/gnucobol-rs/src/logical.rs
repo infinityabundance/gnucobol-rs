@@ -42,6 +42,19 @@ pub fn logical_left(a: i128, b: i128) -> u64 {
 pub fn logical_right(a: i128, b: i128) -> u64 {
     to_u64(a).wrapping_shr(to_u64(b) as u32)
 }
+/// Circular LEFT shift: `cob_logical_left_c` (numeric.c:4577) — rotate `u0` left by `u1` within a
+/// `bytes*8`-bit word: `(u0 << u1) | (u0 >> (bytes*8 - u1))`.
+pub fn cob_logical_left_c(a: i128, b: i128, bytes: i32) -> u64 {
+    let (u0, u1) = (to_u64(a), to_u64(b));
+    let w = bytes as u64 * 8;
+    u0.wrapping_shl(u1 as u32) | u0.wrapping_shr((w.wrapping_sub(u1)) as u32)
+}
+/// Circular RIGHT shift: `cob_logical_right_c` (numeric.c:4586) — `(u0 >> u1) | (u0 << (bytes*8 - u1))`.
+pub fn cob_logical_right_c(a: i128, b: i128, bytes: i32) -> u64 {
+    let (u0, u1) = (to_u64(a), to_u64(b));
+    let w = bytes as u64 * 8;
+    u0.wrapping_shr(u1 as u32) | u0.wrapping_shl((w.wrapping_sub(u1)) as u32)
+}
 
 /// Fuzz target: every bit-logical op is total over arbitrary operand pairs.
 #[cfg(feature = "fuzzing")]

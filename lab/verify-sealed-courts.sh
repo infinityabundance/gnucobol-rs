@@ -131,6 +131,17 @@ fi
 # LIBCOB.PARITY: the forensic 1:1 porting-parity doc must match a fresh re-derivation from the admitted
 # libcob source + the Rust src (source-gated: skips cleanly when the source is not extracted).
 ( cd "$ROOT" && cargo run -q -p xtask -- parity check >/dev/null 2>&1 ) && row "libcob-parity gate (forensic)" "PASS" || { row "libcob-parity gate (forensic)" "FAIL"; RED=$((RED+1)); }
+# Rust-port doxygen: run doxygen on crates/gnucobol-rs/src as a CLEAN refresh (the previous run is wiped
+# first, so it never accumulates), and assert it documented the port. The authoritative per-function
+# coverage ("did we miss anything") is the parity gate above; this proves the browsable native-Rust
+# libcob doxygen regenerates and maps against the C-side libcob doxygen (lab/doxygen/Doxyfile).
+if command -v doxygen >/dev/null 2>&1; then
+  ( cd "$ROOT" && rm -rf lab/doxygen/out-rust && doxygen lab/doxygen/Doxyfile-rust >/dev/null 2>&1 )
+  RFNS=$(grep -rhoE 'kind="function"' "$ROOT"/lab/doxygen/out-rust/xml/*8rs.xml 2>/dev/null | wc -l)
+  if [ "${RFNS:-0}" -gt 200 ]; then row "rust-port doxygen (clean, $RFNS fns)" "PASS"; else row "rust-port doxygen (clean refresh)" "FAIL"; RED=$((RED+1)); fi
+else
+  row "rust-port doxygen (doxygen absent -> skipped)" "PASS"
+fi
 
 echo
 echo "== $GREEN green, $RED red =="

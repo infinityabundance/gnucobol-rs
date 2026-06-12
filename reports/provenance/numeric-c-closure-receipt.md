@@ -6,7 +6,7 @@
 ## What this seals
 
 `numeric.c` is the **first** GnuCOBOL libcob source file ported function-for-function into
-`gnucobol-rs`. Every function in the file has a named Rust counterpart — **102/102**.
+`gnucobol-rs`. Every function in the file has a named Rust counterpart — **104/104**.
 
 The project **does not claim a clean-room implementation** for this file. It claims an **openly-licensed,
 provenance-documented, oracle-verified Rust port/reconstruction** of the admitted GnuCOBOL 3.2 numeric
@@ -16,7 +16,7 @@ from-the-algorithm reconstruction on a pure-Rust `mpz`/`mpf` substrate, `#![forb
 
 ## Coverage
 
-- **102/102 functions** ported as named Rust functions across `cob_decimal.rs`, `packed.rs`, `gmp.rs`
+- **104/104 functions** ported as named Rust functions across `cob_decimal.rs`, `packed.rs`, `gmp.rs`
   (pure-Rust `mpz`), `mpf.rs` (pure-Rust 2048-bit `mpf`), `int_pow.rs`, `logical.rs`, `float.rs`.
 - **Zero declared bounds.** The 2048-bit `mpf` is a real binary float (not an f64 proxy); the lifecycle,
   host-int, print, sign, pool, and ieee functions are all ported as named functions.

@@ -30,7 +30,12 @@ fn functions_in_c(path: &Path) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     let mut seen = HashSet::new();
     let is_rettype = |s: &str| {
-        let t = s.trim_end();
+        // strip a trailing `/* ... */` comment (e.g. `void  /* Circular LEFT shift */`) before the check
+        let mut t = s;
+        if let Some(p) = t.find("/*") {
+            t = &t[..p];
+        }
+        let t = t.trim_end();
         !t.is_empty()
             && t.chars().next().map(|c| c.is_ascii_alphabetic() || c == '_').unwrap_or(false)
             && t.chars().all(|c| c.is_ascii_alphanumeric() || c == '_' || c == ' ' || c == '\t' || c == '*')

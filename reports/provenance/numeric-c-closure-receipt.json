@@ -19,8 +19,8 @@
     "note": "Predecessor byte-courts (ROUND/BIGNUM/INTPOW/LOGICAL/FLOAT/COMP-6/arith) were sealed earlier in the campaign and are aggregated here."
   },
   "coverage": {
-    "functions_total": 102,
-    "functions_ported_named": 102,
+    "functions_total": 104,
+    "functions_ported_named": 104,
     "functions": [
       "align_decimal",
       "check_overflow_and_set_sign",
@@ -90,9 +90,11 @@
       "cob_init_numeric",
       "cob_logical_and",
       "cob_logical_left",
+      "cob_logical_left_c",
       "cob_logical_not",
       "cob_logical_or",
       "cob_logical_right",
+      "cob_logical_right_c",
       "cob_logical_xor",
       "cob_move_bcd",
       "cob_mul",
@@ -133,7 +135,8 @@
       "crates/gnucobol-rs/src/int_pow.rs (cob_s32/s64_pow)",
       "crates/gnucobol-rs/src/logical.rs (cob_logical_*)",
       "crates/gnucobol-rs/src/float.rs (BID dec64/128 + double-decimal primitives)"
-    ]
+    ],
+    "inventory_note": "Inventory cross-checked against doxygen's preprocessed C parse; it caught cob_logical_left_c/cob_logical_right_c (circular shifts) that the line-based awk inventory missed (a /* comment */ after the return type). Now 104/104."
   },
   "disabled_in_source_ported_not_wired": {
     "functions": [

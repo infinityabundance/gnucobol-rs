@@ -1,0 +1,19 @@
+# Doxygen over the NATIVE RUST libcob port (crates/gnucobol-rs/src). Refreshed clean each run (the
+# refresh script wipes OUTPUT_DIRECTORY first). Rust is parsed best-effort as C++ for the function map.
+PROJECT_NAME           = "gnucobol-rs (native Rust libcob port)"
+INPUT                  = crates/gnucobol-rs/src
+FILE_PATTERNS          = *.rs
+RECURSIVE              = YES
+EXTENSION_MAPPING      = rs=C++
+OUTPUT_DIRECTORY       = lab/doxygen/out-rust
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_XML           = YES
+XML_PROGRAMLISTING     = NO
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+EXTRACT_PRIVATE        = YES
+QUIET                  = YES
+WARNINGS               = NO
+WARN_IF_UNDOCUMENTED   = NO
+HAVE_DOT               = NO
