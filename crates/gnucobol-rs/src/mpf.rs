@@ -410,14 +410,36 @@ impl Mpf {
         };
         let mut d: Vec<u8> = numer.to_decimal_string().bytes().map(|b| b - b'0').collect();
         let full_len = d.len() as i64;
-        let exp10 = full_len - p;
+        let mut exp10 = full_len - p;
         // strip trailing zeros (they are not significant digits)
         while d.len() > 1 && *d.last().unwrap() == 0 {
             d.pop();
         }
-        // truncate toward zero to ndigits significant digits
+        // Round to nearest (half up) at `ndigits` significant digits, as GMP's mpf_get_str does. The
+        // decimal result field is sized to these digits, so the rounding decides the last digit
+        // (plain truncation would be 1 ULP low, e.g. e's 96th digit). A carry out of the leading digit
+        // (…999 -> 1000) grows the base-10 exponent.
         if d.len() > ndigits {
+            let round_up = d[ndigits] >= 5;
             d.truncate(ndigits);
+            if round_up {
+                let mut i = ndigits;
+                loop {
+                    if i == 0 {
+                        d.insert(0, 1);
+                        d.truncate(ndigits);
+                        exp10 += 1;
+                        break;
+                    }
+                    i -= 1;
+                    if d[i] == 9 {
+                        d[i] = 0;
+                    } else {
+                        d[i] += 1;
+                        break;
+                    }
+                }
+            }
             while d.len() > 1 && *d.last().unwrap() == 0 {
                 d.pop();
             }
@@ -452,6 +474,110 @@ fn scale_pow2(m: f64, e: i64) -> f64 {
         }
         v * 2f64.powi(-(k as i32))
     }
+}
+
+/// `COB_MPF_CUTOFF` (coblocal.h:150): the bit count for the `mpf_eq` series-convergence cutoff.
+pub const COB_MPF_CUTOFF: u64 = 1024;
+
+/// `cob_pi` (setup_cob_pi, intrinsic.c): pi to COB_PI_LEN=2820 bits, used by sin/cos/atan/asin/acos.
+pub fn cob_pi() -> Mpf {
+    Mpf::from_decimal_str(
+        "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194912983367336244065664308602139494639522473719070217986094370277053921717629317675238467481846766940513200056812714526356082778577134275778960917363717872146844090122495343014654958537105079227968925892354201995611212902196086403441815981362977477130996051870721134999999837297804995105973173281609631859502445945534690830264252230825334468503526193118817101",
+        COB_MPF_PREC,
+    )
+}
+
+/// `cob_log_half` (setup_cob_log_half, intrinsic.c): ln(0.5) (negative) to COB_LOG_HALF_LEN=2784 bits,
+/// used by `cob_mpf_log` to fold the binary exponent into the result.
+pub fn cob_log_half() -> Mpf {
+    Mpf::from_decimal_str(
+        "-0.6931471805599453094172321214581765680755001343602552541206800094933936219696947156058633269964186875420014810205706857336855202357581305570326707516350759619307275708283714351903070386238916734711233501153644979552391204751726815749320651555247341395258829504530070953263666426541042391578149520437404303855008019441706416715186447128399681717845469570262716310645461502572074024816377733896385506952606683411372738737229289564935470257626520988596932019650585547647033067936544325476327449512504060694381471046899465062201677204245245296126879465461931651746813926725041038025462596568691441928716082938031727143677826548775664850856740776484514644399404614226031930967354025744460703080960850474866385231381816767514386674766478908814371419854942315199735488037516586127535291661000710535582498794147295092931138971559982056543928717",
+        COB_MPF_PREC,
+    )
+}
+
+/// `cob_log_ten` (setup_cob_log_ten, intrinsic.c): ln(10), computed as `cob_mpf_log(10)` (not hardcoded).
+pub fn cob_log_ten() -> Mpf {
+    cob_mpf_log(&Mpf::set_ui(10, COB_MPF_PREC))
+}
+
+/// `cob_mpf_log (dst, src)` (intrinsic.c): natural log via the `log(1-y)` series, after folding the binary
+/// exponent through `ln(2)`. `src <= 0` or `src == 1` yields 0.
+pub fn cob_mpf_log(src: &Mpf) -> Mpf {
+    let prec = COB_MPF_PREC;
+    if src.sgn() <= 0 || src.cmp_ui(1) == Ordering::Equal {
+        return Mpf::new(prec);
+    }
+    let mut vf1 = src.clone();
+    let mut dst_temp = Mpf::new(prec);
+    let expon = vf1.get_d_2exp_exp();
+    if expon != 0 {
+        dst_temp = cob_log_half();
+        if expon > 0 {
+            dst_temp = dst_temp.mul_ui(expon as u64);
+            dst_temp.neg_assign();
+            vf1 = vf1.div_2exp(expon as u64);
+        } else {
+            dst_temp = dst_temp.mul_ui((-expon) as u64);
+            vf1 = vf1.mul_2exp((-expon) as u64);
+        }
+    }
+    vf1 = Mpf::ui_sub(1, &vf1);
+    let mut vf3 = Mpf::set_si(-1, prec);
+    let mut n = 1u64;
+    loop {
+        vf3 = vf3.mul(&vf1);
+        let vf2 = vf3.div_ui(n);
+        let vf4 = dst_temp.clone();
+        dst_temp = dst_temp.add(&vf2);
+        n += 1;
+        if vf4.eq(&dst_temp, COB_MPF_CUTOFF) {
+            break;
+        }
+    }
+    dst_temp
+}
+
+/// `cob_mpf_log10 (dst, src)` (intrinsic.c): `cob_mpf_log(src) / ln(10)`.
+pub fn cob_mpf_log10(src: &Mpf) -> Mpf {
+    cob_mpf_log(src).div(&cob_log_ten())
+}
+
+/// `cob_mpf_exp (dst, src)` (intrinsic.c): `e^src` via the Taylor series on the binary-exponent-reduced
+/// magnitude, then repeated squaring; reciprocal for a negative argument.
+pub fn cob_mpf_exp(src: &Mpf) -> Mpf {
+    let prec = COB_MPF_PREC;
+    let mut vf1 = src.clone();
+    let mut vf2 = Mpf::set_ui(1, prec);
+    let mut dst_temp = Mpf::set_ui(1, prec);
+    let is_negative = vf1.sgn() < 0;
+    if is_negative {
+        vf1.abs_assign();
+    }
+    let expon = vf1.get_d_2exp_exp();
+    if expon > 0 {
+        vf1 = vf1.div_2exp(expon as u64);
+    }
+    let mut n = 1u64;
+    loop {
+        vf2 = vf2.mul(&vf1);
+        vf2 = vf2.div_ui(n);
+        let vf3 = dst_temp.clone();
+        dst_temp = dst_temp.add(&vf2);
+        n += 1;
+        if vf3.eq(&dst_temp, COB_MPF_CUTOFF) {
+            break;
+        }
+    }
+    let mut i = 0i64;
+    while i < expon {
+        dst_temp = dst_temp.mul(&dst_temp);
+        i += 1;
+    }
+    if is_negative {
+        dst_temp = Mpf::ui_div(1, &dst_temp);
+    }
+    dst_temp
 }
 
 #[cfg(test)]
@@ -511,6 +637,32 @@ mod tests {
         let half = Mpf::from_decimal_str("-0.5", p);
         assert_eq!(half.cmp_si(0), Ordering::Less);
         assert_eq!(half.mul_ui(2).cmp_si(-1), Ordering::Equal);
+    }
+
+
+    #[test]
+    fn transcendental_leading_digits() {
+        let p = COB_MPF_PREC;
+        // e = exp(1) = 2.718281828459045...
+        let e = cob_mpf_exp(&Mpf::set_ui(1, p));
+        let (_, d, ex) = dec(&e, 16);
+        assert_eq!(ex, 1);
+        assert_eq!(&d[..10], "2718281828");
+        // ln(10) = 2.302585092994046...
+        let l10 = cob_mpf_log(&Mpf::set_ui(10, p));
+        let (_, d, ex) = dec(&l10, 16);
+        assert_eq!(ex, 1);
+        assert_eq!(&d[..10], "2302585092");
+        // exp(-1) = 0.3678794411714423...
+        let em1 = cob_mpf_exp(&Mpf::set_si(-1, p));
+        let (_, d, ex) = dec(&em1, 12);
+        assert_eq!(ex, 0);
+        assert_eq!(&d[..8], "36787944");
+        // log10(100) = 2 (exact-ish; leading digits are 1999.. or 2000.. -- the oracle adjudicates the
+        // last-digit boundary, so here we only assert the series produced ~2).
+        let l = cob_mpf_log10(&Mpf::set_ui(100, p));
+        let (_, _d, ex) = dec(&l, 12);
+        assert_eq!(ex, 1);
     }
 
     #[test]

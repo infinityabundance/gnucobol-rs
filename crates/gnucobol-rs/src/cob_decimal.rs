@@ -664,11 +664,50 @@ pub fn cob_decimal_get_field(mut d: CobDecimal, attr: &FieldAttr, size: usize, r
     } else {
         sign_on_zero && pre_neg
     };
-    // truncate to the field's digit count (overflow keeps the low digits), then to i128
+    // truncate to the field's digit count (overflow keeps the low digits)
     let modulus = Mpz::ui_pow_ui(10, attr.digits as u32);
-    let low = d.value.tdiv_r(&modulus);
-    let abs_mag = low.to_i128().unwrap_or(0).unsigned_abs();
-    Ok(render_numeric(neg, abs_mag, attr, size))
+    let mut low = d.value.tdiv_r(&modulus);
+    if low.sgn() < 0 {
+        low.abs();
+    }
+    // Wide DISPLAY results (transcendentals can reach ~96 digits) exceed u128; render them from the
+    // magnitude's decimal digits. Narrow fields keep the proven u128 path the sealed courts exercise.
+    if attr.digits as usize > 38 {
+        Ok(render_numeric_big(neg, &low, attr, size))
+    } else {
+        Ok(render_numeric(neg, low.to_i128().unwrap_or(0).unsigned_abs(), attr, size))
+    }
+}
+
+/// Render a wide numeric magnitude (`low` already reduced mod 10^digits) into the field — the
+/// `render_numeric` counterpart for fields beyond u128's 38-digit reach (SQRT/EXP/LOG results sized by
+/// `cob_alloc_field`).
+fn render_numeric_big(neg: bool, low: &Mpz, attr: &FieldAttr, size: usize) -> Vec<u8> {
+    let digits = attr.digits as usize;
+    let s = low.to_decimal_string();
+    let sb = s.trim_start_matches('-').as_bytes();
+    let mut temp = vec![b'0'; digits];
+    let start = digits.saturating_sub(sb.len());
+    for (i, &c) in sb.iter().enumerate() {
+        if start + i < digits {
+            temp[start + i] = c;
+        }
+    }
+    let signed = attr.have_sign();
+    if signed && neg {
+        if let Some(l) = temp.last_mut() {
+            *l |= 0x40;
+        }
+    }
+    let dattr = FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits: attr.digits,
+        scale: attr.scale,
+        flags: if signed { crate::attr::COB_FLAG_HAVE_SIGN } else { 0 },
+    };
+    let mut out = vec![0u8; size];
+    let _ = crate::move_ops::cob_move(&temp, &dattr, &mut out, attr);
+    out
 }
 
 /// `cob_decimal_get_display (d, f, opt)` (numeric.c:1548): store an (already scale-aligned) working

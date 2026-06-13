@@ -334,7 +334,8 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 use crate::accessors::cob_get_int;
 use crate::int_pow::cob_s32_pow;
 use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE};
-use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
+use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_get_mpf, cob_decimal_mul, cob_decimal_set_field, cob_decimal_set_mpf, cob_decimal_sub, CobDecimal};
+use crate::mpf::{cob_mpf_exp, cob_mpf_log, cob_mpf_log10};
 use crate::gmp::Mpz;
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
@@ -369,7 +370,10 @@ pub fn cob_alloc_field(d: &mut CobDecimal) -> (FieldAttr, usize) {
     } else if bitnum < (65 - negsign) && d.scale < 19 {
         (FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 20, scale: d.scale as i16, flags }, 8)
     } else {
-        let digits10 = d.value.to_decimal_string().trim_start_matches('-').len();
+        // `mpz_sizeinbase(value, 10)` — GMP estimates the base-10 digit count from the bit length and may
+        // return the exact count OR one too many (it is exact only for power-of-two bases). The result
+        // field width follows that estimate, so replicate the formula (chars_per_bit_exactly = log10(2)).
+        let digits10 = (d.value.sizeinbase2() as f64 * 0.301_029_995_663_981_2_f64) as usize + 1;
         let size = digits10.max(d.scale.max(0) as usize);
         (FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: size as u16, scale: d.scale as i16, flags }, size)
     }
@@ -2766,6 +2770,172 @@ pub fn cob_intr_formatted_datetime(offset: i32, length: i32, fmt: &[u8], days: &
         return intr_refmod(buff, offset, length);
     }
     (buff, ALPHA1)
+}
+
+/// `COB_DECIMAL_NAN` (coblocal.h:137): the sentinel scale marking a not-a-number `cob_decimal`.
+const COB_DECIMAL_NAN: i32 = -32768;
+
+/// `cob_decimal_pow (pd1, pd2)` (intrinsic.c): raise `pd1` to the power `pd2` in place. Integer powers use
+/// repeated squaring (with reciprocal for a negative power); fractional powers go through
+/// `exp(pd2 * log(pd1))`, with an `mpf_sqrt` shortcut for the exponent `0.5`. A negative base with a
+/// non-integer power yields NaN.
+pub fn cob_decimal_pow(pd1: &mut CobDecimal, pd2: &mut CobDecimal) {
+    let sign = pd1.value.sgn();
+    if pd1.scale == COB_DECIMAL_NAN {
+        return;
+    }
+    if pd2.scale == COB_DECIMAL_NAN {
+        pd1.scale = COB_DECIMAL_NAN;
+        return;
+    }
+    if pd2.value.sgn() == 0 {
+        // Exponent is zero -> 1 (0^0 also yields 1, with an exception not modelled in the result bytes).
+        pd1.value = Mpz::from_u64(1);
+        pd1.scale = 0;
+        return;
+    }
+    if sign == 0 {
+        // Base is zero.
+        pd1.scale = 0;
+        return;
+    }
+    cob_trim_decimal(pd2);
+    if sign == -1 && pd2.scale != 0 {
+        // Negative base, non-integer power.
+        pd1.scale = COB_DECIMAL_NAN;
+        return;
+    }
+    cob_trim_decimal(pd1);
+    if pd2.scale == 0 {
+        // Integer power.
+        if pd2.value.to_i128() == Some(1) {
+            return; // power 1
+        }
+        if let Some(v) = pd2.value.to_i128() {
+            if v < 0 && v >= i64::MIN as i128 {
+                // Negative power: pd1 = pd1^|v|, then reciprocal.
+                let n = (-v) as u64;
+                pd1.value = pd1.value.pow_ui(n as u32);
+                if pd1.scale != 0 {
+                    pd1.scale *= n as i32;
+                    cob_trim_decimal(pd1);
+                }
+                pd2.value = pd1.value.clone();
+                pd2.scale = pd1.scale;
+                pd1.value = Mpz::from_u64(1);
+                pd1.scale = 0;
+                let _ = cob_decimal_div(pd1, pd2);
+                cob_trim_decimal(pd1);
+                return;
+            }
+            if v >= 0 && v <= u64::MAX as i128 {
+                // Positive power.
+                let n = v as u64;
+                pd1.value = pd1.value.pow_ui(n as u32);
+                if pd1.scale != 0 {
+                    pd1.scale *= n as i32;
+                    cob_trim_decimal(pd1);
+                }
+                return;
+            }
+        }
+    }
+
+    // Fractional power via mpf.
+    if sign == -1 {
+        pd1.value.abs();
+    }
+    let base = cob_decimal_get_mpf(pd1);
+    let result = if pd2.scale == 1 && pd2.value.to_i128() == Some(5) {
+        base.sqrt()
+    } else {
+        let exponent = cob_decimal_get_mpf(pd2);
+        cob_mpf_exp(&cob_mpf_log(&base).mul(&exponent))
+    };
+    *pd1 = cob_decimal_set_mpf(&result);
+    if sign == -1 {
+        pd1.value.neg();
+    }
+}
+
+/// `cob_intr_sqrt (srcfield)` (intrinsic.c): `FUNCTION SQRT(x)` — the square root (`x ** 0.5`); a negative
+/// argument yields an argument exception and 0.
+pub fn cob_intr_sqrt(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let mut d1 = cob_decimal_set_field(src, attr);
+    if d1.value.sgn() == -1 {
+        return cob_alloc_set_field_uint(0);
+    }
+    let mut d2 = CobDecimal { value: Mpz::from_u64(5), scale: 1 };
+    cob_trim_decimal(&mut d1);
+    cob_decimal_pow(&mut d1, &mut d2);
+    intr_decimal_result(d1)
+}
+
+/// `cob_intr_exp (srcfield)` (intrinsic.c): `FUNCTION EXP(x)` — `e^x`; `EXP(0) = 1`.
+pub fn cob_intr_exp(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    if d1.value.sgn() == 0 {
+        return cob_alloc_set_field_uint(1);
+    }
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_exp(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_exp10 (srcfield)` (intrinsic.c): `FUNCTION EXP10(x)` — `10^x`; integer powers use exact
+/// scaling, others go through `cob_decimal_pow`.
+pub fn cob_intr_exp10(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let mut d1 = cob_decimal_set_field(src, attr);
+    let sign = d1.value.sgn();
+    if sign == 0 {
+        return cob_alloc_set_field_uint(1);
+    }
+    cob_trim_decimal(&mut d1);
+    if d1.scale == 0 {
+        if let Some(v) = d1.value.to_i128() {
+            if sign == -1 && v >= i32::MIN as i128 && v <= i32::MAX as i128 {
+                // 10^(-n) = 1 with scale n.
+                let n = (-v) as i32;
+                return intr_decimal_result(CobDecimal { value: Mpz::from_u64(1), scale: n });
+            }
+            if sign == 1 && v <= u64::MAX as i128 {
+                return intr_decimal_result(CobDecimal { value: Mpz::ui_pow_ui(10, v as u32), scale: 0 });
+            }
+        }
+    }
+    let mut d2 = CobDecimal { value: Mpz::from_u64(10), scale: 0 };
+    cob_decimal_pow(&mut d2, &mut d1);
+    intr_decimal_result(d2)
+}
+
+/// `cob_intr_log (srcfield)` (intrinsic.c): `FUNCTION LOG(x)` — natural log; `x <= 0` is an exception (0),
+/// `LOG(1) = 0`.
+pub fn cob_intr_log(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let mut d1 = cob_decimal_set_field(src, attr);
+    if d1.value.sgn() != 1 {
+        return cob_alloc_set_field_uint(0);
+    }
+    if d1.scale != 0 {
+        cob_trim_decimal(&mut d1);
+    }
+    if d1.scale == 0 && d1.value.to_i128() == Some(1) {
+        return cob_alloc_set_field_uint(0);
+    }
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_log(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_log10 (srcfield)` (intrinsic.c): `FUNCTION LOG10(x)` — base-10 log; `x <= 0` is an exception
+/// (0), `LOG10(1) = 0`.
+pub fn cob_intr_log10(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let mut d1 = cob_decimal_set_field(src, attr);
+    if d1.value.sgn() != 1 {
+        return cob_alloc_set_field_uint(0);
+    }
+    if d1.scale != 0 {
+        cob_trim_decimal(&mut d1);
+    }
+    if d1.scale == 0 && d1.value.to_i128() == Some(1) {
+        return cob_alloc_set_field_uint(0);
+    }
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_log10(&cob_decimal_get_mpf(&d1))))
 }
 
 #[cfg(test)]

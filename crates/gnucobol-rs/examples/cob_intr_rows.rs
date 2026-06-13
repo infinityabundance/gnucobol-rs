@@ -176,4 +176,22 @@ fn main() {
     hexln("nvf2_lead", &cob_intr_numval_f(b"000123.450"));
     hexln("nvf2_e2", &cob_intr_numval_f(b"-7.5e2"));
     hexln("nvf2_zero", &cob_intr_numval_f(b"0"));
+    hexln("sqrt2", &cob_intr_sqrt(b"2", &disp(1, 0, false)));
+    hexln("sqrt16", &cob_intr_sqrt(b"16", &disp(2, 0, false)));
+    hexln("sqrt225", &cob_intr_sqrt(b"225", &disp(3, 2, false)));
+    hexln("sqrt0", &cob_intr_sqrt(b"0", &disp(1, 0, false)));
+    hexln("exp1", &cob_intr_exp(b"1", &disp(1, 0, false)));
+    hexln("exp0", &cob_intr_exp(b"0", &disp(1, 0, false)));
+    hexln("exp2", &cob_intr_exp(b"2", &disp(1, 0, false)));
+    hexln("expn1", &cob_intr_exp(b"q", &disp(1, 0, true)));
+    hexln("logv10", &cob_intr_log(b"10", &disp(2, 0, false)));
+    hexln("log2", &cob_intr_log(b"2", &disp(1, 0, false)));
+    hexln("log1", &cob_intr_log(b"1", &disp(1, 0, false)));
+    hexln("l10_1k", &cob_intr_log10(b"1000", &disp(4, 0, false)));
+    hexln("l10_100", &cob_intr_log10(b"100", &disp(3, 0, false)));
+    hexln("l10_2", &cob_intr_log10(b"2", &disp(1, 0, false)));
+    hexln("e10_2", &cob_intr_exp10(b"2", &disp(1, 0, false)));
+    hexln("e10n1", &cob_intr_exp10(b"q", &disp(1, 0, true)));
+    hexln("e10_3", &cob_intr_exp10(b"3", &disp(1, 0, false)));
+    hexln("e10_h", &cob_intr_exp10(b"05", &disp(2, 1, false)));
 }

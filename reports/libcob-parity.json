@@ -34,7 +34,6 @@
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
         "cob_decimal_move_temp",
-        "cob_decimal_pow",
         "cob_exit_intrinsic",
         "cob_get_indirect_field",
         "cob_init_intrinsic",
@@ -56,15 +55,11 @@
         "cob_intr_exception_location_n",
         "cob_intr_exception_statement",
         "cob_intr_exception_status",
-        "cob_intr_exp",
-        "cob_intr_exp10",
         "cob_intr_formatted_current_date",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
         "cob_intr_locale_time",
-        "cob_intr_log",
-        "cob_intr_log10",
         "cob_intr_module_caller_id",
         "cob_intr_module_date",
         "cob_intr_module_formatted_date",
@@ -78,7 +73,6 @@
         "cob_intr_random",
         "cob_intr_seconds_past_midnight",
         "cob_intr_sin",
-        "cob_intr_sqrt",
         "cob_intr_standard_compare",
         "cob_intr_standard_deviation",
         "cob_intr_tan",
@@ -88,9 +82,6 @@
         "cob_mpf_asin",
         "cob_mpf_atan",
         "cob_mpf_cos",
-        "cob_mpf_exp",
-        "cob_mpf_log",
-        "cob_mpf_log10",
         "cob_mpf_sin",
         "cob_mpf_tan",
         "cob_put_indirect_field",
@@ -113,8 +104,8 @@
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 63.4,
-      "ported": 151
+      "parity_pct": 67.2,
+      "ported": 160
     },
     {
       "file": "cconv.c",
@@ -855,7 +846,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 34.4,
-    "ported": 403
+    "parity_pct": 35.2,
+    "ported": 412
   }
 }

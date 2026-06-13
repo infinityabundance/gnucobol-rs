@@ -332,6 +332,23 @@ impl Mpz {
         r
     }
 
+    /// `mpz_pow_ui (r, base, n)`: `self ^ n` by repeated squaring.
+    pub fn pow_ui(&self, n: u32) -> Mpz {
+        let mut r = Mpz::from_u64(1);
+        let mut base = self.clone();
+        let mut e = n;
+        while e != 0 {
+            if e & 1 == 1 {
+                r = r.mul(&base);
+            }
+            e >>= 1;
+            if e != 0 {
+                base = base.mul(&base);
+            }
+        }
+        r
+    }
+
     // ---- divide (truncating: mpz_tdiv_q/r/q_ui/ui, fdiv_r/q_2exp) ----
 
     /// Divide magnitude by a single u64, returning `(quotient_mag, remainder)`.

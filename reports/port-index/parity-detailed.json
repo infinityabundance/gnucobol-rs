@@ -1220,17 +1220,17 @@
     "test_only": 0
   },
   {
-    "active_ported": 151,
+    "active_ported": 160,
     "compiled": 238,
-    "compiled_parity_pct": 63.4,
+    "compiled_parity_pct": 67.2,
     "disabled": 0,
-    "doc_only": 4,
+    "doc_only": 7,
     "file": "intrinsic.c",
     "fns": [
       {
         "function": "setup_cob_pi",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "setup_cob_sqrt_two",
@@ -1240,12 +1240,12 @@
       {
         "function": "setup_cob_log_half",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "setup_cob_log_ten",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "make_field_entry",
@@ -1308,17 +1308,20 @@
       {
         "function": "cob_mpf_exp",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "cob_mpf_log",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "cob_mpf_log10",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "cob_mpf_sin",
@@ -1892,7 +1895,8 @@
       {
         "function": "cob_decimal_pow",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_put_indirect_field",
@@ -2190,22 +2194,26 @@
       {
         "function": "cob_intr_exp",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_exp10",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_log",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_log10",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_abs",
@@ -2246,7 +2254,8 @@
       {
         "function": "cob_intr_sqrt",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_numval",
@@ -2578,7 +2587,6 @@
       "cob_alloc_set_field_spaces",
       "cob_alloc_set_field_str",
       "cob_decimal_move_temp",
-      "cob_decimal_pow",
       "cob_exit_intrinsic",
       "cob_get_indirect_field",
       "cob_init_intrinsic",
@@ -2600,15 +2608,11 @@
       "cob_intr_exception_location_n",
       "cob_intr_exception_statement",
       "cob_intr_exception_status",
-      "cob_intr_exp",
-      "cob_intr_exp10",
       "cob_intr_formatted_current_date",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
       "cob_intr_locale_date",
       "cob_intr_locale_time",
-      "cob_intr_log",
-      "cob_intr_log10",
       "cob_intr_module_caller_id",
       "cob_intr_module_date",
       "cob_intr_module_formatted_date",
@@ -2622,7 +2626,6 @@
       "cob_intr_random",
       "cob_intr_seconds_past_midnight",
       "cob_intr_sin",
-      "cob_intr_sqrt",
       "cob_intr_standard_compare",
       "cob_intr_standard_deviation",
       "cob_intr_tan",
@@ -2632,9 +2635,6 @@
       "cob_mpf_asin",
       "cob_mpf_atan",
       "cob_mpf_cos",
-      "cob_mpf_exp",
-      "cob_mpf_log",
-      "cob_mpf_log10",
       "cob_mpf_sin",
       "cob_mpf_tan",
       "cob_put_indirect_field",
@@ -2658,7 +2658,7 @@
       "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 83,
+    "missing": 71,
     "source_funcs": 238,
     "test_only": 0
   },

@@ -185,5 +185,24 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("000123.450",10,ALNUM,0,0,0); dump("nvf2_lead", cob_intr_numval_f(&f)); }
 	{ cob_field f=mkf("-7.5e2",6,ALNUM,0,0,0); dump("nvf2_e2", cob_intr_numval_f(&f)); }
 	{ cob_field f=mkf("0",1,ALNUM,0,0,0); dump("nvf2_zero", cob_intr_numval_f(&f)); }
+	/* transcendental: sqrt / exp / exp10 / log / log10 (mpf series, decimal result field) */
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("sqrt2", cob_intr_sqrt(&f)); }
+	{ cob_field f=mkf("16",2,DISP,2,0,0); dump("sqrt16", cob_intr_sqrt(&f)); }
+	{ cob_field f=mkf("225",3,DISP,3,2,0); dump("sqrt225", cob_intr_sqrt(&f)); }
+	{ cob_field f=mkf("0",1,DISP,1,0,0); dump("sqrt0", cob_intr_sqrt(&f)); }
+	{ cob_field f=mkf("1",1,DISP,1,0,0); dump("exp1", cob_intr_exp(&f)); }
+	{ cob_field f=mkf("0",1,DISP,1,0,0); dump("exp0", cob_intr_exp(&f)); }
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("exp2", cob_intr_exp(&f)); }
+	{ cob_field f=mkf("q",1,DISP,1,0,HAVE_SIGN); dump("expn1", cob_intr_exp(&f)); }
+	{ cob_field f=mkf("10",2,DISP,2,0,0); dump("logv10", cob_intr_log(&f)); }
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("log2", cob_intr_log(&f)); }
+	{ cob_field f=mkf("1",1,DISP,1,0,0); dump("log1", cob_intr_log(&f)); }
+	{ cob_field f=mkf("1000",4,DISP,4,0,0); dump("l10_1k", cob_intr_log10(&f)); }
+	{ cob_field f=mkf("100",3,DISP,3,0,0); dump("l10_100", cob_intr_log10(&f)); }
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("l10_2", cob_intr_log10(&f)); }
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("e10_2", cob_intr_exp10(&f)); }
+	{ cob_field f=mkf("q",1,DISP,1,0,HAVE_SIGN); dump("e10n1", cob_intr_exp10(&f)); }
+	{ cob_field f=mkf("3",1,DISP,1,0,0); dump("e10_3", cob_intr_exp10(&f)); }
+	{ cob_field f=mkf("05",2,DISP,2,1,0); dump("e10_h", cob_intr_exp10(&f)); }
 	return 0;
 }
