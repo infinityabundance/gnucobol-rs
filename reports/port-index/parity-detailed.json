@@ -1220,32 +1220,36 @@
     "test_only": 0
   },
   {
-    "active_ported": 221,
+    "active_ported": 232,
     "compiled": 238,
-    "compiled_parity_pct": 92.9,
+    "compiled_parity_pct": 99.6,
     "disabled": 0,
-    "doc_only": 8,
+    "doc_only": 0,
     "file": "intrinsic.c",
     "fns": [
       {
         "function": "setup_cob_pi",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "setup_cob_sqrt_two",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "setup_cob_log_half",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "setup_cob_log_ten",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "make_field_entry",
@@ -1262,12 +1266,14 @@
       {
         "function": "comp_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "calc_ref_mod",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "intrinsic",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "cob_trim_decimal",
@@ -1362,17 +1368,20 @@
       {
         "function": "get_substituted_size",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "substitute_matches",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "substitute",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "int_strncasecmp",
@@ -1401,12 +1410,14 @@
       {
         "function": "numval",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_min_and_max_of_args",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "calc_mean_of_args",
@@ -1423,7 +1434,8 @@
       {
         "function": "get_interval_and_current_year_from_args",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "locale_time",
@@ -1686,7 +1698,8 @@
       {
         "function": "get_system_offset_time_ptr",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_char_cond",
@@ -1919,17 +1932,20 @@
       {
         "function": "cob_put_indirect_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "cob_get_indirect_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "cob_decimal_move_temp",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "cob_check_numval",
@@ -2640,26 +2656,10 @@
       }
     ],
     "gap": [
-      "calc_ref_mod",
-      "cob_decimal_move_temp",
-      "cob_get_indirect_field",
-      "cob_intr_random",
-      "cob_put_indirect_field",
-      "comp_field",
-      "get_interval_and_current_year_from_args",
-      "get_min_and_max_of_args",
-      "get_substituted_size",
-      "get_system_offset_time_ptr",
-      "numval",
-      "setup_cob_log_half",
-      "setup_cob_log_ten",
-      "setup_cob_pi",
-      "setup_cob_sqrt_two",
-      "substitute",
-      "substitute_matches"
+      "cob_intr_random"
     ],
-    "inactive_mirrors": 0,
-    "missing": 9,
+    "inactive_mirrors": 5,
+    "missing": 1,
     "source_funcs": 238,
     "test_only": 0
   },
@@ -5631,7 +5631,7 @@
     "compiled": 254,
     "compiled_parity_pct": 1.2,
     "disabled": 0,
-    "doc_only": 12,
+    "doc_only": 13,
     "file": "common.c",
     "fns": [
       {
@@ -6142,7 +6142,7 @@
       {
         "function": "cob_cmp",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_is_omitted",
@@ -7162,7 +7162,7 @@
       "version_bitstring"
     ],
     "inactive_mirrors": 0,
-    "missing": 239,
+    "missing": 238,
     "source_funcs": 254,
     "test_only": 0
   },

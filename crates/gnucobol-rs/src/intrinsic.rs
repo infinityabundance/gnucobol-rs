@@ -315,6 +315,13 @@ pub fn cob_intr_reverse(offset: i32, length: i32, src: &[u8]) -> IntrField {
     intr_refmod(intrinsic_reverse(src), offset, length)
 }
 
+/// `calc_ref_mod (field, offset, length)` (intrinsic.c): reference-modify a result field to `(offset:length)`
+/// (1-based). The exact-name 1:1 alias of the shared [`intr_refmod`] used by every `cob_intr_*` tail.
+#[allow(dead_code)]
+fn calc_ref_mod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
+    intr_refmod(data, offset, length)
+}
+
 /// Apply the `cob_intr_*` trailing `calc_ref_mod (curr_field, offset, length)` (`(offset:length)` on the
 /// result) when `offset > 0`; otherwise return the whole result as an alphanumeric field.
 fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
@@ -475,13 +482,21 @@ pub fn cob_intr_min(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
 }
 
 /// Index of the min and max operand (numeric compare) — the `get_min_and_max_of_args` helper.
-fn min_max_idx(fields: &[(&[u8], &FieldAttr)]) -> (usize, usize) {
+/// `comp_field (m1, m2)` (intrinsic.c): the field comparator behind MAX/MIN/ORD-MAX/ORD-MIN/RANGE —
+/// `cob_cmp(f1, f2)` (the numeric comparison the sealed statistics intrinsics use).
+fn comp_field(f1: (&[u8], &FieldAttr), f2: (&[u8], &FieldAttr)) -> i32 {
+    crate::cob_decimal::cob_numeric_cmp(f1.0, f1.1, f2.0, f2.1)
+}
+
+/// `get_min_and_max_of_args (num_args, args, min, max)` (intrinsic.c): the indices of the least and greatest
+/// operands.
+fn get_min_and_max_of_args(fields: &[(&[u8], &FieldAttr)]) -> (usize, usize) {
     let (mut mn, mut mx) = (0usize, 0usize);
     for i in 1..fields.len() {
-        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[mn].0, fields[mn].1) < 0 {
+        if comp_field(fields[i], fields[mn]) < 0 {
             mn = i;
         }
-        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[mx].0, fields[mx].1) > 0 {
+        if comp_field(fields[i], fields[mx]) > 0 {
             mx = i;
         }
     }
@@ -491,18 +506,18 @@ fn min_max_idx(fields: &[(&[u8], &FieldAttr)]) -> (usize, usize) {
 /// `cob_intr_ord_min (params, ...)` (intrinsic.c): `FUNCTION ORD-MIN` — the **1-based** ordinal of the
 /// least operand.
 pub fn cob_intr_ord_min(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
-    cob_alloc_set_field_uint(min_max_idx(fields).0 as u32 + 1)
+    cob_alloc_set_field_uint(get_min_and_max_of_args(fields).0 as u32 + 1)
 }
 
 /// `cob_intr_ord_max (params, ...)` (intrinsic.c): `FUNCTION ORD-MAX` — the 1-based ordinal of the
 /// greatest operand.
 pub fn cob_intr_ord_max(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
-    cob_alloc_set_field_uint(min_max_idx(fields).1 as u32 + 1)
+    cob_alloc_set_field_uint(get_min_and_max_of_args(fields).1 as u32 + 1)
 }
 
 /// `cob_intr_range (params, ...)` (intrinsic.c): `FUNCTION RANGE` — `max - min`.
 pub fn cob_intr_range(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
-    let (mn, mx) = min_max_idx(fields);
+    let (mn, mx) = get_min_and_max_of_args(fields);
     let mut d = cob_decimal_set_field(fields[mx].0, fields[mx].1);
     let dmin = cob_decimal_set_field(fields[mn].0, fields[mn].1);
     cob_decimal_sub(&mut d, &dmin);
@@ -511,7 +526,7 @@ pub fn cob_intr_range(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
 
 /// `cob_intr_midrange (params, ...)` (intrinsic.c): `FUNCTION MIDRANGE` — `(max + min) / 2`.
 pub fn cob_intr_midrange(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
-    let (mn, mx) = min_max_idx(fields);
+    let (mn, mx) = get_min_and_max_of_args(fields);
     let mut d = cob_decimal_set_field(fields[mn].0, fields[mn].1);
     let dmax = cob_decimal_set_field(fields[mx].0, fields[mx].1);
     cob_decimal_add(&mut d, &dmax);
@@ -829,24 +844,55 @@ fn run_eq(a: &[u8], b: &[u8], case_insensitive: bool) -> bool {
 /// `(match, replacement)` pair at each position (first pair wins), copying unmatched bytes verbatim. An
 /// empty match operand is skipped (libcob would otherwise loop). Reference modification applies when
 /// `offset > 0`.
-fn substitute_core(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool) -> IntrField {
-    let mut out = Vec::new();
-    let mut i = 0usize;
+/// Whether a `(match, replacement)` pair matches `original` at index `i`.
+fn substitute_match_at(original: &[u8], i: usize, m: &[u8], case_insensitive: bool) -> bool {
+    !m.is_empty() && i + m.len() <= original.len() && run_eq(&original[i..i + m.len()], m, case_insensitive)
+}
+
+/// `get_substituted_size (original, matches, reps, numreps, cmp)` (intrinsic.c): the length of the
+/// SUBSTITUTE result (first matching pair at each position advances by its match length).
+fn get_substituted_size(original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool) -> usize {
+    let mut size = 0;
+    let mut i = 0;
     while i < original.len() {
-        let mut matched = false;
-        for (m, r) in pairs {
-            if !m.is_empty() && i + m.len() <= original.len() && run_eq(&original[i..i + m.len()], m, case_insensitive) {
-                out.extend_from_slice(r);
+        match pairs.iter().find(|(m, _)| substitute_match_at(original, i, m, case_insensitive)) {
+            Some((m, r)) => {
+                size += r.len();
                 i += m.len();
-                matched = true;
-                break;
+            }
+            None => {
+                size += 1;
+                i += 1;
             }
         }
-        if !matched {
-            out.push(original[i]);
-            i += 1;
+    }
+    size
+}
+
+/// `substitute_matches (original, matches, reps, numreps, cmp, replaced_begin)` (intrinsic.c): write the
+/// SUBSTITUTE result into `out`.
+fn substitute_matches(original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool, out: &mut Vec<u8>) {
+    let mut i = 0;
+    while i < original.len() {
+        match pairs.iter().find(|(m, _)| substitute_match_at(original, i, m, case_insensitive)) {
+            Some((m, r)) => {
+                out.extend_from_slice(r);
+                i += m.len();
+            }
+            None => {
+                out.push(original[i]);
+                i += 1;
+            }
         }
     }
+}
+
+/// `substitute (offset, length, params, cmp_func, ...)` (intrinsic.c): the shared engine behind
+/// `FUNCTION SUBSTITUTE`/`SUBSTITUTE-CASE` — size the result, write the matches, optionally reference-modify.
+/// An empty match operand is skipped (libcob would otherwise loop).
+fn substitute(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool) -> IntrField {
+    let mut out = Vec::with_capacity(get_substituted_size(original, pairs, case_insensitive));
+    substitute_matches(original, pairs, case_insensitive, &mut out);
     if offset > 0 {
         return intr_refmod(out, offset, length);
     }
@@ -856,13 +902,13 @@ fn substitute_core(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &
 /// `cob_intr_substitute (offset, length, params, ...)` (intrinsic.c): `FUNCTION SUBSTITUTE` — case-sensitive
 /// pattern replacement.
 pub fn cob_intr_substitute(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])]) -> IntrField {
-    substitute_core(offset, length, original, pairs, false)
+    substitute(offset, length, original, pairs, false)
 }
 
 /// `cob_intr_substitute_case (offset, length, params, ...)` (intrinsic.c): `FUNCTION SUBSTITUTE-CASE` —
 /// case-insensitive pattern replacement.
 pub fn cob_intr_substitute_case(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])]) -> IntrField {
-    substitute_core(offset, length, original, pairs, true)
+    substitute(offset, length, original, pairs, true)
 }
 
 /// The shared 2-digit-year windowing (`maxyear = current_year + interval`; pivot on `maxyear % 100`).
@@ -985,15 +1031,21 @@ fn numval_to_decimal(nv: &Numval) -> CobDecimal {
 /// `cob_intr_numval (srcfield)` (intrinsic.c): `FUNCTION NUMVAL(s)` — parse the field's text to a numeric
 /// result field (wraps the sealed `intrinsic_numval`).
 pub fn cob_intr_numval(src: &[u8]) -> IntrField {
+    numval(src, false)
+}
+
+/// `numval (srcfield, currency, type)` (intrinsic.c): the shared NUMVAL / NUMVAL-C parser core — routed
+/// through the sealed value-logic (`intrinsic_numval` / `intrinsic_numval_c`).
+fn numval(src: &[u8], numval_c: bool) -> IntrField {
     let s = String::from_utf8_lossy(src);
-    intr_decimal_result(numval_to_decimal(&intrinsic_numval(&s)))
+    let nv = if numval_c { intrinsic_numval_c(&s) } else { intrinsic_numval(&s) };
+    intr_decimal_result(numval_to_decimal(&nv))
 }
 
 /// `cob_intr_numval_c (srcfield, currency)` (intrinsic.c): `FUNCTION NUMVAL-C(s)` — like
 /// [`cob_intr_numval`] after stripping the default currency symbol + thousands commas.
 pub fn cob_intr_numval_c(src: &[u8]) -> IntrField {
-    let s = String::from_utf8_lossy(src);
-    intr_decimal_result(numval_to_decimal(&intrinsic_numval_c(&s)))
+    numval(src, true)
 }
 
 /// `cob_check_numval (srcfield, currency, chkcurr, anycase)` (intrinsic.c): validate that `srcfield` holds
@@ -2583,7 +2635,7 @@ fn try_get_valid_offset_time(field: Option<(&[u8], &FieldAttr)>) -> Option<i32> 
 /// `get_system_offset_time_ptr` (intrinsic.c) resolves the host UTC offset from the system clock/timezone.
 /// That is environment-dependent — the clock-deferral boundary (as for `FUNCTION CURRENT-DATE`); gnucobol-rs
 /// reports the offset as unknown, matching libcob's `offset_known == 0` path.
-fn get_system_offset_time() -> Option<i32> {
+fn get_system_offset_time_ptr() -> Option<i32> {
     None
 }
 
@@ -2715,7 +2767,7 @@ pub fn cob_intr_formatted_time(offset: i32, length: i32, fmt: &[u8], time: &[u8]
     }
     let format = parse_time_format_string(&format_str);
     let offset_time = if use_system_offset {
-        get_system_offset_time()
+        get_system_offset_time_ptr()
     } else {
         match try_get_valid_offset_time(offset_time_field) {
             Some(o) => Some(o),
@@ -2755,7 +2807,7 @@ pub fn cob_intr_formatted_datetime(offset: i32, length: i32, fmt: &[u8], days: &
     }
     let time_fmt = parse_time_format_string(&time_fmt_str);
     let offset_time = if use_system_offset {
-        get_system_offset_time()
+        get_system_offset_time_ptr()
     } else {
         match try_get_valid_offset_time(offset_time_field) {
             Some(o) => Some(o),
@@ -3783,6 +3835,46 @@ pub fn cob_intr_content_of(offset: i32, length: i32, ptr: &[u8], _request_len: u
         return intr_refmod(out, offset, length);
     }
     (out, ALPHA1)
+}
+
+/// `get_interval_and_current_year_from_args (num_args, args, interval, current_year)` (intrinsic.c): the
+/// windowing parameters for YEAR-TO-YYYY / DATE-TO-YYYYMMDD / DAY-TO-YYYYDDD — `interval` defaults to 50,
+/// `current_year` to the system year.
+#[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
+fn get_interval_and_current_year_from_args(interval_arg: Option<i32>, current_year_arg: Option<i32>) -> (i32, i32) {
+    let interval = interval_arg.unwrap_or(50);
+    let current_year = current_year_arg.unwrap_or_else(|| cob_get_current_date_and_time_from_os(false).year);
+    (interval, current_year)
+}
+
+/// `cob_put_indirect_field (f)` (intrinsic.c): stash a field for a later indirect get. libcob keeps a global
+/// `move_field`; gnucobol-rs has no such runtime, so the stored copy is returned to the caller.
+#[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
+fn cob_put_indirect_field(f: &[u8], attr: &FieldAttr) -> (Vec<u8>, FieldAttr) {
+    (f.to_vec(), *attr)
+}
+
+/// `cob_get_indirect_field (f)` (intrinsic.c): `cob_move` the stashed field into `f`.
+#[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
+fn cob_get_indirect_field(stored: &[u8], stored_attr: &FieldAttr, dst_attr: &FieldAttr, dst_len: usize) -> Vec<u8> {
+    let mut out = vec![0u8; dst_len];
+    let _ = crate::move_ops::cob_move(stored, stored_attr, &mut out, dst_attr);
+    out
+}
+
+/// `cob_decimal_move_temp (src, dst)` (intrinsic.c): move a numeric `src` through a signed-`DISPLAY`
+/// temporary sized to its trimmed magnitude into `dst`.
+#[allow(dead_code)] // exact-name 1:1 helper; equivalent logic is inlined at the call sites
+fn cob_decimal_move_temp(src: &[u8], src_attr: &FieldAttr, dst_attr: &FieldAttr, dst_len: usize) -> Vec<u8> {
+    let mut d = cob_decimal_set_field(src, src_attr);
+    cob_trim_decimal(&mut d);
+    let size10 = (d.value.sizeinbase2() as f64 * 0.301_029_995_663_981_2_f64) as usize + 1;
+    let size = size10.max(d.scale.max(0) as usize);
+    let tattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: size as u16, scale: d.scale as i16, flags: COB_FLAG_HAVE_SIGN };
+    let temp = cob_decimal_get_field(d, &tattr, size, crate::arith::Round::Truncate, false).unwrap_or_else(|_| vec![0u8; size]);
+    let mut out = vec![0u8; dst_len];
+    let _ = crate::move_ops::cob_move(&temp, &tattr, &mut out, dst_attr);
+    out
 }
 
 /// `cob_intr_exception_file_n ()` (intrinsic.c): unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].

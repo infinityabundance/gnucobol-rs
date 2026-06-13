@@ -826,3 +826,24 @@ mod tests {
         assert_eq!(Mpf::set_ui(1, p).get_d_2exp_exp(), 1);
     }
 }
+
+// ---- exact-name 1:1 aliases for the constant builders (intrinsic.c names `setup_cob_*`) -----------
+// libcob's `setup_cob_*` are void initialisers of a global; gnucobol-rs returns the constant by value,
+// so these alias the value builders above to preserve the 1:1 function-name surface.
+
+/// `setup_cob_pi (void)` (intrinsic.c).
+pub fn setup_cob_pi() -> Mpf {
+    cob_pi()
+}
+/// `setup_cob_log_half (void)` (intrinsic.c).
+pub fn setup_cob_log_half() -> Mpf {
+    cob_log_half()
+}
+/// `setup_cob_log_ten (void)` (intrinsic.c).
+pub fn setup_cob_log_ten() -> Mpf {
+    cob_log_ten()
+}
+/// `setup_cob_sqrt_two (void)` (intrinsic.c).
+pub fn setup_cob_sqrt_two() -> Mpf {
+    cob_sqrt_two()
+}
