@@ -79,6 +79,7 @@ pub mod edited;
 pub mod error;
 pub mod init;
 pub mod layout;
+pub mod mlio;
 pub mod move_ops;
 pub mod perform_slice;
 pub mod search;

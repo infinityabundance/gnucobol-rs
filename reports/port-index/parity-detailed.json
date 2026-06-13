@@ -5082,9 +5082,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 0,
+    "active_ported": 8,
     "compiled": 47,
-    "compiled_parity_pct": 0.0,
+    "compiled_parity_pct": 17.0,
     "disabled": 0,
     "doc_only": 1,
     "file": "mlio.c",
@@ -5127,7 +5127,8 @@
       {
         "function": "is_empty",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "copy_data_as_string",
@@ -5137,17 +5138,19 @@
       {
         "function": "get_trimmed_data",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "has_invalid_xml_char",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "is_valid_xml_name",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_pic_for_num_field",
@@ -5267,17 +5270,20 @@
       {
         "function": "cob_is_xml_namestartchar",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_is_xml_namechar",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_is_valid_uri",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_xml_generate",
@@ -5317,20 +5323,17 @@
       {
         "function": "cob_init_mlio",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_exit_mlio",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       }
     ],
     "gap": [
-      "cob_exit_mlio",
-      "cob_init_mlio",
-      "cob_is_valid_uri",
-      "cob_is_xml_namechar",
-      "cob_is_xml_namestartchar",
       "cob_json_generate",
       "cob_json_generate_new",
       "cob_xml_generate",
@@ -5356,10 +5359,7 @@
       "get_xml_code",
       "get_xml_name",
       "get_xml_num",
-      "has_invalid_xml_char",
       "int_to_hex",
-      "is_empty",
-      "is_valid_xml_name",
       "json_strndup",
       "set_json_code",
       "set_json_exception",
@@ -5371,7 +5371,7 @@
       "xml_generate"
     ],
     "inactive_mirrors": 0,
-    "missing": 46,
+    "missing": 38,
     "source_funcs": 47,
     "test_only": 0
   },

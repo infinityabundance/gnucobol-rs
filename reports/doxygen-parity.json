@@ -546,21 +546,13 @@
       "doxygen_functions": 25,
       "file": "mlio.c",
       "missing": [
-        "cob_exit_mlio",
-        "cob_init_mlio",
-        "cob_is_valid_uri",
-        "cob_is_xml_namechar",
-        "cob_is_xml_namestartchar",
         "cob_json_generate",
         "cob_json_generate_new",
         "cob_xml_generate",
         "cob_xml_generate_new",
         "cob_xml_parse",
         "copy_data_as_string",
-        "get_trimmed_data",
         "get_xml_code",
-        "has_invalid_xml_char",
-        "is_valid_xml_name",
         "set_json_code",
         "set_json_exception",
         "set_xml_code",
@@ -571,8 +563,8 @@
         "xml_generate",
         "xml_parse"
       ],
-      "parity_pct": 4.0,
-      "ported": 1
+      "parity_pct": 36.0,
+      "ported": 9
     },
     {
       "doxygen_functions": 35,
@@ -852,8 +844,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 25.2,
-    "ported": 251
+    "parity_pct": 26.0,
+    "ported": 259
   },
   "xml_root": "lab/doxygen/out/xml"
 }
