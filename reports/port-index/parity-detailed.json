@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 44,
+    "active_ported": 48,
     "compiled": 238,
-    "compiled_parity_pct": 18.5,
+    "compiled_parity_pct": 20.2,
     "disabled": 0,
     "doc_only": 4,
     "file": "intrinsic.c",
@@ -1814,7 +1814,8 @@
       {
         "function": "error_not_implemented",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_switch_value",
@@ -2045,7 +2046,8 @@
       {
         "function": "cob_intr_stored_char_length",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_combined_datetime",
@@ -2414,7 +2416,8 @@
       {
         "function": "cob_intr_boolean_of_integer",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_char_national",
@@ -2439,7 +2442,8 @@
       {
         "function": "cob_intr_integer_of_boolean",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_national_of",
@@ -2487,7 +2491,6 @@
       "cob_intr_binop",
       "cob_intr_bit_of",
       "cob_intr_bit_to_char",
-      "cob_intr_boolean_of_integer",
       "cob_intr_char_national",
       "cob_intr_combined_datetime",
       "cob_intr_content_length",
@@ -2515,7 +2518,6 @@
       "cob_intr_hex_of",
       "cob_intr_hex_to_char",
       "cob_intr_highest_algebraic",
-      "cob_intr_integer_of_boolean",
       "cob_intr_integer_of_formatted_date",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
@@ -2546,7 +2548,6 @@
       "cob_intr_sqrt",
       "cob_intr_standard_compare",
       "cob_intr_standard_deviation",
-      "cob_intr_stored_char_length",
       "cob_intr_substitute",
       "cob_intr_substitute_case",
       "cob_intr_tan",
@@ -2580,7 +2581,6 @@
       "day_of_integer",
       "days_up_to_year",
       "decimal_places_for_seconds",
-      "error_not_implemented",
       "format_as_yyyyddd",
       "format_as_yyyymmdd",
       "format_as_yyyywwwd",
@@ -2658,7 +2658,7 @@
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 190,
+    "missing": 186,
     "source_funcs": 238,
     "test_only": 0
   },

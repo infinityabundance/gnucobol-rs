@@ -50,7 +50,6 @@
         "cob_intr_binop",
         "cob_intr_bit_of",
         "cob_intr_bit_to_char",
-        "cob_intr_boolean_of_integer",
         "cob_intr_char_national",
         "cob_intr_combined_datetime",
         "cob_intr_content_length",
@@ -78,7 +77,6 @@
         "cob_intr_hex_of",
         "cob_intr_hex_to_char",
         "cob_intr_highest_algebraic",
-        "cob_intr_integer_of_boolean",
         "cob_intr_integer_of_formatted_date",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
@@ -109,7 +107,6 @@
         "cob_intr_sqrt",
         "cob_intr_standard_compare",
         "cob_intr_standard_deviation",
-        "cob_intr_stored_char_length",
         "cob_intr_substitute",
         "cob_intr_substitute_case",
         "cob_intr_tan",
@@ -143,7 +140,6 @@
         "day_of_integer",
         "days_up_to_year",
         "decimal_places_for_seconds",
-        "error_not_implemented",
         "format_as_yyyyddd",
         "format_as_yyyymmdd",
         "format_as_yyyywwwd",
@@ -220,8 +216,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 18.5,
-      "ported": 44
+      "parity_pct": 20.2,
+      "ported": 48
     },
     {
       "file": "cconv.c",
@@ -962,7 +958,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 25.3,
-    "ported": 296
+    "parity_pct": 25.6,
+    "ported": 300
   }
 }

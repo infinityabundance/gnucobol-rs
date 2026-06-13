@@ -566,6 +566,34 @@ pub fn cob_intr_factorial(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     intr_decimal_result(CobDecimal { value, scale: 0 })
 }
 
+/// `cob_intr_stored_char_length (srcfield)` (intrinsic.c): `FUNCTION STORED-CHAR-LENGTH` — the field
+/// size minus trailing spaces.
+pub fn cob_intr_stored_char_length(src: &[u8]) -> IntrField {
+    let mut count = src.len();
+    while count > 0 && src[count - 1] == b' ' {
+        count -= 1;
+    }
+    cob_alloc_set_field_uint(count as u32)
+}
+
+/// `error_not_implemented ()` (intrinsic.c): in libcob this raises `COB_EC_IMP_FEATURE_MISSING` and
+/// **fatal-errors** (aborts). A library port cannot abort here, so this returns an empty field — the
+/// documented not-implemented boundary (these `FUNCTION`s are genuinely unimplemented in GnuCOBOL 3.2).
+pub fn error_not_implemented() -> IntrField {
+    (Vec::new(), FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 })
+}
+
+/// `cob_intr_boolean_of_integer (f1, f2)` (intrinsic.c): unimplemented upstream — see
+/// [`error_not_implemented`].
+pub fn cob_intr_boolean_of_integer(_f1: &[u8], _a1: &FieldAttr, _f2: &[u8], _a2: &FieldAttr) -> IntrField {
+    error_not_implemented()
+}
+
+/// `cob_intr_integer_of_boolean (srcfield)` (intrinsic.c): unimplemented upstream.
+pub fn cob_intr_integer_of_boolean(_src: &[u8], _attr: &FieldAttr) -> IntrField {
+    error_not_implemented()
+}
+
 /// Build a `CobDecimal` from a parsed [`Numval`] (`value = signed scaled * 10^(-scale)`).
 fn numval_to_decimal(nv: &Numval) -> CobDecimal {
     let mut value = Mpz::from_u128(nv.scaled);
@@ -753,6 +781,17 @@ mod tests {
     fn nvc(s: &str) -> String {
         numval_display(&intrinsic_numval_c(s), 8, 4)
     }
+    #[test]
+    fn stored_char_length_and_unimplemented() {
+        let u3 = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 };
+        let (d, a) = cob_intr_stored_char_length(b"HI   ");
+        assert_eq!(crate::accessors::cob_get_int(&d, &a), 2);
+        let (d, _) = cob_intr_stored_char_length(b"     ");
+        assert_eq!(crate::accessors::cob_get_int(&d, &u3), 0);
+        // BOOLEAN-OF-INTEGER / INTEGER-OF-BOOLEAN are unimplemented in GnuCOBOL 3.2 -> empty result
+        assert!(cob_intr_integer_of_boolean(b"1", &u3).0.is_empty());
+    }
+
     #[test]
     fn cob_intr_numeric_results() {
         use crate::attr::COB_FLAG_HAVE_SIGN;
