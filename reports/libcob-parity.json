@@ -35,10 +35,8 @@
         "calc_variance_of_args",
         "calculate_start_end_for_numval",
         "cob_alloc_field",
-        "cob_alloc_set_field_int",
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
-        "cob_alloc_set_field_uint",
         "cob_check_numval",
         "cob_check_numval_f",
         "cob_decimal_move_temp",
@@ -55,8 +53,6 @@
         "cob_intr_bit_of",
         "cob_intr_bit_to_char",
         "cob_intr_boolean_of_integer",
-        "cob_intr_byte_length",
-        "cob_intr_char",
         "cob_intr_char_national",
         "cob_intr_combined_datetime",
         "cob_intr_concatenate",
@@ -95,13 +91,11 @@
         "cob_intr_integer_of_formatted_date",
         "cob_intr_integer_part",
         "cob_intr_lcl_time_from_secs",
-        "cob_intr_length",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
         "cob_intr_locale_time",
         "cob_intr_log",
         "cob_intr_log10",
-        "cob_intr_lower_case",
         "cob_intr_lowest_algebraic",
         "cob_intr_max",
         "cob_intr_mean",
@@ -124,7 +118,6 @@
         "cob_intr_numval",
         "cob_intr_numval_c",
         "cob_intr_numval_f",
-        "cob_intr_ord",
         "cob_intr_ord_max",
         "cob_intr_ord_min",
         "cob_intr_pi",
@@ -132,7 +125,6 @@
         "cob_intr_random",
         "cob_intr_range",
         "cob_intr_rem",
-        "cob_intr_reverse",
         "cob_intr_seconds_from_formatted_time",
         "cob_intr_seconds_past_midnight",
         "cob_intr_sign",
@@ -152,7 +144,6 @@
         "cob_intr_test_numval_c",
         "cob_intr_test_numval_f",
         "cob_intr_trim",
-        "cob_intr_upper_case",
         "cob_intr_variance",
         "cob_intr_when_compiled",
         "cob_intr_year_to_yyyy",
@@ -207,7 +198,6 @@
         "integer_of_wwwd",
         "leap_year",
         "locale_time",
-        "make_field_entry",
         "max_week",
         "num_leading_nonspace",
         "numval",
@@ -264,8 +254,8 @@
         "valid_time",
         "valid_year"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 4.2,
+      "ported": 10
     },
     {
       "file": "cconv.c",
@@ -1006,7 +996,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 21.5,
-    "ported": 252
+    "parity_pct": 22.4,
+    "ported": 262
   }
 }

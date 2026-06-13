@@ -240,6 +240,95 @@ pub fn intrinsic_day_of_integer(n: i64) -> u32 {
     (y as u32) * 1000 + ddd as u32
 }
 
+// ---- intrinsic.c `cob_intr_*` entry points + the result-field layer -----------------------------
+// The C `cob_intr_*` functions return a transient result field (`curr_field`) built by the result-field
+// allocator (`make_field_entry` / `cob_alloc_set_field_uint`/`_int`). This port returns the result field
+// as an owned `(bytes, attr)` pair (the byte content is what the oracle observes); the rotating temp pool
+// the C uses is just memory reuse — RAII here. The value logic is the already-sealed `intrinsic_*` fns.
+
+use crate::attr::{FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_BINARY};
+
+/// A `cob_intr_*` result field: the data bytes + their attribute.
+pub type IntrField = (Vec<u8>, FieldAttr);
+
+/// `make_field_entry (f)` (intrinsic.c): allocate the transient result field with `f`'s attribute and
+/// `size` zeroed bytes (the C reuses a rotating pool; RAII makes that a plain allocation here).
+pub fn make_field_entry(attr: &FieldAttr, size: usize) -> IntrField {
+    (vec![0u8; size], *attr)
+}
+
+/// `cob_alloc_set_field_uint (val)` (intrinsic.c): a 4-byte native `BINARY` result field (`PIC 9(9) COMP`)
+/// holding the unsigned value.
+pub fn cob_alloc_set_field_uint(val: u32) -> IntrField {
+    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 };
+    (val.to_ne_bytes().to_vec(), attr)
+}
+
+/// `cob_alloc_set_field_int (val)` (intrinsic.c): a 4-byte native `BINARY` result field; signed when
+/// `val < 0`.
+pub fn cob_alloc_set_field_int(val: i32) -> IntrField {
+    let flags = if val < 0 { COB_FLAG_HAVE_SIGN } else { 0 };
+    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags };
+    (val.to_ne_bytes().to_vec(), attr)
+}
+
+const ALPHA1: FieldAttr = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+
+/// `cob_intr_ord (srcfield)` (intrinsic.c): `FUNCTION ORD(c)` — `*data + 1` as a `BINARY` result.
+pub fn cob_intr_ord(src: &[u8]) -> IntrField {
+    cob_alloc_set_field_uint(src.first().copied().unwrap_or(0) as u32 + 1)
+}
+
+/// `cob_intr_char (srcfield)` (intrinsic.c): `FUNCTION CHAR(n)` — a 1-byte field holding `n-1` when
+/// `n` is in `1..=256`, else `0`. `n` is read from the source as an integer.
+pub fn cob_intr_char(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let i = crate::accessors::cob_get_int(src, src_attr);
+    let mut r = make_field_entry(&ALPHA1, 1);
+    r.0[0] = if !(1..=256).contains(&i) { 0 } else { (i - 1) as u8 };
+    r
+}
+
+/// `cob_intr_byte_length (srcfield)` (intrinsic.c): `FUNCTION BYTE-LENGTH` — the field's byte size.
+pub fn cob_intr_byte_length(src_size: usize) -> IntrField {
+    cob_alloc_set_field_uint(src_size as u32)
+}
+
+/// `cob_intr_length (srcfield)` (intrinsic.c): `FUNCTION LENGTH` — the field's size (national fields are
+/// divided by `COB_NATIONAL_SIZE`; this port handles the non-national case).
+pub fn cob_intr_length(src_size: usize) -> IntrField {
+    cob_alloc_set_field_uint(src_size as u32)
+}
+
+/// `cob_intr_upper_case (offset, length, srcfield)` (intrinsic.c): `FUNCTION UPPER-CASE` — the source
+/// bytes ASCII-upper-cased (same size), optionally reference-modified by `(offset:length)`.
+pub fn cob_intr_upper_case(offset: i32, length: i32, src: &[u8]) -> IntrField {
+    intr_refmod(intrinsic_upper_case(src), offset, length)
+}
+
+/// `cob_intr_lower_case (offset, length, srcfield)` (intrinsic.c): `FUNCTION LOWER-CASE`.
+pub fn cob_intr_lower_case(offset: i32, length: i32, src: &[u8]) -> IntrField {
+    intr_refmod(intrinsic_lower_case(src), offset, length)
+}
+
+/// `cob_intr_reverse (offset, length, srcfield)` (intrinsic.c): `FUNCTION REVERSE`.
+pub fn cob_intr_reverse(offset: i32, length: i32, src: &[u8]) -> IntrField {
+    intr_refmod(intrinsic_reverse(src), offset, length)
+}
+
+/// Apply the `cob_intr_*` trailing `calc_ref_mod (curr_field, offset, length)` (`(offset:length)` on the
+/// result) when `offset > 0`; otherwise return the whole result as an alphanumeric field.
+fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
+    if offset > 0 {
+        let start = (offset - 1).max(0) as usize;
+        let len = if length > 0 { length as usize } else { data.len().saturating_sub(start) };
+        let end = (start + len).min(data.len());
+        let slice = if start <= data.len() { data[start..end].to_vec() } else { Vec::new() };
+        (slice, ALPHA1)
+    } else {
+        (data, ALPHA1)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -252,6 +341,33 @@ mod tests {
     fn nvc(s: &str) -> String {
         numval_display(&intrinsic_numval_c(s), 8, 4)
     }
+    #[test]
+    fn cob_intr_result_fields() {
+        use crate::attr::COB_TYPE_ALPHANUMERIC;
+        let an = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+        // ORD('A') = 66 -> 4-byte native binary
+        let (d, a) = cob_intr_ord(b"A");
+        assert_eq!(crate::accessors::cob_get_int(&d, &a), 66);
+        // CHAR(66) = 'A'
+        let (d, _) = cob_intr_char(b"\x42\x00\x00\x00", &FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 });
+        assert_eq!(d, b"A");
+        // CHAR out of range -> 0
+        let (d, _) = cob_intr_char(b"\x00\x00\x00\x00", &FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 });
+        assert_eq!(d, &[0u8]);
+        // BYTE-LENGTH / LENGTH
+        let (d, a) = cob_intr_byte_length(7);
+        assert_eq!(crate::accessors::cob_get_int(&d, &a), 7);
+        let (d, a) = cob_intr_length(5);
+        assert_eq!(crate::accessors::cob_get_int(&d, &a), 5);
+        // UPPER/LOWER/REVERSE
+        assert_eq!(cob_intr_upper_case(0, 0, b"aB3").0, b"AB3");
+        assert_eq!(cob_intr_lower_case(0, 0, b"aB3").0, b"ab3");
+        assert_eq!(cob_intr_reverse(0, 0, b"abc").0, b"cba");
+        // UPPER-CASE("hello")(2:3) -> "ELL"
+        assert_eq!(cob_intr_upper_case(2, 3, b"hello").0, b"ELL");
+        let _ = an;
+    }
+
     #[test]
     fn numval_c_strips_currency_and_commas() {
         assert_eq!(nvc("$1,234.56"), "+00001234.5600");

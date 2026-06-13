@@ -18,7 +18,7 @@ doc comment is a `doc_only` false hit, never a port. PORT-INDEX.1a then closed e
 exposed in the completed files (`numeric.c` 13, `move.c` 10, `cobgetopt.c` 1) by giving each faithful
 Rust counterpart its **exact C name** (or adding the named wrapper).
 
-**Live total:** 269 / 1169 compiled libcob functions have a real Rust `fn` (900 gap).
+**Live total:** 279 / 1169 compiled libcob functions have a real Rust `fn` (890 gap).
 
 ## Completed files (100% active compiled-parity)
 
@@ -35,6 +35,7 @@ Rust counterpart its **exact C name** (or adding the named wrapper).
 
 | libcob file | source | compiled | active | gap | active parity |
 |---|---:|---:|---:|---:|---:|
+| `intrinsic.c` | 238 | 238 | 10 | 227 | 4.2% |
 | `mlio.c` | 47 | 47 | 8 | 35 | 17.0% |
 | `reportio.c` | 39 | 39 | 18 | 21 | 46.2% |
 
