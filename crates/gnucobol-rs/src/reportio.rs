@@ -125,6 +125,113 @@ fn display_of(data: &[u8], attr: &FieldAttr) -> Vec<u8> {
     out
 }
 
+// ---- cob_report data model (the compiler-built RD tables; common.h:1429-1545) ------------------
+// The C uses linked lists (`sister`/`child` line tree, `next` field/control/sum chains). This port
+// models the line tree with nested `Vec`s; cross-references that the C resolves by pointer identity are
+// indices. Only the parts the ported operations touch are modelled (grown as the port advances).
+
+/// A field on a report line (`cob_report_field`; common.h:1429): the RWCS flags + the per-field state.
+#[derive(Debug, Clone, Default)]
+pub struct ReportField {
+    pub flags: u32,
+    pub line: i32,
+    pub column: i32,
+    pub level: u8,
+    pub group_indicate: bool,
+    pub suppress: bool,
+    pub present_now: bool,
+}
+
+/// A report line (`cob_report_line`; common.h:1448): its fields + the nested child lines (the C's
+/// `child`) — sibling lines (`sister`) are the slice elements at one level.
+#[derive(Debug, Clone, Default)]
+pub struct ReportLine {
+    pub fields: Vec<ReportField>,
+    pub children: Vec<ReportLine>,
+    pub flags: u32,
+    pub line: i32,
+    pub next_group_line: i32,
+    pub suppress: bool,
+}
+
+/// A SUM counter (`cob_report_sum_ctr`; common.h:1474): the running `counter` field plus the numeric
+/// fields summed into it.
+#[derive(Debug, Clone)]
+pub struct ReportSumCtr {
+    pub name: String,
+    pub counter: Vec<u8>,
+    pub counter_attr: FieldAttr,
+    /// The fields summed into `counter` (`sum->f` chain).
+    pub sum_values: Vec<(Vec<u8>, FieldAttr)>,
+    pub subtotal: bool,
+}
+
+/// `clear_group_indicate (l)` (reportio.c:192): clear the `group_indicate` flag on every field of the
+/// line tree.
+pub fn clear_group_indicate(lines: &mut [ReportLine]) {
+    for l in lines.iter_mut() {
+        for f in &mut l.fields {
+            f.group_indicate = false;
+        }
+        clear_group_indicate(&mut l.children);
+    }
+}
+
+/// `clear_suppress (l)` (reportio.c:208): clear the `suppress` flag on each line and its non-GROUP-ITEM
+/// fields, recursively.
+pub fn clear_suppress(lines: &mut [ReportLine]) {
+    for l in lines.iter_mut() {
+        l.suppress = false;
+        for f in &mut l.fields {
+            if f.flags & flags::GROUP_ITEM != 0 {
+                continue;
+            }
+            f.suppress = false;
+        }
+        clear_suppress(&mut l.children);
+    }
+}
+
+/// `get_print_line (l)` (reportio.c:274): descend through field-less single-child lines to the line that
+/// actually carries data fields.
+pub fn get_print_line(line: &ReportLine) -> &ReportLine {
+    let mut l = line;
+    while l.fields.is_empty() && l.children.len() == 1 {
+        l = &l.children[0];
+    }
+    l
+}
+
+/// `get_line_type (r, l, type)` (reportio.c:1142): the first line in the tree (this line, then its child
+/// subtree, then its siblings) whose `flags` include `type` — or `None`.
+pub fn get_line_type(lines: &[ReportLine], type_: u32) -> Option<&ReportLine> {
+    for l in lines {
+        if l.flags & type_ != 0 {
+            return Some(l);
+        }
+        if let Some(t) = get_line_type(&l.children, type_) {
+            return Some(t);
+        }
+    }
+    None
+}
+
+/// `sum_all_detail (r)` (reportio.c:1203): add every (non-subtotal) SUM counter's summed fields into its
+/// running counter — the per-`GENERATE` detail accumulation.
+pub fn sum_all_detail(sum_counters: &mut [ReportSumCtr]) {
+    for sc in sum_counters.iter_mut() {
+        if sc.subtotal {
+            continue;
+        }
+        for (val, vattr) in sc.sum_values.clone() {
+            let (data, attr) = (std::mem::take(&mut sc.counter), sc.counter_attr);
+            let mut out = vec![0u8; data.len()];
+            cob_add_fields(&data, &attr, &val, &vattr, &mut out, &attr);
+            sc.counter = out;
+        }
+    }
+}
+
 /// `reportInitialize ()` (reportio.c:287): one-time global RWCS init. A no-op in this port (the C sets a
 /// `bDidReportInit` guard + `inDetailDecl`; there is no global state to seed here).
 pub fn report_initialize() {}
@@ -168,6 +275,55 @@ mod tests {
         let mut r2 = [b'0'; 4];
         cob_add_fields(b"1234", &s, b"0166", &s, &mut r2, &s);
         assert_eq!(&r2, b"1400");
+    }
+
+    #[test]
+    fn tree_walk_and_sum_accumulation() {
+        // line tree: a heading line (no fields, one child detail line with fields)
+        let detail = ReportLine {
+            fields: vec![
+                ReportField { flags: 0, group_indicate: true, suppress: true, ..Default::default() },
+                ReportField { flags: flags::GROUP_ITEM, suppress: true, ..Default::default() },
+            ],
+            flags: flags::DETAIL,
+            ..Default::default()
+        };
+        let mut lines = vec![ReportLine {
+            fields: vec![],
+            children: vec![detail],
+            flags: flags::PAGE_HEADING,
+            ..Default::default()
+        }];
+        // get_print_line descends to the detail line
+        assert_eq!(get_print_line(&lines[0]).flags, flags::DETAIL);
+        // get_line_type finds the heading (this line) and the detail (child)
+        assert_eq!(get_line_type(&lines, flags::PAGE_HEADING).unwrap().flags, flags::PAGE_HEADING);
+        assert_eq!(get_line_type(&lines, flags::DETAIL).unwrap().flags, flags::DETAIL);
+        assert!(get_line_type(&lines, flags::CONTROL_HEADING).is_none());
+        // clear_group_indicate clears the flag everywhere
+        clear_group_indicate(&mut lines);
+        assert!(!lines[0].children[0].fields[0].group_indicate);
+        // clear_suppress clears line + non-GROUP_ITEM fields, but skips GROUP_ITEM fields
+        lines[0].children[0].suppress = true;
+        clear_suppress(&mut lines);
+        assert!(!lines[0].children[0].suppress);
+        assert!(!lines[0].children[0].fields[0].suppress); // plain field cleared
+        assert!(lines[0].children[0].fields[1].suppress); // GROUP_ITEM field NOT cleared
+
+        // SUM accumulation: counter 0000 += 0010 + 0020 + 0030 = 0060
+        let a = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 4, scale: 0, flags: 0 };
+        let mut ctrs = vec![ReportSumCtr {
+            name: "C".into(),
+            counter: b"0000".to_vec(),
+            counter_attr: a,
+            sum_values: vec![(b"0010".to_vec(), a), (b"0020".to_vec(), a), (b"0030".to_vec(), a)],
+            subtotal: false,
+        }];
+        sum_all_detail(&mut ctrs);
+        assert_eq!(ctrs[0].counter, b"0060");
+        // a second GENERATE accumulates further: 0060 + 60 = 0120
+        sum_all_detail(&mut ctrs);
+        assert_eq!(ctrs[0].counter, b"0120");
     }
 
     #[test]
