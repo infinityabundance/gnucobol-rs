@@ -60,9 +60,7 @@
         "cob_intr_cos",
         "cob_intr_currency_symbol",
         "cob_intr_current_date",
-        "cob_intr_date_of_integer",
         "cob_intr_date_to_yyyymmdd",
-        "cob_intr_day_of_integer",
         "cob_intr_day_to_yyyyddd",
         "cob_intr_display_of",
         "cob_intr_e",
@@ -85,8 +83,6 @@
         "cob_intr_highest_algebraic",
         "cob_intr_integer",
         "cob_intr_integer_of_boolean",
-        "cob_intr_integer_of_date",
-        "cob_intr_integer_of_day",
         "cob_intr_integer_of_formatted_date",
         "cob_intr_integer_part",
         "cob_intr_lcl_time_from_secs",
@@ -165,7 +161,6 @@
         "comp_field",
         "copy_data_to_null_terminated_str",
         "day_of_integer",
-        "days_in_year",
         "days_up_to_year",
         "decimal_places_for_seconds",
         "error_not_implemented",
@@ -186,14 +181,12 @@
         "get_substituted_size",
         "get_system_offset_time_ptr",
         "has_bit_checked",
-        "in_range",
         "int_strncasecmp",
         "integer_of_day",
         "integer_of_ddd",
         "integer_of_formatted_date",
         "integer_of_mmdd",
         "integer_of_wwwd",
-        "leap_year",
         "max_week",
         "num_leading_nonspace",
         "numval",
@@ -242,17 +235,12 @@
         "test_z_presence",
         "try_get_valid_offset_time",
         "valid_day_and_format",
-        "valid_day_of_month",
-        "valid_day_of_year",
         "valid_decimal_time",
-        "valid_integer_date",
-        "valid_month",
         "valid_offset_time",
-        "valid_time",
-        "valid_year"
+        "valid_time"
       ],
-      "parity_pct": 5.5,
-      "ported": 13
+      "parity_pct": 10.5,
+      "ported": 25
     },
     {
       "doxygen_functions": 9,
@@ -833,8 +821,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 27.1,
-    "ported": 270
+    "parity_pct": 28.3,
+    "ported": 282
   },
   "xml_root": "lab/doxygen/out/xml"
 }

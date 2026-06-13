@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 10,
+    "active_ported": 22,
     "compiled": 238,
-    "compiled_parity_pct": 4.2,
+    "compiled_parity_pct": 9.2,
     "disabled": 0,
     "doc_only": 3,
     "file": "intrinsic.c",
@@ -1256,7 +1256,8 @@
       {
         "function": "leap_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "comp_field",
@@ -1428,37 +1429,44 @@
       {
         "function": "days_in_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "in_range",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_integer_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_month",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_day_of_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_day_of_month",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "max_week",
@@ -2040,22 +2048,26 @@
       {
         "function": "cob_intr_date_of_integer",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_day_of_integer",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_integer_of_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_integer_of_day",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_test_date_yyyymmdd",
@@ -2464,9 +2476,7 @@
       "cob_intr_cos",
       "cob_intr_currency_symbol",
       "cob_intr_current_date",
-      "cob_intr_date_of_integer",
       "cob_intr_date_to_yyyymmdd",
-      "cob_intr_day_of_integer",
       "cob_intr_day_to_yyyyddd",
       "cob_intr_display_of",
       "cob_intr_e",
@@ -2489,8 +2499,6 @@
       "cob_intr_highest_algebraic",
       "cob_intr_integer",
       "cob_intr_integer_of_boolean",
-      "cob_intr_integer_of_date",
-      "cob_intr_integer_of_day",
       "cob_intr_integer_of_formatted_date",
       "cob_intr_integer_part",
       "cob_intr_lcl_time_from_secs",
@@ -2570,7 +2578,6 @@
       "copy_data_to_null_terminated_str",
       "date_of_integer",
       "day_of_integer",
-      "days_in_year",
       "days_up_to_year",
       "decimal_places_for_seconds",
       "error_not_implemented",
@@ -2591,7 +2598,6 @@
       "get_substituted_size",
       "get_system_offset_time_ptr",
       "has_bit_checked",
-      "in_range",
       "int_strncasecmp",
       "integer_of_date",
       "integer_of_day",
@@ -2599,7 +2605,6 @@
       "integer_of_formatted_date",
       "integer_of_mmdd",
       "integer_of_wwwd",
-      "leap_year",
       "locale_time",
       "max_week",
       "num_leading_nonspace",
@@ -2648,17 +2653,12 @@
       "test_z_presence",
       "try_get_valid_offset_time",
       "valid_day_and_format",
-      "valid_day_of_month",
-      "valid_day_of_year",
       "valid_decimal_time",
-      "valid_integer_date",
-      "valid_month",
       "valid_offset_time",
-      "valid_time",
-      "valid_year"
+      "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 225,
+    "missing": 213,
     "source_funcs": 238,
     "test_only": 0
   },

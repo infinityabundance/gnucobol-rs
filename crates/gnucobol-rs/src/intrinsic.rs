@@ -246,7 +246,7 @@ pub fn intrinsic_day_of_integer(n: i64) -> u32 {
 // as an owned `(bytes, attr)` pair (the byte content is what the oracle observes); the rotating temp pool
 // the C uses is just memory reuse — RAII here. The value logic is the already-sealed `intrinsic_*` fns.
 
-use crate::attr::{FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_BINARY};
+use crate::attr::{FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY};
 
 /// A `cob_intr_*` result field: the data bytes + their attribute.
 pub type IntrField = (Vec<u8>, FieldAttr);
@@ -329,6 +329,116 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
     }
 }
 
+// ---- date validators (intrinsic.c) + the date-conversion cob_intr_* wrappers -------------------
+
+const NORMAL_MONTH_DAYS: [i32; 13] = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const LEAP_MONTH_DAYS: [i32; 13] = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+/// `in_range (min, max, val)` (intrinsic.c): `min <= val <= max`.
+pub fn in_range(min: i32, max: i32, val: i32) -> bool {
+    min <= val && val <= max
+}
+
+/// `leap_year (year)` (intrinsic.c): Gregorian leap-year test.
+pub fn leap_year(year: i32) -> bool {
+    (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+/// `days_in_year (year)` (intrinsic.c): 366 in a leap year, else 365.
+pub fn days_in_year(year: i32) -> i32 {
+    if leap_year(year) {
+        366
+    } else {
+        365
+    }
+}
+
+/// `valid_year (year)` (intrinsic.c): `1601..=9999`.
+pub fn valid_year(year: i32) -> bool {
+    in_range(1601, 9999, year)
+}
+
+/// `valid_month (month)` (intrinsic.c): `1..=12`.
+pub fn valid_month(month: i32) -> bool {
+    in_range(1, 12, month)
+}
+
+/// `valid_day_of_month (year, month, day)` (intrinsic.c): `day` within the month's length (leap-aware).
+pub fn valid_day_of_month(year: i32, month: i32, day: i32) -> bool {
+    if !valid_month(month) {
+        return false;
+    }
+    let max = if leap_year(year) {
+        LEAP_MONTH_DAYS[month as usize]
+    } else {
+        NORMAL_MONTH_DAYS[month as usize]
+    };
+    in_range(1, max, day)
+}
+
+/// `valid_day_of_year (year, doy)` (intrinsic.c): `doy` within the year's length.
+pub fn valid_day_of_year(year: i32, doy: i32) -> bool {
+    in_range(1, days_in_year(year), doy)
+}
+
+/// `valid_integer_date (days)` (intrinsic.c): the integer-date range `1..=3067671` (1601-01-01 base).
+pub fn valid_integer_date(days: i32) -> bool {
+    in_range(1, 3067671, days)
+}
+
+/// `cob_intr_integer_of_date (srcfield)` (intrinsic.c): `FUNCTION INTEGER-OF-DATE(YYYYMMDD)` — the day
+/// number, or `0` (with an exception) for an invalid date.
+pub fn cob_intr_integer_of_date(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let indate = crate::accessors::cob_get_int(src, src_attr);
+    let year = indate / 10000;
+    if !valid_year(year) {
+        return cob_alloc_set_field_uint(0);
+    }
+    let md = indate % 10000;
+    let month = md / 100;
+    let day = md % 100;
+    if !valid_month(month) || !valid_day_of_month(year, month, day) {
+        return cob_alloc_set_field_uint(0);
+    }
+    cob_alloc_set_field_uint(intrinsic_integer_of_date(indate as u32) as u32)
+}
+
+/// `cob_intr_integer_of_day (srcfield)` (intrinsic.c): `FUNCTION INTEGER-OF-DAY(YYYYDDD)`.
+pub fn cob_intr_integer_of_day(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let indate = crate::accessors::cob_get_int(src, src_attr);
+    let year = indate / 1000;
+    if !valid_year(year) {
+        return cob_alloc_set_field_uint(0);
+    }
+    let doy = indate % 1000;
+    if !valid_day_of_year(year, doy) {
+        return cob_alloc_set_field_uint(0);
+    }
+    cob_alloc_set_field_uint(intrinsic_integer_of_day(indate as u32) as u32)
+}
+
+/// `cob_intr_date_of_integer (srcdays)` (intrinsic.c): `FUNCTION DATE-OF-INTEGER(days)` — an 8-digit
+/// `YYYYMMDD` DISPLAY field, or `"00000000"` for an out-of-range day.
+pub fn cob_intr_date_of_integer(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };
+    let days = crate::accessors::cob_get_int(src, src_attr);
+    if !valid_integer_date(days) {
+        return (b"00000000".to_vec(), attr);
+    }
+    (format!("{:08}", intrinsic_date_of_integer(days as i64)).into_bytes(), attr)
+}
+
+/// `cob_intr_day_of_integer (srcdays)` (intrinsic.c): `FUNCTION DAY-OF-INTEGER(days)` — a 7-digit
+/// `YYYYDDD` DISPLAY field.
+pub fn cob_intr_day_of_integer(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 7, scale: 0, flags: 0 };
+    let days = crate::accessors::cob_get_int(src, src_attr);
+    if !valid_integer_date(days) {
+        return (b"0000000".to_vec(), attr);
+    }
+    (format!("{:07}", intrinsic_day_of_integer(days as i64)).into_bytes(), attr)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -341,6 +451,32 @@ mod tests {
     fn nvc(s: &str) -> String {
         numval_display(&intrinsic_numval_c(s), 8, 4)
     }
+    #[test]
+    fn cob_intr_date_wrappers() {
+        let disp = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };
+        // validators
+        assert!(leap_year(2000));
+        assert!(!leap_year(1900));
+        assert!(leap_year(2024));
+        assert!(valid_day_of_month(2024, 2, 29)); // leap Feb 29
+        assert!(!valid_day_of_month(2023, 2, 29)); // non-leap
+        assert!(!valid_month(13));
+        assert!(valid_integer_date(1));
+        assert!(!valid_integer_date(0));
+        // INTEGER-OF-DATE(YYYYMMDD) then DATE-OF-INTEGER round-trips
+        let (d, a) = cob_intr_integer_of_date(b"20240229", &disp);
+        let days = crate::accessors::cob_get_int(&d, &a);
+        assert!(days > 0);
+        let days_disp = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 9, scale: 0, flags: 0 };
+        let dbytes = format!("{days:09}").into_bytes();
+        let (back, _) = cob_intr_date_of_integer(&dbytes, &days_disp);
+        assert_eq!(back, b"20240229");
+        // invalid date -> 0 / "00000000"
+        assert_eq!(crate::accessors::cob_get_int(&cob_intr_integer_of_date(b"20240230", &disp).0,
+            &FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: 0 }), 0);
+        assert_eq!(cob_intr_date_of_integer(b"000000000", &days_disp).0, b"00000000");
+    }
+
     #[test]
     fn cob_intr_result_fields() {
         use crate::attr::COB_TYPE_ALPHANUMERIC;
