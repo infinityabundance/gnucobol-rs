@@ -61,7 +61,6 @@
         "cob_intr_exp",
         "cob_intr_exp10",
         "cob_intr_formatted_current_date",
-        "cob_intr_formatted_date",
         "cob_intr_formatted_datetime",
         "cob_intr_formatted_time",
         "cob_intr_lcl_time_from_secs",
@@ -104,11 +103,7 @@
         "cob_put_indirect_field",
         "cob_switch_value",
         "comp_field",
-        "format_as_yyyyddd",
-        "format_as_yyyymmdd",
-        "format_as_yyyywwwd",
         "format_current_date",
-        "format_date",
         "format_datetime",
         "format_time",
         "get_fractional_seconds",
@@ -137,12 +132,11 @@
         "test_two_zeroes",
         "test_z_presence",
         "try_get_valid_offset_time",
-        "valid_day_and_format",
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 51.9,
-      "ported": 123
+      "parity_pct": 54.4,
+      "ported": 129
     },
     {
       "doxygen_functions": 9,
@@ -723,8 +717,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 38.1,
-    "ported": 380
+    "parity_pct": 38.7,
+    "ported": 386
   },
   "xml_root": "lab/doxygen/out/xml"
 }

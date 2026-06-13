@@ -2084,6 +2084,102 @@ pub fn cob_intr_integer_of_formatted_date(fmt: &[u8], date: &[u8]) -> IntrField 
     cob_alloc_set_field_uint(integer_of_formatted_date(date_fmt, &date_str))
 }
 
+/// `date_of_integer (day_num)` (intrinsic.c): the `(year, month, day_of_month)` for a 1601-based day number.
+fn date_of_integer(day_num: i32) -> (i32, i32, i32) {
+    let mut days = day_num;
+    let mut baseyear = 1601;
+    let mut leapyear = 365;
+    while days > leapyear {
+        days -= leapyear;
+        baseyear += 1;
+        leapyear = days_in_year(baseyear);
+    }
+    let mut i = 0i32;
+    while i < 13 {
+        if leap_year(baseyear) {
+            if i != 0 && days <= LEAP_DAYS[i as usize] {
+                days -= LEAP_DAYS[(i - 1) as usize];
+                break;
+            }
+        } else if i != 0 && days <= NORMAL_DAYS[i as usize] {
+            days -= NORMAL_DAYS[(i - 1) as usize];
+            break;
+        }
+        i += 1;
+    }
+    (baseyear, i, days)
+}
+
+/// `format_as_yyyymmdd (day_num, with_hyphen)` (intrinsic.c).
+fn format_as_yyyymmdd(day_num: i32, with_hyphen: bool) -> Vec<u8> {
+    let (year, month, day) = date_of_integer(day_num);
+    if with_hyphen {
+        format!("{year:04}-{month:02}-{day:02}")
+    } else {
+        format!("{year:04}{month:02}{day:02}")
+    }
+    .into_bytes()
+}
+
+/// `format_as_yyyyddd (day_num, with_hyphen)` (intrinsic.c).
+fn format_as_yyyyddd(day_num: i32, with_hyphen: bool) -> Vec<u8> {
+    let (year, doy) = day_of_integer(day_num);
+    if with_hyphen {
+        format!("{year:04}-{doy:03}")
+    } else {
+        format!("{year:04}{doy:03}")
+    }
+    .into_bytes()
+}
+
+/// `format_as_yyyywwwd (day_num, with_hyphen)` (intrinsic.c): the ISO week year + week + day-of-week.
+fn format_as_yyyywwwd(day_num: i32, with_hyphen: bool) -> Vec<u8> {
+    let (year, week) = get_iso_week(day_num);
+    let day_of_week = get_day_of_week(day_num) + 1;
+    if with_hyphen {
+        format!("{year:04}-W{week:02}-{day_of_week:01}")
+    } else {
+        format!("{year:04}W{week:02}{day_of_week:01}")
+    }
+    .into_bytes()
+}
+
+/// `format_date (format, days, buff)` (intrinsic.c): render a day number per the date format kind.
+fn format_date(format: DateFormat, days: i32) -> Vec<u8> {
+    match format.days {
+        DaysFormat::Mmdd => format_as_yyyymmdd(days, format.with_hyphens),
+        DaysFormat::Ddd => format_as_yyyyddd(days, format.with_hyphens),
+        DaysFormat::Wwwd => format_as_yyyywwwd(days, format.with_hyphens),
+    }
+}
+
+/// `valid_day_and_format (day, format)` (intrinsic.c).
+fn valid_day_and_format(day: i32, format: &[u8]) -> bool {
+    valid_integer_date(day) && cob_valid_date_format(format)
+}
+
+/// `cob_intr_formatted_date (offset, length, format_field, days_field)` (intrinsic.c):
+/// `FUNCTION FORMATTED-DATE(format, integer-date)` — render the day number as a date string of the format's
+/// own width; an invalid day or format yields all spaces. Reference modification applies when `offset > 0`.
+pub fn cob_intr_formatted_date(offset: i32, length: i32, fmt: &[u8], days: &[u8], days_attr: &FieldAttr) -> IntrField {
+    const COB_DATESTR_MAX: usize = 10;
+    let format_str = copy_data_to_null_terminated_str(fmt, COB_DATESTR_MAX);
+    let field_length = format_str.len();
+    let days_val = cob_get_int(days, days_attr);
+
+    let out: Vec<u8> = if !valid_day_and_format(days_val, &format_str) {
+        vec![b' '; field_length]
+    } else {
+        let mut buff = format_date(parse_date_format_string(&format_str), days_val);
+        buff.truncate(field_length);
+        buff
+    };
+    if offset > 0 {
+        return intr_refmod(out, offset, length);
+    }
+    (out, ALPHA1)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

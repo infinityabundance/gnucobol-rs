@@ -62,7 +62,6 @@
         "cob_intr_exp",
         "cob_intr_exp10",
         "cob_intr_formatted_current_date",
-        "cob_intr_formatted_date",
         "cob_intr_formatted_datetime",
         "cob_intr_formatted_time",
         "cob_intr_lcl_time_from_secs",
@@ -105,12 +104,7 @@
         "cob_put_indirect_field",
         "cob_switch_value",
         "comp_field",
-        "date_of_integer",
-        "format_as_yyyyddd",
-        "format_as_yyyymmdd",
-        "format_as_yyyywwwd",
         "format_current_date",
-        "format_date",
         "format_datetime",
         "format_time",
         "get_fractional_seconds",
@@ -142,12 +136,11 @@
         "test_two_zeroes",
         "test_z_presence",
         "try_get_valid_offset_time",
-        "valid_day_and_format",
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 49.6,
-      "ported": 118
+      "parity_pct": 52.5,
+      "ported": 125
     },
     {
       "file": "cconv.c",
@@ -888,7 +881,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 31.6,
-    "ported": 370
+    "parity_pct": 32.2,
+    "ported": 377
   }
 }

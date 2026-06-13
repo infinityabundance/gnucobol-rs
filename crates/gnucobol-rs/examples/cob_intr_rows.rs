@@ -126,4 +126,14 @@ fn main() {
     hexln("iofd_bad", &cob_intr_integer_of_formatted_date(b"YYYYMMDD", b"20240230"));
     hexln("iofd_badf", &cob_intr_integer_of_formatted_date(b"ZZZZ", b"x"));
     hexln("iofd_base", &cob_intr_integer_of_formatted_date(b"YYYYMMDD", b"16010101"));
+    let d7 = disp(7, 0, false);
+    hexln("fd_1ymd", &cob_intr_formatted_date(0, 0, b"YYYYMMDD", b"0000001", &d7));
+    hexln("fd_1ymdh", &cob_intr_formatted_date(0, 0, b"YYYY-MM-DD", b"0000001", &d7));
+    hexln("fd_1ddd", &cob_intr_formatted_date(0, 0, b"YYYYDDD", b"0000001", &d7));
+    hexln("fd_1www", &cob_intr_formatted_date(0, 0, b"YYYYWwwD", b"0000001", &d7));
+    hexln("fd_1wwwh", &cob_intr_formatted_date(0, 0, b"YYYY-Www-D", b"0000001", &d7));
+    hexln("fd_mod", &cob_intr_formatted_date(0, 0, b"YYYY-MM-DD", b"0154789", &d7));
+    hexln("fd_modw", &cob_intr_formatted_date(0, 0, b"YYYY-Www-D", b"0154789", &d7));
+    hexln("fd_inv", &cob_intr_formatted_date(0, 0, b"YYYYMMDD", b"0000000", &d7));
+    hexln("fd_badf", &cob_intr_formatted_date(0, 0, b"BAD", b"0000001", &d7));
 }

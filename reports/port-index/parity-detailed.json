@@ -1220,11 +1220,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 118,
+    "active_ported": 125,
     "compiled": 238,
-    "compiled_parity_pct": 49.6,
+    "compiled_parity_pct": 52.5,
     "disabled": 0,
-    "doc_only": 4,
+    "doc_only": 3,
     "file": "intrinsic.c",
     "fns": [
       {
@@ -1497,7 +1497,8 @@
       {
         "function": "date_of_integer",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "day_of_integer",
@@ -1531,7 +1532,8 @@
       {
         "function": "valid_day_and_format",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "num_leading_nonspace",
@@ -1542,12 +1544,14 @@
       {
         "function": "format_as_yyyymmdd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_as_yyyyddd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_day_of_week",
@@ -1570,7 +1574,8 @@
       {
         "function": "format_as_yyyywwwd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "parse_date_format_string",
@@ -1581,7 +1586,8 @@
       {
         "function": "format_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_fractional_seconds",
@@ -2445,7 +2451,8 @@
       {
         "function": "cob_intr_formatted_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_formatted_time",
@@ -2573,7 +2580,6 @@
       "cob_intr_exp",
       "cob_intr_exp10",
       "cob_intr_formatted_current_date",
-      "cob_intr_formatted_date",
       "cob_intr_formatted_datetime",
       "cob_intr_formatted_time",
       "cob_intr_lcl_time_from_secs",
@@ -2616,12 +2622,7 @@
       "cob_put_indirect_field",
       "cob_switch_value",
       "comp_field",
-      "date_of_integer",
-      "format_as_yyyyddd",
-      "format_as_yyyymmdd",
-      "format_as_yyyywwwd",
       "format_current_date",
-      "format_date",
       "format_datetime",
       "format_time",
       "get_fractional_seconds",
@@ -2653,12 +2654,11 @@
       "test_two_zeroes",
       "test_z_presence",
       "try_get_valid_offset_time",
-      "valid_day_and_format",
       "valid_offset_time",
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 116,
+    "missing": 110,
     "source_funcs": 238,
     "test_only": 0
   },
