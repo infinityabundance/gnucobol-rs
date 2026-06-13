@@ -36,7 +36,6 @@
         "calculate_start_end_for_numval",
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
-        "cob_check_numval",
         "cob_check_numval_f",
         "cob_decimal_move_temp",
         "cob_decimal_pow",
@@ -94,8 +93,6 @@
         "cob_intr_standard_deviation",
         "cob_intr_tan",
         "cob_intr_test_formatted_datetime",
-        "cob_intr_test_numval",
-        "cob_intr_test_numval_c",
         "cob_intr_test_numval_f",
         "cob_intr_variance",
         "cob_intr_when_compiled",
@@ -193,8 +190,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 29.8,
-      "ported": 71
+      "parity_pct": 31.1,
+      "ported": 74
     },
     {
       "file": "cconv.c",
@@ -935,7 +932,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 27.6,
-    "ported": 323
+    "parity_pct": 27.9,
+    "ported": 326
   }
 }

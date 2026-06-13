@@ -991,6 +991,241 @@ pub fn cob_intr_numval_c(src: &[u8]) -> IntrField {
     intr_decimal_result(numval_to_decimal(&intrinsic_numval_c(&s)))
 }
 
+/// `cob_check_numval (srcfield, currency, chkcurr, anycase)` (intrinsic.c): validate that `srcfield` holds
+/// a numeric string. Returns 0 when valid, otherwise the 1-based position of the first offending character
+/// (or `size + 1` when the field contains no digit at all). `chkcurr` enables `NUMVAL-C` currency/comma
+/// handling; `currency` overrides the symbol; `anycase` accepts lowercase `cr`/`db`. `dec_pt`/`currency_symbol`
+/// come from the current module (the oracle's default config: `'.'` and `'$'`).
+pub fn cob_check_numval(
+    src: &[u8],
+    currency: Option<&[u8]>,
+    chkcurr: bool,
+    anycase: bool,
+    dec_pt: u8,
+    currency_symbol: u8,
+) -> i32 {
+    const COB_MAX_DIGITS: usize = 38;
+    let max_pos = src.len() as i32;
+    if max_pos == 0 {
+        return 1;
+    }
+
+    // Determine the currency token (begp / currcy_size).
+    let mut begp: Option<Vec<u8>> = None;
+    let mut currcy_size: i32 = 0;
+    if let Some(cur) = currency {
+        let cmax = cur.len();
+        let mut begi: Option<usize> = None;
+        let mut endi: Option<usize> = None;
+        for pos in 0..cmax {
+            match cur[pos] {
+                b'0'..=b'9' | b'+' | b'-' | b'.' | b',' | b'*' => return 1,
+                b' ' => {}
+                _ => {
+                    if pos < cmax - 1 && (&cur[pos..pos + 2] == b"CR" || &cur[pos..pos + 2] == b"DB") {
+                        return 1;
+                    }
+                    if begi.is_none() {
+                        begi = Some(pos);
+                    }
+                    endi = Some(pos);
+                }
+            }
+        }
+        match (begi, endi) {
+            (Some(b), Some(e)) => {
+                let sz = (e - b) as i32 + 1;
+                if sz < max_pos {
+                    begp = Some(cur[b..=e].to_vec());
+                    currcy_size = sz;
+                }
+            }
+            _ => return 1,
+        }
+    } else if chkcurr {
+        begp = Some(vec![currency_symbol]);
+        currcy_size = 1;
+    }
+
+    let mut plus_minus = false;
+    let mut break_needed;
+    let mut n: i32 = 0;
+
+    // Leading positions (sign / spaces / currency before the first digit).
+    break_needed = false;
+    while n < max_pos {
+        let c = src[n as usize];
+        match c {
+            b'0'..=b'9' => break_needed = true,
+            b' ' => {
+                n += 1;
+                continue;
+            }
+            b'+' | b'-' => {
+                if plus_minus {
+                    return n + 1;
+                }
+                plus_minus = true;
+                n += 1;
+                continue;
+            }
+            b',' | b'.' => {
+                if c != dec_pt {
+                    return n + 1;
+                }
+                break_needed = true;
+            }
+            _ => {
+                let mut matched_currency = false;
+                if let Some(ref tok) = begp {
+                    if n < max_pos - currcy_size {
+                        let s = n as usize;
+                        if src[s..s + currcy_size as usize] == tok[..] {
+                            matched_currency = true;
+                        }
+                    }
+                }
+                if !matched_currency {
+                    return n + 1;
+                }
+            }
+        }
+        if break_needed {
+            break;
+        }
+        n += 1;
+    }
+
+    // End reached without a digit -> definitely not numeric.
+    if n == max_pos {
+        return max_pos + 1;
+    }
+
+    // Check the actual data.
+    break_needed = false;
+    let mut digits = 0usize;
+    let mut decimal_seen = false;
+    let mut space_seen = false;
+    while n < max_pos {
+        let c = src[n as usize];
+        match c {
+            b'0'..=b'9' => {
+                digits += 1;
+                if digits > COB_MAX_DIGITS || space_seen {
+                    return n + 1;
+                }
+                n += 1;
+                continue;
+            }
+            b',' | b'.' => {
+                if decimal_seen || space_seen {
+                    return n + 1;
+                }
+                if c == dec_pt {
+                    decimal_seen = true;
+                } else if !chkcurr {
+                    return n + 1;
+                }
+                if digits > 0 {
+                    let prev = src[(n - 1) as usize];
+                    if !prev.is_ascii_digit() {
+                        return n + 1;
+                    }
+                } else if n < max_pos - 1 {
+                    let next = src[(n + 1) as usize];
+                    if !next.is_ascii_digit() {
+                        return n + 2;
+                    }
+                }
+                n += 1;
+                continue;
+            }
+            b' ' => {
+                space_seen = true;
+                n += 1;
+                continue;
+            }
+            b'+' | b'-' => {
+                if plus_minus {
+                    return n + 1;
+                }
+                n += 1; // trailing sign consumed; only spaces may follow
+                break_needed = true;
+            }
+            b'c' | b'C' => {
+                if c == b'c' && !anycase {
+                    return n + 1;
+                }
+                if plus_minus {
+                    return n + 1;
+                }
+                if n < max_pos - 1 {
+                    let nx = src[(n + 1) as usize];
+                    if nx == b'R' || (anycase && nx == b'r') {
+                        n += 2; // skip cR
+                        break_needed = true;
+                    } else {
+                        return n + 2;
+                    }
+                } else {
+                    return n + 2;
+                }
+            }
+            b'd' | b'D' => {
+                if c == b'd' && !anycase {
+                    return n + 1;
+                }
+                if plus_minus {
+                    return n + 1;
+                }
+                if n < max_pos - 1 {
+                    let nx = src[(n + 1) as usize];
+                    if nx == b'B' || (anycase && nx == b'b') {
+                        n += 2; // skip dB
+                        break_needed = true;
+                    } else {
+                        return n + 2;
+                    }
+                } else {
+                    return n + 2;
+                }
+            }
+            _ => return n + 1,
+        }
+        if break_needed {
+            break;
+        }
+        n += 1;
+    }
+
+    // No digit -> definitely not numeric.
+    if digits == 0 {
+        return max_pos + 1;
+    }
+
+    // Trailing spaces only.
+    while n < max_pos {
+        if src[n as usize] != b' ' {
+            return n + 1;
+        }
+        n += 1;
+    }
+
+    0
+}
+
+/// `cob_intr_test_numval (srcfield)` (intrinsic.c): `FUNCTION TEST-NUMVAL` — 0 if valid for `NUMVAL`, else
+/// the 1-based position of the first invalid character.
+pub fn cob_intr_test_numval(src: &[u8]) -> IntrField {
+    cob_alloc_set_field_int(cob_check_numval(src, None, false, false, b'.', b'$'))
+}
+
+/// `cob_intr_test_numval_c (srcfield, currency)` (intrinsic.c): `FUNCTION TEST-NUMVAL-C` — like
+/// [`cob_intr_test_numval`] with `NUMVAL-C` currency/comma handling.
+pub fn cob_intr_test_numval_c(src: &[u8], currency: Option<&[u8]>) -> IntrField {
+    cob_alloc_set_field_int(cob_check_numval(src, currency, true, false, b'.', b'$'))
+}
+
 /// `cob_mod_or_rem (f1, f2, func_is_rem)` (intrinsic.c): the shared `MOD`/`REM` core —
 /// `f1 - q*f2` where `q` is `floor(f1/f2)` (MOD) or `trunc(f1/f2)` (REM). A zero divisor yields `0`.
 pub fn cob_mod_or_rem(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, func_is_rem: bool) -> IntrField {

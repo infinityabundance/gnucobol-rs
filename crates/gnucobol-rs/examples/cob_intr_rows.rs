@@ -102,4 +102,14 @@ fn main() {
     hexln("subst", &cob_intr_substitute(0, 0, b"MISSISSIPPI", subst_pairs));
     let subst_c_pairs: &[(&[u8], &[u8])] = &[(b"L", b"_")];
     hexln("subst_c", &cob_intr_substitute_case(0, 0, b"Hello", subst_c_pairs));
+    hexln("tnv_ok", &cob_intr_test_numval(b"-12.34  "));
+    hexln("tnv_dd", &cob_intr_test_numval(b"12.3.4"));
+    hexln("tnv_x", &cob_intr_test_numval(b"12X4"));
+    hexln("tnv_pp", &cob_intr_test_numval(b"++5"));
+    hexln("tnv_cr", &cob_intr_test_numval(b"12CR"));
+    hexln("tnv_lc", &cob_intr_test_numval(b"12cr"));
+    hexln("tnv_sp", &cob_intr_test_numval(b"    "));
+    hexln("tnvc_ok", &cob_intr_test_numval_c(b"$1,234.56", None));
+    hexln("tnvc_cma", &cob_intr_test_numval_c(b"1,234", None));
+    hexln("tnvc_dd", &cob_intr_test_numval_c(b"1.2.3", None));
 }

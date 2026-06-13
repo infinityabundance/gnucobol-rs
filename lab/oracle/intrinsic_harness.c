@@ -112,5 +112,15 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("  HELLO  ",9,ALNUM,0,0,0); dump("trim_t", cob_intr_trim(0,0,&f,2)); }
 	{ cob_field o=mkf("MISSISSIPPI",11,ALNUM,0,0,0),m1=mkf("SS",2,ALNUM,0,0,0),r1=mkf("X",1,ALNUM,0,0,0),m2=mkf("PP",2,ALNUM,0,0,0),r2=mkf("Y",1,ALNUM,0,0,0); dump("subst", cob_intr_substitute(0,0,5,&o,&m1,&r1,&m2,&r2)); }
 	{ cob_field o=mkf("Hello",5,ALNUM,0,0,0),m1=mkf("L",1,ALNUM,0,0,0),r1=mkf("_",1,ALNUM,0,0,0); dump("subst_c", cob_intr_substitute_case(0,0,3,&o,&m1,&r1)); }
+	{ cob_field f=mkf("-12.34  ",8,ALNUM,0,0,0); dump("tnv_ok", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("12.3.4",6,ALNUM,0,0,0); dump("tnv_dd", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("12X4",4,ALNUM,0,0,0); dump("tnv_x", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("++5",3,ALNUM,0,0,0); dump("tnv_pp", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("12CR",4,ALNUM,0,0,0); dump("tnv_cr", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("12cr",4,ALNUM,0,0,0); dump("tnv_lc", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("    ",4,ALNUM,0,0,0); dump("tnv_sp", cob_intr_test_numval(&f)); }
+	{ cob_field f=mkf("$1,234.56",9,ALNUM,0,0,0); dump("tnvc_ok", cob_intr_test_numval_c(&f,NULL)); }
+	{ cob_field f=mkf("1,234",5,ALNUM,0,0,0); dump("tnvc_cma", cob_intr_test_numval_c(&f,NULL)); }
+	{ cob_field f=mkf("1.2.3",5,ALNUM,0,0,0); dump("tnvc_dd", cob_intr_test_numval_c(&f,NULL)); }
 	return 0;
 }
