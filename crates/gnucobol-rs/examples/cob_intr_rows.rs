@@ -2,7 +2,7 @@
 //! (the real exported `cob_intr_*` linked against libcob) through the Rust port, printing
 //! `label <result-field hex bytes>` so the two streams diff byte-for-byte.
 
-use gnucobol_rs::attr::{FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_DISPLAY};
+use gnucobol_rs::attr::{FieldAttr, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY};
 use gnucobol_rs::intrinsic::*;
 
 fn hexln(label: &str, r: &(Vec<u8>, FieldAttr)) {
@@ -154,4 +154,20 @@ fn main() {
     hexln("sfft_eod", &cob_intr_seconds_from_formatted_time(b"hhmmss.sss", b"235959.125"));
     hexln("sfft_dt", &cob_intr_seconds_from_formatted_time(b"YYYY-MM-DDThh:mm:ss", b"2024-02-29T06:30:00"));
     hexln("sfft_bad", &cob_intr_seconds_from_formatted_time(b"hhmmss", b"250000"));
+    // FORMATTED-TIME / FORMATTED-DATETIME: explicit-offset path (use_system_offset = false).
+    let d7n = disp(7, 0, false);
+    let o4 = disp(4, 0, false);
+    let binneg = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: COB_FLAG_HAVE_SIGN };
+    hexln("ft_plain", &cob_intr_formatted_time(0, 0, b"hhmmss", b"0043200", &d7n, None, false));
+    hexln("ft_colon", &cob_intr_formatted_time(0, 0, b"hh:mm:ss", b"0043200", &d7n, None, false));
+    hexln("ft_frac", &cob_intr_formatted_time(0, 0, b"hh:mm:ss.ss", b"4320050", &disp(7, 2, false), None, false));
+    hexln("ft_z", &cob_intr_formatted_time(0, 0, b"hhmmssZ", b"0043200", &d7n, Some((b"0330", &o4)), false));
+    hexln("ft_off", &cob_intr_formatted_time(0, 0, b"hh:mm:ss+hh:mm", b"0043200", &d7n, Some((b"0330", &o4)), false));
+    hexln("ft_offneg", &cob_intr_formatted_time(0, 0, b"hh:mm:ss+hh:mm", b"0043200", &d7n, Some((b"\x88\xff\xff\xff", &binneg)), false));
+    hexln("ft_inv", &cob_intr_formatted_time(0, 0, b"hhmmss", b"0090000", &d7n, None, false));
+    hexln("fdt_plain", &cob_intr_formatted_datetime(0, 0, b"YYYY-MM-DDThh:mm:ss", b"0000001", &d7n, b"0043200", &d7n, None, false));
+    hexln("fdt_z", &cob_intr_formatted_datetime(0, 0, b"YYYY-MM-DDThh:mm:ssZ", b"0000001", &d7n, b"0043200", &d7n, Some((b"0000", &o4)), false));
+    hexln("fdt_ovf", &cob_intr_formatted_datetime(0, 0, b"YYYY-MM-DDThh:mm:ssZ", b"0000001", &d7n, b"0082800", &d7n, Some((b"\x88\xff\xff\xff", &binneg)), false));
+    hexln("fdt_off", &cob_intr_formatted_datetime(0, 0, b"YYYY-MM-DDThh:mm:ss+hh:mm", b"0000001", &d7n, b"0043200", &d7n, Some((b"0330", &o4)), false));
+    hexln("fdt_inv", &cob_intr_formatted_datetime(0, 0, b"BADFORMAT", b"0000001", &d7n, b"0043200", &d7n, None, false));
 }

@@ -165,5 +165,19 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("hhmmss.sss",10,ALNUM,0,0,0),d=mkf("235959.125",10,ALNUM,0,0,0); dump("sfft_eod", cob_intr_seconds_from_formatted_time(&f,&d)); }
 	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0),d=mkf("2024-02-29T06:30:00",19,ALNUM,0,0,0); dump("sfft_dt", cob_intr_seconds_from_formatted_time(&f,&d)); }
 	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("250000",6,ALNUM,0,0,0); dump("sfft_bad", cob_intr_seconds_from_formatted_time(&f,&d)); }
+	/* FORMATTED-TIME / FORMATTED-DATETIME: explicit-offset path (use_system_offset=0). Binary offset fields
+	 * carry signed minute offsets; the system-offset arg is the clock-deferral boundary (not tested). */
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),t=mkf("0043200",7,DISP,7,0,0); dump("ft_plain", cob_intr_formatted_time(0,0,3,&f,&t,0)); }
+	{ cob_field f=mkf("hh:mm:ss",8,ALNUM,0,0,0),t=mkf("0043200",7,DISP,7,0,0); dump("ft_colon", cob_intr_formatted_time(0,0,3,&f,&t,0)); }
+	{ cob_field f=mkf("hh:mm:ss.ss",11,ALNUM,0,0,0),t=mkf("4320050",7,DISP,7,2,0); dump("ft_frac", cob_intr_formatted_time(0,0,3,&f,&t,0)); }
+	{ cob_field f=mkf("hhmmssZ",7,ALNUM,0,0,0),t=mkf("0043200",7,DISP,7,0,0),o=mkf("0330",4,DISP,4,0,0); dump("ft_z", cob_intr_formatted_time(0,0,4,&f,&t,&o,0)); }
+	{ cob_field f=mkf("hh:mm:ss+hh:mm",14,ALNUM,0,0,0),t=mkf("0043200",7,DISP,7,0,0),o=mkf("0330",4,DISP,4,0,0); dump("ft_off", cob_intr_formatted_time(0,0,4,&f,&t,&o,0)); }
+	{ cob_field f=mkf("hh:mm:ss+hh:mm",14,ALNUM,0,0,0),t=mkf("0043200",7,DISP,7,0,0),o=mkf("\x88\xff\xff\xff",4,0x11,9,0,HAVE_SIGN); dump("ft_offneg", cob_intr_formatted_time(0,0,4,&f,&t,&o,0)); }
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),t=mkf("0090000",7,DISP,7,0,0); dump("ft_inv", cob_intr_formatted_time(0,0,3,&f,&t,0)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0043200",7,DISP,7,0,0); dump("fdt_plain", cob_intr_formatted_datetime(0,0,4,&f,&dd,&t,0)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ssZ",20,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0043200",7,DISP,7,0,0),o=mkf("0000",4,DISP,4,0,0); dump("fdt_z", cob_intr_formatted_datetime(0,0,5,&f,&dd,&t,&o,0)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ssZ",20,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0082800",7,DISP,7,0,0),o=mkf("\x88\xff\xff\xff",4,0x11,9,0,HAVE_SIGN); dump("fdt_ovf", cob_intr_formatted_datetime(0,0,5,&f,&dd,&t,&o,0)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss+hh:mm",25,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0043200",7,DISP,7,0,0),o=mkf("0330",4,DISP,4,0,0); dump("fdt_off", cob_intr_formatted_datetime(0,0,5,&f,&dd,&t,&o,0)); }
+	{ cob_field f=mkf("BADFORMAT",9,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0043200",7,DISP,7,0,0); dump("fdt_inv", cob_intr_formatted_datetime(0,0,4,&f,&dd,&t,0)); }
 	return 0;
 }

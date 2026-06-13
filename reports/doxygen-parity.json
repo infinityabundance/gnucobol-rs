@@ -26,8 +26,6 @@
       "doxygen_functions": 237,
       "file": "intrinsic.c",
       "missing": [
-        "add_decimal_digits",
-        "add_offset_time",
         "add_z",
         "at_cr_or_db",
         "calc_mean_of_args",
@@ -61,8 +59,6 @@
         "cob_intr_exp",
         "cob_intr_exp10",
         "cob_intr_formatted_current_date",
-        "cob_intr_formatted_datetime",
-        "cob_intr_formatted_time",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
@@ -102,13 +98,9 @@
         "cob_switch_value",
         "comp_field",
         "format_current_date",
-        "format_datetime",
-        "format_time",
-        "get_fractional_seconds",
         "get_interval_and_current_year_from_args",
         "get_seconds_past_midnight",
         "get_substituted_size",
-        "get_system_offset_time_ptr",
         "int_strncasecmp",
         "numval",
         "setup_cob_log_half",
@@ -116,12 +108,10 @@
         "setup_cob_pi",
         "setup_cob_sqrt_two",
         "space_left",
-        "substitute_matches",
-        "try_get_valid_offset_time",
-        "valid_offset_time"
+        "substitute_matches"
       ],
-      "parity_pct": 60.8,
-      "ported": 144
+      "parity_pct": 65.0,
+      "ported": 154
     },
     {
       "doxygen_functions": 9,
@@ -702,8 +692,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 40.2,
-    "ported": 401
+    "parity_pct": 41.2,
+    "ported": 411
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -26,8 +26,6 @@
       "file": "intrinsic.c",
       "functions": 238,
       "missing": [
-        "add_decimal_digits",
-        "add_offset_time",
         "add_z",
         "at_cr_or_db",
         "calc_mean_of_args",
@@ -62,8 +60,6 @@
         "cob_intr_exp",
         "cob_intr_exp10",
         "cob_intr_formatted_current_date",
-        "cob_intr_formatted_datetime",
-        "cob_intr_formatted_time",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
@@ -103,9 +99,6 @@
         "cob_switch_value",
         "comp_field",
         "format_current_date",
-        "format_datetime",
-        "format_time",
-        "get_fractional_seconds",
         "get_interval_and_current_year_from_args",
         "get_min_and_max_of_args",
         "get_seconds_past_midnight",
@@ -120,12 +113,10 @@
         "setup_cob_sqrt_two",
         "space_left",
         "substitute",
-        "substitute_matches",
-        "try_get_valid_offset_time",
-        "valid_offset_time"
+        "substitute_matches"
       ],
-      "parity_pct": 58.8,
-      "ported": 140
+      "parity_pct": 62.6,
+      "ported": 149
     },
     {
       "file": "cconv.c",
@@ -866,7 +857,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 33.5,
-    "ported": 392
+    "parity_pct": 34.3,
+    "ported": 401
   }
 }

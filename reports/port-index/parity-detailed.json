@@ -1220,11 +1220,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 140,
+    "active_ported": 149,
     "compiled": 238,
-    "compiled_parity_pct": 58.8,
+    "compiled_parity_pct": 62.6,
     "disabled": 0,
-    "doc_only": 3,
+    "doc_only": 4,
     "file": "intrinsic.c",
     "fns": [
       {
@@ -1493,7 +1493,8 @@
       {
         "function": "valid_offset_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "date_of_integer",
@@ -1594,7 +1595,8 @@
       {
         "function": "get_fractional_seconds",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "decimal_places_for_seconds",
@@ -1617,7 +1619,8 @@
       {
         "function": "add_decimal_digits",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "add_z",
@@ -1627,7 +1630,8 @@
       {
         "function": "add_offset_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "parse_time_format_string",
@@ -1638,7 +1642,8 @@
       {
         "function": "format_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "copy_data_to_null_terminated_str",
@@ -1655,12 +1660,13 @@
       {
         "function": "try_get_valid_offset_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_system_offset_time_ptr",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "test_char_cond",
@@ -1863,7 +1869,8 @@
       {
         "function": "format_datetime",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_current_date",
@@ -2471,12 +2478,14 @@
       {
         "function": "cob_intr_formatted_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_formatted_datetime",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_test_formatted_datetime",
@@ -2559,8 +2568,6 @@
       }
     ],
     "gap": [
-      "add_decimal_digits",
-      "add_offset_time",
       "add_z",
       "at_cr_or_db",
       "calc_mean_of_args",
@@ -2595,8 +2602,6 @@
       "cob_intr_exp",
       "cob_intr_exp10",
       "cob_intr_formatted_current_date",
-      "cob_intr_formatted_datetime",
-      "cob_intr_formatted_time",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
       "cob_intr_locale_date",
@@ -2636,9 +2641,6 @@
       "cob_switch_value",
       "comp_field",
       "format_current_date",
-      "format_datetime",
-      "format_time",
-      "get_fractional_seconds",
       "get_interval_and_current_year_from_args",
       "get_min_and_max_of_args",
       "get_seconds_past_midnight",
@@ -2653,12 +2655,10 @@
       "setup_cob_sqrt_two",
       "space_left",
       "substitute",
-      "substitute_matches",
-      "try_get_valid_offset_time",
-      "valid_offset_time"
+      "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 95,
+    "missing": 85,
     "source_funcs": 238,
     "test_only": 0
   },

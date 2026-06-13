@@ -332,6 +332,7 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 // ---- numeric-result cob_intr_* (over the sealed CobDecimal layer) -------------------------------
 
 use crate::accessors::cob_get_int;
+use crate::int_pow::cob_s32_pow;
 use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE};
 use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
 use crate::gmp::Mpz;
@@ -2410,6 +2411,229 @@ pub fn cob_intr_seconds_from_formatted_time(fmt: &[u8], time: &[u8]) -> IntrFiel
         return cob_alloc_set_field_uint(0);
     }
     intr_decimal_result(seconds_from_formatted_time(time_fmt, &time_str))
+}
+
+/// `get_fractional_seconds (time, fraction)` (intrinsic.c): the sub-second part of a numeric time field
+/// (`decimal(time) - floor(time)`).
+fn get_fractional_seconds(time: &[u8], attr: &FieldAttr) -> CobDecimal {
+    let seconds = cob_get_int(time, attr);
+    let whole = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(seconds as u64); m }, scale: 0 };
+    let mut fraction = cob_decimal_set_field(time, attr);
+    cob_decimal_sub(&mut fraction, &whole);
+    fraction
+}
+
+/// `valid_offset_time (offset)` (intrinsic.c): `|offset| < 1440` minutes (one day).
+fn valid_offset_time(offset: i32) -> bool {
+    offset.abs() < 1440
+}
+
+/// `try_get_valid_offset_time (offset_time_field)` (intrinsic.c): `Some(offset)` (0 when the field is
+/// absent), or `None` when the supplied offset is out of range.
+fn try_get_valid_offset_time(field: Option<(&[u8], &FieldAttr)>) -> Option<i32> {
+    match field {
+        Some((d, a)) => {
+            let off = cob_get_int(d, a);
+            if valid_offset_time(off) {
+                Some(off)
+            } else {
+                None
+            }
+        }
+        None => Some(0),
+    }
+}
+
+/// `get_system_offset_time_ptr` (intrinsic.c) resolves the host UTC offset from the system clock/timezone.
+/// That is environment-dependent — the clock-deferral boundary (as for `FUNCTION CURRENT-DATE`); gnucobol-rs
+/// reports the offset as unknown, matching libcob's `offset_known == 0` path.
+fn get_system_offset_time() -> Option<i32> {
+    None
+}
+
+/// `add_decimal_digits (decimal_places, second_fraction, buff, buff_pos)` (intrinsic.c): append the decimal
+/// point and `decimal_places` fractional digits of `second_fraction`, right-padded with zeros.
+fn add_decimal_digits(decimal_places: usize, second_fraction: &CobDecimal, buff: &mut Vec<u8>, dec_pt: u8) {
+    let mut scale = second_fraction.scale;
+    let mut fraction = second_fraction.value.get_ui();
+    buff.push(dec_pt);
+    let mut places = decimal_places as i32;
+    while scale != 0 && places != 0 {
+        scale -= 1;
+        let power_of_ten = cob_s32_pow(10, scale).unwrap_or(1) as u64;
+        buff.push(b'0' + (fraction / power_of_ten) as u8);
+        fraction %= power_of_ten;
+        places -= 1;
+    }
+    for _ in 0..places {
+        buff.push(b'0');
+    }
+}
+
+/// `add_offset_time (with_colon, offset_time, buff_pos, buff)` (intrinsic.c): append the 6-byte `±hh[:]mm`
+/// zone offset (or `"00000"` + NUL when the offset pointer is null).
+fn add_offset_time(with_colon: bool, offset_time: Option<i32>, buff: &mut Vec<u8>) {
+    if let Some(off) = offset_time {
+        let hours = off / 60;
+        let minutes = (off % 60).abs();
+        let s = if with_colon {
+            format!("{hours:+03}:{minutes:02}")
+        } else {
+            format!("{hours:+03}{minutes:02}")
+        };
+        let mut bytes = s.into_bytes();
+        bytes.resize(6, 0);
+        buff.extend_from_slice(&bytes[..6]);
+    } else {
+        buff.extend_from_slice(b"00000\0");
+    }
+}
+
+/// `format_time (format, time, second_fraction, offset_time, buff)` (intrinsic.c): render seconds-since-
+/// midnight as a time string; returns the date overflow (-1/0/+1) a `Z` zone shift may introduce.
+fn format_time(format: TimeFormat, time: i32, second_fraction: &CobDecimal, offset_time: Option<i32>, dec_pt: u8) -> (i32, Vec<u8>) {
+    let mut hours = time / 3600;
+    let rem = time % 3600;
+    let mut minutes = rem / 60;
+    let seconds = rem % 60;
+    let mut date_overflow = 0;
+
+    if format.extra == TimeExtra::Z {
+        let off = match offset_time {
+            Some(o) => o,
+            None => return (0, Vec::new()), // EC_IMP_UTC_UNKNOWN: libcob leaves the buffer untouched
+        };
+        hours -= off / 60;
+        minutes -= off % 60;
+        if minutes >= 60 {
+            minutes -= 60;
+            hours += 1;
+        } else if minutes < 0 {
+            minutes += 60;
+            hours -= 1;
+        }
+        if hours >= 24 {
+            hours -= 24;
+            date_overflow = 1;
+        } else if hours < 0 {
+            hours += 24;
+            date_overflow = -1;
+        }
+    }
+
+    let mut buff: Vec<u8> = if format.with_colons {
+        format!("{hours:02}:{minutes:02}:{seconds:02}").into_bytes()
+    } else {
+        format!("{hours:02}{minutes:02}{seconds:02}").into_bytes()
+    };
+    if format.decimal_places != 0 {
+        add_decimal_digits(format.decimal_places, second_fraction, &mut buff, dec_pt);
+    }
+    if format.extra == TimeExtra::Z {
+        buff.push(b'Z');
+    } else if format.extra == TimeExtra::OffsetTime {
+        add_offset_time(format.with_colons, offset_time, &mut buff);
+    }
+    (date_overflow, buff)
+}
+
+/// `format_datetime (date_fmt, time_fmt, days, whole_seconds, frac, offset_time, buff)` (intrinsic.c):
+/// `<date>T<time>`, the date adjusted by any `Z`-offset day overflow.
+fn format_datetime(date_fmt: DateFormat, time_fmt: TimeFormat, days: i32, whole_seconds: i32, fractional: &CobDecimal, offset_time: Option<i32>, dec_pt: u8) -> Vec<u8> {
+    let (overflow, formatted_time) = format_time(time_fmt, whole_seconds, fractional, offset_time, dec_pt);
+    let mut buff = format_date(date_fmt, days + overflow);
+    buff.push(b'T');
+    buff.extend_from_slice(&formatted_time);
+    buff
+}
+
+/// An all-spaces result of the given width (the formatted-date/time invalid-args path), reference-modified
+/// when `offset > 0`.
+fn formatted_spaces(field_length: usize, offset: i32, length: i32) -> IntrField {
+    let out = vec![b' '; field_length];
+    if offset > 0 {
+        intr_refmod(out, offset, length)
+    } else {
+        (out, ALPHA1)
+    }
+}
+
+/// `cob_intr_formatted_time (offset, length, params, ...)` (intrinsic.c):
+/// `FUNCTION FORMATTED-TIME(format, seconds [, offset-minutes])` — render seconds-since-midnight per the
+/// time format. The `use_system_offset` argument selects the host UTC offset (the clock-deferral boundary);
+/// the explicit-offset path is sealed. Invalid time/format/offset yields all spaces.
+#[allow(clippy::too_many_arguments)]
+pub fn cob_intr_formatted_time(offset: i32, length: i32, fmt: &[u8], time: &[u8], time_attr: &FieldAttr, offset_time_field: Option<(&[u8], &FieldAttr)>, use_system_offset: bool) -> IntrField {
+    const COB_TIMESTR_MAX: usize = 25;
+    let dec_pt = b'.';
+    let format_str = copy_data_to_null_terminated_str(fmt, COB_TIMESTR_MAX);
+    let field_length = format_str.len();
+
+    let whole_seconds = cob_get_int(time, time_attr);
+    if !valid_time(whole_seconds) {
+        return formatted_spaces(field_length, offset, length);
+    }
+    let fractional = get_fractional_seconds(time, time_attr);
+    if !cob_valid_time_format(&format_str, dec_pt) {
+        return formatted_spaces(field_length, offset, length);
+    }
+    let format = parse_time_format_string(&format_str);
+    let offset_time = if use_system_offset {
+        get_system_offset_time()
+    } else {
+        match try_get_valid_offset_time(offset_time_field) {
+            Some(o) => Some(o),
+            None => return formatted_spaces(field_length, offset, length),
+        }
+    };
+    let (_overflow, mut buff) = format_time(format, whole_seconds, &fractional, offset_time, dec_pt);
+    buff.resize(field_length, 0);
+    if offset > 0 {
+        return intr_refmod(buff, offset, length);
+    }
+    (buff, ALPHA1)
+}
+
+/// `cob_intr_formatted_datetime (offset, length, params, ...)` (intrinsic.c):
+/// `FUNCTION FORMATTED-DATETIME(format, integer-date, seconds [, offset-minutes])` — `<date>T<time>` with
+/// the date carried by any `Z`-offset day overflow. `use_system_offset` is the clock-deferral boundary;
+/// the explicit-offset path is sealed. Invalid format/date/time/offset yields all spaces.
+#[allow(clippy::too_many_arguments)]
+pub fn cob_intr_formatted_datetime(offset: i32, length: i32, fmt: &[u8], days: &[u8], days_attr: &FieldAttr, time: &[u8], time_attr: &FieldAttr, offset_time_field: Option<(&[u8], &FieldAttr)>, use_system_offset: bool) -> IntrField {
+    const COB_DATETIMESTR_MAX: usize = 36;
+    let dec_pt = b'.';
+    let fmt_str = copy_data_to_null_terminated_str(fmt, COB_DATETIMESTR_MAX);
+    let field_length = fmt_str.len();
+
+    if !cob_valid_datetime_format(&fmt_str, dec_pt) {
+        return formatted_spaces(field_length, offset, length);
+    }
+    let days_val = cob_get_int(days, days_attr);
+    let whole_seconds = cob_get_int(time, time_attr);
+    if !valid_integer_date(days_val) || !valid_time(whole_seconds) {
+        return formatted_spaces(field_length, offset, length);
+    }
+    let (date_fmt_str, time_fmt_str, ret) = split_around_t(&fmt_str);
+    if ret != 0 {
+        return formatted_spaces(field_length, offset, length);
+    }
+    let time_fmt = parse_time_format_string(&time_fmt_str);
+    let offset_time = if use_system_offset {
+        get_system_offset_time()
+    } else {
+        match try_get_valid_offset_time(offset_time_field) {
+            Some(o) => Some(o),
+            None => return formatted_spaces(field_length, offset, length),
+        }
+    };
+    let date_fmt = parse_date_format_string(&date_fmt_str);
+    let fractional = get_fractional_seconds(time, time_attr);
+    let mut buff = format_datetime(date_fmt, time_fmt, days_val, whole_seconds, &fractional, offset_time, dec_pt);
+    buff.resize(field_length, 0);
+    if offset > 0 {
+        return intr_refmod(buff, offset, length);
+    }
+    (buff, ALPHA1)
 }
 
 #[cfg(test)]
