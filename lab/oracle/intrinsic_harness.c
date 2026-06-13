@@ -1,0 +1,67 @@
+/* Oracle harness for intrinsic.c cob_intr_*. Links the built libcob, cob_init()s the runtime, then calls
+ * each exported intrinsic on a fixed battery of input fields and prints `label <result-field hex bytes>`.
+ * The Rust evaluator (cob_intr_rows) runs the same battery and prints byte-identical lines.
+ *
+ * Build: gcc -O2 -I$PREFIX/include intrinsic_harness.c -o intrinsic_harness -L$PREFIX/lib -lcob
+ */
+#include <stdio.h>
+#include <string.h>
+#include <libcob.h>
+
+static void dump(const char *label, cob_field *r) {
+	printf("%s ", label);
+	if (r && r->data) {
+		for (size_t i = 0; i < r->size; i++) printf("%02x", r->data[i]);
+	}
+	printf("\n");
+}
+
+static cob_field mkf(const char *data, int size, int type, int digits, int scale, int flags) {
+	static cob_field_attr attrs[64];
+	static int na = 0;
+	cob_field_attr *a = &attrs[na++ % 64];
+	a->type = type; a->digits = digits; a->scale = scale; a->flags = flags; a->pic = NULL;
+	cob_field f;
+	f.size = size; f.data = (unsigned char *)data; f.attr = a;
+	return f;
+}
+
+#define ALNUM 0x21
+#define DISP  0x10
+#define HAVE_SIGN 0x01
+
+int main(int argc, char **argv) {
+	cob_init(argc, argv);
+
+	/* The decimal intrinsics read COB_MODULE_PTR->decimal_point; generated code sets the current module
+	 * in its prologue. Set a minimal one (matching the pinned LC_ALL=C / default config). */
+	cob_global *g = cob_get_global_ptr();
+	static cob_module mod;
+	memset(&mod, 0, sizeof(mod));
+	mod.decimal_point = '.';
+	mod.currency_symbol = '$';
+	mod.numeric_separator = ',';
+	g->cob_current_module = &mod;
+
+	{ cob_field f = mkf("A", 1, ALNUM, 0, 0, 0); dump("ord_A", cob_intr_ord(&f)); }
+	{ cob_field f = mkf("066", 3, DISP, 3, 0, 0); dump("char_66", cob_intr_char(&f)); }
+	{ cob_field f = mkf("HELLO", 5, ALNUM, 0, 0, 0); dump("blen_5", cob_intr_byte_length(&f)); }
+	{ cob_field f = mkf("WORLD!", 6, ALNUM, 0, 0, 0); dump("len_6", cob_intr_length(&f)); }
+	{ cob_field f = mkf("aB3xZ", 5, ALNUM, 0, 0, 0); dump("upper", cob_intr_upper_case(0, 0, &f)); }
+	{ cob_field f = mkf("aB3xZ", 5, ALNUM, 0, 0, 0); dump("lower", cob_intr_lower_case(0, 0, &f)); }
+	{ cob_field f = mkf("abcde", 5, ALNUM, 0, 0, 0); dump("rev", cob_intr_reverse(0, 0, &f)); }
+	{ cob_field f = mkf("hello", 5, ALNUM, 0, 0, 0); dump("upper_rm", cob_intr_upper_case(2, 3, &f)); }
+	/* signed S9(2)V99: -12.34 = "123t" (trailing negative overpunch '4'->'t'), +12.34 = "1234" */
+	{ cob_field f = mkf("123t", 4, DISP, 4, 2, HAVE_SIGN); dump("sign_neg", cob_intr_sign(&f)); }
+	{ cob_field f = mkf("1234", 4, DISP, 4, 2, HAVE_SIGN); dump("sign_pos", cob_intr_sign(&f)); }
+	{ cob_field f = mkf("123t", 4, DISP, 4, 2, HAVE_SIGN); dump("abs_neg", cob_intr_abs(&f)); }
+	{ cob_field f = mkf("123t", 4, DISP, 4, 2, HAVE_SIGN); dump("integer_neg", cob_intr_integer(&f)); }
+	{ cob_field f = mkf("1234", 4, DISP, 4, 2, HAVE_SIGN); dump("integer_pos", cob_intr_integer(&f)); }
+	{ cob_field f = mkf("123t", 4, DISP, 4, 2, HAVE_SIGN); dump("intpart_neg", cob_intr_integer_part(&f)); }
+	{ cob_field f = mkf("1234", 4, DISP, 4, 2, HAVE_SIGN); dump("intpart_pos", cob_intr_integer_part(&f)); }
+	{ cob_field f = mkf("20240229", 8, DISP, 8, 0, 0); dump("iod", cob_intr_integer_of_date(&f)); }
+	{ cob_field f = mkf("00154794", 8, DISP, 8, 0, 0); dump("doi", cob_intr_date_of_integer(&f)); }
+	{ cob_field f = mkf("2024060", 7, DISP, 7, 0, 0); dump("ioday", cob_intr_integer_of_day(&f)); }
+	{ cob_field f = mkf("00154794", 8, DISP, 8, 0, 0); dump("doiy", cob_intr_day_of_integer(&f)); }
+	return 0;
+}
