@@ -3974,9 +3974,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 0,
+    "active_ported": 2,
     "compiled": 182,
-    "compiled_parity_pct": 0.0,
+    "compiled_parity_pct": 1.1,
     "disabled": 0,
     "doc_only": 0,
     "file": "fileio.c",
@@ -4189,12 +4189,14 @@
       {
         "function": "lineseq_size",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "lineseq_write",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "lineseq_rewrite",
@@ -5045,8 +5047,6 @@
       "join_environment",
       "lineseq_read",
       "lineseq_rewrite",
-      "lineseq_size",
-      "lineseq_write",
       "lock_file",
       "lock_record",
       "looks_absolute",
@@ -5077,7 +5077,7 @@
       "update_record_and_keys_if_necessary"
     ],
     "inactive_mirrors": 0,
-    "missing": 182,
+    "missing": 180,
     "source_funcs": 182,
     "test_only": 0
   },

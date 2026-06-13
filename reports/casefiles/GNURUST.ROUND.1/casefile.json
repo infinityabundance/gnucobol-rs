@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ROUND.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.41",
+  "crate_version": "0.7.42",
   "damage_if_overclaimed": "a wrong rounding mode silently mis-rounds money: NEAREST-EVEN vs the default differ on every exact tie, so a misapplied mode corrupts totals and interest across a whole ledger",
   "hash_chain": {
-    "inputs_sha256": "02d92baabefcdce6204c013883888610b23e0a0dcf1d59a7726a75347d712eb6"
+    "inputs_sha256": "9e6e7abf00df26d619158598806a69c9249484edb873731253ce609cdc538a94"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "81cab46306b58d020adde3c300fa9faa94cb07f3cc9a9acc86a15ee1c8f60511",
-    "receipt_sha256": "4d0f592c7e7b1ca7fbde2f323492d79cb8080f1193fb61d7aa16bbcbb485778b"
+    "receipt_sha256": "f8625a19ef973f2b6054745fddd79d78fc5cac16530a82d9db845adc8e0eb14c"
   },
   "kind": "court-casefile",
   "lie_prevented": [

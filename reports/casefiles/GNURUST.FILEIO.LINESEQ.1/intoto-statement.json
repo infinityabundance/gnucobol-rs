@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.FILEIO.LINESEQ.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.42",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "e44165046dbc9b34aef9295e4358dd146cf5ec06e365d089269d678d66e58a8e",
+      "receipt_sha256": "4fa2b43788454dc44c5d49b651d5ea8fa29d229572ce1326b5e2ed3b2ab25232"
+    },
+    "negative_claim_count": 9,
+    "positive_claim_count": 5,
+    "replay": {
+      "command": "bash lab/oracle/lineseq_write_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "08376a7d84883d1e4b01364733856fdb7368d4fe40436b84a106e8fbcaff9715"
+      },
+      "name": "reports/casefiles/GNURUST.FILEIO.LINESEQ.1/casefile.json"
+    }
+  ]
+}

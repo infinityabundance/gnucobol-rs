@@ -1,0 +1,35 @@
+{
+  "byte_domain": "OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended bytes + FILE STATUS (00/71)",
+  "campaign": "GNURUST.FILEIO.LINESEQ.1",
+  "command": {
+    "replay": "bash lab/oracle/lineseq_write_sweep.sh"
+  },
+  "court": "line-sequential WRITE config matrix",
+  "crate_version": "0.7.42",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "WRITE ADVANCING / LINAGE (opt != 0)",
+    "Windows CR/LF text-mode (cob_ls_uses_cr)",
+    "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
+    "CODE-SET conversion",
+    "variable-length records",
+    "lineseq_read / lineseq_rewrite",
+    "record/relative/indexed organizations",
+    "the fd/FILE* syscalls (declared OS boundary)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=8 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

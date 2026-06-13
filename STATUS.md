@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-111-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-111-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-112-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-112-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.41 · 75 GNURUST courts (56 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.42 · 76 GNURUST courts (57 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -75,6 +75,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.SIZE.ERROR.1` | arithmetic SIZE ERROR truncation and condition | ✅ pass | [`reports/casefiles/GNURUST.SIZE.ERROR.1/`](reports/casefiles/GNURUST.SIZE.ERROR.1/) |
 | `GNURUST.FILE.WRITE.1` | sequential WRITE byte effects | ✅ pass | [`reports/casefiles/GNURUST.FILE.WRITE.1/`](reports/casefiles/GNURUST.FILE.WRITE.1/) |
 | `GNURUST.FILE.REWRITE.1` | sequential REWRITE in-place update | ✅ pass | [`reports/casefiles/GNURUST.FILE.REWRITE.1/`](reports/casefiles/GNURUST.FILE.REWRITE.1/) |
+| `GNURUST.FILEIO.LINESEQ.1` | line-sequential WRITE config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.1/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
 | `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
 | `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |

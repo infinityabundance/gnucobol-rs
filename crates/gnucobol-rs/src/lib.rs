@@ -54,6 +54,7 @@ pub mod mpf;
 pub mod packed;
 pub mod file_flow_slice;
 pub mod file_seq;
+pub mod fileio;
 pub mod initialize;
 pub mod if_eval;
 pub mod if_numeric;
@@ -632,6 +633,22 @@ pub fn __fuzz_file_seq(data: &[u8]) {
     let _ = file_seq::write_sequential(&recs, file_seq::FileOrg::LineSequential, rl);
     let rw: Vec<(usize, &[u8])> = vec![(0, body), (data.len(), body)];
     let _ = file_seq::rewrite_records(body, rl, &rw);
+}
+
+#[doc(hidden)]
+/// Fuzz entry for the line-sequential WRITE court (`GNURUST.FILEIO.LINESEQ.1`): arbitrary bytes drive
+/// every `COB_LS_*` config path; the contract is panic-freedom (`GNURUST.PANICPOLICY.0`).
+pub fn __fuzz_lineseq(data: &[u8]) {
+    use fileio::{write_line_sequential, LineSeqConfig};
+    let cfg = LineSeqConfig {
+        ls_fixed: data.first().is_some_and(|b| b & 1 != 0),
+        ls_nulls: data.first().is_some_and(|b| b & 2 != 0),
+        ls_validate: data.first().is_some_and(|b| b & 4 != 0),
+    };
+    let body = data.get(1..).unwrap_or(&[]);
+    let recs: Vec<&[u8]> = body.chunks(8).collect();
+    let _ = write_line_sequential(&recs, &cfg);
+    let _ = fileio::lineseq_size(body, body.len(), cfg.ls_fixed);
 }
 
 #[cfg(feature = "fuzzing")]

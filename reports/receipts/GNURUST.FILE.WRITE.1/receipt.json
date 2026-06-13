@@ -5,12 +5,11 @@
     "replay": "bash lab/oracle/write_seq_sweep.sh"
   },
   "court": "sequential WRITE byte effects",
-  "crate_version": "0.7.41",
+  "crate_version": "0.7.42",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "COB_LS_FIXED/COB_LS_NULLS line modes",
     "variable-length records",
     "WRITE ADVANCING/BEFORE/AFTER",
     "REWRITE",

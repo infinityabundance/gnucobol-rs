@@ -12,6 +12,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.42]
+- **`fileio.c` opened — line-sequential `WRITE` config matrix sealed (`GNURUST.FILEIO.LINESEQ.1`).** The first sub-surface of `libcob/fileio.c` (file 8/13, the 10.7k-line keystone): a faithful port of `lineseq_size` + `lineseq_write` (the bytes a `WRITE` appends to an `ORGANIZATION IS LINE SEQUENTIAL` file and the resulting FILE STATUS), proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` across the `COB_LS_*` runtime-config matrix (`lineseq_write_sweep` 8/0):
+  - **default (`COB_LS_VALIDATE=1`)** strips trailing spaces, writes the record raw + `\n`, but rejects any record byte `< 0x20` with status `71` (writing nothing); **`COB_LS_VALIDATE=0`** passes control bytes through raw; **`COB_LS_NULLS=1`** emits `0x00` before each byte `< 0x20`; **`COB_LS_FIXED=1`** writes the full unstripped record area.
+  - **Forensic finding:** `fileio.c`'s `IS_BAD_CHAR` macro excludes `BS`/`ESC`/`FF`/`SI`/`TAB`, but those exclusions are **dead** in the compiled 3.2 GA `libcob` — every byte `0x00–0x1F` is rejected (verified across the full `0x00–0xFF` range; the binary is the authority).
+  - In keeping with the pure-kernel model (`#![forbid(unsafe_code)]`), the actual `fd`/`FILE*` syscalls are the declared OS boundary: the kernel decides the bytes, the caller performs the I/O. `WRITE ADVANCING`/LINAGE, the Windows CR/LF path, `lineseq_read`/`lineseq_rewrite`, and the other organizations remain explicit non-claims for follow-up courts.
+- This closes the `COB_LS_FIXED`/`COB_LS_NULLS` line modes that `GNURUST.FILE.WRITE.1` had left not-proven.
+- No API breaks: additive (new `fileio` module + court; new internal fuzz target).
+
 ## [0.7.41]
 - **`intrinsic.c` completed -- file 7/13 is now 100% 1:1** (233/233 active functions; the second fully-1:1 `libcob` file after `numeric.c`). Each piece oracle-verified byte-for-byte against the admitted GnuCOBOL 3.2 `libcob` -- the `cob_intr_*` differential sweep grew to 220 cases, all passing:
   - **mpf-transcendental layer** -- a pure-Rust 2048-bit `Mpf` reproduces libcob's `cob_mpf_*` series byte-for-byte: `SQRT`/`EXP`/`EXP10`/`LOG`/`LOG10`/`SIN`/`COS`/`TAN`/`ASIN`/`ACOS`/`ATAN`/`PI`/`E` + `cob_decimal_pow`, plus `BINOP`, financial `ANNUITY`/`PRESENT-VALUE`, and `VARIANCE`/`STANDARD-DEVIATION`. Matching GMP precision required round-to-nearest `mpf_get_str`, the GMP `mpz_sizeinbase` field-width estimate, and a wide-DISPLAY render path -- with the sealed `numeric.c`/FLOAT courts held intact.

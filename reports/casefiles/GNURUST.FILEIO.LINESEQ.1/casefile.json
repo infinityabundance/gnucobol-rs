@@ -1,0 +1,71 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended file bytes + FILE STATUS (00 / 71)"
+  ],
+  "case_id": "GNURUST.FILEIO.LINESEQ.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.42",
+  "damage_if_overclaimed": "assuming one line-sequential byte image across configs corrupts framing under COB_LS_FIXED/NULLS or silently drops records the default validate would reject",
+  "hash_chain": {
+    "inputs_sha256": "22fcb06bdc57fafc256f823a74903b7ae8670f6385b87bfc64091a53f46b117e"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e44165046dbc9b34aef9295e4358dd146cf5ec06e365d089269d678d66e58a8e",
+    "receipt_sha256": "4fa2b43788454dc44c5d49b651d5ea8fa29d229572ce1326b5e2ed3b2ab25232"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "the COB_LS_* line modes are cosmetic -- NO: COB_LS_FIXED keeps trailing spaces (changes the record length), COB_LS_NULLS injects 0x00 bytes (changes the byte stream), and default COB_LS_VALIDATE rejects control bytes outright (status 71, nothing written) -- each config produces a materially different file, and the source IS_BAD_CHAR exclusions do not match the compiled binary"
+  ],
+  "negative_capability_ids": [
+    "NEG.WRITE-ADVANCING-OPT-0-THE-COB-WRITE-OPT",
+    "NEG.THE-WINDOWS-CR-LF-TEXT-MODE-PATH-COB-LS",
+    "NEG.COB-LS-VALIDATE-1-PRINTABLE-CHECK-COB-EX",
+    "NEG.CODE-SET-CONVERSION",
+    "NEG.VARIABLE-LENGTH-RECORDS",
+    "NEG.LINESEQ-READ-LINESEQ-REWRITE",
+    "NEG.RECORD-RELATIVE-INDEXED-ORGANIZATIONS",
+    "NEG.THE-ACTUAL-FD-FILE-SYSCALLS-DECLARED-OS"
+  ],
+  "negative_claims": [
+    "WRITE ADVANCING (opt != 0, the cob_*_write_opt family + LINAGE)",
+    "the Windows CR/LF text-mode path (cob_ls_uses_cr, a platform boundary, off on Unix)",
+    "COB_LS_VALIDATE>1 printable-check (COB_EXPERIMENTAL)",
+    "CODE-SET conversion",
+    "variable-length records",
+    "lineseq_read / lineseq_rewrite",
+    "record/relative/indexed organizations",
+    "the actual fd/FILE* syscalls (declared OS boundary)",
+    "lie prevented: the COB_LS_* line modes are cosmetic -- NO: COB_LS_FIXED keeps trailing spaces (changes the record length), COB_LS_NULLS injects 0x00 bytes (changes the byte stream), and default COB_LS_VALIDATE rejects control bytes outright (status 71, nothing written) -- each config produces a materially different file, and the source IS_BAD_CHAR exclusions do not match the compiled binary"
+  ],
+  "oracle": {
+    "detail": "cobc OPEN OUTPUT/WRITE LINE SEQUENTIAL under COB_LS_* env (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.LINESEQ.1"
+  },
+  "positive_claims": [
+    "a faithful port of libcob/fileio.c lineseq_size + lineseq_write (the bytes a WRITE appends to an ORGANIZATION IS LINE SEQUENTIAL file + the FILE STATUS), proven byte-identical to the admitted libcob across the COB_LS_* runtime config matrix (lineseq_write_sweep 8/0): default COB_LS_VALIDATE=1 strips trailing spaces, writes raw",
+    "LF, but rejects any record byte < 0x20 with status 71 (writing nothing)",
+    "COB_LS_VALIDATE=0 passes control bytes raw",
+    "COB_LS_NULLS=1 emits 0x00 before each byte < 0x20",
+    "COB_LS_FIXED=1 writes the full unstripped record area. FORENSIC: fileio.c's IS_BAD_CHAR macro excludes BS/ESC/FF/SI/TAB, but those exclusions are DEAD in the compiled 3.2 GA build -- every byte 0x00-0x1F is rejected (verified 0x00-0xFF). The configured-line-mode WRITE that GNURUST.FILE.WRITE.1 left not_proven"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/lineseq_write_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 8,
+    "total": 8,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

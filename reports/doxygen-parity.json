@@ -279,8 +279,6 @@
         "is_suppressed_key_value",
         "lineseq_read",
         "lineseq_rewrite",
-        "lineseq_size",
-        "lineseq_write",
         "looks_absolute",
         "open_cbl_file",
         "open_next",
@@ -303,8 +301,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 1.4,
+      "ported": 2
     },
     {
       "doxygen_functions": 25,
@@ -604,8 +602,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 49.9,
-    "ported": 498
+    "parity_pct": 50.1,
+    "ported": 500
   },
   "xml_root": "lab/doxygen/out/xml"
 }

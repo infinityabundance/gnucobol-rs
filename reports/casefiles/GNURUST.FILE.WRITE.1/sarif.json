@@ -13,13 +13,6 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FILE.WRITE.1 non-claim: COB_LS_FIXED/COB_LS_NULLS line modes"
-          },
-          "ruleId": "NONCLAIM"
-        },
-        {
-          "level": "note",
-          "message": {
             "text": "GNURUST.FILE.WRITE.1 non-claim: variable-length records"
           },
           "ruleId": "NONCLAIM"
@@ -48,7 +41,7 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FILE.WRITE.1 non-claim: all dialects"
+            "text": "GNURUST.FILE.WRITE.1 non-claim: all dialects (COB_LS_FIXED/COB_LS_NULLS line modes now sealed by GNURUST.FILEIO.LINESEQ.1)"
           },
           "ruleId": "NONCLAIM"
         },

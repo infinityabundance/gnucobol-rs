@@ -27,7 +27,7 @@
 | `lineage-corpus` | meta/differential | `move.c, typeck.c` | 🟡 observed | GNURUST.LINEAGE.CORPUS.20M.0, GNURUST.LINEAGE.CORPUS.20M.SMOKE, GNURUST.LINEAGE.CORPUS.20M.1 |
 | `declaratives-use` | runtime exceptions | `typeck.c, fileio.c` | 🟡 observed | GNURUST.DECLARATIVES.ATLAS.1 |
 | `size-error` | runtime exceptions | `numeric.c` | ✅ sealed | SIZE.ERROR.ATLAS.1, GNURUST.SIZE.ERROR.1 |
-| `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1, GNURUST.FILE.REWRITE.1 |
+| `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1, GNURUST.FILE.REWRITE.1, GNURUST.FILEIO.LINESEQ.1 |
 | `file-io-indexed` | file I/O (keyed) | `fileio.c` | 🟡 observed | GNURUST.INDEXED.FILE.ATLAS.1 |
 | `file-io-relative` | file I/O (relative) | `fileio.c` | 🟡 observed | GNURUST.RELATIVE.FILE.ATLAS.1 |
 | `file-status` | file I/O | `fileio.c` | 🟡 observed | GNURUST.FILE.STATUS.1 |

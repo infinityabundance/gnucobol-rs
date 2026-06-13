@@ -416,7 +416,6 @@
       "sweep": "write_seq_sweep.sh",
       "byte_domain": "OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)",
       "non_claims": [
-        "COB_LS_FIXED/COB_LS_NULLS line modes",
         "variable-length records",
         "WRITE ADVANCING/BEFORE/AFTER",
         "REWRITE",
@@ -864,6 +863,21 @@
         "optimized cmp_packed/uint/llint fast-path code (verdict only)",
         "negative-scale packed compare",
         "National/DBCS comparison"
+      ]
+    },
+    "GNURUST.FILEIO.LINESEQ.1": {
+      "court": "line-sequential WRITE config matrix",
+      "sweep": "lineseq_write_sweep.sh",
+      "byte_domain": "OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended bytes + FILE STATUS (00/71)",
+      "non_claims": [
+        "WRITE ADVANCING / LINAGE (opt != 0)",
+        "Windows CR/LF text-mode (cob_ls_uses_cr)",
+        "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
+        "CODE-SET conversion",
+        "variable-length records",
+        "lineseq_read / lineseq_rewrite",
+        "record/relative/indexed organizations",
+        "the fd/FILE* syscalls (declared OS boundary)"
       ]
     }
   }

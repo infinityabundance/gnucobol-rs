@@ -1098,7 +1098,7 @@
       "oracle": "cobc OPEN OUTPUT/WRITE (libcob/fileio.c)",
       "fixtures": "write_seq_sweep 2/0 + 2 unit tests",
       "sealed_version": "0.7.17",
-      "not_proven": "COB_LS_FIXED/COB_LS_NULLS line modes; variable-length records; WRITE ADVANCING/BEFORE/AFTER; REWRITE; indexed/relative organizations; all dialects",
+      "not_proven": "variable-length records; WRITE ADVANCING/BEFORE/AFTER; REWRITE; indexed/relative organizations; all dialects (COB_LS_FIXED/COB_LS_NULLS line modes now sealed by GNURUST.FILEIO.LINESEQ.1)",
       "breaks_claim": "a configured line mode; variable-length / ODO records; WRITE ADVANCING; REWRITE; indexed WRITE",
       "readiness": 3,
       "lie_prevented": "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record",
@@ -1117,6 +1117,20 @@
       "readiness": 3,
       "lie_prevented": "REWRITE rewrites the whole file -- NO: it overwrites ONLY the current record in place (same length); the bytes of every other record are untouched, so a REWRITE is a surgical single-record update not a file rewrite",
       "damage_if_overclaimed": "assuming REWRITE can change a record's length (it cannot for fixed records) or rewrites surrounding records corrupts a sequential file"
+    },
+    {
+      "id": "GNURUST.FILEIO.LINESEQ.1",
+      "name": "line-sequential WRITE config matrix",
+      "proven": "a faithful port of libcob/fileio.c lineseq_size + lineseq_write (the bytes a WRITE appends to an ORGANIZATION IS LINE SEQUENTIAL file + the FILE STATUS), proven byte-identical to the admitted libcob across the COB_LS_* runtime config matrix (lineseq_write_sweep 8/0): default COB_LS_VALIDATE=1 strips trailing spaces, writes raw + LF, but rejects any record byte < 0x20 with status 71 (writing nothing); COB_LS_VALIDATE=0 passes control bytes raw; COB_LS_NULLS=1 emits 0x00 before each byte < 0x20; COB_LS_FIXED=1 writes the full unstripped record area. FORENSIC: fileio.c's IS_BAD_CHAR macro excludes BS/ESC/FF/SI/TAB, but those exclusions are DEAD in the compiled 3.2 GA build -- every byte 0x00-0x1F is rejected (verified 0x00-0xFF). The configured-line-mode WRITE that GNURUST.FILE.WRITE.1 left not_proven",
+      "byte_domain": "OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended file bytes + FILE STATUS (00 / 71)",
+      "oracle": "cobc OPEN OUTPUT/WRITE LINE SEQUENTIAL under COB_LS_* env (libcob/fileio.c)",
+      "fixtures": "lineseq_write_sweep 8/0 + 8 unit tests + Kani validate_output_is_clean_and_lf_terminated",
+      "sealed_version": "0.7.42",
+      "not_proven": "WRITE ADVANCING (opt != 0, the cob_*_write_opt family + LINAGE); the Windows CR/LF text-mode path (cob_ls_uses_cr, a platform boundary, off on Unix); COB_LS_VALIDATE>1 printable-check (COB_EXPERIMENTAL); CODE-SET conversion; variable-length records; lineseq_read / lineseq_rewrite; record/relative/indexed organizations; the actual fd/FILE* syscalls (declared OS boundary)",
+      "breaks_claim": "WRITE ADVANCING; LINAGE; a CR/LF platform; variable-length / ODO records; reading or rewriting; non-line-sequential organization",
+      "readiness": 3,
+      "lie_prevented": "the COB_LS_* line modes are cosmetic -- NO: COB_LS_FIXED keeps trailing spaces (changes the record length), COB_LS_NULLS injects 0x00 bytes (changes the byte stream), and default COB_LS_VALIDATE rejects control bytes outright (status 71, nothing written) -- each config produces a materially different file, and the source IS_BAD_CHAR exclusions do not match the compiled binary",
+      "damage_if_overclaimed": "assuming one line-sequential byte image across configs corrupts framing under COB_LS_FIXED/NULLS or silently drops records the default validate would reject"
     },
     {
       "id": "GNURUST.INTRINSIC.DATE.1",
