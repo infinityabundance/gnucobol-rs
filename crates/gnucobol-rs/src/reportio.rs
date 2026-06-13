@@ -341,6 +341,53 @@ pub fn set_next_info(report: &mut Report, line: &ReportLine) {
     }
 }
 
+/// `print_field (rf, rec)` (reportio.c:894): place a report field's right-trimmed string into the print
+/// record `rec` at its 1-based `column`, applying `COLUMN LEFT`/`RIGHT`/`CENTER` justification (when the
+/// data-justify runtime setting `col_just_lrc` is on). `field_size` is the field's declared width.
+pub fn print_field(
+    field: &crate::cconv::FieldRef,
+    field_size: usize,
+    column: i32,
+    field_flags: u32,
+    col_just_lrc: bool,
+    rec: &mut [u8],
+) {
+    let mut wrk = vec![0u8; field_size + 2];
+    let ret = crate::cconv::cob_field_to_string(Some(field), &mut wrk, crate::cconv::CobCase::None);
+    let mut ln = if ret > 0 { ret as usize } else { 0 };
+    let mut content: Vec<u8> = wrk[..ln].to_vec();
+    let mut dest_pos = (column - 1).max(0) as usize;
+
+    if !col_just_lrc {
+        // data justify off — no adjustment
+    } else if field_flags & flags::COLUMN_RIGHT != 0 && ln < field_size {
+        dest_pos += field_size - ln;
+    } else if field_flags & flags::COLUMN_CENTER != 0 {
+        // remove leading spaces (bounded by field_size), then centre
+        let mut k = 0;
+        while k < field_size && !content.is_empty() && content[0] == b' ' && ln > 0 {
+            content.remove(0);
+            ln -= 1;
+            k += 1;
+        }
+        let i = 1 - (ln & 1);
+        if ln < field_size {
+            dest_pos += (field_size - ln - i) / 2;
+        }
+    } else if field_flags & flags::COLUMN_LEFT != 0 {
+        let mut k = 0;
+        while k < field_size && !content.is_empty() && content[0] == b' ' && ln > 0 {
+            content.remove(0);
+            ln -= 1;
+            k += 1;
+        }
+    }
+    let end = (dest_pos + ln).min(rec.len());
+    if dest_pos < rec.len() {
+        rec[dest_pos..end].copy_from_slice(&content[..end - dest_pos]);
+    }
+}
+
 /// `reportInitialize ()` (reportio.c:287): one-time global RWCS init. A no-op in this port (the C sets a
 /// `bDidReportInit` guard + `inDetailDecl`; there is no global state to seed here).
 pub fn report_initialize() {}
@@ -469,6 +516,35 @@ mod tests {
         set_next_info(&mut r, &l);
         assert_eq!(r.next_value, 5);
         assert!(r.next_line && r.next_just_set && !r.next_line_plus);
+    }
+
+    #[test]
+    fn print_field_placement_and_justify() {
+        use crate::cconv::FieldRef;
+        let an = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+        let _ = an;
+        // value "AB" in a size-5 field at column 3 (1-based) -> rec[2..]
+        let mk = |rec: &mut [u8], flags: u32, val: &'static [u8]| {
+            let f = FieldRef { size: val.len(), data: Some(val) };
+            print_field(&f, 5, 3, flags, true, rec);
+        };
+        // default (no justify flag): placed left at column, content "AB" (rtrimmed)
+        let mut rec = [b' '; 12];
+        mk(&mut rec, 0, b"AB   ");
+        assert_eq!(&rec, b"  AB        ");
+        // RIGHT: right-align within the 5-wide field -> "AB" at column 3 + (5-2)=offset 3 -> col 6
+        let mut rec = [b' '; 12];
+        mk(&mut rec, flags::COLUMN_RIGHT, b"AB   ");
+        assert_eq!(&rec, b"     AB     ");
+        // LEFT: strip leading spaces, place at column
+        let mut rec = [b' '; 12];
+        mk(&mut rec, flags::COLUMN_LEFT, b"  AB ");
+        assert_eq!(&rec, b"  AB        ");
+        // CENTER: "A" (len 1) in width 5 -> dest += (5-1-0)/2 = 2 -> col 5
+        let mut rec = [b' '; 12];
+        let f = FieldRef { size: 1, data: Some(b"A") };
+        print_field(&f, 5, 3, flags::COLUMN_CENTER, true, &mut rec);
+        assert_eq!(&rec, b"    A       ");
     }
 
     #[test]

@@ -725,7 +725,6 @@
         "get_control_sequence",
         "line_control_chg",
         "line_control_one",
-        "print_field",
         "reportDump",
         "reportDumpLine",
         "reportDumpOneLine",
@@ -737,8 +736,8 @@
         "write_rec",
         "zero_all_counters"
       ],
-      "parity_pct": 43.6,
-      "ported": 17
+      "parity_pct": 46.2,
+      "ported": 18
     },
     {
       "file": "common.c",
@@ -1015,7 +1014,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 20.8,
-    "ported": 243
+    "parity_pct": 20.9,
+    "ported": 244
   }
 }

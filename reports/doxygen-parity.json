@@ -588,7 +588,6 @@
         "get_control_sequence",
         "line_control_chg",
         "line_control_one",
-        "print_field",
         "report_line",
         "report_line_and",
         "report_line_type",
@@ -596,8 +595,8 @@
         "write_rec",
         "zero_all_counters"
       ],
-      "parity_pct": 51.4,
-      "ported": 18
+      "parity_pct": 54.3,
+      "ported": 19
     },
     {
       "doxygen_functions": 244,
@@ -853,8 +852,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 25.1,
-    "ported": 250
+    "parity_pct": 25.2,
+    "ported": 251
   },
   "xml_root": "lab/doxygen/out/xml"
 }
