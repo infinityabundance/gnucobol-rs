@@ -37,10 +37,7 @@
         "cob_exit_intrinsic",
         "cob_get_indirect_field",
         "cob_init_intrinsic",
-        "cob_intr_acos",
         "cob_intr_annuity",
-        "cob_intr_asin",
-        "cob_intr_atan",
         "cob_intr_binop",
         "cob_intr_char_national",
         "cob_intr_content_length",
@@ -73,9 +70,6 @@
         "cob_intr_standard_deviation",
         "cob_intr_variance",
         "cob_intr_when_compiled",
-        "cob_mpf_acos",
-        "cob_mpf_asin",
-        "cob_mpf_atan",
         "cob_put_indirect_field",
         "cob_switch_value",
         "comp_field",
@@ -96,8 +90,8 @@
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 70.6,
-      "ported": 168
+      "parity_pct": 73.1,
+      "ported": 174
     },
     {
       "file": "cconv.c",
@@ -838,7 +832,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 35.9,
-    "ported": 420
+    "parity_pct": 36.4,
+    "ported": 426
   }
 }

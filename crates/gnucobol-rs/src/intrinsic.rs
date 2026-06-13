@@ -335,7 +335,7 @@ use crate::accessors::cob_get_int;
 use crate::int_pow::cob_s32_pow;
 use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE};
 use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_get_mpf, cob_decimal_mul, cob_decimal_set_field, cob_decimal_set_mpf, cob_decimal_sub, CobDecimal};
-use crate::mpf::{cob_mpf_cos, cob_mpf_exp, cob_mpf_log, cob_mpf_log10, cob_mpf_sin, cob_mpf_tan, cob_pi, Mpf, COB_MPF_PREC};
+use crate::mpf::{cob_mpf_acos, cob_mpf_asin, cob_mpf_atan, cob_mpf_cos, cob_mpf_exp, cob_mpf_log, cob_mpf_log10, cob_mpf_sin, cob_mpf_tan, cob_pi, Mpf, COB_MPF_PREC};
 use crate::gmp::Mpz;
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
@@ -2954,6 +2954,41 @@ pub fn cob_intr_cos(src: &[u8], attr: &FieldAttr) -> IntrField {
 pub fn cob_intr_tan(src: &[u8], attr: &FieldAttr) -> IntrField {
     let d1 = cob_decimal_set_field(src, attr);
     intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_tan(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_atan (srcfield)` (intrinsic.c): `FUNCTION ATAN(x)`; `ATAN(0) = 0`.
+pub fn cob_intr_atan(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    if d1.value.sgn() == 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_atan(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_asin (srcfield)` (intrinsic.c): `FUNCTION ASIN(x)`; `|x| > 1` is an exception (0),
+/// `ASIN(0) = 0`.
+pub fn cob_intr_asin(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    let neg1 = CobDecimal { value: Mpz::from_i64(-1), scale: 0 };
+    let pos1 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+    if cob_decimal_cmp(&d1, &neg1) < 0 || cob_decimal_cmp(&d1, &pos1) > 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    if d1.value.sgn() == 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_asin(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_acos (srcfield)` (intrinsic.c): `FUNCTION ACOS(x)`; `|x| > 1` is an exception (0).
+pub fn cob_intr_acos(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    let neg1 = CobDecimal { value: Mpz::from_i64(-1), scale: 0 };
+    let pos1 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+    if cob_decimal_cmp(&d1, &neg1) < 0 || cob_decimal_cmp(&d1, &pos1) > 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_acos(&cob_decimal_get_mpf(&d1))))
 }
 
 /// `cob_intr_pi ()` (intrinsic.c): `FUNCTION PI` — the constant pi.

@@ -36,10 +36,7 @@
         "cob_exit_intrinsic",
         "cob_get_indirect_field",
         "cob_init_intrinsic",
-        "cob_intr_acos",
         "cob_intr_annuity",
-        "cob_intr_asin",
-        "cob_intr_atan",
         "cob_intr_binop",
         "cob_intr_char_national",
         "cob_intr_content_length",
@@ -72,9 +69,6 @@
         "cob_intr_standard_deviation",
         "cob_intr_variance",
         "cob_intr_when_compiled",
-        "cob_mpf_acos",
-        "cob_mpf_asin",
-        "cob_mpf_atan",
         "cob_put_indirect_field",
         "cob_switch_value",
         "comp_field",
@@ -84,12 +78,11 @@
         "get_substituted_size",
         "int_strncasecmp",
         "numval",
-        "setup_cob_sqrt_two",
         "space_left",
         "substitute_matches"
       ],
-      "parity_pct": 74.3,
-      "ported": 176
+      "parity_pct": 77.2,
+      "ported": 183
     },
     {
       "doxygen_functions": 9,
@@ -670,8 +663,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 43.4,
-    "ported": 433
+    "parity_pct": 44.1,
+    "ported": 440
   },
   "xml_root": "lab/doxygen/out/xml"
 }

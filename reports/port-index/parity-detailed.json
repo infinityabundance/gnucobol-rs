@@ -1220,11 +1220,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 168,
+    "active_ported": 174,
     "compiled": 238,
-    "compiled_parity_pct": 70.6,
+    "compiled_parity_pct": 73.1,
     "disabled": 0,
-    "doc_only": 7,
+    "doc_only": 8,
     "file": "intrinsic.c",
     "fns": [
       {
@@ -1235,7 +1235,7 @@
       {
         "function": "setup_cob_sqrt_two",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "setup_cob_log_half",
@@ -1344,17 +1344,20 @@
       {
         "function": "cob_mpf_atan",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "cob_mpf_asin",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "cob_mpf_acos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mpf",
+        "rust_status": "active"
       },
       {
         "function": "get_substituted_size",
@@ -2229,17 +2232,20 @@
       {
         "function": "cob_intr_acos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_asin",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_atan",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_cos",
@@ -2598,10 +2604,7 @@
       "cob_exit_intrinsic",
       "cob_get_indirect_field",
       "cob_init_intrinsic",
-      "cob_intr_acos",
       "cob_intr_annuity",
-      "cob_intr_asin",
-      "cob_intr_atan",
       "cob_intr_binop",
       "cob_intr_char_national",
       "cob_intr_content_length",
@@ -2634,9 +2637,6 @@
       "cob_intr_standard_deviation",
       "cob_intr_variance",
       "cob_intr_when_compiled",
-      "cob_mpf_acos",
-      "cob_mpf_asin",
-      "cob_mpf_atan",
       "cob_put_indirect_field",
       "cob_switch_value",
       "comp_field",
@@ -2658,7 +2658,7 @@
       "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 63,
+    "missing": 56,
     "source_funcs": 238,
     "test_only": 0
   },

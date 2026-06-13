@@ -206,4 +206,19 @@ fn main() {
     hexln("tan0", &cob_intr_tan(b"0", &disp(1, 0, false)));
     hexln("pi", &cob_intr_pi());
     hexln("ee", &cob_intr_e());
+    hexln("atan1", &cob_intr_atan(b"1", &disp(1, 0, false)));
+    hexln("atan2", &cob_intr_atan(b"2", &disp(1, 0, false)));
+    hexln("atan3", &cob_intr_atan(b"3", &disp(1, 0, false)));
+    hexln("atan0", &cob_intr_atan(b"0", &disp(1, 0, false)));
+    hexln("atann1", &cob_intr_atan(b"q", &disp(1, 0, true)));
+    hexln("asin0", &cob_intr_asin(b"0", &disp(1, 0, false)));
+    hexln("asin1", &cob_intr_asin(b"1", &disp(1, 0, false)));
+    hexln("asinn1", &cob_intr_asin(b"q", &disp(1, 0, true)));
+    hexln("asinh", &cob_intr_asin(b"5", &disp(1, 1, false)));
+    hexln("asin_oor", &cob_intr_asin(b"2", &disp(1, 0, false)));
+    hexln("acos0", &cob_intr_acos(b"0", &disp(1, 0, false)));
+    hexln("acos1", &cob_intr_acos(b"1", &disp(1, 0, false)));
+    hexln("acosn1", &cob_intr_acos(b"q", &disp(1, 0, true)));
+    hexln("acosh", &cob_intr_acos(b"5", &disp(1, 1, false)));
+    hexln("acos_oor", &cob_intr_acos(b"2", &disp(1, 0, false)));
 }

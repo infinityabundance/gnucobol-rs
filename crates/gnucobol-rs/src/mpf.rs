@@ -640,6 +640,95 @@ pub fn cob_mpf_tan(src: &Mpf) -> Mpf {
     cob_mpf_sin(src).div(&cob_mpf_cos(src))
 }
 
+/// `cob_sqrt_two` (setup_cob_sqrt_two, intrinsic.c): sqrt(2) to COB_SQRT_TWO_LEN=3827 bits, used by
+/// `cob_mpf_atan` for argument reduction.
+pub fn cob_sqrt_two() -> Mpf {
+    Mpf::from_decimal_str(
+        "1.4142135623730950488016887242096980785696718753769480731766797379907324784621070388503875343276415727350138462309122970249248360558507372126441214970999358314132226659275055927557999505011527820605714701095599716059702745345968620147285174186408891986095523292304843087143214508397626036279952514079896872533965463318088296406206152583523950547457502877599617298355752203375318570113543746034084988471603868999706990048150305440277903164542478230684929369186215805784631115966687130130156185689872372352885092648612494977154218334204285686060146824720771435854874155657069677653720226485447015858801620758474922657226002085584466521458398893944370926591800311388246468157082630100594858704003186480342194897278290641045072636881313739855256117322040245091227700226941127573627280495738108967504018369868368450725799364729060762996941380475654823728997180326802474420629269124859052181004459842150591120249441341728531478105803603371077309182869314710171111683916581726889419758716582152128229518488472089694633862891562882765952635140542267653239694617511291602408715510135150455381287560052631468017127402653969470240300517495318862925631385188163478",
+        COB_MPF_PREC,
+    )
+}
+
+/// `cob_mpf_atan (dst, src)` (intrinsic.c): `atan(src)` via the arctangent series, after reducing |src| to
+/// `<= sqrt(2)-1` using the `pi/2` (for |x| > sqrt2+1) and `pi/4` (for sqrt2-1 < |x| <= sqrt2+1) identities.
+pub fn cob_mpf_atan(src: &Mpf) -> Mpf {
+    let prec = COB_MPF_PREC;
+    let mut vf1 = src.clone();
+    vf1.abs_assign();
+    let sqrt2 = cob_sqrt_two();
+    let mut dst_temp = Mpf::new(prec);
+    if vf1.cmp(&sqrt2.add_ui(1)) == Ordering::Greater {
+        dst_temp = cob_pi().div_2exp(1); // pi/2
+        vf1 = Mpf::ui_div(1, &vf1);
+        vf1.neg_assign();
+    } else if vf1.cmp(&sqrt2.sub_ui(1)) == Ordering::Greater {
+        dst_temp = cob_pi().div_2exp(2); // pi/4
+        let num = vf1.sub_ui(1);
+        let den = vf1.add_ui(1);
+        vf1 = num.div(&den);
+    }
+    let mut neg_sq = vf1.mul(&vf1);
+    neg_sq.neg_assign();
+    dst_temp = dst_temp.add(&vf1);
+    let mut n = 1u64;
+    loop {
+        vf1 = vf1.mul(&neg_sq);
+        let term = vf1.div_ui(2 * n + 1);
+        let prev = dst_temp.clone();
+        dst_temp = dst_temp.add(&term);
+        n += 1;
+        if prev.eq(&dst_temp, COB_MPF_PREC) {
+            break;
+        }
+    }
+    if src.sgn() < 0 {
+        dst_temp.neg_assign();
+    }
+    dst_temp
+}
+
+/// `cob_mpf_asin (dst, src)` (intrinsic.c): `asin(src) = 2*atan(x / (1 + sqrt(1 - x^2)))`; +-1 -> +-pi/2.
+pub fn cob_mpf_asin(src: &Mpf) -> Mpf {
+    let prec = COB_MPF_PREC;
+    if src.cmp_ui(1) == Ordering::Equal || src.cmp_si(-1) == Ordering::Equal {
+        let mut dst = cob_pi().div_ui(2);
+        if src.sgn() < 0 {
+            dst.neg_assign();
+        }
+        return dst;
+    }
+    if src.sgn() == 0 {
+        return Mpf::new(prec);
+    }
+    let mut vf2 = src.mul(src);
+    vf2 = Mpf::ui_sub(1, &vf2);
+    vf2 = vf2.sqrt();
+    vf2 = vf2.add_ui(1);
+    let vf1 = src.div(&vf2);
+    cob_mpf_atan(&vf1).mul_ui(2)
+}
+
+/// `cob_mpf_acos (dst, src)` (intrinsic.c): `acos(src) = 2*atan(sqrt(1 - x^2) / (x + 1))`; 0 -> pi/2,
+/// 1 -> 0, -1 -> pi.
+pub fn cob_mpf_acos(src: &Mpf) -> Mpf {
+    let prec = COB_MPF_PREC;
+    if src.sgn() == 0 {
+        return cob_pi().div_ui(2);
+    }
+    if src.cmp_ui(1) == Ordering::Equal {
+        return Mpf::new(prec);
+    }
+    if src.cmp_si(-1) == Ordering::Equal {
+        return cob_pi();
+    }
+    let vf2 = src.add_ui(1);
+    let mut vf1 = src.mul(src);
+    vf1 = Mpf::ui_sub(1, &vf1);
+    vf1 = vf1.sqrt();
+    vf1 = vf1.div(&vf2);
+    cob_mpf_atan(&vf1).mul_ui(2)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
