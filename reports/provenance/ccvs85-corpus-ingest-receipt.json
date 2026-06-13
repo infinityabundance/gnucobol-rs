@@ -1,0 +1,23 @@
+{
+  "gate": "GNURUST.CCVS85.1",
+  "corpus": "CCVS85",
+  "dialect": "COBOL-85 validation (NIST CCVS85, VERSION 4.0)",
+  "conformance_claim": "NONE — corpus custody/index only; no COBOL-85 conformance, suite-pass, compiler-replacement, or libcob behaviour-parity claim.",
+  "source_name": "newcob.val.Z",
+  "compressed_sha256": "1e9a92ddbd5d730cbeb764281f7810c22b18e0163985b09675393ab22bbd61f9",
+  "compressed_bytes": 4417395,
+  "decompressed_sha256": "744a04982095a3abea29a9df5faf63d226083edecc7b5bf34bc412eae0d53274",
+  "decompressed_bytes": 28210031,
+  "decompressed_lines": 348272,
+  "decompressor": "gzip 1.14-modified",
+  "version_banner": "CCVS85  VERSION 4.0   01 OCT 1992 0032",
+  "header_count": 512,
+  "header_by_kind": {
+    "CLBRY": 51,
+    "COBOL": 459,
+    "DATA*": 2
+  },
+  "program_id_count": 524,
+  "end_of_count": 513,
+  "unit_count": 512
+}

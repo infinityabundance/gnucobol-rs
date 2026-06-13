@@ -138,6 +138,9 @@ fi
 # from the admitted libcob source + the Rust src. This is the authoritative parity (real `fn`s vs doc-only
 # false hits, with #if 0 / config classification) that replaced grep name-matching. Source-gated.
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- check >/dev/null 2>&1 ) && row "libcob-parity gate (port-index, typed)" "PASS" || { row "libcob-parity gate (port-index, typed)" "FAIL"; RED=$((RED+1)); }
+# GNURUST.CCVS85.1: external CCVS85 (NIST COBOL-85 validation) corpus CUSTODY -- compressed/decompressed
+# hashes + split-index metadata stable vs the committed receipt. Corpus-custody only; NO conformance claim.
+( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- ccvs85 check >/dev/null 2>&1 ) && row "GNURUST.CCVS85.1 corpus custody (NIST CCVS85)" "PASS" || { row "GNURUST.CCVS85.1 corpus custody (NIST CCVS85)" "FAIL"; RED=$((RED+1)); }
 # Rust-port doxygen: run doxygen on crates/gnucobol-rs/src as a CLEAN refresh (the previous run is wiped
 # first, so it never accumulates), and assert it documented the port. The authoritative per-function
 # coverage ("did we miss anything") is the parity gate above; this proves the browsable native-Rust

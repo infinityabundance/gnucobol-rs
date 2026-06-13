@@ -7,6 +7,7 @@
 //! PORT-INDEX.1 milestone subcommands: `libcob-symbols`, `rust-symbols`, `parity`, `all`, `check`.
 //! Run from the repo root (cwd) or set `GNURUST_ROOT`.
 
+mod ccvs85;
 mod libcob_symbols;
 mod model;
 mod parity;
@@ -115,8 +116,22 @@ fn main() {
             0
         }
         "check" => check(&root),
+        "ccvs85" => {
+            let sub = args.get(2).map(String::as_str).unwrap_or("");
+            let flag = |name: &str| -> Option<std::path::PathBuf> {
+                args.iter().position(|a| a == name).and_then(|i| args.get(i + 1)).map(std::path::PathBuf::from)
+            };
+            match sub {
+                "ingest" => ccvs85::ingest(&root, flag("--input"), flag("--out")),
+                "check" => ccvs85::check(&root),
+                _ => {
+                    eprintln!("ccvs85: use `ccvs85 ingest [--input <.Z>] [--out <dir>]` or `ccvs85 check`");
+                    2
+                }
+            }
+        }
         other => {
-            eprintln!("unknown subcommand '{other}' (use: libcob-symbols | rust-symbols | parity | all | check)");
+            eprintln!("unknown subcommand '{other}' (use: libcob-symbols | rust-symbols | parity | all | check | ccvs85)");
             2
         }
     };

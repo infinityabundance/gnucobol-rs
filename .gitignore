@@ -31,3 +31,7 @@ reports/port-index/libcob-symbols.json
 reports/port-index/rust-symbols.json
 lab/oracle/cconv_harness
 lab/oracle/intrinsic_harness
+
+# CCVS85 corpus: keep the compressed spine, ignore the 27MB decompressed expansion
+lab/corpus/ccvs85/newcob.val
+reports/ccvs85/newcob.val
