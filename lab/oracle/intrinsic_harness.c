@@ -204,5 +204,17 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("q",1,DISP,1,0,HAVE_SIGN); dump("e10n1", cob_intr_exp10(&f)); }
 	{ cob_field f=mkf("3",1,DISP,1,0,0); dump("e10_3", cob_intr_exp10(&f)); }
 	{ cob_field f=mkf("05",2,DISP,2,1,0); dump("e10_h", cob_intr_exp10(&f)); }
+	{ cob_field f=mkf("1",1,DISP,1,0,0); dump("sin1", cob_intr_sin(&f)); }
+	{ cob_field f=mkf("0",1,DISP,1,0,0); dump("sin0", cob_intr_sin(&f)); }
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("sin2", cob_intr_sin(&f)); }
+	{ cob_field f=mkf("10",2,DISP,2,0,0); dump("sin10", cob_intr_sin(&f)); }
+	{ cob_field f=mkf("q",1,DISP,1,0,HAVE_SIGN); dump("sinn1", cob_intr_sin(&f)); }
+	{ cob_field f=mkf("1",1,DISP,1,0,0); dump("cos1", cob_intr_cos(&f)); }
+	{ cob_field f=mkf("0",1,DISP,1,0,0); dump("cos0", cob_intr_cos(&f)); }
+	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("cos2", cob_intr_cos(&f)); }
+	{ cob_field f=mkf("1",1,DISP,1,0,0); dump("tan1", cob_intr_tan(&f)); }
+	{ cob_field f=mkf("0",1,DISP,1,0,0); dump("tan0", cob_intr_tan(&f)); }
+	dump("pi", cob_intr_pi());
+	dump("ee", cob_intr_e());
 	return 0;
 }

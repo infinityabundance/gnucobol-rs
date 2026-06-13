@@ -194,4 +194,16 @@ fn main() {
     hexln("e10n1", &cob_intr_exp10(b"q", &disp(1, 0, true)));
     hexln("e10_3", &cob_intr_exp10(b"3", &disp(1, 0, false)));
     hexln("e10_h", &cob_intr_exp10(b"05", &disp(2, 1, false)));
+    hexln("sin1", &cob_intr_sin(b"1", &disp(1, 0, false)));
+    hexln("sin0", &cob_intr_sin(b"0", &disp(1, 0, false)));
+    hexln("sin2", &cob_intr_sin(b"2", &disp(1, 0, false)));
+    hexln("sin10", &cob_intr_sin(b"10", &disp(2, 0, false)));
+    hexln("sinn1", &cob_intr_sin(b"q", &disp(1, 0, true)));
+    hexln("cos1", &cob_intr_cos(b"1", &disp(1, 0, false)));
+    hexln("cos0", &cob_intr_cos(b"0", &disp(1, 0, false)));
+    hexln("cos2", &cob_intr_cos(b"2", &disp(1, 0, false)));
+    hexln("tan1", &cob_intr_tan(b"1", &disp(1, 0, false)));
+    hexln("tan0", &cob_intr_tan(b"0", &disp(1, 0, false)));
+    hexln("pi", &cob_intr_pi());
+    hexln("ee", &cob_intr_e());
 }

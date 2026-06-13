@@ -580,6 +580,66 @@ pub fn cob_mpf_exp(src: &Mpf) -> Mpf {
     dst_temp
 }
 
+/// `cob_mpf_sin (dst, src)` (intrinsic.c): `sin(src)` via argument reduction modulo `pi/2` into a quadrant
+/// (`arcquad`, with the matching sign flip / reflection) then the Taylor series.
+pub fn cob_mpf_sin(src: &Mpf) -> Mpf {
+    let prec = COB_MPF_PREC;
+    let mut sign = src.sgn();
+    let mut vf4 = src.clone();
+    vf4.abs_assign();
+    let vf3_half_pi = cob_pi().div_2exp(1); // pi/2
+    let vf1 = vf4.div(&vf3_half_pi);
+    vf4 = vf1.floor();
+    let quad = if vf4.cmp_ui(4) != Ordering::Less {
+        let t = vf4.div_2exp(2).floor().mul_2exp(2);
+        vf4.sub(&t)
+    } else {
+        vf4.clone()
+    };
+    let arcquad = quad.get_ui();
+    let frac = vf1.sub(&vf4);
+    let mut angle = vf3_half_pi.mul(&frac);
+    if arcquad > 1 {
+        sign = -sign;
+    }
+    if arcquad & 1 != 0 {
+        angle = vf3_half_pi.sub(&angle);
+    }
+    let mut neg_sq = angle.mul(&angle);
+    neg_sq.neg_assign();
+
+    let mut n = 1u64;
+    let mut term = Mpf::set_ui(1, prec);
+    let mut dst_temp = Mpf::set_ui(1, prec);
+    loop {
+        n += 1;
+        term = term.div_ui(n);
+        n += 1;
+        term = term.div_ui(n);
+        term = term.mul(&neg_sq);
+        let prev = dst_temp.clone();
+        dst_temp = dst_temp.add(&term);
+        if prev.eq(&dst_temp, COB_MPF_PREC) {
+            break;
+        }
+    }
+    dst_temp = dst_temp.mul(&angle);
+    if sign < 0 {
+        dst_temp.neg_assign();
+    }
+    dst_temp
+}
+
+/// `cob_mpf_cos (dst, src)` (intrinsic.c): `cos(src) = sin(pi/2 - src)`.
+pub fn cob_mpf_cos(src: &Mpf) -> Mpf {
+    cob_mpf_sin(&cob_pi().div_2exp(1).sub(src))
+}
+
+/// `cob_mpf_tan (dst, src)` (intrinsic.c): `tan(src) = sin(src) / cos(src)`.
+pub fn cob_mpf_tan(src: &Mpf) -> Mpf {
+    cob_mpf_sin(src).div(&cob_mpf_cos(src))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

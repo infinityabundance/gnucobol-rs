@@ -335,7 +335,7 @@ use crate::accessors::cob_get_int;
 use crate::int_pow::cob_s32_pow;
 use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE};
 use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_get_mpf, cob_decimal_mul, cob_decimal_set_field, cob_decimal_set_mpf, cob_decimal_sub, CobDecimal};
-use crate::mpf::{cob_mpf_exp, cob_mpf_log, cob_mpf_log10};
+use crate::mpf::{cob_mpf_cos, cob_mpf_exp, cob_mpf_log, cob_mpf_log10, cob_mpf_sin, cob_mpf_tan, cob_pi, Mpf, COB_MPF_PREC};
 use crate::gmp::Mpz;
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
@@ -2936,6 +2936,34 @@ pub fn cob_intr_log10(src: &[u8], attr: &FieldAttr) -> IntrField {
         return cob_alloc_set_field_uint(0);
     }
     intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_log10(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_sin (srcfield)` (intrinsic.c): `FUNCTION SIN(x)`.
+pub fn cob_intr_sin(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_sin(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_cos (srcfield)` (intrinsic.c): `FUNCTION COS(x)`.
+pub fn cob_intr_cos(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_cos(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_tan (srcfield)` (intrinsic.c): `FUNCTION TAN(x)`.
+pub fn cob_intr_tan(src: &[u8], attr: &FieldAttr) -> IntrField {
+    let d1 = cob_decimal_set_field(src, attr);
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_tan(&cob_decimal_get_mpf(&d1))))
+}
+
+/// `cob_intr_pi ()` (intrinsic.c): `FUNCTION PI` — the constant pi.
+pub fn cob_intr_pi() -> IntrField {
+    intr_decimal_result(cob_decimal_set_mpf(&cob_pi()))
+}
+
+/// `cob_intr_e ()` (intrinsic.c): `FUNCTION E` — Euler's number, `exp(1)`.
+pub fn cob_intr_e() -> IntrField {
+    intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_exp(&Mpf::set_ui(1, COB_MPF_PREC))))
 }
 
 #[cfg(test)]
