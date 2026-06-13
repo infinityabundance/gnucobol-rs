@@ -3133,6 +3133,41 @@ pub fn cob_intr_standard_deviation(args: &[(&[u8], &FieldAttr)]) -> IntrField {
     intr_decimal_result(d1)
 }
 
+/// `cob_intr_display_of (offset, length, params, ...)` (intrinsic.c): `FUNCTION DISPLAY-OF` — unimplemented
+/// in GnuCOBOL 3.2 (it `error_not_implemented`s — fatal-errors upstream; the library boundary returns the
+/// empty not-implemented field).
+pub fn cob_intr_display_of(_offset: i32, _length: i32, _args: &[(&[u8], &FieldAttr)]) -> IntrField {
+    error_not_implemented()
+}
+
+/// `cob_intr_national_of (offset, length, params, ...)` (intrinsic.c): `FUNCTION NATIONAL-OF` —
+/// unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].
+pub fn cob_intr_national_of(_offset: i32, _length: i32, _args: &[(&[u8], &FieldAttr)]) -> IntrField {
+    error_not_implemented()
+}
+
+/// `cob_intr_char_national (srcfield)` (intrinsic.c): `FUNCTION CHAR-NATIONAL` — unimplemented in
+/// GnuCOBOL 3.2; see [`error_not_implemented`].
+pub fn cob_intr_char_national(_src: &[u8], _attr: &FieldAttr) -> IntrField {
+    error_not_implemented()
+}
+
+/// `cob_intr_standard_compare (params, ...)` (intrinsic.c): `FUNCTION STANDARD-COMPARE` — unimplemented in
+/// GnuCOBOL 3.2; see [`error_not_implemented`].
+pub fn cob_intr_standard_compare(_args: &[(&[u8], &FieldAttr)]) -> IntrField {
+    error_not_implemented()
+}
+
+/// `cob_intr_when_compiled (offset, length, f)` (intrinsic.c): `FUNCTION WHEN-COMPILED` — returns the
+/// compile-time stamp the compiler supplies in `f` (with optional reference modification).
+pub fn cob_intr_when_compiled(offset: i32, length: i32, f: &[u8], attr: &FieldAttr) -> IntrField {
+    let out = f.to_vec();
+    if offset > 0 {
+        return intr_refmod(out, offset, length);
+    }
+    (out, *attr)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -237,4 +237,6 @@ fn main() {
     hexln("pv", &cob_intr_present_value(b"010", &disp(3, 2, false), &[(b"100", &u3), (b"200", &u3)]));
     hexln("var", &cob_intr_variance(&[(b"002", &u3), (b"004", &u3), (b"006", &u3)]));
     hexln("sdev", &cob_intr_standard_deviation(&[(b"002", &u3), (b"004", &u3), (b"006", &u3)]));
+    hexln("whenc", &cob_intr_when_compiled(0, 0, b"2024010112000000-0500", &an));
+    hexln("whenc_rm", &cob_intr_when_compiled(3, 4, b"2024010112000000-0500", &an));
 }

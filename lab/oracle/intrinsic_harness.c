@@ -247,5 +247,7 @@ int main(int argc, char **argv) {
 	{ cob_field r=mkf("010",3,DISP,3,2,0),c1=mkf("100",3,DISP,3,0,0),c2=mkf("200",3,DISP,3,0,0); dump("pv", cob_intr_present_value(3,&r,&c1,&c2)); }
 	{ cob_field a=mkf("002",3,DISP,3,0,0),b=mkf("004",3,DISP,3,0,0),c=mkf("006",3,DISP,3,0,0); dump("var", cob_intr_variance(3,&a,&b,&c)); }
 	{ cob_field a=mkf("002",3,DISP,3,0,0),b=mkf("004",3,DISP,3,0,0),c=mkf("006",3,DISP,3,0,0); dump("sdev", cob_intr_standard_deviation(3,&a,&b,&c)); }
+	{ cob_field f=mkf("2024010112000000-0500",21,ALNUM,0,0,0); dump("whenc", cob_intr_when_compiled(0,0,&f)); }
+	{ cob_field f=mkf("2024010112000000-0500",21,ALNUM,0,0,0); dump("whenc_rm", cob_intr_when_compiled(3,4,&f)); }
 	return 0;
 }
