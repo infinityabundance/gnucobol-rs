@@ -70,5 +70,10 @@ int main(int argc, char **argv) {
 	{ cob_field a = mkf("01w", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("mod_n", cob_intr_mod(&a, &b)); }
 	{ cob_field a = mkf("017", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("rem_p", cob_intr_rem(&a, &b)); }
 	{ cob_field a = mkf("01w", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("rem_n", cob_intr_rem(&a, &b)); }
+	{ cob_field a=mkf("AB",2,ALNUM,0,0,0),b=mkf("CD",2,ALNUM,0,0,0),c=mkf("EF",2,ALNUM,0,0,0); dump("concat", cob_intr_concatenate(0,0,3,&a,&b,&c)); }
+	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("020",3,DISP,3,0,0),c=mkf("030",3,DISP,3,0,0); dump("sum", cob_intr_sum(3,&a,&b,&c)); }
+	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("max", cob_intr_max(3,&a,&b,&c)); }
+	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("min", cob_intr_min(3,&a,&b,&c)); }
+	{ cob_field f=mkf("005",3,DISP,3,0,0); dump("fact5", cob_intr_factorial(&f)); }
 	return 0;
 }

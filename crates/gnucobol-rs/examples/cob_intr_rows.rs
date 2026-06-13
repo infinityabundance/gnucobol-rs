@@ -54,4 +54,10 @@ fn main() {
     hexln("mod_n", &cob_intr_mod(b"01w", &s3, b"005", &s3));
     hexln("rem_p", &cob_intr_rem(b"017", &s3, b"005", &s3));
     hexln("rem_n", &cob_intr_rem(b"01w", &s3, b"005", &s3));
+    hexln("concat", &cob_intr_concatenate(0, 0, &[b"AB", b"CD", b"EF"]));
+    let u3 = disp(3, 0, false);
+    hexln("sum", &cob_intr_sum(&[(b"010", &u3), (b"020", &u3), (b"030", &u3)]));
+    hexln("max", &cob_intr_max(&[(b"010", &u3), (b"030", &u3), (b"020", &u3)]));
+    hexln("min", &cob_intr_min(&[(b"010", &u3), (b"030", &u3), (b"020", &u3)]));
+    hexln("fact5", &cob_intr_factorial(b"005", &u3));
 }

@@ -331,7 +331,7 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 
 // ---- numeric-result cob_intr_* (over the sealed CobDecimal layer) -------------------------------
 
-use crate::cob_decimal::{cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
+use crate::cob_decimal::{cob_decimal_add, cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
 use crate::gmp::Mpz;
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
@@ -422,6 +422,62 @@ pub fn cob_intr_integer_part(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     }
     d.scale = 0;
     intr_decimal_result(d)
+}
+
+/// `cob_intr_concatenate (offset, length, params, ...)` (intrinsic.c): `FUNCTION CONCATENATE` — the
+/// operands' bytes joined, optionally reference-modified `(offset:length)`.
+pub fn cob_intr_concatenate(offset: i32, length: i32, parts: &[&[u8]]) -> IntrField {
+    let mut data = Vec::new();
+    for p in parts {
+        data.extend_from_slice(p);
+    }
+    intr_refmod(data, offset, length)
+}
+
+/// `cob_intr_sum (params, ...)` (intrinsic.c): `FUNCTION SUM` — the sum of the numeric operands.
+pub fn cob_intr_sum(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let mut d = CobDecimal { value: Mpz::from_u64(0), scale: 0 };
+    for (f, a) in fields {
+        let d2 = cob_decimal_set_field(f, a);
+        cob_decimal_add(&mut d, &d2);
+    }
+    intr_decimal_result(d)
+}
+
+/// `cob_intr_max (params, ...)` (intrinsic.c): `FUNCTION MAX` — the operand with the greatest value,
+/// returned in its own field (numeric compare).
+pub fn cob_intr_max(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let mut best = 0usize;
+    for i in 1..fields.len() {
+        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[best].0, fields[best].1) > 0 {
+            best = i;
+        }
+    }
+    (fields[best].0.to_vec(), *fields[best].1)
+}
+
+/// `cob_intr_min (params, ...)` (intrinsic.c): `FUNCTION MIN` — the operand with the least value.
+pub fn cob_intr_min(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let mut best = 0usize;
+    for i in 1..fields.len() {
+        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[best].0, fields[best].1) < 0 {
+            best = i;
+        }
+    }
+    (fields[best].0.to_vec(), *fields[best].1)
+}
+
+/// `cob_intr_factorial (srcfield)` (intrinsic.c): `FUNCTION FACTORIAL(n)` — `n!` (0 for `n < 0`).
+pub fn cob_intr_factorial(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let n = crate::accessors::cob_get_int(src, src_attr);
+    if n < 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    let mut value = Mpz::from_u64(1);
+    for k in 2..=n as u64 {
+        value = value.mul_ui(k);
+    }
+    intr_decimal_result(CobDecimal { value, scale: 0 })
 }
 
 /// Build a `CobDecimal` from a parsed [`Numval`] (`value = signed scaled * 10^(-scale)`).
