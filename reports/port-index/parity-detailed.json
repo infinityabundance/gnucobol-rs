@@ -1220,11 +1220,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 56,
+    "active_ported": 71,
     "compiled": 238,
-    "compiled_parity_pct": 23.5,
+    "compiled_parity_pct": 29.8,
     "disabled": 0,
-    "doc_only": 4,
+    "doc_only": 5,
     "file": "intrinsic.c",
     "fns": [
       {
@@ -1362,7 +1362,7 @@
       {
         "function": "substitute",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "int_strncasecmp",
@@ -1484,7 +1484,8 @@
       {
         "function": "valid_decimal_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_offset_time",
@@ -1894,7 +1895,8 @@
       {
         "function": "cob_intr_fraction_part",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_sign",
@@ -1923,27 +1925,32 @@
       {
         "function": "cob_intr_bit_of",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "has_bit_checked",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_bit_to_char",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_hex_of",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_hex_to_char",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_date",
@@ -1989,17 +1996,20 @@
       {
         "function": "cob_intr_substitute",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_substitute_case",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_trim",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_exception_file",
@@ -2052,7 +2062,8 @@
       {
         "function": "cob_intr_combined_datetime",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_date_of_integer",
@@ -2081,12 +2092,14 @@
       {
         "function": "cob_intr_test_date_yyyymmdd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_test_day_yyyyddd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_factorial",
@@ -2369,12 +2382,14 @@
       {
         "function": "cob_intr_lowest_algebraic",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_highest_algebraic",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_locale_compare",
@@ -2497,10 +2512,7 @@
       "cob_intr_asin",
       "cob_intr_atan",
       "cob_intr_binop",
-      "cob_intr_bit_of",
-      "cob_intr_bit_to_char",
       "cob_intr_char_national",
-      "cob_intr_combined_datetime",
       "cob_intr_content_length",
       "cob_intr_content_of",
       "cob_intr_cos",
@@ -2519,10 +2531,6 @@
       "cob_intr_formatted_date",
       "cob_intr_formatted_datetime",
       "cob_intr_formatted_time",
-      "cob_intr_fraction_part",
-      "cob_intr_hex_of",
-      "cob_intr_hex_to_char",
-      "cob_intr_highest_algebraic",
       "cob_intr_integer_of_formatted_date",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
@@ -2530,7 +2538,6 @@
       "cob_intr_locale_time",
       "cob_intr_log",
       "cob_intr_log10",
-      "cob_intr_lowest_algebraic",
       "cob_intr_module_caller_id",
       "cob_intr_module_date",
       "cob_intr_module_formatted_date",
@@ -2549,16 +2556,11 @@
       "cob_intr_sqrt",
       "cob_intr_standard_compare",
       "cob_intr_standard_deviation",
-      "cob_intr_substitute",
-      "cob_intr_substitute_case",
       "cob_intr_tan",
-      "cob_intr_test_date_yyyymmdd",
-      "cob_intr_test_day_yyyyddd",
       "cob_intr_test_formatted_datetime",
       "cob_intr_test_numval",
       "cob_intr_test_numval_c",
       "cob_intr_test_numval_f",
-      "cob_intr_trim",
       "cob_intr_variance",
       "cob_intr_when_compiled",
       "cob_mpf_acos",
@@ -2597,7 +2599,6 @@
       "get_seconds_past_midnight",
       "get_substituted_size",
       "get_system_offset_time_ptr",
-      "has_bit_checked",
       "int_strncasecmp",
       "integer_of_date",
       "integer_of_day",
@@ -2653,12 +2654,11 @@
       "test_z_presence",
       "try_get_valid_offset_time",
       "valid_day_and_format",
-      "valid_decimal_time",
       "valid_offset_time",
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 178,
+    "missing": 162,
     "source_funcs": 238,
     "test_only": 0
   },

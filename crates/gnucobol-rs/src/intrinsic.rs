@@ -331,7 +331,9 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 
 // ---- numeric-result cob_intr_* (over the sealed CobDecimal layer) -------------------------------
 
-use crate::cob_decimal::{cob_decimal_add, cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
+use crate::accessors::cob_get_int;
+use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE};
+use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
 use crate::gmp::Mpz;
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
@@ -564,6 +566,298 @@ pub fn cob_intr_factorial(src: &[u8], src_attr: &FieldAttr) -> IntrField {
         value = value.mul_ui(k);
     }
     intr_decimal_result(CobDecimal { value, scale: 0 })
+}
+
+/// `cob_intr_hex_of (srcfield)` (intrinsic.c): `FUNCTION HEX-OF` — each byte as two uppercase hex digits.
+pub fn cob_intr_hex_of(src: &[u8]) -> IntrField {
+    const HEX: &[u8; 16] = b"0123456789ABCDEF";
+    let mut out = Vec::with_capacity(src.len() * 2);
+    for &b in src {
+        out.push(HEX[(b >> 4) as usize & 0xF]);
+        out.push(HEX[(b & 0xF) as usize]);
+    }
+    (out, ALPHA1)
+}
+
+/// One hex digit's value (`0..15`), or `None` for a non-hex char.
+fn hex_digit(c: u8) -> Option<u8> {
+    match c {
+        b'0'..=b'9' => Some(c & 0x0F),
+        b'A'..=b'F' => Some(c - b'A' + 10),
+        b'a'..=b'f' => Some(c - b'a' + 10),
+        _ => None,
+    }
+}
+
+/// `cob_intr_hex_to_char (srcfield)` (intrinsic.c): `FUNCTION HEX-TO-CHAR` — each hex pair → a byte
+/// (`size/2` bytes; a non-hex digit contributes 0).
+pub fn cob_intr_hex_to_char(src: &[u8]) -> IntrField {
+    let size = src.len() / 2;
+    let mut out = Vec::with_capacity(size);
+    for i in 0..size {
+        let hi = hex_digit(src[i * 2]).unwrap_or(0);
+        let lo = hex_digit(src[i * 2 + 1]).unwrap_or(0);
+        out.push(hi * 16 + lo);
+    }
+    (out, ALPHA1)
+}
+
+/// `cob_intr_bit_of (srcfield)` (intrinsic.c): `FUNCTION BIT-OF` — each byte as 8 `'0'`/`'1'` chars (MSB
+/// first).
+pub fn cob_intr_bit_of(src: &[u8]) -> IntrField {
+    let mut out = Vec::with_capacity(src.len() * 8);
+    for &b in src {
+        for bit in (0..8).rev() {
+            out.push(if b & (1 << bit) != 0 { b'1' } else { b'0' });
+        }
+    }
+    (out, ALPHA1)
+}
+
+/// `has_bit_checked (byte)` (intrinsic.c): a bit char is set unless it is `'0'` (`'1'` is set; any other
+/// char is treated as set, with an argument exception).
+fn has_bit_checked(c: u8) -> bool {
+    c != b'0'
+}
+
+/// `cob_intr_bit_to_char (srcfield)` (intrinsic.c): `FUNCTION BIT-TO-CHAR` — each group of 8 bit chars → a
+/// byte (`size/8` bytes).
+pub fn cob_intr_bit_to_char(src: &[u8]) -> IntrField {
+    let size = src.len() / 8;
+    let mut out = Vec::with_capacity(size);
+    for i in 0..size {
+        let mut byte = 0u8;
+        for bit in 0..8 {
+            if has_bit_checked(src[i * 8 + bit]) {
+                byte |= 1 << (7 - bit);
+            }
+        }
+        out.push(byte);
+    }
+    (out, ALPHA1)
+}
+
+/// `10^digits - 1` as a decimal at the given scale (the all-nines magnitude of a `digits`-digit field).
+fn nines_decimal(digits: u16, scale: i16) -> CobDecimal {
+    CobDecimal { value: Mpz::ui_pow_ui(10, digits as u32).sub_ui(1), scale: scale as i32 }
+}
+
+/// `cob_intr_lowest_algebraic (srcfield)` (intrinsic.c): `FUNCTION LOWEST-ALGEBRAIC` — the smallest value
+/// the field can hold. Numeric unsigned → 0; signed `DISPLAY`/`PACKED`/`EDITED` → `-(10^digits - 1)`;
+/// `BINARY`/`COMP-5` follow the binary-truncate default; `ALPHANUMERIC` → a `size`-byte field; float →
+/// argument exception + 0.
+pub fn cob_intr_lowest_algebraic(src_len: usize, attr: &FieldAttr) -> IntrField {
+    match attr.field_type {
+        COB_TYPE_ALPHANUMERIC | COB_TYPE_ALPHANUMERIC_ALL => (vec![0u8; src_len], ALPHA1),
+        COB_TYPE_ALPHANUMERIC_EDITED => (vec![0u8; attr.digits as usize], ALPHA1),
+        COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_COMP5 => {
+            if attr.flags & COB_FLAG_HAVE_SIGN == 0 {
+                return cob_alloc_set_field_uint(0);
+            }
+            let mut d = if attr.field_type == COB_TYPE_NUMERIC_COMP5 {
+                let expo = (src_len as u32) * 8 - 1;
+                CobDecimal { value: Mpz::ui_pow_ui(2, expo), scale: attr.scale as i32 }
+            } else {
+                nines_decimal(attr.digits, attr.scale)
+            };
+            d.value.neg();
+            intr_decimal_result(d)
+        }
+        COB_TYPE_NUMERIC_FLOAT | COB_TYPE_NUMERIC_DOUBLE | COB_TYPE_NUMERIC_L_DOUBLE => {
+            cob_alloc_set_field_uint(0)
+        }
+        _ => {
+            // NUMERIC_DISPLAY / NUMERIC_PACKED / NUMERIC_EDITED
+            if attr.flags & COB_FLAG_HAVE_SIGN == 0 {
+                return cob_alloc_set_field_uint(0);
+            }
+            let mut d = nines_decimal(attr.digits, attr.scale);
+            d.value.neg();
+            intr_decimal_result(d)
+        }
+    }
+}
+
+/// `cob_intr_highest_algebraic (srcfield)` (intrinsic.c): `FUNCTION HIGHEST-ALGEBRAIC` — the largest value
+/// the field can hold. Numeric `DISPLAY`/`PACKED`/`EDITED` → `10^digits - 1`; `BINARY`/`COMP-5` follow the
+/// binary-truncate default; `ALPHANUMERIC` → a `size`-byte field of `0xFF`; float → argument exception + 0.
+pub fn cob_intr_highest_algebraic(src_len: usize, attr: &FieldAttr) -> IntrField {
+    match attr.field_type {
+        COB_TYPE_ALPHANUMERIC | COB_TYPE_ALPHANUMERIC_ALL => (vec![0xFFu8; src_len], ALPHA1),
+        COB_TYPE_ALPHANUMERIC_EDITED => (vec![0xFFu8; attr.digits as usize], ALPHA1),
+        COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_COMP5 => {
+            let d = if attr.field_type == COB_TYPE_NUMERIC_COMP5 {
+                let mut expo = (src_len as u32) * 8;
+                if attr.flags & COB_FLAG_HAVE_SIGN != 0 {
+                    expo -= 1;
+                }
+                CobDecimal { value: Mpz::ui_pow_ui(2, expo).sub_ui(1), scale: attr.scale as i32 }
+            } else {
+                nines_decimal(attr.digits, attr.scale)
+            };
+            intr_decimal_result(d)
+        }
+        COB_TYPE_NUMERIC_FLOAT | COB_TYPE_NUMERIC_DOUBLE | COB_TYPE_NUMERIC_L_DOUBLE => {
+            cob_alloc_set_field_uint(0)
+        }
+        _ => intr_decimal_result(nines_decimal(attr.digits, attr.scale)),
+    }
+}
+
+/// `valid_decimal_time (seconds_from_midnight)` (intrinsic.c): the time-of-day is valid when the
+/// seconds-from-midnight count does not exceed `SECONDS_IN_DAY` (86400).
+fn valid_decimal_time(seconds_from_midnight: &CobDecimal) -> bool {
+    let seconds_in_day = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(86400); m }, scale: 0 };
+    cob_decimal_cmp(seconds_from_midnight, &seconds_in_day) <= 0
+}
+
+/// `cob_intr_combined_datetime (srcdays, srctime)` (intrinsic.c): `FUNCTION COMBINED-DATETIME` —
+/// `integer-date + (seconds-from-midnight / 100000)`; invalid date or time → argument exception + 0.
+pub fn cob_intr_combined_datetime(
+    days: &[u8],
+    days_attr: &FieldAttr,
+    time: &[u8],
+    time_attr: &FieldAttr,
+) -> IntrField {
+    let srdays = cob_get_int(days, days_attr);
+    if !valid_integer_date(srdays) {
+        return cob_alloc_set_field_uint(0);
+    }
+    let mut combined = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(srdays as u64); m }, scale: 0 };
+    let mut srtime = cob_decimal_set_field(time, time_attr);
+    if !valid_decimal_time(&srtime) {
+        return cob_alloc_set_field_uint(0);
+    }
+    let hundred_thousand = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(100000); m }, scale: 0 };
+    let _ = cob_decimal_div(&mut srtime, &hundred_thousand);
+    cob_decimal_add(&mut combined, &srtime);
+    intr_decimal_result(combined)
+}
+
+/// `cob_intr_fraction_part (srcfield)` (intrinsic.c): `FUNCTION FRACTION-PART` — the digits right of the
+/// decimal point (`value mod 10^scale`, keeping the scale); an integer source yields 0.
+pub fn cob_intr_fraction_part(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let mut d = cob_decimal_set_field(src, src_attr);
+    if d.scale > 0 {
+        let m = Mpz::ui_pow_ui(10, d.scale as u32);
+        d.value = d.value.tdiv_r(&m);
+    } else {
+        d.value.set_ui(0);
+        d.scale = 0;
+    }
+    intr_decimal_result(d)
+}
+
+/// `cob_intr_test_date_yyyymmdd (srcfield)` (intrinsic.c): `FUNCTION TEST-DATE-YYYYMMDD` — 0 if the
+/// `YYYYMMDD` integer is a valid date, else 1 (bad year), 2 (bad month), or 3 (bad day-of-month).
+pub fn cob_intr_test_date_yyyymmdd(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let mut indate = cob_get_int(src, src_attr);
+    let year = indate / 10000;
+    if !valid_year(year) {
+        return cob_alloc_set_field_uint(1);
+    }
+    indate %= 10000;
+    let month = indate / 100;
+    if !valid_month(month) {
+        return cob_alloc_set_field_uint(2);
+    }
+    let days = indate % 100;
+    if !valid_day_of_month(year, month, days) {
+        return cob_alloc_set_field_uint(3);
+    }
+    cob_alloc_set_field_uint(0)
+}
+
+/// `cob_intr_test_day_yyyyddd (srcfield)` (intrinsic.c): `FUNCTION TEST-DAY-YYYYDDD` — 0 if the `YYYYDDD`
+/// integer is a valid ordinal date, else 1 (bad year) or 2 (bad day-of-year).
+pub fn cob_intr_test_day_yyyyddd(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let indate = cob_get_int(src, src_attr);
+    let year = indate / 1000;
+    if !valid_year(year) {
+        return cob_alloc_set_field_uint(1);
+    }
+    let days = indate % 1000;
+    if !valid_day_of_year(year, days) {
+        return cob_alloc_set_field_uint(2);
+    }
+    cob_alloc_set_field_uint(0)
+}
+
+/// `cob_intr_trim (offset, length, srcfield, direction)` (intrinsic.c): `FUNCTION TRIM` — strips spaces;
+/// `direction` 0 trims both ends, 1 (LEADING) trims the left, 2 (TRAILING) trims the right. An all-space
+/// source yields a zero-length result. Reference modification is applied when `offset > 0`.
+pub fn cob_intr_trim(offset: i32, length: i32, src: &[u8], src_attr: &FieldAttr, direction: i32) -> IntrField {
+    if src.iter().all(|&b| b == b' ') {
+        return (Vec::new(), *src_attr);
+    }
+    let mut begin = 0usize;
+    let mut end = src.len() - 1;
+    if direction != 2 {
+        while src[begin] == b' ' {
+            begin += 1;
+        }
+    }
+    if direction != 1 {
+        while src[end] == b' ' {
+            end -= 1;
+        }
+    }
+    let out: Vec<u8> = src[begin..=end].to_vec();
+    if offset > 0 {
+        return intr_refmod(out, offset, length);
+    }
+    (out, *src_attr)
+}
+
+/// Whether two equal-length byte runs match, optionally folding ASCII case (mirrors `memcmp` vs
+/// `strncasecmp` under `LC_ALL=C`).
+fn run_eq(a: &[u8], b: &[u8], case_insensitive: bool) -> bool {
+    if case_insensitive {
+        a.iter().zip(b).all(|(&x, &y)| x.to_ascii_lowercase() == y.to_ascii_lowercase())
+    } else {
+        a == b
+    }
+}
+
+/// `substitute (offset, length, params, cmp_func, ...)` (intrinsic.c): the shared engine behind
+/// `FUNCTION SUBSTITUTE`/`SUBSTITUTE-CASE`. A single left-to-right pass replaces the first matching
+/// `(match, replacement)` pair at each position (first pair wins), copying unmatched bytes verbatim. An
+/// empty match operand is skipped (libcob would otherwise loop). Reference modification applies when
+/// `offset > 0`.
+fn substitute_core(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])], case_insensitive: bool) -> IntrField {
+    let mut out = Vec::new();
+    let mut i = 0usize;
+    while i < original.len() {
+        let mut matched = false;
+        for (m, r) in pairs {
+            if !m.is_empty() && i + m.len() <= original.len() && run_eq(&original[i..i + m.len()], m, case_insensitive) {
+                out.extend_from_slice(r);
+                i += m.len();
+                matched = true;
+                break;
+            }
+        }
+        if !matched {
+            out.push(original[i]);
+            i += 1;
+        }
+    }
+    if offset > 0 {
+        return intr_refmod(out, offset, length);
+    }
+    (out, ALPHA1)
+}
+
+/// `cob_intr_substitute (offset, length, params, ...)` (intrinsic.c): `FUNCTION SUBSTITUTE` — case-sensitive
+/// pattern replacement.
+pub fn cob_intr_substitute(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])]) -> IntrField {
+    substitute_core(offset, length, original, pairs, false)
+}
+
+/// `cob_intr_substitute_case (offset, length, params, ...)` (intrinsic.c): `FUNCTION SUBSTITUTE-CASE` —
+/// case-insensitive pattern replacement.
+pub fn cob_intr_substitute_case(offset: i32, length: i32, original: &[u8], pairs: &[(&[u8], &[u8])]) -> IntrField {
+    substitute_core(offset, length, original, pairs, true)
 }
 
 /// The shared 2-digit-year windowing (`maxyear = current_year + interval`; pivot on `maxyear % 100`).

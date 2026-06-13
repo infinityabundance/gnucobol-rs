@@ -91,5 +91,26 @@ int main(int argc, char **argv) {
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("mean", cob_intr_mean(3,&a,&b,&c)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("median", cob_intr_median(3,&a,&b,&c)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("020",3,DISP,3,0,0),c=mkf("030",3,DISP,3,0,0),d=mkf("040",3,DISP,3,0,0); dump("median4", cob_intr_median(4,&a,&b,&c,&d)); }
+	{ cob_field f=mkf("\x00\x7f" "Gz",4,ALNUM,0,0,0); dump("hexof", cob_intr_hex_of(&f)); }
+	{ cob_field f=mkf("007F417A",8,ALNUM,0,0,0); dump("hex2c", cob_intr_hex_to_char(&f)); }
+	{ cob_field f=mkf("\x00\xa5",2,ALNUM,0,0,0); dump("bitof", cob_intr_bit_of(&f)); }
+	{ cob_field f=mkf("0000000010100101",16,ALNUM,0,0,0); dump("bit2c", cob_intr_bit_to_char(&f)); }
+	{ cob_field f=mkf("000000",6,DISP,6,2,HAVE_SIGN); dump("loalg_ds", cob_intr_lowest_algebraic(&f)); }
+	{ cob_field f=mkf("000000",6,DISP,6,2,HAVE_SIGN); dump("hialg_ds", cob_intr_highest_algebraic(&f)); }
+	{ cob_field f=mkf("000000",6,DISP,6,2,0); dump("loalg_du", cob_intr_lowest_algebraic(&f)); }
+	{ cob_field f=mkf("ABCD",4,ALNUM,0,0,0); dump("hialg_a", cob_intr_highest_algebraic(&f)); }
+	{ cob_field d=mkf("00154794",8,DISP,8,0,0),t=mkf("43200",5,DISP,5,0,0); dump("cdt", cob_intr_combined_datetime(&d,&t)); }
+	{ cob_field f=mkf("1234",4,DISP,4,2,0); dump("frac", cob_intr_fraction_part(&f)); }
+	{ cob_field f=mkf("0123",4,DISP,4,0,0); dump("frac0", cob_intr_fraction_part(&f)); }
+	{ cob_field f=mkf("20240229",8,DISP,8,0,0); dump("tdate_ok", cob_intr_test_date_yyyymmdd(&f)); }
+	{ cob_field f=mkf("20230229",8,DISP,8,0,0); dump("tdate_bad", cob_intr_test_date_yyyymmdd(&f)); }
+	{ cob_field f=mkf("20241301",8,DISP,8,0,0); dump("tdate_mon", cob_intr_test_date_yyyymmdd(&f)); }
+	{ cob_field f=mkf("2024060",7,DISP,7,0,0); dump("tday_ok", cob_intr_test_day_yyyyddd(&f)); }
+	{ cob_field f=mkf("2023366",7,DISP,7,0,0); dump("tday_bad", cob_intr_test_day_yyyyddd(&f)); }
+	{ cob_field f=mkf("  HELLO  ",9,ALNUM,0,0,0); dump("trim_b", cob_intr_trim(0,0,&f,0)); }
+	{ cob_field f=mkf("  HELLO  ",9,ALNUM,0,0,0); dump("trim_l", cob_intr_trim(0,0,&f,1)); }
+	{ cob_field f=mkf("  HELLO  ",9,ALNUM,0,0,0); dump("trim_t", cob_intr_trim(0,0,&f,2)); }
+	{ cob_field o=mkf("MISSISSIPPI",11,ALNUM,0,0,0),m1=mkf("SS",2,ALNUM,0,0,0),r1=mkf("X",1,ALNUM,0,0,0),m2=mkf("PP",2,ALNUM,0,0,0),r2=mkf("Y",1,ALNUM,0,0,0); dump("subst", cob_intr_substitute(0,0,5,&o,&m1,&r1,&m2,&r2)); }
+	{ cob_field o=mkf("Hello",5,ALNUM,0,0,0),m1=mkf("L",1,ALNUM,0,0,0),r1=mkf("_",1,ALNUM,0,0,0); dump("subst_c", cob_intr_substitute_case(0,0,3,&o,&m1,&r1)); }
 	return 0;
 }

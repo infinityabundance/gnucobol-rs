@@ -47,10 +47,7 @@
         "cob_intr_asin",
         "cob_intr_atan",
         "cob_intr_binop",
-        "cob_intr_bit_of",
-        "cob_intr_bit_to_char",
         "cob_intr_char_national",
-        "cob_intr_combined_datetime",
         "cob_intr_content_length",
         "cob_intr_content_of",
         "cob_intr_cos",
@@ -69,10 +66,6 @@
         "cob_intr_formatted_date",
         "cob_intr_formatted_datetime",
         "cob_intr_formatted_time",
-        "cob_intr_fraction_part",
-        "cob_intr_hex_of",
-        "cob_intr_hex_to_char",
-        "cob_intr_highest_algebraic",
         "cob_intr_integer_of_formatted_date",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
@@ -80,7 +73,6 @@
         "cob_intr_locale_time",
         "cob_intr_log",
         "cob_intr_log10",
-        "cob_intr_lowest_algebraic",
         "cob_intr_module_caller_id",
         "cob_intr_module_date",
         "cob_intr_module_formatted_date",
@@ -99,16 +91,11 @@
         "cob_intr_sqrt",
         "cob_intr_standard_compare",
         "cob_intr_standard_deviation",
-        "cob_intr_substitute",
-        "cob_intr_substitute_case",
         "cob_intr_tan",
-        "cob_intr_test_date_yyyymmdd",
-        "cob_intr_test_day_yyyyddd",
         "cob_intr_test_formatted_datetime",
         "cob_intr_test_numval",
         "cob_intr_test_numval_c",
         "cob_intr_test_numval_f",
-        "cob_intr_trim",
         "cob_intr_variance",
         "cob_intr_when_compiled",
         "cob_mpf_acos",
@@ -145,7 +132,6 @@
         "get_seconds_past_midnight",
         "get_substituted_size",
         "get_system_offset_time_ptr",
-        "has_bit_checked",
         "int_strncasecmp",
         "integer_of_day",
         "integer_of_ddd",
@@ -166,7 +152,6 @@
         "setup_cob_sqrt_two",
         "space_left",
         "split_around_t",
-        "substitute",
         "substitute_matches",
         "test_century",
         "test_char",
@@ -200,12 +185,11 @@
         "test_z_presence",
         "try_get_valid_offset_time",
         "valid_day_and_format",
-        "valid_decimal_time",
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 25.3,
-      "ported": 60
+      "parity_pct": 32.1,
+      "ported": 76
     },
     {
       "doxygen_functions": 9,
@@ -786,8 +770,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 31.8,
-    "ported": 317
+    "parity_pct": 33.4,
+    "ported": 333
   },
   "xml_root": "lab/doxygen/out/xml"
 }
