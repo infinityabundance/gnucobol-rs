@@ -25,11 +25,9 @@
     {
       "doxygen_functions": 237,
       "file": "intrinsic.c",
-      "missing": [
-        "cob_intr_random"
-      ],
-      "parity_pct": 99.6,
-      "ported": 236
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 237
     },
     {
       "doxygen_functions": 9,
@@ -606,8 +604,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 49.8,
-    "ported": 497
+    "parity_pct": 49.9,
+    "ported": 498
   },
   "xml_root": "lab/doxygen/out/xml"
 }

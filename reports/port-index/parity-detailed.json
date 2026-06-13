@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 232,
+    "active_ported": 233,
     "compiled": 238,
-    "compiled_parity_pct": 99.6,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
     "doc_only": 0,
     "file": "intrinsic.c",
@@ -2406,7 +2406,8 @@
       {
         "function": "cob_intr_random",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_variance",
@@ -2655,11 +2656,9 @@
         "rust_status": "active"
       }
     ],
-    "gap": [
-      "cob_intr_random"
-    ],
+    "gap": [],
     "inactive_mirrors": 5,
-    "missing": 1,
+    "missing": 0,
     "source_funcs": 238,
     "test_only": 0
   },

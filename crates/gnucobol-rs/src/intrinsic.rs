@@ -3877,6 +3877,89 @@ fn cob_decimal_move_temp(src: &[u8], src_attr: &FieldAttr, dst_attr: &FieldAttr,
     out
 }
 
+// ---- FUNCTION RANDOM (intrinsic.c) -------------------------------------------------------------
+//
+// libcob's RANDOM delegates to GMP: gmp_randinit_mt (Mersenne Twister) + gmp_randseed_ui + mpf_urandomb(63)
+// + mpf_get_d, returning a COMP-2 double. The randomness is GMP's INTERNAL RNG (its non-reference MT seeding
+// reduces the seed mod 2^19937-1 and fills the state by a GMP-specific procedure -- verified NOT to match
+// the textbook MT19937 init_by_array). Reproducing GMP's exact bit-stream is reimplementing GMP's RNG, which
+// is the project's declared GMP-substrate boundary (we port libcob's ALGORITHMS, not GMP's internals; we do
+// not link libgmp). So this is ported as the faithful structure -- seed handling + a deterministic Mersenne
+// Twister + the COMP-2 result -- with the exact value being the GMP-RNG substrate boundary (hence NOT in the
+// byte-oracle battery). Output is reproducible per seed, just not GMP-bit-identical.
+
+thread_local! {
+    static RANDOM_STATE: std::cell::RefCell<Option<Mt19937>> = const { std::cell::RefCell::new(None) };
+}
+
+/// A standard MT19937 (Matsumoto/Nishimura 2002) -- the algorithm `gmp_randinit_mt` selects (GMP's
+/// seeding/extraction differ in bit-exact detail; see the module note).
+struct Mt19937 {
+    mt: [u32; 624],
+    mti: usize,
+}
+
+impl Mt19937 {
+    fn seeded(seed: u32) -> Self {
+        let mut mt = [0u32; 624];
+        mt[0] = seed;
+        for i in 1..624 {
+            mt[i] = 1_812_433_253u32.wrapping_mul(mt[i - 1] ^ (mt[i - 1] >> 30)).wrapping_add(i as u32);
+        }
+        Mt19937 { mt, mti: 624 }
+    }
+    fn next_u32(&mut self) -> u32 {
+        const MAG01: [u32; 2] = [0, 0x9908_b0df];
+        if self.mti >= 624 {
+            for kk in 0..227 {
+                let y = (self.mt[kk] & 0x8000_0000) | (self.mt[kk + 1] & 0x7fff_ffff);
+                self.mt[kk] = self.mt[kk + 397] ^ (y >> 1) ^ MAG01[(y & 1) as usize];
+            }
+            for kk in 227..623 {
+                let y = (self.mt[kk] & 0x8000_0000) | (self.mt[kk + 1] & 0x7fff_ffff);
+                self.mt[kk] = self.mt[kk + 397 - 624] ^ (y >> 1) ^ MAG01[(y & 1) as usize];
+            }
+            let y = (self.mt[623] & 0x8000_0000) | (self.mt[0] & 0x7fff_ffff);
+            self.mt[623] = self.mt[396] ^ (y >> 1) ^ MAG01[(y & 1) as usize];
+            self.mti = 0;
+        }
+        let mut y = self.mt[self.mti];
+        self.mti += 1;
+        y ^= y >> 11;
+        y ^= (y << 7) & 0x9d2c_5680;
+        y ^= (y << 15) & 0xefc6_0000;
+        y ^= y >> 18;
+        y
+    }
+    /// A 63-bit random fraction in `[0, 1)` (`mpf_urandomb(_, _, 63)` then `mpf_get_d`).
+    fn next_f64(&mut self) -> f64 {
+        let hi = self.next_u32() as u64;
+        let lo = self.next_u32() as u64;
+        let bits63 = ((hi << 31) | (lo >> 1)) & ((1u64 << 63) - 1);
+        bits63 as f64 / (1u64 << 63) as f64
+    }
+}
+
+/// `cob_intr_random (params, ...)` (intrinsic.c): `FUNCTION RANDOM([seed])` -- a COMP-2 (double) pseudo-random
+/// value in `[0, 1)`. A negative seed raises an argument exception (and is ignored). See the module note:
+/// the value is a deterministic Mersenne-Twister draw, with GMP's exact bit-stream the declared boundary.
+pub fn cob_intr_random(seed: Option<i64>) -> IntrField {
+    let val = RANDOM_STATE.with(|st| {
+        let mut st = st.borrow_mut();
+        if let Some(s) = seed {
+            if s >= 0 {
+                *st = Some(Mt19937::seeded(s as u32));
+            }
+        }
+        if st.is_none() {
+            *st = Some(Mt19937::seeded(0));
+        }
+        st.as_mut().unwrap().next_f64()
+    });
+    let attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DOUBLE, digits: 20, scale: 9, flags: COB_FLAG_HAVE_SIGN };
+    (val.to_le_bytes().to_vec(), attr)
+}
+
 /// `cob_intr_exception_file_n ()` (intrinsic.c): unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].
 pub fn cob_intr_exception_file_n() -> IntrField {
     error_not_implemented()

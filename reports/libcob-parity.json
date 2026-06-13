@@ -25,11 +25,9 @@
     {
       "file": "intrinsic.c",
       "functions": 238,
-      "missing": [
-        "cob_intr_random"
-      ],
-      "parity_pct": 99.6,
-      "ported": 237
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 238
     },
     {
       "file": "cconv.c",
@@ -769,6 +767,6 @@
   "totals": {
     "functions": 1170,
     "parity_pct": 42.1,
-    "ported": 492
+    "ported": 493
   }
 }
