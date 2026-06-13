@@ -82,7 +82,6 @@
         "cob_intr_pi",
         "cob_intr_present_value",
         "cob_intr_random",
-        "cob_intr_seconds_from_formatted_time",
         "cob_intr_seconds_past_midnight",
         "cob_intr_sin",
         "cob_intr_sqrt",
@@ -115,7 +114,6 @@
         "int_strncasecmp",
         "locale_time",
         "numval",
-        "seconds_from_formatted_time",
         "setup_cob_log_half",
         "setup_cob_log_ten",
         "setup_cob_pi",
@@ -124,11 +122,10 @@
         "substitute",
         "substitute_matches",
         "try_get_valid_offset_time",
-        "valid_offset_time",
-        "valid_time"
+        "valid_offset_time"
       ],
-      "parity_pct": 57.6,
-      "ported": 137
+      "parity_pct": 58.8,
+      "ported": 140
     },
     {
       "file": "cconv.c",
@@ -869,7 +866,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 33.2,
-    "ported": 389
+    "parity_pct": 33.5,
+    "ported": 392
   }
 }

@@ -2341,6 +2341,77 @@ pub fn cob_intr_test_formatted_datetime(fmt: &[u8], datetime: &[u8]) -> IntrFiel
     cob_alloc_set_field_uint(0)
 }
 
+/// `valid_time (seconds_from_midnight)` (intrinsic.c): `0 <= s <= SECONDS_IN_DAY` (86400).
+fn valid_time(seconds_from_midnight: i32) -> bool {
+    in_range(0, 86400, seconds_from_midnight)
+}
+
+/// `seconds_from_formatted_time (format, str)` (intrinsic.c): parse a validated `hh[:]mm[:]ss[.frac]` time
+/// to a decimal count of seconds since midnight (the trailing zone/offset is ignored here).
+///
+/// CHARACTERIZED DIVERGENCE: libcob's decimal branch sets `seconds_decimal->value` but not its scale, so
+/// it reads the leftover scale of the shared scratch decimal `cob_d1` — its fractional result is therefore
+/// call-history-dependent (e.g. 86399.125 vs a contaminated 8640.025 after a prior op left `cob_d1` at
+/// scale 1). gnucobol-rs uses a fresh scale-0 base, yielding the well-defined mathematically-correct value;
+/// byte-equality holds whenever `cob_d1` is clean (scale 0) at the call, which the oracle battery arranges.
+fn seconds_from_formatted_time(format: TimeFormat, s: &[u8]) -> CobDecimal {
+    let (hpos, mpos, spos) = if format.with_colons { (0, 3, 6) } else { (0, 2, 4) };
+    let hours = scan_uint(s, hpos, 2);
+    let minutes = scan_uint(s, mpos, 2);
+    let seconds = scan_uint(s, spos, 2);
+    let total_seconds = hours * 3600 + minutes * 60 + seconds;
+
+    if format.decimal_places != 0 {
+        let offset = if format.with_colons { 9 } else { 7 };
+        let mut unscaled_fraction = 0i64;
+        for k in 0..format.decimal_places {
+            unscaled_fraction = unscaled_fraction * 10 + (date_at(s, (offset + k) as i32) & 0x0F) as i64;
+        }
+        let frac = CobDecimal {
+            value: {
+                let mut m = Mpz::new();
+                m.set_ui(unscaled_fraction as u64);
+                m
+            },
+            scale: format.decimal_places as i32,
+        };
+        let mut total = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(total_seconds as u64); m }, scale: 0 };
+        cob_decimal_add(&mut total, &frac);
+        total
+    } else {
+        CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(total_seconds as u64); m }, scale: 0 }
+    }
+}
+
+/// `cob_intr_seconds_from_formatted_time (format_field, time_field)` (intrinsic.c):
+/// `FUNCTION SECONDS-FROM-FORMATTED-TIME(format, value)` — the seconds-since-midnight for a formatted time
+/// (or the time part of a datetime); an invalid format or time yields 0.
+pub fn cob_intr_seconds_from_formatted_time(fmt: &[u8], time: &[u8]) -> IntrField {
+    let dec_pt = b'.';
+    let str_length = num_leading_nonspace(fmt);
+    let format_str = fmt[..str_length.min(fmt.len())].to_vec();
+
+    let is_datetime = if cob_valid_datetime_format(&format_str, dec_pt) {
+        true
+    } else if !cob_valid_time_format(&format_str, dec_pt) {
+        return cob_alloc_set_field_uint(0);
+    } else {
+        false
+    };
+
+    let (time_format_str, time_str): (Vec<u8>, Vec<u8>) = if is_datetime {
+        (split_around_t(&format_str).1, split_around_t(time).1)
+    } else {
+        (format_str.clone(), time[..str_length.min(time.len())].to_vec())
+    };
+
+    let time_fmt = parse_time_format_string(&time_format_str);
+    if test_formatted_time(time_fmt, &time_str, dec_pt) != 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    intr_decimal_result(seconds_from_formatted_time(time_fmt, &time_str))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

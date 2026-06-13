@@ -155,5 +155,15 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0),d=mkf("2024-02-29X12:00:00",19,ALNUM,0,0,0); dump("tfdt_not", cob_intr_test_formatted_datetime(&f,&d)); }
 	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("120061",6,ALNUM,0,0,0); dump("tfdt_bs", cob_intr_test_formatted_datetime(&f,&d)); }
 	{ cob_field f=mkf("GARBAGE",7,ALNUM,0,0,0),d=mkf("x",1,ALNUM,0,0,0); dump("tfdt_bad", cob_intr_test_formatted_datetime(&f,&d)); }
+	/* NOTE: seconds_from_formatted_time's decimal branch reads libcob's uninitialized scratch scale (cob_d1);
+	 * its fractional result is call-history-dependent. Each fractional case below is preceded by a
+	 * zero-decimal case (which sets cob_d1 scale = 0) so the shared scratch is clean and the comparison
+	 * tests the algorithm, not libcob's leftover-scale defect. See seconds_from_formatted_time doc in intrinsic.rs. */
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("120000",6,ALNUM,0,0,0); dump("sfft_noon", cob_intr_seconds_from_formatted_time(&f,&d)); }
+	{ cob_field f=mkf("hh:mm:ss.ss",11,ALNUM,0,0,0),d=mkf("12:00:00.50",11,ALNUM,0,0,0); dump("sfft_dec", cob_intr_seconds_from_formatted_time(&f,&d)); }
+	{ cob_field f=mkf("hh:mm:ss",8,ALNUM,0,0,0),d=mkf("01:02:03",8,ALNUM,0,0,0); dump("sfft_123", cob_intr_seconds_from_formatted_time(&f,&d)); }
+	{ cob_field f=mkf("hhmmss.sss",10,ALNUM,0,0,0),d=mkf("235959.125",10,ALNUM,0,0,0); dump("sfft_eod", cob_intr_seconds_from_formatted_time(&f,&d)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0),d=mkf("2024-02-29T06:30:00",19,ALNUM,0,0,0); dump("sfft_dt", cob_intr_seconds_from_formatted_time(&f,&d)); }
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("250000",6,ALNUM,0,0,0); dump("sfft_bad", cob_intr_seconds_from_formatted_time(&f,&d)); }
 	return 0;
 }

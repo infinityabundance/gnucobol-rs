@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 137,
+    "active_ported": 140,
     "compiled": 238,
-    "compiled_parity_pct": 57.6,
+    "compiled_parity_pct": 58.8,
     "disabled": 0,
     "doc_only": 3,
     "file": "intrinsic.c",
@@ -1481,7 +1481,8 @@
       {
         "function": "valid_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_decimal_time",
@@ -1527,7 +1528,8 @@
       {
         "function": "seconds_from_formatted_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_day_and_format",
@@ -2377,7 +2379,8 @@
       {
         "function": "cob_intr_seconds_from_formatted_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_locale_date",
@@ -2612,7 +2615,6 @@
       "cob_intr_pi",
       "cob_intr_present_value",
       "cob_intr_random",
-      "cob_intr_seconds_from_formatted_time",
       "cob_intr_seconds_past_midnight",
       "cob_intr_sin",
       "cob_intr_sqrt",
@@ -2645,7 +2647,6 @@
       "int_strncasecmp",
       "locale_time",
       "numval",
-      "seconds_from_formatted_time",
       "setup_cob_log_half",
       "setup_cob_log_ten",
       "setup_cob_pi",
@@ -2654,11 +2655,10 @@
       "substitute",
       "substitute_matches",
       "try_get_valid_offset_time",
-      "valid_offset_time",
-      "valid_time"
+      "valid_offset_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 98,
+    "missing": 95,
     "source_funcs": 238,
     "test_only": 0
   },

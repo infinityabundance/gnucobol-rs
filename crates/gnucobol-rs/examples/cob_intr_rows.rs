@@ -146,4 +146,12 @@ fn main() {
     hexln("tfdt_not", &cob_intr_test_formatted_datetime(b"YYYY-MM-DDThh:mm:ss", b"2024-02-29X12:00:00"));
     hexln("tfdt_bs", &cob_intr_test_formatted_datetime(b"hhmmss", b"120061"));
     hexln("tfdt_bad", &cob_intr_test_formatted_datetime(b"GARBAGE", b"x"));
+    // Order mirrors the harness: each fractional case follows a zero-decimal one so libcob's shared
+    // scratch decimal (cob_d1) is clean — see seconds_from_formatted_time's characterized-divergence note.
+    hexln("sfft_noon", &cob_intr_seconds_from_formatted_time(b"hhmmss", b"120000"));
+    hexln("sfft_dec", &cob_intr_seconds_from_formatted_time(b"hh:mm:ss.ss", b"12:00:00.50"));
+    hexln("sfft_123", &cob_intr_seconds_from_formatted_time(b"hh:mm:ss", b"01:02:03"));
+    hexln("sfft_eod", &cob_intr_seconds_from_formatted_time(b"hhmmss.sss", b"235959.125"));
+    hexln("sfft_dt", &cob_intr_seconds_from_formatted_time(b"YYYY-MM-DDThh:mm:ss", b"2024-02-29T06:30:00"));
+    hexln("sfft_bad", &cob_intr_seconds_from_formatted_time(b"hhmmss", b"250000"));
 }
