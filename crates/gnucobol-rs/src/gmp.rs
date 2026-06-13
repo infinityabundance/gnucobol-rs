@@ -455,6 +455,24 @@ impl Mpz {
             Some(&top) => (self.mag.len() - 1) * 64 + (64 - top.leading_zeros() as usize),
         }
     }
+    /// `mpz_sqrt`: the floor of the integer square root, `floor(sqrt(self))`, for `self >= 0` (0 for a
+    /// non-positive value). Newton iteration on integers — converges to the exact floor.
+    pub fn isqrt(&self) -> Mpz {
+        if self.sgn() <= 0 {
+            return Mpz::new();
+        }
+        // initial over-estimate: 2^ceil(bits/2) >= sqrt(self)
+        let mut x = Mpz::from_u64(1).mul_2exp(((self.sizeinbase2() + 1) / 2) as u32);
+        loop {
+            // y = floor((x + floor(self/x)) / 2)
+            let y = x.add(&self.tdiv_q(&x)).fdiv_q_2exp(1);
+            if y.cmp(&x) != Ordering::Less {
+                return x;
+            }
+            x = y;
+        }
+    }
+
     /// `mpz_remove(_, _, 10)`: divide out all factors of ten, returning the count removed.
     pub fn remove_pow10(&mut self) -> u32 {
         if self.sign == 0 {
