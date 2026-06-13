@@ -54,7 +54,6 @@
         "cob_intr_content_length",
         "cob_intr_content_of",
         "cob_intr_cos",
-        "cob_intr_currency_symbol",
         "cob_intr_current_date",
         "cob_intr_date_to_yyyymmdd",
         "cob_intr_day_to_yyyyddd",
@@ -91,11 +90,7 @@
         "cob_intr_module_path",
         "cob_intr_module_source",
         "cob_intr_module_time",
-        "cob_intr_mon_decimal_point",
-        "cob_intr_mon_thousands_sep",
         "cob_intr_national_of",
-        "cob_intr_num_decimal_point",
-        "cob_intr_num_thousands_sep",
         "cob_intr_numval_f",
         "cob_intr_pi",
         "cob_intr_present_value",
@@ -212,8 +207,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 21.9,
-      "ported": 52
+      "parity_pct": 24.1,
+      "ported": 57
     },
     {
       "doxygen_functions": 9,
@@ -794,8 +789,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 31.0,
-    "ported": 309
+    "parity_pct": 31.5,
+    "ported": 314
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -55,7 +55,6 @@
         "cob_intr_content_length",
         "cob_intr_content_of",
         "cob_intr_cos",
-        "cob_intr_currency_symbol",
         "cob_intr_current_date",
         "cob_intr_date_to_yyyymmdd",
         "cob_intr_day_to_yyyyddd",
@@ -92,11 +91,7 @@
         "cob_intr_module_path",
         "cob_intr_module_source",
         "cob_intr_module_time",
-        "cob_intr_mon_decimal_point",
-        "cob_intr_mon_thousands_sep",
         "cob_intr_national_of",
-        "cob_intr_num_decimal_point",
-        "cob_intr_num_thousands_sep",
         "cob_intr_numval_f",
         "cob_intr_pi",
         "cob_intr_present_value",
@@ -216,8 +211,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 20.2,
-      "ported": 48
+      "parity_pct": 22.3,
+      "ported": 53
     },
     {
       "file": "cconv.c",
@@ -958,7 +953,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 25.6,
-    "ported": 300
+    "parity_pct": 26.1,
+    "ported": 305
   }
 }

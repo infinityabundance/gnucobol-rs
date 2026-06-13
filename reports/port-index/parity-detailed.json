@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 48,
+    "active_ported": 53,
     "compiled": 238,
-    "compiled_parity_pct": 20.2,
+    "compiled_parity_pct": 22.3,
     "disabled": 0,
     "doc_only": 4,
     "file": "intrinsic.c",
@@ -2321,27 +2321,32 @@
       {
         "function": "cob_intr_mon_decimal_point",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_num_decimal_point",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_mon_thousands_sep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_num_thousands_sep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_currency_symbol",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_test_numval",
@@ -2496,7 +2501,6 @@
       "cob_intr_content_length",
       "cob_intr_content_of",
       "cob_intr_cos",
-      "cob_intr_currency_symbol",
       "cob_intr_current_date",
       "cob_intr_date_to_yyyymmdd",
       "cob_intr_day_to_yyyyddd",
@@ -2533,11 +2537,7 @@
       "cob_intr_module_path",
       "cob_intr_module_source",
       "cob_intr_module_time",
-      "cob_intr_mon_decimal_point",
-      "cob_intr_mon_thousands_sep",
       "cob_intr_national_of",
-      "cob_intr_num_decimal_point",
-      "cob_intr_num_thousands_sep",
       "cob_intr_numval_f",
       "cob_intr_pi",
       "cob_intr_present_value",
@@ -2658,7 +2658,7 @@
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 186,
+    "missing": 181,
     "source_funcs": 238,
     "test_only": 0
   },

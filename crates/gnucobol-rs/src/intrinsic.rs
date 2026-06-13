@@ -566,6 +566,34 @@ pub fn cob_intr_factorial(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     intr_decimal_result(CobDecimal { value, scale: 0 })
 }
 
+/// `cob_intr_num_decimal_point ()` (intrinsic.c): `FUNCTION NUMVAL`-context decimal point from
+/// `localeconv()`. Under the pinned `LC_ALL=C.UTF-8` (C locale) this is `"."`. **Non-claim:** other
+/// locales (the result is `localeconv()`-dependent).
+pub fn cob_intr_num_decimal_point() -> IntrField {
+    (b".".to_vec(), ALPHA1)
+}
+
+/// `cob_intr_num_thousands_sep ()` (intrinsic.c): `localeconv()->thousands_sep` — empty under the C
+/// locale (a zero-size field). Non-claim: other locales.
+pub fn cob_intr_num_thousands_sep() -> IntrField {
+    (Vec::new(), ALPHA1)
+}
+
+/// `cob_intr_mon_decimal_point ()` (intrinsic.c): `localeconv()->mon_decimal_point` — empty under C.
+pub fn cob_intr_mon_decimal_point() -> IntrField {
+    (Vec::new(), ALPHA1)
+}
+
+/// `cob_intr_mon_thousands_sep ()` (intrinsic.c): `localeconv()->mon_thousands_sep` — empty under C.
+pub fn cob_intr_mon_thousands_sep() -> IntrField {
+    (Vec::new(), ALPHA1)
+}
+
+/// `cob_intr_currency_symbol ()` (intrinsic.c): `localeconv()->currency_symbol` — empty under C.
+pub fn cob_intr_currency_symbol() -> IntrField {
+    (Vec::new(), ALPHA1)
+}
+
 /// `cob_intr_stored_char_length (srcfield)` (intrinsic.c): `FUNCTION STORED-CHAR-LENGTH` — the field
 /// size minus trailing spaces.
 pub fn cob_intr_stored_char_length(src: &[u8]) -> IntrField {

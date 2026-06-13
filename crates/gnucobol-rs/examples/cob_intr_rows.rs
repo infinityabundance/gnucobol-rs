@@ -61,6 +61,11 @@ fn main() {
     hexln("min", &cob_intr_min(&[(b"010", &u3), (b"030", &u3), (b"020", &u3)]));
     hexln("fact5", &cob_intr_factorial(b"005", &u3));
     hexln("scl", &cob_intr_stored_char_length(b"HI   "));
+    hexln("ndp", &cob_intr_num_decimal_point());
+    hexln("nts", &cob_intr_num_thousands_sep());
+    hexln("mdp", &cob_intr_mon_decimal_point());
+    hexln("mts", &cob_intr_mon_thousands_sep());
+    hexln("cur", &cob_intr_currency_symbol());
     let abc: &[(&[u8], &FieldAttr)] = &[(b"010", &u3), (b"030", &u3), (b"020", &u3)];
     hexln("ordmin", &cob_intr_ord_min(abc));
     hexln("ordmax", &cob_intr_ord_max(abc));

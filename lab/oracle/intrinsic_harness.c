@@ -76,6 +76,11 @@ int main(int argc, char **argv) {
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("min", cob_intr_min(3,&a,&b,&c)); }
 	{ cob_field f=mkf("005",3,DISP,3,0,0); dump("fact5", cob_intr_factorial(&f)); }
 	{ cob_field f=mkf("HI   ",5,ALNUM,0,0,0); dump("scl", cob_intr_stored_char_length(&f)); }
+	dump("ndp", cob_intr_num_decimal_point());
+	dump("nts", cob_intr_num_thousands_sep());
+	dump("mdp", cob_intr_mon_decimal_point());
+	dump("mts", cob_intr_mon_thousands_sep());
+	dump("cur", cob_intr_currency_symbol());
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("ordmin", cob_intr_ord_min(3,&a,&b,&c)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("ordmax", cob_intr_ord_max(3,&a,&b,&c)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("range", cob_intr_range(3,&a,&b,&c)); }
