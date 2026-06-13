@@ -60,4 +60,12 @@ fn main() {
     hexln("max", &cob_intr_max(&[(b"010", &u3), (b"030", &u3), (b"020", &u3)]));
     hexln("min", &cob_intr_min(&[(b"010", &u3), (b"030", &u3), (b"020", &u3)]));
     hexln("fact5", &cob_intr_factorial(b"005", &u3));
+    let abc: &[(&[u8], &FieldAttr)] = &[(b"010", &u3), (b"030", &u3), (b"020", &u3)];
+    hexln("ordmin", &cob_intr_ord_min(abc));
+    hexln("ordmax", &cob_intr_ord_max(abc));
+    hexln("range", &cob_intr_range(abc));
+    hexln("midr", &cob_intr_midrange(abc));
+    hexln("mean", &cob_intr_mean(abc));
+    hexln("median", &cob_intr_median(abc));
+    hexln("median4", &cob_intr_median(&[(b"010", &u3), (b"020", &u3), (b"030", &u3), (b"040", &u3)]));
 }

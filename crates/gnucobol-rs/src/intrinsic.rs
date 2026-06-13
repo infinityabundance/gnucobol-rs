@@ -467,6 +467,92 @@ pub fn cob_intr_min(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
     (fields[best].0.to_vec(), *fields[best].1)
 }
 
+/// Index of the min and max operand (numeric compare) — the `get_min_and_max_of_args` helper.
+fn min_max_idx(fields: &[(&[u8], &FieldAttr)]) -> (usize, usize) {
+    let (mut mn, mut mx) = (0usize, 0usize);
+    for i in 1..fields.len() {
+        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[mn].0, fields[mn].1) < 0 {
+            mn = i;
+        }
+        if crate::cob_decimal::cob_numeric_cmp(fields[i].0, fields[i].1, fields[mx].0, fields[mx].1) > 0 {
+            mx = i;
+        }
+    }
+    (mn, mx)
+}
+
+/// `cob_intr_ord_min (params, ...)` (intrinsic.c): `FUNCTION ORD-MIN` — the **1-based** ordinal of the
+/// least operand.
+pub fn cob_intr_ord_min(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    cob_alloc_set_field_uint(min_max_idx(fields).0 as u32 + 1)
+}
+
+/// `cob_intr_ord_max (params, ...)` (intrinsic.c): `FUNCTION ORD-MAX` — the 1-based ordinal of the
+/// greatest operand.
+pub fn cob_intr_ord_max(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    cob_alloc_set_field_uint(min_max_idx(fields).1 as u32 + 1)
+}
+
+/// `cob_intr_range (params, ...)` (intrinsic.c): `FUNCTION RANGE` — `max - min`.
+pub fn cob_intr_range(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let (mn, mx) = min_max_idx(fields);
+    let mut d = cob_decimal_set_field(fields[mx].0, fields[mx].1);
+    let dmin = cob_decimal_set_field(fields[mn].0, fields[mn].1);
+    cob_decimal_sub(&mut d, &dmin);
+    intr_decimal_result(d)
+}
+
+/// `cob_intr_midrange (params, ...)` (intrinsic.c): `FUNCTION MIDRANGE` — `(max + min) / 2`.
+pub fn cob_intr_midrange(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let (mn, mx) = min_max_idx(fields);
+    let mut d = cob_decimal_set_field(fields[mn].0, fields[mn].1);
+    let dmax = cob_decimal_set_field(fields[mx].0, fields[mx].1);
+    cob_decimal_add(&mut d, &dmax);
+    let two = CobDecimal { value: Mpz::from_u64(2), scale: 0 };
+    let _ = cob_decimal_div(&mut d, &two);
+    intr_decimal_result(d)
+}
+
+/// `cob_intr_mean (params, ...)` (intrinsic.c): `FUNCTION MEAN` — the arithmetic mean of the operands.
+pub fn cob_intr_mean(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    if fields.len() == 1 {
+        return (fields[0].0.to_vec(), *fields[0].1);
+    }
+    let mut d = CobDecimal { value: Mpz::from_u64(0), scale: 0 };
+    for (f, a) in fields {
+        let d2 = cob_decimal_set_field(f, a);
+        cob_decimal_add(&mut d, &d2);
+    }
+    let n = CobDecimal { value: Mpz::from_u64(fields.len() as u64), scale: 0 };
+    let _ = cob_decimal_div(&mut d, &n);
+    intr_decimal_result(d)
+}
+
+/// `cob_intr_median (params, ...)` (intrinsic.c): `FUNCTION MEDIAN` — the middle value (or the mean of the
+/// two middle values) after sorting the operands.
+pub fn cob_intr_median(fields: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let n = fields.len();
+    if n == 1 {
+        return (fields[0].0.to_vec(), *fields[0].1);
+    }
+    let mut order: Vec<usize> = (0..n).collect();
+    order.sort_by(|&a, &b| {
+        crate::cob_decimal::cob_numeric_cmp(fields[a].0, fields[a].1, fields[b].0, fields[b].1).cmp(&0)
+    });
+    let i = n / 2;
+    if n % 2 == 1 {
+        let k = order[i];
+        (fields[k].0.to_vec(), *fields[k].1)
+    } else {
+        let mut d = cob_decimal_set_field(fields[order[i - 1]].0, fields[order[i - 1]].1);
+        let d2 = cob_decimal_set_field(fields[order[i]].0, fields[order[i]].1);
+        cob_decimal_add(&mut d, &d2);
+        let two = CobDecimal { value: Mpz::from_u64(2), scale: 0 };
+        let _ = cob_decimal_div(&mut d, &two);
+        intr_decimal_result(d)
+    }
+}
+
 /// `cob_intr_factorial (srcfield)` (intrinsic.c): `FUNCTION FACTORIAL(n)` — `n!` (0 for `n < 0`).
 pub fn cob_intr_factorial(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     let n = crate::accessors::cob_get_int(src, src_attr);

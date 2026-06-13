@@ -1220,11 +1220,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 38,
+    "active_ported": 44,
     "compiled": 238,
-    "compiled_parity_pct": 16.0,
+    "compiled_parity_pct": 18.5,
     "disabled": 0,
-    "doc_only": 3,
+    "doc_only": 4,
     "file": "intrinsic.c",
     "fns": [
       {
@@ -1392,7 +1392,7 @@
       {
         "function": "get_min_and_max_of_args",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "calc_mean_of_args",
@@ -2194,12 +2194,14 @@
       {
         "function": "cob_intr_ord_min",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_ord_max",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_min",
@@ -2216,17 +2218,20 @@
       {
         "function": "cob_intr_midrange",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_median",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_mean",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_mod",
@@ -2237,7 +2242,8 @@
       {
         "function": "cob_intr_range",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_rem",
@@ -2518,9 +2524,6 @@
       "cob_intr_log",
       "cob_intr_log10",
       "cob_intr_lowest_algebraic",
-      "cob_intr_mean",
-      "cob_intr_median",
-      "cob_intr_midrange",
       "cob_intr_module_caller_id",
       "cob_intr_module_date",
       "cob_intr_module_formatted_date",
@@ -2534,12 +2537,9 @@
       "cob_intr_num_decimal_point",
       "cob_intr_num_thousands_sep",
       "cob_intr_numval_f",
-      "cob_intr_ord_max",
-      "cob_intr_ord_min",
       "cob_intr_pi",
       "cob_intr_present_value",
       "cob_intr_random",
-      "cob_intr_range",
       "cob_intr_seconds_from_formatted_time",
       "cob_intr_seconds_past_midnight",
       "cob_intr_sin",
@@ -2658,7 +2658,7 @@
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 197,
+    "missing": 190,
     "source_funcs": 238,
     "test_only": 0
   },

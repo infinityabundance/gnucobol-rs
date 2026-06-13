@@ -87,9 +87,6 @@
         "cob_intr_log",
         "cob_intr_log10",
         "cob_intr_lowest_algebraic",
-        "cob_intr_mean",
-        "cob_intr_median",
-        "cob_intr_midrange",
         "cob_intr_module_caller_id",
         "cob_intr_module_date",
         "cob_intr_module_formatted_date",
@@ -103,12 +100,9 @@
         "cob_intr_num_decimal_point",
         "cob_intr_num_thousands_sep",
         "cob_intr_numval_f",
-        "cob_intr_ord_max",
-        "cob_intr_ord_min",
         "cob_intr_pi",
         "cob_intr_present_value",
         "cob_intr_random",
-        "cob_intr_range",
         "cob_intr_seconds_from_formatted_time",
         "cob_intr_seconds_past_midnight",
         "cob_intr_sin",
@@ -226,8 +220,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 16.0,
-      "ported": 38
+      "parity_pct": 18.5,
+      "ported": 44
     },
     {
       "file": "cconv.c",
@@ -968,7 +962,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 24.8,
-    "ported": 290
+    "parity_pct": 25.3,
+    "ported": 296
   }
 }
