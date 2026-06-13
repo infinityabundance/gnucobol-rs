@@ -2732,11 +2732,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 1,
+    "active_ported": 18,
     "compiled": 18,
-    "compiled_parity_pct": 5.6,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
-    "doc_only": 1,
+    "doc_only": 0,
     "file": "termio.c",
     "fns": [
       {
@@ -2748,110 +2748,109 @@
       {
         "function": "pretty_display_numeric",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "display_alnum",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "clean_double",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_display_common",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "is_field_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "display_alnum_dump",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_dump_output",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_dump_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "setup_varname_with_indices",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "setup_lvlwrk_and_dump_null_adrs",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "dump_pending_output",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "dump_field_internal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_dump_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_dump_field_ext",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       },
       {
         "function": "cob_init_termio",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "termio",
+        "rust_status": "active"
       }
     ],
-    "gap": [
-      "clean_double",
-      "cob_accept",
-      "cob_display",
-      "cob_display_common",
-      "cob_dump_field",
-      "cob_dump_field_ext",
-      "cob_dump_file",
-      "cob_dump_output",
-      "cob_init_termio",
-      "display_alnum",
-      "display_alnum_dump",
-      "dump_field_internal",
-      "dump_pending_output",
-      "is_field_display",
-      "pretty_display_numeric",
-      "setup_lvlwrk_and_dump_null_adrs",
-      "setup_varname_with_indices"
-    ],
+    "gap": [],
     "inactive_mirrors": 0,
-    "missing": 16,
+    "missing": 0,
     "source_funcs": 18,
     "test_only": 0
   },

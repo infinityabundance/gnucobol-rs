@@ -1,0 +1,61 @@
+{
+  "schema": "gnurust-file-closure-receipt-v1",
+  "id": "GNURUST.TERMIO.CLOSE.1",
+  "file": "libcob/termio.c",
+  "file_index": "small-first pass (DISPLAY/ACCEPT + dump feature)",
+  "statement": "termio.c (DISPLAY/ACCEPT terminal I/O + the -fdump debug feature) ported function-for-function into gnucobol-rs. All 18/18 functions have a named, ACTIVE Rust counterpart, confirmed by the typed gnucobol-rs-port-index (18/18 active, 0 doc-only, 0 missing) and the authoritative doxygen parse. The DISPLAY-bytes core is oracle-verified byte-for-byte; the dump feature is faithfully ported (pure formatters unit-tested).",
+  "oracle": {
+    "upstream": "GnuCOBOL 3.2.0 (Free Software Foundation, Inc.)",
+    "cobc_version": "cobc (GnuCOBOL) 3.2.0",
+    "source_tarball_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
+    "termio_c_sha256": "e8587cff83c4dd139ba933c30a81aae379aedfb73948de403fcee8a48674e4ba",
+    "admission_receipt": "reports/admission/RECEIPT-ADMISSION.md"
+  },
+  "coverage": {
+    "functions_total": 18,
+    "functions_ported_named": 18,
+    "functions_active": 18,
+    "functions": [
+      "display_numeric",
+      "pretty_display_numeric",
+      "display_alnum",
+      "clean_double",
+      "cob_display_common",
+      "cob_display",
+      "is_field_display",
+      "display_alnum_dump",
+      "dump_pending_output",
+      "cob_dump_output",
+      "cob_dump_file",
+      "setup_varname_with_indices",
+      "setup_lvlwrk_and_dump_null_adrs",
+      "dump_field_internal",
+      "cob_dump_field",
+      "cob_dump_field_ext",
+      "cob_accept",
+      "cob_init_termio"
+    ],
+    "inventory_confirmed_by": "gnucobol-rs-port-index (typed: termio.c 18/18 active, 0 doc-only, 0 missing) + doxygen preprocessed C parse (DOXYGEN-PARITY.md termio.c 18/18)",
+    "rust_modules": ["crates/gnucobol-rs/src/termio.rs"]
+  },
+  "differential_verification": {
+    "note": "DISPLAY-bytes core byte-verified against a cobc program oracle. FAIL=0.",
+    "sweeps": {
+      "termio.c cob_display_common (termio_display_sweep)": "16/0"
+    },
+    "scenario_coverage": "pretty signed/unsigned/scaled numeric DISPLAY (default pretty-display: yes), COMP-3 packed, COMP binary, COMP-1/COMP-2 float (%G f-form and e-form), alphanumeric. One source of truth (termio_display_rows) emits the cobc program AND builds the same storage in Rust via the sealed cob_move/float encoders. The cob_display_common family is internal/hidden in libcob.so, so a program oracle is the witness.",
+    "self_contained": "5 in-crate unit tests cover the %G/clean_double edges, the pretty path, the cob_display wrapper, and the dump formatters."
+  },
+  "non_claims": [
+    "The -fdump debug feature (dump_field_internal et al.) is ported faithfully as real functions with the pure formatters unit-tested; its full byte output (the OCCURS-collapse 'same as (n)' state machine over the generated whole-record field-tree traversal) is not differentially swept here (it needs the runtime cob_module field-tree model).",
+    "cob_display device routing (printer/punch files, screen redirect, popen pipes) is surrounding I/O; this port produces the SYSOUT/SYSERR emitted bytes.",
+    "long double (x87 80-bit) display is host-specific; the %.32LG path uses the f64 approximation and is not swept.",
+    "cob_accept models the line-read + MOVE; terminal/screen input, crt_status, and SIGINT on ^C are runtime I/O."
+  ],
+  "license_boundary": {
+    "crate_license": "LGPL-3.0-or-later",
+    "clean_room": false,
+    "statement": "Faithful DERIVATIVE PORT of LGPL GnuCOBOL 3.2 termio.c, NOT clean-room. LGPL-3.0-or-later; the Apache-2.0 KOBOLD layer never mixes (gpl-license-guard-receipt.json).",
+    "gpl_partition_guard": "reports/license/gpl-license-guard-receipt.json"
+  }
+}

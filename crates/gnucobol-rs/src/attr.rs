@@ -21,6 +21,21 @@ pub const COB_TYPE_ALPHANUMERIC: u16 = 0x21;
 pub const COB_TYPE_ALPHANUMERIC_ALL: u16 = 0x22;
 /// `ALPHANUMERIC-EDITED` (edited alphanumeric picture). `COB_TYPE_ALPHANUMERIC_EDITED` (`common.h:683`).
 pub const COB_TYPE_ALPHANUMERIC_EDITED: u16 = 0x23;
+/// The numeric-type mask: `COB_FIELD_IS_NUMERIC(f)` is `type & COB_TYPE_NUMERIC` (`common.h:664`/`:736`).
+/// Every numeric usage tag (0x10–0x1F) has this bit; alphanumeric (0x21) / edited (0x24) do not.
+pub const COB_TYPE_NUMERIC: u16 = 0x10;
+/// `USAGE COMP-1` — 32-bit IEEE float. `COB_TYPE_NUMERIC_FLOAT` (`common.h:668`).
+pub const COB_TYPE_NUMERIC_FLOAT: u16 = 0x13;
+/// `USAGE COMP-2` — 64-bit IEEE double. `COB_TYPE_NUMERIC_DOUBLE` (`common.h:669`).
+pub const COB_TYPE_NUMERIC_DOUBLE: u16 = 0x14;
+/// `long double` (x87 80-bit). `COB_TYPE_NUMERIC_L_DOUBLE` (`common.h:670`).
+pub const COB_TYPE_NUMERIC_L_DOUBLE: u16 = 0x15;
+/// IEEE 754 decimal64 (`FLOAT-DECIMAL-16`). `COB_TYPE_NUMERIC_FP_DEC64` (`common.h:671`).
+pub const COB_TYPE_NUMERIC_FP_DEC64: u16 = 0x16;
+/// IEEE 754 decimal128 (`FLOAT-DECIMAL-34`). `COB_TYPE_NUMERIC_FP_DEC128` (`common.h:672`).
+pub const COB_TYPE_NUMERIC_FP_DEC128: u16 = 0x17;
+/// `USAGE COMP-5` — native-order binary with full range. `COB_TYPE_NUMERIC_COMP5` (`common.h:676`).
+pub const COB_TYPE_NUMERIC_COMP5: u16 = 0x1B;
 
 // --- Attribute flags --- common.h:690-701
 /// Binary field stored byte-swapped relative to the native host (big-endian on an LE host):
@@ -40,6 +55,9 @@ pub const COB_FLAG_HAVE_SIGN: u16 = 0x0001;
 pub const COB_FLAG_SIGN_SEPARATE: u16 = 0x0002;
 /// `SIGN LEADING` — the sign is at the front, not the back. `COB_FLAG_SIGN_LEADING`.
 pub const COB_FLAG_SIGN_LEADING: u16 = 0x0004;
+/// `USAGE POINTER` / `PROGRAM-POINTER` — the field holds a machine address. `COB_FLAG_IS_POINTER`
+/// (`common.h:697`, `1 << 7`).
+pub const COB_FLAG_IS_POINTER: u16 = 0x0080;
 /// `COMP-6`-style packed with no sign nibble. `COB_FLAG_NO_SIGN_NIBBLE`.
 pub const COB_FLAG_NO_SIGN_NIBBLE: u16 = 0x0100;
 /// `JUSTIFIED RIGHT` — alphanumeric right-justification. `COB_FLAG_JUSTIFIED` (`common.h:694`).
@@ -77,6 +95,21 @@ impl FieldAttr {
     #[inline]
     pub const fn sign_leading(&self) -> bool {
         self.flags & COB_FLAG_SIGN_LEADING != 0
+    }
+    /// `COB_FIELD_IS_NUMERIC (f)` (`common.h:736`): `type & COB_TYPE_NUMERIC`.
+    #[inline]
+    pub const fn is_numeric(&self) -> bool {
+        self.field_type & COB_TYPE_NUMERIC != 0
+    }
+    /// `COB_FIELD_IS_POINTER (f)` (`common.h:711`).
+    #[inline]
+    pub const fn is_pointer(&self) -> bool {
+        self.flags & COB_FLAG_IS_POINTER != 0
+    }
+    /// `COB_FIELD_REAL_BINARY (f)` (`common.h:710`).
+    #[inline]
+    pub const fn real_binary(&self) -> bool {
+        self.flags & COB_FLAG_REAL_BINARY != 0
     }
     /// `COB_FIELD_NO_SIGN_NIBBLE` (`common.h:712`).
     #[inline]

@@ -275,26 +275,9 @@
     {
       "doxygen_functions": 18,
       "file": "termio.c",
-      "missing": [
-        "clean_double",
-        "cob_accept",
-        "cob_display",
-        "cob_dump_field",
-        "cob_dump_field_ext",
-        "cob_dump_file",
-        "cob_dump_output",
-        "cob_init_termio",
-        "display_alnum",
-        "display_alnum_dump",
-        "dump_field_internal",
-        "dump_pending_output",
-        "is_field_display",
-        "pretty_display_numeric",
-        "setup_lvlwrk_and_dump_null_adrs",
-        "setup_varname_with_indices"
-      ],
-      "parity_pct": 11.1,
-      "ported": 2
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 18
     },
     {
       "doxygen_functions": 28,
@@ -889,8 +872,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 21.5,
-    "ported": 215
+    "parity_pct": 23.1,
+    "ported": 231
   },
   "xml_root": "lab/doxygen/out/xml"
 }

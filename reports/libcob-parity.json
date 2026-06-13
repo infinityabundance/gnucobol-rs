@@ -277,27 +277,9 @@
     {
       "file": "termio.c",
       "functions": 18,
-      "missing": [
-        "clean_double",
-        "cob_accept",
-        "cob_display",
-        "cob_display_common",
-        "cob_dump_field",
-        "cob_dump_field_ext",
-        "cob_dump_file",
-        "cob_dump_output",
-        "cob_init_termio",
-        "display_alnum",
-        "display_alnum_dump",
-        "dump_field_internal",
-        "dump_pending_output",
-        "is_field_display",
-        "pretty_display_numeric",
-        "setup_lvlwrk_and_dump_null_adrs",
-        "setup_varname_with_indices"
-      ],
-      "parity_pct": 5.6,
-      "ported": 1
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 18
     },
     {
       "file": "screenio.c",
@@ -1050,7 +1032,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 17.9,
-    "ported": 209
+    "parity_pct": 19.3,
+    "ported": 226
   }
 }
