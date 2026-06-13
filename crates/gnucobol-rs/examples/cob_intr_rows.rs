@@ -253,4 +253,10 @@ fn main() {
     hexln("exstmt", &cob_intr_exception_statement(None));
     hexln("exloc", &cob_intr_exception_location(None));
     hexln("exfile", &cob_intr_exception_file(None));
+    hexln("locdate", &cob_intr_locale_date(0, 0, b"20240229", &disp(8, 0, false), None));
+    hexln("loctime", &cob_intr_locale_time(0, 0, b"123456", &disp(6, 0, false), None));
+    hexln("lcltfs", &cob_intr_lcl_time_from_secs(0, 0, b"43200", &disp(5, 0, false), None));
+    hexln("loccmp_lt", &cob_intr_locale_compare(b"ABC", b"ABD", None));
+    hexln("loccmp_eq", &cob_intr_locale_compare(b"ABC", b"ABC", None));
+    hexln("loccmp_gt", &cob_intr_locale_compare(b"ABD", b"ABC", None));
 }

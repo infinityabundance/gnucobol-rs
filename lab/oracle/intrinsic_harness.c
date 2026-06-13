@@ -270,5 +270,11 @@ int main(int argc, char **argv) {
 	dump("exstmt", cob_intr_exception_statement());
 	dump("exloc", cob_intr_exception_location());
 	dump("exfile", cob_intr_exception_file());
+	{ cob_field f=mkf("20240229",8,DISP,8,0,0); dump("locdate", cob_intr_locale_date(0,0,&f,NULL)); }
+	{ cob_field f=mkf("123456",6,DISP,6,0,0); dump("loctime", cob_intr_locale_time(0,0,&f,NULL)); }
+	{ cob_field f=mkf("43200",5,DISP,5,0,0); dump("lcltfs", cob_intr_lcl_time_from_secs(0,0,&f,NULL)); }
+	{ cob_field a=mkf("ABC",3,ALNUM,0,0,0),b=mkf("ABD",3,ALNUM,0,0,0); dump("loccmp_lt", cob_intr_locale_compare(2,&a,&b)); }
+	{ cob_field a=mkf("ABC",3,ALNUM,0,0,0),b=mkf("ABC",3,ALNUM,0,0,0); dump("loccmp_eq", cob_intr_locale_compare(2,&a,&b)); }
+	{ cob_field a=mkf("ABD",3,ALNUM,0,0,0),b=mkf("ABC",3,ALNUM,0,0,0); dump("loccmp_gt", cob_intr_locale_compare(2,&a,&b)); }
 	return 0;
 }

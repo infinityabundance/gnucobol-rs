@@ -35,10 +35,6 @@
         "cob_init_intrinsic",
         "cob_intr_content_length",
         "cob_intr_content_of",
-        "cob_intr_lcl_time_from_secs",
-        "cob_intr_locale_compare",
-        "cob_intr_locale_date",
-        "cob_intr_locale_time",
         "cob_intr_random",
         "cob_put_indirect_field",
         "cob_switch_value",
@@ -48,7 +44,6 @@
         "get_substituted_size",
         "get_system_offset_time_ptr",
         "int_strncasecmp",
-        "locale_time",
         "numval",
         "setup_cob_log_half",
         "setup_cob_log_ten",
@@ -58,8 +53,8 @@
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 86.6,
-      "ported": 206
+      "parity_pct": 89.1,
+      "ported": 212
     },
     {
       "file": "cconv.c",
@@ -798,7 +793,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 39.4,
-    "ported": 461
+    "parity_pct": 39.9,
+    "ported": 467
   }
 }

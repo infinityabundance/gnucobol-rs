@@ -333,7 +333,7 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 
 use crate::accessors::cob_get_int;
 use crate::int_pow::cob_s32_pow;
-use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE};
+use crate::attr::{COB_TYPE_ALPHANUMERIC_ALL, COB_TYPE_ALPHANUMERIC_EDITED, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DOUBLE, COB_TYPE_NUMERIC_EDITED, COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_L_DOUBLE, COB_TYPE_NUMERIC_PACKED};
 use crate::cob_decimal::{cob_decimal_add, cob_decimal_cmp, cob_decimal_div, cob_decimal_get_field, cob_decimal_get_mpf, cob_decimal_mul, cob_decimal_set_field, cob_decimal_set_mpf, cob_decimal_sub, CobDecimal};
 use crate::mpf::{cob_mpf_acos, cob_mpf_asin, cob_mpf_atan, cob_mpf_cos, cob_mpf_exp, cob_mpf_log, cob_mpf_log10, cob_mpf_sin, cob_mpf_tan, cob_pi, Mpf, COB_MPF_PREC};
 use crate::gmp::Mpz;
@@ -3576,6 +3576,135 @@ pub fn cob_intr_exception_file(state: Option<(&[u8], &[u8])>) -> IntrField {
             (out, ALPHA1)
         }
     }
+}
+
+// ---- locale-formatted date/time (intrinsic.c) --------------------------------------------------
+//
+// These format via the OS LC_TIME / LC_COLLATE. gnucobol-rs reproduces the C/POSIX-locale formats the
+// oracle build uses (D_FMT `%m/%d/%y`, T_FMT `%H:%M:%S`, byte collation); a non-C `locale_field` selects a
+// different OS-locale-DB format/collation — the OS-locale boundary, not modelled. An invalid argument
+// yields a 10-space field (and an argument exception, not part of the result bytes).
+
+/// True for the numeric field types `COB_FIELD_IS_NUMERIC` accepts.
+fn field_is_numeric(attr: &FieldAttr) -> bool {
+    matches!(
+        attr.field_type,
+        COB_TYPE_NUMERIC_DISPLAY | COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED | COB_TYPE_NUMERIC_COMP5 | COB_TYPE_NUMERIC_EDITED
+    )
+}
+
+fn locale_derror() -> IntrField {
+    cob_alloc_set_field_spaces(10)
+}
+
+/// `locale_time (hours, minutes, seconds, locale_field, buff)` (intrinsic.c): the C/POSIX-locale T_FMT
+/// `%H:%M:%S`.
+fn locale_time(hours: i32, minutes: i32, seconds: i32) -> Vec<u8> {
+    format!("{hours:02}:{minutes:02}:{seconds:02}").into_bytes()
+}
+
+/// `cob_intr_locale_date (offset, length, srcfield, locale_field)` (intrinsic.c): `FUNCTION LOCALE-DATE` —
+/// a `YYYYMMDD` rendered per LC_TIME's D_FMT (`mm/dd/yy` in the C locale).
+pub fn cob_intr_locale_date(offset: i32, length: i32, src: &[u8], attr: &FieldAttr, _locale: Option<&[u8]>) -> IntrField {
+    let indate = if field_is_numeric(attr) {
+        cob_get_int(src, attr)
+    } else {
+        if src.len() < 8 {
+            return locale_derror();
+        }
+        let mut v = 0i32;
+        for &b in &src[..8] {
+            if b.is_ascii_digit() {
+                v = v * 10 + (b & 0x0F) as i32;
+            } else {
+                return locale_derror();
+            }
+        }
+        v
+    };
+    let year = indate / 10000;
+    if !valid_year(year) {
+        return locale_derror();
+    }
+    let md = indate % 10000;
+    let month = md / 100;
+    if !valid_month(month) {
+        return locale_derror();
+    }
+    let days = md % 100;
+    if !valid_day_of_month(year, month, days) {
+        return locale_derror();
+    }
+    cob_alloc_set_field_str(format!("{month:02}/{days:02}/{:02}", year % 100).as_bytes(), offset, length)
+}
+
+/// `cob_intr_locale_time (offset, length, srcfield, locale_field)` (intrinsic.c): `FUNCTION LOCALE-TIME` —
+/// an `HHMMSS` rendered per LC_TIME's T_FMT (`hh:mm:ss` in the C locale).
+pub fn cob_intr_locale_time(offset: i32, length: i32, src: &[u8], attr: &FieldAttr, _locale: Option<&[u8]>) -> IntrField {
+    let indate = if field_is_numeric(attr) {
+        cob_get_int(src, attr)
+    } else {
+        if src.len() < 6 {
+            return locale_derror();
+        }
+        let mut v = 0i32;
+        for &b in &src[..6] {
+            if b.is_ascii_digit() {
+                v = v * 10 + (b & 0x0F) as i32;
+            } else {
+                return locale_derror();
+            }
+        }
+        v
+    };
+    let hours = indate / 10000;
+    if !(0..=24).contains(&hours) {
+        return locale_derror();
+    }
+    let minutes = (indate / 100) % 100;
+    if minutes > 59 {
+        return locale_derror();
+    }
+    let seconds = indate % 100;
+    if seconds > 59 {
+        return locale_derror();
+    }
+    cob_alloc_set_field_str(&locale_time(hours, minutes, seconds), offset, length)
+}
+
+/// `cob_intr_lcl_time_from_secs (offset, length, srcfield, locale_field)` (intrinsic.c):
+/// `FUNCTION LOCALE-TIME-FROM-SECONDS` — seconds-since-midnight rendered per LC_TIME's T_FMT.
+pub fn cob_intr_lcl_time_from_secs(offset: i32, length: i32, src: &[u8], attr: &FieldAttr, _locale: Option<&[u8]>) -> IntrField {
+    if !field_is_numeric(attr) {
+        return locale_derror();
+    }
+    let indate = cob_get_int(src, attr);
+    if !valid_time(indate) {
+        return locale_derror();
+    }
+    let hours = indate / 3600;
+    let rem = indate % 3600;
+    cob_alloc_set_field_str(&locale_time(hours, rem / 60, rem % 60), offset, length)
+}
+
+/// `cob_intr_locale_compare (params, ...)` (intrinsic.c): `FUNCTION LOCALE-COMPARE` — `'<'`/`'='`/`'>'` from
+/// the LC_COLLATE comparison of the two (trailing-space-trimmed) operands (byte order in the C locale).
+pub fn cob_intr_locale_compare(f1: &[u8], f2: &[u8], _locale: Option<&[u8]>) -> IntrField {
+    let trim = |f: &[u8]| -> usize {
+        let mut n = f.len();
+        while n > 1 && f[n - 1] == b' ' {
+            n -= 1;
+        }
+        n
+    };
+    let a = &f1[..trim(f1)];
+    let b = &f2[..trim(f2)];
+    let ch = match a.cmp(b) {
+        std::cmp::Ordering::Less => b'<',
+        std::cmp::Ordering::Greater => b'>',
+        std::cmp::Ordering::Equal => b'=',
+    };
+    (vec![ch], ALPHA1)
 }
 
 /// `cob_intr_exception_file_n ()` (intrinsic.c): unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].
