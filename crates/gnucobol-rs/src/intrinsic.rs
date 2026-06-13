@@ -1497,6 +1497,593 @@ pub fn cob_intr_day_of_integer(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     (format!("{:07}", intrinsic_day_of_integer(days as i64)).into_bytes(), attr)
 }
 
+// ---- formatted date/time machinery (intrinsic.c) ------------------------------------------------
+//
+// The day-number basis is 1601-01-01 = 1. These are faithful 1:1 ports of the intrinsic.c date helpers
+// (the project's existing `intrinsic_*` value-logic layer takes packed YYYYMMDD; these take split
+// year/month/day components, exactly as the formatted-date intrinsics need).
+
+const NORMAL_DAYS: [i32; 13] = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
+const LEAP_DAYS: [i32; 13] = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
+
+/// `days_up_to_year (year)` (intrinsic.c): days from the 1601 base up to (not including) `year`.
+fn days_up_to_year(year: i32) -> u32 {
+    let mut totaldays = 0u32;
+    let mut baseyear = 1601;
+    while baseyear != year {
+        totaldays += days_in_year(baseyear) as u32;
+        baseyear += 1;
+    }
+    totaldays
+}
+
+/// `integer_of_date (year, month, days)` (intrinsic.c): the 1601-based day number for a calendar date.
+fn integer_of_date(year: i32, month: i32, days: i32) -> u32 {
+    let mut totaldays = days_up_to_year(year);
+    totaldays += if leap_year(year) { LEAP_DAYS[(month - 1) as usize] } else { NORMAL_DAYS[(month - 1) as usize] } as u32;
+    totaldays + days as u32
+}
+
+/// `integer_of_day (year, days)` (intrinsic.c): the day number for a `YYYY` + day-of-year.
+fn integer_of_day(year: i32, days: i32) -> u32 {
+    days_up_to_year(year) + days as u32
+}
+
+/// `day_of_integer (day_num)` (intrinsic.c): the `(year, day_of_year)` for a 1601-based day number.
+fn day_of_integer(day_num: i32) -> (i32, i32) {
+    let mut leapyear = 365;
+    let mut days = day_num;
+    let mut year = 1601;
+    while days > leapyear {
+        days -= leapyear;
+        year += 1;
+        leapyear = days_in_year(year);
+    }
+    (year, days)
+}
+
+/// `get_day_of_week (day_num)` (intrinsic.c): 0 (Monday) .. 6 (Sunday) for a day number.
+fn get_day_of_week(day_num: i32) -> i32 {
+    (day_num - 1) % 7
+}
+
+/// `get_iso_week_one (day_num, day_of_year)` (intrinsic.c): day number of the Monday of ISO week 1.
+fn get_iso_week_one(day_num: i32, day_of_year: i32) -> i32 {
+    let jan_4 = day_num - day_of_year + 4;
+    let day_of_week = get_day_of_week(jan_4);
+    jan_4 - day_of_week
+}
+
+/// `get_iso_week (day_num)` (intrinsic.c): the `(iso_year, iso_week)` for a day number.
+fn get_iso_week(day_num: i32) -> (i32, i32) {
+    let (mut year, day_of_year) = day_of_integer(day_num);
+    let days_to_dec_29 = days_in_year(year) - 2;
+    let dec_29 = day_num - day_of_year + days_to_dec_29;
+    let week_one;
+    if day_num >= dec_29 {
+        let mut w1 = get_iso_week_one(day_num + days_in_year(year), day_of_year);
+        if day_num < w1 {
+            w1 = get_iso_week_one(day_num, day_of_year);
+        } else {
+            year += 1;
+        }
+        week_one = w1;
+    } else {
+        let mut w1 = get_iso_week_one(day_num, day_of_year);
+        if day_num < w1 {
+            year -= 1;
+            w1 = get_iso_week_one(day_num - day_of_year, days_in_year(year));
+        }
+        week_one = w1;
+    }
+    (year, (day_num - week_one) / 7 + 1)
+}
+
+/// `max_week (year)` (intrinsic.c): the highest ISO week number (52 or 53) in `year`.
+fn max_week(year: i32) -> i32 {
+    let first_day = integer_of_date(year, 1, 1) as i32;
+    let last_day = first_day + days_in_year(year) - 1;
+    get_iso_week(last_day).1
+}
+
+/// `date[offset]` with C null-terminated-string semantics: out-of-bounds reads the `'\0'` terminator.
+fn date_at(d: &[u8], off: i32) -> u8 {
+    if off >= 0 && (off as usize) < d.len() {
+        d[off as usize]
+    } else {
+        0
+    }
+}
+
+/// `test_char_cond (cond, offset)` (intrinsic.c): advance on success (return 0), else return `offset+1`.
+fn test_char_cond(cond: bool, offset: &mut i32) -> i32 {
+    if cond {
+        *offset += 1;
+        0
+    } else {
+        *offset + 1
+    }
+}
+
+/// `test_char (wanted, str, offset)` (intrinsic.c).
+fn test_char(wanted: u8, d: &[u8], offset: &mut i32) -> i32 {
+    test_char_cond(wanted == date_at(d, *offset), offset)
+}
+
+/// `test_char_in_range (min, max, ch, offset)` (intrinsic.c).
+fn test_char_in_range(min: u8, max: u8, ch: u8, offset: &mut i32) -> i32 {
+    test_char_cond(min <= ch && ch <= max, offset)
+}
+
+/// `test_digit (ch, offset)` (intrinsic.c): a `'0'..'9'` range check (locale-independent).
+fn test_digit(ch: u8, offset: &mut i32) -> i32 {
+    test_char_in_range(b'0', b'9', ch, offset)
+}
+
+macro_rules! return_if_not_zero {
+    ($e:expr) => {{
+        let r = $e;
+        if r != 0 {
+            return r;
+        }
+    }};
+}
+
+/// `test_millenium (date, offset, state)` (intrinsic.c): the thousands digit (`1..9`).
+fn test_millenium(d: &[u8], offset: &mut i32, state: &mut i32) -> i32 {
+    return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
+    *state = (date_at(d, *offset - 1) & 0x0F) as i32;
+    0
+}
+
+/// `test_century (date, offset, state)` (intrinsic.c): hundreds digit (`6..9` when millennium is 1).
+fn test_century(d: &[u8], offset: &mut i32, state: &mut i32) -> i32 {
+    if *state != 1 {
+        return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    } else {
+        return_if_not_zero!(test_char_in_range(b'6', b'9', date_at(d, *offset), offset));
+    }
+    *state = *state * 10 + (date_at(d, *offset - 1) & 0x0F) as i32;
+    0
+}
+
+/// `test_decade (date, offset, state)` (intrinsic.c): tens digit.
+fn test_decade(d: &[u8], offset: &mut i32, state: &mut i32) -> i32 {
+    return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    *state = *state * 10 + (date_at(d, *offset - 1) & 0x0F) as i32;
+    0
+}
+
+/// `test_unit_year (date, offset, state)` (intrinsic.c): units digit (`1..9` when the year is 1600).
+fn test_unit_year(d: &[u8], offset: &mut i32, state: &mut i32) -> i32 {
+    if *state != 160 {
+        return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    } else {
+        return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
+    }
+    *state = *state * 10 + (date_at(d, *offset - 1) & 0x0F) as i32;
+    0
+}
+
+/// `test_year (date, offset, state)` (intrinsic.c): the four `YYYY` digits, accumulating the year.
+fn test_year(d: &[u8], offset: &mut i32, state: &mut i32) -> i32 {
+    return_if_not_zero!(test_millenium(d, offset, state));
+    return_if_not_zero!(test_century(d, offset, state));
+    return_if_not_zero!(test_decade(d, offset, state));
+    return_if_not_zero!(test_unit_year(d, offset, state));
+    0
+}
+
+/// `test_hyphen_presence (with_hyphens, date, offset)` (intrinsic.c).
+fn test_hyphen_presence(with_hyphens: bool, d: &[u8], offset: &mut i32) -> i32 {
+    if with_hyphens {
+        test_char(b'-', d, offset)
+    } else {
+        0
+    }
+}
+
+/// `test_month (date, offset, month)` (intrinsic.c): the two `MM` digits (`01..12`).
+fn test_month(d: &[u8], offset: &mut i32, month: &mut i32) -> i32 {
+    return_if_not_zero!(test_char_cond(date_at(d, *offset) == b'0' || date_at(d, *offset) == b'1', offset));
+    let first_digit = (date_at(d, *offset - 1) & 0x0F) as i32;
+    if first_digit == 0 {
+        return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
+    } else {
+        return_if_not_zero!(test_char_in_range(b'0', b'2', date_at(d, *offset), offset));
+    }
+    *month = first_digit * 10 + (date_at(d, *offset - 1) & 0x0F) as i32;
+    0
+}
+
+/// `test_day_of_month (date, year, month, offset)` (intrinsic.c): `DD` bounded by the month length.
+fn test_day_of_month(d: &[u8], year: i32, month: i32, offset: &mut i32) -> i32 {
+    let days_in_month = if leap_year(year) { LEAP_MONTH_DAYS[month as usize] } else { NORMAL_MONTH_DAYS[month as usize] };
+    let max_first_digit = b'0' + (days_in_month / 10) as u8;
+    let max_second_digit = b'0' + (days_in_month % 10) as u8;
+    return_if_not_zero!(test_char_in_range(b'0', max_first_digit, date_at(d, *offset), offset));
+    let first_digit = date_at(d, *offset - 1);
+    if first_digit == b'0' {
+        return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
+    } else if first_digit != max_first_digit {
+        return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    } else {
+        return_if_not_zero!(test_char_in_range(b'0', max_second_digit, date_at(d, *offset), offset));
+    }
+    0
+}
+
+/// `test_day_of_year (date, year, offset)` (intrinsic.c): the three `DDD` digits (`001..365/366`).
+fn test_day_of_year(d: &[u8], year: i32, offset: &mut i32) -> i32 {
+    return_if_not_zero!(test_char_in_range(b'0', b'3', date_at(d, *offset), offset));
+    let mut state = (date_at(d, *offset - 1) & 0x0F) as i32;
+    if state != 3 {
+        return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    } else {
+        return_if_not_zero!(test_char_in_range(b'0', b'6', date_at(d, *offset), offset));
+    }
+    state = state * 10 + (date_at(d, *offset - 1) & 0x0F) as i32;
+    if state == 0 {
+        return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
+    } else if state != 36 {
+        return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    } else {
+        let max_last_digit = if leap_year(year) { b'6' } else { b'5' };
+        return_if_not_zero!(test_char_in_range(b'0', max_last_digit, date_at(d, *offset), offset));
+    }
+    0
+}
+
+/// `test_w_presence (date, offset)` (intrinsic.c): the literal `'W'` of a week date.
+fn test_w_presence(d: &[u8], offset: &mut i32) -> i32 {
+    test_char(b'W', d, offset)
+}
+
+/// `test_week (date, year, offset)` (intrinsic.c): the two `ww` digits bounded by `max_week(year)`.
+fn test_week(d: &[u8], year: i32, offset: &mut i32) -> i32 {
+    return_if_not_zero!(test_char_in_range(b'0', b'5', date_at(d, *offset), offset));
+    let first_digit = (date_at(d, *offset - 1) & 0x0F) as i32;
+    if first_digit == 0 {
+        return_if_not_zero!(test_char_in_range(b'1', b'9', date_at(d, *offset), offset));
+    } else if first_digit != 5 {
+        return_if_not_zero!(test_digit(date_at(d, *offset), offset));
+    } else {
+        let max_last_digit = if max_week(year) == 53 { b'3' } else { b'2' };
+        return_if_not_zero!(test_char_in_range(b'0', max_last_digit, date_at(d, *offset), offset));
+    }
+    0
+}
+
+/// `test_day_of_week (date, offset)` (intrinsic.c): the single `d` digit (`1..7`).
+fn test_day_of_week(d: &[u8], offset: &mut i32) -> i32 {
+    test_char_in_range(b'1', b'7', date_at(d, *offset), offset)
+}
+
+/// `test_date_end (format, date, year, offset)` (intrinsic.c): the part after `YYYY` per the format kind.
+fn test_date_end(format: DateFormat, d: &[u8], year: i32, offset: &mut i32) -> i32 {
+    match format.days {
+        DaysFormat::Mmdd => {
+            let mut month = 0;
+            return_if_not_zero!(test_month(d, offset, &mut month));
+            return_if_not_zero!(test_hyphen_presence(format.with_hyphens, d, offset));
+            return_if_not_zero!(test_day_of_month(d, year, month, offset));
+        }
+        DaysFormat::Ddd => {
+            return_if_not_zero!(test_day_of_year(d, year, offset));
+        }
+        DaysFormat::Wwwd => {
+            return_if_not_zero!(test_w_presence(d, offset));
+            return_if_not_zero!(test_week(d, year, offset));
+            return_if_not_zero!(test_hyphen_presence(format.with_hyphens, d, offset));
+            return_if_not_zero!(test_day_of_week(d, offset));
+        }
+    }
+    0
+}
+
+/// `test_no_trailing_junk (str, offset, end_of_string)` (intrinsic.c): trailing spaces ok at end-of-string.
+fn test_no_trailing_junk(d: &[u8], mut offset: i32, end_of_string: bool) -> i32 {
+    if end_of_string {
+        while date_at(d, offset) != 0 {
+            if date_at(d, offset) != b' ' {
+                return offset + 1;
+            }
+            offset += 1;
+        }
+        0
+    } else if date_at(d, offset) == 0 {
+        0
+    } else {
+        offset + 1
+    }
+}
+
+/// `test_formatted_date (format, date, end_of_string)` (intrinsic.c): 0 if `date` matches `format`, else
+/// the 1-based position of the first offending character.
+fn test_formatted_date(format: DateFormat, d: &[u8], end_of_string: bool) -> i32 {
+    let mut offset = 0;
+    let mut year = 0;
+    return_if_not_zero!(test_year(d, &mut offset, &mut year));
+    return_if_not_zero!(test_hyphen_presence(format.with_hyphens, d, &mut offset));
+    return_if_not_zero!(test_date_end(format, d, year, &mut offset));
+    return_if_not_zero!(test_no_trailing_junk(d, offset, end_of_string));
+    0
+}
+
+/// The three calendar-date layouts (`enum days_format` in intrinsic.c).
+#[derive(Clone, Copy, PartialEq)]
+enum DaysFormat {
+    Mmdd,
+    Ddd,
+    Wwwd,
+}
+
+/// `struct date_format` (intrinsic.c).
+#[derive(Clone, Copy)]
+struct DateFormat {
+    days: DaysFormat,
+    with_hyphens: bool,
+}
+
+/// `enum formatted_time_extra` (intrinsic.c).
+#[derive(Clone, Copy, PartialEq)]
+enum TimeExtra {
+    None,
+    Z,
+    OffsetTime,
+}
+
+/// `struct time_format` (intrinsic.c).
+#[derive(Clone, Copy)]
+struct TimeFormat {
+    with_colons: bool,
+    decimal_places: usize,
+    extra: TimeExtra,
+}
+
+/// `cob_valid_date_format (format)` (intrinsic.c): one of the six accepted date format strings.
+fn cob_valid_date_format(format: &[u8]) -> bool {
+    matches!(
+        format,
+        b"YYYYMMDD" | b"YYYY-MM-DD" | b"YYYYDDD" | b"YYYY-DDD" | b"YYYYWwwD" | b"YYYY-Www-D"
+    )
+}
+
+/// `parse_date_format_string (format_str)` (intrinsic.c).
+fn parse_date_format_string(format: &[u8]) -> DateFormat {
+    let days = if format == b"YYYYMMDD" || format == b"YYYY-MM-DD" {
+        DaysFormat::Mmdd
+    } else if format == b"YYYYDDD" || format == b"YYYY-DDD" {
+        DaysFormat::Ddd
+    } else {
+        DaysFormat::Wwwd
+    };
+    DateFormat { days, with_hyphens: format.get(4) == Some(&b'-') }
+}
+
+/// `decimal_places_for_seconds (str, point_pos)` (intrinsic.c): count of `'s'` after the decimal point.
+fn decimal_places_for_seconds(s: &[u8], point_pos: usize) -> usize {
+    let mut offset = point_pos;
+    let mut decimal_places = 0;
+    loop {
+        offset += 1;
+        if s.get(offset) == Some(&b's') {
+            decimal_places += 1;
+        } else {
+            break;
+        }
+    }
+    decimal_places
+}
+
+/// `rest_is_z (str)` (intrinsic.c): the remainder is the zone marker `"Z"`.
+fn rest_is_z(s: &[u8]) -> bool {
+    s == b"Z"
+}
+
+/// `rest_is_offset_format (str, with_colon)` (intrinsic.c): the remainder is a `+hh[:]mm` offset.
+fn rest_is_offset_format(s: &[u8], with_colon: bool) -> bool {
+    if with_colon {
+        s == b"+hh:mm"
+    } else {
+        s == b"+hhmm"
+    }
+}
+
+/// `cob_valid_time_format (format, decimal_point)` (intrinsic.c).
+fn cob_valid_time_format(format: &[u8], decimal_point: u8) -> bool {
+    let with_colons;
+    let mut format_offset;
+    if format.starts_with(b"hhmmss") {
+        with_colons = false;
+        format_offset = 6;
+    } else if format.starts_with(b"hh:mm:ss") {
+        with_colons = true;
+        format_offset = 8;
+    } else {
+        return false;
+    }
+    if format.get(format_offset) == Some(&decimal_point) {
+        let decimal_places = decimal_places_for_seconds(format, format_offset);
+        format_offset += decimal_places + 1;
+        if decimal_places == 0 || decimal_places > 9 {
+            return false;
+        }
+    }
+    if format.len() > format_offset {
+        let rest = &format[format_offset..];
+        if !rest_is_z(rest) && !rest_is_offset_format(rest, with_colons) {
+            return false;
+        }
+    }
+    true
+}
+
+/// `parse_time_format_string (str)` (intrinsic.c).
+fn parse_time_format_string(s: &[u8]) -> TimeFormat {
+    let with_colons;
+    let mut offset;
+    if s.starts_with(b"hhmmss") {
+        with_colons = false;
+        offset = 6;
+    } else {
+        with_colons = true;
+        offset = 8;
+    }
+    let decimal_places = if s.get(offset) == Some(&b'.') || s.get(offset) == Some(&b',') {
+        let dp = decimal_places_for_seconds(s, offset);
+        offset += dp + 1;
+        dp
+    } else {
+        0
+    };
+    let extra = if s.len() > offset {
+        if rest_is_z(&s[offset..]) {
+            TimeExtra::Z
+        } else {
+            TimeExtra::OffsetTime
+        }
+    } else {
+        TimeExtra::None
+    };
+    TimeFormat { with_colons, decimal_places, extra }
+}
+
+/// `split_around_t (str, first, second)` (intrinsic.c): split `<date>T<time>` around the `'T'`, capping the
+/// date at 10 and time at 25 chars. Returns `(date_part, time_part, overflow_indicator)`.
+fn split_around_t(s: &[u8]) -> (Vec<u8>, Vec<u8>, i32) {
+    const COB_DATESTR_MAX: usize = 10;
+    const COB_TIMESTR_MAX: usize = 25;
+    let mut ret = 0i32;
+    let i = s.iter().position(|&c| c == b'T').unwrap_or(s.len());
+    let first_length = if i > COB_DATESTR_MAX {
+        ret = (COB_DATESTR_MAX + 1) as i32;
+        COB_DATESTR_MAX
+    } else {
+        i
+    };
+    let first = s[..first_length].to_vec();
+    let mut second = Vec::new();
+    if i < s.len() {
+        let rest = &s[i + 1..];
+        let mut second_length = rest.len();
+        if second_length != 0 {
+            if second_length > COB_TIMESTR_MAX {
+                second_length = COB_TIMESTR_MAX;
+                ret = (COB_TIMESTR_MAX + 1 + i) as i32;
+            }
+            second = rest[..second_length].to_vec();
+        }
+    }
+    (first, second, ret)
+}
+
+/// `cob_valid_datetime_format (format, decimal_point)` (intrinsic.c): a valid `<date>T<time>` whose date
+/// and time agree on the separator style (hyphens iff colons).
+fn cob_valid_datetime_format(format: &[u8], decimal_point: u8) -> bool {
+    let (date_str, time_str, ret) = split_around_t(format);
+    if ret != 0 {
+        return false;
+    }
+    if !cob_valid_date_format(&date_str) || !cob_valid_time_format(&time_str, decimal_point) {
+        return false;
+    }
+    let date_format = parse_date_format_string(&date_str);
+    let time_format = parse_time_format_string(&time_str);
+    date_format.with_hyphens == time_format.with_colons
+}
+
+/// Read up to `max` ASCII digits starting at `start` (the `sscanf("%Nd")` the intrinsics use on already
+/// validated date strings).
+fn scan_uint(s: &[u8], start: usize, max: usize) -> i32 {
+    let mut v = 0i32;
+    let mut k = 0;
+    while k < max {
+        match s.get(start + k) {
+            Some(c) if c.is_ascii_digit() => {
+                v = v * 10 + (c - b'0') as i32;
+                k += 1;
+            }
+            _ => break,
+        }
+    }
+    v
+}
+
+/// `integer_of_mmdd (format, year, final_part)` (intrinsic.c): `YYYYMMDD` → day number.
+fn integer_of_mmdd(format: DateFormat, year: i32, final_part: &[u8]) -> u32 {
+    let month = scan_uint(final_part, 0, 2);
+    let day_start = if format.with_hyphens { 3 } else { 2 };
+    let day = scan_uint(final_part, day_start, 2);
+    integer_of_date(year, month, day)
+}
+
+/// `integer_of_ddd (year, final_part)` (intrinsic.c): `YYYYDDD` → day number.
+fn integer_of_ddd(year: i32, final_part: &[u8]) -> u32 {
+    integer_of_day(year, scan_uint(final_part, 0, 3))
+}
+
+/// `integer_of_wwwd (format, year, final_part)` (intrinsic.c): ISO `YYYYWwwD` → day number.
+fn integer_of_wwwd(format: DateFormat, year: i32, final_part: &[u8]) -> u32 {
+    let first_week_monday = get_iso_week_one((days_up_to_year(year) + 1) as i32, 1);
+    let week = scan_uint(final_part, 1, 2);
+    let dow_idx = if format.with_hyphens { 4 } else { 3 };
+    let day_of_week = (date_at(final_part, dow_idx) - b'0') as i32;
+    (first_week_monday + (week - 1) * 7 + day_of_week - 1) as u32
+}
+
+/// `integer_of_formatted_date (format, formatted_date)` (intrinsic.c): parse a validated formatted date to
+/// its 1601-based day number.
+fn integer_of_formatted_date(format: DateFormat, formatted_date: &[u8]) -> u32 {
+    let year = scan_uint(formatted_date, 0, 4);
+    let final_part_start = 4 + format.with_hyphens as usize;
+    let final_part = &formatted_date[final_part_start.min(formatted_date.len())..];
+    match format.days {
+        DaysFormat::Mmdd => integer_of_mmdd(format, year, final_part),
+        DaysFormat::Ddd => integer_of_ddd(year, final_part),
+        DaysFormat::Wwwd => integer_of_wwwd(format, year, final_part),
+    }
+}
+
+/// `num_leading_nonspace (str, str_len)` (intrinsic.c): characters before the first whitespace.
+fn num_leading_nonspace(s: &[u8]) -> usize {
+    s.iter()
+        .position(|&c| matches!(c, b' ' | b'\t' | b'\n' | 0x0b | 0x0c | b'\r'))
+        .unwrap_or(s.len())
+}
+
+/// `copy_data_to_null_terminated_str (f, out, max)` (intrinsic.c): the field text up to the first
+/// whitespace, capped at `max`.
+fn copy_data_to_null_terminated_str(f: &[u8], max: usize) -> Vec<u8> {
+    let length = num_leading_nonspace(f).min(max);
+    f[..length].to_vec()
+}
+
+/// `cob_intr_integer_of_formatted_date (format_field, date_field)` (intrinsic.c):
+/// `FUNCTION INTEGER-OF-FORMATTED-DATE(format, date)` — the 1601-based day number for a date (or the date
+/// part of a datetime) given its format string; an invalid format or date yields 0.
+pub fn cob_intr_integer_of_formatted_date(fmt: &[u8], date: &[u8]) -> IntrField {
+    const COB_DATETIMESTR_MAX: usize = 36;
+    let original_format = copy_data_to_null_terminated_str(fmt, COB_DATETIMESTR_MAX);
+    let original_date = copy_data_to_null_terminated_str(date, COB_DATETIMESTR_MAX);
+
+    let is_date = cob_valid_date_format(&original_format);
+    let format_str: Vec<u8> = if is_date {
+        original_format.clone()
+    } else if cob_valid_datetime_format(&original_format, b'.') {
+        split_around_t(&original_format).0
+    } else {
+        return cob_alloc_set_field_uint(0);
+    };
+    let date_fmt = parse_date_format_string(&format_str);
+
+    let date_str: Vec<u8> = if is_date { original_date.clone() } else { split_around_t(&original_date).0 };
+    if test_formatted_date(date_fmt, &date_str, true) != 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    cob_alloc_set_field_uint(integer_of_formatted_date(date_fmt, &date_str))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

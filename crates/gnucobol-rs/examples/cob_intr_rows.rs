@@ -117,4 +117,13 @@ fn main() {
     hexln("nvf_neg", &cob_intr_test_numval_f(b"-12.34"));
     hexln("nvf_dd", &cob_intr_test_numval_f(b"1.2.3"));
     hexln("nvf_ee", &cob_intr_test_numval_f(b"1E+"));
+    hexln("iofd_ymd", &cob_intr_integer_of_formatted_date(b"YYYYMMDD", b"20240229"));
+    hexln("iofd_ymdh", &cob_intr_integer_of_formatted_date(b"YYYY-MM-DD", b"2024-02-29"));
+    hexln("iofd_ddd", &cob_intr_integer_of_formatted_date(b"YYYYDDD", b"2024060"));
+    hexln("iofd_www", &cob_intr_integer_of_formatted_date(b"YYYYWwwD", b"2024W092"));
+    hexln("iofd_wwwh", &cob_intr_integer_of_formatted_date(b"YYYY-Www-D", b"2024-W09-2"));
+    hexln("iofd_dt", &cob_intr_integer_of_formatted_date(b"YYYY-MM-DDThh:mm:ss", b"2024-02-29T12:00:00"));
+    hexln("iofd_bad", &cob_intr_integer_of_formatted_date(b"YYYYMMDD", b"20240230"));
+    hexln("iofd_badf", &cob_intr_integer_of_formatted_date(b"ZZZZ", b"x"));
+    hexln("iofd_base", &cob_intr_integer_of_formatted_date(b"YYYYMMDD", b"16010101"));
 }

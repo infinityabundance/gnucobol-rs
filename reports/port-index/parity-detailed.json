@@ -1220,11 +1220,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 76,
+    "active_ported": 118,
     "compiled": 238,
-    "compiled_parity_pct": 31.9,
+    "compiled_parity_pct": 49.6,
     "disabled": 0,
-    "doc_only": 5,
+    "doc_only": 4,
     "file": "intrinsic.c",
     "fns": [
       {
@@ -1475,7 +1475,8 @@
       {
         "function": "max_week",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "valid_time",
@@ -1501,22 +1502,26 @@
       {
         "function": "day_of_integer",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "days_up_to_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "integer_of_date",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "integer_of_day",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "seconds_from_formatted_time",
@@ -1531,7 +1536,8 @@
       {
         "function": "num_leading_nonspace",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_as_yyyymmdd",
@@ -1546,17 +1552,20 @@
       {
         "function": "get_day_of_week",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_iso_week_one",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_iso_week",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_as_yyyywwwd",
@@ -1566,7 +1575,8 @@
       {
         "function": "parse_date_format_string",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_date",
@@ -1581,17 +1591,20 @@
       {
         "function": "decimal_places_for_seconds",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "rest_is_z",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "rest_is_offset_format",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "add_decimal_digits",
@@ -1611,7 +1624,8 @@
       {
         "function": "parse_time_format_string",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_time",
@@ -1621,12 +1635,14 @@
       {
         "function": "copy_data_to_null_terminated_str",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "split_around_t",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "try_get_valid_offset_time",
@@ -1641,92 +1657,110 @@
       {
         "function": "test_char_cond",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_char",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_char_in_range",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_digit",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_century",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_decade",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_unit_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_hyphen_presence",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_month",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_day_of_month",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_day_of_year",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_w_presence",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_week",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_day_of_week",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_date_end",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_no_trailing_junk",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_formatted_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_less_than_60",
@@ -1786,22 +1820,26 @@
       {
         "function": "integer_of_mmdd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "integer_of_ddd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "integer_of_wwwd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "integer_of_formatted_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "format_datetime",
@@ -1853,17 +1891,20 @@
       {
         "function": "cob_valid_date_format",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_valid_time_format",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_valid_datetime_format",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_binop",
@@ -2424,7 +2465,8 @@
       {
         "function": "cob_intr_integer_of_formatted_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_formatted_current_date",
@@ -2534,7 +2576,6 @@
       "cob_intr_formatted_date",
       "cob_intr_formatted_datetime",
       "cob_intr_formatted_time",
-      "cob_intr_integer_of_formatted_date",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
       "cob_intr_locale_date",
@@ -2574,15 +2615,8 @@
       "cob_mpf_tan",
       "cob_put_indirect_field",
       "cob_switch_value",
-      "cob_valid_date_format",
-      "cob_valid_datetime_format",
-      "cob_valid_time_format",
       "comp_field",
-      "copy_data_to_null_terminated_str",
       "date_of_integer",
-      "day_of_integer",
-      "days_up_to_year",
-      "decimal_places_for_seconds",
       "format_as_yyyyddd",
       "format_as_yyyymmdd",
       "format_as_yyyywwwd",
@@ -2590,67 +2624,33 @@
       "format_date",
       "format_datetime",
       "format_time",
-      "get_day_of_week",
       "get_fractional_seconds",
       "get_interval_and_current_year_from_args",
-      "get_iso_week",
-      "get_iso_week_one",
       "get_min_and_max_of_args",
       "get_seconds_past_midnight",
       "get_substituted_size",
       "get_system_offset_time_ptr",
       "int_strncasecmp",
-      "integer_of_date",
-      "integer_of_day",
-      "integer_of_ddd",
-      "integer_of_formatted_date",
-      "integer_of_mmdd",
-      "integer_of_wwwd",
       "locale_time",
-      "max_week",
-      "num_leading_nonspace",
       "numval",
-      "parse_date_format_string",
-      "parse_time_format_string",
-      "rest_is_offset_format",
-      "rest_is_z",
       "seconds_from_formatted_time",
       "setup_cob_log_half",
       "setup_cob_log_ten",
       "setup_cob_pi",
       "setup_cob_sqrt_two",
       "space_left",
-      "split_around_t",
       "substitute",
       "substitute_matches",
-      "test_century",
-      "test_char",
-      "test_char_cond",
-      "test_char_in_range",
       "test_colon_presence",
-      "test_date_end",
-      "test_day_of_month",
-      "test_day_of_week",
-      "test_day_of_year",
-      "test_decade",
       "test_decimal_places",
-      "test_digit",
-      "test_formatted_date",
       "test_formatted_time",
       "test_hour",
-      "test_hyphen_presence",
       "test_less_than_60",
       "test_minute",
-      "test_month",
-      "test_no_trailing_junk",
       "test_offset_time",
       "test_second",
       "test_time_end",
       "test_two_zeroes",
-      "test_unit_year",
-      "test_w_presence",
-      "test_week",
-      "test_year",
       "test_z_presence",
       "try_get_valid_offset_time",
       "valid_day_and_format",
@@ -2658,7 +2658,7 @@
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 157,
+    "missing": 116,
     "source_funcs": 238,
     "test_only": 0
   },
@@ -2859,7 +2859,7 @@
     "compiled": 116,
     "compiled_parity_pct": 0.0,
     "disabled": 0,
-    "doc_only": 0,
+    "doc_only": 1,
     "file": "screenio.c",
     "fns": [
       {
@@ -3105,7 +3105,7 @@
       {
         "function": "format_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "finalize_field_input",
@@ -3551,7 +3551,7 @@
       "valid_field_data"
     ],
     "inactive_mirrors": 0,
-    "missing": 116,
+    "missing": 115,
     "source_funcs": 116,
     "test_only": 0
   },
