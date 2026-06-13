@@ -331,7 +331,7 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
 
 // ---- numeric-result cob_intr_* (over the sealed CobDecimal layer) -------------------------------
 
-use crate::cob_decimal::{cob_decimal_get_field, cob_decimal_set_field, CobDecimal};
+use crate::cob_decimal::{cob_decimal_div, cob_decimal_get_field, cob_decimal_mul, cob_decimal_set_field, cob_decimal_sub, CobDecimal};
 use crate::gmp::Mpz;
 
 /// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
@@ -422,6 +422,71 @@ pub fn cob_intr_integer_part(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     }
     d.scale = 0;
     intr_decimal_result(d)
+}
+
+/// Build a `CobDecimal` from a parsed [`Numval`] (`value = signed scaled * 10^(-scale)`).
+fn numval_to_decimal(nv: &Numval) -> CobDecimal {
+    let mut value = Mpz::from_u128(nv.scaled);
+    if nv.negative {
+        value.neg();
+    }
+    CobDecimal { value, scale: nv.scale as i32 }
+}
+
+/// `cob_intr_numval (srcfield)` (intrinsic.c): `FUNCTION NUMVAL(s)` — parse the field's text to a numeric
+/// result field (wraps the sealed `intrinsic_numval`).
+pub fn cob_intr_numval(src: &[u8]) -> IntrField {
+    let s = String::from_utf8_lossy(src);
+    intr_decimal_result(numval_to_decimal(&intrinsic_numval(&s)))
+}
+
+/// `cob_intr_numval_c (srcfield, currency)` (intrinsic.c): `FUNCTION NUMVAL-C(s)` — like
+/// [`cob_intr_numval`] after stripping the default currency symbol + thousands commas.
+pub fn cob_intr_numval_c(src: &[u8]) -> IntrField {
+    let s = String::from_utf8_lossy(src);
+    intr_decimal_result(numval_to_decimal(&intrinsic_numval_c(&s)))
+}
+
+/// `cob_mod_or_rem (f1, f2, func_is_rem)` (intrinsic.c): the shared `MOD`/`REM` core —
+/// `f1 - q*f2` where `q` is `floor(f1/f2)` (MOD) or `trunc(f1/f2)` (REM). A zero divisor yields `0`.
+pub fn cob_mod_or_rem(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, func_is_rem: bool) -> IntrField {
+    let mut q = cob_decimal_set_field(f1, a1);
+    let d3 = cob_decimal_set_field(f2, a2);
+    if d3.value.sgn() == 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    let _ = cob_decimal_div(&mut q, &d3); // q = f1 / f2
+    if q.scale < 0 {
+        q.value = q.value.mul(&Mpz::ui_pow_ui(10, (-q.scale) as u32));
+    } else if q.scale > 0 {
+        let p = Mpz::ui_pow_ui(10, q.scale as u32);
+        if func_is_rem {
+            q.value = q.value.tdiv_q(&p); // REM uses INTEGER-PART (truncate)
+        } else {
+            let sign = q.value.sgn();
+            let (quo, r) = q.value.tdiv_qr(&p); // MOD uses INTEGER (floor)
+            q.value = quo;
+            if sign == -1 && r.sgn() != 0 {
+                q.value = q.value.sub_ui(1);
+            }
+        }
+    }
+    q.scale = 0;
+    let f2dec = cob_decimal_set_field(f2, a2);
+    cob_decimal_mul(&mut q, &f2dec); // q = q * f2
+    let mut result = cob_decimal_set_field(f1, a1);
+    cob_decimal_sub(&mut result, &q); // result = f1 - q*f2
+    intr_decimal_result(result)
+}
+
+/// `cob_intr_mod (f1, f2)` (intrinsic.c): `FUNCTION MOD(a, b)` — remainder with the **divisor** sign.
+pub fn cob_intr_mod(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr) -> IntrField {
+    cob_mod_or_rem(f1, a1, f2, a2, false)
+}
+
+/// `cob_intr_rem (f1, f2)` (intrinsic.c): `FUNCTION REM(a, b)` — remainder with the **dividend** sign.
+pub fn cob_intr_rem(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr) -> IntrField {
+    cob_mod_or_rem(f1, a1, f2, a2, true)
 }
 
 // ---- date validators (intrinsic.c) + the date-conversion cob_intr_* wrappers -------------------

@@ -47,4 +47,11 @@ fn main() {
     hexln("doi", &cob_intr_date_of_integer(b"00154794", &disp(8, 0, false)));
     hexln("ioday", &cob_intr_integer_of_day(b"2024060", &disp(7, 0, false)));
     hexln("doiy", &cob_intr_day_of_integer(b"00154794", &disp(8, 0, false)));
+    hexln("numval", &cob_intr_numval(b"-12.34  "));
+    hexln("numvalc", &cob_intr_numval_c(b"$1,234.56"));
+    let s3 = disp(3, 0, true);
+    hexln("mod_p", &cob_intr_mod(b"017", &s3, b"005", &s3));
+    hexln("mod_n", &cob_intr_mod(b"01w", &s3, b"005", &s3));
+    hexln("rem_p", &cob_intr_rem(b"017", &s3, b"005", &s3));
+    hexln("rem_n", &cob_intr_rem(b"01w", &s3, b"005", &s3));
 }

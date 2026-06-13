@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 28,
+    "active_ported": 33,
     "compiled": 238,
-    "compiled_parity_pct": 11.8,
+    "compiled_parity_pct": 13.9,
     "disabled": 0,
     "doc_only": 3,
     "file": "intrinsic.c",
@@ -1296,7 +1296,8 @@
       {
         "function": "cob_mod_or_rem",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_numval_f",
@@ -2163,12 +2164,14 @@
       {
         "function": "cob_intr_numval",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_numval_c",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_numval_f",
@@ -2223,7 +2226,8 @@
       {
         "function": "cob_intr_mod",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_range",
@@ -2233,7 +2237,8 @@
       {
         "function": "cob_intr_rem",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_random",
@@ -2515,7 +2520,6 @@
       "cob_intr_median",
       "cob_intr_midrange",
       "cob_intr_min",
-      "cob_intr_mod",
       "cob_intr_module_caller_id",
       "cob_intr_module_date",
       "cob_intr_module_formatted_date",
@@ -2528,8 +2532,6 @@
       "cob_intr_national_of",
       "cob_intr_num_decimal_point",
       "cob_intr_num_thousands_sep",
-      "cob_intr_numval",
-      "cob_intr_numval_c",
       "cob_intr_numval_f",
       "cob_intr_ord_max",
       "cob_intr_ord_min",
@@ -2537,7 +2539,6 @@
       "cob_intr_present_value",
       "cob_intr_random",
       "cob_intr_range",
-      "cob_intr_rem",
       "cob_intr_seconds_from_formatted_time",
       "cob_intr_seconds_past_midnight",
       "cob_intr_sin",
@@ -2559,7 +2560,6 @@
       "cob_intr_variance",
       "cob_intr_when_compiled",
       "cob_intr_year_to_yyyy",
-      "cob_mod_or_rem",
       "cob_mpf_acos",
       "cob_mpf_asin",
       "cob_mpf_atan",
@@ -2658,7 +2658,7 @@
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 207,
+    "missing": 202,
     "source_funcs": 238,
     "test_only": 0
   },

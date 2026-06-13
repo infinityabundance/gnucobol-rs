@@ -63,5 +63,12 @@ int main(int argc, char **argv) {
 	{ cob_field f = mkf("00154794", 8, DISP, 8, 0, 0); dump("doi", cob_intr_date_of_integer(&f)); }
 	{ cob_field f = mkf("2024060", 7, DISP, 7, 0, 0); dump("ioday", cob_intr_integer_of_day(&f)); }
 	{ cob_field f = mkf("00154794", 8, DISP, 8, 0, 0); dump("doiy", cob_intr_day_of_integer(&f)); }
+	{ cob_field f = mkf("-12.34  ", 8, ALNUM, 0, 0, 0); dump("numval", cob_intr_numval(&f)); }
+	{ cob_field f = mkf("$1,234.56", 9, ALNUM, 0, 0, 0); dump("numvalc", cob_intr_numval_c(&f, NULL)); }
+	/* MOD/REM: signed S9(3); 17="017", -17="01w" (neg overpunch '7'->'w'=0x77), 5="005" */
+	{ cob_field a = mkf("017", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("mod_p", cob_intr_mod(&a, &b)); }
+	{ cob_field a = mkf("01w", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("mod_n", cob_intr_mod(&a, &b)); }
+	{ cob_field a = mkf("017", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("rem_p", cob_intr_rem(&a, &b)); }
+	{ cob_field a = mkf("01w", 3, DISP, 3, 0, HAVE_SIGN), b = mkf("005", 3, DISP, 3, 0, HAVE_SIGN); dump("rem_n", cob_intr_rem(&a, &b)); }
 	return 0;
 }
