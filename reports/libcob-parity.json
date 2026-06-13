@@ -37,14 +37,12 @@
         "cob_init_intrinsic",
         "cob_intr_content_length",
         "cob_intr_content_of",
-        "cob_intr_current_date",
         "cob_intr_exception_file",
         "cob_intr_exception_file_n",
         "cob_intr_exception_location",
         "cob_intr_exception_location_n",
         "cob_intr_exception_statement",
         "cob_intr_exception_status",
-        "cob_intr_formatted_current_date",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
@@ -57,14 +55,11 @@
         "cob_intr_module_source",
         "cob_intr_module_time",
         "cob_intr_random",
-        "cob_intr_seconds_past_midnight",
         "cob_put_indirect_field",
         "cob_switch_value",
         "comp_field",
-        "format_current_date",
         "get_interval_and_current_year_from_args",
         "get_min_and_max_of_args",
-        "get_seconds_past_midnight",
         "get_substituted_size",
         "get_system_offset_time_ptr",
         "int_strncasecmp",
@@ -78,8 +73,8 @@
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 78.2,
-      "ported": 186
+      "parity_pct": 80.3,
+      "ported": 191
     },
     {
       "file": "cconv.c",
@@ -620,8 +615,6 @@
         "cob_free",
         "cob_free_alloc",
         "cob_get_current_date_and_time",
-        "cob_get_current_date_and_time_from_os",
-        "cob_get_current_datetime",
         "cob_get_dump_file",
         "cob_get_environment",
         "cob_get_global_ptr",
@@ -803,8 +796,8 @@
         "var_print",
         "version_bitstring"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 1.2,
+      "ported": 3
     },
     {
       "file": "cobgetopt.c",
@@ -820,7 +813,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 37.4,
-    "ported": 438
+    "parity_pct": 38.1,
+    "ported": 446
   }
 }

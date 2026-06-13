@@ -5,6 +5,9 @@
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; PREFIX="$ROOT/lab/oracle/prefix"
 export LD_LIBRARY_PATH="$PREFIX/lib" COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" LC_ALL=C.UTF-8
+# Fix the clock for CURRENT-DATE / FORMATTED-CURRENT-DATE so both the libcob oracle and the Rust port
+# (which reads COB_CURRENT_DATE via std::env) produce a deterministic, comparable datetime.
+export COB_CURRENT_DATE="2024/02/29 12:34:56.780000000-0500"
 H="$ROOT/lab/oracle/intrinsic_harness"
 [ -x "$H" ] || gcc -O2 -I"$PREFIX/include" "$ROOT/lab/oracle/intrinsic_harness.c" -o "$H" -L"$PREFIX/lib" -lcob || exit 2
 ( cd "$ROOT" && cargo build --release -p gnucobol-rs --examples >/dev/null 2>&1 ) || exit 2

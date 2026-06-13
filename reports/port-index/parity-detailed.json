@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 186,
+    "active_ported": 191,
     "compiled": 238,
-    "compiled_parity_pct": 78.2,
+    "compiled_parity_pct": 80.3,
     "disabled": 0,
     "doc_only": 8,
     "file": "intrinsic.c",
@@ -1887,7 +1887,8 @@
       {
         "function": "format_current_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "error_not_implemented",
@@ -2123,7 +2124,8 @@
       {
         "function": "cob_intr_current_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_char",
@@ -2409,12 +2411,14 @@
       {
         "function": "get_seconds_past_midnight",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_seconds_past_midnight",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_seconds_from_formatted_time",
@@ -2535,7 +2539,8 @@
       {
         "function": "cob_intr_formatted_current_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_content_length",
@@ -2616,14 +2621,12 @@
       "cob_init_intrinsic",
       "cob_intr_content_length",
       "cob_intr_content_of",
-      "cob_intr_current_date",
       "cob_intr_exception_file",
       "cob_intr_exception_file_n",
       "cob_intr_exception_location",
       "cob_intr_exception_location_n",
       "cob_intr_exception_statement",
       "cob_intr_exception_status",
-      "cob_intr_formatted_current_date",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
       "cob_intr_locale_date",
@@ -2636,14 +2639,11 @@
       "cob_intr_module_source",
       "cob_intr_module_time",
       "cob_intr_random",
-      "cob_intr_seconds_past_midnight",
       "cob_put_indirect_field",
       "cob_switch_value",
       "comp_field",
-      "format_current_date",
       "get_interval_and_current_year_from_args",
       "get_min_and_max_of_args",
-      "get_seconds_past_midnight",
       "get_substituted_size",
       "get_system_offset_time_ptr",
       "int_strncasecmp",
@@ -2658,7 +2658,7 @@
       "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 44,
+    "missing": 39,
     "source_funcs": 238,
     "test_only": 0
   },
@@ -5626,11 +5626,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 0,
+    "active_ported": 3,
     "compiled": 254,
-    "compiled_parity_pct": 0.0,
+    "compiled_parity_pct": 1.2,
     "disabled": 0,
-    "doc_only": 11,
+    "doc_only": 12,
     "file": "common.c",
     "fns": [
       {
@@ -6271,12 +6271,14 @@
       {
         "function": "cob_get_current_date_and_time_from_os",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_current_date_and_time_from_os",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_current_date_and_time",
@@ -6286,7 +6288,8 @@
       {
         "function": "cob_get_current_datetime",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_set_date_from_epoch",
@@ -6296,7 +6299,7 @@
       {
         "function": "check_current_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_accept_date",
@@ -6976,8 +6979,6 @@
       "cob_free",
       "cob_free_alloc",
       "cob_get_current_date_and_time",
-      "cob_get_current_date_and_time_from_os",
-      "cob_get_current_datetime",
       "cob_get_dump_file",
       "cob_get_environment",
       "cob_get_global_ptr",
@@ -7160,7 +7161,7 @@
       "version_bitstring"
     ],
     "inactive_mirrors": 0,
-    "missing": 243,
+    "missing": 239,
     "source_funcs": 254,
     "test_only": 0
   },

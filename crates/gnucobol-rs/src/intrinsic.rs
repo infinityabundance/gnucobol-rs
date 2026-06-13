@@ -3168,6 +3168,292 @@ pub fn cob_intr_when_compiled(offset: i32, length: i32, f: &[u8], attr: &FieldAt
     (out, *attr)
 }
 
+// ---- clock family (intrinsic.c + the cob_get_current_datetime dependency from common.c) ---------
+//
+// cob_get_current_datetime honors the COB_CURRENT_DATE override (a fixed Y/M/D H:M:S.ns+-tz), which makes
+// CURRENT-DATE / FORMATTED-CURRENT-DATE deterministic and oracle-testable. The no-override path reads the
+// system clock (UTC; std has no timezone API, so offset is reported unknown) — faithful but not byte-tested.
+
+/// `struct cob_time` (common.h): a broken-down date/time. `-1` marks a component to take from the system
+/// (the `COB_CURRENT_DATE` template convention).
+#[derive(Clone, Copy)]
+struct CobTime {
+    year: i32,
+    month: i32,
+    day_of_month: i32,
+    hour: i32,
+    minute: i32,
+    second: i32,
+    nanosecond: i32,
+    utc_offset: i32,
+    offset_known: bool,
+}
+
+/// `civil_from_days` (Howard Hinnant): days-since-1970-01-01 -> `(year, month, day)` (proleptic Gregorian).
+/// `cob_get_current_date_and_time_from_os` (common.c): the system clock as UTC (std exposes no timezone, so
+/// `offset_known` is false). Non-deterministic — used only when `COB_CURRENT_DATE` is unset.
+fn cob_get_current_date_and_time_from_os(want_nano: bool) -> CobTime {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    let dur = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default();
+    let secs = dur.as_secs() as i64;
+    let (y, m, d) = civil_from_days(secs.div_euclid(86400));
+    let rem = secs.rem_euclid(86400);
+    CobTime {
+        year: y as i32,
+        month: m as i32,
+        day_of_month: d as i32,
+        hour: (rem / 3600) as i32,
+        minute: ((rem % 3600) / 60) as i32,
+        second: (rem % 60) as i32,
+        nanosecond: if want_nano { dur.subsec_nanos() as i32 } else { 0 },
+        utc_offset: 0,
+        offset_known: false,
+    }
+}
+
+/// Read up to `max` ASCII digits at `*p`, advancing `*p`; returns `(value, digit_count)`.
+fn scan_date_digits(s: &[u8], p: &mut usize, max: usize) -> (i32, usize) {
+    let mut v = 0i32;
+    let mut i = 0;
+    while *p < s.len() && s[*p].is_ascii_digit() {
+        v = v * 10 + (s[*p] & 0x0F) as i32;
+        *p += 1;
+        i += 1;
+        if i == max {
+            break;
+        }
+    }
+    (v, i)
+}
+
+/// `check_current_date` (common.c): parse the `COB_CURRENT_DATE` override string into a [`CobTime`] constant
+/// (`-1` for a templated/absent component). Returns `None` when the variable is empty.
+fn parse_current_date(s: &[u8]) -> Option<CobTime> {
+    let mut t = CobTime { year: -1, month: -1, day_of_month: -1, hour: -1, minute: -1, second: -1, nanosecond: -1, utc_offset: 0, offset_known: false };
+    let mut p = 0usize;
+    while p < s.len() && (s[p] == 0x27 || s[p] == 0x22 || s[p].is_ascii_whitespace()) {
+        p += 1;
+    }
+    if p >= s.len() {
+        return None;
+    }
+    if s[p] == b'@' {
+        // @seconds-since-epoch
+        p += 1;
+        let mut seconds = 0i64;
+        while p < s.len() && s[p].is_ascii_digit() {
+            seconds = seconds * 10 + (s[p] & 0x0F) as i64;
+            p += 1;
+        }
+        let (y, m, d) = civil_from_days(seconds.div_euclid(86400));
+        let rem = seconds.rem_euclid(86400);
+        t.year = y as i32;
+        t.month = m as i32;
+        t.day_of_month = d as i32;
+        t.hour = (rem / 3600) as i32;
+        t.minute = ((rem % 3600) / 60) as i32;
+        t.second = (rem % 60) as i32;
+        return Some(t);
+    }
+    // date
+    if p < s.len() {
+        let (yr, i) = scan_date_digits(s, &mut p, 4);
+        if i != 2 && i != 4 {
+            if p < s.len() && s[p] == b'Y' {
+                while p < s.len() && s[p] == b'Y' {
+                    p += 1;
+                }
+            }
+            t.year = -1;
+        } else {
+            t.year = if yr < 100 { yr + 2000 } else { yr };
+        }
+        if p < s.len() && (s[p] == b'/' || s[p] == b'-') {
+            p += 1;
+        }
+    }
+    if p < s.len() {
+        let (mm, i) = scan_date_digits(s, &mut p, 2);
+        t.month = if i == 2 { mm } else { -1 };
+        if p < s.len() && (s[p] == b'/' || s[p] == b'-') {
+            p += 1;
+        }
+    }
+    if p < s.len() {
+        let (dd, i) = scan_date_digits(s, &mut p, 2);
+        t.day_of_month = if i == 2 { dd } else { -1 };
+    }
+    // time
+    while p < s.len() && s[p].is_ascii_whitespace() {
+        p += 1;
+    }
+    if p < s.len() {
+        let (hh, i) = scan_date_digits(s, &mut p, 2);
+        t.hour = if i == 2 { hh } else { -1 };
+        if p < s.len() && (s[p] == b':' || s[p] == b'-') {
+            p += 1;
+        }
+    }
+    if p < s.len() {
+        let (mi, i) = scan_date_digits(s, &mut p, 2);
+        t.minute = if i == 2 { mi } else { -1 };
+        if p < s.len() && (s[p] == b':' || s[p] == b'-') {
+            p += 1;
+        }
+    }
+    if p < s.len() && s[p] != b'Z' && s[p] != b'+' && s[p] != b'-' {
+        let (ss, i) = scan_date_digits(s, &mut p, 2);
+        t.second = if i == 2 { ss } else { -1 };
+    }
+    // nanoseconds
+    if p < s.len() && s[p] != b'Z' && s[p] != b'+' && s[p] != b'-' {
+        if s[p] == b'.' || s[p] == b':' {
+            p += 1;
+        }
+        let (ns, i) = scan_date_digits(s, &mut p, 9);
+        if i > 0 {
+            t.nanosecond = ns;
+        }
+    }
+    // UTC offset
+    if p < s.len() && s[p] == b'Z' {
+        t.utc_offset = 0;
+        t.offset_known = true;
+    } else if p < s.len() && (s[p] == b'+' || s[p] == b'-') {
+        let neg = s[p] == b'-';
+        let mut digs: Vec<u8> = Vec::new();
+        let mut q = p + 1;
+        while q < s.len() && digs.len() < 4 {
+            if s[q] == b':' {
+                q += 1;
+                continue;
+            }
+            if !s[q].is_ascii_digit() {
+                break;
+            }
+            digs.push(s[q] & 0x0F);
+            q += 1;
+        }
+        if digs.len() >= 2 {
+            // "+HH" alone -> minutes 00
+            while digs.len() < 4 {
+                digs.push(0);
+            }
+            let off = digs[0] as i32 * 600 + digs[1] as i32 * 60 + digs[2] as i32 * 10 + digs[3] as i32;
+            t.utc_offset = if neg { -off } else { off };
+            t.offset_known = true;
+        }
+    }
+    Some(t)
+}
+
+/// `cob_get_current_datetime (res)` (common.c): the system time, with any `COB_CURRENT_DATE` override
+/// applied component-by-component (leap second clamped to 59).
+fn cob_get_current_datetime(want_nano: bool) -> CobTime {
+    let mut t = cob_get_current_date_and_time_from_os(want_nano);
+    if let Ok(env) = std::env::var("COB_CURRENT_DATE") {
+        if let Some(c) = parse_current_date(env.as_bytes()) {
+            if c.hour != -1 {
+                t.hour = c.hour;
+            }
+            if c.minute != -1 {
+                t.minute = c.minute;
+            }
+            if c.second != -1 {
+                t.second = c.second;
+            }
+            if c.nanosecond != -1 {
+                t.nanosecond = c.nanosecond;
+            }
+            if c.offset_known {
+                t.offset_known = true;
+                t.utc_offset = c.utc_offset;
+            }
+            if c.year != -1 {
+                t.year = c.year;
+            }
+            if c.month != -1 {
+                t.month = c.month;
+            }
+            if c.day_of_month != -1 {
+                t.day_of_month = c.day_of_month;
+            }
+        }
+    }
+    if t.second >= 60 {
+        t.second = 59;
+    }
+    t
+}
+
+/// `get_seconds_past_midnight ()` (intrinsic.c): seconds since midnight from the **real** local clock
+/// (does NOT honor `COB_CURRENT_DATE` — non-deterministic, hence not in the byte-oracle battery).
+fn get_seconds_past_midnight() -> i32 {
+    let t = cob_get_current_date_and_time_from_os(false);
+    t.hour * 3600 + t.minute * 60 + t.second
+}
+
+/// `cob_intr_current_date (offset, length)` (intrinsic.c): `FUNCTION CURRENT-DATE` —
+/// `YYYYMMDDHHMMSShh+-HHMM` (21 chars).
+pub fn cob_intr_current_date(offset: i32, length: i32) -> IntrField {
+    let want_nano = !(offset == 1 && length <= 14);
+    let time = cob_get_current_datetime(want_nano);
+    let mut buff = format!(
+        "{:04}{:02}{:02}{:02}{:02}{:02}{:02}",
+        time.year,
+        time.month,
+        time.day_of_month,
+        time.hour,
+        time.minute,
+        time.second,
+        time.nanosecond / 10000000
+    )
+    .into_bytes();
+    add_offset_time(false, Some(time.utc_offset), &mut buff);
+    buff.resize(21, b' ');
+    if offset != 0 {
+        return intr_refmod(buff, offset, length);
+    }
+    (buff, ALPHA1)
+}
+
+/// `cob_intr_seconds_past_midnight ()` (intrinsic.c): `FUNCTION SECONDS-PAST-MIDNIGHT` (real-clock based).
+pub fn cob_intr_seconds_past_midnight() -> IntrField {
+    cob_alloc_set_field_int(get_seconds_past_midnight())
+}
+
+/// `format_current_date (date_fmt, time_fmt, buff)` (intrinsic.c): render the current datetime per the
+/// parsed formats (over [`format_datetime`]).
+fn format_current_date(date_fmt: DateFormat, time_fmt: TimeFormat) -> Vec<u8> {
+    let time = cob_get_current_datetime(true);
+    let days = integer_of_date(time.year, time.month, time.day_of_month) as i32;
+    let seconds_from_midnight = time.hour * 3600 + time.minute * 60 + time.second;
+    let fractional = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(time.nanosecond as u64); m }, scale: 9 };
+    let offset_time = if time.offset_known { Some(time.utc_offset) } else { None };
+    format_datetime(date_fmt, time_fmt, days, seconds_from_midnight, &fractional, offset_time, b'.')
+}
+
+/// `cob_intr_formatted_current_date (offset, length, format_field)` (intrinsic.c):
+/// `FUNCTION FORMATTED-CURRENT-DATE(format)` — the current datetime in `format`; an invalid format -> spaces.
+pub fn cob_intr_formatted_current_date(offset: i32, length: i32, fmt: &[u8]) -> IntrField {
+    const COB_DATETIMESTR_MAX: usize = 36;
+    let dec_pt = b'.';
+    let format_str = copy_data_to_null_terminated_str(fmt, COB_DATETIMESTR_MAX);
+    let field_length = format_str.len();
+    if !cob_valid_datetime_format(&format_str, dec_pt) {
+        return formatted_spaces(field_length, offset, length);
+    }
+    let (date_fmt_str, time_fmt_str, _) = split_around_t(&format_str);
+    let date_fmt = parse_date_format_string(&date_fmt_str);
+    let time_fmt = parse_time_format_string(&time_fmt_str);
+    let mut buff = format_current_date(date_fmt, time_fmt);
+    buff.resize(field_length, 0);
+    if offset > 0 {
+        return intr_refmod(buff, offset, length);
+    }
+    (buff, ALPHA1)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

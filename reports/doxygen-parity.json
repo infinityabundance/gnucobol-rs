@@ -36,14 +36,12 @@
         "cob_init_intrinsic",
         "cob_intr_content_length",
         "cob_intr_content_of",
-        "cob_intr_current_date",
         "cob_intr_exception_file",
         "cob_intr_exception_file_n",
         "cob_intr_exception_location",
         "cob_intr_exception_location_n",
         "cob_intr_exception_statement",
         "cob_intr_exception_status",
-        "cob_intr_formatted_current_date",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
@@ -56,21 +54,18 @@
         "cob_intr_module_source",
         "cob_intr_module_time",
         "cob_intr_random",
-        "cob_intr_seconds_past_midnight",
         "cob_put_indirect_field",
         "cob_switch_value",
         "comp_field",
-        "format_current_date",
         "get_interval_and_current_year_from_args",
-        "get_seconds_past_midnight",
         "get_substituted_size",
         "int_strncasecmp",
         "numval",
         "space_left",
         "substitute_matches"
       ],
-      "parity_pct": 82.3,
-      "ported": 195
+      "parity_pct": 84.4,
+      "ported": 200
     },
     {
       "doxygen_functions": 9,
@@ -404,7 +399,6 @@
         "call_exit_handlers_and_terminate",
         "cb_config_entry",
         "cb_lookup_config",
-        "check_current_date",
         "check_valid_dir",
         "check_valid_env_tmpdir",
         "cob_accept_arg_number",
@@ -467,8 +461,6 @@
         "cob_free",
         "cob_free_alloc",
         "cob_get_current_date_and_time",
-        "cob_get_current_date_and_time_from_os",
-        "cob_get_current_datetime",
         "cob_get_dump_file",
         "cob_get_environment",
         "cob_get_global_ptr",
@@ -635,8 +627,8 @@
         "var_print",
         "version_bitstring"
       ],
-      "parity_pct": 4.5,
-      "ported": 11
+      "parity_pct": 5.7,
+      "ported": 14
     },
     {
       "doxygen_functions": 4,
@@ -651,8 +643,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 45.3,
-    "ported": 452
+    "parity_pct": 46.1,
+    "ported": 460
   },
   "xml_root": "lab/doxygen/out/xml"
 }

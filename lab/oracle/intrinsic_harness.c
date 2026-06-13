@@ -249,5 +249,8 @@ int main(int argc, char **argv) {
 	{ cob_field a=mkf("002",3,DISP,3,0,0),b=mkf("004",3,DISP,3,0,0),c=mkf("006",3,DISP,3,0,0); dump("sdev", cob_intr_standard_deviation(3,&a,&b,&c)); }
 	{ cob_field f=mkf("2024010112000000-0500",21,ALNUM,0,0,0); dump("whenc", cob_intr_when_compiled(0,0,&f)); }
 	{ cob_field f=mkf("2024010112000000-0500",21,ALNUM,0,0,0); dump("whenc_rm", cob_intr_when_compiled(3,4,&f)); }
+	dump("cdate", cob_intr_current_date(0,0));
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0); dump("fcd", cob_intr_formatted_current_date(0,0,&f)); }
+	{ cob_field f=mkf("YYYYMMDDThhmmss",15,ALNUM,0,0,0); dump("fcd2", cob_intr_formatted_current_date(0,0,&f)); }
 	return 0;
 }
