@@ -3,7 +3,7 @@
 **GENERATED** by `cargo run -p gnucobol-rs-port-index -- ccvs85 ingest` — do not edit by hand.
 
 `GNURUST.CCVS85.1` admits the historical **CCVS85** COBOL-85 validation corpus as an external
-regression gauntlet. It proves only **corpus custody**: the compressed spine's hash, a reproducible
+regression gauntlet. It proves only **corpus custody**: the compressed corpus hash, a reproducible
 decompression, the decompressed hash, and stable split/index metadata.
 
 **Conformance claim:** NONE — corpus custody/index only; no COBOL-85 conformance, suite-pass, compiler-replacement, or libcob behaviour-parity claim.
@@ -15,7 +15,7 @@ decompression, the decompressed hash, and stable split/index metadata.
 | source | `newcob.val.Z` |
 | compressed sha256 | `1e9a92ddbd5d730cbeb764281f7810c22b18e0163985b09675393ab22bbd61f9` |
 | compressed bytes | 4417395 |
-| decompressor | gzip 1.14-modified |
+| decompressor | gzip 1.14-modified, Unix compress/LZW mode (.Z) |
 | decompressed sha256 | `744a04982095a3abea29a9df5faf63d226083edecc7b5bf34bc412eae0d53274` |
 | decompressed bytes | 28210031 |
 | decompressed lines | 348272 |

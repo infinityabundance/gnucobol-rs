@@ -8,6 +8,7 @@
 //! Run from the repo root (cwd) or set `GNURUST_ROOT`.
 
 mod ccvs85;
+mod corpus_atlas;
 mod libcob_symbols;
 mod model;
 mod parity;
@@ -126,6 +127,17 @@ fn main() {
                 "check" => ccvs85::check(&root),
                 _ => {
                     eprintln!("ccvs85: use `ccvs85 ingest [--input <.Z>] [--out <dir>]` or `ccvs85 check`");
+                    2
+                }
+            }
+        }
+        "corpus-atlas" => {
+            let sub = args.get(2).map(String::as_str).unwrap_or("");
+            match sub {
+                "generate" => corpus_atlas::generate(&root),
+                "check" => corpus_atlas::check(&root),
+                _ => {
+                    eprintln!("corpus-atlas: use `corpus-atlas generate` or `corpus-atlas check`");
                     2
                 }
             }

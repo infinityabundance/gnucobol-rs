@@ -66,7 +66,7 @@ const SHA_K: [u32; 64] = [
     0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
 ];
 
-fn sha256_hex(data: &[u8]) -> String {
+pub fn sha256_hex(data: &[u8]) -> String {
     let mut h: [u32; 8] = [
         0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
     ];
@@ -127,7 +127,9 @@ fn decompress(input: &Path) -> Option<(Vec<u8>, String)> {
         return None;
     }
     let ver = Command::new("gzip").arg("--version").output().ok()?;
-    let ident = String::from_utf8_lossy(&ver.stdout).lines().next().unwrap_or("gzip").trim().to_string();
+    let base = String::from_utf8_lossy(&ver.stdout).lines().next().unwrap_or("gzip").trim().to_string();
+    // .Z is Unix `compress` (LZW), NOT gzip deflate — make that explicit for reviewers.
+    let ident = format!("{base}, Unix compress/LZW mode (.Z)");
     Some((out.stdout, ident))
 }
 
@@ -197,7 +199,7 @@ fn receipt_md(r: &Receipt) -> String {
         "# GNURUST.CCVS85.1 — CCVS85 corpus ingest receipt\n\n\
         **GENERATED** by `cargo run -p gnucobol-rs-port-index -- ccvs85 ingest` — do not edit by hand.\n\n\
         `GNURUST.CCVS85.1` admits the historical **{corpus}** COBOL-85 validation corpus as an external\n\
-        regression gauntlet. It proves only **corpus custody**: the compressed spine's hash, a reproducible\n\
+        regression gauntlet. It proves only **corpus custody**: the compressed corpus hash, a reproducible\n\
         decompression, the decompressed hash, and stable split/index metadata.\n\n\
         **Conformance claim:** {claim}\n\n\
         ## Custody\n\n\

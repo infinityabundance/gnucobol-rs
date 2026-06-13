@@ -35,3 +35,8 @@ lab/oracle/intrinsic_harness
 # CCVS85 corpus: keep the compressed spine, ignore the 27MB decompressed expansion
 lab/corpus/ccvs85/newcob.val
 reports/ccvs85/newcob.val
+
+# COBOL corpus atlas: large raw corpora are re-downloadable from permanent sources; commit custody only.
+lab/corpus/x-cobol/
+lab/corpus/gcobol/
+lab/corpus/opencbs/

@@ -57,6 +57,15 @@ if ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- ccvs85 check ) >/tm
 else
   bad "CCVS85 corpus custody STALE:"; cat /tmp/_ccvs85
 fi
+# GNURUST.COBOL-CORPUS-ATLAS.1: the multi-corpus custody manifest receipt must exist and be fresh.
+for f in reports/provenance/cobol-corpus-atlas-receipt.md reports/provenance/cobol-corpus-atlas-receipt.json reports/cobol-corpus-atlas/atlas.json; do
+  [ -f "$f" ] || bad "corpus-atlas receipt missing: $f (run `corpus-atlas generate`)"
+done
+if ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- corpus-atlas check ) >/tmp/_atlas2 2>&1; then
+  note "COBOL corpus atlas custody fresh"
+else
+  bad "COBOL corpus atlas STALE:"; cat /tmp/_atlas2
+fi
 
 # 2b. Atlas hygiene: every archaeology atlas JSON must parse (machine-readable evidence, not prose).
 if ( cd "$ROOT" && cargo run -q -p xtask -- atlas-check ) >/tmp/_atlas 2>&1; then
