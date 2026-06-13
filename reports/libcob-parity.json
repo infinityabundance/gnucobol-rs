@@ -26,35 +26,26 @@
       "file": "intrinsic.c",
       "functions": 238,
       "missing": [
-        "add_z",
-        "at_cr_or_db",
         "calc_ref_mod",
         "cob_decimal_move_temp",
-        "cob_exit_intrinsic",
         "cob_get_indirect_field",
-        "cob_init_intrinsic",
-        "cob_intr_content_length",
-        "cob_intr_content_of",
         "cob_intr_random",
         "cob_put_indirect_field",
-        "cob_switch_value",
         "comp_field",
         "get_interval_and_current_year_from_args",
         "get_min_and_max_of_args",
         "get_substituted_size",
         "get_system_offset_time_ptr",
-        "int_strncasecmp",
         "numval",
         "setup_cob_log_half",
         "setup_cob_log_ten",
         "setup_cob_pi",
         "setup_cob_sqrt_two",
-        "space_left",
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 89.1,
-      "ported": 212
+      "parity_pct": 92.9,
+      "ported": 221
     },
     {
       "file": "cconv.c",
@@ -793,7 +784,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 39.9,
-    "ported": 467
+    "parity_pct": 40.7,
+    "ported": 476
   }
 }

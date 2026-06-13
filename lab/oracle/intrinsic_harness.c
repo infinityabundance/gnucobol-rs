@@ -276,5 +276,8 @@ int main(int argc, char **argv) {
 	{ cob_field a=mkf("ABC",3,ALNUM,0,0,0),b=mkf("ABD",3,ALNUM,0,0,0); dump("loccmp_lt", cob_intr_locale_compare(2,&a,&b)); }
 	{ cob_field a=mkf("ABC",3,ALNUM,0,0,0),b=mkf("ABC",3,ALNUM,0,0,0); dump("loccmp_eq", cob_intr_locale_compare(2,&a,&b)); }
 	{ cob_field a=mkf("ABD",3,ALNUM,0,0,0),b=mkf("ABC",3,ALNUM,0,0,0); dump("loccmp_gt", cob_intr_locale_compare(2,&a,&b)); }
+	{ static unsigned char z[8]={0}; cob_field f=mkf((char*)z,8,ALNUM,0,0,0); dump("clen_null", cob_intr_content_length(&f)); }
+	{ static unsigned char z[8]={0}; cob_field f=mkf((char*)z,8,ALNUM,0,0,0); dump("cof_null", cob_intr_content_of(0,0,1,&f)); }
+	dump("sw0", cob_switch_value(0));
 	return 0;
 }

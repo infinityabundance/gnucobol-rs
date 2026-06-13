@@ -259,4 +259,7 @@ fn main() {
     hexln("loccmp_lt", &cob_intr_locale_compare(b"ABC", b"ABD", None));
     hexln("loccmp_eq", &cob_intr_locale_compare(b"ABC", b"ABC", None));
     hexln("loccmp_gt", &cob_intr_locale_compare(b"ABD", b"ABC", None));
+    hexln("clen_null", &cob_intr_content_length(b"\x00\x00\x00\x00\x00\x00\x00\x00"));
+    hexln("cof_null", &cob_intr_content_of(0, 0, b"\x00\x00\x00\x00\x00\x00\x00\x00", 1));
+    hexln("sw0", &cob_switch_value(0));
 }

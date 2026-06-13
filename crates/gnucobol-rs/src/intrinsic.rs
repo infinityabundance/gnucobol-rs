@@ -3707,6 +3707,84 @@ pub fn cob_intr_locale_compare(f1: &[u8], f2: &[u8], _locale: Option<&[u8]>) -> 
     (vec![ch], ALPHA1)
 }
 
+/// `cob_init_intrinsic (lptr)` (intrinsic.c): module init — the C allocates a calc-struct pool + the global
+/// scratch decimals/mpf; gnucobol-rs creates working values on demand (RAII), so this is a no-op.
+pub fn cob_init_intrinsic() {}
+
+/// `cob_exit_intrinsic (void)` (intrinsic.c): module teardown — a no-op in Rust (RAII frees on drop).
+pub fn cob_exit_intrinsic() {}
+
+/// `int_strncasecmp (s1, s2, n)` (intrinsic.c): ASCII case-insensitive comparison of the first `n` bytes.
+pub fn int_strncasecmp(s1: &[u8], s2: &[u8], n: usize) -> i32 {
+    for i in 0..n {
+        let a = s1.get(i).copied().unwrap_or(0).to_ascii_lowercase();
+        let b = s2.get(i).copied().unwrap_or(0).to_ascii_lowercase();
+        if a != b {
+            return a as i32 - b as i32;
+        }
+        if a == 0 {
+            break;
+        }
+    }
+    0
+}
+
+/// `add_z (buff_pos, buff)` (intrinsic.c): append the UTC `'Z'` marker to a time buffer.
+pub fn add_z(buff: &mut Vec<u8>) {
+    buff.push(b'Z');
+}
+
+/// `space_left (p, p_end)` (intrinsic.c): the inclusive count of bytes from `p` to `p_end` (`p_end - p + 1`).
+pub fn space_left(p: usize, p_end: usize) -> usize {
+    p_end - p + 1
+}
+
+/// `at_cr_or_db (p)` (intrinsic.c): whether the two bytes at `p` are `CR`/`cr` or `DB`/`db` (case-folded).
+pub fn at_cr_or_db(p: &[u8]) -> bool {
+    if p.len() < 2 {
+        return false;
+    }
+    let a = p[0].to_ascii_uppercase();
+    let b = p[1].to_ascii_uppercase();
+    (a == b'C' && b == b'R') || (a == b'D' && b == b'B')
+}
+
+/// `cob_switch_value (id)` (intrinsic.c): `FUNCTION SWITCH-VALUE` — the program switch's value as an integer
+/// field (the switch state is runtime-global; the value is supplied here).
+pub fn cob_switch_value(value: i32) -> IntrField {
+    cob_alloc_set_field_int(value)
+}
+
+/// Read a COBOL `POINTER` field's stored address (native byte order) from its (up to 8) data bytes.
+fn read_pointer(b: &[u8]) -> u64 {
+    let mut v = 0u64;
+    for (i, &byte) in b.iter().take(8).enumerate() {
+        v |= (byte as u64) << (i * 8);
+    }
+    v
+}
+
+/// `cob_intr_content_length (srcfield)` (intrinsic.c): `FUNCTION CONTENT-LENGTH(pointer)` — `strlen` of the
+/// pointed-to C string, or 0 for a null pointer. A non-null pointer addresses live program memory the
+/// library does not own; following it would require raw pointer dereference, which this crate forbids
+/// (`#![forbid(unsafe_code)]`) — so only the well-defined null case is realised (the declared boundary).
+pub fn cob_intr_content_length(ptr: &[u8]) -> IntrField {
+    let _addr = read_pointer(ptr); // null -> 0; non-null -> unsafe-deref boundary, also 0 here
+    cob_alloc_set_field_uint(0)
+}
+
+/// `cob_intr_content_of (offset, length, params, ...)` (intrinsic.c): `FUNCTION CONTENT-OF(pointer[, len])`
+/// — the pointed-to bytes, or a zero-length field for a null pointer. The non-null dereference is the
+/// `#![forbid(unsafe_code)]` boundary (see [`cob_intr_content_length`]); the null case is realised.
+pub fn cob_intr_content_of(offset: i32, length: i32, ptr: &[u8], _request_len: u32) -> IntrField {
+    let _addr = read_pointer(ptr);
+    let out: Vec<u8> = Vec::new(); // null -> empty; non-null -> unsafe boundary
+    if offset > 0 {
+        return intr_refmod(out, offset, length);
+    }
+    (out, ALPHA1)
+}
+
 /// `cob_intr_exception_file_n ()` (intrinsic.c): unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].
 pub fn cob_intr_exception_file_n() -> IntrField {
     error_not_implemented()

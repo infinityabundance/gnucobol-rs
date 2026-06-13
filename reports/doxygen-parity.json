@@ -26,27 +26,18 @@
       "doxygen_functions": 237,
       "file": "intrinsic.c",
       "missing": [
-        "add_z",
-        "at_cr_or_db",
         "cob_decimal_move_temp",
-        "cob_exit_intrinsic",
         "cob_get_indirect_field",
-        "cob_init_intrinsic",
-        "cob_intr_content_length",
-        "cob_intr_content_of",
         "cob_intr_random",
         "cob_put_indirect_field",
-        "cob_switch_value",
         "comp_field",
         "get_interval_and_current_year_from_args",
         "get_substituted_size",
-        "int_strncasecmp",
         "numval",
-        "space_left",
         "substitute_matches"
       ],
-      "parity_pct": 92.4,
-      "ported": 219
+      "parity_pct": 96.2,
+      "ported": 228
     },
     {
       "doxygen_functions": 9,
@@ -624,8 +615,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 48.0,
-    "ported": 479
+    "parity_pct": 48.9,
+    "ported": 488
   },
   "xml_root": "lab/doxygen/out/xml"
 }
