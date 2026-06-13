@@ -329,6 +329,101 @@ fn intr_refmod(data: Vec<u8>, offset: i32, length: i32) -> IntrField {
     }
 }
 
+// ---- numeric-result cob_intr_* (over the sealed CobDecimal layer) -------------------------------
+
+use crate::cob_decimal::{cob_decimal_get_field, cob_decimal_set_field, CobDecimal};
+use crate::gmp::Mpz;
+
+/// `cob_trim_decimal (d)` (intrinsic.c): strip trailing decimal zeros, lowering the scale (a zero value
+/// becomes scale 0).
+pub fn cob_trim_decimal(d: &mut CobDecimal) {
+    if d.value.sgn() == 0 {
+        d.scale = 0;
+        return;
+    }
+    let ten = Mpz::from_i64(10);
+    while d.scale > 0 {
+        let (q, r) = d.value.tdiv_qr(&ten);
+        if r.sgn() != 0 {
+            break;
+        }
+        d.value = q;
+        d.scale -= 1;
+    }
+}
+
+/// `cob_alloc_field (d)` (intrinsic.c): choose the result field's attribute + size for a `cob_decimal` —
+/// a 4-byte `BINARY` (fits 32 bits, scale < 10), an 8-byte `BINARY` (fits 64 bits, scale < 19), or a
+/// `DISPLAY` field wide enough for the digits. Trims `d` first. Returns `(attr, size)`.
+pub fn cob_alloc_field(d: &mut CobDecimal) -> (FieldAttr, usize) {
+    cob_trim_decimal(d);
+    let neg = d.value.sgn() < 0;
+    let negsign = if neg { 1 } else { 0 };
+    let flags = if neg { COB_FLAG_HAVE_SIGN } else { 0 };
+    let bitnum = d.value.sizeinbase2();
+    if bitnum < (33 - negsign) && d.scale < 10 {
+        (FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 9, scale: d.scale as i16, flags }, 4)
+    } else if bitnum < (65 - negsign) && d.scale < 19 {
+        (FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 20, scale: d.scale as i16, flags }, 8)
+    } else {
+        let digits10 = d.value.to_decimal_string().trim_start_matches('-').len();
+        let size = digits10.max(d.scale.max(0) as usize);
+        (FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: size as u16, scale: d.scale as i16, flags }, size)
+    }
+}
+
+fn intr_decimal_result(mut d: CobDecimal) -> IntrField {
+    let (attr, size) = cob_alloc_field(&mut d);
+    let bytes = cob_decimal_get_field(d, &attr, size, crate::arith::Round::Truncate, false)
+        .unwrap_or_else(|_| vec![0u8; size]);
+    (bytes, attr)
+}
+
+/// `cob_intr_sign (srcfield)` (intrinsic.c): `FUNCTION SIGN(x)` — `-1`/`0`/`+1` as a `BINARY` result.
+pub fn cob_intr_sign(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    cob_alloc_set_field_int(cob_decimal_set_field(src, src_attr).value.sgn())
+}
+
+/// `cob_intr_abs (srcfield)` (intrinsic.c): `FUNCTION ABS(x)` — `|x|` stored in a field with the source's
+/// own attribute/size.
+pub fn cob_intr_abs(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let mut d = cob_decimal_set_field(src, src_attr);
+    d.value.abs();
+    let bytes = cob_decimal_get_field(d, src_attr, src.len(), crate::arith::Round::Truncate, false)
+        .unwrap_or_else(|_| vec![0u8; src.len()]);
+    (bytes, *src_attr)
+}
+
+/// `cob_intr_integer (srcfield)` (intrinsic.c): `FUNCTION INTEGER(x)` — the floor (greatest integer not
+/// greater than `x`).
+pub fn cob_intr_integer(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let mut d = cob_decimal_set_field(src, src_attr);
+    if d.scale < 0 {
+        d.value = d.value.mul(&Mpz::ui_pow_ui(10, (-d.scale) as u32));
+    } else if d.scale > 0 {
+        let sign = d.value.sgn();
+        let (q, r) = d.value.tdiv_qr(&Mpz::ui_pow_ui(10, d.scale as u32));
+        d.value = q;
+        if sign == -1 && r.sgn() != 0 {
+            d.value = d.value.sub_ui(1); // floor adjust for negatives
+        }
+    }
+    d.scale = 0;
+    intr_decimal_result(d)
+}
+
+/// `cob_intr_integer_part (srcfield)` (intrinsic.c): `FUNCTION INTEGER-PART(x)` — truncation toward zero.
+pub fn cob_intr_integer_part(src: &[u8], src_attr: &FieldAttr) -> IntrField {
+    let mut d = cob_decimal_set_field(src, src_attr);
+    if d.scale < 0 {
+        d.value = d.value.mul(&Mpz::ui_pow_ui(10, (-d.scale) as u32));
+    } else if d.scale > 0 {
+        d.value = d.value.tdiv_q(&Mpz::ui_pow_ui(10, d.scale as u32));
+    }
+    d.scale = 0;
+    intr_decimal_result(d)
+}
+
 // ---- date validators (intrinsic.c) + the date-conversion cob_intr_* wrappers -------------------
 
 const NORMAL_MONTH_DAYS: [i32; 13] = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -451,6 +546,31 @@ mod tests {
     fn nvc(s: &str) -> String {
         numval_display(&intrinsic_numval_c(s), 8, 4)
     }
+    #[test]
+    fn cob_intr_numeric_results() {
+        use crate::attr::COB_FLAG_HAVE_SIGN;
+        // S9(2)V99: -12.34 stored as "123t" (trailing negative overpunch '4'->'t'=0x74); +12.34 = "1234".
+        let sattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 4, scale: 2, flags: COB_FLAG_HAVE_SIGN };
+        let neg = b"123t";
+        let pos = b"1234";
+        let bin = |d: &[u8], a: &FieldAttr| crate::accessors::cob_get_int(d, a);
+        // SIGN
+        assert_eq!(bin(&cob_intr_sign(neg, &sattr).0, &cob_intr_sign(neg, &sattr).1), -1);
+        assert_eq!(bin(&cob_intr_sign(pos, &sattr).0, &cob_intr_sign(pos, &sattr).1), 1);
+        // INTEGER (floor): -12.34 -> -13 ; 12.34 -> 12
+        let (d, a) = cob_intr_integer(neg, &sattr);
+        assert_eq!(bin(&d, &a), -13);
+        let (d, a) = cob_intr_integer(pos, &sattr);
+        assert_eq!(bin(&d, &a), 12);
+        // INTEGER-PART (trunc): -12.34 -> -12 ; 12.34 -> 12
+        let (d, a) = cob_intr_integer_part(neg, &sattr);
+        assert_eq!(bin(&d, &a), -12);
+        let (d, a) = cob_intr_integer_part(pos, &sattr);
+        assert_eq!(bin(&d, &a), 12);
+        // ABS(-12.34) -> +12.34 in the same S9(2)V99 field -> "1234"
+        assert_eq!(cob_intr_abs(neg, &sattr).0, b"1234");
+    }
+
     #[test]
     fn cob_intr_date_wrappers() {
         let disp = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };

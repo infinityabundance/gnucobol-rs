@@ -34,7 +34,6 @@
         "calc_ref_mod",
         "calc_variance_of_args",
         "calculate_start_end_for_numval",
-        "cob_alloc_field",
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
         "cob_check_numval",
@@ -44,7 +43,6 @@
         "cob_exit_intrinsic",
         "cob_get_indirect_field",
         "cob_init_intrinsic",
-        "cob_intr_abs",
         "cob_intr_acos",
         "cob_intr_annuity",
         "cob_intr_asin",
@@ -82,10 +80,8 @@
         "cob_intr_hex_of",
         "cob_intr_hex_to_char",
         "cob_intr_highest_algebraic",
-        "cob_intr_integer",
         "cob_intr_integer_of_boolean",
         "cob_intr_integer_of_formatted_date",
-        "cob_intr_integer_part",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
@@ -123,7 +119,6 @@
         "cob_intr_rem",
         "cob_intr_seconds_from_formatted_time",
         "cob_intr_seconds_past_midnight",
-        "cob_intr_sign",
         "cob_intr_sin",
         "cob_intr_sqrt",
         "cob_intr_standard_compare",
@@ -155,7 +150,6 @@
         "cob_mpf_tan",
         "cob_put_indirect_field",
         "cob_switch_value",
-        "cob_trim_decimal",
         "cob_valid_date_format",
         "cob_valid_datetime_format",
         "cob_valid_time_format",
@@ -242,8 +236,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 9.2,
-      "ported": 22
+      "parity_pct": 11.8,
+      "ported": 28
     },
     {
       "file": "cconv.c",
@@ -984,7 +978,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 23.4,
-    "ported": 274
+    "parity_pct": 23.9,
+    "ported": 280
   }
 }
