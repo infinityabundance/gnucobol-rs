@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.15` |
 | court | cp500 EBCDIC DISPLAY decode |
-| crate_version | `0.7.40` |
+| crate_version | `0.7.41` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | raw EBCDIC field bytes -> decoded text |
 | replay command | `bash lab/oracle/ebcdic_sweep.sh` |

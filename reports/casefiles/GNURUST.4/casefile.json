@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.4",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.40",
+  "crate_version": "0.7.41",
   "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields",
   "hash_chain": {
-    "inputs_sha256": "820e9d3155f725b34c32e3f739c8378a51ed482812daff008557b1b29fa55410"
+    "inputs_sha256": "a76e5c2d108cc58a21362bee12f470340bc7c813c21327d5857340f97ec10f96"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "77e59de252280871d807046cf1fc8a85c1081d2f074dc2235d477ce821d10855",
-    "receipt_sha256": "259b3268ab7fc741753b828117af0e24b168a86b916146ac248752983d7b7733"
+    "receipt_sha256": "6c1bc5f1db09b019f95d5806696fa667fe2dd5cb9e8c641e5e8e99fc07f26f22"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

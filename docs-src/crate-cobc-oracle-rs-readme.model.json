@@ -1,24 +1,26 @@
 {
- "schema": "trust4-doc-model-v1",
- "document_id": "crate-cobc-oracle-rs-readme",
- "generated_path": "crates/cobc-oracle-rs/README.md",
- "title": "cobc-oracle-rs",
- "machine_fields": [],
- "body_template": "[![crates.io](https://img.shields.io/crates/v/cobc-oracle-rs.svg)](https://crates.io/crates/cobc-oracle-rs) {{badges}}\n\n**Drives the GnuCOBOL `cobc` compiler as an oracle for the [`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs)\ncompatibility court.** It builds and runs a COBOL fixture and records a deterministic, canonical-JSON\n**receipt** of the oracle's identity and observed behaviour (stdout/stderr/exit + SHA-256 of source,\ngenerated C, and the executable).\n\nThis crate copies **no** GPL compiler logic \u2014 it only spawns `cobc`/the produced binary and reads\ntheir outputs \u2014 but, being tooling tightly coupled to the GPL compiler, it is licensed\n**GPL-3.0-or-later** (see `COPYING`), published as GPL tooling and kept out of the LGPL/Apache decode\npath. Still `0.x`: the API may change.\n\nIt is the **program-shape** oracle (compile a whole program, capture runtime behaviour). The byte-level\nsealed courts are driven by the **runtime-library shape** (`lab/oracle/decimal_harness`, linking the\nbuilt `libcob`); campaign evidence of record is the **generated replay receipt** (`xtask receipt`\n\u2192 `reports/receipts/<CAMPAIGN>/receipt.json`, see `docs/trust2-generated-receipts.md`). This crate emits\none such replayable, canonical-JSON program-shape witness.\n\nDoctrine it encodes:\n- **Generated C is a witness, not authority** (`GNURUST.GENC.0`): the receipt records\n  `generated_c_hash`, but semantic authority is the *runtime* (stdout/stderr/exit + field bytes).\n- **Compilation mode is always named** (`GNURUST.ORACLEMODE.0`).\n- **Oracle availability is a typed verdict** (`GNURUST.ORACLEAVAIL.0`), never a silent skip.\n- **Canonical JSON** (`GNURUST.JSONCANON.0`): stable key order, lowercase-hex bytes, explicit nulls\n  \u2014 via a tiny hand-written serializer (zero runtime dependencies, self-contained SHA-256).\n\n## Usage\n\n```text\ncobc-oracle oracle-smoke\ncobc-oracle run-fixture program.cob\ncobc-oracle write-receipt --fixture program.cob --out receipt.json\n```\n\nRun with a built GnuCOBOL `cobc` on `PATH` and `LC_ALL=C.UTF-8`.\n",
- "legacy_preservation": {
-  "legacy_paths": [
-   "research/legacyreports/crates/cobc-oracle-rs/README.md"
+  "schema": "trust4-doc-model-v1",
+  "document_id": "crate-cobc-oracle-rs-readme",
+  "generated_path": "crates/cobc-oracle-rs/README.md",
+  "title": "cobc-oracle-rs",
+  "machine_fields": [
+    "version"
   ],
-  "legacy_sha256": [
-   "3d0a052cde8ecd13398b0ea6fd63b74536de684f17ff3fba18d2cf8c043e3805"
-  ],
-  "information_superset": true,
-  "legacy_claims_carried_forward": [
-   "full original body embedded verbatim in body_template"
-  ],
-  "legacy_non_claims_carried_forward": [],
-  "legacy_notes_carried_forward": [],
-  "legacy_unstructured_notes": [],
-  "missing_items": []
- }
+  "body_template": "[![crates.io](https://img.shields.io/crates/v/cobc-oracle-rs.svg)](https://crates.io/crates/cobc-oracle-rs) {{badges}}\n\n**Drives the GnuCOBOL `cobc` compiler as an oracle for the [`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs)\ncompatibility court.** It builds and runs a COBOL fixture and records a deterministic, canonical-JSON\n**receipt** of the oracle's identity and observed behaviour (stdout/stderr/exit + SHA-256 of source,\ngenerated C, and the executable).\n\nThis crate copies **no** GPL compiler logic — it only spawns `cobc`/the produced binary and reads\ntheir outputs — but, being tooling tightly coupled to the GPL compiler, it is licensed\n**GPL-3.0-or-later** (see `COPYING`), published as GPL tooling and kept out of the LGPL/Apache decode\npath. Still `0.x`: the API may change.\n\nIt is the **program-shape** oracle (compile a whole program, capture runtime behaviour). The byte-level\nsealed courts are driven by the **runtime-library shape** (`lab/oracle/decimal_harness`, linking the\nbuilt `libcob`); campaign evidence of record is the **generated replay receipt** (`xtask receipt`\n→ `reports/receipts/<CAMPAIGN>/receipt.json`, see `docs/trust2-generated-receipts.md`). This crate emits\none such replayable, canonical-JSON program-shape witness.\n\nDoctrine it encodes:\n- **Generated C is a witness, not authority** (`GNURUST.GENC.0`): the receipt records\n  `generated_c_hash`, but semantic authority is the *runtime* (stdout/stderr/exit + field bytes).\n- **Compilation mode is always named** (`GNURUST.ORACLEMODE.0`).\n- **Oracle availability is a typed verdict** (`GNURUST.ORACLEAVAIL.0`), never a silent skip.\n- **Canonical JSON** (`GNURUST.JSONCANON.0`): stable key order, lowercase-hex bytes, explicit nulls\n  — via a tiny hand-written serializer (zero runtime dependencies, self-contained SHA-256).\n\n## Usage\n\n```text\ncobc-oracle oracle-smoke\ncobc-oracle run-fixture program.cob\ncobc-oracle write-receipt --fixture program.cob --out receipt.json\n```\n\nRun with a built GnuCOBOL `cobc` on `PATH` and `LC_ALL=C.UTF-8`.\n\n---\n\n*Companion oracle harness for the **gnucobol-rs {{version}}** release — this README is generated by `xtask docs`; freshness (content + version) is enforced by the `docs check` gate.*\n",
+  "legacy_preservation": {
+    "legacy_paths": [
+      "research/legacyreports/crates/cobc-oracle-rs/README.md"
+    ],
+    "legacy_sha256": [
+      "3d0a052cde8ecd13398b0ea6fd63b74536de684f17ff3fba18d2cf8c043e3805"
+    ],
+    "information_superset": true,
+    "legacy_claims_carried_forward": [
+      "full original body embedded verbatim in body_template"
+    ],
+    "legacy_non_claims_carried_forward": [],
+    "legacy_notes_carried_forward": [],
+    "legacy_unstructured_notes": [],
+    "missing_items": []
+  }
 }

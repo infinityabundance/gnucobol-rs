@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ODO.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.40",
+  "crate_version": "0.7.41",
   "damage_if_overclaimed": "treating an ODO record as max-length over-reads or over-writes a variable-length record, corrupting the next record or trailing data",
   "hash_chain": {
-    "inputs_sha256": "0c09877999997a9a61d86025faa80f35cef06009812c7a3881c8822d5d4b1775"
+    "inputs_sha256": "469a36520962952553a62dee2eed19b843fadfaab0832699977201471a232e67"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "ba60036feb8647f177bedb48b23ce748e9193a988e08d971d5a0a05c5f19141a",
-    "receipt_sha256": "8e7c776aaab5d97301313857e5e5b96a82e398063cf012076935da707b52405a"
+    "receipt_sha256": "526d09aef1f907ed1d9b5a0097a2f78246efc6722dcbcf31b1e1d41898cbcc44"
   },
   "kind": "court-casefile",
   "lie_prevented": [
