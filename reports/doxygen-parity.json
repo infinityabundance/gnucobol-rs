@@ -55,8 +55,6 @@
         "cob_intr_content_of",
         "cob_intr_cos",
         "cob_intr_current_date",
-        "cob_intr_date_to_yyyymmdd",
-        "cob_intr_day_to_yyyyddd",
         "cob_intr_display_of",
         "cob_intr_e",
         "cob_intr_exception_file",
@@ -113,7 +111,6 @@
         "cob_intr_trim",
         "cob_intr_variance",
         "cob_intr_when_compiled",
-        "cob_intr_year_to_yyyy",
         "cob_mpf_acos",
         "cob_mpf_asin",
         "cob_mpf_atan",
@@ -207,8 +204,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 24.1,
-      "ported": 57
+      "parity_pct": 25.3,
+      "ported": 60
     },
     {
       "doxygen_functions": 9,
@@ -789,8 +786,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 31.5,
-    "ported": 314
+    "parity_pct": 31.8,
+    "ported": 317
   },
   "xml_root": "lab/doxygen/out/xml"
 }

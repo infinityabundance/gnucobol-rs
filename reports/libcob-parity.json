@@ -56,8 +56,6 @@
         "cob_intr_content_of",
         "cob_intr_cos",
         "cob_intr_current_date",
-        "cob_intr_date_to_yyyymmdd",
-        "cob_intr_day_to_yyyyddd",
         "cob_intr_display_of",
         "cob_intr_e",
         "cob_intr_exception_file",
@@ -114,7 +112,6 @@
         "cob_intr_trim",
         "cob_intr_variance",
         "cob_intr_when_compiled",
-        "cob_intr_year_to_yyyy",
         "cob_mpf_acos",
         "cob_mpf_asin",
         "cob_mpf_atan",
@@ -211,8 +208,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 22.3,
-      "ported": 53
+      "parity_pct": 23.5,
+      "ported": 56
     },
     {
       "file": "cconv.c",
@@ -953,7 +950,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 26.1,
-    "ported": 305
+    "parity_pct": 26.3,
+    "ported": 308
   }
 }

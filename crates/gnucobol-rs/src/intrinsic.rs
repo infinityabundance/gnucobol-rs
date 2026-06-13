@@ -566,6 +566,58 @@ pub fn cob_intr_factorial(src: &[u8], src_attr: &FieldAttr) -> IntrField {
     intr_decimal_result(CobDecimal { value, scale: 0 })
 }
 
+/// The shared 2-digit-year windowing (`maxyear = current_year + interval`; pivot on `maxyear % 100`).
+/// Returns the full year, or `None` if the window bounds are invalid.
+fn window_year(year: i32, interval: i32, current_year: i32) -> Option<i32> {
+    let maxyear = current_year + interval;
+    if !valid_year(current_year) || maxyear < 1700 || maxyear > 9999 {
+        return None;
+    }
+    Some(if maxyear % 100 >= year {
+        year + 100 * (maxyear / 100)
+    } else {
+        year + 100 * ((maxyear / 100) - 1)
+    })
+}
+
+/// `cob_intr_year_to_yyyy (params, ...)` (intrinsic.c): `FUNCTION YEAR-TO-YYYY(yy, interval, base-year)`.
+/// The default base-year (localtime) is a non-claim; this takes it explicitly (the deterministic form).
+pub fn cob_intr_year_to_yyyy(year: i32, interval: i32, current_year: i32) -> IntrField {
+    if !(0..=99).contains(&year) {
+        return cob_alloc_set_field_uint(0);
+    }
+    match window_year(year, interval, current_year) {
+        Some(y) => cob_alloc_set_field_int(y),
+        None => cob_alloc_set_field_uint(0),
+    }
+}
+
+/// `cob_intr_date_to_yyyymmdd (params, ...)` (intrinsic.c): `FUNCTION DATE-TO-YYYYMMDD(yymmdd, …)`.
+pub fn cob_intr_date_to_yyyymmdd(value: i32, interval: i32, current_year: i32) -> IntrField {
+    let year = value / 10000;
+    let mmdd = value % 10000;
+    if !(0..=999999).contains(&year) {
+        return cob_alloc_set_field_uint(0);
+    }
+    match window_year(year, interval, current_year) {
+        Some(y) => cob_alloc_set_field_int(y * 10000 + mmdd),
+        None => cob_alloc_set_field_uint(0),
+    }
+}
+
+/// `cob_intr_day_to_yyyyddd (params, ...)` (intrinsic.c): `FUNCTION DAY-TO-YYYYDDD(yyddd, …)`.
+pub fn cob_intr_day_to_yyyyddd(value: i32, interval: i32, current_year: i32) -> IntrField {
+    let year = value / 1000;
+    let ddd = value % 1000;
+    if !(0..=999999).contains(&year) {
+        return cob_alloc_set_field_uint(0);
+    }
+    match window_year(year, interval, current_year) {
+        Some(y) => cob_alloc_set_field_int(y * 1000 + ddd),
+        None => cob_alloc_set_field_uint(0),
+    }
+}
+
 /// `cob_intr_num_decimal_point ()` (intrinsic.c): `FUNCTION NUMVAL`-context decimal point from
 /// `localeconv()`. Under the pinned `LC_ALL=C.UTF-8` (C locale) this is `"."`. **Non-claim:** other
 /// locales (the result is `localeconv()`-dependent).

@@ -81,6 +81,9 @@ int main(int argc, char **argv) {
 	dump("mdp", cob_intr_mon_decimal_point());
 	dump("mts", cob_intr_mon_thousands_sep());
 	dump("cur", cob_intr_currency_symbol());
+	{ cob_field y=mkf("070",3,DISP,3,0,0),iv=mkf("020",3,DISP,3,0,0),cy=mkf("2024",4,DISP,4,0,0); dump("y2y", cob_intr_year_to_yyyy(3,&y,&iv,&cy)); }
+	{ cob_field y=mkf("700101",6,DISP,6,0,0),iv=mkf("020",3,DISP,3,0,0),cy=mkf("2024",4,DISP,4,0,0); dump("d2y", cob_intr_date_to_yyyymmdd(3,&y,&iv,&cy)); }
+	{ cob_field y=mkf("70001",5,DISP,5,0,0),iv=mkf("020",3,DISP,3,0,0),cy=mkf("2024",4,DISP,4,0,0); dump("dy2y", cob_intr_day_to_yyyyddd(3,&y,&iv,&cy)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("ordmin", cob_intr_ord_min(3,&a,&b,&c)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("ordmax", cob_intr_ord_max(3,&a,&b,&c)); }
 	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("030",3,DISP,3,0,0),c=mkf("020",3,DISP,3,0,0); dump("range", cob_intr_range(3,&a,&b,&c)); }
