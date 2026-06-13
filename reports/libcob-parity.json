@@ -31,7 +31,6 @@
         "calc_mean_of_args",
         "calc_ref_mod",
         "calc_variance_of_args",
-        "calculate_start_end_for_numval",
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
         "cob_decimal_move_temp",
@@ -74,7 +73,6 @@
         "cob_intr_module_source",
         "cob_intr_module_time",
         "cob_intr_national_of",
-        "cob_intr_numval_f",
         "cob_intr_pi",
         "cob_intr_present_value",
         "cob_intr_random",
@@ -115,8 +113,8 @@
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 62.6,
-      "ported": 149
+      "parity_pct": 63.4,
+      "ported": 151
     },
     {
       "file": "cconv.c",
@@ -857,7 +855,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 34.3,
-    "ported": 401
+    "parity_pct": 34.4,
+    "ported": 403
   }
 }

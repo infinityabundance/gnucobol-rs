@@ -170,4 +170,10 @@ fn main() {
     hexln("fdt_ovf", &cob_intr_formatted_datetime(0, 0, b"YYYY-MM-DDThh:mm:ssZ", b"0000001", &d7n, b"0082800", &d7n, Some((b"\x88\xff\xff\xff", &binneg)), false));
     hexln("fdt_off", &cob_intr_formatted_datetime(0, 0, b"YYYY-MM-DDThh:mm:ss+hh:mm", b"0000001", &d7n, b"0043200", &d7n, Some((b"0330", &o4)), false));
     hexln("fdt_inv", &cob_intr_formatted_datetime(0, 0, b"BADFORMAT", b"0000001", &d7n, b"0043200", &d7n, None, false));
+    hexln("nvf2_sci", &cob_intr_numval_f(b"1.5E+10"));
+    hexln("nvf2_neg", &cob_intr_numval_f(b"-12.34"));
+    hexln("nvf2_em3", &cob_intr_numval_f(b"1E-3"));
+    hexln("nvf2_lead", &cob_intr_numval_f(b"000123.450"));
+    hexln("nvf2_e2", &cob_intr_numval_f(b"-7.5e2"));
+    hexln("nvf2_zero", &cob_intr_numval_f(b"0"));
 }

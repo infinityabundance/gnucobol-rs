@@ -2342,6 +2342,138 @@ pub fn cob_intr_test_formatted_datetime(fmt: &[u8], datetime: &[u8]) -> IntrFiel
     cob_alloc_set_field_uint(0)
 }
 
+/// `calculate_start_end_for_numval (srcfield, pp, pp_end)` (intrinsic.c): the relevant `[start, end]` byte
+/// range after trimming trailing spaces/low-values and leading spaces/zeros; `None` for an empty field.
+fn calculate_start_end_for_numval(src: &[u8]) -> Option<(usize, usize)> {
+    if src.is_empty() {
+        return None;
+    }
+    let mut p = 0usize;
+    let mut p_end = src.len() - 1;
+    while p != p_end {
+        if src[p_end] != b' ' && src[p_end] != 0 {
+            break;
+        }
+        p_end -= 1;
+    }
+    while p != p_end {
+        if src[p] != b' ' && src[p] != b'0' {
+            break;
+        }
+        p += 1;
+    }
+    Some((p, p_end))
+}
+
+/// `cob_intr_numval_f (srcfield)` (intrinsic.c): `FUNCTION NUMVAL-F(s)` — parse a floating-point numeric
+/// string (`±mantissa[.frac][E±exp]`) to an exact decimal (`mantissa * 10^(±exp - frac_digits)`); no
+/// transcendental math. Parses "as valid as possible" (the default 3.2 build does not pre-validate).
+pub fn cob_intr_numval_f(src: &[u8]) -> IntrField {
+    const COB_MAX_DIGITS: usize = 38;
+    let dec_pt = b'.';
+    let (start, p_end) = match calculate_start_end_for_numval(src) {
+        Some(se) => se,
+        None => return cob_alloc_set_field_uint(0),
+    };
+
+    let mut final_buff: Vec<u8> = Vec::new();
+    let mut plus_minus = 0i32;
+    let mut digits = 0usize;
+    let mut decimal_digits = 0usize;
+    let mut decimal_seen = false;
+    let mut e_seen = false;
+    let mut exponent: u64 = 0;
+    let mut e_plus_minus = 0i32;
+
+    let mut p = start;
+    'parse: while p <= p_end {
+        let c = src[p];
+        match c {
+            b'0'..=b'9' => {
+                if c == b'0' && digits == 0 && !decimal_seen && exponent == 0 {
+                    p += 1;
+                    continue;
+                }
+                if e_seen {
+                    exponent = exponent * 10 + (c & 0x0F) as u64;
+                } else {
+                    if decimal_seen {
+                        decimal_digits += 1;
+                    }
+                    final_buff.push(c);
+                    digits += 1;
+                    if digits > COB_MAX_DIGITS {
+                        break 'parse;
+                    }
+                }
+            }
+            b'+' => {
+                if e_seen {
+                    if e_plus_minus == 0 {
+                        e_plus_minus = 1;
+                    }
+                } else if plus_minus == 0 {
+                    plus_minus = 1;
+                }
+            }
+            b'-' => {
+                if e_seen {
+                    if e_plus_minus == 0 {
+                        e_plus_minus = -1;
+                    }
+                } else if plus_minus == 0 {
+                    plus_minus = -1;
+                }
+            }
+            b'e' | b'E' => {
+                if !e_seen {
+                    if digits == 0 && decimal_digits == 0 {
+                        break 'parse;
+                    }
+                    e_seen = true;
+                }
+            }
+            b' ' => {}
+            _ => {
+                if c == dec_pt && !decimal_seen {
+                    decimal_seen = true;
+                }
+            }
+        }
+        p += 1;
+    }
+
+    if digits == 0 {
+        final_buff.push(b'0');
+    }
+    let mut d = CobDecimal { value: Mpz::from_decimal_string(&String::from_utf8_lossy(&final_buff)), scale: 0 };
+    if exponent > 9999 {
+        exponent = 9999;
+    }
+
+    if d.value.sgn() == 0 {
+        d.scale = 0;
+        return intr_decimal_result(d);
+    }
+    if plus_minus == -1 {
+        d.value.neg();
+    }
+    if exponent != 0 {
+        if e_plus_minus == -1 {
+            d.scale = (decimal_digits as u64 + exponent) as i32;
+        } else if decimal_digits as u64 >= exponent {
+            d.scale = (decimal_digits as u64 - exponent) as i32;
+        } else {
+            let extra = exponent - decimal_digits as u64;
+            d.value = d.value.mul(&Mpz::ui_pow_ui(10, extra as u32));
+            d.scale = 0;
+        }
+    } else {
+        d.scale = decimal_digits as i32;
+    }
+    intr_decimal_result(d)
+}
+
 /// `valid_time (seconds_from_midnight)` (intrinsic.c): `0 <= s <= SECONDS_IN_DAY` (86400).
 fn valid_time(seconds_from_midnight: i32) -> bool {
     in_range(0, 86400, seconds_from_midnight)

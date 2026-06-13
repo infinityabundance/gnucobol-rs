@@ -179,5 +179,11 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ssZ",20,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0082800",7,DISP,7,0,0),o=mkf("\x88\xff\xff\xff",4,0x11,9,0,HAVE_SIGN); dump("fdt_ovf", cob_intr_formatted_datetime(0,0,5,&f,&dd,&t,&o,0)); }
 	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss+hh:mm",25,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0043200",7,DISP,7,0,0),o=mkf("0330",4,DISP,4,0,0); dump("fdt_off", cob_intr_formatted_datetime(0,0,5,&f,&dd,&t,&o,0)); }
 	{ cob_field f=mkf("BADFORMAT",9,ALNUM,0,0,0),dd=mkf("0000001",7,DISP,7,0,0),t=mkf("0043200",7,DISP,7,0,0); dump("fdt_inv", cob_intr_formatted_datetime(0,0,4,&f,&dd,&t,0)); }
+	{ cob_field f=mkf("1.5E+10",7,ALNUM,0,0,0); dump("nvf2_sci", cob_intr_numval_f(&f)); }
+	{ cob_field f=mkf("-12.34",6,ALNUM,0,0,0); dump("nvf2_neg", cob_intr_numval_f(&f)); }
+	{ cob_field f=mkf("1E-3",4,ALNUM,0,0,0); dump("nvf2_em3", cob_intr_numval_f(&f)); }
+	{ cob_field f=mkf("000123.450",10,ALNUM,0,0,0); dump("nvf2_lead", cob_intr_numval_f(&f)); }
+	{ cob_field f=mkf("-7.5e2",6,ALNUM,0,0,0); dump("nvf2_e2", cob_intr_numval_f(&f)); }
+	{ cob_field f=mkf("0",1,ALNUM,0,0,0); dump("nvf2_zero", cob_intr_numval_f(&f)); }
 	return 0;
 }

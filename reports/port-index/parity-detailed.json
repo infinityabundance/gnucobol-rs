@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 149,
+    "active_ported": 151,
     "compiled": 238,
-    "compiled_parity_pct": 62.6,
+    "compiled_parity_pct": 63.4,
     "disabled": 0,
     "doc_only": 4,
     "file": "intrinsic.c",
@@ -1383,7 +1383,8 @@
       {
         "function": "calculate_start_end_for_numval",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "numval",
@@ -2262,7 +2263,8 @@
       {
         "function": "cob_intr_numval_f",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_annuity",
@@ -2573,7 +2575,6 @@
       "calc_mean_of_args",
       "calc_ref_mod",
       "calc_variance_of_args",
-      "calculate_start_end_for_numval",
       "cob_alloc_set_field_spaces",
       "cob_alloc_set_field_str",
       "cob_decimal_move_temp",
@@ -2616,7 +2617,6 @@
       "cob_intr_module_source",
       "cob_intr_module_time",
       "cob_intr_national_of",
-      "cob_intr_numval_f",
       "cob_intr_pi",
       "cob_intr_present_value",
       "cob_intr_random",
@@ -2658,7 +2658,7 @@
       "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 85,
+    "missing": 83,
     "source_funcs": 238,
     "test_only": 0
   },

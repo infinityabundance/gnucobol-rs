@@ -30,7 +30,6 @@
         "at_cr_or_db",
         "calc_mean_of_args",
         "calc_variance_of_args",
-        "calculate_start_end_for_numval",
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
         "cob_decimal_move_temp",
@@ -73,7 +72,6 @@
         "cob_intr_module_source",
         "cob_intr_module_time",
         "cob_intr_national_of",
-        "cob_intr_numval_f",
         "cob_intr_pi",
         "cob_intr_present_value",
         "cob_intr_random",
@@ -110,8 +108,8 @@
         "space_left",
         "substitute_matches"
       ],
-      "parity_pct": 65.0,
-      "ported": 154
+      "parity_pct": 65.8,
+      "ported": 156
     },
     {
       "doxygen_functions": 9,
@@ -692,8 +690,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 41.2,
-    "ported": 411
+    "parity_pct": 41.4,
+    "ported": 413
   },
   "xml_root": "lab/doxygen/out/xml"
 }
