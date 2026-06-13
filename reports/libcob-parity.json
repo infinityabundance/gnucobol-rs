@@ -716,17 +716,10 @@
       "missing": [
         "clear_group_indicate",
         "clear_suppress",
-        "cob_add_fields",
-        "cob_exit_reportio",
-        "cob_field_dup",
-        "cob_field_free",
-        "cob_field_init",
-        "cob_init_reportio",
         "cob_report_generate",
         "cob_report_initiate",
         "cob_report_suppress",
         "cob_report_terminate",
-        "cob_str_move",
         "do_page_footing",
         "do_page_heading",
         "dumpFlags",
@@ -754,8 +747,8 @@
         "write_rec",
         "zero_all_counters"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 17.9,
+      "ported": 7
     },
     {
       "file": "common.c",
@@ -1032,7 +1025,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 19.3,
-    "ported": 226
+    "parity_pct": 19.9,
+    "ported": 233
   }
 }

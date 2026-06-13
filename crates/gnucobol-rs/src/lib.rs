@@ -69,6 +69,7 @@ mod binary;
 pub mod cond;
 pub mod class;
 pub mod refmod;
+pub mod reportio;
 pub mod subscript;
 pub mod odo;
 pub mod index_item;

@@ -17,6 +17,7 @@ use std::path::Path;
 
 const MD_REL: &str = "LIBCOB-PARITY.md";
 const LEGACY_JSON_REL: &str = "reports/libcob-parity.json";
+const RECEIPT_REL: &str = "reports/provenance/port-index-1-receipt.md";
 
 fn write_json(path: &Path, v: &serde_json::Value) {
     let _ = std::fs::create_dir_all(path.parent().unwrap());
@@ -37,6 +38,7 @@ fn generate(root: &Path) -> bool {
     write_json(&idx_dir.join("parity-detailed.json"), &parity::detailed_json(&rows));
     write_json(&root.join(LEGACY_JSON_REL), &parity::legacy_json(&rows));
     let _ = std::fs::write(root.join(MD_REL), parity::render_md(&rows));
+    let _ = std::fs::write(root.join(RECEIPT_REL), parity::render_receipt(&rows));
 
     let tot_src: usize = rows.iter().map(|r| r.source_funcs).sum();
     let tot_compiled: usize = rows.iter().map(|r| r.compiled).sum();
@@ -58,8 +60,10 @@ fn check(root: &Path) -> i32 {
     };
     let fresh_md = parity::render_md(&rows);
     let fresh_json = serde_json::to_string_pretty(&parity::legacy_json(&rows)).unwrap() + "\n";
+    let fresh_receipt = parity::render_receipt(&rows);
     let cur_md = std::fs::read_to_string(root.join(MD_REL)).unwrap_or_default();
     let cur_json = std::fs::read_to_string(root.join(LEGACY_JSON_REL)).unwrap_or_default();
+    let cur_receipt = std::fs::read_to_string(root.join(RECEIPT_REL)).unwrap_or_default();
     let mut bad = false;
     if cur_md != fresh_md {
         eprintln!("PORT-INDEX.STALE: {MD_REL} != regeneration (run `gnucobol-rs-port-index parity`)");
@@ -67,6 +71,10 @@ fn check(root: &Path) -> i32 {
     }
     if cur_json != fresh_json {
         eprintln!("PORT-INDEX.STALE: {LEGACY_JSON_REL} != regeneration");
+        bad = true;
+    }
+    if cur_receipt != fresh_receipt {
+        eprintln!("PORT-INDEX.STALE: {RECEIPT_REL} scoreboard != live parity (run `gnucobol-rs-port-index parity`)");
         bad = true;
     }
     if bad {

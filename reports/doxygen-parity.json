@@ -580,17 +580,10 @@
       "missing": [
         "clear_group_indicate",
         "clear_suppress",
-        "cob_add_fields",
-        "cob_exit_reportio",
-        "cob_field_dup",
-        "cob_field_free",
-        "cob_field_init",
-        "cob_init_reportio",
         "cob_report_generate",
         "cob_report_initiate",
         "cob_report_suppress",
         "cob_report_terminate",
-        "cob_str_move",
         "do_page_footing",
         "do_page_heading",
         "free_control_fields",
@@ -603,7 +596,6 @@
         "line_control_chg",
         "line_control_one",
         "print_field",
-        "reportInitialize",
         "report_line",
         "report_line_and",
         "report_line_type",
@@ -614,8 +606,8 @@
         "write_rec",
         "zero_all_counters"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 22.9,
+      "ported": 8
     },
     {
       "doxygen_functions": 244,
@@ -721,7 +713,6 @@
         "cob_last_runtime_error",
         "cob_load_config",
         "cob_load_config_file",
-        "cob_malloc",
         "cob_module_enter",
         "cob_module_free",
         "cob_module_global_enter",
@@ -856,8 +847,8 @@
         "var_print",
         "version_bitstring"
       ],
-      "parity_pct": 4.1,
-      "ported": 10
+      "parity_pct": 4.5,
+      "ported": 11
     },
     {
       "doxygen_functions": 4,
@@ -872,8 +863,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 23.1,
-    "ported": 231
+    "parity_pct": 24.0,
+    "ported": 240
   },
   "xml_root": "lab/doxygen/out/xml"
 }
