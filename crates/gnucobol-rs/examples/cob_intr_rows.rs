@@ -242,4 +242,15 @@ fn main() {
     hexln("cdate", &cob_intr_current_date(0, 0));
     hexln("fcd", &cob_intr_formatted_current_date(0, 0, b"YYYY-MM-DDThh:mm:ss"));
     hexln("fcd2", &cob_intr_formatted_current_date(0, 0, b"YYYYMMDDThhmmss"));
+    hexln("mid", &cob_intr_module_id(b"MYMOD"));
+    hexln("msrc", &cob_intr_module_source(b"mymod.cob"));
+    hexln("mfd", &cob_intr_module_formatted_date(b"2024/02/29 12:34:56"));
+    hexln("mdate", &cob_intr_module_date(20240229));
+    hexln("mtime", &cob_intr_module_time(123456));
+    hexln("mcaller", &cob_intr_module_caller_id(None));
+    hexln("mpath", &cob_intr_module_path(None));
+    hexln("exstat", &cob_intr_exception_status(None));
+    hexln("exstmt", &cob_intr_exception_statement(None));
+    hexln("exloc", &cob_intr_exception_location(None));
+    hexln("exfile", &cob_intr_exception_file(None));
 }

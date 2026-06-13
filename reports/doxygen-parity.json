@@ -28,31 +28,16 @@
       "missing": [
         "add_z",
         "at_cr_or_db",
-        "cob_alloc_set_field_spaces",
-        "cob_alloc_set_field_str",
         "cob_decimal_move_temp",
         "cob_exit_intrinsic",
         "cob_get_indirect_field",
         "cob_init_intrinsic",
         "cob_intr_content_length",
         "cob_intr_content_of",
-        "cob_intr_exception_file",
-        "cob_intr_exception_file_n",
-        "cob_intr_exception_location",
-        "cob_intr_exception_location_n",
-        "cob_intr_exception_statement",
-        "cob_intr_exception_status",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
         "cob_intr_locale_time",
-        "cob_intr_module_caller_id",
-        "cob_intr_module_date",
-        "cob_intr_module_formatted_date",
-        "cob_intr_module_id",
-        "cob_intr_module_path",
-        "cob_intr_module_source",
-        "cob_intr_module_time",
         "cob_intr_random",
         "cob_put_indirect_field",
         "cob_switch_value",
@@ -64,8 +49,8 @@
         "space_left",
         "substitute_matches"
       ],
-      "parity_pct": 84.4,
-      "ported": 200
+      "parity_pct": 90.7,
+      "ported": 215
     },
     {
       "doxygen_functions": 9,
@@ -643,8 +628,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 46.1,
-    "ported": 460
+    "parity_pct": 47.6,
+    "ported": 475
   },
   "xml_root": "lab/doxygen/out/xml"
 }

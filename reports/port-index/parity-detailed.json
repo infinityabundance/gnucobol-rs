@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 191,
+    "active_ported": 206,
     "compiled": 238,
-    "compiled_parity_pct": 80.3,
+    "compiled_parity_pct": 86.6,
     "disabled": 0,
     "doc_only": 8,
     "file": "intrinsic.c",
@@ -1435,12 +1435,14 @@
       {
         "function": "cob_alloc_set_field_str",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_alloc_set_field_spaces",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "days_in_year",
@@ -2039,37 +2041,44 @@
       {
         "function": "cob_intr_module_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_id",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_caller_id",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_formatted_date",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_source",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_module_path",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_concatenate",
@@ -2098,22 +2107,26 @@
       {
         "function": "cob_intr_exception_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_exception_location",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_exception_status",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_exception_statement",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_when_compiled",
@@ -2573,12 +2586,14 @@
       {
         "function": "cob_intr_exception_file_n",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_exception_location_n",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_integer_of_boolean",
@@ -2613,31 +2628,16 @@
       "add_z",
       "at_cr_or_db",
       "calc_ref_mod",
-      "cob_alloc_set_field_spaces",
-      "cob_alloc_set_field_str",
       "cob_decimal_move_temp",
       "cob_exit_intrinsic",
       "cob_get_indirect_field",
       "cob_init_intrinsic",
       "cob_intr_content_length",
       "cob_intr_content_of",
-      "cob_intr_exception_file",
-      "cob_intr_exception_file_n",
-      "cob_intr_exception_location",
-      "cob_intr_exception_location_n",
-      "cob_intr_exception_statement",
-      "cob_intr_exception_status",
       "cob_intr_lcl_time_from_secs",
       "cob_intr_locale_compare",
       "cob_intr_locale_date",
       "cob_intr_locale_time",
-      "cob_intr_module_caller_id",
-      "cob_intr_module_date",
-      "cob_intr_module_formatted_date",
-      "cob_intr_module_id",
-      "cob_intr_module_path",
-      "cob_intr_module_source",
-      "cob_intr_module_time",
       "cob_intr_random",
       "cob_put_indirect_field",
       "cob_switch_value",
@@ -2658,7 +2658,7 @@
       "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 39,
+    "missing": 24,
     "source_funcs": 238,
     "test_only": 0
   },

@@ -29,31 +29,16 @@
         "add_z",
         "at_cr_or_db",
         "calc_ref_mod",
-        "cob_alloc_set_field_spaces",
-        "cob_alloc_set_field_str",
         "cob_decimal_move_temp",
         "cob_exit_intrinsic",
         "cob_get_indirect_field",
         "cob_init_intrinsic",
         "cob_intr_content_length",
         "cob_intr_content_of",
-        "cob_intr_exception_file",
-        "cob_intr_exception_file_n",
-        "cob_intr_exception_location",
-        "cob_intr_exception_location_n",
-        "cob_intr_exception_statement",
-        "cob_intr_exception_status",
         "cob_intr_lcl_time_from_secs",
         "cob_intr_locale_compare",
         "cob_intr_locale_date",
         "cob_intr_locale_time",
-        "cob_intr_module_caller_id",
-        "cob_intr_module_date",
-        "cob_intr_module_formatted_date",
-        "cob_intr_module_id",
-        "cob_intr_module_path",
-        "cob_intr_module_source",
-        "cob_intr_module_time",
         "cob_intr_random",
         "cob_put_indirect_field",
         "cob_switch_value",
@@ -73,8 +58,8 @@
         "substitute",
         "substitute_matches"
       ],
-      "parity_pct": 80.3,
-      "ported": 191
+      "parity_pct": 86.6,
+      "ported": 206
     },
     {
       "file": "cconv.c",
@@ -813,7 +798,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 38.1,
-    "ported": 446
+    "parity_pct": 39.4,
+    "ported": 461
   }
 }

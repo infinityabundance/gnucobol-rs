@@ -41,6 +41,11 @@ int main(int argc, char **argv) {
 	mod.decimal_point = '.';
 	mod.currency_symbol = '$';
 	mod.numeric_separator = ',';
+	mod.module_name = "MYMOD";
+	mod.module_source = "mymod.cob";
+	mod.module_formatted_date = "2024/02/29 12:34:56";
+	mod.module_date = 20240229;
+	mod.module_time = 123456;
 	g->cob_current_module = &mod;
 
 	{ cob_field f = mkf("A", 1, ALNUM, 0, 0, 0); dump("ord_A", cob_intr_ord(&f)); }
@@ -252,5 +257,18 @@ int main(int argc, char **argv) {
 	dump("cdate", cob_intr_current_date(0,0));
 	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0); dump("fcd", cob_intr_formatted_current_date(0,0,&f)); }
 	{ cob_field f=mkf("YYYYMMDDThhmmss",15,ALNUM,0,0,0); dump("fcd2", cob_intr_formatted_current_date(0,0,&f)); }
+	dump("mid", cob_intr_module_id());
+	dump("msrc", cob_intr_module_source());
+	dump("mfd", cob_intr_module_formatted_date());
+	dump("mdate", cob_intr_module_date());
+	dump("mtime", cob_intr_module_time());
+	dump("mcaller", cob_intr_module_caller_id());
+	dump("mpath", cob_intr_module_path());
+	/* exception introspection with a CLEARED last-exception state (deterministic defaults) */
+	cob_set_exception(0);
+	dump("exstat", cob_intr_exception_status());
+	dump("exstmt", cob_intr_exception_statement());
+	dump("exloc", cob_intr_exception_location());
+	dump("exfile", cob_intr_exception_file());
 	return 0;
 }

@@ -3454,6 +3454,141 @@ pub fn cob_intr_formatted_current_date(offset: i32, length: i32, fmt: &[u8]) -> 
     (buff, ALPHA1)
 }
 
+/// `cob_alloc_set_field_str (str, offset, length)` (intrinsic.c): an alphanumeric field holding `str`
+/// (length = its byte length), with optional reference modification.
+pub fn cob_alloc_set_field_str(s: &[u8], offset: i32, length: i32) -> IntrField {
+    let out = s.to_vec();
+    if offset > 0 {
+        return intr_refmod(out, offset, length);
+    }
+    (out, ALPHA1)
+}
+
+/// `cob_alloc_set_field_spaces (n)` (intrinsic.c): an `n`-byte all-space alphanumeric field.
+pub fn cob_alloc_set_field_spaces(n: usize) -> IntrField {
+    (vec![b' '; n], ALPHA1)
+}
+
+// ---- module / exception introspection (intrinsic.c) --------------------------------------------
+//
+// These read the running module / last-exception global state (COB_MODULE_PTR, cobglobptr). gnucobol-rs is
+// a function library with no such runtime, so each is ported as a parameterized formatter of the same
+// state: the FORMATTING is 1:1, and the deterministic cases (a given module field, or the no-exception
+// defaults) are oracle-testable.
+
+/// `cob_intr_module_id ()` (intrinsic.c): `FUNCTION MODULE-ID` — the current module name.
+pub fn cob_intr_module_id(module_name: &[u8]) -> IntrField {
+    cob_alloc_set_field_str(module_name, 0, 0)
+}
+
+/// `cob_intr_module_source ()` (intrinsic.c): `FUNCTION MODULE-SOURCE`.
+pub fn cob_intr_module_source(module_source: &[u8]) -> IntrField {
+    cob_alloc_set_field_str(module_source, 0, 0)
+}
+
+/// `cob_intr_module_formatted_date ()` (intrinsic.c): `FUNCTION MODULE-FORMATTED-DATE`.
+pub fn cob_intr_module_formatted_date(module_formatted_date: &[u8]) -> IntrField {
+    cob_alloc_set_field_str(module_formatted_date, 0, 0)
+}
+
+/// `cob_intr_module_caller_id ()` (intrinsic.c): `FUNCTION MODULE-CALLER-ID` — the caller module name, or a
+/// zero-length field when there is no caller.
+pub fn cob_intr_module_caller_id(caller_name: Option<&[u8]>) -> IntrField {
+    match caller_name {
+        Some(name) => cob_alloc_set_field_str(name, 0, 0),
+        None => (Vec::new(), ALPHA1),
+    }
+}
+
+/// `cob_intr_module_path ()` (intrinsic.c): `FUNCTION MODULE-PATH` — the module path, or a zero-length
+/// field when absent/empty.
+pub fn cob_intr_module_path(path: Option<&[u8]>) -> IntrField {
+    match path {
+        Some(p) if !p.is_empty() => cob_alloc_set_field_str(p, 0, 0),
+        _ => (Vec::new(), ALPHA1),
+    }
+}
+
+/// `cob_intr_module_date ()` (intrinsic.c): `FUNCTION MODULE-DATE` — the module's numeric date as an
+/// 8-digit `DISPLAY` field.
+pub fn cob_intr_module_date(module_date: u32) -> IntrField {
+    let mut b = format!("{module_date:08}").into_bytes();
+    b.truncate(8);
+    (b, FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 })
+}
+
+/// `cob_intr_module_time ()` (intrinsic.c): `FUNCTION MODULE-TIME` — a 6-digit `DISPLAY` field.
+pub fn cob_intr_module_time(module_time: u32) -> IntrField {
+    let mut b = format!("{module_time:06}").into_bytes();
+    b.truncate(6);
+    (b, FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 6, scale: 0, flags: 0 })
+}
+
+/// `cob_intr_exception_status ()` (intrinsic.c): `FUNCTION EXCEPTION-STATUS` — the last exception's name in
+/// a 31-byte field (spaces when no exception is active).
+pub fn cob_intr_exception_status(exception_name: Option<&[u8]>) -> IntrField {
+    let mut out = vec![b' '; 31];
+    if let Some(name) = exception_name {
+        let n = name.len().min(31);
+        out[..n].copy_from_slice(&name[..n]);
+    }
+    (out, ALPHA1)
+}
+
+/// `cob_intr_exception_statement ()` (intrinsic.c): `FUNCTION EXCEPTION-STATEMENT` — the last exception's
+/// statement name in a 31-byte field (spaces when none).
+pub fn cob_intr_exception_statement(statement: Option<&[u8]>) -> IntrField {
+    let mut out = vec![b' '; 31];
+    if let Some(s) = statement {
+        let n = s.len().min(31);
+        out[..n].copy_from_slice(&s[..n]);
+    }
+    (out, ALPHA1)
+}
+
+/// `cob_intr_exception_location ()` (intrinsic.c): `FUNCTION EXCEPTION-LOCATION` — `id; para OF section;
+/// line` (with the variants when section/paragraph are absent); a single space when no exception is active.
+pub fn cob_intr_exception_location(state: Option<(&[u8], Option<&[u8]>, Option<&[u8]>, u32)>) -> IntrField {
+    match state {
+        None => (vec![b' '], ALPHA1),
+        Some((id, section, paragraph, line)) => {
+            let s = |b: &[u8]| String::from_utf8_lossy(b).into_owned();
+            let buff = match (section, paragraph) {
+                (Some(sec), Some(par)) => format!("{}; {} OF {}; {}", s(id), s(par), s(sec), line),
+                (Some(sec), None) => format!("{}; {}; {}", s(id), s(sec), line),
+                (None, Some(par)) => format!("{}; {}; {}", s(id), s(par), line),
+                (None, None) => format!("{}; ; {}", s(id), line),
+            };
+            cob_alloc_set_field_str(buff.as_bytes(), 0, 0)
+        }
+    }
+}
+
+/// `cob_intr_exception_file ()` (intrinsic.c): `FUNCTION EXCEPTION-FILE` — the 2-char file status + the
+/// select name on an I/O exception, else `"00"`.
+pub fn cob_intr_exception_file(state: Option<(&[u8], &[u8])>) -> IntrField {
+    match state {
+        None => (b"00".to_vec(), ALPHA1),
+        Some((status, select)) => {
+            let mut out = Vec::with_capacity(2 + select.len());
+            out.extend_from_slice(&status[..2.min(status.len())]);
+            out.extend_from_slice(select);
+            (out, ALPHA1)
+        }
+    }
+}
+
+/// `cob_intr_exception_file_n ()` (intrinsic.c): unimplemented in GnuCOBOL 3.2; see [`error_not_implemented`].
+pub fn cob_intr_exception_file_n() -> IntrField {
+    error_not_implemented()
+}
+
+/// `cob_intr_exception_location_n ()` (intrinsic.c): unimplemented in GnuCOBOL 3.2; see
+/// [`error_not_implemented`].
+pub fn cob_intr_exception_location_n() -> IntrField {
+    error_not_implemented()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
