@@ -5,10 +5,10 @@ use gnucobol_rs::fileio::{write_line_sequential, LineSeqConfig};
 use std::io::BufRead;
 
 // Each config mirrors the exact COB_LS_* env the oracle program runs under.
-const PLAIN: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false }; // COB_LS_VALIDATE=0
-const NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: true, ls_validate: false }; // VALIDATE=0 NULLS=1
-const FIXED: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: false, ls_validate: true }; // COB_LS_FIXED=1 (validate default 1)
-const FIXED_NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: true, ls_validate: false }; // VALIDATE=0 NULLS=1 FIXED=1
+const PLAIN: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false, ls_split: true }; // COB_LS_VALIDATE=0
+const NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: true, ls_validate: false, ls_split: true }; // VALIDATE=0 NULLS=1
+const FIXED: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: false, ls_validate: true, ls_split: true }; // COB_LS_FIXED=1 (validate default 1)
+const FIXED_NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: true, ls_validate: false, ls_split: true }; // VALIDATE=0 NULLS=1 FIXED=1
 
 // The fixed-width PIC X(8) FD record areas (space-padded) the oracle program writes.
 fn valid() -> Vec<&'static [u8]> {

@@ -40,11 +40,15 @@ pub struct LineSeqConfig {
     pub ls_nulls: bool,
     /// `COB_LS_VALIDATE` — reject a record containing any byte `< 0x20` with status `71`.
     pub ls_validate: bool,
+    /// `COB_LS_SPLIT` (READ only) — a line longer than the record is split into `06`/`00` records;
+    /// when off, the overflow is status `04` and the rest of the line is discarded. Default `true`.
+    pub ls_split: bool,
 }
 
 impl LineSeqConfig {
-    /// libcob's out-of-the-box settings: `COB_LS_VALIDATE=1`, `COB_LS_FIXED=0`, `COB_LS_NULLS=0`.
-    pub const DEFAULT: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: true };
+    /// libcob's out-of-the-box settings: `COB_LS_VALIDATE=1`, `COB_LS_SPLIT=1`, `COB_LS_FIXED=0`, `COB_LS_NULLS=0`.
+    pub const DEFAULT: LineSeqConfig =
+        LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: true, ls_split: true };
 }
 
 /// The outcome of one `WRITE` to a LINE SEQUENTIAL file: the FILE STATUS and the bytes appended.
@@ -134,6 +138,125 @@ pub fn lineseq_write(record: &[u8], cfg: &LineSeqConfig) -> LineWrite {
     LineWrite { status: "00", bytes: out }
 }
 
+/// `IS_BAD_CHAR` as the compiled 3.2 GA `libcob` behaves **on READ**: a byte below the space (`0x20`)
+/// is bad *unless* it is one of `BS`/`TAB`/`FF`/`SI`/`ESC` (`0x08`/`0x09`/`0x0C`/`0x0F`/`0x1B`).
+///
+/// Forensic asymmetry (both verified across `0x00–0x1F`): the **same** source macro is honored here on
+/// READ (those five are allowed → status `00`) but is **dead** on WRITE ([`is_bad_char`], where every
+/// byte `< 0x20` is rejected → status `71`).
+#[inline]
+fn is_bad_char_read(b: u8) -> bool {
+    b < b' ' && b != 0x08 && b != 0x09 && b != 0x0c && b != 0x0f && b != 0x1b
+}
+
+/// The outcome of one `READ NEXT` from a LINE SEQUENTIAL file: FILE STATUS, the `record_max`-wide record
+/// area (space-filled past the bytes read), and the logical record length (`f->record->size`).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct LineRead {
+    pub at_end: bool,
+    /// The record area (`record_max` bytes, space-filled past `size`); empty when `at_end`.
+    pub record: Vec<u8>,
+    /// `f->record->size` — the number of bytes actually read into the record (0 when `at_end`).
+    pub size: usize,
+    /// `"00"` success · `"04"` record truncated, line continues (split off) · `"06"` record truncated,
+    /// remainder is the next read (split on) · `"09"` a bad control byte was read · `"10"` end of file.
+    pub status: &'static str,
+}
+
+/// Port of `fileio.c:lineseq_read` for `READ ... NEXT RECORD` over a byte image: reads one logical line
+/// from `data` starting at `*pos` (advancing it), byte-for-byte as GnuCOBOL 3.2 `libcob`.
+///
+/// `record_max` is `f->record_max` (the FD record width). Line termination is `\n`; a `\r\n` folds to
+/// `\n`; a lone `\r` is kept as a data byte. Per `cfg`: `ls_validate` flags any [`is_bad_char_read`]
+/// byte with status `09` (the line is still read); else `ls_nulls` decodes a `0x00`-prefixed control
+/// byte (an unescaped control byte → status `71`, a declared non-claim); else bytes are stored raw.
+/// When the record fills to `record_max`, `ls_split` peeks for the line end (consuming a trailing
+/// `\n`/`\r\n`, status `00`) or reports `06` and leaves the remainder for the next read; with `ls_split`
+/// off the overflow is status `04` and the rest of the line is consumed and discarded. At EOF with no
+/// bytes read the result is `at_end` with status `10`.
+///
+/// **Non-claims:** the multi-file (concatenated-input) chain, CODE-SET conversion (`sort_collating`),
+/// `ls_validate > 1` printable-check, the `ls_nulls` error-recovery path after status `71`, and the
+/// actual `FILE *` reads (declared OS boundary).
+pub fn lineseq_read(data: &[u8], pos: &mut usize, record_max: usize, cfg: &LineSeqConfig) -> LineRead {
+    let mut rec = vec![b' '; record_max];
+    let mut i = 0usize;
+    let mut sts = "00";
+    loop {
+        if *pos >= data.len() {
+            if i == 0 {
+                return LineRead { at_end: true, record: Vec::new(), size: 0, status: "10" };
+            }
+            break;
+        }
+        let mut n = data[*pos];
+        *pos += 1;
+        if n == b'\r' {
+            // \r\n -> fold to \n (consume the \n); lone \r -> keep as data (leave the next byte).
+            if *pos < data.len() && data[*pos] == b'\n' {
+                *pos += 1;
+                n = b'\n';
+            }
+        }
+        if n == b'\n' {
+            break;
+        }
+        if cfg.ls_validate {
+            if is_bad_char_read(n) {
+                sts = "09";
+            }
+        } else if cfg.ls_nulls {
+            if n == 0 {
+                if *pos >= data.len() || data[*pos] >= b' ' {
+                    // EOF or a non-control byte after 0x00 -> bad NULL encoding (declared non-claim).
+                    return LineRead { at_end: false, record: rec, size: i, status: "71" };
+                }
+                n = data[*pos];
+                *pos += 1;
+            } else if n < b' ' {
+                return LineRead { at_end: false, record: rec, size: i, status: "71" };
+            }
+        }
+        if i < record_max {
+            rec[i] = n;
+            i += 1;
+            if i == record_max && cfg.ls_split {
+                // record full: peek for the line terminator, else put the byte(s) back and report 06.
+                let start = *pos;
+                let mut peek = if *pos < data.len() { let c = data[*pos]; *pos += 1; Some(c) } else { None };
+                if peek == Some(b'\r') {
+                    peek = if *pos < data.len() { let c = data[*pos]; *pos += 1; Some(c) } else { None };
+                }
+                if peek != Some(b'\n') {
+                    *pos = start; // un-read the peeked byte(s)
+                    sts = "06";
+                }
+                break;
+            }
+        } else if i == record_max {
+            // split off: the line overflows the record -> status 04, discard the rest of the line.
+            sts = "04";
+        }
+    }
+    LineRead { at_end: false, record: rec, size: i, status: sts }
+}
+
+/// Replay `OPEN INPUT` + repeated `READ NEXT ... AT END` over `data` for the declared `record_max` and
+/// config, returning every read event (the trailing event is always `at_end` with status `"10"`).
+pub fn read_line_sequential(data: &[u8], record_max: usize, cfg: &LineSeqConfig) -> Vec<LineRead> {
+    let mut out = Vec::new();
+    let mut pos = 0usize;
+    loop {
+        let r = lineseq_read(data, &mut pos, record_max, cfg);
+        let end = r.at_end;
+        out.push(r);
+        if end {
+            break;
+        }
+    }
+    out
+}
+
 /// Replay `OPEN OUTPUT` + a sequence of `WRITE`s, concatenating the bytes each produces. Stops at the
 /// first record that fails validation (status `"71"`) — as libcob does, the failing `WRITE` emits
 /// nothing and the run aborts — returning the bytes written so far and the terminating status.
@@ -153,10 +276,10 @@ pub fn write_line_sequential(records: &[&[u8]], cfg: &LineSeqConfig) -> (Vec<u8>
 mod tests {
     use super::*;
 
-    const PLAIN: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false };
-    const NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: true, ls_validate: false };
-    const FIXED: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: false, ls_validate: false };
-    const FIXED_NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: true, ls_validate: false };
+    const PLAIN: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false, ls_split: true };
+    const NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: true, ls_validate: false, ls_split: true };
+    const FIXED: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: false, ls_validate: false, ls_split: true };
+    const FIXED_NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: true, ls_validate: false, ls_split: true };
 
     #[test]
     fn size_strips_trailing_spaces() {
@@ -216,6 +339,65 @@ mod tests {
         assert_eq!(bytes, b"AB\n"); // wrote AB, then the tab record failed
         assert_eq!(sts, "71");
     }
+
+    // ---- lineseq_read ----
+    fn rd(data: &[u8], cfg: &LineSeqConfig) -> Vec<(Vec<u8>, &'static str)> {
+        read_line_sequential(data, 8, cfg)
+            .into_iter()
+            .filter(|r| !r.at_end)
+            .map(|r| (r.record, r.status))
+            .collect()
+    }
+
+    #[test]
+    fn read_basic_and_crlf_fold() {
+        assert_eq!(rd(b"AB\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
+        // \r\n folds to one line break
+        assert_eq!(rd(b"AB\r\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
+    }
+
+    #[test]
+    fn read_validate_tab_ok_cr_bad() {
+        // TAB (0x09) is an IS_BAD_CHAR exclusion -> status 00; lone CR (0x0d) is bad -> status 09 (kept as data)
+        assert_eq!(rd(b"A\x09B\n", &LineSeqConfig::DEFAULT), vec![(b"A\x09B     ".to_vec(), "00")]);
+        assert_eq!(rd(b"A\x0dB\n", &LineSeqConfig::DEFAULT), vec![(b"A\x0dB     ".to_vec(), "09")]);
+    }
+
+    #[test]
+    fn read_plain_passes_control_raw() {
+        assert_eq!(rd(b"A\x0dB\n", &PLAIN), vec![(b"A\x0dB     ".to_vec(), "00")]);
+    }
+
+    #[test]
+    fn read_nulls_decode() {
+        // 41 00 09 42 00 09 42 00 00 0a -> "A\tB\tB\0" decoded
+        assert_eq!(rd(b"A\x00\x09B\x00\x09B\x00\x00\n", &NULLS), vec![(b"A\x09B\x09B\x00  ".to_vec(), "00")]);
+    }
+
+    #[test]
+    fn read_split_long_line() {
+        // "ABCDEFGHIJ\n" -> split on: 06 "ABCDEFGH", 00 "IJ"
+        assert_eq!(rd(b"ABCDEFGHIJ\n", &LineSeqConfig::DEFAULT), vec![(b"ABCDEFGH".to_vec(), "06"), (b"IJ      ".to_vec(), "00")]);
+        // exactly record_max + \n -> single 00 (the \n is consumed at the boundary peek)
+        assert_eq!(rd(b"ABCDEFGH\n", &LineSeqConfig::DEFAULT), vec![(b"ABCDEFGH".to_vec(), "00")]);
+    }
+
+    #[test]
+    fn read_no_split_truncates_with_04() {
+        // split OFF: "ABCDEFGHIJ\n" -> 04 "ABCDEFGH", the rest of the line is discarded (one record)
+        let nosplit = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: true, ls_split: false };
+        assert_eq!(rd(b"ABCDEFGHIJ\n", &nosplit), vec![(b"ABCDEFGH".to_vec(), "04")]);
+    }
+
+    #[test]
+    fn read_trailing_and_empty() {
+        // no trailing newline keeps the last line
+        assert_eq!(rd(b"AB", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00")]);
+        // empty file -> immediate AT END (no records)
+        assert!(rd(b"", &LineSeqConfig::DEFAULT).is_empty());
+        // a mid-file empty line is a record (all spaces)
+        assert_eq!(rd(b"AB\n\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"        ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
+    }
 }
 
 #[cfg(kani)]
@@ -237,5 +419,21 @@ mod kani_proofs {
         } else {
             assert!(w.bytes.is_empty());
         }
+    }
+    // KANIFOR: GNURUST.FILEIO.LINESEQ.2
+    /// A non-AT-END read always fills the record area to exactly record_max and reports a known status;
+    /// the cursor never runs backwards past where it started.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn read_record_width_and_status() {
+        let data: [u8; 4] = kani::any();
+        let mut pos = 0usize;
+        let r = lineseq_read(&data, &mut pos, 4, &LineSeqConfig::DEFAULT);
+        if !r.at_end {
+            assert_eq!(r.record.len(), 4);
+            assert!(matches!(r.status, "00" | "04" | "06" | "09" | "71"));
+            assert!(r.size <= 4);
+        }
+        assert!(pos <= data.len());
     }
 }

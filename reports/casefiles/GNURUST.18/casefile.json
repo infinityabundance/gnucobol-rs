@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.18",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.42",
+  "crate_version": "0.7.43",
   "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely",
   "hash_chain": {
-    "inputs_sha256": "f50c5aff7fe0239c1ba9115ed85b781d90097ecde0b6c8452f2fb0f1f97ec136"
+    "inputs_sha256": "65a48c63425622dadf466282d9f3c7116b1d206576afa70efb52fc447d0a39e3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3803ff335f62b1b037e7fa176314167a5f252cfa2f1876033aa6e46c949e042f",
-    "receipt_sha256": "5a2435506eb9b87da2ab90f050c08af47fe22b9cf1fa6122c66be5ebbc5758a3"
+    "receipt_sha256": "0a1120a9866401e04c6d3622efebdc43615d60a9b27ef562f43017155019c928"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

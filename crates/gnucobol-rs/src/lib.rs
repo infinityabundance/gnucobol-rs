@@ -644,11 +644,14 @@ pub fn __fuzz_lineseq(data: &[u8]) {
         ls_fixed: data.first().is_some_and(|b| b & 1 != 0),
         ls_nulls: data.first().is_some_and(|b| b & 2 != 0),
         ls_validate: data.first().is_some_and(|b| b & 4 != 0),
+        ls_split: data.first().is_some_and(|b| b & 8 != 0),
     };
     let body = data.get(1..).unwrap_or(&[]);
     let recs: Vec<&[u8]> = body.chunks(8).collect();
     let _ = write_line_sequential(&recs, &cfg);
     let _ = fileio::lineseq_size(body, body.len(), cfg.ls_fixed);
+    let rmax = (data.first().copied().unwrap_or(1) as usize % 7) + 1;
+    let _ = fileio::read_line_sequential(body, rmax, &cfg);
 }
 
 #[cfg(feature = "fuzzing")]

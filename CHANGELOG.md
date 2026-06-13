@@ -12,6 +12,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.43]
+- **`fileio.c` — line-sequential `READ` config matrix sealed (`GNURUST.FILEIO.LINESEQ.2`).** The READ counterpart to 0.7.42's WRITE court: a faithful port of `libcob/fileio.c` `lineseq_read` (the record bytes and FILE STATUS produced by `READ ... NEXT RECORD` over an `ORGANIZATION IS LINE SEQUENTIAL` file), proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` across the `COB_LS_*` matrix (`lineseq_read_sweep` 12/0):
+  - a line ends at `\n`; `\r\n` folds to `\n`; a lone `\r` is kept as a data byte; a short line is space-filled (`00`); a trailing newline makes no empty record; a mid-file empty line **is** a record; EOF with no bytes read is status `10`.
+  - **`COB_LS_VALIDATE`** flags an `IS_BAD_CHAR` byte with status `09` (the line is still delivered); **`COB_LS_NULLS`** decodes a `0x00`-prefixed control byte; **`COB_LS_SPLIT`** on splits a long line into `06`+`00` records, off truncates to status `04` and discards the rest.
+  - **Forensic asymmetry (both verified across `0x00–0x1F`):** `IS_BAD_CHAR`'s `BS`/`TAB`/`FF`/`SI`/`ESC` exclusions are **live on READ** (those five → status `00`) but **dead on WRITE** (every byte `< 0x20` → status `71`) — the same source macro, opposite effective behavior in the compiled 3.2 GA `libcob`.
+  - The `fd`/`FILE*` reads remain the declared OS boundary; the multi-file `open_next` chain, CODE-SET conversion, `COB_LS_VALIDATE>1`, and `lineseq_rewrite` stay explicit non-claims. `fileio.c` parity 2 → 3/182.
+- No API breaks: additive (`fileio::lineseq_read`/`read_line_sequential` + a new field `LineSeqConfig::ls_split`, default `true`).
+
 ## [0.7.42]
 - **`fileio.c` opened — line-sequential `WRITE` config matrix sealed (`GNURUST.FILEIO.LINESEQ.1`).** The first sub-surface of `libcob/fileio.c` (file 8/13, the 10.7k-line keystone): a faithful port of `lineseq_size` + `lineseq_write` (the bytes a `WRITE` appends to an `ORGANIZATION IS LINE SEQUENTIAL` file and the resulting FILE STATUS), proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` across the `COB_LS_*` runtime-config matrix (`lineseq_write_sweep` 8/0):
   - **default (`COB_LS_VALIDATE=1`)** strips trailing spaces, writes the record raw + `\n`, but rejects any record byte `< 0x20` with status `71` (writing nothing); **`COB_LS_VALIDATE=0`** passes control bytes through raw; **`COB_LS_NULLS=1`** emits `0x00` before each byte `< 0x20`; **`COB_LS_FIXED=1`** writes the full unstripped record area.

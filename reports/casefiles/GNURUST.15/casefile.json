@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.15",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.42",
+  "crate_version": "0.7.43",
   "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses",
   "hash_chain": {
-    "inputs_sha256": "89d294ec84399ad69c915be8499b9bda2d5b14ea8ffb1620b954e149eb86f32e"
+    "inputs_sha256": "d4f1e29b0df471a626020613edd9d52c251fdbc3954aa00d1284884ec762fdb0"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b0b3fddad503ceb95a15c12ef8681255a0269deaecc3285d9fd587234fd60532",
-    "receipt_sha256": "0c34c3464f42f075cbabdbb10ad3baa58810af7ba77949d8cfa4cc4377129116"
+    "receipt_sha256": "6dc0058c664186e4d56777ba6f446ff02b7fbb68fc7587ed319cd0ecdd2cefc1"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

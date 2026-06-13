@@ -385,7 +385,6 @@
         "is_absolute",
         "is_suppressed_key_value",
         "join_environment",
-        "lineseq_read",
         "lineseq_rewrite",
         "lock_file",
         "lock_record",
@@ -416,8 +415,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 1.1,
-      "ported": 2
+      "parity_pct": 1.6,
+      "ported": 3
     },
     {
       "file": "mlio.c",
@@ -764,7 +763,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 42.3,
-    "ported": 495
+    "parity_pct": 42.4,
+    "ported": 496
   }
 }

@@ -1,6 +1,6 @@
 #![no_main]
-//! Fuzz the line-sequential WRITE court: arbitrary bytes + config bits. The assertion is panic-freedom
-//! FUZZFOR: GNURUST.FILEIO.LINESEQ.1
+//! Fuzz the line-sequential WRITE+READ courts: arbitrary bytes + config bits. The assertion is panic-freedom
+//! FUZZFOR: GNURUST.FILEIO.LINESEQ.1, GNURUST.FILEIO.LINESEQ.2
 //! (`GNURUST.PANICPOLICY.0`) -- any hostile/malformed input yields a typed result or value, never a panic.
 
 use libfuzzer_sys::fuzz_target;

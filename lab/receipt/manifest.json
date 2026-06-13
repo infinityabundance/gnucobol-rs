@@ -879,6 +879,20 @@
         "record/relative/indexed organizations",
         "the fd/FILE* syscalls (declared OS boundary)"
       ]
+    },
+    "GNURUST.FILEIO.LINESEQ.2": {
+      "court": "line-sequential READ config matrix",
+      "sweep": "lineseq_read_sweep.sh",
+      "byte_domain": "OPEN INPUT + READ NEXT (LINE SEQUENTIAL) under COB_LS_VALIDATE/NULLS/SPLIT -> record bytes + FILE STATUS (00/04/06/09/10)",
+      "non_claims": [
+        "multi-file open_next chain",
+        "CODE-SET conversion (sort_collating)",
+        "COB_LS_VALIDATE>1 printable check (COB_EXPERIMENTAL)",
+        "COB_LS_NULLS error-recovery after status 71",
+        "lineseq_rewrite",
+        "record/relative/indexed organizations",
+        "the fd/FILE* reads (declared OS boundary)"
+      ]
     }
   }
 }

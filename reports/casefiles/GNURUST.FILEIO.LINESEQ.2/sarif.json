@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: the multi-file open_next chain"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: CODE-SET conversion (sort_collating)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: COB_LS_VALIDATE>1 printable-check (COB_EXPERIMENTAL)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: the COB_LS_NULLS error-recovery path after status 71"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: lineseq_rewrite"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: record/relative/indexed organizations"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: the fd/FILE* reads (declared OS boundary)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.LINESEQ.2 non-claim: lie prevented: READ just splits on newline -- NO: \\r\\n folds but a lone \\r is data, a long line splits (06) or truncates (04) by COB_LS_SPLIT, a bad control byte raises status 09 while the line is still delivered, and -- unlike WRITE -- TAB/BS/FF/SI/ESC are accepted (the IS_BAD_CHAR exclusions are live on read, dead on write)"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

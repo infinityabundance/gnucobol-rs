@@ -1133,6 +1133,20 @@
       "damage_if_overclaimed": "assuming one line-sequential byte image across configs corrupts framing under COB_LS_FIXED/NULLS or silently drops records the default validate would reject"
     },
     {
+      "id": "GNURUST.FILEIO.LINESEQ.2",
+      "name": "line-sequential READ config matrix",
+      "proven": "a faithful port of libcob/fileio.c lineseq_read (the record bytes + FILE STATUS produced by READ ... NEXT RECORD over a LINE SEQUENTIAL file), proven byte-identical to the admitted libcob across the COB_LS_* matrix (lineseq_read_sweep 12/0): a line ends at \\n, \\r\\n folds to \\n, a lone \\r is kept as data; default COB_LS_VALIDATE flags an IS_BAD_CHAR byte with status 09 (line still read); COB_LS_NULLS decodes a 0x00-prefixed control byte; a line longer than the record is split into 06+00 records (COB_LS_SPLIT on) or truncated to status 04 with the rest discarded (split off); short lines are space-filled (00), a trailing newline makes no empty record, a mid-file empty line is a record, EOF with no bytes is status 10. FORENSIC ASYMMETRY: IS_BAD_CHAR's BS/TAB/FF/SI/ESC exclusions are LIVE on READ (those five -> status 00) but DEAD on WRITE (every byte < 0x20 -> status 71); verified 0x00-0x1F on both paths. The READ side of GNURUST.FILEIO.LINESEQ.1",
+      "byte_domain": "OPEN INPUT + READ NEXT (LINE SEQUENTIAL) under COB_LS_VALIDATE/NULLS/SPLIT -> record area bytes + FILE STATUS (00/04/06/09/10)",
+      "oracle": "cobc OPEN INPUT/READ NEXT LINE SEQUENTIAL under COB_LS_* env (libcob/fileio.c)",
+      "fixtures": "lineseq_read_sweep 12/0 + 7 unit tests + Kani read_record_width_and_status",
+      "sealed_version": "0.7.43",
+      "not_proven": "the multi-file open_next chain; CODE-SET conversion (sort_collating); COB_LS_VALIDATE>1 printable-check (COB_EXPERIMENTAL); the COB_LS_NULLS error-recovery path after status 71; lineseq_rewrite; record/relative/indexed organizations; the fd/FILE* reads (declared OS boundary)",
+      "breaks_claim": "a multi-file concatenation; CODE-SET; the experimental printable check; rewriting; non-line-sequential organization",
+      "readiness": 3,
+      "lie_prevented": "READ just splits on newline -- NO: \\r\\n folds but a lone \\r is data, a long line splits (06) or truncates (04) by COB_LS_SPLIT, a bad control byte raises status 09 while the line is still delivered, and -- unlike WRITE -- TAB/BS/FF/SI/ESC are accepted (the IS_BAD_CHAR exclusions are live on read, dead on write)",
+      "damage_if_overclaimed": "mis-handling the split (06 vs 04), the \\r\\n fold, or the read-vs-write bad-char asymmetry corrupts record framing or wrongly accepts/rejects control data"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",
