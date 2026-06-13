@@ -221,4 +221,20 @@ fn main() {
     hexln("acosn1", &cob_intr_acos(b"q", &disp(1, 0, true)));
     hexln("acosh", &cob_intr_acos(b"5", &disp(1, 1, false)));
     hexln("acos_oor", &cob_intr_acos(b"2", &disp(1, 0, false)));
+    hexln("bo_add", &cob_intr_binop(b"010", &u3, b'+', b"020", &u3));
+    hexln("bo_sub", &cob_intr_binop(b"030", &u3, b'-', b"012", &u3));
+    hexln("bo_mul", &cob_intr_binop(b"006", &u3, b'*', b"007", &u3));
+    hexln("bo_div", &cob_intr_binop(b"020", &u3, b'/', b"004", &u3));
+    hexln("bo_pow", &cob_intr_binop(b"002", &u3, b'^', b"010", &u3));
+    hexln("bo_powh", &cob_intr_binop(b"009", &u3, b'^', b"5", &disp(1, 1, false)));
+    hexln("bo_and", &cob_intr_binop(b"012", &u3, b'a', b"010", &u3));
+    hexln("bo_or", &cob_intr_binop(b"012", &u3, b'o', b"010", &u3));
+    hexln("bo_xor", &cob_intr_binop(b"012", &u3, b'e', b"010", &u3));
+    hexln("bo_shl", &cob_intr_binop(b"003", &u3, b'l', b"002", &u3));
+    hexln("bo_not", &cob_intr_binop(b"005", &u3, b'n', b"005", &u3));
+    hexln("annu", &cob_intr_annuity(b"005", &disp(3, 2, false), b"10", &disp(2, 0, false)));
+    hexln("annu0", &cob_intr_annuity(b"000", &u3, b"05", &disp(2, 0, false)));
+    hexln("pv", &cob_intr_present_value(b"010", &disp(3, 2, false), &[(b"100", &u3), (b"200", &u3)]));
+    hexln("var", &cob_intr_variance(&[(b"002", &u3), (b"004", &u3), (b"006", &u3)]));
+    hexln("sdev", &cob_intr_standard_deviation(&[(b"002", &u3), (b"004", &u3), (b"006", &u3)]));
 }

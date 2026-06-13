@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 174,
+    "active_ported": 181,
     "compiled": 238,
-    "compiled_parity_pct": 73.1,
+    "compiled_parity_pct": 76.1,
     "disabled": 0,
     "doc_only": 8,
     "file": "intrinsic.c",
@@ -1408,12 +1408,14 @@
       {
         "function": "calc_mean_of_args",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "calc_variance_of_args",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "get_interval_and_current_year_from_args",
@@ -1946,7 +1948,8 @@
       {
         "function": "cob_intr_binop",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_length",
@@ -2292,7 +2295,8 @@
       {
         "function": "cob_intr_annuity",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_sum",
@@ -2368,17 +2372,20 @@
       {
         "function": "cob_intr_variance",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_standard_deviation",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_present_value",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_year_to_yyyy",
@@ -2595,17 +2602,13 @@
     "gap": [
       "add_z",
       "at_cr_or_db",
-      "calc_mean_of_args",
       "calc_ref_mod",
-      "calc_variance_of_args",
       "cob_alloc_set_field_spaces",
       "cob_alloc_set_field_str",
       "cob_decimal_move_temp",
       "cob_exit_intrinsic",
       "cob_get_indirect_field",
       "cob_init_intrinsic",
-      "cob_intr_annuity",
-      "cob_intr_binop",
       "cob_intr_char_national",
       "cob_intr_content_length",
       "cob_intr_content_of",
@@ -2630,12 +2633,9 @@
       "cob_intr_module_source",
       "cob_intr_module_time",
       "cob_intr_national_of",
-      "cob_intr_present_value",
       "cob_intr_random",
       "cob_intr_seconds_past_midnight",
       "cob_intr_standard_compare",
-      "cob_intr_standard_deviation",
-      "cob_intr_variance",
       "cob_intr_when_compiled",
       "cob_put_indirect_field",
       "cob_switch_value",
@@ -2658,7 +2658,7 @@
       "substitute_matches"
     ],
     "inactive_mirrors": 0,
-    "missing": 56,
+    "missing": 49,
     "source_funcs": 238,
     "test_only": 0
   },

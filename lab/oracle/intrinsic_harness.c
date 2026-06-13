@@ -231,5 +231,21 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("q",1,DISP,1,0,HAVE_SIGN); dump("acosn1", cob_intr_acos(&f)); }
 	{ cob_field f=mkf("5",1,DISP,1,1,0); dump("acosh", cob_intr_acos(&f)); }
 	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("acos_oor", cob_intr_acos(&f)); }
+	{ cob_field a=mkf("010",3,DISP,3,0,0),b=mkf("020",3,DISP,3,0,0); dump("bo_add", cob_intr_binop(&a,'+',&b)); }
+	{ cob_field a=mkf("030",3,DISP,3,0,0),b=mkf("012",3,DISP,3,0,0); dump("bo_sub", cob_intr_binop(&a,'-',&b)); }
+	{ cob_field a=mkf("006",3,DISP,3,0,0),b=mkf("007",3,DISP,3,0,0); dump("bo_mul", cob_intr_binop(&a,'*',&b)); }
+	{ cob_field a=mkf("020",3,DISP,3,0,0),b=mkf("004",3,DISP,3,0,0); dump("bo_div", cob_intr_binop(&a,'/',&b)); }
+	{ cob_field a=mkf("002",3,DISP,3,0,0),b=mkf("010",3,DISP,3,0,0); dump("bo_pow", cob_intr_binop(&a,'^',&b)); }
+	{ cob_field a=mkf("009",3,DISP,3,0,0),b=mkf("5",1,DISP,1,1,0); dump("bo_powh", cob_intr_binop(&a,'^',&b)); }
+	{ cob_field a=mkf("012",3,DISP,3,0,0),b=mkf("010",3,DISP,3,0,0); dump("bo_and", cob_intr_binop(&a,'a',&b)); }
+	{ cob_field a=mkf("012",3,DISP,3,0,0),b=mkf("010",3,DISP,3,0,0); dump("bo_or", cob_intr_binop(&a,'o',&b)); }
+	{ cob_field a=mkf("012",3,DISP,3,0,0),b=mkf("010",3,DISP,3,0,0); dump("bo_xor", cob_intr_binop(&a,'e',&b)); }
+	{ cob_field a=mkf("003",3,DISP,3,0,0),b=mkf("002",3,DISP,3,0,0); dump("bo_shl", cob_intr_binop(&a,'l',&b)); }
+	{ cob_field a=mkf("005",3,DISP,3,0,0),b=mkf("005",3,DISP,3,0,0); dump("bo_not", cob_intr_binop(&a,'n',&b)); }
+	{ cob_field a=mkf("005",3,DISP,3,2,0),b=mkf("10",2,DISP,2,0,0); dump("annu", cob_intr_annuity(&a,&b)); }
+	{ cob_field a=mkf("000",3,DISP,3,0,0),b=mkf("05",2,DISP,2,0,0); dump("annu0", cob_intr_annuity(&a,&b)); }
+	{ cob_field r=mkf("010",3,DISP,3,2,0),c1=mkf("100",3,DISP,3,0,0),c2=mkf("200",3,DISP,3,0,0); dump("pv", cob_intr_present_value(3,&r,&c1,&c2)); }
+	{ cob_field a=mkf("002",3,DISP,3,0,0),b=mkf("004",3,DISP,3,0,0),c=mkf("006",3,DISP,3,0,0); dump("var", cob_intr_variance(3,&a,&b,&c)); }
+	{ cob_field a=mkf("002",3,DISP,3,0,0),b=mkf("004",3,DISP,3,0,0),c=mkf("006",3,DISP,3,0,0); dump("sdev", cob_intr_standard_deviation(3,&a,&b,&c)); }
 	return 0;
 }

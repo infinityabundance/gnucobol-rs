@@ -3001,6 +3001,138 @@ pub fn cob_intr_e() -> IntrField {
     intr_decimal_result(cob_decimal_set_mpf(&cob_mpf_exp(&Mpf::set_ui(1, COB_MPF_PREC))))
 }
 
+/// `cob_intr_binop (f1, op, f2)` (intrinsic.c): the runtime binary operator behind compiler-generated
+/// arithmetic. Bitwise ops (`a`/`o`/`e`/`l`/`r`/`n`) work on `cob_get_int`; arithmetic ops
+/// (`+`/`-`/`*`/`/`/`^`) on the decimal value (`/` by zero yields 0; `^` via [`cob_decimal_pow`]).
+pub fn cob_intr_binop(f1: &[u8], a1: &FieldAttr, op: u8, f2: &[u8], a2: &FieldAttr) -> IntrField {
+    match op {
+        b'a' => return cob_alloc_set_field_uint((cob_get_int(f1, a1) & cob_get_int(f2, a2)) as u32),
+        b'o' => return cob_alloc_set_field_uint((cob_get_int(f1, a1) | cob_get_int(f2, a2)) as u32),
+        b'e' => return cob_alloc_set_field_uint((cob_get_int(f1, a1) ^ cob_get_int(f2, a2)) as u32),
+        b'l' => return cob_alloc_set_field_uint(cob_get_int(f1, a1).wrapping_shl(cob_get_int(f2, a2) as u32) as u32),
+        b'r' => return cob_alloc_set_field_uint(cob_get_int(f1, a1).wrapping_shr(cob_get_int(f2, a2) as u32) as u32),
+        b'n' => return cob_alloc_set_field_uint(!cob_get_int(f2, a2) as u32),
+        _ => {}
+    }
+    let mut d1 = cob_decimal_set_field(f1, a1);
+    let mut d2 = cob_decimal_set_field(f2, a2);
+    match op {
+        b'+' => cob_decimal_add(&mut d1, &d2),
+        b'-' => cob_decimal_sub(&mut d1, &d2),
+        b'*' => cob_decimal_mul(&mut d1, &d2),
+        b'/' => {
+            if d2.value.sgn() == 0 {
+                d1 = CobDecimal { value: Mpz::new(), scale: 0 };
+            } else {
+                let _ = cob_decimal_div(&mut d1, &d2);
+            }
+        }
+        b'^' => cob_decimal_pow(&mut d1, &mut d2),
+        _ => {}
+    }
+    intr_decimal_result(d1)
+}
+
+/// `cob_intr_annuity (P1, P2)` (intrinsic.c): `FUNCTION ANNUITY` — the annuity factor
+/// `P1 / (1 - (1 + P1) ^ -P2)`; `P1 == 0` degenerates to `1/P2`. `P1 < 0`, or `P2 <= 0`/non-integer, is an
+/// argument exception (0).
+pub fn cob_intr_annuity(p1: &[u8], a1: &FieldAttr, p2: &[u8], a2: &FieldAttr) -> IntrField {
+    let mut d1 = cob_decimal_set_field(p1, a1);
+    let mut d2 = cob_decimal_set_field(p2, a2);
+    let sign = d1.value.sgn();
+    if sign < 0 || d2.value.sgn() <= 0 || d2.scale != 0 {
+        return cob_alloc_set_field_uint(0);
+    }
+    if sign == 0 {
+        d1 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+        let _ = cob_decimal_div(&mut d1, &d2);
+        return intr_decimal_result(d1);
+    }
+    d2.value.neg(); // -P2
+    let mut d3 = CobDecimal { value: d1.value.clone(), scale: d1.scale };
+    cob_decimal_add(&mut d3, &CobDecimal { value: Mpz::from_u64(1), scale: 0 }); // 1 + P1
+    cob_trim_decimal(&mut d3);
+    cob_trim_decimal(&mut d2);
+    cob_decimal_pow(&mut d3, &mut d2); // (1 + P1) ^ -P2
+    let mut d4 = CobDecimal { value: Mpz::from_u64(1), scale: 0 };
+    cob_decimal_sub(&mut d4, &d3); // 1 - (1 + P1) ^ -P2
+    cob_trim_decimal(&mut d4);
+    cob_trim_decimal(&mut d1);
+    let _ = cob_decimal_div(&mut d1, &d4); // P1 / (...)
+    intr_decimal_result(d1)
+}
+
+/// `cob_intr_present_value (rate, flows...)` (intrinsic.c): `FUNCTION PRESENT-VALUE` —
+/// `sum_i flow_i / (1 + rate)^i` (i from 1).
+pub fn cob_intr_present_value(rate: &[u8], rate_attr: &FieldAttr, flows: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let mut base = cob_decimal_set_field(rate, rate_attr);
+    cob_decimal_add(&mut base, &CobDecimal { value: Mpz::from_u64(1), scale: 0 }); // 1 + rate
+    let mut acc = CobDecimal { value: Mpz::new(), scale: 0 };
+    for (i, (data, attr)) in flows.iter().enumerate() {
+        let idx = i + 1;
+        let mut flow = cob_decimal_set_field(data, attr);
+        let mut denom = CobDecimal { value: base.value.clone(), scale: base.scale };
+        if idx > 1 {
+            denom.value = denom.value.pow_ui(idx as u32);
+            denom.scale *= idx as i32;
+        }
+        let _ = cob_decimal_div(&mut flow, &denom);
+        cob_decimal_add(&mut acc, &flow);
+    }
+    intr_decimal_result(acc)
+}
+
+/// `calc_mean_of_args (args)` (intrinsic.c): the arithmetic mean `sum(args) / n`.
+fn calc_mean_of_args(args: &[(&[u8], &FieldAttr)]) -> CobDecimal {
+    let mut mean = CobDecimal { value: Mpz::new(), scale: 0 };
+    for (data, attr) in args {
+        cob_decimal_add(&mut mean, &cob_decimal_set_field(data, attr));
+    }
+    let n = CobDecimal { value: Mpz::from_u64(args.len() as u64), scale: 0 };
+    let _ = cob_decimal_div(&mut mean, &n);
+    mean
+}
+
+/// `calc_variance_of_args (args, mean)` (intrinsic.c): the population variance `sum((arg - mean)^2) / n`
+/// (`n == 1` -> 0).
+fn calc_variance_of_args(args: &[(&[u8], &FieldAttr)], mean: &CobDecimal) -> CobDecimal {
+    if args.len() == 1 {
+        return CobDecimal { value: Mpz::new(), scale: 0 };
+    }
+    let mut sum = CobDecimal { value: Mpz::new(), scale: 0 };
+    for (data, attr) in args {
+        let mut diff = cob_decimal_set_field(data, attr);
+        cob_decimal_sub(&mut diff, mean);
+        let sq = diff.clone();
+        cob_decimal_mul(&mut diff, &sq);
+        cob_decimal_add(&mut sum, &diff);
+    }
+    let n = CobDecimal { value: Mpz::from_u64(args.len() as u64), scale: 0 };
+    let _ = cob_decimal_div(&mut sum, &n);
+    sum
+}
+
+/// `GET_VARIANCE` (intrinsic.c): the population variance — mean, then the variance about it.
+fn get_variance(args: &[(&[u8], &FieldAttr)]) -> CobDecimal {
+    let mean = calc_mean_of_args(args);
+    calc_variance_of_args(args, &mean)
+}
+
+/// `cob_intr_variance (args...)` (intrinsic.c): `FUNCTION VARIANCE`.
+pub fn cob_intr_variance(args: &[(&[u8], &FieldAttr)]) -> IntrField {
+    intr_decimal_result(get_variance(args))
+}
+
+/// `cob_intr_standard_deviation (args...)` (intrinsic.c): `FUNCTION STANDARD-DEVIATION` — the square root
+/// of the variance.
+pub fn cob_intr_standard_deviation(args: &[(&[u8], &FieldAttr)]) -> IntrField {
+    let mut d1 = get_variance(args);
+    cob_trim_decimal(&mut d1);
+    let mut half = CobDecimal { value: Mpz::from_u64(5), scale: 1 };
+    cob_decimal_pow(&mut d1, &mut half);
+    intr_decimal_result(d1)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
