@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 125,
+    "active_ported": 137,
     "compiled": 238,
-    "compiled_parity_pct": 52.5,
+    "compiled_parity_pct": 57.6,
     "disabled": 0,
     "doc_only": 3,
     "file": "intrinsic.c",
@@ -1771,57 +1771,68 @@
       {
         "function": "test_less_than_60",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_hour",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_minute",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_second",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_colon_presence",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_decimal_places",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_z_presence",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_two_zeroes",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_offset_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_time_end",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "test_formatted_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "integer_of_mmdd",
@@ -2467,7 +2478,8 @@
       {
         "function": "cob_intr_test_formatted_datetime",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_integer_of_formatted_date",
@@ -2607,7 +2619,6 @@
       "cob_intr_standard_compare",
       "cob_intr_standard_deviation",
       "cob_intr_tan",
-      "cob_intr_test_formatted_datetime",
       "cob_intr_variance",
       "cob_intr_when_compiled",
       "cob_mpf_acos",
@@ -2642,23 +2653,12 @@
       "space_left",
       "substitute",
       "substitute_matches",
-      "test_colon_presence",
-      "test_decimal_places",
-      "test_formatted_time",
-      "test_hour",
-      "test_less_than_60",
-      "test_minute",
-      "test_offset_time",
-      "test_second",
-      "test_time_end",
-      "test_two_zeroes",
-      "test_z_presence",
       "try_get_valid_offset_time",
       "valid_offset_time",
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 110,
+    "missing": 98,
     "source_funcs": 238,
     "test_only": 0
   },

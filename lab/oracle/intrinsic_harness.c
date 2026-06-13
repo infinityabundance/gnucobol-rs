@@ -145,5 +145,15 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("YYYY-Www-D",10,ALNUM,0,0,0),d=mkf("0154789",7,DISP,7,0,0); dump("fd_modw", cob_intr_formatted_date(0,0,&f,&d)); }
 	{ cob_field f=mkf("YYYYMMDD",8,ALNUM,0,0,0),d=mkf("0000000",7,DISP,7,0,0); dump("fd_inv", cob_intr_formatted_date(0,0,&f,&d)); }
 	{ cob_field f=mkf("BAD",3,ALNUM,0,0,0),d=mkf("0000001",7,DISP,7,0,0); dump("fd_badf", cob_intr_formatted_date(0,0,&f,&d)); }
+	{ cob_field f=mkf("YYYYMMDD",8,ALNUM,0,0,0),d=mkf("20240229",8,ALNUM,0,0,0); dump("tfdt_d", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("120000",6,ALNUM,0,0,0); dump("tfdt_t", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("hh:mm:ss.ss",11,ALNUM,0,0,0),d=mkf("12:00:00.50",11,ALNUM,0,0,0); dump("tfdt_tdec", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0),d=mkf("2024-02-29T12:00:00",19,ALNUM,0,0,0); dump("tfdt_dt", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("250000",6,ALNUM,0,0,0); dump("tfdt_bh", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("hhmmssZ",7,ALNUM,0,0,0),d=mkf("120000Z",7,ALNUM,0,0,0); dump("tfdt_z", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("hh:mm:ss+hh:mm",14,ALNUM,0,0,0),d=mkf("12:00:00+05:30",14,ALNUM,0,0,0); dump("tfdt_off", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("YYYY-MM-DDThh:mm:ss",19,ALNUM,0,0,0),d=mkf("2024-02-29X12:00:00",19,ALNUM,0,0,0); dump("tfdt_not", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("hhmmss",6,ALNUM,0,0,0),d=mkf("120061",6,ALNUM,0,0,0); dump("tfdt_bs", cob_intr_test_formatted_datetime(&f,&d)); }
+	{ cob_field f=mkf("GARBAGE",7,ALNUM,0,0,0),d=mkf("x",1,ALNUM,0,0,0); dump("tfdt_bad", cob_intr_test_formatted_datetime(&f,&d)); }
 	return 0;
 }

@@ -2180,6 +2180,167 @@ pub fn cob_intr_formatted_date(offset: i32, length: i32, fmt: &[u8], days: &[u8]
     (out, ALPHA1)
 }
 
+/// `test_hour (time, offset)` (intrinsic.c): the two `hh` digits (`00..23`).
+fn test_hour(t: &[u8], offset: &mut i32) -> i32 {
+    return_if_not_zero!(test_char_in_range(b'0', b'2', date_at(t, *offset), offset));
+    let first_digit = (date_at(t, *offset - 1) & 0x0F) as i32;
+    if first_digit != 2 {
+        return_if_not_zero!(test_digit(date_at(t, *offset), offset));
+    } else {
+        return_if_not_zero!(test_char_in_range(b'0', b'3', date_at(t, *offset), offset));
+    }
+    0
+}
+
+/// `test_less_than_60 (time, offset)` (intrinsic.c): two digits forming `00..59`.
+fn test_less_than_60(t: &[u8], offset: &mut i32) -> i32 {
+    return_if_not_zero!(test_char_in_range(b'0', b'5', date_at(t, *offset), offset));
+    return_if_not_zero!(test_digit(date_at(t, *offset), offset));
+    0
+}
+
+/// `test_minute (time, offset)` (intrinsic.c).
+fn test_minute(t: &[u8], offset: &mut i32) -> i32 {
+    test_less_than_60(t, offset)
+}
+
+/// `test_second (time, offset)` (intrinsic.c).
+fn test_second(t: &[u8], offset: &mut i32) -> i32 {
+    test_less_than_60(t, offset)
+}
+
+/// `test_colon_presence (with_colons, time, offset)` (intrinsic.c).
+fn test_colon_presence(with_colons: bool, t: &[u8], offset: &mut i32) -> i32 {
+    if with_colons {
+        return_if_not_zero!(test_char(b':', t, offset));
+    }
+    0
+}
+
+/// `test_decimal_places (num_decimal_places, decimal_point, time, offset)` (intrinsic.c).
+fn test_decimal_places(num: usize, dec_pt: u8, t: &[u8], offset: &mut i32) -> i32 {
+    if num != 0 {
+        return_if_not_zero!(test_char(dec_pt, t, offset));
+        for _ in 0..num {
+            return_if_not_zero!(test_digit(date_at(t, *offset), offset));
+        }
+    }
+    0
+}
+
+/// `test_z_presence (time, offset)` (intrinsic.c): the UTC marker `'Z'`.
+fn test_z_presence(t: &[u8], offset: &mut i32) -> i32 {
+    test_char(b'Z', t, offset)
+}
+
+/// `test_two_zeroes (str, offset)` (intrinsic.c): the literal `"00"`.
+fn test_two_zeroes(s: &[u8], offset: &mut i32) -> i32 {
+    return_if_not_zero!(test_char(b'0', s, offset));
+    return_if_not_zero!(test_char(b'0', s, offset));
+    0
+}
+
+/// `test_offset_time (format, time, offset)` (intrinsic.c): a `±hh[:]mm` offset, or a literal `0000`.
+fn test_offset_time(format: TimeFormat, t: &[u8], offset: &mut i32) -> i32 {
+    let c = date_at(t, *offset);
+    if c == b'+' || c == b'-' {
+        *offset += 1;
+        return_if_not_zero!(test_hour(t, offset));
+        return_if_not_zero!(test_colon_presence(format.with_colons, t, offset));
+        return_if_not_zero!(test_minute(t, offset));
+    } else if c == b'0' {
+        *offset += 1;
+        return_if_not_zero!(test_two_zeroes(t, offset));
+        return_if_not_zero!(test_colon_presence(format.with_colons, t, offset));
+        return_if_not_zero!(test_two_zeroes(t, offset));
+    } else {
+        return *offset + 1;
+    }
+    0
+}
+
+/// `test_time_end (format, time, offset)` (intrinsic.c): the optional `Z`/offset zone after the seconds.
+fn test_time_end(format: TimeFormat, t: &[u8], offset: &mut i32) -> i32 {
+    if format.extra == TimeExtra::Z {
+        return_if_not_zero!(test_z_presence(t, offset));
+    } else if format.extra == TimeExtra::OffsetTime {
+        return_if_not_zero!(test_offset_time(format, t, offset));
+    }
+    0
+}
+
+/// `test_formatted_time (format, time, decimal_point)` (intrinsic.c): 0 if `time` matches `format`, else
+/// the 1-based position of the first offending character.
+fn test_formatted_time(format: TimeFormat, t: &[u8], dec_pt: u8) -> i32 {
+    let mut offset = 0;
+    return_if_not_zero!(test_hour(t, &mut offset));
+    return_if_not_zero!(test_colon_presence(format.with_colons, t, &mut offset));
+    return_if_not_zero!(test_minute(t, &mut offset));
+    return_if_not_zero!(test_colon_presence(format.with_colons, t, &mut offset));
+    return_if_not_zero!(test_second(t, &mut offset));
+    return_if_not_zero!(test_decimal_places(format.decimal_places, dec_pt, t, &mut offset));
+    return_if_not_zero!(test_time_end(format, t, &mut offset));
+    return_if_not_zero!(test_no_trailing_junk(t, offset, true));
+    0
+}
+
+/// `cob_intr_test_formatted_datetime (format_field, datetime_field)` (intrinsic.c):
+/// `FUNCTION TEST-FORMATTED-DATETIME(format, value)` — 0 if `value` matches `format` (date, time, or
+/// `<date>T<time>`), else the 1-based position of the first offending character. An invalid format yields 0.
+pub fn cob_intr_test_formatted_datetime(fmt: &[u8], datetime: &[u8]) -> IntrField {
+    const COB_DATETIMESTR_MAX: usize = 36;
+    let dec_pt = b'.';
+    let datetime_format_str = copy_data_to_null_terminated_str(fmt, COB_DATETIMESTR_MAX);
+    let formatted_datetime = copy_data_to_null_terminated_str(datetime, COB_DATETIMESTR_MAX);
+
+    let (date_present, time_present) = if cob_valid_date_format(&datetime_format_str) {
+        (true, false)
+    } else if cob_valid_time_format(&datetime_format_str, dec_pt) {
+        (false, true)
+    } else if cob_valid_datetime_format(&datetime_format_str, dec_pt) {
+        (true, true)
+    } else {
+        return cob_alloc_set_field_uint(0);
+    };
+
+    let (date_format_str, time_format_str) = if date_present && time_present {
+        let (d, t, _) = split_around_t(&datetime_format_str);
+        (d, t)
+    } else if date_present {
+        (datetime_format_str.clone(), Vec::new())
+    } else {
+        (Vec::new(), datetime_format_str.clone())
+    };
+
+    let (formatted_date, formatted_time) = if date_present && time_present {
+        let (d, t, _) = split_around_t(&formatted_datetime);
+        (d, t)
+    } else if date_present {
+        (formatted_datetime.clone(), Vec::new())
+    } else {
+        (Vec::new(), formatted_datetime.clone())
+    };
+
+    let time_part_offset = if date_present { formatted_date.len() as i32 + 1 } else { 0 };
+
+    if date_present {
+        let error_pos = test_formatted_date(parse_date_format_string(&date_format_str), &formatted_date, !time_present);
+        if error_pos != 0 {
+            return cob_alloc_set_field_uint(error_pos as u32);
+        }
+    }
+    if date_present && time_present && date_at(&formatted_datetime, formatted_date.len() as i32) != b'T' {
+        return cob_alloc_set_field_uint(formatted_date.len() as u32 + 1);
+    }
+    if time_present {
+        let error_pos = test_formatted_time(parse_time_format_string(&time_format_str), &formatted_time, dec_pt);
+        if error_pos != 0 {
+            return cob_alloc_set_field_uint((time_part_offset + error_pos) as u32);
+        }
+    }
+    cob_alloc_set_field_uint(0)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

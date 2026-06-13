@@ -88,7 +88,6 @@
         "cob_intr_standard_compare",
         "cob_intr_standard_deviation",
         "cob_intr_tan",
-        "cob_intr_test_formatted_datetime",
         "cob_intr_variance",
         "cob_intr_when_compiled",
         "cob_mpf_acos",
@@ -120,23 +119,12 @@
         "setup_cob_sqrt_two",
         "space_left",
         "substitute_matches",
-        "test_colon_presence",
-        "test_decimal_places",
-        "test_formatted_time",
-        "test_hour",
-        "test_less_than_60",
-        "test_minute",
-        "test_offset_time",
-        "test_second",
-        "test_time_end",
-        "test_two_zeroes",
-        "test_z_presence",
         "try_get_valid_offset_time",
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 54.4,
-      "ported": 129
+      "parity_pct": 59.5,
+      "ported": 141
     },
     {
       "doxygen_functions": 9,
@@ -717,8 +705,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 38.7,
-    "ported": 386
+    "parity_pct": 39.9,
+    "ported": 398
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -136,4 +136,14 @@ fn main() {
     hexln("fd_modw", &cob_intr_formatted_date(0, 0, b"YYYY-Www-D", b"0154789", &d7));
     hexln("fd_inv", &cob_intr_formatted_date(0, 0, b"YYYYMMDD", b"0000000", &d7));
     hexln("fd_badf", &cob_intr_formatted_date(0, 0, b"BAD", b"0000001", &d7));
+    hexln("tfdt_d", &cob_intr_test_formatted_datetime(b"YYYYMMDD", b"20240229"));
+    hexln("tfdt_t", &cob_intr_test_formatted_datetime(b"hhmmss", b"120000"));
+    hexln("tfdt_tdec", &cob_intr_test_formatted_datetime(b"hh:mm:ss.ss", b"12:00:00.50"));
+    hexln("tfdt_dt", &cob_intr_test_formatted_datetime(b"YYYY-MM-DDThh:mm:ss", b"2024-02-29T12:00:00"));
+    hexln("tfdt_bh", &cob_intr_test_formatted_datetime(b"hhmmss", b"250000"));
+    hexln("tfdt_z", &cob_intr_test_formatted_datetime(b"hhmmssZ", b"120000Z"));
+    hexln("tfdt_off", &cob_intr_test_formatted_datetime(b"hh:mm:ss+hh:mm", b"12:00:00+05:30"));
+    hexln("tfdt_not", &cob_intr_test_formatted_datetime(b"YYYY-MM-DDThh:mm:ss", b"2024-02-29X12:00:00"));
+    hexln("tfdt_bs", &cob_intr_test_formatted_datetime(b"hhmmss", b"120061"));
+    hexln("tfdt_bad", &cob_intr_test_formatted_datetime(b"GARBAGE", b"x"));
 }

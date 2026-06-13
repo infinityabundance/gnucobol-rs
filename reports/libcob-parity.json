@@ -89,7 +89,6 @@
         "cob_intr_standard_compare",
         "cob_intr_standard_deviation",
         "cob_intr_tan",
-        "cob_intr_test_formatted_datetime",
         "cob_intr_variance",
         "cob_intr_when_compiled",
         "cob_mpf_acos",
@@ -124,23 +123,12 @@
         "space_left",
         "substitute",
         "substitute_matches",
-        "test_colon_presence",
-        "test_decimal_places",
-        "test_formatted_time",
-        "test_hour",
-        "test_less_than_60",
-        "test_minute",
-        "test_offset_time",
-        "test_second",
-        "test_time_end",
-        "test_two_zeroes",
-        "test_z_presence",
         "try_get_valid_offset_time",
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 52.5,
-      "ported": 125
+      "parity_pct": 57.6,
+      "ported": 137
     },
     {
       "file": "cconv.c",
@@ -881,7 +869,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 32.2,
-    "ported": 377
+    "parity_pct": 33.2,
+    "ported": 389
   }
 }
