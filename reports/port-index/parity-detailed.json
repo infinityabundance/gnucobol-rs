@@ -5376,9 +5376,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 12,
+    "active_ported": 17,
     "compiled": 39,
-    "compiled_parity_pct": 30.8,
+    "compiled_parity_pct": 43.6,
     "disabled": 0,
     "doc_only": 1,
     "file": "reportio.c",
@@ -5432,7 +5432,8 @@
       {
         "function": "set_next_info",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "get_print_line",
@@ -5474,22 +5475,26 @@
       {
         "function": "limitCheckOneLine",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "limitCheckLine",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "limitCheck",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "saveLineCounter",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "line_control_one",
@@ -5601,9 +5606,6 @@
       "dumpFlags",
       "free_control_fields",
       "get_control_sequence",
-      "limitCheck",
-      "limitCheckLine",
-      "limitCheckOneLine",
       "line_control_chg",
       "line_control_one",
       "print_field",
@@ -5614,14 +5616,12 @@
       "report_line",
       "report_line_and",
       "report_line_type",
-      "saveLineCounter",
-      "set_next_info",
       "sum_this_counter",
       "write_rec",
       "zero_all_counters"
     ],
     "inactive_mirrors": 0,
-    "missing": 26,
+    "missing": 21,
     "source_funcs": 39,
     "test_only": 0
   },

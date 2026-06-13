@@ -137,6 +137,7 @@ pub struct ReportField {
     pub line: i32,
     pub column: i32,
     pub level: u8,
+    pub next_group_line: i32,
     pub group_indicate: bool,
     pub suppress: bool,
     pub present_now: bool,
@@ -232,6 +233,114 @@ pub fn sum_all_detail(sum_counters: &mut [ReportSumCtr]) {
     }
 }
 
+/// The report's runtime state (`cob_report`; common.h:1502) — the parts the ported operations touch:
+/// the line tree, SUM counters, the PAGE/LINE counters, the page-limit defaults, the current position,
+/// and the `NEXT GROUP` bookkeeping. Grown as the port advances.
+#[derive(Debug, Clone, Default)]
+pub struct Report {
+    pub lines: Vec<ReportLine>,
+    pub sum_counters: Vec<ReportSumCtr>,
+    pub page_counter: Option<(Vec<u8>, FieldAttr)>,
+    pub line_counter: Option<(Vec<u8>, FieldAttr)>,
+    pub def_lines: i32,
+    pub curr_page: i32,
+    pub curr_line: i32,
+    pub initiate_done: bool,
+    pub next_value: i32,
+    pub next_line: bool,
+    pub next_line_plus: bool,
+    pub next_page: bool,
+    pub next_just_set: bool,
+}
+
+/// `limitCheckOneLine (r, fl)` (reportio.c:623): a line (and its fields) violates the PAGE LIMIT when any
+/// `LINE` / `NEXT GROUP` number exceeds `def_lines`. Returns `true` on a violation.
+#[allow(non_snake_case)]
+pub fn limitCheckOneLine(line: &ReportLine, def_lines: i32) -> bool {
+    if line.line > 0 && def_lines > 0 && line.line > def_lines {
+        return true;
+    }
+    if line.next_group_line > 0 && def_lines > 0 && line.next_group_line > def_lines {
+        return true;
+    }
+    for rf in &line.fields {
+        if rf.line != 0 && rf.line > def_lines {
+            return true;
+        }
+        if rf.next_group_line != 0 && rf.next_group_line > def_lines {
+            return true;
+        }
+    }
+    false
+}
+
+/// `limitCheckLine (r, fl)` (reportio.c:663): [`limitCheckOneLine`] over the line tree.
+#[allow(non_snake_case)]
+pub fn limitCheckLine(lines: &[ReportLine], def_lines: i32) -> bool {
+    for l in lines {
+        if limitCheckOneLine(l, def_lines) {
+            return true;
+        }
+        if limitCheckLine(&l.children, def_lines) {
+            return true;
+        }
+    }
+    false
+}
+
+/// `limitCheck (r)` (reportio.c:676): verify every `LINE #` is within the PAGE LIMIT; clear
+/// `initiate_done` on a violation (the C also raises `COB_EC_REPORT_PAGE_LIMIT`). Returns the violation.
+#[allow(non_snake_case)]
+pub fn limitCheck(report: &mut Report) -> bool {
+    let bad = limitCheckLine(&report.lines, report.def_lines);
+    if bad {
+        report.initiate_done = false;
+    }
+    bad
+}
+
+/// `saveLineCounter (r)` (reportio.c:682): clamp `curr_line` to `[0, def_lines]` and store the current
+/// page/line into the `PAGE-COUNTER` / `LINE-COUNTER` special registers.
+#[allow(non_snake_case)]
+pub fn saveLineCounter(report: &mut Report) {
+    let mut ln = report.curr_line;
+    if ln > report.def_lines {
+        ln = 0;
+    }
+    if ln < 0 {
+        ln = 0;
+    }
+    if let Some((data, attr)) = report.page_counter.as_mut() {
+        let _ = crate::accessors::cob_set_int(data, attr, report.curr_page);
+    }
+    if let Some((data, attr)) = report.line_counter.as_mut() {
+        let _ = crate::accessors::cob_set_int(data, attr, ln);
+    }
+}
+
+/// `set_next_info (r, l)` (reportio.c:248): record a line's `NEXT GROUP LINE`/`PLUS`/`PAGE` request into
+/// the report state so the next DETAIL advances accordingly.
+pub fn set_next_info(report: &mut Report, line: &ReportLine) {
+    if line.flags & flags::NEXT_GROUP_LINE != 0 {
+        report.next_value = line.next_group_line;
+        report.next_line = true;
+        report.next_just_set = true;
+        report.next_line_plus = false;
+    }
+    if line.flags & flags::NEXT_GROUP_PLUS != 0 {
+        report.next_value = line.next_group_line;
+        report.next_line = false;
+        report.next_line_plus = true;
+        report.next_just_set = true;
+    }
+    if line.flags & flags::NEXT_GROUP_PAGE != 0 {
+        report.next_value = line.next_group_line;
+        report.next_line = false;
+        report.next_page = true;
+        report.next_just_set = true;
+    }
+}
+
 /// `reportInitialize ()` (reportio.c:287): one-time global RWCS init. A no-op in this port (the C sets a
 /// `bDidReportInit` guard + `inDetailDecl`; there is no global state to seed here).
 pub fn report_initialize() {}
@@ -324,6 +433,42 @@ mod tests {
         // a second GENERATE accumulates further: 0060 + 60 = 0120
         sum_all_detail(&mut ctrs);
         assert_eq!(ctrs[0].counter, b"0120");
+    }
+
+    #[test]
+    fn limit_check_counters_next_group() {
+        let a = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 4, scale: 0, flags: 0 };
+        // a line whose LINE 60 exceeds def_lines 50 -> violation, initiate_done cleared
+        let mut r = Report {
+            lines: vec![ReportLine { line: 60, ..Default::default() }],
+            def_lines: 50,
+            initiate_done: true,
+            curr_page: 3,
+            curr_line: 7,
+            page_counter: Some((b"0000".to_vec(), a)),
+            line_counter: Some((b"0000".to_vec(), a)),
+            ..Default::default()
+        };
+        assert!(limitCheck(&mut r));
+        assert!(!r.initiate_done);
+        // within limits -> no violation
+        r.lines[0].line = 40;
+        r.initiate_done = true;
+        assert!(!limitCheck(&mut r));
+        assert!(r.initiate_done);
+        // saveLineCounter stores page/line (curr_line 7 <= def 50, kept)
+        saveLineCounter(&mut r);
+        assert_eq!(r.page_counter.as_ref().unwrap().0, b"0003");
+        assert_eq!(r.line_counter.as_ref().unwrap().0, b"0007");
+        // curr_line beyond def_lines clamps to 0
+        r.curr_line = 99;
+        saveLineCounter(&mut r);
+        assert_eq!(r.line_counter.as_ref().unwrap().0, b"0000");
+        // set_next_info: NEXT GROUP LINE
+        let l = ReportLine { flags: flags::NEXT_GROUP_LINE, next_group_line: 5, ..Default::default() };
+        set_next_info(&mut r, &l);
+        assert_eq!(r.next_value, 5);
+        assert!(r.next_line && r.next_just_set && !r.next_line_plus);
     }
 
     #[test]
