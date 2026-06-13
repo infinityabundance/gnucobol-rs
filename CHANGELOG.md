@@ -12,6 +12,16 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.40]
+- **Files 1-5 of libcob sealed + the typed port-index.** Batch release accumulating the completion of the first five `libcob` source files as faithful 1:1 Rust ports, each oracle-verified byte-for-byte against the admitted GnuCOBOL 3.2 `libcob`:
+  - **`numeric.c`** completed (the decimal/GMP layer: real pure-Rust `Mpz` + `Mpf`, packed BCD arithmetic, the `#if 0` functions) -- `GNURUST.NUMERIC.CLOSE.1`.
+  - **`move.c`** 57/57 (the `cob_move` conversions + the `cob_get/put_*` accessor API + edited leaves) -- `GNURUST.MOVE.CLOSE.1`.
+  - **`strings.c`** 34/34 (the STRING / UNSTRING / INSPECT statement state machines as explicit structs, no global state) -- `GNURUST.STRINGS.CLOSE.1`.
+  - **`cobgetopt.c`** 4/4 (GnuCOBOL's vendored GNU `getopt_long`, scanner state in an explicit struct) -- `GNURUST.COBGETOPT.CLOSE.1`; `getopt_sweep` 35/0.
+  - **`cconv.c`** 9/9 (7-bit ASCII case fold, hex/whitespace scanners, `cob_field_to_string`, `.ttbl` collation loading) -- `GNURUST.CCONV.CLOSE.1`; `cconv_sweep` 27/0.
+- **PORT-INDEX.1 -- typed C<->Rust symbol parity** (`gnucobol-rs-port-index`, an internal `publish = false` governance crate). Replaces grep name-matching: it classifies each libcob C function by preprocessor status (`#if 0` / config-gated) and joins it against a comment/string-aware real-`fn` index of the port, so a name appearing only in a doc comment is a `doc_only` false hit, never a port. PORT-INDEX.1a then closed every false hit it exposed in the completed files (giving each faithful counterpart its exact C name). Plus a first-class C-vs-Rust **doxygen** coverage gate (`DOXYGEN-PARITY.md`). Both wired into the verification + docs-staleness gates.
+- No API breaks: every change is additive (new modules `cconv`, `cobgetopt`; new functions). The published `0.7.39` only contained the first numeric.c court (`NUMCMP.1`); this release ships the rest of files 1-5.
+
 ## [0.7.39]
 - **GNURUST.NUMCMP.1** numeric comparison sealed -- and the first court of a true 1:1 port of numeric.c onto a pure-Rust GMP subset. New `gmp::Mpz` (arbitrary-precision signed integer, the ~40 mpz_* ops numeric.c uses, zero deps) + `cob_decimal` layer (set_field/align/shift/add/sub/mul/div/do_round/get_field/cmp). cob_numeric_cmp's -1/0/1 verdict is byte-identical to libcob across DISPLAY/PACKED x scales x signs (incl. -0): numcmp_sweep 1024/0. The cob_decimal MULTIPLY path is also oracle-verified (1800/0 + bignum 16128/0 -- the arbitrary-precision Mpz subsumes the i128+u256 special-casing) and DIVIDE cross-checks the proven path.
 

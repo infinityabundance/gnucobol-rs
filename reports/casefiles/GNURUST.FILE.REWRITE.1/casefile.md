@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILE.REWRITE.1 (court-casefile)
 
-**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.7.39
+**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.7.40
 
 - **Oracle:** cobc OPEN I-O/REWRITE (libcob/fileio.c)
 - **Byte domain(s):** OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged
