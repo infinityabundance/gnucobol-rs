@@ -112,4 +112,9 @@ fn main() {
     hexln("tnvc_ok", &cob_intr_test_numval_c(b"$1,234.56", None));
     hexln("tnvc_cma", &cob_intr_test_numval_c(b"1,234", None));
     hexln("tnvc_dd", &cob_intr_test_numval_c(b"1.2.3", None));
+    hexln("nvf_ok", &cob_intr_test_numval_f(b"1.5E+10"));
+    hexln("nvf_e5", &cob_intr_test_numval_f(b"1E5"));
+    hexln("nvf_neg", &cob_intr_test_numval_f(b"-12.34"));
+    hexln("nvf_dd", &cob_intr_test_numval_f(b"1.2.3"));
+    hexln("nvf_ee", &cob_intr_test_numval_f(b"1E+"));
 }

@@ -1226,6 +1226,125 @@ pub fn cob_intr_test_numval_c(src: &[u8], currency: Option<&[u8]>) -> IntrField 
     cob_alloc_set_field_int(cob_check_numval(src, currency, true, false, b'.', b'$'))
 }
 
+/// `cob_check_numval_f (srcfield)` (intrinsic.c): validate a floating-point numeric string (`NUMVAL-F`
+/// form: optional sign, digits, decimal point, then an `E±` exponent of up to 4 digits — the exponent sign
+/// is mandatory). Returns 0 when valid, else the 1-based position of the first offending character.
+pub fn cob_check_numval_f(src: &[u8], dec_pt: u8) -> i32 {
+    const COB_MAX_DIGITS: usize = 38;
+    let size = src.len() as i32;
+    if size == 0 {
+        return 1;
+    }
+
+    let mut plus_minus = false;
+    let mut digits = 0usize;
+    let mut decimal_seen = false;
+    let mut space_seen = false;
+    let mut e_seen = false;
+    let mut exponent = 0usize;
+    let mut e_plus_minus = false;
+    let mut break_needed = false;
+    let mut n: i32 = 0;
+
+    // Check leading positions.
+    while n < size {
+        let c = src[n as usize];
+        match c {
+            b'0'..=b'9' => break_needed = true,
+            b' ' => {
+                n += 1;
+                continue;
+            }
+            b'+' | b'-' => {
+                if plus_minus {
+                    return n + 1;
+                }
+                plus_minus = true;
+                n += 1;
+                continue;
+            }
+            b',' | b'.' => {
+                if c != dec_pt {
+                    return n + 1;
+                }
+                break_needed = true;
+            }
+            _ => return n + 1,
+        }
+        if break_needed {
+            break;
+        }
+        n += 1;
+    }
+
+    if n == size {
+        return n + 1;
+    }
+
+    while n < size {
+        let c = src[n as usize];
+        match c {
+            b'0'..=b'9' => {
+                if e_seen {
+                    exponent += 1;
+                    if exponent > 4 || !e_plus_minus {
+                        return n + 1;
+                    }
+                } else {
+                    digits += 1;
+                    if digits > COB_MAX_DIGITS || space_seen {
+                        return n + 1;
+                    }
+                }
+            }
+            b',' | b'.' => {
+                if decimal_seen || space_seen || e_seen {
+                    return n + 1;
+                }
+                if c == dec_pt {
+                    decimal_seen = true;
+                } else {
+                    return n + 1;
+                }
+            }
+            b' ' => space_seen = true,
+            b'E' | b'e' => {
+                if e_seen {
+                    return n + 1;
+                }
+                e_seen = true;
+            }
+            b'+' | b'-' => {
+                if e_seen {
+                    if e_plus_minus {
+                        return n + 1;
+                    }
+                    e_plus_minus = true;
+                } else {
+                    if plus_minus {
+                        return n + 1;
+                    }
+                    plus_minus = true;
+                }
+            }
+            _ => return n + 1,
+        }
+        n += 1;
+    }
+
+    if digits == 0 || (e_seen && exponent == 0) {
+        return n + 1;
+    }
+
+    0
+}
+
+/// `cob_intr_test_numval_f (srcfield)` (intrinsic.c): `FUNCTION TEST-NUMVAL-F` — 0 if valid for `NUMVAL-F`,
+/// else the 1-based position of the first invalid character.
+pub fn cob_intr_test_numval_f(src: &[u8]) -> IntrField {
+    cob_alloc_set_field_int(cob_check_numval_f(src, b'.'))
+}
+
 /// `cob_mod_or_rem (f1, f2, func_is_rem)` (intrinsic.c): the shared `MOD`/`REM` core —
 /// `f1 - q*f2` where `q` is `floor(f1/f2)` (MOD) or `trunc(f1/f2)` (REM). A zero divisor yields `0`.
 pub fn cob_mod_or_rem(f1: &[u8], a1: &FieldAttr, f2: &[u8], a2: &FieldAttr, func_is_rem: bool) -> IntrField {

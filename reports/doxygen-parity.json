@@ -35,7 +35,6 @@
         "calculate_start_end_for_numval",
         "cob_alloc_set_field_spaces",
         "cob_alloc_set_field_str",
-        "cob_check_numval_f",
         "cob_decimal_move_temp",
         "cob_decimal_pow",
         "cob_exit_intrinsic",
@@ -92,7 +91,6 @@
         "cob_intr_standard_deviation",
         "cob_intr_tan",
         "cob_intr_test_formatted_datetime",
-        "cob_intr_test_numval_f",
         "cob_intr_variance",
         "cob_intr_when_compiled",
         "cob_mpf_acos",
@@ -185,8 +183,8 @@
         "valid_offset_time",
         "valid_time"
       ],
-      "parity_pct": 33.3,
-      "ported": 79
+      "parity_pct": 34.2,
+      "ported": 81
     },
     {
       "doxygen_functions": 9,
@@ -767,8 +765,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 33.7,
-    "ported": 336
+    "parity_pct": 33.9,
+    "ported": 338
   },
   "xml_root": "lab/doxygen/out/xml"
 }

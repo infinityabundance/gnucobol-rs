@@ -122,5 +122,10 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("$1,234.56",9,ALNUM,0,0,0); dump("tnvc_ok", cob_intr_test_numval_c(&f,NULL)); }
 	{ cob_field f=mkf("1,234",5,ALNUM,0,0,0); dump("tnvc_cma", cob_intr_test_numval_c(&f,NULL)); }
 	{ cob_field f=mkf("1.2.3",5,ALNUM,0,0,0); dump("tnvc_dd", cob_intr_test_numval_c(&f,NULL)); }
+	{ cob_field f=mkf("1.5E+10",7,ALNUM,0,0,0); dump("nvf_ok", cob_intr_test_numval_f(&f)); }
+	{ cob_field f=mkf("1E5",3,ALNUM,0,0,0); dump("nvf_e5", cob_intr_test_numval_f(&f)); }
+	{ cob_field f=mkf("-12.34",6,ALNUM,0,0,0); dump("nvf_neg", cob_intr_test_numval_f(&f)); }
+	{ cob_field f=mkf("1.2.3",5,ALNUM,0,0,0); dump("nvf_dd", cob_intr_test_numval_f(&f)); }
+	{ cob_field f=mkf("1E+",3,ALNUM,0,0,0); dump("nvf_ee", cob_intr_test_numval_f(&f)); }
 	return 0;
 }

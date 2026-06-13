@@ -1220,9 +1220,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 74,
+    "active_ported": 76,
     "compiled": 238,
-    "compiled_parity_pct": 31.1,
+    "compiled_parity_pct": 31.9,
     "disabled": 0,
     "doc_only": 5,
     "file": "intrinsic.c",
@@ -1302,7 +1302,8 @@
       {
         "function": "cob_check_numval_f",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_mpf_exp",
@@ -2380,7 +2381,8 @@
       {
         "function": "cob_intr_test_numval_f",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "intrinsic",
+        "rust_status": "active"
       },
       {
         "function": "cob_intr_lowest_algebraic",
@@ -2503,7 +2505,6 @@
       "calculate_start_end_for_numval",
       "cob_alloc_set_field_spaces",
       "cob_alloc_set_field_str",
-      "cob_check_numval_f",
       "cob_decimal_move_temp",
       "cob_decimal_pow",
       "cob_exit_intrinsic",
@@ -2560,7 +2561,6 @@
       "cob_intr_standard_deviation",
       "cob_intr_tan",
       "cob_intr_test_formatted_datetime",
-      "cob_intr_test_numval_f",
       "cob_intr_variance",
       "cob_intr_when_compiled",
       "cob_mpf_acos",
@@ -2658,7 +2658,7 @@
       "valid_time"
     ],
     "inactive_mirrors": 0,
-    "missing": 159,
+    "missing": 157,
     "source_funcs": 238,
     "test_only": 0
   },
