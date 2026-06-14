@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.14",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.53",
+  "crate_version": "0.7.54",
   "damage_if_overclaimed": "a wrong binary width/endian mis-reads a key, branch, or amount on the wrong platform",
   "hash_chain": {
-    "inputs_sha256": "ed5c7597b3098249b8a351bde8cc994656f7f97b5cca73e5a02e452be145a59c"
+    "inputs_sha256": "b36ba5b45782c6653bc797c2ef998f988945238303d99eaafa4651765c88be8c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e712e83f43572fa42a3566b29213d286d4f242da108fad742a9fbb98de656f56",
-    "receipt_sha256": "68e7c03b0a534adea0350fe2aae90733dfbe2c0e57e57e2973ace777c668832c"
+    "receipt_sha256": "f882d8e7f1a083dfe00f7bbe0bb8db6ad825045aa599ca5d4c4e911aa2dcac8a"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

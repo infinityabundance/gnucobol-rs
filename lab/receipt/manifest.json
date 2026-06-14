@@ -980,6 +980,19 @@
         "the actual fd open/close syscalls (declared OS boundary)"
       ]
     },
+    "GNURUST.FILEIO.SORTENGINE.1": {
+      "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
+      "sweep": "sortengine_sweep.sh",
+      "byte_domain": "a sequence of submitted records + SORT keys -> the retrieved (sorted) record sequence",
+      "non_claims": [
+        "the temp-file spill path (switch_to_file/files_used, above COB_SORT_MEMORY -- declared OS boundary)",
+        "the EXTFH variants (cob_file_sort_using_extfh/giving_extfh)",
+        "numeric-key ordering (a declared composition with GNURUST.NUMCMP.1)",
+        "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+        "MERGE-sequence checking",
+        "the actual fd tempfile syscalls"
+      ]
+    },
     "GNURUST.FILEIO.MAPPING.1": {
       "court": "COBOL filename mapping (env resolution)",
       "sweep": "map_sweep.sh",

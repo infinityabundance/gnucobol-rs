@@ -1105,6 +1105,266 @@ pub fn sort_records(records: &[&[u8]], keys: &[SortKey], col: Option<&[u8; 256]>
 }
 
 // ======================================================================================================
+// SORT/MERGE engine — the in-memory 4-queue natural merge (`GNURUST.FILEIO.SORTENGINE.1`)
+//
+// A 1:1 port of fileio.c's `struct cobsort` sort engine: `cob_file_sort_submit` inserts each record onto
+// the shorter of two input queues (each new record is a one-element sorted "block"); `cob_sort_queues`
+// repeatedly merges adjacent blocks across a 4-queue ping-pong until a single sorted run remains;
+// `cob_file_sort_retrieve` then drains that run in order. The full-key tie is broken by the per-record
+// `unique` insertion counter, so the result is a STABLE sort by the keys (matching the oracle's SORT
+// record order). The C linked lists (with an `empty` free-list) are modelled faithfully as an arena of
+// `CobItem`s linked by `next: Option<usize>` indices. The temp-file spill path (`switch_to_file` /
+// `files_used`, triggered only above `COB_SORT_MEMORY`, default 128 MiB) is the declared OS boundary —
+// in-memory sorts (every oracle-reachable case) never spill.
+// ======================================================================================================
+
+/// `fileio.c` sort return codes (`COBSORT*`).
+const COBSORTEND: i32 = 1;
+#[allow(dead_code)]
+const COBSORTABORT: i32 = 2;
+#[allow(dead_code)]
+const COBSORTFILEERR: i32 = 3;
+#[allow(dead_code)]
+const COBSORTNOTOPEN: i32 = 4;
+
+/// Port of `fileio.c:struct cobitem` — one record in the sort, plus its insertion-order `unique` key and
+/// the `end_of_block` run delimiter; `next` is the arena index of the following item (the C linked list).
+#[derive(Clone)]
+struct CobItem {
+    item: Vec<u8>,
+    unique: usize,
+    end_of_block: bool,
+    next: Option<usize>,
+}
+
+/// Port of `fileio.c:struct queue_struct` — a singly-linked run of [`CobItem`]s (`first`..`last`).
+#[derive(Clone, Copy, Default)]
+struct QueueStruct {
+    first: Option<usize>,
+    last: Option<usize>,
+    count: i64,
+}
+
+/// Port of `fileio.c:struct cobsort` (the in-memory subset) — the 4-queue merge state for one SORT/MERGE.
+/// Built by [`CobSort::cob_file_sort_init`], fed by [`CobSort::cob_file_sort_submit`], drained by
+/// [`CobSort::cob_file_sort_retrieve`].
+pub struct CobSort {
+    arena: Vec<CobItem>,
+    empty: Option<usize>,
+    queue: [QueueStruct; 4],
+    keys: Vec<SortKey>,
+    col: Option<[u8; 256]>,
+    size: usize,
+    unique: usize,
+    retrieving: bool,
+    retrieval_queue: usize,
+    flag_merge: bool,
+}
+
+impl CobSort {
+    /// Port of `fileio.c:cob_file_sort_init` — set up the engine for a file of `record_max`-wide records
+    /// with an optional collating sequence (`collating_sequence` ?? the module default). Keys are added
+    /// afterwards via [`CobSort::cob_file_sort_init_key`].
+    pub fn cob_file_sort_init(record_max: usize, collating_sequence: Option<[u8; 256]>) -> CobSort {
+        CobSort {
+            arena: Vec::new(),
+            empty: None,
+            queue: [QueueStruct::default(); 4],
+            keys: Vec::new(),
+            col: collating_sequence,
+            size: record_max,
+            unique: 0,
+            retrieving: false,
+            retrieval_queue: 0,
+            flag_merge: false,
+        }
+    }
+
+    /// Port of `fileio.c:cob_file_sort_init_key` — append a sort key (in declaration order).
+    pub fn cob_file_sort_init_key(&mut self, offset: usize, size: usize, ascending: bool) {
+        self.keys.push(SortKey { offset, size, ascending });
+    }
+
+    /// Port of `fileio.c:cob_file_sort_options` — record whether this is a MERGE (`parms[0] == 'M'`).
+    pub fn cob_file_sort_options(&mut self, parms: &str) {
+        self.flag_merge = parms.as_bytes().first() == Some(&b'M');
+    }
+
+    /// Port of `fileio.c:cob_new_item` — allocate (or recycle from the `empty` free-list) a fresh item.
+    fn cob_new_item(&mut self) -> usize {
+        if let Some(q) = self.empty {
+            self.empty = self.arena[q].next;
+            self.arena[q].end_of_block = false;
+            self.arena[q].next = None;
+            return q;
+        }
+        self.arena.push(CobItem { item: vec![0u8; self.size], unique: 0, end_of_block: false, next: None });
+        self.arena.len() - 1
+    }
+
+    /// Port of `fileio.c:cob_file_sort_compare` — order two arena items by the keys (numeric keys are a
+    /// declared composition with `GNURUST.NUMCMP.1`; here the alphanumeric/byte path), then by `unique`.
+    fn compare(&self, k1: usize, k2: usize) -> i32 {
+        let a = &self.arena[k1];
+        let b = &self.arena[k2];
+        match cob_file_sort_compare(&a.item, a.unique, &b.item, b.unique, &self.keys, self.col.as_ref()) {
+            Ordering::Less => -1,
+            Ordering::Greater => 1,
+            Ordering::Equal => 0,
+        }
+    }
+
+    /// Port of `fileio.c:cob_sort_queues` — the natural 4-queue merge. Repeatedly merges the runs in
+    /// `queue[source]`/`queue[source+1]` into `queue[destination]`/`queue[destination+1]` (ping-pong)
+    /// until a single sorted run remains; returns the index of the queue holding it.
+    fn cob_sort_queues(&mut self) -> usize {
+        let mut source = 0usize;
+        while self.queue[source + 1].count != 0 {
+            let mut destination = source ^ 2;
+            self.queue[destination] = QueueStruct::default();
+            self.queue[destination + 1] = QueueStruct::default();
+            loop {
+                let mut end_of_block = [self.queue[source].count == 0, self.queue[source + 1].count == 0];
+                if end_of_block[0] && end_of_block[1] {
+                    break;
+                }
+                while !end_of_block[0] || !end_of_block[1] {
+                    let move_: usize = if end_of_block[0] {
+                        1
+                    } else if end_of_block[1] {
+                        0
+                    } else {
+                        let res = self.compare(self.queue[source].first.unwrap(), self.queue[source + 1].first.unwrap());
+                        if res < 0 { 0 } else { 1 }
+                    };
+                    let q = self.queue[source + move_].first.unwrap();
+                    if self.arena[q].end_of_block {
+                        end_of_block[move_] = true;
+                    }
+                    self.queue[source + move_].first = self.arena[q].next;
+                    if self.queue[destination].first.is_none() {
+                        self.queue[destination].first = Some(q);
+                    } else {
+                        let last = self.queue[destination].last.unwrap();
+                        self.arena[last].next = Some(q);
+                    }
+                    self.queue[destination].last = Some(q);
+                    self.queue[source + move_].count -= 1;
+                    self.queue[destination].count += 1;
+                    self.arena[q].next = None;
+                    self.arena[q].end_of_block = false;
+                }
+                let last = self.queue[destination].last.unwrap();
+                self.arena[last].end_of_block = true;
+                destination ^= 1;
+            }
+            source = destination & 2;
+        }
+        source
+    }
+
+    /// Port of `fileio.c:cob_file_sort_submit` — insert record `p` into the sort: a fresh one-element
+    /// block pushed onto the shorter of `queue[0]`/`queue[1]`. (The temp-file `switch_to_file` branch is
+    /// the declared OS boundary; in-memory sorts never take it.)
+    pub fn cob_file_sort_submit(&mut self, p: &[u8]) -> i32 {
+        if self.retrieving {
+            return COBSORTABORT;
+        }
+        let q = self.cob_new_item();
+        self.arena[q].end_of_block = true;
+        self.arena[q].unique = self.unique;
+        self.unique += 1;
+        let n = self.size.min(p.len());
+        self.arena[q].item[..n].copy_from_slice(&p[..n]);
+        for b in &mut self.arena[q].item[n..] {
+            *b = 0;
+        }
+        let z = if self.queue[0].count <= self.queue[1].count { 0 } else { 1 };
+        self.arena[q].next = self.queue[z].first;
+        self.queue[z].first = Some(q);
+        self.queue[z].count += 1;
+        0
+    }
+
+    /// Port of `fileio.c:cob_file_sort_process` (in-memory path) — run the merge and mark the engine as
+    /// retrieving; the single sorted run is left in `queue[retrieval_queue]`.
+    fn cob_file_sort_process(&mut self) -> i32 {
+        let n = self.cob_sort_queues();
+        self.retrieving = true;
+        self.retrieval_queue = n;
+        0
+    }
+
+    /// Port of `fileio.c:cob_file_sort_retrieve` (in-memory path) — copy the next record (in sorted order)
+    /// into `p`, recycling its item onto the `empty` free-list. Returns [`COBSORTEND`] when drained.
+    pub fn cob_file_sort_retrieve(&mut self, p: &mut [u8]) -> i32 {
+        if !self.retrieving {
+            let res = self.cob_file_sort_process();
+            if res != 0 {
+                return res;
+            }
+        }
+        let z = self.retrieval_queue;
+        let first = match self.queue[z].first {
+            None => return COBSORTEND,
+            Some(f) => f,
+        };
+        let n = self.size.min(p.len());
+        p[..n].copy_from_slice(&self.arena[first].item[..n]);
+        let next = self.arena[first].next;
+        self.arena[first].next = self.empty;
+        self.empty = Some(first);
+        self.queue[z].first = next;
+        0
+    }
+
+    /// Port of `fileio.c:cob_file_sort_using` — submit every record of the input data into the sort (the
+    /// records the C reads from `data_file` via `cob_read_next`), space-padding/truncating to record size
+    /// via [`cob_copy_check`].
+    pub fn cob_file_sort_using(&mut self, data: &[&[u8]]) {
+        for rec in data {
+            let padded = cob_copy_check(rec, self.size);
+            if self.cob_file_sort_submit(&padded) != 0 {
+                break;
+            }
+        }
+    }
+
+    /// Port of `fileio.c:cob_file_sort_giving_internal` — drain the sorted records (what the C writes to
+    /// the GIVING files), returning them in order.
+    pub fn cob_file_sort_giving_internal(&mut self) -> Vec<Vec<u8>> {
+        let mut out = Vec::new();
+        let mut buf = vec![0u8; self.size];
+        loop {
+            if self.cob_file_sort_retrieve(&mut buf) == COBSORTEND {
+                break;
+            }
+            out.push(buf.clone());
+        }
+        out
+    }
+
+    /// Port of `fileio.c:cob_file_sort_giving` — the public GIVING entry (single output); delegates to
+    /// [`CobSort::cob_file_sort_giving_internal`].
+    pub fn cob_file_sort_giving(&mut self) -> Vec<Vec<u8>> {
+        self.cob_file_sort_giving_internal()
+    }
+
+    /// Port of `fileio.c:cob_free_list` / `cob_file_sort_close` — release the engine's items. (Rust drops
+    /// the arena; this resets the queues so a closed sort holds nothing.)
+    pub fn cob_free_list(&mut self) {
+        self.arena = Vec::new();
+        self.empty = None;
+        self.queue = [QueueStruct::default(); 4];
+    }
+
+    /// Port of `fileio.c:cob_file_sort_close` — finish the sort and free its working storage.
+    pub fn cob_file_sort_close(&mut self) {
+        self.cob_free_list();
+    }
+}
+
+// ======================================================================================================
 // File runtime: OPEN / CLOSE / lifecycle (`GNURUST.FILEIO.OPEN.1`)
 //
 // A `CobFile` ties the sealed organization handlers together into a working file runtime. `cob_open`
@@ -2303,6 +2563,45 @@ mod tests {
         assert_eq!(sort_records(&recs, &keys, None), vec![1, 3, 0, 2, 4]);
     }
 
+    // ---- SORT engine (4-queue natural merge) ----
+    #[test]
+    fn sort_engine_matches_stable_sort() {
+        // The in-memory CobSort engine must reproduce the SORT.1-proven stable order (sort_records) for an
+        // arbitrary multi-key, duplicate-laden set, across enough records to force several merge rounds.
+        let recs: Vec<&[u8]> = vec![
+            b"BBB10p01", b"AAA20p02", b"BBB05p03", b"AAA20p04", b"CCC00p05", b"BBB10p06",
+            b"AAA20p07", b"DDD99p08", b"BBB05p09", b"CCC00p10", b"AAA10p11", b"BBB10p12",
+            b"AAA20p13", b"CCC50p14", b"DDD99p15", b"AAA10p16",
+        ];
+        let mut keys = Vec::new();
+        cob_file_sort_init_key(&mut keys, 0, 3, true);
+        cob_file_sort_init_key(&mut keys, 3, 2, false);
+        let want: Vec<Vec<u8>> = sort_records(&recs, &keys, None).into_iter().map(|i| recs[i].to_vec()).collect();
+
+        let mut s = CobSort::cob_file_sort_init(8, None);
+        s.cob_file_sort_init_key(0, 3, true);
+        s.cob_file_sort_init_key(3, 2, false);
+        s.cob_file_sort_using(&recs);
+        let got = s.cob_file_sort_giving();
+        assert_eq!(got, want);
+        // a drained engine yields COBSORTEND and the close frees its storage
+        let mut buf = vec![0u8; 8];
+        assert_eq!(s.cob_file_sort_retrieve(&mut buf), COBSORTEND);
+        s.cob_file_sort_close();
+    }
+
+    #[test]
+    fn sort_engine_single_record_and_empty() {
+        // one record sorts to itself; an empty sort drains immediately
+        let mut s = CobSort::cob_file_sort_init(4, None);
+        s.cob_file_sort_init_key(0, 4, true);
+        s.cob_file_sort_using(&[b"WXYZ"]);
+        assert_eq!(s.cob_file_sort_giving(), vec![b"WXYZ".to_vec()]);
+        let mut e = CobSort::cob_file_sort_init(4, None);
+        e.cob_file_sort_init_key(0, 4, true);
+        assert!(e.cob_file_sort_giving().is_empty());
+    }
+
     #[test]
     fn sort_cmps_and_collation() {
         assert!(sort_cmps(b"ABC", b"ABD", None) < 0);
@@ -2643,6 +2942,23 @@ mod kani_proofs {
         let ab = cob_file_sort_compare(&a, 0, &b, 1, &keys, None);
         let ba = cob_file_sort_compare(&b, 1, &a, 0, &keys, None);
         assert_eq!(ab, ba.reverse());
+    }
+    // KANIFOR: GNURUST.FILEIO.SORTENGINE.1
+    /// The in-memory sort engine is a total permutation: submitting N arbitrary records then draining
+    /// yields exactly N records, in non-decreasing key order, and never panics.
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn sort_engine_total_and_ordered() {
+        let a: [u8; 2] = kani::any();
+        let b: [u8; 2] = kani::any();
+        let c: [u8; 2] = kani::any();
+        let mut s = CobSort::cob_file_sort_init(2, None);
+        s.cob_file_sort_init_key(0, 2, true);
+        s.cob_file_sort_using(&[&a, &b, &c]);
+        let out = s.cob_file_sort_giving();
+        assert_eq!(out.len(), 3);
+        // output is sorted by the ascending key
+        assert!(out[0] <= out[1] && out[1] <= out[2]);
     }
     // KANIFOR: GNURUST.FILEIO.OPEN.1
     /// The non-I/O precondition paths of cob_open/cob_close are total: opening a Locked file is 38, an

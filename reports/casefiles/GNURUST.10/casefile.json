@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.10",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.53",
+  "crate_version": "0.7.54",
   "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records",
   "hash_chain": {
-    "inputs_sha256": "dde615e17cdd9736a9468caa3f442a2102d6b7fbb65f1a6b830911cd371aa6c0"
+    "inputs_sha256": "8b024ffea525616cf031af4c46d5564e6ab2736a8f6c2d7355445b8bfed29899"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "bdbe903da1b51576ce5cdb50da4a818cd2dd0817b1e9e457e37af8082d855717",
-    "receipt_sha256": "0251e8db7b19f09f20b3e0494306ad6ee19aa3379b73e8887f83f4da31d13a29"
+    "receipt_sha256": "a8bf3236e9f5fc6f8905d21059c419d696018b8eaf4c7d710f1026d9a59e2178"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

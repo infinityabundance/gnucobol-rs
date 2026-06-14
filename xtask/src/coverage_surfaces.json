@@ -414,13 +414,14 @@
   "source_modules": [
    "libcob/fileio.c"
   ],
-  "status": "observed",
+  "status": "sealed",
   "courts": [
    "GNURUST.SORT.MERGE.ATLAS.1",
-   "GNURUST.FILEIO.SORT.1"
+   "GNURUST.FILEIO.SORT.1",
+   "GNURUST.FILEIO.SORTENGINE.1"
   ],
   "future_campaign": null,
-  "risk_if_unported": "SORT/MERGE record comparison sealed (GNURUST.FILEIO.SORT.1); the sort engine (tempfile merge/queues) is its own runtime, observed only"
+  "risk_if_unported": "SORT/MERGE record comparison sealed (GNURUST.FILEIO.SORT.1); the in-memory 4-queue natural-merge engine sealed (GNURUST.FILEIO.SORTENGINE.1, byte-identical output order vs the oracle's SORT GIVING); the tempfile-spill path + EXTFH variants stay the declared OS boundary"
  },
  {
   "surface": "screen-section",

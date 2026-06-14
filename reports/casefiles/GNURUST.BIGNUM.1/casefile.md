@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.BIGNUM.1 (court-casefile)
 
-**Verdict: PASS** · bignum_sweep 16128/0 (15-20 digit operands x signs x scales x ROUNDED modes) + K=40 + mul_u256 carry unit tests · crate `gnucobol-rs` 0.7.53
+**Verdict: PASS** · bignum_sweep 16128/0 (15-20 digit operands x signs x scales x ROUNDED modes) + K=40 + mul_u256 carry unit tests · crate `gnucobol-rs` 0.7.54
 
 - **Oracle:** libcob cob_mul (GMP product) + cob_decimal_get_field truncating store
 - **Byte domain(s):** two numeric operands whose i128 product overflows -> receiver bytes (low-digit truncation + ROUNDED)

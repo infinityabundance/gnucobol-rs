@@ -1,0 +1,33 @@
+{
+  "byte_domain": "a sequence of submitted records + SORT keys -> the retrieved (sorted) record sequence",
+  "campaign": "GNURUST.FILEIO.SORTENGINE.1",
+  "command": {
+    "replay": "bash lab/oracle/sortengine_sweep.sh"
+  },
+  "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
+  "crate_version": "0.7.54",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "the temp-file spill path (switch_to_file/files_used, above COB_SORT_MEMORY -- declared OS boundary)",
+    "the EXTFH variants (cob_file_sort_using_extfh/giving_extfh)",
+    "numeric-key ordering (a declared composition with GNURUST.NUMCMP.1)",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE-sequence checking",
+    "the actual fd tempfile syscalls"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

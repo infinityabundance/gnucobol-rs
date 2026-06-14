@@ -1,8 +1,8 @@
 {
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "fuzz_covered": 65,
-  "impl_courts": 65,
-  "kani_covered": 65,
+  "fuzz_covered": 66,
+  "impl_courts": 66,
+  "kani_covered": 66,
   "na_courts": 55,
   "rows": [
     {
@@ -651,6 +651,15 @@
       ]
     },
     {
+      "court": "GNURUST.FILEIO.SORTENGINE.1",
+      "fuzz": [
+        "lineseq.rs"
+      ],
+      "kani": [
+        "fileio.rs"
+      ]
+    },
+    {
       "court": "GNURUST.FILEIO.SYS.1",
       "fuzz": [
         "lineseq.rs"
@@ -922,5 +931,5 @@
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 120
+  "total_courts": 121
 }

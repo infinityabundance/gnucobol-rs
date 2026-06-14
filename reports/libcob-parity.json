@@ -271,23 +271,11 @@
         "cob_file_open",
         "cob_file_release",
         "cob_file_return",
-        "cob_file_sort_close",
-        "cob_file_sort_giving",
         "cob_file_sort_giving_extfh",
-        "cob_file_sort_giving_internal",
-        "cob_file_sort_init",
-        "cob_file_sort_options",
-        "cob_file_sort_process",
-        "cob_file_sort_retrieve",
-        "cob_file_sort_submit",
-        "cob_file_sort_using",
         "cob_file_sort_using_extfh",
-        "cob_free_list",
         "cob_get_filename_print",
         "cob_get_sort_tempfile",
-        "cob_new_item",
         "cob_read_item",
-        "cob_sort_queues",
         "cob_sync",
         "cob_sys_check_file_exist",
         "cob_sys_extfh",
@@ -335,8 +323,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 45.6,
-      "ported": 83
+      "parity_pct": 52.2,
+      "ported": 95
     },
     {
       "file": "mlio.c",
@@ -683,7 +671,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 49.2,
-    "ported": 576
+    "parity_pct": 50.3,
+    "ported": 588
   }
 }

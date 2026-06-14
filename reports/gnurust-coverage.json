@@ -10,12 +10,12 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "27/42",
+  "sealed_fraction": "28/42",
   "status_counts": {
     "missing": 0,
     "negative": 5,
-    "observed": 10,
-    "sealed": 27
+    "observed": 9,
+    "sealed": 28
   },
   "surface_count": 42,
   "surfaces": [
@@ -459,15 +459,16 @@
       "category": "SORT/MERGE",
       "courts": [
         "GNURUST.SORT.MERGE.ATLAS.1",
-        "GNURUST.FILEIO.SORT.1"
+        "GNURUST.FILEIO.SORT.1",
+        "GNURUST.FILEIO.SORTENGINE.1"
       ],
       "future_campaign": null,
-      "risk_if_unported": "SORT/MERGE record comparison sealed (GNURUST.FILEIO.SORT.1); the sort engine (tempfile merge/queues) is its own runtime, observed only",
+      "risk_if_unported": "SORT/MERGE record comparison sealed (GNURUST.FILEIO.SORT.1); the in-memory 4-queue natural-merge engine sealed (GNURUST.FILEIO.SORTENGINE.1, byte-identical output order vs the oracle's SORT GIVING); the tempfile-spill path + EXTFH variants stay the declared OS boundary",
       "source_modules": [
         "libcob/fileio.c"
       ],
       "source_modules_present": true,
-      "status": "observed",
+      "status": "sealed",
       "surface": "sort-merge"
     },
     {

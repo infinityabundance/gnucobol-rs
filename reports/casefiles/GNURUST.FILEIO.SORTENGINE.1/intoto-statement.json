@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.FILEIO.SORTENGINE.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.54",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "b34b252fbf327a1c7e3b09b4f23626c35268b5c2a9e883f0512f63d9ef9b3adf",
+      "receipt_sha256": "5e8b57ded1e32c4a42aef1cf2a201a284e80740b00b332a31d88d25189202a86"
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 4,
+    "replay": {
+      "command": "bash lab/oracle/sortengine_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "dee95c9334fc77168e9d4697439c6af7d8acb98b781bbc91d0badb1e8c45a6ab"
+      },
+      "name": "reports/casefiles/GNURUST.FILEIO.SORTENGINE.1/casefile.json"
+    }
+  ]
+}

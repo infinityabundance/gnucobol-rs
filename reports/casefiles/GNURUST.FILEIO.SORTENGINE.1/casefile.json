@@ -1,0 +1,66 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a sequence of submitted records + SORT keys -> the retrieved (sorted) record sequence"
+  ],
+  "case_id": "GNURUST.FILEIO.SORTENGINE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.54",
+  "damage_if_overclaimed": "claiming the whole sort engine when only the in-memory path is proven would hide the temp-file-spill and EXTFH paths, which a large SORT (above COB_SORT_MEMORY) actually takes",
+  "hash_chain": {
+    "inputs_sha256": "7fa42cdcdf503873aad63add2f8846d90e55eea31bb68f898f665304dd2fe7df"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "b34b252fbf327a1c7e3b09b4f23626c35268b5c2a9e883f0512f63d9ef9b3adf",
+    "receipt_sha256": "5e8b57ded1e32c4a42aef1cf2a201a284e80740b00b332a31d88d25189202a86"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a SORT is just any sort that puts records in key order -- NO: libcob uses a specific 4-queue natural merge whose equal-key tiebreak is the input order (the unique counter), so the output is the STABLE permutation, byte-reproducible record-for-record, not merely key-ordered"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-TEMP-FILE-SPILL-PATH-SWITCH-TO-FILE",
+    "NEG.THE-EXTFH-VARIANTS-COB-FILE-SORT-USING-E",
+    "NEG.NUMERIC-KEY-ORDERING-A-DECLARED-COMPOSIT",
+    "NEG.INPUT-OUTPUT-PROCEDURE-RELEASE-RETURN",
+    "NEG.MERGE-SEQUENCE-CHECKING",
+    "NEG.THE-ACTUAL-FD-TEMPFILE-SYSCALLS"
+  ],
+  "negative_claims": [
+    "the temp-file spill path (switch_to_file/files_used/cob_get_sort_tempfile/cob_read_item/cob_write_block/cob_create_tmpfile, taken only above COB_SORT_MEMORY -- the declared OS boundary)",
+    "the EXTFH variants (cob_file_sort_using_extfh/giving_extfh)",
+    "numeric-key ordering (a declared composition with GNURUST.NUMCMP.1)",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE-sequence checking",
+    "the actual fd tempfile syscalls",
+    "lie prevented: a SORT is just any sort that puts records in key order -- NO: libcob uses a specific 4-queue natural merge whose equal-key tiebreak is the input order (the unique counter), so the output is the STABLE permutation, byte-reproducible record-for-record, not merely key-ordered"
+  ],
+  "oracle": {
+    "detail": "cobc SORT ... USING/GIVING record order (libcob/fileio.c in-memory cobsort engine)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.SORTENGINE.1"
+  },
+  "positive_claims": [
+    "a faithful 1:1 port of libcob/fileio.c's in-memory sort engine -- struct cobsort + cob_file_sort_init/init_key/submit/process/retrieve, cob_sort_queues, cob_new_item, cob_file_sort_using/giving/giving_internal, cob_free_list/cob_file_sort_close -- proven to produce byte-identical output ORDER to the admitted libcob's SORT GIVING file (sortengine_sweep 1/0 over a 16-record, full-key-duplicate, mixed ASCENDING/DESCENDING dataset). The C singly-linked queues (with the empty free-list) are modelled as an arena of items linked by next indices",
+    "submit pushes each one-element block onto the shorter of queue[0]/queue[1]",
+    "cob_sort_queues repeatedly merges adjacent runs across a 4-queue ping-pong (end_of_block delimiting runs) until one sorted run remains",
+    "retrieve drains it. The full-key tie is broken by the per-record unique insertion counter, so the engine is a STABLE permutation. Cross-checked against the GNURUST.FILEIO.SORT.1 stable order and exercised across several merge rounds"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/sortengine_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

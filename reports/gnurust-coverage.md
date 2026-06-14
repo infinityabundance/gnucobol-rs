@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **42**  ·  sealed ✅ **27**  ·  observed 🟡 10  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **42**  ·  sealed ✅ **28**  ·  observed 🟡 9  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **27/42**
+- sealed fraction (data-representation spine): **28/42**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -38,7 +38,7 @@
 | `accept-display` | ACCEPT/DISPLAY | `termio.c` | ✅ sealed | GNURUST.ACCEPT.DISPLAY.1, GNURUST.ACCEPT.DISPLAY.2 |
 | `procedure-flow` | control flow | `typeck.c, codegen.c` | 🟡 observed | GNURUST.PROCEDURE.FLOW.ATLAS.1, GNURUST.IF.EVALUATE.SLICE.1, GNURUST.IF.NUMERIC.SLICE.1, GNURUST.PERFORM.SLICE.1, GNURUST.TABLE.PERFORM.SLICE.1, GNURUST.SEARCH.TABLE.1, GNURUST.FILE.FLOW.SLICE.1, GNURUST.FILE.FILTER.SLICE.1 |
 | `call-linkage` | CALL/linkage | `call.c` | 🟡 observed | GNURUST.CALL.EXTENSION.ATLAS.1, GNURUST.CALL.LAYOUT.ATLAS.1 |
-| `sort-merge` | SORT/MERGE | `fileio.c` | 🟡 observed | GNURUST.SORT.MERGE.ATLAS.1, GNURUST.FILEIO.SORT.1 |
+| `sort-merge` | SORT/MERGE | `fileio.c` | ✅ sealed | GNURUST.SORT.MERGE.ATLAS.1, GNURUST.FILEIO.SORT.1, GNURUST.FILEIO.SORTENGINE.1 |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |
 | `report-writer` | screen/report/CICS/SQL unsupported | `reportio.c` | ⛔ negative | — |
 | `ml-io-xml-json` | screen/report/CICS/SQL unsupported | `mlio.c` | ⛔ negative | — |

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INDEXED.FILE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.53",
+  "crate_version": "0.7.54",
   "damage_if_overclaimed": "treating an indexed file as a flat fixed-record file (insertion order, no key uniqueness) corrupts every keyed read; assuming the on-disk index is portable across backends silently breaks migration",
   "hash_chain": {
-    "inputs_sha256": "cc34a9f54d1f3bbe83b434ef5934506cf9740a10f25ecb6b751aaff38ad3fcf5"
+    "inputs_sha256": "03c749cb55764ad6ba208b017f5b2ffd7fca93149b131458e3eade0fe0b01f7e"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b2d1e631f8874c0aaa7deb2c1fbf0bccbafb6ad6116663d55ca52a05fe4afcb9",
-    "receipt_sha256": "21418ed6a067d6e8c138019bfdbeee2c52cae7c97b326d92a5e7dc0ac8f3f324"
+    "receipt_sha256": "41dfd81376dd7b0d0b6edf48c4cca0fba2a5dd5729fbd47f08fbe31cf2de87d0"
   },
   "kind": "court-casefile",
   "lie_prevented": [

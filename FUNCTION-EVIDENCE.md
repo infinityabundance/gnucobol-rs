@@ -10,7 +10,7 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 561** · direct 335 (incl. oracle-sweep 180) · transitive 115 · lifecycle 42 · **evidenced (any) 468** · **unevidenced 93**.
+**Active ported: 572** · direct 340 (incl. oracle-sweep 183) · transitive 118 · lifecycle 44 · **evidenced (any) 477** · **unevidenced 95**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -20,7 +20,7 @@
 | `intrinsic.c` | 232 | 117 | 103 | 58 | 8 | 177 | 55 |
 | `cconv.c` | 9 | 8 | 4 | 0 | 2 | 9 | 0 |
 | `termio.c` | 18 | 7 | 3 | 2 | 1 | 10 | 8 |
-| `fileio.c` | 82 | 78 | 25 | 3 | 8 | 82 | 0 |
+| `fileio.c` | 93 | 83 | 28 | 6 | 10 | 91 | 2 |
 | `mlio.c` | 8 | 6 | 1 | 0 | 2 | 8 | 0 |
 | `reportio.c` | 18 | 14 | 0 | 1 | 4 | 17 | 1 |
 | `common.c` | 2 | 0 | 0 | 1 | 0 | 1 | 1 |
@@ -33,6 +33,7 @@
 - **`strings.c`** (5): `cob_inspect_trailing`, `cob_unstring_tallying`, `do_mark`, `inspect_common_no_replace`, `inspect_common_replacing`
 - **`intrinsic.c`** (55): `add_decimal_digits`, `add_z`, `cob_intr_boolean_of_integer`, `cob_intr_char_national`, `cob_intr_display_of`, `cob_intr_exception_file_n`, `cob_intr_exception_location_n`, `cob_intr_national_of`, `cob_intr_random`, `cob_intr_seconds_past_midnight`, `cob_intr_standard_compare`, `decimal_places_for_seconds`, `format_as_yyyyddd`, `format_as_yyyymmdd`, `format_as_yyyywwwd`, `get_day_of_week`, `get_iso_week`, `get_iso_week_one`, `get_seconds_past_midnight`, `get_substituted_size`, `integer_of_ddd`, `integer_of_mmdd`, `integer_of_wwwd`, `max_week`, `rest_is_offset_format`, `rest_is_z`, `substitute_matches`, `test_century`, `test_char`, `test_char_cond`, `test_char_in_range`, `test_colon_presence`, `test_date_end`, `test_day_of_month`, `test_day_of_week`, `test_day_of_year`, `test_decade`, `test_decimal_places`, `test_digit`, `test_hour`, `test_hyphen_presence`, `test_less_than_60`, `test_minute`, `test_month`, `test_no_trailing_junk`, `test_offset_time`, `test_second`, `test_time_end`, `test_two_zeroes`, `test_unit_year`, `test_w_presence`, `test_week`, `test_year`, `test_z_presence`, `valid_offset_time`
 - **`termio.c`** (8): `cob_accept`, `cob_dump_field`, `cob_dump_field_ext`, `cob_dump_file`, `cob_dump_output`, `dump_field_internal`, `dump_pending_output`, `is_field_display`
+- **`fileio.c`** (2): `cob_file_sort_options`, `cob_file_sort_submit`
 - **`reportio.c`** (1): `limitCheckOneLine`
 - **`common.c`** (1): `cob_get_current_date_and_time_from_os`
 

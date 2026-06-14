@@ -3974,9 +3974,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 82,
+    "active_ported": 93,
     "compiled": 182,
-    "compiled_parity_pct": 45.6,
+    "compiled_parity_pct": 52.2,
     "disabled": 0,
     "doc_only": 0,
     "file": "fileio.c",
@@ -4686,12 +4686,14 @@
       {
         "function": "cob_free_list",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_new_item",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_create_tmpfile",
@@ -4706,7 +4708,8 @@
       {
         "function": "cob_sort_queues",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_read_item",
@@ -4727,27 +4730,32 @@
       {
         "function": "cob_file_sort_process",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_submit",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_retrieve",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_init",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "cob_file_sort_options",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_init_key",
@@ -4758,7 +4766,8 @@
       {
         "function": "cob_file_sort_using",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_using_extfh",
@@ -4768,12 +4777,14 @@
       {
         "function": "cob_file_sort_giving_internal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_giving",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_giving_extfh",
@@ -4783,7 +4794,8 @@
       {
         "function": "cob_file_sort_close",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_release",
@@ -5012,23 +5024,11 @@
       "cob_file_open",
       "cob_file_release",
       "cob_file_return",
-      "cob_file_sort_close",
-      "cob_file_sort_giving",
       "cob_file_sort_giving_extfh",
-      "cob_file_sort_giving_internal",
-      "cob_file_sort_init",
-      "cob_file_sort_options",
-      "cob_file_sort_process",
-      "cob_file_sort_retrieve",
-      "cob_file_sort_submit",
-      "cob_file_sort_using",
       "cob_file_sort_using_extfh",
-      "cob_free_list",
       "cob_get_filename_print",
       "cob_get_sort_tempfile",
-      "cob_new_item",
       "cob_read_item",
-      "cob_sort_queues",
       "cob_sync",
       "cob_sys_check_file_exist",
       "cob_sys_extfh",
@@ -5076,8 +5076,8 @@
       "update_key_from_fcd",
       "update_record_and_keys_if_necessary"
     ],
-    "inactive_mirrors": 1,
-    "missing": 99,
+    "inactive_mirrors": 2,
+    "missing": 87,
     "source_funcs": 182,
     "test_only": 0
   },
