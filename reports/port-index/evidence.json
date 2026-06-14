@@ -179,16 +179,19 @@
       "unevidenced": []
     },
     {
-      "active": 146,
-      "direct": 127,
-      "evidenced_any": 144,
+      "active": 180,
+      "direct": 151,
+      "evidenced_any": 175,
       "file": "fileio.c",
       "lifecycle": 18,
       "oracle": 36,
-      "transitive": 13,
+      "transitive": 21,
       "unevidenced": [
-        "cob_file_sort_options",
-        "update_record_and_keys_if_necessary"
+        "cob_file_external_addr",
+        "cob_file_fcd_adrs",
+        "cob_file_fcdkey_adrs",
+        "cob_file_sort_giving_extfh",
+        "cob_file_sort_options"
       ]
     },
     {
@@ -243,12 +246,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 625,
-    "direct": 384,
-    "evidenced_any": 530,
+    "active": 659,
+    "direct": 408,
+    "evidenced_any": 561,
     "lifecycle": 52,
     "oracle": 191,
-    "transitive": 125,
-    "unevidenced": 95
+    "transitive": 133,
+    "unevidenced": 98
   }
 }

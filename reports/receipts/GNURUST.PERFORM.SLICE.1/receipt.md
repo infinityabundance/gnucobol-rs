@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.PERFORM.SLICE.1` |
 | court | PERFORM execution slice (TIMES/UNTIL/VARYING) |
-| crate_version | `0.7.58` |
+| crate_version | `0.7.59` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | execute PERFORM loop over numeric counters -> resulting storage bytes |
 | replay command | `bash lab/oracle/perform_sweep.sh` |

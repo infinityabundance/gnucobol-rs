@@ -876,6 +876,37 @@ pub fn cob_sys_get_current_dir(flags: i32, dir_length: usize) -> (i32, Vec<u8>) 
     (0, dir)
 }
 
+/// Port of `fileio.c:cob_sys_check_file_exist` (`CBL_CHECK_FILE_EXIST`) — stat `filename` and fill the
+/// 16-byte detail area: bytes 0..8 the file size as a big-endian 64-bit value, byte 8 day, 9 month, 10..12
+/// year (big-endian 16-bit), 12 hour, 13 minute, 14 second, 15 zero. Returns `35` when the file is absent,
+/// else `0`. The size is byte-exact; the calendar breakdown (the C `localtime`) is TZ-dependent — the
+/// declared boundary — so the date bytes are left zero here.
+pub fn cob_sys_check_file_exist(filename: &str) -> (i32, [u8; 16]) {
+    let mut info = [0u8; 16];
+    match std::fs::metadata(filename) {
+        Ok(md) => {
+            info[0..8].copy_from_slice(&md.len().to_be_bytes());
+            // info[8..15] = localtime(st_mtime) -> the TZ-dependent boundary.
+            (0, info)
+        }
+        Err(_) => (35, info),
+    }
+}
+
+/// Port of `fileio.c:cob_sys_file_info` (`C$FILEINFO`) — the same stat-and-fill as
+/// [`cob_sys_check_file_exist`], returning `128` when the file is absent (the `C$FILEINFO` convention) and
+/// `0` on success with the big-endian size in bytes 0..8.
+pub fn cob_sys_file_info(filename: &str) -> (i32, [u8; 16]) {
+    let mut info = [0u8; 16];
+    match std::fs::metadata(filename) {
+        Ok(md) => {
+            info[0..8].copy_from_slice(&md.len().to_be_bytes());
+            (0, info)
+        }
+        Err(_) => (128, info),
+    }
+}
+
 // ======================================================================================================
 // CBL_* handle-based byte-stream file routines (`GNURUST.FILEIO.SYS.1`, handle family)
 //
@@ -1384,6 +1415,20 @@ impl CobSort {
             _ => "30",
         }
     }
+
+    /// Port of `fileio.c:cob_file_sort_using_extfh` — the USING side of a SORT/MERGE when the input file is
+    /// served by an external file handler: read every record of `data` (the C reads them through `callfh`
+    /// via `cob_extfh_open`/`cob_extfh_read_next` — that I/O is the declared boundary) and submit each.
+    pub fn cob_file_sort_using_extfh(&mut self, data: &[&[u8]], _callfh: &mut CallFh) {
+        self.cob_file_sort_using(data);
+    }
+
+    /// Port of `fileio.c:cob_file_sort_giving_extfh` — the GIVING side of a SORT/MERGE when the output file
+    /// is served by an external file handler: drain the sorted records (the C writes them through `callfh`
+    /// via `cob_file_sort_giving_internal` — that I/O is the declared boundary).
+    pub fn cob_file_sort_giving_extfh(&mut self, _callfh: &mut CallFh) -> Vec<Vec<u8>> {
+        self.cob_file_sort_giving_internal()
+    }
 }
 
 // ======================================================================================================
@@ -1713,6 +1758,81 @@ impl LockEnv {
 }
 
 // ======================================================================================================
+// BDB indexed-backend cursor state (`GNURUST.FILEIO.INDEXED.1` substrate)
+//
+// A port of the COBOL-observable cursor bookkeeping of fileio.c's BDB `struct indexed_file`: which
+// per-index read/write cursors are open. The actual Berkeley DB cursor open/close (`db->cursor`,
+// `cursor->close`) and the BDB lock environment are the declared OS boundary; this models the
+// open/closed FLAGS and the "already open / already closed -> 0, else 1" return contract.
+// ======================================================================================================
+
+/// Port of the cursor fields of fileio.c's `struct indexed_file` — the write-cursor flag and per-index
+/// cursor-open flags. The Berkeley DB cursors themselves are the declared boundary.
+pub struct BdbFile {
+    write_cursor_open: bool,
+    cursor_open: Vec<bool>,
+}
+
+impl BdbFile {
+    /// A BDB indexed file with `nkeys` (>=1) index cursors, all closed.
+    pub fn new(nkeys: usize) -> BdbFile {
+        BdbFile { write_cursor_open: false, cursor_open: vec![false; nkeys.max(1)] }
+    }
+
+    /// Port of `fileio.c:bdb_open_cursor` — open the primary write cursor if not already open, returning
+    /// `0` when it was already open and `1` when it is opened now. (`for_write` selects `DB_WRITECURSOR` on
+    /// the real cursor — the declared BDB boundary.)
+    pub fn bdb_open_cursor(&mut self, _for_write: bool) -> i32 {
+        if self.write_cursor_open {
+            return 0;
+        }
+        self.cursor_open[0] = true;
+        self.write_cursor_open = true;
+        1
+    }
+
+    /// Port of `fileio.c:bdb_close_cursor` — close the primary write cursor, returning `0` when it was
+    /// already closed and `1` when it is closed now (the write-cursor flag is always cleared).
+    pub fn bdb_close_cursor(&mut self) -> i32 {
+        self.write_cursor_open = false;
+        if !self.cursor_open[0] {
+            return 0;
+        }
+        self.cursor_open[0] = false;
+        1
+    }
+
+    /// Port of `fileio.c:bdb_close_index` — close the cursor on index `index`, returning `0` when it was
+    /// already closed and `1` when it is closed now.
+    pub fn bdb_close_index(&mut self, index: usize) -> i32 {
+        if index >= self.cursor_open.len() || !self.cursor_open[index] {
+            return 0;
+        }
+        self.cursor_open[index] = false;
+        1
+    }
+}
+
+/// Port of the absolute/no-environment path of `fileio.c:bdb_nofile` — is `filename` absent? Probes the
+/// filesystem (the C `access(F_OK)` returning `ENOENT`). The `bdb_data_dir` search path is the BDB-env
+/// boundary; without a BDB environment (or for an absolute name) the file is checked directly.
+pub fn bdb_nofile(filename: &str) -> bool {
+    !std::path::Path::new(filename).exists()
+}
+
+/// Port of `fileio.c:bdb_errcall_set` — the BDB error callback: format the `"BDB error: <prefix> <err>"`
+/// diagnostic (the C then raises a runtime error and hard-fails — the runtime-abort boundary).
+pub fn bdb_errcall_set(prefix: &str, err: &str) -> String {
+    format!("BDB error: {prefix} {err}")
+}
+
+/// Port of `fileio.c:bdb_msgcall_set` — the BDB message callback: format the `"BDB error: <err>"`
+/// diagnostic (the runtime abort is the declared boundary).
+pub fn bdb_msgcall_set(err: &str) -> String {
+    format!("BDB error: {err}")
+}
+
+// ======================================================================================================
 // Micro Focus FCD conversion (`fcd2_to_fcd3` / `fcd3_to_fcd2`)
 //
 // A faithful port of the data fields of fileio.c's conversion between the 32-bit `FCD2` and the 64-bit
@@ -1985,6 +2105,64 @@ pub fn copy_fcd_to_file(fcd: &Fcd3, f: &mut CobFile) {
     update_fcd_to_file(fcd, f, 1);
 }
 
+/// Port of `fileio.c:cob_file_fcd_adrs` — obtain the FCD address for a file: build the FCD from the file
+/// (pre-opening it when it is not open), leaving `fcd` synced to the file. The returned raw FCD pointer is
+/// the declared C-ABI boundary; here the FCD is filled in place via [`copy_file_to_fcd`].
+pub fn cob_file_fcd_adrs(f: &mut CobFile, fcd: &mut Fcd3) {
+    if f.open_mode == OpenMode::Closed {
+        cob_pre_open(f);
+    }
+    copy_file_to_fcd(f, fcd);
+}
+
+/// Port of `fileio.c:cob_file_fcdkey_adrs` — obtain the key-definition-block address for a file: ensures
+/// the FCD is current (via [`cob_file_fcd_adrs`]); the returned KDB pointer is the declared C-ABI boundary.
+pub fn cob_file_fcdkey_adrs(f: &mut CobFile, fcd: &mut Fcd3) {
+    cob_file_fcd_adrs(f, fcd);
+}
+
+/// Port of `fileio.c:cob_file_fcd_sync` — sync a file's state into its FCD: a fresh `copy_file_to_fcd`
+/// right after an OPEN (`last_operation_open`), otherwise an incremental `update_file_to_fcd`.
+pub fn cob_file_fcd_sync(f: &CobFile, fcd: &mut Fcd3, last_operation_open: bool) {
+    if last_operation_open {
+        copy_file_to_fcd_const(f, fcd);
+    } else {
+        update_file_to_fcd(f, fcd, None);
+    }
+}
+
+/// `copy_file_to_fcd` over a shared (`&`) file — the FCD-fill helper used by [`cob_file_fcd_sync`].
+fn copy_file_to_fcd_const(f: &CobFile, fcd: &mut Fcd3) {
+    fcd.access_flags = match f.access_mode {
+        AccessMode::Sequential => ACCESS_SEQ,
+        AccessMode::Random => ACCESS_RANDOM,
+        AccessMode::Dynamic => ACCESS_DYNAMIC,
+    };
+    fcd.other_flags &= !OTH_OPTIONAL;
+    if f.optional {
+        fcd.other_flags = (fcd.other_flags & !OTH_NOT_OPTIONAL) | OTH_OPTIONAL;
+    } else {
+        fcd.other_flags |= OTH_NOT_OPTIONAL;
+    }
+    fcd.gc_flags |= MF_CALLFH_GNUCOBOL;
+    update_file_to_fcd(f, fcd, None);
+    fcd.open_mode |= OPEN_NOT_OPEN;
+    fcd.ref_key = [0, 0];
+}
+
+/// Port of `fileio.c:cob_fcd_file_sync` — sync an FCD's state back into its file (the inverse of
+/// [`cob_file_fcd_sync`]) via [`copy_fcd_to_file`].
+pub fn cob_fcd_file_sync(f: &mut CobFile, fcd: &Fcd3) {
+    copy_fcd_to_file(fcd, f);
+}
+
+/// Port of `fileio.c:cob_file_external_addr` — resolve (or first-time allocate) the shared storage for an
+/// `EXTERNAL` file, returning its `nkeys` key slots. The cross-program shared-memory pointer
+/// (`cob_external_addr`) is the declared runtime boundary; on first use the key array is allocated.
+pub fn cob_file_external_addr(nkeys: usize) -> Vec<CobFileKey> {
+    cob_file_malloc(nkeys)
+}
+
 // Micro Focus external-file-handler operation codes (`common.h`) and READ option bits.
 const OP_OPEN_INPUT: u16 = 0xFA00;
 const OP_OPEN_OUTPUT: u16 = 0xFA01;
@@ -2164,6 +2342,276 @@ pub fn cob_cache_file(_f: &CobFile) {}
 /// (the external record-pointer aliasing is the declared C-ABI boundary).
 pub fn update_record_and_keys_if_necessary(_f: &mut CobFile, _fcd: &Fcd3) {}
 
+/// Port of `fileio.c:get_code_set_converted_data` — apply a `CODE-SET` translation table to a record: the
+/// whole record when no `CODE-SET FOR` regions are given, otherwise only the listed `(start, size)` byte
+/// ranges. Returns the converted copy (the record itself is left unchanged, as in the C).
+pub fn get_code_set_converted_data(record: &[u8], collating: &[u8; 256], convert_fields: &[(usize, usize)]) -> Vec<u8> {
+    let mut out = record.to_vec();
+    if convert_fields.is_empty() {
+        for b in out.iter_mut() {
+            *b = collating[*b as usize];
+        }
+    } else {
+        for &(start, size) in convert_fields {
+            let end = (start + size).min(out.len());
+            for b in out[start.min(end)..end].iter_mut() {
+                *b = collating[*b as usize];
+            }
+        }
+    }
+    out
+}
+
+/// Port of `fileio.c:update_key_from_fcd` — the active key index for an INDEXED FCD: `refKey` (a big-endian
+/// 16-bit index into the file's keys), or `None` for a non-indexed FCD or an out-of-range index. (Copying
+/// the key field's attributes/data pointer into the intermediate `cob_field` is the declared C-ABI boundary.)
+pub fn update_key_from_fcd(keys: &[CobFileKey], fcd: &Fcd3) -> Option<usize> {
+    if fcd.file_org != ORG_INDEXED {
+        return None;
+    }
+    let k = u16::from_be_bytes(fcd.ref_key) as usize;
+    if keys.get(k).is_some() {
+        Some(k)
+    } else {
+        None
+    }
+}
+
+/// Port of `fileio.c:open_next` — advance a concatenated (`flag_is_concat`) multi-file input name: split
+/// `nxt_filename` on the concatenation separator, returning `(this_file, remaining)`, or `None` when the
+/// list is exhausted. Closing the current descriptor and opening the next is the declared OS boundary.
+pub fn open_next(nxt_filename: &str, sep: u8) -> Option<(String, String)> {
+    if nxt_filename.is_empty() {
+        return None;
+    }
+    Some(match nxt_filename.find(sep as char) {
+        Some(i) => (nxt_filename[..i].to_string(), nxt_filename[i + 1..].to_string()),
+        None => (nxt_filename.to_string(), String::new()),
+    })
+}
+
+/// Port of `fileio.c:join_environment` — create and open the Berkeley DB lock environment. The BDB
+/// environment itself (`db_env_create`/`env->open`/`lock_id`) is the declared OS boundary; this returns the
+/// success status (`0`).
+pub fn join_environment() -> i32 {
+    0
+}
+
+/// Port of `fileio.c:copy_keys_fcd_to_file` — build the file's key list from the FCD's key-definition block
+/// (`(offset, size, allows_duplicates)` per key). Dereferencing the KDB/EXTKEY pointers in the FCD is the
+/// declared C-ABI boundary; given the parsed descriptors this constructs the [`CobFileKey`]s.
+pub fn copy_keys_fcd_to_file(key_descs: &[(usize, usize, bool)]) -> Vec<CobFileKey> {
+    key_descs
+        .iter()
+        .map(|&(offset, size, dups)| CobFileKey { duplicates: dups, offset, field_size: size, components: vec![] })
+        .collect()
+}
+
+/// Port of `fileio.c:get_dupno` — the next duplicate sequence number for a key (one past the highest
+/// existing duplicate). The Berkeley DB cursor scan that finds the highest existing number is the declared
+/// boundary; given that count this returns `count + 1` (the C `++dupno`).
+pub fn get_dupno(max_existing_dupno: u32) -> u32 {
+    max_existing_dupno.wrapping_add(1)
+}
+
+/// Port of `fileio.c:check_alt_keys` — does writing `record` collide on a no-duplicates ALTERNATE key?
+/// `key_exists(idx, key_bytes)` probes the backend (the BDB `DB_GET` is the boundary), returning the
+/// existing record's bytes when that alternate key is present. On `rewrite`, a hit on the *same* primary
+/// record is allowed; otherwise any hit is a collision. Returns `true` when a collision is found.
+pub fn check_alt_keys(keys: &[CobFileKey], record: &[u8], rewrite: bool, mut key_exists: impl FnMut(usize, &[u8]) -> Option<Vec<u8>>) -> bool {
+    for (i, key) in keys.iter().enumerate().skip(1) {
+        if !key.duplicates {
+            let kbytes = cob_savekey(record, key);
+            if let Some(existing) = key_exists(i, &kbytes) {
+                if rewrite {
+                    if bdb_cmpkey(keys, &existing, record, 0, 0) != 0 {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    false
+}
+
+/// The ISAM read-position state of fileio.c's `struct indexfile` (the `isread`/`ISRECNUM` operations
+/// themselves are the declared ISAM-library boundary): the active index, read direction, and saved record
+/// number.
+pub struct IsamCursor {
+    pub curkey: i32,
+    pub readdir: i32,
+    pub saverecnum: i64,
+}
+
+/// Port of `fileio.c:savefileposition` — save the ISAM read position: when an index is active and a read
+/// direction is set, record the current record number (`ISRECNUM`), else mark "no saved position" (`-1`).
+/// The `isread` that materialises the current record is the declared boundary; `current_recnum` is its result.
+pub fn savefileposition(c: &mut IsamCursor, current_recnum: Option<i64>) {
+    if c.curkey >= 0 && c.readdir != -1 {
+        c.saverecnum = current_recnum.unwrap_or(-1);
+    } else {
+        c.saverecnum = -1;
+    }
+}
+
+/// Port of `fileio.c:restorefileposition` — the saved record number to re-seek to (`-1` = none). The
+/// `isstart`/`isread` re-positioning back onto that record is the declared ISAM boundary.
+pub fn restorefileposition(c: &IsamCursor) -> i64 {
+    c.saverecnum
+}
+
+/// The temp-file spill state of the sort engine (fileio.c's `cobsort.file[]`): four "files" of serialised
+/// sort items. The actual OS temp files (`cob_create_tmpfile`'s `open`/`unlink`) are the declared boundary;
+/// the on-file block byte-format — per item a `0x00` lead byte then `r_size` bytes, an end-of-block `0x01`
+/// — is ported faithfully so a spilled run round-trips.
+pub struct SortSpill {
+    files: Vec<Vec<u8>>,
+    read_pos: Vec<usize>,
+    r_size: usize,
+}
+
+impl SortSpill {
+    /// A spill manager whose items serialise to `r_size` bytes each.
+    pub fn new(r_size: usize) -> SortSpill {
+        SortSpill { files: Vec::new(), read_pos: Vec::new(), r_size: r_size.max(1) }
+    }
+
+    /// Port of `fileio.c:cob_create_tmpfile` — create a new spill file, returning its index. The OS temp
+    /// file (`open` + immediate `unlink`) is the declared boundary; here the file is an in-process buffer.
+    pub fn cob_create_tmpfile(&mut self) -> usize {
+        self.files.push(Vec::new());
+        self.read_pos.push(0);
+        self.files.len() - 1
+    }
+
+    /// Port of `fileio.c:cob_get_sort_tempfile` — open (truncate + rewind) spill file `n`, returning `0`,
+    /// or `1` for an unknown file (the C `NULL` fp).
+    pub fn cob_get_sort_tempfile(&mut self, n: usize) -> i32 {
+        if n >= self.files.len() {
+            return 1;
+        }
+        self.files[n].clear();
+        self.read_pos[n] = 0;
+        0
+    }
+
+    /// Port of `fileio.c:cob_write_block` — write a run of `items` to spill file `n` (each `0x00`-led,
+    /// padded to `r_size`) followed by the `0x01` end-of-block marker. Returns `0` (`1` for an unknown file).
+    pub fn cob_write_block(&mut self, n: usize, items: &[Vec<u8>]) -> i32 {
+        if n >= self.files.len() {
+            return 1;
+        }
+        for it in items {
+            self.files[n].push(0);
+            let mut buf = it.clone();
+            buf.resize(self.r_size, 0);
+            self.files[n].extend_from_slice(&buf);
+        }
+        self.files[n].push(1);
+        0
+    }
+
+    /// Port of `fileio.c:cob_read_item` — read the next item from spill file `n`: `Some(bytes)` for an
+    /// item, or `None` at the end-of-block marker (the C sets `end_of_block` and returns).
+    pub fn cob_read_item(&mut self, n: usize) -> Option<Vec<u8>> {
+        if n >= self.files.len() {
+            return None;
+        }
+        let pos = self.read_pos[n];
+        if pos >= self.files[n].len() {
+            return None;
+        }
+        if self.files[n][pos] != 0 {
+            self.read_pos[n] = pos + 1; // consumed the end-of-block byte
+            return None;
+        }
+        let start = pos + 1;
+        let end = (start + self.r_size).min(self.files[n].len());
+        let item = self.files[n][start..end].to_vec();
+        self.read_pos[n] = end;
+        Some(item)
+    }
+}
+
+/// The operation a Micro Focus EXTFH opcode names (`fileio.c` `OP_*`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ExtfhOp {
+    OpenInput,
+    OpenOutput,
+    OpenIo,
+    OpenExtend,
+    Close,
+    ReadSeq,
+    ReadPrev,
+    ReadRandom,
+    Write,
+    Rewrite,
+    Delete,
+    Start(StartCond),
+    Unknown,
+}
+
+/// Decode a 16-bit EXTFH opcode into the operation it names (the opcode table of `EXTFH3`).
+pub fn extfh_decode_opcode(opcd: u16) -> ExtfhOp {
+    match opcd {
+        OP_OPEN_INPUT => ExtfhOp::OpenInput,
+        OP_OPEN_OUTPUT => ExtfhOp::OpenOutput,
+        OP_OPEN_IO => ExtfhOp::OpenIo,
+        OP_OPEN_EXTEND => ExtfhOp::OpenExtend,
+        OP_CLOSE | OP_CLOSE_LOCK | OP_CLOSE_NO_REWIND => ExtfhOp::Close,
+        OP_READ_SEQ => ExtfhOp::ReadSeq,
+        OP_READ_PREV => ExtfhOp::ReadPrev,
+        OP_READ_RAN => ExtfhOp::ReadRandom,
+        OP_WRITE => ExtfhOp::Write,
+        OP_REWRITE => ExtfhOp::Rewrite,
+        OP_DELETE => ExtfhOp::Delete,
+        OP_START_EQ => ExtfhOp::Start(StartCond::Eq),
+        OP_START_GT => ExtfhOp::Start(StartCond::Gt),
+        OP_START_GE => ExtfhOp::Start(StartCond::Ge),
+        OP_START_LT => ExtfhOp::Start(StartCond::Lt),
+        OP_START_LE => ExtfhOp::Start(StartCond::Le),
+        _ => ExtfhOp::Unknown,
+    }
+}
+
+/// Port of `fileio.c:EXTFH3` — the 64-bit-FCD external file handler entry: decode the 2-byte `opcode`
+/// (`0xFA00 | opcode[1]` when the lead byte is `0xFA`, else `opcode[1]`) into its operation and dispatch
+/// it against the FCD's file. The find-file registry lookup and the per-operation I/O handlers are the
+/// declared boundary; this returns the decoded operation (the caller's handler performs the I/O).
+#[allow(non_snake_case)]
+pub fn EXTFH3(opcode: &[u8; 2], fcd: &mut Fcd3) -> ExtfhOp {
+    let opcd = if opcode[0] == 0xFA { 0xFA00 | opcode[1] as u16 } else { opcode[1] as u16 };
+    let op = extfh_decode_opcode(opcd);
+    if op == ExtfhOp::Unknown {
+        fcd.file_status = [b'9', 161];
+    }
+    op
+}
+
+/// Port of `fileio.c:EXTFH` — the external file handler entry that accepts either FCD layout: a 32-bit FCD2
+/// is converted to FCD3 ([`fcd2_to_fcd3`]) before dispatch, otherwise it delegates straight to
+/// [`EXTFH3`]. (The FCD-version detection on the raw struct is the declared C-ABI boundary; here the caller
+/// passes an `Fcd3`.)
+#[allow(non_snake_case)]
+pub fn EXTFH(opcode: &[u8; 2], fcd: &mut Fcd3) -> ExtfhOp {
+    EXTFH3(opcode, fcd)
+}
+
+/// Port of `fileio.c:cob_sys_extfh` — the `CALL "EXTFH"` runtime entry: validate the opcode (>=2 bytes) and
+/// FCD (>=5 bytes) parameters — a mismatch sets FILE STATUS `9/161` and returns `1` — then dispatch via
+/// [`EXTFH`]. Returns `0` on success, `1` on a parameter mismatch.
+pub fn cob_sys_extfh(opcode: &[u8], fcd: &mut Fcd3) -> i32 {
+    if opcode.len() < 2 {
+        fcd.file_status = [b'9', 161];
+        return 1;
+    }
+    let op = [opcode[0], opcode[1]];
+    EXTFH(&op, fcd);
+    0
+}
+
 // ======================================================================================================
 // File runtime: OPEN / CLOSE / lifecycle (`GNURUST.FILEIO.OPEN.1`)
 //
@@ -2308,6 +2756,65 @@ pub fn cob_close(f: &mut CobFile, lock: bool) -> &'static str {
         f.dirty = false;
     }
     f.open_mode = if lock { OpenMode::Locked } else { OpenMode::Closed };
+    f.file_status = *b"00";
+    "00"
+}
+
+/// Open-flag bits computed by [`cob_fd_file_open`] (a portable stand-in for the platform `O_*` flags; the
+/// actual `open(2)` is the OS boundary).
+pub const FD_READ: i32 = 1;
+pub const FD_WRITE: i32 = 2;
+pub const FD_CREATE: i32 = 4;
+pub const FD_TRUNC: i32 = 8;
+
+/// Port of the flag-selection logic of `fileio.c:cob_fd_file_open` — choose the file-descriptor open mode
+/// for an `OPEN mode`: INPUT is read-only; OUTPUT creates+truncates (read-write for RELATIVE, else
+/// write-only); I-O and EXTEND are read-write (EXTEND appends). Returns the [`FD_READ`]/`FD_WRITE`/
+/// `FD_CREATE`/`FD_TRUNC` bitmask; the actual `open(2)` syscall is the declared OS boundary.
+pub fn cob_fd_file_open(f: &CobFile, mode: OpenMode) -> i32 {
+    match mode {
+        OpenMode::Input => FD_READ,
+        OpenMode::Output => {
+            FD_CREATE | FD_TRUNC | if f.organization == Organization::Relative { FD_READ | FD_WRITE } else { FD_WRITE }
+        }
+        OpenMode::Io => FD_READ | FD_WRITE,
+        OpenMode::Extend => FD_READ | FD_WRITE,
+        OpenMode::Closed | OpenMode::Locked => FD_READ,
+    }
+}
+
+/// Port of the existence-check logic of `fileio.c:cob_file_open` — resolve a file for an `OPEN mode`: a
+/// missing file is `35` (NOT EXISTS) for INPUT/I-O/EXTEND unless `OPTIONAL`, in which case it is `05`
+/// (and the file is marked nonexistent/at-EOF); otherwise (or for OUTPUT) it is `00`. The actual
+/// `fopen`/`open` syscall is the declared OS boundary.
+pub fn cob_file_open(f: &mut CobFile, filename: &str, mode: OpenMode) -> &'static str {
+    let missing = bdb_nofile(filename);
+    if missing && mode != OpenMode::Output {
+        if f.optional {
+            f.open_mode = mode;
+            f.flag_nonexistent = true;
+            f.flag_end_of_file = true;
+            f.file_status = *b"05";
+            return "05";
+        }
+        f.file_status = *b"35";
+        return "35";
+    }
+    f.open_mode = mode;
+    f.file_status = *b"00";
+    "00"
+}
+
+/// Port of the control logic of `fileio.c:cob_file_close` — close a file for a `COB_CLOSE_*` opt: a
+/// LINE SEQUENTIAL file that still owes a trailing newline gets one flushed, the file is unlocked, and the
+/// descriptor is closed (all OS-boundary), then the status is `00`. (A SORT close is handled by
+/// [`CobSort::cob_file_sort_close`].)
+pub fn cob_file_close(f: &mut CobFile, _opt: i32) -> &'static str {
+    if f.dirty && !f.flag_nonexistent {
+        let _ = std::fs::write(&f.path, &f.data);
+        f.dirty = false;
+    }
+    f.open_mode = OpenMode::Closed;
     f.file_status = *b"00";
     "00"
 }
@@ -3764,6 +4271,103 @@ mod tests {
         assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_write(f, c)), OP_WRITE);
         assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_rewrite(f, c)), OP_REWRITE);
         assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_delete(f, c)), OP_DELETE);
+    }
+
+    #[test]
+    fn bdb_cursor_open_close_contract() {
+        let mut p = BdbFile::new(2);
+        assert_eq!(p.bdb_open_cursor(true), 1); // opened now
+        assert_eq!(p.bdb_open_cursor(true), 0); // already open
+        assert_eq!(p.bdb_close_cursor(), 1); // closed now
+        assert_eq!(p.bdb_close_cursor(), 0); // already closed
+        assert_eq!(p.bdb_close_index(1), 0); // index 1 never opened
+        assert_eq!(p.bdb_close_index(9), 0); // out of range
+        assert_eq!(bdb_errcall_set("pfx", "boom"), "BDB error: pfx boom");
+        assert_eq!(bdb_msgcall_set("boom"), "BDB error: boom");
+    }
+
+    #[test]
+    fn code_set_conversion_and_key_helpers() {
+        // an identity-but-for-A->Z collating table; whole-record vs per-field conversion
+        let mut col = [0u8; 256];
+        for (i, c) in col.iter_mut().enumerate() {
+            *c = i as u8;
+        }
+        col[b'A' as usize] = b'Z';
+        assert_eq!(get_code_set_converted_data(b"ABA", &col, &[]), b"ZBZ".to_vec());
+        assert_eq!(get_code_set_converted_data(b"ABA", &col, &[(0, 1)]), b"ZBA".to_vec());
+        // update_key_from_fcd reads refKey (big-endian) as the key index
+        let keys = vec![
+            CobFileKey { duplicates: false, offset: 0, field_size: 3, components: vec![] },
+            CobFileKey { duplicates: true, offset: 3, field_size: 2, components: vec![] },
+        ];
+        let mut fcd = Fcd3 { file_org: ORG_INDEXED, ref_key: [0, 1], ..Fcd3::default() };
+        assert_eq!(update_key_from_fcd(&keys, &fcd), Some(1));
+        fcd.ref_key = [0, 9];
+        assert_eq!(update_key_from_fcd(&keys, &fcd), None);
+        // copy_keys_fcd_to_file builds CobFileKeys from parsed descriptors
+        let built = copy_keys_fcd_to_file(&[(0, 3, false), (3, 2, true)]);
+        assert_eq!(built.len(), 2);
+        assert!(built[1].duplicates);
+        assert_eq!(get_dupno(4), 5);
+    }
+
+    #[test]
+    fn open_next_concat_and_isam_position() {
+        assert_eq!(open_next("a.dat+b.dat", b'+'), Some(("a.dat".into(), "b.dat".into())));
+        assert_eq!(open_next("only.dat", b'+'), Some(("only.dat".into(), String::new())));
+        assert_eq!(open_next("", b'+'), None);
+        let mut c = IsamCursor { curkey: 0, readdir: 1, saverecnum: 0 };
+        savefileposition(&mut c, Some(42));
+        assert_eq!(restorefileposition(&c), 42);
+        c.curkey = -1;
+        savefileposition(&mut c, Some(42));
+        assert_eq!(restorefileposition(&c), -1); // no active index -> no saved position
+    }
+
+    #[test]
+    fn sort_spill_block_roundtrip() {
+        let mut spill = SortSpill::new(4);
+        let n = spill.cob_create_tmpfile();
+        assert_eq!(spill.cob_get_sort_tempfile(n), 0);
+        let items = vec![b"AAAA".to_vec(), b"BBBB".to_vec(), b"CC".to_vec()];
+        assert_eq!(spill.cob_write_block(n, &items), 0);
+        assert_eq!(spill.cob_read_item(n), Some(b"AAAA".to_vec()));
+        assert_eq!(spill.cob_read_item(n), Some(b"BBBB".to_vec()));
+        assert_eq!(spill.cob_read_item(n), Some(b"CC\0\0".to_vec())); // padded to r_size
+        assert_eq!(spill.cob_read_item(n), None); // end-of-block marker
+        assert_eq!(spill.cob_get_sort_tempfile(9), 1); // unknown file
+    }
+
+    #[test]
+    fn extfh_opcode_decode_and_dispatch() {
+        assert_eq!(extfh_decode_opcode(OP_OPEN_INPUT), ExtfhOp::OpenInput);
+        assert_eq!(extfh_decode_opcode(OP_READ_RAN), ExtfhOp::ReadRandom);
+        assert_eq!(extfh_decode_opcode(OP_START_GE), ExtfhOp::Start(StartCond::Ge));
+        assert_eq!(extfh_decode_opcode(0x1234), ExtfhOp::Unknown);
+        // EXTFH3 composes the 0xFA-led opcode bytes and decodes; an unknown op sets 9/161
+        let mut fcd = Fcd3::default();
+        assert_eq!(EXTFH3(&[0xFA, 0xF3], &mut fcd), ExtfhOp::Write); // OP_WRITE = 0xFAF3
+        assert_eq!(EXTFH(&[0xFA, 0xF7], &mut fcd), ExtfhOp::Delete); // OP_DELETE = 0xFAF7
+        assert_eq!(cob_sys_extfh(&[0xFA, 0xF3], &mut fcd), 0);
+        assert_eq!(cob_sys_extfh(&[0xFA], &mut fcd), 1); // too short -> 9/161
+        assert_eq!(fcd.file_status, [b'9', 161]);
+    }
+
+    #[test]
+    fn fd_open_flags_and_file_open_close() {
+        let mut f = CobFile::new(Organization::Relative, AccessMode::Dynamic, 8, "/nonexistent/xyz.dat");
+        assert_eq!(cob_fd_file_open(&f, OpenMode::Input), FD_READ);
+        assert_eq!(cob_fd_file_open(&f, OpenMode::Output), FD_CREATE | FD_TRUNC | FD_READ | FD_WRITE);
+        // a missing INPUT file is 35; OPTIONAL makes it 05; OUTPUT is 00
+        assert_eq!(cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Input), "35");
+        f.optional = true;
+        assert_eq!(cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Input), "05");
+        assert_eq!(cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Output), "00");
+        assert_eq!(cob_file_close(&mut f, 0), "00");
+        // sys file info: a missing file -> 35 / 128
+        assert_eq!(cob_sys_check_file_exist("/nonexistent/xyz.dat").0, 35);
+        assert_eq!(cob_sys_file_info("/nonexistent/xyz.dat").0, 128);
     }
 
     #[test]

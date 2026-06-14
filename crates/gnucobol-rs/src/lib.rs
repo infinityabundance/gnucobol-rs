@@ -750,9 +750,26 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     fileio::cob_extfh_read_next(&mut cf2, data.first().copied().unwrap_or(0) as i32, &mut callfh);
     fileio::cob_extfh_write(&mut cf2, &mut callfh);
     fileio::cob_extfh_close(&mut cf2, data.first().copied().unwrap_or(0) as i32, &mut callfh);
-    let fcd = fileio::find_fcd(&cf2);
+    let mut fcd = fileio::find_fcd(&cf2);
     let _ = fileio::find_file(&fcd);
     let _ = fileio::find_fcd2(&fileio::fcd3_to_fcd2(&fcd));
+    // BDB cursor state + CODE-SET conversion + EXTFH decode + sort spill never panic
+    let mut bdb = fileio::BdbFile::new(2);
+    let _ = bdb.bdb_open_cursor(true);
+    let _ = bdb.bdb_close_cursor();
+    let mut col = [0u8; 256];
+    for (i, c) in col.iter_mut().enumerate() {
+        *c = i as u8;
+    }
+    let _ = fileio::get_code_set_converted_data(body, &col, &[]);
+    if data.len() >= 2 {
+        let _ = fileio::EXTFH3(&[data[0], data[1]], &mut fcd);
+        let _ = fileio::cob_sys_extfh(body, &mut fcd);
+    }
+    let mut spill = fileio::SortSpill::new(rmax);
+    let s = spill.cob_create_tmpfile();
+    let _ = spill.cob_write_block(s, &[body.to_vec()]);
+    let _ = spill.cob_read_item(s);
 }
 
 #[cfg(feature = "fuzzing")]

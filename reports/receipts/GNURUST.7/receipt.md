@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.7` |
 | court | arithmetic ADD/SUB/MUL (+packed receiver) |
-| crate_version | `0.7.58` |
+| crate_version | `0.7.59` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | receiving-field storage bytes |
 | replay command | `bash lab/oracle/arith_sweep.sh` |

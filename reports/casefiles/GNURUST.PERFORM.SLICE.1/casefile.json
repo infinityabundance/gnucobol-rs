@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PERFORM.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.58",
+  "crate_version": "0.7.59",
   "damage_if_overclaimed": "assuming the control variable stops at the limit (or that the body always runs at least once) is an off-by-one in iteration counts and post-loop variable values",
   "hash_chain": {
-    "inputs_sha256": "bc1d6fbdbac4e25638f3f029f69b56a6e33e467e863137c8b6a30adf1f6cda81"
+    "inputs_sha256": "ba3c28a520f984343c9c7831ddfb685dd83093db48aa23ce931509cf55b2a189"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "fd3ca8edc744617f0791dfd048c66046b4be817c171e81b49e0856f2fc0a6300",
-    "receipt_sha256": "12639b3c7f45d9dd0db222c71a6c63e9bbeb11a91f045a326597fe7c4b36ce60"
+    "receipt_sha256": "0d7e11f1dc3d7ccf184f9cf51dcc6313a57fdbfd724b5f1d0d909df505a87959"
   },
   "kind": "court-casefile",
   "lie_prevented": [

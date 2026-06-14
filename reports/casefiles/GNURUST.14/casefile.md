@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.14 (court-casefile)
 
-**Verdict: PASS** · 546/546 pass, 0 fail · crate `gnucobol-rs` 0.7.58
+**Verdict: PASS** · 546/546 pass, 0 fail · crate `gnucobol-rs` 0.7.59
 
 - **Oracle:** cobc -C attr witness + libcob cob_move
 - **Byte domain(s):** field-storage + move-result bytes

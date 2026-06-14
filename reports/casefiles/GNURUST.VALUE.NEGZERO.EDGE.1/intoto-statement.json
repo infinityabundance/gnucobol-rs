@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.58",
+    "crate_version": "0.7.59",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "26013d00cc571ff1da6a4284cabdaec345496c8a218e90fa0645f509f8b47f91",
-      "receipt_sha256": "5da637cb11468cc2754711ee927cdfa94243c8ee77da77184331aa70d6aac025"
+      "receipt_sha256": "dee96e4d6a147271e6b8bb07e4122718b0c2a1892660252ab4e1f22f0d2f3906"
     },
     "negative_claim_count": 7,
     "positive_claim_count": 4,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "59ccd8c20d37f83676392cd2dba029a337a6e2a3e51756f44d4b97cf7cbd5ef5"
+        "sha256": "a43fef33112d29aa58d8606f94c3bb3dec6f2b7e591646dae688bb8730321115"
       },
       "name": "reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/casefile.json"
     }

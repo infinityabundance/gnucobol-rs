@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.CALL.LAYOUT.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.58",
+  "crate_version": "0.7.59",
   "damage_if_overclaimed": "assuming CALL parameters are length-checked/truncated hides the real hazard -- a LINKAGE length that disagrees with the caller silently overlays adjacent storage (read and write); trusting a BY CONTENT over-read value reads uninitialized memory",
   "hash_chain": {
-    "inputs_sha256": "4a73b79ccd605acfe093924fd5bf4c2f179d6084ee1c781299cb95d6cccd0323"
+    "inputs_sha256": "f19e6be805a9fc21249968a89845e3902bc2db5fdc7dddfd20e0ac6b7e136c36"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7e8d7fb0cd27994d959d2ed3ddef173cb8b96b7112cc83e5673d89790e19d214",
-    "receipt_sha256": "c574076d0c8d62eb929b81ada75ddcb1d4da5e333d2780fba7be15a4d983adcf"
+    "receipt_sha256": "81861a3a8281d8f004b691b1915d782508467e9a7bc2c53044efaf36655cb4aa"
   },
   "kind": "court-casefile",
   "lie_prevented": [

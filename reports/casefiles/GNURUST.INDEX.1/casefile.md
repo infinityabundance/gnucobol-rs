@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INDEX.1 (court-casefile)
 
-**Verdict: PASS** · 41/41 pass, 0 fail · crate `gnucobol-rs` 0.7.58
+**Verdict: PASS** · 41/41 pass, 0 fail · crate `gnucobol-rs` 0.7.59
 
 - **Oracle:** cobc SET index-item TO/UP BY/DOWN BY; dumped via REDEFINES + FUNCTION ORD
 - **Byte domain(s):** occurrence value + SET op -> 4 native-endian index bytes
