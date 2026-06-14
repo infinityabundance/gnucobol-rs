@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.FILE.FLOW.SLICE.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.64",
+    "crate_version": "0.7.65",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "93141d699417787d53a680a0c6d1fe43f89d92babfde5501bc34bcb042c1c65d",
-      "receipt_sha256": "7130ec6e0c92e6e4ca9fd443fbdde54c63ff6f02ab152db6d2a321763d0a5e9b"
+      "receipt_sha256": "30ffc76509833a34493f75ba7e232493566a9fd44ce4176d0c7e0b80585dadff"
     },
     "negative_claim_count": 10,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "73c488fb5687d7b500aaa6add3854f4b1557d6ec00ac07140e8b00c30adc3c3a"
+        "sha256": "7c53df9c912396ba841a219368b138ecb84ab9be40d6ba6ce632b24303f7248d"
       },
       "name": "reports/casefiles/GNURUST.FILE.FLOW.SLICE.1/casefile.json"
     }

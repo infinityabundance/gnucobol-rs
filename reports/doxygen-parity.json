@@ -59,7 +59,6 @@
         "cob_init_screenio",
         "cob_screen_accept",
         "cob_screen_display",
-        "cob_screen_init",
         "cob_screen_line_col",
         "cob_screen_set_mode",
         "cob_set_crt3_status",
@@ -76,8 +75,8 @@
         "handle_status",
         "init_cob_screen_if_needed"
       ],
-      "parity_pct": 0.0,
-      "ported": 0
+      "parity_pct": 3.6,
+      "ported": 1
     },
     {
       "doxygen_functions": 66,
@@ -341,8 +340,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 75.9,
-    "ported": 757
+    "parity_pct": 76.0,
+    "ported": 758
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -57,7 +57,7 @@ runtime modules. **COMP-6** runtime support (`numeric.c`) appeared only in **3.2
 Focus behavior is a directive *family*, not a version (V-axis). **Toolchain scar:** GnuCOBOL 3.1.2 (2020) does not compile on this GCC-16 host (configure ok; `libcob/call.c:1284` fails under C23's `()`=`(void)` function-pointer strictness) — so the runtime `--list-*` cross-release diff needs an older toolchain; the source-level drift above needs no build.
 
 ## 8. What gnucobol-rs has sealed
-88 GNURUST courts (see `reports/claim-ladder.json`): decimal MOVE, PIC/field-model (+P), layout (+ODO
+89 GNURUST courts (see `reports/claim-ladder.json`): decimal MOVE, PIC/field-model (+P), layout (+ODO
 physical-max), COPY/REPLACING, ADD/SUB/MUL (+packed), VALUE, LEVEL-88 (+SET TRUE), COMP/COMP-5/COMP-X
 binary, cp500 EBCDIC decode, edited-picture decode (16a) — each oracle-proven with explicit non-claims.
 

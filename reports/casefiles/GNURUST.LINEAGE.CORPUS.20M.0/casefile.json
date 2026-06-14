@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.64",
+  "crate_version": "0.7.65",
   "damage_if_overclaimed": "treating the lineage corpus as a parity/conformance proof, or the negative-zero finding as a fixed bug, or the engine as covering all 15 families, would each overclaim; the corpus reveals the oracle's observed shape and files divergences, it does not certify gnucobol-rs against all of GnuCOBOL",
   "hash_chain": {
-    "inputs_sha256": "67bc447f596c1bb3a9968ac53a5fe470f27ef3f0ef01e2efc81de73ed5e50f33"
+    "inputs_sha256": "589bd9d2e696c5f9d31ddc9e4f7800c66bc8f5444b78bd7f8aab6ef68cf5f25a"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "78af8b4414996ec714b3f4fb11ffbc65fe9d590e74a11c3c6788c70e7fb46b44",
-    "receipt_sha256": "0643b328a977708edd2faee4ac0e4dc780b425aece59bc6b28e0f2bfd0793ccb"
+    "receipt_sha256": "5d4fc29b88c6c800e110eb74d4c3c7b0090333d858724afd8111578da10d8a87"
   },
   "kind": "court-casefile",
   "lie_prevented": [

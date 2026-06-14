@@ -63,6 +63,7 @@ run_sweep "GNURUST.FILEIO.SORT.1" sort_sweep.sh
 run_sweep "GNURUST.FILEIO.SORTENGINE.1" sortengine_sweep.sh
 run_sweep "GNURUST.MLIO.GENERATE.1" ml_generate_sweep.sh
 run_sweep "GNURUST.MLIO.PARSE.1" ml_parse_sweep.sh
+run_sweep "GNURUST.SCREENIO.INIT.1" screenio_sweep.sh
 run_sweep "GNURUST.FILEIO.INDEXED.1" indexed_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh
 run_sweep "GNURUST.FILEIO.OPEN.1" open_sweep.sh

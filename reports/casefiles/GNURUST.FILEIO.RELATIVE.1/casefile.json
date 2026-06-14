@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.RELATIVE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.64",
+  "crate_version": "0.7.65",
   "damage_if_overclaimed": "mis-sizing the slot header (width/endianness) or treating a deleted slot as absent vs zero-data shifts or corrupts every relative record's addressing",
   "hash_chain": {
-    "inputs_sha256": "370af58da02c8a37004c3fef237e6dedeefa4268d2fb363bca0eda34a789d28d"
+    "inputs_sha256": "3318dfbfa16fcfdee6c4a97aabd365b09aaef18089bb5e6d3cc4487f6e57779b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "ff2e2503bc1db43400da6c0ee45a3aa2ebcef12b72c6c740f47f395739f31036",
-    "receipt_sha256": "b5001b0e7837f76d5dca87e420860f888ce7d863284b9b639f53b713a48b2f53"
+    "receipt_sha256": "febe8fee79a19b9f1b9fe1abd4f0bf569f8920b7a675797610bd1f47bdb06017"
   },
   "kind": "court-casefile",
   "lie_prevented": [

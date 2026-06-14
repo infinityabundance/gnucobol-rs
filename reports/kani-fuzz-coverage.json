@@ -1,8 +1,8 @@
 {
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "fuzz_covered": 69,
-  "impl_courts": 69,
-  "kani_covered": 69,
+  "fuzz_covered": 70,
+  "impl_courts": 70,
+  "kani_covered": 70,
   "na_courts": 55,
   "rows": [
     {
@@ -714,6 +714,15 @@
       ]
     },
     {
+      "court": "GNURUST.SCREENIO.INIT.1",
+      "fuzz": [
+        "screenio.rs"
+      ],
+      "kani": [
+        "screenio.rs"
+      ]
+    },
+    {
       "court": "GNURUST.INTRINSIC.DATE.1",
       "fuzz": [
         "intrinsic.rs"
@@ -958,5 +967,5 @@
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 124
+  "total_courts": 125
 }

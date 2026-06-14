@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.64",
+    "crate_version": "0.7.65",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "18e5c80cc60e2db693972f6dd3f474d9641b3c52b5ceb09f0b21689ff3bf389a",
-      "receipt_sha256": "404746fd16248d5cdf764ea8d634c2b1070d39371254761a43ad0ba5a56973bf"
+      "receipt_sha256": "5e419980ef0cab8da749a13d6113cc86b6af9f65935681f4c6e5b5b66866f104"
     },
     "negative_claim_count": 5,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "521b6de27ed19c8e57b069a4deedbf0b962d1b4218fd053a4ba648d2e06cd314"
+        "sha256": "dd05f38be2e5435d8722261ad490102480d64d05974377785c55e7deaa494920"
       },
       "name": "reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/casefile.json"
     }

@@ -13,8 +13,8 @@
   "sealed_fraction": "30/42",
   "status_counts": {
     "missing": 0,
-    "negative": 4,
-    "observed": 8,
+    "negative": 3,
+    "observed": 9,
     "sealed": 30
   },
   "surface_count": 42,
@@ -473,15 +473,17 @@
       "surface": "sort-merge"
     },
     {
-      "category": "screen/report/CICS/SQL unsupported",
-      "courts": [],
-      "future_campaign": null,
-      "risk_if_unported": "SCREEN SECTION is terminal UI; out of the data-evidence lane",
+      "category": "screen I/O (native, terminal-byte reproduction)",
+      "courts": [
+        "GNURUST.SCREENIO.INIT.1"
+      ],
+      "future_campaign": "screenio: the ncurses mvcur cursor-cost model (CUP vs VPA vs space-fill), multi-field layout, color/attribute SGR, numeric-edited field display, and ACCEPT input -- each a follow-on literal-byte court",
+      "risk_if_unported": "SCREEN SECTION init/teardown framing + a positioned literal/FROM DISPLAY are now reproduced BYTE-IDENTICALLY to GnuCOBOL's ncurses output natively (GNURUST.SCREENIO.INIT.1, screenio_sweep 1/0, no ncurses linked) for the admitted terminal (TERM=xterm, ncurses 6.6); other terminals/ncurses builds emit different bytes (the declared terminal-dependence non-claim). The cursor-cost model + attributes + ACCEPT remain follow-on work",
       "source_modules": [
         "libcob/screenio.c"
       ],
       "source_modules_present": true,
-      "status": "negative",
+      "status": "observed",
       "surface": "screen-section"
     },
     {

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.FILTER.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.64",
+  "crate_version": "0.7.65",
   "damage_if_overclaimed": "using byte comparison on a numeric amount filter (or vice versa) selects the wrong record set, corrupting every conditional total/extract",
   "hash_chain": {
-    "inputs_sha256": "9fb9ed09bbba4ec35ab9bd4abac0fc23406fd67437627119ba84128734d72316"
+    "inputs_sha256": "59220293f80d06cc3c6cd4f1bae10e9cc25e73075af18dc943c4a2cee5f4ae31"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4d3290dc008e304c0cc04ca0f866821b6b275024d91196c169d61cf39f70ee88",
-    "receipt_sha256": "93bcbeb902e79eb29db6f056357064ea4c414c5908afc53df81f195ccd7c19ad"
+    "receipt_sha256": "0198a5d6cf085f5fb1284d30e7fcaef8a695ce662ac5435ca5982cdc298669c5"
   },
   "kind": "court-casefile",
   "lie_prevented": [

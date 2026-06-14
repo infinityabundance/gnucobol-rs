@@ -85,6 +85,7 @@ pub mod layout;
 pub mod mlio;
 pub mod move_ops;
 pub mod perform_slice;
+pub mod screenio;
 pub mod search;
 pub mod pic;
 mod sign;
@@ -642,6 +643,21 @@ pub fn __fuzz_mlio(data: &[u8]) {
     let _ = cob_json_generate_new(&tree);
     let _ = mlio::get_hex_xml_data(data);
     let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
+}
+
+/// Fuzz the native SCREEN SECTION DISPLAY emitter: arbitrary positions + payloads always produce a
+/// well-formed prologue..epilogue envelope, never a panic (`GNURUST.SCREENIO.INIT.1`,
+/// `GNURUST.PANICPOLICY.0`).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_screenio(data: &[u8]) {
+    use screenio::{display_and_stop, ScreenItem};
+    let line = (data.first().copied().unwrap_or(1) as i32 % 23) + 1;
+    let column = (data.get(1).copied().unwrap_or(1) as i32 % 80) + 1;
+    let payload = data.get(2..).unwrap_or(&[]).to_vec();
+    let items = vec![ScreenItem { line, column, data: payload }];
+    let out = display_and_stop(&items);
+    debug_assert!(out.starts_with(screenio::INIT_PROLOGUE));
 }
 
 /// Fuzz the native XML PARSE state machine: drive `cob_xml_parse` over arbitrary input to a fixed point.

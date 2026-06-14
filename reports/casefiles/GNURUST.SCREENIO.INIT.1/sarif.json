@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: the ncurses mvcur cursor-cost model (CUP vs VPA vs CHA vs space-fill for arbitrary moves -- only the VPA+space-fill case is swept)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: multi-field layout + field ordering"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: color / attribute SGR (BLANK/HIGHLIGHT/REVERSE/UNDERLINE/colors)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: numeric-edited + JUSTIFIED field display"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: ACCEPT input / key handling / cursor navigation"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: any terminal other than TERM=xterm"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent -- this is the explicit terminal-dependence boundary)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.INIT.1 non-claim: lie prevented: SCREEN SECTION needs ncurses linked -- NO (for the framing + a positioned DISPLAY): the terminal byte stream is deterministic for a fixed terminal, so a native Rust emitter reproduces it exactly, no ncurses linked. The honest scope is the admitted terminal; the bytes are terminfo-dependent and that dependence is declared, not hidden"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

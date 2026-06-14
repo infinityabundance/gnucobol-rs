@@ -1301,6 +1301,20 @@
       "damage_if_overclaimed": "claiming 'XML PARSE works' would imply GnuCOBOL parses XML (it does not); the honest claim is byte-identity of the unimplemented-but-observable event stream"
     },
     {
+      "id": "GNURUST.SCREENIO.INIT.1",
+      "name": "SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes)",
+      "proven": "a from-scratch, dependency-free Rust reproduction of the terminal byte stream GnuCOBOL's SCREEN SECTION DISPLAY writes via ncurses -- WITHOUT linking ncurses (screenio.rs INIT_PROLOGUE/TEARDOWN_EPILOGUE/PAUSE_PROMPT + move_cursor + display_and_stop). GnuCOBOL drives ncurses initscr/move/addstr/refresh/endwin; the literal bytes are ncurses's terminfo-optimized output, which this port emits exactly for the admitted terminal. Captured deterministically from the oracle under a pty (script(1)) and proven byte-identical (screenio_sweep 1/0): the canonical program `DISPLAY \"X\" LINE 2 COLUMN 3.` then `STOP RUN.` yields the exact 230-byte stream -- the smcup/scroll-region/charset/color init prologue, the positioned field (VPA \\e[2d + space-fill to column 3 + the byte), the libcob \"end of program, please press a key to exit \" pause, and the rmcup teardown epilogue -- reproduced to the byte.",
+      "byte_domain": "a positioned SCREEN SECTION DISPLAY (line/column + literal/FROM bytes) -> the exact terminal escape-sequence byte stream GnuCOBOL writes via ncurses, on the admitted terminal",
+      "oracle": "cobc SCREEN SECTION DISPLAY (libcob/screenio.c via ncurses 6.6), captured under a pty with TERM=xterm",
+      "fixtures": "screenio_sweep 1/0 (live pty capture, determinism-guarded) + 1 unit test (the 230-byte canonical stream) + Kani display_framing_envelope",
+      "sealed_version": "0.7.65",
+      "not_proven": "the ncurses mvcur cursor-cost model (CUP vs VPA vs CHA vs space-fill for arbitrary moves -- only the VPA+space-fill case is swept); multi-field layout + field ordering; color / attribute SGR (BLANK/HIGHLIGHT/REVERSE/UNDERLINE/colors); numeric-edited + JUSTIFIED field display; ACCEPT input / key handling / cursor navigation; any terminal other than TERM=xterm; any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent -- this is the explicit terminal-dependence boundary)",
+      "breaks_claim": "a different init/teardown framing, a different cursor-movement encoding, or a different pause-prompt/field byte vs the oracle on the admitted terminal",
+      "readiness": 4,
+      "lie_prevented": "SCREEN SECTION needs ncurses linked -- NO (for the framing + a positioned DISPLAY): the terminal byte stream is deterministic for a fixed terminal, so a native Rust emitter reproduces it exactly, no ncurses linked. The honest scope is the admitted terminal; the bytes are terminfo-dependent and that dependence is declared, not hidden",
+      "damage_if_overclaimed": "claiming 'SCREEN SECTION works' would hide that this is one positioned field on one terminal -- the cursor-cost model, attributes, multi-field layout, and ACCEPT input are unported, and the bytes do not transfer to other terminals/ncurses versions"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

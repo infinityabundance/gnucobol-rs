@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.LINEAGE.CORPUS.20M.SMOKE (court-casefile)
 
-**Verdict: PASS** · 200000/200000 pass, 0 fail · crate `gnucobol-rs` 0.7.64
+**Verdict: PASS** · 200000/200000 pass, 0 fail · crate `gnucobol-rs` 0.7.65
 
 - **Oracle:** real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)
 - **Byte domain(s):** 200K real-cobc witnesses: storage differential (oracle-default vs value_image) + directive variant (default vs -fbinary-* lineage delta)

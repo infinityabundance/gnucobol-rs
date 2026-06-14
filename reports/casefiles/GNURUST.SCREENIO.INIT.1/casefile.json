@@ -1,0 +1,66 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a positioned SCREEN SECTION DISPLAY (line/column + literal/FROM bytes) -> the exact terminal escape-sequence byte stream GnuCOBOL writes via ncurses, on the admitted terminal"
+  ],
+  "case_id": "GNURUST.SCREENIO.INIT.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.65",
+  "damage_if_overclaimed": "claiming 'SCREEN SECTION works' would hide that this is one positioned field on one terminal -- the cursor-cost model, attributes, multi-field layout, and ACCEPT input are unported, and the bytes do not transfer to other terminals/ncurses versions",
+  "hash_chain": {
+    "inputs_sha256": "237b092658e292cfc02db836751f99b33f384651d615e6239ec07d06a4eecab4"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "74c2ba028286ddfd5065e2756b2e02083f9498b01180081a7818ec2c6cb05d0a",
+    "receipt_sha256": "8d98ca8fc0ed6d7a5d0371d118a38bfd86ba6cae658649c2fee6e6c56826e083"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "SCREEN SECTION needs ncurses linked -- NO (for the framing + a positioned DISPLAY): the terminal byte stream is deterministic for a fixed terminal, so a native Rust emitter reproduces it exactly, no ncurses linked. The honest scope is the admitted terminal; the bytes are terminfo-dependent and that dependence is declared, not hidden"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-NCURSES-MVCUR-CURSOR-COST-MODEL-CUP",
+    "NEG.MULTI-FIELD-LAYOUT-FIELD-ORDERING",
+    "NEG.COLOR-ATTRIBUTE-SGR-BLANK-HIGHLIGHT-REVE",
+    "NEG.NUMERIC-EDITED-JUSTIFIED-FIELD-DISPLAY",
+    "NEG.ACCEPT-INPUT-KEY-HANDLING-CURSOR-NAVIGAT",
+    "NEG.ANY-TERMINAL-OTHER-THAN-TERM-XTERM",
+    "NEG.ANY-NCURSES-BUILD-OTHER-THAN-THE-ADMITTE"
+  ],
+  "negative_claims": [
+    "the ncurses mvcur cursor-cost model (CUP vs VPA vs CHA vs space-fill for arbitrary moves -- only the VPA+space-fill case is swept)",
+    "multi-field layout + field ordering",
+    "color / attribute SGR (BLANK/HIGHLIGHT/REVERSE/UNDERLINE/colors)",
+    "numeric-edited + JUSTIFIED field display",
+    "ACCEPT input / key handling / cursor navigation",
+    "any terminal other than TERM=xterm",
+    "any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent -- this is the explicit terminal-dependence boundary)",
+    "lie prevented: SCREEN SECTION needs ncurses linked -- NO (for the framing + a positioned DISPLAY): the terminal byte stream is deterministic for a fixed terminal, so a native Rust emitter reproduces it exactly, no ncurses linked. The honest scope is the admitted terminal; the bytes are terminfo-dependent and that dependence is declared, not hidden"
+  ],
+  "oracle": {
+    "detail": "cobc SCREEN SECTION DISPLAY (libcob/screenio.c via ncurses 6.6), captured under a pty with TERM=xterm",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SCREENIO.INIT.1"
+  },
+  "positive_claims": [
+    "a from-scratch, dependency-free Rust reproduction of the terminal byte stream GnuCOBOL's SCREEN SECTION DISPLAY writes via ncurses -- WITHOUT linking ncurses (screenio.rs INIT_PROLOGUE/TEARDOWN_EPILOGUE/PAUSE_PROMPT + move_cursor + display_and_stop). GnuCOBOL drives ncurses initscr/move/addstr/refresh/endwin",
+    "the literal bytes are ncurses's terminfo-optimized output, which this port emits exactly for the admitted terminal. Captured deterministically from the oracle under a pty (script(1)) and proven byte-identical (screenio_sweep 1/0): the canonical program `DISPLAY \"X\" LINE 2 COLUMN 3.` then `STOP RUN.` yields the exact 230-byte stream -- the smcup/scroll-region/charset/color init prologue, the positioned field (VPA \\e[2d + space-fill to column 3 + the byte), the libcob \"end of program, please press a key to exit \" pause, and the rmcup teardown epilogue -- reproduced to the byte."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/screenio_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

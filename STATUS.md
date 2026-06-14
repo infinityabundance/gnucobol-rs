@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-124-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-124-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-125-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-125-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.64 · 88 GNURUST courts (69 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.65 · 89 GNURUST courts (70 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -87,6 +87,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.FILEIO.MAPPING.1` | COBOL filename mapping (env resolution) | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.MAPPING.1/`](reports/casefiles/GNURUST.FILEIO.MAPPING.1/) |
 | `GNURUST.MLIO.GENERATE.1` | XML / JSON GENERATE (native serializer) | ✅ pass | [`reports/casefiles/GNURUST.MLIO.GENERATE.1/`](reports/casefiles/GNURUST.MLIO.GENERATE.1/) |
 | `GNURUST.MLIO.PARSE.1` | XML PARSE (native state machine) | ✅ pass | [`reports/casefiles/GNURUST.MLIO.PARSE.1/`](reports/casefiles/GNURUST.MLIO.PARSE.1/) |
+| `GNURUST.SCREENIO.INIT.1` | SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.INIT.1/`](reports/casefiles/GNURUST.SCREENIO.INIT.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
 | `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
 | `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |
