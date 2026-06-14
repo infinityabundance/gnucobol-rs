@@ -1,0 +1,67 @@
+# portcourt — the C→Rust port evidence court for gnucobol-rs.
+#
+# Each [module] declares what the port CLAIMS for one libcob source file; `portcourt check` fails the build
+# if the claim is not backed by the parity view (a "complete" module with any missing/doc-only function, or
+# a parity below `min_parity`, or a `requires` court that is not sealed). This is closure math: you cannot
+# claim more than the evidence proves.
+#
+# Run:  cargo run --manifest-path ../portcourt/Cargo.toml -- check portcourt.toml
+
+parity = "reports/port-index/parity-detailed.json"
+courts = "reports/claim-ladder.json"
+
+# --- libcob files ported 1:1 (claim: complete — zero missing, zero doc-only) ---
+
+[module."numeric.c"]
+claim = "complete"
+
+[module."move.c"]
+claim = "complete"
+
+[module."strings.c"]
+claim = "complete"
+
+[module."intrinsic.c"]
+claim = "complete"
+
+[module."cconv.c"]
+claim = "complete"
+
+[module."termio.c"]
+claim = "complete"
+
+[module."cobgetopt.c"]
+claim = "complete"
+
+[module."fileio.c"]
+claim = "complete"
+requires = [
+  "GNURUST.FILEIO.LINESEQ.1",
+  "GNURUST.FILEIO.LINESEQ.2",
+  "GNURUST.FILEIO.SEQ.1",
+  "GNURUST.FILEIO.RELATIVE.1",
+  "GNURUST.FILEIO.VERB.1",
+  "GNURUST.FILEIO.SORT.1",
+  "GNURUST.FILEIO.SORTENGINE.1",
+  "GNURUST.FILEIO.INDEXED.1",
+  "GNURUST.FILEIO.SYS.1",
+  "GNURUST.FILEIO.OPEN.1",
+  "GNURUST.FILEIO.MAPPING.1",
+]
+
+# --- libcob files in progress (claim: partial — honest about the gap) ---
+
+[module."reportio.c"]
+claim = "partial"
+
+[module."mlio.c"]
+claim = "partial"
+
+[module."common.c"]
+claim = "partial"
+
+[module."call.c"]
+claim = "partial"
+
+[module."screenio.c"]
+claim = "partial"
