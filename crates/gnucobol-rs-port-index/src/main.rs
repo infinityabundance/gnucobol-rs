@@ -8,6 +8,7 @@
 //! Run from the repo root (cwd) or set `GNURUST_ROOT`.
 
 mod ccvs85;
+mod clang_index;
 mod corpus_atlas;
 mod evidence;
 mod libcob_symbols;
@@ -150,6 +151,17 @@ fn main() {
                 "check" => evidence::check(&root),
                 _ => {
                     eprintln!("evidence: use `evidence generate` or `evidence check`");
+                    2
+                }
+            }
+        }
+        "clang-index" => {
+            let sub = args.get(2).map(String::as_str).unwrap_or("");
+            match sub {
+                "generate" => clang_index::generate(&root),
+                "check" => clang_index::check(&root),
+                _ => {
+                    eprintln!("clang-index: use `clang-index generate` or `clang-index check`");
                     2
                 }
             }

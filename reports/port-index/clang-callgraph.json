@@ -1,0 +1,7565 @@
+{
+  "files": [
+    {
+      "edges": [
+        {
+          "callees": [
+            "shift_decimal"
+          ],
+          "caller": "align_decimal"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "count_leading_zeros"
+          ],
+          "caller": "check_overflow_and_set_sign"
+        },
+        {
+          "callees": [
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cmp_packed_intern"
+        },
+        {
+          "callees": [
+            "cob_addsub_optimized",
+            "cob_decimal_add",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_add"
+        },
+        {
+          "callees": [
+            "check_overflow_and_set_sign",
+            "cob_set_packed_zero",
+            "cob_shift_left_nibble",
+            "cob_shift_right_nibble",
+            "handle_bcd_rounding",
+            "memcmp",
+            "memcpy",
+            "memmove",
+            "memset"
+          ],
+          "caller": "cob_add_bcd"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_add",
+            "__gmpz_set_si",
+            "cob_decimal_add",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "cob_mul_by_pow_10"
+          ],
+          "caller": "cob_add_int"
+        },
+        {
+          "callees": [
+            "cob_add_bcd",
+            "cob_move",
+            "cob_move_display_to_packed"
+          ],
+          "caller": "cob_addsub_optimized"
+        },
+        {
+          "callees": [
+            "decimal_convert_scale",
+            "memcmp",
+            "packed_is_negative"
+          ],
+          "caller": "cob_bcd_cmp"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_get_sint64"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_get_uint64"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_set_int64"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_set_uint64"
+        },
+        {
+          "callees": [
+            "cob_decimal_get_double",
+            "cob_decimal_set_field",
+            "fabs",
+            "memcpy"
+          ],
+          "caller": "cob_cmp_float"
+        },
+        {
+          "callees": [
+            "__gmpz_cmp",
+            "__gmpz_set_si",
+            "cob_decimal_set_field",
+            "shift_decimal"
+          ],
+          "caller": "cob_cmp_int"
+        },
+        {
+          "callees": [
+            "__gmpz_cmp",
+            "__gmpz_set_si",
+            "cob_decimal_set_field",
+            "shift_decimal"
+          ],
+          "caller": "cob_cmp_llint"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_long_ebcdic_sign"
+          ],
+          "caller": "cob_cmp_numdisp"
+        },
+        {
+          "callees": [
+            "cmp_packed_intern",
+            "cob_get_llint",
+            "packed_is_negative"
+          ],
+          "caller": "cob_cmp_packed"
+        },
+        {
+          "callees": [
+            "__gmpz_cmp",
+            "__gmpz_set_ui",
+            "cob_decimal_set_field",
+            "shift_decimal"
+          ],
+          "caller": "cob_cmp_uint"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_add",
+            "__gmpz_set",
+            "align_decimal"
+          ],
+          "caller": "cob_decimal_add"
+        },
+        {
+          "callees": [
+            "__gmpz_cmpabs",
+            "__gmpz_remove",
+            "__gmpz_set",
+            "__gmpz_tdiv_q_ui",
+            "cob_set_exception"
+          ],
+          "caller": "cob_decimal_adjust"
+        },
+        {
+          "callees": [
+            "shift_decimal"
+          ],
+          "caller": "cob_decimal_align"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start"
+          ],
+          "caller": "cob_decimal_alloc"
+        },
+        {
+          "callees": [
+            "__gmpz_clear"
+          ],
+          "caller": "cob_decimal_clear"
+        },
+        {
+          "callees": [
+            "__gmpz_cmp",
+            "__gmpz_set",
+            "align_decimal"
+          ],
+          "caller": "cob_decimal_cmp"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_tdiv_q",
+            "cob_set_exception",
+            "shift_decimal"
+          ],
+          "caller": "cob_decimal_div"
+        },
+        {
+          "callees": [
+            "__gmpz_add",
+            "__gmpz_add_ui",
+            "__gmpz_mul_ui",
+            "__gmpz_sub",
+            "__gmpz_sub_ui",
+            "__gmpz_tdiv_r",
+            "__gmpz_tdiv_ui",
+            "cob_pow_10",
+            "shift_decimal"
+          ],
+          "caller": "cob_decimal_do_round"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_abs",
+            "__gmpz_cmpabs",
+            "__gmpz_fdiv_r_2exp",
+            "__gmpz_get_si",
+            "__gmpz_get_ui",
+            "__gmpz_size",
+            "__gmpz_sizeinbase",
+            "__gmpz_tdiv_r",
+            "cob_binary_set_int64",
+            "cob_binary_set_uint64",
+            "cob_set_exception",
+            "memset"
+          ],
+          "caller": "cob_decimal_get_binary"
+        },
+        {
+          "callees": [
+            "__gmpz_abs",
+            "__gmpz_cmp",
+            "__gmpz_get_str",
+            "__gmpz_tdiv_r",
+            "cob_gmp_free",
+            "cob_pow_10",
+            "cob_real_put_sign",
+            "cob_set_exception",
+            "memcpy",
+            "memset",
+            "strlen"
+          ],
+          "caller": "cob_decimal_get_display"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_isfinite",
+            "__gmpf_get_d",
+            "__gmpz_size",
+            "cob_decimal_get_mpf"
+          ],
+          "caller": "cob_decimal_get_double"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_isinf_sign",
+            "__builtin_isnan",
+            "__gmpz_set",
+            "cob_decimal_do_round",
+            "cob_decimal_get_binary",
+            "cob_decimal_get_display",
+            "cob_decimal_get_double",
+            "cob_decimal_get_ieee128dec",
+            "cob_decimal_get_ieee64dec",
+            "cob_decimal_get_packed",
+            "cob_last_exception_is",
+            "cob_move",
+            "cob_set_exception",
+            "memcpy",
+            "shift_decimal"
+          ],
+          "caller": "cob_decimal_get_field"
+        },
+        {
+          "callees": [
+            "__gmpz_cmpabs",
+            "__gmpz_export",
+            "__gmpz_neg",
+            "__gmpz_tdiv_q_ui",
+            "cob_decimal_adjust",
+            "cob_set_exception",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cob_decimal_get_ieee128dec"
+        },
+        {
+          "callees": [
+            "__gmpz_cmpabs",
+            "__gmpz_export",
+            "__gmpz_neg",
+            "__gmpz_sizeinbase",
+            "__gmpz_tdiv_q_ui",
+            "cob_decimal_adjust",
+            "cob_set_exception",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cob_decimal_get_ieee64dec"
+        },
+        {
+          "callees": [
+            "__gmpf_div",
+            "__gmpf_mul",
+            "__gmpf_set_z",
+            "cob_pow_10"
+          ],
+          "caller": "cob_decimal_get_mpf"
+        },
+        {
+          "callees": [
+            "__gmpz_abs",
+            "__gmpz_cmp",
+            "__gmpz_fits_ulong_p",
+            "__gmpz_get_str",
+            "__gmpz_get_ui",
+            "__gmpz_tdiv_r",
+            "cob_pow_10",
+            "cob_set_exception",
+            "cob_set_packed_u64",
+            "cob_set_packed_zero",
+            "memset",
+            "strlen"
+          ],
+          "caller": "cob_decimal_get_packed"
+        },
+        {
+          "callees": [
+            "cob_decimal_init2"
+          ],
+          "caller": "cob_decimal_init"
+        },
+        {
+          "callees": [
+            "__gmpz_init2"
+          ],
+          "caller": "cob_decimal_init2"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_mul"
+          ],
+          "caller": "cob_decimal_mul"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_clear",
+            "cob_free"
+          ],
+          "caller": "cob_decimal_pop"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_divisible_ui_p",
+            "__gmpz_get_str",
+            "__gmpz_set",
+            "__gmpz_tdiv_q_ui",
+            "cob_gmp_free",
+            "fprintf",
+            "strlen"
+          ],
+          "caller": "cob_decimal_print"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_decimal_init",
+            "cob_malloc"
+          ],
+          "caller": "cob_decimal_push"
+        },
+        {
+          "callees": [
+            "__gmpz_set"
+          ],
+          "caller": "cob_decimal_set"
+        },
+        {
+          "callees": [
+            "__gmpz_set_si",
+            "__gmpz_set_ui",
+            "cob_binary_get_sint64",
+            "cob_binary_get_uint64"
+          ],
+          "caller": "cob_decimal_set_binary"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_neg",
+            "__gmpz_set_str",
+            "__gmpz_set_ui",
+            "cob_fast_malloc",
+            "cob_free",
+            "cob_pow_10",
+            "cob_real_get_sign",
+            "cob_real_put_sign",
+            "memcpy"
+          ],
+          "caller": "cob_decimal_set_display"
+        },
+        {
+          "callees": [
+            "__builtin_isfinite",
+            "__gmpf_set_d",
+            "__gmpz_set_ui",
+            "cob_decimal_set_mpf_core"
+          ],
+          "caller": "cob_decimal_set_double"
+        },
+        {
+          "callees": [
+            "cob_decimal_set_binary",
+            "cob_decimal_set_display",
+            "cob_decimal_set_double",
+            "cob_decimal_set_ieee128dec",
+            "cob_decimal_set_ieee64dec",
+            "cob_decimal_set_packed",
+            "memcpy"
+          ],
+          "caller": "cob_decimal_set_field"
+        },
+        {
+          "callees": [
+            "__gmpz_add_ui",
+            "__gmpz_cmpabs",
+            "__gmpz_mul_2exp",
+            "__gmpz_neg",
+            "__gmpz_set_ui",
+            "cob_decimal_adjust",
+            "cob_mul_by_pow_10",
+            "cob_set_exception",
+            "memcpy"
+          ],
+          "caller": "cob_decimal_set_ieee128dec"
+        },
+        {
+          "callees": [
+            "__gmpz_neg",
+            "__gmpz_set_ui",
+            "cob_mul_by_pow_10",
+            "cob_set_exception",
+            "memcpy"
+          ],
+          "caller": "cob_decimal_set_ieee64dec"
+        },
+        {
+          "callees": [
+            "__gmpz_set_si"
+          ],
+          "caller": "cob_decimal_set_llint"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_decimal_set_mpf_core"
+          ],
+          "caller": "cob_decimal_set_mpf"
+        },
+        {
+          "callees": [
+            "__gmpf_get_str",
+            "__gmpz_neg",
+            "__gmpz_set_str",
+            "cob_mul_by_pow_10",
+            "strlen"
+          ],
+          "caller": "cob_decimal_set_mpf_core"
+        },
+        {
+          "callees": [
+            "__gmpz_add_ui",
+            "__gmpz_mul_ui",
+            "__gmpz_neg",
+            "__gmpz_set_ui",
+            "cob_packed_get_sign"
+          ],
+          "caller": "cob_decimal_set_packed"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui"
+          ],
+          "caller": "cob_decimal_set_ullint"
+        },
+        {
+          "callees": [
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_decimal_setget_fld"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_set",
+            "__gmpz_sub",
+            "align_decimal"
+          ],
+          "caller": "cob_decimal_sub"
+        },
+        {
+          "callees": [
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_div"
+        },
+        {
+          "callees": [
+            "__gmpz_tdiv_q",
+            "__gmpz_tdiv_q_ui",
+            "cob_pow_10"
+          ],
+          "caller": "cob_div_by_pow_10"
+        },
+        {
+          "callees": [
+            "__gmpz_set",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_mul",
+            "cob_decimal_set_field",
+            "cob_decimal_sub",
+            "shift_decimal"
+          ],
+          "caller": "cob_div_quotient"
+        },
+        {
+          "callees": [
+            "cob_decimal_get_field"
+          ],
+          "caller": "cob_div_remainder"
+        },
+        {
+          "callees": [
+            "__gmpf_clear",
+            "__gmpz_clear",
+            "cob_free"
+          ],
+          "caller": "cob_exit_numeric"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_long_ebcdic_sign"
+        },
+        {
+          "callees": [
+            "__gmp_get_memory_functions",
+            "strlen"
+          ],
+          "caller": "cob_gmp_free"
+        },
+        {
+          "callees": [
+            "__gmpf_init2",
+            "__gmpz_init2",
+            "__gmpz_init_set",
+            "__gmpz_sub_ui",
+            "__gmpz_ui_pow_ui",
+            "cob_decimal_init",
+            "cob_malloc",
+            "memset"
+          ],
+          "caller": "cob_init_numeric"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_and"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_left"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_left_c"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_not"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_or"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_right"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_right_c"
+        },
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_decimal_set_ullint"
+          ],
+          "caller": "cob_logical_xor"
+        },
+        {
+          "callees": [
+            "cob_shift_left_nibble",
+            "cob_shift_right_nibble",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cob_move_bcd"
+        },
+        {
+          "callees": [
+            "cob_decimal_get_field",
+            "cob_decimal_mul",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_mul"
+        },
+        {
+          "callees": [
+            "__gmpz_mul",
+            "__gmpz_mul_ui",
+            "cob_pow_10"
+          ],
+          "caller": "cob_mul_by_pow_10"
+        },
+        {
+          "callees": [
+            "cob_bcd_cmp",
+            "cob_cmp_float",
+            "cob_decimal_cmp",
+            "cob_decimal_set_field",
+            "cob_get_llint"
+          ],
+          "caller": "cob_numeric_cmp"
+        },
+        {
+          "callees": [],
+          "caller": "cob_packed_get_sign"
+        },
+        {
+          "callees": [
+            "__gmpz_set",
+            "__gmpz_ui_pow_ui"
+          ],
+          "caller": "cob_pow_10"
+        },
+        {
+          "callees": [
+            "cob_decimal_print",
+            "cob_decimal_set_double",
+            "cob_decimal_set_ieee128dec",
+            "cob_decimal_set_ieee64dec",
+            "cob_hard_failure_internal",
+            "cob_runtime_error",
+            "gettext",
+            "memcpy"
+          ],
+          "caller": "cob_print_ieeedec"
+        },
+        {
+          "callees": [
+            "cob_binary_get_sint64",
+            "cob_binary_get_uint64",
+            "fprintf"
+          ],
+          "caller": "cob_print_realbin"
+        },
+        {
+          "callees": [
+            "cob_raise"
+          ],
+          "caller": "cob_s32_pow"
+        },
+        {
+          "callees": [
+            "cob_raise"
+          ],
+          "caller": "cob_s64_pow"
+        },
+        {
+          "callees": [
+            "cob_set_packed_u64",
+            "cob_set_packed_zero"
+          ],
+          "caller": "cob_set_packed_int"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_set_packed_u64"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_set_packed_zero"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p"
+          ],
+          "caller": "cob_shift_left_nibble"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p"
+          ],
+          "caller": "cob_shift_right_nibble"
+        },
+        {
+          "callees": [
+            "cob_addsub_optimized",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "cob_decimal_sub"
+          ],
+          "caller": "cob_sub"
+        },
+        {
+          "callees": [
+            "cob_add_int"
+          ],
+          "caller": "cob_sub_int"
+        },
+        {
+          "callees": [],
+          "caller": "count_leading_zeros"
+        },
+        {
+          "callees": [
+            "insert_packed_aligned",
+            "memcmp"
+          ],
+          "caller": "decimal_convert_scale"
+        },
+        {
+          "callees": [
+            "cob_set_exception"
+          ],
+          "caller": "handle_bcd_rounding"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "insert_packed_aligned"
+        },
+        {
+          "callees": [
+            "cob_packed_get_sign"
+          ],
+          "caller": "packed_is_negative"
+        },
+        {
+          "callees": [
+            "cob_div_by_pow_10",
+            "cob_mul_by_pow_10"
+          ],
+          "caller": "shift_decimal"
+        }
+      ],
+      "file": "numeric.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_mget_sint64"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_mget_uint64"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_mset_sint64"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_binary_mset_uint64"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign",
+            "cob_real_put_sign"
+          ],
+          "caller": "cob_display_get_int"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_get_comp1"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_get_comp2"
+        },
+        {
+          "callees": [
+            "cob_binary_mget_sint64",
+            "cob_display_get_int",
+            "cob_move",
+            "cob_packed_get_int"
+          ],
+          "caller": "cob_get_int"
+        },
+        {
+          "callees": [
+            "cob_binary_mget_sint64",
+            "cob_move",
+            "display_get_long_long",
+            "packed_get_long_long"
+          ],
+          "caller": "cob_get_llint"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "memcpy"
+          ],
+          "caller": "cob_get_picx"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_s64_comp3"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_get_s64_comp5"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_get_s64_compx"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_s64_pic9"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_u64_comp3"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_get_u64_comp5"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_u64_comp6"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_get_u64_compx"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_u64_pic9"
+        },
+        {
+          "callees": [],
+          "caller": "cob_init_move"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_init_table"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_binary_mget_sint64",
+            "cob_decimal_move_temp",
+            "cob_decimal_setget_fld",
+            "cob_max_int",
+            "cob_move_all",
+            "cob_move_alphanum_to_alphanum",
+            "cob_move_alphanum_to_display",
+            "cob_move_alphanum_to_edited",
+            "cob_move_bcd",
+            "cob_move_binary_to_binary",
+            "cob_move_binary_to_display",
+            "cob_move_display_to_alphanum",
+            "cob_move_display_to_binary",
+            "cob_move_display_to_display",
+            "cob_move_display_to_edited",
+            "cob_move_display_to_packed",
+            "cob_move_edited_to_display",
+            "cob_move_fp_to_fp",
+            "cob_move_packed_to_display",
+            "cob_set_packed_int",
+            "indirect_move",
+            "memmove"
+          ],
+          "caller": "cob_move"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_free",
+            "cob_malloc",
+            "cob_move",
+            "memset"
+          ],
+          "caller": "cob_move_all"
+        },
+        {
+          "callees": [
+            "memmove",
+            "memset"
+          ],
+          "caller": "cob_move_alphanum_to_alphanum"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc",
+            "cob_real_put_sign",
+            "memset"
+          ],
+          "caller": "cob_move_alphanum_to_display"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign",
+            "cob_real_put_sign"
+          ],
+          "caller": "cob_move_alphanum_to_edited"
+        },
+        {
+          "callees": [
+            "cob_binary_mget_sint64",
+            "cob_binary_mget_uint64",
+            "cob_binary_mset_sint64",
+            "cob_binary_mset_uint64"
+          ],
+          "caller": "cob_move_binary_to_binary"
+        },
+        {
+          "callees": [
+            "cob_binary_mget_sint64",
+            "cob_binary_mget_uint64",
+            "cob_real_put_sign",
+            "store_common_region"
+          ],
+          "caller": "cob_move_binary_to_display"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_min_int",
+            "cob_real_get_sign",
+            "cob_real_put_sign",
+            "memmove",
+            "memset"
+          ],
+          "caller": "cob_move_display_to_alphanum"
+        },
+        {
+          "callees": [
+            "cob_binary_mset_sint64",
+            "cob_binary_mset_uint64",
+            "cob_decimal_setget_fld",
+            "cob_real_get_sign",
+            "cob_real_put_sign"
+          ],
+          "caller": "cob_move_display_to_binary"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign",
+            "cob_real_put_sign",
+            "store_common_region"
+          ],
+          "caller": "cob_move_display_to_display"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign",
+            "cob_real_put_sign",
+            "cob_runtime_error",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cob_move_display_to_edited"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign",
+            "cob_real_put_sign",
+            "memset"
+          ],
+          "caller": "cob_move_display_to_packed"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "cob_real_put_sign",
+            "store_common_region"
+          ],
+          "caller": "cob_move_edited_to_display"
+        },
+        {
+          "callees": [
+            "memmove"
+          ],
+          "caller": "cob_move_fp_to_fp"
+        },
+        {
+          "callees": [],
+          "caller": "cob_move_ibm"
+        },
+        {
+          "callees": [
+            "cob_real_put_sign",
+            "store_common_region"
+          ],
+          "caller": "cob_move_packed_to_display"
+        },
+        {
+          "callees": [],
+          "caller": "cob_packed_get_int"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_put_comp1"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_put_comp2"
+        },
+        {
+          "callees": [
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_put_picx"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_put_pointer"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_put_s64_comp3"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_put_s64_comp5"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_put_s64_compx"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_put_s64_pic9"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_put_u64_comp3"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_put_u64_comp5"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_put_u64_comp6"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "memcpy"
+          ],
+          "caller": "cob_put_u64_compx"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "cob_put_u64_pic9"
+        },
+        {
+          "callees": [
+            "cob_move"
+          ],
+          "caller": "cob_set_int"
+        },
+        {
+          "callees": [
+            "cob_move"
+          ],
+          "caller": "cob_set_llint"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign",
+            "cob_real_put_sign"
+          ],
+          "caller": "display_get_long_long"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "cob_move"
+          ],
+          "caller": "indirect_move"
+        },
+        {
+          "callees": [],
+          "caller": "packed_get_long_long"
+        },
+        {
+          "callees": [
+            "cob_max_int",
+            "cob_min_int",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "store_common_region"
+        }
+      ],
+      "file": "move.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc"
+          ],
+          "caller": "alloc_figurative"
+        },
+        {
+          "callees": [
+            "cob_free"
+          ],
+          "caller": "cob_exit_strings"
+        },
+        {
+          "callees": [],
+          "caller": "cob_init_strings"
+        },
+        {
+          "callees": [
+            "inspect_find_data"
+          ],
+          "caller": "cob_inspect_after"
+        },
+        {
+          "callees": [
+            "inspect_common"
+          ],
+          "caller": "cob_inspect_all"
+        },
+        {
+          "callees": [
+            "inspect_find_data"
+          ],
+          "caller": "cob_inspect_before"
+        },
+        {
+          "callees": [
+            "cob_add_int",
+            "is_marked",
+            "memset",
+            "set_inspect_mark",
+            "setup_repdata"
+          ],
+          "caller": "cob_inspect_characters"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "alloc_figurative",
+            "cob_real_put_sign",
+            "cob_set_exception"
+          ],
+          "caller": "cob_inspect_converting"
+        },
+        {
+          "callees": [
+            "cob_real_put_sign"
+          ],
+          "caller": "cob_inspect_finish"
+        },
+        {
+          "callees": [
+            "inspect_common"
+          ],
+          "caller": "cob_inspect_first"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_inspect_init_common",
+            "cob_malloc",
+            "memset"
+          ],
+          "caller": "cob_inspect_init"
+        },
+        {
+          "callees": [
+            "cob_real_get_sign"
+          ],
+          "caller": "cob_inspect_init_common"
+        },
+        {
+          "callees": [
+            "cob_inspect_init_common"
+          ],
+          "caller": "cob_inspect_init_converting"
+        },
+        {
+          "callees": [
+            "inspect_common"
+          ],
+          "caller": "cob_inspect_leading"
+        },
+        {
+          "callees": [],
+          "caller": "cob_inspect_start"
+        },
+        {
+          "callees": [
+            "inspect_common"
+          ],
+          "caller": "cob_inspect_trailing"
+        },
+        {
+          "callees": [
+            "cob_move"
+          ],
+          "caller": "cob_str_memcpy"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "memcmp",
+            "memcpy"
+          ],
+          "caller": "cob_string_append"
+        },
+        {
+          "callees": [],
+          "caller": "cob_string_delimited"
+        },
+        {
+          "callees": [
+            "cob_set_int"
+          ],
+          "caller": "cob_string_finish"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "cob_set_exception"
+          ],
+          "caller": "cob_string_init"
+        },
+        {
+          "callees": [],
+          "caller": "cob_unstring_delimited"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "cob_set_int"
+          ],
+          "caller": "cob_unstring_finish"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_get_int",
+            "cob_malloc",
+            "cob_set_exception"
+          ],
+          "caller": "cob_unstring_init"
+        },
+        {
+          "callees": [
+            "cob_min_int",
+            "cob_set_int",
+            "cob_str_memcpy",
+            "memcmp",
+            "memset"
+          ],
+          "caller": "cob_unstring_into"
+        },
+        {
+          "callees": [
+            "cob_add_int"
+          ],
+          "caller": "cob_unstring_tallying"
+        },
+        {
+          "callees": [
+            "is_marked",
+            "memcpy",
+            "set_inspect_mark",
+            "setup_repdata"
+          ],
+          "caller": "do_mark"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "alloc_figurative",
+            "cob_set_exception",
+            "inspect_common_no_replace",
+            "inspect_common_replacing"
+          ],
+          "caller": "inspect_common"
+        },
+        {
+          "callees": [
+            "cob_add_int",
+            "is_marked",
+            "memcmp",
+            "set_inspect_mark"
+          ],
+          "caller": "inspect_common_no_replace"
+        },
+        {
+          "callees": [
+            "do_mark",
+            "memcmp"
+          ],
+          "caller": "inspect_common_replacing"
+        },
+        {
+          "callees": [
+            "memcmp"
+          ],
+          "caller": "inspect_find_data"
+        },
+        {
+          "callees": [],
+          "caller": "is_marked"
+        },
+        {
+          "callees": [
+            "memset"
+          ],
+          "caller": "set_inspect_mark"
+        },
+        {
+          "callees": [
+            "cob_fast_malloc",
+            "cob_free"
+          ],
+          "caller": "setup_repdata"
+        }
+      ],
+      "file": "strings.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "__gmpz_get_ui",
+            "cob_s32_pow",
+            "memset"
+          ],
+          "caller": "add_decimal_digits"
+        },
+        {
+          "callees": [
+            "abs",
+            "memcpy",
+            "snprintf"
+          ],
+          "caller": "add_offset_time"
+        },
+        {
+          "callees": [],
+          "caller": "add_z"
+        },
+        {
+          "callees": [
+            "toupper"
+          ],
+          "caller": "at_cr_or_db"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_set_field"
+          ],
+          "caller": "calc_mean_of_args"
+        },
+        {
+          "callees": [
+            "memmove"
+          ],
+          "caller": "calc_ref_mod"
+        },
+        {
+          "callees": [
+            "__gmpz_set",
+            "__gmpz_set_ui",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_mul",
+            "cob_decimal_set_field",
+            "cob_decimal_sub"
+          ],
+          "caller": "calc_variance_of_args"
+        },
+        {
+          "callees": [],
+          "caller": "calculate_start_end_for_numval"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_sizeinbase",
+            "cob_set_exception",
+            "cob_trim_decimal",
+            "make_field_entry"
+          ],
+          "caller": "cob_alloc_field"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_alloc_set_field_int"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memset"
+          ],
+          "caller": "cob_alloc_set_field_spaces"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_alloc_set_field_str"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_alloc_set_field_uint"
+        },
+        {
+          "callees": [
+            "memcmp"
+          ],
+          "caller": "cob_check_numval"
+        },
+        {
+          "callees": [],
+          "caller": "cob_check_numval_f"
+        },
+        {
+          "callees": [
+            "__gmpz_sizeinbase",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "cob_move",
+            "cob_trim_decimal",
+            "make_field_entry"
+          ],
+          "caller": "cob_decimal_move_temp"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "__builtin_expect",
+            "__gmpf_mul",
+            "__gmpf_sqrt",
+            "__gmpz_abs",
+            "__gmpz_cmp_ui",
+            "__gmpz_fits_slong_p",
+            "__gmpz_fits_ulong_p",
+            "__gmpz_get_ui",
+            "__gmpz_neg",
+            "__gmpz_pow_ui",
+            "__gmpz_set",
+            "__gmpz_set_ui",
+            "cob_decimal_div",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_mpf",
+            "cob_mpf_exp",
+            "cob_mpf_log",
+            "cob_set_exception",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_decimal_pow"
+        },
+        {
+          "callees": [
+            "__gmp_randclear",
+            "__gmpf_clear",
+            "__gmpz_clear",
+            "cob_free"
+          ],
+          "caller": "cob_exit_intrinsic"
+        },
+        {
+          "callees": [
+            "cob_move"
+          ],
+          "caller": "cob_get_indirect_field"
+        },
+        {
+          "callees": [
+            "__gmpf_init2",
+            "__gmpz_init2",
+            "cob_decimal_init2",
+            "cob_malloc"
+          ],
+          "caller": "cob_init_intrinsic"
+        },
+        {
+          "callees": [
+            "__gmpz_abs",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_abs"
+        },
+        {
+          "callees": [
+            "__gmpz_set",
+            "__gmpz_set_si",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_cmp",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_acos",
+            "cob_set_exception"
+          ],
+          "caller": "cob_intr_acos"
+        },
+        {
+          "callees": [
+            "__gmpz_neg",
+            "__gmpz_set",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_pow",
+            "cob_decimal_set_field",
+            "cob_decimal_sub",
+            "cob_set_exception",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_intr_annuity"
+        },
+        {
+          "callees": [
+            "__gmpz_set",
+            "__gmpz_set_si",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_cmp",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_asin",
+            "cob_set_exception"
+          ],
+          "caller": "cob_intr_asin"
+        },
+        {
+          "callees": [
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_atan"
+          ],
+          "caller": "cob_intr_atan"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_mul",
+            "cob_decimal_pow",
+            "cob_decimal_set_field",
+            "cob_decimal_sub",
+            "cob_get_int",
+            "cob_set_exception"
+          ],
+          "caller": "cob_intr_binop"
+        },
+        {
+          "callees": [
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_bit_of"
+        },
+        {
+          "callees": [
+            "has_bit_checked",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_bit_to_char"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_boolean_of_integer"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint"
+          ],
+          "caller": "cob_intr_byte_length"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_char"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_char_national"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "cob_get_int",
+            "cob_set_exception",
+            "valid_decimal_time",
+            "valid_integer_date"
+          ],
+          "caller": "cob_intr_combined_datetime"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "calc_ref_mod",
+            "cob_free",
+            "cob_malloc",
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_intr_concatenate"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_set_exception",
+            "strlen"
+          ],
+          "caller": "cob_intr_content_length"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "calc_ref_mod",
+            "cob_get_int",
+            "cob_set_exception",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_content_of"
+        },
+        {
+          "callees": [
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_cos"
+          ],
+          "caller": "cob_intr_cos"
+        },
+        {
+          "callees": [
+            "localeconv",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_currency_symbol"
+        },
+        {
+          "callees": [
+            "add_offset_time",
+            "calc_ref_mod",
+            "cob_get_current_datetime",
+            "make_field_entry",
+            "memcpy",
+            "sprintf"
+          ],
+          "caller": "cob_intr_current_date"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "cob_set_exception",
+            "date_of_integer",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "snprintf",
+            "valid_integer_date"
+          ],
+          "caller": "cob_intr_date_of_integer"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_alloc_set_field_int",
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "cob_set_exception",
+            "get_interval_and_current_year_from_args",
+            "valid_year"
+          ],
+          "caller": "cob_intr_date_to_yyyymmdd"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "cob_set_exception",
+            "day_of_integer",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "snprintf",
+            "valid_integer_date"
+          ],
+          "caller": "cob_intr_day_of_integer"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_alloc_set_field_int",
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "cob_set_exception",
+            "get_interval_and_current_year_from_args",
+            "valid_year"
+          ],
+          "caller": "cob_intr_day_to_yyyyddd"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_display_of"
+        },
+        {
+          "callees": [
+            "__gmpf_set_ui",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_exp"
+          ],
+          "caller": "cob_intr_e"
+        },
+        {
+          "callees": [
+            "cob_last_exception_is",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_exception_file"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_exception_file_n"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_str",
+            "make_field_entry",
+            "snprintf"
+          ],
+          "caller": "cob_intr_exception_location"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_exception_location_n"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "strlen"
+          ],
+          "caller": "cob_intr_exception_statement"
+        },
+        {
+          "callees": [
+            "cob_get_last_exception_code",
+            "cob_get_last_exception_name",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "strlen"
+          ],
+          "caller": "cob_intr_exception_status"
+        },
+        {
+          "callees": [
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_exp"
+          ],
+          "caller": "cob_intr_exp"
+        },
+        {
+          "callees": [
+            "__gmpz_abs",
+            "__gmpz_fits_sint_p",
+            "__gmpz_fits_ulong_p",
+            "__gmpz_get_si",
+            "__gmpz_get_ui",
+            "__gmpz_set_ui",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_decimal_pow",
+            "cob_decimal_set_field",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_intr_exp10"
+        },
+        {
+          "callees": [
+            "__gmpz_fac_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_get_int",
+            "cob_set_exception"
+          ],
+          "caller": "cob_intr_factorial"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "cob_set_exception",
+            "cob_valid_datetime_format",
+            "copy_data_to_null_terminated_str",
+            "format_current_date",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "parse_date_format_string",
+            "parse_time_format_string",
+            "split_around_t",
+            "strlen"
+          ],
+          "caller": "cob_intr_formatted_current_date"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "cob_get_int",
+            "cob_set_exception",
+            "copy_data_to_null_terminated_str",
+            "format_date",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "parse_date_format_string",
+            "strlen",
+            "valid_day_and_format"
+          ],
+          "caller": "cob_intr_formatted_date"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "calc_ref_mod",
+            "cob_get_int",
+            "cob_set_exception",
+            "cob_valid_datetime_format",
+            "copy_data_to_null_terminated_str",
+            "format_datetime",
+            "get_fractional_seconds",
+            "get_system_offset_time_ptr",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "parse_date_format_string",
+            "parse_time_format_string",
+            "split_around_t",
+            "strlen",
+            "try_get_valid_offset_time",
+            "valid_integer_date",
+            "valid_time"
+          ],
+          "caller": "cob_intr_formatted_datetime"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "calc_ref_mod",
+            "cob_get_int",
+            "cob_set_exception",
+            "cob_valid_time_format",
+            "copy_data_to_null_terminated_str",
+            "format_time",
+            "get_fractional_seconds",
+            "get_system_offset_time_ptr",
+            "make_field_entry",
+            "memcpy",
+            "memset",
+            "parse_time_format_string",
+            "strlen",
+            "try_get_valid_offset_time",
+            "valid_time"
+          ],
+          "caller": "cob_intr_formatted_time"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "__gmpz_tdiv_r",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_intr_fraction_part"
+        },
+        {
+          "callees": [
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_hex_of"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_hex_to_char"
+        },
+        {
+          "callees": [
+            "__gmpz_sub_ui",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_set_exception",
+            "make_field_entry",
+            "memset"
+          ],
+          "caller": "cob_intr_highest_algebraic"
+        },
+        {
+          "callees": [
+            "__gmpz_mul",
+            "__gmpz_sub_ui",
+            "__gmpz_tdiv_qr",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_intr_integer"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_integer_of_boolean"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "cob_set_exception",
+            "integer_of_date",
+            "valid_day_of_month",
+            "valid_month",
+            "valid_year"
+          ],
+          "caller": "cob_intr_integer_of_date"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "cob_set_exception",
+            "integer_of_day",
+            "valid_day_of_year",
+            "valid_year"
+          ],
+          "caller": "cob_intr_integer_of_day"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_set_exception",
+            "cob_valid_date_format",
+            "cob_valid_datetime_format",
+            "copy_data_to_null_terminated_str",
+            "integer_of_formatted_date",
+            "parse_date_format_string",
+            "split_around_t",
+            "strcpy",
+            "test_formatted_date"
+          ],
+          "caller": "cob_intr_integer_of_formatted_date"
+        },
+        {
+          "callees": [
+            "__gmpz_mul",
+            "__gmpz_tdiv_q",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_intr_integer_part"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_spaces",
+            "cob_alloc_set_field_str",
+            "cob_get_int",
+            "cob_set_exception",
+            "locale_time",
+            "valid_time"
+          ],
+          "caller": "cob_intr_lcl_time_from_secs"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint"
+          ],
+          "caller": "cob_intr_length"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_field_to_string",
+            "cob_free",
+            "cob_malloc",
+            "cob_set_exception",
+            "make_field_entry",
+            "memcpy",
+            "setlocale",
+            "strcoll"
+          ],
+          "caller": "cob_intr_locale_compare"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_spaces",
+            "cob_alloc_set_field_str",
+            "cob_field_to_string",
+            "cob_get_int",
+            "cob_set_exception",
+            "memset",
+            "nl_langinfo",
+            "setlocale",
+            "snprintf",
+            "strftime",
+            "valid_day_of_month",
+            "valid_month",
+            "valid_year"
+          ],
+          "caller": "cob_intr_locale_date"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_spaces",
+            "cob_alloc_set_field_str",
+            "cob_get_int",
+            "cob_set_exception",
+            "locale_time"
+          ],
+          "caller": "cob_intr_locale_time"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "__gmpz_cmp_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_log",
+            "cob_set_exception",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_intr_log"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "__gmpz_cmp_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_log10",
+            "cob_set_exception",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_intr_log10"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "make_field_entry",
+            "tolower"
+          ],
+          "caller": "cob_intr_lower_case"
+        },
+        {
+          "callees": [
+            "__gmpz_neg",
+            "__gmpz_sub_ui",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_set_exception",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_lowest_algebraic"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_cmp",
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_intr_max"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_intr_mean"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "cob_free",
+            "cob_malloc",
+            "comp_field",
+            "make_field_entry",
+            "memcpy",
+            "qsort"
+          ],
+          "caller": "cob_intr_median"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "get_min_and_max_of_args"
+          ],
+          "caller": "cob_intr_midrange"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_cmp",
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_intr_min"
+        },
+        {
+          "callees": [
+            "cob_mod_or_rem"
+          ],
+          "caller": "cob_intr_mod"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_str",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_module_caller_id"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memcpy",
+            "snprintf"
+          ],
+          "caller": "cob_intr_module_date"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_str"
+          ],
+          "caller": "cob_intr_module_formatted_date"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_str"
+          ],
+          "caller": "cob_intr_module_id"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_str",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_module_path"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_str"
+          ],
+          "caller": "cob_intr_module_source"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memcpy",
+            "snprintf"
+          ],
+          "caller": "cob_intr_module_time"
+        },
+        {
+          "callees": [
+            "localeconv",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_mon_decimal_point"
+        },
+        {
+          "callees": [
+            "localeconv",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_mon_thousands_sep"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_national_of"
+        },
+        {
+          "callees": [
+            "localeconv",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_num_decimal_point"
+        },
+        {
+          "callees": [
+            "localeconv",
+            "make_field_entry",
+            "memcpy",
+            "strlen"
+          ],
+          "caller": "cob_intr_num_thousands_sep"
+        },
+        {
+          "callees": [
+            "numval"
+          ],
+          "caller": "cob_intr_numval"
+        },
+        {
+          "callees": [
+            "numval"
+          ],
+          "caller": "cob_intr_numval_c"
+        },
+        {
+          "callees": [
+            "__gmpz_mul",
+            "__gmpz_neg",
+            "__gmpz_set_str",
+            "__gmpz_ui_pow_ui",
+            "calculate_start_end_for_numval",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_free",
+            "cob_malloc",
+            "cob_set_exception"
+          ],
+          "caller": "cob_intr_numval_f"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint"
+          ],
+          "caller": "cob_intr_ord"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_alloc_set_field_uint",
+            "cob_cmp"
+          ],
+          "caller": "cob_intr_ord_max"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_alloc_set_field_uint",
+            "cob_cmp"
+          ],
+          "caller": "cob_intr_ord_min"
+        },
+        {
+          "callees": [
+            "__gmpf_set",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_set_mpf",
+            "setup_cob_pi"
+          ],
+          "caller": "cob_intr_pi"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_pow_ui",
+            "__gmpz_set",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_decimal_add",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_intr_present_value"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmp_randinit_mt",
+            "__gmp_randseed_ui",
+            "__gmpf_get_d",
+            "__gmpf_init",
+            "__gmpf_urandomb",
+            "cob_get_llint",
+            "cob_set_exception",
+            "get_seconds_past_midnight",
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_intr_random"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field",
+            "cob_decimal_sub",
+            "get_min_and_max_of_args"
+          ],
+          "caller": "cob_intr_range"
+        },
+        {
+          "callees": [
+            "cob_mod_or_rem"
+          ],
+          "caller": "cob_intr_rem"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_reverse"
+        },
+        {
+          "callees": [
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_set_exception",
+            "cob_valid_datetime_format",
+            "cob_valid_time_format",
+            "memcpy",
+            "num_leading_nonspace",
+            "parse_time_format_string",
+            "seconds_from_formatted_time",
+            "split_around_t",
+            "test_formatted_time"
+          ],
+          "caller": "cob_intr_seconds_from_formatted_time"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_int",
+            "get_seconds_past_midnight"
+          ],
+          "caller": "cob_intr_seconds_past_midnight"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_int",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_intr_sign"
+        },
+        {
+          "callees": [
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_sin"
+          ],
+          "caller": "cob_intr_sin"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_decimal_pow",
+            "cob_decimal_set_field",
+            "cob_set_exception",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_intr_sqrt"
+        },
+        {
+          "callees": [
+            "error_not_implemented"
+          ],
+          "caller": "cob_intr_standard_compare"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_set",
+            "__gmpz_set_ui",
+            "calc_mean_of_args",
+            "calc_variance_of_args",
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_pow",
+            "cob_trim_decimal"
+          ],
+          "caller": "cob_intr_standard_deviation"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint"
+          ],
+          "caller": "cob_intr_stored_char_length"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "memcmp",
+            "substitute"
+          ],
+          "caller": "cob_intr_substitute"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "int_strncasecmp",
+            "substitute"
+          ],
+          "caller": "cob_intr_substitute_case"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_set_ui",
+            "cob_alloc_field",
+            "cob_decimal_add",
+            "cob_decimal_get_field",
+            "cob_decimal_set_field"
+          ],
+          "caller": "cob_intr_sum"
+        },
+        {
+          "callees": [
+            "cob_alloc_field",
+            "cob_decimal_get_field",
+            "cob_decimal_get_mpf",
+            "cob_decimal_set_field",
+            "cob_decimal_set_mpf",
+            "cob_mpf_tan"
+          ],
+          "caller": "cob_intr_tan"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "valid_day_of_month",
+            "valid_month",
+            "valid_year"
+          ],
+          "caller": "cob_intr_test_date_yyyymmdd"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "valid_day_of_year",
+            "valid_year"
+          ],
+          "caller": "cob_intr_test_day_yyyyddd"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_uint",
+            "cob_set_exception",
+            "cob_valid_date_format",
+            "cob_valid_datetime_format",
+            "cob_valid_time_format",
+            "copy_data_to_null_terminated_str",
+            "parse_date_format_string",
+            "parse_time_format_string",
+            "split_around_t",
+            "strcpy",
+            "strlen",
+            "test_formatted_date",
+            "test_formatted_time"
+          ],
+          "caller": "cob_intr_test_formatted_datetime"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_int",
+            "cob_check_numval"
+          ],
+          "caller": "cob_intr_test_numval"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_int",
+            "cob_check_numval"
+          ],
+          "caller": "cob_intr_test_numval_c"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_int",
+            "cob_check_numval_f"
+          ],
+          "caller": "cob_intr_test_numval_f"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "make_field_entry"
+          ],
+          "caller": "cob_intr_trim"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "make_field_entry",
+            "toupper"
+          ],
+          "caller": "cob_intr_upper_case"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "__gmpz_set",
+            "calc_mean_of_args",
+            "calc_variance_of_args",
+            "cob_alloc_field",
+            "cob_decimal_get_field"
+          ],
+          "caller": "cob_intr_variance"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "calc_ref_mod",
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_intr_when_compiled"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_alloc_set_field_int",
+            "cob_alloc_set_field_uint",
+            "cob_get_int",
+            "cob_set_exception",
+            "localtime",
+            "time",
+            "valid_year"
+          ],
+          "caller": "cob_intr_year_to_yyyy"
+        },
+        {
+          "callees": [
+            "__gmpz_mul",
+            "__gmpz_sub_ui",
+            "__gmpz_tdiv_q",
+            "__gmpz_tdiv_qr",
+            "__gmpz_ui_pow_ui",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_div",
+            "cob_decimal_get_field",
+            "cob_decimal_mul",
+            "cob_decimal_set_field",
+            "cob_decimal_sub",
+            "cob_set_exception"
+          ],
+          "caller": "cob_mod_or_rem"
+        },
+        {
+          "callees": [
+            "__gmpf_add_ui",
+            "__gmpf_clear",
+            "__gmpf_cmp_si",
+            "__gmpf_cmp_ui",
+            "__gmpf_div",
+            "__gmpf_div_ui",
+            "__gmpf_init2",
+            "__gmpf_mul",
+            "__gmpf_mul_ui",
+            "__gmpf_set",
+            "__gmpf_set_ui",
+            "__gmpf_sqrt",
+            "__gmpf_ui_sub",
+            "cob_mpf_atan",
+            "setup_cob_pi"
+          ],
+          "caller": "cob_mpf_acos"
+        },
+        {
+          "callees": [
+            "__gmpf_add_ui",
+            "__gmpf_clear",
+            "__gmpf_cmp_si",
+            "__gmpf_cmp_ui",
+            "__gmpf_div",
+            "__gmpf_div_ui",
+            "__gmpf_init2",
+            "__gmpf_mul",
+            "__gmpf_mul_ui",
+            "__gmpf_neg",
+            "__gmpf_set",
+            "__gmpf_set_ui",
+            "__gmpf_sqrt",
+            "__gmpf_ui_sub",
+            "cob_mpf_atan",
+            "setup_cob_pi"
+          ],
+          "caller": "cob_mpf_asin"
+        },
+        {
+          "callees": [
+            "__gmpf_abs",
+            "__gmpf_add",
+            "__gmpf_add_ui",
+            "__gmpf_clear",
+            "__gmpf_cmp",
+            "__gmpf_div",
+            "__gmpf_div_2exp",
+            "__gmpf_div_ui",
+            "__gmpf_eq",
+            "__gmpf_init2",
+            "__gmpf_mul",
+            "__gmpf_neg",
+            "__gmpf_set",
+            "__gmpf_set_ui",
+            "__gmpf_sub_ui",
+            "__gmpf_ui_div",
+            "setup_cob_pi",
+            "setup_cob_sqrt_two"
+          ],
+          "caller": "cob_mpf_atan"
+        },
+        {
+          "callees": [
+            "__gmpf_clear",
+            "__gmpf_div_2exp",
+            "__gmpf_init2",
+            "__gmpf_set",
+            "__gmpf_sub",
+            "cob_mpf_sin",
+            "setup_cob_pi"
+          ],
+          "caller": "cob_mpf_cos"
+        },
+        {
+          "callees": [
+            "__gmpf_add",
+            "__gmpf_clear",
+            "__gmpf_div_2exp",
+            "__gmpf_div_ui",
+            "__gmpf_eq",
+            "__gmpf_get_d_2exp",
+            "__gmpf_init2",
+            "__gmpf_mul",
+            "__gmpf_neg",
+            "__gmpf_set",
+            "__gmpf_set_ui",
+            "__gmpf_ui_div"
+          ],
+          "caller": "cob_mpf_exp"
+        },
+        {
+          "callees": [
+            "__gmpf_add",
+            "__gmpf_clear",
+            "__gmpf_cmp_ui",
+            "__gmpf_div_2exp",
+            "__gmpf_div_ui",
+            "__gmpf_eq",
+            "__gmpf_get_d_2exp",
+            "__gmpf_init2",
+            "__gmpf_mul",
+            "__gmpf_mul_2exp",
+            "__gmpf_mul_ui",
+            "__gmpf_neg",
+            "__gmpf_set",
+            "__gmpf_set_si",
+            "__gmpf_set_ui",
+            "__gmpf_ui_sub",
+            "setup_cob_log_half"
+          ],
+          "caller": "cob_mpf_log"
+        },
+        {
+          "callees": [
+            "__gmpf_clear",
+            "__gmpf_div",
+            "__gmpf_init2",
+            "__gmpf_set",
+            "cob_mpf_log",
+            "setup_cob_log_ten"
+          ],
+          "caller": "cob_mpf_log10"
+        },
+        {
+          "callees": [
+            "__gmpf_abs",
+            "__gmpf_add",
+            "__gmpf_clear",
+            "__gmpf_cmp_ui",
+            "__gmpf_div",
+            "__gmpf_div_2exp",
+            "__gmpf_div_ui",
+            "__gmpf_eq",
+            "__gmpf_floor",
+            "__gmpf_get_ui",
+            "__gmpf_init2",
+            "__gmpf_mul",
+            "__gmpf_mul_2exp",
+            "__gmpf_neg",
+            "__gmpf_set",
+            "__gmpf_set_ui",
+            "__gmpf_sub",
+            "setup_cob_pi"
+          ],
+          "caller": "cob_mpf_sin"
+        },
+        {
+          "callees": [
+            "__gmpf_clear",
+            "__gmpf_div",
+            "__gmpf_init2",
+            "cob_mpf_cos",
+            "cob_mpf_sin"
+          ],
+          "caller": "cob_mpf_tan"
+        },
+        {
+          "callees": [
+            "make_field_entry",
+            "memcpy"
+          ],
+          "caller": "cob_put_indirect_field"
+        },
+        {
+          "callees": [
+            "cob_alloc_set_field_int",
+            "cob_get_switch"
+          ],
+          "caller": "cob_switch_value"
+        },
+        {
+          "callees": [
+            "__gmpz_divisible_ui_p",
+            "__gmpz_tdiv_q_ui"
+          ],
+          "caller": "cob_trim_decimal"
+        },
+        {
+          "callees": [
+            "strcmp"
+          ],
+          "caller": "cob_valid_date_format"
+        },
+        {
+          "callees": [
+            "cob_valid_date_format",
+            "cob_valid_time_format",
+            "parse_date_format_string",
+            "parse_time_format_string",
+            "split_around_t"
+          ],
+          "caller": "cob_valid_datetime_format"
+        },
+        {
+          "callees": [
+            "decimal_places_for_seconds",
+            "rest_is_offset_format",
+            "rest_is_z",
+            "strlen",
+            "strncmp"
+          ],
+          "caller": "cob_valid_time_format"
+        },
+        {
+          "callees": [
+            "cob_cmp"
+          ],
+          "caller": "comp_field"
+        },
+        {
+          "callees": [
+            "cob_min_int",
+            "num_leading_nonspace",
+            "strncpy"
+          ],
+          "caller": "copy_data_to_null_terminated_str"
+        },
+        {
+          "callees": [
+            "days_in_year",
+            "leap_year"
+          ],
+          "caller": "date_of_integer"
+        },
+        {
+          "callees": [
+            "days_in_year"
+          ],
+          "caller": "day_of_integer"
+        },
+        {
+          "callees": [
+            "leap_year"
+          ],
+          "caller": "days_in_year"
+        },
+        {
+          "callees": [
+            "days_in_year"
+          ],
+          "caller": "days_up_to_year"
+        },
+        {
+          "callees": [],
+          "caller": "decimal_places_for_seconds"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_set_exception"
+          ],
+          "caller": "error_not_implemented"
+        },
+        {
+          "callees": [
+            "day_of_integer",
+            "sprintf"
+          ],
+          "caller": "format_as_yyyyddd"
+        },
+        {
+          "callees": [
+            "date_of_integer",
+            "sprintf"
+          ],
+          "caller": "format_as_yyyymmdd"
+        },
+        {
+          "callees": [
+            "day_of_integer",
+            "get_day_of_week",
+            "get_iso_week",
+            "sprintf"
+          ],
+          "caller": "format_as_yyyywwwd"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_get_current_datetime",
+            "format_datetime",
+            "integer_of_date"
+          ],
+          "caller": "format_current_date"
+        },
+        {
+          "callees": [
+            "format_as_yyyyddd",
+            "format_as_yyyymmdd",
+            "format_as_yyyywwwd"
+          ],
+          "caller": "format_date"
+        },
+        {
+          "callees": [
+            "format_date",
+            "format_time",
+            "sprintf"
+          ],
+          "caller": "format_datetime"
+        },
+        {
+          "callees": [
+            "add_decimal_digits",
+            "add_offset_time",
+            "add_z",
+            "cob_set_exception",
+            "sprintf"
+          ],
+          "caller": "format_time"
+        },
+        {
+          "callees": [],
+          "caller": "get_day_of_week"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_decimal_set_field",
+            "cob_decimal_sub",
+            "cob_get_int"
+          ],
+          "caller": "get_fractional_seconds"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "localtime",
+            "time"
+          ],
+          "caller": "get_interval_and_current_year_from_args"
+        },
+        {
+          "callees": [
+            "day_of_integer",
+            "days_in_year",
+            "get_iso_week_one"
+          ],
+          "caller": "get_iso_week"
+        },
+        {
+          "callees": [
+            "get_day_of_week"
+          ],
+          "caller": "get_iso_week_one"
+        },
+        {
+          "callees": [
+            "cob_cmp"
+          ],
+          "caller": "get_min_and_max_of_args"
+        },
+        {
+          "callees": [
+            "localtime",
+            "time"
+          ],
+          "caller": "get_seconds_past_midnight"
+        },
+        {
+          "callees": [],
+          "caller": "get_substituted_size"
+        },
+        {
+          "callees": [
+            "cob_get_current_datetime"
+          ],
+          "caller": "get_system_offset_time_ptr"
+        },
+        {
+          "callees": [
+            "cob_set_exception"
+          ],
+          "caller": "has_bit_checked"
+        },
+        {
+          "callees": [],
+          "caller": "in_range"
+        },
+        {
+          "callees": [
+            "strncasecmp"
+          ],
+          "caller": "int_strncasecmp"
+        },
+        {
+          "callees": [
+            "days_up_to_year",
+            "leap_year"
+          ],
+          "caller": "integer_of_date"
+        },
+        {
+          "callees": [
+            "days_up_to_year"
+          ],
+          "caller": "integer_of_day"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "integer_of_day",
+            "sscanf"
+          ],
+          "caller": "integer_of_ddd"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "integer_of_ddd",
+            "integer_of_mmdd",
+            "integer_of_wwwd",
+            "sscanf"
+          ],
+          "caller": "integer_of_formatted_date"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "integer_of_date",
+            "sscanf"
+          ],
+          "caller": "integer_of_mmdd"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "days_up_to_year",
+            "get_iso_week_one",
+            "sscanf"
+          ],
+          "caller": "integer_of_wwwd"
+        },
+        {
+          "callees": [],
+          "caller": "leap_year"
+        },
+        {
+          "callees": [
+            "cob_field_to_string",
+            "memset",
+            "nl_langinfo",
+            "setlocale",
+            "snprintf",
+            "strftime"
+          ],
+          "caller": "locale_time"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "memset"
+          ],
+          "caller": "make_field_entry"
+        },
+        {
+          "callees": [
+            "days_in_year",
+            "get_iso_week",
+            "integer_of_date"
+          ],
+          "caller": "max_week"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "num_leading_nonspace"
+        },
+        {
+          "callees": [
+            "__gmpz_neg",
+            "__gmpz_set_str",
+            "__gmpz_set_ui",
+            "at_cr_or_db",
+            "calculate_start_end_for_numval",
+            "cob_alloc_field",
+            "cob_alloc_set_field_uint",
+            "cob_decimal_get_field",
+            "cob_free",
+            "cob_malloc",
+            "cob_set_exception",
+            "memcmp",
+            "space_left"
+          ],
+          "caller": "numval"
+        },
+        {
+          "callees": [
+            "strcmp"
+          ],
+          "caller": "parse_date_format_string"
+        },
+        {
+          "callees": [
+            "decimal_places_for_seconds",
+            "rest_is_z",
+            "strlen",
+            "strncmp"
+          ],
+          "caller": "parse_time_format_string"
+        },
+        {
+          "callees": [
+            "strcmp"
+          ],
+          "caller": "rest_is_offset_format"
+        },
+        {
+          "callees": [
+            "strcmp"
+          ],
+          "caller": "rest_is_z"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__gmpz_set_ui",
+            "cob_decimal_add",
+            "cob_fatal_error",
+            "sscanf"
+          ],
+          "caller": "seconds_from_formatted_time"
+        },
+        {
+          "callees": [
+            "__gmpf_init2",
+            "__gmpf_set_str"
+          ],
+          "caller": "setup_cob_log_half"
+        },
+        {
+          "callees": [
+            "__gmpf_init2",
+            "__gmpf_set_ui",
+            "cob_mpf_log"
+          ],
+          "caller": "setup_cob_log_ten"
+        },
+        {
+          "callees": [
+            "__gmpf_init2",
+            "__gmpf_set_str"
+          ],
+          "caller": "setup_cob_pi"
+        },
+        {
+          "callees": [
+            "__gmpf_init2",
+            "__gmpf_set_str"
+          ],
+          "caller": "setup_cob_sqrt_two"
+        },
+        {
+          "callees": [],
+          "caller": "space_left"
+        },
+        {
+          "callees": [
+            "snprintf",
+            "strlen"
+          ],
+          "caller": "split_around_t"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__builtin_va_end",
+            "calc_ref_mod",
+            "cob_free",
+            "cob_malloc",
+            "get_substituted_size",
+            "make_field_entry",
+            "substitute_matches"
+          ],
+          "caller": "substitute"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "substitute_matches"
+        },
+        {
+          "callees": [
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_century"
+        },
+        {
+          "callees": [
+            "test_char_cond"
+          ],
+          "caller": "test_char"
+        },
+        {
+          "callees": [],
+          "caller": "test_char_cond"
+        },
+        {
+          "callees": [
+            "test_char_cond"
+          ],
+          "caller": "test_char_in_range"
+        },
+        {
+          "callees": [
+            "test_char"
+          ],
+          "caller": "test_colon_presence"
+        },
+        {
+          "callees": [
+            "test_day_of_month",
+            "test_day_of_week",
+            "test_day_of_year",
+            "test_hyphen_presence",
+            "test_month",
+            "test_w_presence",
+            "test_week"
+          ],
+          "caller": "test_date_end"
+        },
+        {
+          "callees": [
+            "leap_year",
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_day_of_month"
+        },
+        {
+          "callees": [
+            "test_char_in_range"
+          ],
+          "caller": "test_day_of_week"
+        },
+        {
+          "callees": [
+            "leap_year",
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_day_of_year"
+        },
+        {
+          "callees": [
+            "test_digit"
+          ],
+          "caller": "test_decade"
+        },
+        {
+          "callees": [
+            "test_char",
+            "test_digit"
+          ],
+          "caller": "test_decimal_places"
+        },
+        {
+          "callees": [
+            "test_char_in_range"
+          ],
+          "caller": "test_digit"
+        },
+        {
+          "callees": [
+            "test_date_end",
+            "test_hyphen_presence",
+            "test_no_trailing_junk",
+            "test_year"
+          ],
+          "caller": "test_formatted_date"
+        },
+        {
+          "callees": [
+            "test_colon_presence",
+            "test_decimal_places",
+            "test_hour",
+            "test_minute",
+            "test_no_trailing_junk",
+            "test_second",
+            "test_time_end"
+          ],
+          "caller": "test_formatted_time"
+        },
+        {
+          "callees": [
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_hour"
+        },
+        {
+          "callees": [
+            "test_char"
+          ],
+          "caller": "test_hyphen_presence"
+        },
+        {
+          "callees": [
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_less_than_60"
+        },
+        {
+          "callees": [
+            "test_char_in_range"
+          ],
+          "caller": "test_millenium"
+        },
+        {
+          "callees": [
+            "test_less_than_60"
+          ],
+          "caller": "test_minute"
+        },
+        {
+          "callees": [
+            "test_char_cond",
+            "test_char_in_range"
+          ],
+          "caller": "test_month"
+        },
+        {
+          "callees": [],
+          "caller": "test_no_trailing_junk"
+        },
+        {
+          "callees": [
+            "test_colon_presence",
+            "test_hour",
+            "test_minute",
+            "test_two_zeroes"
+          ],
+          "caller": "test_offset_time"
+        },
+        {
+          "callees": [
+            "test_less_than_60"
+          ],
+          "caller": "test_second"
+        },
+        {
+          "callees": [
+            "test_offset_time",
+            "test_z_presence"
+          ],
+          "caller": "test_time_end"
+        },
+        {
+          "callees": [
+            "test_char"
+          ],
+          "caller": "test_two_zeroes"
+        },
+        {
+          "callees": [
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_unit_year"
+        },
+        {
+          "callees": [
+            "test_char"
+          ],
+          "caller": "test_w_presence"
+        },
+        {
+          "callees": [
+            "max_week",
+            "test_char_in_range",
+            "test_digit"
+          ],
+          "caller": "test_week"
+        },
+        {
+          "callees": [
+            "test_century",
+            "test_decade",
+            "test_millenium",
+            "test_unit_year"
+          ],
+          "caller": "test_year"
+        },
+        {
+          "callees": [
+            "test_char"
+          ],
+          "caller": "test_z_presence"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "valid_offset_time"
+          ],
+          "caller": "try_get_valid_offset_time"
+        },
+        {
+          "callees": [
+            "cob_valid_date_format",
+            "valid_integer_date"
+          ],
+          "caller": "valid_day_and_format"
+        },
+        {
+          "callees": [
+            "in_range",
+            "leap_year"
+          ],
+          "caller": "valid_day_of_month"
+        },
+        {
+          "callees": [
+            "days_in_year",
+            "in_range"
+          ],
+          "caller": "valid_day_of_year"
+        },
+        {
+          "callees": [
+            "__gmpz_set_ui",
+            "cob_decimal_cmp"
+          ],
+          "caller": "valid_decimal_time"
+        },
+        {
+          "callees": [
+            "in_range"
+          ],
+          "caller": "valid_integer_date"
+        },
+        {
+          "callees": [
+            "in_range"
+          ],
+          "caller": "valid_month"
+        },
+        {
+          "callees": [
+            "abs"
+          ],
+          "caller": "valid_offset_time"
+        },
+        {
+          "callees": [
+            "in_range"
+          ],
+          "caller": "valid_time"
+        },
+        {
+          "callees": [
+            "in_range"
+          ],
+          "caller": "valid_year"
+        }
+      ],
+      "file": "intrinsic.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "cob_convert_hex_digit"
+          ],
+          "caller": "cob_convert_hex_byte"
+        },
+        {
+          "callees": [
+            "cob_toupper"
+          ],
+          "caller": "cob_convert_hex_digit"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_tolower",
+            "cob_toupper",
+            "snprintf",
+            "tolower",
+            "toupper"
+          ],
+          "caller": "cob_field_to_string"
+        },
+        {
+          "callees": [],
+          "caller": "cob_init_cconv"
+        },
+        {
+          "callees": [
+            "cob_convert_hex_byte",
+            "cob_runtime_error",
+            "cob_skip_blanks",
+            "fclose",
+            "feof",
+            "ferror",
+            "fgets",
+            "fopen",
+            "getenv",
+            "gettext",
+            "memcpy",
+            "sprintf",
+            "strlen"
+          ],
+          "caller": "cob_load_collation"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "cob_skip_blanks"
+        },
+        {
+          "callees": [],
+          "caller": "cob_tolower"
+        },
+        {
+          "callees": [],
+          "caller": "cob_toupper"
+        }
+      ],
+      "file": "cconv.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "memmove",
+            "strcmp",
+            "strcpy",
+            "strlen",
+            "strrchr"
+          ],
+          "caller": "clean_double"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_field_accept",
+            "cob_move",
+            "cob_raise",
+            "cob_set_exception",
+            "cob_set_int",
+            "fflush",
+            "getchar",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cob_accept"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_display_common",
+            "cob_field_display",
+            "cob_free",
+            "cob_runtime_warning",
+            "cob_set_exception",
+            "fclose",
+            "fflush",
+            "fopen",
+            "gettext",
+            "pclose",
+            "popen",
+            "putc"
+          ],
+          "caller": "cob_display"
+        },
+        {
+          "callees": [
+            "clean_double",
+            "cob_print_ieeedec",
+            "cob_print_realbin",
+            "display_alnum",
+            "display_numeric",
+            "fprintf",
+            "memcpy",
+            "pretty_display_numeric",
+            "sprintf"
+          ],
+          "caller": "cob_display_common"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_dump_file",
+            "cob_dump_output",
+            "cob_get_dump_file",
+            "dump_field_internal"
+          ],
+          "caller": "cob_dump_field"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_get_dump_file",
+            "dump_field_internal"
+          ],
+          "caller": "cob_dump_field_ext"
+        },
+        {
+          "callees": [
+            "cob_get_dump_file",
+            "dump_pending_output",
+            "fprintf"
+          ],
+          "caller": "cob_dump_file"
+        },
+        {
+          "callees": [
+            "cob_get_dump_file",
+            "dump_pending_output",
+            "fprintf"
+          ],
+          "caller": "cob_dump_output"
+        },
+        {
+          "callees": [],
+          "caller": "cob_init_termio"
+        },
+        {
+          "callees": [
+            "putc"
+          ],
+          "caller": "display_alnum"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc",
+            "fprintf",
+            "memcmp",
+            "memcpy",
+            "sprintf"
+          ],
+          "caller": "display_alnum_dump"
+        },
+        {
+          "callees": [
+            "cob_move",
+            "fputs",
+            "gettext",
+            "putc"
+          ],
+          "caller": "display_numeric"
+        },
+        {
+          "callees": [
+            "cob_display_common",
+            "cob_get_dump_file",
+            "display_alnum_dump",
+            "dump_pending_output",
+            "fprintf",
+            "is_field_display",
+            "memcmp",
+            "memcpy",
+            "setup_lvlwrk_and_dump_null_adrs",
+            "setup_varname_with_indices",
+            "sprintf"
+          ],
+          "caller": "dump_field_internal"
+        },
+        {
+          "callees": [
+            "fprintf"
+          ],
+          "caller": "dump_pending_output"
+        },
+        {
+          "callees": [],
+          "caller": "is_field_display"
+        },
+        {
+          "callees": [
+            "cob_move",
+            "fputs",
+            "gettext",
+            "putc"
+          ],
+          "caller": "pretty_display_numeric"
+        },
+        {
+          "callees": [
+            "sprintf"
+          ],
+          "caller": "setup_lvlwrk_and_dump_null_adrs"
+        },
+        {
+          "callees": [
+            "memcpy",
+            "sprintf",
+            "strlen"
+          ],
+          "caller": "setup_varname_with_indices"
+        }
+      ],
+      "file": "termio.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "cob_get_int"
+          ],
+          "caller": "adjust_attr_from_color_field"
+        },
+        {
+          "callees": [
+            "bsearch",
+            "cob_field_to_string",
+            "handle_control_field_color",
+            "memcmp",
+            "screen_attr_cmp",
+            "strchr",
+            "strlen",
+            "strtok"
+          ],
+          "caller": "adjust_attr_from_control_field"
+        },
+        {
+          "callees": [],
+          "caller": "adjust_attr_from_extended_color"
+        },
+        {
+          "callees": [
+            "get_decimal_point_offset",
+            "has_decimal_point"
+          ],
+          "caller": "at_offset_from_decimal_point"
+        },
+        {
+          "callees": [
+            "cob_field_is_numeric_or_numeric_edited",
+            "get_decimal_point_offset",
+            "has_decimal_point"
+          ],
+          "caller": "can_insert_left"
+        },
+        {
+          "callees": [
+            "cob_set_int",
+            "get_crt3_status"
+          ],
+          "caller": "cob_accept_escape_key"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "extract_line_and_col_vals",
+            "field_accept"
+          ],
+          "caller": "cob_accept_field"
+        },
+        {
+          "callees": [
+            "wbkgdset",
+            "wcolor_set"
+          ],
+          "caller": "cob_activate_color_pair"
+        },
+        {
+          "callees": [
+            "raise_ec_on_truncation",
+            "waddch"
+          ],
+          "caller": "cob_addch"
+        },
+        {
+          "callees": [
+            "waddch"
+          ],
+          "caller": "cob_addch_no_trunc_check"
+        },
+        {
+          "callees": [
+            "cob_addch_no_trunc_check",
+            "raise_ec_on_truncation"
+          ],
+          "caller": "cob_addnch"
+        },
+        {
+          "callees": [
+            "raise_ec_on_truncation",
+            "waddnstr"
+          ],
+          "caller": "cob_addnstr"
+        },
+        {
+          "callees": [
+            "raise_ec_on_truncation",
+            "wadd_wch",
+            "waddch"
+          ],
+          "caller": "cob_addnstr_graph"
+        },
+        {
+          "callees": [
+            "beep",
+            "cob_speaker_beep",
+            "flash"
+          ],
+          "caller": "cob_beep"
+        },
+        {
+          "callees": [],
+          "caller": "cob_convert_key"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "extract_line_and_col_vals",
+            "field_display",
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_display_field"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_min_int",
+            "field_display_at_curpos",
+            "init_cob_screen_if_needed",
+            "vsnprintf"
+          ],
+          "caller": "cob_display_formatted_text"
+        },
+        {
+          "callees": [
+            "field_display_at_curpos",
+            "init_cob_screen_if_needed",
+            "strlen"
+          ],
+          "caller": "cob_display_text"
+        },
+        {
+          "callees": [
+            "_nc_freeall",
+            "cob_display_text",
+            "cob_free",
+            "cob_settings_screenio",
+            "delwin",
+            "endwin",
+            "field_accept_from_curpos",
+            "snprintf"
+          ],
+          "caller": "cob_exit_screen"
+        },
+        {
+          "callees": [
+            "endwin"
+          ],
+          "caller": "cob_exit_screen_from_signal"
+        },
+        {
+          "callees": [
+            "extract_line_and_col_vals",
+            "field_accept"
+          ],
+          "caller": "cob_field_accept"
+        },
+        {
+          "callees": [
+            "extract_line_and_col_vals",
+            "field_display",
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_field_display"
+        },
+        {
+          "callees": [],
+          "caller": "cob_field_is_numeric_or_numeric_edited"
+        },
+        {
+          "callees": [
+            "field_accept_from_curpos",
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_get_char"
+        },
+        {
+          "callees": [
+            "init_pair",
+            "pair_content"
+          ],
+          "caller": "cob_get_color_pair"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_get_scr_cols"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_get_scr_lines"
+        },
+        {
+          "callees": [
+            "field_accept",
+            "field_accept_from_curpos",
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_get_text"
+        },
+        {
+          "callees": [
+            "cob_settings_screenio",
+            "cob_strdup",
+            "gettext"
+          ],
+          "caller": "cob_init_screenio"
+        },
+        {
+          "callees": [
+            "raise_ec_on_invalid_line_or_col",
+            "wmove"
+          ],
+          "caller": "cob_move_cursor"
+        },
+        {
+          "callees": [
+            "cob_screen_moveyx",
+            "cob_screen_puts"
+          ],
+          "caller": "cob_prep_input"
+        },
+        {
+          "callees": [
+            "extract_line_and_col_vals",
+            "screen_accept"
+          ],
+          "caller": "cob_screen_accept"
+        },
+        {
+          "callees": [
+            "adjust_attr_from_color_field",
+            "adjust_attr_from_control_field",
+            "adjust_attr_from_extended_color",
+            "cob_activate_color_pair",
+            "cob_beep",
+            "cob_get_color_pair",
+            "cob_get_int",
+            "cob_move_cursor",
+            "cob_to_curses_color",
+            "getcurx",
+            "getcury",
+            "wattr_on",
+            "wattrset",
+            "wclear",
+            "wclrtobot",
+            "wclrtoeol"
+          ],
+          "caller": "cob_screen_attr"
+        },
+        {
+          "callees": [
+            "extract_line_and_col_vals",
+            "init_cob_screen_if_needed",
+            "screen_display"
+          ],
+          "caller": "cob_screen_display"
+        },
+        {
+          "callees": [
+            "__errno_location",
+            "at_offset_from_decimal_point",
+            "can_insert_left",
+            "cob_addch",
+            "cob_beep",
+            "cob_convert_key",
+            "cob_field_is_numeric_or_numeric_edited",
+            "cob_move_cursor",
+            "cob_screen_attr",
+            "cob_toggle_insert",
+            "finalize_all_fields",
+            "finalize_field_input",
+            "find_field_by_pos",
+            "flushinp",
+            "get_cursor_from_program",
+            "get_decimal_point_offset",
+            "get_pic_symbol_offset",
+            "getcurx",
+            "getcury",
+            "getmouse",
+            "has_decimal_point",
+            "is_number_with_pic_symbol",
+            "memset",
+            "mouse_to_exception_code",
+            "move_to_initial_field_pos",
+            "shift_left",
+            "shift_right",
+            "tolower",
+            "toupper",
+            "ungetch",
+            "wgetch",
+            "wrefresh",
+            "wtimeout"
+          ],
+          "caller": "cob_screen_get_all"
+        },
+        {
+          "callees": [
+            "cbreak",
+            "cob_runtime_error",
+            "cob_settings_screenio",
+            "define_key",
+            "fflush",
+            "getmaxx",
+            "getmaxy",
+            "gettext",
+            "has_colors",
+            "init_pair",
+            "initscr",
+            "keypad",
+            "noecho",
+            "nonl",
+            "pair_content",
+            "start_color",
+            "use_legacy_coding",
+            "wattrset"
+          ],
+          "caller": "cob_screen_init"
+        },
+        {
+          "callees": [
+            "cob_screen_attr",
+            "cob_screen_moveyx",
+            "cob_screen_puts"
+          ],
+          "caller": "cob_screen_iterate"
+        },
+        {
+          "callees": [
+            "cob_set_int",
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_screen_line_col"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "cob_move_cursor",
+            "cob_runtime_warning",
+            "getcurx",
+            "getcury",
+            "wrefresh"
+          ],
+          "caller": "cob_screen_moveyx"
+        },
+        {
+          "callees": [
+            "cob_addch_no_trunc_check",
+            "cob_addnstr",
+            "cob_addnstr_graph",
+            "cob_move_cursor",
+            "cob_screen_attr",
+            "get_screen_item_line_and_col",
+            "raise_ec_on_truncation",
+            "wrefresh"
+          ],
+          "caller": "cob_screen_puts"
+        },
+        {
+          "callees": [
+            "cob_screen_init",
+            "def_prog_mode",
+            "endwin",
+            "reset_prog_mode",
+            "wrefresh"
+          ],
+          "caller": "cob_screen_set_mode"
+        },
+        {
+          "callees": [
+            "get_crt3_status",
+            "memcpy"
+          ],
+          "caller": "cob_set_crt3_status"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed",
+            "wmove"
+          ],
+          "caller": "cob_set_cursor_pos"
+        },
+        {
+          "callees": [
+            "curs_set",
+            "mouseinterval",
+            "mousemask"
+          ],
+          "caller": "cob_settings_screenio"
+        },
+        {
+          "callees": [
+            "fileno",
+            "write"
+          ],
+          "caller": "cob_speaker_beep"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed",
+            "wclear",
+            "wrefresh"
+          ],
+          "caller": "cob_sys_clear_screen"
+        },
+        {
+          "callees": [
+            "cob_get_char"
+          ],
+          "caller": "cob_sys_get_char"
+        },
+        {
+          "callees": [
+            "getcurx",
+            "getcury",
+            "init_cob_screen_if_needed",
+            "memcpy"
+          ],
+          "caller": "cob_sys_get_csr_pos"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed"
+          ],
+          "caller": "cob_sys_get_scr_size"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed",
+            "memcpy",
+            "wmove"
+          ],
+          "caller": "cob_sys_set_csr_pos"
+        },
+        {
+          "callees": [
+            "init_cob_screen_if_needed",
+            "resize_term"
+          ],
+          "caller": "cob_sys_set_scr_size"
+        },
+        {
+          "callees": [
+            "cob_beep",
+            "cob_screen_init",
+            "cob_speaker_beep"
+          ],
+          "caller": "cob_sys_sound_bell"
+        },
+        {
+          "callees": [],
+          "caller": "cob_to_curses_color"
+        },
+        {
+          "callees": [
+            "cob_settings_screenio"
+          ],
+          "caller": "cob_toggle_insert"
+        },
+        {
+          "callees": [],
+          "caller": "col_where_last_stmt_ended"
+        },
+        {
+          "callees": [],
+          "caller": "compare_yx"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "cob_get_int",
+            "cob_set_exception",
+            "col_where_last_stmt_ended",
+            "get_line_and_col_from_field",
+            "get_line_column",
+            "line_where_last_stmt_ended"
+          ],
+          "caller": "extract_line_and_col_vals"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__errno_location",
+            "cob_addch",
+            "cob_addch_no_trunc_check",
+            "cob_addnch",
+            "cob_beep",
+            "cob_convert_key",
+            "cob_field_is_numeric_or_numeric_edited",
+            "cob_get_int",
+            "cob_min_int",
+            "cob_move",
+            "cob_move_cursor",
+            "cob_screen_attr",
+            "cob_set_int",
+            "cob_toggle_insert",
+            "flushinp",
+            "get_accept_timeout",
+            "get_cursor_from_program",
+            "getcurx",
+            "getcury",
+            "getmouse",
+            "handle_status",
+            "init_cob_screen_if_needed",
+            "memset",
+            "mouse_to_exception_code",
+            "pass_cursor_to_program",
+            "raise_ec_on_truncation",
+            "scrollok",
+            "tolower",
+            "toupper",
+            "wgetch",
+            "wmove",
+            "wrefresh",
+            "wscrl",
+            "wtimeout"
+          ],
+          "caller": "field_accept"
+        },
+        {
+          "callees": [
+            "field_accept",
+            "getcurx",
+            "getcury"
+          ],
+          "caller": "field_accept_from_curpos"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_addnch",
+            "cob_addnstr",
+            "cob_addnstr_graph",
+            "cob_fatal_error",
+            "cob_get_int",
+            "cob_min_int",
+            "cob_move_cursor",
+            "cob_screen_attr",
+            "scrollok",
+            "wrefresh",
+            "wscrl"
+          ],
+          "caller": "field_display"
+        },
+        {
+          "callees": [
+            "field_display",
+            "getcurx",
+            "getcury"
+          ],
+          "caller": "field_display_at_curpos"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "field_is_empty"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "field_is_full"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "field_is_zero"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc",
+            "field_is_zero",
+            "get_num_int_digits_for_no_zero_sup",
+            "pic_has_zero_suppression"
+          ],
+          "caller": "field_is_zero_or_no_zero_suppression"
+        },
+        {
+          "callees": [
+            "finalize_field_input"
+          ],
+          "caller": "finalize_all_fields"
+        },
+        {
+          "callees": [
+            "cob_field_is_numeric_or_numeric_edited",
+            "format_field",
+            "satisfied_full_clause",
+            "satisfied_required_clause",
+            "valid_field_data"
+          ],
+          "caller": "finalize_field_input"
+        },
+        {
+          "callees": [],
+          "caller": "find_field_by_pos"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_intr_numval",
+            "cob_intr_numval_c",
+            "cob_malloc",
+            "cob_move",
+            "memcpy",
+            "refresh_field"
+          ],
+          "caller": "format_field"
+        },
+        {
+          "callees": [
+            "cob_get_int"
+          ],
+          "caller": "get_accept_timeout"
+        },
+        {
+          "callees": [
+            "memcmp",
+            "strtol"
+          ],
+          "caller": "get_cob_color_from_color_value"
+        },
+        {
+          "callees": [],
+          "caller": "get_crt3_status"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "get_line_and_col_from_field"
+          ],
+          "caller": "get_cursor_from_program"
+        },
+        {
+          "callees": [
+            "get_pic_symbol_offset"
+          ],
+          "caller": "get_decimal_point_offset"
+        },
+        {
+          "callees": [],
+          "caller": "get_last_child"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "cob_get_int",
+            "memcpy",
+            "sscanf"
+          ],
+          "caller": "get_line_and_col_from_field"
+        },
+        {
+          "callees": [
+            "cob_get_int"
+          ],
+          "caller": "get_line_column"
+        },
+        {
+          "callees": [],
+          "caller": "get_num_int_digits_for_no_zero_sup"
+        },
+        {
+          "callees": [],
+          "caller": "get_pic_symbol_offset"
+        },
+        {
+          "callees": [
+            "get_last_child"
+          ],
+          "caller": "get_prev_screen_item"
+        },
+        {
+          "callees": [
+            "get_prev_screen_item",
+            "get_size",
+            "is_first_screen_item",
+            "update_column",
+            "update_line"
+          ],
+          "caller": "get_screen_item_line_and_col"
+        },
+        {
+          "callees": [],
+          "caller": "get_size"
+        },
+        {
+          "callees": [
+            "adjust_attr_from_extended_color",
+            "cob_to_curses_color",
+            "get_cob_color_from_color_value"
+          ],
+          "caller": "handle_control_field_color"
+        },
+        {
+          "callees": [
+            "cob_set_crt3_status",
+            "cob_set_exception",
+            "cob_set_int",
+            "memcpy",
+            "sprintf"
+          ],
+          "caller": "handle_status"
+        },
+        {
+          "callees": [
+            "is_number_with_pic_symbol"
+          ],
+          "caller": "has_decimal_point"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_hard_failure",
+            "cob_screen_init"
+          ],
+          "caller": "init_cob_screen_if_needed"
+        },
+        {
+          "callees": [],
+          "caller": "is_first_screen_item"
+        },
+        {
+          "callees": [],
+          "caller": "is_number_with_pic_symbol"
+        },
+        {
+          "callees": [],
+          "caller": "line_where_last_stmt_ended"
+        },
+        {
+          "callees": [],
+          "caller": "mouse_to_exception_code"
+        },
+        {
+          "callees": [
+            "cob_field_is_numeric_or_numeric_edited",
+            "cob_move_cursor",
+            "get_decimal_point_offset",
+            "has_decimal_point"
+          ],
+          "caller": "move_to_initial_field_pos"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_set_int",
+            "getcurx",
+            "getcury",
+            "memcpy",
+            "sprintf"
+          ],
+          "caller": "pass_cursor_to_program"
+        },
+        {
+          "callees": [],
+          "caller": "pic_has_zero_suppression"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "getmaxx",
+            "getmaxy"
+          ],
+          "caller": "raise_ec_on_invalid_line_or_col"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "getcurx",
+            "getcury",
+            "getmaxx",
+            "getmaxy"
+          ],
+          "caller": "raise_ec_on_truncation"
+        },
+        {
+          "callees": [
+            "cob_move_cursor",
+            "cob_screen_puts",
+            "getcurx",
+            "getcury"
+          ],
+          "caller": "refresh_field"
+        },
+        {
+          "callees": [
+            "field_is_empty",
+            "field_is_full",
+            "field_is_zero",
+            "field_is_zero_or_no_zero_suppression"
+          ],
+          "caller": "satisfied_full_clause"
+        },
+        {
+          "callees": [
+            "cob_field_is_numeric_or_numeric_edited",
+            "field_is_empty",
+            "field_is_zero"
+          ],
+          "caller": "satisfied_required_clause"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "cob_move_cursor",
+            "cob_prep_input",
+            "cob_screen_get_all",
+            "compare_yx",
+            "get_accept_timeout",
+            "handle_status",
+            "init_cob_screen_if_needed",
+            "memset",
+            "pass_cursor_to_program",
+            "qsort"
+          ],
+          "caller": "screen_accept"
+        },
+        {
+          "callees": [
+            "strcmp"
+          ],
+          "caller": "screen_attr_cmp"
+        },
+        {
+          "callees": [
+            "cob_move_cursor",
+            "cob_screen_iterate",
+            "wrefresh"
+          ],
+          "caller": "screen_display"
+        },
+        {
+          "callees": [
+            "cob_addch",
+            "cob_move_cursor"
+          ],
+          "caller": "shift_left"
+        },
+        {
+          "callees": [
+            "cob_addch",
+            "cob_move_cursor"
+          ],
+          "caller": "shift_right"
+        },
+        {
+          "callees": [
+            "cob_get_int"
+          ],
+          "caller": "update_column"
+        },
+        {
+          "callees": [
+            "cob_get_int"
+          ],
+          "caller": "update_line"
+        },
+        {
+          "callees": [
+            "cob_check_numval"
+          ],
+          "caller": "valid_field_data"
+        }
+      ],
+      "file": "screenio.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "cob_malloc",
+            "cob_strcat",
+            "cob_strdup"
+          ],
+          "caller": "add_to_preload"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "cob_strdup",
+            "strcmp"
+          ],
+          "caller": "cache_dynload"
+        },
+        {
+          "callees": [
+            "access",
+            "add_to_preload",
+            "cob_runtime_warning",
+            "dlerror",
+            "dlopen",
+            "gettext",
+            "strcmp"
+          ],
+          "caller": "cache_preload"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "dlclose"
+          ],
+          "caller": "close_and_free_module_list"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "cob_hard_failure",
+            "cob_resolve_cobol",
+            "cob_runtime_error",
+            "gettext"
+          ],
+          "caller": "cob_call"
+        },
+        {
+          "callees": [
+            "cob_hard_failure",
+            "cob_resolve_error",
+            "cob_runtime_error"
+          ],
+          "caller": "cob_call_error"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_call_error",
+            "cob_chk_call_path",
+            "cob_fatal_error",
+            "cob_field_to_string",
+            "cob_free",
+            "cob_get_buff",
+            "cob_resolve_internal",
+            "cob_runtime_warning",
+            "cob_set_exception",
+            "gettext",
+            "hash",
+            "lookup",
+            "memmove",
+            "strcmp",
+            "strlen"
+          ],
+          "caller": "cob_call_field"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_chk_dirp",
+            "cob_fatal_error",
+            "cob_hard_failure",
+            "cob_runtime_error",
+            "do_cancel_module",
+            "gettext",
+            "hash",
+            "strcmp"
+          ],
+          "caller": "cob_cancel"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_cancel",
+            "cob_chk_dirp",
+            "cob_fatal_error",
+            "cob_field_to_string",
+            "cob_get_buff",
+            "strcmp"
+          ],
+          "caller": "cob_cancel_field"
+        },
+        {
+          "callees": [
+            "cob_strndup"
+          ],
+          "caller": "cob_chk_call_path"
+        },
+        {
+          "callees": [],
+          "caller": "cob_chk_dirp"
+        },
+        {
+          "callees": [
+            "__builtin_expect"
+          ],
+          "caller": "cob_encode_invalid_chars"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__ctype_b_loc",
+            "cob_encode_invalid_chars",
+            "tolower",
+            "toupper"
+          ],
+          "caller": "cob_encode_program_id"
+        },
+        {
+          "callees": [
+            "close_and_free_module_list",
+            "cob_free"
+          ],
+          "caller": "cob_exit_call"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_field_constant"
+        },
+        {
+          "callees": [
+            "cob_call",
+            "cob_cancel"
+          ],
+          "caller": "cob_func"
+        },
+        {
+          "callees": [
+            "cob_fast_malloc",
+            "cob_free"
+          ],
+          "caller": "cob_get_buff"
+        },
+        {
+          "callees": [
+            "cob_get_comp1",
+            "cob_get_comp2",
+            "cob_get_param_field",
+            "cob_move",
+            "memcpy"
+          ],
+          "caller": "cob_get_dbl_param"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_field_constant"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_field_digits"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_field_scale"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_field_sign"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_field_size"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_display_common",
+            "cob_runtime_warning_external",
+            "fclose",
+            "fmemopen",
+            "gettext"
+          ],
+          "caller": "cob_get_field_str"
+        },
+        {
+          "callees": [
+            "cob_get_buff",
+            "cob_get_field_size",
+            "cob_get_field_str"
+          ],
+          "caller": "cob_get_field_str_buffered"
+        },
+        {
+          "callees": [],
+          "caller": "cob_get_field_type"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_malloc",
+            "memcpy"
+          ],
+          "caller": "cob_get_grp_param"
+        },
+        {
+          "callees": [
+            "cob_runtime_warning_external",
+            "gettext"
+          ],
+          "caller": "cob_get_num_params"
+        },
+        {
+          "callees": [
+            "cob_get_field_constant",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_constant"
+        },
+        {
+          "callees": [
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_data"
+        },
+        {
+          "callees": [
+            "cob_get_field_digits",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_digits"
+        },
+        {
+          "callees": [
+            "cob_runtime_warning_external",
+            "gettext"
+          ],
+          "caller": "cob_get_param_field"
+        },
+        {
+          "callees": [
+            "cob_get_field_scale",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_scale"
+        },
+        {
+          "callees": [
+            "cob_get_field_sign",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_sign"
+        },
+        {
+          "callees": [
+            "cob_get_field_size",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_size"
+        },
+        {
+          "callees": [
+            "cob_get_field_str",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_str"
+        },
+        {
+          "callees": [
+            "cob_get_field_str_buffered",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_str_buffered"
+        },
+        {
+          "callees": [
+            "cob_get_field_type",
+            "cob_get_param_field"
+          ],
+          "caller": "cob_get_param_type"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_get_picx"
+          ],
+          "caller": "cob_get_picx_param"
+        },
+        {
+          "callees": [
+            "cob_get_comp1",
+            "cob_get_comp2",
+            "cob_get_param_field",
+            "cob_get_s64_comp3",
+            "cob_get_s64_comp5",
+            "cob_get_s64_compx",
+            "cob_get_s64_pic9",
+            "cob_move"
+          ],
+          "caller": "cob_get_s64_param"
+        },
+        {
+          "callees": [
+            "cob_get_comp1",
+            "cob_get_comp2",
+            "cob_get_param_field",
+            "cob_get_u64_comp3",
+            "cob_get_u64_comp5",
+            "cob_get_u64_compx",
+            "cob_get_u64_pic9",
+            "cob_move"
+          ],
+          "caller": "cob_get_u64_param"
+        },
+        {
+          "callees": [
+            "cob_fast_malloc",
+            "cob_free",
+            "cob_malloc",
+            "cob_set_library_path",
+            "cob_strdup",
+            "cob_try_preload",
+            "dlopen",
+            "hash",
+            "strtok"
+          ],
+          "caller": "cob_init_call"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "cob_hard_failure",
+            "cob_runtime_error",
+            "gettext",
+            "longjmp"
+          ],
+          "caller": "cob_longjmp"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_move",
+            "cob_put_comp1",
+            "cob_put_comp2",
+            "memcpy"
+          ],
+          "caller": "cob_put_dbl_param"
+        },
+        {
+          "callees": [
+            "cob_check_numval",
+            "cob_check_numval_f",
+            "cob_intr_numval",
+            "cob_intr_numval_f",
+            "cob_move",
+            "cob_runtime_warning_external",
+            "gettext",
+            "strlen"
+          ],
+          "caller": "cob_put_field_str"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_runtime_warning_external",
+            "memcpy"
+          ],
+          "caller": "cob_put_grp_param"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_put_field_str"
+          ],
+          "caller": "cob_put_param_str"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_put_picx",
+            "cob_runtime_warning_external",
+            "gettext"
+          ],
+          "caller": "cob_put_picx_param"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_move",
+            "cob_put_comp1",
+            "cob_put_comp2",
+            "cob_put_s64_comp3",
+            "cob_put_s64_comp5",
+            "cob_put_s64_compx",
+            "cob_put_s64_pic9",
+            "cob_runtime_warning_external",
+            "gettext",
+            "sprintf"
+          ],
+          "caller": "cob_put_s64_param"
+        },
+        {
+          "callees": [
+            "cob_get_param_field",
+            "cob_move",
+            "cob_put_comp1",
+            "cob_put_comp2",
+            "cob_put_u64_comp3",
+            "cob_put_u64_comp5",
+            "cob_put_u64_compx",
+            "cob_put_u64_pic9",
+            "cob_runtime_warning_external",
+            "gettext",
+            "sprintf"
+          ],
+          "caller": "cob_put_u64_param"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_chk_call_path",
+            "cob_fatal_error",
+            "cob_free",
+            "cob_resolve_internal"
+          ],
+          "caller": "cob_resolve"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_call_error",
+            "cob_chk_call_path",
+            "cob_fatal_error",
+            "cob_free",
+            "cob_resolve_internal",
+            "cob_set_exception"
+          ],
+          "caller": "cob_resolve_cobol"
+        },
+        {
+          "callees": [
+            "gettext"
+          ],
+          "caller": "cob_resolve_error"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "cob_hard_failure",
+            "cob_resolve_internal",
+            "cob_runtime_error",
+            "gettext"
+          ],
+          "caller": "cob_resolve_func"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "access",
+            "cache_dynload",
+            "cob_encode_program_id",
+            "cob_runtime_warning",
+            "dlerror",
+            "dlopen",
+            "dlsym",
+            "gettext",
+            "insert",
+            "lookup",
+            "set_resolve_error",
+            "snprintf",
+            "strlen",
+            "tolower",
+            "toupper"
+          ],
+          "caller": "cob_resolve_internal"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fatal_error",
+            "cob_hard_failure",
+            "cob_runtime_error",
+            "gettext"
+          ],
+          "caller": "cob_savenv"
+        },
+        {
+          "callees": [
+            "cob_savenv"
+          ],
+          "caller": "cob_savenv2"
+        },
+        {
+          "callees": [
+            "hash",
+            "insert",
+            "strcmp"
+          ],
+          "caller": "cob_set_cancel"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "cob_strdup",
+            "last_entry_is_working_directory",
+            "stat",
+            "strcmp",
+            "strlen",
+            "strtok"
+          ],
+          "caller": "cob_set_library_path"
+        },
+        {
+          "callees": [
+            "cache_preload",
+            "cob_runtime_warning",
+            "gettext",
+            "snprintf"
+          ],
+          "caller": "cob_try_preload"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "dlclose"
+          ],
+          "caller": "do_cancel_module"
+        },
+        {
+          "callees": [],
+          "caller": "hash"
+        },
+        {
+          "callees": [
+            "canonicalize_file_name",
+            "cob_malloc",
+            "cob_strdup",
+            "hash"
+          ],
+          "caller": "insert"
+        },
+        {
+          "callees": [],
+          "caller": "last_entry_is_working_directory"
+        },
+        {
+          "callees": [
+            "hash",
+            "strcmp"
+          ],
+          "caller": "lookup"
+        },
+        {
+          "callees": [
+            "cob_set_exception"
+          ],
+          "caller": "set_resolve_error"
+        }
+      ],
+      "file": "call.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "EXTFH3",
+            "cob_runtime_warning",
+            "gettext"
+          ],
+          "caller": "EXTFH"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc",
+            "cob_chk_file_mapping",
+            "cob_close",
+            "cob_commit",
+            "cob_delete",
+            "cob_delete_file",
+            "cob_init",
+            "cob_malloc",
+            "cob_open",
+            "cob_read",
+            "cob_read_next",
+            "cob_rewrite",
+            "cob_rollback",
+            "cob_runtime_warning",
+            "cob_start",
+            "cob_sync",
+            "cob_unlock_file",
+            "cob_write",
+            "copy_file_to_fcd",
+            "find_file",
+            "gettext",
+            "memcmp",
+            "memcpy",
+            "strlen",
+            "update_file_to_fcd",
+            "update_key_from_fcd",
+            "update_record_and_keys_if_necessary"
+          ],
+          "caller": "EXTFH3"
+        },
+        {
+          "callees": [],
+          "caller": "bdb_close_cursor"
+        },
+        {
+          "callees": [],
+          "caller": "bdb_close_index"
+        },
+        {
+          "callees": [
+            "bdb_keylen",
+            "cob_hard_failure_internal",
+            "cob_runtime_error",
+            "gettext",
+            "memcmp"
+          ],
+          "caller": "bdb_cmpkey"
+        },
+        {
+          "callees": [],
+          "caller": "bdb_keylen"
+        },
+        {
+          "callees": [
+            "__errno_location",
+            "access",
+            "is_absolute",
+            "snprintf"
+          ],
+          "caller": "bdb_nofile"
+        },
+        {
+          "callees": [],
+          "caller": "bdb_open_cursor"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "bdb_savekey"
+        },
+        {
+          "callees": [
+            "bdb_savekey",
+            "memset"
+          ],
+          "caller": "bdb_setkey"
+        },
+        {
+          "callees": [
+            "bdb_savekey"
+          ],
+          "caller": "bdb_suppresskey"
+        },
+        {
+          "callees": [
+            "bdb_cmpkey",
+            "bdb_setkey"
+          ],
+          "caller": "check_alt_keys"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "memset"
+          ],
+          "caller": "cob_cache_file"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__ctype_b_loc",
+            "cob_free",
+            "cob_strdup",
+            "getenv",
+            "snprintf",
+            "strlen"
+          ],
+          "caller": "cob_chk_file_env"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_chk_file_env",
+            "cob_free",
+            "cob_strdup",
+            "do_acu_hyphen_translation",
+            "has_acu_hyphen",
+            "has_directory_separator",
+            "looks_absolute",
+            "snprintf",
+            "strcat",
+            "strcpy",
+            "strlen",
+            "strncat",
+            "strncpy",
+            "strtok"
+          ],
+          "caller": "cob_chk_file_mapping"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_free",
+            "save_status"
+          ],
+          "caller": "cob_close"
+        },
+        {
+          "callees": [
+            "cob_file_unlock"
+          ],
+          "caller": "cob_commit"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "cob_copy_check"
+        },
+        {
+          "callees": [
+            "close",
+            "cob_free",
+            "cob_incr_temp_iteration",
+            "cob_malloc",
+            "cob_temp_name",
+            "fdopen",
+            "open",
+            "unlink"
+          ],
+          "caller": "cob_create_tmpfile"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "save_status"
+          ],
+          "caller": "cob_delete"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_chk_file_mapping",
+            "cob_field_to_string",
+            "errno_cob_sts",
+            "indexed_file_delete",
+            "save_status",
+            "unlink"
+          ],
+          "caller": "cob_delete_file"
+        },
+        {
+          "callees": [
+            "cob_exit_fileio_closeall",
+            "cob_free",
+            "free_extfh_fcd"
+          ],
+          "caller": "cob_exit_fileio"
+        },
+        {
+          "callees": [
+            "cob_close",
+            "memset"
+          ],
+          "caller": "cob_exit_fileio_closeall"
+        },
+        {
+          "callees": [
+            "cob_get_filename_print",
+            "cob_runtime_warning_ss"
+          ],
+          "caller": "cob_exit_fileio_msg_only"
+        },
+        {
+          "callees": [
+            "cob_cache_free",
+            "find_fcd",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_close"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "find_fcd",
+            "memset",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_delete"
+        },
+        {
+          "callees": [
+            "find_fcd",
+            "memcmp",
+            "save_fcd_status",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_open"
+        },
+        {
+          "callees": [
+            "cob_findkey",
+            "cob_get_int",
+            "find_fcd",
+            "memset",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_read"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "find_fcd",
+            "memset",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_read_next"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "find_fcd",
+            "memset",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_rewrite"
+        },
+        {
+          "callees": [
+            "cob_findkey",
+            "cob_get_int",
+            "find_fcd",
+            "memset",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_start"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int",
+            "find_fcd",
+            "memset",
+            "update_fcd_to_file"
+          ],
+          "caller": "cob_extfh_write"
+        },
+        {
+          "callees": [
+            "copy_fcd_to_file"
+          ],
+          "caller": "cob_fcd_file_sync"
+        },
+        {
+          "callees": [
+            "__errno_location",
+            "close",
+            "cob_fatal_error",
+            "cob_runtime_error",
+            "fcntl",
+            "gettext",
+            "lseek",
+            "memcmp",
+            "memset",
+            "open",
+            "set_sequential_variable_length"
+          ],
+          "caller": "cob_fd_file_open"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__errno_location",
+            "close",
+            "cob_runtime_warning",
+            "errno_cob_sts",
+            "fclose",
+            "fcntl",
+            "fdatasync",
+            "memset",
+            "putc",
+            "write"
+          ],
+          "caller": "cob_file_close"
+        },
+        {
+          "callees": [
+            "cob_external_addr",
+            "cob_file_malloc"
+          ],
+          "caller": "cob_file_external_addr"
+        },
+        {
+          "callees": [
+            "cob_hard_failure_internal",
+            "cob_pre_open",
+            "cob_runtime_error",
+            "copy_file_to_fcd",
+            "find_fcd",
+            "gettext",
+            "memcpy"
+          ],
+          "caller": "cob_file_fcd_adrs"
+        },
+        {
+          "callees": [
+            "copy_file_to_fcd",
+            "update_file_to_fcd"
+          ],
+          "caller": "cob_file_fcd_sync"
+        },
+        {
+          "callees": [
+            "cob_file_fcd_adrs",
+            "cob_hard_failure_internal",
+            "cob_runtime_error",
+            "gettext",
+            "memcpy"
+          ],
+          "caller": "cob_file_fcdkey_adrs"
+        },
+        {
+          "callees": [
+            "cob_cache_free",
+            "cob_free"
+          ],
+          "caller": "cob_file_free"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc"
+          ],
+          "caller": "cob_file_malloc"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__errno_location",
+            "access",
+            "cob_chk_file_mapping",
+            "cob_fatal_error",
+            "cob_fd_file_open",
+            "cob_runtime_error",
+            "cob_set_int",
+            "fclose",
+            "fcntl",
+            "file_linage_check",
+            "fileno",
+            "fopen",
+            "gettext",
+            "memcmp",
+            "memset"
+          ],
+          "caller": "cob_file_open"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_file_sort_submit",
+            "save_status"
+          ],
+          "caller": "cob_file_release"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_file_sort_retrieve",
+            "save_status"
+          ],
+          "caller": "cob_file_return"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_free",
+            "cob_free_list",
+            "fclose",
+            "save_status"
+          ],
+          "caller": "cob_file_sort_close"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_numeric_cmp",
+            "sort_cmps",
+            "unique_copy"
+          ],
+          "caller": "cob_file_sort_compare"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_file_sort_giving_internal",
+            "cob_malloc"
+          ],
+          "caller": "cob_file_sort_giving"
+        },
+        {
+          "callees": [
+            "__builtin_va_end",
+            "__builtin_va_start",
+            "cob_file_sort_giving_internal",
+            "cob_malloc"
+          ],
+          "caller": "cob_file_sort_giving_extfh"
+        },
+        {
+          "callees": [
+            "cob_close",
+            "cob_copy_check",
+            "cob_extfh_close",
+            "cob_extfh_open",
+            "cob_extfh_write",
+            "cob_file_sort_retrieve",
+            "cob_free",
+            "cob_malloc",
+            "cob_open",
+            "cob_set_exception",
+            "cob_write"
+          ],
+          "caller": "cob_file_sort_giving_internal"
+        },
+        {
+          "callees": [
+            "cob_fast_malloc",
+            "cob_malloc",
+            "save_status"
+          ],
+          "caller": "cob_file_sort_init"
+        },
+        {
+          "callees": [],
+          "caller": "cob_file_sort_init_key"
+        },
+        {
+          "callees": [],
+          "caller": "cob_file_sort_options"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_file_sort_compare",
+            "cob_get_sort_tempfile",
+            "cob_read_item",
+            "cob_sort_queues",
+            "cob_write_block",
+            "fwrite",
+            "putc",
+            "rewind"
+          ],
+          "caller": "cob_file_sort_process"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_file_sort_compare",
+            "cob_file_sort_process",
+            "cob_read_item",
+            "memcpy"
+          ],
+          "caller": "cob_file_sort_retrieve"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_sort_tempfile",
+            "cob_new_item",
+            "cob_sort_queues",
+            "cob_write_block",
+            "memcpy",
+            "unique_copy"
+          ],
+          "caller": "cob_file_sort_submit"
+        },
+        {
+          "callees": [
+            "cob_file_sort_using_extfh"
+          ],
+          "caller": "cob_file_sort_using"
+        },
+        {
+          "callees": [
+            "cob_close",
+            "cob_copy_check",
+            "cob_extfh_close",
+            "cob_extfh_open",
+            "cob_extfh_read_next",
+            "cob_file_sort_submit",
+            "cob_open",
+            "cob_read_next",
+            "cob_set_exception"
+          ],
+          "caller": "cob_file_sort_using_extfh"
+        },
+        {
+          "callees": [
+            "__errno_location",
+            "cob_runtime_warning",
+            "fcntl",
+            "fdatasync",
+            "memset",
+            "unlock_file",
+            "unlock_record"
+          ],
+          "caller": "cob_file_unlock"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_linage_write_opt",
+            "errno_cob_sts",
+            "putc"
+          ],
+          "caller": "cob_file_write_opt"
+        },
+        {
+          "callees": [
+            "cob_findkey_attr"
+          ],
+          "caller": "cob_findkey"
+        },
+        {
+          "callees": [],
+          "caller": "cob_findkey_attr"
+        },
+        {
+          "callees": [
+            "cob_free"
+          ],
+          "caller": "cob_free_list"
+        },
+        {
+          "callees": [
+            "cob_chk_file_mapping",
+            "cob_field_to_string",
+            "memcpy",
+            "strcmp",
+            "strlen",
+            "strncpy"
+          ],
+          "caller": "cob_get_filename_print"
+        },
+        {
+          "callees": [
+            "cob_create_tmpfile",
+            "rewind"
+          ],
+          "caller": "cob_get_sort_tempfile"
+        },
+        {
+          "callees": [
+            "cob_fast_malloc",
+            "cob_malloc",
+            "gettext"
+          ],
+          "caller": "cob_init_fileio"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_add_int",
+            "cob_get_int",
+            "cob_set_int",
+            "errno_cob_sts",
+            "file_linage_check",
+            "putc"
+          ],
+          "caller": "cob_linage_write_opt"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_fast_malloc"
+          ],
+          "caller": "cob_new_item"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_cache_file",
+            "cob_fcd_file_sync",
+            "cob_pre_open",
+            "cob_runtime_error",
+            "cob_strdup",
+            "fileno",
+            "gettext",
+            "save_status",
+            "strchr",
+            "strcpy",
+            "strlen"
+          ],
+          "caller": "cob_open"
+        },
+        {
+          "callees": [
+            "cob_field_to_string",
+            "strncpy"
+          ],
+          "caller": "cob_pre_open"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_set_int",
+            "save_status"
+          ],
+          "caller": "cob_read"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "fread",
+            "getc"
+          ],
+          "caller": "cob_read_item"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_set_int",
+            "is_suppressed_key_value",
+            "save_status"
+          ],
+          "caller": "cob_read_next"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_free",
+            "cob_get_int",
+            "get_code_set_converted_data",
+            "lineseq_size",
+            "save_status"
+          ],
+          "caller": "cob_rewrite"
+        },
+        {
+          "callees": [
+            "cob_file_unlock"
+          ],
+          "caller": "cob_rollback"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "cob_savekey"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "errno_cob_sts",
+            "write"
+          ],
+          "caller": "cob_seq_write_opt"
+        },
+        {
+          "callees": [
+            "cob_file_sort_compare"
+          ],
+          "caller": "cob_sort_queues"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int",
+            "save_status"
+          ],
+          "caller": "cob_start"
+        },
+        {
+          "callees": [
+            "cob_fast_malloc",
+            "cob_malloc"
+          ],
+          "caller": "cob_str_from_fld"
+        },
+        {
+          "callees": [
+            "fdatasync",
+            "fflush"
+          ],
+          "caller": "cob_sync"
+        },
+        {
+          "callees": [
+            "chdir",
+            "cob_free",
+            "cob_str_from_fld"
+          ],
+          "caller": "cob_sys_change_dir"
+        },
+        {
+          "callees": [
+            "cob_set_int",
+            "cob_sys_change_dir"
+          ],
+          "caller": "cob_sys_chdir"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "cob_chk_file_mapping",
+            "cob_free",
+            "cob_runtime_error",
+            "cob_str_from_fld",
+            "gettext",
+            "localtime",
+            "memcpy",
+            "stat",
+            "strncpy"
+          ],
+          "caller": "cob_sys_check_file_exist"
+        },
+        {
+          "callees": [
+            "close",
+            "memcpy"
+          ],
+          "caller": "cob_sys_close_file"
+        },
+        {
+          "callees": [
+            "close",
+            "cob_chk_file_mapping",
+            "cob_free",
+            "cob_str_from_fld",
+            "errno_cob_sts",
+            "open",
+            "read",
+            "strncpy",
+            "write"
+          ],
+          "caller": "cob_sys_copy_file"
+        },
+        {
+          "callees": [
+            "cob_sys_copy_file"
+          ],
+          "caller": "cob_sys_copyfile"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_str_from_fld",
+            "mkdir"
+          ],
+          "caller": "cob_sys_create_dir"
+        },
+        {
+          "callees": [
+            "cob_runtime_warning",
+            "gettext",
+            "open_cbl_file"
+          ],
+          "caller": "cob_sys_create_file"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_str_from_fld",
+            "rmdir"
+          ],
+          "caller": "cob_sys_delete_dir"
+        },
+        {
+          "callees": [
+            "cob_chk_file_mapping",
+            "cob_free",
+            "cob_str_from_fld",
+            "strncpy",
+            "unlink"
+          ],
+          "caller": "cob_sys_delete_file"
+        },
+        {
+          "callees": [
+            "EXTFH3",
+            "cob_runtime_warning",
+            "cob_set_exception",
+            "gettext"
+          ],
+          "caller": "cob_sys_extfh"
+        },
+        {
+          "callees": [
+            "cob_sys_delete_file"
+          ],
+          "caller": "cob_sys_file_delete"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "cob_free",
+            "cob_runtime_error",
+            "cob_str_from_fld",
+            "gettext",
+            "localtime",
+            "memcpy",
+            "stat"
+          ],
+          "caller": "cob_sys_file_info"
+        },
+        {
+          "callees": [
+            "fdatasync",
+            "memcpy"
+          ],
+          "caller": "cob_sys_flush_file"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "getcwd",
+            "memcpy",
+            "memset",
+            "strchr",
+            "strlen"
+          ],
+          "caller": "cob_sys_get_current_dir"
+        },
+        {
+          "callees": [
+            "cob_sys_create_dir"
+          ],
+          "caller": "cob_sys_mkdir"
+        },
+        {
+          "callees": [
+            "open_cbl_file"
+          ],
+          "caller": "cob_sys_open_file"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "fstat",
+            "lseek",
+            "memcpy",
+            "read"
+          ],
+          "caller": "cob_sys_read_file"
+        },
+        {
+          "callees": [
+            "cob_chk_file_mapping",
+            "cob_free",
+            "cob_str_from_fld",
+            "rename",
+            "strncpy"
+          ],
+          "caller": "cob_sys_rename_file"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "lseek",
+            "memcpy",
+            "write"
+          ],
+          "caller": "cob_sys_write_file"
+        },
+        {
+          "callees": [
+            "cob_file_unlock",
+            "save_status"
+          ],
+          "caller": "cob_unlock_file"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_free",
+            "cob_get_int",
+            "get_code_set_converted_data",
+            "lineseq_size",
+            "save_status"
+          ],
+          "caller": "cob_write"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "fwrite",
+            "putc"
+          ],
+          "caller": "cob_write_block"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc",
+            "cob_get_filename_print",
+            "cob_runtime_warning",
+            "copy_keys_fcd_to_file",
+            "gettext",
+            "memcpy",
+            "toupper",
+            "update_fcd_to_file"
+          ],
+          "caller": "copy_fcd_to_file"
+        },
+        {
+          "callees": [
+            "cob_cache_free",
+            "cob_cache_malloc",
+            "cob_field_to_string",
+            "strcpy",
+            "strlen",
+            "strncpy",
+            "update_file_to_fcd"
+          ],
+          "caller": "copy_file_to_fcd"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc"
+          ],
+          "caller": "copy_keys_fcd_to_file"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc",
+            "memcpy",
+            "strlen",
+            "strncpy"
+          ],
+          "caller": "do_acu_hyphen_translation"
+        },
+        {
+          "callees": [],
+          "caller": "dummy_delete"
+        },
+        {
+          "callees": [],
+          "caller": "dummy_read"
+        },
+        {
+          "callees": [],
+          "caller": "dummy_start"
+        },
+        {
+          "callees": [
+            "__errno_location"
+          ],
+          "caller": "errno_cob_sts"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "cob_set_int"
+          ],
+          "caller": "file_linage_check"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc",
+            "copy_file_to_fcd"
+          ],
+          "caller": "find_fcd"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc",
+            "copy_fcd_to_file"
+          ],
+          "caller": "find_file"
+        },
+        {
+          "callees": [
+            "cob_cache_free"
+          ],
+          "caller": "free_extfh_fcd"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "memcpy"
+          ],
+          "caller": "get_code_set_converted_data"
+        },
+        {
+          "callees": [
+            "bdb_close_index",
+            "bdb_setkey",
+            "memcmp",
+            "memcpy"
+          ],
+          "caller": "get_dupno"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "has_acu_hyphen"
+        },
+        {
+          "callees": [],
+          "caller": "has_directory_separator"
+        },
+        {
+          "callees": [
+            "bdb_close_index",
+            "cob_free",
+            "unlock_file",
+            "unlock_record"
+          ],
+          "caller": "indexed_close"
+        },
+        {
+          "callees": [
+            "indexed_delete_internal"
+          ],
+          "caller": "indexed_delete"
+        },
+        {
+          "callees": [
+            "bdb_close_cursor",
+            "bdb_close_index",
+            "bdb_cmpkey",
+            "bdb_savekey",
+            "bdb_setkey",
+            "memcmp",
+            "memcpy",
+            "test_record_lock",
+            "unlock_record"
+          ],
+          "caller": "indexed_delete_internal"
+        },
+        {
+          "callees": [
+            "__errno_location",
+            "snprintf",
+            "unlink"
+          ],
+          "caller": "indexed_file_delete"
+        },
+        {
+          "callees": [
+            "bdb_close_cursor",
+            "bdb_keylen",
+            "bdb_nofile",
+            "bdb_setkey",
+            "cob_chk_file_mapping",
+            "cob_fatal_error",
+            "cob_free",
+            "cob_malloc",
+            "cob_runtime_error",
+            "db_create",
+            "gettext",
+            "join_environment",
+            "lock_file",
+            "memcpy",
+            "memset",
+            "snprintf",
+            "stat",
+            "strcpy",
+            "strlen",
+            "unlock_file"
+          ],
+          "caller": "indexed_open"
+        },
+        {
+          "callees": [
+            "indexed_start_internal",
+            "memcpy",
+            "unlock_record"
+          ],
+          "caller": "indexed_read"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "bdb_close_cursor",
+            "bdb_close_index",
+            "bdb_keylen",
+            "lock_record",
+            "memcmp",
+            "memcpy",
+            "test_record_lock",
+            "unlock_record"
+          ],
+          "caller": "indexed_read_next"
+        },
+        {
+          "callees": [
+            "bdb_close_cursor",
+            "bdb_setkey",
+            "check_alt_keys",
+            "indexed_delete_internal",
+            "indexed_write_internal",
+            "unlock_record"
+          ],
+          "caller": "indexed_rewrite"
+        },
+        {
+          "callees": [
+            "indexed_start_internal"
+          ],
+          "caller": "indexed_start"
+        },
+        {
+          "callees": [
+            "bdb_close_cursor",
+            "bdb_close_index",
+            "bdb_cmpkey",
+            "bdb_keylen",
+            "bdb_setkey",
+            "cob_findkey_attr",
+            "cob_hard_failure_internal",
+            "cob_runtime_error",
+            "gettext",
+            "lock_record",
+            "memcpy",
+            "test_record_lock"
+          ],
+          "caller": "indexed_start_internal"
+        },
+        {
+          "callees": [
+            "bdb_close_cursor",
+            "bdb_setkey",
+            "cob_malloc",
+            "indexed_write_internal",
+            "memcmp",
+            "memcpy",
+            "unlock_record"
+          ],
+          "caller": "indexed_write"
+        },
+        {
+          "callees": [
+            "bdb_close_cursor",
+            "bdb_open_cursor",
+            "bdb_savekey",
+            "bdb_setkey",
+            "bdb_suppresskey",
+            "check_alt_keys",
+            "get_dupno",
+            "lock_record",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "indexed_write_internal"
+        },
+        {
+          "callees": [],
+          "caller": "is_absolute"
+        },
+        {
+          "callees": [
+            "cob_savekey"
+          ],
+          "caller": "is_suppressed_key_value"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "cob_runtime_error",
+            "db_env_create",
+            "db_strerror",
+            "gettext",
+            "realloc"
+          ],
+          "caller": "join_environment"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "fseek",
+            "ftell",
+            "getc",
+            "memset",
+            "open_next"
+          ],
+          "caller": "lineseq_read"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "errno_cob_sts",
+            "fseek",
+            "ftell",
+            "fwrite",
+            "putc"
+          ],
+          "caller": "lineseq_rewrite"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int"
+          ],
+          "caller": "lineseq_size"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "__errno_location",
+            "cob_file_write_opt",
+            "errno_cob_sts",
+            "ftell",
+            "fwrite",
+            "putc"
+          ],
+          "caller": "lineseq_write"
+        },
+        {
+          "callees": [
+            "cob_runtime_error",
+            "db_strerror",
+            "gettext",
+            "memset"
+          ],
+          "caller": "lock_file"
+        },
+        {
+          "callees": [
+            "cob_runtime_error",
+            "db_strerror",
+            "gettext",
+            "set_dbt"
+          ],
+          "caller": "lock_record"
+        },
+        {
+          "callees": [],
+          "caller": "looks_absolute"
+        },
+        {
+          "callees": [
+            "cob_chk_file_mapping",
+            "cob_free",
+            "cob_runtime_warning",
+            "cob_str_from_fld",
+            "errno_cob_sts",
+            "gettext",
+            "memcpy",
+            "memset",
+            "open",
+            "strncpy"
+          ],
+          "caller": "open_cbl_file"
+        },
+        {
+          "callees": [
+            "close",
+            "cob_free",
+            "fclose",
+            "fdopen",
+            "open",
+            "strchr"
+          ],
+          "caller": "open_next"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int",
+            "errno_cob_sts",
+            "lseek",
+            "read",
+            "write"
+          ],
+          "caller": "relative_delete"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int",
+            "lseek",
+            "read"
+          ],
+          "caller": "relative_read"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_add_int",
+            "cob_set_int",
+            "fstat",
+            "lseek",
+            "read"
+          ],
+          "caller": "relative_read_next"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int",
+            "errno_cob_sts",
+            "lseek",
+            "read",
+            "write"
+          ],
+          "caller": "relative_rewrite"
+        },
+        {
+          "callees": [
+            "cob_get_int",
+            "fstat",
+            "lseek",
+            "read"
+          ],
+          "caller": "relative_start"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "cob_get_int",
+            "cob_set_int",
+            "errno_cob_sts",
+            "lseek",
+            "read",
+            "write"
+          ],
+          "caller": "relative_write"
+        },
+        {
+          "callees": [],
+          "caller": "save_fcd_status"
+        },
+        {
+          "callees": [
+            "cob_file_fcd_sync",
+            "cob_set_exception",
+            "cob_sync",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "save_status"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "lseek",
+            "open_next",
+            "read",
+            "set_sequential_variable_length"
+          ],
+          "caller": "sequential_read"
+        },
+        {
+          "callees": [
+            "__builtin_expect",
+            "errno_cob_sts",
+            "lseek",
+            "write"
+          ],
+          "caller": "sequential_rewrite"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "__builtin_expect",
+            "cob_seq_write_opt",
+            "errno_cob_sts",
+            "lseek",
+            "write"
+          ],
+          "caller": "sequential_write"
+        },
+        {
+          "callees": [
+            "cob_realloc",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "set_dbt"
+        },
+        {
+          "callees": [
+            "__builtin_constant_p",
+            "__builtin_expect",
+            "read"
+          ],
+          "caller": "set_sequential_variable_length"
+        },
+        {
+          "callees": [
+            "__builtin_expect"
+          ],
+          "caller": "sort_cmps"
+        },
+        {
+          "callees": [
+            "cob_runtime_error",
+            "db_strerror",
+            "gettext",
+            "set_dbt"
+          ],
+          "caller": "test_record_lock"
+        },
+        {
+          "callees": [],
+          "caller": "unique_copy"
+        },
+        {
+          "callees": [],
+          "caller": "unlock_file"
+        },
+        {
+          "callees": [
+            "cob_runtime_error",
+            "db_strerror",
+            "gettext"
+          ],
+          "caller": "unlock_record"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc",
+            "cob_cache_malloc",
+            "cob_last_exception_is",
+            "cob_set_exception",
+            "copy_keys_fcd_to_file",
+            "memcpy"
+          ],
+          "caller": "update_fcd_to_file"
+        },
+        {
+          "callees": [
+            "memcpy"
+          ],
+          "caller": "update_file_to_fcd"
+        },
+        {
+          "callees": [
+            "cob_set_int",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "update_key_from_fcd"
+        },
+        {
+          "callees": [
+            "cob_cache_malloc",
+            "copy_keys_fcd_to_file"
+          ],
+          "caller": "update_record_and_keys_if_necessary"
+        }
+      ],
+      "file": "fileio.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "xmlCleanupParser"
+          ],
+          "caller": "cob_exit_mlio"
+        },
+        {
+          "callees": [],
+          "caller": "cob_init_mlio"
+        },
+        {
+          "callees": [
+            "xmlFreeURI"
+          ],
+          "caller": "cob_is_valid_uri"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc",
+            "cob_is_xml_namestartchar"
+          ],
+          "caller": "cob_is_xml_namechar"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "cob_is_xml_namestartchar"
+        },
+        {
+          "callees": [
+            "cob_json_generate_new"
+          ],
+          "caller": "cob_json_generate"
+        },
+        {
+          "callees": [
+            "cob_min_int",
+            "cob_set_int",
+            "json_object_put",
+            "json_object_to_json_string_ext",
+            "memcpy",
+            "memset",
+            "set_json_code",
+            "set_json_exception",
+            "strlen"
+          ],
+          "caller": "cob_json_generate_new"
+        },
+        {
+          "callees": [
+            "cob_xml_generate_new"
+          ],
+          "caller": "cob_xml_generate"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_free",
+            "cob_is_valid_uri",
+            "copy_data_as_string",
+            "get_trimmed_data",
+            "has_invalid_xml_char",
+            "is_empty",
+            "is_valid_xml_name",
+            "set_xml_exception",
+            "xml_generate"
+          ],
+          "caller": "cob_xml_generate_new"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_malloc",
+            "cob_set_exception",
+            "get_xml_code",
+            "has_invalid_xml_char",
+            "is_empty",
+            "set_xml_code",
+            "set_xml_event",
+            "set_xml_exception",
+            "set_xml_text",
+            "xml_free_parse_memory",
+            "xml_parse"
+          ],
+          "caller": "cob_xml_parse"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "memcpy"
+          ],
+          "caller": "copy_data_as_string"
+        },
+        {
+          "callees": [
+            "has_invalid_xml_char",
+            "set_xml_code"
+          ],
+          "caller": "generate_attributes"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_set_exception",
+            "xmlFree",
+            "xmlTextWriterWriteString"
+          ],
+          "caller": "generate_content"
+        },
+        {
+          "callees": [
+            "has_invalid_xml_char",
+            "set_xml_code"
+          ],
+          "caller": "generate_element"
+        },
+        {
+          "callees": [
+            "xmlFree",
+            "xmlTextWriterWriteAttribute"
+          ],
+          "caller": "generate_hex_attribute"
+        },
+        {
+          "callees": [
+            "xmlFree",
+            "xmlTextWriterEndElement",
+            "xmlTextWriterStartElementNS",
+            "xmlTextWriterWriteString"
+          ],
+          "caller": "generate_hex_element"
+        },
+        {
+          "callees": [
+            "cob_fatal_error",
+            "cob_free",
+            "cob_set_exception",
+            "get_json_num",
+            "get_trimmed_json_data",
+            "json_object_new_double_s",
+            "json_object_new_string",
+            "json_object_object_add",
+            "json_object_put"
+          ],
+          "caller": "generate_json_from_tree"
+        },
+        {
+          "callees": [
+            "xmlFree",
+            "xmlTextWriterWriteAttribute"
+          ],
+          "caller": "generate_normal_attribute"
+        },
+        {
+          "callees": [
+            "xmlFree",
+            "xmlTextWriterEndElement",
+            "xmlTextWriterStartElementNS"
+          ],
+          "caller": "generate_normal_element"
+        },
+        {
+          "callees": [],
+          "caller": "generate_xml_from_tree"
+        },
+        {
+          "callees": [
+            "int_to_hex",
+            "xmlBufferFree",
+            "xmlBufferWriteChar"
+          ],
+          "caller": "get_hex_xml_data"
+        },
+        {
+          "callees": [
+            "get_num",
+            "json_strndup"
+          ],
+          "caller": "get_json_num"
+        },
+        {
+          "callees": [
+            "xmlFree"
+          ],
+          "caller": "get_name_with_hex_prefix"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_malloc",
+            "cob_max_int",
+            "cob_move",
+            "get_pic_for_num_field",
+            "get_trimmed_data",
+            "memchr"
+          ],
+          "caller": "get_num"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "cob_max_int"
+          ],
+          "caller": "get_pic_for_num_field"
+        },
+        {
+          "callees": [],
+          "caller": "get_trimmed_data"
+        },
+        {
+          "callees": [
+            "get_trimmed_data",
+            "json_strndup"
+          ],
+          "caller": "get_trimmed_json_data"
+        },
+        {
+          "callees": [],
+          "caller": "get_trimmed_xml_data"
+        },
+        {
+          "callees": [
+            "cob_get_int"
+          ],
+          "caller": "get_xml_code"
+        },
+        {
+          "callees": [
+            "xmlFree"
+          ],
+          "caller": "get_xml_name"
+        },
+        {
+          "callees": [
+            "get_num",
+            "xmlCharStrndup_void"
+          ],
+          "caller": "get_xml_num"
+        },
+        {
+          "callees": [
+            "__ctype_b_loc"
+          ],
+          "caller": "has_invalid_xml_char"
+        },
+        {
+          "callees": [],
+          "caller": "int_to_hex"
+        },
+        {
+          "callees": [],
+          "caller": "is_empty"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "cob_is_xml_namechar",
+            "cob_is_xml_namestartchar",
+            "copy_data_as_string",
+            "get_trimmed_data"
+          ],
+          "caller": "is_valid_xml_name"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "memcpy"
+          ],
+          "caller": "json_strndup"
+        },
+        {
+          "callees": [
+            "cob_set_int"
+          ],
+          "caller": "set_json_code"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "set_json_code"
+          ],
+          "caller": "set_json_exception"
+        },
+        {
+          "callees": [
+            "cob_set_int"
+          ],
+          "caller": "set_xml_code"
+        },
+        {
+          "callees": [
+            "strlen"
+          ],
+          "caller": "set_xml_event"
+        },
+        {
+          "callees": [
+            "cob_set_exception",
+            "set_xml_code"
+          ],
+          "caller": "set_xml_exception"
+        },
+        {
+          "callees": [
+            "strlen"
+          ],
+          "caller": "set_xml_text"
+        },
+        {
+          "callees": [
+            "xmlCharStrndup"
+          ],
+          "caller": "xmlCharStrndup_void"
+        },
+        {
+          "callees": [
+            "cob_free",
+            "xmlFreeDoc",
+            "xmlFreeParserCtxt"
+          ],
+          "caller": "xml_free_parse_memory"
+        },
+        {
+          "callees": [
+            "cob_min_int",
+            "cob_set_int",
+            "memcpy",
+            "memset",
+            "set_xml_code",
+            "set_xml_exception",
+            "xmlBufferContent",
+            "xmlBufferFree",
+            "xmlBufferLength",
+            "xmlFree",
+            "xmlFreeTextWriter",
+            "xmlTextWriterEndDocument",
+            "xmlTextWriterStartDocument"
+          ],
+          "caller": "xml_generate"
+        },
+        {
+          "callees": [
+            "cob_add_exception",
+            "cob_free",
+            "cob_get_picx",
+            "cob_malloc",
+            "cob_runtime_warning",
+            "gettext",
+            "memcmp",
+            "set_xml_code",
+            "set_xml_event",
+            "set_xml_exception",
+            "set_xml_text",
+            "xmlCreatePushParserCtxt",
+            "xmlParseChunk"
+          ],
+          "caller": "xml_parse"
+        }
+      ],
+      "file": "mlio.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [],
+          "caller": "clear_group_indicate"
+        },
+        {
+          "callees": [],
+          "caller": "clear_suppress"
+        },
+        {
+          "callees": [
+            "cob_add",
+            "cob_move",
+            "memset"
+          ],
+          "caller": "cob_add_fields"
+        },
+        {
+          "callees": [
+            "free_control_fields"
+          ],
+          "caller": "cob_exit_reportio"
+        },
+        {
+          "callees": [
+            "cob_malloc",
+            "cob_move"
+          ],
+          "caller": "cob_field_dup"
+        },
+        {
+          "callees": [
+            "cob_free"
+          ],
+          "caller": "cob_field_free"
+        },
+        {
+          "callees": [
+            "cob_move"
+          ],
+          "caller": "cob_field_init"
+        },
+        {
+          "callees": [],
+          "caller": "cob_init_reportio"
+        },
+        {
+          "callees": [
+            "clear_group_indicate",
+            "clear_suppress",
+            "cob_cmp",
+            "cob_hard_failure",
+            "cob_move",
+            "cob_runtime_error",
+            "cob_set_exception",
+            "do_page_footing",
+            "do_page_heading",
+            "get_print_line",
+            "gettext",
+            "line_control_chg",
+            "reportInitialize",
+            "report_line",
+            "report_line_and",
+            "report_line_type",
+            "saveLineCounter",
+            "sum_all_detail",
+            "zero_all_counters"
+          ],
+          "caller": "cob_report_generate"
+        },
+        {
+          "callees": [
+            "cob_field_dup",
+            "cob_field_free",
+            "cob_field_init",
+            "cob_runtime_error",
+            "cob_set_exception",
+            "gettext",
+            "limitCheck",
+            "reportInitialize",
+            "saveLineCounter"
+          ],
+          "caller": "cob_report_initiate"
+        },
+        {
+          "callees": [
+            "cob_runtime_error",
+            "get_print_line",
+            "gettext"
+          ],
+          "caller": "cob_report_suppress"
+        },
+        {
+          "callees": [
+            "cob_hard_failure",
+            "cob_runtime_error",
+            "cob_set_exception",
+            "do_page_footing",
+            "free_control_fields",
+            "get_line_type",
+            "get_print_line",
+            "gettext",
+            "reportInitialize",
+            "report_line_and",
+            "report_line_type",
+            "zero_all_counters"
+          ],
+          "caller": "cob_report_terminate"
+        },
+        {
+          "callees": [
+            "cob_move"
+          ],
+          "caller": "cob_str_move"
+        },
+        {
+          "callees": [
+            "memset",
+            "report_line_type",
+            "saveLineCounter",
+            "write_rec"
+          ],
+          "caller": "do_page_footing"
+        },
+        {
+          "callees": [
+            "clear_group_indicate",
+            "line_control_chg",
+            "memset",
+            "report_line_type",
+            "saveLineCounter",
+            "write_rec"
+          ],
+          "caller": "do_page_heading"
+        },
+        {
+          "callees": [
+            "cob_field_free"
+          ],
+          "caller": "free_control_fields"
+        },
+        {
+          "callees": [],
+          "caller": "get_control_sequence"
+        },
+        {
+          "callees": [],
+          "caller": "get_line_type"
+        },
+        {
+          "callees": [],
+          "caller": "get_print_line"
+        },
+        {
+          "callees": [
+            "limitCheckLine"
+          ],
+          "caller": "limitCheck"
+        },
+        {
+          "callees": [
+            "limitCheckOneLine"
+          ],
+          "caller": "limitCheckLine"
+        },
+        {
+          "callees": [
+            "cob_runtime_error",
+            "cob_set_exception",
+            "gettext"
+          ],
+          "caller": "limitCheckOneLine"
+        },
+        {
+          "callees": [
+            "line_control_one"
+          ],
+          "caller": "line_control_chg"
+        },
+        {
+          "callees": [
+            "strncpy"
+          ],
+          "caller": "line_control_one"
+        },
+        {
+          "callees": [
+            "cob_field_to_string",
+            "memcpy",
+            "memmove"
+          ],
+          "caller": "print_field"
+        },
+        {
+          "callees": [],
+          "caller": "reportInitialize"
+        },
+        {
+          "callees": [
+            "cob_move",
+            "cob_str_move",
+            "do_page_footing",
+            "do_page_heading",
+            "memcpy",
+            "memset",
+            "print_field",
+            "saveLineCounter",
+            "set_next_info",
+            "write_rec"
+          ],
+          "caller": "report_line"
+        },
+        {
+          "callees": [
+            "report_line",
+            "report_line_type"
+          ],
+          "caller": "report_line_and"
+        },
+        {
+          "callees": [
+            "get_control_sequence",
+            "report_line"
+          ],
+          "caller": "report_line_type"
+        },
+        {
+          "callees": [
+            "cob_set_int"
+          ],
+          "caller": "saveLineCounter"
+        },
+        {
+          "callees": [],
+          "caller": "set_next_info"
+        },
+        {
+          "callees": [
+            "cob_add_fields"
+          ],
+          "caller": "sum_all_detail"
+        },
+        {
+          "callees": [
+            "cob_add_fields"
+          ],
+          "caller": "sum_this_counter"
+        },
+        {
+          "callees": [
+            "cob_write",
+            "memcpy",
+            "memset"
+          ],
+          "caller": "write_rec"
+        },
+        {
+          "callees": [
+            "cob_field_init",
+            "get_print_line",
+            "sum_this_counter"
+          ],
+          "caller": "zero_all_counters"
+        }
+      ],
+      "file": "reportio.c"
+    },
+    {
+      "edges": [
+        {
+          "callees": [
+            "cob_common_init",
+            "getenv"
+          ],
+          "caller": "_getopt_initialize"
+        },
+        {
+          "callees": [
+            "_getopt_initialize",
+            "exchange",
+            "fprintf",
+            "fputc",
+            "gettext",
+            "process_long_option",
+            "strchr",
+            "strcmp"
+          ],
+          "caller": "cob_getopt_long_long"
+        },
+        {
+          "callees": [],
+          "caller": "exchange"
+        },
+        {
+          "callees": [
+            "calloc",
+            "flockfile",
+            "fprintf",
+            "fputc",
+            "free",
+            "funlockfile",
+            "gettext",
+            "strchr",
+            "strlen",
+            "strncmp"
+          ],
+          "caller": "process_long_option"
+        }
+      ],
+      "file": "cobgetopt.c"
+    }
+  ],
+  "schema": "gnurust-clang-callgraph-v1"
+}
