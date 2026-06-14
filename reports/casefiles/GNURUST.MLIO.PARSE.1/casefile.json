@@ -1,0 +1,63 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT special-register sequence a PROCESSING PROCEDURE observes"
+  ],
+  "case_id": "GNURUST.MLIO.PARSE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.64",
+  "damage_if_overclaimed": "claiming 'XML PARSE works' would imply GnuCOBOL parses XML (it does not); the honest claim is byte-identity of the unimplemented-but-observable event stream",
+  "hash_chain": {
+    "inputs_sha256": "0f368eb93a82fe38a06c1a11111a5481ecadb1756aa3a686f71586fc26a3d9bc"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "3ce5012f98958b4514fba08fb28c1d2694866914e57412bf2e3a48d0236c41e9",
+    "receipt_sha256": "de5071438330d4a077231e8759156c38e5573964561378b1735a00dd78343220"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "XML PARSE needs libxml2 -- NO: GnuCOBOL 3.2 XML PARSE does not actually parse; its observable behaviour is a fixed START-OF-DOCUMENT -> END-OF-INPUT -> END-OF-DOCUMENT event walk that a native Rust state machine reproduces exactly, no C library linked. Writing a real parser would be LESS faithful, not more."
+  ],
+  "negative_capability_ids": [
+    "NEG.AN-ACTUAL-XML-TREE-ATTRIBUTE-CONTENT-PAR",
+    "NEG.JSON-PARSE-NO-SUCH-STATEMENT-IN-GNUCOBOL",
+    "NEG.THE-COMPAT-NON-XMLNSS-FULL-DOCUMENT-XML",
+    "NEG.MULTI-CHUNK-STREAMING",
+    "NEG.SCHEMA-VALIDATING-AGAINST-A-REAL-SCHEMA"
+  ],
+  "negative_claims": [
+    "an actual XML tree/attribute/content parse (GnuCOBOL 3.2 does not parse, so neither claim nor port exists)",
+    "JSON PARSE (no such statement in GnuCOBOL 3.2 mlio.c)",
+    "the COMPAT (non-XMLNSS) full-document XML-TEXT delivery beyond the modelled path",
+    "multi-chunk streaming",
+    "schema VALIDATING against a real schema",
+    "lie prevented: XML PARSE needs libxml2 -- NO: GnuCOBOL 3.2 XML PARSE does not actually parse; its observable behaviour is a fixed START-OF-DOCUMENT -> END-OF-INPUT -> END-OF-DOCUMENT event walk that a native Rust state machine reproduces exactly, no C library linked. Writing a real parser would be LESS faithful, not more."
+  ],
+  "oracle": {
+    "detail": "cobc XML PARSE ... PROCESSING PROCEDURE (libcob/mlio.c cob_xml_parse)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.MLIO.PARSE.1"
+  },
+  "positive_claims": [
+    "a from-scratch, dependency-free Rust port of the XML PARSE state machine (mlio.rs cob_xml_parse/xml_parse/xml_free_parse_memory over the modelled XML special registers MlModule/XmlState + set_xml_event/set_xml_text/set_xml_code/get_xml_code/set_xml_exception), reproducing the GnuCOBOL 3.2 observable event stream WITHOUT linking libxml2. Crucial fidelity point: GnuCOBOL 3.2's XML PARSE is itself unimplemented -- even built WITH_XML2, mlio.c:xml_parse advances JUST_STARTED -> HAD_END_OF_INPUT directly (the xmlParseChunk and 'not implemented' branches are unreachable for an in-memory document), so a PROCESSING PROCEDURE observes exactly START-OF-DOCUMENT -> END-OF-INPUT -> END-OF-DOCUMENT, all with XML-CODE 0 and (in the default XMLNSS mode) empty XML-TEXT. ml_parse_sweep 2/0 confirms the native state machine emits that identical sequence",
+    "a 'real' parser would DIVERGE from the authority. Empty/all-spaces items raise XML_INTERNAL_ERROR",
+    "EVENT_EXCEPTION as in the C."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/ml_parse_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

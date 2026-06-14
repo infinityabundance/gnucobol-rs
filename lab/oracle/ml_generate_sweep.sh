@@ -30,8 +30,10 @@ WORKING-STORAGE SECTION.
 PROCEDURE DIVISION.
     XML GENERATE OUT FROM G COUNT IN CNT.
     DISPLAY "xml=" OUT(1:CNT).
+    DISPLAY "xmlcount=" CNT.
     JSON GENERATE OUT FROM G COUNT IN CNT.
     DISPLAY "json=" OUT(1:CNT).
+    DISPLAY "jsoncount=" CNT.
     STOP RUN.
 COB
 cobc -free -x -o mg mg.cob 2>e || { echo "compile failed"; cat e; exit 2; }

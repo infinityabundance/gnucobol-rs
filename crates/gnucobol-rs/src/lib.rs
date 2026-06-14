@@ -640,8 +640,31 @@ pub fn __fuzz_mlio(data: &[u8]) {
     let tree = MlTree { name, attrs: vec![], content: MlContent::None, is_suppressed: false, children: vec![leaf] };
     let _ = cob_xml_generate_new(&tree);
     let _ = cob_json_generate_new(&tree);
-    let _ = mlio::hex_encode(data);
+    let _ = mlio::get_hex_xml_data(data);
     let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
+}
+
+/// Fuzz the native XML PARSE state machine: drive `cob_xml_parse` over arbitrary input to a fixed point.
+/// The contract is termination + panic-freedom -- the loop always reaches `ret != 0` and never spins
+/// (`GNURUST.MLIO.PARSE.1`, `GNURUST.PANICPOLICY.0`).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_mlio_parse(data: &[u8]) {
+    use mlio::{cob_xml_parse, MlModule, XmlState};
+    let mut module = MlModule::default();
+    if data.first().copied().unwrap_or(0) & 1 == 0 {
+        module.xml_mode = 0; // exercise COMPAT mode (non-empty XML-TEXT) as well as XMLNSS
+    }
+    let mut saved: Option<XmlState> = None;
+    let mut guard = 0u32;
+    loop {
+        let (next, ret) = cob_xml_parse(&mut module, saved, data, None, data.get(0..0), 0);
+        saved = next;
+        guard += 1;
+        if ret != 0 || guard > 16 {
+            break;
+        }
+    }
 }
 
 #[cfg(feature = "fuzzing")]

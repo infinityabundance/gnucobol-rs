@@ -5,17 +5,15 @@
     "replay": "bash lab/oracle/ml_generate_sweep.sh"
   },
   "court": "XML / JSON GENERATE (native serializer)",
-  "crate_version": "0.7.63",
+  "crate_version": "0.7.64",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "XML/JSON PARSE (the libxml2/json-c parser -- external-library boundary)",
+    "XML/JSON PARSE is sealed separately (GNURUST.MLIO.PARSE.1)",
     "NATIONAL/UTF-16 content + non-ASCII multibyte escaping",
     "pretty-print / indentation options",
-    "COUNT IN truncation + receiving-item overflow",
-    "namespaces / complex attributes",
-    "the libxml2 cob_xml_generate / cJSON cob_json_generate entry points"
+    "namespaces / complex attributes"
   ],
   "oracle": {
     "dialect_profile_id": "gnucobol-3.2.0-default",
@@ -25,7 +23,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=2 FAIL=0"
+    "sweep": "PASS=5 FAIL=0"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,

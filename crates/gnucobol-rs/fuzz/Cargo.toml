@@ -234,3 +234,9 @@ name = "mlio"
 path = "fuzz_targets/mlio.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "mlio_parse"
+path = "fuzz_targets/mlio_parse.rs"
+test = false
+doc = false

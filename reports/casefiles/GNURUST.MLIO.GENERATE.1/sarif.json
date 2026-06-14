@@ -13,7 +13,14 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.MLIO.GENERATE.1 non-claim: XML/JSON PARSE (the libxml2/json-c parser -- the declared external-library boundary)"
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: XML PARSE is sealed separately (GNURUST.MLIO.PARSE.1)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: JSON PARSE does not exist in GnuCOBOL 3.2"
           },
           "ruleId": "NONCLAIM"
         },
@@ -27,7 +34,7 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the NATIONAL/UTF-16 content path"
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the NATIONAL / UTF-16 content path"
           },
           "ruleId": "NONCLAIM"
         },
@@ -41,13 +48,6 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the COUNT IN truncation + receiving-item overflow"
-          },
-          "ruleId": "NONCLAIM"
-        },
-        {
-          "level": "note",
-          "message": {
             "text": "GNURUST.MLIO.GENERATE.1 non-claim: non-ASCII multibyte content escaping"
           },
           "ruleId": "NONCLAIM"
@@ -55,7 +55,21 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the libxml2-based old cob_xml_generate / cJSON cob_json_generate entry points"
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the exact bytes of the WITH XML-DECLARATION prolog (only the no-declaration path is oracle-swept)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: CDATA / comments / processing-instructions / DOCTYPE in the output"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: SUPPRESS WHEN conditional predicates beyond the unconditional is_suppressed flag"
           },
           "ruleId": "NONCLAIM"
         },

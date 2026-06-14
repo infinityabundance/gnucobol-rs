@@ -998,12 +998,21 @@
       "sweep": "ml_generate_sweep.sh",
       "byte_domain": "a cob_ml_tree -> the XML / JSON GENERATE output bytes",
       "non_claims": [
-        "XML/JSON PARSE (the libxml2/json-c parser -- external-library boundary)",
+        "XML/JSON PARSE is sealed separately (GNURUST.MLIO.PARSE.1)",
         "NATIONAL/UTF-16 content + non-ASCII multibyte escaping",
         "pretty-print / indentation options",
-        "COUNT IN truncation + receiving-item overflow",
-        "namespaces / complex attributes",
-        "the libxml2 cob_xml_generate / cJSON cob_json_generate entry points"
+        "namespaces / complex attributes"
+      ]
+    },
+    "GNURUST.MLIO.PARSE.1": {
+      "court": "XML PARSE (native state machine)",
+      "sweep": "ml_parse_sweep.sh",
+      "byte_domain": "an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT register sequence",
+      "non_claims": [
+        "an actual XML tree/content parse (GnuCOBOL 3.2 XML PARSE is an unimplemented stub; the port reproduces its observable START-OF-DOCUMENT->END-OF-INPUT->END-OF-DOCUMENT event walk, not a real parser)",
+        "JSON PARSE (no such statement in GnuCOBOL 3.2 mlio.c)",
+        "COMPAT (non-XMLNSS) full-document XML-TEXT delivery beyond the modelled path",
+        "multi-chunk streaming + schema VALIDATING"
       ]
     },
     "GNURUST.FILEIO.SORTENGINE.1": {

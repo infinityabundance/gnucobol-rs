@@ -214,13 +214,13 @@
       ]
     },
     {
-      "active": 28,
-      "direct": 14,
-      "evidenced_any": 17,
+      "active": 43,
+      "direct": 25,
+      "evidenced_any": 30,
       "file": "mlio.c",
       "lifecycle": 2,
-      "oracle": 3,
-      "transitive": 1,
+      "oracle": 5,
+      "transitive": 3,
       "unevidenced": [
         "generate_attributes",
         "generate_content",
@@ -232,7 +232,9 @@
         "generate_xml_from_tree",
         "get_json_num",
         "get_trimmed_xml_data",
-        "get_xml_name"
+        "get_xml_name",
+        "set_xml_event",
+        "set_xml_text"
       ]
     },
     {
@@ -284,12 +286,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 782,
-    "direct": 474,
-    "evidenced_any": 648,
+    "active": 797,
+    "direct": 485,
+    "evidenced_any": 661,
     "lifecycle": 60,
-    "oracle": 194,
-    "transitive": 149,
-    "unevidenced": 134
+    "oracle": 196,
+    "transitive": 151,
+    "unevidenced": 136
   }
 }

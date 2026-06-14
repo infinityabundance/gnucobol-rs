@@ -9,36 +9,40 @@
   ],
   "case_id": "GNURUST.MLIO.GENERATE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.63",
+  "crate_version": "0.7.64",
   "damage_if_overclaimed": "claiming the whole ML subsystem would hide that XML/JSON PARSE still needs libxml2/json-c, and that national encoding / pretty-print / overflow paths are unported",
   "hash_chain": {
-    "inputs_sha256": "399675d7307ff516ccd0235abed690fdc6ac7d698c24739318c7f6e6df3a0d50"
+    "inputs_sha256": "af55a48b57db0f4e91d36e0e6870f17ceb4bf51de5f7b0e55c6ae9d017814333"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "13cebf67cc6caf48e6b098519a7ee371fa8193b95178d8db2a5a8aa7b7f03cc7",
-    "receipt_sha256": "1b5906ab072e1ef3c93939fed24bcf5827f513456d6e1874596f4a77bab9353a"
+    "claim_ladder_entry_sha256": "77fdacb9641695201eec37d3e1e5ccde2ce944635daf1bad3cef57e8e9c76307",
+    "receipt_sha256": "97f52b5359c28f72fc0b9d142004fae990d0ed96a676bb895afeb99ebee41263"
   },
   "kind": "court-casefile",
   "lie_prevented": [
     "XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked"
   ],
   "negative_capability_ids": [
-    "NEG.XML-JSON-PARSE-THE-LIBXML2-JSON-C-PARSER",
+    "NEG.XML-PARSE-IS-SEALED-SEPARATELY-GNURUST-M",
+    "NEG.JSON-PARSE-DOES-NOT-EXIST-IN-GNUCOBOL-3",
     "NEG.ATTRIBUTES-NAMESPACES-BEYOND-THE-BASIC-N",
     "NEG.THE-NATIONAL-UTF-16-CONTENT-PATH",
     "NEG.PRETTY-PRINTING-INDENTATION-OPTIONS",
-    "NEG.THE-COUNT-IN-TRUNCATION-RECEIVING-ITEM-O",
     "NEG.NON-ASCII-MULTIBYTE-CONTENT-ESCAPING",
-    "NEG.THE-LIBXML2-BASED-OLD-COB-XML-GENERATE-C"
+    "NEG.THE-EXACT-BYTES-OF-THE-WITH-XML-DECLARAT",
+    "NEG.CDATA-COMMENTS-PROCESSING-INSTRUCTIONS-D",
+    "NEG.SUPPRESS-WHEN-CONDITIONAL-PREDICATES-BEY"
   ],
   "negative_claims": [
-    "XML/JSON PARSE (the libxml2/json-c parser -- the declared external-library boundary)",
+    "XML PARSE is sealed separately (GNURUST.MLIO.PARSE.1)",
+    "JSON PARSE does not exist in GnuCOBOL 3.2",
     "attributes/namespaces beyond the basic name=\"value\" form",
-    "the NATIONAL/UTF-16 content path",
+    "the NATIONAL / UTF-16 content path",
     "pretty-printing / indentation options",
-    "the COUNT IN truncation + receiving-item overflow",
     "non-ASCII multibyte content escaping",
-    "the libxml2-based old cob_xml_generate / cJSON cob_json_generate entry points",
+    "the exact bytes of the WITH XML-DECLARATION prolog (only the no-declaration path is oracle-swept)",
+    "CDATA / comments / processing-instructions / DOCTYPE in the output",
+    "SUPPRESS WHEN conditional predicates beyond the unconditional is_suppressed flag",
     "lie prevented: XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked"
   ],
   "oracle": {
@@ -63,8 +67,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 2,
-    "total": 2,
+    "pass": 5,
+    "total": 5,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

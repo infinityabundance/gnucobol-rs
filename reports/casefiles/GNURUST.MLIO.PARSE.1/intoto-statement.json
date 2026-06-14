@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.MLIO.PARSE.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.64",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "3ce5012f98958b4514fba08fb28c1d2694866914e57412bf2e3a48d0236c41e9",
+      "receipt_sha256": "de5071438330d4a077231e8759156c38e5573964561378b1735a00dd78343220"
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 3,
+    "replay": {
+      "command": "bash lab/oracle/ml_parse_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "0756a0ccee6bec12fd3e044a2ff2a065a5c340475c00960b804406b01c18d92b"
+      },
+      "name": "reports/casefiles/GNURUST.MLIO.PARSE.1/casefile.json"
+    }
+  ]
+}

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.BUILD.PROFILE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.63",
+  "crate_version": "0.7.64",
   "damage_if_overclaimed": "presenting byte parity as build-independent silently breaks on any oracle rebuilt with a different binary-byteorder / char-signedness / dialect -- the ABI abyss",
   "hash_chain": {
-    "inputs_sha256": "a0f6ac9cedbf61c35bfa050c69d39dce2ffb027b8ff9d368a9f118016c47bfda"
+    "inputs_sha256": "86c16c5db5959b73020c6ae142ed7211a41e25d8c14a0b65438935110d5ec112"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "028db19fe3aef3c0ed31096ab254a6f56a6f21a4d246be4a5c37a641f9c389d4",
-    "receipt_sha256": "a4b6170250c3bd611fb88cac25c2da9ccfbd01d05b6e9732a8755e0dac4aa8ad"
+    "receipt_sha256": "5324d63cab1f05071b9442551485f3f1d02243718f112a00999827dae082a152"
   },
   "kind": "court-casefile",
   "lie_prevented": [

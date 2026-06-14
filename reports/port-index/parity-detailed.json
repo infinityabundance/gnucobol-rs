@@ -5080,9 +5080,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 31,
+    "active_ported": 47,
     "compiled": 47,
-    "compiled_parity_pct": 66.0,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
     "doc_only": 0,
     "file": "mlio.c",
@@ -5096,22 +5096,26 @@
       {
         "function": "set_xml_exception",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_xml_code",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "set_xml_event",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "set_xml_text",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "set_json_code",
@@ -5122,7 +5126,8 @@
       {
         "function": "set_json_exception",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "is_empty",
@@ -5157,17 +5162,20 @@
       {
         "function": "get_pic_for_num_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_num",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "xmlCharStrndup_void",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_trimmed_xml_data",
@@ -5190,7 +5198,8 @@
       {
         "function": "get_name_with_hex_prefix",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "int_to_hex",
@@ -5201,12 +5210,14 @@
       {
         "function": "get_hex_xml_data",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "generate_hex_attribute",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "generate_normal_attribute",
@@ -5265,7 +5276,8 @@
       {
         "function": "get_trimmed_json_data",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_json_num",
@@ -5306,7 +5318,8 @@
       {
         "function": "cob_xml_generate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_xml_generate_new",
@@ -5317,17 +5330,20 @@
       {
         "function": "xml_generate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "xml_generate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_json_generate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "cob_json_generate_new",
@@ -5354,25 +5370,9 @@
         "rust_status": "active"
       }
     ],
-    "gap": [
-      "cob_json_generate",
-      "cob_xml_generate",
-      "generate_hex_attribute",
-      "get_hex_xml_data",
-      "get_name_with_hex_prefix",
-      "get_num",
-      "get_pic_for_num_field",
-      "get_trimmed_json_data",
-      "get_xml_code",
-      "set_json_exception",
-      "set_xml_event",
-      "set_xml_exception",
-      "set_xml_text",
-      "xmlCharStrndup_void",
-      "xml_generate"
-    ],
+    "gap": [],
     "inactive_mirrors": 0,
-    "missing": 16,
+    "missing": 0,
     "source_funcs": 47,
     "test_only": 0
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.17",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.63",
+  "crate_version": "0.7.64",
   "damage_if_overclaimed": "a wrong zoned sign flips the sign of mainframe money",
   "hash_chain": {
-    "inputs_sha256": "e0998d48885874b67adfd505952bbe711ff8fd89e513be97825706c6099d548a"
+    "inputs_sha256": "767f47c41980ab61d449afebfcdb5e95e5f831207a23115d1a23b6b8bec90047"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3cfcecf7c15e07cd6d998cbd6ae8abf605a10b5e54cf17705fe98c18fc755273",
-    "receipt_sha256": "422092070b3d742653b96571881e16d438b6ce3758d391d3a64d5b8e4068d316"
+    "receipt_sha256": "e84007271c067fc8b1f0fbaef57bd778a913b2d9e01308d40db5dadc4302c0f7"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

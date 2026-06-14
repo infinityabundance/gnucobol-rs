@@ -454,10 +454,11 @@
   ],
   "status": "sealed",
   "courts": [
-   "GNURUST.MLIO.GENERATE.1"
+   "GNURUST.MLIO.GENERATE.1",
+   "GNURUST.MLIO.PARSE.1"
   ],
   "future_campaign": null,
-  "risk_if_unported": "XML GENERATE / JSON GENERATE native byte output sealed (GNURUST.MLIO.GENERATE.1, ml_generate_sweep 2/0, no libxml2/cJSON linked); XML/JSON PARSE stays the external-library boundary"
+  "risk_if_unported": "XML GENERATE / JSON GENERATE native byte output sealed (GNURUST.MLIO.GENERATE.1, ml_generate_sweep 2/0) AND XML PARSE's native observable event-stream state machine sealed (GNURUST.MLIO.PARSE.1, ml_parse_sweep 2/0) -- mlio.c is 100% ported with NO libxml2/cJSON linked. GnuCOBOL 3.2 XML PARSE is itself an unimplemented stub, so the native port reproduces its exact START-OF-DOCUMENT->END-OF-INPUT->END-OF-DOCUMENT event walk rather than a real parser, which would diverge from the authority"
  },
  {
   "surface": "diagnostics",

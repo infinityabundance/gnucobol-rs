@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MLIO.GENERATE.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.63
+**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.64
 
 - **Oracle:** cobc XML GENERATE / JSON GENERATE (libcob/mlio.c via libxml2 + json-c)
 - **Byte domain(s):** a cob_ml_tree (names, group/leaf structure, numeric/alphanumeric content) -> the XML / JSON GENERATE output bytes
@@ -18,14 +18,16 @@
 - XML content escapes &/</>
 - JSON strings are quoted + json-escaped, numbers unquoted
 
-## Negative claims (8) — negative capability is the trust surface
-- XML/JSON PARSE (the libxml2/json-c parser -- the declared external-library boundary)
+## Negative claims (10) — negative capability is the trust surface
+- XML PARSE is sealed separately (GNURUST.MLIO.PARSE.1)
+- JSON PARSE does not exist in GnuCOBOL 3.2
 - attributes/namespaces beyond the basic name="value" form
-- the NATIONAL/UTF-16 content path
+- the NATIONAL / UTF-16 content path
 - pretty-printing / indentation options
-- the COUNT IN truncation + receiving-item overflow
 - non-ASCII multibyte content escaping
-- the libxml2-based old cob_xml_generate / cJSON cob_json_generate entry points
+- the exact bytes of the WITH XML-DECLARATION prolog (only the no-declaration path is oracle-swept)
+- CDATA / comments / processing-instructions / DOCTYPE in the output
+- SUPPRESS WHEN conditional predicates beyond the unconditional is_suppressed flag
 - lie prevented: XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked
 
 ## Damage if overclaimed

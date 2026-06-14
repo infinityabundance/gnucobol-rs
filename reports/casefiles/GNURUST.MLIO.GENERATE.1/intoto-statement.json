@@ -3,13 +3,13 @@
   "predicate": {
     "case_id": "GNURUST.MLIO.GENERATE.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.63",
+    "crate_version": "0.7.64",
     "kind": "court-casefile",
     "materials": {
-      "claim_ladder_entry_sha256": "13cebf67cc6caf48e6b098519a7ee371fa8193b95178d8db2a5a8aa7b7f03cc7",
-      "receipt_sha256": "1b5906ab072e1ef3c93939fed24bcf5827f513456d6e1874596f4a77bab9353a"
+      "claim_ladder_entry_sha256": "77fdacb9641695201eec37d3e1e5ccde2ce944635daf1bad3cef57e8e9c76307",
+      "receipt_sha256": "97f52b5359c28f72fc0b9d142004fae990d0ed96a676bb895afeb99ebee41263"
     },
-    "negative_claim_count": 8,
+    "negative_claim_count": 10,
     "positive_claim_count": 7,
     "replay": {
       "command": "bash lab/oracle/ml_generate_sweep.sh",
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "b6514efdc9b66a1bfd2e716fc20980c074ef1299f6bfab41df53952b303ddb6f"
+        "sha256": "c198ce8d698a0615b0b73ee974e292bcc38012fd6d9c0ae736e654e5ba46187e"
       },
       "name": "reports/casefiles/GNURUST.MLIO.GENERATE.1/casefile.json"
     }

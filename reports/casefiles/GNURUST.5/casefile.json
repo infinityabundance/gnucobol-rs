@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.5",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.63",
+  "crate_version": "0.7.64",
   "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with",
   "hash_chain": {
-    "inputs_sha256": "68e62ac1e0052156726820b29c52a7af9c0045d0fbdc7401375be411272d7f73"
+    "inputs_sha256": "cb749ddeb452db532827add115a6b98d6a89b6370799ebee657722766542a280"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "8711eec34ed5583cd9cb0e1c455de87258c4d7b71e0f8799a2e5292ad9de7953",
-    "receipt_sha256": "24bcd9047ab5322f3900f5c15aee3753d0a37edb9c3f2056cc0b2faff18c894b"
+    "receipt_sha256": "324dc947fbf786cc315659bdc4685163996cea1c8642dc1070fb684fcc8d1217"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

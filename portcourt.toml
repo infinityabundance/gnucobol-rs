@@ -55,10 +55,14 @@ requires = [
   "GNURUST.FILEIO.MAPPING.1",
 ]
 
-# --- libcob files in progress (claim: partial — honest about the gap) ---
-
 [module."mlio.c"]
-claim = "partial"
+claim = "complete"
+requires = [
+  "GNURUST.MLIO.GENERATE.1",
+  "GNURUST.MLIO.PARSE.1",
+]
+
+# --- libcob files in progress (claim: partial — honest about the gap) ---
 
 [module."common.c"]
 claim = "partial"

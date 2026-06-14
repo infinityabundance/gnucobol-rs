@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.SORT.1 (court-casefile)
 
-**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.7.63
+**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.7.64
 
 - **Oracle:** cobc SORT ... ON ASCENDING/DESCENDING KEY USING/GIVING (libcob/fileio.c)
 - **Byte domain(s):** SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)

@@ -41,7 +41,7 @@
 | `sort-merge` | SORT/MERGE | `fileio.c` | ✅ sealed | GNURUST.SORT.MERGE.ATLAS.1, GNURUST.FILEIO.SORT.1, GNURUST.FILEIO.SORTENGINE.1 |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |
 | `report-writer` | screen/report/CICS/SQL unsupported | `reportio.c` | ⛔ negative | — |
-| `ml-io-xml-json` | ML I/O (XML/JSON) | `mlio.c` | ✅ sealed | GNURUST.MLIO.GENERATE.1 |
+| `ml-io-xml-json` | ML I/O (XML/JSON) | `mlio.c` | ✅ sealed | GNURUST.MLIO.GENERATE.1, GNURUST.MLIO.PARSE.1 |
 | `diagnostics` | diagnostics | `error.c` | ⛔ negative | — |
 | `cics-sql-preprocessor` | screen/report/CICS/SQL unsupported | `ppparse.c` | ⛔ negative | — |
 | `class-conditions` | condition | `common.c` | ✅ sealed | GNURUST.CLASS.1 |

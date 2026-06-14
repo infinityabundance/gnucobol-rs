@@ -23,7 +23,7 @@
       "not_proven": "arithmetic; edited pictures; any other type pair",
       "breaks_claim": "non-ASCII host; EBCDIC sign mode; locale != C.UTF-8",
       "readiness": 4,
-      "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven",
+      "lie_prevented": "'a MOVE result is close enough' — every byte of the receiving field is proven",
       "damage_if_overclaimed": "a wrong MOVE result posted as a real value corrupts a record silently"
     },
     {
@@ -37,7 +37,7 @@
       "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3",
       "breaks_claim": "edited symbols; unsupported usage",
       "readiness": 4,
-      "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs",
+      "lie_prevented": "'a PIC width can be eyeballed' — the field model matches cobc's own attrs",
       "damage_if_overclaimed": "a mis-modeled field width mis-reads every downstream field in the record"
     },
     {
@@ -51,7 +51,7 @@
       "not_proven": "SYNCHRONIZED; REDEFINES larger than target",
       "breaks_claim": "alignment/SYNC; record-growth REDEFINES",
       "readiness": 4,
-      "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition",
+      "lie_prevented": "'offsets are obvious' — layout matches cobc's emitted offsets, not intuition",
       "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields"
     },
     {
@@ -65,7 +65,7 @@
       "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS",
       "breaks_claim": "non-line-oriented COPY",
       "readiness": 4,
-      "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word",
+      "lie_prevented": "'substring replacement is close enough' — COPY REPLACING is whole-text-word",
       "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with"
     },
     {
@@ -79,7 +79,7 @@
       "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands",
       "breaks_claim": "substring replacement expectation; REPLACE directive",
       "readiness": 4,
-      "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word",
+      "lie_prevented": "'substring replacement is close enough' — REPLACING is whole-text-word",
       "damage_if_overclaimed": "a wrong REPLACING substitution silently changes field identities across a whole estate"
     },
     {
@@ -93,7 +93,7 @@
       "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum",
       "breaks_claim": ">38 significant digits; float fields",
       "readiness": 3,
-      "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly",
+      "lie_prevented": "'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly",
       "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total"
     },
     {
@@ -107,7 +107,7 @@
       "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE",
       "breaks_claim": "P-scaled parent; edited PIC",
       "readiness": 4,
-      "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE",
+      "lie_prevented": "'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE",
       "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data"
     },
     {
@@ -121,7 +121,7 @@
       "not_proven": "V+P; P at both ends; VALUE/MOVE on P field",
       "breaks_claim": "V combined with P",
       "readiness": 3,
-      "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact",
+      "lie_prevented": "'P-scaling is just digits' — the asymmetric P digit/scale rule is exact",
       "damage_if_overclaimed": "a wrong P-scale mis-places the decimal point, off-by-10x on money"
     },
     {
@@ -135,7 +135,7 @@
       "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO",
       "breaks_claim": "treating physical-max as logical length",
       "readiness": 4,
-      "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length",
+      "lie_prevented": "'LENGTH OF proves physical allocation' — ODO physical-max != logical length",
       "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records"
     },
     {
@@ -149,7 +149,7 @@
       "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution",
       "breaks_claim": "collating sequence; SET semantics",
       "readiness": 4,
-      "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact",
+      "lie_prevented": "'88 truth is a string compare' — padded/numeric/THRU semantics are exact",
       "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)"
     },
     {
@@ -177,7 +177,7 @@
       "not_proven": "condition expressions; collating-sensitive ranges; Procedure Division execution",
       "breaks_claim": "SET FALSE expectation",
       "readiness": 4,
-      "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes",
+      "lie_prevented": "'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes",
       "damage_if_overclaimed": "a wrong SET writes a status the program never intended"
     },
     {
@@ -205,7 +205,7 @@
       "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float",
       "breaks_claim": ">38 digits; SIZE ERROR control flow",
       "readiness": 3,
-      "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation",
+      "lie_prevented": "'packed add rounds like display' — cob_add_bcd keeps -0 on truncation",
       "damage_if_overclaimed": "a wrong packed sign/rounding flips the sign of money on truncation"
     },
     {
@@ -219,7 +219,7 @@
       "not_proven": "transformed-record write-back; EBCDIC; edited PIC; line-sequential containers",
       "breaks_claim": "treating KOBOLD output as business truth beyond sealed fields",
       "readiness": 4,
-      "lie_prevented": "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only",
+      "lie_prevented": "'decoded JSON is business truth' — it is record truth over sealed courts only",
       "damage_if_overclaimed": "treating decoded JSON as business truth acts on record-truth as if it were account state"
     },
     {
@@ -233,7 +233,7 @@
       "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
       "breaks_claim": "big-endian host; SYNC alignment; binary arithmetic",
       "readiness": 3,
-      "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8",
+      "lie_prevented": "'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8",
       "damage_if_overclaimed": "a wrong binary width/endian mis-reads a key, branch, or amount on the wrong platform"
     },
     {
@@ -247,7 +247,7 @@
       "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
       "breaks_claim": "non-cp500 page; treating EBCDIC as record-wide convert-everything",
       "readiness": 3,
-      "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw",
+      "lie_prevented": "'EBCDIC conversion can be record-wide' — it is per-DISPLAY-field; binary/packed raw",
       "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses"
     },
     {
@@ -261,7 +261,7 @@
       "not_proven": "report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
       "readiness": 3,
-      "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated",
+      "lie_prevented": "'presentation string and numeric value are the same field truth' — they are separated",
       "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals"
     },
     {
@@ -289,7 +289,7 @@
       "not_proven": "binary arithmetic; business truth",
       "breaks_claim": "binary fields text-converted",
       "readiness": 4,
-      "lie_prevented": "'binary fields are text under any encoding' \u2014 they are raw storage passthrough",
+      "lie_prevented": "'binary fields are text under any encoding' — they are raw storage passthrough",
       "damage_if_overclaimed": "reading a binary field as text under an encoding corrupts keys and amounts"
     },
     {
@@ -303,7 +303,7 @@
       "not_proven": "numeric DISPLAY under cp500 (EBCDIC zoned sign); business truth",
       "breaks_claim": "EBCDIC conversion touching COMP bytes",
       "readiness": 4,
-      "lie_prevented": "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)",
+      "lie_prevented": "'EBCDIC touches all bytes' — binary/packed pass through untouched (proven)",
       "damage_if_overclaimed": "converting binary/packed bytes as EBCDIC text destroys numeric values"
     },
     {
@@ -317,7 +317,7 @@
       "not_proven": "business truth; semantic validity; INITIALIZE/repair",
       "breaks_claim": "coercing dirty bytes; silent key collision",
       "readiness": 4,
-      "lie_prevented": "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance",
+      "lie_prevented": "'a hand-written PASS table is evidence' — every value names its court + provenance",
       "damage_if_overclaimed": "trusting a value with no provenance trail means an auditor cannot defend it"
     },
     {
@@ -331,7 +331,7 @@
       "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS",
       "breaks_claim": "non-cp500 page; treating binary as EBCDIC zoned",
       "readiness": 3,
-      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ",
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' — the C/D/F sign zones differ",
       "damage_if_overclaimed": "a wrong zoned sign flips the sign of mainframe money"
     },
     {
@@ -345,7 +345,7 @@
       "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2",
       "breaks_claim": "signed COMP-6; strict cobol85/2002 (reject it)",
       "readiness": 3,
-      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3",
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3",
       "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely"
     },
     {
@@ -1278,13 +1278,27 @@
       "proven": "a from-scratch, dependency-free Rust serializer of the cob_ml_tree (mlio.rs generate_xml_from_tree/generate_element/generate_normal_element/generate_hex_element/generate_content/generate_attributes/generate_normal_attribute + generate_json_from_tree + get_xml_name/get_xml_num/get_json_num/get_xml_data/get_trimmed_data + cob_xml_generate_new/cob_json_generate_new), proven to produce byte-identical output to the admitted GnuCOBOL's XML GENERATE / JSON GENERATE (which drives libxml2's xmlTextWriter + json-c) WITHOUT linking those libraries (ml_generate_sweep 2/0). Verified end-to-end against a cobc record with a signed numeric (S9(3) -42 -> -42), a scaled numeric (9(3)V99 12.50 -> 12.50), an alphanumeric needing XML escaping (a<b&c -> a&lt;b&amp;c in XML, the raw bytes quoted in JSON), and a nested group: XML <G><NEG>-42</NEG><DEC>12.50</DEC><SPC>a&lt;b&amp;c</SPC><GRP><X>hi</X><Y>7</Y></GRP></G>, JSON {\"G\":{\"NEG\":-42,\"DEC\":12.50,\"SPC\":\"a<b&c\",\"GRP\":{\"X\":\"hi\",\"Y\":7}}}. Numeric formatting strips leading zeros + inserts the decimal point at the scale; XML content escapes &/</>; JSON strings are quoted + json-escaped, numbers unquoted",
       "byte_domain": "a cob_ml_tree (names, group/leaf structure, numeric/alphanumeric content) -> the XML / JSON GENERATE output bytes",
       "oracle": "cobc XML GENERATE / JSON GENERATE (libcob/mlio.c via libxml2 + json-c)",
-      "fixtures": "ml_generate_sweep 2/0 + 1 unit test (vs the oracle bytes) + Kani xml_generate_total",
+      "fixtures": "ml_generate_sweep 5/0 (XML+JSON bytes, both COUNT IN values, and the cob_xml_generate/cob_json_generate field-write entry) + unit tests + Kani xml_generate_total",
       "sealed_version": "0.7.63",
-      "not_proven": "XML/JSON PARSE (the libxml2/json-c parser -- the declared external-library boundary); attributes/namespaces beyond the basic name=\"value\" form; the NATIONAL/UTF-16 content path; pretty-printing / indentation options; the COUNT IN truncation + receiving-item overflow; non-ASCII multibyte content escaping; the libxml2-based old cob_xml_generate / cJSON cob_json_generate entry points",
+      "not_proven": "XML PARSE is sealed separately (GNURUST.MLIO.PARSE.1); JSON PARSE does not exist in GnuCOBOL 3.2; attributes/namespaces beyond the basic name=\"value\" form; the NATIONAL / UTF-16 content path; pretty-printing / indentation options; non-ASCII multibyte content escaping; the exact bytes of the WITH XML-DECLARATION prolog (only the no-declaration path is oracle-swept); CDATA / comments / processing-instructions / DOCTYPE in the output; SUPPRESS WHEN conditional predicates beyond the unconditional is_suppressed flag",
       "breaks_claim": "a different escaping, a different numeric edit (leading zeros / sign / decimal), a different element/attribute ordering, or a whitespace/indentation difference from the oracle",
       "readiness": 4,
       "lie_prevented": "XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked",
       "damage_if_overclaimed": "claiming the whole ML subsystem would hide that XML/JSON PARSE still needs libxml2/json-c, and that national encoding / pretty-print / overflow paths are unported"
+    },
+    {
+      "id": "GNURUST.MLIO.PARSE.1",
+      "name": "XML PARSE (native state machine)",
+      "proven": "a from-scratch, dependency-free Rust port of the XML PARSE state machine (mlio.rs cob_xml_parse/xml_parse/xml_free_parse_memory over the modelled XML special registers MlModule/XmlState + set_xml_event/set_xml_text/set_xml_code/get_xml_code/set_xml_exception), reproducing the GnuCOBOL 3.2 observable event stream WITHOUT linking libxml2. Crucial fidelity point: GnuCOBOL 3.2's XML PARSE is itself unimplemented -- even built WITH_XML2, mlio.c:xml_parse advances JUST_STARTED -> HAD_END_OF_INPUT directly (the xmlParseChunk and 'not implemented' branches are unreachable for an in-memory document), so a PROCESSING PROCEDURE observes exactly START-OF-DOCUMENT -> END-OF-INPUT -> END-OF-DOCUMENT, all with XML-CODE 0 and (in the default XMLNSS mode) empty XML-TEXT. ml_parse_sweep 2/0 confirms the native state machine emits that identical sequence; a 'real' parser would DIVERGE from the authority. Empty/all-spaces items raise XML_INTERNAL_ERROR + EVENT_EXCEPTION as in the C.",
+      "byte_domain": "an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT special-register sequence a PROCESSING PROCEDURE observes",
+      "oracle": "cobc XML PARSE ... PROCESSING PROCEDURE (libcob/mlio.c cob_xml_parse)",
+      "fixtures": "ml_parse_sweep 2/0 + 2 unit tests (event stream + empty-item exception) + Kani xml_parse_terminates",
+      "sealed_version": "0.7.64",
+      "not_proven": "an actual XML tree/attribute/content parse (GnuCOBOL 3.2 does not parse, so neither claim nor port exists); JSON PARSE (no such statement in GnuCOBOL 3.2 mlio.c); the COMPAT (non-XMLNSS) full-document XML-TEXT delivery beyond the modelled path; multi-chunk streaming; schema VALIDATING against a real schema",
+      "breaks_claim": "a different event ordering, a non-zero XML-CODE in the happy path, or a non-empty XML-TEXT in XMLNSS mode vs the oracle",
+      "readiness": 4,
+      "lie_prevented": "XML PARSE needs libxml2 -- NO: GnuCOBOL 3.2 XML PARSE does not actually parse; its observable behaviour is a fixed START-OF-DOCUMENT -> END-OF-INPUT -> END-OF-DOCUMENT event walk that a native Rust state machine reproduces exactly, no C library linked. Writing a real parser would be LESS faithful, not more.",
+      "damage_if_overclaimed": "claiming 'XML PARSE works' would imply GnuCOBOL parses XML (it does not); the honest claim is byte-identity of the unimplemented-but-observable event stream"
     },
     {
       "id": "GNURUST.INTRINSIC.DATE.1",

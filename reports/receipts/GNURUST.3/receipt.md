@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.3` |
 | court | PIC field model (+P scaling) |
-| crate_version | `0.7.63` |
+| crate_version | `0.7.64` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | generated-C cob_field_attr + LENGTH OF |
 | replay command | `bash lab/oracle/pic_sweep.sh` |

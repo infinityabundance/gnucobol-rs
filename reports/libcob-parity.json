@@ -173,25 +173,9 @@
     {
       "file": "mlio.c",
       "functions": 47,
-      "missing": [
-        "cob_json_generate",
-        "cob_xml_generate",
-        "generate_hex_attribute",
-        "get_hex_xml_data",
-        "get_name_with_hex_prefix",
-        "get_num",
-        "get_pic_for_num_field",
-        "get_trimmed_json_data",
-        "get_xml_code",
-        "set_json_exception",
-        "set_xml_event",
-        "set_xml_exception",
-        "set_xml_text",
-        "xmlCharStrndup_void",
-        "xml_generate"
-      ],
-      "parity_pct": 66.0,
-      "ported": 31
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 47
     },
     {
       "file": "reportio.c",
@@ -458,7 +442,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 68.5,
-    "ported": 801
+    "parity_pct": 69.8,
+    "ported": 817
   }
 }
