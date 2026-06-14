@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.ROUND.1 (court-casefile)
 
-**Verdict: PASS** · round sweep 6720/0 (DISPLAY + packed receivers, seven byte-producing modes, kept digits 0-9) + unit matrix + fuzz + Kani · crate `gnucobol-rs` 0.7.49
+**Verdict: PASS** · round sweep 6720/0 (DISPLAY + packed receivers, seven byte-producing modes, kept digits 0-9) + unit matrix + fuzz + Kani · crate `gnucobol-rs` 0.7.50
 
 - **Oracle:** libcob cob_add with the COB_STORE_<mode> opt, DISPLAY and packed receivers (cob_decimal_do_round + cob_add_bcd)
 - **Byte domain(s):** value + target scale + ROUNDED mode + receiver path (cob_decimal / packed BCD) -> stored field bytes

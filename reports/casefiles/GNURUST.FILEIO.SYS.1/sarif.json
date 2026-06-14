@@ -13,21 +13,14 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FILEIO.SYS.1 non-claim: the localtime-dependent CBL_CHECK_FILE_EXIST date/time formatting"
+            "text": "GNURUST.FILEIO.SYS.1 non-claim: the localtime-dependent CBL_CHECK_FILE_EXIST + cob_sys_file_info date/time formatting"
           },
           "ruleId": "NONCLAIM"
         },
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FILEIO.SYS.1 non-claim: CBL_OPEN_FILE/READ_FILE/WRITE_FILE/CLOSE_FILE/FLUSH_FILE handle-based I/O"
-          },
-          "ruleId": "NONCLAIM"
-        },
-        {
-          "level": "note",
-          "message": {
-            "text": "GNURUST.FILEIO.SYS.1 non-claim: cob_sys_file_info"
+            "text": "GNURUST.FILEIO.SYS.1 non-claim: the file-lock / file_dev open parameters"
           },
           "ruleId": "NONCLAIM"
         },
@@ -56,6 +49,13 @@
           "level": "note",
           "message": {
             "text": "GNURUST.FILEIO.SYS.1 non-claim: concurrent filesystem races"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.SYS.1 non-claim: the handle value matching libcob's raw fd (a safe registry index is used instead)"
           },
           "ruleId": "NONCLAIM"
         },

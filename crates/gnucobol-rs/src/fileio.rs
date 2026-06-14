@@ -797,6 +797,153 @@ pub fn cob_sys_get_current_dir(flags: i32, dir_length: usize) -> (i32, Vec<u8>) 
 }
 
 // ======================================================================================================
+// CBL_* handle-based byte-stream file routines (`GNURUST.FILEIO.SYS.1`, handle family)
+//
+// `CBL_OPEN_FILE`/`CREATE_FILE`/`READ_FILE`/`WRITE_FILE`/`CLOSE_FILE`/`FLUSH_FILE` operate on an opaque
+// 4-byte file handle. libcob stores the raw OS `fd`; with `#![forbid(unsafe_code)]` we instead store an
+// index into a safe process-global `File` registry (the handle value is opaque to the COBOL program, so
+// behaviour is identical). Positioned `lseek`+`read`/`write` map to `Seek`+`Read`/`Write`.
+// ======================================================================================================
+
+/// The process-global open-file registry backing the CBL handle routines (index = the 4-byte handle).
+static CBL_FILES: std::sync::Mutex<Vec<Option<std::fs::File>>> = std::sync::Mutex::new(Vec::new());
+
+/// Port of `fileio.c:open_cbl_file` — open `name` per `access` (1 read, 2 write+create+truncate, 3 r/w);
+/// `create` forces `O_CREAT|O_TRUNC` (for `CBL_CREATE_FILE`). Returns `(status, handle)`: `(0, h)` on
+/// success, `(-1, -1)` on a bad access mode, `(35, -1)` when the open fails.
+pub fn open_cbl_file(name: &[u8], access: u8, create: bool) -> (i32, i32) {
+    let Ok(path) = std::str::from_utf8(name) else {
+        return (-1, -1);
+    };
+    let mut opts = std::fs::OpenOptions::new();
+    match access & 0x3F {
+        1 => {
+            opts.read(true);
+        }
+        2 => {
+            opts.write(true).create(true).truncate(true);
+        }
+        3 => {
+            opts.read(true).write(true);
+        }
+        _ => return (-1, -1),
+    }
+    if create {
+        opts.create(true).truncate(true).write(true);
+    }
+    match opts.open(path) {
+        Ok(f) => {
+            let mut reg = CBL_FILES.lock().unwrap();
+            let idx = reg.iter().position(Option::is_none).unwrap_or_else(|| {
+                reg.push(None);
+                reg.len() - 1
+            });
+            reg[idx] = Some(f);
+            (0, idx as i32)
+        }
+        Err(_) => (35, -1),
+    }
+}
+
+/// Port of `fileio.c:cob_sys_open_file` (`CBL_OPEN_FILE`) — open an existing file for the given access.
+pub fn cob_sys_open_file(name: &[u8], access: u8) -> (i32, i32) {
+    open_cbl_file(name, access, false)
+}
+
+/// Port of `fileio.c:cob_sys_create_file` (`CBL_CREATE_FILE`) — create/truncate a file for the given access.
+pub fn cob_sys_create_file(name: &[u8], access: u8) -> (i32, i32) {
+    open_cbl_file(name, access, true)
+}
+
+/// Port of `fileio.c:cob_sys_read_file` (`CBL_READ_FILE`) — read `len` bytes at `offset` from `handle`
+/// into `buf`. With `flags & 0x80` it instead returns the file size in `(size, _)`. Status: `0` success,
+/// `10` end of file (0-byte read), `-1` on a bad handle/offset.
+pub fn cob_sys_read_file(handle: i32, offset: u64, len: usize, flags: u8, buf: &mut [u8]) -> (i32, u64) {
+    use std::io::{Read, Seek, SeekFrom};
+    let mut reg = CBL_FILES.lock().unwrap();
+    let Some(Some(f)) = reg.get_mut(handle as usize) else {
+        return (-1, 0);
+    };
+    if flags & 0x80 != 0 {
+        return match f.metadata() {
+            Ok(m) => (0, m.len()),
+            Err(_) => (-1, 0),
+        };
+    }
+    if f.seek(SeekFrom::Start(offset)).is_err() {
+        return (-1, 0);
+    }
+    if len > 0 {
+        let n = len.min(buf.len());
+        match f.read(&mut buf[..n]) {
+            Ok(0) => return (10, 0), // COB_STATUS_10_END_OF_FILE
+            Ok(_) => {}
+            Err(_) => return (-1, 0),
+        }
+    }
+    (0, 0)
+}
+
+/// Port of `fileio.c:cob_sys_write_file` (`CBL_WRITE_FILE`) — write `len` bytes of `buf` at `offset` to
+/// `handle`. Status: `0` success, `30` on a short write, `-1` on a bad handle/offset.
+pub fn cob_sys_write_file(handle: i32, offset: u64, len: usize, buf: &[u8]) -> i32 {
+    use std::io::{Seek, SeekFrom, Write};
+    let mut reg = CBL_FILES.lock().unwrap();
+    let Some(Some(f)) = reg.get_mut(handle as usize) else {
+        return -1;
+    };
+    if f.seek(SeekFrom::Start(offset)).is_err() {
+        return -1;
+    }
+    let n = len.min(buf.len());
+    match f.write(&buf[..n]) {
+        Ok(w) if w == n => 0,
+        Ok(_) => 30,
+        Err(_) => 30,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_close_file` (`CBL_CLOSE_FILE`) — close the handle (drop the `File`); `0`.
+pub fn cob_sys_close_file(handle: i32) -> i32 {
+    let mut reg = CBL_FILES.lock().unwrap();
+    if let Some(slot) = reg.get_mut(handle as usize) {
+        *slot = None;
+    }
+    0
+}
+
+/// Port of `fileio.c:cob_sys_flush_file` (`CBL_FLUSH_FILE`) — flush the handle's buffers to disk; `0`.
+pub fn cob_sys_flush_file(handle: i32) -> i32 {
+    let reg = CBL_FILES.lock().unwrap();
+    if let Some(Some(f)) = reg.get(handle as usize) {
+        let _ = f.sync_all();
+    }
+    0
+}
+
+/// Port of `fileio.c:cob_sys_file_delete` (`C$DELETE`) — delete `name` via [`cob_sys_delete_file`],
+/// mapping a `< 0` result to `128`.
+pub fn cob_sys_file_delete(name: &[u8]) -> i32 {
+    let ret = cob_sys_delete_file(name);
+    if ret < 0 {
+        128
+    } else {
+        ret
+    }
+}
+
+/// Port of `fileio.c:cob_sys_copyfile` (`C$COPY`) — copy `from` to `to` via [`cob_sys_copy_file`],
+/// mapping a `< 0` result to `128`.
+pub fn cob_sys_copyfile(from: &[u8], to: &[u8]) -> i32 {
+    let ret = cob_sys_copy_file(from, to);
+    if ret < 0 {
+        128
+    } else {
+        ret
+    }
+}
+
+// ======================================================================================================
 // SORT/MERGE record comparison (`GNURUST.FILEIO.SORT.1`)
 // ======================================================================================================
 
@@ -1705,6 +1852,34 @@ mod tests {
         assert_eq!(cob_sys_get_current_dir(1, 100).0, 129);
         assert_eq!(cob_sys_get_current_dir(0, 0).0, 128);
         assert_eq!(cob_sys_get_current_dir(0, 4096).0, 0);
+    }
+
+    #[test]
+    fn cbl_handle_file_roundtrip() {
+        let base = std::env::temp_dir().join("gnucobol_rs_handle_test_b");
+        let _ = std::fs::remove_dir_all(&base);
+        std::fs::create_dir(&base).unwrap();
+        let f = base.join("h.dat");
+        let fb = f.to_str().unwrap().as_bytes();
+        // create r/w, write, read back
+        let (st, h) = cob_sys_create_file(fb, 3);
+        assert_eq!(st, 0);
+        assert_eq!(cob_sys_write_file(h, 0, 5, b"HELLO"), 0);
+        let mut buf = vec![0u8; 5];
+        assert_eq!(cob_sys_read_file(h, 0, 5, 0, &mut buf).0, 0);
+        assert_eq!(&buf, b"HELLO");
+        // read past EOF -> 10
+        assert_eq!(cob_sys_read_file(h, 100, 5, 0, &mut buf).0, 10);
+        // size query (flags 0x80) -> 5
+        assert_eq!(cob_sys_read_file(h, 0, 0, 0x80, &mut buf), (0, 5));
+        assert_eq!(cob_sys_flush_file(h), 0);
+        assert_eq!(cob_sys_close_file(h), 0);
+        // a bad handle -> -1
+        assert_eq!(cob_sys_read_file(99999, 0, 1, 0, &mut buf).0, -1);
+        // bad access mode -> (-1, -1)
+        assert_eq!(cob_sys_open_file(fb, 9), (-1, -1));
+        std::fs::remove_file(&f).ok();
+        std::fs::remove_dir(&base).ok();
     }
 
     // ---- SORT comparison ----

@@ -214,17 +214,9 @@
         "cob_sync",
         "cob_sys_chdir",
         "cob_sys_check_file_exist",
-        "cob_sys_close_file",
-        "cob_sys_copyfile",
-        "cob_sys_create_file",
         "cob_sys_extfh",
-        "cob_sys_file_delete",
         "cob_sys_file_info",
-        "cob_sys_flush_file",
         "cob_sys_mkdir",
-        "cob_sys_open_file",
-        "cob_sys_read_file",
-        "cob_sys_write_file",
         "cob_unlock_file",
         "cob_write_block",
         "copy_fcd_to_file",
@@ -247,7 +239,6 @@
         "indexed_rewrite",
         "indexed_start",
         "indexed_write",
-        "open_cbl_file",
         "open_next",
         "save_fcd_status",
         "unique_copy",
@@ -256,8 +247,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 32.0,
-      "ported": 47
+      "parity_pct": 38.1,
+      "ported": 56
     },
     {
       "doxygen_functions": 25,
@@ -557,8 +548,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 54.6,
-    "ported": 545
+    "parity_pct": 55.5,
+    "ported": 554
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.STRING.UNSTRING.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.49",
+    "crate_version": "0.7.50",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "14e648782542b508f7b522c3ff19fdb931fe8b4b4ffe734e88f784d25f235503",
-      "receipt_sha256": "8e1f42923a44b417b9b9fabd10a6adfa8573dbe4dd12ac4cf57395e535da873b"
+      "receipt_sha256": "84f4a02f59180d3df00d82fc388407a78975c6ed0d2efba95ba9ecc3d773b994"
     },
     "negative_claim_count": 7,
     "positive_claim_count": 2,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "dbef6c684e9462cd3ef2524e1f9a091ecc644cbbdcf0125f2b82d876e49505f6"
+        "sha256": "6e1934b0bef7f616ef8b8d757333d4d78e36dd47f915e6072d9c8ebf61e9ae82"
       },
       "name": "reports/casefiles/GNURUST.STRING.UNSTRING.1/casefile.json"
     }

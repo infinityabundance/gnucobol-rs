@@ -3974,9 +3974,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 53,
+    "active_ported": 62,
     "compiled": 182,
-    "compiled_parity_pct": 29.7,
+    "compiled_parity_pct": 34.6,
     "disabled": 0,
     "doc_only": 0,
     "file": "fileio.c",
@@ -4537,37 +4537,44 @@
       {
         "function": "open_cbl_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_open_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_create_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_read_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_write_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_close_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_flush_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_delete_file",
@@ -4629,7 +4636,8 @@
       {
         "function": "cob_sys_copyfile",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_file_info",
@@ -4639,7 +4647,8 @@
       {
         "function": "cob_sys_file_delete",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "sort_cmps",
@@ -5018,17 +5027,9 @@
       "cob_sync",
       "cob_sys_chdir",
       "cob_sys_check_file_exist",
-      "cob_sys_close_file",
-      "cob_sys_copyfile",
-      "cob_sys_create_file",
       "cob_sys_extfh",
-      "cob_sys_file_delete",
       "cob_sys_file_info",
-      "cob_sys_flush_file",
       "cob_sys_mkdir",
-      "cob_sys_open_file",
-      "cob_sys_read_file",
-      "cob_sys_write_file",
       "cob_unlock",
       "cob_unlock_file",
       "cob_write_block",
@@ -5061,7 +5062,6 @@
       "join_environment",
       "lock_file",
       "lock_record",
-      "open_cbl_file",
       "open_next",
       "restorefileposition",
       "save_fcd_status",
@@ -5077,7 +5077,7 @@
       "update_record_and_keys_if_necessary"
     ],
     "inactive_mirrors": 1,
-    "missing": 128,
+    "missing": 119,
     "source_funcs": 182,
     "test_only": 0
   },

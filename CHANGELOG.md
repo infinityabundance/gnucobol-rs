@@ -12,6 +12,12 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.50]
+- **`fileio.c` -- CBL_* handle-based byte-stream file routines + C$DELETE/C$COPY (extends `GNURUST.FILEIO.SYS.1`).** Ports `open_cbl_file`/`cob_sys_open_file`/`cob_sys_create_file`/`cob_sys_read_file`/`cob_sys_write_file`/`cob_sys_close_file`/`cob_sys_flush_file` (the `CBL_OPEN_FILE`/`CREATE_FILE`/`READ_FILE`/`WRITE_FILE`/`CLOSE_FILE`/`FLUSH_FILE` routines) plus `cob_sys_file_delete`/`cob_sys_copyfile` (`C$DELETE`/`C$COPY`), proven against the oracle (`cob_sys_sweep` 2/0, now incl. a `CBL_CREATE_FILE`/`WRITE_FILE`/`READ_FILE` round-trip that reads back the written bytes):
+  - the opaque 4-byte handle is a safe `File`-registry index (libcob stores the raw `fd`; `#![forbid(unsafe_code)]` precludes that, and the handle is opaque to the program so behaviour is identical); access `1` read / `2` write+create+truncate / `3` r/w; positioned read/write (status `0`/`10`/`30`/`-1`); a `flags & 0x80` size query.
+  - **Forensic note:** `CBL_READ_FILE`/`WRITE_FILE` decode the offset/length parameters as **big-endian** (libcob byte-swaps them), so the oracle fields must be `COMP`, not `COMP-5` -- a `COMP-5` length of 5 is byte-swapped to 83886080 and the write returns status 30. `fileio.c` parity 53 -> 62/182 (34.6%).
+- No API breaks: additive (new `fileio::cob_sys_*` handle routines + `C$DELETE`/`C$COPY` wrappers).
+
 ## [0.7.49]
 - **`fileio.c` -- CBL_* system file/directory routines sealed (`GNURUST.FILEIO.SYS.1`).** A faithful port of `libcob/fileio.c`'s `cob_sys_delete_file`/`cob_sys_copy_file`/`cob_sys_rename_file`/`cob_sys_create_dir`/`cob_sys_delete_dir`/`cob_sys_change_dir`/`cob_sys_get_current_dir` -- the `CBL_DELETE_FILE`/`CBL_COPY_FILE`/`CBL_RENAME_FILE`/`CBL_CREATE_DIR`/`CBL_DELETE_DIR`/`CBL_CHANGE_DIR`/`CBL_GET_CURRENT_DIR` library routines a COBOL program `CALL`s -- proven to match the admitted GnuCOBOL 3.2 `libcob`'s `RETURN-CODE` (`cob_sys_sweep` 1/0, end-to-end against a fixed CALL sequence):
   - each performs the syscall (via `std::fs`/`std::env`, as the core already does for collation/clock I/O) and returns `0` success, `128` failure, `35` when a copy source is absent, `129` for `CBL_GET_CURRENT_DIR` with nonzero flags, `-1` for a missing parameter; `CBL_GET_CURRENT_DIR` writes the cwd space-filled and double-quoted when it contains a space.

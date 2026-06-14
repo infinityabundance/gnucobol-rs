@@ -955,13 +955,13 @@
       "sweep": "cob_sys_sweep.sh",
       "byte_domain": "CBL_DELETE_FILE/COPY_FILE/RENAME_FILE/CREATE_DIR/DELETE_DIR/CHANGE_DIR/GET_CURRENT_DIR -> RETURN-CODE (0/35/128/129/-1)",
       "non_claims": [
-        "CBL_CHECK_FILE_EXIST localtime date/time formatting",
-        "CBL_OPEN/READ/WRITE/CLOSE/FLUSH_FILE handle-based I/O",
-        "cob_sys_file_info",
+        "CBL_CHECK_FILE_EXIST / cob_sys_file_info localtime date formatting",
+        "the file-lock / file_dev open parameters",
         "the ACUCOBOL hyphen / filename-mapping path",
         "non-UTF-8 path bytes",
         "the exact errno->status mapping beyond 35/128",
         "concurrent filesystem races",
+        "the handle value matching libcob's raw fd (a safe registry index is used)",
         "the underlying syscalls (declared OS boundary)"
       ]
     }

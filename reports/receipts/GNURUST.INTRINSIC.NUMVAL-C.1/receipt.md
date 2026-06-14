@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.NUMVAL-C.1` |
 | court | FUNCTION NUMVAL-C currency parse |
-| crate_version | `0.7.49` |
+| crate_version | `0.7.50` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | FUNCTION NUMVAL-C(currency string) -> value (strip $ + thousands commas) |
 | replay command | `bash lab/oracle/numvalc_sweep.sh` |

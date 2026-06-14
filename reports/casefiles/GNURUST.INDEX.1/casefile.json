@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INDEX.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.49",
+  "crate_version": "0.7.50",
   "damage_if_overclaimed": "mis-modelling an index as an offset (or wrong endianness) corrupts every SET/SEARCH and every index-driven table access",
   "hash_chain": {
-    "inputs_sha256": "b34bde45e33cf1fd626cd4f23eb154974e4f9af043ee13779152d4fd3d43bc8e"
+    "inputs_sha256": "34e0c8ba0ba06bf098e2a686596d0aff64179f3397a139adc605190f642a311d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "32390f4a24cda27370ddf89bed9f19e3fd8c17a616ed67004019fd22e2d2976f",
-    "receipt_sha256": "a1cd1c3a3be0932980f0098f38b5b452ff314e126e21c32b77c6e82291508e06"
+    "receipt_sha256": "e0f5522fcbc978593f03ef1b9243b73bd0f33522a608afb345ce66e8eb23555d"
   },
   "kind": "court-casefile",
   "lie_prevented": [

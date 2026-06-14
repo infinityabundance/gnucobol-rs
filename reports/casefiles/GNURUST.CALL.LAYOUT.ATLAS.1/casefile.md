@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.CALL.LAYOUT.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.49
+**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.50
 
 - **Oracle:** cobc CALL USING + LINKAGE parameter layout (libcob/call.c address passing)
 - **Byte domain(s):** CALL USING parameter byte layout: BY REFERENCE address overlay (into adjacent storage), BY CONTENT sized copy, numeric length-mismatch leading-byte overlay

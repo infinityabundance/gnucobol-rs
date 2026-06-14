@@ -5,18 +5,18 @@
     "replay": "bash lab/oracle/cob_sys_sweep.sh"
   },
   "court": "CBL_* system file/directory routines",
-  "crate_version": "0.7.49",
+  "crate_version": "0.7.50",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "CBL_CHECK_FILE_EXIST localtime date/time formatting",
-    "CBL_OPEN/READ/WRITE/CLOSE/FLUSH_FILE handle-based I/O",
-    "cob_sys_file_info",
+    "CBL_CHECK_FILE_EXIST / cob_sys_file_info localtime date formatting",
+    "the file-lock / file_dev open parameters",
     "the ACUCOBOL hyphen / filename-mapping path",
     "non-UTF-8 path bytes",
     "the exact errno->status mapping beyond 35/128",
     "concurrent filesystem races",
+    "the handle value matching libcob's raw fd (a safe registry index is used)",
     "the underlying syscalls (declared OS boundary)"
   ],
   "oracle": {
@@ -27,7 +27,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=1 FAIL=0"
+    "sweep": "PASS=2 FAIL=0"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,

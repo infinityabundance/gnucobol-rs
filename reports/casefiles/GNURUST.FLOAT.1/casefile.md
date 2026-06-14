@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FLOAT.1 (court-casefile)
 
-**Verdict: PASS** · float_sweep 1476/0 (all four usages x both directions x signs/scales/magnitudes) + oracle-pinned unit bit-patterns · crate `gnucobol-rs` 0.7.49
+**Verdict: PASS** · float_sweep 1476/0 (all four usages x both directions x signs/scales/magnitudes) + oracle-pinned unit bit-patterns · crate `gnucobol-rs` 0.7.50
 
 - **Oracle:** libcob cob_move via cob_decimal_get/set_double + get/set_ieee64dec/ieee128dec (numeric.c; constants coblocal.h:165-198)
 - **Byte domain(s):** decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL-16/FLOAT-DECIMAL-34 field bytes, both directions

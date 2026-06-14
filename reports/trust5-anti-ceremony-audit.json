@@ -831,14 +831,14 @@
       "class": "A",
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
-      "fixtures": "cob_sys_sweep 1/0 + 1 unit test + Kani cob_sys_get_current_dir_preconditions",
+      "fixtures": "cob_sys_sweep 2/0 + 2 unit tests + Kani cob_sys_get_current_dir_preconditions",
       "generated_from_named_evidence": true,
       "has_casefile": true,
       "has_receipt": true,
       "id": "GNURUST.FILEIO.SYS.1",
       "negative_claims": 9,
       "negatives_ge_positives": true,
-      "positive_claims": 2
+      "positive_claims": 4
     },
     {
       "can_fail": true,
