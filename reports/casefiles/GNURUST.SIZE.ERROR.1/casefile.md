@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SIZE.ERROR.1 (court-casefile)
 
-**Verdict: PASS** · 12/12 pass, 0 fail · crate `gnucobol-rs` 0.7.59
+**Verdict: PASS** · 12/12 pass, 0 fail · crate `gnucobol-rs` 0.7.60
 
 - **Oracle:** cobc arithmetic SIZE ERROR (libcob/numeric.c)
 - **Byte domain(s):** overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition

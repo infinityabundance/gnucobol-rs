@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.VERB.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.59",
+  "crate_version": "0.7.60",
   "damage_if_overclaimed": "skipping the mode preconditions would let an illegal verb corrupt or read a file the dialect would have rejected with a 4x status",
   "hash_chain": {
-    "inputs_sha256": "4c862e0a36a99bea7784ae6de1bb4c68d73766461e40dbb9c4671198c5fa198a"
+    "inputs_sha256": "b1ccdfb4403bf4cd95512aa1855acfa333d81b948bff5b3b3709568f39431e14"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4a7cf1c294e4c2309a039c4d17c7fff36598cb5ece712b1f88e23d576e526f50",
-    "receipt_sha256": "098e9fcbb1c638000fccf22b9f6b117b8b4b1814578f3933d632f1074648d6a8"
+    "receipt_sha256": "1c837d7c5a1c877b213f9b3233bc9e0e942b9c3b6ea7393bb8cd3f2b79b832a8"
   },
   "kind": "court-casefile",
   "lie_prevented": [

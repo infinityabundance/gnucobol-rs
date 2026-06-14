@@ -31,18 +31,16 @@
     {
       "active": 56,
       "direct": 32,
-      "evidenced_any": 48,
+      "evidenced_any": 50,
       "file": "move.c",
       "lifecycle": 2,
       "oracle": 23,
-      "transitive": 14,
+      "transitive": 16,
       "unevidenced": [
         "cob_binary_mget_uint64",
         "cob_binary_mset_sint64",
         "cob_binary_mset_uint64",
-        "cob_get_comp1",
         "cob_move_ibm",
-        "cob_put_comp1",
         "cob_put_pointer",
         "cob_set_llint"
       ]
@@ -169,14 +167,35 @@
       "unevidenced": []
     },
     {
-      "active": 0,
-      "direct": 0,
-      "evidenced_any": 0,
+      "active": 67,
+      "direct": 38,
+      "evidenced_any": 47,
       "file": "call.c",
-      "lifecycle": 0,
-      "oracle": 0,
-      "transitive": 0,
-      "unevidenced": []
+      "lifecycle": 5,
+      "oracle": 1,
+      "transitive": 6,
+      "unevidenced": [
+        "cob_get_dbl_param",
+        "cob_get_field_str_buffered",
+        "cob_get_param_constant",
+        "cob_get_param_digits",
+        "cob_get_param_scale",
+        "cob_get_param_sign",
+        "cob_get_param_str",
+        "cob_get_param_str_buffered",
+        "cob_get_param_type",
+        "cob_longjmp",
+        "cob_put_dbl_param",
+        "cob_put_param_str",
+        "cob_put_u64_param",
+        "cob_resolve_error",
+        "cob_resolve_func",
+        "cob_savenv",
+        "cob_savenv2",
+        "cob_set_library_path",
+        "lt_dlerror",
+        "set_resolve_error"
+      ]
     },
     {
       "active": 180,
@@ -217,9 +236,9 @@
       ]
     },
     {
-      "active": 2,
-      "direct": 0,
-      "evidenced_any": 1,
+      "active": 3,
+      "direct": 1,
+      "evidenced_any": 2,
       "file": "common.c",
       "lifecycle": 0,
       "oracle": 0,
@@ -246,12 +265,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 659,
-    "direct": 408,
-    "evidenced_any": 561,
-    "lifecycle": 52,
-    "oracle": 191,
-    "transitive": 133,
-    "unevidenced": 98
+    "active": 727,
+    "direct": 447,
+    "evidenced_any": 611,
+    "lifecycle": 57,
+    "oracle": 192,
+    "transitive": 141,
+    "unevidenced": 116
   }
 }

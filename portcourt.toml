@@ -33,6 +33,9 @@ claim = "complete"
 [module."cobgetopt.c"]
 claim = "complete"
 
+[module."call.c"]
+claim = "complete"
+
 [module."fileio.c"]
 claim = "complete"
 requires = [
@@ -58,9 +61,6 @@ claim = "partial"
 claim = "partial"
 
 [module."common.c"]
-claim = "partial"
-
-[module."call.c"]
 claim = "partial"
 
 [module."screenio.c"]

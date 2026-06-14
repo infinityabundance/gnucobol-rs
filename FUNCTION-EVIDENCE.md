@@ -10,29 +10,31 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 659** · direct 408 (incl. oracle-sweep 191) · transitive 133 · lifecycle 52 · **evidenced (any) 561** · **unevidenced 98**.
+**Active ported: 727** · direct 447 (incl. oracle-sweep 192) · transitive 141 · lifecycle 57 · **evidenced (any) 611** · **unevidenced 116**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | `numeric.c` | 98 | 53 | 20 | 25 | 6 | 83 | 15 |
-| `move.c` | 56 | 32 | 23 | 14 | 2 | 48 | 8 |
+| `move.c` | 56 | 32 | 23 | 16 | 2 | 50 | 6 |
 | `strings.c` | 34 | 19 | 0 | 8 | 8 | 29 | 5 |
 | `intrinsic.c` | 232 | 117 | 103 | 58 | 8 | 177 | 55 |
 | `cconv.c` | 9 | 8 | 4 | 0 | 2 | 9 | 0 |
 | `termio.c` | 18 | 7 | 3 | 2 | 1 | 10 | 8 |
+| `call.c` | 67 | 38 | 1 | 6 | 5 | 47 | 20 |
 | `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
 | `mlio.c` | 8 | 6 | 1 | 0 | 2 | 8 | 0 |
 | `reportio.c` | 18 | 14 | 0 | 1 | 4 | 17 | 1 |
-| `common.c` | 2 | 0 | 0 | 1 | 0 | 1 | 1 |
+| `common.c` | 3 | 1 | 0 | 1 | 0 | 2 | 1 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)
 
 - **`numeric.c`** (15): `cob_decimal_adjust`, `cob_decimal_align`, `cob_decimal_clear`, `cob_decimal_pop`, `cob_decimal_push`, `cob_decimal_set`, `cob_decimal_set_llint`, `cob_logical_left_c`, `cob_logical_right_c`, `cob_pow_10_uli`, `count_leading_zeros`, `insert_packed_aligned`, `mpz_get_sll`, `mpz_get_ull`, `mpz_set_sll`
-- **`move.c`** (8): `cob_binary_mget_uint64`, `cob_binary_mset_sint64`, `cob_binary_mset_uint64`, `cob_get_comp1`, `cob_move_ibm`, `cob_put_comp1`, `cob_put_pointer`, `cob_set_llint`
+- **`move.c`** (6): `cob_binary_mget_uint64`, `cob_binary_mset_sint64`, `cob_binary_mset_uint64`, `cob_move_ibm`, `cob_put_pointer`, `cob_set_llint`
 - **`strings.c`** (5): `cob_inspect_trailing`, `cob_unstring_tallying`, `do_mark`, `inspect_common_no_replace`, `inspect_common_replacing`
 - **`intrinsic.c`** (55): `add_decimal_digits`, `add_z`, `cob_intr_boolean_of_integer`, `cob_intr_char_national`, `cob_intr_display_of`, `cob_intr_exception_file_n`, `cob_intr_exception_location_n`, `cob_intr_national_of`, `cob_intr_random`, `cob_intr_seconds_past_midnight`, `cob_intr_standard_compare`, `decimal_places_for_seconds`, `format_as_yyyyddd`, `format_as_yyyymmdd`, `format_as_yyyywwwd`, `get_day_of_week`, `get_iso_week`, `get_iso_week_one`, `get_seconds_past_midnight`, `get_substituted_size`, `integer_of_ddd`, `integer_of_mmdd`, `integer_of_wwwd`, `max_week`, `rest_is_offset_format`, `rest_is_z`, `substitute_matches`, `test_century`, `test_char`, `test_char_cond`, `test_char_in_range`, `test_colon_presence`, `test_date_end`, `test_day_of_month`, `test_day_of_week`, `test_day_of_year`, `test_decade`, `test_decimal_places`, `test_digit`, `test_hour`, `test_hyphen_presence`, `test_less_than_60`, `test_minute`, `test_month`, `test_no_trailing_junk`, `test_offset_time`, `test_second`, `test_time_end`, `test_two_zeroes`, `test_unit_year`, `test_w_presence`, `test_week`, `test_year`, `test_z_presence`, `valid_offset_time`
 - **`termio.c`** (8): `cob_accept`, `cob_dump_field`, `cob_dump_field_ext`, `cob_dump_file`, `cob_dump_output`, `dump_field_internal`, `dump_pending_output`, `is_field_display`
+- **`call.c`** (20): `cob_get_dbl_param`, `cob_get_field_str_buffered`, `cob_get_param_constant`, `cob_get_param_digits`, `cob_get_param_scale`, `cob_get_param_sign`, `cob_get_param_str`, `cob_get_param_str_buffered`, `cob_get_param_type`, `cob_longjmp`, `cob_put_dbl_param`, `cob_put_param_str`, `cob_put_u64_param`, `cob_resolve_error`, `cob_resolve_func`, `cob_savenv`, `cob_savenv2`, `cob_set_library_path`, `lt_dlerror`, `set_resolve_error`
 - **`fileio.c`** (5): `cob_file_external_addr`, `cob_file_fcd_adrs`, `cob_file_fcdkey_adrs`, `cob_file_sort_giving_extfh`, `cob_file_sort_options`
 - **`reportio.c`** (1): `limitCheckOneLine`
 - **`common.c`** (1): `cob_get_current_date_and_time_from_os`
