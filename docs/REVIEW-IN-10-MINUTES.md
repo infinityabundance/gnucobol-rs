@@ -37,6 +37,15 @@ Generated, not authored: [`reports/receipts/`](../reports/receipts/) — one `re
 each the output of a live sweep. The machine-readable ladder with the **lie each court prevents** is
 [`reports/claim-ladder.json`](../reports/claim-ladder.json).
 
+## 5b. The generated evidence views (which documents are authoritative)
+Four independent generated views back the port, each with a `generate`/`check` gate (drift fails the guard):
+- [`LIBCOB-PARITY.md`](../LIBCOB-PARITY.md) -- typed C<->Rust **symbol** parity (a real `fn` exists; doc-only false hits rejected). Authoritative for *symbol* coverage. (`port-index parity`)
+- [`DOXYGEN-PARITY.md`](../DOXYGEN-PARITY.md) -- an independent preprocessed-C function inventory (did we miss a function?). (`xtask doxygen-compare`)
+- [`CLANG-AST-PARITY.md`](../CLANG-AST-PARITY.md) -- clang AST: per-file function definitions, signatures, and the C callgraph (what does each function depend on?). (`port-index clang-index`)
+- [`FUNCTION-EVIDENCE.md`](../FUNCTION-EVIDENCE.md) -- per-ported-fn classified evidence: direct (unit/Kani/fuzz/oracle-sweep) / transitive (callgraph) / lifecycle / unevidenced. (`port-index evidence`)
+
+**Byte/behaviour parity is none of these** -- it is the per-court oracle sweeps in `lab/verify-sealed-courts.sh` (the authoritative behaviour court). The libcob port is **file-by-file**: 7 files at 100% symbol parity, `fileio.c` in progress. **Next risk frontier:** finish `fileio.c` in layers (status preconditions, record bounds, open/close, the organizations, locks, FCD/EXTFH), then `common.c` -- the runtime nervous system, to be mapped (state / side-effect / exception / config / signal) before it is ported.
+
 ## 6. Current audit/gate board
 [`audits/README.md`](../audits/README.md). **A folder existing is not a result** — only a current
 generated receipt or an explicit green row is a claim.
