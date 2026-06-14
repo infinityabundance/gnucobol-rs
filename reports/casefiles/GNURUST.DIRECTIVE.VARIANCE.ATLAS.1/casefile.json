@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.48",
+  "crate_version": "0.7.49",
   "damage_if_overclaimed": "decoding a record produced under a non-default binary-size/byteorder/truncate with the default profile silently mis-offsets fields, reverses binary values, or mis-rounds MOVEs; assuming the profile can be auto-detected from bytes invents a build environment that was never recorded",
   "hash_chain": {
-    "inputs_sha256": "87951b0410aba6b638d946e87fb13c622901a0aff8c24fd16c256a1972a4a8dd"
+    "inputs_sha256": "7abf67f8f9ac99cfa7d44a6bd75f3b337bcea8faf30f93ee8970aac1a6e2c9be"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "da3d04906bc9ae01c86fe78288220d0d3d2fd6928b57e174bea92af730a59af3",
-    "receipt_sha256": "a0039928bc9a6ff2232a5956950e8eb1873112af403a5c960028144159613ca4"
+    "receipt_sha256": "f6a308976fddf6202e96012e6c0f199f7cfa397347a5faca28b5ce31fd4f166c"
   },
   "kind": "court-casefile",
   "lie_prevented": [

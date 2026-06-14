@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SEARCH.TABLE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.48",
+  "crate_version": "0.7.49",
   "damage_if_overclaimed": "treating serial SEARCH as position-independent (or running SEARCH ALL on an unsorted table) silently returns the wrong table element in a lookup",
   "hash_chain": {
-    "inputs_sha256": "800b7debd24ea4d91f12bf15986834f2d664d1302e6ba2c51206432b337ea3d4"
+    "inputs_sha256": "63daa7c180a02b718596d670a5d6de63dd20cfea4a1cf373b778af6bdee0c4e6"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "752cd5c23ee3e8a788d9a04d63116018e0b17b8987d1e48b393c403ac12104ea",
-    "receipt_sha256": "c31de874b08b39778e87bf31a74ec23da9f983bd56afbbdd2ecaf38f4c39fce8"
+    "receipt_sha256": "53c714724b9a989b024ead14a977c5d9151bdc1d86644b3bb56038e2e0027f26"
   },
   "kind": "court-casefile",
   "lie_prevented": [

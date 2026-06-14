@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ACCEPT.DISPLAY.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.48",
+  "crate_version": "0.7.49",
   "damage_if_overclaimed": "assuming DISPLAY separates operands (it does not) or that ACCEPT preserves an over-length line (it truncates) corrupts emitted/captured text in a ported program",
   "hash_chain": {
-    "inputs_sha256": "679e251284fe558ac86d478ed60afde88a805d2e9c96109fde924a26fc8b5775"
+    "inputs_sha256": "99426647991e1f45f6f7f78a48adfd58beecf77deeb1366a5f094ca723772825"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "9f30da8477cf484cb44a4a43fa408742b957cce6234fe44f0920fdb302699e91",
-    "receipt_sha256": "e570dc5ac63d55592d86830955d4781cd93badaf2732093afad4d71180c76ddd"
+    "receipt_sha256": "ea9ebc1914bb62154f4bc84c88be713f7866702ecd63e24e5e994e51ffe3a659"
   },
   "kind": "court-casefile",
   "lie_prevented": [

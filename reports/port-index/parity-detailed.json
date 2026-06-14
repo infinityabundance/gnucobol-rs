@@ -3974,9 +3974,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 46,
+    "active_ported": 53,
     "compiled": 182,
-    "compiled_parity_pct": 25.8,
+    "compiled_parity_pct": 29.7,
     "disabled": 0,
     "doc_only": 0,
     "file": "fileio.c",
@@ -4572,12 +4572,14 @@
       {
         "function": "cob_sys_delete_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_copy_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_check_file_exist",
@@ -4587,27 +4589,32 @@
       {
         "function": "cob_sys_rename_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_get_current_dir",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_create_dir",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_change_dir",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_delete_dir",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_mkdir",
@@ -5009,25 +5016,18 @@
       "cob_rollback",
       "cob_sort_queues",
       "cob_sync",
-      "cob_sys_change_dir",
       "cob_sys_chdir",
       "cob_sys_check_file_exist",
       "cob_sys_close_file",
-      "cob_sys_copy_file",
       "cob_sys_copyfile",
-      "cob_sys_create_dir",
       "cob_sys_create_file",
-      "cob_sys_delete_dir",
-      "cob_sys_delete_file",
       "cob_sys_extfh",
       "cob_sys_file_delete",
       "cob_sys_file_info",
       "cob_sys_flush_file",
-      "cob_sys_get_current_dir",
       "cob_sys_mkdir",
       "cob_sys_open_file",
       "cob_sys_read_file",
-      "cob_sys_rename_file",
       "cob_sys_write_file",
       "cob_unlock",
       "cob_unlock_file",
@@ -5077,7 +5077,7 @@
       "update_record_and_keys_if_necessary"
     ],
     "inactive_mirrors": 1,
-    "missing": 135,
+    "missing": 128,
     "source_funcs": 182,
     "test_only": 0
   },

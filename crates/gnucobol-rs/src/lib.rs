@@ -684,6 +684,8 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     fileio::cob_file_sort_init_key(&mut keys, 0, rmax, data.first().copied().unwrap_or(0) & 1 == 0);
     let chunks: Vec<&[u8]> = body.chunks(rmax.max(1)).collect();
     let _ = fileio::sort_records(&chunks, &keys, None);
+    // CBL_GET_CURRENT_DIR (GNURUST.FILEIO.SYS.1): read-only, never panics for any flags/length.
+    let _ = fileio::cob_sys_get_current_dir(data.first().copied().unwrap_or(0) as i32, body.len() % 8192);
 }
 
 #[cfg(feature = "fuzzing")]

@@ -699,6 +699,104 @@ pub fn dummy_rnxt_rewrite() -> &'static str {
 }
 
 // ======================================================================================================
+// CBL_* system file/directory routines (`GNURUST.FILEIO.SYS.1`)
+//
+// Faithful ports of `fileio.c`'s `cob_sys_*` library routines (the `CBL_DELETE_FILE` / `CBL_CREATE_DIR`
+// / ... entry points a COBOL program CALLs). Each takes the already-resolved name(s) (the C extracts
+// them from the COBOL parameters and applies filename mapping, the calling-convention boundary) and
+// returns the routine's documented status: `0` success, `128` operation failed, `35` the
+// source does not exist, `-1` a missing parameter. The actual syscall is performed via `std::fs` /
+// `std::env`, matching libcob's `unlink`/`rename`/`mkdir`/`chdir`/`getcwd`/copy.
+// ======================================================================================================
+
+/// Port of `fileio.c:cob_sys_delete_file` (`CBL_DELETE_FILE`): remove `name`; `0` on success, `128` on
+/// failure.
+pub fn cob_sys_delete_file(name: &[u8]) -> i32 {
+    match std::str::from_utf8(name) {
+        Ok(p) if std::fs::remove_file(p).is_ok() => 0,
+        _ => 128,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_copy_file` (`CBL_COPY_FILE`): copy `from` to `to`; `35` if the source does
+/// not exist, `-1` on a write failure, `0` on success.
+pub fn cob_sys_copy_file(from: &[u8], to: &[u8]) -> i32 {
+    let (Ok(src), Ok(dst)) = (std::str::from_utf8(from), std::str::from_utf8(to)) else {
+        return -1;
+    };
+    let data = match std::fs::read(src) {
+        Ok(d) => d,
+        Err(_) => return 35,
+    };
+    match std::fs::write(dst, &data) {
+        Ok(()) => 0,
+        Err(_) => -1,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_rename_file` (`CBL_RENAME_FILE`): rename `from` to `to`; `0` / `128`.
+pub fn cob_sys_rename_file(from: &[u8], to: &[u8]) -> i32 {
+    match (std::str::from_utf8(from), std::str::from_utf8(to)) {
+        (Ok(a), Ok(b)) if std::fs::rename(a, b).is_ok() => 0,
+        _ => 128,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_create_dir` (`CBL_CREATE_DIR`): create directory `name`; `0` / `128`.
+pub fn cob_sys_create_dir(name: &[u8]) -> i32 {
+    match std::str::from_utf8(name) {
+        Ok(p) if std::fs::create_dir(p).is_ok() => 0,
+        _ => 128,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_delete_dir` (`CBL_DELETE_DIR`): remove directory `name`; `0` / `128`.
+pub fn cob_sys_delete_dir(name: &[u8]) -> i32 {
+    match std::str::from_utf8(name) {
+        Ok(p) if std::fs::remove_dir(p).is_ok() => 0,
+        _ => 128,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_change_dir` (`CBL_CHANGE_DIR`): change the working directory to `name`;
+/// `0` / `128`.
+pub fn cob_sys_change_dir(name: &[u8]) -> i32 {
+    match std::str::from_utf8(name) {
+        Ok(p) if std::env::set_current_dir(p).is_ok() => 0,
+        _ => 128,
+    }
+}
+
+/// Port of `fileio.c:cob_sys_get_current_dir` (`CBL_GET_CURRENT_DIR`): write the working directory into a
+/// `dir_length`-wide field (space-filled, double-quoted when it contains a space). `flags != 0` → `129`,
+/// `dir_length < 1` or a name that does not fit → `128`. Returns `(status, field_bytes)`.
+pub fn cob_sys_get_current_dir(flags: i32, dir_length: usize) -> (i32, Vec<u8>) {
+    if dir_length < 1 {
+        return (128, Vec::new());
+    }
+    if flags != 0 {
+        return (129, vec![b' '; dir_length]);
+    }
+    let mut dir = vec![b' '; dir_length];
+    let cwd = match std::env::current_dir() {
+        Ok(p) => p.to_string_lossy().into_owned().into_bytes(),
+        Err(_) => return (128, dir),
+    };
+    let has_space = if cwd.contains(&b' ') { 2usize } else { 0 };
+    if cwd.len() + has_space > dir_length {
+        return (128, dir);
+    }
+    if has_space != 0 {
+        dir[0] = 0x22;
+        dir[1..1 + cwd.len()].copy_from_slice(&cwd);
+        dir[1 + cwd.len()] = 0x22;
+    } else {
+        dir[..cwd.len()].copy_from_slice(&cwd);
+    }
+    (0, dir)
+}
+
+// ======================================================================================================
 // SORT/MERGE record comparison (`GNURUST.FILEIO.SORT.1`)
 // ======================================================================================================
 
@@ -1576,6 +1674,39 @@ mod tests {
         assert_eq!(relative_read_next(&d1.file, &mut slot, 4).status, "10"); // end of file
     }
 
+    // ---- CBL_* system routines ----
+    #[test]
+    fn cbl_file_dir_routines() {
+        let base = std::env::temp_dir().join("gnucobol_rs_sys_test_a");
+        let _ = std::fs::remove_dir_all(&base);
+        // create_dir -> 0, again -> 128 (exists)
+        assert_eq!(cob_sys_create_dir(base.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(cob_sys_create_dir(base.to_str().unwrap().as_bytes()), 128);
+        // write a file, copy it, rename it, delete it
+        let f1 = base.join("a.txt");
+        std::fs::write(&f1, b"hello").unwrap();
+        let f2 = base.join("b.txt");
+        assert_eq!(cob_sys_copy_file(f1.to_str().unwrap().as_bytes(), f2.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(std::fs::read(&f2).unwrap(), b"hello");
+        // copy a missing source -> 35
+        assert_eq!(cob_sys_copy_file(base.join("none").to_str().unwrap().as_bytes(), f2.to_str().unwrap().as_bytes()), 35);
+        let f3 = base.join("c.txt");
+        assert_eq!(cob_sys_rename_file(f2.to_str().unwrap().as_bytes(), f3.to_str().unwrap().as_bytes()), 0);
+        assert!(f3.exists() && !f2.exists());
+        assert_eq!(cob_sys_delete_file(f3.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(cob_sys_delete_file(f3.to_str().unwrap().as_bytes()), 128); // already gone
+        std::fs::remove_file(&f1).ok();
+        // delete_dir -> 0, again -> 128
+        assert_eq!(cob_sys_delete_dir(base.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(cob_sys_delete_dir(base.to_str().unwrap().as_bytes()), 128);
+        // change_dir to a missing path -> 128 (does not change cwd)
+        assert_eq!(cob_sys_change_dir(b"/gnucobol_rs_nonexistent_xyz"), 128);
+        // get_current_dir: flags != 0 -> 129; length 0 -> 128; a sane length succeeds
+        assert_eq!(cob_sys_get_current_dir(1, 100).0, 129);
+        assert_eq!(cob_sys_get_current_dir(0, 0).0, 128);
+        assert_eq!(cob_sys_get_current_dir(0, 4096).0, 0);
+    }
+
     // ---- SORT comparison ----
     #[test]
     fn sort_records_ascending_descending_stable() {
@@ -1833,5 +1964,15 @@ mod kani_proofs {
         let ab = cob_file_sort_compare(&a, 0, &b, 1, &keys, None);
         let ba = cob_file_sort_compare(&b, 1, &a, 0, &keys, None);
         assert_eq!(ab, ba.reverse());
+    }
+    // KANIFOR: GNURUST.FILEIO.SYS.1
+    /// The non-I/O precondition paths of `cob_sys_get_current_dir` are total: `flags != 0` → 129, a
+    /// zero-length field → 128, regardless of value. (The `getcwd` path itself is the OS boundary.)
+    #[kani::proof]
+    fn cob_sys_get_current_dir_preconditions() {
+        let flags: i32 = kani::any();
+        kani::assume(flags != 0);
+        assert_eq!(cob_sys_get_current_dir(flags, 100).0, 129);
+        assert_eq!(cob_sys_get_current_dir(0, 0).0, 128);
     }
 }

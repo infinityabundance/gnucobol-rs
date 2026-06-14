@@ -12,6 +12,12 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.49]
+- **`fileio.c` -- CBL_* system file/directory routines sealed (`GNURUST.FILEIO.SYS.1`).** A faithful port of `libcob/fileio.c`'s `cob_sys_delete_file`/`cob_sys_copy_file`/`cob_sys_rename_file`/`cob_sys_create_dir`/`cob_sys_delete_dir`/`cob_sys_change_dir`/`cob_sys_get_current_dir` -- the `CBL_DELETE_FILE`/`CBL_COPY_FILE`/`CBL_RENAME_FILE`/`CBL_CREATE_DIR`/`CBL_DELETE_DIR`/`CBL_CHANGE_DIR`/`CBL_GET_CURRENT_DIR` library routines a COBOL program `CALL`s -- proven to match the admitted GnuCOBOL 3.2 `libcob`'s `RETURN-CODE` (`cob_sys_sweep` 1/0, end-to-end against a fixed CALL sequence):
+  - each performs the syscall (via `std::fs`/`std::env`, as the core already does for collation/clock I/O) and returns `0` success, `128` failure, `35` when a copy source is absent, `129` for `CBL_GET_CURRENT_DIR` with nonzero flags, `-1` for a missing parameter; `CBL_GET_CURRENT_DIR` writes the cwd space-filled and double-quoted when it contains a space.
+  - The `localtime`-dependent `CBL_CHECK_FILE_EXIST` date formatting, the handle-based `CBL_OPEN`/`READ`/`WRITE`/`CLOSE`/`FLUSH_FILE` routines, and the filename-mapping path stay explicit non-claims. `fileio.c` parity 46 -> 53/182 (29.7%).
+- No API breaks: additive (new `fileio::cob_sys_*` routines).
+
 ## [0.7.48]
 - **`fileio.c` -- SORT/MERGE record comparison sealed (`GNURUST.FILEIO.SORT.1`).** A faithful port of `libcob/fileio.c` `sort_cmps` + `cob_file_sort_compare` + `cob_file_sort_init_key` -- the record order a `SORT` produces -- proven to match the admitted GnuCOBOL 3.2 `libcob`'s GIVING-file order (`sort_sweep` 1/0, end-to-end against a real `SORT ON ASCENDING KEY ... ON DESCENDING KEY ...` with duplicate keys):
   - each `ON ASCENDING`/`DESCENDING KEY` is a byte range of the record compared via `sort_cmps` (byte-by-byte, optionally through a 256-entry collating table); the first differing key decides, negated for DESCENDING; a full key tie breaks by insertion order (the `unique` field) so the sort is **stable**.

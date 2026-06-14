@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.FILEIO.SYS.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.49",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "7536a20c68bf7ab8e6b0d9f02c71374c1869dfcf00d7d7f7d92b4419e3dd10c0",
+      "receipt_sha256": "47a77b55f543ce10ad6268c1cfda16b5ebef24e3bc251bccd221db774c40fcb2"
+    },
+    "negative_claim_count": 9,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/cob_sys_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "cb52b6c34729989fdb8f2fa1c9d01bf51c9bf1a2c87253ce9a03c66515bb303f"
+      },
+      "name": "reports/casefiles/GNURUST.FILEIO.SYS.1/casefile.json"
+    }
+  ]
+}
