@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILE.WRITE.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.55
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.56
 
 - **Oracle:** cobc OPEN OUTPUT/WRITE (libcob/fileio.c)
 - **Byte domain(s):** OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF)

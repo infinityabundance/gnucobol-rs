@@ -179,16 +179,15 @@
       "unevidenced": []
     },
     {
-      "active": 110,
-      "direct": 96,
-      "evidenced_any": 108,
+      "active": 121,
+      "direct": 107,
+      "evidenced_any": 120,
       "file": "fileio.c",
       "lifecycle": 12,
       "oracle": 36,
-      "transitive": 10,
+      "transitive": 11,
       "unevidenced": [
-        "cob_file_sort_options",
-        "cob_file_sort_submit"
+        "cob_file_sort_options"
       ]
     },
     {
@@ -243,12 +242,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 589,
-    "direct": 353,
-    "evidenced_any": 494,
+    "active": 600,
+    "direct": 364,
+    "evidenced_any": 506,
     "lifecycle": 46,
     "oracle": 191,
-    "transitive": 122,
-    "unevidenced": 95
+    "transitive": 123,
+    "unevidenced": 94
   }
 }

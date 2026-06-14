@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SEARCH.TABLE.1 (court-casefile)
 
-**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.55
+**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.56
 
 - **Oracle:** cobc SEARCH/SEARCH ALL (cobc/typeck.c + codegen.c)
 - **Byte domain(s):** the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key)

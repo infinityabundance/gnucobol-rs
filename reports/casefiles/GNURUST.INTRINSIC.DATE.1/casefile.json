@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.DATE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.55",
+  "crate_version": "0.7.56",
   "damage_if_overclaimed": "using a Unix/1900 epoch or a Julian-calendar model shifts every INTEGER-OF-DATE/DATE-OF-INTEGER result, corrupting date arithmetic in a ported program",
   "hash_chain": {
-    "inputs_sha256": "e9e2c9a343a0952c5e51eda48aa88144db6d3a91d6a8fcb80dc4d31af6aea77e"
+    "inputs_sha256": "0302c6c311f4ab3213c8a6eb85ea2027011a7cb1f78dedafd32c0a2adad43a84"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "29555594025e45667e55b5a0e9ec6c855fac3c446892e965f1e457f07f2f3527",
-    "receipt_sha256": "196156222982d5ddbc7f071ff44f1af37ef012c66cc58cb99300f205e7e6d10e"
+    "receipt_sha256": "c3a9f381265380a479b0d5a57888cbb05f1e4e02e53a68a1db03a4f59f2df609"
   },
   "kind": "court-casefile",
   "lie_prevented": [

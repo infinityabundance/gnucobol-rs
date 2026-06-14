@@ -1362,6 +1362,28 @@ impl CobSort {
     pub fn cob_file_sort_close(&mut self) {
         self.cob_free_list();
     }
+
+    /// Port of `fileio.c:cob_file_release` — the `RELEASE record` verb of a SORT INPUT PROCEDURE: submit
+    /// `record` to the sort, returning FILE STATUS `00` on success or `30` (permanent error) if the engine
+    /// is already retrieving.
+    pub fn cob_file_release(&mut self, record: &[u8]) -> &'static str {
+        if self.cob_file_sort_submit(record) == 0 {
+            "00"
+        } else {
+            "30"
+        }
+    }
+
+    /// Port of `fileio.c:cob_file_return` — the `RETURN INTO record` verb of a SORT OUTPUT PROCEDURE:
+    /// retrieve the next sorted record into `buf`, returning FILE STATUS `00` (got a record), `10` (end of
+    /// the sorted run), or `30` (permanent error).
+    pub fn cob_file_return(&mut self, buf: &mut [u8]) -> &'static str {
+        match self.cob_file_sort_retrieve(buf) {
+            0 => "00",
+            COBSORTEND => "10",
+            _ => "30",
+        }
+    }
 }
 
 // ======================================================================================================
@@ -1687,6 +1709,155 @@ impl LockEnv {
             f.file_lock_set = false;
         }
         "00"
+    }
+}
+
+// ======================================================================================================
+// Micro Focus FCD conversion (`fcd2_to_fcd3` / `fcd3_to_fcd2`)
+//
+// A faithful port of the data fields of fileio.c's conversion between the 32-bit `FCD2` and the 64-bit
+// `FCD3` File Control Description structs (the Micro Focus external-file-handler ABI). Single-byte flags copy across; the
+// record-length fields widen 16<->32 bits (`LDCOMPX2`/`STCOMPX4`, big-endian in the on-wire struct, held
+// here as values); `refKey`/`lineCount` swap roles by ORG_INDEXED; and `fcd2_to_fcd3` sets the
+// `MF_CALLFH_GNUCOBOL` (0x80) flag. The struct *pointers* (record/filename/kdb/file handle) and the KDB
+// key-block construction are the declared C-ABI boundary; this models the scalar data conversion, which
+// round-trips (an FCD2 -> FCD3 -> FCD2 preserves every data field).
+// ======================================================================================================
+
+/// `ORG_INDEXED` (`common.h`).
+const ORG_INDEXED: u8 = 2;
+/// `MF_CALLFH_GNUCOBOL` — set in `gcFlags` when GnuCOBOL drives the external-file-handler conversion.
+const MF_CALLFH_GNUCOBOL: u8 = 0x80;
+
+/// The scalar data fields of the 64-bit `FCD3` File Control Description (the pointers + KDB block are the
+/// declared C-ABI boundary). Record lengths are held as 32-bit values (the struct stores them BE32).
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct Fcd3 {
+    pub file_status: [u8; 2],
+    pub file_org: u8,
+    pub access_flags: u8,
+    pub open_mode: u8,
+    pub record_mode: u8,
+    pub file_format: u8,
+    pub lock_mode: u8,
+    pub other_flags: u8,
+    pub fstatus_type: u8,
+    pub comp_type: u8,
+    pub block_size: u8,
+    pub gc_flags: u8,
+    pub fsv2_flags: u8,
+    pub conf_flags: u8,
+    pub conf_flags2: u8,
+    pub idx_cache_sz: u8,
+    pub idx_cache_area: u8,
+    pub cur_rec_len: u32,
+    pub min_rec_len: u32,
+    pub max_rec_len: u32,
+    pub ref_key: [u8; 2],
+    pub line_count: [u8; 2],
+    pub eff_key_len: [u8; 2],
+    pub fname_len: [u8; 2],
+    pub rel_byte_adrs: [u8; 8],
+}
+
+/// The scalar data fields of the 32-bit `FCD2` File Control Description. Record lengths are 16-bit.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct Fcd2 {
+    pub file_status: [u8; 2],
+    pub file_org: u8,
+    pub access_flags: u8,
+    pub open_mode: u8,
+    pub record_mode: u8,
+    pub file_format: u8,
+    pub lock_mode: u8,
+    pub other_flags: u8,
+    pub fstatus_type: u8,
+    pub comp_type: u8,
+    pub block_size: u8,
+    pub gc_flags: u8,
+    pub fsv2_flags: u8,
+    pub conf_flags: u8,
+    pub conf_flags2: u8,
+    pub idx_cache_sz: u8,
+    pub idx_cache_area: u8,
+    pub cur_rec_len: u16,
+    pub min_rec_len: u16,
+    pub max_rec_len: u16,
+    pub ref_key: [u8; 2],
+    pub eff_key_len: [u8; 2],
+    pub fname_len: [u8; 2],
+    pub rel_byte_adrs64: [u8; 8],
+}
+
+/// Port of `fileio.c:fcd2_to_fcd3` — convert a 32-bit `FCD2` into a 64-bit `FCD3` (the data fields). Flags
+/// copy across, record lengths widen 16->32, the `MF_CALLFH_GNUCOBOL` flag is forced on, and `refKey`/
+/// `lineCount` are placed by organization (INDEXED -> `refKey`, else -> `lineCount`).
+pub fn fcd2_to_fcd3(fcd2: &Fcd2) -> Fcd3 {
+    let mut fcd = Fcd3 {
+        file_status: fcd2.file_status,
+        file_org: fcd2.file_org,
+        access_flags: fcd2.access_flags,
+        open_mode: fcd2.open_mode,
+        record_mode: fcd2.record_mode,
+        file_format: fcd2.file_format,
+        lock_mode: fcd2.lock_mode,
+        other_flags: fcd2.other_flags,
+        fstatus_type: fcd2.fstatus_type,
+        comp_type: fcd2.comp_type,
+        block_size: fcd2.block_size,
+        gc_flags: fcd2.gc_flags | MF_CALLFH_GNUCOBOL,
+        fsv2_flags: fcd2.fsv2_flags,
+        conf_flags: fcd2.conf_flags,
+        conf_flags2: fcd2.conf_flags2,
+        idx_cache_sz: fcd2.idx_cache_sz,
+        idx_cache_area: fcd2.idx_cache_area,
+        cur_rec_len: fcd2.cur_rec_len as u32,
+        min_rec_len: fcd2.min_rec_len as u32,
+        max_rec_len: fcd2.max_rec_len as u32,
+        eff_key_len: fcd2.eff_key_len,
+        fname_len: fcd2.fname_len,
+        rel_byte_adrs: fcd2.rel_byte_adrs64,
+        ..Fcd3::default()
+    };
+    if fcd.file_org == ORG_INDEXED {
+        fcd.line_count = [0, 0];
+        fcd.ref_key = fcd2.ref_key;
+    } else {
+        fcd.line_count = fcd2.ref_key;
+        fcd.ref_key = [0, 0];
+    }
+    fcd
+}
+
+/// Port of `fileio.c:fcd3_to_fcd2` — convert a 64-bit `FCD3` back into a 32-bit `FCD2` (the data fields):
+/// the inverse of [`fcd2_to_fcd3`], record lengths narrowing 32->16, `refKey` taken from `refKey` for
+/// INDEXED else from `lineCount`.
+pub fn fcd3_to_fcd2(fcd: &Fcd3) -> Fcd2 {
+    Fcd2 {
+        file_status: fcd.file_status,
+        file_org: fcd.file_org,
+        access_flags: fcd.access_flags,
+        open_mode: fcd.open_mode,
+        record_mode: fcd.record_mode,
+        file_format: fcd.file_format,
+        lock_mode: fcd.lock_mode,
+        other_flags: fcd.other_flags,
+        fstatus_type: fcd.fstatus_type,
+        comp_type: fcd.comp_type,
+        block_size: fcd.block_size,
+        gc_flags: fcd.gc_flags,
+        fsv2_flags: fcd.fsv2_flags,
+        conf_flags: fcd.conf_flags,
+        conf_flags2: fcd.conf_flags2,
+        idx_cache_sz: fcd.idx_cache_sz,
+        idx_cache_area: fcd.idx_cache_area,
+        cur_rec_len: fcd.cur_rec_len as u16,
+        min_rec_len: fcd.min_rec_len as u16,
+        max_rec_len: fcd.max_rec_len as u16,
+        ref_key: if fcd.file_org == ORG_INDEXED { fcd.ref_key } else { fcd.line_count },
+        eff_key_len: fcd.eff_key_len,
+        fname_len: fcd.fname_len,
+        rel_byte_adrs64: fcd.rel_byte_adrs,
     }
 }
 
@@ -2264,6 +2435,75 @@ pub fn cob_savekey(record: &[u8], key: &CobFileKey) -> Vec<u8> {
         out.extend_from_slice(&record[s.min(end)..end]);
     }
     out
+}
+
+/// Port of `fileio.c:bdb_keylen` — the total length of key `idx` (the sum of its part sizes, or the
+/// single field's size). Returns `None` for an out-of-range index (the C `-1`).
+pub fn bdb_keylen(keys: &[CobFileKey], idx: usize) -> Option<usize> {
+    let key = keys.get(idx)?;
+    if key.components.is_empty() {
+        Some(key.field_size)
+    } else {
+        Some(key.components.iter().map(|c| c.1).sum())
+    }
+}
+
+/// Port of `fileio.c:bdb_savekey` — extract key `idx` from `record` into a contiguous key buffer (each
+/// component copied in order; a single-component key copies its `[offset, offset+size)` field). Returns
+/// the saved key (its length is [`bdb_keylen`]).
+pub fn bdb_savekey(keys: &[CobFileKey], record: &[u8], idx: usize) -> Vec<u8> {
+    match keys.get(idx) {
+        Some(key) => cob_savekey(record, key),
+        None => Vec::new(),
+    }
+}
+
+/// Port of `fileio.c:bdb_setkey` — set the active search key to key `idx` extracted from `record` (the C
+/// fills `p->savekey` and points `p->key` at it). Returns the key bytes (the observable `p->key`).
+pub fn bdb_setkey(keys: &[CobFileKey], record: &[u8], idx: usize) -> Vec<u8> {
+    bdb_savekey(keys, record, idx)
+}
+
+/// Port of `fileio.c:bdb_cmpkey` — compare a saved key `keyarea` against key `idx` extracted from
+/// `record`, up to `partlen` bytes (`<= 0` = the whole key), returning the sign of the first differing
+/// byte (`memcmp` chain over the components).
+pub fn bdb_cmpkey(keys: &[CobFileKey], keyarea: &[u8], record: &[u8], idx: usize, partlen: i32) -> i32 {
+    match keys.get(idx) {
+        // C: memcmp(keyarea, extract(record)); indexed_cmpkey gives memcmp(extract(record), keyarea), so negate.
+        Some(key) => -indexed_cmpkey(record, keyarea, &indexed_keydesc(key), partlen),
+        None => 0,
+    }
+}
+
+/// Port of `fileio.c:bdb_suppresskey` — is every byte of key `idx` (extracted from `record`) the
+/// `suppress` character? Returns `false` when the key has no SUPPRESS clause (`suppress` is `None`).
+pub fn bdb_suppresskey(keys: &[CobFileKey], record: &[u8], idx: usize, suppress: Option<u8>) -> bool {
+    let ch = match suppress {
+        Some(c) => c,
+        None => return false,
+    };
+    let key = bdb_savekey(keys, record, idx);
+    !key.is_empty() && key.iter().all(|&b| b == ch)
+}
+
+/// Port of `fileio.c:set_dbt` — build the record-lock object: the file name, a NUL terminator, then the
+/// record key bytes (`filename \0 key`). Locks are therefore scoped per file *and* per record key.
+pub fn set_dbt(filename: &[u8], key: &[u8]) -> Vec<u8> {
+    let mut out = Vec::with_capacity(filename.len() + 1 + key.len());
+    out.extend_from_slice(filename);
+    out.push(0);
+    out.extend_from_slice(key);
+    out
+}
+
+/// Port of `fileio.c:cob_get_filename_print` — the diagnostic string for a file: `select_name ('env')`,
+/// or `select_name ('env' => resolved)` when `resolved_name` is given and differs from the ASSIGN/env
+/// name (`show_resolved_name`). This is what appears in libcob's I/O error messages.
+pub fn cob_get_filename_print(select_name: &str, open_env: &str, resolved_name: Option<&str>) -> String {
+    match resolved_name {
+        Some(resolved) if resolved != open_env => format!("{select_name} ('{open_env}' => {resolved})"),
+        _ => format!("{select_name} ('{open_env}')"),
+    }
 }
 
 /// Port of the byte-core of `fileio.c:save_status` — format an integer FILE STATUS into its 2 display
@@ -2928,6 +3168,26 @@ mod tests {
         assert!(e.cob_file_sort_giving().is_empty());
     }
 
+    #[test]
+    fn sort_release_return_verbs() {
+        // RELEASE 3 records into a sort, then RETURN them in sorted order; RETURN past the end is 10
+        let mut s = CobSort::cob_file_sort_init(2, None);
+        s.cob_file_sort_init_key(0, 2, true);
+        assert_eq!(s.cob_file_release(b"CC"), "00");
+        assert_eq!(s.cob_file_release(b"AA"), "00");
+        assert_eq!(s.cob_file_release(b"BB"), "00");
+        let mut buf = vec![0u8; 2];
+        assert_eq!(s.cob_file_return(&mut buf), "00");
+        assert_eq!(buf, b"AA");
+        assert_eq!(s.cob_file_return(&mut buf), "00");
+        assert_eq!(buf, b"BB");
+        assert_eq!(s.cob_file_return(&mut buf), "00");
+        assert_eq!(buf, b"CC");
+        assert_eq!(s.cob_file_return(&mut buf), "10"); // end
+        // RELEASE after retrieving begins -> 30
+        assert_eq!(s.cob_file_release(b"ZZ"), "30");
+    }
+
     // ---- INDEXED organization ----
     fn rec(k: &str, v: &str) -> Vec<u8> {
         let mut r = k.as_bytes().to_vec();
@@ -2972,6 +3232,82 @@ mod tests {
         assert_eq!(s.indexed_delete(b"BBB"), "00");
         assert_eq!(s.indexed_read(b"BBB").0, "23");
         assert_eq!(s.indexed_delete(b"BBB"), "23");
+    }
+
+    #[test]
+    fn bdb_key_helpers_and_set_dbt() {
+        // single-component key at offset 2, length 3; multi-component key (0,2)+(5,1)
+        let keys = vec![
+            CobFileKey { duplicates: false, offset: 2, field_size: 3, components: vec![] },
+            CobFileKey { duplicates: true, offset: 0, field_size: 3, components: vec![(0, 2), (5, 1)] },
+        ];
+        assert_eq!(bdb_keylen(&keys, 0), Some(3));
+        assert_eq!(bdb_keylen(&keys, 1), Some(3));
+        assert_eq!(bdb_keylen(&keys, 9), None);
+        let record = b"ABCDEFGHIJ";
+        assert_eq!(bdb_savekey(&keys, record, 0), b"CDE".to_vec()); // offset 2..5
+        assert_eq!(bdb_setkey(&keys, record, 0), b"CDE".to_vec());
+        assert_eq!(bdb_savekey(&keys, record, 1), b"ABF".to_vec()); // (0,2)="AB" + (5,1)="F"
+        // cmpkey: equal -> 0, differing -> sign
+        let saved = bdb_savekey(&keys, record, 0);
+        assert_eq!(bdb_cmpkey(&keys, &saved, record, 0, 0), 0);
+        assert!(bdb_cmpkey(&keys, b"CDE", b"XXAAA", 0, 0) > 0); // "CDE" vs "AAA"
+        // suppresskey: key idx 0 = bytes [2,5); all '*' with suppress='*' -> true, else false
+        assert!(bdb_suppresskey(&keys, b"XX***ZZ", 0, Some(b'*')));
+        assert!(!bdb_suppresskey(&keys, b"XX**XZZ", 0, Some(b'*')));
+        assert!(!bdb_suppresskey(&keys, record, 0, None));
+        // set_dbt: filename \0 key
+        assert_eq!(set_dbt(b"f.dat", b"KEY"), b"f.dat\0KEY".to_vec());
+    }
+
+    #[test]
+    fn fcd2_fcd3_roundtrip() {
+        // a populated FCD2 (non-indexed: refKey carries lineCount); round-trips through FCD3
+        let mut fcd2 = Fcd2 {
+            file_status: *b"00",
+            file_org: 1, // ORG_SEQ
+            access_flags: 8,
+            open_mode: 2,
+            record_mode: 1,
+            file_format: 3,
+            lock_mode: 0x02,
+            other_flags: 0x20,
+            fstatus_type: 0x80,
+            comp_type: 0,
+            block_size: 4,
+            gc_flags: MF_CALLFH_GNUCOBOL, // already set so round-trip is exact
+            fsv2_flags: 0,
+            conf_flags: 0,
+            conf_flags2: 0,
+            idx_cache_sz: 0,
+            idx_cache_area: 0,
+            cur_rec_len: 80,
+            min_rec_len: 1,
+            max_rec_len: 80,
+            ref_key: [0x12, 0x34],
+            eff_key_len: [0, 3],
+            fname_len: [0, 7],
+            rel_byte_adrs64: [1, 2, 3, 4, 5, 6, 7, 8],
+        };
+        let fcd3 = fcd2_to_fcd3(&fcd2);
+        assert_eq!(fcd3.cur_rec_len, 80);
+        assert_eq!(fcd3.line_count, [0x12, 0x34]); // non-indexed: refKey -> lineCount
+        assert_eq!(fcd3.ref_key, [0, 0]);
+        assert_eq!(fcd3.gc_flags & MF_CALLFH_GNUCOBOL, MF_CALLFH_GNUCOBOL);
+        assert_eq!(fcd3_to_fcd2(&fcd3), fcd2);
+        // indexed: refKey stays refKey
+        fcd2.file_org = ORG_INDEXED;
+        let fcd3i = fcd2_to_fcd3(&fcd2);
+        assert_eq!(fcd3i.ref_key, [0x12, 0x34]);
+        assert_eq!(fcd3i.line_count, [0, 0]);
+        assert_eq!(fcd3_to_fcd2(&fcd3i), fcd2);
+    }
+
+    #[test]
+    fn filename_print_formats() {
+        assert_eq!(cob_get_filename_print("INF", "in.dat", None), "INF ('in.dat')");
+        assert_eq!(cob_get_filename_print("INF", "DD_IN", Some("in.dat")), "INF ('DD_IN' => in.dat)");
+        assert_eq!(cob_get_filename_print("INF", "in.dat", Some("in.dat")), "INF ('in.dat')");
     }
 
     #[test]

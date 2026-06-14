@@ -239,15 +239,10 @@
         "EXTFH3",
         "bdb_close_cursor",
         "bdb_close_index",
-        "bdb_cmpkey",
         "bdb_errcall_set",
-        "bdb_keylen",
         "bdb_msgcall_set",
         "bdb_nofile",
         "bdb_open_cursor",
-        "bdb_savekey",
-        "bdb_setkey",
-        "bdb_suppresskey",
         "check_alt_keys",
         "cob_cache_file",
         "cob_create_tmpfile",
@@ -269,11 +264,8 @@
         "cob_file_free",
         "cob_file_malloc",
         "cob_file_open",
-        "cob_file_release",
-        "cob_file_return",
         "cob_file_sort_giving_extfh",
         "cob_file_sort_using_extfh",
-        "cob_get_filename_print",
         "cob_get_sort_tempfile",
         "cob_read_item",
         "cob_sync",
@@ -284,8 +276,6 @@
         "copy_fcd_to_file",
         "copy_file_to_fcd",
         "copy_keys_fcd_to_file",
-        "fcd2_to_fcd3",
-        "fcd3_to_fcd2",
         "find_fcd",
         "find_fcd2",
         "find_file",
@@ -300,14 +290,13 @@
         "restorefileposition",
         "save_fcd_status",
         "savefileposition",
-        "set_dbt",
         "update_fcd_to_file",
         "update_file_to_fcd",
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 61.5,
-      "ported": 112
+      "parity_pct": 67.6,
+      "ported": 123
     },
     {
       "file": "mlio.c",
@@ -654,7 +643,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 51.7,
-    "ported": 605
+    "parity_pct": 52.6,
+    "ported": 616
   }
 }

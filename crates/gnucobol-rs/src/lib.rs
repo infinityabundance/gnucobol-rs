@@ -723,6 +723,22 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = env.unlock_record(&mut fl);
     let _ = env.lock_file(&mut fl, &String::from_utf8_lossy(body));
     let _ = env.unlock_file(&mut fl);
+    // bdb key helpers + set_dbt + filename print (never panic for any record/key bytes)
+    let keys = vec![fileio::CobFileKey { duplicates: false, offset: 0, field_size: rmax, components: vec![] }];
+    let _ = fileio::bdb_keylen(&keys, 0);
+    let _ = fileio::bdb_savekey(&keys, body, 0);
+    let _ = fileio::bdb_cmpkey(&keys, body, body, 0, 0);
+    let _ = fileio::bdb_suppresskey(&keys, body, 0, body.first().copied());
+    let _ = fileio::set_dbt(body, body);
+    let _ = fileio::cob_get_filename_print("F", &String::from_utf8_lossy(body), None);
+    // SORT RELEASE/RETURN over the engine
+    let mut sr = fileio::CobSort::cob_file_sort_init(rmax, None);
+    sr.cob_file_sort_init_key(0, rmax, true);
+    for c in body.chunks(rmax.max(1)) {
+        let _ = sr.cob_file_release(c);
+    }
+    let mut rb = vec![0u8; rmax];
+    let _ = sr.cob_file_return(&mut rb);
 }
 
 #[cfg(feature = "fuzzing")]

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.INDEXED.1 (court-casefile)
 
-**Verdict: PASS** · 18/18 pass, 0 fail · crate `gnucobol-rs` 0.7.55
+**Verdict: PASS** · 18/18 pass, 0 fail · crate `gnucobol-rs` 0.7.56
 
 - **Oracle:** cobc ORGANIZATION INDEXED RECORD KEY (libcob/fileio.c indexed_* handlers)
 - **Byte domain(s):** INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order
