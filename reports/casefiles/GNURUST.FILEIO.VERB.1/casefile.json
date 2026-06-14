@@ -1,0 +1,73 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23) before the organization handler"
+  ],
+  "case_id": "GNURUST.FILEIO.VERB.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.47",
+  "damage_if_overclaimed": "skipping the mode preconditions would let an illegal verb corrupt or read a file the dialect would have rejected with a 4x status",
+  "hash_chain": {
+    "inputs_sha256": "1dafbdd70e67344c01ddf6e08eff95fb78eb862a57291613b1e7c43457b72c08"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "4a7cf1c294e4c2309a039c4d17c7fff36598cb5ece712b1f88e23d576e526f50",
+    "receipt_sha256": "f4a869b7a6d95cb68a9cedd44d25746da3e38e3508a499a88d8bbca8e17908dc"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a COBOL verb runs regardless of how the file was opened -- NO: WRITE to an INPUT file is 48, READ from an OUTPUT file is 47, REWRITE/DELETE outside I-O is 49, a sequential REWRITE/DELETE without a prior READ is 43, and a sequential READ past EOF is 46 -- each verb checks the open and access mode first"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-ORGANIZATION-DISPATCH-ITSELF-SEALED",
+    "NEG.THE-COMPILE-TIME-START-ON-RANDOM-REJECTI",
+    "NEG.LINE-SEQUENTIAL-VALIDATE-71-AT-THE-VERB",
+    "NEG.CODE-SET-CONVERSION",
+    "NEG.THE-VARIABLE-RECORD-SIZE-RESOLUTION",
+    "NEG.EOP-EXCEPTION-SIDE-EFFECTS",
+    "NEG.THE-INDEXED-SUPPRESSED-KEY-SKIP",
+    "NEG.THE-FD-READ-WRITE-SYSCALLS-DECLARED-OS-B"
+  ],
+  "negative_claims": [
+    "the organization dispatch itself (sealed separately by the LINESEQ/SEQ/RELATIVE courts)",
+    "the compile-time START-on-RANDOM rejection (cobc rejects it before runtime)",
+    "LINE SEQUENTIAL validate-71 at the verb layer",
+    "CODE-SET conversion",
+    "the variable_record size resolution",
+    "EOP / exception side effects",
+    "the indexed suppressed-key skip",
+    "the fd read/write syscalls (declared OS boundary)",
+    "lie prevented: a COBOL verb runs regardless of how the file was opened -- NO: WRITE to an INPUT file is 48, READ from an OUTPUT file is 47, REWRITE/DELETE outside I-O is 49, a sequential REWRITE/DELETE without a prior READ is 43, and a sequential READ past EOF is 46 -- each verb checks the open and access mode first"
+  ],
+  "oracle": {
+    "detail": "cobc WRITE/READ/REWRITE/DELETE attempted in the wrong OPEN/ACCESS mode (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.VERB.1"
+  },
+  "positive_claims": [
+    "a faithful port of the precondition layer of libcob/fileio.c cob_write/cob_read/cob_read_next/cob_rewrite/cob_delete/cob_start -- the FILE STATUS a verb returns before dispatching to its organization handler, proven byte-identical to the admitted libcob (verb_sweep 7/0): WRITE needs OPEN OUTPUT/EXTEND in sequential access (else OUTPUT/I-O) otherwise 48",
+    "READ and READ NEXT need OPEN INPUT/I-O otherwise 47",
+    "REWRITE and DELETE need OPEN I-O otherwise 49",
+    "a SEQUENTIAL-access REWRITE or DELETE without a prior successful READ is 43",
+    "a sequential READ past end-of-file is 46",
+    "START on a RANDOM-access or non-INPUT/I-O file is 47",
+    "a record outside record_min..record_max is 44"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/verb_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 7,
+    "total": 7,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

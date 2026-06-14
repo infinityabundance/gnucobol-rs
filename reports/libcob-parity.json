@@ -255,7 +255,6 @@
         "cob_close",
         "cob_commit",
         "cob_create_tmpfile",
-        "cob_delete",
         "cob_delete_file",
         "cob_exit_fileio",
         "cob_exit_fileio_closeall",
@@ -303,13 +302,9 @@
         "cob_new_item",
         "cob_open",
         "cob_pre_open",
-        "cob_read",
         "cob_read_item",
-        "cob_read_next",
-        "cob_rewrite",
         "cob_rollback",
         "cob_sort_queues",
-        "cob_start",
         "cob_sync",
         "cob_sys_change_dir",
         "cob_sys_chdir",
@@ -333,7 +328,6 @@
         "cob_sys_write_file",
         "cob_unlock",
         "cob_unlock_file",
-        "cob_write",
         "cob_write_block",
         "copy_fcd_to_file",
         "copy_file_to_fcd",
@@ -380,8 +374,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 20.9,
-      "ported": 38
+      "parity_pct": 24.2,
+      "ported": 44
     },
     {
       "file": "mlio.c",
@@ -728,7 +722,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 45.4,
-    "ported": 531
+    "parity_pct": 45.9,
+    "ported": 537
   }
 }

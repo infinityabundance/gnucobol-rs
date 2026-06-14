@@ -671,6 +671,14 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let mut slot = 0usize;
     let _ = fileio::relative_read_next(body, &mut slot, rmax);
     let _ = fileio::relative_start(body, rmax, fileio::RelCond::Ge, key);
+    // verb preconditions (GNURUST.FILEIO.VERB.1): every mode combination decides without panicking.
+    let modes = [fileio::OpenMode::Closed, fileio::OpenMode::Input, fileio::OpenMode::Output, fileio::OpenMode::Io, fileio::OpenMode::Extend];
+    let om = modes[data.first().copied().unwrap_or(0) as usize % 5];
+    let am = [fileio::AccessMode::Sequential, fileio::AccessMode::Random, fileio::AccessMode::Dynamic][data.first().copied().unwrap_or(0) as usize % 3];
+    let _ = fileio::cob_write(om, am, body.len(), 0, rmax);
+    let _ = fileio::cob_read(om, false, true, false, true, false, false);
+    let _ = fileio::cob_delete(om, am, false);
+    let _ = fileio::cob_start(om, am, false, true);
 }
 
 #[cfg(feature = "fuzzing")]

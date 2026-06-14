@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ACCEPT.DISPLAY.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.46",
+  "crate_version": "0.7.47",
   "damage_if_overclaimed": "assuming DISPLAY of a signed field equals its stored zoned bytes (it does not -- it de-overpunches to a sign prefix) mis-sizes and mis-reads captured DISPLAY output",
   "hash_chain": {
-    "inputs_sha256": "c69f22351a7af2d62e1db0beec24b5aa11d0b69c18c051a7a21946c7872d7156"
+    "inputs_sha256": "24232d5b95f23ac3953873ff6b2ea1f3952c487dc8640b0dbefbc8d201781ce9"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "19162280a143831ff3a934e767c7e2b8777795e76efb5025133ce7611c5323a2",
-    "receipt_sha256": "a624cf5cd88abb235e515eb729789e4173a08c9b33eed022eaa820f65dca1e20"
+    "receipt_sha256": "4919a14169708f591ca95a41f56dd980ff9436170e4753ada6bf1f2d64888c27"
   },
   "kind": "court-casefile",
   "lie_prevented": [

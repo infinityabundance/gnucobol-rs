@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.LINESEQ.2` |
 | court | line-sequential READ config matrix |
-| crate_version | `0.7.46` |
+| crate_version | `0.7.47` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN INPUT + READ NEXT (LINE SEQUENTIAL) under COB_LS_VALIDATE/NULLS/SPLIT -> record bytes + FILE STATUS (00/04/06/09/10) |
 | replay command | `bash lab/oracle/lineseq_read_sweep.sh` |

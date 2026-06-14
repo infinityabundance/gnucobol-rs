@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.IF.NUMERIC.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.46",
+  "crate_version": "0.7.47",
   "damage_if_overclaimed": "comparing numeric amounts as bytes (or vice versa) takes the wrong IF/EVALUATE branch, corrupting derived flags and classifications",
   "hash_chain": {
-    "inputs_sha256": "bc2bae61b9f38b9eae4438b76b6c72d065e4b437d9d44041277aec131e6f0fd9"
+    "inputs_sha256": "4613278c015b8e6bf68c9a06ac42333c6c43909b81a94b6d234e70afd4ba740d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b2c2a5ff8f93c8e64d19510ec82ff46a639a74e97c203db33884525628a16065",
-    "receipt_sha256": "26d1b4caa977f940cf50e76b731b172f69044828b96ed10c2446fee7bc102f26"
+    "receipt_sha256": "5f4980e660d7c0d04cac52fa2eeeb5f62df8e3689833b42404df8cc2e29205b8"
   },
   "kind": "court-casefile",
   "lie_prevented": [

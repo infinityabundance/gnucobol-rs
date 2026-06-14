@@ -1175,6 +1175,20 @@
       "damage_if_overclaimed": "mis-sizing the slot header (width/endianness) or treating a deleted slot as absent vs zero-data shifts or corrupts every relative record's addressing"
     },
     {
+      "id": "GNURUST.FILEIO.VERB.1",
+      "name": "file verb open/access-mode preconditions",
+      "proven": "a faithful port of the precondition layer of libcob/fileio.c cob_write/cob_read/cob_read_next/cob_rewrite/cob_delete/cob_start -- the FILE STATUS a verb returns before dispatching to its organization handler, proven byte-identical to the admitted libcob (verb_sweep 7/0): WRITE needs OPEN OUTPUT/EXTEND in sequential access (else OUTPUT/I-O) otherwise 48; READ and READ NEXT need OPEN INPUT/I-O otherwise 47; REWRITE and DELETE need OPEN I-O otherwise 49; a SEQUENTIAL-access REWRITE or DELETE without a prior successful READ is 43; a sequential READ past end-of-file is 46; START on a RANDOM-access or non-INPUT/I-O file is 47; a record outside record_min..record_max is 44",
+      "byte_domain": "cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23) before the organization handler",
+      "oracle": "cobc WRITE/READ/REWRITE/DELETE attempted in the wrong OPEN/ACCESS mode (libcob/fileio.c)",
+      "fixtures": "verb_sweep 7/0 + 1 unit test + Kani verb_precondition_total",
+      "sealed_version": "0.7.47",
+      "not_proven": "the organization dispatch itself (sealed separately by the LINESEQ/SEQ/RELATIVE courts); the compile-time START-on-RANDOM rejection (cobc rejects it before runtime); LINE SEQUENTIAL validate-71 at the verb layer; CODE-SET conversion; the variable_record size resolution; EOP / exception side effects; the indexed suppressed-key skip; the fd read/write syscalls (declared OS boundary)",
+      "breaks_claim": "a dialect that permits a verb in a denied mode; the START-on-RANDOM runtime path; a handler-level status",
+      "readiness": 4,
+      "lie_prevented": "a COBOL verb runs regardless of how the file was opened -- NO: WRITE to an INPUT file is 48, READ from an OUTPUT file is 47, REWRITE/DELETE outside I-O is 49, a sequential REWRITE/DELETE without a prior READ is 43, and a sequential READ past EOF is 46 -- each verb checks the open and access mode first",
+      "damage_if_overclaimed": "skipping the mode preconditions would let an illegal verb corrupt or read a file the dialect would have rejected with a 4x status"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

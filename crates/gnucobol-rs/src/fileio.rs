@@ -697,6 +697,148 @@ pub fn dummy_rnxt_rewrite() -> &'static str {
 }
 
 // ======================================================================================================
+// Verb-layer preconditions (`GNURUST.FILEIO.VERB.1`)
+//
+// The open-mode / access-mode / record-state checks the public `cob_*` verbs apply *before* dispatching
+// to an organization handler — the FILE STATUS a WRITE/READ/REWRITE/DELETE/START produces when the file
+// is in the wrong mode for the operation. Each returns `Some(status)` for an early precondition failure
+// or `None` when the preconditions pass and the verb proceeds to its (separately-sealed) handler.
+// ======================================================================================================
+
+/// `OPEN` mode (`f->open_mode`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OpenMode {
+    Closed,
+    Input,
+    Output,
+    Io,
+    Extend,
+}
+
+/// `ACCESS MODE` (`f->access_mode`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum AccessMode {
+    Sequential,
+    Random,
+    Dynamic,
+}
+
+/// File `ORGANIZATION` (`f->organization`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Organization {
+    Sequential,
+    LineSequential,
+    Relative,
+    Indexed,
+    Sort,
+}
+
+/// Port of the precondition layer of `fileio.c:cob_write` — the FILE STATUS before the handler runs.
+/// In SEQUENTIAL access the file must be `OPEN OUTPUT`/`EXTEND`, otherwise `OUTPUT`/`I-O`, else `"48"`;
+/// a record outside `[record_min, record_max]` is `"44"`. `None` means proceed to the write handler.
+pub fn cob_write(open: OpenMode, access: AccessMode, rec_size: usize, record_min: usize, record_max: usize) -> Option<&'static str> {
+    let ok = if access == AccessMode::Sequential {
+        matches!(open, OpenMode::Output | OpenMode::Extend)
+    } else {
+        matches!(open, OpenMode::Output | OpenMode::Io)
+    };
+    if !ok {
+        return Some("48");
+    }
+    if rec_size < record_min || rec_size > record_max {
+        return Some("44");
+    }
+    None
+}
+
+/// Port of the precondition layer of `fileio.c:cob_rewrite`: the file must be `OPEN I-O` (`"49"`), a
+/// SEQUENTIAL-access REWRITE requires a prior successful READ (`"43"`), and a RECORD SEQUENTIAL rewrite
+/// must keep the record length (`"44"`). `None` means proceed.
+pub fn cob_rewrite(open: OpenMode, access: AccessMode, org: Organization, read_done: bool, rec_size: usize, record_size: usize) -> Option<&'static str> {
+    if open != OpenMode::Io {
+        return Some("49");
+    }
+    if access == AccessMode::Sequential && !read_done {
+        return Some("43");
+    }
+    if org == Organization::Sequential && record_size != rec_size {
+        return Some("44");
+    }
+    None
+}
+
+/// Port of the precondition layer of `fileio.c:cob_delete`: the file must be `OPEN I-O` (`"49"`) and a
+/// SEQUENTIAL-access DELETE requires a prior successful READ (`"43"`). `None` means proceed.
+pub fn cob_delete(open: OpenMode, access: AccessMode, read_done: bool) -> Option<&'static str> {
+    if open != OpenMode::Io {
+        return Some("49");
+    }
+    if access == AccessMode::Sequential && !read_done {
+        return Some("43");
+    }
+    None
+}
+
+/// Port of the precondition layer of `fileio.c:cob_start`: the file must be `OPEN INPUT`/`I-O` and not
+/// RANDOM-access (`"47"`), must exist (`"23"`), and a supplied key size must be `1..=key.size` (`"23"`).
+/// `None` means proceed.
+pub fn cob_start(open: OpenMode, access: AccessMode, nonexistent: bool, keysize_valid: bool) -> Option<&'static str> {
+    if !matches!(open, OpenMode::Io | OpenMode::Input) {
+        return Some("47");
+    }
+    if access == AccessMode::Random {
+        return Some("47");
+    }
+    if nonexistent {
+        return Some("23");
+    }
+    if !keysize_valid {
+        return Some("23");
+    }
+    None
+}
+
+/// Port of the precondition layer of `fileio.c:cob_read` (keyed or sequential): the file must be `OPEN
+/// INPUT`/`I-O` (`"47"`); a nonexistent optional file is `"10"` on the first read else `"23"`; a
+/// sequential read past end-of-file (or before begin, reading backwards) is `"46"`. `None` = proceed.
+#[allow(clippy::too_many_arguments)]
+pub fn cob_read(open: OpenMode, nonexistent: bool, first_read: bool, key_based: bool, end_of_file: bool, begin_of_file: bool, read_previous: bool) -> Option<&'static str> {
+    if !matches!(open, OpenMode::Input | OpenMode::Io) {
+        return Some("47");
+    }
+    if nonexistent {
+        return Some(if first_read { "10" } else { "23" });
+    }
+    if !key_based {
+        if end_of_file && !read_previous {
+            return Some("46");
+        }
+        if begin_of_file && read_previous {
+            return Some("46");
+        }
+    }
+    None
+}
+
+/// Port of the precondition layer of `fileio.c:cob_read_next`: like [`cob_read`] but a nonexistent file
+/// after the first read is `"46"` (not `"23"`), and the end/begin-of-file check always applies. `None` = proceed.
+pub fn cob_read_next(open: OpenMode, nonexistent: bool, first_read: bool, end_of_file: bool, begin_of_file: bool, read_previous: bool) -> Option<&'static str> {
+    if !matches!(open, OpenMode::Input | OpenMode::Io) {
+        return Some("47");
+    }
+    if nonexistent {
+        return Some(if first_read { "10" } else { "46" });
+    }
+    if end_of_file && !read_previous {
+        return Some("46");
+    }
+    if begin_of_file && read_previous {
+        return Some("46");
+    }
+    None
+}
+
+// ======================================================================================================
 // INDEXED key-descriptor handling (structural 1:1 ports of the pure `fileio.c` key helpers)
 //
 // Faithful ports of the ISAM key-extraction helpers, which operate purely on a key descriptor (a set of
@@ -1374,6 +1516,37 @@ mod tests {
         assert_eq!(relative_read_next(&d1.file, &mut slot, 4).status, "10"); // end of file
     }
 
+    // ---- verb preconditions ----
+    #[test]
+    fn verb_preconditions() {
+        use AccessMode::*;
+        use OpenMode::*;
+        // WRITE: sequential access needs OUTPUT/EXTEND; INPUT -> 48; OUTPUT -> proceed
+        assert_eq!(cob_write(Input, Sequential, 4, 4, 4), Some("48"));
+        assert_eq!(cob_write(Output, Sequential, 4, 4, 4), None);
+        assert_eq!(cob_write(Io, Random, 4, 4, 4), None); // random WRITE allows I-O
+        assert_eq!(cob_write(Output, Sequential, 9, 4, 4), Some("44")); // too long
+        // READ on OUTPUT -> 47; on INPUT -> proceed
+        assert_eq!(cob_read(Output, false, false, false, false, false, false), Some("47"));
+        assert_eq!(cob_read(Input, false, false, false, false, false, false), None);
+        assert_eq!(cob_read(Input, false, false, false, true, false, false), Some("46")); // seq read at EOF
+        // REWRITE/DELETE need I-O; INPUT -> 49; I-O seq without read -> 43
+        assert_eq!(cob_rewrite(Input, Random, Organization::Relative, true, 4, 4), Some("49"));
+        assert_eq!(cob_rewrite(Io, Sequential, Organization::Relative, false, 4, 4), Some("43"));
+        assert_eq!(cob_rewrite(Io, Sequential, Organization::Sequential, true, 5, 4), Some("44")); // size change
+        assert_eq!(cob_delete(Input, Random, false), Some("49"));
+        assert_eq!(cob_delete(Io, Sequential, false), Some("43"));
+        assert_eq!(cob_delete(Io, Random, false), None); // random delete needs no prior read
+        // START: not INPUT/I-O -> 47; RANDOM -> 47; nonexistent -> 23
+        assert_eq!(cob_start(Output, Sequential, false, true), Some("47"));
+        assert_eq!(cob_start(Input, Random, false, true), Some("47"));
+        assert_eq!(cob_start(Input, Sequential, true, true), Some("23"));
+        assert_eq!(cob_start(Io, Dynamic, false, true), None);
+        // read_next nonexistent non-first -> 46 (vs cob_read's 23)
+        assert_eq!(cob_read_next(Input, true, false, false, false, false), Some("46"));
+        assert_eq!(cob_read_next(Input, true, true, false, false, false), Some("10"));
+    }
+
     // ---- indexed key descriptor ----
     #[test]
     fn indexed_key_ops() {
@@ -1544,5 +1717,20 @@ mod kani_proofs {
         assert_eq!((r.status, &r.data[..]), ("00", &rec[..]));
         let d = relative_delete(&w.file, 2, key);
         assert_eq!(relative_read(&d.file, 2, key).status, "23");
+    }
+    // KANIFOR: GNURUST.FILEIO.VERB.1
+    /// A verb precondition either denies with a known FILE STATUS or permits (None); a WRITE outside the
+    /// allowed open modes is always denied. Never panics.
+    #[kani::proof]
+    fn verb_precondition_total() {
+        let opens = [OpenMode::Closed, OpenMode::Input, OpenMode::Output, OpenMode::Io, OpenMode::Extend];
+        let oi: usize = kani::any();
+        kani::assume(oi < 5);
+        let open = opens[oi];
+        let r = cob_write(open, AccessMode::Random, 4, 4, 4);
+        match r {
+            Some(s) => assert!(s == "48" || s == "44"),
+            None => assert!(matches!(open, OpenMode::Output | OpenMode::Io)),
+        }
     }
 }

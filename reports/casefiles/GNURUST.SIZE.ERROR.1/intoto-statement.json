@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.SIZE.ERROR.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.46",
+    "crate_version": "0.7.47",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "2fb1c70dfb1fe0e46a7455925ca0718731e1e3b150fa7a566e0241e5468fd766",
-      "receipt_sha256": "e32b89f95a58af27ebf8bb37885fa35f3463e83f9fb9f16ba989214680a0d9c5"
+      "receipt_sha256": "06f90609f70a39175ebe48bc9944b9cfa245280ffdc46994956fe650fce4ac05"
     },
     "negative_claim_count": 7,
     "positive_claim_count": 4,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "25eca6e7343366fcf09e3276ea56105552e27bd2f889229fcc6f5fc75b69355b"
+        "sha256": "f03c402a3b2d1fb07ac007003b01c449916af5cae5d387abb14e06a002eb2cbf"
       },
       "name": "reports/casefiles/GNURUST.SIZE.ERROR.1/casefile.json"
     }

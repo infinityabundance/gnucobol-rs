@@ -281,7 +281,8 @@
         "GNURUST.FILE.REWRITE.1",
         "GNURUST.FILEIO.LINESEQ.1",
         "GNURUST.FILEIO.LINESEQ.2",
-        "GNURUST.FILEIO.SEQ.1"
+        "GNURUST.FILEIO.SEQ.1",
+        "GNURUST.FILEIO.VERB.1"
       ],
       "future_campaign": null,
       "risk_if_unported": "sequential/line READ record bytes + AT END drive most batch COBOL logic",

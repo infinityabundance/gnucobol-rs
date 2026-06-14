@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.LINEAGE.CORPUS.20M.0 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.46
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.47
 
 - **Oracle:** real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)
 - **Byte domain(s):** meta-engine: deterministic generate + canonical hashing + Merkle + stratified replay + parallel isolation + shrink/file findings path

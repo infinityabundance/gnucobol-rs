@@ -99,7 +99,8 @@
     },
     {
       "courts": [
-        "GNURUST.FILE.STATUS.1"
+        "GNURUST.FILE.STATUS.1",
+        "GNURUST.FILEIO.VERB.1"
       ],
       "description": "file/runtime status observation bound to declared conditions",
       "level": 4,
@@ -181,6 +182,7 @@
     "GNURUST.FILEIO.LINESEQ.2": 3,
     "GNURUST.FILEIO.RELATIVE.1": 3,
     "GNURUST.FILEIO.SEQ.1": 3,
+    "GNURUST.FILEIO.VERB.1": 4,
     "GNURUST.FLOAT.1": 2,
     "GNURUST.IF.EVALUATE.SLICE.1": 6,
     "GNURUST.IF.NUMERIC.SLICE.1": 6,

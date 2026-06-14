@@ -920,6 +920,21 @@
         "the EXTFH external file handler path",
         "the fd lseek/read/write syscalls (declared OS boundary)"
       ]
+    },
+    "GNURUST.FILEIO.VERB.1": {
+      "court": "file verb open/access-mode preconditions",
+      "sweep": "verb_sweep.sh",
+      "byte_domain": "cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23)",
+      "non_claims": [
+        "the organization dispatch (sealed by LINESEQ/SEQ/RELATIVE)",
+        "the compile-time START-on-RANDOM rejection",
+        "LINE SEQUENTIAL validate-71 at the verb layer",
+        "CODE-SET conversion",
+        "the variable_record size resolution",
+        "EOP / exception side effects",
+        "the indexed suppressed-key skip",
+        "the fd read/write syscalls (declared OS boundary)"
+      ]
     }
   }
 }

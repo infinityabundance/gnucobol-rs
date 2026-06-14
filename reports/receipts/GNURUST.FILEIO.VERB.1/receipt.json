@@ -1,0 +1,35 @@
+{
+  "byte_domain": "cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23)",
+  "campaign": "GNURUST.FILEIO.VERB.1",
+  "command": {
+    "replay": "bash lab/oracle/verb_sweep.sh"
+  },
+  "court": "file verb open/access-mode preconditions",
+  "crate_version": "0.7.47",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "the organization dispatch (sealed by LINESEQ/SEQ/RELATIVE)",
+    "the compile-time START-on-RANDOM rejection",
+    "LINE SEQUENTIAL validate-71 at the verb layer",
+    "CODE-SET conversion",
+    "the variable_record size resolution",
+    "EOP / exception side effects",
+    "the indexed suppressed-key skip",
+    "the fd read/write syscalls (declared OS boundary)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=7 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

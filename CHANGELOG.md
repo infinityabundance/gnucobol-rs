@@ -12,6 +12,12 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.47]
+- **`fileio.c` -- verb open/access-mode preconditions sealed (`GNURUST.FILEIO.VERB.1`).** A faithful port of the precondition layer of `libcob/fileio.c` `cob_write`/`cob_read`/`cob_read_next`/`cob_rewrite`/`cob_delete`/`cob_start` -- the FILE STATUS a verb returns *before* dispatching to its organization handler -- proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` (`verb_sweep` 7/0):
+  - WRITE needs `OPEN OUTPUT`/`EXTEND` in sequential access (otherwise `OUTPUT`/`I-O`), else `48`; READ and READ NEXT need `OPEN INPUT`/`I-O`, else `47`; REWRITE and DELETE need `OPEN I-O`, else `49`; a SEQUENTIAL-access REWRITE/DELETE without a prior successful READ is `43`; a sequential READ past end-of-file is `46`; a record outside `record_min..record_max` is `44`.
+  - The organization dispatch itself is sealed separately (LINESEQ.1/.2, SEQ.1, RELATIVE.1); the compile-time `START`-on-RANDOM rejection (cobc rejects it before runtime), CODE-SET conversion, and the verb-layer side effects stay explicit non-claims. `fileio.c` parity 37 -> 43/182 (24.2%).
+- No API breaks: additive (`fileio::cob_write`/`cob_read`/`cob_read_next`/`cob_rewrite`/`cob_delete`/`cob_start` + `OpenMode`/`AccessMode`/`Organization` enums).
+
 ## [0.7.46]
 - **`fileio.c` -- record-I/O helper layer ported; the file is now past 20% (37/182).** A batch of faithful, unit-tested structural ports of the pure byte/decision helpers the sealed organizations build on (no new oracle court -- the byte-courts remain LINESEQ.1/.2, SEQ.1, RELATIVE.1):
   - **INDEXED key descriptors** -- `indexed_keylen`/`indexed_savekey`/`indexed_restorekey`/`indexed_cmpkey`/`indexed_keycmp`/`indexed_keydesc` + `cob_savekey` extract, restore and compare multi-part keys from a record per a key descriptor.

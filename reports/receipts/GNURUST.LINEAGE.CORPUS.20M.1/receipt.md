@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.LINEAGE.CORPUS.20M.1` |
 | court | full 20M real-cobc COBOL-witness lineage run (complete) |
-| crate_version | `0.7.46` |
+| crate_version | `0.7.47` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | completed 4M real-cobc witness run; evidence-of-record reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards) |
 | replay command | `bash lab/oracle/lineage_fullrun_sweep.sh` |
