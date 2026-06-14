@@ -704,6 +704,25 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     // filename mapping (GNURUST.FILEIO.MAPPING.1): resolving an arbitrary ASSIGN name never panics.
     let _ = fileio::cob_chk_file_mapping(body);
     let _ = fileio::cob_chk_file_env(body);
+    // INDEXED store (GNURUST.FILEIO.INDEXED.1): write/read/start/rewrite/delete over arbitrary records.
+    let mut ix = fileio::IndexedStore::indexed_open(0, rmax.min(body.len().max(1)).max(1), fileio::AccessMode::Dynamic, fileio::OpenMode::Io);
+    for c in body.chunks(rmax.max(1)) {
+        let _ = ix.indexed_write(c);
+    }
+    let _ = ix.indexed_read(body);
+    let _ = ix.indexed_start(fileio::StartCond::Ge, body);
+    let _ = ix.indexed_read_next();
+    let _ = ix.indexed_rewrite(body);
+    let _ = ix.indexed_delete(body);
+    let _ = ix.records_in_key_order();
+    // record/file locks (GNURUST.FILEIO.INDEXED.1 locking sub-layer): grant/deny never panics.
+    let mut env = fileio::LockEnv::new();
+    let mut fl = fileio::FileLockState::default();
+    let _ = env.lock_record(&mut fl, body);
+    let _ = env.test_record_lock(&fl, body);
+    let _ = env.unlock_record(&mut fl);
+    let _ = env.lock_file(&mut fl, &String::from_utf8_lossy(body));
+    let _ = env.unlock_file(&mut fl);
 }
 
 #[cfg(feature = "fuzzing")]

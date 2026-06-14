@@ -61,6 +61,7 @@ run_sweep "GNURUST.FILEIO.RELATIVE.1" relative_sweep.sh
 run_sweep "GNURUST.FILEIO.VERB.1" verb_sweep.sh
 run_sweep "GNURUST.FILEIO.SORT.1" sort_sweep.sh
 run_sweep "GNURUST.FILEIO.SORTENGINE.1" sortengine_sweep.sh
+run_sweep "GNURUST.FILEIO.INDEXED.1" indexed_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh
 run_sweep "GNURUST.FILEIO.OPEN.1" open_sweep.sh
 run_sweep "GNURUST.FILEIO.MAPPING.1" map_sweep.sh

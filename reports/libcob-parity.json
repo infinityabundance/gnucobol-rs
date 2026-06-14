@@ -295,36 +295,19 @@
         "freefh",
         "get_code_set_converted_data",
         "get_dupno",
-        "indexed_close",
-        "indexed_delete",
-        "indexed_delete_internal",
-        "indexed_file_delete",
-        "indexed_open",
-        "indexed_read",
-        "indexed_read_next",
-        "indexed_rewrite",
-        "indexed_start",
-        "indexed_start_internal",
-        "indexed_write",
-        "indexed_write_internal",
         "join_environment",
-        "lock_file",
-        "lock_record",
         "open_next",
         "restorefileposition",
         "save_fcd_status",
         "savefileposition",
         "set_dbt",
-        "test_record_lock",
-        "unlock_file",
-        "unlock_record",
         "update_fcd_to_file",
         "update_file_to_fcd",
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 52.2,
-      "ported": 95
+      "parity_pct": 61.5,
+      "ported": 112
     },
     {
       "file": "mlio.c",
@@ -671,7 +654,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 50.3,
-    "ported": 588
+    "parity_pct": 51.7,
+    "ported": 605
   }
 }

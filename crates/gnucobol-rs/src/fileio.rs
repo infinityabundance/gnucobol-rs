@@ -1365,6 +1365,332 @@ impl CobSort {
 }
 
 // ======================================================================================================
+// INDEXED organization — the keyed-store handler (`GNURUST.FILEIO.INDEXED.1`)
+//
+// A 1:1 port of the COBOL-observable behaviour of fileio.c's indexed_* handlers (indexed_open/write/read/
+// read_next/start/rewrite/delete + the *_internal variants): a primary RECORD KEY indexes records, WRITE
+// rejects a duplicate primary key with status 22 (and a non-ascending key under SEQUENTIAL access with 21),
+// READ by key returns the record or 23, READ NEXT walks the keys in ascending order (AT END 10), START
+// positions the cursor by an =/</<=/>/>= condition (or 23 when no key satisfies it), and REWRITE/DELETE
+// require the key to exist (else 23). The on-disk index file format is backend-specific (BDB / VBISAM / an
+// external file handler) and is the DECLARED OS boundary — what a COBOL program observes is the record
+// bytes, the FILE STATUS, and
+// the key order, which this in-memory `BTreeMap`-keyed model reproduces. Alternate keys, DUPLICATES, and
+// READ PREVIOUS are non-claims (the primary-key contract is the court).
+// ======================================================================================================
+
+/// A `START`/`READ` relational condition (`common.h` `COB_EQ`/`COB_LT`/`COB_LE`/`COB_GT`/`COB_GE`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum StartCond {
+    Eq = 1,
+    Lt = 2,
+    Le = 3,
+    Gt = 4,
+    Ge = 5,
+}
+
+/// The sequential read position of an INDEXED file (what a forward `READ NEXT` consults). `BeforeStart`
+/// reads from the first key; `NextKey(k)` reads from the first key `>= k`; `AtEnd` is `10`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum CursorPos {
+    BeforeStart,
+    NextKey(Vec<u8>),
+    AtEnd,
+}
+
+/// Port of the COBOL-observable subset of fileio.c's `struct indexed_file` — an INDEXED file as a
+/// primary-key-ordered store. The key is the record's `[key_offset, key_offset+key_len)` byte range; the
+/// cursor tracks where the next forward `READ NEXT` resumes.
+pub struct IndexedStore {
+    key_offset: usize,
+    key_len: usize,
+    recs: std::collections::BTreeMap<Vec<u8>, Vec<u8>>,
+    pub open_mode: OpenMode,
+    pub access_mode: AccessMode,
+    cursor: CursorPos,
+    last_key: Option<Vec<u8>>,
+    flag_nonexistent: bool,
+}
+
+impl IndexedStore {
+    /// The primary key bytes of a record.
+    fn key_of(&self, record: &[u8]) -> Vec<u8> {
+        let end = (self.key_offset + self.key_len).min(record.len());
+        record[self.key_offset.min(record.len())..end].to_vec()
+    }
+
+    /// Port of `fileio.c:indexed_open` — open an empty (or existing) keyed store in `mode`; sets the
+    /// `flag_nonexistent` used by `OPEN INPUT`/`I-O` of a missing file. The records map is the file image.
+    pub fn indexed_open(key_offset: usize, key_len: usize, access_mode: AccessMode, mode: OpenMode) -> IndexedStore {
+        IndexedStore {
+            key_offset,
+            key_len,
+            recs: std::collections::BTreeMap::new(),
+            open_mode: mode,
+            access_mode,
+            cursor: CursorPos::BeforeStart,
+            last_key: None,
+            flag_nonexistent: false,
+        }
+    }
+
+    /// The first key strictly greater than `k`, as a cursor position (`AtEnd` when none).
+    fn after(&self, k: &[u8]) -> CursorPos {
+        match self
+            .recs
+            .range((std::ops::Bound::Excluded(k.to_vec()), std::ops::Bound::Unbounded))
+            .next()
+        {
+            Some((kk, _)) => CursorPos::NextKey(kk.clone()),
+            None => CursorPos::AtEnd,
+        }
+    }
+
+    /// Port of `fileio.c:indexed_write_internal` — insert the record under its primary key, returning
+    /// status `22` if the key already exists (no DUPLICATES on the primary key), else `00`.
+    pub fn indexed_write_internal(&mut self, record: &[u8]) -> &'static str {
+        let key = self.key_of(record);
+        if self.recs.contains_key(&key) {
+            return "22";
+        }
+        self.recs.insert(key, record.to_vec());
+        "00"
+    }
+
+    /// Port of `fileio.c:indexed_write` — write a record. A nonexistent OUTPUT file is `48`; under
+    /// SEQUENTIAL access the key must be strictly ascending (else `21`); otherwise delegates to
+    /// [`IndexedStore::indexed_write_internal`] (duplicate primary key `22`).
+    pub fn indexed_write(&mut self, record: &[u8]) -> &'static str {
+        if self.flag_nonexistent {
+            return "48";
+        }
+        let key = self.key_of(record);
+        if self.access_mode == AccessMode::Sequential {
+            if let Some(last) = &self.last_key {
+                if &key <= last {
+                    return "21";
+                }
+            }
+        }
+        let st = self.indexed_write_internal(record);
+        if st == "00" {
+            self.last_key = Some(key);
+        }
+        st
+    }
+
+    /// Port of `fileio.c:indexed_read` — random read by `key`: `00` and the record (positioning the cursor
+    /// just after it for a following `READ NEXT`) when present, `23` (record not found) otherwise.
+    pub fn indexed_read(&mut self, key: &[u8]) -> (&'static str, Option<Vec<u8>>) {
+        let k = key.to_vec();
+        match self.recs.get(&k) {
+            Some(rec) => {
+                let rec = rec.clone();
+                self.cursor = self.after(&k);
+                ("00", Some(rec))
+            }
+            None => ("23", None),
+        }
+    }
+
+    /// Port of `fileio.c:indexed_read_next` — sequential read in ascending key order from the cursor:
+    /// `00` and the record, or `10` (end of file) when the cursor is past the last key.
+    pub fn indexed_read_next(&mut self) -> (&'static str, Option<Vec<u8>>) {
+        let next_key = match &self.cursor {
+            CursorPos::AtEnd => None,
+            CursorPos::BeforeStart => self.recs.keys().next().cloned(),
+            CursorPos::NextKey(c) => self.recs.range(c.clone()..).next().map(|(k, _)| k.clone()),
+        };
+        match next_key {
+            Some(k) => {
+                let rec = self.recs[&k].clone();
+                self.cursor = self.after(&k);
+                ("00", Some(rec))
+            }
+            None => {
+                self.cursor = CursorPos::AtEnd;
+                ("10", None)
+            }
+        }
+    }
+
+    /// Port of `fileio.c:indexed_start_internal` — find the key satisfying `cond` relative to `key`,
+    /// returning the matched key or `None` when none satisfies the condition.
+    fn indexed_start_internal(&self, cond: StartCond, key: &[u8]) -> Option<Vec<u8>> {
+        use std::ops::Bound;
+        let k = key.to_vec();
+        match cond {
+            StartCond::Eq => self.recs.get_key_value(&k).map(|(kk, _)| kk.clone()),
+            StartCond::Ge => self.recs.range(k..).next().map(|(kk, _)| kk.clone()),
+            StartCond::Gt => self
+                .recs
+                .range((Bound::Excluded(k), Bound::Unbounded))
+                .next()
+                .map(|(kk, _)| kk.clone()),
+            StartCond::Le => self.recs.range(..=k).next_back().map(|(kk, _)| kk.clone()),
+            StartCond::Lt => self
+                .recs
+                .range((Bound::Unbounded, Bound::Excluded(k)))
+                .next_back()
+                .map(|(kk, _)| kk.clone()),
+        }
+    }
+
+    /// Port of `fileio.c:indexed_start` — position the file at the first key satisfying `cond key`,
+    /// returning `00` (cursor set so a following `READ NEXT` returns that record) or `23` when none does.
+    pub fn indexed_start(&mut self, cond: StartCond, key: &[u8]) -> &'static str {
+        match self.indexed_start_internal(cond, key) {
+            Some(k) => {
+                self.cursor = CursorPos::NextKey(k);
+                "00"
+            }
+            None => {
+                self.cursor = CursorPos::AtEnd;
+                "23"
+            }
+        }
+    }
+
+    /// Port of `fileio.c:indexed_rewrite` — replace an existing record (matched by its primary key). When
+    /// the primary key is not present the ISAM path returns `21` (KEY_INVALID, the `isread ISEQUAL` miss at
+    /// fileio.c:5754), else `00`.
+    pub fn indexed_rewrite(&mut self, record: &[u8]) -> &'static str {
+        let key = self.key_of(record);
+        if !self.recs.contains_key(&key) {
+            return "21";
+        }
+        self.recs.insert(key, record.to_vec());
+        "00"
+    }
+
+    /// Port of `fileio.c:indexed_delete_internal` — remove the record under `key`; `23` when absent.
+    pub fn indexed_delete_internal(&mut self, key: &[u8]) -> &'static str {
+        if self.recs.remove(key).is_some() {
+            "00"
+        } else {
+            "23"
+        }
+    }
+
+    /// Port of `fileio.c:indexed_delete` — delete the record at `key` (a `DELETE key`); `00` or `23`.
+    pub fn indexed_delete(&mut self, key: &[u8]) -> &'static str {
+        self.indexed_delete_internal(key)
+    }
+
+    /// Port of `fileio.c:indexed_file_delete` — drop the whole indexed file (every key/record).
+    pub fn indexed_file_delete(&mut self) {
+        self.recs.clear();
+        self.cursor = CursorPos::BeforeStart;
+        self.last_key = None;
+    }
+
+    /// Port of `fileio.c:indexed_close` — close the file, clearing the per-open cursor state.
+    pub fn indexed_close(&mut self) {
+        self.open_mode = OpenMode::Closed;
+        self.cursor = CursorPos::BeforeStart;
+    }
+
+    /// The records in ascending key order (the file image a `READ NEXT` sweep would yield).
+    pub fn records_in_key_order(&self) -> Vec<Vec<u8>> {
+        self.recs.values().cloned().collect()
+    }
+}
+
+// ======================================================================================================
+// Record / file locking (`GNURUST.FILEIO.INDEXED.1` locking sub-layer)
+//
+// A faithful port of the COBOL-observable status CONTRACT of fileio.c's BDB locking (lock_record/
+// unlock_record/test_record_lock/lock_file/unlock_file): a NOWAIT `DB_LOCK_WRITE` request is granted unless
+// another open holds a conflicting lock on the same object, in which case a record request returns `51`
+// (RECORD LOCKED) and a file request `61` (FILE SHARING); a BDB deadlock is `52`. The actual cross-process
+// BDB lock environment is the declared OS boundary; `LockEnv` reproduces the grant/deny decision (and the
+// per-file `record_locked`/`file_lock_set` flags) that a COBOL program observes via FILE STATUS.
+// ======================================================================================================
+
+/// Port of the `bdb_env` lock manager (the process-wide BDB lock environment) — the set of currently held
+/// record-lock objects and file locks. The real BDB env is the OS boundary; this models its NOWAIT grants.
+#[derive(Default)]
+pub struct LockEnv {
+    held_records: std::collections::HashSet<Vec<u8>>,
+    held_files: std::collections::HashSet<String>,
+}
+
+/// Port of the per-file lock fields of `struct indexed_file` — whether this open holds a record/file lock.
+#[derive(Default)]
+pub struct FileLockState {
+    pub record_locked: bool,
+    record_key: Option<Vec<u8>>,
+    pub file_lock_set: bool,
+    lock_filename: Option<String>,
+}
+
+impl LockEnv {
+    /// A fresh, empty lock environment.
+    pub fn new() -> LockEnv {
+        LockEnv::default()
+    }
+
+    /// Port of `fileio.c:lock_record` — impose a NOWAIT write lock on the record `key`. Granted (`00`,
+    /// `record_locked = 1`) unless another open already holds it, in which case `51` (RECORD LOCKED). The
+    /// same open re-locking its own record is granted (BDB same-owner).
+    pub fn lock_record(&mut self, f: &mut FileLockState, key: &[u8]) -> &'static str {
+        if self.held_records.contains(key) && f.record_key.as_deref() != Some(key) {
+            return "51";
+        }
+        self.held_records.insert(key.to_vec());
+        f.record_locked = true;
+        f.record_key = Some(key.to_vec());
+        "00"
+    }
+
+    /// Port of `fileio.c:test_record_lock` — probe whether `key` can be locked (acquire-then-release, no
+    /// state change): `00` when grantable, `51` when another open holds it.
+    pub fn test_record_lock(&self, f: &FileLockState, key: &[u8]) -> &'static str {
+        if self.held_records.contains(key) && f.record_key.as_deref() != Some(key) {
+            "51"
+        } else {
+            "00"
+        }
+    }
+
+    /// Port of `fileio.c:unlock_record` — release this open's record lock (a no-op `00` when none is held).
+    pub fn unlock_record(&mut self, f: &mut FileLockState) -> &'static str {
+        if !f.record_locked {
+            return "00";
+        }
+        if let Some(k) = f.record_key.take() {
+            self.held_records.remove(&k);
+        }
+        f.record_locked = false;
+        "00"
+    }
+
+    /// Port of `fileio.c:lock_file` — impose a NOWAIT lock on the whole file. Granted (`00`,
+    /// `file_lock_set = 1`) unless another open holds it (`61`, FILE SHARING).
+    pub fn lock_file(&mut self, f: &mut FileLockState, filename: &str) -> &'static str {
+        f.file_lock_set = false;
+        if self.held_files.contains(filename) && f.lock_filename.as_deref() != Some(filename) {
+            return "61";
+        }
+        self.held_files.insert(filename.to_string());
+        f.file_lock_set = true;
+        f.lock_filename = Some(filename.to_string());
+        "00"
+    }
+
+    /// Port of `fileio.c:unlock_file` — release this open's file lock (a no-op `00` when none is held).
+    pub fn unlock_file(&mut self, f: &mut FileLockState) -> &'static str {
+        if f.file_lock_set {
+            if let Some(n) = f.lock_filename.take() {
+                self.held_files.remove(&n);
+            }
+            f.file_lock_set = false;
+        }
+        "00"
+    }
+}
+
+// ======================================================================================================
 // File runtime: OPEN / CLOSE / lifecycle (`GNURUST.FILEIO.OPEN.1`)
 //
 // A `CobFile` ties the sealed organization handlers together into a working file runtime. `cob_open`
@@ -2602,6 +2928,82 @@ mod tests {
         assert!(e.cob_file_sort_giving().is_empty());
     }
 
+    // ---- INDEXED organization ----
+    fn rec(k: &str, v: &str) -> Vec<u8> {
+        let mut r = k.as_bytes().to_vec();
+        r.extend_from_slice(v.as_bytes());
+        r
+    }
+
+    #[test]
+    fn indexed_write_read_status_and_key_order() {
+        // primary key = first 3 bytes
+        let mut s = IndexedStore::indexed_open(0, 3, AccessMode::Dynamic, OpenMode::Output);
+        assert_eq!(s.indexed_write(&rec("BBB", "bbbbb")), "00");
+        assert_eq!(s.indexed_write(&rec("AAA", "aaaaa")), "00");
+        assert_eq!(s.indexed_write(&rec("BBB", "dupbb")), "22"); // duplicate primary key
+        // random read: hit -> 00 + record, miss -> 23
+        assert_eq!(s.indexed_read(b"AAA"), ("00", Some(rec("AAA", "aaaaa"))));
+        assert_eq!(s.indexed_read(b"ZZZ"), ("23", None));
+        // READ NEXT walks ascending key order from a low START
+        assert_eq!(s.indexed_start(StartCond::Ge, b"\x00\x00\x00"), "00");
+        assert_eq!(s.indexed_read_next().1, Some(rec("AAA", "aaaaa")));
+        assert_eq!(s.indexed_read_next().1, Some(rec("BBB", "bbbbb")));
+        assert_eq!(s.indexed_read_next(), ("10", None)); // AT END
+    }
+
+    #[test]
+    fn indexed_start_conditions_rewrite_delete() {
+        let mut s = IndexedStore::indexed_open(0, 3, AccessMode::Dynamic, OpenMode::Io);
+        for k in ["BBB", "DDD", "FFF"] {
+            assert_eq!(s.indexed_write(&rec(k, "xxxxx")), "00");
+        }
+        // START >= CCC positions at DDD; > FFF / < AAA find nothing -> 23
+        assert_eq!(s.indexed_start(StartCond::Ge, b"CCC"), "00");
+        assert_eq!(s.indexed_read_next().1, Some(rec("DDD", "xxxxx")));
+        assert_eq!(s.indexed_start(StartCond::Gt, b"FFF"), "23");
+        assert_eq!(s.indexed_start(StartCond::Lt, b"AAA"), "23");
+        assert_eq!(s.indexed_start(StartCond::Le, b"EEE"), "00"); // positions at DDD
+        assert_eq!(s.indexed_read_next().1, Some(rec("DDD", "xxxxx")));
+        // REWRITE: existing key -> 00, absent key -> 21 (ISAM KEY_INVALID); DELETE: 00 then 23
+        assert_eq!(s.indexed_rewrite(&rec("DDD", "newdd")), "00");
+        assert_eq!(s.indexed_read(b"DDD"), ("00", Some(rec("DDD", "newdd"))));
+        assert_eq!(s.indexed_rewrite(&rec("GGG", "ggggg")), "21");
+        assert_eq!(s.indexed_delete(b"BBB"), "00");
+        assert_eq!(s.indexed_read(b"BBB").0, "23");
+        assert_eq!(s.indexed_delete(b"BBB"), "23");
+    }
+
+    #[test]
+    fn record_and_file_lock_contention() {
+        // two opens sharing one lock environment contend over the same record/file
+        let mut env = LockEnv::new();
+        let mut a = FileLockState::default();
+        let mut b = FileLockState::default();
+        // A locks BBB -> 00; B's lock/test of BBB -> 51 (held by another); B locks CCC -> 00
+        assert_eq!(env.lock_record(&mut a, b"BBB"), "00");
+        assert!(a.record_locked);
+        assert_eq!(env.test_record_lock(&b, b"BBB"), "51");
+        assert_eq!(env.lock_record(&mut b, b"BBB"), "51");
+        assert_eq!(env.lock_record(&mut b, b"CCC"), "00");
+        // A re-locking its own record is granted; A unlocks -> B can now take BBB
+        assert_eq!(env.lock_record(&mut a, b"BBB"), "00");
+        assert_eq!(env.unlock_record(&mut a), "00");
+        assert!(!a.record_locked);
+        assert_eq!(env.test_record_lock(&b, b"BBB"), "00");
+        assert_eq!(env.lock_record(&mut b, b"BBB"), "00");
+        // file locks: A locks the file -> 00; B -> 61; A unlocks -> B grantable
+        assert_eq!(env.lock_file(&mut a, "f.dat"), "00");
+        assert!(a.file_lock_set);
+        assert_eq!(env.lock_file(&mut b, "f.dat"), "61");
+        assert_eq!(env.unlock_file(&mut a), "00");
+        assert_eq!(env.lock_file(&mut b, "f.dat"), "00");
+        // unlocking when nothing is held is a no-op success
+        let mut c = FileLockState::default();
+        assert_eq!(env.unlock_record(&mut c), "00");
+        assert_eq!(env.unlock_file(&mut c), "00");
+    }
+
     #[test]
     fn sort_cmps_and_collation() {
         assert!(sort_cmps(b"ABC", b"ABD", None) < 0);
@@ -2959,6 +3361,25 @@ mod kani_proofs {
         assert_eq!(out.len(), 3);
         // output is sorted by the ascending key
         assert!(out[0] <= out[1] && out[1] <= out[2]);
+    }
+    // KANIFOR: GNURUST.FILEIO.INDEXED.1
+    /// A write-then-read round-trip on the indexed store returns the written record; a duplicate primary
+    /// key is rejected with 22; a read of an absent key is 23. Never panics.
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn indexed_write_read_total() {
+        let k: [u8; 1] = kani::any();
+        let v: [u8; 1] = kani::any();
+        let rec = [k[0], v[0]];
+        let mut s = IndexedStore::indexed_open(0, 1, AccessMode::Dynamic, OpenMode::Output);
+        assert_eq!(s.indexed_write(&rec), "00");
+        assert_eq!(s.indexed_write(&rec), "22"); // duplicate primary key
+        let (st, r) = s.indexed_read(&k);
+        assert_eq!(st, "00");
+        assert_eq!(r, Some(rec.to_vec()));
+        let other: [u8; 1] = kani::any();
+        kani::assume(other[0] != k[0]);
+        assert_eq!(s.indexed_read(&other), ("23", None));
     }
     // KANIFOR: GNURUST.FILEIO.OPEN.1
     /// The non-I/O precondition paths of cob_open/cob_close are total: opening a Locked file is 38, an

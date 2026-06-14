@@ -265,12 +265,13 @@
   "source_modules": [
    "libcob/fileio.c"
   ],
-  "status": "observed",
+  "status": "sealed",
   "courts": [
-   "GNURUST.INDEXED.FILE.ATLAS.1"
+   "GNURUST.INDEXED.FILE.ATLAS.1",
+   "GNURUST.FILEIO.INDEXED.1"
   ],
   "future_campaign": null,
-  "risk_if_unported": "indexed/keyed file I/O -- the largest remaining gap cluster; backend-specific on-disk ISAM/BDB format observed, not implemented"
+  "risk_if_unported": "indexed/keyed file I/O -- the COBOL-observable primary-key behaviour (WRITE/READ/READ NEXT/START/REWRITE/DELETE status + record bytes + key order + record locking) sealed (GNURUST.FILEIO.INDEXED.1, indexed_sweep 18/0); the backend-specific on-disk ISAM/BDB format, alternate keys, and cross-process locking stay the declared boundary"
  },
  {
   "surface": "file-io-relative",

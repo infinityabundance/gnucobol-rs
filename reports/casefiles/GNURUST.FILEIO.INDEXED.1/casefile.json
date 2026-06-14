@@ -1,0 +1,70 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order"
+  ],
+  "case_id": "GNURUST.FILEIO.INDEXED.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.55",
+  "damage_if_overclaimed": "treating the in-memory model as the whole INDEXED runtime would hide the on-disk index format, alternate keys, and real cross-process locking that operational indexed files depend on",
+  "hash_chain": {
+    "inputs_sha256": "772d388d090c835caccbce86f8f5e7634bb69f82ffb4088532151ddd1ad6803c"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "30cc2942040aa04219ba146a2e6ed223a87079930ff4617c344e558a4de1178b",
+    "receipt_sha256": "db08717d5aae4f8fc0ab53b219ac82e1fab92499e6ce0f6a7ed643b073c700d3"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "an INDEXED file is just a keyed map -- NO: WRITE of a duplicate primary key is 22 (not an overwrite), REWRITE of an absent key is 21 (not 23), READ NEXT is strictly key-ordered, START positions by a relational condition, and a record locked by another open is 51"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-ON-DISK-INDEX-FILE-FORMAT-BDB-VBISAM",
+    "NEG.ALTERNATE-RECORD-KEYS-AND-WITH-DUPLICATE",
+    "NEG.READ-PREVIOUS-DESCENDING-TRAVERSAL",
+    "NEG.THE-ACTUAL-CROSS-PROCESS-BDB-LOCK-ENVIRO",
+    "NEG.VARIABLE-LENGTH-INDEXED-RECORDS",
+    "NEG.THE-BDB-EXTFH-SUBSTRATE-FUNCTIONS",
+    "NEG.CONCURRENT-MULTI-PROCESS-CONTENTION-BEYO"
+  ],
+  "negative_claims": [
+    "the on-disk index file format (BDB/VBISAM/EXTFH -- the declared OS boundary, the model is in-memory)",
+    "ALTERNATE RECORD KEYs and WITH DUPLICATES (only the primary key is the court)",
+    "READ PREVIOUS / descending traversal",
+    "the actual cross-process BDB lock environment (52 deadlock and 30 permanent-error are BDB-internal)",
+    "variable-length indexed records",
+    "the bdb_*/EXTFH substrate functions",
+    "concurrent multi-process contention beyond the in-process model",
+    "lie prevented: an INDEXED file is just a keyed map -- NO: WRITE of a duplicate primary key is 22 (not an overwrite), REWRITE of an absent key is 21 (not 23), READ NEXT is strictly key-ordered, START positions by a relational condition, and a record locked by another open is 51"
+  ],
+  "oracle": {
+    "detail": "cobc ORGANIZATION INDEXED RECORD KEY (libcob/fileio.c indexed_* handlers)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.INDEXED.1"
+  },
+  "positive_claims": [
+    "a faithful port of the COBOL-observable behaviour of fileio.c's INDEXED handlers (indexed_open/indexed_write/indexed_write_internal/indexed_read/indexed_read_next/indexed_start/indexed_start_internal/indexed_rewrite/indexed_delete/indexed_delete_internal/indexed_file_delete/indexed_close) over a primary RECORD KEY, proven to match the admitted libcob's FILE STATUS + record bytes + key order (indexed_sweep 18/0): WRITE indexes a record by its primary key and rejects a duplicate primary key with 22 (and a non-ascending key under SEQUENTIAL access with 21)",
+    "a random READ by key returns 00 + the record or 23 (not found)",
+    "READ NEXT walks the keys in ascending order (10 at end)",
+    "START positions the cursor by an =/</<=/>/>= condition (00, a following READ NEXT returns that record) or 23 when no key satisfies it",
+    "REWRITE replaces an existing record (00) or returns 21 (ISAM KEY_INVALID) when the primary key is absent",
+    "DELETE removes a record (00) or returns 23. Verified end-to-end against a fixed cobc ORGANIZATION INDEXED script (write incl duplicate, random read hit/miss, read-next sweep, START =/>/>=/<, rewrite, delete). The record/file LOCKING sub-layer (lock_record/unlock_record/test_record_lock/lock_file/unlock_file) is a faithful port of the NOWAIT grant/deny status contract: a record locked by another open is 51, a file 61, unit-tested with two contending opens over one lock environment"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/indexed_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 18,
+    "total": 18,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

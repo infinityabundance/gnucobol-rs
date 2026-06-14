@@ -10,12 +10,12 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "28/42",
+  "sealed_fraction": "29/42",
   "status_counts": {
     "missing": 0,
     "negative": 5,
-    "observed": 9,
-    "sealed": 28
+    "observed": 8,
+    "sealed": 29
   },
   "surface_count": 42,
   "surfaces": [
@@ -299,15 +299,16 @@
     {
       "category": "file I/O (keyed)",
       "courts": [
-        "GNURUST.INDEXED.FILE.ATLAS.1"
+        "GNURUST.INDEXED.FILE.ATLAS.1",
+        "GNURUST.FILEIO.INDEXED.1"
       ],
       "future_campaign": null,
-      "risk_if_unported": "indexed/keyed file I/O -- the largest remaining gap cluster; backend-specific on-disk ISAM/BDB format observed, not implemented",
+      "risk_if_unported": "indexed/keyed file I/O -- the COBOL-observable primary-key behaviour (WRITE/READ/READ NEXT/START/REWRITE/DELETE status + record bytes + key order + record locking) sealed (GNURUST.FILEIO.INDEXED.1, indexed_sweep 18/0); the backend-specific on-disk ISAM/BDB format, alternate keys, and cross-process locking stay the declared boundary",
       "source_modules": [
         "libcob/fileio.c"
       ],
       "source_modules_present": true,
-      "status": "observed",
+      "status": "sealed",
       "surface": "file-io-indexed"
     },
     {

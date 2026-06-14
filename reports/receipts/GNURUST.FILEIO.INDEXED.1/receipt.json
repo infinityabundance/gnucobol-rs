@@ -1,0 +1,33 @@
+{
+  "byte_domain": "INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order",
+  "campaign": "GNURUST.FILEIO.INDEXED.1",
+  "command": {
+    "replay": "bash lab/oracle/indexed_sweep.sh"
+  },
+  "court": "INDEXED organization (keyed store + record locking)",
+  "crate_version": "0.7.55",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "the on-disk index file format (BDB/VBISAM/EXTFH -- the declared OS boundary)",
+    "ALTERNATE RECORD KEYs and WITH DUPLICATES (only the primary key is the court)",
+    "READ PREVIOUS / descending traversal",
+    "the actual cross-process BDB lock environment (52 deadlock / 30 permanent-error)",
+    "variable-length indexed records",
+    "the bdb_*/EXTFH substrate functions"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=18 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

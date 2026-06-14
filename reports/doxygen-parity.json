@@ -200,15 +200,6 @@
         "free_extfh_fcd",
         "free_fcd2",
         "get_code_set_converted_data",
-        "indexed_close",
-        "indexed_delete",
-        "indexed_file_delete",
-        "indexed_open",
-        "indexed_read",
-        "indexed_read_next",
-        "indexed_rewrite",
-        "indexed_start",
-        "indexed_write",
         "open_next",
         "save_fcd_status",
         "update_fcd_to_file",
@@ -216,8 +207,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 59.2,
-      "ported": 87
+      "parity_pct": 65.3,
+      "ported": 96
     },
     {
       "doxygen_functions": 25,
@@ -517,8 +508,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 58.6,
-    "ported": 585
+    "parity_pct": 59.5,
+    "ported": 594
   },
   "xml_root": "lab/doxygen/out/xml"
 }

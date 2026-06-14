@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **42**  ·  sealed ✅ **28**  ·  observed 🟡 9  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **42**  ·  sealed ✅ **29**  ·  observed 🟡 8  ·  refused ⛔ 5  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **28/42**
+- sealed fraction (data-representation spine): **29/42**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -28,7 +28,7 @@
 | `declaratives-use` | runtime exceptions | `typeck.c, fileio.c` | 🟡 observed | GNURUST.DECLARATIVES.ATLAS.1 |
 | `size-error` | runtime exceptions | `numeric.c` | ✅ sealed | SIZE.ERROR.ATLAS.1, GNURUST.SIZE.ERROR.1 |
 | `file-io-sequential` | file I/O | `fileio.c` | ✅ sealed | GNURUST.FILE.SEQUENTIAL.1, GNURUST.FILE.WRITE.1, GNURUST.FILE.REWRITE.1, GNURUST.FILEIO.LINESEQ.1, GNURUST.FILEIO.LINESEQ.2, GNURUST.FILEIO.SEQ.1, GNURUST.FILEIO.VERB.1, GNURUST.FILEIO.SYS.1, GNURUST.FILEIO.OPEN.1, GNURUST.FILEIO.MAPPING.1 |
-| `file-io-indexed` | file I/O (keyed) | `fileio.c` | 🟡 observed | GNURUST.INDEXED.FILE.ATLAS.1 |
+| `file-io-indexed` | file I/O (keyed) | `fileio.c` | ✅ sealed | GNURUST.INDEXED.FILE.ATLAS.1, GNURUST.FILEIO.INDEXED.1 |
 | `file-io-relative` | file I/O (relative) | `fileio.c` | ✅ sealed | GNURUST.RELATIVE.FILE.ATLAS.1, GNURUST.FILEIO.RELATIVE.1 |
 | `file-status` | file I/O | `fileio.c` | 🟡 observed | GNURUST.FILE.STATUS.1 |
 | `initialize` | MOVE/storage | `typeck.c` | ✅ sealed | GNURUST.INITIALIZE.1 |

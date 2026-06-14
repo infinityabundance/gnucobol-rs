@@ -980,6 +980,19 @@
         "the actual fd open/close syscalls (declared OS boundary)"
       ]
     },
+    "GNURUST.FILEIO.INDEXED.1": {
+      "court": "INDEXED organization (keyed store + record locking)",
+      "sweep": "indexed_sweep.sh",
+      "byte_domain": "INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order",
+      "non_claims": [
+        "the on-disk index file format (BDB/VBISAM/EXTFH -- the declared OS boundary)",
+        "ALTERNATE RECORD KEYs and WITH DUPLICATES (only the primary key is the court)",
+        "READ PREVIOUS / descending traversal",
+        "the actual cross-process BDB lock environment (52 deadlock / 30 permanent-error)",
+        "variable-length indexed records",
+        "the bdb_*/EXTFH substrate functions"
+      ]
+    },
     "GNURUST.FILEIO.SORTENGINE.1": {
       "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
       "sweep": "sortengine_sweep.sh",

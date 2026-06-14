@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.LENGTH.1 (court-casefile)
 
-**Verdict: PASS** · 12/12 pass, 0 fail · crate `gnucobol-rs` 0.7.54
+**Verdict: PASS** · 12/12 pass, 0 fail · crate `gnucobol-rs` 0.7.55
 
 - **Oracle:** cobc FUNCTION LENGTH (libcob/intrinsic.c)
 - **Byte domain(s):** FUNCTION LENGTH(field) -> storage byte length
