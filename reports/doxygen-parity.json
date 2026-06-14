@@ -155,18 +155,8 @@
       "doxygen_functions": 147,
       "file": "fileio.c",
       "missing": [
-        "EXTFH",
         "EXTFH3",
-        "cob_cache_file",
         "cob_create_tmpfile",
-        "cob_extfh_close",
-        "cob_extfh_delete",
-        "cob_extfh_open",
-        "cob_extfh_read",
-        "cob_extfh_read_next",
-        "cob_extfh_rewrite",
-        "cob_extfh_start",
-        "cob_extfh_write",
         "cob_fcd_file_sync",
         "cob_fd_file_open",
         "cob_file_close",
@@ -174,32 +164,22 @@
         "cob_file_fcd_adrs",
         "cob_file_fcd_sync",
         "cob_file_fcdkey_adrs",
-        "cob_file_free",
-        "cob_file_malloc",
         "cob_file_open",
         "cob_file_sort_giving_extfh",
         "cob_file_sort_using_extfh",
         "cob_get_sort_tempfile",
         "cob_read_item",
-        "cob_sync",
         "cob_sys_check_file_exist",
         "cob_sys_extfh",
         "cob_sys_file_info",
         "cob_write_block",
         "copy_keys_fcd_to_file",
-        "find_fcd",
-        "find_fcd2",
-        "find_file",
-        "free_extfh_fcd",
-        "free_fcd2",
         "get_code_set_converted_data",
         "open_next",
-        "save_fcd_status",
-        "update_key_from_fcd",
-        "update_record_and_keys_if_necessary"
+        "update_key_from_fcd"
       ],
-      "parity_pct": 71.4,
-      "ported": 105
+      "parity_pct": 85.0,
+      "ported": 125
     },
     {
       "doxygen_functions": 25,
@@ -499,8 +479,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 60.4,
-    "ported": 603
+    "parity_pct": 62.4,
+    "ported": 623
   },
   "xml_root": "lab/doxygen/out/xml"
 }

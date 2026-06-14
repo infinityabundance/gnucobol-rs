@@ -739,6 +739,20 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     }
     let mut rb = vec![0u8; rmax];
     let _ = sr.cob_file_return(&mut rb);
+    // FCD conversions + EXTFH wrappers (a noop callfh) + registry builders never panic
+    let mut cf2 = fileio::CobFile::new(org, fileio::AccessMode::Dynamic, rmax, "");
+    let mut callfh = |_op: u16, fcd: &mut fileio::Fcd3| {
+        fcd.file_status = *b"00";
+        0
+    };
+    fileio::cob_extfh_open(&mut cf2, fileio::OpenMode::Io, &mut callfh);
+    fileio::cob_extfh_read(&mut cf2, Some(body), data.first().copied().unwrap_or(0) as i32, &mut callfh);
+    fileio::cob_extfh_read_next(&mut cf2, data.first().copied().unwrap_or(0) as i32, &mut callfh);
+    fileio::cob_extfh_write(&mut cf2, &mut callfh);
+    fileio::cob_extfh_close(&mut cf2, data.first().copied().unwrap_or(0) as i32, &mut callfh);
+    let fcd = fileio::find_fcd(&cf2);
+    let _ = fileio::find_file(&fcd);
+    let _ = fileio::find_fcd2(&fileio::fcd3_to_fcd2(&fcd));
 }
 
 #[cfg(feature = "fuzzing")]

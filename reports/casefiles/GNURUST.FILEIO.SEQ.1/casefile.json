@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.SEQ.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.57",
+  "crate_version": "0.7.58",
   "damage_if_overclaimed": "mis-framing the varseq prefix (width/endianness) shifts every variable record; assuming a short final fixed record is space-filled corrupts the tail bytes",
   "hash_chain": {
-    "inputs_sha256": "d78f00ebf697e9f8db8e6d3de40c9bdeb9f6a17d7b19e5da3f2630d929703136"
+    "inputs_sha256": "8f957634510dab4f1b95deecaafcab8e14c4f5a8a2e4bfcc5cbe6e606b91735d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "9752bb3d778569c7e9b42b261ae500046de5b12ac06c3532f2288cad18d9d2ad",
-    "receipt_sha256": "b899d338952d4215d913e2e85a0cd354787949a2b936c7bbe09f99f003aa1b86"
+    "receipt_sha256": "53e9ad25e152da543af211966b35847ba0214b3a94fc7c1a6426037791e750d4"
   },
   "kind": "court-casefile",
   "lie_prevented": [

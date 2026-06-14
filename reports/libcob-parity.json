@@ -244,16 +244,7 @@
         "bdb_nofile",
         "bdb_open_cursor",
         "check_alt_keys",
-        "cob_cache_file",
         "cob_create_tmpfile",
-        "cob_extfh_close",
-        "cob_extfh_delete",
-        "cob_extfh_open",
-        "cob_extfh_read",
-        "cob_extfh_read_next",
-        "cob_extfh_rewrite",
-        "cob_extfh_start",
-        "cob_extfh_write",
         "cob_fcd_file_sync",
         "cob_fd_file_open",
         "cob_file_close",
@@ -261,38 +252,26 @@
         "cob_file_fcd_adrs",
         "cob_file_fcd_sync",
         "cob_file_fcdkey_adrs",
-        "cob_file_free",
-        "cob_file_malloc",
         "cob_file_open",
         "cob_file_sort_giving_extfh",
         "cob_file_sort_using_extfh",
         "cob_get_sort_tempfile",
         "cob_read_item",
-        "cob_sync",
         "cob_sys_check_file_exist",
         "cob_sys_extfh",
         "cob_sys_file_info",
         "cob_write_block",
         "copy_keys_fcd_to_file",
-        "find_fcd",
-        "find_fcd2",
-        "find_file",
-        "fisretsts",
-        "free_extfh_fcd",
-        "free_fcd2",
-        "freefh",
         "get_code_set_converted_data",
         "get_dupno",
         "join_environment",
         "open_next",
         "restorefileposition",
-        "save_fcd_status",
         "savefileposition",
-        "update_key_from_fcd",
-        "update_record_and_keys_if_necessary"
+        "update_key_from_fcd"
       ],
-      "parity_pct": 69.8,
-      "ported": 127
+      "parity_pct": 81.3,
+      "ported": 148
     },
     {
       "file": "mlio.c",
@@ -639,7 +618,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 53.0,
-    "ported": 620
+    "parity_pct": 54.8,
+    "ported": 641
   }
 }

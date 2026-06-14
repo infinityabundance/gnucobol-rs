@@ -3974,11 +3974,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 125,
+    "active_ported": 146,
     "compiled": 182,
-    "compiled_parity_pct": 69.8,
+    "compiled_parity_pct": 81.3,
     "disabled": 0,
-    "doc_only": 0,
+    "doc_only": 1,
     "file": "fileio.c",
     "fns": [
       {
@@ -4131,12 +4131,14 @@
       {
         "function": "cob_sync",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_cache_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "save_status",
@@ -4275,12 +4277,14 @@
       {
         "function": "fisretsts",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "freefh",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "restorefileposition",
@@ -4450,12 +4454,14 @@
       {
         "function": "cob_file_malloc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_free",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_unlock_file",
@@ -4865,7 +4871,8 @@
       {
         "function": "free_extfh_fcd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "update_file_to_fcd",
@@ -4899,17 +4906,20 @@
       {
         "function": "find_fcd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "find_fcd2",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "free_fcd2",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "fcd2_to_fcd3",
@@ -4926,57 +4936,68 @@
       {
         "function": "find_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "update_record_and_keys_if_necessary",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "save_fcd_status",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_open",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_close",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_start",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_read",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_read_next",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_write",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_rewrite",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_extfh_delete",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_extfh",
@@ -5006,7 +5027,7 @@
       {
         "function": "EXTFH",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "update_key_from_fcd",
@@ -5029,16 +5050,7 @@
       "bdb_nofile",
       "bdb_open_cursor",
       "check_alt_keys",
-      "cob_cache_file",
       "cob_create_tmpfile",
-      "cob_extfh_close",
-      "cob_extfh_delete",
-      "cob_extfh_open",
-      "cob_extfh_read",
-      "cob_extfh_read_next",
-      "cob_extfh_rewrite",
-      "cob_extfh_start",
-      "cob_extfh_write",
       "cob_fcd_file_sync",
       "cob_fd_file_open",
       "cob_file_close",
@@ -5046,38 +5058,26 @@
       "cob_file_fcd_adrs",
       "cob_file_fcd_sync",
       "cob_file_fcdkey_adrs",
-      "cob_file_free",
-      "cob_file_malloc",
       "cob_file_open",
       "cob_file_sort_giving_extfh",
       "cob_file_sort_using_extfh",
       "cob_get_sort_tempfile",
       "cob_read_item",
-      "cob_sync",
       "cob_sys_check_file_exist",
       "cob_sys_extfh",
       "cob_sys_file_info",
       "cob_write_block",
       "copy_keys_fcd_to_file",
-      "find_fcd",
-      "find_fcd2",
-      "find_file",
-      "fisretsts",
-      "free_extfh_fcd",
-      "free_fcd2",
-      "freefh",
       "get_code_set_converted_data",
       "get_dupno",
       "join_environment",
       "open_next",
       "restorefileposition",
-      "save_fcd_status",
       "savefileposition",
-      "update_key_from_fcd",
-      "update_record_and_keys_if_necessary"
+      "update_key_from_fcd"
     ],
     "inactive_mirrors": 2,
-    "missing": 55,
+    "missing": 33,
     "source_funcs": 182,
     "test_only": 0
   },

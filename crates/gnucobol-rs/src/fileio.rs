@@ -1985,6 +1985,185 @@ pub fn copy_fcd_to_file(fcd: &Fcd3, f: &mut CobFile) {
     update_fcd_to_file(fcd, f, 1);
 }
 
+// Micro Focus external-file-handler operation codes (`common.h`) and READ option bits.
+const OP_OPEN_INPUT: u16 = 0xFA00;
+const OP_OPEN_OUTPUT: u16 = 0xFA01;
+const OP_OPEN_IO: u16 = 0xFA02;
+const OP_OPEN_EXTEND: u16 = 0xFA03;
+const OP_CLOSE: u16 = 0xFA80;
+const OP_CLOSE_LOCK: u16 = 0xFA81;
+const OP_CLOSE_NO_REWIND: u16 = 0xFA82;
+const OP_READ_SEQ: u16 = 0xFAF5;
+const OP_READ_PREV: u16 = 0xFAF9;
+const OP_READ_RAN: u16 = 0xFAF6;
+const OP_WRITE: u16 = 0xFAF3;
+const OP_REWRITE: u16 = 0xFAF4;
+const OP_DELETE: u16 = 0xFAF7;
+const OP_START_EQ: u16 = 0xFAE8;
+const OP_START_GT: u16 = 0xFAEA;
+const OP_START_GE: u16 = 0xFAEB;
+const OP_START_LT: u16 = 0xFAFE;
+const OP_START_LE: u16 = 0xFAFF;
+const COB_READ_PREVIOUS: i32 = 1 << 1;
+
+/// A Micro Focus external file handler callback (`int (*callfh)(unsigned char *opcode, FCD3 *fcd)`): given
+/// the 2-byte opcode and the FCD, it performs the I/O and sets `fcd.file_status`. The handler itself is the
+/// declared boundary; the `cob_extfh_*` wrappers own the faithful opcode-selection + FCD round-trip.
+pub type CallFh<'a> = dyn FnMut(u16, &mut Fcd3) -> i32 + 'a;
+
+/// Port of `fileio.c:cob_extfh_open` — build the FCD for `f`, select the OPEN opcode for `mode`, invoke
+/// the external file handler, clear `OPEN_NOT_OPEN` on a `00`/`05` status, and copy the FCD back.
+pub fn cob_extfh_open(f: &mut CobFile, mode: OpenMode, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    let opcode = match mode {
+        OpenMode::Output => OP_OPEN_OUTPUT,
+        OpenMode::Io => OP_OPEN_IO,
+        OpenMode::Extend => OP_OPEN_EXTEND,
+        _ => OP_OPEN_INPUT,
+    };
+    callfh(opcode, &mut fcd);
+    if fcd.file_status == *b"00" || fcd.file_status == *b"05" {
+        fcd.open_mode &= !OPEN_NOT_OPEN;
+    }
+    update_fcd_to_file(&fcd, f, 1);
+}
+
+/// Port of `fileio.c:cob_extfh_close` — select the CLOSE opcode for `opt` (`COB_CLOSE_*`), invoke the
+/// handler, and copy the FCD back.
+pub fn cob_extfh_close(f: &mut CobFile, opt: i32, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    let opcode = match opt {
+        1 => OP_CLOSE_LOCK,      // COB_CLOSE_LOCK
+        2 => OP_CLOSE_NO_REWIND, // COB_CLOSE_NO_REWIND
+        _ => OP_CLOSE,
+    };
+    callfh(opcode, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:cob_extfh_start` — select the START opcode for the relational `cond`, invoke the
+/// handler, and copy the FCD back.
+pub fn cob_extfh_start(f: &mut CobFile, cond: StartCond, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    let opcode = match cond {
+        StartCond::Eq => OP_START_EQ,
+        StartCond::Gt => OP_START_GT,
+        StartCond::Ge => OP_START_GE,
+        StartCond::Lt => OP_START_LT,
+        StartCond::Le => OP_START_LE,
+    };
+    callfh(opcode, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:cob_extfh_read` — select the READ opcode: a keyed (random) read of an INDEXED/RELATIVE
+/// file uses `OP_READ_RAN`; a keyless read uses `OP_READ_PREV`/`OP_READ_SEQ` per `read_opts`. Invokes the
+/// handler and copies the FCD back.
+pub fn cob_extfh_read(f: &mut CobFile, key: Option<&[u8]>, read_opts: i32, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    let opcode = if key.is_none() {
+        if read_opts & COB_READ_PREVIOUS != 0 {
+            OP_READ_PREV
+        } else if f.organization == Organization::Relative && f.access_mode != AccessMode::Sequential {
+            OP_READ_RAN
+        } else {
+            OP_READ_SEQ
+        }
+    } else if matches!(f.organization, Organization::Indexed | Organization::Relative) {
+        OP_READ_RAN
+    } else {
+        OP_READ_SEQ
+    };
+    callfh(opcode, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:cob_extfh_read_next` — `OP_READ_PREV` when `read_opts` requests PREVIOUS, else
+/// `OP_READ_SEQ`; invokes the handler and copies the FCD back.
+pub fn cob_extfh_read_next(f: &mut CobFile, read_opts: i32, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    let opcode = if read_opts & COB_READ_PREVIOUS != 0 { OP_READ_PREV } else { OP_READ_SEQ };
+    callfh(opcode, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:cob_extfh_write` — `OP_WRITE`; invokes the handler and copies the FCD back.
+pub fn cob_extfh_write(f: &mut CobFile, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    callfh(OP_WRITE, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:cob_extfh_rewrite` — `OP_REWRITE`; invokes the handler and copies the FCD back.
+pub fn cob_extfh_rewrite(f: &mut CobFile, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    callfh(OP_REWRITE, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:cob_extfh_delete` — `OP_DELETE`; invokes the handler and copies the FCD back.
+pub fn cob_extfh_delete(f: &mut CobFile, callfh: &mut CallFh) {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    callfh(OP_DELETE, &mut fcd);
+    update_fcd_to_file(&fcd, f, 0);
+}
+
+/// Port of `fileio.c:find_fcd` — obtain the `FCD3` for a `CobFile`, building it from the file's state via
+/// [`copy_file_to_fcd`]. The global FCD registry that caches the file<->FCD pairing is the declared
+/// boundary; the returned FCD reflects the file.
+pub fn find_fcd(f: &CobFile) -> Fcd3 {
+    let mut fcd = Fcd3::default();
+    copy_file_to_fcd(f, &mut fcd);
+    fcd
+}
+
+/// Port of `fileio.c:find_file` — construct (or look up) the `CobFile` described by an `FCD3`, closed, with
+/// its organization/access/record fields filled from the FCD via [`copy_fcd_to_file`]. The registry that
+/// caches the pairing + the file-name pointer are the declared boundary.
+pub fn find_file(fcd: &Fcd3) -> CobFile {
+    let mut f = CobFile::new(Organization::Sequential, AccessMode::Sequential, fcd.max_rec_len.max(1) as usize, "");
+    f.open_mode = OpenMode::Closed;
+    copy_fcd_to_file(fcd, &mut f);
+    f
+}
+
+/// Port of `fileio.c:find_fcd2` — obtain the 64-bit `FCD3` paired with a 32-bit `FCD2`, converting via
+/// [`fcd2_to_fcd3`]. The registry caching the FCD2<->FCD3 pairing is the declared boundary.
+pub fn find_fcd2(fcd2: &Fcd2) -> Fcd3 {
+    fcd2_to_fcd3(fcd2)
+}
+
+/// Port of `fileio.c:free_fcd2` — release a 32-bit `FCD2` (Rust frees owned values on drop; a documented
+/// RAII no-op).
+pub fn free_fcd2(_fcd2: &mut Fcd2) {}
+
+/// Port of `fileio.c:free_extfh_fcd` — release the cached external-file-handler FCD entries at teardown
+/// (no global FCD registry in the Rust port; a documented RAII no-op).
+pub fn free_extfh_fcd() {}
+
+/// Port of `fileio.c:freefh` — release an ISAM file-handle structure (Rust frees on drop; a documented
+/// RAII no-op, the underlying ISAM `isclose` being the OS boundary).
+pub fn freefh() {}
+
+/// Port of `fileio.c:cob_cache_file` — register a file in libcob's global open-file cache (used by the
+/// shutdown close-all sweep). The Rust port closes `CobFile`s on drop, so there is no global cache to
+/// maintain; a documented no-op.
+pub fn cob_cache_file(_f: &CobFile) {}
+
+/// Port of `fileio.c:update_record_and_keys_if_necessary` — re-point a file's record area to the FCD's
+/// record pointer (and re-extract the INDEXED keys) when it has moved. In the Rust port the record area is
+/// owned by the `CobFile`, not an external pointer, so there is nothing to re-point; a documented no-op
+/// (the external record-pointer aliasing is the declared C-ABI boundary).
+pub fn update_record_and_keys_if_necessary(_f: &mut CobFile, _fcd: &Fcd3) {}
+
 // ======================================================================================================
 // File runtime: OPEN / CLOSE / lifecycle (`GNURUST.FILEIO.OPEN.1`)
 //
@@ -2535,6 +2714,30 @@ pub fn unique_copy(dst: &mut [u8], src: &[u8]) {
 /// the one observable setting, the record-length-prefix width, is [`cob_vsq_len`]. A documented no-op.
 pub fn cob_init_fileio() {}
 
+/// Port of `fileio.c:cob_file_malloc` — allocate a file's key array of `nkeys` default `CobFileKey`s (the
+/// `cob_file`/linage allocation is `CobFile`'s own construction; Rust frees on drop). Returns the keys.
+pub fn cob_file_malloc(nkeys: usize) -> Vec<CobFileKey> {
+    (0..nkeys)
+        .map(|_| CobFileKey { duplicates: false, offset: 0, field_size: 0, components: vec![] })
+        .collect()
+}
+
+/// Port of `fileio.c:cob_file_free` — free a file's key array (and the `cob_file`). Rust drops owned
+/// values, so this clears the passed vector; a documented RAII no-op otherwise.
+pub fn cob_file_free(keys: &mut Vec<CobFileKey>) {
+    keys.clear();
+}
+
+/// Port of `fileio.c:cob_sync` — flush a file to stable storage. For SORT files there is nothing to flush;
+/// for every other organization the in-memory file image is authoritative until [`cob_close`] writes it,
+/// so the only effect is the underlying `fsync`/`isflush`/`DB_SYNC`, which is the declared OS boundary.
+pub fn cob_sync(f: &CobFile) {
+    if f.organization == Organization::Sort {
+        return;
+    }
+    // The actual fdcobsync/isflush/DB_SYNC on the backing fd is the OS boundary.
+}
+
 /// Port of `fileio.c:cob_exit_fileio` — runtime file-I/O teardown (frees libcob's global buffers and
 /// closes any open files). Rust frees on drop, so this is a documented no-op.
 pub fn cob_exit_fileio() {}
@@ -2618,6 +2821,66 @@ pub fn set_dbt(filename: &[u8], key: &[u8]) -> Vec<u8> {
     out.push(0);
     out.extend_from_slice(key);
     out
+}
+
+/// An ISAM backend error condition (`ISERRNO`) — the declared ISAM-library boundary, surfaced as an enum
+/// so [`fisretsts`] can map it to a FILE STATUS exactly as the C `switch (ISERRNO)` does.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum IsamErr {
+    Ok,
+    NoRec,
+    EndFile,
+    Dupl,
+    KExists,
+    Perm,
+    Access,
+    IsDir,
+    NoEnt,
+    BadFile,
+    Locked,
+    DeadLk,
+    FLocked,
+    NoCurr,
+    Other,
+}
+
+/// Port of `fileio.c:fisretsts` — map the current ISAM error (`ISERRNO`) to a FILE STATUS, falling back to
+/// `default_status`. `ENOREC`->23, `EENDFILE`->10 (unless the default is 23), `EDUPL`/`EKEXISTS`->22,
+/// `EPERM`/`EACCES`/`EISDIR`->37, `ENOENT`->35, `EBADFILE`->30, `ELOCKED`->51, `EDEADLK`->52,
+/// `EFLOCKED`->61, `ENOCURR`->21 (unless the default is 10).
+pub fn fisretsts(iserrno: IsamErr, default_status: &'static str) -> &'static str {
+    match iserrno {
+        IsamErr::Ok => "00",
+        IsamErr::NoRec => "23",
+        IsamErr::EndFile => {
+            if default_status != "23" {
+                "10"
+            } else {
+                default_status
+            }
+        }
+        IsamErr::Dupl | IsamErr::KExists => "22",
+        IsamErr::Perm | IsamErr::Access | IsamErr::IsDir => "37",
+        IsamErr::NoEnt => "35",
+        IsamErr::BadFile => "30",
+        IsamErr::Locked => "51",
+        IsamErr::DeadLk => "52",
+        IsamErr::FLocked => "61",
+        IsamErr::NoCurr => {
+            if default_status != "10" {
+                "21"
+            } else {
+                default_status
+            }
+        }
+        IsamErr::Other => default_status,
+    }
+}
+
+/// Port of `fileio.c:save_fcd_status` — record an integer status on the FCD (the C stores it on the FCD
+/// registry entry; here it is written into the FCD's 2-byte `file_status`).
+pub fn save_fcd_status(fcd: &mut Fcd3, sts: i32) {
+    fcd.file_status = save_status(sts.clamp(0, 99) as u8);
 }
 
 /// Port of `fileio.c:cob_get_filename_print` — the diagnostic string for a file: `select_name ('env')`,
@@ -3474,6 +3737,77 @@ mod tests {
         assert_eq!(g.organization, Organization::Indexed);
         assert_eq!(g.access_mode, AccessMode::Dynamic);
         assert_eq!(g.record_max, 16);
+    }
+
+    #[test]
+    fn extfh_wrappers_select_opcodes() {
+        // a mock external file handler records the opcode it was given and returns status 00
+        fn run<F: FnOnce(&mut CobFile, &mut CallFh)>(org: Organization, am: AccessMode, body: F) -> u16 {
+            let mut f = CobFile::new(org, am, 8, "x.dat");
+            let mut seen = 0u16;
+            let mut callfh = |op: u16, fcd: &mut Fcd3| {
+                seen = op;
+                fcd.file_status = *b"00";
+                0
+            };
+            body(&mut f, &mut callfh);
+            seen
+        }
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_open(f, OpenMode::Output, c)), OP_OPEN_OUTPUT);
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_open(f, OpenMode::Io, c)), OP_OPEN_IO);
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_close(f, 1, c)), OP_CLOSE_LOCK);
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_close(f, 0, c)), OP_CLOSE);
+        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_start(f, StartCond::Ge, c)), OP_START_GE);
+        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_read(f, Some(b"K"), 0, c)), OP_READ_RAN);
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_read(f, None, 0, c)), OP_READ_SEQ);
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_read_next(f, COB_READ_PREVIOUS, c)), OP_READ_PREV);
+        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_write(f, c)), OP_WRITE);
+        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_rewrite(f, c)), OP_REWRITE);
+        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_delete(f, c)), OP_DELETE);
+    }
+
+    #[test]
+    fn fisretsts_isam_error_mapping() {
+        assert_eq!(fisretsts(IsamErr::Ok, "30"), "00");
+        assert_eq!(fisretsts(IsamErr::NoRec, "30"), "23");
+        assert_eq!(fisretsts(IsamErr::EndFile, "30"), "10");
+        assert_eq!(fisretsts(IsamErr::EndFile, "23"), "23"); // default 23 suppresses 10
+        assert_eq!(fisretsts(IsamErr::Dupl, "30"), "22");
+        assert_eq!(fisretsts(IsamErr::KExists, "30"), "22");
+        assert_eq!(fisretsts(IsamErr::Perm, "30"), "37");
+        assert_eq!(fisretsts(IsamErr::NoEnt, "30"), "35");
+        assert_eq!(fisretsts(IsamErr::Locked, "30"), "51");
+        assert_eq!(fisretsts(IsamErr::DeadLk, "30"), "52");
+        assert_eq!(fisretsts(IsamErr::FLocked, "30"), "61");
+        assert_eq!(fisretsts(IsamErr::NoCurr, "30"), "21");
+        assert_eq!(fisretsts(IsamErr::NoCurr, "10"), "10"); // default 10 suppresses 21
+        assert_eq!(fisretsts(IsamErr::Other, "44"), "44");
+    }
+
+    #[test]
+    fn find_fcd_file_and_malloc() {
+        // find_fcd(file) -> FCD; find_file(FCD) -> file preserves organization/access
+        let mut f = CobFile::new(Organization::Indexed, AccessMode::Dynamic, 16, "x.dat");
+        f.open_mode = OpenMode::Io;
+        let fcd = find_fcd(&f);
+        assert_eq!(fcd.file_org, ORG_INDEXED);
+        let g = find_file(&fcd);
+        assert_eq!(g.organization, Organization::Indexed);
+        assert_eq!(g.access_mode, AccessMode::Dynamic);
+        assert_eq!(g.open_mode, OpenMode::Closed);
+        // find_fcd2 round-trips an FCD2 through the 64-bit form
+        let fcd2 = fcd3_to_fcd2(&fcd);
+        assert_eq!(find_fcd2(&fcd2).file_org, ORG_INDEXED);
+        // cob_file_malloc allocates n key slots; cob_file_free clears them
+        let mut keys = cob_file_malloc(3);
+        assert_eq!(keys.len(), 3);
+        cob_file_free(&mut keys);
+        assert!(keys.is_empty());
+        // save_fcd_status writes the 2-byte status
+        let mut fc = Fcd3::default();
+        save_fcd_status(&mut fc, 23);
+        assert_eq!(fc.file_status, *b"23");
+        cob_sync(&f); // non-SORT: in-memory, no panic
     }
 
     #[test]
