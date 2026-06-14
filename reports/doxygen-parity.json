@@ -289,10 +289,6 @@
         "relative_write",
         "save_fcd_status",
         "save_status",
-        "sequential_read",
-        "sequential_rewrite",
-        "sequential_write",
-        "set_sequential_variable_length",
         "sort_cmps",
         "unique_copy",
         "update_fcd_to_file",
@@ -300,8 +296,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 2.0,
-      "ported": 3
+      "parity_pct": 4.8,
+      "ported": 7
     },
     {
       "doxygen_functions": 25,
@@ -601,8 +597,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 50.2,
-    "ported": 501
+    "parity_pct": 50.6,
+    "ported": 505
   },
   "xml_root": "lab/doxygen/out/xml"
 }

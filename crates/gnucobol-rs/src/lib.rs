@@ -652,6 +652,16 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = fileio::lineseq_size(body, body.len(), cfg.ls_fixed);
     let rmax = (data.first().copied().unwrap_or(1) as usize % 7) + 1;
     let _ = fileio::read_line_sequential(body, rmax, &cfg);
+    // RECORD SEQUENTIAL (GNURUST.FILEIO.SEQ.1): variable-length framing round-trips never panic.
+    let ty = data.first().copied().unwrap_or(0) % 4;
+    let sz = body.len().min(rmax);
+    let w = fileio::sequential_write(body, sz, true, ty);
+    let mut p = 0usize;
+    let _ = fileio::set_sequential_variable_length(&w, &mut p, ty);
+    let mut rbuf = vec![b' '; rmax];
+    let mut p2 = 0usize;
+    let _ = fileio::sequential_read(body, &mut p2, &mut rbuf, 1, rmax, ty);
+    let _ = fileio::sequential_read(body, &mut p2, &mut rbuf, rmax, rmax, ty);
 }
 
 #[cfg(feature = "fuzzing")]

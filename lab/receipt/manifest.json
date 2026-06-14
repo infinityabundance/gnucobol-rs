@@ -893,6 +893,19 @@
         "record/relative/indexed organizations",
         "the fd/FILE* reads (declared OS boundary)"
       ]
+    },
+    "GNURUST.FILEIO.SEQ.1": {
+      "court": "RECORD SEQUENTIAL read/write incl. variable-length",
+      "sweep": "seqrec_sweep.sh",
+      "byte_domain": "OPEN + WRITE/READ (RECORD SEQUENTIAL) -> fixed full record / variable cob_varseq_type prefix + data + FILE STATUS",
+      "non_claims": [
+        "WRITE ADVANCING (cob_seq_write_opt)",
+        "CODE-SET conversion",
+        "over-long record bytes_to_skip seek-past",
+        "multi-file concatenation",
+        "relative/indexed organizations",
+        "the fd read/write/lseek syscalls (declared OS boundary)"
+      ]
     }
   }
 }

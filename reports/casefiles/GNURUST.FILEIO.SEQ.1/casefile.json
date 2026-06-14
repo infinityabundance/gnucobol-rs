@@ -1,0 +1,65 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "OPEN OUTPUT/INPUT + WRITE/READ (RECORD SEQUENTIAL) -> file bytes (fixed: full record; variable: cob_varseq_type prefix + data) + FILE STATUS"
+  ],
+  "case_id": "GNURUST.FILEIO.SEQ.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.44",
+  "damage_if_overclaimed": "mis-framing the varseq prefix (width/endianness) shifts every variable record; assuming a short final fixed record is space-filled corrupts the tail bytes",
+  "hash_chain": {
+    "inputs_sha256": "8ed15e8c019f17863c2d2e14674cab266a47f83fd5de9fc8f54a425a6364aaba"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "9752bb3d778569c7e9b42b261ae500046de5b12ac06c3532f2288cad18d9d2ad",
+    "receipt_sha256": "d26e295e76c48555516f9ed40bcb0fbe1214c33f90a7efa3ec47ee3f3a1fd43d"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "variable-length records are just data -- NO: each is framed by a length prefix whose width AND byte order depend on COB_VARSEQ_FORMAT (2 or 4 bytes; big-endian, little-endian, or BE16+NUL pad), and a fixed short-final read leaks the prior record's tail rather than zero/space filling"
+  ],
+  "negative_capability_ids": [
+    "NEG.WRITE-ADVANCING-COB-SEQ-WRITE-OPT",
+    "NEG.CODE-SET-CONVERSION",
+    "NEG.THE-OVER-LONG-RECORD-BYTES-TO-SKIP-SEEK",
+    "NEG.MULTI-FILE-CONCATENATION",
+    "NEG.RELATIVE-INDEXED-ORGANIZATIONS",
+    "NEG.THE-FD-READ-WRITE-LSEEK-SYSCALLS-DECLARE"
+  ],
+  "negative_claims": [
+    "WRITE ADVANCING (cob_seq_write_opt)",
+    "CODE-SET conversion",
+    "the over-long record bytes_to_skip seek-past",
+    "multi-file concatenation",
+    "relative/indexed organizations",
+    "the fd read/write/lseek syscalls (declared OS boundary)",
+    "lie prevented: variable-length records are just data -- NO: each is framed by a length prefix whose width AND byte order depend on COB_VARSEQ_FORMAT (2 or 4 bytes; big-endian, little-endian, or BE16+NUL pad), and a fixed short-final read leaks the prior record's tail rather than zero/space filling"
+  ],
+  "oracle": {
+    "detail": "cobc OPEN/WRITE/READ RECORD SEQUENTIAL (fixed + RECORD IS VARYING) under COB_VARSEQ_FORMAT (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.SEQ.1"
+  },
+  "positive_claims": [
+    "a faithful port of libcob/fileio.c sequential_write + sequential_read + set_sequential_variable_length (+ sequential_rewrite), proven byte-identical to the admitted libcob (seqrec_sweep 9/0): a FIXED record (record_min==record_max) writes the full record area with no delimiter and reads it back in record_max chunks (a short final read leaves the prior record's tail, EOF=10)",
+    "a VARIABLE-LENGTH record (RECORD IS VARYING) is framed by a cob_varseq_type length prefix -- COB_VARSEQ_FORMAT 0/default = BE16(size)+0x0000 (4 bytes), 1 = BE32 (4 bytes), 2 = native LE32 (4 bytes), 3 = BE16 (2 bytes) -- all four verified on both WRITE (raw prefix bytes) and READ (status+size round-trip). The RECORD SEQUENTIAL org sibling of the line-sequential courts",
+    "extends GNURUST.FILE.SEQUENTIAL.1/WRITE.1 with the variable-length framing"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/seqrec_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 9,
+    "total": 9,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

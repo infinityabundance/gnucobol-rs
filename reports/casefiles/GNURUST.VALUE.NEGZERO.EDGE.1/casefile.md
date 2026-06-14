@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.VALUE.NEGZERO.EDGE.1 (court-casefile)
 
-**Verdict: PASS** · 8/8 pass, 0 fail · crate `gnucobol-rs` 0.7.43
+**Verdict: PASS** · 8/8 pass, 0 fail · crate `gnucobol-rs` 0.7.44
 
 - **Oracle:** cobc VALUE initial image (cobc/typeck.c + libcob packed/zoned encode)
 - **Byte domain(s):** VALUE-image negative-zero sign across usage x literal-form x scale; oracle rule + the locked gnucobol-rs divergence set (COMP-3 integer-form only)

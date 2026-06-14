@@ -401,9 +401,6 @@
         "save_fcd_status",
         "save_status",
         "savefileposition",
-        "sequential_read",
-        "sequential_rewrite",
-        "sequential_write",
         "set_dbt",
         "sort_cmps",
         "test_record_lock",
@@ -415,8 +412,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 1.6,
-      "ported": 3
+      "parity_pct": 3.3,
+      "ported": 6
     },
     {
       "file": "mlio.c",
@@ -763,7 +760,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 42.4,
-    "ported": 496
+    "parity_pct": 42.6,
+    "ported": 499
   }
 }

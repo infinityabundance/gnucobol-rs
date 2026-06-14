@@ -12,6 +12,13 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.44]
+- **`fileio.c` — RECORD SEQUENTIAL read/write incl. variable-length records sealed (`GNURUST.FILEIO.SEQ.1`).** A faithful port of `libcob/fileio.c` `sequential_write` + `sequential_read` + `set_sequential_variable_length` (+ `sequential_rewrite`), proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` (`seqrec_sweep` 9/0):
+  - a **fixed** record (`record_min == record_max`) is written as the full record area with no delimiter and read back in `record_max` chunks — a short final read overwrites only the bytes available and **leaves the prior record's tail** (status `00`), and a zero-byte read is end of file (`10`).
+  - a **variable-length** record (`RECORD IS VARYING`) is framed by a `cob_varseq_type` length prefix whose width and byte order depend on **`COB_VARSEQ_FORMAT`**: `0`/default = `BE16(size)` + two NUL bytes (4 bytes), `1` = `BE32` (4), `2` = native little-endian `LE32` (4), `3` = `BE16` (2) — all four verified on both WRITE (raw prefix bytes) and READ (status + size round-trip).
+  - The `fd` read/write/lseek syscalls remain the declared OS boundary; `WRITE ... ADVANCING`, CODE-SET conversion, the over-long-record `bytes_to_skip` seek-past, and the relative/indexed organizations stay explicit non-claims. `fileio.c` parity 3 → 6/182 (plus the not-separately-counted `set_sequential_variable_length`).
+- No API breaks: additive (`fileio::sequential_write`/`sequential_read`/`sequential_rewrite`/`set_sequential_variable_length`/`cob_vsq_len`).
+
 ## [0.7.43]
 - **`fileio.c` — line-sequential `READ` config matrix sealed (`GNURUST.FILEIO.LINESEQ.2`).** The READ counterpart to 0.7.42's WRITE court: a faithful port of `libcob/fileio.c` `lineseq_read` (the record bytes and FILE STATUS produced by `READ ... NEXT RECORD` over an `ORGANIZATION IS LINE SEQUENTIAL` file), proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` across the `COB_LS_*` matrix (`lineseq_read_sweep` 12/0):
   - a line ends at `\n`; `\r\n` folds to `\n`; a lone `\r` is kept as a data byte; a short line is space-filled (`00`); a trailing newline makes no empty record; a mid-file empty line **is** a record; EOF with no bytes read is status `10`.

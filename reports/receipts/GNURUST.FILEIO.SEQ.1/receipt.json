@@ -1,0 +1,33 @@
+{
+  "byte_domain": "OPEN + WRITE/READ (RECORD SEQUENTIAL) -> fixed full record / variable cob_varseq_type prefix + data + FILE STATUS",
+  "campaign": "GNURUST.FILEIO.SEQ.1",
+  "command": {
+    "replay": "bash lab/oracle/seqrec_sweep.sh"
+  },
+  "court": "RECORD SEQUENTIAL read/write incl. variable-length",
+  "crate_version": "0.7.44",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "WRITE ADVANCING (cob_seq_write_opt)",
+    "CODE-SET conversion",
+    "over-long record bytes_to_skip seek-past",
+    "multi-file concatenation",
+    "relative/indexed organizations",
+    "the fd read/write/lseek syscalls (declared OS boundary)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=9 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

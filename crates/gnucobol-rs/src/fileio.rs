@@ -272,6 +272,153 @@ pub fn write_line_sequential(records: &[&[u8]], cfg: &LineSeqConfig) -> (Vec<u8>
     (out, "00")
 }
 
+// ======================================================================================================
+// RECORD SEQUENTIAL organization (`GNURUST.FILEIO.SEQ.1`)
+// ======================================================================================================
+
+/// The record-length-prefix width for a variable-length RECORD SEQUENTIAL file (`cob_vsq_len`):
+/// 2 bytes for `COB_VARSEQ_FORMAT=3`, otherwise 4.
+pub fn cob_vsq_len(varseq_type: u8) -> usize {
+    if varseq_type == 3 {
+        2
+    } else {
+        4
+    }
+}
+
+/// The variable-length size prefix `sequential_write` emits, per `COB_VARSEQ_FORMAT` (`cob_varseq_type`),
+/// verified byte-exact against the oracle:
+/// - `0` (default): `BE16(size)` then two `0x00` bytes (4 bytes total)
+/// - `1`: `BE32(size)` (4 bytes) · `2`: native little-endian `LE32(size)` (4 bytes) · `3`: `BE16(size)` (2 bytes)
+fn varseq_prefix(size: usize, varseq_type: u8) -> Vec<u8> {
+    match varseq_type {
+        1 => (size as u32).to_be_bytes().to_vec(),
+        2 => (size as u32).to_le_bytes().to_vec(),
+        3 => (size as u16).to_be_bytes().to_vec(),
+        // 0 and any other: BE16 size in the first two bytes, the rest of the 4-byte field zero.
+        _ => {
+            let mut v = (size as u16).to_be_bytes().to_vec();
+            v.extend_from_slice(&[0u8, 0u8]);
+            v
+        }
+    }
+}
+
+/// Port of `fileio.c:sequential_write` for the unadvanced write (`opt == 0`): the bytes a `WRITE`
+/// appends to a RECORD SEQUENTIAL file. For a **fixed** record (`record_min == record_max`, so
+/// `variable` is false) the full record area is written with no prefix; for a **variable-length**
+/// record a [`varseq_prefix`] size prefix precedes the `size` data bytes. The `record` buffer is the
+/// FD record area (`size` bytes of which are live). No delimiter is ever added.
+///
+/// **Non-claims:** `WRITE ... ADVANCING` (the `opt != 0` advancing path) and CODE-SET conversion.
+pub fn sequential_write(record: &[u8], size: usize, variable: bool, varseq_type: u8) -> Vec<u8> {
+    let mut out = Vec::new();
+    if variable {
+        out.extend_from_slice(&varseq_prefix(size, varseq_type));
+    }
+    let n = size.min(record.len());
+    out.extend_from_slice(&record[..n]);
+    out
+}
+
+/// Port of `fileio.c:set_sequential_variable_length` — read the `cob_vsq_len`-byte record-length prefix
+/// at `data[*pos..]` (advancing the cursor) and return the record size, or a FILE STATUS on error
+/// (`"10"` EOF when no prefix bytes remain, `"39"` conflicting attribute on a malformed prefix).
+pub fn set_sequential_variable_length(data: &[u8], pos: &mut usize, varseq_type: u8) -> Result<usize, &'static str> {
+    let vlen = cob_vsq_len(varseq_type);
+    if *pos >= data.len() {
+        return Err("10"); // bytesread == 0 -> end of file
+    }
+    if *pos + vlen > data.len() {
+        return Err("39"); // a partial prefix -> conflicting attribute
+    }
+    let buf = &data[*pos..*pos + vlen];
+    *pos += vlen;
+    let size = match varseq_type {
+        0 => {
+            if buf[2] != 0 || buf[3] != 0 {
+                return Err("39"); // type 0 expects two trailing NULs
+            }
+            u16::from_be_bytes([buf[0], buf[1]]) as usize
+        }
+        1 => u32::from_be_bytes([buf[0], buf[1], buf[2], buf[3]]) as usize,
+        2 => u32::from_le_bytes([buf[0], buf[1], buf[2], buf[3]]) as usize,
+        _ => u16::from_be_bytes([buf[0], buf[1]]) as usize, // type 3 (and any default)
+    };
+    Ok(size)
+}
+
+/// The outcome of one `READ NEXT` from a RECORD SEQUENTIAL file.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SeqReadResult {
+    pub at_end: bool,
+    /// `f->record->size` after the read (bytes actually delivered into the record area).
+    pub size: usize,
+    /// `"00"` success · `"04"` record truncated/short · `"10"` end of file · `"39"` malformed prefix.
+    pub status: &'static str,
+}
+
+/// Port of `fileio.c:sequential_read`: read one record from `data` at `*pos` into `record_buf`
+/// (the persistent `record_max`-wide FD record area, kept across reads), advancing the cursor.
+///
+/// For a **fixed** record (`record_min == record_max`) it reads `record_max` bytes; a short final read
+/// overwrites only the bytes available and **leaves the prior record's tail** in `record_buf` (status
+/// `"00"`, `size = bytesread`), and a read of zero bytes is end of file (`"10"`). For a **variable**
+/// record it first parses the [`set_sequential_variable_length`] prefix, then reads that many data
+/// bytes (clamped to `record_max`; an over/under-length record yields status `"04"`).
+///
+/// **Non-claims:** CODE-SET conversion and the over-long `bytes_to_skip` seek-past on a record whose
+/// declared length exceeds `record_max` (the prefix is honored; the trailing data handling is a
+/// declared boundary).
+pub fn sequential_read(
+    data: &[u8],
+    pos: &mut usize,
+    record_buf: &mut [u8],
+    record_min: usize,
+    record_max: usize,
+    varseq_type: u8,
+) -> SeqReadResult {
+    let mut ret = "00";
+    let mut want = record_max;
+    let variable = record_min != record_max;
+    if variable {
+        match set_sequential_variable_length(data, pos, varseq_type) {
+            Err(s) => return SeqReadResult { at_end: s == "10", size: 0, status: s },
+            Ok(sz) => {
+                want = sz;
+                if sz < record_min || sz > record_max {
+                    ret = "04";
+                    want = want.min(record_max);
+                }
+            }
+        }
+    }
+    let avail = data.len() - *pos;
+    let bytesread = avail.min(want);
+    if bytesread == 0 {
+        if !variable {
+            return SeqReadResult { at_end: true, size: 0, status: "10" };
+        }
+        return SeqReadResult { at_end: false, size: 0, status: "04" };
+    }
+    record_buf[..bytesread].copy_from_slice(&data[*pos..*pos + bytesread]);
+    *pos += bytesread;
+    let size = if bytesread != want { bytesread } else { want };
+    SeqReadResult { at_end: false, size, status: ret }
+}
+
+/// Port of `fileio.c:sequential_rewrite`: overwrite the just-read fixed record in place with
+/// `record[..size]`, returning the updated file bytes. (`REWRITE` seeks back `record->size` and writes
+/// the same length.) An out-of-range offset leaves the file unchanged.
+pub fn sequential_rewrite(file: &[u8], record_off: usize, record: &[u8], size: usize) -> Vec<u8> {
+    let mut out = file.to_vec();
+    let n = size.min(record.len());
+    if record_off + n <= out.len() {
+        out[record_off..record_off + n].copy_from_slice(&record[..n]);
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -398,6 +545,101 @@ mod tests {
         // a mid-file empty line is a record (all spaces)
         assert_eq!(rd(b"AB\n\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"        ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
     }
+
+    // ---- RECORD SEQUENTIAL ----
+    #[test]
+    fn varseq_prefix_all_formats() {
+        // oracle: WRITE "AB" (size 2) variable -> the prefix per COB_VARSEQ_FORMAT
+        assert_eq!(varseq_prefix(2, 0), vec![0x00, 0x02, 0x00, 0x00]); // BE16 + 00 00 (default)
+        assert_eq!(varseq_prefix(2, 1), vec![0x00, 0x00, 0x00, 0x02]); // BE32
+        assert_eq!(varseq_prefix(2, 2), vec![0x02, 0x00, 0x00, 0x00]); // native LE32
+        assert_eq!(varseq_prefix(2, 3), vec![0x00, 0x02]); // BE16 (2 bytes)
+    }
+
+    #[test]
+    fn sequential_write_variable_matches_oracle() {
+        // oracle (VARSEQ=0): "AB"/2, "HELLO"/5 -> 0002000041420005000048454c4c4f
+        let mut out = Vec::new();
+        out.extend_from_slice(&sequential_write(b"AB      ", 2, true, 0));
+        out.extend_from_slice(&sequential_write(b"HELLO   ", 5, true, 0));
+        assert_eq!(out, b"\x00\x02\x00\x00AB\x00\x05\x00\x00HELLO");
+        // VARSEQ=3 (2-byte BE16): "AB"/2 -> 0002 4142
+        assert_eq!(sequential_write(b"AB      ", 2, true, 3), b"\x00\x02AB");
+    }
+
+    #[test]
+    fn sequential_write_fixed_is_full_record() {
+        // fixed: no prefix, full record area (record_max=8)
+        assert_eq!(sequential_write(b"AB      ", 8, false, 0), b"AB      ");
+    }
+
+    #[test]
+    fn set_varlen_roundtrips_every_format() {
+        for ty in [0u8, 1, 2, 3] {
+            let bytes = sequential_write(b"HELLO123", 5, true, ty);
+            let mut pos = 0usize;
+            let sz = set_sequential_variable_length(&bytes, &mut pos, ty).unwrap();
+            assert_eq!(sz, 5, "format {ty}");
+            assert_eq!(pos, cob_vsq_len(ty), "format {ty} prefix width");
+            assert_eq!(&bytes[pos..pos + sz], b"HELLO", "format {ty} data");
+        }
+    }
+
+    #[test]
+    fn set_varlen_eof_and_malformed() {
+        let mut p = 0usize;
+        assert_eq!(set_sequential_variable_length(b"", &mut p, 0), Err("10")); // no bytes -> EOF
+        let mut p = 0usize;
+        assert_eq!(set_sequential_variable_length(b"\x00\x02\x01\x00", &mut p, 0), Err("39")); // type 0 non-zero tail
+    }
+
+    #[test]
+    fn sequential_read_fixed_chunks_and_eof() {
+        let data = b"01234567ABCDEFGH";
+        let mut buf = vec![0u8; 8];
+        let mut pos = 0usize;
+        let r1 = sequential_read(data, &mut pos, &mut buf, 8, 8, 0);
+        assert_eq!((&buf[..], r1.status, r1.size), (&b"01234567"[..], "00", 8));
+        let r2 = sequential_read(data, &mut pos, &mut buf, 8, 8, 0);
+        assert_eq!((&buf[..], r2.status), (&b"ABCDEFGH"[..], "00"));
+        let r3 = sequential_read(data, &mut pos, &mut buf, 8, 8, 0);
+        assert!(r3.at_end && r3.status == "10");
+    }
+
+    #[test]
+    fn sequential_read_short_final_leaks_prior_tail() {
+        // a 4-byte final record overlays only WXYZ, leaving EFGH from the prior record
+        let data = b"ABCDEFGHWXYZ";
+        let mut buf = vec![0u8; 8];
+        let mut pos = 0usize;
+        let _ = sequential_read(data, &mut pos, &mut buf, 8, 8, 0); // "ABCDEFGH"
+        let r = sequential_read(data, &mut pos, &mut buf, 8, 8, 0);
+        assert_eq!(&buf[..], b"WXYZEFGH");
+        assert_eq!((r.status, r.size), ("00", 4));
+    }
+
+    #[test]
+    fn sequential_read_variable_roundtrip() {
+        // write 3 variable records, read them back (record_min=1 record_max=8)
+        let mut file = Vec::new();
+        for (d, s) in [(&b"AB      "[..], 2usize), (b"HELLO   ", 5), (b"XYZ12678", 8)] {
+            file.extend_from_slice(&sequential_write(d, s, true, 0));
+        }
+        let mut buf = vec![b' '; 8];
+        let mut pos = 0usize;
+        let r1 = sequential_read(&file, &mut pos, &mut buf, 1, 8, 0);
+        assert_eq!((r1.status, r1.size, &buf[..2]), ("00", 2, &b"AB"[..]));
+        let r2 = sequential_read(&file, &mut pos, &mut buf, 1, 8, 0);
+        assert_eq!((r2.status, r2.size, &buf[..5]), ("00", 5, &b"HELLO"[..]));
+        let r3 = sequential_read(&file, &mut pos, &mut buf, 1, 8, 0);
+        assert_eq!((r3.status, r3.size, &buf[..]), ("00", 8, &b"XYZ12678"[..]));
+        assert!(sequential_read(&file, &mut pos, &mut buf, 1, 8, 0).at_end);
+    }
+
+    #[test]
+    fn sequential_rewrite_in_place() {
+        assert_eq!(sequential_rewrite(b"AAAABBBBCCCC", 4, b"X1X1", 4), b"AAAAX1X1CCCC");
+    }
 }
 
 #[cfg(kani)]
@@ -435,5 +677,21 @@ mod kani_proofs {
             assert!(r.size <= 4);
         }
         assert!(pos <= data.len());
+    }
+    // KANIFOR: GNURUST.FILEIO.SEQ.1
+    /// A variable-length write/read round-trip never panics; the parsed size is bounded by record_max.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn seqrec_varlen_roundtrip_total() {
+        let rec: [u8; 4] = kani::any();
+        let size: usize = kani::any();
+        kani::assume(size <= 4);
+        let ty: u8 = kani::any();
+        kani::assume(ty <= 3);
+        let bytes = sequential_write(&rec, size, true, ty);
+        let mut pos = 0usize;
+        if let Ok(sz) = set_sequential_variable_length(&bytes, &mut pos, ty) {
+            assert_eq!(sz, size);
+        }
     }
 }
