@@ -28,6 +28,8 @@
 //! `COB_LS_VALIDATE>1` printable-check (`COB_EXPERIMENTAL`), CODE-SET conversion, variable-length
 //! records (`f->variable_record`), the line-sequential READ and REWRITE paths, and all other organizations.
 
+use std::cmp::Ordering;
+
 /// The `COB_LS_*` runtime settings that change line-sequential WRITE output bytes.
 ///
 /// Mirrors the relevant `cobsetptr` fields read by `lineseq_size`/`lineseq_write`. `ls_validate`
@@ -694,6 +696,64 @@ pub fn dummy_start() -> &'static str {
 #[allow(dead_code)]
 pub fn dummy_rnxt_rewrite() -> &'static str {
     "91"
+}
+
+// ======================================================================================================
+// SORT/MERGE record comparison (`GNURUST.FILEIO.SORT.1`)
+// ======================================================================================================
+
+/// Port of `fileio.c:sort_cmps` — compare two equal-length keys byte-by-byte, optionally through a
+/// 256-entry collating table; returns the signed difference of the first differing (translated) byte,
+/// or `0` if equal.
+pub fn sort_cmps(s1: &[u8], s2: &[u8], col: Option<&[u8; 256]>) -> i32 {
+    for i in 0..s1.len().min(s2.len()) {
+        let (a, b) = match col {
+            Some(c) => (c[s1[i] as usize] as i32, c[s2[i] as usize] as i32),
+            None => (s1[i] as i32, s2[i] as i32),
+        };
+        if a != b {
+            return a - b;
+        }
+    }
+    0
+}
+
+/// One `SORT ... ON {ASCENDING|DESCENDING} KEY` key: a byte range `[offset, offset+size)` of the record.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct SortKey {
+    pub offset: usize,
+    pub size: usize,
+    /// `COB_ASCENDING` vs `COB_DESCENDING`.
+    pub ascending: bool,
+}
+
+/// Port of `fileio.c:cob_file_sort_init_key` — append a key to the sort key list (in declaration order).
+pub fn cob_file_sort_init_key(keys: &mut Vec<SortKey>, offset: usize, size: usize, ascending: bool) {
+    keys.push(SortKey { offset, size, ascending });
+}
+
+/// Port of the alphanumeric path of `fileio.c:cob_file_sort_compare` — order two records by the sort
+/// keys (each compared via [`sort_cmps`], negated for DESCENDING). A full key tie breaks by the records'
+/// insertion order (`u1`/`u2`, the `unique` field), giving a **stable** sort. (Numeric keys, which the C
+/// routes through `cob_numeric_cmp`, are a declared composition with `GNURUST.NUMCMP.1`.)
+pub fn cob_file_sort_compare(rec1: &[u8], u1: usize, rec2: &[u8], u2: usize, keys: &[SortKey], col: Option<&[u8; 256]>) -> Ordering {
+    for k in keys {
+        let a = &rec1[k.offset.min(rec1.len())..(k.offset + k.size).min(rec1.len())];
+        let b = &rec2[k.offset.min(rec2.len())..(k.offset + k.size).min(rec2.len())];
+        let cmp = sort_cmps(a, b, col);
+        if cmp != 0 {
+            return if k.ascending { cmp } else { -cmp }.cmp(&0);
+        }
+    }
+    u1.cmp(&u2)
+}
+
+/// Replay a `SORT` over `records` with the given keys: return the records' indices in sorted order
+/// (a stable sort by [`cob_file_sort_compare`]).
+pub fn sort_records(records: &[&[u8]], keys: &[SortKey], col: Option<&[u8; 256]>) -> Vec<usize> {
+    let mut idx: Vec<usize> = (0..records.len()).collect();
+    idx.sort_by(|&i, &j| cob_file_sort_compare(records[i], i, records[j], j, keys, col));
+    idx
 }
 
 // ======================================================================================================
@@ -1516,6 +1576,33 @@ mod tests {
         assert_eq!(relative_read_next(&d1.file, &mut slot, 4).status, "10"); // end of file
     }
 
+    // ---- SORT comparison ----
+    #[test]
+    fn sort_records_ascending_descending_stable() {
+        // K1 = X(3) at 0 ASCENDING; K2 = X(2) at 3 DESCENDING
+        let mut keys = Vec::new();
+        cob_file_sort_init_key(&mut keys, 0, 3, true);
+        cob_file_sort_init_key(&mut keys, 3, 2, false);
+        let recs: Vec<&[u8]> = vec![b"BBB10xyz", b"AAA20xyz", b"BBB05xyz", b"AAA20abc", b"CCC00xyz"];
+        // AAA before BBB before CCC; within AAA the key2 ties (20==20) -> stable insertion order (1,3);
+        // within BBB key2 desc -> 10 before 05 (0,2)
+        assert_eq!(sort_records(&recs, &keys, None), vec![1, 3, 0, 2, 4]);
+    }
+
+    #[test]
+    fn sort_cmps_and_collation() {
+        assert!(sort_cmps(b"ABC", b"ABD", None) < 0);
+        assert_eq!(sort_cmps(b"ABC", b"ABC", None), 0);
+        assert!(sort_cmps(b"ABD", b"ABC", None) > 0);
+        // a collating table that inverts A and Z ordering swaps the verdict
+        let mut col = [0u8; 256];
+        for (i, c) in col.iter_mut().enumerate() {
+            *c = i as u8;
+        }
+        col[b'A' as usize] = 255;
+        assert!(sort_cmps(b"A", b"B", Some(&col)) > 0); // A now sorts after B
+    }
+
     // ---- verb preconditions ----
     #[test]
     fn verb_preconditions() {
@@ -1732,5 +1819,19 @@ mod kani_proofs {
             Some(s) => assert!(s == "48" || s == "44"),
             None => assert!(matches!(open, OpenMode::Output | OpenMode::Io)),
         }
+    }
+    // KANIFOR: GNURUST.FILEIO.SORT.1
+    /// The sort comparison is consistent (a record compares Equal to itself) and antisymmetric on the
+    /// key bytes; never panics.
+    #[kani::proof]
+    #[kani::unwind(5)]
+    fn sort_compare_consistent() {
+        let a: [u8; 3] = kani::any();
+        let b: [u8; 3] = kani::any();
+        let keys = [SortKey { offset: 0, size: 3, ascending: true }];
+        assert_eq!(cob_file_sort_compare(&a, 0, &a, 0, &keys, None), Ordering::Equal);
+        let ab = cob_file_sort_compare(&a, 0, &b, 1, &keys, None);
+        let ba = cob_file_sort_compare(&b, 1, &a, 0, &keys, None);
+        assert_eq!(ab, ba.reverse());
     }
 }

@@ -1189,6 +1189,20 @@
       "damage_if_overclaimed": "skipping the mode preconditions would let an illegal verb corrupt or read a file the dialect would have rejected with a 4x status"
     },
     {
+      "id": "GNURUST.FILEIO.SORT.1",
+      "name": "SORT/MERGE record comparison",
+      "proven": "a faithful port of libcob/fileio.c sort_cmps + cob_file_sort_compare + cob_file_sort_init_key -- the record ordering a SORT produces, proven to match the admitted libcob's GIVING-file order (sort_sweep 1/0): each ON ASCENDING/DESCENDING KEY is a byte range of the record compared via sort_cmps (a byte-by-byte compare, optionally through a 256-entry collating table); the first key whose bytes differ decides, negated for DESCENDING; a full tie breaks by insertion order (the unique field) so the sort is STABLE. Verified end-to-end against a real SORT ON ASCENDING KEY K1 ON DESCENDING KEY K2 with duplicate keys",
+      "byte_domain": "SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)",
+      "oracle": "cobc SORT ... ON ASCENDING/DESCENDING KEY USING/GIVING (libcob/fileio.c)",
+      "fixtures": "sort_sweep 1/0 + 2 unit tests + Kani sort_compare_consistent",
+      "sealed_version": "0.7.48",
+      "not_proven": "numeric keys (routed through cob_numeric_cmp, a declared composition with GNURUST.NUMCMP.1); the SORT engine's tempfile merge / queues / chunking; INPUT/OUTPUT PROCEDURE (RELEASE/RETURN); MERGE of multiple files; DUPLICATES IN ORDER beyond the stable tiebreak; the EXTFH sort path; the fd tempfile syscalls (declared OS boundary)",
+      "breaks_claim": "a non-stable tie resolution; a different key precedence or direction handling; a numeric-key collation that ignores value",
+      "readiness": 4,
+      "lie_prevented": "a SORT just orders records left-to-right -- NO: each key is an independent byte range, ASCENDING and DESCENDING keys mix within one SORT, a DESCENDING key inverts the byte compare, and equal-key records keep their input order (a STABLE sort), not an arbitrary one",
+      "damage_if_overclaimed": "getting the key precedence, a DESCENDING inversion, or the stable tiebreak wrong reorders records a downstream report or match step assumes are in key order"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

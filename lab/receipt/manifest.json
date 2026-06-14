@@ -935,6 +935,20 @@
         "the indexed suppressed-key skip",
         "the fd read/write syscalls (declared OS boundary)"
       ]
+    },
+    "GNURUST.FILEIO.SORT.1": {
+      "court": "SORT/MERGE record comparison",
+      "sweep": "sort_sweep.sh",
+      "byte_domain": "SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)",
+      "non_claims": [
+        "numeric keys (composition with GNURUST.NUMCMP.1)",
+        "the SORT engine tempfile merge / queues / chunking",
+        "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+        "MERGE of multiple files",
+        "DUPLICATES IN ORDER beyond the stable tiebreak",
+        "the EXTFH sort path",
+        "the fd tempfile syscalls (declared OS boundary)"
+      ]
     }
   }
 }

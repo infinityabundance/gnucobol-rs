@@ -12,6 +12,12 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.48]
+- **`fileio.c` -- SORT/MERGE record comparison sealed (`GNURUST.FILEIO.SORT.1`).** A faithful port of `libcob/fileio.c` `sort_cmps` + `cob_file_sort_compare` + `cob_file_sort_init_key` -- the record order a `SORT` produces -- proven to match the admitted GnuCOBOL 3.2 `libcob`'s GIVING-file order (`sort_sweep` 1/0, end-to-end against a real `SORT ON ASCENDING KEY ... ON DESCENDING KEY ...` with duplicate keys):
+  - each `ON ASCENDING`/`DESCENDING KEY` is a byte range of the record compared via `sort_cmps` (byte-by-byte, optionally through a 256-entry collating table); the first differing key decides, negated for DESCENDING; a full key tie breaks by insertion order (the `unique` field) so the sort is **stable**.
+  - Numeric keys (routed through `cob_numeric_cmp`, a declared composition with `GNURUST.NUMCMP.1`), the sort engine's tempfile merge/queues, INPUT/OUTPUT PROCEDURE, and MERGE stay explicit non-claims. `fileio.c` parity 43 -> 46/182 (25.8%).
+- No API breaks: additive (`fileio::sort_cmps`/`cob_file_sort_compare`/`cob_file_sort_init_key`/`sort_records` + `SortKey`).
+
 ## [0.7.47]
 - **`fileio.c` -- verb open/access-mode preconditions sealed (`GNURUST.FILEIO.VERB.1`).** A faithful port of the precondition layer of `libcob/fileio.c` `cob_write`/`cob_read`/`cob_read_next`/`cob_rewrite`/`cob_delete`/`cob_start` -- the FILE STATUS a verb returns *before* dispatching to its organization handler -- proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` (`verb_sweep` 7/0):
   - WRITE needs `OPEN OUTPUT`/`EXTEND` in sequential access (otherwise `OUTPUT`/`I-O`), else `48`; READ and READ NEXT need `OPEN INPUT`/`I-O`, else `47`; REWRITE and DELETE need `OPEN I-O`, else `49`; a SEQUENTIAL-access REWRITE/DELETE without a prior successful READ is `43`; a sequential READ past end-of-file is `46`; a record outside `record_min..record_max` is `44`.

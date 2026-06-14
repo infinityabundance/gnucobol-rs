@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FLOAT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.47",
+  "crate_version": "0.7.48",
   "damage_if_overclaimed": "a correctly-rounded conversion writes a different COMP-2 byte image than GnuCOBOL for most non-representable decimals -- checksums, comparisons, and downstream arithmetic diverge one ULP at a time",
   "hash_chain": {
-    "inputs_sha256": "3c8248acecae151acf2c56c2cf3f15a32a1e7bd6d8025b7edb003a14b98ad38a"
+    "inputs_sha256": "64eb41d597b1f496e476a1cb1b51a846849f562314544e8a61cff05f82961275"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1e126e572345eca7489107bd255069c83b35be3895c7cc9c7b895b6233b11cdf",
-    "receipt_sha256": "86c3be119f13f96a7311ae35ca6e85d7d1c718154eb35157f68c17b7c5341f55"
+    "receipt_sha256": "493019fb3abd7eb3ace73f6d1e78d066026026d704372108d549138b3dd09bba"
   },
   "kind": "court-casefile",
   "lie_prevented": [

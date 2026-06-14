@@ -1,0 +1,67 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)"
+  ],
+  "case_id": "GNURUST.FILEIO.SORT.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.48",
+  "damage_if_overclaimed": "getting the key precedence, a DESCENDING inversion, or the stable tiebreak wrong reorders records a downstream report or match step assumes are in key order",
+  "hash_chain": {
+    "inputs_sha256": "e2803f34e87ae1beb9d5b7a561ce19b4dd6e13032d8e318e326a205202a8b485"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "50e29bb4ec2332539cd1fb61d63d6d57b327d10891432858db7b22f7bdb9a2bf",
+    "receipt_sha256": "5715e818cdfd0f5848edaf9a02deac0053643a645ae61cf2e3edd5fd7ed7c664"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a SORT just orders records left-to-right -- NO: each key is an independent byte range, ASCENDING and DESCENDING keys mix within one SORT, a DESCENDING key inverts the byte compare, and equal-key records keep their input order (a STABLE sort), not an arbitrary one"
+  ],
+  "negative_capability_ids": [
+    "NEG.NUMERIC-KEYS-ROUTED-THROUGH-COB-NUMERIC",
+    "NEG.THE-SORT-ENGINE-S-TEMPFILE-MERGE-QUEUES",
+    "NEG.INPUT-OUTPUT-PROCEDURE-RELEASE-RETURN",
+    "NEG.MERGE-OF-MULTIPLE-FILES",
+    "NEG.DUPLICATES-IN-ORDER-BEYOND-THE-STABLE-TI",
+    "NEG.THE-EXTFH-SORT-PATH",
+    "NEG.THE-FD-TEMPFILE-SYSCALLS-DECLARED-OS-BOU"
+  ],
+  "negative_claims": [
+    "numeric keys (routed through cob_numeric_cmp, a declared composition with GNURUST.NUMCMP.1)",
+    "the SORT engine's tempfile merge / queues / chunking",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE of multiple files",
+    "DUPLICATES IN ORDER beyond the stable tiebreak",
+    "the EXTFH sort path",
+    "the fd tempfile syscalls (declared OS boundary)",
+    "lie prevented: a SORT just orders records left-to-right -- NO: each key is an independent byte range, ASCENDING and DESCENDING keys mix within one SORT, a DESCENDING key inverts the byte compare, and equal-key records keep their input order (a STABLE sort), not an arbitrary one"
+  ],
+  "oracle": {
+    "detail": "cobc SORT ... ON ASCENDING/DESCENDING KEY USING/GIVING (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.SORT.1"
+  },
+  "positive_claims": [
+    "a faithful port of libcob/fileio.c sort_cmps + cob_file_sort_compare + cob_file_sort_init_key -- the record ordering a SORT produces, proven to match the admitted libcob's GIVING-file order (sort_sweep 1/0): each ON ASCENDING/DESCENDING KEY is a byte range of the record compared via sort_cmps (a byte-by-byte compare, optionally through a 256-entry collating table)",
+    "the first key whose bytes differ decides, negated for DESCENDING",
+    "a full tie breaks by insertion order (the unique field) so the sort is STABLE. Verified end-to-end against a real SORT ON ASCENDING KEY K1 ON DESCENDING KEY K2 with duplicate keys"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/sort_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 1,
+    "total": 1,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

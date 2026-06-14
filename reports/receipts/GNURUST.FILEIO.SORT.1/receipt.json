@@ -1,0 +1,34 @@
+{
+  "byte_domain": "SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes)",
+  "campaign": "GNURUST.FILEIO.SORT.1",
+  "command": {
+    "replay": "bash lab/oracle/sort_sweep.sh"
+  },
+  "court": "SORT/MERGE record comparison",
+  "crate_version": "0.7.48",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "numeric keys (composition with GNURUST.NUMCMP.1)",
+    "the SORT engine tempfile merge / queues / chunking",
+    "INPUT/OUTPUT PROCEDURE (RELEASE/RETURN)",
+    "MERGE of multiple files",
+    "DUPLICATES IN ORDER beyond the stable tiebreak",
+    "the EXTFH sort path",
+    "the fd tempfile syscalls (declared OS boundary)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=1 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

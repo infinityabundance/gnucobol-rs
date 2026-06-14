@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.NUMCMP.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.47",
+  "crate_version": "0.7.48",
   "damage_if_overclaimed": "a wrong comparison flips IF/EVALUATE branches, mis-orders SORT keys, and breaks SEARCH ALL binary search -- silent control-flow and data corruption",
   "hash_chain": {
-    "inputs_sha256": "a90dc467ba9c5b1a04300d4bf813b63107ff8d2f58a6f2a85cacbf2de82d7907"
+    "inputs_sha256": "399fde1f6144600f2e0b59ee66a5c8eaa79f565105ea8db8df73720261bccb57"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "a1b998e2be35e83770ca381efefad81d5ad06ef041ccdc088ea20d2dd48d7fbb",
-    "receipt_sha256": "679ca3fdb0e7637f056fd706659ae2ada51e8456e3ac55768498bda4cd5815dc"
+    "receipt_sha256": "5b47abf11dfcfbf528e160b44747694eb05d65f80f321670811d7593cf268896"
   },
   "kind": "court-casefile",
   "lie_prevented": [

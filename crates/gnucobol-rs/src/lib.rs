@@ -679,6 +679,11 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = fileio::cob_read(om, false, true, false, true, false, false);
     let _ = fileio::cob_delete(om, am, false);
     let _ = fileio::cob_start(om, am, false, true);
+    // SORT comparison (GNURUST.FILEIO.SORT.1): comparing/sorting arbitrary records never panics.
+    let mut keys = Vec::new();
+    fileio::cob_file_sort_init_key(&mut keys, 0, rmax, data.first().copied().unwrap_or(0) & 1 == 0);
+    let chunks: Vec<&[u8]> = body.chunks(rmax.max(1)).collect();
+    let _ = fileio::sort_records(&chunks, &keys, None);
 }
 
 #[cfg(feature = "fuzzing")]

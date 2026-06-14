@@ -455,10 +455,11 @@
     {
       "category": "SORT/MERGE",
       "courts": [
-        "GNURUST.SORT.MERGE.ATLAS.1"
+        "GNURUST.SORT.MERGE.ATLAS.1",
+        "GNURUST.FILEIO.SORT.1"
       ],
       "future_campaign": null,
-      "risk_if_unported": "SORT/MERGE is its own runtime; refused until receipt-backed",
+      "risk_if_unported": "SORT/MERGE record comparison sealed (GNURUST.FILEIO.SORT.1); the sort engine (tempfile merge/queues) is its own runtime, observed only",
       "source_modules": [
         "libcob/fileio.c"
       ],

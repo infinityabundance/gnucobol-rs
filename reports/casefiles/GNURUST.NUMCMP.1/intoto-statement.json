@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.NUMCMP.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.47",
+    "crate_version": "0.7.48",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "a1b998e2be35e83770ca381efefad81d5ad06ef041ccdc088ea20d2dd48d7fbb",
-      "receipt_sha256": "679ca3fdb0e7637f056fd706659ae2ada51e8456e3ac55768498bda4cd5815dc"
+      "receipt_sha256": "5b47abf11dfcfbf528e160b44747694eb05d65f80f321670811d7593cf268896"
     },
     "negative_claim_count": 5,
     "positive_claim_count": 3,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "060de83895f6007dc3906e09eca1b3624d63c36ffb5b08bbabe20eb68ffe8844"
+        "sha256": "5c9c27d018dc836b488866da0aa70a534ae6c4c5c6657562ec3a3166ed495aa4"
       },
       "name": "reports/casefiles/GNURUST.NUMCMP.1/casefile.json"
     }

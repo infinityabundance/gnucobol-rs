@@ -188,12 +188,10 @@
         "cob_file_release",
         "cob_file_return",
         "cob_file_sort_close",
-        "cob_file_sort_compare",
         "cob_file_sort_giving",
         "cob_file_sort_giving_extfh",
         "cob_file_sort_giving_internal",
         "cob_file_sort_init",
-        "cob_file_sort_init_key",
         "cob_file_sort_options",
         "cob_file_sort_process",
         "cob_file_sort_retrieve",
@@ -259,15 +257,14 @@
         "open_cbl_file",
         "open_next",
         "save_fcd_status",
-        "sort_cmps",
         "unique_copy",
         "update_fcd_to_file",
         "update_file_to_fcd",
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 25.2,
-      "ported": 37
+      "parity_pct": 27.2,
+      "ported": 40
     },
     {
       "doxygen_functions": 25,
@@ -567,8 +564,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 53.6,
-    "ported": 535
+    "parity_pct": 53.9,
+    "ported": 538
   },
   "xml_root": "lab/doxygen/out/xml"
 }
