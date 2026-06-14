@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.62",
+  "crate_version": "0.7.63",
   "damage_if_overclaimed": "a wrong MOVE result posted as a real value corrupts a record silently",
   "hash_chain": {
-    "inputs_sha256": "b0ae1276386644883271cbc6d5eef60b8ceded2ba22f4dfa1f2cd9ca411c10d8"
+    "inputs_sha256": "35a7fd34c3ba4076b165ca5ce75313a5d7f015135496eb404a4a344327f4ea2a"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "16b16a9a154b1e44eb1baba81db40152792bd2c79bfa49d4c26579ff7a37c9b9",
-    "receipt_sha256": "3a497970e0f48a18085d16cd0f3bca2bf4abb81d7a7ed82dbf920453a18d33f0"
+    "receipt_sha256": "85baf3f1969417cac77e2e4db83ff4740b25c2607086005e2fd963b573bf04b1"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

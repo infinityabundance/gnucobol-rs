@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-122-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-122-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-123-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-123-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -187,6 +187,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.FILEIO.SYS.1` | CBL_* system file/directory routines | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SYS.1/`](reports/casefiles/GNURUST.FILEIO.SYS.1/) |
 | `GNURUST.FILEIO.OPEN.1` | file runtime OPEN/CLOSE + lifecycle | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.OPEN.1/`](reports/casefiles/GNURUST.FILEIO.OPEN.1/) |
 | `GNURUST.FILEIO.MAPPING.1` | COBOL filename mapping (env resolution) | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.MAPPING.1/`](reports/casefiles/GNURUST.FILEIO.MAPPING.1/) |
+| `GNURUST.MLIO.GENERATE.1` | XML / JSON GENERATE (native serializer) | ✅ pass | [`reports/casefiles/GNURUST.MLIO.GENERATE.1/`](reports/casefiles/GNURUST.MLIO.GENERATE.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
 | `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
 | `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |

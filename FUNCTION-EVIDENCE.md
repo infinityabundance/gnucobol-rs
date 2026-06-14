@@ -10,7 +10,7 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 767** · direct 471 (incl. oracle-sweep 192) · transitive 148 · lifecycle 60 · **evidenced (any) 644** · **unevidenced 123**.
+**Active ported: 782** · direct 474 (incl. oracle-sweep 194) · transitive 149 · lifecycle 60 · **evidenced (any) 648** · **unevidenced 134**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -22,7 +22,7 @@
 | `termio.c` | 18 | 7 | 3 | 2 | 1 | 10 | 8 |
 | `call.c` | 67 | 38 | 1 | 6 | 5 | 47 | 20 |
 | `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
-| `mlio.c` | 13 | 11 | 1 | 0 | 2 | 13 | 0 |
+| `mlio.c` | 28 | 14 | 3 | 1 | 2 | 17 | 11 |
 | `reportio.c` | 39 | 21 | 0 | 8 | 7 | 33 | 6 |
 | `common.c` | 17 | 13 | 0 | 1 | 0 | 14 | 3 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
@@ -36,6 +36,7 @@
 - **`termio.c`** (8): `cob_accept`, `cob_dump_field`, `cob_dump_field_ext`, `cob_dump_file`, `cob_dump_output`, `dump_field_internal`, `dump_pending_output`, `is_field_display`
 - **`call.c`** (20): `cob_get_dbl_param`, `cob_get_field_str_buffered`, `cob_get_param_constant`, `cob_get_param_digits`, `cob_get_param_scale`, `cob_get_param_sign`, `cob_get_param_str`, `cob_get_param_str_buffered`, `cob_get_param_type`, `cob_longjmp`, `cob_put_dbl_param`, `cob_put_param_str`, `cob_put_u64_param`, `cob_resolve_error`, `cob_resolve_func`, `cob_savenv`, `cob_savenv2`, `cob_set_library_path`, `lt_dlerror`, `set_resolve_error`
 - **`fileio.c`** (5): `cob_file_external_addr`, `cob_file_fcd_adrs`, `cob_file_fcdkey_adrs`, `cob_file_sort_giving_extfh`, `cob_file_sort_options`
+- **`mlio.c`** (11): `generate_attributes`, `generate_content`, `generate_element`, `generate_hex_element`, `generate_json_from_tree`, `generate_normal_attribute`, `generate_normal_element`, `generate_xml_from_tree`, `get_json_num`, `get_trimmed_xml_data`, `get_xml_name`
 - **`reportio.c`** (6): `cob_report_suppress`, `limitCheckOneLine`, `line_control_one`, `reportDump`, `reportDumpLine`, `reportDumpOneLine`
 - **`common.c`** (3): `cob_get_current_date_and_time_from_os`, `common_cmpc`, `sort_compare_collate`
 

@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > sealed surfaces are the data-representation + fixed-record spine; the file I/O, runtime-statement, intrinsic, and control-flow surfaces are mostly missing. This is NOT a near-complete port of GnuCOBOL.
 
-- surfaces: **42**  ·  sealed ✅ **29**  ·  observed 🟡 8  ·  refused ⛔ 5  ·  **missing ❌ 0**
+- surfaces: **42**  ·  sealed ✅ **30**  ·  observed 🟡 8  ·  refused ⛔ 4  ·  **missing ❌ 0**
 
-- sealed fraction (data-representation spine): **29/42**
+- sealed fraction (data-representation spine): **30/42**
 
 | surface | category | source | status | courts / future |
 |---|---|---|:---:|---|
@@ -41,7 +41,7 @@
 | `sort-merge` | SORT/MERGE | `fileio.c` | ✅ sealed | GNURUST.SORT.MERGE.ATLAS.1, GNURUST.FILEIO.SORT.1, GNURUST.FILEIO.SORTENGINE.1 |
 | `screen-section` | screen/report/CICS/SQL unsupported | `screenio.c` | ⛔ negative | — |
 | `report-writer` | screen/report/CICS/SQL unsupported | `reportio.c` | ⛔ negative | — |
-| `ml-io-xml-json` | screen/report/CICS/SQL unsupported | `mlio.c` | ⛔ negative | — |
+| `ml-io-xml-json` | ML I/O (XML/JSON) | `mlio.c` | ✅ sealed | GNURUST.MLIO.GENERATE.1 |
 | `diagnostics` | diagnostics | `error.c` | ⛔ negative | — |
 | `cics-sql-preprocessor` | screen/report/CICS/SQL unsupported | `ppparse.c` | ⛔ negative | — |
 | `class-conditions` | condition | `common.c` | ✅ sealed | GNURUST.CLASS.1 |

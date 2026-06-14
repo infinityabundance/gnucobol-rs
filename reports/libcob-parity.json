@@ -175,29 +175,14 @@
       "functions": 47,
       "missing": [
         "cob_json_generate",
-        "cob_json_generate_new",
         "cob_xml_generate",
-        "cob_xml_generate_new",
-        "generate_attributes",
-        "generate_content",
-        "generate_element",
         "generate_hex_attribute",
-        "generate_hex_element",
-        "generate_json_from_tree",
-        "generate_normal_attribute",
-        "generate_normal_element",
-        "generate_xml_from_tree",
         "get_hex_xml_data",
-        "get_json_num",
         "get_name_with_hex_prefix",
         "get_num",
         "get_pic_for_num_field",
-        "get_trimmed_data",
         "get_trimmed_json_data",
-        "get_trimmed_xml_data",
         "get_xml_code",
-        "get_xml_name",
-        "get_xml_num",
         "set_json_exception",
         "set_xml_event",
         "set_xml_exception",
@@ -205,8 +190,8 @@
         "xmlCharStrndup_void",
         "xml_generate"
       ],
-      "parity_pct": 27.7,
-      "ported": 13
+      "parity_pct": 66.0,
+      "ported": 31
     },
     {
       "file": "reportio.c",
@@ -473,7 +458,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 66.9,
-    "ported": 783
+    "parity_pct": 68.5,
+    "ported": 801
   }
 }

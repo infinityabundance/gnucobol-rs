@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: XML/JSON PARSE (the libxml2/json-c parser -- the declared external-library boundary)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: attributes/namespaces beyond the basic name=\"value\" form"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the NATIONAL/UTF-16 content path"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: pretty-printing / indentation options"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the COUNT IN truncation + receiving-item overflow"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: non-ASCII multibyte content escaping"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: the libxml2-based old cob_xml_generate / cJSON cob_json_generate entry points"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.MLIO.GENERATE.1 non-claim: lie prevented: XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

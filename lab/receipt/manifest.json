@@ -993,6 +993,19 @@
         "the bdb_*/EXTFH substrate functions"
       ]
     },
+    "GNURUST.MLIO.GENERATE.1": {
+      "court": "XML / JSON GENERATE (native serializer)",
+      "sweep": "ml_generate_sweep.sh",
+      "byte_domain": "a cob_ml_tree -> the XML / JSON GENERATE output bytes",
+      "non_claims": [
+        "XML/JSON PARSE (the libxml2/json-c parser -- external-library boundary)",
+        "NATIONAL/UTF-16 content + non-ASCII multibyte escaping",
+        "pretty-print / indentation options",
+        "COUNT IN truncation + receiving-item overflow",
+        "namespaces / complex attributes",
+        "the libxml2 cob_xml_generate / cJSON cob_json_generate entry points"
+      ]
+    },
     "GNURUST.FILEIO.SORTENGINE.1": {
       "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
       "sweep": "sortengine_sweep.sh",

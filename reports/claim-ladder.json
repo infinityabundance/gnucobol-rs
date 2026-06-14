@@ -1273,6 +1273,20 @@
       "damage_if_overclaimed": "treating the ASSIGN literal as the path ignores the DD_*/COB_FILE_PATH indirection every operational deployment relies on to place its files"
     },
     {
+      "id": "GNURUST.MLIO.GENERATE.1",
+      "name": "XML / JSON GENERATE (native serializer)",
+      "proven": "a from-scratch, dependency-free Rust serializer of the cob_ml_tree (mlio.rs generate_xml_from_tree/generate_element/generate_normal_element/generate_hex_element/generate_content/generate_attributes/generate_normal_attribute + generate_json_from_tree + get_xml_name/get_xml_num/get_json_num/get_xml_data/get_trimmed_data + cob_xml_generate_new/cob_json_generate_new), proven to produce byte-identical output to the admitted GnuCOBOL's XML GENERATE / JSON GENERATE (which drives libxml2's xmlTextWriter + json-c) WITHOUT linking those libraries (ml_generate_sweep 2/0). Verified end-to-end against a cobc record with a signed numeric (S9(3) -42 -> -42), a scaled numeric (9(3)V99 12.50 -> 12.50), an alphanumeric needing XML escaping (a<b&c -> a&lt;b&amp;c in XML, the raw bytes quoted in JSON), and a nested group: XML <G><NEG>-42</NEG><DEC>12.50</DEC><SPC>a&lt;b&amp;c</SPC><GRP><X>hi</X><Y>7</Y></GRP></G>, JSON {\"G\":{\"NEG\":-42,\"DEC\":12.50,\"SPC\":\"a<b&c\",\"GRP\":{\"X\":\"hi\",\"Y\":7}}}. Numeric formatting strips leading zeros + inserts the decimal point at the scale; XML content escapes &/</>; JSON strings are quoted + json-escaped, numbers unquoted",
+      "byte_domain": "a cob_ml_tree (names, group/leaf structure, numeric/alphanumeric content) -> the XML / JSON GENERATE output bytes",
+      "oracle": "cobc XML GENERATE / JSON GENERATE (libcob/mlio.c via libxml2 + json-c)",
+      "fixtures": "ml_generate_sweep 2/0 + 1 unit test (vs the oracle bytes) + Kani xml_generate_total",
+      "sealed_version": "0.7.63",
+      "not_proven": "XML/JSON PARSE (the libxml2/json-c parser -- the declared external-library boundary); attributes/namespaces beyond the basic name=\"value\" form; the NATIONAL/UTF-16 content path; pretty-printing / indentation options; the COUNT IN truncation + receiving-item overflow; non-ASCII multibyte content escaping; the libxml2-based old cob_xml_generate / cJSON cob_json_generate entry points",
+      "breaks_claim": "a different escaping, a different numeric edit (leading zeros / sign / decimal), a different element/attribute ordering, or a whitespace/indentation difference from the oracle",
+      "readiness": 4,
+      "lie_prevented": "XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked",
+      "damage_if_overclaimed": "claiming the whole ML subsystem would hide that XML/JSON PARSE still needs libxml2/json-c, and that national encoding / pretty-print / overflow paths are unported"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

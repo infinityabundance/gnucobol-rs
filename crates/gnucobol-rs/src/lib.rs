@@ -623,6 +623,27 @@ pub fn __fuzz_inspect(data: &[u8]) {
     let _ = inspect::inspect_converting(target, pat, to, inspect::Region::After(pat));
 }
 
+/// Fuzz the native XML/JSON GENERATE serializer: build a small `cob_ml_tree` from arbitrary bytes and
+/// serialize it both ways. Any input yields valid output, never a panic.
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_mlio(data: &[u8]) {
+    use mlio::{cob_json_generate_new, cob_xml_generate_new, MlContent, MlTree};
+    let name = if data.is_empty() { b"N".to_vec() } else { data[..data.len().min(4)].to_vec() };
+    let leaf = MlTree {
+        name: name.clone(),
+        attrs: vec![],
+        content: MlContent::Alnum(data.to_vec()),
+        is_suppressed: data.first().copied().unwrap_or(0) & 1 == 0,
+        children: vec![],
+    };
+    let tree = MlTree { name, attrs: vec![], content: MlContent::None, is_suppressed: false, children: vec![leaf] };
+    let _ = cob_xml_generate_new(&tree);
+    let _ = cob_json_generate_new(&tree);
+    let _ = mlio::hex_encode(data);
+    let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
+}
+
 #[cfg(feature = "fuzzing")]
 #[doc(hidden)]
 pub fn __fuzz_file_seq(data: &[u8]) {

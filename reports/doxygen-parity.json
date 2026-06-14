@@ -98,11 +98,8 @@
       "file": "mlio.c",
       "missing": [
         "cob_json_generate",
-        "cob_json_generate_new",
         "cob_xml_generate",
-        "cob_xml_generate_new",
         "cob_xml_parse",
-        "get_trimmed_data",
         "get_xml_code",
         "set_json_exception",
         "set_xml_event",
@@ -112,8 +109,8 @@
         "xml_generate",
         "xml_parse"
       ],
-      "parity_pct": 44.0,
-      "ported": 11
+      "parity_pct": 56.0,
+      "ported": 14
     },
     {
       "doxygen_functions": 35,
@@ -356,8 +353,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 74.4,
-    "ported": 743
+    "parity_pct": 74.7,
+    "ported": 746
   },
   "xml_root": "lab/doxygen/out/xml"
 }

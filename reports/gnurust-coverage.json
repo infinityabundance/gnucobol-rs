@@ -10,12 +10,12 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "29/42",
+  "sealed_fraction": "30/42",
   "status_counts": {
     "missing": 0,
-    "negative": 5,
+    "negative": 4,
     "observed": 8,
-    "sealed": 29
+    "sealed": 30
   },
   "surface_count": 42,
   "surfaces": [
@@ -497,15 +497,17 @@
       "surface": "report-writer"
     },
     {
-      "category": "screen/report/CICS/SQL unsupported",
-      "courts": [],
+      "category": "ML I/O (XML/JSON)",
+      "courts": [
+        "GNURUST.MLIO.GENERATE.1"
+      ],
       "future_campaign": null,
-      "risk_if_unported": "XML/JSON GENERATE/PARSE is out of the fixed-record lane",
+      "risk_if_unported": "XML GENERATE / JSON GENERATE native byte output sealed (GNURUST.MLIO.GENERATE.1, ml_generate_sweep 2/0, no libxml2/cJSON linked); XML/JSON PARSE stays the external-library boundary",
       "source_modules": [
         "libcob/mlio.c"
       ],
       "source_modules_present": true,
-      "status": "negative",
+      "status": "sealed",
       "surface": "ml-io-xml-json"
     },
     {

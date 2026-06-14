@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.16C` |
 | court | edited-picture encode (numeric->edited 16c) |
-| crate_version | `0.7.62` |
+| crate_version | `0.7.63` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | numeric value -> edited DISPLAY field bytes |
 | replay command | `bash lab/oracle/edited_encode_sweep.sh` |

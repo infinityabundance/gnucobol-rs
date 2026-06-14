@@ -448,14 +448,16 @@
  },
  {
   "surface": "ml-io-xml-json",
-  "category": "screen/report/CICS/SQL unsupported",
+  "category": "ML I/O (XML/JSON)",
   "source_modules": [
    "libcob/mlio.c"
   ],
-  "status": "negative",
-  "courts": [],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.MLIO.GENERATE.1"
+  ],
   "future_campaign": null,
-  "risk_if_unported": "XML/JSON GENERATE/PARSE is out of the fixed-record lane"
+  "risk_if_unported": "XML GENERATE / JSON GENERATE native byte output sealed (GNURUST.MLIO.GENERATE.1, ml_generate_sweep 2/0, no libxml2/cJSON linked); XML/JSON PARSE stays the external-library boundary"
  },
  {
   "surface": "diagnostics",

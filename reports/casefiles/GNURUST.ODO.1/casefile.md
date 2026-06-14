@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.ODO.1 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.62
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.63
 
 - **Oracle:** cobc LENGTH OF / E(i) over an OCCURS DEPENDING ON group
 - **Byte domain(s):** controlling value + table -> used length / active element bytes

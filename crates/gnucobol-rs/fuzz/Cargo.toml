@@ -228,3 +228,9 @@ name = "numcmp"
 path = "fuzz_targets/numcmp.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "mlio"
+path = "fuzz_targets/mlio.rs"
+test = false
+doc = false
