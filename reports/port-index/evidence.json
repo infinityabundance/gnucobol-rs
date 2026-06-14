@@ -224,15 +224,20 @@
       "unevidenced": []
     },
     {
-      "active": 18,
-      "direct": 14,
-      "evidenced_any": 17,
+      "active": 39,
+      "direct": 21,
+      "evidenced_any": 33,
       "file": "reportio.c",
-      "lifecycle": 4,
+      "lifecycle": 7,
       "oracle": 0,
-      "transitive": 1,
+      "transitive": 8,
       "unevidenced": [
-        "limitCheckOneLine"
+        "cob_report_suppress",
+        "limitCheckOneLine",
+        "line_control_one",
+        "reportDump",
+        "reportDumpLine",
+        "reportDumpOneLine"
       ]
     },
     {
@@ -265,12 +270,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 727,
-    "direct": 447,
-    "evidenced_any": 611,
-    "lifecycle": 57,
+    "active": 748,
+    "direct": 454,
+    "evidenced_any": 627,
+    "lifecycle": 60,
     "oracle": 192,
-    "transitive": 141,
-    "unevidenced": 116
+    "transitive": 148,
+    "unevidenced": 121
   }
 }

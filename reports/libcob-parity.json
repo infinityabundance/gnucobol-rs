@@ -216,31 +216,9 @@
     {
       "file": "reportio.c",
       "functions": 39,
-      "missing": [
-        "cob_report_generate",
-        "cob_report_initiate",
-        "cob_report_suppress",
-        "cob_report_terminate",
-        "do_page_footing",
-        "do_page_heading",
-        "dumpFlags",
-        "free_control_fields",
-        "get_control_sequence",
-        "line_control_chg",
-        "line_control_one",
-        "reportDump",
-        "reportDumpLine",
-        "reportDumpOneLine",
-        "reportInitialize",
-        "report_line",
-        "report_line_and",
-        "report_line_type",
-        "sum_this_counter",
-        "write_rec",
-        "zero_all_counters"
-      ],
-      "parity_pct": 46.2,
-      "ported": 18
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 39
     },
     {
       "file": "common.c",
@@ -514,7 +492,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 63.5,
-    "ported": 743
+    "parity_pct": 65.3,
+    "ported": 764
   }
 }

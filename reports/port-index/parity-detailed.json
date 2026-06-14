@@ -5374,11 +5374,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 18,
+    "active_ported": 39,
     "compiled": 39,
-    "compiled_parity_pct": 46.2,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
-    "doc_only": 1,
+    "doc_only": 0,
     "file": "reportio.c",
     "fns": [
       {
@@ -5408,7 +5408,8 @@
       {
         "function": "free_control_fields",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "clear_group_indicate",
@@ -5425,7 +5426,8 @@
       {
         "function": "get_control_sequence",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "set_next_info",
@@ -5442,7 +5444,8 @@
       {
         "function": "reportInitialize",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "cob_add_fields",
@@ -5453,22 +5456,26 @@
       {
         "function": "dumpFlags",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "reportDumpOneLine",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "reportDumpLine",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "reportDump",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "limitCheckOneLine",
@@ -5497,27 +5504,32 @@
       {
         "function": "line_control_one",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "line_control_chg",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "write_rec",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "do_page_footing",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "do_page_heading",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "print_field",
@@ -5528,12 +5540,14 @@
       {
         "function": "report_line",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "report_line_and",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "get_line_type",
@@ -5544,7 +5558,8 @@
       {
         "function": "report_line_type",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "sum_all_detail",
@@ -5555,12 +5570,14 @@
       {
         "function": "sum_this_counter",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "zero_all_counters",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "cob_init_reportio",
@@ -5577,49 +5594,31 @@
       {
         "function": "cob_report_initiate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "cob_report_terminate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "cob_report_generate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       },
       {
         "function": "cob_report_suppress",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "reportio",
+        "rust_status": "active"
       }
     ],
-    "gap": [
-      "cob_report_generate",
-      "cob_report_initiate",
-      "cob_report_suppress",
-      "cob_report_terminate",
-      "do_page_footing",
-      "do_page_heading",
-      "dumpFlags",
-      "free_control_fields",
-      "get_control_sequence",
-      "line_control_chg",
-      "line_control_one",
-      "reportDump",
-      "reportDumpLine",
-      "reportDumpOneLine",
-      "reportInitialize",
-      "report_line",
-      "report_line_and",
-      "report_line_type",
-      "sum_this_counter",
-      "write_rec",
-      "zero_all_counters"
-    ],
+    "gap": [],
     "inactive_mirrors": 0,
-    "missing": 20,
+    "missing": 0,
     "source_funcs": 39,
     "test_only": 0
   },

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.NUMCMP.1 (court-casefile)
 
-**Verdict: PASS** · numcmp_sweep 1024/0 (DISPLAY/PACKED x scales 0-3 x signs x magnitudes incl. -0) + unit cases · crate `gnucobol-rs` 0.7.60
+**Verdict: PASS** · numcmp_sweep 1024/0 (DISPLAY/PACKED x scales 0-3 x signs x magnitudes incl. -0) + unit cases · crate `gnucobol-rs` 0.7.61
 
 - **Oracle:** libcob cob_numeric_cmp (numeric.c) over real cob_fields (cmp_harness)
 - **Byte domain(s):** two numeric field byte images -> the -1/0/1 ordering verdict

@@ -36,6 +36,9 @@ claim = "complete"
 [module."call.c"]
 claim = "complete"
 
+[module."reportio.c"]
+claim = "complete"
+
 [module."fileio.c"]
 claim = "complete"
 requires = [
@@ -53,9 +56,6 @@ requires = [
 ]
 
 # --- libcob files in progress (claim: partial — honest about the gap) ---
-
-[module."reportio.c"]
-claim = "partial"
 
 [module."mlio.c"]
 claim = "partial"
