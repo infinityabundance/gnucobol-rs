@@ -943,6 +943,29 @@ pub fn cob_sys_copyfile(from: &[u8], to: &[u8]) -> i32 {
     }
 }
 
+/// Port of `fileio.c:cob_sys_mkdir` (`C$MAKEDIR`) — create directory `name` via [`cob_sys_create_dir`],
+/// mapping a `< 0` result to `128`.
+pub fn cob_sys_mkdir(name: &[u8]) -> i32 {
+    let ret = cob_sys_create_dir(name);
+    if ret < 0 {
+        128
+    } else {
+        ret
+    }
+}
+
+/// Port of `fileio.c:cob_sys_chdir` (`C$CHDIR`) — change directory to `name` via
+/// [`cob_sys_change_dir`], mapping a `< 0` result to `128` (the status is also returned to the caller's
+/// second parameter, the calling-convention boundary).
+pub fn cob_sys_chdir(name: &[u8]) -> i32 {
+    let ret = cob_sys_change_dir(name);
+    if ret < 0 {
+        128
+    } else {
+        ret
+    }
+}
+
 // ======================================================================================================
 // SORT/MERGE record comparison (`GNURUST.FILEIO.SORT.1`)
 // ======================================================================================================
@@ -1509,6 +1532,58 @@ pub fn indexed_keydesc(key: &CobFileKey) -> KeyDesc {
     };
     KeyDesc { parts, duplicates: key.duplicates }
 }
+
+/// Port of `fileio.c:cob_findkey_attr` — find the key index whose field matches the query key (matched
+/// by the field's record offset, the Rust analogue of the C's `key->data == kf->data` pointer identity),
+/// returning `(key_index, full_key_len, part_len)`, or `(-1, 0, 0)` if none. A single-component key
+/// matches by offset; a multi-component key matches the whole key or its first component.
+pub fn cob_findkey_attr(keys: &[CobFileKey], query_offset: usize, query_size: usize) -> (i32, usize, usize) {
+    for (k, key) in keys.iter().enumerate() {
+        if key.components.is_empty() && key.offset == query_offset {
+            return (k as i32, key.field_size, query_size);
+        }
+    }
+    for (k, key) in keys.iter().enumerate() {
+        if !key.components.is_empty() {
+            let whole = key.offset == query_offset && key.field_size == query_size;
+            let comp0 = key.components.first().map(|c| c.0 == query_offset).unwrap_or(false);
+            if whole || comp0 {
+                let fullkeylen: usize = key.components.iter().map(|c| c.1).sum();
+                let partlen = if whole { key.field_size } else { fullkeylen };
+                return (k as i32, fullkeylen, partlen);
+            }
+        }
+    }
+    (-1, 0, 0)
+}
+
+/// Port of `fileio.c:cob_findkey` — thin wrapper over [`cob_findkey_attr`] returning the key index.
+pub fn cob_findkey(keys: &[CobFileKey], query_offset: usize, query_size: usize) -> i32 {
+    cob_findkey_attr(keys, query_offset, query_size).0
+}
+
+/// Port of `fileio.c:unique_copy` — copy the 8-byte (`sizeof(size_t)`) unique value used as the stable
+/// sort tiebreak key.
+pub fn unique_copy(dst: &mut [u8], src: &[u8]) {
+    let n = 8.min(dst.len()).min(src.len());
+    dst[..n].copy_from_slice(&src[..n]);
+}
+
+/// Port of `fileio.c:cob_init_fileio` — runtime file-I/O initialization. The global buffers and runtime
+/// pointers libcob allocates here are not needed in the Rust port (RAII / explicit state on `CobFile`);
+/// the one observable setting, the record-length-prefix width, is [`cob_vsq_len`]. A documented no-op.
+pub fn cob_init_fileio() {}
+
+/// Port of `fileio.c:cob_exit_fileio` — runtime file-I/O teardown (frees libcob's global buffers and
+/// closes any open files). Rust frees on drop, so this is a documented no-op.
+pub fn cob_exit_fileio() {}
+
+/// Port of `fileio.c:cob_exit_fileio_closeall` — close every still-open file at shutdown (no global file
+/// cache in the Rust port; `CobFile`s close on drop). A documented no-op.
+pub fn cob_exit_fileio_closeall() {}
+
+/// Port of `fileio.c:cob_exit_fileio_msg_only` — the message-only teardown variant. A documented no-op.
+pub fn cob_exit_fileio_msg_only() {}
 
 /// Port of `fileio.c:cob_savekey` — extract key `idx`'s bytes from the record. A single-component key
 /// copies the contiguous field; a multi-component key concatenates its parts in order.
@@ -2089,6 +2164,10 @@ mod tests {
         let f3 = base.join("c.txt");
         assert_eq!(cob_sys_rename_file(f2.to_str().unwrap().as_bytes(), f3.to_str().unwrap().as_bytes()), 0);
         assert!(f3.exists() && !f2.exists());
+        // C$COPY / C$DELETE wrappers route to copy_file / delete_file
+        let f4 = base.join("d.txt");
+        assert_eq!(cob_sys_copyfile(f3.to_str().unwrap().as_bytes(), f4.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(cob_sys_file_delete(f4.to_str().unwrap().as_bytes()), 0);
         assert_eq!(cob_sys_delete_file(f3.to_str().unwrap().as_bytes()), 0);
         assert_eq!(cob_sys_delete_file(f3.to_str().unwrap().as_bytes()), 128); // already gone
         std::fs::remove_file(&f1).ok();
@@ -2281,6 +2360,41 @@ mod tests {
         assert_eq!(cob_str_from_fld(b"AB\x00\x00"), b"AB"); // trailing NULs dropped
         assert_eq!(cob_str_from_fld(b"        "), b""); // all spaces -> empty
         assert_eq!(cob_str_from_fld(b"a\x22b\x22c "), b"abc"); // embedded quotes removed
+    }
+
+    #[test]
+    fn findkey_and_unique_copy() {
+        // keys: a single key at offset 2 size 4, and a composite at components (0,2)+(8,3)
+        let keys = vec![
+            CobFileKey { duplicates: false, offset: 2, field_size: 4, components: vec![] },
+            CobFileKey { duplicates: true, offset: 0, field_size: 0, components: vec![(0, 2), (8, 3)] },
+        ];
+        // single key matched by offset -> (index 0, fullkeylen 4, partlen = query size)
+        assert_eq!(cob_findkey_attr(&keys, 2, 4), (0, 4, 4));
+        assert_eq!(cob_findkey(&keys, 2, 4), 0);
+        // composite matched by its first component offset -> (index 1, fullkeylen 5, partlen 5)
+        assert_eq!(cob_findkey_attr(&keys, 0, 99), (1, 5, 5));
+        // no match -> -1
+        assert_eq!(cob_findkey(&keys, 7, 1), -1);
+        // unique_copy moves exactly 8 bytes
+        let mut dst = [0u8; 8];
+        unique_copy(&mut dst, b"ABCDEFGHIJ");
+        assert_eq!(&dst, b"ABCDEFGH");
+    }
+
+    #[test]
+    fn fileio_lifecycle_and_dir_aliases_are_total() {
+        cob_init_fileio();
+        cob_exit_fileio();
+        cob_exit_fileio_closeall();
+        cob_exit_fileio_msg_only();
+        // mkdir/chdir aliases route to create_dir/change_dir; a bad path is 128
+        assert_eq!(cob_sys_chdir(b"/gnucobol_rs_no_such_dir_q"), 128);
+        let base = std::env::temp_dir().join("gnucobol_rs_mkdir_test");
+        let _ = std::fs::remove_dir_all(&base);
+        assert_eq!(cob_sys_mkdir(base.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(cob_sys_mkdir(base.to_str().unwrap().as_bytes()), 128); // exists
+        std::fs::remove_dir(&base).ok();
     }
 
     #[test]

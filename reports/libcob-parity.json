@@ -253,9 +253,6 @@
         "cob_chk_file_env",
         "cob_chk_file_mapping",
         "cob_create_tmpfile",
-        "cob_exit_fileio",
-        "cob_exit_fileio_closeall",
-        "cob_exit_fileio_msg_only",
         "cob_extfh_close",
         "cob_extfh_delete",
         "cob_extfh_open",
@@ -287,21 +284,16 @@
         "cob_file_sort_submit",
         "cob_file_sort_using",
         "cob_file_sort_using_extfh",
-        "cob_findkey",
-        "cob_findkey_attr",
         "cob_free_list",
         "cob_get_filename_print",
         "cob_get_sort_tempfile",
-        "cob_init_fileio",
         "cob_new_item",
         "cob_read_item",
         "cob_sort_queues",
         "cob_sync",
-        "cob_sys_chdir",
         "cob_sys_check_file_exist",
         "cob_sys_extfh",
         "cob_sys_file_info",
-        "cob_sys_mkdir",
         "cob_write_block",
         "copy_fcd_to_file",
         "copy_file_to_fcd",
@@ -338,7 +330,6 @@
         "savefileposition",
         "set_dbt",
         "test_record_lock",
-        "unique_copy",
         "unlock_file",
         "unlock_record",
         "update_fcd_to_file",
@@ -346,8 +337,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 39.6,
-      "ported": 72
+      "parity_pct": 44.5,
+      "ported": 81
     },
     {
       "file": "mlio.c",
@@ -694,7 +685,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 48.3,
-    "ported": 565
+    "parity_pct": 49.1,
+    "ported": 574
   }
 }

@@ -195,6 +195,26 @@ fn render_md(b: &Value) -> String {
         ));
     }
     l.push(String::new());
+    l.push("## Reading these counts (why they differ from the other views)".to_string());
+    l.push(String::new());
+    l.push("- **Clang totals are *preprocessed-build* totals**, like `DOXYGEN-PARITY.md`: they count only".to_string());
+    l.push("  the function **definitions** clang sees after the preprocessor, so they can be **lower** than".to_string());
+    l.push("  `LIBCOB-PARITY`'s source-symbol inventory where a function is `#if 0`/config-gated, an".to_string());
+    l.push("  alternate-build variant, or macro-shaped (e.g. `cconv.c` shows 8 here vs 9 source symbols;".to_string());
+    l.push("  `fileio.c` 165 definitions vs 182 source symbols — the BDB/EXTFH alternates among them).".to_string());
+    l.push("- **`ported` is a name cross-reference**, not the authoritative parity: it counts how many of".to_string());
+    l.push("  *this clang definition set* have a same-named active/inactive Rust `fn`. It can differ from".to_string());
+    l.push("  `LIBCOB-PARITY`'s active count by a few when a definition is matched to an inactive mirror, or".to_string());
+    l.push("  when one clang-visible helper has no same-named Rust counterpart (e.g. `intrinsic.c` 237/238 —".to_string());
+    l.push("  one AST-visible definition sits outside active Rust parity; see `clang-functions.json` for the".to_string());
+    l.push("  exact row). This is a structure-map classification detail, never a byte-court regression —".to_string());
+    l.push("  byte parity stays the per-court oracle sweeps and `LIBCOB-PARITY` is authoritative for symbols.".to_string());
+    l.push("- **Next layer (planned):** an `unclassified calls` column — each call edge bucketed as *direct".to_string());
+    l.push("  Rust counterpart / delegated to a sealed primitive / collapsed into a Rust state object /".to_string());
+    l.push("  oracle-only-or-external-C boundary / non-claim / not-yet-ported* — turning this from a call-edge".to_string());
+    l.push("  count into a porting-dependency court (a Tier-2 closure gate: no file is structurally closed".to_string());
+    l.push("  until every call edge is classified).".to_string());
+    l.push(String::new());
     l.push("## How this is produced (reproducible)".to_string());
     l.push(String::new());
     l.push("`gnucobol-rs-port-index clang-index generate` runs `clang -Xclang -ast-dump=json -fsyntax-only`".to_string());

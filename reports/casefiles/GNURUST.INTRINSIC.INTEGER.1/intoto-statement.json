@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.INTRINSIC.INTEGER.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.51",
+    "crate_version": "0.7.52",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "48a86be899dd7018dc39756602d711c730cbd44fe3883aaeb53c046c7934da15",
-      "receipt_sha256": "7918a1f3749a5209db8bedf41338b03eee915c84d94edae430e914ea68fa856c"
+      "receipt_sha256": "0b9c9b4920a379afcfe2116005c304b09b37bb9fb02b131a75d94b7380227e63"
     },
     "negative_claim_count": 5,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "c6e0e7db633da46824ad86923885231b88b50a4776ea8e0b186d2d3a0a959835"
+        "sha256": "a31be539917cb5a1c183a068a138ac2c149fe82cd6231f1baf813955b46d7cef"
       },
       "name": "reports/casefiles/GNURUST.INTRINSIC.INTEGER.1/casefile.json"
     }

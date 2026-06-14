@@ -7,7 +7,7 @@
 > it **calls** (the C callgraph). It answers "what does this function depend on?" — the map for
 > porting the entangled files. Structure/dependency only; behaviour stays the per-court oracle sweeps.
 
-**Definitions indexed: 870** (static 465) · call edges 3240 · with a Rust port 541.
+**Definitions indexed: 870** (static 465) · call edges 3240 · with a Rust port 550.
 
 | libcob file | definitions | static | call edges | ported |
 |---|---:|---:|---:|---:|
@@ -19,10 +19,30 @@
 | `termio.c` | 18 | 10 | 84 | 18 |
 | `screenio.c` | 106 | 79 | 365 | 0 |
 | `call.c` | 66 | 17 | 250 | 0 |
-| `fileio.c` | 165 | 103 | 678 | 64 |
+| `fileio.c` | 165 | 103 | 678 | 73 |
 | `mlio.c` | 46 | 33 | 135 | 8 |
 | `reportio.c` | 35 | 29 | 96 | 18 |
 | `cobgetopt.c` | 4 | 3 | 20 | 4 |
+
+## Reading these counts (why they differ from the other views)
+
+- **Clang totals are *preprocessed-build* totals**, like `DOXYGEN-PARITY.md`: they count only
+  the function **definitions** clang sees after the preprocessor, so they can be **lower** than
+  `LIBCOB-PARITY`'s source-symbol inventory where a function is `#if 0`/config-gated, an
+  alternate-build variant, or macro-shaped (e.g. `cconv.c` shows 8 here vs 9 source symbols;
+  `fileio.c` 165 definitions vs 182 source symbols — the BDB/EXTFH alternates among them).
+- **`ported` is a name cross-reference**, not the authoritative parity: it counts how many of
+  *this clang definition set* have a same-named active/inactive Rust `fn`. It can differ from
+  `LIBCOB-PARITY`'s active count by a few when a definition is matched to an inactive mirror, or
+  when one clang-visible helper has no same-named Rust counterpart (e.g. `intrinsic.c` 237/238 —
+  one AST-visible definition sits outside active Rust parity; see `clang-functions.json` for the
+  exact row). This is a structure-map classification detail, never a byte-court regression —
+  byte parity stays the per-court oracle sweeps and `LIBCOB-PARITY` is authoritative for symbols.
+- **Next layer (planned):** an `unclassified calls` column — each call edge bucketed as *direct
+  Rust counterpart / delegated to a sealed primitive / collapsed into a Rust state object /
+  oracle-only-or-external-C boundary / non-claim / not-yet-ported* — turning this from a call-edge
+  count into a porting-dependency court (a Tier-2 closure gate: no file is structurally closed
+  until every call edge is classified).
 
 ## How this is produced (reproducible)
 
