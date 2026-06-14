@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SUBSCRIPT.1 (court-casefile)
 
-**Verdict: PASS** · 17/17 pass, 0 fail · crate `gnucobol-rs` 0.7.52
+**Verdict: PASS** · 17/17 pass, 0 fail · crate `gnucobol-rs` 0.7.53
 
 - **Oracle:** cobc DISPLAY TABLE(i[,j]) subscript
 - **Byte domain(s):** OCCURS table bytes + subscripts -> element bytes

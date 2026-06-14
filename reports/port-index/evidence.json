@@ -179,12 +179,12 @@
       "unevidenced": []
     },
     {
-      "active": 80,
-      "direct": 76,
-      "evidenced_any": 80,
+      "active": 82,
+      "direct": 78,
+      "evidenced_any": 82,
       "file": "fileio.c",
       "lifecycle": 8,
-      "oracle": 24,
+      "oracle": 25,
       "transitive": 3,
       "unevidenced": []
     },
@@ -240,11 +240,11 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 559,
-    "direct": 333,
-    "evidenced_any": 466,
+    "active": 561,
+    "direct": 335,
+    "evidenced_any": 468,
     "lifecycle": 42,
-    "oracle": 179,
+    "oracle": 180,
     "transitive": 115,
     "unevidenced": 93
   }

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILE.FILTER.SLICE.1 (court-casefile)
 
-**Verdict: PASS** · 4/4 pass, 0 fail · crate `gnucobol-rs` 0.7.52
+**Verdict: PASS** · 4/4 pass, 0 fail · crate `gnucobol-rs` 0.7.53
 
 - **Oracle:** cobc filter read-loop (libcob/fileio.c + cobc control flow)
 - **Byte domain(s):** read-loop with a per-record IF gating the accumulation -> resulting WORKING-STORAGE

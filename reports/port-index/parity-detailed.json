@@ -3974,9 +3974,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 80,
+    "active_ported": 82,
     "compiled": 182,
-    "compiled_parity_pct": 44.5,
+    "compiled_parity_pct": 45.6,
     "disabled": 0,
     "doc_only": 0,
     "file": "fileio.c",
@@ -4090,7 +4090,8 @@
       {
         "function": "cob_chk_file_env",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "has_directory_separator",
@@ -4119,7 +4120,8 @@
       {
         "function": "cob_chk_file_mapping",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_sync",
@@ -4989,8 +4991,6 @@
       "bdb_suppresskey",
       "check_alt_keys",
       "cob_cache_file",
-      "cob_chk_file_env",
-      "cob_chk_file_mapping",
       "cob_create_tmpfile",
       "cob_extfh_close",
       "cob_extfh_delete",
@@ -5077,7 +5077,7 @@
       "update_record_and_keys_if_necessary"
     ],
     "inactive_mirrors": 1,
-    "missing": 101,
+    "missing": 99,
     "source_funcs": 182,
     "test_only": 0
   },

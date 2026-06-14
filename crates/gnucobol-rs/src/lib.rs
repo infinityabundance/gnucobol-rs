@@ -693,6 +693,9 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = fileio::cob_open(&mut cf, fileio::OpenMode::Output);
     let _ = fileio::cob_close(&mut cf, false);
     let _ = fileio::cob_unlock(&mut cf);
+    // filename mapping (GNURUST.FILEIO.MAPPING.1): resolving an arbitrary ASSIGN name never panics.
+    let _ = fileio::cob_chk_file_mapping(body);
+    let _ = fileio::cob_chk_file_env(body);
 }
 
 #[cfg(feature = "fuzzing")]

@@ -250,8 +250,6 @@
         "bdb_suppresskey",
         "check_alt_keys",
         "cob_cache_file",
-        "cob_chk_file_env",
-        "cob_chk_file_mapping",
         "cob_create_tmpfile",
         "cob_extfh_close",
         "cob_extfh_delete",
@@ -337,8 +335,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 44.5,
-      "ported": 81
+      "parity_pct": 45.6,
+      "ported": 83
     },
     {
       "file": "mlio.c",
@@ -685,7 +683,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 49.1,
-    "ported": 574
+    "parity_pct": 49.2,
+    "ported": 576
   }
 }

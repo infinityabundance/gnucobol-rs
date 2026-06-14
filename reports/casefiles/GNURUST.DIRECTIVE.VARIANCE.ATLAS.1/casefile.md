@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.DIRECTIVE.VARIANCE.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.52
+**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.53
 
 - **Oracle:** cobc -f<directive> compile + run (cobc/config.c directive engine + libcob/move.c binary codec)
 - **Byte domain(s):** compiler-directive byte delta from the default profile: -fbinary-size (layout), -fbinary-byteorder (endianness), -fbinary-truncate (MOVE result)

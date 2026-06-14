@@ -7,7 +7,7 @@
 > it **calls** (the C callgraph). It answers "what does this function depend on?" — the map for
 > porting the entangled files. Structure/dependency only; behaviour stays the per-court oracle sweeps.
 
-**Definitions indexed: 870** (static 465) · call edges 3240 · with a Rust port 550.
+**Definitions indexed: 870** (static 465) · call edges 3240 · with a Rust port 552.
 
 | libcob file | definitions | static | call edges | ported |
 |---|---:|---:|---:|---:|
@@ -19,7 +19,7 @@
 | `termio.c` | 18 | 10 | 84 | 18 |
 | `screenio.c` | 106 | 79 | 365 | 0 |
 | `call.c` | 66 | 17 | 250 | 0 |
-| `fileio.c` | 165 | 103 | 678 | 73 |
+| `fileio.c` | 165 | 103 | 678 | 75 |
 | `mlio.c` | 46 | 33 | 135 | 8 |
 | `reportio.c` | 35 | 29 | 96 | 18 |
 | `cobgetopt.c` | 4 | 3 | 20 | 4 |

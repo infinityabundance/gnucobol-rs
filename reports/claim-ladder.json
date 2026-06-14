@@ -1231,6 +1231,20 @@
       "damage_if_overclaimed": "ignoring the OPEN/CLOSE status (41/42/38/35) lets a program write to an unopened file or silently re-open, corrupting the file or its sequence"
     },
     {
+      "id": "GNURUST.FILEIO.MAPPING.1",
+      "name": "COBOL filename mapping (env resolution)",
+      "proven": "a faithful port of fileio.c's cob_chk_file_env + the simple-case path of cob_chk_file_mapping -- how an ORGANIZATION OPEN resolves a COBOL ASSIGN name to a filesystem path, proven to match the admitted libcob's resolution (map_sweep 2/0: the oracle creates each file at exactly the path the Rust mapping predicts): a bare name (no separator, not absolute) is looked up via the environment variables DD_<name>, dd_<name>, <name> in order (with '.' mangled to '_', or all non-alnum under COB_ENV_MANGLE; surrounding quotes stripped), an absolute env value is used as-is, otherwise the name is prefixed by COB_FILE_PATH if set; a name starting with '.', '-', or a digit is not env-mapped; an ACU-hyphen name (-F/-D + space) is device-translated. Verified end-to-end: a DD_-mapped ASSIGN resolves to its env value, an unmapped name to COB_FILE_PATH/name",
+      "byte_domain": "a COBOL ASSIGN name + environment (DD_*/COB_FILE_PATH) -> the resolved filesystem path",
+      "oracle": "cobc OPEN of files ASSIGNed names resolved via DD_*/COB_FILE_PATH env (libcob/fileio.c)",
+      "fixtures": "map_sweep 2/0 + 1 unit test + Kani mapping_special_starts_total",
+      "sealed_version": "0.7.53",
+      "not_proven": "the complex multi-element path mapping (per-slash-element $ / DD_ resolution); COB_ENV_MANGLE non-default; the ACU repeated-resolution recursion; the dialect flag_filename_mapping=off case; concatenated (multi-file) input names; the actual getenv ordering beyond the three prefixes",
+      "breaks_claim": "a dialect with different ASSIGN resolution; the complex per-element path mapping; a different env prefix set or precedence",
+      "readiness": 3,
+      "lie_prevented": "a COBOL ASSIGN name is the filename -- NO: a bare name is first resolved through DD_<name>/dd_<name>/<name> environment variables (with '.'->'_' mangling), an absolute env value replaces it, and otherwise COB_FILE_PATH is prefixed; a leading '.'/'-'/digit or a $/quote changes the rule",
+      "damage_if_overclaimed": "treating the ASSIGN literal as the path ignores the DD_*/COB_FILE_PATH indirection every operational deployment relies on to place its files"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

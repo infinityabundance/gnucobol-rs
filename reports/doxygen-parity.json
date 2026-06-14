@@ -158,8 +158,6 @@
         "EXTFH",
         "EXTFH3",
         "cob_cache_file",
-        "cob_chk_file_env",
-        "cob_chk_file_mapping",
         "cob_create_tmpfile",
         "cob_extfh_close",
         "cob_extfh_delete",
@@ -230,8 +228,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 49.7,
-      "ported": 73
+      "parity_pct": 51.0,
+      "ported": 75
     },
     {
       "doxygen_functions": 25,
@@ -531,8 +529,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 57.2,
-    "ported": 571
+    "parity_pct": 57.4,
+    "ported": 573
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -62,6 +62,7 @@ run_sweep "GNURUST.FILEIO.VERB.1" verb_sweep.sh
 run_sweep "GNURUST.FILEIO.SORT.1" sort_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh
 run_sweep "GNURUST.FILEIO.OPEN.1" open_sweep.sh
+run_sweep "GNURUST.FILEIO.MAPPING.1" map_sweep.sh
 run_sweep "GNURUST.FILE.REWRITE.1" rewrite_sweep.sh
 run_sweep "GNURUST.FILE.STATUS.1 (observed)" file_status_sweep.sh
 run_sweep "GNURUST.INITIALIZE.1 bytes" initialize_sweep.sh

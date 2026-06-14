@@ -635,6 +635,86 @@ pub fn has_acu_hyphen(src: &[u8]) -> bool {
         && src[2].is_ascii_whitespace()
 }
 
+/// Port of `fileio.c:cob_chk_file_env` — resolve a COBOL ASSIGN name through the environment: tries the
+/// env vars `DD_<name>`, `dd_<name>`, `<name>` in order (with `.` mangled to `_`, or all non-alnum when
+/// `COB_ENV_MANGLE`), returning the first set value (surrounding quotes stripped). A name starting with
+/// `.`, `-`, or a digit is not mapped (`None`).
+pub fn cob_chk_file_env(src: &[u8]) -> Option<Vec<u8>> {
+    if src.first() == Some(&b'.') || matches!(src.first(), Some(b'-') | Some(b'0'..=b'9')) {
+        return None;
+    }
+    let mangle = std::env::var("COB_ENV_MANGLE").map(|v| v == "1" || v.eq_ignore_ascii_case("true") || v.eq_ignore_ascii_case("yes")).unwrap_or(false);
+    let name: String = src
+        .iter()
+        .map(|&c| {
+            let ch = c as char;
+            if mangle {
+                if ch.is_ascii_alphanumeric() {
+                    ch
+                } else {
+                    '_'
+                }
+            } else if ch == '.' {
+                '_'
+            } else {
+                ch
+            }
+        })
+        .collect();
+    for prefix in ["DD_", "dd_", ""] {
+        if let Ok(v) = std::env::var(format!("{prefix}{name}")) {
+            if !v.is_empty() {
+                let b = v.into_bytes();
+                if b.len() >= 2 && (b[0] == 0x22 || b[0] == 0x27) && b[b.len() - 1] == b[0] {
+                    return Some(b[1..b.len() - 1].to_vec());
+                }
+                return Some(b);
+            }
+        }
+    }
+    None
+}
+
+/// Port of the simple-case path of `fileio.c:cob_chk_file_mapping` — resolve a COBOL ASSIGN name to a
+/// filesystem path: an ACU-hyphen name is translated; a bare name (no separator, not absolute) has its
+/// quotes/leading-`$` dropped, is looked up via [`cob_chk_file_env`] (an absolute result is used as-is),
+/// and is then prefixed by `COB_FILE_PATH` if set. A name that is already absolute or contains a path
+/// separator (the complex multi-element mapping) is a declared non-claim and is returned unchanged.
+pub fn cob_chk_file_mapping(name: &[u8]) -> Vec<u8> {
+    if has_acu_hyphen(name) {
+        return do_acu_hyphen_translation(name);
+    }
+    if looks_absolute(name) || has_directory_separator(name) {
+        return name.to_vec(); // complex case: declared non-claim
+    }
+    let mut src: &[u8] = name;
+    if src.len() >= 2 && (src[0] == 0x22 || src[0] == 0x27) && src[src.len() - 1] == src[0] {
+        src = &src[1..src.len() - 1];
+    }
+    if src.first() == Some(&b'$') {
+        src = &src[1..];
+    }
+    let mut resolved = src.to_vec();
+    if let Some(env) = cob_chk_file_env(src) {
+        if looks_absolute(&env) {
+            return env;
+        }
+        if has_acu_hyphen(&env) {
+            return do_acu_hyphen_translation(&env);
+        }
+        resolved = env;
+    }
+    if let Ok(path) = std::env::var("COB_FILE_PATH") {
+        if !path.is_empty() {
+            let mut out = path.into_bytes();
+            out.push(b'/');
+            out.extend_from_slice(&resolved);
+            return out;
+        }
+    }
+    resolved
+}
+
 /// Port of `fileio.c:do_acu_hyphen_translation` — for an [`has_acu_hyphen`] name, the actual filename is
 /// what follows the `-F `/`-D ` prefix after the first non-space, with surrounding matching quotes dropped.
 pub fn do_acu_hyphen_translation(src: &[u8]) -> Vec<u8> {
@@ -2408,6 +2488,20 @@ mod tests {
         assert_eq!(indexed_keycmp(&a, &d), 1); // different dup flag
     }
 
+    // ---- filename mapping ----
+    #[test]
+    fn file_mapping_env_independent() {
+        // absolute / separator -> unchanged (the complex multi-element case is a non-claim)
+        assert_eq!(cob_chk_file_mapping(b"/etc/foo"), b"/etc/foo");
+        assert_eq!(cob_chk_file_mapping(b"dir/foo.dat"), b"dir/foo.dat");
+        // ACU-hyphen -> translated to the bare name
+        assert_eq!(cob_chk_file_mapping(b"-F realname"), b"realname");
+        // names that are never env-mapped: leading '.', '-', or a digit
+        assert_eq!(cob_chk_file_env(b".hidden"), None);
+        assert_eq!(cob_chk_file_env(b"-opt"), None);
+        assert_eq!(cob_chk_file_env(b"9lives"), None);
+    }
+
     // ---- path / status helpers ----
     #[test]
     fn path_helpers() {
@@ -2562,6 +2656,16 @@ mod kani_proofs {
         assert_eq!(cob_open(&mut f, OpenMode::Input), "41");
         f.open_mode = OpenMode::Closed;
         assert_eq!(cob_close(&mut f, false), "42");
+    }
+    // KANIFOR: GNURUST.FILEIO.MAPPING.1
+    /// A name starting with `.`, `-`, or a digit is never environment-mapped (returns before any getenv),
+    /// and an absolute name is returned unchanged. Never panics.
+    #[kani::proof]
+    fn mapping_special_starts_total() {
+        assert_eq!(cob_chk_file_env(b"."), None);
+        assert_eq!(cob_chk_file_env(b"-x"), None);
+        assert_eq!(cob_chk_file_env(b"5"), None);
+        assert_eq!(cob_chk_file_mapping(b"/abs"), b"/abs");
     }
     // KANIFOR: GNURUST.FILEIO.SYS.1
     /// The non-I/O precondition paths of `cob_sys_get_current_dir` are total: `flags != 0` → 129, a

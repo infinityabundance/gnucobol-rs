@@ -1,0 +1,66 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a COBOL ASSIGN name + environment (DD_*/COB_FILE_PATH) -> the resolved filesystem path"
+  ],
+  "case_id": "GNURUST.FILEIO.MAPPING.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.53",
+  "damage_if_overclaimed": "treating the ASSIGN literal as the path ignores the DD_*/COB_FILE_PATH indirection every operational deployment relies on to place its files",
+  "hash_chain": {
+    "inputs_sha256": "346600c22fd4b0c2aae3215927aa350ec97152e847ccdf0b0b6cf9cf0b757466"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f5f862e09021a70cefb0a0c7e014aa2cba8b4bb36f5748b20a77540cecfda5e2",
+    "receipt_sha256": "c7798429f5b798942f3327eed616bff26f6c81c73471c31f85c3f0317889f7d0"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "a COBOL ASSIGN name is the filename -- NO: a bare name is first resolved through DD_<name>/dd_<name>/<name> environment variables (with '.'->'_' mangling), an absolute env value replaces it, and otherwise COB_FILE_PATH is prefixed; a leading '.'/'-'/digit or a $/quote changes the rule"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-COMPLEX-MULTI-ELEMENT-PATH-MAPPING-P",
+    "NEG.COB-ENV-MANGLE-NON-DEFAULT",
+    "NEG.THE-ACU-REPEATED-RESOLUTION-RECURSION",
+    "NEG.THE-DIALECT-FLAG-FILENAME-MAPPING-OFF-CA",
+    "NEG.CONCATENATED-MULTI-FILE-INPUT-NAMES",
+    "NEG.THE-ACTUAL-GETENV-ORDERING-BEYOND-THE-TH"
+  ],
+  "negative_claims": [
+    "the complex multi-element path mapping (per-slash-element $ / DD_ resolution)",
+    "COB_ENV_MANGLE non-default",
+    "the ACU repeated-resolution recursion",
+    "the dialect flag_filename_mapping=off case",
+    "concatenated (multi-file) input names",
+    "the actual getenv ordering beyond the three prefixes",
+    "lie prevented: a COBOL ASSIGN name is the filename -- NO: a bare name is first resolved through DD_<name>/dd_<name>/<name> environment variables (with '.'->'_' mangling), an absolute env value replaces it, and otherwise COB_FILE_PATH is prefixed; a leading '.'/'-'/digit or a $/quote changes the rule"
+  ],
+  "oracle": {
+    "detail": "cobc OPEN of files ASSIGNed names resolved via DD_*/COB_FILE_PATH env (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.MAPPING.1"
+  },
+  "positive_claims": [
+    "a faithful port of fileio.c's cob_chk_file_env + the simple-case path of cob_chk_file_mapping -- how an ORGANIZATION OPEN resolves a COBOL ASSIGN name to a filesystem path, proven to match the admitted libcob's resolution (map_sweep 2/0: the oracle creates each file at exactly the path the Rust mapping predicts): a bare name (no separator, not absolute) is looked up via the environment variables DD_<name>, dd_<name>, <name> in order (with '.' mangled to '_', or all non-alnum under COB_ENV_MANGLE",
+    "surrounding quotes stripped), an absolute env value is used as-is, otherwise the name is prefixed by COB_FILE_PATH if set",
+    "a name starting with '.', '-', or a digit is not env-mapped",
+    "an ACU-hyphen name (-F/-D + space) is device-translated. Verified end-to-end: a DD_-mapped ASSIGN resolves to its env value, an unmapped name to COB_FILE_PATH/name"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/map_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}
