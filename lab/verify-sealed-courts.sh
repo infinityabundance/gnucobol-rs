@@ -146,6 +146,9 @@ fi
 # from the admitted libcob source + the Rust src. This is the authoritative parity (real `fn`s vs doc-only
 # false hits, with #if 0 / config classification) that replaced grep name-matching. Source-gated.
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- check >/dev/null 2>&1 ) && row "libcob-parity gate (port-index, typed)" "PASS" || { row "libcob-parity gate (port-index, typed)" "FAIL"; RED=$((RED+1)); }
+# PORT-GOVERNANCE.2: the FUNCTION-EVIDENCE map (per-ported-fn test/Kani/fuzz reference) must be fresh.
+# Anti-staleness only (Tier 1); the per-completed-file "no unevidenced active fn" rule is a future gate.
+( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- evidence check >/dev/null 2>&1 ) && row "function-evidence map (PORT-GOVERNANCE.2)" "PASS" || { row "function-evidence map (PORT-GOVERNANCE.2)" "FAIL"; RED=$((RED+1)); }
 # GNURUST.CCVS85.1: external CCVS85 (NIST COBOL-85 validation) corpus CUSTODY -- compressed/decompressed
 # hashes + split-index metadata stable vs the committed receipt. Corpus-custody only; NO conformance claim.
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- ccvs85 check >/dev/null 2>&1 ) && row "GNURUST.CCVS85.1 corpus custody (NIST CCVS85)" "PASS" || { row "GNURUST.CCVS85.1 corpus custody (NIST CCVS85)" "FAIL"; RED=$((RED+1)); }

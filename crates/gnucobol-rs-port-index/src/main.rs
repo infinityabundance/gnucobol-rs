@@ -9,6 +9,7 @@
 
 mod ccvs85;
 mod corpus_atlas;
+mod evidence;
 mod libcob_symbols;
 mod model;
 mod parity;
@@ -138,6 +139,17 @@ fn main() {
                 "check" => corpus_atlas::check(&root),
                 _ => {
                     eprintln!("corpus-atlas: use `corpus-atlas generate` or `corpus-atlas check`");
+                    2
+                }
+            }
+        }
+        "evidence" => {
+            let sub = args.get(2).map(String::as_str).unwrap_or("");
+            match sub {
+                "generate" => evidence::generate(&root),
+                "check" => evidence::check(&root),
+                _ => {
+                    eprintln!("evidence: use `evidence generate` or `evidence check`");
                     2
                 }
             }
