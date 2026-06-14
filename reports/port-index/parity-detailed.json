@@ -5080,17 +5080,18 @@
     "test_only": 0
   },
   {
-    "active_ported": 8,
+    "active_ported": 13,
     "compiled": 47,
-    "compiled_parity_pct": 17.0,
+    "compiled_parity_pct": 27.7,
     "disabled": 0,
-    "doc_only": 1,
+    "doc_only": 0,
     "file": "mlio.c",
     "fns": [
       {
         "function": "set_xml_code",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "set_xml_exception",
@@ -5115,7 +5116,8 @@
       {
         "function": "set_json_code",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "set_json_exception",
@@ -5131,12 +5133,13 @@
       {
         "function": "copy_data_as_string",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_trimmed_data",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_status": "missing"
       },
       {
         "function": "has_invalid_xml_char",
@@ -5188,7 +5191,8 @@
       {
         "function": "int_to_hex",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_hex_xml_data",
@@ -5243,7 +5247,8 @@
       {
         "function": "json_strndup",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "mlio",
+        "rust_status": "active"
       },
       {
         "function": "get_trimmed_json_data",
@@ -5336,7 +5341,6 @@
       "cob_json_generate_new",
       "cob_xml_generate",
       "cob_xml_generate_new",
-      "copy_data_as_string",
       "generate_attributes",
       "generate_content",
       "generate_element",
@@ -5357,11 +5361,7 @@
       "get_xml_code",
       "get_xml_name",
       "get_xml_num",
-      "int_to_hex",
-      "json_strndup",
-      "set_json_code",
       "set_json_exception",
-      "set_xml_code",
       "set_xml_event",
       "set_xml_exception",
       "set_xml_text",
@@ -5369,7 +5369,7 @@
       "xml_generate"
     ],
     "inactive_mirrors": 0,
-    "missing": 38,
+    "missing": 34,
     "source_funcs": 47,
     "test_only": 0
   },
@@ -5623,9 +5623,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 4,
+    "active_ported": 18,
     "compiled": 254,
-    "compiled_parity_pct": 1.6,
+    "compiled_parity_pct": 7.1,
     "disabled": 0,
     "doc_only": 14,
     "file": "common.c",
@@ -5663,7 +5663,8 @@
       {
         "function": "ss_itoa_u10",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "set_source_location",
@@ -5733,52 +5734,62 @@
       {
         "function": "cob_put_sign_ebcdic",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "common_cmpc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "common_cmps",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "compare_character",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "compare_spaces",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "compare_zeroes",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_cmp_all",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_cmp_alnum",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "sort_compare",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "sort_compare_collate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_move_intermediate",
@@ -5808,12 +5819,14 @@
       {
         "function": "cob_check_env_true",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_env_false",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_rescan_env_vals",
@@ -5823,7 +5836,8 @@
       {
         "function": "one_indexed_day_of_week_from_monday",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "set_cob_time_ns_from_filetime",
@@ -6935,8 +6949,6 @@
       "cob_chain_setup",
       "cob_check_based",
       "cob_check_beyond_exit",
-      "cob_check_env_false",
-      "cob_check_env_true",
       "cob_check_fence",
       "cob_check_linkage",
       "cob_check_linkage_size",
@@ -6950,8 +6962,6 @@
       "cob_check_trace_file",
       "cob_check_version",
       "cob_cmp",
-      "cob_cmp_all",
-      "cob_cmp_alnum",
       "cob_command_line",
       "cob_common_init",
       "cob_continue_after",
@@ -7026,7 +7036,6 @@
       "cob_open_logfile",
       "cob_parameter_check",
       "cob_put_sign_ascii",
-      "cob_put_sign_ebcdic",
       "cob_putenv",
       "cob_raise",
       "cob_ready_trace",
@@ -7107,11 +7116,6 @@
       "cob_trace_statement",
       "cob_trace_stmt",
       "cob_unsetenv",
-      "common_cmpc",
-      "common_cmps",
-      "compare_character",
-      "compare_spaces",
-      "compare_zeroes",
       "conf_runtime_error",
       "conf_runtime_error_value",
       "create_dumpfile",
@@ -7132,7 +7136,6 @@
       "init_statement_list",
       "internal_nanosleep",
       "locate_sign",
-      "one_indexed_day_of_week_from_monday",
       "output_procedure_stack_entry",
       "output_source_location",
       "print_info",
@@ -7148,9 +7151,6 @@
       "set_source_location",
       "set_value",
       "setenv",
-      "sort_compare",
-      "sort_compare_collate",
-      "ss_itoa_u10",
       "ss_terminate_routines",
       "translate_boolean_to_int",
       "unsetenv",
@@ -7158,7 +7158,7 @@
       "version_bitstring"
     ],
     "inactive_mirrors": 0,
-    "missing": 236,
+    "missing": 222,
     "source_funcs": 254,
     "test_only": 0
   },

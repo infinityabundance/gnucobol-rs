@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.61",
+  "crate_version": "0.7.62",
   "damage_if_overclaimed": "using INTEGER where INTEGER-PART is meant (or MOD/REM interchangeably) on negative values flips results; trusting a CURRENT-DATE value bakes wall-clock time into evidence",
   "hash_chain": {
-    "inputs_sha256": "3de9f647a59eca4f9c6265e801e7dc97f352f74569b36778416ef15dfa3b90e2"
+    "inputs_sha256": "eab55d58efa2f33fdf3b08dd773a863349d2ad4a053814908e84793efffadcb4"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "ae64d103e1d66aa7a8de6df7a2c13d0e07ce2ad09d202bba96b5688be0b3270a",
-    "receipt_sha256": "a5f2a5ddfe05e2ed2927e726aea445698246cf53a4c78f4e5817bdc2d0ec68cd"
+    "receipt_sha256": "0657ecae374bebde1cadba27ca7ca01be91e1bf33add4a13ef2d03cb6b128556"
   },
   "kind": "court-casefile",
   "lie_prevented": [

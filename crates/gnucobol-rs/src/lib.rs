@@ -49,6 +49,7 @@ pub mod int_pow;
 pub mod logical;
 pub mod accessors;
 pub mod call;
+pub mod common;
 pub mod strings;
 pub mod cobgetopt;
 pub mod mpf;

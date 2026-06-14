@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.BIGNUM.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.61",
+  "crate_version": "0.7.62",
   "damage_if_overclaimed": "treating an overflowing product as unsupported (or wrapping it) silently corrupts large-value multiplications that libcob handles exactly",
   "hash_chain": {
-    "inputs_sha256": "ae1be417548452b165d07e3300d30a98c14a2f8d8f7b02748ee74a6998d12691"
+    "inputs_sha256": "1654cb0cf14ca6c43f8f9dc6b83569bf8e4a57095b3a6eb5def15ab87d4d0fde"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "808cb61a588dbe4283b64e969feaad4b128f4cd839de5e06bef9f836e50b33ac",
-    "receipt_sha256": "e717e36c93cfa29fc6db5c7a9c94f3109feeb80e45eebb8b3ed69983d7c359bb"
+    "receipt_sha256": "2b415076ccd215a5e40d5da1d117c3fcb5cbbd062904dd712e83e534e044f941"
   },
   "kind": "court-casefile",
   "lie_prevented": [

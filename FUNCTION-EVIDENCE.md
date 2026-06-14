@@ -10,7 +10,7 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 748** · direct 454 (incl. oracle-sweep 192) · transitive 148 · lifecycle 60 · **evidenced (any) 627** · **unevidenced 121**.
+**Active ported: 767** · direct 471 (incl. oracle-sweep 192) · transitive 148 · lifecycle 60 · **evidenced (any) 644** · **unevidenced 123**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -22,9 +22,9 @@
 | `termio.c` | 18 | 7 | 3 | 2 | 1 | 10 | 8 |
 | `call.c` | 67 | 38 | 1 | 6 | 5 | 47 | 20 |
 | `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
-| `mlio.c` | 8 | 6 | 1 | 0 | 2 | 8 | 0 |
+| `mlio.c` | 13 | 11 | 1 | 0 | 2 | 13 | 0 |
 | `reportio.c` | 39 | 21 | 0 | 8 | 7 | 33 | 6 |
-| `common.c` | 3 | 1 | 0 | 1 | 0 | 2 | 1 |
+| `common.c` | 17 | 13 | 0 | 1 | 0 | 14 | 3 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)
@@ -37,7 +37,7 @@
 - **`call.c`** (20): `cob_get_dbl_param`, `cob_get_field_str_buffered`, `cob_get_param_constant`, `cob_get_param_digits`, `cob_get_param_scale`, `cob_get_param_sign`, `cob_get_param_str`, `cob_get_param_str_buffered`, `cob_get_param_type`, `cob_longjmp`, `cob_put_dbl_param`, `cob_put_param_str`, `cob_put_u64_param`, `cob_resolve_error`, `cob_resolve_func`, `cob_savenv`, `cob_savenv2`, `cob_set_library_path`, `lt_dlerror`, `set_resolve_error`
 - **`fileio.c`** (5): `cob_file_external_addr`, `cob_file_fcd_adrs`, `cob_file_fcdkey_adrs`, `cob_file_sort_giving_extfh`, `cob_file_sort_options`
 - **`reportio.c`** (6): `cob_report_suppress`, `limitCheckOneLine`, `line_control_one`, `reportDump`, `reportDumpLine`, `reportDumpOneLine`
-- **`common.c`** (1): `cob_get_current_date_and_time_from_os`
+- **`common.c`** (3): `cob_get_current_date_and_time_from_os`, `common_cmpc`, `sort_compare_collate`
 
 ## How this is produced (reproducible)
 

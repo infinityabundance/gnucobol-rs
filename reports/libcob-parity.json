@@ -178,7 +178,6 @@
         "cob_json_generate_new",
         "cob_xml_generate",
         "cob_xml_generate_new",
-        "copy_data_as_string",
         "generate_attributes",
         "generate_content",
         "generate_element",
@@ -199,19 +198,15 @@
         "get_xml_code",
         "get_xml_name",
         "get_xml_num",
-        "int_to_hex",
-        "json_strndup",
-        "set_json_code",
         "set_json_exception",
-        "set_xml_code",
         "set_xml_event",
         "set_xml_exception",
         "set_xml_text",
         "xmlCharStrndup_void",
         "xml_generate"
       ],
-      "parity_pct": 17.0,
-      "ported": 8
+      "parity_pct": 27.7,
+      "ported": 13
     },
     {
       "file": "reportio.c",
@@ -253,8 +248,6 @@
         "cob_chain_setup",
         "cob_check_based",
         "cob_check_beyond_exit",
-        "cob_check_env_false",
-        "cob_check_env_true",
         "cob_check_fence",
         "cob_check_linkage",
         "cob_check_linkage_size",
@@ -268,8 +261,6 @@
         "cob_check_trace_file",
         "cob_check_version",
         "cob_cmp",
-        "cob_cmp_all",
-        "cob_cmp_alnum",
         "cob_command_line",
         "cob_common_init",
         "cob_continue_after",
@@ -344,7 +335,6 @@
         "cob_open_logfile",
         "cob_parameter_check",
         "cob_put_sign_ascii",
-        "cob_put_sign_ebcdic",
         "cob_putenv",
         "cob_raise",
         "cob_ready_trace",
@@ -425,11 +415,6 @@
         "cob_trace_statement",
         "cob_trace_stmt",
         "cob_unsetenv",
-        "common_cmpc",
-        "common_cmps",
-        "compare_character",
-        "compare_spaces",
-        "compare_zeroes",
         "conf_runtime_error",
         "conf_runtime_error_value",
         "create_dumpfile",
@@ -450,7 +435,6 @@
         "init_statement_list",
         "internal_nanosleep",
         "locate_sign",
-        "one_indexed_day_of_week_from_monday",
         "output_procedure_stack_entry",
         "output_source_location",
         "print_info",
@@ -466,17 +450,14 @@
         "set_source_location",
         "set_value",
         "setenv",
-        "sort_compare",
-        "sort_compare_collate",
-        "ss_itoa_u10",
         "ss_terminate_routines",
         "translate_boolean_to_int",
         "unsetenv",
         "var_print",
         "version_bitstring"
       ],
-      "parity_pct": 1.6,
-      "ported": 4
+      "parity_pct": 7.1,
+      "ported": 18
     },
     {
       "file": "cobgetopt.c",
@@ -492,7 +473,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 65.3,
-    "ported": 764
+    "parity_pct": 66.9,
+    "ported": 783
   }
 }

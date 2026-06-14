@@ -102,11 +102,9 @@
         "cob_xml_generate",
         "cob_xml_generate_new",
         "cob_xml_parse",
-        "copy_data_as_string",
+        "get_trimmed_data",
         "get_xml_code",
-        "set_json_code",
         "set_json_exception",
-        "set_xml_code",
         "set_xml_event",
         "set_xml_exception",
         "set_xml_text",
@@ -114,8 +112,8 @@
         "xml_generate",
         "xml_parse"
       ],
-      "parity_pct": 36.0,
-      "ported": 9
+      "parity_pct": 44.0,
+      "ported": 11
     },
     {
       "doxygen_functions": 35,
@@ -156,8 +154,6 @@
         "cob_chain_setup",
         "cob_check_based",
         "cob_check_beyond_exit",
-        "cob_check_env_false",
-        "cob_check_env_true",
         "cob_check_fence",
         "cob_check_linkage",
         "cob_check_linkage_size",
@@ -170,8 +166,6 @@
         "cob_check_subscript",
         "cob_check_trace_file",
         "cob_check_version",
-        "cob_cmp_all",
-        "cob_cmp_alnum",
         "cob_command_line",
         "cob_continue_after",
         "cob_correct_numeric",
@@ -233,7 +227,6 @@
         "cob_nop",
         "cob_open_logfile",
         "cob_parameter_check",
-        "cob_put_sign_ebcdic",
         "cob_putenv",
         "cob_ready_trace",
         "cob_realloc",
@@ -309,11 +302,6 @@
         "cob_trace_statement",
         "cob_trace_stmt",
         "cob_unsetenv",
-        "common_cmpc",
-        "common_cmps",
-        "compare_character",
-        "compare_spaces",
-        "compare_zeroes",
         "conf_runtime_error",
         "conf_runtime_error_value",
         "create_dumpfile",
@@ -332,7 +320,6 @@
         "init_statement_list",
         "internal_nanosleep",
         "libcob_version",
-        "one_indexed_day_of_week_from_monday",
         "output_procedure_stack_entry",
         "output_source_location",
         "print_info",
@@ -348,16 +335,13 @@
         "set_libcob_version",
         "set_source_location",
         "set_value",
-        "sort_compare",
-        "sort_compare_collate",
-        "ss_itoa_u10",
         "ss_terminate_routines",
         "translate_boolean_to_int",
         "var_print",
         "version_bitstring"
       ],
-      "parity_pct": 7.0,
-      "ported": 17
+      "parity_pct": 12.7,
+      "ported": 31
     },
     {
       "doxygen_functions": 4,
@@ -372,8 +356,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 72.8,
-    "ported": 727
+    "parity_pct": 74.4,
+    "ported": 743
   },
   "xml_root": "lab/doxygen/out/xml"
 }

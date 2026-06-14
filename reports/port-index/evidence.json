@@ -214,9 +214,9 @@
       ]
     },
     {
-      "active": 8,
-      "direct": 6,
-      "evidenced_any": 8,
+      "active": 13,
+      "direct": 11,
+      "evidenced_any": 13,
       "file": "mlio.c",
       "lifecycle": 2,
       "oracle": 1,
@@ -241,15 +241,17 @@
       ]
     },
     {
-      "active": 3,
-      "direct": 1,
-      "evidenced_any": 2,
+      "active": 17,
+      "direct": 13,
+      "evidenced_any": 14,
       "file": "common.c",
       "lifecycle": 0,
       "oracle": 0,
       "transitive": 1,
       "unevidenced": [
-        "cob_get_current_date_and_time_from_os"
+        "cob_get_current_date_and_time_from_os",
+        "common_cmpc",
+        "sort_compare_collate"
       ]
     },
     {
@@ -270,12 +272,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 748,
-    "direct": 454,
-    "evidenced_any": 627,
+    "active": 767,
+    "direct": 471,
+    "evidenced_any": 644,
     "lifecycle": 60,
     "oracle": 192,
     "transitive": 148,
-    "unevidenced": 121
+    "unevidenced": 123
   }
 }

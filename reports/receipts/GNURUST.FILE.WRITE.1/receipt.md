@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILE.WRITE.1` |
 | court | sequential WRITE byte effects |
-| crate_version | `0.7.61` |
+| crate_version | `0.7.62` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN OUTPUT + WRITE -> file bytes (RECORD SEQ full padded / LINE SEQ trailing-space-stripped + LF) |
 | replay command | `bash lab/oracle/write_seq_sweep.sh` |

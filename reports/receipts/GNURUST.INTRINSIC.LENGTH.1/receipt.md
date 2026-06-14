@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.LENGTH.1` |
 | court | FUNCTION LENGTH storage byte length |
-| crate_version | `0.7.61` |
+| crate_version | `0.7.62` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | FUNCTION LENGTH(elementary field) -> storage byte length |
 | replay command | `bash lab/oracle/length_sweep.sh` |
