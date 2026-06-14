@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILE.SEQUENTIAL.1` |
 | court | sequential file READ record bytes + file status |
-| crate_version | `0.7.45` |
+| crate_version | `0.7.46` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN INPUT / READ NEXT / AT END record bytes + status for RECORD/LINE SEQUENTIAL |
 | replay command | `bash lab/oracle/seqfile_sweep.sh` |

@@ -12,6 +12,13 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.46]
+- **`fileio.c` -- record-I/O helper layer ported; the file is now past 20% (37/182).** A batch of faithful, unit-tested structural ports of the pure byte/decision helpers the sealed organizations build on (no new oracle court -- the byte-courts remain LINESEQ.1/.2, SEQ.1, RELATIVE.1):
+  - **INDEXED key descriptors** -- `indexed_keylen`/`indexed_savekey`/`indexed_restorekey`/`indexed_cmpkey`/`indexed_keycmp`/`indexed_keydesc` + `cob_savekey` extract, restore and compare multi-part keys from a record per a key descriptor.
+  - **WRITE ADVANCING + LINAGE** -- `cob_seq_write_opt`/`cob_file_write_opt` (the advancing newline/CR/form-feed bytes), `cob_linage_write_opt` (page advancing + LINAGE-COUNTER), `file_linage_check` (linage geometry validation), and `lineseq_rewrite` (in-place LINE SEQUENTIAL REWRITE).
+  - **path / status / record helpers** -- filename classification (`is_absolute`/`looks_absolute`/`has_directory_separator`/`has_acu_hyphen`/`do_acu_hyphen_translation`), `errno_cob_sts` (errno to FILE STATUS), `save_status` (status to 2 display bytes), `cob_str_from_fld` (right-trim + de-quote), `cob_copy_check` (SORT record move), `is_suppressed_key_value`, and the `dummy_*` no-op handlers.
+- No API breaks: additive (new `fileio` functions + `KeyDesc`/`KeyPart`/`CobFileKey`/`Linage`/`FileErrno` types).
+
 ## [0.7.45]
 - **`fileio.c` — RELATIVE organization sealed (`GNURUST.FILEIO.RELATIVE.1`).** A faithful port of `libcob/fileio.c` `relative_write`/`relative_read`/`relative_read_next`/`relative_rewrite`/`relative_delete`/`relative_start`, proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` (`relative_sweep` 4/0):
   - an `ORGANIZATION IS RELATIVE` file is an array of fixed slots of `sizeof(record->size) + record_max` bytes — each an **8-byte native-endian size header** (`> 0` active, `0` empty/deleted) followed by the `record_max` data area; the record at relative key *N* lives at slot *N-1*.

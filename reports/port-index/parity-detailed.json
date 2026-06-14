@@ -3974,9 +3974,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 12,
+    "active_ported": 37,
     "compiled": 182,
-    "compiled_parity_pct": 6.6,
+    "compiled_parity_pct": 20.9,
     "disabled": 0,
     "doc_only": 0,
     "file": "fileio.c",
@@ -3984,32 +3984,38 @@
       {
         "function": "indexed_keylen",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "indexed_savekey",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "indexed_restorekey",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "indexed_cmpkey",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "indexed_keydesc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "indexed_keycmp",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_findkey_attr",
@@ -4059,22 +4065,26 @@
       {
         "function": "dummy_delete",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "dummy_rnxt_rewrite",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "dummy_read",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "dummy_start",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_chk_file_env",
@@ -4084,22 +4094,26 @@
       {
         "function": "has_directory_separator",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "looks_absolute",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "has_acu_hyphen",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "do_acu_hyphen_translation",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_chk_file_mapping",
@@ -4119,32 +4133,38 @@
       {
         "function": "save_status",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "errno_cob_sts",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "file_linage_check",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_linage_write_opt",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_seq_write_opt",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_write_opt",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_fd_file_open",
@@ -4205,7 +4225,8 @@
       {
         "function": "lineseq_rewrite",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "relative_start",
@@ -4336,7 +4357,8 @@
       {
         "function": "is_absolute",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "bdb_nofile",
@@ -4446,7 +4468,8 @@
       {
         "function": "is_suppressed_key_value",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_read_next",
@@ -4496,12 +4519,14 @@
       {
         "function": "cob_savekey",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_str_from_fld",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "open_cbl_file",
@@ -4656,7 +4681,8 @@
       {
         "function": "cob_copy_check",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "fileio",
+        "rust_status": "active"
       },
       {
         "function": "cob_file_sort_process",
@@ -4924,7 +4950,6 @@
       "cob_chk_file_mapping",
       "cob_close",
       "cob_commit",
-      "cob_copy_check",
       "cob_create_tmpfile",
       "cob_delete",
       "cob_delete_file",
@@ -4965,14 +4990,12 @@
       "cob_file_sort_using",
       "cob_file_sort_using_extfh",
       "cob_file_unlock",
-      "cob_file_write_opt",
       "cob_findkey",
       "cob_findkey_attr",
       "cob_free_list",
       "cob_get_filename_print",
       "cob_get_sort_tempfile",
       "cob_init_fileio",
-      "cob_linage_write_opt",
       "cob_new_item",
       "cob_open",
       "cob_pre_open",
@@ -4981,11 +5004,8 @@
       "cob_read_next",
       "cob_rewrite",
       "cob_rollback",
-      "cob_savekey",
-      "cob_seq_write_opt",
       "cob_sort_queues",
       "cob_start",
-      "cob_str_from_fld",
       "cob_sync",
       "cob_sys_change_dir",
       "cob_sys_chdir",
@@ -5014,15 +5034,8 @@
       "copy_fcd_to_file",
       "copy_file_to_fcd",
       "copy_keys_fcd_to_file",
-      "do_acu_hyphen_translation",
-      "dummy_delete",
-      "dummy_read",
-      "dummy_rnxt_rewrite",
-      "dummy_start",
-      "errno_cob_sts",
       "fcd2_to_fcd3",
       "fcd3_to_fcd2",
-      "file_linage_check",
       "find_fcd",
       "find_fcd2",
       "find_file",
@@ -5032,38 +5045,25 @@
       "freefh",
       "get_code_set_converted_data",
       "get_dupno",
-      "has_acu_hyphen",
-      "has_directory_separator",
       "indexed_close",
-      "indexed_cmpkey",
       "indexed_delete",
       "indexed_delete_internal",
       "indexed_file_delete",
-      "indexed_keycmp",
-      "indexed_keydesc",
-      "indexed_keylen",
       "indexed_open",
       "indexed_read",
       "indexed_read_next",
-      "indexed_restorekey",
       "indexed_rewrite",
-      "indexed_savekey",
       "indexed_start",
       "indexed_start_internal",
       "indexed_write",
       "indexed_write_internal",
-      "is_absolute",
-      "is_suppressed_key_value",
       "join_environment",
-      "lineseq_rewrite",
       "lock_file",
       "lock_record",
-      "looks_absolute",
       "open_cbl_file",
       "open_next",
       "restorefileposition",
       "save_fcd_status",
-      "save_status",
       "savefileposition",
       "set_dbt",
       "sort_cmps",
@@ -5076,8 +5076,8 @@
       "update_key_from_fcd",
       "update_record_and_keys_if_necessary"
     ],
-    "inactive_mirrors": 0,
-    "missing": 170,
+    "inactive_mirrors": 1,
+    "missing": 144,
     "source_funcs": 182,
     "test_only": 0
   },

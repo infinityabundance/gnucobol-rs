@@ -241,6 +241,186 @@ pub fn lineseq_read(data: &[u8], pos: &mut usize, record_max: usize, cfg: &LineS
     LineRead { at_end: false, record: rec, size: i, status: sts }
 }
 
+// COB_WRITE_* option bits (common.h): the WRITE ADVANCING encoding.
+const COB_WRITE_MASK: i32 = 0x0000_FFFF;
+const COB_WRITE_LINES: i32 = 0x0001_0000;
+const COB_WRITE_PAGE: i32 = 0x0002_0000;
+
+/// Port of `fileio.c:cob_seq_write_opt` — the advancing bytes a RECORD SEQUENTIAL `WRITE ... ADVANCING`
+/// emits: `ADVANCING n LINES` → `n` newlines (or a single `\r` when `n == 0`), `ADVANCING PAGE` → a
+/// form-feed (`\f`), otherwise nothing.
+pub fn cob_seq_write_opt(opt: i32) -> Vec<u8> {
+    if opt & COB_WRITE_LINES != 0 {
+        let n = opt & COB_WRITE_MASK;
+        if n == 0 {
+            vec![b'\r']
+        } else {
+            vec![b'\n'; n as usize]
+        }
+    } else if opt & COB_WRITE_PAGE != 0 {
+        vec![0x0c]
+    } else {
+        Vec::new()
+    }
+}
+
+/// Port of `fileio.c:cob_file_write_opt` for a non-LINAGE file — identical advancing bytes to
+/// [`cob_seq_write_opt`] (`\n`×n / `\r` / `\f`). The LINAGE-clause advancing path is [`cob_linage_write_opt`].
+pub fn cob_file_write_opt(opt: i32) -> Vec<u8> {
+    cob_seq_write_opt(opt)
+}
+
+/// A LINAGE page geometry + the current line counter, as read by `cob_linage_write_opt`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Linage {
+    pub lin_lines: i32,
+    pub lin_top: i32,
+    pub lin_bot: i32,
+    /// the live `LINAGE-COUNTER`.
+    pub counter: i32,
+}
+
+/// Port of `fileio.c:cob_linage_write_opt` — the page-advancing newlines for a `WRITE ADVANCING` on a
+/// LINAGE file, returning the emitted bytes, the updated `LINAGE-COUNTER`, and the FILE STATUS (`"00"`
+/// or `"57"` when the linage geometry is invalid). `ADVANCING PAGE` finishes the page (newlines to the
+/// bottom + footer + top margin, counter → 1); `ADVANCING n LINES` advances the counter, rolling to a
+/// fresh page (bottom + top margins) when it passes `lin_lines`, else emitting `n-1` newlines.
+pub fn cob_linage_write_opt(lin: Linage, opt: i32) -> (Vec<u8>, i32, &'static str) {
+    let mut out = Vec::new();
+    let mut counter = lin.counter;
+    if opt & COB_WRITE_PAGE != 0 {
+        if counter == 0 {
+            return (out, counter, "57");
+        }
+        let mut i = counter;
+        while i < lin.lin_lines {
+            out.push(b'\n');
+            i += 1;
+        }
+        for _ in 0..lin.lin_bot {
+            out.push(b'\n');
+        }
+        if lin.lin_lines < 1 {
+            return (out, counter, "57");
+        }
+        for _ in 0..lin.lin_top {
+            out.push(b'\n');
+        }
+        counter = 1;
+    } else if opt & COB_WRITE_LINES != 0 {
+        if counter == 0 {
+            return (out, counter, "57");
+        }
+        counter += opt & COB_WRITE_MASK;
+        if counter > lin.lin_lines {
+            let mut n = lin.counter;
+            while n < lin.lin_lines {
+                out.push(b'\n');
+                n += 1;
+            }
+            for _ in 0..lin.lin_bot {
+                out.push(b'\n');
+            }
+            if lin.lin_lines < 1 {
+                return (out, counter, "57");
+            }
+            counter = 1;
+            for _ in 0..lin.lin_top {
+                out.push(b'\n');
+            }
+        } else {
+            for _ in 0..((opt & COB_WRITE_MASK) - 1) {
+                out.push(b'\n');
+            }
+        }
+    }
+    (out, counter, "00")
+}
+
+/// Port of `fileio.c:cob_copy_check` — copy `from` into a fresh `to_size`-byte record: when the target
+/// is wider the source is copied and the remainder space-filled, otherwise the source is truncated to
+/// fit. (The SORT/MERGE record-move semantics.)
+pub fn cob_copy_check(from: &[u8], to_size: usize) -> Vec<u8> {
+    let mut to = vec![b' '; to_size];
+    let n = from.len().min(to_size);
+    to[..n].copy_from_slice(&from[..n]);
+    to
+}
+
+/// Port of `fileio.c:file_linage_check` — validate a LINAGE clause's geometry, returning the resolved
+/// `(lin_lines, lin_foot, lin_top, lin_bot)` or `Err(())` (the C status `1`, which zeroes the counter).
+/// `lin_lines` must be `>= 1`; a present FOOTING must be `1..=lin_lines`; a present TOP/BOTTOM must be
+/// `>= 0`; an absent FOOTING/TOP/BOTTOM resolves to `0`.
+pub fn file_linage_check(lin_lines: i32, lin_foot: Option<i32>, lin_top: Option<i32>, lin_bot: Option<i32>) -> Result<(i32, i32, i32, i32), ()> {
+    if lin_lines < 1 {
+        return Err(());
+    }
+    let foot = match lin_foot {
+        Some(v) if v < 1 || v > lin_lines => return Err(()),
+        Some(v) => v,
+        None => 0,
+    };
+    let top = match lin_top {
+        Some(v) if v < 0 => return Err(()),
+        Some(v) => v,
+        None => 0,
+    };
+    let bot = match lin_bot {
+        Some(v) if v < 0 => return Err(()),
+        Some(v) => v,
+        None => 0,
+    };
+    Ok((lin_lines, foot, top, bot))
+}
+
+/// Port of the byte-core of `fileio.c:is_suppressed_key_value` — is key `idx`'s value entirely the
+/// SUPPRESS character (so the key is treated as absent)? Returns `1` if `tf_suppress` and every byte of
+/// the key field equals `suppress_char`, else `0`.
+pub fn is_suppressed_key_value(key_field: &[u8], suppress_char: u8, tf_suppress: bool) -> i32 {
+    if tf_suppress && !key_field.is_empty() && key_field.iter().all(|&b| b == suppress_char) {
+        1
+    } else {
+        0
+    }
+}
+
+/// Port of the byte-core of `fileio.c:lineseq_rewrite` — `REWRITE` a LINE SEQUENTIAL record in place.
+/// `slotlen` is the original line's length (without its newline); the new `record[..size]` (NUL-encoded
+/// when `ls_nulls`) must fit, else status `"44"` (record overflow). It is written over the slot and the
+/// remainder is space-padded so the surrounding bytes are undisturbed.
+pub fn lineseq_rewrite(file: &[u8], record_off: usize, slotlen: usize, record: &[u8], size: usize, cfg: &LineSeqConfig) -> RelWrite {
+    let data = &record[..size.min(record.len())];
+    // build the bytes to write (validate -> 71; nulls -> 0x00 prefix; else raw)
+    let mut body = Vec::new();
+    if cfg.ls_validate {
+        if data.iter().any(|&b| is_bad_char(b)) {
+            return RelWrite { file: file.to_vec(), status: "71" };
+        }
+        body.extend_from_slice(data);
+    } else if cfg.ls_nulls {
+        for &b in data {
+            if b < b' ' {
+                body.push(0);
+            }
+            body.push(b);
+        }
+    } else {
+        body.extend_from_slice(data);
+    }
+    if body.len() > slotlen {
+        return RelWrite { file: file.to_vec(), status: "44" };
+    }
+    let mut out = file.to_vec();
+    if record_off + slotlen <= out.len() {
+        out[record_off..record_off + body.len()].copy_from_slice(&body);
+        // pad the rest of the slot with spaces
+        for b in out.iter_mut().skip(record_off + body.len()).take(slotlen - body.len()) {
+            *b = b' ';
+        }
+    }
+    RelWrite { file: out, status: "00" }
+}
+
 /// Replay `OPEN INPUT` + repeated `READ NEXT ... AT END` over `data` for the declared `record_max` and
 /// config, returning every read event (the trailing event is always `at_end` with status `"10"`).
 pub fn read_line_sequential(data: &[u8], record_max: usize, cfg: &LineSeqConfig) -> Vec<LineRead> {
@@ -417,6 +597,263 @@ pub fn sequential_rewrite(file: &[u8], record_off: usize, record: &[u8], size: u
         out[record_off..record_off + n].copy_from_slice(&record[..n]);
     }
     out
+}
+
+// ======================================================================================================
+// Path / filename + status helpers (structural 1:1 ports of the pure `fileio.c` helpers)
+//
+// These are faithful ports of `fileio.c`'s pure string/status helpers (no I/O, no runtime config), each
+// verified by unit tests against the source semantics. They are the decision logic the OS-facing open/
+// map routines call; the syscalls themselves remain the declared OS boundary.
+// ======================================================================================================
+
+/// Port of `fileio.c:has_directory_separator` — does the name contain a `/` or `\` path separator?
+pub fn has_directory_separator(src: &[u8]) -> bool {
+    src.iter().any(|&c| c == b'/' || c == b'\\')
+}
+
+/// Port of `fileio.c:looks_absolute` — does the name (after an optional surrounding quote) begin with a
+/// path separator? (The Win32 drive-letter case is a declared platform boundary.)
+pub fn looks_absolute(src: &[u8]) -> bool {
+    let s = if src.first() == Some(&0x22) || src.first() == Some(&0x27) { &src[1..] } else { src };
+    s.first() == Some(&b'/') || s.first() == Some(&b'\\')
+}
+
+/// Port of `fileio.c:is_absolute` (non-Windows) — an absolute path begins with `/`.
+pub fn is_absolute(filename: &[u8]) -> bool {
+    filename.first() == Some(&b'/')
+}
+
+/// Port of `fileio.c:has_acu_hyphen` — the ACUCOBOL special case: a name beginning `-F`/`-D`/`-f`/`-d`
+/// followed by whitespace (the device-assignment form, no path translation).
+pub fn has_acu_hyphen(src: &[u8]) -> bool {
+    src.len() >= 3
+        && src[0] == b'-'
+        && matches!(src[1], b'F' | b'D' | b'f' | b'd')
+        && src[2].is_ascii_whitespace()
+}
+
+/// Port of `fileio.c:do_acu_hyphen_translation` — for an [`has_acu_hyphen`] name, the actual filename is
+/// what follows the `-F `/`-D ` prefix after the first non-space, with surrounding matching quotes dropped.
+pub fn do_acu_hyphen_translation(src: &[u8]) -> Vec<u8> {
+    // skip the "-F"/"-D" (2 chars) then any whitespace (the C starts at src+3 then skips spaces; src[2]
+    // is already known whitespace, so from index 2 skip all whitespace).
+    let mut i = 2usize.min(src.len());
+    while i < src.len() && src[i].is_ascii_whitespace() {
+        i += 1;
+    }
+    let mut s = &src[i..];
+    if s.len() >= 2 && (s[0] == 0x22 || s[0] == 0x27) && s[0] == s[s.len() - 1] {
+        s = &s[1..s.len() - 1];
+    }
+    s.to_vec()
+}
+
+/// An `errno` value, as the subset `fileio.c:errno_cob_sts` distinguishes when mapping a failed syscall
+/// to a FILE STATUS.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FileErrno {
+    /// `ENOSPC` / `EDQUOT` — out of space / over quota.
+    NoSpaceOrQuota,
+    /// `EPERM` / `EACCES` / `EISDIR` — permission denied / is a directory.
+    PermissionOrIsDir,
+    /// `ENOENT` — no such file.
+    NotExist,
+    /// any other `errno`.
+    Other,
+}
+
+/// Port of `fileio.c:errno_cob_sts` — map a failed syscall's `errno` to a FILE STATUS, falling back to
+/// `default_status` for unrecognised errors. `ENOSPC`/`EDQUOT` → `"34"`, `EPERM`/`EACCES`/`EISDIR` →
+/// `"37"`, `ENOENT` → `"35"`.
+pub fn errno_cob_sts(err: FileErrno, default_status: &'static str) -> &'static str {
+    match err {
+        FileErrno::NoSpaceOrQuota => "34",
+        FileErrno::PermissionOrIsDir => "37",
+        FileErrno::NotExist => "35",
+        FileErrno::Other => default_status,
+    }
+}
+
+/// Port of `fileio.c:dummy_delete` — the DELETE handler for a file organization that does not support it:
+/// always status `"91"` (not available). (`dummy_read`/`dummy_start` are the matching no-op handlers.)
+pub fn dummy_delete() -> &'static str {
+    "91"
+}
+/// Port of `fileio.c:dummy_read` — the READ handler for an unsupported organization: status `"91"`.
+pub fn dummy_read() -> &'static str {
+    "91"
+}
+/// Port of `fileio.c:dummy_start` — the START handler for an unsupported organization: status `"91"`.
+pub fn dummy_start() -> &'static str {
+    "91"
+}
+
+/// Port of `fileio.c:dummy_rnxt_rewrite` — the disabled (`#if 0`) READ-NEXT/REWRITE no-op handler, ported
+/// for completeness; not wired (status `"91"` not available).
+#[allow(dead_code)]
+pub fn dummy_rnxt_rewrite() -> &'static str {
+    "91"
+}
+
+// ======================================================================================================
+// INDEXED key-descriptor handling (structural 1:1 ports of the pure `fileio.c` key helpers)
+//
+// Faithful ports of the ISAM key-extraction helpers, which operate purely on a key descriptor (a set of
+// (start, length) parts within the record) — the byte logic the indexed backend uses to build, save,
+// restore and compare keys. The backing ISAM/BDB store itself is the declared OS boundary.
+// ======================================================================================================
+
+/// One component of a multi-part key: a byte range `[start, start+leng)` within the record
+/// (`struct keydesc`'s `k_part`: `kp_start` / `kp_leng`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct KeyPart {
+    pub start: usize,
+    pub leng: usize,
+}
+
+/// A key descriptor (`struct keydesc`): the parts that make up the key and whether duplicates are allowed.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct KeyDesc {
+    pub parts: Vec<KeyPart>,
+    /// `k_flags`: duplicates allowed (`ISDUPS`) vs not (`ISNODUPS`).
+    pub duplicates: bool,
+}
+
+/// Port of `fileio.c:indexed_keylen` — the total key length (sum of all part lengths).
+pub fn indexed_keylen(kd: &KeyDesc) -> usize {
+    kd.parts.iter().map(|p| p.leng).sum()
+}
+
+/// Port of `fileio.c:indexed_savekey` — extract the key from `data` into a contiguous buffer by copying
+/// each part's `[start, start+leng)` range in order. Returns the saved key (its length is [`indexed_keylen`]).
+pub fn indexed_savekey(data: &[u8], kd: &KeyDesc) -> Vec<u8> {
+    let mut out = Vec::with_capacity(indexed_keylen(kd));
+    for p in &kd.parts {
+        let end = (p.start + p.leng).min(data.len());
+        let start = p.start.min(end);
+        out.extend_from_slice(&data[start..end]);
+        // pad if the record was shorter than the part (faithful to the C memcpy over the record area)
+        out.resize(out.len() + (p.leng - (end - start)), 0);
+    }
+    out
+}
+
+/// Port of `fileio.c:indexed_restorekey` — copy a saved key back into `data` at each part's range (the
+/// inverse of [`indexed_savekey`]).
+pub fn indexed_restorekey(data: &mut [u8], savekey: &[u8], kd: &KeyDesc) {
+    let mut totlen = 0usize;
+    for p in &kd.parts {
+        let n = p.leng.min(savekey.len().saturating_sub(totlen));
+        let dend = (p.start + n).min(data.len());
+        let dn = dend.saturating_sub(p.start);
+        if dn > 0 {
+            data[p.start..p.start + dn].copy_from_slice(&savekey[totlen..totlen + dn]);
+        }
+        totlen += p.leng;
+    }
+}
+
+/// Port of `fileio.c:indexed_cmpkey` — compare the key extracted from `data` against `savekey`,
+/// part by part (`memcmp`), up to `partlen` bytes (`<= 0` means the whole key). Returns the sign of the
+/// first differing byte (negative / zero / positive), like the C `memcmp` chain.
+pub fn indexed_cmpkey(data: &[u8], savekey: &[u8], kd: &KeyDesc, partlen: i32) -> i32 {
+    let mut remaining = if partlen <= 0 { indexed_keylen(kd) as i32 } else { partlen };
+    let mut totlen = 0usize;
+    for p in &kd.parts {
+        if remaining <= 0 {
+            break;
+        }
+        let cl = (remaining as usize).min(p.leng);
+        let a_end = (p.start + cl).min(data.len());
+        let a = &data[p.start.min(a_end)..a_end];
+        let b_end = (totlen + cl).min(savekey.len());
+        let b = &savekey[totlen.min(b_end)..b_end];
+        match a.cmp(b) {
+            std::cmp::Ordering::Less => return -1,
+            std::cmp::Ordering::Greater => return 1,
+            std::cmp::Ordering::Equal => {}
+        }
+        totlen += p.leng;
+        remaining -= p.leng as i32;
+    }
+    0
+}
+
+/// Port of `fileio.c:indexed_keycmp` — are two key descriptors identical (same flags, parts, and each
+/// part's start+length)? Returns `0` if equal, `1` otherwise (matching the C convention).
+pub fn indexed_keycmp(k1: &KeyDesc, k2: &KeyDesc) -> i32 {
+    if k1.duplicates != k2.duplicates || k1.parts.len() != k2.parts.len() {
+        return 1;
+    }
+    if k1.parts == k2.parts {
+        0
+    } else {
+        1
+    }
+}
+
+/// A `cob_file_key`: a key as declared on the file — either a single contiguous field at `offset` of
+/// `field_size` bytes, or, when `components` is non-empty, a composite of those `(offset, size)` ranges.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CobFileKey {
+    pub duplicates: bool,
+    pub offset: usize,
+    pub field_size: usize,
+    pub components: Vec<(usize, usize)>,
+}
+
+/// Port of `fileio.c:indexed_keydesc` — build a [`KeyDesc`] from a [`CobFileKey`]. With no declared
+/// components the key is one part `(offset, field_size)`; otherwise each component becomes a part.
+pub fn indexed_keydesc(key: &CobFileKey) -> KeyDesc {
+    let parts = if key.components.is_empty() {
+        vec![KeyPart { start: key.offset, leng: key.field_size }]
+    } else {
+        key.components.iter().map(|&(s, l)| KeyPart { start: s, leng: l }).collect()
+    };
+    KeyDesc { parts, duplicates: key.duplicates }
+}
+
+/// Port of `fileio.c:cob_savekey` — extract key `idx`'s bytes from the record. A single-component key
+/// copies the contiguous field; a multi-component key concatenates its parts in order.
+pub fn cob_savekey(record: &[u8], key: &CobFileKey) -> Vec<u8> {
+    if key.components.len() <= 1 {
+        let end = (key.offset + key.field_size).min(record.len());
+        return record[key.offset.min(end)..end].to_vec();
+    }
+    let mut out = Vec::new();
+    for &(s, l) in &key.components {
+        let end = (s + l).min(record.len());
+        out.extend_from_slice(&record[s.min(end)..end]);
+    }
+    out
+}
+
+/// Port of the byte-core of `fileio.c:save_status` — format an integer FILE STATUS into its 2 display
+/// bytes: `0` → `"00"`, otherwise the tens and units digits (e.g. `23` → `"23"`, `10` → `"10"`). The
+/// exception/sync/FCD side effects of the full routine are the declared runtime boundary.
+pub fn save_status(status: u8) -> [u8; 2] {
+    if status == 0 {
+        [b'0', b'0']
+    } else {
+        [b'0' + status / 10, b'0' + status % 10]
+    }
+}
+
+/// Port of `fileio.c:cob_str_from_fld` — the right-trimmed string content of a field: trailing spaces
+/// **and** NUL bytes are dropped, embedded `"` (0x22) quote characters are removed, and an all-space /
+/// all-NUL field yields an empty string.
+pub fn cob_str_from_fld(field: &[u8]) -> Vec<u8> {
+    if field.is_empty() {
+        return Vec::new();
+    }
+    // right-trim trailing spaces and NULs
+    let mut end = field.len();
+    while end > 0 && (field[end - 1] == b' ' || field[end - 1] == 0) {
+        end -= 1;
+    }
+    // drop embedded quote (0x22) bytes from the trimmed content
+    field[..end].iter().copied().filter(|&b| b != 0x22).collect()
 }
 
 // ======================================================================================================
@@ -680,6 +1117,59 @@ mod tests {
     }
 
     #[test]
+    fn write_opt_advancing() {
+        assert_eq!(cob_seq_write_opt(COB_WRITE_LINES | 2), b"\n\n"); // ADVANCING 2 LINES
+        assert_eq!(cob_seq_write_opt(COB_WRITE_LINES), b"\r"); // ADVANCING 0
+        assert_eq!(cob_seq_write_opt(COB_WRITE_PAGE), b"\x0c"); // ADVANCING PAGE
+        assert!(cob_seq_write_opt(0).is_empty());
+        assert_eq!(cob_file_write_opt(COB_WRITE_LINES | 3), b"\n\n\n");
+    }
+
+    #[test]
+    fn copy_check_and_linage_check() {
+        // wider target -> copy + space-pad
+        assert_eq!(cob_copy_check(b"AB", 5), b"AB   ");
+        // narrower target -> truncate
+        assert_eq!(cob_copy_check(b"ABCDEF", 4), b"ABCD");
+        // linage validation
+        assert_eq!(file_linage_check(10, Some(8), Some(2), Some(2)), Ok((10, 8, 2, 2)));
+        assert_eq!(file_linage_check(10, None, None, None), Ok((10, 0, 0, 0)));
+        assert_eq!(file_linage_check(0, None, None, None), Err(())); // lines < 1
+        assert_eq!(file_linage_check(10, Some(11), None, None), Err(())); // footing > lines
+        assert_eq!(file_linage_check(10, None, Some(-1), None), Err(())); // top < 0
+    }
+
+    #[test]
+    fn linage_and_suppress() {
+        // a 5-line page, top 1, bot 1, currently at line 2; ADVANCING PAGE finishes the page
+        let lin = Linage { lin_lines: 5, lin_top: 1, lin_bot: 1, counter: 2 };
+        let (bytes, ctr, sts) = cob_linage_write_opt(lin, COB_WRITE_PAGE);
+        // counter 2..5 -> 3 newlines, +1 bottom, +1 top = 5 newlines, counter resets to 1
+        assert_eq!((bytes.len(), ctr, sts), (5, 1, "00"));
+        // counter 0 -> linage error
+        assert_eq!(cob_linage_write_opt(Linage { counter: 0, ..lin }, COB_WRITE_PAGE).2, "57");
+        // ADVANCING 2 LINES within the page -> n-1 = 1 newline
+        let (b2, c2, _) = cob_linage_write_opt(lin, COB_WRITE_LINES | 2);
+        assert_eq!((b2.len(), c2), (1, 4));
+        // suppress: all-suppress-char key is suppressed
+        assert_eq!(is_suppressed_key_value(b"\x00\x00\x00", 0, true), 1);
+        assert_eq!(is_suppressed_key_value(b"\x00A\x00", 0, true), 0);
+        assert_eq!(is_suppressed_key_value(b"\x00\x00", 0, false), 0); // not a suppress key
+    }
+
+    #[test]
+    fn lineseq_rewrite_in_place() {
+        // file "OLDLINE\nNEXT\n", rewrite the first line (slotlen 7) with "HI"
+        let file = b"OLDLINE\nNEXT\n";
+        let plain = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false, ls_split: true };
+        let r = lineseq_rewrite(file, 0, 7, b"HI", 2, &plain);
+        assert_eq!(r.status, "00");
+        assert_eq!(r.file, b"HI     \nNEXT\n"); // "HI" + 5 spaces, newline + rest intact
+        // a record longer than the slot -> overflow 44
+        assert_eq!(lineseq_rewrite(file, 0, 7, b"WAYTOOLONG", 10, &plain).status, "44");
+    }
+
+    #[test]
     fn write_sequence_stops_at_validation_failure() {
         let (bytes, sts) = write_line_sequential(&[b"AB      ", b"A\x09B     ", b"XY      "], &LineSeqConfig::DEFAULT);
         assert_eq!(bytes, b"AB\n"); // wrote AB, then the tab record failed
@@ -882,6 +1372,91 @@ mod tests {
         let r1 = relative_read_next(&d1.file, &mut slot, 4); // skips deleted slot0 + empty slot1
         assert_eq!((r1.data, r1.status), (b"CCCC".to_vec(), "00"));
         assert_eq!(relative_read_next(&d1.file, &mut slot, 4).status, "10"); // end of file
+    }
+
+    // ---- indexed key descriptor ----
+    #[test]
+    fn indexed_key_ops() {
+        // a 2-part key: bytes [2..5) and [8..10) of the record
+        let kd = KeyDesc { parts: vec![KeyPart { start: 2, leng: 3 }, KeyPart { start: 8, leng: 2 }], duplicates: false };
+        assert_eq!(indexed_keylen(&kd), 5);
+        let rec = b"XXABCXXX12X";
+        let key = indexed_savekey(rec, &kd);
+        assert_eq!(key, b"ABC12"); // parts concatenated in order
+        // restore into a fresh record
+        let mut rec2 = vec![b'.'; 11];
+        indexed_restorekey(&mut rec2, &key, &kd);
+        assert_eq!(&rec2[2..5], b"ABC");
+        assert_eq!(&rec2[8..10], b"12");
+        // compare: equal, then greater, then partial
+        assert_eq!(indexed_cmpkey(rec, &key, &kd, 0), 0);
+        assert_eq!(indexed_cmpkey(b"XXABDXXX12X", &key, &kd, 0), 1); // 'D' > 'C'
+        assert_eq!(indexed_cmpkey(b"XXAAAXXX99X", &key, &kd, 0), -1); // 'A' < 'B'
+        // partial compare of only the first 3 bytes ignores the second part
+        assert_eq!(indexed_cmpkey(b"XXABCXXX99X", &key, &kd, 3), 0);
+    }
+
+    #[test]
+    fn indexed_keydesc_and_cob_savekey() {
+        // single-field key: offset 2, size 4
+        let k1 = CobFileKey { duplicates: false, offset: 2, field_size: 4, components: vec![] };
+        assert_eq!(indexed_keydesc(&k1).parts, vec![KeyPart { start: 2, leng: 4 }]);
+        assert_eq!(cob_savekey(b"XXABCDXX", &k1), b"ABCD");
+        // composite key: two components
+        let k2 = CobFileKey { duplicates: true, offset: 0, field_size: 0, components: vec![(0, 2), (5, 3)] };
+        let kd = indexed_keydesc(&k2);
+        assert!(kd.duplicates && kd.parts.len() == 2);
+        assert_eq!(cob_savekey(b"AB...XYZ..", &k2), b"ABXYZ");
+    }
+
+    #[test]
+    fn save_status_and_str_from_fld() {
+        assert_eq!(&save_status(0), b"00");
+        assert_eq!(&save_status(23), b"23");
+        assert_eq!(&save_status(10), b"10");
+        assert_eq!(&save_status(7), b"07");
+        assert_eq!(cob_str_from_fld(b"HELLO   "), b"HELLO");
+        assert_eq!(cob_str_from_fld(b"AB\x00\x00"), b"AB"); // trailing NULs dropped
+        assert_eq!(cob_str_from_fld(b"        "), b""); // all spaces -> empty
+        assert_eq!(cob_str_from_fld(b"a\x22b\x22c "), b"abc"); // embedded quotes removed
+    }
+
+    #[test]
+    fn indexed_keycmp_equality() {
+        let a = KeyDesc { parts: vec![KeyPart { start: 0, leng: 4 }], duplicates: false };
+        let b = KeyDesc { parts: vec![KeyPart { start: 0, leng: 4 }], duplicates: false };
+        let c = KeyDesc { parts: vec![KeyPart { start: 0, leng: 5 }], duplicates: false };
+        let d = KeyDesc { parts: vec![KeyPart { start: 0, leng: 4 }], duplicates: true };
+        assert_eq!(indexed_keycmp(&a, &b), 0);
+        assert_eq!(indexed_keycmp(&a, &c), 1); // different length
+        assert_eq!(indexed_keycmp(&a, &d), 1); // different dup flag
+    }
+
+    // ---- path / status helpers ----
+    #[test]
+    fn path_helpers() {
+        assert!(has_directory_separator(b"a/b"));
+        assert!(has_directory_separator(b"a\\b"));
+        assert!(!has_directory_separator(b"abc"));
+        assert!(looks_absolute(b"/etc/x"));
+        assert!(looks_absolute(b"\"/quoted/abs"));
+        assert!(!looks_absolute(b"rel/path"));
+        assert!(is_absolute(b"/abs"));
+        assert!(!is_absolute(b"rel"));
+        assert!(has_acu_hyphen(b"-F file"));
+        assert!(has_acu_hyphen(b"-d\tdev"));
+        assert!(!has_acu_hyphen(b"-Xfile"));
+        assert_eq!(do_acu_hyphen_translation(b"-F   myfile"), b"myfile");
+        assert_eq!(do_acu_hyphen_translation(b"-D \"a b\""), b"a b"); // quotes dropped
+    }
+
+    #[test]
+    fn errno_and_dummy_status() {
+        assert_eq!(errno_cob_sts(FileErrno::NoSpaceOrQuota, "30"), "34");
+        assert_eq!(errno_cob_sts(FileErrno::PermissionOrIsDir, "30"), "37");
+        assert_eq!(errno_cob_sts(FileErrno::NotExist, "30"), "35");
+        assert_eq!(errno_cob_sts(FileErrno::Other, "30"), "30");
+        assert_eq!((dummy_delete(), dummy_read(), dummy_start()), ("91", "91", "91"));
     }
 
     #[test]
