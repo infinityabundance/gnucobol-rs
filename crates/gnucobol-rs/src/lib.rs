@@ -739,7 +739,7 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     }
     let mut rb = vec![0u8; rmax];
     let _ = sr.cob_file_return(&mut rb);
-    // FCD conversions + EXTFH wrappers (a noop callfh) + registry builders never panic
+    // FCD conversions + external-handler wrappers (a noop callfh) + registry builders never panic
     let mut cf2 = fileio::CobFile::new(org, fileio::AccessMode::Dynamic, rmax, "");
     let mut callfh = |_op: u16, fcd: &mut fileio::Fcd3| {
         fcd.file_status = *b"00";

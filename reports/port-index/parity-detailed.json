@@ -3978,7 +3978,7 @@
     "compiled": 182,
     "compiled_parity_pct": 81.3,
     "disabled": 0,
-    "doc_only": 1,
+    "doc_only": 0,
     "file": "fileio.c",
     "fns": [
       {
@@ -5027,7 +5027,7 @@
       {
         "function": "EXTFH",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_status": "missing"
       },
       {
         "function": "update_key_from_fcd",
@@ -5077,7 +5077,7 @@
       "update_key_from_fcd"
     ],
     "inactive_mirrors": 2,
-    "missing": 33,
+    "missing": 34,
     "source_funcs": 182,
     "test_only": 0
   },

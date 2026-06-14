@@ -155,6 +155,7 @@
       "doxygen_functions": 147,
       "file": "fileio.c",
       "missing": [
+        "EXTFH",
         "EXTFH3",
         "cob_create_tmpfile",
         "cob_fcd_file_sync",
@@ -178,8 +179,8 @@
         "open_next",
         "update_key_from_fcd"
       ],
-      "parity_pct": 85.0,
-      "ported": 125
+      "parity_pct": 84.4,
+      "ported": 124
     },
     {
       "doxygen_functions": 25,
@@ -479,8 +480,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 62.4,
-    "ported": 623
+    "parity_pct": 62.3,
+    "ported": 622
   },
   "xml_root": "lab/doxygen/out/xml"
 }
