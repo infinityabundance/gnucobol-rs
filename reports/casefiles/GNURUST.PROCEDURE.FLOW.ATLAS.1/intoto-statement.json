@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.56",
+    "crate_version": "0.7.57",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "7034f04de5f8f7011b4c3808f34250d5ad8e158332e49e6ba223f40fd8730689",
-      "receipt_sha256": "373993f41421be7256564b86cf9ae115b7bde3691f4ea12b27d34248032b6819"
+      "receipt_sha256": "22731f325177fd667187bda3db0107260c9fdb87317c5d76b60becd690a23200"
     },
     "negative_claim_count": 8,
     "positive_claim_count": 1,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "9fecf12e8020f80b94124b4a2bdf2e302a49cbd5aee275ecd090f3b2a72d72ac"
+        "sha256": "6a8f38cf116250e8f115b95aa085a11b2100c2cb4bf0ba8358587bf171b76ffe"
       },
       "name": "reports/casefiles/GNURUST.PROCEDURE.FLOW.ATLAS.1/casefile.json"
     }

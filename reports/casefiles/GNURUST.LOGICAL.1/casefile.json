@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LOGICAL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.56",
+  "crate_version": "0.7.57",
   "damage_if_overclaimed": "a two's-complement bit model diverges from GnuCOBOL on every negative operand and on shift counts at/above the word width",
   "hash_chain": {
-    "inputs_sha256": "266ffc278946b4b5adb10f6445dde3a522247e3f0e2ac86d90ec138f6e000bb0"
+    "inputs_sha256": "94e44329f6f1c5560a494d9c6e807a10523d98541d083d59d098026d35f045e3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0d7fc28a773ad4232845ce178266152fd339f71efe05407e795e2adc5ce5d148",
-    "receipt_sha256": "a87cbf14dcad5c678bcf1cea27e777a6886a8da4300aaae12003b8b02613810f"
+    "receipt_sha256": "bac0a41d9728802828a9e5838065390e958ad62f41e67e657c3a41497c9204f6"
   },
   "kind": "court-casefile",
   "lie_prevented": [

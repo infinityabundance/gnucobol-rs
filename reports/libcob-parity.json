@@ -273,8 +273,6 @@
         "cob_sys_extfh",
         "cob_sys_file_info",
         "cob_write_block",
-        "copy_fcd_to_file",
-        "copy_file_to_fcd",
         "copy_keys_fcd_to_file",
         "find_fcd",
         "find_fcd2",
@@ -290,13 +288,11 @@
         "restorefileposition",
         "save_fcd_status",
         "savefileposition",
-        "update_fcd_to_file",
-        "update_file_to_fcd",
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 67.6,
-      "ported": 123
+      "parity_pct": 69.8,
+      "ported": 127
     },
     {
       "file": "mlio.c",
@@ -643,7 +639,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 52.6,
-    "ported": 616
+    "parity_pct": 53.0,
+    "ported": 620
   }
 }

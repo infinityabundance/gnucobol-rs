@@ -1861,6 +1861,130 @@ pub fn fcd3_to_fcd2(fcd: &Fcd3) -> Fcd2 {
     }
 }
 
+// FCD open-mode / organization codes (`common.h`).
+const OPEN_INPUT: u8 = 0;
+const OPEN_OUTPUT: u8 = 1;
+const OPEN_IO: u8 = 2;
+const OPEN_EXTEND: u8 = 3;
+const OPEN_NOT_OPEN: u8 = 128;
+const ORG_LINE_SEQ: u8 = 0;
+const ORG_SEQ: u8 = 1;
+const ORG_RELATIVE: u8 = 3;
+const REC_MODE_FIXED: u8 = 0;
+const REC_MODE_VARIABLE: u8 = 1;
+const MF_FST_CRDELIM: u8 = 0x01;
+const MF_FST_INSERT_NULLS: u8 = 0x02;
+const MF_FST_NO_STRIP_SPACES: u8 = 0x20;
+
+/// Port of `fileio.c:update_file_to_fcd` — copy a `CobFile`'s status, open mode, record lengths, record
+/// mode, and organization into an `FCD3` (the data fields; `fnstatus` overrides the file status when
+/// given). The line-sequential feature flags (`CRdelim`/`InsertNulls`/`NoStripSpaces`) reflect the file's
+/// `LineSeqConfig`. The record pointer + KDB key block are the declared C-ABI boundary.
+pub fn update_file_to_fcd(f: &CobFile, fcd: &mut Fcd3, fnstatus: Option<[u8; 2]>) {
+    fcd.file_status = fnstatus.unwrap_or(f.file_status);
+    fcd.open_mode = match f.open_mode {
+        OpenMode::Closed | OpenMode::Locked => OPEN_NOT_OPEN,
+        OpenMode::Input => OPEN_INPUT,
+        OpenMode::Output => OPEN_OUTPUT,
+        OpenMode::Io => OPEN_IO,
+        OpenMode::Extend => OPEN_EXTEND,
+    };
+    fcd.min_rec_len = f.record_min as u32;
+    fcd.max_rec_len = f.record_max as u32;
+    fcd.cur_rec_len = f.record_max as u32;
+    fcd.record_mode = if f.record_min == f.record_max { REC_MODE_FIXED } else { REC_MODE_VARIABLE };
+    fcd.ref_key = [0, 0];
+    match f.organization {
+        Organization::Sequential | Organization::Sort => fcd.file_org = ORG_SEQ,
+        Organization::LineSequential => {
+            fcd.file_org = ORG_LINE_SEQ;
+            if f.line_cfg.ls_nulls {
+                fcd.fstatus_type |= MF_FST_INSERT_NULLS;
+            }
+            if f.line_cfg.ls_fixed {
+                fcd.fstatus_type |= MF_FST_NO_STRIP_SPACES;
+            }
+            // COB_LS_USES_CR is a Windows-only platform feature (the CRdelim flag); off on this host.
+            let _ = MF_FST_CRDELIM;
+        }
+        Organization::Relative => fcd.file_org = ORG_RELATIVE,
+        Organization::Indexed => fcd.file_org = ORG_INDEXED,
+    }
+}
+
+/// Port of `fileio.c:update_fcd_to_file` — copy an `FCD3`'s status, open mode (when `was_open > 0`), and
+/// record lengths back into a `CobFile`. Returns the 2-byte FILE STATUS written. The exception side
+/// effect, the record pointer, the key-block copy-back, and the lock-mode field are the declared
+/// C-ABI/state boundary.
+pub fn update_fcd_to_file(fcd: &Fcd3, f: &mut CobFile, was_open: i32) -> [u8; 2] {
+    if was_open >= 0 {
+        f.file_status = fcd.file_status;
+    }
+    if was_open > 0 {
+        if fcd.open_mode & OPEN_NOT_OPEN != 0 {
+            f.open_mode = OpenMode::Closed;
+        } else {
+            f.open_mode = match fcd.open_mode & 0x7f {
+                OPEN_INPUT => OpenMode::Input,
+                OPEN_OUTPUT => OpenMode::Output,
+                OPEN_EXTEND => OpenMode::Extend,
+                OPEN_IO => OpenMode::Io,
+                _ => f.open_mode,
+            };
+        }
+    }
+    f.record_min = fcd.min_rec_len as usize;
+    f.record_max = fcd.max_rec_len as usize;
+    f.file_status
+}
+
+// FCD access-flag / other-flag codes (`common.h`).
+const ACCESS_SEQ: u8 = 0;
+const ACCESS_RANDOM: u8 = 4;
+const ACCESS_DYNAMIC: u8 = 8;
+const OTH_OPTIONAL: u8 = 0x80;
+const OTH_NOT_OPTIONAL: u8 = 0x20;
+
+/// Port of the data fields of `fileio.c:copy_file_to_fcd` — initialise an `FCD3` from a `CobFile` ahead of
+/// an external-handler open: set the access flags, the OPTIONAL/NOT-OPTIONAL flag, the `MF_CALLFH_GNUCOBOL` flag, mark
+/// the file not-open, and copy the status/mode/record/organization fields (via [`update_file_to_fcd`]).
+/// The file-name pointer, the KDB key block, and the record pointer are the declared C-ABI boundary.
+pub fn copy_file_to_fcd(f: &CobFile, fcd: &mut Fcd3) {
+    fcd.access_flags = match f.access_mode {
+        AccessMode::Sequential => ACCESS_SEQ,
+        AccessMode::Random => ACCESS_RANDOM,
+        AccessMode::Dynamic => ACCESS_DYNAMIC,
+    };
+    fcd.other_flags &= !OTH_OPTIONAL;
+    if f.optional {
+        fcd.other_flags = (fcd.other_flags & !OTH_NOT_OPTIONAL) | OTH_OPTIONAL;
+    } else {
+        fcd.other_flags |= OTH_NOT_OPTIONAL;
+    }
+    fcd.gc_flags |= MF_CALLFH_GNUCOBOL;
+    update_file_to_fcd(f, fcd, None);
+    fcd.open_mode |= OPEN_NOT_OPEN;
+    fcd.ref_key = [0, 0];
+}
+
+/// Port of the data fields of `fileio.c:copy_fcd_to_file` — set a `CobFile`'s organization from an `FCD3`
+/// and copy its status/mode/record fields back (via [`update_fcd_to_file`]). The KDB key-block copy-back,
+/// the record pointer, and the file-name pointer are the declared C-ABI boundary.
+pub fn copy_fcd_to_file(fcd: &Fcd3, f: &mut CobFile) {
+    f.organization = match fcd.file_org {
+        ORG_LINE_SEQ => Organization::LineSequential,
+        ORG_RELATIVE => Organization::Relative,
+        ORG_INDEXED => Organization::Indexed,
+        _ => Organization::Sequential,
+    };
+    f.access_mode = match fcd.access_flags & 0x0f {
+        ACCESS_RANDOM => AccessMode::Random,
+        ACCESS_DYNAMIC => AccessMode::Dynamic,
+        _ => AccessMode::Sequential,
+    };
+    update_fcd_to_file(fcd, f, 1);
+}
+
 // ======================================================================================================
 // File runtime: OPEN / CLOSE / lifecycle (`GNURUST.FILEIO.OPEN.1`)
 //
@@ -3301,6 +3425,55 @@ mod tests {
         assert_eq!(fcd3i.ref_key, [0x12, 0x34]);
         assert_eq!(fcd3i.line_count, [0, 0]);
         assert_eq!(fcd3_to_fcd2(&fcd3i), fcd2);
+    }
+
+    #[test]
+    fn update_file_fcd_roundtrip() {
+        // a RELATIVE I-O file with 80-byte records -> FCD3 -> back into a fresh CobFile
+        let mut f = CobFile::new(Organization::Relative, AccessMode::Dynamic, 80, "r.dat");
+        f.open_mode = OpenMode::Io;
+        f.record_min = 80;
+        f.file_status = *b"00";
+        let mut fcd = Fcd3::default();
+        update_file_to_fcd(&f, &mut fcd, None);
+        assert_eq!(fcd.open_mode, OPEN_IO);
+        assert_eq!(fcd.file_org, ORG_RELATIVE);
+        assert_eq!(fcd.max_rec_len, 80);
+        assert_eq!(fcd.record_mode, REC_MODE_FIXED);
+        let mut g = CobFile::new(Organization::Relative, AccessMode::Dynamic, 8, "r.dat");
+        let st = update_fcd_to_file(&fcd, &mut g, 1);
+        assert_eq!(st, *b"00");
+        assert_eq!(g.open_mode, OpenMode::Io);
+        assert_eq!(g.record_max, 80);
+        assert_eq!(g.record_min, 80);
+        // line-sequential with NULLS sets the FCD feature flag
+        let mut ls = CobFile::new(Organization::LineSequential, AccessMode::Sequential, 8, "l.dat");
+        ls.line_cfg.ls_nulls = true;
+        let mut fcd2 = Fcd3::default();
+        update_file_to_fcd(&ls, &mut fcd2, Some(*b"05"));
+        assert_eq!(fcd2.file_status, *b"05");
+        assert_eq!(fcd2.file_org, ORG_LINE_SEQ);
+        assert_ne!(fcd2.fstatus_type & MF_FST_INSERT_NULLS, 0);
+    }
+
+    #[test]
+    fn copy_file_fcd_roundtrip() {
+        // an OPTIONAL DYNAMIC indexed file -> FCD -> back: access + organization survive
+        let mut f = CobFile::new(Organization::Indexed, AccessMode::Dynamic, 16, "ix.dat");
+        f.open_mode = OpenMode::Io;
+        f.optional = true;
+        let mut fcd = Fcd3::default();
+        copy_file_to_fcd(&f, &mut fcd);
+        assert_eq!(fcd.access_flags, ACCESS_DYNAMIC);
+        assert_ne!(fcd.other_flags & OTH_OPTIONAL, 0);
+        assert_eq!(fcd.other_flags & OTH_NOT_OPTIONAL, 0);
+        assert_eq!(fcd.file_org, ORG_INDEXED);
+        assert_ne!(fcd.open_mode & OPEN_NOT_OPEN, 0);
+        let mut g = CobFile::new(Organization::Sequential, AccessMode::Sequential, 4, "ix.dat");
+        copy_fcd_to_file(&fcd, &mut g);
+        assert_eq!(g.organization, Organization::Indexed);
+        assert_eq!(g.access_mode, AccessMode::Dynamic);
+        assert_eq!(g.record_max, 16);
     }
 
     #[test]

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SIZE.ERROR.1` |
 | court | arithmetic SIZE ERROR truncation + condition |
-| crate_version | `0.7.56` |
+| crate_version | `0.7.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | overflow -> low-order truncated store (no ON SIZE ERROR) + size-error condition |
 | replay command | `bash lab/oracle/size_error_sweep.sh` |

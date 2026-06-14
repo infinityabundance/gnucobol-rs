@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.DIALECT.RUNTIME.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.56
+**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.57
 
 - **Oracle:** cobc -std=<dialect> compile + run (cobc/config/*.conf dialect engine + libcob display)
 - **Byte domain(s):** cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions

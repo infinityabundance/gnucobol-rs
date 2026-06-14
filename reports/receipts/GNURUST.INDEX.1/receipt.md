@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INDEX.1` |
 | court | USAGE INDEX storage + SET arithmetic |
-| crate_version | `0.7.56` |
+| crate_version | `0.7.57` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | occurrence value + SET op -> 4 native-endian index bytes |
 | replay command | `bash lab/oracle/index_sweep.sh` |
