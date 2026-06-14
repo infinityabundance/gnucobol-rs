@@ -1161,6 +1161,20 @@
       "damage_if_overclaimed": "mis-framing the varseq prefix (width/endianness) shifts every variable record; assuming a short final fixed record is space-filled corrupts the tail bytes"
     },
     {
+      "id": "GNURUST.FILEIO.RELATIVE.1",
+      "name": "RELATIVE organization keyed + sequential access",
+      "proven": "a faithful port of libcob/fileio.c relative_write/relative_read/relative_read_next/relative_rewrite/relative_delete/relative_start, proven byte-identical to the admitted libcob (relative_sweep 4/0): an ORGANIZATION IS RELATIVE file is an array of fixed slots of relsize = sizeof(record->size)+record_max bytes, each = an 8-byte NATIVE-ENDIAN size header (>0 active, 0 empty/deleted) + record_max data; a record at relative key N lives at slot (N-1). Keyed WRITE writes the slot (zero-filling gaps), status 22 on an occupied slot, 24 on key<1; READ/REWRITE/DELETE address slot (key-1) -> 23 on an empty slot, 24 on key<1; DELETE tombstones by zeroing the header and LEAVES the data; sequential READ NEXT skips empty/deleted slots and is EOF (10) at end; START positions by EQ/GE/GT/LE/LT/FIRST/LAST. Verified file bytes + per-op FILE STATUS + a READ NEXT scan",
+      "byte_domain": "OPEN + WRITE/READ/REWRITE/DELETE/START (RELATIVE) -> slot array bytes (8-byte LE header + record_max) + FILE STATUS (00/22/23/24/10)",
+      "oracle": "cobc OPEN/WRITE/READ/REWRITE/DELETE RELATIVE RANDOM+SEQUENTIAL (libcob/fileio.c)",
+      "fixtures": "relative_sweep 4/0 + 4 unit tests + Kani relative_write_read_roundtrip",
+      "sealed_version": "0.7.45",
+      "not_proven": "variable-length relative records; the READ FIRST/LAST/PREVIOUS directions of read_next; COB_READ_MASK option bits; the SEQUENTIAL-access RELATIVE KEY write-back on append; OPEN EXTEND / file-sharing and record locking; the EXTFH external file handler path; the actual fd lseek/read/write syscalls (declared OS boundary)",
+      "breaks_claim": "a non-64-bit size_t header width or non-native byte order; variable-length relative records; the reverse read directions",
+      "readiness": 4,
+      "lie_prevented": "a relative file is a packed array of records -- NO: each record is a fixed slot prefixed by an 8-byte native-endian length header, a DELETE only zeroes that header (the data bytes survive), an empty/deleted slot READs as status 23, and writing key N zero-fills the gap up to slot N-1",
+      "damage_if_overclaimed": "mis-sizing the slot header (width/endianness) or treating a deleted slot as absent vs zero-data shifts or corrupts every relative record's addressing"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

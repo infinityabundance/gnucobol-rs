@@ -10,12 +10,12 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "26/42",
+  "sealed_fraction": "27/42",
   "status_counts": {
     "missing": 0,
     "negative": 5,
-    "observed": 11,
-    "sealed": 26
+    "observed": 10,
+    "sealed": 27
   },
   "surface_count": 42,
   "surfaces": [
@@ -309,7 +309,8 @@
     {
       "category": "file I/O (relative)",
       "courts": [
-        "GNURUST.RELATIVE.FILE.ATLAS.1"
+        "GNURUST.RELATIVE.FILE.ATLAS.1",
+        "GNURUST.FILEIO.RELATIVE.1"
       ],
       "future_campaign": null,
       "risk_if_unported": "relative (by record number) file I/O observed; backend slotted format not implemented",
@@ -317,7 +318,7 @@
         "libcob/fileio.c"
       ],
       "source_modules_present": true,
-      "status": "observed",
+      "status": "sealed",
       "surface": "file-io-relative"
     },
     {

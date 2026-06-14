@@ -57,6 +57,7 @@ run_sweep "GNURUST.FILE.WRITE.1" write_seq_sweep.sh
 run_sweep "GNURUST.FILEIO.LINESEQ.1" lineseq_write_sweep.sh
 run_sweep "GNURUST.FILEIO.LINESEQ.2" lineseq_read_sweep.sh
 run_sweep "GNURUST.FILEIO.SEQ.1" seqrec_sweep.sh
+run_sweep "GNURUST.FILEIO.RELATIVE.1" relative_sweep.sh
 run_sweep "GNURUST.FILE.REWRITE.1" rewrite_sweep.sh
 run_sweep "GNURUST.FILE.STATUS.1 (observed)" file_status_sweep.sh
 run_sweep "GNURUST.INITIALIZE.1 bytes" initialize_sweep.sh

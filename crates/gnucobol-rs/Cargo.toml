@@ -1,6 +1,6 @@
 [package]
 name = "gnucobol-rs"
-version = "0.7.44"
+version = "0.7.45"
 description = "Faithful Rust port of GnuCOBOL packed-decimal (COMP-3), zoned, and display numeric byte semantics and the MOVE conversions between them, proven byte-identical against the GnuCOBOL 3.2 libcob oracle. Plus a PIC->field-model parser , DATA DIVISION record-layout engine, , COPY+REPLACING copybook expander, pure-Rust decimal arithmetic, VALUE initial-record images, PIC P-scaling, OCCURS DEPENDING ON physical-max layout, LEVEL-88 condition-name predicates, and SET-TO-TRUE byte construction. Not a compiler; not arithmetic."
 license = "LGPL-3.0-or-later"
 keywords = ["cobol", "gnucobol", "packed-decimal", "comp-3", "decimal"]

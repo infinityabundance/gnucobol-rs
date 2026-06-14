@@ -662,6 +662,15 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let mut p2 = 0usize;
     let _ = fileio::sequential_read(body, &mut p2, &mut rbuf, 1, rmax, ty);
     let _ = fileio::sequential_read(body, &mut p2, &mut rbuf, rmax, rmax, ty);
+    // RELATIVE (GNURUST.FILEIO.RELATIVE.1): keyed ops over arbitrary bytes never panic.
+    let key = data.first().copied().unwrap_or(0) as i64 - 1;
+    let w = fileio::relative_write(body, body, rmax, rmax, key);
+    let _ = fileio::relative_read(&w.file, rmax, key);
+    let _ = fileio::relative_delete(&w.file, rmax, key);
+    let _ = fileio::relative_rewrite(&w.file, body, rmax, key);
+    let mut slot = 0usize;
+    let _ = fileio::relative_read_next(body, &mut slot, rmax);
+    let _ = fileio::relative_start(body, rmax, fileio::RelCond::Ge, key);
 }
 
 #[cfg(feature = "fuzzing")]

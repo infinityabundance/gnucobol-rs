@@ -281,12 +281,6 @@
         "looks_absolute",
         "open_cbl_file",
         "open_next",
-        "relative_delete",
-        "relative_read",
-        "relative_read_next",
-        "relative_rewrite",
-        "relative_start",
-        "relative_write",
         "save_fcd_status",
         "save_status",
         "sort_cmps",
@@ -296,8 +290,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 4.8,
-      "ported": 7
+      "parity_pct": 8.8,
+      "ported": 13
     },
     {
       "doxygen_functions": 25,
@@ -597,8 +591,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 50.6,
-    "ported": 505
+    "parity_pct": 51.2,
+    "ported": 511
   },
   "xml_root": "lab/doxygen/out/xml"
 }

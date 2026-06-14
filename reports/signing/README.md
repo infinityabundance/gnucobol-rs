@@ -4,7 +4,7 @@ Verification of every casefile DSSE envelope against its in-toto payload, by the
 
 - signing mode: **unsigned**
 - tool available: true  ·  selftest passed: true
-- casefiles: 114
-- status summary: `{"unsigned_no_key_configured":114}`
+- casefiles: 115
+- status summary: `{"unsigned_no_key_configured":115}`
 
 `unsigned_no_key_configured` is the **honest default** — not a failure. Set a signed policy + key to produce `signed_verified`. No regulatory/production/customer-acceptance/key-custody/supply-chain claim.

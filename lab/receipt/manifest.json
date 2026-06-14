@@ -906,6 +906,20 @@
         "relative/indexed organizations",
         "the fd read/write/lseek syscalls (declared OS boundary)"
       ]
+    },
+    "GNURUST.FILEIO.RELATIVE.1": {
+      "court": "RELATIVE organization keyed + sequential access",
+      "sweep": "relative_sweep.sh",
+      "byte_domain": "OPEN + WRITE/READ/REWRITE/DELETE/START (RELATIVE) -> 8-byte LE header + record_max slots + FILE STATUS (00/22/23/24/10)",
+      "non_claims": [
+        "variable-length relative records",
+        "READ FIRST/LAST/PREVIOUS directions",
+        "COB_READ_MASK option bits",
+        "SEQUENTIAL-access RELATIVE KEY write-back on append",
+        "OPEN EXTEND / file-sharing and record locking",
+        "the EXTFH external file handler path",
+        "the fd lseek/read/write syscalls (declared OS boundary)"
+      ]
     }
   }
 }

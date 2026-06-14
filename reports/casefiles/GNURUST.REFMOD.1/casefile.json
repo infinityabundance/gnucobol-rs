@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.REFMOD.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.44",
+  "crate_version": "0.7.45",
   "damage_if_overclaimed": "an out-of-bounds substring silently reads or corrupts neighbouring fields",
   "hash_chain": {
-    "inputs_sha256": "9aa0e04bf9fc36473d824d178e78302426c996140d95e906a272460f95990854"
+    "inputs_sha256": "8965657941f6a8260051df3812c677c52f3c59a0cfbc613c0ea2ef37709c4ab6"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "408bf9bfea8eefe8a3c95d86692ab960d8485c2f9aa78f8c7026f360bc961eb1",
-    "receipt_sha256": "ff588fe305bf25c96c33df4d0c46762f78afd3c49dd174dd74ba03195498914b"
+    "receipt_sha256": "0d73a8a5ed33d8e7cb874a5637095227e615cea7ce6e76267a59c78669417f87"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -274,9 +274,10 @@
   "source_modules": [
    "libcob/fileio.c"
   ],
-  "status": "observed",
+  "status": "sealed",
   "courts": [
-   "GNURUST.RELATIVE.FILE.ATLAS.1"
+   "GNURUST.RELATIVE.FILE.ATLAS.1",
+   "GNURUST.FILEIO.RELATIVE.1"
   ],
   "future_campaign": null,
   "risk_if_unported": "relative (by record number) file I/O observed; backend slotted format not implemented"

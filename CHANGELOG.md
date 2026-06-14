@@ -12,6 +12,13 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.45]
+- **`fileio.c` — RELATIVE organization sealed (`GNURUST.FILEIO.RELATIVE.1`).** A faithful port of `libcob/fileio.c` `relative_write`/`relative_read`/`relative_read_next`/`relative_rewrite`/`relative_delete`/`relative_start`, proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` (`relative_sweep` 4/0):
+  - an `ORGANIZATION IS RELATIVE` file is an array of fixed slots of `sizeof(record->size) + record_max` bytes — each an **8-byte native-endian size header** (`> 0` active, `0` empty/deleted) followed by the `record_max` data area; the record at relative key *N* lives at slot *N-1*.
+  - keyed `WRITE` writes the slot and zero-fills any gap (status `22` on an occupied slot, `24` on key `< 1`); `READ`/`REWRITE`/`DELETE` address slot `key-1` (`23` on an empty slot, `24` on key `< 1`); **`DELETE` tombstones by zeroing the header and leaves the data bytes intact**; sequential `READ NEXT` skips empty/deleted slots and is end-of-file (`10`) at the end; `START` positions by `EQ`/`GE`/`GT`/`LE`/`LT`/`FIRST`/`LAST`.
+  - The `fd` `lseek`/`read`/`write` syscalls remain the declared OS boundary; variable-length relative records and the `READ FIRST`/`LAST`/`PREVIOUS` directions stay explicit non-claims. `fileio.c` parity 6 → 12/182.
+- No API breaks: additive (`fileio::relative_*` + `RelWrite`/`RelRead`/`RelCond`/`relsize`/`REL_SIZE_HEADER`).
+
 ## [0.7.44]
 - **`fileio.c` — RECORD SEQUENTIAL read/write incl. variable-length records sealed (`GNURUST.FILEIO.SEQ.1`).** A faithful port of `libcob/fileio.c` `sequential_write` + `sequential_read` + `set_sequential_variable_length` (+ `sequential_rewrite`), proven byte-identical to the admitted GnuCOBOL 3.2 `libcob` (`seqrec_sweep` 9/0):
   - a **fixed** record (`record_min == record_max`) is written as the full record area with no delimiter and read back in `record_max` chunks — a short final read overwrites only the bytes available and **leaves the prior record's tail** (status `00`), and a zero-byte read is end of file (`10`).

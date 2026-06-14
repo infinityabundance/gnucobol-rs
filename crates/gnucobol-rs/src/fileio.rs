@@ -419,6 +419,205 @@ pub fn sequential_rewrite(file: &[u8], record_off: usize, record: &[u8], size: u
     out
 }
 
+// ======================================================================================================
+// RELATIVE organization (`GNURUST.FILEIO.RELATIVE.1`)
+// ======================================================================================================
+
+/// The on-disk width of a RELATIVE record's length header — `sizeof(f->record->size)` (`sizeof(size_t)`,
+/// 8 bytes on a 64-bit platform), stored **native-endian** (little-endian on x86-64). A header `> 0`
+/// marks an active record; `0` marks an empty or deleted slot (verified against the oracle).
+pub const REL_SIZE_HEADER: usize = 8;
+
+/// The on-disk width of one RELATIVE slot: the size header plus the fixed `record_max` data area.
+pub fn relsize(record_max: usize) -> usize {
+    record_max + REL_SIZE_HEADER
+}
+
+fn read_rel_header(file: &[u8], off: usize) -> u64 {
+    let mut b = [0u8; 8];
+    let end = (off + REL_SIZE_HEADER).min(file.len());
+    if off < file.len() {
+        b[..end - off].copy_from_slice(&file[off..end]);
+    }
+    u64::from_le_bytes(b)
+}
+
+fn write_rel_header(file: &mut [u8], off: usize, size: u64) {
+    file[off..off + REL_SIZE_HEADER].copy_from_slice(&size.to_le_bytes());
+}
+
+/// The outcome of a keyed RELATIVE operation: the (possibly mutated) file bytes and the FILE STATUS.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RelWrite {
+    pub file: Vec<u8>,
+    /// `"00"` success · `"22"` key already exists · `"23"` key not present · `"24"` key boundary (< 1).
+    pub status: &'static str,
+}
+
+/// Port of `fileio.c:relative_write` for keyed (RANDOM/DYNAMIC) access: write `record` (the `record_max`
+/// data area, logical length `size`) at relative key `key`. The slot at `(key-1)*relsize` must be empty
+/// (header `0`); an occupied slot is status `"22"`, a key `< 1` is `"24"`. Gaps before the slot are
+/// zero-filled. The 8-byte native-endian size header precedes the `record_max` data bytes.
+pub fn relative_write(file: &[u8], record: &[u8], size: usize, record_max: usize, key: i64) -> RelWrite {
+    let kindex = key - 1;
+    if kindex < 0 {
+        return RelWrite { file: file.to_vec(), status: "24" };
+    }
+    let rs = relsize(record_max);
+    let off = kindex as usize * rs;
+    let mut out = file.to_vec();
+    if off + REL_SIZE_HEADER <= out.len() && read_rel_header(&out, off) > 0 {
+        return RelWrite { file: out, status: "22" };
+    }
+    if off + rs > out.len() {
+        out.resize(off + rs, 0);
+    }
+    write_rel_header(&mut out, off, size as u64);
+    let n = record_max.min(record.len());
+    out[off + REL_SIZE_HEADER..off + REL_SIZE_HEADER + n].copy_from_slice(&record[..n]);
+    RelWrite { file: out, status: "00" }
+}
+
+/// The outcome of a RELATIVE read: the `record_max`-wide record data, its logical size, and FILE STATUS.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RelRead {
+    /// The `record_max` data bytes (empty when the read failed).
+    pub data: Vec<u8>,
+    pub size: usize,
+    /// `"00"` success · `"23"` key not present / empty slot · `"10"` end of file (READ NEXT).
+    pub status: &'static str,
+}
+
+/// Port of `fileio.c:relative_read` for keyed (RANDOM) access: read the record at relative `key`. A key
+/// `< 1`, a slot beyond the file, or an empty slot (header `0`) is status `"23"`; otherwise the
+/// `record_max` data bytes are returned with the slot's logical size and status `"00"`.
+pub fn relative_read(file: &[u8], record_max: usize, key: i64) -> RelRead {
+    let relnum = key - 1;
+    if relnum < 0 {
+        return RelRead { data: Vec::new(), size: 0, status: "23" };
+    }
+    let rs = relsize(record_max);
+    let off = relnum as usize * rs;
+    if off + REL_SIZE_HEADER > file.len() {
+        return RelRead { data: Vec::new(), size: 0, status: "23" };
+    }
+    let size = read_rel_header(file, off) as usize;
+    if size == 0 {
+        return RelRead { data: Vec::new(), size: 0, status: "23" };
+    }
+    let dstart = off + REL_SIZE_HEADER;
+    if dstart + record_max > file.len() {
+        return RelRead { data: Vec::new(), size: 0, status: "30" };
+    }
+    RelRead { data: file[dstart..dstart + record_max].to_vec(), size, status: "00" }
+}
+
+/// Port of `fileio.c:relative_read_next` for sequential `READ NEXT`: starting at slot `*slot` (advancing
+/// it), return the next **active** record (skipping empty/deleted slots), or status `"10"` at end of
+/// file. (The `READ FIRST`/`LAST`/`PREVIOUS` direction options are a declared non-claim.)
+pub fn relative_read_next(file: &[u8], slot: &mut usize, record_max: usize) -> RelRead {
+    let rs = relsize(record_max);
+    loop {
+        let off = *slot * rs;
+        if off + REL_SIZE_HEADER > file.len() {
+            return RelRead { data: Vec::new(), size: 0, status: "10" };
+        }
+        let size = read_rel_header(file, off) as usize;
+        *slot += 1;
+        if size > 0 {
+            let dstart = off + REL_SIZE_HEADER;
+            let end = (dstart + record_max).min(file.len());
+            return RelRead { data: file[dstart..end].to_vec(), size, status: "00" };
+        }
+    }
+}
+
+/// Port of `fileio.c:relative_rewrite` for keyed (RANDOM) access: overwrite the `record_max` data of an
+/// existing record at relative `key`. A key `< 1` is status `"24"`; an empty slot is `"23"`.
+pub fn relative_rewrite(file: &[u8], record: &[u8], record_max: usize, key: i64) -> RelWrite {
+    let relnum = key - 1;
+    if relnum < 0 {
+        return RelWrite { file: file.to_vec(), status: "24" };
+    }
+    let rs = relsize(record_max);
+    let off = relnum as usize * rs;
+    let mut out = file.to_vec();
+    if off + REL_SIZE_HEADER > out.len() || read_rel_header(&out, off) == 0 {
+        return RelWrite { file: out, status: "23" };
+    }
+    let dstart = off + REL_SIZE_HEADER;
+    let n = record_max.min(record.len());
+    if dstart + n <= out.len() {
+        out[dstart..dstart + n].copy_from_slice(&record[..n]);
+    }
+    RelWrite { file: out, status: "00" }
+}
+
+/// Port of `fileio.c:relative_delete`: tombstone the record at relative `key` by zeroing its size
+/// header (the data bytes are left intact). A key `< 1` is status `"24"`; an empty slot is `"23"`.
+pub fn relative_delete(file: &[u8], record_max: usize, key: i64) -> RelWrite {
+    let relnum = key - 1;
+    if relnum < 0 {
+        return RelWrite { file: file.to_vec(), status: "24" };
+    }
+    let rs = relsize(record_max);
+    let off = relnum as usize * rs;
+    let mut out = file.to_vec();
+    if off + REL_SIZE_HEADER > out.len() || read_rel_header(&out, off) == 0 {
+        return RelWrite { file: out, status: "23" };
+    }
+    write_rel_header(&mut out, off, 0);
+    RelWrite { file: out, status: "00" }
+}
+
+/// Port of `fileio.c:relative_start` positioning: find the slot index satisfying `cond` relative to
+/// `key` over the file, returning the 0-based slot (for a following `READ NEXT`) or status `"23"` if no
+/// active record qualifies. `cond` is one of [`RelCond`].
+pub fn relative_start(file: &[u8], record_max: usize, cond: RelCond, key: i64) -> Result<usize, &'static str> {
+    let rs = relsize(record_max);
+    if file.is_empty() {
+        return Err("23");
+    }
+    let nslots = file.len() / rs;
+    let active = |idx: i64| -> bool {
+        if idx < 0 || idx as usize >= nslots {
+            return false;
+        }
+        read_rel_header(file, idx as usize * rs) > 0
+    };
+    let kindex = (key - 1) as i64;
+    // scan in the direction implied by the condition, from the starting index.
+    let (mut idx, step): (i64, i64) = match cond {
+        RelCond::First | RelCond::Ge => (if matches!(cond, RelCond::First) { 0 } else { kindex.max(0) }, 1),
+        RelCond::Gt => (kindex + 1, 1),
+        RelCond::Last => (nslots as i64 - 1, -1),
+        RelCond::Le => (kindex.min(nslots as i64 - 1), -1),
+        RelCond::Lt => (kindex - 1, -1),
+        RelCond::Eq => {
+            return if active(kindex) { Ok(kindex as usize) } else { Err("23") };
+        }
+    };
+    while idx >= 0 && (idx as usize) < nslots {
+        if active(idx) {
+            return Ok(idx as usize);
+        }
+        idx += step;
+    }
+    Err("23")
+}
+
+/// The `START` comparison condition for [`relative_start`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RelCond {
+    Eq,
+    Lt,
+    Le,
+    Gt,
+    Ge,
+    First,
+    Last,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -640,6 +839,67 @@ mod tests {
     fn sequential_rewrite_in_place() {
         assert_eq!(sequential_rewrite(b"AAAABBBBCCCC", 4, b"X1X1", 4), b"AAAAX1X1CCCC");
     }
+
+    // ---- RELATIVE ----
+    #[test]
+    fn relative_write_read_delete_matches_oracle() {
+        // reproduce the oracle: write key1=AAAA, key3=CCCC, delete key1, write key5=EEEE
+        let w1 = relative_write(&[], b"AAAA", 4, 4, 1);
+        assert_eq!(w1.status, "00");
+        let w3 = relative_write(&w1.file, b"CCCC", 4, 4, 3);
+        let d1 = relative_delete(&w3.file, 4, 1);
+        assert_eq!(d1.status, "00");
+        let w5 = relative_write(&d1.file, b"EEEE", 4, 4, 5);
+        // final file bytes == the oracle (8-byte LE header + 4 data per slot; deleted slot keeps data)
+        let oracle: Vec<u8> = [
+            &[0u8, 0, 0, 0, 0, 0, 0, 0][..], b"AAAA", // slot0: deleted (size 0), data AAAA
+            &[0, 0, 0, 0, 0, 0, 0, 0], b"\x00\x00\x00\x00", // slot1: empty
+            &[4, 0, 0, 0, 0, 0, 0, 0], b"CCCC", // slot2: key3
+            &[0, 0, 0, 0, 0, 0, 0, 0], b"\x00\x00\x00\x00", // slot3: empty
+            &[4, 0, 0, 0, 0, 0, 0, 0], b"EEEE", // slot4: key5
+        ]
+        .concat();
+        assert_eq!(w5.file, oracle);
+        // read key3 -> CCCC/00; key2 (empty) -> 23; key1 (deleted) -> 23
+        assert_eq!(relative_read(&w5.file, 4, 3), RelRead { data: b"CCCC".to_vec(), size: 4, status: "00" });
+        assert_eq!(relative_read(&w5.file, 4, 2).status, "23");
+        assert_eq!(relative_read(&w5.file, 4, 1).status, "23");
+    }
+
+    #[test]
+    fn relative_write_existing_is_22_and_low_key_24() {
+        let w = relative_write(&[], b"AAAA", 4, 4, 1);
+        assert_eq!(relative_write(&w.file, b"ZZZZ", 4, 4, 1).status, "22"); // key exists
+        assert_eq!(relative_write(&[], b"AAAA", 4, 4, 0).status, "24"); // key < 1
+    }
+
+    #[test]
+    fn relative_read_next_skips_deleted() {
+        let w1 = relative_write(&[], b"AAAA", 4, 4, 1);
+        let w3 = relative_write(&w1.file, b"CCCC", 4, 4, 3);
+        let d1 = relative_delete(&w3.file, 4, 1);
+        let mut slot = 0usize;
+        let r1 = relative_read_next(&d1.file, &mut slot, 4); // skips deleted slot0 + empty slot1
+        assert_eq!((r1.data, r1.status), (b"CCCC".to_vec(), "00"));
+        assert_eq!(relative_read_next(&d1.file, &mut slot, 4).status, "10"); // end of file
+    }
+
+    #[test]
+    fn relative_rewrite_and_start() {
+        let w1 = relative_write(&[], b"AAAA", 4, 4, 1);
+        let w3 = relative_write(&w1.file, b"CCCC", 4, 4, 3);
+        // rewrite key3 -> ZZZZ
+        let rw = relative_rewrite(&w3.file, b"ZZZZ", 4, 3);
+        assert_eq!(rw.status, "00");
+        assert_eq!(relative_read(&rw.file, 4, 3).data, b"ZZZZ");
+        // rewrite an empty slot -> 23
+        assert_eq!(relative_rewrite(&w3.file, b"ZZZZ", 4, 2).status, "23");
+        // START >= 2 finds the next active record (slot2 = key3)
+        assert_eq!(relative_start(&w3.file, 4, RelCond::Ge, 2), Ok(2));
+        assert_eq!(relative_start(&w3.file, 4, RelCond::Eq, 2), Err("23")); // empty slot
+        assert_eq!(relative_start(&w3.file, 4, RelCond::First, 0), Ok(0)); // key1 active
+        assert_eq!(relative_start(&w3.file, 4, RelCond::Last, 0), Ok(2)); // key3 active
+    }
 }
 
 #[cfg(kani)]
@@ -693,5 +953,21 @@ mod kani_proofs {
         if let Ok(sz) = set_sequential_variable_length(&bytes, &mut pos, ty) {
             assert_eq!(sz, size);
         }
+    }
+    // KANIFOR: GNURUST.FILEIO.RELATIVE.1
+    /// A keyed RELATIVE write-then-read round-trip at the same key returns the written record; a deleted
+    /// slot reads back as not-present (status 23). Never panics.
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn relative_write_read_roundtrip() {
+        let rec: [u8; 2] = kani::any();
+        let key: i64 = kani::any();
+        kani::assume(key >= 1 && key <= 3);
+        let w = relative_write(&[], &rec, 2, 2, key);
+        assert_eq!(w.status, "00");
+        let r = relative_read(&w.file, 2, key);
+        assert_eq!((r.status, &r.data[..]), ("00", &rec[..]));
+        let d = relative_delete(&w.file, 2, key);
+        assert_eq!(relative_read(&d.file, 2, key).status, "23");
     }
 }
