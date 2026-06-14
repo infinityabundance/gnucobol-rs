@@ -160,10 +160,7 @@
         "cob_cache_file",
         "cob_chk_file_env",
         "cob_chk_file_mapping",
-        "cob_close",
-        "cob_commit",
         "cob_create_tmpfile",
-        "cob_delete_file",
         "cob_exit_fileio",
         "cob_exit_fileio_closeall",
         "cob_exit_fileio_msg_only",
@@ -198,7 +195,6 @@
         "cob_file_sort_submit",
         "cob_file_sort_using",
         "cob_file_sort_using_extfh",
-        "cob_file_unlock",
         "cob_findkey",
         "cob_findkey_attr",
         "cob_free_list",
@@ -206,10 +202,7 @@
         "cob_get_sort_tempfile",
         "cob_init_fileio",
         "cob_new_item",
-        "cob_open",
-        "cob_pre_open",
         "cob_read_item",
-        "cob_rollback",
         "cob_sort_queues",
         "cob_sync",
         "cob_sys_chdir",
@@ -217,7 +210,6 @@
         "cob_sys_extfh",
         "cob_sys_file_info",
         "cob_sys_mkdir",
-        "cob_unlock_file",
         "cob_write_block",
         "copy_fcd_to_file",
         "copy_file_to_fcd",
@@ -247,8 +239,8 @@
         "update_key_from_fcd",
         "update_record_and_keys_if_necessary"
       ],
-      "parity_pct": 38.1,
-      "ported": 56
+      "parity_pct": 43.5,
+      "ported": 64
     },
     {
       "doxygen_functions": 25,
@@ -548,8 +540,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 55.5,
-    "ported": 554
+    "parity_pct": 56.3,
+    "ported": 562
   },
   "xml_root": "lab/doxygen/out/xml"
 }

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.NUMVAL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.50",
+  "crate_version": "0.7.51",
   "damage_if_overclaimed": "missing the trailing-sign/CR/DB negative convention flips the sign of a parsed amount; assuming NUMVAL strips commas mis-parses NUMVAL-C-shaped input",
   "hash_chain": {
-    "inputs_sha256": "aac857626bc667e3515e643335319d2382f9c1a496fe7812bf14c391a3dc2bcb"
+    "inputs_sha256": "2b37e52ee5fb9a7c9580209cc6d5abf31c3a1f021ad7afffe0af4793245c8cce"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b7f476117be9108c093210cdb3b018fe0a6d2cda40b74e0e55b0db40dddf86c9",
-    "receipt_sha256": "6610e6059d8217b79069b0f218b576d89c7afea9b767f05bf533d0ce267db588"
+    "receipt_sha256": "101f515d13e91a8e050f9db5033b3c7a28a27506d6966c5aad4cce97051cf7ab"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -964,6 +964,21 @@
         "the handle value matching libcob's raw fd (a safe registry index is used)",
         "the underlying syscalls (declared OS boundary)"
       ]
+    },
+    "GNURUST.FILEIO.OPEN.1": {
+      "court": "file runtime OPEN/CLOSE + lifecycle",
+      "sweep": "open_sweep.sh",
+      "byte_domain": "OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)",
+      "non_claims": [
+        "indexed/BDB and SORT open/close (substrate boundary)",
+        "record/file locking beyond no-op success",
+        "OPEN EXTEND positioning details",
+        "file-sharing modes",
+        "concat (multi-file) input",
+        "the EXTFH open path",
+        "cob_cache_file / file_cache list management",
+        "the actual fd open/close syscalls (declared OS boundary)"
+      ]
     }
   }
 }

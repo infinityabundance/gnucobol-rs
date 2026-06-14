@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SEARCH.TABLE.1` |
 | court | SEARCH / SEARCH ALL table lookup |
-| crate_version | `0.7.50` |
+| crate_version | `0.7.51` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | the 1-based landing index of SEARCH (serial, forward-from-index) / SEARCH ALL (binary on ascending key) |
 | replay command | `bash lab/oracle/search_sweep.sh` |

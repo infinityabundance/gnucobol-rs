@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: the indexed/BDB and SORT organizations' open/close (substrate boundary)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: record/file locking semantics beyond no-op success"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: OPEN EXTEND positioning details"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: the file-sharing modes"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: concat (multi-file) input"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: the EXTFH open path"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: cob_cache_file / file_cache list management"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: the actual fd open/close syscalls (declared OS boundary)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.OPEN.1 non-claim: lie prevented: OPEN/CLOSE always succeed -- NO: re-opening an open file is 41, closing a closed file is 42, opening a file that was CLOSE WITH LOCK is 38, a missing OPEN INPUT is 35 (05 if OPTIONAL), and an empty/bad-quoted name is 31; CLOSE of an output file flushes the written image to disk"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

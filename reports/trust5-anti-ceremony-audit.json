@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 77,
+    "A": 78,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -43,6 +43,7 @@
       "GNURUST.FILE.WRITE.1",
       "GNURUST.FILEIO.LINESEQ.1",
       "GNURUST.FILEIO.LINESEQ.2",
+      "GNURUST.FILEIO.OPEN.1",
       "GNURUST.FILEIO.RELATIVE.1",
       "GNURUST.FILEIO.SEQ.1",
       "GNURUST.FILEIO.SORT.1",
@@ -775,6 +776,22 @@
       "negative_claims": 8,
       "negatives_ge_positives": true,
       "positive_claims": 7
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "open_sweep 2/0 + 1 unit test + Kani open_close_preconditions",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.FILEIO.OPEN.1",
+      "negative_claims": 9,
+      "negatives_ge_positives": true,
+      "positive_claims": 5
     },
     {
       "can_fail": true,

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTPOW.1 (court-casefile)
 
-**Verdict: PASS** · pow_sweep 588/0 (bases incl 0/1/-1/overflowing x powers incl 0/negative/overflowing, both widths) · crate `gnucobol-rs` 0.7.50
+**Verdict: PASS** · pow_sweep 588/0 (bases incl 0/1/-1/overflowing x powers incl 0/negative/overflowing, both widths) · crate `gnucobol-rs` 0.7.51
 
 - **Oracle:** libcob cob_s32_pow / cob_s64_pow
 - **Byte domain(s):** (base, power, width 32/64) -> integer result (two's-complement wrapping)

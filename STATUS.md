@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-118-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-118-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-119-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-119-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.7.50 · 82 GNURUST courts (63 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.7.51 · 83 GNURUST courts (64 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -81,6 +81,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.FILEIO.VERB.1` | file verb open/access-mode preconditions | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.VERB.1/`](reports/casefiles/GNURUST.FILEIO.VERB.1/) |
 | `GNURUST.FILEIO.SORT.1` | SORT/MERGE record comparison | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SORT.1/`](reports/casefiles/GNURUST.FILEIO.SORT.1/) |
 | `GNURUST.FILEIO.SYS.1` | CBL_* system file/directory routines | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SYS.1/`](reports/casefiles/GNURUST.FILEIO.SYS.1/) |
+| `GNURUST.FILEIO.OPEN.1` | file runtime OPEN/CLOSE + lifecycle | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.OPEN.1/`](reports/casefiles/GNURUST.FILEIO.OPEN.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
 | `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
 | `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |

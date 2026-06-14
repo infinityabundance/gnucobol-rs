@@ -1217,6 +1217,20 @@
       "damage_if_overclaimed": "treating a failed CBL_* call as success (ignoring 128/35) loses the very error a batch job's RETURN-CODE check depends on"
     },
     {
+      "id": "GNURUST.FILEIO.OPEN.1",
+      "name": "file runtime OPEN/CLOSE + lifecycle",
+      "proven": "a CobFile runtime that ties the sealed organization handlers into a working file: a faithful port of cob_open/cob_close/cob_pre_open/cob_unlock/cob_file_unlock/cob_unlock_file/cob_commit/cob_rollback/cob_delete_file, proven to match the admitted libcob's FILE STATUS and the on-disk file image (open_sweep 2/0, end-to-end against an OPEN OUTPUT/WRITE/READ/CLOSE LINE SEQUENTIAL program): cob_open loads the file image (real std::fs I/O) and sets status -- a file closed-with-lock is 38, an already-open file 41, an empty/badly-quoted filename 31, OPEN INPUT of a missing file 35 (or 05 when OPTIONAL), OPEN OUTPUT truncates; cob_close flushes an output/I-O image and is 42 when the file is not open, leaving it Locked for CLOSE WITH LOCK; WRITE/READ NEXT dispatch by organization to the sealed sequential_*/lineseq_*/relative_* handlers; cob_unlock/cob_commit/cob_rollback release locks (no-op success without locking configured); cob_delete_file removes the file (00/30). The integration layer over GNURUST.FILEIO.LINESEQ/SEQ/RELATIVE",
+      "byte_domain": "OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> the on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)",
+      "oracle": "cobc OPEN/WRITE/READ/CLOSE incl. double-open, close-when-closed, CLOSE WITH LOCK, missing-input (libcob/fileio.c)",
+      "fixtures": "open_sweep 2/0 + 1 unit test + Kani open_close_preconditions",
+      "sealed_version": "0.7.51",
+      "not_proven": "the indexed/BDB and SORT organizations' open/close (substrate boundary); record/file locking semantics beyond no-op success; OPEN EXTEND positioning details; the file-sharing modes; concat (multi-file) input; the EXTFH open path; cob_cache_file / file_cache list management; the actual fd open/close syscalls (declared OS boundary)",
+      "breaks_claim": "a dialect with different OPEN/CLOSE status classes; real record locking; indexed/BDB open; a file-sharing conflict",
+      "readiness": 4,
+      "lie_prevented": "OPEN/CLOSE always succeed -- NO: re-opening an open file is 41, closing a closed file is 42, opening a file that was CLOSE WITH LOCK is 38, a missing OPEN INPUT is 35 (05 if OPTIONAL), and an empty/bad-quoted name is 31; CLOSE of an output file flushes the written image to disk",
+      "damage_if_overclaimed": "ignoring the OPEN/CLOSE status (41/42/38/35) lets a program write to an unopened file or silently re-open, corrupting the file or its sequence"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

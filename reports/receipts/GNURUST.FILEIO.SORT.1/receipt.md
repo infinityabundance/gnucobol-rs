@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.SORT.1` |
 | court | SORT/MERGE record comparison |
-| crate_version | `0.7.50` |
+| crate_version | `0.7.51` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | SORT keys (offset/size/direction) over records -> the sorted record order (GIVING file bytes) |
 | replay command | `bash lab/oracle/sort_sweep.sh` |

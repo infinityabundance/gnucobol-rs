@@ -1002,6 +1002,253 @@ pub fn sort_records(records: &[&[u8]], keys: &[SortKey], col: Option<&[u8; 256]>
 }
 
 // ======================================================================================================
+// File runtime: OPEN / CLOSE / lifecycle (`GNURUST.FILEIO.OPEN.1`)
+//
+// A `CobFile` ties the sealed organization handlers together into a working file runtime. `cob_open`
+// loads the file image (real I/O), `cob_close` flushes it; `WRITE`/`READ NEXT` dispatch by organization
+// to the sealed `sequential_*`/`lineseq_*`/`relative_*` handlers over the in-memory image. The
+// open/close FILE STATUS matrix (38 closed-with-lock, 41 already-open, 42 not-open, 35 input missing,
+// 31 bad filename) is the byte-court; the BDB/ISAM substrate stays the declared boundary.
+// ======================================================================================================
+
+/// A runtime file: organization + modes + the in-memory file image the sealed handlers operate on.
+#[derive(Debug, Clone)]
+pub struct CobFile {
+    pub organization: Organization,
+    pub access_mode: AccessMode,
+    pub open_mode: OpenMode,
+    pub record_min: usize,
+    pub record_max: usize,
+    pub optional: bool,
+    pub varseq_type: u8,
+    pub line_cfg: LineSeqConfig,
+    pub file_status: [u8; 2],
+    path: String,
+    data: Vec<u8>,
+    pos: usize,
+    record_buf: Vec<u8>,
+    dirty: bool,
+    flag_first_read: bool,
+    flag_end_of_file: bool,
+    flag_nonexistent: bool,
+}
+
+impl CobFile {
+    /// A closed file of the given organization with a fixed `record_max`-wide record.
+    pub fn new(organization: Organization, access_mode: AccessMode, record_max: usize, path: &str) -> CobFile {
+        CobFile {
+            organization,
+            access_mode,
+            open_mode: OpenMode::Closed,
+            record_min: record_max,
+            record_max,
+            optional: false,
+            varseq_type: 0,
+            line_cfg: LineSeqConfig::DEFAULT,
+            file_status: *b"00",
+            path: path.to_string(),
+            data: Vec::new(),
+            pos: 0,
+            record_buf: vec![b' '; record_max],
+            dirty: false,
+            flag_first_read: true,
+            flag_end_of_file: false,
+            flag_nonexistent: false,
+        }
+    }
+
+    /// The current file image bytes (what `cob_close` would flush).
+    pub fn image(&self) -> &[u8] {
+        &self.data
+    }
+}
+
+/// Port of `fileio.c:cob_pre_open` — reset the per-open positional/EOF state before an `OPEN`.
+pub fn cob_pre_open(f: &mut CobFile) {
+    f.pos = 0;
+    f.flag_first_read = true;
+    f.flag_end_of_file = false;
+    f.flag_nonexistent = false;
+}
+
+/// Port of the precondition + dispatch of `fileio.c:cob_open` — set `f.open_mode` and FILE STATUS for an
+/// `OPEN mode`. A file closed-with-lock is `"38"`, an already-open file `"41"`, an empty/badly-quoted
+/// filename `"31"`; `OPEN INPUT`/`I-O` of a missing file is `"35"` (or `"05"` when `OPTIONAL`), and
+/// `OPEN OUTPUT` truncates. Returns the FILE STATUS.
+pub fn cob_open(f: &mut CobFile, mode: OpenMode) -> &'static str {
+    if f.open_mode == OpenMode::Locked {
+        f.file_status = *b"38";
+        return "38";
+    }
+    if f.open_mode != OpenMode::Closed {
+        f.file_status = *b"41";
+        return "41";
+    }
+    cob_pre_open(f);
+    // bad filename: empty or unbalanced surrounding quotes
+    let name = f.path.as_bytes();
+    let bad_quote = matches!(name.first(), Some(&0x22) | Some(&0x27))
+        && (name.len() < 2 || name[name.len() - 1] != name[0]);
+    if f.path.is_empty() || bad_quote {
+        f.file_status = *b"31";
+        return "31";
+    }
+    let status: &'static str = match mode {
+        OpenMode::Input | OpenMode::Io => match std::fs::read(&f.path) {
+            Ok(d) => {
+                f.data = d;
+                "00"
+            }
+            Err(_) => {
+                f.flag_nonexistent = true;
+                f.data.clear();
+                if f.optional {
+                    "05"
+                } else {
+                    "35"
+                }
+            }
+        },
+        OpenMode::Output => {
+            f.data.clear();
+            f.dirty = true;
+            "00"
+        }
+        OpenMode::Extend => {
+            f.data = std::fs::read(&f.path).unwrap_or_default();
+            f.pos = f.data.len();
+            f.dirty = true;
+            "00"
+        }
+        OpenMode::Closed | OpenMode::Locked => "30",
+    };
+    // status 35 leaves the file unopened; 05/00 open it.
+    if status == "35" {
+        f.file_status = *b"35";
+        return "35";
+    }
+    f.open_mode = mode;
+    f.file_status = [status.as_bytes()[0], status.as_bytes()[1]];
+    status
+}
+
+/// Port of the precondition + dispatch of `fileio.c:cob_close` — flush (for an output/I-O/extend file)
+/// and close. A file that is not open is `"42"`; `lock` leaves it `Locked` (a later OPEN → `38`), else
+/// `Closed`. Returns the FILE STATUS.
+pub fn cob_close(f: &mut CobFile, lock: bool) -> &'static str {
+    if f.open_mode == OpenMode::Closed {
+        f.file_status = *b"42";
+        return "42";
+    }
+    if f.dirty && !f.flag_nonexistent {
+        let _ = std::fs::write(&f.path, &f.data);
+        f.dirty = false;
+    }
+    f.open_mode = if lock { OpenMode::Locked } else { OpenMode::Closed };
+    f.file_status = *b"00";
+    "00"
+}
+
+/// Port of `fileio.c:cob_unlock` / `cob_file_unlock` / `cob_unlock_file` — release record/file locks on a
+/// file. With record locking unconfigured this is a no-op success (status `"00"`).
+pub fn cob_unlock(f: &mut CobFile) -> &'static str {
+    f.file_status = *b"00";
+    "00"
+}
+
+/// Port of `fileio.c:cob_file_unlock` — release the file's locks (no-op without locking configured).
+pub fn cob_file_unlock(_f: &mut CobFile) {}
+
+/// Port of `fileio.c:cob_unlock_file` — release a single record/file lock (no-op without locking).
+pub fn cob_unlock_file(_f: &mut CobFile) {}
+
+/// Port of `fileio.c:cob_commit` — `COMMIT` releases the locks on all open files (no-op without locking).
+pub fn cob_commit() {}
+
+/// Port of `fileio.c:cob_rollback` — `ROLLBACK` releases the locks on all open files (no-op without locking).
+pub fn cob_rollback() {}
+
+/// Port of `fileio.c:cob_delete_file` — delete the named file from disk; status `"00"` on success,
+/// `"30"` on failure.
+pub fn cob_delete_file(f: &mut CobFile) -> &'static str {
+    let s = if std::fs::remove_file(&f.path).is_ok() { "00" } else { "30" };
+    f.file_status = [s.as_bytes()[0], s.as_bytes()[1]];
+    s
+}
+
+impl CobFile {
+    /// `WRITE` one record into the file image, dispatching by organization to a sealed handler. Returns
+    /// the FILE STATUS. (Supports RECORD/LINE SEQUENTIAL append and RELATIVE keyed write.)
+    pub fn write_record(&mut self, record: &[u8], key: i64) -> &'static str {
+        // the FD record area is record_max wide (the C uses f->record->size = the field size).
+        if let Some(s) = cob_write(self.open_mode, self.access_mode, self.record_max, self.record_min, self.record_max) {
+            self.file_status = [s.as_bytes()[0], s.as_bytes()[1]];
+            return s;
+        }
+        self.dirty = true;
+        match self.organization {
+            Organization::LineSequential => {
+                let area = pad_record(record, self.record_max);
+                let w = lineseq_write(&area, &self.line_cfg);
+                self.data.extend_from_slice(&w.bytes);
+                "00"
+            }
+            Organization::Sequential => {
+                let area = pad_record(record, self.record_max);
+                let variable = self.record_min != self.record_max;
+                let bytes = sequential_write(&area, self.record_max, variable, self.varseq_type);
+                self.data.extend_from_slice(&bytes);
+                "00"
+            }
+            Organization::Relative => {
+                let w = relative_write(&self.data, record, self.record_max, self.record_max, key);
+                let st = w.status;
+                self.data = w.file;
+                st
+            }
+            _ => "00",
+        }
+    }
+
+    /// `READ NEXT` one record from the file image (RECORD/LINE SEQUENTIAL / RELATIVE), returning
+    /// `(status, record_bytes)`; `"10"` at end of file.
+    pub fn read_record(&mut self) -> (&'static str, Vec<u8>) {
+        self.flag_first_read = false;
+        match self.organization {
+            Organization::LineSequential => {
+                let r = lineseq_read(&self.data, &mut self.pos, self.record_max, &self.line_cfg);
+                if r.at_end {
+                    self.flag_end_of_file = true;
+                }
+                (r.status, r.record)
+            }
+            Organization::Sequential => {
+                let r = sequential_read(&self.data, &mut self.pos, &mut self.record_buf, self.record_min, self.record_max, self.varseq_type);
+                if r.at_end {
+                    self.flag_end_of_file = true;
+                }
+                (r.status, self.record_buf.clone())
+            }
+            Organization::Relative => {
+                let mut slot = self.pos / relsize(self.record_max);
+                let r = relative_read_next(&self.data, &mut slot, self.record_max);
+                self.pos = slot * relsize(self.record_max);
+                (r.status, r.data)
+            }
+            _ => ("10", Vec::new()),
+        }
+    }
+}
+
+/// Lay a record into the fixed `record_max`-wide FD area, space-padded / truncated.
+fn pad_record(record: &[u8], record_max: usize) -> Vec<u8> {
+    let mut area = vec![b' '; record_max];
+    let n = record.len().min(record_max);
+    area[..n].copy_from_slice(&record[..n]);
+    area
+}
+
+// ======================================================================================================
 // Verb-layer preconditions (`GNURUST.FILEIO.VERB.1`)
 //
 // The open-mode / access-mode / record-state checks the public `cob_*` verbs apply *before* dispatching
@@ -1018,6 +1265,8 @@ pub enum OpenMode {
     Output,
     Io,
     Extend,
+    /// `COB_OPEN_LOCKED` — closed with lock (a later OPEN is status `38`).
+    Locked,
 }
 
 /// `ACCESS MODE` (`f->access_mode`).
@@ -1909,6 +2158,53 @@ mod tests {
         assert!(sort_cmps(b"A", b"B", Some(&col)) > 0); // A now sorts after B
     }
 
+    // ---- CobFile OPEN/CLOSE runtime ----
+    #[test]
+    fn cobfile_open_write_read_close_roundtrip() {
+        let base = std::env::temp_dir().join("gnucobol_rs_open_test");
+        let _ = std::fs::remove_dir_all(&base);
+        std::fs::create_dir(&base).unwrap();
+        let p = base.join("ls.dat");
+        let ps = p.to_str().unwrap();
+        // OPEN OUTPUT a LINE SEQUENTIAL file, WRITE two records, CLOSE -> the file image is "AB\nXY\n"
+        let mut f = CobFile::new(Organization::LineSequential, AccessMode::Sequential, 8, ps);
+        assert_eq!(cob_open(&mut f, OpenMode::Output), "00");
+        assert_eq!(cob_open(&mut f, OpenMode::Output), "41"); // already open
+        assert_eq!(f.write_record(b"AB", 0), "00");
+        assert_eq!(f.write_record(b"XY", 0), "00");
+        assert_eq!(cob_close(&mut f, false), "00");
+        assert_eq!(cob_close(&mut f, false), "42"); // not open
+        assert_eq!(std::fs::read(ps).unwrap(), b"AB\nXY\n");
+        // OPEN INPUT, READ both records back
+        let mut g = CobFile::new(Organization::LineSequential, AccessMode::Sequential, 8, ps);
+        assert_eq!(cob_open(&mut g, OpenMode::Input), "00");
+        assert_eq!(g.read_record(), ("00", b"AB      ".to_vec()));
+        assert_eq!(g.read_record(), ("00", b"XY      ".to_vec()));
+        assert_eq!(g.read_record().0, "10"); // AT END
+        // CLOSE then OPEN with lock -> a later OPEN is 38
+        let _ = cob_close(&mut g, false);
+        let mut h = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, ps);
+        assert_eq!(cob_open(&mut h, OpenMode::Input), "00");
+        assert_eq!(cob_close(&mut h, true), "00"); // close with lock
+        assert_eq!(cob_open(&mut h, OpenMode::Input), "38"); // closed with lock
+        // OPEN INPUT a missing file -> 35; OPTIONAL -> 05
+        let mut m = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, base.join("none.dat").to_str().unwrap());
+        assert_eq!(cob_open(&mut m, OpenMode::Input), "35");
+        m.optional = true;
+        assert_eq!(cob_open(&mut m, OpenMode::Input), "05");
+        // bad filename -> 31; delete the file
+        let mut e = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, "");
+        assert_eq!(cob_open(&mut e, OpenMode::Output), "31");
+        let mut d = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, ps);
+        assert_eq!(cob_delete_file(&mut d), "00");
+        assert_eq!(cob_delete_file(&mut d), "30"); // already gone
+        // unlock / commit / rollback are no-op successes
+        assert_eq!(cob_unlock(&mut h), "00");
+        cob_commit();
+        cob_rollback();
+        std::fs::remove_dir_all(&base).ok();
+    }
+
     // ---- verb preconditions ----
     #[test]
     fn verb_preconditions() {
@@ -2139,6 +2435,19 @@ mod kani_proofs {
         let ab = cob_file_sort_compare(&a, 0, &b, 1, &keys, None);
         let ba = cob_file_sort_compare(&b, 1, &a, 0, &keys, None);
         assert_eq!(ab, ba.reverse());
+    }
+    // KANIFOR: GNURUST.FILEIO.OPEN.1
+    /// The non-I/O precondition paths of cob_open/cob_close are total: opening a Locked file is 38, an
+    /// already-open file is 41; closing a Closed file is 42. Never panics.
+    #[kani::proof]
+    fn open_close_preconditions() {
+        let mut f = CobFile::new(Organization::Sequential, AccessMode::Sequential, 4, "");
+        f.open_mode = OpenMode::Locked;
+        assert_eq!(cob_open(&mut f, OpenMode::Input), "38");
+        f.open_mode = OpenMode::Output;
+        assert_eq!(cob_open(&mut f, OpenMode::Input), "41");
+        f.open_mode = OpenMode::Closed;
+        assert_eq!(cob_close(&mut f, false), "42");
     }
     // KANIFOR: GNURUST.FILEIO.SYS.1
     /// The non-I/O precondition paths of `cob_sys_get_current_dir` are total: `flags != 0` → 129, a

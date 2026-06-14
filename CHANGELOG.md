@@ -12,6 +12,12 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.51]
+- **`fileio.c` -- file runtime OPEN/CLOSE + lifecycle sealed (`GNURUST.FILEIO.OPEN.1`).** A `CobFile` runtime ties the sealed organization handlers into a working file: faithful ports of `cob_open`/`cob_close`/`cob_pre_open`/`cob_unlock`/`cob_file_unlock`/`cob_unlock_file`/`cob_commit`/`cob_rollback`/`cob_delete_file`, proven to match the admitted GnuCOBOL 3.2 `libcob`'s FILE STATUS and on-disk file image (`open_sweep` 2/0, end-to-end against an OPEN OUTPUT/WRITE/READ/CLOSE LINE SEQUENTIAL program):
+  - `cob_open` loads the file image (real `std::fs` I/O) and sets the status -- a file closed-with-lock is `38`, an already-open file `41`, an empty/badly-quoted filename `31`, OPEN INPUT of a missing file `35` (or `05` when `OPTIONAL`), OPEN OUTPUT truncates; `cob_close` flushes an output/I-O image and is `42` when the file is not open, leaving it `Locked` for `CLOSE WITH LOCK`; `WRITE`/`READ NEXT` dispatch by organization to the sealed `sequential_*`/`lineseq_*`/`relative_*` handlers.
+  - The indexed/BDB and SORT organizations' open, real record/file locking, OPEN EXTEND positioning, file-sharing, and the EXTFH path stay explicit non-claims. `fileio.c` parity 62 -> 71/182 (39.6%).
+- No API breaks: additive (new `fileio::CobFile` + `cob_open`/`cob_close`/lifecycle functions + `OpenMode::Locked`).
+
 ## [0.7.50]
 - **`fileio.c` -- CBL_* handle-based byte-stream file routines + C$DELETE/C$COPY (extends `GNURUST.FILEIO.SYS.1`).** Ports `open_cbl_file`/`cob_sys_open_file`/`cob_sys_create_file`/`cob_sys_read_file`/`cob_sys_write_file`/`cob_sys_close_file`/`cob_sys_flush_file` (the `CBL_OPEN_FILE`/`CREATE_FILE`/`READ_FILE`/`WRITE_FILE`/`CLOSE_FILE`/`FLUSH_FILE` routines) plus `cob_sys_file_delete`/`cob_sys_copyfile` (`C$DELETE`/`C$COPY`), proven against the oracle (`cob_sys_sweep` 2/0, now incl. a `CBL_CREATE_FILE`/`WRITE_FILE`/`READ_FILE` round-trip that reads back the written bytes):
   - the opaque 4-byte handle is a safe `File`-registry index (libcob stores the raw `fd`; `#![forbid(unsafe_code)]` precludes that, and the handle is opaque to the program so behaviour is identical); access `1` read / `2` write+create+truncate / `3` r/w; positioned read/write (status `0`/`10`/`30`/`-1`); a `flags & 0x80` size query.

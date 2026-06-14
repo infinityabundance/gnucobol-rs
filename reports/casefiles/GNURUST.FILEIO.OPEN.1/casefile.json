@@ -1,0 +1,71 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> the on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)"
+  ],
+  "case_id": "GNURUST.FILEIO.OPEN.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.51",
+  "damage_if_overclaimed": "ignoring the OPEN/CLOSE status (41/42/38/35) lets a program write to an unopened file or silently re-open, corrupting the file or its sequence",
+  "hash_chain": {
+    "inputs_sha256": "91a5947832f187501aee268b5a8294bb54a9fc636e7821087f3193e2a3e86a46"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "e84c11517f4360b6ce4c81c7ae1500cb0b8838479bc9d9963fd6e9eb5bfd34d8",
+    "receipt_sha256": "288576a525710ad67717e730ef4ba5b76ee21d262a19fd627231ca0547c57fb1"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "OPEN/CLOSE always succeed -- NO: re-opening an open file is 41, closing a closed file is 42, opening a file that was CLOSE WITH LOCK is 38, a missing OPEN INPUT is 35 (05 if OPTIONAL), and an empty/bad-quoted name is 31; CLOSE of an output file flushes the written image to disk"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-INDEXED-BDB-AND-SORT-ORGANIZATIONS-O",
+    "NEG.RECORD-FILE-LOCKING-SEMANTICS-BEYOND-NO",
+    "NEG.OPEN-EXTEND-POSITIONING-DETAILS",
+    "NEG.THE-FILE-SHARING-MODES",
+    "NEG.CONCAT-MULTI-FILE-INPUT",
+    "NEG.THE-EXTFH-OPEN-PATH",
+    "NEG.COB-CACHE-FILE-FILE-CACHE-LIST-MANAGEMEN",
+    "NEG.THE-ACTUAL-FD-OPEN-CLOSE-SYSCALLS-DECLAR"
+  ],
+  "negative_claims": [
+    "the indexed/BDB and SORT organizations' open/close (substrate boundary)",
+    "record/file locking semantics beyond no-op success",
+    "OPEN EXTEND positioning details",
+    "the file-sharing modes",
+    "concat (multi-file) input",
+    "the EXTFH open path",
+    "cob_cache_file / file_cache list management",
+    "the actual fd open/close syscalls (declared OS boundary)",
+    "lie prevented: OPEN/CLOSE always succeed -- NO: re-opening an open file is 41, closing a closed file is 42, opening a file that was CLOSE WITH LOCK is 38, a missing OPEN INPUT is 35 (05 if OPTIONAL), and an empty/bad-quoted name is 31; CLOSE of an output file flushes the written image to disk"
+  ],
+  "oracle": {
+    "detail": "cobc OPEN/WRITE/READ/CLOSE incl. double-open, close-when-closed, CLOSE WITH LOCK, missing-input (libcob/fileio.c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.FILEIO.OPEN.1"
+  },
+  "positive_claims": [
+    "a CobFile runtime that ties the sealed organization handlers into a working file: a faithful port of cob_open/cob_close/cob_pre_open/cob_unlock/cob_file_unlock/cob_unlock_file/cob_commit/cob_rollback/cob_delete_file, proven to match the admitted libcob's FILE STATUS and the on-disk file image (open_sweep 2/0, end-to-end against an OPEN OUTPUT/WRITE/READ/CLOSE LINE SEQUENTIAL program): cob_open loads the file image (real std::fs I/O) and sets status -- a file closed-with-lock is 38, an already-open file 41, an empty/badly-quoted filename 31, OPEN INPUT of a missing file 35 (or 05 when OPTIONAL), OPEN OUTPUT truncates",
+    "cob_close flushes an output/I-O image and is 42 when the file is not open, leaving it Locked for CLOSE WITH LOCK",
+    "WRITE/READ NEXT dispatch by organization to the sealed sequential_*/lineseq_*/relative_* handlers",
+    "cob_unlock/cob_commit/cob_rollback release locks (no-op success without locking configured)",
+    "cob_delete_file removes the file (00/30). The integration layer over GNURUST.FILEIO.LINESEQ/SEQ/RELATIVE"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/open_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

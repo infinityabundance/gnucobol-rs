@@ -686,6 +686,13 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = fileio::sort_records(&chunks, &keys, None);
     // CBL_GET_CURRENT_DIR (GNURUST.FILEIO.SYS.1): read-only, never panics for any flags/length.
     let _ = fileio::cob_sys_get_current_dir(data.first().copied().unwrap_or(0) as i32, body.len() % 8192);
+    // cob_open/cob_close (GNURUST.FILEIO.OPEN.1): the empty-path precondition paths do no I/O.
+    let orgs = [fileio::Organization::Sequential, fileio::Organization::LineSequential, fileio::Organization::Relative];
+    let org = orgs[data.first().copied().unwrap_or(0) as usize % 3];
+    let mut cf = fileio::CobFile::new(org, fileio::AccessMode::Sequential, rmax, "");
+    let _ = fileio::cob_open(&mut cf, fileio::OpenMode::Output);
+    let _ = fileio::cob_close(&mut cf, false);
+    let _ = fileio::cob_unlock(&mut cf);
 }
 
 #[cfg(feature = "fuzzing")]

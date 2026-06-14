@@ -1,0 +1,35 @@
+{
+  "byte_domain": "OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)",
+  "campaign": "GNURUST.FILEIO.OPEN.1",
+  "command": {
+    "replay": "bash lab/oracle/open_sweep.sh"
+  },
+  "court": "file runtime OPEN/CLOSE + lifecycle",
+  "crate_version": "0.7.51",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "indexed/BDB and SORT open/close (substrate boundary)",
+    "record/file locking beyond no-op success",
+    "OPEN EXTEND positioning details",
+    "file-sharing modes",
+    "concat (multi-file) input",
+    "the EXTFH open path",
+    "cob_cache_file / file_cache list management",
+    "the actual fd open/close syscalls (declared OS boundary)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=2 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

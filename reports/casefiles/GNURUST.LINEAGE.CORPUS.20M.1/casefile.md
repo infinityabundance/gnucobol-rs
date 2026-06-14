@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.LINEAGE.CORPUS.20M.1 (court-casefile)
 
-**Verdict: PASS** · 4000000/4000000 pass, 0 fail · crate `gnucobol-rs` 0.7.50
+**Verdict: PASS** · 4000000/4000000 pass, 0 fail · crate `gnucobol-rs` 0.7.51
 
 - **Oracle:** real cobc/libcob compile+run over 4M generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)
 - **Byte domain(s):** completed 4M real-cobc witness run: storage differential + directive variant lineage; evidence-of-record = reports/lineage20m/full-run-seal.json (root-of-roots binds the regenerable shards)
