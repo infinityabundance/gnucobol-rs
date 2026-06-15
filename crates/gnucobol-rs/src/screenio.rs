@@ -256,6 +256,152 @@ pub fn display_and_stop(items: &[ScreenItem]) -> Vec<u8> {
     out
 }
 
+// ===========================================================================================
+// GNURUST.SCREENIO.COLOR.1 -- the COLORED SCREEN SECTION field (full ncurses repaint).
+// ===========================================================================================
+//
+// A monochrome attribute (`HIGHLIGHT` etc.) only wraps its field in an SGR on/off pair -- the
+// rest of the screen is untouched, so `display_and_stop` handles it inline. A *color* clause
+// (`FOREGROUND-COLOR`/`BACKGROUND-COLOR`) is different: the first use of a non-default color pair
+// makes ncurses repaint the whole touched region. The observable byte stream is therefore not a
+// simple positioned write but ncurses's `wclear` + top-down `TransformLine` sequence. This court
+// reproduces that stream byte-for-byte against the admitted xterm/ncurses 6.6 oracle.
+//
+// ## The two genuinely new facts this court pins
+//
+// 1. **The COBOL->curses color permutation.** COBOL/IBM color numbers order the 3 color bits as
+//    (bit0=blue, bit1=green, bit2=red); curses/ANSI order them (bit0=red, bit1=green, bit2=blue).
+//    So a COBOL color maps to its curses color by *reversing the low three bits*
+//    (`curses_color`): COBOL 1 (blue) -> 4, COBOL 4 (red) -> 1, COBOL 6 (brown) -> 3, etc. The
+//    foreground SGR is then `30 + curses_color`, the background `40 + curses_color`. Verified
+//    byte-exact for every one of the 8x8 color combinations.
+//
+// 2. **The default color pair is free.** COBOL `FOREGROUND-COLOR 7 BACKGROUND-COLOR 0`
+//    (white-on-black) is ncurses color pair 0, which is always allocated and needs no SGR -- so a
+//    field in the default colors triggers *no* repaint and falls back to the plain
+//    `display_and_stop` byte stream. Only a non-default pair forces the full-screen repaint.
+//
+// ## The repaint shape (R >= 2, the sealed envelope)
+//
+// For a single colored field at COBOL `LINE R`, `COLUMN C` the body between the screen-clear and
+// the pause prompt is, exactly:
+//
+// * `\e[<R+1>d` -- VPA parking the cursor on the row below the field (where the prompt will land),
+// * the default-restore SGR `\e(B\e[m\e[39;49m\e[37m\e[40m` ([`RESET_DEFAULTS`]),
+// * `\e[J` -- erase from there to the bottom of the screen (clears every row at/below the field),
+// * the **top-down repaint of the rows above the field**: `\e[H\e[K` clears row 1, then each row
+//   `2..=R-1` is `\e[<r>d\e[K`,
+// * the **field-row positioning** (the leading-blank handling ncurses's `TransformLine` chooses):
+//   when the field starts within 5 columns (`C-1 <= 4`) it space-fills from column 1
+//   (`\e[<R>d` then `C-1` spaces); otherwise it cursor-addresses just before the field and clears
+//   the leading blanks in one shot (`\e[<R>;<C-1>H\e[1K` then a single space onto column `C`),
+// * the field itself: the two color SGRs, the data bytes, then `RESET_DEFAULTS` and `\e[K` to
+//   clear the rest of the field row,
+// * the prompt move -- the *same* [`mvcur`] cost model used everywhere else, from the cursor's
+//   end position `(R, C+len)` to `(R+1, 1)`.
+//
+// The `R == 1` single-row-screen case uses a different `\e[A`-based positioning and is an explicit
+// **non-claim** of this court (a colored field on the very first line is a rare edge; it is left to
+// a follow-on). The court's sealed envelope is `R >= 2`.
+
+/// The default ncurses foreground color (white) -- COBOL `FOREGROUND-COLOR 7`. Together with
+/// [`DEFAULT_BG`] this is color pair 0, which needs no SGR and triggers no repaint.
+pub const DEFAULT_FG: u8 = 7;
+/// The default ncurses background color (black) -- COBOL `BACKGROUND-COLOR 0`.
+pub const DEFAULT_BG: u8 = 0;
+
+/// The SGR sequence that restores ncurses's default attributes + colors (charset designation,
+/// `sgr0`, default fg/bg, then the libcob default white-on-black pair). Emitted by every attribute
+/// or color reset; identical to the bytes [`sgr_off`] produces.
+pub const RESET_DEFAULTS: &[u8] = b"\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m";
+
+/// Map a COBOL color number (0..=7) to its curses/ANSI color number by reversing the low three
+/// bits. COBOL orders the color bits (blue, green, red) low-to-high; curses orders them
+/// (red, green, blue). So COBOL `1` (blue) -> `4`, `2` (green) -> `2`, `4` (red) -> `1`,
+/// `6` (brown/yellow) -> `3`, and the symmetric values (`0`, `7`, plus `2`/`5`) are fixed points.
+/// Inputs above 7 are masked to three bits (defensive; the compiler only emits 0..=7).
+pub fn curses_color(cobol_color: u8) -> u8 {
+    let n = cobol_color & 0b111;
+    ((n & 0b001) << 2) | (n & 0b010) | ((n & 0b100) >> 2)
+}
+
+/// Append the foreground/background color SGRs for a COBOL `(fg, bg)` pair: `\e[<30+fg'>m` then
+/// `\e[<40+bg'>m`, where `fg'`/`bg'` are the [`curses_color`]-mapped numbers.
+fn color_sgr(out: &mut Vec<u8>, fg: u8, bg: u8) {
+    csi1_str(out, 30 + curses_color(fg) as i32, b'm');
+    csi1_str(out, 40 + curses_color(bg) as i32, b'm');
+}
+
+/// Append a CSI sequence `\e[<n><final>` (same shape as [`csi1`]; named to read clearly at the
+/// SGR call sites where `n` is a color code rather than a row/column).
+fn csi1_str(out: &mut Vec<u8>, n: i32, fin: u8) {
+    csi1(out, n, fin);
+}
+
+/// Reproduce the full terminal byte stream of a `SCREEN SECTION` `DISPLAY` of a single field
+/// carrying explicit `FOREGROUND-COLOR fg` / `BACKGROUND-COLOR bg` (COBOL color numbers 0..=7),
+/// followed by `STOP RUN` -- byte-identical to GnuCOBOL on the admitted xterm/ncurses 6.6 terminal
+/// (`GNURUST.SCREENIO.COLOR.1`).
+///
+/// When `(fg, bg)` is the default pair ([`DEFAULT_FG`], [`DEFAULT_BG`]) ncurses needs no color and
+/// no repaint, so this delegates to the plain `display_and_stop` stream. Otherwise it emits the
+/// full `wclear` repaint described in the module section above. The sealed envelope is `line >= 2`;
+/// `line == 1` (a colored field on the very first row) is the documented non-claim.
+pub fn color_display_and_stop(line: i32, column: i32, data: &[u8], fg: u8, bg: u8) -> Vec<u8> {
+    // Default color pair -> no repaint; this is observably the plain positioned-write stream.
+    if fg == DEFAULT_FG && bg == DEFAULT_BG {
+        return display_and_stop(&[ScreenItem::plain(line, column, data.to_vec())]);
+    }
+
+    let mut out = Vec::new();
+    // The colour prologue is the standard init prologue with the field's colour-pair SGR injected
+    // just before the home+clear `\e[H\e[2J` -- ncurses's `start_color`/`init_pair` pre-selects the
+    // pair that the first painted field will use, so the SGR appears already at screen setup. Split
+    // the constant before its trailing 7-byte `\e[H\e[2J` and slot the colour SGR in.
+    let home_clear_len = b"\x1b[H\x1b[2J".len();
+    let split = INIT_PROLOGUE.len() - home_clear_len;
+    out.extend_from_slice(&INIT_PROLOGUE[..split]);
+    color_sgr(&mut out, fg, bg);
+    out.extend_from_slice(&INIT_PROLOGUE[split..]);
+
+    // (1) Park on the row below the field, restore defaults, erase from there to the bottom.
+    csi1(&mut out, line + 1, b'd'); // VPA R+1
+    out.extend_from_slice(RESET_DEFAULTS);
+    out.extend_from_slice(b"\x1b[J"); // ED: erase to end of screen
+
+    // (2) Repaint the rows above the field top-down: row 1 via home+clear, rows 2..=R-1 via
+    //     VPA+clear. (Each row is blank, so a clear-to-EOL from column 1 blanks the whole line.)
+    out.extend_from_slice(b"\x1b[H\x1b[K");
+    for r in 2..line {
+        csi1(&mut out, r, b'd');
+        out.extend_from_slice(b"\x1b[K");
+    }
+
+    // (3) Position onto the field row. Few leading blanks (<=4) -> space-fill from column 1;
+    //     more -> cursor-address just before the field and clear the leading blanks with \e[1K.
+    if column - 1 <= 4 {
+        csi1(&mut out, line, b'd'); // VPA R (column stays 1)
+        spaces(&mut out, column - 1);
+    } else {
+        cup(&mut out, line, column - 1);
+        out.extend_from_slice(b"\x1b[1K");
+        out.push(b' ');
+    }
+
+    // (4) The colored field: fg/bg SGRs, the data, then restore defaults + clear the rest of row.
+    color_sgr(&mut out, fg, bg);
+    out.extend_from_slice(data);
+    out.extend_from_slice(RESET_DEFAULTS);
+    out.extend_from_slice(b"\x1b[K");
+
+    // (5) Prompt move -- the shared mvcur cost model, from end-of-field to (R+1, 1).
+    let end_col = column + data.len() as i32;
+    out.extend_from_slice(&mvcur(line, end_col, line + 1, 1));
+    out.extend_from_slice(PAUSE_PROMPT);
+    out.extend_from_slice(TEARDOWN_EPILOGUE);
+    out
+}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
@@ -338,6 +484,28 @@ mod kani_proofs {
             _ => ScreenAttr::Reverse,
         };
         let out = display_and_stop(&[ScreenItem::with_attr(line, column, vec![b'X'], attr)]);
+        assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
+        assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
+    }
+
+    // KANIFOR: GNURUST.SCREENIO.COLOR.1
+    /// A colored field DISPLAY always emits a well-formed prologue..epilogue envelope and never
+    /// panics, for any in-screen position (R >= 2), any data byte, and any COBOL color pair. The
+    /// color-mapping arithmetic stays in range (`curses_color` masks to three bits, so the SGR
+    /// codes are always `30..=37` / `40..=47`).
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn color_envelope_and_sgr_bounds() {
+        let line: i32 = kani::any();
+        let column: i32 = kani::any();
+        kani::assume(line >= 2 && line <= SCREEN_ROWS - 1);
+        kani::assume(column >= 1 && column <= 80);
+        let fg: u8 = kani::any();
+        let bg: u8 = kani::any();
+        let b: u8 = kani::any();
+        // curses_color is a total 3-bit permutation: always 0..=7.
+        assert!(curses_color(fg) <= 7 && curses_color(bg) <= 7);
+        let out = color_display_and_stop(line, column, &[b], fg, bg);
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
@@ -424,5 +592,68 @@ mod tests {
             want.extend_from_slice(b"m\x1b[39;49m\x1b[37m\x1b[40mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\r\x1b[3d");
             assert_eq!(body(ScreenItem::with_attr(2, 3, b"X".to_vec(), a)), want);
         }
+    }
+
+    #[test]
+    fn cobol_to_curses_color_permutation() {
+        // The low-3-bit reversal: COBOL (blue,green,red) bit order -> curses (red,green,blue).
+        assert_eq!(curses_color(0), 0); // black
+        assert_eq!(curses_color(1), 4); // blue  -> SGR 34/44
+        assert_eq!(curses_color(2), 2); // green
+        assert_eq!(curses_color(3), 6); // cyan
+        assert_eq!(curses_color(4), 1); // red   -> SGR 31/41
+        assert_eq!(curses_color(5), 5); // magenta
+        assert_eq!(curses_color(6), 3); // brown/yellow
+        assert_eq!(curses_color(7), 7); // white
+    }
+
+    /// Append `\e[<n><fin>` -- a tiny CSI helper local to the colour test (the module's `csi1` is
+    /// private to non-test code; this keeps the test self-contained).
+    fn csi1_str_test(out: &mut Vec<u8>, n: i32, fin: u8) {
+        out.extend_from_slice(b"\x1b[");
+        out.extend_from_slice(n.to_string().as_bytes());
+        out.push(fin);
+    }
+
+    #[test]
+    fn color_display_matches_oracle() {
+        // Exact captures of `DISPLAY` of a colored SCREEN SECTION field then `STOP RUN`, taken from
+        // the admitted oracle under a pty (TERM=xterm, ncurses 6.6). The vectors are the *body*
+        // between the screen clear `\e[2J` and the pause prompt; the test reconstructs the full
+        // stream (prologue + body + prompt + teardown) and asserts byte-identity. Validated
+        // additionally against a 628-capture R>=2 x C x 8x8-color grid offline.
+        let vectors: &[(&str, i32, i32, u8, u8, &[u8])] = &[
+            ("\x1b[3d\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[J\x1b[H\x1b[K\x1b[2d  \x1b[32m\x1b[44mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[K\r\x1b[3d", 2, 3, 2, 1, b"X"),
+            ("\x1b[4d\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[J\x1b[H\x1b[K\x1b[2d\x1b[K\x1b[3d\x1b[32m\x1b[44mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[K\x1b[4d\x08", 3, 1, 2, 1, b"X"),
+            ("\x1b[4d\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[J\x1b[H\x1b[K\x1b[2d\x1b[K\x1b[3;5H\x1b[1K \x1b[32m\x1b[44mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[K\r\x1b[4d", 3, 6, 2, 1, b"X"),
+            ("\x1b[6d\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[J\x1b[H\x1b[K\x1b[2d\x1b[K\x1b[3d\x1b[K\x1b[4d\x1b[K\x1b[5;9H\x1b[1K \x1b[32m\x1b[44mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[K\r\x1b[6d", 5, 10, 2, 1, b"X"),
+            ("\x1b[5d\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[J\x1b[H\x1b[K\x1b[2d\x1b[K\x1b[3d\x1b[K\x1b[4;9H\x1b[1K \x1b[31m\x1b[43mHELLO\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[K\r\x1b[5d", 4, 10, 4, 6, b"HELLO"),
+            ("\x1b[7d\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[J\x1b[H\x1b[K\x1b[2d\x1b[K\x1b[3d\x1b[K\x1b[4d\x1b[K\x1b[5d\x1b[K\x1b[6d \x1b[34m\x1b[45mQRS\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\x1b[K\r\x1b[7d", 6, 2, 1, 5, b"QRS"),
+        ];
+        for (body_str, line, col, fg, bg, data) in vectors {
+            let body = body_str.as_bytes();
+            let mut want = Vec::new();
+            // The colour prologue carries the field's colour-pair SGR before `\e[H\e[2J`.
+            let hc = b"\x1b[H\x1b[2J".len();
+            let split = INIT_PROLOGUE.len() - hc;
+            want.extend_from_slice(&INIT_PROLOGUE[..split]);
+            csi1_str_test(&mut want, 30 + curses_color(*fg) as i32, b'm');
+            csi1_str_test(&mut want, 40 + curses_color(*bg) as i32, b'm');
+            want.extend_from_slice(&INIT_PROLOGUE[split..]);
+            want.extend_from_slice(body);
+            want.extend_from_slice(PAUSE_PROMPT);
+            want.extend_from_slice(TEARDOWN_EPILOGUE);
+            let got = color_display_and_stop(*line, *col, data, *fg, *bg);
+            assert_eq!(got, want, "color mismatch at L{} C{} fg{} bg{}", line, col, fg, bg);
+        }
+    }
+
+    #[test]
+    fn default_color_pair_falls_back_to_plain() {
+        // FOREGROUND-COLOR 7 BACKGROUND-COLOR 0 is ncurses pair 0 -> no repaint; the stream is the
+        // plain positioned write, identical to a no-color DISPLAY of the same field.
+        let colored = color_display_and_stop(2, 3, b"X", DEFAULT_FG, DEFAULT_BG);
+        let plain = display_and_stop(&[ScreenItem::plain(2, 3, b"X".to_vec())]);
+        assert_eq!(colored, plain);
     }
 }

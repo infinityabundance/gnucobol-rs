@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.COMMON.CBL.1` |
 | court | CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER) |
-| crate_version | `0.7.76` |
+| crate_version | `0.7.77` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | CALL USING buffer(s) + length -> the in-place transformed destination bytes (verified vs both oracles 3.1.2 + 3.2) |
 | replay command | `bash lab/oracle/cbl_logic_sweep.sh` |

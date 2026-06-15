@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 90,
+    "A": 91,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -87,6 +87,7 @@
       "GNURUST.REMAINDER.1",
       "GNURUST.ROUND.1",
       "GNURUST.SCREENIO.ATTR.1",
+      "GNURUST.SCREENIO.COLOR.1",
       "GNURUST.SCREENIO.DISPLAY.2",
       "GNURUST.SCREENIO.DISPLAY.3",
       "GNURUST.SCREENIO.INIT.1",
@@ -1524,6 +1525,22 @@
       "negative_claims": 6,
       "negatives_ge_positives": true,
       "positive_claims": 4
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "screenio_color_sweep 11/0 (live pty capture across the space-fill + CUP field-row branches, the default-pair control, multi-char data, and several colours) + 3 unit tests (the colour permutation, 6 oracle-pinned repaint vectors, the default-pair fallback) + Kani color_envelope_and_sgr_bounds",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.SCREENIO.COLOR.1",
+      "negative_claims": 7,
+      "negatives_ge_positives": true,
+      "positive_claims": 2
     },
     {
       "can_fail": true,

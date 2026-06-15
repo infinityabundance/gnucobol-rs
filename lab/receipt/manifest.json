@@ -1084,8 +1084,19 @@
       "sweep": "screenio_attr_sweep.sh",
       "byte_domain": "an attributed positioned DISPLAY -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal",
       "non_claims": [
-        "COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, a follow-on court",
+        "COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, sealed in GNURUST.SCREENIO.COLOR.1",
         "combined attributes, attributes on multi-field/numeric-edited displays, ACCEPT-side attributes",
+        "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+      ]
+    },
+    "GNURUST.SCREENIO.COLOR.1": {
+      "court": "SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes",
+      "sweep": "screenio_color_sweep.sh",
+      "byte_domain": "a colour-attributed positioned single-field DISPLAY (LINE>=2) -> the exact ncurses whole-screen colour-repaint byte stream, on the admitted terminal",
+      "non_claims": [
+        "the LINE==1 single-row-screen colour case (a different positioning edge)",
+        "MULTIPLE colour fields in one DISPLAY -- the general doupdate/TransformLine line-diff across an arbitrary screen delta (overlapping same-row clr_eol)",
+        "combined colour+monochrome attributes, colour on numeric-edited displays, ACCEPT-side colour",
         "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
       ]
     },

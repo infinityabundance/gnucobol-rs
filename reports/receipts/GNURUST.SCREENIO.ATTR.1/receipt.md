@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.ATTR.1` |
 | court | SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes |
-| crate_version | `0.7.76` |
+| crate_version | `0.7.77` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | an attributed positioned DISPLAY -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_attr_sweep.sh` |
@@ -17,7 +17,7 @@
 | receipt_status | current |
 
 ## Non-claims
-- COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, a follow-on court
+- COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, sealed in GNURUST.SCREENIO.COLOR.1
 - combined attributes, attributes on multi-field/numeric-edited displays, ACCEPT-side attributes
 - any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)
 

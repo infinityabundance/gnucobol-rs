@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.TABLE.PERFORM.SLICE.1 (court-casefile)
 
-**Verdict: PASS** · 3/3 pass, 0 fail · crate `gnucobol-rs` 0.7.76
+**Verdict: PASS** · 3/3 pass, 0 fail · crate `gnucobol-rs` 0.7.77
 
 - **Oracle:** cobc PERFORM VARYING + subscript (cobc/typeck.c + codegen.c)
 - **Byte domain(s):** PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I)

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.VERB.1 (court-casefile)
 
-**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.76
+**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.77
 
 - **Oracle:** cobc WRITE/READ/REWRITE/DELETE attempted in the wrong OPEN/ACCESS mode (libcob/fileio.c)
 - **Byte domain(s):** cob_write/read/read_next/rewrite/delete/start preconditions -> FILE STATUS (43/44/46/47/48/49/23) before the organization handler

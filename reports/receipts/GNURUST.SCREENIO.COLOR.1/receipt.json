@@ -1,0 +1,31 @@
+{
+  "byte_domain": "a colour-attributed positioned single-field DISPLAY (LINE>=2) -> the exact ncurses whole-screen colour-repaint byte stream, on the admitted terminal",
+  "campaign": "GNURUST.SCREENIO.COLOR.1",
+  "command": {
+    "replay": "bash lab/oracle/screenio_color_sweep.sh"
+  },
+  "court": "SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes",
+  "crate_version": "0.7.77",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "the LINE==1 single-row-screen colour case (a different positioning edge)",
+    "MULTIPLE colour fields in one DISPLAY -- the general doupdate/TransformLine line-diff across an arbitrary screen delta (overlapping same-row clr_eol)",
+    "combined colour+monochrome attributes, colour on numeric-edited displays, ACCEPT-side colour",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=11 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

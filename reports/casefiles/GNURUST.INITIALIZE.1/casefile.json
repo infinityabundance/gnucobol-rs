@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INITIALIZE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.76",
+  "crate_version": "0.7.77",
   "damage_if_overclaimed": "assuming INITIALIZE cleared a FILLER/redefiner, restored a VALUE, or used low-values/spaces wrongly silently corrupts a record before it is written or compared",
   "hash_chain": {
-    "inputs_sha256": "e898f700ad7245414e022652a2fd7c32a05614c720be9d124acbdb56b1d9a3b4"
+    "inputs_sha256": "f05a0ef7e6086eaef3a805bc27db25d4adc89e2b41c3ce36ba200907fcd2a575"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4f1fa4b6c8ec4901a09ed361dc64482199c1647f6f785cba3588027771b797f6",
-    "receipt_sha256": "b913615b3268b4410ce1430dffa24d52ad04ce89cf7c9c3ae58358f1294e933c"
+    "receipt_sha256": "eaeb531394c524adcbf3c0713c81dd35049669709bcebd89e5c9dc71d43f2f82"
   },
   "kind": "court-casefile",
   "lie_prevented": [

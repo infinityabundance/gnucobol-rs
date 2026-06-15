@@ -5,12 +5,12 @@
     "replay": "bash lab/oracle/screenio_attr_sweep.sh"
   },
   "court": "SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes",
-  "crate_version": "0.7.76",
+  "crate_version": "0.7.77",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, a follow-on court",
+    "COLOUR attributes (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen colour repaint, sealed in GNURUST.SCREENIO.COLOR.1",
     "combined attributes, attributes on multi-field/numeric-edited displays, ACCEPT-side attributes",
     "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
   ],

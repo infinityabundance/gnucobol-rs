@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MLIO.GENERATE.1 (court-casefile)
 
-**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.76
+**Verdict: PASS** · 5/5 pass, 0 fail · crate `gnucobol-rs` 0.7.77
 
 - **Oracle:** cobc XML GENERATE / JSON GENERATE (libcob/mlio.c via libxml2 + json-c)
 - **Byte domain(s):** a cob_ml_tree (names, group/leaf structure, numeric/alphanumeric content) -> the XML / JSON GENERATE output bytes

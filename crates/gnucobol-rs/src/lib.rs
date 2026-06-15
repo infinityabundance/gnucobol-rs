@@ -743,6 +743,15 @@ pub fn __fuzz_screenio(data: &[u8]) {
     ];
     let out = display_and_stop(&items);
     debug_assert!(out.starts_with(screenio::INIT_PROLOGUE));
+    // Also exercise the COLOUR whole-screen repaint path (GNURUST.SCREENIO.COLOR.1): any colour
+    // pair + LINE>=2 position must still yield a well-formed prologue..epilogue envelope.
+    let cline = (data.get(1).copied().unwrap_or(0) as i32 % 22) + 2; // 2..=23
+    let ccol = (data.get(2).copied().unwrap_or(1) as i32 % 80) + 1;
+    let fg = data.get(3).copied().unwrap_or(0) % 8;
+    let bg = data.get(4).copied().unwrap_or(0) % 8;
+    let cout = screenio::color_display_and_stop(cline, ccol, data.get(5..).unwrap_or(&[]), fg, bg);
+    debug_assert!(cout.starts_with(screenio::INIT_PROLOGUE));
+    debug_assert!(cout.ends_with(screenio::TEARDOWN_EPILOGUE));
 }
 
 /// Fuzz the native XML PARSE state machine: drive `cob_xml_parse` over arbitrary input to a fixed point.
