@@ -69,6 +69,7 @@ run_sweep "GNURUST.SCREENIO.DISPLAY.3" screenio_multi_sweep.sh
 run_sweep "GNURUST.SCREENIO.ATTR.1" screenio_attr_sweep.sh
 run_sweep "GNURUST.SCREENIO.COLOR.1" screenio_color_sweep.sh
 run_sweep "GNURUST.SCREENIO.NUMEDIT.1" screenio_numedit_sweep.sh
+run_sweep "GNURUST.SCREENIO.ACCEPT.1" screenio_accept_sweep.sh
 run_sweep "GNURUST.FILEIO.INDEXED.1" indexed_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh
 run_sweep "GNURUST.FILEIO.OPEN.1" open_sweep.sh

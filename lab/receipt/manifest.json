@@ -1089,6 +1089,17 @@
         "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
       ]
     },
+    "GNURUST.SCREENIO.ACCEPT.1": {
+      "court": "SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes",
+      "sweep": "screenio_accept_sweep.sh",
+      "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 alphanumeric field + the printable input (<= width) -> the exact ncurses prompt/reposition/echo/field-full byte stream, on the admitted terminal",
+      "non_claims": [
+        "width >= 7 fields (the `rep`-painted prompt + terminfo-internal post-rep reposition)",
+        "OVERFLOW input (typing past the field width -- BEL + overwrite, a separate input-editing state machine)",
+        "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
+        "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+      ]
+    },
     "GNURUST.SCREENIO.NUMEDIT.1": {
       "court": "SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes",
       "sweep": "screenio_numedit_sweep.sh",

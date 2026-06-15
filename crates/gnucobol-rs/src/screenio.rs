@@ -474,6 +474,94 @@ pub fn display_edited_and_stop(line: i32, column: i32, edited: &[u8]) -> Vec<u8>
     out
 }
 
+// ===========================================================================================
+// GNURUST.SCREENIO.ACCEPT.1 -- a SCREEN SECTION ACCEPT of an alphanumeric input field.
+// ===========================================================================================
+//
+// `ACCEPT` of a `SCREEN SECTION` field reads keystrokes into the field. Its observable terminal
+// byte stream (captured under a pty, input fed then EOF) is, for a single alphanumeric `USING`/`TO`
+// field of width W at `LINE`/`COLUMN`:
+//
+// 1. **Position** at the field start via the shared [`mvcur`] cost model (from home).
+// 2. **The input prompt:** the field is shown as W underscores `_` (ncurses paints the field's
+//    initial blank-but-promptable content; the default prompt char is `_`).
+// 3. **Reposition to the field start** so typing overwrites the prompt: a same-row *backward* move
+//    whose encoding is the cheapest of column-address HPA `\e[<col>G`, backspaces, or
+//    carriage-return-plus-spaces -- with HPA winning a byte-count tie over backspaces, and
+//    backspaces over CR ([`accept_reposition`]).
+// 4. **Echo** of the typed characters (up to W), verbatim.
+// 5. **The field-full backspace:** if the typed text fills the whole field, after echoing the last
+//    character the cursor sits one past the field, so ncurses emits a single backspace to keep the
+//    cursor on the last field cell.
+// 6. **Teardown** -- on EOF the implicit `STOP RUN` pause is skipped (no "press a key" prompt), so
+//    the stream goes straight to the standard [`TEARDOWN_EPILOGUE`].
+//
+// ## Sealed envelope (verified byte-identical against BOTH GnuCOBOL 3.2 and 3.1.2)
+//
+// A single alphanumeric field of **width 1..=6**, plain printable input that does **not exceed** the
+// field width, terminated by Enter then EOF. Width >= 7 is the declared non-claim: ncurses then
+// paints the prompt with the `rep` capability (`_\e[<W-1>b`) and the post-`rep` reposition becomes
+// terminfo-internal and position-dependent. Typing **past** the field width (overflow) is also a
+// non-claim: each excess key emits a BEL `\a` and an overwrite, a separate input-editing state
+// machine. Field editing keys (arrows, backspace-during-input, function keys), numeric/`USING`
+// validation, and any terminal but the admitted `TERM=xterm` / ncurses 6.6 are likewise out of scope.
+
+/// The default ncurses prompt character an `ACCEPT` field shows for each empty position.
+pub const ACCEPT_PROMPT_CHAR: u8 = b'_';
+
+/// Reproduce ncurses's same-row **backward** cursor move from `from_col` to `to_col` (the
+/// reposition from the field end back to the field start after painting the prompt). Candidates: the
+/// column-address HPA `\e[<to_col>G`, a run of backspaces, or carriage-return + `to_col-1` spaces;
+/// the shortest wins, and on a byte-count tie HPA beats backspaces beats CR (the empirically pinned
+/// order, `screenio_accept_sweep`). Distinct from the general [`mvcur`], whose backward path only
+/// considers backspaces -- the ACCEPT reposition additionally reaches for HPA.
+fn accept_reposition(from_col: i32, to_col: i32) -> Vec<u8> {
+    // (priority, bytes) -- lower priority wins a length tie.
+    let mut cands: Vec<(u8, Vec<u8>)> = Vec::new();
+    // HPA `\e[<to_col>G`.
+    let mut hpa = b"\x1b[".to_vec();
+    hpa.extend_from_slice(to_col.to_string().as_bytes());
+    hpa.push(b'G');
+    cands.push((0, hpa));
+    // Backspaces.
+    cands.push((1, vec![0x08; (from_col - to_col).max(0) as usize]));
+    // CR + (to_col-1) spaces.
+    let mut cr = vec![b'\r'];
+    cr.extend(std::iter::repeat(b' ').take((to_col - 1).max(0) as usize));
+    cands.push((2, cr));
+    cands.into_iter().min_by_key(|(prio, b)| (b.len(), *prio)).map(|(_, b)| b).unwrap_or_default()
+}
+
+/// Reproduce the full terminal byte stream of a `SCREEN SECTION` `ACCEPT` of a single alphanumeric
+/// field of width `width` at `LINE line` / `COLUMN col`, given the printable `typed` input (the
+/// characters entered before Enter), followed by `STOP RUN` at EOF -- byte-identical to GnuCOBOL on
+/// the admitted xterm/ncurses 6.6 terminal (`GNURUST.SCREENIO.ACCEPT.1`).
+///
+/// Sealed envelope: `1 <= width <= 6` and `typed.len() <= width` (see the module section above);
+/// width >= 7 (the `rep`-painted prompt) and overflow input are documented non-claims.
+pub fn accept_field_and_stop(line: i32, col: i32, width: i32, typed: &[u8]) -> Vec<u8> {
+    let mut out = Vec::new();
+    out.extend_from_slice(INIT_PROLOGUE);
+
+    // (1) Position at the field start, then (2) paint the W-underscore input prompt.
+    out.extend_from_slice(&mvcur(1, 1, line, col));
+    for _ in 0..width {
+        out.push(ACCEPT_PROMPT_CHAR);
+    }
+    // (3) Reposition from the field end (col + width) back to the field start.
+    out.extend_from_slice(&accept_reposition(col + width, col));
+    // (4) Echo the typed characters, capped at the field width.
+    let echoed = typed.len().min(width as usize);
+    out.extend_from_slice(&typed[..echoed]);
+    // (5) Field-full backspace: a full field leaves the cursor one past the field; ncurses backs up.
+    if typed.len() as i32 >= width {
+        out.push(0x08);
+    }
+    // (6) EOF -> no pause prompt; straight to teardown.
+    out.extend_from_slice(TEARDOWN_EPILOGUE);
+    out
+}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
@@ -596,6 +684,25 @@ mod kani_proofs {
         let a: u8 = kani::any();
         let b: u8 = kani::any();
         let out = display_edited_and_stop(line, column, &[a, b]);
+        assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
+        assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
+    }
+
+    // KANIFOR: GNURUST.SCREENIO.ACCEPT.1
+    /// An ACCEPT field always emits a well-formed prologue..epilogue envelope and never panics, for
+    /// any in-screen position, any width 1..=6, and any input (including over-width). The reposition
+    /// + echo + field-full logic is total.
+    #[kani::proof]
+    #[kani::unwind(8)]
+    fn accept_envelope() {
+        let line: i32 = kani::any();
+        let col: i32 = kani::any();
+        let width: i32 = kani::any();
+        kani::assume(line >= 1 && line <= SCREEN_ROWS - 1);
+        kani::assume(col >= 1 && col <= 70);
+        kani::assume(width >= 1 && width <= 6);
+        let a: u8 = kani::any();
+        let out = accept_field_and_stop(line, col, width, &[a]);
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
@@ -786,6 +893,41 @@ mod tests {
         want.extend_from_slice(PAUSE_PROMPT);
         want.extend_from_slice(TEARDOWN_EPILOGUE);
         assert_eq!(got, want);
+    }
+
+    #[test]
+    fn accept_field_matches_oracle() {
+        // Exact captures of a `SCREEN SECTION` `ACCEPT` of an alphanumeric field, input fed then EOF,
+        // from the admitted oracle under a pty (TERM=xterm, ncurses 6.6). Verified additionally
+        // byte-identical against GnuCOBOL 3.1.2 (the differential oracle). Each vector gives the body
+        // between the screen clear and the teardown (there is NO pause prompt: EOF skips it). Covers
+        // the prompt, the reposition (backspaces / HPA / CR), the echo, and the field-full backspace.
+        let vectors: &[(i32, i32, i32, &[u8], &str)] = &[
+            (2, 3, 5, b"HELLO", "\x1b[2d  _____\r  HELLO\x08"), // full -> field-full backspace
+            (2, 3, 5, b"HI", "\x1b[2d  _____\r  HI"),           // partial
+            (2, 3, 5, b"", "\x1b[2d  _____\r  "),               // empty input
+            (2, 3, 3, b"AB", "\x1b[2d  ___\x08\x08\x08AB"),     // reposition by backspaces
+            (4, 10, 5, b"XY", "\x1b[4;10H_____\x1b[10GXY"),     // reposition by HPA
+            (2, 3, 1, b"A", "\x1b[2d  _\x08A\x08"),             // width-1, full
+        ];
+        for (line, col, width, typed, body_str) in vectors {
+            let mut want = Vec::new();
+            want.extend_from_slice(INIT_PROLOGUE);
+            want.extend_from_slice(body_str.as_bytes());
+            want.extend_from_slice(TEARDOWN_EPILOGUE);
+            let got = accept_field_and_stop(*line, *col, *width, typed);
+            assert_eq!(got, want, "accept mismatch L{} C{} W{} typed={:?}", line, col, width, typed);
+        }
+    }
+
+    #[test]
+    fn accept_reposition_cost_model() {
+        // Same-row backward move: HPA `\e[<c>G`, backspaces, or CR+spaces -- shortest wins, HPA before
+        // backspaces before CR on a tie.
+        assert_eq!(accept_reposition(6, 3), b"\x08\x08\x08"); // back 3 from col6: 3 BS (3) < HPA \e[3G (4)
+        assert_eq!(accept_reposition(8, 3), b"\r  "); // back 5 from col8: CR+2sp (3) < 5 BS, < HPA \e[3G (4)
+        assert_eq!(accept_reposition(15, 10), b"\x1b[10G"); // back 5 from col15: HPA (5) ties 5 BS, HPA wins
+        assert_eq!(accept_reposition(4, 3), b"\x08"); // back 1: single backspace
     }
 
     #[test]

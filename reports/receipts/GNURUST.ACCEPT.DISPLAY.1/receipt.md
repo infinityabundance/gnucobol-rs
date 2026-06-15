@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.ACCEPT.DISPLAY.1` |
 | court | DISPLAY emitted text + ACCEPT field bytes |
-| crate_version | `0.7.78` |
+| crate_version | `0.7.79` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | DISPLAY operand concatenation + newline; ACCEPT field move bytes |
 | replay command | `bash lab/oracle/accept_display_sweep.sh` |

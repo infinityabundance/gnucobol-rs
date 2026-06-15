@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.CASE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.78",
+  "crate_version": "0.7.79",
   "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program",
   "hash_chain": {
-    "inputs_sha256": "012804c995b73b70046b0817af7a2be198c4fba91d0693259831bcd1bd44a0a4"
+    "inputs_sha256": "881f58627787d746c5026cab5c0b964a5af2900f795635721ae0f476f8ce9d1c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4521552e098e8dada0feb3fe54c24a0903b5b9ef6a291ac3c3f3f129294d79a1",
-    "receipt_sha256": "ed3f5580374b6346074e9387a91b17dc3420dec5bdc7e50736a4959a9366dc13"
+    "receipt_sha256": "91271ab7603d59ce7176ef89a396ea1e711bcfbe7870c9cba15c46bf0c813e48"
   },
   "kind": "court-casefile",
   "lie_prevented": [

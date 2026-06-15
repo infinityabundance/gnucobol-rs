@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.MOD-REM.1` |
 | court | FUNCTION MOD/REM integer modulo/remainder |
-| crate_version | `0.7.78` |
+| crate_version | `0.7.79` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | FUNCTION MOD(a,b) (divisor sign) / REM(a,b) (dividend sign) for integers |
 | replay command | `bash lab/oracle/modrem_sweep.sh` |

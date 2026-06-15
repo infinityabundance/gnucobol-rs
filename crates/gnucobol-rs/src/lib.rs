@@ -758,6 +758,12 @@ pub fn __fuzz_screenio(data: &[u8]) {
     let nout = screenio::display_edited_and_stop(cline, ccol, data.get(2..).unwrap_or(&[]));
     debug_assert!(nout.starts_with(screenio::INIT_PROLOGUE));
     debug_assert!(nout.ends_with(screenio::TEARDOWN_EPILOGUE));
+    // Also exercise the ACCEPT input-field path (GNURUST.SCREENIO.ACCEPT.1): any width 1..=6 + any
+    // input (including over-width) must still produce a well-formed prologue..epilogue envelope.
+    let awidth = (data.get(2).copied().unwrap_or(1) as i32 % 6) + 1;
+    let aout = screenio::accept_field_and_stop(cline, ccol, awidth, data.get(5..).unwrap_or(&[]));
+    debug_assert!(aout.starts_with(screenio::INIT_PROLOGUE));
+    debug_assert!(aout.ends_with(screenio::TEARDOWN_EPILOGUE));
 }
 
 /// Fuzz the native XML PARSE state machine: drive `cob_xml_parse` over arbitrary input to a fixed point.

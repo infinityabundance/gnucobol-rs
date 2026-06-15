@@ -1,0 +1,31 @@
+{
+  "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 alphanumeric field + the printable input (<= width) -> the exact ncurses prompt/reposition/echo/field-full byte stream, on the admitted terminal",
+  "campaign": "GNURUST.SCREENIO.ACCEPT.1",
+  "command": {
+    "replay": "bash lab/oracle/screenio_accept_sweep.sh"
+  },
+  "court": "SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes",
+  "crate_version": "0.7.79",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal post-rep reposition)",
+    "OVERFLOW input (typing past the field width -- BEL + overwrite, a separate input-editing state machine)",
+    "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=12 FAIL=0 (3.1.2 differential-matched=12)"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

@@ -1,0 +1,67 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a SCREEN SECTION ACCEPT of a width-1..6 alphanumeric field + the printable input (<= width) -> the exact ncurses prompt/reposition/echo/field-full byte stream, on the admitted terminal"
+  ],
+  "case_id": "GNURUST.SCREENIO.ACCEPT.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.79",
+  "damage_if_overclaimed": "claiming 'screen ACCEPT works' would hide that only single width<=6 non-overflow alphanumeric input is proven -- the rep prompt, overflow/edit keys, numeric/USING validation, multi-field, and non-admitted terminals are not",
+  "hash_chain": {
+    "inputs_sha256": "3990c3f7af8569fd0c296d69acec6337aed11b88f0325d24595dfca4512c8542"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "4f36acb848a2e5d04db1ea6f69e28b45c42a0ef6f13bcac3fc3e90bdb6bd1dc6",
+    "receipt_sha256": "236a0f29cf9be673c4579b5f667bcd716256e643e4a7a8a793a8e560f27d495f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "screen ACCEPT input needs ncurses linked -- NO (for the width<=6 non-overflow envelope): the prompt + reposition + echo + field-full are deterministic bytes reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. The `rep` prompt, overflow editing, and field keys are honestly carved out"
+  ],
+  "negative_capability_ids": [
+    "NEG.WIDTH-7-FIELDS-NCURSES-THEN-PAINTS-THE-P",
+    "NEG.OVERFLOW-INPUT-TYPING-PAST-THE-FIELD-WID",
+    "NEG.FIELD-EDITING-KEYS-ARROWS-BACKSPACE-DURI",
+    "NEG.NUMERIC-OR-USING-VALIDATION-FIELDS",
+    "NEG.MULTI-FIELD-ACCEPT",
+    "NEG.ACCEPT-COLOUR-ATTRIBUTES",
+    "NEG.ANY-TERMINAL-OTHER-THAN-TERM-XTERM-OR-NC"
+  ],
+  "negative_claims": [
+    "width >= 7 fields (ncurses then paints the prompt with the `rep` capability `\\e[<W-1>b` and the post-rep reposition is terminfo-internal + position-dependent)",
+    "OVERFLOW input (typing past the field width bells `\\a` + overwrites -- a separate input-editing state machine)",
+    "field editing keys (arrows / backspace-during-input / function keys)",
+    "numeric or USING-validation fields",
+    "multi-field ACCEPT",
+    "ACCEPT colour/attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6",
+    "lie prevented: screen ACCEPT input needs ncurses linked -- NO (for the width<=6 non-overflow envelope): the prompt + reposition + echo + field-full are deterministic bytes reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. The `rep` prompt, overflow editing, and field keys are honestly carved out"
+  ],
+  "oracle": {
+    "detail": "cobc SCREEN SECTION ACCEPT of an alphanumeric USING field (libcob/screenio.c via ncurses field input), input fed then EOF, captured under a pty with TERM=xterm; DIFFERENTIALLY against GnuCOBOL 3.2 AND 3.1.2",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SCREENIO.ACCEPT.1"
+  },
+  "positive_claims": [
+    "a from-scratch, dependency-free Rust reproduction of the terminal byte stream of a SCREEN SECTION ACCEPT of a single alphanumeric USING field -- WITHOUT linking ncurses -- proven byte-identical to GnuCOBOL, AND DIFFERENTIALLY byte-identical to the 3.1.2 second oracle (screenio_accept_sweep 12/0, 3.1.2-matched 12/12",
+    "an offline 336-capture width x col x line x input grid vs 3.2 + a 56-case 3.1.2 differential). The stream is: position at the field start (shared mvcur), paint the field as W underscores (the ncurses input prompt), reposition to the field start (a same-row backward move -- HPA \\e[<col>G / backspaces / CR+spaces, shortest-wins, HPA before backspaces before CR on a tie, screenio::accept_reposition), echo the typed characters (up to W), and -- if the input fills the field -- a single field-full backspace",
+    "on EOF the implicit STOP RUN pause is skipped, straight to teardown (screenio::accept_field_and_stop)."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/screenio_accept_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 12,
+    "total": 12,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

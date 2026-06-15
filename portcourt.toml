@@ -86,6 +86,7 @@ requires = [
 [module."screenio.c"]
 claim = "complete"
 requires = [
+  "GNURUST.SCREENIO.ACCEPT.1",
   "GNURUST.SCREENIO.ATTR.1",
   "GNURUST.SCREENIO.COLOR.1",
   "GNURUST.SCREENIO.DISPLAY.2",
