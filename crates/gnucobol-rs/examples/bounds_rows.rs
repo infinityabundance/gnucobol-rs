@@ -4,7 +4,7 @@
 //! lines are produced by both admitted oracles (3.1.2 + 3.2), so this is a version-stable claim. The
 //! `case=<id>` line selects which native check to evaluate. Prints `PASS=n FAIL=n`.
 
-use gnucobol_rs::common::{cob_check_odo, cob_check_ref_mod, cob_check_subscript};
+use gnucobol_rs::common::{cob_check_numeric, cob_check_odo, cob_check_ref_mod, cob_check_subscript};
 use std::io::Read;
 
 fn main() {
@@ -40,6 +40,11 @@ fn main() {
             // names the DEPENDING ON variable (N).
             let v = cob_check_odo(7, 1, 5, "E", "N").unwrap();
             (v.message, v.hint)
+        }
+        "numeric" => {
+            // N PIC 9(3) gets "12X" then arithmetic -> the not-numeric runtime diagnostic.
+            let v = cob_check_numeric(false, "N", "NUMERIC DISPLAY", b"12X", true).unwrap();
+            (v, None)
         }
         other => {
             println!("unknown case {other}");

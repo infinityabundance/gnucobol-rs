@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a non-numeric value reaching arithmetic (field name + type + raw bytes) -> the exact runtime not-numeric diagnostic message bytes"
+  ],
+  "case_id": "GNURUST.COMMON.NUMCHECK.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.71",
+  "damage_if_overclaimed": "claiming 'numeric checking' would hide that only the DIAGNOSTIC MESSAGE is sealed here, not the cob_is_numeric validity decision, the abort, or the prefix framing",
+  "hash_chain": {
+    "inputs_sha256": "bc24e1dc0410123409ab8f62a706e2ce1a9e877aabed1d8fb647e12e028ca01f"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "7a13e5d62305671839240e571a0f942deca95d82e2dbfd5081cb0158737854ba",
+    "receipt_sha256": "a3789f415d7a9c7fff425efbf36030501b1ab256defae6eaf7e38fb32f99107a"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "the not-numeric runtime diagnostic is GnuCOBOL-internal and unportable -- NO: its text is a deterministic function of the field name/type/bytes, reproduced byte-identically and proven stable across two GnuCOBOL versions"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-COB-IS-NUMERIC-VALIDITY-DECISION-ITS",
+    "NEG.COB-IS-NUMERIC-IS-A-FOLLOW-ON",
+    "NEG.THE-LIBCOB-FILE-LINE-ERROR-PREFIX-FRAMIN",
+    "NEG.THE-COB-HARD-FAILURE-ABORT-EXIT",
+    "NEG.NATIONAL-UTF-16-BYTE-WIDTHS-IN-THE-ESCAP"
+  ],
+  "negative_claims": [
+    "the cob_is_numeric VALIDITY decision itself (the per-type digit/sign/BCD/float-finite check -- this court takes the numeric verdict as input and reproduces the MESSAGE",
+    "cob_is_numeric is a follow-on)",
+    "the libcob: <file>:<line>: error: prefix framing",
+    "the cob_hard_failure abort + exit",
+    "NATIONAL/UTF-16 byte widths in the escaping",
+    "lie prevented: the not-numeric runtime diagnostic is GnuCOBOL-internal and unportable -- NO: its text is a deterministic function of the field name/type/bytes, reproduced byte-identically and proven stable across two GnuCOBOL versions"
+  ],
+  "oracle": {
+    "detail": "cobc -debug EC-DATA-INCOMPATIBLE runtime check (libcob/common.c cob_check_numeric), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COMMON.NUMCHECK.1"
+  },
+  "positive_claims": [
+    "a faithful pure port of common.c's numeric-class diagnostics (explain_field_type + cob_check_numeric), reproducing the EXACT EC-DATA-INCOMPATIBLE runtime error text GnuCOBOL prints when a non-numeric value reaches arithmetic (under cobc -debug): '<name>' (Type: <type>) not numeric: '<escaped>'. explain_field_type maps the field-type code to its human name (NUMERIC DISPLAY / PACKED-DECIMAL / COMP-6 / ALPHANUMERIC / ...)",
+    "the escaping shows printable bytes as-is and non-printable bytes as \\<ooo> octal (for NUMERIC DISPLAY / alphanumeric fields) or the whole value as 0x<hex> otherwise. The pure verdict + message is separated from the abort. DIFFERENTIAL: proven byte-identical against BOTH oracles GnuCOBOL 3.1.2 + 3.2 (numeric_check_sweep 2/0). Example: \"'N' (Type: NUMERIC DISPLAY) not numeric: '12X'\"."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/numeric_check_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

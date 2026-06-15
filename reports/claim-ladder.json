@@ -1581,6 +1581,20 @@
       "damage_if_overclaimed": "claiming 'runtime diagnostics' broadly would hide that only these three bounds messages are sealed (not the not-numeric message, the abort, or the libcob: prefix framing)"
     },
     {
+      "id": "GNURUST.COMMON.NUMCHECK.1",
+      "name": "Not-numeric runtime diagnostic + field-type explanation",
+      "proven": "a faithful pure port of common.c's numeric-class diagnostics (explain_field_type + cob_check_numeric), reproducing the EXACT EC-DATA-INCOMPATIBLE runtime error text GnuCOBOL prints when a non-numeric value reaches arithmetic (under cobc -debug): '<name>' (Type: <type>) not numeric: '<escaped>'. explain_field_type maps the field-type code to its human name (NUMERIC DISPLAY / PACKED-DECIMAL / COMP-6 / ALPHANUMERIC / ...); the escaping shows printable bytes as-is and non-printable bytes as \\<ooo> octal (for NUMERIC DISPLAY / alphanumeric fields) or the whole value as 0x<hex> otherwise. The pure verdict + message is separated from the abort. DIFFERENTIAL: proven byte-identical against BOTH oracles GnuCOBOL 3.1.2 + 3.2 (numeric_check_sweep 2/0). Example: \"'N' (Type: NUMERIC DISPLAY) not numeric: '12X'\".",
+      "byte_domain": "a non-numeric value reaching arithmetic (field name + type + raw bytes) -> the exact runtime not-numeric diagnostic message bytes",
+      "oracle": "cobc -debug EC-DATA-INCOMPATIBLE runtime check (libcob/common.c cob_check_numeric), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
+      "fixtures": "numeric_check_sweep 2/0 (1 case x 2 oracles, differential) + unit tests (explain_field_type map + escaping: octal + hex) + Kani numeric_check_is_conditional",
+      "sealed_version": "0.7.71",
+      "not_proven": "the cob_is_numeric VALIDITY decision itself (the per-type digit/sign/BCD/float-finite check -- this court takes the numeric verdict as input and reproduces the MESSAGE; cob_is_numeric is a follow-on); the libcob: <file>:<line>: error: prefix framing; the cob_hard_failure abort + exit; NATIONAL/UTF-16 byte widths in the escaping",
+      "breaks_claim": "a different field-type name, a different escaping, or a different message shape vs the oracle on either version",
+      "readiness": 4,
+      "lie_prevented": "the not-numeric runtime diagnostic is GnuCOBOL-internal and unportable -- NO: its text is a deterministic function of the field name/type/bytes, reproduced byte-identically and proven stable across two GnuCOBOL versions",
+      "damage_if_overclaimed": "claiming 'numeric checking' would hide that only the DIAGNOSTIC MESSAGE is sealed here, not the cob_is_numeric validity decision, the abort, or the prefix framing"
+    },
+    {
       "id": "GNURUST.INDEX.1",
       "name": "USAGE INDEX storage + SET arithmetic",
       "proven": "the bytes a USAGE INDEX / INDEXED BY index item holds: a 4-byte native-endian (little-endian on the admitted x86-64 oracle) signed two's-complement word storing the OCCURRENCE NUMBER (element-size independent -- SET IDX TO 5 stores 5, never 5*element_size), and SET IDX TO/UP BY/DOWN BY as plain integer arithmetic on that word (DOWN past zero stores the negative two's-complement value; cobc does not clamp)",

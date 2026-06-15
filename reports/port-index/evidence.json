@@ -255,12 +255,12 @@
       ]
     },
     {
-      "active": 27,
-      "direct": 22,
-      "evidenced_any": 23,
+      "active": 29,
+      "direct": 24,
+      "evidenced_any": 25,
       "file": "common.c",
       "lifecycle": 0,
-      "oracle": 3,
+      "oracle": 5,
       "transitive": 1,
       "unevidenced": [
         "cob_check_ref_mod_detailed",
@@ -287,11 +287,11 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 807,
-    "direct": 494,
-    "evidenced_any": 670,
+    "active": 809,
+    "direct": 496,
+    "evidenced_any": 672,
     "lifecycle": 60,
-    "oracle": 199,
+    "oracle": 201,
     "transitive": 151,
     "unevidenced": 137
   }

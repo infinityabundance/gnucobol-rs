@@ -10,7 +10,7 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 807** · direct 494 (incl. oracle-sweep 199) · transitive 151 · lifecycle 60 · **evidenced (any) 670** · **unevidenced 137**.
+**Active ported: 809** · direct 496 (incl. oracle-sweep 201) · transitive 151 · lifecycle 60 · **evidenced (any) 672** · **unevidenced 137**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -24,7 +24,7 @@
 | `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
 | `mlio.c` | 43 | 25 | 5 | 3 | 2 | 30 | 13 |
 | `reportio.c` | 39 | 21 | 0 | 8 | 7 | 33 | 6 |
-| `common.c` | 27 | 22 | 3 | 1 | 0 | 23 | 4 |
+| `common.c` | 29 | 24 | 5 | 1 | 0 | 25 | 4 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)

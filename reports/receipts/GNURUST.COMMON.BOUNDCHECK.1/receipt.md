@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.COMMON.BOUNDCHECK.1` |
 | court | Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON) |
-| crate_version | `0.7.70` |
+| crate_version | `0.7.71` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2) |
 | replay command | `bash lab/oracle/bounds_check_sweep.sh` |
@@ -18,7 +18,7 @@
 
 ## Non-claims
 - the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)
-- cob_check_numeric's not-numeric message (octal/hex byte escaping)
+- the not-numeric message is sealed separately (GNURUST.COMMON.NUMCHECK.1)
 - the cob_hard_failure abort + exit code + EC numeric ids
 - the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case
 

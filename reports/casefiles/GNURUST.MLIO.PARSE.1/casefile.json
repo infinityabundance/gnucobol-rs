@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MLIO.PARSE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.70",
+  "crate_version": "0.7.71",
   "damage_if_overclaimed": "claiming 'XML PARSE works' would imply GnuCOBOL parses XML (it does not); the honest claim is byte-identity of the unimplemented-but-observable event stream",
   "hash_chain": {
-    "inputs_sha256": "9cf8ea285813923fe682b826cbf36700ecc47c6808f4fae19314129a1f3fb417"
+    "inputs_sha256": "7706cf47fe266ada13cfaa1ee1993df140548181da3def4696b1d2e96a13be07"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3ce5012f98958b4514fba08fb28c1d2694866914e57412bf2e3a48d0236c41e9",
-    "receipt_sha256": "23ac46cfa5988f166cf927352233d2d8bd7d0f6f7b9d61c47d62de5c36d1af0f"
+    "receipt_sha256": "405e43f5badc384f85d7a1ab3d2da823cd2723fcc1423a340c27682cfcfb9504"
   },
   "kind": "court-casefile",
   "lie_prevented": [

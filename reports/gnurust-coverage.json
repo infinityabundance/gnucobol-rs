@@ -587,9 +587,10 @@
     {
       "category": "runtime diagnostics",
       "courts": [
-        "GNURUST.COMMON.BOUNDCHECK.1"
+        "GNURUST.COMMON.BOUNDCHECK.1",
+        "GNURUST.COMMON.NUMCHECK.1"
       ],
-      "future_campaign": null,
+      "future_campaign": "cob_is_numeric (the per-type numeric validity decision) + cob_correct_numeric (sign-byte fix) -- the data-class checks behind the diagnostics",
       "risk_if_unported": "the runtime EC-BOUND diagnostic text for an out-of-bounds subscript / reference modification / OCCURS DEPENDING ON is reproduced byte-identically to GnuCOBOL (common.c cob_check_subscript / cob_check_ref_mod / cob_check_odo), verified identical across BOTH admitted oracles 3.1.2 + 3.2 (bounds_check_sweep 6/0) -- so a migration that asserts on the diagnostic text sees the same bytes",
       "source_modules": [
         "libcob/common.c"

@@ -142,7 +142,6 @@
         "cob_check_linkage",
         "cob_check_linkage_size",
         "cob_check_numdisp",
-        "cob_check_numeric",
         "cob_check_trace_file",
         "cob_check_version",
         "cob_command_line",
@@ -280,7 +279,6 @@
         "conf_runtime_error_value",
         "create_dumpfile",
         "do_trace_statement",
-        "explain_field_type",
         "flush_target",
         "get_config_val",
         "get_math_info",
@@ -313,8 +311,8 @@
         "translate_boolean_to_int",
         "var_print"
       ],
-      "parity_pct": 17.2,
-      "ported": 42
+      "parity_pct": 18.0,
+      "ported": 44
     },
     {
       "doxygen_functions": 4,
@@ -329,8 +327,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 77.1,
-    "ported": 769
+    "parity_pct": 77.3,
+    "ported": 771
   },
   "xml_root": "lab/doxygen/out/xml"
 }

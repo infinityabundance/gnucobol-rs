@@ -47,7 +47,7 @@
 | `class-conditions` | condition | `common.c` | ✅ sealed | GNURUST.CLASS.1 |
 | `reference-modification` | data handling | `move.c, typeck.c` | ✅ sealed | GNURUST.REFMOD.1 |
 | `table-subscript` | data handling | `typeck.c, move.c` | ✅ sealed | GNURUST.SUBSCRIPT.1 |
-| `runtime-bounds-messages` | runtime diagnostics | `common.c` | ✅ sealed | GNURUST.COMMON.BOUNDCHECK.1 |
+| `runtime-bounds-messages` | runtime diagnostics | `common.c` | ✅ sealed | GNURUST.COMMON.BOUNDCHECK.1, GNURUST.COMMON.NUMCHECK.1 |
 | `occurs-depending-on` | data handling | `typeck.c, move.c` | ✅ sealed | GNURUST.ODO.1 |
 | `usage-index` | data handling | `typeck.c, move.c` | ✅ sealed | GNURUST.INDEX.1 |
 | `integer-power` | arithmetic | `numeric.c` | ✅ sealed | GNURUST.INTPOW.1 |

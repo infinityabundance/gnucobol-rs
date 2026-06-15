@@ -1,0 +1,30 @@
+{
+  "byte_domain": "a non-numeric value reaching arithmetic -> the exact not-numeric diagnostic message bytes (verified vs both oracles 3.1.2 + 3.2)",
+  "campaign": "GNURUST.COMMON.NUMCHECK.1",
+  "command": {
+    "replay": "bash lab/oracle/numeric_check_sweep.sh"
+  },
+  "court": "Not-numeric runtime diagnostic + field-type explanation",
+  "crate_version": "0.7.71",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "the cob_is_numeric validity decision itself (this court reproduces the MESSAGE, taking the verdict as input)",
+    "the libcob: prefix framing + the abort/exit",
+    "NATIONAL/UTF-16 byte widths in the escaping"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=2 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

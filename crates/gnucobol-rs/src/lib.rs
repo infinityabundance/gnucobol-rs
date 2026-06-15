@@ -645,6 +645,16 @@ pub fn __fuzz_mlio(data: &[u8]) {
     let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
 }
 
+/// Fuzz the not-numeric diagnostic generators (`GNURUST.COMMON.NUMCHECK.1`): arbitrary type codes + data
+/// never panic and yield well-formed (or no) messages.
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_common_numcheck(data: &[u8]) {
+    let ty = data.first().copied().unwrap_or(0);
+    let _ = common::explain_field_type(ty, data.len() & 1 == 0, data.len() & 2 == 0);
+    let _ = common::cob_check_numeric(data.len() & 4 == 0, "X", "NUMERIC DISPLAY", data, data.len() & 8 == 0);
+}
+
 /// Fuzz the runtime bounds-check message generators (`GNURUST.COMMON.BOUNDCHECK.1`): arbitrary indices,
 /// sizes, offsets, and lengths never panic and yield well-formed (or empty) violation lists.
 #[cfg(feature = "fuzzing")]

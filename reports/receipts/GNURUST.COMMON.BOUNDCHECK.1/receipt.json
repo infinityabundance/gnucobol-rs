@@ -5,13 +5,13 @@
     "replay": "bash lab/oracle/bounds_check_sweep.sh"
   },
   "court": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
-  "crate_version": "0.7.70",
+  "crate_version": "0.7.71",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
     "the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)",
-    "cob_check_numeric's not-numeric message (octal/hex byte escaping)",
+    "the not-numeric message is sealed separately (GNURUST.COMMON.NUMCHECK.1)",
     "the cob_hard_failure abort + exit code + EC numeric ids",
     "the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case"
   ],

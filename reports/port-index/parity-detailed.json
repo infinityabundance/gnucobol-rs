@@ -5626,9 +5626,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 28,
+    "active_ported": 30,
     "compiled": 254,
-    "compiled_parity_pct": 11.0,
+    "compiled_parity_pct": 11.8,
     "disabled": 0,
     "doc_only": 17,
     "file": "common.c",
@@ -6234,12 +6234,14 @@
       {
         "function": "explain_field_type",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_numeric",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_odo",
@@ -6966,7 +6968,6 @@
       "cob_check_linkage",
       "cob_check_linkage_size",
       "cob_check_numdisp",
-      "cob_check_numeric",
       "cob_check_trace_file",
       "cob_check_version",
       "cob_cmp",
@@ -7124,7 +7125,6 @@
       "conf_runtime_error_value",
       "create_dumpfile",
       "do_trace_statement",
-      "explain_field_type",
       "flush_target",
       "get_config_val",
       "get_function_ptr_for_precise_time",
@@ -7161,7 +7161,7 @@
       "var_print"
     ],
     "inactive_mirrors": 0,
-    "missing": 209,
+    "missing": 207,
     "source_funcs": 254,
     "test_only": 0
   },

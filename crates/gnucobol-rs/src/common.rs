@@ -448,6 +448,115 @@ pub fn cob_check_ref_mod_minimal(name: &str, offset: i32, length: i32) -> Vec<Bo
     out
 }
 
+// ======================================================================================================
+// Numeric-class diagnostics (common.c explain_field_type / cob_check_numeric). The "not numeric" runtime
+// error is what GnuCOBOL prints when a non-numeric value reaches arithmetic (under cobc -debug); its text
+// is reproduced byte-identically and proven version-stable across the 3.1.2 + 3.2 oracles.
+// ======================================================================================================
+
+// `common.h` field-type codes (the subset explain_field_type names).
+const T_GROUP: u8 = 0x01;
+const T_BOOLEAN: u8 = 0x02;
+const T_NUMERIC_DISPLAY: u8 = 0x10;
+const T_NUMERIC_BINARY: u8 = 0x11;
+const T_NUMERIC_PACKED: u8 = 0x12;
+const T_NUMERIC_FLOAT: u8 = 0x13;
+const T_NUMERIC_DOUBLE: u8 = 0x14;
+const T_NUMERIC_L_DOUBLE: u8 = 0x15;
+const T_NUMERIC_FP_DEC64: u8 = 0x16;
+const T_NUMERIC_FP_DEC128: u8 = 0x17;
+const T_NUMERIC_FP_BIN32: u8 = 0x18;
+const T_NUMERIC_FP_BIN64: u8 = 0x19;
+const T_NUMERIC_FP_BIN128: u8 = 0x1A;
+const T_NUMERIC_COMP5: u8 = 0x1B;
+const T_NUMERIC_EDITED: u8 = 0x24;
+const T_ALPHANUMERIC: u8 = 0x21;
+const T_ALPHANUMERIC_ALL: u8 = 0x22;
+const T_ALPHANUMERIC_EDITED: u8 = 0x23;
+const T_NATIONAL: u8 = 0x40;
+const T_NATIONAL_EDITED: u8 = 0x41;
+
+/// Port of `common.c:explain_field_type` -- the human field-type name GnuCOBOL prints in runtime
+/// diagnostics (e.g. `NUMERIC DISPLAY`, `PACKED-DECIMAL`, `ALPHANUMERIC`). `no_sign_nibble` / `have_sign`
+/// disambiguate the packed-decimal variants (`COMP-6`, `PACKED-DECIMAL (unsigned)`).
+pub fn explain_field_type(field_type: u8, no_sign_nibble: bool, have_sign: bool) -> &'static str {
+    match field_type {
+        T_GROUP => "GROUP",
+        T_BOOLEAN => "BOOLEAN",
+        T_NUMERIC_DISPLAY => "NUMERIC DISPLAY",
+        T_NUMERIC_BINARY => "BINARY",
+        T_NUMERIC_PACKED => {
+            if no_sign_nibble {
+                "COMP-6"
+            } else if !have_sign {
+                "PACKED-DECIMAL (unsigned)"
+            } else {
+                "PACKED-DECIMAL"
+            }
+        }
+        T_NUMERIC_FLOAT => "FLOAT",
+        T_NUMERIC_DOUBLE => "DOUBLE",
+        T_NUMERIC_L_DOUBLE => "LONG DOUBLE",
+        T_NUMERIC_FP_DEC64 => "FP DECIMAL 64",
+        T_NUMERIC_FP_DEC128 => "FP DECIMAL 128",
+        T_NUMERIC_FP_BIN32 => "FP BINARY 32",
+        T_NUMERIC_FP_BIN64 => "FP BINARY 64",
+        T_NUMERIC_FP_BIN128 => "FP BINARY 128",
+        T_NUMERIC_COMP5 => "COMP-5",
+        T_NUMERIC_EDITED => "NUMERIC EDITED",
+        T_ALPHANUMERIC => "ALPHANUMERIC",
+        T_ALPHANUMERIC_ALL => "ALPHANUMERIC ALL",
+        T_ALPHANUMERIC_EDITED => "ALPHANUMERIC EDITED",
+        T_NATIONAL => "NATIONAL",
+        T_NATIONAL_EDITED => "NATIONAL EDITED",
+        _ => "UNKNOWN",
+    }
+}
+
+/// Escape a field's raw bytes for the "not numeric" diagnostic, as `common.c:cob_check_numeric` does:
+/// for a NUMERIC DISPLAY or alphanumeric field (`as_text`), each printable byte is shown as-is and each
+/// non-printable byte as `\<ooo>` (3-digit octal); otherwise the whole value is shown as `0x<hex>`.
+fn escape_not_numeric(data: &[u8], as_text: bool) -> Vec<u8> {
+    let mut out = Vec::new();
+    if as_text {
+        for &b in data {
+            if (0x20..=0x7e).contains(&b) {
+                out.push(b);
+            } else {
+                out.extend_from_slice(format!("\\{b:03o}").as_bytes());
+            }
+        }
+    } else {
+        out.extend_from_slice(b"0x");
+        for &b in data {
+            out.extend_from_slice(format!("{b:02x}").as_bytes());
+        }
+    }
+    out
+}
+
+/// Port of `common.c:cob_check_numeric` -- when `is_numeric` is false (the field's bytes are not valid for
+/// its numeric type), the EC-DATA-INCOMPATIBLE runtime error message GnuCOBOL prints (the text after
+/// `libcob: <file>:<line>: error: `): `'<name>' (Type: <type>) not numeric: '<escaped>'`. `type_name` is
+/// [`explain_field_type`]; `escape_as_text` is set for NUMERIC DISPLAY / alphanumeric fields (see
+/// [`escape_not_numeric`]). Returns `None` when the value is numeric (no error). The abort
+/// (`cob_hard_failure`) is the caller's side effect.
+pub fn cob_check_numeric(
+    is_numeric: bool,
+    name: &str,
+    type_name: &str,
+    data: &[u8],
+    escape_as_text: bool,
+) -> Option<Vec<u8>> {
+    if is_numeric {
+        return None;
+    }
+    let mut msg = format!("'{name}' (Type: {type_name}) not numeric: '").into_bytes();
+    msg.extend_from_slice(&escape_not_numeric(data, escape_as_text));
+    msg.push(b'\'');
+    Some(msg)
+}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
@@ -465,6 +574,20 @@ mod kani_proofs {
         } else {
             assert!(v.is_some());
         }
+    }
+
+    // KANIFOR: GNURUST.COMMON.NUMCHECK.1
+    /// `cob_check_numeric` returns a message exactly when the value is not numeric, never otherwise, and
+    /// `explain_field_type` is total -- both never panic for any inputs.
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn numeric_check_is_conditional() {
+        let is_numeric: bool = kani::any();
+        let b: u8 = kani::any();
+        let ty: u8 = kani::any();
+        let _ = explain_field_type(ty, kani::any(), kani::any());
+        let v = cob_check_numeric(is_numeric, "X", "T", &[b], kani::any());
+        assert_eq!(v.is_none(), is_numeric);
     }
 }
 
@@ -595,5 +718,33 @@ mod tests {
         assert_eq!(r3[0].message, b"length of 'F' out of bounds: 3, starting at: 4, maximum: 5".to_vec());
         assert!(cob_check_ref_mod(1, 5, 5, "F").is_empty()); // in bounds
         assert_eq!(cob_check_ref_mod_minimal("F", 0, 2)[0].message, b"offset of 'F' out of bounds: 0".to_vec());
+    }
+
+    #[test]
+    fn numeric_diagnostics() {
+        // explain_field_type
+        assert_eq!(explain_field_type(0x10, false, false), "NUMERIC DISPLAY");
+        assert_eq!(explain_field_type(0x12, false, true), "PACKED-DECIMAL");
+        assert_eq!(explain_field_type(0x12, false, false), "PACKED-DECIMAL (unsigned)");
+        assert_eq!(explain_field_type(0x12, true, true), "COMP-6");
+        assert_eq!(explain_field_type(0x21, false, false), "ALPHANUMERIC");
+        assert_eq!(explain_field_type(0x24, false, false), "NUMERIC EDITED");
+        assert_eq!(explain_field_type(0x99, false, false), "UNKNOWN");
+        // cob_check_numeric: the exact "not numeric" message (verified vs 3.1.2 + 3.2)
+        assert_eq!(
+            cob_check_numeric(false, "N", "NUMERIC DISPLAY", b"12X", true).unwrap(),
+            b"'N' (Type: NUMERIC DISPLAY) not numeric: '12X'".to_vec()
+        );
+        assert!(cob_check_numeric(true, "N", "NUMERIC DISPLAY", b"123", true).is_none());
+        // non-printable byte -> \ooo octal (0x01 -> \001)
+        assert_eq!(
+            cob_check_numeric(false, "X", "NUMERIC DISPLAY", b"1\x01", true).unwrap(),
+            b"'X' (Type: NUMERIC DISPLAY) not numeric: '1\\001'".to_vec()
+        );
+        // non-text field -> 0xHEX
+        assert_eq!(
+            cob_check_numeric(false, "P", "PACKED-DECIMAL", b"\x12\x3f", false).unwrap(),
+            b"'P' (Type: PACKED-DECIMAL) not numeric: '0x123f'".to_vec()
+        );
     }
 }

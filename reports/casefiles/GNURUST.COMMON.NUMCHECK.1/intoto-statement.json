@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.COMMON.NUMCHECK.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.71",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "7a13e5d62305671839240e571a0f942deca95d82e2dbfd5081cb0158737854ba",
+      "receipt_sha256": "a3789f415d7a9c7fff425efbf36030501b1ab256defae6eaf7e38fb32f99107a"
+    },
+    "negative_claim_count": 6,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/numeric_check_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "21bfba89488cbbcb75380e9e3dcc24c1deafa75cbac7f39fbb9bfddee9b6c6d1"
+      },
+      "name": "reports/casefiles/GNURUST.COMMON.NUMCHECK.1/casefile.json"
+    }
+  ]
+}

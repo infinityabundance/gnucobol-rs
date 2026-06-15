@@ -796,9 +796,19 @@
       "byte_domain": "a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2)",
       "non_claims": [
         "the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)",
-        "cob_check_numeric's not-numeric message (octal/hex byte escaping)",
+        "the not-numeric message is sealed separately (GNURUST.COMMON.NUMCHECK.1)",
         "the cob_hard_failure abort + exit code + EC numeric ids",
         "the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case"
+      ]
+    },
+    "GNURUST.COMMON.NUMCHECK.1": {
+      "court": "Not-numeric runtime diagnostic + field-type explanation",
+      "sweep": "numeric_check_sweep.sh",
+      "byte_domain": "a non-numeric value reaching arithmetic -> the exact not-numeric diagnostic message bytes (verified vs both oracles 3.1.2 + 3.2)",
+      "non_claims": [
+        "the cob_is_numeric validity decision itself (this court reproduces the MESSAGE, taking the verdict as input)",
+        "the libcob: prefix framing + the abort/exit",
+        "NATIONAL/UTF-16 byte widths in the escaping"
       ]
     },
     "GNURUST.INDEX.1": {

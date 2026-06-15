@@ -221,7 +221,6 @@
         "cob_check_linkage",
         "cob_check_linkage_size",
         "cob_check_numdisp",
-        "cob_check_numeric",
         "cob_check_trace_file",
         "cob_check_version",
         "cob_cmp",
@@ -379,7 +378,6 @@
         "conf_runtime_error_value",
         "create_dumpfile",
         "do_trace_statement",
-        "explain_field_type",
         "flush_target",
         "get_config_val",
         "get_function_ptr_for_precise_time",
@@ -415,8 +413,8 @@
         "unsetenv",
         "var_print"
       ],
-      "parity_pct": 11.0,
-      "ported": 28
+      "parity_pct": 11.8,
+      "ported": 30
     },
     {
       "file": "cobgetopt.c",
@@ -432,7 +430,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 70.7,
-    "ported": 827
+    "parity_pct": 70.9,
+    "ported": 829
   }
 }
