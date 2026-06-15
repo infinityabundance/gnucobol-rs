@@ -562,6 +562,54 @@ pub fn accept_field_and_stop(line: i32, col: i32, width: i32, typed: &[u8]) -> V
     out
 }
 
+/// The general multi-DISPLAY same-row refresh **line-diff** (ncurses `doupdate` / `TransformLine`)
+/// -- a thoroughly reverse-engineered but **deliberately UNSEALED** boundary. This module is
+/// documentation only: it records what was proven, what blocks a faithful general seal, and why, so a
+/// future engineer (or a port of ncurses's `lib_doupdate.c` + `lib_mvcur.c`) can pick it up without
+/// re-deriving it. There is no claim here -- the general line-diff is the declared non-claim of the
+/// screenio surface.
+///
+/// ## The shape (verified)
+///
+/// When two `DISPLAY` statements write the same screen row, the second is not a fresh positioned
+/// write: ncurses keeps a virtual screen, and on refresh `TransformLine` diffs the new row against
+/// the old and emits the minimal update. A `DISPLAY` of a literal at `(line, col)` writes its text at
+/// `[col, col+len)` and blanks `[col+len, EOL)` in the virtual row; `TransformLine` then:
+/// * finds the first and last columns that changed,
+/// * repositions to the first changed column,
+/// * writes the new content up to its last non-blank cell, and
+/// * **erases the now-blank tail** -- the genuinely new behaviour vs the sealed DISPLAY courts.
+///
+/// ## Robustly proven sub-facts (oracle 3.2 + 3.1.2, byte-identical)
+///
+/// * **The `clr_eol`-vs-spaces threshold.** After writing the changed run, a trailing run of cells
+///   that changed to blank is erased with `\e[K` (`el`) when it is **>= 2 cells**, written as a
+///   single space when it is exactly **1 cell**, and omitted when **0**. (Probed `tail-1..tail-5`:
+///   1 -> ` `, 2..5 -> `\e[K`.)
+/// * **The same-row reposition priority.** The backward move between writes prefers column-address
+///   HPA `\e[<c>G` over backspaces over CR+spaces on a byte-count tie -- the same order as
+///   [`accept_reposition`], and *unlike* the sealed forward [`mvcur`] (whose backward path only emits
+///   backspaces). This is why the line-diff cannot simply reuse `mvcur`.
+///
+/// ## Why a GENERAL seal is blocked (the two ncurses internals)
+///
+/// 1. **`EmitRange` rewrites leading unchanged cells when the cursor move is cheaper.** For
+///    `DISPLAY "ABCDEFGH" @3` then `DISPLAY "WXYZ" @4`, the first changed column is 4, yet the oracle
+///    repositions to column **3** (CR+2 spaces, 3 bytes) and rewrites the unchanged `A` -- because
+///    `move(->3)+write("AWXYZ")` ties `move(->4)+write("WXYZ")` on cost and ncurses takes the former.
+///    Reproducing this needs ncurses's per-cell PutRange/EmitRange cost search, not a first-diff start.
+/// 2. **`mvcur` chooses by terminfo string COST, not byte length.** For `DISPLAY "ABCDEFGH" @10` then
+///    `@10` again, the reposition from column 18 back to 10 uses CUP `\e[2;10H` (8 bytes) in
+///    preference to the **shorter** HPA `\e[10G` (5 bytes). The sealed courts' byte-length-shortest
+///    `mvcur` happens to agree with ncurses across their move ranges; the line-diff's larger backward
+///    repositions cross into the range where ncurses's cost model and raw byte length disagree.
+///    Reproducing this needs the actual `lib_mvcur.c` cost tables for the admitted terminfo.
+///
+/// Until those two cost models are ported, the general line-diff stays a documented non-claim; the
+/// sealed screenio courts (`INIT.1`, `DISPLAY.2`/`.3`, `ATTR.1`, `COLOR.1`, `NUMEDIT.1`, `ACCEPT.1`)
+/// cover the positioned/attributed/edited/input cases whose moves stay in the agreeing range.
+pub mod line_diff_boundary {}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
