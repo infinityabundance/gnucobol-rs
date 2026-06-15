@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-134-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-134-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-135-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-135-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -231,6 +231,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |
 | `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
+| `GNURUST.SCREENIO.ACCEPT.2` | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.SCREENIO.DISPLAY.3` | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |

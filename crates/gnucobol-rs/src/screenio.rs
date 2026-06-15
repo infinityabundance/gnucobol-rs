@@ -498,13 +498,13 @@ pub fn display_edited_and_stop(line: i32, column: i32, edited: &[u8]) -> Vec<u8>
 //
 // ## Sealed envelope (verified byte-identical against BOTH GnuCOBOL 3.2 and 3.1.2)
 //
-// A single alphanumeric field of **width 1..=6**, plain printable input that does **not exceed** the
-// field width, terminated by Enter then EOF. Width >= 7 is the declared non-claim: ncurses then
-// paints the prompt with the `rep` capability (`_\e[<W-1>b`) and the post-`rep` reposition becomes
-// terminfo-internal and position-dependent. Typing **past** the field width (overflow) is also a
-// non-claim: each excess key emits a BEL `\a` and an overwrite, a separate input-editing state
-// machine. Field editing keys (arrows, backspace-during-input, function keys), numeric/`USING`
-// validation, and any terminal but the admitted `TERM=xterm` / ncurses 6.6 are likewise out of scope.
+// A single alphanumeric field of **width 1..=6**, plain printable input terminated by Enter then EOF
+// -- INCLUDING **overflow** input that exceeds the field width (`GNURUST.SCREENIO.ACCEPT.2`, the
+// BEL/overwrite tail in step (6) below). Width >= 7 is the declared non-claim: ncurses then paints
+// the prompt with the `rep` capability (`_\e[<W-1>b`) and the post-`rep` reposition becomes
+// terminfo-internal and position-dependent. Field editing keys (arrows, backspace-during-input,
+// function keys), numeric/`USING` validation, and any terminal but the admitted `TERM=xterm` /
+// ncurses 6.6 are likewise out of scope.
 
 /// The default ncurses prompt character an `ACCEPT` field shows for each empty position.
 pub const ACCEPT_PROMPT_CHAR: u8 = b'_';
@@ -557,7 +557,24 @@ pub fn accept_field_and_stop(line: i32, col: i32, width: i32, typed: &[u8]) -> V
     if typed.len() as i32 >= width {
         out.push(0x08);
     }
-    // (6) EOF -> no pause prompt; straight to teardown.
+    // (6) OVERFLOW (GNURUST.SCREENIO.ACCEPT.2): typing past the field width. With the cursor parked on
+    // the last cell, each excess key rings the bell `\a`; if the key differs from the character
+    // currently shown in that cell it overwrites it (write the char, then a backspace to stay on the
+    // cell), otherwise the bell is all that is emitted (overwriting a cell with its own value is a
+    // no-op). The "currently shown" character starts as the last filled cell and updates on each
+    // overwrite.
+    if typed.len() as i32 > width {
+        let mut last_shown = typed[width as usize - 1];
+        for &ch in &typed[width as usize..] {
+            out.push(0x07); // BEL
+            if ch != last_shown {
+                out.push(ch);
+                out.push(0x08); // backspace back onto the last cell
+                last_shown = ch;
+            }
+        }
+    }
+    // (7) EOF -> no pause prompt; straight to teardown.
     out.extend_from_slice(TEARDOWN_EPILOGUE);
     out
 }
@@ -737,9 +754,11 @@ mod kani_proofs {
     }
 
     // KANIFOR: GNURUST.SCREENIO.ACCEPT.1
+    // KANIFOR: GNURUST.SCREENIO.ACCEPT.2
     /// An ACCEPT field always emits a well-formed prologue..epilogue envelope and never panics, for
-    /// any in-screen position, any width 1..=6, and any input (including over-width). The reposition
-    /// + echo + field-full logic is total.
+    /// any in-screen position, any width 1..=6, and any input -- including OVERFLOW (the input here is
+    /// up to 3 bytes, which over-fills a width-1 or width-2 field, exercising the ACCEPT.2 BEL/
+    /// overwrite tail). The reposition + echo + field-full + overflow logic is total.
     #[kani::proof]
     #[kani::unwind(8)]
     fn accept_envelope() {
@@ -750,7 +769,9 @@ mod kani_proofs {
         kani::assume(col >= 1 && col <= 70);
         kani::assume(width >= 1 && width <= 6);
         let a: u8 = kani::any();
-        let out = accept_field_and_stop(line, col, width, &[a]);
+        let b: u8 = kani::any();
+        let c: u8 = kani::any();
+        let out = accept_field_and_stop(line, col, width, &[a, b, c]);
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
@@ -965,6 +986,29 @@ mod tests {
             want.extend_from_slice(TEARDOWN_EPILOGUE);
             let got = accept_field_and_stop(*line, *col, *width, typed);
             assert_eq!(got, want, "accept mismatch L{} C{} W{} typed={:?}", line, col, width, typed);
+        }
+    }
+
+    #[test]
+    fn accept_overflow_matches_oracle() {
+        // GNURUST.SCREENIO.ACCEPT.2: typing past the field width. Each excess key rings the bell and
+        // -- if it differs from the last-shown cell -- overwrites it then backspaces. Oracle-pinned
+        // (TERM=xterm, ncurses 6.6), additionally byte-identical against GnuCOBOL 3.1.2. Bodies are
+        // between the screen clear and the teardown.
+        let vectors: &[(i32, i32, i32, &[u8], &str)] = &[
+            (2, 3, 1, b"AB", "\x1b[2d  _\x08A\x08\x07B\x08"),         // 1 overflow, differs
+            (2, 3, 1, b"ABC", "\x1b[2d  _\x08A\x08\x07B\x08\x07C\x08"), // 2 overflow, both differ
+            (2, 3, 1, b"ZZZ", "\x1b[2d  _\x08Z\x08\x07\x07"),          // overflow == shown -> BEL only
+            (2, 3, 3, b"ABCD", "\x1b[2d  ___\x08\x08\x08ABC\x08\x07D\x08"), // width-3, 1 overflow
+            (2, 5, 2, b"WXYZ", "\x1b[2;5H__\x08\x08WX\x08\x07Y\x08\x07Z\x08"), // width-2, 2 overflow
+        ];
+        for (line, col, width, typed, body_str) in vectors {
+            let mut want = Vec::new();
+            want.extend_from_slice(INIT_PROLOGUE);
+            want.extend_from_slice(body_str.as_bytes());
+            want.extend_from_slice(TEARDOWN_EPILOGUE);
+            let got = accept_field_and_stop(*line, *col, *width, typed);
+            assert_eq!(got, want, "overflow mismatch L{} C{} W{} typed={:?}", line, col, width, typed);
         }
     }
 

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SCREENIO.NUMEDIT.1 (court-casefile)
 
-**Verdict: PASS** · 14/14 pass, 0 fail · crate `gnucobol-rs` 0.7.79
+**Verdict: PASS** · 14/14 pass, 0 fail · crate `gnucobol-rs` 0.7.80
 
 - **Oracle:** cobc SCREEN SECTION DISPLAY of a numeric-edited field FROM a numeric source (libcob/screenio.c via ncurses; the edited image from the move/edit engine), captured under a pty with TERM=xterm
 - **Byte domain(s):** a numeric-edited positioned single-field DISPLAY (LINE/COLUMN + edited PIC FROM a numeric source) -> the exact ncurses byte stream that skips leading blanks + writes the edited run, on the admitted terminal

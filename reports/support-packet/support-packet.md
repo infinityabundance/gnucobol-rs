@@ -5,9 +5,9 @@
 > [!IMPORTANT]
 > A reviewer/operator evidence bundle gathered from **existing generated artifacts**. It creates **no** new truth, certification, compliance, production approval, or customer acceptance.
 
-- crate (this repo): `gnucobol-rs 0.7.79`
+- crate (this repo): `gnucobol-rs 0.7.80`
 - artifacts gathered: **10** committed + pointers to runtime/operator artifacts
-- casefiles: **134**
+- casefiles: **135**
 
 ## Truth boundary
 
@@ -17,14 +17,14 @@
 
 | id | path | sha256 |
 |---|---|---|
-| `status` | [`STATUS.md`](../../STATUS.md) | `d8bc38c2da8e064d…` |
-| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `6f2c12d8f245abca…` |
-| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `f68d2df70db5399e…` |
+| `status` | [`STATUS.md`](../../STATUS.md) | `10366b5d8a54e2e5…` |
+| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `7994ad901a8c156f…` |
+| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `3115a2b3c917d8af…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `8657a3bda9e269d1…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `daf501bd75de5e18…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |
 | `truth_boundaries` | [`docs/truth-boundaries.md`](../../docs/truth-boundaries.md) | `86ce4f9182e75e63…` |
-| `future_risk_register` | [`docs/future-risk-register.md`](../../docs/future-risk-register.md) | `955847fd80c725ad…` |
+| `future_risk_register` | [`docs/future-risk-register.md`](../../docs/future-risk-register.md) | `fab1cae19d6b5ecf…` |
 
 ## Runtime / operator artifacts (pointers — not embedded)
 

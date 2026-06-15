@@ -1,0 +1,65 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal"
+  ],
+  "case_id": "GNURUST.SCREENIO.ACCEPT.2",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.80",
+  "damage_if_overclaimed": "claiming 'ACCEPT overflow works' would hide that only width<=6 alphanumeric overflow is proven -- the rep prompt, edit keys, numeric/USING validation, multi-field, and non-admitted terminals are not",
+  "hash_chain": {
+    "inputs_sha256": "894d5e8d68a6acf749ce84c342369657952022b0c014fcfb8cc0a4530199013b"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f4815d3ac39cde42c5a9889d2837eb6e031e57cc6764127cc57b82fa9d4f7d24",
+    "receipt_sha256": "526461b501405029a33d4f95e95452a31cffe7dab856a8e71f125b633806e769"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "ACCEPT overflow needs ncurses linked -- NO: the BEL + conditional-overwrite tail is a deterministic byte sequence reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. It removes the overflow non-claim that GNURUST.SCREENIO.ACCEPT.1 had carved out"
+  ],
+  "negative_capability_ids": [
+    "NEG.WIDTH-7-FIELDS-THE-REP-PAINTED-PROMPT-TE",
+    "NEG.FIELD-EDITING-KEYS-ARROWS-BACKSPACE-DURI",
+    "NEG.NUMERIC-OR-USING-VALIDATION-FIELDS",
+    "NEG.MULTI-FIELD-ACCEPT",
+    "NEG.ACCEPT-COLOUR-ATTRIBUTES",
+    "NEG.ANY-TERMINAL-OTHER-THAN-TERM-XTERM-OR-NC"
+  ],
+  "negative_claims": [
+    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition)",
+    "field editing keys (arrows / backspace-during-input / function keys)",
+    "numeric or USING-validation fields",
+    "multi-field ACCEPT",
+    "ACCEPT colour/attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6",
+    "lie prevented: ACCEPT overflow needs ncurses linked -- NO: the BEL + conditional-overwrite tail is a deterministic byte sequence reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. It removes the overflow non-claim that GNURUST.SCREENIO.ACCEPT.1 had carved out"
+  ],
+  "oracle": {
+    "detail": "cobc SCREEN SECTION ACCEPT with over-width input (libcob/screenio.c via ncurses field input), input fed then EOF, captured under a pty with TERM=xterm; DIFFERENTIALLY against GnuCOBOL 3.2 AND 3.1.2",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SCREENIO.ACCEPT.2"
+  },
+  "positive_claims": [
+    "a from-scratch, dependency-free Rust reproduction of the terminal byte stream when input EXCEEDS the ACCEPT field width -- WITHOUT linking ncurses -- proven byte-identical to GnuCOBOL AND DIFFERENTIALLY byte-identical to the 3.1.2 second oracle (screenio_accept2_sweep 11/0, 3.1.2-matched 11/11",
+    "an offline 72-case width x col x overflow-input grid vs 3.2 + a 48-case 3.1.2 differential). Extends GNURUST.SCREENIO.ACCEPT.1: after the field fills and the cursor parks on the last cell, each excess key rings the bell `\\a`",
+    "if the key differs from the character currently shown in that cell it overwrites it (write the char, then a backspace to stay on the cell), otherwise only the bell is emitted (overwriting a cell with its own value is a no-op). The shown character starts as the last filled cell and updates on each overwrite (screenio::accept_field_and_stop overflow tail)."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/screenio_accept2_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 11,
+    "total": 11,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

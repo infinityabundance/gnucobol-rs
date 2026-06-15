@@ -1,0 +1,30 @@
+{
+  "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal",
+  "campaign": "GNURUST.SCREENIO.ACCEPT.2",
+  "command": {
+    "replay": "bash lab/oracle/screenio_accept2_sweep.sh"
+  },
+  "court": "SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes",
+  "crate_version": "0.7.80",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition)",
+    "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=11 FAIL=0 (3.1.2 differential-matched=11)"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

@@ -1399,6 +1399,20 @@
       "damage_if_overclaimed": "claiming 'screen ACCEPT works' would hide that only single width<=6 non-overflow alphanumeric input is proven -- the rep prompt, overflow/edit keys, numeric/USING validation, multi-field, and non-admitted terminals are not"
     },
     {
+      "id": "GNURUST.SCREENIO.ACCEPT.2",
+      "name": "SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes",
+      "proven": "a from-scratch, dependency-free Rust reproduction of the terminal byte stream when input EXCEEDS the ACCEPT field width -- WITHOUT linking ncurses -- proven byte-identical to GnuCOBOL AND DIFFERENTIALLY byte-identical to the 3.1.2 second oracle (screenio_accept2_sweep 11/0, 3.1.2-matched 11/11; an offline 72-case width x col x overflow-input grid vs 3.2 + a 48-case 3.1.2 differential). Extends GNURUST.SCREENIO.ACCEPT.1: after the field fills and the cursor parks on the last cell, each excess key rings the bell `\\a`; if the key differs from the character currently shown in that cell it overwrites it (write the char, then a backspace to stay on the cell), otherwise only the bell is emitted (overwriting a cell with its own value is a no-op). The shown character starts as the last filled cell and updates on each overwrite (screenio::accept_field_and_stop overflow tail).",
+      "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal",
+      "oracle": "cobc SCREEN SECTION ACCEPT with over-width input (libcob/screenio.c via ncurses field input), input fed then EOF, captured under a pty with TERM=xterm; DIFFERENTIALLY against GnuCOBOL 3.2 AND 3.1.2",
+      "fixtures": "screenio_accept2_sweep 11/0 + 3.1.2 differential 11/11 (live pty capture) + 1 unit test (5 oracle-pinned overflow vectors incl. differs/same-char/multi-width) + Kani accept_envelope (3-byte input over-fills width-1/2)",
+      "sealed_version": "0.7.80",
+      "not_proven": "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition); field editing keys (arrows / backspace-during-input / function keys); numeric or USING-validation fields; multi-field ACCEPT; ACCEPT colour/attributes; any terminal other than TERM=xterm or ncurses other than the admitted 6.6",
+      "breaks_claim": "a different BEL/overwrite sequence vs either oracle for any swept width/position/overflow-input",
+      "readiness": 4,
+      "lie_prevented": "ACCEPT overflow needs ncurses linked -- NO: the BEL + conditional-overwrite tail is a deterministic byte sequence reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. It removes the overflow non-claim that GNURUST.SCREENIO.ACCEPT.1 had carved out",
+      "damage_if_overclaimed": "claiming 'ACCEPT overflow works' would hide that only width<=6 alphanumeric overflow is proven -- the rep prompt, edit keys, numeric/USING validation, multi-field, and non-admitted terminals are not"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

@@ -1089,6 +1089,16 @@
         "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
       ]
     },
+    "GNURUST.SCREENIO.ACCEPT.2": {
+      "court": "SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes",
+      "sweep": "screenio_accept2_sweep.sh",
+      "byte_domain": "a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal",
+      "non_claims": [
+        "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition)",
+        "field editing keys (arrows / backspace-during-input / function keys), numeric/USING-validation fields, multi-field ACCEPT, ACCEPT colour/attributes",
+        "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+      ]
+    },
     "GNURUST.SCREENIO.ACCEPT.1": {
       "court": "SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes",
       "sweep": "screenio_accept_sweep.sh",

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.LINEAGE.CORPUS.20M.SMOKE` |
 | court | 200K real-cobc COBOL-witness lineage burn (pilot) |
-| crate_version | `0.7.79` |
+| crate_version | `0.7.80` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | 200K real-cobc witnesses: storage differential + directive variant; gate=Merkle+replay+isolation+findings |
 | replay command | `bash lab/oracle/lineage_corpus_sweep.sh` |

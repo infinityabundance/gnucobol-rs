@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.REFMOD.1` |
 | court | reference modification field(start:length) |
-| crate_version | `0.7.79` |
+| crate_version | `0.7.80` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field bytes + (start,length) -> substring / overwritten field |
 | replay command | `bash lab/oracle/refmod_sweep.sh` |

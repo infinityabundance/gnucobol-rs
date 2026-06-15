@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 93,
+    "A": 94,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -87,6 +87,7 @@
       "GNURUST.REMAINDER.1",
       "GNURUST.ROUND.1",
       "GNURUST.SCREENIO.ACCEPT.1",
+      "GNURUST.SCREENIO.ACCEPT.2",
       "GNURUST.SCREENIO.ATTR.1",
       "GNURUST.SCREENIO.COLOR.1",
       "GNURUST.SCREENIO.DISPLAY.2",
@@ -1525,6 +1526,22 @@
       "has_receipt": true,
       "id": "GNURUST.SCREENIO.ACCEPT.1",
       "negative_claims": 8,
+      "negatives_ge_positives": true,
+      "positive_claims": 3
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "screenio_accept2_sweep 11/0 + 3.1.2 differential 11/11 (live pty capture) + 1 unit test (5 oracle-pinned overflow vectors incl. differs/same-char/multi-width) + Kani accept_envelope (3-byte input over-fills width-1/2)",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.SCREENIO.ACCEPT.2",
+      "negative_claims": 7,
       "negatives_ge_positives": true,
       "positive_claims": 3
     },
