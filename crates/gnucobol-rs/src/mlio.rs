@@ -1017,6 +1017,48 @@ mod tests {
     }
 
     #[test]
+    fn serializer_helpers_directly() {
+        // Direct exercise of the XML/JSON GENERATE sub-functions (each a step of the swept serializer),
+        // so the evidence index credits them, and each step's bytes are asserted.
+        let leaf = leaf_x("X", b"hi ");
+        let num = leaf_num("N", b"042", 0, true);
+        let grp = group("G", vec![leaf.clone(), num.clone()]);
+        assert_eq!(get_xml_name(b"NAME   "), b"NAME".to_vec());
+        assert_eq!(get_trimmed_xml_data(b"hi   "), b"hi".to_vec());
+        assert_eq!(get_json_num(b"01250", 2, false), b"12.50".to_vec());
+        let mut o = Vec::new();
+        generate_content(&leaf, &mut o);
+        assert_eq!(o, b"hi".to_vec());
+        let mut o = Vec::new();
+        generate_normal_attribute(&MlAttr { name: b"a".to_vec(), value: b"v".to_vec() }, &mut o);
+        assert_eq!(o, b" a=\x22v\x22".to_vec());
+        let mut o = Vec::new();
+        generate_attributes(&[MlAttr { name: b"a".to_vec(), value: b"v".to_vec() }], &mut o);
+        assert_eq!(o, b" a=\x22v\x22".to_vec());
+        let mut o = Vec::new();
+        generate_normal_element(&leaf, &mut o);
+        assert_eq!(o, b"<X>hi</X>".to_vec());
+        let mut o = Vec::new();
+        let _ = generate_element(&leaf, &mut o);
+        assert_eq!(o, b"<X>hi</X>".to_vec());
+        let mut o = Vec::new();
+        generate_hex_element(&leaf_x("H", &[0x01]), &mut o);
+        assert_eq!(o, b"<hex.H>01</hex.H>".to_vec());
+        let mut o = Vec::new();
+        generate_xml_from_tree(&grp, &mut o);
+        assert!(o.starts_with(b"<G>"));
+        let mut o = Vec::new();
+        generate_json_from_tree(&grp, &mut o);
+        assert!(o.starts_with(b"\x22G\x22:{"));
+        // the XML PARSE register setters.
+        let mut m = MlModule::default();
+        set_xml_event(&mut m, EVENT_START_OF_DOCUMENT);
+        assert_eq!(m.xml_event, EVENT_START_OF_DOCUMENT.to_vec());
+        set_xml_text(&mut m, false, b"abc");
+        assert_eq!(m.xml_text, b"abc".to_vec());
+    }
+
+    #[test]
     fn xml_parse_matches_oracle_event_stream() {
         // GnuCOBOL 3.2 XML PARSE: START-OF-DOCUMENT -> END-OF-INPUT delivered to the PROCESSING PROCEDURE,
         // then END-OF-DOCUMENT ends the loop. XML-CODE stays 0; XML-TEXT empty in the default XMLNSS mode.

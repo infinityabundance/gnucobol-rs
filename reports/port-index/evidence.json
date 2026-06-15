@@ -4,127 +4,43 @@
   "files": [
     {
       "active": 98,
-      "direct": 53,
-      "evidenced_any": 83,
+      "direct": 69,
+      "evidenced_any": 98,
       "file": "numeric.c",
       "lifecycle": 6,
       "oracle": 20,
-      "transitive": 25,
-      "unevidenced": [
-        "cob_decimal_adjust",
-        "cob_decimal_align",
-        "cob_decimal_clear",
-        "cob_decimal_pop",
-        "cob_decimal_push",
-        "cob_decimal_set",
-        "cob_decimal_set_llint",
-        "cob_logical_left_c",
-        "cob_logical_right_c",
-        "cob_pow_10_uli",
-        "count_leading_zeros",
-        "insert_packed_aligned",
-        "mpz_get_sll",
-        "mpz_get_ull",
-        "mpz_set_sll"
-      ]
+      "transitive": 26,
+      "unevidenced": []
     },
     {
       "active": 56,
-      "direct": 33,
-      "evidenced_any": 51,
+      "direct": 39,
+      "evidenced_any": 56,
       "file": "move.c",
       "lifecycle": 2,
       "oracle": 23,
-      "transitive": 16,
-      "unevidenced": [
-        "cob_binary_mget_uint64",
-        "cob_binary_mset_sint64",
-        "cob_binary_mset_uint64",
-        "cob_move_ibm",
-        "cob_set_llint"
-      ]
+      "transitive": 15,
+      "unevidenced": []
     },
     {
       "active": 34,
-      "direct": 19,
-      "evidenced_any": 29,
+      "direct": 24,
+      "evidenced_any": 34,
       "file": "strings.c",
       "lifecycle": 8,
       "oracle": 0,
       "transitive": 8,
-      "unevidenced": [
-        "cob_inspect_trailing",
-        "cob_unstring_tallying",
-        "do_mark",
-        "inspect_common_no_replace",
-        "inspect_common_replacing"
-      ]
+      "unevidenced": []
     },
     {
       "active": 232,
-      "direct": 117,
-      "evidenced_any": 177,
+      "direct": 173,
+      "evidenced_any": 232,
       "file": "intrinsic.c",
       "lifecycle": 8,
       "oracle": 103,
-      "transitive": 58,
-      "unevidenced": [
-        "add_decimal_digits",
-        "add_z",
-        "cob_intr_boolean_of_integer",
-        "cob_intr_char_national",
-        "cob_intr_display_of",
-        "cob_intr_exception_file_n",
-        "cob_intr_exception_location_n",
-        "cob_intr_national_of",
-        "cob_intr_random",
-        "cob_intr_seconds_past_midnight",
-        "cob_intr_standard_compare",
-        "decimal_places_for_seconds",
-        "format_as_yyyyddd",
-        "format_as_yyyymmdd",
-        "format_as_yyyywwwd",
-        "get_day_of_week",
-        "get_iso_week",
-        "get_iso_week_one",
-        "get_seconds_past_midnight",
-        "get_substituted_size",
-        "integer_of_ddd",
-        "integer_of_mmdd",
-        "integer_of_wwwd",
-        "max_week",
-        "rest_is_offset_format",
-        "rest_is_z",
-        "substitute_matches",
-        "test_century",
-        "test_char",
-        "test_char_cond",
-        "test_char_in_range",
-        "test_colon_presence",
-        "test_date_end",
-        "test_day_of_month",
-        "test_day_of_week",
-        "test_day_of_year",
-        "test_decade",
-        "test_decimal_places",
-        "test_digit",
-        "test_hour",
-        "test_hyphen_presence",
-        "test_less_than_60",
-        "test_minute",
-        "test_month",
-        "test_no_trailing_junk",
-        "test_offset_time",
-        "test_second",
-        "test_time_end",
-        "test_two_zeroes",
-        "test_unit_year",
-        "test_w_presence",
-        "test_week",
-        "test_year",
-        "test_z_presence",
-        "valid_offset_time"
-      ]
+      "transitive": 57,
+      "unevidenced": []
     },
     {
       "active": 9,
@@ -138,22 +54,13 @@
     },
     {
       "active": 18,
-      "direct": 7,
-      "evidenced_any": 10,
+      "direct": 15,
+      "evidenced_any": 18,
       "file": "termio.c",
       "lifecycle": 1,
       "oracle": 3,
       "transitive": 2,
-      "unevidenced": [
-        "cob_accept",
-        "cob_dump_field",
-        "cob_dump_field_ext",
-        "cob_dump_file",
-        "cob_dump_output",
-        "dump_field_internal",
-        "dump_pending_output",
-        "is_field_display"
-      ]
+      "unevidenced": []
     },
     {
       "active": 0,
@@ -167,115 +74,53 @@
     },
     {
       "active": 67,
-      "direct": 38,
-      "evidenced_any": 47,
+      "direct": 58,
+      "evidenced_any": 67,
       "file": "call.c",
       "lifecycle": 5,
       "oracle": 1,
       "transitive": 6,
-      "unevidenced": [
-        "cob_get_dbl_param",
-        "cob_get_field_str_buffered",
-        "cob_get_param_constant",
-        "cob_get_param_digits",
-        "cob_get_param_scale",
-        "cob_get_param_sign",
-        "cob_get_param_str",
-        "cob_get_param_str_buffered",
-        "cob_get_param_type",
-        "cob_longjmp",
-        "cob_put_dbl_param",
-        "cob_put_param_str",
-        "cob_put_u64_param",
-        "cob_resolve_error",
-        "cob_resolve_func",
-        "cob_savenv",
-        "cob_savenv2",
-        "cob_set_library_path",
-        "lt_dlerror",
-        "set_resolve_error"
-      ]
+      "unevidenced": []
     },
     {
       "active": 180,
-      "direct": 151,
-      "evidenced_any": 175,
+      "direct": 156,
+      "evidenced_any": 180,
       "file": "fileio.c",
       "lifecycle": 18,
       "oracle": 36,
       "transitive": 21,
-      "unevidenced": [
-        "cob_file_external_addr",
-        "cob_file_fcd_adrs",
-        "cob_file_fcdkey_adrs",
-        "cob_file_sort_giving_extfh",
-        "cob_file_sort_options"
-      ]
+      "unevidenced": []
     },
     {
       "active": 43,
-      "direct": 25,
-      "evidenced_any": 30,
+      "direct": 38,
+      "evidenced_any": 43,
       "file": "mlio.c",
       "lifecycle": 2,
       "oracle": 5,
       "transitive": 3,
-      "unevidenced": [
-        "generate_attributes",
-        "generate_content",
-        "generate_element",
-        "generate_hex_element",
-        "generate_json_from_tree",
-        "generate_normal_attribute",
-        "generate_normal_element",
-        "generate_xml_from_tree",
-        "get_json_num",
-        "get_trimmed_xml_data",
-        "get_xml_name",
-        "set_xml_event",
-        "set_xml_text"
-      ]
+      "unevidenced": []
     },
     {
       "active": 39,
-      "direct": 21,
-      "evidenced_any": 33,
+      "direct": 27,
+      "evidenced_any": 39,
       "file": "reportio.c",
       "lifecycle": 7,
       "oracle": 0,
       "transitive": 8,
-      "unevidenced": [
-        "cob_report_suppress",
-        "limitCheckOneLine",
-        "line_control_one",
-        "reportDump",
-        "reportDumpLine",
-        "reportDumpOneLine"
-      ]
+      "unevidenced": []
     },
     {
       "active": 253,
-      "direct": 236,
-      "evidenced_any": 240,
+      "direct": 249,
+      "evidenced_any": 253,
       "file": "common.c",
       "lifecycle": 31,
       "oracle": 17,
       "transitive": 1,
-      "unevidenced": [
-        "cob_check_ref_mod_detailed",
-        "cob_get_current_date_and_time_from_os",
-        "cob_get_settings_ptr",
-        "cob_runtime_hint",
-        "cob_stack_trace_internal",
-        "cob_trace_entry",
-        "cob_trace_para",
-        "cob_trace_stmt",
-        "common_cmpc",
-        "get_signal_entry",
-        "print_info_detailed",
-        "set_config_val",
-        "sort_compare_collate"
-      ]
+      "unevidenced": []
     },
     {
       "active": 4,
@@ -296,11 +141,11 @@
   "schema": "gnurust-function-evidence-v2",
   "totals": {
     "active": 1033,
-    "direct": 709,
-    "evidenced_any": 888,
+    "direct": 857,
+    "evidenced_any": 1033,
     "lifecycle": 91,
     "oracle": 213,
-    "transitive": 151,
-    "unevidenced": 145
+    "transitive": 150,
+    "unevidenced": 0
   }
 }

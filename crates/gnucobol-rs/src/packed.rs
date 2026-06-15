@@ -1482,4 +1482,34 @@ mod tests {
             assert_eq!(got, want, "get_packed {v}");
         }
     }
+
+    #[test]
+    fn count_leading_zeros_counts_zero_bytes() {
+        // Five leading zero bytes, then a non-zero byte -> stops at the non-zero, returns 5.
+        let mut buff = [0u8; 48];
+        buff[5] = 0x99;
+        assert_eq!(count_leading_zeros(&buff, 0, 48), 5);
+        // Starting mid-buffer at the non-zero byte -> zero leading zeros.
+        assert_eq!(count_leading_zeros(&buff, 5, 48), 0);
+        // `len` caps the count even when more zero bytes follow.
+        let zeros = [0u8; 48];
+        assert_eq!(count_leading_zeros(&zeros, 0, 3), 3);
+    }
+
+    #[test]
+    fn insert_packed_aligned_right_justifies() {
+        // Same scale, both unsigned (no sign-nibble clearing): f1 and f2 are placed
+        // right-justified into their 48-byte buffers, and the compare length is the longer operand.
+        let f1 = [0x12u8, 0x34];
+        let f2 = [0x56u8, 0x78, 0x90];
+        let mut buff1 = [0u8; 48];
+        let mut buff2 = [0u8; 48];
+        let cmp_len = insert_packed_aligned(&f1, true, 0, &f2, true, 0, &mut buff1, &mut buff2);
+        assert_eq!(cmp_len, 3); // len2 (3) > len1 (2)
+        assert_eq!(&buff1[46..48], &[0x12, 0x34]);
+        assert_eq!(&buff2[45..48], &[0x56, 0x78, 0x90]);
+        // Bytes above the inserted operands stay zero.
+        assert!(buff1[..46].iter().all(|&b| b == 0));
+        assert!(buff2[..45].iter().all(|&b| b == 0));
+    }
 }

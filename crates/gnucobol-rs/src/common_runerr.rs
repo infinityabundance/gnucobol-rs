@@ -806,4 +806,15 @@ mod tests {
         let indent = &s[first_nl + 1..first_nl + 1 + (CB_IMSG_SIZE + 3)];
         assert!(indent.iter().all(|&b| b == 0x20), "continuation line should start with 27 spaces");
     }
+
+    #[test]
+    fn runtime_hint_prefixes_note_and_newline() {
+        assert_eq!(cob_runtime_hint(b"x"), b"note: x\n".to_vec());
+        assert_eq!(
+            cob_runtime_hint(b"maximum subscript for 'T': 5"),
+            b"note: maximum subscript for 'T': 5\n".to_vec()
+        );
+        // empty body -> just the prefix and newline.
+        assert_eq!(cob_runtime_hint(b""), b"note: \n".to_vec());
+    }
 }

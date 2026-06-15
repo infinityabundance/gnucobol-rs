@@ -714,4 +714,47 @@ mod tests {
         assert!(flush_target(true));
         assert!(!flush_target(false));
     }
+
+    #[test]
+    fn get_signal_entry_finds_segv_and_falls_back() {
+        let e = get_signal_entry(11);
+        assert_eq!(e.sig, 11);
+        assert_eq!(e.shortname, "SIGSEGV");
+        assert_eq!(e.description, "attempt to reference invalid memory address");
+        // unknown signal -> the trailing sentinel row.
+        let u = get_signal_entry(9999);
+        assert_eq!(u.sig, -1);
+        assert_eq!(u.shortname, "unknown");
+    }
+
+    #[test]
+    fn cob_stack_trace_internal_formats_and_gates() {
+        // empty chain / single zero-stmt head -> no output.
+        assert!(cob_stack_trace_internal(&[], true, 0).is_empty());
+        assert!(cob_stack_trace_internal(
+            &[StackFrame { module_stmt: 0, ..Default::default() }],
+            true,
+            0
+        )
+        .is_empty());
+
+        // one frame with a known statement + procedure: the verbose "Last statement of" form.
+        let chain = vec![StackFrame {
+            module_stmt: pack(0, 42),
+            module_sources: vec![b"prog.cob".to_vec()],
+            module_name: Some(b"MAIN".to_vec()),
+            statement: Some(b"MOVE".to_vec()),
+            paragraph_name: Some(b"P1".to_vec()),
+            ..Default::default()
+        }];
+        let out = cob_stack_trace_internal(&chain, true, 0);
+        let s = String::from_utf8_lossy(&out);
+        assert!(out.starts_with(b"\n"), "verbose output leads with a newline");
+        assert!(s.contains("Last statement of \"MAIN\" was MOVE"), "{s}");
+
+        // non-verbose (backtrace) form: "<name> at <file>:<line>".
+        let out = cob_stack_trace_internal(&chain, false, 0);
+        let s = String::from_utf8_lossy(&out);
+        assert!(s.contains("MAIN at prog.cob:42"), "{s}");
+    }
 }

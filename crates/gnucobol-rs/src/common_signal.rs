@@ -1201,4 +1201,33 @@ mod tests {
         assert!(s.contains(" Miscellaneous\n"), "{s}");
         assert!(s.contains("(Y)"), "{s}");
     }
+
+    #[test]
+    fn print_info_detailed_assembles_header_and_lines() {
+        let lines = vec![
+            InfoLine { label: b"CC".to_vec(), value: Some(b"gcc".to_vec()), format: 0 },
+            InfoLine { label: b"version".to_vec(), value: Some(b"3.2.0".to_vec()), format: 0 },
+        ];
+        let out = print_info_detailed(b"build information\n", &lines);
+        let s = String::from_utf8_lossy(&out);
+        assert!(s.starts_with("build information\n"), "{s}");
+        assert!(s.contains("gcc"), "{s}");
+        assert!(s.contains("3.2.0"), "{s}");
+        // each InfoLine renders through var_print: the label column is 24 wide, then " : ".
+        assert_eq!(out[b"build information\n".len()..][..24], b"CC                      "[..]);
+        // header-only with no lines is just the header.
+        assert_eq!(print_info_detailed(b"hdr\n", &[]), b"hdr\n".to_vec());
+    }
+
+    #[test]
+    fn get_signal_entry_local_copy_finds_segv() {
+        // the module-local get_signal_entry: real row lookup + sentinel fallback.
+        let e = get_signal_entry(11);
+        assert_eq!(e.sig, 11);
+        assert_eq!(e.shortname, "SIGSEGV");
+        assert_eq!(e.description, "attempt to reference invalid memory address");
+        let u = get_signal_entry(9999);
+        assert_eq!(u.sig, -1);
+        assert_eq!(u.shortname, "unknown");
+    }
 }

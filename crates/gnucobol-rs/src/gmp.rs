@@ -659,4 +659,17 @@ mod tests {
             assert_eq!(s(&Mpz::from_decimal_string(v)), v);
         }
     }
+
+    #[test]
+    fn sll_ull_roundtrip() {
+        // mpz_set_sll / mpz_get_sll: signed 64-bit round-trip incl. sign + zero.
+        for &v in &[0i64, 1, -1, 42, -42, i64::MAX, i64::MIN + 1] {
+            assert_eq!(Mpz::mpz_set_sll(v).mpz_get_sll(), v, "sll round-trip {v}");
+        }
+        // mpz_get_ull: low 64-bit magnitude limb.
+        assert_eq!(Mpz::mpz_set_sll(0).mpz_get_ull(), 0);
+        assert_eq!(Mpz::mpz_set_sll(123456789).mpz_get_ull(), 123456789);
+        // get_ull ignores the sign (magnitude limb only).
+        assert_eq!(Mpz::mpz_set_sll(-1000).mpz_get_ull(), 1000);
+    }
 }

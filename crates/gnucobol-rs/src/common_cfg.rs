@@ -766,4 +766,27 @@ mod tests {
         // type 1 ignores stmt_exception
         assert!(cob_check_linkage(true, "'Z'", 1, true).is_some());
     }
+
+    #[test]
+    fn set_config_val_dispatches_by_type() {
+        // ENV_BOOL: "1" -> translate_boolean_to_int -> 1.
+        assert_eq!(set_config_val(b"1", env::ENV_BOOL, 0, 0), Ok(1));
+        assert_eq!(set_config_val(b"0", env::ENV_BOOL, 0, 0), Ok(0));
+        // ENV_BOOL with an unrecognised value -> out of range.
+        assert_eq!(set_config_val(b"maybe", env::ENV_BOOL, 0, 0), Err(ConfigParseError::NotInEnumList));
+        // ENV_BOOL | ENV_NOT negates: "0" -> 1.
+        assert_eq!(set_config_val(b"0", env::ENV_BOOL | env::ENV_NOT, 0, 0), Ok(1));
+
+        // ENV_UINT numeric branch.
+        assert_eq!(set_config_val(b"42", env::ENV_UINT, 0, 0), Ok(42));
+        // ENV_SINT accepts a sign.
+        assert_eq!(set_config_val(b"-5", env::ENV_SINT, 0, 0), Ok(-5));
+        // ENV_SIZE suffix branch.
+        assert_eq!(set_config_val(b"1K", env::ENV_SIZE, 0, 0), Ok(1024));
+        // numeric out-of-range still surfaces.
+        assert_eq!(set_config_val(b"99", env::ENV_UINT, 0, 10), Err(ConfigParseError::AboveMaximum(10)));
+
+        // string / char setting (no recognised type bit): the store is the boundary, returns Ok(0).
+        assert_eq!(set_config_val(b"/some/path", 0, 0, 0), Ok(0));
+    }
 }

@@ -548,4 +548,18 @@ mod tests {
             assert_eq!(cob_get_llint(&img, &pa), want, "packed get_llint v={v}");
         }
     }
+
+    #[test]
+    fn set_llint_stores_value_into_field() {
+        // cob_set_llint stores a host i64 into a field; cob_get_llint reads it back.
+        let a = disp(7, 0, true);
+        let mut img = vec![b'0'; 7];
+        cob_set_llint(&mut img, &a, -123456).unwrap();
+        assert_eq!(cob_get_llint(&img, &a), -123456);
+        // packed receiver, scale 0
+        let pa = FieldAttr { field_type: COB_TYPE_NUMERIC_PACKED, digits: 7, scale: 0, flags: COB_FLAG_HAVE_SIGN };
+        let mut pimg = vec![0u8; 4];
+        cob_set_llint(&mut pimg, &pa, 98765).unwrap();
+        assert_eq!(cob_get_llint(&pimg, &pa), 98765);
+    }
 }

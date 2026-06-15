@@ -125,4 +125,18 @@ mod tests {
         assert_eq!(cob_logical_left(1, 65), 2); // 65 mod 64 = 1
         assert_eq!(cob_logical_right(0x8000_0000_0000_0000, 63), 1);
     }
+
+    #[test]
+    fn circular_shifts() {
+        // Over a full 8-byte (64-bit) word these are exact bit rotations.
+        // cob_logical_left_c: 1 rol 1 = 2; top bit wraps to bit 0.
+        assert_eq!(cob_logical_left_c(1, 1, 8), 2);
+        assert_eq!(cob_logical_left_c(0x8000_0000_0000_0000u64 as i128, 1, 8), 1);
+        // cob_logical_right_c: 2 ror 1 = 1; bit 0 wraps to the top bit.
+        assert_eq!(cob_logical_right_c(2, 1, 8), 1);
+        assert_eq!(cob_logical_right_c(1, 1, 8), 0x8000_0000_0000_0000);
+        // left_c then right_c by the same count is the identity (64-bit rotate).
+        let v: u64 = 0xDEAD_BEEF_0000_0001;
+        assert_eq!(cob_logical_right_c(cob_logical_left_c(v as i128, 13, 8) as i128, 13, 8), v);
+    }
 }

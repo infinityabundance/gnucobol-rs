@@ -1100,4 +1100,57 @@ mod tests {
         // PACKED bad sign nibble (0x3F with have_sign) -> not numeric
         assert_eq!(cob_is_numeric(0x12, b"\x12\x3f", true, false, false, SignMode::Ascii, false, false), 0);
     }
+
+    #[test]
+    fn common_cmpc_translates_through_collation() {
+        let col = ident_col();
+        // identity collation: byte-by-byte difference against the single char.
+        assert_eq!(common_cmpc(b"AAA", b'A', &col), 0);
+        // 'B'(0x42) vs 'A'(0x41) -> +1 at the first byte.
+        assert_eq!(common_cmpc(b"BBB", b'A', &col), 1);
+        // 'A' vs 'B' -> -1.
+        assert_eq!(common_cmpc(b"A", b'B', &col), -1);
+
+        // a collation that folds 'a'(0x61) onto 'A'(0x41) makes them compare equal.
+        let mut fold = ident_col();
+        fold[0x61] = 0x41;
+        assert_eq!(common_cmpc(b"aaa", b'A', &fold), 0);
+    }
+
+    #[test]
+    fn sort_compare_collate_orders_by_keys() {
+        let col = ident_col();
+        let asc = [SortKey { offset: 0, size: 3, ascending: true, numeric: false }];
+        // "ABC" < "ABD" ascending -> negative.
+        assert_eq!(sort_compare_collate(b"ABC", b"ABD", &asc, &col), -1);
+        assert_eq!(sort_compare_collate(b"ABD", b"ABC", &asc, &col), 1);
+        assert_eq!(sort_compare_collate(b"ABC", b"ABC", &asc, &col), 0);
+        // descending flips the sign.
+        let desc = [SortKey { offset: 0, size: 3, ascending: false, numeric: false }];
+        assert_eq!(sort_compare_collate(b"ABC", b"ABD", &desc, &col), 1);
+    }
+
+    #[test]
+    fn cob_check_ref_mod_detailed_reports_violations() {
+        // in-bounds field(2:3) of a size-5 item: no violation.
+        assert!(cob_check_ref_mod_detailed("F", true, false, 5, 2, 3).is_empty());
+
+        // offset 0 (< 1): one offset-out-of-bounds violation.
+        let v = cob_check_ref_mod_detailed("F", true, false, 5, 0, 1);
+        assert_eq!(v.len(), 1);
+        assert_eq!(v[0].exception, BoundException::RefMod);
+        assert!(v[0].fatal);
+        assert_eq!(v[0].message, b"offset of 'F' out of bounds: 0".to_vec());
+
+        // length 0 with zero NOT allowed -> length-out-of-bounds.
+        let v = cob_check_ref_mod_detailed("F", false, false, 5, 1, 0);
+        assert_eq!(v.len(), 1);
+        assert!(!v[0].fatal);
+        assert_eq!(v[0].message, b"length of 'F' out of bounds: 0".to_vec());
+
+        // offset 4 + length 4 - 1 = 7 > size 5 -> the combined start+length violation.
+        let v = cob_check_ref_mod_detailed("F", true, false, 5, 4, 4);
+        assert!(v.iter().any(|b| b.message
+            == b"length of 'F' out of bounds: 4, starting at: 4, maximum: 5".to_vec()));
+    }
 }

@@ -1042,4 +1042,126 @@ mod tests {
         assert_eq!(cob_func(&mut cache, "ONESHOT", 0), 0);
         assert_eq!(cob_call(&cache, "ONESHOT", 0), -1); // cancelled by cob_func
     }
+
+    #[test]
+    fn param_metadata_getters() {
+        // a signed PIC S9(5)V99 DISPLAY field at slot 1, a constant alphanumeric at slot 2
+        let p1 = CallField {
+            attr: af(COB_TYPE_NUMERIC_DISPLAY, 7, 2, COB_FLAG_HAVE_SIGN),
+            data: vec![0u8; 7],
+        };
+        let p2 = cob_field_constant(&CallField {
+            attr: af(COB_TYPE_ALPHANUMERIC, 0, 0, 0),
+            data: b"ABC".to_vec(),
+        });
+        let b = CallField {
+            attr: af(COB_TYPE_NUMERIC_BINARY, 9, 0, 0),
+            data: vec![0u8; 4],
+        };
+        let params = Params { fields: vec![Some(p1), Some(p2), Some(b)] };
+        // cob_get_param_type: DISPLAY stays DISPLAY; a non-swapped BINARY reports as COMP-5
+        assert_eq!(cob_get_param_type(&params, 1), COB_TYPE_NUMERIC_DISPLAY as i32);
+        assert_eq!(cob_get_param_type(&params, 3), COB_TYPE_NUMERIC_COMP5 as i32);
+        assert_eq!(cob_get_param_type(&params, 9), -1); // out of range
+        // cob_get_param_sign / scale / digits read the field attrs of param 1
+        assert_eq!(cob_get_param_sign(&params, 1), 1);
+        assert_eq!(cob_get_param_scale(&params, 1), 2);
+        assert_eq!(cob_get_param_digits(&params, 1), 7);
+        assert_eq!(cob_get_param_sign(&params, 9), -1); // out of range -> -1
+        // cob_get_param_constant: param 1 is not a constant, param 2 is
+        assert_eq!(cob_get_param_constant(&params, 1), 0);
+        assert_eq!(cob_get_param_constant(&params, 2), 1);
+    }
+
+    #[test]
+    fn dbl_param_get_and_put() {
+        // a COMP-2 (double) param and a scaled DISPLAY param (PIC 9(3)V99)
+        let comp2 = CallField {
+            attr: af(COB_TYPE_NUMERIC_DOUBLE, 18, 0, 0),
+            data: 2.5f64.to_le_bytes().to_vec(),
+        };
+        let disp = CallField {
+            attr: af(COB_TYPE_NUMERIC_DISPLAY, 5, 2, 0),
+            data: b"01234".to_vec(), // 012.34 (scale 2)
+        };
+        let mut params = Params { fields: vec![Some(comp2), Some(disp)] };
+        // cob_get_dbl_param: COMP-2 read directly; DISPLAY value scaled by the field scale
+        assert_eq!(cob_get_dbl_param(&params, 1), 2.5);
+        assert!((cob_get_dbl_param(&params, 2) - 12.34).abs() < 1e-9);
+        assert_eq!(cob_get_dbl_param(&params, 9), -1.0); // out of range
+        // cob_put_dbl_param: store into the COMP-2 param, read back
+        assert!(cob_put_dbl_param(&mut params, 1, 3.75));
+        assert_eq!(cob_get_dbl_param(&params, 1), 3.75);
+        // cob_put_dbl_param into the scaled DISPLAY param
+        assert!(cob_put_dbl_param(&mut params, 2, 9.99));
+        assert!((cob_get_dbl_param(&params, 2) - 9.99).abs() < 1e-9);
+        assert!(!cob_put_dbl_param(&mut params, 9, 1.0)); // absent -> false
+    }
+
+    #[test]
+    fn u64_param_put() {
+        // cob_put_u64_param stores into a COMP-5 binary param; read back via the unsigned getter
+        let p = CallField {
+            attr: af(COB_TYPE_NUMERIC_BINARY, 9, 0, 0),
+            data: vec![0u8; 4],
+        };
+        let mut params = Params { fields: vec![Some(p)] };
+        assert!(cob_put_u64_param(&mut params, 1, 12345));
+        assert_eq!(cob_get_u64_param(&params, 1), 12345);
+        assert!(!cob_put_u64_param(&mut params, 9, 1)); // absent -> false
+    }
+
+    #[test]
+    fn param_str_get_and_put() {
+        // a signed PIC S9(3)V99 DISPLAY param: put a numeric literal, read it back pretty
+        let p = CallField {
+            attr: af(COB_TYPE_NUMERIC_DISPLAY, 5, 2, COB_FLAG_HAVE_SIGN),
+            data: vec![0x30u8; 5], // 0x30 = '0'
+        };
+        let mut params = Params { fields: vec![Some(p)] };
+        // cob_put_param_str: store "-12.34"; returns 0 on success
+        assert_eq!(cob_put_param_str(&mut params, 1, b"-12.34"), 0);
+        // cob_get_param_str / cob_get_param_str_buffered: the pretty rendering
+        assert_eq!(cob_get_param_str(&params, 1), b"-12.34".to_vec());
+        assert_eq!(cob_get_param_str_buffered(&params, 1), b"-12.34".to_vec());
+        // a NULL/absent param renders as the NULL marker; put refused (EINVAL = 22)
+        assert_eq!(cob_get_param_str(&params, 9), b"NULL field".to_vec());
+        assert_eq!(cob_put_param_str(&mut params, 9, b"X"), 22);
+    }
+
+    #[test]
+    fn field_str_buffered_matches_unbuffered() {
+        // cob_get_field_str_buffered: same rendering as cob_get_field_str
+        let f = CallField {
+            attr: af(COB_TYPE_ALPHANUMERIC, 0, 0, 0),
+            data: b"Hi  ".to_vec(),
+        };
+        assert_eq!(cob_get_field_str_buffered(Some(&f)), b"Hi  ".to_vec());
+        assert_eq!(cob_get_field_str_buffered(None), b"NULL field".to_vec());
+    }
+
+    #[test]
+    fn resolve_func_and_error_messages() {
+        // cob_resolve_func: a cache hit returns the handle, a miss returns None
+        let mut cache = CallCache::new();
+        cache.insert("MYFUNC", 11);
+        assert_eq!(cob_resolve_func(&cache, "MYFUNC"), Some(11));
+        assert_eq!(cob_resolve_func(&cache, "GHOST"), None);
+        // set_resolve_error / cob_resolve_error: the formatted "not found" message
+        assert_eq!(set_resolve_error("MOD"), "module 'MOD' not found".to_string());
+        assert_eq!(cob_resolve_error("MOD"), "module 'MOD' not found".to_string());
+        // lt_dlerror: no loader error at the OS boundary
+        assert_eq!(lt_dlerror(), None);
+    }
+
+    #[test]
+    fn savenv_and_longjmp_and_library_path() {
+        // cob_savenv / cob_savenv2: priming the save point yields the primed flag (true)
+        assert!(cob_savenv(false));
+        assert!(cob_savenv2(false, 0));
+        // cob_longjmp: consuming the save point clears the prime flag (false)
+        assert!(!cob_longjmp(true));
+        // cob_set_library_path: returns the normalised search path the resolver uses
+        assert_eq!(cob_set_library_path("/opt/cob/lib"), "/opt/cob/lib".to_string());
+    }
 }

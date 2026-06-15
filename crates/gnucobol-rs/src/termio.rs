@@ -745,4 +745,82 @@ mod tests {
         cob_display_common(b"01234", &attr, &DisplaySettings::default(), &mut out);
         assert_eq!(out, b"012.34");
     }
+
+    #[test]
+    fn accept_moves_input_line_left_justified() {
+        // ACCEPT into an alphanumeric receiver: left-justified, space-padded, truncated to width.
+        let a = an(5);
+        let mut f = vec![b'.'; 5];
+        cob_accept(b"HI", &mut f, &a);
+        assert_eq!(&f, b"HI   ");
+        // longer-than-field input truncates to the field width.
+        let mut f2 = vec![0u8; 3];
+        cob_accept(b"ABCDEF", &mut f2, &a);
+        assert_eq!(&f2, b"ABC");
+    }
+
+    #[test]
+    fn is_field_display_predicate() {
+        assert!(is_field_display(b"HELLO 123"));
+        assert!(!is_field_display(&[0x00, b'A']));
+        assert!(!is_field_display(&[0xFF]));
+    }
+
+    #[test]
+    fn dump_output_and_file_headers() {
+        let mut st = DumpState::default();
+        let mut out = Vec::new();
+        cob_dump_output(&mut st, "WORKING-STORAGE", &mut out);
+        assert_eq!(out, b"\nWORKING-STORAGE\n**********************\n");
+
+        let mut out2 = Vec::new();
+        cob_dump_file(&mut st, Some("CUSTFILE"), DumpOpenMode::Open, b"00", &mut out2);
+        assert_eq!(
+            out2,
+            b"\nCUSTFILE\n**********************\n   File is OPEN\n   FILE STATUS  '00'\n"
+        );
+    }
+
+    #[test]
+    fn dump_pending_output_flushes_same_as_line() {
+        // Seed a pending collapsed-occurrence line and flush it.
+        let mut st = DumpState::default();
+        st.pending_dump_name = b"TBL (2".to_vec();
+        st.dump_index = 0;
+        st.ensure(1);
+        st.dump_idx[0] = 1;
+        st.dump_idx_first[0] = 2;
+        st.dump_idx_last[0] = 4;
+        let mut out = Vec::new();
+        dump_pending_output(&mut st, &mut out);
+        assert_eq!(out, b"TBL (2..4) same as (1)\n");
+        assert!(st.pending_dump_name.is_empty());
+    }
+
+    #[test]
+    fn dump_field_internal_and_entry_points() {
+        let settings = DisplaySettings::default();
+        // dump_field_internal: an 01-level alphanumeric field dumps "level name 'value'".
+        let mut st = DumpState::default();
+        let mut out = Vec::new();
+        dump_field_internal(&mut st, 1, "WS-NAME", Some(b"HELLO"), &an(5), 0, &[], &settings, 100, &mut out);
+        let s = String::from_utf8(out).unwrap();
+        assert!(s.starts_with("01"), "level marker: {s:?}");
+        assert!(s.contains("WS-NAME"), "name present: {s:?}");
+        assert!(s.contains("'HELLO'"), "quoted value: {s:?}");
+
+        // cob_dump_field_ext routes through dump_field_internal identically.
+        let mut st2 = DumpState::default();
+        let mut out2 = Vec::new();
+        cob_dump_field_ext(&mut st2, 1, "WS-NAME", Some(b"HELLO"), &an(5), 0, &[], &settings, 100, &mut out2);
+        let s2 = String::from_utf8(out2).unwrap();
+        assert!(s2.contains("WS-NAME") && s2.contains("'HELLO'"), "ext: {s2:?}");
+
+        // cob_dump_field (compat) on a NULL-address 01 field prints "<NULL> address".
+        let mut st3 = DumpState::default();
+        let mut out3 = Vec::new();
+        cob_dump_field(&mut st3, 1, "WS-NULL", None, &an(5), 0, &[], &settings, 100, &mut out3);
+        let s3 = String::from_utf8(out3).unwrap();
+        assert!(s3.contains("<NULL> address"), "null: {s3:?}");
+    }
 }

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COMMON.BOUNDCHECK.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.74",
+  "crate_version": "0.7.75",
   "damage_if_overclaimed": "claiming 'runtime diagnostics' broadly would hide that only these three bounds messages are sealed (not the not-numeric message, the abort, or the libcob: prefix framing)",
   "hash_chain": {
-    "inputs_sha256": "5484503506a6f6ad3952faf4b7336ce940b37c9417156da792d2ab1f5163823f"
+    "inputs_sha256": "be743567fdc6b2a76963e2004e2f89a4026dd161bdc8e608a475881c791293c2"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7d1426cf4e7e23c1a487f837bbb866751eda45981427868074183a2bbb9895e8",
-    "receipt_sha256": "ed1aa691e94600c6ec4b8e69c0866b85f9205b0cee183c9298c1248a93b93e3f"
+    "receipt_sha256": "515a7c9a2cbbbef93897cc447eea04a141dea9ead7006263e78536891013f99f"
   },
   "kind": "court-casefile",
   "lie_prevented": [

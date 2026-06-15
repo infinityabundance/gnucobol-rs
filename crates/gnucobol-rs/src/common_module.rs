@@ -1139,4 +1139,15 @@ mod tests {
             Some("3.2")
         );
     }
+
+    #[test]
+    fn cob_get_settings_ptr_returns_the_settings_block() {
+        let mut rt = init_rt();
+        // The shared accessor returns a reference to the same settings the mutable accessor mutates.
+        let baseline = rt.cob_get_settings_ptr().clone();
+        assert_eq!(rt.cob_get_settings_ptr(), &baseline);
+        // mutate through the mut accessor, observe it through the shared one.
+        *rt.cob_get_settings_ptr_mut() = baseline.clone();
+        assert_eq!(rt.cob_get_settings_ptr(), &baseline);
+    }
 }

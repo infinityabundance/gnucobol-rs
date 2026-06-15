@@ -864,5 +864,64 @@ pub fn cob_move(
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::attr::{COB_FLAG_BINARY_SWAP, COB_FLAG_HAVE_SIGN};
+
+    fn bin(size_signed: bool, swap: bool) -> FieldAttr {
+        let mut flags = 0u16;
+        if size_signed {
+            flags |= COB_FLAG_HAVE_SIGN;
+        }
+        if swap {
+            flags |= COB_FLAG_BINARY_SWAP;
+        }
+        FieldAttr { field_type: crate::attr::COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags }
+    }
+
+    #[test]
+    fn binary_mset_mget_uint64_roundtrip_native() {
+        // Native little-endian 4-byte COMP-5: store then read back unsigned.
+        let attr = bin(false, false);
+        let mut buf = [0u8; 4];
+        cob_binary_mset_uint64(&mut buf, &attr, 0x0102_0304);
+        assert_eq!(buf, [0x04, 0x03, 0x02, 0x01]); // little-endian byte order
+        assert_eq!(cob_binary_mget_uint64(&buf, &attr), 0x0102_0304);
+    }
+
+    #[test]
+    fn binary_mset_uint64_swap_is_big_endian() {
+        // COB_FLAG_BINARY_SWAP stores big-endian.
+        let attr = bin(false, true);
+        let mut buf = [0u8; 4];
+        cob_binary_mset_uint64(&mut buf, &attr, 0x0102_0304);
+        assert_eq!(buf, [0x01, 0x02, 0x03, 0x04]); // big-endian byte order
+        assert_eq!(cob_binary_mget_uint64(&buf, &attr), 0x0102_0304);
+    }
+
+    #[test]
+    fn binary_mset_sint64_signed_roundtrip() {
+        // Signed store of a negative value round-trips through the signed getter.
+        let attr = bin(true, false);
+        let mut buf = [0u8; 8];
+        cob_binary_mset_sint64(&mut buf, &attr, -12345);
+        assert_eq!(cob_binary_mget_sint64(&buf, &attr), -12345);
+    }
+
+    #[test]
+    fn move_ibm_copies_len_bytes() {
+        // cob_move_ibm is the IBM MVC left-to-right byte copy.
+        let src = *b"HELLO";
+        let mut dst = [0u8; 5];
+        cob_move_ibm(&mut dst, &src, 5);
+        assert_eq!(&dst, b"HELLO");
+        // partial length: only the first 3 bytes are copied.
+        let mut dst2 = [b'.'; 5];
+        cob_move_ibm(&mut dst2, &src, 3);
+        assert_eq!(&dst2, b"HEL..");
+    }
+}
+
 
 

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.INIT.1` |
 | court | SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes) |
-| crate_version | `0.7.74` |
+| crate_version | `0.7.75` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a positioned SCREEN SECTION DISPLAY -> the exact ncurses terminal byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_sweep.sh` |

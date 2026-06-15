@@ -717,4 +717,55 @@ mod tests {
         };
         assert!(out.ends_with(&body));
     }
+
+    #[test]
+    fn trace_para_records_and_formats() {
+        let mut s = ready_state();
+        let out = s.cob_trace_para(Some(b"P1"), true).unwrap();
+        assert_eq!(s.paragraph_name, Some(b"P1".to_vec()));
+        // prep prefix (Source + Program-Id) then the printed "Paragraph: P1" body.
+        assert!(out.starts_with(b"Source: 'prog.cob'\n"));
+        let body = {
+            let t = s.clone();
+            t.cob_trace_print(b"Paragraph: P1")
+        };
+        assert!(out.ends_with(&body));
+        // line trace off -> still records the name but returns None.
+        let mut s = ready_state();
+        s.cob_line_trace = false;
+        assert_eq!(s.cob_trace_para(Some(b"P2"), true), None);
+        assert_eq!(s.paragraph_name, Some(b"P2".to_vec()));
+    }
+
+    #[test]
+    fn trace_entry_formats_entry_line() {
+        let mut s = ready_state();
+        let out = s.cob_trace_entry(Some(b"FUNC1"), true).unwrap();
+        assert!(out.starts_with(b"Source: 'prog.cob'\n"));
+        let body = {
+            let t = s.clone();
+            t.cob_trace_print(b"    Entry: FUNC1")
+        };
+        assert!(out.ends_with(&body));
+        // gated off when the TRACE module bit is missing.
+        let mut s = ready_state();
+        s.flag_debug_trace = 0;
+        assert_eq!(s.cob_trace_entry(Some(b"FUNC1"), true), None);
+    }
+
+    #[test]
+    fn trace_stmt_gated_by_traceall() {
+        let mut s = ready_state();
+        // TRACEALL present (ready_state sets both bits): defers to do_trace_statement.
+        let out = s.cob_trace_stmt(Some(b"MOVE"), true).unwrap();
+        let body = {
+            let t = s.clone();
+            t.cob_trace_print(b"           MOVE")
+        };
+        assert!(out.ends_with(&body));
+        // TRACEALL missing -> None.
+        let mut s = ready_state();
+        s.flag_debug_trace = COB_MODULE_TRACE;
+        assert_eq!(s.cob_trace_stmt(Some(b"MOVE"), true), None);
+    }
 }

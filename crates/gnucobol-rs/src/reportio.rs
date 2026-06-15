@@ -1252,4 +1252,72 @@ mod tests {
         assert!(not_detail(flags::CONTROL_FOOTING));
         assert!(!not_detail(flags::DETAIL));
     }
+
+    #[test]
+    fn report_dump_renders_line_tree() {
+        use flags::*;
+        // A parent line (PAGE HEADING) with a child (DETAIL): reportDumpOneLine renders one line,
+        // reportDumpLine recurses with a deeper indent, reportDump dumps the whole report.
+        let parent = ReportLine {
+            fields: vec![],
+            children: vec![line(DETAIL, vec![])],
+            flags: PAGE_HEADING,
+            line: 5,
+            next_group_line: 0,
+            suppress: false,
+        };
+        let one = reportDumpOneLine(&parent, 0);
+        assert_eq!(one, "Line 5 PAGE HEADING \n");
+
+        let tree = reportDumpLine(std::slice::from_ref(&parent), 0);
+        // parent at indent 0, child at indent 2.
+        assert_eq!(tree, "Line 5 PAGE HEADING \n  Line 1 DETAIL \n");
+
+        let mut r = Report::default();
+        r.lines = vec![parent];
+        assert_eq!(reportDump(&r), tree);
+    }
+
+    #[test]
+    fn limit_check_one_line_flags_overshoot() {
+        // limitCheckOneLine: a LINE number beyond the page def_lines is a violation.
+        let mut l = line(0, vec![]);
+        l.line = 80;
+        assert!(limitCheckOneLine(&l, 60));
+        l.line = 40;
+        assert!(!limitCheckOneLine(&l, 60));
+        // a field NEXT GROUP overshoot also violates.
+        let mut lf = line(0, vec![fld(1, b"X")]);
+        lf.line = 1;
+        lf.fields[0].next_group_line = 99;
+        assert!(limitCheckOneLine(&lf, 60));
+    }
+
+    #[test]
+    fn line_control_one_sets_present_on_break() {
+        use flags::*;
+        // A PRESENT-WHEN field tracking control id 7 becomes present when that control changes.
+        let mut rf = fld(1, b"X");
+        rf.flags = PRESENT;
+        rf.control_id = Some(7);
+        rf.present_now = false;
+        let mut l = line(0, vec![rf]);
+        // an unrelated control change leaves it absent
+        line_control_one(&mut l, Some(3));
+        assert!(!l.fields[0].present_now);
+        // the tracked control change makes it present
+        line_control_one(&mut l, Some(7));
+        assert!(l.fields[0].present_now);
+    }
+
+    #[test]
+    fn report_suppress_sets_control_flag() {
+        // cob_report_suppress sets the suppress flag on the control referencing the line group.
+        let mut r = Report::default();
+        r.controls.push(ReportControl { name: "DEPT".into(), sequence: 1, control_ref: vec![4], ..Default::default() });
+        r.controls.push(ReportControl { name: "OTHER".into(), sequence: 2, control_ref: vec![9], ..Default::default() });
+        cob_report_suppress(&mut r, 4);
+        assert!(r.controls[0].suppress);
+        assert!(!r.controls[1].suppress);
+    }
 }

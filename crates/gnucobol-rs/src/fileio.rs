@@ -4841,6 +4841,60 @@ mod kani_proofs {
         f.open_mode = OpenMode::Closed;
         assert_eq!(cob_close(&mut f, false), "42");
     }
+
+    #[test]
+    fn file_fcd_adrs_builds_fcd_from_file() {
+        // cob_file_fcd_adrs pre-opens a closed file and fills the FCD: RANDOM access -> ACCESS_RANDOM,
+        // NOT_OPTIONAL set, the GnuCOBOL-driver flag set, and OPEN_NOT_OPEN marked.
+        let mut f = CobFile::new(Organization::Indexed, AccessMode::Random, 8, "k.dat");
+        let mut fcd = Fcd3::default();
+        cob_file_fcd_adrs(&mut f, &mut fcd);
+        assert_eq!(fcd.access_flags, ACCESS_RANDOM);
+        assert_ne!(fcd.gc_flags & MF_CALLFH_GNUCOBOL, 0);
+        assert_ne!(fcd.open_mode & OPEN_NOT_OPEN, 0);
+        assert_ne!(fcd.other_flags & OTH_NOT_OPTIONAL, 0);
+        assert_eq!(fcd.ref_key, [0, 0]);
+    }
+
+    #[test]
+    fn file_fcdkey_adrs_syncs_fcd() {
+        // cob_file_fcdkey_adrs delegates to cob_file_fcd_adrs (ensuring the FCD is current).
+        let mut f = CobFile::new(Organization::Indexed, AccessMode::Sequential, 8, "k.dat");
+        let mut fcd = Fcd3::default();
+        cob_file_fcdkey_adrs(&mut f, &mut fcd);
+        assert_eq!(fcd.access_flags, ACCESS_SEQ);
+        assert_ne!(fcd.gc_flags & MF_CALLFH_GNUCOBOL, 0);
+    }
+
+    #[test]
+    fn file_external_addr_allocates_key_slots() {
+        // cob_file_external_addr allocates the EXTERNAL file's key array.
+        let keys = cob_file_external_addr(3);
+        assert_eq!(keys.len(), 3);
+        assert!(keys.iter().all(|k| k.field_size == 0 && k.offset == 0 && !k.duplicates));
+    }
+
+    #[test]
+    fn file_sort_options_flags_merge() {
+        // cob_file_sort_options records MERGE when parms start with 'M'.
+        let mut s = CobSort::cob_file_sort_init(4, None);
+        s.cob_file_sort_options("M");
+        assert!(s.flag_merge);
+        let mut s2 = CobSort::cob_file_sort_init(4, None);
+        s2.cob_file_sort_options("S");
+        assert!(!s2.flag_merge);
+    }
+
+    #[test]
+    fn file_sort_giving_extfh_drains_sorted() {
+        // cob_file_sort_giving_extfh drains the sorted records (the extfh callback is the I/O boundary).
+        let mut s = CobSort::cob_file_sort_init(3, None);
+        s.cob_file_sort_init_key(0, 3, true);
+        s.cob_file_sort_using(&[b"CCC", b"AAA", b"BBB"]);
+        let mut callfh = |_op: u16, _fcd: &mut Fcd3| -> i32 { 0 };
+        let got = s.cob_file_sort_giving_extfh(&mut callfh);
+        assert_eq!(got, vec![b"AAA".to_vec(), b"BBB".to_vec(), b"CCC".to_vec()]);
+    }
     // KANIFOR: GNURUST.FILEIO.MAPPING.1
     /// A name starting with `.`, `-`, or a digit is never environment-mapped (returns before any getenv),
     /// and an absolute name is returned unchanged. Never panics.

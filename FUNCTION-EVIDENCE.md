@@ -10,35 +10,26 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 1033** · direct 709 (incl. oracle-sweep 213) · transitive 151 · lifecycle 91 · **evidenced (any) 888** · **unevidenced 145**.
+**Active ported: 1033** · direct 857 (incl. oracle-sweep 213) · transitive 150 · lifecycle 91 · **evidenced (any) 1033** · **unevidenced 0**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `numeric.c` | 98 | 53 | 20 | 25 | 6 | 83 | 15 |
-| `move.c` | 56 | 33 | 23 | 16 | 2 | 51 | 5 |
-| `strings.c` | 34 | 19 | 0 | 8 | 8 | 29 | 5 |
-| `intrinsic.c` | 232 | 117 | 103 | 58 | 8 | 177 | 55 |
+| `numeric.c` | 98 | 69 | 20 | 26 | 6 | 98 | 0 |
+| `move.c` | 56 | 39 | 23 | 15 | 2 | 56 | 0 |
+| `strings.c` | 34 | 24 | 0 | 8 | 8 | 34 | 0 |
+| `intrinsic.c` | 232 | 173 | 103 | 57 | 8 | 232 | 0 |
 | `cconv.c` | 9 | 8 | 4 | 0 | 2 | 9 | 0 |
-| `termio.c` | 18 | 7 | 3 | 2 | 1 | 10 | 8 |
-| `call.c` | 67 | 38 | 1 | 6 | 5 | 47 | 20 |
-| `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
-| `mlio.c` | 43 | 25 | 5 | 3 | 2 | 30 | 13 |
-| `reportio.c` | 39 | 21 | 0 | 8 | 7 | 33 | 6 |
-| `common.c` | 253 | 236 | 17 | 1 | 31 | 240 | 13 |
+| `termio.c` | 18 | 15 | 3 | 2 | 1 | 18 | 0 |
+| `call.c` | 67 | 58 | 1 | 6 | 5 | 67 | 0 |
+| `fileio.c` | 180 | 156 | 36 | 21 | 18 | 180 | 0 |
+| `mlio.c` | 43 | 38 | 5 | 3 | 2 | 43 | 0 |
+| `reportio.c` | 39 | 27 | 0 | 8 | 7 | 39 | 0 |
+| `common.c` | 253 | 249 | 17 | 1 | 31 | 253 | 0 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)
 
-- **`numeric.c`** (15): `cob_decimal_adjust`, `cob_decimal_align`, `cob_decimal_clear`, `cob_decimal_pop`, `cob_decimal_push`, `cob_decimal_set`, `cob_decimal_set_llint`, `cob_logical_left_c`, `cob_logical_right_c`, `cob_pow_10_uli`, `count_leading_zeros`, `insert_packed_aligned`, `mpz_get_sll`, `mpz_get_ull`, `mpz_set_sll`
-- **`move.c`** (5): `cob_binary_mget_uint64`, `cob_binary_mset_sint64`, `cob_binary_mset_uint64`, `cob_move_ibm`, `cob_set_llint`
-- **`strings.c`** (5): `cob_inspect_trailing`, `cob_unstring_tallying`, `do_mark`, `inspect_common_no_replace`, `inspect_common_replacing`
-- **`intrinsic.c`** (55): `add_decimal_digits`, `add_z`, `cob_intr_boolean_of_integer`, `cob_intr_char_national`, `cob_intr_display_of`, `cob_intr_exception_file_n`, `cob_intr_exception_location_n`, `cob_intr_national_of`, `cob_intr_random`, `cob_intr_seconds_past_midnight`, `cob_intr_standard_compare`, `decimal_places_for_seconds`, `format_as_yyyyddd`, `format_as_yyyymmdd`, `format_as_yyyywwwd`, `get_day_of_week`, `get_iso_week`, `get_iso_week_one`, `get_seconds_past_midnight`, `get_substituted_size`, `integer_of_ddd`, `integer_of_mmdd`, `integer_of_wwwd`, `max_week`, `rest_is_offset_format`, `rest_is_z`, `substitute_matches`, `test_century`, `test_char`, `test_char_cond`, `test_char_in_range`, `test_colon_presence`, `test_date_end`, `test_day_of_month`, `test_day_of_week`, `test_day_of_year`, `test_decade`, `test_decimal_places`, `test_digit`, `test_hour`, `test_hyphen_presence`, `test_less_than_60`, `test_minute`, `test_month`, `test_no_trailing_junk`, `test_offset_time`, `test_second`, `test_time_end`, `test_two_zeroes`, `test_unit_year`, `test_w_presence`, `test_week`, `test_year`, `test_z_presence`, `valid_offset_time`
-- **`termio.c`** (8): `cob_accept`, `cob_dump_field`, `cob_dump_field_ext`, `cob_dump_file`, `cob_dump_output`, `dump_field_internal`, `dump_pending_output`, `is_field_display`
-- **`call.c`** (20): `cob_get_dbl_param`, `cob_get_field_str_buffered`, `cob_get_param_constant`, `cob_get_param_digits`, `cob_get_param_scale`, `cob_get_param_sign`, `cob_get_param_str`, `cob_get_param_str_buffered`, `cob_get_param_type`, `cob_longjmp`, `cob_put_dbl_param`, `cob_put_param_str`, `cob_put_u64_param`, `cob_resolve_error`, `cob_resolve_func`, `cob_savenv`, `cob_savenv2`, `cob_set_library_path`, `lt_dlerror`, `set_resolve_error`
-- **`fileio.c`** (5): `cob_file_external_addr`, `cob_file_fcd_adrs`, `cob_file_fcdkey_adrs`, `cob_file_sort_giving_extfh`, `cob_file_sort_options`
-- **`mlio.c`** (13): `generate_attributes`, `generate_content`, `generate_element`, `generate_hex_element`, `generate_json_from_tree`, `generate_normal_attribute`, `generate_normal_element`, `generate_xml_from_tree`, `get_json_num`, `get_trimmed_xml_data`, `get_xml_name`, `set_xml_event`, `set_xml_text`
-- **`reportio.c`** (6): `cob_report_suppress`, `limitCheckOneLine`, `line_control_one`, `reportDump`, `reportDumpLine`, `reportDumpOneLine`
-- **`common.c`** (13): `cob_check_ref_mod_detailed`, `cob_get_current_date_and_time_from_os`, `cob_get_settings_ptr`, `cob_runtime_hint`, `cob_stack_trace_internal`, `cob_trace_entry`, `cob_trace_para`, `cob_trace_stmt`, `common_cmpc`, `get_signal_entry`, `print_info_detailed`, `set_config_val`, `sort_compare_collate`
+_None — every active ported function carries at least one evidence reference._
 
 ## How this is produced (reproducible)
 

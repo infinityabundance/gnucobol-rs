@@ -3977,6 +3977,21 @@ mod tests {
     fn len(pic: &str, u: Usage) -> usize {
         intrinsic_length(pic, u).unwrap()
     }
+
+    #[test]
+    fn current_date_and_time_from_os_in_range() {
+        // Reads the system clock (a runtime boundary); assert the decoded UTC components are in range.
+        let t = cob_get_current_date_and_time_from_os(true);
+        assert!(t.year >= 2020 && t.year < 3000);
+        assert!((1..=12).contains(&t.month));
+        assert!((1..=31).contains(&t.day_of_month));
+        assert!((0..=23).contains(&t.hour));
+        assert!((0..=59).contains(&t.minute));
+        assert!((0..=60).contains(&t.second));
+        assert!(!t.offset_known); // std exposes no timezone -> UTC, offset unknown
+        let t2 = cob_get_current_date_and_time_from_os(false);
+        assert_eq!(t2.nanosecond, 0); // want_nano=false zeroes the nanosecond field
+    }
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
     }
@@ -4156,6 +4171,344 @@ mod tests {
         assert_eq!(len("9(7)", Usage::Comp3), 4);
         assert_eq!(len("S9(9)", Usage::Comp), 4);
         assert_eq!(len("X(1)", Usage::Display), 1);
+    }
+
+    // --- Date/time validation + formatting helper evidence (libcob intrinsic.c) ---
+
+    #[test]
+    fn char_and_digit_primitives() {
+        // test_char_cond: advance on true (return 0), else offset+1 (offset unchanged).
+        let mut o = 0;
+        assert_eq!(test_char_cond(true, &mut o), 0);
+        assert_eq!(o, 1);
+        let mut o = 3;
+        assert_eq!(test_char_cond(false, &mut o), 4);
+        assert_eq!(o, 3);
+        // test_char: match the wanted byte at offset.
+        let mut o = 0;
+        assert_eq!(test_char(b'A', b"A", &mut o), 0);
+        assert_eq!(o, 1);
+        let mut o = 0;
+        assert_eq!(test_char(b'A', b"B", &mut o), 1);
+        // test_char_in_range
+        let mut o = 0;
+        assert_eq!(test_char_in_range(b'a', b'z', b'm', &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_char_in_range(b'a', b'z', b'Z', &mut o), 1);
+        // test_digit
+        let mut o = 0;
+        assert_eq!(test_digit(b'7', &mut o), 0);
+        assert_eq!(o, 1);
+        let mut o = 0;
+        assert_eq!(test_digit(b'x', &mut o), 1);
+    }
+
+    #[test]
+    fn year_components_accumulate() {
+        // test_century / test_decade / test_unit_year accumulate `state`.
+        let mut o = 0;
+        let mut st = 0;
+        assert_eq!(test_century(b"5", &mut o, &mut st), 0);
+        assert_eq!(st, 5);
+        let mut o = 0;
+        let mut st = 16;
+        assert_eq!(test_decade(b"0", &mut o, &mut st), 0);
+        assert_eq!(st, 160);
+        // test_unit_year: when state==160 the units digit must be 1..9 (year 1600 is invalid).
+        let mut o = 0;
+        let mut st = 160;
+        assert_eq!(test_unit_year(b"0", &mut o, &mut st), 1); // 1600-01-01 not representable
+        let mut o = 0;
+        let mut st = 160;
+        assert_eq!(test_unit_year(b"1", &mut o, &mut st), 0);
+        assert_eq!(st, 1601);
+        // test_year: full YYYY accumulates and validates.
+        let mut o = 0;
+        let mut st = 0;
+        assert_eq!(test_year(b"2026", &mut o, &mut st), 0);
+        assert_eq!((o, st), (4, 2026));
+        let mut o = 0;
+        let mut st = 0;
+        assert_eq!(test_year(b"0500", &mut o, &mut st), 1); // millennium 0 invalid
+    }
+
+    #[test]
+    fn month_day_and_separator_validators() {
+        // test_month: 01..12 valid, 13 invalid (fails on the 2nd digit -> offset+1 == 2).
+        let mut o = 0;
+        let mut m = 0;
+        assert_eq!(test_month(b"03", &mut o, &mut m), 0);
+        assert_eq!(m, 3);
+        let mut o = 0;
+        let mut m = 0;
+        assert_eq!(test_month(b"12", &mut o, &mut m), 0);
+        assert_eq!(m, 12);
+        let mut o = 0;
+        let mut m = 0;
+        assert_eq!(test_month(b"13", &mut o, &mut m), 2);
+        // test_day_of_month: Feb 29 valid in a leap year, invalid otherwise.
+        let mut o = 0;
+        assert_eq!(test_day_of_month(b"29", 2024, 2, &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_day_of_month(b"29", 2023, 2, &mut o), 2);
+        // test_day_of_year: 366 valid in leap year, invalid otherwise.
+        let mut o = 0;
+        assert_eq!(test_day_of_year(b"366", 2024, &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_day_of_year(b"366", 2023, &mut o), 3);
+        let mut o = 0;
+        assert_eq!(test_day_of_year(b"000", 2024, &mut o), 3); // 000 invalid
+        // test_hyphen_presence
+        let mut o = 0;
+        assert_eq!(test_hyphen_presence(true, b"-", &mut o), 0);
+        assert_eq!(o, 1);
+        let mut o = 5;
+        assert_eq!(test_hyphen_presence(false, b"x", &mut o), 0); // no hyphen expected
+        assert_eq!(o, 5);
+    }
+
+    #[test]
+    fn week_and_day_of_week_validators() {
+        // test_w_presence: literal 'W'.
+        let mut o = 0;
+        assert_eq!(test_w_presence(b"W", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_w_presence(b"x", &mut o), 1);
+        // test_week: 2024 has 52 ISO weeks -> "53" invalid, "52" valid.
+        let mut o = 0;
+        assert_eq!(test_week(b"52", 2024, &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_week(b"00", 2024, &mut o), 2); // week 00 invalid
+        // test_day_of_week: 1..7.
+        let mut o = 0;
+        assert_eq!(test_day_of_week(b"7", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_day_of_week(b"8", &mut o), 1);
+        let mut o = 0;
+        assert_eq!(test_day_of_week(b"0", &mut o), 1);
+    }
+
+    #[test]
+    fn date_end_and_trailing_junk() {
+        // test_date_end for a YYYYMMDD-shaped tail (mmdd).
+        let fmt_mmdd = DateFormat { days: DaysFormat::Mmdd, with_hyphens: false };
+        let mut o = 0;
+        assert_eq!(test_date_end(fmt_mmdd, b"0229", 2024, &mut o), 0);
+        assert_eq!(o, 4);
+        // test_date_end for ddd.
+        let fmt_ddd = DateFormat { days: DaysFormat::Ddd, with_hyphens: false };
+        let mut o = 0;
+        assert_eq!(test_date_end(fmt_ddd, b"060", 2024, &mut o), 0);
+        // test_no_trailing_junk: trailing spaces OK at end-of-string.
+        assert_eq!(test_no_trailing_junk(b"   ", 0, true), 0);
+        assert_eq!(test_no_trailing_junk(b"  x", 0, true), 3); // non-space -> 1-based pos
+        assert_eq!(test_no_trailing_junk(b"", 0, false), 0); // not end-of-string but at NUL
+    }
+
+    #[test]
+    fn time_component_validators() {
+        // test_hour: 00..23.
+        let mut o = 0;
+        assert_eq!(test_hour(b"23", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_hour(b"24", &mut o), 2);
+        // test_less_than_60 / test_minute / test_second.
+        let mut o = 0;
+        assert_eq!(test_less_than_60(b"59", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_less_than_60(b"60", &mut o), 1);
+        let mut o = 0;
+        assert_eq!(test_minute(b"00", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_second(b"30", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_second(b"99", &mut o), 1);
+    }
+
+    #[test]
+    fn time_separator_and_zone_validators() {
+        // test_colon_presence
+        let mut o = 0;
+        assert_eq!(test_colon_presence(true, b":", &mut o), 0);
+        assert_eq!(o, 1);
+        let mut o = 7;
+        assert_eq!(test_colon_presence(false, b"x", &mut o), 0);
+        assert_eq!(o, 7);
+        // test_decimal_places: '.' then `num` digits.
+        let mut o = 0;
+        assert_eq!(test_decimal_places(3, b'.', b".500", &mut o), 0);
+        assert_eq!(o, 4);
+        let mut o = 0;
+        assert_eq!(test_decimal_places(2, b'.', b".5x", &mut o), 3); // non-digit
+        let mut o = 9;
+        assert_eq!(test_decimal_places(0, b'.', b"", &mut o), 0); // zero places: no-op
+        assert_eq!(o, 9);
+        // test_z_presence
+        let mut o = 0;
+        assert_eq!(test_z_presence(b"Z", &mut o), 0);
+        let mut o = 0;
+        assert_eq!(test_z_presence(b"z", &mut o), 1);
+        // test_two_zeroes
+        let mut o = 0;
+        assert_eq!(test_two_zeroes(b"00", &mut o), 0);
+        assert_eq!(o, 2);
+        let mut o = 0;
+        assert_eq!(test_two_zeroes(b"01", &mut o), 2);
+    }
+
+    #[test]
+    fn offset_time_validators() {
+        let fmt_off = TimeFormat { with_colons: false, decimal_places: 0, extra: TimeExtra::OffsetTime };
+        // "+0130" valid offset.
+        let mut o = 0;
+        assert_eq!(test_offset_time(fmt_off, b"+0130", &mut o), 0);
+        assert_eq!(o, 5);
+        // literal "00000" valid (leading '0' then two "00" zero-pairs).
+        let mut o = 0;
+        assert_eq!(test_offset_time(fmt_off, b"00000", &mut o), 0);
+        assert_eq!(o, 5);
+        // leading char neither +/-/0 -> immediate failure.
+        let mut o = 0;
+        assert_eq!(test_offset_time(fmt_off, b"x000", &mut o), 1);
+        // test_time_end with a Z zone.
+        let fmt_z = TimeFormat { with_colons: false, decimal_places: 0, extra: TimeExtra::Z };
+        let mut o = 0;
+        assert_eq!(test_time_end(fmt_z, b"Z", &mut o), 0);
+        let fmt_none = TimeFormat { with_colons: false, decimal_places: 0, extra: TimeExtra::None };
+        let mut o = 4;
+        assert_eq!(test_time_end(fmt_none, b"", &mut o), 0); // None: no zone
+        // valid_offset_time: |offset| < 1440 minutes.
+        assert!(valid_offset_time(0));
+        assert!(valid_offset_time(1439));
+        assert!(valid_offset_time(-1439));
+        assert!(!valid_offset_time(1440));
+        assert!(!valid_offset_time(-1440));
+    }
+
+    #[test]
+    fn date_format_string_helpers() {
+        // decimal_places_for_seconds: count of 's' after the decimal point position.
+        assert_eq!(decimal_places_for_seconds(b"hhmmss.sss", 6), 3);
+        assert_eq!(decimal_places_for_seconds(b"hhmmss.s", 6), 1);
+        // rest_is_z / rest_is_offset_format
+        assert!(rest_is_z(b"Z"));
+        assert!(!rest_is_z(b"+hhmm"));
+        assert!(rest_is_offset_format(b"+hhmm", false));
+        assert!(rest_is_offset_format(b"+hh:mm", true));
+        assert!(!rest_is_offset_format(b"+hh:mm", false));
+    }
+
+    #[test]
+    fn day_of_week_and_iso_week_helpers() {
+        // get_day_of_week: day 1 (1601-01-01) is a Monday -> index 0.
+        assert_eq!(get_day_of_week(1), 0);
+        assert_eq!(get_day_of_week(8), 0);
+        assert_eq!(get_day_of_week(7), 6);
+        // get_iso_week_one: Monday of ISO week 1 is <= Jan 4 of that year.
+        let day_jan4_2024 = integer_of_date(2024, 1, 4) as i32;
+        let (_, doy) = day_of_integer(day_jan4_2024);
+        let w1 = get_iso_week_one(day_jan4_2024, doy);
+        assert_eq!(get_day_of_week(w1), 0); // it is a Monday
+        assert!(w1 <= day_jan4_2024);
+        // get_iso_week: Jan 4 is always in ISO week 1.
+        assert_eq!(get_iso_week(day_jan4_2024), (2024, 1));
+        // get_iso_week round-trips with format_as_yyyywwwd below.
+        // max_week: 2020 has 53 ISO weeks, 2021 has 52.
+        assert_eq!(max_week(2020), 53);
+        assert_eq!(max_week(2021), 52);
+    }
+
+    #[test]
+    fn date_formatters_render_known_dates() {
+        let d = integer_of_date(2024, 2, 29) as i32;
+        assert_eq!(format_as_yyyymmdd(d, false), b"20240229");
+        assert_eq!(format_as_yyyymmdd(d, true), b"2024-02-29");
+        let d2 = integer_of_date(2024, 3, 1) as i32; // day-of-year 061 in leap 2024
+        assert_eq!(format_as_yyyyddd(d2, false), b"2024061");
+        assert_eq!(format_as_yyyyddd(d2, true), b"2024-061");
+        // format_as_yyyywwwd: 2024-01-01 is ISO 2024-W01-1 (a Monday).
+        let d3 = integer_of_date(2024, 1, 1) as i32;
+        assert_eq!(format_as_yyyywwwd(d3, false), b"2024W011");
+        assert_eq!(format_as_yyyywwwd(d3, true), b"2024-W01-1");
+    }
+
+    #[test]
+    fn integer_of_formatted_parts() {
+        let fmt_mmdd = DateFormat { days: DaysFormat::Mmdd, with_hyphens: false };
+        // integer_of_mmdd: parse "0229" with year 2024 -> same as integer_of_date(2024,2,29).
+        assert_eq!(integer_of_mmdd(fmt_mmdd, 2024, b"0229"), integer_of_date(2024, 2, 29));
+        let fmt_mmdd_h = DateFormat { days: DaysFormat::Mmdd, with_hyphens: true };
+        assert_eq!(integer_of_mmdd(fmt_mmdd_h, 2024, b"02-29"), integer_of_date(2024, 2, 29));
+        // integer_of_ddd: "061" of 2024 -> 2024-03-01.
+        assert_eq!(integer_of_ddd(2024, b"061"), integer_of_date(2024, 3, 1));
+        // integer_of_wwwd: ISO 2024-W01-1 == 2024-01-01.
+        let fmt_w = DateFormat { days: DaysFormat::Wwwd, with_hyphens: false };
+        assert_eq!(integer_of_wwwd(fmt_w, 2024, b"W011"), integer_of_date(2024, 1, 1));
+    }
+
+    #[test]
+    fn substitute_helpers() {
+        let pairs: &[(&[u8], &[u8])] = &[(b"ab".as_slice(), b"X".as_slice())];
+        // "abcab" -> "XcX": size 3.
+        assert_eq!(get_substituted_size(b"abcab", pairs, false), 3);
+        let mut out = Vec::new();
+        substitute_matches(b"abcab", pairs, false, &mut out);
+        assert_eq!(out, b"XcX");
+        // case-insensitive
+        let pairs2: &[(&[u8], &[u8])] = &[(b"AB".as_slice(), b"Y".as_slice())];
+        assert_eq!(get_substituted_size(b"abcab", pairs2, true), 3);
+        let mut out2 = Vec::new();
+        substitute_matches(b"abcab", pairs2, true, &mut out2);
+        assert_eq!(out2, b"YcY");
+    }
+
+    #[test]
+    fn add_z_and_add_decimal_digits() {
+        // add_z appends the UTC marker.
+        let mut buff = b"12".to_vec();
+        add_z(&mut buff);
+        assert_eq!(buff, b"12Z");
+        // add_decimal_digits: '.' then `decimal_places` fraction digits, right-padded with zeros.
+        // second_fraction = 0.5 (value 5 scale 1) -> ".500" for 3 places.
+        let frac = CobDecimal { value: { let mut m = Mpz::new(); m.set_ui(5); m }, scale: 1 };
+        let mut buff = Vec::new();
+        add_decimal_digits(3, &frac, &mut buff, b'.');
+        assert_eq!(buff, b".500");
+        // 0 places: just the decimal point.
+        let mut buff = Vec::new();
+        add_decimal_digits(0, &frac, &mut buff, b'.');
+        assert_eq!(buff, b".");
+    }
+
+    #[test]
+    fn clock_based_intrinsics_run() {
+        // get_seconds_past_midnight is a real-clock read in [0, 86400).
+        let s = get_seconds_past_midnight();
+        assert!((0..86400).contains(&s));
+        // cob_intr_seconds_past_midnight wraps it into a BINARY result field that decodes to the same range.
+        let (d, a) = cob_intr_seconds_past_midnight();
+        let v = crate::accessors::cob_get_int(&d, &a);
+        assert!((0..86400).contains(&v));
+        // cob_intr_random: reseed(42) -> deterministic value in [0, 1); reseeding repeats it.
+        let (d1, _) = cob_intr_random(Some(42));
+        let r1 = f64::from_le_bytes(d1.try_into().unwrap());
+        assert!((0.0..1.0).contains(&r1));
+        let (d2, _) = cob_intr_random(Some(42));
+        let r2 = f64::from_le_bytes(d2.try_into().unwrap());
+        assert_eq!(r1, r2); // same seed -> same first draw
+    }
+
+    #[test]
+    fn unimplemented_intrinsics_return_empty() {
+        let an = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+        // These FUNCTIONs are unimplemented in GnuCOBOL 3.2 -> empty not-implemented field.
+        assert!(cob_intr_boolean_of_integer(b"1", &an, b"8", &an).0.is_empty());
+        assert!(cob_intr_char_national(b"A", &an).0.is_empty());
+        assert!(cob_intr_display_of(0, 0, &[(b"A".as_slice(), &an)]).0.is_empty());
+        assert!(cob_intr_national_of(0, 0, &[(b"A".as_slice(), &an)]).0.is_empty());
+        assert!(cob_intr_standard_compare(&[(b"A".as_slice(), &an)]).0.is_empty());
+        assert!(cob_intr_exception_file_n().0.is_empty());
+        assert!(cob_intr_exception_location_n().0.is_empty());
     }
 }
 

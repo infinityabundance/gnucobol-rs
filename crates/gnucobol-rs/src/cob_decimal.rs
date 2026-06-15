@@ -1558,6 +1558,55 @@ mod tests {
             assert_eq!(cob_print_realbin(&buf, &unsigned, 10), want, "realbin unsigned {v}");
         }
     }
+
+    #[test]
+    fn evidence_numeric_internals() {
+        // cob_pow_10_uli(n) == 10^n
+        assert_eq!(cob_pow_10_uli(0), 1);
+        assert_eq!(cob_pow_10_uli(3), 1000);
+        assert_eq!(cob_pow_10_uli(9), 1_000_000_000);
+
+        // cob_decimal_set_llint: signed 64-bit at scale 0
+        let mut d = cob_decimal_init();
+        cob_decimal_set_llint(&mut d, -12345);
+        assert_eq!(d.scale, 0);
+        assert_eq!(d.value.to_i128(), Some(-12345));
+
+        // cob_decimal_set: faithful copy of value + scale
+        let src = dec("789", 2); // 7.89
+        let mut dst = cob_decimal_init();
+        cob_decimal_set(&mut dst, &src);
+        assert_eq!(dst.scale, 2);
+        assert_eq!(dst.value.to_i128(), Some(789));
+
+        // cob_decimal_clear: reset to zero at scale 0
+        let mut c = dec("4242", 3);
+        cob_decimal_clear(&mut c);
+        assert_eq!(c.scale, 0);
+        assert_eq!(c.value.sgn(), 0);
+
+        // cob_decimal_align: scale-down branch is well-defined: 1.200 (1200 @scale3) -> scale 1
+        // shifts the value by (1 - 3) = -2, i.e. /100 -> 12 @scale1 = 1.2 (value preserved).
+        let mut a = dec("1200", 3); // 1.200
+        cob_decimal_align(&mut a, 1);
+        assert_eq!(a.scale, 1);
+        assert_eq!(a.value.to_i128(), Some(12));
+
+        // cob_decimal_adjust: strip trailing zeros, shift comma left until <= max_value.
+        // 123000 @scale0: trailing zeros stripped -> value 123, scale -3.
+        let mut adj = dec("123000", 0);
+        let max = Mpz::ui_pow_ui(10, 30); // huge -> magnitude fits, no overflow
+        let overflow = cob_decimal_adjust(&mut adj, &max, -100, 100);
+        assert!(!overflow);
+        assert_eq!(adj.value.to_i128(), Some(123));
+        assert_eq!(adj.scale, -3);
+
+        // cob_decimal_push / cob_decimal_pop: allocate N zero temporaries, then release.
+        let temps = cob_decimal_push(3);
+        assert_eq!(temps.len(), 3);
+        assert!(temps.iter().all(|t| t.value.sgn() == 0 && t.scale == 0));
+        cob_decimal_pop(temps);
+    }
 }
 
 #[cfg(test)]

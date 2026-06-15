@@ -881,4 +881,72 @@ mod tests {
         // pointer now 5 (started 3, appended 2)
         assert_eq!(crate::accessors::cob_get_int(s.pointer().unwrap(), &pa), 5);
     }
+
+    fn cnt_attr() -> FieldAttr {
+        FieldAttr { field_type: crate::attr::COB_TYPE_NUMERIC_BINARY, digits: 9, scale: 0, flags: crate::attr::COB_FLAG_HAVE_SIGN | crate::attr::COB_FLAG_REAL_BINARY }
+    }
+
+    #[test]
+    fn inspect_trailing_tallies_only_trailing_run() {
+        // INSPECT "AABAA" TALLYING n FOR TRAILING "A" -> 2 (the two trailing A's only).
+        let a = alnum(5);
+        let ca = cnt_attr();
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, false);
+        ins.cob_inspect_start();
+        let mut n = 0i32.to_le_bytes();
+        ins.cob_inspect_trailing(&mut n, &ca, b"A");
+        ins.cob_inspect_finish();
+        assert_eq!(crate::accessors::cob_get_int(&n, &ca), 2);
+    }
+
+    #[test]
+    fn do_mark_records_replacement_and_rejects_overlap() {
+        // do_mark defers a replacement into repdata at an unmarked position and reports true;
+        // a second call into the now-marked range reports false. cob_inspect_finish applies repdata.
+        let a = alnum(4);
+        let mut ins = CobInspect::cob_inspect_init(b"AAAA", &a, true);
+        ins.cob_inspect_start();
+        assert!(ins.do_mark(1, 2, b"XY"), "first mark of fresh range");
+        assert!(!ins.do_mark(1, 2, b"ZZ"), "overlapping mark rejected");
+        ins.cob_inspect_finish();
+        assert_eq!(ins.result(), b"AXYA");
+    }
+
+    #[test]
+    fn inspect_common_no_replace_counts_all_matches() {
+        // The TALLYING half called directly: count ALL "A" in "AABAA" -> 4.
+        let a = alnum(5);
+        let ca = cnt_attr();
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, false);
+        ins.cob_inspect_start();
+        let mut n = 0i32.to_le_bytes();
+        ins.inspect_common_no_replace(&mut n, &ca, b"A", InspectType::All);
+        assert_eq!(crate::accessors::cob_get_int(&n, &ca), 4);
+    }
+
+    #[test]
+    fn inspect_common_replacing_defers_all_matches() {
+        // The REPLACING half called directly: ALL "A" BY "X" in "AABAA" -> "XXBXX".
+        let a = alnum(5);
+        let mut ins = CobInspect::cob_inspect_init(b"AABAA", &a, true);
+        ins.cob_inspect_start();
+        ins.inspect_common_replacing(b"X", b"A", InspectType::All);
+        ins.cob_inspect_finish();
+        assert_eq!(ins.result(), b"XXBXX");
+    }
+
+    #[test]
+    fn unstring_tallying_adds_receiver_count() {
+        // After two cob_unstring_into calls, cob_unstring_tallying adds 2 to the existing TALLYING value.
+        let a3 = alnum(3);
+        let ca = cnt_attr();
+        let mut u = CobUnstring::cob_unstring_init(b"AB,CD", None, 1);
+        u.cob_unstring_delimited(b",", false);
+        let mut d = vec![b' '; 3];
+        u.cob_unstring_into(&mut d, &a3, None, None);
+        u.cob_unstring_into(&mut d, &a3, None, None);
+        let mut tal = 10i32.to_le_bytes();
+        u.cob_unstring_tallying(&mut tal, &ca);
+        assert_eq!(crate::accessors::cob_get_int(&tal, &ca), 12);
+    }
 }

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SCREENIO.DISPLAY.2 (court-casefile)
 
-**Verdict: PASS** · 70/70 pass, 0 fail · crate `gnucobol-rs` 0.7.74
+**Verdict: PASS** · 70/70 pass, 0 fail · crate `gnucobol-rs` 0.7.75
 
 - **Oracle:** cobc SCREEN SECTION DISPLAY at varied LINE/COLUMN (libcob/screenio.c via ncurses 6.6 move/addstr/mvcur), captured under a pty with TERM=xterm
 - **Byte domain(s):** a positioned SCREEN SECTION DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid, on the admitted terminal
