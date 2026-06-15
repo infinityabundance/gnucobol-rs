@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-135-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-135-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-136-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-136-blueviolet)
 
 **A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
 data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
@@ -194,6 +194,7 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `GNURUST.SCREENIO.COLOR.1` | SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.COLOR.1/`](reports/casefiles/GNURUST.SCREENIO.COLOR.1/) |
 | `GNURUST.SCREENIO.NUMEDIT.1` | SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/`](reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/) |
 | `GNURUST.SCREENIO.ACCEPT.1` | SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.1/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.1/) |
+| `GNURUST.SCREENIO.LINEDIFF.1` | multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/`](reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
 | `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
 | `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |

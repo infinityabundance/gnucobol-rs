@@ -764,6 +764,13 @@ pub fn __fuzz_screenio(data: &[u8]) {
     let aout = screenio::accept_field_and_stop(cline, ccol, awidth, data.get(5..).unwrap_or(&[]));
     debug_assert!(aout.starts_with(screenio::INIT_PROLOGUE));
     debug_assert!(aout.ends_with(screenio::TEARDOWN_EPILOGUE));
+    // Also exercise the two-DISPLAY same-row line-diff (GNURUST.SCREENIO.LINEDIFF.1): any two in-row
+    // columns + payloads must still yield a well-formed prologue..epilogue envelope.
+    let lc1 = (data.get(1).copied().unwrap_or(1) as i32 % 70) + 1;
+    let lc2 = (data.get(2).copied().unwrap_or(1) as i32 % 70) + 1;
+    let lout = screenio::two_display_line_and_stop(2, lc1, data.get(3..6).unwrap_or(&[]), lc2, data.get(6..).unwrap_or(&[]));
+    debug_assert!(lout.starts_with(screenio::INIT_PROLOGUE));
+    debug_assert!(lout.ends_with(screenio::TEARDOWN_EPILOGUE));
 }
 
 /// Fuzz the native XML PARSE state machine: drive `cob_xml_parse` over arbitrary input to a fixed point.

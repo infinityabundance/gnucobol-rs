@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INSPECT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.81",
+  "crate_version": "0.7.82",
   "damage_if_overclaimed": "a wrong overlap/leading/region/case assumption in an INSPECT-based cleanup or validation transform silently mis-counts or mis-mutates a field",
   "hash_chain": {
-    "inputs_sha256": "95e8b970031f857c389e4259d36259f00ca41e05786946a810fec21c375f69ee"
+    "inputs_sha256": "dadb9d48f430f5907ce4e8e0787a2e636267429d21ef5d654a44f5dc17296a16"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "217f17ed9cae08ff22812167a0422588f39a8b11c298996e8ed643d21c826679",
-    "receipt_sha256": "f997a0e07d333dc31a68380f517b55342d39b30cc218e35fb765657c56996cde"
+    "receipt_sha256": "2ec687a34a37247d2976ba580dceea84af61b88b84d7422ea05001b674cbf06e"
   },
   "kind": "court-casefile",
   "lie_prevented": [

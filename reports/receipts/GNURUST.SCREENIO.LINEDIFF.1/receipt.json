@@ -1,0 +1,31 @@
+{
+  "byte_domain": "two same-row DISPLAY statements -> the exact ncurses doupdate/TransformLine refresh byte stream (reposition + changed run + clr_eol trailing-erase), on the admitted terminal",
+  "campaign": "GNURUST.SCREENIO.LINEDIFF.1",
+  "command": {
+    "replay": "bash lab/oracle/screenio_linediff_sweep.sh"
+  },
+  "court": "multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes",
+  "crate_version": "0.7.82",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "THREE or more same-row DISPLAYs (clear-to-EOL batches differently across 3+ refreshes)",
+    "distant isolated survivors needing a jump + single space; the MULTI-ROW diff (vertical mvcur between changed rows)",
+    "attributes/colour on the diffed text",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=19 FAIL=0 (3.1.2 differential-matched=19)"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "fail"
+}

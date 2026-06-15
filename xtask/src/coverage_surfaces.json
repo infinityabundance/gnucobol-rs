@@ -439,9 +439,10 @@
    "GNURUST.SCREENIO.COLOR.1",
    "GNURUST.SCREENIO.NUMEDIT.1",
    "GNURUST.SCREENIO.ACCEPT.1",
-   "GNURUST.SCREENIO.ACCEPT.2"
+   "GNURUST.SCREENIO.ACCEPT.2",
+   "GNURUST.SCREENIO.LINEDIFF.1"
   ],
-  "future_campaign": "screenio: the GENERAL curses refresh line-diff (clr_eol erase for overlapping same-row / multi-field layouts -- doupdate/TransformLine; reverse-engineered + documented as the screenio::line_diff_boundary non-claim, blocked on porting lib_doupdate.c + lib_mvcur.c cost models), the `rep`-painted (width>=7) ACCEPT prompt, and multi-field/edit-key ACCEPT -- each a follow-on literal-byte court. (Sealed: the general mvcur single- + multi-field positioning GNURUST.SCREENIO.DISPLAY.2 + .3, the monochrome display attributes GNURUST.SCREENIO.ATTR.1, the SINGLE-field colour whole-screen repaint GNURUST.SCREENIO.COLOR.1, the numeric-edited single-field positioning GNURUST.SCREENIO.NUMEDIT.1, the width<=6 alphanumeric ACCEPT GNURUST.SCREENIO.ACCEPT.1, and its OVERFLOW (BEL/overwrite) tail GNURUST.SCREENIO.ACCEPT.2 -- the last two differentially verified against GnuCOBOL 3.2 AND 3.1.2.)",
+  "future_campaign": "screenio remaining follow-ons: THREE-or-more same-row DISPLAYs (the doupdate clear-to-EOL batches differently across 3+ refreshes) + distant-survivor + MULTI-ROW line-diffs, the `rep`-painted (width>=7) ACCEPT prompt, and multi-field/edit-key ACCEPT -- each a follow-on literal-byte court. (Sealed: the general mvcur single- + multi-field positioning GNURUST.SCREENIO.DISPLAY.2 + .3, the monochrome display attributes GNURUST.SCREENIO.ATTR.1, the SINGLE-field colour whole-screen repaint GNURUST.SCREENIO.COLOR.1, the numeric-edited single-field positioning GNURUST.SCREENIO.NUMEDIT.1, the width<=6 alphanumeric ACCEPT GNURUST.SCREENIO.ACCEPT.1 + its OVERFLOW tail GNURUST.SCREENIO.ACCEPT.2, and the TWO-DISPLAY same-row doupdate/TransformLine line-diff GNURUST.SCREENIO.LINEDIFF.1 -- the colour/edited/ACCEPT/linediff courts all differentially verified against GnuCOBOL 3.2 AND 3.1.2.)",
   "risk_if_unported": "SCREEN SECTION init/teardown framing + a positioned literal/FROM DISPLAY are now reproduced BYTE-IDENTICALLY to GnuCOBOL's ncurses output natively (GNURUST.SCREENIO.INIT.1, screenio_sweep 1/0, no ncurses linked) for the admitted terminal (TERM=xterm, ncurses 6.6); other terminals/ncurses builds emit different bytes (the declared terminal-dependence non-claim). The cursor-cost model + attributes + ACCEPT remain follow-on work"
  },
  {

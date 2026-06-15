@@ -579,65 +579,283 @@ pub fn accept_field_and_stop(line: i32, col: i32, width: i32, typed: &[u8]) -> V
     out
 }
 
-/// The general multi-DISPLAY same-row refresh **line-diff** (ncurses `doupdate` / `TransformLine`)
-/// -- a thoroughly reverse-engineered but **deliberately UNSEALED** boundary. This module is
-/// documentation only: it records what was proven, what blocks a faithful general seal, and why, so a
-/// future engineer (or a port of ncurses's `lib_doupdate.c` + `lib_mvcur.c`) can pick it up without
-/// re-deriving it. There is no claim here -- the general line-diff is the declared non-claim of the
-/// screenio surface.
-///
-/// ## The shape (verified)
-///
-/// When two `DISPLAY` statements write the same screen row, the second is not a fresh positioned
-/// write: ncurses keeps a virtual screen, and on refresh `TransformLine` diffs the new row against
-/// the old and emits the minimal update. A `DISPLAY` of a literal at `(line, col)` writes its text at
-/// `[col, col+len)` and blanks `[col+len, EOL)` in the virtual row; `TransformLine` then:
-/// * finds the first and last columns that changed,
-/// * repositions to the first changed column,
-/// * writes the new content up to its last non-blank cell, and
-/// * **erases the now-blank tail** -- the genuinely new behaviour vs the sealed DISPLAY courts.
-///
-/// ## Robustly proven sub-facts (oracle 3.2 + 3.1.2, byte-identical)
-///
-/// * **The `clr_eol`-vs-spaces threshold.** After writing the changed run, a trailing run of cells
-///   that changed to blank is erased with `\e[K` (`el`) when it is **>= 2 cells**, written as a
-///   single space when it is exactly **1 cell**, and omitted when **0**. (Probed `tail-1..tail-5`:
-///   1 -> ` `, 2..5 -> `\e[K`.)
-/// * **The same-row reposition priority.** The backward move between writes prefers column-address
-///   HPA `\e[<c>G` over backspaces over CR+spaces on a byte-count tie -- the same order as
-///   [`accept_reposition`], and *unlike* the sealed forward [`mvcur`] (whose backward path only emits
-///   backspaces). This is why the line-diff cannot simply reuse `mvcur`.
-///
-/// ## Why a GENERAL seal is blocked (the two ncurses internals)
-///
-/// 1. **`EmitRange` rewrites leading unchanged cells when the cursor move is cheaper.** For
-///    `DISPLAY "ABCDEFGH" @3` then `DISPLAY "WXYZ" @4`, the first changed column is 4, yet the oracle
-///    repositions to column **3** (CR+2 spaces, 3 bytes) and rewrites the unchanged `A` -- because
-///    `move(->3)+write("AWXYZ")` ties `move(->4)+write("WXYZ")` on cost and ncurses takes the former.
-///    Reproducing this needs ncurses's per-cell PutRange/EmitRange cost search, not a first-diff start.
-/// 2. **`mvcur` emits an ABSOLUTE cursor address when the column is treated as UNKNOWN -- this is NOT
-///    a cost decision.** For `DISPLAY "ABCDEFGH" @10` then `@10` again, the reposition from column 18
-///    back to 10 uses CUP `\e[2;10H` (7-8 bytes) in preference to the shorter HPA `\e[10G` (5 bytes).
-///    This first read as "ncurses chooses by terminfo cost, not byte length" -- but computing the REAL
-///    ncurses `NormalizedCost` from the admitted xterm terminfo (`cup` = `\e[%i%p1%d;%p2%dH`,
-///    `hpa` = `\e[%i%p1%dG`) gives `hpa_cost` ~ 5 and `cup_cost` ~ 8: HPA is cheaper by BOTH byte
-///    length AND cost, so `relative_move` would pick HPA. The oracle's CUP therefore means
-///    `onscreen_mvcur` saw the previous column as **unknown** (`xold < 0`) and was forced to a direct
-///    address -- a `doupdate` / libcob **cursor-tracking** state (which refresh marks the position
-///    lost), NOT the terminfo cost model.
-///
-/// **On the `ncurses-native` terminfo work:** a real terminfo binary parser + `tparm`/`tputs` (the
-/// foundation for capability costs) is the necessary infrastructure for general ncurses parity, but
-/// the analysis above shows it is NOT sufficient to unlock this line-diff: both blockers live in
-/// `doupdate` (the `EmitRange` leading-cell rewrite, and the cursor-unknown absolute address), above
-/// the terminfo cost tables. The unlock needs ncurses's `lib_doupdate.c` cursor bookkeeping plus
-/// libcob's exact per-`DISPLAY` `wmove`/`wrefresh` call sequence reproduced.
-///
-/// Until the doupdate cursor model is reproduced, the general line-diff stays a documented non-claim;
-/// the sealed screenio courts (`INIT.1`, `DISPLAY.2`/`.3`, `ATTR.1`, `COLOR.1`, `NUMEDIT.1`,
-/// `ACCEPT.1`/`.2`) cover the positioned/attributed/edited/input cases whose moves stay in the range
-/// where the byte-length model and ncurses agree.
-pub mod line_diff_boundary {}
+// ===========================================================================================
+// GNURUST.SCREENIO.LINEDIFF.1 -- the multi-DISPLAY same-row refresh line-diff (ncurses doupdate /
+// TransformLine), SEALED for the two-DISPLAY overwrite envelope.
+// ===========================================================================================
+//
+// When two `DISPLAY` statements write the same screen row, the second is NOT a fresh positioned
+// write: ncurses keeps a virtual screen, and on refresh `TransformLine` diffs the new row against
+// the old and emits the minimal update. A `DISPLAY` of a literal at `(row, col)` writes its text at
+// `[col, col+len)` and blanks `[col+len, EOL)` in the virtual row; the refresh then repositions to
+// the first changed column, writes the changed run, and erases the now-blank tail. This was the
+// long-documented hard case ("the overlapping same-row clr_eol line-diff"); it is reproduced here
+// byte-for-byte against BOTH GnuCOBOL 3.2 and 3.1.2 (`screenio_linediff_sweep`, 297-case grid).
+//
+// ## The model (every rule oracle-pinned)
+//
+// For the second DISPLAY, with the cursor at `end1` (end of the first write), the new virtual line
+// is diffed against the old; `first`/`last` are the first/last changed columns. The update is the
+// CHEAPEST of these candidates (cost = move bytes + written bytes + tail), ties broken by the
+// listed priority -- exactly ncurses's `EmitRange` + `onscreen_mvcur`:
+//
+// * **CR (priority 1):** carriage-return to column 1, then write from column 1 -- literal spaces for
+//   the leading blanks (cursor advance, never `rep`-compressed) then the content. This is the path
+//   that "rewrites leading unchanged cells" when reaching `first` precisely would cost more.
+// * **The relative move to `first` (priority 0), restricted by distance:** a backward move uses
+//   repeated backspaces when the distance is **<= 4**, else column-address `HPA \e[<c>G` (priority 2);
+//   a forward gap uses spaces when **<= 4**, else `HPA`; a zero move writes in place. ncurses switches
+//   from repeated `cub1`/`cuf1` to `column_address` exactly at distance 5.
+// * **The cursor-uncertainty CUP (priority 3):** when the backward distance is **>= 8 AND the target
+//   column is >= 9**, ncurses treats the prior column as unknown and HPA is SUPPRESSED -- the move is
+//   forced to a direct `CUP \e[<row>;<col>H` even though HPA would be shorter. (Below that boundary
+//   HPA wins on cost; this is the one rule that is not a pure cost decision.)
+//
+// The written run runs to its last non-blank cell; the trailing run of cells that changed to blank
+// is erased with `clr_eol \e[K` when **>= 2 cells**, a single space when exactly **1**, nothing when
+// **0**. Identical runs of **>= 7** characters use the `rep` capability `\e[<n>b`.
+//
+// ## Sealed envelope + non-claims
+//
+// TWO `DISPLAY`s to the same `row` (the second overwriting/extending/overlapping the first). The
+// declared follow-ons (each a separate doupdate sub-case): **three or more** same-row DISPLAYs (the
+// clear-to-EOL batches differently across 3+ refreshes -- a DISPLAY's trailing erase is deferred when
+// another write to the row follows); **distant isolated** survivors needing a jump+single-space; the
+// **multi-ROW** diff (vertical `mvcur` between changed rows); attributes/colour on the diffed text;
+// any terminal but the admitted `TERM=xterm` / ncurses 6.6.
+
+/// The 1-based virtual-screen width the line-diff models (the admitted 80-column terminal).
+const LINEDIFF_WIDTH: usize = 80;
+
+/// Append `\e[<n><final>` (VPA `d`, HPA/CHA `G`). Local mirror for the line-diff emitter.
+fn ld_csi1(out: &mut Vec<u8>, n: i32, fin: u8) {
+    out.extend_from_slice(b"\x1b[");
+    out.extend_from_slice(n.to_string().as_bytes());
+    out.push(fin);
+}
+
+/// Write `bytes` with ncurses's `rep` run-length encoding: a run of `>= 7` identical bytes becomes
+/// the byte followed by `\e[<run-1>b`. Shorter runs are literal.
+fn ld_rep_write(bytes: &[u8], out: &mut Vec<u8>) {
+    let mut i = 0;
+    while i < bytes.len() {
+        let mut j = i;
+        while j < bytes.len() && bytes[j] == bytes[i] {
+            j += 1;
+        }
+        let run = j - i;
+        if run >= 7 {
+            out.push(bytes[i]);
+            ld_csi1(out, (run - 1) as i32, b'b');
+        } else {
+            out.extend_from_slice(&bytes[i..j]);
+        }
+        i = j;
+    }
+}
+
+/// Emit the write of the changed run starting at 0-based column `start` through `last` (inclusive),
+/// over the new virtual line `new`: literal leading spaces (cursor advance) for the run's leading
+/// blanks, then `rep`-encoded content, then the trailing erase (`clr_eol` for >= 2 blanked cells, a
+/// space for 1, nothing for 0). Returns `(bytes, end_cursor_1based)`.
+fn ld_emit_from(new: &[u8], start: usize, last: usize) -> (Vec<u8>, i32) {
+    let mut out = Vec::new();
+    let seg_first_nb = (start..=last).find(|&k| new[k] != b' ');
+    let seg_last_nb = (start..=last).rev().find(|&k| new[k] != b' ');
+    match (seg_first_nb, seg_last_nb) {
+        (Some(fnb), Some(lnb)) => {
+            for _ in start..fnb {
+                out.push(b' '); // literal leading spaces
+            }
+            ld_rep_write(&new[fnb..=lnb], &mut out);
+            let trailing = last - lnb;
+            if trailing >= 2 {
+                out.extend_from_slice(b"\x1b[K");
+            } else if trailing == 1 {
+                out.push(b' ');
+            }
+            let end = (lnb + 1) + if trailing == 1 { 1 } else { 0 } + 1;
+            (out, end as i32)
+        }
+        _ => {
+            // the whole changed region is blank
+            let n = last - start + 1;
+            if n >= 2 {
+                out.extend_from_slice(b"\x1b[K");
+                (out, (start + 1) as i32)
+            } else {
+                out.push(b' ');
+                (out, (start + 2) as i32)
+            }
+        }
+    }
+}
+
+/// The `TransformLine` update of the second DISPLAY: diff `old` vs `new`, choose the cheapest
+/// reposition+write per the model above, return `(bytes, end_cursor_1based)`. `end_col` is the
+/// 1-based cursor column after the previous write; `row` is the 1-based screen row.
+fn ld_transform(old: &[u8], new: &[u8], end_col: i32, row: i32) -> (Vec<u8>, i32) {
+    let diffs: Vec<usize> = (0..LINEDIFF_WIDTH).filter(|&k| old[k] != new[k]).collect();
+    if diffs.is_empty() {
+        return (Vec::new(), end_col);
+    }
+    let first = diffs[0];
+    let last = *diffs.last().unwrap();
+    let fc = (first + 1) as i32; // 1-based first changed column
+    let back = end_col - fc;
+    // candidates: (cost, priority, bytes, end_cursor)
+    let mut cands: Vec<(usize, u8, Vec<u8>, i32)> = Vec::new();
+    let mut add = |prio: u8, mv: &[u8], start: usize, cands: &mut Vec<(usize, u8, Vec<u8>, i32)>| {
+        let (body, end) = ld_emit_from(new, start, last);
+        let mut bytes = mv.to_vec();
+        bytes.extend_from_slice(&body);
+        cands.push((mv.len() + body.len(), prio, bytes, end));
+    };
+    // CR: write from column 1.
+    add(1, b"\r", 0, &mut cands);
+    let suppressed = back >= 8 && fc >= 9;
+    if !suppressed {
+        if fc < end_col {
+            // backward: backspaces up to 4, else HPA.
+            if back <= 4 {
+                add(0, &vec![0x08u8; back as usize], first, &mut cands);
+            } else {
+                let mut h = Vec::new();
+                ld_csi1(&mut h, fc, b'G');
+                add(2, &h, first, &mut cands);
+            }
+        } else if fc > end_col {
+            // forward gap: spaces up to 4, else HPA.
+            let fwd = fc - end_col;
+            if fwd <= 4 {
+                add(0, &vec![b' '; fwd as usize], first, &mut cands);
+            } else {
+                let mut h = Vec::new();
+                ld_csi1(&mut h, fc, b'G');
+                add(2, &h, first, &mut cands);
+            }
+        } else {
+            add(0, b"", first, &mut cands); // already at first
+        }
+    }
+    // CUP fallback (and the only horizontal in the cursor-uncertainty region).
+    let mut c = Vec::new();
+    c.extend_from_slice(b"\x1b[");
+    c.extend_from_slice(row.to_string().as_bytes());
+    c.push(b';');
+    c.extend_from_slice(fc.to_string().as_bytes());
+    c.push(b'H');
+    add(3, &c, first, &mut cands);
+
+    cands.sort_by_key(|(cost, prio, _, _)| (*cost, *prio));
+    let best = cands.into_iter().next().unwrap();
+    (best.2, best.3)
+}
+
+/// The home -> first-field move for the first DISPLAY (VPA + spaces, or `HPA` for a 5..=7 advance,
+/// or `CUP`; VPA+spaces preferred on a tie). 1-based.
+fn ld_move_first(col: i32, row: i32) -> Vec<u8> {
+    let mut cands: Vec<(usize, u8, Vec<u8>)> = Vec::new();
+    let mut vpa_sp = Vec::new();
+    ld_csi1(&mut vpa_sp, row, b'd');
+    for _ in 0..(col - 1) {
+        vpa_sp.push(b' ');
+    }
+    cands.push((vpa_sp.len(), 0, vpa_sp));
+    if (5..=7).contains(&(col - 1)) {
+        let mut v = Vec::new();
+        ld_csi1(&mut v, row, b'd');
+        ld_csi1(&mut v, col, b'G');
+        cands.push((v.len(), 1, v));
+    }
+    let mut cup = Vec::new();
+    cup.extend_from_slice(b"\x1b[");
+    cup.extend_from_slice(row.to_string().as_bytes());
+    cup.push(b';');
+    cup.extend_from_slice(col.to_string().as_bytes());
+    cup.push(b'H');
+    cands.push((cup.len(), 2, cup));
+    cands.sort_by_key(|(l, p, _)| (*l, *p));
+    cands.into_iter().next().unwrap().2
+}
+
+/// The post-DISPLAY move to the pause-prompt row at column 1 (VPA + backspaces/spaces, CR+VPA, or
+/// CUP). 1-based, from cursor column `fx` on the field row to `(ty, tx)`.
+fn ld_move_final(fx: i32, ty: i32, tx: i32) -> Vec<u8> {
+    let mut cands: Vec<(usize, u8, Vec<u8>)> = Vec::new();
+    let mut a = Vec::new();
+    ld_csi1(&mut a, ty, b'd');
+    if fx >= tx {
+        for _ in 0..(fx - tx) {
+            a.push(0x08);
+        }
+    } else {
+        for _ in 0..(tx - fx) {
+            a.push(b' ');
+        }
+    }
+    cands.push((a.len(), 0, a));
+    let mut b = vec![b'\r'];
+    ld_csi1(&mut b, ty, b'd');
+    for _ in 0..(tx - 1) {
+        b.push(b' ');
+    }
+    cands.push((b.len(), 1, b));
+    let mut cup = Vec::new();
+    cup.extend_from_slice(b"\x1b[");
+    cup.extend_from_slice(ty.to_string().as_bytes());
+    cup.push(b';');
+    cup.extend_from_slice(tx.to_string().as_bytes());
+    cup.push(b'H');
+    cands.push((cup.len(), 2, cup));
+    cands.sort_by_key(|(l, p, _)| (*l, *p));
+    cands.into_iter().next().unwrap().2
+}
+
+/// Reproduce the full terminal byte stream of TWO `DISPLAY` statements to the same screen `row` --
+/// the first at `(row, c1)` writing `d1`, the second at `(row, c2)` writing `d2` (overwriting /
+/// extending / overlapping the first) -- followed by `STOP RUN`, byte-identical to GnuCOBOL on the
+/// admitted xterm/ncurses 6.6 terminal (`GNURUST.SCREENIO.LINEDIFF.1`). This is the ncurses
+/// `doupdate` / `TransformLine` line-diff (`clr_eol` trailing-erase, the leading-cell rewrite, the
+/// cursor-uncertainty CUP, the backward/forward HPA distance thresholds). Sealed envelope: exactly
+/// two same-row DISPLAYs (see the module section above for the declared follow-ons).
+pub fn two_display_line_and_stop(row: i32, c1: i32, d1: &[u8], c2: i32, d2: &[u8]) -> Vec<u8> {
+    let mut out = Vec::new();
+    out.extend_from_slice(INIT_PROLOGUE);
+
+    // The virtual line: blanks, then each DISPLAY writes [col, col+len) and blanks [col+len, EOL).
+    let mut line = vec![b' '; LINEDIFF_WIDTH];
+    let apply = |line: &mut Vec<u8>, col: i32, data: &[u8]| {
+        let c0 = (col - 1) as usize;
+        for (i, &b) in data.iter().enumerate() {
+            if c0 + i < LINEDIFF_WIDTH {
+                line[c0 + i] = b;
+            }
+        }
+        for k in (c0 + data.len())..LINEDIFF_WIDTH {
+            line[k] = b' ';
+        }
+    };
+
+    // First DISPLAY: position from home, write (rep-encoded).
+    out.extend_from_slice(&ld_move_first(c1, row));
+    ld_rep_write(d1, &mut out);
+    apply(&mut line, c1, d1);
+    let mut cx = c1 + d1.len() as i32;
+
+    // Second DISPLAY: the TransformLine diff.
+    let old = line.clone();
+    apply(&mut line, c2, d2);
+    let (body, end) = ld_transform(&old, &line, cx, row);
+    out.extend_from_slice(&body);
+    cx = end;
+
+    // Pause prompt on the row below, then teardown.
+    out.extend_from_slice(&ld_move_final(cx, row + 1, 1));
+    out.extend_from_slice(PAUSE_PROMPT);
+    out.extend_from_slice(TEARDOWN_EPILOGUE);
+    out
+}
 
 #[cfg(kani)]
 mod kani_proofs {
@@ -784,6 +1002,24 @@ mod kani_proofs {
         let b: u8 = kani::any();
         let c: u8 = kani::any();
         let out = accept_field_and_stop(line, col, width, &[a, b, c]);
+        assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
+        assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
+    }
+
+    // KANIFOR: GNURUST.SCREENIO.LINEDIFF.1
+    /// A two-DISPLAY same-row line-diff always emits a well-formed prologue..epilogue envelope and
+    /// never panics, for any two in-screen positions and any single-byte payloads. The virtual-line
+    /// diff + cost-search reposition is total.
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn linediff_envelope() {
+        let c1: i32 = kani::any();
+        let c2: i32 = kani::any();
+        kani::assume(c1 >= 1 && c1 <= 70);
+        kani::assume(c2 >= 1 && c2 <= 70);
+        let a: u8 = kani::any();
+        let b: u8 = kani::any();
+        let out = two_display_line_and_stop(2, c1, &[a], c2, &[b]);
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
@@ -998,6 +1234,34 @@ mod tests {
             want.extend_from_slice(TEARDOWN_EPILOGUE);
             let got = accept_field_and_stop(*line, *col, *width, typed);
             assert_eq!(got, want, "accept mismatch L{} C{} W{} typed={:?}", line, col, width, typed);
+        }
+    }
+
+    #[test]
+    fn two_display_line_diff_matches_oracle() {
+        // Exact captures of two same-row DISPLAYs then STOP RUN (TERM=xterm, ncurses 6.6), additionally
+        // byte-identical against GnuCOBOL 3.1.2. Each vector covers a distinct doupdate branch: the
+        // clr_eol trailing-erase, the leading-cell rewrite, the cursor-uncertainty CUP, backward HPA,
+        // backspaces, a forward-gap, forward HPA, and the same-start small-column HPA. Validated
+        // additionally against a 297-case grid (both oracles). The string is the FULL stream body.
+        let vectors: &[((i32, i32, &[u8]), (i32, i32, &[u8]), &str)] = &[
+            ((2, 3, b"ABCDEFGH"), (2, 3, b"XY"), "\x1b[2d  ABCDEFGH\r  XY\x1b[K\r\x1b[3d"),
+            ((2, 3, b"ABCDEFGH"), (2, 4, b"WXYZ"), "\x1b[2d  ABCDEFGH\r  AWXYZ\x1b[K\r\x1b[3d"),
+            ((2, 10, b"ABCDEFGH"), (2, 10, b"YY"), "\x1b[2;10HABCDEFGH\x1b[2;10HYY\x1b[K\r\x1b[3d"),
+            ((2, 3, b"ABCDEFGH"), (2, 6, b"XY"), "\x1b[2d  ABCDEFGH\x1b[6GXY\x1b[K\r\x1b[3d"),
+            ((2, 3, b"ABCDEFGH"), (2, 9, b"XY"), "\x1b[2d  ABCDEFGH\x08\x08XY\r\x1b[3d"),
+            ((2, 3, b"ABCDEFGH"), (2, 13, b"XY"), "\x1b[2d  ABCDEFGH  XY\r\x1b[3d"),
+            ((2, 3, b"ABCDEFGH"), (2, 16, b"YY"), "\x1b[2d  ABCDEFGH\x1b[16GYY\r\x1b[3d"),
+            ((2, 5, b"MNOPQR"), (2, 5, b"YY"), "\x1b[2;5HMNOPQR\x1b[5GYY\x1b[K\r\x1b[3d"),
+        ];
+        for ((r1, c1, d1), (_r2, c2, d2), body) in vectors {
+            let mut want = Vec::new();
+            want.extend_from_slice(INIT_PROLOGUE);
+            want.extend_from_slice(body.as_bytes());
+            want.extend_from_slice(PAUSE_PROMPT);
+            want.extend_from_slice(TEARDOWN_EPILOGUE);
+            let got = two_display_line_and_stop(*r1, *c1, d1, *c2, d2);
+            assert_eq!(got, want, "linediff mismatch ({},{},{:?})->({},{:?})", r1, c1, d1, c2, d2);
         }
     }
 

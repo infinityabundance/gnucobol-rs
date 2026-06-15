@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.TABLE.PERFORM.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.81",
+  "crate_version": "0.7.82",
   "damage_if_overclaimed": "using 0-based subscript arithmetic on a COBOL table reads the wrong element (or adjacent storage), corrupting every table-driven total or lookup",
   "hash_chain": {
-    "inputs_sha256": "ad1b95fda997c9d3e4ef8b18c8838a63ff737f2d2231fb95258636387e99dcc9"
+    "inputs_sha256": "8e4a04b09b6b646a545d3d51bb06d3746e54a46a9cdf344a5298b15bc90b38ce"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e5af6c1661beee6904e6cc0c837e0cc109a23c88fb3e09de1412baa24e285a76",
-    "receipt_sha256": "59c8b0fdddac742ef97b8684ef646c98fc54998182126fcf752fca2d0d05af18"
+    "receipt_sha256": "46b038da1b03e31719b86d4b78a7ff60c2e15e3b7d0f698dcf30ccce09e46594"
   },
   "kind": "court-casefile",
   "lie_prevented": [

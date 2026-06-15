@@ -5,21 +5,21 @@
       "kind": "generated_doc",
       "path": "STATUS.md",
       "present": true,
-      "sha256": "943ac45a587140c47fb9d9a5ae3954f86930e57baf04d24290a4fd0e7e6b3ab3"
+      "sha256": "6b6b901b031719b29e8ded295dc4427adf146d3bcf89778eb412fe921af3b37d"
     },
     {
       "id": "changelog",
       "kind": "generated_doc",
       "path": "CHANGELOG.md",
       "present": true,
-      "sha256": "510526ff7f0ea97944b1b26e495dc8ae2b77ad59047fe0df82bd81050519eea0"
+      "sha256": "6fa2c6c1e83338b07db695723419560be6dbc9bdcdbd4257ca9e7b273dd26bcf"
     },
     {
       "id": "claim_ladder",
       "kind": "machine_spine",
       "path": "reports/claim-ladder.json",
       "present": true,
-      "sha256": "3bc9d6e738edbe1eedf790390282928427f88c08a5c9ccac26098ca90c8f612a"
+      "sha256": "58865c3dcbd12f666271166ec2b237f42c2c6a0cdb6f077f961af130e2af9be7"
     },
     {
       "id": "negative_capabilities",
@@ -54,7 +54,7 @@
       "kind": "doctrine_doc",
       "path": "docs/future-risk-register.md",
       "present": true,
-      "sha256": "fab1cae19d6b5ecf56e6bc4d596bb71affd258bf23fe77b7999b0b753f140e41"
+      "sha256": "76b2343e4b0d0c24d082c1fc59e38f754c0064cf898c17d95ad658d31097961a"
     },
     {
       "casefiles": [
@@ -66,28 +66,28 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "fe141980cd23a1697ca67e4eb973e608e2bfb4c8fed4524bfaeebab519a31357",
+          "casefile_sha256": "ed7c836e32b77b772b58fd429db79dcb0aee68beee600ecd56d676505d1daca8",
           "court": "GNURUST.10",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "1c07af9e242a59fb0423bd3ca161e0082dc43abf3e70d9ec736b1dc471ac7658",
+          "casefile_sha256": "f362b04f201d226bc9acc7573f4328ffbaf915ced86cf331f4be746e7867c86a",
           "court": "GNURUST.11",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "eb96fc15f1d05296bd43e57674f8b896ed6428e56c617f54b72955f7112bbc7d",
+          "casefile_sha256": "1acda4fa62858621a61ebbfcf7f6c5e4ce828bcb82bcf9166cb456686ae4a0f7",
           "court": "GNURUST.12",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "9f399d7a0d33e6fb185e6d4143c6d6c14457c58beb1358e0811e3659d2a1595e",
+          "casefile_sha256": "94400f940cd8addca74e241f2c844a0c84c7ef5e2c547bfd02398bf14ca612a1",
           "court": "GNURUST.12B",
           "dsse": true,
           "intoto": true,
@@ -101,77 +101,77 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "619be4c52518d5a127eae5e56ba04b3d3719371d89b1c695f653cea1887e92fe",
+          "casefile_sha256": "e41bdf2fada5013347c3516e10a708a6f1a6b41d6b14b9594ee736d03dcede91",
           "court": "GNURUST.14",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "71d38a7a944759cf1636c2917baa1bdecda5d3fe0418122becc68a5c77c1881f",
+          "casefile_sha256": "ed22bff31cd37af954c317f3879473c93529870f79e67b42d6229914cad889f1",
           "court": "GNURUST.15",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "02d3e9eb50f1e6b7704baca6ab6f0c9113961245d6f57354003fecbcd07ec22c",
+          "casefile_sha256": "23b377eb766513ffe91768110aa0b4bd1b8417d94a1c7a9a223e79a8cc0fa6d5",
           "court": "GNURUST.16",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "ff278663d0358624f692a6eb242add654ac6d33e8062a0c0c2cba19353636325",
+          "casefile_sha256": "7cce25b9e2284881b78484527ed01b9533da0f9779fa5a6f5f5f64f71a013ee7",
           "court": "GNURUST.16C",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "082c1979b083b7a9090cbc859a73759097693688d575e9d049abcf01b8315b76",
+          "casefile_sha256": "9bf1d4e5dd9a6fbb621b04267ffcd828367cf1abbeda6a1784df70845bab24c1",
           "court": "GNURUST.17",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "ebd91d7435f6829016adbc1ace251a2ce0dfe39951b7a6bf5682ffc7f07798bf",
+          "casefile_sha256": "392ce59a6de467a53ba0029c7f79e83240e793a5f0cd77c24471e63fd60a5a09",
           "court": "GNURUST.18",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "bc7dac8f42881cf0f4aae74e645345156a5f59e42e46cbd8f777f3464e40a13c",
+          "casefile_sha256": "d9879b64dc53fd9b55c68366202d715b2ab6475744d143f6a1b4b2f3e70f1239",
           "court": "GNURUST.19",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "3d927fb73a8bcb2cd3f337f37a83ddc4faec15adadafb80182c203ebb65f48a8",
+          "casefile_sha256": "819a94b357902b450b8ee4c07bdbd7e3f9ff34c94e973c9c4a85e87adb5fd5c3",
           "court": "GNURUST.2",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "5d297b3805c58ded405028df18ce94c543991e31674ef16819e7af494522bcab",
+          "casefile_sha256": "4e22cbbfd19550783bf314eba4abc692affcfffdf7e5340f739e5223d7f366a2",
           "court": "GNURUST.3",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "7814f193318ecb0bfb1075c11f8b73d16374f49bc7dee0532b5356283a6b2af6",
+          "casefile_sha256": "04430e051af9e2ba592049e87bcaffca44efadeb8df16b57e624ab354b5b0ed1",
           "court": "GNURUST.4",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "3428a732ea3ca8c60b304002714eda9e80a879ed9ca0249270436bb2d30f8131",
+          "casefile_sha256": "bcbb74583be7d2b3536521c349d6ad5fed612cbfa74302894979dfd49157d5cf",
           "court": "GNURUST.5",
           "dsse": true,
           "intoto": true,
@@ -185,14 +185,14 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "033f4da2df005ea8213a2f03c684a5aa86d08a3c2210abb99d2a3a602932120a",
+          "casefile_sha256": "6acbbe4710e56c8788c4b584556a26b1b196780d4fa841efa741873d22cf2cdf",
           "court": "GNURUST.7",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "5f4119550dea37beaadf46445150c66bba7ff6c1605292671ad9e96fdf458638",
+          "casefile_sha256": "996d3085493b4f0b48e4784f143b4ef204cdf5c2ab02cf740da05e21a24f1989",
           "court": "GNURUST.8",
           "dsse": true,
           "intoto": true,
@@ -206,70 +206,70 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "0cfd4a90cdec4cdf94d36b0c603e92e6df922da2dee7ce57c4a706d0d243c31e",
+          "casefile_sha256": "baf4769fdf3b547cff531cdccc0c6fb22f179dfe1819086592bbfe73643e7440",
           "court": "GNURUST.ACCEPT.DISPLAY.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "8448117b7159c97252aa7512e99ebfa495d51de3fcaaa749a408af38dc12a6f9",
+          "casefile_sha256": "df3d50ae61b70b0cf6f92612e1c8f44ae741606e4e3ed4ac21520cf6215efedf",
           "court": "GNURUST.ACCEPT.DISPLAY.2",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "6fecd5aee1396526dd592b46401e86d0d18f7da37fc98d924c75abbc7ccd13f8",
+          "casefile_sha256": "400f4c20c9aec0e77196feab020a0c2462b043b6dfbccff6bbbd50ed2e0ee104",
           "court": "GNURUST.BIGNUM.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "706c12edbba798fb9a4b2a5ebff110128a3441789a02e19e81ce662582aeb6bc",
+          "casefile_sha256": "3966dce6c63c4b8f32473bb52417e948ac914681c78e3a4ed0bc8604e65b0f28",
           "court": "GNURUST.BUILD.PROFILE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "64e081e9133fb0a94324f7170a95f1f25bac1ca09a4e917f6fa7d9cf0d194ec9",
+          "casefile_sha256": "47e5fd65844fec0452295ba562ff3f9f6ebfd54729cf3e0c6b5e273d4aedf659",
           "court": "GNURUST.CALL.EXTENSION.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "0df281700709cbb91c5dfd9816c6d20ca399d6a1b6bb914dee25d5657f65183f",
+          "casefile_sha256": "1c287b7cf9dae16208e08c74214b067867244a190a4350d7d38339157a42a19c",
           "court": "GNURUST.CALL.LAYOUT.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "baec30def2fc949f1c515764dcbaf36a2c98ac530ca0c230add22269b194c2a4",
+          "casefile_sha256": "b9771c69a940f74e72730214d6f892e3c35113fd790c9b5c87e0dadd5ce286ae",
           "court": "GNURUST.CLASS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "3434a873e411b5e327be536ce52444b871dbf399d2219a05a15f1ff86c7a19e9",
+          "casefile_sha256": "7b36727748d7e1f24d63c9cb83a6cc036f6d663884ad8f691c52aefafb5ae0db",
           "court": "GNURUST.COMMON.BOUNDCHECK.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "7945b2225e8ab713384b31665bed9d251c6400a004603f7e426d70dcc55927df",
+          "casefile_sha256": "9283980e96413869a9d9e35b79284f6b615c726c526dd9cd58d07bed1cd896d8",
           "court": "GNURUST.COMMON.CBL.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "1201d75e8b3c4c7fc0654e33316782465afc5f2e392e231273bf457f5517a23a",
+          "casefile_sha256": "c5e94cb2b9226570298a36543efb60c54fecd14e5449dcf4fdf51cf7cd8d5a8f",
           "court": "GNURUST.COMMON.NUMCHECK.1",
           "dsse": true,
           "intoto": true,
@@ -283,329 +283,329 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "0b29deb35cb8aeda091c9f295919dfc5459a17c7fa951c002f4e78d14eaa70bd",
+          "casefile_sha256": "aad65ad17eb9d1af710fd33fbabc95068b64e65ed6d61d65789914adf79cc778",
           "court": "GNURUST.DECLARATIVES.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "798693bdc267d0c6bef12b1e981e7e7384d86c3ab21729c1d76c18eae40ffe15",
+          "casefile_sha256": "9daceec702b8df59ccbd1198dad0d413cec2eca71b816294eb0e2339f1772888",
           "court": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e32c584917dfaa8f6b18d4fc0cc9876ee9b98db519ececbec9e0f80280783f49",
+          "casefile_sha256": "e03ebfec30c360742b8e83d6db7b9ea026396376f3b8a7617396896aa2b779ac",
           "court": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "6512d28e24e4856f34bdf0a334b45f245b3c5069f56a8ff582ffb5b8c2c1ca28",
+          "casefile_sha256": "a1ecfaa5e66bbf4e76450cde24da9fae7ef3d5bb3e441d0601fab71df261785e",
           "court": "GNURUST.FILE.FILTER.SLICE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "331902e107cb35b7ed7363878d40eebf5b08e66e09bf0836f58f761592505c73",
+          "casefile_sha256": "91c96beeccd62b02dfc19b66e25d242ea15a9809790a9d6f20b2ba90d1fa49f8",
           "court": "GNURUST.FILE.FLOW.SLICE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "5875fd19dfb08080f842290790a5deb68e11f935c1ea6c3c76645cfadb86bfa4",
+          "casefile_sha256": "eaa275a500fdf938c3f557d62937293163a7fede89cbc3121eca96647547bebc",
           "court": "GNURUST.FILE.REWRITE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "743aaa6b8d5699c57302552c85ee735591e8f3c2d7aacc3130b1afb73f0352f3",
+          "casefile_sha256": "2708372bfff5a91d65fa9096cb55a8b9ebbd888f854b73d6fa7428b20f1d01f8",
           "court": "GNURUST.FILE.SEQUENTIAL.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "332bee26453f126fd684b9be3cca2a4231043ba22e0d60a807b5d2c988b50635",
+          "casefile_sha256": "7ceeaefe4728e8d44a8983a1d66a2e87ea2506889d56f33d98187d4c3fd65c05",
           "court": "GNURUST.FILE.STATUS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "bfbcf2b6ecc23f12ac024edc89a084f131cb20952eb3a191b0186d55f05b1085",
+          "casefile_sha256": "3d9cd9468966df0420115a28abc7b017e0a354602644691a794fb1f664ab59c1",
           "court": "GNURUST.FILE.WRITE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "ecd429769f8f34157a7f13eecb593eb89847881545435adba3de244afb21d5b6",
+          "casefile_sha256": "f036929b271626015d3f5b9b39f60578193cac8e94af3208c240e503ac5533c0",
           "court": "GNURUST.FILEIO.INDEXED.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "79e383077a3387a845cc6ebee9624dc4e7dc446ba394dded61532a3cbc300df2",
+          "casefile_sha256": "c231e5a8b459093b55603e5c0b76fab0559597499058664d1fafe41bf362c077",
           "court": "GNURUST.FILEIO.LINESEQ.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "46d925ed83d3d03eec13d7f404e975d650706d6b807ae334a188353f2f30822e",
+          "casefile_sha256": "014cc75bba29914e78d0f77e0fa64eaae91c4fb4841b04495854c821062da432",
           "court": "GNURUST.FILEIO.LINESEQ.2",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "2372ba61e482d4f389d54af455de02ce4b827d6d1e976bf53f1ffa8571e4b063",
+          "casefile_sha256": "dddb115d30004ffd83b65f9a17893e32aae2d620364fb44d7ce0788487da617a",
           "court": "GNURUST.FILEIO.MAPPING.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "5c549893394d0a8f0793fc6aac0018c34ed81d95e0e7d08c74542e81692aa782",
+          "casefile_sha256": "cea3bfb83e13e9be18101186a27e883b0fe3c86d4e121b5617814cc9bade5f0c",
           "court": "GNURUST.FILEIO.OPEN.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "f27713944b4ca8bd94afa36b6050848f626095e52d14816b48dcf9856f43ca09",
+          "casefile_sha256": "e3e95ba4ba6186780ed11f50f4e89ffd9cb4697220fefdaddfdf821e5099c16f",
           "court": "GNURUST.FILEIO.RELATIVE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "1ac1a31963b25c496b97697c0cb3c504b87cdff260a6c2e82221a83f533573ad",
+          "casefile_sha256": "d51807b8282e196bd830a3b03cc60f0177409307c0194d5176cd8c4a81485c82",
           "court": "GNURUST.FILEIO.SEQ.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "8411773d02a549435b8b74085f6821a486cb787d82ed35d8fc53d6e3b48b308a",
+          "casefile_sha256": "eb7a41098ed0b0d90616205d52e10aac5dc2a5b311dd51a3b7e729c0d31389b8",
           "court": "GNURUST.FILEIO.SORT.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "9efeb00829e04c3347648c7765e29ab0616e86a172d9da8d05329b719e101a74",
+          "casefile_sha256": "24f3697d8958cc3cfbfc4691870e8d93cea54d82921a063d386fe3472561e813",
           "court": "GNURUST.FILEIO.SORTENGINE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "7afbc20713e5aff088e39b6dac7f2320ab22edbae5811d59faa0465b52e7df5b",
+          "casefile_sha256": "4e5bd1dc130167dad2af2fd85d1402b8a412ab6ff70b568020bed90edc2702a1",
           "court": "GNURUST.FILEIO.SYS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "91e22aeb724b521e6b6c017bbdb4c07f8c7d918e7fbc9ab84579f3ffa4c0fce1",
+          "casefile_sha256": "dccd65e972c1787227a1c66081355dc530c4ed8ee2211432c1671e88b80b5c7e",
           "court": "GNURUST.FILEIO.VERB.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "7b2b6e08fcfb21a1b9f38dc1cac5934ae5a8aa22996af3732d6d3e9465524675",
+          "casefile_sha256": "8a1eac64920217e213368e623e9d6533f1b130b583c8647dbac2d18fab6653f4",
           "court": "GNURUST.FLOAT.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "4023f5a4a35ecc9de64a8c39cc2c563c049d725af1e2fddec105565f3d1fd6d7",
+          "casefile_sha256": "b9e9a8b6a92301fd11e1a800a64cac98cef4d8039dac35a51faa0cee0f85c779",
           "court": "GNURUST.IF.EVALUATE.SLICE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "232150eea895854db0136d1bf6d4e519174c768e5d943c3125a6270333c8ac00",
+          "casefile_sha256": "64f02d640639d77589b889f0603c36e78865f6029945b1e9e1a32e94de4781f9",
           "court": "GNURUST.IF.NUMERIC.SLICE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "bfb9502e68914b2cc88572fa73ed59dec01651d99c9908d54d6e0deec14d86f1",
+          "casefile_sha256": "48525ddd3525d2f13d2e0264f91985254480666c60c01f298c2c45f3a2383a29",
           "court": "GNURUST.INDEX.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "0b1e1bcca1a05a3e39d00a9c4e83a336729a8c072c7caf216fc3dc9b21377b18",
+          "casefile_sha256": "bf8c132d8430682b130a6354dad8cae513fe524a38cccfc08d15176abb8c3ec4",
           "court": "GNURUST.INDEXED.FILE.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "84fe22018f1960173f35dea8a748929b5f6570da50fffe8db8752b71cb6e57b1",
+          "casefile_sha256": "d3827340082be1d980038044da7c2712ffc8f6b23e359341ad67d4ccfe5d4b21",
           "court": "GNURUST.INITIALIZE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e1beac8e76c43b826a3552330f582349603552e16a11cecb9664e3358298c277",
+          "casefile_sha256": "552b58257df2cd419743b23d49c081dc7b585fd4173e87d6c15f1d1453d42163",
           "court": "GNURUST.INSPECT.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "8d447ce64042220c39cee9f20b8cc3fa93c04a4ea939d0d209995899b901918b",
+          "casefile_sha256": "aef613e29ad7279a8375120db2662be5105630f870da5b70c7255104d7fae107",
           "court": "GNURUST.INTPOW.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "44095789360acef0f4d8239a4f33fbb560525c7b19317a2ef200f31e20951c8b",
+          "casefile_sha256": "8b18a00de5fea4d4d4fb8e03d2dc7b706f97f586b18bec85af33da69bac62d0a",
           "court": "GNURUST.INTRINSIC.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "a89af0cdfd6bf35afcc8adb0142159e627e21caefc196738a460329b2e7ed01d",
+          "casefile_sha256": "e1a0c302b360913e527f5553f35c013ea344f5308b9d76cfff0ac15672277936",
           "court": "GNURUST.INTRINSIC.CASE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e6bed0cd3a950ebbd1971bf64fa463814beee66393cb54e1b9cca11683621e3c",
+          "casefile_sha256": "074ddd85600db3ad2332c251c59ded61b89c43ffe5c1af13facc7cc597358594",
           "court": "GNURUST.INTRINSIC.DATE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "ff6d8d5c4c64710992e491bddb5e42730f45ad88e2a7f9139d26f21704385247",
+          "casefile_sha256": "5306a9f56c54df7d092d9da6a336518e3e7e74553955dc74c6e66e9aa2898deb",
           "court": "GNURUST.INTRINSIC.INTEGER.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "27ea51a27da8b4d75a594ec3e387ee627bc98eeea3c6a247bc23a1410cca0fe3",
+          "casefile_sha256": "ad4f29d1d57216bbe088d3505bf4d6085a7a1101624d747f13e614a1fef52f2e",
           "court": "GNURUST.INTRINSIC.LENGTH.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "9b4b3c29180d2359e624224d2f3f0c94fd4adfb75019a2b24929e984058e8c06",
+          "casefile_sha256": "1f62dc789115739db060e419abe12f47619744b4b943452b64b902605f5fe4aa",
           "court": "GNURUST.INTRINSIC.MOD-REM.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "d6763190e3390e9d4e0d216d0e92920a7966b9d7b8c5da9299ff047ba07c9557",
+          "casefile_sha256": "ef9da2a21c33159db56dc01d17e3e63b8ef5db602cd1db9be2c70e20d67b4838",
           "court": "GNURUST.INTRINSIC.NUMVAL-C.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e9f4454e5896e66c1897d424e967a76d7a86e6225eda43a2cafb30dd17c107bb",
+          "casefile_sha256": "947fa9d717ec4993c7cdc318fd88cb7f9100f389ed64014e329e98eb9a75e1b1",
           "court": "GNURUST.INTRINSIC.NUMVAL.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "2f8f1a3ca92f3c871ada42d914ca6be74167173826f1eef58117a481239699a0",
+          "casefile_sha256": "ad842c710989e5ec1ea88869fe09c60a100ce1516ee52d4aca4bd3fb72871eb7",
           "court": "GNURUST.INTRINSIC.ORD-CHAR.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "3de58362bf13ce6fd51ca69411a6c949ba29add74e0ec2a369caf464211f43e1",
+          "casefile_sha256": "c2d97a5d19edc216194d8ee18acc4736489ad3705b4fc3a2d1ed3be56973203c",
           "court": "GNURUST.LINEAGE.CORPUS.20M.0",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "ed09a04bc51aad6725f84d15172dc7f5c73d833a8c5e78824cc73aa6defa3f77",
+          "casefile_sha256": "0f4729de63cc40f31bda9d906617f92e9ac26fc6167cef22ef425166dca5114f",
           "court": "GNURUST.LINEAGE.CORPUS.20M.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "272c05fef5fc8b7a0464c2b7ee92e890fcbdbafb193bf4a681216a1a7deb6d48",
+          "casefile_sha256": "876d97123afe45527203658a1c9931a06509c15898e6843d272a8fda214c65ca",
           "court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "2fa48c7112e5cdbc3f669a107879717d4c82297a71e5a560b0b9ef596d407221",
+          "casefile_sha256": "c87daf17f6669ef488a26e9bff19b2813bde6aa5901a34e2499ab5dda029081c",
           "court": "GNURUST.LOGICAL.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e33916c1993663c6e75c96e8a2680b67ec33fd6bd738b7000e115205fb5ab569",
+          "casefile_sha256": "0b78665bbdba7494a7477a1bc6f2b1ed1e054b27ac9ff9f9295e85007d43b032",
           "court": "GNURUST.MLIO.GENERATE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "978f7f7907c1b277ad81249c3d492058923db2f8d8db68374cf5b70903991a7e",
+          "casefile_sha256": "e8a112295af56bb435ab17deee4c6ef956403675b5c01cf3cd805f8b00b172bb",
           "court": "GNURUST.MLIO.PARSE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "dbc4992cf028e5d22fe4c43decee53fe5d4c606fe93d1aec75903160ea45620d",
+          "casefile_sha256": "4bbeaab6b8ad7e6286459ad8396f2f088dd1c2d85f2e333c9296fc06d7aa0480",
           "court": "GNURUST.NUMCMP.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "794ee6f127de416296789d79b189ebbb038a3102b514b300406c770247a24826",
+          "casefile_sha256": "7d5ae9d7409eca284d53091a9ccd28f3dfad2252cd3625c7484f06c41944a792",
           "court": "GNURUST.ODO.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e4f74d5afca83525d7c5df75c95af8d49c09b8157ad9dabcbf93c9e579563442",
+          "casefile_sha256": "7486e77b09e3ff644cd6a52efde42b74b1c0ddc2c79fb299a19dc915213b1d3a",
           "court": "GNURUST.PERFORM.SLICE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "a1c4212e9d204b8dd58894dc272c6a4f1c233fc7f9ac500bef83df259569e48e",
+          "casefile_sha256": "fc7781610bc06c443200039f7ebe9d5fd0c4b355d5157b51a6a6656f3f94aa98",
           "court": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
           "dsse": true,
           "intoto": true,
@@ -626,133 +626,140 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "f2abd23e174cb46048709d8116f0adee505df6ba2f26da6c138b58ac5af018e2",
+          "casefile_sha256": "bd7445a522567b542b8e5926092bb11c4f7bd13847e40c4d097f901c152171e7",
           "court": "GNURUST.REFMOD.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "872da3f233ce3ed7e64cbf0413d6e22ac96934eed2a086dea5305987ded191c4",
+          "casefile_sha256": "41c8bb8dd297312deba1bf22a96eb4c1868068d64e4a438ae778c5b6233b0444",
           "court": "GNURUST.RELATIVE.FILE.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "a46a0326dfaf3193caaec937845e24cb2c2a26d28a0336e1fdc4c06421eb5c1e",
+          "casefile_sha256": "04e0ce3332706e0f908ad6ba7f85e9e12b7e20594e6b3c77d31d62df456fab90",
           "court": "GNURUST.REMAINDER.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "97d74aa009b823977d4cfb0d19a4876b5592ceb23518b2d5f9fbfd8c7b34ee34",
+          "casefile_sha256": "0f148aecace43c0c8533656520e3124243b27505b936e5faf149171923f8188e",
           "court": "GNURUST.ROUND.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "8d48d5ec8dc05edbb8991ace12079b35e63e24d0f0f7b9adc5645f0c735a2e71",
+          "casefile_sha256": "8bd599cb7ae03cf76c234e096efaba9daa20058a7c08e4ce484fc93abe3f43e8",
           "court": "GNURUST.SCREENIO.ACCEPT.1",
           "dsse": false,
           "intoto": false,
           "sarif": true
         },
         {
-          "casefile_sha256": "77fb1958e4728c65c1fa93ae9abce9c3138a04ef83caa4ecdd88f7190ed632a5",
+          "casefile_sha256": "17e4dcf804cf1aad2a802f44e9b50df59e28da249eb86af20334ef7e43d2f9bf",
           "court": "GNURUST.SCREENIO.ACCEPT.2",
           "dsse": false,
           "intoto": false,
           "sarif": true
         },
         {
-          "casefile_sha256": "78c87575c69b1c287329238217ea267f275c8252761729466e7c5eb659f81a0a",
+          "casefile_sha256": "153f63e3417f7aea465860b80d1cc87da381909e6903bccc521d93877dea5d1e",
           "court": "GNURUST.SCREENIO.ATTR.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "3b0db8b8b30b2d93347e8226ae6cbc5425ef1fad4ba3f02310f340a4ff9369af",
+          "casefile_sha256": "3fee1ba45a6b572fe15d27002bda79158029bb957684c3eff8e64dabea07c755",
           "court": "GNURUST.SCREENIO.COLOR.1",
           "dsse": false,
           "intoto": false,
           "sarif": true
         },
         {
-          "casefile_sha256": "dbe8180cb33f6d45d4e7de7ac1336ffd0590c7af813fd6763fc5c17fee4a4a82",
+          "casefile_sha256": "2f53b5667b328b36e08617642bb0263744a307bf4dc9b54fc0c1cb3034385455",
           "court": "GNURUST.SCREENIO.DISPLAY.2",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "2bf360f870506f8a57a9fc74d9bd45e4698e2b1bd098f59706d002556c495dbd",
+          "casefile_sha256": "ae457cda6ccbf8ffd0db5012adecd45ec490a578443c2dd546d5b5e431fc31e0",
           "court": "GNURUST.SCREENIO.DISPLAY.3",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "86b2ab17e94dfe8db861d7fbac7ee46982319eef6761ec299d6c263ae02a03b6",
+          "casefile_sha256": "bd6e1da8b38c894b5ebf4126a2890ad0175e42e29bdc1f65ff578b04adc926e9",
           "court": "GNURUST.SCREENIO.INIT.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "e4766bae5109684e08c744f817c7b4bab7a377f378148bdc7d01a6c05cdd8b63",
+          "casefile_sha256": "86df4e27425d1ff2f133f242dcf7356058202c86b49f4ceb9ca9cf6bb38b2b3a",
+          "court": "GNURUST.SCREENIO.LINEDIFF.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "bbc51b04358669032335592d6c905c4e5006a6d9a4c0f8e46653ad25eaa7c42b",
           "court": "GNURUST.SCREENIO.NUMEDIT.1",
           "dsse": false,
           "intoto": false,
           "sarif": true
         },
         {
-          "casefile_sha256": "d881fcc5eb219be884d77975138e27f73d0720536abc906d5bb2c7e13b17c3d4",
+          "casefile_sha256": "e43e382f1c984499777a7151dc6a7d94ff959ea3a26cf850b0c0ae84467bd92f",
           "court": "GNURUST.SEARCH.TABLE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "dbc77609bd530556333f2766c482b45f2328702254374da40e651ba546a842af",
+          "casefile_sha256": "14c999262b98a311103f9c4a6b5957e2747e71999fc1de06b02edd9608c18048",
           "court": "GNURUST.SIZE.ERROR.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "d95e35a898f5fd3d4701276f8930c2a468b683ca3fb9313c63eb1547e2566177",
+          "casefile_sha256": "ec72deff91337bea915c7d4c4b88fe26cbde9292ae8d30426b0f84f80b266ddb",
           "court": "GNURUST.SORT.MERGE.ATLAS.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "1c14ccbc35d569f6e385746d2ad2f586145fa594d2dc75992417a31222ec8a84",
+          "casefile_sha256": "918d7a7be03d78a636b47a2e8b196ac12a8033fd51595f94bc4eb0baff547dbb",
           "court": "GNURUST.STRING.UNSTRING.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "790e5f49ad6d6c867a4cd316ab569e27a409179dc7370e9e18fd1619b92d9354",
+          "casefile_sha256": "f9aa81b1fa6796bf64e2904f61b6fed4a1d630612987705741fcff5ff267ba2b",
           "court": "GNURUST.SUBSCRIPT.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "2be590fd315cfcc41282bce368bda381224e98b7f5be0fa5c1cc01b24d2c0c9e",
+          "casefile_sha256": "4e26444fc311f94703c4352be095780fae01aefd869494c42670d2d094574a6f",
           "court": "GNURUST.TABLE.PERFORM.SLICE.1",
           "dsse": true,
           "intoto": true,
           "sarif": true
         },
         {
-          "casefile_sha256": "454b29d66930ac5dbd7d22ae9cb44b8888f9206c3db58b75b0f357b57e82891b",
+          "casefile_sha256": "421bef5d9db09f78605ce3d73c877993d921e208566119c1ab2b73223909dc7f",
           "court": "GNURUST.VALUE.NEGZERO.EDGE.1",
           "dsse": true,
           "intoto": true,
@@ -983,7 +990,7 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "c73a97a52bb95db1a05db32ebbb6eb2dd9c09b330e78c2c2c2c06d52c2ebfd03",
+          "casefile_sha256": "8d79750cad37c5b8ad5dcdbef6a37fe380e2ae71c43da28ed0085047dbe9536d",
           "court": "SIZE.ERROR.ATLAS.1",
           "dsse": true,
           "intoto": true,
@@ -1004,7 +1011,7 @@
           "sarif": true
         }
       ],
-      "count": 135,
+      "count": 136,
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true
@@ -1094,6 +1101,7 @@
         "gnucobol-rs-0.7.8",
         "gnucobol-rs-0.7.80",
         "gnucobol-rs-0.7.81",
+        "gnucobol-rs-0.7.82",
         "gnucobol-rs-0.7.9"
       ],
       "present": true
@@ -1157,7 +1165,7 @@
   ],
   "court": "SUPPORT-PACKET.1",
   "crate_versions": {
-    "gnucobol-rs": "0.7.81 (this repo)",
+    "gnucobol-rs": "0.7.82 (this repo)",
     "kobold-attest": "external repo: github.com/infinityabundance/kobold-attest (Apache-2.0; cargo install kobold-attest)",
     "kobold-bench": "sibling repo (bench/scale receipts)",
     "kobold-data-shim": "sibling repo (see its Cargo.toml/crates.io)"

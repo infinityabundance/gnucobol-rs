@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: THREE or more same-row DISPLAYs (a DISPLAY's clear-to-EOL batches differently across 3+ refreshes -- the trailing erase is deferred when another write to the row follows)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: distant isolated survivors needing a jump + single space"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: the MULTI-ROW diff (vertical mvcur between changed rows)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: insert/delete-character optimizations (ncurses ich/dch when the new line shifts content)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: scroll-region (DECSTBM) interactions within the diff"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: attributes or colour on the diffed text (the bce repaint interacting with TransformLine)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: a numeric-edited or FROM field as the diffed content"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: the LINE==1 single-row-screen diff"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: any terminal other than TERM=xterm"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: any ncurses other than the admitted 6.6"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.LINEDIFF.1 non-claim: lie prevented: the overlapping same-row refresh line-diff needs ncurses linked -- NO (for two same-row DISPLAYs): the doupdate/TransformLine reposition cost search + clr_eol + rep are deterministic bytes reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. The 3+/distant/multi-row doupdate sub-cases are honestly carved out"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}
