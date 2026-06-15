@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.CASE.1 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.75
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.76
 
 - **Oracle:** cobc FUNCTION UPPER-CASE/LOWER-CASE/REVERSE (libcob/intrinsic.c)
 - **Byte domain(s):** ASCII case fold + byte reversal

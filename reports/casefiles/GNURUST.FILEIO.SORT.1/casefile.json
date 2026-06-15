@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.SORT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.75",
+  "crate_version": "0.7.76",
   "damage_if_overclaimed": "getting the key precedence, a DESCENDING inversion, or the stable tiebreak wrong reorders records a downstream report or match step assumes are in key order",
   "hash_chain": {
-    "inputs_sha256": "963a91994080a6cd0f54e4ff838edc123d6d4df6ef849ab38ab27bee7248532c"
+    "inputs_sha256": "0bf20f4b92749f2fc379c5f086f42a21d58ec0f74e3fae3a4a9176ef01ba693c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "50e29bb4ec2332539cd1fb61d63d6d57b327d10891432858db7b22f7bdb9a2bf",
-    "receipt_sha256": "7efe954d6e739e7c83583db28b198549d9270fb88be43b3c91915d6b58567163"
+    "receipt_sha256": "41dd16cd99ba9c52040c581137a23ab2623bf47fcac66aa3f56fb4c08306ef46"
   },
   "kind": "court-casefile",
   "lie_prevented": [

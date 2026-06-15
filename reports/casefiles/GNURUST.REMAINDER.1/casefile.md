@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.REMAINDER.1 (court-casefile)
 
-**Verdict: PASS** · 768/768 pass, 0 fail · crate `gnucobol-rs` 0.7.75
+**Verdict: PASS** · 768/768 pass, 0 fail · crate `gnucobol-rs` 0.7.76
 
 - **Oracle:** cobc DIVIDE REMAINDER (program-shape)
 - **Byte domain(s):** DIVIDE GIVING quotient + REMAINDER receiver field bytes

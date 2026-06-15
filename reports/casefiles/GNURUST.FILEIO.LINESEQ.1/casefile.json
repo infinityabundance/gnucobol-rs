@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.LINESEQ.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.75",
+  "crate_version": "0.7.76",
   "damage_if_overclaimed": "assuming one line-sequential byte image across configs corrupts framing under COB_LS_FIXED/NULLS or silently drops records the default validate would reject",
   "hash_chain": {
-    "inputs_sha256": "f2eb224dfa946acf5dc4a6f286f0f5efb961f557dca9ad6204c076dd30907434"
+    "inputs_sha256": "374c12cff57d015c035f2d8e21ac73ab73d3fbb1a6b5a13388e6555104fbf731"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e44165046dbc9b34aef9295e4358dd146cf5ec06e365d089269d678d66e58a8e",
-    "receipt_sha256": "8c5fef8bd0d1232ba4e34e6109df7146dd77a938b619a51337d978c65f1d2803"
+    "receipt_sha256": "bb08fa7de9529ea57945e2c5d17dda13cb56f36162ea604875fca21711d20117"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -46,36 +46,9 @@
     {
       "doxygen_functions": 28,
       "file": "screenio.c",
-      "missing": [
-        "cob_accept_escape_key",
-        "cob_accept_field",
-        "cob_display_field",
-        "cob_exit_screen_from_signal",
-        "cob_field_accept",
-        "cob_field_display",
-        "cob_get_scr_cols",
-        "cob_get_scr_lines",
-        "cob_init_screenio",
-        "cob_screen_accept",
-        "cob_screen_display",
-        "cob_screen_line_col",
-        "cob_screen_set_mode",
-        "cob_set_crt3_status",
-        "cob_settings_screenio",
-        "cob_speaker_beep",
-        "cob_sys_clear_screen",
-        "cob_sys_get_char",
-        "cob_sys_get_csr_pos",
-        "cob_sys_get_scr_size",
-        "cob_sys_set_csr_pos",
-        "cob_sys_set_scr_size",
-        "cob_sys_sound_bell",
-        "get_crt3_status",
-        "handle_status",
-        "init_cob_screen_if_needed"
-      ],
-      "parity_pct": 7.1,
-      "ported": 2
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 28
     },
     {
       "doxygen_functions": 66,
@@ -125,8 +98,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 97.4,
-    "ported": 972
+    "parity_pct": 100.0,
+    "ported": 998
   },
   "xml_root": "lab/doxygen/out/xml"
 }

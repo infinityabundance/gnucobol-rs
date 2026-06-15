@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.STRING.UNSTRING.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.75",
+  "crate_version": "0.7.76",
   "damage_if_overclaimed": "a wrong pointer base, count-vs-truncation, tail-preservation, or delimiter assumption in a STRING/UNSTRING transform silently corrupts assembled/split fields",
   "hash_chain": {
-    "inputs_sha256": "1edeb42136da6ddf2d5cee751ea39d4b432d72a3be67c53a869a6d104b605695"
+    "inputs_sha256": "6b226b1e635ce7b11d02dd7c881d8b3ed2908dced39cd48e80b6e4b2bf21cb5e"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "14e648782542b508f7b522c3ff19fdb931fe8b4b4ffe734e88f784d25f235503",
-    "receipt_sha256": "580fa7ee3be3f8d28ad45b8c3afa0c3395d69daeb245c16c9e84624ce3e6a519"
+    "receipt_sha256": "325d59e6122ffc03160e3af487f3524113e40787b681e20355a43a2ef789866f"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.PERFORM.SLICE.1 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.75
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.76
 
 - **Oracle:** cobc PERFORM (cobc/typeck.c + codegen.c, libcob)
 - **Byte domain(s):** execute PERFORM loop over numeric counters -> resulting storage bytes

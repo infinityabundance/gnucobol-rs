@@ -2855,703 +2855,713 @@
     "test_only": 0
   },
   {
-    "active_ported": 0,
+    "active_ported": 116,
     "compiled": 116,
-    "compiled_parity_pct": 0.0,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
-    "doc_only": 5,
+    "doc_only": 0,
     "file": "screenio.c",
     "fns": [
       {
         "function": "cob_speaker_beep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "init_cob_screen_if_needed",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "get_crt3_status",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_set_crt3_status",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "handle_status",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_beep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "raise_ec_on_invalid_line_or_col",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "cob_move_cursor",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_set_cursor_pos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_move_to_beg_of_last_line",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_color_pair",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "cob_activate_color_pair",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "cob_to_curses_color",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "adjust_attr_from_extended_color",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "adjust_attr_from_color_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "get_cob_color_from_color_value",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "handle_control_field_color",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "screen_attr_cmp",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "adjust_attr_from_control_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_attr",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_color",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_init",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "cob_convert_key",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "pass_cursor_to_program",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "get_line_and_col_from_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "get_cursor_from_program",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "raise_ec_on_truncation",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_addnstr",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_addnstr_graph",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_addch",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_addch_no_trunc_check",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_addnch",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "is_first_screen_item",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "get_last_child",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "get_prev_screen_item",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "get_size",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "get_screen_item_line_and_col",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_puts",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_field_is_numeric_or_numeric_edited",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "field_is_empty",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "field_is_zero",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "pic_has_zero_suppression",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "get_num_int_digits_for_no_zero_sup",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "field_is_zero_or_no_zero_suppression",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "field_is_full",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "satisfied_full_clause",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "satisfied_required_clause",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "valid_field_data",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "refresh_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "format_field",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "finalize_field_input",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "finalize_all_fields",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_toggle_insert",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "find_field_by_pos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "mouse_to_exception_code",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "is_number_with_pic_symbol",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "has_decimal_point",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "get_pic_symbol_offset",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "get_decimal_point_offset",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "shift_left",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "shift_right",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "at_offset_from_decimal_point",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "move_to_initial_field_pos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "can_insert_left",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_field",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_get_all",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "compare_yx",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_moveyx",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_curses",
+        "rust_status": "active"
       },
       {
         "function": "cob_prep_input",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_iterate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "get_line_column",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "col_where_last_stmt_ended",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "line_where_last_stmt_ended",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_geom",
+        "rust_status": "active"
       },
       {
         "function": "extract_line_and_col_vals",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "screen_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "get_accept_timeout",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "screen_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "field_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "field_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "field_accept_from_curpos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "field_display_at_curpos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_display_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_field_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_field_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_clear_screen",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_set_mode",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_display_text",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_char",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_text",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_display_formatted_text",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_exit_screen",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "cob_exit_screen_from_signal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_init",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "cob_exit_screen",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "screenio_edit",
+        "rust_status": "active"
       },
       {
         "function": "cob_exit_screen_from_signal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_display_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_field",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_field_display",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_display",
+        "rust_status": "active"
       },
       {
         "function": "cob_field_accept",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_set_mode",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_clear_screen",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_screen_line_col",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_sound_bell",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_escape_key",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_accept",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_get_csr_pos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_get_char",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_set_csr_pos",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_get_scr_size",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_set_scr_size",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_scr_cols",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_scr_lines",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_settings_screenio",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       },
       {
         "function": "cob_init_screenio",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "screenio_sys",
+        "rust_status": "active"
       }
     ],
-    "gap": [
-      "adjust_attr_from_color_field",
-      "adjust_attr_from_control_field",
-      "adjust_attr_from_extended_color",
-      "at_offset_from_decimal_point",
-      "can_insert_left",
-      "cob_accept_escape_key",
-      "cob_accept_field",
-      "cob_activate_color_pair",
-      "cob_addch",
-      "cob_addch_no_trunc_check",
-      "cob_addnch",
-      "cob_addnstr",
-      "cob_addnstr_graph",
-      "cob_beep",
-      "cob_convert_key",
-      "cob_display_field",
-      "cob_display_formatted_text",
-      "cob_display_text",
-      "cob_exit_screen",
-      "cob_exit_screen_from_signal",
-      "cob_field_accept",
-      "cob_field_display",
-      "cob_field_is_numeric_or_numeric_edited",
-      "cob_get_char",
-      "cob_get_color_pair",
-      "cob_get_scr_cols",
-      "cob_get_scr_lines",
-      "cob_get_text",
-      "cob_init_screenio",
-      "cob_move_cursor",
-      "cob_move_to_beg_of_last_line",
-      "cob_prep_input",
-      "cob_screen_accept",
-      "cob_screen_attr",
-      "cob_screen_display",
-      "cob_screen_get_all",
-      "cob_screen_init",
-      "cob_screen_iterate",
-      "cob_screen_line_col",
-      "cob_screen_moveyx",
-      "cob_screen_puts",
-      "cob_screen_set_mode",
-      "cob_set_crt3_status",
-      "cob_set_cursor_pos",
-      "cob_settings_screenio",
-      "cob_speaker_beep",
-      "cob_sys_clear_screen",
-      "cob_sys_get_char",
-      "cob_sys_get_csr_pos",
-      "cob_sys_get_scr_size",
-      "cob_sys_set_csr_pos",
-      "cob_sys_set_scr_size",
-      "cob_sys_sound_bell",
-      "cob_to_curses_color",
-      "cob_toggle_insert",
-      "col_where_last_stmt_ended",
-      "compare_yx",
-      "extract_line_and_col_vals",
-      "field_accept",
-      "field_accept_from_curpos",
-      "field_display",
-      "field_display_at_curpos",
-      "field_is_empty",
-      "field_is_full",
-      "field_is_zero",
-      "field_is_zero_or_no_zero_suppression",
-      "finalize_all_fields",
-      "finalize_field_input",
-      "find_field_by_pos",
-      "format_field",
-      "get_accept_timeout",
-      "get_cob_color_from_color_value",
-      "get_crt3_status",
-      "get_cursor_from_program",
-      "get_decimal_point_offset",
-      "get_last_child",
-      "get_line_and_col_from_field",
-      "get_line_column",
-      "get_num_int_digits_for_no_zero_sup",
-      "get_pic_symbol_offset",
-      "get_prev_screen_item",
-      "get_screen_item_line_and_col",
-      "get_size",
-      "handle_control_field_color",
-      "handle_status",
-      "has_decimal_point",
-      "init_cob_screen_if_needed",
-      "is_first_screen_item",
-      "is_number_with_pic_symbol",
-      "line_where_last_stmt_ended",
-      "mouse_to_exception_code",
-      "move_to_initial_field_pos",
-      "pass_cursor_to_program",
-      "pic_has_zero_suppression",
-      "raise_ec_on_invalid_line_or_col",
-      "raise_ec_on_truncation",
-      "refresh_field",
-      "satisfied_full_clause",
-      "satisfied_required_clause",
-      "screen_accept",
-      "screen_attr_cmp",
-      "screen_display",
-      "shift_left",
-      "shift_right",
-      "valid_field_data"
-    ],
+    "gap": [],
     "inactive_mirrors": 0,
-    "missing": 111,
+    "missing": 0,
     "source_funcs": 116,
     "test_only": 0
   },

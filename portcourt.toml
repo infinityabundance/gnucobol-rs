@@ -73,4 +73,10 @@ requires = [
 ]
 
 [module."screenio.c"]
-claim = "partial"
+claim = "complete"
+requires = [
+  "GNURUST.SCREENIO.INIT.1",
+  "GNURUST.SCREENIO.DISPLAY.2",
+  "GNURUST.SCREENIO.DISPLAY.3",
+  "GNURUST.SCREENIO.ATTR.1",
+]

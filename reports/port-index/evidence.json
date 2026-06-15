@@ -63,11 +63,11 @@
       "unevidenced": []
     },
     {
-      "active": 0,
-      "direct": 0,
-      "evidenced_any": 0,
+      "active": 105,
+      "direct": 105,
+      "evidenced_any": 105,
       "file": "screenio.c",
-      "lifecycle": 0,
+      "lifecycle": 6,
       "oracle": 0,
       "transitive": 0,
       "unevidenced": []
@@ -140,10 +140,10 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 1033,
-    "direct": 857,
-    "evidenced_any": 1033,
-    "lifecycle": 91,
+    "active": 1138,
+    "direct": 962,
+    "evidenced_any": 1138,
+    "lifecycle": 97,
     "oracle": 213,
     "transitive": 150,
     "unevidenced": 0

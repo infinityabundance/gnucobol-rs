@@ -24,18 +24,18 @@ oracle-backed *byte* parity is the separate per-court sweeps.
 | `intrinsic.c` | 238 | 238 | 0 | 233 | 5 | 0 | 0 | 0 | 100.0% |
 | `cconv.c` | 9 | 9 | 0 | 9 | 0 | 0 | 0 | 0 | 100.0% |
 | `termio.c` | 18 | 18 | 0 | 18 | 0 | 0 | 0 | 0 | 100.0% |
-| `screenio.c` | 116 | 116 | 0 | 0 | 0 | 0 | 5 | 111 | 0.0% |
+| `screenio.c` | 116 | 116 | 0 | 116 | 0 | 0 | 0 | 0 | 100.0% |
 | `call.c` | 67 | 67 | 0 | 67 | 0 | 0 | 0 | 0 | 100.0% |
 | `fileio.c` | 182 | 182 | 0 | 180 | 2 | 0 | 0 | 0 | 100.0% |
 | `mlio.c` | 47 | 47 | 0 | 47 | 0 | 0 | 0 | 0 | 100.0% |
 | `reportio.c` | 39 | 39 | 0 | 39 | 0 | 0 | 0 | 0 | 100.0% |
 | `common.c` | 254 | 254 | 0 | 254 | 0 | 0 | 0 | 0 | 100.0% |
 | `cobgetopt.c` | 4 | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 100.0% |
-| **total** | **1170** | **1169** | **1** | **1040** | **13** | **0** | **6** | **111** | **91.0%** |
+| **total** | **1170** | **1169** | **1** | **1156** | **13** | **0** | **1** | **0** | **100.0%** |
 
 ## Gaps — compiled C functions with no real Rust `fn`
 
-- **`screenio.c`** (105): `adjust_attr_from_color_field`, `adjust_attr_from_control_field`, `adjust_attr_from_extended_color`, `at_offset_from_decimal_point`, `can_insert_left`, `cob_accept_escape_key`, `cob_accept_field`, `cob_activate_color_pair`, `cob_addch`, `cob_addch_no_trunc_check`, `cob_addnch`, `cob_addnstr`, `cob_addnstr_graph`, `cob_beep`, `cob_convert_key`, `cob_display_field`, `cob_display_formatted_text`, `cob_display_text`, `cob_exit_screen`, `cob_exit_screen_from_signal`, `cob_field_accept`, `cob_field_display`, `cob_field_is_numeric_or_numeric_edited`, `cob_get_char`, `cob_get_color_pair`, `cob_get_scr_cols`, `cob_get_scr_lines`, `cob_get_text`, `cob_init_screenio`, `cob_move_cursor`, `cob_move_to_beg_of_last_line`, `cob_prep_input`, `cob_screen_accept`, `cob_screen_attr`, `cob_screen_display`, `cob_screen_get_all`, `cob_screen_init`, `cob_screen_iterate`, `cob_screen_line_col`, `cob_screen_moveyx`, `cob_screen_puts`, `cob_screen_set_mode`, `cob_set_crt3_status`, `cob_set_cursor_pos`, `cob_settings_screenio`, `cob_speaker_beep`, `cob_sys_clear_screen`, `cob_sys_get_char`, `cob_sys_get_csr_pos`, `cob_sys_get_scr_size`, `cob_sys_set_csr_pos`, `cob_sys_set_scr_size`, `cob_sys_sound_bell`, `cob_to_curses_color`, `cob_toggle_insert`, `col_where_last_stmt_ended`, `compare_yx`, `extract_line_and_col_vals`, `field_accept`, `field_accept_from_curpos`, `field_display`, `field_display_at_curpos`, `field_is_empty`, `field_is_full`, `field_is_zero`, `field_is_zero_or_no_zero_suppression`, `finalize_all_fields`, `finalize_field_input`, `find_field_by_pos`, `format_field`, `get_accept_timeout`, `get_cob_color_from_color_value`, `get_crt3_status`, `get_cursor_from_program`, `get_decimal_point_offset`, `get_last_child`, `get_line_and_col_from_field`, `get_line_column`, `get_num_int_digits_for_no_zero_sup`, `get_pic_symbol_offset`, `get_prev_screen_item`, `get_screen_item_line_and_col`, `get_size`, `handle_control_field_color`, `handle_status`, `has_decimal_point`, `init_cob_screen_if_needed`, `is_first_screen_item`, `is_number_with_pic_symbol`, `line_where_last_stmt_ended`, `mouse_to_exception_code`, `move_to_initial_field_pos`, `pass_cursor_to_program`, `pic_has_zero_suppression`, `raise_ec_on_invalid_line_or_col`, `raise_ec_on_truncation`, `refresh_field`, `satisfied_full_clause`, `satisfied_required_clause`, `screen_accept`, `screen_attr_cmp`, `screen_display`, `shift_left`, `shift_right`, `valid_field_data`
+None. Every compiled libcob function across all files has a real Rust counterpart.
 
 ## How this is produced (reproducible)
 

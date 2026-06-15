@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.INTEGER.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.75",
+  "crate_version": "0.7.76",
   "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math",
   "hash_chain": {
-    "inputs_sha256": "5582627f721081dc1f01c6e46782ed8406b6e328260184a80f3f54dcc45f8aec"
+    "inputs_sha256": "50efa711dd709b2606ba9d6feedfa0e792f29e60cb91a107c9ea1c1b0b05294c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "48a86be899dd7018dc39756602d711c730cbd44fe3883aaeb53c046c7934da15",
-    "receipt_sha256": "5ffc614d6fc2bbc5a7e7d109b65eefea04d0513b9747309b7e15dd428bae78e5"
+    "receipt_sha256": "9a92678bae38d60c02cc03781594af6a252f8c74220dc4f351d8f9eaca36a53e"
   },
   "kind": "court-casefile",
   "lie_prevented": [

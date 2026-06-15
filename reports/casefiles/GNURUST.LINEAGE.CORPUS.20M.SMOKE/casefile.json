@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.75",
+  "crate_version": "0.7.76",
   "damage_if_overclaimed": "treating the 200K pilot as the full 20M, or as a parity proof, or the negative-zero finding as fixed, each overclaims",
   "hash_chain": {
-    "inputs_sha256": "fa24780915d11e8d3d6bc4880a84d4b1dcd96c0212093584d9bbc8bfbb8acebc"
+    "inputs_sha256": "1bfe9b4b729f7adc01433812a0d191cef73a533ac3142c11e312a80b766c35dc"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "957f3a305073436c3a4f05415a94efc5ebc0dfe15e9998ec1aae7f094a00e930",
-    "receipt_sha256": "239c78c72179ca371ebfb585c3bdac7771776bf77155621fb53c56cb39eddd19"
+    "receipt_sha256": "c0c7a2bdfd6e3570cdf78fca7bd1829fc669229e92f6cc00fff099f0964b927a"
   },
   "kind": "court-casefile",
   "lie_prevented": [
