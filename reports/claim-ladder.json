@@ -267,10 +267,10 @@
     {
       "id": "GNURUST.16C",
       "name": "edited-picture encode (numeric->edited, 16c)",
-      "proven": "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based",
+      "proven": "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based -- INCLUDING complete suppression of an exactly-zero value: an all-`Z` field (no forced `9`) blanks entirely (incl. the decimal point + comma), and an all-`*` field stars every position EXCEPT the decimal point (incl. comma + trailing sign). Verified against BOTH GnuCOBOL 3.2 and 3.1.2 (the complete-suppression cases byte-identical on both).",
       "byte_domain": "numeric value -> edited DISPLAY field bytes",
-      "oracle": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
-      "fixtures": "edited encode sweep 141/0",
+      "oracle": "cobc MOVE numeric -> edited, DISPLAY edited bytes (GnuCOBOL 3.2; complete-suppression cases differentially confirmed on 3.1.2)",
+      "fixtures": "edited encode sweep 153/0 (incl. complete-Z-blank + complete-*-fill zero cases + their forced-9 / non-zero controls)",
       "sealed_version": "0.7.28",
       "not_proven": "report writer; locale/currency CURRENCY SIGN; EBCDIC edited; edited arithmetic/VALUE",
       "breaks_claim": "CURRENCY/locale symbols; edited under COMP/cp500; numeric->edited under EBCDIC",

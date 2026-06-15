@@ -67,6 +67,23 @@ fn main() {
         emit("99B99", &format!("{:04}", v.parse::<i64>().unwrap() % 10000));
         emit("99/99/99", &format!("{:06}", v.parse::<i64>().unwrap() % 1000000));
     }
+    // complete suppression of an exactly-ZERO value -- the two symmetric rules the earlier generator
+    // never exercised (every star pic had a `9`, every Z pic a `9`), which let the bug hide:
+    //   * all-`Z` (no forced `9`) of zero -> the WHOLE field blanks, incl. the decimal point + comma;
+    //   * all-`*` (no forced `9`) of zero -> EVERY position becomes `*` *except* the decimal point.
+    // Plus the controls that must NOT trigger it (a forced `9`, or a non-zero value).
+    emit("ZZZZ.ZZ", "0.00"); // -> all spaces
+    emit("ZZZ.ZZ", "0.00");
+    emit("ZZZZ", "0");
+    emit("ZZ,ZZZ.ZZ", "0.00"); // comma blanks too
+    emit("ZZZZ.ZZ", "0.07"); // non-zero -> ".07" (control)
+    emit("****.**", "0.00"); // -> "****.**"
+    emit("*(5).**", "0.00");
+    emit("**,***.**", "0.00"); // comma -> `*`
+    emit("**,***.**-", "0.00"); // trailing sign -> `*`
+    emit("****.**", "12.34"); // non-zero -> "**12.34" (control)
+    emit("****.**", "0.05"); // non-zero fraction -> "****.05" (control)
+    emit("***9.99", "0.00"); // forced 9 -> "***0.00" (control)
     // floating +/- sign strings (sign-aware: + shows +/-, - shows space/-).
     for v in ["0", "5", "-5", "12.5", "-12.5"] {
         let val = if v.contains('.') { v.to_string() } else { format!("{v}.00") };

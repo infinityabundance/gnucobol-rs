@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.SEQUENTIAL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.80",
+  "crate_version": "0.7.81",
   "damage_if_overclaimed": "misreading a short final record (leaked prior-record tail) or a chunked long line, or branching on an unproven file status, silently corrupts a batch file pipeline",
   "hash_chain": {
-    "inputs_sha256": "ec475da5668da323fd54a8cacbe07bb7579d0a03738952c6fb6c6faa9ea8f2e2"
+    "inputs_sha256": "0744659c305412ae4dda10ad0cfee2200cb87e4d1ea70ba028171b0540f70c67"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "a8978c1f8c8e2a9df11b31d1740ac9518396c2bf77a0885e20210530ee24a17e",
-    "receipt_sha256": "12b296cfbc454d70d81c2905c81981f0d380d1d77b5f7f6e41abf18c67cc2288"
+    "receipt_sha256": "8a14b82c6de49e4c118aeddeb995e6903960cedbb0a73e177462182770adddab"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -433,7 +433,27 @@ pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError>
     out.push_str(&emit_frac(frac_syms, &frac_d));
     out.push_str(&suffix);
 
-    let bytes = out.into_bytes();
+    let mut bytes = out.into_bytes();
+
+    // Complete CHECK-PROTECTION fill (cobc/ISO, the `*` partner of the all-`Z` blank above): when a
+    // picture's digit positions are ALL check-protection `*` -- no forced `9`, no floating `$`/`+`/`-`,
+    // no fixed prefix -- and the value is exactly zero, EVERY position becomes `*` *except* the decimal
+    // point, which stays `.`. That includes comma insertions and a trailing sign position. (Verified
+    // against the oracle: `****.**` of 0 -> "****.**", `**,***.**` of 0 -> "******.**" (comma -> `*`),
+    // `**,***.**-` of 0 -> "******.***" (trailing sign -> `*`), `*(5).**` of 0 -> "*****.**"; a `9`
+    // -- `***9.99` of 0 -> "***0.00" -- or a non-zero value -- `****.**` of 0.05 -> "****.05" -- renders
+    // normally.) Note the asymmetry with `Z`: `Z` blanks the decimal point too, `*` keeps it. Without
+    // this the editor wrongly kept the fraction digits + sign space (e.g. `****.**` of 0 -> "****.00").
+    let has_9 = syms.iter().any(|&c| c == '9');
+    let has_star = syms.iter().any(|&c| c == '*');
+    if value_is_zero && has_star && !has_9 && float_char.is_none() && prefix.is_empty() {
+        for b in bytes.iter_mut() {
+            if *b != b'.' {
+                *b = b'*';
+            }
+        }
+    }
+
     let expected = edited_size(pic)?;
     if bytes.len() != expected {
         return Err(EditedError::SizeMismatch {
@@ -478,11 +498,25 @@ mod tests {
         assert_eq!(encode_edited("ZZZZ.ZZ", &tiny).unwrap(), b"    .07");
         // A forced `9` prevents blanking -- the 9 position shows a 0.
         assert_eq!(encode_edited("ZZ,ZZ9.99", &zero).unwrap(), b"     0.00");
-        // NOTE (follow-on, NOT fixed here): check-protection `*` of an all-star zero field should fill
-        // every position with `*` (the oracle renders `****.**` of 0 as "****.**"); the current editor
-        // still emits "****.00". That is a separate `*`-fill rule (with its own comma/decimal-point
-        // interaction needing an oracle grid) and is out of scope for the all-`Z` blank fix above and
-        // for the GNURUST.SCREENIO.NUMEDIT.1 court (which uses no star pictures).
+    }
+
+    #[test]
+    fn complete_check_protection_fill() {
+        // All-`*` picture (no forced 9) + exactly-zero value -> EVERY position becomes `*` except the
+        // decimal point (which stays `.`); comma + trailing-sign positions are starred too. The `*`
+        // partner of the all-`Z` blank rule (oracle-verified). GNURUST.STAR.FILL.1.
+        let z8 = Decimal { negative: false, digits: vec![0; 8], scale: 2 };
+        assert_eq!(encode_edited("****.**", &z8).unwrap(), b"****.**");
+        assert_eq!(encode_edited("*(5).**", &z8).unwrap(), b"*****.**");
+        assert_eq!(encode_edited("**,***.**", &z8).unwrap(), b"******.**"); // comma -> `*`
+        assert_eq!(encode_edited("**,***.**-", &z8).unwrap(), b"******.***"); // trailing sign -> `*`
+        // A non-zero value renders normally (leading zeros star-filled, real digits/fraction shown).
+        let v = Decimal { negative: false, digits: vec![0, 0, 0, 0, 1, 2, 3, 4], scale: 2 };
+        assert_eq!(encode_edited("****.**", &v).unwrap(), b"**12.34");
+        let frac = Decimal { negative: false, digits: vec![0, 0, 0, 0, 0, 0, 0, 5], scale: 2 };
+        assert_eq!(encode_edited("****.**", &frac).unwrap(), b"****.05"); // non-zero -> fraction shows
+        // A forced `9` prevents complete star fill -- the 9 shows a 0.
+        assert_eq!(encode_edited("***9.99", &z8).unwrap(), b"***0.00");
     }
 
     #[test]

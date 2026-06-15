@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.16C",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.80",
+  "crate_version": "0.7.81",
   "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports",
   "hash_chain": {
-    "inputs_sha256": "4dbf2a725ca908ba84f6a879958e7193f5ad8720c51e7ecda6dbb65b8ea7414a"
+    "inputs_sha256": "5344d4024d4a02ea0e22930ed16b91d50c60e3ad67c8db4d525e5f86de7f1400"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "3e304107a6930356e716c941141b4cbce366c608d7b01a4a962828313739b965",
-    "receipt_sha256": "70febfbbddcc840c40636ede2e009303bbb59475c2ece14d9ad0ae34648939af"
+    "claim_ladder_entry_sha256": "61efee6d95b6c74d3f9ef14ed39499064ca6be66a25f58052cac210b9f81fe28",
+    "receipt_sha256": "e0d3ac33b732dc88a61c96254c3d47c477954a3d536b715660f23ab76c4bab6c"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,14 +36,14 @@
     "lie prevented: 'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle"
   ],
   "oracle": {
-    "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
+    "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes (GnuCOBOL 3.2; complete-suppression cases differentially confirmed on 3.1.2)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
     "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.16C"
   },
   "positive_claims": [
-    "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based"
+    "numeric value -> edited DISPLAY field bytes byte-faithful to cobc for Z 9 , . fixed and floating +/- signs (sign-aware) fixed-and-floating $ * CR DB B 0 / (zero-suppression, check-protection, floating currency/sign, sign placement, insertion), slot-based -- INCLUDING complete suppression of an exactly-zero value: an all-`Z` field (no forced `9`) blanks entirely (incl. the decimal point + comma), and an all-`*` field stars every position EXCEPT the decimal point (incl. comma + trailing sign). Verified against BOTH GnuCOBOL 3.2 and 3.1.2 (the complete-suppression cases byte-identical on both)."
   ],
   "replay": {
     "command": "bash lab/oracle/edited_encode_sweep.sh",
@@ -51,8 +51,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 141,
-    "total": 141,
+    "pass": 153,
+    "total": 153,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

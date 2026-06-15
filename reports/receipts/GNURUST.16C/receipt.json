@@ -5,7 +5,7 @@
     "replay": "bash lab/oracle/edited_encode_sweep.sh"
   },
   "court": "edited-picture encode (numeric->edited 16c)",
-  "crate_version": "0.7.80",
+  "crate_version": "0.7.81",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
@@ -23,7 +23,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=141 FAIL=0"
+    "sweep": "PASS=153 FAIL=0"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,

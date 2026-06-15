@@ -2,13 +2,13 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.16C — edited-picture encode (numeric->edited 16c)
 
-**Verdict: PASS** · replay `PASS=141 FAIL=0`
+**Verdict: PASS** · replay `PASS=153 FAIL=0`
 
 | field | value |
 |-------|-------|
 | campaign | `GNURUST.16C` |
 | court | edited-picture encode (numeric->edited 16c) |
-| crate_version | `0.7.80` |
+| crate_version | `0.7.81` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | numeric value -> edited DISPLAY field bytes |
 | replay command | `bash lab/oracle/edited_encode_sweep.sh` |

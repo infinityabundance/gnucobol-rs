@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.MAPPING.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.80",
+  "crate_version": "0.7.81",
   "damage_if_overclaimed": "treating the ASSIGN literal as the path ignores the DD_*/COB_FILE_PATH indirection every operational deployment relies on to place its files",
   "hash_chain": {
-    "inputs_sha256": "5aa06586c713a70017a9c9f125d9bde37a4ee598ae50b7f2f4ac1d311479427d"
+    "inputs_sha256": "1809404261cb8733c9267b6a07f6423e295dd914bee3aa9b171f257cc5dde6c9"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "f5f862e09021a70cefb0a0c7e014aa2cba8b4bb36f5748b20a77540cecfda5e2",
-    "receipt_sha256": "673951ec0c253fc93f8204636db329e6459a6a2e161f8c552644633abd00c0cc"
+    "receipt_sha256": "65824e216f99c516bb4ab8c09cc56e87d614713c19d149ff4793d7a30b7c22dc"
   },
   "kind": "court-casefile",
   "lie_prevented": [
