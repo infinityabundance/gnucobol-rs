@@ -5626,42 +5626,48 @@
     "test_only": 0
   },
   {
-    "active_ported": 102,
+    "active_ported": 210,
     "compiled": 254,
-    "compiled_parity_pct": 40.2,
+    "compiled_parity_pct": 82.7,
     "disabled": 0,
-    "doc_only": 24,
+    "doc_only": 27,
     "file": "common.c",
     "fns": [
       {
         "function": "cob_exit_common",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_exit_common_modules",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "ss_terminate_routines",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_terminate_routines",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_source_line",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_strerror",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "ss_itoa_u10",
@@ -5672,22 +5678,25 @@
       {
         "function": "set_source_location",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "output_source_location",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "create_dumpfile",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "cob_sig_handler",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_raise",
@@ -5697,27 +5706,31 @@
       {
         "function": "get_signal_entry",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_sig_name",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_sig_description",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_init_sig_descriptions",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_set_signal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_get_sign_ascii",
@@ -5797,27 +5810,32 @@
       {
         "function": "cob_move_intermediate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_move_to_group_as_alnum",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_open_logfile",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_trace_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_new_trace_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_env_true",
@@ -5834,7 +5852,8 @@
       {
         "function": "cob_rescan_env_vals",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "one_indexed_day_of_week_from_monday",
@@ -5845,7 +5864,8 @@
       {
         "function": "set_cob_time_ns_from_filetime",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_last_exception_code",
@@ -5951,67 +5971,80 @@
       {
         "function": "init_statement_hashlist",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "get_stmt_from_name",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_set_location",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_section",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_prep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_print",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_sect",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_para",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_entry",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_exit",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "do_trace_statement",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_stmt",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_trace_statement",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_nop",
@@ -6022,12 +6055,14 @@
       {
         "function": "cob_ready_trace",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_reset_trace",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_trace",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_pointer",
@@ -6038,82 +6073,98 @@
       {
         "function": "call_exit_handlers_and_terminate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_stop_run",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_stop_error",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "handle_core_on_error",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_hard_failure",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_hard_failure_internal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_last_exit_code",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_last_runtime_error",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_is_initialized",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_global_ptr",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_module_global_enter",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_module_enter",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_module_leave",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_module_free",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_save_func",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_restore_func",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "version_bitstring",
@@ -6124,12 +6175,14 @@
       {
         "function": "cob_check_version",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_parameter_check",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_correct_numeric",
@@ -6161,7 +6214,7 @@
       {
         "function": "cob_reg_sighnd",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_get_switch",
@@ -6213,17 +6266,20 @@
       {
         "function": "cob_table_sort_init",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_table_sort_init_key",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_table_sort",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_beyond_exit",
@@ -6337,7 +6393,8 @@
       {
         "function": "cob_get_current_date_and_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_current_datetime",
@@ -6348,7 +6405,8 @@
       {
         "function": "cob_set_date_from_epoch",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "check_current_date",
@@ -6400,27 +6458,32 @@
       {
         "function": "cob_display_command_line",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_command_line",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_display_arg_number",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_arg_number",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_arg_value",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "setenv",
@@ -6497,12 +6560,14 @@
       {
         "function": "cob_chain_setup",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_continue_after",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_allocate",
@@ -6534,32 +6599,37 @@
       {
         "function": "cob_temp_name",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_incr_temp_iteration",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_extern_init",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_command_line",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "cob_tidy",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_term",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_exit_proc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_sys_error_proc",
@@ -6666,12 +6736,13 @@
       {
         "function": "get_sleep_nanoseconds_from_seconds",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_cmdline",
+        "rust_status": "active"
       },
       {
         "function": "internal_nanosleep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_sys_oc_nanosleep",
@@ -6736,7 +6807,8 @@
       {
         "function": "cob_set_locale",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "cob_int_to_string",
@@ -6765,23 +6837,26 @@
       {
         "function": "var_print",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_expand_env_string",
         "preprocessor_status": "compiled",
-        "rust_module": "common_env",
+        "rust_module": "common_configload",
         "rust_status": "active"
       },
       {
         "function": "set_value",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "get_value",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "translate_boolean_to_int",
@@ -6797,47 +6872,54 @@
       {
         "function": "set_config_val_by_name",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "get_config_val",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "cb_lookup_config",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "cb_config_entry",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "cob_load_config_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_load_config",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_runtime_warning_external",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_runtime_warning_ss",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_runtime_warning",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_runtime_hint",
@@ -6847,72 +6929,83 @@
       {
         "function": "cob_setup_runtime_error_str",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_runtime_error",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_fatal_error",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "conf_runtime_error_value",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "conf_runtime_error",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "get_screenio_and_mouse_info",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "get_math_info",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "print_version_summary",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "print_version",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       },
       {
         "function": "print_info",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "print_info_detailed",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "print_runtime_conf",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_get_settings_ptr",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_init_nomain",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_common_init",
@@ -6922,72 +7015,85 @@
       {
         "function": "cob_call_with_exception_check",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_init",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_set_runtime_option",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_runtime_option",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_module",
+        "rust_status": "active"
       },
       {
         "function": "cob_stack_trace",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "flush_target",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_backtrace",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "output_procedure_stack_entry",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_stack_trace_internal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_stack",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_dump_file",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "cob_dump_module",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_debug_open",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "cob_debug_logit",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "cob_debug_logger",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "repeatWord",
@@ -6998,106 +7104,40 @@
       {
         "function": "cob_debug_dump",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "init_statement_list",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_print",
+        "rust_status": "active"
       }
     ],
     "gap": [
-      "call_exit_handlers_and_terminate",
-      "cb_config_entry",
-      "cb_lookup_config",
       "check_current_date",
       "check_valid_dir",
-      "cob_accept_arg_number",
-      "cob_accept_arg_value",
-      "cob_accept_command_line",
       "cob_accept_user_name",
       "cob_allocate",
-      "cob_backtrace",
-      "cob_call_with_exception_check",
-      "cob_chain_setup",
-      "cob_check_trace_file",
-      "cob_check_version",
       "cob_cmp",
-      "cob_command_line",
       "cob_common_init",
-      "cob_continue_after",
-      "cob_debug_dump",
-      "cob_debug_logger",
-      "cob_debug_logit",
-      "cob_debug_open",
-      "cob_display_arg_number",
-      "cob_display_command_line",
       "cob_dump_module",
-      "cob_exit_common",
-      "cob_exit_common_modules",
-      "cob_extern_init",
       "cob_external_addr",
       "cob_external_addr_create",
       "cob_external_addr_lookup",
-      "cob_fatal_error",
       "cob_free_alloc",
-      "cob_get_current_date_and_time",
-      "cob_get_dump_file",
-      "cob_get_global_ptr",
-      "cob_get_runtime_option",
-      "cob_get_settings_ptr",
-      "cob_get_sig_description",
-      "cob_get_sig_name",
       "cob_get_sign_ascii",
       "cob_get_sign_ebcdic",
-      "cob_get_source_line",
-      "cob_get_strerror",
-      "cob_hard_failure",
-      "cob_hard_failure_internal",
-      "cob_incr_temp_iteration",
-      "cob_init",
-      "cob_init_nomain",
-      "cob_init_sig_descriptions",
-      "cob_is_initialized",
-      "cob_last_exit_code",
-      "cob_last_runtime_error",
       "cob_load_config",
       "cob_load_config_file",
-      "cob_module_enter",
-      "cob_module_free",
-      "cob_module_global_enter",
-      "cob_module_leave",
-      "cob_move_intermediate",
-      "cob_move_to_group_as_alnum",
-      "cob_new_trace_file",
-      "cob_open_logfile",
-      "cob_parameter_check",
       "cob_put_sign_ascii",
       "cob_raise",
-      "cob_ready_trace",
       "cob_real_get_sign",
       "cob_real_put_sign",
       "cob_reg_sighnd",
-      "cob_rescan_env_vals",
-      "cob_reset_trace",
-      "cob_restore_func",
-      "cob_runtime_error",
       "cob_runtime_hint",
-      "cob_runtime_warning",
-      "cob_runtime_warning_external",
-      "cob_runtime_warning_ss",
-      "cob_save_func",
-      "cob_set_date_from_epoch",
-      "cob_set_locale",
-      "cob_set_location",
-      "cob_set_runtime_option",
       "cob_set_signal",
-      "cob_setup_runtime_error_str",
       "cob_sig_handler",
-      "cob_stack_trace",
-      "cob_stack_trace_internal",
-      "cob_stop_error",
-      "cob_stop_run",
       "cob_sys_error_proc",
       "cob_sys_exit_proc",
       "cob_sys_fork",
@@ -7110,58 +7150,18 @@
       "cob_sys_system",
       "cob_sys_waitpid",
       "cob_sys_x91",
-      "cob_table_sort",
-      "cob_table_sort_init",
-      "cob_table_sort_init_key",
-      "cob_temp_name",
-      "cob_terminate_routines",
-      "cob_tidy",
-      "cob_trace_entry",
-      "cob_trace_exit",
-      "cob_trace_para",
-      "cob_trace_prep",
-      "cob_trace_print",
-      "cob_trace_sect",
-      "cob_trace_section",
-      "cob_trace_statement",
-      "cob_trace_stmt",
-      "conf_runtime_error",
-      "conf_runtime_error_value",
-      "create_dumpfile",
-      "do_trace_statement",
-      "flush_target",
-      "get_config_val",
       "get_function_ptr_for_precise_time",
-      "get_math_info",
-      "get_screenio_and_mouse_info",
-      "get_signal_entry",
       "get_sleep_nanoseconds",
-      "get_sleep_nanoseconds_from_seconds",
-      "get_stmt_from_name",
-      "get_value",
-      "handle_core_on_error",
-      "init_statement_hashlist",
-      "init_statement_list",
       "internal_nanosleep",
       "locate_sign",
-      "output_procedure_stack_entry",
-      "output_source_location",
       "print_info",
       "print_info_detailed",
       "print_runtime_conf",
-      "print_version",
-      "print_version_summary",
       "raise_arg_mismatch",
-      "set_cob_time_ns_from_filetime",
-      "set_config_val",
-      "set_config_val_by_name",
-      "set_source_location",
-      "set_value",
-      "ss_terminate_routines",
-      "var_print"
+      "set_config_val"
     ],
     "inactive_mirrors": 0,
-    "missing": 128,
+    "missing": 17,
     "source_funcs": 254,
     "test_only": 0
   },

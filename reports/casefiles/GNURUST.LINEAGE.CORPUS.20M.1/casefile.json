@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.72",
+  "crate_version": "0.7.73",
   "damage_if_overclaimed": "treating 20M index sweep as 20M witnesses inflates the corpus 5x; treating the run as parity, or the negzero finding as fixed, overclaims; the 13 dropped families are future work, not coverage",
   "hash_chain": {
-    "inputs_sha256": "820fcc3414686e034e44a88ef2a74dc06c3ff14aea476ce26dd5153d41102251"
+    "inputs_sha256": "69e945b06d11d7685088e27bf162d41592e6dd02c253e1fced3e50e2a65c7849"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "23aafd03662819084a420f8893079745eef88fb0d50b0a2a404c0e8fd6b11687",
-    "receipt_sha256": "ac07862592368b3afacadbd0eeb5ddf83d9e85f0403aa7f99b48c213e6b9424a"
+    "receipt_sha256": "70f4fb0e9e9f9dde0caad9dc00091cc0066c3f424f3c909cceee9c2c37f3c6ea"
   },
   "kind": "court-casefile",
   "lie_prevented": [

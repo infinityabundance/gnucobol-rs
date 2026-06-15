@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "SIZE.ERROR.ATLAS.1",
     "crate": "kobold-data-shim",
-    "crate_version": "0.7.72",
+    "crate_version": "0.7.73",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "d54824e5ac390c4c03f9ff62308349c15779303464667e721e8c0458fb8be36e",
-      "receipt_sha256": "2bd642eca561abe1d7a56159026e5e5d467c4ae7eef9198654f64ba01ab2ce4a"
+      "receipt_sha256": "8ca896a24bffebeaeb9eae334136d864ac1712a9c37dda5a1f8090e7bdba41f3"
     },
     "negative_claim_count": 6,
     "positive_claim_count": 5,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "d94af25d999bb5ae257d6e8ed1c0612f5396767d2dbf6111184442d7a8c70639"
+        "sha256": "3d9c28434a49c01bd2c1293e60315c3b10b19d6f35c72d25686308b539ceac41"
       },
       "name": "reports/casefiles/SIZE.ERROR.ATLAS.1/casefile.json"
     }

@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.FILEIO.MAPPING.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.72",
+    "crate_version": "0.7.73",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "f5f862e09021a70cefb0a0c7e014aa2cba8b4bb36f5748b20a77540cecfda5e2",
-      "receipt_sha256": "491b7cc7d005579739b7a4dcd0f9275717c83533a8e06cfb3c4cde65ba69c663"
+      "receipt_sha256": "ad61ceb4031a26d332131e6fddafeb1704bedaf55bc3620f7b105af6400d52da"
     },
     "negative_claim_count": 7,
     "positive_claim_count": 4,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "512db42c5a624f3a763ce625e3b80f2542720451b109d9e0e5cb713bcffb7b56"
+        "sha256": "77e53c4ee4211428ab132f651447897e7eb518fc8c7c1d18d658980b770dbcea"
       },
       "name": "reports/casefiles/GNURUST.FILEIO.MAPPING.1/casefile.json"
     }

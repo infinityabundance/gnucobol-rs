@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.COMMON.NUMCHECK.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.72
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.73
 
 - **Oracle:** cobc -debug EC-DATA-INCOMPATIBLE runtime check (libcob/common.c cob_check_numeric), captured from BOTH GnuCOBOL 3.1.2 and 3.2
 - **Byte domain(s):** a non-numeric value reaching arithmetic (field name + type + raw bytes) -> the exact runtime not-numeric diagnostic message bytes

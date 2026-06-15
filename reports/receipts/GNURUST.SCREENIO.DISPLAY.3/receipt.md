@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.DISPLAY.3` |
 | court | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes |
-| crate_version | `0.7.72` |
+| crate_version | `0.7.73` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a multi-field DISPLAY -> the exact ncurses inter-field cursor-movement + field byte stream, for non-overlapping layouts |
 | replay command | `bash lab/oracle/screenio_multi_sweep.sh` |

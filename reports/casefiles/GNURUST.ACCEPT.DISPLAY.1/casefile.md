@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.ACCEPT.DISPLAY.1 (court-casefile)
 
-**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.72
+**Verdict: PASS** · 7/7 pass, 0 fail · crate `gnucobol-rs` 0.7.73
 
 - **Oracle:** cobc DISPLAY/ACCEPT (libcob/termio.c)
 - **Byte domain(s):** DISPLAY operand concatenation + newline; ACCEPT field move bytes

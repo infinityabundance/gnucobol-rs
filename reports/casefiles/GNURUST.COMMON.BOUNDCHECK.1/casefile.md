@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.COMMON.BOUNDCHECK.1 (court-casefile)
 
-**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.72
+**Verdict: PASS** · 6/6 pass, 0 fail · crate `gnucobol-rs` 0.7.73
 
 - **Oracle:** cobc -debug runtime bounds checks (libcob/common.c cob_check_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2
 - **Byte domain(s):** a bounds-check input (index/offset/length + field size/limits + names) -> the exact runtime EC-BOUND diagnostic message + hint bytes
