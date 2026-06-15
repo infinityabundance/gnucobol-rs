@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.DISPLAY.3",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.71",
+  "crate_version": "0.7.72",
   "damage_if_overclaimed": "claiming 'multi-field DISPLAY works' would hide that overlapping same-row layouts (needing the clr_eol refresh diff), attributes, and ACCEPT are unported, and that only non-overlapping pairs on the admitted terminal are proven",
   "hash_chain": {
-    "inputs_sha256": "6b8b34ed011391c277d6c254651207f32f7b8a121ccb096a4ebce86a5ae061ac"
+    "inputs_sha256": "d5f047b6b1fd2ba5fbb5b335d9770dc97c845e8bb4985aeb9da0189cf65d3bce"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "67e4a607e691e24c5b2e1bd7f5dd0a93342ffbfedf0037c599996b42a51acb03",
-    "receipt_sha256": "7eeb5027e3a8508f58d5dff3db84d03e8c9c364b6e15063ed9007be08ec388f1"
+    "receipt_sha256": "ded41bdb7d8094ff3cd3e839d8dfd6cb70ec7931f871bd7f08d3d4abada56cea"
   },
   "kind": "court-casefile",
   "lie_prevented": [

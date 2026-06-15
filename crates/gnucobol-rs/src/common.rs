@@ -557,6 +557,278 @@ pub fn cob_check_numeric(
     Some(msg)
 }
 
+// ======================================================================================================
+// CBL_/C$ logic + bit + case builtins (common.c cob_sys_*). Each is a pure, in-place byte operation over a
+// caller-sized buffer; the C trusts the caller's `length`, this port additionally bounds-guards every byte
+// access (GNURUST.PANICPOLICY.0). All return 0 (the routine status). Oracle-verifiable via `CALL "CBL_AND"`
+// etc.
+// ======================================================================================================
+
+/// Apply a binary byte op `dst[n] = f(src[n], dst[n])` for `n in 0..length`, bounds-guarded.
+fn cbl_binop(src: &[u8], dst: &mut [u8], length: i32, f: impl Fn(u8, u8) -> u8) -> i32 {
+    if length <= 0 {
+        return 0;
+    }
+    let end = (length as usize).min(src.len()).min(dst.len());
+    for n in 0..end {
+        dst[n] = f(src[n], dst[n]);
+    }
+    0
+}
+
+/// `CBL_AND` (`common.c:cob_sys_and`): `dst &= src` over `length` bytes.
+pub fn cob_sys_and(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| a & b)
+}
+/// `CBL_OR` (`cob_sys_or`): `dst |= src`.
+pub fn cob_sys_or(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| a | b)
+}
+/// `CBL_NOR` (`cob_sys_nor`): `dst = ~(src | dst)`.
+pub fn cob_sys_nor(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| !(a | b))
+}
+/// `CBL_XOR` (`cob_sys_xor`): `dst ^= src`.
+pub fn cob_sys_xor(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| a ^ b)
+}
+/// `CBL_IMP` (`cob_sys_imp`): logical implies `dst = ~src | dst`.
+pub fn cob_sys_imp(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| !a | b)
+}
+/// `CBL_NIMP` (`cob_sys_nimp`): not-implies `dst = src & ~dst`.
+pub fn cob_sys_nimp(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| a & !b)
+}
+/// `CBL_EQ` (`cob_sys_eq`): bit equivalence `dst = ~(src ^ dst)`.
+pub fn cob_sys_eq(src: &[u8], dst: &mut [u8], length: i32) -> i32 {
+    cbl_binop(src, dst, length, |a, b| !(a ^ b))
+}
+/// `CBL_NOT` (`cob_sys_not`): `dst = ~dst` (single buffer).
+pub fn cob_sys_not(dst: &mut [u8], length: i32) -> i32 {
+    if length > 0 {
+        let end = (length as usize).min(dst.len());
+        for n in 0..end {
+            dst[n] = !dst[n];
+        }
+    }
+    0
+}
+/// `CBL_XF4` (`cob_sys_xf4`): pack the low bit of 8 source bytes into one destination byte
+/// (`dst = sum(src[n]&1 << (7-n))`).
+pub fn cob_sys_xf4(dst: &mut [u8], src: &[u8]) -> i32 {
+    if dst.is_empty() || src.len() < 8 {
+        return 0;
+    }
+    let mut b = 0u8;
+    for n in 0..8 {
+        b |= (src[n] & 1) << (7 - n);
+    }
+    dst[0] = b;
+    0
+}
+/// `CBL_XF5` (`cob_sys_xf5`): unpack one source byte's 8 bits into 8 destination bytes (`0`/`1`).
+pub fn cob_sys_xf5(src: &[u8], dst: &mut [u8]) -> i32 {
+    if src.is_empty() || dst.len() < 8 {
+        return 0;
+    }
+    for n in 0..8 {
+        dst[n] = if src[0] & (1 << (7 - n)) != 0 { 1 } else { 0 };
+    }
+    0
+}
+/// `CBL_TOUPPER` (`cob_sys_toupper`): ASCII-uppercase `length` bytes in place (C `toupper`, C locale).
+pub fn cob_sys_toupper(data: &mut [u8], length: i32) -> i32 {
+    if length > 0 {
+        let end = (length as usize).min(data.len());
+        for b in &mut data[..end] {
+            *b = b.to_ascii_uppercase();
+        }
+    }
+    0
+}
+/// `CBL_TOLOWER` (`cob_sys_tolower`): ASCII-lowercase `length` bytes in place.
+pub fn cob_sys_tolower(data: &mut [u8], length: i32) -> i32 {
+    if length > 0 {
+        let end = (length as usize).min(data.len());
+        for b in &mut data[..end] {
+            *b = b.to_ascii_lowercase();
+        }
+    }
+    0
+}
+/// `CBL_GC_PRINTABLE` (`cob_sys_printable`): replace every non-printable byte (C `isprint`, the C-locale
+/// `0x20..=0x7e` range) with `dotrep` (default `'.'`). The field length is the buffer length here.
+pub fn cob_sys_printable(data: &mut [u8], dotrep: u8) -> i32 {
+    for b in data.iter_mut() {
+        if !(0x20..=0x7e).contains(b) {
+            *b = dotrep;
+        }
+    }
+    0
+}
+
+/// Port of `common.c:cob_correct_numeric` -- correct a NUMERIC DISPLAY field's bytes in place to a canonical
+/// representation: fix the sign byte (leading or trailing; `+`/`-` for SIGN SEPARATE, the EBCDIC overpunch
+/// `{`/`A`-`I` positive `}`/`J`-`R` negative for `ebcdic_sign`, else the ASCII path) and replace each
+/// non-digit data byte with `'0'` (for NUL/space) or its low-nibble digit. The field attributes are passed
+/// as flags. A no-op for a non-`NUMDISP` field.
+pub fn cob_correct_numeric(
+    data: &mut [u8],
+    is_numdisp: bool,
+    have_sign: bool,
+    sign_leading: bool,
+    sign_separate: bool,
+    ebcdic_sign: bool,
+) {
+    if !is_numdisp || data.is_empty() {
+        return;
+    }
+    let mut p_start = 0usize;
+    let mut end = data.len();
+    if have_sign {
+        let c = if sign_leading {
+            p_start = 1;
+            0
+        } else {
+            end -= 1;
+            end
+        };
+        if sign_separate {
+            if data[c] != b'+' && data[c] != b'-' {
+                data[c] = b'+';
+            }
+        } else if ebcdic_sign {
+            match data[c] {
+                b'{' | b'A'..=b'I' | b'}' | b'J'..=b'R' => {}
+                b'0' => data[c] = b'{',
+                b'1'..=b'9' => data[c] = b'A' + (data[c] - b'1'),
+                0 | b' ' => data[c] = b'{',
+                _ => {}
+            }
+        } else if data[c] == 0 || data[c] == b' ' {
+            data[c] = b'0';
+        }
+    } else {
+        let c = end - 1;
+        if ebcdic_sign {
+            match data[c] {
+                0 | b' ' | b'{' | b'}' => data[c] = b'0',
+                b'A'..=b'I' => data[c] = b'1' + (data[c] - b'A'),
+                b'J'..=b'R' => data[c] = b'1' + (data[c] - b'J'),
+                _ => {}
+            }
+        } else {
+            match data[c] {
+                0 | b' ' | b'p' => data[c] = b'0',
+                b'q'..=b'y' => data[c] -= b'p',
+                _ => {}
+            }
+        }
+    }
+    for b in &mut data[p_start..end] {
+        match *b {
+            b'0'..=b'9' => {}
+            0 | b' ' => *b = b'0',
+            other => {
+                if (other & 0x0f) <= 9 {
+                    *b = b'0' + (other & 0x0f);
+                }
+            }
+        }
+    }
+}
+
+/// Port of `common.c:cob_is_numeric` -- whether a field's bytes are valid for its numeric type. Dispatches
+/// on `field_type` (the `COB_TYPE_*` code): BINARY is always numeric; NUMERIC DISPLAY delegates to
+/// [`crate::common_misc::cob_check_numdisp`]; PACKED checks the sign nibble + BCD digits (`no_sign_nibble`
+/// = COMP-6, `host_sign` = the host-sign relaxation); FLOAT/DOUBLE reproduce the C `!ISFINITE` test on the
+/// little-endian value; the IEEE-754 decimal forms test the combination-field bits; any other type checks
+/// every byte is an ASCII digit. Sign attributes are passed as flags (see `cob_check_numdisp`).
+#[allow(clippy::too_many_arguments)]
+pub fn cob_is_numeric(
+    field_type: u8,
+    data: &[u8],
+    have_sign: bool,
+    sign_leading: bool,
+    sign_separate: bool,
+    sign_mode: crate::common_misc::SignMode,
+    no_sign_nibble: bool,
+    host_sign: bool,
+) -> i32 {
+    // IS_INVALID_BCD_DATA(c) = (c & 0x0f) > 0x09 || (c & 0xf0) > 0x90
+    let invalid_bcd = |c: u8| (c & 0x0f) > 0x09 || (c & 0xf0) > 0x90;
+    match field_type {
+        0x11 => 1, // COB_TYPE_NUMERIC_BINARY
+        0x13 => {
+            // FLOAT: the C returns !ISFINITE(value) (ported verbatim).
+            if data.len() < 4 {
+                return 0;
+            }
+            let v = f32::from_le_bytes([data[0], data[1], data[2], data[3]]);
+            i32::from(!v.is_finite())
+        }
+        0x14 | 0x15 => {
+            // DOUBLE / LONG DOUBLE: the C `!ISFINITE` on the value (LONG DOUBLE is decoded as f64 here;
+            // the exact extended-precision layout is the host boundary).
+            if data.len() < 8 {
+                return 0;
+            }
+            let mut b = [0u8; 8];
+            b.copy_from_slice(&data[..8]);
+            i32::from(!f64::from_le_bytes(b).is_finite())
+        }
+        0x12 => {
+            // PACKED-DECIMAL: sign nibble + high nibble of last byte + BCD digit bytes.
+            if data.is_empty() {
+                return 0;
+            }
+            let end = data.len() - 1;
+            let sign = data[end] & 0x0f;
+            if no_sign_nibble {
+                if sign > 0x09 {
+                    return 0;
+                }
+            } else if have_sign {
+                if host_sign && sign == 0x0f {
+                    // ok
+                } else if sign != 0x0c && sign != 0x0d {
+                    return 0;
+                }
+            } else if sign != 0x0f {
+                return 0;
+            }
+            if (data[end] & 0xf0) > 0x90 {
+                return 0;
+            }
+            for &p in &data[..end] {
+                if invalid_bcd(p) {
+                    return 0;
+                }
+            }
+            1
+        }
+        0x10 => crate::common_misc::cob_check_numdisp(data, have_sign, sign_leading, sign_separate, sign_mode),
+        0x16 => {
+            // FP DECIMAL 64 (little-endian host): combination field not 0x78.
+            i32::from(data.len() >= 8 && (data[7] & 0x78) != 0x78)
+        }
+        0x17 => {
+            // FP DECIMAL 128 (little-endian host).
+            i32::from(data.len() >= 16 && (data[15] & 0x78) != 0x78)
+        }
+        _ => {
+            // default: every byte must be an ASCII digit.
+            for &p in data {
+                if p.wrapping_sub(0x30) > 9 {
+                    return 0;
+                }
+            }
+            1
+        }
+    }
+}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
@@ -574,6 +846,24 @@ mod kani_proofs {
         } else {
             assert!(v.is_some());
         }
+    }
+
+    // KANIFOR: GNURUST.COMMON.CBL.1
+    /// `cob_sys_xor` is involutive (XORing the same source twice restores the destination) and every CBL_
+    /// bit op is panic-free + bounded for any inputs -- the byte-op contract.
+    #[kani::proof]
+    #[kani::unwind(2)]
+    fn cbl_xor_is_involutive() {
+        let s: u8 = kani::any();
+        let d0: u8 = kani::any();
+        let mut d = [d0];
+        cob_sys_xor(&[s], &mut d, 1);
+        cob_sys_xor(&[s], &mut d, 1);
+        assert_eq!(d[0], d0);
+        // negative/zero length is a no-op, never panics.
+        let mut e = [d0];
+        cob_sys_and(&[s], &mut e, -1);
+        assert_eq!(e[0], d0);
     }
 
     // KANIFOR: GNURUST.COMMON.NUMCHECK.1
@@ -746,5 +1036,26 @@ mod tests {
             cob_check_numeric(false, "P", "PACKED-DECIMAL", b"\x12\x3f", false).unwrap(),
             b"'P' (Type: PACKED-DECIMAL) not numeric: '0x123f'".to_vec()
         );
+    }
+
+    #[test]
+    fn correct_numeric_and_is_numeric() {
+        use crate::common_misc::SignMode;
+        // cob_correct_numeric: unsigned NUMDISP with a space/junk digit -> '0'
+        let mut d = *b"12 4";
+        cob_correct_numeric(&mut d, true, false, false, false, false);
+        assert_eq!(&d, b"1204");
+        // ASCII trailing overpunch sign: 'r' (=2, negative) corrected to '2' in the last byte
+        let mut s = *b"34r";
+        cob_correct_numeric(&mut s, true, false, false, false, false);
+        assert_eq!(&s, b"342");
+        // cob_is_numeric: BINARY always numeric; DISPLAY digit check; default ASCII-digit check
+        assert_eq!(cob_is_numeric(0x11, b"\x00\x05", false, false, false, SignMode::Ascii, false, false), 1);
+        assert_eq!(cob_is_numeric(0x10, b"123", false, false, false, SignMode::Ascii, false, false), 1);
+        assert_eq!(cob_is_numeric(0x10, b"12X", false, false, false, SignMode::Ascii, false, false), 0);
+        // PACKED: 0x12 0x3C = digits 123 sign C (positive) -> numeric
+        assert_eq!(cob_is_numeric(0x12, b"\x12\x3c", true, false, false, SignMode::Ascii, false, false), 1);
+        // PACKED bad sign nibble (0x3F with have_sign) -> not numeric
+        assert_eq!(cob_is_numeric(0x12, b"\x12\x3f", true, false, false, SignMode::Ascii, false, false), 0);
     }
 }

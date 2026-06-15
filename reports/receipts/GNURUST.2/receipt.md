@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.2` |
 | court | decimal MOVE (COMP-3/zoned/display) |
-| crate_version | `0.7.71` |
+| crate_version | `0.7.72` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field-storage + move-result bytes |
 | replay command | `bash lab/oracle/sweep.sh 0` |

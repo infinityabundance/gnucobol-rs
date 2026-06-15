@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.OPEN.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.71
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.72
 
 - **Oracle:** cobc OPEN/WRITE/READ/CLOSE incl. double-open, close-when-closed, CLOSE WITH LOCK, missing-input (libcob/fileio.c)
 - **Byte domain(s):** OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> the on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42)

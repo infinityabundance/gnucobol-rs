@@ -30,8 +30,8 @@
     },
     {
       "active": 56,
-      "direct": 32,
-      "evidenced_any": 50,
+      "direct": 33,
+      "evidenced_any": 51,
       "file": "move.c",
       "lifecycle": 2,
       "oracle": 23,
@@ -41,7 +41,6 @@
         "cob_binary_mset_sint64",
         "cob_binary_mset_uint64",
         "cob_move_ibm",
-        "cob_put_pointer",
         "cob_set_llint"
       ]
     },
@@ -255,17 +254,18 @@
       ]
     },
     {
-      "active": 29,
-      "direct": 24,
-      "evidenced_any": 25,
+      "active": 101,
+      "direct": 95,
+      "evidenced_any": 96,
       "file": "common.c",
-      "lifecycle": 0,
-      "oracle": 5,
+      "lifecycle": 8,
+      "oracle": 15,
       "transitive": 1,
       "unevidenced": [
         "cob_check_ref_mod_detailed",
         "cob_get_current_date_and_time_from_os",
         "common_cmpc",
+        "setenv",
         "sort_compare_collate"
       ]
     },
@@ -287,11 +287,11 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 809,
-    "direct": 496,
-    "evidenced_any": 672,
-    "lifecycle": 60,
-    "oracle": 201,
+    "active": 881,
+    "direct": 568,
+    "evidenced_any": 744,
+    "lifecycle": 68,
+    "oracle": 211,
     "transitive": 151,
     "unevidenced": 137
   }

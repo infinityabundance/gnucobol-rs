@@ -811,6 +811,16 @@
         "NATIONAL/UTF-16 byte widths in the escaping"
       ]
     },
+    "GNURUST.COMMON.CBL.1": {
+      "court": "CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER)",
+      "sweep": "cbl_logic_sweep.sh",
+      "byte_domain": "CALL USING buffer(s) + length -> the in-place transformed destination bytes (verified vs both oracles 3.1.2 + 3.2)",
+      "non_claims": [
+        "the COB_CHK_PARMS parameter-count diagnostic",
+        "CBL_GC_PRINTABLE locale + custom dot-char; cob_sys_x91 multiplexer",
+        "the OS/process CBL routines (getpid/system/fork/nanosleep)"
+      ]
+    },
     "GNURUST.INDEX.1": {
       "court": "USAGE INDEX storage + SET arithmetic",
       "sweep": "index_sweep.sh",

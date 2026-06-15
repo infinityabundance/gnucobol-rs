@@ -10,12 +10,12 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 809** · direct 496 (incl. oracle-sweep 201) · transitive 151 · lifecycle 60 · **evidenced (any) 672** · **unevidenced 137**.
+**Active ported: 881** · direct 568 (incl. oracle-sweep 211) · transitive 151 · lifecycle 68 · **evidenced (any) 744** · **unevidenced 137**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | `numeric.c` | 98 | 53 | 20 | 25 | 6 | 83 | 15 |
-| `move.c` | 56 | 32 | 23 | 16 | 2 | 50 | 6 |
+| `move.c` | 56 | 33 | 23 | 16 | 2 | 51 | 5 |
 | `strings.c` | 34 | 19 | 0 | 8 | 8 | 29 | 5 |
 | `intrinsic.c` | 232 | 117 | 103 | 58 | 8 | 177 | 55 |
 | `cconv.c` | 9 | 8 | 4 | 0 | 2 | 9 | 0 |
@@ -24,13 +24,13 @@
 | `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
 | `mlio.c` | 43 | 25 | 5 | 3 | 2 | 30 | 13 |
 | `reportio.c` | 39 | 21 | 0 | 8 | 7 | 33 | 6 |
-| `common.c` | 29 | 24 | 5 | 1 | 0 | 25 | 4 |
+| `common.c` | 101 | 95 | 15 | 1 | 8 | 96 | 5 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)
 
 - **`numeric.c`** (15): `cob_decimal_adjust`, `cob_decimal_align`, `cob_decimal_clear`, `cob_decimal_pop`, `cob_decimal_push`, `cob_decimal_set`, `cob_decimal_set_llint`, `cob_logical_left_c`, `cob_logical_right_c`, `cob_pow_10_uli`, `count_leading_zeros`, `insert_packed_aligned`, `mpz_get_sll`, `mpz_get_ull`, `mpz_set_sll`
-- **`move.c`** (6): `cob_binary_mget_uint64`, `cob_binary_mset_sint64`, `cob_binary_mset_uint64`, `cob_move_ibm`, `cob_put_pointer`, `cob_set_llint`
+- **`move.c`** (5): `cob_binary_mget_uint64`, `cob_binary_mset_sint64`, `cob_binary_mset_uint64`, `cob_move_ibm`, `cob_set_llint`
 - **`strings.c`** (5): `cob_inspect_trailing`, `cob_unstring_tallying`, `do_mark`, `inspect_common_no_replace`, `inspect_common_replacing`
 - **`intrinsic.c`** (55): `add_decimal_digits`, `add_z`, `cob_intr_boolean_of_integer`, `cob_intr_char_national`, `cob_intr_display_of`, `cob_intr_exception_file_n`, `cob_intr_exception_location_n`, `cob_intr_national_of`, `cob_intr_random`, `cob_intr_seconds_past_midnight`, `cob_intr_standard_compare`, `decimal_places_for_seconds`, `format_as_yyyyddd`, `format_as_yyyymmdd`, `format_as_yyyywwwd`, `get_day_of_week`, `get_iso_week`, `get_iso_week_one`, `get_seconds_past_midnight`, `get_substituted_size`, `integer_of_ddd`, `integer_of_mmdd`, `integer_of_wwwd`, `max_week`, `rest_is_offset_format`, `rest_is_z`, `substitute_matches`, `test_century`, `test_char`, `test_char_cond`, `test_char_in_range`, `test_colon_presence`, `test_date_end`, `test_day_of_month`, `test_day_of_week`, `test_day_of_year`, `test_decade`, `test_decimal_places`, `test_digit`, `test_hour`, `test_hyphen_presence`, `test_less_than_60`, `test_minute`, `test_month`, `test_no_trailing_junk`, `test_offset_time`, `test_second`, `test_time_end`, `test_two_zeroes`, `test_unit_year`, `test_w_presence`, `test_week`, `test_year`, `test_z_presence`, `valid_offset_time`
 - **`termio.c`** (8): `cob_accept`, `cob_dump_field`, `cob_dump_field_ext`, `cob_dump_file`, `cob_dump_output`, `dump_field_internal`, `dump_pending_output`, `is_field_display`
@@ -38,7 +38,7 @@
 - **`fileio.c`** (5): `cob_file_external_addr`, `cob_file_fcd_adrs`, `cob_file_fcdkey_adrs`, `cob_file_sort_giving_extfh`, `cob_file_sort_options`
 - **`mlio.c`** (13): `generate_attributes`, `generate_content`, `generate_element`, `generate_hex_element`, `generate_json_from_tree`, `generate_normal_attribute`, `generate_normal_element`, `generate_xml_from_tree`, `get_json_num`, `get_trimmed_xml_data`, `get_xml_name`, `set_xml_event`, `set_xml_text`
 - **`reportio.c`** (6): `cob_report_suppress`, `limitCheckOneLine`, `line_control_one`, `reportDump`, `reportDumpLine`, `reportDumpOneLine`
-- **`common.c`** (4): `cob_check_ref_mod_detailed`, `cob_get_current_date_and_time_from_os`, `common_cmpc`, `sort_compare_collate`
+- **`common.c`** (5): `cob_check_ref_mod_detailed`, `cob_get_current_date_and_time_from_os`, `common_cmpc`, `setenv`, `sort_compare_collate`
 
 ## How this is produced (reproducible)
 

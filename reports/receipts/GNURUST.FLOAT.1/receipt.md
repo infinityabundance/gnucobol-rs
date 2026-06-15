@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FLOAT.1` |
 | court | float fields COMP-1/COMP-2 + FLOAT-DECIMAL-16/34, both directions |
-| crate_version | `0.7.71` |
+| crate_version | `0.7.72` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | decimal value <-> COMP-1/COMP-2/FLOAT-DECIMAL field bytes (truncate-toward-zero) |
 | replay command | `bash lab/oracle/float_sweep.sh` |

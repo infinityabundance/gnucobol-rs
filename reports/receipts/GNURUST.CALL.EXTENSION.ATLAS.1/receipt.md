@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.CALL.EXTENSION.ATLAS.1` |
 | court | observed CALL/linkage atlas |
-| crate_version | `0.7.71` |
+| crate_version | `0.7.72` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | CALL parameter passing (BY REFERENCE shares / BY CONTENT copies) + C$ extensions + CANCEL + ON EXCEPTION |
 | replay command | `bash lab/oracle/call_atlas_sweep.sh` |

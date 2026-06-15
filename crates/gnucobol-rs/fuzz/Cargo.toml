@@ -258,3 +258,9 @@ name = "common_numcheck"
 path = "fuzz_targets/common_numcheck.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "common_cbl"
+path = "fuzz_targets/common_cbl.rs"
+test = false
+doc = false

@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "CALL USING buffer(s) + length -> the in-place transformed bytes of the destination buffer"
+  ],
+  "case_id": "GNURUST.COMMON.CBL.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.72",
+  "damage_if_overclaimed": "claiming 'the CBL_ library' would hide that the parameter-count checks, the x91 multiplexer, the locale path, and the OS/process routines are unported",
+  "hash_chain": {
+    "inputs_sha256": "d2d9233d9e63eb7e82d7da588b7e0893d0f542d686263f888c88e740de6819c3"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "c195666c374275e2855fa2af8135689a6a8b63edc303a3e830b2adaf98e8d1bb",
+    "receipt_sha256": "1fc18fbb9d8274207831199da3c0ebd2753f80c8a94415190dddf887b69e7fac"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "the CBL_ builtins are libcob-internal -- NO: each is a deterministic byte transform reproduced byte-identically and proven stable across two GnuCOBOL versions"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-COB-CHK-PARMS-PARAMETER-COUNT-RUNTIM",
+    "NEG.CBL-GC-PRINTABLE-S-OPTIONAL-LOCALE-COB-L",
+    "NEG.COB-SYS-X91-THE-SWITCH-PARAM-MULTIPLEXER",
+    "NEG.THE-OS-PROCESS-CBL-ROUTINES-GETPID-SYSTE"
+  ],
+  "negative_claims": [
+    "the COB_CHK_PARMS parameter-count runtime check (the wrong-arg-count diagnostic)",
+    "CBL_GC_PRINTABLE's optional locale (cob_locale_ctype) + custom dot-replacement-char variadic argument beyond the default",
+    "cob_sys_x91 (the switch/param multiplexer -- a follow-on)",
+    "the OS/process CBL routines (getpid/system/fork/nanosleep)",
+    "lie prevented: the CBL_ builtins are libcob-internal -- NO: each is a deterministic byte transform reproduced byte-identically and proven stable across two GnuCOBOL versions"
+  ],
+  "oracle": {
+    "detail": "cobc CALL \"CBL_AND\"/.../\"CBL_TOLOWER\" (libcob/common.c cob_sys_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COMMON.CBL.1"
+  },
+  "positive_claims": [
+    "faithful pure ports of common.c's CBL_ logic/bit/case system routines (cob_sys_and/or/nor/xor/imp/nimp/eq/not/xf4/xf5/toupper/tolower/printable) -- each a deterministic in-place byte operation over a caller-sized buffer -- proven byte-identical to GnuCOBOL's CALL \"CBL_*\" results. DIFFERENTIAL: verified across BOTH admitted oracles GnuCOBOL 3.1.2 + 3.2 (cbl_logic_sweep 2/0) via a COBOL program that CALLs each routine on fixed inputs (SRC=0xCC, B=0xAA) and DISPLAYs the result byte. The bit ops: AND d&=s, OR d|=s, NOR d=~(s|d), XOR d^=s, IMP d=~s|d, NIMP d=s&~d, EQ d=~(s^d), NOT d=~d",
+    "XF4 packs 8 low-bits into 1 byte, XF5 unpacks",
+    "TOUPPER/TOLOWER ASCII-case the buffer",
+    "GC_PRINTABLE dots non-printable bytes."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/cbl_logic_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 2,
+    "total": 2,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

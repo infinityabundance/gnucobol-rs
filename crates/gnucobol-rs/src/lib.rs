@@ -50,6 +50,12 @@ pub mod logical;
 pub mod accessors;
 pub mod call;
 pub mod common;
+pub mod common_alloc;
+pub mod common_exception;
+pub mod common_misc;
+pub mod common_cfg;
+pub mod common_datetime;
+pub mod common_env;
 pub mod strings;
 pub mod cobgetopt;
 pub mod mpf;
@@ -643,6 +649,30 @@ pub fn __fuzz_mlio(data: &[u8]) {
     let _ = cob_json_generate_new(&tree);
     let _ = mlio::get_hex_xml_data(data);
     let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
+}
+
+/// Fuzz the CBL_ logic/bit builtins (`GNURUST.COMMON.CBL.1`): arbitrary buffers + lengths never panic.
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_common_cbl(data: &[u8]) {
+    let n = data.len() as i32;
+    let half = data.len() / 2;
+    let (src, dstsrc) = data.split_at(half);
+    let mut dst = dstsrc.to_vec();
+    let _ = common::cob_sys_and(src, &mut dst, n);
+    let _ = common::cob_sys_or(src, &mut dst, n);
+    let _ = common::cob_sys_xor(src, &mut dst, n);
+    let _ = common::cob_sys_nor(src, &mut dst, n);
+    let _ = common::cob_sys_imp(src, &mut dst, n);
+    let _ = common::cob_sys_nimp(src, &mut dst, n);
+    let _ = common::cob_sys_eq(src, &mut dst, n);
+    let _ = common::cob_sys_not(&mut dst, n);
+    let _ = common::cob_sys_toupper(&mut dst, n);
+    let _ = common::cob_sys_tolower(&mut dst, n);
+    let _ = common::cob_sys_printable(&mut dst, b'.');
+    let mut eight = [0u8; 8];
+    let _ = common::cob_sys_xf4(&mut dst, data);
+    let _ = common::cob_sys_xf5(data, &mut eight);
 }
 
 /// Fuzz the not-numeric diagnostic generators (`GNURUST.COMMON.NUMCHECK.1`): arbitrary type codes + data

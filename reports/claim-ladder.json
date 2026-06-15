@@ -1595,6 +1595,20 @@
       "damage_if_overclaimed": "claiming 'numeric checking' would hide that only the DIAGNOSTIC MESSAGE is sealed here, not the cob_is_numeric validity decision, the abort, or the prefix framing"
     },
     {
+      "id": "GNURUST.COMMON.CBL.1",
+      "name": "CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER)",
+      "proven": "faithful pure ports of common.c's CBL_ logic/bit/case system routines (cob_sys_and/or/nor/xor/imp/nimp/eq/not/xf4/xf5/toupper/tolower/printable) -- each a deterministic in-place byte operation over a caller-sized buffer -- proven byte-identical to GnuCOBOL's CALL \"CBL_*\" results. DIFFERENTIAL: verified across BOTH admitted oracles GnuCOBOL 3.1.2 + 3.2 (cbl_logic_sweep 2/0) via a COBOL program that CALLs each routine on fixed inputs (SRC=0xCC, B=0xAA) and DISPLAYs the result byte. The bit ops: AND d&=s, OR d|=s, NOR d=~(s|d), XOR d^=s, IMP d=~s|d, NIMP d=s&~d, EQ d=~(s^d), NOT d=~d; XF4 packs 8 low-bits into 1 byte, XF5 unpacks; TOUPPER/TOLOWER ASCII-case the buffer; GC_PRINTABLE dots non-printable bytes.",
+      "byte_domain": "CALL USING buffer(s) + length -> the in-place transformed bytes of the destination buffer",
+      "oracle": "cobc CALL \"CBL_AND\"/.../\"CBL_TOLOWER\" (libcob/common.c cob_sys_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
+      "fixtures": "cbl_logic_sweep 2/0 (10 routines x 2 oracles, differential) + unit tests + Kani cbl_xor_is_involutive",
+      "sealed_version": "0.7.72",
+      "not_proven": "the COB_CHK_PARMS parameter-count runtime check (the wrong-arg-count diagnostic); CBL_GC_PRINTABLE's optional locale (cob_locale_ctype) + custom dot-replacement-char variadic argument beyond the default; cob_sys_x91 (the switch/param multiplexer -- a follow-on); the OS/process CBL routines (getpid/system/fork/nanosleep)",
+      "breaks_claim": "a different result byte for any CBL_ routine vs the oracle on either version",
+      "readiness": 4,
+      "lie_prevented": "the CBL_ builtins are libcob-internal -- NO: each is a deterministic byte transform reproduced byte-identically and proven stable across two GnuCOBOL versions",
+      "damage_if_overclaimed": "claiming 'the CBL_ library' would hide that the parameter-count checks, the x91 multiplexer, the locale path, and the OS/process routines are unported"
+    },
+    {
       "id": "GNURUST.INDEX.1",
       "name": "USAGE INDEX storage + SET arithmetic",
       "proven": "the bytes a USAGE INDEX / INDEXED BY index item holds: a 4-byte native-endian (little-endian on the admitted x86-64 oracle) signed two's-complement word storing the OCCURRENCE NUMBER (element-size independent -- SET IDX TO 5 stores 5, never 5*element_size), and SET IDX TO/UP BY/DOWN BY as plain integer arithmetic on that word (DOWN past zero stores the negative two's-complement value; cobc does not clamp)",
