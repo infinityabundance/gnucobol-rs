@@ -279,14 +279,10 @@
         "cob_init",
         "cob_init_nomain",
         "cob_init_sig_descriptions",
-        "cob_int_to_formatted_bytestring",
-        "cob_int_to_string",
         "cob_is_alpha",
         "cob_is_initialized",
-        "cob_is_lower",
         "cob_is_numeric",
         "cob_is_omitted",
-        "cob_is_upper",
         "cob_last_exception_is",
         "cob_last_exit_code",
         "cob_last_runtime_error",
@@ -422,11 +418,10 @@
         "ss_terminate_routines",
         "translate_boolean_to_int",
         "unsetenv",
-        "var_print",
-        "version_bitstring"
+        "var_print"
       ],
-      "parity_pct": 7.1,
-      "ported": 18
+      "parity_pct": 9.1,
+      "ported": 23
     },
     {
       "file": "cobgetopt.c",
@@ -442,7 +437,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 69.8,
-    "ported": 817
+    "parity_pct": 70.3,
+    "ported": 822
   }
 }

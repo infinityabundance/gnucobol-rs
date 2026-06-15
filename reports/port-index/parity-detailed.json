@@ -5626,9 +5626,9 @@
     "test_only": 0
   },
   {
-    "active_ported": 18,
+    "active_ported": 23,
     "compiled": 254,
-    "compiled_parity_pct": 7.1,
+    "compiled_parity_pct": 9.1,
     "disabled": 0,
     "doc_only": 14,
     "file": "common.c",
@@ -6101,7 +6101,8 @@
       {
         "function": "version_bitstring",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_version",
@@ -6176,12 +6177,14 @@
       {
         "function": "cob_is_upper",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_is_lower",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_table_sort_init",
@@ -6664,12 +6667,14 @@
       {
         "function": "cob_int_to_string",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_int_to_formatted_bytestring",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_strcat",
@@ -7014,14 +7019,10 @@
       "cob_init",
       "cob_init_nomain",
       "cob_init_sig_descriptions",
-      "cob_int_to_formatted_bytestring",
-      "cob_int_to_string",
       "cob_is_alpha",
       "cob_is_initialized",
-      "cob_is_lower",
       "cob_is_numeric",
       "cob_is_omitted",
-      "cob_is_upper",
       "cob_last_exception_is",
       "cob_last_exit_code",
       "cob_last_runtime_error",
@@ -7157,11 +7158,10 @@
       "ss_terminate_routines",
       "translate_boolean_to_int",
       "unsetenv",
-      "var_print",
-      "version_bitstring"
+      "var_print"
     ],
     "inactive_mirrors": 0,
-    "missing": 222,
+    "missing": 217,
     "source_funcs": 254,
     "test_only": 0
   },

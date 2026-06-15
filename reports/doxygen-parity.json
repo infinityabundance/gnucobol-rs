@@ -192,10 +192,8 @@
         "cob_init_sig_descriptions",
         "cob_is_alpha",
         "cob_is_initialized",
-        "cob_is_lower",
         "cob_is_numeric",
         "cob_is_omitted",
-        "cob_is_upper",
         "cob_last_exception_is",
         "cob_last_exit_code",
         "cob_last_runtime_error",
@@ -321,11 +319,10 @@
         "set_value",
         "ss_terminate_routines",
         "translate_boolean_to_int",
-        "var_print",
-        "version_bitstring"
+        "var_print"
       ],
-      "parity_pct": 12.7,
-      "ported": 31
+      "parity_pct": 13.9,
+      "ported": 34
     },
     {
       "doxygen_functions": 4,
@@ -340,8 +337,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 76.0,
-    "ported": 758
+    "parity_pct": 76.3,
+    "ported": 761
   },
   "xml_root": "lab/doxygen/out/xml"
 }

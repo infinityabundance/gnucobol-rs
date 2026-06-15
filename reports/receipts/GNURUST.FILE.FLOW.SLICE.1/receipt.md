@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILE.FLOW.SLICE.1` |
 | court | read-loop execution slice (file x control flow) |
-| crate_version | `0.7.68` |
+| crate_version | `0.7.69` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN INPUT + PERFORM UNTIL EOF READ + accumulate -> resulting WORKING-STORAGE |
 | replay command | `bash lab/oracle/file_flow_sweep.sh` |

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.LOGICAL.1 (court-casefile)
 
-**Verdict: PASS** · logical_sweep 2400/0 (incl. negative operands, shift counts >= 64, full-width values) · crate `gnucobol-rs` 0.7.68
+**Verdict: PASS** · logical_sweep 2400/0 (incl. negative operands, shift counts >= 64, full-width values) · crate `gnucobol-rs` 0.7.69
 
 - **Oracle:** libcob cob_logical_and/or/xor/not/left/right (over cob_decimal)
 - **Byte domain(s):** (value0, value1) -> u64 bitwise result via |value| mod 2^64

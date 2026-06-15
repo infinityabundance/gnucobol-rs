@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.BUILD.PROFILE.1 (court-casefile)
 
-**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.7.68
+**Verdict: PASS** · 1/1 pass, 0 fail · crate `gnucobol-rs` 0.7.69
 
 - **Oracle:** cobc --version / cobc -info / default.conf / libcob sha256
 - **Byte domain(s):** cobc/libcob/config build profile (version, endianness, binary-byteorder, char signedness, C-long, sha256)

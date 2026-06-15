@@ -12,6 +12,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.69]
+- **common.c harvest -- 5 more pure helpers ported (common.c 222 -> 217 missing).** Faithful pure ports of `version_bitstring` (the `0xMMmmpp00` version packing), `cob_is_upper` / `cob_is_lower` (the all-space-or-ASCII-case class tests), `cob_int_to_string` (`sprintf("%i")`), and `cob_int_to_formatted_bytestring` (the binary-1024 `B`/`kB`/`MB` size formatter, `%3.2f`). Each is a side-effect-free function of its inputs, with unit tests against the C semantics. Continues mining the dependency-free subset of common.c (the runtime-mutator bulk still awaits its state/side-effect map).
+
 ## [0.7.68]
 - **`GNURUST.SCREENIO.ATTR.1` sealed -- native SCREEN SECTION monochrome display attributes.** `DISPLAY ... HIGHLIGHT / LOWLIGHT / UNDERLINE / BLINK / REVERSE-VIDEO` now reproduces GnuCOBOL's terminal bytes exactly (`screenio_attr_sweep` 10/0, no ncurses linked). Each attribute wraps the field text in the SGR-on opener `\e(B\e[0;<n>m\e[39;49m\e[37m\e[40m` (charset + `set_attributes` + default-colour restore) and the constant SGR-off closer `\e(B\e[m\e[39;49m\e[37m\e[40m`, with `<n>` = 1/2/4/5/7. Because the SGR moves nothing, the attribute composes exactly with the sealed mvcur positioning. `screenio.rs` `ScreenAttr` + `sgr_on`/`sgr_off` + Kani `attribute_envelope` + fuzz. Non-claims: COLOUR attributes (FOREGROUND/BACKGROUND-COLOR trigger a whole-screen repaint -- a follow-on court), combined attributes, ACCEPT-side attributes, and any terminal but the admitted `TERM=xterm` / ncurses 6.6.
 

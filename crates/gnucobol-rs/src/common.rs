@@ -256,6 +256,42 @@ pub fn cob_check_env_false(s: &[u8]) -> bool {
     up == b"NO" || up == b"NONE" || up == b"OFF" || up == b"FALSE"
 }
 
+/// Port of `common.c:version_bitstring` -- pack a `(major, minor, point)` version into the
+/// `0xMMmmpp00` unsigned integer GnuCOBOL compares (`major<<24 | minor<<16 | point<<8`).
+pub fn version_bitstring(major: u32, minor: u32, point: u32) -> u32 {
+    (major << 24) | (minor << 16) | (point << 8)
+}
+
+/// Port of `common.c:cob_is_upper` -- every byte of the field is a space or an ASCII uppercase letter
+/// (the `CLASS UPPER` / `FUNCTION UPPER-CASE`-adjacent test; C `isupper` under the C locale).
+pub fn cob_is_upper(data: &[u8]) -> bool {
+    data.iter().all(|&p| p == b' ' || p.is_ascii_uppercase())
+}
+
+/// Port of `common.c:cob_is_lower` -- every byte of the field is a space or an ASCII lowercase letter.
+pub fn cob_is_lower(data: &[u8]) -> bool {
+    data.iter().all(|&p| p == b' ' || p.is_ascii_lowercase())
+}
+
+/// Port of `common.c:cob_int_to_string` -- the decimal text of a signed integer (`sprintf("%i")`).
+pub fn cob_int_to_string(i: i32) -> Vec<u8> {
+    i.to_string().into_bytes()
+}
+
+/// Port of `common.c:cob_int_to_formatted_bytestring` -- a human byte size: `> 1 MiB` -> `"<d> MB"`,
+/// `> 1 kiB` -> `"<d> kB"`, else `"0.00 B"`, each formatted `"%3.2f %s"` (the binary 1024 thresholds the C
+/// uses, with its `d = 0` for the bytes branch). Matches GnuCOBOL's dump/runtime size reporting.
+pub fn cob_int_to_formatted_bytestring(i: i32) -> Vec<u8> {
+    let (d, unit): (f64, &str) = if i > 1024 * 1024 {
+        (i as f64 / 1024.0 / 1024.0, "MB")
+    } else if i > 1024 {
+        (i as f64 / 1024.0, "kB")
+    } else {
+        (0.0, "B")
+    };
+    format!("{d:.2} {unit}").into_bytes()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -325,5 +361,26 @@ mod tests {
         let mut r = b'N';
         cob_put_sign_ebcdic(&mut r, -1);
         assert_eq!(r, b'N'); // already signed -> unchanged
+    }
+
+    #[test]
+    fn version_and_class_and_format_helpers() {
+        // version_bitstring: 3.2.0 -> 0x03020000
+        assert_eq!(version_bitstring(3, 2, 0), 0x0302_0000);
+        assert_eq!(version_bitstring(9, 9, 9), 0x0909_0900);
+        // is_upper / is_lower (space counts; empty is vacuously true)
+        assert!(cob_is_upper(b"ABC DEF"));
+        assert!(!cob_is_upper(b"ABc"));
+        assert!(cob_is_lower(b"abc def"));
+        assert!(!cob_is_lower(b"abC"));
+        assert!(cob_is_upper(b"   "));
+        // int_to_string
+        assert_eq!(cob_int_to_string(0), b"0".to_vec());
+        assert_eq!(cob_int_to_string(-42), b"-42".to_vec());
+        assert_eq!(cob_int_to_string(2147483647), b"2147483647".to_vec());
+        // formatted byte size (binary thresholds, %3.2f)
+        assert_eq!(cob_int_to_formatted_bytestring(512), b"0.00 B".to_vec());
+        assert_eq!(cob_int_to_formatted_bytestring(2048), b"2.00 kB".to_vec());
+        assert_eq!(cob_int_to_formatted_bytestring(1024 * 1024 * 3), b"3.00 MB".to_vec());
     }
 }
