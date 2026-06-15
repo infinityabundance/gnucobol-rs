@@ -265,6 +265,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "PORTING-LADDER: drift / unplaced court"; cat /tmp/_lad_check
   fi
+  if ( cd "$ROOT" && cargo run -q -p xtask -- portcourt check ) >/tmp/_pc_check 2>&1; then
+    note "portcourt.toml: generated from the parity + court map; regeneration-equal (fresh)"
+  else
+    bad "portcourt.toml: drift / not regenerated (run \`cargo run -p xtask -- portcourt generate\`)"; cat /tmp/_pc_check
+  fi
   if ( cd "$ROOT" && cargo run -q -p xtask -- kani-fuzz check ) >/tmp/_kf_check 2>&1; then
     note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
   else
