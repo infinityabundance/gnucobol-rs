@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.SYS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.73",
+  "crate_version": "0.7.74",
   "damage_if_overclaimed": "treating a failed CBL_* call as success (ignoring 128/35) loses the very error a batch job's RETURN-CODE check depends on",
   "hash_chain": {
-    "inputs_sha256": "8a29005fbd959701d6f06f9cb48f0842b482a78fd3623390a2015f3e88243e79"
+    "inputs_sha256": "42eb2b58fc86c490db59b8f2a821eb2122b7dd0f9d3332227c05f41b437bdd30"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "24a4e0cb7b5575caead5c32ee0daa46c9d897708f6f17c3becfeb6761a6b1b49",
-    "receipt_sha256": "00260059c4e8a9bbaf5820967f09f0831a593ef640332416b4402ed8ff284b65"
+    "receipt_sha256": "60cc241fe9a304954087f315e85a52edecc67538a89c8b7f479cb6148ee1ddbc"
   },
   "kind": "court-casefile",
   "lie_prevented": [

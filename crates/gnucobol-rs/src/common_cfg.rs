@@ -66,6 +66,28 @@ pub type ConfigValue = i64;
 /// already-ported `translate_boolean_to_int` over the (possibly enum-translated) value: `1`/`0`/`-1` are
 /// the accepted settings, anything else (`2`) is the out-of-range error. With `ENV_NOT` set the logic is
 /// negated (`numval = !numval`, i.e. `0 -> 1`, non-zero -> `0`). Returns the value `set_value` receives.
+/// Port of the `common.c:set_config_val` DISPATCHER -- parse a runtime-config string `value` for a setting
+/// of the given `data_type` and return its stored integer value: the `ENV_BOOL` branch translates the
+/// value ([`crate::common_misc::translate_boolean_to_int`]) then [`set_config_val_bool`]; the
+/// `ENV_UINT`/`ENV_SINT`/`ENV_SIZE` branch is [`set_config_val_numeric`]. String/file/path/char settings
+/// store the raw value (a pointer in the C) -- that store is the declared boundary, returning `Ok(0)`.
+pub fn set_config_val(
+    value: &[u8],
+    data_type: u32,
+    min_value: i64,
+    max_value: i64,
+) -> Result<ConfigValue, ConfigParseError> {
+    if data_type & env::ENV_BOOL != 0 {
+        let b = crate::common_misc::translate_boolean_to_int(Some(value));
+        set_config_val_bool(b, data_type)
+    } else if data_type & (env::ENV_UINT | env::ENV_SINT | env::ENV_SIZE) != 0 {
+        set_config_val_numeric(value, data_type, min_value, max_value)
+    } else {
+        // string / file / path / char: the raw-value store is the runtime boundary.
+        Ok(0)
+    }
+}
+
 pub fn set_config_val_bool(boolean_as_int: i32, data_type: u32) -> Result<ConfigValue, ConfigParseError> {
     if boolean_as_int != -1 && boolean_as_int != 1 && boolean_as_int != 0 {
         return Err(ConfigParseError::NotInEnumList);

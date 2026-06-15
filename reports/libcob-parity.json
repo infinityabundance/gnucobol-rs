@@ -187,54 +187,9 @@
     {
       "file": "common.c",
       "functions": 254,
-      "missing": [
-        "check_current_date",
-        "check_valid_dir",
-        "cob_accept_user_name",
-        "cob_allocate",
-        "cob_cmp",
-        "cob_common_init",
-        "cob_dump_module",
-        "cob_external_addr",
-        "cob_external_addr_create",
-        "cob_external_addr_lookup",
-        "cob_free_alloc",
-        "cob_get_sign_ascii",
-        "cob_get_sign_ebcdic",
-        "cob_load_config",
-        "cob_load_config_file",
-        "cob_put_sign_ascii",
-        "cob_raise",
-        "cob_real_get_sign",
-        "cob_real_put_sign",
-        "cob_reg_sighnd",
-        "cob_runtime_hint",
-        "cob_set_signal",
-        "cob_sig_handler",
-        "cob_sys_error_proc",
-        "cob_sys_exit_proc",
-        "cob_sys_fork",
-        "cob_sys_getopt_long_long",
-        "cob_sys_getpid",
-        "cob_sys_hosted",
-        "cob_sys_oc_nanosleep",
-        "cob_sys_runtime_error_proc",
-        "cob_sys_sleep",
-        "cob_sys_system",
-        "cob_sys_waitpid",
-        "cob_sys_x91",
-        "get_function_ptr_for_precise_time",
-        "get_sleep_nanoseconds",
-        "internal_nanosleep",
-        "locate_sign",
-        "print_info",
-        "print_info_detailed",
-        "print_runtime_conf",
-        "raise_arg_mismatch",
-        "set_config_val"
-      ],
-      "parity_pct": 82.7,
-      "ported": 210
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 254
     },
     {
       "file": "cobgetopt.c",
@@ -250,7 +205,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 86.2,
-    "ported": 1009
+    "parity_pct": 90.0,
+    "ported": 1053
   }
 }

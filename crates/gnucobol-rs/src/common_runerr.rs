@@ -164,6 +164,16 @@ pub fn cob_runtime_error(loc: &SourceLocation, body: &[u8]) -> Vec<u8> {
 /// `"<file>:<line>: "` (the `:` joins file and line) whereas `cob_runtime_error`'s inline prefix emits
 /// `"<file>:<line>: "` too -- but with a trailing `:` after the file even when the line is `0`. Reproduced
 /// faithfully. Returns `None` when warnings are disabled (`cob_display_warn == 0`).
+/// Port of `common.c:cob_runtime_hint` -- the `note:` companion line GnuCOBOL prints after a runtime error
+/// (e.g. the bounds-check `maximum subscript ...` hint): the `"note: "` prefix, the body, and a trailing
+/// newline. The stderr write + flush are the boundary.
+pub fn cob_runtime_hint(body: &[u8]) -> Vec<u8> {
+    let mut out = b"note: ".to_vec();
+    out.extend_from_slice(body);
+    out.push(b'\n');
+    out
+}
+
 pub fn cob_runtime_warning(display_warn: bool, loc: &SourceLocation, body: &[u8]) -> Option<Vec<u8>> {
     if !display_warn {
         return None;

@@ -1080,3 +1080,57 @@ mod tests {
         assert_eq!(applied, vec![(3usize, "120".to_string())]);
     }
 }
+
+/// Port of `common.c:cob_load_config_file` -- parse every line of a runtime configuration file into the
+/// ordered list of directives the runtime then applies. The C reads the file with `fgets` and, for each
+/// non-blank / non-comment line ([`classify_config_line`]), calls [`cb_config_entry`]; this reproduces that
+/// loop over the file's `lines` (the `fopen`/`fgets` + directory resolution is the declared boundary).
+pub fn cob_load_config_file(
+    lines: &[&[u8]],
+    tbl: &[ConfigEntry],
+    getenv: &dyn Fn(&str) -> Option<String>,
+    pid: i32,
+    config_dir: &str,
+    copy_dir: &str,
+) -> Vec<ConfigDirective> {
+    let mut out = Vec::new();
+    for line in lines {
+        match classify_config_line(line) {
+            ConfigLineKind::Skip => {}
+            ConfigLineKind::Entry => {
+                out.push(cb_config_entry(line, tbl, getenv, pid, config_dir, copy_dir));
+            }
+        }
+    }
+    out
+}
+
+/// Port of `common.c:cob_load_config` -- the driver that locates the runtime config file(s) (from
+/// `COB_RUNTIME_CONFIG` / the default search path) and loads each via [`cob_load_config_file`]. The file
+/// location + read is the declared boundary; given the already-read `lines` this returns the parsed
+/// directives, mirroring the C's load of the resolved file.
+pub fn cob_load_config(
+    lines: &[&[u8]],
+    tbl: &[ConfigEntry],
+    getenv: &dyn Fn(&str) -> Option<String>,
+    pid: i32,
+    config_dir: &str,
+    copy_dir: &str,
+) -> Vec<ConfigDirective> {
+    cob_load_config_file(lines, tbl, getenv, pid, config_dir, copy_dir)
+}
+
+#[cfg(test)]
+mod cob_load_config_tests {
+    use super::*;
+    #[test]
+    fn load_skips_comments_and_blanks() {
+        let tbl: &[ConfigEntry] = &[];
+        let none = |_: &str| None;
+        let lines: Vec<&[u8]> = vec![b"# comment".as_ref(), b"".as_ref(), b"  ".as_ref()];
+        let d = cob_load_config_file(&lines, tbl, &none, 1, ".", ".");
+        assert!(d.is_empty()); // all skipped
+        let d2 = cob_load_config(&lines, tbl, &none, 1, ".", ".");
+        assert!(d2.is_empty());
+    }
+}

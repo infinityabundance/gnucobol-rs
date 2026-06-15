@@ -782,3 +782,31 @@ mod tests {
         assert!(!repeat_word(&pat, &bad));
     }
 }
+
+/// Port of `common.c:cob_dump_module` -- the top-level module dump: the `"Module dump due to <reason>"`
+/// banner (when a reason is given) followed, per module in the chain, by the
+/// `"Dump Program-Id <name> from <source> compiled <date>"` header and that module's field dump. This
+/// composes [`cob_dump_module_reason`] + [`cob_dump_module_header`]; the per-field value dump (the C
+/// `cancel(-10)` callback into the generated module) and the chain walk are the declared runtime boundary,
+/// so this returns the banner + headers for the supplied modules.
+pub fn cob_dump_module(reason: &[u8], modules: &[(&[u8], &[u8], &[u8])]) -> Vec<u8> {
+    let mut out = Vec::new();
+    if !reason.is_empty() {
+        out.extend_from_slice(&cob_dump_module_reason(reason));
+    }
+    for (name, source, date) in modules {
+        out.extend_from_slice(&cob_dump_module_header(name, source, date));
+    }
+    out
+}
+
+#[cfg(test)]
+mod cob_dump_module_tests {
+    use super::*;
+    #[test]
+    fn dump_module_banner() {
+        let out = cob_dump_module(b"abend", &[(b"PROG".as_ref(), b"prog.cob".as_ref(), b"2026".as_ref())]);
+        assert!(out.starts_with(b"\nModule dump due to abend\n"));
+        assert!(out.windows(16).any(|w| w == b"Dump Program-Id "));
+    }
+}

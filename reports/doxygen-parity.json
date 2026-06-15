@@ -50,7 +50,6 @@
         "cob_accept_escape_key",
         "cob_accept_field",
         "cob_display_field",
-        "cob_exit_screen",
         "cob_exit_screen_from_signal",
         "cob_field_accept",
         "cob_field_display",
@@ -75,8 +74,8 @@
         "handle_status",
         "init_cob_screen_if_needed"
       ],
-      "parity_pct": 3.6,
-      "ported": 1
+      "parity_pct": 7.1,
+      "ported": 2
     },
     {
       "doxygen_functions": 66,
@@ -109,27 +108,9 @@
     {
       "doxygen_functions": 244,
       "file": "common.c",
-      "missing": [
-        "cob_accept_user_name",
-        "cob_allocate",
-        "cob_external_addr_create",
-        "cob_external_addr_lookup",
-        "cob_free_alloc",
-        "cob_sys_error_proc",
-        "cob_sys_fork",
-        "cob_sys_getopt_long_long",
-        "cob_sys_hosted",
-        "cob_sys_oc_nanosleep",
-        "cob_sys_runtime_error_proc",
-        "cob_sys_sleep",
-        "cob_sys_system",
-        "cob_sys_waitpid",
-        "cob_sys_x91",
-        "get_sleep_nanoseconds",
-        "set_libcob_version"
-      ],
-      "parity_pct": 93.0,
-      "ported": 227
+      "missing": [],
+      "parity_pct": 100.0,
+      "ported": 244
     },
     {
       "doxygen_functions": 4,
@@ -144,8 +125,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 95.6,
-    "ported": 954
+    "parity_pct": 97.4,
+    "ported": 972
   },
   "xml_root": "lab/doxygen/out/xml"
 }

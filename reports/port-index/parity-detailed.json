@@ -2859,7 +2859,7 @@
     "compiled": 116,
     "compiled_parity_pct": 0.0,
     "disabled": 0,
-    "doc_only": 3,
+    "doc_only": 5,
     "file": "screenio.c",
     "fns": [
       {
@@ -3320,7 +3320,7 @@
       {
         "function": "cob_exit_screen",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_exit_screen_from_signal",
@@ -3335,7 +3335,7 @@
       {
         "function": "cob_exit_screen",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_exit_screen_from_signal",
@@ -3551,7 +3551,7 @@
       "valid_field_data"
     ],
     "inactive_mirrors": 0,
-    "missing": 113,
+    "missing": 111,
     "source_funcs": 116,
     "test_only": 0
   },
@@ -5626,11 +5626,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 210,
+    "active_ported": 254,
     "compiled": 254,
-    "compiled_parity_pct": 82.7,
+    "compiled_parity_pct": 100.0,
     "disabled": 0,
-    "doc_only": 27,
+    "doc_only": 0,
     "file": "common.c",
     "fns": [
       {
@@ -5696,29 +5696,31 @@
       {
         "function": "cob_sig_handler",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_raise",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "get_signal_entry",
         "preprocessor_status": "compiled",
-        "rust_module": "common_stack",
+        "rust_module": "common_signal",
         "rust_status": "active"
       },
       {
         "function": "cob_get_sig_name",
         "preprocessor_status": "compiled",
-        "rust_module": "common_stack",
+        "rust_module": "common_signal",
         "rust_status": "active"
       },
       {
         "function": "cob_get_sig_description",
         "preprocessor_status": "compiled",
-        "rust_module": "common_stack",
+        "rust_module": "common_signal",
         "rust_status": "active"
       },
       {
@@ -5730,22 +5732,26 @@
       {
         "function": "cob_set_signal",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_sign_ascii",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_put_sign_ascii",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_sign_ebcdic",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_put_sign_ebcdic",
@@ -5906,7 +5912,8 @@
       {
         "function": "cob_accept_user_name",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_malloc",
@@ -6199,22 +6206,26 @@
       {
         "function": "locate_sign",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_real_get_sign",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_real_put_sign",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_reg_sighnd",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_switch",
@@ -6231,7 +6242,8 @@
       {
         "function": "cob_cmp",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_sign",
+        "rust_status": "active"
       },
       {
         "function": "cob_is_omitted",
@@ -6302,7 +6314,8 @@
       {
         "function": "raise_arg_mismatch",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_linkage_size",
@@ -6361,22 +6374,26 @@
       {
         "function": "cob_external_addr_lookup",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_allocate",
+        "rust_status": "active"
       },
       {
         "function": "cob_external_addr_create",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_allocate",
+        "rust_status": "active"
       },
       {
         "function": "cob_external_addr",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_allocate",
+        "rust_status": "active"
       },
       {
         "function": "get_function_ptr_for_precise_time",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_current_date_and_time_from_os",
@@ -6411,7 +6428,8 @@
       {
         "function": "check_current_date",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_accept_date",
@@ -6572,17 +6590,20 @@
       {
         "function": "cob_allocate",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_allocate",
+        "rust_status": "active"
       },
       {
         "function": "cob_free_alloc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_allocate",
+        "rust_status": "active"
       },
       {
         "function": "check_valid_dir",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "check_valid_env_tmpdir",
@@ -6629,27 +6650,32 @@
       {
         "function": "cob_sys_exit_proc",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_error_proc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_runtime_error_proc",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_system",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_hosted",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_and",
@@ -6714,7 +6740,8 @@
       {
         "function": "cob_sys_x91",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_toupper",
@@ -6731,7 +6758,8 @@
       {
         "function": "get_sleep_nanoseconds",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "get_sleep_nanoseconds_from_seconds",
@@ -6742,32 +6770,38 @@
       {
         "function": "internal_nanosleep",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_oc_nanosleep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_sleep",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_getpid",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_fork",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_waitpid",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_return_args",
@@ -6790,7 +6824,8 @@
       {
         "function": "cob_sys_getopt_long_long",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common_proc",
+        "rust_status": "active"
       },
       {
         "function": "cob_sys_printable",
@@ -6867,7 +6902,8 @@
       {
         "function": "set_config_val",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_cfg",
+        "rust_status": "active"
       },
       {
         "function": "set_config_val_by_name",
@@ -6896,12 +6932,14 @@
       {
         "function": "cob_load_config_file",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "cob_load_config",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_configload",
+        "rust_status": "active"
       },
       {
         "function": "cob_runtime_warning_external",
@@ -6924,7 +6962,8 @@
       {
         "function": "cob_runtime_hint",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_runerr",
+        "rust_status": "active"
       },
       {
         "function": "cob_setup_runtime_error_str",
@@ -6983,17 +7022,20 @@
       {
         "function": "print_info",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "print_info_detailed",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "print_runtime_conf",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_get_settings_ptr",
@@ -7010,7 +7052,8 @@
       {
         "function": "cob_common_init",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_signal",
+        "rust_status": "active"
       },
       {
         "function": "cob_call_with_exception_check",
@@ -7075,7 +7118,8 @@
       {
         "function": "cob_dump_module",
         "preprocessor_status": "compiled",
-        "rust_status": "doc_only"
+        "rust_module": "common_dump",
+        "rust_status": "active"
       },
       {
         "function": "cob_debug_open",
@@ -7114,54 +7158,9 @@
         "rust_status": "active"
       }
     ],
-    "gap": [
-      "check_current_date",
-      "check_valid_dir",
-      "cob_accept_user_name",
-      "cob_allocate",
-      "cob_cmp",
-      "cob_common_init",
-      "cob_dump_module",
-      "cob_external_addr",
-      "cob_external_addr_create",
-      "cob_external_addr_lookup",
-      "cob_free_alloc",
-      "cob_get_sign_ascii",
-      "cob_get_sign_ebcdic",
-      "cob_load_config",
-      "cob_load_config_file",
-      "cob_put_sign_ascii",
-      "cob_raise",
-      "cob_real_get_sign",
-      "cob_real_put_sign",
-      "cob_reg_sighnd",
-      "cob_runtime_hint",
-      "cob_set_signal",
-      "cob_sig_handler",
-      "cob_sys_error_proc",
-      "cob_sys_exit_proc",
-      "cob_sys_fork",
-      "cob_sys_getopt_long_long",
-      "cob_sys_getpid",
-      "cob_sys_hosted",
-      "cob_sys_oc_nanosleep",
-      "cob_sys_runtime_error_proc",
-      "cob_sys_sleep",
-      "cob_sys_system",
-      "cob_sys_waitpid",
-      "cob_sys_x91",
-      "get_function_ptr_for_precise_time",
-      "get_sleep_nanoseconds",
-      "internal_nanosleep",
-      "locate_sign",
-      "print_info",
-      "print_info_detailed",
-      "print_runtime_conf",
-      "raise_arg_mismatch",
-      "set_config_val"
-    ],
+    "gap": [],
     "inactive_mirrors": 0,
-    "missing": 17,
+    "missing": 0,
     "source_funcs": 254,
     "test_only": 0
   },

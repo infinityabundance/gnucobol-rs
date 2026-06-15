@@ -20,14 +20,14 @@
 | `intrinsic.c` | 237 | 237 | 100.0% | — |
 | `cconv.c` | 9 | 9 | 100.0% | — |
 | `termio.c` | 18 | 18 | 100.0% | — |
-| `screenio.c` | 28 | 1 | 3.6% | `cob_accept_escape_key`, `cob_accept_field`, `cob_display_field`, `cob_exit_screen`, `cob_exit_screen_from_signal`, `cob_field_accept`, `cob_field_display`, `cob_get_scr_cols`, `cob_get_scr_lines`, `cob_init_screenio`, `cob_screen_accept`, `cob_screen_display`, `cob_screen_line_col`, `cob_screen_set_mode`, `cob_set_crt3_status`, `cob_settings_screenio`, `cob_speaker_beep`, `cob_sys_clear_screen`, `cob_sys_get_char`, `cob_sys_get_csr_pos`, `cob_sys_get_scr_size`, `cob_sys_set_csr_pos`, `cob_sys_set_scr_size`, `cob_sys_sound_bell`, `get_crt3_status`, `handle_status`, `init_cob_screen_if_needed` |
+| `screenio.c` | 28 | 2 | 7.1% | `cob_accept_escape_key`, `cob_accept_field`, `cob_display_field`, `cob_exit_screen_from_signal`, `cob_field_accept`, `cob_field_display`, `cob_get_scr_cols`, `cob_get_scr_lines`, `cob_init_screenio`, `cob_screen_accept`, `cob_screen_display`, `cob_screen_line_col`, `cob_screen_set_mode`, `cob_set_crt3_status`, `cob_settings_screenio`, `cob_speaker_beep`, `cob_sys_clear_screen`, `cob_sys_get_char`, `cob_sys_get_csr_pos`, `cob_sys_get_scr_size`, `cob_sys_set_csr_pos`, `cob_sys_set_scr_size`, `cob_sys_sound_bell`, `get_crt3_status`, `handle_status`, `init_cob_screen_if_needed` |
 | `call.c` | 66 | 66 | 100.0% | — |
 | `fileio.c` | 147 | 147 | 100.0% | — |
 | `mlio.c` | 25 | 25 | 100.0% | — |
 | `reportio.c` | 35 | 35 | 100.0% | — |
-| `common.c` | 244 | 227 | 93.0% | `cob_accept_user_name`, `cob_allocate`, `cob_external_addr_create`, `cob_external_addr_lookup`, `cob_free_alloc`, `cob_sys_error_proc`, `cob_sys_fork`, `cob_sys_getopt_long_long`, `cob_sys_hosted`, `cob_sys_oc_nanosleep`, `cob_sys_runtime_error_proc`, `cob_sys_sleep`, `cob_sys_system`, `cob_sys_waitpid`, `cob_sys_x91`, `get_sleep_nanoseconds`, `set_libcob_version` |
+| `common.c` | 244 | 244 | 100.0% | — |
 | `cobgetopt.c` | 4 | 4 | 100.0% | — |
-| **total** | **998** | **954** | **95.6%** | |
+| **total** | **998** | **972** | **97.4%** | |
 
 ## How this is produced (reproducible)
 

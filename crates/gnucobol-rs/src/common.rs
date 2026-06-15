@@ -256,6 +256,35 @@ pub fn cob_check_env_false(s: &[u8]) -> bool {
     up == b"NO" || up == b"NONE" || up == b"OFF" || up == b"FALSE"
 }
 
+/// The admitted `libcob` version components (`version.h`: `__LIBCOB_VERSION` 3, `_MINOR` 2,
+/// `_PATCHLEVEL` 0 -- GnuCOBOL 3.2.0).
+pub const LIBCOB_VERSION: i32 = 3;
+/// See [`LIBCOB_VERSION`].
+pub const LIBCOB_VERSION_MINOR: i32 = 2;
+/// See [`LIBCOB_VERSION`].
+pub const LIBCOB_VERSION_PATCHLEVEL: i32 = 0;
+
+/// Port of `common.c:set_libcob_version` -- compare a caller's `(major, minor, patch)` against the linked
+/// libcob version and overwrite them with the library's: returns `0` when they match (or the caller passed
+/// `major == 0`), else `1`/`2`/`3` for a major/minor/patch mismatch. The `major`/`minor`/`patch` are
+/// updated in place to the library version regardless (the C `*mayor = __LIBCOB_VERSION; ...`).
+pub fn set_libcob_version(major: &mut i32, minor: &mut i32, patch: &mut i32) -> i32 {
+    let mut ret = 0;
+    if *major != 0 {
+        if *major != LIBCOB_VERSION {
+            ret = 1;
+        } else if *minor != LIBCOB_VERSION_MINOR {
+            ret = 2;
+        } else if *patch != LIBCOB_VERSION_PATCHLEVEL {
+            ret = 3;
+        }
+    }
+    *major = LIBCOB_VERSION;
+    *minor = LIBCOB_VERSION_MINOR;
+    *patch = LIBCOB_VERSION_PATCHLEVEL;
+    ret
+}
+
 /// Port of `common.c:version_bitstring` -- pack a `(major, minor, point)` version into the
 /// `0xMMmmpp00` unsigned integer GnuCOBOL compares (`major<<24 | minor<<16 | point<<8`).
 pub fn version_bitstring(major: u32, minor: u32, point: u32) -> u32 {
@@ -950,6 +979,19 @@ mod tests {
         let mut r = b'N';
         cob_put_sign_ebcdic(&mut r, -1);
         assert_eq!(r, b'N'); // already signed -> unchanged
+    }
+
+    #[test]
+    fn set_libcob_version_compares_and_overwrites() {
+        let (mut ma, mut mi, mut pa) = (3, 2, 0);
+        assert_eq!(set_libcob_version(&mut ma, &mut mi, &mut pa), 0); // match
+        let (mut ma, mut mi, mut pa) = (2, 9, 9);
+        assert_eq!(set_libcob_version(&mut ma, &mut mi, &mut pa), 1); // major mismatch
+        assert_eq!((ma, mi, pa), (3, 2, 0)); // overwritten to lib version
+        let (mut ma, mut mi, mut pa) = (3, 1, 0);
+        assert_eq!(set_libcob_version(&mut ma, &mut mi, &mut pa), 2); // minor mismatch
+        let (mut ma, mut mi, mut pa) = (0, 0, 0);
+        assert_eq!(set_libcob_version(&mut ma, &mut mi, &mut pa), 0); // major==0 -> 0
     }
 
     #[test]

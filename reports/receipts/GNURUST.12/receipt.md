@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.12` |
 | court | SET condition-name TO TRUE |
-| crate_version | `0.7.73` |
+| crate_version | `0.7.74` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | parent field-storage bytes |
 | replay command | `bash lab/oracle/set_sweep.sh` |

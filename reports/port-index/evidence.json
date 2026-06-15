@@ -254,24 +254,26 @@
       ]
     },
     {
-      "active": 209,
-      "direct": 194,
-      "evidenced_any": 198,
+      "active": 253,
+      "direct": 236,
+      "evidenced_any": 240,
       "file": "common.c",
-      "lifecycle": 27,
+      "lifecycle": 31,
       "oracle": 17,
       "transitive": 1,
       "unevidenced": [
         "cob_check_ref_mod_detailed",
         "cob_get_current_date_and_time_from_os",
         "cob_get_settings_ptr",
+        "cob_runtime_hint",
         "cob_stack_trace_internal",
         "cob_trace_entry",
         "cob_trace_para",
         "cob_trace_stmt",
         "common_cmpc",
         "get_signal_entry",
-        "get_sleep_nanoseconds_from_seconds",
+        "print_info_detailed",
+        "set_config_val",
         "sort_compare_collate"
       ]
     },
@@ -293,12 +295,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 989,
-    "direct": 667,
-    "evidenced_any": 846,
-    "lifecycle": 87,
+    "active": 1033,
+    "direct": 709,
+    "evidenced_any": 888,
+    "lifecycle": 91,
     "oracle": 213,
     "transitive": 151,
-    "unevidenced": 143
+    "unevidenced": 145
   }
 }

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.16",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.73",
+  "crate_version": "0.7.74",
   "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals",
   "hash_chain": {
-    "inputs_sha256": "e21ec64750c2fe79cd34ed6f2e44ae2da49189e290042f5de07121532ed339fd"
+    "inputs_sha256": "cf06c1e4c2a17a0c8a61f84c9ac8b19cfa3582746978d7d0b406aa96cb44de8d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7fc01ff60fc2ee104a3e969efda2a7f11c5fad14a5e4c4cda3c40743133d6a46",
-    "receipt_sha256": "cf9bd48fb8d723ceda5793739c17a7800270765b68dbee89661801984f24f926"
+    "receipt_sha256": "0d80b5b8d23210c41576c64fa4dce055af33e8d1682da492a2099154aa5a0c6c"
   },
   "kind": "court-casefile",
   "legacy_preservation": {
