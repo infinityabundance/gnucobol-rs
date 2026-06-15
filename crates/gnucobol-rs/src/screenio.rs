@@ -402,6 +402,78 @@ pub fn color_display_and_stop(line: i32, column: i32, data: &[u8], fg: u8, bg: u
     out
 }
 
+// ===========================================================================================
+// GNURUST.SCREENIO.NUMEDIT.1 -- a NUMERIC-EDITED field DISPLAY (zero-suppression / sign / CR-DB).
+// ===========================================================================================
+//
+// A `SCREEN SECTION` field with an *edited* PIC (`ZZ,ZZ9.99`, `$$,$$9.99`, `-9(5).99`, `9(4).99CR`,
+// `ZZ,ZZ9.99-` ...) `FROM` a numeric source displays the **edited representation** of the value --
+// the bytes the move/edit engine produces (`edited::encode_edited`, sealed separately). That edited
+// string is right-aligned in the field, so it characteristically carries **leading blanks** (from
+// zero-suppression or a non-printing sign) and sometimes a short run of **trailing blanks** (a `CR`/
+// `DB` on a positive value shows as two spaces; a trailing fixed sign on a positive value as one).
+//
+// This court reproduces, byte-for-byte, how ncurses paints that edited string on the cleared screen.
+// The numeric editing itself is NOT re-proved here (it is the move.c court); this court proves the
+// **screen positioning of an edited field**, which is the genuinely new screenio behaviour:
+//
+// * **Leading blanks are skipped.** The cleared screen is already all-blank, so ncurses does not
+//   write the leading spaces -- it moves the cursor straight to the first non-blank column
+//   (`col + first_nonblank`) via the shared [`mvcur`] cost model and writes from there.
+// * **The written run goes to the end of the field** (`edited[first_nonblank..]`), which includes any
+//   short trailing-blank run -- ncurses space-fills those (cheaper than a cursor move for the 1-2
+//   trailing blanks a `CR`/`DB`/sign produces). The cursor therefore ends at the field's logical end
+//   `col + width`, from which the pause-prompt move is taken.
+// * **An all-blank field** (e.g. `ZZZZ.ZZ` of zero) writes *nothing*: ncurses simply positions the
+//   cursor at the field end `col + width` and moves on.
+//
+// Sealed envelope: a single edited field on `LINE >= 1`, whose trailing-blank run is short enough that
+// ncurses space-fills rather than cursor-skips it (true for all standard numeric editing -- `CR`/`DB`
+// give 2, a trailing sign 1). A pathological PIC with a long interior/trailing blank run (5+), or
+// multiple edited fields, is the declared non-claim.
+
+/// Reproduce the full terminal byte stream of a `SCREEN SECTION` `DISPLAY` of a single NUMERIC-EDITED
+/// field whose already-edited bytes are `edited` (produced by [`crate::edited::encode_edited`] for the
+/// field's PIC + value), followed by `STOP RUN` -- byte-identical to GnuCOBOL on the admitted
+/// xterm/ncurses 6.6 terminal (`GNURUST.SCREENIO.NUMEDIT.1`).
+///
+/// `edited` is the FULL field image including its leading (and any trailing) blanks; this function
+/// supplies only the screen positioning: skip the leading blanks, write the first-non-blank-to-end
+/// run, and leave the cursor at the field end (`column + edited.len()`). An all-blank `edited` writes
+/// nothing and parks the cursor at the field end.
+pub fn display_edited_and_stop(line: i32, column: i32, edited: &[u8]) -> Vec<u8> {
+    let mut out = Vec::new();
+    out.extend_from_slice(INIT_PROLOGUE);
+
+    let width = edited.len() as i32;
+    let first_nonblank = edited.iter().position(|&b| b != b' ');
+    let (mut cy, mut cx) = (1, 1);
+    match first_nonblank {
+        None => {
+            // All-blank field: nothing to paint; the cursor parks at the field's logical end.
+            let end = column + width;
+            out.extend_from_slice(&mvcur(cy, cx, line, end));
+            cy = line;
+            cx = end;
+        }
+        Some(s) => {
+            let s = s as i32;
+            // Position at the first non-blank column and write the remainder (trailing blanks, if
+            // any, are written as spaces -- ncurses space-fills the short tail).
+            out.extend_from_slice(&mvcur(cy, cx, line, column + s));
+            out.extend_from_slice(&edited[s as usize..]);
+            cy = line;
+            cx = column + width; // the cursor ends at the field's logical end.
+        }
+    }
+
+    let prompt_line = line + 1;
+    out.extend_from_slice(&mvcur(cy, cx, prompt_line, 1));
+    out.extend_from_slice(PAUSE_PROMPT);
+    out.extend_from_slice(TEARDOWN_EPILOGUE);
+    out
+}
+
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
@@ -506,6 +578,24 @@ mod kani_proofs {
         // curses_color is a total 3-bit permutation: always 0..=7.
         assert!(curses_color(fg) <= 7 && curses_color(bg) <= 7);
         let out = color_display_and_stop(line, column, &[b], fg, bg);
+        assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
+        assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
+    }
+
+    // KANIFOR: GNURUST.SCREENIO.NUMEDIT.1
+    /// A numeric-edited field DISPLAY always emits a well-formed prologue..epilogue envelope and never
+    /// panics, for any in-screen position and any field image (including all-blank). The leading-blank
+    /// scan + positioning is total.
+    #[kani::proof]
+    #[kani::unwind(5)]
+    fn numedit_envelope() {
+        let line: i32 = kani::any();
+        let column: i32 = kani::any();
+        kani::assume(line >= 1 && line <= SCREEN_ROWS - 1);
+        kani::assume(column >= 1 && column <= 70);
+        let a: u8 = kani::any();
+        let b: u8 = kani::any();
+        let out = display_edited_and_stop(line, column, &[a, b]);
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
@@ -646,6 +736,56 @@ mod tests {
             let got = color_display_and_stop(*line, *col, data, *fg, *bg);
             assert_eq!(got, want, "color mismatch at L{} C{} fg{} bg{}", line, col, fg, bg);
         }
+    }
+
+    #[test]
+    fn numeric_edited_display_matches_oracle() {
+        // Exact captures of a `DISPLAY` of a numeric-edited SCREEN SECTION field `FROM` a numeric
+        // source, then `STOP RUN`, from the admitted oracle under a pty (TERM=xterm, ncurses 6.6).
+        // Each vector gives the FULL field image `edited` (leading/trailing blanks included, exactly
+        // as the move/edit engine produces it) + the body between the screen clear and the pause
+        // prompt; the test reconstructs the full stream and asserts byte-identity. Covers the
+        // leading-blank skip, the all-blank field, the trailing CR/DB space-fill, and trailing signs.
+        let vectors: &[(&[u8], i32, i32, &str)] = &[
+            (b" 1,234.56", 2, 3, "\x1b[2;4H1,234.56\r\x1b[3d"),     // ZZ,ZZ9.99 of 1234.56
+            (b"     7.00", 2, 3, "\x1b[2;8H7.00\r\x1b[3d"),         // ZZ,ZZ9.99 of 7.00
+            (b"       ", 2, 3, "\x1b[2;10H\r\x1b[3d"),              // ZZZZ.ZZ of 0 -> all blank
+            (b"    .07", 2, 3, "\x1b[2;7H.07\r\x1b[3d"),            // ZZZZ.ZZ of 0.07
+            (b"0012.30  ", 2, 3, "\x1b[2d  0012.30  \r\x1b[3d"),    // 9(4).99CR of +12.30 (CR -> 2 spaces)
+            (b"0012.30CR", 2, 3, "\x1b[2d  0012.30CR\r\x1b[3d"),    // 9(4).99CR of -12.30
+            (b" 00012.30", 2, 3, "\x1b[2;4H00012.30\r\x1b[3d"),     // -9(5).99 of +12.30 (sign -> blank)
+            (b"+0012.30", 2, 3, "\x1b[2d  +0012.30\r\x1b[3d"),      // +9(4).99 of +12.30
+            (b"    88.10-", 3, 6, "\x1b[3;10H88.10-\r\x1b[4d"),     // ZZ,ZZ9.99- of -88.10
+            (b" 1,234.56", 5, 10, "\x1b[5;11H1,234.56\r\x1b[6d"),   // ZZ,ZZ9.99 of 1234.56 @ (5,10)
+        ];
+        for (edited, line, col, body_str) in vectors {
+            let mut want = Vec::new();
+            want.extend_from_slice(INIT_PROLOGUE);
+            want.extend_from_slice(body_str.as_bytes());
+            want.extend_from_slice(PAUSE_PROMPT);
+            want.extend_from_slice(TEARDOWN_EPILOGUE);
+            let got = display_edited_and_stop(*line, *col, edited);
+            assert_eq!(got, want, "numedit mismatch for {:?} at L{} C{}", edited, line, col);
+        }
+    }
+
+    #[test]
+    fn numeric_edited_composes_with_encode_edited() {
+        // End-to-end: the sealed editor produces the field image, this court positions it. Proves the
+        // composition `encode_edited` -> `display_edited_and_stop` yields the oracle stream for
+        // `ZZ,ZZ9.99` of 7.00.
+        use crate::edited::encode_edited;
+        use crate::value::Decimal;
+        let v = Decimal { negative: false, digits: vec![0, 0, 0, 7, 0, 0], scale: 2 };
+        let edited = encode_edited("ZZ,ZZ9.99", &v).unwrap();
+        assert_eq!(edited, b"     7.00");
+        let got = display_edited_and_stop(2, 3, &edited);
+        let mut want = Vec::new();
+        want.extend_from_slice(INIT_PROLOGUE);
+        want.extend_from_slice(b"\x1b[2;8H7.00\r\x1b[3d");
+        want.extend_from_slice(PAUSE_PROMPT);
+        want.extend_from_slice(TEARDOWN_EPILOGUE);
+        assert_eq!(got, want);
     }
 
     #[test]

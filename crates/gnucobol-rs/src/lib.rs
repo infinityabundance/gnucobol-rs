@@ -752,6 +752,12 @@ pub fn __fuzz_screenio(data: &[u8]) {
     let cout = screenio::color_display_and_stop(cline, ccol, data.get(5..).unwrap_or(&[]), fg, bg);
     debug_assert!(cout.starts_with(screenio::INIT_PROLOGUE));
     debug_assert!(cout.ends_with(screenio::TEARDOWN_EPILOGUE));
+    // Also exercise the numeric-edited positioning path (GNURUST.SCREENIO.NUMEDIT.1): an arbitrary
+    // field image (any mix of blanks + bytes, including all-blank) must still produce a well-formed
+    // prologue..epilogue envelope.
+    let nout = screenio::display_edited_and_stop(cline, ccol, data.get(2..).unwrap_or(&[]));
+    debug_assert!(nout.starts_with(screenio::INIT_PROLOGUE));
+    debug_assert!(nout.ends_with(screenio::TEARDOWN_EPILOGUE));
 }
 
 /// Fuzz the native XML PARSE state machine: drive `cob_xml_parse` over arbitrary input to a fixed point.

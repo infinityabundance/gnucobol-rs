@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: the numeric editing itself (the move.c court"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: this court proves the screen POSITIONING of an already-edited image)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: a pathological PIC with a long (5+) interior/trailing blank run that ncurses would cursor-skip rather than space-fill"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: the `*` check-protection zero-fill rule (a separate edited.rs follow-on)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: MULTIPLE edited fields in one DISPLAY (the general multi-field line-diff)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: numeric-edited COLOUR/attributes"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: ACCEPT-side numeric-edited input"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.NUMEDIT.1 non-claim: lie prevented: numeric-edited screen display needs ncurses linked -- NO: the edited image composes the sealed editor and the screen POSITIONING is a deterministic leading-blank-skip reproduced exactly, no ncurses linked. The editing rule itself stays the move.c court's claim; the `*`-fill and multi-field cases are honestly carved out"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

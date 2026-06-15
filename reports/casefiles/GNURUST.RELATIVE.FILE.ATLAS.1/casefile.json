@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.RELATIVE.FILE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.77",
+  "crate_version": "0.7.78",
   "damage_if_overclaimed": "treating relative slots as a dense sequential file ignores empty-slot gaps (status 23) and the by-number addressing",
   "hash_chain": {
-    "inputs_sha256": "94e7184f6b82942a2c7af9525b4b79ad384ff38b868ee6deacd501c0b7eae681"
+    "inputs_sha256": "13c6586b040bf35b1e9c2dcadd392d5a5423b22dbd6e4b86fe59abf40a1b401e"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "c359fc205d32760d13cc406529312e8889ade12fd66d70efed8384add8f1c6e9",
-    "receipt_sha256": "a140550a75fc4afa8696865da504e6b9c194eabe06aa1248e9d7dc1b39528ae6"
+    "receipt_sha256": "6ab4f3bce67075e0a31b5dd5fa4fdd1a0040bdee7b04c57f94f612eb5578d03d"
   },
   "kind": "court-casefile",
   "lie_prevented": [

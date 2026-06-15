@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.MLIO.GENERATE.1` |
 | court | XML / JSON GENERATE (native serializer) |
-| crate_version | `0.7.77` |
+| crate_version | `0.7.78` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a cob_ml_tree -> the XML / JSON GENERATE output bytes |
 | replay command | `bash lab/oracle/ml_generate_sweep.sh` |

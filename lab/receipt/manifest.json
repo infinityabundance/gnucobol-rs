@@ -1089,6 +1089,18 @@
         "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
       ]
     },
+    "GNURUST.SCREENIO.NUMEDIT.1": {
+      "court": "SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes",
+      "sweep": "screenio_numedit_sweep.sh",
+      "byte_domain": "a numeric-edited positioned single-field DISPLAY (edited PIC FROM a numeric source) -> the exact ncurses byte stream that skips leading blanks + writes the edited run, on the admitted terminal",
+      "non_claims": [
+        "the numeric editing itself (the move.c court; this proves the screen POSITIONING of an already-edited image)",
+        "the `*` check-protection zero-fill rule (a separate edited.rs follow-on)",
+        "a long (5+) trailing/interior blank run that ncurses cursor-skips rather than space-fills",
+        "MULTIPLE edited fields in one DISPLAY (the general multi-field line-diff); numeric-edited colour/attributes; ACCEPT-side numeric-edited input",
+        "any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
+      ]
+    },
     "GNURUST.SCREENIO.COLOR.1": {
       "court": "SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes",
       "sweep": "screenio_color_sweep.sh",

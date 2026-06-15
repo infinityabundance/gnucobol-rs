@@ -404,6 +404,26 @@ pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError>
     };
     let (int_d, frac_d) = align(value, count_digits(int_syms), count_digits(frac_syms));
 
+    // Complete zero suppression (cobc/ISO): when a picture's digit positions are ALL space-suppression
+    // `Z` -- no forced `9`, no check-protection `*`, no floating `$`/`+`/`-`, and no fixed prefix/suffix
+    // decoration -- and the value is exactly zero, the ENTIRE field renders as spaces, including the
+    // decimal point and any comma insertion. (Verified against the oracle: `ZZZZ.ZZ` of 0 -> "       ",
+    // `ZZZ.ZZ` of 0 -> "      ", `ZZZZ` of 0 -> "    "; a `9` anywhere -- e.g. `ZZ,ZZ9.99` -> "     0.00"
+    // -- or `*` fill -- `****.**` -> stars -- does NOT blank. A non-zero value -- `ZZZZ.ZZ` of 0.07 ->
+    // "    .07" -- renders normally.) Without this, a zero in an all-`Z` edited field wrongly kept the
+    // decimal point + fraction (e.g. "    .00"); surfaced by the SCREEN SECTION numeric-edited DISPLAY
+    // court GNURUST.SCREENIO.NUMEDIT.1.
+    let value_is_zero = value.digits.iter().all(|&d| d == 0);
+    let has_forced_digit = syms.iter().any(|&c| c == '9' || c == '*');
+    if value_is_zero
+        && !has_forced_digit
+        && float_char.is_none()
+        && prefix.is_empty()
+        && suffix.is_empty()
+    {
+        return Ok(vec![b' '; edited_size(pic)?]);
+    }
+
     let mut out = String::new();
     out.push_str(&prefix);
     out.push_str(&emit_int(int_syms, &int_d, float_char, neg));
@@ -443,6 +463,26 @@ mod tests {
             edited_size("Z%9"),
             Err(EditedError::UnsupportedSymbol('%'))
         ));
+    }
+
+    #[test]
+    fn complete_zero_suppression_blanks_field() {
+        // All-Z picture (no forced 9, no * fill) + exactly-zero value -> the ENTIRE field is spaces,
+        // including the decimal point and comma insertion (cobc/ISO complete zero suppression).
+        let zero = Decimal { negative: false, digits: vec![0, 0, 0, 0, 0, 0], scale: 2 };
+        assert_eq!(encode_edited("ZZZZ.ZZ", &zero).unwrap(), b"       "); // 7 spaces
+        assert_eq!(encode_edited("ZZZ.ZZ", &zero).unwrap(), b"      "); // 6 spaces
+        assert_eq!(encode_edited("ZZZZ", &zero).unwrap(), b"    "); // 4 spaces
+        // A non-zero value renders normally (the point + fraction show).
+        let tiny = Decimal { negative: false, digits: vec![0, 0, 0, 0, 0, 7], scale: 2 };
+        assert_eq!(encode_edited("ZZZZ.ZZ", &tiny).unwrap(), b"    .07");
+        // A forced `9` prevents blanking -- the 9 position shows a 0.
+        assert_eq!(encode_edited("ZZ,ZZ9.99", &zero).unwrap(), b"     0.00");
+        // NOTE (follow-on, NOT fixed here): check-protection `*` of an all-star zero field should fill
+        // every position with `*` (the oracle renders `****.**` of 0 as "****.**"); the current editor
+        // still emits "****.00". That is a separate `*`-fill rule (with its own comma/decimal-point
+        // interaction needing an oracle grid) and is out of scope for the all-`Z` blank fix above and
+        // for the GNURUST.SCREENIO.NUMEDIT.1 court (which uses no star pictures).
     }
 
     #[test]

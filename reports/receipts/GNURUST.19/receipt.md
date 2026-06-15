@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.19` |
 | court | DIVIDE receiving-field bytes |
-| crate_version | `0.7.77` |
+| crate_version | `0.7.78` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | DIVIDE GIVING receiver field bytes (DISPLAY/COMP-3) |
 | replay command | `bash lab/oracle/divide_sweep.sh` |

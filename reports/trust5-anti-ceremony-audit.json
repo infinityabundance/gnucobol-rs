@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 91,
+    "A": 92,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -91,6 +91,7 @@
       "GNURUST.SCREENIO.DISPLAY.2",
       "GNURUST.SCREENIO.DISPLAY.3",
       "GNURUST.SCREENIO.INIT.1",
+      "GNURUST.SCREENIO.NUMEDIT.1",
       "GNURUST.SEARCH.TABLE.1",
       "GNURUST.SIZE.ERROR.1",
       "GNURUST.SORT.MERGE.ATLAS.1",
@@ -1589,6 +1590,22 @@
       "negative_claims": 8,
       "negatives_ge_positives": true,
       "positive_claims": 2
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "screenio_numedit_sweep 14/0 (live pty capture) + 2 unit tests (10 oracle-pinned positioning vectors incl. all-blank/CR-DB/trailing-sign; the encode_edited->display_edited_and_stop composition) + 1 edited.rs regression test (complete-zero-suppression blanking) + Kani numedit_envelope",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.SCREENIO.NUMEDIT.1",
+      "negative_claims": 9,
+      "negatives_ge_positives": true,
+      "positive_claims": 3
     },
     {
       "can_fail": true,
