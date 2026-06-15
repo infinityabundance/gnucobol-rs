@@ -1032,7 +1032,18 @@
       "byte_domain": "a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid",
       "non_claims": [
         "positions outside the swept LINE x COLUMN grid",
-        "multi-field DISPLAY with inter-field moves whose origin is not home",
+        "multi-field DISPLAY is sealed separately (GNURUST.SCREENIO.DISPLAY.3)",
+        "color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input",
+        "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+      ]
+    },
+    "GNURUST.SCREENIO.DISPLAY.3": {
+      "court": "SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes",
+      "sweep": "screenio_multi_sweep.sh",
+      "byte_domain": "a multi-field DISPLAY -> the exact ncurses inter-field cursor-movement + field byte stream, for non-overlapping layouts",
+      "non_claims": [
+        "overlapping same-row layouts (later field left of an earlier one) -- those need the curses refresh line-diff (clr_eol erase), a follow-on court",
+        "3+ field interactions beyond the swept pairs",
         "color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input",
         "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
       ]

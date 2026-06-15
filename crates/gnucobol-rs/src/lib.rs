@@ -655,7 +655,13 @@ pub fn __fuzz_screenio(data: &[u8]) {
     let line = (data.first().copied().unwrap_or(1) as i32 % 23) + 1;
     let column = (data.get(1).copied().unwrap_or(1) as i32 % 80) + 1;
     let payload = data.get(2..).unwrap_or(&[]).to_vec();
-    let items = vec![ScreenItem { line, column, data: payload }];
+    // Also exercise the multi-field path (inter-field mvcur from a non-home origin).
+    let line2 = (data.get(2).copied().unwrap_or(1) as i32 % 23) + 1;
+    let column2 = (data.get(3).copied().unwrap_or(1) as i32 % 80) + 1;
+    let items = vec![
+        ScreenItem { line, column, data: payload },
+        ScreenItem { line: line2, column: column2, data: data.get(4..).unwrap_or(&[]).to_vec() },
+    ];
     let out = display_and_stop(&items);
     debug_assert!(out.starts_with(screenio::INIT_PROLOGUE));
 }

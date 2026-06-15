@@ -81,34 +81,88 @@ fn cup(out: &mut Vec<u8>, line: i32, col: i32) {
     out.push(b'H');
 }
 
-/// Reproduce ncurses's `mvcur` choice for a move **from the home position `(1,1)`** (where the cursor sits
-/// after the screen clear) to `(to_line, to_col)`, on the admitted xterm/ncurses 6.6 terminal. The choice
-/// minimizes the emitted bytes among space-fill, column-address (HPA, `\e[<c>G`), row-address (VPA,
-/// `\e[<r>d`), and direct cursor-address (CUP, `\e[<r>;<c>H`), as empirically pinned against the oracle over
-/// a position grid (`screenio_grid_sweep`):
-///
-/// - **same row** (`to_line == 1`): advance the column from 1 -- `<=4` cols -> spaces; cols 6..=8 ->
-///   HPA `\e[<c>G`; col `>=9` -> CUP.
-/// - **row change** (`to_line > 1`): `to_col <= 3` -> VPA `\e[<r>d` then `(to_col-1)` spaces; else CUP.
-///
-/// Moves whose origin is **not** home (the inter-field moves of a multi-field `DISPLAY`) are a follow-on
-/// court and are not modelled here.
-fn move_cursor_from_home(out: &mut Vec<u8>, to_line: i32, to_col: i32) {
-    if to_line == 1 {
-        let delta = to_col - 1;
-        if delta <= 4 {
-            spaces(out, delta);
-        } else if to_col <= 8 {
-            csi1(out, to_col, b'G');
-        } else {
-            cup(out, to_line, to_col);
-        }
-    } else if to_col <= 3 {
-        csi1(out, to_line, b'd');
-        spaces(out, to_col - 1);
-    } else {
-        cup(out, to_line, to_col);
+/// Build the candidate byte sequences for a horizontal move within row `ty`, from column `sc` to `tx`,
+/// matching ncurses `relative_move`'s column handling. Forward: space-fill always; column-address HPA
+/// `\e[<tx>G` only when it is the cheaper choice (advance of 5..=7 columns -- ncurses does not reach for HPA
+/// on longer same-row runs, preferring direct cursor-address there). Backward: backspaces. (HPA candidates
+/// are listed first so they win a byte-count tie, as the oracle does.)
+fn horiz_candidates(sc: i32, tx: i32) -> Vec<Vec<u8>> {
+    if tx == sc {
+        return vec![Vec::new()];
     }
+    let mut out = Vec::new();
+    if tx > sc {
+        let delta = tx - sc;
+        if (5..=7).contains(&delta) {
+            let mut h = Vec::new();
+            csi1(&mut h, tx, b'G');
+            out.push(h);
+        }
+        let mut s = Vec::new();
+        spaces(&mut s, delta);
+        out.push(s);
+    } else {
+        out.push(vec![0x08; (sc - tx) as usize]); // backspaces
+    }
+    out
+}
+
+/// Reproduce ncurses's `mvcur` choice for a move from `(fy,fx)` to `(ty,tx)` on the admitted xterm/ncurses
+/// 6.6 terminal: enumerate the move strategies ncurses considers -- (1) keep the column and move
+/// vertically (VPA `\e[<r>d`, or `cuu1 \e[A` for up-one) then move horizontally from `fx`; (2) carriage
+/// return to column 1, move vertically, then horizontally from 1; (3) `home \e[H` for the exact `(1,1)`
+/// target; (4) direct cursor-address CUP `\e[<r>;<c>H` -- and emit the shortest, with local/CR strategies
+/// winning a byte-count tie over CUP (the empirically pinned tie-break, `screenio_grid_sweep` /
+/// `screenio_multi_sweep`). This single function reproduces the from-home first-field move, every
+/// inter-field move of a multi-field `DISPLAY`, and the post-field move to the pause prompt.
+fn mvcur(fy: i32, fx: i32, ty: i32, tx: i32) -> Vec<u8> {
+    let mut cands: Vec<Vec<u8>> = Vec::new();
+
+    // Strategy 1: vertical (keeping the column) + horizontal from fx.
+    let mut verticals: Vec<Vec<u8>> = Vec::new();
+    if ty == fy {
+        verticals.push(Vec::new());
+    } else {
+        if ty == fy - 1 {
+            verticals.push(b"\x1b[A".to_vec()); // cuu1 (up one)
+        }
+        let mut v = Vec::new();
+        csi1(&mut v, ty, b'd'); // VPA
+        verticals.push(v);
+    }
+    for v in &verticals {
+        for h in horiz_candidates(fx, tx) {
+            let mut c = v.clone();
+            c.extend_from_slice(&h);
+            cands.push(c);
+        }
+    }
+
+    // Strategy 2: CR to column 1, then vertical, then horizontal from column 1.
+    {
+        let mut c = vec![b'\r'];
+        if ty != fy {
+            csi1(&mut c, ty, b'd');
+        }
+        // After CR the column is 1; only a forward (or empty) horizontal applies.
+        c.extend_from_slice(&horiz_candidates(1, tx)[0]);
+        cands.push(c);
+    }
+
+    // Strategy 3: home for the exact (1,1) target.
+    if ty == 1 && tx == 1 {
+        cands.push(b"\x1b[H".to_vec());
+    }
+
+    // Strategy 4: direct cursor-address (CUP) -- listed last so it loses ties to the local strategies.
+    {
+        let mut c = Vec::new();
+        cup(&mut c, ty, tx);
+        cands.push(c);
+    }
+
+    // Shortest wins; the first-generated wins a tie (local/CR/home before CUP).
+    cands.into_iter().min_by_key(|c| c.len()).unwrap_or_default()
 }
 
 /// Reproduce the full terminal byte stream of a `SCREEN SECTION` `DISPLAY` of `items` followed by `STOP
@@ -118,25 +172,18 @@ fn move_cursor_from_home(out: &mut Vec<u8>, to_line: i32, to_col: i32) {
 pub fn display_and_stop(items: &[ScreenItem]) -> Vec<u8> {
     let mut out = Vec::new();
     out.extend_from_slice(INIT_PROLOGUE);
-    // This court models a SINGLE positioned field (the cursor starts at home `(1,1)` after the clear).
-    // Multi-field layout -- with inter-field moves whose origin is not home -- is a follow-on court.
-    let it = &items[0];
-    move_cursor_from_home(&mut out, it.line, it.column);
-    out.extend_from_slice(&it.data);
-    // After writing, the cursor sits at `end_col = column + len`. The pause prompt is one row below, at
-    // column 1. ncurses picks the cheaper of two equal-cost orderings for that move: when the cursor is
-    // only one column past column 1 (`end_col == 2`, i.e. a column-1 field of length 1) it drops the row
-    // first then backspaces (`\e[<r>d` then `\x08`); otherwise it carriage-returns to column 1 then drops
-    // the row (`\r` then `\e[<r>d`).
-    let prompt_line = it.line + 1;
-    let end_col = it.column + it.data.len() as i32;
-    if end_col == 2 {
-        csi1(&mut out, prompt_line, b'd');
-        out.push(0x08); // backspace
-    } else {
-        out.push(b'\r');
-        csi1(&mut out, prompt_line, b'd');
+    // The cursor starts at home `(1,1)` after the clear; each field is reached by the general `mvcur`, then
+    // written (advancing the cursor by its length), in `DISPLAY` order.
+    let (mut cy, mut cx) = (1, 1);
+    for it in items {
+        out.extend_from_slice(&mvcur(cy, cx, it.line, it.column));
+        out.extend_from_slice(&it.data);
+        cy = it.line;
+        cx = it.column + it.data.len() as i32;
     }
+    // The pause prompt sits one row below where the cursor ended (the last field's row), at column 1.
+    let prompt_line = cy + 1;
+    out.extend_from_slice(&mvcur(cy, cx, prompt_line, 1));
     out.extend_from_slice(PAUSE_PROMPT);
     out.extend_from_slice(TEARDOWN_EPILOGUE);
     out
@@ -171,14 +218,39 @@ mod kani_proofs {
     #[kani::proof]
     #[kani::unwind(6)]
     fn mvcur_is_bounded() {
-        let line: i32 = kani::any();
-        let column: i32 = kani::any();
-        kani::assume(line >= 1 && line <= SCREEN_ROWS - 1);
-        kani::assume(column >= 1 && column <= 80);
-        let mut out = Vec::new();
-        move_cursor_from_home(&mut out, line, column);
-        // A move is at most a CUP `\e[<=2d;<=2d H` (<= 8 bytes) or VPA+<=2 spaces, never unbounded.
+        let fy: i32 = kani::any();
+        let fx: i32 = kani::any();
+        let ty: i32 = kani::any();
+        let tx: i32 = kani::any();
+        kani::assume(fy >= 1 && fy <= SCREEN_ROWS && fx >= 1 && fx <= 80);
+        kani::assume(ty >= 1 && ty <= SCREEN_ROWS && tx >= 1 && tx <= 80);
+        let out = mvcur(fy, fx, ty, tx);
+        // Every move ncurses picks here is short: a CUP `\e[<=2;<=2H` is 8 bytes, the longest local path
+        // (VPA + <=4 space-fill) is 9; never unbounded.
         assert!(out.len() <= 9);
+    }
+
+    // KANIFOR: GNURUST.SCREENIO.DISPLAY.3
+    /// A two-field DISPLAY is always a well-formed prologue..epilogue envelope, for any two in-screen
+    /// positions and any single-byte payloads -- the multi-field path never panics and always brackets the
+    /// init/teardown framing.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn multi_field_envelope() {
+        let l1: i32 = kani::any();
+        let c1: i32 = kani::any();
+        let l2: i32 = kani::any();
+        let c2: i32 = kani::any();
+        kani::assume(l1 >= 1 && l1 <= SCREEN_ROWS - 1 && c1 >= 1 && c1 <= 80);
+        kani::assume(l2 >= 1 && l2 <= SCREEN_ROWS - 1 && c2 >= 1 && c2 <= 80);
+        let a: u8 = kani::any();
+        let b: u8 = kani::any();
+        let out = display_and_stop(&[
+            ScreenItem { line: l1, column: c1, data: vec![a] },
+            ScreenItem { line: l2, column: c2, data: vec![b] },
+        ]);
+        assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
+        assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
 }
 
@@ -216,5 +288,29 @@ mod tests {
         assert_eq!(move_and_field(2, 3), b"\x1b[2d  Z\r\x1b[3d");
         assert_eq!(move_and_field(3, 5), b"\x1b[3;5HZ\r\x1b[4d"); // CUP
         assert_eq!(move_and_field(10, 40), b"\x1b[10;40HZ\r\x1b[11d");
+    }
+
+    #[test]
+    fn multi_field_inter_field_mvcur() {
+        // Two fields, with the inter-field move whose origin is NOT home, then the prompt move from the
+        // last field's row -- each oracle-pinned (screenio_multi_sweep).
+        let body = |items: &[ScreenItem]| {
+            let out = display_and_stop(items);
+            let s = out.windows(4).position(|w| w == b"\x1b[2J").unwrap() + 4;
+            let e = out.windows(PAUSE_PROMPT.len()).position(|w| w == PAUSE_PROMPT).unwrap();
+            out[s..e].to_vec()
+        };
+        // (1,1)AA then (2,5)BB: row-change keeps the column (VPA) then space-fills; prompt below row 2.
+        assert_eq!(
+            body(&[ScreenItem { line: 1, column: 1, data: b"AA".to_vec() },
+                   ScreenItem { line: 2, column: 5, data: b"BB".to_vec() }]),
+            b"AA\x1b[2d  BB\r\x1b[3d"
+        );
+        // last field on a HIGHER row than the first: the prompt follows the last field (row 2 -> row 3).
+        assert_eq!(
+            body(&[ScreenItem { line: 5, column: 5, data: b"AA".to_vec() },
+                   ScreenItem { line: 2, column: 2, data: b"BB".to_vec() }]),
+            b"\x1b[5;5HAA\r\x1b[2d BB\r\x1b[3d"
+        );
     }
 }

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.REFMOD.1 (court-casefile)
 
-**Verdict: PASS** · 16/16 pass, 0 fail · crate `gnucobol-rs` 0.7.66
+**Verdict: PASS** · 16/16 pass, 0 fail · crate `gnucobol-rs` 0.7.67
 
 - **Oracle:** cobc DISPLAY field(start:length) / MOVE TO field(start:length)
 - **Byte domain(s):** field bytes + (start,length) -> substring bytes / overwritten field

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: overlapping same-row layouts where a later field sits LEFT of an earlier field's cells -- those trigger ncurses's REFRESH LINE-DIFF (clr_eol \\e[K erase of the now-stale earlier cells via the curses TransformLine algorithm), a separate mechanism that is a declared follow-on court (NOT the cursor-move model sealed here)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: 3+ field interactions beyond the swept pairs"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: color / attribute SGR"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: numeric-edited / JUSTIFIED display"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: ACCEPT input"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.DISPLAY.3 non-claim: lie prevented: multi-field screen layout needs ncurses linked -- NO (for non-overlapping layouts): the inter-field mvcur byte choice is deterministic for a fixed terminal and reproduced exactly across the swept pairs, no ncurses linked. The curses refresh line-diff (overlapping erase) is honestly carved out as a separate unsealed mechanism"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

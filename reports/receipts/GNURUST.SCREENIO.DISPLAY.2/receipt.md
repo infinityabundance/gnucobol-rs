@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.DISPLAY.2` |
 | court | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) |
-| crate_version | `0.7.66` |
+| crate_version | `0.7.67` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid |
 | replay command | `bash lab/oracle/screenio_grid_sweep.sh` |
@@ -18,7 +18,7 @@
 
 ## Non-claims
 - positions outside the swept LINE x COLUMN grid
-- multi-field DISPLAY with inter-field moves whose origin is not home
+- multi-field DISPLAY is sealed separately (GNURUST.SCREENIO.DISPLAY.3)
 - color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input
 - any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)
 

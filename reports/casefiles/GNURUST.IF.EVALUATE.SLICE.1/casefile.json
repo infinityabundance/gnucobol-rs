@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.IF.EVALUATE.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.66",
+  "crate_version": "0.7.67",
   "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound",
   "hash_chain": {
-    "inputs_sha256": "b6883fd29ac72f6ca5747d0f890d0c307b4b6cae10d6118968e8e79d210d38eb"
+    "inputs_sha256": "f92767f1135d233284edbbf4af6acc5c74e94a01db244acfefc1e2b1ba24fe2b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d0ef429f7fcdb528152cf28f8cd15d8d908f57ecd67cbdac514d548c288b0eda",
-    "receipt_sha256": "530adfac6669ef76109f861555ce19819577f44d772f539c125c1638922de4c7"
+    "receipt_sha256": "3fc3e3b41c9b0b72976713758e1b0375178439357ca7ebab1693d55610adcdb8"
   },
   "kind": "court-casefile",
   "lie_prevented": [

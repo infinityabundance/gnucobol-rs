@@ -3,6 +3,7 @@
 //! ncurses prologue..epilogue envelope without panicking.
 //! FUZZFOR: GNURUST.SCREENIO.INIT.1
 //! FUZZFOR: GNURUST.SCREENIO.DISPLAY.2
+//! FUZZFOR: GNURUST.SCREENIO.DISPLAY.3
 
 use libfuzzer_sys::fuzz_target;
 
