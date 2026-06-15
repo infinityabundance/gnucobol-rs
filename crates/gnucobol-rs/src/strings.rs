@@ -2,14 +2,87 @@
 //! that the generated code drives through `init -> ... -> finish` call sequences; this port carries the
 //! same state in explicit structs (no global mutable state, `#![forbid(unsafe_code)]`). The observable
 //! results are the sealed `GNURUST.STRING.UNSTRING.1` / `GNURUST.INSPECT.1` byte courts.
+//!
+//! # Why this module exists / how to read it
+//!
+//! GnuCOBOL does not run a COBOL `STRING` / `UNSTRING` / `INSPECT` statement as one library call. The
+//! COBOL compiler lowers each statement into a *sequence* of small runtime calls and keeps the
+//! intermediate state (receiver pointer, current delimiter, scan window, tally/replace marks) in
+//! libcob module-global variables between those calls. So the C is a state machine driven from the
+//! outside in a fixed order. A faithful Rust port cannot use globals (`#![forbid(unsafe_code)]`, and we
+//! want re-entrancy), so each statement gets a struct (`CobString`, `CobUnstring`, `CobInspect`) that
+//! holds exactly the C's module-global state, and each former C entry point becomes a method on that
+//! struct. The compiler-emitted call order is preserved 1:1; only the *home* of the state moved.
+//!
+//! ## INSPECT (the most intricate verb)
+//!
+//! `INSPECT identifier ...` examines the bytes of a single receiver and either counts matches
+//! (TALLYING) or rewrites bytes (REPLACING), with an optional CONVERTING form. Key COBOL rules this
+//! module must honour to the byte:
+//!
+//! * **TALLYING vs REPLACING** share the same scan engine but differ in the payload: TALLYING adds a
+//!   match count into an integer counter field; REPLACING records, per matched position, the bytes to
+//!   write -- but does *not* write them immediately (see "deferred replacement" below).
+//! * **Phrase selectors** choose which matches count/replace:
+//!   - `CHARACTERS` -- every (still-unconsumed) character position in the window.
+//!   - `ALL x`      -- every non-overlapping occurrence of `x`.
+//!   - `LEADING x`  -- only the run of occurrences of `x` that starts at the window start (stops at the
+//!                     first non-match).
+//!   - `FIRST x`    -- only the first occurrence of `x` (REPLACING-only in standard COBOL).
+//!   - `TRAILING x` -- only the run of occurrences of `x` that ends at the window end.
+//! * **BEFORE / AFTER INITIAL phrase** narrows the scan window: `BEFORE INITIAL d` ends the window at
+//!   the first `d`; `AFTER INITIAL d` starts the window just past the first `d`. The "INITIAL" is
+//!   implicit in this engine -- the bound is found relative to the *current* window. If `AFTER`'s
+//!   delimiter is absent the window collapses to empty (nothing is inspected), which is the COBOL rule.
+//! * **No double-consumption / overlap rule.** A character once counted or replaced by an earlier
+//!   phrase in the same statement must not be re-counted/re-replaced by a later phrase. The C realises
+//!   this with a per-position "mark" bitmap (here `mark`, with a tracked `[mark_min, mark_max]` span);
+//!   every phrase consults `is_marked` before acting and calls `set_inspect_mark` after. This is what
+//!   makes overlapping `ALL`/`LEADING` interactions across multiple clauses come out oracle-correct.
+//! * **Deferred replacement.** REPLACING does not mutate `data` during the scan, because a later
+//!   `BY` value must see the *original* bytes when matching. Instead each replacement is staged into
+//!   `repdata` at the marked positions and flushed onto `data` once, in `cob_inspect_finish`.
+//! * **Signed numeric DISPLAY receivers.** An overpunch sign occupies bits of a digit byte; INSPECT
+//!   must operate on the *magnitude* digits, so the sign is stripped on init and restored on finish.
+//!
+//! ## STRING (delimited concatenation)
+//!
+//! `STRING a b ... DELIMITED BY {d|SIZE} INTO r [WITH POINTER p] [ON OVERFLOW ...]` appends source
+//! operands into receiver `r` starting at a running offset. `DELIMITED BY SIZE` appends the whole
+//! source; `DELIMITED BY d` appends only the bytes up to (not including) the first `d`. `WITH POINTER`
+//! supplies/receives a 1-based cursor into `r`. When the receiver fills, the copy is truncated and the
+//! `ON OVERFLOW` condition (`overflow` here) is raised; subsequent appends are no-ops.
+//!
+//! ## UNSTRING (split into receivers)
+//!
+//! `UNSTRING src DELIMITED BY [ALL] d1 [OR d2 ...] INTO r1 [DELIMITER IN m1] [COUNT IN c1] r2 ...
+//! [WITH POINTER p] [TALLYING t] [ON OVERFLOW ...]` walks `src` left to right. For each receiver it
+//! copies the bytes from the cursor up to the first matching delimiter (or to end-of-source, or a
+//! fixed `DELIMITED BY SIZE` chunk), then advances the cursor past the delimiter. `DELIMITED BY ALL d`
+//! collapses an adjacent run of `d` into a single delimiter. Optional out-fields per receiver: the
+//! matched delimiter bytes (`DELIMITER IN`), and the count of bytes moved before it (`COUNT IN`).
+//! `TALLYING` accumulates how many receivers were filled; `WITH POINTER` is the 1-based cursor;
+//! `ON OVERFLOW` (`overflow`) fires if source remains after the last receiver.
+//!
+//! In all three, "byte-semantics" means: comparisons are raw byte equality, copies go through the
+//! receiver's `cob_move` (so JUSTIFIED / space-padding / numeric editing of the receiver still apply),
+//! and every length is measured in bytes, never code points.
 #![forbid(unsafe_code)]
 
 use crate::attr::{FieldAttr, COB_TYPE_ALPHANUMERIC, COB_TYPE_NUMERIC_DISPLAY};
 
 /// `cob_str_memcpy (dst, src, size)` (strings.c:104): move `size` alphanumeric bytes into `dst` via
 /// `cob_move` (so the receiver's JUSTIFIED/padding semantics apply).
+///
+/// This is deliberately NOT a raw `memcpy`. The COBOL rule is that a STRING/UNSTRING sub-field landing
+/// in a receiver is a *move*, so the receiver's own picture governs the landing: an alphanumeric
+/// receiver gets left-justified and space-padded (or right-justified under JUSTIFIED RIGHT), a numeric
+/// receiver gets numeric-edited. To get that, the source is wrapped in a throwaway plain-alphanumeric
+/// attribute and handed to the move engine, which then applies `dst_attr`'s semantics.
 pub fn cob_str_memcpy(dst: &mut [u8], dst_attr: &FieldAttr, src: &[u8], size: usize) {
     let sattr = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 };
+    // size.min(src.len()) guards against a caller-requested length longer than the slice we were given;
+    // the C reads from a raw pointer of the requested size, but here the slice bound keeps us in-range.
     let _ = crate::move_ops::cob_move(&src[..size.min(src.len())], &sattr, dst, dst_attr);
 }
 
@@ -22,9 +95,15 @@ pub fn cob_exit_strings() {}
 /// `cob_string_delimited`/`cob_string_append`, then `cob_string_finish`. State that the C keeps in
 /// module globals (`string_dst`, `string_ptr`, `string_dlm`, `string_offset`) lives here.
 pub struct CobString {
+    /// The receiver bytes being built (the `INTO` operand). Mutated in place by each append.
     dst: Vec<u8>,
+    /// The `WITH POINTER` field: (its raw bytes, its attribute). `None` when no POINTER was given. We
+    /// keep the attribute so `cob_string_finish` can write the final 1-based offset back into it.
     ptr: Option<(Vec<u8>, FieldAttr)>,
+    /// The currently active `DELIMITED BY` value, or `None` for `DELIMITED BY SIZE`. Set by
+    /// `cob_string_delimited` and consulted by each following `cob_string_append`.
     dlm: Option<Vec<u8>>,
+    /// 0-based write cursor into `dst`. The C / COBOL POINTER is 1-based, so this is `pointer - 1`.
     offset: i32,
     /// `COB_EC_OVERFLOW_STRING` raised (the `ON OVERFLOW` condition).
     pub overflow: bool,

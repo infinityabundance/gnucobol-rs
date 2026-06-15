@@ -3,6 +3,73 @@
 //! `pack_to_bin` lookup table with the source's invalid-nibble quirks). The in-place BCD arithmetic
 //! fast path (`cob_add_bcd`/`cob_addsub_optimized`/...) is ported in [`crate::cob_decimal`] alongside
 //! the general decimal arithmetic it accelerates.
+//!
+//! # What PACKED-DECIMAL (COMP-3 / COMP-6) IS
+//!
+//! COMP-3 (a.k.a. PACKED-DECIMAL) and COMP-6 are the IBM "Binary Coded Decimal" (BCD) storage formats
+//! for COBOL numeric items. The value is stored as a string of *decimal* digits, but two digits are
+//! squeezed into each byte -- one digit per 4-bit *nibble*. A nibble holds 0x0..=0x9 (the digit) and,
+//! by long-standing convention, the LAST (lowest, least-significant) nibble of a COMP-3 field is a
+//! *sign nibble* rather than a digit:
+//!
+//! ```text
+//!   COMP-3  S9(5)  value -123, stored big-endian (most significant first):
+//!
+//!       byte0      byte1      byte2
+//!     +----+----+ +----+----+ +----+----+
+//!     | 0  | 0  | | 1  | 2  | | 3  | D  |      <- D = 0x0D = "negative" sign nibble
+//!     +----+----+ +----+----+ +----+----+
+//!      hi   lo     hi   lo     hi   sign
+//!
+//!   digit string read left-to-right = 0 0 1 2 3 = 00123, sign = negative -> -123
+//! ```
+//!
+//! ## The sign nibble (COMP-3)
+//!
+//! The trailing low nibble encodes sign, following the IBM/COBOL standard:
+//! * `0x0C` -> POSITIVE  (the canonical "preferred" positive sign GnuCOBOL writes)
+//! * `0x0D` -> NEGATIVE  (the ONLY value treated as negative; everything else reads as non-negative)
+//! * `0x0F` -> UNSIGNED  (written for an item declared without `S`, i.e. no `HAVE_SIGN`)
+//!
+//! Note the asymmetry that this port preserves exactly: when READING a sign, only `0x0D` means
+//! negative -- `0x0A`/`0x0B`/`0x0E` and any stray nibble all read as positive (see
+//! [`cob_packed_get_sign`]). When WRITING, GnuCOBOL emits the canonical 0x0C/0x0D/0x0F. This is the
+//! source's NUMPROC-tolerant behavior: an "invalid" sign nibble is accepted on input rather than
+//! rejected, matching how production IBM data with alternate sign codes (0x0A, 0x0B from EBCDIC zone
+//! conventions) decodes as positive.
+//!
+//! ## COMP-6 (no sign nibble)
+//!
+//! COMP-6 is the same nibble packing but with NO trailing sign nibble -- it is always unsigned, so
+//! every nibble is a digit. In this module the COMP-6 case is gated by [`FieldAttr::no_sign_nibble`].
+//! The `nibtest` integer (0 for COMP-3, 1 for COMP-6) threads this distinction through the decoders.
+//!
+//! ## Byte count vs digit count (the parity rule)
+//!
+//! How many bytes a field occupies is a function of its declared digit count and whether it carries a
+//! sign nibble:
+//! * COMP-3 (sign nibble present): `digits / 2 + 1` bytes. The "+1" accounts for the half-byte the
+//!   sign nibble needs; integer division then rounds the digit nibbles up to whole bytes. So 5 digits
+//!   -> `5/2 + 1 = 3` bytes (5 digit nibbles + 1 sign nibble = 6 nibbles = 3 bytes); 6 digits ->
+//!   `6/2 + 1 = 4` bytes (6 digit nibbles + 1 sign nibble = 7 nibbles, rounded up to 8 = 4 bytes,
+//!   leaving the very first high nibble as an unused zero pad).
+//! * COMP-6 (no sign nibble): `ceil(digits / 2)` bytes. 6 digits -> 3 bytes; 5 digits -> 3 bytes with
+//!   the leading high nibble as a zero pad.
+//!
+//! Whenever the nibble count is ODD relative to the byte boundary, the EXTRA nibble is the HIGH nibble
+//! of the FIRST byte and is held at zero (a "pad" nibble). The decoders detect this with a parity test
+//! `(digits & 1) == nibtest` and consume that leading half-nibble separately before the two-digits-per-
+//! byte main loop. See [`field_byte_size`] for the byte-count helper used by the arithmetic path.
+//!
+//! ## This module's role in the port
+//!
+//! These functions are the BYTE-LEVEL foundation of the GnuCOBOL-compatible decimal engine: they are
+//! the only place the raw COMP-3/COMP-6 image is parsed into, or rendered from, the working
+//! arbitrary-precision decimal (`CobDecimal` over [`Mpz`]). Everything above (MOVE, arithmetic,
+//! comparison, intrinsic functions on packed operands) ultimately bottoms out here. Because a single
+//! wrong nibble would silently corrupt every COMP-3 program, the port is deliberately a verbatim
+//! transcription of numeric.c -- including its lookup tables, its bug-for-bug invalid-nibble handling,
+//! and its `#if 0`-disabled "Buggy" routines (ported for completeness but NOT wired into any live path).
 #![forbid(unsafe_code)]
 
 use crate::attr::FieldAttr;
@@ -11,6 +78,15 @@ use crate::gmp::Mpz;
 
 /// `pack_to_bin` (numeric.c:107, active `#else` branch): BCD-byte -> 0..=165, `(hi*10+lo)` for
 /// valid nibbles, with GnuCOBOL's verbatim invalid-nibble translation (incl. the source's 0x2F=>25).
+///
+/// This is a 256-entry table indexed by a whole BCD byte; the result is the two-digit decimal value
+/// `high_nibble * 10 + low_nibble`. For a well-formed byte both nibbles are 0x0..=0x9, so the value is
+/// 0..=99. The source's table is intentionally NOT a clean `hi*10+lo`: invalid nibbles (0xA..=0xF) map
+/// through whatever the upstream generator emitted, so e.g. row 0x10 reads `10 11 12 .. 15 16 .. 25`,
+/// meaning a low nibble of 0xA (entry 0x1A) decodes to 16, not garbage. We replicate the table BYTE
+/// FOR BYTE -- including the lone anomaly at index 0x2F which maps to 25 instead of the 35 a naive
+/// formula would give -- because the oracle's decoder uses exactly these numbers, and matching its
+/// output on malformed input is part of the parity contract.
 pub(crate) static PACK_TO_BIN: [u8; 256] = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
     10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
@@ -31,6 +107,11 @@ pub(crate) static PACK_TO_BIN: [u8; 256] = [
 ];
 
 /// `packed_bytes` (numeric.c): the BCD byte for a two-digit number 0..=99 (`(n/10)<<4 | n%10`).
+///
+/// The inverse direction of [`PACK_TO_BIN`] for valid input: given a value 0..=99, return the single
+/// packed byte whose high nibble is the tens digit and low nibble is the units digit. e.g. 42 ->
+/// `(4 << 4) | 2 = 0x42`. Used by the encoders to lay down two digits per byte in one indexed lookup,
+/// avoiding a per-nibble shift/mask in the hot loop.
 pub(crate) static PACKED_BYTES: [u8; 100] = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
     16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
@@ -45,6 +126,10 @@ pub(crate) static PACKED_BYTES: [u8; 100] = [
 ];
 
 /// `COB_D2I(x)` (coblocal.h:243): low nibble of an ASCII digit (`x & 0x0F`).
+///
+/// "Display to Integer" of a single character: an ASCII digit byte `'0'..='9'` is 0x30..=0x39, so its
+/// low nibble IS the numeric value (`'7' = 0x37`, `& 0x0F = 0x07`). The encoders feed it the bytes of a
+/// decimal string and get back the digit to pack. The high nibble (the 0x3 zone) is simply discarded.
 #[inline]
 fn cob_d2i(x: u8) -> u8 {
     x & 0x0F
@@ -53,28 +138,47 @@ fn cob_d2i(x: u8) -> u8 {
 /// The real number of stored digits for a packed field: `digits` for non-negative scale, else
 /// `digits + scale` (e.g. `99P` is 3 PIC digits but scale -1, so 2 stored). Mirrors the inline block
 /// repeated throughout numeric.c's packed code.
+///
+/// WHY this differs from `attr.digits`: a NEGATIVE scale models the COBOL `P` scaling picture, where
+/// `P` positions are implied (assumed-zero) trailing positions that scale the value but are NOT
+/// physically stored. `PIC 99P` declares 3 significant positions (`attr.digits == 3`) with scale -1
+/// (one trailing implied zero), yet only 2 digit nibbles actually live in the field. The decoders/
+/// encoders must size their loops by the STORED count, not the declared count, or they would read past
+/// the field. For non-negative scale (the common case, including `V` decimal-point items) every
+/// declared digit is stored, so the count is just `attr.digits`.
 #[inline]
 fn stored_digits(attr: &FieldAttr) -> i32 {
     let scale = attr.scale as i32;
     if scale >= 0 {
         attr.digits as i32
     } else {
+        // scale < 0: the `P` positions are implied, not stored -- subtract them (scale is negative,
+        // so `digits + scale` shrinks the count).
         attr.digits as i32 + scale
     }
 }
 
 /// `cob_packed_get_sign (f)` (numeric.c:967): `-1` if the trailing sign nibble is `0x0D`, `+1` for any
 /// other nibble on a signed field, `0` for an unsigned (or no-sign-nibble) field.
+///
+/// Contract / byte rule:
+/// * If the field has no `S` in its picture (`!have_sign()`) -- which covers COMP-6 and unsigned
+///   COMP-3 -- there is no meaningful sign, so return `0`. Callers treat `0` as "magnitude only".
+/// * Otherwise inspect the LOW nibble of the LAST byte (the sign nibble). Per the IBM convention,
+///   ONLY `0x0D` is negative. Every other nibble -- the canonical positive `0x0C`, the unsigned `0x0F`
+///   that should not appear on a signed item, and the alternate sign codes `0x0A`/`0x0B`/`0x0E` from
+///   EBCDIC-zone data -- reads as positive (`+1`). This tolerance is deliberate (NUMPROC behavior):
+///   the source never rejects a "wrong" sign nibble here; it just decodes it as non-negative.
 pub fn cob_packed_get_sign(data: &[u8], attr: &FieldAttr) -> i32 {
     if attr.have_sign() {
-        let p = data[data.len() - 1];
+        let p = data[data.len() - 1]; // last byte; its LOW nibble is the sign
         if (p & 0x0F) == 0x0D {
-            -1
+            -1 // 0x0D is the one and only negative sign code
         } else {
-            1
+            1 // 0x0C / 0x0F / anything else -> positive (tolerant of alternate codes)
         }
     } else {
-        0
+        0 // no sign nibble (COMP-6 or unsigned COMP-3): magnitude only
     }
 }
 

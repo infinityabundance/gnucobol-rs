@@ -7,6 +7,63 @@
 //! one-byte-past read in the packing loop (cleaned by the trailing `&= 0xf0`, faithfully
 //! reproduced) — here every such read is **bounds-guarded** to a `0`, which yields the identical
 //! result because that nibble is always cleaned. Evidence kind: **source_port**.
+//!
+//! ## What COBOL MOVE actually does (read this first)
+//!
+//! `MOVE source TO dest` is *not* a byte copy: it is a **category conversion**. Every COBOL data
+//! item has a category derived from its PICTURE — alphanumeric (PIC X), numeric (PIC 9 / S9 with a
+//! USAGE that picks a physical encoding), numeric-edited (PIC with insertion/floating symbols),
+//! and group (a record with no elementary PIC of its own, treated as a raw byte run). MOVE first
+//! decides which category pair it is dealing with, then applies that pair's *own* placement rule.
+//! The receiver's PICTURE — not the sender's — owns the result: the value is reshaped to fit the
+//! receiver, padding or truncating as the receiver demands.
+//!
+//! ### The two master placement rules
+//!
+//! * **Alphanumeric receivers are LEFT-justified, SPACE-padded.** The source string is laid down
+//!   starting at the left byte; if the source is shorter, the surplus right-hand bytes are filled
+//!   with ASCII space (`0x20`); if longer, the right-hand excess is dropped. `JUSTIFIED RIGHT` on
+//!   the receiver flips this: the string is anchored at the right byte, padding/truncation happen
+//!   on the *left*. Space is the fill — never zero — because the receiver holds text, not a number.
+//!
+//! * **Numeric receivers are aligned by the DECIMAL POINT, ZERO-padded, then signed.** The sender
+//!   and receiver each have an implied decimal position (their `scale` = number of fractional
+//!   digits). MOVE lines those two points up and copies digit-for-digit outward in both directions
+//!   from the point. Integer digits the receiver cannot hold are truncated on the **left** (high
+//!   order — silent high-order truncation is a defined COBOL behavior, not an error); fraction
+//!   digits the receiver cannot hold are truncated on the **right** (low order); positions the
+//!   receiver has but the sender does not are filled with the digit `'0'`. Fill is the character
+//!   `'0'` (`0x30`) for zoned DISPLAY, or the nibble `0` for packed — never space, because the
+//!   receiver holds a number. The sign is handled separately at the end (see below).
+//!
+//! ### Sign handling
+//!
+//! Numeric DISPLAY carries its sign as an *overpunch* baked into one zone half-byte of a digit (or
+//! as a separate leading/trailing `+`/`-` byte). Before any digit math the sign is **stripped** so
+//! the digits are clean ASCII `0`..`9`; after placement the receiver's own sign convention is
+//! re-applied. If the receiver is **unsigned** (PIC 9, no `S`), the sign is simply dropped — a
+//! negative value silently stores as its magnitude. Packed COMP-3 keeps the sign in its final
+//! low nibble (`0xC` = positive, `0xD` = negative, `0xF` = unsigned). COMP-6 has *no* sign nibble
+//! at all and is always non-negative.
+//!
+//! ### The `P` scaling picture and the `scale` field
+//!
+//! A PICTURE digit `P` is an implied position outside the stored digits (e.g. `99PPP` scales the
+//! two stored digits up by 1000; `PPP99` scales them down). In this port `scale` is the count of
+//! implied fractional positions: positive `scale` = that many real stored fraction digits;
+//! **negative** `scale` = trailing `P`s that multiply the value but occupy no storage. The digit
+//! routines therefore compute an *effective* digit count of `digits + scale` when `scale < 0`, and
+//! the alphanumeric path materializes the negative-scale `P`s as literal `'0'` bytes on the right.
+//!
+//! ### This module's role
+//!
+//! These functions are the byte-level engine underneath the COBOL `MOVE` verb: one helper per
+//! category pair, plus the [`cob_move`] dispatcher that classifies the pair and routes to the
+//! right helper (failing **closed** on any pair not yet sealed rather than guessing). They operate
+//! directly on the raw field storage slices — there is no intermediate "value" type for the
+//! DISPLAY/PACKED paths; the digits *are* the representation, so correctness is a matter of exact
+//! byte placement. All out-of-range buffer access is bounds-guarded so a self-inconsistent field
+//! attribute fails closed instead of corrupting memory or panicking.
 
 use crate::attr::{
     FieldAttr, COB_TYPE_ALPHANUMERIC, COB_TYPE_GROUP, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
@@ -15,6 +72,12 @@ use crate::error::DecimalError;
 use crate::sign;
 
 /// Bounds-guarded read: out-of-range index yields `0` (never panics on hostile attrs).
+///
+/// Upstream C addresses field bytes through raw pointers and can momentarily read one byte past
+/// the field (see the module header's note on the packing loop); the value of any such stray read
+/// is always discarded or cleaned, so returning `0` here is behaviorally identical to the C while
+/// being memory-safe. The `i64` index lets callers do pointer-style arithmetic (which can go
+/// transiently negative) without casting; a negative index is treated as out of range.
 #[inline]
 fn rd(buf: &[u8], idx: i64) -> u8 {
     if idx >= 0 && (idx as usize) < buf.len() {
@@ -26,6 +89,10 @@ fn rd(buf: &[u8], idx: i64) -> u8 {
 
 /// Bounds-guarded write: out-of-range index is dropped (the C never writes past `f->size`;
 /// this only differs for self-inconsistent attrs, where it fails closed instead of corrupting).
+///
+/// A *well-formed* field never produces an out-of-range write index here, so on real inputs this
+/// is exactly the C store; the guard only fires for a hostile/inconsistent attribute, where
+/// silently dropping the write is the fail-closed choice (no buffer overflow, no panic).
 #[inline]
 fn wr(buf: &mut [u8], idx: i64, val: u8) {
     if idx >= 0 && (idx as usize) < buf.len() {
