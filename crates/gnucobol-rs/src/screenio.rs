@@ -615,16 +615,28 @@ pub fn accept_field_and_stop(line: i32, col: i32, width: i32, typed: &[u8]) -> V
 ///    repositions to column **3** (CR+2 spaces, 3 bytes) and rewrites the unchanged `A` -- because
 ///    `move(->3)+write("AWXYZ")` ties `move(->4)+write("WXYZ")` on cost and ncurses takes the former.
 ///    Reproducing this needs ncurses's per-cell PutRange/EmitRange cost search, not a first-diff start.
-/// 2. **`mvcur` chooses by terminfo string COST, not byte length.** For `DISPLAY "ABCDEFGH" @10` then
-///    `@10` again, the reposition from column 18 back to 10 uses CUP `\e[2;10H` (8 bytes) in
-///    preference to the **shorter** HPA `\e[10G` (5 bytes). The sealed courts' byte-length-shortest
-///    `mvcur` happens to agree with ncurses across their move ranges; the line-diff's larger backward
-///    repositions cross into the range where ncurses's cost model and raw byte length disagree.
-///    Reproducing this needs the actual `lib_mvcur.c` cost tables for the admitted terminfo.
+/// 2. **`mvcur` emits an ABSOLUTE cursor address when the column is treated as UNKNOWN -- this is NOT
+///    a cost decision.** For `DISPLAY "ABCDEFGH" @10` then `@10` again, the reposition from column 18
+///    back to 10 uses CUP `\e[2;10H` (7-8 bytes) in preference to the shorter HPA `\e[10G` (5 bytes).
+///    This first read as "ncurses chooses by terminfo cost, not byte length" -- but computing the REAL
+///    ncurses `NormalizedCost` from the admitted xterm terminfo (`cup` = `\e[%i%p1%d;%p2%dH`,
+///    `hpa` = `\e[%i%p1%dG`) gives `hpa_cost` ~ 5 and `cup_cost` ~ 8: HPA is cheaper by BOTH byte
+///    length AND cost, so `relative_move` would pick HPA. The oracle's CUP therefore means
+///    `onscreen_mvcur` saw the previous column as **unknown** (`xold < 0`) and was forced to a direct
+///    address -- a `doupdate` / libcob **cursor-tracking** state (which refresh marks the position
+///    lost), NOT the terminfo cost model.
 ///
-/// Until those two cost models are ported, the general line-diff stays a documented non-claim; the
-/// sealed screenio courts (`INIT.1`, `DISPLAY.2`/`.3`, `ATTR.1`, `COLOR.1`, `NUMEDIT.1`, `ACCEPT.1`)
-/// cover the positioned/attributed/edited/input cases whose moves stay in the agreeing range.
+/// **On the `ncurses-native` terminfo work:** a real terminfo binary parser + `tparm`/`tputs` (the
+/// foundation for capability costs) is the necessary infrastructure for general ncurses parity, but
+/// the analysis above shows it is NOT sufficient to unlock this line-diff: both blockers live in
+/// `doupdate` (the `EmitRange` leading-cell rewrite, and the cursor-unknown absolute address), above
+/// the terminfo cost tables. The unlock needs ncurses's `lib_doupdate.c` cursor bookkeeping plus
+/// libcob's exact per-`DISPLAY` `wmove`/`wrefresh` call sequence reproduced.
+///
+/// Until the doupdate cursor model is reproduced, the general line-diff stays a documented non-claim;
+/// the sealed screenio courts (`INIT.1`, `DISPLAY.2`/`.3`, `ATTR.1`, `COLOR.1`, `NUMEDIT.1`,
+/// `ACCEPT.1`/`.2`) cover the positioned/attributed/edited/input cases whose moves stay in the range
+/// where the byte-length model and ncurses agree.
 pub mod line_diff_boundary {}
 
 #[cfg(kani)]
