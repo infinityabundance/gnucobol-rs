@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.12B (court-casefile)
 
-**Verdict: PASS** · set-false sweep 37/0 + fuzz · crate `gnucobol-rs` 0.7.65
+**Verdict: PASS** · set-false sweep 37/0 + fuzz · crate `gnucobol-rs` 0.7.66
 
 - **Oracle:** cobc SET ... TO FALSE final bytes
 - **Byte domain(s):** parent field-storage bytes

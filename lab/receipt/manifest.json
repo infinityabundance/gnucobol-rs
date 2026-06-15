@@ -1020,10 +1020,21 @@
       "sweep": "screenio_sweep.sh",
       "byte_domain": "a positioned SCREEN SECTION DISPLAY -> the exact ncurses terminal byte stream, on the admitted terminal",
       "non_claims": [
-        "the ncurses mvcur cursor-cost model beyond the swept VPA+space-fill case",
+        "the ncurses mvcur cursor-cost model is sealed separately (GNURUST.SCREENIO.DISPLAY.2)",
         "multi-field layout, color/attribute SGR, numeric-edited/JUSTIFIED display",
         "ACCEPT input / key handling / cursor navigation",
         "any terminal other than TERM=xterm or any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent)"
+      ]
+    },
+    "GNURUST.SCREENIO.DISPLAY.2": {
+      "court": "SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes)",
+      "sweep": "screenio_grid_sweep.sh",
+      "byte_domain": "a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid",
+      "non_claims": [
+        "positions outside the swept LINE x COLUMN grid",
+        "multi-field DISPLAY with inter-field moves whose origin is not home",
+        "color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input",
+        "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
       ]
     },
     "GNURUST.FILEIO.SORTENGINE.1": {

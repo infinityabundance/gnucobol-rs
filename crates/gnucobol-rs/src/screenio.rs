@@ -59,24 +59,55 @@ pub struct ScreenItem {
     pub data: Vec<u8>,
 }
 
-/// Reproduce ncurses's cursor move from `(from_line, from_col)` to `(to_line, to_col)` for the in-screen
-/// case GnuCOBOL's positioned `DISPLAY` exercises (ncurses `mvcur` via `move`). For a move that changes the
-/// row, xterm-ncurses emits `\e[<row>d` (VPA) leaving the column at 1, then advances the column with spaces
-/// when that is the cheapest path; a column-only advance to the right also uses spaces. Coordinates here are
-/// 1-based COBOL (ncurses is 0-based internally; the `-1` is folded into the emitted CSI which is 1-based).
-fn move_cursor(out: &mut Vec<u8>, from_line: i32, from_col: i32, to_line: i32, to_col: i32) {
-    let mut col = from_col;
-    if to_line != from_line {
-        // VPA to the target row; xterm leaves the column at 1 after a bare VPA.
-        out.extend_from_slice(b"\x1b[");
-        out.extend_from_slice(to_line.to_string().as_bytes());
-        out.push(b'd');
-        col = 1;
-    }
-    // Advance to the target column with spaces (ncurses chooses this for short right-moves from col 1).
-    while col < to_col {
+/// Append `n` spaces (the cheapest right-move ncurses chooses for a short column advance: each overwrites a
+/// known blank).
+fn spaces(out: &mut Vec<u8>, n: i32) {
+    for _ in 0..n {
         out.push(b' ');
-        col += 1;
+    }
+}
+/// Append a CSI numeric command `\e[<n><final>` (VPA `d`, CHA/HPA `G`).
+fn csi1(out: &mut Vec<u8>, n: i32, fin: u8) {
+    out.extend_from_slice(b"\x1b[");
+    out.extend_from_slice(n.to_string().as_bytes());
+    out.push(fin);
+}
+/// Append a CUP `\e[<row>;<col>H` (direct cursor address, 1-based -- COBOL `LINE`/`COLUMN` map straight in).
+fn cup(out: &mut Vec<u8>, line: i32, col: i32) {
+    out.extend_from_slice(b"\x1b[");
+    out.extend_from_slice(line.to_string().as_bytes());
+    out.push(b';');
+    out.extend_from_slice(col.to_string().as_bytes());
+    out.push(b'H');
+}
+
+/// Reproduce ncurses's `mvcur` choice for a move **from the home position `(1,1)`** (where the cursor sits
+/// after the screen clear) to `(to_line, to_col)`, on the admitted xterm/ncurses 6.6 terminal. The choice
+/// minimizes the emitted bytes among space-fill, column-address (HPA, `\e[<c>G`), row-address (VPA,
+/// `\e[<r>d`), and direct cursor-address (CUP, `\e[<r>;<c>H`), as empirically pinned against the oracle over
+/// a position grid (`screenio_grid_sweep`):
+///
+/// - **same row** (`to_line == 1`): advance the column from 1 -- `<=4` cols -> spaces; cols 6..=8 ->
+///   HPA `\e[<c>G`; col `>=9` -> CUP.
+/// - **row change** (`to_line > 1`): `to_col <= 3` -> VPA `\e[<r>d` then `(to_col-1)` spaces; else CUP.
+///
+/// Moves whose origin is **not** home (the inter-field moves of a multi-field `DISPLAY`) are a follow-on
+/// court and are not modelled here.
+fn move_cursor_from_home(out: &mut Vec<u8>, to_line: i32, to_col: i32) {
+    if to_line == 1 {
+        let delta = to_col - 1;
+        if delta <= 4 {
+            spaces(out, delta);
+        } else if to_col <= 8 {
+            csi1(out, to_col, b'G');
+        } else {
+            cup(out, to_line, to_col);
+        }
+    } else if to_col <= 3 {
+        csi1(out, to_line, b'd');
+        spaces(out, to_col - 1);
+    } else {
+        cup(out, to_line, to_col);
     }
 }
 
@@ -87,20 +118,25 @@ fn move_cursor(out: &mut Vec<u8>, from_line: i32, from_col: i32, to_line: i32, t
 pub fn display_and_stop(items: &[ScreenItem]) -> Vec<u8> {
     let mut out = Vec::new();
     out.extend_from_slice(INIT_PROLOGUE);
-    // After `\e[2J` the cursor is at home (row 1, col 1).
-    let (mut cur_line, mut cur_col) = (1, 1);
-    for it in items {
-        move_cursor(&mut out, cur_line, cur_col, it.line, it.column);
-        out.extend_from_slice(&it.data);
-        cur_line = it.line;
-        cur_col = it.column + it.data.len() as i32;
-        // ncurses returns the cursor to column 1 of the item's row after writing (observed `\r`).
+    // This court models a SINGLE positioned field (the cursor starts at home `(1,1)` after the clear).
+    // Multi-field layout -- with inter-field moves whose origin is not home -- is a follow-on court.
+    let it = &items[0];
+    move_cursor_from_home(&mut out, it.line, it.column);
+    out.extend_from_slice(&it.data);
+    // After writing, the cursor sits at `end_col = column + len`. The pause prompt is one row below, at
+    // column 1. ncurses picks the cheaper of two equal-cost orderings for that move: when the cursor is
+    // only one column past column 1 (`end_col == 2`, i.e. a column-1 field of length 1) it drops the row
+    // first then backspaces (`\e[<r>d` then `\x08`); otherwise it carriage-returns to column 1 then drops
+    // the row (`\r` then `\e[<r>d`).
+    let prompt_line = it.line + 1;
+    let end_col = it.column + it.data.len() as i32;
+    if end_col == 2 {
+        csi1(&mut out, prompt_line, b'd');
+        out.push(0x08); // backspace
+    } else {
         out.push(b'\r');
-        cur_col = 1;
+        csi1(&mut out, prompt_line, b'd');
     }
-    // The pause prompt sits one row below the lowest displayed item.
-    let prompt_line = items.iter().map(|i| i.line).max().unwrap_or(1) + 1;
-    move_cursor(&mut out, cur_line, cur_col, prompt_line, 1);
     out.extend_from_slice(PAUSE_PROMPT);
     out.extend_from_slice(TEARDOWN_EPILOGUE);
     out
@@ -127,6 +163,23 @@ mod kani_proofs {
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
+
+    // KANIFOR: GNURUST.SCREENIO.DISPLAY.2
+    /// The mvcur cost model emits a bounded, well-formed move for any in-screen target: the move bytes are
+    /// always non-empty-or-empty (col 1 row 1 is a no-op) and never exceed a small constant, and every
+    /// branch (spaces / HPA / VPA / CUP) terminates. Proves the cursor reproduction is total + bounded.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn mvcur_is_bounded() {
+        let line: i32 = kani::any();
+        let column: i32 = kani::any();
+        kani::assume(line >= 1 && line <= SCREEN_ROWS - 1);
+        kani::assume(column >= 1 && column <= 80);
+        let mut out = Vec::new();
+        move_cursor_from_home(&mut out, line, column);
+        // A move is at most a CUP `\e[<=2d;<=2d H` (<= 8 bytes) or VPA+<=2 spaces, never unbounded.
+        assert!(out.len() <= 9);
+    }
 }
 
 #[cfg(test)]
@@ -141,5 +194,27 @@ mod tests {
         let got = display_and_stop(&items);
         let want: &[u8] = b"\x1b[?1049h\x1b[22;0;0t\x1b[1;24r\x1b(B\x1b[m\x1b[4l\x1b[?7h\x1b[?1h\x1b=\x1b[39;49m\x1b[?12;25h\x1b[?1006;1000h\x1b[39;49m\x1b[37m\x1b[40m\x1b[H\x1b[2J\x1b[2d  X\r\x1b[3dend of program, please press a key to exit \x1b[?1006;1000l\x1b[39;49m\r\x1b[24d\x1b[K\x1b[24;1H\x1b[?12l\x1b[?25h\x1b[?1049l\x1b[23;0;0t\r\x1b[?1l\x1b>";
         assert_eq!(got, want);
+    }
+
+    /// The cursor-movement bytes between the screen clear and the pause prompt, for one positioned field
+    /// -- exercising each branch of the mvcur cost model against the oracle-pinned encodings.
+    fn move_and_field(line: i32, column: i32) -> Vec<u8> {
+        let out = display_and_stop(&[ScreenItem { line, column, data: b"Z".to_vec() }]);
+        let start = out.windows(4).position(|w| w == b"\x1b[2J").unwrap() + 4;
+        let end = out.windows(PAUSE_PROMPT.len()).position(|w| w == PAUSE_PROMPT).unwrap();
+        out[start..end].to_vec()
+    }
+
+    #[test]
+    fn mvcur_cost_model_branches() {
+        // same row: <=4 cols -> spaces; 6..=8 -> HPA; >=9 -> CUP.
+        assert_eq!(move_and_field(1, 1), b"Z\x1b[2d\x08"); // col-1: VPA + backspace to prompt
+        assert_eq!(move_and_field(1, 5), b"    Z\r\x1b[2d"); // 4 spaces
+        assert_eq!(move_and_field(1, 7), b"\x1b[7GZ\r\x1b[2d"); // HPA
+        assert_eq!(move_and_field(1, 10), b"\x1b[1;10HZ\r\x1b[2d"); // CUP
+        // row change: col<=3 -> VPA + spaces; else CUP.
+        assert_eq!(move_and_field(2, 3), b"\x1b[2d  Z\r\x1b[3d");
+        assert_eq!(move_and_field(3, 5), b"\x1b[3;5HZ\r\x1b[4d"); // CUP
+        assert_eq!(move_and_field(10, 40), b"\x1b[10;40HZ\r\x1b[11d");
     }
 }

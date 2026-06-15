@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.SCREENIO.DISPLAY.2",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.7.66",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "efc2368e8d58a3ee8ec01c0c7efb8636983c86574fffdbae93047f17da3d1e9e",
+      "receipt_sha256": "9a574ce28a82ec35e78eeba7ace298c437cee2f651f3e18b23a170a0f7f1dc48"
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 4,
+    "replay": {
+      "command": "bash lab/oracle/screenio_grid_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "dcd835542d2972adc7b7ef46747fcbcd27dfa01cfc717798f031c66d455c73ce"
+      },
+      "name": "reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/casefile.json"
+    }
+  ]
+}

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.INTEGER.1` |
 | court | FUNCTION INTEGER (floor) / INTEGER-PART (truncate) |
-| crate_version | `0.7.65` |
+| crate_version | `0.7.66` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc-toward-zero |
 | replay command | `bash lab/oracle/integer_sweep.sh` |

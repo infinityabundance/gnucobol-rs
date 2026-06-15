@@ -1,0 +1,31 @@
+{
+  "byte_domain": "a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid",
+  "campaign": "GNURUST.SCREENIO.DISPLAY.2",
+  "command": {
+    "replay": "bash lab/oracle/screenio_grid_sweep.sh"
+  },
+  "court": "SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes)",
+  "crate_version": "0.7.66",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "positions outside the swept LINE x COLUMN grid",
+    "multi-field DISPLAY with inter-field moves whose origin is not home",
+    "color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=70 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

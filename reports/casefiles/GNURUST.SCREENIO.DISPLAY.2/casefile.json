@@ -1,0 +1,66 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a positioned SCREEN SECTION DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid, on the admitted terminal"
+  ],
+  "case_id": "GNURUST.SCREENIO.DISPLAY.2",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.66",
+  "damage_if_overclaimed": "claiming 'positioned DISPLAY works everywhere' would hide that only the swept grid + single-field + the admitted terminal are proven; un-swept positions, multi-field layout, attributes, and other terminals are not",
+  "hash_chain": {
+    "inputs_sha256": "9151152eac101b6e23dbd161e32e2444b278fce24313b6fc63781e609a598f23"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "efc2368e8d58a3ee8ec01c0c7efb8636983c86574fffdbae93047f17da3d1e9e",
+    "receipt_sha256": "9a574ce28a82ec35e78eeba7ace298c437cee2f651f3e18b23a170a0f7f1dc48"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "reproducing ncurses cursor optimization needs ncurses linked -- NO: the mvcur byte choice is deterministic for a fixed terminal, and the native emitter reproduces it exactly across the swept grid, no ncurses linked. The claim is bounded to the swept positions + admitted terminal, not all of mvcur"
+  ],
+  "negative_capability_ids": [
+    "NEG.POSITIONS-OUTSIDE-THE-SWEPT-GRID-LINE-10",
+    "NEG.MULTI-FIELD-DISPLAY-WITH-INTER-FIELD-MOV",
+    "NEG.COLOR-ATTRIBUTE-SGR",
+    "NEG.NUMERIC-EDITED-JUSTIFIED-FIELD-DISPLAY",
+    "NEG.ACCEPT-INPUT",
+    "NEG.ANY-TERMINAL-OTHER-THAN-TERM-XTERM-OR-NC"
+  ],
+  "negative_claims": [
+    "positions outside the swept grid (LINE > 10 or COLUMN > 40, untested -- the rule generalizes the observed pattern but only the grid is swept)",
+    "MULTI-FIELD DISPLAY with inter-field moves whose origin is not the home position (a follow-on court)",
+    "color / attribute SGR",
+    "numeric-edited + JUSTIFIED field display",
+    "ACCEPT input",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent boundary)",
+    "lie prevented: reproducing ncurses cursor optimization needs ncurses linked -- NO: the mvcur byte choice is deterministic for a fixed terminal, and the native emitter reproduces it exactly across the swept grid, no ncurses linked. The claim is bounded to the swept positions + admitted terminal, not all of mvcur"
+  ],
+  "oracle": {
+    "detail": "cobc SCREEN SECTION DISPLAY at varied LINE/COLUMN (libcob/screenio.c via ncurses 6.6 move/addstr/mvcur), captured under a pty with TERM=xterm",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SCREENIO.DISPLAY.2"
+  },
+  "positive_claims": [
+    "a from-scratch, dependency-free Rust reproduction of ncurses's mvcur cursor-movement optimization (screenio.rs move_cursor_from_home + display_and_stop) -- WITHOUT linking ncurses -- proven byte-identical to GnuCOBOL's terminal output for a positioned single-field DISPLAY across a position grid (screenio_grid_sweep 70/0: LINE in {1,2,3,5,10} x COLUMN in {1,2,3,4,5,6,7,8,9,10,11,15,20,40}). The mvcur cost model, reverse-engineered from the oracle and reproduced exactly: same-row column advance uses space-fill for <=4 columns, column-address HPA \\e[<c>G for columns 6..8, and direct CUP \\e[<r>",
+    "<c>H for column >=9",
+    "a row change uses row-address VPA \\e[<r>d + space-fill when the column is <=3, else CUP",
+    "and the post-field move to the pause prompt drops the row then backspaces (\\e[<r>d \\x08) when the field ends at column 2, else carriage-returns then drops the row (\\r \\e[<r>d). Every grid cell's full ~230-byte stream (init prologue + positioned field + pause + teardown) matches to the byte."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/screenio_grid_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 70,
+    "total": 70,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

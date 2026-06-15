@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.SYS.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.65
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.66
 
 - **Oracle:** cobc CALL CBL_* system routines, RETURN-CODE after each (libcob/fileio.c)
 - **Byte domain(s):** CBL_DELETE_FILE/COPY_FILE/RENAME_FILE/CREATE_DIR/DELETE_DIR/CHANGE_DIR/GET_CURRENT_DIR -> RETURN-CODE (0/35/128/129/-1) + the GET_CURRENT_DIR field bytes

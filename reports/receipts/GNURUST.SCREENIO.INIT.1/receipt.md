@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.INIT.1` |
 | court | SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes) |
-| crate_version | `0.7.65` |
+| crate_version | `0.7.66` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a positioned SCREEN SECTION DISPLAY -> the exact ncurses terminal byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_sweep.sh` |
@@ -17,7 +17,7 @@
 | receipt_status | current |
 
 ## Non-claims
-- the ncurses mvcur cursor-cost model beyond the swept VPA+space-fill case
+- the ncurses mvcur cursor-cost model is sealed separately (GNURUST.SCREENIO.DISPLAY.2)
 - multi-field layout, color/attribute SGR, numeric-edited/JUSTIFIED display
 - ACCEPT input / key handling / cursor navigation
 - any terminal other than TERM=xterm or any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent)

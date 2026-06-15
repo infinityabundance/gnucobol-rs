@@ -5,12 +5,12 @@
     "replay": "bash lab/oracle/screenio_sweep.sh"
   },
   "court": "SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes)",
-  "crate_version": "0.7.65",
+  "crate_version": "0.7.66",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
   "non_claims": [
-    "the ncurses mvcur cursor-cost model beyond the swept VPA+space-fill case",
+    "the ncurses mvcur cursor-cost model is sealed separately (GNURUST.SCREENIO.DISPLAY.2)",
     "multi-field layout, color/attribute SGR, numeric-edited/JUSTIFIED display",
     "ACCEPT input / key handling / cursor navigation",
     "any terminal other than TERM=xterm or any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent)"

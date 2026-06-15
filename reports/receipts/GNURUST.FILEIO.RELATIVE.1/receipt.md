@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.RELATIVE.1` |
 | court | RELATIVE organization keyed + sequential access |
-| crate_version | `0.7.65` |
+| crate_version | `0.7.66` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN + WRITE/READ/REWRITE/DELETE/START (RELATIVE) -> 8-byte LE header + record_max slots + FILE STATUS (00/22/23/24/10) |
 | replay command | `bash lab/oracle/relative_sweep.sh` |

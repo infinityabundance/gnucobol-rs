@@ -475,9 +475,10 @@
     {
       "category": "screen I/O (native, terminal-byte reproduction)",
       "courts": [
-        "GNURUST.SCREENIO.INIT.1"
+        "GNURUST.SCREENIO.INIT.1",
+        "GNURUST.SCREENIO.DISPLAY.2"
       ],
-      "future_campaign": "screenio: the ncurses mvcur cursor-cost model (CUP vs VPA vs space-fill), multi-field layout, color/attribute SGR, numeric-edited field display, and ACCEPT input -- each a follow-on literal-byte court",
+      "future_campaign": "screenio: multi-field layout (inter-field non-home moves), color/attribute SGR, numeric-edited field display, and ACCEPT input -- each a follow-on literal-byte court. (The ncurses mvcur cursor-cost model for single-field positioning is now sealed: GNURUST.SCREENIO.DISPLAY.2.)",
       "risk_if_unported": "SCREEN SECTION init/teardown framing + a positioned literal/FROM DISPLAY are now reproduced BYTE-IDENTICALLY to GnuCOBOL's ncurses output natively (GNURUST.SCREENIO.INIT.1, screenio_sweep 1/0, no ncurses linked) for the admitted terminal (TERM=xterm, ncurses 6.6); other terminals/ncurses builds emit different bytes (the declared terminal-dependence non-claim). The cursor-cost model + attributes + ACCEPT remain follow-on work",
       "source_modules": [
         "libcob/screenio.c"

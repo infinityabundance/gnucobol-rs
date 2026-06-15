@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILE.SEQUENTIAL.1 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.65
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.66
 
 - **Oracle:** cobc OPEN INPUT/READ NEXT (libcob/fileio.c, program-shape)
 - **Byte domain(s):** sequential READ record buffer bytes + file status
