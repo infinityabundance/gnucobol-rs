@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.18` |
 | court | COMP-6 unsigned packed storage + MOVE |
-| crate_version | `0.7.69` |
+| crate_version | `0.7.70` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | field-storage + move-result bytes (COMP-6, unsigned packed) |
 | replay command | `bash lab/oracle/comp6_sweep.sh` |

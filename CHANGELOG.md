@@ -12,6 +12,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
+## [0.7.70]
+- **`GNURUST.COMMON.BOUNDCHECK.1` sealed -- runtime bounds-check diagnostics, verified against TWO oracles.** Faithful pure ports of common.c's `cob_check_subscript` / `cob_check_odo` / `cob_check_ref_mod` / `cob_check_ref_mod_detailed` / `cob_check_ref_mod_minimal`, reproducing the EXACT `cob_runtime_error` + `cob_runtime_hint` text GnuCOBOL prints on an out-of-bounds table subscript, reference modification, or OCCURS DEPENDING ON length (under `cobc -debug`) -- e.g. `subscript of 'E' out of bounds: 5` + `maximum subscript for 'E': 3`. **A second oracle (GnuCOBOL 3.1.2) was built and the messages proven byte-identical across BOTH 3.1.2 and 3.2** (`bounds_check_sweep` 6/0) -- a version-stable claim, the first court verified differentially against two admitted oracles. The pure bounds decision + message text is separated from the abort side effect. Kani `subscript_check_is_exact` + fuzz. common.c 222 -> 209 missing. Non-claims: the `libcob:` prefix framing, the `cob_check_numeric` not-numeric message, and the abort/exit.
+
 ## [0.7.69]
 - **common.c harvest -- 5 more pure helpers ported (common.c 222 -> 217 missing).** Faithful pure ports of `version_bitstring` (the `0xMMmmpp00` version packing), `cob_is_upper` / `cob_is_lower` (the all-space-or-ASCII-case class tests), `cob_int_to_string` (`sprintf("%i")`), and `cob_int_to_formatted_bytestring` (the binary-1024 `B`/`kB`/`MB` size formatter, `%3.2f`). Each is a side-effect-free function of its inputs, with unit tests against the C semantics. Continues mining the dependency-free subset of common.c (the runtime-mutator bulk still awaits its state/side-effect map).
 

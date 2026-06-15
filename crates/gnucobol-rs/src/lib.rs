@@ -645,6 +645,18 @@ pub fn __fuzz_mlio(data: &[u8]) {
     let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
 }
 
+/// Fuzz the runtime bounds-check message generators (`GNURUST.COMMON.BOUNDCHECK.1`): arbitrary indices,
+/// sizes, offsets, and lengths never panic and yield well-formed (or empty) violation lists.
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_common_boundcheck(data: &[u8]) {
+    let g = |o: usize| data.get(o).copied().unwrap_or(0) as i32 - 64;
+    let _ = common::cob_check_subscript(g(0), g(1), "F", data.first().copied().unwrap_or(0) & 1 == 0, data.first().copied().unwrap_or(0) & 2 == 0);
+    let _ = common::cob_check_odo(g(2), g(3), g(4), "T", "N");
+    let _ = common::cob_check_ref_mod(g(5), g(6), g(7), "F");
+    let _ = common::cob_check_ref_mod_minimal("F", g(0), g(1));
+}
+
 /// Fuzz the native SCREEN SECTION DISPLAY emitter: arbitrary positions + payloads always produce a
 /// well-formed prologue..epilogue envelope, never a panic (`GNURUST.SCREENIO.INIT.1`,
 /// `GNURUST.PANICPOLICY.0`).

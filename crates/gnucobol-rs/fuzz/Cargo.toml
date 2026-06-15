@@ -246,3 +246,9 @@ name = "screenio"
 path = "fuzz_targets/screenio.rs"
 test = false
 doc = false
+
+[[bin]]
+name = "common_boundcheck"
+path = "fuzz_targets/common_boundcheck.rs"
+test = false
+doc = false

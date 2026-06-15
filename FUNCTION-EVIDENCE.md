@@ -10,7 +10,7 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 802** · direct 490 (incl. oracle-sweep 196) · transitive 151 · lifecycle 60 · **evidenced (any) 666** · **unevidenced 136**.
+**Active ported: 807** · direct 494 (incl. oracle-sweep 199) · transitive 151 · lifecycle 60 · **evidenced (any) 670** · **unevidenced 137**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -24,7 +24,7 @@
 | `fileio.c` | 180 | 151 | 36 | 21 | 18 | 175 | 5 |
 | `mlio.c` | 43 | 25 | 5 | 3 | 2 | 30 | 13 |
 | `reportio.c` | 39 | 21 | 0 | 8 | 7 | 33 | 6 |
-| `common.c` | 22 | 18 | 0 | 1 | 0 | 19 | 3 |
+| `common.c` | 27 | 22 | 3 | 1 | 0 | 23 | 4 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)
@@ -38,7 +38,7 @@
 - **`fileio.c`** (5): `cob_file_external_addr`, `cob_file_fcd_adrs`, `cob_file_fcdkey_adrs`, `cob_file_sort_giving_extfh`, `cob_file_sort_options`
 - **`mlio.c`** (13): `generate_attributes`, `generate_content`, `generate_element`, `generate_hex_element`, `generate_json_from_tree`, `generate_normal_attribute`, `generate_normal_element`, `generate_xml_from_tree`, `get_json_num`, `get_trimmed_xml_data`, `get_xml_name`, `set_xml_event`, `set_xml_text`
 - **`reportio.c`** (6): `cob_report_suppress`, `limitCheckOneLine`, `line_control_one`, `reportDump`, `reportDumpLine`, `reportDumpOneLine`
-- **`common.c`** (3): `cob_get_current_date_and_time_from_os`, `common_cmpc`, `sort_compare_collate`
+- **`common.c`** (4): `cob_check_ref_mod_detailed`, `cob_get_current_date_and_time_from_os`, `common_cmpc`, `sort_compare_collate`
 
 ## How this is produced (reproducible)
 

@@ -255,14 +255,15 @@
       ]
     },
     {
-      "active": 22,
-      "direct": 18,
-      "evidenced_any": 19,
+      "active": 27,
+      "direct": 22,
+      "evidenced_any": 23,
       "file": "common.c",
       "lifecycle": 0,
-      "oracle": 0,
+      "oracle": 3,
       "transitive": 1,
       "unevidenced": [
+        "cob_check_ref_mod_detailed",
         "cob_get_current_date_and_time_from_os",
         "common_cmpc",
         "sort_compare_collate"
@@ -286,12 +287,12 @@
   ],
   "schema": "gnurust-function-evidence-v2",
   "totals": {
-    "active": 802,
-    "direct": 490,
-    "evidenced_any": 666,
+    "active": 807,
+    "direct": 494,
+    "evidenced_any": 670,
     "lifecycle": 60,
-    "oracle": 196,
+    "oracle": 199,
     "transitive": 151,
-    "unevidenced": 136
+    "unevidenced": 137
   }
 }

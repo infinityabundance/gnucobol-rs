@@ -790,6 +790,17 @@
         "signed/packed elements"
       ]
     },
+    "GNURUST.COMMON.BOUNDCHECK.1": {
+      "court": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
+      "sweep": "bounds_check_sweep.sh",
+      "byte_domain": "a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2)",
+      "non_claims": [
+        "the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)",
+        "cob_check_numeric's not-numeric message (octal/hex byte escaping)",
+        "the cob_hard_failure abort + exit code + EC numeric ids",
+        "the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case"
+      ]
+    },
     "GNURUST.INDEX.1": {
       "court": "USAGE INDEX storage + SET arithmetic",
       "sweep": "index_sweep.sh",

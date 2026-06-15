@@ -292,6 +292,182 @@ pub fn cob_int_to_formatted_bytestring(i: i32) -> Vec<u8> {
     format!("{d:.2} {unit}").into_bytes()
 }
 
+// ======================================================================================================
+// Runtime bounds checks (common.c cob_check_subscript / cob_check_odo / cob_check_ref_mod*). In libcob each
+// raises an EC-BOUND exception, prints a `cob_runtime_error` line (and optional `cob_runtime_hint`), and --
+// when `abend` -- aborts via `cob_hard_failure`. This port separates the PURE bounds decision + the exact
+// message text (the oracle-visible artifact, verified identical across GnuCOBOL 3.1.2 and 3.2) from the
+// abort side effect: each function returns the violation(s) it would raise, or none when in bounds.
+// ======================================================================================================
+
+/// The EC-BOUND exception a check raises (symbolic; the oracle shows the message text, not the numeric id).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BoundException {
+    /// `EC-BOUND-SUBSCRIPT`.
+    Subscript,
+    /// `EC-BOUND-ODO`.
+    Odo,
+    /// `EC-BOUND-REF-MOD`.
+    RefMod,
+}
+
+/// A single bounds-check violation: the exception raised, the `cob_runtime_error` message (the text after
+/// `libcob: <file>:<line>: error: `), an optional `cob_runtime_hint` line (after `note: `), and whether the
+/// runtime aborts on it (`cob_hard_failure`).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BoundViolation {
+    /// The raised exception.
+    pub exception: BoundException,
+    /// The runtime-error message text.
+    pub message: Vec<u8>,
+    /// An optional hint line.
+    pub hint: Option<Vec<u8>>,
+    /// Whether this violation aborts the run.
+    pub fatal: bool,
+}
+
+/// Port of `common.c:cob_check_subscript` -- validate a 1-based table subscript `i` against `max`.
+/// `cannot_check` models the 2.0-ABI compatibility path (only a zero subscript is caught). `odo_item`
+/// selects the "current maximum" hint wording for a variable-length table. Returns the violation, or `None`
+/// when in bounds.
+pub fn cob_check_subscript(
+    i: i32,
+    max: i32,
+    name: &str,
+    odo_item: bool,
+    cannot_check: bool,
+) -> Option<BoundViolation> {
+    if cannot_check {
+        if i == 0 {
+            return Some(BoundViolation {
+                exception: BoundException::Subscript,
+                message: format!("subscript of 'unknown field' out of bounds: {i}").into_bytes(),
+                hint: None,
+                fatal: true,
+            });
+        }
+        return None;
+    }
+    if i < 1 || i > max {
+        let hint = if i >= 1 {
+            let label = if odo_item { "current maximum subscript" } else { "maximum subscript" };
+            Some(format!("{label} for '{name}': {max}").into_bytes())
+        } else {
+            None
+        };
+        return Some(BoundViolation {
+            exception: BoundException::Subscript,
+            message: format!("subscript of '{name}' out of bounds: {i}").into_bytes(),
+            hint,
+            fatal: true,
+        });
+    }
+    None
+}
+
+/// Port of `common.c:cob_check_odo` -- validate an `OCCURS DEPENDING ON` length `i` against `[min, max]`.
+pub fn cob_check_odo(i: i32, min: i32, max: i32, name: &str, dep_name: &str) -> Option<BoundViolation> {
+    if i < min || i > max {
+        let hint = if i > max {
+            format!("maximum subscript for '{name}': {max}")
+        } else {
+            format!("minimum subscript for '{name}': {min}")
+        };
+        return Some(BoundViolation {
+            exception: BoundException::Odo,
+            message: format!("OCCURS DEPENDING ON '{dep_name}' out of bounds: {i}").into_bytes(),
+            hint: Some(hint.into_bytes()),
+            fatal: true,
+        });
+    }
+    None
+}
+
+/// Port of `common.c:cob_check_ref_mod_detailed` -- validate a reference modification `field(offset:length)`
+/// against the field `size`. Returns every violation it would raise, in evaluation order (offset, then
+/// plain length, then length-with-offset); `abend` sets each violation's `fatal` (with `abend` the first
+/// fatal aborts, so the first violation is the one the oracle shows). `zero_allowed` permits a zero length.
+pub fn cob_check_ref_mod_detailed(
+    name: &str,
+    abend: bool,
+    zero_allowed: bool,
+    size: i32,
+    offset: i32,
+    length: i32,
+) -> Vec<BoundViolation> {
+    let minimal_length = if zero_allowed { 0 } else { 1 };
+    let mut out = Vec::new();
+    if offset < 1 || offset > size {
+        let message = if offset < 1 {
+            format!("offset of '{name}' out of bounds: {offset}")
+        } else {
+            format!("offset of '{name}' out of bounds: {offset}, maximum: {size}")
+        };
+        out.push(BoundViolation { exception: BoundException::RefMod, message: message.into_bytes(), hint: None, fatal: abend });
+    }
+    if length < minimal_length || length > size {
+        let message = if length < minimal_length {
+            format!("length of '{name}' out of bounds: {length}")
+        } else {
+            format!("length of '{name}' out of bounds: {length}, maximum: {size}")
+        };
+        out.push(BoundViolation { exception: BoundException::RefMod, message: message.into_bytes(), hint: None, fatal: abend });
+    }
+    if offset + length - 1 > size {
+        let message = format!("length of '{name}' out of bounds: {length}, starting at: {offset}, maximum: {size}");
+        out.push(BoundViolation { exception: BoundException::RefMod, message: message.into_bytes(), hint: None, fatal: abend });
+    }
+    out
+}
+
+/// Port of `common.c:cob_check_ref_mod` (the 2.2/3.1-rc1 compat shim) -- always-abend, no zero length.
+pub fn cob_check_ref_mod(offset: i32, length: i32, size: i32, name: &str) -> Vec<BoundViolation> {
+    cob_check_ref_mod_detailed(name, true, false, size, offset, length)
+}
+
+/// Port of `common.c:cob_check_ref_mod_minimal` -- the minimal check (only `offset >= 1` and `length >= 1`,
+/// each fatal), with no upper-bound check.
+pub fn cob_check_ref_mod_minimal(name: &str, offset: i32, length: i32) -> Vec<BoundViolation> {
+    let mut out = Vec::new();
+    if offset < 1 {
+        out.push(BoundViolation {
+            exception: BoundException::RefMod,
+            message: format!("offset of '{name}' out of bounds: {offset}").into_bytes(),
+            hint: None,
+            fatal: true,
+        });
+    }
+    if length < 1 {
+        out.push(BoundViolation {
+            exception: BoundException::RefMod,
+            message: format!("length of '{name}' out of bounds: {length}").into_bytes(),
+            hint: None,
+            fatal: true,
+        });
+    }
+    out
+}
+
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.COMMON.BOUNDCHECK.1
+    /// `cob_check_subscript` is total + exactly characterizes the in-bounds set: for any `(i, max)` it
+    /// returns `None` iff `1 <= i <= max` (in the normal, non-compat path), and never panics.
+    #[kani::proof]
+    fn subscript_check_is_exact() {
+        let i: i32 = kani::any();
+        let max: i32 = kani::any();
+        kani::assume(max >= 0 && max <= 1000 && i >= -1000 && i <= 2000);
+        let v = cob_check_subscript(i, max, "X", false, false);
+        if i >= 1 && i <= max {
+            assert!(v.is_none());
+        } else {
+            assert!(v.is_some());
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -382,5 +558,42 @@ mod tests {
         assert_eq!(cob_int_to_formatted_bytestring(512), b"0.00 B".to_vec());
         assert_eq!(cob_int_to_formatted_bytestring(2048), b"2.00 kB".to_vec());
         assert_eq!(cob_int_to_formatted_bytestring(1024 * 1024 * 3), b"3.00 MB".to_vec());
+    }
+
+    #[test]
+    fn bounds_check_messages() {
+        // subscript out of bounds (the exact message + hint the oracle prints, verified vs 3.1.2 + 3.2)
+        let v = cob_check_subscript(5, 3, "E", false, false).unwrap();
+        assert_eq!(v.message, b"subscript of 'E' out of bounds: 5".to_vec());
+        assert_eq!(v.hint.unwrap(), b"maximum subscript for 'E': 3".to_vec());
+        assert!(v.fatal);
+        assert!(cob_check_subscript(2, 3, "E", false, false).is_none()); // in bounds
+        // zero subscript with cannot_check
+        assert_eq!(
+            cob_check_subscript(0, 3, "E", false, true).unwrap().message,
+            b"subscript of 'unknown field' out of bounds: 0".to_vec()
+        );
+        // odo-item subscript uses the "current maximum" wording
+        assert_eq!(
+            cob_check_subscript(9, 4, "T", true, false).unwrap().hint.unwrap(),
+            b"current maximum subscript for 'T': 4".to_vec()
+        );
+        // ODO out of bounds
+        let o = cob_check_odo(7, 1, 5, "T", "N").unwrap();
+        assert_eq!(o.message, b"OCCURS DEPENDING ON 'N' out of bounds: 7".to_vec());
+        assert_eq!(o.hint.unwrap(), b"maximum subscript for 'T': 5".to_vec());
+        assert_eq!(
+            cob_check_odo(0, 1, 5, "T", "N").unwrap().hint.unwrap(),
+            b"minimum subscript for 'T': 1".to_vec()
+        );
+        // reference modification: offset and length
+        let r = cob_check_ref_mod(0, 2, 5, "F");
+        assert_eq!(r[0].message, b"offset of 'F' out of bounds: 0".to_vec());
+        let r2 = cob_check_ref_mod(2, 9, 5, "F");
+        assert_eq!(r2[0].message, b"length of 'F' out of bounds: 9, maximum: 5".to_vec());
+        let r3 = cob_check_ref_mod(4, 3, 5, "F"); // 4+3-1=6 > 5
+        assert_eq!(r3[0].message, b"length of 'F' out of bounds: 3, starting at: 4, maximum: 5".to_vec());
+        assert!(cob_check_ref_mod(1, 5, 5, "F").is_empty()); // in bounds
+        assert_eq!(cob_check_ref_mod_minimal("F", 0, 2)[0].message, b"offset of 'F' out of bounds: 0".to_vec());
     }
 }

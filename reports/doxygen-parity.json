@@ -143,11 +143,6 @@
         "cob_check_linkage_size",
         "cob_check_numdisp",
         "cob_check_numeric",
-        "cob_check_odo",
-        "cob_check_ref_mod",
-        "cob_check_ref_mod_detailed",
-        "cob_check_ref_mod_minimal",
-        "cob_check_subscript",
         "cob_check_trace_file",
         "cob_check_version",
         "cob_command_line",
@@ -185,7 +180,6 @@
         "cob_getenv",
         "cob_getenv_direct",
         "cob_gettmpdir",
-        "cob_hard_failure",
         "cob_hard_failure_internal",
         "cob_incr_temp_iteration",
         "cob_init_nomain",
@@ -216,8 +210,6 @@
         "cob_rescan_env_vals",
         "cob_reset_trace",
         "cob_restore_func",
-        "cob_runtime_error",
-        "cob_runtime_hint",
         "cob_runtime_warning",
         "cob_runtime_warning_external",
         "cob_runtime_warning_ss",
@@ -321,8 +313,8 @@
         "translate_boolean_to_int",
         "var_print"
       ],
-      "parity_pct": 13.9,
-      "ported": 34
+      "parity_pct": 17.2,
+      "ported": 42
     },
     {
       "doxygen_functions": 4,
@@ -337,8 +329,8 @@
   "schema": "libcob-doxygen-parity-v1",
   "totals": {
     "doxygen_functions": 998,
-    "parity_pct": 76.3,
-    "ported": 761
+    "parity_pct": 77.1,
+    "ported": 769
   },
   "xml_root": "lab/doxygen/out/xml"
 }

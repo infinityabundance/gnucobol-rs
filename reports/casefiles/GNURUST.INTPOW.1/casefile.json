@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTPOW.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.69",
+  "crate_version": "0.7.70",
   "damage_if_overclaimed": "a 'nicer' power (correct sign, saturating instead of wrapping) diverges from generated GnuCOBOL code on every integer ** with a -1 base or an overflowing result",
   "hash_chain": {
-    "inputs_sha256": "2184e0c0f95569808c396580987b552979fdd718ec8f183e7633b2d633ecd34e"
+    "inputs_sha256": "637bbeab9e1fea109ebad7c680f34a4d42a9e3e1ddbf95b1015a9875d3d1ca54"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "db4bc7327361ff94e3ea6833484223c2ab738da0667099a0dfa05c6b429d3db2",
-    "receipt_sha256": "de9516cb74f855aaef734e4177f4659afe8d2e58d5415ecf4c362a566786e782"
+    "receipt_sha256": "af875858539e268be617742c06189530711217e7bdf81933bd7c0481fbe12499"
   },
   "kind": "court-casefile",
   "lie_prevented": [

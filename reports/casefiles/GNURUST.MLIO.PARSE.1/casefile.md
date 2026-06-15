@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MLIO.PARSE.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.69
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.7.70
 
 - **Oracle:** cobc XML PARSE ... PROCESSING PROCEDURE (libcob/mlio.c cob_xml_parse)
 - **Byte domain(s):** an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT special-register sequence a PROCESSING PROCEDURE observes

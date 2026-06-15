@@ -222,11 +222,6 @@
         "cob_check_linkage_size",
         "cob_check_numdisp",
         "cob_check_numeric",
-        "cob_check_odo",
-        "cob_check_ref_mod",
-        "cob_check_ref_mod_detailed",
-        "cob_check_ref_mod_minimal",
-        "cob_check_subscript",
         "cob_check_trace_file",
         "cob_check_version",
         "cob_cmp",
@@ -420,8 +415,8 @@
         "unsetenv",
         "var_print"
       ],
-      "parity_pct": 9.1,
-      "ported": 23
+      "parity_pct": 11.0,
+      "ported": 28
     },
     {
       "file": "cobgetopt.c",
@@ -437,7 +432,7 @@
   "schema": "libcob-porting-parity-v1",
   "totals": {
     "functions": 1170,
-    "parity_pct": 70.3,
-    "ported": 822
+    "parity_pct": 70.7,
+    "ported": 827
   }
 }

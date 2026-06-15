@@ -529,6 +529,19 @@
   "risk_if_unported": "a wrong subscript offset reads the wrong table element"
  },
  {
+  "surface": "runtime-bounds-messages",
+  "category": "runtime diagnostics",
+  "source_modules": [
+   "libcob/common.c"
+  ],
+  "status": "sealed",
+  "courts": [
+   "GNURUST.COMMON.BOUNDCHECK.1"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "the runtime EC-BOUND diagnostic text for an out-of-bounds subscript / reference modification / OCCURS DEPENDING ON is reproduced byte-identically to GnuCOBOL (common.c cob_check_subscript / cob_check_ref_mod / cob_check_odo), verified identical across BOTH admitted oracles 3.1.2 + 3.2 (bounds_check_sweep 6/0) -- so a migration that asserts on the diagnostic text sees the same bytes"
+ },
+ {
   "surface": "occurs-depending-on",
   "category": "data handling",
   "source_modules": [

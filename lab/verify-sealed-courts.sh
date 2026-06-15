@@ -111,6 +111,7 @@ run_sweep "GNURUST.PERFORM.SLICE.1" perform_sweep.sh
 run_sweep "GNURUST.TABLE.PERFORM.SLICE.1" table_sweep.sh
 run_sweep "GNURUST.SEARCH.TABLE.1" search_sweep.sh
 run_sweep "GNURUST.SUBSCRIPT.1 subscript" subscript_sweep.sh
+run_sweep "GNURUST.COMMON.BOUNDCHECK.1" bounds_check_sweep.sh
 run_sweep "GNURUST.ODO.1 odo"        odo_sweep.sh
 run_sweep "GNURUST.INDEX.1 usage-index" index_sweep.sh
 run_sweep "GNURUST.FILE.FLOW.SLICE.1" file_flow_sweep.sh

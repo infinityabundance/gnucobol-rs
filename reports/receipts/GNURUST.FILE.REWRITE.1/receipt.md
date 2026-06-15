@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILE.REWRITE.1` |
 | court | sequential REWRITE in-place update |
-| crate_version | `0.7.69` |
+| crate_version | `0.7.70` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN I-O + REWRITE -> record overwritten in place (same length), others unchanged |
 | replay command | `bash lab/oracle/rewrite_sweep.sh` |

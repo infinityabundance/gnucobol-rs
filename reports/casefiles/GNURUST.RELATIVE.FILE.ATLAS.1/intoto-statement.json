@@ -3,11 +3,11 @@
   "predicate": {
     "case_id": "GNURUST.RELATIVE.FILE.ATLAS.1",
     "crate": "gnucobol-rs",
-    "crate_version": "0.7.69",
+    "crate_version": "0.7.70",
     "kind": "court-casefile",
     "materials": {
       "claim_ladder_entry_sha256": "c359fc205d32760d13cc406529312e8889ade12fd66d70efed8384add8f1c6e9",
-      "receipt_sha256": "eac40ad0eda6708c2b3eda46901360f85374afe25b4b34596cf9b3de89714952"
+      "receipt_sha256": "0deb1f1307b88b2fede2502a17d6d7ec996b350d4bcdd106dde413dfa619c47a"
     },
     "negative_claim_count": 7,
     "positive_claim_count": 3,
@@ -21,7 +21,7 @@
   "subject": [
     {
       "digest": {
-        "sha256": "968f26809fa1acb9b2d029bc2884adc7e247502d57683f385f0aeb29bffd008e"
+        "sha256": "922f2d7f0981d1e35e32758c785db81a533c650657a7a0e25f49821f9a5df5fa"
       },
       "name": "reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/casefile.json"
     }

@@ -1,0 +1,31 @@
+{
+  "byte_domain": "a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2)",
+  "campaign": "GNURUST.COMMON.BOUNDCHECK.1",
+  "command": {
+    "replay": "bash lab/oracle/bounds_check_sweep.sh"
+  },
+  "court": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
+  "crate_version": "0.7.70",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "the libcob: <file>:<line>: error: / note: prefix framing (the runtime wrapper, not the check)",
+    "cob_check_numeric's not-numeric message (octal/hex byte escaping)",
+    "the cob_hard_failure abort + exit code + EC numeric ids",
+    "the 2.0-ABI cannot_check_subscript state path beyond the zero-subscript case"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=6 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

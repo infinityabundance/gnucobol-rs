@@ -1567,6 +1567,20 @@
       "damage_if_overclaimed": "treating an ODO record as max-length over-reads or over-writes a variable-length record, corrupting the next record or trailing data"
     },
     {
+      "id": "GNURUST.COMMON.BOUNDCHECK.1",
+      "name": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
+      "proven": "a faithful pure port of common.c's runtime bounds checks (cob_check_subscript / cob_check_odo / cob_check_ref_mod / cob_check_ref_mod_detailed / cob_check_ref_mod_minimal), reproducing the EXACT cob_runtime_error message + cob_runtime_hint text GnuCOBOL prints when a table subscript, a reference modification, or an OCCURS DEPENDING ON length goes out of bounds (under cobc -debug). The pure bounds decision + message text is separated from the abort side effect (cob_hard_failure). DIFFERENTIAL: the messages are proven byte-identical against BOTH admitted oracles -- GnuCOBOL 3.1.2 AND 3.2 (bounds_check_sweep 6/0) -- confirming they are version-stable semantics, not a single-version quirk. Examples: \"subscript of 'E' out of bounds: 5\" + \"maximum subscript for 'E': 3\"; \"length of 'F' out of bounds: 9, maximum: 5\"; \"OCCURS DEPENDING ON 'N' out of bounds: 7\" + \"maximum subscript for 'E': 5\".",
+      "byte_domain": "a bounds-check input (index/offset/length + field size/limits + names) -> the exact runtime EC-BOUND diagnostic message + hint bytes",
+      "oracle": "cobc -debug runtime bounds checks (libcob/common.c cob_check_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
+      "fixtures": "bounds_check_sweep 6/0 (3 cases x 2 oracles, differential) + unit tests (each check + hint wording) + Kani subscript_check_is_exact",
+      "sealed_version": "0.7.70",
+      "not_proven": "the cob_runtime_error PREFIX framing (libcob: <file>:<line>: error: / note:) which is the runtime wrapper, not the check (the check produces the core text); cob_check_numeric's not-numeric message (octal/hex byte escaping -- a follow-on); the actual cob_hard_failure abort + exit code; the EC exception numeric ids; the 2.0-ABI cannot_check_subscript global state path beyond the modelled zero-subscript case",
+      "breaks_claim": "a different bounds-check message or hint wording vs the oracle for any of the three check kinds, on either oracle version",
+      "readiness": 4,
+      "lie_prevented": "the runtime bounds diagnostics are GnuCOBOL-internal and unportable -- NO: the message text is a deterministic function of the bounds inputs, reproduced byte-identically and proven stable across two GnuCOBOL versions",
+      "damage_if_overclaimed": "claiming 'runtime diagnostics' broadly would hide that only these three bounds messages are sealed (not the not-numeric message, the abort, or the libcob: prefix framing)"
+    },
+    {
       "id": "GNURUST.INDEX.1",
       "name": "USAGE INDEX storage + SET arithmetic",
       "proven": "the bytes a USAGE INDEX / INDEXED BY index item holds: a 4-byte native-endian (little-endian on the admitted x86-64 oracle) signed two's-complement word storing the OCCURRENCE NUMBER (element-size independent -- SET IDX TO 5 stores 5, never 5*element_size), and SET IDX TO/UP BY/DOWN BY as plain integer arithmetic on that word (DOWN past zero stores the negative two's-complement value; cobc does not clamp)",

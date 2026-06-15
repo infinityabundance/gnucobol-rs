@@ -1,0 +1,63 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "a bounds-check input (index/offset/length + field size/limits + names) -> the exact runtime EC-BOUND diagnostic message + hint bytes"
+  ],
+  "case_id": "GNURUST.COMMON.BOUNDCHECK.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.70",
+  "damage_if_overclaimed": "claiming 'runtime diagnostics' broadly would hide that only these three bounds messages are sealed (not the not-numeric message, the abort, or the libcob: prefix framing)",
+  "hash_chain": {
+    "inputs_sha256": "d1885920ba68744e2c48b9d85805732c4416c8f019c4bc2a682b566f3fc48410"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "7d1426cf4e7e23c1a487f837bbb866751eda45981427868074183a2bbb9895e8",
+    "receipt_sha256": "0b17b452966422c732e0aa14e02dd23b7d44667154599d32c73ab3d738ca5d36"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "the runtime bounds diagnostics are GnuCOBOL-internal and unportable -- NO: the message text is a deterministic function of the bounds inputs, reproduced byte-identically and proven stable across two GnuCOBOL versions"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-COB-RUNTIME-ERROR-PREFIX-FRAMING-LIB",
+    "NEG.COB-CHECK-NUMERIC-S-NOT-NUMERIC-MESSAGE",
+    "NEG.THE-ACTUAL-COB-HARD-FAILURE-ABORT-EXIT-C",
+    "NEG.THE-EC-EXCEPTION-NUMERIC-IDS",
+    "NEG.THE-2-0-ABI-CANNOT-CHECK-SUBSCRIPT-GLOBA"
+  ],
+  "negative_claims": [
+    "the cob_runtime_error PREFIX framing (libcob: <file>:<line>: error: / note:) which is the runtime wrapper, not the check (the check produces the core text)",
+    "cob_check_numeric's not-numeric message (octal/hex byte escaping -- a follow-on)",
+    "the actual cob_hard_failure abort + exit code",
+    "the EC exception numeric ids",
+    "the 2.0-ABI cannot_check_subscript global state path beyond the modelled zero-subscript case",
+    "lie prevented: the runtime bounds diagnostics are GnuCOBOL-internal and unportable -- NO: the message text is a deterministic function of the bounds inputs, reproduced byte-identically and proven stable across two GnuCOBOL versions"
+  ],
+  "oracle": {
+    "detail": "cobc -debug runtime bounds checks (libcob/common.c cob_check_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COMMON.BOUNDCHECK.1"
+  },
+  "positive_claims": [
+    "a faithful pure port of common.c's runtime bounds checks (cob_check_subscript / cob_check_odo / cob_check_ref_mod / cob_check_ref_mod_detailed / cob_check_ref_mod_minimal), reproducing the EXACT cob_runtime_error message + cob_runtime_hint text GnuCOBOL prints when a table subscript, a reference modification, or an OCCURS DEPENDING ON length goes out of bounds (under cobc -debug). The pure bounds decision + message text is separated from the abort side effect (cob_hard_failure). DIFFERENTIAL: the messages are proven byte-identical against BOTH admitted oracles -- GnuCOBOL 3.1.2 AND 3.2 (bounds_check_sweep 6/0) -- confirming they are version-stable semantics, not a single-version quirk. Examples: \"subscript of 'E' out of bounds: 5\" + \"maximum subscript for 'E': 3\"",
+    "\"length of 'F' out of bounds: 9, maximum: 5\"",
+    "\"OCCURS DEPENDING ON 'N' out of bounds: 7\" + \"maximum subscript for 'E': 5\"."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/bounds_check_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 6,
+    "total": 6,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

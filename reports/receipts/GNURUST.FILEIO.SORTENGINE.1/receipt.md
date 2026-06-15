@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.SORTENGINE.1` |
 | court | SORT/MERGE in-memory engine (4-queue natural merge) |
-| crate_version | `0.7.69` |
+| crate_version | `0.7.70` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a sequence of submitted records + SORT keys -> the retrieved (sorted) record sequence |
 | replay command | `bash lab/oracle/sortengine_sweep.sh` |

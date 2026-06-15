@@ -6,6 +6,8 @@ Cargo.lock
 # Admitted upstream + built oracle (re-fetchable / re-buildable, never vendored)
 /lab/admit/
 /lab/oracle/prefix/
+/lab/oracle/prefix-312/
+/lab/oracle/prefix-*/
 /lab/oracle/*.log
 /lab/oracle/build/
 /lab/**/*.o

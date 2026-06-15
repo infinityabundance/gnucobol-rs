@@ -5626,11 +5626,11 @@
     "test_only": 0
   },
   {
-    "active_ported": 23,
+    "active_ported": 28,
     "compiled": 254,
-    "compiled_parity_pct": 9.1,
+    "compiled_parity_pct": 11.0,
     "disabled": 0,
-    "doc_only": 14,
+    "doc_only": 17,
     "file": "common.c",
     "fns": [
       {
@@ -6041,7 +6041,7 @@
       {
         "function": "cob_hard_failure",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_hard_failure_internal",
@@ -6244,27 +6244,32 @@
       {
         "function": "cob_check_odo",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_subscript",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_ref_mod_detailed",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_ref_mod",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_check_ref_mod_minimal",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_module": "common",
+        "rust_status": "active"
       },
       {
         "function": "cob_external_addr_lookup",
@@ -6764,7 +6769,7 @@
       {
         "function": "cob_runtime_hint",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_setup_runtime_error_str",
@@ -6774,7 +6779,7 @@
       {
         "function": "cob_runtime_error",
         "preprocessor_status": "compiled",
-        "rust_status": "missing"
+        "rust_status": "doc_only"
       },
       {
         "function": "cob_fatal_error",
@@ -6962,11 +6967,6 @@
       "cob_check_linkage_size",
       "cob_check_numdisp",
       "cob_check_numeric",
-      "cob_check_odo",
-      "cob_check_ref_mod",
-      "cob_check_ref_mod_detailed",
-      "cob_check_ref_mod_minimal",
-      "cob_check_subscript",
       "cob_check_trace_file",
       "cob_check_version",
       "cob_cmp",
@@ -7161,7 +7161,7 @@
       "var_print"
     ],
     "inactive_mirrors": 0,
-    "missing": 217,
+    "missing": 209,
     "source_funcs": 254,
     "test_only": 0
   },
