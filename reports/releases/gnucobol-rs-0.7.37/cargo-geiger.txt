@@ -4,9 +4,9 @@ note: every shipped crate is #![forbid(unsafe_code)]
 
 
      Removed 8057 files, 1.5GiB total
-    Checking gnucobol-rs v0.7.37 (/home/one/gnucobol-rs/crates/gnucobol-rs)
-{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/gnucobol_rs-fb13cb13115c8f1b.d","emit":"dep-info"}
-{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/libgnucobol_rs-fb13cb13115c8f1b.rmeta","emit":"metadata"}
+    Checking gnucobol-rs v0.7.37 (./crates/gnucobol-rs)
+{"$message_type":"artifact","artifact":"./target/debug/deps/gnucobol_rs-fb13cb13115c8f1b.d","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"./target/debug/deps/libgnucobol_rs-fb13cb13115c8f1b.rmeta","emit":"metadata"}
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.53s
-error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" }, "/home/one/gnucobol-rs/crates/cobol-decimal-rs/src/lib.rs")
+error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" }, "./crates/cobol-decimal-rs/src/lib.rs")
 
