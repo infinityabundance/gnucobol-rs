@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILE.STATUS.1` |
 | court | observed FILE STATUS bytes for declared file-operation fixtures |
-| crate_version | `0.7.67` |
+| crate_version | `0.7.68` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | declared OPEN/READ/CLOSE condition -> observed FILE STATUS byte (00/06/10/35/42/46) |
 | replay command | `bash lab/oracle/file_status_sweep.sh` |

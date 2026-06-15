@@ -1,0 +1,64 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "an attributed positioned DISPLAY (LINE/COLUMN + monochrome attribute) -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal"
+  ],
+  "case_id": "GNURUST.SCREENIO.ATTR.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.7.68",
+  "damage_if_overclaimed": "claiming 'screen attributes work' would hide that COLOUR (the whole-screen repaint), combined attributes, and ACCEPT-side attributes are unported, and that only the admitted terminal is proven",
+  "hash_chain": {
+    "inputs_sha256": "2af808c2c08bf39b797269636365727e0c7d6de5177435be625eab8c31529644"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "33cd8965aa8931f5a5300055afc85308416368e903992d1090d79d64163f9f52",
+    "receipt_sha256": "1fe04a7c3b62e00f870adc9223d426b9fae349ab6c183e1f9b16c75992349da1"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "screen display attributes need ncurses linked -- NO (for the monochrome attributes): each is a deterministic SGR on/off wrap reproduced exactly, no ncurses linked. The colour-repaint path is honestly carved out as unsealed"
+  ],
+  "negative_capability_ids": [
+    "NEG.COLOUR-ATTRIBUTES-FOREGROUND-COLOR-BACKG",
+    "NEG.COMBINED-ATTRIBUTES-E-G-HIGHLIGHT-UNDERL",
+    "NEG.ATTRIBUTES-ON-MULTI-FIELD-OR-NUMERIC-EDI",
+    "NEG.ACCEPT-SIDE-PROMPT-SECURE-ATTRIBUTES",
+    "NEG.ANY-TERMINAL-OTHER-THAN-TERM-XTERM-OR-NC"
+  ],
+  "negative_claims": [
+    "COLOUR attributes (FOREGROUND-COLOR / BACKGROUND-COLOR) -- those trigger a whole-screen colour repaint (the terminfo bce path with an extra clear/\\e[J/\\e[K), a separate mechanism NOT sealed here",
+    "COMBINED attributes (e.g. HIGHLIGHT UNDERLINE together)",
+    "attributes on multi-field or numeric-edited displays",
+    "ACCEPT-side prompt/secure attributes",
+    "any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)",
+    "lie prevented: screen display attributes need ncurses linked -- NO (for the monochrome attributes): each is a deterministic SGR on/off wrap reproduced exactly, no ncurses linked. The colour-repaint path is honestly carved out as unsealed"
+  ],
+  "oracle": {
+    "detail": "cobc SCREEN SECTION DISPLAY ... HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE-VIDEO (libcob/screenio.c via ncurses 6.6 attrset), captured under a pty with TERM=xterm",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.SCREENIO.ATTR.1"
+  },
+  "positive_claims": [
+    "a from-scratch, dependency-free Rust reproduction of the SGR attribute sequences ncurses emits around an attributed SCREEN SECTION DISPLAY field -- WITHOUT linking ncurses -- proven byte-identical to GnuCOBOL (screenio_attr_sweep 10/0 over the 5 monochrome attributes x 2 positions). Each attribute wraps the field text in an SGR-on opener (\\e(B \\e[0",
+    "<n>m \\e[39",
+    "49m\\e[37m\\e[40m -- charset + set_attributes + default-colour restore) and a constant SGR-off closer (\\e(B \\e[m \\e[39",
+    "49m\\e[37m\\e[40m), with the SGR parameter <n> = 1 HIGHLIGHT, 2 LOWLIGHT, 4 UNDERLINE, 5 BLINK, 7 REVERSE-VIDEO. The cursor advances only by the field length (the SGR sequences move nothing), so this composes exactly with the sealed mvcur positioning (screenio.rs ScreenAttr + sgr_on/sgr_off + display_and_stop)."
+  ],
+  "replay": {
+    "command": "bash lab/oracle/screenio_attr_sweep.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "pass": 10,
+    "total": 10,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

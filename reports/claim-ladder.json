@@ -1343,6 +1343,20 @@
       "damage_if_overclaimed": "claiming 'multi-field DISPLAY works' would hide that overlapping same-row layouts (needing the clr_eol refresh diff), attributes, and ACCEPT are unported, and that only non-overlapping pairs on the admitted terminal are proven"
     },
     {
+      "id": "GNURUST.SCREENIO.ATTR.1",
+      "name": "SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes",
+      "proven": "a from-scratch, dependency-free Rust reproduction of the SGR attribute sequences ncurses emits around an attributed SCREEN SECTION DISPLAY field -- WITHOUT linking ncurses -- proven byte-identical to GnuCOBOL (screenio_attr_sweep 10/0 over the 5 monochrome attributes x 2 positions). Each attribute wraps the field text in an SGR-on opener (\\e(B \\e[0;<n>m \\e[39;49m\\e[37m\\e[40m -- charset + set_attributes + default-colour restore) and a constant SGR-off closer (\\e(B \\e[m \\e[39;49m\\e[37m\\e[40m), with the SGR parameter <n> = 1 HIGHLIGHT, 2 LOWLIGHT, 4 UNDERLINE, 5 BLINK, 7 REVERSE-VIDEO. The cursor advances only by the field length (the SGR sequences move nothing), so this composes exactly with the sealed mvcur positioning (screenio.rs ScreenAttr + sgr_on/sgr_off + display_and_stop).",
+      "byte_domain": "an attributed positioned DISPLAY (LINE/COLUMN + monochrome attribute) -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal",
+      "oracle": "cobc SCREEN SECTION DISPLAY ... HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE-VIDEO (libcob/screenio.c via ncurses 6.6 attrset), captured under a pty with TERM=xterm",
+      "fixtures": "screenio_attr_sweep 10/0 (live pty capture, 5 attributes x 2 positions) + 1 unit test (each attribute's SGR wrap) + Kani attribute_envelope",
+      "sealed_version": "0.7.68",
+      "not_proven": "COLOUR attributes (FOREGROUND-COLOR / BACKGROUND-COLOR) -- those trigger a whole-screen colour repaint (the terminfo bce path with an extra clear/\\e[J/\\e[K), a separate mechanism NOT sealed here; COMBINED attributes (e.g. HIGHLIGHT UNDERLINE together); attributes on multi-field or numeric-edited displays; ACCEPT-side prompt/secure attributes; any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)",
+      "breaks_claim": "a different SGR code or a different on/off wrapping vs the oracle for any swept attribute/position",
+      "readiness": 4,
+      "lie_prevented": "screen display attributes need ncurses linked -- NO (for the monochrome attributes): each is a deterministic SGR on/off wrap reproduced exactly, no ncurses linked. The colour-repaint path is honestly carved out as unsealed",
+      "damage_if_overclaimed": "claiming 'screen attributes work' would hide that COLOUR (the whole-screen repaint), combined attributes, and ACCEPT-side attributes are unported, and that only the admitted terminal is proven"
+    },
+    {
       "id": "GNURUST.INTRINSIC.DATE.1",
       "name": "date-conversion intrinsics",
       "proven": "FUNCTION INTEGER-OF-DATE / DATE-OF-INTEGER / INTEGER-OF-DAY / DAY-OF-INTEGER match cobc/libcob across a spread of dates incl leap days and century boundaries (verified 30/0 + a 200000-day round-trip unit test): COBOL integer dates count days in the PROLEPTIC GREGORIAN calendar from a fixed epoch where 1601-01-01 = day 1 (INTEGER-OF-DATE(20240229)=154557 a leap day; the four functions are mutual inverses). These are DETERMINISTIC pure calendar math, distinct from the environment-sensitive CURRENT-DATE/WHEN-COMPILED which stay refused. The date intrinsic court on the spine",

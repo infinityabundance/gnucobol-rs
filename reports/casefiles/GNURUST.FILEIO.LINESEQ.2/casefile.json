@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.LINESEQ.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.67",
+  "crate_version": "0.7.68",
   "damage_if_overclaimed": "mis-handling the split (06 vs 04), the \\r\\n fold, or the read-vs-write bad-char asymmetry corrupts record framing or wrongly accepts/rejects control data",
   "hash_chain": {
-    "inputs_sha256": "695c61a6c27097a10bcc912ad4f4cf8c85895c0b74261d7c34cf0ed6a7224eb9"
+    "inputs_sha256": "58fd0e8b149b6d39f1dce36b8e23eb205d02a0cc3d146f1e04cd40345b65eb4f"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "56555fe3a1c4867e7717181e668accfeac2d30b565f3a8118f5fe826cc3c401c",
-    "receipt_sha256": "e13574d36be41db8b37f72a82d1294fe5395a566fb4e91536df86f26da13d533"
+    "receipt_sha256": "e13fa40eb787b645bf3b07bf8b93febc59739de48635019908d14641b35b6d79"
   },
   "kind": "court-casefile",
   "lie_prevented": [

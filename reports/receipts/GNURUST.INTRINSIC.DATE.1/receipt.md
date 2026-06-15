@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.DATE.1` |
 | court | date-conversion intrinsics |
-| crate_version | `0.7.67` |
+| crate_version | `0.7.68` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | INTEGER-OF-DATE/DATE-OF-INTEGER/INTEGER-OF-DAY/DAY-OF-INTEGER (proleptic Gregorian, 1601-01-01=1) |
 | replay command | `bash lab/oracle/date_sweep.sh` |

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 non-claim: COLOUR attributes (FOREGROUND-COLOR / BACKGROUND-COLOR) -- those trigger a whole-screen colour repaint (the terminfo bce path with an extra clear/\\e[J/\\e[K), a separate mechanism NOT sealed here"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 non-claim: COMBINED attributes (e.g. HIGHLIGHT UNDERLINE together)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 non-claim: attributes on multi-field or numeric-edited displays"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 non-claim: ACCEPT-side prompt/secure attributes"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 non-claim: any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.SCREENIO.ATTR.1 non-claim: lie prevented: screen display attributes need ncurses linked -- NO (for the monochrome attributes): each is a deterministic SGR on/off wrap reproduced exactly, no ncurses linked. The colour-repaint path is honestly carved out as unsealed"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

@@ -47,8 +47,38 @@ pub const TEARDOWN_EPILOGUE: &[u8] = b"\x1b[?1006;1000l\x1b[39;49m\r\x1b[24d\x1b
 /// pause prompt and the teardown's last-line clear.
 pub const SCREEN_ROWS: i32 = 24;
 
-/// A single positioned screen item of a `DISPLAY`: 1-based COBOL `LINE`/`COLUMN` and the literal/`FROM`
-/// bytes to write (already space-padded to the item's `PIC` size, as the compiler presents it).
+/// A monochrome SCREEN SECTION display attribute (the ones whose terminal bytes do not trigger a
+/// whole-screen color repaint). Each maps to the SGR parameter ncurses emits via `set_attributes`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ScreenAttr {
+    /// `HIGHLIGHT` (bold) -- SGR `1`.
+    Highlight,
+    /// `LOWLIGHT` (dim) -- SGR `2`.
+    Lowlight,
+    /// `UNDERLINE` -- SGR `4`.
+    Underline,
+    /// `BLINK` -- SGR `5`.
+    Blink,
+    /// `REVERSE-VIDEO` -- SGR `7`.
+    Reverse,
+}
+
+impl ScreenAttr {
+    /// The SGR numeric parameter for this attribute (`\e[0;<n>m`).
+    fn sgr_code(self) -> u8 {
+        match self {
+            ScreenAttr::Highlight => 1,
+            ScreenAttr::Lowlight => 2,
+            ScreenAttr::Underline => 4,
+            ScreenAttr::Blink => 5,
+            ScreenAttr::Reverse => 7,
+        }
+    }
+}
+
+/// A single positioned screen item of a `DISPLAY`: 1-based COBOL `LINE`/`COLUMN`, the literal/`FROM`
+/// bytes to write (already space-padded to the item's `PIC` size, as the compiler presents it), and an
+/// optional monochrome display attribute wrapping the field.
 #[derive(Debug, Clone)]
 pub struct ScreenItem {
     /// COBOL `LINE` (1-based).
@@ -57,6 +87,35 @@ pub struct ScreenItem {
     pub column: i32,
     /// The item's display bytes.
     pub data: Vec<u8>,
+    /// An optional monochrome display attribute (`HIGHLIGHT`/`REVERSE-VIDEO`/...).
+    pub attr: Option<ScreenAttr>,
+}
+
+impl ScreenItem {
+    /// A plain (no-attribute) positioned field.
+    pub fn plain(line: i32, column: i32, data: Vec<u8>) -> Self {
+        ScreenItem { line, column, data, attr: None }
+    }
+    /// A positioned field carrying a monochrome display attribute.
+    pub fn with_attr(line: i32, column: i32, data: Vec<u8>, attr: ScreenAttr) -> Self {
+        ScreenItem { line, column, data, attr: Some(attr) }
+    }
+}
+
+/// The SGR "attribute on" sequence ncurses emits before an attributed field: the ASCII-charset
+/// designation, the `set_attributes` SGR `\e[0;<n>m`, then the default-color restore. Observed byte-exact
+/// against the oracle (`screenio_attr_sweep`).
+fn sgr_on(attr: ScreenAttr) -> Vec<u8> {
+    let mut v = b"\x1b(B\x1b[0;".to_vec();
+    v.extend_from_slice(attr.sgr_code().to_string().as_bytes());
+    v.extend_from_slice(b"m\x1b[39;49m\x1b[37m\x1b[40m");
+    v
+}
+
+/// The SGR "attribute off" sequence ncurses emits after an attributed field: charset designation, `sgr0`
+/// reset `\e[m`, then the default-color restore. Constant for every monochrome attribute.
+fn sgr_off() -> Vec<u8> {
+    b"\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m".to_vec()
 }
 
 /// Append `n` spaces (the cheapest right-move ncurses chooses for a short column advance: each overwrites a
@@ -177,7 +236,15 @@ pub fn display_and_stop(items: &[ScreenItem]) -> Vec<u8> {
     let (mut cy, mut cx) = (1, 1);
     for it in items {
         out.extend_from_slice(&mvcur(cy, cx, it.line, it.column));
-        out.extend_from_slice(&it.data);
+        // A monochrome attribute wraps the field in an SGR on/off pair; the cursor still advances only by
+        // the data length (the SGR sequences move nothing).
+        if let Some(a) = it.attr {
+            out.extend_from_slice(&sgr_on(a));
+            out.extend_from_slice(&it.data);
+            out.extend_from_slice(&sgr_off());
+        } else {
+            out.extend_from_slice(&it.data);
+        }
         cy = it.line;
         cx = it.column + it.data.len() as i32;
     }
@@ -204,7 +271,7 @@ mod kani_proofs {
         kani::assume(line >= 1 && line <= SCREEN_ROWS - 1);
         kani::assume(column >= 1 && column <= 80);
         let b: u8 = kani::any();
-        let items = vec![ScreenItem { line, column, data: vec![b] }];
+        let items = vec![ScreenItem { line, column, data: vec![b], attr: None }];
         let out = display_and_stop(&items);
         assert!(out.len() >= INIT_PROLOGUE.len() + TEARDOWN_EPILOGUE.len());
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
@@ -246,9 +313,31 @@ mod kani_proofs {
         let a: u8 = kani::any();
         let b: u8 = kani::any();
         let out = display_and_stop(&[
-            ScreenItem { line: l1, column: c1, data: vec![a] },
-            ScreenItem { line: l2, column: c2, data: vec![b] },
+            ScreenItem { line: l1, column: c1, data: vec![a], attr: None },
+            ScreenItem { line: l2, column: c2, data: vec![b], attr: None },
         ]);
+        assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
+        assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
+    }
+
+    // KANIFOR: GNURUST.SCREENIO.ATTR.1
+    /// An attributed field always emits a well-formed envelope and contains both the SGR-on opener
+    /// (`\e(B\e[0;`) and the field byte, for any attribute and position -- the attribute path never panics.
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn attribute_envelope() {
+        let line: i32 = kani::any();
+        let column: i32 = kani::any();
+        kani::assume(line >= 1 && line <= SCREEN_ROWS - 1 && column >= 1 && column <= 80);
+        let sel: u8 = kani::any();
+        let attr = match sel % 5 {
+            0 => ScreenAttr::Highlight,
+            1 => ScreenAttr::Lowlight,
+            2 => ScreenAttr::Underline,
+            3 => ScreenAttr::Blink,
+            _ => ScreenAttr::Reverse,
+        };
+        let out = display_and_stop(&[ScreenItem::with_attr(line, column, vec![b'X'], attr)]);
         assert_eq!(&out[..INIT_PROLOGUE.len()], INIT_PROLOGUE);
         assert_eq!(&out[out.len() - TEARDOWN_EPILOGUE.len()..], TEARDOWN_EPILOGUE);
     }
@@ -262,7 +351,7 @@ mod tests {
     fn minimal_single_field_display_matches_oracle() {
         // `DISPLAY "X" LINE 2 COLUMN 3.` then `STOP RUN.` -- the exact 230-byte oracle capture
         // (TERM=xterm, ncurses 6.6). Proves the init framing + positioned write + pause + teardown.
-        let items = vec![ScreenItem { line: 2, column: 3, data: b"X".to_vec() }];
+        let items = vec![ScreenItem { line: 2, column: 3, data: b"X".to_vec(), attr: None }];
         let got = display_and_stop(&items);
         let want: &[u8] = b"\x1b[?1049h\x1b[22;0;0t\x1b[1;24r\x1b(B\x1b[m\x1b[4l\x1b[?7h\x1b[?1h\x1b=\x1b[39;49m\x1b[?12;25h\x1b[?1006;1000h\x1b[39;49m\x1b[37m\x1b[40m\x1b[H\x1b[2J\x1b[2d  X\r\x1b[3dend of program, please press a key to exit \x1b[?1006;1000l\x1b[39;49m\r\x1b[24d\x1b[K\x1b[24;1H\x1b[?12l\x1b[?25h\x1b[?1049l\x1b[23;0;0t\r\x1b[?1l\x1b>";
         assert_eq!(got, want);
@@ -271,7 +360,7 @@ mod tests {
     /// The cursor-movement bytes between the screen clear and the pause prompt, for one positioned field
     /// -- exercising each branch of the mvcur cost model against the oracle-pinned encodings.
     fn move_and_field(line: i32, column: i32) -> Vec<u8> {
-        let out = display_and_stop(&[ScreenItem { line, column, data: b"Z".to_vec() }]);
+        let out = display_and_stop(&[ScreenItem { line, column, data: b"Z".to_vec(), attr: None }]);
         let start = out.windows(4).position(|w| w == b"\x1b[2J").unwrap() + 4;
         let end = out.windows(PAUSE_PROMPT.len()).position(|w| w == PAUSE_PROMPT).unwrap();
         out[start..end].to_vec()
@@ -302,15 +391,38 @@ mod tests {
         };
         // (1,1)AA then (2,5)BB: row-change keeps the column (VPA) then space-fills; prompt below row 2.
         assert_eq!(
-            body(&[ScreenItem { line: 1, column: 1, data: b"AA".to_vec() },
-                   ScreenItem { line: 2, column: 5, data: b"BB".to_vec() }]),
+            body(&[ScreenItem { line: 1, column: 1, data: b"AA".to_vec(), attr: None },
+                   ScreenItem { line: 2, column: 5, data: b"BB".to_vec(), attr: None }]),
             b"AA\x1b[2d  BB\r\x1b[3d"
         );
         // last field on a HIGHER row than the first: the prompt follows the last field (row 2 -> row 3).
         assert_eq!(
-            body(&[ScreenItem { line: 5, column: 5, data: b"AA".to_vec() },
-                   ScreenItem { line: 2, column: 2, data: b"BB".to_vec() }]),
+            body(&[ScreenItem { line: 5, column: 5, data: b"AA".to_vec(), attr: None },
+                   ScreenItem { line: 2, column: 2, data: b"BB".to_vec(), attr: None }]),
             b"\x1b[5;5HAA\r\x1b[2d BB\r\x1b[3d"
         );
+    }
+
+    #[test]
+    fn monochrome_attribute_wraps_field() {
+        let body = |it: ScreenItem| {
+            let out = display_and_stop(&[it]);
+            let s = out.windows(4).position(|w| w == b"\x1b[2J").unwrap() + 4;
+            let e = out.windows(PAUSE_PROMPT.len()).position(|w| w == PAUSE_PROMPT).unwrap();
+            out[s..e].to_vec()
+        };
+        // HIGHLIGHT at (2,3): the field char is wrapped in the SGR on (`\e(B\e[0;1m...`) / off pair.
+        assert_eq!(
+            body(ScreenItem::with_attr(2, 3, b"X".to_vec(), ScreenAttr::Highlight)),
+            b"\x1b[2d  \x1b(B\x1b[0;1m\x1b[39;49m\x1b[37m\x1b[40mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\r\x1b[3d"
+        );
+        // each attribute differs only in the SGR code.
+        for (a, n) in [(ScreenAttr::Lowlight, b'2'), (ScreenAttr::Underline, b'4'),
+                       (ScreenAttr::Blink, b'5'), (ScreenAttr::Reverse, b'7')] {
+            let mut want = b"\x1b[2d  \x1b(B\x1b[0;".to_vec();
+            want.push(n);
+            want.extend_from_slice(b"m\x1b[39;49m\x1b[37m\x1b[40mX\x1b(B\x1b[m\x1b[39;49m\x1b[37m\x1b[40m\r\x1b[3d");
+            assert_eq!(body(ScreenItem::with_attr(2, 3, b"X".to_vec(), a)), want);
+        }
     }
 }

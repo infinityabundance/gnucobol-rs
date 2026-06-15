@@ -12,11 +12,11 @@ fn main() {
         if triple.len() < 3 {
             break;
         }
-        items.push(ScreenItem {
-            line: triple[0].parse().unwrap_or(1),
-            column: triple[1].parse().unwrap_or(1),
-            data: triple[2].clone().into_bytes(),
-        });
+        items.push(ScreenItem::plain(
+            triple[0].parse().unwrap_or(1),
+            triple[1].parse().unwrap_or(1),
+            triple[2].clone().into_bytes(),
+        ));
     }
     std::io::stdout().write_all(&display_and_stop(&items)).unwrap();
 }

@@ -13,7 +13,7 @@ fn main() {
     std::io::stdin().read_to_end(&mut oracle).unwrap();
 
     // The canonical program's single positioned item.
-    let items = vec![ScreenItem { line: 2, column: 3, data: b"X".to_vec() }];
+    let items = vec![ScreenItem::plain(2, 3, b"X".to_vec())];
     let mine = display_and_stop(&items);
 
     if mine == oracle {

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.DISPLAY.3` |
 | court | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes |
-| crate_version | `0.7.67` |
+| crate_version | `0.7.68` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a multi-field DISPLAY -> the exact ncurses inter-field cursor-movement + field byte stream, for non-overlapping layouts |
 | replay command | `bash lab/oracle/screenio_multi_sweep.sh` |
@@ -19,7 +19,7 @@
 ## Non-claims
 - overlapping same-row layouts (later field left of an earlier one) -- those need the curses refresh line-diff (clr_eol erase), a follow-on court
 - 3+ field interactions beyond the swept pairs
-- color/attribute SGR, numeric-edited/JUSTIFIED display, ACCEPT input
+- colour/attribute SGR (monochrome attributes are sealed in GNURUST.SCREENIO.ATTR.1), numeric-edited/JUSTIFIED display, ACCEPT input
 - any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)
 
 > A receipt is the reproducible output of a replayable court run, not a static claim. This `.md` is

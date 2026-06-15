@@ -66,6 +66,7 @@ run_sweep "GNURUST.MLIO.PARSE.1" ml_parse_sweep.sh
 run_sweep "GNURUST.SCREENIO.INIT.1" screenio_sweep.sh
 run_sweep "GNURUST.SCREENIO.DISPLAY.2" screenio_grid_sweep.sh
 run_sweep "GNURUST.SCREENIO.DISPLAY.3" screenio_multi_sweep.sh
+run_sweep "GNURUST.SCREENIO.ATTR.1" screenio_attr_sweep.sh
 run_sweep "GNURUST.FILEIO.INDEXED.1" indexed_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh
 run_sweep "GNURUST.FILEIO.OPEN.1" open_sweep.sh

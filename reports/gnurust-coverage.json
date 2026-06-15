@@ -477,9 +477,10 @@
       "courts": [
         "GNURUST.SCREENIO.INIT.1",
         "GNURUST.SCREENIO.DISPLAY.2",
-        "GNURUST.SCREENIO.DISPLAY.3"
+        "GNURUST.SCREENIO.DISPLAY.3",
+        "GNURUST.SCREENIO.ATTR.1"
       ],
-      "future_campaign": "screenio: the curses refresh line-diff (clr_eol erase for overlapping same-row layouts), color/attribute SGR, numeric-edited field display, and ACCEPT input -- each a follow-on literal-byte court. (The general ncurses mvcur cursor-cost model, single- and multi-field for non-overlapping layouts, is now sealed: GNURUST.SCREENIO.DISPLAY.2 + .3.)",
+      "future_campaign": "screenio: the curses refresh line-diff (clr_eol erase for overlapping same-row layouts), COLOUR attributes (the whole-screen bce repaint), numeric-edited field display, and ACCEPT input -- each a follow-on literal-byte court. (Sealed: the general mvcur single- + multi-field positioning GNURUST.SCREENIO.DISPLAY.2 + .3, and the monochrome display attributes GNURUST.SCREENIO.ATTR.1.)",
       "risk_if_unported": "SCREEN SECTION init/teardown framing + a positioned literal/FROM DISPLAY are now reproduced BYTE-IDENTICALLY to GnuCOBOL's ncurses output natively (GNURUST.SCREENIO.INIT.1, screenio_sweep 1/0, no ncurses linked) for the admitted terminal (TERM=xterm, ncurses 6.6); other terminals/ncurses builds emit different bytes (the declared terminal-dependence non-claim). The cursor-cost model + attributes + ACCEPT remain follow-on work",
       "source_modules": [
         "libcob/screenio.c"
