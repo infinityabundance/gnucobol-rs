@@ -390,10 +390,11 @@
    "GNURUST.TABLE.PERFORM.SLICE.1",
    "GNURUST.SEARCH.TABLE.1",
    "GNURUST.FILE.FLOW.SLICE.1",
-   "GNURUST.FILE.FILTER.SLICE.1"
+   "GNURUST.FILE.FILTER.SLICE.1",
+   "GNURUST.FRONTEND.1"
   ],
   "future_campaign": null,
-  "risk_if_unported": "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, execution NOT claimed"
+  "risk_if_unported": "IF/EVALUATE/PERFORM/GO TO control flow is the bulk of unported Procedure Division; observed atlas, subset EXECUTION now proven (GNURUST.FRONTEND.1 parse+run to cobc-identical stdout); full control-flow execution still NOT claimed"
  },
  {
   "surface": "call-linkage",

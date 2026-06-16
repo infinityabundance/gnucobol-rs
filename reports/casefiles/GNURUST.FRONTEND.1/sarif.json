@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: this is an INTERPRETER over the runtime, NOT a native-code compiler (no codegen to machine code / no .o/.so emission)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: group items / OCCURS / REDEFINES / level numbers other than 01"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: COMPUTE and arithmetic expressions"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: control flow (IF / PERFORM / EVALUATE / GO TO -- those are the separate execution-slice courts)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: ACCEPT and file I/O"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: ON SIZE ERROR / ROUNDED modes beyond truncate"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: multiple programs / CALL"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: the full PICTURE and statement grammar"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: any verb or clause outside the listed subset"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: all dialects and non-default runtime config"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: lie prevented: 'gnucobol-rs is a COBOL compiler' is the lie this prevents being overstated -- what is PROVEN is parse+EXECUTE of a small, explicit subset to cobc-identical stdout (an interpreter over the sealed runtime), with everything outside the subset failing closed; native-code compilation of the full language is NOT claimed"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.ROUND.1` |
 | court | ROUNDED MODE IS (all eight rounding modes, cob_decimal + packed BCD paths) |
-| crate_version | `0.7.82` |
+| crate_version | `0.7.83` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | value + target scale + ROUNDED mode + receiver path -> stored field bytes |
 | replay command | `bash lab/oracle/round_sweep.sh` |

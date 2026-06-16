@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COMMON.NUMCHECK.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.82",
+  "crate_version": "0.7.83",
   "damage_if_overclaimed": "claiming 'numeric checking' would hide that only the DIAGNOSTIC MESSAGE is sealed here, not the cob_is_numeric validity decision, the abort, or the prefix framing",
   "hash_chain": {
-    "inputs_sha256": "47f0c0152aae78c051e20dc6663b84deef542aaa5e12f6ea61cc7f17f8f52e30"
+    "inputs_sha256": "956184198c2e2c505c520392cd2d8bcda18fed3eda29413ca3f6769ea85ab19d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7a13e5d62305671839240e571a0f942deca95d82e2dbfd5081cb0158737854ba",
-    "receipt_sha256": "f889037e23cc3f9deaefdcf43f539e18c3911131709134ee36318ec0e295c212"
+    "receipt_sha256": "c8b051f6d31f7903cb0b85ff96f27bbd4cd43d9965660ece80c14a30e54298a4"
   },
   "kind": "court-casefile",
   "lie_prevented": [

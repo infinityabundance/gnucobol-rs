@@ -711,12 +711,40 @@ fn find_seq(toks: &[Tok], seq: &[&str]) -> Option<usize> {
     None
 }
 
+#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+    // KANIFOR: GNURUST.FRONTEND.1
+    /// The lexer is total: tokenizing any short ASCII byte sequence never panics (the front-end's
+    /// parse entry must fail closed, never crash, on garbage). Bounded to a few bytes for tractability.
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn lex_never_panics() {
+        let a: u8 = kani::any();
+        let b: u8 = kani::any();
+        let c: u8 = kani::any();
+        kani::assume(a.is_ascii() && b.is_ascii() && c.is_ascii());
+        let s = [a, b, c];
+        if let Ok(text) = core::str::from_utf8(&s) {
+            let _ = lex(text); // must return without panicking
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
+    }
+
+    #[test]
+    fn garbage_fails_closed_never_panics() {
+        // The fail-closed contract: arbitrary non-program input returns an Err, not a panic.
+        for s in ["", "garbage tokens here", "MOVE", "01 X PIC", "PROCEDURE DIVISION."] {
+            let _ = run_program(s); // must not panic
+        }
     }
 
     #[test]

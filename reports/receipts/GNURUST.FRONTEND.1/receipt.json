@@ -1,0 +1,31 @@
+{
+  "byte_domain": "a COBOL program (sealed subset) -> the exact stdout bytes it writes, byte-identical to cobc",
+  "campaign": "GNURUST.FRONTEND.1",
+  "command": {
+    "replay": "bash lab/oracle/cobol_frontend_sweep.sh"
+  },
+  "court": "clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
+  "crate_version": "0.7.83",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "an INTERPRETER over the runtime, NOT a native-code compiler (no machine-code/.o/.so emission)",
+    "group items / OCCURS / REDEFINES / non-01 levels; COMPUTE + arithmetic expressions",
+    "control flow (IF/PERFORM/EVALUATE/GO TO -- separate execution-slice courts); ACCEPT; file I/O; CALL; multiple programs",
+    "the full PICTURE + statement grammar; any verb/clause outside the listed subset; all dialects"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=10 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

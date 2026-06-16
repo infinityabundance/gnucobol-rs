@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.VALUE.NEGZERO.EDGE.1` |
 | court | negative-zero VALUE sign edge (oracle-characterized) |
-| crate_version | `0.7.82` |
+| crate_version | `0.7.83` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | VALUE-image negative-zero sign matrix; oracle rule + locked gnucobol-rs divergence (COMP-3 integer-form) |
 | replay command | `bash lab/oracle/edge_negzero_sweep.sh` |

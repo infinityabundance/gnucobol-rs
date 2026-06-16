@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.INIT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.82",
+  "crate_version": "0.7.83",
   "damage_if_overclaimed": "claiming 'SCREEN SECTION works' would hide that this is one positioned field on one terminal -- the cursor-cost model, attributes, multi-field layout, and ACCEPT input are unported, and the bytes do not transfer to other terminals/ncurses versions",
   "hash_chain": {
-    "inputs_sha256": "a14dc3d867f5528de21289eaca39690b34b1f1655f45eddaa84ae1ad832944d4"
+    "inputs_sha256": "c25f45a9f6c4a33b752810bdc9b365fa00c7afe14d0343cdbb8242938aa743e5"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "74c2ba028286ddfd5065e2756b2e02083f9498b01180081a7818ec2c6cb05d0a",
-    "receipt_sha256": "d415f241fd97701459ec9e887dc60e0cb11c7eb922909a2d42c0f5994436f16c"
+    "receipt_sha256": "ab3465872b6efd3144c47502d16c3679220af646cf21913a0d76c8a44d0ced08"
   },
   "kind": "court-casefile",
   "lie_prevented": [

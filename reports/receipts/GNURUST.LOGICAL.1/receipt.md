@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.LOGICAL.1` |
 | court | bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts |
-| crate_version | `0.7.82` |
+| crate_version | `0.7.83` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | (value0, value1) -> u64 bitwise via |value| mod 2^64 |
 | replay command | `bash lab/oracle/logical_sweep.sh` |

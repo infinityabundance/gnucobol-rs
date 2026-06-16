@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.IF.EVALUATE.SLICE.1 (court-casefile)
 
-**Verdict: PASS** · 9/9 pass, 0 fail · crate `gnucobol-rs` 0.7.82
+**Verdict: PASS** · 9/9 pass, 0 fail · crate `gnucobol-rs` 0.7.83
 
 - **Oracle:** cobc IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob/move.c)
 - **Byte domain(s):** execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes

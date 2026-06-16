@@ -1,8 +1,8 @@
 {
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "fuzz_covered": 81,
-  "impl_courts": 81,
-  "kani_covered": 81,
+  "fuzz_covered": 82,
+  "impl_courts": 82,
+  "kani_covered": 82,
   "na_courts": 55,
   "rows": [
     {
@@ -813,6 +813,15 @@
       ]
     },
     {
+      "court": "GNURUST.FRONTEND.1",
+      "fuzz": [
+        "frontend.rs"
+      ],
+      "kani": [
+        "frontend.rs"
+      ]
+    },
+    {
       "court": "GNURUST.PERFORM.SLICE.1",
       "fuzz": [
         "perform_slice.rs"
@@ -1066,5 +1075,5 @@
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 136
+  "total_courts": 137
 }

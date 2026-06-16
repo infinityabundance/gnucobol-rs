@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.SORTENGINE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.82",
+  "crate_version": "0.7.83",
   "damage_if_overclaimed": "claiming the whole sort engine when only the in-memory path is proven would hide the temp-file-spill and EXTFH paths, which a large SORT (above COB_SORT_MEMORY) actually takes",
   "hash_chain": {
-    "inputs_sha256": "cbfdc0eee862049b2174f54f34830d9ca4094409261355838a6be2c930791d41"
+    "inputs_sha256": "97ee94d54163cbb792ee733e7ba2538c164c8bd24932de03a2fbb6c73c9ca9f5"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b34b252fbf327a1c7e3b09b4f23626c35268b5c2a9e883f0512f63d9ef9b3adf",
-    "receipt_sha256": "6de695aa5b0af5fcf8c588ca7f9d2afd7090b3a1f6853406ceb72524496dbf48"
+    "receipt_sha256": "d55ecb314b12a6daa2ff188e5575e8428eaff6ef07eaa8bb2493f958e9bc0b4b"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 19/19 pass, 0 fail · crate `gnucobol-rs` 0.7.82
+**Verdict: PASS** · 19/19 pass, 0 fail · crate `gnucobol-rs` 0.7.83
 
 - **Oracle:** cobc FUNCTION intrinsics (libcob/intrinsic.c)
 - **Byte domain(s):** declared intrinsic + input -> observed result (deterministic) or shape (env-sensitive)

@@ -811,6 +811,24 @@ pub fn __fuzz_file_seq(data: &[u8]) {
     let _ = file_seq::rewrite_records(body, rl, &rw);
 }
 
+/// Fuzz entry for the COBOL front-end (`GNURUST.FRONTEND.1`): drive `run_program` with arbitrary
+/// source bytes. The contract is panic-freedom -- the parser/executor must either run the program or
+/// return a `RunError`, never panic, on any input (well-formed or garbage).
+#[cfg(feature = "fuzzing")]
+#[doc(hidden)]
+pub fn __fuzz_frontend(data: &[u8]) {
+    let src = String::from_utf8_lossy(data);
+    let _ = frontend::run_program(&src);
+    // also exercise it with a valid skeleton + the fuzz bytes spliced into the procedure body.
+    let mut prog = String::from(
+        "IDENTIFICATION DIVISION. PROGRAM-ID. F. DATA DIVISION. WORKING-STORAGE SECTION. \
+         01 A PIC 9(4) VALUE 1. 01 R PIC ZZZ9. PROCEDURE DIVISION. ",
+    );
+    prog.push_str(&src);
+    prog.push_str(" STOP RUN.");
+    let _ = frontend::run_program(&prog);
+}
+
 #[doc(hidden)]
 /// Fuzz entry for the line-sequential WRITE court (`GNURUST.FILEIO.LINESEQ.1`): arbitrary bytes drive
 /// every `COB_LS_*` config path; the contract is panic-freedom (`GNURUST.PANICPOLICY.0`).

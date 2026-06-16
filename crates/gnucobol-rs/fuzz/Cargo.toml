@@ -248,6 +248,12 @@ test = false
 doc = false
 
 [[bin]]
+name = "frontend"
+path = "fuzz_targets/frontend.rs"
+test = false
+doc = false
+
+[[bin]]
 name = "common_boundcheck"
 path = "fuzz_targets/common_boundcheck.rs"
 test = false

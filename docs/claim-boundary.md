@@ -25,8 +25,8 @@ excludes is a lie of omission.
 ## What `gnucobol-rs` is NOT (yet, or by design)
 
 - **Not a GnuCOBOL replacement.** It reproduces isolated semantics, not the product.
-- **Not a COBOL compiler.** No parsing of full programs into native code is claimed.
-- **Not a `libcob` replacement.** A handful of runtime primitives are ported, not the runtime.
+- **Not a full COBOL compiler.** A clean-room front-end (`src/frontend.rs`, the `cobrun` binary) now PARSES and EXECUTES a small, explicit SUBSET of whole programs to byte-identical `cobc` stdout (`GNURUST.FRONTEND.1`, `cobol_frontend_sweep` 10/0 + `cobol_run_sweep` 3/0) -- so 'cannot parse/run a program' is no longer flatly true. But this is an INTERPRETER over the sealed runtime, NOT a native-code compiler: no machine-code/object emission is claimed, and only the listed subset (WORKING-STORAGE 01 elementary items + MOVE/ADD/SUBTRACT/MULTIPLY/DIVIDE/DISPLAY/STOP RUN) runs -- everything else fails closed.
+-**Not a `libcob` replacement.** A handful of runtime primitives are ported, not the runtime.
 - **Not decimal arithmetic.** `ADD`/`SUBTRACT`/`MULTIPLY`/`DIVIDE`/`ROUNDED` are GMP-backed
   in upstream and are explicitly deferred to a future, separately sealed campaign.
 - **Not a "better" or ergonomic COBOL library.** A divergence from the oracle that happens to
