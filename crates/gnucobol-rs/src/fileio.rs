@@ -757,6 +757,24 @@ pub fn errno_cob_sts(err: FileErrno, default_status: &'static str) -> &'static s
     }
 }
 
+/// Classify a failed `std::fs` operation into the [`FileErrno`] equivalence classes libcob's `errno`
+/// switch keys on (fileio.c:1674). Uses the stable `io::ErrorKind` where it names the case and the raw
+/// OS error otherwise (EISDIR/EROFS/EDQUOT are not all named on stable Rust): `ENOENT`→NotExist,
+/// `EACCES`/`EISDIR`/`EROFS`→PermissionOrIsDir, `ENOSPC`/`EDQUOT`→NoSpaceOrQuota.
+pub fn classify_io_error(e: &std::io::Error) -> FileErrno {
+    use std::io::ErrorKind;
+    match e.kind() {
+        ErrorKind::NotFound => FileErrno::NotExist,
+        ErrorKind::PermissionDenied => FileErrno::PermissionOrIsDir,
+        _ => match e.raw_os_error() {
+            Some(2) => FileErrno::NotExist,                       // ENOENT
+            Some(13) | Some(21) | Some(30) => FileErrno::PermissionOrIsDir, // EACCES / EISDIR / EROFS
+            Some(28) | Some(122) => FileErrno::NoSpaceOrQuota,    // ENOSPC / EDQUOT
+            _ => FileErrno::Other,
+        },
+    }
+}
+
 /// Port of `fileio.c:dummy_delete` — the DELETE handler for a file organization that does not support it:
 /// always status `"91"` (not available). (`dummy_read`/`dummy_start` are the matching no-op handlers.)
 pub fn dummy_delete() -> &'static str {
@@ -2742,13 +2760,23 @@ pub fn cob_open(f: &mut CobFile, mode: OpenMode) -> &'static str {
                 f.data = d;
                 "00"
             }
-            Err(_) => {
-                f.flag_nonexistent = true;
+            // Distinguish the open error (was: every failure collapsed to 35/05). ENOENT -> 05
+            // (OPTIONAL) / 35; EACCES/EISDIR/EROFS -> 37; ENOSPC/EDQUOT -> 34; else -> 30 (the C
+            // default), matching libcob's errno switch (fileio.c:1674).
+            Err(e) => {
                 f.data.clear();
-                if f.optional {
-                    "05"
-                } else {
-                    "35"
+                match classify_io_error(&e) {
+                    FileErrno::NotExist => {
+                        f.flag_nonexistent = true;
+                        if f.optional {
+                            "05"
+                        } else {
+                            "35"
+                        }
+                    }
+                    FileErrno::PermissionOrIsDir => "37",
+                    FileErrno::NoSpaceOrQuota => "34",
+                    FileErrno::Other => "30",
                 }
             }
         },
@@ -2765,10 +2793,11 @@ pub fn cob_open(f: &mut CobFile, mode: OpenMode) -> &'static str {
         }
         OpenMode::Closed | OpenMode::Locked => "30",
     };
-    // status 35 leaves the file unopened; 05/00 open it.
-    if status == "35" {
-        f.file_status = *b"35";
-        return "35";
+    // Only 00 (success) and 05 (OPTIONAL file absent, opened empty) actually open the file; every
+    // error status (35/37/34/30) leaves it unopened.
+    if status != "00" && status != "05" {
+        f.file_status = [status.as_bytes()[0], status.as_bytes()[1]];
+        return status;
     }
     f.open_mode = mode;
     f.file_status = [status.as_bytes()[0], status.as_bytes()[1]];
@@ -4736,6 +4765,14 @@ mod tests {
         assert_eq!(errno_cob_sts(FileErrno::PermissionOrIsDir, "30"), "37");
         assert_eq!(errno_cob_sts(FileErrno::NotExist, "30"), "35");
         assert_eq!(errno_cob_sts(FileErrno::Other, "30"), "30");
+        // classify_io_error keys an OPEN failure into the right FILE STATUS class (oracle: cobc OPEN
+        // INPUT of a chmod-000 file -> status 37). NotFound->35, perm/isdir->37, nospace->34.
+        use std::io::{Error, ErrorKind};
+        assert_eq!(classify_io_error(&Error::from(ErrorKind::NotFound)), FileErrno::NotExist);
+        assert_eq!(classify_io_error(&Error::from(ErrorKind::PermissionDenied)), FileErrno::PermissionOrIsDir);
+        assert_eq!(classify_io_error(&Error::from_raw_os_error(21)), FileErrno::PermissionOrIsDir); // EISDIR
+        assert_eq!(classify_io_error(&Error::from_raw_os_error(28)), FileErrno::NoSpaceOrQuota); // ENOSPC
+        assert_eq!(errno_cob_sts(classify_io_error(&Error::from(ErrorKind::PermissionDenied)), "35"), "37");
         assert_eq!((dummy_delete(), dummy_read(), dummy_start()), ("91", "91", "91"));
     }
 

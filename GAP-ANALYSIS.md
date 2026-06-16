@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (12 fixed, 93 open)
+## Summary -- 105 gaps catalogued across 5 panels (13 fixed, 92 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 16 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 15 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 41 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 12 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 13 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -55,19 +55,18 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 1 | **INDEXED organization is an in-memory BTreeMap; no Berkeley DB / ISAM on-disk store** | osfiles | C persists keyed records as on-disk page files; Rust holds them in process memory that evaporates on drop and never touches the filesystem |
 | 2 | **A .dat/.idx (or BDB) file written by real GnuCOBOL cannot be read by the port** | osfiles | No parsing path from a Berkeley DB page file or ISAM .idx/.dat into the BTreeMap |
 | 3 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
-| 4 | **Open errno switch collapsed to exists/not-exists: status 37/61/34/open-time-39 unreachable** | osfiles | C distinguishes EACCES/EISDIR/EROFS(37), EAGAIN(61), ENOSPC(34), open-time 39; Rust reduces all to 35/05/00 |
-| 5 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
-| 6 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 7 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
-| 8 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
-| 9 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
-| 10 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
-| 11 | **Bound/numeric check functions never call cob_set_exception (the two halves are disconnected)** | dialect | After a bounds/numeric violation, Rust last_exception_code stays 0 where C holds 0x0207/0x0202/0x0205/0x0303; EXCEPTION-STATUS differs |
-| 12 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 13 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 14 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
-| 15 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
-| 16 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 4 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
+| 5 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
+| 6 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
+| 7 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
+| 8 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
+| 9 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
+| 10 | **Bound/numeric check functions never call cob_set_exception (the two halves are disconnected)** | dialect | After a bounds/numeric violation, Rust last_exception_code stays 0 where C holds 0x0207/0x0202/0x0205/0x0303; EXCEPTION-STATUS differs |
+| 11 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
+| 12 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
+| 13 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
+| 14 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
+| 15 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -372,12 +371,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Needs an unsafe libloading FFI layer (declared boundary). CALL a separately-compiled .so: cobc loads, port fails.
 
 #### `errno-status-collapse` -- Open errno switch collapsed to exists/not-exists: status 37/61/34/open-time-39 unreachable  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: FILE STATUS is a directly-observed field -- permission-denied OPEN yields 37 (cobc) vs 35 (port); disk-full WRITE 34 vs 30/00
+**severity:** high &nbsp;·&nbsp; **observable:** yes: FILE STATUS is a directly-observed field -- permission-denied OPEN yields 37 (cobc) vs 35 (port); disk-full WRITE 34 vs 30/00 &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cob_file_open errno switch (fileio.c:1674): ENOENT->30/05/35; EACCES/EISDIR/EROFS->37; EAGAIN->61; errno_cob_sts maps ENOSPC/EDQUOT->34; open-time record-length mismatch->39.
 - **gnucobol-rs (Rust):** fileio.rs errno_cob_sts (751) faithfully ports the write table but is DEAD CODE (only its own test calls it); live cob_open collapses every Err to 05/35; cob_file_open uses bdb_nofile->35/05/00; 39 appears only in varlen prefix parsing.
 - **Diff:** C distinguishes EACCES/EISDIR/EROFS(37), EAGAIN(61), ENOSPC(34), open-time 39; Rust reduces all to 35/05/00.
-- **Evidence / plan:** Wire errno_cob_sts + an errno-classifying open path. chmod 000 then OPEN INPUT: cobc->37, port->35.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): new classify_io_error maps a failed std::fs OPEN (io::ErrorKind + raw_os_error: EISDIR/EROFS/EDQUOT aren't all named on stable) into the FileErrno classes libcob's errno switch keys on, and cob_open's Input/Io arm now returns ENOENT->05(optional)/35, EACCES/EISDIR/EROFS->37, ENOSPC/EDQUOT->34, else 30 (was: every Err collapsed to 35/05); the post-match only opens the file for 00/05. Oracle-proven: cobc OPEN INPUT of a chmod-000 file -> FILE STATUS 37 (port now matches). Unit test on classify_io_error; all OPEN sweeps green (open/lineseq/seq/relative). RESIDUAL: status 61 is the fcntl advisory-lock contention case (see fcntl-whole-file-lock-noop, a forbid(unsafe_code) boundary); open-time 39 (record-length mismatch) is a thin separate check.
 
 #### `indexed-altkeys-dups` -- Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: ALTERNATE RECORD KEY / WITH DUPLICATES / READ PREVIOUS get wrong-or-unsupported results, never status 02
