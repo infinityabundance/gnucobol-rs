@@ -280,6 +280,27 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "GAP-ANALYSIS.md: drift (run \`cargo run -p xtask -- gap-analysis generate\`)"; cat /tmp/_ga_check
   fi
+  # Config custody: root config/ is the byte-for-byte GnuCOBOL-3.2 config tree at the repo root
+  # (mirrors the GnuCOBOL distribution layout). The crate bundles the runtime subset, proven to parse
+  # natively by the `config_files_parse_natively` test; verify every config file the crate ships is
+  # present + byte-identical at the repo root, so the root mirror can never silently drift from the
+  # parsed-and-proven copy.
+  cfg_drift=0; cfg_missing=0
+  if [ -d "$ROOT/config" ]; then
+    for f in "$ROOT"/crates/gnucobol-rs/config/*; do
+      b="$(basename "$f")"
+      [ "$b" = "README.md" ] && continue   # the crate-only port note, not a GnuCOBOL config file
+      if [ ! -e "$ROOT/config/$b" ]; then cfg_missing=$((cfg_missing+1)); echo "  missing at root: config/$b"
+      elif ! cmp -s "$f" "$ROOT/config/$b"; then cfg_drift=$((cfg_drift+1)); echo "  drift: config/$b"; fi
+    done
+  else
+    cfg_missing=1; echo "  root config/ directory is absent"
+  fi
+  if [ "$cfg_drift" -eq 0 ] && [ "$cfg_missing" -eq 0 ]; then
+    note "CONFIG custody: root config/ mirrors the bundled (natively-parsed) GnuCOBOL config tree, no drift"
+  else
+    bad "root config/ drift/missing vs crates/gnucobol-rs/config (re-copy the GnuCOBOL config tree to root)"
+  fi
   if ( cd "$ROOT" && cargo run -q -p xtask -- kani-fuzz check ) >/tmp/_kf_check 2>&1; then
     note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
   else
