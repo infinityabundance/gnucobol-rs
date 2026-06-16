@@ -340,6 +340,33 @@ pub enum BoundException {
     RefMod,
 }
 
+impl BoundException {
+    /// The COBOL exception code (`exception.def`) this violation kind raises, so a caught violation can
+    /// be threaded into the runtime exception state. libcob's `cob_check_*` call `cob_set_exception`
+    /// with exactly these conditions (common.c:4360+) before emitting the message; the port returns the
+    /// violation and the runtime raises this code (see [`raise_bound_violation`]).
+    pub fn ec_code(self) -> i32 {
+        match self {
+            BoundException::Subscript => 0x0207, // EC-BOUND-SUBSCRIPT
+            BoundException::Odo => 0x0202,        // EC-BOUND-ODO
+            BoundException::RefMod => 0x0205,     // EC-BOUND-REF-MOD
+        }
+    }
+}
+
+/// `EC-DATA-INCOMPATIBLE` (`0x0303`): the exception `cob_check_numeric` raises when a field tested for
+/// the numeric class is not numeric (common.c:4360). [`cob_check_numeric`] returns only the message; the
+/// runtime raises this code alongside it.
+pub const EC_DATA_INCOMPATIBLE: i32 = 0x0303;
+
+/// Raise a caught [`BoundViolation`] into the runtime exception state -- the missing link between the
+/// pure `cob_check_*` (which return the violation) and `cob_set_exception` (which records it for
+/// EXCEPTION-STATUS / `cob_last_exception_is`). Mirrors the `cob_set_exception(...)` call libcob makes
+/// inside each `cob_check_*` before the `cob_runtime_error`.
+pub fn raise_bound_violation(state: &mut crate::common_exception::ExceptionState, v: &BoundViolation) {
+    crate::common_exception::cob_set_exception_by_code(state, v.exception.ec_code());
+}
+
 /// A single bounds-check violation: the exception raised, the `cob_runtime_error` message (the text after
 /// `libcob: <file>:<line>: error: `), an optional `cob_runtime_hint` line (after `note: `), and whether the
 /// runtime aborts on it (`cob_hard_failure`).
@@ -913,6 +940,31 @@ mod kani_proofs {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn bound_violation_sets_exception_status() {
+        use crate::common_exception::{
+            cob_exception_index_of, cob_get_last_exception_code, cob_get_last_exception_name,
+            cob_last_exception_is, cob_set_exception_by_code, ExceptionState,
+        };
+        // A caught subscript violation, raised into the exception state, must surface as
+        // EC-BOUND-SUBSCRIPT (0x0207) for EXCEPTION-STATUS -- the link that was missing.
+        let mut st = ExceptionState::default();
+        let v = cob_check_subscript(7, 5, "T", false, false).expect("out of bounds");
+        raise_bound_violation(&mut st, &v);
+        assert_eq!(cob_get_last_exception_code(&st), 0x0207);
+        assert_eq!(cob_get_last_exception_name(&st), Some("EC-BOUND-SUBSCRIPT"));
+        assert!(cob_last_exception_is(&st, cob_exception_index_of(0x0207)) != 0);
+        // ODO -> EC-BOUND-ODO (0x0202)
+        let mut st2 = ExceptionState::default();
+        raise_bound_violation(&mut st2, &cob_check_odo(9, 1, 5, "T", "N").unwrap());
+        assert_eq!(cob_get_last_exception_code(&st2), 0x0202);
+        // a non-numeric class check -> EC-DATA-INCOMPATIBLE (0x0303)
+        let mut st3 = ExceptionState::default();
+        cob_set_exception_by_code(&mut st3, EC_DATA_INCOMPATIBLE);
+        assert_eq!(cob_get_last_exception_code(&st3), 0x0303);
+        assert_eq!(cob_get_last_exception_name(&st3), Some("EC-DATA-INCOMPATIBLE"));
+    }
 
     fn ident_col() -> [u8; 256] {
         let mut c = [0u8; 256];

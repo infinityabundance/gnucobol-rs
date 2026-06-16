@@ -360,6 +360,23 @@ pub fn cob_set_exception(state: &mut ExceptionState, id: usize) {
     state.cob_set_exception(id);
 }
 
+/// The `EXCEPTION_TAB` index whose entry has the given COBOL exception `code` (e.g. `0x0207` ->
+/// the EC-BOUND-SUBSCRIPT index), or `0` (`COB_EC_ZERO`) if none. The codes of the named conditions are
+/// unique, so this is the inverse of [`tab_code`] for them.
+pub fn cob_exception_index_of(code: i32) -> usize {
+    if code == 0 {
+        return 0;
+    }
+    EXCEPTION_TAB.iter().position(|&(c, _)| c == code).unwrap_or(0)
+}
+
+/// Raise an exception by its COBOL `code` (e.g. `0x0207`) rather than its table index -- a thin shim over
+/// [`ExceptionState::cob_set_exception`] for callers that hold the documented code (the `cob_check_*`
+/// violation kinds map to a code, see [`crate::common::BoundException::ec_code`]).
+pub fn cob_set_exception_by_code(state: &mut ExceptionState, code: i32) {
+    state.cob_set_exception(cob_exception_index_of(code));
+}
+
 /// Port of `common.c:cob_add_exception` -- see [`ExceptionState::cob_add_exception`].
 pub fn cob_add_exception(state: &mut ExceptionState, id: usize) {
     state.cob_add_exception(id);
