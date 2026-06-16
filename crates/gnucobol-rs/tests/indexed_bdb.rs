@@ -46,6 +46,22 @@ fn reads_a_cobc_written_indexed_file() {
 }
 
 #[test]
+fn writes_a_dat_then_reads_it_back() {
+    // Write the INDEXED file via the port, then read it back -- the write side of interchange. (The
+    // separate gnucobol-rs-bdb-format crate proves the genuine cobc OPENs + READs a port-written file;
+    // here we prove the gnucobol-rs store round-trips through its own writer + reader.)
+    let mut store = IndexedStore::indexed_open(0, 4, AccessMode::Dynamic, OpenMode::Io);
+    // load the cobc fixture as the source records, then re-serialise + re-read
+    store.indexed_load_bdb(COBC_INDEXED).unwrap();
+    let bytes = store.indexed_to_bdb().expect("serialise to a BDB .dat");
+
+    let mut back = IndexedStore::indexed_open(0, 4, AccessMode::Dynamic, OpenMode::Input);
+    assert_eq!(back.indexed_load_bdb(&bytes).unwrap(), 3, "all records survive the write+read");
+    assert_eq!(back.indexed_read(b"0001").1.as_deref(), Some(&b"0001one       "[..]));
+    assert_eq!(back.indexed_read(b"0003").1.as_deref(), Some(&b"0003three     "[..]));
+}
+
+#[test]
 fn rejects_a_non_indexed_buffer() {
     let mut store = IndexedStore::indexed_open(0, 4, AccessMode::Dynamic, OpenMode::Input);
     // an empty / never-written file is not a B-tree DB: a typed error, not a panic or silent success.

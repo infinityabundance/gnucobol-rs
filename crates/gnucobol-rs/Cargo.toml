@@ -17,9 +17,10 @@ exclude = ["fuzz/", "/lab", "/reports"]
 workspace = true
 
 [dependencies]
-# Pure-safe-Rust reader for the Berkeley DB B-tree on-disk format GnuCOBOL writes for INDEXED files,
-# so the port can read an indexed .dat produced by the genuine compiler (forbid(unsafe_code) preserved).
-gnucobol-rs-bdb-format = "0.1"
+# Pure-safe-Rust reader + writer for the Berkeley DB B-tree on-disk format GnuCOBOL uses for INDEXED
+# files: the port both reads a .dat written by the genuine compiler and writes one cobc can read back
+# (forbid(unsafe_code) preserved -- no libdb/C linkage).
+gnucobol-rs-bdb-format = "0.2"
 
 [features]
 default = []

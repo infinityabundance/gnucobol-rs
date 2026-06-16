@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (16 fixed, 89 open)
+## Summary -- 105 gaps catalogued across 5 panels (17 fixed, 88 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 13 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 12 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 40 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 16 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 17 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -52,19 +52,18 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 
 | # | gap | panel | the divergence |
 |---:|---|---|---|
-| 1 | **INDEXED organization is an in-memory BTreeMap; no Berkeley DB / ISAM on-disk store** | osfiles | C persists keyed records as on-disk page files; Rust holds them in process memory that evaporates on drop and never touches the filesystem |
-| 2 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
-| 3 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
-| 4 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 5 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
-| 6 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
-| 7 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
-| 8 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
-| 9 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 10 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 11 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
-| 12 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
-| 13 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 1 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
+| 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
+| 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
+| 4 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
+| 5 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
+| 6 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
+| 7 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
+| 8 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
+| 9 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
+| 10 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
+| 11 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
+| 12 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -385,12 +384,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Add secondary maps + dupno encoding mirroring COB_DUPSWAP. Test ALTERNATE RECORD KEY + READ by alt.
 
 #### `indexed-no-bdb-ondisk` -- INDEXED organization is an in-memory BTreeMap; no Berkeley DB / ISAM on-disk store  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: an INDEXED file has no on-disk artifact; close+reopen across runs sees no data
+**severity:** high &nbsp;·&nbsp; **observable:** yes: an INDEXED file has no on-disk artifact; close+reopen across runs sees no data &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c indexed_open BDB branch (~4429) opens a DB handle per key, persists Berkeley DB B-tree pages (or ISAM .idx/.dat); records via DB_CPUT.
 - **gnucobol-rs (Rust):** fileio.rs IndexedStore (1435) builds an empty BTreeMap<Vec<u8>,Vec<u8>>; indexed_write inserts in memory. No BDB/ISAM/on-disk btree. Declared OS boundary.
 - **Diff:** C persists keyed records as on-disk page files; Rust holds them in process memory that evaporates on drop and never touches the filesystem.
-- **Evidence / plan:** Declared boundary today. Closing requires porting/embedding a BDB-format reader/writer. cobc INDEXED WRITE then ls .dat/.idx: port produces nothing.
+- **Evidence / plan:** FIXED (read+write) gnucobol-rs 0.7.85 + gnucobol-rs-bdb-format 0.2.0 (PUBLISHED): the IndexedStore now serialises to / from a real Berkeley DB B-tree .dat. IndexedStore::indexed_to_bdb writes the on-disk format (write_btree: meta page + a root-leaf page of sorted key/data items) and indexed_load_bdb reads it. PROVEN bidirectional: the genuine cobc OPENs (status 00) + READs a port-written .dat in key order, and the port reads a cobc-written one; gnucobol-rs store round-trips write->read (test writes_a_dat_then_reads_it_back). forbid(unsafe_code) preserved (pure-safe, no libdb/C). RESIDUAL: runtime auto-persist-on-close (path mgmt), the multi-leaf + internal-page writer for files bigger than one page, and alternate keys/DUPLICATES (sibling gap indexed-altkeys-dups).
 
 #### `indexed-ondisk-not-readable` -- A .dat/.idx (or BDB) file written by real GnuCOBOL cannot be read by the port  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: cross-tool interchange (cobc writes / port reads, or vice versa) is impossible &nbsp;·&nbsp; **status: ✓ FIXED**

@@ -1568,6 +1568,17 @@ impl IndexedStore {
         Ok(n)
     }
 
+    /// Serialise this store to a Berkeley DB B-tree `.dat` (via `gnucobol-rs-bdb-format`) that the
+    /// genuine GnuCOBOL `cobc` can OPEN and READ -- the write side of cross-tool interchange (a port
+    /// runtime writes an INDEXED file the real compiler reads back). Emits the records key->record in
+    /// ascending key order. A record set too large for a single leaf page returns a typed error (the
+    /// multi-leaf writer is a follow-on), so the caller never writes a corrupt file.
+    pub fn indexed_to_bdb(&self) -> Result<Vec<u8>, gnucobol_rs_bdb_format::BdbError> {
+        let pairs: Vec<(Vec<u8>, Vec<u8>)> =
+            self.recs.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
+        gnucobol_rs_bdb_format::write_btree(&pairs, 4096)
+    }
+
     /// The first key strictly greater than `k`, as a cursor position (`AtEnd` when none).
     fn after(&self, k: &[u8]) -> CursorPos {
         match self
