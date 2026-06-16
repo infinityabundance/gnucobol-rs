@@ -152,10 +152,17 @@ fn padded(lit: &str, len: usize) -> Vec<u8> {
     v
 }
 
-/// Decode the parent's numeric value for comparison.
+/// Decode the parent's numeric value for comparison. PACKED goes through the faithful
+/// cob_decimal_set_packed (PACK_TO_BIN byte folding, numeric.c:1144) so an invalid digit nibble
+/// compares the same value GnuCOBOL's cob_numeric_cmp would (identical to the nibble split for valid
+/// BCD; see arith::decode for the same routing).
 fn parent_num(attr: &FieldAttr, bytes: &[u8]) -> Result<Num, ConditionError> {
+    if attr.field_type == COB_TYPE_NUMERIC_PACKED {
+        let cd = crate::packed::cob_decimal_set_packed(bytes, attr);
+        let mag = cd.value.to_i128().ok_or(ConditionError::OutOfRange)?;
+        return Ok((mag, cd.scale));
+    }
     let d = match attr.field_type {
-        COB_TYPE_NUMERIC_PACKED => Decimal::from_packed(bytes, attr),
         COB_TYPE_NUMERIC_DISPLAY => Decimal::from_display(bytes, attr),
         _ => return Err(ConditionError::UnsupportedParent),
     };

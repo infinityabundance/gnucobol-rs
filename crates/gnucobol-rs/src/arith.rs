@@ -107,8 +107,17 @@ struct Dec {
 
 /// Decode a numeric field's value (via the sealed decoders) into a `Dec`.
 fn decode(data: &[u8], attr: &FieldAttr) -> Result<Dec, ArithError> {
+    // PACKED (COMP-3/COMP-6) value decode goes through the faithful cob_decimal_set_packed
+    // (numeric.c:1144), which accumulates `val*100 + PACK_TO_BIN[byte]`. For valid BCD this equals the
+    // nibble split (proven by set_packed_agrees_with_sealed_from_packed_decoder); for INVALID nibbles
+    // (>9) the byte-table folding -- carries included, e.g. PACK_TO_BIN[0x2F]=25, the verbatim
+    // GnuCOBOL quirk -- is what libcob computes, which a per-nibble `*10+nibble` cannot reproduce.
+    if attr.field_type == crate::attr::COB_TYPE_NUMERIC_PACKED {
+        let cd = crate::packed::cob_decimal_set_packed(data, attr);
+        let mag = cd.value.to_i128().ok_or(ArithError::OutOfRange)?;
+        return Ok(Dec { mag, scale: cd.scale });
+    }
     let d: Decimal = match attr.field_type {
-        crate::attr::COB_TYPE_NUMERIC_PACKED => Decimal::from_packed(data, attr),
         crate::attr::COB_TYPE_NUMERIC_DISPLAY => Decimal::from_display(data, attr),
         _ => return Err(ArithError::InvalidAttr),
     };
@@ -906,6 +915,17 @@ mod tests {
         )
         .unwrap();
         assert_eq!(&r, b"0000333");
+    }
+
+    #[test]
+    fn packed_invalid_nibble_arith_vs_cobc() {
+        // A COMP-3 field with an INVALID digit nibble (>9). The arithmetic decode must fold the byte
+        // through PACK_TO_BIN (cob_decimal_set_packed, numeric.c:1144), NOT split nibbles. Ground truth
+        // from the built GnuCOBOL oracle: PIC S9(3) COMP-3 = X"2F6C", `COMPUTE acc = P3 + 0` -> 256
+        // (PACK_TO_BIN[0x2F]=25 -> 25*10+6=256), where a per-nibble split would give 356.
+        let p3 = packed(3, 0, true);
+        let r = cob_arith(Op::Add, b"0000000", &disp(7, 0, false), &[0x2F, 0x6C], &p3, Round::Truncate).unwrap();
+        assert_eq!(&r, b"0000256", "0x2F6C COMP-3 arith must fold via PACK_TO_BIN -> 256 (cobc), not nibble-split 356");
     }
 
     #[test]

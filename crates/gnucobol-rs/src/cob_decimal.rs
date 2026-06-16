@@ -181,15 +181,42 @@ pub fn cob_decimal_set_ieee128dec(data: &[u8]) -> CobDecimal {
     }
 }
 
+/// Reduce a working decimal so its significand fits `i128` (and thus the IEEE-decimal encoders),
+/// truncating low digits toward zero and tracking the scale. This is the `mpz`-level analogue of
+/// GnuCOBOL's `cob_decimal_adjust` + the `mpz_tdiv_q_ui(., 10)` loop in
+/// `cob_decimal_set_ieee64dec`/`set_ieee128dec` (numeric.c): both keep the most-significant digits and
+/// drop the low ones. For an in-range value (≤ 38 digits) it is a no-op (returns the exact `i128`);
+/// only a > 38-digit magnitude (e.g. a transcendental/MULTIPLY intermediate stored into a
+/// FLOAT-DECIMAL field) is reduced -- the previous `to_i128().unwrap_or(0)` silently encoded 0 there.
+fn reduce_to_i128(value: &Mpz, scale: i32) -> (i128, i32) {
+    if let Some(m) = value.to_i128() {
+        return (m, scale);
+    }
+    let mut v = value.clone();
+    let mut sc = scale;
+    loop {
+        v = v.tdiv_q_ui(10); // truncate toward zero (drop the least-significant digit)
+        sc -= 1; // (value/10) * 10^-(scale-1) preserves the represented magnitude
+        if v.sgn() == 0 {
+            return (0, sc);
+        }
+        if let Some(m) = v.to_i128() {
+            return (m, sc);
+        }
+    }
+}
+
 /// `cob_decimal_get_ieee64dec (d, f, opt)` (numeric.c:613): encode a working decimal into an IEEE-754
 /// decimal64 (BID) field, via the FLOAT.1-sealed [`crate::float::dec64_encode`].
 pub fn cob_decimal_get_ieee64dec(d: &CobDecimal) -> [u8; 8] {
-    crate::float::dec64_encode(d.value.to_i128().unwrap_or(0), d.scale)
+    let (mag, scale) = reduce_to_i128(&d.value, d.scale);
+    crate::float::dec64_encode(mag, scale)
 }
 
 /// `cob_decimal_get_ieee128dec (d, f, opt)` (numeric.c:731): encode into an IEEE-754 decimal128 field.
 pub fn cob_decimal_get_ieee128dec(d: &CobDecimal) -> [u8; 16] {
-    crate::float::dec128_encode(d.value.to_i128().unwrap_or(0), d.scale)
+    let (mag, scale) = reduce_to_i128(&d.value, d.scale);
+    crate::float::dec128_encode(mag, scale)
 }
 
 // `#if 0`-disabled DISPLAY in-place arithmetic (numeric.c:3403, marked "Buggy"). NOT compiled into the
@@ -1280,6 +1307,28 @@ mod tests {
         let sub = cob_sub_int(f, &a, i32::MIN, Round::Truncate).expect("no panic, no error");
         let add = cob_add_int(f, &a, i32::MIN, Round::Truncate).expect("add ok");
         assert_eq!(sub, add, "cob_sub_int(f, INT_MIN) must equal cob_add_int(f, INT_MIN) per -fwrapv");
+    }
+
+    #[test]
+    fn ieee128dec_over_38_digits_reduces_not_zero() {
+        // A >38-digit decimal (e.g. a transcendental result) stored into FLOAT-DECIMAL-34 exceeds i128,
+        // so the old `to_i128().unwrap_or(0)` silently encoded 0. The faithful path reduces the mpz
+        // (truncate toward zero, keeping the most-significant digits) like cob_decimal_set_ieee128dec
+        // (numeric.c). NB: this path is NOT reachable through cobc COMPUTE (which caps the intermediate
+        // at 38 digits before the encoder), so there is no direct cobc byte-oracle for >38 digits; we
+        // prove correctness by round-tripping through the FLOAT.1-sealed dec128_decode: the encoded
+        // value must equal the input truncated to its top 34 significant digits.
+        let a = Mpz::from_decimal_string("99999999999999999999");
+        let big = a.mul(&a); // (10^20-1)^2 = 40 digits, > i128
+        let drop = (big.to_decimal_string().len() - 34) as u32; // 6 low digits truncated to fit 34 sig
+        let ten_drop = Mpz::ui_pow_ui(10, drop);
+        let expect = big.tdiv_q(&ten_drop).mul(&ten_drop); // input truncated to its top 34 sig digits
+        let got = cob_decimal_get_ieee128dec(&CobDecimal { value: big, scale: 0 });
+        assert_ne!(got, [0u8; 16], "must NOT silently encode 0 for a >38-digit value");
+        let (sig, sc) = crate::float::dec128_decode(got).expect("FLOAT.1 decoder");
+        assert!(sc <= 0, "a >1e34 magnitude has a non-positive decimal scale");
+        let recon = Mpz::from_i128(sig).mul(&Mpz::ui_pow_ui(10, (-sc) as u32)); // sig * 10^-sc
+        assert_eq!(recon, expect, "encoded value must be the top-34-digit truncation of the input");
     }
 
     #[test]

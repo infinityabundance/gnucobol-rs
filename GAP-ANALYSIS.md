@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (4 fixed, 101 open)
+## Summary -- 105 gaps catalogued across 5 panels (6 fixed, 99 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 19 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 43 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 23 | narrow, or faithful-but-surprising |
-| **latent** | 16 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 4 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **low** | 22 | narrow, or faithful-but-surprising |
+| **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 6 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -135,12 +135,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Document FCD/EXTFH + raw-fd as a host boundary. No portable-COBOL file program is affected.
 
 #### `fp-dec-encode-to-i128-unreduced` -- cob_decimal_to_fp_dec64/128 call to_i128().unwrap_or(0) on the unreduced mpz  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: result magnitude >=~1.7e38 stored into a COMP-1/2-DECIMAL field
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: result magnitude >=~1.7e38 stored into a COMP-1/2-DECIMAL field &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:1832 + the IEEE DEC64/128 encoders carry the full mpz (bignum) without a lossy 128-bit narrowing.
 - **gnucobol-rs (Rust):** cob_decimal.rs:187/192 dec64/128_encode(d.value.to_i128().unwrap_or(0), scale); unlike get_field (which tdiv_r-reduces BEFORE to_i128), the FP-DECIMAL encoders narrow the unreduced value.
 - **Diff:** If |value|>=~1.7e38 (transcendental intermediate / >38-digit accumulation -> MOVE to FLOAT-DECIMAL), to_i128() None -> unwrap_or(0) encodes 0 where C encodes the large value.
-- **Evidence / plan:** Reduce/round the mpz to the DEC64/128 significand before to_i128, mirroring the tdiv_r guard in get_field. Test store 1.0E40 into a FLOAT-DECIMAL-34 field.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_decimal_get_ieee64dec/128dec now reduce the mpz via reduce_to_i128 (truncate toward zero, keep the most-significant digits, track scale) before to_i128 -- the mpz-level analogue of cob_decimal_set_ieee64/128dec's cob_decimal_adjust + tdiv_q_ui(.,10) loop -- instead of to_i128().unwrap_or(0) silently encoding 0. In-range (<=38-digit) values are a no-op (FLOAT sweep 1476/0 unchanged). >38-digit is unreachable via cobc COMPUTE (38-digit intermediate cap) so there is no direct byte-oracle; test ieee128dec_over_38_digits_reduces_not_zero round-trips a 40-digit value through the FLOAT.1-sealed dec128_decode and asserts it equals the top-34-digit truncation (non-zero).
 
 #### `pointer-field-value-synthetic` -- USAGE POINTER value is a synthetic handle/caller bytes, never a real host address; ADDRESS OF ordinary item not representable  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: DISPLAY/compare pointer bytes vs an externally-known address (C's own output is ASLR-nondeterministic, excluded from oracle)
@@ -331,12 +331,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Documented at cob_decimal.rs:195; reproduced verbatim for completeness, not oracle-verifiable.
 
 #### `packed-invalid-nibble-translate` -- COMP-3 invalid digit nibble (0xA-0xF) decoded per-nibble vs C pack_to_bin byte table  
-**severity:** latent &nbsp;·&nbsp; **observable:** conditional: non-conforming packed data only (never from values GnuCOBOL itself wrote)
+**severity:** latent &nbsp;·&nbsp; **observable:** conditional: non-conforming packed data only (never from values GnuCOBOL itself wrote) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:1184 cob_decimal_set_packed accumulates val=val*100+pack_to_bin[byte] using the 256-entry table (numeric.c:125): invalid nibbles fold with a carry (e.g. byte 0x1A->20).
 - **gnucobol-rs (Rust):** value.rs:30 from_packed extracts b>>4 and b&0x0F as independent digits, mag=mag*10+digit.
 - **Diff:** Identical for valid BCD; for corrupt non-BCD bytes (nibble>=0xA) the decoded magnitude differs (C table folds with carry, Rust is linear).
-- **Evidence / plan:** Port the pack_to_bin table into from_packed. Differential-test packed bytes 0x0A..0xFF in digit positions.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): the arithmetic value decode (arith::decode) and the 88-condition compare (cond::parent_num) now route PACKED through the faithful cob_decimal_set_packed (PACK_TO_BIN byte folding, packed.rs), instead of value::Decimal::from_packed's per-nibble split. from_packed stays the decoder for class checks (IS NUMERIC), which correctly need raw nibbles. Valid BCD is unchanged (packed_arith 1800/0, numcmp 1024/0, cob_decimal 5400/0); invalid nibble oracle-proven: PIC S9(3) COMP-3 = X"2F6C", COMPUTE acc = P3 + 0 -> 256 via cobc (PACK_TO_BIN[0x2F]=25), where the old nibble split gave 356. Test packed_invalid_nibble_arith_vs_cobc.
 
 #### `pow-ui-exponent-u32-narrow` -- cob_decimal_pow / present_value integer exponent narrowed to u32 vs C cob_uli_t (64-bit)  
 **severity:** latent &nbsp;·&nbsp; **observable:** no (latent): exponent >4.29e9, unreachable within COBOL digit limits
