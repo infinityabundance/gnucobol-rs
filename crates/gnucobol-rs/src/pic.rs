@@ -192,6 +192,20 @@ pub fn build_field(
     sign_separate: bool,
     sign_leading: bool,
 ) -> Result<PicField, PicError> {
+    build_field_dialect(pic, usage, sign_separate, sign_leading, crate::dialect::Dialect::DEFAULT)
+}
+
+/// As [`build_field`] but under an explicit compile-time [`Dialect`](crate::dialect::Dialect): the
+/// `binary-size` table and `binary-truncate` flag of `COMP`/`BINARY` fields follow `-std=` (`build_field`
+/// is exactly this with [`Dialect::DEFAULT`](crate::dialect::Dialect::DEFAULT), so the sealed default
+/// field model is byte-unchanged). `COMP-5`/`COMP-X` keep their own (dialect-independent) rules.
+pub fn build_field_dialect(
+    pic: &str,
+    usage: Usage,
+    sign_separate: bool,
+    sign_leading: bool,
+    dialect: crate::dialect::Dialect,
+) -> Result<PicField, PicError> {
     let parsed = terms(pic)?;
 
     let mut nines: u64 = 0;
@@ -308,12 +322,18 @@ pub fn build_field(
         // distinguish endian + truncation (proven against `cobc`'s emitted attrs).
         Usage::Comp => (
             COB_TYPE_NUMERIC_BINARY,
-            binary_size(nines),
-            COB_FLAG_BINARY_SWAP | COB_FLAG_BINARY_TRUNC,
+            dialect.binary_size.bytes(nines),
+            // binary-truncate: yes (default) sets COB_FLAG_BINARY_TRUNC; ibm/mf/mvs (no) clear it so the
+            // field keeps its full binary range (the store path in binary.rs honors the flag).
+            if dialect.binary_truncate {
+                COB_FLAG_BINARY_SWAP | COB_FLAG_BINARY_TRUNC
+            } else {
+                COB_FLAG_BINARY_SWAP
+            },
         ),
         Usage::Comp5 => (
             COB_TYPE_NUMERIC_BINARY,
-            binary_size(nines),
+            dialect.binary_size.bytes(nines),
             COB_FLAG_REAL_BINARY,
         ),
         Usage::CompX => (
@@ -446,6 +466,41 @@ mod tests {
         let cx = f("9(6)", Usage::CompX, false, false);
         assert_eq!((cx.attr.flags, cx.size), (COB_FLAG_BINARY_SWAP, 3));
         assert_eq!(f("9(10)", Usage::CompX, false, false).size, 5);
+    }
+
+    #[test]
+    fn dialect_binary_size_and_truncate_match_oracle() {
+        use crate::attr::{COB_FLAG_BINARY_TRUNC, COB_TYPE_NUMERIC_BINARY};
+        use crate::dialect::Dialect;
+        let comp = |pic: &str, d: Dialect| {
+            build_field_dialect(pic, Usage::Comp, false, false, d).unwrap()
+        };
+        // binary-size (cobc LEN1=PIC 9(1) COMP, LEN6=PIC 9(6) COMP):
+        //   default 1/4, ibm/mvs 2/4, mf 1/3.
+        assert_eq!(comp("9(1)", Dialect::DEFAULT).size, 1);
+        assert_eq!(comp("9(1)", Dialect::IBM).size, 2);
+        assert_eq!(comp("9(1)", Dialect::MVS).size, 2);
+        assert_eq!(comp("9(1)", Dialect::MF).size, 1);
+        assert_eq!(comp("9(6)", Dialect::DEFAULT).size, 4);
+        assert_eq!(comp("9(6)", Dialect::IBM).size, 4);
+        assert_eq!(comp("9(6)", Dialect::MF).size, 3);
+        // binary-truncate: default sets the TRUNC flag; ibm/mf/mvs clear it. Field type unchanged.
+        assert_eq!(comp("9(4)", Dialect::DEFAULT).attr.field_type, COB_TYPE_NUMERIC_BINARY);
+        assert!(comp("9(4)", Dialect::DEFAULT).attr.flags & COB_FLAG_BINARY_TRUNC != 0);
+        assert!(comp("9(4)", Dialect::IBM).attr.flags & COB_FLAG_BINARY_TRUNC == 0);
+        assert!(comp("9(4)", Dialect::MF).attr.flags & COB_FLAG_BINARY_TRUNC == 0);
+
+        // Store/load value through binary.rs honors the truncate flag: MOVE 70000 TO PIC 9(4) COMP.
+        //   default (truncate): 70000 % 10^4 = 0.   ibm/mf (no truncate, 2 bytes): 70000 % 65536 = 4464.
+        let store_load = |d: Dialect| {
+            let f = comp("9(4)", d);
+            let mut buf = vec![0u8; f.size];
+            crate::binary::binary_encode(70000, &f.attr, &mut buf);
+            crate::binary::binary_decode(&buf, &f.attr)
+        };
+        assert_eq!(store_load(Dialect::DEFAULT), 0);
+        assert_eq!(store_load(Dialect::IBM), 4464);
+        assert_eq!(store_load(Dialect::MF), 4464);
     }
 
     #[test]

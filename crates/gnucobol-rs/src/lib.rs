@@ -115,6 +115,7 @@ pub mod screenio_display;
 pub mod screenio_accept;
 pub mod screenio_edit;
 pub mod search;
+pub mod dialect;
 pub mod pic;
 mod sign;
 pub mod value;
