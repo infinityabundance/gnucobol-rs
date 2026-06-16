@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (17 fixed, 88 open)
+## Summary -- 105 gaps catalogued across 5 panels (18 fixed, 87 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 12 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 40 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 17 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 18 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -540,12 +540,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Same probe via CALL. Matches under the C.UTF-8 oracle.
 
 #### `edited-currency-fixed-dollar` -- Picture editing currency symbol fixed to '$', C honors COB_MODULE_PTR->currency_symbol  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: non-'$' CURRENCY SIGN or DECIMAL-POINT IS COMMA in an edited PIC
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: non-'$' CURRENCY SIGN or DECIMAL-POINT IS COMMA in an edited PIC &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** move.c:911 cob_move_display_to_edited reads currency = COB_MODULE_PTR->currency_symbol (CURRENCY SIGN IS / config: can be euro/pound) and dec_symbol from decimal_point.
 - **gnucobol-rs (Rust):** edited.rs hardcodes b'$' throughout (the value-decode skip list, floating/fixed currency); no runtime currency-symbol parameter.
 - **Diff:** A program with CURRENCY SIGN IS pound editing PIC ###9.99 produces pound in GnuCOBOL; the port only understands '$'.
-- **Evidence / plan:** MOVE 12.34 TO a PIC pound-pound-pound-9.99 field under CURRENCY SIGN IS pound. Add a currency + decimal-point parameter to edited.rs.
+- **Evidence / plan:** FIXED (currency) gnucobol-rs 0.7.85: edited.rs grows encode_edited_cfg(pic, value, currency) -- a non-'$' CURRENCY SIGN is normalized to '$' for the proven internal logic and swapped back in the output (the default-'$' encode_edited is byte-unchanged, sealed edited_encode_sweep 153/0). The front-end (this is phase A's first slice) parses SPECIAL-NAMES CURRENCY SIGN IS "x" (parse_currency_sign) + threads it through Storage::Edited(pic, currency) + make_field. END-TO-END oracle: CURRENCY SIGN IS "F", PIC FF,FF9.99 <- 1234.56 -> F1,234.56 via BOTH cobc and cobrun (front-end corpus p24_currency: IDENTICAL, cobol_frontend_sweep 24/0 + 3.1.2 differential). RESIDUAL: DECIMAL-POINT IS COMMA (the '.'<->',' role swap) is the follow-on (sibling cli-decimal-currency-specialnames).
 
 #### `locale-compare-bytewise` -- LOCALE-COMPARE: C uses strcoll() under LC_COLLATE; port uses raw byte ordering  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_COLLATE != C/POSIX or a passed locale (under C/POSIX strcoll==strcmp)
@@ -701,7 +701,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **GnuCOBOL 3.2 (C):** Parsed in cobc into current_program flags; affects edited PIC encoding (','/'.' roles, currency substitution).
 - **gnucobol-rs (Rust):** frontend.rs has zero matches for DECIMAL-POINT/CURRENCY/OPTIONS/SOURCE FORMAT; no CONFIGURATION SECTION / SPECIAL-NAMES handling (data parse starts at WORKING-STORAGE). edited.rs assumes '.'/'$'.
 - **Diff:** DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause).
-- **Evidence / plan:** Parse SPECIAL-NAMES + thread decimal-point/currency into edited.rs.
+- **Evidence / plan:** IN PROGRESS (phase A): the front-end now parses SPECIAL-NAMES CURRENCY SIGN IS "x" (parse_currency_sign) and threads it through Storage::Edited + make_field into encode_edited_cfg -- a custom currency edited PIC is byte-identical to cobc end-to-end (corpus p24_currency, cobol_frontend_sweep 24/0; see edited-currency-fixed-dollar). REMAINING: DECIMAL-POINT IS COMMA (swap the '.'/',' grouping/decimal roles in the PIC interpretation + output, and accept comma-decimal VALUE/numeric literals) and the OPTIONS paragraph.
 
 #### `cli-runtime-cfg` -- --conf / --runtime-config / runtime.cfg auto-load never invoked  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: any behavior controlled by runtime.cfg / a --conf file

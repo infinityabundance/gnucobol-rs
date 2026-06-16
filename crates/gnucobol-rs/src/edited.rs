@@ -347,12 +347,40 @@ fn emit_frac(syms: &[char], digits: &[u8]) -> String {
 /// `MOVE numeric TO edited-field` for the admitted `16a`+`16b` subset (the inverse of [`decode_edited`]).
 /// Fail closed on any symbol outside the subset.
 pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError> {
+    encode_edited_cfg(pic, value, b'$')
+}
+
+/// As [`encode_edited`] but with a configurable **CURRENCY SIGN** character (`SPECIAL-NAMES CURRENCY
+/// SIGN IS x`): the PICTURE uses `currency` in place of `$` for the fixed/floating currency symbol. The
+/// default-`$` path (`encode_edited`) is byte-unchanged, so the sealed GNURUST.16C edited-encode sweep
+/// is untouched; only a non-`$` currency exercises the new path.
+pub fn encode_edited_cfg(pic: &str, value: &Decimal, currency: u8) -> Result<Vec<u8>, EditedError> {
+    let cur = (currency as char).to_ascii_uppercase();
     let mut chars: Vec<char> = pic
         .trim()
         .chars()
         .filter(|c| !c.is_whitespace())
         .map(|c| c.to_ascii_uppercase())
         .collect();
+    // Normalize a non-'$' CURRENCY SIGN to '$' so all the internal currency logic (fixed/floating
+    // detection, validation, digit counting) is the proven '$' path; swap '$' back to the real currency
+    // byte in the output. (COBOL forbids the currency sign from being any other PICTURE symbol, and only
+    // one currency sign exists per program, so no '$' can legitimately appear when cur != '$'.)
+    if cur != '$' {
+        for c in chars.iter_mut() {
+            if *c == cur {
+                *c = '$';
+            }
+        }
+    }
+    // The same normalization for `edited_size` (which re-parses the PICTURE string): the output width is
+    // identical whether the currency symbol is `$` or `cur`.
+    let pic_norm: String = if cur == '$' {
+        pic.to_string()
+    } else {
+        pic.chars().map(|c| if c.to_ascii_uppercase() == cur { '$' } else { c }).collect()
+    };
+    let pic = pic_norm.as_str();
     if chars.is_empty() {
         return Err(EditedError::Empty);
     }
@@ -461,6 +489,14 @@ pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError>
             got: bytes.len(),
         });
     }
+    // Swap the internal '$' back to the real CURRENCY SIGN byte.
+    if cur != '$' {
+        for b in bytes.iter_mut() {
+            if *b == b'$' {
+                *b = currency.to_ascii_uppercase();
+            }
+        }
+    }
     Ok(bytes)
 }
 
@@ -517,6 +553,18 @@ mod tests {
         assert_eq!(encode_edited("****.**", &frac).unwrap(), b"****.05"); // non-zero -> fraction shows
         // A forced `9` prevents complete star fill -- the 9 shows a 0.
         assert_eq!(encode_edited("***9.99", &z8).unwrap(), b"***0.00");
+    }
+
+    #[test]
+    fn currency_sign_other_than_dollar() {
+        // `SPECIAL-NAMES. CURRENCY SIGN IS "F".` PIC FF,FF9.99 <- 1234.56 -> "F1,234.56" (cobc oracle).
+        let v = Decimal { negative: false, digits: vec![1, 2, 3, 4, 5, 6], scale: 2 };
+        assert_eq!(encode_edited_cfg("FF,FF9.99", &v, b'F').unwrap(), b"F1,234.56");
+        // a fixed (single) currency too: PIC F9999.99 -> "F1234.56"
+        assert_eq!(encode_edited_cfg("F9999.99", &v, b'F').unwrap(), b"F1234.56");
+        // the default '$' path is byte-unchanged
+        assert_eq!(encode_edited_cfg("$$,$$9.99", &v, b'$').unwrap(), b"$1,234.56");
+        assert_eq!(encode_edited("$$,$$9.99", &v).unwrap(), b"$1,234.56");
     }
 
     #[test]

@@ -22,7 +22,7 @@
 
 use crate::arith::{cob_arith, cob_divide, Op, Round};
 use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_DISPLAY};
-use crate::edited::{edited_size, encode_edited};
+use crate::edited::{edited_size, encode_edited_cfg};
 use crate::move_ops::cob_move;
 use crate::pic::{build_field, Usage};
 use crate::termio::{cob_display, DisplaySettings};
@@ -69,8 +69,9 @@ enum Storage {
     Numeric(FieldAttr),
     /// An alphanumeric `PIC X/A` field: raw bytes, left-justified space-padded.
     Alpha(FieldAttr),
-    /// A numeric-edited field: the bytes are the edited image; its PIC string drives editing.
-    Edited(String),
+    /// A numeric-edited field: the bytes are the edited image; its PIC string drives editing, with the
+    /// program's CURRENCY SIGN symbol (default `b'$'`, from `SPECIAL-NAMES`).
+    Edited(String, u8),
 }
 
 /// A live field: its storage shape and its current bytes (always exactly the field's size).
@@ -188,6 +189,10 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
         .ok_or_else(|| RunError::Unsupported("no PROCEDURE DIVISION".into()))?;
     let ws_at = find_seq(&toks, &["WORKING-STORAGE", "SECTION"]);
 
+    // ENVIRONMENT DIVISION / SPECIAL-NAMES: the CURRENCY SIGN IS "x" clause (default '$') sets the
+    // currency symbol the edited PICTUREs use. Scanned from the tokens before the data division.
+    let currency = parse_currency_sign(&toks, proc_at);
+
     // --- DATA DIVISION: parse 01-level elementary items between WS SECTION and PROCEDURE DIVISION.
     if let Some(ws) = ws_at {
         let mut k = ws + 2;
@@ -247,7 +252,7 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
                 }
             }
             let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-            let field = make_field(&pic, value.as_ref())?;
+            let field = make_field(&pic, value.as_ref(), currency)?;
             fields.insert(name, field);
         }
     }
@@ -702,7 +707,7 @@ fn scaled_digits(d: &Decimal, scale: i16) -> Vec<u8> {
 
 /// Build a [`Field`] from its PIC + optional VALUE literal. Edited pictures (which [`build_field`]
 /// rejects as unsupported symbols) are stored as their edited image.
-fn make_field(pic: &str, value: Option<&Tok>) -> Result<Field, RunError> {
+fn make_field(pic: &str, value: Option<&Tok>, currency: u8) -> Result<Field, RunError> {
     match build_field(pic, Usage::Display, false, false) {
         Ok(pf) => {
             let is_alpha = !pf.attr.is_numeric();
@@ -719,9 +724,16 @@ fn make_field(pic: &str, value: Option<&Tok>) -> Result<Field, RunError> {
             Ok(field)
         }
         Err(crate::pic::PicError::UnsupportedSymbol(_)) | Err(crate::pic::PicError::MixedCategory) => {
-            // treat as numeric-edited: storage is the edited image, sized by edited_size.
-            let size = edited_size(pic).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
-            let mut field = Field { storage: Storage::Edited(pic.to_string()), bytes: vec![b' '; size] };
+            // treat as numeric-edited: storage is the edited image, sized by edited_size. A non-'$'
+            // CURRENCY SIGN is normalized to '$' for the size computation (the width is the same).
+            let cur = (currency as char).to_ascii_uppercase();
+            let pic_norm: String = if cur == '$' {
+                pic.to_string()
+            } else {
+                pic.chars().map(|c| if c.to_ascii_uppercase() == cur { '$' } else { c }).collect()
+            };
+            let size = edited_size(&pic_norm).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
+            let mut field = Field { storage: Storage::Edited(pic.to_string(), currency), bytes: vec![b' '; size] };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -768,9 +780,10 @@ fn parse_num_literal(w: &str) -> Result<Decimal, RunError> {
 /// Store a [`Decimal`] into a field (numeric -> zoned via the runtime move; edited -> encode).
 fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
     match &field.storage {
-        Storage::Edited(pic) => {
+        Storage::Edited(pic, currency) => {
             let pic = pic.clone();
-            field.bytes = encode_edited(&pic, dec).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            let cur = *currency;
+            field.bytes = encode_edited_cfg(&pic, dec, cur).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             Ok(())
         }
         Storage::Numeric(attr) => {
@@ -814,7 +827,7 @@ fn decimal_as_display(dec: &Decimal) -> (Vec<u8>, FieldAttr) {
 fn store_alnum(field: &mut Field, src: &[u8]) -> Result<(), RunError> {
     let src_attr = alnum_attr();
     match &field.storage {
-        Storage::Edited(_) => {
+        Storage::Edited(..) => {
             // alphanumeric into edited: just place left-justified (rare path).
             let n = field.bytes.len();
             let mut b = vec![b' '; n];
@@ -1048,7 +1061,7 @@ fn display_bytes(f: &Field) -> Vec<u8> {
             crate::termio::cob_display_common(&f.bytes, attr, &DisplaySettings::default(), &mut o);
             o
         }
-        Storage::Alpha(_) | Storage::Edited(_) => f.bytes.clone(),
+        Storage::Alpha(_) | Storage::Edited(..) => f.bytes.clone(),
     }
 }
 
@@ -1081,7 +1094,7 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
                 match &f.storage {
                     Storage::Numeric(a) => Ok((f.bytes.clone(), *a)),
                     Storage::Alpha(a) => Ok((f.bytes.clone(), *a)),
-                    Storage::Edited(_) => Ok((f.bytes.clone(), alnum_attr())),
+                    Storage::Edited(..) => Ok((f.bytes.clone(), alnum_attr())),
                 }
             } else {
                 // a numeric literal operand.
@@ -1096,12 +1109,13 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
 /// MOVE a source `(bytes, attr)` into a field via the right runtime path (edited vs cob_move).
 fn move_into(f: &mut Field, sbytes: &[u8], sattr: &FieldAttr) -> Result<(), RunError> {
     match &f.storage {
-        Storage::Edited(pic) => {
+        Storage::Edited(pic, currency) => {
             // numeric/alnum source into a numeric-edited receiver: decode the source to a decimal,
             // then encode per the edited PIC (the move.c numeric->edited path).
             let pic = pic.clone();
+            let cur = *currency;
             let dec = source_to_decimal(sbytes, sattr)?;
-            f.bytes = encode_edited(&pic, &dec).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            f.bytes = encode_edited_cfg(&pic, &dec, cur).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             Ok(())
         }
         Storage::Numeric(attr) | Storage::Alpha(attr) => {
@@ -1284,6 +1298,31 @@ fn is_kw(w: &str) -> bool {
 }
 
 /// Find the index of a contiguous keyword sequence (e.g. `["PROCEDURE","DIVISION"]`).
+/// `SPECIAL-NAMES. CURRENCY SIGN IS "x".` -> the currency symbol byte (default `b'$'`). Scans the tokens
+/// before the data division for `CURRENCY [SIGN] [IS] "<sym>"`. Only the first byte of the literal is the
+/// symbol (GnuCOBOL allows a 1-char currency sign for editing).
+fn parse_currency_sign(toks: &[Tok], before: usize) -> u8 {
+    let mut i = 0;
+    while i < before {
+        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "CURRENCY") {
+            let mut k = i + 1;
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "SIGN") {
+                k += 1;
+            }
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                k += 1;
+            }
+            if let Some(Tok::Str(s)) = toks.get(k) {
+                if let Some(&b) = s.first() {
+                    return b;
+                }
+            }
+        }
+        i += 1;
+    }
+    b'$'
+}
+
 fn find_seq(toks: &[Tok], seq: &[&str]) -> Option<usize> {
     if seq.is_empty() {
         return None;
