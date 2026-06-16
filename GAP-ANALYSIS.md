@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (21 fixed, 84 open)
+## Summary -- 105 gaps catalogued across 5 panels (23 fixed, 82 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 9 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 7 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 21 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 23 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -55,12 +55,10 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 1 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
 | 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 | 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 4 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
-| 5 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
-| 6 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 7 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 8 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
-| 9 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 4 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
+| 5 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
+| 6 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
+| 7 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -709,12 +707,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Add file-locating + cob_load_config invocation at startup; wire results into the executor.
 
 #### `cli-std-dialect` -- -std=/-fdialect dialect selection has no runtime effect  
-**severity:** high &nbsp;·&nbsp; **observable:** conditional: whenever a non-default -std would change behavior
+**severity:** high &nbsp;·&nbsp; **observable:** conditional: whenever a non-default -std would change behavior &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cobc.c:596 -std loads a .conf dialect that flips cb_* flags (binary-size/truncate/defaultbyte/move-ibm/etc above).
 - **gnucobol-rs (Rust):** cobrun takes exactly one positional file-path arg; run_program(source) takes no flags. The .conf files parse but are never consumed by the executor.
 - **Diff:** C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect. This is the master switch behind every dialect-* gap.
-- **Evidence / plan:** Add a dialect selector to the front-end + route config into the executor.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.87 (phase A): the master switch is wired. dialect.rs::Dialect::from_std(name) resolves -std= (ibm/mf/mvs/cobol85/2002/2014/default) to the field-model knob set; cobrun parses `cobrun [-std=NAME] <file>` -> run_program_dialect(src, dialect), which threads it into make_field (defaultbyte) and the native field model exposes build_field_dialect (binary-size/truncate). PROVEN end-to-end that a non-default -std now changes runtime output: corpus p26 under -std=ibm yields the 0x00 alphanumeric fill byte-identical to cobc -std=ibm (cobol_frontend_sweep 26/0), where the default dialect yields spaces. The dialect-* leaves (binary-size, binary-truncate, defaultbyte) are individually sealed. RESIDUAL: full config/*.conf file parsing (vs the const Dialect tables provenance-cited to those files) + COMP emission in the front-end + complex-odo.
 
 #### `dialect-binary-size` -- binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: -std=ibm/mf/mvs with small COMP items &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -741,12 +739,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Significant layout-engine work; today single-dialect only.
 
 #### `dialect-defaultbyte` -- defaultbyte (uninitialized storage fill) hardcoded to category defaults  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: any program displaying/using an item without VALUE under ibm/mvs/cobol85
+**severity:** high &nbsp;·&nbsp; **observable:** yes: any program displaying/using an item without VALUE under ibm/mvs/cobol85 &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** config.def defaultbyte default 'init' -> '0' in ibm/mvs, space in mf, 'none' in cobol85. cb_default_byte fills WORKING-STORAGE items lacking VALUE.
 - **gnucobol-rs (Rust):** initialize.rs:6 always fills X->0x20, numeric->'0', binary/packed->0x00; no path for defaultbyte 0 or none.
 - **Diff:** Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0). First DISPLAY of uninitialized storage diverges.
-- **Evidence / plan:** Thread defaultbyte from dialect into the initial-storage fill.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.87 (phase A): dialect.rs gains DefaultByte { Init, Fill(u8) } + Dialect.defaultbyte (DEFAULT Init; ibm/mvs Fill(0); mf Fill(b' '); cobol85/2002/2014 Fill(0) for `none` observed as 0x00). DefaultByte::byte(is_alpha) governs ONLY alphanumeric storage -- a numeric DISPLAY elementary item is always figurative ZERO '0' regardless of dialect (proven: cobc -std=ibm leaves a standalone 01 N PIC 9(3) as "000" while 01 A PIC X(3) becomes 0x00; the earlier all-0x00 group reading was a group filled as one alphanumeric region). The front-end's make_field fills un-VALUEd storage via dialect.defaultbyte.byte(is_alpha); run_program_dialect + cobrun -std=NAME + a `*> @std:` sweep header thread the dialect end-to-end. Corpus p26_dialect_defaultbyte (@std: ibm) -> [<00 00 00>][000] byte-identical to cobc 3.2 -std=ibm (cobol_frontend_sweep 26/0). NOTE: the 3.1.2 cross-check is exempt for dialect-tagged programs -- -std=ibm alphanumeric defaultbyte is space in 3.1.2 but 0x00 in 3.2 (config evolves across versions; the port targets the admitted 3.2 oracle).
 
 #### `dialect-refmod-zero-length` -- ref-mod-zero-length hardcoded to 'no' -- contradicts the GnuCOBOL DEFAULT (yes)  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: any zero-length reference modification under the default dialect &nbsp;·&nbsp; **status: ✓ FIXED**

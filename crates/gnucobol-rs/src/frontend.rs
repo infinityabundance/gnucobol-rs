@@ -177,8 +177,19 @@ fn lex(src: &str) -> Vec<Tok> {
 // ---------------------------------------------------------------------------------------------
 
 /// Parse + execute a COBOL program from `source`, returning the exact stdout bytes it would write.
-/// Fails closed with a [`RunError`] for anything outside the sealed subset.
+/// Fails closed with a [`RunError`] for anything outside the sealed subset. Runs under the default
+/// dialect; [`run_program_dialect`] selects a `-std=` dialect (e.g. uninitialized-storage `defaultbyte`).
 pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
+    run_program_dialect(source, crate::dialect::Dialect::DEFAULT)
+}
+
+/// As [`run_program`] but under an explicit compile-time [`Dialect`](crate::dialect::Dialect) (`-std=`):
+/// the `defaultbyte` fill of uninitialized `WORKING-STORAGE` follows the dialect. `run_program` is exactly
+/// this with [`Dialect::DEFAULT`](crate::dialect::Dialect::DEFAULT).
+pub fn run_program_dialect(
+    source: &str,
+    dialect: crate::dialect::Dialect,
+) -> Result<Vec<u8>, RunError> {
     let up = source.to_uppercase();
     let mut toks = lex(&up);
     let mut fields: HashMap<String, Field> = HashMap::new();
@@ -266,7 +277,7 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
                 }
             }
             let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-            let field = make_field(&pic, value.as_ref(), currency, decimal_comma)?;
+            let field = make_field(&pic, value.as_ref(), currency, decimal_comma, dialect)?;
             fields.insert(name, field);
         }
     }
@@ -721,19 +732,25 @@ fn scaled_digits(d: &Decimal, scale: i16) -> Vec<u8> {
 
 /// Build a [`Field`] from its PIC + optional VALUE literal. Edited pictures (which [`build_field`]
 /// rejects as unsupported symbols) are stored as their edited image.
-fn make_field(pic: &str, value: Option<&Tok>, currency: u8, decimal_comma: bool) -> Result<Field, RunError> {
+fn make_field(
+    pic: &str,
+    value: Option<&Tok>,
+    currency: u8,
+    decimal_comma: bool,
+    dialect: crate::dialect::Dialect,
+) -> Result<Field, RunError> {
     match build_field(pic, Usage::Display, false, false) {
         Ok(pf) => {
             let is_alpha = !pf.attr.is_numeric();
-            let mut bytes = vec![if is_alpha { b' ' } else { b'0' }; pf.size];
+            // Uninitialized storage (no VALUE) is filled per the dialect's `defaultbyte`: the category
+            // default ('0'/space) under the default dialect, a single byte (0x00 ibm/mvs, space mf) else.
+            // A VALUE clause always overrides the fill.
+            let fill = dialect.defaultbyte.byte(is_alpha);
+            let bytes = vec![fill; pf.size];
             let storage = if is_alpha { Storage::Alpha(pf.attr) } else { Storage::Numeric(pf.attr) };
-            let mut field = Field { storage, bytes: bytes.clone() };
+            let mut field = Field { storage, bytes };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
-            } else if is_alpha {
-                // alphanumeric default is spaces (already set).
-                bytes.fill(b' ');
-                field.bytes = bytes;
             }
             Ok(field)
         }

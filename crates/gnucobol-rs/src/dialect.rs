@@ -51,6 +51,35 @@ impl BinarySize {
     }
 }
 
+/// The `defaultbyte` knob: how an uninitialized `WORKING-STORAGE` item (no `VALUE`) is filled.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DefaultByte {
+    /// `init` (default): the category default -- `'0'` (0x30) for numeric, space (0x20) for alphanumeric
+    /// (GnuCOBOL's "INITIALIZE ALL TO VALUE THEN TO DEFAULT").
+    Init,
+    /// A single fill byte for ALL uninitialized storage: ibm/mvs `0` (0x00), mf `" "` (0x20). The
+    /// cobol85/2002/2014 `none` ("undefined") is observed as 0x00, so it maps here as `Fill(0)`.
+    Fill(u8),
+}
+
+impl DefaultByte {
+    /// The fill byte for an uninitialized *elementary* item. `defaultbyte` governs only ALPHANUMERIC
+    /// (and group/FILLER) storage: a numeric DISPLAY elementary item always initializes to figurative
+    /// ZERO (`'0'` = 0x30), independent of the dialect -- proven by `cobc -std=ibm` on a standalone
+    /// `01 N PIC 9(3)` (still `"000"`, while a standalone `01 A PIC X(3)` becomes 0x00). (A *group*'s
+    /// numeric subordinate is filled as part of the alphanumeric group region, but the front-end's
+    /// sealed subset is elementary items.)
+    pub fn byte(self, is_alpha: bool) -> u8 {
+        if !is_alpha {
+            return b'0';
+        }
+        match self {
+            DefaultByte::Init => b' ',
+            DefaultByte::Fill(b) => b,
+        }
+    }
+}
+
 /// The compile-time dialect knobs that change the emitted field model.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Dialect {
@@ -62,6 +91,8 @@ pub struct Dialect {
     /// `complex-odo` -- whether complex `OCCURS DEPENDING ON` (indirect / larger redefines / sliding) is
     /// permitted (ibm/mf/mvs `yes`).
     pub complex_odo: bool,
+    /// `defaultbyte` -- the fill for uninitialized storage.
+    pub defaultbyte: DefaultByte,
 }
 
 impl Dialect {
@@ -71,24 +102,36 @@ impl Dialect {
         binary_size: BinarySize::Cob1248,
         binary_truncate: true,
         complex_odo: false,
+        defaultbyte: DefaultByte::Init,
     };
-    /// `-std=ibm` (`ibm.conf` -> `ibm-strict.conf`): `2-4-8`, no truncate, complex ODO.
+    /// `-std=ibm` (`ibm.conf` -> `ibm-strict.conf`): `2-4-8`, no truncate, complex ODO, defaultbyte 0.
     pub const IBM: Dialect = Dialect {
         binary_size: BinarySize::Cob248,
         binary_truncate: false,
         complex_odo: true,
+        defaultbyte: DefaultByte::Fill(0),
     };
-    /// `-std=mf` (`mf.conf` -> `mf-strict.conf`): `1--8` (tight), no truncate, complex ODO.
+    /// `-std=mf` (`mf.conf` -> `mf-strict.conf`): `1--8` (tight), no truncate, complex ODO, defaultbyte space.
     pub const MF: Dialect = Dialect {
         binary_size: BinarySize::Cob1to8,
         binary_truncate: false,
         complex_odo: true,
+        defaultbyte: DefaultByte::Fill(b' '),
     };
-    /// `-std=mvs` (`mvs.conf` -> `mvs-strict.conf`): same three knobs as ibm.
+    /// `-std=mvs` (`mvs.conf` -> `mvs-strict.conf`): same four knobs as ibm.
     pub const MVS: Dialect = Dialect {
         binary_size: BinarySize::Cob248,
         binary_truncate: false,
         complex_odo: true,
+        defaultbyte: DefaultByte::Fill(0),
+    };
+    /// `-std=cobol85` / `cobol2002` / `cobol2014`: the same three field-model knobs as DEFAULT, but
+    /// `defaultbyte: none` -- undefined storage, observed as 0x00.
+    pub const COBOL85: Dialect = Dialect {
+        binary_size: BinarySize::Cob1248,
+        binary_truncate: true,
+        complex_odo: false,
+        defaultbyte: DefaultByte::Fill(0),
     };
 
     /// Resolve a `-std=` name to its [`Dialect`] (the field-model subset). Unknown names fall back to
@@ -98,6 +141,7 @@ impl Dialect {
             "ibm" | "ibm-strict" => Dialect::IBM,
             "mf" | "mf-strict" => Dialect::MF,
             "mvs" | "mvs-strict" => Dialect::MVS,
+            "cobol85" | "cobol2002" | "cobol2014" => Dialect::COBOL85,
             _ => Dialect::DEFAULT,
         }
     }
@@ -137,5 +181,21 @@ mod tests {
         assert_eq!(Dialect::from_std("xyz"), Dialect::DEFAULT);
         assert!(Dialect::DEFAULT.binary_truncate);
         assert!(!Dialect::DEFAULT.complex_odo);
+    }
+
+    #[test]
+    fn defaultbyte_matches_cobc_oracle() {
+        // cobc -std=X on STANDALONE elementary items `01 A PIC X(3).` and `01 N PIC 9(3).`, hexdumped:
+        //   numeric N is "000" (0x30) under EVERY dialect; only the alpha A changes:
+        //   default/mf space (0x20), ibm/mvs/cobol85 0x00.
+        for d in [Dialect::DEFAULT, Dialect::IBM, Dialect::MVS, Dialect::MF, Dialect::COBOL85] {
+            assert_eq!(d.defaultbyte.byte(false), b'0', "numeric is always '0'");
+        }
+        assert_eq!(Dialect::DEFAULT.defaultbyte.byte(true), b' ');
+        assert_eq!(Dialect::IBM.defaultbyte.byte(true), 0);
+        assert_eq!(Dialect::MVS.defaultbyte.byte(true), 0);
+        assert_eq!(Dialect::MF.defaultbyte.byte(true), b' ');
+        assert_eq!(Dialect::COBOL85.defaultbyte.byte(true), 0);
+        assert_eq!(Dialect::from_std("cobol85"), Dialect::COBOL85);
     }
 }
