@@ -275,6 +275,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "COBOL-PARITY.md / FILE-PARITY.md: drift (run \`cargo run -p xtask -- cobol-parity generate\`)"; cat /tmp/_cp_check
   fi
+  if ( cd "$ROOT" && cargo run -q -p xtask -- gap-analysis check ) >/tmp/_ga_check 2>&1; then
+    note "GAP-ANALYSIS: forensic C->Rust gap ledger (every divergence as a diff) fresh"
+  else
+    bad "GAP-ANALYSIS.md: drift (run \`cargo run -p xtask -- gap-analysis generate\`)"; cat /tmp/_ga_check
+  fi
   if ( cd "$ROOT" && cargo run -q -p xtask -- kani-fuzz check ) >/tmp/_kf_check 2>&1; then
     note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
   else
