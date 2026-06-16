@@ -194,19 +194,38 @@ fn compute_divide(a: Dec, b: Dec, result_scale: i32) -> Result<(Dec, bool), Arit
     }
     let k = result_scale + b.scale - a.scale;
     let (mag, inexact) = if k >= 0 {
-        let num = a
-            .mag
-            .checked_mul(pow10(k as u32).ok_or(ArithError::OutOfRange)?)
-            .ok_or(ArithError::OutOfRange)?;
-        (num / b.mag, num % b.mag != 0) // i128 division truncates toward zero
+        // Fast path: scale the dividend in i128. If 10^k or the product overflows i128 (the scaled
+        // dividend exceeds ~38 digits, as GnuCOBOL's GMP shift to COB_MAX_DIGITS routinely produces,
+        // numeric.c:2260), fall back to the arbitrary-precision Mpz divide so we never fail closed.
+        match pow10(k as u32).and_then(|p| a.mag.checked_mul(p)) {
+            Some(num) => (num / b.mag, num % b.mag != 0), // i128 division truncates toward zero
+            None => divide_via_mpz(a.mag, k as u32, b.mag, true)?,
+        }
     } else {
-        let den = b
-            .mag
-            .checked_mul(pow10((-k) as u32).ok_or(ArithError::OutOfRange)?)
-            .ok_or(ArithError::OutOfRange)?;
-        (a.mag / den, a.mag % den != 0)
+        match pow10((-k) as u32).and_then(|p| b.mag.checked_mul(p)) {
+            Some(den) => (a.mag / den, a.mag % den != 0),
+            None => divide_via_mpz(b.mag, (-k) as u32, a.mag, false)?,
+        }
     };
     Ok((Dec { mag, scale: result_scale }, inexact))
+}
+
+/// Arbitrary-precision divide fallback for when the i128 operand scaling in [`compute_divide`] overflows
+/// (the scaled dividend/divisor exceeds ~38 digits). Mirrors GnuCOBOL's GMP `cob_decimal_div`: the
+/// quotient is truncated toward zero and the (nonzero) remainder is the sticky bit. The quotient itself
+/// fits i128 whenever the receiving field does; if it does not, that is a genuine size overflow
+/// (`OutOfRange`), the same boundary the fast path reports. `scale_num = true` -> `(op*10^pow)/other`
+/// (k>=0); `false` -> `op/(other*10^pow)` (k<0, op = dividend, other = divisor).
+fn divide_via_mpz(op: i128, pow: u32, other: i128, scale_num: bool) -> Result<(i128, bool), ArithError> {
+    use crate::gmp::Mpz;
+    let ten_pow = Mpz::ui_pow_ui(10, pow);
+    let (num, den) = if scale_num {
+        (Mpz::from_i128(op).mul(&ten_pow), Mpz::from_i128(other))
+    } else {
+        (Mpz::from_i128(op), Mpz::from_i128(other).mul(&ten_pow))
+    };
+    let (q, r) = num.tdiv_qr(&den);
+    Ok((q.to_i128().ok_or(ArithError::OutOfRange)?, r.sgn() != 0))
 }
 
 /// `DIVIDE` quotient into a GIVING receiver (`GNURUST.19`): `receiver := lhs / rhs`, returning the
@@ -671,6 +690,18 @@ pub fn cob_arith(
         Err(ArithError::OutOfRange) if matches!(op, Op::Multiply) => {
             mul_store_big(da, db, a_attr, round, bcd_path)
         }
+        // An ADD/SUBTRACT whose i128 operand alignment overflows (a >38-digit aligned intermediate, as
+        // GnuCOBOL's GMP align_decimal produces): fall back to the arbitrary-precision Mpz cob_decimal
+        // path (cob_add/cob_sub, the verified structural-1:1 layer == this i128 path for in-range), so
+        // we never fail closed. The result still truncates to the receiver at store.
+        Err(ArithError::OutOfRange) if matches!(op, Op::Add | Op::Subtract) => {
+            let res = if matches!(op, Op::Add) {
+                crate::cob_decimal::cob_add(a, a_attr, b, b_attr, round)
+            } else {
+                crate::cob_decimal::cob_sub(a, a_attr, b, b_attr, round)
+            };
+            res.map_err(|_| ArithError::OutOfRange)
+        }
         Err(e) => Err(e),
     }
 }
@@ -915,6 +946,45 @@ mod tests {
         )
         .unwrap();
         assert_eq!(&r, b"0000333");
+    }
+
+    #[test]
+    fn add_intermediate_over_i128_vs_cobc() {
+        // ADD 1.5 TO A where A = 2e20 (PIC 9(21)): aligning A to the addend's scale 18 needs
+        // 2e20 * 10^18 = 2e38, which overflows i128 (max ~1.7e38). The old fast path failed closed; the
+        // Mpz fallback computes it. Receiver is scale 0, so the .5 truncates. Oracle (built GnuCOBOL):
+        // 200000000000000000001.
+        let a = disp(21, 0, false);
+        let b = disp(19, 18, false); // PIC 9V9(18) holding 1.5 -> "1" + "5" + 17 zeros
+        let res = cob_arith(
+            Op::Add,
+            b"200000000000000000000",
+            &a,
+            b"1500000000000000000",
+            &b,
+            Round::Truncate,
+        )
+        .unwrap();
+        assert_eq!(&res, b"200000000000000000001", "ADD with >38-digit aligned intermediate must not fail closed");
+    }
+
+    #[test]
+    fn divide_intermediate_over_i128_vs_cobc() {
+        // DIVIDE 2 BY 3 into a scale-37 receiver. The i128-scaled dividend (2 * 10^38) overflows i128,
+        // so the old fast path failed closed (OutOfRange); the Mpz fallback computes it. The quotient
+        // (6.6e37) still fits i128. Ground truth from the built GnuCOBOL oracle, PIC 9V9(37):
+        // trunc = 0.(37 sixes), ROUNDED = 0.(36 sixes)7.
+        let small = disp(1, 0, false);
+        let recv = disp(38, 37, false);
+        let mut want_t = vec![b'0'];
+        want_t.extend(std::iter::repeat(b'6').take(37));
+        let trunc = cob_divide(b"2", &small, b"3", &small, &recv, Round::Truncate).unwrap();
+        assert_eq!(trunc, want_t, "2/3 scale-37 truncate must not fail closed");
+        let mut want_r = vec![b'0'];
+        want_r.extend(std::iter::repeat(b'6').take(36));
+        want_r.push(b'7');
+        let round = cob_divide(b"2", &small, b"3", &small, &recv, Round::NearAwayFromZero).unwrap();
+        assert_eq!(round, want_r, "2/3 scale-37 rounded");
     }
 
     #[test]
