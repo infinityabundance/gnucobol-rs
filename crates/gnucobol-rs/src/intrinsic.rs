@@ -2424,9 +2424,12 @@ fn calculate_start_end_for_numval(src: &[u8]) -> Option<(usize, usize)> {
 /// `cob_intr_numval_f (srcfield)` (intrinsic.c): `FUNCTION NUMVAL-F(s)` — parse a floating-point numeric
 /// string (`±mantissa[.frac][E±exp]`) to an exact decimal (`mantissa * 10^(±exp - frac_digits)`); no
 /// transcendental math. Parses "as valid as possible" (the default 3.2 build does not pre-validate).
-pub fn cob_intr_numval_f(src: &[u8]) -> IntrField {
+///
+/// `dec_pt` is the decimal-point character. GnuCOBOL reads it from `COB_MODULE_PTR->decimal_point`
+/// (intrinsic.c:4958), so under `DECIMAL-POINT IS COMMA` the separator is `,` not `.`. The default-config
+/// oracle passes `b'.'`; the caller threads the module setting (was previously hardcoded to `b'.'`).
+pub fn cob_intr_numval_f(src: &[u8], dec_pt: u8) -> IntrField {
     const COB_MAX_DIGITS: usize = 38;
-    let dec_pt = b'.';
     let (start, p_end) = match calculate_start_end_for_numval(src) {
         Some(se) => se,
         None => return cob_alloc_set_field_uint(0),

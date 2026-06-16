@@ -190,6 +190,11 @@ int main(int argc, char **argv) {
 	{ cob_field f=mkf("000123.450",10,ALNUM,0,0,0); dump("nvf2_lead", cob_intr_numval_f(&f)); }
 	{ cob_field f=mkf("-7.5e2",6,ALNUM,0,0,0); dump("nvf2_e2", cob_intr_numval_f(&f)); }
 	{ cob_field f=mkf("0",1,ALNUM,0,0,0); dump("nvf2_zero", cob_intr_numval_f(&f)); }
+	/* DECIMAL-POINT IS COMMA: cob_intr_numval_f reads COB_MODULE_PTR->decimal_point (intrinsic.c:4958). */
+	mod.decimal_point = ',';
+	{ cob_field f=mkf("1,5",3,ALNUM,0,0,0); dump("nvf2_comma", cob_intr_numval_f(&f)); }
+	{ cob_field f=mkf("-12,34E+2",9,ALNUM,0,0,0); dump("nvf2_comma_e", cob_intr_numval_f(&f)); }
+	mod.decimal_point = '.';
 	/* transcendental: sqrt / exp / exp10 / log / log10 (mpf series, decimal result field) */
 	{ cob_field f=mkf("2",1,DISP,1,0,0); dump("sqrt2", cob_intr_sqrt(&f)); }
 	{ cob_field f=mkf("16",2,DISP,2,0,0); dump("sqrt16", cob_intr_sqrt(&f)); }

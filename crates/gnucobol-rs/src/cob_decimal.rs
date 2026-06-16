@@ -930,8 +930,13 @@ pub fn cob_add_int(f1: &[u8], a1: &FieldAttr, n: i32, round: Round) -> Result<Ve
 }
 
 /// `cob_sub_int (f, n, opt)`: `f := f - n` for a host integer `n`.
+///
+/// GnuCOBOL implements this as `cob_add_int (f, -n, opt)` (numeric.c:3631). The unary `-n` on an `int`
+/// is signed-overflow UB in C, but GnuCOBOL builds with gcc `-fwrapv`, so for `n == INT_MIN` the negation
+/// wraps back to `INT_MIN` and that value is added. We reproduce the oracle exactly with `wrapping_neg()`
+/// (a bare `-n` would instead panic in a debug Rust build at `n == i32::MIN`) — byte-identical to libcob.
 pub fn cob_sub_int(f1: &[u8], a1: &FieldAttr, n: i32, round: Round) -> Result<Vec<u8>, ()> {
-    cob_add_int(f1, a1, -n, round)
+    cob_add_int(f1, a1, n.wrapping_neg(), round)
 }
 
 /// `cob_set_int (f, n)`: store a host integer into a numeric field (no rounding; truncating store).
@@ -1254,6 +1259,21 @@ mod tests {
         assert_eq!(cob_numeric_cmp(a, &disp(3, 1, false), c, &disp(5, 2, false)), -1);
         // 99 vs 12 -> greater
         assert_eq!(cob_numeric_cmp(b"99", &disp(2, 0, false), b"12", &disp(2, 0, false)), 1);
+    }
+
+    #[test]
+    fn sub_int_intmin_matches_fwrapv_no_panic() {
+        // f = +100 in a signed 10-digit DISPLAY field.
+        let f = b"0000000100";
+        let a = disp(10, 0, true);
+        // Normal subtraction: f - 5 == f + (-5).
+        assert_eq!(cob_sub_int(f, &a, 5, Round::Truncate), cob_add_int(f, &a, -5, Round::Truncate));
+        // The edge: n == i32::MIN. A bare `-n` would panic in a debug build. GnuCOBOL (gcc -fwrapv)
+        // wraps `-INT_MIN` back to INT_MIN and adds it, so `f - INT_MIN` produces the SAME bytes as
+        // `f + INT_MIN` (faithful, if mathematically surprising). This must not panic and must match.
+        let sub = cob_sub_int(f, &a, i32::MIN, Round::Truncate).expect("no panic, no error");
+        let add = cob_add_int(f, &a, i32::MIN, Round::Truncate).expect("add ok");
+        assert_eq!(sub, add, "cob_sub_int(f, INT_MIN) must equal cob_add_int(f, INT_MIN) per -fwrapv");
     }
 
     fn dec(value: &str, scale: i32) -> CobDecimal {

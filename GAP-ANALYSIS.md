@@ -13,14 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels
+## Summary -- 105 gaps catalogued across 5 panels (2 fixed, 103 open)
 
-| severity | count | meaning |
+| severity | open | meaning |
 |---|---:|---|
 | **high** | 20 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 44 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 25 | narrow, or faithful-but-surprising |
+| **medium** | 43 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **low** | 24 | narrow, or faithful-but-surprising |
 | **latent** | 16 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 2 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -116,7 +117,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **GnuCOBOL 3.2 (C):** common.c:3712/3763 cob_real_get_sign/put_sign branch on COB_MODULE_PTR->ebcdic_sign, using cob_get/put_sign_ebcdic (common.c:1640-1686) when set.
 - **gnucobol-rs (Rust):** move_ops.rs:186/206 route through sign.rs (ASCII-only, no ebcdic_sign param). A faithful flag-aware common_sign.rs:145/200 exists but is NOT wired into the move/accessor pipeline.
 - **Diff:** With ebcdic_sign enabled, C reads/writes EBCDIC overpunch sign bytes; Rust always uses ASCII 0x40 overpunch.
-- **Evidence / plan:** Route move_ops/accessors through common_sign.rs with module ebcdic_sign threaded in. Test: EBCDIC-sign field := -123, compare last byte (0x4C 'L' C vs 0x73 's' Rust).
+- **Evidence / plan:** STRUCTURAL (not a one-line fix): the flag-aware port already exists in common_sign.rs:145/200, but routing move_ops + the accessors through it means threading the module ebcdic_sign flag through every DISPLAY-sign call site (move_ops.rs:186/206 and the get/put accessor pipeline). Then retire the ASCII-only sign.rs entry points. Oracle: EBCDIC-sign field := -123, compare last byte (0x4C 'L' C vs 0x73 's' Rust).
 
 #### `allocate-uninitialized-zeroed` -- ALLOCATE without INITIALIZED yields deterministic zeros; C leaves indeterminate malloc bytes  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: ALLOCATE w/o INITIALIZED then read-before-write (C value is undefined, not oracle-testable)
@@ -151,12 +152,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Document pointer VALUE as an unprovable-by-oracle host boundary; byte-transfer + DISPLAY format are the faithful claims.
 
 #### `sub-int-negate-intmin-ub` -- cob_sub_int negates n unguarded; n==i32::MIN panics in debug Rust where gcc -fwrapv wraps  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: SUBTRACT lowering to cob_sub_int with host n==-2147483648 (debug panic vs value)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: SUBTRACT lowering to cob_sub_int with host n==-2147483648 (debug panic vs value) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:3631 cob_sub_int returns cob_add_int(f,-n,opt); -INT_MIN is signed-overflow UB but gcc -fwrapv wraps to INT_MIN.
 - **gnucobol-rs (Rust):** cob_decimal.rs:932 does cob_add_int(...,-n,...) with bare i32 negation: debug panics on -(i32::MIN); release wraps (matches gcc).
 - **Diff:** C wraps; Rust debug panics, Rust release matches. Build-profile-dependent at n==-2147483648.
-- **Evidence / plan:** Replace -n with n.wrapping_neg() to match -fwrapv in all profiles. Test SUBTRACT -2147483648 FROM an i64-wide field.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_decimal.rs cob_sub_int now uses n.wrapping_neg() (was -n), reproducing gcc -fwrapv exactly (subtracting INT_MIN == adding INT_MIN) and removing the debug-build panic. Unit test sub_int_intmin_matches_fwrapv_no_panic locks it (cob_sub_int(f,INT_MIN)==cob_add_int(f,INT_MIN)).
 
 #### `ten-pow-i128-saturating` -- binary.rs ten_pow_i128 uses saturating_mul where arith.rs uses checked_mul for the same 10^n  
 **severity:** low &nbsp;·&nbsp; **observable:** no today (guarded digits<=38); latent if a new caller passes digits>38
@@ -243,12 +244,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Model the COB_DECIMAL_NAN sentinel through the store + an EC-SIZE-ZERO-DIVIDE exception; the SIZE ERROR phrase is a declared future court.
 
 #### `numval-f-locale-decimal-point` -- NUMVAL-F hardcodes '.' decimal point, ignoring DECIMAL-POINT IS COMMA  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA set
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA set &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:4961 cob_intr_numval_f reads dec_pt = COB_MODULE_PTR->decimal_point.
 - **gnucobol-rs (Rust):** intrinsic.rs:2429 sets dec_pt = b'.' fixed (NUMVAL/NUMVAL-C core thread dec_pt; only NUMVAL-F is hardcoded).
 - **Diff:** Under DECIMAL-POINT IS COMMA, C treats ',' as separator; Rust treats '.' and skips ','.
-- **Evidence / plan:** Thread ModuleState.decimal_point into cob_intr_numval_f. Add a comma-locale NUMVAL-F oracle case.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_intr_numval_f now takes a dec_pt: u8 param (was hardcoded b'.'), matching the C which reads COB_MODULE_PTR->decimal_point (intrinsic.c:4958). Oracle-sealed: intrinsic_harness.c sets module decimal_point=',' for nvf2_comma / nvf2_comma_e; intrinsic_sweep 222/0 byte-identical vs real libcob.
 
 #### `bcd-round-near-even-degrades` -- Packed (cob_add_bcd) ROUNDED NEAREST-EVEN resolves as NEAREST-AWAY -- a faithful C quirk  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: packed receiver, ROUNDED NEAREST-EVEN, exact tie (matches C)
@@ -412,7 +413,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **GnuCOBOL 3.2 (C):** fileio.c cob_file_sort_compare (7762) routes COB_FIELD_IS_NUMERIC keys through cob_numeric_cmp (magnitude+sign); alphanumeric through sort_cmps with sort_collating.
 - **gnucobol-rs (Rust):** fileio.rs cob_file_sort_compare (1118) compares EVERY key byte-wise with sort_cmps; the doc calls numeric a declared composition but no numeric routing exists.
 - **Diff:** C orders numeric keys by value; Rust by raw representation bytes.
-- **Evidence / plan:** Route numeric keys through the ported numeric compare. SORT on a signed numeric key with negatives; compare GIVING file to cobc.
+- **Evidence / plan:** STRUCTURAL (not a one-line fix): fileio.rs SortKey carries only {offset,size,ascending} -- no field type -- so the C's COB_FIELD_IS_NUMERIC branch cannot be reproduced until SortKey gains the key's FieldAttr and the SORT verb threads it through cob_file_sort_init_key + both push sites. Then route numeric keys through cob_numeric_cmp (GNURUST.NUMCMP.1). Oracle: SORT on a signed numeric key with negatives; compare GIVING file to cobc.
 
 #### `bdb-record-lock-not-wired` -- BDB record/file lock model (51/52/61) is built but never invoked by read/write  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: READ WITH LOCK then a contending READ never returns 51; 51/52 unreachable through real file I/O

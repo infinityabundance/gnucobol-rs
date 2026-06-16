@@ -76,19 +76,26 @@ fn build() -> String {
         *by_sev.entry(g["severity"].as_str().unwrap_or("?").to_string()).or_default() += 1;
         *by_panel.entry(g["panel"].as_str().unwrap_or("?").to_string()).or_default() += 1;
     }
+    let is_fixed = |g: &Value| g.get("status").and_then(|s| s.as_str()) == Some("fixed");
+    let fixed_n = gaps.iter().filter(|g| is_fixed(g)).count();
     let total = gaps.len();
-    let high = *by_sev.get("high").unwrap_or(&0);
-    let medium = *by_sev.get("medium").unwrap_or(&0);
-    let low = *by_sev.get("low").unwrap_or(&0);
-    let latent = *by_sev.get("latent").unwrap_or(&0);
+    // open-severity counts EXCLUDE gaps already closed (status: fixed).
+    let sev_open = |s: &str| gaps.iter().filter(|g| !is_fixed(g) && g["severity"].as_str() == Some(s)).count();
+    let high = sev_open("high");
+    let medium = sev_open("medium");
+    let low = sev_open("low");
+    let latent = sev_open("latent");
+    let _ = &by_sev;
 
     out.push_str(&format!(
-        "## Summary -- {total} gaps catalogued across 5 panels\n\n\
-         | severity | count | meaning |\n|---|---:|---|\n\
+        "## Summary -- {total} gaps catalogued across 5 panels ({fixed_n} fixed, {open} open)\n\n\
+         | severity | open | meaning |\n|---|---:|---|\n\
          | **high** | {high} | oracle-observable on a real program -- the actionable head of the list |\n\
          | **medium** | {medium} | observable under a stated trigger (a dialect / non-C locale / error path) |\n\
          | **low** | {low} | narrow, or faithful-but-surprising |\n\
-         | **latent** | {latent} | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |\n\n",
+         | **latent** | {latent} | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |\n\
+         | **fixed** | {fixed_n} | closed + oracle/unit-verified (see the per-gap FIXED note) |\n\n",
+        open = total - fixed_n,
     ));
 
     out.push_str("| panel | scope | gaps |\n|---|---|---:|\n");
@@ -111,7 +118,7 @@ fn build() -> String {
     out.push_str("| # | gap | panel | the divergence |\n|---:|---|---|---|\n");
     let mut hi_n = 0;
     for g in &gaps {
-        if g["severity"].as_str() == Some("high") {
+        if g["severity"].as_str() == Some("high") && !is_fixed(g) {
             hi_n += 1;
             out.push_str(&format!(
                 "| {hi_n} | **{}** | {} | {} |\n",
@@ -143,8 +150,9 @@ fn build() -> String {
                 g["id"].as_str().unwrap_or(""),
                 g["title"].as_str().unwrap_or(""),
             ));
+            let status = if is_fixed(g) { " &nbsp;·&nbsp; **status: ✓ FIXED**" } else { "" };
             out.push_str(&format!(
-                "**severity:** {} &nbsp;·&nbsp; **observable:** {}\n\n",
+                "**severity:** {} &nbsp;·&nbsp; **observable:** {}{status}\n\n",
                 g["severity"].as_str().unwrap_or(""),
                 g["observable"].as_str().unwrap_or(""),
             ));
