@@ -816,6 +816,45 @@ fn cob_move_fp_to_fp(s: &[u8], sa: &FieldAttr, d: &mut [u8], da: &FieldAttr) {
     }
 }
 
+/// `cob_move` under `DISPLAY SIGN IS EBCDIC` (the module `ebcdic_sign` flag, set by `-fsign=EBCDIC` /
+/// a mainframe dialect). GnuCOBOL's `cob_real_get_sign`/`cob_real_put_sign` (common.c:3712/3763) branch
+/// on that flag and read/write an EBCDIC overpunch on the (otherwise ASCII) sign byte. Rather than
+/// thread the flag through the whole move dispatch, this wrapper converts the *sign byte* at the two
+/// boundaries: the EBCDIC-overpunched source sign -> ASCII before the (unchanged) ASCII `cob_move`, then
+/// the ASCII destination sign -> EBCDIC after. The result is byte-identical to libcob's threaded path
+/// (e.g. PIC S9(3) := -12 stores `01K`, := +12 stores `01B`), and the default ASCII `cob_move` and every
+/// sealed move sweep are untouched. Only the overpunched (non-separate) signed DISPLAY sign is affected.
+pub fn cob_move_ebcdic_sign(
+    src: &[u8],
+    src_attr: &FieldAttr,
+    dst: &mut [u8],
+    dst_attr: &FieldAttr,
+) -> Result<(), DecimalError> {
+    use crate::common_sign::{cob_real_get_sign, cob_real_put_sign, SignFlags};
+    let overpunched = |a: &FieldAttr| {
+        a.field_type == COB_TYPE_NUMERIC_DISPLAY && a.have_sign() && !a.sign_separate()
+    };
+    let flags = |a: &FieldAttr, ebcdic: bool| SignFlags {
+        have_sign: a.have_sign(),
+        sign_separate: a.sign_separate(),
+        sign_leading: a.flags & crate::attr::COB_FLAG_SIGN_LEADING != 0,
+        ebcdic_sign: ebcdic,
+    };
+    // Source: re-encode the EBCDIC overpunch sign byte to ASCII so the ASCII pipeline reads it.
+    let mut src_buf = src.to_vec();
+    if overpunched(src_attr) {
+        let s = cob_real_get_sign(COB_TYPE_NUMERIC_DISPLAY as u8, &mut src_buf, flags(src_attr, true), false);
+        cob_real_put_sign(COB_TYPE_NUMERIC_DISPLAY as u8, &mut src_buf, flags(src_attr, false), s.signum());
+    }
+    cob_move(&src_buf, src_attr, dst, dst_attr)?;
+    // Destination: re-encode the ASCII overpunch sign byte to EBCDIC.
+    if overpunched(dst_attr) {
+        let s = cob_real_get_sign(COB_TYPE_NUMERIC_DISPLAY as u8, dst, flags(dst_attr, false), false);
+        cob_real_put_sign(COB_TYPE_NUMERIC_DISPLAY as u8, dst, flags(dst_attr, true), s.signum());
+    }
+    Ok(())
+}
+
 /// `cob_move` (`move.c:1446`), restricted to the sealed elementary type pairs. Any other pair
 /// **fails closed** with [`DecimalError::UnsupportedConversion`] rather than guessing.
 ///
@@ -935,6 +974,29 @@ pub fn cob_move(
 mod tests {
     use super::*;
     use crate::attr::{COB_FLAG_BINARY_SWAP, COB_FLAG_HAVE_SIGN};
+
+    #[test]
+    fn ebcdic_sign_move_vs_cobc() {
+        // PIC S9(n) under DISPLAY SIGN IS EBCDIC (-fsign=EBCDIC). The built GnuCOBOL oracle encodes
+        // (trailing sign byte overpunched, others plain ASCII): -12 in S9(3) = "01K", +12 = "01B".
+        let s9 = |n: u16| FieldAttr {
+            field_type: COB_TYPE_NUMERIC_DISPLAY,
+            digits: n,
+            scale: 0,
+            flags: COB_FLAG_HAVE_SIGN,
+        };
+        // round-trip the exact EBCDIC encodings (reads + writes the overpunch)
+        let mut d = vec![0u8; 3];
+        cob_move_ebcdic_sign(b"01K", &s9(3), &mut d, &s9(3)).unwrap();
+        assert_eq!(d, b"01K", "EBCDIC -12 round-trips");
+        let mut d2 = vec![0u8; 3];
+        cob_move_ebcdic_sign(b"01B", &s9(3), &mut d2, &s9(3)).unwrap();
+        assert_eq!(d2, b"01B", "EBCDIC +12 round-trips");
+        // value-preserving widen: EBCDIC -12 (S9(3)) -> S9(5) must be "0001K" (magnitude 12, sign -)
+        let mut dw = vec![0u8; 5];
+        cob_move_ebcdic_sign(b"01K", &s9(3), &mut dw, &s9(5)).unwrap();
+        assert_eq!(dw, b"0001K", "EBCDIC -12 widened to S9(5)");
+    }
 
     fn bin(size_signed: bool, swap: bool) -> FieldAttr {
         let mut flags = 0u16;

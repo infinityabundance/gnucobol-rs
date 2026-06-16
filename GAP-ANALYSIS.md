@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (10 fixed, 95 open)
+## Summary -- 105 gaps catalogued across 5 panels (11 fixed, 94 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 17 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 42 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 41 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 10 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 11 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -109,12 +109,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Unfixable with raw addresses under forbid(unsafe_code). Route through a resolvable based-storage handle (AllocCache) or keep as a documented boundary.
 
 #### `ebcdic-sign-ignored-in-move` -- DISPLAY sign get/put in the move pipeline hardcodes ASCII overpunch, ignores module ebcdic_sign  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: program enables SIGN EBCDIC on an ASCII host
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: program enables SIGN EBCDIC on an ASCII host &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:3712/3763 cob_real_get_sign/put_sign branch on COB_MODULE_PTR->ebcdic_sign, using cob_get/put_sign_ebcdic (common.c:1640-1686) when set.
 - **gnucobol-rs (Rust):** move_ops.rs:186/206 route through sign.rs (ASCII-only, no ebcdic_sign param). A faithful flag-aware common_sign.rs:145/200 exists but is NOT wired into the move/accessor pipeline.
 - **Diff:** With ebcdic_sign enabled, C reads/writes EBCDIC overpunch sign bytes; Rust always uses ASCII 0x40 overpunch.
-- **Evidence / plan:** STRUCTURAL (not a one-line fix): the flag-aware port already exists in common_sign.rs:145/200, but routing move_ops + the accessors through it means threading the module ebcdic_sign flag through every DISPLAY-sign call site (move_ops.rs:186/206 and the get/put accessor pipeline). Then retire the ASCII-only sign.rs entry points. Oracle: EBCDIC-sign field := -123, compare last byte (0x4C 'L' C vs 0x73 's' Rust).
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): new cob_move_ebcdic_sign wraps the unchanged ASCII cob_move and converts only the sign BYTE at the two boundaries via the flag-aware cob_real_get_sign/cob_real_put_sign (common_sign.rs) -- EBCDIC overpunch source sign -> ASCII before the move, ASCII dest sign -> EBCDIC after. Byte-identical to libcob's threaded path without touching the move dispatch (cob_move's 31 callers + every sealed move sweep unchanged). Oracle-proven via cobc -fsign=EBCDIC, PIC S9(3): -12 -> 01K, +12 -> 01B (only the trailing sign byte overpunched), and -12 widened to S9(5) -> 0001K. Test ebcdic_sign_move_vs_cobc.
 
 #### `allocate-uninitialized-zeroed` -- ALLOCATE without INITIALIZED yields deterministic zeros; C leaves indeterminate malloc bytes  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: ALLOCATE w/o INITIALIZED then read-before-write (C value is undefined, not oracle-testable)
