@@ -2813,7 +2813,17 @@ pub fn cob_close(f: &mut CobFile, lock: bool) -> &'static str {
         return "42";
     }
     if f.dirty && !f.flag_nonexistent {
-        let _ = std::fs::write(&f.path, &f.data);
+        // The port buffers writes in `f.data` and flushes here; a flush failure (disk full / quota /
+        // permission) surfaces at CLOSE as the mapped FILE STATUS rather than being silently dropped
+        // (was `let _ = ...`). libcob reports it per-WRITE; we report it once at close (a timing, not a
+        // value, difference): ENOSPC/EDQUOT -> 34, EACCES/EISDIR/EROFS -> 37, else 30.
+        if let Err(e) = std::fs::write(&f.path, &f.data) {
+            f.dirty = false;
+            f.open_mode = if lock { OpenMode::Locked } else { OpenMode::Closed };
+            let st = errno_cob_sts(classify_io_error(&e), "30");
+            f.file_status = [st.as_bytes()[0], st.as_bytes()[1]];
+            return st;
+        }
         f.dirty = false;
     }
     f.open_mode = if lock { OpenMode::Locked } else { OpenMode::Closed };
@@ -4774,6 +4784,19 @@ mod tests {
         assert_eq!(classify_io_error(&Error::from_raw_os_error(28)), FileErrno::NoSpaceOrQuota); // ENOSPC
         assert_eq!(errno_cob_sts(classify_io_error(&Error::from(ErrorKind::PermissionDenied)), "35"), "37");
         assert_eq!((dummy_delete(), dummy_read(), dummy_start()), ("91", "91", "91"));
+    }
+
+    #[test]
+    fn close_surfaces_write_error_status() {
+        // cob_close flushes buffered data at close; writing to a path that IS a directory fails with
+        // EISDIR (errno 21) -> classify_io_error -> 37 (structural, so deterministic even as root).
+        // Proves the flush failure is surfaced as a FILE STATUS, not silently dropped (was `let _`).
+        let mut f = CobFile::new(Organization::LineSequential, AccessMode::Sequential, 10, "/tmp");
+        f.open_mode = OpenMode::Output;
+        f.dirty = true;
+        f.flag_nonexistent = false;
+        f.data = b"x".to_vec();
+        assert_eq!(cob_close(&mut f, false), "37");
     }
 
     #[test]

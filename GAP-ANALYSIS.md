@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (13 fixed, 92 open)
+## Summary -- 105 gaps catalogued across 5 panels (14 fixed, 91 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 15 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 41 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 40 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 13 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 14 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -435,12 +435,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** CANCEL then re-CALL a stateful module; the C cancel-handler reset is not reproduced.
 
 #### `disk-full-write-status-34` -- Short/failed write (ENOSPC/EDQUOT) does not produce status 34; some writes ignore the result  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: filesystem full / over-quota during WRITE/close
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: filesystem full / over-quota during WRITE/close &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c COB_CHECKED_WRITE routes a short fwrite with ENOSPC/EDQUOT through errno_cob_sts -> status 34 BOUNDARY_VIOLATION.
 - **gnucobol-rs (Rust):** fileio.rs cob_file_close (2814) discards the std::fs::write result with let _; cob_delete_file uses is_ok()->30. No live 34 path.
 - **Diff:** C surfaces disk-full as 34; Rust reports 30 or silently swallows the failure as 00.
-- **Evidence / plan:** Check write() results, map errno via errno_cob_sts. WRITE to a full tmpfs: cobc->34, port->00/30.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_close now checks the std::fs::write flush result (was `let _ = ...`) and surfaces a failure as the mapped FILE STATUS via classify_io_error + errno_cob_sts: ENOSPC/EDQUOT -> 34, EACCES/EISDIR/EROFS -> 37, else 30. Because the port buffers writes and flushes at close, the disk-full status appears at CLOSE rather than per-WRITE (a timing, not a value, difference -- noted). Test close_surfaces_write_error_status (flush to a directory path -> EISDIR -> 37, deterministic); write sweeps green.
 
 #### `env-detached-map` -- setenv/getenv operate on a private map/closure, not the live process environment  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: DISPLAY UPON ENVIRONMENT then CALL "SYSTEM" -- the variable does not propagate to the child
