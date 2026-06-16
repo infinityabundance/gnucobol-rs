@@ -402,7 +402,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **GnuCOBOL 3.2 (C):** fileio.c ISAM opens %s.idx/%s.dat siblings (~4219); BDB uses bare filename + %s.%d per alt key. Bytes are backend-proprietary B-tree/ISAM pages.
 - **gnucobol-rs (Rust):** fileio.rs IndexedStore has zero on-disk decoders; indexed_open ignores the filename entirely.
 - **Diff:** No parsing path from a Berkeley DB page file or ISAM .idx/.dat into the BTreeMap.
-- **Evidence / plan:** Requires a Berkeley DB B-tree page parser. Boundary today.
+- **Evidence / plan:** IN PROGRESS: the Berkeley DB B-tree page parser now exists as gnucobol-rs-bdb-format (a pure-safe-Rust, forbid(unsafe_code), LGPL leaf crate) -- it parses the meta page (DB_BTREEMAGIC, v9, root, last_pgno) and walks internal+leaf pages, oracle-proven against real GnuCOBOL .dat files (a 3-record single-leaf and an 800-record 18-page tree, every record recovered in key order byte-for-byte). REMAINING: wire BdbFile::records into fileio indexed_open so the port loads a cobc-written .dat (version dep after the crate is published). The reader path closes here; the write path + alternate keys are the follow-on.
 
 #### `sort-numeric-key-bytewise` -- SORT compares numeric keys byte-wise instead of by numeric value -> wrong output order  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: SORT ASCENDING KEY <zoned/signed/packed/COMP> GIVING out orders negatives/overpunched-sign/big-endian COMP records wrong; output file bytes differ &nbsp;·&nbsp; **status: ✓ FIXED**
