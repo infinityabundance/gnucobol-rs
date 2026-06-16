@@ -1515,9 +1515,28 @@ enum CursorPos {
     AtEnd,
 }
 
+/// An `ALTERNATE RECORD KEY`: the key byte range within the record, and whether `WITH DUPLICATES`.
+#[derive(Clone)]
+struct AltKeyDef {
+    offset: usize,
+    len: usize,
+    duplicates: bool,
+}
+
+/// The sequential position of an alternate-key cursor: the alt key index, the current alt-key value, and
+/// the 0-based duplicate slot within it (the entry just returned; `READ NEXT`/`PREVIOUS` step from here).
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct AltCursor {
+    key_idx: usize,
+    value: Vec<u8>,
+    dup: usize,
+}
+
 /// Port of the COBOL-observable subset of fileio.c's `struct indexed_file` — an INDEXED file as a
-/// primary-key-ordered store. The key is the record's `[key_offset, key_offset+key_len)` byte range; the
-/// cursor tracks where the next forward `READ NEXT` resumes.
+/// primary-key-ordered store, with secondary (alternate-key) indexes. The primary key is the record's
+/// `[key_offset, key_offset+key_len)` byte range; the cursor tracks where the next forward `READ NEXT`
+/// resumes. Each alternate key maps its value to the primary keys carrying it (in `WITH DUPLICATES` /
+/// dupno order), so a read by an alternate key two-hops alt-value -> primary-key -> record.
 pub struct IndexedStore {
     key_offset: usize,
     key_len: usize,
@@ -1527,6 +1546,14 @@ pub struct IndexedStore {
     cursor: CursorPos,
     last_key: Option<Vec<u8>>,
     flag_nonexistent: bool,
+    /// Alternate-key definitions (index `i` is the `i`-th `ALTERNATE RECORD KEY`).
+    alt_keys: Vec<AltKeyDef>,
+    /// Per alternate key: alt-value -> the primary keys carrying it, in insertion (dupno) order. The
+    /// dupno of slot `j` is `j + 1` (the C's `get_dupno` starts at 1).
+    alt_index: Vec<std::collections::BTreeMap<Vec<u8>, Vec<Vec<u8>>>>,
+    /// When the last read was by an alternate key, the alt cursor `READ NEXT`/`PREVIOUS` walk (alt-value
+    /// then dupno order). Cleared by a primary read/start, so `READ NEXT` reverts to primary order.
+    alt_cursor: Option<AltCursor>,
 }
 
 impl IndexedStore {
@@ -1548,6 +1575,33 @@ impl IndexedStore {
             cursor: CursorPos::BeforeStart,
             last_key: None,
             flag_nonexistent: false,
+            alt_keys: Vec::new(),
+            alt_index: Vec::new(),
+            alt_cursor: None,
+        }
+    }
+
+    /// Register an `ALTERNATE RECORD KEY IS <field> [WITH DUPLICATES]` (its byte range within the record).
+    /// Returns the alternate key's 0-based index (the `i` in the on-disk `<base>.<i+1>` file). Must be
+    /// called for every alternate key before records are written/loaded.
+    pub fn indexed_add_alt_key(&mut self, offset: usize, len: usize, duplicates: bool) -> usize {
+        self.alt_keys.push(AltKeyDef { offset, len, duplicates });
+        self.alt_index.push(std::collections::BTreeMap::new());
+        self.alt_keys.len() - 1
+    }
+
+    /// The `i`-th alternate key's value bytes within `record`.
+    fn alt_value_of(&self, record: &[u8], i: usize) -> Vec<u8> {
+        let a = &self.alt_keys[i];
+        let end = (a.offset + a.len).min(record.len());
+        record[a.offset.min(record.len())..end].to_vec()
+    }
+
+    /// Insert a record's primary key into every alternate index (called after a successful primary write).
+    fn alt_index_insert(&mut self, record: &[u8], primary: &[u8]) {
+        for i in 0..self.alt_keys.len() {
+            let v = self.alt_value_of(record, i);
+            self.alt_index[i].entry(v).or_default().push(primary.to_vec());
         }
     }
 
@@ -1563,6 +1617,9 @@ impl IndexedStore {
         let pairs = db.records()?;
         let n = pairs.len();
         for (key, record) in pairs {
+            // Rebuild the alternate indexes from the loaded records (so a primary file + registered alt
+            // keys yields working alt reads); `indexed_load_alt` instead reads a genuine on-disk alt file.
+            self.alt_index_insert(&record, &key);
             self.recs.insert(key, record);
         }
         Ok(n)
@@ -1577,6 +1634,66 @@ impl IndexedStore {
         let pairs: Vec<(Vec<u8>, Vec<u8>)> =
             self.recs.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
         gnucobol_rs_bdb_format::write_btree(&pairs, 4096)
+    }
+
+    /// Serialise alternate key `i`'s on-disk index file (cobc names it `<base>.<i+1>`): a Berkeley DB
+    /// B-tree keyed by the alt-key value, whose data is the primary key followed -- for a `WITH DUPLICATES`
+    /// key -- by the 4-byte **native-LE dupno** (`slot + 1`; `COB_DUPSWAP` is the identity on a
+    /// little-endian host, the `|| 1` preserved historical bug). A unique alternate key stores the primary
+    /// key alone (no dupno trailer). A genuine `cobc` can OPEN + READ the result.
+    pub fn indexed_alt_to_bdb(&self, i: usize) -> Result<Vec<u8>, gnucobol_rs_bdb_format::BdbError> {
+        let dups = self.alt_keys[i].duplicates;
+        let mut pairs: Vec<(Vec<u8>, Vec<u8>)> = Vec::new();
+        for (value, primaries) in &self.alt_index[i] {
+            for (slot, primary) in primaries.iter().enumerate() {
+                let mut data = primary.clone();
+                if dups {
+                    data.extend_from_slice(&((slot as u32) + 1).to_le_bytes());
+                }
+                pairs.push((value.clone(), data));
+            }
+        }
+        // A WITH DUPLICATES alternate key is a DB_DUP database (BTM_DUP flag + shared duplicate-key items),
+        // which the genuine cobc requires to OPEN + READ the file.
+        gnucobol_rs_bdb_format::write_btree_dup(&pairs, 4096, dups)
+    }
+
+    /// Load alternate key `i`'s on-disk index file written by genuine `cobc` (`<base>.<i+1>`): parse the
+    /// B-tree and split each data value into the primary key (its first `key_len` bytes) and the optional
+    /// 4-byte LE dupno trailer, populating `alt_index[i]` in dupno order. The alternate key must already be
+    /// registered (via [`IndexedStore::indexed_add_alt_key`]). Returns the entry count.
+    pub fn indexed_load_alt(
+        &mut self,
+        i: usize,
+        bytes: &[u8],
+    ) -> Result<usize, gnucobol_rs_bdb_format::BdbError> {
+        let primekeylen = self.key_len;
+        let db = gnucobol_rs_bdb_format::BdbFile::parse(bytes)?;
+        let pairs = db.records()?;
+        let n = pairs.len();
+        self.alt_index[i].clear(); // replace this alt index with the on-disk image
+        let mut by_val: std::collections::BTreeMap<Vec<u8>, Vec<(u32, Vec<u8>)>> =
+            std::collections::BTreeMap::new();
+        for (value, data) in pairs {
+            let cut = primekeylen.min(data.len());
+            let primary = data[..cut].to_vec();
+            let dupno = if data.len() >= primekeylen + 4 {
+                u32::from_le_bytes([
+                    data[primekeylen],
+                    data[primekeylen + 1],
+                    data[primekeylen + 2],
+                    data[primekeylen + 3],
+                ])
+            } else {
+                1
+            };
+            by_val.entry(value).or_default().push((dupno, primary));
+        }
+        for (value, mut slots) in by_val {
+            slots.sort_by_key(|(d, _)| *d);
+            self.alt_index[i].insert(value, slots.into_iter().map(|(_, p)| p).collect());
+        }
+        Ok(n)
     }
 
     /// The first key strictly greater than `k`, as a cursor position (`AtEnd` when none).
@@ -1598,7 +1715,8 @@ impl IndexedStore {
         if self.recs.contains_key(&key) {
             return "22";
         }
-        self.recs.insert(key, record.to_vec());
+        self.recs.insert(key.clone(), record.to_vec());
+        self.alt_index_insert(record, &key);
         "00"
     }
 
@@ -1628,6 +1746,7 @@ impl IndexedStore {
     /// just after it for a following `READ NEXT`) when present, `23` (record not found) otherwise.
     pub fn indexed_read(&mut self, key: &[u8]) -> (&'static str, Option<Vec<u8>>) {
         let k = key.to_vec();
+        self.alt_cursor = None; // a primary read reverts READ NEXT/PREVIOUS to primary order
         match self.recs.get(&k) {
             Some(rec) => {
                 let rec = rec.clone();
@@ -1638,9 +1757,33 @@ impl IndexedStore {
         }
     }
 
-    /// Port of `fileio.c:indexed_read_next` — sequential read in ascending key order from the cursor:
-    /// `00` and the record, or `10` (end of file) when the cursor is past the last key.
+    /// Read by an `ALTERNATE RECORD KEY` value (alt key index `i`): two-hop alt-value -> first primary key
+    /// (lowest dupno) -> record, positioning the alt cursor so a following `READ NEXT`/`PREVIOUS` walks the
+    /// alternate-key order (alt-value asc, then dupno asc). `00` + record when present, else `23`. cobc
+    /// returns `00` even for a value with duplicates (the C sets `02` then clobbers it with the DB_PUT/GET
+    /// result -- see `cli-runtime`/`indexed-altkeys` notes), so this never surfaces `02`.
+    pub fn indexed_read_alt(&mut self, i: usize, value: &[u8]) -> (&'static str, Option<Vec<u8>>) {
+        let v = value.to_vec();
+        match self.alt_index.get(i).and_then(|m| m.get(&v)).and_then(|ks| ks.first()).cloned() {
+            Some(primary) => {
+                let rec = self.recs.get(&primary).cloned();
+                self.alt_cursor = Some(AltCursor { key_idx: i, value: v, dup: 0 });
+                match rec {
+                    Some(r) => ("00", Some(r)),
+                    None => ("23", None), // alt index points at a missing primary (corrupt) -> not found
+                }
+            }
+            None => ("23", None),
+        }
+    }
+
+    /// Port of `fileio.c:indexed_read_next` — sequential read from the cursor: when a read-by-alt is active,
+    /// the next entry in alternate-key order; otherwise ascending primary-key order. `00` + record, or `10`
+    /// at end of file.
     pub fn indexed_read_next(&mut self) -> (&'static str, Option<Vec<u8>>) {
+        if self.alt_cursor.is_some() {
+            return self.alt_step(true);
+        }
         let next_key = match &self.cursor {
             CursorPos::AtEnd => None,
             CursorPos::BeforeStart => self.recs.keys().next().cloned(),
@@ -1656,6 +1799,68 @@ impl IndexedStore {
                 self.cursor = CursorPos::AtEnd;
                 ("10", None)
             }
+        }
+    }
+
+    /// `READ PREVIOUS` — the reverse of [`IndexedStore::indexed_read_next`]: the previous entry in alternate
+    /// -key order when a read-by-alt is active, else descending primary-key order. `10` at start of file.
+    pub fn indexed_read_previous(&mut self) -> (&'static str, Option<Vec<u8>>) {
+        if self.alt_cursor.is_some() {
+            return self.alt_step(false);
+        }
+        // Primary descending: the greatest key strictly below the forward cursor's resume point.
+        let upper = match &self.cursor {
+            CursorPos::BeforeStart => None, // before the first key -> nothing previous
+            CursorPos::AtEnd => self.recs.keys().next_back().cloned(),
+            CursorPos::NextKey(c) => self
+                .recs
+                .range::<Vec<u8>, _>((std::ops::Bound::Unbounded, std::ops::Bound::Excluded(c.clone())))
+                .next_back()
+                .map(|(k, _)| k.clone()),
+        };
+        match upper {
+            Some(k) => {
+                let rec = self.recs[&k].clone();
+                self.cursor = CursorPos::NextKey(k); // resume point is this key (so the next PREVIOUS goes below it)
+                ("00", Some(rec))
+            }
+            None => ("10", None),
+        }
+    }
+
+    /// Step the alternate-key cursor forward (`next = true`) or backward, two-hopping to the primary record.
+    /// `10` at the corresponding end.
+    fn alt_step(&mut self, next: bool) -> (&'static str, Option<Vec<u8>>) {
+        let cur = self.alt_cursor.clone().expect("alt_step requires an active alt cursor");
+        let map = &self.alt_index[cur.key_idx];
+        // Candidate next position: another dupno under the same value, else the adjacent value's edge slot.
+        let pos = if next {
+            let len = map.get(&cur.value).map(|v| v.len()).unwrap_or(0);
+            if cur.dup + 1 < len {
+                Some((cur.value.clone(), cur.dup + 1))
+            } else {
+                map.range::<Vec<u8>, _>((std::ops::Bound::Excluded(cur.value.clone()), std::ops::Bound::Unbounded))
+                    .next()
+                    .map(|(v, _)| (v.clone(), 0))
+            }
+        } else if cur.dup > 0 {
+            Some((cur.value.clone(), cur.dup - 1))
+        } else {
+            map.range::<Vec<u8>, _>((std::ops::Bound::Unbounded, std::ops::Bound::Excluded(cur.value.clone())))
+                .next_back()
+                .map(|(v, ks)| (v.clone(), ks.len() - 1))
+        };
+        match pos {
+            Some((value, dup)) => {
+                let primary = self.alt_index[cur.key_idx][&value][dup].clone();
+                let rec = self.recs.get(&primary).cloned();
+                self.alt_cursor = Some(AltCursor { key_idx: cur.key_idx, value, dup });
+                match rec {
+                    Some(r) => ("00", Some(r)),
+                    None => ("23", None),
+                }
+            }
+            None => ("10", None),
         }
     }
 
@@ -1684,6 +1889,7 @@ impl IndexedStore {
     /// Port of `fileio.c:indexed_start` — position the file at the first key satisfying `cond key`,
     /// returning `00` (cursor set so a following `READ NEXT` returns that record) or `23` when none does.
     pub fn indexed_start(&mut self, cond: StartCond, key: &[u8]) -> &'static str {
+        self.alt_cursor = None; // START repositions the primary cursor; READ NEXT reverts to primary order
         match self.indexed_start_internal(cond, key) {
             Some(k) => {
                 self.cursor = CursorPos::NextKey(k);

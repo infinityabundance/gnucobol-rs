@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (27 fixed, 78 open)
+## Summary -- 105 gaps catalogued across 5 panels (28 fixed, 77 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 3 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 2 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 27 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 28 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -52,9 +52,8 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 
 | # | gap | panel | the divergence |
 |---:|---|---|---|
-| 1 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
-| 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
-| 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
+| 1 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
+| 2 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -367,12 +366,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): new classify_io_error maps a failed std::fs OPEN (io::ErrorKind + raw_os_error: EISDIR/EROFS/EDQUOT aren't all named on stable) into the FileErrno classes libcob's errno switch keys on, and cob_open's Input/Io arm now returns ENOENT->05(optional)/35, EACCES/EISDIR/EROFS->37, ENOSPC/EDQUOT->34, else 30 (was: every Err collapsed to 35/05); the post-match only opens the file for 00/05. Oracle-proven: cobc OPEN INPUT of a chmod-000 file -> FILE STATUS 37 (port now matches). Unit test on classify_io_error; all OPEN sweeps green (open/lineseq/seq/relative). RESIDUAL: status 61 is the fcntl advisory-lock contention case (see fcntl-whole-file-lock-noop, a forbid(unsafe_code) boundary); open-time 39 (record-length mismatch) is a thin separate check.
 
 #### `indexed-altkeys-dups` -- Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: ALTERNATE RECORD KEY / WITH DUPLICATES / READ PREVIOUS get wrong-or-unsupported results, never status 02
+**severity:** high &nbsp;·&nbsp; **observable:** yes: ALTERNATE RECORD KEY / WITH DUPLICATES / READ PREVIOUS get wrong-or-unsupported results, never status 02 &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c indexed_write_internal (~3758) writes a DB[i] per alternate key whose value is the primary key + a 4-byte dupno stored little-endian-backwards via COB_DUPSWAP (~679, a preserved historical bug); read-by-alt is a two-hop lookup; READ NEXT drives a DB_PREV/DB_NEXT cursor; returns 02 SUCCESS_DUPLICATE.
 - **gnucobol-rs (Rust):** fileio.rs IndexedStore keys only on the primary key; header declares alt keys, DUPLICATES, READ PREVIOUS as non-claims; CursorPos is forward-only.
 - **Diff:** No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status.
-- **Evidence / plan:** Add secondary maps + dupno encoding mirroring COB_DUPSWAP. Test ALTERNATE RECORD KEY + READ by alt.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.92 (+ gnucobol-rs-bdb-format 0.3.0), proven BIDIRECTIONALLY vs genuine cobc. IndexedStore grows alternate-key support: indexed_add_alt_key(offset, len, duplicates) + per-key secondary maps (alt-value -> primary keys in dupno order, dupno = slot+1); indexed_read_alt(i, value) two-hops alt-value -> first primary -> record and sets an AltCursor; indexed_read_next/indexed_read_previous walk the alternate-key index (alt-value asc, then dupno asc) when alt-active, else primary order (a primary read/START reverts to primary). On-disk: each alt key is its own B-tree file <base>.<i+1> -- indexed_alt_to_bdb(i)/indexed_load_alt(i) encode/decode data = primary || 4-byte NATIVE-LE dupno (COB_DUPSWAP is the identity on a LE host: fileio.c:681 `|| 1` force-selects the preserved 'store LE backwards' branch). The format crate gained write_btree_dup: the meta page BTM_DUP flag (offset 48) + the SHARED duplicate-key item (inp[] references one 'AA' key offset for both its data items) that libdb's duplicate cursor requires. CORRECTED the gap's '02' claim: cobc WRITE/READ/READ NEXT all return 00 -- the C sets ret=02 for dupno>1 (fileio.c:3772) then immediately clobbers it with DB_PUT (~3789), so 02 is never observable; matching 00 is faithful. Proof: tests/indexed_altkeys.rs (6 tests incl. reading a committed genuine-cobc data/data.1 fixture: AA->001, READ NEXT->003, ->002) + a verified probe where genuine cobc OPENs(00)+READs a port-written alt file in alt order (rAA=001, 003/AA, 002/BB, 10). 885 lib + integration green. RESIDUAL: multi-leaf alt files (>1 page) follow the primary multi-leaf writer.
 
 #### `indexed-no-bdb-ondisk` -- INDEXED organization is an in-memory BTreeMap; no Berkeley DB / ISAM on-disk store  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: an INDEXED file has no on-disk artifact; close+reopen across runs sees no data &nbsp;·&nbsp; **status: ✓ FIXED**
