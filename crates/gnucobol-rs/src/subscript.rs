@@ -8,7 +8,10 @@
 //! element_size`, and so on). `index` is **1-based** (`TABLE(1)` is the first element, at offset 0).
 //! Composes the sealed layout/offset model (`GNURUST.4`, `GNURUST.TABLE.PERFORM.SLICE.1`).
 
-/// Why a subscript was refused (fail closed — never an out-of-range read).
+/// Why a subscript was refused (fail closed — never an out-of-range read). This `Display` text is an
+/// internal developer-facing detail; the byte-faithful GnuCOBOL runtime-error bytes for a live subscript
+/// fault come from [`crate::common::cob_check_subscript`] + [`crate::common::cob_bound_violation_diagnostic`]
+/// (which carry the field name + source location this pure slicer lacks).
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum SubscriptError {

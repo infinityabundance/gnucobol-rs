@@ -5,7 +5,10 @@
 //!
 //! `start` is **1-based** (COBOL convention). Pure byte slicing/overwrite; no numeric or edited semantics.
 
-/// Why a reference-modification was refused (fail closed — never an out-of-bounds read/write).
+/// Why a reference-modification was refused (fail closed — never an out-of-bounds read/write). This
+/// `Display` text is an internal developer-facing detail; the byte-faithful GnuCOBOL runtime-error bytes
+/// for a live refmod fault come from [`crate::common::cob_check_ref_mod`] +
+/// [`crate::common::cob_bound_violation_diagnostic`] (which carry the field name + source location).
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum RefModError {

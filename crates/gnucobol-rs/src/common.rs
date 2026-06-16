@@ -504,6 +504,30 @@ pub fn cob_check_ref_mod_minimal(name: &str, offset: i32, length: i32) -> Vec<Bo
     out
 }
 
+/// Emit the **exact** bytes GnuCOBOL writes to `stderr` for a caught [`BoundViolation`]: the
+/// `cob_runtime_error` line (`libcob: <file>:<line>: error: <message>`) and, when the violation carries a
+/// hint, the `cob_runtime_hint` companion (`note: <hint>`). This is the single byte-faithful bound-fault
+/// diagnostic -- it wires the message **body** (the `cob_check_*` ports above, which already match the
+/// oracle) to the `libcob:`/`note:` **wrapper** in [`crate::common_runerr`]. The internal `Display` of the
+/// pure slice helpers (`subscript.rs` / `refmod.rs` / `odo.rs`) is a developer-facing detail, NOT these
+/// runtime-error bytes; a live bounds fault is reported through here.
+///
+/// Oracle (built `cobc -fec=all -debug`): a subscript fault prints
+/// `libcob: sub.cob:9: error: subscript of 'E' out of bounds: 5` then `note: maximum subscript for 'E': 3`;
+/// a reference-modification fault prints `libcob: rm.cob:9: error: length of 'S' out of bounds: 8, maximum: 5`.
+/// (The subsequent `Last statement ... / ENTRY ... / Started by ...` module-stack dump is the `cob_hard_failure`
+/// abort path -- it needs the live module/call-stack state and is tracked under `exc-hard-failure`.)
+pub fn cob_bound_violation_diagnostic(
+    loc: &crate::common_runerr::SourceLocation,
+    v: &BoundViolation,
+) -> Vec<u8> {
+    let mut out = crate::common_runerr::cob_runtime_error(loc, &v.message);
+    if let Some(hint) = &v.hint {
+        out.extend_from_slice(&crate::common_runerr::cob_runtime_hint(hint));
+    }
+    out
+}
+
 // ======================================================================================================
 // Numeric-class diagnostics (common.c explain_field_type / cob_check_numeric). The "not numeric" runtime
 // error is what GnuCOBOL prints when a non-numeric value reaches arithmetic (under cobc -debug); its text
@@ -964,6 +988,35 @@ mod tests {
         cob_set_exception_by_code(&mut st3, EC_DATA_INCOMPATIBLE);
         assert_eq!(cob_get_last_exception_code(&st3), 0x0303);
         assert_eq!(cob_get_last_exception_name(&st3), Some("EC-DATA-INCOMPATIBLE"));
+    }
+
+    #[test]
+    fn bound_violation_diagnostic_matches_cobc_bytes() {
+        use crate::common_runerr::SourceLocation;
+        // Subscript fault (cobc -fec=all -debug): the libcob error line + the `note:` hint line, byte-exact.
+        let v = cob_check_subscript(5, 3, "E", false, false).expect("out of bounds");
+        let diag = cob_bound_violation_diagnostic(&SourceLocation::at(b"sub.cob", 9), &v);
+        assert_eq!(
+            diag,
+            b"libcob: sub.cob:9: error: subscript of 'E' out of bounds: 5\nnote: maximum subscript for 'E': 3\n"
+                .to_vec()
+        );
+        // Reference-modification fault: the first (aborting) violation -- length over the field size, no note.
+        let rv = cob_check_ref_mod(3, 8, 5, "S"); // offset 3, length 8, size 5
+        let diag2 = cob_bound_violation_diagnostic(&SourceLocation::at(b"rm.cob", 9), &rv[0]);
+        assert_eq!(
+            diag2,
+            b"libcob: rm.cob:9: error: length of 'S' out of bounds: 8, maximum: 5\n".to_vec()
+        );
+        // ODO depending-on fault: the message names the DEPENDING-ON field (N), the hint names the OCCURS
+        // ELEMENT (E) -- cobc `... OCCURS DEPENDING ON 'N' out of bounds: 9` / `note: maximum subscript for 'E': 5`.
+        let ov = cob_check_odo(9, 1, 5, "E", "N").unwrap();
+        let diag3 = cob_bound_violation_diagnostic(&SourceLocation::at(b"o.cob", 10), &ov);
+        assert_eq!(
+            diag3,
+            b"libcob: o.cob:10: error: OCCURS DEPENDING ON 'N' out of bounds: 9\nnote: maximum subscript for 'E': 5\n"
+                .to_vec()
+        );
     }
 
     fn ident_col() -> [u8; 256] {

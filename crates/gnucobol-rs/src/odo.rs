@@ -7,7 +7,9 @@
 //! admitted only for `1 <= i <= N`; gnucobol-rs **fails closed** beyond the active count rather than read a
 //! physically-present-but-inactive slot. Composes the sealed offset model (`GNURUST.SUBSCRIPT.1`).
 
-/// Why an `OCCURS DEPENDING ON` access was refused (fail closed).
+/// Why an `OCCURS DEPENDING ON` access was refused (fail closed). This `Display` text is an internal
+/// developer-facing detail; the byte-faithful GnuCOBOL runtime-error bytes for a live ODO-bound fault come
+/// from [`crate::common::cob_check_odo`] + [`crate::common::cob_bound_violation_diagnostic`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum OdoError {

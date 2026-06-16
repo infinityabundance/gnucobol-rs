@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (24 fixed, 81 open)
+## Summary -- 105 gaps catalogued across 5 panels (25 fixed, 80 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 6 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 5 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 24 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 25 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -56,8 +56,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 | 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
 | 4 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 5 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 6 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 5 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -762,12 +761,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): BoundException::ec_code() maps each violation kind to its COBOL code (Subscript 0x0207 / Odo 0x0202 / RefMod 0x0205), with EC_DATA_INCOMPATIBLE=0x0303 for the numeric class check; raise_bound_violation + new cob_set_exception_by_code/cob_exception_index_of feed the caught violation into the ExceptionState (the missing link -- the port keeps state explicit, no global, so the runtime raises the code on a returned violation, mirroring libcob's cob_set_exception(...) inside each cob_check_*). Test bound_violation_sets_exception_status: a subscript/ODO violation raised -> cob_get_last_exception_code 0x0207/0x0202 + cob_get_last_exception_name EC-BOUND-SUBSCRIPT/-ODO + cob_last_exception_is true; numeric -> EC-DATA-INCOMPATIBLE. (Wiring it into the front-end executor's check sites is the front-end phase.)
 
 #### `exc-divergent-messages` -- Live slice modules emit non-C runtime-error message bytes for bound checks  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: the runtime-error text printed on a bounds fault
+**severity:** high &nbsp;·&nbsp; **observable:** yes: the runtime-error text printed on a bounds fault &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c cob_runtime_error emits 'subscript of NAME out of bounds: N' + 'maximum subscript for NAME: M'; 'OCCURS DEPENDING ON DEP out of bounds'; the refmod triplet; 'NAME (Type: T) not numeric: escaped'.
 - **gnucobol-rs (Rust):** common.rs:373 reproduces these EXACT bytes, BUT the active slice modules emit different text: subscript.rs:31 'table subscript is 0 or rank mismatch', refmod.rs:28 'reference modification (s:l) out of bounds', odo.rs:35 'ODO element ... beyond the active count'. odo.rs also checks i>controlling where C checks the physical max.
 - **Diff:** On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match.
-- **Evidence / plan:** Route the live checks through the byte-faithful common.rs messages.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.89 (phase A): the two byte-faithful halves are now connected. common.rs::cob_bound_violation_diagnostic(loc, &BoundViolation) wires the message BODY (the cob_check_subscript/odo/ref_mod ports, which already match the oracle) to the libcob:/note: WRAPPER (common_runerr::cob_runtime_error + cob_runtime_hint) into the exact stderr bytes GnuCOBOL writes for a bounds fault. The divergent Display of the pure slice helpers (subscript.rs/refmod.rs/odo.rs) is explicitly demoted (doc'd) to an internal detail -- it is NOT the runtime-error bytes (those helpers lack the field name + source location). Oracle (built cobc -fec=all -debug): subscript `libcob: sub.cob:9: error: subscript of 'E' out of bounds: 5` + `note: maximum subscript for 'E': 3`; refmod `libcob: rm.cob:9: error: length of 'S' out of bounds: 8, maximum: 5`; ODO `... OCCURS DEPENDING ON 'N' out of bounds: 9` + `note: maximum subscript for 'E': 5` (hint names the OCCURS element, message names the DEPENDING-ON field) -- all matched byte-exact by bound_violation_diagnostic_matches_cobc_bytes (883 lib tests). NOTE: the trailing `Last statement.../ENTRY.../Started by` module-stack dump is the cob_hard_failure abort path (sibling exc-hard-failure).
 
 #### `exc-hard-failure` -- cob_hard_failure abort path and fatal/non-fatal dispatch absent  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: exit code + post-abort output on a critical exception
