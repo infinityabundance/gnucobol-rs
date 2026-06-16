@@ -70,8 +70,8 @@ enum Storage {
     /// An alphanumeric `PIC X/A` field: raw bytes, left-justified space-padded.
     Alpha(FieldAttr),
     /// A numeric-edited field: the bytes are the edited image; its PIC string drives editing, with the
-    /// program's CURRENCY SIGN symbol (default `b'$'`, from `SPECIAL-NAMES`).
-    Edited(String, u8),
+    /// program's CURRENCY SIGN symbol (default `b'$'`) and DECIMAL-POINT IS COMMA flag (`SPECIAL-NAMES`).
+    Edited(String, u8, bool),
 }
 
 /// A live field: its storage shape and its current bytes (always exactly the field's size).
@@ -180,7 +180,7 @@ fn lex(src: &str) -> Vec<Tok> {
 /// Fails closed with a [`RunError`] for anything outside the sealed subset.
 pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
     let up = source.to_uppercase();
-    let toks = lex(&up);
+    let mut toks = lex(&up);
     let mut fields: HashMap<String, Field> = HashMap::new();
     let mut out = Vec::new();
 
@@ -190,8 +190,22 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
     let ws_at = find_seq(&toks, &["WORKING-STORAGE", "SECTION"]);
 
     // ENVIRONMENT DIVISION / SPECIAL-NAMES: the CURRENCY SIGN IS "x" clause (default '$') sets the
-    // currency symbol the edited PICTUREs use. Scanned from the tokens before the data division.
+    // currency symbol the edited PICTUREs use; DECIMAL-POINT IS COMMA swaps the '.'/',' roles. Scanned
+    // from the tokens before the data division.
     let currency = parse_currency_sign(&toks, proc_at);
+    let decimal_comma = parse_decimal_comma(&toks, proc_at);
+    // Under DECIMAL-POINT IS COMMA a numeric literal carries its decimal as ',' (e.g. `1234,56`). The
+    // lexer keeps it as one Word; rewrite the comma to the internal '.'-decimal form so every downstream
+    // literal parser is unchanged. PICTURE strings (which contain letters) and field names never match.
+    if decimal_comma {
+        for t in toks.iter_mut() {
+            if let Tok::Word(w) = t {
+                if is_comma_decimal_literal(w) {
+                    *w = w.replace(',', ".");
+                }
+            }
+        }
+    }
 
     // --- DATA DIVISION: parse 01-level elementary items between WS SECTION and PROCEDURE DIVISION.
     if let Some(ws) = ws_at {
@@ -252,7 +266,7 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
                 }
             }
             let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-            let field = make_field(&pic, value.as_ref(), currency)?;
+            let field = make_field(&pic, value.as_ref(), currency, decimal_comma)?;
             fields.insert(name, field);
         }
     }
@@ -707,7 +721,7 @@ fn scaled_digits(d: &Decimal, scale: i16) -> Vec<u8> {
 
 /// Build a [`Field`] from its PIC + optional VALUE literal. Edited pictures (which [`build_field`]
 /// rejects as unsupported symbols) are stored as their edited image.
-fn make_field(pic: &str, value: Option<&Tok>, currency: u8) -> Result<Field, RunError> {
+fn make_field(pic: &str, value: Option<&Tok>, currency: u8, decimal_comma: bool) -> Result<Field, RunError> {
     match build_field(pic, Usage::Display, false, false) {
         Ok(pf) => {
             let is_alpha = !pf.attr.is_numeric();
@@ -725,7 +739,8 @@ fn make_field(pic: &str, value: Option<&Tok>, currency: u8) -> Result<Field, Run
         }
         Err(crate::pic::PicError::UnsupportedSymbol(_)) | Err(crate::pic::PicError::MixedCategory) => {
             // treat as numeric-edited: storage is the edited image, sized by edited_size. A non-'$'
-            // CURRENCY SIGN is normalized to '$' for the size computation (the width is the same).
+            // CURRENCY SIGN is normalized to '$' for the size computation (the width is the same; the
+            // '.'/',' role swap of DECIMAL-POINT IS COMMA is width-invariant too).
             let cur = (currency as char).to_ascii_uppercase();
             let pic_norm: String = if cur == '$' {
                 pic.to_string()
@@ -733,7 +748,8 @@ fn make_field(pic: &str, value: Option<&Tok>, currency: u8) -> Result<Field, Run
                 pic.chars().map(|c| if c.to_ascii_uppercase() == cur { '$' } else { c }).collect()
             };
             let size = edited_size(&pic_norm).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
-            let mut field = Field { storage: Storage::Edited(pic.to_string(), currency), bytes: vec![b' '; size] };
+            let mut field =
+                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma), bytes: vec![b' '; size] };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -780,10 +796,11 @@ fn parse_num_literal(w: &str) -> Result<Decimal, RunError> {
 /// Store a [`Decimal`] into a field (numeric -> zoned via the runtime move; edited -> encode).
 fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
     match &field.storage {
-        Storage::Edited(pic, currency) => {
+        Storage::Edited(pic, currency, decimal_comma) => {
             let pic = pic.clone();
             let cur = *currency;
-            field.bytes = encode_edited_cfg(&pic, dec, cur).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            let dc = *decimal_comma;
+            field.bytes = encode_edited_cfg(&pic, dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             Ok(())
         }
         Storage::Numeric(attr) => {
@@ -1109,13 +1126,14 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
 /// MOVE a source `(bytes, attr)` into a field via the right runtime path (edited vs cob_move).
 fn move_into(f: &mut Field, sbytes: &[u8], sattr: &FieldAttr) -> Result<(), RunError> {
     match &f.storage {
-        Storage::Edited(pic, currency) => {
+        Storage::Edited(pic, currency, decimal_comma) => {
             // numeric/alnum source into a numeric-edited receiver: decode the source to a decimal,
             // then encode per the edited PIC (the move.c numeric->edited path).
             let pic = pic.clone();
             let cur = *currency;
+            let dc = *decimal_comma;
             let dec = source_to_decimal(sbytes, sattr)?;
-            f.bytes = encode_edited_cfg(&pic, &dec, cur).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            f.bytes = encode_edited_cfg(&pic, &dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             Ok(())
         }
         Storage::Numeric(attr) | Storage::Alpha(attr) => {
@@ -1321,6 +1339,44 @@ fn parse_currency_sign(toks: &[Tok], before: usize) -> u8 {
         i += 1;
     }
     b'$'
+}
+
+/// `SPECIAL-NAMES. DECIMAL-POINT IS COMMA.` -> true if the program swaps the roles of `.` and `,` (`,`
+/// becomes the decimal point, `.` the grouping separator). Scans the tokens before the data division for
+/// `DECIMAL-POINT [IS] COMMA` (the lexer keeps the hyphenated `DECIMAL-POINT` as one word).
+fn parse_decimal_comma(toks: &[Tok], before: usize) -> bool {
+    let mut i = 0;
+    while i < before {
+        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DECIMAL-POINT") {
+            let mut k = i + 1;
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                k += 1;
+            }
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "COMMA") {
+                return true;
+            }
+        }
+        i += 1;
+    }
+    false
+}
+
+/// True when a word is shaped exactly like a signed decimal-comma numeric literal (`[+-]?digits,digits`),
+/// e.g. `1234,56` or `-12,5`. Used under DECIMAL-POINT IS COMMA to rewrite such literals to the internal
+/// `.`-decimal form. PICTURE strings (which contain letters/`9`/`Z`/`(`) and field names never match, so
+/// the rewrite cannot corrupt them.
+fn is_comma_decimal_literal(w: &str) -> bool {
+    let body = w.trim_start_matches(['+', '-']);
+    let mut parts = body.splitn(3, ',');
+    match (parts.next(), parts.next(), parts.next()) {
+        (Some(int_p), Some(frac_p), None) => {
+            !int_p.is_empty()
+                && !frac_p.is_empty()
+                && int_p.bytes().all(|b| b.is_ascii_digit())
+                && frac_p.bytes().all(|b| b.is_ascii_digit())
+        }
+        _ => false,
+    }
 }
 
 fn find_seq(toks: &[Tok], seq: &[&str]) -> Option<usize> {

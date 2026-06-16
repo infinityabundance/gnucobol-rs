@@ -347,14 +347,23 @@ fn emit_frac(syms: &[char], digits: &[u8]) -> String {
 /// `MOVE numeric TO edited-field` for the admitted `16a`+`16b` subset (the inverse of [`decode_edited`]).
 /// Fail closed on any symbol outside the subset.
 pub fn encode_edited(pic: &str, value: &Decimal) -> Result<Vec<u8>, EditedError> {
-    encode_edited_cfg(pic, value, b'$')
+    encode_edited_cfg(pic, value, b'$', false)
 }
 
 /// As [`encode_edited`] but with a configurable **CURRENCY SIGN** character (`SPECIAL-NAMES CURRENCY
-/// SIGN IS x`): the PICTURE uses `currency` in place of `$` for the fixed/floating currency symbol. The
-/// default-`$` path (`encode_edited`) is byte-unchanged, so the sealed GNURUST.16C edited-encode sweep
-/// is untouched; only a non-`$` currency exercises the new path.
-pub fn encode_edited_cfg(pic: &str, value: &Decimal, currency: u8) -> Result<Vec<u8>, EditedError> {
+/// SIGN IS x`) and **DECIMAL-POINT IS COMMA** mode. The PICTURE uses `currency` in place of `$` for the
+/// fixed/floating currency symbol; when `decimal_comma` is set, `,` is the decimal point and `.` the
+/// grouping separator (their roles are swapped, as in much of Europe). Both are handled by normalizing
+/// to the proven internal `$`/`.`-decimal convention before encoding and swapping the bytes back in the
+/// output, so the default path (`encode_edited`, `$`/`.`/no-comma) is byte-unchanged and the sealed
+/// GNURUST.16C edited-encode sweep is untouched; only a non-`$` currency or comma-decimal program
+/// exercises the new path.
+pub fn encode_edited_cfg(
+    pic: &str,
+    value: &Decimal,
+    currency: u8,
+    decimal_comma: bool,
+) -> Result<Vec<u8>, EditedError> {
     let cur = (currency as char).to_ascii_uppercase();
     let mut chars: Vec<char> = pic
         .trim()
@@ -373,13 +382,35 @@ pub fn encode_edited_cfg(pic: &str, value: &Decimal, currency: u8) -> Result<Vec
             }
         }
     }
+    // DECIMAL-POINT IS COMMA swaps the roles of '.' and ',' (',' becomes the decimal point, '.' the
+    // grouping separator). Normalize to the proven '.'-decimal / ','-grouping internal convention by
+    // swapping the two bytes in the PICTURE; the output is swapped back below -- symmetric to currency.
+    if decimal_comma {
+        for c in chars.iter_mut() {
+            *c = match *c {
+                '.' => ',',
+                ',' => '.',
+                other => other,
+            };
+        }
+    }
     // The same normalization for `edited_size` (which re-parses the PICTURE string): the output width is
-    // identical whether the currency symbol is `$` or `cur`.
-    let pic_norm: String = if cur == '$' {
-        pic.to_string()
-    } else {
-        pic.chars().map(|c| if c.to_ascii_uppercase() == cur { '$' } else { c }).collect()
-    };
+    // identical under either currency symbol or '.'/',' role assignment.
+    let pic_norm: String = pic
+        .chars()
+        .map(|c| {
+            let c = if cur != '$' && c.to_ascii_uppercase() == cur { '$' } else { c };
+            if decimal_comma {
+                match c {
+                    '.' => ',',
+                    ',' => '.',
+                    other => other,
+                }
+            } else {
+                c
+            }
+        })
+        .collect();
     let pic = pic_norm.as_str();
     if chars.is_empty() {
         return Err(EditedError::Empty);
@@ -497,6 +528,16 @@ pub fn encode_edited_cfg(pic: &str, value: &Decimal, currency: u8) -> Result<Vec
             }
         }
     }
+    // Swap '.' <-> ',' back for DECIMAL-POINT IS COMMA (decimal -> ',', grouping -> '.').
+    if decimal_comma {
+        for b in bytes.iter_mut() {
+            *b = match *b {
+                b'.' => b',',
+                b',' => b'.',
+                other => other,
+            };
+        }
+    }
     Ok(bytes)
 }
 
@@ -559,12 +600,26 @@ mod tests {
     fn currency_sign_other_than_dollar() {
         // `SPECIAL-NAMES. CURRENCY SIGN IS "F".` PIC FF,FF9.99 <- 1234.56 -> "F1,234.56" (cobc oracle).
         let v = Decimal { negative: false, digits: vec![1, 2, 3, 4, 5, 6], scale: 2 };
-        assert_eq!(encode_edited_cfg("FF,FF9.99", &v, b'F').unwrap(), b"F1,234.56");
+        assert_eq!(encode_edited_cfg("FF,FF9.99", &v, b'F', false).unwrap(), b"F1,234.56");
         // a fixed (single) currency too: PIC F9999.99 -> "F1234.56"
-        assert_eq!(encode_edited_cfg("F9999.99", &v, b'F').unwrap(), b"F1234.56");
+        assert_eq!(encode_edited_cfg("F9999.99", &v, b'F', false).unwrap(), b"F1234.56");
         // the default '$' path is byte-unchanged
-        assert_eq!(encode_edited_cfg("$$,$$9.99", &v, b'$').unwrap(), b"$1,234.56");
+        assert_eq!(encode_edited_cfg("$$,$$9.99", &v, b'$', false).unwrap(), b"$1,234.56");
         assert_eq!(encode_edited("$$,$$9.99", &v).unwrap(), b"$1,234.56");
+    }
+
+    #[test]
+    fn decimal_point_is_comma() {
+        // `SPECIAL-NAMES. DECIMAL-POINT IS COMMA.` swaps the roles of '.' and ',': the PICTURE uses ','
+        // for the decimal and '.' for grouping, and so does the output (cobc oracle).
+        // PIC Z.ZZZ.ZZ9,99 <- 1234.56 -> "    1.234,56".
+        let v = Decimal { negative: false, digits: vec![1, 2, 3, 4, 5, 6], scale: 2 };
+        assert_eq!(encode_edited_cfg("Z.ZZZ.ZZ9,99", &v, b'$', true).unwrap(), b"    1.234,56");
+        // PIC ZZ.ZZ9,99- <- -12.50 -> "    12,50-" (trailing sign, comma decimal).
+        let neg = Decimal { negative: true, digits: vec![1, 2, 5, 0], scale: 2 };
+        assert_eq!(encode_edited_cfg("ZZ.ZZ9,99-", &neg, b'$', true).unwrap(), b"    12,50-");
+        // currency + comma together: PIC EUR-floating with comma decimal still works (currency byte 'E').
+        assert_eq!(encode_edited_cfg("EE.EE9,99", &v, b'E', true).unwrap(), b"E1.234,56");
     }
 
     #[test]

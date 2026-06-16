@@ -1,0 +1,16 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P25.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES. DECIMAL-POINT IS COMMA.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 N PIC 9(4)V99 VALUE 1234,56.
+       01 E PIC Z.ZZZ.ZZ9,99.
+       01 F PIC ZZ.ZZ9,99-.
+       PROCEDURE DIVISION.
+           MOVE N TO E.
+           DISPLAY "E=[" E "]".
+           MOVE -12,5 TO F.
+           DISPLAY "F=[" F "]".
+           STOP RUN.

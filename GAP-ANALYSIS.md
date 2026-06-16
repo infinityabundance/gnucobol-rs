@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (18 fixed, 87 open)
+## Summary -- 105 gaps catalogued across 5 panels (19 fixed, 86 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 12 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 11 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 18 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 19 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -62,8 +62,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 8 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
 | 9 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
 | 10 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
-| 11 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
-| 12 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 11 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -696,12 +695,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 > Scope: #ifdef variant matrix, dialect-config behavior toggles, the EC exception model, cobc/cobrun CLI + env-driven runtime
 
 #### `cli-decimal-currency-specialnames` -- DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: edited DISPLAY under DECIMAL-POINT IS COMMA or a custom currency
+**severity:** high &nbsp;·&nbsp; **observable:** yes: edited DISPLAY under DECIMAL-POINT IS COMMA or a custom currency &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** Parsed in cobc into current_program flags; affects edited PIC encoding (','/'.' roles, currency substitution).
 - **gnucobol-rs (Rust):** frontend.rs has zero matches for DECIMAL-POINT/CURRENCY/OPTIONS/SOURCE FORMAT; no CONFIGURATION SECTION / SPECIAL-NAMES handling (data parse starts at WORKING-STORAGE). edited.rs assumes '.'/'$'.
 - **Diff:** DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause).
-- **Evidence / plan:** IN PROGRESS (phase A): the front-end now parses SPECIAL-NAMES CURRENCY SIGN IS "x" (parse_currency_sign) and threads it through Storage::Edited + make_field into encode_edited_cfg -- a custom currency edited PIC is byte-identical to cobc end-to-end (corpus p24_currency, cobol_frontend_sweep 24/0; see edited-currency-fixed-dollar). REMAINING: DECIMAL-POINT IS COMMA (swap the '.'/',' grouping/decimal roles in the PIC interpretation + output, and accept comma-decimal VALUE/numeric literals) and the OPTIONS paragraph.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.85 (phase A): the front-end parses SPECIAL-NAMES CURRENCY SIGN IS "x" (parse_currency_sign) AND DECIMAL-POINT IS COMMA (parse_decimal_comma) before the data division, threading both through Storage::Edited(pic, currency, decimal_comma) + make_field into encode_edited_cfg. CURRENCY: corpus p24_currency (F1,234.56). DECIMAL-POINT IS COMMA: the '.'/',' roles are swapped in the PIC interpretation + output (edited.rs boundary swap) and comma-decimal numeric literals (VALUE 1234,56 / MOVE -12,5) are rewritten to the internal '.'-decimal form by is_comma_decimal_literal (PICTURE words never match) -- corpus p25_decimal_comma (E=[    1.234,56], F=[    12,50-]) is byte-identical to cobc AND 3.1.2 (cobol_frontend_sweep 25/0). RESIDUAL (low-observable, tracked in the dialect-* cluster): the OPTIONS paragraph (ARITHMETIC/DEFAULT ROUNDED).
 
 #### `cli-runtime-cfg` -- --conf / --runtime-config / runtime.cfg auto-load never invoked  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: any behavior controlled by runtime.cfg / a --conf file
