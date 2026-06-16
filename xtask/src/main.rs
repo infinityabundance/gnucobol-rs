@@ -20,6 +20,7 @@ mod release;
 mod sweeps;
 mod atlas;
 mod portcourt;
+mod cobol_parity;
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -69,6 +70,7 @@ fn main() {
         "atlas-negzero" => atlas::negzero(&root, &args[2.min(args.len())..]),
         "lineage" => lineage::run(cmd, &root),
         "portcourt" => portcourt::run(cmd, &root),
+        "cobol-parity" => cobol_parity::run(cmd, &root),
         _ => {
             eprintln!("usage: xtask <ladder> <generate|check>");
             2

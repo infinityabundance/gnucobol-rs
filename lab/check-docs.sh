@@ -270,6 +270,11 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "portcourt.toml: drift / not regenerated (run \`cargo run -p xtask -- portcourt generate\`)"; cat /tmp/_pc_check
   fi
+  if ( cd "$ROOT" && cargo run -q -p xtask -- cobol-parity check ) >/tmp/_cp_check 2>&1; then
+    note "COBOL-PARITY + FILE-PARITY: full-language + every-file 1:1 parity census fresh"
+  else
+    bad "COBOL-PARITY.md / FILE-PARITY.md: drift (run \`cargo run -p xtask -- cobol-parity generate\`)"; cat /tmp/_cp_check
+  fi
   if ( cd "$ROOT" && cargo run -q -p xtask -- kani-fuzz check ) >/tmp/_kf_check 2>&1; then
     note "KANI+FUZZ: every GNURUST byte court has a Kani proof + a fuzz target (n/a declared for composition/atlas)"
   else

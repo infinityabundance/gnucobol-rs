@@ -29,6 +29,14 @@ use crate::termio::{cob_display, DisplaySettings};
 use crate::value::Decimal;
 use std::collections::HashMap;
 
+/// The COBOL statement verbs the front-end actually EXECUTES (not merely recognizes as a boundary).
+/// The generated parity tracker (`xtask cobol-parity`) reads this to report front-end coverage, so it
+/// stays honest as the subset grows. Keep this in sync with the dispatch in `exec_stmt` + `run_block`.
+pub const WIRED_STATEMENTS: &[&str] = &[
+    "DISPLAY", "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP",
+    "CONTINUE",
+];
+
 /// Why a program could not be run (fail closed -- the front-end never guesses).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RunError {
