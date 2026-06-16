@@ -3402,43 +3402,74 @@ fn parse_current_date(s: &[u8]) -> Option<CobTime> {
     Some(t)
 }
 
-/// `cob_get_current_datetime (res)` (common.c): the system time, with any `COB_CURRENT_DATE` override
-/// applied component-by-component (leap second clamped to 59).
-fn cob_get_current_datetime(want_nano: bool) -> CobTime {
-    let mut t = cob_get_current_date_and_time_from_os(want_nano);
-    if let Ok(env) = std::env::var("COB_CURRENT_DATE") {
-        if let Some(c) = parse_current_date(env.as_bytes()) {
-            if c.hour != -1 {
-                t.hour = c.hour;
-            }
-            if c.minute != -1 {
-                t.minute = c.minute;
-            }
-            if c.second != -1 {
-                t.second = c.second;
-            }
-            if c.nanosecond != -1 {
-                t.nanosecond = c.nanosecond;
-            }
-            if c.offset_known {
-                t.offset_known = true;
-                t.utc_offset = c.utc_offset;
-            }
-            if c.year != -1 {
-                t.year = c.year;
-            }
-            if c.month != -1 {
-                t.month = c.month;
-            }
-            if c.day_of_month != -1 {
-                t.day_of_month = c.day_of_month;
-            }
+/// Apply a `COB_CURRENT_DATE` override string onto a base time, component-by-component (`-1` keeps the
+/// base component), then clamp a leap second to 59. Shared by the env-driven and the explicit (runtime.cfg)
+/// override paths.
+fn apply_current_date_override(mut t: CobTime, value: &[u8]) -> CobTime {
+    if let Some(c) = parse_current_date(value) {
+        if c.hour != -1 {
+            t.hour = c.hour;
+        }
+        if c.minute != -1 {
+            t.minute = c.minute;
+        }
+        if c.second != -1 {
+            t.second = c.second;
+        }
+        if c.nanosecond != -1 {
+            t.nanosecond = c.nanosecond;
+        }
+        if c.offset_known {
+            t.offset_known = true;
+            t.utc_offset = c.utc_offset;
+        }
+        if c.year != -1 {
+            t.year = c.year;
+        }
+        if c.month != -1 {
+            t.month = c.month;
+        }
+        if c.day_of_month != -1 {
+            t.day_of_month = c.day_of_month;
         }
     }
     if t.second >= 60 {
         t.second = 59;
     }
     t
+}
+
+/// `cob_get_current_datetime (res)` (common.c): the system time, with any `COB_CURRENT_DATE` override
+/// applied component-by-component (leap second clamped to 59).
+fn cob_get_current_datetime(want_nano: bool) -> CobTime {
+    let t = cob_get_current_date_and_time_from_os(want_nano);
+    match std::env::var("COB_CURRENT_DATE") {
+        Ok(env) => apply_current_date_override(t, env.as_bytes()),
+        Err(_) => {
+            let mut t = t;
+            if t.second >= 60 {
+                t.second = 59;
+            }
+            t
+        }
+    }
+}
+
+/// As [`cob_get_current_datetime`] but with an **explicit** `COB_CURRENT_DATE` override value -- e.g. the
+/// `current_date` setting loaded from `runtime.cfg` (the `cli-runtime-cfg` wiring) -- instead of the env.
+/// `None` means no override: the raw system clock.
+fn cob_get_current_datetime_with(want_nano: bool, override_val: Option<&[u8]>) -> CobTime {
+    let t = cob_get_current_date_and_time_from_os(want_nano);
+    match override_val {
+        Some(v) => apply_current_date_override(t, v),
+        None => {
+            let mut t = t;
+            if t.second >= 60 {
+                t.second = 59;
+            }
+            t
+        }
+    }
 }
 
 /// `get_seconds_past_midnight ()` (intrinsic.c): seconds since midnight from the **real** local clock
@@ -3448,11 +3479,8 @@ fn get_seconds_past_midnight() -> i32 {
     t.hour * 3600 + t.minute * 60 + t.second
 }
 
-/// `cob_intr_current_date (offset, length)` (intrinsic.c): `FUNCTION CURRENT-DATE` —
-/// `YYYYMMDDHHMMSShh+-HHMM` (21 chars).
-pub fn cob_intr_current_date(offset: i32, length: i32) -> IntrField {
-    let want_nano = !(offset == 1 && length <= 14);
-    let time = cob_get_current_datetime(want_nano);
+/// Render a [`CobTime`] as the `FUNCTION CURRENT-DATE` field (`YYYYMMDDHHMMSShh+-HHMM`, 21 chars).
+fn current_date_field(time: CobTime, offset: i32, length: i32) -> IntrField {
     let mut buff = format!(
         "{:04}{:02}{:02}{:02}{:02}{:02}{:02}",
         time.year,
@@ -3470,6 +3498,21 @@ pub fn cob_intr_current_date(offset: i32, length: i32) -> IntrField {
         return intr_refmod(buff, offset, length);
     }
     (buff, ALPHA1)
+}
+
+/// `cob_intr_current_date (offset, length)` (intrinsic.c): `FUNCTION CURRENT-DATE` —
+/// `YYYYMMDDHHMMSShh+-HHMM` (21 chars). Honors the `COB_CURRENT_DATE` env override.
+pub fn cob_intr_current_date(offset: i32, length: i32) -> IntrField {
+    let want_nano = !(offset == 1 && length <= 14);
+    current_date_field(cob_get_current_datetime(want_nano), offset, length)
+}
+
+/// As [`cob_intr_current_date`] but honoring an **explicit** `COB_CURRENT_DATE` override value -- e.g. the
+/// `current_date` setting loaded from `runtime.cfg` (see `crate::common_configload::cob_runtime_config_value`).
+/// `None` -> the system clock. This is the consuming end of the `cli-runtime-cfg` file-load wiring.
+pub fn cob_intr_current_date_cfg(offset: i32, length: i32, override_val: Option<&[u8]>) -> IntrField {
+    let want_nano = !(offset == 1 && length <= 14);
+    current_date_field(cob_get_current_datetime_with(want_nano, override_val), offset, length)
 }
 
 /// `cob_intr_seconds_past_midnight ()` (intrinsic.c): `FUNCTION SECONDS-PAST-MIDNIGHT` (real-clock based).

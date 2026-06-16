@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (26 fixed, 79 open)
+## Summary -- 105 gaps catalogued across 5 panels (27 fixed, 78 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 4 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 3 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 26 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 27 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -55,7 +55,6 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 1 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
 | 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 | 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 4 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -696,12 +695,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.85 (phase A): the front-end parses SPECIAL-NAMES CURRENCY SIGN IS "x" (parse_currency_sign) AND DECIMAL-POINT IS COMMA (parse_decimal_comma) before the data division, threading both through Storage::Edited(pic, currency, decimal_comma) + make_field into encode_edited_cfg. CURRENCY: corpus p24_currency (F1,234.56). DECIMAL-POINT IS COMMA: the '.'/',' roles are swapped in the PIC interpretation + output (edited.rs boundary swap) and comma-decimal numeric literals (VALUE 1234,56 / MOVE -12,5) are rewritten to the internal '.'-decimal form by is_comma_decimal_literal (PICTURE words never match) -- corpus p25_decimal_comma (E=[    1.234,56], F=[    12,50-]) is byte-identical to cobc AND 3.1.2 (cobol_frontend_sweep 25/0). RESIDUAL (low-observable, tracked in the dialect-* cluster): the OPTIONS paragraph (ARITHMETIC/DEFAULT ROUNDED).
 
 #### `cli-runtime-cfg` -- --conf / --runtime-config / runtime.cfg auto-load never invoked  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: any behavior controlled by runtime.cfg / a --conf file
+**severity:** high &nbsp;·&nbsp; **observable:** yes: any behavior controlled by runtime.cfg / a --conf file &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cobc.c:597 --conf; cobcrun.c:56 --runtime-config; cob_load_config walks COB_RUNTIME_CONFIG + the default search path at cob_init, applying a whole config file before running.
 - **gnucobol-rs (Rust):** common_configload::cob_load_config is a pure function taking already-read lines; the fopen/path-search is an explicit un-ported boundary. Neither cobrun nor run_program calls it; --conf does not exist on any Rust entry point.
 - **Diff:** C applies an entire config file's COB_* settings before running; Rust applies none. Config files have zero runtime effect.
-- **Evidence / plan:** Add file-locating + cob_load_config invocation at startup; wire results into the executor.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.91: the locate -> read -> load -> apply pipeline is wired + proven end-to-end. common_configload.rs adds cob_runtime_config_path(getenv) (locates the file via COB_RUNTIME_CONFIG, the --conf/--runtime-config target; the implicit default-dir search is a noted residual) and cob_runtime_config_value(bytes, conf_name, ...) (splits the file into lines, runs the already-ported cob_load_config, and returns the last Set value for a keyword). intrinsic.rs grows cob_intr_current_date_cfg(offset, length, override) + cob_get_current_datetime_with: the consuming end, applying a loaded current_date to FUNCTION CURRENT-DATE (the env-driven cob_intr_current_date refactored to share apply_current_date_override, so it is byte-unchanged). Integration test (tests/runtime_cfg.rs): a temp runtime.cfg `current_date 2020/06/15 12:34:56` is located, read (std::fs, no unsafe/libcob), loaded, its value extracted as `2020/06/15` (the config-line parser stops at whitespace, matching cobc) and applied -> CURRENT-DATE date portion 20200615, vs the live system clock without it. Oracle: built cobc under COB_RUNTIME_CONFIG=runtime.cfg prints 20200615<systemtime>; identical date override. RESIDUAL: auto-invocation at the cobrun/run_program entry is meaningful only once the front-end consumes a runtime setting (its sealed subset has no CURRENT-DATE yet); the loader + apply path is wired + observable at the library API. The fopen path-search default-dir + non-current_date settings remain a noted extension.
 
 #### `cli-std-dialect` -- -std=/-fdialect dialect selection has no runtime effect  
 **severity:** high &nbsp;·&nbsp; **observable:** conditional: whenever a non-default -std would change behavior &nbsp;·&nbsp; **status: ✓ FIXED**

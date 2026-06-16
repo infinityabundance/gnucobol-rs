@@ -1148,6 +1148,39 @@ pub fn cob_load_config(
     cob_load_config_file(lines, tbl, getenv, pid, config_dir, copy_dir)
 }
 
+/// Locate the runtime config file at `cob_init`, as `cob_load_config` does: `COB_RUNTIME_CONFIG` names it
+/// explicitly (the primary, and what `cobc`/`cobcrun` honor for `--runtime-config`). The implicit
+/// default-directory search for `runtime.cfg` is a documented residual. Pure: the actual `fopen`/read is
+/// the caller's `std::fs` boundary (a non-`unsafe`, non-libcob file read).
+pub fn cob_runtime_config_path(getenv: &dyn Fn(&str) -> Option<String>) -> Option<String> {
+    getenv("COB_RUNTIME_CONFIG").filter(|s| !s.is_empty())
+}
+
+/// Load a runtime config file's `bytes` and return the value stored for one setting (`conf_name`), exactly
+/// as `cob_load_config` would apply it (the last assignment wins). Returns `None` when the file does not
+/// set that keyword. This is the file-load half of the `cli-runtime-cfg` wiring; the value is then handed
+/// to the setting's consumer (e.g. `current_date` -> [`crate::intrinsic::cob_intr_current_date_cfg`]).
+pub fn cob_runtime_config_value(
+    bytes: &[u8],
+    conf_name: &str,
+    getenv: &dyn Fn(&str) -> Option<String>,
+    pid: i32,
+    config_dir: &str,
+    copy_dir: &str,
+) -> Option<Vec<u8>> {
+    let pos = cb_lookup_config(conf_name, GC_CONF);
+    if pos >= GC_CONF.len() {
+        return None; // not a known setting
+    }
+    let lines: Vec<&[u8]> = bytes.split(|&b| b == b'\n').collect();
+    let directives = cob_load_config(&lines, GC_CONF, getenv, pid, config_dir, copy_dir);
+    // last `Set` of this setting wins (the C applies directives in file order).
+    directives.iter().rev().find_map(|d| match d {
+        ConfigDirective::Set { pos: p, value } if *p == pos => Some(value.clone()),
+        _ => None,
+    })
+}
+
 #[cfg(test)]
 mod cob_load_config_tests {
     use super::*;
