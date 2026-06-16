@@ -57,6 +57,7 @@ fn build_files() -> String {
         "CONSUMED-AS-ORACLE" => "GnuCOBOL test corpus, used AS the oracle",
         "REFERENCE" => "documentation / license -- reference, not ported",
         "TEST-DATA" => "sample copybooks -- front-end test data",
+        "NON-CLAIM" => "declared boundary -- intentionally not ported, with explicit reasoning (e.g. off-oracle localization catalogs)",
         _ => "triage",
     };
     for (s, n) in &counts {

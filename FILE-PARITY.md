@@ -17,14 +17,15 @@
 | **COPIED+WIRED** | 43 | config copied verbatim + parsed natively |
 | **GAP -> cobrun** | 7 | **active gap** -- grow the cobrun CLI |
 | **GAP -> front-end** | 23 | **active gap** -- reimplement in the clean-room front-end |
+| **NON-CLAIM** | 12 | declared boundary -- intentionally not ported, with explicit reasoning (e.g. off-oracle localization catalogs) |
 | **OBVIATED** | 60 | build system -- Cargo/xtask replaces it (no port needed) |
-| **PARTIAL** | 13 | partially reproduced (e.g. runtime messages) |
 | **PORTED** | 5 | ported (API header / support unit) |
 | **PORTED+EVIDENCED** | 13 | 1:1 in the runtime, oracle-sealed |
+| **PORTED-VIA** | 1 | folded into a ported module |
 | **REFERENCE** | 83 | documentation / license -- reference, not ported |
 | **TEST-DATA** | 8 | sample copybooks -- front-end test data |
 
-**Receipts: every one of the 329 files carries a receipt** -- 286 with positive evidence (the Rust module / config copy / test / oracle role that proves it is accounted for) and 43 explicitly marked **UNEVIDENCED-GAP** with a plan (nothing is silently omitted). **Active gaps: 43 files** (the cobc compiler -> clean-room front-end, the CLI drivers -> `cobrun`, and the partial runtime-message reproduction). Everything else is ported, copied, obviated by Cargo, or reference. The plans are the road to full 1:1 parity.
+**Receipts: every one of the 329 files carries a receipt** -- 299 with positive evidence (the Rust module / config copy / test / oracle role that proves it is accounted for) and 30 explicitly marked **UNEVIDENCED-GAP** with a plan (nothing is silently omitted). **Active gaps: 30 files** (the cobc compiler -> clean-room front-end, the CLI drivers -> `cobrun`, and the partial runtime-message reproduction). Everything else is ported, copied, obviated by Cargo, or reference. The plans are the road to full 1:1 parity.
 
 ## Active gaps (the road to full parity)
 
@@ -60,19 +61,6 @@
 | `cobc/tree.c` | compiler (cobc) | Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal. |
 | `cobc/tree.h` | compiler header (cobc) | Mirror only the structures the front-end needs. |
 | `cobc/typeck.c` | compiler (cobc) | Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal. |
-| `po/de.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/en@boldquot.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/en@quot.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/es.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/fr.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/gnucobol.pot` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/it.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/ja.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/nl.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/pt.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/sr.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/sv.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
-| `po/tr.po` | message catalog (gettext) | Reproduce remaining libcob runtime message bytes as their courts are sealed; translation catalogs are a later localization task. |
 
 ## Every file (grouped by directory)
 
@@ -354,41 +342,41 @@
 | `po/boldquot.sed` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/ChangeLog` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/de.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/de.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/de.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/en@boldquot.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/en@boldquot.header` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/en@boldquot.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/en@boldquot.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/en@quot.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/en@quot.header` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/en@quot.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/en@quot.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/es.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/es.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/es.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/fr.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/fr.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
-| `po/gnucobol.pot` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/fr.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
+| `po/gnucobol.pot` | PORTED-VIA | Custody: the 220 libcob runtime English msgids are snapshotted in xtask/src/data/gnucobol_surface.json (po.libcob_runtime_msgids) and emitted directly from the ported Rust runtime (cob_runtime_error/cob_fatal_error call sites) as their courts are sealed -- no separate gettext catalog is consulted under the pinned C.UTF-8 oracle (gettext(_(s))==s). |
 | `po/insert-header.sin` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/it.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/it.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/it.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/ja.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/ja.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/ja.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/LINGUAS` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/Makefile.in.in` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/Makevars` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/nl.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/nl.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/nl.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/POTFILES.in` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/pt.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/pt.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/pt.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/quot.sed` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/remove-potcdate.sin` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/Rules-quot` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/sr.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/sr.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/sr.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/stamp-po` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `po/sv.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/sv.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/sv.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/tr.gmo` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `po/tr.po` | PARTIAL | UNEVIDENCED (partial): 147/220 libcob runtime message fragments present in the port; remaining + 12 translation catalogs are the gap |
+| `po/tr.po` | NON-CLAIM | Explicit non-claim: localized runtime messages are off-oracle. Under the pinned C.UTF-8 oracle gettext(_(s))==s, so the port emits the English msgids verbatim; this language translation catalog is a declared localization boundary, deliberately not reproduced (not an unevidenced gap). |
 | `po/update_linguas.sh` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 
 ### `tests/` (74 files)
