@@ -244,39 +244,452 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
         }
     }
 
-    // --- PROCEDURE DIVISION: execute statements from after "PROCEDURE DIVISION." to end.
-    let mut k = proc_at + 2;
-    if matches!(toks.get(k), Some(Tok::Dot)) {
-        k += 1;
+    // --- PROCEDURE DIVISION: execute statements (verb-delimited, with IF/PERFORM scopes).
+    let proc: Vec<Tok> = toks[(proc_at + 2)..].to_vec();
+    let mut pos = 0;
+    if matches!(proc.first(), Some(Tok::Dot)) {
+        pos = 1; // skip the '.' after "PROCEDURE DIVISION."
     }
-    while k < toks.len() {
-        match toks.get(k) {
-            Some(Tok::Word(w)) => {
-                let verb = w.clone();
-                k += 1;
-                // collect this statement's tokens up to the next Dot.
-                let mut stmt = Vec::new();
-                while k < toks.len() && !matches!(toks.get(k), Some(Tok::Dot)) {
-                    stmt.push(toks[k].clone());
-                    k += 1;
-                }
-                if matches!(toks.get(k), Some(Tok::Dot)) {
-                    k += 1;
-                }
-                exec_stmt(&verb, &stmt, &mut fields, &mut out)?;
-                if verb == "STOP" {
-                    break;
-                }
-            }
-            Some(Tok::Dot) => {
-                k += 1;
-            }
-            _ => {
-                k += 1;
-            }
+    // The top level runs sentence by sentence; each sentence is a block ending at a '.'.
+    while pos < proc.len() {
+        if matches!(proc.get(pos), Some(Tok::Dot)) {
+            pos += 1;
+            continue;
+        }
+        let halted = run_block(&proc, &mut pos, &mut fields, &mut out, true)?;
+        if halted {
+            break; // STOP RUN
+        }
+        if matches!(proc.get(pos), Some(Tok::Dot)) {
+            pos += 1; // consume the sentence-terminating '.'
         }
     }
     Ok(out)
+}
+
+/// Statement verbs that begin a new statement (so an operand list ends when one is seen).
+const STMT_VERBS: &[&str] = &[
+    "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP",
+    "CONTINUE", "ACCEPT", "GO", "EVALUATE",
+];
+/// Scope terminators that end a block.
+const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE"];
+
+fn is_boundary(w: &str) -> bool {
+    STMT_VERBS.contains(&w) || SCOPE_ENDERS.contains(&w)
+}
+
+/// Execute (or, when `exec` is false, SKIP) a block of statements starting at `*pos`, stopping -- WITHOUT
+/// consuming -- at a `.`, a scope terminator, or end of input. Returns `Ok(true)` if `STOP RUN` halted
+/// the program. This is the spine of control flow: `IF`/`PERFORM` recurse into it for their branches.
+fn run_block(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+) -> Result<bool, RunError> {
+    loop {
+        match toks.get(*pos) {
+            None | Some(Tok::Dot) => return Ok(false),
+            Some(Tok::Word(w)) if SCOPE_ENDERS.contains(&w.as_str()) => return Ok(false),
+            Some(Tok::Word(w)) => {
+                let verb = w.clone();
+                *pos += 1;
+                match verb.as_str() {
+                    "IF" => {
+                        if exec_if(toks, pos, fields, out, exec)? {
+                            return Ok(true);
+                        }
+                    }
+                    "PERFORM" => {
+                        if exec_perform(toks, pos, fields, out, exec)? {
+                            return Ok(true);
+                        }
+                    }
+                    "STOP" => {
+                        let _ = collect_operands(toks, pos); // consume RUN
+                        if exec {
+                            return Ok(true);
+                        }
+                    }
+                    "CONTINUE" | "NEXT" => { /* no-op */ }
+                    _ => {
+                        let stmt = collect_operands(toks, pos);
+                        if exec {
+                            exec_stmt(&verb, &stmt, fields, out)?;
+                        }
+                    }
+                }
+            }
+            Some(_) => {
+                *pos += 1;
+            }
+        }
+    }
+}
+
+/// Collect a simple statement's operand tokens from `*pos` until the next statement verb, scope
+/// terminator, or `.`.
+fn collect_operands(toks: &[Tok], pos: &mut usize) -> Vec<Tok> {
+    let mut v = Vec::new();
+    while let Some(t) = toks.get(*pos) {
+        match t {
+            Tok::Dot => break,
+            Tok::Word(w) if is_boundary(w) => break,
+            _ => {
+                v.push(t.clone());
+                *pos += 1;
+            }
+        }
+    }
+    v
+}
+
+/// `IF <cond> [THEN] <stmts> [ELSE <stmts>] [END-IF]` -- evaluate the condition, run the taken branch,
+/// skip the other. The IF scope ends at `END-IF` or, in the period form, at the sentence `.`.
+fn exec_if(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+) -> Result<bool, RunError> {
+    // condition tokens: from here until a statement verb, THEN, scope terminator, or '.'.
+    let mut cond = Vec::new();
+    while let Some(t) = toks.get(*pos) {
+        match t {
+            Tok::Dot => break,
+            Tok::Word(w) if w == "THEN" || STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+            _ => {
+                cond.push(t.clone());
+                *pos += 1;
+            }
+        }
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THEN") {
+        *pos += 1;
+    }
+    let truth = if exec { eval_cond(&cond, fields)? } else { false };
+
+    // THEN branch.
+    let halted = run_block(toks, pos, fields, out, exec && truth)?;
+    if halted {
+        return Ok(true);
+    }
+    // ELSE branch.
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "ELSE") {
+        *pos += 1;
+        let halted = run_block(toks, pos, fields, out, exec && !truth)?;
+        if halted {
+            return Ok(true);
+        }
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-IF") {
+        *pos += 1;
+    }
+    Ok(false)
+}
+
+/// `PERFORM <n> TIMES <stmts> END-PERFORM` or `PERFORM UNTIL <cond> <stmts> END-PERFORM` (the inline
+/// forms). Out-of-line `PERFORM <paragraph>` is not in the subset (fail closed).
+fn exec_perform(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+) -> Result<bool, RunError> {
+    // forms: PERFORM <n> TIMES ... END-PERFORM ; PERFORM UNTIL <cond> ... END-PERFORM
+    let is_until = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "UNTIL");
+    let mut times_word: Option<String> = None;
+    let mut cond = Vec::new();
+    if is_until {
+        *pos += 1;
+        while let Some(t) = toks.get(*pos) {
+            match t {
+                Tok::Dot => break,
+                Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+                _ => {
+                    cond.push(t.clone());
+                    *pos += 1;
+                }
+            }
+        }
+    } else {
+        // PERFORM <n> TIMES
+        if let Some(Tok::Word(w)) = toks.get(*pos) {
+            times_word = Some(w.clone());
+            *pos += 1;
+        }
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "TIMES") {
+            *pos += 1;
+        } else {
+            return Err(RunError::Unsupported("PERFORM form (only `n TIMES` / `UNTIL cond` inline)".into()));
+        }
+    }
+
+    // record the body's start; we re-run it per iteration.
+    let body_start = *pos;
+    let mut body_end = *pos;
+    // first pass: if not executing, just skip the body once to find END-PERFORM.
+    {
+        let mut scan = *pos;
+        let _ = run_block(toks, &mut scan, fields, out, false)?;
+        body_end = scan;
+    }
+
+    if exec {
+        if is_until {
+            // PERFORM UNTIL: test BEFORE each iteration (WITH TEST BEFORE, the default).
+            let mut guard = 0u32;
+            while !eval_cond(&cond, fields)? {
+                let mut p = body_start;
+                if run_block(toks, &mut p, fields, out, true)? {
+                    return Ok(true);
+                }
+                guard += 1;
+                if guard > 1_000_000 {
+                    return Err(RunError::Runtime("PERFORM UNTIL exceeded 1e6 iterations".into()));
+                }
+            }
+        } else {
+            let n = times_word
+                .as_deref()
+                .and_then(|w| resolve_int(w, fields))
+                .ok_or_else(|| RunError::Unsupported("PERFORM TIMES count not an integer".into()))?;
+            for _ in 0..n {
+                let mut p = body_start;
+                if run_block(toks, &mut p, fields, out, true)? {
+                    return Ok(true);
+                }
+            }
+        }
+    }
+
+    // advance past the body + END-PERFORM.
+    *pos = body_end;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-PERFORM") {
+        *pos += 1;
+    }
+    Ok(false)
+}
+
+/// Resolve a token to an integer count (a numeric literal, or a numeric field's integer value).
+fn resolve_int(w: &str, fields: &HashMap<String, Field>) -> Option<i64> {
+    if let Some(f) = fields.get(w) {
+        if let Storage::Numeric(a) = &f.storage {
+            let dec = source_to_decimal(&f.bytes, a).ok()?;
+            let mut v: i64 = 0;
+            for d in &dec.digits {
+                v = v.checked_mul(10)?.checked_add(*d as i64)?;
+            }
+            // ignore fractional digits for a TIMES count (integer part only).
+            for _ in 0..dec.scale.max(0) {
+                v /= 10;
+            }
+            return Some(if dec.negative { -v } else { v });
+        }
+        None
+    } else {
+        w.parse::<i64>().ok()
+    }
+}
+
+/// Evaluate a condition to a boolean. Grammar: `or := and (OR and)*`, `and := rel (AND rel)*`,
+/// `rel := operand [IS] [NOT] (= | > | < | >= | <= | <> | GREATER [THAN] | LESS [THAN] | EQUAL [TO])
+/// operand`. Numeric operands compare by value; alphanumeric by space-padded bytes. The combined word
+/// forms ("GREATER THAN OR EQUAL TO") and class/sign/88-level conditions are not in the subset.
+fn eval_cond(t: &[Tok], fields: &HashMap<String, Field>) -> Result<bool, RunError> {
+    let words: Vec<String> = t
+        .iter()
+        .map(|tok| match tok {
+            Tok::Word(w) => w.clone(),
+            Tok::Str(s) => format!("\u{1}{}", String::from_utf8_lossy(s)), // mark string literal
+            Tok::Dot => ".".into(),
+        })
+        .collect();
+    let mut p = 0;
+    let r = cond_or(&words, &mut p, fields)?;
+    if p != words.len() {
+        return Err(RunError::Unsupported(format!("trailing tokens in condition at {}", words[p])));
+    }
+    Ok(r)
+}
+
+fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>) -> Result<bool, RunError> {
+    let mut acc = cond_and(w, p, f)?;
+    while w.get(*p).map(|s| s.as_str()) == Some("OR") {
+        *p += 1;
+        let r = cond_and(w, p, f)?;
+        acc = acc || r;
+    }
+    Ok(acc)
+}
+
+fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>) -> Result<bool, RunError> {
+    let mut acc = cond_rel(w, p, f)?;
+    while w.get(*p).map(|s| s.as_str()) == Some("AND") {
+        *p += 1;
+        let r = cond_rel(w, p, f)?;
+        acc = acc && r;
+    }
+    Ok(acc)
+}
+
+fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>) -> Result<bool, RunError> {
+    let left = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?.clone();
+    *p += 1;
+    if w.get(*p).map(|s| s.as_str()) == Some("IS") {
+        *p += 1;
+    }
+    let mut neg = false;
+    if w.get(*p).map(|s| s.as_str()) == Some("NOT") {
+        neg = true;
+        *p += 1;
+    }
+    let op = match w.get(*p).map(|s| s.as_str()) {
+        Some("=") => Rel::Eq,
+        Some(">") => Rel::Gt,
+        Some("<") => Rel::Lt,
+        Some(">=") => Rel::Ge,
+        Some("<=") => Rel::Le,
+        Some("<>") => Rel::Ne,
+        Some("GREATER") => {
+            *p += 1;
+            if w.get(*p).map(|s| s.as_str()) == Some("THAN") {
+                *p += 1;
+            }
+            *p -= 1; // the loop below does +=1 once
+            Rel::Gt
+        }
+        Some("LESS") => {
+            *p += 1;
+            if w.get(*p).map(|s| s.as_str()) == Some("THAN") {
+                *p += 1;
+            }
+            *p -= 1;
+            Rel::Lt
+        }
+        Some("EQUAL") => {
+            *p += 1;
+            if w.get(*p).map(|s| s.as_str()) == Some("TO") {
+                *p += 1;
+            }
+            *p -= 1;
+            Rel::Eq
+        }
+        other => return Err(RunError::Unsupported(format!("condition relop {other:?} (subset: = > < >= <= <> GREATER LESS EQUAL)"))),
+    };
+    *p += 1;
+    let right = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
+    *p += 1;
+    let ord = cond_compare(&left, &right, f)?;
+    let base = match op {
+        Rel::Eq => ord == std::cmp::Ordering::Equal,
+        Rel::Ne => ord != std::cmp::Ordering::Equal,
+        Rel::Gt => ord == std::cmp::Ordering::Greater,
+        Rel::Lt => ord == std::cmp::Ordering::Less,
+        Rel::Ge => ord != std::cmp::Ordering::Less,
+        Rel::Le => ord != std::cmp::Ordering::Greater,
+    };
+    Ok(if neg { !base } else { base })
+}
+
+#[derive(Clone, Copy)]
+enum Rel {
+    Eq,
+    Ne,
+    Gt,
+    Lt,
+    Ge,
+    Le,
+}
+
+/// Compare two condition operands (each a word: a field name, a numeric literal, or a `\u{1}`-marked
+/// string literal). If BOTH resolve to numeric values, compare by value; otherwise compare the display
+/// bytes space-padded to equal length (the COBOL alphanumeric collation).
+fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>) -> Result<std::cmp::Ordering, RunError> {
+    let na = cond_numeric(a, f);
+    let nb = cond_numeric(b, f);
+    if let (Some(da), Some(db)) = (&na, &nb) {
+        return Ok(dec_cmp(da, db));
+    }
+    // alphanumeric compare: space-pad the shorter, byte compare.
+    let sa = cond_bytes(a, f);
+    let sb = cond_bytes(b, f);
+    let n = sa.len().max(sb.len());
+    for i in 0..n {
+        let ca = sa.get(i).copied().unwrap_or(b' ');
+        let cb = sb.get(i).copied().unwrap_or(b' ');
+        if ca != cb {
+            return Ok(ca.cmp(&cb));
+        }
+    }
+    Ok(std::cmp::Ordering::Equal)
+}
+
+/// If a condition operand is numeric (a numeric field or a numeric literal), decode it to a [`Decimal`].
+fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
+    if let Some(field) = f.get(w) {
+        if let Storage::Numeric(a) = &field.storage {
+            return source_to_decimal(&field.bytes, a).ok();
+        }
+        return None;
+    }
+    if w.starts_with('\u{1}') {
+        return None; // string literal -> alphanumeric
+    }
+    parse_num_literal(w).ok()
+}
+
+/// The display bytes of a condition operand for alphanumeric comparison.
+fn cond_bytes(w: &str, f: &HashMap<String, Field>) -> Vec<u8> {
+    if let Some(field) = f.get(w) {
+        return field.bytes.clone();
+    }
+    if let Some(rest) = w.strip_prefix('\u{1}') {
+        return rest.as_bytes().to_vec();
+    }
+    w.as_bytes().to_vec()
+}
+
+/// Compare two decimals by value (scale-aligned).
+fn dec_cmp(a: &Decimal, b: &Decimal) -> std::cmp::Ordering {
+    use std::cmp::Ordering;
+    let za = a.digits.iter().all(|&d| d == 0);
+    let zb = b.digits.iter().all(|&d| d == 0);
+    let na = a.negative && !za;
+    let nb = b.negative && !zb;
+    if na != nb {
+        return if na { Ordering::Less } else { Ordering::Greater };
+    }
+    // align scales, compare integer magnitudes as digit strings.
+    let scale = a.scale.max(b.scale).max(0);
+    let ma = scaled_digits(a, scale);
+    let mb = scaled_digits(b, scale);
+    // magnitude order: more significant digits (after leading-zero strip) is larger, then lexicographic.
+    let mag = ma.len().cmp(&mb.len()).then_with(|| ma.cmp(&mb));
+    if na {
+        mag.reverse()
+    } else {
+        mag
+    }
+}
+
+/// The magnitude digit string of a decimal scaled to `scale` fractional digits (leading zeros kept for
+/// length-aligned comparison).
+fn scaled_digits(d: &Decimal, scale: i16) -> Vec<u8> {
+    let mut digits = d.digits.clone();
+    let extra = (scale - d.scale.max(0)).max(0);
+    for _ in 0..extra {
+        digits.push(0);
+    }
+    // strip leading zeros but keep at least one digit; then left-pad both to equal length at call site.
+    while digits.len() > 1 && digits[0] == 0 {
+        digits.remove(0);
+    }
+    digits
 }
 
 /// Build a [`Field`] from its PIC + optional VALUE literal. Edited pictures (which [`build_field`]
@@ -969,6 +1382,43 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"PI=3.14285714\n"); // 22/7 truncated to 8 fractional digits
+    }
+
+    #[test]
+    fn if_else_and_perform() {
+        // IF/ELSE branch selection + PERFORM UNTIL loop (factorial) + alphanumeric compare.
+        let fac = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 I PIC 9(4) VALUE 1.\n\
+                    01 F PIC 9(8) VALUE 1.\n\
+                    01 R PIC ZZZZZZZ9.\n\
+                    PROCEDURE DIVISION.\n\
+                        PERFORM UNTIL I > 5\n\
+                            MULTIPLY I BY F GIVING F\n\
+                            ADD 1 TO I\n\
+                        END-PERFORM.\n\
+                        MOVE F TO R.\n\
+                        DISPLAY R.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(fac, b"     120\n"); // 5! = 120
+
+        let branch = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC 9 VALUE 3.\n\
+                    01 R PIC X(3).\n\
+                    PROCEDURE DIVISION.\n\
+                        IF A > 5 MOVE \"BIG\" TO R ELSE MOVE \"LOW\" TO R END-IF.\n\
+                        DISPLAY R.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(branch, b"LOW\n");
     }
 
     #[test]

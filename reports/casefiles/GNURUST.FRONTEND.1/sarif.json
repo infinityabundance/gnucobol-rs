@@ -48,7 +48,21 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FRONTEND.1 non-claim: control flow (IF / PERFORM / EVALUATE / GO TO -- those are the separate execution-slice courts)"
+            "text": "GNURUST.FRONTEND.1 non-claim: EVALUATE / GO TO / ALTER"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: paragraphs + out-of-line / PERFORM THRU / PERFORM VARYING"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: the combined-word relops (GREATER THAN OR EQUAL TO) + class/sign/88-level conditions"
           },
           "ruleId": "NONCLAIM"
         },

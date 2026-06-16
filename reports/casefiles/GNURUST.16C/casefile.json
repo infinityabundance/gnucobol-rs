@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.16C",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.84",
+  "crate_version": "0.7.85",
   "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports",
   "hash_chain": {
-    "inputs_sha256": "8da9f99a354d0db95eb21cb42804e27ecc5135eb739b2b93de2556890a2ad1cc"
+    "inputs_sha256": "dbc037147860f1b4aa74aaf7059cd12e36e6ff565d6bc76cca20779bc3231fd2"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "61efee6d95b6c74d3f9ef14ed39499064ca6be66a25f58052cac210b9f81fe28",
-    "receipt_sha256": "79cc223583b26a9223e59b3f4635772505564599ff8bafad7063bd7472d7e0b7"
+    "receipt_sha256": "9c7c86bb0ee135e8b0b00b33f09febde42be6a0010cf79a4c881119972ef95a7"
   },
   "kind": "court-casefile",
   "lie_prevented": [
