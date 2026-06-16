@@ -1,0 +1,13 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 N PIC 9(6)V99 VALUE 1000.00.
+       01 D PIC 9 VALUE 8.
+       01 Q PIC 9(4)V99.
+       01 R PIC Z,ZZ9.99.
+       PROCEDURE DIVISION.
+           DIVIDE N BY D GIVING Q.
+           MOVE Q TO R.
+           DISPLAY "QUOT=" R.
+           STOP RUN.

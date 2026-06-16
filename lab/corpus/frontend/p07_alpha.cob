@@ -1,0 +1,8 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 NAME-X PIC X(10) VALUE "HELLO".
+       PROCEDURE DIVISION.
+           DISPLAY "[" NAME-X "]".
+           STOP RUN.

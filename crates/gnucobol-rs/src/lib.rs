@@ -80,6 +80,7 @@ pub mod initialize;
 pub mod if_eval;
 pub mod if_numeric;
 pub mod inspect;
+pub mod frontend;
 pub mod accept_display;
 pub mod intrinsic;
 pub mod size_error;

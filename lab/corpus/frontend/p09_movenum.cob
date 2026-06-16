@@ -1,0 +1,10 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 A PIC 9(5) VALUE 7.
+       01 R PIC ZZZZ9.
+       PROCEDURE DIVISION.
+           MOVE A TO R.
+           DISPLAY "VAL=" R.
+           STOP RUN.

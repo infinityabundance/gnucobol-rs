@@ -1,0 +1,13 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 A PIC S9(4) VALUE 30.
+       01 B PIC S9(4) VALUE 50.
+       01 C PIC S9(5).
+       01 R PIC -ZZZ9.
+       PROCEDURE DIVISION.
+           SUBTRACT B FROM A GIVING C.
+           MOVE C TO R.
+           DISPLAY "NET=" R.
+           STOP RUN.

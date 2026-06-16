@@ -1,0 +1,13 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 PRICE PIC 9(4)V99 VALUE 19.99.
+       01 QTY   PIC 9(3) VALUE 3.
+       01 TOT   PIC 9(6)V99.
+       01 R     PIC $$,$$9.99.
+       PROCEDURE DIVISION.
+           MULTIPLY PRICE BY QTY GIVING TOT.
+           MOVE TOT TO R.
+           DISPLAY "COST=" R.
+           STOP RUN.
