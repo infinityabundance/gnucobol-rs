@@ -161,10 +161,23 @@ fn node_at_mut<'a>(root: &'a mut Node, path: &[usize]) -> &'a mut Node {
     n
 }
 
-/// Lay out a record: assign every item its offset and one-occurrence size. The first element of the
-/// result is the `01` record itself (offset 0, size = total record length).
+/// Lay out a record under the **default** dialect: assign every item its offset and one-occurrence size.
+/// The `01` record's own entry (offset 0, size = total record length) is included in the result; the
+/// list is in layout (children-before-group) order, so look entries up by name rather than by index.
 pub fn lay_out(items: &[Item]) -> Result<Vec<Laid>, LayoutError> {
-    // Global OCCURS DEPENDING ON rules (sealed subset: a single, trailing, physical-max ODO).
+    lay_out_dialect(items, crate::dialect::Dialect::DEFAULT)
+}
+
+/// As [`lay_out`] but under an explicit [`Dialect`](crate::dialect::Dialect): with `complex-odo` a field
+/// is permitted *after* an `OCCURS DEPENDING ON` table (the default dialect rejects it, as `cobc` does at
+/// compile time). The static offsets are the table's **physical maximum** in either case; the runtime
+/// slide (`odoslide`) is applied by [`record_used_length`], which the static `Laid` cannot express.
+pub fn lay_out_dialect(
+    items: &[Item],
+    dialect: crate::dialect::Dialect,
+) -> Result<Vec<Laid>, LayoutError> {
+    // Global OCCURS DEPENDING ON rules (sealed subset: a single trailing physical-max ODO, optionally --
+    // under complex-odo -- followed by fixed fields).
     let odo_items: Vec<&Item> = items.iter().filter(|i| i.odo.is_some()).collect();
     if odo_items.len() > 1 {
         return Err(LayoutError::OdoUnsupported(
@@ -194,12 +207,18 @@ pub fn lay_out(items: &[Item]) -> Result<Vec<Laid>, LayoutError> {
     }
     let root = build_tree(items)?;
     let mut out = Vec::new();
-    let _ = compute(&root, 0, &mut out)?;
+    let _ = compute(&root, 0, &mut out, dialect.complex_odo)?;
     Ok(out)
 }
 
-/// Compute `node`'s one-occurrence size at `base` offset, appending every item to `out`.
-fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, LayoutError> {
+/// Compute `node`'s one-occurrence size at `base` offset, appending every item to `out`. `complex_odo`
+/// permits a field after an ODO table (otherwise such a layout fails closed, matching the default dialect).
+fn compute(
+    node: &Node,
+    base: usize,
+    out: &mut Vec<Laid>,
+    complex_odo: bool,
+) -> Result<usize, LayoutError> {
     if node.item.occurs == Some(0) {
         return Err(LayoutError::BadOccurs);
     }
@@ -233,7 +252,10 @@ fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, Layou
             // OCCURS DEPENDING ON contributes its physical maximum; it must be the last item in its
             // group (GnuCOBOL forbids a field after an ODO item without complex-ODO config).
             let child_occurs = if let Some(o) = &child.item.odo {
-                if idx != last_idx {
+                // A field after an ODO table is only permitted under complex-odo (ibm/mf/mvs); the default
+                // dialect rejects it, exactly as `cobc` errors ("cannot have OCCURS DEPENDING because of
+                // <field>"). The static offsets here are the physical maximum either way.
+                if idx != last_idx && !complex_odo {
                     return Err(LayoutError::OdoUnsupported(format!(
                         "{} is not the last item in its group",
                         child.item.name
@@ -265,7 +287,7 @@ fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, Layou
             } else {
                 cursor
             };
-            let one = compute(child, child_base, out)?;
+            let one = compute(child, child_base, out, complex_odo)?;
             let span = one
                 .checked_mul(child_occurs as usize)
                 .ok_or(LayoutError::BadOccurs)?;
@@ -298,6 +320,53 @@ fn compute(node: &Node, base: usize, out: &mut Vec<Laid>) -> Result<usize, Layou
         size,
     });
     Ok(size)
+}
+
+/// The runtime byte length of an `01` record given the live `DEPENDING ON` count -- the `LENGTH OF`
+/// semantics across `-std=`. Without an ODO this is the static record size. With a single ODO table:
+///   - the table contributes `count` occurrences (not `max`);
+///   - any fields *after* it either **slide** to immediately follow the runtime-sized table (`odoslide`,
+///     ibm/mvs) or stay at the table's physical-maximum position (mf), making the record's length
+///     count-independent.
+/// `count` is clamped to the ODO's `[min, max]`. Matches `cobc`'s `LENGTH OF` (ibm 7/9/11, mf 11/11/11 for
+/// a `CNT(1) + OCCURS 1 TO 3 OF X(2) + TAIL X(4)` record at counts 1/2/3).
+pub fn record_used_length(
+    items: &[Item],
+    dialect: crate::dialect::Dialect,
+    count: u32,
+) -> Result<usize, LayoutError> {
+    let laid = lay_out_dialect(items, dialect)?;
+    // The 01 record is the first source item (its laid entry spans the whole record).
+    let record_name = &items.first().ok_or(LayoutError::NotARecord)?.name;
+    let record_size = laid
+        .iter()
+        .find(|l| &l.name == record_name)
+        .ok_or(LayoutError::NotARecord)?
+        .size;
+    let odo_item = match items.iter().find(|i| i.odo.is_some()) {
+        Some(it) => it,
+        None => return Ok(record_size), // fixed-length record
+    };
+    let o = odo_item.odo.as_ref().unwrap();
+    let count = count.clamp(o.min, o.max);
+    let odo_laid = laid
+        .iter()
+        .find(|l| l.name == odo_item.name)
+        .ok_or(LayoutError::NotARecord)?;
+    let elem = odo_laid.size; // one-occurrence size
+    let odo_offset = odo_laid.offset; // bytes before the table (fixed prefix)
+    // Bytes physically after the table at its physical maximum (the trailing fixed fields).
+    let trailing = record_size.saturating_sub(odo_offset + (o.max as usize) * elem);
+    if dialect.odoslide {
+        // Trailing fields slide to follow the runtime-sized table.
+        Ok(odo_offset + (count as usize) * elem + trailing)
+    } else if trailing == 0 {
+        // Simple trailing ODO (nothing after): LENGTH OF still shrinks with the count.
+        Ok(odo_offset + (count as usize) * elem)
+    } else {
+        // mf: trailing fields stay at the physical-max position -> count-independent length.
+        Ok(record_size)
+    }
 }
 
 #[cfg(test)]
@@ -457,6 +526,48 @@ mod tests {
         odo(&mut o2, 0, 3, "CNT");
         let two = vec![group(1, "REC"), elem(5, "CNT", "9", Usage::Display), o1, o2];
         assert!(matches!(lay_out(&two), Err(LayoutError::OdoUnsupported(_))));
+    }
+
+    #[test]
+    fn complex_odo_slide_matches_dialect_oracle() {
+        use crate::dialect::Dialect;
+        // Record: CNT PIC 9 (1) + T OCCURS 1 TO 3 OF X(2) + TAIL X(4). cobc LENGTH OF R at CNT=1/2/3:
+        //   default COMPILE ERROR (field after ODO); ibm 7/9/11 (slides); mf 11/11/11 (physical max).
+        let rec = || {
+            let mut t = elem(5, "T", "X(2)", Usage::Display);
+            odo(&mut t, 1, 3, "CNT");
+            vec![
+                group(1, "R"),
+                elem(5, "CNT", "9", Usage::Display),
+                t,
+                elem(5, "TAIL", "X(4)", Usage::Display),
+            ]
+        };
+        // default: a field after an ODO table is rejected (the cobc compile error).
+        assert!(matches!(
+            lay_out_dialect(&rec(), Dialect::DEFAULT),
+            Err(LayoutError::OdoUnsupported(_))
+        ));
+        // ibm/mf accept it; the STATIC offsets are the physical maximum (TAIL at 1 + 3*2 = 7, size 11).
+        for d in [Dialect::IBM, Dialect::MF] {
+            let laid = lay_out_dialect(&rec(), d).unwrap();
+            let by = |n: &str| laid.iter().find(|l| l.name == n).unwrap();
+            assert_eq!((by("R").offset, by("R").size), (0, 11));
+            assert_eq!((by("T").offset, by("T").size), (1, 2));
+            assert_eq!(by("TAIL").offset, 7);
+        }
+        // runtime LENGTH OF: ibm SLIDES (odoslide), mf is physical-max (count-independent).
+        assert_eq!(record_used_length(&rec(), Dialect::IBM, 1).unwrap(), 7);
+        assert_eq!(record_used_length(&rec(), Dialect::IBM, 2).unwrap(), 9);
+        assert_eq!(record_used_length(&rec(), Dialect::IBM, 3).unwrap(), 11);
+        assert_eq!(record_used_length(&rec(), Dialect::MF, 1).unwrap(), 11);
+        assert_eq!(record_used_length(&rec(), Dialect::MF, 3).unwrap(), 11);
+        // A simple trailing ODO (nothing after) still shrinks with the count under any dialect.
+        let mut t = elem(5, "T", "X(2)", Usage::Display);
+        odo(&mut t, 1, 3, "CNT");
+        let simple = vec![group(1, "R"), elem(5, "CNT", "9", Usage::Display), t];
+        assert_eq!(record_used_length(&simple, Dialect::MF, 2).unwrap(), 5); // 1 + 2*2
+        assert_eq!(record_used_length(&simple, Dialect::DEFAULT, 2).unwrap(), 5);
     }
 }
 

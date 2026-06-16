@@ -88,9 +88,13 @@ pub struct Dialect {
     /// `binary-truncate` -- when true (default), a stored value is truncated to the PIC digit range
     /// (`COB_FLAG_BINARY_TRUNC`); when false (ibm/mf/mvs), the field keeps its full binary range.
     pub binary_truncate: bool,
-    /// `complex-odo` -- whether complex `OCCURS DEPENDING ON` (indirect / larger redefines / sliding) is
-    /// permitted (ibm/mf/mvs `yes`).
+    /// `complex-odo` -- whether complex `OCCURS DEPENDING ON` (a field *after* an ODO table) is permitted
+    /// (ibm/mf/mvs `yes`; default `no` rejects it, as `cobc` does at compile time).
     pub complex_odo: bool,
+    /// `odoslide` -- when a field follows an ODO table, whether the trailing items *slide* to the runtime
+    /// `DEPENDING ON` count (ibm/mvs `yes`: `LENGTH OF` shrinks with the count) or sit at the table's
+    /// physical maximum (mf `no`: a fixed, count-independent length). Only meaningful with `complex-odo`.
+    pub odoslide: bool,
     /// `defaultbyte` -- the fill for uninitialized storage.
     pub defaultbyte: DefaultByte,
 }
@@ -102,35 +106,41 @@ impl Dialect {
         binary_size: BinarySize::Cob1248,
         binary_truncate: true,
         complex_odo: false,
+        odoslide: false,
         defaultbyte: DefaultByte::Init,
     };
-    /// `-std=ibm` (`ibm.conf` -> `ibm-strict.conf`): `2-4-8`, no truncate, complex ODO, defaultbyte 0.
+    /// `-std=ibm` (`ibm.conf` -> `ibm-strict.conf`): `2-4-8`, no truncate, complex ODO + slide, defaultbyte 0.
     pub const IBM: Dialect = Dialect {
         binary_size: BinarySize::Cob248,
         binary_truncate: false,
         complex_odo: true,
+        odoslide: true,
         defaultbyte: DefaultByte::Fill(0),
     };
-    /// `-std=mf` (`mf.conf` -> `mf-strict.conf`): `1--8` (tight), no truncate, complex ODO, defaultbyte space.
+    /// `-std=mf` (`mf.conf` -> `mf-strict.conf`): `1--8` (tight), no truncate, complex ODO (no slide),
+    /// defaultbyte space.
     pub const MF: Dialect = Dialect {
         binary_size: BinarySize::Cob1to8,
         binary_truncate: false,
         complex_odo: true,
+        odoslide: false,
         defaultbyte: DefaultByte::Fill(b' '),
     };
-    /// `-std=mvs` (`mvs.conf` -> `mvs-strict.conf`): same four knobs as ibm.
+    /// `-std=mvs` (`mvs.conf` -> `mvs-strict.conf`): same five knobs as ibm.
     pub const MVS: Dialect = Dialect {
         binary_size: BinarySize::Cob248,
         binary_truncate: false,
         complex_odo: true,
+        odoslide: true,
         defaultbyte: DefaultByte::Fill(0),
     };
-    /// `-std=cobol85` / `cobol2002` / `cobol2014`: the same three field-model knobs as DEFAULT, but
+    /// `-std=cobol85` / `cobol2002` / `cobol2014`: the same field-model knobs as DEFAULT, but
     /// `defaultbyte: none` -- undefined storage, observed as 0x00.
     pub const COBOL85: Dialect = Dialect {
         binary_size: BinarySize::Cob1248,
         binary_truncate: true,
         complex_odo: false,
+        odoslide: false,
         defaultbyte: DefaultByte::Fill(0),
     };
 
@@ -181,6 +191,11 @@ mod tests {
         assert_eq!(Dialect::from_std("xyz"), Dialect::DEFAULT);
         assert!(Dialect::DEFAULT.binary_truncate);
         assert!(!Dialect::DEFAULT.complex_odo);
+        // complex-odo + odoslide: default neither; ibm/mvs both; mf complex-odo but NO slide.
+        assert!(Dialect::IBM.complex_odo && Dialect::IBM.odoslide);
+        assert!(Dialect::MVS.complex_odo && Dialect::MVS.odoslide);
+        assert!(Dialect::MF.complex_odo && !Dialect::MF.odoslide);
+        assert!(!Dialect::DEFAULT.odoslide);
     }
 
     #[test]

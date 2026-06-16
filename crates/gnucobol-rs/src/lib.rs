@@ -142,7 +142,7 @@ pub use class::{is_alphabetic, is_alphabetic_lower, is_alphabetic_upper, is_nume
 pub use edited::{decode_edited, edited_size, encode_edited, EditedDecode, EditedError};
 pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
-pub use layout::{lay_out, Item, Laid, LayoutError, Odo};
+pub use layout::{lay_out, lay_out_dialect, record_used_length, Item, Laid, LayoutError, Odo};
 pub use move_ops::cob_move;
 pub use pic::{build_field, PicError, PicField, Usage};
 pub use value::Decimal;

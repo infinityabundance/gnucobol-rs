@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (23 fixed, 82 open)
+## Summary -- 105 gaps catalogued across 5 panels (24 fixed, 81 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 7 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 6 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 23 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 24 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -55,10 +55,9 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 1 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
 | 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 | 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 4 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
-| 5 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 6 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 7 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 4 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
+| 5 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
+| 6 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -731,12 +730,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.86 (phase A): build_field_dialect's Comp arm sets COB_FLAG_BINARY_TRUNC only when dialect.binary_truncate (DEFAULT); IBM/MF/MVS clear it, and the existing binary.rs store path (v %= 10^digits guarded by the flag) then keeps the full binary range. Oracle (built cobc, MOVE 70000 TO PIC 9(4) COMP, 2 bytes): default truncates to 0 (70000 % 10^4), ibm/mf keep 70000 % 65536 = 4464 -- matched at the value level by binary_encode/binary_decode in dialect_binary_size_and_truncate_match_oracle. RESIDUAL: the no-truncate DISPLAY digit-WIDTH nuance (cobc shows ibm '04464' vs mf '4464') is a downstream display concern, distinct from the stored value proven here.
 
 #### `dialect-complex-odo-slide` -- complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: complex/sliding ODO or indirect/larger REDEFINES under ibm/mf/mvs
+**severity:** high &nbsp;·&nbsp; **observable:** yes: complex/sliding ODO or indirect/larger REDEFINES under ibm/mf/mvs &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** config.def complex-odo (no->yes ibm/mf/mvs), odoslide (no->yes ibm/mvs), indirect-redefines (no->yes), larger-redefines (error->ok mf): nested/non-trailing ODO, sliding trailing items, REDEFINES-of-REDEFINES, oversize redefiners.
 - **gnucobol-rs (Rust):** odo.rs + layout.rs:11 defer multiple/nested ODO and ODO+REDEFINES; layout.rs:64 defers larger-redefines; no odoslide logic.
 - **Diff:** Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes.
-- **Evidence / plan:** Significant layout-engine work; today single-dialect only.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.88 (phase A): the complex-odo + odoslide layout knobs are wired. dialect.rs adds Dialect.complex_odo (already) + Dialect.odoslide (DEFAULT no; ibm/mvs yes; mf no -- from config/*.conf). layout.rs gains lay_out_dialect(items, dialect): compute() rejects a field AFTER an ODO table only when !complex_odo (the default dialect's cobc compile-error analog; lay_out == lay_out_dialect(.., DEFAULT) so the sealed default layout is unchanged), and record_used_length(items, dialect, count) computes the runtime LENGTH OF: odoslide (ibm/mvs) SLIDES trailing fields to follow the count-sized table (length shrinks with the count), else (mf) they stay at the physical-maximum position (count-independent). Oracle (built cobc, CNT PIC 9 + T OCCURS 1 TO 3 OF X(2) + TAIL X(4), LENGTH OF R at CNT=1/2/3): default COMPILE ERROR; ibm 7/9/11 (slides); mf 11/11/11 (physical max) -- matched by complex_odo_slide_matches_dialect_oracle (882 lib tests, sealed GNURUST.10 ODO court green). RESIDUAL (separate sub-cases, noted): multiple/nested ODO, ODO+REDEFINES, indirect-redefines, larger-redefines (mf) -- still fail closed.
 
 #### `dialect-defaultbyte` -- defaultbyte (uninitialized storage fill) hardcoded to category defaults  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: any program displaying/using an item without VALUE under ibm/mvs/cobol85 &nbsp;·&nbsp; **status: ✓ FIXED**
