@@ -35,12 +35,12 @@ impl core::fmt::Display for RefModError {
 }
 impl std::error::Error for RefModError {}
 
-/// `field(start:length)` — the `length` bytes of `field` starting at 1-based `start`. Fail closed if the
-/// window is empty or runs past the field.
+/// `field(start:length)` — the `length` bytes of `field` starting at 1-based `start`. A runtime
+/// `length` of 0 is a **valid empty result** under the default dialect (`ref-mod-zero-length: yes`):
+/// GnuCOBOL yields an empty string (e.g. `A(2:0)` → ``), so we return an empty slice rather than
+/// failing closed. (Strict dialects — cobol85/ibm/mf/mvs — reject zero length; the default-dialect
+/// oracle is the pinned target.) Still fail closed when the window runs past the field or `start` is 0.
 pub fn ref_mod(field: &[u8], start: usize, length: usize) -> Result<&[u8], RefModError> {
-    if length == 0 {
-        return Err(RefModError::ZeroLength);
-    }
     if start == 0 || start - 1 + length > field.len() {
         return Err(RefModError::OutOfBounds { start, length, field_len: field.len() });
     }
@@ -56,17 +56,15 @@ pub fn ref_mod_to_end(field: &[u8], start: usize) -> Result<&[u8], RefModError> 
 }
 
 /// `MOVE src TO field(start:length)` — overwrite the `length`-byte window at 1-based `start` with `src`
-/// under alphanumeric MOVE rules (left-justified, space-padded, truncated to the window). Fail closed if the
-/// window is empty or runs past the field; on error `field` is untouched.
+/// under alphanumeric MOVE rules (left-justified, space-padded, truncated to the window). A runtime
+/// `length` of 0 is a valid no-op (an empty receiver window; default dialect), like the source form.
+/// Fail closed only when the window runs past the field or `start` is 0; on error `field` is untouched.
 pub fn apply_ref_mod(
     field: &mut [u8],
     start: usize,
     length: usize,
     src: &[u8],
 ) -> Result<(), RefModError> {
-    if length == 0 {
-        return Err(RefModError::ZeroLength);
-    }
     if start == 0 || start - 1 + length > field.len() {
         return Err(RefModError::OutOfBounds { start, length, field_len: field.len() });
     }
@@ -102,10 +100,18 @@ mod tests {
         assert_eq!(ref_mod(b"ABCDEF", 1, 6), Ok(&b"ABCDEF"[..]));
         assert_eq!(ref_mod(b"ABCDEF", 6, 1), Ok(&b"F"[..]));
         assert_eq!(ref_mod_to_end(b"ABCDEF", 3), Ok(&b"CDEF"[..]));
-        // fail-closed out of bounds / zero / start-0
+        // fail-closed out of bounds / start-0
         assert!(matches!(ref_mod(b"ABCDEF", 5, 3), Err(RefModError::OutOfBounds { .. })));
         assert!(matches!(ref_mod(b"ABCDEF", 0, 3), Err(RefModError::OutOfBounds { .. })));
-        assert!(matches!(ref_mod(b"ABCDEF", 1, 0), Err(RefModError::ZeroLength)));
+        // runtime zero length is a VALID empty result in the default dialect (matches cobc: A(s:0) -> "")
+        assert_eq!(ref_mod(b"ABCDEF", 1, 0), Ok(&b""[..]));
+        assert_eq!(ref_mod(b"ABCDEF", 2, 0), Ok(&b""[..]));
+        assert_eq!(ref_mod(b"ABCDEF", 7, 0), Ok(&b""[..])); // start = size+1, empty at end
+        assert!(matches!(ref_mod(b"ABCDEF", 8, 0), Err(RefModError::OutOfBounds { .. }))); // start past end+1
+        // receiver zero length is a no-op (field untouched)
+        let mut f = *b"ABCDEF";
+        assert_eq!(apply_ref_mod(&mut f, 2, 0, b"ZZ"), Ok(()));
+        assert_eq!(&f, b"ABCDEF");
     }
 
     #[test]
