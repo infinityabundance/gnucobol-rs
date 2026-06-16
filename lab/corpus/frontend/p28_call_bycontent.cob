@@ -1,0 +1,22 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. MAIN.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 N PIC 9(3) VALUE 5.
+       01 M PIC 9(3) VALUE 8.
+       PROCEDURE DIVISION.
+           CALL "SUB" USING BY CONTENT N BY REFERENCE M.
+           DISPLAY "N=" N " M=" M.
+           STOP RUN.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SUB.
+       DATA DIVISION.
+       LINKAGE SECTION.
+       01 A PIC 9(3).
+       01 B PIC 9(3).
+       PROCEDURE DIVISION USING A B.
+           ADD 100 TO A.
+           ADD 100 TO B.
+           GOBACK.
+       END PROGRAM SUB.
+       END PROGRAM MAIN.

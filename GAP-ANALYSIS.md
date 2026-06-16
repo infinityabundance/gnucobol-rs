@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (28 fixed, 77 open)
+## Summary -- 105 gaps catalogued across 5 panels (29 fixed, 76 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 2 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 28 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 29 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -53,7 +53,6 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | # | gap | panel | the divergence |
 |---:|---|---|---|
 | 1 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
-| 2 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -342,12 +341,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 > Scope: INDEXED/BDB, file status errno mapping, locks, dlopen CALL, signals, exit/system/env, SORT spill
 
 #### `call-args-returncode` -- cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: any CALL ... USING that depends on argument passing or RETURN-CODE has no real effect
+**severity:** high &nbsp;·&nbsp; **observable:** yes: any CALL ... USING that depends on argument passing or RETURN-CODE has no real effect &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** call.c cob_call/cob_call_field invoke the resolved fn pointer through pargv[0..251] dispatch and return RETURN-CODE; cob_call_field scans contained-program overrides + system_tab.
 - **gnucobol-rs (Rust):** call.rs cob_call (894) returns 0 on cache hit / -1 on miss, argc unused, no argv; cob_call_field only trims the name -- no resolve, no override scan, no system_tab.
 - **Diff:** C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args.
-- **Evidence / plan:** Requires the execution/marshalling layer. CALL USING a field + check RETURN-CODE: port does not invoke it.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.93 (phase A): the execution/marshalling layer is built in the cobrun front-end. run_program_dialect now splits the source into a program registry (parse_programs/parse_one_program -- MAIN + any CONTAINED/nested PROGRAM-ID..END PROGRAM), and CALL "NAME" USING resolves the callee, runs it in its own field table, and marshals arguments: each BY REFERENCE (default) arg is copied into the callee's PROCEDURE DIVISION USING parameter (a LINKAGE item) and copied BACK afterwards (the caller sees the callee's update); BY CONTENT is copy-in only. RETURN-CODE is the signed S9(9) special register (make_return_code; cobc's leading-sign DISPLAY +000000042/-000000007 reproduced by display_return_code), shared into the callee and propagated back. GOBACK/EXIT PROGRAM end a program body. Oracle (built cobc, contained programs): CALL "SUB" USING N(5) where SUB ADDs 10 BY REFERENCE + MOVE 42 TO RETURN-CODE -> N=015 RC=+000000042 (corpus p27_call); CALL USING BY CONTENT N BY REFERENCE M -> N=005 M=108 (p28_call_bycontent). Both IDENTICAL to cobc 3.2 AND 3.1.2 (cobol_frontend_sweep 28/0). 885 lib tests green; the single-program sweep is unregressed. BOUNDARY (unchanged): CALL to an EXTERNAL .so needs lt_dlopen/lt_dlsym -- the declared dlopen boundary (dlopen-call-stub); a CALL to a non-contained name fails closed, never a silent no-op. RESIDUAL: BY VALUE arg conversion, system_tab (CBL_/C\$) targets, and the native call.rs cob_call path (the front-end is the executing layer).
 
 #### `dlopen-call-stub` -- lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: CALL to any external (not statically-registered) module always fails to resolve

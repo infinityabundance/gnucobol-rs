@@ -192,22 +192,13 @@ pub fn run_program_dialect(
 ) -> Result<Vec<u8>, RunError> {
     let up = source.to_uppercase();
     let mut toks = lex(&up);
-    let mut fields: HashMap<String, Field> = HashMap::new();
-    let mut out = Vec::new();
 
-    // locate PROCEDURE DIVISION; everything before it (after WORKING-STORAGE SECTION) is data.
-    let proc_at = find_seq(&toks, &["PROCEDURE", "DIVISION"])
+    // ENVIRONMENT DIVISION / SPECIAL-NAMES of the first program: CURRENCY SIGN IS "x" + DECIMAL-POINT IS
+    // COMMA apply program-wide. (Scanned before the first PROCEDURE DIVISION.)
+    let first_proc = find_seq(&toks, &["PROCEDURE", "DIVISION"])
         .ok_or_else(|| RunError::Unsupported("no PROCEDURE DIVISION".into()))?;
-    let ws_at = find_seq(&toks, &["WORKING-STORAGE", "SECTION"]);
-
-    // ENVIRONMENT DIVISION / SPECIAL-NAMES: the CURRENCY SIGN IS "x" clause (default '$') sets the
-    // currency symbol the edited PICTUREs use; DECIMAL-POINT IS COMMA swaps the '.'/',' roles. Scanned
-    // from the tokens before the data division.
-    let currency = parse_currency_sign(&toks, proc_at);
-    let decimal_comma = parse_decimal_comma(&toks, proc_at);
-    // Under DECIMAL-POINT IS COMMA a numeric literal carries its decimal as ',' (e.g. `1234,56`). The
-    // lexer keeps it as one Word; rewrite the comma to the internal '.'-decimal form so every downstream
-    // literal parser is unchanged. PICTURE strings (which contain letters) and field names never match.
+    let currency = parse_currency_sign(&toks, first_proc);
+    let decimal_comma = parse_decimal_comma(&toks, first_proc);
     if decimal_comma {
         for t in toks.iter_mut() {
             if let Tok::Word(w) = t {
@@ -218,97 +209,245 @@ pub fn run_program_dialect(
         }
     }
 
-    // --- DATA DIVISION: parse 01-level elementary items between WS SECTION and PROCEDURE DIVISION.
-    if let Some(ws) = ws_at {
-        let mut k = ws + 2;
-        // skip the '.' after SECTION
-        if matches!(toks.get(k), Some(Tok::Dot)) {
-            k += 1;
+    // Split the source into its programs (a MAIN plus any CONTAINED / nested programs reachable by CALL).
+    let (main_name, program_map) = parse_programs(&toks)?;
+    let ctx = Ctx { programs: &program_map, dialect, currency, decimal_comma };
+    let main = ctx.programs.get(&main_name).expect("main program is registered");
+
+    let mut out = Vec::new();
+    let mut fields = build_program_fields(main, &ctx)?;
+    run_program_body(main, &ctx, &mut fields, &mut out)?;
+    Ok(out)
+}
+
+/// A program's parsed shape: WORKING-STORAGE + LINKAGE items, the `PROCEDURE DIVISION USING` parameter
+/// names, and the procedure-body tokens.
+struct ProgramDef {
+    ws: Vec<ProgItem>,
+    linkage: Vec<ProgItem>,
+    using: Vec<String>,
+    proc_toks: Vec<Tok>,
+}
+
+/// One `01`-level elementary item (its name, PIC, and optional VALUE literal) -- the field is built at run
+/// time (so a CALL can build the callee's fields under the same dialect).
+struct ProgItem {
+    name: String,
+    pic: String,
+    value: Option<Tok>,
+}
+
+/// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
+/// needed to build any program's fields.
+struct Ctx<'a> {
+    programs: &'a HashMap<String, ProgramDef>,
+    dialect: crate::dialect::Dialect,
+    currency: u8,
+    decimal_comma: bool,
+}
+
+/// Split the token stream at `PROGRAM-ID` boundaries into a registry of programs; the first is the MAIN.
+fn parse_programs(toks: &[Tok]) -> Result<(String, HashMap<String, ProgramDef>), RunError> {
+    let starts: Vec<usize> = toks
+        .iter()
+        .enumerate()
+        .filter(|(_, t)| matches!(t, Tok::Word(w) if w == "PROGRAM-ID"))
+        .map(|(i, _)| i)
+        .collect();
+    if starts.is_empty() {
+        return Err(RunError::Unsupported("no PROGRAM-ID".into()));
+    }
+    let mut map = HashMap::new();
+    let mut main_name = None;
+    for (idx, &s) in starts.iter().enumerate() {
+        let end = starts.get(idx + 1).copied().unwrap_or(toks.len());
+        let (name, def) = parse_one_program(toks, s, end)?;
+        if main_name.is_none() {
+            main_name = Some(name.clone());
         }
-        while k < proc_at {
-            // each item: <level> NAME [PIC <pic>] [VALUE <lit>] .
-            let level = match toks.get(k) {
-                Some(Tok::Word(w)) => w.clone(),
-                _ => {
-                    k += 1;
-                    continue;
+        map.insert(name, def);
+    }
+    Ok((main_name.unwrap(), map))
+}
+
+/// Parse one program from `toks[start..end]` (start is its `PROGRAM-ID`).
+fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, ProgramDef), RunError> {
+    // PROGRAM-ID. NAME.
+    let mut k = start + 1;
+    if matches!(toks.get(k), Some(Tok::Dot)) {
+        k += 1;
+    }
+    let name = match toks.get(k) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("expected program name after PROGRAM-ID".into())),
+    };
+    let proc_at = find_seq_in(toks, &["PROCEDURE", "DIVISION"], start, end)
+        .ok_or_else(|| RunError::Unsupported(format!("{name}: no PROCEDURE DIVISION")))?;
+    let ws_at = find_seq_in(toks, &["WORKING-STORAGE", "SECTION"], start, proc_at);
+    let link_at = find_seq_in(toks, &["LINKAGE", "SECTION"], start, proc_at);
+
+    // WORKING-STORAGE items: from WS SECTION to LINKAGE SECTION (or PROCEDURE).
+    let ws = match ws_at {
+        Some(w) => parse_items(toks, w + 2, link_at.unwrap_or(proc_at))?,
+        None => Vec::new(),
+    };
+    let linkage = match link_at {
+        Some(l) => parse_items(toks, l + 2, proc_at)?,
+        None => Vec::new(),
+    };
+
+    // PROCEDURE DIVISION [USING name ...].
+    let mut p = proc_at + 2;
+    let mut using = Vec::new();
+    if matches!(toks.get(p), Some(Tok::Word(w)) if w == "USING") {
+        p += 1;
+        while p < end {
+            match toks.get(p) {
+                Some(Tok::Word(w)) if w == "BY" || w == "REFERENCE" || w == "CONTENT" || w == "VALUE" => {
+                    p += 1;
                 }
-            };
-            if level != "01" {
-                return Err(RunError::Unsupported(format!("only level 01 elementary items (got {level})")));
-            }
-            k += 1;
-            let name = match toks.get(k) {
-                Some(Tok::Word(w)) => w.clone(),
-                _ => return Err(RunError::Unsupported("expected data name after 01".into())),
-            };
-            k += 1;
-            // gather the rest of the item (until the terminating Dot).
-            let mut pic: Option<String> = None;
-            let mut value: Option<Tok> = None;
-            while k < proc_at {
-                match toks.get(k) {
-                    Some(Tok::Dot) => {
-                        k += 1;
-                        break;
-                    }
-                    Some(Tok::Word(w)) if w == "PIC" || w == "PICTURE" => {
-                        // optional "IS"
-                        k += 1;
-                        if matches!(toks.get(k), Some(Tok::Word(w)) if w=="IS") {
-                            k += 1;
-                        }
-                        if let Some(Tok::Word(p)) = toks.get(k) {
-                            pic = Some(p.clone());
-                            k += 1;
-                        }
-                    }
-                    Some(Tok::Word(w)) if w == "VALUE" => {
-                        k += 1;
-                        if matches!(toks.get(k), Some(Tok::Word(w)) if w=="IS") {
-                            k += 1;
-                        }
-                        value = toks.get(k).cloned();
-                        k += 1;
-                    }
-                    _ => {
-                        k += 1;
-                    }
+                Some(Tok::Word(w)) => {
+                    using.push(w.clone());
+                    p += 1;
                 }
+                _ => break,
             }
-            let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-            let field = make_field(&pic, value.as_ref(), currency, decimal_comma, dialect)?;
-            fields.insert(name, field);
         }
     }
+    if matches!(toks.get(p), Some(Tok::Dot)) {
+        p += 1;
+    }
+    // proc body: from here to END PROGRAM (or the range end).
+    let body_end = find_seq_in(toks, &["END", "PROGRAM"], p, end).unwrap_or(end);
+    let proc_toks = toks[p..body_end].to_vec();
 
-    // --- PROCEDURE DIVISION: execute statements (verb-delimited, with IF/PERFORM scopes).
-    let proc: Vec<Tok> = toks[(proc_at + 2)..].to_vec();
+    Ok((name, ProgramDef { ws, linkage, using, proc_toks }))
+}
+
+/// Parse the `01`-level elementary items in `toks[start..end]` (a WORKING-STORAGE or LINKAGE section body).
+fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, RunError> {
+    let mut items = Vec::new();
+    let mut k = start;
+    if matches!(toks.get(k), Some(Tok::Dot)) {
+        k += 1; // skip the '.' after SECTION
+    }
+    while k < end {
+        let level = match toks.get(k) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => {
+                k += 1;
+                continue;
+            }
+        };
+        // stop if we reach a new DIVISION/SECTION header word.
+        if level == "PROCEDURE" || level == "LINKAGE" || level == "DATA" {
+            break;
+        }
+        if level != "01" {
+            return Err(RunError::Unsupported(format!("only level 01 elementary items (got {level})")));
+        }
+        k += 1;
+        let name = match toks.get(k) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => return Err(RunError::Unsupported("expected data name after 01".into())),
+        };
+        k += 1;
+        let mut pic: Option<String> = None;
+        let mut value: Option<Tok> = None;
+        while k < end {
+            match toks.get(k) {
+                Some(Tok::Dot) => {
+                    k += 1;
+                    break;
+                }
+                Some(Tok::Word(w)) if w == "PIC" || w == "PICTURE" => {
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                        k += 1;
+                    }
+                    if let Some(Tok::Word(p)) = toks.get(k) {
+                        pic = Some(p.clone());
+                        k += 1;
+                    }
+                }
+                Some(Tok::Word(w)) if w == "VALUE" => {
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                        k += 1;
+                    }
+                    value = toks.get(k).cloned();
+                    k += 1;
+                }
+                _ => k += 1,
+            }
+        }
+        let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
+        items.push(ProgItem { name, pic, value });
+    }
+    Ok(items)
+}
+
+/// `find_seq` restricted to the window `toks[from..to]`.
+fn find_seq_in(toks: &[Tok], seq: &[&str], from: usize, to: usize) -> Option<usize> {
+    let to = to.min(toks.len());
+    'outer: for i in from..to.saturating_sub(seq.len().saturating_sub(1)) {
+        for (j, s) in seq.iter().enumerate() {
+            match toks.get(i + j) {
+                Some(Tok::Word(w)) if w == s => {}
+                _ => continue 'outer,
+            }
+        }
+        return Some(i);
+    }
+    None
+}
+
+/// Build a program's runtime field table (its WORKING-STORAGE items + the RETURN-CODE special register).
+/// LINKAGE fields are NOT created here -- a CALL fills them from the caller's arguments.
+fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, Field>, RunError> {
+    let mut fields = HashMap::new();
+    for it in &prog.ws {
+        let f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
+        fields.insert(it.name.clone(), f);
+    }
+    // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
+    fields.insert("RETURN-CODE".to_string(), make_return_code(0));
+    Ok(fields)
+}
+
+/// Execute a program's PROCEDURE DIVISION against `fields`, writing output to `out`. Returns when the body
+/// ends (`STOP RUN` / `GOBACK` / `EXIT PROGRAM` / falling off the end).
+fn run_program_body(
+    prog: &ProgramDef,
+    ctx: &Ctx,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+) -> Result<(), RunError> {
+    let proc = &prog.proc_toks;
     let mut pos = 0;
     if matches!(proc.first(), Some(Tok::Dot)) {
-        pos = 1; // skip the '.' after "PROCEDURE DIVISION."
+        pos = 1;
     }
-    // The top level runs sentence by sentence; each sentence is a block ending at a '.'.
     while pos < proc.len() {
         if matches!(proc.get(pos), Some(Tok::Dot)) {
             pos += 1;
             continue;
         }
-        let halted = run_block(&proc, &mut pos, &mut fields, &mut out, true)?;
+        let halted = run_block(proc, &mut pos, fields, out, true, ctx)?;
         if halted {
-            break; // STOP RUN
+            break; // STOP RUN / GOBACK / EXIT PROGRAM
         }
         if matches!(proc.get(pos), Some(Tok::Dot)) {
-            pos += 1; // consume the sentence-terminating '.'
+            pos += 1;
         }
     }
-    Ok(out)
+    Ok(())
 }
 
 /// Statement verbs that begin a new statement (so an operand list ends when one is seen).
 const STMT_VERBS: &[&str] = &[
     "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP",
-    "CONTINUE", "ACCEPT", "GO", "EVALUATE",
+    "CONTINUE", "ACCEPT", "GO", "EVALUATE", "CALL", "GOBACK", "EXIT",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE"];
@@ -326,6 +465,7 @@ fn run_block(
     fields: &mut HashMap<String, Field>,
     out: &mut Vec<u8>,
     exec: bool,
+    ctx: &Ctx,
 ) -> Result<bool, RunError> {
     loop {
         match toks.get(*pos) {
@@ -336,18 +476,28 @@ fn run_block(
                 *pos += 1;
                 match verb.as_str() {
                     "IF" => {
-                        if exec_if(toks, pos, fields, out, exec)? {
+                        if exec_if(toks, pos, fields, out, exec, ctx)? {
                             return Ok(true);
                         }
                     }
                     "PERFORM" => {
-                        if exec_perform(toks, pos, fields, out, exec)? {
+                        if exec_perform(toks, pos, fields, out, exec, ctx)? {
                             return Ok(true);
                         }
                     }
-                    "STOP" => {
-                        let _ = collect_operands(toks, pos); // consume RUN
+                    // STOP RUN halts everything; GOBACK / EXIT PROGRAM end the current program body (a CALL
+                    // returns to its caller). The front-end models all three as "end this body".
+                    "STOP" | "GOBACK" => {
+                        let _ = collect_operands(toks, pos); // consume RUN / trailing words
                         if exec {
+                            return Ok(true);
+                        }
+                    }
+                    "EXIT" => {
+                        // EXIT PROGRAM ends the body; a bare EXIT (paragraph exit) is a no-op.
+                        let rest = collect_operands(toks, pos);
+                        let is_prog = rest.iter().any(|t| matches!(t, Tok::Word(w) if w == "PROGRAM"));
+                        if exec && is_prog {
                             return Ok(true);
                         }
                     }
@@ -355,7 +505,7 @@ fn run_block(
                     _ => {
                         let stmt = collect_operands(toks, pos);
                         if exec {
-                            exec_stmt(&verb, &stmt, fields, out)?;
+                            exec_stmt(&verb, &stmt, fields, out, ctx)?;
                         }
                     }
                 }
@@ -392,6 +542,7 @@ fn exec_if(
     fields: &mut HashMap<String, Field>,
     out: &mut Vec<u8>,
     exec: bool,
+    ctx: &Ctx,
 ) -> Result<bool, RunError> {
     // condition tokens: from here until a statement verb, THEN, scope terminator, or '.'.
     let mut cond = Vec::new();
@@ -411,14 +562,14 @@ fn exec_if(
     let truth = if exec { eval_cond(&cond, fields)? } else { false };
 
     // THEN branch.
-    let halted = run_block(toks, pos, fields, out, exec && truth)?;
+    let halted = run_block(toks, pos, fields, out, exec && truth, ctx)?;
     if halted {
         return Ok(true);
     }
     // ELSE branch.
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "ELSE") {
         *pos += 1;
-        let halted = run_block(toks, pos, fields, out, exec && !truth)?;
+        let halted = run_block(toks, pos, fields, out, exec && !truth, ctx)?;
         if halted {
             return Ok(true);
         }
@@ -437,6 +588,7 @@ fn exec_perform(
     fields: &mut HashMap<String, Field>,
     out: &mut Vec<u8>,
     exec: bool,
+    ctx: &Ctx,
 ) -> Result<bool, RunError> {
     // forms: PERFORM <n> TIMES ... END-PERFORM ; PERFORM UNTIL <cond> ... END-PERFORM
     let is_until = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "UNTIL");
@@ -473,7 +625,7 @@ fn exec_perform(
     // first pass: if not executing, just skip the body once to find END-PERFORM.
     {
         let mut scan = *pos;
-        let _ = run_block(toks, &mut scan, fields, out, false)?;
+        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
         body_end = scan;
     }
 
@@ -483,7 +635,7 @@ fn exec_perform(
             let mut guard = 0u32;
             while !eval_cond(&cond, fields)? {
                 let mut p = body_start;
-                if run_block(toks, &mut p, fields, out, true)? {
+                if run_block(toks, &mut p, fields, out, true, ctx)? {
                     return Ok(true);
                 }
                 guard += 1;
@@ -498,7 +650,7 @@ fn exec_perform(
                 .ok_or_else(|| RunError::Unsupported("PERFORM TIMES count not an integer".into()))?;
             for _ in 0..n {
                 let mut p = body_start;
-                if run_block(toks, &mut p, fields, out, true)? {
+                if run_block(toks, &mut p, fields, out, true, ctx)? {
                     return Ok(true);
                 }
             }
@@ -856,6 +1008,31 @@ fn decimal_as_display(dec: &Decimal) -> (Vec<u8>, FieldAttr) {
     (bytes, attr)
 }
 
+/// The RETURN-CODE special register: a signed `S9(9)` DISPLAY field. (cobc renders it with a LEADING sign
+/// + 9 zero-padded digits, e.g. `+000000042`, reproduced by [`display_return_code`].)
+fn make_return_code(value: i64) -> Field {
+    let attr = lit_num_attr(9, 0, true);
+    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![b'0'; 9] };
+    let mag: Vec<u8> = value.unsigned_abs().to_string().bytes().map(|b| b - b'0').collect();
+    let _ = store_decimal(&mut f, &Decimal { negative: value < 0, digits: mag, scale: 0 });
+    f
+}
+
+/// Format the RETURN-CODE register the way cobc DISPLAYs it: a leading `+`/`-` then 9 zero-padded digits
+/// (`+000000042`, `+000000000`, `-000000007`).
+fn display_return_code(f: &Field) -> Vec<u8> {
+    let dec = match &f.storage {
+        Storage::Numeric(a) => source_to_decimal(&f.bytes, a).ok(),
+        _ => None,
+    }
+    .unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
+    let mag_full: String = dec.digits.iter().map(|d| (d + b'0') as char).collect();
+    let mag = mag_full.trim_start_matches('0');
+    let mag = if mag.is_empty() { "0" } else { mag };
+    let sign = if dec.negative && mag != "0" { '-' } else { '+' };
+    format!("{sign}{mag:0>9}").into_bytes()
+}
+
 /// Store alphanumeric source bytes into a field (left-justified, space-padded/truncated, or numeric
 /// receiver via the runtime move).
 fn store_alnum(field: &mut Field, src: &[u8]) -> Result<(), RunError> {
@@ -886,15 +1063,93 @@ fn exec_stmt(
     stmt: &[Tok],
     fields: &mut HashMap<String, Field>,
     out: &mut Vec<u8>,
+    ctx: &Ctx,
 ) -> Result<(), RunError> {
     match verb {
         "DISPLAY" => exec_display(stmt, fields, out),
         "MOVE" => exec_move(stmt, fields),
         "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" => exec_arith(verb, stmt, fields),
         "COMPUTE" => exec_compute(stmt, fields),
+        "CALL" => exec_call(stmt, fields, out, ctx),
         "STOP" => Ok(()), // STOP RUN
         other => Err(RunError::Unsupported(format!("verb {other}"))),
     }
+}
+
+/// `CALL "NAME" [USING [BY REFERENCE|CONTENT] arg ...]` to a CONTAINED (nested) program. The callee runs
+/// in its own field table: each `BY REFERENCE` (default) argument is copied into the callee's matching
+/// `PROCEDURE DIVISION USING` parameter and copied BACK afterwards (so the caller sees the callee's
+/// updates); `BY CONTENT` is copied in only. RETURN-CODE is shared (copied in, then back). A CALL to a
+/// name that is not a contained program fails closed (an external `.so` CALL is the declared dlopen
+/// boundary -- never silently no-op'd).
+fn exec_call(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let name = match stmt.first() {
+        Some(Tok::Str(s)) => String::from_utf8_lossy(s).to_string(),
+        Some(Tok::Word(w)) => w.clone(), // CALL <identifier> -- treat the literal word as the name
+        _ => return Err(RunError::Unsupported("CALL without a program name".into())),
+    };
+    let callee = ctx.programs.get(&name).ok_or_else(|| {
+        RunError::Unsupported(format!("CALL \"{name}\": not a contained program (external CALL is a boundary)"))
+    })?;
+
+    // Parse the USING argument list with optional BY REFERENCE/CONTENT modifiers.
+    let mut args: Vec<(String, bool)> = Vec::new(); // (caller field name, by_reference)
+    let mut by_ref = true;
+    let mut seen_using = false;
+    for t in &stmt[1..] {
+        if let Tok::Word(w) = t {
+            match w.as_str() {
+                "USING" => seen_using = true,
+                "BY" => {}
+                "REFERENCE" => by_ref = true,
+                "CONTENT" | "VALUE" => by_ref = false,
+                _ if seen_using => args.push((w.clone(), by_ref)),
+                _ => {}
+            }
+        }
+    }
+
+    // Build the callee's fields (its WORKING-STORAGE + RETURN-CODE), then fill its LINKAGE USING params
+    // from the caller's arguments (copy-in).
+    let mut cfields = build_program_fields(callee, ctx)?;
+    // RETURN-CODE is shared: seed the callee with the caller's current value.
+    if let Some(rc) = fields.get("RETURN-CODE") {
+        cfields.insert("RETURN-CODE".to_string(), rc.clone());
+    }
+    for (idx, param) in callee.using.iter().enumerate() {
+        let (argname, _) = args.get(idx).ok_or_else(|| {
+            RunError::Unsupported(format!(
+                "CALL \"{name}\": fewer USING args than the {} parameters",
+                callee.using.len()
+            ))
+        })?;
+        let argf = fields
+            .get(argname)
+            .ok_or_else(|| RunError::UndefinedName(argname.clone()))?
+            .clone();
+        cfields.insert(param.clone(), argf); // copy-in (the LINKAGE field takes the caller's value)
+    }
+
+    run_program_body(callee, ctx, &mut cfields, out)?;
+
+    // Copy-out: BY REFERENCE arguments receive the callee's (possibly modified) parameter value back.
+    for (idx, param) in callee.using.iter().enumerate() {
+        if let Some((argname, true)) = args.get(idx) {
+            if let Some(updated) = cfields.get(param) {
+                fields.insert(argname.clone(), updated.clone());
+            }
+        }
+    }
+    // RETURN-CODE propagates back to the caller.
+    if let Some(rc) = cfields.get("RETURN-CODE") {
+        fields.insert("RETURN-CODE".to_string(), rc.clone());
+    }
+    Ok(())
 }
 
 /// `COMPUTE r1 [r2 ...] [ROUNDED] = <expr>` -- evaluate an arithmetic expression and store the result
@@ -1075,7 +1330,8 @@ fn exec_display(stmt: &[Tok], fields: &HashMap<String, Field>, out: &mut Vec<u8>
                     continue;
                 }
                 let f = fields.get(w).ok_or_else(|| RunError::UndefinedName(w.clone()))?;
-                operands.push((display_bytes(f), alnum_attr()));
+                let bytes = if w == "RETURN-CODE" { display_return_code(f) } else { display_bytes(f) };
+                operands.push((bytes, alnum_attr()));
             }
             Tok::Dot => {}
         }
