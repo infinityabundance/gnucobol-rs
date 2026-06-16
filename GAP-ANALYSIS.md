@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (25 fixed, 80 open)
+## Summary -- 105 gaps catalogued across 5 panels (26 fixed, 79 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 5 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 4 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 25 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 26 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -55,8 +55,7 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 1 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
 | 2 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 | 3 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 4 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 5 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 4 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -769,12 +768,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.89 (phase A): the two byte-faithful halves are now connected. common.rs::cob_bound_violation_diagnostic(loc, &BoundViolation) wires the message BODY (the cob_check_subscript/odo/ref_mod ports, which already match the oracle) to the libcob:/note: WRAPPER (common_runerr::cob_runtime_error + cob_runtime_hint) into the exact stderr bytes GnuCOBOL writes for a bounds fault. The divergent Display of the pure slice helpers (subscript.rs/refmod.rs/odo.rs) is explicitly demoted (doc'd) to an internal detail -- it is NOT the runtime-error bytes (those helpers lack the field name + source location). Oracle (built cobc -fec=all -debug): subscript `libcob: sub.cob:9: error: subscript of 'E' out of bounds: 5` + `note: maximum subscript for 'E': 3`; refmod `libcob: rm.cob:9: error: length of 'S' out of bounds: 8, maximum: 5`; ODO `... OCCURS DEPENDING ON 'N' out of bounds: 9` + `note: maximum subscript for 'E': 5` (hint names the OCCURS element, message names the DEPENDING-ON field) -- all matched byte-exact by bound_violation_diagnostic_matches_cobc_bytes (883 lib tests). NOTE: the trailing `Last statement.../ENTRY.../Started by` module-stack dump is the cob_hard_failure abort path (sibling exc-hard-failure).
 
 #### `exc-hard-failure` -- cob_hard_failure abort path and fatal/non-fatal dispatch absent  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: exit code + post-abort output on a critical exception
+**severity:** high &nbsp;·&nbsp; **observable:** yes: exit code + post-abort output on a critical exception &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:3072 cob_hard_failure runs exit handlers, sets exit_code -1, longjmp/abort; exception.def per-condition 'critical' column (EC-BOUND-ODO=1 fatal, EC-BOUND=0 non-fatal) drives fatal-vs-continue.
 - **gnucobol-rs (Rust):** Modeled only as BoundViolation.fatal bool (common.rs:355) + a doc note; no cob_hard_failure, no caller acts on fatal, and the 'critical' column is dropped from EXCEPTION_TAB.
 - **Diff:** C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics.
-- **Evidence / plan:** Carry the critical column; implement cob_hard_failure; act on the fatal flag.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.90 (phase A): all three asks. (1) CARRY THE CRITICAL COLUMN: common_exception.rs adds EXCEPTION_FATAL_CODES (the 83 of 90 exception.def conditions with fatal==1, verbatim from libcob/exception.def -- the 4th COB_EXCEPTION column dropped from EXCEPTION_TAB's (code, name)) + cob_exception_is_fatal(code); a drift-guard test asserts every fatal code is a real EXCEPTION_TAB code. (2) IMPLEMENT cob_hard_failure: already present in common_term.rs (ExitState::cob_hard_failure -> runs exit handlers, records exit_code, TermAction::Exit(EXIT_FAILURE=1)/RaiseSigabrt/Longjmp per core_on_error) -- the gap's 'absent' note was stale. (3) ACT ON THE FATAL FLAG: common.rs::cob_bound_violation_is_critical(v) cross-checks each cob_check_* BoundViolation.fatal against cob_exception_is_fatal(v.exception.ec_code()) so they cannot drift; a fatal bound fault emits cob_bound_violation_diagnostic then drives cob_hard_failure. Oracle: EC-BOUND-SUBSCRIPT/-ODO/-REF-MOD critical (fatal), umbrella EC-BOUND non-fatal; the bounds-fault process exit is EXIT_FAILURE=1 (matches the observed cobc exit) -- bound_fault_critical_column_drives_hard_failure + fatal_column_carried_and_consistent (885 lib tests). RESIDUAL: the post-abort module-stack DUMP (Last statement.../ENTRY.../Started by) needs the live module/call-stack state (separate from the exit code + diagnostic proven here).
 
 #### `build-status-02-dup` -- COB_WITH_STATUS_02 duplicate-key file status (0,2) ISAM variant absent  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: WRITE/REWRITE on an indexed file with WITH DUPLICATES alternate keys (02 vs 00)

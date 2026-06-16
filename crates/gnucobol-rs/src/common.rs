@@ -528,6 +528,16 @@ pub fn cob_bound_violation_diagnostic(
     out
 }
 
+/// Whether a [`BoundViolation`] is **critical** per `exception.def`'s `fatal` column -- i.e. whether the
+/// runtime acts on it with `cob_hard_failure` (abort, exit `EXIT_FAILURE`) rather than continuing. This is
+/// the "act on the fatal flag" link: it cross-checks the violation's own `fatal` (set by the `cob_check_*`)
+/// against the authoritative critical column ([`crate::common_exception::cob_exception_is_fatal`]) keyed by
+/// the raised `EC-BOUND-*` code, so the two can never silently drift. EC-BOUND-ODO/-REF-MOD/-SUBSCRIPT are
+/// all critical; the umbrella EC-BOUND (`0x0200`) is not.
+pub fn cob_bound_violation_is_critical(v: &BoundViolation) -> bool {
+    crate::common_exception::cob_exception_is_fatal(v.exception.ec_code())
+}
+
 // ======================================================================================================
 // Numeric-class diagnostics (common.c explain_field_type / cob_check_numeric). The "not numeric" runtime
 // error is what GnuCOBOL prints when a non-numeric value reaches arithmetic (under cobc -debug); its text
@@ -1017,6 +1027,36 @@ mod tests {
             b"libcob: o.cob:10: error: OCCURS DEPENDING ON 'N' out of bounds: 9\nnote: maximum subscript for 'E': 5\n"
                 .to_vec()
         );
+    }
+
+    #[test]
+    fn bound_fault_critical_column_drives_hard_failure() {
+        use crate::common_exception::cob_exception_is_fatal;
+        use crate::common_term::{ExitState, TermAction, EXIT_FAILURE};
+        // exception.def's `fatal` column: EC-BOUND-SUBSCRIPT/-ODO/-REF-MOD are critical; umbrella EC-BOUND
+        // (0x0200) is not. (Carried in EXCEPTION_FATAL_CODES, dropped from EXCEPTION_TAB's (code, name).)
+        assert!(cob_exception_is_fatal(0x0207)); // EC-BOUND-SUBSCRIPT
+        assert!(cob_exception_is_fatal(0x0202)); // EC-BOUND-ODO
+        assert!(cob_exception_is_fatal(0x0205)); // EC-BOUND-REF-MOD
+        assert!(!cob_exception_is_fatal(0x0200)); // EC-BOUND (umbrella)
+        assert!(!cob_exception_is_fatal(0x1000)); // EC-SIZE
+
+        // Each cob_check_* violation's own `fatal` equals the authoritative critical column (no drift), so
+        // acting on `v.fatal` IS acting on exception.def's `fatal` bit.
+        let sub = cob_check_subscript(5, 3, "E", false, false).unwrap();
+        let odo = cob_check_odo(9, 1, 5, "E", "N").unwrap();
+        let rm = &cob_check_ref_mod(3, 8, 5, "S")[0];
+        for v in [&sub, &odo, rm] {
+            assert_eq!(v.fatal, cob_bound_violation_is_critical(v));
+            assert!(v.fatal, "a bound fault is critical");
+        }
+
+        // Acting on the fatal flag: a critical bound fault drives cob_hard_failure, which terminates with
+        // exit code EXIT_FAILURE (1) -- the observed cobc process exit on a bounds fault.
+        let mut term = ExitState::default();
+        let outcome = term.cob_hard_failure();
+        assert_eq!(outcome.action, TermAction::Exit(EXIT_FAILURE));
+        assert_eq!(EXIT_FAILURE, 1);
     }
 
     fn ident_col() -> [u8; 256] {

@@ -198,6 +198,30 @@ pub const EXCEPTION_TAB: &[(i32, &str)] = &[
 /// (`sizeof cob_exception_tab_code / sizeof(int)`).
 pub const EXCEPTION_TAB_SIZE: usize = EXCEPTION_TAB.len();
 
+/// The **`critical` (fatal) column** of `exception.def` -- the 4th argument of each
+/// `COB_EXCEPTION(code, tag, name, fatal)` row, dropped from [`EXCEPTION_TAB`]'s `(code, name)` pairs.
+/// These are the exception codes whose `fatal` is `1`: an *unhandled* exception of one of these
+/// conditions is critical, so `cob_hard_failure` aborts the run (vs a `fatal == 0` condition, which is
+/// recorded and execution continues). Verbatim from `research/gnucobol-3.2/libcob/exception.def` (83 of
+/// 90 conditions). The bound checks raise `EC-BOUND-ODO`/`-REF-MOD`/`-SUBSCRIPT` (all fatal) -- matching
+/// the `fatal: true` each `cob_check_*` already sets in its [`crate::common::BoundViolation`].
+pub const EXCEPTION_FATAL_CODES: &[i32] = &[
+    0x0101, 0x0202, 0x0203, 0x0204, 0x0205, 0x0206, 0x0207, 0x0208, 0x0303, 0x0304, 0x0305, 0x0306,
+    0x1901, 0x1902, 0x1903, 0x040A, 0x040B, 0x0401, 0x0402, 0x0404, 0x0405, 0x0406, 0x040C, 0x0407,
+    0x0408, 0x1503, 0x1504, 0x1501, 0x1502, 0x0603, 0x0703, 0x0704, 0x0705, 0x0706, 0x0803, 0x0801,
+    0x0802, 0x0805, 0x0806, 0x0807, 0x0808, 0x0902, 0x0B01, 0x0B02, 0x0B03, 0x0B05, 0x0B06, 0x0B07,
+    0x0B08, 0x0C02, 0x0D02, 0x0D03, 0x0D05, 0x0D06, 0x0E01, 0x0E02, 0x0E03, 0x0E05, 0x0E0B, 0x0E0C,
+    0x1001, 0x1002, 0x1004, 0x1005, 0x1006, 0x1007, 0x1101, 0x1102, 0x1104, 0x1105, 0x1106, 0x1405,
+    0x1601, 0x1602, 0x1603, 0x1604, 0x1605, 0x1606, 0x1607, 0x1608, 0x1609, 0x1610, 0x1710,
+];
+
+/// Whether an exception `code` is **critical/fatal** (`exception.def`'s 4th column == 1): an unhandled
+/// exception of this condition drives `cob_hard_failure` rather than continuing. Looks the code up in
+/// [`EXCEPTION_FATAL_CODES`].
+pub fn cob_exception_is_fatal(code: i32) -> bool {
+    EXCEPTION_FATAL_CODES.contains(&code)
+}
+
 // Selected `enum cob_exception_id` indices used by name resolution / status translation. These are the
 // array indices into EXCEPTION_TAB (== the enum values), taken from exception.def's file order.
 /// `COB_EC_IMP_FEATURE_DISABLED` index.
@@ -409,6 +433,22 @@ mod tests {
     // Index helper: find the table index of a name (for tests; tab order is the enum order).
     fn idx(name: &str) -> usize {
         EXCEPTION_TAB.iter().position(|&(_, n)| n == name).unwrap()
+    }
+
+    #[test]
+    fn fatal_column_carried_and_consistent() {
+        // 83 of the 90 exception.def conditions are critical (fatal == 1).
+        assert_eq!(EXCEPTION_FATAL_CODES.len(), 83);
+        // Drift guard: every fatal code is a real EXCEPTION_TAB condition code.
+        for &code in EXCEPTION_FATAL_CODES {
+            assert!(
+                EXCEPTION_TAB.iter().any(|&(c, _)| c == code),
+                "fatal code {code:#06x} is not in EXCEPTION_TAB"
+            );
+        }
+        // Spot-check the boundary: bound subscript/odo/ref-mod fatal; umbrella EC-BOUND + EC-SIZE not.
+        assert!(cob_exception_is_fatal(0x0207) && cob_exception_is_fatal(0x0202) && cob_exception_is_fatal(0x0205));
+        assert!(!cob_exception_is_fatal(0x0200) && !cob_exception_is_fatal(0x1000));
     }
 
     #[test]
