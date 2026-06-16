@@ -173,28 +173,31 @@ fn compute(a: Dec, b: Dec, op: Op) -> Result<Dec, ArithError> {
 /// `a / b` evaluated at exactly `result_scale` fractional digits, truncating toward zero (the COBOL
 /// DIVIDE truncation). `result_scale = a/b * 10^result_scale = a.mag * 10^(result_scale+b.scale-a.scale)
 /// / b.mag`. Fails closed on divide-by-zero (`GNURUST.19`; `ON SIZE ERROR` is a future court).
-fn compute_divide(a: Dec, b: Dec, result_scale: i32) -> Result<Dec, ArithError> {
+/// Returns `(quotient at result_scale, inexact)` where `inexact` is true iff the division dropped a
+/// nonzero remainder below `result_scale`. The remainder is the sticky bit the rounding step needs: with
+/// a single guard digit, the round digit alone cannot distinguish an exact half (e.g. `x.5`) from
+/// `x.5…nonzero`, so `do_round` ORs `inexact` into its sticky/exact tests. GnuCOBOL gets this for free
+/// because `cob_decimal_div` shifts the dividend by `COB_MAX_DIGITS` before `mpz_tdiv_q` (numeric.c:2260),
+/// carrying full precision into `cob_decimal_get_field`'s rounder.
+fn compute_divide(a: Dec, b: Dec, result_scale: i32) -> Result<(Dec, bool), ArithError> {
     if b.mag == 0 {
         return Err(ArithError::DivideByZero);
     }
     let k = result_scale + b.scale - a.scale;
-    let mag = if k >= 0 {
+    let (mag, inexact) = if k >= 0 {
         let num = a
             .mag
             .checked_mul(pow10(k as u32).ok_or(ArithError::OutOfRange)?)
             .ok_or(ArithError::OutOfRange)?;
-        num / b.mag // i128 division truncates toward zero (sign = sign(num)*sign(b))
+        (num / b.mag, num % b.mag != 0) // i128 division truncates toward zero
     } else {
         let den = b
             .mag
             .checked_mul(pow10((-k) as u32).ok_or(ArithError::OutOfRange)?)
             .ok_or(ArithError::OutOfRange)?;
-        a.mag / den
+        (a.mag / den, a.mag % den != 0)
     };
-    Ok(Dec {
-        mag,
-        scale: result_scale,
-    })
+    Ok((Dec { mag, scale: result_scale }, inexact))
 }
 
 /// `DIVIDE` quotient into a GIVING receiver (`GNURUST.19`): `receiver := lhs / rhs`, returning the
@@ -214,13 +217,13 @@ pub fn cob_divide(
 ) -> Result<Vec<u8>, ArithError> {
     let dl = decode(lhs, lhs_attr)?;
     let dr = decode(rhs, rhs_attr)?;
-    let guard = if round == Round::NearAwayFromZero {
-        1
-    } else {
-        0
-    };
-    let q = compute_divide(dl, dr, recv_attr.scale as i32 + guard)?;
-    store(q, recv_attr, round, false)
+    // One guard digit for EVERY rounding mode (was only NEAREST-AWAY) plus the division's `inexact`
+    // sticky bit — so do_round can distinguish an exact half from `…5…nonzero` for NEAREST-EVEN,
+    // NEAREST-TOWARD-ZERO, PROHIBITED, AWAY-FROM-ZERO and TOWARD-GREATER/LESSER. TRUNCATION drops the
+    // guard digit (unchanged); NEAREST-AWAY ignores the sticky (≥5 always rounds away) — both stay
+    // byte-identical to the sealed divide_sweep.
+    let (q, inexact) = compute_divide(dl, dr, recv_attr.scale as i32 + 1)?;
+    store(q, recv_attr, round, false, inexact)
 }
 
 /// `DIVIDE` with a `REMAINDER` receiver (`GNURUST.REMAINDER.1`): for `DIVIDE a BY b GIVING q REMAINDER r`
@@ -241,13 +244,14 @@ pub fn cob_divide_remainder(
 ) -> Result<(Vec<u8>, Vec<u8>), ArithError> {
     let dl = decode(lhs, lhs_attr)?;
     let dr = decode(rhs, rhs_attr)?;
-    // quotient truncated toward zero to the quotient receiver's scale (the value as stored in GIVING)
-    let q = compute_divide(dl, dr, quot_attr.scale as i32)?;
+    // quotient truncated toward zero to the quotient receiver's scale (the value as stored in GIVING);
+    // REMAINDER uses the un-rounded quotient, so the division's inexactness is irrelevant here.
+    let (q, _inexact) = compute_divide(dl, dr, quot_attr.scale as i32)?;
     // remainder = dividend − (stored quotient × divisor), exact, then truncated into the remainder receiver
     let qd = compute(q, dr, Op::Multiply)?;
     let r = compute(dl, qd, Op::Subtract)?;
-    let quot_bytes = store(q, quot_attr, Round::Truncate, false)?;
-    let rem_bytes = store(r, rem_attr, Round::Truncate, false)?;
+    let quot_bytes = store(q, quot_attr, Round::Truncate, false, false)?;
+    let rem_bytes = store(r, rem_attr, Round::Truncate, false, false)?;
     Ok((quot_bytes, rem_bytes))
 }
 
@@ -431,21 +435,26 @@ fn mul_store_big(
         mag = mag * 10 + d as i128;
     }
     let mag = if positive { mag } else { -mag };
-    store(Dec { mag, scale: tr }, recv, Round::Truncate, bcd_path)
+    store(Dec { mag, scale: tr }, recv, Round::Truncate, bcd_path, false)
 }
 
 /// Faithful port of `cob_decimal_do_round` (numeric.c:1936): round `(mag, scale)` toward the target
 /// `tgt` scale per `round`, returning the adjusted `(mag, scale)`. The caller then truncates to the
 /// field scale (matching libcob's post-round `shift_decimal` to `COB_FIELD_SCALE`). Only invoked
 /// when the value is non-zero and actually narrows (`tgt < scale`); other cases are a no-op upstream.
-fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32), ArithError> {
+fn do_round(mag: i128, scale: i32, tgt: i32, round: Round, inexact: bool) -> Result<(i128, i32), ArithError> {
+    // `inexact` (a divide's dropped remainder below `scale`) is a sticky bit: it makes a value that
+    // *looks* exact at `scale` actually non-exact. It ORs into the "any dropped digit" tests
+    // (AWAY/TOWARD-GREATER/LESSER/PROHIBITED) and breaks the exact-half tie tests (NEAR-EVEN,
+    // NEAR-TOWARD-ZERO). NEAREST-AWAY and TRUNCATION never consult it, so `inexact: false` (every
+    // non-divide caller) reproduces the original do_round byte-for-byte.
     let sign: i128 = if mag > 0 { 1 } else { -1 };
     match round {
         // COB_STORE_TRUNCATION: drop the low digits (handled by the caller's adjust step).
         Round::Truncate => Ok((mag, scale)),
         // COB_STORE_PROHIBITED: a dropped non-zero digit is a size error.
         Round::Prohibited => {
-            if trem_pow10(mag, (scale - tgt) as u32)? != 0 {
+            if trem_pow10(mag, (scale - tgt) as u32)? != 0 || inexact {
                 Err(ArithError::RoundingProhibited)
             } else {
                 Ok((mag, scale))
@@ -454,7 +463,7 @@ fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32)
         // COB_STORE_AWAY_FROM_ZERO: if inexact, push the magnitude past the boundary.
         Round::AwayFromZero => {
             let divisor = pow10((scale - tgt) as u32).ok_or(ArithError::OutOfRange)?;
-            let mag = if mag % divisor != 0 {
+            let mag = if mag % divisor != 0 || inexact {
                 mag.checked_add(sign * divisor).ok_or(ArithError::OutOfRange)?
             } else {
                 mag
@@ -464,7 +473,7 @@ fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32)
         // COB_STORE_TOWARD_GREATER (ceiling): only positive inexact values move up.
         Round::TowardGreater => {
             let divisor = pow10((scale - tgt) as u32).ok_or(ArithError::OutOfRange)?;
-            let mag = if mag % divisor != 0 && sign == 1 {
+            let mag = if (mag % divisor != 0 || inexact) && sign == 1 {
                 mag.checked_add(divisor).ok_or(ArithError::OutOfRange)?
             } else {
                 mag
@@ -474,7 +483,7 @@ fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32)
         // COB_STORE_TOWARD_LESSER (floor): only negative inexact values move down.
         Round::TowardLesser => {
             let divisor = pow10((scale - tgt) as u32).ok_or(ArithError::OutOfRange)?;
-            let mag = if mag % divisor != 0 && sign == -1 {
+            let mag = if (mag % divisor != 0 || inexact) && sign == -1 {
                 mag.checked_sub(divisor).ok_or(ArithError::OutOfRange)?
             } else {
                 mag
@@ -483,9 +492,9 @@ fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32)
         }
         // COB_STORE_NEAR_TOWARD_ZERO: nearest, exact ties truncate toward zero. libcob's `exact`
         // test is `value mod (5*10^(cur-tgt-1)) == 0` (true for both an exact value and an exact
-        // half), computed on the value *before* the shift.
+        // half), computed on the value *before* the shift. A divide's sticky remainder breaks the tie.
         Round::NearTowardZero => {
-            let exact = mag % five_pow10((scale - tgt - 1) as u32)? == 0;
+            let exact = !inexact && mag % five_pow10((scale - tgt - 1) as u32)? == 0;
             let k = (scale - tgt - 1) as u32;
             let mut mag = if k > 0 { tdiv_pow10(mag, k)? } else { mag };
             let scale = tgt + 1;
@@ -497,7 +506,7 @@ fn do_round(mag: i128, scale: i32, tgt: i32, round: Round) -> Result<(i128, i32)
         // COB_STORE_NEAR_EVEN (banker's): nearest, exact ties go to the even kept digit. Same
         // `exact` test, then the kept (post-shift) digit pair {05,25,45,65,85} = even kept digit.
         Round::NearEven => {
-            let exact = mag % five_pow10((scale - tgt - 1) as u32)? == 0;
+            let exact = !inexact && mag % five_pow10((scale - tgt - 1) as u32)? == 0;
             let k = (scale - tgt - 1) as u32;
             let mut mag = if k > 0 { tdiv_pow10(mag, k)? } else { mag };
             let scale = tgt + 1;
@@ -543,6 +552,7 @@ fn store(
     attr: &FieldAttr,
     round: Round,
     bcd_path: bool,
+    inexact: bool,
 ) -> Result<Vec<u8>, ArithError> {
     let target_scale = attr.scale as i32;
     let target_digits = attr.digits as usize;
@@ -560,7 +570,7 @@ fn store(
     // diverges from cob_decimal only at NEAREST-EVEN, which it resolves away-from-zero (no to-even).
     if mag != 0 && target_scale < scale {
         let eff = if bcd_path { bcd_round_mode(round) } else { round };
-        let (m, s) = do_round(mag, scale, target_scale, eff)?;
+        let (m, s) = do_round(mag, scale, target_scale, eff, inexact)?;
         mag = m;
         scale = s;
     }
@@ -644,7 +654,9 @@ pub fn cob_arith(
     let bcd_path = matches!(op, Op::Add | Op::Subtract)
         && a_attr.field_type == crate::attr::COB_TYPE_NUMERIC_PACKED;
     match compute(da, db, op) {
-        Ok(r) => store(r, a_attr, round, bcd_path),
+        // ADD/SUBTRACT/MULTIPLY: the exact result lives in `r` (any dropped digits are already in its
+        // magnitude), so there is no division-style sticky bit — pass `inexact: false`.
+        Ok(r) => store(r, a_attr, round, bcd_path, false),
         // A MULTIPLY whose i128 product overflows: carry the exact 256-bit product (GNURUST.BIGNUM.1)
         // instead of failing closed, matching libcob's GMP product + low-digit truncating store.
         Err(ArithError::OutOfRange) if matches!(op, Op::Multiply) => {
@@ -680,7 +692,7 @@ mod tests {
     /// integer back. Exercises the full do_round + scale-adjust + cob_move path (GNURUST.ROUND.1).
     fn round_int(mag: i128, scale: i32, mode: Round) -> Result<i128, ArithError> {
         let attr = disp(6, 0, true);
-        let bytes = store(Dec { mag, scale }, &attr, mode, false)?;
+        let bytes = store(Dec { mag, scale }, &attr, mode, false, false)?;
         Ok(decode(&bytes, &attr)?.mag)
     }
 
@@ -894,6 +906,29 @@ mod tests {
         )
         .unwrap();
         assert_eq!(&r, b"0000333");
+    }
+
+    #[test]
+    fn divide_rounded_all_modes_vs_cobc() {
+        // Ground truth captured from the built GnuCOBOL 3.2 oracle: `DIVIDE x BY y GIVING z ROUNDED
+        // MODE IS <mode>` for tie/inexact quotients into a scale-0 receiver. Before the fix, the
+        // non-NEAREST-AWAY modes got no guard digit and the divide's sticky remainder was discarded,
+        // so ev_35/aw_35/tg_35/ev_2501/nt_2501 were wrong (3 instead of 4, 2 instead of 3).
+        let n4 = disp(4, 0, false);
+        let n6 = disp(6, 0, false);
+        let div = |a: &[u8], aa: &FieldAttr, b: &[u8], ba: &FieldAttr, m: Round| {
+            cob_divide(a, aa, b, ba, &n6, m).unwrap()
+        };
+        // 35 / 10 = 3.5 (exact tie) -> scale-0
+        assert_eq!(&div(b"0035", &n4, b"0010", &n4, Round::NearEven), b"000004", "ev_35: 3.5 -> even 4");
+        assert_eq!(&div(b"0035", &n4, b"0010", &n4, Round::NearAwayFromZero), b"000004", "na_35");
+        assert_eq!(&div(b"0035", &n4, b"0010", &n4, Round::NearTowardZero), b"000003", "nt_35: tie toward zero");
+        assert_eq!(&div(b"0035", &n4, b"0010", &n4, Round::AwayFromZero), b"000004", "aw_35: inexact -> away");
+        assert_eq!(&div(b"0035", &n4, b"0010", &n4, Round::TowardGreater), b"000004", "tg_35: ceiling");
+        assert_eq!(&div(b"0035", &n4, b"0010", &n4, Round::TowardLesser), b"000003", "tl_35: floor");
+        // 2501 / 1000 = 2.501 (above the half, sticky) -> scale-0
+        assert_eq!(&div(b"002501", &n6, b"001000", &n6, Round::NearEven), b"000003", "ev_2501: >2.5 -> 3");
+        assert_eq!(&div(b"002501", &n6, b"001000", &n6, Round::NearTowardZero), b"000003", "nt_2501: >2.5 -> 3");
     }
 
     #[test]
@@ -1133,7 +1168,7 @@ mod kani_proofs {
         // bound the pow10 loop; larger scales only widen the (checked) pow10 overflow -> Err path, no
         // new panic surface.
         kani::assume(mag != 0 && tgt < scale && scale < 6);
-        let _ = do_round(mag as i128, scale as i32, tgt as i32, mode);
+        let _ = do_round(mag as i128, scale as i32, tgt as i32, mode, false);
     }
 
     /// The arithmetic ops are total over symbolic operand bytes for fixed field attrs: Ok(bytes) or a typed

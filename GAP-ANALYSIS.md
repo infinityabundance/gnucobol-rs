@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (2 fixed, 103 open)
+## Summary -- 105 gaps catalogued across 5 panels (3 fixed, 102 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 20 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 19 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 43 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 24 | narrow, or faithful-but-surprising |
 | **latent** | 16 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 2 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 3 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -53,25 +53,24 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | # | gap | panel | the divergence |
 |---:|---|---|---|
 | 1 | **DIVIDE intermediate precision capped at i128 (~38 digits) vs GMP 38-digit-shifted dividend** | numeric | C produces a correct truncated quotient when the scaled dividend exceeds 38 digits; Rust fails closed |
-| 2 | **DIVIDE ROUNDED guard digit only added for NEAREST-AWAY, not the other 7 modes** | numeric | DIVIDE ROUNDED in any mode != NEAREST-AWAY on a non-terminating quotient: Rust lacks the dropped-digit/sticky info, so the rounding decision (and PROHIBITED's size-error trigger) can differ from C |
-| 3 | **INDEXED organization is an in-memory BTreeMap; no Berkeley DB / ISAM on-disk store** | osfiles | C persists keyed records as on-disk page files; Rust holds them in process memory that evaporates on drop and never touches the filesystem |
-| 4 | **A .dat/.idx (or BDB) file written by real GnuCOBOL cannot be read by the port** | osfiles | No parsing path from a Berkeley DB page file or ISAM .idx/.dat into the BTreeMap |
-| 5 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
-| 6 | **Open errno switch collapsed to exists/not-exists: status 37/61/34/open-time-39 unreachable** | osfiles | C distinguishes EACCES/EISDIR/EROFS(37), EAGAIN(61), ENOSPC(34), open-time 39; Rust reduces all to 35/05/00 |
-| 7 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
-| 8 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 9 | **SORT compares numeric keys byte-wise instead of by numeric value -> wrong output order** | osfiles | C orders numeric keys by value; Rust by raw representation bytes |
-| 10 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
-| 11 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
-| 12 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
-| 13 | **ref-mod-zero-length hardcoded to 'no' -- contradicts the GnuCOBOL DEFAULT (yes)** | dialect | MOVE X(5:0) yields an empty string under default GnuCOBOL but the port refuses it |
-| 14 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
-| 15 | **Bound/numeric check functions never call cob_set_exception (the two halves are disconnected)** | dialect | After a bounds/numeric violation, Rust last_exception_code stays 0 where C holds 0x0207/0x0202/0x0205/0x0303; EXCEPTION-STATUS differs |
-| 16 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 17 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 18 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
-| 19 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
-| 20 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 2 | **INDEXED organization is an in-memory BTreeMap; no Berkeley DB / ISAM on-disk store** | osfiles | C persists keyed records as on-disk page files; Rust holds them in process memory that evaporates on drop and never touches the filesystem |
+| 3 | **A .dat/.idx (or BDB) file written by real GnuCOBOL cannot be read by the port** | osfiles | No parsing path from a Berkeley DB page file or ISAM .idx/.dat into the BTreeMap |
+| 4 | **Alternate keys, DUPLICATES (the little-endian dupno trailer), and READ PREVIOUS are unported** | osfiles | No secondary index, no dupno 4-byte trailer, no COB_DUPSWAP quirk, no READ PREVIOUS, no 02 status |
+| 5 | **Open errno switch collapsed to exists/not-exists: status 37/61/34/open-time-39 unreachable** | osfiles | C distinguishes EACCES/EISDIR/EROFS(37), EAGAIN(61), ENOSPC(34), open-time 39; Rust reduces all to 35/05/00 |
+| 6 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
+| 7 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
+| 8 | **SORT compares numeric keys byte-wise instead of by numeric value -> wrong output order** | osfiles | C orders numeric keys by value; Rust by raw representation bytes |
+| 9 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
+| 10 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
+| 11 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
+| 12 | **ref-mod-zero-length hardcoded to 'no' -- contradicts the GnuCOBOL DEFAULT (yes)** | dialect | MOVE X(5:0) yields an empty string under default GnuCOBOL but the port refuses it |
+| 13 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
+| 14 | **Bound/numeric check functions never call cob_set_exception (the two halves are disconnected)** | dialect | After a bounds/numeric violation, Rust last_exception_code stays 0 where C holds 0x0207/0x0202/0x0205/0x0303; EXCEPTION-STATUS differs |
+| 15 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
+| 16 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
+| 17 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
+| 18 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
+| 19 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -204,12 +203,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Port compute_divide over Mpz (gmp.rs) replicating shift_decimal(38+neg-scale) then tdiv_q. Differential-test 18-digit / small-divisor at scale 18 vs oracle.
 
 #### `div-guard-digit-only-near-away` -- DIVIDE ROUNDED guard digit only added for NEAREST-AWAY, not the other 7 modes  
-**severity:** high &nbsp;·&nbsp; **observable:** conditional: DIVIDE ROUNDED in a mode other than NEAREST-AWAY with a quotient past receiver scale
+**severity:** high &nbsp;·&nbsp; **observable:** conditional: DIVIDE ROUNDED in a mode other than NEAREST-AWAY with a quotient past receiver scale &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:2260 cob_decimal_div computes the quotient to COB_MAX_DIGITS guard digits unconditionally, then get_field applies do_round for whichever of the 8 modes -- every mode sees full guard precision.
 - **gnucobol-rs (Rust):** arith.rs:217 cob_divide adds exactly one guard digit only when round==NearAwayFromZero; other modes get the quotient at receiver scale with no guard.
 - **Diff:** DIVIDE ROUNDED in any mode != NEAREST-AWAY on a non-terminating quotient: Rust lacks the dropped-digit/sticky info, so the rounding decision (and PROHIBITED's size-error trigger) can differ from C.
-- **Evidence / plan:** Compute the quotient with a full guard regardless of mode and feed do_round; or add one guard + a sticky flag. Test DIVIDE ROUNDED MODE NEAREST-EVEN with a 1/3 quotient.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): compute_divide now returns the division's inexact (sticky) bit; cob_divide gives ONE guard digit to EVERY mode (was NEAREST-AWAY only) and threads inexact through store -> do_round, which ORs it into the any-dropped tests (AWAY/TOWARD-GREATER/LESSER/PROHIBITED) and breaks the exact-half tie tests (NEAREST-EVEN, NEAREST-TOWARD-ZERO). NEAREST-AWAY/TRUNCATION never read it, so the sealed divide_sweep (736/0) + round_sweep (6720/0) are byte-unchanged. Proven: divide_rounded_all_modes_vs_cobc asserts 8 tie/inexact cases (ev_35->4, aw_35->4, tg_35->4, ev_2501->3, nt_2501->3, ...) against the built GnuCOBOL DIVIDE ... ROUNDED MODE oracle; the old guard=0 path gave 5 of 8 wrong.
 
 #### `arith-i128-add-sub-overflow` -- ADD/SUBTRACT operand alignment overflows i128 where GMP is exact  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: max(scale)+integer-digits of an operand exceeds 38 during alignment
