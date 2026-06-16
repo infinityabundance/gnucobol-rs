@@ -1152,9 +1152,15 @@ pub fn cob_decimal_print(d: &CobDecimal) -> String {
 /// literally as libcob does — `mpf_set_d` into a real 2048-bit [`Mpf`], then `cob_decimal_set_mpf_core`
 /// (`mpf_get_str` at 96 significant digits). No f64 proxy: the `Mpf` is a genuine binary float, and the
 /// whole path is byte-identical to the oracle over MOVE COMP-2→DISPLAY (`double_move_sweep`, 392/0).
+/// The all-spaces double: a COMP-2 field left at its `VALUE SPACES` / uninitialised image. GnuCOBOL
+/// reinterprets the 8 field bytes as a `cob_u64_t` (`ud.l1`) and compares against `i64_spaced_out`
+/// (`memset(' ')`, numeric.c:4490/930); `v.to_bits()` is that same little-endian reinterpretation.
+const F64_SPACED_OUT: u64 = 0x2020_2020_2020_2020;
+
 pub fn cob_decimal_set_double(v: f64) -> CobDecimal {
-    // numeric.c guards zero / non-finite (and an uninitialised-double sentinel) before the mpf path.
-    if v == 0.0 || !v.is_finite() {
+    // numeric.c:930 maps zero, the all-spaces uninitialised-COMP-2 sentinel, and non-finite to decimal 0
+    // before the mpf path. The sentinel is a *bit-pattern* test (ud.l1), not a value test.
+    if v == 0.0 || v.to_bits() == F64_SPACED_OUT || !v.is_finite() {
         return CobDecimal { value: Mpz::new(), scale: 0 };
     }
     // mpf_set_d(cob_mpft, v); cob_decimal_set_mpf_core(d, cob_mpft) -- literal, over the real Mpf.
@@ -1274,6 +1280,18 @@ mod tests {
         let sub = cob_sub_int(f, &a, i32::MIN, Round::Truncate).expect("no panic, no error");
         let add = cob_add_int(f, &a, i32::MIN, Round::Truncate).expect("add ok");
         assert_eq!(sub, add, "cob_sub_int(f, INT_MIN) must equal cob_add_int(f, INT_MIN) per -fwrapv");
+    }
+
+    #[test]
+    fn set_double_spaces_sentinel_is_zero() {
+        // An all-spaces (uninitialised / VALUE SPACES) COMP-2 image maps to decimal 0 (numeric.c:930),
+        // matching the cobc oracle: MOVE of a SPACES-redefined COMP-2 DISPLAYs 0000.0000. The C test is
+        // on the bit pattern (ud.l1 == i64_spaced_out), not the f64 value.
+        let spaces = f64::from_bits(0x2020_2020_2020_2020);
+        assert_ne!(spaces, 0.0, "the sentinel double is a nonzero value (~1.16e-152)");
+        assert_eq!(cob_decimal_set_double(spaces).value.to_i128(), Some(0));
+        // a genuine value is unaffected by the sentinel guard (nonzero mantissa).
+        assert_ne!(cob_decimal_set_double(2.5).value.to_i128(), Some(0));
     }
 
     fn dec(value: &str, scale: i32) -> CobDecimal {

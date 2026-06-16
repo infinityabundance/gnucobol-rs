@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (3 fixed, 102 open)
+## Summary -- 105 gaps catalogued across 5 panels (4 fixed, 101 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 19 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 43 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 24 | narrow, or faithful-but-surprising |
+| **low** | 23 | narrow, or faithful-but-surprising |
 | **latent** | 16 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 3 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 4 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -275,12 +275,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Confirm data_offset/size agree with COB_FIELD_DATA for SIGN LEADING SEPARATE; covered by FLOAT-sealed decode tests.
 
 #### `float-spaced-out-sentinel` -- i64_spaced_out SPACES sentinel for uninitialised COMP-2 not ported  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: reading a space-init COMP-2 before any numeric MOVE
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: reading a space-init COMP-2 before any numeric MOVE &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:930 cob_decimal_set_double maps a double whose 8 bytes == 0x2020202020202020 to decimal 0 -- a SPACES-init COMP-2 reads as zero.
 - **gnucobol-rs (Rust):** cob_decimal.rs:1152 set_double guards only v==0.0 || !v.is_finite(); no all-spaces bit-pattern case.
 - **Diff:** A never-MOVEd space-init COMP-2: Rust yields ~1.16e-152; C yields 0.
-- **Evidence / plan:** At the COMP-2 read site reject raw bytes 0x2020202020202020 -> zero (test bytes, not the f64).
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_decimal_set_double now guards v.to_bits() == 0x2020202020202020 (the C's ud.l1 == i64_spaced_out bit-pattern test, numeric.c:930) -> decimal 0. Oracle-confirmed: cobc MOVE of a SPACES-redefined COMP-2 DISPLAYs 0000.0000; unit test set_double_spaces_sentinel_is_zero; double_move_sweep 392/0 unchanged.
 
 #### `mpf-getstr-round-half-up` -- Mpf::get_str rounds half-up; GMP mpf_get_str rounds half-to-even at digit 96  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: a transcendental result with an exact half at digit 96 and even predecessor
