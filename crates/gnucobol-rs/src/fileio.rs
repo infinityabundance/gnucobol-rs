@@ -1551,6 +1551,23 @@ impl IndexedStore {
         }
     }
 
+    /// Load an INDEXED file written by the genuine GnuCOBOL compiler: parse the Berkeley DB B-tree
+    /// `.dat` bytes (via the pure-safe `gnucobol-rs-bdb-format` crate) and populate this store with the
+    /// key->record pairs. This is the read path for cross-tool interchange -- a `.dat` produced by real
+    /// `cobc` (libcob over Berkeley DB) becomes readable by the port. Returns the record count, or a
+    /// typed error if the bytes are not a B-tree DB file (e.g. an empty/never-written file). The
+    /// BDB key is the COBOL record key; the BDB data is the full record image, matching this store's
+    /// `recs` (record-key -> record).
+    pub fn indexed_load_bdb(&mut self, bytes: &[u8]) -> Result<usize, gnucobol_rs_bdb_format::BdbError> {
+        let db = gnucobol_rs_bdb_format::BdbFile::parse(bytes)?;
+        let pairs = db.records()?;
+        let n = pairs.len();
+        for (key, record) in pairs {
+            self.recs.insert(key, record);
+        }
+        Ok(n)
+    }
+
     /// The first key strictly greater than `k`, as a cursor position (`AtEnd` when none).
     fn after(&self, k: &[u8]) -> CursorPos {
         match self
