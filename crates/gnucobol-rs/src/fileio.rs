@@ -1098,17 +1098,36 @@ pub fn sort_cmps(s1: &[u8], s2: &[u8], col: Option<&[u8; 256]>) -> i32 {
 }
 
 /// One `SORT ... ON {ASCENDING|DESCENDING} KEY` key: a byte range `[offset, offset+size)` of the record.
+/// `attr` is the key field's template (`fileio.c:cob_file_sort_compare` builds a `cob_field` from
+/// `f->keys[i].field`): `Some(numeric attr)` => the key compares by numeric value (`cob_numeric_cmp`,
+/// the `COB_FIELD_IS_NUMERIC` branch); `None` or a non-numeric attr => the alphanumeric collated compare.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct SortKey {
     pub offset: usize,
     pub size: usize,
     /// `COB_ASCENDING` vs `COB_DESCENDING`.
     pub ascending: bool,
+    /// The key field's attribute (numeric keys compare by value). `None` = alphanumeric (bytewise/collated).
+    pub attr: Option<crate::attr::FieldAttr>,
 }
 
-/// Port of `fileio.c:cob_file_sort_init_key` — append a key to the sort key list (in declaration order).
+/// Port of `fileio.c:cob_file_sort_init_key` — append an alphanumeric key (in declaration order).
 pub fn cob_file_sort_init_key(keys: &mut Vec<SortKey>, offset: usize, size: usize, ascending: bool) {
-    keys.push(SortKey { offset, size, ascending });
+    keys.push(SortKey { offset, size, ascending, attr: None });
+}
+
+/// Append a *typed* sort key. A numeric `attr` (`field_type & COB_TYPE_NUMERIC`) makes the key compare
+/// by numeric value via `cob_numeric_cmp`, reproducing libcob's `COB_FIELD_IS_NUMERIC` branch -- so a
+/// signed key orders negatives correctly and an overpunched-sign / big-endian COMP key orders by value,
+/// not by raw representation bytes.
+pub fn cob_file_sort_init_key_typed(
+    keys: &mut Vec<SortKey>,
+    offset: usize,
+    size: usize,
+    ascending: bool,
+    attr: crate::attr::FieldAttr,
+) {
+    keys.push(SortKey { offset, size, ascending, attr: Some(attr) });
 }
 
 /// Port of the alphanumeric path of `fileio.c:cob_file_sort_compare` — order two records by the sort
@@ -1119,7 +1138,14 @@ pub fn cob_file_sort_compare(rec1: &[u8], u1: usize, rec2: &[u8], u2: usize, key
     for k in keys {
         let a = &rec1[k.offset.min(rec1.len())..(k.offset + k.size).min(rec1.len())];
         let b = &rec2[k.offset.min(rec2.len())..(k.offset + k.size).min(rec2.len())];
-        let cmp = sort_cmps(a, b, col);
+        // libcob (fileio.c:cob_file_sort_compare): a numeric key compares by VALUE via cob_numeric_cmp;
+        // otherwise the alphanumeric bytes go through sort_cmps (with the collating sequence).
+        let cmp = match k.attr {
+            Some(at) if at.field_type & crate::attr::COB_TYPE_NUMERIC != 0 => {
+                crate::cob_decimal::cob_numeric_cmp(a, &at, b, &at)
+            }
+            _ => sort_cmps(a, b, col),
+        };
         if cmp != 0 {
             return if k.ascending { cmp } else { -cmp }.cmp(&0);
         }
@@ -1211,9 +1237,15 @@ impl CobSort {
         }
     }
 
-    /// Port of `fileio.c:cob_file_sort_init_key` — append a sort key (in declaration order).
+    /// Port of `fileio.c:cob_file_sort_init_key` — append an alphanumeric sort key (in declaration order).
     pub fn cob_file_sort_init_key(&mut self, offset: usize, size: usize, ascending: bool) {
-        self.keys.push(SortKey { offset, size, ascending });
+        self.keys.push(SortKey { offset, size, ascending, attr: None });
+    }
+
+    /// As [`Self::cob_file_sort_init_key`] but for a typed (e.g. numeric) key — see
+    /// [`cob_file_sort_init_key_typed`].
+    pub fn cob_file_sort_init_key_typed(&mut self, offset: usize, size: usize, ascending: bool, attr: crate::attr::FieldAttr) {
+        self.keys.push(SortKey { offset, size, ascending, attr: Some(attr) });
     }
 
     /// Port of `fileio.c:cob_file_sort_options` — record whether this is a MERGE (`parms[0] == 'M'`).
@@ -4452,6 +4484,36 @@ mod tests {
     }
 
     #[test]
+    fn sort_numeric_key_orders_by_value_vs_cobc() {
+        // A signed numeric (S9(2) DISPLAY) SORT key must order by VALUE, not raw bytes. Records + key
+        // bytes (overpunch sign) and the sorted order are from the built GnuCOBOL oracle: SORT ON
+        // ASCENDING KEY of S9(2) over {+3, -5, +10, -1} -> -5, -1, +3, +10. Bytewise would give the
+        // wrong order (+3, -1, -5, +10), since 0x75('u',-5) > 0x33('3',+3).
+        let s9 = crate::attr::FieldAttr {
+            field_type: crate::attr::COB_TYPE_NUMERIC_DISPLAY,
+            digits: 2,
+            scale: 0,
+            flags: crate::attr::COB_FLAG_HAVE_SIGN,
+        };
+        let recs: Vec<&[u8]> = vec![b"03bbb", b"0uaaa", b"10ddd", b"0qccc"]; // +3, -5, +10, -1
+        let keys = [SortKey { offset: 0, size: 2, ascending: true, attr: Some(s9) }];
+        let mut idx: Vec<usize> = (0..recs.len()).collect();
+        idx.sort_by(|&i, &j| cob_file_sort_compare(recs[i], i, recs[j], j, &keys, None));
+        let sorted: Vec<&[u8]> = idx.iter().map(|&i| recs[i]).collect();
+        assert_eq!(
+            sorted,
+            vec![b"0uaaa".as_slice(), b"0qccc", b"03bbb", b"10ddd"],
+            "numeric key must sort by value (-5,-1,+3,+10), matching cobc"
+        );
+        // and an alphanumeric (attr: None) key still sorts the same key bytes by raw bytes
+        let akeys = [SortKey { offset: 0, size: 2, ascending: true, attr: None }];
+        let mut aidx: Vec<usize> = (0..recs.len()).collect();
+        aidx.sort_by(|&i, &j| cob_file_sort_compare(recs[i], i, recs[j], j, &akeys, None));
+        let asorted: Vec<&[u8]> = aidx.iter().map(|&i| recs[i]).collect();
+        assert_eq!(asorted, vec![b"03bbb".as_slice(), b"0qccc", b"0uaaa", b"10ddd"], "bytewise order differs");
+    }
+
+    #[test]
     fn sort_cmps_and_collation() {
         assert!(sort_cmps(b"ABC", b"ABD", None) < 0);
         assert_eq!(sort_cmps(b"ABC", b"ABC", None), 0);
@@ -4786,7 +4848,7 @@ mod kani_proofs {
     fn sort_compare_consistent() {
         let a: [u8; 3] = kani::any();
         let b: [u8; 3] = kani::any();
-        let keys = [SortKey { offset: 0, size: 3, ascending: true }];
+        let keys = [SortKey { offset: 0, size: 3, ascending: true, attr: None }];
         assert_eq!(cob_file_sort_compare(&a, 0, &a, 0, &keys, None), Ordering::Equal);
         let ab = cob_file_sort_compare(&a, 0, &b, 1, &keys, None);
         let ba = cob_file_sort_compare(&b, 1, &a, 0, &keys, None);

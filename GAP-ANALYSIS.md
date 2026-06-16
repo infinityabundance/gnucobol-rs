@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (9 fixed, 96 open)
+## Summary -- 105 gaps catalogued across 5 panels (10 fixed, 95 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 18 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 17 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 42 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 9 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 10 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -58,18 +58,17 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 | 4 | **Open errno switch collapsed to exists/not-exists: status 37/61/34/open-time-39 unreachable** | osfiles | C distinguishes EACCES/EISDIR/EROFS(37), EAGAIN(61), ENOSPC(34), open-time 39; Rust reduces all to 35/05/00 |
 | 5 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 | 6 | **cob_call does not marshal parameters or return a real RETURN-CODE; the call is never executed** | osfiles | C executes the target with BY REFERENCE/CONTENT/VALUE marshalling and propagates RETURN-CODE; Rust returns a sentinel and never executes or passes args |
-| 7 | **SORT compares numeric keys byte-wise instead of by numeric value -> wrong output order** | osfiles | C orders numeric keys by value; Rust by raw representation bytes |
-| 8 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
-| 9 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
-| 10 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
-| 11 | **ref-mod-zero-length hardcoded to 'no' -- contradicts the GnuCOBOL DEFAULT (yes)** | dialect | MOVE X(5:0) yields an empty string under default GnuCOBOL but the port refuses it |
-| 12 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
-| 13 | **Bound/numeric check functions never call cob_set_exception (the two halves are disconnected)** | dialect | After a bounds/numeric violation, Rust last_exception_code stays 0 where C holds 0x0207/0x0202/0x0205/0x0303; EXCEPTION-STATUS differs |
-| 14 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
-| 15 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
-| 16 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
-| 17 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
-| 18 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
+| 7 | **binary-size hardcoded to 1-2-4-8 (ibm/mf/mvs use 2-4-8 / 1--8)** | dialect | PIC 9(2) COMP is 1 byte under default but 2 bytes under ibm '2-4-8'; record length + every downstream offset and emitted byte shifts |
+| 8 | **binary-truncate yes hardcoded (ibm/mf/mvs-strict use no)** | dialect | PIC 9(2) COMP given 300: 44 (truncated, default) vs 300 (ibm no-truncate) |
+| 9 | **defaultbyte (uninitialized storage fill) hardcoded to category defaults** | dialect | Un-VALUEd PIC X(4) DISPLAYs 4 spaces (default) vs 4 NUL bytes (ibm defaultbyte:0) |
+| 10 | **ref-mod-zero-length hardcoded to 'no' -- contradicts the GnuCOBOL DEFAULT (yes)** | dialect | MOVE X(5:0) yields an empty string under default GnuCOBOL but the port refuses it |
+| 11 | **complex-odo / odoslide / indirect+larger redefines hardcoded to default (off)** | dialect | Byte offsets of items after a variable table and the used record length differ when these toggles are on; affects every subsequent field's bytes |
+| 12 | **Bound/numeric check functions never call cob_set_exception (the two halves are disconnected)** | dialect | After a bounds/numeric violation, Rust last_exception_code stays 0 where C holds 0x0207/0x0202/0x0205/0x0303; EXCEPTION-STATUS differs |
+| 13 | **cob_hard_failure abort path and fatal/non-fatal dispatch absent** | dialect | C aborts with exit code -1 + runs exit handlers on a critical EC; Rust returns an Err with divergent text and no process-termination semantics |
+| 14 | **Live slice modules emit non-C runtime-error message bytes for bound checks** | dialect | On the live execution path the abort/diagnostic bytes do not match the oracle; only the unused common.rs ports match |
+| 15 | **-std=/-fdialect dialect selection has no runtime effect** | dialect | C selects MF/IBM/COBOL85/default semantics; Rust always runs one fixed dialect |
+| 16 | **DECIMAL-POINT IS COMMA, CURRENCY SIGN, OPTIONS paragraph not honored at parse time** | dialect | DECIMAL-POINT IS COMMA does not swap ','/'.'; a custom CURRENCY SIGN is ignored (or trips Unsupported on the SPECIAL-NAMES clause) |
+| 17 | **--conf / --runtime-config / runtime.cfg auto-load never invoked** | dialect | C applies an entire config file's COB_* settings before running; Rust applies none |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -406,12 +405,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Requires a Berkeley DB B-tree page parser. Boundary today.
 
 #### `sort-numeric-key-bytewise` -- SORT compares numeric keys byte-wise instead of by numeric value -> wrong output order  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: SORT ASCENDING KEY <zoned/signed/packed/COMP> GIVING out orders negatives/overpunched-sign/big-endian COMP records wrong; output file bytes differ
+**severity:** high &nbsp;·&nbsp; **observable:** yes: SORT ASCENDING KEY <zoned/signed/packed/COMP> GIVING out orders negatives/overpunched-sign/big-endian COMP records wrong; output file bytes differ &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c cob_file_sort_compare (7762) routes COB_FIELD_IS_NUMERIC keys through cob_numeric_cmp (magnitude+sign); alphanumeric through sort_cmps with sort_collating.
 - **gnucobol-rs (Rust):** fileio.rs cob_file_sort_compare (1118) compares EVERY key byte-wise with sort_cmps; the doc calls numeric a declared composition but no numeric routing exists.
 - **Diff:** C orders numeric keys by value; Rust by raw representation bytes.
-- **Evidence / plan:** STRUCTURAL (not a one-line fix): fileio.rs SortKey carries only {offset,size,ascending} -- no field type -- so the C's COB_FIELD_IS_NUMERIC branch cannot be reproduced until SortKey gains the key's FieldAttr and the SORT verb threads it through cob_file_sort_init_key + both push sites. Then route numeric keys through cob_numeric_cmp (GNURUST.NUMCMP.1). Oracle: SORT on a signed numeric key with negatives; compare GIVING file to cobc.
+- **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): fileio::SortKey now carries attr: Option<FieldAttr>; cob_file_sort_compare routes a numeric key (field_type & COB_TYPE_NUMERIC) through cob_numeric_cmp (sealed GNURUST.NUMCMP.1, ==real libcob), reproducing libcob's COB_FIELD_IS_NUMERIC branch; alphanumeric keys stay on sort_cmps (collated). New cob_file_sort_init_key_typed builds a typed key. Oracle-proven: file SORT ON ASCENDING KEY of S9(2) over {+3,-5,+10,-1} orders -5,-1,+3,+10 (cobc), where bytewise gives the wrong +3,-1,-5,+10 (0x75 u=-5 > 0x33 3=+3). Test sort_numeric_key_orders_by_value_vs_cobc; alphanumeric SORT sweeps unchanged.
 
 #### `bdb-record-lock-not-wired` -- BDB record/file lock model (51/52/61) is built but never invoked by read/write  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: READ WITH LOCK then a contending READ never returns 51; 51/52 unreachable through real file I/O
