@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A reviewer/operator evidence bundle gathered from **existing generated artifacts**. It creates **no** new truth, certification, compliance, production approval, or customer acceptance.
 
-- crate (this repo): `gnucobol-rs 0.7.83`
+- crate (this repo): `gnucobol-rs 0.7.84`
 - artifacts gathered: **10** committed + pointers to runtime/operator artifacts
 - casefiles: **137**
 
@@ -17,9 +17,9 @@
 
 | id | path | sha256 |
 |---|---|---|
-| `status` | [`STATUS.md`](../../STATUS.md) | `fba7478f40c2f183…` |
-| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `e74ccd801ec63449…` |
-| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `ab47a6567ef178e5…` |
+| `status` | [`STATUS.md`](../../STATUS.md) | `67d395ba60d9224f…` |
+| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `f91a5d24913c708c…` |
+| `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `a502c9794ea3dc94…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `8657a3bda9e269d1…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `daf501bd75de5e18…` |
 | `size_error_atlas` | [`reports/size-error-atlas.json`](../size-error-atlas.json) | `18ae911b912353d6…` |

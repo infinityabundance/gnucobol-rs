@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SCREENIO.COLOR.1 (court-casefile)
 
-**Verdict: PASS** · 11/11 pass, 0 fail · crate `gnucobol-rs` 0.7.83
+**Verdict: PASS** · 11/11 pass, 0 fail · crate `gnucobol-rs` 0.7.84
 
 - **Oracle:** cobc SCREEN SECTION DISPLAY of a field with FOREGROUND-COLOR/BACKGROUND-COLOR (libcob/screenio.c via ncurses 6.6 start_color/init_pair/wclear), captured under a pty with TERM=xterm
 - **Byte domain(s):** a colour-attributed positioned single-field DISPLAY (LINE/COLUMN + FOREGROUND-COLOR/BACKGROUND-COLOR, LINE>=2) -> the exact ncurses whole-screen colour-repaint byte stream, on the admitted terminal

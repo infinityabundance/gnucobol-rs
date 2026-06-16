@@ -27,7 +27,21 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FRONTEND.1 non-claim: COMPUTE and arithmetic expressions"
+            "text": "GNURUST.FRONTEND.1 non-claim: COMPUTE ROUNDED + ON SIZE ERROR"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: non-integer ** exponents"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FRONTEND.1 non-claim: receiver scale deeper than the wide intermediate's ~18 fractional digits"
           },
           "ruleId": "NONCLAIM"
         },

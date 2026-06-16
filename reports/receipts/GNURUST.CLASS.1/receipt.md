@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.CLASS.1` |
 | court | class conditions IS NUMERIC/ALPHABETIC |
-| crate_version | `0.7.83` |
+| crate_version | `0.7.84` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | alphanumeric field bytes -> class-condition truth |
 | replay command | `bash lab/oracle/class_sweep.sh` |

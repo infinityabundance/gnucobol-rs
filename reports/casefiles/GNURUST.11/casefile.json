@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.11",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.83",
+  "crate_version": "0.7.84",
   "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)",
   "hash_chain": {
-    "inputs_sha256": "a1a3d16750e6fe92539a2fb442edf70f7fb9fca6eb15d1166996b87f95fe0726"
+    "inputs_sha256": "dd2eadb639eb2e9ef6dd2f5b4df8fb048dcc9c7488bf961d14a9ce71998855db"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "081c62a6e7b83c4b35bf111feb08ba68021faf0385fbf6a1f7478f4381844b8e",
-    "receipt_sha256": "91563f757d7fcd90664ed654e4cbf56bd668545f64ef38ea347a17e7d49913b4"
+    "receipt_sha256": "5f3abf5d99970bc817aa418ececa8d0ba900d855263a71580e179aee9b21669c"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

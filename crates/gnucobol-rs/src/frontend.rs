@@ -13,7 +13,8 @@
 //!   `01 NAME PIC <pic> [VALUE <literal>].` -- numeric (`9 V S P`), alphanumeric (`X A`), or
 //!   numeric-EDITED pictures (`Z * $ + - , . CR DB B 0 /`).
 //! * `PROCEDURE DIVISION.` statements: `MOVE`, `ADD`, `SUBTRACT`, `MULTIPLY`, `DIVIDE` (the `TO` /
-//!   `FROM` / `BY` / `INTO` / `GIVING` forms), `DISPLAY`, `STOP RUN`.
+//!   `FROM` / `BY` / `INTO` / `GIVING` forms), `COMPUTE` (arithmetic expressions: `+ - * / **`,
+//!   parentheses, unary minus, standard precedence), `DISPLAY`, `STOP RUN`.
 //!
 //! Group items, `OCCURS`/`REDEFINES`, level numbers other than `01`, `COMPUTE`, control flow
 //! (`IF`/`PERFORM`/`EVALUATE`), `ACCEPT`, files, and any unlisted verb are out of subset and return a
@@ -422,8 +423,175 @@ fn exec_stmt(
         "DISPLAY" => exec_display(stmt, fields, out),
         "MOVE" => exec_move(stmt, fields),
         "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" => exec_arith(verb, stmt, fields),
+        "COMPUTE" => exec_compute(stmt, fields),
         "STOP" => Ok(()), // STOP RUN
         other => Err(RunError::Unsupported(format!("verb {other}"))),
+    }
+}
+
+/// `COMPUTE r1 [r2 ...] [ROUNDED] = <expr>` -- evaluate an arithmetic expression and store the result
+/// into each receiver. The expression grammar (standard precedence): `expr := term (('+'|'-') term)*`,
+/// `term := factor (('*'|'/') factor)*`, `factor := primary ('**' factor)?`, `primary := '(' expr ')'
+/// | '-' primary | operand`. Each binary op is computed via a WIDE numeric intermediate (so a long
+/// expression keeps precision); the per-receiver store is the truncation/edit point. `ROUNDED` and any
+/// non-integer `**` exponent fail closed (not yet in the sealed envelope).
+fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    let eq = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "="))
+        .ok_or_else(|| RunError::Unsupported("COMPUTE without '='".into()))?;
+    // receivers = the names before '='; ROUNDED is not yet supported (fail closed).
+    let mut receivers = Vec::new();
+    for t in &stmt[..eq] {
+        if let Tok::Word(w) = t {
+            if w == "ROUNDED" {
+                return Err(RunError::Unsupported("COMPUTE ... ROUNDED (deferred)".into()));
+            }
+            receivers.push(w.clone());
+        }
+    }
+    if receivers.is_empty() {
+        return Err(RunError::Unsupported("COMPUTE with no receiver".into()));
+    }
+    // tokenize the expression: split parentheses glued to operands; operators are space-separated.
+    let mut etoks: Vec<String> = Vec::new();
+    for t in &stmt[eq + 1..] {
+        match t {
+            Tok::Word(w) => split_parens(w, &mut etoks),
+            Tok::Str(_) => return Err(RunError::Unsupported("string in COMPUTE".into())),
+            Tok::Dot => {}
+        }
+    }
+    let mut pos = 0;
+    let (val, attr) = parse_expr(&etoks, &mut pos, fields)?;
+    if pos != etoks.len() {
+        return Err(RunError::Unsupported(format!("trailing tokens in COMPUTE expr at {}", etoks[pos])));
+    }
+    for r in receivers {
+        let f = fields.get_mut(&r).ok_or_else(|| RunError::UndefinedName(r.clone()))?;
+        move_into(f, &val, &attr)?;
+    }
+    Ok(())
+}
+
+/// Split a word into expression tokens, peeling leading `(` and trailing `)` (which may glue to an
+/// operand, e.g. `(A` or `B)`); `**` / `+` / `-` / `*` / `/` and bare names pass through.
+fn split_parens(w: &str, out: &mut Vec<String>) {
+    let mut s = w;
+    while let Some(rest) = s.strip_prefix('(') {
+        out.push("(".into());
+        s = rest;
+    }
+    // collect trailing ')'s.
+    let mut close = 0;
+    while s.ends_with(')') {
+        close += 1;
+        s = &s[..s.len() - 1];
+    }
+    if !s.is_empty() {
+        out.push(s.to_string());
+    }
+    for _ in 0..close {
+        out.push(")".into());
+    }
+}
+
+/// `expr := term (('+'|'-') term)*`.
+fn parse_expr(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    let (mut acc, mut aattr) = parse_term(t, pos, f)?;
+    while let Some(op) = t.get(*pos).map(|s| s.as_str()) {
+        let o = match op {
+            "+" => Op::Add,
+            "-" => Op::Subtract,
+            _ => break,
+        };
+        *pos += 1;
+        let (b, battr) = parse_term(t, pos, f)?;
+        let (r, ra) = wide_op(o, &acc, &aattr, &b, &battr)?;
+        acc = r;
+        aattr = ra;
+    }
+    Ok((acc, aattr))
+}
+
+/// `term := factor (('*'|'/') factor)*`.
+fn parse_term(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    let (mut acc, mut aattr) = parse_factor(t, pos, f)?;
+    while let Some(op) = t.get(*pos).map(|s| s.as_str()) {
+        match op {
+            "*" => {
+                *pos += 1;
+                let (b, battr) = parse_factor(t, pos, f)?;
+                let (r, ra) = wide_op(Op::Multiply, &acc, &aattr, &b, &battr)?;
+                acc = r;
+                aattr = ra;
+            }
+            "/" => {
+                *pos += 1;
+                let (b, battr) = parse_factor(t, pos, f)?;
+                let wide = lit_num_attr(36, 18, true); // generous quotient scale; receiver store truncates.
+                acc = cob_divide(&acc, &aattr, &b, &battr, &wide, Round::Truncate)
+                    .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+                aattr = wide;
+            }
+            _ => break,
+        }
+    }
+    Ok((acc, aattr))
+}
+
+/// `factor := primary ('**' integer)?` -- exponentiation by an integer literal (repeated multiply).
+fn parse_factor(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    let (base, battr) = parse_primary(t, pos, f)?;
+    if t.get(*pos).map(|s| s.as_str()) == Some("**") {
+        *pos += 1;
+        let exp_word = t.get(*pos).ok_or_else(|| RunError::Unsupported("** without exponent".into()))?;
+        *pos += 1;
+        let e: u32 = exp_word.parse().map_err(|_| RunError::Unsupported(format!("** non-integer exponent {exp_word}")))?;
+        // base ** e via repeated multiply; e==0 -> 1.
+        if e == 0 {
+            let (one, oa) = decimal_as_display(&Decimal { negative: false, digits: vec![1], scale: 0 });
+            return Ok((one, oa));
+        }
+        let mut acc = base.clone();
+        let mut acc_attr = battr;
+        for _ in 1..e {
+            let (r, ra) = wide_op(Op::Multiply, &acc, &acc_attr, &base, &battr)?;
+            acc = r;
+            acc_attr = ra;
+        }
+        return Ok((acc, acc_attr));
+    }
+    Ok((base, battr))
+}
+
+/// `primary := '(' expr ')' | '-' primary | operand`.
+fn parse_primary(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    match t.get(*pos).map(|s| s.as_str()) {
+        Some("(") => {
+            *pos += 1;
+            let v = parse_expr(t, pos, f)?;
+            if t.get(*pos).map(|s| s.as_str()) != Some(")") {
+                return Err(RunError::Unsupported("missing ')' in COMPUTE".into()));
+            }
+            *pos += 1;
+            Ok(v)
+        }
+        Some("-") => {
+            *pos += 1;
+            let (b, ba) = parse_primary(t, pos, f)?;
+            // unary minus: 0 - b.
+            let (zero, za) = decimal_as_display(&Decimal { negative: false, digits: vec![0], scale: 0 });
+            wide_op(Op::Subtract, &zero, &za, &b, &ba)
+        }
+        Some("+") => {
+            *pos += 1;
+            parse_primary(t, pos, f)
+        }
+        Some(_) => {
+            let w = t[*pos].clone();
+            *pos += 1;
+            operand_value(&Tok::Word(w), f)
+        }
+        None => Err(RunError::Unsupported("unexpected end of COMPUTE expr".into())),
     }
 }
 
@@ -782,6 +950,42 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"P= 48\n");
+    }
+
+    #[test]
+    fn compute_precedence_and_div() {
+        // COMPUTE with operator precedence + division intermediate precision.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC 9(6) VALUE 22.\n\
+                    01 B PIC 9(6) VALUE 7.\n\
+                    01 R PIC 9.9(8).\n\
+                    PROCEDURE DIVISION.\n\
+                        COMPUTE R = A / B.\n\
+                        DISPLAY \"PI=\" R.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"PI=3.14285714\n"); // 22/7 truncated to 8 fractional digits
+    }
+
+    #[test]
+    fn compute_rounded_fails_closed() {
+        // ROUNDED is not yet in the subset -> fail closed, not a wrong answer.
+        let r = run_program(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC 9(4) VALUE 10.\n\
+                    01 R PIC 9.\n\
+                    PROCEDURE DIVISION.\n\
+                        COMPUTE R ROUNDED = A / 3.\n\
+                        STOP RUN.\n",
+        );
+        assert!(matches!(r, Err(RunError::Unsupported(_))));
     }
 
     #[test]

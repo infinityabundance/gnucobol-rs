@@ -1,0 +1,12 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 PRICE PIC 9(4)V99 VALUE 19.99.
+       01 QTY   PIC 9(3) VALUE 3.
+       01 RATE  PIC 9(3) VALUE 100.
+       01 R     PIC $$,$$9.99.
+       PROCEDURE DIVISION.
+           COMPUTE R = PRICE * QTY / RATE.
+           DISPLAY "PCT=" R.
+           STOP RUN.

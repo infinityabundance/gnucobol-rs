@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.8",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.83",
+  "crate_version": "0.7.84",
   "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data",
   "hash_chain": {
-    "inputs_sha256": "d8fcc6e2acd965bf225b70a9b39ad70cb25beb0d64c47243e3ae0f03179026ba"
+    "inputs_sha256": "725642acd36b04ef387950375693211e60c95deb767ba6cbe2b0538b67100f5b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "31540327f4b14b96cbfc995418bf813f702aaecd43fa0ecada689a11d3937d14",
-    "receipt_sha256": "f3d714bbc76fba16c0e1f08e6ca6d1e3f2ecc0cb0b8dffc890cb74152e3bb4bc"
+    "receipt_sha256": "09e9050690dba90dc0b3191b07d6269dcac320087432f6782a71f49e1875a938"
   },
   "kind": "court-casefile",
   "legacy_preservation": {

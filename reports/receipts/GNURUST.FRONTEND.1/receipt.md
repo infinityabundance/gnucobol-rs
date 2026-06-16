@@ -2,13 +2,13 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.FRONTEND.1 — clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout
 
-**Verdict: PASS** · replay `PASS=10 FAIL=0`
+**Verdict: PASS** · replay `PASS=16 FAIL=0`
 
 | field | value |
 |-------|-------|
 | campaign | `GNURUST.FRONTEND.1` |
 | court | clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout |
-| crate_version | `0.7.83` |
+| crate_version | `0.7.84` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a COBOL program (sealed subset) -> the exact stdout bytes it writes, byte-identical to cobc |
 | replay command | `bash lab/oracle/cobol_frontend_sweep.sh` |

@@ -1010,14 +1010,14 @@
       "class": "A",
       "creates_new_truth": false,
       "damage_if_overclaimed_present": true,
-      "fixtures": "cobol_frontend_sweep 10/0 (the cobrun binary over lab/corpus/frontend) + cobol_run_sweep 3/0 (hand-wired) + 3 unit tests (add/move/display, multiply-giving-edited, string-move)",
+      "fixtures": "cobol_frontend_sweep 16/0 (the cobrun binary over lab/corpus/frontend) + cobol_run_sweep 3/0 (hand-wired) + 5 unit tests (add/move/display, multiply-giving-edited, string-move, COMPUTE precedence+division, COMPUTE ROUNDED fail-closed)",
       "generated_from_named_evidence": true,
       "has_casefile": true,
       "has_receipt": true,
       "id": "GNURUST.FRONTEND.1",
-      "negative_claims": 11,
+      "negative_claims": 13,
       "negatives_ge_positives": true,
-      "positive_claims": 3
+      "positive_claims": 4
     },
     {
       "can_fail": true,

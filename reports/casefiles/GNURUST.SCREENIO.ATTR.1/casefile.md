@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SCREENIO.ATTR.1 (court-casefile)
 
-**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.83
+**Verdict: PASS** · 10/10 pass, 0 fail · crate `gnucobol-rs` 0.7.84
 
 - **Oracle:** cobc SCREEN SECTION DISPLAY ... HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE-VIDEO (libcob/screenio.c via ncurses 6.6 attrset), captured under a pty with TERM=xterm
 - **Byte domain(s):** an attributed positioned DISPLAY (LINE/COLUMN + monochrome attribute) -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal
