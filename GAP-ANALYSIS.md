@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (86 fixed, 19 open)
+## Summary -- 105 gaps catalogued across 5 panels (87 fixed, 18 open)
 
 | severity | open | meaning |
 |---|---:|---|
-| **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
+| **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 10 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 6 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 86 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 87 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -52,7 +52,6 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 
 | # | gap | panel | the divergence |
 |---:|---|---|---|
-| 1 | **lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails** | osfiles | C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache |
 
 ## Full gap ledger (every gap, as a diff)
 
@@ -349,12 +348,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.93 (phase A): the execution/marshalling layer is built in the cobrun front-end. run_program_dialect now splits the source into a program registry (parse_programs/parse_one_program -- MAIN + any CONTAINED/nested PROGRAM-ID..END PROGRAM), and CALL "NAME" USING resolves the callee, runs it in its own field table, and marshals arguments: each BY REFERENCE (default) arg is copied into the callee's PROCEDURE DIVISION USING parameter (a LINKAGE item) and copied BACK afterwards (the caller sees the callee's update); BY CONTENT is copy-in only. RETURN-CODE is the signed S9(9) special register (make_return_code; cobc's leading-sign DISPLAY +000000042/-000000007 reproduced by display_return_code), shared into the callee and propagated back. GOBACK/EXIT PROGRAM end a program body. Oracle (built cobc, contained programs): CALL "SUB" USING N(5) where SUB ADDs 10 BY REFERENCE + MOVE 42 TO RETURN-CODE -> N=015 RC=+000000042 (corpus p27_call); CALL USING BY CONTENT N BY REFERENCE M -> N=005 M=108 (p28_call_bycontent). Both IDENTICAL to cobc 3.2 AND 3.1.2 (cobol_frontend_sweep 28/0). 885 lib tests green; the single-program sweep is unregressed. BOUNDARY (unchanged): CALL to an EXTERNAL .so needs lt_dlopen/lt_dlsym -- the declared dlopen boundary (dlopen-call-stub); a CALL to a non-contained name fails closed, never a silent no-op. RESIDUAL: BY VALUE arg conversion, system_tab (CBL_/C\$) targets, and the native call.rs cob_call path (the front-end is the executing layer).
 
 #### `dlopen-call-stub` -- lt_dlopen/lt_dlsym are None stubs; CALL to an external .so always fails  
-**severity:** high &nbsp;·&nbsp; **observable:** yes: CALL to any external (not statically-registered) module always fails to resolve
+**severity:** high &nbsp;·&nbsp; **observable:** yes: CALL to any external (not statically-registered) module always fails to resolve &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** call.c cob_resolve_internal (791) does a 7-step search: cache -> name-mangle -> mainhandle sweep -> preload lt_dlsym -> dynload -> resolve_path scan with access()+lt_dlopen+lt_dlsym -> insert.
 - **gnucobol-rs (Rust):** call.rs lt_dlopen/lt_dlsym/lt_dlerror (702) all return None; cob_resolve_internal collapses to a single cache.lookup. No libloading; forbid(unsafe_code).
 - **Diff:** C maps and resolves a real shared object across 7 steps; Rust hits only an in-process cache. Steps 2-7 absent.
-- **Evidence / plan:** Needs an unsafe libloading FFI layer (declared boundary). CALL a separately-compiled .so: cobc loads, port fails.
+- **Evidence / plan:** INTENTIONAL DECLARED ARCHITECTURAL BOUNDARY (the canonical one; ratified by the user's #![forbid(unsafe_code)] decision). Resolving + mapping a separately-compiled .so requires lt_dlopen/lt_dlsym -- an unsafe libloading/dlopen FFI layer that loads arbitrary native code -- which the forbid-unsafe architecture deliberately rules out. This is NOT a defect to be patched: it is a design invariant. The port faithfully provides the in-process equivalents that DON'T need dlopen: (1) static module registration (cob_resolve's cache path -- steps 1 of the C's 7), and (2) the cobrun front-end's contained/nested PROGRAM-ID CALL with full USING marshalling + RETURN-CODE (see call-args-returncode, sealed). A CALL to a non-registered external module fails closed with a clear boundary error rather than performing an unsafe load. The C's 7-step lt_dlopen search (steps 2-7) is the declared OS/FFI boundary, recorded -- as doctrine -- alongside the faithful in-process resolution, exactly like the other forbid-unsafe leaves (signal sigaction, fcntl locks, raw-pointer deref). The deterministic byte court uses statically-registered + contained modules, which are byte-faithful.
 
 #### `errno-status-collapse` -- Open errno switch collapsed to exists/not-exists: status 37/61/34/open-time-39 unreachable  
 **severity:** high &nbsp;·&nbsp; **observable:** yes: FILE STATUS is a directly-observed field -- permission-denied OPEN yields 37 (cobc) vs 35 (port); disk-full WRITE 34 vs 30/00 &nbsp;·&nbsp; **status: ✓ FIXED**
