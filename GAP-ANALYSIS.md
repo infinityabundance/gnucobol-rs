@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (47 fixed, 58 open)
+## Summary -- 105 gaps catalogued across 5 panels (48 fixed, 57 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 21 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 20 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 47 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 48 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -837,12 +837,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Implement fixed-format lexing gated on -fixed / >>SOURCE FORMAT.
 
 #### `cli-upsi-switch` -- COB_SWITCH_0..7 / UPSI switches ported but never loaded or evaluated  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: switch-conditioned programs / UPSI mnemonics
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: switch-conditioned programs / UPSI mnemonics &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:10175 cob_init loops COB_SWITCH_%d, sets cob_switch[i] from env ('1'/'ON'); UPSI-0..7 + switch-status conditions read the array.
 - **gnucobol-rs (Rust):** common_misc::Switches + common_proc.rs:413 model the array, but nothing populates it from COB_SWITCH_n env, and frontend.rs eval_cond has no UPSI/switch-status support.
 - **Diff:** C: 'IF SWITCH-1 ON' works after COB_SWITCH_1=ON; Rust: env ignored, switch conditions absent.
-- **Evidence / plan:** Load COB_SWITCH_n at startup + add switch-status condition evaluation.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (front-end feature): the cobrun front-end gains UPSI switches. frontend.rs::parse_switches scans SPECIAL-NAMES `SWITCH-n [ON STATUS IS a] [OFF STATUS IS b]` into a condition-name map AND loads the live states from the COB_SWITCH_n environment ('ON'/'1' -> on, else off; default off) -- the SwitchEnv now lives in the executor Ctx. eval_cond/cond_rel evaluate a bare switch condition-name as (state[n] == declared ON/OFF sense). Oracle (built cobc): SPECIAL-NAMES SWITCH-1 ON STATUS IS SW1-ON OFF STATUS IS SW1-OFF; unset -> SW1-ON false / SW1-OFF true; COB_SWITCH_1=ON|1 -> SW1-ON true / SW1-OFF false. Corpus p31_upsi (default) + p32_upsi_on (COB_SWITCH_1=ON via a new `*> @env:` sweep header exported to cobc + cobrun + 3.1.2): both IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 32/0). 895 lib tests. RESIDUAL: SET SWITCH-n TO ON/OFF (runtime write) + UPSI mnemonic display devices.
 
 #### `dialect-hostsign-osvs` -- hostsign, init-justify, perform/arithmetic-osvs not dialect-driven  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: respective constructs under ibm/mvs

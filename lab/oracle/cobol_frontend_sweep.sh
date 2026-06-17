@@ -24,11 +24,14 @@ for cob in "$CORPUS"/*.cob; do
   # (so the dialect-sensitive corpus -- e.g. defaultbyte fill -- is compared under the same dialect).
   STD="$(sed -n 's/^[[:space:]]*\*>[[:space:]]*@std:[[:space:]]*\([A-Za-z0-9]*\).*/\1/p' "$cob" | head -1)"
   STDOPT=""; [ -n "$STD" ] && STDOPT="-std=$STD"
+  # Optional per-program runtime env: a `*> @env: NAME=VALUE` header is exported for BOTH the cobc binary
+  # and cobrun (so a runtime-env-driven program -- e.g. a UPSI COB_SWITCH_n -- is compared under the same env).
+  ENVKV="$(sed -n 's/^[[:space:]]*\*>[[:space:]]*@env:[[:space:]]*\([A-Za-z0-9_]*=[^ ]*\).*/\1/p' "$cob" | head -1)"
   if ! cobc -x -free $STDOPT -o "$TMP/p" "$cob" 2>"$TMP/cobc.err"; then
     echo "$name: cobc compile FAIL"; head -2 "$TMP/cobc.err"; FAIL=$((FAIL+1)); continue
   fi
-  "$TMP/p" </dev/null > "$TMP/oracle.out" 2>/dev/null
-  if ! "$COBRUN" $STDOPT "$cob" > "$TMP/rust.out" 2>"$TMP/rust.err"; then
+  env $ENVKV "$TMP/p" </dev/null > "$TMP/oracle.out" 2>/dev/null
+  if ! env $ENVKV "$COBRUN" $STDOPT "$cob" > "$TMP/rust.out" 2>"$TMP/rust.err"; then
     echo "$name: cobrun FAIL: $(cat "$TMP/rust.err")"; FAIL=$((FAIL+1)); continue
   fi
   if cmp -s "$TMP/oracle.out" "$TMP/rust.out"; then
@@ -43,7 +46,7 @@ for cob in "$CORPUS"/*.cob; do
     elif [ -x "$P312/bin/cobc" ]; then
       if PATH="$P312/bin:$PATH" LD_LIBRARY_PATH="$P312/lib" COB_CONFIG_DIR="$P312/share/gnucobol/config" \
            cobc -x -free $STDOPT -o "$TMP/p312" "$cob" 2>/dev/null; then
-        LD_LIBRARY_PATH="$P312/lib" "$TMP/p312" </dev/null > "$TMP/o312.out" 2>/dev/null
+        env $ENVKV LD_LIBRARY_PATH="$P312/lib" "$TMP/p312" </dev/null > "$TMP/o312.out" 2>/dev/null
         cmp -s "$TMP/o312.out" "$TMP/rust.out" && DIFF=$((DIFF+1)) || { echo "$name: 3.1.2 DIFFER"; FAIL=$((FAIL+1)); }
       fi
     fi

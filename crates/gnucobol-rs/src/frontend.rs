@@ -217,7 +217,8 @@ pub fn run_program_dialect(
 
     // Split the source into its programs (a MAIN plus any CONTAINED / nested programs reachable by CALL).
     let (main_name, program_map) = parse_programs(&toks)?;
-    let ctx = Ctx { programs: &program_map, dialect, currency, decimal_comma };
+    let switches = parse_switches(&toks, first_proc);
+    let ctx = Ctx { programs: &program_map, dialect, currency, decimal_comma, switches };
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
     let mut out = Vec::new();
@@ -244,12 +245,77 @@ struct ProgItem {
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
-/// needed to build any program's fields.
+/// needed to build any program's fields, and the UPSI switch environment.
 struct Ctx<'a> {
     programs: &'a HashMap<String, ProgramDef>,
     dialect: crate::dialect::Dialect,
     currency: u8,
     decimal_comma: bool,
+    switches: SwitchEnv,
+}
+
+/// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
+/// `SWITCH-n ON/OFF STATUS IS <name>` condition-name map.
+struct SwitchEnv {
+    /// `cob_switch[n]` -- index `n` from `SWITCH-n` (1-based); on/off.
+    states: [bool; crate::common_misc::COB_SWITCH_COUNT],
+    /// condition-name -> (switch index, expected ON when true).
+    conds: HashMap<String, (usize, bool)>,
+}
+
+impl Default for SwitchEnv {
+    fn default() -> Self {
+        SwitchEnv { states: [false; crate::common_misc::COB_SWITCH_COUNT], conds: HashMap::new() }
+    }
+}
+
+/// Parse the `SPECIAL-NAMES` switch declarations (`SWITCH-n [ON STATUS IS a] [OFF STATUS IS b]`) before
+/// `before`, and load the switch states from the `COB_SWITCH_n` environment (`ON`/`1` -> on, else off --
+/// the default is off), mirroring `cob_init`.
+fn parse_switches(toks: &[Tok], before: usize) -> SwitchEnv {
+    let mut conds: HashMap<String, (usize, bool)> = HashMap::new();
+    let mut i = 0;
+    while i < before {
+        if let Some(Tok::Word(w)) = toks.get(i) {
+            if let Some(n) = w.strip_prefix("SWITCH-").and_then(|s| s.parse::<usize>().ok()) {
+                let mut k = i + 1;
+                while k < before {
+                    match toks.get(k) {
+                        Some(Tok::Dot) => break,
+                        Some(Tok::Word(x)) if x.starts_with("SWITCH-") => break,
+                        Some(Tok::Word(x)) if x == "ON" || x == "OFF" => {
+                            let on = x == "ON";
+                            let mut j = k + 1;
+                            if matches!(toks.get(j), Some(Tok::Word(y)) if y == "STATUS") {
+                                j += 1;
+                            }
+                            if matches!(toks.get(j), Some(Tok::Word(y)) if y == "IS") {
+                                j += 1;
+                            }
+                            if let Some(Tok::Word(name)) = toks.get(j) {
+                                if n < crate::common_misc::COB_SWITCH_COUNT {
+                                    conds.insert(name.clone(), (n, on));
+                                }
+                                k = j + 1;
+                                continue;
+                            }
+                            k += 1;
+                        }
+                        _ => k += 1,
+                    }
+                }
+            }
+        }
+        i += 1;
+    }
+    let mut states = [false; crate::common_misc::COB_SWITCH_COUNT];
+    for (n, slot) in states.iter_mut().enumerate() {
+        if let Ok(v) = std::env::var(format!("COB_SWITCH_{n}")) {
+            let v = v.trim().to_ascii_uppercase();
+            *slot = v == "ON" || v == "1";
+        }
+    }
+    SwitchEnv { states, conds }
 }
 
 /// Split the token stream at `PROGRAM-ID` boundaries into a registry of programs; the first is the MAIN.
@@ -664,7 +730,7 @@ fn exec_if(
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THEN") {
         *pos += 1;
     }
-    let truth = if exec { eval_cond(&cond, fields)? } else { false };
+    let truth = if exec { eval_cond(&cond, fields, &ctx.switches)? } else { false };
 
     // THEN branch.
     let halted = run_block(toks, pos, fields, out, exec && truth, ctx)?;
@@ -738,7 +804,7 @@ fn exec_perform(
         if is_until {
             // PERFORM UNTIL: test BEFORE each iteration (WITH TEST BEFORE, the default).
             let mut guard = 0u32;
-            while !eval_cond(&cond, fields)? {
+            while !eval_cond(&cond, fields, &ctx.switches)? {
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
                     return Ok(true);
@@ -795,7 +861,7 @@ fn resolve_int(w: &str, fields: &HashMap<String, Field>) -> Option<i64> {
 /// `rel := operand [IS] [NOT] (= | > | < | >= | <= | <> | GREATER [THAN] | LESS [THAN] | EQUAL [TO])
 /// operand`. Numeric operands compare by value; alphanumeric by space-padded bytes. The combined word
 /// forms ("GREATER THAN OR EQUAL TO") and class/sign/88-level conditions are not in the subset.
-fn eval_cond(t: &[Tok], fields: &HashMap<String, Field>) -> Result<bool, RunError> {
+fn eval_cond(t: &[Tok], fields: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
     let words: Vec<String> = t
         .iter()
         .map(|tok| match tok {
@@ -805,36 +871,41 @@ fn eval_cond(t: &[Tok], fields: &HashMap<String, Field>) -> Result<bool, RunErro
         })
         .collect();
     let mut p = 0;
-    let r = cond_or(&words, &mut p, fields)?;
+    let r = cond_or(&words, &mut p, fields, sw)?;
     if p != words.len() {
         return Err(RunError::Unsupported(format!("trailing tokens in condition at {}", words[p])));
     }
     Ok(r)
 }
 
-fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>) -> Result<bool, RunError> {
-    let mut acc = cond_and(w, p, f)?;
+fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
+    let mut acc = cond_and(w, p, f, sw)?;
     while w.get(*p).map(|s| s.as_str()) == Some("OR") {
         *p += 1;
-        let r = cond_and(w, p, f)?;
+        let r = cond_and(w, p, f, sw)?;
         acc = acc || r;
     }
     Ok(acc)
 }
 
-fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>) -> Result<bool, RunError> {
-    let mut acc = cond_rel(w, p, f)?;
+fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
+    let mut acc = cond_rel(w, p, f, sw)?;
     while w.get(*p).map(|s| s.as_str()) == Some("AND") {
         *p += 1;
-        let r = cond_rel(w, p, f)?;
+        let r = cond_rel(w, p, f, sw)?;
         acc = acc && r;
     }
     Ok(acc)
 }
 
-fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>) -> Result<bool, RunError> {
+fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
     let left = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?.clone();
     *p += 1;
+    // A bare UPSI switch condition-name (SPECIAL-NAMES `SWITCH-n ON/OFF STATUS IS <name>`): its truth is
+    // the switch's state matching the declared ON/OFF sense. No relational operator follows.
+    if let Some(&(idx, on)) = sw.conds.get(&left) {
+        return Ok(sw.states[idx] == on);
+    }
     if w.get(*p).map(|s| s.as_str()) == Some("IS") {
         *p += 1;
     }
