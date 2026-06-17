@@ -335,6 +335,8 @@ pub fn run_program_redirected(
     // Conditional-compilation preprocessor: resolve >>DEFINE / >>IF / >>ELSE / >>END-IF before lexing.
     let pre = preprocess(source);
     let up = uppercase_outside_quotes(&pre);
+    // EC-BOUND-SUBSCRIPT checking is per-run state (>>TURN ... CHECKING ON/OFF); default OFF like cobc.
+    EC_BOUND_SUBSCRIPT_ON.with(|c| c.set(parse_ec_bound_check(&up)));
     let mut toks = lex(&up);
 
     // ENVIRONMENT DIVISION / SPECIAL-NAMES of the first program: CURRENCY SIGN IS "x" + DECIMAL-POINT IS
@@ -2052,6 +2054,41 @@ fn split_subscript(w: &str) -> (&str, Option<&str>) {
     (w, None)
 }
 
+thread_local! {
+    /// Whether `EC-BOUND-SUBSCRIPT` checking is ENABLED for this run. Default OFF -- matching cobc, whose
+    /// default emits NO subscript check (an out-of-range read is undefined, reading adjacent storage).
+    /// `>>TURN EC-BOUND-SUBSCRIPT CHECKING ON` (or `EC-ALL`) turns it on. Set per run in
+    /// run_program_redirected; read in [`table_element`] / [`write_field`].
+    static EC_BOUND_SUBSCRIPT_ON: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+/// Scan for a program-level `>>TURN EC-BOUND-SUBSCRIPT CHECKING ON` / `>>TURN EC-ALL CHECKING ON` directive
+/// (a later matching `... CHECKING OFF` turns it back off). cobc's default is OFF (no emitted check).
+fn parse_ec_bound_check(src_upper: &str) -> bool {
+    let mut on = false;
+    for line in src_upper.lines() {
+        let l = line.trim_start();
+        if l.starts_with(">>TURN") && (l.contains("EC-BOUND-SUBSCRIPT") || l.contains("EC-ALL")) {
+            if l.contains("CHECKING ON") {
+                on = true;
+            } else if l.contains("CHECKING OFF") {
+                on = false;
+            }
+        }
+    }
+    on
+}
+
+/// A category-default element (`'0'` numeric, space alphanumeric) of `elem` bytes -- the safe value the
+/// port returns for a suppressed out-of-range subscript read (the C reads adjacent storage; that is UB).
+fn default_element(storage: &Storage, elem: usize) -> Field {
+    let fill = match storage {
+        Storage::Numeric(_) => b'0',
+        Storage::Alpha(_) | Storage::Edited(..) => b' ',
+    };
+    Field { storage: storage.clone(), bytes: vec![fill; elem], occurs: 1, redefines: None }
+}
+
 /// The element Field of an `OCCURS` table at 1-based subscript `idx` (a transient single-element Field).
 /// Out of range fails closed: cobc's default (no `>>TURN ... CHECKING ON`) OOB read is UNDEFINED (it reads
 /// adjacent storage); under #![forbid(unsafe_code)] the port cannot read past the table, so it errors
@@ -2060,9 +2097,15 @@ fn table_element(f: &Field, idx: usize, name: &str) -> Result<Field, RunError> {
     let occ = f.occurs.max(1);
     let elem = f.bytes.len() / occ;
     if idx < 1 || idx > occ {
-        return Err(RunError::Runtime(format!(
-            "subscript of '{name}' out of bounds: {idx} (maximum: {occ})"
-        )));
+        // EC-BOUND-SUBSCRIPT: when the check is enabled (>>TURN ... CHECKING ON) an OOB subscript raises
+        // (the libcob abort); when OFF (the cobc default) the check is SUPPRESSED -- cobc reads adjacent
+        // storage (UB), the safe port returns a category-default element and continues.
+        if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+            return Err(RunError::Runtime(format!(
+                "subscript of '{name}' out of bounds: {idx} (maximum: {occ})"
+            )));
+        }
+        return Ok(default_element(&f.storage, elem));
     }
     let start = (idx - 1) * elem;
     Ok(Field { storage: f.storage.clone(), bytes: f.bytes[start..start + elem].to_vec(), occurs: 1, redefines: None })
@@ -2140,6 +2183,16 @@ fn write_field(
             let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
             let occ = f.occurs.max(1);
             let elem = f.bytes.len() / occ;
+            if idx < 1 || idx > occ {
+                // EC-BOUND-SUBSCRIPT: ON -> raise; OFF (default) -> suppressed, the OOB write is a no-op
+                // (cobc writes into adjacent storage, UB; the safe port does nothing).
+                if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+                    return Err(RunError::Runtime(format!(
+                        "subscript of '{base}' out of bounds: {idx} (maximum: {occ})"
+                    )));
+                }
+                return Ok(());
+            }
             let mut tmp = table_element(f, idx, base)?;
             apply(&mut tmp)?;
             let f = fields.get_mut(base).expect("base field present");
@@ -2478,6 +2531,26 @@ mod tests {
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".  *> here's the caller's note: don't break\n           STOP RUN.\n";
         let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"OK\n");
+    }
+
+    #[test]
+    fn turn_ec_bound_subscript_is_honored() {
+        use crate::dialect::Dialect;
+        let prog = |head: &str| {
+            format!(
+                "{head}       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 E PIC 9 OCCURS 3.\n       01 I PIC 9 VALUE 5.\n       PROCEDURE DIVISION.\n           MOVE 9 TO E(I).\n           DISPLAY \"OK\".\n           STOP RUN.\n"
+            )
+        };
+        // Default (no >>TURN): EC-BOUND-SUBSCRIPT is OFF -> the out-of-range MOVE is suppressed and the
+        // program continues to completion (cobc's default reads/writes adjacent storage and continues).
+        let (out, _rc) = run_program_dialect_with_rc(&prog(""), Dialect::DEFAULT).unwrap();
+        assert_eq!(out, b"OK\n");
+        // >>TURN EC-BOUND-SUBSCRIPT CHECKING ON: the SAME out-of-range subscript now RAISES (honored).
+        let on = run_program_dialect_with_rc(&prog(">>TURN EC-BOUND-SUBSCRIPT CHECKING ON\n"), Dialect::DEFAULT);
+        assert!(on.is_err(), "EC-BOUND-SUBSCRIPT ON must raise on an out-of-range subscript");
+        // EC-ALL CHECKING ON also enables it.
+        let all = run_program_dialect_with_rc(&prog(">>TURN EC-ALL CHECKING ON\n"), Dialect::DEFAULT);
+        assert!(all.is_err());
     }
 
     #[test]

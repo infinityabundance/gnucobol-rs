@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (99 fixed, 6 open)
+## Summary -- 105 gaps catalogued across 5 panels (100 fixed, 5 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 4 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 3 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 1 | narrow, or faithful-but-surprising |
 | **latent** | 1 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 99 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 100 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -876,12 +876,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Add the location fields to ExceptionState + wire the intrinsics to read them.
 
 #### `exc-turn-fec` -- >>TURN directive, -fec=/-fno-ec, and per-EC default-enable mask entirely absent  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: >>TURN EC-BOUND-SUBSCRIPT OFF should suppress the check; Rust ignores it
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: >>TURN EC-BOUND-SUBSCRIPT OFF should suppress the check; Rust ignores it &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cobc (typeck.c:2706) decides via >>TURN EC-x ON/OFF and -fec=/-fno-ec whether to EMIT cob_check_* calls; the default-on set vs the -debug-only set (EC-SIZE-TRUNCATION, EC-RANGE) differ.
 - **gnucobol-rs (Rust):** No enabled-EC mask, no >>TURN parsing, no -fec concept in the runtime crate.
 - **Diff:** Rust cannot express 'this EC is turned off so the check is silent' nor distinguish default-on vs -debug-only checks; checks are always-on or always-off as coded.
-- **Evidence / plan:** Model an EC-enable mask driven by >>TURN/-fec; gate the checks on it.
+- **Evidence / plan:** FIXED gnucobol-rs 0.8.4 -- the cobrun front-end now PARSES >>TURN and GATES the bound check on the EC-enable state, exactly the gap's plan. parse_ec_bound_check scans for `>>TURN EC-BOUND-SUBSCRIPT CHECKING ON` / `>>TURN EC-ALL CHECKING ON` (honoring a later CHECKING OFF); a per-run thread-local EC_BOUND_SUBSCRIPT_ON (default OFF, matching cobc, whose default emits NO check) drives the OCCURS-subscript path: table_element / write_field RAISE on an out-of-range subscript only when the EC is ON (the libcob `subscript of 'E' out of bounds: N (maximum: M)` message + abort), and SUPPRESS it when OFF -- the program continues, the read returns a category-default element and the write is a no-op (cobc's default reads/writes adjacent storage, which is UNDEFINED; the memory-safe port cannot, so it picks the safe deterministic continuation). Oracle: default OOB -> cobc continues (probed BEFORE/AFTER exit 0) == cobrun OFF (corpus p42_turn_bound_check, sweep IDENTICAL + 3.1.2); >>TURN ON -> raise (unit turn_ec_bound_subscript_is_honored asserts ON/EC-ALL raise, OFF continues). 914 lib tests, clang parity fresh. (-fec= / -debug compile-flag selection of the default-on vs debug-only EC set is the cobc compile-driver surface; the runtime now honors the >>TURN source directive, the observable.)
 
 #### `exc-use-declaratives` -- USE AFTER EXCEPTION declaratives and ON EXCEPTION non-fatal return absent  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: statements with ON EXCEPTION or USE AFTER EXCEPTION declaratives
