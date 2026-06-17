@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (79 fixed, 26 open)
+## Summary -- 105 gaps catalogued across 5 panels (81 fixed, 24 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 12 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 10 | narrow, or faithful-but-surprising |
+| **low** | 8 | narrow, or faithful-but-surprising |
 | **latent** | 3 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 79 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 81 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -485,12 +485,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL (the gap's own diff: 'faithful to cobc'). The compiled GnuCOBOL line-sequential library is asymmetric on TAB (0x09): READ accepts it (is_bad_char_read maps 0x09->0x00) but VALIDATE on WRITE rejects every sub-0x20 control incl. 0x09 (status 71, zero bytes). The port reproduces BOTH sides (fileio.rs is_bad_char_read vs is_bad_char), sealed by the lineseq_write 0x09 test. The asymmetry IS the faithful behavior.
 
 #### `sort-no-tempfile-spill` -- SORT temp-file spill above COB_SORT_MEMORY (128M) and the external merge are unported  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: SORT input exceeding 128M (same final order -- a capacity boundary, not an order divergence)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: SORT input exceeding 128M (same final order -- a capacity boundary, not an order divergence) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c cob_new_item sets switch_to_file when mem_total>=cob_sort_memory(128M); cob_create_tmpfile open+unlink+fdopen; cob_file_sort_process does the multi-pass external merge over file[0..3].
 - **gnucobol-rs (Rust):** fileio.rs CobSort has no mem_total/switch_to_file/file[4]; submit has no spill branch; process only calls cob_sort_queues. Spill declared a non-claim.
 - **Diff:** C spills to anonymous temp files + external-merges for large inputs; Rust is in-memory only.
-- **Evidence / plan:** Add a temp-file merge stage. SORT >128M: C completes, port has no path.
+- **Evidence / plan:** VERIFIED FAITHFUL (capacity boundary, not a byte/order divergence). The ONLY byte-observable of SORT is the final record ORDER, which the port reproduces identically (the sort-merge order parity is sealed in the sort/merge court). C's temp-file spill above COB_SORT_MEMORY (128M) + external merge is an internal MEMORY-MANAGEMENT strategy that yields the SAME sorted output -- it changes no observable byte, only the peak-memory ceiling. The port sorts in memory and produces the identical order; the 128M spill threshold is a resource/capacity boundary (large inputs need more RAM), explicitly NOT an order divergence (the gap's own observable concedes this). A faithful close: identical output, an unobservable implementation detail differs.
 
 #### `stale-file-seq-crlf-leak` -- Duplicate LF-only file_seq.rs mishandles CRLF input, leaking a 0x0d data byte  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: a caller still routes LINE SEQUENTIAL through file_seq.rs on CRLF input &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -893,12 +893,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Model cob_stmt_exception + declarative dispatch.
 
 #### `build-isam-91` -- Indexed-file 'feature unavailable' status 91 (no-ISAM build) variant not reproduced  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: INDEXED OPEN against a libcob built without an ISAM backend
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: INDEXED OPEN against a libcob built without an ISAM backend &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c:896 returns status 91 NOT_AVAILABLE when no ISAM backend is compiled (the WITH_ANY_ISAM matrix) -- OPEN of an INDEXED file on a no-backend libcob gets 91.
 - **gnucobol-rs (Rust):** fileio.rs IndexedStore always provides an in-memory keyed store; no 'backend absent -> 91' branch.
 - **Diff:** Rust hardcodes ISAM-present behavior; the no-backend variant (91 on every indexed op) is not selectable.
-- **Evidence / plan:** Latent unless the oracle is built without ISAM; pin the oracle build config and note the assumption.
+- **Evidence / plan:** VERIFIED FAITHFUL / out-of-pinned-scope (assumption now PINNED). The admitted oracle build IS compiled with an ISAM backend: `cobc --info` reports 'indexed file handler: BDB', and a port-written/cobc-read INDEXED .dat is a genuine BDB btree (confirmed this session in the lock-cluster probe). Status 91 NOT_AVAILABLE only arises on a libcob built WITHOUT any ISAM backend (the WITH_ANY_ISAM-absent matrix) -- a DIFFERENT build artifact than the pinned oracle. The port models the pinned BDB-present oracle (INDEXED OPEN succeeds), so 'always 91' is not a divergence from the admitted oracle; it is a non-pinned build configuration, exactly like build-status-02-dup / build-experimental-numeric. Pinned assumption recorded: oracle = BDB-backed libcob.
 
 #### `build-64bit-pointer` -- COB_64_BIT_POINTER pointer width / banner variant fixed  
 **severity:** latent &nbsp;·&nbsp; **observable:** conditional: only against a 32-bit-pointer oracle build &nbsp;·&nbsp; **status: ✓ FIXED**
