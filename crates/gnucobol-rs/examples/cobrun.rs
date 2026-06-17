@@ -38,9 +38,25 @@ fn main() {
         }
     };
     let src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
-    match gnucobol_rs::frontend::run_program_dialect_with_rc(&src, dialect) {
-        Ok((out, rc)) => {
+    // DISPLAY ... UPON PRINTER redirect: when COB_DISPLAY_PRINT_FILE is set, libcob diverts UPON PRINTER
+    // to that file (appending) instead of stdout. cobrun is the host that owns this env+file boundary; the
+    // interpreter only separates the printer stream. (COB_DISPLAY_PRINT_PIPE -- a spawned pipe -- is a
+    // boundary cobrun does not implement.)
+    let print_file = std::env::var_os("COB_DISPLAY_PRINT_FILE");
+    let redirect = print_file.is_some();
+    match gnucobol_rs::frontend::run_program_redirected(&src, dialect, redirect) {
+        Ok((out, printer, rc)) => {
             std::io::stdout().write_all(&out).unwrap();
+            if let Some(path) = print_file {
+                if !printer.is_empty() {
+                    use std::io::Write as _;
+                    if let Ok(mut f) =
+                        std::fs::OpenOptions::new().create(true).append(true).open(&path)
+                    {
+                        let _ = f.write_all(&printer);
+                    }
+                }
+            }
             // RETURN-CODE flows to the process exit status (MOVE n TO RETURN-CODE / STOP RUN n).
             std::process::exit(rc);
         }

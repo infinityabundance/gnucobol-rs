@@ -27,6 +27,7 @@ use crate::move_ops::cob_move;
 use crate::pic::{build_field, Usage};
 use crate::termio::{cob_display, DisplaySettings};
 use crate::value::Decimal;
+use std::cell::RefCell;
 use std::collections::HashMap;
 
 /// The COBOL statement verbs the front-end actually EXECUTES (not merely recognizes as a boundary).
@@ -301,6 +302,19 @@ pub fn run_program_dialect_with_rc(
     source: &str,
     dialect: crate::dialect::Dialect,
 ) -> Result<(Vec<u8>, i32), RunError> {
+    let (out, _printer, rc) = run_program_redirected(source, dialect, false)?;
+    Ok((out, rc))
+}
+
+/// Run a program, optionally diverting `DISPLAY ... UPON PRINTER` to a separate `printer` stream (instead
+/// of interleaving it into stdout) when `redirect_printer` is set -- the host (`cobrun`) supplies this
+/// from `COB_DISPLAY_PRINT_FILE`/`_PIPE` and appends the returned printer bytes to that file, mirroring
+/// libcob's `cob_display_print_file`. Returns `(stdout, printer, exit_code)`.
+pub fn run_program_redirected(
+    source: &str,
+    dialect: crate::dialect::Dialect,
+    redirect_printer: bool,
+) -> Result<(Vec<u8>, Vec<u8>, i32), RunError> {
     // Conditional-compilation preprocessor: resolve >>DEFINE / >>IF / >>ELSE / >>END-IF before lexing.
     let pre = preprocess(source);
     let up = pre.to_uppercase();
@@ -325,14 +339,23 @@ pub fn run_program_dialect_with_rc(
     // Split the source into its programs (a MAIN plus any CONTAINED / nested programs reachable by CALL).
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
-    let ctx = Ctx { programs: &program_map, dialect, currency, decimal_comma, switches };
+    let ctx = Ctx {
+        programs: &program_map,
+        dialect,
+        currency,
+        decimal_comma,
+        switches,
+        print_redirect: redirect_printer,
+        printer: RefCell::new(Vec::new()),
+    };
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
     let mut out = Vec::new();
     let mut fields = build_program_fields(main, &ctx)?;
     run_program_body(main, &ctx, &mut fields, &mut out)?;
     let rc = read_return_code(&fields);
-    Ok((out, rc))
+    let printer = ctx.printer.borrow().clone();
+    Ok((out, printer, rc))
 }
 
 /// Read the program's final `RETURN-CODE` register as the process exit code (`MOVE n TO RETURN-CODE` /
@@ -382,6 +405,12 @@ struct Ctx<'a> {
     currency: u8,
     decimal_comma: bool,
     switches: SwitchEnv,
+    /// `DISPLAY ... UPON PRINTER` is diverted here (instead of stdout) when the print redirect is active
+    /// (`COB_DISPLAY_PRINT_FILE`/`_PIPE` set), mirroring libcob's `cob_display_print_file`. The host
+    /// (`cobrun`) appends this stream to the redirect file; with no redirect it stays empty and UPON
+    /// PRINTER interleaves into stdout, as the oracle does.
+    print_redirect: bool,
+    printer: RefCell<Vec<u8>>,
 }
 
 /// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
@@ -1379,7 +1408,7 @@ fn exec_stmt(
     ctx: &Ctx,
 ) -> Result<(), RunError> {
     match verb {
-        "DISPLAY" => exec_display(stmt, fields, out),
+        "DISPLAY" => exec_display(stmt, fields, out, ctx),
         "MOVE" => exec_move(stmt, fields),
         "CALL" => exec_call(stmt, fields, out, ctx),
         "STOP" => Ok(()), // STOP RUN
@@ -1650,12 +1679,28 @@ fn parse_primary(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> R
 }
 
 /// `DISPLAY op [op ...]` -- concatenate each operand's display bytes, then a newline.
-fn exec_display(stmt: &[Tok], fields: &HashMap<String, Field>, out: &mut Vec<u8>) -> Result<(), RunError> {
+fn exec_display(
+    stmt: &[Tok],
+    fields: &HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
     let mut operands: Vec<(Vec<u8>, FieldAttr)> = Vec::new();
-    for t in stmt {
+    // `DISPLAY ... UPON PRINTER` (a built-in device mnemonic -- cobc accepts it even when SPECIAL-NAMES
+    // does not declare it) is routed to the print redirect when active; UPON CONSOLE/SYSOUT and the
+    // default stay on stdout.
+    let mut upon_printer = false;
+    let mut it = stmt.iter();
+    while let Some(t) = it.next() {
         match t {
             Tok::Str(s) => operands.push((s.clone(), alnum_attr())),
             Tok::Word(w) => {
+                if w == "UPON" {
+                    if let Some(Tok::Word(dev)) = it.next() {
+                        upon_printer = dev == "PRINTER";
+                    }
+                    continue;
+                }
                 if w == "WITH" || w == "NO" || w == "ADVANCING" {
                     // DISPLAY ... WITH NO ADVANCING handled below (no newline) -- mark it.
                     continue;
@@ -1669,7 +1714,12 @@ fn exec_display(stmt: &[Tok], fields: &HashMap<String, Field>, out: &mut Vec<u8>
     }
     let no_adv = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w=="ADVANCING"));
     let refs: Vec<(&[u8], &FieldAttr)> = operands.iter().map(|(b, a)| (b.as_slice(), a)).collect();
-    cob_display(!no_adv, &refs, &DisplaySettings::default(), out);
+    if upon_printer && ctx.print_redirect {
+        let mut p = ctx.printer.borrow_mut();
+        cob_display(!no_adv, &refs, &DisplaySettings::default(), &mut p);
+    } else {
+        cob_display(!no_adv, &refs, &DisplaySettings::default(), out);
+    }
     Ok(())
 }
 
@@ -2053,6 +2103,20 @@ mod tests {
         assert_eq!(rc("           DISPLAY \"X\".\n           STOP RUN."), 0);
         // STOP RUN n sets the exit code directly (oracle: STOP RUN 7 -> 7).
         assert_eq!(rc("           STOP RUN 7."), 7);
+    }
+
+    #[test]
+    fn display_upon_printer_redirect_separates_stream() {
+        use crate::dialect::Dialect;
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"A\".\n           DISPLAY \"P\" UPON PRINTER.\n           DISPLAY \"B\".\n           STOP RUN.\n";
+        // redirect ON (COB_DISPLAY_PRINT_FILE set): UPON PRINTER -> separate stream, stdout omits it.
+        let (out, printer, _rc) = run_program_redirected(src, Dialect::DEFAULT, true).unwrap();
+        assert_eq!(out, b"A\nB\n");
+        assert_eq!(printer, b"P\n");
+        // redirect OFF (default): UPON PRINTER interleaves into stdout (oracle default), printer empty.
+        let (out2, printer2, _rc2) = run_program_redirected(src, Dialect::DEFAULT, false).unwrap();
+        assert_eq!(out2, b"A\nP\nB\n");
+        assert!(printer2.is_empty());
     }
 
     #[test]

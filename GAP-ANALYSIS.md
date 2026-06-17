@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (70 fixed, 35 open)
+## Summary -- 105 gaps catalogued across 5 panels (71 fixed, 34 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 16 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 13 | narrow, or faithful-but-surprising |
 | **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 70 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 71 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -805,12 +805,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (front-end feature): frontend.rs::preprocess runs a line-based conditional-compilation pass BEFORE the lexer (run_program_dialect calls it first), resolving >>DEFINE name [AS value], >>IF <cond> / >>ELSE / >>END-IF (nested via a (include, taken) stack) and emitting only the lines whose enclosing conditions are all true; directive lines are never emitted; it is a no-op for directive-free source (the existing 32-program sweep is unregressed). eval_pp_cond supports [NOT] name DEFINED and name = value. Oracle (built cobc, corpus p33_define_if): >>DEFINE FEAT AS 1; >>IF FEAT DEFINED -> FEAT-ON; >>IF OTHER DEFINED ... >>ELSE -> OTHER-OFF; >>IF FEAT = 1 -> FEAT-IS-1; then DONE -- IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 33/0). 895 lib tests. RESIDUAL: >>SET, -D CLI defines (a cobrun flag), and the richer >>IF expression grammar (the common DEFINED / equality forms are sealed).
 
 #### `cli-display-print-redirect` -- COB_DISPLAY_PRINT_FILE/PIPE (DISPLAY UPON PRINTER) and COB_REDIRECT_DISPLAY ignored  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: DISPLAY UPON PRINTER with COB_DISPLAY_PRINT_FILE set
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: DISPLAY UPON PRINTER with COB_DISPLAY_PRINT_FILE set &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:531 gc_conf COB_DISPLAY_PRINT_FILE/PIPE -> cob_display_print_file; DISPLAY UPON PRINTER + redirected DISPLAY route there.
 - **gnucobol-rs (Rust):** common_module.rs:127 carries the cob_display_print_file field + a runtime-option switch, but frontend::exec_display always writes to one output buffer via DisplaySettings::default(); never reads these vars.
 - **Diff:** C sends DISPLAY UPON PRINTER to a file/pipe; Rust always concatenates to the single stdout byte stream.
-- **Evidence / plan:** Honor the redirect vars in exec_display.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.97. The cobrun front-end now honors the print redirect: exec_display recognizes DISPLAY ... UPON PRINTER (a built-in device mnemonic cobc accepts even when SPECIAL-NAMES omits it) and, when the redirect is active, diverts that line to a separate printer stream instead of stdout; run_program_redirected returns (stdout, printer, rc). The host (cobrun) reads COB_DISPLAY_PRINT_FILE and APPENDS the printer bytes to that file -- mirroring libcob cob_display_print_file's append-open. Oracle-verified byte-for-byte against built cobc 3.2: default (no env) interleaves UPON PRINTER into stdout (TO-STDOUT/TO-PRINTER/TO-STDOUT2); with COB_DISPLAY_PRINT_FILE set, stdout shows only the plain DISPLAYs and the file holds the printer line, accumulating across runs (two runs -> two lines). Corpus p35_print_redirect (sweep IDENTICAL + 3.1.2 differential-matched), unit display_upon_printer_redirect_separates_stream, 900 lib tests. BOUNDARY: COB_DISPLAY_PRINT_PIPE (a spawned pipe) and COB_REDIRECT_DISPLAY (redirecting ALL DISPLAY) are not wired -- only the FILE redirect, which is the observable in the gap.
 
 #### `cli-fsign-ebcdic` -- -fsign=ASCII/EBCDIC and SIGN IS LEADING/SEPARATE from CLI not selectable; sign hardcoded  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: signed zoned DISPLAY output under -fsign=EBCDIC &nbsp;·&nbsp; **status: ✓ FIXED**
