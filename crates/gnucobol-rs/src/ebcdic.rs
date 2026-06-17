@@ -74,15 +74,25 @@ pub fn translate_byte(cp: CodePage, b: u8) -> Result<u8, EbcdicError> {
     }
 }
 
-/// Decode raw EBCDIC bytes of an **alphanumeric DISPLAY** field into a `String` (each byte mapped
-/// through the code-page table; the result byte is a Latin-1 code point). This is text decoding only
-/// — numeric EBCDIC zoned sign processing, binary, and packed fields are **not** handled here.
-pub fn decode_display(cp: CodePage, bytes: &[u8]) -> Result<String, EbcdicError> {
-    let mut s = String::with_capacity(bytes.len());
+/// Decode raw EBCDIC bytes of an **alphanumeric DISPLAY** field into the **byte-length-preserving**
+/// ASCII/Latin-1 storage image — cconv.c's `translate` maps each EBCDIC byte to exactly one result
+/// byte (`out.len() == bytes.len()`). This is the field-storage-faithful form: use it wherever the
+/// result is stored back into a COBOL field. Numeric EBCDIC zoned sign processing, binary, and packed
+/// fields are **not** handled here (text decoding only).
+pub fn decode_display_bytes(cp: CodePage, bytes: &[u8]) -> Result<Vec<u8>, EbcdicError> {
+    let mut v = Vec::with_capacity(bytes.len());
     for &b in bytes {
-        s.push(translate_byte(cp, b)? as char); // Latin-1 byte -> char
+        v.push(translate_byte(cp, b)?);
     }
-    Ok(s)
+    Ok(v)
+}
+
+/// As [`decode_display_bytes`], but as a `String` for **text/diagnostic** use (each result byte taken
+/// as a Latin-1 code point). NOTE: a Latin-1 high byte (>=0x80) UTF-8-encodes to two bytes in the
+/// returned `String`, so this is 1:1 in *chars* but not in *bytes* — for byte-length field-storage
+/// fidelity use [`decode_display_bytes`].
+pub fn decode_display(cp: CodePage, bytes: &[u8]) -> Result<String, EbcdicError> {
+    Ok(decode_display_bytes(cp, bytes)?.into_iter().map(|b| b as char).collect())
 }
 
 #[cfg(test)]
@@ -117,6 +127,22 @@ mod tests {
         assert_eq!(translate_byte(CodePage::Cp500, 0xC1).unwrap(), b'A');
         assert_eq!(translate_byte(CodePage::Cp500, 0xF0).unwrap(), b'0');
         assert_eq!(translate_byte(CodePage::Cp500, 0x5B).unwrap(), b'$');
+    }
+
+    #[test]
+    fn decode_bytes_is_byte_length_preserving() {
+        // cconv.c translate is 1:1 in BYTES: 256 input bytes -> 256 output bytes, even for the high
+        // cp500 images (>=0x80) that UTF-8-expand to two bytes in the String form. This is the
+        // field-storage-faithful property the String API cannot offer.
+        let all: Vec<u8> = (0u16..256).map(|b| b as u8).collect();
+        let v = decode_display_bytes(CodePage::Cp500, &all).unwrap();
+        assert_eq!(v.len(), 256, "byte-length preserved 1:1");
+        // The String form is 1:1 in CHARS but its UTF-8 byte length exceeds 256 (high bytes expand).
+        let s = decode_display(CodePage::Cp500, &all).unwrap();
+        assert_eq!(s.chars().count(), 256);
+        assert!(s.len() > 256, "String UTF-8 length expands for >=0x80 cp500 images");
+        // Each output byte equals its translate_byte image.
+        assert!(v.iter().zip(all.iter()).all(|(&o, &i)| o == translate_byte(CodePage::Cp500, i).unwrap()));
     }
 
     #[test]

@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (73 fixed, 32 open)
+## Summary -- 105 gaps catalogued across 5 panels (74 fixed, 31 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 12 | narrow, or faithful-but-surprising |
+| **low** | 11 | narrow, or faithful-but-surprising |
 | **latent** | 4 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 73 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 74 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -609,12 +609,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Supply/admit the EBCDIC ordering table; the compare fn is already correct given the table. Algorithm parity sealed.
 
 #### `ebcdic-decode-string-expands` -- EBCDIC decode_display returns a UTF-8 String (Latin-1 re-encoded), not byte-length-preserving like libcob  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: EBCDIC bytes whose cp500 image is >=0x80 (the test asserts chars().count()==256, not bytes)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: EBCDIC bytes whose cp500 image is >=0x80 (the test asserts chars().count()==256, not bytes) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cconv.c translate yields a byte array: each EBCDIC byte -> one ASCII/Latin-1 byte stored as raw storage bytes.
 - **gnucobol-rs (Rust):** ebcdic.rs:80 decode_display does s.push(translate_byte(...) as char): for result bytes >=128 (cp500 maps many to Latin-1 0x80..0xFF) the char UTF-8-encodes to 2 bytes, so String byte-length != input length.
 - **Diff:** libcob's EBCDIC->ASCII is byte-length-preserving (1:1 bytes); the port's String is 1:1 in chars but expands high bytes to 2 UTF-8 bytes. A caller using the String bytes as field storage gets the wrong width.
-- **Evidence / plan:** For field-storage fidelity, decode_display must return Vec<u8>, not String.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.98. Added the byte-length-preserving decode_display_bytes(cp, bytes) -> Vec<u8> (cconv.c's translate: one EBCDIC byte -> exactly one output byte, out.len()==bytes.len()), exported from lib; decode_display (the String form, kept for text/diagnostics) now delegates to it. New unit decode_bytes_is_byte_length_preserving proves the 256-byte battery maps to 256 output bytes while the String form's UTF-8 length exceeds 256 (high cp500 images >=0x80 expand). Field-storage callers (e.g. value.rs, which already used translate_byte directly) now have a byte-faithful API; the String API documents its char-1:1/byte-expanding caveat. 904 lib tests.
 
 #### `ebcdic-zoned-sign` -- EBCDIC zoned-sign zones (cp500 numeric sign half-bytes) not handled; EBCDIC admitted for DISPLAY text only  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: EBCDIC zoned numeric fields with sign zones
