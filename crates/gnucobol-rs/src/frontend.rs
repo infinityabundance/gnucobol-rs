@@ -326,7 +326,7 @@ pub fn run_program_redirected(
 ) -> Result<(Vec<u8>, Vec<u8>, i32), RunError> {
     // Conditional-compilation preprocessor: resolve >>DEFINE / >>IF / >>ELSE / >>END-IF before lexing.
     let pre = preprocess(source);
-    let up = pre.to_uppercase();
+    let up = uppercase_outside_quotes(&pre);
     let mut toks = lex(&up);
 
     // ENVIRONMENT DIVISION / SPECIAL-NAMES of the first program: CURRENCY SIGN IS "x" + DECIMAL-POINT IS
@@ -348,11 +348,13 @@ pub fn run_program_redirected(
     // Split the source into its programs (a MAIN plus any CONTAINED / nested programs reachable by CALL).
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
+    let collation = parse_collation(&toks, first_proc);
     let ctx = Ctx {
         programs: &program_map,
         dialect,
         currency,
         decimal_comma,
+        collation,
         switches,
         print_redirect: redirect_printer,
         printer: RefCell::new(Vec::new()),
@@ -418,6 +420,9 @@ struct Ctx<'a> {
     dialect: crate::dialect::Dialect,
     currency: u8,
     decimal_comma: bool,
+    /// `PROGRAM COLLATING SEQUENCE IS <ebcdic-alphabet>` -- the byte->weight table alphanumeric comparisons
+    /// go through (None = native ASCII byte order). Currently the EBCDIC alphabet (the common case).
+    collation: Option<[u8; 256]>,
     switches: SwitchEnv,
     /// `DISPLAY ... UPON PRINTER` is diverted here (instead of stdout) when the print redirect is active
     /// (`COB_DISPLAY_PRINT_FILE`/`_PIPE` set), mirroring libcob's `cob_display_print_file`. The host
@@ -498,6 +503,85 @@ fn parse_switches(toks: &[Tok], before: usize) -> SwitchEnv {
         }
     }
     SwitchEnv { states, conds }
+}
+
+/// Parse `PROGRAM COLLATING SEQUENCE IS <alphabet>` (OBJECT-COMPUTER / SPECIAL-NAMES) before `before`,
+/// resolving the alphabet against any `ALPHABET <name> IS EBCDIC` declaration. Returns the EBCDIC
+/// collating-weight table when the program's collating sequence is EBCDIC, else None (native ASCII order).
+fn parse_collation(toks: &[Tok], before: usize) -> Option<[u8; 256]> {
+    // ALPHABET <name> [IS] EBCDIC -> <name> denotes the EBCDIC ordering.
+    let mut ebcdic_alphabets: Vec<String> = Vec::new();
+    let mut i = 0;
+    while i + 2 < before {
+        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "ALPHABET") {
+            if let Some(Tok::Word(name)) = toks.get(i + 1) {
+                let mut j = i + 2;
+                if matches!(toks.get(j), Some(Tok::Word(w)) if w == "IS") {
+                    j += 1;
+                }
+                if matches!(toks.get(j), Some(Tok::Word(w)) if w == "EBCDIC") {
+                    ebcdic_alphabets.push(name.clone());
+                }
+            }
+        }
+        i += 1;
+    }
+    // PROGRAM COLLATING SEQUENCE [IS] <name>.
+    let mut sel: Option<String> = None;
+    let mut i = 0;
+    while i + 1 < before {
+        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "COLLATING")
+            && matches!(toks.get(i + 1), Some(Tok::Word(w)) if w == "SEQUENCE")
+        {
+            let mut j = i + 2;
+            if matches!(toks.get(j), Some(Tok::Word(w)) if w == "IS") {
+                j += 1;
+            }
+            if let Some(Tok::Word(name)) = toks.get(j) {
+                sel = Some(name.clone());
+            }
+        }
+        i += 1;
+    }
+    let sel = sel?;
+    if sel == "EBCDIC" || ebcdic_alphabets.iter().any(|a| a == &sel) {
+        Some(crate::ebcdic::ebcdic_collation())
+    } else {
+        None
+    }
+}
+
+/// Uppercase COBOL source -- keywords and user names are case-insensitive -- while PRESERVING the bytes
+/// inside string literals (`"..."` / `'...'`, COBOL's doubled-quote escape kept inside): `DISPLAY "hello"`
+/// must print `hello`, and `IF "a" < "A"` must compare distinct bytes (not both folded to `A`).
+fn uppercase_outside_quotes(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut quote: Option<char> = None;
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        match quote {
+            Some(q) => {
+                out.push(c);
+                if c == q {
+                    if chars.peek() == Some(&q) {
+                        // doubled quote -> an escaped quote, stays inside the literal.
+                        out.push(chars.next().unwrap());
+                    } else {
+                        quote = None;
+                    }
+                }
+            }
+            None => {
+                if c == '"' || c == '\'' {
+                    quote = Some(c);
+                    out.push(c);
+                } else {
+                    out.extend(c.to_uppercase());
+                }
+            }
+        }
+    }
+    out
 }
 
 /// Split the token stream at `PROGRAM-ID` boundaries into a registry of programs; the first is the MAIN.
@@ -960,7 +1044,7 @@ fn exec_if(
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THEN") {
         *pos += 1;
     }
-    let truth = if exec { eval_cond(&cond, fields, &ctx.switches)? } else { false };
+    let truth = if exec { eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? } else { false };
 
     // THEN branch.
     let halted = run_block(toks, pos, fields, out, exec && truth, ctx)?;
@@ -1034,7 +1118,7 @@ fn exec_perform(
         if is_until {
             // PERFORM UNTIL: test BEFORE each iteration (WITH TEST BEFORE, the default).
             let mut guard = 0u32;
-            while !eval_cond(&cond, fields, &ctx.switches)? {
+            while !eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
                     return Ok(true);
@@ -1091,7 +1175,12 @@ fn resolve_int(w: &str, fields: &HashMap<String, Field>) -> Option<i64> {
 /// `rel := operand [IS] [NOT] (= | > | < | >= | <= | <> | GREATER [THAN] | LESS [THAN] | EQUAL [TO])
 /// operand`. Numeric operands compare by value; alphanumeric by space-padded bytes. The combined word
 /// forms ("GREATER THAN OR EQUAL TO") and class/sign/88-level conditions are not in the subset.
-fn eval_cond(t: &[Tok], fields: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
+fn eval_cond(
+    t: &[Tok],
+    fields: &HashMap<String, Field>,
+    sw: &SwitchEnv,
+    col: Option<&[u8; 256]>,
+) -> Result<bool, RunError> {
     let words: Vec<String> = t
         .iter()
         .map(|tok| match tok {
@@ -1101,34 +1190,34 @@ fn eval_cond(t: &[Tok], fields: &HashMap<String, Field>, sw: &SwitchEnv) -> Resu
         })
         .collect();
     let mut p = 0;
-    let r = cond_or(&words, &mut p, fields, sw)?;
+    let r = cond_or(&words, &mut p, fields, sw, col)?;
     if p != words.len() {
         return Err(RunError::Unsupported(format!("trailing tokens in condition at {}", words[p])));
     }
     Ok(r)
 }
 
-fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
-    let mut acc = cond_and(w, p, f, sw)?;
+fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
+    let mut acc = cond_and(w, p, f, sw, col)?;
     while w.get(*p).map(|s| s.as_str()) == Some("OR") {
         *p += 1;
-        let r = cond_and(w, p, f, sw)?;
+        let r = cond_and(w, p, f, sw, col)?;
         acc = acc || r;
     }
     Ok(acc)
 }
 
-fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
-    let mut acc = cond_rel(w, p, f, sw)?;
+fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
+    let mut acc = cond_rel(w, p, f, sw, col)?;
     while w.get(*p).map(|s| s.as_str()) == Some("AND") {
         *p += 1;
-        let r = cond_rel(w, p, f, sw)?;
+        let r = cond_rel(w, p, f, sw, col)?;
         acc = acc && r;
     }
     Ok(acc)
 }
 
-fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv) -> Result<bool, RunError> {
+fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
     let left = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?.clone();
     *p += 1;
     // A bare UPSI switch condition-name (SPECIAL-NAMES `SWITCH-n ON/OFF STATUS IS <name>`): its truth is
@@ -1180,7 +1269,7 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     *p += 1;
     let right = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
     *p += 1;
-    let ord = cond_compare(&left, &right, f)?;
+    let ord = cond_compare(&left, &right, f, col)?;
     let base = match op {
         Rel::Eq => ord == std::cmp::Ordering::Equal,
         Rel::Ne => ord != std::cmp::Ordering::Equal,
@@ -1205,21 +1294,26 @@ enum Rel {
 /// Compare two condition operands (each a word: a field name, a numeric literal, or a `\u{1}`-marked
 /// string literal). If BOTH resolve to numeric values, compare by value; otherwise compare the display
 /// bytes space-padded to equal length (the COBOL alphanumeric collation).
-fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>) -> Result<std::cmp::Ordering, RunError> {
+fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 256]>) -> Result<std::cmp::Ordering, RunError> {
     let na = cond_numeric(a, f);
     let nb = cond_numeric(b, f);
     if let (Some(da), Some(db)) = (&na, &nb) {
         return Ok(dec_cmp(da, db));
     }
-    // alphanumeric compare: space-pad the shorter, byte compare.
+    // alphanumeric compare: space-pad the shorter, byte compare. Under PROGRAM COLLATING SEQUENCE the
+    // bytes are weighted through `col` first (e.g. EBCDIC order: lowercase < uppercase < digits).
     let sa = cond_bytes(a, f);
     let sb = cond_bytes(b, f);
     let n = sa.len().max(sb.len());
     for i in 0..n {
         let ca = sa.get(i).copied().unwrap_or(b' ');
         let cb = sb.get(i).copied().unwrap_or(b' ');
-        if ca != cb {
-            return Ok(ca.cmp(&cb));
+        let (wa, wb) = match col {
+            Some(t) => (t[ca as usize], t[cb as usize]),
+            None => (ca, cb),
+        };
+        if wa != wb {
+            return Ok(wa.cmp(&wb));
         }
     }
     Ok(std::cmp::Ordering::Equal)
@@ -2193,6 +2287,36 @@ mod tests {
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".  *> here's the caller's note: don't break\n           STOP RUN.\n";
         let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"OK\n");
+    }
+
+    #[test]
+    fn ebcdic_collating_sequence_orders_alphanumeric() {
+        use crate::dialect::Dialect;
+        // PROGRAM COLLATING SEQUENCE IS <ebcdic-alphabet>: EBCDIC order is lowercase < uppercase < digits
+        // (opposite of ASCII). String-literal case is preserved through the uppercase-outside-quotes pass.
+        let prog = |cs: &str| {
+            format!(
+                "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION.\n       CONFIGURATION SECTION.\n       SPECIAL-NAMES. ALPHABET EB IS EBCDIC.\n       {cs}\n       PROCEDURE DIVISION.\n           IF \"a\" < \"A\" DISPLAY \"lo\" ELSE DISPLAY \"up\" END-IF.\n           IF \"Z\" < \"0\" DISPLAY \"let\" ELSE DISPLAY \"dig\" END-IF.\n           STOP RUN.\n"
+            )
+        };
+        // EBCDIC: a<A (lo), Z<0 (let).
+        let (out, _rc) = run_program_dialect_with_rc(
+            &prog("OBJECT-COMPUTER. PROGRAM COLLATING SEQUENCE IS EB."),
+            Dialect::DEFAULT,
+        )
+        .unwrap();
+        assert_eq!(out, b"lo\nlet\n");
+        // No collating sequence -> native ASCII: A<a (up), 0<Z (dig).
+        let (out2, _rc2) = run_program_dialect_with_rc(&prog(""), Dialect::DEFAULT).unwrap();
+        assert_eq!(out2, b"up\ndig\n");
+    }
+
+    #[test]
+    fn display_preserves_string_literal_case() {
+        use crate::dialect::Dialect;
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"Hello, World\".\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        assert_eq!(out, b"Hello, World\n");
     }
 
     #[test]

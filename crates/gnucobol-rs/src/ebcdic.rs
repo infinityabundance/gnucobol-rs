@@ -67,6 +67,21 @@ pub(crate) const CP500_TO_ASCII: [u8; 256] = [
     0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff,
 ];
 
+/// The EBCDIC **collating** weight table for `PROGRAM COLLATING SEQUENCE IS <ebcdic-alphabet>`: maps each
+/// ASCII byte (how text is stored on an ASCII host) to its EBCDIC code-point, so a byte comparison through
+/// this table orders ASCII data as EBCDIC would. It is the exact inverse of [`CP500_TO_ASCII`] (a proven
+/// bijection): `col[CP500_TO_ASCII[e]] = e`. Result: lowercase < uppercase < digits, the EBCDIC order
+/// (e.g. 'a'(0x61)->0x81 < 'A'(0x41)->0xC1, 'Z'->0xE9 < '0'->0xF0), matching built cobc 3.2.
+pub fn ebcdic_collation() -> [u8; 256] {
+    let mut col = [0u8; 256];
+    let mut e = 0usize;
+    while e < 256 {
+        col[CP500_TO_ASCII[e] as usize] = e as u8;
+        e += 1;
+    }
+    col
+}
+
 /// Translate one EBCDIC byte to its ASCII/Latin-1 byte under `cp`.
 pub fn translate_byte(cp: CodePage, b: u8) -> Result<u8, EbcdicError> {
     match cp {
@@ -127,6 +142,24 @@ mod tests {
         assert_eq!(translate_byte(CodePage::Cp500, 0xC1).unwrap(), b'A');
         assert_eq!(translate_byte(CodePage::Cp500, 0xF0).unwrap(), b'0');
         assert_eq!(translate_byte(CodePage::Cp500, 0x5B).unwrap(), b'$');
+    }
+
+    #[test]
+    fn ebcdic_collation_is_cp500_inverse_in_ebcdic_order() {
+        let col = ebcdic_collation();
+        // exact inverse of the translate table: col[CP500_TO_ASCII[e]] == e for every byte.
+        for e in 0u16..256 {
+            assert_eq!(col[CP500_TO_ASCII[e as usize] as usize], e as u8);
+        }
+        // EBCDIC code-point order (matches built cobc 3.2 PROGRAM COLLATING SEQUENCE EBCDIC):
+        // lowercase < uppercase < digits; e.g. 'a' < 'A' < '9', and 'Z' < '0'.
+        assert!(col[b'a' as usize] < col[b'A' as usize], "lowercase before uppercase");
+        assert!(col[b'A' as usize] < col[b'9' as usize], "letters before digits");
+        assert!(col[b'Z' as usize] < col[b'0' as usize], "Z before 0");
+        // anchors: 'a'->0x81, 'A'->0xC1, '0'->0xF0.
+        assert_eq!(col[b'a' as usize], 0x81);
+        assert_eq!(col[b'A' as usize], 0xC1);
+        assert_eq!(col[b'0' as usize], 0xF0);
     }
 
     #[test]

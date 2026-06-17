@@ -131,7 +131,7 @@ pub use cond::{
     ConditionSetError,
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
-pub use ebcdic::{decode_display, decode_display_bytes, translate_byte, CodePage, EbcdicError};
+pub use ebcdic::{decode_display, decode_display_bytes, ebcdic_collation, translate_byte, CodePage, EbcdicError};
 pub use refmod::{apply_ref_mod, ref_mod, ref_mod_to_end, RefModError};
 pub use subscript::{element_1d, element_2d, table_element, SubscriptError};
 pub use odo::{odo_element, odo_used_length, OdoError};

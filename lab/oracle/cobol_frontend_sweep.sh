@@ -48,8 +48,14 @@ for cob in "$CORPUS"/*.cob; do
     # across GnuCOBOL versions (e.g. -std=ibm defaultbyte for alphanumeric storage is space in 3.1.2 but
     # 0x00 in 3.2). The port targets the admitted 3.2 oracle, so such programs are exempt from the 3.1.2
     # cross-check by design (not a divergence in the port).
+    # A `*> @no312: <reason>` header also exempts the 3.1.2 cross-check, for a behaviour that legitimately
+    # EVOLVED between 3.1.2 and 3.2 (e.g. PROGRAM COLLATING SEQUENCE EBCDIC is ignored in 3.1.2 but applied
+    # in 3.2). The port targets the admitted 3.2 oracle.
+    NO312="$(sed -n 's/^[[:space:]]*\*>[[:space:]]*@no312:[[:space:]]*\(.*\)/\1/p' "$cob" | head -1)"
     if [ -n "$STD" ]; then
       echo "$name: 3.1.2 differential SKIPPED (dialect $STD evolves across versions; port targets 3.2)"
+    elif [ -n "$NO312" ]; then
+      echo "$name: 3.1.2 differential SKIPPED ($NO312; port targets 3.2)"
     elif [ -x "$P312/bin/cobc" ]; then
       if PATH="$P312/bin:$PATH" LD_LIBRARY_PATH="$P312/lib" COB_CONFIG_DIR="$P312/share/gnucobol/config" \
            cobc -x $FMTOPT $STDOPT -o "$TMP/p312" "$cob" 2>/dev/null; then

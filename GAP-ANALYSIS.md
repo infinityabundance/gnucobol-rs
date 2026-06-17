@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (90 fixed, 15 open)
+## Summary -- 105 gaps catalogued across 5 panels (92 fixed, 13 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 9 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 4 | narrow, or faithful-but-surprising |
+| **medium** | 8 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **low** | 3 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 90 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 92 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -576,12 +576,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.95: intrinsic.rs adds intrinsic_numval_cfg(s, decimal_comma) + intrinsic_numval_c_cfg(s, currency, decimal_comma). DECIMAL-POINT IS COMMA is handled by swapping '.'<->',' into the proven '.'-decimal form (the integer grouping is then dropped by intrinsic_numval's non-digit filter); the currency strip takes the program's CURRENCY SIGN char instead of a literal '$'. The public intrinsic_numval/intrinsic_numval_c are the byte-unchanged DEFAULT ('$'/no-comma) wrappers (sealed nvc tests green). Oracle (built cobc, SPECIAL-NAMES DECIMAL-POINT IS COMMA + CURRENCY SIGN IS "F"): NUMVAL("1.234,56") = 1234.56, NUMVAL-C("F1.234,56") = 1234.56 -- matched by numval_honors_decimal_comma_and_currency_sign (891 lib tests). (The cobrun front-end has no FUNCTION NUMVAL yet, so the dec_pt/currency selection is sealed at the native cfg API, ready to thread from SPECIAL-NAMES.)
 
 #### `ttbl-only-cp500` -- Only ebcdic500_ascii8bit (cp500) is built in; default.ttbl, alternate, ascii7bit, latin1 are absent  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: PROGRAM COLLATING SEQUENCE / ALPHABET using the non-cp500 tables
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: PROGRAM COLLATING SEQUENCE / ALPHABET using the non-cp500 tables &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** config/ ships 5 .ttbl tables loadable via cob_load_collation: default.ttbl (the historical default, a DIFFERENT mapping from cp500), alternate, ebcdic500_ascii7bit, ascii8bit, latin1. cobc embeds these for ALPHABET / PROGRAM COLLATING SEQUENCE EBCDIC.
 - **gnucobol-rs (Rust):** ebcdic.rs hardcodes only CP500_TO_ASCII; doctrine admits only ascii8bit. cob_load_collation IS ported (cconv.rs:218) so tables CAN be loaded from disk, but no built-in besides cp500.
 - **Diff:** Programs selecting the default EBCDIC alphabet (default.ttbl differs from cp500) or ascii7bit/latin1 have no built-in table; only cp500 is admitted.
-- **Evidence / plan:** default.ttbl differs from cp500 (its row 0 begins 00 01 02 03 EC 09 CA 7F). cob_load_collation can read them at runtime if shipped; built-in admission is cp500-only.
+- **Evidence / plan:** VERIFIED FAITHFUL -- the 'absent' premise is inaccurate. ALL FIVE .ttbl tables ARE shipped in the port's config (crates/gnucobol-rs/config/: default.ttbl, alternate.ttbl, ebcdic500_ascii7bit.ttbl, ebcdic500_ascii8bit.ttbl, ebcdic500_latin1.ttbl) and are BYTE-IDENTICAL to the admitted oracle's (cmp -s each vs lab/oracle/prefix/share/gnucobol/config -> IDENTICAL), and cob_load_collation IS ported (cconv.rs) to read them -- the SAME mechanism cobc uses (it loads these from its config dir, it does not hard-embed them). So a program selecting default/alternate/ascii7bit/latin1 loads the identical table the oracle does. On top of that the EBCDIC (cp500 / ebcdic500_ascii8bit) collation is now ALSO built-in via ebcdic_collation() and front-end-WIRED into PROGRAM COLLATING SEQUENCE comparisons, oracle-verified end-to-end (see [[collation-table-source]], corpus p39). The doctrine 'only cp500 admitted' is superseded: cp500/EBCDIC is built-in+wired AND all five config tables are shipped + loadable byte-for-byte from the oracle.
 
 #### `upper-lower-locale-fold` -- UPPER-CASE / LOWER-CASE intrinsics use ASCII fold, C uses locale-sensitive toupper/tolower  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_CTYPE != C/POSIX and field has bytes >=128 (matches under the C.UTF-8 oracle) &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -600,12 +600,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL under the pinned oracle locale (same C.UTF-8 doctrine as the 6 locale-fold gaps already closed -- upper-lower-locale-fold, cbl-toupper-locale, locale-compare-bytewise, etc.). Under the admitted C.UTF-8 / POSIX-C locale, the libc locale-aware tolower/toupper that CCM_*_LOCALE calls fold ONLY the 7-bit ASCII range A-Z/a-z and leave every byte >=128 unchanged -- byte-for-byte identical to the 7-bit cob_tolower/cob_toupper the port aliases them to. So CCM_LOWER_LOCALE/CCM_UPPER_LOCALE == CCM_LOWER/CCM_UPPER on the pinned oracle, and the aliasing is correct. A divergence requires a non-C locale (e.g. a Latin-1/Turkish locale that folds >=128), which is out of the admitted-oracle claim (the port targets the pinned C.UTF-8 court). cconv.rs documents the alias.
 
 #### `collation-table-source` -- Alphanumeric compare under PROGRAM COLLATING SEQUENCE is ported, but only via a caller-supplied table -- no built-in EBCDIC default  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: PROGRAM COLLATING SEQUENCE EBCDIC with the default (non-cp500) alphabet
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: PROGRAM COLLATING SEQUENCE EBCDIC with the default (non-cp500) alphabet &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:1891 cob_cmp/common_cmps use COB_MODULE_PTR->collating_sequence (from PROGRAM COLLATING SEQUENCE / ALPHABET); for EBCDIC the EBCDIC ordering table; sort uses sort_collate.
 - **gnucobol-rs (Rust):** common.rs:60 common_cmpc/common_cmps/sort_compare_collate are faithfully ported and take a col:&[u8;256] param. The algorithm is 1:1, but the built-in EBCDIC collation table must be supplied; only cp500 is admitted (see ttbl-only-cp500).
 - **Diff:** The collation algorithm is 1:1; the gap is the SOURCE of the EBCDIC default table (non-cp500 .ttbl not built in).
-- **Evidence / plan:** Supply/admit the EBCDIC ordering table; the compare fn is already correct given the table. Algorithm parity sealed.
+- **Evidence / plan:** FIXED gnucobol-rs 0.8.1 -- the EBCDIC ordering table is now SUPPLIED and WIRED end-to-end. ebcdic::ebcdic_collation() builds the EBCDIC collating-weight table as the exact inverse of the proven-bijective CP500_TO_ASCII (col[CP500_TO_ASCII[e]]=e), so an ASCII-stored byte compares by its EBCDIC code point (unit ebcdic_collation_is_cp500_inverse_in_ebcdic_order: 'a'->0x81 < 'A'->0xC1 < '9', 'Z'<'0'). The cobrun front-end parses ALPHABET <name> IS EBCDIC + PROGRAM/OBJECT-COMPUTER COLLATING SEQUENCE (parse_collation -> Ctx.collation) and threads the table through the whole condition chain (eval_cond/cond_or/cond_and/cond_rel/cond_compare) so alphanumeric IF comparisons weight each byte through it. Oracle byte-identical to built cobc 3.2 (corpus p39_ebcdic_collation: lowercase<uppercase, letters<digits) -- cobc's EBCDIC alphabet IS the cp500/ebcdic500_ascii8bit mapping, which this derives. (3.1.2 ignores the EBCDIC collating sequence -> @no312 sweep exemption; port targets 3.2.) The library common_cmps/sort_compare_collate were already 1:1 given the table; the gap (the table SOURCE) is now closed. Also fixed a real latent bug found here: string-literal CASE is now preserved (uppercase_outside_quotes), so "a"<"A" compares distinct bytes.
 
 #### `ebcdic-decode-string-expands` -- EBCDIC decode_display returns a UTF-8 String (Latin-1 re-encoded), not byte-length-preserving like libcob  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: EBCDIC bytes whose cp500 image is >=0x80 (the test asserts chars().count()==256, not bytes) &nbsp;·&nbsp; **status: ✓ FIXED**
