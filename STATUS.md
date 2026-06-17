@@ -196,7 +196,7 @@ Every byte court additionally carries a **Kani proof** of its sharp invariant an
 See [`docs/not-yet-ready.md`](docs/not-yet-ready.md). Headline: this is **not** a compiler, not
 `libcob`, not Procedure Division execution, not universal COBOL truth, not business-truth validation,
 not automatic migration, not dirty-data repair, not a proven AWS deployment. The full machine-readable
-non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (584 surfaces, incl.
+non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (573 surfaces, incl.
 18 banking operating-semantics refusals), and the **truth hierarchy** — bytes / record / posting /
 accounting / extraction / business — is [`docs/truth-boundaries.md`](docs/truth-boundaries.md).
 
