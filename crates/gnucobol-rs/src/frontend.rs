@@ -79,6 +79,17 @@ enum Storage {
     /// A numeric-edited field: the bytes are the edited image; its PIC string drives editing, with the
     /// program's CURRENCY SIGN symbol (default `b'$'`) and DECIMAL-POINT IS COMMA flag (`SPECIAL-NAMES`).
     Edited(String, u8, bool),
+    /// An `88`-level condition-name: true when its `parent` field's value equals any of `values` (a single
+    /// value or a `lo THRU hi` range). Carries no storage of its own.
+    Condition { parent: String, values: Vec<CondVal> },
+}
+
+/// One value clause of an `88` condition-name: a single literal/identifier or an inclusive `lo THRU hi`
+/// range. Stored as condition-comparison words (the `\u{1}`-marked form for string literals).
+#[derive(Debug, Clone)]
+enum CondVal {
+    Single(String),
+    Range(String, String),
 }
 
 /// A live field: its storage shape and its current bytes. For a scalar `bytes` is exactly the field's
@@ -426,6 +437,8 @@ struct ProgItem {
     occurs: usize,
     /// `NAME REDEFINES TARGET`: the field aliases `TARGET`'s storage (see [`Field::redefines`]).
     redefines: Option<String>,
+    /// An `88`-level condition-name on a parent item: `Some((parent, values))`. A normal data item is None.
+    condition: Option<(String, Vec<CondVal>)>,
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
@@ -693,6 +706,7 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
 /// Parse the `01`-level elementary items in `toks[start..end]` (a WORKING-STORAGE or LINKAGE section body).
 fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, RunError> {
     let mut items = Vec::new();
+    let mut last_item: Option<String> = None; // the most recent data item (parent for an 88 condition-name)
     let mut k = start;
     if matches!(toks.get(k), Some(Tok::Dot)) {
         k += 1; // skip the '.' after SECTION
@@ -709,6 +723,57 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         if level == "PROCEDURE" || level == "LINKAGE" || level == "DATA" {
             break;
         }
+        // An `88`-level condition-name on the most recent data item.
+        if level == "88" {
+            k += 1;
+            let cname = match toks.get(k) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => return Err(RunError::Unsupported("expected condition-name after 88".into())),
+            };
+            k += 1;
+            let parent = last_item
+                .clone()
+                .ok_or_else(|| RunError::Unsupported("88 condition-name with no parent item".into()))?;
+            // VALUE [IS] v [THRU h] [v2 [THRU h2] ...] .
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "VALUE" || w == "VALUES") {
+                k += 1;
+                if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS" || w == "ARE") {
+                    k += 1;
+                }
+            }
+            let mut values: Vec<CondVal> = Vec::new();
+            while k < end {
+                match toks.get(k) {
+                    Some(Tok::Dot) => {
+                        k += 1;
+                        break;
+                    }
+                    Some(t) => {
+                        let lo = tok_to_cond_word(t);
+                        k += 1;
+                        if matches!(toks.get(k), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
+                            k += 1;
+                            if let Some(ht) = toks.get(k) {
+                                values.push(CondVal::Range(lo, tok_to_cond_word(ht)));
+                                k += 1;
+                            }
+                        } else {
+                            values.push(CondVal::Single(lo));
+                        }
+                    }
+                    None => break,
+                }
+            }
+            items.push(ProgItem {
+                name: cname,
+                pic: String::new(),
+                value: None,
+                occurs: 1,
+                redefines: None,
+                condition: Some((parent, values)),
+            });
+            continue;
+        }
         if level != "01" {
             return Err(RunError::Unsupported(format!("only level 01 elementary items (got {level})")));
         }
@@ -717,6 +782,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             Some(Tok::Word(w)) => w.clone(),
             _ => return Err(RunError::Unsupported("expected data name after 01".into())),
         };
+        last_item = Some(name.clone());
         k += 1;
         // `NAME REDEFINES TARGET` -- the item aliases TARGET's storage.
         let mut redefines: Option<String> = None;
@@ -770,7 +836,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             }
         }
         let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-        items.push(ProgItem { name, pic, value, occurs, redefines });
+        items.push(ProgItem { name, pic, value, occurs, redefines, condition: None });
     }
     Ok(items)
 }
@@ -795,6 +861,19 @@ fn find_seq_in(toks: &[Tok], seq: &[&str], from: usize, to: usize) -> Option<usi
 fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, Field>, RunError> {
     let mut fields = HashMap::new();
     for it in &prog.ws {
+        // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
+        if let Some((parent, values)) = &it.condition {
+            fields.insert(
+                it.name.clone(),
+                Field {
+                    storage: Storage::Condition { parent: parent.clone(), values: values.clone() },
+                    bytes: Vec::new(),
+                    occurs: 1,
+                    redefines: None,
+                },
+            );
+            continue;
+        }
         let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
@@ -1380,6 +1459,22 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     if let Some(&(idx, on)) = sw.conds.get(&left) {
         return Ok(sw.states[idx] == on);
     }
+    // A bare 88-level condition-name: true when its parent's value equals any listed value or range.
+    if let Some(Field { storage: Storage::Condition { parent, values }, .. }) = f.get(&left) {
+        for v in values {
+            let hit = match v {
+                CondVal::Single(val) => cond_compare(parent, val, f, col)? == std::cmp::Ordering::Equal,
+                CondVal::Range(lo, hi) => {
+                    cond_compare(parent, lo, f, col)? != std::cmp::Ordering::Less
+                        && cond_compare(parent, hi, f, col)? != std::cmp::Ordering::Greater
+                }
+            };
+            if hit {
+                return Ok(true);
+            }
+        }
+        return Ok(false);
+    }
     if w.get(*p).map(|s| s.as_str()) == Some("IS") {
         *p += 1;
     }
@@ -1641,6 +1736,7 @@ fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
             let s: Vec<u8> = dec.digits.iter().map(|d| d + b'0').collect();
             store_alnum(field, &s)
         }
+        Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
     }
 }
 
@@ -1709,6 +1805,7 @@ fn store_alnum(field: &mut Field, src: &[u8]) -> Result<(), RunError> {
             field.bytes = dst;
             Ok(())
         }
+        Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
     }
 }
 
@@ -2101,6 +2198,7 @@ fn display_bytes(f: &Field, decimal_comma: bool) -> Vec<u8> {
             o
         }
         Storage::Alpha(_) | Storage::Edited(..) => f.bytes.clone(),
+        Storage::Condition { .. } => Vec::new(), // a condition-name has no displayable value
     }
 }
 
@@ -2137,6 +2235,9 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
                     Storage::Numeric(a) => Ok((f.bytes.clone(), *a)),
                     Storage::Alpha(a) => Ok((f.bytes.clone(), *a)),
                     Storage::Edited(..) => Ok((f.bytes.clone(), alnum_attr())),
+                    Storage::Condition { .. } => {
+                        Err(RunError::Unsupported("88 condition-name is not a value operand".into()))
+                    }
                 }
             } else {
                 // a numeric literal operand.
@@ -2192,7 +2293,7 @@ fn parse_ec_bound_check(src_upper: &str) -> bool {
 fn default_element(storage: &Storage, elem: usize) -> Field {
     let fill = match storage {
         Storage::Numeric(_) => b'0',
-        Storage::Alpha(_) | Storage::Edited(..) => b' ',
+        Storage::Alpha(_) | Storage::Edited(..) | Storage::Condition { .. } => b' ',
     };
     Field { storage: storage.clone(), bytes: vec![fill; elem], occurs: 1, redefines: None }
 }
@@ -2339,6 +2440,7 @@ fn move_into(
             f.bytes = dst;
             Ok(())
         }
+        Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
     }
 }
 
@@ -2659,6 +2761,14 @@ mod tests {
         // EC-ALL CHECKING ON also enables it.
         let all = run_program_dialect_with_rc(&prog(">>TURN EC-ALL CHECKING ON\n"), Dialect::DEFAULT);
         assert!(all.is_err());
+    }
+
+    #[test]
+    fn level_88_condition_names() {
+        use crate::dialect::Dialect;
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 G PIC 99.\n          88 PASS VALUE 50 THRU 100.\n       01 F PIC X.\n          88 YES VALUE \"Y\" \"y\".\n       PROCEDURE DIVISION.\n           MOVE 75 TO G.\n           IF PASS DISPLAY \"P\" ELSE DISPLAY \"F\" END-IF.\n           MOVE 10 TO G.\n           IF PASS DISPLAY \"P\" ELSE DISPLAY \"F\" END-IF.\n           MOVE \"y\" TO F.\n           IF YES DISPLAY \"Y\" ELSE DISPLAY \"N\" END-IF.\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        assert_eq!(out, b"P\nF\nY\n");
     }
 
     #[test]
