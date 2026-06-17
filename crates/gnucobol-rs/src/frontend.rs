@@ -37,7 +37,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "DISPLAY", "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ACCEPT", "ADD", "SUBTRACT",
     "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
-    "UNLOCK", "COMMIT", "ROLLBACK",
+    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1167,7 +1167,7 @@ const STMT_VERBS: &[&str] = &[
     "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE",
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
-    "COMMIT", "ROLLBACK",
+    "COMMIT", "ROLLBACK", "SORT", "MERGE",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ"];
@@ -2200,6 +2200,8 @@ fn exec_stmt(
         "REWRITE" => exec_rewrite(stmt, fields, ctx),
         "DELETE" => exec_delete(stmt, fields, ctx),
         "START" => exec_start(stmt, fields, ctx),
+        // MERGE of already-ordered inputs yields the same globally-ordered output as SORT over the union.
+        "SORT" | "MERGE" => exec_sort(stmt, fields, ctx),
         "UNLOCK" => exec_unlock(stmt, fields, ctx),
         // COMMIT / ROLLBACK are no-ops without a transactional backend (as libcob is for sequential files).
         "COMMIT" | "ROLLBACK" => Ok(()),
@@ -3117,6 +3119,73 @@ fn exec_unlock(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
         let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("UNLOCK: `{name}` is not a declared file")))?;
         set_file_status(fields, def, "00");
     }
+    Ok(())
+}
+
+/// `SORT sd-file ON {ASCENDING|DESCENDING} KEY key USING in... GIVING out...` (and `MERGE`, same shape) --
+/// read every record from the USING files, order them, and write them to the GIVING files. The subset is a
+/// single **whole-record** KEY (sub-field keys need group items) with USING/GIVING; INPUT/OUTPUT PROCEDURE
+/// (which drive RELEASE/RETURN) is out of subset.
+fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let sf = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("SORT: missing sort file".into())) };
+    let sd_def = ctx.file_defs.get(&sf).ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?.clone();
+    let reclen = read_field(fields, &sd_def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+    let (mut sect, mut descending) = (0u8, false);
+    let (mut keys, mut using, mut giving): (Vec<String>, Vec<String>, Vec<String>) = (vec![], vec![], vec![]);
+    for t in &stmt[1..] {
+        if let Tok::Word(w) = t {
+            match w.as_str() {
+                "ON" | "KEY" => {}
+                "ASCENDING" => { descending = false; sect = 1; }
+                "DESCENDING" => { descending = true; sect = 1; }
+                "USING" => sect = 2,
+                "GIVING" => sect = 3,
+                "INPUT" | "OUTPUT" => return Err(RunError::Unsupported("SORT/MERGE INPUT/OUTPUT PROCEDURE not in subset".into())),
+                _ => match sect { 1 => keys.push(w.clone()), 2 => using.push(w.clone()), 3 => giving.push(w.clone()), _ => {} },
+            }
+        }
+    }
+    if keys.len() != 1 {
+        return Err(RunError::Unsupported("SORT/MERGE subset: a single KEY".into()));
+    }
+    let keylen = read_field(fields, &keys[0])?.map(|f| f.bytes.len()).unwrap_or(0);
+    if keylen != reclen {
+        return Err(RunError::Unsupported("SORT/MERGE subset: KEY must be the whole sort record (sub-field keys need group items)".into()));
+    }
+    if using.is_empty() || giving.is_empty() {
+        return Err(RunError::Unsupported("SORT/MERGE subset requires USING + GIVING".into()));
+    }
+    let mut recs: Vec<Vec<u8>> = Vec::new();
+    {
+        let files = ctx.files.borrow();
+        for f in &using {
+            if let Some(st) = files.get(f) {
+                for r in &st.records {
+                    if r.is_empty() { continue; }
+                    let mut b = r.clone();
+                    b.resize(reclen, b' ');
+                    recs.push(b);
+                }
+            }
+        }
+    }
+    recs.sort();
+    if descending { recs.reverse(); }
+    {
+        let mut files = ctx.files.borrow_mut();
+        for f in &giving {
+            let out_org = ctx.file_defs.get(f).map(|d| d.org).unwrap_or(FileOrg::Sequential);
+            let st = files.entry(f.clone()).or_default();
+            st.records = recs.iter().map(|r| {
+                let mut b = r.clone();
+                if out_org == FileOrg::LineSequential { while b.last() == Some(&b' ') { b.pop(); } }
+                b
+            }).collect();
+            st.read_pos = 0;
+            st.mode = 0;
+        }
+    }
+    set_file_status(fields, &sd_def, "00");
     Ok(())
 }
 
