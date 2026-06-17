@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (69 fixed, 36 open)
+## Summary -- 105 gaps catalogued across 5 panels (70 fixed, 35 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 17 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 16 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 13 | narrow, or faithful-but-surprising |
 | **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 69 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 70 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -453,12 +453,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Model lock_mode->strength once locks are wired. Open INDEXED I-O twice: only C blocks.
 
 #### `process-exit-not-called` -- STOP RUN / hard failure never calls exit(); the OS exit status is a returned decision  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: shell exit code observed -- STOP RUN 7 does not yield $?==7 from the port alone
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: shell exit code observed -- STOP RUN 7 does not yield $?==7 from the port alone &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c cob_stop_run ends in exit(status); cob_hard_failure -> exit(EXIT_FAILURE)/cob_raise(SIGABRT).
 - **gnucobol-rs (Rust):** common_term.rs cob_stop_run/cob_hard_failure return TermOutcome{Exit(status)|RaiseSigabrt|Longjmp}; no std::process::exit/raise in non-test code (exit_code recorded correctly).
 - **Diff:** C terminates the process and sets $?; Rust returns what should happen and relies on the host to act.
-- **Evidence / plan:** Wrap the interpreter to honor TermAction::Exit; today the host must translate the decision.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (same RETURN-CODE -> exit work as cli-returncode-whencompiled). The cobrun front-end now honors the program's RETURN-CODE as the real process exit status via std::process::exit(rc), so the shell observes it directly -- the host no longer has to translate the returned TermOutcome. Verified against the built cobc oracle end-to-end: STOP RUN 7 -> cobrun $?==7 (cobc $?==7); MOVE 42 TO RETURN-CODE / STOP RUN -> cobrun $?==42 (cobc $?==42). Unit-covered by return_code_flows_to_process_exit. (The library common_term.rs continues to RETURN the decision so #![forbid(unsafe)] non-test library code never calls exit() itself -- the cobrun binary is the host that acts on it.)
 
 #### `sigfpe-vs-size-error` -- Divide-by-zero is a recoverable COBOL SIZE ERROR, not a trapped SIGFPE abort  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: unguarded DIVIDE BY ZERO with no ON SIZE ERROR aborts (signal exit ~136) in cobc, silently handled in port &nbsp;·&nbsp; **status: ✓ FIXED**
