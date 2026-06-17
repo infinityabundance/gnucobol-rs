@@ -189,6 +189,31 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
     run_program_dialect(source, crate::dialect::Dialect::DEFAULT)
 }
 
+/// Convert FIXED-format COBOL source to free format (`-fixed` / `>>SOURCE FORMAT IS FIXED`): columns 1-6
+/// are the sequence area (ignored), column 7 is the indicator (`*` or `/` = a full-line comment, dropped;
+/// anything else = code), columns 8-72 are the code area, and columns 73+ are ignored. The result is the
+/// free-format text [`run_program`] then lexes. (Tabs are not expanded -- the sealed corpus uses spaces.)
+pub fn fixed_to_free(source: &str) -> String {
+    let mut out = String::new();
+    for line in source.lines() {
+        let chars: Vec<char> = line.chars().collect();
+        // A line with no indicator column (<= 6 chars: blank or sequence-only) contributes a blank line.
+        if chars.len() < 7 {
+            out.push('\n');
+            continue;
+        }
+        match chars[6] {
+            '*' | '/' => out.push('\n'),              // comment / page-eject: drop the line
+            _ => {
+                let end = chars.len().min(72);        // columns 8..=72 (0-indexed 7..72); 73+ ignored
+                out.extend(&chars[7..end]);
+                out.push('\n');
+            }
+        }
+    }
+    out
+}
+
 /// The conditional-compilation preprocessor (`cobc`'s `>>` directives): resolve `>>DEFINE name [AS value]`,
 /// `>>IF <cond>` / `>>ELSE` / `>>END-IF` line by line, emitting only the lines whose enclosing conditions
 /// are all true. Directive lines are never emitted. Supported conditions: `[NOT] name DEFINED` and a plain
@@ -1972,6 +1997,21 @@ mod tests {
 
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
+    }
+
+    #[test]
+    fn fixed_to_free_strips_seqnum_indicator_and_col73() {
+        // cols 1-6 sequence (ignored), col 7 '*' = comment (dropped), code in 8-72, 73+ ignored.
+        let fixed = "000100 DISPLAY \"OK\".\n000200* a comment\n000300 STOP RUN.";
+        assert_eq!(fixed_to_free(fixed), "DISPLAY \"OK\".\n\nSTOP RUN.\n");
+        // a 73+-column tail is dropped: build a line whose code fills cols 8..72 then has junk at 73+.
+        let mut line = String::from("000400"); // cols 1-6
+        line.push(' '); // col 7
+        line.push_str(&"X".repeat(65)); // cols 8..=72 (65 chars)
+        line.push_str("JUNK73"); // cols 73+
+        assert_eq!(fixed_to_free(&line), format!("{}\n", "X".repeat(65)));
+        // a short line (<7 chars) is a blank line.
+        assert_eq!(fixed_to_free("0001\n"), "\n");
     }
 
     #[test]

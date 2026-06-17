@@ -8,12 +8,17 @@ use gnucobol_rs::dialect::Dialect;
 use std::io::Write;
 
 fn main() {
-    // cobrun [-std=NAME] <file.cob> -- an optional dialect selector (default: the default dialect).
+    // cobrun [-std=NAME] [-fixed|-free] <file.cob> -- dialect selector + source format (default free).
     let mut dialect = Dialect::DEFAULT;
+    let mut fixed = false;
     let mut path: Option<String> = None;
     for arg in std::env::args().skip(1) {
         if let Some(name) = arg.strip_prefix("-std=").or_else(|| arg.strip_prefix("--std=")) {
             dialect = Dialect::from_std(name);
+        } else if arg == "-fixed" || arg == "--fixed" {
+            fixed = true;
+        } else if arg == "-free" || arg == "--free" {
+            fixed = false;
         } else {
             path = Some(arg);
         }
@@ -21,17 +26,18 @@ fn main() {
     let path = match path {
         Some(p) => p,
         None => {
-            eprintln!("usage: cobrun [-std=NAME] <file.cob>");
+            eprintln!("usage: cobrun [-std=NAME] [-fixed|-free] <file.cob>");
             std::process::exit(2);
         }
     };
-    let src = match std::fs::read_to_string(&path) {
+    let raw = match std::fs::read_to_string(&path) {
         Ok(s) => s,
         Err(e) => {
             eprintln!("cobrun: cannot read {path}: {e}");
             std::process::exit(2);
         }
     };
+    let src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
     match gnucobol_rs::frontend::run_program_dialect(&src, dialect) {
         Ok(out) => {
             std::io::stdout().write_all(&out).unwrap();

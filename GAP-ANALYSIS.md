@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (67 fixed, 38 open)
+## Summary -- 105 gaps catalogued across 5 panels (68 fixed, 37 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 19 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 18 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 13 | narrow, or faithful-but-surprising |
 | **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 67 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 68 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -829,12 +829,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Add a RETURN-CODE register feeding the process exit; supply a compile-stamp for WHEN-COMPILED.
 
 #### `cli-source-format` -- -free/-fixed/-fsource-format and >>SOURCE FORMAT not selectable; fixed-format columns unimplemented  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: fixed-format-dependent source (margin truncation, continuation lines)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: fixed-format-dependent source (margin truncation, continuation lines) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cobc.c:600 -free/-fixed; >>SOURCE FORMAT; fixed format honors cols 1-6 sequence, col-7 indicator (* comment, - continuation, D debug), col-72 right margin.
 - **gnucobol-rs (Rust):** frontend.rs:108 lex hardcodes one tokenizer (col-1 '*' comment, free-ish whitespace); no fixed-format column/continuation handling; no toggle.
 - **Diff:** A fixed-format program with text past col 72 or a '-' continuation mis-lexes; D-in-col-7 debug lines not handled.
-- **Evidence / plan:** Implement fixed-format lexing gated on -fixed / >>SOURCE FORMAT.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (front-end feature, 5th this session): frontend.rs::fixed_to_free(source) converts FIXED-format COBOL to free before lexing -- columns 1-6 are the sequence area (ignored), column 7 the indicator ('*' or '/' = a dropped full-line comment, else code), columns 8-72 the code area, 73+ ignored. cobrun gains a -fixed/-free flag (raw -> fixed_to_free -> run_program). The sweep gains an `@format: fixed` header (matched as a free `*>` OR a fixed col-7 `*` comment) that compiles + runs the program -fixed for cobc + cobrun + 3.1.2. Oracle (built cobc -fixed, corpus p34_fixed_format with a col-7 comment, sequence numbers, and code in 8-72): DISPLAY of N=042 + a second DISPLAY -> IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 34/0). Unit test fixed_to_free_strips_seqnum_indicator_and_col73 (898 lib tests). RESIDUAL: column-7 '-' continuation lines, tab expansion, and the >>SOURCE FORMAT mid-source switch (the -fixed/format-marker path is sealed).
 
 #### `cli-upsi-switch` -- COB_SWITCH_0..7 / UPSI switches ported but never loaded or evaluated  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: switch-conditioned programs / UPSI mnemonics &nbsp;·&nbsp; **status: ✓ FIXED**
