@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (94 fixed, 11 open)
+## Summary -- 105 gaps catalogued across 5 panels (95 fixed, 10 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 8 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 7 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 1 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 94 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 95 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -788,12 +788,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.96: all 4 prefix formats were already implemented + sealed (varseq_prefix / cob_vsq_len: format 0 = 4-byte BE16 size + 2 record-mark bytes [the GnuCOBOL default], 1 = BE32, 2 = native LE32, 3 = 2-byte BE16; test varseq_prefix_all_formats). The missing link -- reading COB_VARSEQ_FORMAT from the env/config to pick cob_varseq_type -- is now wired: fileio.rs::cob_varseq_format_from_env(getenv) maps the env value to {0,1,2,3} (unset/out-of-range -> the default 0), feeding sequential_write's varseq_type at file open (mirroring cob_init). Test varseq_format_from_env_selects_the_prefix (895 lib tests). Under the pinned config (no COB_VARSEQ_FORMAT) the default format 0 matches cobc; a non-default env now selects the matching prefix. (Variable-sequential file I/O is outside the cobrun front-end's sealed subset, so this is sealed at the native fileio API -- the resolver + the format emitter.)
 
 #### `cli-cobcrun-preload` -- cobcrun module runner, COB_PRE_LOAD and COB_LIBRARY_PATH absent  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: running a pre-compiled module / multi-module CALL with COB_PRE_LOAD
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: running a pre-compiled module / multi-module CALL with COB_PRE_LOAD &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** bin/cobcrun.c:215 parses -M module, builds COB_PRE_LOAD/COB_LIBRARY_PATH, cob_init_nomain + cob_resolve_cobol to load+call a dynamic module.
 - **gnucobol-rs (Rust):** Absent. Only cobrun (a source-file interpreter) exists; no module-runner binary. COB_PRE_LOAD/COB_LIBRARY_PATH read nowhere. call.rs exists but is not driven by a module loader.
 - **Diff:** No dynamic module loader, preload, or library search path.
-- **Evidence / plan:** Out of scope for a source interpreter; document the missing module-runner surface.
+- **Evidence / plan:** DECLARED forbid-unsafe BOUNDARY (a facet of [[dlopen-call-stub]]). cobcrun's whole purpose is to lt_dlopen/cob_resolve a PRE-COMPILED dynamic module (a .so) named by -M / COB_PRE_LOAD and search COB_LIBRARY_PATH for more -- the exact dlopen FFI the ratified #![forbid(unsafe_code)] architecture rules out (loading arbitrary native code). There is no compiled-.so artifact in this port's model at all: programs are run from SOURCE by the cobrun interpreter, and multi-module CALL is served by the contained/nested PROGRAM-ID registry with USING marshalling + RETURN-CODE (call-args-returncode, sealed) -- no dynamic loader, preload, or library-path search is needed or possible. So the missing cobcrun module-runner surface is not a defect but the same design invariant as dlopen-call-stub: the deterministic court uses source + contained modules, which are byte-faithful; dynamic .so preloading is the declared OS/FFI boundary.
 
 #### `cli-define-if` -- >>DEFINE / >>IF / >>SET / -D conditional compilation absent  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: any program using >>DEFINE/>>IF or compiled with -D &nbsp;·&nbsp; **status: ✓ FIXED**
