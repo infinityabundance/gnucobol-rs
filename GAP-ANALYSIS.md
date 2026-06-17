@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (68 fixed, 37 open)
+## Summary -- 105 gaps catalogued across 5 panels (69 fixed, 36 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 18 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 17 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 13 | narrow, or faithful-but-surprising |
 | **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 68 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 69 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -821,12 +821,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.96: the EBCDIC zoned-sign convention is fully + faithfully implemented at the native sign layer, selected by SignFlags.ebcdic_sign (the COB_MODULE_PTR->ebcdic_sign / -fsign=EBCDIC switch). ENCODE: cob_real_put_sign -> put_sign_ebcdic_byte overlays the overpunch (positive 0..9 -> {ABCDEFGHI, negative 0..9 -> }JKLMNOPQR); DECODE: cob_get_sign_ebcdic is the inverse. Oracle (built cobc, S9(3) REDEFINED as X(3) to expose raw bytes): -fsign=EBCDIC -123 -> "12"+'L'(0x4C), +123 -> "12"+'C'(0x43); -fsign=ASCII -123 -> "12"+'s'(0x73) -- matched by put_sign_ebcdic_field_matches_fsign_oracle + get_sign_ebcdic_overpunch (894 lib tests). NOTE on observability: a signed-DISPLAY field's overpunch byte is NOT visible through the cobrun front-end's sealed subset (DISPLAY reformats with a leading sign -- identical both ways; MOVE numeric->alpha drops the sign; raw bytes need REDEFINES or file I/O, not in the subset), so the convention + its selection are sealed at the native API. RESIDUAL: a -fsign CLI flag on cobrun + SIGN IS LEADING/SEPARATE from the CLI (the SignFlags already carry sign_leading/sign_separate; the CLI plumbing is the remainder).
 
 #### `cli-returncode-whencompiled` -- RETURN-CODE process exit code and WHEN-COMPILED real timestamp not modeled  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: scripts checking $? after a COBOL run; programs displaying WHEN-COMPILED
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: scripts checking $? after a COBOL run; programs displaying WHEN-COMPILED &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** RETURN-CODE flows to the process exit status on STOP RUN/GOBACK; WHEN-COMPILED is fixed at compile time by cobc.
 - **gnucobol-rs (Rust):** frontend.rs has no RETURN-CODE register / no MOVE ... TO RETURN-CODE; cobrun.rs:29 always exit(2) on error / 0 on success regardless of intent. intrinsic.rs:3213 cob_intr_when_compiled echoes a caller-supplied stamp, unreachable from run_program.
 - **Diff:** Process exit code is not program-controlled via RETURN-CODE; WHEN-COMPILED has no real value source.
-- **Evidence / plan:** Add a RETURN-CODE register feeding the process exit; supply a compile-stamp for WHEN-COMPILED.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (RETURN-CODE -> exit, the observable part). The cobrun front-end's RETURN-CODE register now flows to the process exit status: run_program_dialect_with_rc returns (stdout, exit_code) read from the program's final RETURN-CODE (read_return_code), and cobrun std::process::exit()s with it; STOP RUN <n> / GOBACK <n> set it directly. Oracle (built cobc): MOVE 42 TO RETURN-CODE -> exit 42, MOVE 5 -> 5, default -> 0, STOP RUN 7 -> 7 -- matched by return_code_flows_to_process_exit (899 lib tests). The sweep harness was updated so a non-zero RETURN-CODE exit is not mistaken for a cobrun failure (only a stderr RunError is). WHEN-COMPILED is a NON-APPLICABLE BOUNDARY: it returns the COMPILE timestamp baked by cobc, but cobrun is an INTERPRETER with no compile step -- there is no compile-time to stamp (and the value is non-deterministic, not oracle-testable).
 
 #### `cli-source-format` -- -free/-fixed/-fsource-format and >>SOURCE FORMAT not selectable; fixed-format columns unimplemented  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: fixed-format-dependent source (margin truncation, continuation lines) &nbsp;·&nbsp; **status: ✓ FIXED**

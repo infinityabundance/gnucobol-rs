@@ -38,9 +38,11 @@ fn main() {
         }
     };
     let src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
-    match gnucobol_rs::frontend::run_program_dialect(&src, dialect) {
-        Ok(out) => {
+    match gnucobol_rs::frontend::run_program_dialect_with_rc(&src, dialect) {
+        Ok((out, rc)) => {
             std::io::stdout().write_all(&out).unwrap();
+            // RETURN-CODE flows to the process exit status (MOVE n TO RETURN-CODE / STOP RUN n).
+            std::process::exit(rc);
         }
         Err(e) => {
             eprintln!("cobrun: {e}");

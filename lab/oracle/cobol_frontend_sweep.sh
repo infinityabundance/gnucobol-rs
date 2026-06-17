@@ -35,7 +35,10 @@ for cob in "$CORPUS"/*.cob; do
     echo "$name: cobc compile FAIL"; head -2 "$TMP/cobc.err"; FAIL=$((FAIL+1)); continue
   fi
   env $ENVKV "$TMP/p" </dev/null > "$TMP/oracle.out" 2>/dev/null
-  if ! env $ENVKV "$COBRUN" $FIXEDOPT $STDOPT "$cob" > "$TMP/rust.out" 2>"$TMP/rust.err"; then
+  # cobrun's exit status is the program's RETURN-CODE (MOVE n TO RETURN-CODE / STOP RUN n), so a non-zero
+  # exit is NOT a failure -- only a real RunError (a message on stderr) is.
+  env $ENVKV "$COBRUN" $FIXEDOPT $STDOPT "$cob" > "$TMP/rust.out" 2>"$TMP/rust.err"
+  if [ -s "$TMP/rust.err" ]; then
     echo "$name: cobrun FAIL: $(cat "$TMP/rust.err")"; FAIL=$((FAIL+1)); continue
   fi
   if cmp -s "$TMP/oracle.out" "$TMP/rust.out"; then

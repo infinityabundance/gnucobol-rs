@@ -189,6 +189,15 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
     run_program_dialect(source, crate::dialect::Dialect::DEFAULT)
 }
 
+/// As [`run_program_dialect_with_rc`] but returns only the stdout bytes (the common case; the sweep and
+/// most callers ignore the exit code).
+pub fn run_program_dialect(
+    source: &str,
+    dialect: crate::dialect::Dialect,
+) -> Result<Vec<u8>, RunError> {
+    run_program_dialect_with_rc(source, dialect).map(|(out, _rc)| out)
+}
+
 /// Convert FIXED-format COBOL source to free format (`-fixed` / `>>SOURCE FORMAT IS FIXED`): columns 1-6
 /// are the sequence area (ignored), column 7 is the indicator (`*` or `/` = a full-line comment, dropped;
 /// anything else = code), columns 8-72 are the code area, and columns 73+ are ignored. The result is the
@@ -286,13 +295,12 @@ fn eval_pp_cond(c: &str, defines: &HashMap<String, String>) -> bool {
     false
 }
 
-/// As [`run_program`] but under an explicit compile-time [`Dialect`](crate::dialect::Dialect) (`-std=`):
-/// the `defaultbyte` fill of uninitialized `WORKING-STORAGE` follows the dialect. `run_program` is exactly
-/// this with [`Dialect::DEFAULT`](crate::dialect::Dialect::DEFAULT).
-pub fn run_program_dialect(
+/// As [`run_program_dialect`] but also returns the program's final `RETURN-CODE` as the process exit code
+/// (`MOVE n TO RETURN-CODE` / `STOP RUN n`; default 0) -- the value a `cobrun` would `exit()` with.
+pub fn run_program_dialect_with_rc(
     source: &str,
     dialect: crate::dialect::Dialect,
-) -> Result<Vec<u8>, RunError> {
+) -> Result<(Vec<u8>, i32), RunError> {
     // Conditional-compilation preprocessor: resolve >>DEFINE / >>IF / >>ELSE / >>END-IF before lexing.
     let pre = preprocess(source);
     let up = pre.to_uppercase();
@@ -323,7 +331,30 @@ pub fn run_program_dialect(
     let mut out = Vec::new();
     let mut fields = build_program_fields(main, &ctx)?;
     run_program_body(main, &ctx, &mut fields, &mut out)?;
-    Ok(out)
+    let rc = read_return_code(&fields);
+    Ok((out, rc))
+}
+
+/// Read the program's final `RETURN-CODE` register as the process exit code (`MOVE n TO RETURN-CODE` /
+/// `STOP RUN n`). Defaults to 0.
+fn read_return_code(fields: &HashMap<String, Field>) -> i32 {
+    match fields.get("RETURN-CODE").map(|f| &f.storage) {
+        Some(Storage::Numeric(a)) => {
+            let f = &fields["RETURN-CODE"];
+            source_to_decimal(&f.bytes, a)
+                .ok()
+                .map(|d| {
+                    let mag: i64 = d.digits.iter().fold(0i64, |acc, &x| acc * 10 + x as i64);
+                    if d.negative {
+                        -mag as i32
+                    } else {
+                        mag as i32
+                    }
+                })
+                .unwrap_or(0)
+        }
+        _ => 0,
+    }
 }
 
 /// A program's parsed shape: WORKING-STORAGE + LINKAGE items, the `PROCEDURE DIVISION USING` parameter
@@ -659,8 +690,15 @@ fn run_block(
                     // STOP RUN halts everything; GOBACK / EXIT PROGRAM end the current program body (a CALL
                     // returns to its caller). The front-end models all three as "end this body".
                     "STOP" | "GOBACK" => {
-                        let _ = collect_operands(toks, pos); // consume RUN / trailing words
+                        let rest = collect_operands(toks, pos); // consume RUN / trailing words
                         if exec {
+                            // STOP RUN <n> / GOBACK <n>: set the exit code (RETURN-CODE) to the integer.
+                            if let Some(n) = rest.iter().find_map(|t| match t {
+                                Tok::Word(w) if w != "RUN" => w.parse::<i64>().ok(),
+                                _ => None,
+                            }) {
+                                fields.insert("RETURN-CODE".to_string(), make_return_code(n));
+                            }
                             return Ok(true);
                         }
                     }
@@ -1997,6 +2035,24 @@ mod tests {
 
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
+    }
+
+    #[test]
+    fn return_code_flows_to_process_exit() {
+        use crate::dialect::Dialect;
+        let rc = |body: &str| {
+            let src = format!(
+                "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n{body}"
+            );
+            run_program_dialect_with_rc(&src, Dialect::DEFAULT).unwrap().1
+        };
+        // MOVE n TO RETURN-CODE -> process exit code n (oracle: 5->5, 42->42).
+        assert_eq!(rc("           MOVE 42 TO RETURN-CODE.\n           STOP RUN."), 42);
+        assert_eq!(rc("           MOVE 5 TO RETURN-CODE.\n           STOP RUN."), 5);
+        // default 0.
+        assert_eq!(rc("           DISPLAY \"X\".\n           STOP RUN."), 0);
+        // STOP RUN n sets the exit code directly (oracle: STOP RUN 7 -> 7).
+        assert_eq!(rc("           STOP RUN 7."), 7);
     }
 
     #[test]
