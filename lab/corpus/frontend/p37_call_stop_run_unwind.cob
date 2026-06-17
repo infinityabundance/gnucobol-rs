@@ -1,5 +1,5 @@
       *> STOP RUN inside a CALLed contained program unwinds the WHOLE run to the run boundary (libcob
-      *> longjmp stop_run): the post-CALL statement in the caller must NOT execute. GOBACK / EXIT PROGRAM
+      *> longjmp stop_run): the caller's post-CALL statement must NOT execute. GOBACK / EXIT PROGRAM
       *> instead return to the caller. Identical stdout under cobc and cobrun.
        IDENTIFICATION DIVISION.
        PROGRAM-ID. P37MAIN.

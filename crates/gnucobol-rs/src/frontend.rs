@@ -119,6 +119,15 @@ fn lex(src: &str) -> Vec<Tok> {
     let mut i = 0;
     while i < bytes.len() {
         let c = bytes[i];
+        if c == b'*' && bytes.get(i + 1) == Some(&b'>') {
+            // free-format inline comment `*>` (anywhere on the line, after indentation): skip to EOL.
+            // Must be stripped BEFORE quote tokenization -- an apostrophe in the comment (e.g. "caller's")
+            // would otherwise open a spurious string literal that swallows the rest of the source.
+            while i < bytes.len() && bytes[i] != b'\n' {
+                i += 1;
+            }
+            continue;
+        }
         if c == b'*' && (i == 0 || bytes[i - 1] == b'\n') {
             // a full-line comment (col-1 '*' in free form, or a comment line); skip to EOL.
             while i < bytes.len() && bytes[i] != b'\n' {
@@ -2122,6 +2131,17 @@ mod tests {
 
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
+    }
+
+    #[test]
+    fn inline_star_gt_comment_with_apostrophe_is_stripped() {
+        use crate::dialect::Dialect;
+        // A free-format `*>` inline comment (after indentation) containing an apostrophe must be stripped
+        // before quote tokenization -- otherwise the "'" opens a spurious string that swallows the rest of
+        // the program (cobc strips it; cobrun must too). Regression for the p37 corpus discovery.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".  *> here's the caller's note: don't break\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        assert_eq!(out, b"OK\n");
     }
 
     #[test]
