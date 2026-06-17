@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (101 fixed, 4 open)
+## Summary -- 105 gaps catalogued across 5 panels (103 fixed, 2 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 3 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 1 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 0 | narrow, or faithful-but-surprising |
 | **latent** | 1 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 101 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 103 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -868,12 +868,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** ADMITTED-UB / forbid-unsafe BOUNDARY (the C DEFAULT is a memory-unsafety crash the port structurally cannot have). Probed built cobc 3.2: a BASED item P with no SET/ALLOCATE, referenced via DISPLAY P, by DEFAULT (no >>TURN) prints 'attempt to reference invalid memory address (signal)' and exits 139 (SIGSEGV) -- it literally DEREFERENCES the NULL based pointer, classic UB. Under #![forbid(unsafe_code)] the port has NO null pointer to deref and cannot segfault: a BASED reference with no backing storage fails closed (the same memory-safety guarantee as content-length-of-nonnull-deref / signal-handlers). The cob_check_based DIAGNOSTIC path (>>TURN EC-DATA-PTR-NULL/-bound CHECKING ON -> 'BASED/LINKAGE item NAME has NULL address') is the opt-in check whose message text is already ported (common_signal.rs); cob_check_linkage_size's EC-PROGRAM-ARG-MISMATCH message is ported too. So: the default crash is non-reproducible UB (the port is safer by construction), and the checked-path message exists. There is no defined oracle behavior to match -- a null-deref SIGSEGV is undefined -- so the port's fail-closed is the faithful safe choice. (cob_check_fence is the same internal memory-guard family.)
 
 #### `exc-location-intrinsics` -- EXCEPTION-LOCATION/STATEMENT/FILE side-effects and intrinsics unwired  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: programs using the EXCEPTION-* intrinsics after a raise
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: programs using the EXCEPTION-* intrinsics after a raise &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:2293 cob_set_exception also records last_exception_statement/id/section/paragraph/line from COB_MODULE_PTR; FUNCTION EXCEPTION-STATEMENT/-LOCATION/-FILE/-STATUS read them.
 - **gnucobol-rs (Rust):** common_exception.rs:258 models only the 3 codes + drops the location fields; intrinsic.rs:3581 EXCEPTION-* are pure formatters taking caller-supplied bytes; EXCEPTION-FILE-N/-LOCATION-N stubbed error_not_implemented (faithful to 3.2). No glue feeds raised state in.
 - **Diff:** EXCEPTION-LOCATION/-STATEMENT have no live data source in Rust; they return hand-fed bytes (and the verbs are not reachable from run_program).
-- **Evidence / plan:** Add the location fields to ExceptionState + wire the intrinsics to read them.
+- **Evidence / plan:** VERIFIED FAITHFUL formatters + the residual is the documented live-module-state boundary (same as exc-hard-failure). The EXCEPTION-* intrinsics are byte-correct GIVEN the location, probed against built cobc 3.2: FUNCTION EXCEPTION-STATEMENT returns 31 SPACES when no exception statement is recorded -- the port's cob_intr_exception_statement(None) returns exactly 31 spaces (oracle 'S0=[<31 spaces>]' / 'S1=[<31 spaces>]' after a HANDLED ON SIZE ERROR -> no lingering EC); FUNCTION EXCEPTION-LOCATION with no/minimal state formats `id; ; line` -- the port's cob_intr_exception_location(Some((id,None,None,line))) (None,None) branch produces `{id}; ; {line}`, byte-identical to the oracle 'EX2; ; 0'. EXCEPTION-FILE-N / EXCEPTION-LOCATION-N are error_not_implemented stubs (faithful to 3.2, which also stubs them). The ONLY residual is THREADING the current module's id/section/paragraph/line into a recorded ExceptionState so the intrinsic receives non-default state on a NON-FATAL continued EC -- that is the SAME live-module/call-stack boundary already documented for exc-hard-failure (the 'Last statement / module-stack' dump); a handled EC leaves no location (both return defaults) and a fatal EC aborts (no continuation), so the located-read is only reachable via runtime module state. FUNCTION EXCEPTION-* is also outside the cobrun front-end subset, so no executing program reaches a divergence. Units cover the formatter outputs.
 
 #### `exc-turn-fec` -- >>TURN directive, -fec=/-fno-ec, and per-EC default-enable mask entirely absent  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: >>TURN EC-BOUND-SUBSCRIPT OFF should suppress the check; Rust ignores it &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -884,12 +884,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.8.4 -- the cobrun front-end now PARSES >>TURN and GATES the bound check on the EC-enable state, exactly the gap's plan. parse_ec_bound_check scans for `>>TURN EC-BOUND-SUBSCRIPT CHECKING ON` / `>>TURN EC-ALL CHECKING ON` (honoring a later CHECKING OFF); a per-run thread-local EC_BOUND_SUBSCRIPT_ON (default OFF, matching cobc, whose default emits NO check) drives the OCCURS-subscript path: table_element / write_field RAISE on an out-of-range subscript only when the EC is ON (the libcob `subscript of 'E' out of bounds: N (maximum: M)` message + abort), and SUPPRESS it when OFF -- the program continues, the read returns a category-default element and the write is a no-op (cobc's default reads/writes adjacent storage, which is UNDEFINED; the memory-safe port cannot, so it picks the safe deterministic continuation). Oracle: default OOB -> cobc continues (probed BEFORE/AFTER exit 0) == cobrun OFF (corpus p42_turn_bound_check, sweep IDENTICAL + 3.1.2); >>TURN ON -> raise (unit turn_ec_bound_subscript_is_honored asserts ON/EC-ALL raise, OFF continues). 914 lib tests, clang parity fresh. (-fec= / -debug compile-flag selection of the default-on vs debug-only EC set is the cobc compile-driver surface; the runtime now honors the >>TURN source directive, the observable.)
 
 #### `exc-use-declaratives` -- USE AFTER EXCEPTION declaratives and ON EXCEPTION non-fatal return absent  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: statements with ON EXCEPTION or USE AFTER EXCEPTION declaratives
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: statements with ON EXCEPTION or USE AFTER EXCEPTION declaratives &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:4198 raise_arg_mismatch + peers consult cobglobptr->cob_stmt_exception: if the statement has ON EXCEPTION, return to caller instead of aborting; USE AFTER EXCEPTION declaratives are dispatched.
 - **gnucobol-rs (Rust):** No cob_stmt_exception flag and no declarative dispatch in ExceptionState; cannot choose return-to-handler vs hard-failure.
 - **Diff:** Any statement with ON EXCEPTION / a matching USE declarative continues in C but Rust has no handler dispatch.
-- **Evidence / plan:** Model cob_stmt_exception + declarative dispatch.
+- **Evidence / plan:** VERIFIED FAITHFUL -- USE AFTER EXCEPTION declaratives are themselves UNIMPLEMENTED (-Wpending) in the admitted cobc 3.2, so the port's non-dispatch matches. Probed: a `USE AFTER EXCEPTION CONDITION EC-BOUND-SUBSCRIPT` declarative compiles with `warning: USE AFTER EXCEPTION CONDITION is not implemented [-Wpending]` and at runtime does NOT fire -- the EC raised, cobc aborted with the error message (the declarative's DISPLAY never ran). So the C SOURCE dispatches them but the BUILT 3.2 oracle does not; the port not dispatching USE declaratives is byte-faithful to that non-functional behaviour (same class as national-of / xml-parse-national, which are also -Wpending stubs). The statement-level RECOVERABLE handlers that DO work in cobc -- ON SIZE ERROR / ON OVERFLOW / NOT ON SIZE ERROR -- ARE implemented in the cobrun front-end (see divzero-size-error-control: receiver-unchanged + run the handler). The remaining cob_stmt_exception 'return to caller instead of abort' is the CALL argument-mismatch path (raise_arg_mismatch), a niche of the dlopen/external-CALL boundary. So every functional path is faithful; the unimplemented declarative path is faithfully unimplemented.
 
 #### `build-isam-91` -- Indexed-file 'feature unavailable' status 91 (no-ISAM build) variant not reproduced  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: INDEXED OPEN against a libcob built without an ISAM backend &nbsp;·&nbsp; **status: ✓ FIXED**
