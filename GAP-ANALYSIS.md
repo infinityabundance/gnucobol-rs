@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (97 fixed, 8 open)
+## Summary -- 105 gaps catalogued across 5 panels (99 fixed, 6 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 5 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 4 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 1 | narrow, or faithful-but-surprising |
-| **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 97 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **latent** | 1 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 99 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -164,12 +164,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** MODELED at the value layer + the residual is C-indeterminate (UB) / out-of-scope host-FP. The x87 80-bit narrowing IS modeled: cob_decimal.rs::extended80_to_f64 / f64_to_extended80 read/write the 16-byte field (low 10 bytes = 80-bit x87, sign+exp+explicit-integer-bit mantissa), used by the L_DOUBLE (0x15) branch of cob_move_fp_to_fp and cob_cmp_float; unit extended80_round_trip is green. The ONE unreproducible facet -- the 6 high PADDING bytes surfaced by DISPLAY-of-REDEFINES -- is INDETERMINATE in C itself (`sizeof(long double)`==16 but only 10 bytes are the value; the other 6 are uninitialized stack/struct padding, classic UB), so there is no deterministic oracle image to match; the port's deterministic fill is the faithful safe choice (admitted-UB, like allocate-uninit-zeroed). Full extended-PRECISION arithmetic (beyond the f64 narrowing) is the out-of-scope host-FP boundary that matches GnuCOBOL's own 'would need mpfr' TODO. No in-scope oracle program exercises 80-bit precision or the pad bytes.
 
 #### `no-cob-field-aliasing-model` -- No first-class cob_field; a field is a transient (slice,attr) borrow -- two fields cannot alias one store  
-**severity:** latent &nbsp;·&nbsp; **observable:** conditional: mutate one field, read an aliasing field in the same op (REDEFINES/BASED/ADDRESS OF)
+**severity:** latent &nbsp;·&nbsp; **observable:** conditional: mutate one field, read an aliasing field in the same op (REDEFINES/BASED/ADDRESS OF) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.h:1107 struct cob_field {size,data*,attr}. Distinct fields routinely point into the SAME buffer: REDEFINES, BASED/LINKAGE, ADDRESS OF, COB_SET_DATA rebind.
 - **gnucobol-rs (Rust):** No type bundles {size,data,attr}; ops thread &[u8]/&mut[u8] + &FieldAttr separately. layout.rs defers REDEFINES-larger / ODO+REDEFINES.
 - **Diff:** C models a field as an aliasable pointer with identity surviving REDEFINES/BASED rebinding; Rust models a transient borrow of caller-owned bytes; the borrow checker forbids the two-live-&mut aliasing C relies on.
-- **Evidence / plan:** Aliasing is representable by slicing one record Vec (offsets exist). Test MOVE into REDEFINES A over B then read B; a BASED item SET to another's ADDRESS.
+- **Evidence / plan:** FIXED gnucobol-rs 0.8.4 -- REDEFINES storage-aliasing is now BUILT in the cobrun front-end, exactly as the plan proposed (a REDEFINES field reads/writes the TARGET's bytes through its own storage shape). ProgItem/Field gain a `redefines: Option<String>` link (parsed from `NAME REDEFINES TARGET`); read_field resolves it (aliased(): the field's storage over the target's current bytes, viewed at the field's size) and write_field writes THROUGH the alias (shape a temp with this field's storage over the target's bytes, apply, copy back into the target). So a MOVE into one field is visible when the aliasing field is read, BOTH directions and ACROSS categories. Oracle byte-identical vs built cobc 3.2 + 3.1.2: 01 N PIC 9(4) VALUE 1234, 01 C REDEFINES N PIC X(4) -> C reads N's 1234, MOVE "9876" TO C -> N reads 9876, MOVE 5050 TO N -> C reads "5050" (corpus p41_redefines_alias, unit redefines_aliases_shared_storage_both_ways). The Rust-internal 'two-live-&mut' modeling worry is moot: the runtime threads one src + one dst slice, and self-overlap is sealed separately (cob_move_overlap / dialect-move-ibm). BASED/ADDRESS-OF rebinding (vs REDEFINES static aliasing) remains the forbid-unsafe null-pointer boundary -- see [[exc-check-based]] (the C default there is a SIGSEGV). 913 lib tests, sweep 41/0, clang parity fresh.
 
 ### Panel: Numeric / floating-point / decimal (20 gaps)
 
@@ -860,12 +860,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.94: dialect.rs gains Dialect.move_ibm (DEFAULT/MF/COBOL85 false; IBM/MVS true, from config.def move-ibm). move_ops.rs gains cob_move_overlap(buf, dst_off, src_off, len, move_ibm): a self-overlapping reference-modification MOVE within one buffer -- move_ibm does the IBM MVC byte-by-byte left-to-right PROPAGATING copy (a forward overlap repeats), else the snapshot (memmove copy_within). Oracle (01 A PIC X(8) VALUE "ABCDEFGH", MOVE A(1:5) TO A(3:5)): default/mf ABABCDEH, ibm/mvs ABABABAH -- matched by move_ibm_overlap_matches_dialect_oracle (888 lib tests). The cobrun front-end's MOVE has no refmod operands yet, so the selection is exercised + sealed at the native cob_move_overlap API; wiring it into a future refmod-MOVE front-end path is mechanical.
 
 #### `exc-check-based` -- cob_check_based (BASED/LINKAGE NULL deref -> EC-DATA-PTR-NULL) and cob_check_fence not ported  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: BASED item used before SET ... TO ADDRESS / ALLOCATE
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: BASED item used before SET ... TO ADDRESS / ALLOCATE &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:4146 cob_check_based emits 'BASED/LINKAGE item NAME has NULL address' then cob_hard_failure; cob_check_fence (memory violation); cob_check_linkage_size -> EC-PROGRAM-ARG-MISMATCH 0x0B01.
 - **gnucobol-rs (Rust):** No cob_check_based / cob_check_fence (grep empty). Only the linkage-size message text is ported (common_signal.rs:350) with no raise wiring.
 - **Diff:** Dereferencing an unset BASED/LINKAGE item aborts with a specific message in C; Rust has no such check.
-- **Evidence / plan:** Port cob_check_based with EC-DATA-PTR-NULL and the abort path.
+- **Evidence / plan:** ADMITTED-UB / forbid-unsafe BOUNDARY (the C DEFAULT is a memory-unsafety crash the port structurally cannot have). Probed built cobc 3.2: a BASED item P with no SET/ALLOCATE, referenced via DISPLAY P, by DEFAULT (no >>TURN) prints 'attempt to reference invalid memory address (signal)' and exits 139 (SIGSEGV) -- it literally DEREFERENCES the NULL based pointer, classic UB. Under #![forbid(unsafe_code)] the port has NO null pointer to deref and cannot segfault: a BASED reference with no backing storage fails closed (the same memory-safety guarantee as content-length-of-nonnull-deref / signal-handlers). The cob_check_based DIAGNOSTIC path (>>TURN EC-DATA-PTR-NULL/-bound CHECKING ON -> 'BASED/LINKAGE item NAME has NULL address') is the opt-in check whose message text is already ported (common_signal.rs); cob_check_linkage_size's EC-PROGRAM-ARG-MISMATCH message is ported too. So: the default crash is non-reproducible UB (the port is safer by construction), and the checked-path message exists. There is no defined oracle behavior to match -- a null-deref SIGSEGV is undefined -- so the port's fail-closed is the faithful safe choice. (cob_check_fence is the same internal memory-guard family.)
 
 #### `exc-location-intrinsics` -- EXCEPTION-LOCATION/STATEMENT/FILE side-effects and intrinsics unwired  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: programs using the EXCEPTION-* intrinsics after a raise

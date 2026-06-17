@@ -89,6 +89,11 @@ struct Field {
     storage: Storage,
     bytes: Vec<u8>,
     occurs: usize,
+    /// `NAME REDEFINES TARGET`: this field ALIASES `TARGET`'s storage (the C `cob_field` aliasable
+    /// pointer). When set, the field carries no independent bytes -- every read/write reinterprets the
+    /// target's bytes through this field's `storage` (so a MOVE into the redefining field is visible when
+    /// the redefined field is read, and vice versa).
+    redefines: Option<String>,
 }
 
 
@@ -417,6 +422,8 @@ struct ProgItem {
     /// `OCCURS n TIMES` element count (1 = a scalar). A 01-level table `01 E PIC 9 OCCURS 3` is `n` copies
     /// of the element, subscripted `E(i)`.
     occurs: usize,
+    /// `NAME REDEFINES TARGET`: the field aliases `TARGET`'s storage (see [`Field::redefines`]).
+    redefines: Option<String>,
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
@@ -709,6 +716,15 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             _ => return Err(RunError::Unsupported("expected data name after 01".into())),
         };
         k += 1;
+        // `NAME REDEFINES TARGET` -- the item aliases TARGET's storage.
+        let mut redefines: Option<String> = None;
+        if matches!(toks.get(k), Some(Tok::Word(w)) if w == "REDEFINES") {
+            k += 1;
+            if let Some(Tok::Word(t)) = toks.get(k) {
+                redefines = Some(t.clone());
+                k += 1;
+            }
+        }
         let mut pic: Option<String> = None;
         let mut value: Option<Tok> = None;
         let mut occurs: usize = 1;
@@ -752,7 +768,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             }
         }
         let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-        items.push(ProgItem { name, pic, value, occurs });
+        items.push(ProgItem { name, pic, value, occurs, redefines });
     }
     Ok(items)
 }
@@ -785,6 +801,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             f.bytes = elem.repeat(it.occurs);
             f.occurs = it.occurs;
         }
+        // A REDEFINES item aliases its target's storage: it keeps its own `storage` (the reinterpretation
+        // shape) but reads/writes the target's bytes -- `f.bytes` here is only a size reference.
+        f.redefines = it.redefines.clone();
         fields.insert(it.name.clone(), f);
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
@@ -1426,7 +1445,7 @@ fn make_field(
             let fill = dialect.defaultbyte.byte(is_alpha);
             let bytes = vec![fill; pf.size];
             let storage = if is_alpha { Storage::Alpha(pf.attr) } else { Storage::Numeric(pf.attr) };
-            let mut field = Field { storage, bytes, occurs: 1 };
+            let mut field = Field { storage, bytes, occurs: 1, redefines: None };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -1444,7 +1463,7 @@ fn make_field(
             };
             let size = edited_size(&pic_norm).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
             let mut field =
-                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma), bytes: vec![b' '; size], occurs: 1 };
+                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma), bytes: vec![b' '; size], occurs: 1, redefines: None };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -1538,7 +1557,7 @@ fn decimal_as_display(dec: &Decimal) -> (Vec<u8>, FieldAttr) {
 /// + 9 zero-padded digits, e.g. `+000000042`, reproduced by [`display_return_code`].)
 fn make_return_code(value: i64) -> Field {
     let attr = lit_num_attr(9, 0, true);
-    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![b'0'; 9], occurs: 1 };
+    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![b'0'; 9], occurs: 1, redefines: None };
     let mag: Vec<u8> = value.unsigned_abs().to_string().bytes().map(|b| b - b'0').collect();
     let _ = store_decimal(&mut f, &Decimal { negative: value < 0, digits: mag, scale: 0 });
     f
@@ -2046,20 +2065,38 @@ fn table_element(f: &Field, idx: usize, name: &str) -> Result<Field, RunError> {
         )));
     }
     let start = (idx - 1) * elem;
-    Ok(Field { storage: f.storage.clone(), bytes: f.bytes[start..start + elem].to_vec(), occurs: 1 })
+    Ok(Field { storage: f.storage.clone(), bytes: f.bytes[start..start + elem].to_vec(), occurs: 1, redefines: None })
+}
+
+/// The bytes a field's storage operates on -- its own, or, for a `REDEFINES` alias, the target field's
+/// bytes viewed at this field's size (the first `size` bytes; REDEFINES width <= target width). A single
+/// alias hop (the common 01-level case).
+fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
+    match &f.redefines {
+        Some(target) => {
+            let size = f.bytes.len();
+            let mut bytes = fields.get(target).map(|t| t.bytes.clone()).unwrap_or_default();
+            bytes.resize(size, b' ');
+            bytes.truncate(size);
+            Field { storage: f.storage.clone(), bytes, occurs: f.occurs, redefines: None }
+        }
+        None => f.clone(),
+    }
 }
 
 /// Resolve a (possibly subscripted) field reference word to an owned Field for READING. Returns `Ok(None)`
-/// when `word` names no field (e.g. it is a numeric literal). The subscript may itself be a field (`E(I)`).
+/// when `word` names no field (e.g. it is a numeric literal). The subscript may itself be a field (`E(I)`);
+/// a `REDEFINES` field reads its target's storage (so an alias sees the other field's current bytes).
 fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Field>, RunError> {
     let (base, sub) = split_subscript(word);
     let Some(f) = fields.get(base) else { return Ok(None) };
+    let f = aliased(fields, f);
     match sub {
-        None => Ok(Some(f.clone())),
+        None => Ok(Some(f)),
         Some(s) => {
             let idx = resolve_int(s, fields)
                 .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
-            Ok(Some(table_element(f, idx as usize, base)?))
+            Ok(Some(table_element(&f, idx as usize, base)?))
         }
     }
 }
@@ -2072,6 +2109,25 @@ fn write_field(
     apply: impl FnOnce(&mut Field) -> Result<(), RunError>,
 ) -> Result<(), RunError> {
     let (base, sub) = split_subscript(word);
+    // A REDEFINES field writes THROUGH its alias into the target's storage: shape a temp with this field's
+    // storage over the target's bytes, apply, and copy the result back into the target.
+    if sub.is_none() {
+        if let Some(target) = fields.get(base).and_then(|f| f.redefines.clone()) {
+            let f = fields.get(base).expect("base present");
+            let storage = f.storage.clone();
+            let size = f.bytes.len();
+            let occ = f.occurs;
+            let mut bytes = fields.get(&target).map(|t| t.bytes.clone()).unwrap_or_default();
+            bytes.resize(size, b' ');
+            bytes.truncate(size);
+            let mut tmp = Field { storage, bytes, occurs: occ, redefines: None };
+            apply(&mut tmp)?;
+            let t = fields.get_mut(&target).ok_or_else(|| RunError::UndefinedName(target.clone()))?;
+            let n = tmp.bytes.len().min(t.bytes.len());
+            t.bytes[..n].copy_from_slice(&tmp.bytes[..n]);
+            return Ok(());
+        }
+    }
     match sub {
         None => {
             let f = fields.get_mut(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
@@ -2422,6 +2478,16 @@ mod tests {
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".  *> here's the caller's note: don't break\n           STOP RUN.\n";
         let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"OK\n");
+    }
+
+    #[test]
+    fn redefines_aliases_shared_storage_both_ways() {
+        use crate::dialect::Dialect;
+        // REDEFINES makes A and B share storage: a MOVE into one is seen when the other is read.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 N PIC 9(4) VALUE 1234.\n       01 C REDEFINES N PIC X(4).\n       PROCEDURE DIVISION.\n           DISPLAY C.\n           MOVE \"9876\" TO C.\n           DISPLAY N.\n           MOVE 5050 TO N.\n           DISPLAY C.\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        // C reads N's "1234" ; MOVE "9876" TO C -> N reads 9876 ; MOVE 5050 TO N -> C reads "5050".
+        assert_eq!(out, b"1234\n9876\n5050\n");
     }
 
     #[test]
