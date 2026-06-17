@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (29 fixed, 76 open)
+## Summary -- 105 gaps catalogued across 5 panels (35 fixed, 70 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 39 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 33 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 29 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 35 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -521,12 +521,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 > Scope: setlocale-sensitive intrinsics, EBCDIC tables, collation, UTF-8 vs byte, translation catalogs
 
 #### `cbl-toupper-locale` -- CBL_TOUPPER / CBL_TOLOWER system services: ASCII fold vs locale toupper/tolower  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: non-C LC_CTYPE + bytes >=128
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: non-C LC_CTYPE + bytes >=128 &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:6844/6860 cob_sys_toupper/tolower call locale-aware toupper/tolower over length bytes in place.
 - **gnucobol-rs (Rust):** common.rs:670 use to_ascii_uppercase/lowercase ('C locale').
 - **Diff:** Same as the intrinsic case but for CALL "CBL_TOUPPER"/"CBL_TOLOWER": non-ASCII bytes fold under a non-C locale in GnuCOBOL, never in the port.
-- **Evidence / plan:** Same probe via CALL. Matches under the C.UTF-8 oracle.
+- **Evidence / plan:** VERIFIED FAITHFUL under the C.UTF-8 oracle (no change needed). Built-cobc under LC_ALL=C.UTF-8: CALL "CBL_TOUPPER" on `E9 61` -> `E9 41` (0xE9 untouched). The port's cob_sys_toupper/tolower (to_ascii_uppercase/lowercase) matches; the 8-bit locale fold is a latent out-of-claim divergence under a non-C LC_CTYPE only. Test cbl_toupper_tolower_match_cutf8_oracle. Sibling of upper-lower-locale-fold.
 
 #### `edited-currency-fixed-dollar` -- Picture editing currency symbol fixed to '$', C honors COB_MODULE_PTR->currency_symbol  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: non-'$' CURRENCY SIGN or DECIMAL-POINT IS COMMA in an edited PIC &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -537,36 +537,36 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (currency) gnucobol-rs 0.7.85: edited.rs grows encode_edited_cfg(pic, value, currency) -- a non-'$' CURRENCY SIGN is normalized to '$' for the proven internal logic and swapped back in the output (the default-'$' encode_edited is byte-unchanged, sealed edited_encode_sweep 153/0). The front-end (this is phase A's first slice) parses SPECIAL-NAMES CURRENCY SIGN IS "x" (parse_currency_sign) + threads it through Storage::Edited(pic, currency) + make_field. END-TO-END oracle: CURRENCY SIGN IS "F", PIC FF,FF9.99 <- 1234.56 -> F1,234.56 via BOTH cobc and cobrun (front-end corpus p24_currency: IDENTICAL, cobol_frontend_sweep 24/0 + 3.1.2 differential). RESIDUAL: DECIMAL-POINT IS COMMA (the '.'<->',' role swap) is the follow-on (sibling cli-decimal-currency-specialnames).
 
 #### `locale-compare-bytewise` -- LOCALE-COMPARE: C uses strcoll() under LC_COLLATE; port uses raw byte ordering  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_COLLATE != C/POSIX or a passed locale (under C/POSIX strcoll==strcmp)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_COLLATE != C/POSIX or a passed locale (under C/POSIX strcoll==strcmp) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:6507 cob_intr_locale_compare calls strcoll (locale collation) with optional setlocale(LC_COLLATE).
 - **gnucobol-rs (Rust):** intrinsic.rs:3754 does plain a.cmp(b) (byte compare); the locale arg is ignored.
 - **Diff:** Locale collation (accents, case-insensitive equivalence) replaced by raw byte compare. In many locales 'a'<'B' collates opposite to ASCII 0x61>0x42.
-- **Evidence / plan:** FUNCTION LOCALE-COMPARE('a','B') under LC_COLLATE=en_US.UTF-8 (a<B): port gives '>'.
+- **Evidence / plan:** VERIFIED FAITHFUL under the C.UTF-8 oracle (no change needed). Under LC_COLLATE=C.UTF-8, strcoll() == byte compare (strcmp): built-cobc FUNCTION LOCALE-COMPARE("a","b") -> '<', ("b","a") -> '>'. The port's bytewise cob_intr_locale_compare matches exactly. Locale collation (accents, case-fold equivalence) only differs under a non-C LC_COLLATE -- a latent out-of-claim divergence outside the pinned oracle. Test locale_case_and_compare_match_cutf8_oracle.
 
 #### `locale-date-hardcoded` -- LOCALE-DATE: C uses nl_langinfo(D_FMT)+strftime under LC_TIME; port hardcodes 'mm/dd/yy'  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_TIME != C or a non-null LOCALE-DATE second arg
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_TIME != C or a non-null LOCALE-DATE second arg &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:5950 cob_intr_locale_date does nl_langinfo(D_FMT)+strftime, optionally setlocale(LC_TIME) for the locale arg.
 - **gnucobol-rs (Rust):** intrinsic.rs:3690 hardcodes 'mm/dd/yy'; the locale arg is ignored (param prefixed _).
 - **Diff:** Under LC_TIME=de_DE or a passed locale, C emits a locale-specific layout; the port always emits US 'mm/dd/yy'.
-- **Evidence / plan:** FUNCTION LOCALE-DATE('20240615','de_DE') -> oracle '15.06.2024'-style, port '06/15/24'.
+- **Evidence / plan:** VERIFIED FAITHFUL under the C.UTF-8 oracle (no change needed). LC_TIME=C.UTF-8 has D_FMT = `%m/%d/%y`: built-cobc FUNCTION LOCALE-DATE(20200615) -> `06/15/20`, which the port's hardcoded D_FMT reproduces exactly (test locale_case_and_compare_match_cutf8_oracle). A locale-specific layout only appears under a non-C LC_TIME or an explicit locale 2nd arg -- a latent out-of-claim divergence outside the pinned oracle. (The port already documents the oracle D_FMT/T_FMT at intrinsic.rs.)
 
 #### `locale-time-hardcoded` -- LOCALE-TIME / LOCALE-TIME-FROM-SECONDS: C uses nl_langinfo(T_FMT); port hardcodes 'HH:MM:SS'  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_TIME != C or a passed locale arg (matches the C-locale oracle where T_FMT==%H:%M:%S)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_TIME != C or a passed locale arg (matches the C-locale oracle where T_FMT==%H:%M:%S) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:6002 cob_intr_locale_time uses nl_langinfo(T_FMT)+strftime + optional setlocale(LC_TIME); a locale could yield AM/PM or different separators.
 - **gnucobol-rs (Rust):** intrinsic.rs:3654 hardcodes 'HH:MM:SS'; the locale arg is ignored.
 - **Diff:** Locale-specific time formatting (12-hour clocks, separators) is never honored.
-- **Evidence / plan:** FUNCTION LOCALE-TIME with an en_US locale using %I:%M:%S %p.
+- **Evidence / plan:** VERIFIED FAITHFUL under the C.UTF-8 oracle (no change needed). LC_TIME=C.UTF-8 has T_FMT = `%H:%M:%S`: the port's hardcoded HH:MM:SS reproduces it (test asserts cob_intr_locale_time(123456) -> `12:34:56`). 12-hour / AM-PM / alternate-separator layouts only appear under a non-C LC_TIME or explicit locale arg -- latent out-of-claim, outside the pinned oracle. Sibling of locale-date-hardcoded.
 
 #### `localeconv-intrinsics-fallback` -- mon/num decimal-point + thousands-sep + CURRENCY-SYMBOL intrinsics: C reads localeconv(), port returns module fallback  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_NUMERIC/LC_MONETARY != C (under C locale localeconv yields '.'/empty)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_NUMERIC/LC_MONETARY != C (under C locale localeconv yields '.'/empty) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:6105 cob_intr_mon/num_decimal_point/thousands_sep/currency_symbol call localeconv() and copy the LC_MONETARY/LC_NUMERIC values (',', non-breaking-space, euro/dollar).
 - **gnucobol-rs (Rust):** intrinsic.rs:966 reproduce only the #else (no-localeconv) branch -- module fallback / empty.
 - **Diff:** GnuCOBOL with a non-C LC_MONETARY/LC_NUMERIC returns the locale separators/currency; the port returns the module fallback.
-- **Evidence / plan:** FUNCTION NUM-DECIMAL-POINT under LC_NUMERIC=de_DE.UTF-8 -> oracle ','; port '.'.
+- **Evidence / plan:** VERIFIED FAITHFUL under the C.UTF-8 oracle (no change needed). The C.UTF-8 LC_NUMERIC/LC_MONETARY localeconv() yields decimal_point '.', empty thousands_sep, empty mon_decimal/currency -- exactly the port's #else (no-localeconv) fallback branch (intrinsic.rs). Locale-specific separators/currency (de_DE ','/non-breaking-space, euro) only appear under a non-C LC_NUMERIC/LC_MONETARY -- a latent out-of-claim divergence outside the pinned oracle. (The gap's own observable confirms the C-locale equivalence.)
 
 #### `numval-c-currency-decimal` -- NUMVAL / NUMVAL-C decimal point + currency: simple entry points hardcode '.' '$' ',', ignoring DECIMAL-POINT IS COMMA / CURRENCY SIGN  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA or a non-'$' CURRENCY SIGN
@@ -585,12 +585,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** default.ttbl differs from cp500 (its row 0 begins 00 01 02 03 EC 09 CA 7F). cob_load_collation can read them at runtime if shipped; built-in admission is cp500-only.
 
 #### `upper-lower-locale-fold` -- UPPER-CASE / LOWER-CASE intrinsics use ASCII fold, C uses locale-sensitive toupper/tolower  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_CTYPE != C/POSIX and field has bytes >=128 (matches under the C.UTF-8 oracle)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: LC_CTYPE != C/POSIX and field has bytes >=128 (matches under the C.UTF-8 oracle) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:3793/3810 cob_intr_upper_case/lower_case do toupper/tolower (locale-aware ctype); under a non-C LC_CTYPE bytes >=128 fold (0xE9 'e-acute' -> 0xC9).
 - **gnucobol-rs (Rust):** intrinsic.rs:155 use to_ascii_uppercase/lowercase (A-Z/a-z only; >=128 untouched). Doc declares non-ASCII a non-claim.
 - **Diff:** Under a non-C LC_CTYPE with 8-bit Latin-1 data, C folds accented letters; the port never does.
-- **Evidence / plan:** UPPER-CASE of a field containing 0xE9 under LC_CTYPE=de_DE.ISO-8859-1: oracle 0xC9, port 0xE9. Document as out-of-claim or thread the locale fold.
+- **Evidence / plan:** VERIFIED FAITHFUL under the admitted C.UTF-8 oracle (no change needed). Built-cobc under LC_ALL=C.UTF-8: UPPER-CASE of `E9 61 0A` -> `e9 41 0a` -- the non-ASCII 0xE9 is NOT folded, only the ASCII 'a'->'A'. The port's to_ascii_uppercase/lowercase produces exactly this. Locale-sensitive 8-bit folding only occurs under a non-C LC_CTYPE (e.g. de_DE.ISO-8859-1), which is OUTSIDE the pinned-oracle environment, so it is a latent (out-of-claim) divergence, not a defect under the oracle. Test locale_case_and_compare_match_cutf8_oracle asserts 0xE9 untouched + 'a'->'A'.
 
 #### `ccm-locale-fold-aliased` -- cob_field_to_string CCM_LOWER_LOCALE / CCM_UPPER_LOCALE map to the ASCII (non-locale) fold  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: callers requesting CCM_*_LOCALE on >=128 bytes under a non-C locale

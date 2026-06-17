@@ -1030,6 +1030,19 @@ mod tests {
     }
 
     #[test]
+    fn cbl_toupper_tolower_match_cutf8_oracle() {
+        // Under the admitted C.UTF-8 oracle, cobc's CBL_TOUPPER/CBL_TOLOWER fold only ASCII -- a byte
+        // >=128 is left untouched (built-cobc oracle: CBL_TOUPPER of `E9 61` -> `E9 41`). Locale-sensitive
+        // folding of 8-bit data only happens under a non-C LC_CTYPE, which is outside the pinned locale.
+        let mut up = [0xE9u8, b'a', b'Z'];
+        cob_sys_toupper(&mut up, 3);
+        assert_eq!(up, [0xE9, b'A', b'Z']);
+        let mut lo = [0xC9u8, b'A', b'z'];
+        cob_sys_tolower(&mut lo, 3);
+        assert_eq!(lo, [0xC9, b'a', b'z']);
+    }
+
+    #[test]
     fn bound_fault_critical_column_drives_hard_failure() {
         use crate::common_exception::cob_exception_is_fatal;
         use crate::common_term::{ExitState, TermAction, EXIT_FAILURE};

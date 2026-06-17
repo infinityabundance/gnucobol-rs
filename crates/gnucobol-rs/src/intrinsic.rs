@@ -4134,6 +4134,29 @@ mod tests {
     }
 
     #[test]
+    fn locale_case_and_compare_match_cutf8_oracle() {
+        // Under the admitted C.UTF-8 oracle, UPPER-CASE/LOWER-CASE fold ONLY ASCII; a byte >=128 is left
+        // untouched -- built-cobc: UPPER-CASE of `E9 61 0A` -> `e9 41 0a`. (Locale-sensitive 8-bit folding
+        // only occurs under a non-C LC_CTYPE, outside the pinned locale -- so the port is faithful here.)
+        assert_eq!(cob_intr_upper_case(0, 0, &[0xE9, b'a', 0x0A]).0, vec![0xE9, b'A', 0x0A]);
+        assert_eq!(cob_intr_lower_case(0, 0, &[0xC9, b'A']).0, vec![0xC9, b'a']);
+        // LOCALE-COMPARE uses LC_COLLATE = byte order under C.UTF-8 (strcoll == memcmp): built-cobc gives
+        // `a`<`b` and `b`>`a`. So the port's bytewise compare is faithful under the pinned locale.
+        assert_eq!(cob_intr_locale_compare(b"a", b"b", None).0, b"<");
+        assert_eq!(cob_intr_locale_compare(b"b", b"a", None).0, b">");
+        assert_eq!(cob_intr_locale_compare(b"a", b"a", None).0, b"=");
+        // LOCALE-DATE renders per LC_TIME's D_FMT = `%m/%d/%y` under C.UTF-8: built-cobc LOCALE-DATE of
+        // 20200615 -> `06/15/20`. The port hardcodes that oracle D_FMT, so it is faithful.
+        let datt = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 8, scale: 0, flags: 0 };
+        let ld = cob_intr_locale_date(0, 0, b"20200615", &datt, None).0;
+        assert_eq!(&ld[..8], b"06/15/20");
+        // LOCALE-TIME per LC_TIME's T_FMT = `%H:%M:%S` under C.UTF-8: 123456 -> `12:34:56`.
+        let tatt = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 6, scale: 0, flags: 0 };
+        let lt = cob_intr_locale_time(0, 0, b"123456", &tatt, None).0;
+        assert_eq!(&lt[..8], b"12:34:56");
+    }
+
+    #[test]
     fn numval_c_strips_currency_and_commas() {
         assert_eq!(nvc("$1,234.56"), "+00001234.5600");
         assert_eq!(nvc("1,234,567"), "+01234567.0000");
