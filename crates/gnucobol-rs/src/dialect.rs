@@ -97,6 +97,10 @@ pub struct Dialect {
     pub odoslide: bool,
     /// `defaultbyte` -- the fill for uninitialized storage.
     pub defaultbyte: DefaultByte,
+    /// `move-ibm` -- when true (ibm/mvs), a self-overlapping MOVE (a field onto a shifted reference
+    /// modification of itself) uses the IBM `MVC` byte-by-byte left-to-right *propagating* copy; when
+    /// false (default/mf), the snapshot (memmove) copy. See [`crate::move_ops::cob_move_overlap`].
+    pub move_ibm: bool,
 }
 
 impl Dialect {
@@ -108,6 +112,7 @@ impl Dialect {
         complex_odo: false,
         odoslide: false,
         defaultbyte: DefaultByte::Init,
+        move_ibm: false,
     };
     /// `-std=ibm` (`ibm.conf` -> `ibm-strict.conf`): `2-4-8`, no truncate, complex ODO + slide, defaultbyte 0.
     pub const IBM: Dialect = Dialect {
@@ -116,6 +121,7 @@ impl Dialect {
         complex_odo: true,
         odoslide: true,
         defaultbyte: DefaultByte::Fill(0),
+        move_ibm: true,
     };
     /// `-std=mf` (`mf.conf` -> `mf-strict.conf`): `1--8` (tight), no truncate, complex ODO (no slide),
     /// defaultbyte space.
@@ -125,6 +131,7 @@ impl Dialect {
         complex_odo: true,
         odoslide: false,
         defaultbyte: DefaultByte::Fill(b' '),
+        move_ibm: false,
     };
     /// `-std=mvs` (`mvs.conf` -> `mvs-strict.conf`): same five knobs as ibm.
     pub const MVS: Dialect = Dialect {
@@ -133,6 +140,7 @@ impl Dialect {
         complex_odo: true,
         odoslide: true,
         defaultbyte: DefaultByte::Fill(0),
+        move_ibm: true,
     };
     /// `-std=cobol85` / `cobol2002` / `cobol2014`: the same field-model knobs as DEFAULT, but
     /// `defaultbyte: none` -- undefined storage, observed as 0x00.
@@ -142,6 +150,7 @@ impl Dialect {
         complex_odo: false,
         odoslide: false,
         defaultbyte: DefaultByte::Fill(0),
+        move_ibm: false,
     };
 
     /// Resolve a `-std=` name to its [`Dialect`] (the field-model subset). Unknown names fall back to

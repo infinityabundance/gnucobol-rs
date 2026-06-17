@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (35 fixed, 70 open)
+## Summary -- 105 gaps catalogued across 5 panels (36 fixed, 69 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 33 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 32 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 35 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 36 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -853,12 +853,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Wire hostsign/init-justify/osvs flags from dialect; primitives partly exist for hostsign only.
 
 #### `dialect-move-ibm` -- move-ibm overlapping-MOVE semantics implemented but never dialect-selected  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: self-overlapping MOVE under -std=ibm/mvs
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: self-overlapping MOVE under -std=ibm/mvs &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** config.def move-ibm default 'no' -> 'yes' ibm/mvs-strict; selects IBM left-to-right MVC-style propagating overlap MOVE.
 - **gnucobol-rs (Rust):** move_ops.rs:538 cob_move_ibm() exists but nothing reads a move-ibm directive to choose it over the normal MOVE.
 - **Diff:** Overlapping MOVE of a field onto a shifted refmod of itself produces propagating-fill bytes (ibm) vs single copy (default). The primitive is present but unwired.
-- **Evidence / plan:** Dispatch to cob_move_ibm when the dialect sets move-ibm:yes.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.94: dialect.rs gains Dialect.move_ibm (DEFAULT/MF/COBOL85 false; IBM/MVS true, from config.def move-ibm). move_ops.rs gains cob_move_overlap(buf, dst_off, src_off, len, move_ibm): a self-overlapping reference-modification MOVE within one buffer -- move_ibm does the IBM MVC byte-by-byte left-to-right PROPAGATING copy (a forward overlap repeats), else the snapshot (memmove copy_within). Oracle (01 A PIC X(8) VALUE "ABCDEFGH", MOVE A(1:5) TO A(3:5)): default/mf ABABCDEH, ibm/mvs ABABABAH -- matched by move_ibm_overlap_matches_dialect_oracle (888 lib tests). The cobrun front-end's MOVE has no refmod operands yet, so the selection is exercised + sealed at the native cob_move_overlap API; wiring it into a future refmod-MOVE front-end path is mechanical.
 
 #### `exc-check-based` -- cob_check_based (BASED/LINKAGE NULL deref -> EC-DATA-PTR-NULL) and cob_check_fence not ported  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: BASED item used before SET ... TO ADDRESS / ALLOCATE

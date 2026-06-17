@@ -539,6 +539,22 @@ pub fn cob_move_ibm(dst: &mut [u8], src: &[u8], len: usize) {
     dst[..len].copy_from_slice(&src[..len]);
 }
 
+/// A self-overlapping reference-modification MOVE -- a field onto a shifted slice of *itself*, within one
+/// `buf` -- honoring the `move-ibm` dialect knob. When `move_ibm` (ibm/mvs), the IBM `MVC` byte-by-byte
+/// LEFT-TO-RIGHT copy: a forward overlap (`dst_off > src_off`) PROPAGATES, since each destination byte is
+/// read after earlier ones were written. Otherwise (default/mf) the snapshot (memmove) copy, as if the
+/// source were captured first. Oracle (`01 A PIC X(8) VALUE "ABCDEFGH"`, `MOVE A(1:5) TO A(3:5)`):
+/// default `ABABCDEH`, ibm `ABABABAH`.
+pub fn cob_move_overlap(buf: &mut [u8], dst_off: usize, src_off: usize, len: usize, move_ibm: bool) {
+    if move_ibm {
+        for i in 0..len {
+            buf[dst_off + i] = buf[src_off + i];
+        }
+    } else {
+        buf.copy_within(src_off..src_off + len, dst_off);
+    }
+}
+
 /// `cob_init_table (tbl, len, occ)` (move.c:1426): propagate the first `len`-byte element through an
 /// `occ`-occurrence table by doubling copies (used by `INITIALIZE`). `tbl` is the full `len*occ` buffer
 /// with the seed element in `tbl[..len]`.
@@ -974,6 +990,27 @@ pub fn cob_move(
 mod tests {
     use super::*;
     use crate::attr::{COB_FLAG_BINARY_SWAP, COB_FLAG_HAVE_SIGN};
+
+    #[test]
+    fn move_ibm_overlap_matches_dialect_oracle() {
+        // `01 A PIC X(8) VALUE "ABCDEFGH"`, `MOVE A(1:5) TO A(3:5)` -- src=A[0..5], dst=A[2..7].
+        // default/mf (snapshot): ABABCDEH; ibm/mvs (propagating MVC): ABABABAH (built-cobc oracle).
+        let mut a = *b"ABCDEFGH";
+        cob_move_overlap(&mut a, 2, 0, 5, crate::dialect::Dialect::DEFAULT.move_ibm);
+        assert_eq!(&a, b"ABABCDEH");
+
+        let mut a = *b"ABCDEFGH";
+        cob_move_overlap(&mut a, 2, 0, 5, crate::dialect::Dialect::IBM.move_ibm);
+        assert_eq!(&a, b"ABABABAH");
+
+        // mf follows default (no move-ibm); mvs follows ibm.
+        let mut a = *b"ABCDEFGH";
+        cob_move_overlap(&mut a, 2, 0, 5, crate::dialect::Dialect::MF.move_ibm);
+        assert_eq!(&a, b"ABABCDEH");
+        let mut a = *b"ABCDEFGH";
+        cob_move_overlap(&mut a, 2, 0, 5, crate::dialect::Dialect::MVS.move_ibm);
+        assert_eq!(&a, b"ABABABAH");
+    }
 
     #[test]
     fn ebcdic_sign_move_vs_cobc() {
