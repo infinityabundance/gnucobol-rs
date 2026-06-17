@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (74 fixed, 31 open)
+## Summary -- 105 gaps catalogued across 5 panels (75 fixed, 30 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 11 | narrow, or faithful-but-surprising |
+| **low** | 10 | narrow, or faithful-but-surprising |
 | **latent** | 4 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 74 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 75 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -649,12 +649,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** CONFIRMED divergence then FIXED gnucobol-rs 0.7.98. Built-cobc oracle (DECIMAL-POINT IS COMMA, MOVE "12,34" to PIC 9(2)V99): stores 12.34; the port stored 34.00 (parsed 1234 ignoring the comma, truncated to 2 integer digits). Fix: cob_move_alphanum_to_display is now parameterized as cob_move_alphanum_to_display_cfg(dec_pt, num_sep) and a new cob_move_cfg routes the alphanumeric->numeric-DISPLAY leaf with the swapped separators (dec_pt=',' num_sep='.') under comma; frontend move_into threads ctx.decimal_comma (exec_move); numeric/arith stores stay separator-independent. The deliberate ASCII-range digit check is preserved. A SECOND divergence surfaced and was fixed in the same change: pretty numeric DISPLAY built the comma INTO the edited PIC (where ',' is a grouping separator, not a decimal), mangling placement (12.34 -> 00,12); pretty_display_numeric now builds the canonical '.' PIC and translates the sole '.' to the module decimal point, so DISPLAY of a numeric under comma renders 12,34 / -007,5. Oracle byte-identical: corpus p36_decimal_comma_move (sweep IDENTICAL + 3.1.2 differential-matched); units cob_move_cfg_decimal_comma_alphanum_to_numeric + pretty_numeric_decimal_point_is_comma; 902 lib tests.
 
 #### `national-of-not-implemented` -- NATIONAL-OF / DISPLAY-OF / CHAR-NATIONAL / STANDARD-COMPARE unimplemented in BOTH (faithful), no UTF-16 NATIONAL support  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: a program calls these (C aborts/errors, port returns empty)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: a program calls these (C aborts/errors, port returns empty) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:7088 cob_intr_char_national/display_of/national_of/standard_compare all call error_not_implemented() -- GnuCOBOL 3.2 itself has no working NATIONAL-OF/DISPLAY-OF.
 - **gnucobol-rs (Rust):** intrinsic.rs:3188 return empty IntrField (tests assert .is_empty()). Behaviorally faithful (both non-functional); the port returns empty rather than emitting the not-implemented error.
 - **Diff:** Behaviorally faithful. Minor: C raises a not-implemented error (a cob_fatal_error/abort path) whereas the port silently returns an empty field.
-- **Evidence / plan:** Verify error_not_implemented() (likely cob_fatal_error->abort) and whether the port should reproduce the abort.
+- **Evidence / plan:** VERIFIED FAITHFUL (both reject before execution; the library stub is unreachable via compilation). Oracle (built cobc 3.2): FUNCTION NATIONAL-OF is rejected at COMPILE time -- `error: FUNCTION 'NATIONAL-OF' is not implemented` (a cobc codegen-time rejection, NOT a runtime abort) -- so no compiled program can ever reach the runtime function. The port mirrors this end to end: the cobrun front-end fails CLOSED on these functions (exit 2, unsupported), and the library cob_intr_national_of/display_of/char_national stubs call error_not_implemented() returning an empty IntrField -- a path that is unreachable through a normally-compiled program, exactly as upstream. So the observable (a program that 'calls these') does not exist in either system: both stop it before the call. The minor 'C aborts vs port returns empty' note is moot because the runtime path is dead. Units assert .is_empty() on all three (intrinsic.rs).
 
 #### `translation-catalogs-absent` -- Runtime message translation catalogs (12 languages) entirely absent; only English msgids reproduced  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: LC_MESSAGES != C and a catalog installed (faithful under the C-locale oracle where gettext returns the msgid) &nbsp;·&nbsp; **status: ✓ FIXED**
