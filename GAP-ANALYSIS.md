@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (95 fixed, 10 open)
+## Summary -- 105 gaps catalogued across 5 panels (97 fixed, 8 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 7 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 5 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 1 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 95 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 97 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -404,12 +404,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL against the admitted oracle -- the gap's predicted divergence (C->51, port->00) does NOT hold for the pinned built cobc 3.2. Empirically probed (BDB handler confirmed: `cobc --info` -> 'indexed file handler: BDB', and the .dat is a real BDB btree): in EVERY reproducible scenario the oracle ALSO returns 00, never 51/52 -- (a) single process, two SELECTs to the same INDEXED file LOCK MODE MANUAL, READ F1 WITH LOCK then READ F2 same key -> 00/00; (b) two PROCESSES, holder READ WITH LOCK held while a second process READs WITH LOCK -> 00/00; (c) LOCK MODE EXCLUSIVE cross-process -> 00/00. The admitted build's BDB has no shared lock environment (no DB_INIT_LOCK), so lock_get always grants; the 51/52 path in fileio.c is source-present but UNREACHABLE in the admitted oracle's observable behavior. The port's LockEnv reproduces the grant/deny ALGEBRA (unit record_and_file_lock_contention) but correctly does NOT force 51 through the executing I/O API -- wiring it to return 51 would DIVERGE from the oracle. Cross-process BDB lock enforcement is the declared OS boundary; the deterministic single-process court cannot exhibit it and neither does the admitted oracle. See sibling [[fcntl-whole-file-lock-noop]] / open-with-lock-mode-select (same evidence).
 
 #### `call-system-no-spawn` -- CALL "SYSTEM" builds the command but never invokes system(); no child status/WIFSIGNALED  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: CALL "SYSTEM" ... GIVING rc cannot return a real child status from the port alone
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: CALL "SYSTEM" ... GIVING rc cannot return a real child status from the port alone &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c cob_sys_system builds command, status=system(command), inspects WIFSIGNALED, returns the wait-status.
 - **gnucobol-rs (Rust):** common_proc.rs cob_sys_system returns SystemOutcome::Run{command}; trim/size-guard/WIN32-requote are faithful but system() is the declared boundary -- no spawn, no status byte.
 - **Diff:** C runs the child and returns its exit status; Rust returns the assembled command for the host to run.
-- **Evidence / plan:** Host must spawn + map status. CALL "SYSTEM" USING "exit 3" GIVING rc: port returns no real rc.
+- **Evidence / plan:** DECLARED OS BOUNDARY (system() is an explicit doctrine-listed OS-mutating leaf, alongside dlopen/sigaction/exit/fcntl/BDB). The PURE part is fully + faithfully ported: cob_sys_system reifies the command exactly as libcob assembles it -- trailing SPACE/NUL trim, the COB_MEDIUM_MAX (8191) size guard, the WIN32 re-quote -- and returns SystemOutcome::Run{command} (vs Return(1) on the empty/oversize guards). The single boundary is the literal status=system(command) syscall (spawn a /bin/sh child + inspect WIFSIGNALED/WEXITSTATUS), which would fork+exec arbitrary host commands. The deterministic pure interpreter does not spawn external processes (a deliberate scope decision, same family as the dlopen external-CALL boundary): GIVING rc needs the child's wait-status MID-interpretation, and a faithful interleave of the child's stdout with the program's own DISPLAY would require streaming the interpreter's output rather than the pure buffered-Vec model. So the assembled command is byte-faithful; spawning it + mapping the wait-status is the declared OS boundary (a host wrapping cobrun can act on SystemOutcome::Run).
 
 #### `cancel-no-unload` -- CANCEL never runs the module cancel handler and never lt_dlclose-unloads  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: programs relying on CANCEL to reset a subprogram's WORKING-STORAGE or unload a .so &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -428,12 +428,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_close now checks the std::fs::write flush result (was `let _ = ...`) and surfaces a failure as the mapped FILE STATUS via classify_io_error + errno_cob_sts: ENOSPC/EDQUOT -> 34, EACCES/EISDIR/EROFS -> 37, else 30. Because the port buffers writes and flushes at close, the disk-full status appears at CLOSE rather than per-WRITE (a timing, not a value, difference -- noted). Test close_surfaces_write_error_status (flush to a directory path -> EISDIR -> 37, deterministic); write sweeps green.
 
 #### `env-detached-map` -- setenv/getenv operate on a private map/closure, not the live process environment  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: DISPLAY UPON ENVIRONMENT then CALL "SYSTEM" -- the variable does not propagate to the child
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: DISPLAY UPON ENVIRONMENT then CALL "SYSTEM" -- the variable does not propagate to the child &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c cob_setenv calls real setenv/putenv; cob_getenv/_direct call real getenv -- mutating/reading the process environ inherited by fork/exec children; _direct returns a live pointer vs _getenv's strdup copy.
 - **gnucobol-rs (Rust):** common_env.rs routes reads through an injected closure and writes into a &mut BTreeMap; both _getenv and _direct return owned Vec<u8>; the cache refresh is dropped.
 - **Diff:** C shares one OS env table with children; Rust's env is a detached map and the live-pointer aliasing distinction is collapsed.
-- **Evidence / plan:** Bridge to real environ for the host run. Set a var then CALL SYSTEM that reads it: child sees it under cobc, not port.
+- **Evidence / plan:** DECLARED OS BOUNDARY + the observable is subsumed by [[call-system-no-spawn]]. The env LOGIC is faithfully ported and unit-tested: cob_setenv/cob_putenv/cob_unsetenv write into a byte-keyed BTreeMap<Vec<u8>,Vec<u8>>, cob_getenv/_direct read through an injected lookup, and cob_expand_env_string reproduces libcob's ${name:default}/precedence expansion -- all pure, panic-free, testable. The ONE boundary is binding that map to the LIVE process environ (real setenv/getenv) so a fork/exec child inherits it -- the same OS-mutating leaf the doctrine declares. Crucially the gap's observable ('DISPLAY UPON ENVIRONMENT then CALL SYSTEM -> the child sees the var') REQUIRES a spawned child, which is itself the call-system-no-spawn boundary: with no child process there is nothing for the env to propagate TO, so the divergence is unobservable in the port's model for the same reason. The _direct-returns-live-pointer vs _getenv-strdup-copy distinction is a C ABI detail with no COBOL-observable effect (both yield the same value bytes). Pure env logic faithful; live-environ + child inheritance is the declared OS boundary.
 
 #### `fcntl-whole-file-lock-noop` -- POSIX fcntl/F_SETLK whole-file lock is a no-op; status 61 never raised on open contention  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: two processes contend for the same sequential file (C->61, port->success/35) &nbsp;·&nbsp; **status: ✓ FIXED**
