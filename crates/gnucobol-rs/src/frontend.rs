@@ -81,11 +81,14 @@ enum Storage {
     Edited(String, u8, bool),
 }
 
-/// A live field: its storage shape and its current bytes (always exactly the field's size).
+/// A live field: its storage shape and its current bytes. For a scalar `bytes` is exactly the field's
+/// size; for an `OCCURS n` table `bytes` is `n` element images concatenated and `occurs == n` (the
+/// element size is `bytes.len() / occurs`), accessed by a subscript `NAME(i)`.
 #[derive(Debug, Clone)]
 struct Field {
     storage: Storage,
     bytes: Vec<u8>,
+    occurs: usize,
 }
 
 
@@ -411,6 +414,9 @@ struct ProgItem {
     name: String,
     pic: String,
     value: Option<Tok>,
+    /// `OCCURS n TIMES` element count (1 = a scalar). A 01-level table `01 E PIC 9 OCCURS 3` is `n` copies
+    /// of the element, subscripted `E(i)`.
+    occurs: usize,
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
@@ -705,11 +711,24 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         k += 1;
         let mut pic: Option<String> = None;
         let mut value: Option<Tok> = None;
+        let mut occurs: usize = 1;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
                     k += 1;
                     break;
+                }
+                Some(Tok::Word(w)) if w == "OCCURS" => {
+                    k += 1;
+                    if let Some(Tok::Word(n)) = toks.get(k) {
+                        occurs = n.parse::<usize>().map_err(|_| {
+                            RunError::Unsupported(format!("OCCURS count {n} is not an integer"))
+                        })?;
+                        k += 1;
+                    }
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "TIMES") {
+                        k += 1;
+                    }
                 }
                 Some(Tok::Word(w)) if w == "PIC" || w == "PICTURE" => {
                     k += 1;
@@ -733,7 +752,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             }
         }
         let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-        items.push(ProgItem { name, pic, value });
+        items.push(ProgItem { name, pic, value, occurs });
     }
     Ok(items)
 }
@@ -758,7 +777,14 @@ fn find_seq_in(toks: &[Tok], seq: &[&str], from: usize, to: usize) -> Option<usi
 fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, Field>, RunError> {
     let mut fields = HashMap::new();
     for it in &prog.ws {
-        let f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
+        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
+        if it.occurs > 1 {
+            // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
+            // identically, per its VALUE or the dialect fill).
+            let elem = f.bytes.clone();
+            f.bytes = elem.repeat(it.occurs);
+            f.occurs = it.occurs;
+        }
         fields.insert(it.name.clone(), f);
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
@@ -1321,7 +1347,7 @@ fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 
 
 /// If a condition operand is numeric (a numeric field or a numeric literal), decode it to a [`Decimal`].
 fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
-    if let Some(field) = f.get(w) {
+    if let Some(field) = read_field(f, w).ok().flatten() {
         if let Storage::Numeric(a) = &field.storage {
             return source_to_decimal(&field.bytes, a).ok();
         }
@@ -1335,7 +1361,7 @@ fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
 
 /// The display bytes of a condition operand for alphanumeric comparison.
 fn cond_bytes(w: &str, f: &HashMap<String, Field>) -> Vec<u8> {
-    if let Some(field) = f.get(w) {
+    if let Some(field) = read_field(f, w).ok().flatten() {
         return field.bytes.clone();
     }
     if let Some(rest) = w.strip_prefix('\u{1}') {
@@ -1400,7 +1426,7 @@ fn make_field(
             let fill = dialect.defaultbyte.byte(is_alpha);
             let bytes = vec![fill; pf.size];
             let storage = if is_alpha { Storage::Alpha(pf.attr) } else { Storage::Numeric(pf.attr) };
-            let mut field = Field { storage, bytes };
+            let mut field = Field { storage, bytes, occurs: 1 };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -1418,7 +1444,7 @@ fn make_field(
             };
             let size = edited_size(&pic_norm).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
             let mut field =
-                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma), bytes: vec![b' '; size] };
+                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma), bytes: vec![b' '; size], occurs: 1 };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -1512,7 +1538,7 @@ fn decimal_as_display(dec: &Decimal) -> (Vec<u8>, FieldAttr) {
 /// + 9 zero-padded digits, e.g. `+000000042`, reproduced by [`display_return_code`].)
 fn make_return_code(value: i64) -> Field {
     let attr = lit_num_attr(9, 0, true);
-    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![b'0'; 9] };
+    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![b'0'; 9], occurs: 1 };
     let mag: Vec<u8> = value.unsigned_abs().to_string().bytes().map(|b| b - b'0').collect();
     let _ = store_decimal(&mut f, &Decimal { negative: value < 0, digits: mag, scale: 0 });
     f
@@ -1877,8 +1903,8 @@ fn exec_display(
                     // DISPLAY ... WITH NO ADVANCING handled below (no newline) -- mark it.
                     continue;
                 }
-                let f = fields.get(w).ok_or_else(|| RunError::UndefinedName(w.clone()))?;
-                let bytes = if w == "RETURN-CODE" { display_return_code(f) } else { display_bytes(f, ctx.decimal_comma) };
+                let f = read_field(fields, w)?.ok_or_else(|| RunError::UndefinedName(w.clone()))?;
+                let bytes = if w == "RETURN-CODE" { display_return_code(&f) } else { display_bytes(&f, ctx.decimal_comma) };
                 operands.push((bytes, alnum_attr()));
             }
             Tok::Dot => {}
@@ -1931,8 +1957,7 @@ fn exec_move(
     // resolve the source value as (bytes, attr) once.
     let (sbytes, sattr) = operand_value(src_tok, fields)?;
     for d in dests {
-        let f = fields.get_mut(&d).ok_or_else(|| RunError::UndefinedName(d.clone()))?;
-        move_into(f, &sbytes, &sattr, decimal_comma)?;
+        write_field(fields, &d, |f| move_into(f, &sbytes, &sattr, decimal_comma))?;
     }
     Ok(())
 }
@@ -1943,7 +1968,7 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
     match t {
         Tok::Str(s) => Ok((s.clone(), alnum_attr())),
         Tok::Word(w) => {
-            if let Some(f) = fields.get(w) {
+            if let Some(f) = read_field(fields, w)? {
                 match &f.storage {
                     Storage::Numeric(a) => Ok((f.bytes.clone(), *a)),
                     Storage::Alpha(a) => Ok((f.bytes.clone(), *a)),
@@ -1956,6 +1981,81 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
             }
         }
         Tok::Dot => Err(RunError::Unsupported("unexpected '.'".into())),
+    }
+}
+
+/// Split a possibly-subscripted reference `NAME(sub)` into `(NAME, Some(sub))`; a bare `NAME` -> `(NAME,
+/// None)`. A reference-modification `NAME(a:b)` (contains `:`) is NOT a subscript here -> `(NAME, None)`.
+fn split_subscript(w: &str) -> (&str, Option<&str>) {
+    if let Some(open) = w.find('(') {
+        if w.ends_with(')') {
+            let inner = &w[open + 1..w.len() - 1];
+            if !inner.contains(':') {
+                return (&w[..open], Some(inner));
+            }
+        }
+    }
+    (w, None)
+}
+
+/// The element Field of an `OCCURS` table at 1-based subscript `idx` (a transient single-element Field).
+/// Out of range fails closed: cobc's default (no `>>TURN ... CHECKING ON`) OOB read is UNDEFINED (it reads
+/// adjacent storage); under #![forbid(unsafe_code)] the port cannot read past the table, so it errors
+/// rather than fabricate a byte -- and under an active bound check this IS the EC-BOUND-SUBSCRIPT raise.
+fn table_element(f: &Field, idx: usize, name: &str) -> Result<Field, RunError> {
+    let occ = f.occurs.max(1);
+    let elem = f.bytes.len() / occ;
+    if idx < 1 || idx > occ {
+        return Err(RunError::Runtime(format!(
+            "subscript of '{name}' out of bounds: {idx} (maximum: {occ})"
+        )));
+    }
+    let start = (idx - 1) * elem;
+    Ok(Field { storage: f.storage.clone(), bytes: f.bytes[start..start + elem].to_vec(), occurs: 1 })
+}
+
+/// Resolve a (possibly subscripted) field reference word to an owned Field for READING. Returns `Ok(None)`
+/// when `word` names no field (e.g. it is a numeric literal). The subscript may itself be a field (`E(I)`).
+fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Field>, RunError> {
+    let (base, sub) = split_subscript(word);
+    let Some(f) = fields.get(base) else { return Ok(None) };
+    match sub {
+        None => Ok(Some(f.clone())),
+        Some(s) => {
+            let idx = resolve_int(s, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
+            Ok(Some(table_element(f, idx as usize, base)?))
+        }
+    }
+}
+
+/// Apply `apply` to a (possibly subscripted) field reference for WRITING: a bare `NAME` mutates the field;
+/// `NAME(i)` extracts the element, applies, and writes the element bytes back into the table.
+fn write_field(
+    fields: &mut HashMap<String, Field>,
+    word: &str,
+    apply: impl FnOnce(&mut Field) -> Result<(), RunError>,
+) -> Result<(), RunError> {
+    let (base, sub) = split_subscript(word);
+    match sub {
+        None => {
+            let f = fields.get_mut(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+            apply(f)
+        }
+        Some(s) => {
+            let idx = resolve_int(s, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?
+                as usize;
+            let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+            let occ = f.occurs.max(1);
+            let elem = f.bytes.len() / occ;
+            let mut tmp = table_element(f, idx, base)?;
+            apply(&mut tmp)?;
+            let f = fields.get_mut(base).expect("base field present");
+            let start = (idx - 1) * elem;
+            f.bytes[start..start + elem].copy_from_slice(&tmp.bytes);
+            Ok(())
+        }
     }
 }
 
@@ -2287,6 +2387,15 @@ mod tests {
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".  *> here's the caller's note: don't break\n           STOP RUN.\n";
         let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"OK\n");
+    }
+
+    #[test]
+    fn occurs_table_subscript_read_write() {
+        use crate::dialect::Dialect;
+        // 01-level OCCURS table: subscripted MOVE/DISPLAY/IF/ADD with literal and variable subscripts.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 E PIC 99 OCCURS 3 TIMES.\n       01 I PIC 9 VALUE 2.\n       01 S PIC 999.\n       PROCEDURE DIVISION.\n           MOVE 11 TO E(1).\n           MOVE 22 TO E(2).\n           MOVE 33 TO E(3).\n           DISPLAY \"A\" E(1) E(I) E(3).\n           ADD E(1) E(3) GIVING S.\n           DISPLAY \"S\" S.\n           IF E(I) > E(1) DISPLAY \"GT\" ELSE DISPLAY \"LE\" END-IF.\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        assert_eq!(out, b"A112233\nS044\nGT\n");
     }
 
     #[test]
