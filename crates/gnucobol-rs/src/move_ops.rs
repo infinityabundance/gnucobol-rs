@@ -946,7 +946,10 @@ pub fn cob_move(
     if is_fp(dst_attr) {
         // encode: src -> decimal -> the float receiver (no recursion through cob_move)
         let d = crate::cob_decimal::cob_decimal_set_field(src, src_attr);
-        let v = crate::cob_decimal::cob_decimal_get_double(&d);
+        // (value, not_finite): the C zeroes the value AND sets cob_not_finite on an out-of-IEEE-range
+        // magnitude; the store proceeds with `v` (0.0 on overflow, the no-handler behaviour), while
+        // `_not_finite` is the EC-SIZE-OVERFLOW signal a COMP-1/2 store consults under ON SIZE ERROR.
+        let (v, _not_finite) = crate::cob_decimal::cob_decimal_get_double_checked(&d);
         match dst_attr.field_type {
             0x13 => dst[..4].copy_from_slice(&(v as f32).to_le_bytes()),
             0x14 => dst[..8].copy_from_slice(&v.to_le_bytes()),

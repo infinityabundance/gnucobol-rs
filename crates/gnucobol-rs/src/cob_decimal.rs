@@ -993,6 +993,25 @@ pub fn cob_decimal_get_double(d: &CobDecimal) -> f64 {
     cob_decimal_get_mpf(d).get_d()
 }
 
+/// `cob_decimal_get_double` with the libcob `cob_not_finite` overflow flag (numeric.c:950): returns
+/// `(value, not_finite)`. `not_finite` is true when the decimal magnitude exceeds the IEEE double range
+/// (`|d| > f64::MAX`) -- the condition under which the C sets `cob_not_finite = 1` and zeroes the value;
+/// in that case the returned `value` is `0.0` (matching the C). A COMP-1/COMP-2/long-double store consults
+/// this flag: under `KEEP_ON_OVERFLOW` (`ON SIZE ERROR`) `not_finite` raises `EC-SIZE-OVERFLOW` and leaves
+/// the receiver unchanged; otherwise `0.0` is stored. Overflow is detected independently of `mpf_get_d`
+/// (which can flush a too-large magnitude to `0.0` rather than `inf`) by probing the decimal magnitude
+/// through an `f64` parse, which yields `inf` on overflow.
+pub fn cob_decimal_get_double_checked(d: &CobDecimal) -> (f64, bool) {
+    let v = cob_decimal_get_double(d);
+    if d.value.sgn() == 0 {
+        return (v, false);
+    }
+    let mant = d.value.to_decimal_string();
+    let probe: f64 = format!("{mant}e{}", -(d.scale as i64)).parse().unwrap_or(f64::INFINITY);
+    let not_finite = !probe.is_finite();
+    (if not_finite { 0.0 } else { v }, not_finite)
+}
+
 /// `cob_get_long_ascii_sign (p, val)` (numeric.c:4186): decode an ASCII trailing-overpunch sign byte
 /// (`p`..`y` => digit 0..9, all negative). Writes the digit into `val`, returns 1 if negative.
 pub fn cob_get_long_ascii_sign(p: u8, val: &mut i32) -> i32 {
@@ -1589,6 +1608,33 @@ mod tests {
                 assert_eq!(viamp.to_bits(), sealed.to_bits(), "mag={mag} scale={scale}: mpf={viamp} sealed={sealed}");
             }
         }
+    }
+
+    #[test]
+    fn get_double_checked_flags_overflow() {
+        // A finite-range decimal: no overflow, value preserved (== cob_decimal_get_double).
+        let small = CobDecimal { value: Mpz::from_i128(12345), scale: 2 };
+        let (v, of) = cob_decimal_get_double_checked(&small);
+        assert!(!of);
+        assert_eq!(v.to_bits(), cob_decimal_get_double(&small).to_bits());
+        assert_eq!(cob_decimal_get_double_checked(&CobDecimal { value: Mpz::new(), scale: 0 }), (0.0, false));
+        // An absurdly large decimal (~1e330, well past f64::MAX ~1.8e308): cob_not_finite set, value 0.0
+        // (matching the C, which sets the flag and zeroes v). Built as 10^330.
+        let mut big = Mpz::from_u64(1);
+        let ten = Mpz::from_u64(10);
+        for _ in 0..330 {
+            big = big.mul(&ten);
+        }
+        let huge = CobDecimal { value: big, scale: 0 };
+        let (vh, ofh) = cob_decimal_get_double_checked(&huge);
+        assert!(ofh, "1e330 must flag cob_not_finite (EC-SIZE-OVERFLOW)");
+        assert_eq!(vh, 0.0);
+        // Just under the range (1e308) does NOT overflow.
+        let mut e308 = Mpz::from_u64(1);
+        for _ in 0..308 {
+            e308 = e308.mul(&ten);
+        }
+        assert!(!cob_decimal_get_double_checked(&CobDecimal { value: e308, scale: 0 }).1);
     }
 
     #[test]

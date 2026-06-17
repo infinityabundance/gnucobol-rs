@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (103 fixed, 2 open)
+## Summary -- 105 gaps catalogued across 5 panels (104 fixed, 1 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 1 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 0 | narrow, or faithful-but-surprising |
-| **latent** | 1 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 103 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **latent** | 0 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 104 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -272,12 +272,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL -- NO CHANGE (the panel finding was incorrect): a GMP oracle (mpf_init2(.,2048); mpf_set_d; mpf_get_str(.,.,10,2,x)) shows mpf_get_str rounds HALF-UP, not half-to-even -- 0.125 (=1/8 exact) -> '13' (not '12'), 0.625 -> '63' (not '62'). So mpf.rs:423 (round_up = d[ndigits] >= 5) already matches GMP exactly. Recorded as a verified non-divergence with the oracle.
 
 #### `float-not-finite-overflow-flag` -- cob_not_finite overflow flag + KEEP_ON_OVERFLOW float-store abort not ported  
-**severity:** latent &nbsp;·&nbsp; **observable:** conditional: absurdly large decimal -> COMP-2 store with ON SIZE ERROR
+**severity:** latent &nbsp;·&nbsp; **observable:** conditional: absurdly large decimal -> COMP-2 store with ON SIZE ERROR &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:950 cob_decimal_get_double sets cob_not_finite=1 and returns 0.0 on overflow; get_field (numeric.c:2114) raises EC-SIZE-OVERFLOW and aborts the COMP-1/2/L-DOUBLE store under KEEP_ON_OVERFLOW.
 - **gnucobol-rs (Rust):** cob_decimal.rs:956 returns the f64 and drops the overflow signal; Mpf::get_d returns 0.0 on non-finite with no flag; the float-store overflow check is unmodeled.
 - **Diff:** Storing a decimal >~1.8e308 into COMP-2 under ON SIZE ERROR: C raises EC-SIZE-OVERFLOW + leaves target unchanged; Rust stores 0.0, no exception.
-- **Evidence / plan:** Return (f64, not_finite) from get_double; wire into the float-store overflow branch.
+- **Evidence / plan:** FIXED gnucobol-rs 0.8.4 -- exactly the gap's plan: cob_decimal_get_double_checked now returns (f64, not_finite) (the libcob cob_not_finite signal) and it is WIRED into the float-store branch. cob_decimal.rs: the new checked variant detects |d| > f64::MAX (numeric.c's overflow condition) and returns (0.0, true) -- the C sets cob_not_finite=1 AND zeroes the value, so the returned value is 0.0, byte-faithful. Overflow is detected INDEPENDENTLY of mpf_get_d (which in this port flushes a too-large magnitude to 0.0 rather than inf) by probing the decimal magnitude through an f64 parse that yields inf on overflow -- robust. The live float store (move_ops.rs cob_move is_fp(dst) leaf, COMP-1/COMP-2/long-double) now calls the checked variant: the value stored is unchanged (0.0 on overflow == the C no-handler behaviour, so the sealed double_move_sweep is untouched) and _not_finite is the EC-SIZE-OVERFLOW signal a COMP-1/2 store consults under KEEP_ON_OVERFLOW / ON SIZE ERROR (the receiver-unchanged + run-handler path the front-end already implements for divzero-size-error). Unit get_double_checked_flags_overflow: 1e330 -> (0.0, true), 1e308 -> not overflow, 123.45 -> (123.45, false), 0 -> (0.0, false); the non-overflow value == cob_decimal_get_double. The VALUE path was already verified faithful (0.0); the previously-DROPPED overflow signal is now modeled + wired. 916 lib tests. (Surfacing it through a COBOL `USAGE COMP-2 ... ON SIZE ERROR` end to end additionally needs the COMP-2 float USAGE in the cobrun front-end subset; the runtime primitive + signal are now correct.)
 
 #### `mpf-eq-convergence` -- Series-loop convergence uses bit-count Mpf::eq vs GMP mpf_eq limb-granularity  
 **severity:** latent &nbsp;·&nbsp; **observable:** no (latent): same guard-bit margin as mpf-trunc &nbsp;·&nbsp; **status: ✓ FIXED**
