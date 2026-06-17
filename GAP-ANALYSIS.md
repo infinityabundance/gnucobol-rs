@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (37 fixed, 68 open)
+## Summary -- 105 gaps catalogued across 5 panels (38 fixed, 67 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 31 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 30 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 37 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 38 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -569,12 +569,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL under the C.UTF-8 oracle (no change needed). The C.UTF-8 LC_NUMERIC/LC_MONETARY localeconv() yields decimal_point '.', empty thousands_sep, empty mon_decimal/currency -- exactly the port's #else (no-localeconv) fallback branch (intrinsic.rs). Locale-specific separators/currency (de_DE ','/non-breaking-space, euro) only appear under a non-C LC_NUMERIC/LC_MONETARY -- a latent out-of-claim divergence outside the pinned oracle. (The gap's own observable confirms the C-locale equivalence.)
 
 #### `numval-c-currency-decimal` -- NUMVAL / NUMVAL-C decimal point + currency: simple entry points hardcode '.' '$' ',', ignoring DECIMAL-POINT IS COMMA / CURRENCY SIGN  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA or a non-'$' CURRENCY SIGN
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA or a non-'$' CURRENCY SIGN &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:1490 numval() reads dec_pt/num_sep/cur_symb from COB_MODULE_PTR (driven by DECIMAL-POINT IS COMMA / CURRENCY SIGN).
 - **gnucobol-rs (Rust):** intrinsic.rs:39/72 intrinsic_numval hardcodes '.', intrinsic_numval_c strips literal '$' and ','. The richer cob_intr-layer numval DOES take dec_pt/currency params; the public wrappers do not.
 - **Diff:** Under DECIMAL-POINT IS COMMA, '1.234,56' should parse as 1234.56; the simple path treats ',' as junk. NUMVAL-C with CURRENCY '€' won't strip it.
-- **Evidence / plan:** NUMVAL('1.234,56') under DECIMAL-POINT IS COMMA. The parameterized numval exists; the gap is the default-config wrappers.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.95: intrinsic.rs adds intrinsic_numval_cfg(s, decimal_comma) + intrinsic_numval_c_cfg(s, currency, decimal_comma). DECIMAL-POINT IS COMMA is handled by swapping '.'<->',' into the proven '.'-decimal form (the integer grouping is then dropped by intrinsic_numval's non-digit filter); the currency strip takes the program's CURRENCY SIGN char instead of a literal '$'. The public intrinsic_numval/intrinsic_numval_c are the byte-unchanged DEFAULT ('$'/no-comma) wrappers (sealed nvc tests green). Oracle (built cobc, SPECIAL-NAMES DECIMAL-POINT IS COMMA + CURRENCY SIGN IS "F"): NUMVAL("1.234,56") = 1234.56, NUMVAL-C("F1.234,56") = 1234.56 -- matched by numval_honors_decimal_comma_and_currency_sign (891 lib tests). (The cobrun front-end has no FUNCTION NUMVAL yet, so the dec_pt/currency selection is sealed at the native cfg API, ready to thread from SPECIAL-NAMES.)
 
 #### `ttbl-only-cp500` -- Only ebcdic500_ascii8bit (cp500) is built in; default.ttbl, alternate, ascii7bit, latin1 are absent  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: PROGRAM COLLATING SEQUENCE / ALPHABET using the non-cp500 tables

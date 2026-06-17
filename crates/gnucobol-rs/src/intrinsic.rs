@@ -65,13 +65,42 @@ pub fn intrinsic_numval(s: &str) -> Numval {
     Numval { negative, scaled, scale: frac_digits.len() as u32 }
 }
 
+/// `FUNCTION NUMVAL(s)` honoring `DECIMAL-POINT IS COMMA`: when `decimal_comma`, `,` is the decimal point
+/// and `.` the grouping separator. Modelled by swapping the two characters into the standard `.`-decimal
+/// form (the integer-part grouping is then dropped by [`intrinsic_numval`]'s non-digit filter), so
+/// `NUMVAL("1.234,56")` under DECIMAL-POINT IS COMMA = `1234.56`. `decimal_comma == false` is exactly
+/// [`intrinsic_numval`].
+pub fn intrinsic_numval_cfg(s: &str, decimal_comma: bool) -> Numval {
+    if decimal_comma {
+        let swapped: String = s
+            .chars()
+            .map(|c| match c {
+                '.' => ',',
+                ',' => '.',
+                x => x,
+            })
+            .collect();
+        intrinsic_numval(&swapped)
+    } else {
+        intrinsic_numval(s)
+    }
+}
+
 /// `FUNCTION NUMVAL-C(s)` for the narrow admitted form: like [`intrinsic_numval`] but first strips the
 /// default currency symbol `$` and thousands-separator commas (`GNURUST.INTRINSIC.NUMVAL-C.1`). So
-/// `NUMVAL-C("$1,234.56") = 1234.56`. **Non-claims:** a non-default currency symbol (the 2-arg form),
-/// `DECIMAL-POINT IS COMMA` / locale comma-decimal, national/UTF-8, and all dialects.
+/// `NUMVAL-C("$1,234.56") = 1234.56`.
 pub fn intrinsic_numval_c(s: &str) -> Numval {
-    let cleaned: String = s.chars().filter(|&c| c != '$' && c != ',').collect();
-    intrinsic_numval(&cleaned)
+    intrinsic_numval_c_cfg(s, '$', false)
+}
+
+/// `FUNCTION NUMVAL-C(s)` honoring the program's `CURRENCY SIGN` (`currency`) and `DECIMAL-POINT IS COMMA`
+/// (`decimal_comma`): strips the currency symbol, then parses via [`intrinsic_numval_cfg`] (whose non-digit
+/// filter drops the thousands separators). So `NUMVAL-C("F1.234,56")` under `CURRENCY SIGN IS "F"` +
+/// `DECIMAL-POINT IS COMMA` = `1234.56`. The default (`'$'`, no comma) is the byte-unchanged
+/// [`intrinsic_numval_c`].
+pub fn intrinsic_numval_c_cfg(s: &str, currency: char, decimal_comma: bool) -> Numval {
+    let stripped: String = s.chars().filter(|&c| c != currency).collect();
+    intrinsic_numval_cfg(&stripped, decimal_comma)
 }
 
 /// Render a [`Numval`] as a signed fixed `S9(int_digits)V9(frac_digits)` display string (the bytes a `MOVE`
@@ -4163,6 +4192,16 @@ mod tests {
         assert_eq!(nvc("-$1,234.56"), "-00001234.5600");
         assert_eq!(nvc("$1,234.56CR"), "-00001234.5600");
         assert_eq!(nvc("  $42.00  "), "+00000042.0000");
+    }
+    #[test]
+    fn numval_honors_decimal_comma_and_currency_sign() {
+        // DECIMAL-POINT IS COMMA: built-cobc NUMVAL("1.234,56") = 1234.56 ('.' grouping, ',' decimal).
+        assert_eq!(numval_display(&intrinsic_numval_cfg("1.234,56", true), 8, 4), "+00001234.5600");
+        // CURRENCY SIGN IS "F" + DECIMAL-POINT IS COMMA: NUMVAL-C("F1.234,56") = 1234.56.
+        assert_eq!(numval_display(&intrinsic_numval_c_cfg("F1.234,56", 'F', true), 8, 4), "+00001234.5600");
+        // The default ($/'.'/no-comma) wrappers are byte-unchanged.
+        assert_eq!(numval_display(&intrinsic_numval_c("$1,234.56"), 8, 4), "+00001234.5600");
+        assert_eq!(numval_display(&intrinsic_numval_cfg("1,234.56", false), 8, 4), "+00001234.5600");
     }
     #[test]
     fn date_conversion_intrinsics_match_oracle() {
