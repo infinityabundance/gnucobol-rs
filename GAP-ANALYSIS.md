@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (48 fixed, 57 open)
+## Summary -- 105 gaps catalogued across 5 panels (49 fixed, 56 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 20 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 19 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 48 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 49 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -797,12 +797,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Out of scope for a source interpreter; document the missing module-runner surface.
 
 #### `cli-define-if` -- >>DEFINE / >>IF / >>SET / -D conditional compilation absent  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: any program using >>DEFINE/>>IF or compiled with -D
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: any program using >>DEFINE/>>IF or compiled with -D &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cobc.c:3618 -D; the preprocessor handles >>DEFINE/>>IF DEFINED/>>SET.
 - **gnucobol-rs (Rust):** frontend.rs has no -D, no >>DEFINE/>>IF/>>SET; a >> directive falls through as ordinary words and likely yields RunError::Unsupported.
 - **Diff:** No compile-time symbol table; conditional source selection impossible; directive tokens mis-parse.
-- **Evidence / plan:** Add a preprocessor pass for >> directives + -D defines.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (front-end feature): frontend.rs::preprocess runs a line-based conditional-compilation pass BEFORE the lexer (run_program_dialect calls it first), resolving >>DEFINE name [AS value], >>IF <cond> / >>ELSE / >>END-IF (nested via a (include, taken) stack) and emitting only the lines whose enclosing conditions are all true; directive lines are never emitted; it is a no-op for directive-free source (the existing 32-program sweep is unregressed). eval_pp_cond supports [NOT] name DEFINED and name = value. Oracle (built cobc, corpus p33_define_if): >>DEFINE FEAT AS 1; >>IF FEAT DEFINED -> FEAT-ON; >>IF OTHER DEFINED ... >>ELSE -> OTHER-OFF; >>IF FEAT = 1 -> FEAT-IS-1; then DONE -- IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 33/0). 895 lib tests. RESIDUAL: >>SET, -D CLI defines (a cobrun flag), and the richer >>IF expression grammar (the common DEFINED / equality forms are sealed).
 
 #### `cli-display-print-redirect` -- COB_DISPLAY_PRINT_FILE/PIPE (DISPLAY UPON PRINTER) and COB_REDIRECT_DISPLAY ignored  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: DISPLAY UPON PRINTER with COB_DISPLAY_PRINT_FILE set

@@ -189,6 +189,78 @@ pub fn run_program(source: &str) -> Result<Vec<u8>, RunError> {
     run_program_dialect(source, crate::dialect::Dialect::DEFAULT)
 }
 
+/// The conditional-compilation preprocessor (`cobc`'s `>>` directives): resolve `>>DEFINE name [AS value]`,
+/// `>>IF <cond>` / `>>ELSE` / `>>END-IF` line by line, emitting only the lines whose enclosing conditions
+/// are all true. Directive lines are never emitted. Supported conditions: `[NOT] name DEFINED` and a plain
+/// `name = value` equality against the defined value. Unrecognized `>>` directives (e.g. `>>SOURCE FORMAT`)
+/// are passed through untouched so the rest of the pipeline can fail closed on them if needed.
+fn preprocess(source: &str) -> String {
+    let mut defines: HashMap<String, String> = HashMap::new();
+    // one (include_this_branch, any_branch_taken) per open >>IF.
+    let mut stack: Vec<(bool, bool)> = Vec::new();
+    let including = |s: &[(bool, bool)]| s.iter().all(|&(inc, _)| inc);
+    let mut out = String::new();
+    for line in source.lines() {
+        let t = line.trim_start();
+        if let Some(rest) = t.strip_prefix(">>").map(str::trim) {
+            let up = rest.to_ascii_uppercase();
+            if let Some(d) = up.strip_prefix("DEFINE ") {
+                if including(&stack) {
+                    let parts: Vec<&str> = d.split_whitespace().collect();
+                    if let Some(name) = parts.first() {
+                        let value = if parts.len() >= 3 && parts[1] == "AS" {
+                            parts[2].to_string()
+                        } else {
+                            String::new()
+                        };
+                        defines.insert((*name).to_string(), value);
+                    }
+                }
+                continue;
+            }
+            if let Some(c) = up.strip_prefix("IF ") {
+                let parent = including(&stack);
+                let cond = parent && eval_pp_cond(c, &defines);
+                stack.push((cond, cond));
+                continue;
+            }
+            if up == "ELSE" {
+                if let Some(idx) = stack.len().checked_sub(1) {
+                    let parent = stack[..idx].iter().all(|&(i, _)| i);
+                    let taken = stack[idx].1;
+                    stack[idx] = (parent && !taken, true);
+                }
+                continue;
+            }
+            if up == "END-IF" || up.starts_with("END-IF ") {
+                stack.pop();
+                continue;
+            }
+            // an unrecognized >> directive: pass it through (only if currently including).
+        }
+        if including(&stack) {
+            out.push_str(line);
+            out.push('\n');
+        }
+    }
+    out
+}
+
+/// Evaluate a `>>IF` condition: `[NOT] name DEFINED`, or `name = value` (string-equal the defined value).
+fn eval_pp_cond(c: &str, defines: &HashMap<String, String>) -> bool {
+    let p: Vec<&str> = c.split_whitespace().collect();
+    if p.len() >= 3 && p[0] == "NOT" && p[2] == "DEFINED" {
+        return !defines.contains_key(p[1]);
+    }
+    if p.len() >= 2 && p[1] == "DEFINED" {
+        return defines.contains_key(p[0]);
+    }
+    if p.len() >= 3 && p[1] == "=" {
+        return defines.get(p[0]).map(|v| v == p[2]).unwrap_or(false);
+    }
+    false
+}
+
 /// As [`run_program`] but under an explicit compile-time [`Dialect`](crate::dialect::Dialect) (`-std=`):
 /// the `defaultbyte` fill of uninitialized `WORKING-STORAGE` follows the dialect. `run_program` is exactly
 /// this with [`Dialect::DEFAULT`](crate::dialect::Dialect::DEFAULT).
@@ -196,7 +268,9 @@ pub fn run_program_dialect(
     source: &str,
     dialect: crate::dialect::Dialect,
 ) -> Result<Vec<u8>, RunError> {
-    let up = source.to_uppercase();
+    // Conditional-compilation preprocessor: resolve >>DEFINE / >>IF / >>ELSE / >>END-IF before lexing.
+    let pre = preprocess(source);
+    let up = pre.to_uppercase();
     let mut toks = lex(&up);
 
     // ENVIRONMENT DIVISION / SPECIAL-NAMES of the first program: CURRENCY SIGN IS "x" + DECIMAL-POINT IS
