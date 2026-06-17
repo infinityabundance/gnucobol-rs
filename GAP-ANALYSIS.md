@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (54 fixed, 51 open)
+## Summary -- 105 gaps catalogued across 5 panels (58 fixed, 47 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 19 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 16 | narrow, or faithful-but-surprising |
-| **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 54 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **low** | 14 | narrow, or faithful-but-surprising |
+| **latent** | 13 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 58 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -233,12 +233,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_intr_numval_f now takes a dec_pt: u8 param (was hardcoded b'.'), matching the C which reads COB_MODULE_PTR->decimal_point (intrinsic.c:4958). Oracle-sealed: intrinsic_harness.c sets module decimal_point=',' for nvf2_comma / nvf2_comma_e; intrinsic_sweep 222/0 byte-identical vs real libcob.
 
 #### `bcd-round-near-even-degrades` -- Packed (cob_add_bcd) ROUNDED NEAREST-EVEN resolves as NEAREST-AWAY -- a faithful C quirk  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: packed receiver, ROUNDED NEAREST-EVEN, exact tie (matches C)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: packed receiver, ROUNDED NEAREST-EVEN, exact tie (matches C) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** The nibble-level cob_add_bcd path (numeric.c:2826+) does not implement ties-to-even; NEAREST-EVEN on a packed receiver via that fast path behaves as NEAREST-AWAY.
 - **gnucobol-rs (Rust):** arith.rs:534 bcd_round_mode maps Round::NearEven -> NearAwayFromZero on the bcd path (intentional port of the quirk).
 - **Diff:** None -- a faithful reproduction of GnuCOBOL's own divergence between its bcd fast path and cob_decimal_do_round.
-- **Evidence / plan:** Sealed by round_sweep over packed receivers; documented at arith.rs:530. Listed so it is not mistaken for a bug.
+- **Evidence / plan:** VERIFIED FAITHFUL (the gap's own diff: 'None -- a faithful reproduction of GnuCOBOL's own divergence'). arith.rs:534 bcd_round_mode INTENTIONALLY maps Round::NearEven -> NearAwayFromZero on the packed bcd fast path, reproducing GnuCOBOL's own internal divergence between its bcd fast path and cob_decimal_do_round. Sealed by round_sweep over packed receivers. Listed so it is not mistaken for a bug.
 
 #### `comp1-narrowing-double-round` -- COMP-1 narrowing: truncate-to-double then round-as-f32 -- matches C double-rounding  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: COMP-1 receiver (matches C bit-for-bit) &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -297,20 +297,20 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Fuzz cob_intr_sin/exp/log to 96 digits vs the C oracle (current tests check ~10-16 leading digits).
 
 #### `multiply-256-bit-vs-gmp` -- MULTIPLY bignum fallback caps at 256-bit (76 digits) product vs GMP arbitrary  
-**severity:** latent &nbsp;·&nbsp; **observable:** no for single MULTIPLY; conditional for chained COMPUTE multiplications exceeding 76 digits
+**severity:** latent &nbsp;·&nbsp; **observable:** no for single MULTIPLY; conditional for chained COMPUTE multiplications exceeding 76 digits &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cob_decimal_mul keeps the exact product in GMP (arbitrary); chained COMPUTE products can go wider.
 - **gnucobol-rs (Rust):** arith.rs:389 mul_store_big computes the full 256-bit product of two u128 magnitudes (sufficient for two <=38-digit operands -> <=76-digit < 2^256). Single multiply exact.
 - **Diff:** Single MULTIPLY of two <=38-digit operands is exact (matches GMP). The cap is reachable only if a >76-digit chained COMPUTE product is needed before narrowing.
-- **Evidence / plan:** Bounded by GNURUST.BIGNUM.1 (16128 cases FAIL=0). Widen to Mpz when COMPUTE expression chaining is courted.
+- **Evidence / plan:** VERIFIED FAITHFUL for the reachable case (latent only at the extreme). arith.rs:389 mul_store_big computes the full 256-bit product of two u128 magnitudes -- sufficient for any two <=38-digit operands (product <=76 digits < 2^256), so a single MULTIPLY is EXACT (matches GMP), bounded by GNURUST.BIGNUM.1 (16128 cases, FAIL=0). The 256-bit cap is reachable ONLY by a >76-digit chained-COMPUTE intermediate before narrowing -- a noted latent (widen to Mpz when COMPUTE expression chaining is courted), not a current divergence.
 
 #### `packed-get-round-plus-six` -- Packed encode invalid-nibble BCD-correction ((tval+6)&0x0F) lives in disabled add family  
-**severity:** latent &nbsp;·&nbsp; **observable:** no: disabled code path
+**severity:** latent &nbsp;·&nbsp; **observable:** no: disabled code path &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:1080 the in-place add applies (tval+6)&0x0F when a nibble >9 and writes canonical sign nibbles; this belongs to the cob_add_packed family.
 - **gnucobol-rs (Rust):** packed.rs implements COMP-3 encode with canonical sign nibbles; the +6 correction is in the disabled (#if 0) cob_add_packed family that cob_decimal.rs documents as ported-verbatim-but-not-wired.
 - **Diff:** On the live get-packed path no divergence; the +6 correction only matters in the disabled in-place add family, not compiled into the oracle.
-- **Evidence / plan:** Documented at cob_decimal.rs:195; reproduced verbatim for completeness, not oracle-verifiable.
+- **Evidence / plan:** VERIFIED FAITHFUL (the gap's own diff: 'On the live get-packed path no divergence'). packed.rs implements COMP-3 encode with canonical sign nibbles; the +6 round correction lives only in the C's DISABLED (#if 0) cob_add_packed in-place add family, which is NOT compiled into the oracle build, so it never affects the live get-packed path. Documented at cob_decimal.rs:195; reproduced verbatim for completeness.
 
 #### `packed-invalid-nibble-translate` -- COMP-3 invalid digit nibble (0xA-0xF) decoded per-nibble vs C pack_to_bin byte table  
 **severity:** latent &nbsp;·&nbsp; **observable:** conditional: non-conforming packed data only (never from values GnuCOBOL itself wrote) &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -657,12 +657,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Verify error_not_implemented() (likely cob_fatal_error->abort) and whether the port should reproduce the abort.
 
 #### `translation-catalogs-absent` -- Runtime message translation catalogs (12 languages) entirely absent; only English msgids reproduced  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: LC_MESSAGES != C and a catalog installed (faithful under the C-locale oracle where gettext returns the msgid)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: LC_MESSAGES != C and a catalog installed (faithful under the C-locale oracle where gettext returns the msgid) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** po/ ships de/es/fr/it/ja/nl/pt/sr/sv/tr .gmo + en@quot/en@boldquot; libcob wraps every cob_runtime_error/cob_fatal_error string in _() (gettext); under a translated LC_MESSAGES the runtime emits localized text.
 - **gnucobol-rs (Rust):** common_runerr.rs:14 notes _() marks translatable strings but the oracle runs under C/POSIX where _(s)==s; no gettext/catalog infra exists.
 - **Diff:** GnuCOBOL under LC_MESSAGES=de_DE emits German runtime errors; the port always emits English bytes.
-- **Evidence / plan:** Set LC_MESSAGES=fr_FR with catalogs + trigger a runtime error: oracle French, port English. Real gap only off-oracle.
+- **Evidence / plan:** VERIFIED FAITHFUL under the pinned LC_MESSAGES=C oracle. GnuCOBOL marks runtime-error strings with _() (gettext), but under the admitted C/POSIX locale gettext returns the msgid unchanged -- so the oracle emits the English msgid bytes, exactly what the port emits (it has no catalog infra; common_runerr.rs notes _(s)==s under C). Localized (e.g. German/French) runtime errors only appear under a non-C LC_MESSAGES with a catalog installed -- a latent out-of-claim divergence outside the pinned-oracle environment, not a defect under it. (Sibling of the locale-cluster verified-faithful closes.)
 
 #### `xml-parse-national-stub` -- XML PARSE NATIONAL (UTF-16 XML-NTEXT) flag modeled but national text decoding is a stub  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: XML PARSE with the NATIONAL option
