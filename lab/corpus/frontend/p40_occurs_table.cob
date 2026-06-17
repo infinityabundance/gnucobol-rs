@@ -16,6 +16,8 @@
            DISPLAY "EI=" E(I).
            ADD E(1) E(2) E(I) GIVING S.
            DISPLAY "SUM134=" S.
+           COMPUTE S = (E(1) + E(3)) * 2 - E(I).
+           DISPLAY "EXPR=" S.
            IF E(2) < E(I)
                DISPLAY "E2-LESS-E3"
            ELSE

@@ -1757,11 +1757,46 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Resu
 /// operand, e.g. `(A` or `B)`); `**` / `+` / `-` / `*` / `/` and bare names pass through.
 fn split_parens(w: &str, out: &mut Vec<String>) {
     let mut s = w;
+    // Peel leading GROUPING '(' (e.g. `(E(1)` -> a group-open, then the operand).
     while let Some(rest) = s.strip_prefix('(') {
         out.push("(".into());
         s = rest;
     }
-    // collect trailing ')'s.
+    // If what remains is a name-prefixed subscript/refmod `NAME(...)`, keep that operand WHOLE -- its own
+    // parens belong to it, not to grouping -- so parse_primary -> operand_value resolves the element; any
+    // parens after its matching `)` are trailing grouping closes.
+    if let Some(open) = s.find('(') {
+        if open > 0 {
+            let bytes = s.as_bytes();
+            let mut depth = 0i32;
+            let mut end = None;
+            for (i, &c) in bytes.iter().enumerate().skip(open) {
+                if c == b'(' {
+                    depth += 1;
+                } else if c == b')' {
+                    depth -= 1;
+                    if depth == 0 {
+                        end = Some(i);
+                        break;
+                    }
+                }
+            }
+            if let Some(e) = end {
+                out.push(s[..=e].to_string()); // the subscripted operand, e.g. `E(1)`
+                let mut tail = &s[e + 1..];
+                let mut close = 0;
+                while let Some(t) = tail.strip_suffix(')') {
+                    close += 1;
+                    tail = t;
+                }
+                for _ in 0..close {
+                    out.push(")".into());
+                }
+                return;
+            }
+        }
+    }
+    // No subscript: peel trailing grouping ')'.
     let mut close = 0;
     while s.ends_with(')') {
         close += 1;
@@ -2396,6 +2431,16 @@ mod tests {
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 E PIC 99 OCCURS 3 TIMES.\n       01 I PIC 9 VALUE 2.\n       01 S PIC 999.\n       PROCEDURE DIVISION.\n           MOVE 11 TO E(1).\n           MOVE 22 TO E(2).\n           MOVE 33 TO E(3).\n           DISPLAY \"A\" E(1) E(I) E(3).\n           ADD E(1) E(3) GIVING S.\n           DISPLAY \"S\" S.\n           IF E(I) > E(1) DISPLAY \"GT\" ELSE DISPLAY \"LE\" END-IF.\n           STOP RUN.\n";
         let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"A112233\nS044\nGT\n");
+    }
+
+    #[test]
+    fn occurs_subscript_in_compute_expression() {
+        use crate::dialect::Dialect;
+        // Subscripts inside a COMPUTE arithmetic expression, including grouping `(E(1) + E(3))`.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 E PIC 99 OCCURS 3 TIMES.\n       01 I PIC 9 VALUE 3.\n       01 S PIC 999.\n       PROCEDURE DIVISION.\n           MOVE 10 TO E(1). MOVE 20 TO E(2). MOVE 30 TO E(3).\n           COMPUTE S = (E(1) + E(3)) * 2 - E(I).\n           DISPLAY S.\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        // (10 + 30) * 2 - 30 = 50.
+        assert_eq!(out, b"050\n");
     }
 
     #[test]
