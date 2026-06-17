@@ -91,6 +91,17 @@ mod tests {
     }
 
     #[test]
+    fn ten_pow_i128_exact_within_38_clamps_beyond() {
+        // The truncation modulus 10^digits is EXACT within the i128 range (digits <= 38), matching the C's
+        // GMP mpz; binary_encode only ever calls it for attr.digits <= 38, so the saturating clamp branch
+        // (10^39 overflows i128) is never reached on the live path -- a noted latent, not a divergence.
+        assert_eq!(ten_pow_i128(0), 1);
+        assert_eq!(ten_pow_i128(18), 1_000_000_000_000_000_000);
+        assert_eq!(ten_pow_i128(38), 10i128.pow(38));
+        assert_eq!(ten_pow_i128(39), i128::MAX); // saturating clamp (unreachable on the live path)
+    }
+
+    #[test]
     fn binary_overflow_wrap_modes_match_cobc_oracle() {
         use crate::attr::COB_FLAG_HAVE_SIGN;
         // COMP-5 (binary-truncate: no): an overflowing store byte-WRAPS = floor mod 2^bits, like the C's

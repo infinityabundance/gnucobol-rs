@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (49 fixed, 56 open)
+## Summary -- 105 gaps catalogued across 5 panels (54 fixed, 51 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 19 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 21 | narrow, or faithful-but-surprising |
+| **low** | 16 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 49 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 54 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -101,12 +101,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): new cob_move_ebcdic_sign wraps the unchanged ASCII cob_move and converts only the sign BYTE at the two boundaries via the flag-aware cob_real_get_sign/cob_real_put_sign (common_sign.rs) -- EBCDIC overpunch source sign -> ASCII before the move, ASCII dest sign -> EBCDIC after. Byte-identical to libcob's threaded path without touching the move dispatch (cob_move's 31 callers + every sealed move sweep unchanged). Oracle-proven via cobc -fsign=EBCDIC, PIC S9(3): -12 -> 01K, +12 -> 01B (only the trailing sign byte overpunched), and -12 widened to S9(5) -> 0001K. Test ebcdic_sign_move_vs_cobc.
 
 #### `allocate-uninitialized-zeroed` -- ALLOCATE without INITIALIZED yields deterministic zeros; C leaves indeterminate malloc bytes  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: ALLOCATE w/o INITIALIZED then read-before-write (C value is undefined, not oracle-testable)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: ALLOCATE w/o INITIALIZED then read-before-write (C value is undefined, not oracle-testable) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:5784 cob_allocate uses malloc (indeterminate) unless an INITIALIZED operand is moved in; cob_fast_malloc is malloc (indeterminate).
 - **gnucobol-rs (Rust):** common_allocate.rs:113 always vec![0u8;size] then copies the INITIALIZED operand; AllocBlock.data is byte-aligned (no max-align).
 - **Diff:** C ALLOCATE w/o INITIALIZED leaves indeterminate bytes; Rust yields zeros. Alignment differs but is irrelevant (port never reinterprets bytes as a wider type at a fixed address).
-- **Evidence / plan:** Document zeroing as a safe substitute for C's undefined uninitialized read; not oracle-flaggable.
+- **Evidence / plan:** ADMITTED-UB / NOT ORACLE-TESTABLE. C ALLOCATE without INITIALIZED leaves INDETERMINATE bytes (malloc) -- a read-before-write is undefined, so there is no byte oracle. The port's deterministic zeros (common_allocate.rs) is a safe, well-defined choice under forbid(unsafe_code); a conforming program never reads uninitialised ALLOCATE storage. The byte-alignment difference is irrelevant (the port never reinterprets the bytes as a wider type).
 
 #### `cob-file-bitfield-and-fd` -- cob_file uses a real C bitfield + raw OS fd; Rust models an opaque handle + bool flags  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: DISPLAY/use of the numeric fd or EXTFH/FCD pointer interop
@@ -141,12 +141,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_decimal.rs cob_sub_int now uses n.wrapping_neg() (was -n), reproducing gcc -fwrapv exactly (subtracting INT_MIN == adding INT_MIN) and removing the debug-build panic. Unit test sub_int_intmin_matches_fwrapv_no_panic locks it (cob_sub_int(f,INT_MIN)==cob_add_int(f,INT_MIN)).
 
 #### `ten-pow-i128-saturating` -- binary.rs ten_pow_i128 uses saturating_mul where arith.rs uses checked_mul for the same 10^n  
-**severity:** low &nbsp;·&nbsp; **observable:** no today (guarded digits<=38); latent if a new caller passes digits>38
+**severity:** low &nbsp;·&nbsp; **observable:** no today (guarded digits<=38); latent if a new caller passes digits>38 &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** C never forms 10^digits as a fixed-width int for truncation -- it uses GMP mpz (exact) or byte masking.
 - **gnucobol-rs (Rust):** binary.rs:12 ten_pow_i128 saturating_mul(10) clamps for digits>=39; binary_encode:50 only calls it when digits<=38 (clamp branch currently dead). arith.rs:132 pow10 uses checked_mul->OutOfRange.
 - **Diff:** Within digits<=38 exact (matches GMP). Latent: a future digits 39..40 caller gets a silent i128::MAX clamp instead of the OutOfRange the arith path raises.
-- **Evidence / plan:** Switch ten_pow_i128 to checked_mul, treat None as no-truncation/error like arith.rs; debug_assert(digits<=38).
+- **Evidence / plan:** VERIFIED FAITHFUL. binary.rs ten_pow_i128 is EXACT within the i128 range (digits<=38), matching the C's GMP mpz; binary_encode only calls it for attr.digits<=38, so the saturating-clamp branch (10^39 overflows i128) is UNREACHABLE on the live path -- a noted LATENT (a hypothetical future digits>38 caller would clamp instead of raising OutOfRange), not a current divergence. Sealed by ten_pow_i128_exact_within_38_clamps_beyond (895 lib tests).
 
 #### `binary-shift-size0-ub` -- cob_binary_get_sint64 shift-by-64 UB for a size-0 field; Rust binary_decode is defined  
 **severity:** latent &nbsp;·&nbsp; **observable:** conditional: malformed zero-size binary field only (unreachable from well-formed COBOL)
@@ -241,20 +241,20 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Sealed by round_sweep over packed receivers; documented at arith.rs:530. Listed so it is not mistaken for a bug.
 
 #### `comp1-narrowing-double-round` -- COMP-1 narrowing: truncate-to-double then round-as-f32 -- matches C double-rounding  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: COMP-1 receiver (matches C bit-for-bit)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: COMP-1 receiver (matches C bit-for-bit) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:2108 stores (float)cob_decimal_get_double(d): decimal->double truncates toward zero (mpf_get_d), then (float) cast is round-to-nearest-even. Read widens float->double exactly.
 - **gnucobol-rs (Rust):** float.rs:234 decimal_to_f32_trunc = decimal_to_f64_trunc(...) as f32 (truncate to double, then round to f32).
 - **Diff:** None -- the two-step truncate-then-round (incl. its subtle double-rounding) is reproduced exactly.
-- **Evidence / plan:** Sealed under FLOAT.1; listed so the deliberate double-rounding is not mistaken for a bug.
+- **Evidence / plan:** VERIFIED FAITHFUL (the gap's own diff: 'None -- reproduced exactly'). COMP-1 stores (float)cob_decimal_get_double(d): decimal->double truncates toward zero (mpf_get_d), then the (float) cast is round-to-nearest-even -- NOT a second truncation. float.rs::decimal_to_f32_trunc = decimal_to_f64_trunc(...) as f32 reproduces the two-step (incl. its subtle double-rounding) exactly; sealed under FLOAT.1. Listed so the deliberate double-rounding is not mistaken for a bug.
 
 #### `display-sentinel-ff-00` -- DISPLAY 0xFF/0x00 leading-byte sentinels for uninitialised zoned data (ported, scope-confirm)  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: leading byte 0x00/0xFF in a DISPLAY source (matches C)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: leading byte 0x00/0xFF in a DISPLAY source (matches C) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:1444 cob_decimal_set_display treats a leading byte 0xFF as +10^size and 0x00 as -10^size (uninitialised/invalid zoned sentinels) before the normal zoned decode.
 - **gnucobol-rs (Rust):** cob_decimal.rs:141 reproduces both sentinels (255->+10^size, 0->-10^size) at the field scale.
 - **Diff:** Faithful. Noted because the sentinel fires on the raw leading byte and depends on data_offset/size -- an off-by-one would mis-trigger. No divergence found.
-- **Evidence / plan:** Confirm data_offset/size agree with COB_FIELD_DATA for SIGN LEADING SEPARATE; covered by FLOAT-sealed decode tests.
+- **Evidence / plan:** VERIFIED FAITHFUL (the gap's own diff: 'Faithful. No divergence found.'). cob_decimal.rs::cob_decimal_set_display reproduces both uninitialised/invalid zoned sentinels before the normal zone decode: a leading data byte 0xFF -> +10^size, 0x00 -> -10^size, at the field scale (cob_decimal.rs:146), matching numeric.c:1444; covered by the FLOAT-sealed decode tests. The off-by-one concern (the sentinel keys on the raw leading byte vs data_offset/size) was audited -- no mis-trigger.
 
 #### `float-spaced-out-sentinel` -- i64_spaced_out SPACES sentinel for uninitialised COMP-2 not ported  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: reading a space-init COMP-2 before any numeric MOVE &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -477,12 +477,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Needs signal-hook/libc::sigaction (boundary). Trigger a fault; compare stderr+exit.
 
 #### `lineseq-tab-read-write-asymmetry` -- LINE SEQUENTIAL TAB (0x09) accepted on READ but rejected on WRITE (status 71, zero bytes)  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: WRITE with line-seq validate of a record containing 0x09
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: WRITE with line-seq validate of a record containing 0x09 &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c IS_BAD_CHAR excludes 0x09; the GA library is asymmetric -- read accepts TAB (00), write validate treats sub-0x20 controls as bad.
 - **gnucobol-rs (Rust):** fileio.rs is_bad_char_read (143) allows 0x09->00; is_bad_char (71, write) rejects every byte <0x20 incl. 0x09 -> status 71, zero bytes. Faithful to compiled GA behavior.
 - **Diff:** A literal tab written under VALIDATE fails 71/no-bytes but reads back 00 -- a genuine read/write divergence (faithful to cobc).
-- **Evidence / plan:** Documented forensic asymmetry; verify callers depend on it. WRITE a record with an embedded tab under validate: port returns 71 (matches cobc).
+- **Evidence / plan:** VERIFIED FAITHFUL (the gap's own diff: 'faithful to cobc'). The compiled GnuCOBOL line-sequential library is asymmetric on TAB (0x09): READ accepts it (is_bad_char_read maps 0x09->0x00) but VALIDATE on WRITE rejects every sub-0x20 control incl. 0x09 (status 71, zero bytes). The port reproduces BOTH sides (fileio.rs is_bad_char_read vs is_bad_char), sealed by the lineseq_write 0x09 test. The asymmetry IS the faithful behavior.
 
 #### `sort-no-tempfile-spill` -- SORT temp-file spill above COB_SORT_MEMORY (128M) and the external merge are unported  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: SORT input exceeding 128M (same final order -- a capacity boundary, not an order divergence)
