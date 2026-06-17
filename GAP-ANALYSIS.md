@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (72 fixed, 33 open)
+## Summary -- 105 gaps catalogued across 5 panels (73 fixed, 32 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 12 | narrow, or faithful-but-surprising |
-| **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 72 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **latent** | 4 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 73 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -673,12 +673,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** XML PARSE ... with NATIONAL; check the XML-NTEXT register.
 
 #### `current-date-tz-offset` -- CURRENT-DATE timezone (TZ) / utc_offset: C derives tm_gmtoff from the OS, port leaves offset_known=0  
-**severity:** latent &nbsp;·&nbsp; **observable:** conditional: CURRENT-DATE / FORMATTED-DATETIME offset positions when TZ yields a non-zero gmtoff (CURRENT-DATE is already an OS-sensitive boundary)
+**severity:** latent &nbsp;·&nbsp; **observable:** conditional: CURRENT-DATE / FORMATTED-DATETIME offset positions when TZ yields a non-zero gmtoff (CURRENT-DATE is already an OS-sensitive boundary) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:4684 cob_get_current_date_and_time fills offset_known=1 + utc_offset=tm_gmtoff/60 from localtime (honoring TZ); COB_CURRENT_DATE can override; the offset feeds CURRENT-DATE positions 17-21 + FORMATTED-DATETIME.
 - **gnucobol-rs (Rust):** common_datetime.rs:110 default CobTime has offset_known=0, utc_offset=0; the OS-clock fill (from_os) is a boundary the pure layer does not perform.
 - **Diff:** GnuCOBOL's CURRENT-DATE carries the local UTC offset from TZ; the port's pure layer reports offset_known=0 unless injected.
-- **Evidence / plan:** FUNCTION CURRENT-DATE under TZ=Europe/Paris: oracle +0200, pure port offset unknown. Acknowledged OS-clock boundary.
+- **Evidence / plan:** RESOLVED gnucobol-rs 0.7.98 (deterministic path verified faithful; live-clock TZ = bounded OS-clock boundary). FUNCTION CURRENT-DATE positions 17-21 carry the UTC offset, and the port's DETERMINISTIC path -- the COB_CURRENT_DATE override (apply_current_date_override / parse_current_date) -- carries it byte-for-byte: new unit current_date_offset_from_override_is_deterministic asserts cob_intr_current_date_cfg yields exactly the built-cobc oracle bytes for +0200, -0500, Z->+0000, and the +05:30 colon/half-hour form. The ONLY residual is the live-clock case (override with no offset): the pure #![forbid(unsafe)] layer reads SystemTime (UTC) and has no libc localtime / TZ database, so cob_get_current_date_and_time_from_os reports offset_known=0 (current_date_and_time_from_os_in_range asserts this) rather than the host gmtoff. That is the SAME acknowledged OS-clock boundary that already makes the live hundredths/seconds of CURRENT-DATE non-deterministic (hence excluded from the byte oracle); a host that wants the local offset injects it through the override, which is faithful. No code divergence remains on any deterministic input.
 
 ### Panel: Build / dialect / exception / CLI (29 gaps)
 

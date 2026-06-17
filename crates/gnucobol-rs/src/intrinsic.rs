@@ -4067,6 +4067,25 @@ mod tests {
         let t2 = cob_get_current_date_and_time_from_os(false);
         assert_eq!(t2.nanosecond, 0); // want_nano=false zeroes the nanosecond field
     }
+    #[test]
+    fn current_date_offset_from_override_is_deterministic() {
+        // FUNCTION CURRENT-DATE positions 17-21 carry the UTC offset. With an explicit COB_CURRENT_DATE
+        // override the offset is pinned deterministically and matches the built-cobc oracle byte-for-byte
+        // (the live-clock TZ offset -- override with no offset -- is the acknowledged OS-clock boundary).
+        // Oracle: "...+0200" / "...-0500" / "Z"->"+0000". The override also pins the date; the live-clock
+        // hundredths (positions 15-16) are not asserted.
+        let off = |v: &[u8]| {
+            let (b, _a) = cob_intr_current_date_cfg(0, 0, Some(v));
+            assert_eq!(b.len(), 21);
+            assert_eq!(&b[0..14], b"20260615143045", "override pins the date/time");
+            String::from_utf8(b[16..21].to_vec()).unwrap()
+        };
+        assert_eq!(off(b"2026/06/15 14:30:45+0200"), "+0200");
+        assert_eq!(off(b"2026/06/15 14:30:45-0500"), "-0500");
+        assert_eq!(off(b"2026/06/15 14:30:45Z"), "+0000");
+        assert_eq!(off(b"2026/06/15 14:30:45+05:30"), "+0530"); // colon form, half-hour zone
+    }
+
     fn nv(s: &str) -> String {
         numval_display(&intrinsic_numval(s), 8, 4)
     }
