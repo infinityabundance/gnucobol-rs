@@ -27,7 +27,7 @@ use crate::move_ops::{cob_move, cob_move_cfg};
 use crate::pic::{build_field, Usage};
 use crate::termio::{cob_display, DisplaySettings};
 use crate::value::Decimal;
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 
 /// The COBOL statement verbs the front-end actually EXECUTES (not merely recognizes as a boundary).
@@ -347,6 +347,7 @@ pub fn run_program_redirected(
         switches,
         print_redirect: redirect_printer,
         printer: RefCell::new(Vec::new()),
+        stop_run: Cell::new(false),
     };
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
@@ -411,6 +412,11 @@ struct Ctx<'a> {
     /// PRINTER interleaves into stdout, as the oracle does.
     print_redirect: bool,
     printer: RefCell<Vec<u8>>,
+    /// `STOP RUN` reached anywhere -- including inside a CALLed contained program -- halts the WHOLE run
+    /// (the libcob `longjmp(return_jmp_buf, stop_run)` to the run boundary), whereas `GOBACK` / `EXIT
+    /// PROGRAM` only end the current program body and return to the caller. The flag carries the STOP-RUN
+    /// decision back across the CALL boundary, where the plain "this body ended" bool cannot distinguish them.
+    stop_run: Cell<bool>,
 }
 
 /// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
@@ -716,8 +722,10 @@ fn run_block(
                             return Ok(true);
                         }
                     }
-                    // STOP RUN halts everything; GOBACK / EXIT PROGRAM end the current program body (a CALL
-                    // returns to its caller). The front-end models all three as "end this body".
+                    // STOP RUN halts the WHOLE run -- even from inside a CALLed program it unwinds to the run
+                    // boundary (libcob longjmp(stop_run)); GOBACK / EXIT PROGRAM only end the current body and
+                    // return to the caller. Both end this body (Ok(true)); STOP additionally sets ctx.stop_run
+                    // so the decision survives the CALL boundary (see the CALL propagation below).
                     "STOP" | "GOBACK" => {
                         let rest = collect_operands(toks, pos); // consume RUN / trailing words
                         if exec {
@@ -727,6 +735,9 @@ fn run_block(
                                 _ => None,
                             }) {
                                 fields.insert("RETURN-CODE".to_string(), make_return_code(n));
+                            }
+                            if verb == "STOP" {
+                                ctx.stop_run.set(true);
                             }
                             return Ok(true);
                         }
@@ -768,6 +779,12 @@ fn run_block(
                         let stmt = collect_operands(toks, pos);
                         if exec {
                             exec_stmt(&verb, &stmt, fields, out, ctx)?;
+                            // A CALLed program that hit STOP RUN unwinds the whole run, not just its own
+                            // body: propagate the halt up past the CALL (GOBACK/EXIT PROGRAM leave the flag
+                            // clear, so a normal return continues here).
+                            if ctx.stop_run.get() {
+                                return Ok(true);
+                            }
                         }
                     }
                 }
@@ -2105,6 +2122,28 @@ mod tests {
 
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
+    }
+
+    #[test]
+    fn stop_run_in_callee_unwinds_whole_run() {
+        use crate::dialect::Dialect;
+        // STOP RUN inside a CALLed contained program halts the WHOLE run: the caller's post-CALL
+        // statement must not execute. GOBACK returns to the caller (post-CALL statement runs).
+        let prog = |sub_term: &str| {
+            format!(
+                "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. M.\n       PROCEDURE DIVISION.\n           DISPLAY \"A\".\n           CALL \"S\".\n           DISPLAY \"B\".\n           STOP RUN.\n       END PROGRAM M.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. S.\n       PROCEDURE DIVISION.\n           DISPLAY \"S\".\n           {sub_term}\n       END PROGRAM S.\n"
+            )
+        };
+        // STOP RUN in the callee -> "B" never prints.
+        let (out, _rc) = run_program_dialect_with_rc(&prog("STOP RUN."), Dialect::DEFAULT).unwrap();
+        assert_eq!(out, b"A\nS\n");
+        // STOP RUN 9 in the callee -> exit code 9 propagates to the run boundary.
+        let (out2, rc2) = run_program_dialect_with_rc(&prog("STOP RUN 9."), Dialect::DEFAULT).unwrap();
+        assert_eq!(out2, b"A\nS\n");
+        assert_eq!(rc2, 9);
+        // GOBACK in the callee -> returns to caller, "B" prints.
+        let (out3, _rc3) = run_program_dialect_with_rc(&prog("GOBACK."), Dialect::DEFAULT).unwrap();
+        assert_eq!(out3, b"A\nS\nB\n");
     }
 
     #[test]

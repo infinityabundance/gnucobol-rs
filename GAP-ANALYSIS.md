@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (75 fixed, 30 open)
+## Summary -- 105 gaps catalogued across 5 panels (76 fixed, 29 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 10 | narrow, or faithful-but-surprising |
-| **latent** | 4 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 75 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **latent** | 3 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 76 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -509,12 +509,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL under the pinned single-threaded model (the gap's own observable: 'no for single-threaded byte output'). The admitted oracle is a single-threaded run; there the port reproduces C's behavior exactly (and CBL_FILES even shares a global handle table like the C global). A multi-instance/multi-threaded host is outside the pinned single-threaded model -- a latent thread-safety axis (C is itself not thread-safe there), not a divergence under the oracle.
 
 #### `setjmp-longjmp-as-value` -- setjmp/longjmp runtime-error escape is modeled as a returned i32, not an actual stack unwind  
-**severity:** latent &nbsp;·&nbsp; **observable:** conditional: STOP RUN / hard failure inside a CALLed module expected to unwind to the run boundary
+**severity:** latent &nbsp;·&nbsp; **observable:** conditional: STOP RUN / hard failure inside a CALLed module expected to unwind to the run boundary &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c cob_init_with_return ret=setjmp(return_jmp_buf); longjmp escapes with distinct codes: -3 signal, 1 stop_run, -1 hard_failure, -2 internal. call.c cob_longjmp does longjmp(jbuf,1).
 - **gnucobol-rs (Rust):** No setjmp/longjmp/catch_unwind. common_term.rs reifies the transfer as TermAction::Longjmp(i32); call.rs cob_savenv/cob_longjmp return a bool prime flag.
 - **Diff:** The escape codes are preserved as values, but no unwind happens -- the caller must implement the early return; cross-CALL STOP RUN/abend unwinding is not reproduced.
-- **Evidence / plan:** Faithful value port; closing requires the host to act on TermAction or a catch_unwind layer.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.98 for the STOP RUN unwind (the observable case); the cobrun host now ACTS on the longjmp(stop_run) decision. The library always reified the escape as a value (TermAction::Longjmp(i32)); the missing piece was the host honoring it across the CALL boundary. cobrun's run loop now carries a run-wide ctx.stop_run flag: STOP RUN sets it (GOBACK / EXIT PROGRAM do not), and after a CALL returns the run loop propagates the halt up past the caller -- so STOP RUN inside a CALLed contained program unwinds the WHOLE run, exactly as libcob longjmp(return_jmp_buf, stop_run) does. Oracle byte-identical vs built cobc 3.2: STOP RUN in a callee -> the caller post-CALL DISPLAY does NOT run (corpus p37_call_stop_run_unwind, sweep IDENTICAL + 3.1.2 differential-matched); STOP RUN <n> in a callee -> exit code n propagates to the run boundary (oracle exit 9 == cobrun exit 9); GOBACK still returns to the caller. Unit stop_run_in_callee_unwinds_whole_run + return_code_flows_to_process_exit; 905 lib tests; clang C<->Rust parity gate fresh. RESIDUAL BOUNDARY: cross-CALL hard-failure/abend unwinding (cob_hard_failure longjmp(-1)) has no front-end trigger in the sealed subset, so only the value (TermAction) is modeled there, not an end-to-end abend.
 
 ### Panel: Locale / encoding / i18n (20 gaps)
 
