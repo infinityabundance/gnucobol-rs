@@ -84,6 +84,10 @@ enum Storage {
     /// An `88`-level condition-name: true when its `parent` field's value equals any of `values` (a single
     /// value or a `lo THRU hi` range). Carries no storage of its own.
     Condition { parent: String, values: Vec<CondVal> },
+    /// A group item: an ordered list of its elementary leaf field names. The group has no bytes of its own
+    /// -- a read concatenates the leaves' current bytes, a write distributes the incoming bytes across them
+    /// by length. (The leaves own their storage; the group is the aggregate view over the record.)
+    Group { children: Vec<String> },
 }
 
 /// One value clause of an `88` condition-name: a single literal/identifier or an inclusive `lo THRU hi`
@@ -470,6 +474,9 @@ struct FileState {
 /// One `01`-level elementary item (its name, PIC, and optional VALUE literal) -- the field is built at run
 /// time (so a CALL can build the callee's fields under the same dialect).
 struct ProgItem {
+    /// The COBOL level number (01..49, or 77). Determines group nesting; an item is a GROUP when the next
+    /// item has a higher level number and this item has no PIC.
+    level: u16,
     name: String,
     pic: String,
     value: Option<Tok>,
@@ -924,6 +931,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 }
             }
             items.push(ProgItem {
+                level: 88,
                 name: cname,
                 pic: String::new(),
                 value: None,
@@ -934,13 +942,16 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             });
             continue;
         }
-        if level != "01" {
-            return Err(RunError::Unsupported(format!("only level 01 elementary items (got {level})")));
+        let lvl: u16 = level.parse().unwrap_or(0);
+        if lvl == 0 || (lvl > 49 && lvl != 77) {
+            // 01..49 group/elementary levels and 77 (independent elementary) are supported; 66 (RENAMES)
+            // and other forms fail closed.
+            return Err(RunError::Unsupported(format!("unsupported level number {level}")));
         }
         k += 1;
         let name = match toks.get(k) {
             Some(Tok::Word(w)) => w.clone(),
-            _ => return Err(RunError::Unsupported("expected data name after 01".into())),
+            _ => return Err(RunError::Unsupported("expected data name after a level number".into())),
         };
         last_item = Some(name.clone());
         k += 1;
@@ -1010,8 +1021,9 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 _ => k += 1,
             }
         }
-        let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-        items.push(ProgItem { name, pic, value, occurs, redefines, condition: None, indexed_by: indexed });
+        // a PIC-less item is a GROUP (its children follow at higher level numbers); resolved in build.
+        let pic = pic.unwrap_or_default();
+        items.push(ProgItem { level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed });
     }
     Ok(items)
 }
@@ -1049,6 +1061,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             );
             continue;
         }
+        // A group item (no PIC) is built after its leaves exist (second pass below).
+        if it.pic.is_empty() {
+            continue;
+        }
         let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
@@ -1070,9 +1086,56 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         }
         fields.insert(it.name.clone(), f);
     }
+    // Second pass: group items (no PIC). A group's elementary leaves are the items that follow it at a
+    // strictly higher level number, up to the next item at <= its level (a sibling/uncle).
+    for (i, it) in prog.ws.iter().enumerate() {
+        if it.level == 88 || !it.pic.is_empty() {
+            continue;
+        }
+        let mut children = Vec::new();
+        for sib in &prog.ws[i + 1..] {
+            if sib.level <= it.level {
+                break;
+            }
+            if sib.level != 88 && !sib.pic.is_empty() {
+                children.push(sib.name.clone());
+            }
+        }
+        fields.insert(it.name.clone(), Field {
+            storage: Storage::Group { children },
+            bytes: Vec::new(),
+            occurs: 1,
+            redefines: None,
+        });
+    }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
     Ok(fields)
+}
+
+/// The concatenated current bytes of a group's leaves (its record image).
+fn group_bytes(children: &[String], fields: &HashMap<String, Field>) -> Vec<u8> {
+    let mut b = Vec::new();
+    for c in children {
+        if let Some(f) = fields.get(c) {
+            b.extend_from_slice(&f.bytes);
+        }
+    }
+    b
+}
+
+/// Distribute `bytes` (space-padded/truncated to the group's total length) across a group's leaves by length.
+fn put_group_bytes(children: &[String], mut bytes: Vec<u8>, fields: &mut HashMap<String, Field>) {
+    let total: usize = children.iter().map(|c| fields.get(c).map(|f| f.bytes.len()).unwrap_or(0)).sum();
+    bytes.resize(total, b' ');
+    let mut off = 0;
+    for c in children {
+        let len = fields.get(c).map(|f| f.bytes.len()).unwrap_or(0);
+        if let Some(f) = fields.get_mut(c) {
+            f.bytes = bytes[off..off + len].to_vec();
+        }
+        off += len;
+    }
 }
 
 thread_local! {
@@ -2104,6 +2167,7 @@ fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
             let s: Vec<u8> = dec.digits.iter().map(|d| d + b'0').collect();
             store_alnum(field, &s)
         }
+        Storage::Group { .. } => Err(RunError::Unsupported("a group MOVE is distributed across its leaves by write_field".into())),
         Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
     }
 }
@@ -2173,6 +2237,7 @@ fn store_alnum(field: &mut Field, src: &[u8]) -> Result<(), RunError> {
             field.bytes = dst;
             Ok(())
         }
+        Storage::Group { .. } => Err(RunError::Unsupported("a group MOVE is distributed across its leaves by write_field".into())),
         Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
     }
 }
@@ -2583,6 +2648,7 @@ fn display_bytes(f: &Field, decimal_comma: bool) -> Vec<u8> {
             o
         }
         Storage::Alpha(_) | Storage::Edited(..) => f.bytes.clone(),
+        Storage::Group { .. } => f.bytes.clone(), // a group displays as its concatenated record image
         Storage::Condition { .. } => Vec::new(), // a condition-name has no displayable value
     }
 }
@@ -2713,6 +2779,14 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
             Storage::Alpha(_) | Storage::Edited(..) => Tok::Str(vec![b' ']),
             // an 88 condition-name has no storage of its own -- INITIALIZE skips it (cobc does not reset it).
             Storage::Condition { .. } => continue,
+            // INITIALIZE of a group resets each of its leaves to its category default.
+            Storage::Group { children } => {
+                let kids = children.clone();
+                for c in kids {
+                    exec_initialize(&[Tok::Word(c)], fields, decimal_comma)?;
+                }
+                continue;
+            }
         };
         let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(name)];
         exec_move(&mv, fields, decimal_comma)?;
@@ -3148,10 +3222,9 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
     if keys.len() != 1 {
         return Err(RunError::Unsupported("SORT/MERGE subset: a single KEY".into()));
     }
-    let keylen = read_field(fields, &keys[0])?.map(|f| f.bytes.len()).unwrap_or(0);
-    if keylen != reclen {
-        return Err(RunError::Unsupported("SORT/MERGE subset: KEY must be the whole sort record (sub-field keys need group items)".into()));
-    }
+    // resolve the key's byte span within the sort record: a leaf of the SD group, or the whole record.
+    let (key_off, key_len) = sort_key_span(&sd_def.record, &keys[0], reclen, fields)
+        .ok_or_else(|| RunError::Unsupported(format!("SORT/MERGE KEY `{}` is not a field of the sort record", keys[0])))?;
     if using.is_empty() || giving.is_empty() {
         return Err(RunError::Unsupported("SORT/MERGE subset requires USING + GIVING".into()));
     }
@@ -3169,7 +3242,11 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
             }
         }
     }
-    recs.sort();
+    recs.sort_by(|a, b| {
+        let ea = (key_off + key_len).min(a.len());
+        let eb = (key_off + key_len).min(b.len());
+        a[key_off.min(a.len())..ea].cmp(&b[key_off.min(b.len())..eb])
+    });
     if descending { recs.reverse(); }
     {
         let mut files = ctx.files.borrow_mut();
@@ -3187,6 +3264,26 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
     }
     set_file_status(fields, &sd_def, "00");
     Ok(())
+}
+
+/// The byte offset + length of a SORT/MERGE key within the sort record: the whole record when the key
+/// names the record, otherwise the key leaf's position within the SD group.
+fn sort_key_span(record: &str, key: &str, reclen: usize, fields: &HashMap<String, Field>) -> Option<(usize, usize)> {
+    if key == record {
+        return Some((0, reclen));
+    }
+    if let Some(Field { storage: Storage::Group { children }, .. }) = fields.get(record) {
+        let mut off = 0;
+        for c in children {
+            let len = fields.get(c).map(|f| f.bytes.len()).unwrap_or(0);
+            if c == key {
+                return Some((off, len));
+            }
+            off += len;
+        }
+    }
+    let kl = fields.get(key).map(|f| f.bytes.len()).unwrap_or(0);
+    if kl == reclen { Some((0, reclen)) } else { None }
 }
 
 /// `DELETE file [RECORD]` -- remove the RELATIVE record at the current RELATIVE KEY (status `"23"` if no
@@ -3396,6 +3493,8 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
                     Storage::Numeric(a) => Ok((f.bytes.clone(), *a)),
                     Storage::Alpha(a) => Ok((f.bytes.clone(), *a)),
                     Storage::Edited(..) => Ok((f.bytes.clone(), alnum_attr())),
+                    // a group is an alphanumeric value of its concatenated leaves (read_field filled bytes).
+                    Storage::Group { .. } => Ok((f.bytes.clone(), alnum_attr())),
                     Storage::Condition { .. } => {
                         Err(RunError::Unsupported("88 condition-name is not a value operand".into()))
                     }
@@ -3454,7 +3553,7 @@ fn parse_ec_bound_check(src_upper: &str) -> bool {
 fn default_element(storage: &Storage, elem: usize) -> Field {
     let fill = match storage {
         Storage::Numeric(_) => b'0',
-        Storage::Alpha(_) | Storage::Edited(..) | Storage::Condition { .. } => b' ',
+        Storage::Alpha(_) | Storage::Edited(..) | Storage::Condition { .. } | Storage::Group { .. } => b' ',
     };
     Field { storage: storage.clone(), bytes: vec![fill; elem], occurs: 1, redefines: None }
 }
@@ -3503,6 +3602,16 @@ fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
 fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Field>, RunError> {
     let (base, sub) = split_subscript(word);
     let Some(f) = fields.get(base) else { return Ok(None) };
+    // A group item reads as the concatenation of its leaves' current bytes (its live record image).
+    if let Storage::Group { children } = &f.storage {
+        let bytes = group_bytes(children, fields);
+        return Ok(Some(Field {
+            storage: Storage::Group { children: children.clone() },
+            bytes,
+            occurs: 1,
+            redefines: None,
+        }));
+    }
     let f = aliased(fields, f);
     match sub {
         None => Ok(Some(f)),
@@ -3522,6 +3631,17 @@ fn write_field(
     apply: impl FnOnce(&mut Field) -> Result<(), RunError>,
 ) -> Result<(), RunError> {
     let (base, sub) = split_subscript(word);
+    // A group write distributes the result across its leaves: shape a temp alphanumeric field over the
+    // group's current concatenation, apply, then split the bytes back into the leaves by length.
+    if sub.is_none() {
+        if let Some(Storage::Group { children }) = fields.get(base).map(|f| f.storage.clone()) {
+            let concat = group_bytes(&children, fields);
+            let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: concat, occurs: 1, redefines: None };
+            apply(&mut tmp)?;
+            put_group_bytes(&children, tmp.bytes, fields);
+            return Ok(());
+        }
+    }
     // A REDEFINES field writes THROUGH its alias into the target's storage: shape a temp with this field's
     // storage over the target's bytes, apply, and copy the result back into the target.
     if sub.is_none() {
@@ -3601,6 +3721,7 @@ fn move_into(
             f.bytes = dst;
             Ok(())
         }
+        Storage::Group { .. } => Err(RunError::Unsupported("a group MOVE is distributed across its leaves by write_field".into())),
         Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
     }
 }
