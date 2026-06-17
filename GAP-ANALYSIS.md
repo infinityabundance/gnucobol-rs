@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (40 fixed, 65 open)
+## Summary -- 105 gaps catalogued across 5 panels (41 fixed, 64 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 28 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 27 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 40 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 41 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -461,12 +461,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Wrap the interpreter to honor TermAction::Exit; today the host must translate the decision.
 
 #### `sigfpe-vs-size-error` -- Divide-by-zero is a recoverable COBOL SIZE ERROR, not a trapped SIGFPE abort  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: unguarded DIVIDE BY ZERO with no ON SIZE ERROR aborts (signal exit ~136) in cobc, silently handled in port
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: unguarded DIVIDE BY ZERO with no ON SIZE ERROR aborts (signal exit ~136) in cobc, silently handled in port &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c arms SIGFPE always; an unguarded integer divide-by-zero hardware-traps to cob_sig_handler ('fatal arithmetic error (signal SIGFPE)'), runs terminate routines, exits with the signal value.
 - **gnucobol-rs (Rust):** common_signal.rs cob_sig_handler can format the text if handed sig=8 but nothing delivers a real SIGFPE; the arithmetic surface treats divide-by-zero as ON SIZE ERROR (size_error.rs) with the receiver unchanged.
 - **Diff:** C: hardware trap -> fatal abort with signal exit. Rust: recoverable SIZE ERROR, no abort.
-- **Evidence / plan:** Compile DIVIDE x BY ZERO with no ON SIZE ERROR; cobc aborts, port continues. Document/align the trap semantics.
+- **Evidence / plan:** VERIFIED FAITHFUL -- the gap's abort claim is CONTRADICTED by the built-cobc oracle. A COBOL DIVIDE/COMPUTE by zero is ALWAYS guarded (cob_decimal_div checks the divisor; the generated code never emits an unguarded hardware divide), so it never reaches the SIGFPE handler: built-cobc DIVIDE A BY 0 / COMPUTE R = A / 0 with NO ON SIZE ERROR -> the receiver is left unchanged and execution CONTINUES (exit 0), tested for PIC 9(4) DISPLAY and PIC 9(4) COMP-5 (even at -O2) -- never signal exit ~136. The port's recoverable SIZE ERROR handling (now with full ON SIZE ERROR control flow, see divzero-size-error-control) matches this exactly. (The armed SIGFPE handler in common_signal.rs is for genuine hardware faults from CALL'd native code, which is the dlopen boundary -- not a COBOL divide.)
 
 #### `signal-handlers-not-installed` -- No real signal handler installed; cob_set_signal only returns the row list  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: any uncaught fault (C prints its handler message + exits with the signal; port crashes generically)
