@@ -37,7 +37,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "DISPLAY", "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ACCEPT", "ADD", "SUBTRACT",
     "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
-    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE",
+    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1149,6 +1149,52 @@ fn table_index_lookup(table: &str) -> Option<String> {
     TABLE_INDEX.with(|m| m.borrow().get(table).cloned())
 }
 
+thread_local! {
+    /// The currently-executing program body's paragraphs as `(name, start_token)` plus the body length,
+    /// used by out-of-line `PERFORM para [THRU para2]` to find the token range to run. Saved/restored
+    /// around each program body so a CALL does not clobber the caller's paragraphs.
+    static CUR_PARAS: std::cell::RefCell<(Vec<(String, usize)>, usize)> = const { std::cell::RefCell::new((Vec::new(), 0)) };
+    /// The current program body's tokens (`proc_toks`), so a verb that runs a paragraph range (SORT
+    /// INPUT/OUTPUT PROCEDURE) can reach them. Saved/restored around each program body.
+    static CUR_PROC: std::cell::RefCell<Vec<Tok>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+/// Whether `name` is a paragraph/section label in the current program body.
+fn para_exists(name: &str) -> bool {
+    CUR_PARAS.with(|c| c.borrow().0.iter().any(|(n, _)| n == name))
+}
+
+/// The `[start, end)` token range of `PERFORM p1 [THRU p2]`: from p1's first statement to the start of the
+/// paragraph following p2 (or the body end).
+fn para_range(p1: &str, p2: &str) -> Option<(usize, usize)> {
+    CUR_PARAS.with(|c| {
+        let (paras, plen) = &*c.borrow();
+        let start = paras.iter().find(|(n, _)| n == p1).map(|(_, s)| *s)?;
+        let p2start = paras.iter().find(|(n, _)| n == p2).map(|(_, s)| *s)?;
+        let end = paras.iter().map(|(_, s)| *s).filter(|&s| s > p2start).min().unwrap_or(*plen);
+        Some((start, end))
+    })
+}
+
+/// Run the statements in `toks[start..end)` (a performed paragraph range). Returns `Ok(true)` if a halt
+/// (STOP RUN / GOBACK / EXIT PROGRAM / pending GO TO) propagated out.
+fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+    let mut pos = start;
+    while pos < end {
+        if matches!(toks.get(pos), Some(Tok::Dot)) {
+            pos += 1;
+            continue;
+        }
+        if run_block(toks, &mut pos, fields, out, true, ctx)? {
+            return Ok(true);
+        }
+        if matches!(toks.get(pos), Some(Tok::Dot)) {
+            pos += 1;
+        }
+    }
+    Ok(false)
+}
+
 /// Execute a program's PROCEDURE DIVISION against `fields`, writing output to `out`. Returns when the body
 /// ends (`STOP RUN` / `GOBACK` / `EXIT PROGRAM` / falling off the end).
 fn run_program_body(
@@ -1159,6 +1205,10 @@ fn run_program_body(
 ) -> Result<(), RunError> {
     let proc = &prog.proc_toks;
     let labels = paragraph_labels(proc);
+    // Publish this body's paragraph ranges for out-of-line PERFORM, saving the caller's (CALL nesting).
+    let paras_vec: Vec<(String, usize)> = labels.iter().map(|(n, s)| (n.clone(), *s)).collect();
+    let prev_paras = CUR_PARAS.with(|c| c.replace((paras_vec, proc.len())));
+    let prev_proc = CUR_PROC.with(|c| c.replace(proc.clone()));
     let mut pos = 0;
     if matches!(proc.first(), Some(Tok::Dot)) {
         pos = 1;
@@ -1189,6 +1239,9 @@ fn run_program_body(
             pos += 1;
         }
     }
+    // restore the caller's paragraph table (normal return; an error aborts the whole run anyway).
+    CUR_PARAS.with(|c| { *c.borrow_mut() = prev_paras; });
+    CUR_PROC.with(|c| { *c.borrow_mut() = prev_proc; });
     Ok(())
 }
 
@@ -1230,10 +1283,10 @@ const STMT_VERBS: &[&str] = &[
     "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE",
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
-    "COMMIT", "ROLLBACK", "SORT", "MERGE",
+    "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN",
 ];
 /// Scope terminators that end a block.
-const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ"];
+const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
 
 fn is_boundary(w: &str) -> bool {
     STMT_VERBS.contains(&w) || SCOPE_ENDERS.contains(&w)
@@ -1295,6 +1348,11 @@ fn run_block(
                     }
                     "READ" => {
                         if exec_read(toks, pos, fields, out, exec, ctx)? {
+                            return Ok(true);
+                        }
+                    }
+                    "RETURN" => {
+                        if exec_return(toks, pos, fields, out, exec, ctx)? {
                             return Ok(true);
                         }
                     }
@@ -1740,6 +1798,56 @@ fn exec_perform(
     exec: bool,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
+    // out-of-line form: PERFORM para [THRU para2] [ n TIMES | UNTIL cond ] -- run a named paragraph range.
+    if let Some(Tok::Word(w)) = toks.get(*pos) {
+        if para_exists(w) {
+            let p1 = w.clone();
+            *pos += 1;
+            let mut p2 = p1.clone();
+            if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
+                *pos += 1;
+                if let Some(Tok::Word(w)) = toks.get(*pos) { p2 = w.clone(); *pos += 1; }
+            }
+            let mut times: Option<String> = None;
+            let mut ucond: Vec<Tok> = Vec::new();
+            let mut until = false;
+            if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "UNTIL") {
+                until = true;
+                *pos += 1;
+                while let Some(t) = toks.get(*pos) {
+                    match t {
+                        Tok::Dot => break,
+                        Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+                        _ => { ucond.push(t.clone()); *pos += 1; }
+                    }
+                }
+            } else if matches!(toks.get(*pos), Some(Tok::Word(_)))
+                && matches!(toks.get(*pos + 1), Some(Tok::Word(t)) if t == "TIMES")
+            {
+                if let Some(Tok::Word(w)) = toks.get(*pos) { times = Some(w.clone()); }
+                *pos += 2;
+            }
+            if !exec {
+                return Ok(false);
+            }
+            let (start, end) = para_range(&p1, &p2)
+                .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
+            if until {
+                let mut guard = 0u32;
+                while !eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                    if run_range(toks, start, end, fields, out, ctx)? { return Ok(true); }
+                    guard += 1;
+                    if guard > 1_000_000 { return Err(RunError::Runtime("PERFORM UNTIL exceeded 1e6 iterations".into())); }
+                }
+            } else {
+                let n = times.as_deref().and_then(|w| resolve_int(w, fields)).unwrap_or(1);
+                for _ in 0..n.max(0) {
+                    if run_range(toks, start, end, fields, out, ctx)? { return Ok(true); }
+                }
+            }
+            return Ok(false);
+        }
+    }
     // forms: PERFORM <n> TIMES ... END-PERFORM ; PERFORM UNTIL <cond> ... END-PERFORM
     let is_until = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "UNTIL");
     let mut times_word: Option<String> = None;
@@ -2266,7 +2374,8 @@ fn exec_stmt(
         "DELETE" => exec_delete(stmt, fields, ctx),
         "START" => exec_start(stmt, fields, ctx),
         // MERGE of already-ordered inputs yields the same globally-ordered output as SORT over the union.
-        "SORT" | "MERGE" => exec_sort(stmt, fields, ctx),
+        "SORT" | "MERGE" => exec_sort(stmt, fields, out, ctx),
+        "RELEASE" => exec_release(stmt, fields, ctx),
         "UNLOCK" => exec_unlock(stmt, fields, ctx),
         // COMMIT / ROLLBACK are no-ops without a transactional backend (as libcob is for sequential files).
         "COMMIT" | "ROLLBACK" => Ok(()),
@@ -3200,70 +3309,183 @@ fn exec_unlock(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
 /// read every record from the USING files, order them, and write them to the GIVING files. The subset is a
 /// single **whole-record** KEY (sub-field keys need group items) with USING/GIVING; INPUT/OUTPUT PROCEDURE
 /// (which drive RELEASE/RETURN) is out of subset.
-fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
     let sf = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("SORT: missing sort file".into())) };
     let sd_def = ctx.file_defs.get(&sf).ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?.clone();
     let reclen = read_field(fields, &sd_def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
-    let (mut sect, mut descending) = (0u8, false);
-    let (mut keys, mut using, mut giving): (Vec<String>, Vec<String>, Vec<String>) = (vec![], vec![], vec![]);
-    for t in &stmt[1..] {
-        if let Tok::Word(w) = t {
-            match w.as_str() {
-                "ON" | "KEY" => {}
-                "ASCENDING" => { descending = false; sect = 1; }
-                "DESCENDING" => { descending = true; sect = 1; }
-                "USING" => sect = 2,
-                "GIVING" => sect = 3,
-                "INPUT" | "OUTPUT" => return Err(RunError::Unsupported("SORT/MERGE INPUT/OUTPUT PROCEDURE not in subset".into())),
-                _ => match sect { 1 => keys.push(w.clone()), 2 => using.push(w.clone()), 3 => giving.push(w.clone()), _ => {} },
+    let kw = |w: &str| matches!(w, "ON" | "KEY" | "ASCENDING" | "DESCENDING" | "USING" | "GIVING" | "INPUT" | "OUTPUT" | "PROCEDURE" | "IS" | "THRU" | "THROUGH");
+    let (mut descending, mut keys): (bool, Vec<String>) = (false, vec![]);
+    let (mut using, mut giving): (Vec<String>, Vec<String>) = (vec![], vec![]);
+    let (mut in_proc, mut out_proc): (Option<(String, String)>, Option<(String, String)>) = (None, None);
+    let word = |i: usize| stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None });
+    let mut i = 1;
+    while i < stmt.len() {
+        match word(i).as_deref() {
+            Some("ON") | Some("KEY") => i += 1,
+            Some("ASCENDING") => { descending = false; i += 1; }
+            Some("DESCENDING") => { descending = true; i += 1; }
+            Some("USING") => { i += 1; while let Some(w) = word(i) { if kw(&w) { break; } using.push(w); i += 1; } }
+            Some("GIVING") => { i += 1; while let Some(w) = word(i) { if kw(&w) { break; } giving.push(w); i += 1; } }
+            Some("INPUT") | Some("OUTPUT") => {
+                let is_in = word(i).as_deref() == Some("INPUT");
+                i += 1;
+                if word(i).as_deref() == Some("PROCEDURE") { i += 1; }
+                if word(i).as_deref() == Some("IS") { i += 1; }
+                let p1 = word(i).unwrap_or_default();
+                i += 1;
+                let mut p2 = p1.clone();
+                if matches!(word(i).as_deref(), Some("THRU") | Some("THROUGH")) {
+                    i += 1;
+                    if let Some(w) = word(i) { p2 = w; i += 1; }
+                }
+                if is_in { in_proc = Some((p1, p2)); } else { out_proc = Some((p1, p2)); }
             }
+            Some(w) => { keys.push(w.to_string()); i += 1; }
+            None => i += 1,
         }
     }
     if keys.len() != 1 {
         return Err(RunError::Unsupported("SORT/MERGE subset: a single KEY".into()));
     }
-    // resolve the key's byte span within the sort record: a leaf of the SD group, or the whole record.
     let (key_off, key_len) = sort_key_span(&sd_def.record, &keys[0], reclen, fields)
         .ok_or_else(|| RunError::Unsupported(format!("SORT/MERGE KEY `{}` is not a field of the sort record", keys[0])))?;
-    if using.is_empty() || giving.is_empty() {
-        return Err(RunError::Unsupported("SORT/MERGE subset requires USING + GIVING".into()));
-    }
+    // the current body's tokens, for running INPUT/OUTPUT PROCEDURE ranges.
+    let proc = CUR_PROC.with(|c| c.borrow().clone());
+    // ---- gather phase: INPUT PROCEDURE (RELEASE records into the sort file) or USING files ----
     let mut recs: Vec<Vec<u8>> = Vec::new();
-    {
+    if let Some((p1, p2)) = &in_proc {
+        ctx.files.borrow_mut().entry(sf.clone()).or_default().records.clear();
+        let (start, end) = para_range(p1, p2)
+            .ok_or_else(|| RunError::Unsupported(format!("SORT INPUT PROCEDURE: unknown paragraph `{p1}`")))?;
+        run_range(&proc, start, end, fields, out, ctx)?;
+        recs = ctx.files.borrow().get(&sf).map(|st| st.records.clone()).unwrap_or_default();
+    } else if !using.is_empty() {
         let files = ctx.files.borrow();
         for f in &using {
             if let Some(st) = files.get(f) {
                 for r in &st.records {
                     if r.is_empty() { continue; }
-                    let mut b = r.clone();
-                    b.resize(reclen, b' ');
-                    recs.push(b);
+                    recs.push(r.clone());
                 }
             }
         }
+    } else {
+        return Err(RunError::Unsupported("SORT/MERGE requires USING or INPUT PROCEDURE".into()));
     }
+    for r in recs.iter_mut() { r.resize(reclen, b' '); }
     recs.sort_by(|a, b| {
         let ea = (key_off + key_len).min(a.len());
         let eb = (key_off + key_len).min(b.len());
         a[key_off.min(a.len())..ea].cmp(&b[key_off.min(b.len())..eb])
     });
     if descending { recs.reverse(); }
-    {
+    // ---- distribute phase: OUTPUT PROCEDURE (RETURN records) or GIVING files ----
+    if let Some((p3, p4)) = &out_proc {
+        {
+            let mut files = ctx.files.borrow_mut();
+            let st = files.entry(sf.clone()).or_default();
+            st.records = recs;
+            st.read_pos = 0;
+            st.mode = 1;
+        }
+        set_file_status(fields, &sd_def, "00");
+        let (start, end) = para_range(p3, p4)
+            .ok_or_else(|| RunError::Unsupported(format!("SORT OUTPUT PROCEDURE: unknown paragraph `{p3}`")))?;
+        run_range(&proc, start, end, fields, out, ctx)?;
+    } else if !giving.is_empty() {
         let mut files = ctx.files.borrow_mut();
         for f in &giving {
-            let out_org = ctx.file_defs.get(f).map(|d| d.org).unwrap_or(FileOrg::Sequential);
+            let gorg = ctx.file_defs.get(f).map(|d| d.org).unwrap_or(FileOrg::Sequential);
             let st = files.entry(f.clone()).or_default();
             st.records = recs.iter().map(|r| {
                 let mut b = r.clone();
-                if out_org == FileOrg::LineSequential { while b.last() == Some(&b' ') { b.pop(); } }
+                if gorg == FileOrg::LineSequential { while b.last() == Some(&b' ') { b.pop(); } }
                 b
             }).collect();
             st.read_pos = 0;
             st.mode = 0;
         }
+        set_file_status(fields, &sd_def, "00");
+    } else {
+        return Err(RunError::Unsupported("SORT/MERGE requires GIVING or OUTPUT PROCEDURE".into()));
     }
-    set_file_status(fields, &sd_def, "00");
     Ok(())
+}
+
+/// `RELEASE record [FROM id]` -- write a record to its sort file during a SORT INPUT PROCEDURE (the records
+/// accumulate, then SORT orders them).
+fn exec_release(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let rec = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("RELEASE: missing record".into())) };
+    if let Some(fp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")) {
+        if let Some(src) = stmt.get(fp + 1) {
+            let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
+            exec_move(&mv, fields, ctx.decimal_comma)?;
+        }
+    }
+    let def = ctx.file_defs.values().find(|d| d.record == rec)
+        .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?
+        .clone();
+    let bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
+    ctx.files.borrow_mut().entry(def.name.clone()).or_default().records.push(bytes);
+    Ok(())
+}
+
+/// `RETURN sort-file [RECORD] [INTO id] [AT END imperative] [END-RETURN]` -- read the next ordered record
+/// from a sort file during a SORT OUTPUT PROCEDURE; at end-of-set run the AT END imperative.
+fn exec_return(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    let file = match toks.get(*pos) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("RETURN: missing sort file".into())) };
+    *pos += 1;
+    while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "RECORD") { *pos += 1; }
+    let mut into: Option<String> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INTO") {
+        *pos += 1;
+        if let Some(Tok::Word(w)) = toks.get(*pos) { into = Some(w.clone()); *pos += 1; }
+    }
+    let mut at_end: Option<usize> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "AT") {
+        *pos += 1;
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") { *pos += 1; }
+        at_end = Some(*pos);
+        let mut scan = *pos;
+        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
+        *pos = scan;
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-RETURN") { *pos += 1; }
+    if !exec {
+        return Ok(false);
+    }
+    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("RETURN: `{file}` is not a declared file")))?.clone();
+    let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+    let next = {
+        let files = ctx.files.borrow();
+        files.get(&file).and_then(|st| st.records.get(st.read_pos).cloned())
+    };
+    match next {
+        Some(mut bytes) => {
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&file) { st.read_pos += 1; }
+            bytes.resize(reclen, b' ');
+            write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
+            if let Some(id) = into {
+                let mv = vec![Tok::Word(def.record.clone()), Tok::Word("TO".to_string()), Tok::Word(id)];
+                exec_move(&mv, fields, ctx.decimal_comma)?;
+            }
+            Ok(false)
+        }
+        None => {
+            if let Some(s) = at_end {
+                let mut p = s;
+                return run_block(toks, &mut p, fields, out, true, ctx);
+            }
+            Ok(false)
+        }
+    }
 }
 
 /// The byte offset + length of a SORT/MERGE key within the sort record: the whole record when the key
