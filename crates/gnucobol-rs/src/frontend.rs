@@ -357,6 +357,7 @@ pub fn run_program_redirected(
         print_redirect: redirect_printer,
         printer: RefCell::new(Vec::new()),
         stop_run: Cell::new(false),
+        call_state: RefCell::new(HashMap::new()),
     };
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
@@ -397,6 +398,9 @@ struct ProgramDef {
     linkage: Vec<ProgItem>,
     using: Vec<String>,
     proc_toks: Vec<Tok>,
+    /// `PROGRAM-ID. name IS INITIAL` -- the program's WORKING-STORAGE is re-initialized to its VALUE
+    /// clauses on EVERY entry, rather than persisting (static) across CALLs.
+    is_initial: bool,
 }
 
 /// One `01`-level elementary item (its name, PIC, and optional VALUE literal) -- the field is built at run
@@ -426,6 +430,10 @@ struct Ctx<'a> {
     /// PROGRAM` only end the current program body and return to the caller. The flag carries the STOP-RUN
     /// decision back across the CALL boundary, where the plain "this body ended" bool cannot distinguish them.
     stop_run: Cell<bool>,
+    /// Each CALLed contained program's persisted WORKING-STORAGE (COBOL static storage: a subprogram's WS
+    /// survives between CALLs). Keyed by program name; absent = never called or CANCELed (next CALL rebuilds
+    /// from VALUE clauses). INITIAL programs are never stored here. CANCEL removes the entry.
+    call_state: RefCell<HashMap<String, HashMap<String, Field>>>,
 }
 
 /// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
@@ -527,6 +535,19 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
         Some(Tok::Word(w)) => w.clone(),
         _ => return Err(RunError::Unsupported("expected program name after PROGRAM-ID".into())),
     };
+    // PROGRAM-ID. name [IS] [INITIAL | COMMON | RECURSIVE]. -- scan the paragraph (to its '.') for INITIAL.
+    let mut is_initial = false;
+    let mut q = k + 1;
+    while let Some(t) = toks.get(q) {
+        match t {
+            Tok::Dot => break,
+            Tok::Word(w) if w == "INITIAL" => {
+                is_initial = true;
+                break;
+            }
+            _ => q += 1,
+        }
+    }
     let proc_at = find_seq_in(toks, &["PROCEDURE", "DIVISION"], start, end)
         .ok_or_else(|| RunError::Unsupported(format!("{name}: no PROCEDURE DIVISION")))?;
     let ws_at = find_seq_in(toks, &["WORKING-STORAGE", "SECTION"], start, proc_at);
@@ -567,7 +588,7 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     let body_end = find_seq_in(toks, &["END", "PROGRAM"], p, end).unwrap_or(end);
     let proc_toks = toks[p..body_end].to_vec();
 
-    Ok((name, ProgramDef { ws, linkage, using, proc_toks }))
+    Ok((name, ProgramDef { ws, linkage, using, proc_toks, is_initial }))
 }
 
 /// Parse the `01`-level elementary items in `toks[start..end]` (a WORKING-STORAGE or LINKAGE section body).
@@ -693,7 +714,7 @@ fn run_program_body(
 /// Statement verbs that begin a new statement (so an operand list ends when one is seen).
 const STMT_VERBS: &[&str] = &[
     "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP",
-    "CONTINUE", "ACCEPT", "GO", "EVALUATE", "CALL", "GOBACK", "EXIT",
+    "CONTINUE", "ACCEPT", "GO", "EVALUATE", "CALL", "GOBACK", "EXIT", "CANCEL",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE"];
@@ -760,6 +781,23 @@ fn run_block(
                         }
                     }
                     "CONTINUE" | "NEXT" => { /* no-op */ }
+                    // CANCEL "NAME" ... -- drop each named program's persisted WORKING-STORAGE, so its
+                    // next CALL rebuilds from VALUE (libcob un-initializes + unloads the module).
+                    "CANCEL" => {
+                        let rest = collect_operands(toks, pos);
+                        if exec {
+                            for t in &rest {
+                                let nm = match t {
+                                    Tok::Str(s) => Some(String::from_utf8_lossy(s).to_string()),
+                                    Tok::Word(w) => Some(w.clone()),
+                                    Tok::Dot => None,
+                                };
+                                if let Some(nm) = nm {
+                                    ctx.call_state.borrow_mut().remove(&nm);
+                                }
+                            }
+                        }
+                    }
                     // Arithmetic verbs carry optional ON SIZE ERROR / NOT ON SIZE ERROR handler blocks
                     // (+ END-verb), so they are parsed here rather than via collect_operands/exec_stmt.
                     "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" | "COMPUTE" => {
@@ -1481,9 +1519,17 @@ fn exec_call(
         }
     }
 
-    // Build the callee's fields (its WORKING-STORAGE + RETURN-CODE), then fill its LINKAGE USING params
-    // from the caller's arguments (copy-in).
-    let mut cfields = build_program_fields(callee, ctx)?;
+    // The callee's fields: restore its PERSISTED WORKING-STORAGE (COBOL static storage -- a subprogram's WS
+    // survives between CALLs) when it has been called before and not CANCELed; otherwise build fresh from
+    // the VALUE clauses. An INITIAL program is always rebuilt (re-initialized every entry).
+    let mut cfields = if !callee.is_initial {
+        match ctx.call_state.borrow_mut().remove(&name) {
+            Some(saved) => saved,
+            None => build_program_fields(callee, ctx)?,
+        }
+    } else {
+        build_program_fields(callee, ctx)?
+    };
     // RETURN-CODE is shared: seed the callee with the caller's current value.
     if let Some(rc) = fields.get("RETURN-CODE") {
         cfields.insert("RETURN-CODE".to_string(), rc.clone());
@@ -1515,6 +1561,11 @@ fn exec_call(
     // RETURN-CODE propagates back to the caller.
     if let Some(rc) = cfields.get("RETURN-CODE") {
         fields.insert("RETURN-CODE".to_string(), rc.clone());
+    }
+    // Persist the callee's WORKING-STORAGE for the next CALL (static storage). INITIAL programs do not
+    // persist -- they re-initialize from VALUE each entry.
+    if !callee.is_initial {
+        ctx.call_state.borrow_mut().insert(name, cfields);
     }
     Ok(())
 }
@@ -2142,6 +2193,17 @@ mod tests {
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".  *> here's the caller's note: don't break\n           STOP RUN.\n";
         let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"OK\n");
+    }
+
+    #[test]
+    fn subprogram_ws_persists_cancel_resets_initial_reinits() {
+        use crate::dialect::Dialect;
+        // A CALLed contained program's WORKING-STORAGE is static (persists across CALLs); CANCEL drops it
+        // (next CALL rebuilds from VALUE); an INITIAL program re-initializes every entry.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. M.\n       PROCEDURE DIVISION.\n           CALL \"S\".\n           CALL \"S\".\n           CANCEL \"S\".\n           CALL \"S\".\n           CALL \"I\".\n           CALL \"I\".\n           STOP RUN.\n       END PROGRAM M.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. S.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 C PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           ADD 1 TO C. DISPLAY \"C=\" C.\n       END PROGRAM S.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. I IS INITIAL.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 N PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           ADD 1 TO N. DISPLAY \"N=\" N.\n       END PROGRAM I.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        // persist 1,2 ; CANCEL -> 1 ; INITIAL re-inits 1,1.
+        assert_eq!(out, b"C=1\nC=2\nC=1\nN=1\nN=1\n");
     }
 
     #[test]

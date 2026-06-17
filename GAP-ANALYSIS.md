@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (87 fixed, 18 open)
+## Summary -- 105 gaps catalogued across 5 panels (88 fixed, 17 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 10 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 9 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 6 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 87 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 88 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -412,12 +412,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Host must spawn + map status. CALL "SYSTEM" USING "exit 3" GIVING rc: port returns no real rc.
 
 #### `cancel-no-unload` -- CANCEL never runs the module cancel handler and never lt_dlclose-unloads  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: programs relying on CANCEL to reset a subprogram's WORKING-STORAGE or unload a .so
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: programs relying on CANCEL to reset a subprogram's WORKING-STORAGE or unload a .so &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** call.c cob_cancel -> do_cancel_module invokes module_cancel.funcint(-1,...) so the program releases state, then lt_dlclose(handle) gated on cob_physical_cancel.
 - **gnucobol-rs (Rust):** call.rs do_cancel_module (850) just cache.remove(name): no handler invocation, no lt_dlclose, no -1 convention.
 - **Diff:** C un-initializes + physically unloads; Rust only evicts a cache row.
-- **Evidence / plan:** CANCEL then re-CALL a stateful module; the C cancel-handler reset is not reproduced.
+- **Evidence / plan:** FIXED gnucobol-rs 0.8.0 for the OBSERVABLE part (WORKING-STORAGE reset), which also corrected a REAL pre-existing divergence the gap exposed. Probing the oracle revealed the cobrun front-end was REBUILDING a CALLed contained program's fields on every CALL (counter 1,1,1) whereas cobc keeps a subprogram's WS STATIC across CALLs (1,2,3). Built the COBOL static-storage model: Ctx.call_state persists each non-INITIAL contained program's field table between CALLs (PROGRAM-ID ... IS INITIAL re-initializes from VALUE every entry, parsed via is_initial), and the CANCEL verb drops the persisted entry so the next CALL rebuilds from VALUE -- exactly libcob's do_cancel_module reset. Oracle byte-identical (built cobc 3.2 + 3.1.2): CALL/CALL -> C=1,2; CANCEL then CALL -> C=1; INITIAL program -> 1,1 each entry. Corpus p38_cancel_ws_persist (sweep IDENTICAL + 3.1.2 differential), unit subprogram_ws_persists_cancel_resets_initial_reinits; 907 lib tests; clang parity fresh. RESIDUAL BOUNDARY: lt_dlclose physically unloading a .so is the dlopen/forbid-unsafe boundary (see [[dlopen-call-stub]]) -- there is no .so in the contained-program model; the program-state reset (the COBOL-observable effect) is now faithful.
 
 #### `disk-full-write-status-34` -- Short/failed write (ENOSPC/EDQUOT) does not produce status 34; some writes ignore the result  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: filesystem full / over-quota during WRITE/close &nbsp;·&nbsp; **status: ✓ FIXED**
