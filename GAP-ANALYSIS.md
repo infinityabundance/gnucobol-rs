@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (44 fixed, 61 open)
+## Summary -- 105 gaps catalogued across 5 panels (46 fixed, 59 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 24 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 22 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 44 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 46 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -77,12 +77,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED as an ADMITTED-UB divergence (no byte oracle exists -- the C side is undefined behavior). move.c:2083 indexes cob_exp10_ll[-scale] (19-entry table), so scale <= -19 (a P-scaled PIC, legal to 38 digits) is an out-of-bounds static-array READ (UB) compounded by i64 overflow. The port's pow10_i64 clamps 10^n to i64::MAX for n>=19 (NO out-of-bounds, NO panic) then wrapping_mul, so cob_get_int/cob_get_llint are well-defined + safe for ANY P scale under forbid(unsafe_code) -- the faithful choice when the reference is UB. Sealed by cob_get_int_large_negative_pscale_is_safe_not_oob (asserts pow10_i64(19)==i64::MAX and a scale -20 read does not panic). 892 lib tests.
 
 #### `cob-module-struct-subset` -- CobModule reproduces only a subset of cob_module and reorders it; drops decimal_point/currency_symbol  
-**severity:** medium &nbsp;·&nbsp; **observable:** no (for ported lifecycle fns); only via struct-offset interop or a dropped edit setting
+**severity:** medium &nbsp;·&nbsp; **observable:** no (for ported lifecycle fns); only via struct-offset interop or a dropped edit setting &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.h:1223 cob_module: ~60 members in a frozen ABI order; carries decimal_point, currency_symbol, numeric_separator, module_date/time, alignment pad.
 - **gnucobol-rs (Rust):** common_module.rs:55 CobModule has ~13 fields, different order, subset of survivors; pointer/union/XML members an intentional boundary.
 - **Diff:** Semantic subset, not layout-faithful -- cannot catch a C field-position regression. The dropped decimal_point/currency_symbol/numeric_separator feed numeric editing.
-- **Evidence / plan:** Add module decimal_point/currency_symbol/numeric_separator + module_date/time before porting locale-sensitive editing.
+- **Evidence / plan:** VERIFIED FAITHFUL / NOT OBSERVABLE. By the gap's own observable column there is NO observable divergence for the ported lifecycle functions. The only two ways the subset could matter are both resolved: (1) C struct-offset interop -- the port links no C / passes no cob_module across an ABI boundary (forbid(unsafe), no FFI), so a frozen-ABI field-position layout is a declared non-goal, not a regression risk; (2) the dropped decimal_point / currency_symbol / numeric_separator edit settings -- these ARE now modelled where they are observed: SPECIAL-NAMES CURRENCY SIGN + DECIMAL-POINT IS COMMA flow through edited.rs::encode_edited_cfg (currency/decimal_comma) and intrinsic_numval_cfg/_c_cfg, threaded by the cobrun front-end (see cli-decimal-currency-specialnames, numval-c-currency-decimal), NOT via a cob_module struct field. So the CobModule semantic subset is sufficient + faithful for everything the port actually does.
 
 #### `content-length-of-nonnull-deref` -- FUNCTION CONTENT-LENGTH / CONTENT-OF return 0/empty for every non-null pointer  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: any program using CONTENT-LENGTH/CONTENT-OF on a set pointer
@@ -773,12 +773,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.90 (phase A): all three asks. (1) CARRY THE CRITICAL COLUMN: common_exception.rs adds EXCEPTION_FATAL_CODES (the 83 of 90 exception.def conditions with fatal==1, verbatim from libcob/exception.def -- the 4th COB_EXCEPTION column dropped from EXCEPTION_TAB's (code, name)) + cob_exception_is_fatal(code); a drift-guard test asserts every fatal code is a real EXCEPTION_TAB code. (2) IMPLEMENT cob_hard_failure: already present in common_term.rs (ExitState::cob_hard_failure -> runs exit handlers, records exit_code, TermAction::Exit(EXIT_FAILURE=1)/RaiseSigabrt/Longjmp per core_on_error) -- the gap's 'absent' note was stale. (3) ACT ON THE FATAL FLAG: common.rs::cob_bound_violation_is_critical(v) cross-checks each cob_check_* BoundViolation.fatal against cob_exception_is_fatal(v.exception.ec_code()) so they cannot drift; a fatal bound fault emits cob_bound_violation_diagnostic then drives cob_hard_failure. Oracle: EC-BOUND-SUBSCRIPT/-ODO/-REF-MOD critical (fatal), umbrella EC-BOUND non-fatal; the bounds-fault process exit is EXIT_FAILURE=1 (matches the observed cobc exit) -- bound_fault_critical_column_drives_hard_failure + fatal_column_carried_and_consistent (885 lib tests). RESIDUAL: the post-abort module-stack DUMP (Last statement.../ENTRY.../Started by) needs the live module/call-stack state (separate from the exit code + diagnostic proven here).
 
 #### `build-status-02-dup` -- COB_WITH_STATUS_02 duplicate-key file status (0,2) ISAM variant absent  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: WRITE/REWRITE on an indexed file with WITH DUPLICATES alternate keys (02 vs 00)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: WRITE/REWRITE on an indexed file with WITH DUPLICATES alternate keys (02 vs 00) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c:119 #define COB_WITH_STATUS_02 (undef'd for CISAM/VBISAM); at :5308/:5603 a duplicate alternate key returns 02 only when the macro is defined -- the SAME WRITE returns 02 on BDB/DISAM builds, 00 on CISAM/VBISAM.
 - **gnucobol-rs (Rust):** No SUCCESS_DUPLICATE / 02 duplicate-key path found in fileio.rs; the indexed store models one backend behavior.
 - **Diff:** The two C build variants give different file-status bytes for a duplicate-allowed alt key; the port reproduces neither the variant axis nor (apparently) the 02 return.
-- **Evidence / plan:** Decide the oracle build (default BDB has COB_WITH_STATUS_02 on); reproduce the 02 on duplicate alt-key; document the variant.
+- **Evidence / plan:** VERIFIED FAITHFUL on the pinned oracle build. The admitted built-cobc (BDB backend) returns file status 00, NOT 02, for a duplicate WITH DUPLICATES alternate-key WRITE -- proven directly during the indexed-altkeys-dups work: writing 001AA / 002BB / 003AA (003AA duplicates alt value AA) gives FILE STATUS w1=w2=w3=00. The C sets ret=COB_STATUS_02_SUCCESS_DUPLICATE (fileio.c:3772) but immediately clobbers it with the DB_PUT return, so even on the COB_WITH_STATUS_02-defined build the 02 never surfaces here. The port's indexed_write returns 00 for an alternate-key duplicate -- matching the pinned oracle. The 02-returning ISAM build variant (a different #define / backend) is outside the pinned BDB oracle. (See indexed-altkeys-dups for the full alt-key + dupno court.)
 
 #### `build-varseq-format` -- COB_VARSEQ_FORMAT variable-sequential record-prefix variant not env-driven  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: VARIABLE sequential WRITE with COB_VARSEQ_FORMAT != default
