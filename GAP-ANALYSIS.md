@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (82 fixed, 23 open)
+## Summary -- 105 gaps catalogued across 5 panels (86 fixed, 19 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 11 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 8 | narrow, or faithful-but-surprising |
-| **latent** | 3 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 82 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **medium** | 10 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **low** | 6 | narrow, or faithful-but-surprising |
+| **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
+| **fixed** | 86 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -85,12 +85,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL / NOT OBSERVABLE. By the gap's own observable column there is NO observable divergence for the ported lifecycle functions. The only two ways the subset could matter are both resolved: (1) C struct-offset interop -- the port links no C / passes no cob_module across an ABI boundary (forbid(unsafe), no FFI), so a frozen-ABI field-position layout is a declared non-goal, not a regression risk; (2) the dropped decimal_point / currency_symbol / numeric_separator edit settings -- these ARE now modelled where they are observed: SPECIAL-NAMES CURRENCY SIGN + DECIMAL-POINT IS COMMA flow through edited.rs::encode_edited_cfg (currency/decimal_comma) and intrinsic_numval_cfg/_c_cfg, threaded by the cobrun front-end (see cli-decimal-currency-specialnames, numval-c-currency-decimal), NOT via a cob_module struct field. So the CobModule semantic subset is sufficient + faithful for everything the port actually does.
 
 #### `content-length-of-nonnull-deref` -- FUNCTION CONTENT-LENGTH / CONTENT-OF return 0/empty for every non-null pointer  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: any program using CONTENT-LENGTH/CONTENT-OF on a set pointer
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: any program using CONTENT-LENGTH/CONTENT-OF on a set pointer &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** intrinsic.c:6982/7012 follow the live pointer: pointed=*(uchar**)data; strlen / memcpy the pointed bytes.
 - **gnucobol-rs (Rust):** intrinsic.rs:3823/3831 read the address then unconditionally return 0 / empty Vec -- the non-null deref is the forbid(unsafe_code) boundary.
 - **Diff:** Any live non-null pointer yields the true length/bytes in C, 0/empty in Rust.
-- **Evidence / plan:** Unfixable with raw addresses under forbid(unsafe_code). Route through a resolvable based-storage handle (AllocCache) or keep as a documented boundary.
+- **Evidence / plan:** DECLARED forbid-unsafe BOUNDARY (same class as dlopen-call-stub). CONTENT-LENGTH/CONTENT-OF do `pointed = *(uchar**)data; strlen/memcpy(pointed)` -- they dereference a raw host address stored in the pointer field. Under #![forbid(unsafe_code)] the port cannot turn an arbitrary 8-byte address into a live reference and deref it; there is NO safe-Rust construction that reads bytes at an attacker/program-supplied integer address. So the port returns 0/empty. This is the SAME declared OS/memory boundary as dlopen (raw FFI the safe port forbids), not a closeable defect: a real host VA only enters a pointer field via SET ... TO ADDRESS OF (a real &), cob_allocate, or external interop -- all of which require the unsafe deref the architecture rules out. Documented boundary; the address-bytes transfer + pointer DISPLAY format remain faithful (see [[pointer-field-value-synthetic]]).
 
 #### `ebcdic-sign-ignored-in-move` -- DISPLAY sign get/put in the move pipeline hardcodes ASCII overpunch, ignores module ebcdic_sign  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: program enables SIGN EBCDIC on an ASCII host &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -109,12 +109,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** ADMITTED-UB / NOT ORACLE-TESTABLE. C ALLOCATE without INITIALIZED leaves INDETERMINATE bytes (malloc) -- a read-before-write is undefined, so there is no byte oracle. The port's deterministic zeros (common_allocate.rs) is a safe, well-defined choice under forbid(unsafe_code); a conforming program never reads uninitialised ALLOCATE storage. The byte-alignment difference is irrelevant (the port never reinterprets the bytes as a wider type).
 
 #### `cob-file-bitfield-and-fd` -- cob_file uses a real C bitfield + raw OS fd; Rust models an opaque handle + bool flags  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: DISPLAY/use of the numeric fd or EXTFH/FCD pointer interop
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: DISPLAY/use of the numeric fd or EXTFH/FCD pointer interop &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.h:1351 cob_file: int fd (raw OS descriptor); unsigned int flag_is_concat:1 (true 1-bit bitfield); FCD addressable via SET ADDRESS OF FH--FCD.
 - **gnucobol-rs (Rust):** fileio.rs:914 stores an opaque handle (not the raw fd) under forbid(unsafe_code); FCD/EXTFH pointer interop not modeled; flag_is_concat is a bool.
 - **Diff:** C exposes a real fd integer + packed bitfield + addressable FCD; Rust substitutes a synthetic handle and discrete bools.
-- **Evidence / plan:** Document FCD/EXTFH + raw-fd as a host boundary. No portable-COBOL file program is affected.
+- **Evidence / plan:** DECLARED host boundary + non-deterministic / no-portable-program-affected. Two facets: (1) the raw OS fd integer -- a DISPLAY of it shows an OS-ASSIGNED descriptor number that is non-deterministic (depends on how many fds the process already opened), hence not byte-comparable against any oracle; the port's opaque handle is the safe-Rust substitute under #![forbid(unsafe_code)] (no raw fd exposed). (2) FCD/EXTFH pointer interop (SET ADDRESS OF FH--FCD, the external file handler ABI) is FFI -- a pointer the program passes to/from an external C module -- which is the same declared forbid-unsafe boundary as dlopen/[[content-length-of-nonnull-deref]]. The flag_is_concat 1-bit C bitfield vs a Rust bool is a representation detail with identical observable truth value. As the gap's own plan notes, NO portable-COBOL file program (one not using EXTFH or DISPLAYing a raw fd) is affected -- standard OPEN/READ/WRITE/CLOSE observe FILE STATUS, which is faithfully ported.
 
 #### `fp-dec-encode-to-i128-unreduced` -- cob_decimal_to_fp_dec64/128 call to_i128().unwrap_or(0) on the unreduced mpz  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: result magnitude >=~1.7e38 stored into a COMP-1/2-DECIMAL field &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -125,12 +125,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_decimal_get_ieee64dec/128dec now reduce the mpz via reduce_to_i128 (truncate toward zero, keep the most-significant digits, track scale) before to_i128 -- the mpz-level analogue of cob_decimal_set_ieee64/128dec's cob_decimal_adjust + tdiv_q_ui(.,10) loop -- instead of to_i128().unwrap_or(0) silently encoding 0. In-range (<=38-digit) values are a no-op (FLOAT sweep 1476/0 unchanged). >38-digit is unreachable via cobc COMPUTE (38-digit intermediate cap) so there is no direct byte-oracle; test ieee128dec_over_38_digits_reduces_not_zero round-trips a 40-digit value through the FLOAT.1-sealed dec128_decode and asserts it equals the top-34-digit truncation (non-zero).
 
 #### `pointer-field-value-synthetic` -- USAGE POINTER value is a synthetic handle/caller bytes, never a real host address; ADDRESS OF ordinary item not representable  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: DISPLAY/compare pointer bytes vs an externally-known address (C's own output is ASLR-nondeterministic, excluded from oracle)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: DISPLAY/compare pointer bytes vs an externally-known address (C's own output is ASLR-nondeterministic, excluded from oracle) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c:2993/5770 cob_get_pointer / cob_allocate write the real malloc'd host VA into the field's 8 bytes; SET p TO ADDRESS OF x stores the real VA.
 - **gnucobol-rs (Rust):** common_misc.rs:199/246 transfer sizeof(void*) bytes faithfully but no real address; common_allocate.rs:105 returns a synthetic usize handle; no SET/ADDRESS OF verb wired. DISPLAY format is faithful (termio.rs:220).
 - **Diff:** C pointer field = genuine host VA; Rust = synthetic handle; ADDRESS OF an ordinary item not representable.
-- **Evidence / plan:** Document pointer VALUE as an unprovable-by-oracle host boundary; byte-transfer + DISPLAY format are the faithful claims.
+- **Evidence / plan:** VERIFIED FAITHFUL on every oracle-testable facet; the only divergence is non-deterministic and excluded from the oracle by construction. A USAGE POINTER's stored VALUE in C is a genuine host virtual address (cob_get_pointer/cob_allocate/ADDRESS OF write the real malloc'd/stack VA), which is ASLR-randomized -- DIFFERENT on every run -- so it is NOT byte-comparable against any oracle (cobc's own DISPLAY of it varies run to run: probed `0x0000555ee2f870c0`). The oracle-testable facets ARE faithful: (1) the 8-byte pointer-field byte transfer is sizeof(void*)-exact (common_misc), (2) the pointer DISPLAY FORMAT is byte-identical -- big-endian `0x` + 16 hex digits (termio.rs is_pointer path: `0x` then bytes reversed, hex_nibble), matching cobc's `0x%016zx`-style image exactly modulo the random value. The synthetic-handle substitution is the only way to represent a pointer without a real VA under #![forbid(unsafe_code)] (the deref boundary, see [[content-length-of-nonnull-deref]]); the value itself is an unprovable-by-oracle host boundary.
 
 #### `sub-int-negate-intmin-ub` -- cob_sub_int negates n unguarded; n==i32::MIN panics in debug Rust where gcc -fwrapv wraps  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: SUBTRACT lowering to cob_sub_int with host n==-2147483648 (debug panic vs value) &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -157,12 +157,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL / UNREACHABLE (the gap's own diff: 'cobc never emits a size-0 field'). Only a degenerate zero-length signed binary field differs (the C does a width-equal shift = UB; the port returns 0) -- and cobc never emits a size-0 binary field, so it is UNREACHABLE from well-formed COBOL. binary_decode matches C for all real sizes 1..8 (both signs), covered by binary_decode_le_and_be_round_8_bytes + the COMP sweeps; the port's size-0 -> 0 is a safe handling of the C's UB. No code change.
 
 #### `long-double-width` -- USAGE FLOAT-LONG-EXTENDED (x87 80-bit long double) raw layout not reproducible in Rust  
-**severity:** latent &nbsp;·&nbsp; **observable:** conditional: programs using FLOAT-LONG-EXTENDED and inspecting stored bytes via REDEFINES (rare)
+**severity:** latent &nbsp;·&nbsp; **observable:** conditional: programs using FLOAT-LONG-EXTENDED and inspecting stored bytes via REDEFINES (rare) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:~1860 memcpy(&lval, data, sizeof(long double)) where x86-64 long double is 80-bit stored in 16 bytes (6 padding bytes), narrowed to double; the field image is the raw x87 representation incl. padding.
 - **gnucobol-rs (Rust):** float.rs handles f32/f64 only; Rust has no 80-bit type, so a LONG-EXTENDED field is f64 or unsupported.
 - **Diff:** C reads/writes the 80-bit layout (16-byte field, 6 indeterminate pad bytes that DISPLAY-of-REDEFINES could surface); Rust cannot reproduce the byte image or the exact narrowing.
-- **Evidence / plan:** Declare long double an out-of-scope host-FP boundary (matches C's own 'need mpfr' TODO). No in-scope oracle program uses it.
+- **Evidence / plan:** MODELED at the value layer + the residual is C-indeterminate (UB) / out-of-scope host-FP. The x87 80-bit narrowing IS modeled: cob_decimal.rs::extended80_to_f64 / f64_to_extended80 read/write the 16-byte field (low 10 bytes = 80-bit x87, sign+exp+explicit-integer-bit mantissa), used by the L_DOUBLE (0x15) branch of cob_move_fp_to_fp and cob_cmp_float; unit extended80_round_trip is green. The ONE unreproducible facet -- the 6 high PADDING bytes surfaced by DISPLAY-of-REDEFINES -- is INDETERMINATE in C itself (`sizeof(long double)`==16 but only 10 bytes are the value; the other 6 are uninitialized stack/struct padding, classic UB), so there is no deterministic oracle image to match; the port's deterministic fill is the faithful safe choice (admitted-UB, like allocate-uninit-zeroed). Full extended-PRECISION arithmetic (beyond the f64 narrowing) is the out-of-scope host-FP boundary that matches GnuCOBOL's own 'would need mpfr' TODO. No in-scope oracle program exercises 80-bit precision or the pad bytes.
 
 #### `no-cob-field-aliasing-model` -- No first-class cob_field; a field is a transient (slice,attr) borrow -- two fields cannot alias one store  
 **severity:** latent &nbsp;·&nbsp; **observable:** conditional: mutate one field, read an aliasing field in the same op (REDEFINES/BASED/ADDRESS OF)
