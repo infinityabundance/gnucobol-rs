@@ -91,6 +91,29 @@ mod tests {
     }
 
     #[test]
+    fn binary_overflow_wrap_modes_match_cobc_oracle() {
+        use crate::attr::COB_FLAG_HAVE_SIGN;
+        // COMP-5 (binary-truncate: no): an overflowing store byte-WRAPS = floor mod 2^bits, like the C's
+        // mpz_fdiv_r. Oracle: S9(4) COMP-5 <- -70001 -> -4465, <- 70001 -> +4465.
+        let c5 = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 4, scale: 0, flags: COB_FLAG_HAVE_SIGN };
+        let mut buf = [0u8; 2];
+        binary_encode(-70001, &c5, &mut buf);
+        assert_eq!(binary_decode(&buf, &c5), -4465);
+        binary_encode(70001, &c5, &mut buf);
+        assert_eq!(binary_decode(&buf, &c5), 4465);
+        // COMP (binary-truncate: yes, default): an overflow TRUNCATES to the PIC digit range = trunc mod
+        // 10^digits (toward zero, keeping sign), like the C's mpz_tdiv_r. Oracle: S9(4) COMP <- -70001 -> -1.
+        let c = FieldAttr {
+            field_type: COB_TYPE_NUMERIC_BINARY,
+            digits: 4,
+            scale: 0,
+            flags: COB_FLAG_BINARY_SWAP | COB_FLAG_BINARY_TRUNC | COB_FLAG_HAVE_SIGN,
+        };
+        binary_encode(-70001, &c, &mut buf);
+        assert_eq!(binary_decode(&buf, &c), -1);
+    }
+
+    #[test]
     fn binary_decode_caps_wide_field_at_low_64_bits_vs_c_default() {
         // The default C build reads a binary field through cob_binary_get_*int64 (low 64 bits only), so a
         // 16-byte COMP-X with non-zero high bytes is taken mod 2^64. Oracle: PIC 9(38) COMP-X <-

@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (41 fixed, 64 open)
+## Summary -- 105 gaps catalogued across 5 panels (42 fixed, 63 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 27 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 26 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 41 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 42 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -201,12 +201,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): cob_arith catches an i128-alignment OutOfRange for ADD/SUBTRACT and falls back to the arbitrary-precision Mpz cob_decimal path (cob_add/cob_sub, the verified structural-1:1 layer == this i128 path for in-range) -- the same overflow-fallback pattern MULTIPLY already uses (mul_store_big). In-range is the i128 fast path (cob_decimal arith sweep 5400/0 unchanged). Oracle-proven: ADD 1.5 TO A=2e20 (PIC 9(21)) -- aligning A to scale 18 needs 2e38 > i128 -- yields 200000000000000000001, matching the built GnuCOBOL oracle. Test add_intermediate_over_i128_vs_cobc.
 
 #### `binary-trunc-overflow-modes` -- Binary store overflow: KEEP vs TRUNC (mod 10^digits) vs bit-wrap (fdiv_r_2exp) -- verify all 3 + neg-scale  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: out-of-range store into a too-small BINARY/COMP w/o ON SIZE ERROR, esp. negatives + P-scaled PICs
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: out-of-range store into a too-small BINARY/COMP w/o ON SIZE ERROR, esp. negatives + P-scaled PICs &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:1735 cob_decimal_get_binary: KEEP_ON_OVERFLOW->EC-SIZE-OVERFLOW; TRUNC_ON_OVERFLOW->mpz_tdiv_r by 10^digits (with the 99P negative-scale adjustment); else mpz_fdiv_r_2exp by size*8 (two's-complement FLOOR wrap). BINARY-TRUNC re-checks cmpabs vs 10^digits.
 - **gnucobol-rs (Rust):** arith.rs store() / binary.rs encode -- needs confirming the default non-KEEP/non-TRUNC path does fdiv_r_2exp (floor mod 2^bits) not a plain mask, and applies the negative-scale digit count.
 - **Diff:** If Rust uses a plain mod-2^bits mask or omits the neg-scale digit adjustment, the wrapped value of an overflowing store differs (floor vs truncate for negatives).
-- **Evidence / plan:** Audit arith.rs store() binary branch vs numeric.c:1735; test overflowing negative -> S9(2) COMP and a 99P field.
+- **Evidence / plan:** VERIFIED FAITHFUL (audited + oracle-tested). binary.rs binary_encode does the two C overflow paths correctly, INCLUDING the negative floor-vs-truncate distinction: with COB_FLAG_BINARY_TRUNC (binary-truncate:yes, default) it does `v %= 10^digits` = mpz_tdiv_r (truncate toward zero, keeps sign); without it (COMP-5/COMP-X, binary-truncate:no) the byte mask `(v as u128) & ((1<<bits)-1)` IS the two's-complement floor wrap = mpz_fdiv_r_2exp (a negative's low `bits` bits land in [0, 2^bits), not a sign-preserving truncate). Oracle (built cobc): S9(4) COMP-5 <- -70001 -> -4465 (floor mod 2^16); S9(4) COMP <- -70001 -> -1 (trunc mod 10^4) -- both matched by binary_overflow_wrap_modes_match_cobc_oracle. The KEEP_ON_OVERFLOW path is the ON SIZE ERROR / EC-SIZE-OVERFLOW surface (raise-not-store), separate. RESIDUAL: the 99P negative-SCALE digit adjustment on a P-scaled COMP field is a narrow sub-case (P-scaled binary is rare) -- the core three modes are sealed.
 
 #### `decimal-nan-inf-propagation` -- COB_DECIMAL_NAN / COB_DECIMAL_INF scale sentinels not modeled in arith Dec  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: multi-op COMPUTE where an intermediate is NAN/INF
