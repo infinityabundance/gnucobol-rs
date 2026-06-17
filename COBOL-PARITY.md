@@ -12,7 +12,7 @@
 | surface | total | runtime ported (1:1) | front-end runs it |
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
-| statements (verbs) | 66 | 51 (77%) | **16 (24%)** |
+| statements (verbs) | 66 | 51 (77%) | **34 (52%)** |
 | intrinsic functions | 110 | **110 (100%)** | 0 (0%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
@@ -42,28 +42,28 @@
 | `EVALUATE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `EXIT` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `GOBACK` | control flow | yes (call.c) | **yes** | **DONE** -- parses + runs |
-| `GOTO` | control flow | n/a | no | front-end TODO (compiler control flow) |
+| `GOTO` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `IF` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `PERFORM` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `STOP` | control flow | yes (common.c) | **yes** | **DONE** -- parses + runs |
-| `INITIALIZE` | data movement | yes (move.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `INITIALIZE` | data movement | yes (move.c) | **yes** | **DONE** -- parses + runs |
 | `MOVE` | data movement | yes (move.c) | **yes** | **DONE** -- parses + runs |
-| `SET` | data movement | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `SET` | data movement | yes (common.c) | **yes** | **DONE** -- parses + runs |
 | `EXHIBIT` | debug (dialect) | n/a | no | front-end TODO (compiler control flow) |
 | `READY` | debug (dialect) | n/a | no | front-end TODO (compiler control flow) |
 | `USE` | declaratives | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `RAISE` | exception | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `RESET` | exception | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `CLOSE` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `COMMIT` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `DELETE` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `OPEN` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `READ` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `REWRITE` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `ROLLBACK` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `START` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `UNLOCK` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `WRITE` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `CLOSE` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `COMMIT` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `DELETE` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `OPEN` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `READ` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `REWRITE` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `ROLLBACK` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `START` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `UNLOCK` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
+| `WRITE` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
 | `CALL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `CANCEL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `ENTRY` | inter-program | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
@@ -81,12 +81,12 @@
 | `ALLOCATE` | storage | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `FREE` | storage | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `EXAMINE` | string handling | yes (strings.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `INSPECT` | string handling | yes (strings.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `STRING` | string handling | yes (strings.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `INSPECT` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |
+| `STRING` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |
 | `TRANSFORM` | string handling | yes (strings.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `UNSTRING` | string handling | yes (strings.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `SEARCH` | table handling | n/a | no | front-end TODO (compiler control flow) |
-| `ACCEPT` | terminal I/O | yes (termio.c / screenio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `UNSTRING` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |
+| `SEARCH` | table handling | n/a | **yes** | **DONE** -- parses + runs |
+| `ACCEPT` | terminal I/O | yes (termio.c / screenio.c) | **yes** | **DONE** -- parses + runs |
 | `DISPLAY` | terminal I/O | yes (termio.c / screenio.c) | **yes** | **DONE** -- parses + runs |
 | `VALIDATE` | validation | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 

@@ -34,8 +34,10 @@ use std::collections::HashMap;
 /// The generated parity tracker (`xtask cobol-parity`) reads this to report front-end coverage, so it
 /// stays honest as the subset grows. Keep this in sync with the dispatch in `exec_stmt` + `run_block`.
 pub const WIRED_STATEMENTS: &[&str] = &[
-    "DISPLAY", "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP",
-    "CONTINUE", "GOBACK", "EXIT", "CALL", "CANCEL", "EVALUATE",
+    "DISPLAY", "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ACCEPT", "ADD", "SUBTRACT",
+    "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
+    "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
+    "UNLOCK", "COMMIT", "ROLLBACK",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -370,6 +372,9 @@ pub fn run_program_redirected(
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
     let collation = parse_collation(&toks, first_proc);
+    let file_defs: HashMap<String, FileDef> = program_map.get(&main_name)
+        .map(|p| p.files.iter().map(|f| (f.name.clone(), f.clone())).collect())
+        .unwrap_or_default();
     let ctx = Ctx {
         programs: &program_map,
         dialect,
@@ -381,6 +386,9 @@ pub fn run_program_redirected(
         printer: RefCell::new(Vec::new()),
         stop_run: Cell::new(false),
         call_state: RefCell::new(HashMap::new()),
+        goto: RefCell::new(None),
+        file_defs,
+        files: RefCell::new(HashMap::new()),
     };
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
@@ -420,10 +428,43 @@ struct ProgramDef {
     ws: Vec<ProgItem>,
     linkage: Vec<ProgItem>,
     using: Vec<String>,
+    /// `SELECT ... ASSIGN` + `FD` declared files (the subset: sequential / line-sequential).
+    files: Vec<FileDef>,
     proc_toks: Vec<Tok>,
     /// `PROGRAM-ID. name IS INITIAL` -- the program's WORKING-STORAGE is re-initialized to its VALUE
     /// clauses on EVERY entry, rather than persisting (static) across CALLs.
     is_initial: bool,
+}
+
+/// A file's record organization (the subset). `LINE SEQUENTIAL` writes each record as a `\n`-terminated
+/// line (trailing spaces trimmed by the oracle); `SEQUENTIAL` is fixed-length record-sequential.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum FileOrg {
+    LineSequential,
+    Sequential,
+    /// `ORGANIZATION RELATIVE` -- records addressed by a 1-based relative record number (the RELATIVE KEY).
+    /// Modelled position-indexed in `FileState.records`, where an empty slot means absent/deleted.
+    Relative,
+}
+
+/// A declared file: its `SELECT` name, the `FD` record field it reads/writes through, the optional
+/// `FILE STATUS` field, the organization, and (for RELATIVE) the RELATIVE KEY field name.
+#[derive(Debug, Clone)]
+struct FileDef {
+    name: String,
+    record: String,
+    status: Option<String>,
+    org: FileOrg,
+    rel_key: Option<String>,
+}
+
+/// The live state of an OPEN file: its logical records, the next READ position, and the open mode.
+#[derive(Debug, Clone, Default)]
+struct FileState {
+    records: Vec<Vec<u8>>,
+    read_pos: usize,
+    /// 0 = closed, 1 = INPUT, 2 = OUTPUT, 3 = EXTEND, 4 = I-O.
+    mode: u8,
 }
 
 /// One `01`-level elementary item (its name, PIC, and optional VALUE literal) -- the field is built at run
@@ -439,6 +480,9 @@ struct ProgItem {
     redefines: Option<String>,
     /// An `88`-level condition-name on a parent item: `Some((parent, values))`. A normal data item is None.
     condition: Option<(String, Vec<CondVal>)>,
+    /// `OCCURS ... INDEXED BY idx [idx ...]` -- the table's index name(s). Each becomes an integer index
+    /// field; the first is the table's implicit SEARCH index.
+    indexed_by: Vec<String>,
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
@@ -467,6 +511,15 @@ struct Ctx<'a> {
     /// survives between CALLs). Keyed by program name; absent = never called or CANCELed (next CALL rebuilds
     /// from VALUE clauses). INITIAL programs are never stored here. CANCEL removes the entry.
     call_state: RefCell<HashMap<String, HashMap<String, Field>>>,
+    /// A pending `GO TO <paragraph>`: set when a GO TO executes, it makes the enclosing block return like a
+    /// halt; the program-body loop then resumes at the named paragraph instead of ending. Resolved + cleared
+    /// per program body (a GO TO never targets a label outside its own program), so it does not cross a CALL.
+    goto: RefCell<Option<String>>,
+    /// Declared file metadata (SELECT/FD) by file name, and the live OPEN state of each file. The front-end
+    /// models files logically in memory (a self-contained WRITE-then-READ round-trips), so a program's file
+    /// I/O is deterministic on stdout without touching the host filesystem.
+    file_defs: HashMap<String, FileDef>,
+    files: RefCell<HashMap<String, FileState>>,
 }
 
 /// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
@@ -666,10 +719,18 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     let link_at = find_seq_in(toks, &["LINKAGE", "SECTION"], start, proc_at);
 
     // WORKING-STORAGE items: from WS SECTION to LINKAGE SECTION (or PROCEDURE).
-    let ws = match ws_at {
+    let mut ws = match ws_at {
         Some(w) => parse_items(toks, w + 2, link_at.unwrap_or(proc_at))?,
         None => Vec::new(),
     };
+    // ENVIRONMENT FILE-CONTROL (SELECT ... ) + DATA FILE SECTION (FD + 01 record). The FD record items are
+    // added to the field table; each file's metadata becomes a FileDef.
+    let file_control = parse_file_control(toks, start, proc_at);
+    let (mut file_recs, file_rec) = parse_file_section(toks, start, proc_at)?;
+    let files: Vec<FileDef> = file_control.into_iter().filter_map(|(name, org, status, rel_key)| {
+        file_rec.get(&name).map(|rec| FileDef { name: name.clone(), record: rec.clone(), status, org, rel_key })
+    }).collect();
+    ws.append(&mut file_recs);
     let linkage = match link_at {
         Some(l) => parse_items(toks, l + 2, proc_at)?,
         None => Vec::new(),
@@ -700,7 +761,105 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     let body_end = find_seq_in(toks, &["END", "PROGRAM"], p, end).unwrap_or(end);
     let proc_toks = toks[p..body_end].to_vec();
 
-    Ok((name, ProgramDef { ws, linkage, using, proc_toks, is_initial }))
+    Ok((name, ProgramDef { ws, linkage, using, files, proc_toks, is_initial }))
+}
+
+/// Parse `FILE-CONTROL` `SELECT name ASSIGN ... [ORGANIZATION [IS] {LINE SEQUENTIAL|SEQUENTIAL}]
+/// [FILE STATUS [IS] status]` entries -> `(name, org, status)`. Unknown clauses are skipped.
+fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, FileOrg, Option<String>, Option<String>)> {
+    let fc = match find_seq_in(toks, &["FILE-CONTROL"], start, end) {
+        Some(i) => i + 1,
+        None => return Vec::new(),
+    };
+    let mut out = Vec::new();
+    let mut i = fc;
+    while i < end {
+        match toks.get(i) {
+            Some(Tok::Word(w)) if w == "DATA" => break,
+            Some(Tok::Word(w)) if w == "SELECT" => {
+                i += 1;
+                let name = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => break };
+                i += 1;
+                let mut org = FileOrg::Sequential;
+                let mut status = None;
+                let mut rel_key = None;
+                while i < end {
+                    match toks.get(i) {
+                        Some(Tok::Dot) => { i += 1; break; }
+                        Some(Tok::Word(w)) if w == "ORGANIZATION" => {
+                            i += 1;
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "LINE") {
+                                org = FileOrg::LineSequential;
+                                i += 1;
+                                if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") { i += 1; }
+                            } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "RELATIVE") {
+                                org = FileOrg::Relative;
+                                i += 1;
+                            } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") {
+                                org = FileOrg::Sequential;
+                                i += 1;
+                            }
+                        }
+                        // RELATIVE KEY [IS] field
+                        Some(Tok::Word(w)) if w == "RELATIVE" => {
+                            i += 1;
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "KEY") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                            if let Some(Tok::Word(w)) = toks.get(i) { rel_key = Some(w.clone()); i += 1; }
+                        }
+                        Some(Tok::Word(w)) if w == "STATUS" => {
+                            i += 1;
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                            if let Some(Tok::Word(w)) = toks.get(i) { status = Some(w.clone()); i += 1; }
+                        }
+                        _ => i += 1,
+                    }
+                }
+                out.push((name, org, status, rel_key));
+            }
+            None => break,
+            _ => i += 1,
+        }
+    }
+    out
+}
+
+/// Parse the `FILE SECTION` `FD name [clauses]. 01 record ...` entries -> (the record items to add to the
+/// field table, and a file-name -> record-name map). The subset is one `01` record per file.
+fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, String>), RunError> {
+    let fs = match find_seq_in(toks, &["FILE", "SECTION"], start, end) {
+        Some(i) => i + 2,
+        None => return Ok((Vec::new(), HashMap::new())),
+    };
+    let ws_at = find_seq_in(toks, &["WORKING-STORAGE", "SECTION"], fs, end).unwrap_or(end);
+    let mut recs = Vec::new();
+    let mut file_rec = HashMap::new();
+    let mut i = fs;
+    while i < ws_at {
+        match toks.get(i) {
+            Some(Tok::Word(w)) if w == "FD" || w == "SD" => {
+                i += 1;
+                let fname = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => break };
+                i += 1;
+                while i < ws_at && !matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
+                if matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
+                let rec_start = i;
+                let mut rec_end = i;
+                while rec_end < ws_at && !matches!(toks.get(rec_end), Some(Tok::Word(w)) if w == "FD" || w == "SD") {
+                    rec_end += 1;
+                }
+                let items = parse_items(toks, rec_start, rec_end)?;
+                if let Some(first) = items.first() {
+                    file_rec.insert(fname, first.name.clone());
+                }
+                recs.extend(items);
+                i = rec_end;
+            }
+            _ => i += 1,
+        }
+    }
+    Ok((recs, file_rec))
 }
 
 /// Parse the `01`-level elementary items in `toks[start..end]` (a WORKING-STORAGE or LINKAGE section body).
@@ -771,6 +930,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 occurs: 1,
                 redefines: None,
                 condition: Some((parent, values)),
+                indexed_by: Vec::new(),
             });
             continue;
         }
@@ -796,6 +956,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut pic: Option<String> = None;
         let mut value: Option<Tok> = None;
         let mut occurs: usize = 1;
+        let mut indexed: Vec<String> = Vec::new();
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -811,6 +972,20 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         k += 1;
                     }
                     if matches!(toks.get(k), Some(Tok::Word(w)) if w == "TIMES") {
+                        k += 1;
+                    }
+                }
+                // `INDEXED BY idx [idx ...]` -- read the index name(s) until the next clause/period.
+                Some(Tok::Word(w)) if w == "INDEXED" => {
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "BY") {
+                        k += 1;
+                    }
+                    while let Some(Tok::Word(nm)) = toks.get(k) {
+                        if matches!(nm.as_str(), "PIC" | "PICTURE" | "VALUE" | "OCCURS" | "REDEFINES" | "TIMES") {
+                            break;
+                        }
+                        indexed.push(nm.clone());
                         k += 1;
                     }
                 }
@@ -836,7 +1011,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             }
         }
         let pic = pic.ok_or_else(|| RunError::Unsupported(format!("item {name} has no PIC")))?;
-        items.push(ProgItem { name, pic, value, occurs, redefines, condition: None });
+        items.push(ProgItem { name, pic, value, occurs, redefines, condition: None, indexed_by: indexed });
     }
     Ok(items)
 }
@@ -885,11 +1060,30 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // A REDEFINES item aliases its target's storage: it keeps its own `storage` (the reinterpretation
         // shape) but reads/writes the target's bytes -- `f.bytes` here is only a size reference.
         f.redefines = it.redefines.clone();
+        // OCCURS ... INDEXED BY idx: each index is an integer field (modelled S9(9) DISPLAY, init 0); the
+        // first index is recorded as the table's implicit SEARCH index.
+        for (n, idx) in it.indexed_by.iter().enumerate() {
+            fields.insert(idx.clone(), make_return_code(0));
+            if n == 0 {
+                TABLE_INDEX.with(|m| m.borrow_mut().insert(it.name.clone(), idx.clone()));
+            }
+        }
         fields.insert(it.name.clone(), f);
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
     Ok(fields)
+}
+
+thread_local! {
+    /// `OCCURS ... INDEXED BY` table -> its implicit SEARCH index name, populated as each program's fields
+    /// are built. `SEARCH table` (without `VARYING`) varies this index.
+    static TABLE_INDEX: std::cell::RefCell<HashMap<String, String>> = std::cell::RefCell::new(HashMap::new());
+}
+
+/// The implicit SEARCH index for an `OCCURS ... INDEXED BY` table, if one was declared.
+fn table_index_lookup(table: &str) -> Option<String> {
+    TABLE_INDEX.with(|m| m.borrow().get(table).cloned())
 }
 
 /// Execute a program's PROCEDURE DIVISION against `fields`, writing output to `out`. Returns when the body
@@ -901,10 +1095,12 @@ fn run_program_body(
     out: &mut Vec<u8>,
 ) -> Result<(), RunError> {
     let proc = &prog.proc_toks;
+    let labels = paragraph_labels(proc);
     let mut pos = 0;
     if matches!(proc.first(), Some(Tok::Dot)) {
         pos = 1;
     }
+    let mut guard = 0u64;
     while pos < proc.len() {
         if matches!(proc.get(pos), Some(Tok::Dot)) {
             pos += 1;
@@ -912,6 +1108,18 @@ fn run_program_body(
         }
         let halted = run_block(proc, &mut pos, fields, out, true, ctx)?;
         if halted {
+            // A pending GO TO is not a real halt: resume at the named paragraph. STOP/GOBACK/EXIT leave
+            // `goto` clear and genuinely end the body.
+            let target = ctx.goto.borrow_mut().take();
+            if let Some(label) = target {
+                pos = *labels.get(&label)
+                    .ok_or_else(|| RunError::Unsupported(format!("GO TO unknown paragraph `{label}`")))?;
+                guard += 1;
+                if guard > 10_000_000 {
+                    return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into()));
+                }
+                continue;
+            }
             break; // STOP RUN / GOBACK / EXIT PROGRAM
         }
         if matches!(proc.get(pos), Some(Tok::Dot)) {
@@ -921,13 +1129,48 @@ fn run_program_body(
     Ok(())
 }
 
+/// Map each PROCEDURE DIVISION paragraph/section label -> the token index of its first statement. A label
+/// is a non-verb word at statement start (program start or just after a `.`) followed by `.` (paragraph) or
+/// by `SECTION .` (section). This is the GO TO jump table; `run_block` skips the same labels while running.
+fn paragraph_labels(proc: &[Tok]) -> HashMap<String, usize> {
+    let mut m = HashMap::new();
+    let mut i = 0;
+    let mut at_start = true;
+    while i < proc.len() {
+        match &proc[i] {
+            Tok::Dot => { at_start = true; i += 1; }
+            Tok::Word(w) if at_start
+                && matches!(proc.get(i + 1), Some(Tok::Dot))
+                && !STMT_VERBS.contains(&w.as_str())
+                && !SCOPE_ENDERS.contains(&w.as_str()) =>
+            {
+                m.entry(w.clone()).or_insert(i + 2);
+                i += 2;
+                at_start = true;
+            }
+            Tok::Word(w) if at_start
+                && matches!(proc.get(i + 1), Some(Tok::Word(s)) if s == "SECTION")
+                && matches!(proc.get(i + 2), Some(Tok::Dot)) =>
+            {
+                m.entry(w.clone()).or_insert(i + 3);
+                i += 3;
+                at_start = true;
+            }
+            _ => { at_start = false; i += 1; }
+        }
+    }
+    m
+}
+
 /// Statement verbs that begin a new statement (so an operand list ends when one is seen).
 const STMT_VERBS: &[&str] = &[
-    "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP",
-    "CONTINUE", "ACCEPT", "GO", "EVALUATE", "CALL", "GOBACK", "EXIT", "CANCEL",
+    "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE",
+    "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
+    "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
+    "COMMIT", "ROLLBACK",
 ];
 /// Scope terminators that end a block.
-const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE"];
+const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ"];
 
 fn is_boundary(w: &str) -> bool {
     STMT_VERBS.contains(&w) || SCOPE_ENDERS.contains(&w)
@@ -949,6 +1192,21 @@ fn run_block(
             None | Some(Tok::Dot) => return Ok(false),
             Some(Tok::Word(w)) if SCOPE_ENDERS.contains(&w.as_str()) => return Ok(false),
             Some(Tok::Word(w)) => {
+                // A paragraph label `NAME.` or section label `NAME SECTION.` in the run stream: skip it.
+                // The following period ends this (empty) block; the program-body loop resumes after it.
+                if matches!(toks.get(*pos + 1), Some(Tok::Dot))
+                    && !STMT_VERBS.contains(&w.as_str())
+                    && !SCOPE_ENDERS.contains(&w.as_str())
+                {
+                    *pos += 1;
+                    return Ok(false);
+                }
+                if matches!(toks.get(*pos + 1), Some(Tok::Word(s)) if s == "SECTION")
+                    && matches!(toks.get(*pos + 2), Some(Tok::Dot))
+                {
+                    *pos += 2;
+                    return Ok(false);
+                }
                 let verb = w.clone();
                 *pos += 1;
                 match verb.as_str() {
@@ -964,6 +1222,16 @@ fn run_block(
                     }
                     "EVALUATE" => {
                         if exec_evaluate(toks, pos, fields, out, exec, ctx)? {
+                            return Ok(true);
+                        }
+                    }
+                    "SEARCH" => {
+                        if exec_search(toks, pos, fields, out, exec, ctx)? {
+                            return Ok(true);
+                        }
+                    }
+                    "READ" => {
+                        if exec_read(toks, pos, fields, out, exec, ctx)? {
                             return Ok(true);
                         }
                     }
@@ -996,6 +1264,24 @@ fn run_block(
                         }
                     }
                     "CONTINUE" | "NEXT" => { /* no-op */ }
+                    // GO TO <paragraph>: set the pending-jump and end this block like a halt; the program
+                    // body loop resolves the label and resumes there. `GO TO ... DEPENDING ON` is out of subset.
+                    "GO" => {
+                        let rest = collect_operands(toks, pos);
+                        if exec {
+                            if rest.iter().any(|t| matches!(t, Tok::Word(w) if w == "DEPENDING")) {
+                                return Err(RunError::Unsupported("GO TO ... DEPENDING ON not in subset".into()));
+                            }
+                            let label = rest.iter().find_map(|t| match t {
+                                Tok::Word(w) if w != "TO" => Some(w.clone()),
+                                _ => None,
+                            });
+                            match label {
+                                Some(l) => { ctx.goto.borrow_mut().replace(l); return Ok(true); }
+                                None => return Err(RunError::Unsupported("GO TO without a target paragraph".into())),
+                            }
+                        }
+                    }
                     // CANCEL "NAME" ... -- drop each named program's persisted WORKING-STORAGE, so its
                     // next CALL rebuilds from VALUE (libcob un-initializes + unloads the module).
                     "CANCEL" => {
@@ -1274,6 +1560,88 @@ fn exec_evaluate(
         *pos += 1;
     }
     Ok(false)
+}
+
+/// `SEARCH table [VARYING idx] [AT END imperative] {WHEN cond imperative}... END-SEARCH` -- a serial (linear)
+/// search: from the index's current value it tests each WHEN in order at each element; the first WHEN true
+/// runs its imperative and ends, the index advancing by 1 otherwise; running off the end runs AT END. The
+/// index is the table's `INDEXED BY` index (or the explicit `VARYING` one). Binary `SEARCH ALL` is out of
+/// subset (fails closed).
+fn exec_search(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    let table = match toks.get(*pos) {
+        Some(Tok::Word(w)) if w == "ALL" => return Err(RunError::Unsupported("SEARCH ALL (binary search) not in subset".into())),
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("SEARCH: missing table name".into())),
+    };
+    *pos += 1;
+    let mut varying: Option<String> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
+        *pos += 1;
+        if let Some(Tok::Word(w)) = toks.get(*pos) { varying = Some(w.clone()); *pos += 1; }
+    }
+    let occurs = fields.get(&table).map(|f| f.occurs).filter(|&o| o > 1)
+        .ok_or_else(|| RunError::Unsupported(format!("SEARCH `{table}` is not an OCCURS table")))?;
+    let idx_name = varying.or_else(|| table_index_lookup(&table))
+        .ok_or_else(|| RunError::Unsupported(format!("SEARCH `{table}`: no INDEXED BY or VARYING index")))?;
+    // parse (do not yet run) the optional AT END block and the WHEN clauses, recording token ranges.
+    let mut at_end: Option<usize> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "AT") {
+        *pos += 1;
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") { *pos += 1; }
+        at_end = Some(*pos);
+        let mut scan = *pos;
+        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
+        *pos = scan;
+    }
+    let mut whens: Vec<(Vec<Tok>, usize)> = Vec::new();
+    while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "WHEN") {
+        *pos += 1;
+        let mut cond = Vec::new();
+        while let Some(t) = toks.get(*pos) {
+            match t {
+                Tok::Dot => break,
+                Tok::Word(w) if is_boundary(w) => break,
+                _ => { cond.push(t.clone()); *pos += 1; }
+            }
+        }
+        let block_start = *pos;
+        let mut scan = *pos;
+        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
+        *pos = scan;
+        whens.push((cond, block_start));
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-SEARCH") {
+        *pos += 1;
+    }
+    if !exec {
+        return Ok(false);
+    }
+    // serial search: vary the index from its current value until a WHEN matches or it runs off the table.
+    loop {
+        let iv = resolve_int(&idx_name, fields).unwrap_or(0);
+        if iv < 1 || iv as usize > occurs {
+            if let Some(s) = at_end {
+                let mut p = s;
+                if run_block(toks, &mut p, fields, out, true, ctx)? { return Ok(true); }
+            }
+            return Ok(false);
+        }
+        for (cond, bstart) in &whens {
+            if eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                let mut p = *bstart;
+                return run_block(toks, &mut p, fields, out, true, ctx);
+            }
+        }
+        let mv = vec![Tok::Word((iv + 1).to_string()), Tok::Word("TO".to_string()), Tok::Word(idx_name.clone())];
+        exec_move(&mv, fields, ctx.decimal_comma)?;
+    }
 }
 
 /// Whether the EVALUATE subject value matches a WHEN object: a single value (`subject = object`) or a
@@ -1820,6 +2188,21 @@ fn exec_stmt(
     match verb {
         "DISPLAY" => exec_display(stmt, fields, out, ctx),
         "MOVE" => exec_move(stmt, fields, ctx.decimal_comma),
+        "SET" => exec_set(stmt, fields, ctx.decimal_comma),
+        "INITIALIZE" => exec_initialize(stmt, fields, ctx.decimal_comma),
+        "INSPECT" => exec_inspect(stmt, fields, ctx.decimal_comma),
+        "STRING" => exec_string(stmt, fields, ctx.decimal_comma),
+        "UNSTRING" => exec_unstring(stmt, fields),
+        "ACCEPT" => exec_accept(stmt, fields),
+        "OPEN" => exec_open(stmt, fields, ctx),
+        "CLOSE" => exec_close(stmt, fields, ctx),
+        "WRITE" => exec_write(stmt, fields, ctx),
+        "REWRITE" => exec_rewrite(stmt, fields, ctx),
+        "DELETE" => exec_delete(stmt, fields, ctx),
+        "START" => exec_start(stmt, fields, ctx),
+        "UNLOCK" => exec_unlock(stmt, fields, ctx),
+        // COMMIT / ROLLBACK are no-ops without a transactional backend (as libcob is for sequential files).
+        "COMMIT" | "ROLLBACK" => Ok(()),
         "CALL" => exec_call(stmt, fields, out, ctx),
         "STOP" => Ok(()), // STOP RUN
         // ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE are handled in run_block (they carry ON SIZE ERROR clauses).
@@ -2222,6 +2605,715 @@ fn exec_move(
         write_field(fields, &d, |f| move_into(f, &sbytes, &sattr, decimal_comma))?;
     }
     Ok(())
+}
+
+/// `SET cond-name [cond-name ...] TO TRUE` -- the write counterpart of the LEVEL-88 predicate
+/// (`GNURUST.12 SET ... TO TRUE`): construct the parent's bytes so the condition becomes true by MOVEing
+/// the condition's first `VALUE` (or a `THRU` range's lower bound) into the parent. Only `TO TRUE` is in
+/// the subset; `TO FALSE`, index/pointer SET, and `UP/DOWN BY` fail closed.
+fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    // form: SET idx [idx ...] UP|DOWN BY n  (index arithmetic).
+    if let Some(ud) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "UP" || w == "DOWN")) {
+        let up = matches!(stmt.get(ud), Some(Tok::Word(w)) if w == "UP");
+        if !matches!(stmt.get(ud + 1), Some(Tok::Word(w)) if w == "BY") {
+            return Err(RunError::Unsupported("SET ... UP/DOWN must be followed by BY".into()));
+        }
+        let amount = match stmt.get(ud + 2) {
+            Some(Tok::Word(w)) => resolve_int(w, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("SET ... BY {w}: not an integer")))?,
+            _ => return Err(RunError::Unsupported("SET ... BY: missing amount".into())),
+        };
+        for name in stmt[..ud].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
+            let cur = resolve_int(&name, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("SET {name} UP/DOWN BY: not a numeric index")))?;
+            let nv = if up { cur + amount } else { cur - amount };
+            let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(name)];
+            exec_move(&mv, fields, decimal_comma)?;
+        }
+        return Ok(());
+    }
+    let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO"))
+        .ok_or_else(|| RunError::Unsupported("SET subset is `SET name ... TO {TRUE|value}` / `SET idx UP|DOWN BY n`".into()))?;
+    let targets: Vec<String> = stmt[..to].iter().filter_map(|t| match t {
+        Tok::Word(w) => Some(w.clone()),
+        _ => None,
+    }).collect();
+    if targets.is_empty() {
+        return Err(RunError::Unsupported("SET: no target before TO".into()));
+    }
+    // form: SET idx [idx ...] TO value  (set an index/numeric item to a literal or another item's value).
+    if !matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "TRUE") {
+        let src = stmt.get(to + 1).cloned()
+            .ok_or_else(|| RunError::Unsupported("SET ... TO: missing value".into()))?;
+        for name in &targets {
+            match fields.get(name) {
+                Some(Field { storage: Storage::Numeric(_), .. }) => {
+                    let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(name.clone())];
+                    exec_move(&mv, fields, decimal_comma)?;
+                }
+                Some(Field { storage: Storage::Condition { .. }, .. }) =>
+                    return Err(RunError::Unsupported(format!("SET {name} TO <value>: an 88 condition-name is only `SET ... TO TRUE`"))),
+                Some(_) => return Err(RunError::Unsupported(format!("SET {name} TO <value>: target is not a numeric/index item"))),
+                None => return Err(RunError::UndefinedName(name.clone())),
+            }
+        }
+        return Ok(());
+    }
+    // form: SET cond-name [cond-name ...] TO TRUE  (LEVEL-88 construction).
+    for name in targets {
+        let (parent, setword) = match fields.get(&name) {
+            Some(Field { storage: Storage::Condition { parent, values }, .. }) => {
+                let v = values.first()
+                    .ok_or_else(|| RunError::Unsupported(format!("88 {name} has no VALUE to SET")))?;
+                let w = match v { CondVal::Single(s) => s.clone(), CondVal::Range(lo, _) => lo.clone() };
+                (parent.clone(), w)
+            }
+            Some(_) => return Err(RunError::Unsupported(format!("SET {name} TO TRUE: not an 88 condition-name"))),
+            None => return Err(RunError::UndefinedName(name)),
+        };
+        // decode the stored condition word back into a source token (the `\u{1}` prefix marks a string
+        // literal; otherwise it is a numeric/word literal), then MOVE it into the parent.
+        let src = match setword.strip_prefix('\u{1}') {
+            Some(rest) => Tok::Str(rest.as_bytes().to_vec()),
+            None => Tok::Word(setword),
+        };
+        let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(parent)];
+        exec_move(&mv, fields, decimal_comma)?;
+    }
+    Ok(())
+}
+
+/// `INITIALIZE item [item ...]` -- reset each named item to its category default, matching `cobc`'s
+/// no-`REPLACING` INITIALIZE: a numeric item becomes ZERO, an alphanumeric/edited item becomes SPACES.
+/// (VALUE clauses are deliberately NOT used, per the standard.) The subset is elementary items; the
+/// `REPLACING`/`WITH`/group-traversal forms fail closed.
+fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    let mut names: Vec<String> = Vec::new();
+    for t in stmt {
+        match t {
+            Tok::Word(w) if w == "REPLACING" || w == "WITH" || w == "ALL" || w == "THRU" || w == "TO" || w == "FILLER" => {
+                return Err(RunError::Unsupported(format!("INITIALIZE ... {w} (subset: elementary items, no REPLACING/WITH)")));
+            }
+            Tok::Word(w) => names.push(w.clone()),
+            _ => {}
+        }
+    }
+    if names.is_empty() {
+        return Err(RunError::Unsupported("INITIALIZE: no item named".into()));
+    }
+    for name in names {
+        let kind = match fields.get(&name) {
+            Some(f) => f.storage.clone(),
+            None => return Err(RunError::UndefinedName(name)),
+        };
+        let src = match kind {
+            Storage::Numeric(_) => Tok::Word("0".to_string()),
+            Storage::Alpha(_) | Storage::Edited(..) => Tok::Str(vec![b' ']),
+            // an 88 condition-name has no storage of its own -- INITIALIZE skips it (cobc does not reset it).
+            Storage::Condition { .. } => continue,
+        };
+        let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(name)];
+        exec_move(&mv, fields, decimal_comma)?;
+    }
+    Ok(())
+}
+
+/// An `INSPECT` comparand operand -> its bytes: a string literal, the figuratives `SPACE`/`ZERO` (a single
+/// character), or an identifier's current bytes. (Other figuratives/forms fail closed.)
+fn inspect_operand(t: Option<&Tok>, fields: &HashMap<String, Field>) -> Result<Vec<u8>, RunError> {
+    match t {
+        Some(Tok::Str(s)) => Ok(s.clone()),
+        Some(Tok::Word(w)) => match w.as_str() {
+            "SPACE" | "SPACES" => Ok(vec![b' ']),
+            "ZERO" | "ZEROS" | "ZEROES" => Ok(vec![b'0']),
+            _ => match read_field(fields, w)? {
+                Some(f) => Ok(f.bytes.clone()),
+                None => Err(RunError::Unsupported(format!("INSPECT operand `{w}` (subset: literal / SPACE / ZERO / identifier)"))),
+            },
+        },
+        _ => Err(RunError::Unsupported("INSPECT: missing operand".into())),
+    }
+}
+
+/// Parse a trailing `INSPECT` region clause into `(kind, delim)` -- `0`=whole, `1`=`BEFORE INITIAL d`,
+/// `2`=`AFTER INITIAL d` -- returning the delimiter bytes owned so the caller can build a `Region`.
+fn inspect_region(rest: &[Tok], fields: &HashMap<String, Field>) -> Result<(u8, Vec<u8>), RunError> {
+    match rest.first() {
+        None => Ok((0, Vec::new())),
+        Some(Tok::Word(w)) if w == "BEFORE" || w == "AFTER" => {
+            let kind = if w == "AFTER" { 2 } else { 1 };
+            let mut i = 1;
+            if matches!(rest.get(i), Some(Tok::Word(x)) if x == "INITIAL") { i += 1; }
+            Ok((kind, inspect_operand(rest.get(i), fields)?))
+        }
+        Some(t) => Err(RunError::Unsupported(format!("INSPECT region clause near {t:?}"))),
+    }
+}
+
+/// `INSPECT target {TALLYING counter FOR <ALL|LEADING> lit | FOR CHARACTERS [region] | REPLACING
+/// <ALL|LEADING|FIRST> x BY y [region] | CONVERTING from TO to [region]}` -- the byte effects of the
+/// sealed `GNURUST.INSPECT.1` court. A single clause is in the subset; multi-clause/`ALL`-counter-chains
+/// and figurative ranges fail closed.
+fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    use crate::inspect::{inspect_converting, inspect_replacing, inspect_tallying, Region, ReplaceMode, TallyMode};
+    let target = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("INSPECT: missing target".into())),
+    };
+    let target_bytes = read_field(fields, &target)?
+        .ok_or_else(|| RunError::UndefinedName(target.clone()))?
+        .bytes;
+    match stmt.get(1) {
+        Some(Tok::Word(w)) if w == "TALLYING" => {
+            let counter = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT TALLYING: missing counter".into())) };
+            if !matches!(stmt.get(3), Some(Tok::Word(w)) if w == "FOR") {
+                return Err(RunError::Unsupported("INSPECT TALLYING: expected FOR".into()));
+            }
+            let modekw = match stmt.get(4) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT TALLYING: missing FOR mode".into())) };
+            let (item, rstart) = match modekw.as_str() {
+                "CHARACTERS" => (Vec::new(), 5),
+                "ALL" | "LEADING" => (inspect_operand(stmt.get(5), fields)?, 6),
+                other => return Err(RunError::Unsupported(format!("INSPECT TALLYING FOR {other} (subset: ALL/LEADING/CHARACTERS)"))),
+            };
+            let (rk, d) = inspect_region(&stmt[rstart.min(stmt.len())..], fields)?;
+            let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
+            let mode = match modekw.as_str() {
+                "CHARACTERS" => TallyMode::Characters,
+                "ALL" => TallyMode::All(&item),
+                _ => TallyMode::Leading(&item),
+            };
+            let count = inspect_tallying(&target_bytes, mode, region) as i64;
+            let nv = resolve_int(&counter, fields).unwrap_or(0) + count;
+            let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(counter)];
+            exec_move(&mv, fields, decimal_comma)
+        }
+        Some(Tok::Word(w)) if w == "REPLACING" => {
+            let modekw = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT REPLACING: missing mode".into())) };
+            if !matches!(modekw.as_str(), "ALL" | "LEADING" | "FIRST") {
+                return Err(RunError::Unsupported(format!("INSPECT REPLACING {modekw} (subset: ALL/LEADING/FIRST x BY y)")));
+            }
+            let x = inspect_operand(stmt.get(3), fields)?;
+            if !matches!(stmt.get(4), Some(Tok::Word(w)) if w == "BY") {
+                return Err(RunError::Unsupported("INSPECT REPLACING: expected BY".into()));
+            }
+            let y = inspect_operand(stmt.get(5), fields)?;
+            let (rk, d) = inspect_region(&stmt[6.min(stmt.len())..], fields)?;
+            let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
+            let mode = match modekw.as_str() {
+                "ALL" => ReplaceMode::All(&x, &y),
+                "LEADING" => ReplaceMode::Leading(&x, &y),
+                _ => ReplaceMode::First(&x, &y),
+            };
+            let newb = inspect_replacing(&target_bytes, mode, region);
+            write_field(fields, &target, |f| {
+                if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
+                else { Err(RunError::Runtime("INSPECT REPLACING changed field length".into())) }
+            })
+        }
+        Some(Tok::Word(w)) if w == "CONVERTING" => {
+            let from = inspect_operand(stmt.get(2), fields)?;
+            if !matches!(stmt.get(3), Some(Tok::Word(w)) if w == "TO") {
+                return Err(RunError::Unsupported("INSPECT CONVERTING: expected TO".into()));
+            }
+            let to = inspect_operand(stmt.get(4), fields)?;
+            let (rk, d) = inspect_region(&stmt[5.min(stmt.len())..], fields)?;
+            let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
+            let newb = inspect_converting(&target_bytes, &from, &to, region);
+            write_field(fields, &target, |f| {
+                if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
+                else { Err(RunError::Runtime("INSPECT CONVERTING changed field length".into())) }
+            })
+        }
+        other => Err(RunError::Unsupported(format!("INSPECT clause {other:?} (subset: TALLYING/REPLACING/CONVERTING)"))),
+    }
+}
+
+/// `STRING <src [DELIMITED BY SIZE|lit]> ... INTO target [WITH POINTER p]` -- concatenate the sources into
+/// the target at the 1-based pointer, preserving the unwritten tail (`GNURUST.STRING.UNSTRING.1`). The
+/// `ON OVERFLOW` handler form is outside the subset (fails closed).
+fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    use crate::string_ops::{string_into, StringSource};
+    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "OVERFLOW")) {
+        return Err(RunError::Unsupported("STRING ... ON OVERFLOW not in subset".into()));
+    }
+    let into = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
+        .ok_or_else(|| RunError::Unsupported("STRING without INTO".into()))?;
+    let target = match stmt.get(into + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("STRING: missing target".into())) };
+    // optional WITH POINTER p (after the target)
+    let mut pointer_name: Option<String> = None;
+    let mut pointer = 1usize;
+    if let Some(rel) = stmt[into + 2..].iter().position(|t| matches!(t, Tok::Word(w) if w == "POINTER")) {
+        if let Some(Tok::Word(pn)) = stmt.get(into + 2 + rel + 1) {
+            pointer = resolve_int(pn, fields).unwrap_or(1).max(1) as usize;
+            pointer_name = Some(pn.clone());
+        }
+    }
+    // parse sources (operands [DELIMITED BY {SIZE|lit}]); a DELIMITED BY applies to the preceding run.
+    let mut pending: Vec<Vec<u8>> = Vec::new();
+    let mut srcs: Vec<(Vec<u8>, Option<Vec<u8>>)> = Vec::new();
+    let mut i = 0;
+    while i < into {
+        match &stmt[i] {
+            Tok::Word(w) if w == "DELIMITED" => {
+                i += 1;
+                if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") { i += 1; }
+                let delim = match stmt.get(i) {
+                    Some(Tok::Word(w)) if w == "SIZE" => None,
+                    other => Some(inspect_operand(other, fields)?),
+                };
+                i += 1;
+                for op in pending.drain(..) { srcs.push((op, delim.clone())); }
+            }
+            t => { pending.push(inspect_operand(Some(t), fields)?); i += 1; }
+        }
+    }
+    for op in pending.drain(..) { srcs.push((op, None)); }
+    let ss: Vec<StringSource> = srcs.iter().map(|(b, d)| match d {
+        Some(d) => StringSource::Delimited(b, d),
+        None => StringSource::Size(b),
+    }).collect();
+    let prefill = read_field(fields, &target)?.ok_or_else(|| RunError::UndefinedName(target.clone()))?.bytes;
+    let res = string_into(&prefill, &ss, pointer);
+    let newb = res.target;
+    write_field(fields, &target, |f| {
+        if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
+        else { Err(RunError::Runtime("STRING changed target length".into())) }
+    })?;
+    if let Some(pn) = pointer_name {
+        let mv = vec![Tok::Word(res.pointer.to_string()), Tok::Word("TO".to_string()), Tok::Word(pn)];
+        exec_move(&mv, fields, decimal_comma)?;
+    }
+    Ok(())
+}
+
+/// `UNSTRING source [DELIMITED BY d] INTO f1 f2 ...` -- split the source by the delimiter (or by each
+/// receiver's width when absent) into the alphanumeric receiving fields (`GNURUST.STRING.UNSTRING.1`).
+/// `DELIMITER IN` / `COUNT IN` / `TALLYING` / `POINTER` / `OVERFLOW` and multi-delimiter forms fail closed.
+fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    use crate::string_ops::unstring;
+    for bad in ["DELIMITER", "COUNT", "TALLYING", "POINTER", "OVERFLOW", "OR"] {
+        if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == bad)) {
+            return Err(RunError::Unsupported(format!("UNSTRING ... {bad} not in subset")));
+        }
+    }
+    let into = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
+        .ok_or_else(|| RunError::Unsupported("UNSTRING without INTO".into()))?;
+    let source = inspect_operand(stmt.first(), fields)?;
+    // optional DELIMITED BY d between the source and INTO
+    let mut delim: Option<Vec<u8>> = None;
+    if let Some(dp) = stmt[..into].iter().position(|t| matches!(t, Tok::Word(w) if w == "DELIMITED")) {
+        let mut j = dp + 1;
+        if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
+        delim = Some(inspect_operand(stmt.get(j), fields)?);
+    }
+    let recv: Vec<String> = stmt[into + 1..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
+    if recv.is_empty() {
+        return Err(RunError::Unsupported("UNSTRING: no receiving field".into()));
+    }
+    let mut sizes = Vec::with_capacity(recv.len());
+    for n in &recv {
+        let f = read_field(fields, n)?.ok_or_else(|| RunError::UndefinedName(n.clone()))?;
+        if !matches!(f.storage, Storage::Alpha(_)) {
+            return Err(RunError::Unsupported(format!("UNSTRING into non-alphanumeric `{n}` not in subset")));
+        }
+        sizes.push(f.bytes.len());
+    }
+    let res = unstring(&source, delim.as_deref(), &sizes, 1);
+    for (n, fld) in recv.iter().zip(res.fields.iter()) {
+        let data = fld.data.clone();
+        write_field(fields, n, |f| { f.bytes = data; Ok(()) })?;
+    }
+    Ok(())
+}
+
+/// Day-of-year (1..366) for a Gregorian `(year, month, day)`.
+fn day_of_year(y: i32, m: i32, d: i32) -> i32 {
+    let mdays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let leap = (y % 4 == 0 && y % 100 != 0) || y % 400 == 0;
+    let mut s = 0;
+    for (i, &md) in mdays.iter().enumerate().take((m - 1).max(0) as usize) {
+        s += md;
+        if i == 1 && leap { s += 1; }
+    }
+    s + d
+}
+
+/// COBOL `DAY-OF-WEEK` (1 = Monday .. 7 = Sunday) for a Gregorian date (Sakamoto's algorithm).
+fn day_of_week(y: i32, m: i32, d: i32) -> i32 {
+    let t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
+    let yy = if m < 3 { y - 1 } else { y };
+    let w = (yy + yy / 4 - yy / 100 + yy / 400 + t[(m - 1).max(0) as usize] + d) % 7; // 0 = Sunday
+    if w == 0 { 7 } else { w }
+}
+
+/// `ACCEPT identifier FROM {DATE [YYYYMMDD] | DAY [YYYYDDD] | TIME | DAY-OF-WEEK}` -- the system date/time
+/// registers. To stay oracle-deterministic the front-end reads the **pinned** `COB_CURRENT_DATE` (the same
+/// override `libcob` honors); with it unset (a live wall clock) ACCEPT fails closed rather than guess. The
+/// terminal-input form (`ACCEPT id` with no FROM) is also outside the subset.
+fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    let target = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("ACCEPT: missing receiver".into())),
+    };
+    if !matches!(stmt.get(1), Some(Tok::Word(w)) if w == "FROM") {
+        return Err(RunError::Unsupported("ACCEPT subset is `ACCEPT id FROM DATE|DAY|TIME|DAY-OF-WEEK` (terminal input not modelled)".into()));
+    }
+    let src = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("ACCEPT FROM: missing source".into())) };
+    let long_year = matches!(stmt.get(3), Some(Tok::Word(w)) if w == "YYYYMMDD" || w == "YYYYDDD");
+    let raw = std::env::var("COB_CURRENT_DATE").map_err(|_| RunError::Unsupported(
+        "ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)".into()))?;
+    let cd = crate::common_signal::check_current_date(raw.as_bytes());
+    if cd.invalid || cd.year < 0 || cd.month < 0 || cd.day < 0 {
+        return Err(RunError::Runtime("COB_CURRENT_DATE did not parse to a full date".into()));
+    }
+    let (y, m, d) = (cd.year, cd.month, cd.day);
+    let digits = match src.as_str() {
+        "DATE" if long_year => format!("{:04}{:02}{:02}", y, m, d),
+        "DATE" => format!("{:02}{:02}{:02}", y % 100, m, d),
+        "DAY" if long_year => format!("{:04}{:03}", y, day_of_year(y, m, d)),
+        "DAY" => format!("{:02}{:03}", y % 100, day_of_year(y, m, d)),
+        "DAY-OF-WEEK" => format!("{}", day_of_week(y, m, d)),
+        "TIME" => {
+            let (hh, mi, ss) = (cd.hour.max(0), cd.minute.max(0), cd.second.max(0));
+            let cs = if cd.nanosecond >= 0 { cd.nanosecond / 10_000_000 } else { 0 };
+            format!("{:02}{:02}{:02}{:02}", hh, mi, ss, cs)
+        }
+        other => return Err(RunError::Unsupported(format!("ACCEPT FROM {other} (subset: DATE/DAY/TIME/DAY-OF-WEEK)"))),
+    };
+    let s = digits.into_bytes();
+    let n = s.len();
+    write_field(fields, &target, |f| match &f.storage {
+        Storage::Numeric(_) | Storage::Alpha(_) if f.bytes.len() == n => { f.bytes = s; Ok(()) }
+        _ => Err(RunError::Unsupported(format!("ACCEPT FROM {src}: receiver must be a {n}-digit numeric/alphanumeric item"))),
+    })
+}
+
+/// Set a file's `FILE STATUS` field (if declared) to a 2-character code (`"00"` ok, `"10"` end-of-file).
+fn set_file_status(fields: &mut HashMap<String, Field>, def: &FileDef, code: &str) {
+    if let Some(s) = &def.status {
+        let mv = vec![Tok::Str(code.as_bytes().to_vec()), Tok::Word("TO".to_string()), Tok::Word(s.clone())];
+        let _ = exec_move(&mv, fields, false);
+    }
+}
+
+/// `OPEN {INPUT|OUTPUT|EXTEND|I-O} file [file ...]` -- set each file's open mode (OUTPUT truncates the
+/// logical file). The subset is a single mode keyword per statement.
+fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let mode = match stmt.first() {
+        Some(Tok::Word(w)) => match w.as_str() {
+            "INPUT" => 1u8, "OUTPUT" => 2, "EXTEND" => 3, "I-O" => 4,
+            other => return Err(RunError::Unsupported(format!("OPEN {other} (subset: INPUT/OUTPUT/EXTEND/I-O)"))),
+        },
+        _ => return Err(RunError::Unsupported("OPEN: missing mode".into())),
+    };
+    for name in stmt[1..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
+        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?;
+        {
+            let mut files = ctx.files.borrow_mut();
+            let st = files.entry(name.clone()).or_default();
+            if mode == 2 { st.records.clear(); }
+            st.read_pos = 0;
+            st.mode = mode;
+        }
+        set_file_status(fields, def, "00");
+    }
+    Ok(())
+}
+
+/// `CLOSE file [file ...]` -- mark each file closed (its logical records persist so a later OPEN INPUT can
+/// re-read them within the same run).
+fn exec_close(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    for name in stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
+        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("CLOSE: `{name}` is not a declared file")))?;
+        if let Some(st) = ctx.files.borrow_mut().get_mut(&name) { st.mode = 0; }
+        set_file_status(fields, def, "00");
+    }
+    Ok(())
+}
+
+/// `WRITE record [FROM id]` -- append the record's current bytes to its file (LINE SEQUENTIAL trims trailing
+/// spaces, matching the oracle). The operand is the FD record name.
+fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let rec = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("WRITE: missing record".into())) };
+    // optional FROM id: MOVE id into the record first.
+    if let Some(fp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")) {
+        if let Some(src) = stmt.get(fp + 1) {
+            let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
+            exec_move(&mv, fields, ctx.decimal_comma)?;
+        }
+    }
+    let def = ctx.file_defs.values().find(|d| d.record == rec)
+        .ok_or_else(|| RunError::Unsupported(format!("WRITE `{rec}`: not an FD record")))?
+        .clone();
+    let mut bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
+    if def.org == FileOrg::LineSequential {
+        while bytes.last() == Some(&b' ') { bytes.pop(); }
+    }
+    if def.org == FileOrg::Relative {
+        // place the record at the 1-based RELATIVE KEY position (empty slots = absent records).
+        let pos = relative_key_value(&def, fields)?;
+        let mut files = ctx.files.borrow_mut();
+        let st = files.entry(def.name.clone()).or_default();
+        if st.records.len() < pos { st.records.resize(pos, Vec::new()); }
+        let occupied = !st.records[pos - 1].is_empty();
+        if !occupied { st.records[pos - 1] = bytes; }
+        drop(files);
+        set_file_status(fields, &def, if occupied { "22" } else { "00" });
+        return Ok(());
+    }
+    ctx.files.borrow_mut().entry(def.name.clone()).or_default().records.push(bytes);
+    set_file_status(fields, &def, "00");
+    Ok(())
+}
+
+/// The current 1-based value of a RELATIVE file's RELATIVE KEY field (>= 1 required).
+fn relative_key_value(def: &FileDef, fields: &HashMap<String, Field>) -> Result<usize, RunError> {
+    let key = def.rel_key.as_ref()
+        .ok_or_else(|| RunError::Unsupported(format!("RELATIVE file `{}` has no RELATIVE KEY", def.name)))?;
+    let v = resolve_int(key, fields)
+        .ok_or_else(|| RunError::Unsupported(format!("RELATIVE KEY `{key}` is not an integer")))?;
+    if v < 1 {
+        return Err(RunError::Runtime(format!("RELATIVE KEY `{key}` = {v} (< 1)")));
+    }
+    Ok(v as usize)
+}
+
+/// `REWRITE record [FROM id]` -- replace the record last READ (under OPEN I-O) with the record buffer's
+/// current bytes. With no current record (no prior READ) it fails with status `"43"`.
+fn exec_rewrite(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let rec = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("REWRITE: missing record".into())) };
+    if let Some(fp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")) {
+        if let Some(src) = stmt.get(fp + 1) {
+            let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
+            exec_move(&mv, fields, ctx.decimal_comma)?;
+        }
+    }
+    let def = ctx.file_defs.values().find(|d| d.record == rec)
+        .ok_or_else(|| RunError::Unsupported(format!("REWRITE `{rec}`: not an FD record")))?
+        .clone();
+    let mut bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
+    if def.org == FileOrg::LineSequential {
+        while bytes.last() == Some(&b' ') { bytes.pop(); }
+    }
+    let no_current = {
+        let mut files = ctx.files.borrow_mut();
+        match files.get_mut(&def.name) {
+            Some(st) if st.read_pos >= 1 && st.read_pos <= st.records.len() => {
+                let idx = st.read_pos - 1;
+                st.records[idx] = bytes;
+                false
+            }
+            _ => true,
+        }
+    };
+    set_file_status(fields, &def, if no_current { "43" } else { "00" });
+    Ok(())
+}
+
+/// `UNLOCK file [file ...]` -- release record locks. The front-end's in-memory model holds no locks, so this
+/// is a faithful no-op (status `"00"`), matching libcob on a non-locked sequential file.
+fn exec_unlock(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    for name in stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
+        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("UNLOCK: `{name}` is not a declared file")))?;
+        set_file_status(fields, def, "00");
+    }
+    Ok(())
+}
+
+/// `DELETE file [RECORD]` -- remove the RELATIVE record at the current RELATIVE KEY (status `"23"` if no
+/// such record). DELETE on a sequential file is invalid (out of subset).
+fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let file = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("DELETE: missing file".into())) };
+    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("DELETE: `{file}` is not a declared file")))?.clone();
+    if def.org != FileOrg::Relative {
+        return Err(RunError::Unsupported("DELETE is only supported on a RELATIVE file in this subset".into()));
+    }
+    let pos = relative_key_value(&def, fields)?;
+    let deleted = {
+        let mut files = ctx.files.borrow_mut();
+        match files.get_mut(&file) {
+            Some(st) if pos <= st.records.len() && !st.records[pos - 1].is_empty() => {
+                st.records[pos - 1] = Vec::new();
+                true
+            }
+            _ => false,
+        }
+    };
+    set_file_status(fields, &def, if deleted { "00" } else { "23" });
+    Ok(())
+}
+
+/// `START file [KEY [IS] {= | > | >= | < | <= | NOT < | NOT >} key-field]` -- position a RELATIVE file so
+/// the next sequential READ returns the first record whose relative number satisfies the relation (default
+/// `=` on the current RELATIVE KEY). Status `"23"` if no record qualifies. `INVALID KEY` is out of subset.
+fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let file = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("START: missing file".into())) };
+    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("START: `{file}` is not a declared file")))?.clone();
+    if def.org != FileOrg::Relative {
+        return Err(RunError::Unsupported("START is only supported on a RELATIVE file in this subset".into()));
+    }
+    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "INVALID")) {
+        return Err(RunError::Unsupported("START ... INVALID KEY not in subset".into()));
+    }
+    // default: EQUAL on the current RELATIVE KEY value.
+    let mut rel = "=".to_string();
+    let mut keyval = relative_key_value(&def, fields)?;
+    if let Some(kp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "KEY")) {
+        let mut i = kp + 1;
+        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+        rel = match stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
+            Some("=") | Some("EQUAL") => { i += 1; if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "TO") { i += 1; } "=".into() }
+            Some(">=") => { i += 1; ">=".into() }
+            Some("<=") => { i += 1; "<=".into() }
+            Some(">") | Some("GREATER") => { i += 1; if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } ">".into() }
+            Some("<") | Some("LESS") => { i += 1; if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } "<".into() }
+            Some("NOT") => {
+                i += 1;
+                let r = match stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
+                    Some("<") | Some("LESS") => ">=",
+                    Some(">") | Some("GREATER") => "<=",
+                    _ => return Err(RunError::Unsupported("START KEY NOT <relation>".into())),
+                };
+                i += 1;
+                if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; }
+                r.into()
+            }
+            other => return Err(RunError::Unsupported(format!("START KEY relation {other:?}"))),
+        };
+        if let Some(Tok::Word(field)) = stmt.get(i) {
+            keyval = resolve_int(field, fields).map(|v| v.max(0) as usize).unwrap_or(keyval);
+        }
+    }
+    let foundpos = {
+        let files = ctx.files.borrow();
+        let mut fp = None;
+        if let Some(st) = files.get(&file) {
+            for n in 1..=st.records.len() {
+                if st.records[n - 1].is_empty() { continue; }
+                let ok = match rel.as_str() {
+                    "=" => n == keyval,
+                    ">" => n > keyval,
+                    ">=" => n >= keyval,
+                    "<" => n < keyval,
+                    "<=" => n <= keyval,
+                    _ => false,
+                };
+                if ok { fp = Some(n); break; }
+            }
+        }
+        fp
+    };
+    match foundpos {
+        Some(n) => {
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&file) { st.read_pos = n - 1; }
+            set_file_status(fields, &def, "00");
+        }
+        None => set_file_status(fields, &def, "23"),
+    }
+    Ok(())
+}
+
+/// `READ file [NEXT] [RECORD] [INTO id] [AT END imperative] [END-READ]` -- read the next sequential record
+/// into the FD record (and optionally MOVE it INTO `id`); at end-of-file set status `"10"` and run the AT
+/// END imperative. `NOT AT END` / keyed reads are out of subset.
+fn exec_read(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    let file = match toks.get(*pos) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("READ: missing file".into())) };
+    *pos += 1;
+    let mut had_next = false;
+    while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NEXT" || w == "RECORD") {
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NEXT") { had_next = true; }
+        *pos += 1;
+    }
+    let mut into: Option<String> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INTO") {
+        *pos += 1;
+        if let Some(Tok::Word(w)) = toks.get(*pos) { into = Some(w.clone()); *pos += 1; }
+    }
+    // optional AT END imperative (runs at EOF). Parsed as a block ending at END-READ / a period.
+    let mut at_end: Option<usize> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "AT") {
+        *pos += 1;
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") { *pos += 1; }
+        at_end = Some(*pos);
+        let mut scan = *pos;
+        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
+        *pos = scan;
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-READ") { *pos += 1; }
+    if !exec {
+        return Ok(false);
+    }
+    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("READ: `{file}` is not a declared file")))?.clone();
+    let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+    let loaded: Option<Vec<u8>> = match def.org {
+        // RELATIVE random read: by the RELATIVE KEY (no position advance).
+        FileOrg::Relative if !had_next => {
+            let pos = relative_key_value(&def, fields)?;
+            let files = ctx.files.borrow();
+            files.get(&file).and_then(|st| st.records.get(pos - 1)).filter(|r| !r.is_empty()).cloned()
+        }
+        // RELATIVE sequential read: the next non-empty slot, setting the RELATIVE KEY to its number.
+        FileOrg::Relative => {
+            let mut found = None;
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&file) {
+                while st.read_pos < st.records.len() {
+                    let p = st.read_pos;
+                    st.read_pos += 1;
+                    if !st.records[p].is_empty() {
+                        found = Some((p + 1, st.records[p].clone()));
+                        break;
+                    }
+                }
+            }
+            match found {
+                Some((relnum, bytes)) => {
+                    if let Some(key) = &def.rel_key {
+                        let mv = vec![Tok::Word(relnum.to_string()), Tok::Word("TO".to_string()), Tok::Word(key.clone())];
+                        exec_move(&mv, fields, ctx.decimal_comma)?;
+                    }
+                    Some(bytes)
+                }
+                None => None,
+            }
+        }
+        // sequential / line-sequential: the next record.
+        _ => {
+            let bytes = { let files = ctx.files.borrow(); files.get(&file).and_then(|st| st.records.get(st.read_pos).cloned()) };
+            if bytes.is_some() {
+                if let Some(st) = ctx.files.borrow_mut().get_mut(&file) { st.read_pos += 1; }
+            }
+            bytes
+        }
+    };
+    match loaded {
+        Some(mut bytes) => {
+            bytes.resize(reclen, b' ');
+            write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
+            if let Some(id) = into {
+                let mv = vec![Tok::Word(def.record.clone()), Tok::Word("TO".to_string()), Tok::Word(id)];
+                exec_move(&mv, fields, ctx.decimal_comma)?;
+            }
+            set_file_status(fields, &def, "00");
+            Ok(false)
+        }
+        None => {
+            // a relative random miss is "23" (record not found); a sequential/relative-next end is "10".
+            let code = if def.org == FileOrg::Relative && !had_next { "23" } else { "10" };
+            set_file_status(fields, &def, code);
+            if let Some(s) = at_end {
+                let mut p = s;
+                return run_block(toks, &mut p, fields, out, true, ctx);
+            }
+            Ok(false)
+        }
+    }
 }
 
 /// Resolve a single operand token to `(bytes, attr)` (identifier -> its stored numeric/alnum form;
