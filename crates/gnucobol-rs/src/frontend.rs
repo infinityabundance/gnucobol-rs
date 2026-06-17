@@ -23,7 +23,7 @@
 use crate::arith::{cob_arith, cob_divide, ArithError, Op, Round};
 use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_DISPLAY};
 use crate::edited::{edited_size, encode_edited_cfg};
-use crate::move_ops::cob_move;
+use crate::move_ops::{cob_move, cob_move_cfg};
 use crate::pic::{build_field, Usage};
 use crate::termio::{cob_display, DisplaySettings};
 use crate::value::Decimal;
@@ -1409,7 +1409,7 @@ fn exec_stmt(
 ) -> Result<(), RunError> {
     match verb {
         "DISPLAY" => exec_display(stmt, fields, out, ctx),
-        "MOVE" => exec_move(stmt, fields),
+        "MOVE" => exec_move(stmt, fields, ctx.decimal_comma),
         "CALL" => exec_call(stmt, fields, out, ctx),
         "STOP" => Ok(()), // STOP RUN
         // ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE are handled in run_block (they carry ON SIZE ERROR clauses).
@@ -1550,7 +1550,8 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Resu
     }
     for r in receivers {
         let f = fields.get_mut(&r).ok_or_else(|| RunError::UndefinedName(r.clone()))?;
-        move_into(f, &val, &attr)?;
+        // COMPUTE result is an already-decoded numeric value -> separator-independent store.
+        move_into(f, &val, &attr, false)?;
     }
     Ok(())
 }
@@ -1706,7 +1707,7 @@ fn exec_display(
                     continue;
                 }
                 let f = fields.get(w).ok_or_else(|| RunError::UndefinedName(w.clone()))?;
-                let bytes = if w == "RETURN-CODE" { display_return_code(f) } else { display_bytes(f) };
+                let bytes = if w == "RETURN-CODE" { display_return_code(f) } else { display_bytes(f, ctx.decimal_comma) };
                 operands.push((bytes, alnum_attr()));
             }
             Tok::Dot => {}
@@ -1725,11 +1726,17 @@ fn exec_display(
 
 /// The bytes a field contributes to DISPLAY: numeric DISPLAY fields are shown via the runtime's
 /// display formatting; alphanumeric + edited fields are shown as their stored bytes.
-fn display_bytes(f: &Field) -> Vec<u8> {
+fn display_bytes(f: &Field, decimal_comma: bool) -> Vec<u8> {
     match &f.storage {
         Storage::Numeric(attr) => {
             let mut o = Vec::new();
-            crate::termio::cob_display_common(&f.bytes, attr, &DisplaySettings::default(), &mut o);
+            // DISPLAY of a numeric DISPLAY item inserts the module decimal point (comma under
+            // DECIMAL-POINT IS COMMA), matching cob_display_common's pretty-display path.
+            let settings = DisplaySettings {
+                decimal_point: if decimal_comma { b',' } else { b'.' },
+                ..DisplaySettings::default()
+            };
+            crate::termio::cob_display_common(&f.bytes, attr, &settings, &mut o);
             o
         }
         Storage::Alpha(_) | Storage::Edited(..) => f.bytes.clone(),
@@ -1737,7 +1744,11 @@ fn display_bytes(f: &Field) -> Vec<u8> {
 }
 
 /// `MOVE src TO d1 [d2 ...]`.
-fn exec_move(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+fn exec_move(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
     // split at TO.
     let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="TO"))
         .ok_or_else(|| RunError::Unsupported("MOVE without TO".into()))?;
@@ -1750,7 +1761,7 @@ fn exec_move(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), Ru
     let (sbytes, sattr) = operand_value(src_tok, fields)?;
     for d in dests {
         let f = fields.get_mut(&d).ok_or_else(|| RunError::UndefinedName(d.clone()))?;
-        move_into(f, &sbytes, &sattr)?;
+        move_into(f, &sbytes, &sattr, decimal_comma)?;
     }
     Ok(())
 }
@@ -1778,7 +1789,12 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
 }
 
 /// MOVE a source `(bytes, attr)` into a field via the right runtime path (edited vs cob_move).
-fn move_into(f: &mut Field, sbytes: &[u8], sattr: &FieldAttr) -> Result<(), RunError> {
+fn move_into(
+    f: &mut Field,
+    sbytes: &[u8],
+    sattr: &FieldAttr,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
     match &f.storage {
         Storage::Edited(pic, currency, decimal_comma) => {
             // numeric/alnum source into a numeric-edited receiver: decode the source to a decimal,
@@ -1793,7 +1809,10 @@ fn move_into(f: &mut Field, sbytes: &[u8], sattr: &FieldAttr) -> Result<(), RunE
         Storage::Numeric(attr) | Storage::Alpha(attr) => {
             let attr = *attr;
             let mut dst = f.bytes.clone();
-            cob_move(sbytes, sattr, &mut dst, &attr).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            // cob_move_cfg honors DECIMAL-POINT IS COMMA on the alphanumeric->numeric leaf (move.c reads
+            // dec_pt/num_sep from the module): MOVE "12,34" under comma stores 12.34, not 1234.
+            cob_move_cfg(sbytes, sattr, &mut dst, &attr, decimal_comma)
+                .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             f.bytes = dst;
             Ok(())
         }
@@ -1942,7 +1961,8 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
 
     // Store the wide result into the receiver -- cob_move (numeric) or encode_edited (edited).
     let f = fields.get_mut(&recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
-    move_into(f, &rb, &ra)
+    // arithmetic result is an already-decoded numeric value -> separator-independent store.
+    move_into(f, &rb, &ra, false)
 }
 
 /// Compute `op(a, b)` exactly into a wide numeric DISPLAY `(bytes, attr)` -- 18 integer digits plus a

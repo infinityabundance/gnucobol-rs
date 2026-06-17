@@ -130,7 +130,8 @@ fn pretty_display_numeric(data: &[u8], attr: &FieldAttr, decimal_point: u8, out:
         out.extend_from_slice(b"(Not representable)");
         return;
     }
-    let dp = decimal_point as char;
+    // Build the PIC with the CANONICAL '.' decimal (the PIC grammar reads ',' as a grouping separator,
+    // not a decimal); the module decimal-point character is applied to the encoded output below.
     let mut pic = String::new();
     let trailing_sep = has_sign && attr.sign_separate() && !attr.sign_leading();
     if has_sign && !trailing_sep {
@@ -142,7 +143,7 @@ fn pretty_display_numeric(data: &[u8], attr: &FieldAttr, decimal_point: u8, out:
                 pic.push('9');
             }
         }
-        pic.push(dp);
+        pic.push('.');
         for _ in 0..scale {
             pic.push('9');
         }
@@ -157,7 +158,17 @@ fn pretty_display_numeric(data: &[u8], attr: &FieldAttr, decimal_point: u8, out:
 
     let value = decimal_of(data, attr);
     match crate::edited::encode_edited(&pic, &value) {
-        Ok(bytes) => out.extend_from_slice(&bytes),
+        Ok(mut bytes) => {
+            // DECIMAL-POINT IS COMMA: the sole '.' in this pretty (comma-free) form is the decimal point.
+            if decimal_point != b'.' {
+                for b in bytes.iter_mut() {
+                    if *b == b'.' {
+                        *b = decimal_point;
+                    }
+                }
+            }
+            out.extend_from_slice(&bytes);
+        }
         Err(_) => out.extend_from_slice(b"(Not representable)"),
     }
 }
@@ -687,6 +698,20 @@ mod tests {
         let mut out = Vec::new();
         cob_display_common(b"HELLO", &an(5), &DisplaySettings::default(), &mut out);
         assert_eq!(out, b"HELLO");
+    }
+
+    #[test]
+    fn pretty_numeric_decimal_point_is_comma() {
+        // PIC 9(2)V99 value 12.34 -> "1234" stored; pretty DISPLAY inserts the module decimal point.
+        let attr = FieldAttr { field_type: crate::attr::COB_TYPE_NUMERIC_DISPLAY, digits: 4, scale: 2, flags: 0 };
+        let dot = DisplaySettings { decimal_point: b'.', pretty_display: true };
+        let comma = DisplaySettings { decimal_point: b',', pretty_display: true };
+        let mut o = Vec::new();
+        cob_display_common(b"1234", &attr, &dot, &mut o);
+        assert_eq!(o, b"12.34");
+        o.clear();
+        cob_display_common(b"1234", &attr, &comma, &mut o);
+        assert_eq!(o, b"12,34", "DECIMAL-POINT IS COMMA renders the decimal as a comma");
     }
 
     #[test]

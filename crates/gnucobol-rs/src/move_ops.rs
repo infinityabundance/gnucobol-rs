@@ -456,8 +456,20 @@ fn cob_move_display_to_alphanum(src_full: &[u8], src_attr: &FieldAttr, dst: &mut
 /// the receiver scale, copy digits (ignoring whitespace and the thousands separator), and on any
 /// invalid character zero-fill the receiver. `dec_pt`/`num_sep` default to `'.'`/`','`.
 fn cob_move_alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAttr) {
-    const DEC_PT: u8 = b'.';
-    const NUM_SEP: u8 = b',';
+    cob_move_alphanum_to_display_cfg(data1, dst, dst_attr, b'.', b',');
+}
+
+/// As [`cob_move_alphanum_to_display`], but with the decimal point / thousands separator supplied by the
+/// module configuration (move.c reads `dec_pt`/`num_sep` from `COB_MODULE_PTR`). Under `DECIMAL-POINT IS
+/// COMMA` the roles swap: `dec_pt = ','`, `num_sep = '.'`, so `MOVE "12,34"` to a numeric receiver stores
+/// 12.34 rather than parsing 1234.
+fn cob_move_alphanum_to_display_cfg(
+    data1: &[u8],
+    dst: &mut [u8],
+    dst_attr: &FieldAttr,
+    dec_pt: u8,
+    num_sep: u8,
+) {
     let off = dst_attr.data_offset();
     let fsize = dst_attr.data_size(dst.len());
     // memset(f2->data, '0', f2->size)
@@ -480,7 +492,7 @@ fn cob_move_alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAt
     let mut count = 0i64;
     {
         let mut p = s1;
-        while p < e1 && data1[p] != DEC_PT {
+        while p < e1 && data1[p] != dec_pt {
             if data1[p].is_ascii_digit() {
                 count += 1;
             }
@@ -511,13 +523,13 @@ fn cob_move_alphanum_to_display(data1: &[u8], dst: &mut [u8], dst_attr: &FieldAt
         if ch.is_ascii_digit() {
             wr(dst, s2 as i64, ch);
             s2 += 1;
-        } else if ch == DEC_PT {
+        } else if ch == dec_pt {
             dpcount += 1;
             if dpcount > 1 {
                 error = true;
                 break;
             }
-        } else if !(ch.is_ascii_whitespace() || ch == NUM_SEP) {
+        } else if !(ch.is_ascii_whitespace() || ch == num_sep) {
             error = true;
             break;
         }
@@ -986,10 +998,49 @@ pub fn cob_move(
     }
 }
 
+/// [`cob_move`] honoring the module's `DECIMAL-POINT IS COMMA` setting. Only the alphanumeric ->
+/// numeric-DISPLAY leaf is separator-sensitive (move.c reads `dec_pt`/`num_sep` from `COB_MODULE_PTR`
+/// there); every other leaf is separator-independent, so this delegates to [`cob_move`] unless the
+/// comma swap actually applies.
+pub fn cob_move_cfg(
+    src: &[u8],
+    src_attr: &FieldAttr,
+    dst: &mut [u8],
+    dst_attr: &FieldAttr,
+    decimal_comma: bool,
+) -> Result<(), DecimalError> {
+    if decimal_comma
+        && src_attr.field_type == COB_TYPE_ALPHANUMERIC
+        && dst_attr.field_type == COB_TYPE_NUMERIC_DISPLAY
+    {
+        // DECIMAL-POINT IS COMMA: ',' is the decimal point, '.' the thousands separator.
+        cob_move_alphanum_to_display_cfg(src, dst, dst_attr, b',', b'.');
+        return Ok(());
+    }
+    cob_move(src, src_attr, dst, dst_attr)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::attr::{COB_FLAG_BINARY_SWAP, COB_FLAG_HAVE_SIGN};
+
+    #[test]
+    fn cob_move_cfg_decimal_comma_alphanum_to_numeric() {
+        // MOVE "12,34" (alphanumeric) -> PIC 9(2)V99 (digits=4, scale=2). Under DECIMAL-POINT IS COMMA the
+        // comma is the decimal point: store 1234 as 12.34 -> "1234". With the default dot, ',' is a
+        // thousands separator and there is no point, so "12,34" parses as integer 1234 truncated to the
+        // 2 integer digits -> 34.00 -> "3400" (the built-cobc oracle behaviour, matched both ways).
+        let src = b"12,34";
+        let sattr = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 5, scale: 0, flags: 0 };
+        let dattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 4, scale: 2, flags: 0 };
+        let mut comma = vec![0u8; 4];
+        cob_move_cfg(src, &sattr, &mut comma, &dattr, true).unwrap();
+        assert_eq!(&comma, b"1234", "comma = decimal point -> 12.34");
+        let mut dot = vec![0u8; 4];
+        cob_move_cfg(src, &sattr, &mut dot, &dattr, false).unwrap();
+        assert_eq!(&dot, b"3400", "dot mode: comma is a separator, 1234 truncates to 34.00");
+    }
 
     #[test]
     fn move_ibm_overlap_matches_dialect_oracle() {

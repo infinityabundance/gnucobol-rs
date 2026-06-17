@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (71 fixed, 34 open)
+## Summary -- 105 gaps catalogued across 5 panels (72 fixed, 33 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 13 | narrow, or faithful-but-surprising |
+| **low** | 12 | narrow, or faithful-but-surprising |
 | **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 71 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 72 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -641,12 +641,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** cob_load_collation on a .ttbl with a bad hex byte: oracle prints 'invalid hex byte on line N', port silent. Return code matches; message bytes do not.
 
 #### `move-alphanum-decimal-default` -- cob_move_alphanum_to_display decimal point configurable in C; Rust default '.' with no module wiring confirmed  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA programs only
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA programs only &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** move.c:299 reads dec_pt/num_sep from COB_MODULE_PTR; the alphanum->numeric move treats dec_pt as the decimal and counts only ASCII '0'-'9' (deliberately not locale isdigit).
 - **gnucobol-rs (Rust):** move_ops.rs:457 parameterized but the default entry uses '.'/','; no evidence DECIMAL-POINT IS COMMA is threaded into default-config callers. The deliberate ASCII-range digit check IS matched.
 - **Diff:** Under DECIMAL-POINT IS COMMA, MOVE of an alphanumeric '12,34' to numeric should treat ',' as the point; the default path uses '.'.
-- **Evidence / plan:** Confirm whether callers pass the module decimal_point; if not, MOVE '12,34' under DECIMAL-POINT IS COMMA diverges.
+- **Evidence / plan:** CONFIRMED divergence then FIXED gnucobol-rs 0.7.98. Built-cobc oracle (DECIMAL-POINT IS COMMA, MOVE "12,34" to PIC 9(2)V99): stores 12.34; the port stored 34.00 (parsed 1234 ignoring the comma, truncated to 2 integer digits). Fix: cob_move_alphanum_to_display is now parameterized as cob_move_alphanum_to_display_cfg(dec_pt, num_sep) and a new cob_move_cfg routes the alphanumeric->numeric-DISPLAY leaf with the swapped separators (dec_pt=',' num_sep='.') under comma; frontend move_into threads ctx.decimal_comma (exec_move); numeric/arith stores stay separator-independent. The deliberate ASCII-range digit check is preserved. A SECOND divergence surfaced and was fixed in the same change: pretty numeric DISPLAY built the comma INTO the edited PIC (where ',' is a grouping separator, not a decimal), mangling placement (12.34 -> 00,12); pretty_display_numeric now builds the canonical '.' PIC and translates the sole '.' to the module decimal point, so DISPLAY of a numeric under comma renders 12,34 / -007,5. Oracle byte-identical: corpus p36_decimal_comma_move (sweep IDENTICAL + 3.1.2 differential-matched); units cob_move_cfg_decimal_comma_alphanum_to_numeric + pretty_numeric_decimal_point_is_comma; 902 lib tests.
 
 #### `national-of-not-implemented` -- NATIONAL-OF / DISPLAY-OF / CHAR-NATIONAL / STANDARD-COMPARE unimplemented in BOTH (faithful), no UTF-16 NATIONAL support  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: a program calls these (C aborts/errors, port returns empty)
