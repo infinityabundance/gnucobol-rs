@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (66 fixed, 39 open)
+## Summary -- 105 gaps catalogued across 5 panels (67 fixed, 38 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 19 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 14 | narrow, or faithful-but-surprising |
+| **low** | 13 | narrow, or faithful-but-surprising |
 | **latent** | 5 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 66 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 67 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -493,12 +493,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Add a temp-file merge stage. SORT >128M: C completes, port has no path.
 
 #### `stale-file-seq-crlf-leak` -- Duplicate LF-only file_seq.rs mishandles CRLF input, leaking a 0x0d data byte  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: a caller still routes LINE SEQUENTIAL through file_seq.rs on CRLF input
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: a caller still routes LINE SEQUENTIAL through file_seq.rs on CRLF input &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c lineseq_read (2528) folds \r\n -> \n (lone \r pushed back via fseek(-1) and stored as data).
 - **gnucobol-rs (Rust):** Two ports: faithful fileio.rs (183) folds \r\n; stale file_seq.rs read_sequential (39) splits only on \n, never folds \r\n, no ls_validate config.
 - **Diff:** For input AB\r\nCD\n, file_seq.rs yields record0 'AB\r' (padded); the C oracle and fileio.rs yield 'AB' -- a leaked 0x0d.
-- **Evidence / plan:** Retire file_seq.rs in favor of fileio.rs. Read a CRLF file via file_seq.rs: trailing 0x0d appears.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (real bug fix -- the stale path IS live: file_flow_slice.rs routes LINE SEQUENTIAL reads through file_seq::read_sequential). The LineSequential branch now folds CRLF -> LF like libcob's lineseq_read + the faithful fileio.rs: a '\r' immediately before the '\n' is dropped (a lone '\r' elsewhere stays as data), so the 0x0d no longer leaks into the record. Oracle: AB\r\nCD\n (record_len 4/8) -> 'AB'/'CD' (was 'AB\r'). Sealed by line_seq_folds_crlf_to_lf_no_leaked_cr (897 lib tests; the existing line-seq + record-seq tests unregressed).
 
 #### `cbl-files-global-mutex` -- CBL_FILES handle registry is a process-global Mutex while the rest of the runtime is per-&mut-struct  
 **severity:** latent &nbsp;·&nbsp; **observable:** no for single-threaded byte output; latent for multi-instance/threaded hosts &nbsp;·&nbsp; **status: ✓ FIXED**

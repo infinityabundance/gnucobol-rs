@@ -75,7 +75,13 @@ pub fn read_sequential(data: &[u8], org: FileOrg, record_len: usize) -> Vec<SeqR
                     out.push(SeqRead { at_end: false, record: data[pos..pos + record_len].to_vec(), status: "06" });
                     pos += record_len;
                 } else {
-                    let mut rec = data[pos..line_end].to_vec();
+                    // Fold CRLF -> LF like libcob's lineseq_read: a '\r' immediately before the '\n' is
+                    // dropped (a lone '\r' elsewhere stays as data). Previously the trailing '\r' leaked.
+                    let mut content_end = line_end;
+                    if content_end > pos && data[content_end - 1] == b'\r' {
+                        content_end -= 1;
+                    }
+                    let mut rec = data[pos..content_end].to_vec();
                     rec.resize(record_len, b' ');
                     out.push(SeqRead { at_end: false, record: rec, status: "00" });
                     // consume the newline (if any); a trailing newline leaves pos == n -> next read is AT END.
@@ -155,6 +161,20 @@ mod tests {
         assert_eq!(
             recs(b"AB\nCDEFGHIJKL\nXY\n", FileOrg::LineSequential),
             vec![("AB      ".into(), "00"), ("CDEFGHIJ".into(), "06"), ("KL      ".into(), "00"), ("XY      ".into(), "00"), (String::new(), "10")]
+        );
+    }
+    #[test]
+    fn line_seq_folds_crlf_to_lf_no_leaked_cr() {
+        // libcob lineseq_read folds \r\n -> \n: the '\r' before the '\n' is dropped, NOT leaked into the
+        // record (previously file_seq.rs left "AB\r"). Matches the faithful fileio.rs path.
+        assert_eq!(
+            recs(b"AB\r\nCD\n", FileOrg::LineSequential),
+            vec![("AB      ".into(), "00"), ("CD      ".into(), "00"), (String::new(), "10")]
+        );
+        // a lone '\r' not immediately before a '\n' stays as data.
+        assert_eq!(
+            recs(b"A\rB\n", FileOrg::LineSequential),
+            vec![("A\rB     ".into(), "00"), (String::new(), "10")]
         );
     }
     #[test]
