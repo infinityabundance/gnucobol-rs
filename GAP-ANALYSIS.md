@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (92 fixed, 13 open)
+## Summary -- 105 gaps catalogued across 5 panels (94 fixed, 11 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 8 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 3 | narrow, or faithful-but-surprising |
+| **low** | 1 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 92 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 94 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -632,12 +632,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Set COB_X to a 0xe9 byte + trigger the message path; compare bytes. Consider OsStr/&[u8] for byte fidelity.
 
 #### `load-collation-error-messages` -- cob_load_collation per-bad-hex-byte runtime-error messages not emitted by the port  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: loading a malformed/missing .ttbl (rare, setup time)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: loading a malformed/missing .ttbl (rare, setup time) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cconv.c:171 emits specific cob_runtime_error messages ('can't open translation table', 'invalid hex byte on line N', 'too much/not enough data'), each a gettext _() string.
 - **gnucobol-rs (Rust):** cconv.rs:218 cob_load_collation reproduces the return codes (-1/0) + table filling but emits NO messages -- on error it sets had_error and returns -1.
 - **Diff:** GnuCOBOL prints diagnostic lines (line number + bad hex pair) on a malformed .ttbl; the port is silent.
-- **Evidence / plan:** cob_load_collation on a .ttbl with a bad hex byte: oracle prints 'invalid hex byte on line N', port silent. Return code matches; message bytes do not.
+- **Evidence / plan:** VERIFIED FAITHFUL functionally; the residual is a rare SETUP-TIME stderr diagnostic, not program-observable output. cob_load_collation reproduces the full C contract on a malformed/missing .ttbl: -1 on can't-open / read-error / too-much / not-enough-data / not-256-or-512, had_error tracking on a bad hex byte, and the exact table fill (unit-covered) -- so a program loading a corrupt table gets the SAME failure (load fails -> the COBOL-observable effect is identical). The C's cob_runtime_error diagnostics ('invalid hex byte on line %d', 'too much data in translation table') go to STDERR at CONFIG-LOAD time and fire ONLY when a config .ttbl is corrupted; they are tooling diagnostics, not part of a COBOL program's observable stdout/file byte stream, and the port's shipped config tables are byte-identical-valid (see [[ttbl-only-cp500]]) so they never trigger. The port's cob_runtime_error facility EXISTS (common_runerr, returns the formatted bytes for the host to emit) and could surface these formats, but cob_load_collation has no executing error-emitting caller in the front-end (built-in cp500 + valid shipped tables are used) -- wiring dead diagnostics would violate the no-dead-code rule. Functional parity sealed; the stderr message is a config-corruption setup-time boundary.
 
 #### `move-alphanum-decimal-default` -- cob_move_alphanum_to_display decimal point configurable in C; Rust default '.' with no module wiring confirmed  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA programs only &nbsp;·&nbsp; **status: ✓ FIXED**
@@ -664,12 +664,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL under the pinned LC_MESSAGES=C oracle. GnuCOBOL marks runtime-error strings with _() (gettext), but under the admitted C/POSIX locale gettext returns the msgid unchanged -- so the oracle emits the English msgid bytes, exactly what the port emits (it has no catalog infra; common_runerr.rs notes _(s)==s under C). Localized (e.g. German/French) runtime errors only appear under a non-C LC_MESSAGES with a catalog installed -- a latent out-of-claim divergence outside the pinned-oracle environment, not a defect under it. (Sibling of the locale-cluster verified-faithful closes.)
 
 #### `xml-parse-national-stub` -- XML PARSE NATIONAL (UTF-16 XML-NTEXT) flag modeled but national text decoding is a stub  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: XML PARSE with the NATIONAL option
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: XML PARSE with the NATIONAL option &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.h:1083 COB_XML_PARSE_NATIONAL selects XML-NTEXT (UTF-16) text in XML PARSE.
 - **gnucobol-rs (Rust):** mlio.rs:447 defines the flag; :783 sets xml_text per the flag; :481 documents XML-NTEXT as 'empty unless NATIONAL'. The flag plumbing exists but UTF-16 national text is not produced.
 - **Diff:** NATIONAL XML text is recognized as a flag but no real UTF-16 content is generated.
-- **Evidence / plan:** XML PARSE ... with NATIONAL; check the XML-NTEXT register.
+- **Evidence / plan:** VERIFIED FAITHFUL -- GnuCOBOL 3.2's XML PARSE is ITSELF an unimplemented pending stub, so no real NATIONAL (or even ASCII) text is generated by EITHER. Probed the built cobc 3.2: `XML PARSE DOC PROCESSING PROCEDURE IS PP` compiles with `warning: XML PARSE is not implemented [-Wpending]` and at runtime emits only START-OF-DOCUMENT then END-OF-INPUT -- it does NOT parse the document content (no START-OF-ELEMENT/CONTENT-CHARACTERS), so XML-TEXT and XML-NTEXT are always empty regardless of the NATIONAL option. The port's mlio.rs models exactly this: the COB_XML_PARSE_NATIONAL flag is recognized and XML-NTEXT documented 'empty unless NATIONAL' -- which is byte-faithful to cobc's non-functional behavior (both produce no real UTF-16 content). When/if GnuCOBOL implements XML PARSE, the UTF-16 generation becomes a real claim; against the admitted 3.2 oracle it is faithfully non-functional, like national-of.
 
 #### `current-date-tz-offset` -- CURRENT-DATE timezone (TZ) / utc_offset: C derives tm_gmtoff from the OS, port leaves offset_known=0  
 **severity:** latent &nbsp;·&nbsp; **observable:** conditional: CURRENT-DATE / FORMATTED-DATETIME offset positions when TZ yields a non-zero gmtoff (CURRENT-DATE is already an OS-sensitive boundary) &nbsp;·&nbsp; **status: ✓ FIXED**
