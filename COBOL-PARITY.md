@@ -12,7 +12,7 @@
 | surface | total | runtime ported (1:1) | front-end runs it |
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
-| statements (verbs) | 66 | 51 (77%) | **11 (17%)** |
+| statements (verbs) | 66 | 51 (77%) | **16 (24%)** |
 | intrinsic functions | 110 | **110 (100%)** | 0 (0%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
@@ -39,9 +39,9 @@
 | `SEND` | communication | n/a | no | front-end TODO (compiler control flow) |
 | `ALTER` | control flow | n/a | no | front-end TODO (compiler control flow) |
 | `CONTINUE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
-| `EVALUATE` | control flow | n/a | no | front-end TODO (compiler control flow) |
-| `EXIT` | control flow | n/a | no | front-end TODO (compiler control flow) |
-| `GOBACK` | control flow | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `EVALUATE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
+| `EXIT` | control flow | n/a | **yes** | **DONE** -- parses + runs |
+| `GOBACK` | control flow | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `GOTO` | control flow | n/a | no | front-end TODO (compiler control flow) |
 | `IF` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `PERFORM` | control flow | n/a | **yes** | **DONE** -- parses + runs |
@@ -64,8 +64,8 @@
 | `START` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `UNLOCK` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `WRITE` | file I/O | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `CALL` | inter-program | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `CANCEL` | inter-program | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `CALL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
+| `CANCEL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `ENTRY` | inter-program | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `GENERATE` | report writer | yes (reportio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `INITIATE` | report writer | yes (reportio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |

@@ -35,7 +35,7 @@ use std::collections::HashMap;
 /// stays honest as the subset grows. Keep this in sync with the dispatch in `exec_stmt` + `run_block`.
 pub const WIRED_STATEMENTS: &[&str] = &[
     "DISPLAY", "MOVE", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP",
-    "CONTINUE",
+    "CONTINUE", "GOBACK", "EXIT", "CALL", "CANCEL", "EVALUATE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -883,6 +883,11 @@ fn run_block(
                             return Ok(true);
                         }
                     }
+                    "EVALUATE" => {
+                        if exec_evaluate(toks, pos, fields, out, exec, ctx)? {
+                            return Ok(true);
+                        }
+                    }
                     // STOP RUN halts the WHOLE run -- even from inside a CALLed program it unwinds to the run
                     // boundary (libcob longjmp(stop_run)); GOBACK / EXIT PROGRAM only end the current body and
                     // return to the caller. Both end this body (Ok(true)); STOP additionally sets ctx.stop_run
@@ -1110,6 +1115,109 @@ fn exec_if(
         *pos += 1;
     }
     Ok(false)
+}
+
+/// A `Tok` as a condition/comparison word (the `\u{1}`-marked form for a string literal), so the EVALUATE
+/// subject/WHEN operands route through the same `eval_cond` / `cond_compare` machinery as `IF`.
+fn tok_to_cond_word(t: &Tok) -> String {
+    match t {
+        Tok::Word(w) => w.clone(),
+        Tok::Str(s) => format!("\u{1}{}", String::from_utf8_lossy(s)),
+        Tok::Dot => ".".into(),
+    }
+}
+
+/// `EVALUATE <subject> (WHEN <object> <stmts>)+ [WHEN OTHER <stmts>] END-EVALUATE` -- the COBOL case
+/// statement. The subject is either `TRUE` (each WHEN object is a CONDITION) or a value (each WHEN object
+/// is a value, optionally `v1 THRU v2`); the FIRST matching WHEN's statements run, the rest are skipped.
+fn exec_evaluate(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    // subject: tokens from here until the first WHEN.
+    let mut subject: Vec<Tok> = Vec::new();
+    while let Some(t) = toks.get(*pos) {
+        match t {
+            Tok::Word(w) if w == "WHEN" => break,
+            Tok::Dot => break,
+            _ => {
+                subject.push(t.clone());
+                *pos += 1;
+            }
+        }
+    }
+    let is_true = subject.len() == 1 && matches!(&subject[0], Tok::Word(w) if w == "TRUE" || w == "ANY");
+    let subject_word = subject.first().map(tok_to_cond_word);
+    let mut matched = false;
+
+    while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "WHEN") {
+        *pos += 1;
+        let is_other = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "OTHER");
+        let mut object: Vec<Tok> = Vec::new();
+        if is_other {
+            *pos += 1;
+        } else {
+            while let Some(t) = toks.get(*pos) {
+                match t {
+                    Tok::Dot => break,
+                    Tok::Word(w) if w == "WHEN" || is_boundary(w) => break,
+                    _ => {
+                        object.push(t.clone());
+                        *pos += 1;
+                    }
+                }
+            }
+        }
+        // does this WHEN match? (only meaningful when executing and nothing matched yet).
+        let clause_matches = if !exec || matched {
+            false
+        } else if is_other {
+            true
+        } else if is_true {
+            eval_cond(&object, fields, &ctx.switches, ctx.collation.as_ref())?
+        } else {
+            evaluate_value_match(subject_word.as_deref(), &object, fields, ctx)?
+        };
+        // run (or skip) this WHEN's statements -- run_block stops at the next WHEN / END-EVALUATE.
+        let halted = run_block(toks, pos, fields, out, exec && clause_matches, ctx)?;
+        if halted {
+            return Ok(true);
+        }
+        if clause_matches {
+            matched = true;
+        }
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-EVALUATE") {
+        *pos += 1;
+    }
+    Ok(false)
+}
+
+/// Whether the EVALUATE subject value matches a WHEN object: a single value (`subject = object`) or a
+/// range (`object = lo THRU hi`, inclusive).
+fn evaluate_value_match(
+    subject: Option<&str>,
+    object: &[Tok],
+    fields: &HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    use std::cmp::Ordering;
+    let subj = subject.ok_or_else(|| RunError::Unsupported("EVALUATE without a subject".into()))?;
+    let col = ctx.collation.as_ref();
+    let words: Vec<String> = object.iter().map(tok_to_cond_word).collect();
+    if let Some(i) = words.iter().position(|w| w == "THRU" || w == "THROUGH") {
+        let lo = words.first().ok_or_else(|| RunError::Unsupported("THRU without lower bound".into()))?;
+        let hi = words.get(i + 1).ok_or_else(|| RunError::Unsupported("THRU without upper bound".into()))?;
+        let ge = cond_compare(subj, lo, fields, col)? != Ordering::Less;
+        let le = cond_compare(subj, hi, fields, col)? != Ordering::Greater;
+        return Ok(ge && le);
+    }
+    let val = words.first().ok_or_else(|| RunError::Unsupported("WHEN without a value".into()))?;
+    Ok(cond_compare(subj, val, fields, col)? == Ordering::Equal)
 }
 
 /// `PERFORM <n> TIMES <stmts> END-PERFORM` or `PERFORM UNTIL <cond> <stmts> END-PERFORM` (the inline
@@ -2551,6 +2659,15 @@ mod tests {
         // EC-ALL CHECKING ON also enables it.
         let all = run_program_dialect_with_rc(&prog(">>TURN EC-ALL CHECKING ON\n"), Dialect::DEFAULT);
         assert!(all.is_err());
+    }
+
+    #[test]
+    fn evaluate_subject_match_and_true() {
+        use crate::dialect::Dialect;
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 N PIC 99 VALUE 7.\n       PROCEDURE DIVISION.\n           EVALUATE N\n               WHEN 1 DISPLAY \"ONE\"\n               WHEN 5 THRU 9 DISPLAY \"RANGE\"\n               WHEN OTHER DISPLAY \"OTHER\"\n           END-EVALUATE.\n           EVALUATE TRUE\n               WHEN N > 50 DISPLAY \"BIG\"\n               WHEN N < 50 DISPLAY \"SMALL\"\n           END-EVALUATE.\n           STOP RUN.\n";
+        let (out, _rc) = run_program_dialect_with_rc(src, Dialect::DEFAULT).unwrap();
+        // N=7 -> 5 THRU 9 -> RANGE ; TRUE -> N<50 -> SMALL.
+        assert_eq!(out, b"RANGE\nSMALL\n");
     }
 
     #[test]
