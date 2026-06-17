@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (43 fixed, 62 open)
+## Summary -- 105 gaps catalogued across 5 panels (44 fixed, 61 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 25 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 24 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 43 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 44 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -209,12 +209,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL (audited + oracle-tested). binary.rs binary_encode does the two C overflow paths correctly, INCLUDING the negative floor-vs-truncate distinction: with COB_FLAG_BINARY_TRUNC (binary-truncate:yes, default) it does `v %= 10^digits` = mpz_tdiv_r (truncate toward zero, keeps sign); without it (COMP-5/COMP-X, binary-truncate:no) the byte mask `(v as u128) & ((1<<bits)-1)` IS the two's-complement floor wrap = mpz_fdiv_r_2exp (a negative's low `bits` bits land in [0, 2^bits), not a sign-preserving truncate). Oracle (built cobc): S9(4) COMP-5 <- -70001 -> -4465 (floor mod 2^16); S9(4) COMP <- -70001 -> -1 (trunc mod 10^4) -- both matched by binary_overflow_wrap_modes_match_cobc_oracle. The KEEP_ON_OVERFLOW path is the ON SIZE ERROR / EC-SIZE-OVERFLOW surface (raise-not-store), separate. RESIDUAL: the 99P negative-SCALE digit adjustment on a P-scaled COMP field is a narrow sub-case (P-scaled binary is rare) -- the core three modes are sealed.
 
 #### `decimal-nan-inf-propagation` -- COB_DECIMAL_NAN / COB_DECIMAL_INF scale sentinels not modeled in arith Dec  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: multi-op COMPUTE where an intermediate is NAN/INF
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: multi-op COMPUTE where an intermediate is NAN/INF &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:80 DECIMAL_CHECK short-circuits add/sub/mul when an operand is NAN, propagating it; get_field turns NAN into EC-SIZE-OVERFLOW and INF (KEEP) into EC-SIZE-OVERFLOW.
 - **gnucobol-rs (Rust):** arith.rs Dec{mag:i128,scale:i32} has no NAN/INF sentinel; compute()/store() have no DECIMAL_CHECK; divide-by-zero is a separate error not a NAN-scale that flows on.
 - **Diff:** A COMPUTE chaining a zero-divide intermediate into further arithmetic: C propagates NAN through every op and reports one SIZE error at the store; Rust errors at the divide.
-- **Evidence / plan:** Add NAN/INF sentinels to Dec + a DECIMAL_CHECK at compute() head; declared part of the COMPUTE future court.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96 -- the OBSERVABLE NAN-propagation behavior is now reproduced (the internal Dec NAN/INF sentinel is an unobservable implementation detail). With the ON SIZE ERROR feature (divzero-size-error-control), a zero-divide intermediate in a multi-op COMPUTE raises a recoverable RunError::SizeError that propagates up through parse_expr (short-circuiting the rest of the expression) -- so the receiver is left UNCHANGED and the statement's ON SIZE ERROR handler runs, EXACTLY the bytes C produces by flowing COB_DECIMAL_NAN through every op and reporting one SIZE error at the store. The short-circuit vs NAN-flow is internal; the result is identical. Oracle (built cobc, corpus p30_nan_propagate): COMPUTE R = (A / 0) + 5 ON SIZE ERROR -> SE + R unchanged; COMPUTE R = A + (10 / 0) - 2 ON SIZE ERROR -> SE2 + R unchanged -- IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 30/0). RESIDUAL: the COB_DECIMAL_INF / KEEP-on-overflow intermediate (an oversize -- not zero-divide -- intermediate) is a narrower sub-case; the front-end's wide 36-digit intermediate rarely overflows, and that path is the EC-SIZE-OVERFLOW surface, distinct from the zero-divide NAN proven here.
 
 #### `divzero-size-error-control` -- Divide-by-zero: C sets EC-SIZE-ZERO-DIVIDE + NAN scale and honors ON SIZE ERROR; Rust hard-errors  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: any DIVIDE BY 0 / COMPUTE with ON SIZE ERROR &nbsp;·&nbsp; **status: ✓ FIXED**
