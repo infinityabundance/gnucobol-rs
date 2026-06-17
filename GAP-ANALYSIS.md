@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (39 fixed, 66 open)
+## Summary -- 105 gaps catalogued across 5 panels (40 fixed, 65 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 29 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 28 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 39 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 40 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -217,12 +217,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Add NAN/INF sentinels to Dec + a DECIMAL_CHECK at compute() head; declared part of the COMPUTE future court.
 
 #### `divzero-size-error-control` -- Divide-by-zero: C sets EC-SIZE-ZERO-DIVIDE + NAN scale and honors ON SIZE ERROR; Rust hard-errors  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: any DIVIDE BY 0 / COMPUTE with ON SIZE ERROR
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: any DIVIDE BY 0 / COMPUTE with ON SIZE ERROR &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:2245 cob_decimal_div on zero divisor sets scale=COB_DECIMAL_NAN + cob_set_exception(EC-SIZE-ZERO-DIVIDE) with a FIXME to defer the abort; get_field propagates NAN as a SIZE error so ON SIZE ERROR control flow is honored.
 - **gnucobol-rs (Rust):** arith.rs:176 compute_divide returns ArithError::DivideByZero (fails closed); no NAN-scale propagation, no SIZE-ERROR phrase semantics.
 - **Diff:** C continues after a zero divide under ON SIZE ERROR (target unchanged, branch taken); Rust surfaces a Result error with no decimal-NAN sentinel.
-- **Evidence / plan:** Model the COB_DECIMAL_NAN sentinel through the store + an EC-SIZE-ZERO-DIVIDE exception; the SIZE ERROR phrase is a declared future court.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96: the cobrun front-end implements the ON SIZE ERROR control flow. A divide-by-zero is now a recoverable RunError::SizeError (map_arith_err maps ArithError::DivideByZero); exec_arith/exec_compute became wrappers returning a `size_error: bool` (the receiver MOVE is skipped on size error -> the receiver is left UNCHANGED). run_block parses the arithmetic statement's optional ON SIZE ERROR / NOT ON SIZE ERROR handler blocks (+ END-verb) via collect_arith_operands/parse_on_size_handler and runs the ON handler on size error, the NOT handler otherwise; with NO handler the receiver stays unchanged and execution continues. Oracle (built cobc, corpus p29_size_error): DIVIDE A BY 0 GIVING R ON SIZE ERROR -> branch taken + R unchanged (7777); DIVIDE A BY 5 -> NOT ON SIZE ERROR branch + R=0020; COMPUTE R=A/0 ON SIZE ERROR -> branch; bare DIVIDE A BY 0 (no handler) -> R unchanged, DONE printed -- all IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 29/0). 892 lib tests. NOTE: the internal COB_DECIMAL_NAN scale sentinel that flows through a multi-op COMPUTE intermediate is a separate gap (decimal-nan-inf-propagation); the observable SIZE ERROR control flow is sealed here.
 
 #### `numval-f-locale-decimal-point` -- NUMVAL-F hardcodes '.' decimal point, ignoring DECIMAL-POINT IS COMMA  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: DECIMAL-POINT IS COMMA set &nbsp;·&nbsp; **status: ✓ FIXED**

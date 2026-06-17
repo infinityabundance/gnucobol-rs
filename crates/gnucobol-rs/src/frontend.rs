@@ -20,7 +20,7 @@
 //! (`IF`/`PERFORM`/`EVALUATE`), `ACCEPT`, files, and any unlisted verb are out of subset and return a
 //! [`RunError`] rather than guessing.
 
-use crate::arith::{cob_arith, cob_divide, Op, Round};
+use crate::arith::{cob_arith, cob_divide, ArithError, Op, Round};
 use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_DISPLAY};
 use crate::edited::{edited_size, encode_edited_cfg};
 use crate::move_ops::cob_move;
@@ -44,8 +44,13 @@ pub enum RunError {
     Unsupported(String),
     /// A referenced data name was never declared in WORKING-STORAGE.
     UndefinedName(String),
-    /// A runtime operation (move/arith/edit) failed (e.g. non-numeric operand, divide by zero).
+    /// A runtime operation (move/arith/edit) failed (e.g. non-numeric operand).
     Runtime(String),
+    /// An arithmetic SIZE ERROR condition (EC-SIZE-*): a divide-by-zero (or, in future, a result too
+    /// large for the receiver). The receiver is left UNCHANGED and the statement's `ON SIZE ERROR`
+    /// handler (if any) runs; with no handler, execution continues silently. Caught by `run_block` /
+    /// the `exec_arith` / `exec_compute` wrappers -- it never propagates out as a fatal error.
+    SizeError,
 }
 
 impl core::fmt::Display for RunError {
@@ -54,6 +59,7 @@ impl core::fmt::Display for RunError {
             RunError::Unsupported(s) => write!(f, "unsupported: {s}"),
             RunError::UndefinedName(s) => write!(f, "undefined data name: {s}"),
             RunError::Runtime(s) => write!(f, "runtime error: {s}"),
+            RunError::SizeError => write!(f, "SIZE ERROR"),
         }
     }
 }
@@ -502,6 +508,30 @@ fn run_block(
                         }
                     }
                     "CONTINUE" | "NEXT" => { /* no-op */ }
+                    // Arithmetic verbs carry optional ON SIZE ERROR / NOT ON SIZE ERROR handler blocks
+                    // (+ END-verb), so they are parsed here rather than via collect_operands/exec_stmt.
+                    "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" | "COMPUTE" => {
+                        let stmt = collect_arith_operands(toks, pos);
+                        let on_size = parse_on_size_handler(toks, pos, false);
+                        let not_size = parse_on_size_handler(toks, pos, true);
+                        let end_kw = format!("END-{verb}");
+                        if matches!(toks.get(*pos), Some(Tok::Word(w)) if *w == end_kw) {
+                            *pos += 1;
+                        }
+                        if exec {
+                            let size_err = if verb == "COMPUTE" {
+                                exec_compute(&stmt, fields)?
+                            } else {
+                                exec_arith(&verb, &stmt, fields)?
+                            };
+                            let handler = if size_err { &on_size } else { &not_size };
+                            if let Some(block) = handler {
+                                if run_handler(block, fields, out, ctx)? {
+                                    return Ok(true); // STOP RUN / GOBACK inside the handler
+                                }
+                            }
+                        }
+                    }
                     _ => {
                         let stmt = collect_operands(toks, pos);
                         if exec {
@@ -532,6 +562,81 @@ fn collect_operands(toks: &[Tok], pos: &mut usize) -> Vec<Tok> {
         }
     }
     v
+}
+
+/// Collect an arithmetic statement's operand tokens (up to an `ON`/`NOT` SIZE-ERROR clause, an `END-verb`,
+/// a `.`, or the next statement boundary).
+fn collect_arith_operands(toks: &[Tok], pos: &mut usize) -> Vec<Tok> {
+    let start = *pos;
+    while let Some(t) = toks.get(*pos) {
+        match t {
+            Tok::Dot => break,
+            Tok::Word(w) if w == "ON" || w == "NOT" || w.starts_with("END-") || is_boundary(w) => break,
+            _ => *pos += 1,
+        }
+    }
+    toks[start..*pos].to_vec()
+}
+
+/// True when `toks[p]` ends an arithmetic SIZE-ERROR handler block: end of input, `.`, an `END-verb`, an
+/// outer scope terminator, or a following `NOT ON SIZE ERROR` clause.
+fn at_size_terminator(toks: &[Tok], p: usize) -> bool {
+    match toks.get(p) {
+        None | Some(Tok::Dot) => true,
+        Some(Tok::Word(w)) if w.starts_with("END-") || SCOPE_ENDERS.contains(&w.as_str()) => true,
+        Some(Tok::Word(w)) if w == "NOT"
+            && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON")
+            && matches!(toks.get(p + 2), Some(Tok::Word(x)) if x == "SIZE") =>
+        {
+            true
+        }
+        _ => false,
+    }
+}
+
+/// Parse an `[NOT] ON SIZE ERROR <statements>` handler at `*pos` (when `is_not`, the `NOT ON SIZE ERROR`
+/// form). Returns the handler statement tokens and advances `*pos` past them; `None` if the clause is absent.
+fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<Vec<Tok>> {
+    let mut p = *pos;
+    if is_not {
+        if !matches!(toks.get(p), Some(Tok::Word(w)) if w == "NOT") {
+            return None;
+        }
+        p += 1;
+    }
+    if !(matches!(toks.get(p), Some(Tok::Word(w)) if w == "ON")
+        && matches!(toks.get(p + 1), Some(Tok::Word(w)) if w == "SIZE")
+        && matches!(toks.get(p + 2), Some(Tok::Word(w)) if w == "ERROR"))
+    {
+        return None;
+    }
+    p += 3;
+    let start = p;
+    while p < toks.len() && !at_size_terminator(toks, p) {
+        p += 1;
+    }
+    let block = toks[start..p].to_vec();
+    *pos = p;
+    Some(block)
+}
+
+/// Run an arithmetic SIZE-ERROR handler block (its own statement sequence). Returns `true` on `STOP RUN` /
+/// `GOBACK` inside it.
+fn run_handler(block: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+    let mut p = 0;
+    while p < block.len() {
+        if matches!(block.get(p), Some(Tok::Dot)) {
+            p += 1;
+            continue;
+        }
+        if run_block(block, &mut p, fields, out, true, ctx)? {
+            return Ok(true);
+        }
+        if matches!(block.get(p), Some(Tok::Dot)) {
+            p += 1;
+        }
+    }
+    Ok(false)
 }
 
 /// `IF <cond> [THEN] <stmts> [ELSE <stmts>] [END-IF]` -- evaluate the condition, run the taken branch,
@@ -1068,10 +1173,9 @@ fn exec_stmt(
     match verb {
         "DISPLAY" => exec_display(stmt, fields, out),
         "MOVE" => exec_move(stmt, fields),
-        "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" => exec_arith(verb, stmt, fields),
-        "COMPUTE" => exec_compute(stmt, fields),
         "CALL" => exec_call(stmt, fields, out, ctx),
         "STOP" => Ok(()), // STOP RUN
+        // ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE are handled in run_block (they carry ON SIZE ERROR clauses).
         other => Err(RunError::Unsupported(format!("verb {other}"))),
     }
 }
@@ -1158,7 +1262,26 @@ fn exec_call(
 /// | '-' primary | operand`. Each binary op is computed via a WIDE numeric intermediate (so a long
 /// expression keeps precision); the per-receiver store is the truncation/edit point. `ROUNDED` and any
 /// non-integer `**` exponent fail closed (not yet in the sealed envelope).
-fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+/// Map an arithmetic error: a divide-by-zero becomes a recoverable [`RunError::SizeError`] (the ON SIZE
+/// ERROR path -- the receiver is left unchanged); everything else is a fatal runtime error.
+fn map_arith_err(e: ArithError) -> RunError {
+    match e {
+        ArithError::DivideByZero => RunError::SizeError,
+        other => RunError::Runtime(format!("{other:?}")),
+    }
+}
+
+/// `COMPUTE` -- returns `true` if a SIZE ERROR (e.g. divide-by-zero) occurred, in which case the receiver
+/// is left UNCHANGED (the move never runs). The caller dispatches the `ON SIZE ERROR` handler.
+fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
+    match exec_compute_inner(stmt, fields) {
+        Ok(()) => Ok(false),
+        Err(RunError::SizeError) => Ok(true),
+        Err(e) => Err(e),
+    }
+}
+
+fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
     let eq = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "="))
         .ok_or_else(|| RunError::Unsupported("COMPUTE without '='".into()))?;
     // receivers = the names before '='; ROUNDED is not yet supported (fail closed).
@@ -1252,7 +1375,7 @@ fn parse_term(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Resu
                 let (b, battr) = parse_factor(t, pos, f)?;
                 let wide = lit_num_attr(36, 18, true); // generous quotient scale; receiver store truncates.
                 acc = cob_divide(&acc, &aattr, &b, &battr, &wide, Round::Truncate)
-                    .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+                    .map_err(map_arith_err)?;
                 aattr = wide;
             }
             _ => break,
@@ -1451,7 +1574,17 @@ fn source_to_decimal(bytes: &[u8], attr: &FieldAttr) -> Result<Decimal, RunError
 
 /// `ADD/SUBTRACT/MULTIPLY/DIVIDE ...` -- the `TO`/`FROM`/`BY`/`INTO`/`GIVING` forms over numeric
 /// receivers, dispatched onto the sealed arithmetic primitives.
-fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+/// `ADD`/`SUBTRACT`/`MULTIPLY`/`DIVIDE` -- returns `true` if a SIZE ERROR (e.g. DIVIDE by zero) occurred,
+/// leaving the receiver UNCHANGED. The caller dispatches the `ON SIZE ERROR` handler.
+fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
+    match exec_arith_inner(verb, stmt, fields) {
+        Ok(()) => Ok(false),
+        Err(RunError::SizeError) => Ok(true),
+        Err(e) => Err(e),
+    }
+}
+
+fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
     // find a GIVING receiver if present.
     let giving = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="GIVING"));
     let kw = match verb {
@@ -1543,7 +1676,7 @@ fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>) -> 
             };
             let wide = lit_num_attr(36, 18, true); // generous quotient scale; move_into truncates.
             let q = cob_divide(&num, &na, &den, &da, &wide, Round::Truncate)
-                .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+                .map_err(map_arith_err)?;
             (q, wide)
         }
         _ => return Err(RunError::Unsupported(format!("{verb} form (target/giving)"))),
