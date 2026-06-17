@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (38 fixed, 67 open)
+## Summary -- 105 gaps catalogued across 5 panels (39 fixed, 66 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 30 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 29 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 38 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 39 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -69,12 +69,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.94: binary.rs binary_decode now caps at 8 bytes (the low 64 bits), taking the least-significant 8 per endianness (big-endian/SWAP COMP-X: the LAST 8 bytes; little-endian: the FIRST 8), matching the default (non-COB_EXPERIMENTAL) C path through cob_binary_get_s/uint64. cobc rejects COMP/COMP-5 >18 digits (>8 bytes) at compile time, so the only reachable >8-byte binary is a 16-byte COMP-X; the C reads only its low 64 bits. Oracle (built cobc, PIC 9(38) COMP-X <- 1234567890123456789012345, read back): 1096246371337559929 == that value mod 2^64 -- matched by binary_decode_caps_wide_field_at_low_64_bits_vs_c_default. <=8-byte fields are byte-unchanged (binary_decode_le_and_be_round_8_bytes; 890 lib tests, COMP sweeps green). The C path for f->size>8 is itself technically UB (fsiz=8U-size underflows) but deterministic on the pinned x86-64 oracle (shift count masked to 0), which the cap reproduces.
 
 #### `cob-get-int-pscale-oob` -- PIC P negative-scale read indexes cob_exp10_ll out of bounds (scale<-18) in C; Rust saturates  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: 19+ trailing P positions read via cob_get_int into an int receiver (C is UB)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: 19+ trailing P positions read via cob_get_int into an int receiver (C is UB) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** move.c:2083 cob_get_int does val*cob_exp10_ll[-scale] where the table is [19]; scale<=-19 (PIC 9(n)P(m), legal to 38) is a genuine OOB static-array read (UB) + i64 overflow.
 - **gnucobol-rs (Rust):** accessors.rs:10 pow10_i64(n)=10i64.checked_pow(n).unwrap_or(i64::MAX) clamps for n>=19 (no OOB), then wrapping_mul.
 - **Diff:** scale<=-19: C reads past the table (UB garbage); Rust multiplies by clamped i64::MAX. Both meaningless, different bytes.
-- **Evidence / plan:** Admitted divergence (C is UB), not a parity target. Prove with ASan on PIC S9(2)P(20) COMP-5.
+- **Evidence / plan:** FIXED as an ADMITTED-UB divergence (no byte oracle exists -- the C side is undefined behavior). move.c:2083 indexes cob_exp10_ll[-scale] (19-entry table), so scale <= -19 (a P-scaled PIC, legal to 38 digits) is an out-of-bounds static-array READ (UB) compounded by i64 overflow. The port's pow10_i64 clamps 10^n to i64::MAX for n>=19 (NO out-of-bounds, NO panic) then wrapping_mul, so cob_get_int/cob_get_llint are well-defined + safe for ANY P scale under forbid(unsafe_code) -- the faithful choice when the reference is UB. Sealed by cob_get_int_large_negative_pscale_is_safe_not_oob (asserts pow10_i64(19)==i64::MAX and a scale -20 read does not panic). 892 lib tests.
 
 #### `cob-module-struct-subset` -- CobModule reproduces only a subset of cob_module and reorders it; drops decimal_point/currency_symbol  
 **severity:** medium &nbsp;·&nbsp; **observable:** no (for ported lifecycle fns); only via struct-offset interop or a dropped edit setting

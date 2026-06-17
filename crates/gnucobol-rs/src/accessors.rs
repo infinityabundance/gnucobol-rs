@@ -520,6 +520,23 @@ mod tests {
     }
 
     #[test]
+    fn cob_get_int_large_negative_pscale_is_safe_not_oob() {
+        // C move.c:2083 does `val * cob_exp10_ll[-scale]` where the table has 19 entries, so a P-scaled
+        // PIC with scale <= -19 (`PIC 9(n)P(m)`, legal to 38 digits) is a genuine OUT-OF-BOUNDS static-array
+        // read (undefined behavior) plus i64 overflow. The port's pow10_i64 clamps 10^n to i64::MAX for
+        // n >= 19 (no OOB) then wrapping_mul, so cob_get_int is panic-free + well-defined for ANY P scale.
+        // There is no byte oracle (the C side is UB); the safe clamp is the faithful choice under
+        // forbid(unsafe_code).
+        assert_eq!(pow10_i64(18), 1_000_000_000_000_000_000);
+        assert_eq!(pow10_i64(19), i64::MAX); // clamped instead of OOB
+        assert_eq!(pow10_i64(38), i64::MAX);
+        // A field with scale -20 (20 trailing P) read into an int does not panic / index OOB.
+        let attr = disp(2, -20, false);
+        let _ = cob_get_int(b"42", &attr); // well-defined (clamped), no panic
+        let _ = cob_get_llint(b"42", &attr);
+    }
+
+    #[test]
     fn get_int_display_and_packed_match_decoders() {
         // cob_get_int/llint must equal the sealed decode -> integer truncation.
         for &(v, dg, sc) in &[(12345i64, 5, 0), (12345, 7, 2), (700, 5, 0), (-4200, 6, 2), (0, 4, 0), (-1, 5, 0)] {
