@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (81 fixed, 24 open)
+## Summary -- 105 gaps catalogued across 5 panels (82 fixed, 23 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 12 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 11 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 8 | narrow, or faithful-but-surprising |
 | **latent** | 3 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 81 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 82 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -469,12 +469,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL -- the gap's abort claim is CONTRADICTED by the built-cobc oracle. A COBOL DIVIDE/COMPUTE by zero is ALWAYS guarded (cob_decimal_div checks the divisor; the generated code never emits an unguarded hardware divide), so it never reaches the SIGFPE handler: built-cobc DIVIDE A BY 0 / COMPUTE R = A / 0 with NO ON SIZE ERROR -> the receiver is left unchanged and execution CONTINUES (exit 0), tested for PIC 9(4) DISPLAY and PIC 9(4) COMP-5 (even at -O2) -- never signal exit ~136. The port's recoverable SIZE ERROR handling (now with full ON SIZE ERROR control flow, see divzero-size-error-control) matches this exactly. (The armed SIGFPE handler in common_signal.rs is for genuine hardware faults from CALL'd native code, which is the dlopen boundary -- not a COBOL divide.)
 
 #### `signal-handlers-not-installed` -- No real signal handler installed; cob_set_signal only returns the row list  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: any uncaught fault (C prints its handler message + exits with the signal; port crashes generically)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: any uncaught fault (C prints its handler message + exits with the signal; port crashes generically) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c cob_set_signal (1380) builds struct sigaction{cob_sig_handler, SA_RESETHAND} and sigaction()-arms SIGFPE/SIGSEGV/SIGBUS etc.
 - **gnucobol-rs (Rust):** common_signal.rs cob_set_signal (286) returns a Vec describing which rows WOULD register; no sigaction/libc; forbid(unsafe_code) -- arms nothing.
 - **Diff:** C takes kernel control of fault signals; Rust computes the would-install list but arms nothing -- faults hit the Rust default.
-- **Evidence / plan:** Needs signal-hook/libc::sigaction (boundary). Trigger a fault; compare stderr+exit.
+- **Evidence / plan:** DECLARED OS BOUNDARY + faithful set-decision (same shape as dlopen-call-stub). The pure SET-DECISION is ported: cob_set_signal returns the exact would-install list (which signals, direct vs only-if-not-ignored) -- the `for (k) if (signals[k].for_set)` loop -- and cob_reg_sighnd returns the must-install-first decision. The sigaction(2)/signal(2) syscalls that ARM the kernel handlers are the declared OS boundary under #![forbid(unsafe_code)] (no libc), exactly like dlopen. Crucially, the FAULT signals C arms (SIGSEGV/SIGBUS/SIGFPE) catch conditions the safe port CANNOT exhibit: SIGSEGV/SIGBUS come from C pointer/BASED UB (the memory-safe port has none -- it fails closed with a typed RunError instead), and SIGFPE from an unguarded integer divide (every COBOL DIVIDE is guarded -> recoverable SizeError, proven in [[sigfpe-vs-size-error]] -- the oracle itself never SIGFPEs). So no COBOL program in the deterministic byte court reaches a fault on which the installed-vs-not handler would differ. The remaining case -- interactive SIGINT/SIGTERM cleanup + the handler's stderr message -- is non-deterministic/interactive, outside the deterministic byte oracle.
 
 #### `lineseq-tab-read-write-asymmetry` -- LINE SEQUENTIAL TAB (0x09) accepted on READ but rejected on WRITE (status 71, zero bytes)  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: WRITE with line-seq validate of a record containing 0x09 &nbsp;·&nbsp; **status: ✓ FIXED**
