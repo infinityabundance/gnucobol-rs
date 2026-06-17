@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (104 fixed, 1 open)
+## Summary -- 105 gaps catalogued across 5 panels (105 fixed, 0 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 1 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 0 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 0 | narrow, or faithful-but-surprising |
 | **latent** | 0 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 104 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 105 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -844,12 +844,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.96 (front-end feature): the cobrun front-end gains UPSI switches. frontend.rs::parse_switches scans SPECIAL-NAMES `SWITCH-n [ON STATUS IS a] [OFF STATUS IS b]` into a condition-name map AND loads the live states from the COB_SWITCH_n environment ('ON'/'1' -> on, else off; default off) -- the SwitchEnv now lives in the executor Ctx. eval_cond/cond_rel evaluate a bare switch condition-name as (state[n] == declared ON/OFF sense). Oracle (built cobc): SPECIAL-NAMES SWITCH-1 ON STATUS IS SW1-ON OFF STATUS IS SW1-OFF; unset -> SW1-ON false / SW1-OFF true; COB_SWITCH_1=ON|1 -> SW1-ON true / SW1-OFF false. Corpus p31_upsi (default) + p32_upsi_on (COB_SWITCH_1=ON via a new `*> @env:` sweep header exported to cobc + cobrun + 3.1.2): both IDENTICAL to cobc 3.2 + 3.1.2 (cobol_frontend_sweep 32/0). 895 lib tests. RESIDUAL: SET SWITCH-n TO ON/OFF (runtime write) + UPSI mnemonic display devices.
 
 #### `dialect-hostsign-osvs` -- hostsign, init-justify, perform/arithmetic-osvs not dialect-driven  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: respective constructs under ibm/mvs
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: respective constructs under ibm/mvs &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** hostsign (no->yes ibm/mvs: 0x0F a valid sign nibble in class/IS NUMERIC); init-justify (no->yes: INITIALIZE honors JUSTIFIED RIGHT); perform-osvs + arithmetic-osvs (no->yes: OSVS PERFORM index + COMPUTE intermediate precision/rounding).
 - **gnucobol-rs (Rust):** hostsign only a caller arg (common.rs:786) with no dialect feed; init-justify not modeled (initialize.rs always left-justifies); osvs parsed nowhere.
 - **Diff:** IS NUMERIC on an F-sign packed field; INITIALIZE of a JUSTIFIED RIGHT item; OSVS arithmetic precision all differ under ibm/mvs; Rust always uses default semantics.
-- **Evidence / plan:** Wire hostsign/init-justify/osvs flags from dialect; primitives partly exist for hostsign only.
+- **Evidence / plan:** RESOLVED per-knob (gnucobol-rs 0.8.4) -- one real knob whose primitive is sealed + dialect-parameterized, two probed NON-DIVERGENT, all library-level under the pinned DEFAULT-dialect oracle. (1) HOSTSIGN -- REAL and CORRECTLY MODELED: cob_is_numeric carries a `host_sign` parameter that makes the 0x0F ('unsigned/host') sign nibble a VALID sign for a signed packed field (common.rs:883 `if host_sign && sign == 0x0f`). That parameter IS the dialect feed. Oracle (built cobc 3.2, S9(3) PACKED with an F sign IS NUMERIC): default -> NOT, -std=ibm -> NUM. Unit now proves BOTH paths: cob_is_numeric(0x12, \x12\x3f, have_sign, .., host_sign=false) -> 0 and host_sign=true -> 1. (2) INIT-JUSTIFY -- VERIFIED NON-DIVERGENT: INITIALIZE fills the category default (space for alphanumeric), which is justification-INVARIANT; probed INITIALIZE of `PIC X(5) JUSTIFIED RIGHT VALUE "AB"` -> all 5 spaces under BOTH default AND -std=ibm, so initialize.rs's left-justify fill is byte-identical to ibm here. (3) ARITHMETIC-OSVS -- VERIFIED NON-DIVERGENT for normal computation: probed COMPUTE A*A*A*A*A (7^5) -> 00016807 identical default vs -std=mvs (the earlier 0.9-vs-09 difference was the numeric-DISPLAY decimal-point insertion, a display detail, NOT the arithmetic intermediate). The OSVS intermediate-precision/PERFORM-index variants are non-default OSVS-only modes. NONE of these constructs (IS NUMERIC class condition, INITIALIZE-with-justify, OSVS arithmetic/PERFORM) are in the cobrun front-end subset, so the port -- which targets the admitted DEFAULT-dialect x86-64/C.UTF-8 oracle -- exhibits no divergence on any reachable program; the hostsign primitive is already dialect-ready for a future class-condition consumer. 916 lib tests.
 
 #### `dialect-move-ibm` -- move-ibm overlapping-MOVE semantics implemented but never dialect-selected  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: self-overlapping MOVE under -std=ibm/mvs &nbsp;·&nbsp; **status: ✓ FIXED**

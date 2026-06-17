@@ -1257,6 +1257,11 @@ mod tests {
         assert_eq!(cob_is_numeric(0x12, b"\x12\x3c", true, false, false, SignMode::Ascii, false, false), 1);
         // PACKED bad sign nibble (0x3F with have_sign) -> not numeric
         assert_eq!(cob_is_numeric(0x12, b"\x12\x3f", true, false, false, SignMode::Ascii, false, false), 0);
+        // dialect-hostsign (ibm/mvs): the F sign nibble (0x0F, "unsigned/host" sign) IS a VALID sign for a
+        // signed packed field -> NUMERIC. The default dialect (host_sign=false) rejects it (above); the IBM
+        // host-sign dialect (host_sign=true) accepts it. This is the Dialect.hostsign feed: built cobc 3.2
+        // `IF S9(3) PACKED with an F sign IS NUMERIC` -> default NOT, -std=ibm NUM.
+        assert_eq!(cob_is_numeric(0x12, b"\x12\x3f", true, false, false, SignMode::Ascii, false, /*host_sign*/ true), 1);
     }
 
     #[test]
