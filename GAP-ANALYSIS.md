@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (36 fixed, 69 open)
+## Summary -- 105 gaps catalogued across 5 panels (37 fixed, 68 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 32 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 31 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 36 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 37 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -61,12 +61,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 > Scope: struct layout, aliasing, endianness, integer/pointer UB, the unsafe-free boundary
 
 #### `binary-decode-16-vs-c-8-byte-cap` -- binary_decode reads up to 16 bytes; default-build C cob_decimal_set_binary caps at 8 bytes  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: COMP-5 field 9..16 bytes with non-zero high bytes read into the decimal core
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: COMP-5 field 9..16 bytes with non-zero high bytes read into the decimal core &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** numeric.c:1637 cob_decimal_set_binary (default, non-COB_EXPERIMENTAL path) builds the mpz via cob_binary_get_sint64/uint64 (numeric.c:273/295) which memcpy at most 8 bytes; for f->size>8 bytes 9..size are never read.
 - **gnucobol-rs (Rust):** binary.rs:21 binary_decode loops bytes.take(n) with n=len().min(16), sign-extending the full width into i128 (cob_decimal.rs:163).
 - **Diff:** For a >8-byte COMP-5/BINARY field with non-zero high bytes, Rust includes bytes 9..16; default C ignores them -> different magnitude.
-- **Evidence / plan:** Confirm the oracle is the default (non-experimental) build, then cap binary_decode at 8 bytes or gate on the build flag. Oracle test: PIC 9(19) COMP-5 := 0xFF x9, MOVE to DISPLAY, diff.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.94: binary.rs binary_decode now caps at 8 bytes (the low 64 bits), taking the least-significant 8 per endianness (big-endian/SWAP COMP-X: the LAST 8 bytes; little-endian: the FIRST 8), matching the default (non-COB_EXPERIMENTAL) C path through cob_binary_get_s/uint64. cobc rejects COMP/COMP-5 >18 digits (>8 bytes) at compile time, so the only reachable >8-byte binary is a 16-byte COMP-X; the C reads only its low 64 bits. Oracle (built cobc, PIC 9(38) COMP-X <- 1234567890123456789012345, read back): 1096246371337559929 == that value mod 2^64 -- matched by binary_decode_caps_wide_field_at_low_64_bits_vs_c_default. <=8-byte fields are byte-unchanged (binary_decode_le_and_be_round_8_bytes; 890 lib tests, COMP sweeps green). The C path for f->size>8 is itself technically UB (fsiz=8U-size underflows) but deterministic on the pinned x86-64 oracle (shift count masked to 0), which the cap reproduces.
 
 #### `cob-get-int-pscale-oob` -- PIC P negative-scale read indexes cob_exp10_ll out of bounds (scale<-18) in C; Rust saturates  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: 19+ trailing P positions read via cob_get_int into an int receiver (C is UB)
