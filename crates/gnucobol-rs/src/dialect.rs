@@ -154,7 +154,9 @@ impl Dialect {
     };
 
     /// Resolve a `-std=` name to its [`Dialect`] (the field-model subset). Unknown names fall back to
-    /// [`Dialect::DEFAULT`] (GnuCOBOL's behavior when `-std` is unset).
+    /// [`Dialect::DEFAULT`] (GnuCOBOL's behavior when `-std` is unset). The returned knobs are PROVEN equal
+    /// to the parsed `config/<name>.conf` (see [`Dialect::from_conf`] + the `from_std_equals_parsed_conf`
+    /// test), so this fast hardcoded path is 1:1 with the shipped dialect configuration files.
     pub fn from_std(name: &str) -> Dialect {
         match name {
             "ibm" | "ibm-strict" => Dialect::IBM,
@@ -164,6 +166,125 @@ impl Dialect {
             _ => Dialect::DEFAULT,
         }
     }
+
+    /// Parse a cobc dialect configuration file (`config/<name>.conf`) into the runtime [`Dialect`] knobs,
+    /// 1:1 with cobc/config.c -- resolving `include "file"` chains in order (an included file's settings
+    /// apply where the directive appears, so a later line overrides). `read` maps a config filename to its
+    /// bytes (the OS boundary). Only the runtime field-model knobs are consumed (binary-size,
+    /// binary-truncate, complex-odo, odoslide, move-ibm, defaultbyte); compiler-only settings (tab-width,
+    /// word-length, warnings) and `.words` reserved-word includes are parsed-and-skipped, as the port has
+    /// no native codegen. Returns the resolved [`Dialect`], starting from [`Dialect::DEFAULT`].
+    pub fn from_conf(name: &str, read: &dyn Fn(&str) -> Option<Vec<u8>>) -> Option<Dialect> {
+        let mut d = Dialect::DEFAULT;
+        apply_conf(name, read, &mut d, 0)?;
+        Some(d)
+    }
+}
+
+/// One overlay pass of a dialect `.conf` onto `d` (recursing on `include`). Cycle-guarded by `depth`.
+fn apply_conf(name: &str, read: &dyn Fn(&str) -> Option<Vec<u8>>, d: &mut Dialect, depth: u32) -> Option<()> {
+    if depth > 16 {
+        return None;
+    }
+    let body = read(name)?;
+    for raw in body.split(|&b| b == b'\n') {
+        let Some((key, val)) = parse_conf_line(raw) else { continue };
+        match key.as_str() {
+            "include" => {
+                // include "file" / include: "file" -- resolve recursively (settings apply in place). A
+                // `.words` reserved-word include is a separate concern (no field-model effect).
+                if !val.ends_with(".words") {
+                    apply_conf(&val, read, d, depth + 1);
+                }
+            }
+            "binary-size" => {
+                d.binary_size = match val.as_str() {
+                    "2-4-8" => BinarySize::Cob248,
+                    "1--8" => BinarySize::Cob1to8,
+                    _ => BinarySize::Cob1248, // "1-2-4-8" (the GnuCOBOL default)
+                }
+            }
+            "binary-truncate" => d.binary_truncate = val == "yes",
+            "complex-odo" => d.complex_odo = val == "yes",
+            "odoslide" => d.odoslide = val == "yes",
+            "move-ibm" => d.move_ibm = val == "yes",
+            "defaultbyte" => {
+                d.defaultbyte = match val.as_str() {
+                    "init" => DefaultByte::Init,
+                    "0" | "none" => DefaultByte::Fill(0), // cobol85 'none' fills 0x00 per the oracle
+                    " " | "32" | "space" => DefaultByte::Fill(b' '),
+                    other => {
+                        // a single decimal byte value (e.g. defaultbyte: 65) or a quoted char.
+                        if let Ok(n) = other.parse::<u8>() {
+                            DefaultByte::Fill(n)
+                        } else if let Some(c) = other.bytes().next() {
+                            DefaultByte::Fill(c)
+                        } else {
+                            DefaultByte::Init
+                        }
+                    }
+                }
+            }
+            _ => {} // compiler-only or not field-model-relevant
+        }
+    }
+    Some(())
+}
+
+/// Parse one `.conf` line into `(key, value)`. Returns `None` for a blank/comment line. The key is the
+/// first token (a trailing `:` stripped); the value is the remainder up to an inline `#` comment, trimmed
+/// and unquoted (`"..."`). Tabs and spaces both separate.
+fn parse_conf_line(raw: &[u8]) -> Option<(String, String)> {
+    // trim leading whitespace; skip blank / comment.
+    let line: &[u8] = {
+        let mut s = raw;
+        while let [first, rest @ ..] = s {
+            if *first == b' ' || *first == b'\t' || *first == b'\r' {
+                s = rest;
+            } else {
+                break;
+            }
+        }
+        s
+    };
+    if line.is_empty() || line[0] == b'#' {
+        return None;
+    }
+    // key: up to whitespace or ':'.
+    let mut i = 0;
+    while i < line.len() && line[i] != b' ' && line[i] != b'\t' && line[i] != b':' {
+        i += 1;
+    }
+    let key = String::from_utf8_lossy(&line[..i]).to_string();
+    // skip a ':' and following whitespace.
+    if i < line.len() && line[i] == b':' {
+        i += 1;
+    }
+    while i < line.len() && (line[i] == b' ' || line[i] == b'\t') {
+        i += 1;
+    }
+    // value: to end-of-line or an inline '#', then trim + unquote.
+    let mut rest = &line[i..];
+    if let Some(h) = rest.iter().position(|&b| b == b'#') {
+        rest = &rest[..h];
+    }
+    // trim trailing whitespace/CR.
+    while let [head @ .., last] = rest {
+        if *last == b' ' || *last == b'\t' || *last == b'\r' {
+            rest = head;
+        } else {
+            break;
+        }
+    }
+    let mut val = String::from_utf8_lossy(rest).to_string();
+    // unquote "..." (keeping the inner bytes, e.g. a single space for defaultbyte).
+    if val.len() >= 2 && val.starts_with('"') && val.ends_with('"') {
+        val = val[1..val.len() - 1].to_string();
+    }
+    if key.is_empty() {
+        return None;
+    }
+    Some((key, val))
 }
 
 impl Default for Dialect {
@@ -175,6 +296,28 @@ impl Default for Dialect {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn from_std_equals_parsed_conf() {
+        // The runtime dialect knobs (binary-size/truncate, complex-odo, odoslide, move-ibm, defaultbyte)
+        // are 1:1 with the shipped config/<name>.conf files: parsing each -std= dialect's .conf (resolving
+        // its include chain natively) must EQUAL the hardcoded from_std Dialect. This is the parity that
+        // makes the config files genuinely wired in native Rust, not just copied.
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("config");
+        let read = |fname: &str| std::fs::read(dir.join(fname)).ok();
+        for name in ["default", "ibm", "ibm-strict", "mf", "mvs", "cobol85", "cobol2002", "cobol2014"] {
+            let parsed = Dialect::from_conf(&format!("{name}.conf"), &read)
+                .unwrap_or_else(|| panic!("parse config/{name}.conf"));
+            assert_eq!(parsed, Dialect::from_std(name), "config/{name}.conf != from_std({name})");
+        }
+        // the parser actually reads the file (not a silent default): ibm.conf -> the ibm knobs, distinct
+        // from DEFAULT.
+        let ibm = Dialect::from_conf("ibm.conf", &read).unwrap();
+        assert_ne!(ibm, Dialect::DEFAULT);
+        assert_eq!(ibm.binary_size, BinarySize::Cob248);
+        assert!(ibm.complex_odo && ibm.odoslide && ibm.move_ibm && !ibm.binary_truncate);
+        assert_eq!(ibm.defaultbyte, DefaultByte::Fill(0));
+    }
 
     #[test]
     fn binary_size_table_matches_cobc_oracle() {

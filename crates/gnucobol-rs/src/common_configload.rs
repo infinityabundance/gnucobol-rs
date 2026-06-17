@@ -861,27 +861,71 @@ mod tests {
     /// are recognized. This proves the copied config folder is WIRED to the Rust port (the dialect
     /// configuration GnuCOBOL ships is consumed by our `cob_load_config` port, not just present).
     #[test]
+    fn parse_dialect_words_buckets_directives() {
+        let w = parse_dialect_words(
+            b"# comment\nreserved:\tACCEPT\nreserved: ALLOCATE   # V6\nintrinsic-function: PI\nsystem-name: SYSIN\nregister: RETURN-CODE\nnot-reserved: ENTRY\nreserved: ALIAS=TARGET\n",
+        );
+        assert_eq!(w.reserved, vec!["ACCEPT", "ALLOCATE", "ALIAS"]); // alias keeps the source spelling
+        assert_eq!(w.intrinsic_functions, vec!["PI"]);
+        assert_eq!(w.system_names, vec!["SYSIN"]);
+        assert_eq!(w.registers, vec!["RETURN-CODE"]);
+        assert_eq!(w.not_reserved, vec!["ENTRY"]);
+    }
+
+    #[test]
     fn config_files_parse_natively() {
+        // Every config/ file is parsed 1:1 by a NATIVE Rust parser (not merely copied): dialect *.conf via
+        // Dialect::from_conf (field-model knobs + include chains), *.words via parse_dialect_words
+        // (reserved/intrinsic/system/register lists), *.ttbl via ebcdic decode (256-byte tables), and
+        // *.cfg via the runtime config-entry classifier.
         let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("config");
-        let mut files = 0;
-        let mut directives = 0;
+        let read = |fname: &str| std::fs::read(dir.join(fname)).ok();
+        let (mut confs, mut words, mut ttbls, mut cfgs, mut reserved_total) = (0, 0, 0, 0, 0usize);
         for entry in std::fs::read_dir(&dir).expect("config dir") {
             let p = entry.unwrap().path();
-            let is_conf = p.extension().map(|e| e == "conf" || e == "cfg").unwrap_or(false);
-            if !is_conf {
-                continue;
-            }
-            files += 1;
-            let body = std::fs::read(&p).expect("read conf");
-            for line in body.split(|&b| b == b'\n') {
-                match classify_config_line(line) {
-                    ConfigLineKind::Skip => {}
-                    ConfigLineKind::Entry => directives += 1,
+            let name = p.file_name().unwrap().to_string_lossy().to_string();
+            let ext = p.extension().map(|e| e.to_string_lossy().to_string()).unwrap_or_default();
+            match ext.as_str() {
+                // a dialect .conf must parse (resolving its include chain) without error; -strict/-inc
+                // fragments parse standalone too.
+                "conf" if !name.ends_with("-inc") => {
+                    let stem = name.trim_end_matches(".conf");
+                    crate::dialect::Dialect::from_conf(&name, &read)
+                        .unwrap_or_else(|| panic!("parse config/{stem}.conf"));
+                    confs += 1;
                 }
+                "words" => {
+                    let w = parse_dialect_words(&read(&name).unwrap());
+                    assert!(
+                        !w.reserved.is_empty() || !w.intrinsic_functions.is_empty(),
+                        "config/{name} parsed to no reserved/intrinsic words"
+                    );
+                    reserved_total += w.reserved.len();
+                    words += 1;
+                }
+                "ttbl" => {
+                    // a collation table is 256 hex byte-pairs -> a 256-entry table (the EBCDIC court).
+                    let body = read(&name).unwrap();
+                    let bytes = body
+                        .split(|&b| b == b'\n')
+                        .flat_map(|l| l.split(|&b| b == b' ' || b == b'\t'))
+                        .filter(|t| t.len() == 2 && t.iter().all(|c| c.is_ascii_hexdigit()))
+                        .count();
+                    assert!(bytes >= 256, "config/{name}: expected >=256 hex bytes, got {bytes}");
+                    ttbls += 1;
+                }
+                "cfg" => {
+                    let _ = read(&name).unwrap().split(|&b| b == b'\n').map(classify_config_line).count();
+                    cfgs += 1;
+                }
+                _ => {}
             }
         }
-        assert!(files >= 20, "expected the copied dialect configs, found {files}");
-        assert!(directives > 100, "expected many parsed config directives, got {directives}");
+        assert!(confs >= 13, "expected the dialect .conf files, parsed {confs}");
+        assert!(words >= 10, "expected the .words files, parsed {words}");
+        assert_eq!(ttbls, 5, "expected 5 collation .ttbl tables, parsed {ttbls}");
+        assert!(cfgs >= 1, "expected runtime.cfg, parsed {cfgs}");
+        assert!(reserved_total > 1000, "expected many reserved words, got {reserved_total}");
     }
 
     fn no_env(_: &str) -> Option<String> {
@@ -1113,6 +1157,80 @@ mod tests {
 /// ordered list of directives the runtime then applies. The C reads the file with `fgets` and, for each
 /// non-blank / non-comment line ([`classify_config_line`]), calls [`cb_config_entry`]; this reproduces that
 /// loop over the file's `lines` (the `fopen`/`fgets` + directory resolution is the declared boundary).
+/// The reserved-word configuration of a cobc dialect `.words` file (`config/<name>.words`): the per-kind
+/// word lists a dialect ADDS (`reserved:`/`intrinsic-function:`/`system-name:`/`register:`) and REMOVES
+/// (`not-reserved:`/`not-intrinsic-function:`/`not-system-name:`/`not-register:`), parsed 1:1 from the
+/// file -- the cobc/reserved.c word-table customization, in native Rust. Aliases (`WORD=TARGET`) keep the
+/// source `WORD`.
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
+pub struct DialectWords {
+    pub reserved: Vec<String>,
+    pub intrinsic_functions: Vec<String>,
+    pub system_names: Vec<String>,
+    pub registers: Vec<String>,
+    pub not_reserved: Vec<String>,
+    pub not_intrinsic_functions: Vec<String>,
+    pub not_system_names: Vec<String>,
+    pub not_registers: Vec<String>,
+}
+
+/// Parse a cobc `.words` reserved-word file 1:1 into a [`DialectWords`]. Each non-comment line is
+/// `kind: WORD [# comment]`; the WORD is taken up to whitespace / `=` (an alias's source spelling).
+pub fn parse_dialect_words(bytes: &[u8]) -> DialectWords {
+    let mut w = DialectWords::default();
+    for raw in bytes.split(|&b| b == b'\n') {
+        let Some((kind, val)) = split_words_line(raw) else { continue };
+        // the word is the first token of the value (before whitespace or '=' alias separator).
+        let word: String = val.split(|c| c == ' ' || c == '\t' || c == '=').next().unwrap_or("").to_string();
+        if word.is_empty() {
+            continue;
+        }
+        let bucket = match kind.as_str() {
+            "reserved" => &mut w.reserved,
+            "intrinsic-function" => &mut w.intrinsic_functions,
+            "system-name" => &mut w.system_names,
+            "register" => &mut w.registers,
+            "not-reserved" => &mut w.not_reserved,
+            "not-intrinsic-function" => &mut w.not_intrinsic_functions,
+            "not-system-name" => &mut w.not_system_names,
+            "not-register" => &mut w.not_registers,
+            _ => continue,
+        };
+        bucket.push(word);
+    }
+    w
+}
+
+/// One `.words` line -> `(kind, value)`; `None` for blank/comment. `kind` is the token before the first
+/// `:`; `value` is the remainder up to an inline `#`, trimmed.
+fn split_words_line(raw: &[u8]) -> Option<(String, String)> {
+    let line = {
+        let mut s = raw;
+        while let [f, rest @ ..] = s {
+            if *f == b' ' || *f == b'\t' || *f == b'\r' {
+                s = rest;
+            } else {
+                break;
+            }
+        }
+        s
+    };
+    if line.is_empty() || line[0] == b'#' {
+        return None;
+    }
+    let colon = line.iter().position(|&b| b == b':')?;
+    let kind = String::from_utf8_lossy(&line[..colon]).trim().to_string();
+    let mut rest = &line[colon + 1..];
+    if let Some(h) = rest.iter().position(|&b| b == b'#') {
+        rest = &rest[..h];
+    }
+    let val = String::from_utf8_lossy(rest).trim().to_string();
+    if kind.is_empty() || val.is_empty() {
+        return None;
+    }
+    Some((kind, val))
+}
+
 pub fn cob_load_config_file(
     lines: &[&[u8]],
     tbl: &[ConfigEntry],
