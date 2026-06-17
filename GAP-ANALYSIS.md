@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (76 fixed, 29 open)
+## Summary -- 105 gaps catalogued across 5 panels (79 fixed, 26 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 15 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 12 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 10 | narrow, or faithful-but-surprising |
 | **latent** | 3 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 76 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 79 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -397,12 +397,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED (gnucobol-rs 0.7.85, in-place): fileio::SortKey now carries attr: Option<FieldAttr>; cob_file_sort_compare routes a numeric key (field_type & COB_TYPE_NUMERIC) through cob_numeric_cmp (sealed GNURUST.NUMCMP.1, ==real libcob), reproducing libcob's COB_FIELD_IS_NUMERIC branch; alphanumeric keys stay on sort_cmps (collated). New cob_file_sort_init_key_typed builds a typed key. Oracle-proven: file SORT ON ASCENDING KEY of S9(2) over {+3,-5,+10,-1} orders -5,-1,+3,+10 (cobc), where bytewise gives the wrong +3,-1,-5,+10 (0x75 u=-5 > 0x33 3=+3). Test sort_numeric_key_orders_by_value_vs_cobc; alphanumeric SORT sweeps unchanged.
 
 #### `bdb-record-lock-not-wired` -- BDB record/file lock model (51/52/61) is built but never invoked by read/write  
-**severity:** medium &nbsp;·&nbsp; **observable:** yes: READ WITH LOCK then a contending READ never returns 51; 51/52 unreachable through real file I/O
+**severity:** medium &nbsp;·&nbsp; **observable:** yes: READ WITH LOCK then a contending READ never returns 51; 51/52 unreachable through real file I/O &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c lock_record (3593) does DB_LOCK_NOWAIT lock_get, NOTGRANTED->51, DEADLOCK->52; lock_file NOTGRANTED->61; cob_read/cob_write call them inline.
 - **gnucobol-rs (Rust):** fileio.rs LockEnv/FileLockState (1680) reproduce the grant/deny algebra and 51/61/52 mapping, but the only callers are a unit test + a smoke harness; IndexedStore read/write/rewrite/delete/start never consult LockEnv.
 - **Diff:** The status-mapping and grant algebra exist in the type system but are unreachable through the executing I/O API.
-- **Evidence / plan:** Wire LockEnv into indexed_read/write. Two READ-WITH-LOCK calls return 00/00 in the port.
+- **Evidence / plan:** VERIFIED FAITHFUL against the admitted oracle -- the gap's predicted divergence (C->51, port->00) does NOT hold for the pinned built cobc 3.2. Empirically probed (BDB handler confirmed: `cobc --info` -> 'indexed file handler: BDB', and the .dat is a real BDB btree): in EVERY reproducible scenario the oracle ALSO returns 00, never 51/52 -- (a) single process, two SELECTs to the same INDEXED file LOCK MODE MANUAL, READ F1 WITH LOCK then READ F2 same key -> 00/00; (b) two PROCESSES, holder READ WITH LOCK held while a second process READs WITH LOCK -> 00/00; (c) LOCK MODE EXCLUSIVE cross-process -> 00/00. The admitted build's BDB has no shared lock environment (no DB_INIT_LOCK), so lock_get always grants; the 51/52 path in fileio.c is source-present but UNREACHABLE in the admitted oracle's observable behavior. The port's LockEnv reproduces the grant/deny ALGEBRA (unit record_and_file_lock_contention) but correctly does NOT force 51 through the executing I/O API -- wiring it to return 51 would DIVERGE from the oracle. Cross-process BDB lock enforcement is the declared OS boundary; the deterministic single-process court cannot exhibit it and neither does the admitted oracle. See sibling [[fcntl-whole-file-lock-noop]] / open-with-lock-mode-select (same evidence).
 
 #### `call-system-no-spawn` -- CALL "SYSTEM" builds the command but never invokes system(); no child status/WIFSIGNALED  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: CALL "SYSTEM" ... GIVING rc cannot return a real child status from the port alone
@@ -437,20 +437,20 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Bridge to real environ for the host run. Set a var then CALL SYSTEM that reads it: child sees it under cobc, not port.
 
 #### `fcntl-whole-file-lock-noop` -- POSIX fcntl/F_SETLK whole-file lock is a no-op; status 61 never raised on open contention  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: two processes contend for the same sequential file (C->61, port->success/35)
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: two processes contend for the same sequential file (C->61, port->success/35) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cob_fd_file_open (fileio.c:1734) takes struct flock{F_WRLCK/F_RDLCK, whole file} via fcntl(F_SETLK); EACCES/EAGAIN/EDEADLK -> abort open, status 61 FILE_SHARING; close F_UNLCK.
 - **gnucobol-rs (Rust):** No fcntl/flock anywhere; cob_unlock_file/cob_file_unlock (fileio.rs:2824) are no-ops; open_status emits 38/41/42/35/30 but never 61.
 - **Diff:** C acquires a real kernel advisory whole-file lock and rejects sharing conflicts with 61; Rust takes no OS lock.
-- **Evidence / plan:** Wire a flock/fcntl layer (needs libc, against forbid(unsafe_code)). Two cobc-linked processes vs port: only C blocks with 61.
+- **Evidence / plan:** VERIFIED FAITHFUL against the admitted oracle (same probe as [[bdb-record-lock-not-wired]]). The predicted C->61 on open contention does NOT occur in the pinned built cobc 3.2: a second process OPEN I-O of an INDEXED file LOCK MODE IS EXCLUSIVE, while a first process holds it open EXCLUSIVE, returns OPEN status 00 (NOT 61) -- the admitted build takes no enforced whole-file lock. So the port's no-fcntl-lock OPEN-succeeds behavior is byte-identical to the admitted oracle. Real kernel/BDB cross-process advisory locking (status 61) is the declared OS boundary (needs fcntl/flock, against #![forbid(unsafe_code)]); it is unobservable in the deterministic single-process court AND unenforced by the admitted oracle. Forcing 61 would diverge from the oracle.
 
 #### `open-with-lock-mode-select` -- OPEN ... WITH LOCK / SHARING lock-mode selection (COB_LOCK_* matrix) not modeled  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: multi-opener INDEXED -- OPEN OUTPUT/I-O does not take C's exclusive lock
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: multi-opener INDEXED -- OPEN OUTPUT/I-O does not take C's exclusive lock &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** fileio.c translates f->lock_mode (EXCLUSIVE/AUTOMATIC/MANUAL/MULTIPLE) into ISAM/BDB lock strength; per-op auto-unlock under AUTOMATIC && !MULTIPLE; cob_commit/cob_rollback release.
 - **gnucobol-rs (Rust):** fileio.rs OpenMode::Locked only means 'closed-with-lock -> later OPEN is 38'; FCD lock_mode is passive data; no branch on COB_LOCK_*; commit/rollback are no-ops.
 - **Diff:** C selects read-vs-write / shared-vs-exclusive strength and auto-unlocks per record; Rust models none of it.
-- **Evidence / plan:** Model lock_mode->strength once locks are wired. Open INDEXED I-O twice: only C blocks.
+- **Evidence / plan:** VERIFIED FAITHFUL against the admitted oracle (same probe as [[bdb-record-lock-not-wired]] / [[fcntl-whole-file-lock-noop]]). The lock_mode->strength selection has no OBSERVABLE effect in the pinned built cobc 3.2: opening an INDEXED file I-O twice (single process, two SELECTs) and cross-process under LOCK MODE EXCLUSIVE both return OPEN 00 and READ 00 -- the admitted build's BDB grants every lock regardless of EXCLUSIVE/AUTOMATIC/MANUAL/MULTIPLE, so 'only C blocks' is false for the admitted oracle. The port modelling none of the lock-strength branching is therefore byte-identical to the admitted oracle. Per-mode lock strength + auto-unlock is the declared cross-process OS boundary (BDB lock env, unenforced in the admitted build); modelling it to block would diverge from the oracle.
 
 #### `process-exit-not-called` -- STOP RUN / hard failure never calls exit(); the OS exit status is a returned decision  
 **severity:** medium &nbsp;·&nbsp; **observable:** conditional: shell exit code observed -- STOP RUN 7 does not yield $?==7 from the port alone &nbsp;·&nbsp; **status: ✓ FIXED**
