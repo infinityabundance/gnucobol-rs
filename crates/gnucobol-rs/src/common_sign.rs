@@ -417,6 +417,26 @@ mod tests {
     }
 
     #[test]
+    fn put_sign_ebcdic_field_matches_fsign_oracle() {
+        // `-fsign=EBCDIC` stores a signed S9(3) DISPLAY field with the EBCDIC overpunch on the trailing
+        // digit. Oracle (built cobc, the field REDEFINED as X(3) to expose the raw bytes):
+        //   -123 -> "12" + 'L' (0x4C);  +123 -> "12" + 'C' (0x43).  vs the default ASCII -123 -> "12s".
+        let ebc = flags(true, false, false, true);
+        let mut neg = *b"123";
+        cob_real_put_sign(COB_TYPE_NUMERIC_DISPLAY, &mut neg, ebc, -1);
+        assert_eq!(&neg, b"12L");
+        let mut pos = *b"123";
+        cob_real_put_sign(COB_TYPE_NUMERIC_DISPLAY, &mut pos, ebc, 1);
+        assert_eq!(&pos, b"12C");
+        // decode is the inverse (cob_get_sign_ebcdic, tested in get_sign_ebcdic_overpunch): 'L' -> -3.
+        // the default ASCII convention stores -3 as the overpunch 's' (0x73) instead.
+        let asc = flags(true, false, false, false);
+        let mut an = *b"123";
+        cob_real_put_sign(COB_TYPE_NUMERIC_DISPLAY, &mut an, asc, -1);
+        assert_eq!(&an, b"12s");
+    }
+
+    #[test]
     fn locate_sign_index() {
         assert_eq!(locate_sign(4, true), 0); // leading
         assert_eq!(locate_sign(4, false), 3); // trailing

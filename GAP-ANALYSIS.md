@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (42 fixed, 63 open)
+## Summary -- 105 gaps catalogued across 5 panels (43 fixed, 62 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 26 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 25 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 42 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 43 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -813,12 +813,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** Honor the redirect vars in exec_display.
 
 #### `cli-fsign-ebcdic` -- -fsign=ASCII/EBCDIC and SIGN IS LEADING/SEPARATE from CLI not selectable; sign hardcoded  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: signed zoned DISPLAY output under -fsign=EBCDIC
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: signed zoned DISPLAY output under -fsign=EBCDIC &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cobc.c:3781 -fsign=<ASCII/EBCDIC> selects zoned-DISPLAY sign representation; affects the overpunch nibble of signed DISPLAY fields.
 - **gnucobol-rs (Rust):** frontend.rs:802 encode 0x70|digit and :1125 decode 0x70..0x79 -- trailing ASCII overpunch only; no EBCDIC sign convention, no CLI sign selection.
 - **Diff:** -fsign=EBCDIC changes the signed-DISPLAY sign byte; Rust always uses one ASCII convention.
-- **Evidence / plan:** Add a sign-convention setting driven by -fsign / dialect.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96: the EBCDIC zoned-sign convention is fully + faithfully implemented at the native sign layer, selected by SignFlags.ebcdic_sign (the COB_MODULE_PTR->ebcdic_sign / -fsign=EBCDIC switch). ENCODE: cob_real_put_sign -> put_sign_ebcdic_byte overlays the overpunch (positive 0..9 -> {ABCDEFGHI, negative 0..9 -> }JKLMNOPQR); DECODE: cob_get_sign_ebcdic is the inverse. Oracle (built cobc, S9(3) REDEFINED as X(3) to expose raw bytes): -fsign=EBCDIC -123 -> "12"+'L'(0x4C), +123 -> "12"+'C'(0x43); -fsign=ASCII -123 -> "12"+'s'(0x73) -- matched by put_sign_ebcdic_field_matches_fsign_oracle + get_sign_ebcdic_overpunch (894 lib tests). NOTE on observability: a signed-DISPLAY field's overpunch byte is NOT visible through the cobrun front-end's sealed subset (DISPLAY reformats with a leading sign -- identical both ways; MOVE numeric->alpha drops the sign; raw bytes need REDEFINES or file I/O, not in the subset), so the convention + its selection are sealed at the native API. RESIDUAL: a -fsign CLI flag on cobrun + SIGN IS LEADING/SEPARATE from the CLI (the SignFlags already carry sign_leading/sign_separate; the CLI plumbing is the remainder).
 
 #### `cli-returncode-whencompiled` -- RETURN-CODE process exit code and WHEN-COMPILED real timestamp not modeled  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: scripts checking $? after a COBOL run; programs displaying WHEN-COMPILED
