@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (100 fixed, 5 open)
+## Summary -- 105 gaps catalogued across 5 panels (101 fixed, 4 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 3 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 1 | narrow, or faithful-but-surprising |
+| **low** | 0 | narrow, or faithful-but-surprising |
 | **latent** | 1 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 100 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 101 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -624,12 +624,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL / already-sealed in a different court than the gap looked. The EBCDIC zoned-decimal SIGN (the C0/D0 positive/negative zones, F unsigned) IS processed -- in common_sign.rs (the sign court), NOT ebcdic.rs (the alphanumeric TEXT code-page court the gap inspected). common_sign::cob_get_sign_ebcdic / cob_real_get_sign(ebcdic_sign) DECODE the EBCDIC overpunch (its ASCII-host image: positive `{ABCDEFGHI` -> 0..9 sign +, negative `}JKLMNOPQR` -> 0..9 sign -, plain digit unsigned) and cob_real_put_sign / put_sign_ebcdic_byte ENCODE it -- the COB_MODULE_PTR->ebcdic_sign path. This was sealed by [[cli-fsign-ebcdic]] and is oracle-verified against built cobc 3.2 (DISPLAY SIGN IS EBCDIC: -123 -> "12L" 0x4C, +123 -> "12C" 0x43; round-trip unit put_sign_ebcdic_field_matches_fsign_oracle). So an EBCDIC zoned numeric with a C0/D0 sign zone IS decoded to a signed value; the gap conflated the text-decode layer (ebcdic.rs, alphanumeric only -- correct) with the numeric-sign layer (common_sign.rs -- implemented).
 
 #### `from-utf8-lossy-env-argv` -- from_utf8_lossy on env-var and option-name bytes can corrupt non-UTF-8 bytes (U+FFFD)  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: env var or CLI arg with non-UTF-8 bytes (ASCII envs unaffected)
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: env var or CLI arg with non-UTF-8 bytes (ASCII envs unaffected) &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** libcob treats env values and getopt names as raw NUL-terminated char*; non-UTF-8 bytes pass through unchanged.
 - **gnucobol-rs (Rust):** common_env.rs (79/313) + common_allocate.rs (274) + cobgetopt.rs (multiple) use String::from_utf8_lossy on env names/values/option bytes -- invalid bytes become U+FFFD (3 bytes EF BF BD).
 - **Diff:** A COB_* env var or argument with a non-UTF-8 byte (Latin-1 0xE9) is rendered U+FFFD in diagnostics/keys, where GnuCOBOL keeps the raw byte -- could mis-key an env lookup or alter a message byte.
-- **Evidence / plan:** Set COB_X to a 0xe9 byte + trigger the message path; compare bytes. Consider OsStr/&[u8] for byte fidelity.
+- **Evidence / plan:** FIXED gnucobol-rs 0.8.4 for the CONSEQUENTIAL facet (the 'could mis-key an env lookup'). The env READ side of common_env.rs is now BYTE-KEYED end to end: the lookup closure is impl Fn(&[u8]) -> Option<Vec<u8>> (was Fn(&str)), and cob_expand_env_string / cob_get_environment / cob_accept_environment / cob_getenv / cob_getenv_direct key on the RAW NAME BYTES -- the from_utf8_lossy(&ename) keying is removed (0 remaining in common_env.rs). So a non-UTF-8 env var name keys exactly like libcob's getenv(char*) and never mis-keys to a U+FFFD-mangled string (unit env_lookup_is_byte_keyed_not_utf8_lossy: name b"V\xe9" -> hit, b"V\xff" -> miss; matches the byte-keyed write side BTreeMap<Vec<u8>,Vec<u8>>). Env VALUES were already Vec<u8> (faithful) and argv optarg is already Vec<u8>. RESIDUAL (cosmetic, non-program-observable): from_utf8_lossy still appears in STDERR DIAGNOSTIC text only -- cobgetopt option-name error messages + common_allocate external_size_message ('EXTERNAL item <name> ...') -- where a non-ASCII NAME would render U+FFFD in a stderr message; these names are program/ASCII-defined in practice, the messages are not part of the stdout/file byte court, and no keying/value path remains lossy. 915 lib tests.
 
 #### `load-collation-error-messages` -- cob_load_collation per-bad-hex-byte runtime-error messages not emitted by the port  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: loading a malformed/missing .ttbl (rare, setup time) &nbsp;·&nbsp; **status: ✓ FIXED**

@@ -9,7 +9,7 @@
 //! The C originals call `getenv`/`setenv`/`putenv`/`unsetenv`, which read and mutate global,
 //! process-wide OS state -- the genuinely impure part. This port keeps the *scanning / expansion /
 //! precedence* logic faithful while routing every actual lookup through an injected closure
-//! `lookup: impl Fn(&str) -> Option<Vec<u8>>` (returning the bytes of the variable's value, or
+//! `lookup: impl Fn(&[u8]) -> Option<Vec<u8>>` (returning the bytes of the variable's value, or
 //! `None` when unset). Mutating operations are modelled as functions over an explicit env map
 //! (`&mut BTreeMap<Vec<u8>, Vec<u8>>`). This makes the logic pure, panic-free and testable; the
 //! caller decides whether the closure / map is backed by `std::env` or a sandbox.
@@ -40,7 +40,7 @@ use std::collections::BTreeMap;
 /// collected here to match.
 pub fn cob_expand_env_string(
     strval: &[u8],
-    lookup: impl Fn(&str) -> Option<Vec<u8>>,
+    lookup: impl Fn(&[u8]) -> Option<Vec<u8>>,
     pid: i32,
     config_dir: Option<&[u8]>,
     copy_dir: Option<&[u8]>,
@@ -76,8 +76,7 @@ pub fn cob_expand_env_string(
                 }
                 k += 1;
             }
-            let name = String::from_utf8_lossy(&ename).into_owned();
-            let mut penv: Option<Vec<u8>> = lookup(&name);
+            let mut penv: Option<Vec<u8>> = lookup(&ename);
 
             if penv.is_none() {
                 if at(k) == COLON {
@@ -140,7 +139,7 @@ fn is_c_space(b: u8) -> bool {
 /// Port of `common.c:cob_getenv_direct` -- return the environment value for `name`, or `None`.
 ///
 /// The C `getenv` returns a pointer into the live environment; here the lookup is the boundary.
-pub fn cob_getenv_direct(name: &str, lookup: impl Fn(&str) -> Option<Vec<u8>>) -> Option<Vec<u8>> {
+pub fn cob_getenv_direct(name: &[u8], lookup: impl Fn(&[u8]) -> Option<Vec<u8>>) -> Option<Vec<u8>> {
     lookup(name)
 }
 
@@ -149,7 +148,7 @@ pub fn cob_getenv_direct(name: &str, lookup: impl Fn(&str) -> Option<Vec<u8>>) -
 /// The C version returns `NULL` for a `NULL` name or an unset variable; otherwise a `cob_strdup`
 /// of the value. Here `name` is always present, so this is `cob_getenv_direct` (the returned
 /// `Vec<u8>` is already an owned copy, matching the `cob_strdup`).
-pub fn cob_getenv(name: &str, lookup: impl Fn(&str) -> Option<Vec<u8>>) -> Option<Vec<u8>> {
+pub fn cob_getenv(name: &[u8], lookup: impl Fn(&[u8]) -> Option<Vec<u8>>) -> Option<Vec<u8>> {
     lookup(name)
 }
 
@@ -293,7 +292,7 @@ pub fn cob_get_environment(
     envname: &[u8],
     envval_size: usize,
     env_mangle: bool,
-    lookup: impl Fn(&str) -> Option<Vec<u8>>,
+    lookup: impl Fn(&[u8]) -> Option<Vec<u8>>,
 ) -> AcceptEnv {
     if envname.is_empty() || envval_size == 0 {
         return AcceptEnv::Exception;
@@ -310,8 +309,7 @@ pub fn cob_get_environment(
             }
         }
     }
-    let key = String::from_utf8_lossy(&name).into_owned();
-    match lookup(&key) {
+    match lookup(&name) {
         Some(value) => AcceptEnv::Value(value),
         None => AcceptEnv::ExceptionSpace,
     }
@@ -324,11 +322,10 @@ pub fn cob_get_environment(
 /// raises `COB_EC_IMP_ACCEPT` and moves a single space -> [`AcceptEnv::ExceptionSpace`].
 pub fn cob_accept_environment(
     local_env: Option<&[u8]>,
-    lookup: impl Fn(&str) -> Option<Vec<u8>>,
+    lookup: impl Fn(&[u8]) -> Option<Vec<u8>>,
 ) -> AcceptEnv {
     if let Some(name) = local_env {
-        let key = String::from_utf8_lossy(name).into_owned();
-        if let Some(value) = lookup(&key) {
+        if let Some(value) = lookup(name) {
             return AcceptEnv::Value(value);
         }
     }
@@ -346,10 +343,10 @@ pub fn cob_accept_environment(
 /// [`TmpdirCandidate`].
 pub fn check_valid_env_tmpdir(
     envname: &str,
-    lookup: impl Fn(&str) -> Option<Vec<u8>>,
+    lookup: impl Fn(&[u8]) -> Option<Vec<u8>>,
     dir_valid: impl Fn(&[u8]) -> bool,
 ) -> TmpdirCandidate {
-    match lookup(envname) {
+    match lookup(envname.as_bytes()) {
         None => TmpdirCandidate::Unset,
         Some(dir) if dir.is_empty() || dir[0] == 0 => TmpdirCandidate::Unset,
         Some(dir) => {
@@ -386,7 +383,7 @@ pub enum TmpdirCandidate {
 pub fn cob_gettmpdir(
     windows: bool,
     slash: u8,
-    lookup: impl Fn(&str) -> Option<Vec<u8>>,
+    lookup: impl Fn(&[u8]) -> Option<Vec<u8>>,
     dir_valid: impl Fn(&[u8]) -> bool,
 ) -> Vec<u8> {
     let names: &[&str] = if windows {
@@ -451,8 +448,24 @@ mod tests {
     use super::*;
     use std::collections::BTreeMap;
 
-    fn map_lookup<'a>(m: &'a BTreeMap<&'a str, &'a str>) -> impl Fn(&str) -> Option<Vec<u8>> + 'a {
-        move |name: &str| m.get(name).map(|v| v.as_bytes().to_vec())
+    fn map_lookup<'a>(m: &'a BTreeMap<&'a str, &'a str>) -> impl Fn(&[u8]) -> Option<Vec<u8>> + 'a {
+        move |name: &[u8]| std::str::from_utf8(name).ok().and_then(|s| m.get(s)).map(|v| v.as_bytes().to_vec())
+    }
+
+    #[test]
+    fn env_lookup_is_byte_keyed_not_utf8_lossy() {
+        // A non-UTF-8 env var name (a raw 0xE9 byte) must key by its RAW BYTES, matching libcob's
+        // getenv(char*), NOT a U+FFFD-mangled UTF-8 string. (Real COB_* names are ASCII, so this only
+        // ever matters for a pathological name -- but the keying is now byte-faithful.)
+        let raw_name: &[u8] = b"V\xe9";
+        let lookup = |n: &[u8]| (n == raw_name).then(|| b"hit".to_vec());
+        assert_eq!(cob_getenv(raw_name, &lookup), Some(b"hit".to_vec()));
+        assert_eq!(cob_getenv_direct(b"V\xe9", &lookup), Some(b"hit".to_vec()));
+        // ${name} expansion keys on the raw bytes too.
+        let out = cob_expand_env_string(b"[${V\xe9}]", &lookup, 0, None, None);
+        assert_eq!(out, b"[hit]");
+        // a different name does NOT spuriously match (no lossy collision).
+        assert_eq!(cob_getenv(b"V\xff", &lookup), None);
     }
 
     #[test]
@@ -530,9 +543,9 @@ mod tests {
     fn getenv_direct_and_getenv() {
         let mut m = BTreeMap::new();
         m.insert("A", "1");
-        assert_eq!(cob_getenv_direct("A", map_lookup(&m)), Some(b"1".to_vec()));
-        assert_eq!(cob_getenv_direct("B", map_lookup(&m)), None);
-        assert_eq!(cob_getenv("A", map_lookup(&m)), Some(b"1".to_vec()));
+        assert_eq!(cob_getenv_direct(b"A", map_lookup(&m)), Some(b"1".to_vec()));
+        assert_eq!(cob_getenv_direct(b"B", map_lookup(&m)), None);
+        assert_eq!(cob_getenv(b"A", map_lookup(&m)), Some(b"1".to_vec()));
     }
 
     #[test]
