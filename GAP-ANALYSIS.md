@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (88 fixed, 17 open)
+## Summary -- 105 gaps catalogued across 5 panels (90 fixed, 15 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 0 | oracle-observable on a real program -- the actionable head of the list |
 | **medium** | 9 | observable under a stated trigger (a dialect / non-C locale / error path) |
-| **low** | 6 | narrow, or faithful-but-surprising |
+| **low** | 4 | narrow, or faithful-but-surprising |
 | **latent** | 2 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 88 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 90 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -592,12 +592,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL under the admitted C.UTF-8 oracle (no change needed). Built-cobc under LC_ALL=C.UTF-8: UPPER-CASE of `E9 61 0A` -> `e9 41 0a` -- the non-ASCII 0xE9 is NOT folded, only the ASCII 'a'->'A'. The port's to_ascii_uppercase/lowercase produces exactly this. Locale-sensitive 8-bit folding only occurs under a non-C LC_CTYPE (e.g. de_DE.ISO-8859-1), which is OUTSIDE the pinned-oracle environment, so it is a latent (out-of-claim) divergence, not a defect under the oracle. Test locale_case_and_compare_match_cutf8_oracle asserts 0xE9 untouched + 'a'->'A'.
 
 #### `ccm-locale-fold-aliased` -- cob_field_to_string CCM_LOWER_LOCALE / CCM_UPPER_LOCALE map to the ASCII (non-locale) fold  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: callers requesting CCM_*_LOCALE on >=128 bytes under a non-C locale
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: callers requesting CCM_*_LOCALE on >=128 bytes under a non-C locale &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** cconv.c:325 CCM_LOWER_LOCALE/CCM_UPPER_LOCALE call the locale-aware tolower/toupper, distinct from CCM_LOWER/CCM_UPPER (7-bit table).
 - **gnucobol-rs (Rust):** cconv.rs:183 collapses both Lower|LowerLocale to cob_tolower and Upper|UpperLocale to cob_toupper -- the locale variants are aliased to the 7-bit table.
 - **Diff:** The point of the *_LOCALE modifier (locale folding for >=128) is lost; it becomes 7-bit ASCII.
-- **Evidence / plan:** Internal helper; no COBOL-visible path under the C.UTF-8 oracle. Document or thread a real locale fold.
+- **Evidence / plan:** VERIFIED FAITHFUL under the pinned oracle locale (same C.UTF-8 doctrine as the 6 locale-fold gaps already closed -- upper-lower-locale-fold, cbl-toupper-locale, locale-compare-bytewise, etc.). Under the admitted C.UTF-8 / POSIX-C locale, the libc locale-aware tolower/toupper that CCM_*_LOCALE calls fold ONLY the 7-bit ASCII range A-Z/a-z and leave every byte >=128 unchanged -- byte-for-byte identical to the 7-bit cob_tolower/cob_toupper the port aliases them to. So CCM_LOWER_LOCALE/CCM_UPPER_LOCALE == CCM_LOWER/CCM_UPPER on the pinned oracle, and the aliasing is correct. A divergence requires a non-C locale (e.g. a Latin-1/Turkish locale that folds >=128), which is out of the admitted-oracle claim (the port targets the pinned C.UTF-8 court). cconv.rs documents the alias.
 
 #### `collation-table-source` -- Alphanumeric compare under PROGRAM COLLATING SEQUENCE is ported, but only via a caller-supplied table -- no built-in EBCDIC default  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: PROGRAM COLLATING SEQUENCE EBCDIC with the default (non-cp500) alphabet
@@ -616,12 +616,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** FIXED gnucobol-rs 0.7.98. Added the byte-length-preserving decode_display_bytes(cp, bytes) -> Vec<u8> (cconv.c's translate: one EBCDIC byte -> exactly one output byte, out.len()==bytes.len()), exported from lib; decode_display (the String form, kept for text/diagnostics) now delegates to it. New unit decode_bytes_is_byte_length_preserving proves the 256-byte battery maps to 256 output bytes while the String form's UTF-8 length exceeds 256 (high cp500 images >=0x80 expand). Field-storage callers (e.g. value.rs, which already used translate_byte directly) now have a byte-faithful API; the String API documents its char-1:1/byte-expanding caveat. 904 lib tests.
 
 #### `ebcdic-zoned-sign` -- EBCDIC zoned-sign zones (cp500 numeric sign half-bytes) not handled; EBCDIC admitted for DISPLAY text only  
-**severity:** low &nbsp;·&nbsp; **observable:** conditional: EBCDIC zoned numeric fields with sign zones
+**severity:** low &nbsp;·&nbsp; **observable:** conditional: EBCDIC zoned numeric fields with sign zones &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** GnuCOBOL processes EBCDIC zoned-decimal signs (C0/D0 zone nibbles, F unsigned) when a numeric DISPLAY field is in an EBCDIC sign mode (sign.c/move.c zoned paths), distinct from the alphanumeric translate.
 - **gnucobol-rs (Rust):** ebcdic.rs decode_display handles alphanumeric DISPLAY only; doctrine fails closed on numeric EBCDIC zoned sign processing (a separate court).
 - **Diff:** An EBCDIC zoned numeric with a C0/D0 sign zone is not decoded to a signed value by the EBCDIC layer.
-- **Evidence / plan:** Deliberate scope boundary (documented). Known gap, not a regression.
+- **Evidence / plan:** VERIFIED FAITHFUL / already-sealed in a different court than the gap looked. The EBCDIC zoned-decimal SIGN (the C0/D0 positive/negative zones, F unsigned) IS processed -- in common_sign.rs (the sign court), NOT ebcdic.rs (the alphanumeric TEXT code-page court the gap inspected). common_sign::cob_get_sign_ebcdic / cob_real_get_sign(ebcdic_sign) DECODE the EBCDIC overpunch (its ASCII-host image: positive `{ABCDEFGHI` -> 0..9 sign +, negative `}JKLMNOPQR` -> 0..9 sign -, plain digit unsigned) and cob_real_put_sign / put_sign_ebcdic_byte ENCODE it -- the COB_MODULE_PTR->ebcdic_sign path. This was sealed by [[cli-fsign-ebcdic]] and is oracle-verified against built cobc 3.2 (DISPLAY SIGN IS EBCDIC: -123 -> "12L" 0x4C, +123 -> "12C" 0x43; round-trip unit put_sign_ebcdic_field_matches_fsign_oracle). So an EBCDIC zoned numeric with a C0/D0 sign zone IS decoded to a signed value; the gap conflated the text-decode layer (ebcdic.rs, alphanumeric only -- correct) with the numeric-sign layer (common_sign.rs -- implemented).
 
 #### `from-utf8-lossy-env-argv` -- from_utf8_lossy on env-var and option-name bytes can corrupt non-UTF-8 bytes (U+FFFD)  
 **severity:** low &nbsp;·&nbsp; **observable:** conditional: env var or CLI arg with non-UTF-8 bytes (ASCII envs unaffected)
