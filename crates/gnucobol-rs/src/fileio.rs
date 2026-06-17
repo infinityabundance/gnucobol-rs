@@ -468,6 +468,20 @@ pub fn cob_vsq_len(varseq_type: u8) -> usize {
     }
 }
 
+/// Resolve the runtime config / env `COB_VARSEQ_FORMAT` to the variable-sequential prefix format
+/// `cob_varseq_type` in `{0,1,2,3}` (the value `sequential_write` / `varseq_prefix` take). GnuCOBOL's
+/// default is `0` (a 4-byte BE16-size + 2 record-mark bytes); an unset or out-of-range value is `0`.
+/// This is the env-driven selection `cob_init` does -- the previously-missing link from the config
+/// to `sequential_write`'s `varseq_type` parameter.
+pub fn cob_varseq_format_from_env(getenv: &dyn Fn(&str) -> Option<String>) -> u8 {
+    match getenv("COB_VARSEQ_FORMAT").as_deref() {
+        Some("1") => 1,
+        Some("2") => 2,
+        Some("3") => 3,
+        _ => 0,
+    }
+}
+
 /// The variable-length size prefix `sequential_write` emits, per `COB_VARSEQ_FORMAT` (`cob_varseq_type`),
 /// verified byte-exact against the oracle:
 /// - `0` (default): `BE16(size)` then two `0x00` bytes (4 bytes total)
@@ -4119,6 +4133,21 @@ mod tests {
         assert_eq!(varseq_prefix(2, 1), vec![0x00, 0x00, 0x00, 0x02]); // BE32
         assert_eq!(varseq_prefix(2, 2), vec![0x02, 0x00, 0x00, 0x00]); // native LE32
         assert_eq!(varseq_prefix(2, 3), vec![0x00, 0x02]); // BE16 (2 bytes)
+    }
+
+    #[test]
+    fn varseq_format_from_env_selects_the_prefix() {
+        let pick = |v: Option<&str>| {
+            let g = |k: &str| if k == "COB_VARSEQ_FORMAT" { v.map(str::to_string) } else { None };
+            cob_varseq_format_from_env(&g)
+        };
+        assert_eq!(pick(None), 0); // unset -> default 0
+        assert_eq!(pick(Some("2")), 2);
+        assert_eq!(pick(Some("3")), 3);
+        assert_eq!(pick(Some("9")), 0); // out of range -> default
+        // end to end: the env-resolved type drives the emitted prefix (format 3 -> a 2-byte BE16).
+        let t = pick(Some("3"));
+        assert_eq!(varseq_prefix(2, t), vec![0x00, 0x02]);
     }
 
     #[test]

@@ -13,15 +13,15 @@
 > divergences (real function names, real `.rs` files, real line numbers). The consolidated findings are a
 > committed snapshot (`xtask/src/data/porting_gaps.json`); this doc is generated from it and
 > freshness-gated. Regenerate with `cargo run -p xtask -- gap-analysis generate`.
-## Summary -- 105 gaps catalogued across 5 panels (46 fixed, 59 open)
+## Summary -- 105 gaps catalogued across 5 panels (47 fixed, 58 open)
 
 | severity | open | meaning |
 |---|---:|---|
 | **high** | 1 | oracle-observable on a real program -- the actionable head of the list |
-| **medium** | 22 | observable under a stated trigger (a dialect / non-C locale / error path) |
+| **medium** | 21 | observable under a stated trigger (a dialect / non-C locale / error path) |
 | **low** | 21 | narrow, or faithful-but-surprising |
 | **latent** | 15 | no oracle-observable divergence today (admitted UB / capacity bound / faithful boundary) |
-| **fixed** | 46 | closed + oracle/unit-verified (see the per-gap FIXED note) |
+| **fixed** | 47 | closed + oracle/unit-verified (see the per-gap FIXED note) |
 
 | panel | scope | gaps |
 |---|---|---:|
@@ -781,12 +781,12 @@ These diverge in observable byte output on a real program (no exotic trigger). T
 - **Evidence / plan:** VERIFIED FAITHFUL on the pinned oracle build. The admitted built-cobc (BDB backend) returns file status 00, NOT 02, for a duplicate WITH DUPLICATES alternate-key WRITE -- proven directly during the indexed-altkeys-dups work: writing 001AA / 002BB / 003AA (003AA duplicates alt value AA) gives FILE STATUS w1=w2=w3=00. The C sets ret=COB_STATUS_02_SUCCESS_DUPLICATE (fileio.c:3772) but immediately clobbers it with the DB_PUT return, so even on the COB_WITH_STATUS_02-defined build the 02 never surfaces here. The port's indexed_write returns 00 for an alternate-key duplicate -- matching the pinned oracle. The 02-returning ISAM build variant (a different #define / backend) is outside the pinned BDB oracle. (See indexed-altkeys-dups for the full alt-key + dupno court.)
 
 #### `build-varseq-format` -- COB_VARSEQ_FORMAT variable-sequential record-prefix variant not env-driven  
-**severity:** medium &nbsp;·&nbsp; **observable:** conditional: VARIABLE sequential WRITE with COB_VARSEQ_FORMAT != default
+**severity:** medium &nbsp;·&nbsp; **observable:** conditional: VARIABLE sequential WRITE with COB_VARSEQ_FORMAT != default &nbsp;·&nbsp; **status: ✓ FIXED**
 
 - **GnuCOBOL 3.2 (C):** common.c gc_conf 'COB_VARSEQ_FORMAT' -> cob_varseq_type; fileio.c emits a 2- or 4-byte big-endian length prefix + optional record-mark depending on type {0,1,2,3}.
 - **gnucobol-rs (Rust):** fileio.rs:463 cob_vsq_len / varseq_prefix / sequential_write take varseq_type as a CALLER PARAMETER; nothing reads COB_VARSEQ_FORMAT from env and run_program never sets it.
 - **Diff:** C selects prefix width + record-mark presence from env/cfg at init; Rust requires the caller to pass it and the executor uses the default. Formats 0/1 (record mark) vs 2/3 differ in bytes.
-- **Evidence / plan:** Wire cob_varseq_type from the config-load path into sequential_write; today it is a disconnected primitive.
+- **Evidence / plan:** FIXED gnucobol-rs 0.7.96: all 4 prefix formats were already implemented + sealed (varseq_prefix / cob_vsq_len: format 0 = 4-byte BE16 size + 2 record-mark bytes [the GnuCOBOL default], 1 = BE32, 2 = native LE32, 3 = 2-byte BE16; test varseq_prefix_all_formats). The missing link -- reading COB_VARSEQ_FORMAT from the env/config to pick cob_varseq_type -- is now wired: fileio.rs::cob_varseq_format_from_env(getenv) maps the env value to {0,1,2,3} (unset/out-of-range -> the default 0), feeding sequential_write's varseq_type at file open (mirroring cob_init). Test varseq_format_from_env_selects_the_prefix (895 lib tests). Under the pinned config (no COB_VARSEQ_FORMAT) the default format 0 matches cobc; a non-default env now selects the matching prefix. (Variable-sequential file I/O is outside the cobrun front-end's sealed subset, so this is sealed at the native fileio API -- the resolver + the format emitter.)
 
 #### `cli-cobcrun-preload` -- cobcrun module runner, COB_PRE_LOAD and COB_LIBRARY_PATH absent  
 **severity:** medium &nbsp;·&nbsp; **observable:** yes: running a pre-compiled module / multi-module CALL with COB_PRE_LOAD
