@@ -2626,6 +2626,72 @@ fn evaluate_value_match(
 
 /// `PERFORM <n> TIMES <stmts> END-PERFORM` or `PERFORM UNTIL <cond> <stmts> END-PERFORM` (the inline
 /// forms). Out-of-line `PERFORM <paragraph>` is not in the subset (fail closed).
+/// Parse `VARYING <id> FROM <x> BY <y> UNTIL <cond>` (the cursor is at `VARYING`). Returns the loop
+/// variable, the FROM / BY operand tokens, and the UNTIL condition tokens. Nested `AFTER` varying is
+/// not in the subset (fails closed).
+fn parse_varying_clause(toks: &[Tok], pos: &mut usize) -> Result<(String, Tok, Tok, Vec<Tok>), RunError> {
+    *pos += 1; // skip VARYING
+    let word = |p: usize| matches!(toks.get(p), Some(Tok::Word(_)) | Some(Tok::Str(_)));
+    let id = match toks.get(*pos) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("PERFORM VARYING: missing loop variable".into())),
+    };
+    *pos += 1;
+    let expect = |toks: &[Tok], pos: &mut usize, kw: &str| -> Result<(), RunError> {
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == kw) {
+            *pos += 1;
+            Ok(())
+        } else {
+            Err(RunError::Unsupported(format!("PERFORM VARYING: expected {kw}")))
+        }
+    };
+    expect(toks, pos, "FROM")?;
+    if !word(*pos) {
+        return Err(RunError::Unsupported("PERFORM VARYING: missing FROM value".into()));
+    }
+    let from = toks[*pos].clone();
+    *pos += 1;
+    expect(toks, pos, "BY")?;
+    if !word(*pos) {
+        return Err(RunError::Unsupported("PERFORM VARYING: missing BY value".into()));
+    }
+    let by = toks[*pos].clone();
+    *pos += 1;
+    expect(toks, pos, "UNTIL")?;
+    let mut cond = Vec::new();
+    while let Some(t) = toks.get(*pos) {
+        match t {
+            Tok::Dot => break,
+            Tok::Word(w) if w == "AFTER" => {
+                return Err(RunError::Unsupported("PERFORM VARYING ... AFTER (nested varying not in subset)".into()))
+            }
+            Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+            _ => {
+                cond.push(t.clone());
+                *pos += 1;
+            }
+        }
+    }
+    Ok((id, from, by, cond))
+}
+
+/// Set the VARYING loop variable to its FROM value.
+fn varying_set(name: &str, src: &Tok, fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    let (b, a) = operand_value(src, fields)?;
+    let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+    move_into(f, &b, &a, false)
+}
+
+/// Step the VARYING loop variable by its BY increment (`id = id + by`).
+fn varying_step(name: &str, by: &Tok, fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    let (idb, ida) = operand_value(&Tok::Word(name.to_string()), fields)?;
+    let (byb, bya) = operand_value(by, fields)?;
+    let (rb, ra) = wide_op(Op::Add, &idb, &ida, &byb, &bya)?;
+    let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+    store_arith_result(f, &rb, &ra, false, false)?;
+    Ok(())
+}
+
 fn exec_perform(
     toks: &[Tok],
     pos: &mut usize,
@@ -2643,6 +2709,28 @@ fn exec_perform(
             if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
                 *pos += 1;
                 if let Some(Tok::Word(w)) = toks.get(*pos) { p2 = w.clone(); *pos += 1; }
+            }
+            // PERFORM para [THRU para2] VARYING id FROM x BY y UNTIL cond (out-of-line, TEST BEFORE).
+            if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
+                let (id, from, by, cond) = parse_varying_clause(toks, pos)?;
+                if !exec {
+                    return Ok(false);
+                }
+                let (start, end) = para_range(&p1, &p2)
+                    .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
+                varying_set(&id, &from, fields)?;
+                let mut guard = 0u32;
+                while !eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                    if run_range(toks, start, end, fields, out, ctx)? {
+                        return Ok(true);
+                    }
+                    varying_step(&id, &by, fields)?;
+                    guard += 1;
+                    if guard > 1_000_000 {
+                        return Err(RunError::Runtime("PERFORM VARYING exceeded 1e6 iterations".into()));
+                    }
+                }
+                return Ok(false);
             }
             let mut times: Option<String> = None;
             let mut ucond: Vec<Tok> = Vec::new();
@@ -2683,6 +2771,34 @@ fn exec_perform(
             }
             return Ok(false);
         }
+    }
+    // inline: PERFORM VARYING id FROM x BY y UNTIL cond ... END-PERFORM (TEST BEFORE, the default).
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
+        let (id, from, by, cond) = parse_varying_clause(toks, pos)?;
+        let body_start = *pos;
+        let mut scan = *pos;
+        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
+        let body_end = scan;
+        if exec {
+            varying_set(&id, &from, fields)?;
+            let mut guard = 0u32;
+            while !eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                let mut p = body_start;
+                if run_block(toks, &mut p, fields, out, true, ctx)? {
+                    return Ok(true);
+                }
+                varying_step(&id, &by, fields)?;
+                guard += 1;
+                if guard > 1_000_000 {
+                    return Err(RunError::Runtime("PERFORM VARYING exceeded 1e6 iterations".into()));
+                }
+            }
+        }
+        *pos = body_end;
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-PERFORM") {
+            *pos += 1;
+        }
+        return Ok(false);
     }
     // forms: PERFORM <n> TIMES ... END-PERFORM ; PERFORM UNTIL <cond> ... END-PERFORM
     let is_until = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "UNTIL");
