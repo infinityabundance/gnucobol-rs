@@ -426,6 +426,7 @@ pub fn run_program_redirected(
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
     let mut out = Vec::new();
+    EXTERNAL_STORE.with(|m| m.borrow_mut().clear()); // EXTERNAL storage is per run unit (before any build)
     let mut fields = build_program_fields(main, &ctx)?;
     reset_exception(); // a fresh run starts with no raised exception
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
@@ -563,6 +564,8 @@ struct ProgItem {
     /// `SYNCHRONIZED` / `SYNC` -- align a binary/float item to its natural boundary (slack inserted before
     /// it in the group layout).
     sync: bool,
+    /// `EXTERNAL` -- storage shared across the run unit (by name), zero-filled, VALUE ignored.
+    external: bool,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1212,7 +1215,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 level: 66, name: rname, pic: String::new(), value: None, occurs: 1, redefines: None,
                 condition: None, indexed_by: Vec::new(), usage: None, sign: (false, false),
                 extra_flags: 0, float_kind: None, odo_counter: None,
-                renames: Some((start, end)), sync: false,
+                renames: Some((start, end)), sync: false, external: false,
             });
             continue;
         }
@@ -1273,6 +1276,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 odo_counter: None,
                 renames: None,
                 sync: false,
+                external: false,
             });
             continue;
         }
@@ -1316,6 +1320,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut odo_counter: Option<String> = None;
         // SYNCHRONIZED alignment.
         let mut sync = false;
+        // EXTERNAL shared storage.
+        let mut external = false;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1439,6 +1445,11 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         k += 1;
                     }
                 }
+                // `EXTERNAL` -- run-unit-shared storage (VALUE ignored, zero-filled).
+                Some(Tok::Word(w)) if w == "EXTERNAL" => {
+                    external = true;
+                    k += 1;
+                }
                 // `SYNCHRONIZED [LEFT|RIGHT]` / `SYNC` -- natural-boundary alignment.
                 Some(Tok::Word(w)) if w == "SYNCHRONIZED" || w == "SYNC" => {
                     sync = true;
@@ -1493,6 +1504,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             odo_counter,
             renames: None,
             sync,
+            external,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1636,6 +1648,20 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 redefines: None,
             });
         }
+    }
+    // EXTERNAL items: VALUE is ignored and the storage is run-unit-shared by name (zero-filled on first
+    // use). Load the shared value if another program already created it, else zero-fill + register.
+    for it in &prog.ws {
+        if !it.external {
+            continue;
+        }
+        let size = field_len(&it.name, &fields);
+        let bytes = EXTERNAL_STORE
+            .with(|m| m.borrow().get(&it.name).cloned())
+            .unwrap_or_else(|| vec![0u8; size]);
+        set_item_bytes(&it.name, bytes, &mut fields);
+        let cur = read_field(&fields, &it.name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+        EXTERNAL_STORE.with(|m| m.borrow_mut().insert(it.name.clone(), cur));
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
@@ -1829,6 +1855,43 @@ thread_local! {
 /// The `(counter, elem-size)` of an `OCCURS DEPENDING ON` table, if `name` is one.
 fn odo_lookup(name: &str) -> Option<(String, usize)> {
     ODO_TABLES.with(|m| m.borrow().get(name).cloned())
+}
+
+thread_local! {
+    /// `EXTERNAL` data items: the run-unit-shared storage, keyed by item name. Persists across program
+    /// builds and CALLs (cleared only at a fresh top-level run); zero-filled on first use.
+    static EXTERNAL_STORE: std::cell::RefCell<HashMap<String, Vec<u8>>> = std::cell::RefCell::new(HashMap::new());
+}
+
+/// Set an item's bytes -- distributing into a group's leaves, or replacing an elementary field's bytes.
+fn set_item_bytes(name: &str, bytes: Vec<u8>, fields: &mut HashMap<String, Field>) {
+    if let Some(Field { storage: Storage::Group { children }, .. }) = fields.get(name) {
+        let children = children.clone();
+        put_group_bytes(&children, bytes, fields);
+    } else if let Some(f) = fields.get_mut(name) {
+        f.bytes = bytes;
+    }
+}
+
+/// Copy every EXTERNAL item present in `fields` into the shared store (a program's current values out).
+fn sync_external_to_store(fields: &HashMap<String, Field>) {
+    let names: Vec<String> = EXTERNAL_STORE.with(|m| m.borrow().keys().cloned().collect());
+    for name in names {
+        if let Ok(Some(f)) = read_field(fields, &name) {
+            EXTERNAL_STORE.with(|m| m.borrow_mut().insert(name, f.bytes));
+        }
+    }
+}
+
+/// Copy every EXTERNAL item from the shared store into `fields` (the shared values in).
+fn sync_store_to_external(fields: &mut HashMap<String, Field>) {
+    let entries: Vec<(String, Vec<u8>)> =
+        EXTERNAL_STORE.with(|m| m.borrow().iter().map(|(k, v)| (k.clone(), v.clone())).collect());
+    for (name, bytes) in entries {
+        if fields.contains_key(&name) {
+            set_item_bytes(&name, bytes, fields);
+        }
+    }
 }
 
 /// The natural-boundary alignment (bytes) of a SYNCHRONIZED item: its size for a binary/float
@@ -3274,6 +3337,9 @@ fn exec_call(
         }
     }
 
+    // EXTERNAL storage is run-unit-shared: publish the caller's current values before the callee builds
+    // (its build loads them) and reads them back after.
+    sync_external_to_store(fields);
     // The callee's fields: restore its PERSISTED WORKING-STORAGE (COBOL static storage -- a subprogram's WS
     // survives between CALLs) when it has been called before and not CANCELed; otherwise build fresh from
     // the VALUE clauses. An INITIAL program is always rebuilt (re-initialized every entry).
@@ -3285,6 +3351,7 @@ fn exec_call(
     } else {
         build_program_fields(callee, ctx)?
     };
+    sync_store_to_external(&mut cfields); // the callee sees the shared EXTERNAL values (fresh or persisted)
     // RETURN-CODE is shared: seed the callee with the caller's current value.
     if let Some(rc) = fields.get("RETURN-CODE") {
         cfields.insert("RETURN-CODE".to_string(), rc.clone());
@@ -3304,6 +3371,10 @@ fn exec_call(
     }
 
     run_program_body(callee, &name, ctx, &mut cfields, out)?;
+
+    // EXTERNAL: the callee's (possibly modified) shared values flow back to the store, then to the caller.
+    sync_external_to_store(&cfields);
+    sync_store_to_external(fields);
 
     // Copy-out: BY REFERENCE arguments receive the callee's (possibly modified) parameter value back.
     for (idx, param) in callee.using.iter().enumerate() {
