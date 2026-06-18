@@ -65,6 +65,7 @@ pub mod common_term;
 pub mod common_dump;
 pub mod common_cmdline;
 pub mod common_print;
+pub mod common_runtimeconf;
 pub mod common_proc;
 pub mod common_sign;
 pub mod common_allocate;
