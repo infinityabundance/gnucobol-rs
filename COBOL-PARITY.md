@@ -12,7 +12,7 @@
 | surface | total | runtime ported (1:1) | front-end runs it |
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
-| statements (verbs) | 66 | 51 (77%) | **48 (73%)** |
+| statements (verbs) | 66 | 51 (77%) | **50 (76%)** |
 | intrinsic functions | 110 | **110 (100%)** | 0 (0%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
@@ -37,7 +37,7 @@
 | `PURGE` | communication | n/a | no | front-end TODO (compiler control flow) |
 | `RECEIVE` | communication | n/a | no | front-end TODO (compiler control flow) |
 | `SEND` | communication | n/a | no | front-end TODO (compiler control flow) |
-| `ALTER` | control flow | n/a | no | front-end TODO (compiler control flow) |
+| `ALTER` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `CONTINUE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `EVALUATE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `EXIT` | control flow | n/a | **yes** | **DONE** -- parses + runs |
@@ -49,7 +49,7 @@
 | `INITIALIZE` | data movement | yes (move.c) | **yes** | **DONE** -- parses + runs |
 | `MOVE` | data movement | yes (move.c) | **yes** | **DONE** -- parses + runs |
 | `SET` | data movement | yes (common.c) | **yes** | **DONE** -- parses + runs |
-| `EXHIBIT` | debug (dialect) | n/a | no | front-end TODO (compiler control flow) |
+| `EXHIBIT` | debug (dialect) | n/a | **yes** | **DONE** -- parses + runs |
 | `READY` | debug (dialect) | n/a | **yes** | **DONE** -- parses + runs |
 | `USE` | declaratives | yes (fileio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `RAISE` | exception | yes (common.c) | **yes** | **DONE** -- parses + runs |

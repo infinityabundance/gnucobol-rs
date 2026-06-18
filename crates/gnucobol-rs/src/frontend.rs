@@ -38,7 +38,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
     "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1168,6 +1168,9 @@ thread_local! {
     /// The current program body's tokens (`proc_toks`), so a verb that runs a paragraph range (SORT
     /// INPUT/OUTPUT PROCEDURE) can reach them. Saved/restored around each program body.
     static CUR_PROC: std::cell::RefCell<Vec<Tok>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// `ALTER`ed GO TO targets: the token index of a `GO` verb -> the paragraph it now proceeds to. Set by
+    /// ALTER, consulted by the GO TO executor. Saved/restored per program body.
+    static ALTERED: std::cell::RefCell<HashMap<usize, String>> = std::cell::RefCell::new(HashMap::new());
 }
 
 /// Whether `name` is a paragraph/section label in the current program body.
@@ -1220,6 +1223,7 @@ fn run_program_body(
     let paras_vec: Vec<(String, usize)> = labels.iter().map(|(n, s)| (n.clone(), *s)).collect();
     let prev_paras = CUR_PARAS.with(|c| c.replace((paras_vec, proc.len())));
     let prev_proc = CUR_PROC.with(|c| c.replace(proc.clone()));
+    let prev_altered = ALTERED.with(|c| c.replace(HashMap::new()));
     let mut pos = 0;
     if matches!(proc.first(), Some(Tok::Dot)) {
         pos = 1;
@@ -1253,6 +1257,7 @@ fn run_program_body(
     // restore the caller's paragraph table (normal return; an error aborts the whole run anyway).
     CUR_PARAS.with(|c| { *c.borrow_mut() = prev_paras; });
     CUR_PROC.with(|c| { *c.borrow_mut() = prev_proc; });
+    ALTERED.with(|c| { *c.borrow_mut() = prev_altered; });
     Ok(())
 }
 
@@ -1295,7 +1300,7 @@ const STMT_VERBS: &[&str] = &[
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
     "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -1336,6 +1341,7 @@ fn run_block(
                     return Ok(false);
                 }
                 let verb = w.clone();
+                let verb_pos = *pos; // token index of this verb (for ALTERed GO TO lookup)
                 *pos += 1;
                 match verb.as_str() {
                     "IF" => {
@@ -1405,10 +1411,13 @@ fn run_block(
                             if rest.iter().any(|t| matches!(t, Tok::Word(w) if w == "DEPENDING")) {
                                 return Err(RunError::Unsupported("GO TO ... DEPENDING ON not in subset".into()));
                             }
-                            let label = rest.iter().find_map(|t| match t {
+                            // an ALTERed GO TO (this verb's position is in the override map) proceeds to the
+                            // altered target; otherwise the written target.
+                            let altered = ALTERED.with(|c| c.borrow().get(&verb_pos).cloned());
+                            let label = altered.or_else(|| rest.iter().find_map(|t| match t {
                                 Tok::Word(w) if w != "TO" => Some(w.clone()),
                                 _ => None,
-                            });
+                            }));
                             match label {
                                 Some(l) => { ctx.goto.borrow_mut().replace(l); return Ok(true); }
                                 None => return Err(RunError::Unsupported("GO TO without a target paragraph".into())),
@@ -2399,6 +2408,8 @@ fn exec_stmt(
             _ => Err(RunError::Unsupported("XML: expected GENERATE".into())),
         },
         "TRANSFORM" => exec_transform(stmt, fields),
+        "EXHIBIT" => exec_exhibit(stmt, fields, out, ctx),
+        "ALTER" => exec_alter(stmt),
         // GnuCOBOL 3.2 compiles these as "not implemented" (or with no stdout effect under the default
         // runtime); the oracle-first front-end accepts them and matches that exactly as a no-op.
         "RAISE" | "VALIDATE" | "DESTROY" | "READY" | "RESET" => Ok(()),
@@ -3037,6 +3048,56 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
         }
         other => Err(RunError::Unsupported(format!("INSPECT clause {other:?} (subset: TALLYING/REPLACING/CONVERTING)"))),
     }
+}
+
+/// `EXHIBIT [NAMED] name [name ...]` -- the OS/VS debug display: each item as `NAME = <display value>`,
+/// space-joined, one line. `CHANGED` (display-only-if-changed) is out of subset.
+fn exec_exhibit(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
+    let mut i = 0;
+    while let Some(Tok::Word(w)) = stmt.get(i) {
+        match w.as_str() {
+            "CHANGED" => return Err(RunError::Unsupported("EXHIBIT CHANGED not in subset".into())),
+            "NAMED" => i += 1,
+            _ => break,
+        }
+    }
+    let names: Vec<String> = stmt[i..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
+    let mut line = Vec::new();
+    for (j, name) in names.iter().enumerate() {
+        if j > 0 { line.push(b' '); }
+        line.extend_from_slice(name.as_bytes());
+        line.extend_from_slice(b" = ");
+        let f = read_field(fields, name)?.ok_or_else(|| RunError::UndefinedName(name.clone()))?;
+        line.extend_from_slice(&display_bytes(&f, ctx.decimal_comma));
+    }
+    line.push(b'\n');
+    out.extend_from_slice(&line);
+    Ok(())
+}
+
+/// `ALTER para TO [PROCEED TO] target [para2 TO ...]` -- retarget the `GO TO` in each named (alterable)
+/// paragraph: record the paragraph's GO-token index -> the new target, consulted when that GO TO runs.
+fn exec_alter(stmt: &[Tok]) -> Result<(), RunError> {
+    let proc = CUR_PROC.with(|c| c.borrow().clone());
+    let words: Vec<String> = stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
+    let mut i = 0;
+    while i < words.len() {
+        let para = words[i].clone();
+        i += 1;
+        while i < words.len() && (words[i] == "TO" || words[i] == "PROCEED") { i += 1; }
+        if i >= words.len() { break; }
+        let target = words[i].clone();
+        i += 1;
+        if let Some((start, end)) = para_range(&para, &para) {
+            for gi in start..end.min(proc.len()) {
+                if matches!(proc.get(gi), Some(Tok::Word(w)) if w == "GO") {
+                    ALTERED.with(|c| { c.borrow_mut().insert(gi, target.clone()); });
+                    break;
+                }
+            }
+        }
+    }
+    Ok(())
 }
 
 /// `TRANSFORM target FROM from TO to` -- the legacy form of `INSPECT target CONVERTING from TO to` (a
