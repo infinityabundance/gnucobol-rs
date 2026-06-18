@@ -148,7 +148,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `LEVEL 66 (RENAMES)` | no (runtime ready) |
 | `LEVEL 77` | **yes** |
 | `FILLER` | **yes** |
-| `OCCURS DEPENDING ON` | no (runtime ready) |
+| `OCCURS DEPENDING ON` | **yes** |
 | `INDEXED BY` | **yes** |
 
 ## USAGE forms
@@ -164,7 +164,9 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `COMP-6` | **yes** |
 | `POINTER` | **yes** |
 | `INDEX` | **yes** |
-| `NATIONAL` | no (runtime ready) |
+| `NATIONAL` | boundary |
+
+`NATIONAL` (UTF-16) is a **boundary**, not a TODO: GnuCOBOL 3.2 declares it unfinished -- `cobc` emits `warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed [-Wunfinished]`, and the explicit `USAGE NATIONAL` form does not compile. Pinning to an admittedly-unstable implementation is not a 1:1 target.
 
 ## Provenance + method
 

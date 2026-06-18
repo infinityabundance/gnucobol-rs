@@ -453,7 +453,7 @@ fn build(root: &str) -> String {
             c,
             "PICTURE" | "USAGE" | "VALUE" | "OCCURS" | "REDEFINES" | "FILLER"
                 | "LEVEL 88 (condition-name)" | "LEVEL 77" | "INDEXED BY"
-                | "SIGN" | "JUSTIFIED" | "BLANK WHEN ZERO" | "GLOBAL"
+                | "SIGN" | "JUSTIFIED" | "BLANK WHEN ZERO" | "GLOBAL" | "OCCURS DEPENDING ON"
         )
     };
     for c in &clauses {
@@ -472,8 +472,21 @@ fn build(root: &str) -> String {
     };
     for u in &usages {
         let name = u.as_str().unwrap_or("");
-        out.push_str(&format!("| `{name}` | {} |\n", if fe_usage(name) { "**yes**" } else { "no (runtime ready)" }));
+        let cell = if fe_usage(name) {
+            "**yes**"
+        } else if name == "NATIONAL" {
+            "boundary"
+        } else {
+            "no (runtime ready)"
+        };
+        out.push_str(&format!("| `{name}` | {cell} |\n"));
     }
+    out.push_str(
+        "\n`NATIONAL` (UTF-16) is a **boundary**, not a TODO: GnuCOBOL 3.2 declares it unfinished -- \
+         `cobc` emits `warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be \
+         changed [-Wunfinished]`, and the explicit `USAGE NATIONAL` form does not compile. Pinning to an \
+         admittedly-unstable implementation is not a 1:1 target.\n",
+    );
 
     // ---- provenance ----
     out.push_str("\n## Provenance + method\n\n");

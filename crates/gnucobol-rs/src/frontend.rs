@@ -554,6 +554,9 @@ struct ProgItem {
     extra_flags: u16,
     /// `USAGE COMP-1`/`COMP-2`: the IEEE float field type (`0x13`/`0x14`); `None` for a non-float item.
     float_kind: Option<u16>,
+    /// `OCCURS min TO max DEPENDING ON counter`: the counter data-name (`occurs` holds the MAX). `None`
+    /// for a fixed (or no) OCCURS.
+    odo_counter: Option<String>,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1223,6 +1226,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 sign: (false, false),
                 extra_flags: 0,
                 float_kind: None,
+                odo_counter: None,
             });
             continue;
         }
@@ -1262,6 +1266,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut extra_flags: u16 = 0;
         // USAGE COMP-1/COMP-2 -> an IEEE float field type.
         let mut float_kind: Option<u16> = None;
+        // OCCURS ... DEPENDING ON counter.
+        let mut odo_counter: Option<String> = None;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1276,8 +1282,29 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         })?;
                         k += 1;
                     }
+                    // `OCCURS min TO max` -- the physical size is the MAX.
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "TO") {
+                        k += 1;
+                        if let Some(Tok::Word(m)) = toks.get(k) {
+                            occurs = m.parse::<usize>().map_err(|_| {
+                                RunError::Unsupported(format!("OCCURS max {m} is not an integer"))
+                            })?;
+                            k += 1;
+                        }
+                    }
                     if matches!(toks.get(k), Some(Tok::Word(w)) if w == "TIMES") {
                         k += 1;
+                    }
+                    // `DEPENDING [ON] counter` -- the variable-length counter.
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "DEPENDING") {
+                        k += 1;
+                        if matches!(toks.get(k), Some(Tok::Word(w)) if w == "ON") {
+                            k += 1;
+                        }
+                        if let Some(Tok::Word(c)) = toks.get(k) {
+                            odo_counter = Some(c.clone());
+                            k += 1;
+                        }
                     }
                 }
                 // `INDEXED BY idx [idx ...]` -- read the index name(s) until the next clause/period.
@@ -1407,6 +1434,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             sign,
             extra_flags,
             float_kind,
+            odo_counter,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1432,6 +1460,7 @@ fn find_seq_in(toks: &[Tok], seq: &[&str], from: usize, to: usize) -> Option<usi
 /// LINKAGE fields are NOT created here -- a CALL fills them from the caller's arguments.
 fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, Field>, RunError> {
     let mut fields = HashMap::new();
+    ODO_TABLES.with(|m| m.borrow_mut().clear()); // fresh per program build
     for it in &prog.ws {
         // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
         if let Some((parent, values)) = &it.condition {
@@ -1459,6 +1488,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
             // identically, per its VALUE or the dialect fill).
             let elem = f.bytes.clone();
+            // OCCURS DEPENDING ON: physical size is MAX; record (counter, element size) for the live length.
+            if let Some(counter) = &it.odo_counter {
+                ODO_TABLES.with(|m| m.borrow_mut().insert(it.name.clone(), (counter.clone(), elem.len())));
+            }
             f.bytes = elem.repeat(it.occurs);
             f.occurs = it.occurs;
         }
@@ -1682,6 +1715,31 @@ fn caller_program_id() -> Option<String> {
 /// The implicit SEARCH index for an `OCCURS ... INDEXED BY` table, if one was declared.
 fn table_index_lookup(table: &str) -> Option<String> {
     TABLE_INDEX.with(|m| m.borrow().get(table).cloned())
+}
+
+thread_local! {
+    /// `OCCURS min TO max DEPENDING ON counter` tables -> `(counter name, single-element byte size)`.
+    /// The field is built at MAX physical size; the CURRENT length is `counter_value * elem`, computed at
+    /// read time so a group's live image and `FUNCTION LENGTH` reflect the DEPENDING counter.
+    static ODO_TABLES: std::cell::RefCell<HashMap<String, (String, usize)>> = std::cell::RefCell::new(HashMap::new());
+}
+
+/// The `(counter, elem-size)` of an `OCCURS DEPENDING ON` table, if `name` is one.
+fn odo_lookup(name: &str) -> Option<(String, usize)> {
+    ODO_TABLES.with(|m| m.borrow().get(name).cloned())
+}
+
+/// Whether `name` is variable-length: an `OCCURS DEPENDING ON` table itself, or a group whose subtree
+/// contains one. cobc computes `FUNCTION LENGTH` of such an item at runtime (not a compile-time constant).
+fn is_variable_length(name: &str, fields: &HashMap<String, Field>) -> bool {
+    let base = split_subscript(name).0;
+    if odo_lookup(base).is_some() {
+        return true;
+    }
+    if let Some(Field { storage: Storage::Group { children }, .. }) = fields.get(base) {
+        return children.iter().any(|c| is_variable_length(c, fields));
+    }
+    false
 }
 
 thread_local! {
@@ -5172,6 +5230,15 @@ fn eval_function_call(
             args.push(operand_value(&Tok::Word(a.clone()), fields)?);
         }
     }
+    // LENGTH/BYTE-LENGTH of a VARIABLE-length item (one with an OCCURS DEPENDING ON in its subtree) is a
+    // RUNTIME call in cobc, not the compile-time constant fold -- so it displays as the 9-digit cob_intr
+    // form, not a minimal integer.
+    if matches!(name.as_str(), "LENGTH" | "BYTE-LENGTH")
+        && arg_strs.first().is_some_and(|a| is_variable_length(a, fields))
+    {
+        let n = args.first().map(|(b, _)| b.len()).unwrap_or(0);
+        return Ok((crate::intrinsic::cob_intr_length(n), k));
+    }
     Ok((eval_intrinsic(&name, &args)?, k))
 }
 
@@ -5319,7 +5386,14 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
             redefines: None,
         }));
     }
-    let f = aliased(fields, f);
+    let mut f = aliased(fields, f);
+    // OCCURS DEPENDING ON: the live image is only `counter * elem` bytes (the field is built at MAX).
+    if let Some((counter, elem)) = odo_lookup(base) {
+        let n = resolve_int(&counter, fields).unwrap_or(0).max(0) as usize;
+        let cur = (n * elem).min(f.bytes.len());
+        f.bytes.truncate(cur);
+        f.occurs = n;
+    }
     match sub {
         None => Ok(Some(f)),
         Some(s) => {
