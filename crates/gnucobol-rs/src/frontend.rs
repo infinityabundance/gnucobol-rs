@@ -61,6 +61,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
     "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
+    "EXCEPTION-STATUS",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -425,6 +426,7 @@ pub fn run_program_redirected(
 
     let mut out = Vec::new();
     let mut fields = build_program_fields(main, &ctx)?;
+    reset_exception(); // a fresh run starts with no raised exception
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
     let rc = read_return_code(&fields);
     let printer = ctx.printer.borrow().clone();
@@ -1488,6 +1490,76 @@ pub fn set_source_file(path: &str) {
     SOURCE_FILE.with(|s| *s.borrow_mut() = path.to_string());
 }
 
+thread_local! {
+    /// The last raised arithmetic exception condition name (an `EC-SIZE-*`), STICKY: set when a SIZE ERROR
+    /// occurs (divide-by-zero, or a result with more integer digits than the receiver holds) and NOT
+    /// cleared by a later successful statement -- only overwritten by the next exception, exactly as
+    /// libcob's `FUNCTION EXCEPTION-STATUS` behaves (proven: a clean COMPUTE/MOVE after a fault does not
+    /// reset it). Reset only at the start of a top-level run.
+    static EXCEPTION_CODE: std::cell::Cell<&'static str> = const { std::cell::Cell::new("") };
+}
+
+/// Set the current exception condition (sticky until the next exception).
+fn set_exception(code: &'static str) {
+    EXCEPTION_CODE.with(|c| c.set(code));
+}
+
+/// Clear the exception register (called once at the start of a top-level run).
+fn reset_exception() {
+    EXCEPTION_CODE.with(|c| c.set(""));
+}
+
+/// The `FUNCTION EXCEPTION-STATUS` field: the current condition name in a 31-byte field, or spaces.
+fn exception_status_field() -> (Vec<u8>, FieldAttr) {
+    let code = EXCEPTION_CODE.with(|c| c.get());
+    crate::intrinsic::cob_intr_exception_status(if code.is_empty() { None } else { Some(code.as_bytes()) })
+}
+
+/// The integer-digit capacity of an arithmetic receiver (digit positions left of the implied decimal
+/// point), or `None` for a receiver that does not raise a SIZE ERROR (alphanumeric / non-sized).
+fn receiver_int_digits(f: &Field) -> Option<usize> {
+    match &f.storage {
+        Storage::Numeric(a) => Some((a.digits as i32 - a.scale as i32).max(0) as usize),
+        _ => None,
+    }
+}
+
+/// Whether the wide arithmetic result `(val, attr)` has more significant integer digits than `cap` --
+/// i.e. storing it into a receiver of `cap` integer digits would lose high-order digits (SIZE ERROR).
+fn arith_overflows(val: &[u8], attr: &FieldAttr, cap: usize) -> bool {
+    let dec = match source_to_decimal(val, attr) {
+        Ok(d) => d,
+        Err(_) => return false,
+    };
+    let intlen = dec.digits.len().saturating_sub(dec.scale.max(0) as usize);
+    let sig = dec.digits[..intlen].iter().skip_while(|&&d| d == 0).count();
+    sig > cap
+}
+
+/// Store an arithmetic result into receiver `f`, detecting a SIZE ERROR overflow. Returns `true` if a
+/// size error occurred. On overflow WITH a handler present the receiver is left UNCHANGED (the handler
+/// runs); WITHOUT a handler it is truncated; both set `EXCEPTION-STATUS` to `EC-SIZE-OVERFLOW`.
+fn store_arith_result(
+    f: &mut Field,
+    val: &[u8],
+    attr: &FieldAttr,
+    has_handler: bool,
+    decimal_comma: bool,
+) -> Result<bool, RunError> {
+    if let Some(cap) = receiver_int_digits(f) {
+        if arith_overflows(val, attr, cap) {
+            set_exception("EC-SIZE-OVERFLOW");
+            if has_handler {
+                return Ok(true); // receiver unchanged; the ON SIZE ERROR handler runs
+            }
+            move_into(f, val, attr, decimal_comma)?; // no handler: truncate-store, but still a size error
+            return Ok(true);
+        }
+    }
+    move_into(f, val, attr, decimal_comma)?;
+    Ok(false)
+}
+
 /// The caller's PROGRAM-ID (the entry below the top), or `None` at the top-level program.
 fn caller_program_id() -> Option<String> {
     PROGRAM_STACK.with(|s| {
@@ -1841,10 +1913,11 @@ fn run_block(
                             *pos += 1;
                         }
                         if exec {
+                            let has_handler = on_size.is_some();
                             let size_err = if verb == "COMPUTE" {
-                                exec_compute(&stmt, fields)?
+                                exec_compute(&stmt, fields, has_handler)?
                             } else {
-                                exec_arith(&verb, &stmt, fields)?
+                                exec_arith(&verb, &stmt, fields, has_handler)?
                             };
                             let handler = if size_err { &on_size } else { &not_size };
                             if let Some(block) = handler {
@@ -2944,15 +3017,18 @@ fn map_arith_err(e: ArithError) -> RunError {
 
 /// `COMPUTE` -- returns `true` if a SIZE ERROR (e.g. divide-by-zero) occurred, in which case the receiver
 /// is left UNCHANGED (the move never runs). The caller dispatches the `ON SIZE ERROR` handler.
-fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
-    match exec_compute_inner(stmt, fields) {
-        Ok(()) => Ok(false),
-        Err(RunError::SizeError) => Ok(true),
+fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+    match exec_compute_inner(stmt, fields, has_handler) {
+        Ok(size_err) => Ok(size_err),
+        Err(RunError::SizeError) => {
+            set_exception("EC-SIZE-ZERO-DIVIDE");
+            Ok(true)
+        }
         Err(e) => Err(e),
     }
 }
 
-fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
     let eq = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "="))
         .ok_or_else(|| RunError::Unsupported("COMPUTE without '='".into()))?;
     // receivers = the names before '='; ROUNDED is not yet supported (fail closed).
@@ -2984,12 +3060,13 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Resu
     if pos != etoks.len() {
         return Err(RunError::Unsupported(format!("trailing tokens in COMPUTE expr at {}", etoks[pos])));
     }
+    let mut size_err = false;
     for r in receivers {
         let f = fields.get_mut(&r).ok_or_else(|| RunError::UndefinedName(r.clone()))?;
         // COMPUTE result is an already-decoded numeric value -> separator-independent store.
-        move_into(f, &val, &attr, false)?;
+        size_err |= store_arith_result(f, &val, &attr, has_handler, false)?;
     }
-    Ok(())
+    Ok(size_err)
 }
 
 /// Split a word into expression tokens, peeling leading `(` and trailing `)` (which may glue to an
@@ -4783,6 +4860,9 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
             let src = SOURCE_FILE.with(|s| s.borrow().clone());
             ix::cob_intr_module_source(src.as_bytes())
         }
+        // EXCEPTION-STATUS: the last raised arithmetic condition (EC-SIZE-*), sticky, from the register
+        // the front-end maintains as arithmetic SIZE ERRORs occur.
+        "EXCEPTION-STATUS" => exception_status_field(),
         // The compile-stamp intrinsics: deterministic under a pinned SOURCE_DATE_EPOCH (the reproducible-
         // builds standard cobc honours), via the interpreter's compile step.
         "MODULE-DATE" => {
@@ -5216,15 +5296,18 @@ fn source_to_decimal(bytes: &[u8], attr: &FieldAttr) -> Result<Decimal, RunError
 /// receivers, dispatched onto the sealed arithmetic primitives.
 /// `ADD`/`SUBTRACT`/`MULTIPLY`/`DIVIDE` -- returns `true` if a SIZE ERROR (e.g. DIVIDE by zero) occurred,
 /// leaving the receiver UNCHANGED. The caller dispatches the `ON SIZE ERROR` handler.
-fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
-    match exec_arith_inner(verb, stmt, fields) {
-        Ok(()) => Ok(false),
-        Err(RunError::SizeError) => Ok(true),
+fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+    match exec_arith_inner(verb, stmt, fields, has_handler) {
+        Ok(size_err) => Ok(size_err),
+        Err(RunError::SizeError) => {
+            set_exception("EC-SIZE-ZERO-DIVIDE");
+            Ok(true)
+        }
         Err(e) => Err(e),
     }
 }
 
-fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
     // find a GIVING receiver if present.
     let giving = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="GIVING"));
     let kw = match verb {
@@ -5329,8 +5412,9 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
 
     // Store the wide result into the receiver -- cob_move (numeric) or encode_edited (edited).
     let f = fields.get_mut(&recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
-    // arithmetic result is an already-decoded numeric value -> separator-independent store.
-    move_into(f, &rb, &ra, false)
+    // arithmetic result is an already-decoded numeric value -> separator-independent store (with SIZE
+    // ERROR overflow detection).
+    store_arith_result(f, &rb, &ra, has_handler, false)
 }
 
 /// Compute `op(a, b)` exactly into a wide numeric DISPLAY `(bytes, attr)` -- 18 integer digits plus a
