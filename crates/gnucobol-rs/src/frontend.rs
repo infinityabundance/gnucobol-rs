@@ -3160,6 +3160,57 @@ fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
     }
 }
 
+/// The receiver scale (fractional digit count) of a numeric or numeric-edited field -- what a `ROUNDED`
+/// store rounds the arithmetic result to. Alphanumeric receivers have no scale (0).
+fn receiver_scale(f: &Field) -> i16 {
+    match &f.storage {
+        Storage::Numeric(a) => a.scale,
+        Storage::Edited(pic, ..) => crate::edited::edited_scale(pic).unwrap_or(0),
+        _ => 0,
+    }
+}
+
+/// Increment a big-endian decimal magnitude by 1, growing on all-nines carry (`[9,9]` -> `[1,0,0]`).
+fn inc_magnitude(mut d: Vec<u8>) -> Vec<u8> {
+    let mut i = d.len();
+    loop {
+        if i == 0 {
+            d.insert(0, 1);
+            break;
+        }
+        i -= 1;
+        if d[i] == 9 {
+            d[i] = 0;
+        } else {
+            d[i] += 1;
+            break;
+        }
+    }
+    d
+}
+
+/// Round a decimal value to `target_scale` fractional digits using COBOL's default `ROUNDED` mode --
+/// NEAREST, ties **away from zero** (the libcob `COB_STORE_ROUND` default). A value already at or below
+/// the target scale is returned unchanged (the store then zero-extends).
+fn round_decimal(dec: &Decimal, target_scale: i16) -> Decimal {
+    let ts = target_scale.max(0);
+    if dec.scale <= ts {
+        return dec.clone();
+    }
+    let drop = (dec.scale - ts) as usize;
+    let keep = dec.digits.len().saturating_sub(drop);
+    // `keep <= len-1` (drop >= 1), so `digits[keep]` is the most-significant dropped digit.
+    let round_up = dec.digits[keep] >= 5;
+    let mut kept: Vec<u8> = dec.digits[..keep].to_vec();
+    if round_up {
+        kept = inc_magnitude(kept);
+    }
+    if kept.is_empty() {
+        kept.push(0);
+    }
+    Decimal { negative: dec.negative, digits: kept, scale: ts }
+}
+
 /// Render a [`Decimal`] as a zoned `USAGE DISPLAY` source `(bytes, attr)` with a trailing sign
 /// overpunch (the form arithmetic + move accept).
 fn decimal_as_display(dec: &Decimal) -> (Vec<u8>, FieldAttr) {
@@ -3435,14 +3486,17 @@ fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: 
 fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
     let eq = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "="))
         .ok_or_else(|| RunError::Unsupported("COMPUTE without '='".into()))?;
-    // receivers = the names before '='; ROUNDED is not yet supported (fail closed).
+    // receivers = the names before '='; a `ROUNDED` keyword rounds every receiver's store to its own
+    // scale (COBOL default mode: NEAREST, ties away from zero).
     let mut receivers = Vec::new();
+    let mut rounded = false;
     for t in &stmt[..eq] {
         if let Tok::Word(w) = t {
             if w == "ROUNDED" {
-                return Err(RunError::Unsupported("COMPUTE ... ROUNDED (deferred)".into()));
+                rounded = true;
+            } else {
+                receivers.push(w.clone());
             }
-            receivers.push(w.clone());
         }
     }
     if receivers.is_empty() {
@@ -3467,8 +3521,15 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_han
     let mut size_err = false;
     for r in receivers {
         let f = fields.get_mut(&r).ok_or_else(|| RunError::UndefinedName(r.clone()))?;
-        // COMPUTE result is an already-decoded numeric value -> separator-independent store.
-        size_err |= store_arith_result(f, &val, &attr, has_handler, false)?;
+        // COMPUTE result is an already-decoded numeric value -> separator-independent store. With
+        // ROUNDED, round the result to THIS receiver's scale before storing (default mode: ties away).
+        if rounded {
+            let dec = source_to_decimal(&val, &attr)?;
+            let (rval, rattr) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
+            size_err |= store_arith_result(f, &rval, &rattr, has_handler, false)?;
+        } else {
+            size_err |= store_arith_result(f, &val, &attr, has_handler, false)?;
+        }
     }
     Ok(size_err)
 }
@@ -5900,6 +5961,14 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
 
     // Store the wide result into the receiver -- cob_move (numeric) or encode_edited (edited).
     let f = fields.get_mut(&recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
+    // A `ROUNDED` phrase rounds the result to the receiver's scale before the store (COBOL default
+    // mode: NEAREST, ties away from zero); otherwise the store truncates.
+    let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
+    if rounded {
+        let dec = source_to_decimal(&rb, &ra)?;
+        let (nb, na) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
+        return store_arith_result(f, &nb, &na, has_handler, false);
+    }
     // arithmetic result is an already-decoded numeric value -> separator-independent store (with SIZE
     // ERROR overflow detection).
     store_arith_result(f, &rb, &ra, has_handler, false)
@@ -6354,9 +6423,9 @@ mod tests {
     }
 
     #[test]
-    fn compute_rounded_fails_closed() {
-        // ROUNDED is not yet in the subset -> fail closed, not a wrong answer.
-        let r = run_program(
+    fn compute_rounded_rounds_to_receiver_scale() {
+        // ROUNDED (default mode: NEAREST, ties away from zero). 10/3 = 3.33 -> 3; 5/2 = 2.5 -> 3 (tie away).
+        let out = run_program(
             "       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
@@ -6365,9 +6434,13 @@ mod tests {
                     01 R PIC 9.\n\
                     PROCEDURE DIVISION.\n\
                         COMPUTE R ROUNDED = A / 3.\n\
+                        DISPLAY R.\n\
+                        COMPUTE R ROUNDED = 5 / 2.\n\
+                        DISPLAY R.\n\
                         STOP RUN.\n",
-        );
-        assert!(matches!(r, Err(RunError::Unsupported(_))));
+        )
+        .unwrap();
+        assert_eq!(out, b"3\n3\n");
     }
 
     #[test]

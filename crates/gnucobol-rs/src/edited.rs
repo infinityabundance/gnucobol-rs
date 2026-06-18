@@ -142,6 +142,22 @@ pub fn edited_size(pic: &str) -> Result<usize, EditedError> {
     Ok(slots_width(&parse_slots(pic)?))
 }
 
+/// The number of fractional digit positions in an edited PIC -- the count of value slots after the
+/// decimal point `.`. This is the receiver scale a `ROUNDED` store rounds the result to.
+pub fn edited_scale(pic: &str) -> Result<i16, EditedError> {
+    let slots = parse_slots(pic)?;
+    let mut scale: i16 = 0;
+    let mut seen_dot = false;
+    for slot in &slots {
+        match slot {
+            Slot::Decimal => seen_dot = true,
+            Slot::Value if seen_dot => scale += 1,
+            _ => {}
+        }
+    }
+    Ok(scale)
+}
+
 /// Decode the bytes of an edited DISPLAY field into its presentation text and recovered numeric value,
 /// **slot by slot**: value positions collect digits (or skip spaces/`$`/`*`/sign), literal positions
 /// (including an inserted `0`) are skipped, the `.` slot marks the decimal point, and a trailing
