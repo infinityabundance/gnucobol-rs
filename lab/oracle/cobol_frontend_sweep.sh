@@ -8,7 +8,10 @@
 # closed.) PASS=n FAIL=n.
 set -u
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"; PREFIX="$ROOT/lab/oracle/prefix"
-export PATH="$PREFIX/bin:$PATH" LD_LIBRARY_PATH="$PREFIX/lib" COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" LC_ALL=C.UTF-8
+# TZ is pinned to UTC so a live-clock function (FUNCTION SECONDS-PAST-MIDNIGHT) is comparable: libcob uses
+# localtime() and the port computes UTC, so under TZ=UTC0 both yield the same time-of-day. (The date/
+# compile-stamp tests pin COB_CURRENT_DATE/SOURCE_DATE_EPOCH with explicit offsets, so TZ is inert there.)
+export PATH="$PREFIX/bin:$PATH" LD_LIBRARY_PATH="$PREFIX/lib" COB_CONFIG_DIR="$PREFIX/share/gnucobol/config" LC_ALL=C.UTF-8 TZ=UTC0
 command -v cobc >/dev/null 2>&1 || { echo "cobc not built"; exit 2; }
 ( cd "$ROOT" && cargo build --release -p gnucobol-rs --example cobrun >/dev/null 2>&1 ) || exit 2
 COBRUN="$ROOT/target/release/examples/cobrun"
@@ -37,10 +40,17 @@ for cob in "$CORPUS"/*.cob; do
   if ! env $ENVKV cobc -x $FMTOPT $STDOPT -o "$TMP/p" "$cob" 2>"$TMP/cobc.err"; then
     echo "$name: cobc compile FAIL"; head -2 "$TMP/cobc.err"; FAIL=$((FAIL+1)); continue
   fi
-  env $ENVKV "$TMP/p" </dev/null > "$TMP/oracle.out" 2>/dev/null
-  # cobrun's exit status is the program's RETURN-CODE (MOVE n TO RETURN-CODE / STOP RUN n), so a non-zero
-  # exit is NOT a failure -- only a real RunError (a message on stderr) is.
-  env $ENVKV "$COBRUN" $FIXEDOPT $STDOPT "$cob" > "$TMP/rust.out" 2>"$TMP/rust.err"
+  # `@clock`: a LIVE-clock program (FUNCTION SECONDS-PAST-MIDNIGHT). cobc + cobrun must land in the same
+  # wall-clock second; retry to absorb a rare second-boundary straddle (the value is otherwise identical).
+  CLOCK="$(sed -n 's/^[[:space:]]*\*>[[:space:]]*@clock.*/1/p' "$cob" | head -1)"
+  tries=1; [ -n "$CLOCK" ] && tries=8
+  for _attempt in $(seq 1 "$tries"); do
+    # cobrun's exit status is the program's RETURN-CODE (MOVE n TO RETURN-CODE / STOP RUN n), so a non-zero
+    # exit is NOT a failure -- only a real RunError (a message on stderr) is.
+    env $ENVKV "$TMP/p" </dev/null > "$TMP/oracle.out" 2>/dev/null
+    env $ENVKV "$COBRUN" $FIXEDOPT $STDOPT "$cob" > "$TMP/rust.out" 2>"$TMP/rust.err"
+    { [ -s "$TMP/rust.err" ] || cmp -s "$TMP/oracle.out" "$TMP/rust.out"; } && break
+  done
   if [ -s "$TMP/rust.err" ]; then
     echo "$name: cobrun FAIL: $(cat "$TMP/rust.err")"; FAIL=$((FAIL+1)); continue
   fi

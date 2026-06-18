@@ -221,7 +221,6 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
         // libgmp -- so the exact bit-stream is a declared substrate boundary (like the host x87 80-bit long
         // double), not a libcob algorithm to reproduce.
         "RANDOM" => Some((true, "GMP-RNG substrate boundary: the value is GMP's internal Mersenne-Twister stream (gmp_randseed_ui), not a libcob algorithm; the port does not reproduce GMP internals / link libgmp")),
-        "SECONDS-PAST-MIDNIGHT" => Some((false, "no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE)")),
         // A compiler artifact with no interpreter analog: cobc's MODULE-PATH is the *compiled binary*
         // path (its -o output); an interpreter never produces a binary, so there is nothing to match.
         "MODULE-PATH" =>

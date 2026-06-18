@@ -62,7 +62,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
     "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
     "EXCEPTION-STATUS", "EXCEPTION-STATEMENT", "EXCEPTION-LOCATION", "EXCEPTION-FILE",
-    "CONTENT-OF", "CONTENT-LENGTH",
+    "CONTENT-OF", "CONTENT-LENGTH", "SECONDS-PAST-MIDNIGHT",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -5259,6 +5259,10 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         // NUM-/MON- helpers exist in libcob but cobc rejects them as unknown functions, so they stay
         // unwired (a program using them does not compile under the oracle -- nothing to match).
         "CURRENCY-SYMBOL" => ix::cob_intr_currency_symbol(),
+        // SECONDS-PAST-MIDNIGHT reads the LIVE wall clock exactly as libcob (it ignores COB_CURRENT_DATE);
+        // the value is the current time-of-day in seconds. Deterministic-vs-oracle only when both run in
+        // the same wall-clock second (the sweep runs cobc + cobrun back-to-back under a pinned TZ).
+        "SECONDS-PAST-MIDNIGHT" => ix::cob_intr_seconds_past_midnight(),
         // LOCALE conversions are deterministic under a fixed (pinned) locale, which the sweep enforces
         // (LC_ALL=C); the runtime ignores the optional locale name and uses the active locale.
         "LOCALE-DATE" => {
