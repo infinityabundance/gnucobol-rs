@@ -139,10 +139,10 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `OCCURS` | **yes** |
 | `REDEFINES` | **yes** |
 | `RENAMES` | no (runtime ready) |
-| `SIGN` | no (runtime ready) |
+| `SIGN` | **yes** |
 | `SYNCHRONIZED` | no (runtime ready) |
-| `JUSTIFIED` | no (runtime ready) |
-| `BLANK WHEN ZERO` | no (runtime ready) |
+| `JUSTIFIED` | **yes** |
+| `BLANK WHEN ZERO` | **yes** |
 | `GLOBAL` | no (runtime ready) |
 | `EXTERNAL` | no (runtime ready) |
 | `LEVEL 88 (condition-name)` | **yes** |

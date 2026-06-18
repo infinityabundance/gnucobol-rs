@@ -104,7 +104,8 @@ enum Storage {
     Alpha(FieldAttr),
     /// A numeric-edited field: the bytes are the edited image; its PIC string drives editing, with the
     /// program's CURRENCY SIGN symbol (default `b'$'`) and DECIMAL-POINT IS COMMA flag (`SPECIAL-NAMES`).
-    Edited(String, u8, bool),
+    /// The trailing `bool` is `BLANK WHEN ZERO` (the whole field becomes spaces when the value is zero).
+    Edited(String, u8, bool, bool),
     /// An `88`-level condition-name: true when its `parent` field's value equals any of `values` (a single
     /// value or a `lo THRU hi` range). Carries no storage of its own.
     Condition { parent: String, values: Vec<CondVal> },
@@ -548,6 +549,9 @@ struct ProgItem {
     /// `SIGN IS [LEADING|TRAILING] [SEPARATE]` for a signed DISPLAY numeric: `(separate, leading)`.
     /// Default `(false, false)` = the standard trailing overpunch.
     sign: (bool, bool),
+    /// Extra `FieldAttr` flag bits set by clauses: `COB_FLAG_JUSTIFIED` (`JUSTIFIED RIGHT`) and
+    /// `COB_FLAG_BLANK_ZERO` (`BLANK WHEN ZERO`). OR-ed into the built field's attr.
+    extra_flags: u16,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1182,6 +1186,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 indexed_by: Vec::new(),
                 usage: None,
                 sign: (false, false),
+                extra_flags: 0,
             });
             continue;
         }
@@ -1217,6 +1222,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut pointer = false;
         // SIGN IS [LEADING|TRAILING] [SEPARATE]: (separate, leading).
         let mut sign: (bool, bool) = (false, false);
+        // JUSTIFIED / BLANK WHEN ZERO -> extra attr flag bits.
+        let mut extra_flags: u16 = 0;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1303,6 +1310,25 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 Some(Tok::Word(w)) if unsupported_usage_kw(w) => {
                     return Err(RunError::Unsupported(format!("USAGE {w} is not in the front-end subset")));
                 }
+                // `JUSTIFIED [RIGHT]` / `JUST [RIGHT]` -- alphanumeric right-justification.
+                Some(Tok::Word(w)) if w == "JUSTIFIED" || w == "JUST" => {
+                    extra_flags |= crate::attr::COB_FLAG_JUSTIFIED;
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "RIGHT") {
+                        k += 1;
+                    }
+                }
+                // `BLANK [WHEN] ZERO` -- the field becomes spaces when its value is zero.
+                Some(Tok::Word(w)) if w == "BLANK" => {
+                    extra_flags |= crate::attr::COB_FLAG_BLANK_ZERO;
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "WHEN") {
+                        k += 1;
+                    }
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "ZERO" || w == "ZEROS" || w == "ZEROES") {
+                        k += 1;
+                    }
+                }
                 // `SIGN [IS] [LEADING|TRAILING] [SEPARATE [CHARACTER]]` -- sets the (separate, leading) form.
                 Some(Tok::Word(w)) if w == "SIGN" => {
                     k += 1;
@@ -1334,6 +1360,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed,
             usage,
             sign,
+            extra_flags,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1377,7 +1404,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         if it.pic.is_empty() {
             continue;
         }
-        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign)?;
+        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign, it.extra_flags)?;
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
             // identically, per its VALUE or the dialect fill).
@@ -1428,7 +1455,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
     // TALLY: the EXAMINE count register (unsigned 9(5) DISPLAY).
-    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false)) {
+    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false), 0) {
         fields.entry("TALLY".to_string()).or_insert(t);
     }
     Ok(fields)
@@ -2685,6 +2712,7 @@ fn make_field(
     dialect: crate::dialect::Dialect,
     usage: Usage,
     sign: (bool, bool),
+    extra_flags: u16,
 ) -> Result<Field, RunError> {
     match build_field(pic, usage, sign.0, sign.1) {
         Ok(pf) => {
@@ -2694,7 +2722,10 @@ fn make_field(
             // A VALUE clause always overrides the fill.
             let fill = dialect.defaultbyte.byte(is_alpha);
             let bytes = vec![fill; pf.size];
-            let storage = if is_alpha { Storage::Alpha(pf.attr) } else { Storage::Numeric(pf.attr) };
+            // JUSTIFIED / BLANK WHEN ZERO ride in the attr flags (COB_FLAG_JUSTIFIED / _BLANK_ZERO).
+            let mut attr = pf.attr;
+            attr.flags |= extra_flags;
+            let storage = if is_alpha { Storage::Alpha(attr) } else { Storage::Numeric(attr) };
             let mut field = Field { storage, bytes, occurs: 1, redefines: None };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
@@ -2712,8 +2743,9 @@ fn make_field(
                 pic.chars().map(|c| if c.to_ascii_uppercase() == cur { '$' } else { c }).collect()
             };
             let size = edited_size(&pic_norm).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
+            let blank_zero = extra_flags & crate::attr::COB_FLAG_BLANK_ZERO != 0;
             let mut field =
-                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma), bytes: vec![b' '; size], occurs: 1, redefines: None };
+                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma, blank_zero), bytes: vec![b' '; size], occurs: 1, redefines: None };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -2757,19 +2789,52 @@ fn parse_num_literal(w: &str) -> Result<Decimal, RunError> {
     Ok(Decimal { negative, digits, scale })
 }
 
+/// Whether a decimal's magnitude is zero (all digits zero).
+fn dec_is_zero(dec: &Decimal) -> bool {
+    dec.digits.iter().all(|&d| d == 0)
+}
+
+/// Place `src` into a `len`-byte alphanumeric field honoring `JUSTIFIED RIGHT` (right-aligned, truncated
+/// on the LEFT) vs the default (left-aligned, space-padded, truncated on the right).
+fn alnum_justified_or_left(src: &[u8], len: usize, justified: bool) -> Vec<u8> {
+    let mut dst = vec![b' '; len];
+    if justified {
+        if src.len() >= len {
+            dst.copy_from_slice(&src[src.len() - len..]);
+        } else {
+            dst[len - src.len()..].copy_from_slice(src);
+        }
+    } else {
+        let m = src.len().min(len);
+        dst[..m].copy_from_slice(&src[..m]);
+    }
+    dst
+}
+
 /// Store a [`Decimal`] into a field (numeric -> zoned via the runtime move; edited -> encode).
 fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
     match &field.storage {
-        Storage::Edited(pic, currency, decimal_comma) => {
+        Storage::Edited(pic, currency, decimal_comma, blank_zero) => {
             let pic = pic.clone();
             let cur = *currency;
             let dc = *decimal_comma;
-            field.bytes = encode_edited_cfg(&pic, dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            let blank = *blank_zero;
+            // BLANK WHEN ZERO: a zero value blanks the whole edited field.
+            field.bytes = if blank && dec_is_zero(dec) {
+                vec![b' '; field.bytes.len()]
+            } else {
+                encode_edited_cfg(&pic, dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?
+            };
             Ok(())
         }
         Storage::Numeric(attr) => {
             // build a literal source field (zoned display) holding the decimal, then move it in.
             let attr = *attr;
+            // BLANK WHEN ZERO on a numeric receiver: a zero value blanks the field.
+            if attr.blank_when_zero() && dec_is_zero(dec) {
+                field.bytes = vec![b' '; field.bytes.len()];
+                return Ok(());
+            }
             let (src, src_attr) = decimal_as_display(dec);
             let mut dst = field.bytes.clone();
             cob_move(&src, &src_attr, &mut dst, &attr).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
@@ -2842,6 +2907,11 @@ fn store_alnum(field: &mut Field, src: &[u8]) -> Result<(), RunError> {
             let m = src.len().min(n);
             b[..m].copy_from_slice(&src[..m]);
             field.bytes = b;
+            Ok(())
+        }
+        Storage::Alpha(attr) if attr.justified() => {
+            // JUSTIFIED RIGHT alphanumeric receiver: right-align the source bytes.
+            field.bytes = alnum_justified_or_left(src, field.bytes.len(), true);
             Ok(())
         }
         Storage::Alpha(attr) | Storage::Numeric(attr) => {
@@ -3296,6 +3366,11 @@ fn exec_display(
 /// display formatting; alphanumeric + edited fields are shown as their stored bytes.
 fn display_bytes(f: &Field, decimal_comma: bool) -> Vec<u8> {
     match &f.storage {
+        // BLANK WHEN ZERO leaves the data spaces when the value is zero; DISPLAY emits the raw bytes
+        // (cob_display_common would re-normalize spaces back to "0000").
+        Storage::Numeric(attr) if attr.blank_when_zero() && f.bytes.iter().all(|&b| b == b' ') => {
+            f.bytes.clone()
+        }
         Storage::Numeric(attr) => {
             let mut o = Vec::new();
             // DISPLAY of a numeric DISPLAY item inserts the module decimal point (comma under
@@ -4278,7 +4353,7 @@ fn exec_ml_parse_noop() -> Result<(), RunError> {
 
 /// The displayed bytes of a report element: a `PIC` field holding its SOURCE value (or VALUE literal).
 fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<Vec<u8>, RunError> {
-    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false))?;
+    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false), 0)?;
     if let Some(src) = &el.source {
         let (sb, sa) = operand_value(&Tok::Word(src.clone()), fields)?;
         move_into(&mut temp, &sb, &sa, ctx.decimal_comma)?;
@@ -5259,18 +5334,34 @@ fn move_into(
     decimal_comma: bool,
 ) -> Result<(), RunError> {
     match &f.storage {
-        Storage::Edited(pic, currency, decimal_comma) => {
+        Storage::Edited(pic, currency, decimal_comma, blank_zero) => {
             // numeric/alnum source into a numeric-edited receiver: decode the source to a decimal,
             // then encode per the edited PIC (the move.c numeric->edited path).
             let pic = pic.clone();
             let cur = *currency;
             let dc = *decimal_comma;
+            let blank = *blank_zero;
             let dec = source_to_decimal(sbytes, sattr)?;
-            f.bytes = encode_edited_cfg(&pic, &dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            // BLANK WHEN ZERO: a zero value blanks the whole edited field.
+            f.bytes = if blank && dec_is_zero(&dec) {
+                vec![b' '; f.bytes.len()]
+            } else {
+                encode_edited_cfg(&pic, &dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?
+            };
+            Ok(())
+        }
+        // JUSTIFIED RIGHT alphanumeric receiver: right-align the source (left-truncating).
+        Storage::Alpha(attr) if attr.justified() => {
+            f.bytes = alnum_justified_or_left(sbytes, f.bytes.len(), true);
             Ok(())
         }
         Storage::Numeric(attr) | Storage::Alpha(attr) => {
             let attr = *attr;
+            // BLANK WHEN ZERO on a numeric receiver: a zero value blanks the field.
+            if attr.blank_when_zero() && source_to_decimal(sbytes, sattr).map(|d| dec_is_zero(&d)).unwrap_or(false) {
+                f.bytes = vec![b' '; f.bytes.len()];
+                return Ok(());
+            }
             let mut dst = f.bytes.clone();
             // cob_move_cfg honors DECIMAL-POINT IS COMMA on the alphanumeric->numeric leaf (move.c reads
             // dec_pt/num_sep from the module): MOVE "12,34" under comma stores 12.34, not 1234.

@@ -62,6 +62,9 @@ pub const COB_FLAG_IS_POINTER: u16 = 0x0080;
 pub const COB_FLAG_NO_SIGN_NIBBLE: u16 = 0x0100;
 /// `JUSTIFIED RIGHT` — alphanumeric right-justification. `COB_FLAG_JUSTIFIED` (`common.h:694`).
 pub const COB_FLAG_JUSTIFIED: u16 = 0x0010;
+/// `BLANK WHEN ZERO` — the field is set to spaces when its value is zero. `COB_FLAG_BLANK_ZERO`
+/// (`common.h:693`).
+pub const COB_FLAG_BLANK_ZERO: u16 = 0x0008;
 
 /// A field's attributes: type, digit count, scale, and flags.
 ///
@@ -120,6 +123,11 @@ impl FieldAttr {
     #[inline]
     pub const fn justified(&self) -> bool {
         self.flags & COB_FLAG_JUSTIFIED != 0
+    }
+    /// `COB_FIELD_BLANK_ZERO` — `BLANK WHEN ZERO` (`common.h:707`).
+    #[inline]
+    pub const fn blank_when_zero(&self) -> bool {
+        self.flags & COB_FLAG_BLANK_ZERO != 0
     }
     /// `COB_FIELD_SIGN_LEADSEP` — leading **and** separate (the only case that shifts
     /// `COB_FIELD_DATA` forward by one byte; `common.h:730`).
