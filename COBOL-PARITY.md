@@ -14,7 +14,7 @@
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
 | statements (verbs) | 66 | 51 (77%) | **58 (88%)** |
-| intrinsic functions | 110 | **110 (100%)** | 88 (80%) |
+| intrinsic functions | 110 | **110 (100%)** | 90 (82%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
 
@@ -93,13 +93,13 @@
 
 ## Intrinsic functions (`FUNCTION ...`, from `libcob/intrinsic.c`)
 
-All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed present as `cob_intr_*` in the port; `intrinsic.c` is 100% in the doxygen parity). The front-end now evaluates **88 (80%)** of them in `FUNCTION ...` references (DISPLAY / COMPUTE / MOVE / conditions), each proven byte-identical to cobc -- including cobc's compile-time constant fold for `LENGTH`/`BYTE-LENGTH`, the libcob-faithful display of binary, scaled and signed results, the full-precision 2048-bit transcendentals, the date functions and `CURRENT-DATE` under a pinned `COB_CURRENT_DATE`, `MODULE-ID`/`MODULE-CALLER-ID` from the interpreter's program stack, the `LOCALE-*` conversions under the pinned locale, and the compile stamp (`WHEN-COMPILED`/`MODULE-DATE`/`MODULE-TIME`) via the interpreter's compile step under a pinned `SOURCE_DATE_EPOCH`. Wired functions are **bold**. The unbold remainder is **not** an easy TODO; each is classified with a specific reason in the boundary tables below -- split into those absent/inactive in GnuCOBOL 3.2 itself (no oracle behaviour) and those present-but-not-yet-reproduced (a concrete future target each).
+All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed present as `cob_intr_*` in the port; `intrinsic.c` is 100% in the doxygen parity). The front-end now evaluates **90 (82%)** of them in `FUNCTION ...` references (DISPLAY / COMPUTE / MOVE / conditions), each proven byte-identical to cobc -- including cobc's compile-time constant fold for `LENGTH`/`BYTE-LENGTH`, the libcob-faithful display of binary, scaled and signed results, the full-precision 2048-bit transcendentals, the date functions and `CURRENT-DATE` under a pinned `COB_CURRENT_DATE`, `MODULE-ID`/`MODULE-CALLER-ID` from the interpreter's program stack, the `LOCALE-*` conversions under the pinned locale, and the compile stamp (`WHEN-COMPILED`/`MODULE-DATE`/`MODULE-TIME`) via the interpreter's compile step under a pinned `SOURCE_DATE_EPOCH`. Wired functions are **bold**. The unbold remainder is **not** an easy TODO; each is classified with a specific reason in the boundary tables below -- split into those absent/inactive in GnuCOBOL 3.2 itself (no oracle behaviour) and those present-but-not-yet-reproduced (a concrete future target each).
 
-> **ABS**, **ACOS**, **ANNUITY**, **ASIN**, **ATAN**, BINOP, **BIT-OF**, **BIT-TO-CHAR**, BOOLEAN-OF-INTEGER, **BYTE-LENGTH**, **CHAR**, CHAR-NATIONAL, **COMBINED-DATETIME**, **CONCATENATE**, CONTENT-LENGTH, CONTENT-OF, **COS**, **CURRENCY-SYMBOL**, **CURRENT-DATE**, **DATE-OF-INTEGER**, **DATE-TO-YYYYMMDD**, **DAY-OF-INTEGER**, **DAY-TO-YYYYDDD**, DISPLAY-OF, **E**, EXCEPTION-FILE, EXCEPTION-FILE-N, EXCEPTION-LOCATION, EXCEPTION-LOCATION-N, EXCEPTION-STATEMENT, **EXCEPTION-STATUS**, **EXP**, **EXP10**, **FACTORIAL**, **FORMATTED-CURRENT-DATE**, **FORMATTED-DATE**, **FORMATTED-DATETIME**, **FORMATTED-TIME**, **FRACTION-PART**, **HEX-OF**, **HEX-TO-CHAR**, **HIGHEST-ALGEBRAIC**, **INTEGER**, INTEGER-OF-BOOLEAN, **INTEGER-OF-DATE**, **INTEGER-OF-DAY**, **INTEGER-OF-FORMATTED-DATE**, **INTEGER-PART**, LCL-TIME-FROM-SECS, **LENGTH**, **LOCALE-COMPARE**, **LOCALE-DATE**, **LOCALE-TIME**, **LOG**, **LOG10**, **LOWER-CASE**, **LOWEST-ALGEBRAIC**, **MAX**, **MEAN**, **MEDIAN**, **MIDRANGE**, **MIN**, **MOD**, **MODULE-CALLER-ID**, **MODULE-DATE**, **MODULE-FORMATTED-DATE**, **MODULE-ID**, MODULE-PATH, **MODULE-SOURCE**, **MODULE-TIME**, MON-DECIMAL-POINT, MON-THOUSANDS-SEP, NATIONAL-OF, NUM-DECIMAL-POINT, NUM-THOUSANDS-SEP, **NUMVAL**, **NUMVAL-C**, **NUMVAL-F**, **ORD**, **ORD-MAX**, **ORD-MIN**, **PI**, **PRESENT-VALUE**, RANDOM, **RANGE**, **REM**, **REVERSE**, **SECONDS-FROM-FORMATTED-TIME**, SECONDS-PAST-MIDNIGHT, **SIGN**, **SIN**, **SQRT**, STANDARD-COMPARE, **STANDARD-DEVIATION**, **STORED-CHAR-LENGTH**, **SUBSTITUTE**, **SUBSTITUTE-CASE**, **SUM**, **TAN**, **TEST-DATE-YYYYMMDD**, **TEST-DAY-YYYYDDD**, **TEST-FORMATTED-DATETIME**, **TEST-NUMVAL**, **TEST-NUMVAL-C**, **TEST-NUMVAL-F**, **TRIM**, **UPPER-CASE**, **VARIANCE**, **WHEN-COMPILED**, **YEAR-TO-YYYY**
+> **ABS**, **ACOS**, **ANNUITY**, **ASIN**, **ATAN**, BINOP, **BIT-OF**, **BIT-TO-CHAR**, BOOLEAN-OF-INTEGER, **BYTE-LENGTH**, **CHAR**, CHAR-NATIONAL, **COMBINED-DATETIME**, **CONCATENATE**, CONTENT-LENGTH, CONTENT-OF, **COS**, **CURRENCY-SYMBOL**, **CURRENT-DATE**, **DATE-OF-INTEGER**, **DATE-TO-YYYYMMDD**, **DAY-OF-INTEGER**, **DAY-TO-YYYYDDD**, DISPLAY-OF, **E**, EXCEPTION-FILE, EXCEPTION-FILE-N, **EXCEPTION-LOCATION**, EXCEPTION-LOCATION-N, **EXCEPTION-STATEMENT**, **EXCEPTION-STATUS**, **EXP**, **EXP10**, **FACTORIAL**, **FORMATTED-CURRENT-DATE**, **FORMATTED-DATE**, **FORMATTED-DATETIME**, **FORMATTED-TIME**, **FRACTION-PART**, **HEX-OF**, **HEX-TO-CHAR**, **HIGHEST-ALGEBRAIC**, **INTEGER**, INTEGER-OF-BOOLEAN, **INTEGER-OF-DATE**, **INTEGER-OF-DAY**, **INTEGER-OF-FORMATTED-DATE**, **INTEGER-PART**, LCL-TIME-FROM-SECS, **LENGTH**, **LOCALE-COMPARE**, **LOCALE-DATE**, **LOCALE-TIME**, **LOG**, **LOG10**, **LOWER-CASE**, **LOWEST-ALGEBRAIC**, **MAX**, **MEAN**, **MEDIAN**, **MIDRANGE**, **MIN**, **MOD**, **MODULE-CALLER-ID**, **MODULE-DATE**, **MODULE-FORMATTED-DATE**, **MODULE-ID**, MODULE-PATH, **MODULE-SOURCE**, **MODULE-TIME**, MON-DECIMAL-POINT, MON-THOUSANDS-SEP, NATIONAL-OF, NUM-DECIMAL-POINT, NUM-THOUSANDS-SEP, **NUMVAL**, **NUMVAL-C**, **NUMVAL-F**, **ORD**, **ORD-MAX**, **ORD-MIN**, **PI**, **PRESENT-VALUE**, RANDOM, **RANGE**, **REM**, **REVERSE**, **SECONDS-FROM-FORMATTED-TIME**, SECONDS-PAST-MIDNIGHT, **SIGN**, **SIN**, **SQRT**, STANDARD-COMPARE, **STANDARD-DEVIATION**, **STORED-CHAR-LENGTH**, **SUBSTITUTE**, **SUBSTITUTE-CASE**, **SUM**, **TAN**, **TEST-DATE-YYYYMMDD**, **TEST-DAY-YYYYDDD**, **TEST-FORMATTED-DATETIME**, **TEST-NUMVAL**, **TEST-NUMVAL-C**, **TEST-NUMVAL-F**, **TRIM**, **UPPER-CASE**, **VARIANCE**, **WHEN-COMPILED**, **YEAR-TO-YYYY**
 
-**Boundary intrinsics (22 not wired).** Two kinds, distinguished so the gap is not read as latent work:
+**Boundary intrinsics (20 not wired).** Two kinds, distinguished so the gap is not read as latent work:
 
-***Deliberately bounded -- absent or inactive in GnuCOBOL 3.2 itself (13).*** These cannot be byte-identical to anything: the oracle has no behaviour for them (libcob leaves them unimplemented, or cobc rejects them as unknown user functions). Wiring them would be inventing semantics the admitted compiler does not have.
+***Deliberately bounded -- absent or inactive in GnuCOBOL 3.2 itself (15).*** These cannot be byte-identical to anything: the oracle has no behaviour for them (libcob leaves them unimplemented, or cobc rejects them as unknown user functions). Wiring them would be inventing semantics the admitted compiler does not have.
 
 | intrinsic | why it is not in GnuCOBOL 3.2 |
 |---|---|
@@ -107,6 +107,8 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `BOOLEAN-OF-INTEGER` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 | `CHAR-NATIONAL` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 | `DISPLAY-OF` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
+| `EXCEPTION-FILE-N` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
+| `EXCEPTION-LOCATION-N` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 | `INTEGER-OF-BOOLEAN` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 | `LCL-TIME-FROM-SECS` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
 | `MODULE-PATH` | compiler artifact: cobc returns the compiled binary path; an interpreter produces no binary |
@@ -117,17 +119,13 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `NUM-THOUSANDS-SEP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
 | `STANDARD-COMPARE` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 
-***Present in GnuCOBOL 3.2, not yet reproduced byte-for-byte here (9).*** These DO run under the oracle; each is bounded for a specific, stated reason -- a runtime helper not yet sealed, a front-end model not yet built (exception registers, pointer contents), or an output with no fixed or portable value (a compile-time stamp, the live wall clock, a host path). Each is a concrete future target, not a dead end.
+***Present in GnuCOBOL 3.2, not yet reproduced byte-for-byte here (5).*** These DO run under the oracle; each is bounded for a specific, stated reason -- a runtime helper not yet sealed, a front-end model not yet built (exception registers, pointer contents), or an output with no fixed or portable value (a compile-time stamp, the live wall clock, a host path). Each is a concrete future target, not a dead end.
 
 | intrinsic | why it is bounded today |
 |---|---|
 | `CONTENT-LENGTH` | needs the pointer-content model (dereferences a USAGE POINTER target) |
 | `CONTENT-OF` | needs the pointer-content model (dereferences a USAGE POINTER target) |
-| `EXCEPTION-FILE` | needs the file-exception register (the I/O status -> EC-I-O mapping) |
-| `EXCEPTION-FILE-N` | needs the file-exception register (the I/O status -> EC-I-O mapping) |
-| `EXCEPTION-LOCATION` | needs source LINE numbers, which the lexer currently drops |
-| `EXCEPTION-LOCATION-N` | needs source LINE numbers, which the lexer currently drops |
-| `EXCEPTION-STATEMENT` | needs statement-name tracking + >>TURN EC checking semantics (the register exists; the statement label does not yet) |
+| `EXCEPTION-FILE` | needs the file-exception register (the last I/O status + SELECT name) |
 | `RANDOM` | runtime gap: the ported cob_intr_random PRNG does not yet match libcob's stream (would not be byte-identical) |
 | `SECONDS-PAST-MIDNIGHT` | no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE) |
 

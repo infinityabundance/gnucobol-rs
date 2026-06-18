@@ -212,6 +212,9 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
         "BINOP" | "NUM-DECIMAL-POINT" | "NUM-THOUSANDS-SEP" | "MON-DECIMAL-POINT" | "MON-THOUSANDS-SEP"
         | "LCL-TIME-FROM-SECS" =>
             Some((true, "not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper)")),
+        // cobc rejects the *-N variants at compile ("not implemented").
+        "EXCEPTION-LOCATION-N" | "EXCEPTION-FILE-N" =>
+            Some((true, "cobc rejects it at compile: \"FUNCTION is not implemented\" (no oracle output exists)")),
         // RUNTIME gap: present + deterministic with a seed, but the ported cob_intr_random PRNG does not yet
         // reproduce libcob's stream (probed: cobrun 0.4170.. vs oracle 0.5541.. for RANDOM(1)). Wiring it
         // would be WRONG until the runtime PRNG is sealed -- a runtime task, not a front-end one.
@@ -223,15 +226,10 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
             Some((true, "compiler artifact: cobc returns the compiled binary path; an interpreter produces no binary")),
         // Needs a front-end EXCEPTION-state model: deterministic given a known fault, but the interpreter
         // does not yet track the COBOL exception registers (it fails closed on faults instead).
-        // EXCEPTION-STATUS is wired (an EC-SIZE-* register the front-end maintains). EXCEPTION-STATEMENT
-        // and EXCEPTION-LOCATION additionally need the statement name / source line numbers (the lexer
-        // drops line info); the EXCEPTION-FILE pair needs the file-exception register.
-        "EXCEPTION-STATEMENT" =>
-            Some((false, "needs statement-name tracking + >>TURN EC checking semantics (the register exists; the statement label does not yet)")),
-        "EXCEPTION-LOCATION" | "EXCEPTION-LOCATION-N" =>
-            Some((false, "needs source LINE numbers, which the lexer currently drops")),
-        "EXCEPTION-FILE" | "EXCEPTION-FILE-N" =>
-            Some((false, "needs the file-exception register (the I/O status -> EC-I-O mapping)")),
+        // EXCEPTION-STATUS / -STATEMENT / -LOCATION are wired. EXCEPTION-FILE additionally needs the
+        // file-exception register (the last I/O status + SELECT name).
+        "EXCEPTION-FILE" =>
+            Some((false, "needs the file-exception register (the last I/O status + SELECT name)")),
         // Needs the USAGE POINTER content model: deref a pointer's target.
         "CONTENT-OF" | "CONTENT-LENGTH" =>
             Some((false, "needs the pointer-content model (dereferences a USAGE POINTER target)")),

@@ -61,7 +61,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
     "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
-    "EXCEPTION-STATUS",
+    "EXCEPTION-STATUS", "EXCEPTION-STATEMENT", "EXCEPTION-LOCATION",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1497,16 +1497,33 @@ thread_local! {
     /// libcob's `FUNCTION EXCEPTION-STATUS` behaves (proven: a clean COMPUTE/MOVE after a fault does not
     /// reset it). Reset only at the start of a top-level run.
     static EXCEPTION_CODE: std::cell::Cell<&'static str> = const { std::cell::Cell::new("") };
+    /// The PROGRAM-ID where the last exception was raised, for `FUNCTION EXCEPTION-LOCATION`.
+    static EXCEPTION_PROGRAM: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
 }
 
-/// Set the current exception condition (sticky until the next exception).
+/// Set the current exception condition (sticky until the next exception), recording the raising program.
 fn set_exception(code: &'static str) {
     EXCEPTION_CODE.with(|c| c.set(code));
+    let prog = current_program_id();
+    EXCEPTION_PROGRAM.with(|p| *p.borrow_mut() = prog);
 }
 
 /// Clear the exception register (called once at the start of a top-level run).
 fn reset_exception() {
     EXCEPTION_CODE.with(|c| c.set(""));
+    EXCEPTION_PROGRAM.with(|p| p.borrow_mut().clear());
+}
+
+/// The `FUNCTION EXCEPTION-LOCATION` field: `"<prog>; ; 0"` once an exception has been raised (no
+/// paragraph/section and line 0 without `>>TURN EC ... CHECKING`, which the sealed subset omits), or a
+/// single space before any exception -- matching libcob's default.
+fn exception_location_field() -> (Vec<u8>, FieldAttr) {
+    let code = EXCEPTION_CODE.with(|c| c.get());
+    if code.is_empty() {
+        return crate::intrinsic::cob_intr_exception_location(None);
+    }
+    let prog = EXCEPTION_PROGRAM.with(|p| p.borrow().clone());
+    crate::intrinsic::cob_intr_exception_location(Some((prog.as_bytes(), None, None, 0)))
 }
 
 /// The `FUNCTION EXCEPTION-STATUS` field: the current condition name in a 31-byte field, or spaces.
@@ -4863,6 +4880,11 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         // EXCEPTION-STATUS: the last raised arithmetic condition (EC-SIZE-*), sticky, from the register
         // the front-end maintains as arithmetic SIZE ERRORs occur.
         "EXCEPTION-STATUS" => exception_status_field(),
+        // EXCEPTION-STATEMENT is spaces unless `>>TURN EC-ALL CHECKING` is on (outside the sealed subset),
+        // so the default-dialect value is the empty (spaces) form.
+        "EXCEPTION-STATEMENT" => ix::cob_intr_exception_statement(None),
+        // EXCEPTION-LOCATION: "<prog>; ; 0" once an exception has been raised, else a single space.
+        "EXCEPTION-LOCATION" => exception_location_field(),
         // The compile-stamp intrinsics: deterministic under a pinned SOURCE_DATE_EPOCH (the reproducible-
         // builds standard cobc honours), via the interpreter's compile step.
         "MODULE-DATE" => {
