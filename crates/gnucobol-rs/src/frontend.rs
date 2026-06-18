@@ -39,7 +39,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
     "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
     "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE",
-    "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE",
+    "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1332,6 +1332,46 @@ thread_local! {
     /// `ALTER`ed GO TO targets: the token index of a `GO` verb -> the paragraph it now proceeds to. Set by
     /// ALTER, consulted by the GO TO executor. Saved/restored per program body.
     static ALTERED: std::cell::RefCell<HashMap<usize, String>> = std::cell::RefCell::new(HashMap::new());
+    /// DECLARATIVES `USE ... ON file` error handlers: file name -> the handler's `[start, end)` token range
+    /// to run when a file op on that file returns an error status. Saved/restored per program body.
+    static USE_PROCS: std::cell::RefCell<HashMap<String, (usize, usize)>> = std::cell::RefCell::new(HashMap::new());
+}
+
+/// Parse a PROCEDURE DIVISION's DECLARATIVES (if present): map each `USE ... ON file` file to the `[start,
+/// end)` token range of its handler paragraph (the first label after the USE statement, up to the next
+/// label or `END DECLARATIVES`), and return the token index where normal execution starts. No DECLARATIVES
+/// -> empty.
+fn parse_declaratives(proc: &[Tok], labels: &HashMap<String, usize>) -> (HashMap<String, (usize, usize)>, usize) {
+    let mut use_procs = HashMap::new();
+    let decl = match proc.iter().position(|t| matches!(t, Tok::Word(w) if w == "DECLARATIVES")) {
+        Some(d) => d,
+        None => return (use_procs, 0),
+    };
+    let end_decl = find_seq_in(proc, &["END", "DECLARATIVES"], decl, proc.len()).unwrap_or(proc.len());
+    let mut i = decl;
+    while i < end_decl {
+        if matches!(proc.get(i), Some(Tok::Word(w)) if w == "USE") {
+            let mut j = i + 1;
+            while j < end_decl && !matches!(proc.get(j), Some(Tok::Word(w)) if w == "ON") { j += 1; }
+            j += 1;
+            let mut files = Vec::new();
+            while j < end_decl && !matches!(proc.get(j), Some(Tok::Dot)) {
+                if let Some(Tok::Word(f)) = proc.get(j) {
+                    if !matches!(f.as_str(), "FILE" | "INPUT" | "OUTPUT" | "I-O" | "EXTEND") { files.push(f.clone()); }
+                }
+                j += 1;
+            }
+            // handler range: the first label after the USE statement, to the next label or END DECLARATIVES.
+            if let Some(&start) = labels.values().filter(|&&p| p > j).min() {
+                let end = labels.values().copied().filter(|&p| p > start).min().unwrap_or(end_decl).min(end_decl);
+                for f in files { use_procs.insert(f, (start, end)); }
+            }
+        }
+        i += 1;
+    }
+    let mut start = end_decl + 2;
+    if matches!(proc.get(start), Some(Tok::Dot)) { start += 1; }
+    (use_procs, start)
 }
 
 /// Whether `name` is a paragraph/section label in the current program body.
@@ -1385,8 +1425,11 @@ fn run_program_body(
     let prev_paras = CUR_PARAS.with(|c| c.replace((paras_vec, proc.len())));
     let prev_proc = CUR_PROC.with(|c| c.replace(proc.clone()));
     let prev_altered = ALTERED.with(|c| c.replace(HashMap::new()));
-    let mut pos = 0;
-    if matches!(proc.first(), Some(Tok::Dot)) {
+    // DECLARATIVES: register the USE error handlers and begin normal execution after END DECLARATIVES.
+    let (use_procs, decl_start) = parse_declaratives(proc, &labels);
+    let prev_use = USE_PROCS.with(|c| c.replace(use_procs));
+    let mut pos = decl_start;
+    if pos == 0 && matches!(proc.first(), Some(Tok::Dot)) {
         pos = 1;
     }
     let mut guard = 0u64;
@@ -1419,6 +1462,7 @@ fn run_program_body(
     CUR_PARAS.with(|c| { *c.borrow_mut() = prev_paras; });
     CUR_PROC.with(|c| { *c.borrow_mut() = prev_proc; });
     ALTERED.with(|c| { *c.borrow_mut() = prev_altered; });
+    USE_PROCS.with(|c| { *c.borrow_mut() = prev_use; });
     Ok(())
 }
 
@@ -1461,7 +1505,7 @@ const STMT_VERBS: &[&str] = &[
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
     "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -2549,7 +2593,7 @@ fn exec_stmt(
         "STRING" => exec_string(stmt, fields, ctx.decimal_comma),
         "UNSTRING" => exec_unstring(stmt, fields),
         "ACCEPT" => exec_accept(stmt, fields),
-        "OPEN" => exec_open(stmt, fields, ctx),
+        "OPEN" => exec_open(stmt, fields, out, ctx),
         "CLOSE" => exec_close(stmt, fields, ctx),
         "WRITE" => exec_write(stmt, fields, ctx),
         "REWRITE" => exec_rewrite(stmt, fields, ctx),
@@ -2587,10 +2631,15 @@ fn exec_stmt(
         // The remaining verbs are explicit boundary non-claims: GnuCOBOL itself needs a data-division
         // section the front-end's WORKING-STORAGE/FILE/REPORT model does not include, or the result is
         // nondeterministic. Each fails closed with the specific reason (not a lazy TODO).
+        // The COMMUNICATION SECTION (message control) is NOT IMPLEMENTED in the admitted GnuCOBOL 3.2
+        // itself (`warning: COMMUNICATION SECTION is not implemented [-Wpending]` + "CD record missing"):
+        // the oracle cannot compile/run these, so there is no output to be byte-identical to.
         "SEND" | "RECEIVE" | "PURGE" | "ENABLE" | "DISABLE" =>
-            Err(RunError::Unsupported(format!("{verb}: message control requires a COMMUNICATION SECTION (CD); GnuCOBOL's CM is minimal and the front-end models WORKING-STORAGE / FILE / REPORT sections only"))),
+            Err(RunError::Unsupported(format!("{verb}: GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION -- the oracle itself cannot run it (boundary non-claim)"))),
+        // MODIFY / INQUIRE are ACUCOBOL GUI verbs absent from the admitted GnuCOBOL 3.2 grammar (a syntax
+        // error in the oracle) -- there is nothing to reproduce.
         "MODIFY" | "INQUIRE" =>
-            Err(RunError::Unsupported(format!("{verb}: an ACUCOBOL screen/GUI verb that requires a SCREEN SECTION the front-end does not model"))),
+            Err(RunError::Unsupported(format!("{verb}: an ACUCOBOL screen/GUI verb absent from the GnuCOBOL 3.2 grammar -- the oracle itself rejects it (boundary non-claim)"))),
         "ALLOCATE" => exec_allocate(stmt, fields, ctx.decimal_comma),
         "FREE" => Ok(()), // FREE [ADDRESS OF] id -- release based storage; a no-op in the logical model.
         "ENTRY" =>
@@ -3549,7 +3598,7 @@ fn set_file_status(fields: &mut HashMap<String, Field>, def: &FileDef, code: &st
 
 /// `OPEN {INPUT|OUTPUT|EXTEND|I-O} file [file ...]` -- set each file's open mode (OUTPUT truncates the
 /// logical file). The subset is a single mode keyword per statement.
-fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
     let mode = match stmt.first() {
         Some(Tok::Word(w)) => match w.as_str() {
             "INPUT" => 1u8, "OUTPUT" => 2, "EXTEND" => 3, "I-O" => 4,
@@ -3558,7 +3607,15 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
         _ => return Err(RunError::Unsupported("OPEN: missing mode".into())),
     };
     for name in stmt[1..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
-        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?;
+        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?.clone();
+        // OPEN INPUT / I-O on a file that was never created (never OPEN OUTPUT'd / written) is "file not
+        // found": status "35", then any DECLARATIVES USE handler for the file runs.
+        let exists = ctx.files.borrow().contains_key(&fkey(ctx, &name));
+        if (mode == 1 || mode == 4) && !exists {
+            set_file_status(fields, &def, "35");
+            run_use_handler(&name, fields, out, ctx)?;
+            continue;
+        }
         {
             let mut files = ctx.files.borrow_mut();
             let st = files.entry(fkey(ctx, &name)).or_default();
@@ -3566,9 +3623,19 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
             st.read_pos = 0;
             st.mode = mode;
         }
-        set_file_status(fields, def, "00");
+        set_file_status(fields, &def, "00");
     }
     Ok(())
+}
+
+/// Run the DECLARATIVES `USE ... ON file` handler paragraph (if any) after a file error on `file`.
+fn run_use_handler(file: &str, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+    let range = USE_PROCS.with(|c| c.borrow().get(file).cloned());
+    if let Some((start, end)) = range {
+        let proc = CUR_PROC.with(|c| c.borrow().clone());
+        return run_range(&proc, start, end, fields, out, ctx);
+    }
+    Ok(false)
 }
 
 /// `CLOSE file [file ...]` -- mark each file closed (its logical records persist so a later OPEN INPUT can
