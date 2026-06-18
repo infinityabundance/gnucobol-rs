@@ -215,10 +215,12 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
         // cobc rejects the *-N variants at compile ("not implemented").
         "EXCEPTION-LOCATION-N" | "EXCEPTION-FILE-N" =>
             Some((true, "cobc rejects it at compile: \"FUNCTION is not implemented\" (no oracle output exists)")),
-        // RUNTIME gap: present + deterministic with a seed, but the ported cob_intr_random PRNG does not yet
-        // reproduce libcob's stream (probed: cobrun 0.4170.. vs oracle 0.5541.. for RANDOM(1)). Wiring it
-        // would be WRONG until the runtime PRNG is sealed -- a runtime task, not a front-end one.
-        "RANDOM" => Some((false, "runtime gap: the ported cob_intr_random PRNG does not yet match libcob's stream (would not be byte-identical)")),
+        // GMP-substrate boundary: RANDOM's value is GMP's INTERNAL Mersenne-Twister stream (libcob delegates
+        // to gmp_randinit_mt + gmp_randseed_ui, whose GMP-specific seeding is verified NOT to be the textbook
+        // MT init_by_array). The project ports libcob's ALGORITHMS, not GMP's internals, and does not link
+        // libgmp -- so the exact bit-stream is a declared substrate boundary (like the host x87 80-bit long
+        // double), not a libcob algorithm to reproduce.
+        "RANDOM" => Some((true, "GMP-RNG substrate boundary: the value is GMP's internal Mersenne-Twister stream (gmp_randseed_ui), not a libcob algorithm; the port does not reproduce GMP internals / link libgmp")),
         "SECONDS-PAST-MIDNIGHT" => Some((false, "no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE)")),
         // A compiler artifact with no interpreter analog: cobc's MODULE-PATH is the *compiled binary*
         // path (its -o output); an interpreter never produces a binary, so there is nothing to match.
