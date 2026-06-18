@@ -37,7 +37,8 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "DISPLAY", "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ACCEPT", "ADD", "SUBTRACT",
     "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
-    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML",
+    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
+    "VALIDATE", "DESTROY", "READY", "RESET",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1293,7 +1294,8 @@ const STMT_VERBS: &[&str] = &[
     "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE",
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
-    "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML",
+    "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
+    "VALIDATE", "DESTROY", "READY", "RESET",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -2396,6 +2398,10 @@ fn exec_stmt(
             Some(Tok::Word(w)) if w == "PARSE" => exec_ml_parse_noop(),
             _ => Err(RunError::Unsupported("XML: expected GENERATE".into())),
         },
+        "TRANSFORM" => exec_transform(stmt, fields),
+        // GnuCOBOL 3.2 compiles these as "not implemented" (or with no stdout effect under the default
+        // runtime); the oracle-first front-end accepts them and matches that exactly as a no-op.
+        "RAISE" | "VALIDATE" | "DESTROY" | "READY" | "RESET" => Ok(()),
         "UNLOCK" => exec_unlock(stmt, fields, ctx),
         // COMMIT / ROLLBACK are no-ops without a transactional backend (as libcob is for sequential files).
         "COMMIT" | "ROLLBACK" => Ok(()),
@@ -3031,6 +3037,23 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
         }
         other => Err(RunError::Unsupported(format!("INSPECT clause {other:?} (subset: TALLYING/REPLACING/CONVERTING)"))),
     }
+}
+
+/// `TRANSFORM target FROM from TO to` -- the legacy form of `INSPECT target CONVERTING from TO to` (a
+/// per-byte translation), reusing the sealed CONVERTING court.
+fn exec_transform(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    use crate::inspect::{inspect_converting, Region};
+    let target = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("TRANSFORM: missing target".into())) };
+    let fp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")).ok_or_else(|| RunError::Unsupported("TRANSFORM without FROM".into()))?;
+    let from = inspect_operand(stmt.get(fp + 1), fields)?;
+    let tp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO")).ok_or_else(|| RunError::Unsupported("TRANSFORM without TO".into()))?;
+    let to = inspect_operand(stmt.get(tp + 1), fields)?;
+    let tb = read_field(fields, &target)?.map(|f| f.bytes).unwrap_or_default();
+    let newb = inspect_converting(&tb, &from, &to, Region::All);
+    write_field(fields, &target, |f| {
+        if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
+        else { Err(RunError::Runtime("TRANSFORM changed field length".into())) }
+    })
 }
 
 /// `STRING <src [DELIMITED BY SIZE|lit]> ... INTO target [WITH POINTER p]` -- concatenate the sources into
