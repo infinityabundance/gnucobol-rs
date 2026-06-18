@@ -1,0 +1,29 @@
+[package]
+name = "gnucobol-rs-ffi"
+version = "0.1.0"
+description = "C-ABI shim for gnucobol-rs: exposes the native-Rust libcob algorithms (cob_move, accessors, ...) with `extern \"C\"` linkage so a C program can link gnucobol-rs as a drop-in libcob replacement. The ONLY crate that uses unsafe (the C boundary); the gnucobol-rs core stays forbid(unsafe_code)."
+license = "LGPL-3.0-or-later"
+keywords = ["cobol", "gnucobol", "libcob", "ffi", "abi"]
+categories = ["external-ffi-bindings", "encoding"]
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "README.md"
+homepage.workspace = true
+
+[lib]
+# cdylib = a libcob-compatible .so a C program can link; staticlib = a .a; rlib = use from Rust tests.
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+gnucobol-rs = { path = "../gnucobol-rs" }
+
+[lints.rust]
+# This crate is the C-ABI boundary -- it must use `unsafe` for raw cob_field pointers (the workspace
+# default forbids it). Everything ELSE in the workspace stays forbid(unsafe_code).
+unsafe_code = "allow"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+
+[lints.clippy]
+all = "warn"

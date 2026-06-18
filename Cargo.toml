@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "crates/gnucobol-rs",
+    "crates/gnucobol-rs-ffi",
     "crates/cobc-oracle-rs",
     "crates/gnucobol-rs-port-index",
     "xtask",
