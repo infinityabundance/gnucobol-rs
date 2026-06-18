@@ -11,16 +11,31 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 [![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) [![docs.rs](https://img.shields.io/docsrs/gnucobol-rs)](https://docs.rs/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-137-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-137-blueviolet)
 
-**A faithful, line-cited Rust port of GnuCOBOL's packed-decimal (COMP-3), zoned, and display
-numeric *byte* semantics and the `MOVE` conversions between them — proven byte-identical against
-the GnuCOBOL 3.2 `libcob` oracle.**
+**A faithful, line-cited native-Rust implementation of the GnuCOBOL 3.2 `libcob` runtime —
+proven byte-identical to the upstream oracle — plus `cobrun`, a clean-room interpreter that
+parses and executes COBOL to `cobc`-identical output. `#![forbid(unsafe_code)]`; no C linked.**
 
-This is a memory-safe (`#![forbid(unsafe_code)]`), dependency-free, **pure** kernel: every function
-is a deterministic function of its `(bytes, attrs)` inputs — no global state, no env/locale/fs
-reads, panic-free on hostile input. It is part of the [`gnucobol-rs`](https://github.com/infinityabundance/gnucobol-rs)
-compatibility court.
+Every runtime function is ported statement-by-statement from `libcob` with upstream line citations
+(e.g. `// move.c:477`) and proven **byte-identical** under a differential sweep against a locally
+built GnuCOBOL 3.2. "Correct" means *matches the built oracle*, never *matches a spec reading*.
 
-## What it does — sealed claims
+## What it does
+
+- **The `libcob` runtime, 1:1.** All 13 admitted `libcob` source files are ported (move, numeric,
+  intrinsic, fileio, common, …) — MOVE, decimal/binary/packed/edited storage, arithmetic, the 110
+  intrinsic functions, sequential/indexed/relative files — verified by the doxygen C↔Rust parity view.
+- **`cobrun`, the interpreter front-end.** A clean-room COBOL parser + executor *on* the ported
+  runtime (no `cobc`, no `libcob` linked) that runs a growing, sweep-verified subset of the language
+  to output byte-identical to `cobc`. Run a program with `cargo run --example cobrun -- file.cob`.
+- **`cobcrun --runtime-config`** reproduced byte-for-byte (`common_runtimeconf`).
+
+The detailed, per-court claims — byte domain, oracle, fixture counts, sealing version, and exact
+non-claims — are **generated evidence**, not prose here: see the sealed-court table below, the live
+[`COBOL-PARITY.md`](https://github.com/infinityabundance/gnucobol-rs/blob/main/COBOL-PARITY.md) /
+[`FILE-PARITY.md`](https://github.com/infinityabundance/gnucobol-rs/blob/main/FILE-PARITY.md)
+coverage maps, and each court's `reports/casefiles/<court>/` + `reports/receipts/<court>/` case file.
+
+## Sealed claims
 
 ### Sealed GnuCOBOL data/arithmetic courts
 
@@ -129,160 +144,23 @@ compatibility court.
 | `GNURUST.19` | DIVIDE receiving-field bytes | ✅ pass | `reports/casefiles/GNURUST.19/` |
 
 > [!NOTE]
-> Every court is proven **byte-identical** to GnuCOBOL 3.2's `libcob` under a differential sweep (`FAIL=0`). ✅ = proven against the oracle; the detailed claim for each follows below.
-
-## `GNURUST.2` — decimal `MOVE` bytes
-
-For three elementary `cob_move` type pairs on a little-endian ASCII host under `LC_ALL=C.UTF-8`:
-
-- **DISPLAY → DISPLAY** (zoned store, scale alignment, sign)
-- **DISPLAY → PACKED** (COMP-3 encode)
-- **PACKED → DISPLAY** (COMP-3 decode)
-
-`gnucobol-rs::cob_move` produces **byte-identical** destination field bytes to `libcob`'s
-`cob_move`. Verified by a differential sweep of 13,152 cases/seed across 7 seeds (`FAIL=0`), two
-sharp Kani proofs, and 20M fuzz runs.
-
-```rust
-use gnucobol_rs::{cob_move, FieldAttr, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED, COB_FLAG_HAVE_SIGN};
-
-// MOVE a signed display S9(3)V99 value -012.34 into a COMP-3 field.
-let src = [0x30, 0x31, 0x32, 0x33, 0x74]; // "0123" + overpunched '4' ('t')
-let src_attr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 5, scale: 2, flags: COB_FLAG_HAVE_SIGN };
-let dst_attr = FieldAttr { field_type: COB_TYPE_NUMERIC_PACKED,  digits: 5, scale: 2, flags: COB_FLAG_HAVE_SIGN };
-let mut dst = [0u8; 3];
-cob_move(&src, &src_attr, &mut dst, &dst_attr).unwrap();
-assert_eq!(dst, [0x01, 0x23, 0x4d]); // COMP-3, negative sign nibble 0x0d
-```
-
-## `GNURUST.3` — PIC → field model (`gnucobol_rs::pic`)
-
-Parse a COBOL `PIC` clause + `USAGE` into the same field model, matching the GnuCOBOL compiler's
-own `cob_field_attr` + storage-size computation (differential sweep vs `cobc`, `PASS=192 FAIL=0`):
-
-```rust
-use gnucobol_rs::{build_field, Usage};
-
-let f = build_field("S9(5)V99", Usage::Comp3, false, false).unwrap();
-assert_eq!((f.attr.field_type, f.attr.digits, f.attr.scale, f.size), (0x12, 7, 2, 4)); // COMP-3, 4 bytes
-```
-
-Sealed subset: `9 X A S V`, repeats `(n)`, `SIGN [LEADING|TRAILING] [SEPARATE]`,
-`USAGE DISPLAY`/`COMP-3`. The `P` scaling symbol, edited pictures, and other usages **fail closed**
-with a typed `PicError`. The `P` scaling symbol is **sealed** (`GNURUST.9`): trailing `999PPP` -> `digits 6, scale -3`; leading `PPP999` -> `digits 3, scale 6`; `size` = stored `9`s. `V`+`P` and VALUE/MOVE on a P field still fail closed.
-
-## `GNURUST.4` — DATA DIVISION layout (`gnucobol_rs::layout`)
-
-`lay_out` assigns each record item its byte **offset** and **size** — nested groups, fixed
-`OCCURS n TIMES`, `REDEFINES` overlay, and `FILLER` — matching the GnuCOBOL compiler's own record
-layout (differential sweep vs `cobc`, `PASS=32 FAIL=0`). `OCCURS DEPENDING ON`, `SYNCHRONIZED`, and
-a `REDEFINES` larger than its target **fail closed** with a typed `LayoutError`. A single trailing `OCCURS min TO max DEPENDING ON` is sealed (`GNURUST.10`) as its **physical maximum** (proven vs `cobc`'s `b_REC` allocation); the active/logical count is a non-claim, and multiple/nested/non-last ODO fail closed.
-
-## `GNURUST.5` / `GNURUST.6` — COPY (+ REPLACING) copybook expansion (`gnucobol_rs::copybook`)
-
-`expand` splices `COPY <name> [REPLACING ==old== BY ==new== …].` copybooks into the source —
-recursively, with cycle detection and a per-line provenance map — matching the GnuCOBOL preprocessor
-(`cobc -P`) at **text-word** granularity (`programs=7 PASS=7 FAIL=0`). REPLACING is whole-text-word
-(`==AA==` does not touch `AA-X`; the `:tag:` idiom works), composes across nesting, and **fails
-closed** (typed `CopyError`) on `LEADING`/`TRAILING`/identifier operands, recursion, and
-over-deep/over-large expansion.
-
-## `GNURUST.7` — decimal arithmetic (`gnucobol_rs::cob_arith`)
-
-`cob_arith(op, a, a_attr, b, b_attr, round)` computes `a := a (op) b` in pure-Rust integer decimal
-(i128, zero deps, no float), matching libcob `cob_add`/`cob_sub`/`cob_mul`: ADD/SUBTRACT (DISPLAY) +
-MULTIPLY (DISPLAY/COMP-3), truncation and ROUNDED (nearest-away), negative-zero-on-overflow (sweep
-`PASS=1800 FAIL=0`). ADD/SUBTRACT into PACKED (libcob's separate BCD path), DIVIDE, other rounding
-modes, and >38-digit (bignum) inputs **fail closed** with a typed `ArithError`. **`GNURUST.13`** additionally seals `ADD`/`SUBTRACT` into a **PACKED** receiver (libcob's `cob_add_bcd` path): byte-identical for DISPLAY/COMP-3 operands, scales, truncate/ROUNDED, carry, overflow, and negative-zero-on-truncation (sweep `5400/0`).
-
-## `GNURUST.8` — VALUE initial record image (`gnucobol_rs::value_image`)
-
-`value_image(items)` computes the initial WORKING-STORAGE bytes of an `01` record from `VALUE` clauses,
-matching `cobc`: alphanumeric `VALUE` (left-justified, space-padded), numeric DISPLAY (zoned +
-overpunch), COMP-3 (packed via the sealed `cob_move`), with type-correct defaults for unvalued fields
-(DISPLAY numeric `'0'`, alnum spaces, **COMP-3 canonical packed zero**). Sweep `PASS=392 FAIL=0`.
-OCCURS/REDEFINES+VALUE, edited/`P` PICs, and non-fitting literals **fail closed** (`InitError`).
-
-## `GNURUST.11` — LEVEL-88 condition-name predicate (`gnucobol_rs::eval_88`)
-
-`eval_88(attr, bytes, condition)` proves whether a LEVEL-88 condition name is true for a parent field's
-current bytes, matching `cobc`: alphanumeric parents compare the literal **space-padded to the parent
-length** (incl. `THRU` ranges); numeric DISPLAY/COMP-3 parents compare by **numeric value** (scale/
-sign-aware, ranges inclusive). Sweep `total=103 PASS=103 FAIL=0`. Predicate only — `SET`, the `FALSE`
-clause, condition expressions, and collating-sensitive ranges **fail closed** (`ConditionError`).
-
-## `GNURUST.12` — SET condition-name TO TRUE (`gnucobol_rs::set_88_true`)
-
-`set_88_true(attr, size, condition)` constructs the canonical parent bytes GnuCOBOL writes for
-`SET condition-name TO TRUE` (the first `VALUE`, or a `THRU` range's lower bound, encoded into the
-parent), matching `cobc` — and its output always satisfies `eval_88` (round-trip). Sweep
-`total=52 PASS=52 FAIL=0`. **TRUE only**: `SET ... TO FALSE`, the `FALSE` clause, condition
-expressions, and execution **fail closed** (`ConditionSetError`).
-
-## `GNURUST.14` — binary storage (COMP / COMP-5 / COMP-X)
-
-`build_field` admits `USAGE COMP`/`BINARY`/`COMP-5`/`COMP-X` (type/digits/scale/flags/size match `cobc`;
-PIC sweep 416/0), and `cob_move` handles DISPLAY↔binary both ways — big-endian/native two's complement,
-COMP digit-truncation, COMP-X/COMP-5 byte-masking (binary MOVE sweep 546/0). `Decimal::from_binary`
-decodes for the read path. Binary **arithmetic**, SYNCHRONIZED, and host-portable endian are non-claims.
-
-## `GNURUST.15` — EBCDIC code-page boundary (cp500)
-
-`ebcdic::decode_display(CodePage::Cp500, bytes)` decodes raw EBCDIC **alphanumeric DISPLAY** bytes to
-text via the cp500 table — byte-for-byte the table the admitted oracle's `cob_load_collation` produces
-(sweep 256/256). Other code pages (incl. cp037), numeric EBCDIC zoned sign, national/DBCS, and
-binary/packed conversion are non-claims (binary/packed bytes pass through untouched).
-
-## `GNURUST.16` — edited-picture decode (16a + 16b)
-
-`edited::decode_edited(pic, bytes)` recovers an edited DISPLAY field's `numeric_value` + presentation
-`raw_text` for `Z 9 , . - +` (16a) and the financial decorations `$ * CR DB B 0 /` (16b) — slot-based, proven
-against `cobc`'s MOVE→edited→DISPLAY (92/0). Decode-only: numeric→edited formatting, reports, locale,
-EBCDIC edited, and edited arithmetic are non-claims; corrupt/foreign bytes fail closed.
-
-## `GNURUST.17` — cp500 EBCDIC zoned numeric decode
-
-`Decimal::from_ebcdic_zoned(data, attr)` decodes raw mainframe **zoned-decimal numeric DISPLAY** bytes:
-cp500 translate (`GNURUST.15`) + the `cob_get_sign_ebcdic` overpunch sign (final byte `'A'..'I'`=+,
-`'J'..'R'`=−, `'{'`/`'}'`=±0; raw zones `0xC`/`0xD`/`0xF`). Proven vs `cobc -fsign=EBCDIC` (120/0). cp037,
-edited-numeric under cp500, and binary/packed via this path are non-claims.
-
-## `GNURUST.18` — COMP-6 unsigned packed-decimal
-
-`Usage::Comp6` → `build_field` gives `{PACKED, NO_SIGN_NIBBLE, ceil(digits/2)}` (two digits/byte, no sign
-nibble), proven vs `cobc` (PIC 432/0); `cob_move` DISPLAY↔COMP-6 matches libcob (98/0); `from_packed`
-decodes it. **Unsigned only** — signed COMP-6 is converted by GnuCOBOL to COMP-3 (non-claim).
-
-## `GNURUST.19` — DIVIDE receiving-field bytes
-
-`arith::cob_divide(lhs, lhs_attr, rhs, rhs_attr, recv_attr, round)` writes `recv := lhs/rhs` byte-for-byte
-as `cobc` for `DIVIDE ... GIVING` (DISPLAY/COMP-3, truncate + ROUNDED, signed/scaled/narrowing), proven
-736/0. Divide-by-zero fails closed; REMAINDER/COMPUTE/ON SIZE ERROR/float/binary-edited receivers are
-non-claims.
+> Every court is proven **byte-identical** to GnuCOBOL 3.2's `libcob`/`cobc` under a differential
+> sweep (`FAIL=0`). ✅ = proven against the oracle.
 
 ## What it does NOT do
 
-> [!CAUTION]
-> Not a GnuCOBOL replacement, not a compiler, not `libcob`. Beyond the sealed claims above, these are **refused** (each fails closed with a typed error):
-
-| ❌ not claimed | note |
-|---|---|
-| `ON SIZE ERROR` / overflow control-flow | bytes-written + branch semantics unmapped |
-| `DIVIDE ... REMAINDER` | quotient bytes are `GNURUST.19`; the remainder receiver is a future court |
-| rounding modes other than nearest-away | only `ROUNDED` nearest-away is proven |
-| comparison / collation, binary & float arithmetic | out of the admitted numeric subset |
-| `DISPLAY`-statement output, file I/O | not a runtime; see `KOBOLD.FILE.1` for container ingest only |
-| `OCCURS DEPENDING ON` arithmetic | physical-max layout only (`GNURUST.4/10`) |
-
-See [`reports/negative-capabilities.json`](reports/negative-capabilities.json) and [`docs/future-risk-register.md`](docs/future-risk-register.md) for the full machine-readable refusal set.
+- **It does not emit native code.** The front-end *interprets*; it does not reproduce `cobc`'s
+  C-emission (codegen) — a deliberate non-goal. The behaviour codegen would produce is reproduced by
+  the interpreter and sweep-verified.
+- **The interpreter runs a verified subset.** Anything outside it **fails closed** (an explicit
+  error), never a wrong answer; constructs the GnuCOBOL 3.2 oracle itself cannot run are marked
+  BOUNDARY. The live list of what runs is `COBOL-PARITY.md`.
+- **`cobc` diagnostic / help text is not reproduced byte-for-byte;** localized (non-`C.UTF-8`)
+  runtime messages are an explicit off-oracle non-claim.
 
 ## License
 
-**LGPL-3.0-or-later** — this is a faithful derivative port of `libcob/move.c`, `libcob/numeric.c`,
-and `libcob/common.c` (GnuCOBOL 3.2, © Free Software Foundation, Inc.; authors Keisuke Nishida,
-Roger While, Simon Sobisch, et al.), and inherits their copyleft. See `COPYING.LESSER`.
-
----
-
-*This README is generated by `xtask docs` for **gnucobol-rs 0.8.7** — regenerate with `cargo run -p xtask -- docs generate`; freshness (content + version) is enforced by the `docs check` gate.*
+**LGPL-3.0-or-later** — this is `gnucobol-rs 0.8.7`, a faithful derivative port of `libcob` (LGPL-3.0-or-later), inheriting
+upstream copyleft; the FSF copyright notice is retained. Not the upstream GnuCOBOL project, nor
+endorsed by it. GnuCOBOL is the admitted oracle.
 
