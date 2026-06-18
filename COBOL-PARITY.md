@@ -12,7 +12,7 @@
 | surface | total | runtime ported (1:1) | front-end runs it |
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
-| statements (verbs) | 66 | 51 (77%) | **50 (76%)** |
+| statements (verbs) | 66 | 51 (77%) | **54 (82%)** |
 | intrinsic functions | 110 | **110 (100%)** | 0 (0%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
@@ -67,10 +67,10 @@
 | `CALL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `CANCEL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `ENTRY` | inter-program | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `GENERATE` | report writer | yes (reportio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `INITIATE` | report writer | yes (reportio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `SUPPRESS` | report writer | yes (reportio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `TERMINATE` | report writer | yes (reportio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `GENERATE` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
+| `INITIATE` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
+| `SUPPRESS` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
+| `TERMINATE` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
 | `DESTROY` | screen | yes (screenio.c) | **yes** | **DONE** -- parses + runs |
 | `INQUIRE` | screen | yes (screenio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `MODIFY` | screen | yes (screenio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |

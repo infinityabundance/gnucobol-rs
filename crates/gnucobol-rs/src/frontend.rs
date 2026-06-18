@@ -38,7 +38,8 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
     "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE",
+    "SUPPRESS",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -380,6 +381,9 @@ pub fn run_program_redirected(
     let file_defs: HashMap<String, FileDef> = program_map.get(&main_name)
         .map(|p| p.files.iter().map(|f| (f.name.clone(), f.clone())).collect())
         .unwrap_or_default();
+    let reports: HashMap<String, ReportDef> = program_map.get(&main_name)
+        .map(|p| p.reports.clone())
+        .unwrap_or_default();
     let ctx = Ctx {
         programs: &program_map,
         dialect,
@@ -394,6 +398,7 @@ pub fn run_program_redirected(
         goto: RefCell::new(None),
         file_defs,
         files: RefCell::new(HashMap::new()),
+        reports,
     };
     let main = ctx.programs.get(&main_name).expect("main program is registered");
 
@@ -435,6 +440,8 @@ struct ProgramDef {
     using: Vec<String>,
     /// `SELECT ... ASSIGN` + `FD` declared files (the subset: sequential / line-sequential).
     files: Vec<FileDef>,
+    /// `RD` report descriptions (REPORT SECTION) by report name.
+    reports: HashMap<String, ReportDef>,
     proc_toks: Vec<Tok>,
     /// `PROGRAM-ID. name IS INITIAL` -- the program's WORKING-STORAGE is re-initialized to its VALUE
     /// clauses on EVERY entry, rather than persisting (static) across CALLs.
@@ -457,10 +464,30 @@ enum FileOrg {
 #[derive(Debug, Clone)]
 struct FileDef {
     name: String,
+    /// The `ASSIGN TO` target -- the in-memory file store is keyed by this, so two SELECTs on the same
+    /// physical name share records (a report written then re-read: the disk semantics the oracle has).
+    assign: String,
     record: String,
     status: Option<String>,
     org: FileOrg,
     rel_key: Option<String>,
+}
+
+/// One printable report element: a `COLUMN n PIC p {SOURCE field | VALUE lit}` entry in a report group.
+#[derive(Debug, Clone)]
+struct RElem {
+    column: usize,
+    pic: String,
+    source: Option<String>,
+    value: Option<Tok>,
+}
+
+/// A `RD` report description: the file it writes to, and each report group's lines (each line a set of
+/// column-placed elements). The minimal subset: groups of COLUMN + PIC + SOURCE/VALUE elements.
+#[derive(Debug, Clone, Default)]
+struct ReportDef {
+    file: String,
+    groups: HashMap<String, Vec<Vec<RElem>>>,
 }
 
 /// The live state of an OPEN file: its logical records, the next READ position, and the open mode.
@@ -528,6 +555,8 @@ struct Ctx<'a> {
     /// I/O is deterministic on stdout without touching the host filesystem.
     file_defs: HashMap<String, FileDef>,
     files: RefCell<HashMap<String, FileState>>,
+    /// `RD` report descriptions by report name (from the main program), for INITIATE/GENERATE/TERMINATE.
+    reports: HashMap<String, ReportDef>,
 }
 
 /// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
@@ -734,10 +763,12 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // ENVIRONMENT FILE-CONTROL (SELECT ... ) + DATA FILE SECTION (FD + 01 record). The FD record items are
     // added to the field table; each file's metadata becomes a FileDef.
     let file_control = parse_file_control(toks, start, proc_at);
-    let (mut file_recs, file_rec) = parse_file_section(toks, start, proc_at)?;
-    let files: Vec<FileDef> = file_control.into_iter().filter_map(|(name, org, status, rel_key)| {
-        file_rec.get(&name).map(|rec| FileDef { name: name.clone(), record: rec.clone(), status, org, rel_key })
+    let (mut file_recs, file_rec, report_file) = parse_file_section(toks, start, proc_at)?;
+    let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key)| {
+        let record = file_rec.get(&name).cloned().unwrap_or_default();
+        FileDef { name, assign, record, status, org, rel_key }
     }).collect();
+    let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
     let linkage = match link_at {
         Some(l) => parse_items(toks, l + 2, proc_at)?,
@@ -769,12 +800,12 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     let body_end = find_seq_in(toks, &["END", "PROGRAM"], p, end).unwrap_or(end);
     let proc_toks = toks[p..body_end].to_vec();
 
-    Ok((name, ProgramDef { ws, linkage, using, files, proc_toks, is_initial }))
+    Ok((name, ProgramDef { ws, linkage, using, files, reports, proc_toks, is_initial }))
 }
 
 /// Parse `FILE-CONTROL` `SELECT name ASSIGN ... [ORGANIZATION [IS] {LINE SEQUENTIAL|SEQUENTIAL}]
 /// [FILE STATUS [IS] status]` entries -> `(name, org, status)`. Unknown clauses are skipped.
-fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, FileOrg, Option<String>, Option<String>)> {
+fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, String, FileOrg, Option<String>, Option<String>)> {
     let fc = match find_seq_in(toks, &["FILE-CONTROL"], start, end) {
         Some(i) => i + 1,
         None => return Vec::new(),
@@ -791,9 +822,21 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, Fi
                 let mut org = FileOrg::Sequential;
                 let mut status = None;
                 let mut rel_key = None;
+                let mut assign = name.clone();
                 while i < end {
                     match toks.get(i) {
                         Some(Tok::Dot) => { i += 1; break; }
+                        // ASSIGN [TO] [DYNAMIC] {"path" | word} -- the physical file the store keys on.
+                        Some(Tok::Word(w)) if w == "ASSIGN" => {
+                            i += 1;
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "TO") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DYNAMIC" || w == "EXTERNAL") { i += 1; }
+                            match toks.get(i) {
+                                Some(Tok::Str(s)) => { assign = String::from_utf8_lossy(s).to_string(); i += 1; }
+                                Some(Tok::Word(w)) => { assign = w.clone(); i += 1; }
+                                _ => {}
+                            }
+                        }
                         Some(Tok::Word(w)) if w == "ORGANIZATION" => {
                             i += 1;
                             if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
@@ -824,7 +867,7 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, Fi
                         _ => i += 1,
                     }
                 }
-                out.push((name, org, status, rel_key));
+                out.push((name, assign, org, status, rel_key));
             }
             None => break,
             _ => i += 1,
@@ -835,14 +878,20 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, Fi
 
 /// Parse the `FILE SECTION` `FD name [clauses]. 01 record ...` entries -> (the record items to add to the
 /// field table, and a file-name -> record-name map). The subset is one `01` record per file.
-fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, String>), RunError> {
+fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, String>, HashMap<String, String>), RunError> {
     let fs = match find_seq_in(toks, &["FILE", "SECTION"], start, end) {
         Some(i) => i + 2,
-        None => return Ok((Vec::new(), HashMap::new())),
+        None => return Ok((Vec::new(), HashMap::new(), HashMap::new())),
     };
-    let ws_at = find_seq_in(toks, &["WORKING-STORAGE", "SECTION"], fs, end).unwrap_or(end);
+    // the FILE SECTION ends at the next section (WORKING-STORAGE, LOCAL-STORAGE, LINKAGE, or REPORT).
+    let ws_at = [
+        find_seq_in(toks, &["WORKING-STORAGE", "SECTION"], fs, end),
+        find_seq_in(toks, &["REPORT", "SECTION"], fs, end),
+        find_seq_in(toks, &["LINKAGE", "SECTION"], fs, end),
+    ].into_iter().flatten().min().unwrap_or(end);
     let mut recs = Vec::new();
     let mut file_rec = HashMap::new();
+    let mut report_file = HashMap::new();
     let mut i = fs;
     while i < ws_at {
         match toks.get(i) {
@@ -850,7 +899,19 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
                 i += 1;
                 let fname = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => break };
                 i += 1;
-                while i < ws_at && !matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
+                // scan the FD clauses to the period; capture `REPORT[S] [IS|ARE] r1 [r2 ...]`.
+                while i < ws_at && !matches!(toks.get(i), Some(Tok::Dot)) {
+                    if matches!(toks.get(i), Some(Tok::Word(w)) if w == "REPORT" || w == "REPORTS") {
+                        i += 1;
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS" || w == "ARE") { i += 1; }
+                        while let Some(Tok::Word(r)) = toks.get(i) {
+                            report_file.insert(r.clone(), fname.clone());
+                            i += 1;
+                        }
+                        continue;
+                    }
+                    i += 1;
+                }
                 if matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
                 let rec_start = i;
                 let mut rec_end = i;
@@ -867,7 +928,103 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
             _ => i += 1,
         }
     }
-    Ok((recs, file_rec))
+    Ok((recs, file_rec, report_file))
+}
+
+/// Parse the `REPORT SECTION` `RD r1. 01 group [TYPE ...]. ... COLUMN n PIC p {SOURCE id | VALUE lit} ...`
+/// into report definitions. Minimal subset: each report group is a set of column-placed elements, one
+/// output line per `LINE` clause (a group with no LINE clause is one line).
+fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &HashMap<String, String>) -> HashMap<String, ReportDef> {
+    let mut reports: HashMap<String, ReportDef> = HashMap::new();
+    let rs = match find_seq_in(toks, &["REPORT", "SECTION"], start, end) {
+        Some(i) => i + 2,
+        None => return reports,
+    };
+    let mut cur_report: Option<String> = None;
+    let mut cur_group: Option<String> = None;
+    let mut i = rs;
+    while i < end {
+        let w = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => { i += 1; continue; } };
+        if w == "PROCEDURE" { break; }
+        if w == "RD" {
+            i += 1;
+            if let Some(Tok::Word(r)) = toks.get(i) {
+                let file = report_file.get(r).cloned().unwrap_or_default();
+                reports.entry(r.clone()).or_insert_with(|| ReportDef { file, groups: HashMap::new() });
+                cur_report = Some(r.clone());
+                cur_group = None;
+                i += 1;
+            }
+            while i < end && !matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
+            i += 1;
+            continue;
+        }
+        // a level number starting a report item.
+        if w == "01" {
+            i += 1;
+            let gname = match toks.get(i) { Some(Tok::Word(g)) => g.clone(), _ => { continue; } };
+            i += 1;
+            if let (Some(rep), grp) = (cur_report.clone(), &gname) {
+                reports.entry(rep).or_default().groups.entry(grp.clone()).or_insert_with(|| vec![Vec::new()]);
+            }
+            cur_group = Some(gname);
+            continue;
+        }
+        // a `LINE` clause starts a new output line in the current group.
+        if w == "LINE" {
+            if let (Some(rep), Some(grp)) = (&cur_report, &cur_group) {
+                if let Some(rd) = reports.get_mut(rep) {
+                    let lines = rd.groups.entry(grp.clone()).or_insert_with(|| vec![Vec::new()]);
+                    if !lines.last().map(|l| l.is_empty()).unwrap_or(true) {
+                        lines.push(Vec::new());
+                    }
+                }
+            }
+            i += 1;
+            continue;
+        }
+        // a `COLUMN n ... PIC p ... {SOURCE id | VALUE lit}` printable element.
+        if w == "COLUMN" || w == "COL" {
+            i += 1;
+            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "NUMBER" || w == "IS" || w == "PLUS") { i += 1; }
+            let column: usize = match toks.get(i) { Some(Tok::Word(n)) => n.parse().unwrap_or(1), _ => 1 };
+            i += 1;
+            let mut pic = String::new();
+            let mut source = None;
+            let mut value = None;
+            while i < end && !matches!(toks.get(i), Some(Tok::Dot)) {
+                match toks.get(i) {
+                    Some(Tok::Word(w)) if w == "PIC" || w == "PICTURE" => {
+                        i += 1;
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                        if let Some(Tok::Word(p)) = toks.get(i) { pic = p.clone(); i += 1; }
+                    }
+                    Some(Tok::Word(w)) if w == "SOURCE" => {
+                        i += 1;
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                        if let Some(Tok::Word(s)) = toks.get(i) { source = Some(s.clone()); i += 1; }
+                    }
+                    Some(Tok::Word(w)) if w == "VALUE" => {
+                        i += 1;
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                        value = toks.get(i).cloned();
+                        i += 1;
+                    }
+                    _ => i += 1,
+                }
+            }
+            if let (Some(rep), Some(grp)) = (&cur_report, &cur_group) {
+                if let Some(rd) = reports.get_mut(rep) {
+                    let lines = rd.groups.entry(grp.clone()).or_insert_with(|| vec![Vec::new()]);
+                    if lines.is_empty() { lines.push(Vec::new()); }
+                    lines.last_mut().unwrap().push(RElem { column, pic, source, value });
+                }
+            }
+            continue;
+        }
+        i += 1;
+    }
+    reports
 }
 
 /// Parse the `01`-level elementary items in `toks[start..end]` (a WORKING-STORAGE or LINKAGE section body).
@@ -887,7 +1044,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             }
         };
         // stop if we reach a new DIVISION/SECTION header word.
-        if level == "PROCEDURE" || level == "LINKAGE" || level == "DATA" {
+        if level == "PROCEDURE" || level == "LINKAGE" || level == "DATA" || level == "REPORT" {
             break;
         }
         // An `88`-level condition-name on the most recent data item.
@@ -1300,7 +1457,7 @@ const STMT_VERBS: &[&str] = &[
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
     "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -2410,6 +2567,9 @@ fn exec_stmt(
         "TRANSFORM" => exec_transform(stmt, fields),
         "EXHIBIT" => exec_exhibit(stmt, fields, out, ctx),
         "ALTER" => exec_alter(stmt),
+        "GENERATE" => exec_generate(stmt, fields, ctx),
+        // INITIATE/TERMINATE/SUPPRESS over the minimal report subset (DETAIL only) are no-ops.
+        "INITIATE" | "TERMINATE" | "SUPPRESS" => Ok(()),
         // GnuCOBOL 3.2 compiles these as "not implemented" (or with no stdout effect under the default
         // runtime); the oracle-first front-end accepts them and matches that exactly as a no-op.
         "RAISE" | "VALIDATE" | "DESTROY" | "READY" | "RESET" => Ok(()),
@@ -3277,6 +3437,12 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
     })
 }
 
+/// The in-memory file-store key for a COBOL file name: its ASSIGN target (so two SELECTs on the same
+/// physical name share storage), falling back to the name.
+fn fkey(ctx: &Ctx, name: &str) -> String {
+    ctx.file_defs.get(name).map(|d| d.assign.clone()).filter(|a| !a.is_empty()).unwrap_or_else(|| name.to_string())
+}
+
 /// Set a file's `FILE STATUS` field (if declared) to a 2-character code (`"00"` ok, `"10"` end-of-file).
 fn set_file_status(fields: &mut HashMap<String, Field>, def: &FileDef, code: &str) {
     if let Some(s) = &def.status {
@@ -3299,7 +3465,7 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
         let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?;
         {
             let mut files = ctx.files.borrow_mut();
-            let st = files.entry(name.clone()).or_default();
+            let st = files.entry(fkey(ctx, &name)).or_default();
             if mode == 2 { st.records.clear(); }
             st.read_pos = 0;
             st.mode = mode;
@@ -3314,7 +3480,7 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Re
 fn exec_close(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
     for name in stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
         let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("CLOSE: `{name}` is not a declared file")))?;
-        if let Some(st) = ctx.files.borrow_mut().get_mut(&name) { st.mode = 0; }
+        if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &name)) { st.mode = 0; }
         set_file_status(fields, def, "00");
     }
     Ok(())
@@ -3342,7 +3508,7 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         // place the record at the 1-based RELATIVE KEY position (empty slots = absent records).
         let pos = relative_key_value(&def, fields)?;
         let mut files = ctx.files.borrow_mut();
-        let st = files.entry(def.name.clone()).or_default();
+        let st = files.entry(def.assign.clone()).or_default();
         if st.records.len() < pos { st.records.resize(pos, Vec::new()); }
         let occupied = !st.records[pos - 1].is_empty();
         if !occupied { st.records[pos - 1] = bytes; }
@@ -3350,7 +3516,7 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         set_file_status(fields, &def, if occupied { "22" } else { "00" });
         return Ok(());
     }
-    ctx.files.borrow_mut().entry(def.name.clone()).or_default().records.push(bytes);
+    ctx.files.borrow_mut().entry(def.assign.clone()).or_default().records.push(bytes);
     set_file_status(fields, &def, "00");
     Ok(())
 }
@@ -3386,7 +3552,7 @@ fn exec_rewrite(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) ->
     }
     let no_current = {
         let mut files = ctx.files.borrow_mut();
-        match files.get_mut(&def.name) {
+        match files.get_mut(&def.assign) {
             Some(st) if st.read_pos >= 1 && st.read_pos <= st.records.len() => {
                 let idx = st.read_pos - 1;
                 st.records[idx] = bytes;
@@ -3458,15 +3624,15 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     // ---- gather phase: INPUT PROCEDURE (RELEASE records into the sort file) or USING files ----
     let mut recs: Vec<Vec<u8>> = Vec::new();
     if let Some((p1, p2)) = &in_proc {
-        ctx.files.borrow_mut().entry(sf.clone()).or_default().records.clear();
+        ctx.files.borrow_mut().entry(fkey(ctx, &sf)).or_default().records.clear();
         let (start, end) = para_range(p1, p2)
             .ok_or_else(|| RunError::Unsupported(format!("SORT INPUT PROCEDURE: unknown paragraph `{p1}`")))?;
         run_range(&proc, start, end, fields, out, ctx)?;
-        recs = ctx.files.borrow().get(&sf).map(|st| st.records.clone()).unwrap_or_default();
+        recs = ctx.files.borrow().get(&fkey(ctx, &sf)).map(|st| st.records.clone()).unwrap_or_default();
     } else if !using.is_empty() {
         let files = ctx.files.borrow();
         for f in &using {
-            if let Some(st) = files.get(f) {
+            if let Some(st) = files.get(&fkey(ctx, f)) {
                 for r in &st.records {
                     if r.is_empty() { continue; }
                     recs.push(r.clone());
@@ -3487,7 +3653,7 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     if let Some((p3, p4)) = &out_proc {
         {
             let mut files = ctx.files.borrow_mut();
-            let st = files.entry(sf.clone()).or_default();
+            let st = files.entry(fkey(ctx, &sf)).or_default();
             st.records = recs;
             st.read_pos = 0;
             st.mode = 1;
@@ -3500,7 +3666,7 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
         let mut files = ctx.files.borrow_mut();
         for f in &giving {
             let gorg = ctx.file_defs.get(f).map(|d| d.org).unwrap_or(FileOrg::Sequential);
-            let st = files.entry(f.clone()).or_default();
+            let st = files.entry(fkey(ctx, f)).or_default();
             st.records = recs.iter().map(|r| {
                 let mut b = r.clone();
                 if gorg == FileOrg::LineSequential { while b.last() == Some(&b' ') { b.pop(); } }
@@ -3615,6 +3781,42 @@ fn exec_ml_parse_noop() -> Result<(), RunError> {
     Ok(())
 }
 
+/// The displayed bytes of a report element: a `PIC` field holding its SOURCE value (or VALUE literal).
+fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<Vec<u8>, RunError> {
+    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
+    if let Some(src) = &el.source {
+        let (sb, sa) = operand_value(&Tok::Word(src.clone()), fields)?;
+        move_into(&mut temp, &sb, &sa, ctx.decimal_comma)?;
+    }
+    Ok(display_bytes(&temp, ctx.decimal_comma))
+}
+
+/// `GENERATE group-name` -- print a report group: for each of its lines, place each element's value at its
+/// COLUMN and append the line to the report's file. (Headings/footings/SUM/control breaks are out of subset.)
+fn exec_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let gname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("GENERATE: missing report group".into())) };
+    for rd in ctx.reports.values() {
+        if let Some(lines) = rd.groups.get(&gname) {
+            let org = ctx.file_defs.get(&rd.file).map(|d| d.org).unwrap_or(FileOrg::LineSequential);
+            for line_elems in lines {
+                if line_elems.is_empty() { continue; }
+                let mut buf: Vec<u8> = Vec::new();
+                for el in line_elems {
+                    let val = format_relem(el, fields, ctx)?;
+                    let start = el.column.saturating_sub(1);
+                    let endp = start + val.len();
+                    if buf.len() < endp { buf.resize(endp, b' '); }
+                    buf[start..endp].copy_from_slice(&val);
+                }
+                if org == FileOrg::LineSequential { while buf.last() == Some(&b' ') { buf.pop(); } }
+                ctx.files.borrow_mut().entry(fkey(ctx, &rd.file)).or_default().records.push(buf);
+            }
+            return Ok(());
+        }
+    }
+    Err(RunError::Unsupported(format!("GENERATE: `{gname}` is not a report group in the subset")))
+}
+
 /// `RELEASE record [FROM id]` -- write a record to its sort file during a SORT INPUT PROCEDURE (the records
 /// accumulate, then SORT orders them).
 fn exec_release(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
@@ -3629,7 +3831,7 @@ fn exec_release(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) ->
         .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?
         .clone();
     let bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
-    ctx.files.borrow_mut().entry(def.name.clone()).or_default().records.push(bytes);
+    ctx.files.borrow_mut().entry(def.assign.clone()).or_default().records.push(bytes);
     Ok(())
 }
 
@@ -3668,11 +3870,11 @@ fn exec_return(
     let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
     let next = {
         let files = ctx.files.borrow();
-        files.get(&file).and_then(|st| st.records.get(st.read_pos).cloned())
+        files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(st.read_pos).cloned())
     };
     match next {
         Some(mut bytes) => {
-            if let Some(st) = ctx.files.borrow_mut().get_mut(&file) { st.read_pos += 1; }
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos += 1; }
             bytes.resize(reclen, b' ');
             write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
             if let Some(id) = into {
@@ -3722,7 +3924,7 @@ fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
     let pos = relative_key_value(&def, fields)?;
     let deleted = {
         let mut files = ctx.files.borrow_mut();
-        match files.get_mut(&file) {
+        match files.get_mut(&fkey(ctx, &file)) {
             Some(st) if pos <= st.records.len() && !st.records[pos - 1].is_empty() => {
                 st.records[pos - 1] = Vec::new();
                 true
@@ -3778,7 +3980,7 @@ fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
     let foundpos = {
         let files = ctx.files.borrow();
         let mut fp = None;
-        if let Some(st) = files.get(&file) {
+        if let Some(st) = files.get(&fkey(ctx, &file)) {
             for n in 1..=st.records.len() {
                 if st.records[n - 1].is_empty() { continue; }
                 let ok = match rel.as_str() {
@@ -3796,7 +3998,7 @@ fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
     };
     match foundpos {
         Some(n) => {
-            if let Some(st) = ctx.files.borrow_mut().get_mut(&file) { st.read_pos = n - 1; }
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos = n - 1; }
             set_file_status(fields, &def, "00");
         }
         None => set_file_status(fields, &def, "23"),
@@ -3848,12 +4050,12 @@ fn exec_read(
         FileOrg::Relative if !had_next => {
             let pos = relative_key_value(&def, fields)?;
             let files = ctx.files.borrow();
-            files.get(&file).and_then(|st| st.records.get(pos - 1)).filter(|r| !r.is_empty()).cloned()
+            files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(pos - 1)).filter(|r| !r.is_empty()).cloned()
         }
         // RELATIVE sequential read: the next non-empty slot, setting the RELATIVE KEY to its number.
         FileOrg::Relative => {
             let mut found = None;
-            if let Some(st) = ctx.files.borrow_mut().get_mut(&file) {
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) {
                 while st.read_pos < st.records.len() {
                     let p = st.read_pos;
                     st.read_pos += 1;
@@ -3876,9 +4078,9 @@ fn exec_read(
         }
         // sequential / line-sequential: the next record.
         _ => {
-            let bytes = { let files = ctx.files.borrow(); files.get(&file).and_then(|st| st.records.get(st.read_pos).cloned()) };
+            let bytes = { let files = ctx.files.borrow(); files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(st.read_pos).cloned()) };
             if bytes.is_some() {
-                if let Some(st) = ctx.files.borrow_mut().get_mut(&file) { st.read_pos += 1; }
+                if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos += 1; }
             }
             bytes
         }
