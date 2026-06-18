@@ -12,7 +12,7 @@
 | surface | total | runtime ported (1:1) | front-end runs it |
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
-| statements (verbs) | 66 | 51 (77%) | **54 (82%)** |
+| statements (verbs) | 66 | 51 (77%) | **55 (83%)** |
 | intrinsic functions | 110 | **110 (100%)** | 0 (0%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
@@ -80,7 +80,7 @@
 | `SORT` | sort/merge | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
 | `ALLOCATE` | storage | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
 | `FREE` | storage | yes (common.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `EXAMINE` | string handling | yes (strings.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `EXAMINE` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |
 | `INSPECT` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |
 | `STRING` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |
 | `TRANSFORM` | string handling | yes (strings.c) | **yes** | **DONE** -- parses + runs |

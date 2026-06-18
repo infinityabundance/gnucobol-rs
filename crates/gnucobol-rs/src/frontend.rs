@@ -39,7 +39,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
     "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
     "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE",
-    "SUPPRESS",
+    "SUPPRESS", "EXAMINE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1273,6 +1273,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
+    // TALLY: the EXAMINE count register (unsigned 9(5) DISPLAY).
+    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect) {
+        fields.entry("TALLY".to_string()).or_insert(t);
+    }
     Ok(fields)
 }
 
@@ -1457,7 +1461,7 @@ const STMT_VERBS: &[&str] = &[
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
     "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -2565,6 +2569,7 @@ fn exec_stmt(
             _ => Err(RunError::Unsupported("XML: expected GENERATE".into())),
         },
         "TRANSFORM" => exec_transform(stmt, fields),
+        "EXAMINE" => exec_examine(stmt, fields, ctx.decimal_comma),
         "EXHIBIT" => exec_exhibit(stmt, fields, out, ctx),
         "ALTER" => exec_alter(stmt),
         "GENERATE" => exec_generate(stmt, fields, ctx),
@@ -3258,6 +3263,72 @@ fn exec_alter(stmt: &[Tok]) -> Result<(), RunError> {
         }
     }
     Ok(())
+}
+
+/// `EXAMINE id TALLYING {ALL|LEADING|UNTIL FIRST} lit [REPLACING BY lit2]` / `EXAMINE id REPLACING
+/// {ALL|LEADING|FIRST} lit BY lit2` -- the COBOL-68 precursor of INSPECT (an OS/VS dialect verb). TALLYING
+/// sets the `TALLY` register; reuses the sealed INSPECT TALLYING/REPLACING courts.
+fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    use crate::inspect::{inspect_replacing, inspect_tallying, Region, ReplaceMode, TallyMode};
+    let target = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("EXAMINE: missing field".into())) };
+    let tbytes = read_field(fields, &target)?.map(|f| f.bytes).unwrap_or_default();
+    let pos_of = |kw: &str| stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == kw));
+    let write_target = |fields: &mut HashMap<String, Field>, newb: Vec<u8>| -> Result<(), RunError> {
+        write_field(fields, &target, |f| {
+            if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
+            else { Err(RunError::Runtime("EXAMINE changed field length".into())) }
+        })
+    };
+    if let Some(tp) = pos_of("TALLYING") {
+        let mut i = tp + 1;
+        let modekw = match stmt.get(i) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("EXAMINE TALLYING mode".into())) };
+        i += 1;
+        if modekw == "UNTIL" && matches!(stmt.get(i), Some(Tok::Word(w)) if w == "FIRST") { i += 1; }
+        let lit = inspect_operand(stmt.get(i), fields)?;
+        let tmode = match modekw.as_str() {
+            "ALL" => TallyMode::All(&lit),
+            "LEADING" => TallyMode::Leading(&lit),
+            "UNTIL" => TallyMode::Characters,
+            other => return Err(RunError::Unsupported(format!("EXAMINE TALLYING {other}"))),
+        };
+        let region = if modekw == "UNTIL" { Region::Before(&lit) } else { Region::All };
+        let count = inspect_tallying(&tbytes, tmode, region) as i64;
+        let mv = vec![Tok::Word(count.to_string()), Tok::Word("TO".to_string()), Tok::Word("TALLY".to_string())];
+        exec_move(&mv, fields, decimal_comma)?;
+        if let Some(rp) = stmt[tp..].iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")) {
+            let mut j = tp + rp + 1;
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
+            let lit2 = inspect_operand(stmt.get(j), fields)?;
+            let rmode = match modekw.as_str() {
+                "ALL" => ReplaceMode::All(&lit, &lit2),
+                "LEADING" => ReplaceMode::Leading(&lit, &lit2),
+                _ => return Err(RunError::Unsupported("EXAMINE TALLYING UNTIL ... REPLACING not in subset".into())),
+            };
+            let newb = inspect_replacing(&tbytes, rmode, Region::All);
+            write_target(fields, newb)?;
+        }
+        return Ok(());
+    }
+    if let Some(rp) = pos_of("REPLACING") {
+        let mut i = rp + 1;
+        let modekw = match stmt.get(i) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("EXAMINE REPLACING mode".into())) };
+        i += 1;
+        if modekw == "UNTIL" && matches!(stmt.get(i), Some(Tok::Word(w)) if w == "FIRST") { i += 1; }
+        let lit = inspect_operand(stmt.get(i), fields)?;
+        i += 1;
+        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") { i += 1; }
+        let lit2 = inspect_operand(stmt.get(i), fields)?;
+        let rmode = match modekw.as_str() {
+            "ALL" => ReplaceMode::All(&lit, &lit2),
+            "LEADING" => ReplaceMode::Leading(&lit, &lit2),
+            "FIRST" => ReplaceMode::First(&lit, &lit2),
+            other => return Err(RunError::Unsupported(format!("EXAMINE REPLACING {other}"))),
+        };
+        let newb = inspect_replacing(&tbytes, rmode, Region::All);
+        write_target(fields, newb)?;
+        return Ok(());
+    }
+    Err(RunError::Unsupported("EXAMINE: expected TALLYING or REPLACING".into()))
 }
 
 /// `TRANSFORM target FROM from TO to` -- the legacy form of `INSPECT target CONVERTING from TO to` (a
