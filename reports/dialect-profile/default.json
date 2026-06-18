@@ -1,18 +1,9 @@
 {
-  "schema": "kobold-dialect-profile-v1",
-  "profile_id": "gnucobol-3.2.0-default",
-  "witness": {
-    "compiler": "GnuCOBOL",
-    "version": "3.2.0",
-    "cobc_sha256": "2d832ed22700c91d3ec78947e233b705859896587705b06359b15b2cefeefc79",
-    "libcob_sha256": "698565c0a4c7010229af730a6757d90abc249129254c7d03fd04abea269425b6"
-  },
   "dialect": {
-    "std": "default",
+    "options": [],
     "source_format": "free",
-    "options": []
+    "std": "default"
   },
-  "oracle_status": "admitted_witness",
   "non_claims": [
     "NEG.DIALECT.IMPLICIT",
     "NEG.DIALECT.GENERAL_COBOL",
@@ -21,5 +12,14 @@
     "NEG.COBOL.NIST_CONFORMANCE",
     "NEG.PLATFORM.RUNTIME_NOT_CLAIMED"
   ],
-  "profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c"
+  "oracle_status": "admitted_witness",
+  "profile_id": "gnucobol-3.2.0-default",
+  "profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+  "schema": "kobold-dialect-profile-v1",
+  "witness": {
+    "cobc_sha256": "2d832ed22700c91d3ec78947e233b705859896587705b06359b15b2cefeefc79",
+    "compiler": "GnuCOBOL",
+    "libcob_sha256": "698565c0a4c7010229af730a6757d90abc249129254c7d03fd04abea269425b6",
+    "version": "3.2.0"
+  }
 }

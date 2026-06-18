@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.INDEXED.1` |
 | court | INDEXED organization (keyed store + record locking) |
-| crate_version | `0.7.85` |
+| crate_version | `0.8.7` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | INDEXED operations (WRITE/READ/READ NEXT/START/REWRITE/DELETE + record/file locks) over a primary key -> FILE STATUS + record bytes + key order |
 | replay command | `bash lab/oracle/indexed_sweep.sh` |
