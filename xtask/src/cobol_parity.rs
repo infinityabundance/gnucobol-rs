@@ -215,10 +215,6 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
         // reproduce libcob's stream (probed: cobrun 0.4170.. vs oracle 0.5541.. for RANDOM(1)). Wiring it
         // would be WRONG until the runtime PRNG is sealed -- a runtime task, not a front-end one.
         "RANDOM" => Some((false, "runtime gap: the ported cob_intr_random PRNG does not yet match libcob's stream (would not be byte-identical)")),
-        // Genuinely non-deterministic in 3.2: a compile-time stamp the interpreter has no compile step for,
-        // or a live wall-clock read that ignores COB_CURRENT_DATE.
-        "WHEN-COMPILED" | "MODULE-DATE" | "MODULE-TIME" | "MODULE-FORMATTED-DATE" =>
-            Some((false, "no fixed oracle: a compile-time stamp (cobc embeds the build moment; the interpreter has no compile step)")),
         "SECONDS-PAST-MIDNIGHT" => Some((false, "no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE)")),
         // Host-path dependent: the compile-time source name / runtime load path.
         "MODULE-SOURCE" | "MODULE-PATH" =>

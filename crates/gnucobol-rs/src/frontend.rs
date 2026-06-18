@@ -60,6 +60,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "FORMATTED-DATETIME", "INTEGER-OF-FORMATTED-DATE", "TEST-FORMATTED-DATETIME",
     "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
+    "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -3725,6 +3726,46 @@ fn day_of_week(y: i32, m: i32, d: i32) -> i32 {
     if w == 0 { 7 } else { w }
 }
 
+/// Civil (Gregorian) `(year, month, day)` from a count of days since 1970-01-01 (day 0). Howard
+/// Hinnant's branch-free `civil_from_days` algorithm.
+fn civil_from_days(z: i64) -> (i64, u32, u32) {
+    let z = z + 719468;
+    let era = (if z >= 0 { z } else { z - 146096 }) / 146097;
+    let doe = z - era * 146097; // [0, 146096]
+    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365; // [0, 399]
+    let y = yoe + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100); // [0, 365]
+    let mp = (5 * doy + 2) / 153; // [0, 11]
+    let d = (doy - (153 * mp + 2) / 5 + 1) as u32; // [1, 31]
+    let m = (if mp < 10 { mp + 3 } else { mp - 9 }) as u32; // [1, 12]
+    (if m <= 2 { y + 1 } else { y }, m, d)
+}
+
+/// The interpreter's **compile step**: the compile date/time as `(year, month, day, hour, min, sec)`,
+/// taken from a pinned `SOURCE_DATE_EPOCH` exactly as the admitted cobc derives WHEN-COMPILED /
+/// MODULE-DATE / MODULE-TIME (libcob `cob_set_date_from_epoch`: `tm_mday = epoch/86400`, 1-based from
+/// 1970-01, then normalized -- so day 1 is 1970-01-01 and the displayed fields are TZ-independent). cobc
+/// honours `SOURCE_DATE_EPOCH` (the reproducible-builds standard); without the pin the live compile clock
+/// is a non-claim and these intrinsics fail closed.
+fn compile_tm() -> Result<(i64, u32, u32, u32, u32, u32), RunError> {
+    let raw = std::env::var("SOURCE_DATE_EPOCH").map_err(|_| {
+        RunError::Unsupported(
+            "FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)".into(),
+        )
+    })?;
+    let digits: String = raw.trim().chars().take_while(|c| c.is_ascii_digit()).collect();
+    let epoch: i64 = digits
+        .parse()
+        .map_err(|_| RunError::Unsupported("SOURCE_DATE_EPOCH is not a number".into()))?;
+    if epoch > 253_402_300_799 {
+        return Err(RunError::Unsupported("SOURCE_DATE_EPOCH exceeds the year-9999 ceiling".into()));
+    }
+    let days = epoch / 86400;
+    let sod = epoch % 86400;
+    let (y, mon, d) = civil_from_days(days - 1);
+    Ok((y, mon, d, (sod / 3600) as u32, ((sod / 60) % 60) as u32, (sod % 60) as u32))
+}
+
 /// `ACCEPT identifier FROM {DATE [YYYYMMDD] | DAY [YYYYDDD] | TIME | DAY-OF-WEEK}` -- the system date/time
 /// registers. To stay oracle-deterministic the front-end reads the **pinned** `COB_CURRENT_DATE` (the same
 /// override `libcob` honors); with it unset (a live wall clock) ACCEPT fails closed rather than guess. The
@@ -4724,6 +4765,29 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         "MODULE-CALLER-ID" => {
             let caller = caller_program_id();
             ix::cob_intr_module_caller_id(caller.as_deref().map(str::as_bytes))
+        }
+        // The compile-stamp intrinsics: deterministic under a pinned SOURCE_DATE_EPOCH (the reproducible-
+        // builds standard cobc honours), via the interpreter's compile step.
+        "MODULE-DATE" => {
+            let (y, mo, d, ..) = compile_tm()?;
+            ix::cob_intr_module_date(y as u32 * 10000 + mo * 100 + d)
+        }
+        "MODULE-TIME" => {
+            let (_, _, _, h, mi, s) = compile_tm()?;
+            ix::cob_intr_module_time(h * 10000 + mi * 100 + s)
+        }
+        "WHEN-COMPILED" => {
+            let (y, mo, d, h, mi, s) = compile_tm()?;
+            // 21-char YYYYMMDDHHMMSS + hundredths(00) + offset(00000) -- zero under SOURCE_DATE_EPOCH.
+            let bytes = format!("{y:04}{mo:02}{d:02}{h:02}{mi:02}{s:02}0000000").into_bytes();
+            ix::cob_intr_when_compiled(0, 0, &bytes, &alnum_attr())
+        }
+        "MODULE-FORMATTED-DATE" => {
+            let (y, mo, d, h, mi, s) = compile_tm()?;
+            const MON: [&str; 12] =
+                ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let bytes = format!("{} {d:02} {y:04} {h:02}:{mi:02}:{s:02}", MON[(mo - 1) as usize]).into_bytes();
+            ix::cob_intr_module_formatted_date(&bytes)
         }
         // CURRENT-DATE honours the pinned COB_CURRENT_DATE (same override cobc's libcob reads), so the
         // result is oracle-deterministic; the live clock is a non-claim (fail closed without the pin).

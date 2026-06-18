@@ -31,7 +31,10 @@ for cob in "$CORPUS"/*.cob; do
   # runs the program FIXED-format for BOTH cobc and cobrun; the default is free.
   FMT="$(sed -n 's/.*@format:[[:space:]]*\(fixed\|free\).*/\1/p' "$cob" | head -1)"
   FMTOPT="-free"; FIXEDOPT=""; [ "$FMT" = fixed ] && { FMTOPT="-fixed"; FIXEDOPT="-fixed"; }
-  if ! cobc -x $FMTOPT $STDOPT -o "$TMP/p" "$cob" 2>"$TMP/cobc.err"; then
+  # The @env is exported for the COMPILE too, not just the run: SOURCE_DATE_EPOCH (the reproducible-builds
+  # pin cobc honours for WHEN-COMPILED / MODULE-DATE) is a compile-time concern. Runtime-only vars
+  # (COB_CURRENT_DATE, COB_SWITCH_n) are inert at compile, so this is harmless for the existing corpus.
+  if ! env $ENVKV cobc -x $FMTOPT $STDOPT -o "$TMP/p" "$cob" 2>"$TMP/cobc.err"; then
     echo "$name: cobc compile FAIL"; head -2 "$TMP/cobc.err"; FAIL=$((FAIL+1)); continue
   fi
   env $ENVKV "$TMP/p" </dev/null > "$TMP/oracle.out" 2>/dev/null
