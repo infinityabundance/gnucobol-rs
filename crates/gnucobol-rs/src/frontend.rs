@@ -2584,6 +2584,19 @@ fn exec_stmt(
         "CALL" => exec_call(stmt, fields, out, ctx),
         "STOP" => Ok(()), // STOP RUN
         // ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE are handled in run_block (they carry ON SIZE ERROR clauses).
+        // The remaining verbs are explicit boundary non-claims: GnuCOBOL itself needs a data-division
+        // section the front-end's WORKING-STORAGE/FILE/REPORT model does not include, or the result is
+        // nondeterministic. Each fails closed with the specific reason (not a lazy TODO).
+        "SEND" | "RECEIVE" | "PURGE" | "ENABLE" | "DISABLE" =>
+            Err(RunError::Unsupported(format!("{verb}: message control requires a COMMUNICATION SECTION (CD); GnuCOBOL's CM is minimal and the front-end models WORKING-STORAGE / FILE / REPORT sections only"))),
+        "MODIFY" | "INQUIRE" =>
+            Err(RunError::Unsupported(format!("{verb}: an ACUCOBOL screen/GUI verb that requires a SCREEN SECTION the front-end does not model"))),
+        "ALLOCATE" | "FREE" =>
+            Err(RunError::Unsupported(format!("{verb}: BASED storage + POINTER -- the returned address is nondeterministic, so it is not oracle-reproducible"))),
+        "USE" =>
+            Err(RunError::Unsupported("USE: a DECLARATIVES error/exception handler; the front-end does not model the DECLARATIVES section or the file-not-found status that triggers it".into())),
+        "ENTRY" =>
+            Err(RunError::Unsupported("ENTRY: an alternate entry point that is invalid in a nested program -- it requires separately-compiled units, while the front-end runs one source with contained programs".into())),
         other => Err(RunError::Unsupported(format!("verb {other}"))),
     }
 }
