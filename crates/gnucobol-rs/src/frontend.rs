@@ -59,6 +59,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "HIGHEST-ALGEBRAIC", "CURRENT-DATE", "COMBINED-DATETIME", "FORMATTED-DATE", "FORMATTED-TIME",
     "FORMATTED-DATETIME", "INTEGER-OF-FORMATTED-DATE", "TEST-FORMATTED-DATETIME",
     "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
+    "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -423,7 +424,7 @@ pub fn run_program_redirected(
 
     let mut out = Vec::new();
     let mut fields = build_program_fields(main, &ctx)?;
-    run_program_body(main, &ctx, &mut fields, &mut out)?;
+    run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
     let rc = read_return_code(&fields);
     let printer = ctx.printer.borrow().clone();
     Ok((out, printer, rc))
@@ -1440,6 +1441,22 @@ thread_local! {
     /// `OCCURS ... INDEXED BY` table -> its implicit SEARCH index name, populated as each program's fields
     /// are built. `SEARCH table` (without `VARYING`) varies this index.
     static TABLE_INDEX: std::cell::RefCell<HashMap<String, String>> = std::cell::RefCell::new(HashMap::new());
+    /// The stack of executing PROGRAM-IDs (top = current). Pushed/popped around each program body so
+    /// `FUNCTION MODULE-ID` reads the running program and `FUNCTION MODULE-CALLER-ID` reads its caller.
+    static PROGRAM_STACK: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+/// The current PROGRAM-ID (top of the program stack), empty outside any program body.
+fn current_program_id() -> String {
+    PROGRAM_STACK.with(|s| s.borrow().last().cloned()).unwrap_or_default()
+}
+
+/// The caller's PROGRAM-ID (the entry below the top), or `None` at the top-level program.
+fn caller_program_id() -> Option<String> {
+    PROGRAM_STACK.with(|s| {
+        let b = s.borrow();
+        (b.len() >= 2).then(|| b[b.len() - 2].clone())
+    })
 }
 
 /// The implicit SEARCH index for an `OCCURS ... INDEXED BY` table, if one was declared.
@@ -1540,12 +1557,15 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
 /// ends (`STOP RUN` / `GOBACK` / `EXIT PROGRAM` / falling off the end).
 fn run_program_body(
     prog: &ProgramDef,
+    prog_id: &str,
     ctx: &Ctx,
     fields: &mut HashMap<String, Field>,
     out: &mut Vec<u8>,
 ) -> Result<(), RunError> {
     let proc = &prog.proc_toks;
     let labels = paragraph_labels(proc);
+    // Publish this PROGRAM-ID for MODULE-ID / MODULE-CALLER-ID (popped at the normal return below).
+    PROGRAM_STACK.with(|s| s.borrow_mut().push(prog_id.to_string()));
     // Publish this body's paragraph ranges for out-of-line PERFORM, saving the caller's (CALL nesting).
     let paras_vec: Vec<(String, usize)> = labels.iter().map(|(n, s)| (n.clone(), *s)).collect();
     let prev_paras = CUR_PARAS.with(|c| c.replace((paras_vec, proc.len())));
@@ -1589,6 +1609,7 @@ fn run_program_body(
     CUR_PROC.with(|c| { *c.borrow_mut() = prev_proc; });
     ALTERED.with(|c| { *c.borrow_mut() = prev_altered; });
     USE_PROCS.with(|c| { *c.borrow_mut() = prev_use; });
+    PROGRAM_STACK.with(|s| { s.borrow_mut().pop(); });
     Ok(())
 }
 
@@ -2846,7 +2867,7 @@ fn exec_call(
         cfields.insert(param.clone(), argf); // copy-in (the LINKAGE field takes the caller's value)
     }
 
-    run_program_body(callee, ctx, &mut cfields, out)?;
+    run_program_body(callee, &name, ctx, &mut cfields, out)?;
 
     // Copy-out: BY REFERENCE arguments receive the callee's (possibly modified) parameter value back.
     for (idx, param) in callee.using.iter().enumerate() {
@@ -4658,6 +4679,27 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         // NUM-/MON- helpers exist in libcob but cobc rejects them as unknown functions, so they stay
         // unwired (a program using them does not compile under the oracle -- nothing to match).
         "CURRENCY-SYMBOL" => ix::cob_intr_currency_symbol(),
+        // LOCALE conversions are deterministic under a fixed (pinned) locale, which the sweep enforces
+        // (LC_ALL=C); the runtime ignores the optional locale name and uses the active locale.
+        "LOCALE-DATE" => {
+            let a = a0()?;
+            ix::cob_intr_locale_date(0, 0, &a.0, &a.1, None)
+        }
+        "LOCALE-TIME" => {
+            let a = a0()?;
+            ix::cob_intr_locale_time(0, 0, &a.0, &a.1, None)
+        }
+        "LOCALE-COMPARE" => {
+            let (x, y) = pair(0, 1)?;
+            ix::cob_intr_locale_compare(&x.0, &y.0, None)
+        }
+        // MODULE-ID / MODULE-CALLER-ID are deterministic: the running PROGRAM-ID and its caller's (read
+        // from the program stack the interpreter maintains across CALLs).
+        "MODULE-ID" => ix::cob_intr_module_id(current_program_id().as_bytes()),
+        "MODULE-CALLER-ID" => {
+            let caller = caller_program_id();
+            ix::cob_intr_module_caller_id(caller.as_deref().map(str::as_bytes))
+        }
         // CURRENT-DATE honours the pinned COB_CURRENT_DATE (same override cobc's libcob reads), so the
         // result is oracle-deterministic; the live clock is a non-claim (fail closed without the pin).
         "CURRENT-DATE" => {

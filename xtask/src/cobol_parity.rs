@@ -208,20 +208,29 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
         | "CHAR-NATIONAL" => Some((true, "not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub)")),
         // ABSENT as a user FUNCTION -- cobc rejects these as unknown (probed against the oracle); they are
         // libcob-internal helpers, not user-facing intrinsics, so a program using them does not compile.
-        "BINOP" | "NUM-DECIMAL-POINT" | "NUM-THOUSANDS-SEP" | "MON-DECIMAL-POINT" | "MON-THOUSANDS-SEP" =>
+        "BINOP" | "NUM-DECIMAL-POINT" | "NUM-THOUSANDS-SEP" | "MON-DECIMAL-POINT" | "MON-THOUSANDS-SEP"
+        | "LCL-TIME-FROM-SECS" =>
             Some((true, "not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper)")),
-        // PRESENT in 3.2 but no fixed oracle: live program/exception/pointer state.
-        "MODULE-ID" | "MODULE-SOURCE" | "MODULE-CALLER-ID" | "MODULE-PATH" | "MODULE-DATE"
-        | "MODULE-FORMATTED-DATE" | "MODULE-TIME" | "EXCEPTION-FILE" | "EXCEPTION-FILE-N"
-        | "EXCEPTION-LOCATION" | "EXCEPTION-LOCATION-N" | "EXCEPTION-STATEMENT" | "EXCEPTION-STATUS"
-        | "CONTENT-OF" | "CONTENT-LENGTH" => Some((false, "present in 3.2, no fixed oracle: live program/exception/pointer state")),
-        // PRESENT in 3.2 but non-deterministic.
-        "RANDOM" => Some((false, "present in 3.2, non-deterministic: seeded PRNG")),
-        "SECONDS-PAST-MIDNIGHT" => Some((false, "present in 3.2, non-deterministic: reads the live wall clock (ignores COB_CURRENT_DATE)")),
-        "WHEN-COMPILED" => Some((false, "present in 3.2, non-deterministic: embeds the actual compile timestamp")),
-        // PRESENT in 3.2 but locale-dependent.
-        "LOCALE-DATE" | "LOCALE-TIME" | "LOCALE-COMPARE" | "LCL-TIME-FROM-SECS" =>
-            Some((false, "present in 3.2, locale-dependent: deterministic only under a fixed locale profile")),
+        // RUNTIME gap: present + deterministic with a seed, but the ported cob_intr_random PRNG does not yet
+        // reproduce libcob's stream (probed: cobrun 0.4170.. vs oracle 0.5541.. for RANDOM(1)). Wiring it
+        // would be WRONG until the runtime PRNG is sealed -- a runtime task, not a front-end one.
+        "RANDOM" => Some((false, "runtime gap: the ported cob_intr_random PRNG does not yet match libcob's stream (would not be byte-identical)")),
+        // Genuinely non-deterministic in 3.2: a compile-time stamp the interpreter has no compile step for,
+        // or a live wall-clock read that ignores COB_CURRENT_DATE.
+        "WHEN-COMPILED" | "MODULE-DATE" | "MODULE-TIME" | "MODULE-FORMATTED-DATE" =>
+            Some((false, "no fixed oracle: a compile-time stamp (cobc embeds the build moment; the interpreter has no compile step)")),
+        "SECONDS-PAST-MIDNIGHT" => Some((false, "no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE)")),
+        // Host-path dependent: the compile-time source name / runtime load path.
+        "MODULE-SOURCE" | "MODULE-PATH" =>
+            Some((false, "no portable oracle: the compile-time source name / runtime load path (host-specific)")),
+        // Needs a front-end EXCEPTION-state model: deterministic given a known fault, but the interpreter
+        // does not yet track the COBOL exception registers (it fails closed on faults instead).
+        "EXCEPTION-FILE" | "EXCEPTION-FILE-N" | "EXCEPTION-LOCATION" | "EXCEPTION-LOCATION-N"
+        | "EXCEPTION-STATEMENT" | "EXCEPTION-STATUS" =>
+            Some((false, "needs a front-end exception-state model (deterministic given a fault; the interpreter does not yet track the exception registers)")),
+        // Needs the USAGE POINTER content model: deref a pointer's target.
+        "CONTENT-OF" | "CONTENT-LENGTH" =>
+            Some((false, "needs the pointer-content model (dereferences a USAGE POINTER target)")),
         _ => None,
     }
 }
@@ -418,10 +427,11 @@ fn build(root: &str) -> String {
         out.push_str(&format!("| `{nm}` | {why} |\n"));
     }
     out.push_str(&format!(
-        "\n***Present in GnuCOBOL 3.2, but no fixed oracle output ({}).*** These run under the oracle but \
-         produce live program/host state, non-deterministic, or locale-dependent values -- there is no \
-         single correct byte string to match, so they stay outside the byte-identity subset (admissible \
-         only under an explicit pinned profile).\n\n| intrinsic | why there is no fixed oracle |\n|---|---|\n",
+        "\n***Present in GnuCOBOL 3.2, not yet reproduced byte-for-byte here ({}).*** These DO run under \
+         the oracle; each is bounded for a specific, stated reason -- a runtime helper not yet sealed, a \
+         front-end model not yet built (exception registers, pointer contents), or an output with no fixed \
+         or portable value (a compile-time stamp, the live wall clock, a host path). Each is a concrete \
+         future target, not a dead end.\n\n| intrinsic | why it is bounded today |\n|---|---|\n",
         present.len(),
     ));
     for (nm, why) in &present {
