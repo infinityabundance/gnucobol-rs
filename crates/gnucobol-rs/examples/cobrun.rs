@@ -25,6 +25,13 @@ fn main() {
             fixed = true;
         } else if arg == "-free" || arg == "--free" {
             fixed = false;
+        } else if arg == "-x" || arg == "-j" || arg == "--job" {
+            // cobc-compatibility: `cobc -x`/`-j` build-and-run an executable; for the interpreter, running
+            // the source IS that step, so these are accepted as no-ops (cobrun <file> == cobc -x <file>).
+        } else if arg.starts_with('-') && arg != "-" {
+            // an unknown leading-dash token is a flag, not the source file (avoid mis-reading it as <file>).
+            eprintln!("cobrun: unknown option `{arg}` (try --help)");
+            std::process::exit(2);
         } else if arg == "-dumpversion" || arg == "--dumpversion" {
             // the targeted GnuCOBOL version, byte-identical to `cobc -dumpversion` / `cobcrun -dumpversion`.
             println!("{}", target_version());
