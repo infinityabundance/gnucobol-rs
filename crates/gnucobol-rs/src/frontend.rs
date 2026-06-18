@@ -557,6 +557,9 @@ struct ProgItem {
     /// `OCCURS min TO max DEPENDING ON counter`: the counter data-name (`occurs` holds the MAX). `None`
     /// for a fixed (or no) OCCURS.
     odo_counter: Option<String>,
+    /// `66 name RENAMES start [THRU end]`: the `(start, end)` sibling range this item re-groups (an alias
+    /// over their contiguous bytes). `None` for a normal item.
+    renames: Option<(String, String)>,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1172,6 +1175,44 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         if level == "PROCEDURE" || level == "LINKAGE" || level == "DATA" || level == "REPORT" {
             break;
         }
+        // A `66`-level `RENAMES start [THRU|THROUGH end]` regrouping alias.
+        if level == "66" {
+            k += 1;
+            let rname = match toks.get(k) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => return Err(RunError::Unsupported("expected data-name after 66".into())),
+            };
+            k += 1;
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "RENAMES") {
+                k += 1;
+            } else {
+                return Err(RunError::Unsupported("66 level without RENAMES".into()));
+            }
+            let start = match toks.get(k) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => return Err(RunError::Unsupported("RENAMES without a start data-name".into())),
+            };
+            k += 1;
+            let end = if matches!(toks.get(k), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
+                k += 1;
+                match toks.get(k) {
+                    Some(Tok::Word(w)) => { let e = w.clone(); k += 1; e }
+                    _ => return Err(RunError::Unsupported("RENAMES THRU without an end data-name".into())),
+                }
+            } else {
+                start.clone()
+            };
+            if matches!(toks.get(k), Some(Tok::Dot)) {
+                k += 1;
+            }
+            items.push(ProgItem {
+                level: 66, name: rname, pic: String::new(), value: None, occurs: 1, redefines: None,
+                condition: None, indexed_by: Vec::new(), usage: None, sign: (false, false),
+                extra_flags: 0, float_kind: None, odo_counter: None,
+                renames: Some((start, end)),
+            });
+            continue;
+        }
         // An `88`-level condition-name on the most recent data item.
         if level == "88" {
             k += 1;
@@ -1227,6 +1268,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 extra_flags: 0,
                 float_kind: None,
                 odo_counter: None,
+                renames: None,
             });
             continue;
         }
@@ -1435,6 +1477,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             extra_flags,
             float_kind,
             odo_counter,
+            renames: None,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1534,6 +1577,27 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             occurs: 1,
             redefines: None,
         });
+    }
+    // Third pass: `66 RENAMES start [THRU end]` regrouping -- an alias over the contiguous leaf fields
+    // from `start` to `end`, modelled as a Group so reads/writes distribute across them.
+    for it in &prog.ws {
+        let Some((start, end)) = &it.renames else { continue };
+        let s_idx = prog.ws.iter().position(|x| &x.name == start);
+        let e_idx = prog.ws.iter().position(|x| &x.name == end);
+        if let (Some(s), Some(e)) = (s_idx, e_idx) {
+            let children: Vec<String> = prog.ws[s..=e.max(s)]
+                .iter()
+                .filter(|x| x.level != 88 && x.level != 66
+                    && fields.get(&x.name).is_some_and(|f| !matches!(f.storage, Storage::Group { .. })))
+                .map(|x| x.name.clone())
+                .collect();
+            fields.insert(it.name.clone(), Field {
+                storage: Storage::Group { children },
+                bytes: Vec::new(),
+                occurs: 1,
+                redefines: None,
+            });
+        }
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));

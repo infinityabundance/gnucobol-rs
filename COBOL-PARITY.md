@@ -137,7 +137,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `VALUE` | **yes** |
 | `OCCURS` | **yes** |
 | `REDEFINES` | **yes** |
-| `RENAMES` | no (runtime ready) |
+| `RENAMES` | **yes** |
 | `SIGN` | **yes** |
 | `SYNCHRONIZED` | no (runtime ready) |
 | `JUSTIFIED` | **yes** |
@@ -145,7 +145,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `GLOBAL` | **yes** |
 | `EXTERNAL` | no (runtime ready) |
 | `LEVEL 88 (condition-name)` | **yes** |
-| `LEVEL 66 (RENAMES)` | no (runtime ready) |
+| `LEVEL 66 (RENAMES)` | **yes** |
 | `LEVEL 77` | **yes** |
 | `FILLER` | **yes** |
 | `OCCURS DEPENDING ON` | **yes** |
