@@ -62,6 +62,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
     "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
     "EXCEPTION-STATUS", "EXCEPTION-STATEMENT", "EXCEPTION-LOCATION", "EXCEPTION-FILE",
+    "CONTENT-OF", "CONTENT-LENGTH",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -427,6 +428,7 @@ pub fn run_program_redirected(
 
     let mut out = Vec::new();
     EXTERNAL_STORE.with(|m| m.borrow_mut().clear()); // EXTERNAL storage is per run unit (before any build)
+    POINTER_TARGETS.with(|m| m.borrow_mut().clear());
     let mut fields = build_program_fields(main, &ctx)?;
     reset_exception(); // a fresh run starts with no raised exception
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
@@ -1855,6 +1857,12 @@ thread_local! {
 /// The `(counter, elem-size)` of an `OCCURS DEPENDING ON` table, if `name` is one.
 fn odo_lookup(name: &str) -> Option<(String, usize)> {
     ODO_TABLES.with(|m| m.borrow().get(name).cloned())
+}
+
+thread_local! {
+    /// `SET ptr TO ADDRESS OF field` -- a USAGE POINTER's target field name, for `FUNCTION CONTENT-OF` /
+    /// `CONTENT-LENGTH` (which dereference the pointer). Cleared at a fresh top-level run.
+    static POINTER_TARGETS: std::cell::RefCell<HashMap<String, String>> = std::cell::RefCell::new(HashMap::new());
 }
 
 thread_local! {
@@ -3759,6 +3767,17 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     if targets.is_empty() {
         return Err(RunError::Unsupported("SET: no target before TO".into()));
     }
+    // form: SET ptr TO ADDRESS OF field -- record the pointer's target for FUNCTION CONTENT-OF/-LENGTH.
+    if matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "ADDRESS")
+        && matches!(stmt.get(to + 2), Some(Tok::Word(w)) if w == "OF")
+    {
+        if let Some(Tok::Word(target)) = stmt.get(to + 3) {
+            for name in &targets {
+                POINTER_TARGETS.with(|m| m.borrow_mut().insert(name.clone(), target.clone()));
+            }
+        }
+        return Ok(());
+    }
     // form: SET idx [idx ...] TO value  (set an index/numeric item to a literal or another item's value).
     if !matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "TRUE") {
         let src = stmt.get(to + 1).cloned()
@@ -5422,6 +5441,26 @@ fn eval_function_call(
     {
         let n = args.first().map(|(b, _)| b.len()).unwrap_or(0);
         return Ok((crate::intrinsic::cob_intr_length(n), k));
+    }
+    // CONTENT-OF(ptr [, len]) / CONTENT-LENGTH(ptr): dereference a USAGE POINTER (set via SET ptr TO
+    // ADDRESS OF field) to its target's bytes / length.
+    if matches!(name.as_str(), "CONTENT-OF" | "CONTENT-LENGTH") {
+        let target = arg_strs.first().and_then(|p| POINTER_TARGETS.with(|m| m.borrow().get(p).cloned()));
+        let target = target.ok_or_else(|| {
+            RunError::Unsupported(format!("FUNCTION {name}: the pointer has no SET ... TO ADDRESS OF target"))
+        })?;
+        if name == "CONTENT-LENGTH" {
+            return Ok((crate::intrinsic::cob_intr_length(field_len(&target, fields)), k));
+        }
+        let bytes = read_field(fields, &target).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+        let bytes = match args.get(1) {
+            Some(lenarg) => {
+                let n = dec_to_i64(&source_to_decimal(&lenarg.0, &lenarg.1)?).max(0) as usize;
+                bytes.into_iter().take(n).collect()
+            }
+            None => bytes,
+        };
+        return Ok(((bytes, alnum_attr()), k));
     }
     Ok((eval_intrinsic(&name, &args)?, k))
 }
