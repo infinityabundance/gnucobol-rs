@@ -2222,8 +2222,26 @@ fn run_block(
                     "GO" => {
                         let rest = collect_operands(toks, pos);
                         if exec {
-                            if rest.iter().any(|t| matches!(t, Tok::Word(w) if w == "DEPENDING")) {
-                                return Err(RunError::Unsupported("GO TO ... DEPENDING ON not in subset".into()));
+                            // GO TO l1 l2 ... lN DEPENDING ON id: jump to the id-th label (1-based); if id
+                            // is < 1 or > N, fall through to the next statement (no jump), per the standard.
+                            if let Some(dep) = rest.iter().position(|t| matches!(t, Tok::Word(w) if w == "DEPENDING")) {
+                                let labels: Vec<String> = rest[..dep].iter().filter_map(|t| match t {
+                                    Tok::Word(w) if w != "TO" => Some(w.clone()),
+                                    _ => None,
+                                }).collect();
+                                let id = rest[dep + 1..].iter().find_map(|t| match t {
+                                    Tok::Word(w) if w != "ON" => Some(w.clone()),
+                                    _ => None,
+                                });
+                                let idx = id.as_deref().and_then(|w| resolve_int(w, fields));
+                                if let Some(i) = idx {
+                                    if i >= 1 && (i as usize) <= labels.len() {
+                                        ctx.goto.borrow_mut().replace(labels[(i - 1) as usize].clone());
+                                        return Ok(true);
+                                    }
+                                }
+                                // out of range / unresolved -> fall through (continue with the next statement).
+                                continue;
                             }
                             // an ALTERed GO TO (this verb's position is in the override map) proceeds to the
                             // altered target; otherwise the written target.
