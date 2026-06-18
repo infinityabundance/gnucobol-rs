@@ -11,142 +11,71 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 [![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-137-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-137-blueviolet)
 
-**A Rust-native compatibility court for GnuCOBOL — it begins with byte-exact COBOL
-data semantics proven against upstream GnuCOBOL 3.2, not a compiler.**
+**A faithful, native-Rust forensic implementation of GnuCOBOL 3.2 — the `libcob`
+runtime ported 1:1 and proven byte-identical to the upstream oracle, plus a
+clean-room interpreter front-end (`cobrun`) that parses and *executes* COBOL to
+`cobc`-identical output. No C is linked; every claim is sealed against a locally
+built GnuCOBOL 3.2.**
 
-`gnucobol-rs` is **not** a GnuCOBOL replacement, **not** a COBOL compiler, and **not** a
-`libcob` replacement. It does not define COBOL truth. It is an *oracle-first*, receipt-bearing
-porting surface: it reproduces **observable GnuCOBOL byte/runtime semantics** in memory-safe
-Rust, one narrow slice at a time, and proves each slice against a locally built GnuCOBOL
-oracle under pinned settings — stating, as loudly as each positive claim, exactly what it
-does *not* claim.
+`gnucobol-rs` is an *oracle-first* port: "correct" always means **byte-identical to the
+admitted GnuCOBOL 3.2** (`cobc` + `libcob`), built from pinned source — never "matches our
+reading of a spec". It states, as loudly as each positive claim, exactly what it does **not**
+claim. The core crate is `#![forbid(unsafe_code)]`.
 
-## Why this exists
+## What it is today
 
-COBOL's bedrock is not its syntax. It is **byte layout, decimal representation, and field
-movement** — packed decimal (COMP-3), zoned decimal, display numerics, and the `MOVE`
-semantics between them. Those are exactly the things a migration team must trust to the
-byte. `gnucobol-rs` owns them first, with proof, before reaching for anything larger.
+| Layer | State |
+|------|-------|
+| **`libcob` runtime** | **100% ported (13/13 admitted files), oracle-sealed.** MOVE / arithmetic / decimal / binary / edited / files / intrinsics — every admitted libcob source file is 1:1 in safe Rust, verified by the doxygen C↔Rust parity view. |
+| **Intrinsic functions** | **110/110 ported** in the runtime; the front-end evaluates **94** of them in `FUNCTION …` references, each byte-identical to `cobc`. |
+| **Front-end interpreter (`cobrun`)** | A clean-room COBOL parser + executor on the ported runtime — **no `cobc`, no `libcob` linked.** It runs a **growing, sweep-verified subset** of the language (WORKING-STORAGE + data description, MOVE/arithmetic/`COMPUTE` incl. `ROUNDED`, control flow incl. `PERFORM VARYING` / `GO TO … DEPENDING`, tables, files, intrinsics) to output proven byte-identical to `cobc` across a corpus sweep. |
+| **CLI parity** | `cobrun --runtime-config` reproduces `cobcrun --runtime-config` byte-for-byte (native `print_runtime_conf`); `-dumpversion` / `--version` / `--help`. |
+| **C ABI** | `gnucobol-rs-ffi` exposes the ported algorithms under libcob's `cob_field` C ABI (drop-in `cob_move` / `cob_get_int` / …), verified byte-identical to `libcob`. |
 
-## Compatibility axes (claimed independently, never bundled)
+**Live coverage is tracked, generated, and gated** — never asserted by hand:
+[`COBOL-PARITY.md`](COBOL-PARITY.md) (every verb / intrinsic / clause, with what runs) and
+[`FILE-PARITY.md`](FILE-PARITY.md) (every GnuCOBOL 3.2 source file, accounted for).
 
-| Axis | Meaning | Status |
-|------|---------|--------|
-| **byte-layout** | a field's bytes match GnuCOBOL's exactly | **sealed** — COMP-3/zoned/display (`GNURUST.2`) |
-| **runtime** | a runtime operation (`MOVE`, …) matches `libcob` | **sealed** — decimal `MOVE` (`GNURUST.2`) |
-| **field model** | `PIC`+`USAGE` → `{type, digits, scale, flags, size}` matches `cobc` (`P`, COMP/COMP-5/COMP-X) | **sealed** — `pic` (`GNURUST.3`, `GNURUST.9`, `GNURUST.14`) |
-| **record layout** | item offsets / group sizes / `OCCURS` (incl. `DEPENDING ON` physical-max) / `REDEFINES` match `cobc` | **sealed** — `layout` (`GNURUST.4`, `GNURUST.10`) |
-| **copybook expansion** | `COPY` splice + `REPLACING` match the `cobc` preprocessor | **sealed** — `copybook` (`GNURUST.5`, `GNURUST.6`) |
-| **arithmetic** | `ADD`/`SUBTRACT`/`MULTIPLY` + ROUNDED (incl. packed receiver) match `cob_add`/`cob_mul` | **sealed** — `arith` (`GNURUST.7`, `GNURUST.13`); DIVIDE / REMAINDER receiver bytes (`GNURUST.19` `cob_divide`, `GNURUST.REMAINDER.1` `cob_divide_remainder`) |
-| **condition name** | LEVEL-88 truth vs bytes + `SET TO TRUE` byte construction match `cobc` | **sealed** — `cond` (`GNURUST.11`, `GNURUST.12`) |
-| **initialization** | initial record bytes from `VALUE` match `cobc` WORKING-STORAGE | **sealed** — `init` (`GNURUST.8`) |
-| **code page** | raw EBCDIC DISPLAY bytes → text under a named table match the oracle | **sealed** — `ebcdic` cp500 (`GNURUST.15`) |
-| **edited decode** | edited DISPLAY field bytes → recovered value + text match the oracle | **sealed** — `edited` 16a (`GNURUST.16`) |
-| source | source-form / directives | future campaign |
-| behavior | program stdout/stderr/exit matches `cobc -x` output | oracle harness only |
-| diagnostic | compiler messages match `cobc` | not claimed |
-| compiler-replacement | emit native code | **not claimed — requires future receipts** |
+## What it does NOT claim
 
-## Doctrine
+- **It does not emit native code.** `gnucobol-rs` *interprets* directly on the ported runtime; it
+  does not reproduce `cobc`'s C-emission (codegen) — a deliberate **non-goal**, not a gap. The runtime
+  *behaviour* codegen would produce is reproduced by the interpreter and verified by the sweep.
+- **The front-end is a verified subset, not the whole language.** Anything outside the sealed subset
+  **fails closed** (an explicit error), never a wrong answer. What runs is enumerated live in
+  `COBOL-PARITY.md`; constructs the GnuCOBOL 3.2 oracle itself cannot run (COMMUNICATION SECTION,
+  ACUCOBOL GUI verbs, `ENTRY` in a nested program) are marked **BOUNDARY**, not TODO.
+- **`cobc`'s diagnostic / help *text* is not reproduced byte-for-byte** — the interpreter has its own
+  error model. Localized (non-`C.UTF-8`) runtime messages are an explicit off-oracle non-claim.
 
-> `gnucobol-rs` and KOBOLD prioritize **migration-trust over compiler ambition**: every byte, field,
-> predicate, transformation, and audit artifact is admitted only through a sealed oracle court, while
-> unsupported COBOL surfaces remain explicit evidence instead of inferred behavior.
-
-It is **not a compiler, not `libcob`, not Procedure Division execution** — it is a sealed
-compatibility court for admitted COBOL **data** semantics.
-
-**Reviewer entry points:** [`STATUS.md`](STATUS.md) is the **live current-state authority** (it wins
-over README/receipts when they disagree) · [`docs/REVIEW-IN-10-MINUTES.md`](docs/REVIEW-IN-10-MINUTES.md)
-· [`docs/not-yet-ready.md`](docs/not-yet-ready.md) (refusal surfaces) ·
-[`docs/effect-boundary-map.md`](docs/effect-boundary-map.md) (what touches host/fs/process/AWS) ·
-[`audits/README.md`](audits/README.md) (a folder is not a result).
+The machine-readable registry of every non-claim is
+[`reports/negative-capabilities.json`](reports/negative-capabilities.json); the human ledger is
+[`docs/negative-capabilities.md`](docs/negative-capabilities.md).
 
 ## Claim ladder (front door)
 
 Every positive claim names its byte domain, oracle, fixture count, sealing version, and what breaks
-it. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json); the human
-ledger of non-claims is [`docs/negative-capabilities.md`](docs/negative-capabilities.md).
-
-| Court | Proven (byte domain) | Oracle | Sealed | Not claimed |
-|-------|----------------------|--------|:------:|-------------|
-| `GNURUST.2` MOVE | field-storage + move-result bytes | `libcob cob_move` | 0.1.0 | arithmetic, edited PIC |
-| `GNURUST.3/9` PIC (+P) | `cob_field_attr` + size | `cobc -C` / `LENGTH OF` | 0.2.0/0.2.6 | edited PIC, V+P |
-| `GNURUST.14` binary | COMP/COMP-5/COMP-X storage + MOVE bytes | `cobc -C` / `cob_move` | 0.4.0 | binary arithmetic, SYNC, portable endian |
-| `GNURUST.4` layout | item offsets / sizes | `cobc -C` offsets | 0.2.1 | SYNC, REDEFINES-grow |
-| `GNURUST.5/6` COPY/REPLACING | expanded text-word stream | `cobc -P` | 0.2.2/0.2.3 | REPLACE directive |
-| `GNURUST.7/13` arithmetic | receiving-field bytes | `cob_add/sub/mul` | 0.2.4/0.3.3 | DIVIDE, SIZE ERROR, bignum |
-| `GNURUST.8` VALUE | record initial bytes | `cobc` DISPLAY raw | 0.2.5 | ODO/REDEFINES VALUE |
-| `GNURUST.10` ODO | **physical-max** storage size | `cobc -C` `b_REC[size]` | 0.3.0 | logical/active count |
-| `GNURUST.11` LEVEL-88 | parent bytes → bool | `cobc IF` truth | 0.3.1 | SET, expressions |
-| `GNURUST.12` SET-88-TRUE | parent bytes | `cobc SET` final bytes | 0.3.2 | SET FALSE |
-| `GNURUST.15` EBCDIC | cp500 DISPLAY decode (raw bytes → text) | `libcob cob_load_collation` | 0.5.0 | cp037, numeric-zoned, DBCS, binary |
-| `GNURUST.16` edited | edited-PIC DECODE (16a `Z 9 , . - +` + 16b `$ * CR DB B 0 /`) → value+text | `cobc` MOVE→edited→DISPLAY | 0.6.0/0.6.1 | numeric→edited, reports, locale |
-| `GNURUST.17` cp500 zoned-num | raw EBCDIC zoned-decimal → value | `cobc -fsign=EBCDIC` | 0.6.3 | cp037, edited-numeric, mixed encodings |
-| `GNURUST.18` COMP-6 | unsigned packed storage + MOVE | `cobc -C` / `cob_move` | 0.7.0 | signed COMP-6, arithmetic, dialect portability |
-| `GNURUST.19` DIVIDE | DIVIDE GIVING quotient bytes | `cobc` DIVIDE GIVING | 0.7.1 | divide-by-zero, ON SIZE ERROR, COMPUTE, float, binary receiver |
-| `GNURUST.REMAINDER.1` DIVIDE REMAINDER | quotient + REMAINDER receiver bytes (dividend − stored-quotient × divisor; sign follows dividend) | `cobc` DIVIDE REMAINDER | 0.7.2 | divide-by-zero, ON SIZE ERROR, COMPUTE, float, binary receiver |
-| `GNURUST.FILE.SEQUENTIAL.1` sequential READ | READ NEXT record bytes + file status (00/06/10) | `cobc` OPEN/READ | 0.7.3 | indexed/relative/VSAM, WRITE, status beyond 00/06/10 |
-| `KOBOLD.RECON.1` | JSONL + audit bytes | sealed courts (composed) | shim 0.2.0 | write-back, business truth |
-| `KOBOLD.DATA.2/3` | binary + cp500 EBCDIC composed in corpus | sealed courts (composed) | shim 0.3.0/0.4.0 | binary arithmetic, numeric EBCDIC zoned |
-| `KOBOLD.OPERATOR.1` | explain / totals / dirty-mode + risk | sealed courts (composed) | shim 0.5.0 | business truth, semantic validity |
-
-**Receipts are generated evidence, not hand-written claims** (`docs/trust2-generated-receipts.md`):
-[`reports/receipts/<CAMPAIGN>/receipt.json`](reports/receipts/) is produced by **live court replay**,
-`receipt.md` is rendered from the JSON, and the doc-gate fails on stale replay drift or manual receipt
-edits — *the receipt is the replay*.
-
-Replay all of it with one command (prints a PASS table):
+it. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json); each
+court's full forensic record is its [`reports/casefiles/<court>/`](reports/casefiles/) case file.
+Replay every sealed court with one command (prints a PASS table):
 
 ```sh
 bash lab/verify-sealed-courts.sh
 ```
 
-## Ecosystem (one diagram)
-
-```text
-cobc-oracle-rs   (GPL-3.0+)   drives cobc → oracle sweeps
-      │
-gnucobol-rs      (LGPL-3.0+)  sealed data courts (this repo)
-      │
-kobold-data-shim (Apache-2.0) fixed-record reconciliation JSON/audit
-      ├── kobold-bench         performance — only after a parity re-check
-      └── kobold-lambda-layer  deployment packaging, not semantic authority
-```
-
-The role separation is deliberate (see [`docs/license-boundaries.md`](docs/license-boundaries.md)):
-no layer invents semantics a lower court has not sealed.
-
-An evidence **archaeology atlas** (standards × GnuCOBOL dialects × vendor generations, with the
-GnuCOBOL `-std` dialect axis generated from the admitted oracle) is in [`archaeology/ATLAS.md`](archaeology/ATLAS.md).
-
-## The admitted oracle
-
-Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the source of truth. Because it is not
-installed system-wide, it is **built from pinned source** (`research/gnucobol-3.2.tar.lz`,
-sha256 recorded in `reports/admission/`) into a gitignored `lab/oracle/prefix`. "Correct"
-here always means *matches the built oracle*, never *matches our reading of a spec*.
-
-## Crates
-
-| Crate | Derives from | License | Scope |
-|-------|--------------|---------|-------|
-| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/move.c`, `libcob/numeric.c`, `libcob/common.c` | **LGPL-3.0-or-later** | sealed COBOL data courts: MOVE/storage, PIC (+P), layout (+ODO), COPY/REPLACING, VALUE, arithmetic, LEVEL-88, binary COMP/COMP-5/COMP-X, cp500 EBCDIC decode, edited-picture decode |
-| [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | build/run `cobc` fixtures, capture deterministic JSON receipts |
-
-## License & derivation boundary
-
-This is a **faithful derivative port**, not a clean-room reimplementation: functions are
-ported statement-by-statement with upstream line citations (e.g. `// move.c:477`). The port
-therefore **inherits upstream copyleft**:
-
-- crates derived from **`libcob`** (LGPL-3.0-or-later) are **LGPL-3.0-or-later**;
-- crates derived from **`cobc`** (GPL-3.0-or-later) are **GPL-3.0-or-later**.
-
-The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](docs/derivation-and-license.md),
-[`COPYING.LESSER`](COPYING.LESSER) (LGPL-3.0), and [`COPYING`](COPYING) (GPL-3.0).
+**Reviewer entry points:** [`STATUS.md`](STATUS.md) is the **live current-state authority** (it wins
+over README/receipts on disagreement) · [`COBOL-PARITY.md`](COBOL-PARITY.md) / [`FILE-PARITY.md`](FILE-PARITY.md)
+(live language + file coverage) · [`docs/negative-capabilities.md`](docs/negative-capabilities.md)
+(non-claims) · [`docs/`](docs/) (the method, taxonomy, risk register, and design/planning notes).
 
 ## Compatibility is a stack of courts
+
+`gnucobol-rs` treats COBOL compatibility as a stack of **separately admitted courts** — bytes,
+moves, field model, record layout, initialization, comparison, formatting, source expansion, runtime
+lifecycle, files, intrinsics, and the executing front-end — where **no lower layer is allowed to
+imply a higher one**. The full taxonomy is
+[`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and its
+non-claim is [`docs/future-risk-register.md`](docs/future-risk-register.md).
 
 ### Sealed courts (generated from `reports/claim-ladder.json`)
 
@@ -290,37 +219,40 @@ The FSF copyright notice is retained. See [`docs/derivation-and-license.md`](doc
 | `SUPPORT-PACKET.1` | reviewer/operator evidence bundle (generated from existing artifacts) | ✅ pass | [`reports/casefiles/SUPPORT-PACKET.1/`](reports/casefiles/SUPPORT-PACKET.1/) |
 | `TRUST.5` | anti-ceremony audit (every court can fail) | ✅ pass | [`reports/casefiles/TRUST.5/`](reports/casefiles/TRUST.5/) |
 
-`gnucobol-rs` treats COBOL compatibility as a stack of **separately admitted courts** — bytes,
-moves, field model, record layout, initialization, comparison, formatting, source expansion,
-runtime lifecycle, files, reports, diagnostics — and **no lower layer is allowed to imply a higher
-layer**. Sealed today: storage bytes + `MOVE` bytes (`GNURUST.2`), `PIC`→field-model (`GNURUST.3`),
-DATA DIVISION record layout (`GNURUST.4`), `COPY` copybook expansion (`GNURUST.5`), `COPY ... REPLACING` (`GNURUST.6`), decimal arithmetic (`GNURUST.7`), `VALUE` initial-record images (`GNURUST.8`), PIC `P`-scaling (`GNURUST.9`), `OCCURS DEPENDING ON` physical-max layout (`GNURUST.10`), LEVEL-88 condition-name predicates (`GNURUST.11`), `SET ... TO TRUE` byte construction (`GNURUST.12`), packed `ADD`/`SUBTRACT` (`GNURUST.13`), COMP/COMP-5/COMP-X binary storage+MOVE (`GNURUST.14`), cp500 EBCDIC DISPLAY decode (`GNURUST.15`), edited-picture decode (`GNURUST.16` 16a+16b), cp500 EBCDIC zoned-decimal numeric decode (`GNURUST.17`), COMP-6 unsigned packed storage+MOVE (`GNURUST.18`), DIVIDE GIVING quotient bytes (`GNURUST.19`), and DIVIDE…REMAINDER quotient+remainder bytes (`GNURUST.REMAINDER.1`).DIVIDE…REMAINDER quotient+remainder bytes (`GNURUST.REMAINDER.1`), and sequential file READ record bytes + status (`GNURUST.FILE.SEQUENTIAL.1`). The full
-taxonomy is in
-[`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and
-its non-claim is in [`docs/future-risk-register.md`](docs/future-risk-register.md); the
-machine-readable registry of every non-claim is [`reports/negative-capabilities.json`](reports/negative-capabilities.json), and each court's full forensic record (claims, non-claims, SARIF/in-toto/DSSE, lossless legacy preservation) is its [`reports/casefiles/<court>/`](reports/casefiles/) case file.
+## The admitted oracle
 
-## Project status, features, and MSRV
+Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the source of truth. Because it is not installed
+system-wide, it is **built from pinned source** (`research/gnucobol-3.2.tar.lz`, sha256 in
+`reports/admission/`) into a gitignored `lab/oracle/prefix`. "Correct" here always means *matches the
+built oracle*.
 
-- **Independent project.** This is an independent Rust compatibility/porting effort and is **not**
-  the upstream GnuCOBOL project, nor endorsed by it. GnuCOBOL is the admitted oracle.
-- **Feature flags never change admitted semantics.** Cargo features gate only surface (e.g.
-  `serde`, `cli`, `fuzzing`, `kani`), never dialect/behavior. A dialect or "accept invalid data"
-  mode, if ever added, is explicit runtime config or a typed policy with its own receipt — never a
-  hidden feature toggle.
-- **MSRV 1.74** applies to the library crates and their **self-contained** tests (which pass
-  without a local GnuCOBOL). The oracle sweep needs host tools (a built `cobc`/`libcob`) outside
-  the MSRV guarantee.
+## Crates
+
+| Crate | Derives from | License | Scope |
+|-------|--------------|---------|-------|
+| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/*.c` (move, numeric, common, intrinsic, fileio, …) | **LGPL-3.0-or-later** | the native-Rust `libcob` runtime (1:1, oracle-sealed) + the `cobrun` interpreter front-end |
+| [`gnucobol-rs-ffi`](crates/gnucobol-rs-ffi) | libcob `common.h` C ABI | **LGPL-3.0-or-later** | a `cob_field` C-ABI shim — link it where you would link `libcob` |
+| [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | build/run `cobc` fixtures, capture deterministic JSON receipts |
+
+## License & derivation boundary
+
+This is a **faithful derivative port**, not a clean-room reimplementation of the runtime: functions
+are ported statement-by-statement with upstream line citations (e.g. `// move.c:477`), so the port
+**inherits upstream copyleft** — crates derived from **`libcob`** (LGPL-3.0-or-later) are
+**LGPL-3.0-or-later**. (The `cobrun` front-end is a clean-room interpreter, but it ships in the
+LGPL crate alongside the ported runtime.) `cobc`-driving tooling is **GPL-3.0-or-later**. The FSF
+copyright notice is retained. See [`docs/derivation-and-license.md`](docs/derivation-and-license.md),
+[`COPYING.LESSER`](COPYING.LESSER) (LGPL-3.0), and [`COPYING`](COPYING) (GPL-3.0). This is an
+independent effort and is **not** the upstream GnuCOBOL project, nor endorsed by it.
 
 ## Method
 
-Admit pinned source → read it → build the real upstream as an executable oracle → port
-faithfully with citations → prove byte parity over a fixture matrix + differential sweep →
-pin or classify every confounder → Kani the sharp invariants → fuzz the hostile surface and
-fix what it finds → gate → seal with receipts and exact non-claims. See
-[`docs/porting-method.md`](docs/porting-method.md) and [`docs/claim-boundary.md`](docs/claim-boundary.md).
-
-A **documentation refresh gate** ([`docs/doc-gate.md`](docs/doc-gate.md), `lab/check-docs.sh`)
-runs alongside fmt/clippy/test/sweep and fails if any doc drifts from the code, the receipts, or
-the oracle — so nothing goes stale as the compatibility register grows.
+Admit pinned source → read it → build the real upstream as an executable oracle → port faithfully
+with citations → prove byte parity over a fixture matrix + differential sweep → pin or classify every
+confounder → Kani the sharp invariants → fuzz the hostile surface → gate → seal with receipts and
+exact non-claims. See [`docs/porting-method.md`](docs/porting-method.md) and
+[`docs/claim-boundary.md`](docs/claim-boundary.md). A **documentation refresh gate**
+([`docs/doc-gate.md`](docs/doc-gate.md), `lab/check-docs.sh`) runs alongside fmt/clippy/test/sweep and
+fails if any doc, receipt, or coverage map drifts from the code or the oracle — so nothing goes stale
+as the register grows. MSRV 1.74 for the library crates and their self-contained tests.
 

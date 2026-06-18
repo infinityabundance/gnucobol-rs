@@ -1,0 +1,65 @@
+     1  IDENTIFICATION DIVISION.
+     2  PROGRAM-ID. T.
+     3  DATA DIVISION.
+     4  WORKING-STORAGE SECTION.
+     5         01  SQLDA.
+     6      03  SQLDAID            PIC X(8)           VALUE "SQLDA  ".
+     7      03  SQLDABC            USAGE BINARY-LONG  VALUE 0.
+     8      03  SQLN               USAGE BINARY-SHORT VALUE 0.
+     9      03  SQLD               USAGE BINARY-SHORT VALUE 0.
+    10      03  SQLVAR OCCURS 1 TO 1489 TIMES DEPENDING ON SQLD.
+    11         05  SQLTYPE         USAGE BINARY-SHORT.
+    12         05  SQLLEN          USAGE BINARY-SHORT.
+    13         05  FILLER          PIC X(4).
+    14         05  SQLDATA         USAGE POINTER.
+    15         05  SQLIND          USAGE POINTER.
+    16         05  SQLNAME.
+    17            07  SQLNAMEL     PIC USAGE BINARY-SHORT.
+    18            07  SQLNAMEC     PIC X(30).
+    19 
+    20 
+    21 
+    22  78  ESQL-DATE-CHAR              VALUE 384.
+    23  78  ESQL-DATE-CHAR-NULL         VALUE 385.
+    24  78  ESQL-DATE-REC               VALUE 386.
+    25  78  ESQL-DATE-REC-NULL          VALUE 387.
+    26  78  ESQL-TIME-CHAR              VALUE 388.
+    27  78  ESQL-TIME-CHAR-NULL         VALUE 389.
+    28  78  ESQL-TIME-REC               VALUE 390.
+    29  78  ESQL-TIME-REC-NULL          VALUE 391.
+    30  78  ESQL-TIMESTAMP-CHAR         VALUE 392.
+    31  78  ESQL-TIMESTAMP-CHAR-NULL    VALUE 393.
+    32  78  ESQL-TIMESTAMP-REC          VALUE 394.
+    33  78  ESQL-TIMESTAMP-REC-NULL     VALUE 395.
+    34  78  ESQL-LONGVARBINARY          VALUE 404.
+    35  78  ESQL-LONGVARBINARY-NULL     VALUE 405.
+    36  78  ESQL-LONGVARCHAR            VALUE 408.
+    37  78  ESQL-LONGVARCHAR-NULL       VALUE 409.
+    38  78  ESQL-BINARY                 VALUE 444.
+    39  78  ESQL-BINARY-NULL            VALUE 445.
+    40  78  ESQL-VARBINARY              VALUE 446.
+    41  78  ESQL-VARBINARY-NULL         VALUE 447.
+    42  78  ESQL-VARCHAR                VALUE 448.
+    43  78  ESQL-VARCHAR-NULL           VALUE 449.
+    44  78  ESQL-CHARVARYING            VALUE 450.
+    45  78  ESQL-CHARVARYING-NULL       VALUE 451.
+    46  78  ESQL-CHAR                   VALUE 452.
+    47  78  ESQL-CHAR-NULL              VALUE 453.
+    48  78  ESQL-CHAR-FIXED             VALUE 454.
+    49  78  ESQL-CHAR-FIXED-NULL        VALUE 455.
+    50  78  ESQL-DOUBLE                 VALUE 480.
+    51  78  ESQL-DOUBLE-NULL            VALUE 481.
+    52  78  ESQL-REAL                   VALUE 482.
+    53  78  ESQL-REAL-NULL              VALUE 483.
+    54  78  ESQL-DECIMAL                VALUE 484.
+    55  78  ESQL-DECIMAL-NULL           VALUE 485.
+    56  78  ESQL-INTEGER                VALUE 496.
+    57  78  ESQL-INTEGER-NULL           VALUE 497.
+    58  78  ESQL-SMALLINT               VALUE 500.
+    59  78  ESQL-SMALLINT-NULL          VALUE 501.
+    60  78  ESQL-TINYINT                VALUE 502.
+    61  78  ESQL-TINYINT-NULL           VALUE 503.
+    62 
+    63  PROCEDURE DIVISION.
+    64      STOP RUN.
+
