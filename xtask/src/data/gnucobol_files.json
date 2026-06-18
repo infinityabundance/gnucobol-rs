@@ -54,18 +54,25 @@
   {
    "path": "bin/cob-config.1",
    "category": "CLI driver (cob-config)",
-   "status": "GAP -> cobrun",
-   "gap": "The cob-config man page -- reports compile/link flags for embedding libcob.",
-   "plan": "Future: a `cob-config`-equivalent reporting the gnucobol-rs-ffi include/link flags.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (gnucobol-rs-ffi link/include reporting)."
+   "status": "PARTIAL",
+   "gap": "cob-config man page (usage/options).",
+   "plan": "Document the gnucobol-rs-ffi linking surface; a cob-config CLI man page follows if/when the CLI is added.",
+   "evidence": "PARTIAL: the linking information this man page describes is documented in the `gnucobol-rs-ffi` crate README + header. NOTE: not a byte-for-byte reproduction of the cob-config man page.",
+   "proof": [
+    "crates/gnucobol-rs-ffi/README.md"
+   ]
   },
   {
    "path": "bin/cob-config.in",
    "category": "CLI driver (cob-config)",
-   "status": "GAP -> cobrun",
-   "gap": "The cob-config build-flags reporting script -- reports compile/link flags for embedding libcob.",
-   "plan": "Future: a `cob-config`-equivalent reporting the gnucobol-rs-ffi include/link flags.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (gnucobol-rs-ffi link/include reporting)."
+   "status": "PARTIAL",
+   "gap": "cob-config: reports the cflags/libs to compile + link against libcob.",
+   "plan": "Optional: a flag-printing `cob-config` CLI over the gnucobol-rs-ffi crate; the flags themselves are already documented.",
+   "evidence": "PARTIAL: the linking surface cob-config reports is provided by the `gnucobol-rs-ffi` crate -- the C header (`crates/gnucobol-rs-ffi/include/gnucobol-rs-ffi.h`) + its README document the cflags/libs, and Cargo builds the cdylib/staticlib to link. NOTE: a flag-PRINTING `cob-config`-style CLI is not yet provided (the information is, the tool is not).",
+   "proof": [
+    "crates/gnucobol-rs-ffi/include/gnucobol-rs-ffi.h",
+    "crates/gnucobol-rs-ffi/README.md"
+   ]
   },
   {
    "path": "bin/cobcrun.1",
@@ -277,35 +284,49 @@
   },
   {
    "path": "cobc/cobc.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: driver",
+   "status": "PARTIAL",
+   "gap": "The cobc compiler driver (main, option parsing, build pipeline).",
+   "plan": "Grow cobrun toward the cobc option surface; native codegen pipeline is replaced by interpretation (a non-goal -- see codegen.c).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "proof": [
+    "crates/gnucobol-rs/examples/cobrun.rs :: run_program_redirected"
+   ]
   },
   {
    "path": "cobc/cobc.h",
-   "category": "compiler header (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "Internal cobc structures.",
-   "plan": "Mirror only the structures the front-end needs.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: driver",
+   "status": "PARTIAL",
+   "gap": "The cobc compiler driver (main, option parsing, build pipeline).",
+   "plan": "Grow cobrun toward the cobc option surface; native codegen pipeline is replaced by interpretation (a non-goal -- see codegen.c).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "proof": [
+    "crates/gnucobol-rs/examples/cobrun.rs :: run_program_redirected"
+   ]
   },
   {
    "path": "cobc/codegen.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc back-end (codegen)",
+   "status": "NON-CLAIM",
+   "gap": "cobc C code generation.",
+   "plan": "Non-goal: gnucobol-rs does not emit C.",
+   "evidence": "Explicit non-claim: cobc emits C source (C code generation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn run_program_body",
+    "lab/oracle/cobol_frontend_sweep.sh"
+   ]
   },
   {
    "path": "cobc/codeoptim.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc back-end (codegen)",
+   "status": "NON-CLAIM",
+   "gap": "cobc generated-C peephole optimisation.",
+   "plan": "Non-goal: gnucobol-rs does not emit C.",
+   "evidence": "Explicit non-claim: cobc emits C source (generated-C peephole optimisation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn run_program_body",
+    "lab/oracle/cobol_frontend_sweep.sh"
+   ]
   },
   {
    "path": "cobc/codeoptim.def",
@@ -317,11 +338,14 @@
   },
   {
    "path": "cobc/config.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: dialect config",
+   "status": "PARTIAL",
+   "gap": "Dialect configuration loader (-std=, .conf files).",
+   "plan": "Grow the dialect-knob coverage as more std-sensitive behaviour is modelled.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/dialect.rs::from_conf` parses the dialect `.conf` files (copied verbatim into `config/`, COPIED+WIRED) and `-std=` selection mirrors `cobc -std=`; a subset of cobc’s full knob set.",
+   "proof": [
+    "crates/gnucobol-rs/src/dialect.rs :: pub fn from_conf"
+   ]
   },
   {
    "path": "cobc/config.def",
@@ -333,19 +357,26 @@
   },
   {
    "path": "cobc/error.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: diagnostics",
+   "status": "PARTIAL",
+   "gap": "Compiler diagnostics (errors/warnings) + formatting.",
+   "plan": "cobc’s exact diagnostic text format is a future gap; the interpreter currently fails closed with its own message.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::RunError` is the interpreter’s error model (it fails CLOSED on anything outside the sealed subset). NOTE: cobc’s exact diagnostic TEXT format is NOT reproduced byte-for-byte -- a deliberate, explicit scope limit, not a silent omission.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: enum RunError"
+   ]
   },
   {
    "path": "cobc/field.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: data layout",
+   "status": "PARTIAL",
+   "gap": "Data-description / field layout (PIC, USAGE, OCCURS, REDEFINES, SYNC).",
+   "plan": "Grow clause coverage; tracked live in COBOL-PARITY.md (data-description axis).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::parse_items` + `build_program_fields` build the runtime field table on the ported libcob field model (PIC/USAGE/OCCURS/REDEFINES/SYNC over the sealed subset); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_items",
+    "crates/gnucobol-rs/src/frontend.rs :: fn build_program_fields"
+   ]
   },
   {
    "path": "cobc/flag.def",
@@ -357,11 +388,14 @@
   },
   {
    "path": "cobc/help.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: help/usage",
+   "status": "PARTIAL",
+   "gap": "cobc --help / usage text.",
+   "plan": "Keep cobrun --help aligned with its option set; cobc’s exact help text is a different tool’s surface.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` provides `--help`/`--version`/`-dumpversion` for the interpreter. NOTE: this is cobrun’s own usage, NOT a byte-for-byte reproduction of cobc’s help text.",
+   "proof": [
+    "crates/gnucobol-rs/examples/cobrun.rs :: --help"
+   ]
   },
   {
    "path": "cobc/Makefile.am",
@@ -381,51 +415,75 @@
   },
   {
    "path": "cobc/parser.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: parser",
+   "status": "PARTIAL",
+   "gap": "COBOL grammar / parser (bison).",
+   "plan": "Extend the recursive-descent parser as the interpreted subset grows; tracked live in COBOL-PARITY.md.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_one_program",
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_items"
+   ]
   },
   {
    "path": "cobc/parser.h",
-   "category": "compiler header (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "Internal cobc structures.",
-   "plan": "Mirror only the structures the front-end needs.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: parser",
+   "status": "PARTIAL",
+   "gap": "COBOL grammar / parser (bison).",
+   "plan": "Extend the recursive-descent parser as the interpreted subset grows; tracked live in COBOL-PARITY.md.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_one_program",
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_items"
+   ]
   },
   {
    "path": "cobc/parser.y",
-   "category": "compiler grammar (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "The authoritative COBOL grammar (parser.y/scanner.l). The clean-room front-end (src/frontend.rs) reimplements a growing SUBSET; the full grammar is the front-end roadmap.",
-   "plan": "Widen src/frontend.rs to the full statement/clause grammar (the COBOL-PARITY.md statement table is the live TODO).",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: parser",
+   "status": "PARTIAL",
+   "gap": "COBOL grammar / parser (bison).",
+   "plan": "Extend the recursive-descent parser as the interpreted subset grows; tracked live in COBOL-PARITY.md.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_one_program",
+    "crates/gnucobol-rs/src/frontend.rs :: fn parse_items"
+   ]
   },
   {
    "path": "cobc/pplex.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: preprocessor",
+   "status": "PARTIAL",
+   "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
+   "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
+    "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
+   ]
   },
   {
    "path": "cobc/pplex.l",
-   "category": "compiler grammar (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "The authoritative COBOL grammar (parser.y/scanner.l). The clean-room front-end (src/frontend.rs) reimplements a growing SUBSET; the full grammar is the front-end roadmap.",
-   "plan": "Widen src/frontend.rs to the full statement/clause grammar (the COBOL-PARITY.md statement table is the live TODO).",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: preprocessor",
+   "status": "PARTIAL",
+   "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
+   "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
+    "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
+   ]
   },
   {
    "path": "cobc/ppparse.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: preprocessor",
+   "status": "PARTIAL",
+   "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
+   "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
+    "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
+   ]
   },
   {
    "path": "cobc/ppparse.def",
@@ -437,75 +495,108 @@
   },
   {
    "path": "cobc/ppparse.h",
-   "category": "compiler header (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "Internal cobc structures.",
-   "plan": "Mirror only the structures the front-end needs.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: preprocessor",
+   "status": "PARTIAL",
+   "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
+   "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
+    "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
+   ]
   },
   {
    "path": "cobc/ppparse.y",
-   "category": "compiler grammar (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "The authoritative COBOL grammar (parser.y/scanner.l). The clean-room front-end (src/frontend.rs) reimplements a growing SUBSET; the full grammar is the front-end roadmap.",
-   "plan": "Widen src/frontend.rs to the full statement/clause grammar (the COBOL-PARITY.md statement table is the live TODO).",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: preprocessor",
+   "status": "PARTIAL",
+   "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
+   "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
+    "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
+   ]
   },
   {
    "path": "cobc/replace.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: preprocessor",
+   "status": "PARTIAL",
+   "gap": "COPY ... REPLACING / REPLACE text replacement.",
+   "plan": "Grow REPLACE/REPLACING form coverage as needed.",
+   "evidence": "PARTIAL: COPY/REPLACING text substitution is reproduced by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The standalone REPLACE statement forms are a subset.",
+   "proof": [
+    "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
+   ]
   },
   {
    "path": "cobc/reserved.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: reserved words",
+   "status": "PARTIAL",
+   "gap": "Reserved-word + intrinsic-function name tables.",
+   "plan": "Grow WIRED_STATEMENTS / WIRED_FUNCTIONS as verbs + intrinsics are wired (tracked live in COBOL-PARITY.md).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` carries the recognised verb set (`WIRED_STATEMENTS`) and intrinsic set (`WIRED_FUNCTIONS`) that drive the live COBOL-PARITY tracker; a subset of cobc’s full reserved list.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: pub const WIRED_STATEMENTS",
+    "crates/gnucobol-rs/src/frontend.rs :: pub const WIRED_FUNCTIONS"
+   ]
   },
   {
    "path": "cobc/scanner.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: lexer",
+   "status": "PARTIAL",
+   "gap": "COBOL lexical scanner (generated C).",
+   "plan": "Grow the tokeniser as the interpreted language subset grows.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn lex"
+   ]
   },
   {
    "path": "cobc/scanner.l",
-   "category": "compiler grammar (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "The authoritative COBOL grammar (parser.y/scanner.l). The clean-room front-end (src/frontend.rs) reimplements a growing SUBSET; the full grammar is the front-end roadmap.",
-   "plan": "Widen src/frontend.rs to the full statement/clause grammar (the COBOL-PARITY.md statement table is the live TODO).",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: lexer",
+   "status": "PARTIAL",
+   "gap": "COBOL lexical scanner (flex).",
+   "plan": "Grow the tokeniser as the interpreted language subset grows.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn lex"
+   ]
   },
   {
    "path": "cobc/tree.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: AST",
+   "status": "PARTIAL",
+   "gap": "The cobc AST (cb_tree) + node constructors.",
+   "plan": "Evolve the interpreter AST as coverage grows.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` carries a clean-room interpreter AST (`struct ProgramDef` / `struct ProgItem` / `struct Field`) -- an independent analog of cobc’s cb_tree, not a 1:1 port of it.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: struct ProgramDef",
+    "crates/gnucobol-rs/src/frontend.rs :: struct ProgItem"
+   ]
   },
   {
    "path": "cobc/tree.h",
-   "category": "compiler header (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "Internal cobc structures.",
-   "plan": "Mirror only the structures the front-end needs.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: AST",
+   "status": "PARTIAL",
+   "gap": "The cobc AST (cb_tree) + node constructors.",
+   "plan": "Evolve the interpreter AST as coverage grows.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` carries a clean-room interpreter AST (`struct ProgramDef` / `struct ProgItem` / `struct Field`) -- an independent analog of cobc’s cb_tree, not a 1:1 port of it.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: struct ProgramDef",
+    "crates/gnucobol-rs/src/frontend.rs :: struct ProgItem"
+   ]
   },
   {
    "path": "cobc/typeck.c",
-   "category": "compiler (cobc)",
-   "status": "GAP -> front-end",
-   "gap": "A cobc compiler pass (parse/typecheck/codegen/...). gnucobol-rs INTERPRETS rather than compiles to C; the clean-room front-end covers a subset.",
-   "plan": "Reimplement the needed semantics in src/frontend.rs (interpreter), oracle-verified; native codegen is a non-goal.",
-   "evidence": "UNEVIDENCED-GAP: no native Rust port yet; see plan (clean-room front-end / cobrun). Tracked live in COBOL-PARITY.md statement table."
+   "category": "cobc front-end: semantics",
+   "status": "PARTIAL",
+   "gap": "Type checking / semantic analysis of statements + expressions.",
+   "plan": "Grow statement + expression coverage; tracked live in COBOL-PARITY.md (statement axis).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::exec_stmt` / `exec_compute` evaluate the typed operations directly on the ported libcob runtime (cob_move/cob_arith); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn exec_stmt",
+    "crates/gnucobol-rs/src/frontend.rs :: fn exec_compute"
+   ]
   },
   {
    "path": "cobc/warning.def",
