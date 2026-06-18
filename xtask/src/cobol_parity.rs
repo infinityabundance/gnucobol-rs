@@ -439,13 +439,27 @@ fn build(root: &str) -> String {
 
     // ---- data clauses + usages ----
     out.push_str("## Data-description clauses\n\n| clause | front-end (cobrun) |\n|---|:---:|\n");
-    let fe_clause = |c: &str| matches!(c, "PICTURE" | "VALUE" | "FILLER");
+    // Clauses the cobrun front-end parses + applies (the rest are runtime-ready, not yet wired).
+    let fe_clause = |c: &str| {
+        matches!(
+            c,
+            "PICTURE" | "USAGE" | "VALUE" | "OCCURS" | "REDEFINES" | "FILLER"
+                | "LEVEL 88 (condition-name)" | "LEVEL 77" | "INDEXED BY"
+        )
+    };
     for c in &clauses {
         let name = c.as_str().unwrap_or("");
         out.push_str(&format!("| `{name}` | {} |\n", if fe_clause(name) { "**yes**" } else { "no (runtime ready)" }));
     }
     out.push_str("\n## USAGE forms\n\n| usage | front-end (cobrun) |\n|---|:---:|\n");
-    let fe_usage = |u: &str| u == "DISPLAY";
+    // DISPLAY + the integer/packed COMP family + COMP-6 + an opaque POINTER are wired; COMP-1/COMP-2
+    // (float/double), INDEX and NATIONAL are not yet carried by the field model (fail closed).
+    let fe_usage = |u: &str| {
+        matches!(
+            u,
+            "DISPLAY" | "COMP/BINARY" | "COMP-3/PACKED-DECIMAL" | "COMP-5" | "COMP-6" | "POINTER"
+        )
+    };
     for u in &usages {
         let name = u.as_str().unwrap_or("");
         out.push_str(&format!("| `{name}` | {} |\n", if fe_usage(name) { "**yes**" } else { "no (runtime ready)" }));

@@ -147,10 +147,10 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | clause | front-end (cobrun) |
 |---|:---:|
 | `PICTURE` | **yes** |
-| `USAGE` | no (runtime ready) |
+| `USAGE` | **yes** |
 | `VALUE` | **yes** |
-| `OCCURS` | no (runtime ready) |
-| `REDEFINES` | no (runtime ready) |
+| `OCCURS` | **yes** |
+| `REDEFINES` | **yes** |
 | `RENAMES` | no (runtime ready) |
 | `SIGN` | no (runtime ready) |
 | `SYNCHRONIZED` | no (runtime ready) |
@@ -158,25 +158,25 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `BLANK WHEN ZERO` | no (runtime ready) |
 | `GLOBAL` | no (runtime ready) |
 | `EXTERNAL` | no (runtime ready) |
-| `LEVEL 88 (condition-name)` | no (runtime ready) |
+| `LEVEL 88 (condition-name)` | **yes** |
 | `LEVEL 66 (RENAMES)` | no (runtime ready) |
-| `LEVEL 77` | no (runtime ready) |
+| `LEVEL 77` | **yes** |
 | `FILLER` | **yes** |
 | `OCCURS DEPENDING ON` | no (runtime ready) |
-| `INDEXED BY` | no (runtime ready) |
+| `INDEXED BY` | **yes** |
 
 ## USAGE forms
 
 | usage | front-end (cobrun) |
 |---|:---:|
 | `DISPLAY` | **yes** |
-| `COMP/BINARY` | no (runtime ready) |
-| `COMP-3/PACKED-DECIMAL` | no (runtime ready) |
+| `COMP/BINARY` | **yes** |
+| `COMP-3/PACKED-DECIMAL` | **yes** |
 | `COMP-1 (float)` | no (runtime ready) |
 | `COMP-2 (double)` | no (runtime ready) |
-| `COMP-5` | no (runtime ready) |
-| `COMP-6` | no (runtime ready) |
-| `POINTER` | no (runtime ready) |
+| `COMP-5` | **yes** |
+| `COMP-6` | **yes** |
+| `POINTER` | **yes** |
 | `INDEX` | no (runtime ready) |
 | `NATIONAL` | no (runtime ready) |
 

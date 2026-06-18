@@ -537,6 +537,63 @@ struct ProgItem {
     /// `OCCURS ... INDEXED BY idx [idx ...]` -- the table's index name(s). Each becomes an integer index
     /// field; the first is the table's implicit SEARCH index.
     indexed_by: Vec<String>,
+    /// `USAGE [IS] <form>` as stated on THIS item (`None` = not stated). A group's USAGE is inherited by
+    /// every nested item that does not state its own; `resolve_usage_inheritance` rewrites each `None` to
+    /// the effective form before build, so by build time this is `Some(..)`.
+    usage: Option<Usage>,
+}
+
+/// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
+/// enclosing group's, defaulting to `DISPLAY`. Uses a level-keyed stack of groups that stated a usage.
+fn resolve_usage_inheritance(items: &mut [ProgItem]) {
+    let mut stack: Vec<(u16, Usage)> = Vec::new();
+    for it in items.iter_mut() {
+        // pop groups we have exited (a sibling or shallower item ends the group's scope).
+        while let Some(&(lvl, _)) = stack.last() {
+            if it.level <= lvl {
+                stack.pop();
+            } else {
+                break;
+            }
+        }
+        let stated = it.usage;
+        let effective = stated.or_else(|| stack.last().map(|&(_, u)| u)).unwrap_or(Usage::Display);
+        // a stated usage encloses this item's nested children (popped when a <= level item appears).
+        if let Some(u) = stated {
+            stack.push((it.level, u));
+        }
+        it.usage = Some(effective);
+    }
+}
+
+/// Map a USAGE keyword (with or without the `USAGE [IS]` prefix) to the lib's [`Usage`]. Returns `None`
+/// for a non-usage word; the COMP-1/COMP-2/POINTER/INDEX/NATIONAL forms the field model does not yet
+/// carry are caught separately and fail closed (never silently treated as DISPLAY).
+fn usage_from_kw(w: &str) -> Option<Usage> {
+    match w {
+        "COMP-3" | "COMPUTATIONAL-3" | "PACKED-DECIMAL" => Some(Usage::Comp3),
+        "COMP" | "COMPUTATIONAL" | "COMP-4" | "COMPUTATIONAL-4" | "BINARY" => Some(Usage::Comp),
+        "COMP-5" | "COMPUTATIONAL-5" => Some(Usage::Comp5),
+        "COMP-X" | "COMPUTATIONAL-X" => Some(Usage::CompX),
+        "COMP-6" | "COMPUTATIONAL-6" => Some(Usage::Comp6),
+        "DISPLAY" => Some(Usage::Display),
+        _ => None,
+    }
+}
+
+/// A USAGE keyword for an opaque machine pointer: modelled as an 8-byte field (its value -- an address --
+/// is a non-claim, never displayed deterministically), so the byte width is faithful.
+fn is_pointer_usage(w: &str) -> bool {
+    matches!(w, "POINTER" | "PROGRAM-POINTER" | "FUNCTION-POINTER")
+}
+
+/// A USAGE keyword the field model does not yet carry (fails closed rather than mis-modelling): the
+/// COMP-1/COMP-2 floats, USAGE INDEX, and NATIONAL (UTF-16).
+fn unsupported_usage_kw(w: &str) -> bool {
+    matches!(
+        w,
+        "COMP-1" | "COMPUTATIONAL-1" | "COMP-2" | "COMPUTATIONAL-2" | "INDEX" | "NATIONAL"
+    )
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
@@ -1116,6 +1173,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 redefines: None,
                 condition: Some((parent, values)),
                 indexed_by: Vec::new(),
+                usage: None,
             });
             continue;
         }
@@ -1145,6 +1203,10 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut value: Option<Tok> = None;
         let mut occurs: usize = 1;
         let mut indexed: Vec<String> = Vec::new();
+        // None = no USAGE stated here (inherit a group's, else DISPLAY); Some = stated on this item.
+        let mut usage: Option<Usage> = None;
+        // an opaque machine pointer (USAGE POINTER): modelled as an 8-byte field below.
+        let mut pointer = false;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1195,13 +1257,58 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     value = toks.get(k).cloned();
                     k += 1;
                 }
+                // `USAGE [IS] <form>` -- the explicit clause.
+                Some(Tok::Word(w)) if w == "USAGE" => {
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                        k += 1;
+                    }
+                    match toks.get(k) {
+                        Some(Tok::Word(u)) if usage_from_kw(u).is_some() => {
+                            usage = usage_from_kw(u);
+                            k += 1;
+                        }
+                        Some(Tok::Word(u)) if is_pointer_usage(u) => {
+                            pointer = true;
+                            k += 1;
+                        }
+                        Some(Tok::Word(u)) if unsupported_usage_kw(u) => {
+                            return Err(RunError::Unsupported(format!("USAGE {u} is not in the front-end subset")));
+                        }
+                        Some(Tok::Word(u)) => {
+                            return Err(RunError::Unsupported(format!("unrecognized USAGE {u}")));
+                        }
+                        _ => return Err(RunError::Unsupported("USAGE with no form".into())),
+                    }
+                }
+                // a bare usage keyword (no `USAGE` prefix), e.g. `PIC S9(5) COMP-3`.
+                Some(Tok::Word(w)) if usage_from_kw(w).is_some() => {
+                    usage = usage_from_kw(w);
+                    k += 1;
+                }
+                Some(Tok::Word(w)) if is_pointer_usage(w) => {
+                    pointer = true;
+                    k += 1;
+                }
+                Some(Tok::Word(w)) if unsupported_usage_kw(w) => {
+                    return Err(RunError::Unsupported(format!("USAGE {w} is not in the front-end subset")));
+                }
                 _ => k += 1,
             }
         }
         // a PIC-less item is a GROUP (its children follow at higher level numbers); resolved in build.
-        let pic = pic.unwrap_or_default();
-        items.push(ProgItem { level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed });
+        // a USAGE POINTER item has no PIC -- model it as an opaque 8-byte field (the libcob pointer width).
+        let pic = match pic {
+            Some(p) => p,
+            None if pointer => "X(8)".to_string(),
+            None => String::new(),
+        };
+        items.push(ProgItem {
+            level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed,
+            usage,
+        });
     }
+    resolve_usage_inheritance(&mut items);
     Ok(items)
 }
 
@@ -1242,7 +1349,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         if it.pic.is_empty() {
             continue;
         }
-        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
+        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display))?;
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
             // identically, per its VALUE or the dialect fill).
@@ -1293,7 +1400,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
     // TALLY: the EXAMINE count register (unsigned 9(5) DISPLAY).
-    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect) {
+    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display) {
         fields.entry("TALLY".to_string()).or_insert(t);
     }
     Ok(fields)
@@ -2428,8 +2535,9 @@ fn make_field(
     currency: u8,
     decimal_comma: bool,
     dialect: crate::dialect::Dialect,
+    usage: Usage,
 ) -> Result<Field, RunError> {
-    match build_field(pic, Usage::Display, false, false) {
+    match build_field(pic, usage, false, false) {
         Ok(pf) => {
             let is_alpha = !pf.attr.is_numeric();
             // Uninitialized storage (no VALUE) is filled per the dialect's `defaultbyte`: the category
@@ -3977,7 +4085,7 @@ fn exec_ml_parse_noop() -> Result<(), RunError> {
 
 /// The displayed bytes of a report element: a `PIC` field holding its SOURCE value (or VALUE literal).
 fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<Vec<u8>, RunError> {
-    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect)?;
+    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display)?;
     if let Some(src) = &el.source {
         let (sb, sa) = operand_value(&Tok::Word(src.clone()), fields)?;
         move_into(&mut temp, &sb, &sa, ctx.decimal_comma)?;
@@ -5016,10 +5124,15 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         _ => None,
     }));
 
-    // Fold the source operands into a single decimal-bearing (bytes, attr) accumulator.
-    let (mut acc, mut acc_attr) = operand_value(sources[0], fields)?;
+    // Fold the source operands into a single decimal-bearing (bytes, attr) accumulator. Operands are
+    // normalized so binary (COMP/COMP-5/COMP-X) sources participate (cob_arith's decode is DISPLAY+PACKED).
+    let (mut acc, mut acc_attr) = {
+        let (b, a) = operand_value(sources[0], fields)?;
+        to_arith_operand(&b, &a)?
+    };
     for s in &sources[1..] {
         let (b, a) = operand_value(s, fields)?;
+        let (b, a) = to_arith_operand(&b, &a)?;
         acc = cob_arith(Op::Add, &acc, &acc_attr, &b, &a, Round::Truncate)
             .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
         acc_attr = widen(&acc_attr, &a);
@@ -5084,9 +5197,27 @@ fn wide_op(op: Op, a: &[u8], aa: &FieldAttr, b: &[u8], ba: &FieldAttr) -> Result
     let wsize = wide.digits as usize;
     let mut a_wide = vec![b'0'; wsize.max(1)];
     cob_move(a, aa, &mut a_wide, &wide).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
-    let r = cob_arith(op, &a_wide, &wide, b, ba, Round::Truncate)
+    // The `b` operand goes straight to cob_arith, whose decode handles only DISPLAY + PACKED; normalize a
+    // binary (COMP/COMP-5/COMP-X) `b` to zoned DISPLAY first (the `a` side was already widened by cob_move).
+    let (bn, ban) = to_arith_operand(b, ba)?;
+    let r = cob_arith(op, &a_wide, &wide, &bn, &ban, Round::Truncate)
         .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
     Ok((r, wide))
+}
+
+/// Normalize a numeric operand to a form `cob_arith`'s decoder accepts. DISPLAY and PACKED
+/// (COMP-3/COMP-6) pass through unchanged; binary (COMP/COMP-5/COMP-X) is converted to zoned DISPLAY via
+/// the sealed `cob_move`. This keeps binary-USAGE arithmetic entirely on the oracle-sealed conversion +
+/// arithmetic paths without extending the runtime decode.
+fn to_arith_operand(bytes: &[u8], attr: &FieldAttr) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    use crate::attr::COB_TYPE_NUMERIC_PACKED;
+    if matches!(attr.field_type, COB_TYPE_NUMERIC_DISPLAY | COB_TYPE_NUMERIC_PACKED) {
+        return Ok((bytes.to_vec(), *attr));
+    }
+    let disp = lit_num_attr(attr.digits.max(1), attr.scale.max(0), true);
+    let mut out = vec![b'0'; disp.digits as usize];
+    cob_move(bytes, attr, &mut out, &disp).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+    Ok((out, disp))
 }
 
 
