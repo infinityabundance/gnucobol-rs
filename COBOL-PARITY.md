@@ -97,6 +97,51 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 > **ABS**, **ACOS**, **ANNUITY**, **ASIN**, **ATAN**, BINOP, **BIT-OF**, **BIT-TO-CHAR**, BOOLEAN-OF-INTEGER, **BYTE-LENGTH**, **CHAR**, CHAR-NATIONAL, **COMBINED-DATETIME**, **CONCATENATE**, CONTENT-LENGTH, CONTENT-OF, **COS**, **CURRENCY-SYMBOL**, **CURRENT-DATE**, **DATE-OF-INTEGER**, **DATE-TO-YYYYMMDD**, **DAY-OF-INTEGER**, **DAY-TO-YYYYDDD**, DISPLAY-OF, **E**, EXCEPTION-FILE, EXCEPTION-FILE-N, EXCEPTION-LOCATION, EXCEPTION-LOCATION-N, EXCEPTION-STATEMENT, EXCEPTION-STATUS, **EXP**, **EXP10**, **FACTORIAL**, **FORMATTED-CURRENT-DATE**, **FORMATTED-DATE**, **FORMATTED-DATETIME**, **FORMATTED-TIME**, **FRACTION-PART**, **HEX-OF**, **HEX-TO-CHAR**, **HIGHEST-ALGEBRAIC**, **INTEGER**, INTEGER-OF-BOOLEAN, **INTEGER-OF-DATE**, **INTEGER-OF-DAY**, **INTEGER-OF-FORMATTED-DATE**, **INTEGER-PART**, LCL-TIME-FROM-SECS, **LENGTH**, LOCALE-COMPARE, LOCALE-DATE, LOCALE-TIME, **LOG**, **LOG10**, **LOWER-CASE**, **LOWEST-ALGEBRAIC**, **MAX**, **MEAN**, **MEDIAN**, **MIDRANGE**, **MIN**, **MOD**, MODULE-CALLER-ID, MODULE-DATE, MODULE-FORMATTED-DATE, MODULE-ID, MODULE-PATH, MODULE-SOURCE, MODULE-TIME, MON-DECIMAL-POINT, MON-THOUSANDS-SEP, NATIONAL-OF, NUM-DECIMAL-POINT, NUM-THOUSANDS-SEP, **NUMVAL**, **NUMVAL-C**, **NUMVAL-F**, **ORD**, **ORD-MAX**, **ORD-MIN**, **PI**, **PRESENT-VALUE**, RANDOM, **RANGE**, **REM**, **REVERSE**, **SECONDS-FROM-FORMATTED-TIME**, SECONDS-PAST-MIDNIGHT, **SIGN**, **SIN**, **SQRT**, STANDARD-COMPARE, **STANDARD-DEVIATION**, **STORED-CHAR-LENGTH**, **SUBSTITUTE**, **SUBSTITUTE-CASE**, **SUM**, **TAN**, **TEST-DATE-YYYYMMDD**, **TEST-DAY-YYYYDDD**, **TEST-FORMATTED-DATETIME**, **TEST-NUMVAL**, **TEST-NUMVAL-C**, **TEST-NUMVAL-F**, **TRIM**, **UPPER-CASE**, **VARIANCE**, WHEN-COMPILED, **YEAR-TO-YYYY**
 
+**Boundary intrinsics (33 not wired).** Two kinds, distinguished so the gap is not read as latent work:
+
+***Deliberately bounded -- absent or inactive in GnuCOBOL 3.2 itself (11).*** These cannot be byte-identical to anything: the oracle has no behaviour for them (libcob leaves them unimplemented, or cobc rejects them as unknown user functions). Wiring them would be inventing semantics the admitted compiler does not have.
+
+| intrinsic | why it is not in GnuCOBOL 3.2 |
+|---|---|
+| `BINOP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
+| `BOOLEAN-OF-INTEGER` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `CHAR-NATIONAL` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `DISPLAY-OF` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `INTEGER-OF-BOOLEAN` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `MON-DECIMAL-POINT` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
+| `MON-THOUSANDS-SEP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
+| `NATIONAL-OF` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `NUM-DECIMAL-POINT` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
+| `NUM-THOUSANDS-SEP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
+| `STANDARD-COMPARE` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+
+***Present in GnuCOBOL 3.2, but no fixed oracle output (22).*** These run under the oracle but produce live program/host state, non-deterministic, or locale-dependent values -- there is no single correct byte string to match, so they stay outside the byte-identity subset (admissible only under an explicit pinned profile).
+
+| intrinsic | why there is no fixed oracle |
+|---|---|
+| `CONTENT-LENGTH` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `CONTENT-OF` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `EXCEPTION-FILE` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `EXCEPTION-FILE-N` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `EXCEPTION-LOCATION` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `EXCEPTION-LOCATION-N` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `EXCEPTION-STATEMENT` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `EXCEPTION-STATUS` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `LCL-TIME-FROM-SECS` | present in 3.2, locale-dependent: deterministic only under a fixed locale profile |
+| `LOCALE-COMPARE` | present in 3.2, locale-dependent: deterministic only under a fixed locale profile |
+| `LOCALE-DATE` | present in 3.2, locale-dependent: deterministic only under a fixed locale profile |
+| `LOCALE-TIME` | present in 3.2, locale-dependent: deterministic only under a fixed locale profile |
+| `MODULE-CALLER-ID` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `MODULE-DATE` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `MODULE-FORMATTED-DATE` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `MODULE-ID` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `MODULE-PATH` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `MODULE-SOURCE` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `MODULE-TIME` | present in 3.2, no fixed oracle: live program/exception/pointer state |
+| `RANDOM` | present in 3.2, non-deterministic: seeded PRNG |
+| `SECONDS-PAST-MIDNIGHT` | present in 3.2, non-deterministic: reads the live wall clock (ignores COB_CURRENT_DATE) |
+| `WHEN-COMPILED` | present in 3.2, non-deterministic: embeds the actual compile timestamp |
+
 ## Data-description clauses
 
 | clause | front-end (cobrun) |

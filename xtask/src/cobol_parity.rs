@@ -194,6 +194,38 @@ fn wired_functions(root: &str) -> Vec<String> {
     out
 }
 
+/// For an intrinsic that the front-end does NOT wire, the reason it is a deliberate boundary. Returns
+/// `(absent_in_3_2, short_reason)`: `absent_in_3_2 == true` means the function is **not present or not
+/// active** in GnuCOBOL 3.2 itself (libcob never implements it, or cobc rejects it as an unknown user
+/// function) -- so there is no oracle behaviour to be byte-identical to. `false` means it exists in 3.2
+/// but has no fixed oracle output (live program/host state, non-determinism, or locale dependence).
+/// `None` would mean "should be wired"; every unwired intrinsic is expected to match an arm here.
+fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
+    match name {
+        // ABSENT/INACTIVE in GnuCOBOL 3.2 -- libcob leaves these unimplemented; the ported cob_intr_* is a
+        // faithful not-implemented stub, so the runtime has nothing to reproduce.
+        "BOOLEAN-OF-INTEGER" | "INTEGER-OF-BOOLEAN" | "STANDARD-COMPARE" | "DISPLAY-OF" | "NATIONAL-OF"
+        | "CHAR-NATIONAL" => Some((true, "not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub)")),
+        // ABSENT as a user FUNCTION -- cobc rejects these as unknown (probed against the oracle); they are
+        // libcob-internal helpers, not user-facing intrinsics, so a program using them does not compile.
+        "BINOP" | "NUM-DECIMAL-POINT" | "NUM-THOUSANDS-SEP" | "MON-DECIMAL-POINT" | "MON-THOUSANDS-SEP" =>
+            Some((true, "not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper)")),
+        // PRESENT in 3.2 but no fixed oracle: live program/exception/pointer state.
+        "MODULE-ID" | "MODULE-SOURCE" | "MODULE-CALLER-ID" | "MODULE-PATH" | "MODULE-DATE"
+        | "MODULE-FORMATTED-DATE" | "MODULE-TIME" | "EXCEPTION-FILE" | "EXCEPTION-FILE-N"
+        | "EXCEPTION-LOCATION" | "EXCEPTION-LOCATION-N" | "EXCEPTION-STATEMENT" | "EXCEPTION-STATUS"
+        | "CONTENT-OF" | "CONTENT-LENGTH" => Some((false, "present in 3.2, no fixed oracle: live program/exception/pointer state")),
+        // PRESENT in 3.2 but non-deterministic.
+        "RANDOM" => Some((false, "present in 3.2, non-deterministic: seeded PRNG")),
+        "SECONDS-PAST-MIDNIGHT" => Some((false, "present in 3.2, non-deterministic: reads the live wall clock (ignores COB_CURRENT_DATE)")),
+        "WHEN-COMPILED" => Some((false, "present in 3.2, non-deterministic: embeds the actual compile timestamp")),
+        // PRESENT in 3.2 but locale-dependent.
+        "LOCALE-DATE" | "LOCALE-TIME" | "LOCALE-COMPARE" | "LCL-TIME-FROM-SECS" =>
+            Some((false, "present in 3.2, locale-dependent: deterministic only under a fixed locale profile")),
+        _ => None,
+    }
+}
+
 /// Does our crate define an intrinsic (`cob_intr_<name>` or a clearly-named port) in src?
 fn intr_ported(root: &str, name: &str) -> bool {
     // every libcob/intrinsic.c function is ported (file is 100%); confirm the symbol is present.
@@ -353,6 +385,57 @@ fn build(root: &str) -> String {
     out.push_str("> ");
     out.push_str(&names.join(", "));
     out.push_str("\n\n");
+
+    // Explicit boundary breakdown for every UNWIRED intrinsic: which are deliberately bounded because
+    // they are absent/inactive in GnuCOBOL 3.2 itself, vs. present-but-not-oracle-testable.
+    let mut absent: Vec<(String, &str)> = Vec::new();
+    let mut present: Vec<(String, &str)> = Vec::new();
+    let mut uncategorized: Vec<String> = Vec::new();
+    for n in &intr {
+        let nm = intr_name(n);
+        if wired_fn.contains(&nm) {
+            continue;
+        }
+        match intrinsic_boundary(&nm) {
+            Some((true, why)) => absent.push((nm, why)),
+            Some((false, why)) => present.push((nm, why)),
+            None => uncategorized.push(nm),
+        }
+    }
+    out.push_str(&format!(
+        "**Boundary intrinsics ({} not wired).** Two kinds, distinguished so the gap is not read as \
+         latent work:\n\n",
+        absent.len() + present.len() + uncategorized.len(),
+    ));
+    out.push_str(&format!(
+        "***Deliberately bounded -- absent or inactive in GnuCOBOL 3.2 itself ({}).*** These cannot be \
+         byte-identical to anything: the oracle has no behaviour for them (libcob leaves them \
+         unimplemented, or cobc rejects them as unknown user functions). Wiring them would be inventing \
+         semantics the admitted compiler does not have.\n\n| intrinsic | why it is not in GnuCOBOL 3.2 |\n|---|---|\n",
+        absent.len(),
+    ));
+    for (nm, why) in &absent {
+        out.push_str(&format!("| `{nm}` | {why} |\n"));
+    }
+    out.push_str(&format!(
+        "\n***Present in GnuCOBOL 3.2, but no fixed oracle output ({}).*** These run under the oracle but \
+         produce live program/host state, non-deterministic, or locale-dependent values -- there is no \
+         single correct byte string to match, so they stay outside the byte-identity subset (admissible \
+         only under an explicit pinned profile).\n\n| intrinsic | why there is no fixed oracle |\n|---|---|\n",
+        present.len(),
+    ));
+    for (nm, why) in &present {
+        out.push_str(&format!("| `{nm}` | {why} |\n"));
+    }
+    if !uncategorized.is_empty() {
+        out.push_str(&format!(
+            "\n> **gate:** {} unwired intrinsic(s) have no boundary classification -- wire them or add an \
+             `intrinsic_boundary` arm: {}\n",
+            uncategorized.len(),
+            uncategorized.join(", "),
+        ));
+    }
+    out.push('\n');
 
     // ---- data clauses + usages ----
     out.push_str("## Data-description clauses\n\n| clause | front-end (cobrun) |\n|---|:---:|\n");
