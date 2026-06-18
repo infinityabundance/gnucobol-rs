@@ -104,17 +104,17 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | intrinsic | why it is not in GnuCOBOL 3.2 |
 |---|---|
 | `BINOP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
-| `BOOLEAN-OF-INTEGER` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
-| `CHAR-NATIONAL` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
-| `DISPLAY-OF` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
-| `INTEGER-OF-BOOLEAN` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `BOOLEAN-OF-INTEGER` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
+| `CHAR-NATIONAL` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
+| `DISPLAY-OF` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
+| `INTEGER-OF-BOOLEAN` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 | `LCL-TIME-FROM-SECS` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
 | `MON-DECIMAL-POINT` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
 | `MON-THOUSANDS-SEP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
-| `NATIONAL-OF` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `NATIONAL-OF` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 | `NUM-DECIMAL-POINT` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
 | `NUM-THOUSANDS-SEP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
-| `STANDARD-COMPARE` | not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub) |
+| `STANDARD-COMPARE` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 
 ***Present in GnuCOBOL 3.2, not yet reproduced byte-for-byte here (12).*** These DO run under the oracle; each is bounded for a specific, stated reason -- a runtime helper not yet sealed, a front-end model not yet built (exception registers, pointer contents), or an output with no fixed or portable value (a compile-time stamp, the live wall clock, a host path). Each is a concrete future target, not a dead end.
 

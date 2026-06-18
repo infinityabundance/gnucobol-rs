@@ -202,10 +202,11 @@ fn wired_functions(root: &str) -> Vec<String> {
 /// `None` would mean "should be wired"; every unwired intrinsic is expected to match an arm here.
 fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
     match name {
-        // ABSENT/INACTIVE in GnuCOBOL 3.2 -- libcob leaves these unimplemented; the ported cob_intr_* is a
-        // faithful not-implemented stub, so the runtime has nothing to reproduce.
+        // ABSENT/INACTIVE in GnuCOBOL 3.2 -- cobc REJECTS these at compile time with "FUNCTION 'X' is not
+        // implemented" (probed against the oracle); a program using one does not compile, so there is no
+        // oracle behaviour to be byte-identical to.
         "BOOLEAN-OF-INTEGER" | "INTEGER-OF-BOOLEAN" | "STANDARD-COMPARE" | "DISPLAY-OF" | "NATIONAL-OF"
-        | "CHAR-NATIONAL" => Some((true, "not active in GnuCOBOL 3.2: libcob leaves it unimplemented (faithful stub)")),
+        | "CHAR-NATIONAL" => Some((true, "cobc rejects it at compile: \"FUNCTION is not implemented\" (no oracle output exists)")),
         // ABSENT as a user FUNCTION -- cobc rejects these as unknown (probed against the oracle); they are
         // libcob-internal helpers, not user-facing intrinsics, so a program using them does not compile.
         "BINOP" | "NUM-DECIMAL-POINT" | "NUM-THOUSANDS-SEP" | "MON-DECIMAL-POINT" | "MON-THOUSANDS-SEP"
