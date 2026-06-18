@@ -99,9 +99,9 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 **Boundary intrinsics (17 not wired).** Two kinds, distinguished so the gap is not read as latent work:
 
-***Deliberately bounded -- absent or inactive in GnuCOBOL 3.2 itself (16).*** These cannot be byte-identical to anything: the oracle has no behaviour for them (libcob leaves them unimplemented, or cobc rejects them as unknown user functions). Wiring them would be inventing semantics the admitted compiler does not have.
+***Deliberately bounded -- absent/inactive in GnuCOBOL 3.2, or a non-libcob substrate (16).*** These cannot be byte-identical to anything the port reproduces: the oracle has no fixed behaviour for them -- libcob leaves them unimplemented, cobc rejects them as unknown user functions, the value is a compiler artifact with no interpreter analog (the compiled-binary path), or it is GMP's internal RNG substrate (the port reproduces libcob's algorithms, not GMP's internals, and does not link libgmp).
 
-| intrinsic | why it is not in GnuCOBOL 3.2 |
+| intrinsic | why it is a boundary |
 |---|---|
 | `BINOP` | not a user FUNCTION in GnuCOBOL 3.2: cobc rejects it as unknown (libcob-internal helper) |
 | `BOOLEAN-OF-INTEGER` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
@@ -120,9 +120,9 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `RANDOM` | GMP-RNG substrate boundary: the value is GMP's internal Mersenne-Twister stream (gmp_randseed_ui), not a libcob algorithm; the port does not reproduce GMP internals / link libgmp |
 | `STANDARD-COMPARE` | cobc rejects it at compile: "FUNCTION is not implemented" (no oracle output exists) |
 
-***Present in GnuCOBOL 3.2, not yet reproduced byte-for-byte here (1).*** These DO run under the oracle; each is bounded for a specific, stated reason -- a runtime helper not yet sealed, a front-end model not yet built (exception registers, pointer contents), or an output with no fixed or portable value (a compile-time stamp, the live wall clock, a host path). Each is a concrete future target, not a dead end.
+***Present in GnuCOBOL 3.2, but no fixed oracle value (1).*** Runs under the oracle, but the result is not deterministic, so there is no single byte string to match (it is not a dead end -- it would be admissible under an explicit pinned profile the live source does not honour).
 
-| intrinsic | why it is bounded today |
+| intrinsic | why there is no fixed value |
 |---|---|
 | `SECONDS-PAST-MIDNIGHT` | no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE) |
 
