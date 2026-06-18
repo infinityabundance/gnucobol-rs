@@ -457,7 +457,7 @@ fn build(root: &str) -> String {
             c,
             "PICTURE" | "USAGE" | "VALUE" | "OCCURS" | "REDEFINES" | "FILLER"
                 | "LEVEL 88 (condition-name)" | "LEVEL 77" | "INDEXED BY"
-                | "SIGN" | "JUSTIFIED" | "BLANK WHEN ZERO"
+                | "SIGN" | "JUSTIFIED" | "BLANK WHEN ZERO" | "GLOBAL" | "EXTERNAL"
         )
     };
     for c in &clauses {
@@ -470,7 +470,7 @@ fn build(root: &str) -> String {
     let fe_usage = |u: &str| {
         matches!(
             u,
-            "DISPLAY" | "COMP/BINARY" | "COMP-3/PACKED-DECIMAL" | "COMP-5" | "COMP-6" | "POINTER"
+            "DISPLAY" | "COMP/BINARY" | "COMP-3/PACKED-DECIMAL" | "COMP-5" | "COMP-6" | "POINTER" | "INDEX"
         )
     };
     for u in &usages {

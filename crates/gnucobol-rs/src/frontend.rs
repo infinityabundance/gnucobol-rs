@@ -598,12 +598,24 @@ fn is_pointer_usage(w: &str) -> bool {
     matches!(w, "POINTER" | "PROGRAM-POINTER" | "FUNCTION-POINTER")
 }
 
+/// A synthetic PIC for a USAGE form with no PIC that the front-end models with an equivalent display
+/// field: POINTER -> an opaque 8-byte item; INDEX -> a signed binary integer cobc DISPLAYs as `S9(9)`.
+fn synthetic_usage_pic(w: &str) -> Option<&'static str> {
+    if is_pointer_usage(w) {
+        Some("X(8)")
+    } else if w == "INDEX" {
+        Some("S9(9)")
+    } else {
+        None
+    }
+}
+
 /// A USAGE keyword the field model does not yet carry (fails closed rather than mis-modelling): the
-/// COMP-1/COMP-2 floats, USAGE INDEX, and NATIONAL (UTF-16).
+/// COMP-1/COMP-2 floats and NATIONAL (UTF-16).
 fn unsupported_usage_kw(w: &str) -> bool {
     matches!(
         w,
-        "COMP-1" | "COMPUTATIONAL-1" | "COMP-2" | "COMPUTATIONAL-2" | "INDEX" | "NATIONAL"
+        "COMP-1" | "COMPUTATIONAL-1" | "COMP-2" | "COMPUTATIONAL-2" | "NATIONAL"
     )
 }
 
@@ -1218,8 +1230,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut indexed: Vec<String> = Vec::new();
         // None = no USAGE stated here (inherit a group's, else DISPLAY); Some = stated on this item.
         let mut usage: Option<Usage> = None;
-        // an opaque machine pointer (USAGE POINTER): modelled as an 8-byte field below.
-        let mut pointer = false;
+        // a USAGE form with no PIC modelled via a synthetic PIC (POINTER -> X(8), INDEX -> S9(9)).
+        let mut synthetic: Option<&'static str> = None;
         // SIGN IS [LEADING|TRAILING] [SEPARATE]: (separate, leading).
         let mut sign: (bool, bool) = (false, false);
         // JUSTIFIED / BLANK WHEN ZERO -> extra attr flag bits.
@@ -1285,8 +1297,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                             usage = usage_from_kw(u);
                             k += 1;
                         }
-                        Some(Tok::Word(u)) if is_pointer_usage(u) => {
-                            pointer = true;
+                        Some(Tok::Word(u)) if synthetic_usage_pic(u).is_some() => {
+                            synthetic = synthetic_usage_pic(u);
                             k += 1;
                         }
                         Some(Tok::Word(u)) if unsupported_usage_kw(u) => {
@@ -1303,8 +1315,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     usage = usage_from_kw(w);
                     k += 1;
                 }
-                Some(Tok::Word(w)) if is_pointer_usage(w) => {
-                    pointer = true;
+                Some(Tok::Word(w)) if synthetic_usage_pic(w).is_some() => {
+                    synthetic = synthetic_usage_pic(w);
                     k += 1;
                 }
                 Some(Tok::Word(w)) if unsupported_usage_kw(w) => {
@@ -1353,8 +1365,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         // a USAGE POINTER item has no PIC -- model it as an opaque 8-byte field (the libcob pointer width).
         let pic = match pic {
             Some(p) => p,
-            None if pointer => "X(8)".to_string(),
-            None => String::new(),
+            None => synthetic.map(|s| s.to_string()).unwrap_or_default(),
         };
         items.push(ProgItem {
             level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed,

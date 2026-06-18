@@ -143,8 +143,8 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `SYNCHRONIZED` | no (runtime ready) |
 | `JUSTIFIED` | **yes** |
 | `BLANK WHEN ZERO` | **yes** |
-| `GLOBAL` | no (runtime ready) |
-| `EXTERNAL` | no (runtime ready) |
+| `GLOBAL` | **yes** |
+| `EXTERNAL` | **yes** |
 | `LEVEL 88 (condition-name)` | **yes** |
 | `LEVEL 66 (RENAMES)` | no (runtime ready) |
 | `LEVEL 77` | **yes** |
@@ -164,7 +164,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `COMP-5` | **yes** |
 | `COMP-6` | **yes** |
 | `POINTER` | **yes** |
-| `INDEX` | no (runtime ready) |
+| `INDEX` | **yes** |
 | `NATIONAL` | no (runtime ready) |
 
 ## Provenance + method
