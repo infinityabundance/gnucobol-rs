@@ -42,6 +42,22 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
 ];
 
+/// The intrinsic functions the front-end evaluates in `FUNCTION ...` references (DISPLAY / COMPUTE /
+/// MOVE / conditions), each dispatched to the ported `cob_intr_*` runtime and proven byte-identical to
+/// cobc. Names are the canonical hyphenated COBOL spellings; the COBOL-PARITY tracker parses this marker
+/// to count front-end intrinsic coverage. Keep in sync with `eval_intrinsic`.
+pub const WIRED_FUNCTIONS: &[&str] = &[
+    "LENGTH", "BYTE-LENGTH", "UPPER-CASE", "LOWER-CASE", "REVERSE", "TRIM", "NUMVAL", "NUMVAL-C",
+    "NUMVAL-F", "INTEGER", "INTEGER-PART", "FRACTION-PART", "ABS", "ABSOLUTE-VALUE", "FACTORIAL",
+    "SIGN", "ORD", "CHAR", "HEX-OF", "HEX-TO-CHAR", "BIT-OF", "BIT-TO-CHAR", "STORED-CHAR-LENGTH",
+    "MOD", "REM", "MAX", "MIN", "SUM", "MEAN", "MEDIAN", "RANGE", "MIDRANGE", "ORD-MAX", "ORD-MIN",
+    "VARIANCE", "STANDARD-DEVIATION", "ANNUITY", "PRESENT-VALUE", "CONCATENATE",
+    "SQRT", "EXP", "EXP10", "LOG", "LOG10", "SIN", "COS", "TAN", "ASIN", "ACOS", "ATAN", "PI", "E",
+    "INTEGER-OF-DATE", "INTEGER-OF-DAY", "DATE-OF-INTEGER", "DAY-OF-INTEGER", "TEST-DATE-YYYYMMDD",
+    "TEST-DAY-YYYYDDD", "TEST-NUMVAL", "TEST-NUMVAL-C", "TEST-NUMVAL-F", "LOWEST-ALGEBRAIC",
+    "HIGHEST-ALGEBRAIC",
+];
+
 /// Why a program could not be run (fail closed -- the front-end never guesses).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RunError {
@@ -2176,10 +2192,14 @@ fn resolve_int(w: &str, fields: &HashMap<String, Field>) -> Option<i64> {
 /// forms ("GREATER THAN OR EQUAL TO") and class/sign/88-level conditions are not in the subset.
 fn eval_cond(
     t: &[Tok],
-    fields: &HashMap<String, Field>,
+    fields: &mut HashMap<String, Field>,
     sw: &SwitchEnv,
     col: Option<&[u8; 256]>,
 ) -> Result<bool, RunError> {
+    // resolve any FUNCTION reference into a temp field, then evaluate through the ordinary operand paths.
+    let t = resolve_functions(t, fields)?;
+    let t = &t[..];
+    let fields = &*fields;
     let words: Vec<String> = t
         .iter()
         .map(|tok| match tok {
@@ -2778,9 +2798,11 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Resu
     if receivers.is_empty() {
         return Err(RunError::Unsupported("COMPUTE with no receiver".into()));
     }
+    // resolve any FUNCTION reference in the expression into a temp field (referenced by name below).
+    let expr = resolve_functions(&stmt[eq + 1..], fields)?;
     // tokenize the expression: split parentheses glued to operands; operators are space-separated.
     let mut etoks: Vec<String> = Vec::new();
-    for t in &stmt[eq + 1..] {
+    for t in &expr {
         match t {
             Tok::Word(w) => split_parens(w, &mut etoks),
             Tok::Str(_) => return Err(RunError::Unsupported("string in COMPUTE".into())),
@@ -2961,10 +2983,13 @@ fn parse_primary(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> R
 /// `DISPLAY op [op ...]` -- concatenate each operand's display bytes, then a newline.
 fn exec_display(
     stmt: &[Tok],
-    fields: &HashMap<String, Field>,
+    fields: &mut HashMap<String, Field>,
     out: &mut Vec<u8>,
     ctx: &Ctx,
 ) -> Result<(), RunError> {
+    // resolve any FUNCTION reference into a temp field, then display through the ordinary field paths.
+    let stmt = resolve_functions(stmt, fields)?;
+    let fields = &*fields;
     let mut operands: Vec<(Vec<u8>, FieldAttr)> = Vec::new();
     // `DISPLAY ... UPON PRINTER` (a built-in device mnemonic -- cobc accepts it even when SPECIAL-NAMES
     // does not declare it) is routed to the print redirect when active; UPON CONSOLE/SYSOUT and the
@@ -3030,6 +3055,9 @@ fn exec_move(
     fields: &mut HashMap<String, Field>,
     decimal_comma: bool,
 ) -> Result<(), RunError> {
+    // resolve a FUNCTION source into a temp field, then MOVE through the ordinary field paths.
+    let stmt = resolve_functions(stmt, fields)?;
+    let stmt = &stmt[..];
     // split at TO.
     let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="TO"))
         .ok_or_else(|| RunError::Unsupported("MOVE without TO".into()))?;
@@ -4297,6 +4325,281 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
         }
         Tok::Dot => Err(RunError::Unsupported("unexpected '.'".into())),
     }
+}
+
+/// The base-10 digits of `n` (most-significant first); `0` -> `[0]`.
+fn digits_of(mut n: u128) -> Vec<u8> {
+    if n == 0 {
+        return vec![0];
+    }
+    let mut d = Vec::new();
+    while n > 0 {
+        d.push((n % 10) as u8);
+        n /= 10;
+    }
+    d.reverse();
+    d
+}
+
+/// Dispatch a parsed `FUNCTION name(args)` to the ported `cob_intr_*` runtime, returning the result
+/// `(bytes, attr)`. Each helper's libcob-faithful result is reproduced exactly; `LENGTH`/`BYTE-LENGTH`
+/// reproduce cobc's *compile-time* constant fold (a minimal-width integer like `10`, not the 9-digit
+/// binary the runtime returns) because cobc never calls libcob for them. Names outside the wired subset
+/// fail closed.
+fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    use crate::intrinsic as ix;
+    let a0 = || {
+        args.first()
+            .ok_or_else(|| RunError::Unsupported(format!("FUNCTION {name}: missing argument")))
+    };
+    let pair = |i: usize, j: usize| -> Result<(&(Vec<u8>, FieldAttr), &(Vec<u8>, FieldAttr)), RunError> {
+        match (args.get(i), args.get(j)) {
+            (Some(x), Some(y)) => Ok((x, y)),
+            _ => Err(RunError::Unsupported(format!("FUNCTION {name}: needs two arguments"))),
+        }
+    };
+    let list = || -> Result<Vec<(&[u8], &FieldAttr)>, RunError> {
+        if args.is_empty() {
+            return Err(RunError::Unsupported(format!("FUNCTION {name}: needs at least one argument")));
+        }
+        Ok(args.iter().map(|(b, at)| (b.as_slice(), at)).collect())
+    };
+    let r = match name {
+        // cobc folds LENGTH/BYTE-LENGTH of a fixed item to an integer literal at compile time.
+        "LENGTH" | "BYTE-LENGTH" => {
+            let n = a0()?.0.len() as u128;
+            decimal_as_display(&Decimal { negative: false, digits: digits_of(n), scale: 0 })
+        }
+        "UPPER-CASE" => ix::cob_intr_upper_case(0, 0, &a0()?.0),
+        "LOWER-CASE" => ix::cob_intr_lower_case(0, 0, &a0()?.0),
+        "REVERSE" => ix::cob_intr_reverse(0, 0, &a0()?.0),
+        "TRIM" => {
+            let a = a0()?;
+            ix::cob_intr_trim(0, 0, &a.0, &a.1, 0)
+        }
+        "NUMVAL" => ix::cob_intr_numval(&a0()?.0),
+        "NUMVAL-C" => ix::cob_intr_numval_c(&a0()?.0),
+        "INTEGER" => {
+            let a = a0()?;
+            ix::cob_intr_integer(&a.0, &a.1)
+        }
+        "INTEGER-PART" => {
+            let a = a0()?;
+            ix::cob_intr_integer_part(&a.0, &a.1)
+        }
+        "FRACTION-PART" => {
+            let a = a0()?;
+            ix::cob_intr_fraction_part(&a.0, &a.1)
+        }
+        "ABS" | "ABSOLUTE-VALUE" => {
+            let a = a0()?;
+            ix::cob_intr_abs(&a.0, &a.1)
+        }
+        "FACTORIAL" => {
+            let a = a0()?;
+            ix::cob_intr_factorial(&a.0, &a.1)
+        }
+        "SIGN" => {
+            let a = a0()?;
+            ix::cob_intr_sign(&a.0, &a.1)
+        }
+        "ORD" => ix::cob_intr_ord(&a0()?.0),
+        "CHAR" => {
+            let a = a0()?;
+            ix::cob_intr_char(&a.0, &a.1)
+        }
+        "HEX-OF" => ix::cob_intr_hex_of(&a0()?.0),
+        "HEX-TO-CHAR" => ix::cob_intr_hex_to_char(&a0()?.0),
+        "MOD" => {
+            let (x, y) = pair(0, 1)?;
+            ix::cob_intr_mod(&x.0, &x.1, &y.0, &y.1)
+        }
+        "REM" => {
+            let (x, y) = pair(0, 1)?;
+            ix::cob_intr_rem(&x.0, &x.1, &y.0, &y.1)
+        }
+        "MAX" => ix::cob_intr_max(&list()?),
+        "MIN" => ix::cob_intr_min(&list()?),
+        "SUM" => ix::cob_intr_sum(&list()?),
+        "MEAN" => ix::cob_intr_mean(&list()?),
+        "MEDIAN" => ix::cob_intr_median(&list()?),
+        "RANGE" => ix::cob_intr_range(&list()?),
+        "MIDRANGE" => ix::cob_intr_midrange(&list()?),
+        "ORD-MAX" => ix::cob_intr_ord_max(&list()?),
+        "ORD-MIN" => ix::cob_intr_ord_min(&list()?),
+        // --- transcendental + roots (2048-bit Mpf) ---
+        "SQRT" => { let a = a0()?; ix::cob_intr_sqrt(&a.0, &a.1) }
+        "EXP" => { let a = a0()?; ix::cob_intr_exp(&a.0, &a.1) }
+        "EXP10" => { let a = a0()?; ix::cob_intr_exp10(&a.0, &a.1) }
+        "LOG" => { let a = a0()?; ix::cob_intr_log(&a.0, &a.1) }
+        "LOG10" => { let a = a0()?; ix::cob_intr_log10(&a.0, &a.1) }
+        "SIN" => { let a = a0()?; ix::cob_intr_sin(&a.0, &a.1) }
+        "COS" => { let a = a0()?; ix::cob_intr_cos(&a.0, &a.1) }
+        "TAN" => { let a = a0()?; ix::cob_intr_tan(&a.0, &a.1) }
+        "ASIN" => { let a = a0()?; ix::cob_intr_asin(&a.0, &a.1) }
+        "ACOS" => { let a = a0()?; ix::cob_intr_acos(&a.0, &a.1) }
+        "ATAN" => { let a = a0()?; ix::cob_intr_atan(&a.0, &a.1) }
+        "PI" => ix::cob_intr_pi(),
+        "E" => ix::cob_intr_e(),
+        // --- statistical + financial ---
+        "VARIANCE" => ix::cob_intr_variance(&list()?),
+        "STANDARD-DEVIATION" => ix::cob_intr_standard_deviation(&list()?),
+        "ANNUITY" => {
+            let (x, y) = pair(0, 1)?;
+            ix::cob_intr_annuity(&x.0, &x.1, &y.0, &y.1)
+        }
+        "PRESENT-VALUE" => {
+            let rate = a0()?;
+            let flows: Vec<(&[u8], &FieldAttr)> = args[1..].iter().map(|(b, at)| (b.as_slice(), at)).collect();
+            if flows.is_empty() {
+                return Err(RunError::Unsupported("FUNCTION PRESENT-VALUE: needs a rate and at least one flow".into()));
+            }
+            ix::cob_intr_present_value(&rate.0, &rate.1, &flows)
+        }
+        // --- date/time integer conversions (deterministic) ---
+        "INTEGER-OF-DATE" => { let a = a0()?; ix::cob_intr_integer_of_date(&a.0, &a.1) }
+        "INTEGER-OF-DAY" => { let a = a0()?; ix::cob_intr_integer_of_day(&a.0, &a.1) }
+        "DATE-OF-INTEGER" => { let a = a0()?; ix::cob_intr_date_of_integer(&a.0, &a.1) }
+        "DAY-OF-INTEGER" => { let a = a0()?; ix::cob_intr_day_of_integer(&a.0, &a.1) }
+        "TEST-DATE-YYYYMMDD" => { let a = a0()?; ix::cob_intr_test_date_yyyymmdd(&a.0, &a.1) }
+        "TEST-DAY-YYYYDDD" => { let a = a0()?; ix::cob_intr_test_day_yyyyddd(&a.0, &a.1) }
+        // --- NUMVAL validators + variants ---
+        "TEST-NUMVAL" => ix::cob_intr_test_numval(&a0()?.0),
+        "TEST-NUMVAL-C" => ix::cob_intr_test_numval_c(&a0()?.0, None),
+        "TEST-NUMVAL-F" => ix::cob_intr_test_numval_f(&a0()?.0),
+        "NUMVAL-F" => ix::cob_intr_numval_f(&a0()?.0, b'.'),
+        // --- bit/char + algebraic bounds + lengths ---
+        "BIT-OF" => ix::cob_intr_bit_of(&a0()?.0),
+        "BIT-TO-CHAR" => ix::cob_intr_bit_to_char(&a0()?.0),
+        "STORED-CHAR-LENGTH" => ix::cob_intr_stored_char_length(&a0()?.0),
+        "LOWEST-ALGEBRAIC" => { let a = a0()?; ix::cob_intr_lowest_algebraic(a.0.len(), &a.1) }
+        "HIGHEST-ALGEBRAIC" => { let a = a0()?; ix::cob_intr_highest_algebraic(a.0.len(), &a.1) }
+        "CONCATENATE" => {
+            let parts: Vec<&[u8]> = args.iter().map(|(b, _)| b.as_slice()).collect();
+            if parts.is_empty() {
+                return Err(RunError::Unsupported("FUNCTION CONCATENATE: needs at least one argument".into()));
+            }
+            ix::cob_intr_concatenate(0, 0, &parts)
+        }
+        other => {
+            return Err(RunError::Unsupported(format!(
+                "FUNCTION {other}: not in the wired front-end subset"
+            )))
+        }
+    };
+    Ok(r)
+}
+
+/// Evaluate the `FUNCTION name(args)` reference beginning at `toks[start]` (which is the `FUNCTION`
+/// keyword). The lexer glues parens into words (`MAX(A`, `C)`, `UPPER-CASE(X)`), so the call is
+/// reconstructed by tracking paren depth across tokens; string-literal arguments are carried through a
+/// `\u{1}N` placeholder. Returns the result `(bytes, attr)` and the index just past the call.
+fn eval_function_call(
+    toks: &[Tok],
+    start: usize,
+    fields: &HashMap<String, Field>,
+) -> Result<((Vec<u8>, FieldAttr), usize), RunError> {
+    let mut raw = String::new();
+    let mut strs: Vec<Vec<u8>> = Vec::new();
+    let mut k = start + 1;
+    let (mut depth, mut seen) = (0i32, false);
+    while k < toks.len() {
+        match &toks[k] {
+            Tok::Word(w) => {
+                raw.push(' ');
+                raw.push_str(w);
+                for c in w.bytes() {
+                    if c == b'(' {
+                        depth += 1;
+                        seen = true;
+                    } else if c == b')' {
+                        depth -= 1;
+                    }
+                }
+            }
+            Tok::Str(s) => {
+                raw.push(' ');
+                raw.push('\u{1}');
+                raw.push_str(&strs.len().to_string());
+                strs.push(s.clone());
+            }
+            Tok::Dot => break,
+        }
+        k += 1;
+        if seen && depth <= 0 {
+            break;
+        }
+        // a no-argument function (e.g. PI, E): the name token carries no '(' and the next token does
+        // not open one.
+        if !seen && !matches!(toks.get(k), Some(Tok::Word(w)) if w.starts_with('(')) {
+            break;
+        }
+    }
+    let raw = raw.trim();
+    let (name, arg_strs): (String, Vec<String>) = match raw.find('(') {
+        Some(o) => {
+            let close = raw.rfind(')').unwrap_or(raw.len());
+            let args = raw[o + 1..close]
+                .split([' ', ','])
+                .map(|s| s.trim_matches(|c| c == '(' || c == ')'))
+                .filter(|s| !s.is_empty())
+                .map(|s| s.to_string())
+                .collect();
+            (raw[..o].trim().to_ascii_uppercase(), args)
+        }
+        None => (raw.trim().to_ascii_uppercase(), Vec::new()),
+    };
+    let mut args: Vec<(Vec<u8>, FieldAttr)> = Vec::new();
+    for a in &arg_strs {
+        if let Some(idx) = a.strip_prefix('\u{1}') {
+            let i: usize = idx.parse().unwrap_or(0);
+            args.push((strs.get(i).cloned().unwrap_or_default(), alnum_attr()));
+        } else {
+            args.push(operand_value(&Tok::Word(a.clone()), fields)?);
+        }
+    }
+    Ok((eval_intrinsic(&name, &args)?, k))
+}
+
+/// Replace every `FUNCTION name(args)` reference in `toks` with a freshly-evaluated temporary field,
+/// returning the rewritten token stream. The temp is inserted into `fields` under a sentinel name no
+/// COBOL identifier can collide with, so every downstream path (operand_value / display_bytes /
+/// wide_op / move_into) resolves the function result through the ordinary field machinery -- which keeps
+/// binary, scaled and signed intrinsic results byte-faithful for free. The no-FUNCTION fast path avoids
+/// any allocation churn.
+fn resolve_functions(
+    toks: &[Tok],
+    fields: &mut HashMap<String, Field>,
+) -> Result<Vec<Tok>, RunError> {
+    if !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION"))) {
+        return Ok(toks.to_vec());
+    }
+    let mut out = Vec::new();
+    let mut i = 0;
+    let mut n = 0usize;
+    while i < toks.len() {
+        if matches!(&toks[i], Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION")) {
+            let ((bytes, attr), next) = eval_function_call(toks, i, fields)?;
+            // \u{2} prefix (not \u{1}, which eval_cond reserves for string-literal markers).
+            let name = format!("\u{2}FN{n}");
+            n += 1;
+            let storage = if attr.field_type >= 0x20 {
+                Storage::Alpha(attr)
+            } else {
+                Storage::Numeric(attr)
+            };
+            fields.insert(
+                name.clone(),
+                Field { storage, bytes, occurs: 0, redefines: None },
+            );
+            out.push(Tok::Word(name));
+            i = next;
+        } else {
+            out.push(toks[i].clone());
+            i += 1;
+        }
+    }
+    Ok(out)
 }
 
 /// Split a possibly-subscripted reference `NAME(sub)` into `(NAME, Some(sub))`; a bare `NAME` -> `(NAME,

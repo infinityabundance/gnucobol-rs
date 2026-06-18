@@ -172,6 +172,28 @@ fn wired_verbs(root: &str) -> Vec<String> {
     out
 }
 
+/// The front-end's wired intrinsic functions, parsed live from `src/frontend.rs`'s `WIRED_FUNCTIONS`.
+fn wired_functions(root: &str) -> Vec<String> {
+    let src = std::fs::read_to_string(Path::new(root).join("crates/gnucobol-rs/src/frontend.rs")).unwrap_or_default();
+    let mut out = Vec::new();
+    if let Some(start) = src.find("pub const WIRED_FUNCTIONS") {
+        let after_eq = src[start..].find('=').map(|e| start + e).unwrap_or(start);
+        if let Some(open) = src[after_eq..].find('[') {
+            let from = after_eq + open + 1;
+            if let Some(close) = src[from..].find(']') {
+                let body = &src[from..from + close];
+                for tok in body.split(',') {
+                    let t = tok.trim().trim_matches('"').trim();
+                    if !t.is_empty() {
+                        out.push(t.to_ascii_uppercase());
+                    }
+                }
+            }
+        }
+    }
+    out
+}
+
 /// Does our crate define an intrinsic (`cob_intr_<name>` or a clearly-named port) in src?
 fn intr_ported(root: &str, name: &str) -> bool {
     // every libcob/intrinsic.c function is ported (file is 100%); confirm the symbol is present.
@@ -209,6 +231,7 @@ fn build(root: &str) -> String {
         })
     };
     let wired = wired_verbs(root);
+    let wired_fn = wired_functions(root);
     let mut out = String::from(HEADER);
 
     // ---- summary first (computed below, but written after the tables via a placeholder pass) ----
@@ -232,6 +255,8 @@ fn build(root: &str) -> String {
         }
     }
     let intr_done = intr.iter().filter(|n| intr_ported(root, n.as_str().unwrap_or(""))).count();
+    let intr_name = |n: &Value| n.as_str().unwrap_or("").to_uppercase().replace('_', "-");
+    let intr_wired = intr.iter().filter(|n| wired_fn.contains(&intr_name(n))).count();
     let libcob_done = libcob.iter().filter(|f| ported.iter().any(|pf| pf == f.as_str().unwrap_or(""))).count();
 
     out.push_str("## Summary\n\n");
@@ -239,13 +264,14 @@ fn build(root: &str) -> String {
         "| surface | total | runtime ported (1:1) | front-end runs it |\n|---|---:|---:|---:|\n\
          | libcob runtime files | {lt} | **{ld} ({lp:.0}%)** | n/a |\n\
          | statements (verbs) | {st} | {sr} ({srp:.0}%) | **{sw} ({swp:.0}%)** |\n\
-         | intrinsic functions | {it} | **{idn} ({ip:.0}%)** | 0 (0%) |\n\
+         | intrinsic functions | {it} | **{idn} ({ip:.0}%)** | {iw} ({iwp:.0}%) |\n\
          | data-description clauses | {ct} | (runtime via move/layout) | see table |\n\
          | USAGE forms | {ut} | (runtime ported) | see table |\n\n",
         lt = libcob.len(), ld = libcob_done, lp = pct(libcob_done, libcob.len()),
         st = statements.len(), sr = st_runtime, srp = pct(st_runtime, statements.len()),
         sw = st_wired, swp = pct(st_wired, statements.len()),
         it = intr.len(), idn = intr_done, ip = pct(intr_done, intr.len()),
+        iw = intr_wired, iwp = pct(intr_wired, intr.len()),
         ct = clauses.len(), ut = usages.len(),
     ));
     out.push_str(
@@ -306,12 +332,17 @@ fn build(root: &str) -> String {
     out.push_str("\n## Intrinsic functions (`FUNCTION ...`, from `libcob/intrinsic.c`)\n\n");
     out.push_str(&format!(
         "All **{}** intrinsic functions are ported 1:1 in the runtime ({}/{} confirmed present as \
-         `cob_intr_*` in the port; `intrinsic.c` is 100% in the doxygen parity). The front-end does not \
-         yet evaluate `FUNCTION ...` references in expressions (0 wired) -- wiring them is cheap since \
-         the runtime is done. The full list:\n\n",
-        intr.len(), intr_done, intr.len(),
+         `cob_intr_*` in the port; `intrinsic.c` is 100% in the doxygen parity). The front-end now \
+         evaluates **{} ({:.0}%)** of them in `FUNCTION ...` references (DISPLAY / COMPUTE / MOVE / \
+         conditions), each proven byte-identical to cobc -- including cobc's compile-time constant fold \
+         for `LENGTH`/`BYTE-LENGTH` and the libcob-faithful display of binary, scaled and signed results. \
+         Wired functions are **bold**; the rest are runtime-ready and wire cheaply:\n\n",
+        intr.len(), intr_done, intr.len(), intr_wired, pct(intr_wired, intr.len()),
     ));
-    let names: Vec<String> = intr.iter().map(|n| n.as_str().unwrap_or("").to_uppercase().replace('_', "-")).collect();
+    let names: Vec<String> = intr.iter().map(|n| {
+        let nm = intr_name(n);
+        if wired_fn.contains(&nm) { format!("**{nm}**") } else { nm }
+    }).collect();
     out.push_str("> ");
     out.push_str(&names.join(", "));
     out.push_str("\n\n");
@@ -335,9 +366,10 @@ fn build(root: &str) -> String {
     out.push_str(&format!("{}\n\n", surface["provenance"].as_str().unwrap_or("")));
     out.push_str(
         "Regenerate with `cargo run -p xtask -- cobol-parity generate`. The status columns are computed \
-         live: runtime from `reports/doxygen-parity.json`, front-end from the `WIRED_STATEMENTS` marker \
-         in `src/frontend.rs`. As statements are wired into the front-end, regenerating updates this \
-         doc; the doc-refresh gate (`lab/check-docs.sh`) fails if it drifts.\n",
+         live: runtime from `reports/doxygen-parity.json`, front-end from the `WIRED_STATEMENTS` and \
+         `WIRED_FUNCTIONS` markers in `src/frontend.rs`. As statements and intrinsics are wired into the \
+         front-end, regenerating updates this doc; the doc-refresh gate (`lab/check-docs.sh`) fails if it \
+         drifts.\n",
     );
     out
 }
