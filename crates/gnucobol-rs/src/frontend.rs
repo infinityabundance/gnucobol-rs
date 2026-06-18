@@ -51,11 +51,14 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "NUMVAL-F", "INTEGER", "INTEGER-PART", "FRACTION-PART", "ABS", "ABSOLUTE-VALUE", "FACTORIAL",
     "SIGN", "ORD", "CHAR", "HEX-OF", "HEX-TO-CHAR", "BIT-OF", "BIT-TO-CHAR", "STORED-CHAR-LENGTH",
     "MOD", "REM", "MAX", "MIN", "SUM", "MEAN", "MEDIAN", "RANGE", "MIDRANGE", "ORD-MAX", "ORD-MIN",
-    "VARIANCE", "STANDARD-DEVIATION", "ANNUITY", "PRESENT-VALUE", "CONCATENATE",
+    "VARIANCE", "STANDARD-DEVIATION", "ANNUITY", "PRESENT-VALUE", "CONCATENATE", "SUBSTITUTE",
+    "SUBSTITUTE-CASE", "CURRENCY-SYMBOL",
     "SQRT", "EXP", "EXP10", "LOG", "LOG10", "SIN", "COS", "TAN", "ASIN", "ACOS", "ATAN", "PI", "E",
     "INTEGER-OF-DATE", "INTEGER-OF-DAY", "DATE-OF-INTEGER", "DAY-OF-INTEGER", "TEST-DATE-YYYYMMDD",
     "TEST-DAY-YYYYDDD", "TEST-NUMVAL", "TEST-NUMVAL-C", "TEST-NUMVAL-F", "LOWEST-ALGEBRAIC",
-    "HIGHEST-ALGEBRAIC",
+    "HIGHEST-ALGEBRAIC", "CURRENT-DATE", "COMBINED-DATETIME", "FORMATTED-DATE", "FORMATTED-TIME",
+    "FORMATTED-DATETIME", "INTEGER-OF-FORMATTED-DATE", "TEST-FORMATTED-DATETIME",
+    "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -4341,6 +4344,20 @@ fn digits_of(mut n: u128) -> Vec<u8> {
     d
 }
 
+/// The integer value of a [`Decimal`] (its fractional digits dropped), as `i64`.
+fn dec_to_i64(d: &Decimal) -> i64 {
+    let intlen = d.digits.len().saturating_sub(d.scale.max(0) as usize);
+    let mut v: i64 = 0;
+    for &dig in &d.digits[..intlen] {
+        v = v * 10 + dig as i64;
+    }
+    if d.negative {
+        -v
+    } else {
+        v
+    }
+}
+
 /// Dispatch a parsed `FUNCTION name(args)` to the ported `cob_intr_*` runtime, returning the result
 /// `(bytes, attr)`. Each helper's libcob-faithful result is reproduced exactly; `LENGTH`/`BYTE-LENGTH`
 /// reproduce cobc's *compile-time* constant fold (a minimal-width integer like `10`, not the 9-digit
@@ -4480,6 +4497,96 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
                 return Err(RunError::Unsupported("FUNCTION CONCATENATE: needs at least one argument".into()));
             }
             ix::cob_intr_concatenate(0, 0, &parts)
+        }
+        // --- SUBSTITUTE(subject, from1, to1, from2, to2, ...) ---
+        "SUBSTITUTE" | "SUBSTITUTE-CASE" => {
+            if args.len() < 3 || args.len() % 2 == 0 {
+                return Err(RunError::Unsupported(format!(
+                    "FUNCTION {name}: needs a subject and from/to pairs"
+                )));
+            }
+            let original = args[0].0.as_slice();
+            let pairs: Vec<(&[u8], &[u8])> = args[1..]
+                .chunks(2)
+                .map(|c| (c[0].0.as_slice(), c[1].0.as_slice()))
+                .collect();
+            if name == "SUBSTITUTE-CASE" {
+                ix::cob_intr_substitute_case(0, 0, original, &pairs)
+            } else {
+                ix::cob_intr_substitute(0, 0, original, &pairs)
+            }
+        }
+        // --- formatted date/time conversions (deterministic) ---
+        "FORMATTED-DATE" => {
+            let (fmt, d) = pair(0, 1)?;
+            ix::cob_intr_formatted_date(0, 0, &fmt.0, &d.0, &d.1)
+        }
+        "INTEGER-OF-FORMATTED-DATE" => {
+            let (fmt, d) = pair(0, 1)?;
+            ix::cob_intr_integer_of_formatted_date(&fmt.0, &d.0)
+        }
+        "TEST-FORMATTED-DATETIME" => {
+            let (fmt, dt) = pair(0, 1)?;
+            ix::cob_intr_test_formatted_datetime(&fmt.0, &dt.0)
+        }
+        "SECONDS-FROM-FORMATTED-TIME" => {
+            let (fmt, t) = pair(0, 1)?;
+            ix::cob_intr_seconds_from_formatted_time(&fmt.0, &t.0)
+        }
+        "COMBINED-DATETIME" => {
+            let (d, t) = pair(0, 1)?;
+            ix::cob_intr_combined_datetime(&d.0, &d.1, &t.0, &t.1)
+        }
+        "FORMATTED-TIME" => {
+            let (fmt, t) = pair(0, 1)?;
+            ix::cob_intr_formatted_time(0, 0, &fmt.0, &t.0, &t.1, None, false)
+        }
+        "FORMATTED-DATETIME" => {
+            let fmt = a0()?;
+            let (d, t) = pair(1, 2)?;
+            ix::cob_intr_formatted_datetime(0, 0, &fmt.0, &d.0, &d.1, &t.0, &t.1, None, false)
+        }
+        // CURRENCY-SYMBOL is the only locale separator GnuCOBOL 3.2 exposes as a user FUNCTION; the
+        // NUM-/MON- helpers exist in libcob but cobc rejects them as unknown functions, so they stay
+        // unwired (a program using them does not compile under the oracle -- nothing to match).
+        "CURRENCY-SYMBOL" => ix::cob_intr_currency_symbol(),
+        // CURRENT-DATE honours the pinned COB_CURRENT_DATE (same override cobc's libcob reads), so the
+        // result is oracle-deterministic; the live clock is a non-claim (fail closed without the pin).
+        "CURRENT-DATE" => {
+            let raw = std::env::var("COB_CURRENT_DATE").map_err(|_| {
+                RunError::Unsupported(
+                    "FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)".into(),
+                )
+            })?;
+            ix::cob_intr_current_date_cfg(0, 0, Some(raw.as_bytes()))
+        }
+        // FORMATTED-CURRENT-DATE routes through the same env-aware clock (cob_get_current_datetime reads
+        // COB_CURRENT_DATE), so it is oracle-deterministic under the pin.
+        "FORMATTED-CURRENT-DATE" => ix::cob_intr_formatted_current_date(0, 0, &a0()?.0),
+        // year-window conversions: the windowing pivot is the current year (taken from the pinned
+        // COB_CURRENT_DATE); the optional second argument is the max-year offset (default 50).
+        "YEAR-TO-YYYY" | "DATE-TO-YYYYMMDD" | "DAY-TO-YYYYDDD" => {
+            let cur_year = {
+                let raw = std::env::var("COB_CURRENT_DATE").map_err(|_| {
+                    RunError::Unsupported(format!("FUNCTION {name} requires a pinned COB_CURRENT_DATE"))
+                })?;
+                raw.get(0..4)
+                    .and_then(|s| s.parse::<i32>().ok())
+                    .ok_or_else(|| RunError::Unsupported(format!("FUNCTION {name}: COB_CURRENT_DATE has no year")))?
+            };
+            let arg_i32 = |i: usize| -> Result<i32, RunError> {
+                let a = args
+                    .get(i)
+                    .ok_or_else(|| RunError::Unsupported(format!("FUNCTION {name}: missing argument")))?;
+                Ok(dec_to_i64(&source_to_decimal(&a.0, &a.1)?) as i32)
+            };
+            let value = arg_i32(0)?;
+            let interval = if args.len() > 1 { arg_i32(1)? } else { 50 };
+            match name {
+                "YEAR-TO-YYYY" => ix::cob_intr_year_to_yyyy(value, interval, cur_year),
+                "DATE-TO-YYYYMMDD" => ix::cob_intr_date_to_yyyymmdd(value, interval, cur_year),
+                _ => ix::cob_intr_day_to_yyyyddd(value, interval, cur_year),
+            }
         }
         other => {
             return Err(RunError::Unsupported(format!(

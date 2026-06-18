@@ -1,0 +1,19 @@
+      *> SUBSTITUTE / SUBSTITUTE-CASE (subject + from/to pairs), the formatted-date conversions,
+      *> COMBINED-DATETIME and CURRENCY-SYMBOL -- each byte-identical to cobc.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P71.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 DI   PIC 9(7) VALUE 0150000.
+       PROCEDURE DIVISION.
+           DISPLAY "SUB=[" FUNCTION SUBSTITUTE("hello world" "o" "0" "l" "L") "]".
+           DISPLAY "SUBC=[" FUNCTION SUBSTITUTE-CASE("Hello" "h" "J") "]".
+           DISPLAY "FD=[" FUNCTION FORMATTED-DATE("YYYY-MM-DD" DI) "]".
+           DISPLAY "IOFD=[" FUNCTION INTEGER-OF-FORMATTED-DATE("YYYY-MM-DD" "2026-06-18") "]".
+           DISPLAY "TFD=[" FUNCTION TEST-FORMATTED-DATETIME("YYYY-MM-DD" "2026-06-18") "]".
+           DISPLAY "SFT=[" FUNCTION SECONDS-FROM-FORMATTED-TIME("hh:mm:ss" "01:02:03") "]".
+           DISPLAY "CDT=[" FUNCTION COMBINED-DATETIME(DI 3723) "]".
+           DISPLAY "FT=[" FUNCTION FORMATTED-TIME("hh:mm:ss" 3723) "]".
+           DISPLAY "FDT=[" FUNCTION FORMATTED-DATETIME("YYYY-MM-DDThh:mm:ss" DI 3723) "]".
+           DISPLAY "CUR=[" FUNCTION CURRENCY-SYMBOL "]".
+           STOP RUN.
