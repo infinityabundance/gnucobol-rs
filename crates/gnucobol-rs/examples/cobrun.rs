@@ -7,6 +7,12 @@
 use gnucobol_rs::dialect::Dialect;
 use std::io::Write;
 
+/// The GnuCOBOL version this front-end targets (the ported `libcob` version constants), e.g. `3.2.0`.
+fn target_version() -> String {
+    use gnucobol_rs::common::{LIBCOB_VERSION, LIBCOB_VERSION_MINOR, LIBCOB_VERSION_PATCHLEVEL};
+    format!("{LIBCOB_VERSION}.{LIBCOB_VERSION_MINOR}.{LIBCOB_VERSION_PATCHLEVEL}")
+}
+
 fn main() {
     // cobrun [-std=NAME] [-fixed|-free] <file.cob> -- dialect selector + source format (default free).
     let mut dialect = Dialect::DEFAULT;
@@ -19,6 +25,35 @@ fn main() {
             fixed = true;
         } else if arg == "-free" || arg == "--free" {
             fixed = false;
+        } else if arg == "-dumpversion" || arg == "--dumpversion" {
+            // the targeted GnuCOBOL version, byte-identical to `cobc -dumpversion` / `cobcrun -dumpversion`.
+            println!("{}", target_version());
+            return;
+        } else if arg == "-V" || arg == "--version" {
+            // Identify honestly as the gnucobol-rs port (NOT a masquerade of GnuCOBOL), reporting the
+            // GnuCOBOL version it reproduces, in the GnuCOBOL --version block format.
+            print!(
+                "cobrun (gnucobol-rs, reproducing GnuCOBOL) {ver}\n\
+                 A clean-room native-Rust reimplementation of the GnuCOBOL {ver} runtime + a COBOL\n\
+                 interpreter front-end, proven byte-identical to the admitted cobc oracle.\n\
+                 License LGPL-3.0-or-later. Not GnuCOBOL; not affiliated with the GNU project.\n",
+                ver = target_version(),
+            );
+            return;
+        } else if arg == "-h" || arg == "--help" {
+            print!(
+                "cobrun -- run a COBOL program on the native-Rust GnuCOBOL runtime (no cobc/libcob linked)\n\n\
+                 Usage: cobrun [options] <file.cob>\n\n\
+                 Options:\n  \
+                 -free | -fixed              source format (default: free)\n  \
+                 -std=<name>                 dialect (default | ibm | mvs | mf | cobol2014 | ...)\n  \
+                 -V, --version               version information and exit\n  \
+                 -dumpversion                the targeted GnuCOBOL version (e.g. {}) and exit\n  \
+                 -h, --help                  this help and exit\n\n\
+                 The program's RETURN-CODE becomes the process exit status.\n",
+                target_version(),
+            );
+            return;
         } else {
             path = Some(arg);
         }
