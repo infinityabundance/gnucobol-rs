@@ -139,7 +139,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `REDEFINES` | **yes** |
 | `RENAMES` | **yes** |
 | `SIGN` | **yes** |
-| `SYNCHRONIZED` | no (runtime ready) |
+| `SYNCHRONIZED` | **yes** |
 | `JUSTIFIED` | **yes** |
 | `BLANK WHEN ZERO` | **yes** |
 | `GLOBAL` | **yes** |

@@ -560,6 +560,9 @@ struct ProgItem {
     /// `66 name RENAMES start [THRU end]`: the `(start, end)` sibling range this item re-groups (an alias
     /// over their contiguous bytes). `None` for a normal item.
     renames: Option<(String, String)>,
+    /// `SYNCHRONIZED` / `SYNC` -- align a binary/float item to its natural boundary (slack inserted before
+    /// it in the group layout).
+    sync: bool,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1209,7 +1212,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 level: 66, name: rname, pic: String::new(), value: None, occurs: 1, redefines: None,
                 condition: None, indexed_by: Vec::new(), usage: None, sign: (false, false),
                 extra_flags: 0, float_kind: None, odo_counter: None,
-                renames: Some((start, end)),
+                renames: Some((start, end)), sync: false,
             });
             continue;
         }
@@ -1269,6 +1272,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 float_kind: None,
                 odo_counter: None,
                 renames: None,
+                sync: false,
             });
             continue;
         }
@@ -1310,6 +1314,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut float_kind: Option<u16> = None;
         // OCCURS ... DEPENDING ON counter.
         let mut odo_counter: Option<String> = None;
+        // SYNCHRONIZED alignment.
+        let mut sync = false;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1433,6 +1439,14 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         k += 1;
                     }
                 }
+                // `SYNCHRONIZED [LEFT|RIGHT]` / `SYNC` -- natural-boundary alignment.
+                Some(Tok::Word(w)) if w == "SYNCHRONIZED" || w == "SYNC" => {
+                    sync = true;
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "LEFT" || w == "RIGHT") {
+                        k += 1;
+                    }
+                }
                 // `BLANK [WHEN] ZERO` -- the field becomes spaces when its value is zero.
                 Some(Tok::Word(w)) if w == "BLANK" => {
                     extra_flags |= crate::attr::COB_FLAG_BLANK_ZERO;
@@ -1478,6 +1492,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             float_kind,
             odo_counter,
             renames: None,
+            sync,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1553,12 +1568,16 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     }
     // Second pass: group items (no PIC). A group's IMMEDIATE children are the items that follow it at the
     // first (smallest) level below it, up to the next item at <= its level; deeper items belong to a child.
+    // SYNCHRONIZED children get a synthetic slack FILLER inserted before them to reach their natural
+    // boundary (offset relative to the group start -- the flat-record case).
+    let mut slack_n = 0usize;
     for (i, it) in prog.ws.iter().enumerate() {
         if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() {
             continue;
         }
         let mut children = Vec::new();
         let mut child_level: Option<u16> = None;
+        let mut offset = 0usize;
         for sib in &prog.ws[i + 1..] {
             if sib.level <= it.level {
                 break;
@@ -1568,7 +1587,26 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             }
             let cl = *child_level.get_or_insert(sib.level);
             if sib.level == cl {
+                let csize = fields.get(&sib.name).map(|f| f.bytes.len()).unwrap_or(0);
+                if sib.sync {
+                    let align = fields.get(&sib.name).map(sync_align).unwrap_or(1);
+                    let rem = offset % align;
+                    if rem != 0 {
+                        let slack = align - rem;
+                        let sname = format!("\u{3}SYNC{slack_n}");
+                        slack_n += 1;
+                        fields.insert(sname.clone(), Field {
+                            storage: Storage::Alpha(alnum_attr()),
+                            bytes: vec![0u8; slack],
+                            occurs: 1,
+                            redefines: None,
+                        });
+                        children.push(sname);
+                        offset += slack;
+                    }
+                }
                 children.push(sib.name.clone());
+                offset += csize;
             }
         }
         fields.insert(it.name.clone(), Field {
@@ -1791,6 +1829,17 @@ thread_local! {
 /// The `(counter, elem-size)` of an `OCCURS DEPENDING ON` table, if `name` is one.
 fn odo_lookup(name: &str) -> Option<(String, usize)> {
     ODO_TABLES.with(|m| m.borrow().get(name).cloned())
+}
+
+/// The natural-boundary alignment (bytes) of a SYNCHRONIZED item: its size for a binary/float
+/// (COMP/COMP-5/COMP-X/COMP-1/COMP-2) field, capped at 8; 1 (no effect) for display/packed/alnum.
+fn sync_align(f: &Field) -> usize {
+    if let Storage::Numeric(a) = &f.storage {
+        if matches!(a.field_type, 0x11 | 0x1B | 0x13 | 0x14 | 0x15) {
+            return f.bytes.len().clamp(1, 8);
+        }
+    }
+    1
 }
 
 /// Whether `name` is variable-length: an `OCCURS DEPENDING ON` table itself, or a group whose subtree
