@@ -373,14 +373,14 @@ fn build(root: &str) -> String {
          evaluates **{} ({:.0}%)** of them in `FUNCTION ...` references (DISPLAY / COMPUTE / MOVE / \
          conditions), each proven byte-identical to cobc -- including cobc's compile-time constant fold \
          for `LENGTH`/`BYTE-LENGTH`, the libcob-faithful display of binary, scaled and signed results, \
-         the full-precision 2048-bit transcendentals, and the date functions under a pinned \
-         `COB_CURRENT_DATE`. Wired functions are **bold**. The unbold remainder is **not** an easy TODO -- \
-         it is the boundary: functions libcob itself leaves unimplemented (e.g. `DISPLAY-OF`, \
-         `NATIONAL-OF`, `BOOLEAN-OF-INTEGER`, `STANDARD-COMPARE`), ones tied to non-deterministic program \
-         or host state with no fixed oracle output (`MODULE-*`, `EXCEPTION-*`, `RANDOM`, `CONTENT-OF`, \
-         the live-clock `SECONDS-PAST-MIDNIGHT`, compile-stamp `WHEN-COMPILED`), locale-dependent ones \
-         (`LOCALE-*`), and libcob-internal helpers cobc does not expose as user functions \
-         (`NUM-DECIMAL-POINT`, `MON-THOUSANDS-SEP`, `BINOP`):\n\n",
+         the full-precision 2048-bit transcendentals, the date functions and `CURRENT-DATE` under a pinned \
+         `COB_CURRENT_DATE`, `MODULE-ID`/`MODULE-CALLER-ID` from the interpreter's program stack, the \
+         `LOCALE-*` conversions under the pinned locale, and the compile stamp \
+         (`WHEN-COMPILED`/`MODULE-DATE`/`MODULE-TIME`) via the interpreter's compile step under a pinned \
+         `SOURCE_DATE_EPOCH`. Wired functions are **bold**. The unbold remainder is **not** an easy TODO; \
+         each is classified with a specific reason in the boundary tables below -- split into those \
+         absent/inactive in GnuCOBOL 3.2 itself (no oracle behaviour) and those present-but-not-yet-\
+         reproduced (a concrete future target each).\n\n",
         intr.len(), intr_done, intr.len(), intr_wired, pct(intr_wired, intr.len()),
     ));
     let names: Vec<String> = intr.iter().map(|n| {
