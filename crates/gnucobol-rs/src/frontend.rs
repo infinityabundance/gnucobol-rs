@@ -552,6 +552,8 @@ struct ProgItem {
     /// Extra `FieldAttr` flag bits set by clauses: `COB_FLAG_JUSTIFIED` (`JUSTIFIED RIGHT`) and
     /// `COB_FLAG_BLANK_ZERO` (`BLANK WHEN ZERO`). OR-ed into the built field's attr.
     extra_flags: u16,
+    /// `USAGE COMP-1`/`COMP-2`: the IEEE float field type (`0x13`/`0x14`); `None` for a non-float item.
+    float_kind: Option<u16>,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -610,13 +612,34 @@ fn synthetic_usage_pic(w: &str) -> Option<&'static str> {
     }
 }
 
-/// A USAGE keyword the field model does not yet carry (fails closed rather than mis-modelling): the
-/// COMP-1/COMP-2 floats and NATIONAL (UTF-16).
+/// The IEEE field type for a `COMP-1` (32-bit float) / `COMP-2` (64-bit double) usage keyword.
+fn float_usage_kind(w: &str) -> Option<u16> {
+    match w {
+        "COMP-1" | "COMPUTATIONAL-1" => Some(crate::attr::COB_TYPE_NUMERIC_FLOAT),
+        "COMP-2" | "COMPUTATIONAL-2" => Some(crate::attr::COB_TYPE_NUMERIC_DOUBLE),
+        _ => None,
+    }
+}
+
+/// A USAGE keyword the field model does not yet carry (fails closed rather than mis-modelling): NATIONAL
+/// (UTF-16).
 fn unsupported_usage_kw(w: &str) -> bool {
-    matches!(
-        w,
-        "COMP-1" | "COMPUTATIONAL-1" | "COMP-2" | "COMPUTATIONAL-2" | "NATIONAL"
-    )
+    matches!(w, "NATIONAL")
+}
+
+/// Build a `COMP-1` (4-byte float) / `COMP-2` (8-byte double) field. The IEEE bytes drive display
+/// (`cob_display_common` reads the f32/f64 directly) and decimal<->float conversion (`cob_move`); a
+/// VALUE is encoded through the same path.
+fn make_float_field(kind: u16, value: Option<&Tok>) -> Result<Field, RunError> {
+    let size = if kind == crate::attr::COB_TYPE_NUMERIC_DOUBLE { 8 } else { 4 };
+    // digits/scale are unused by the float display path; a generous decimal width lets the float operand
+    // round-trip through the wide-decimal arithmetic intermediate (to_arith_operand).
+    let attr = FieldAttr { field_type: kind, digits: 18, scale: 9, flags: crate::attr::COB_FLAG_HAVE_SIGN };
+    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![0u8; size], occurs: 1, redefines: None };
+    if let Some(v) = value {
+        init_value(&mut f, v)?;
+    }
+    Ok(f)
 }
 
 /// The shared execution context: the program registry (for CALL resolution) + the dialect / SPECIAL-NAMES
@@ -1199,6 +1222,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 usage: None,
                 sign: (false, false),
                 extra_flags: 0,
+                float_kind: None,
             });
             continue;
         }
@@ -1236,6 +1260,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut sign: (bool, bool) = (false, false);
         // JUSTIFIED / BLANK WHEN ZERO -> extra attr flag bits.
         let mut extra_flags: u16 = 0;
+        // USAGE COMP-1/COMP-2 -> an IEEE float field type.
+        let mut float_kind: Option<u16> = None;
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1301,6 +1327,10 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                             synthetic = synthetic_usage_pic(u);
                             k += 1;
                         }
+                        Some(Tok::Word(u)) if float_usage_kind(u).is_some() => {
+                            float_kind = float_usage_kind(u);
+                            k += 1;
+                        }
                         Some(Tok::Word(u)) if unsupported_usage_kw(u) => {
                             return Err(RunError::Unsupported(format!("USAGE {u} is not in the front-end subset")));
                         }
@@ -1317,6 +1347,10 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 }
                 Some(Tok::Word(w)) if synthetic_usage_pic(w).is_some() => {
                     synthetic = synthetic_usage_pic(w);
+                    k += 1;
+                }
+                Some(Tok::Word(w)) if float_usage_kind(w).is_some() => {
+                    float_kind = float_usage_kind(w);
                     k += 1;
                 }
                 Some(Tok::Word(w)) if unsupported_usage_kw(w) => {
@@ -1372,6 +1406,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             usage,
             sign,
             extra_flags,
+            float_kind,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1411,11 +1446,15 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             );
             continue;
         }
-        // A group item (no PIC) is built after its leaves exist (second pass below).
-        if it.pic.is_empty() {
+        // A group item (no PIC) is built after its leaves exist (second pass below) -- but a COMP-1/COMP-2
+        // item also has no PIC yet is an elementary float leaf, so it must build here.
+        if it.pic.is_empty() && it.float_kind.is_none() {
             continue;
         }
-        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign, it.extra_flags)?;
+        let mut f = match it.float_kind {
+            Some(kind) => make_float_field(kind, it.value.as_ref())?,
+            None => make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign, it.extra_flags)?,
+        };
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
             // identically, per its VALUE or the dialect fill).
@@ -1439,7 +1478,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // Second pass: group items (no PIC). A group's IMMEDIATE children are the items that follow it at the
     // first (smallest) level below it, up to the next item at <= its level; deeper items belong to a child.
     for (i, it) in prog.ws.iter().enumerate() {
-        if it.level == 88 || !it.pic.is_empty() {
+        if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() {
             continue;
         }
         let mut children = Vec::new();
@@ -3274,8 +3313,11 @@ fn parse_term(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Resu
             "/" => {
                 *pos += 1;
                 let (b, battr) = parse_factor(t, pos, f)?;
+                // normalize binary/float operands to DISPLAY for cob_divide's decoder (handles DISPLAY+PACKED).
+                let (an, anattr) = to_arith_operand(&acc, &aattr)?;
+                let (bn, bnattr) = to_arith_operand(&b, &battr)?;
                 let wide = lit_num_attr(36, 18, true); // generous quotient scale; receiver store truncates.
-                acc = cob_divide(&acc, &aattr, &b, &battr, &wide, Round::Truncate)
+                acc = cob_divide(&an, &anattr, &bn, &bnattr, &wide, Round::Truncate)
                     .map_err(map_arith_err)?;
                 aattr = wide;
             }

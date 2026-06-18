@@ -158,8 +158,8 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `DISPLAY` | **yes** |
 | `COMP/BINARY` | **yes** |
 | `COMP-3/PACKED-DECIMAL` | **yes** |
-| `COMP-1 (float)` | no (runtime ready) |
-| `COMP-2 (double)` | no (runtime ready) |
+| `COMP-1 (float)` | **yes** |
+| `COMP-2 (double)` | **yes** |
 | `COMP-5` | **yes** |
 | `COMP-6` | **yes** |
 | `POINTER` | **yes** |

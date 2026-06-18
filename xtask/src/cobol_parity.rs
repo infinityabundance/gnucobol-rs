@@ -467,6 +467,7 @@ fn build(root: &str) -> String {
         matches!(
             u,
             "DISPLAY" | "COMP/BINARY" | "COMP-3/PACKED-DECIMAL" | "COMP-5" | "COMP-6" | "POINTER" | "INDEX"
+                | "COMP-1 (float)" | "COMP-2 (double)"
         )
     };
     for u in &usages {
