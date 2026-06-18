@@ -79,6 +79,19 @@ fn machine_values(root: &str) -> BTreeMap<String, String> {
     m.insert("casefile_count".into(), casefiles.to_string());
     m.insert("neg_count".into(), neg_count.to_string());
     m.insert("sealed_byte_court_count".into(), sealed_byte.to_string());
+    // live magnitude counts (so the README / crate READMEs never name a stale figure).
+    let count_in = |sub: &str, pred: &dyn Fn(&str) -> bool| -> usize {
+        std::fs::read_dir(Path::new(root).join(sub))
+            .map(|rd| rd.flatten().filter(|e| e.file_name().to_str().map(pred).unwrap_or(false)).count())
+            .unwrap_or(0)
+    };
+    let frontend_progs = count_in("lab/corpus/frontend", &|n| n.ends_with(".cob"));
+    let sweep_count = count_in("lab/oracle", &|n| n.contains("sweep") && n.ends_with(".sh"));
+    let dox = read_json(&Path::new(root).join("reports/doxygen-parity.json"));
+    let dox_files = dox["files"].as_array().map(|a| a.len()).or_else(|| dox.as_array().map(|a| a.len())).unwrap_or(0);
+    m.insert("frontend_program_count".into(), frontend_progs.to_string());
+    m.insert("sweep_count".into(), sweep_count.to_string());
+    m.insert("runtime_file_count".into(), dox_files.to_string());
     m.insert("publish_note".into(), "(The git repo is the authority; crates.io may trail by a version under publish rate limits.)".into());
     m.insert("sealed_courts_table".into(), court_table(root, &courts, "Sealed courts (generated from `reports/claim-ladder.json`)", true));
     m.insert("gnurust_courts_table".into(), court_table(root, &gnurust, "Sealed GnuCOBOL data/arithmetic courts", false));

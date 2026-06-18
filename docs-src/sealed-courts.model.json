@@ -1,0 +1,18 @@
+{
+ "schema": "trust4-doc-model-v1",
+ "document_id": "sealed-courts",
+ "generated_path": "docs/sealed-courts.md",
+ "title": "Sealed courts — the full ledger",
+ "machine_fields": [],
+ "body_template": "The complete, machine-generated ledger of every sealed court — **{{court_count}}** total ({{gnurust_court_count}} `GNURUST.*` + {{kobold_court_count}} `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.\n\n{{sealed_courts_table}}\n",
+ "legacy_preservation": {
+  "legacy_paths": [],
+  "legacy_sha256": [],
+  "information_superset": true,
+  "legacy_claims_carried_forward": [],
+  "legacy_non_claims_carried_forward": [],
+  "legacy_notes_carried_forward": [],
+  "legacy_unstructured_notes": [],
+  "missing_items": []
+ }
+}

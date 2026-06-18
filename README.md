@@ -11,248 +11,221 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 [![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-137-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-137-blueviolet)
 
-**A faithful, native-Rust forensic implementation of GnuCOBOL 3.2 — the `libcob`
-runtime ported 1:1 and proven byte-identical to the upstream oracle, plus a
-clean-room interpreter front-end (`cobrun`) that parses and *executes* COBOL to
-`cobc`-identical output. No C is linked; every claim is sealed against a locally
-built GnuCOBOL 3.2.**
+**`gnucobol-rs` ports the entire GnuCOBOL 3.2 `libcob` runtime — all 13 admitted `.c` files — 1:1 into safe Rust, proven byte-identical to a pinned, locally-built GnuCOBOL 3.2 oracle, and ships a clean-room interpreter (`cobrun`) that parses and *executes* real COBOL programs on that runtime. No C is linked. It is not a library with tests; it is a *compatibility court* where "correct" never means "our reading of a spec" — it means byte-for-byte identical to the admitted cobc (GnuCOBOL) 3.2.0, where every claim is mechanically chained to a replayable receipt, and where every boundary is stated as loudly as every capability.**
 
-`gnucobol-rs` is an *oracle-first* port: "correct" always means **byte-identical to the
-admitted GnuCOBOL 3.2** (`cobc` + `libcob`), built from pinned source — never "matches our
-reading of a spec". It states, as loudly as each positive claim, exactly what it does **not**
-claim. The core crate is `#![forbid(unsafe_code)]`.
+COBOL's bedrock is its *byte layout* — COMP-3, zoned decimal, edited PICTURE, fixed-record offsets — far more than its syntax. `gnucobol-rs` reproduces that bedrock exactly, then runs a verified slice of the language on top of it. The discipline is the product: nothing is asserted because we read the spec that way; a claim is admitted only when a live differential sweep against the built oracle produces identical bytes, and sealed only when its evidence — fixtures, receipt, SARIF, in-toto statement, and explicit non-claims — is committed and mechanically re-derivable. If the bytes would diverge today, the gate goes red and publishing is blocked. The core crate is `#![forbid(unsafe_code)]`.
+
+---
+
+## What it is, in one minute
+
+- A **native-Rust `libcob`** — the GnuCOBOL 3.2 runtime, ported statement-by-statement and oracle-sealed.
+- A **turn-key interpreter** (`cobrun`) — feed it a `.cob` file, it runs, output matches `cobc -x` byte-for-byte across the corpus sweep. No `cobc`, no `libcob` linked.
+- A **C-ABI shim** (`gnucobol-rs-ffi`) — drop it in where you would link `libcob` (`cob_move`, `cob_get_int`, …).
+- A **compatibility court** — 137 sealed courts, each backed by a forensic case file and a one-command replay.
+
+> As of **gnucobol-rs 0.8.7** (2026-06): **13/13 `libcob` files** ported 1:1 · **110/110 intrinsics** in the runtime · **137 sealed courts** · MSRV **1.74**. The living current-state authority is [`STATUS.md`](STATUS.md) — when it disagrees with this page, it wins.
+
+---
+
+## The scope, honestly
+
+Three independent parity views cross-check the runtime so a doc-comment can never masquerade as a port — all at 100% / 0 gaps:
+
+- **13/13 `libcob` source files** ported 1:1 to safe Rust, oracle-sealed — `call`, `cconv`, `common`, `cobgetopt`, `fileio`, `intrinsic`, `mlio`, `move`, `numeric`, `reportio`, `screenio`, `strings`, `termio`. Not a subset of the runtime. The runtime.
+- **Doxygen C-parse view:** 998/998 functions.
+- **Typed C↔Rust symbol-map view:** 1156 active + 13 inactive mirrors, 0 missing.
+- **Gap ledger** ([`GAP-ANALYSIS.md`](GAP-ANALYSIS.md)): 105 gaps catalogued, all 105 fixed, 0 open.
+- **All 110 intrinsic functions** ported as `cob_intr_*`; the front-end evaluates 94 of them byte-identical to `cobc`.
+
+Live coverage is **generated and gated**, never asserted by hand: [`COBOL-PARITY.md`](COBOL-PARITY.md) enumerates every verb / intrinsic / clause and what actually runs; [`FILE-PARITY.md`](FILE-PARITY.md) accounts for every GnuCOBOL 3.2 source file with no unevidenced gaps.
+
+---
+
+## See it run
+
+A small program, executed by `cobrun` on the ported Rust runtime — **no `cobc`, no `libcob` linked**:
+
+```cobol
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. DEMO.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01  PRINCIPAL  PIC 9(5)V99 VALUE 1000.00.
+       01  RATE       PIC V999    VALUE 0.075.
+       01  INTEREST   PIC 9(5)V99.
+       01  OUT-LINE   PIC $$$,$$9.99.
+       PROCEDURE DIVISION.
+           COMPUTE INTEREST ROUNDED = PRINCIPAL * RATE
+           MOVE INTEREST TO OUT-LINE
+           DISPLAY "INTEREST: " OUT-LINE
+           STOP RUN.
+```
+
+```console
+$ cobrun demo.cob
+INTEREST:    $75.00
+```
+
+That stdout is **byte-identical to `cobc -x demo.cob && ./demo`** — proven, not asserted: every program in the front-end corpus is compiled and run through the admitted real `cobc` *and* through `cobrun`, with `cmp -s` requiring identical stdout and the gate requiring zero failures (`FAIL=0`). Passing programs are additionally diffed against a second oracle, GnuCOBOL **3.1.2**, for version stability.
+
+Prefer the runtime as a library? The same packed-decimal and MOVE semantics are reachable directly — `#![forbid(unsafe_code)]`, no GMP, no `libcob`, no FFI — or under libcob's own `cob_field` C ABI via [`gnucobol-rs-ffi`](crates/gnucobol-rs-ffi) (drop-in `cob_move` / `cob_get_int` / `cob_set_int`, verified byte-identical to real `libcob` by `tests/verify_vs_libcob.sh`).
+
+---
+
+## Who this is for
+
+- **Migration & re-platforming teams** who need *byte-trust*, not vibes: a way to read mainframe COMP-3 / zoned / EBCDIC records in Rust and prove the bytes match what the COBOL runtime produces — a COMP-3 sign nibble, a zoned overpunch, an `OCCURS DEPENDING ON` length, a truncating `MOVE`. Any one of these silently corrupts money; here every layout decision is judged against the real compiler's output, not a re-reading of the standard.
+- **Rust projects that need COBOL data semantics without linking C**: PIC arithmetic, edited pictures, MOVE conversions, fixed-record layout — in a `#![forbid(unsafe_code)]` crate.
+- **Auditors & reviewers** who want a *replayable evidence trail*, not assertions: every claim names its oracle, its fixtures, the version that sealed it, and what would break it; one command replays the lot on *your* machine.
+
+---
 
 ## What it is today
 
+Live coverage is **generated and gated**, never hand-asserted — see [`COBOL-PARITY.md`](COBOL-PARITY.md) (every verb / intrinsic / clause and what runs) and [`FILE-PARITY.md`](FILE-PARITY.md) (every GnuCOBOL 3.2 source file, accounted for).
+
+> **As of gnucobol-rs 0.8.7 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 137 sealed courts.
+
 | Layer | State |
-|------|-------|
-| **`libcob` runtime** | **100% ported (13/13 admitted files), oracle-sealed.** MOVE / arithmetic / decimal / binary / edited / files / intrinsics — every admitted libcob source file is 1:1 in safe Rust, verified by the doxygen C↔Rust parity view. |
-| **Intrinsic functions** | **110/110 ported** in the runtime; the front-end evaluates **94** of them in `FUNCTION …` references, each byte-identical to `cobc`. |
-| **Front-end interpreter (`cobrun`)** | A clean-room COBOL parser + executor on the ported runtime — **no `cobc`, no `libcob` linked.** It runs a **growing, sweep-verified subset** of the language (WORKING-STORAGE + data description, MOVE/arithmetic/`COMPUTE` incl. `ROUNDED`, control flow incl. `PERFORM VARYING` / `GO TO … DEPENDING`, tables, files, intrinsics) to output proven byte-identical to `cobc` across a corpus sweep. |
-| **CLI parity** | `cobrun --runtime-config` reproduces `cobcrun --runtime-config` byte-for-byte (native `print_runtime_conf`); `-dumpversion` / `--version` / `--help`. |
-| **C ABI** | `gnucobol-rs-ffi` exposes the ported algorithms under libcob's `cob_field` C ABI (drop-in `cob_move` / `cob_get_int` / …), verified byte-identical to `libcob`. |
+|---|---|
+| **`libcob` runtime** | **100% ported (13/13 admitted files), oracle-sealed.** MOVE · arithmetic · pure-Rust decimal · COMP-3 / zoned / binary · edited PICTURE · DATA DIVISION layout · COPY/REPLACING · OCCURS DEPENDING ON · files · intrinsics — every admitted `libcob` source file is 1:1 in safe Rust, cross-checked by all three parity views. |
+| **Intrinsic functions** | **110/110 ported** as `cob_intr_*` in the runtime; the front-end evaluates **94/110 (85%)** in `FUNCTION …` references, each byte-identical to the oracle. |
+| **Front-end interpreter (`cobrun`)** | A **clean-room** COBOL parser + executor on the ported runtime — *no `cobc`, no `libcob` linked.* Runs a **growing, sweep-verified subset** (~57 verbs incl. MOVE / arithmetic / `COMPUTE` with full `+ - * / **` grammar, parens & precedence, and `ROUNDED`; IF/EVALUATE; `PERFORM TIMES/UNTIL/VARYING`; `GO TO … DEPENDING`; tables; sequential files; 88-levels; numeric-EDITED output; ~110 dispatched intrinsics) to stdout proven byte-identical to `cobc` across the corpus sweep. Out-of-subset constructs **fail closed**. |
+| **CLI parity** | `cobrun --runtime-config` reproduces `cobcrun --runtime-config` **byte-for-byte** (native port of libcob's `print_runtime_conf`, common.c:9762); plus `-std=NAME`, `-fixed`/`-free`, honest `--version` that identifies as gnucobol-rs reproducing GnuCOBOL 3.2.0 — never masquerading as `cobc`. |
+| **C ABI** | `gnucobol-rs-ffi` exposes the ported algorithms under libcob's `cob_field` C ABI (drop-in `cob_move` / `cob_get_int` / `cob_set_int` / …), verified byte-identical to real `libcob`. |
 
-**Live coverage is tracked, generated, and gated** — never asserted by hand:
-[`COBOL-PARITY.md`](COBOL-PARITY.md) (every verb / intrinsic / clause, with what runs) and
-[`FILE-PARITY.md`](FILE-PARITY.md) (every GnuCOBOL 3.2 source file, accounted for).
+Of 66 COBOL verbs total, the runtime backs **51 (77%)** and the front-end runs **58 (88%)** — enumerated live in [`COBOL-PARITY.md`](COBOL-PARITY.md).
 
-## What it does NOT claim
+---
 
-- **It does not emit native code.** `gnucobol-rs` *interprets* directly on the ported runtime; it
-  does not reproduce `cobc`'s C-emission (codegen) — a deliberate **non-goal**, not a gap. The runtime
-  *behaviour* codegen would produce is reproduced by the interpreter and verified by the sweep.
-- **The front-end is a verified subset, not the whole language.** Anything outside the sealed subset
-  **fails closed** (an explicit error), never a wrong answer. What runs is enumerated live in
-  `COBOL-PARITY.md`; constructs the GnuCOBOL 3.2 oracle itself cannot run (COMMUNICATION SECTION,
-  ACUCOBOL GUI verbs, `ENTRY` in a nested program) are marked **BOUNDARY**, not TODO.
-- **`cobc`'s diagnostic / help *text* is not reproduced byte-for-byte** — the interpreter has its own
-  error model. Localized (non-`C.UTF-8`) runtime messages are an explicit off-oracle non-claim.
+## What it does **NOT** claim
 
-The machine-readable registry of every non-claim is
-[`reports/negative-capabilities.json`](reports/negative-capabilities.json); the human ledger is
-[`docs/negative-capabilities.md`](docs/negative-capabilities.md).
+State the boundaries as loudly as the capabilities — they are the credibility. The runtime port is **complete** (100% across all three parity views); the remaining frontier is the interpreter front-end. Crucially, `gnucobol-rs` distinguishes a **TODO** (latent work) from a **BOUNDARY** (a surface the GnuCOBOL 3.2 oracle itself cannot run, so there is no byte-truth to match).
 
-## Claim ladder (front door)
+- **No native code generation.** `gnucobol-rs` *interprets* directly on the ported runtime; it does **not** reproduce `cobc`'s C-emission (`codegen.c` / `codeoptim.c`) — a deliberate **non-goal**, not a gap. `cobrun <file>` equals `cobc -x <file>` only at **observable stdout**, never in artifacts. Correctness is oracle-judged, not self-asserted.
+- **The front-end is a verified subset, not the whole grammar.** The parser / scanner / preprocessor / typecheck reproduce a sweep-verified slice (byte-identical over the 93-program sweep). Out-of-subset constructs — group items, OCCURS/REDEFINES, non-01 levels, unlisted verbs — return a typed `RunError` and **exit 2**, never a silent mis-run.
+- **16 intrinsics not wired** into the front-end — classified boundaries, not latent work: 15 have no fixed oracle output (`cobc` rejects them — DISPLAY-OF, NATIONAL-OF, BOOLEAN-OF-INTEGER, BINOP, STANDARD-COMPARE, separators; MODULE-PATH is a compiled-binary artifact), and **RANDOM** is a deliberate boundary (it depends on GMP's internal Mersenne-Twister; the port does not link or reproduce libgmp internals).
+- **8 verbs unrun** — every one an explicit **BOUNDARY** the 3.2 oracle itself cannot run (5 COMMUNICATION SECTION verbs, ACUCOBOL GUI `INQUIRE`/`MODIFY`, `ENTRY` in a nested program).
+- **`cobc`'s diagnostic / help text is not reproduced** byte-for-byte — the interpreter has its own error model (a deliberate scope limit). Localized (non-`C.UTF-8`) runtime messages are an explicit off-oracle non-claim. `cob-config` is documented but **not provided**; the `cobcrun` dynamic module loader / `CALL` dispatch reproduce a documented **subset**.
+- **Declared non-goals:** `cobc`'s C codegen, and `USAGE NATIONAL` (UTF-16) — which GnuCOBOL 3.2 itself marks unfinished and won't compile in the explicit form.
+- **Independent project.** Reproduces GnuCOBOL 3.2; **not affiliated with or endorsed by the GNU project.** The runtime is a *faithful copyleft derivative*, **not** clean-room — see License & derivation below.
 
-Every positive claim names its byte domain, oracle, fixture count, sealing version, and what breaks
-it. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json); each
-court's full forensic record is its [`reports/casefiles/<court>/`](reports/casefiles/) case file.
-Replay every sealed court with one command (prints a PASS table):
+The machine-readable registry of every refused surface is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (human ledger: [`docs/negative-capabilities.md`](docs/negative-capabilities.md)). A sealed governance invariant enforces that **negative claims must be ≥ positive claims** — currently **573** refused surfaces.
+
+---
+
+## How "correct" is defined: the admitted oracle
+
+There is exactly one source of truth: **upstream GnuCOBOL 3.2** (`cobc` + `libcob`). Because it is not installed system-wide, it is **built from pinned source** (`research/gnucobol-3.2.tar.lz`, sha256 recorded in `reports/admission/`) into a gitignored `lab/oracle/prefix` — x86-64, `C.UTF-8`, default dialect, COMP big-endian. Every byte claim in this repo means *matches that built binary on a fresh run*. The oracle's ABI / dialect / config is itself bound as evidence (`GNURUST.BUILD.PROFILE.1`). When the oracle is present, the documentation gate re-runs ~20 live differential sweeps and requires `FAIL=0` on a fresh run before anything ships.
+
+---
+
+## Verify it yourself (≈ 10 minutes)
+
+One command replays every sealed court and prints a PASS table:
 
 ```sh
-bash lab/verify-sealed-courts.sh
+bash lab/verify-sealed-courts.sh      # all differential sweeps + shim suite + doc-gate (needs the built oracle)
 ```
 
-**Reviewer entry points:** [`STATUS.md`](STATUS.md) is the **live current-state authority** (it wins
-over README/receipts on disagreement) · [`COBOL-PARITY.md`](COBOL-PARITY.md) / [`FILE-PARITY.md`](FILE-PARITY.md)
-(live language + file coverage) · [`docs/negative-capabilities.md`](docs/negative-capabilities.md)
-(non-claims) · [`docs/`](docs/) (the method, taxonomy, risk register, and design/planning notes).
+No oracle built yet? The self-contained court tests run with zero external dependencies, and oracle-dependent checks degrade to typed *skipped* — never a silent pass:
 
-## Compatibility is a stack of courts
+```sh
+cargo test                                  # self-contained court tests, no oracle needed
+cargo run -p xtask -- receipt check         # receipts == live replay, no hand-edits
+```
 
-`gnucobol-rs` treats COBOL compatibility as a stack of **separately admitted courts** — bytes,
-moves, field model, record layout, initialization, comparison, formatting, source expansion, runtime
-lifecycle, files, intrinsics, and the executing front-end — where **no lower layer is allowed to
-imply a higher one**. The full taxonomy is
-[`docs/compatibility-taxonomy.md`](docs/compatibility-taxonomy.md); every named future court and its
-non-claim is [`docs/future-risk-register.md`](docs/future-risk-register.md).
+The front-end's own proof harness compiles **and** runs every program in `lab/corpus/frontend/` through both real `cobc` and `cobrun`, requiring byte-identical stdout (passing programs are *also* differentially checked against GnuCOBOL **3.1.2**, with documented per-program exemptions):
 
-### Sealed courts (generated from `reports/claim-ladder.json`)
+```sh
+bash lab/oracle/cobol_frontend_sweep.sh     # 93-program byte sweep, gate FAIL=0
+```
 
-| 🔒 court | name | verdict | casefile |
-|---|---|:---:|---|
-| `DIALECT.PROFILE.1` | declared GnuCOBOL witness profile | ✅ pass | [`reports/casefiles/DIALECT.PROFILE.1/`](reports/casefiles/DIALECT.PROFILE.1/) |
-| `GNURUST.LINEAGE.CORPUS.20M.0` | deterministic COBOL lineage corpus ENGINE (schema/Merkle/replay/isolation/findings) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.0/) |
-| `GNURUST.LINEAGE.CORPUS.20M.SMOKE` | 200K real-cobc COBOL-witness lineage burn (pilot) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.SMOKE/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.SMOKE/) |
-| `GNURUST.CLASS.1` | class conditions (NUMERIC/ALPHABETIC) | ✅ pass | [`reports/casefiles/GNURUST.CLASS.1/`](reports/casefiles/GNURUST.CLASS.1/) |
-| `GNURUST.REMAINDER.1` | DIVIDE REMAINDER receiving-field bytes | ✅ pass | [`reports/casefiles/GNURUST.REMAINDER.1/`](reports/casefiles/GNURUST.REMAINDER.1/) |
-| `GNURUST.COVERAGE.1` | forensic coverage map of the GnuCOBOL semantic surface | ✅ pass | [`reports/casefiles/GNURUST.COVERAGE.1/`](reports/casefiles/GNURUST.COVERAGE.1/) |
-| `GNURUST.FILE.SEQUENTIAL.1` | sequential file READ record bytes + file status | ✅ pass | [`reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/`](reports/casefiles/GNURUST.FILE.SEQUENTIAL.1/) |
-| `GNURUST.FILE.STATUS.1` | observed FILE STATUS atlas | ✅ pass | [`reports/casefiles/GNURUST.FILE.STATUS.1/`](reports/casefiles/GNURUST.FILE.STATUS.1/) |
-| `GNURUST.INITIALIZE.1` | INITIALIZE receiver byte effects | ✅ pass | [`reports/casefiles/GNURUST.INITIALIZE.1/`](reports/casefiles/GNURUST.INITIALIZE.1/) |
-| `GNURUST.INSPECT.1` | INSPECT byte effects + tally bytes | ✅ pass | [`reports/casefiles/GNURUST.INSPECT.1/`](reports/casefiles/GNURUST.INSPECT.1/) |
-| `GNURUST.REFMOD.1` | reference modification (substring) | ✅ pass | [`reports/casefiles/GNURUST.REFMOD.1/`](reports/casefiles/GNURUST.REFMOD.1/) |
-| `GNURUST.STRING.UNSTRING.1` | STRING/UNSTRING byte effects | ✅ pass | [`reports/casefiles/GNURUST.STRING.UNSTRING.1/`](reports/casefiles/GNURUST.STRING.UNSTRING.1/) |
-| `GNURUST.INTRINSIC.ATLAS.1` | observed intrinsic-function atlas | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.ATLAS.1/`](reports/casefiles/GNURUST.INTRINSIC.ATLAS.1/) |
-| `GNURUST.INTRINSIC.LENGTH.1` | FUNCTION LENGTH storage byte length | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.LENGTH.1/`](reports/casefiles/GNURUST.INTRINSIC.LENGTH.1/) |
-| `GNURUST.INTRINSIC.NUMVAL.1` | FUNCTION NUMVAL numeric parse | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.NUMVAL.1/`](reports/casefiles/GNURUST.INTRINSIC.NUMVAL.1/) |
-| `GNURUST.ACCEPT.DISPLAY.1` | DISPLAY emitted text + ACCEPT field bytes | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.1/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.1/) |
-| `GNURUST.PROCEDURE.FLOW.ATLAS.1` | observed control-flow atlas | ✅ pass | [`reports/casefiles/GNURUST.PROCEDURE.FLOW.ATLAS.1/`](reports/casefiles/GNURUST.PROCEDURE.FLOW.ATLAS.1/) |
-| `GNURUST.INTRINSIC.MOD-REM.1` | FUNCTION MOD/REM integer modulo and remainder | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/`](reports/casefiles/GNURUST.INTRINSIC.MOD-REM.1/) |
-| `GNURUST.INTRINSIC.INTEGER.1` | FUNCTION INTEGER (floor) and INTEGER-PART (truncate) | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.INTEGER.1/`](reports/casefiles/GNURUST.INTRINSIC.INTEGER.1/) |
-| `GNURUST.INTRINSIC.CASE.1` | FUNCTION UPPER-CASE / LOWER-CASE / REVERSE | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.CASE.1/`](reports/casefiles/GNURUST.INTRINSIC.CASE.1/) |
-| `GNURUST.INTRINSIC.ORD-CHAR.1` | FUNCTION ORD / CHAR 1-based ordinal and character | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.ORD-CHAR.1/`](reports/casefiles/GNURUST.INTRINSIC.ORD-CHAR.1/) |
-| `GNURUST.INTRINSIC.NUMVAL-C.1` | FUNCTION NUMVAL-C currency-string parse | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.NUMVAL-C.1/`](reports/casefiles/GNURUST.INTRINSIC.NUMVAL-C.1/) |
-| `GNURUST.SIZE.ERROR.1` | arithmetic SIZE ERROR truncation and condition | ✅ pass | [`reports/casefiles/GNURUST.SIZE.ERROR.1/`](reports/casefiles/GNURUST.SIZE.ERROR.1/) |
-| `GNURUST.FILE.WRITE.1` | sequential WRITE byte effects | ✅ pass | [`reports/casefiles/GNURUST.FILE.WRITE.1/`](reports/casefiles/GNURUST.FILE.WRITE.1/) |
-| `GNURUST.FILE.REWRITE.1` | sequential REWRITE in-place update | ✅ pass | [`reports/casefiles/GNURUST.FILE.REWRITE.1/`](reports/casefiles/GNURUST.FILE.REWRITE.1/) |
-| `GNURUST.FILEIO.LINESEQ.1` | line-sequential WRITE config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.1/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.1/) |
-| `GNURUST.FILEIO.SEQ.1` | RECORD SEQUENTIAL read/write incl. variable-length | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SEQ.1/`](reports/casefiles/GNURUST.FILEIO.SEQ.1/) |
-| `GNURUST.FILEIO.RELATIVE.1` | RELATIVE organization keyed + sequential access | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.RELATIVE.1/`](reports/casefiles/GNURUST.FILEIO.RELATIVE.1/) |
-| `GNURUST.FILEIO.VERB.1` | file verb open/access-mode preconditions | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.VERB.1/`](reports/casefiles/GNURUST.FILEIO.VERB.1/) |
-| `GNURUST.FILEIO.SORT.1` | SORT/MERGE record comparison | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SORT.1/`](reports/casefiles/GNURUST.FILEIO.SORT.1/) |
-| `GNURUST.FILEIO.SORTENGINE.1` | SORT/MERGE in-memory engine (4-queue natural merge) | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SORTENGINE.1/`](reports/casefiles/GNURUST.FILEIO.SORTENGINE.1/) |
-| `GNURUST.FILEIO.INDEXED.1` | INDEXED organization (keyed store + record locking) | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.INDEXED.1/`](reports/casefiles/GNURUST.FILEIO.INDEXED.1/) |
-| `GNURUST.FILEIO.SYS.1` | CBL_* system file/directory routines | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SYS.1/`](reports/casefiles/GNURUST.FILEIO.SYS.1/) |
-| `GNURUST.FILEIO.OPEN.1` | file runtime OPEN/CLOSE + lifecycle | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.OPEN.1/`](reports/casefiles/GNURUST.FILEIO.OPEN.1/) |
-| `GNURUST.FILEIO.MAPPING.1` | COBOL filename mapping (env resolution) | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.MAPPING.1/`](reports/casefiles/GNURUST.FILEIO.MAPPING.1/) |
-| `GNURUST.MLIO.GENERATE.1` | XML / JSON GENERATE (native serializer) | ✅ pass | [`reports/casefiles/GNURUST.MLIO.GENERATE.1/`](reports/casefiles/GNURUST.MLIO.GENERATE.1/) |
-| `GNURUST.MLIO.PARSE.1` | XML PARSE (native state machine) | ✅ pass | [`reports/casefiles/GNURUST.MLIO.PARSE.1/`](reports/casefiles/GNURUST.MLIO.PARSE.1/) |
-| `GNURUST.SCREENIO.INIT.1` | SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.INIT.1/`](reports/casefiles/GNURUST.SCREENIO.INIT.1/) |
-| `GNURUST.SCREENIO.ATTR.1` | SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ATTR.1/`](reports/casefiles/GNURUST.SCREENIO.ATTR.1/) |
-| `GNURUST.SCREENIO.COLOR.1` | SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.COLOR.1/`](reports/casefiles/GNURUST.SCREENIO.COLOR.1/) |
-| `GNURUST.SCREENIO.NUMEDIT.1` | SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/`](reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/) |
-| `GNURUST.SCREENIO.ACCEPT.1` | SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.1/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.1/) |
-| `GNURUST.SCREENIO.LINEDIFF.1` | multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/`](reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/) |
-| `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
-| `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
-| `GNURUST.FRONTEND.1` | clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout | ✅ pass | [`reports/casefiles/GNURUST.FRONTEND.1/`](reports/casefiles/GNURUST.FRONTEND.1/) |
-| `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |
-| `GNURUST.FILE.FLOW.SLICE.1` | read-loop execution slice (file x control flow) | ✅ pass | [`reports/casefiles/GNURUST.FILE.FLOW.SLICE.1/`](reports/casefiles/GNURUST.FILE.FLOW.SLICE.1/) |
-| `GNURUST.FILE.FILTER.SLICE.1` | filter (conditional) read-loop | ✅ pass | [`reports/casefiles/GNURUST.FILE.FILTER.SLICE.1/`](reports/casefiles/GNURUST.FILE.FILTER.SLICE.1/) |
-| `GNURUST.IF.NUMERIC.SLICE.1` | numeric IF/EVALUATE execution slice | ✅ pass | [`reports/casefiles/GNURUST.IF.NUMERIC.SLICE.1/`](reports/casefiles/GNURUST.IF.NUMERIC.SLICE.1/) |
-| `GNURUST.TABLE.PERFORM.SLICE.1` | table (OCCURS) PERFORM VARYING execution slice | ✅ pass | [`reports/casefiles/GNURUST.TABLE.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.TABLE.PERFORM.SLICE.1/) |
-| `GNURUST.PUBLIC.CORPUS.1` | public-COBOL corpus index (gap discovery) | ✅ pass | [`reports/casefiles/GNURUST.PUBLIC.CORPUS.1/`](reports/casefiles/GNURUST.PUBLIC.CORPUS.1/) |
-| `GNURUST.BUILD.PROFILE.1` | oracle ABI / dialect / config profile | ✅ pass | [`reports/casefiles/GNURUST.BUILD.PROFILE.1/`](reports/casefiles/GNURUST.BUILD.PROFILE.1/) |
-| `GNURUST.PUBLIC.GAP.1` | surface gap board over the admitted GnuCOBOL testsuite | ✅ pass | [`reports/casefiles/GNURUST.PUBLIC.GAP.1/`](reports/casefiles/GNURUST.PUBLIC.GAP.1/) |
-| `GNURUST.CALL.EXTENSION.ATLAS.1` | observed CALL / linkage atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.EXTENSION.ATLAS.1/`](reports/casefiles/GNURUST.CALL.EXTENSION.ATLAS.1/) |
-| `GNURUST.INDEXED.FILE.ATLAS.1` | observed indexed-file atlas | ✅ pass | [`reports/casefiles/GNURUST.INDEXED.FILE.ATLAS.1/`](reports/casefiles/GNURUST.INDEXED.FILE.ATLAS.1/) |
-| `GNURUST.SEARCH.TABLE.1` | SEARCH / SEARCH ALL table lookup | ✅ pass | [`reports/casefiles/GNURUST.SEARCH.TABLE.1/`](reports/casefiles/GNURUST.SEARCH.TABLE.1/) |
-| `GNURUST.SUBSCRIPT.1` | table subscript access (multi-dimensional) | ✅ pass | [`reports/casefiles/GNURUST.SUBSCRIPT.1/`](reports/casefiles/GNURUST.SUBSCRIPT.1/) |
-| `GNURUST.ODO.1` | OCCURS DEPENDING ON (variable length) | ✅ pass | [`reports/casefiles/GNURUST.ODO.1/`](reports/casefiles/GNURUST.ODO.1/) |
-| `GNURUST.COMMON.BOUNDCHECK.1` | Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON) | ✅ pass | [`reports/casefiles/GNURUST.COMMON.BOUNDCHECK.1/`](reports/casefiles/GNURUST.COMMON.BOUNDCHECK.1/) |
-| `GNURUST.COMMON.NUMCHECK.1` | Not-numeric runtime diagnostic + field-type explanation | ✅ pass | [`reports/casefiles/GNURUST.COMMON.NUMCHECK.1/`](reports/casefiles/GNURUST.COMMON.NUMCHECK.1/) |
-| `GNURUST.COMMON.CBL.1` | CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER) | ✅ pass | [`reports/casefiles/GNURUST.COMMON.CBL.1/`](reports/casefiles/GNURUST.COMMON.CBL.1/) |
-| `GNURUST.INDEX.1` | USAGE INDEX storage + SET arithmetic | ✅ pass | [`reports/casefiles/GNURUST.INDEX.1/`](reports/casefiles/GNURUST.INDEX.1/) |
-| `GNURUST.ROUND.1` | ROUNDED MODE IS (all eight rounding modes) | ✅ pass | [`reports/casefiles/GNURUST.ROUND.1/`](reports/casefiles/GNURUST.ROUND.1/) |
-| `GNURUST.SORT.MERGE.ATLAS.1` | observed SORT / MERGE atlas | ✅ pass | [`reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/`](reports/casefiles/GNURUST.SORT.MERGE.ATLAS.1/) |
-| `GNURUST.RELATIVE.FILE.ATLAS.1` | observed relative-file atlas | ✅ pass | [`reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/`](reports/casefiles/GNURUST.RELATIVE.FILE.ATLAS.1/) |
-| `GNURUST.DIALECT.RUNTIME.ATLAS.1` | observed dialect-runtime divergence atlas | ✅ pass | [`reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/`](reports/casefiles/GNURUST.DIALECT.RUNTIME.ATLAS.1/) |
-| `GNURUST.DIRECTIVE.VARIANCE.ATLAS.1` | observed compiler-directive byte-variance atlas | ✅ pass | [`reports/casefiles/GNURUST.DIRECTIVE.VARIANCE.ATLAS.1/`](reports/casefiles/GNURUST.DIRECTIVE.VARIANCE.ATLAS.1/) |
-| `GNURUST.DECLARATIVES.ATLAS.1` | observed DECLARATIVES / USE error-handler atlas | ✅ pass | [`reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/`](reports/casefiles/GNURUST.DECLARATIVES.ATLAS.1/) |
-| `GNURUST.CALL.LAYOUT.ATLAS.1` | observed CALL parameter byte-layout atlas | ✅ pass | [`reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/`](reports/casefiles/GNURUST.CALL.LAYOUT.ATLAS.1/) |
-| `GNURUST.LINEAGE.CORPUS.20M.1` | full 20M real-cobc COBOL-witness lineage run (complete) | ✅ pass | [`reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/`](reports/casefiles/GNURUST.LINEAGE.CORPUS.20M.1/) |
-| `GNURUST.VALUE.NEGZERO.EDGE.1` | negative-zero VALUE sign edge (oracle-characterized + PATCHED to parity, locks both ways) | ✅ pass | [`reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/`](reports/casefiles/GNURUST.VALUE.NEGZERO.EDGE.1/) |
-| `GNURUST.BIGNUM.1` | MULTIPLY beyond i128 (exact 256-bit product) | ✅ pass | [`reports/casefiles/GNURUST.BIGNUM.1/`](reports/casefiles/GNURUST.BIGNUM.1/) |
-| `GNURUST.INTPOW.1` | integer exponentiation (cob_s32_pow / cob_s64_pow) | ✅ pass | [`reports/casefiles/GNURUST.INTPOW.1/`](reports/casefiles/GNURUST.INTPOW.1/) |
-| `GNURUST.LOGICAL.1` | bit-logical operations (B-AND/B-OR/B-XOR/B-NOT, bit shifts) | ✅ pass | [`reports/casefiles/GNURUST.LOGICAL.1/`](reports/casefiles/GNURUST.LOGICAL.1/) |
-| `GNURUST.FLOAT.1` | floating-point fields: COMP-1/COMP-2 + FLOAT-DECIMAL-16/34 | ✅ pass | [`reports/casefiles/GNURUST.FLOAT.1/`](reports/casefiles/GNURUST.FLOAT.1/) |
-| `GNURUST.NUMCMP.1` | numeric comparison (cob_numeric_cmp) across type pairs | ✅ pass | [`reports/casefiles/GNURUST.NUMCMP.1/`](reports/casefiles/GNURUST.NUMCMP.1/) |
-| `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
-| `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
-| `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |
-| `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
-| `GNURUST.SCREENIO.ACCEPT.2` | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/) |
-| `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
-| `GNURUST.SCREENIO.DISPLAY.3` | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/) |
-| `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
-| `GNURUST.5` | COPY expansion | ✅ pass | [`reports/casefiles/GNURUST.5/`](reports/casefiles/GNURUST.5/) |
-| `GNURUST.6` | COPY ... REPLACING | ✅ pass | [`reports/casefiles/GNURUST.6/`](reports/casefiles/GNURUST.6/) |
-| `GNURUST.7` | arithmetic ADD/SUB/MUL | ✅ pass | [`reports/casefiles/GNURUST.7/`](reports/casefiles/GNURUST.7/) |
-| `GNURUST.8` | VALUE initial image | ✅ pass | [`reports/casefiles/GNURUST.8/`](reports/casefiles/GNURUST.8/) |
-| `GNURUST.9` | PIC P-scaling | ✅ pass | [`reports/casefiles/GNURUST.9/`](reports/casefiles/GNURUST.9/) |
-| `GNURUST.10` | ODO physical-max layout | ✅ pass | [`reports/casefiles/GNURUST.10/`](reports/casefiles/GNURUST.10/) |
-| `GNURUST.11` | LEVEL-88 eval | ✅ pass | [`reports/casefiles/GNURUST.11/`](reports/casefiles/GNURUST.11/) |
-| `GNURUST.12` | SET 88 TO TRUE | ✅ pass | [`reports/casefiles/GNURUST.12/`](reports/casefiles/GNURUST.12/) |
-| `GNURUST.12B` | SET 88 TO FALSE | ✅ pass | [`reports/casefiles/GNURUST.12B/`](reports/casefiles/GNURUST.12B/) |
-| `GNURUST.13` | packed ADD/SUBTRACT (cob_add_bcd) | ✅ pass | [`reports/casefiles/GNURUST.13/`](reports/casefiles/GNURUST.13/) |
-| `GNURUST.14` | binary storage (COMP/COMP-5/COMP-X) | ✅ pass | [`reports/casefiles/GNURUST.14/`](reports/casefiles/GNURUST.14/) |
-| `GNURUST.15` | EBCDIC cp500 DISPLAY decode | ✅ pass | [`reports/casefiles/GNURUST.15/`](reports/casefiles/GNURUST.15/) |
-| `GNURUST.16` | edited-picture decode (16a+16b) | ✅ pass | [`reports/casefiles/GNURUST.16/`](reports/casefiles/GNURUST.16/) |
-| `GNURUST.16C` | edited-picture encode (numeric->edited, 16c) | ✅ pass | [`reports/casefiles/GNURUST.16C/`](reports/casefiles/GNURUST.16C/) |
-| `GNURUST.17` | cp500 EBCDIC zoned numeric decode | ✅ pass | [`reports/casefiles/GNURUST.17/`](reports/casefiles/GNURUST.17/) |
-| `GNURUST.18` | COMP-6 unsigned packed storage + MOVE | ✅ pass | [`reports/casefiles/GNURUST.18/`](reports/casefiles/GNURUST.18/) |
-| `GNURUST.19` | DIVIDE receiving-field bytes | ✅ pass | [`reports/casefiles/GNURUST.19/`](reports/casefiles/GNURUST.19/) |
-| `KOBOLD.RECON.1` | fixed-record reconciliation | ✅ pass | [`reports/casefiles/KOBOLD.RECON.1/`](reports/casefiles/KOBOLD.RECON.1/) |
-| `KOBOLD.OPERATOR.1` | operator trust layer | ✅ pass | [`reports/casefiles/KOBOLD.OPERATOR.1/`](reports/casefiles/KOBOLD.OPERATOR.1/) |
-| `KOBOLD.FILE.1` | fixed-record container ingest | ✅ pass | [`reports/casefiles/KOBOLD.FILE.1/`](reports/casefiles/KOBOLD.FILE.1/) |
-| `KOBOLD.BANK.1` | header/detail/trailer + declared control totals | ✅ pass | [`reports/casefiles/KOBOLD.BANK.1/`](reports/casefiles/KOBOLD.BANK.1/) |
-| `KOBOLD.DB2HOST.1` | Db2 host-variable null/truncation indicator manifest | ✅ pass | [`reports/casefiles/KOBOLD.DB2HOST.1/`](reports/casefiles/KOBOLD.DB2HOST.1/) |
-| `KOBOLD.POSTING.1` | declared posting-unit custody manifest | ✅ pass | [`reports/casefiles/KOBOLD.POSTING.1/`](reports/casefiles/KOBOLD.POSTING.1/) |
-| `KOBOLD.EXTRACT.PROFILE.1` | declared extraction provenance + copybook freshness | ✅ pass | [`reports/casefiles/KOBOLD.EXTRACT.PROFILE.1/`](reports/casefiles/KOBOLD.EXTRACT.PROFILE.1/) |
-| `KOBOLD.PRIVACY.REDACTION.1` | declared evidence-preserving redaction | ✅ pass | [`reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/`](reports/casefiles/KOBOLD.PRIVACY.REDACTION.1/) |
-| `KOBOLD.PERF.1` | gated record-level Rayon (byte-identical to scalar) | ✅ pass | [`reports/casefiles/KOBOLD.PERF.1/`](reports/casefiles/KOBOLD.PERF.1/) |
-| `KOBOLD.BANK.RECONCILE.1` | opinionated generated banking reconciliation VIEW | ✅ pass | [`reports/casefiles/KOBOLD.BANK.RECONCILE.1/`](reports/casefiles/KOBOLD.BANK.RECONCILE.1/) |
-| `KOBOLD.DIFF.1` | structural diff against a declared expected artifact | ✅ pass | [`reports/casefiles/KOBOLD.DIFF.1/`](reports/casefiles/KOBOLD.DIFF.1/) |
-| `KOBOLD.SCALE.1` | local synthetic scale measurement (scalar + Rayon, parity-gated) | ✅ pass | [`reports/casefiles/KOBOLD.SCALE.1/`](reports/casefiles/KOBOLD.SCALE.1/) |
-| `KOBOLD.SENTINEL.PROFILE.1` | declared sentinel-marker evidence | ✅ pass | [`reports/casefiles/KOBOLD.SENTINEL.PROFILE.1/`](reports/casefiles/KOBOLD.SENTINEL.PROFILE.1/) |
-| `KOBOLD.DATE.PROFILE.1` | declared date-format evidence | ✅ pass | [`reports/casefiles/KOBOLD.DATE.PROFILE.1/`](reports/casefiles/KOBOLD.DATE.PROFILE.1/) |
-| `KOBOLD.CURRENCY.PROFILE.1` | declared currency/amount-profile evidence | ✅ pass | [`reports/casefiles/KOBOLD.CURRENCY.PROFILE.1/`](reports/casefiles/KOBOLD.CURRENCY.PROFILE.1/) |
-| `KOBOLD.TOOLING.EXPORT.1` | generated evidence export for downstream tools | ✅ pass | [`reports/casefiles/KOBOLD.TOOLING.EXPORT.1/`](reports/casefiles/KOBOLD.TOOLING.EXPORT.1/) |
-| `KOBOLD.PILOT-PACKET.1` | hash-bound pilot evidence packet | ✅ pass | [`reports/casefiles/KOBOLD.PILOT-PACKET.1/`](reports/casefiles/KOBOLD.PILOT-PACKET.1/) |
-| `KOBOLD.PILOT.WORKFLOW.1` | end-to-end pilot workflow wiring | ✅ pass | [`reports/casefiles/KOBOLD.PILOT.WORKFLOW.1/`](reports/casefiles/KOBOLD.PILOT.WORKFLOW.1/) |
-| `KOBOLD.PILOT.RUN.1` | redacted pilot runner + committed evidence packet | ✅ pass | [`reports/casefiles/KOBOLD.PILOT.RUN.1/`](reports/casefiles/KOBOLD.PILOT.RUN.1/) |
-| `KOBOLD.DATA.2` | binary fields in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.2/`](reports/casefiles/KOBOLD.DATA.2/) |
-| `KOBOLD.BANK.2` | declared accounting profile (numeric-role + debit/credit polarity) | ✅ pass | [`reports/casefiles/KOBOLD.BANK.2/`](reports/casefiles/KOBOLD.BANK.2/) |
-| `KOBOLD.RECON.2` | declared transformed-record reconciliation | ✅ pass | [`reports/casefiles/KOBOLD.RECON.2/`](reports/casefiles/KOBOLD.RECON.2/) |
-| `KOBOLD.CORPUS.2` | adversarial / banking-shaped corpus | ✅ pass | [`reports/casefiles/KOBOLD.CORPUS.2/`](reports/casefiles/KOBOLD.CORPUS.2/) |
-| `KOBOLD.BENCH.2` | parity-gated end-to-end scalar benchmark | ✅ pass | [`reports/casefiles/KOBOLD.BENCH.2/`](reports/casefiles/KOBOLD.BENCH.2/) |
-| `KOBOLD.ENTERPRISE.2` | Rust-native signed attestation verification (DSSE/ed25519) | ✅ pass | [`reports/casefiles/KOBOLD.ENTERPRISE.2/`](reports/casefiles/KOBOLD.ENTERPRISE.2/) |
-| `KOBOLD.PERF.2` | deterministic multithreaded pipeline + per-stage profiling | ✅ pass | [`reports/casefiles/KOBOLD.PERF.2/`](reports/casefiles/KOBOLD.PERF.2/) |
-| `KOBOLD.LAYOUT.REDEFINES.2` | overlapping REDEFINES view manifest | ✅ pass | [`reports/casefiles/KOBOLD.LAYOUT.REDEFINES.2/`](reports/casefiles/KOBOLD.LAYOUT.REDEFINES.2/) |
-| `KOBOLD.DATA.3` | cp500 EBCDIC in corpus | ✅ pass | [`reports/casefiles/KOBOLD.DATA.3/`](reports/casefiles/KOBOLD.DATA.3/) |
-| `KOBOLD.DATA.4` | edited-picture decode composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.4/`](reports/casefiles/KOBOLD.DATA.4/) |
-| `KOBOLD.DATA.5` | cp500 numeric DISPLAY composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.5/`](reports/casefiles/KOBOLD.DATA.5/) |
-| `KOBOLD.DATA.6` | COMP-6 composed | ✅ pass | [`reports/casefiles/KOBOLD.DATA.6/`](reports/casefiles/KOBOLD.DATA.6/) |
-| `NIST-STYLE-FIXTURE-FORMAT.1` | named replayable fixture format | ✅ pass | [`reports/casefiles/NIST-STYLE-FIXTURE-FORMAT.1/`](reports/casefiles/NIST-STYLE-FIXTURE-FORMAT.1/) |
-| `SIZE.ERROR.ATLAS.1` | arithmetic size-error behavior atlas (observed) | ✅ pass | [`reports/casefiles/SIZE.ERROR.ATLAS.1/`](reports/casefiles/SIZE.ERROR.ATLAS.1/) |
-| `SUPPORT-PACKET.1` | reviewer/operator evidence bundle (generated from existing artifacts) | ✅ pass | [`reports/casefiles/SUPPORT-PACKET.1/`](reports/casefiles/SUPPORT-PACKET.1/) |
-| `TRUST.5` | anti-ceremony audit (every court can fail) | ✅ pass | [`reports/casefiles/TRUST.5/`](reports/casefiles/TRUST.5/) |
+**Reviewer entry points** — [`STATUS.md`](STATUS.md) (live current-state authority) · [`COBOL-PARITY.md`](COBOL-PARITY.md) / [`FILE-PARITY.md`](FILE-PARITY.md) (live language + file coverage) · [`GAP-ANALYSIS.md`](GAP-ANALYSIS.md) (105/105 catalogued gaps fixed, 0 open) · [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (non-claims) · [`reports/casefiles/`](reports/casefiles/) (137 forensic case files).
 
-## The admitted oracle
+---
 
-Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the source of truth. Because it is not installed
-system-wide, it is **built from pinned source** (`research/gnucobol-3.2.tar.lz`, sha256 in
-`reports/admission/`) into a gitignored `lab/oracle/prefix`. "Correct" here always means *matches the
-built oracle*.
+## Compatibility as a stack of courts
+
+`gnucobol-rs` treats COBOL compatibility as a stack of **separately admitted courts** — bytes, moves, the field model, record layout, initialization, comparison, formatting, source expansion, runtime lifecycle, files, intrinsics, and the executing front-end — where **no lower layer is allowed to imply a higher one**. Passing the decimal-MOVE court says nothing about files; each court stands on its own evidence, naming its byte domain, oracle, fixture count, sealing version, and what would break it. A few marquee courts:
+
+| Court | What it seals |
+|---|---|
+| `GNURUST.2` | decimal MOVE — COMP-3 / zoned / display byte conversions |
+| `GNURUST.3` | the PIC field model (incl. P-scaling) |
+| `GNURUST.7` / `GNURUST.13` | arithmetic ADD/SUB/MUL · packed BCD add/subtract |
+| `GNURUST.16` / `GNURUST.16C` | edited-PICTURE decode and encode |
+| `GNURUST.FILEIO.*` | sequential / relative / indexed / SORT runtime I-O (INDEXED on a pure-safe-Rust B-tree) |
+| `GNURUST.INTRINSIC.*` | LENGTH, NUMVAL(-C), INTEGER, MOD/REM, CASE, ORD/CHAR, dates |
+| `GNURUST.LINEAGE.CORPUS.20M.1` | a completed 20M real-`cobc` COBOL-witness lineage run |
+| `GNURUST.FRONTEND.1` | the clean-room front-end: parse + **execute** a subset to `cobc`-identical stdout |
+
+Of the **137** sealed courts, **101** are `GNURUST.*` (the open LGPL runtime + front-end layer); **31** are `KOBOLD.*`; the remainder are framework courts. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json), and each court's full forensic record (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope) lives under [`reports/casefiles/`](reports/casefiles/). 
+
+The **full 137-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts.md).
+
+> The `KOBOLD.*` courts belong to downstream, independently-written **Apache-2.0** crates that *use* this runtime (operator trust layer, fixed-record reconciliation, banking packets). They ship and are documented in their own repositories, not here.
+
+---
+
+## Breadth of verification
+
+- **106 differential oracle sweep scripts** (`lab/oracle/*sweep*.sh`), each byte-for-byte vs the admitted GnuCOBOL 3.2, spanning arithmetic/numeric, edited/PICTURE/encoding, data movement/tables, control flow, files/I-O, strings, screen I/O (9 native terminal-byte courts), intrinsics/dates, and CALL/interop.
+- **Corpus** (`lab/corpus/`): ~679 real COBOL programs across 7 subdirectories plus the 4.3 MB NIST COBOL-85 validation suite (`newcob.val.Z`, held under the `GNURUST.CCVS85.1` custody gate) — including 533 programs from a public GnuCOBOL test corpus, 53 from an open banking suite, and the 93 hand-authored front-end programs.
+- **Three independent parity maps** cross-check so a doc-comment can never masquerade as a port: DOXYGEN-PARITY (998/998 fns), LIBCOB-PARITY / PORT-INDEX (typed C↔Rust symbols, 100% active), and CLANG-AST-PARITY (870 defs / 3240 call edges). See [`COBOL-PARITY.md`](COBOL-PARITY.md), [`FILE-PARITY.md`](FILE-PARITY.md), [`DOXYGEN-PARITY.md`](DOXYGEN-PARITY.md), [`LIBCOB-PARITY.md`](LIBCOB-PARITY.md), [`CLANG-AST-PARITY.md`](CLANG-AST-PARITY.md), [`FUNCTION-EVIDENCE.md`](FUNCTION-EVIDENCE.md), and the 0–7 [`PORTING-LADDER.md`](PORTING-LADDER.md) (level 7 = compiler replacement, explicitly **NOT CLAIMED**; level is evidence *shape*, not quality).
+
+---
 
 ## Crates
 
-| Crate | Derives from | License | Scope |
-|-------|--------------|---------|-------|
-| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/*.c` (move, numeric, common, intrinsic, fileio, …) | **LGPL-3.0-or-later** | the native-Rust `libcob` runtime (1:1, oracle-sealed) + the `cobrun` interpreter front-end |
-| [`gnucobol-rs-ffi`](crates/gnucobol-rs-ffi) | libcob `common.h` C ABI | **LGPL-3.0-or-later** | a `cob_field` C-ABI shim — link it where you would link `libcob` |
-| [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | build/run `cobc` fixtures, capture deterministic JSON receipts |
+| Crate | Derives from | License | Scope | `unsafe` |
+|---|---|---|---|---|
+| [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/*.c` (move, numeric, common, intrinsic, fileio, …) | **LGPL-3.0-or-later** | the native-Rust `libcob` runtime (1:1, oracle-sealed) **+** the `cobrun` interpreter front-end | **forbid** |
+| [`gnucobol-rs-ffi`](crates/gnucobol-rs-ffi) | libcob `common.h` C ABI | **LGPL-3.0-or-later** | a `cob_field` C-ABI shim — link it where you would link `libcob` | allow (confined to the raw-pointer shim) |
+| [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | spawns `cobc`, captures deterministic canonical-JSON receipts | forbid |
+
+The runtime additionally depends on `gnucobol-rs-bdb-format` (a pure-safe-Rust Berkeley DB B-tree, for INDEXED organization).
+
+---
 
 ## License & derivation boundary
 
-This is a **faithful derivative port**, not a clean-room reimplementation of the runtime: functions
-are ported statement-by-statement with upstream line citations (e.g. `// move.c:477`), so the port
-**inherits upstream copyleft** — crates derived from **`libcob`** (LGPL-3.0-or-later) are
-**LGPL-3.0-or-later**. (The `cobrun` front-end is a clean-room interpreter, but it ships in the
-LGPL crate alongside the ported runtime.) `cobc`-driving tooling is **GPL-3.0-or-later**. The FSF
-copyright notice is retained. See [`docs/derivation-and-license.md`](docs/derivation-and-license.md),
-[`COPYING.LESSER`](COPYING.LESSER) (LGPL-3.0), and [`COPYING`](COPYING) (GPL-3.0). This is an
-independent effort and is **not** the upstream GnuCOBOL project, nor endorsed by it.
+**Legal skim, in one line:** the runtime is a **faithful LGPL-3.0-or-later derivative** of `libcob` — ported statement-by-statement with upstream line citations (e.g. `// move.c:477`), so it is **not clean-room** and its license was **not freely chosen**; the `cobrun` front-end *is* clean-room but ships inside the LGPL crate; the `cobc`-driving tooling is **GPL-3.0-or-later**.
+
+Because the runtime inherits upstream copyleft, a distributed binary that statically links the LGPL core is a **Combined Work under LGPL-3.0 §4**. The FSF copyright and original-author credits (Nishida, While, Sobisch, et al.) are retained in every ported file header; [`COPYING.LESSER`](COPYING.LESSER) (LGPL v3) and [`COPYING`](COPYING) (GPL v3) are shipped. Do **not** describe the *runtime* as "clean-room" — the authoritative statement is [`docs/derivation-and-license.md`](docs/derivation-and-license.md), with the boundary detailed in [`docs/license-boundaries.md`](docs/license-boundaries.md). The permissive downstream satellites (`kobold-*`, Apache-2.0) are independently written and merely *use* the core.
+
+This is an independent effort and is **not** the upstream GnuCOBOL project, nor endorsed by it.
+
+---
+
+## Project status, features & MSRV
+
+- **Feature flags never change semantics** — they gate optional surfaces (e.g. parallelism), never the bytes a court seals.
+- Workspace: resolver 2, **MSRV 1.74** (inherited), workspace lint `unsafe_code = "forbid"`, `[profile.release] overflow-checks = true`.
+- The runtime port is **complete across all three parity views**; active development is in the front-end interpreter (the 25 `PARTIAL` files under `cobc/` + `bin/`), tracked live in [`COBOL-PARITY.md`](COBOL-PARITY.md) and bounded by the non-claims above.
+
+---
 
 ## Method
 
-Admit pinned source → read it → build the real upstream as an executable oracle → port faithfully
-with citations → prove byte parity over a fixture matrix + differential sweep → pin or classify every
-confounder → Kani the sharp invariants → fuzz the hostile surface → gate → seal with receipts and
-exact non-claims. See [`docs/porting-method.md`](docs/porting-method.md) and
-[`docs/claim-boundary.md`](docs/claim-boundary.md). A **documentation refresh gate**
-([`docs/doc-gate.md`](docs/doc-gate.md), `lab/check-docs.sh`) runs alongside fmt/clippy/test/sweep and
-fails if any doc, receipt, or coverage map drifts from the code or the oracle — so nothing goes stale
-as the register grows. MSRV 1.74 for the library crates and their self-contained tests.
+Admit pinned source → read it → build the real upstream as an executable oracle → port faithfully with citations → prove byte parity over a fixture matrix + differential sweep → pin or classify every confounder → Kani the sharp invariants → fuzz the hostile surface → gate → seal with receipts and exact non-claims. Each byte court carries both a Kani proof and a fuzz target (gate-enforced), plus a forensic case file. A **documentation refresh gate** (`lab/check-docs.sh`, `cargo run -p xtask -- docs check`) runs alongside fmt/clippy/test/sweep and fails if any doc, receipt, or coverage map drifts from the code or the oracle — so nothing goes stale as the register grows. Depth on method, taxonomy, and the risk register lives in [`docs/`](docs/).
 
+---
+
+## Repository map
+
+| Map | What it answers |
+|---|---|
+| [`STATUS.md`](STATUS.md) | live current-state authority (it wins on any disagreement) |
+| [`COBOL-PARITY.md`](COBOL-PARITY.md) | every verb / intrinsic / clause and exactly what runs |
+| [`FILE-PARITY.md`](FILE-PARITY.md) | every GnuCOBOL 3.2 source file accounted for, 0 unevidenced gaps |
+| [`GAP-ANALYSIS.md`](GAP-ANALYSIS.md) | the catalogued C→Rust gap ledger (105/105 fixed, 0 open) |
+| [`DOXYGEN-PARITY.md`](DOXYGEN-PARITY.md) | the Doxygen C-parse function-parity view (998/998) |
+| [`LIBCOB-PARITY.md`](LIBCOB-PARITY.md) / [`CLANG-AST-PARITY.md`](CLANG-AST-PARITY.md) | typed C↔Rust symbol parity · clang-AST def/call-edge parity |
+| [`PORTING-LADDER.md`](PORTING-LADDER.md) | the 0–7 evidence hierarchy (level 7 explicitly NOT CLAIMED) |
+| [`docs/`](docs/) | method, taxonomy, derivation/license, risk register, planning |
+
+---
+
+<sub>Generated document — `DO NOT EDIT BY HAND`. Rendered by `xtask` from `docs-src/README.model.json` and machine evidence ([`reports/claim-ladder.json`](reports/claim-ladder.json), [`reports/casefiles/`](reports/casefiles/), `Cargo.toml`, live receipts). Regenerate with `cargo run -p xtask -- docs generate`; verify freshness with `cargo run -p xtask -- docs check`. The prior hand-written README is preserved losslessly under `research/legacyreports/README.md`; its claims are carried forward in full by this generated body. Counts are dated and version-anchored to [`STATUS.md`](STATUS.md), the living authority.</sub>

@@ -3,8 +3,8 @@
  * Link libgnucobol_rs_ffi (cdylib/staticlib) where you would link libcob. The cob_field / cob_field_attr
  * layouts match GnuCOBOL 3.2's libcob common.h, so the same field buffers work unchanged.
  *
- * License: LGPL-3.0-or-later. This is gnucobol-rs (a clean-room native-Rust reimplementation), NOT
- * GnuCOBOL and not affiliated with the GNU project.
+ * License: LGPL-3.0-or-later. This is gnucobol-rs (a faithful, line-cited native-Rust port of libcob,
+ * NOT clean-room), NOT GnuCOBOL and not affiliated with the GNU project.
  */
 #ifndef GNUCOBOL_RS_FFI_H
 #define GNUCOBOL_RS_FFI_H
