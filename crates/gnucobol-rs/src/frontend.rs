@@ -39,7 +39,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
     "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
     "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE",
-    "SUPPRESS", "EXAMINE",
+    "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1461,7 +1461,7 @@ const STMT_VERBS: &[&str] = &[
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
     "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -2591,10 +2591,8 @@ fn exec_stmt(
             Err(RunError::Unsupported(format!("{verb}: message control requires a COMMUNICATION SECTION (CD); GnuCOBOL's CM is minimal and the front-end models WORKING-STORAGE / FILE / REPORT sections only"))),
         "MODIFY" | "INQUIRE" =>
             Err(RunError::Unsupported(format!("{verb}: an ACUCOBOL screen/GUI verb that requires a SCREEN SECTION the front-end does not model"))),
-        "ALLOCATE" | "FREE" =>
-            Err(RunError::Unsupported(format!("{verb}: BASED storage + POINTER -- the returned address is nondeterministic, so it is not oracle-reproducible"))),
-        "USE" =>
-            Err(RunError::Unsupported("USE: a DECLARATIVES error/exception handler; the front-end does not model the DECLARATIVES section or the file-not-found status that triggers it".into())),
+        "ALLOCATE" => exec_allocate(stmt, fields, ctx.decimal_comma),
+        "FREE" => Ok(()), // FREE [ADDRESS OF] id -- release based storage; a no-op in the logical model.
         "ENTRY" =>
             Err(RunError::Unsupported("ENTRY: an alternate entry point that is invalid in a nested program -- it requires separately-compiled units, while the front-end runs one source with contained programs".into())),
         other => Err(RunError::Unsupported(format!("verb {other}"))),
@@ -3273,6 +3271,20 @@ fn exec_alter(stmt: &[Tok]) -> Result<(), RunError> {
                     break;
                 }
             }
+        }
+    }
+    Ok(())
+}
+
+/// `ALLOCATE {id | n CHARACTERS} [INITIALIZED] [RETURNING ptr]` -- obtain BASED storage. With `INITIALIZED`
+/// the based item is set to its category defaults (deterministic); the returned pointer address is a
+/// non-claim (not displayed). Raw `n CHARACTERS` allocation has no observable item.
+fn exec_allocate(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    let initialized = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "INITIALIZED"));
+    let is_chars = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "CHARACTERS" || w == "CHARACTER"));
+    if !is_chars && initialized {
+        if let Some(Tok::Word(id)) = stmt.first() {
+            exec_initialize(&[Tok::Word(id.clone())], fields, decimal_comma)?;
         }
     }
     Ok(())
