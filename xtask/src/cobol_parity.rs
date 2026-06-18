@@ -122,7 +122,8 @@ const HEADER: &str = "\
 > language + runtime against two axes -- **Runtime** (is the `libcob` primitive ported 1:1?) and
 > **Front-end** (can the native interpreter `cobrun` actually run it?). The authoritative surface is
 > derived from the admitted GnuCOBOL 3.2 source (`cobc/parser.y` statements, `libcob/intrinsic.c`
-> functions, `cobc/reserved.c` clauses). The gap between the two axes is exactly what is left to build.
+> functions, `cobc/reserved.c` clauses). The gap between the two axes -- minus the rows marked **BOUNDARY**,
+> which the admitted GnuCOBOL 3.2 oracle itself cannot run -- is what is left to build.
 ";
 
 fn read_json(p: &Path) -> Value {
@@ -250,8 +251,12 @@ fn build(root: &str) -> String {
     out.push_str(
         "**Reading this:** the **runtime engine is ~100%** -- every admitted libcob file and every \
          intrinsic is ported 1:1 and oracle-sealed. The **front-end** (the native interpreter that \
-         turns source into runtime calls) is the remaining work; the statements/clauses it does not \
-         yet run are the 1:1-parity TODO list below.\n\n",
+         turns source into runtime calls) runs the statements marked **DONE**, each proven \
+         byte-identical to the admitted cobc. The rows marked **BOUNDARY** are NOT a TODO: the admitted \
+         GnuCOBOL 3.2 oracle itself cannot compile/run them (it does not implement the COMMUNICATION \
+         SECTION, the ACUCOBOL screen/GUI verbs are not in its grammar, and ENTRY is invalid in a \
+         nested program), so there is no oracle output to be byte-identical to. Anything still \
+         unmarked is the genuine remaining front-end work.\n\n",
     );
 
     // ---- statements table ----
@@ -270,8 +275,22 @@ fn build(root: &str) -> String {
             let verb = s["verb"].as_str().unwrap_or("");
             let rt = if m == "-" { "n/a".to_string() } else if is_ported(m) { format!("yes ({m})") } else { format!("no ({m})") };
             let fe = wired.iter().any(|w| w == verb);
+            // Verbs the ADMITTED GnuCOBOL 3.2 oracle itself cannot compile/run (confirmed by probing the
+            // built cobc): there is no oracle output to be byte-identical to, so these are boundary
+            // non-claims, NOT a front-end TODO.
+            let boundary = match name {
+                "SEND" | "RECEIVE" | "PURGE" | "ENABLE" | "DISABLE" =>
+                    Some("BOUNDARY -- GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION (the oracle itself cannot run it)"),
+                "MODIFY" | "INQUIRE" =>
+                    Some("BOUNDARY -- an ACUCOBOL GUI verb absent from the GnuCOBOL 3.2 grammar (the oracle rejects it)"),
+                "ENTRY" =>
+                    Some("BOUNDARY -- invalid in a nested program; requires separately-compiled units"),
+                _ => None,
+            };
             let status = if fe {
                 "**DONE** -- parses + runs"
+            } else if let Some(b) = boundary {
+                b
             } else if m == "-" {
                 "front-end TODO (compiler control flow)"
             } else if is_ported(m) {

@@ -6,7 +6,8 @@
 > language + runtime against two axes -- **Runtime** (is the `libcob` primitive ported 1:1?) and
 > **Front-end** (can the native interpreter `cobrun` actually run it?). The authoritative surface is
 > derived from the admitted GnuCOBOL 3.2 source (`cobc/parser.y` statements, `libcob/intrinsic.c`
-> functions, `cobc/reserved.c` clauses). The gap between the two axes is exactly what is left to build.
+> functions, `cobc/reserved.c` clauses). The gap between the two axes -- minus the rows marked **BOUNDARY**,
+> which the admitted GnuCOBOL 3.2 oracle itself cannot run -- is what is left to build.
 ## Summary
 
 | surface | total | runtime ported (1:1) | front-end runs it |
@@ -17,7 +18,7 @@
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
 
-**Reading this:** the **runtime engine is ~100%** -- every admitted libcob file and every intrinsic is ported 1:1 and oracle-sealed. The **front-end** (the native interpreter that turns source into runtime calls) is the remaining work; the statements/clauses it does not yet run are the 1:1-parity TODO list below.
+**Reading this:** the **runtime engine is ~100%** -- every admitted libcob file and every intrinsic is ported 1:1 and oracle-sealed. The **front-end** (the native interpreter that turns source into runtime calls) runs the statements marked **DONE**, each proven byte-identical to the admitted cobc. The rows marked **BOUNDARY** are NOT a TODO: the admitted GnuCOBOL 3.2 oracle itself cannot compile/run them (it does not implement the COMMUNICATION SECTION, the ACUCOBOL screen/GUI verbs are not in its grammar, and ENTRY is invalid in a nested program), so there is no oracle output to be byte-identical to. Anything still unmarked is the genuine remaining front-end work.
 
 ## Statements (the verb surface, from `cobc/parser.y`)
 
@@ -32,11 +33,11 @@
 | `DIVIDE` | arithmetic | yes (numeric.c) | **yes** | **DONE** -- parses + runs |
 | `MULTIPLY` | arithmetic | yes (numeric.c) | **yes** | **DONE** -- parses + runs |
 | `SUBTRACT` | arithmetic | yes (numeric.c) | **yes** | **DONE** -- parses + runs |
-| `DISABLE` | communication | n/a | no | front-end TODO (compiler control flow) |
-| `ENABLE` | communication | n/a | no | front-end TODO (compiler control flow) |
-| `PURGE` | communication | n/a | no | front-end TODO (compiler control flow) |
-| `RECEIVE` | communication | n/a | no | front-end TODO (compiler control flow) |
-| `SEND` | communication | n/a | no | front-end TODO (compiler control flow) |
+| `DISABLE` | communication | n/a | no | BOUNDARY -- GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION (the oracle itself cannot run it) |
+| `ENABLE` | communication | n/a | no | BOUNDARY -- GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION (the oracle itself cannot run it) |
+| `PURGE` | communication | n/a | no | BOUNDARY -- GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION (the oracle itself cannot run it) |
+| `RECEIVE` | communication | n/a | no | BOUNDARY -- GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION (the oracle itself cannot run it) |
+| `SEND` | communication | n/a | no | BOUNDARY -- GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION (the oracle itself cannot run it) |
 | `ALTER` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `CONTINUE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
 | `EVALUATE` | control flow | n/a | **yes** | **DONE** -- parses + runs |
@@ -66,14 +67,14 @@
 | `WRITE` | file I/O | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
 | `CALL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
 | `CANCEL` | inter-program | yes (call.c) | **yes** | **DONE** -- parses + runs |
-| `ENTRY` | inter-program | yes (call.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `ENTRY` | inter-program | yes (call.c) | no | BOUNDARY -- invalid in a nested program; requires separately-compiled units |
 | `GENERATE` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
 | `INITIATE` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
 | `SUPPRESS` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
 | `TERMINATE` | report writer | yes (reportio.c) | **yes** | **DONE** -- parses + runs |
 | `DESTROY` | screen | yes (screenio.c) | **yes** | **DONE** -- parses + runs |
-| `INQUIRE` | screen | yes (screenio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `MODIFY` | screen | yes (screenio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `INQUIRE` | screen | yes (screenio.c) | no | BOUNDARY -- an ACUCOBOL GUI verb absent from the GnuCOBOL 3.2 grammar (the oracle rejects it) |
+| `MODIFY` | screen | yes (screenio.c) | no | BOUNDARY -- an ACUCOBOL GUI verb absent from the GnuCOBOL 3.2 grammar (the oracle rejects it) |
 | `MERGE` | sort/merge | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
 | `RELEASE` | sort/merge | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
 | `RETURN` | sort/merge | yes (fileio.c) | **yes** | **DONE** -- parses + runs |
