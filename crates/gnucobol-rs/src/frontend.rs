@@ -542,6 +542,9 @@ struct ProgItem {
     /// every nested item that does not state its own; `resolve_usage_inheritance` rewrites each `None` to
     /// the effective form before build, so by build time this is `Some(..)`.
     usage: Option<Usage>,
+    /// `SIGN IS [LEADING|TRAILING] [SEPARATE]` for a signed DISPLAY numeric: `(separate, leading)`.
+    /// Default `(false, false)` = the standard trailing overpunch.
+    sign: (bool, bool),
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1175,6 +1178,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 condition: Some((parent, values)),
                 indexed_by: Vec::new(),
                 usage: None,
+                sign: (false, false),
             });
             continue;
         }
@@ -1208,6 +1212,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut usage: Option<Usage> = None;
         // an opaque machine pointer (USAGE POINTER): modelled as an 8-byte field below.
         let mut pointer = false;
+        // SIGN IS [LEADING|TRAILING] [SEPARATE]: (separate, leading).
+        let mut sign: (bool, bool) = (false, false);
         while k < end {
             match toks.get(k) {
                 Some(Tok::Dot) => {
@@ -1294,6 +1300,23 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 Some(Tok::Word(w)) if unsupported_usage_kw(w) => {
                     return Err(RunError::Unsupported(format!("USAGE {w} is not in the front-end subset")));
                 }
+                // `SIGN [IS] [LEADING|TRAILING] [SEPARATE [CHARACTER]]` -- sets the (separate, leading) form.
+                Some(Tok::Word(w)) if w == "SIGN" => {
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                        k += 1;
+                    }
+                    // LEADING/TRAILING, then optional SEPARATE [CHARACTER], in any of the allowed orders.
+                    while let Some(Tok::Word(w)) = toks.get(k) {
+                        match w.as_str() {
+                            "LEADING" => { sign.1 = true; k += 1; }
+                            "TRAILING" => { sign.1 = false; k += 1; }
+                            "SEPARATE" => { sign.0 = true; k += 1; }
+                            "CHARACTER" => { k += 1; }
+                            _ => break,
+                        }
+                    }
+                }
                 _ => k += 1,
             }
         }
@@ -1307,6 +1330,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         items.push(ProgItem {
             level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed,
             usage,
+            sign,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1350,7 +1374,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         if it.pic.is_empty() {
             continue;
         }
-        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display))?;
+        let mut f = make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign)?;
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
             // identically, per its VALUE or the dialect fill).
@@ -1401,7 +1425,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
     // TALLY: the EXAMINE count register (unsigned 9(5) DISPLAY).
-    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display) {
+    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false)) {
         fields.entry("TALLY".to_string()).or_insert(t);
     }
     Ok(fields)
@@ -2557,8 +2581,9 @@ fn make_field(
     decimal_comma: bool,
     dialect: crate::dialect::Dialect,
     usage: Usage,
+    sign: (bool, bool),
 ) -> Result<Field, RunError> {
-    match build_field(pic, usage, false, false) {
+    match build_field(pic, usage, sign.0, sign.1) {
         Ok(pf) => {
             let is_alpha = !pf.attr.is_numeric();
             // Uninitialized storage (no VALUE) is filled per the dialect's `defaultbyte`: the category
@@ -4106,7 +4131,7 @@ fn exec_ml_parse_noop() -> Result<(), RunError> {
 
 /// The displayed bytes of a report element: a `PIC` field holding its SOURCE value (or VALUE literal).
 fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<Vec<u8>, RunError> {
-    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display)?;
+    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false))?;
     if let Some(src) = &el.source {
         let (sb, sa) = operand_value(&Tok::Word(src.clone()), fields)?;
         move_into(&mut temp, &sb, &sa, ctx.decimal_comma)?;
