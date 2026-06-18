@@ -226,10 +226,6 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
             Some((true, "compiler artifact: cobc returns the compiled binary path; an interpreter produces no binary")),
         // Needs a front-end EXCEPTION-state model: deterministic given a known fault, but the interpreter
         // does not yet track the COBOL exception registers (it fails closed on faults instead).
-        // EXCEPTION-STATUS / -STATEMENT / -LOCATION are wired. EXCEPTION-FILE additionally needs the
-        // file-exception register (the last I/O status + SELECT name).
-        "EXCEPTION-FILE" =>
-            Some((false, "needs the file-exception register (the last I/O status + SELECT name)")),
         // Needs the USAGE POINTER content model: deref a pointer's target.
         "CONTENT-OF" | "CONTENT-LENGTH" =>
             Some((false, "needs the pointer-content model (dereferences a USAGE POINTER target)")),

@@ -61,7 +61,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
     "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
-    "EXCEPTION-STATUS", "EXCEPTION-STATEMENT", "EXCEPTION-LOCATION",
+    "EXCEPTION-STATUS", "EXCEPTION-STATEMENT", "EXCEPTION-LOCATION", "EXCEPTION-FILE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1537,6 +1537,22 @@ thread_local! {
     static EXCEPTION_CODE: std::cell::Cell<&'static str> = const { std::cell::Cell::new("") };
     /// The PROGRAM-ID where the last exception was raised, for `FUNCTION EXCEPTION-LOCATION`.
     static EXCEPTION_PROGRAM: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
+    /// The LAST file operation's `(2-char status, SELECT name)`, for `FUNCTION EXCEPTION-FILE`. Updated on
+    /// every I/O (success too -- it reflects the last op, not just exceptions); `None` before any I/O.
+    static FILE_EXCEPTION: std::cell::RefCell<Option<(String, String)>> = const { std::cell::RefCell::new(None) };
+}
+
+/// Record the last file operation for `FUNCTION EXCEPTION-FILE`.
+fn set_file_exception(code: &str, select: &str) {
+    FILE_EXCEPTION.with(|c| *c.borrow_mut() = Some((code.to_string(), select.to_string())));
+}
+
+/// The `FUNCTION EXCEPTION-FILE` field: the last I/O `<status><SELECT>`, or `"00"` before any I/O.
+fn exception_file_field() -> (Vec<u8>, FieldAttr) {
+    FILE_EXCEPTION.with(|c| match c.borrow().as_ref() {
+        Some((code, name)) => crate::intrinsic::cob_intr_exception_file(Some((code.as_bytes(), name.as_bytes()))),
+        None => crate::intrinsic::cob_intr_exception_file(None),
+    })
 }
 
 /// Set the current exception condition (sticky until the next exception), recording the raising program.
@@ -1550,6 +1566,7 @@ fn set_exception(code: &'static str) {
 fn reset_exception() {
     EXCEPTION_CODE.with(|c| c.set(""));
     EXCEPTION_PROGRAM.with(|p| p.borrow_mut().clear());
+    FILE_EXCEPTION.with(|c| *c.borrow_mut() = None);
 }
 
 /// The `FUNCTION EXCEPTION-LOCATION` field: `"<prog>; ; 0"` once an exception has been raised (no
@@ -4008,6 +4025,8 @@ fn fkey(ctx: &Ctx, name: &str) -> String {
 
 /// Set a file's `FILE STATUS` field (if declared) to a 2-character code (`"00"` ok, `"10"` end-of-file).
 fn set_file_status(fields: &mut HashMap<String, Field>, def: &FileDef, code: &str) {
+    // FUNCTION EXCEPTION-FILE reflects the LAST I/O operation (regardless of a FILE STATUS clause).
+    set_file_exception(code, &def.name);
     if let Some(s) = &def.status {
         let mv = vec![Tok::Str(code.as_bytes().to_vec()), Tok::Word("TO".to_string()), Tok::Word(s.clone())];
         let _ = exec_move(&mv, fields, false);
@@ -4971,6 +4990,8 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         "EXCEPTION-STATEMENT" => ix::cob_intr_exception_statement(None),
         // EXCEPTION-LOCATION: "<prog>; ; 0" once an exception has been raised, else a single space.
         "EXCEPTION-LOCATION" => exception_location_field(),
+        // EXCEPTION-FILE: the last I/O "<status><SELECT>", or "00" before any I/O.
+        "EXCEPTION-FILE" => exception_file_field(),
         // The compile-stamp intrinsics: deterministic under a pinned SOURCE_DATE_EPOCH (the reproducible-
         // builds standard cobc honours), via the interpreter's compile step.
         "MODULE-DATE" => {
