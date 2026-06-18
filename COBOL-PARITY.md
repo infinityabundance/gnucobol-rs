@@ -144,7 +144,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 | `JUSTIFIED` | **yes** |
 | `BLANK WHEN ZERO` | **yes** |
 | `GLOBAL` | **yes** |
-| `EXTERNAL` | **yes** |
+| `EXTERNAL` | no (runtime ready) |
 | `LEVEL 88 (condition-name)` | **yes** |
 | `LEVEL 66 (RENAMES)` | no (runtime ready) |
 | `LEVEL 77` | **yes** |

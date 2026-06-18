@@ -457,7 +457,7 @@ fn build(root: &str) -> String {
             c,
             "PICTURE" | "USAGE" | "VALUE" | "OCCURS" | "REDEFINES" | "FILLER"
                 | "LEVEL 88 (condition-name)" | "LEVEL 77" | "INDEXED BY"
-                | "SIGN" | "JUSTIFIED" | "BLANK WHEN ZERO" | "GLOBAL" | "EXTERNAL"
+                | "SIGN" | "JUSTIFIED" | "BLANK WHEN ZERO" | "GLOBAL"
         )
     };
     for c in &clauses {
