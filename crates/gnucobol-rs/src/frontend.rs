@@ -37,7 +37,7 @@ pub const WIRED_STATEMENTS: &[&str] = &[
     "DISPLAY", "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ACCEPT", "ADD", "SUBTRACT",
     "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
     "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
-    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN",
+    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1086,18 +1086,23 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         }
         fields.insert(it.name.clone(), f);
     }
-    // Second pass: group items (no PIC). A group's elementary leaves are the items that follow it at a
-    // strictly higher level number, up to the next item at <= its level (a sibling/uncle).
+    // Second pass: group items (no PIC). A group's IMMEDIATE children are the items that follow it at the
+    // first (smallest) level below it, up to the next item at <= its level; deeper items belong to a child.
     for (i, it) in prog.ws.iter().enumerate() {
         if it.level == 88 || !it.pic.is_empty() {
             continue;
         }
         let mut children = Vec::new();
+        let mut child_level: Option<u16> = None;
         for sib in &prog.ws[i + 1..] {
             if sib.level <= it.level {
                 break;
             }
-            if sib.level != 88 && !sib.pic.is_empty() {
+            if sib.level == 88 {
+                continue;
+            }
+            let cl = *child_level.get_or_insert(sib.level);
+            if sib.level == cl {
                 children.push(sib.name.clone());
             }
         }
@@ -1113,27 +1118,32 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     Ok(fields)
 }
 
-/// The concatenated current bytes of a group's leaves (its record image).
+/// The concatenated current bytes of a group's immediate children (a sub-group recurses via `read_field`).
 fn group_bytes(children: &[String], fields: &HashMap<String, Field>) -> Vec<u8> {
     let mut b = Vec::new();
     for c in children {
-        if let Some(f) = fields.get(c) {
+        if let Ok(Some(f)) = read_field(fields, c) {
             b.extend_from_slice(&f.bytes);
         }
     }
     b
 }
 
-/// Distribute `bytes` (space-padded/truncated to the group's total length) across a group's leaves by length.
+/// The total byte length of a field (a group recurses through `read_field`).
+fn field_len(name: &str, fields: &HashMap<String, Field>) -> usize {
+    read_field(fields, name).ok().flatten().map(|f| f.bytes.len()).unwrap_or(0)
+}
+
+/// Distribute `bytes` (space-padded/truncated to the group's total length) across its immediate children by
+/// length (a sub-group child distributes recursively via `write_field`).
 fn put_group_bytes(children: &[String], mut bytes: Vec<u8>, fields: &mut HashMap<String, Field>) {
-    let total: usize = children.iter().map(|c| fields.get(c).map(|f| f.bytes.len()).unwrap_or(0)).sum();
+    let lens: Vec<usize> = children.iter().map(|c| field_len(c, fields)).collect();
+    let total: usize = lens.iter().sum();
     bytes.resize(total, b' ');
     let mut off = 0;
-    for c in children {
-        let len = fields.get(c).map(|f| f.bytes.len()).unwrap_or(0);
-        if let Some(f) = fields.get_mut(c) {
-            f.bytes = bytes[off..off + len].to_vec();
-        }
+    for (c, len) in children.iter().zip(lens) {
+        let slice = bytes[off..off + len].to_vec();
+        let _ = write_field(fields, c, |f| { f.bytes = slice; Ok(()) });
         off += len;
     }
 }
@@ -1283,7 +1293,7 @@ const STMT_VERBS: &[&str] = &[
     "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE",
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
-    "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN",
+    "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -2376,6 +2386,16 @@ fn exec_stmt(
         // MERGE of already-ordered inputs yields the same globally-ordered output as SORT over the union.
         "SORT" | "MERGE" => exec_sort(stmt, fields, out, ctx),
         "RELEASE" => exec_release(stmt, fields, ctx),
+        "JSON" => match stmt.first() {
+            Some(Tok::Word(w)) if w == "GENERATE" => exec_ml_generate(stmt, fields, ctx, false),
+            Some(Tok::Word(w)) if w == "PARSE" => exec_ml_parse_noop(),
+            _ => Err(RunError::Unsupported("JSON: expected GENERATE/PARSE".into())),
+        },
+        "XML" => match stmt.first() {
+            Some(Tok::Word(w)) if w == "GENERATE" => exec_ml_generate(stmt, fields, ctx, true),
+            Some(Tok::Word(w)) if w == "PARSE" => exec_ml_parse_noop(),
+            _ => Err(RunError::Unsupported("XML: expected GENERATE".into())),
+        },
         "UNLOCK" => exec_unlock(stmt, fields, ctx),
         // COMMIT / ROLLBACK are no-ops without a transactional backend (as libcob is for sequential files).
         "COMMIT" | "ROLLBACK" => Ok(()),
@@ -3409,6 +3429,105 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     } else {
         return Err(RunError::Unsupported("SORT/MERGE requires GIVING or OUTPUT PROCEDURE".into()));
     }
+    Ok(())
+}
+
+/// Format a decimal as a JSON/XML number: sign (if negative non-zero), integer part with leading zeros
+/// stripped, and the scale's fractional digits kept (e.g. `12.50`), matching GnuCOBOL `JSON/XML GENERATE`.
+fn num_to_json(dec: &Decimal) -> String {
+    let scale = dec.scale.max(0) as usize;
+    let total = dec.digits.len();
+    let intlen = total.saturating_sub(scale);
+    let int_str: String = dec.digits[..intlen].iter().map(|d| (b'0' + d) as char).collect();
+    let int_t = int_str.trim_start_matches('0');
+    let int_final = if int_t.is_empty() { "0" } else { int_t };
+    let frac: String = dec.digits[intlen..].iter().map(|d| (b'0' + d) as char).collect();
+    let is_zero = int_final == "0" && frac.chars().all(|c| c == '0');
+    let sign = if dec.negative && !is_zero { "-" } else { "" };
+    if scale > 0 { format!("{sign}{int_final}.{frac}") } else { format!("{sign}{int_final}") }
+}
+
+/// A field's alphanumeric value with trailing spaces trimmed, with the `escape` map applied per byte.
+fn trimmed_escaped(bytes: &[u8], escape: impl Fn(u8) -> Option<&'static str>) -> String {
+    let mut end = bytes.len();
+    while end > 0 && bytes[end - 1] == b' ' { end -= 1; }
+    let mut s = String::new();
+    for &b in &bytes[..end] {
+        match escape(b) {
+            Some(e) => s.push_str(e),
+            None => s.push(b as char),
+        }
+    }
+    s
+}
+
+/// The JSON value of a field: `{...}` for a group, a trimmed number for numeric, a quoted escaped string
+/// otherwise -- recursively over the group tree (GnuCOBOL `JSON GENERATE`).
+fn json_value(name: &str, fields: &HashMap<String, Field>) -> String {
+    match fields.get(name).map(|f| f.storage.clone()) {
+        Some(Storage::Group { children }) => {
+            let parts: Vec<String> = children.iter().map(|c| format!("\"{}\":{}", c, json_value(c, fields))).collect();
+            format!("{{{}}}", parts.join(","))
+        }
+        Some(Storage::Numeric(attr)) => {
+            let bytes = fields.get(name).map(|f| f.bytes.clone()).unwrap_or_default();
+            source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
+        }
+        _ => {
+            let bytes = read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+            let esc = |b: u8| match b { b'"' => Some("\\\""), b'\\' => Some("\\\\"), 0x08 => Some("\\b"), 0x0c => Some("\\f"), b'\n' => Some("\\n"), b'\r' => Some("\\r"), b'\t' => Some("\\t"), _ => None };
+            format!("\"{}\"", trimmed_escaped(&bytes, esc))
+        }
+    }
+}
+
+/// The XML element of a field: `<name>...</name>` with children nested, numeric/alnum content (XML-escaped),
+/// recursively over the group tree (GnuCOBOL `XML GENERATE`, no declaration).
+fn xml_value(name: &str, fields: &HashMap<String, Field>) -> String {
+    let inner = match fields.get(name).map(|f| f.storage.clone()) {
+        Some(Storage::Group { children }) => children.iter().map(|c| xml_value(c, fields)).collect::<String>(),
+        Some(Storage::Numeric(attr)) => {
+            let bytes = fields.get(name).map(|f| f.bytes.clone()).unwrap_or_default();
+            source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
+        }
+        _ => {
+            let bytes = read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+            let esc = |b: u8| match b { b'&' => Some("&amp;"), b'<' => Some("&lt;"), b'>' => Some("&gt;"), _ => None };
+            trimmed_escaped(&bytes, esc)
+        }
+    };
+    format!("<{name}>{inner}</{name}>")
+}
+
+/// `{JSON|XML} GENERATE dest FROM source [COUNT IN c]` -- serialize the source group into `dest`. `NAME`/
+/// `SUPPRESS`/`ON EXCEPTION` are out of subset.
+fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx, xml: bool) -> Result<(), RunError> {
+    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "NAME" || w == "SUPPRESS" || w == "EXCEPTION")) {
+        return Err(RunError::Unsupported("JSON/XML GENERATE NAME/SUPPRESS/EXCEPTION not in subset".into()));
+    }
+    let dest = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing destination".into())) };
+    let fp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")).ok_or_else(|| RunError::Unsupported("JSON/XML GENERATE without FROM".into()))?;
+    let source = match stmt.get(fp + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing source".into())) };
+    let text = if xml { xml_value(&source, fields) } else { format!("{{\"{}\":{}}}", source, json_value(&source, fields)) };
+    let bytes = text.into_bytes();
+    let mv = vec![Tok::Str(bytes.clone()), Tok::Word("TO".to_string()), Tok::Word(dest)];
+    exec_move(&mv, fields, ctx.decimal_comma)?;
+    // optional COUNT IN counter -> the generated length.
+    if let Some(cp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "COUNT")) {
+        let mut i = cp + 1;
+        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IN") { i += 1; }
+        if let Some(Tok::Word(c)) = stmt.get(i) {
+            let mv = vec![Tok::Word(bytes.len().to_string()), Tok::Word("TO".to_string()), Tok::Word(c.clone())];
+            exec_move(&mv, fields, ctx.decimal_comma)?;
+        }
+    }
+    Ok(())
+}
+
+/// `JSON PARSE` / `XML PARSE` are a faithful no-op: GnuCOBOL 3.2 compiles them with
+/// `warning: JSON/XML PARSE is not implemented [-Wpending]` and they do nothing at run time, so the
+/// oracle-faithful front-end accepts the statement and leaves the destination unchanged.
+fn exec_ml_parse_noop() -> Result<(), RunError> {
     Ok(())
 }
 

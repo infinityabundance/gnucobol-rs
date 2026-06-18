@@ -12,7 +12,7 @@
 | surface | total | runtime ported (1:1) | front-end runs it |
 |---|---:|---:|---:|
 | libcob runtime files | 13 | **13 (100%)** | n/a |
-| statements (verbs) | 66 | 51 (77%) | **38 (58%)** |
+| statements (verbs) | 66 | 51 (77%) | **42 (64%)** |
 | intrinsic functions | 110 | **110 (100%)** | 0 (0%) |
 | data-description clauses | 18 | (runtime via move/layout) | see table |
 | USAGE forms | 10 | (runtime ported) | see table |
@@ -23,10 +23,10 @@
 
 | statement | category | runtime (libcob) | front-end (cobrun) | status |
 |---|---|:---:|:---:|---|
-| `JSON GENERATE` | XML/JSON | yes (mlio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `JSON PARSE` | XML/JSON | yes (mlio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `XML GENERATE` | XML/JSON | yes (mlio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
-| `XML PARSE` | XML/JSON | yes (mlio.c) | no | RUNTIME-ONLY -- libcob ported, front-end not wired |
+| `JSON GENERATE` | XML/JSON | yes (mlio.c) | **yes** | **DONE** -- parses + runs |
+| `JSON PARSE` | XML/JSON | yes (mlio.c) | **yes** | **DONE** -- parses + runs |
+| `XML GENERATE` | XML/JSON | yes (mlio.c) | **yes** | **DONE** -- parses + runs |
+| `XML PARSE` | XML/JSON | yes (mlio.c) | **yes** | **DONE** -- parses + runs |
 | `ADD` | arithmetic | yes (numeric.c) | **yes** | **DONE** -- parses + runs |
 | `COMPUTE` | arithmetic | yes (numeric.c) | **yes** | **DONE** -- parses + runs |
 | `DIVIDE` | arithmetic | yes (numeric.c) | **yes** | **DONE** -- parses + runs |
