@@ -60,7 +60,7 @@ pub const WIRED_FUNCTIONS: &[&str] = &[
     "FORMATTED-DATETIME", "INTEGER-OF-FORMATTED-DATE", "TEST-FORMATTED-DATETIME",
     "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
     "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
-    "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE",
+    "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -1474,6 +1474,18 @@ thread_local! {
 /// The current PROGRAM-ID (top of the program stack), empty outside any program body.
 fn current_program_id() -> String {
     PROGRAM_STACK.with(|s| s.borrow().last().cloned()).unwrap_or_default()
+}
+
+thread_local! {
+    /// The source-file path the host is running, for `FUNCTION MODULE-SOURCE` (cobc embeds the source
+    /// name it was given; the interpreter knows the `.cob` it was invoked with). Set by the host
+    /// (`set_source_file`) before running; empty otherwise.
+    static SOURCE_FILE: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
+}
+
+/// Record the source-file path for `FUNCTION MODULE-SOURCE` (the host sets this before running a program).
+pub fn set_source_file(path: &str) {
+    SOURCE_FILE.with(|s| *s.borrow_mut() = path.to_string());
 }
 
 /// The caller's PROGRAM-ID (the entry below the top), or `None` at the top-level program.
@@ -4765,6 +4777,11 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         "MODULE-CALLER-ID" => {
             let caller = caller_program_id();
             ix::cob_intr_module_caller_id(caller.as_deref().map(str::as_bytes))
+        }
+        // MODULE-SOURCE is the source-file path the host is running (cobc embeds the name it was given).
+        "MODULE-SOURCE" => {
+            let src = SOURCE_FILE.with(|s| s.borrow().clone());
+            ix::cob_intr_module_source(src.as_bytes())
         }
         // The compile-stamp intrinsics: deterministic under a pinned SOURCE_DATE_EPOCH (the reproducible-
         // builds standard cobc honours), via the interpreter's compile step.

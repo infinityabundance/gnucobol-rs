@@ -217,9 +217,10 @@ fn intrinsic_boundary(name: &str) -> Option<(bool, &'static str)> {
         // would be WRONG until the runtime PRNG is sealed -- a runtime task, not a front-end one.
         "RANDOM" => Some((false, "runtime gap: the ported cob_intr_random PRNG does not yet match libcob's stream (would not be byte-identical)")),
         "SECONDS-PAST-MIDNIGHT" => Some((false, "no fixed oracle: reads the live wall clock (ignores COB_CURRENT_DATE)")),
-        // Host-path dependent: the compile-time source name / runtime load path.
-        "MODULE-SOURCE" | "MODULE-PATH" =>
-            Some((false, "no portable oracle: the compile-time source name / runtime load path (host-specific)")),
+        // A compiler artifact with no interpreter analog: cobc's MODULE-PATH is the *compiled binary*
+        // path (its -o output); an interpreter never produces a binary, so there is nothing to match.
+        "MODULE-PATH" =>
+            Some((true, "compiler artifact: cobc returns the compiled binary path; an interpreter produces no binary")),
         // Needs a front-end EXCEPTION-state model: deterministic given a known fault, but the interpreter
         // does not yet track the COBOL exception registers (it fails closed on faults instead).
         "EXCEPTION-FILE" | "EXCEPTION-FILE-N" | "EXCEPTION-LOCATION" | "EXCEPTION-LOCATION-N"

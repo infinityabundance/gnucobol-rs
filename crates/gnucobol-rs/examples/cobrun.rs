@@ -38,6 +38,8 @@ fn main() {
         }
     };
     let src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
+    // Record the source path for FUNCTION MODULE-SOURCE (cobc embeds the source name it was given).
+    gnucobol_rs::frontend::set_source_file(&path);
     // DISPLAY ... UPON PRINTER redirect: when COB_DISPLAY_PRINT_FILE is set, libcob diverts UPON PRINTER
     // to that file (appending) instead of stdout. cobrun is the host that owns this env+file boundary; the
     // interpreter only separates the printer stream. (COB_DISPLAY_PRINT_PIPE -- a spawned pipe -- is a
