@@ -209,6 +209,15 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: DIVIDE sweep $DIVSWEEP" ;;
     *) bad "oracle freshness: DIVIDE sweep not clean ($DIVSWEEP)" ;;
   esac
+  # FRONT-END sweep: the 1:1 proof behind FILE-PARITY.md's depth %, the sealed sub-forms (section A) and
+  # every cobrun claim -- it compiles + RUNS each lab/corpus/frontend/*.cob through real cobc AND cobrun and
+  # requires byte-identical stdout. Gating it here makes the FILE-PARITY sealed/depth claims oracle-verified
+  # (not merely string-anchored): break an implementation and this fails even though the anchor strings stay.
+  FESWEEP=$(bash "$ROOT/lab/oracle/cobol_frontend_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+')
+  case "$FESWEEP" in
+    *"FAIL=0") note "oracle freshness: front-end byte sweep $FESWEEP (proves FILE-PARITY sealed sub-forms + depth)" ;;
+    *) bad "oracle freshness: front-end sweep not clean ($FESWEEP) -- a FILE-PARITY sealed/depth claim regressed" ;;
+  esac
   # TRUST.2: generated receipts must be current (live replay) + .md == render(.json), no manual edits.
   if ( cd "$ROOT" && cargo run -q -p xtask -- receipt check ) >/tmp/_rec_check 2>&1; then
     note "TRUST.2: receipts reproducible (generated == live replay, no hand-edits)"

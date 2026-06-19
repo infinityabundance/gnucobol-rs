@@ -1049,6 +1049,14 @@ fn reality_check(root: &str) -> Vec<String> {
     let frontend_src = "crates/gnucobol-rs/src/frontend.rs";
     let frontend_body = std::fs::read_to_string(Path::new(root).join(frontend_src)).unwrap_or_default();
     for (verb, _form, status, path, needle) in FRONTEND_SUBFORMS {
+        // A `sealed` claim ("byte-identical to cobc") is only as good as its proof: require the anchor to be
+        // a program in `lab/corpus/frontend/`, which the doc gate now runs through real cobc + cobrun and
+        // requires byte-identical (the front-end sweep). Otherwise "sealed" would rest on string-presence.
+        if *status == "sealed" && !path.starts_with("lab/corpus/frontend/") {
+            problems.push(format!(
+                "FRONTEND_SUBFORMS `{verb}` (sealed): anchor `{path}` is not a swept corpus program (lab/corpus/frontend/*.cob) -- sealed claims must be oracle-verified by the front-end sweep, not just string-anchored"
+            ));
+        }
         let full = Path::new(root).join(path);
         match std::fs::read_to_string(&full) {
             Ok(body) => {
