@@ -181,7 +181,34 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | USAGE forms | 10 | 9 | **90%** | 1 -- USAGE NATIONAL (unfinished in cobc -- boundary) |
 | **TOTAL (language breadth)** | **204** | **179** | **88%** | **25 left** |
 
-**Runtime engine: 100%** (13/13 libcob files + 110/110 intrinsics ported 1:1, oracle-sealed) -- the breadth figure above is the FRONT-END (interpreter) axis only. Excluding the boundary non-claims the oracle itself cannot run, the front-end runs **~100% of the *runnable* language surface**; the 204-item denominator above keeps those boundaries IN, so the honest front-end-of-everything figure is **88%**. **Depth:** within the wired verbs, **3 sub-form(s) byte-sealed** and **38 feature-gap form(s) still open** (section B) -- depth has no fixed denominator (the set of all sub-forms is unbounded), so it is tracked as an open-gap COUNT, not a percentage, to avoid a fabricated ratio.
+**Runtime engine: 100%** (13/13 libcob files + 110/110 intrinsics ported 1:1, oracle-sealed) -- the breadth figure above is the FRONT-END (interpreter) axis only. Excluding the boundary non-claims the oracle itself cannot run, the front-end runs **~100% of the *runnable* language surface**; the 204-item denominator above keeps those boundaries IN, so the honest front-end-of-everything figure is **88%**.
+
+### Depth -- sub-forms within wired verbs
+
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 41 front-end sub-forms have been identified -- **3 sealed** (byte-identical to cobc, section A) and **38 still open** (fail-closed guards, section B). **Depth completion = 3/41 = 7.3%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+
+| verb / clause | open gaps (what's left) | share of the remaining work |
+|---|---:|---:|
+| `file I/O` | 6 | 16% |
+| `EXAMINE` | 5 | 13% |
+| `INSPECT` | 4 | 11% |
+| `OCCURS / tables` | 4 | 11% |
+| `ACCEPT` | 2 | 5% |
+| `MOVE / ADD / SUBTRACT CORR` | 2 | 5% |
+| `REPORT / ML GENERATE` | 2 | 5% |
+| `UNSTRING` | 2 | 5% |
+| `DIVIDE / arithmetic` | 1 | 3% |
+| `EXHIBIT` | 1 | 3% |
+| `FUNCTION` | 1 | 3% |
+| `IF / condition` | 1 | 3% |
+| `INITIALIZE` | 1 | 3% |
+| `PERFORM` | 1 | 3% |
+| `SEARCH` | 1 | 3% |
+| `SET` | 1 | 3% |
+| `SORT / MERGE` | 1 | 3% |
+| `USAGE` | 1 | 3% |
+| `exponent` | 1 | 3% |
+| **TOTAL** | **38 open** (+ 3 sealed = 41 identified) | **7.3% complete** |
 
 ### A. Sealed sub-forms (3) -- proven byte-identical to cobc
 

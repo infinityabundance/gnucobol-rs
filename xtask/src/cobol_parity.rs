@@ -649,11 +649,42 @@ fn frontend_subforms_section(root: &str) -> String {
          breadth figure above is the FRONT-END (interpreter) axis only. Excluding the boundary non-claims \
          the oracle itself cannot run, the front-end runs **~100% of the *runnable* language surface**; the \
          {tot_tot}-item denominator above keeps those boundaries IN, so the honest front-end-of-everything \
-         figure is **{:.0}%**. **Depth:** within the wired verbs, **{} sub-form(s) byte-sealed** and \
-         **{ng} feature-gap form(s) still open** (section B) -- depth has no fixed denominator (the set of \
-         all sub-forms is unbounded), so it is tracked as an open-gap COUNT, not a percentage, to avoid a \
-         fabricated ratio.\n\n",
-        pct(tot_done, tot_tot), sealed.len(),
+         figure is **{:.0}%**.\n\n",
+        pct(tot_done, tot_tot),
+    ));
+
+    // ---- DEPTH completion: identified sub-forms = sealed (byte-proven) + open (fail-closed guards). ----
+    // Denominator is the IDENTIFIED forms, computed LIVE (sealed from FRONTEND_SUBFORMS, open from the
+    // inventory) -- NOT a grammar count (verified mismatch: gap rows are edge-cases that do not line up 1:1
+    // with parser.y alternatives, e.g. OCCURS has more gap rows than `occurs_clause` has alternatives) and
+    // NOT "all of COBOL". It climbs to 100% as the open gaps seal; a NEW fail-closed guard raises the
+    // denominator, so it can never read 100% while any guard remains.
+    let identified = sealed.len() + ng;
+    let mut open_by_cat: std::collections::BTreeMap<&str, usize> = std::collections::BTreeMap::new();
+    for (cls, cat, _m) in &inv {
+        if cls == "gap" { *open_by_cat.entry(cat.as_str()).or_default() += 1; }
+    }
+    let mut movers: Vec<(&str, usize)> = open_by_cat.into_iter().collect();
+    movers.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(b.0))); // biggest movers first
+    s.push_str("### Depth -- sub-forms within wired verbs\n\n");
+    s.push_str(&format!(
+        "**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb \
+         run*. {identified} front-end sub-forms have been identified -- **{} sealed** (byte-identical to \
+         cobc, section A) and **{ng} still open** (fail-closed guards, section B). **Depth completion = \
+         {}/{identified} = {:.1}%**, climbing to 100% as the open gaps seal. The denominator is the \
+         IDENTIFIED forms (sealed + open), computed live from source -- *not* \"% of all COBOL\" and *not* a \
+         grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` \
+         alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while \
+         any guard remains. Below: the open gaps per verb, **biggest movers first**.\n\n",
+        sealed.len(), sealed.len(), pct(sealed.len(), identified),
+    ));
+    s.push_str("| verb / clause | open gaps (what's left) | share of the remaining work |\n|---|---:|---:|\n");
+    for (cat, n) in &movers {
+        s.push_str(&format!("| `{cat}` | {n} | {:.0}% |\n", pct(*n, ng)));
+    }
+    s.push_str(&format!(
+        "| **TOTAL** | **{ng} open** (+ {} sealed = {identified} identified) | **{:.1}% complete** |\n\n",
+        sealed.len(), pct(sealed.len(), identified),
     ));
 
     // (1) sealed -- what cobrun now DOES, each anchored to the corpus program that proves it.
