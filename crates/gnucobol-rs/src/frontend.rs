@@ -4774,7 +4774,7 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
             let (item, rstart) = match modekw.as_str() {
                 "CHARACTERS" => (Vec::new(), 5),
                 "ALL" | "LEADING" => (inspect_operand(stmt.get(5), fields)?, 6),
-                other => return Err(RunError::Unsupported(format!("INSPECT TALLYING FOR {other} (subset: ALL/LEADING/CHARACTERS)"))),
+                other => return Err(RunError::Unsupported(format!("INSPECT TALLYING FOR: unrecognized mode `{other}` (expected ALL/LEADING/CHARACTERS)"))),
             };
             let (rk, d) = inspect_region(&stmt[rstart.min(stmt.len())..], fields)?;
             let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
@@ -5258,7 +5258,7 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     let mode = match stmt.first() {
         Some(Tok::Word(w)) => match w.as_str() {
             "INPUT" => 1u8, "OUTPUT" => 2, "EXTEND" => 3, "I-O" => 4,
-            other => return Err(RunError::Unsupported(format!("OPEN {other} (subset: INPUT/OUTPUT/EXTEND/I-O)"))),
+            other => return Err(RunError::Unsupported(format!("OPEN: unrecognized mode `{other}` (expected INPUT/OUTPUT/EXTEND/I-O)"))),
         },
         _ => return Err(RunError::Unsupported("OPEN: missing mode".into())),
     };
