@@ -5045,7 +5045,8 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
 /// `DELIMITER IN` / `COUNT IN` / `TALLYING` / `POINTER` / `OVERFLOW` and multi-delimiter forms fail closed.
 fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
     use crate::string_ops::unstring;
-    for bad in ["DELIMITER", "COUNT", "TALLYING", "POINTER", "OVERFLOW", "OR"] {
+    // Still non-claims: WITH POINTER, ON OVERFLOW, multi-delimiter (`OR`), `DELIMITED BY ALL`.
+    for bad in ["POINTER", "OVERFLOW", "OR", "ALL"] {
         if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == bad)) {
             return Err(RunError::Unsupported(format!("UNSTRING ... {bad} not in subset")));
         }
@@ -5060,12 +5061,46 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<()
         if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
         delim = Some(inspect_operand(stmt.get(j), fields)?);
     }
-    let recv: Vec<String> = stmt[into + 1..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
-    if recv.is_empty() {
+    // The receiver list runs from INTO to TALLYING (or end). Each receiver is `name [DELIMITER IN d]
+    // [COUNT IN c]`; an optional trailing `TALLYING IN t` counts the filled fields (added to t).
+    let tally_pos = stmt[into + 1..].iter().position(|t| matches!(t, Tok::Word(w) if w == "TALLYING")).map(|p| into + 1 + p);
+    let seg = &stmt[into + 1..tally_pos.unwrap_or(stmt.len())];
+    let mut recvs: Vec<(String, Option<String>, Option<String>)> = Vec::new();
+    let mut i = 0;
+    while i < seg.len() {
+        let Some(Tok::Word(name)) = seg.get(i) else { i += 1; continue };
+        let name = name.clone();
+        i += 1;
+        let (mut din, mut cin) = (None, None);
+        loop {
+            let in_at = |k: usize| matches!(seg.get(k), Some(Tok::Word(w)) if w == "IN");
+            match seg.get(i) {
+                Some(Tok::Word(w)) if w == "DELIMITER" && in_at(i + 1) => {
+                    din = Some(match seg.get(i + 2) { Some(Tok::Word(d)) => d.clone(), _ => return Err(RunError::Unsupported("UNSTRING DELIMITER IN: missing field".into())) });
+                    i += 3;
+                }
+                Some(Tok::Word(w)) if w == "COUNT" && in_at(i + 1) => {
+                    cin = Some(match seg.get(i + 2) { Some(Tok::Word(c)) => c.clone(), _ => return Err(RunError::Unsupported("UNSTRING COUNT IN: missing field".into())) });
+                    i += 3;
+                }
+                _ => break,
+            }
+        }
+        recvs.push((name, din, cin));
+    }
+    if recvs.is_empty() {
         return Err(RunError::Unsupported("UNSTRING: no receiving field".into()));
     }
-    let mut sizes = Vec::with_capacity(recv.len());
-    for n in &recv {
+    let tally_field = match tally_pos {
+        Some(tp) => {
+            let mut j = tp + 1;
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "IN") { j += 1; }
+            Some(match stmt.get(j) { Some(Tok::Word(n)) => n.clone(), _ => return Err(RunError::Unsupported("UNSTRING TALLYING IN: missing field".into())) })
+        }
+        None => None,
+    };
+    let mut sizes = Vec::with_capacity(recvs.len());
+    for (n, _, _) in &recvs {
         let f = read_field(fields, n)?.ok_or_else(|| RunError::UndefinedName(n.clone()))?;
         if !matches!(f.storage, Storage::Alpha(_)) {
             return Err(RunError::Unsupported(format!("UNSTRING into non-alphanumeric `{n}` not in subset")));
@@ -5073,9 +5108,28 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<()
         sizes.push(f.bytes.len());
     }
     let res = unstring(&source, delim.as_deref(), &sizes, 1);
-    for (n, fld) in recv.iter().zip(res.fields.iter()) {
+    for ((n, din, cin), fld) in recvs.iter().zip(res.fields.iter()) {
         let data = fld.data.clone();
         write_field(fields, n, |f| { f.bytes = data; Ok(()) })?;
+        if let Some(d) = din {
+            let dl = fld.delimiter.clone();
+            write_field(fields, d, |f| {
+                let mut b = vec![b' '; f.bytes.len()];
+                let k = dl.len().min(b.len());
+                b[..k].copy_from_slice(&dl[..k]);
+                f.bytes = b;
+                Ok(())
+            })?;
+        }
+        if let Some(c) = cin {
+            let mv = vec![Tok::Word(fld.count.to_string()), Tok::Word("TO".to_string()), Tok::Word(c.clone())];
+            exec_move(&mv, fields, false)?;
+        }
+    }
+    if let Some(t) = tally_field {
+        let nv = resolve_int(&t, fields).unwrap_or(0) + res.tally as i64;
+        let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(t)];
+        exec_move(&mv, fields, false)?;
     }
     Ok(())
 }

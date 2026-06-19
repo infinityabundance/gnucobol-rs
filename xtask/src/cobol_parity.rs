@@ -46,6 +46,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p107_initialize_replacing.cob", "REPLACING NUMERIC DATA BY 7"),
     ("INSPECT", "`REPLACING CHARACTERS BY y` (incl. BEFORE/AFTER region)", "sealed",
         "lab/corpus/frontend/p108_inspect_chars.cob", "REPLACING CHARACTERS BY"),
+    ("UNSTRING", "`DELIMITER IN` / `COUNT IN` per receiver + `TALLYING IN` (added)", "sealed",
+        "lab/corpus/frontend/p109_unstring_delim.cob", "DELIMITER IN D1 COUNT IN C1"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
