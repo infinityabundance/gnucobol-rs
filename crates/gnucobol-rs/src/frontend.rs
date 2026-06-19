@@ -5493,7 +5493,10 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     let sd_def = ctx.file_defs.get(&sf).ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?.clone();
     let reclen = read_field(fields, &sd_def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
     let kw = |w: &str| matches!(w, "ON" | "KEY" | "ASCENDING" | "DESCENDING" | "USING" | "GIVING" | "INPUT" | "OUTPUT" | "PROCEDURE" | "IS" | "THRU" | "THROUGH");
-    let (mut descending, mut keys): (bool, Vec<String>) = (false, vec![]);
+    // Each KEY records the ASCENDING/DESCENDING direction in effect when it was named (a SORT may mix
+    // directions: `ASCENDING KEY a DESCENDING KEY b`). The keys compare in declared order.
+    let mut cur_desc = false;
+    let mut keys: Vec<(String, bool)> = vec![];
     let (mut using, mut giving): (Vec<String>, Vec<String>) = (vec![], vec![]);
     let (mut in_proc, mut out_proc): (Option<(String, String)>, Option<(String, String)>) = (None, None);
     let word = |i: usize| stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None });
@@ -5501,8 +5504,8 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     while i < stmt.len() {
         match word(i).as_deref() {
             Some("ON") | Some("KEY") => i += 1,
-            Some("ASCENDING") => { descending = false; i += 1; }
-            Some("DESCENDING") => { descending = true; i += 1; }
+            Some("ASCENDING") => { cur_desc = false; i += 1; }
+            Some("DESCENDING") => { cur_desc = true; i += 1; }
             Some("USING") => { i += 1; while let Some(w) = word(i) { if kw(&w) { break; } using.push(w); i += 1; } }
             Some("GIVING") => { i += 1; while let Some(w) = word(i) { if kw(&w) { break; } giving.push(w); i += 1; } }
             Some("INPUT") | Some("OUTPUT") => {
@@ -5519,15 +5522,20 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
                 }
                 if is_in { in_proc = Some((p1, p2)); } else { out_proc = Some((p1, p2)); }
             }
-            Some(w) => { keys.push(w.to_string()); i += 1; }
+            Some(w) => { keys.push((w.to_string(), cur_desc)); i += 1; }
             None => i += 1,
         }
     }
-    if keys.len() != 1 {
-        return Err(RunError::Unsupported("SORT/MERGE subset: a single KEY".into()));
+    if keys.is_empty() {
+        return Err(RunError::Unsupported("SORT/MERGE: no KEY given".into()));
     }
-    let (key_off, key_len) = sort_key_span(&sd_def.record, &keys[0], reclen, fields)
-        .ok_or_else(|| RunError::Unsupported(format!("SORT/MERGE KEY `{}` is not a field of the sort record", keys[0])))?;
+    // (offset, length, descending) for each key, in declared (major-to-minor) order.
+    let mut spans: Vec<(usize, usize, bool)> = Vec::with_capacity(keys.len());
+    for (k, desc) in &keys {
+        let (off, len) = sort_key_span(&sd_def.record, k, reclen, fields)
+            .ok_or_else(|| RunError::Unsupported(format!("SORT/MERGE KEY `{k}` is not a field of the sort record")))?;
+        spans.push((off, len, *desc));
+    }
     // the current body's tokens, for running INPUT/OUTPUT PROCEDURE ranges.
     let proc = CUR_PROC.with(|c| c.borrow().clone());
     // ---- gather phase: INPUT PROCEDURE (RELEASE records into the sort file) or USING files ----
@@ -5553,11 +5561,17 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     }
     for r in recs.iter_mut() { r.resize(reclen, b' '); }
     recs.sort_by(|a, b| {
-        let ea = (key_off + key_len).min(a.len());
-        let eb = (key_off + key_len).min(b.len());
-        a[key_off.min(a.len())..ea].cmp(&b[key_off.min(b.len())..eb])
+        for &(off, len, desc) in &spans {
+            let (sa, ea) = (off.min(a.len()), (off + len).min(a.len()));
+            let (sb, eb) = (off.min(b.len()), (off + len).min(b.len()));
+            let ord = a[sa..ea].cmp(&b[sb..eb]);
+            let ord = if desc { ord.reverse() } else { ord };
+            if ord != std::cmp::Ordering::Equal {
+                return ord;
+            }
+        }
+        std::cmp::Ordering::Equal
     });
-    if descending { recs.reverse(); }
     // ---- distribute phase: OUTPUT PROCEDURE (RETURN records) or GIVING files ----
     if let Some((p3, p4)) = &out_proc {
         {

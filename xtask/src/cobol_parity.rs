@@ -60,6 +60,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p114_unstring_num.cob", "INTO A B C"),
     ("INITIALIZE", "over an OCCURS table (plain + REPLACING; expands to subscripted element leaves)", "sealed",
         "lab/corpus/frontend/p115_init_occurs.cob", "INITIALIZE T1 REPLACING NUMERIC BY 7"),
+    ("SORT/MERGE", "multiple KEYs with mixed ASCENDING/DESCENDING direction (major-to-minor)", "sealed",
+        "lab/corpus/frontend/p116_sort_multikey.cob", "ASCENDING KEY S-GRP DESCENDING KEY S-AGE"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

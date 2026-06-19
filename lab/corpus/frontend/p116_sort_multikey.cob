@@ -1,0 +1,38 @@
+      *> SORT on TWO keys with mixed direction: ASCENDING S-GRP, DESCENDING S-AGE.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P116.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT SORTWK ASSIGN TO "p116s.dat".
+           SELECT INF  ASSIGN TO "p116i.dat" ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT OUTF ASSIGN TO "p116o.dat" ORGANIZATION IS LINE SEQUENTIAL.
+       DATA DIVISION.
+       FILE SECTION.
+       SD SORTWK.
+       01 SREC.
+          05 S-GRP PIC 9.
+          05 S-AGE PIC 9(2).
+          05 S-TAG PIC XX.
+       FD INF.
+       01 IREC PIC X(5).
+       FD OUTF.
+       01 OREC PIC X(5).
+       WORKING-STORAGE SECTION.
+       01 EOFF PIC X VALUE "N".
+       PROCEDURE DIVISION.
+           OPEN OUTPUT INF.
+           MOVE "120ab" TO IREC. WRITE IREC.
+           MOVE "110cd" TO IREC. WRITE IREC.
+           MOVE "205ef" TO IREC. WRITE IREC.
+           MOVE "130gh" TO IREC. WRITE IREC.
+           CLOSE INF.
+           SORT SORTWK ASCENDING KEY S-GRP DESCENDING KEY S-AGE
+              USING INF GIVING OUTF.
+           OPEN INPUT OUTF.
+           PERFORM UNTIL EOFF = "Y"
+               READ OUTF AT END MOVE "Y" TO EOFF END-READ
+               IF EOFF = "N" DISPLAY "[" OREC "]" END-IF
+           END-PERFORM.
+           CLOSE OUTF.
+           STOP RUN.
