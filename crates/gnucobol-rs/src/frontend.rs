@@ -1596,7 +1596,9 @@ fn find_seq_in(toks: &[Tok], seq: &[&str], from: usize, to: usize) -> Option<usi
 fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, Field>, RunError> {
     let mut fields = HashMap::new();
     ODO_TABLES.with(|m| m.borrow_mut().clear()); // fresh per program build
-    for it in &prog.ws {
+    GROUP_OCCURS.with(|m| m.borrow_mut().clear());
+    GROUP_CHILD.with(|m| m.borrow_mut().clear());
+    for (gi, it) in prog.ws.iter().enumerate() {
         // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
         if let Some((parent, values)) = &it.condition {
             fields.insert(
@@ -1613,14 +1615,49 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // A group item (no PIC) is built after its leaves exist (second pass below) -- but a COMP-1/COMP-2
         // item also has no PIC yet is an elementary float leaf, so it must build here.
         if it.pic.is_empty() && it.float_kind.is_none() {
-            // A GROUP with OCCURS (a table of group items) needs an interleaved per-element array model the
-            // flat field model does not yet provide -- its children would be mis-indexed (a silent wrong
-            // answer). Fail CLOSED rather than mis-run; elementary OCCURS (`PIC ... OCCURS n`) is supported.
+            // A GROUP with OCCURS is a table of group items, built as an interleaved buffer in pass 2.
+            // Admit ONLY the oracle-confirmed subset (single level, fixed count, all-elementary children);
+            // fail CLOSED on anything that would need a richer model than the flat field store provides.
             if it.occurs > 1 {
-                return Err(RunError::Unsupported(format!(
-                    "OCCURS on group item `{}` (table of group items) not in subset -- elementary OCCURS only",
-                    it.name
-                )));
+                if it.odo_counter.is_some() {
+                    return Err(RunError::Unsupported(format!("OCCURS DEPENDING ON on group `{}` not in subset", it.name)));
+                }
+                let mut child_level: Option<u16> = None;
+                for sib in &prog.ws[gi + 1..] {
+                    if sib.level <= it.level {
+                        break;
+                    }
+                    if sib.level == 88 {
+                        continue;
+                    }
+                    let cl = *child_level.get_or_insert(sib.level);
+                    if sib.level == cl {
+                        let is_group = sib.pic.is_empty() && sib.float_kind.is_none();
+                        let why = if is_group {
+                            Some("child is itself a group (group-of-group)")
+                        } else if sib.occurs > 1 {
+                            Some("child has nested OCCURS (multi-dimension)")
+                        } else if sib.redefines.is_some() {
+                            Some("child REDEFINES")
+                        } else if sib.odo_counter.is_some() {
+                            Some("child OCCURS DEPENDING ON")
+                        } else if sib.sync {
+                            Some("SYNCHRONIZED child")
+                        } else {
+                            None
+                        };
+                        if let Some(reason) = why {
+                            return Err(RunError::Unsupported(format!(
+                                "group-OCCURS `{}` ({}) not in subset", it.name, reason
+                            )));
+                        }
+                    } else if sib.level > cl {
+                        return Err(RunError::Unsupported(format!(
+                            "group-OCCURS `{}` has a nested group child (group-of-group) not in subset", it.name
+                        )));
+                    }
+                }
+                // eligible: the GROUP field (interleaved buffer + child views) is built in pass 2.
             }
             continue;
         }
@@ -1666,6 +1703,8 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             continue;
         }
         let mut children = Vec::new();
+        // group-OCCURS: each immediate child's (name, offset within the element, size) -- for the views.
+        let mut child_views: Vec<(String, usize, usize)> = Vec::new();
         let mut child_level: Option<u16> = None;
         let mut offset = 0usize;
         for sib in &prog.ws[i + 1..] {
@@ -1696,8 +1735,46 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                     }
                 }
                 children.push(sib.name.clone());
+                child_views.push((sib.name.clone(), offset, csize)); // offset BEFORE the += below
                 offset += csize;
             }
+        }
+        // A group with OCCURS n: build the live INTERLEAVED buffer [elem]*n and demote children to strided
+        // views into it (the children own no bytes). The pass-1 gate already restricted this to the
+        // supported subset (single level, fixed count, all-elementary children).
+        if it.occurs > 1 {
+            let stride = offset; // the group element size
+            let mut elem_image = Vec::with_capacity(stride);
+            for (cname, _o, csz) in &child_views {
+                let cb = fields.get(cname).map(|f| f.bytes.clone()).unwrap_or_else(|| vec![b' '; *csz]);
+                elem_image.extend_from_slice(&cb);
+            }
+            elem_image.resize(stride, b' ');
+            let buf = elem_image.repeat(it.occurs); // interleaved, n elements (same shape as elementary OCCURS)
+            GROUP_OCCURS.with(|m| m.borrow_mut().insert(it.name.clone(), (stride, it.occurs)));
+            for (cname, coff, csz) in &child_views {
+                GROUP_CHILD.with(|m| m.borrow_mut().insert(cname.clone(), (it.name.clone(), *coff, *csz)));
+                if let Some(cf) = fields.get_mut(cname) {
+                    cf.bytes.clear(); // the child is now a view into the parent buffer
+                }
+            }
+            // INDEXED BY / ASCENDING|DESCENDING KEY are keyed on the GROUP name (for SEARCH / SEARCH ALL).
+            for (n, idx) in it.indexed_by.iter().enumerate() {
+                fields.entry(idx.clone()).or_insert_with(|| make_return_code(0));
+                if n == 0 {
+                    TABLE_INDEX.with(|m| m.borrow_mut().insert(it.name.clone(), idx.clone()));
+                }
+            }
+            if let Some(asc) = it.occurs_key {
+                TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
+            }
+            fields.insert(it.name.clone(), Field {
+                storage: Storage::Group { children }, // children retained for category/DISPLAY resolution
+                bytes: buf,                            // AUTHORITATIVE interleaved buffer
+                occurs: it.occurs,                     // n (not 1) -- unblocks SEARCH's occurs > 1 gate
+                redefines: None,
+            });
+            continue;
         }
         fields.insert(it.name.clone(), Field {
             storage: Storage::Group { children },
@@ -1716,6 +1793,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             let children: Vec<String> = prog.ws[s..=e.max(s)]
                 .iter()
                 .filter(|x| x.level != 88 && x.level != 66
+                    && group_child_lookup(&x.name).is_none() // skip group-OCCURS child views (zero-byte)
                     && fields.get(&x.name).is_some_and(|f| !matches!(f.storage, Storage::Group { .. })))
                 .map(|x| x.name.clone())
                 .collect();
@@ -1787,6 +1865,12 @@ thread_local! {
     /// `OCCURS ... ASCENDING|DESCENDING KEY` table -> sort direction (`true` = ascending). Read by
     /// `SEARCH ALL` to narrow the binary search. Absent = no KEY clause (SEARCH ALL fails closed).
     static TABLE_KEY: std::cell::RefCell<HashMap<String, bool>> = std::cell::RefCell::new(HashMap::new());
+    /// A group-OCCURS GROUP name -> (group element stride, occurs n). The group `Field` holds the live
+    /// INTERLEAVED buffer `[c0 c1 ...][c0 c1 ...]...` as its real bytes, occurs = n.
+    static GROUP_OCCURS: std::cell::RefCell<HashMap<String, (usize, usize)>> = std::cell::RefCell::new(HashMap::new());
+    /// A group-OCCURS CHILD name -> (parent group, offset within the element, child size). The child owns
+    /// NO bytes; it is a strided view into the parent's interleaved buffer (read/written at stride).
+    static GROUP_CHILD: std::cell::RefCell<HashMap<String, (String, usize, usize)>> = std::cell::RefCell::new(HashMap::new());
     /// The stack of executing PROGRAM-IDs (top = current). Pushed/popped around each program body so
     /// `FUNCTION MODULE-ID` reads the running program and `FUNCTION MODULE-CALLER-ID` reads its caller.
     static PROGRAM_STACK: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
@@ -1936,6 +2020,16 @@ thread_local! {
 /// The `(counter, elem-size)` of an `OCCURS DEPENDING ON` table, if `name` is one.
 fn odo_lookup(name: &str) -> Option<(String, usize)> {
     ODO_TABLES.with(|m| m.borrow().get(name).cloned())
+}
+
+/// `(group element stride, occurs)` if `name` is a group-OCCURS group, else `None`.
+fn group_occurs_lookup(name: &str) -> Option<(usize, usize)> {
+    GROUP_OCCURS.with(|m| m.borrow().get(name).cloned())
+}
+
+/// `(parent group, offset within element, child size)` if `name` is a group-OCCURS child view, else `None`.
+fn group_child_lookup(name: &str) -> Option<(String, usize, usize)> {
+    GROUP_CHILD.with(|m| m.borrow().get(name).cloned())
 }
 
 thread_local! {
@@ -5965,7 +6059,10 @@ fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
     match &f.redefines {
         Some(target) => {
             let size = f.bytes.len();
-            let mut bytes = fields.get(target).map(|t| t.bytes.clone()).unwrap_or_default();
+            // Read the target's live IMAGE (not its raw `bytes`): an elementary target's image is its
+            // bytes, but a GROUP target's bytes are empty -- its image is the concatenated/interleaved
+            // leaves (so REDEFINES over a group, incl. a group-OCCURS interleaved buffer, sees real data).
+            let mut bytes = read_field(fields, target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
             bytes.resize(size, b' ');
             bytes.truncate(size);
             Field { storage: f.storage.clone(), bytes, occurs: f.occurs, redefines: None }
@@ -5979,9 +6076,41 @@ fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
 /// a `REDEFINES` field reads its target's storage (so an alias sees the other field's current bytes).
 fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Field>, RunError> {
     let (base, sub) = split_subscript(word);
+    // group-OCCURS CHILD: `EK(i)` is a single strided slice into the PARENT's interleaved buffer.
+    if let Some((parent, coff, csz)) = group_child_lookup(base) {
+        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let (stride, occ) = group_occurs_lookup(&parent).unwrap_or((csz, 1));
+        let idx = match sub {
+            Some(s) => resolve_int(s, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize,
+            None => return Err(RunError::Unsupported(format!("group-OCCURS child `{base}` must be subscripted"))),
+        };
+        if idx < 1 || idx > occ {
+            if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+                return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+            }
+            return Ok(Some(default_element(&cstore, csz)));
+        }
+        let pf = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?;
+        let start = (idx - 1) * stride + coff;
+        return Ok(Some(Field { storage: cstore, bytes: pf.bytes[start..start + csz].to_vec(), occurs: 1, redefines: None }));
+    }
     let Some(f) = fields.get(base) else { return Ok(None) };
-    // A group item reads as the concatenation of its leaves' current bytes (its live record image).
     if let Storage::Group { children } = &f.storage {
+        // group-OCCURS TABLE: bytes are the live interleaved buffer; `ENT(i)` via the unchanged table_element.
+        if let Some((_stride, occ)) = group_occurs_lookup(base) {
+            let tbl = Field { storage: Storage::Group { children: children.clone() }, bytes: f.bytes.clone(), occurs: occ, redefines: None };
+            return match sub {
+                None => Ok(Some(tbl)), // whole interleaved image (REDEFINES X(n) read / group DISPLAY/MOVE)
+                Some(s) => {
+                    let idx = resolve_int(s, fields)
+                        .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
+                    Ok(Some(table_element(&tbl, idx as usize, base)?))
+                }
+            };
+        }
+        // A non-OCCURS group reads as the concatenation of its leaves' current bytes (its live record image).
+        debug_assert!(group_occurs_lookup(base).is_none(), "group_bytes reached for group-OCCURS `{base}`");
         let bytes = group_bytes(children, fields);
         return Ok(Some(Field {
             storage: Storage::Group { children: children.clone() },
@@ -6016,10 +6145,70 @@ fn write_field(
     apply: impl FnOnce(&mut Field) -> Result<(), RunError>,
 ) -> Result<(), RunError> {
     let (base, sub) = split_subscript(word);
+    // group-OCCURS CHILD write-back: `EK(i)` shapes a temp over the child's strided slice of the parent
+    // buffer, applies, and copies the result back into the parent buffer.
+    if let Some((parent, coff, csz)) = group_child_lookup(base) {
+        let Some(s) = sub else {
+            return Err(RunError::Unsupported(format!("group-OCCURS child `{base}` must be subscripted")));
+        };
+        let idx = resolve_int(s, fields)
+            .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize;
+        let (stride, occ) = group_occurs_lookup(&parent).unwrap_or((csz, 1));
+        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        if idx < 1 || idx > occ {
+            if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+                return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+            }
+            return Ok(());
+        }
+        let start = (idx - 1) * stride + coff;
+        let pf = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?;
+        let mut tmp = Field { storage: cstore, bytes: pf.bytes[start..start + csz].to_vec(), occurs: 1, redefines: None };
+        apply(&mut tmp)?;
+        let pf = fields.get_mut(&parent).expect("parent present");
+        let n = tmp.bytes.len().min(csz);
+        pf.bytes[start..start + n].copy_from_slice(&tmp.bytes[..n]);
+        return Ok(());
+    }
+    // group-OCCURS TABLE write (whole image, or `ENT(i)` element), BEFORE the group-distribute branch.
+    if let Some((stride, occ)) = group_occurs_lookup(base) {
+        match sub {
+            None => {
+                let f = fields.get(base).expect("present");
+                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: f.bytes.clone(), occurs: occ, redefines: None };
+                apply(&mut tmp)?;
+                let f = fields.get_mut(base).expect("present");
+                let n = tmp.bytes.len().min(f.bytes.len());
+                f.bytes[..n].copy_from_slice(&tmp.bytes[..n]);
+                return Ok(());
+            }
+            Some(s) => {
+                let idx = resolve_int(s, fields)
+                    .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize;
+                if idx < 1 || idx > occ {
+                    if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+                        return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+                    }
+                    return Ok(());
+                }
+                // The whole group element is moved with alphanumeric (byte-copy) semantics -- shape an
+                // Alpha temp over the element bytes so move_into does a raw left-justified store.
+                let f = fields.get(base).expect("present");
+                let start = (idx - 1) * stride;
+                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: f.bytes[start..start + stride].to_vec(), occurs: 1, redefines: None };
+                apply(&mut tmp)?;
+                let f = fields.get_mut(base).expect("present");
+                let n = tmp.bytes.len().min(stride);
+                f.bytes[start..start + n].copy_from_slice(&tmp.bytes[..n]);
+                return Ok(());
+            }
+        }
+    }
     // A group write distributes the result across its leaves: shape a temp alphanumeric field over the
     // group's current concatenation, apply, then split the bytes back into the leaves by length.
     if sub.is_none() {
         if let Some(Storage::Group { children }) = fields.get(base).map(|f| f.storage.clone()) {
+            debug_assert!(group_occurs_lookup(base).is_none(), "group_bytes write reached for group-OCCURS `{base}`");
             let concat = group_bytes(&children, fields);
             let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: concat, occurs: 1, redefines: None };
             apply(&mut tmp)?;
@@ -6031,6 +6220,11 @@ fn write_field(
     // storage over the target's bytes, apply, and copy the result back into the target.
     if sub.is_none() {
         if let Some(target) = fields.get(base).and_then(|f| f.redefines.clone()) {
+            // A REDEFINES write-through over a group-OCCURS interleaved buffer would corrupt the interleave
+            // (the alias view is flat). Read over the group is supported; write fails closed (out of subset).
+            if group_occurs_lookup(&target).is_some() {
+                return Err(RunError::Unsupported(format!("REDEFINES write-through over group-OCCURS `{target}` not in subset")));
+            }
             let f = fields.get(base).expect("base present");
             let storage = f.storage.clone();
             let size = f.bytes.len();

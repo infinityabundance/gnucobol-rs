@@ -1,0 +1,16 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P98.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 TBL.
+          05 ENT OCCURS 4 ASCENDING KEY IS EK INDEXED BY I.
+             10 EK PIC 9(3).
+             10 EV PIC X(4).
+       PROCEDURE DIVISION.
+           MOVE 010 TO EK(1). MOVE "AAAA" TO EV(1).
+           MOVE 040 TO EK(2). MOVE "BBBB" TO EV(2).
+           MOVE 070 TO EK(3). MOVE "CCCC" TO EV(3).
+           MOVE 099 TO EK(4). MOVE "DDDD" TO EV(4).
+           SEARCH ALL ENT AT END DISPLAY "NF" WHEN EK(I) = 070
+               DISPLAY "FOUND " EV(I) " AT " I END-SEARCH.
+           STOP RUN.
