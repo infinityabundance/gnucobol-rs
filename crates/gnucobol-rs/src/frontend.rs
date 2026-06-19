@@ -2639,6 +2639,23 @@ fn at_overflow_terminator(toks: &[Tok], p: usize) -> bool {
     }
 }
 
+/// A READ handler block (`AT END` / `INVALID KEY` / `NOT AT END` / `NOT INVALID KEY`) ends at END-READ, an
+/// outer scope terminator, a period, or a following `NOT AT`/`NOT INVALID` clause. (Bare `NOT` is NOT a
+/// terminator -- it only ends the block when it begins a `NOT AT`/`NOT INVALID` handler -- so conditions
+/// containing `NOT` are unaffected.)
+fn at_read_terminator(toks: &[Tok], p: usize) -> bool {
+    match toks.get(p) {
+        None | Some(Tok::Dot) => true,
+        Some(Tok::Word(w)) if w == "END-READ" || SCOPE_ENDERS.contains(&w.as_str()) => true,
+        Some(Tok::Word(w)) if w == "NOT"
+            && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID") =>
+        {
+            true
+        }
+        _ => false,
+    }
+}
+
 /// Parse an `[NOT] ON OVERFLOW <statements>` handler at `*pos` (the STRING overflow clause). Returns the
 /// handler tokens and advances `*pos`; `None` if the clause is absent.
 fn parse_on_overflow_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<Vec<Tok>> {
@@ -6030,15 +6047,29 @@ fn exec_read(
         *pos += 1;
         if let Some(Tok::Word(w)) = toks.get(*pos) { into = Some(w.clone()); *pos += 1; }
     }
-    // optional AT END imperative (runs at EOF). Parsed as a block ending at END-READ / a period.
-    let mut at_end: Option<usize> = None;
-    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "AT") {
-        *pos += 1;
-        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") { *pos += 1; }
-        at_end = Some(*pos);
-        let mut scan = *pos;
-        let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
-        *pos = scan;
+    // Optional handlers: `AT END` / `INVALID KEY` run on a miss/EOF; `NOT AT END` / `NOT INVALID KEY` run
+    // on a successful read. Each is collected as its own token block (bounded by `at_read_terminator`).
+    let w_eq = |p: usize, k: &str| matches!(toks.get(p), Some(Tok::Word(w)) if w == k);
+    let mut at_end: Option<Vec<Tok>> = None;
+    let mut not_end: Option<Vec<Tok>> = None;
+    loop {
+        if w_eq(*pos, "AT") || w_eq(*pos, "INVALID") {
+            *pos += 1;
+            if w_eq(*pos, "END") || w_eq(*pos, "KEY") { *pos += 1; }
+            let start = *pos;
+            while *pos < toks.len() && !at_read_terminator(toks, *pos) { *pos += 1; }
+            at_end = Some(toks[start..*pos].to_vec());
+        } else if w_eq(*pos, "NOT") {
+            *pos += 1;
+            for kw in ["AT", "END", "INVALID", "KEY"] {
+                if w_eq(*pos, kw) { *pos += 1; }
+            }
+            let start = *pos;
+            while *pos < toks.len() && !at_read_terminator(toks, *pos) { *pos += 1; }
+            not_end = Some(toks[start..*pos].to_vec());
+        } else {
+            break;
+        }
     }
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-READ") { *pos += 1; }
     if !exec {
@@ -6116,15 +6147,17 @@ fn exec_read(
                 exec_move(&mv, fields, ctx.decimal_comma)?;
             }
             set_file_status(fields, &def, "00");
+            if let Some(b) = &not_end {
+                return run_handler(b, fields, out, ctx);
+            }
             Ok(false)
         }
         None => {
             // a relative/indexed random miss is "23" (record not found); a sequential next-end is "10".
             let code = if matches!(def.org, FileOrg::Relative | FileOrg::Indexed) && !had_next { "23" } else { "10" };
             set_file_status(fields, &def, code);
-            if let Some(s) = at_end {
-                let mut p = s;
-                return run_block(toks, &mut p, fields, out, true, ctx);
+            if let Some(b) = &at_end {
+                return run_handler(b, fields, out, ctx);
             }
             Ok(false)
         }
