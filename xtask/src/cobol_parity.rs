@@ -802,10 +802,11 @@ fn frontend_fail_closed_inventory(root: &str) -> Vec<(String, String, String)> {
 /// feature-form limit of a supported verb), else `validation` (malformed-input rejection).
 fn fail_closed_class(msg: &str) -> &'static str {
     // Non-"subset" feature gaps (deliberate limits of a supported verb that aren't worded with "subset").
+    // Non-"subset" guards that ARE genuine feature gaps (cobc itself runs the form). NOTE: SEARCH ALL's
+    // non-equality WHEN is NOT here -- cobc 3.2 rejects `WHEN key >= v` at compile time, so refusing it is
+    // faithful (validation), not a gap; and `**` fractional exponents are now wired (no guard left).
     const GAP_EXTRAS: &[&str] = &[
-        "SEARCH ALL: WHEN must be a key equality (key = value)",
         "START KEY relation {other:?}", "START KEY NOT <relation>",
-        "** non-integer exponent {exp_word}",
     ];
     if msg.contains("boundary non-claim")
         || msg.contains("non-claim")
