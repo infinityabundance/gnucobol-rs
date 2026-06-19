@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end sub-form coverage (within DONE verbs)
 
-The verb table above is verb-granular: a verb reads **DONE** once *any* of its forms run, which can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms explicitly -- **2 sealed** (proven byte-identical to cobc, anchored to the corpus program that proves it) and **4 open gap(s)** (still fail closed, anchored to the live guard in `src/frontend.rs`). It is reality-checked by the doc gate: a `sealed` row whose corpus vanishes, a `gap` row whose guard is gone (i.e. silently sealed), or a new `is not in the front-end subset` guard with no row here, all FAIL the gate. The doctrine is fail-closed -- an open gap is an explicit `RunError::Unsupported`, never a silent wrong answer.
+Verb-level status is verb-granular: a verb reads **DONE** once *any* of its forms run, which can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms explicitly -- **2 sealed** (proven byte-identical to cobc, anchored to the corpus program that proves it) and **4 open gap(s)** (still fail closed, anchored to the live guard in `src/frontend.rs`). It is reality-checked by the doc gate: a `sealed` row whose corpus vanishes, a `gap` row whose guard is gone (i.e. silently sealed), or a new `is not in the front-end subset` guard with no row here, all FAIL the gate. The doctrine is fail-closed -- an open gap is an explicit `RunError::Unsupported`, never a silent wrong answer.
 
 | verb | sub-form | status | evidence / guard anchor |
 |---|---|:---:|---|

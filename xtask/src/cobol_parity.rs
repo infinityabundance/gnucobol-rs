@@ -154,6 +154,10 @@ fn build_files() -> String {
         }
     }
 
+    // The biggest PARTIAL file is the clean-room front-end interpreter itself; spell out, at sub-form
+    // granularity, what it now DOES and what still fails closed -- so "PARTIAL" is not an opaque label.
+    out.push_str(&frontend_subforms_section());
+
     // every file, grouped by top-level directory.
     out.push_str("\n## Every file (grouped by directory)\n\n");
     let mut by_dir: std::collections::BTreeMap<String, Vec<&Value>> = std::collections::BTreeMap::new();
@@ -580,7 +584,7 @@ fn frontend_subforms_section() -> String {
     let mut s = String::new();
     s.push_str("\n## Front-end sub-form coverage (within DONE verbs)\n\n");
     s.push_str(&format!(
-        "The verb table above is verb-granular: a verb reads **DONE** once *any* of its forms run, which \
+        "Verb-level status is verb-granular: a verb reads **DONE** once *any* of its forms run, which \
          can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms \
          explicitly -- **{sealed} sealed** (proven byte-identical to cobc, anchored to the corpus program \
          that proves it) and **{gaps} open gap(s)** (still fail closed, anchored to the live guard in \

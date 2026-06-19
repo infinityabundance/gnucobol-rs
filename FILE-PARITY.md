@@ -72,6 +72,19 @@ These files ARE accounted for (the interpreter reproduces a sweep-verified subse
 | `cobc/typeck.c` | cobc front-end: semantics | Grow statement + expression coverage; tracked live in COBOL-PARITY.md (statement axis). |
 | `extras/CBL_OC_DUMP.cob` | cobc front-end: COBOL program | Front-end target: USAGE BINARY-CHAR/SHORT/LONG/DOUBLE (incl. UNSIGNED) and USAGE POINTER now parse; remaining blockers are USING-module execution + an 88-level condition form. Grow the interpreter to run it. |
 
+## Front-end sub-form coverage (within DONE verbs)
+
+Verb-level status is verb-granular: a verb reads **DONE** once *any* of its forms run, which can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms explicitly -- **2 sealed** (proven byte-identical to cobc, anchored to the corpus program that proves it) and **4 open gap(s)** (still fail closed, anchored to the live guard in `src/frontend.rs`). It is reality-checked by the doc gate: a `sealed` row whose corpus vanishes, a `gap` row whose guard is gone (i.e. silently sealed), or a new `is not in the front-end subset` guard with no row here, all FAIL the gate. The doctrine is fail-closed -- an open gap is an explicit `RunError::Unsupported`, never a silent wrong answer.
+
+| verb | sub-form | status | evidence / guard anchor |
+|---|---|:---:|---|
+| `IF` | sign condition `x IS [NOT] {POSITIVE|NEGATIVE|ZERO}` (incl. COMP-3) | **sealed** | `lab/corpus/frontend/p104_sign_cond.cob` |
+| `ADD/SUBTRACT/MULTIPLY/DIVIDE` | multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver) | **sealed** | `lab/corpus/frontend/p105_multi_receiver.cob` |
+| `MOVE` | `CORRESPONDING` (matches leaves by name across two groups) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `MOVE CORRESPONDING is not in the front-end subset` |
+| `ADD/SUBTRACT` | `CORRESPONDING` (same qualified-name blocker as MOVE CORR) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `{verb} CORRESPONDING is not in the front-end subset` |
+| `DIVIDE` | `REMAINDER` (the second, remainder result) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `DIVIDE ... REMAINDER is not in the front-end subset` |
+| `INITIALIZE` | `REPLACING` / `WITH` (category-targeted init: NUMERIC/ALPHANUMERIC/ALPHABETIC/edited) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `no REPLACING/WITH` |
+
 ## Every file (grouped by directory)
 
 ### `(top level)/` (26 files)
