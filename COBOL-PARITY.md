@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **10 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 197 of them, de-duplicated from the 213 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 197: **28 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **159 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **11 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 197 of them, de-duplicated from the 213 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 197: **28 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **159 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,7 +185,7 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 38 front-end sub-forms have been identified -- **10 sealed** (byte-identical to cobc, section A) and **28 still open** (fail-closed guards, section B). **Depth completion = 10/38 = 26.3%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 39 front-end sub-forms have been identified -- **11 sealed** (byte-identical to cobc, section A) and **28 still open** (fail-closed guards, section B). **Depth completion = 11/39 = 28.2%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
@@ -205,9 +205,9 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | `SET` | 1 | 4% |
 | `SORT / MERGE` | 1 | 4% |
 | `USAGE` | 1 | 4% |
-| **TOTAL** | **28 open** (+ 10 sealed = 38 identified) | **26.3% complete** |
+| **TOTAL** | **28 open** (+ 11 sealed = 39 identified) | **28.2% complete** |
 
-### A. Sealed sub-forms (10) -- proven byte-identical to cobc
+### A. Sealed sub-forms (11) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -223,6 +223,7 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `EXAMINE` | `UNTIL FIRST` (REPLACING + TALLYING...REPLACING), via the inspect CHARACTERS/BEFORE helper | `lab/corpus/frontend/p110_examine_until.cob` |
 | `COMPUTE` | `**` fractional / identifier exponent (e.g. `9 ** 0.5`), via the sealed cob_decimal_pow | `lab/corpus/frontend/p111_exponent.cob` |
 | `SET` | `SET cond TO FALSE` (the 88 `WHEN SET TO FALSE` value) | `lab/corpus/frontend/p113_set_false.cob` |
+| `UNSTRING` | INTO DISPLAY-numeric receivers (alphanumeric->numeric per field) | `lab/corpus/frontend/p114_unstring_num.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (28)
 
@@ -251,7 +252,7 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 | `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
 | `SORT / MERGE` | SORT/MERGE subset: a single KEY |
 | `UNSTRING` | UNSTRING ... <x> not in subset |
-|  | UNSTRING into non-alphanumeric `<x>` not in subset |
+|  | UNSTRING into `<x>` (subset: alphanumeric or DISPLAY-numeric receivers) |
 | `USAGE` | USAGE <x> is not in the front-end subset |
 | `file I/O` | DELETE is only supported on a RELATIVE file in this subset |
 |  | START ... INVALID KEY not in subset |

@@ -5153,17 +5153,31 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<()
         None => None,
     };
     let mut sizes = Vec::with_capacity(recvs.len());
+    let mut numeric = Vec::with_capacity(recvs.len());
     for (n, _, _) in &recvs {
         let f = read_field(fields, n)?.ok_or_else(|| RunError::UndefinedName(n.clone()))?;
-        if !matches!(f.storage, Storage::Alpha(_)) {
-            return Err(RunError::Unsupported(format!("UNSTRING into non-alphanumeric `{n}` not in subset")));
-        }
+        let is_num = match &f.storage {
+            Storage::Alpha(_) => false,
+            Storage::Numeric(a) if a.field_type == COB_TYPE_NUMERIC_DISPLAY => true,
+            _ => return Err(RunError::Unsupported(format!(
+                "UNSTRING into `{n}` (subset: alphanumeric or DISPLAY-numeric receivers)"
+            ))),
+        };
         sizes.push(f.bytes.len());
+        numeric.push(is_num);
     }
     let res = unstring(&source, delim.as_deref(), &sizes, 1);
-    for ((n, din, cin), fld) in recvs.iter().zip(res.fields.iter()) {
-        let data = fld.data.clone();
-        write_field(fields, n, |f| { f.bytes = data; Ok(()) })?;
+    for (((n, din, cin), fld), is_num) in recvs.iter().zip(res.fields.iter()).zip(numeric.iter()) {
+        if *is_num {
+            // A DISPLAY-numeric receiver takes the delimited substring (its `count` chars) by MOVE, which
+            // applies the alphanumeric->numeric conversion (right-justify, zero-fill) -- e.g. "12" -> 012.
+            let sub = fld.data.get(..fld.count.min(fld.data.len())).unwrap_or(&[]).to_vec();
+            let mv = vec![Tok::Str(sub), Tok::Word("TO".to_string()), Tok::Word(n.clone())];
+            exec_move(&mv, fields, false)?;
+        } else {
+            let data = fld.data.clone();
+            write_field(fields, n, |f| { f.bytes = data; Ok(()) })?;
+        }
         if let Some(d) = din {
             let dl = fld.delimiter.clone();
             write_field(fields, d, |f| {
