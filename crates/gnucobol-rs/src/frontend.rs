@@ -4925,7 +4925,7 @@ fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
             "ALL" => TallyMode::All(&lit),
             "LEADING" => TallyMode::Leading(&lit),
             "UNTIL" => TallyMode::Characters,
-            other => return Err(RunError::Unsupported(format!("EXAMINE TALLYING {other}"))),
+            other => return Err(RunError::Unsupported(format!("EXAMINE TALLYING: unrecognized mode `{other}` (expected ALL/LEADING/UNTIL FIRST)"))),
         };
         let region = if modekw == "UNTIL" { Region::Before(&lit) } else { Region::All };
         let count = inspect_tallying(&tbytes, tmode, region) as i64;
@@ -4935,12 +4935,15 @@ fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
             let mut j = tp + rp + 1;
             if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
             let lit2 = inspect_operand(stmt.get(j), fields)?;
-            let rmode = match modekw.as_str() {
-                "ALL" => ReplaceMode::All(&lit, &lit2),
-                "LEADING" => ReplaceMode::Leading(&lit, &lit2),
-                _ => return Err(RunError::Unsupported("EXAMINE TALLYING UNTIL ... REPLACING not in subset".into())),
+            // The REPLACING mode mirrors the TALLYING mode; UNTIL FIRST replaces the chars before the
+            // delimiter (the same span just tallied) via the CHARACTERS mode over the BEFORE region.
+            let (rmode, rregion) = match modekw.as_str() {
+                "ALL" => (ReplaceMode::All(&lit, &lit2), Region::All),
+                "LEADING" => (ReplaceMode::Leading(&lit, &lit2), Region::All),
+                "UNTIL" => (ReplaceMode::Characters(&lit2), Region::Before(&lit)),
+                other => return Err(RunError::Unsupported(format!("EXAMINE TALLYING {other} REPLACING: unrecognized mode"))),
             };
-            let newb = inspect_replacing(&tbytes, rmode, Region::All);
+            let newb = inspect_replacing(&tbytes, rmode, rregion);
             write_target(fields, newb)?;
         }
         return Ok(());
@@ -4954,13 +4957,14 @@ fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
         i += 1;
         if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") { i += 1; }
         let lit2 = inspect_operand(stmt.get(i), fields)?;
-        let rmode = match modekw.as_str() {
-            "ALL" => ReplaceMode::All(&lit, &lit2),
-            "LEADING" => ReplaceMode::Leading(&lit, &lit2),
-            "FIRST" => ReplaceMode::First(&lit, &lit2),
-            other => return Err(RunError::Unsupported(format!("EXAMINE REPLACING {other}"))),
+        let (rmode, rregion) = match modekw.as_str() {
+            "ALL" => (ReplaceMode::All(&lit, &lit2), Region::All),
+            "LEADING" => (ReplaceMode::Leading(&lit, &lit2), Region::All),
+            "FIRST" => (ReplaceMode::First(&lit, &lit2), Region::All),
+            "UNTIL" => (ReplaceMode::Characters(&lit2), Region::Before(&lit)),
+            other => return Err(RunError::Unsupported(format!("EXAMINE REPLACING: unrecognized mode `{other}` (expected ALL/LEADING/FIRST/UNTIL FIRST)"))),
         };
-        let newb = inspect_replacing(&tbytes, rmode, Region::All);
+        let newb = inspect_replacing(&tbytes, rmode, rregion);
         write_target(fields, newb)?;
         return Ok(());
     }

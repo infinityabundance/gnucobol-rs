@@ -48,6 +48,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p108_inspect_chars.cob", "REPLACING CHARACTERS BY"),
     ("UNSTRING", "`DELIMITER IN` / `COUNT IN` per receiver + `TALLYING IN` (added)", "sealed",
         "lab/corpus/frontend/p109_unstring_delim.cob", "DELIMITER IN D1 COUNT IN C1"),
+    ("EXAMINE", "`UNTIL FIRST` (REPLACING + TALLYING...REPLACING), via the inspect CHARACTERS/BEFORE helper", "sealed",
+        "lab/corpus/frontend/p110_examine_until.cob", "REPLACING UNTIL FIRST"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
@@ -791,8 +793,6 @@ fn frontend_fail_closed_inventory(root: &str) -> Vec<(String, String, String)> {
 fn fail_closed_class(msg: &str) -> &'static str {
     // Non-"subset" feature gaps (deliberate limits of a supported verb that aren't worded with "subset").
     const GAP_EXTRAS: &[&str] = &[
-        "EXAMINE REPLACING mode", "EXAMINE REPLACING {other}",
-        "EXAMINE TALLYING mode", "EXAMINE TALLYING {other}",
         "SEARCH ALL: WHEN must be a key equality (key = value)",
         "START KEY relation {other:?}", "START KEY NOT <relation>",
         "** non-integer exponent {exp_word}",
