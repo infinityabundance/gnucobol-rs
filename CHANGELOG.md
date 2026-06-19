@@ -9,6 +9,12 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.8]
+- **Front-end control-flow + USAGE expansion (`GNURUST.FRONTEND.1`).** Six COBOL forms wired into the `cobrun` interpreter, each proven BYTE-IDENTICAL to the admitted cobc and gated in the front-end sweep (now 96 programs, FAIL=0): `COMPUTE`/`ADD`/`SUBTRACT`/`MULTIPLY`/`DIVIDE ... ROUNDED` (NEAREST, ties away from zero); `PERFORM VARYING` incl. nested `AFTER` (inline + out-of-line); `GO TO ... DEPENDING ON`; `SEARCH ALL` (binary search over `ASCENDING`/`DESCENDING KEY` tables); and `USAGE BINARY-CHAR`/`SHORT`/`LONG`/`DOUBLE` (signed + unsigned, fixed dialect-invariant width).
+- **Native `cobcrun --runtime-config` (`GNURUST.CLI.1`).** `cobrun --runtime-config` reproduces libcob's `print_runtime_conf` byte-for-byte; plus `gnucobol-rs-ffi` C-ABI shim (`cob_field` drop-in) verified vs `libcob`.
+- **Doctrine fix:** `OCCURS` on a group item now FAILS CLOSED (was a silent wrong answer); group-array support is a future feature.
+- **Forensic docs:** negative-capabilities rewritten accurately (no sealed court mislabeled as a non-claim; the compile axis stated precisely); README + crate READMEs rebuilt to the full runtime+interpreter reality; FILE-PARITY gains a reality-check freshness gate (every file evidenced).
+
 All notable changes to `gnucobol-rs` are documented here. The project follows the
 oracle-first method: each entry names the slice sealed and the parity it proved.
 
