@@ -3443,9 +3443,14 @@ fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 
         return Ok(dec_cmp(da, db));
     }
     // alphanumeric compare: space-pad the shorter, byte compare. Under PROGRAM COLLATING SEQUENCE the
-    // bytes are weighted through `col` first (e.g. EBCDIC order: lowercase < uppercase < digits).
-    let sa = cond_bytes(a, f);
-    let sb = cond_bytes(b, f);
+    // bytes are weighted through `col` first (e.g. EBCDIC order: lowercase < uppercase < digits). A
+    // figurative operand (SPACES/HIGH-VALUE/...) fills the OTHER operand's width with its byte.
+    let (fa, fb) = (figurative_kind(a), figurative_kind(b));
+    let ba = if fa.is_some() { Vec::new() } else { cond_bytes(a, f) };
+    let bb = if fb.is_some() { Vec::new() } else { cond_bytes(b, f) };
+    let width = ba.len().max(bb.len()).max(1);
+    let sa = match fa { Some(fig) => vec![fig_byte(fig); width], None => ba };
+    let sb = match fb { Some(fig) => vec![fig_byte(fig); width], None => bb };
     let n = sa.len().max(sb.len());
     for i in 0..n {
         let ca = sa.get(i).copied().unwrap_or(b' ');
@@ -3472,7 +3477,22 @@ fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
     if w.starts_with('\u{1}') {
         return None; // string literal -> alphanumeric
     }
+    // figurative ZERO is the numeric value 0 (so `IF n = ZERO` compares numerically for any numeric usage).
+    if matches!(w, "ZERO" | "ZEROS" | "ZEROES") {
+        return Some(Decimal { negative: false, digits: vec![0], scale: 0 });
+    }
     parse_num_literal(w).ok()
+}
+
+/// The fill byte for a figurative constant (used when it fills another operand's width).
+fn fig_byte(fig: Fig) -> u8 {
+    match fig {
+        Fig::Space => b' ',
+        Fig::Zero => b'0',
+        Fig::HighValue => 0xFF,
+        Fig::LowValue => 0x00,
+        Fig::Quote => b'"',
+    }
 }
 
 /// The display bytes of a condition operand for alphanumeric comparison.
@@ -4284,6 +4304,11 @@ fn exec_display(
                 }
                 if w == "WITH" || w == "NO" || w == "ADVANCING" {
                     // DISPLAY ... WITH NO ADVANCING handled below (no newline) -- mark it.
+                    continue;
+                }
+                // a figurative constant in DISPLAY is a single character (cobc displays it length 1).
+                if let Some(fig) = figurative_kind(w) {
+                    operands.push((vec![fig_byte(fig)], alnum_attr()));
                     continue;
                 }
                 let f = read_field(fields, w)?.ok_or_else(|| RunError::UndefinedName(w.clone()))?;
