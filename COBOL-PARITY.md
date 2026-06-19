@@ -169,6 +169,20 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **2 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 181 of them, de-duplicated from the 197 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 181: **38 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **133 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
+### Completion scorecard
+
+Two axes. **Breadth** -- can the front-end run the construct at all (the bounded surface from `cobc/parser.y` / `libcob/intrinsic.c` / `cobc/reserved.c`). **Depth** -- which sub-forms within a wired verb run (sections A/B). All figures are computed live from the wired-marker scan, not asserted.
+
+| surface axis (breadth) | total | front-end runs | **% complete** | left (and why) |
+|---|---:|---:|---:|---|
+| statements (verbs) | 66 | 58 | **88%** | 8 -- all COMMUNICATION / ACUCOBOL GUI / ENTRY boundaries |
+| intrinsic functions | 110 | 94 | **85%** | 16 -- all non-deterministic / oracle-rejected boundaries |
+| data-description clauses | 18 | 18 | **100%** | — |
+| USAGE forms | 10 | 9 | **90%** | 1 -- USAGE NATIONAL (unfinished in cobc -- boundary) |
+| **TOTAL (language breadth)** | **204** | **179** | **88%** | **25 left** |
+
+**Runtime engine: 100%** (13/13 libcob files + 110/110 intrinsics ported 1:1, oracle-sealed) -- the breadth figure above is the FRONT-END (interpreter) axis only. Excluding the boundary non-claims the oracle itself cannot run, the front-end runs **~100% of the *runnable* language surface**; the 204-item denominator above keeps those boundaries IN, so the honest front-end-of-everything figure is **88%**. **Depth:** within the wired verbs, **2 sub-form(s) byte-sealed** and **38 feature-gap form(s) still open** (section B) -- depth has no fixed denominator (the set of all sub-forms is unbounded), so it is tracked as an open-gap COUNT, not a percentage, to avoid a fabricated ratio.
+
 ### A. Sealed sub-forms (2) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
