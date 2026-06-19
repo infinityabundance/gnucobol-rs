@@ -1598,6 +1598,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     ODO_TABLES.with(|m| m.borrow_mut().clear()); // fresh per program build
     GROUP_OCCURS.with(|m| m.borrow_mut().clear());
     GROUP_CHILD.with(|m| m.borrow_mut().clear());
+    ALPHABETIC_FIELDS.with(|m| m.borrow_mut().clear());
     for (gi, it) in prog.ws.iter().enumerate() {
         // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
         if let Some((parent, values)) = &it.condition {
@@ -1665,6 +1666,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             Some(kind) => make_float_field(kind, it.value.as_ref())?,
             None => make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign, it.extra_flags)?,
         };
+        // Retain the compile-time ALPHABETIC category (PIC A, no X) for INITIALIZE ... REPLACING.
+        if matches!(f.storage, Storage::Alpha(_)) && pic_is_alphabetic(&it.pic) {
+            ALPHABETIC_FIELDS.with(|m| m.borrow_mut().insert(it.name.clone()));
+        }
         if it.occurs > 1 {
             // A 01-level OCCURS table: replicate the element image `occurs` times (each element initialized
             // identically, per its VALUE or the dialect fill).
@@ -1871,6 +1876,11 @@ thread_local! {
     /// A group-OCCURS CHILD name -> (parent group, offset within the element, child size). The child owns
     /// NO bytes; it is a strided view into the parent's interleaved buffer (read/written at stride).
     static GROUP_CHILD: std::cell::RefCell<HashMap<String, (String, usize, usize)>> = std::cell::RefCell::new(HashMap::new());
+    /// Names of fields whose PICTURE is ALPHABETIC (`PIC A...`, no `X`). At runtime PIC A and PIC X are both
+    /// `Storage::Alpha` / `COB_TYPE_ALPHANUMERIC` (libcob has no distinct alphabetic type); cobc decides the
+    /// category at COMPILE time from the PIC. We retain it here so `INITIALIZE ... REPLACING ALPHABETIC` vs
+    /// `REPLACING ALPHANUMERIC` can target the right leaves (an `ALPHANUMERIC` replace must skip PIC A).
+    static ALPHABETIC_FIELDS: std::cell::RefCell<std::collections::HashSet<String>> = std::cell::RefCell::new(std::collections::HashSet::new());
     /// The stack of executing PROGRAM-IDs (top = current). Pushed/popped around each program body so
     /// `FUNCTION MODULE-ID` reads the running program and `FUNCTION MODULE-CALLER-ID` reads its caller.
     static PROGRAM_STACK: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
@@ -4535,16 +4545,35 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     Ok(())
 }
 
-/// `INITIALIZE item [item ...]` -- reset each named item to its category default, matching `cobc`'s
-/// no-`REPLACING` INITIALIZE: a numeric item becomes ZERO, an alphanumeric/edited item becomes SPACES.
-/// (VALUE clauses are deliberately NOT used, per the standard.) The subset is elementary items; the
-/// `REPLACING`/`WITH`/group-traversal forms fail closed.
+/// The data category an `INITIALIZE ... REPLACING` clause targets. At runtime PIC A and PIC X share one
+/// storage type, so ALPHABETIC vs ALPHANUMERIC is resolved via `ALPHABETIC_FIELDS` (the compile-time PIC).
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum InitCat {
+    Numeric,
+    Alphanumeric,
+    Alphabetic,
+    NumericEdited,
+    AlphanumericEdited,
+}
+
+/// `INITIALIZE item [item ...] [REPLACING cat [DATA] BY val ...]`. Without REPLACING each leaf is reset to
+/// its category default (numeric -> ZERO, alphanumeric/edited -> SPACES; VALUE is deliberately NOT used,
+/// per the standard). With REPLACING, ONLY the leaves whose category is named are set to that category's
+/// value (`cat` in {NUMERIC, ALPHANUMERIC, ALPHABETIC, NUMERIC-EDITED, ALPHANUMERIC-EDITED}); leaves of an
+/// unnamed category are left UNCHANGED. `WITH`/`THEN`/`TO VALUE` and OCCURS-table targets fail closed.
 fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"));
+    let head = match repl_pos {
+        Some(p) => &stmt[..p],
+        None => stmt,
+    };
     let mut names: Vec<String> = Vec::new();
-    for t in stmt {
+    for t in head {
         match t {
-            Tok::Word(w) if w == "REPLACING" || w == "WITH" || w == "ALL" || w == "THRU" || w == "TO" || w == "FILLER" => {
-                return Err(RunError::Unsupported(format!("INITIALIZE ... {w} (subset: elementary items, no REPLACING/WITH)")));
+            Tok::Word(w) if matches!(w.as_str(), "WITH" | "THEN" | "TO" | "THRU" | "ALL" | "FILLER") => {
+                return Err(RunError::Unsupported(format!(
+                    "INITIALIZE ... {w} (subset: items [REPLACING cat BY val ...])"
+                )));
             }
             Tok::Word(w) => names.push(w.clone()),
             _ => {}
@@ -4553,29 +4582,141 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
     if names.is_empty() {
         return Err(RunError::Unsupported("INITIALIZE: no item named".into()));
     }
-    for name in names {
-        let kind = match fields.get(&name) {
-            Some(f) => f.storage.clone(),
-            None => return Err(RunError::UndefinedName(name)),
-        };
-        let src = match kind {
-            Storage::Numeric(_) => Tok::Word("0".to_string()),
-            Storage::Alpha(_) | Storage::Edited(..) => Tok::Str(vec![b' ']),
-            // an 88 condition-name has no storage of its own -- INITIALIZE skips it (cobc does not reset it).
-            Storage::Condition { .. } => continue,
-            // INITIALIZE of a group resets each of its leaves to its category default.
-            Storage::Group { children } => {
-                let kids = children.clone();
-                for c in kids {
-                    exec_initialize(&[Tok::Word(c)], fields, decimal_comma)?;
-                }
-                continue;
+
+    let Some(rp) = repl_pos else {
+        for name in &names {
+            init_default(name, fields, decimal_comma)?;
+        }
+        return Ok(());
+    };
+
+    // REPLACING: parse `cat [DATA] BY val` pairs, then set every matching leaf to its category's value.
+    let repl = parse_initialize_replacing(&stmt[rp + 1..])?;
+    for name in &names {
+        let mut leaves = Vec::new();
+        collect_init_leaves(name, fields, &mut leaves)?;
+        for leaf in leaves {
+            let Some(cat) = init_field_category(&leaf, fields) else { continue };
+            if let Some((_, val)) = repl.iter().find(|(c, _)| *c == cat) {
+                let mv = vec![val.clone(), Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
+                exec_move(&mv, fields, decimal_comma)?;
             }
-        };
-        let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(name)];
-        exec_move(&mv, fields, decimal_comma)?;
+        }
     }
     Ok(())
+}
+
+/// Reset one item (recursing groups) to its category default -- the no-REPLACING INITIALIZE behaviour.
+fn init_default(name: &str, fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    let kind = match fields.get(name) {
+        Some(f) => f.storage.clone(),
+        None => return Err(RunError::UndefinedName(name.to_string())),
+    };
+    let src = match kind {
+        Storage::Numeric(_) => Tok::Word("0".to_string()),
+        Storage::Alpha(_) | Storage::Edited(..) => Tok::Str(vec![b' ']),
+        Storage::Condition { .. } => return Ok(()), // 88 has no storage; cobc does not reset it
+        Storage::Group { children } => {
+            for c in children {
+                init_default(&c, fields, decimal_comma)?;
+            }
+            return Ok(());
+        }
+    };
+    let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(name.to_string())];
+    exec_move(&mv, fields, decimal_comma)
+}
+
+/// Parse the `cat [DATA] BY val [cat [DATA] BY val ...]` tail of INITIALIZE REPLACING into (category, value).
+fn parse_initialize_replacing(toks: &[Tok]) -> Result<Vec<(InitCat, Tok)>, RunError> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < toks.len() {
+        let cat = match toks.get(i) {
+            Some(Tok::Word(w)) => init_cat_from_kw(w).ok_or_else(|| RunError::Unsupported(format!(
+                "INITIALIZE REPLACING: unrecognized category `{w}` (expected NUMERIC/ALPHANUMERIC/ALPHABETIC/NUMERIC-EDITED/ALPHANUMERIC-EDITED)"
+            )))?,
+            _ => return Err(RunError::Unsupported("INITIALIZE REPLACING: expected a category".into())),
+        };
+        i += 1;
+        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DATA") {
+            i += 1;
+        }
+        if !matches!(toks.get(i), Some(Tok::Word(w)) if w == "BY") {
+            return Err(RunError::Unsupported("INITIALIZE REPLACING: expected BY".into()));
+        }
+        i += 1;
+        let val = toks.get(i).cloned()
+            .ok_or_else(|| RunError::Unsupported("INITIALIZE REPLACING: missing replacement value".into()))?;
+        out.push((cat, val));
+        i += 1;
+    }
+    if out.is_empty() {
+        return Err(RunError::Unsupported("INITIALIZE REPLACING: no category given".into()));
+    }
+    Ok(out)
+}
+
+fn init_cat_from_kw(w: &str) -> Option<InitCat> {
+    Some(match w {
+        "NUMERIC" => InitCat::Numeric,
+        "ALPHANUMERIC" => InitCat::Alphanumeric,
+        "ALPHABETIC" => InitCat::Alphabetic,
+        "NUMERIC-EDITED" => InitCat::NumericEdited,
+        "ALPHANUMERIC-EDITED" => InitCat::AlphanumericEdited,
+        _ => return None,
+    })
+}
+
+/// The INITIALIZE category of an elementary leaf: numeric, alphabetic (PIC A), alphanumeric (PIC X), or the
+/// two edited categories (split by whether the edited PIC carries an X/A). `None` for non-data leaves.
+fn init_field_category(name: &str, fields: &HashMap<String, Field>) -> Option<InitCat> {
+    match &fields.get(name)?.storage {
+        Storage::Numeric(_) => Some(InitCat::Numeric),
+        Storage::Alpha(_) => Some(if ALPHABETIC_FIELDS.with(|s| s.borrow().contains(name)) {
+            InitCat::Alphabetic
+        } else {
+            InitCat::Alphanumeric
+        }),
+        Storage::Edited(pic, ..) => {
+            let up = pic.to_ascii_uppercase();
+            Some(if up.contains('X') || up.contains('A') {
+                InitCat::AlphanumericEdited
+            } else {
+                InitCat::NumericEdited
+            })
+        }
+        _ => None,
+    }
+}
+
+/// Flatten an INITIALIZE target into its elementary leaf names (recursing groups). OCCURS tables and
+/// group-OCCURS child views are out of the REPLACING subset and fail closed (no silent partial init).
+fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Vec<String>) -> Result<(), RunError> {
+    let f = fields.get(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+    if f.occurs > 1 || group_child_lookup(name).is_some() {
+        return Err(RunError::Unsupported(format!(
+            "INITIALIZE REPLACING over OCCURS table `{name}` not in subset"
+        )));
+    }
+    match &f.storage {
+        Storage::Group { children } => {
+            let kids = children.clone();
+            for c in kids {
+                collect_init_leaves(&c, fields, out)?;
+            }
+        }
+        Storage::Condition { .. } => {}
+        _ => out.push(name.to_string()),
+    }
+    Ok(())
+}
+
+/// True when a PICTURE is ALPHABETIC (only `A` position symbols, no `X`); used to retain the compile-time
+/// category that PIC A and PIC X share at runtime.
+fn pic_is_alphabetic(pic: &str) -> bool {
+    let up = pic.to_ascii_uppercase();
+    up.contains('A') && !up.contains('X')
 }
 
 /// An `INSPECT` comparand operand -> its bytes: a string literal, the figuratives `SPACE`/`ZERO` (a single
