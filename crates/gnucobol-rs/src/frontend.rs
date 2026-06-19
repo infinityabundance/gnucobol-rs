@@ -3467,12 +3467,25 @@ fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 
 }
 
 /// If a condition operand is numeric (a numeric field or a numeric literal), decode it to a [`Decimal`].
+/// Decode a numeric field to a [`Decimal`] respecting its USAGE: a zoned DISPLAY field decodes directly,
+/// while a packed (COMP-3) / binary (COMP/COMP-5/COMP-X) field is normalised to zoned DISPLAY via
+/// `cob_move` first (so a comparison like `IF comp-3-field = 5` is correct, not a raw-byte mis-read).
+fn field_to_decimal(field: &Field) -> Option<Decimal> {
+    let Storage::Numeric(a) = &field.storage else { return None };
+    if a.field_type == COB_TYPE_NUMERIC_DISPLAY {
+        return source_to_decimal(&field.bytes, a).ok();
+    }
+    let digits = a.digits.max(1);
+    let signed = a.flags & crate::attr::COB_FLAG_HAVE_SIGN != 0;
+    let disp = lit_num_attr(digits, a.scale, signed);
+    let mut buf = vec![b'0'; digits as usize];
+    cob_move(&field.bytes, a, &mut buf, &disp).ok()?;
+    source_to_decimal(&buf, &disp).ok()
+}
+
 fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
     if let Some(field) = read_field(f, w).ok().flatten() {
-        if let Storage::Numeric(a) = &field.storage {
-            return source_to_decimal(&field.bytes, a).ok();
-        }
-        return None;
+        return field_to_decimal(&field);
     }
     if w.starts_with('\u{1}') {
         return None; // string literal -> alphanumeric
