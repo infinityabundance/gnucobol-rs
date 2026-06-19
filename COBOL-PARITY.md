@@ -165,6 +165,19 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 `NATIONAL` (UTF-16) is a **boundary**, not a TODO: GnuCOBOL 3.2 declares it unfinished -- `cobc` emits `warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed [-Wunfinished]`, and the explicit `USAGE NATIONAL` form does not compile. Pinning to an admittedly-unstable implementation is not a 1:1 target.
 
+## Front-end sub-form coverage (within DONE verbs)
+
+The verb table above is verb-granular: a verb reads **DONE** once *any* of its forms run, which can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms explicitly -- **2 sealed** (proven byte-identical to cobc, anchored to the corpus program that proves it) and **4 open gap(s)** (still fail closed, anchored to the live guard in `src/frontend.rs`). It is reality-checked by the doc gate: a `sealed` row whose corpus vanishes, a `gap` row whose guard is gone (i.e. silently sealed), or a new `is not in the front-end subset` guard with no row here, all FAIL the gate. The doctrine is fail-closed -- an open gap is an explicit `RunError::Unsupported`, never a silent wrong answer.
+
+| verb | sub-form | status | evidence / guard anchor |
+|---|---|:---:|---|
+| `IF` | sign condition `x IS [NOT] {POSITIVE|NEGATIVE|ZERO}` (incl. COMP-3) | **sealed** | `lab/corpus/frontend/p104_sign_cond.cob` |
+| `ADD/SUBTRACT/MULTIPLY/DIVIDE` | multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver) | **sealed** | `lab/corpus/frontend/p105_multi_receiver.cob` |
+| `MOVE` | `CORRESPONDING` (matches leaves by name across two groups) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `MOVE CORRESPONDING is not in the front-end subset` |
+| `ADD/SUBTRACT` | `CORRESPONDING` (same qualified-name blocker as MOVE CORR) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `{verb} CORRESPONDING is not in the front-end subset` |
+| `DIVIDE` | `REMAINDER` (the second, remainder result) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `DIVIDE ... REMAINDER is not in the front-end subset` |
+| `INITIALIZE` | `REPLACING` / `WITH` (category-targeted init: NUMERIC/ALPHANUMERIC/ALPHABETIC/edited) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `no REPLACING/WITH` |
+
 ## Provenance + method
 
 Derived from the admitted GnuCOBOL 3.2 source: statements from cobc/parser.y (*_statement: grammar rules), intrinsic functions from libcob/intrinsic.c (cob_intr_*), data clauses/usages from cobc/reserved.c. The libcob runtime files are the 13 admitted compilation units.

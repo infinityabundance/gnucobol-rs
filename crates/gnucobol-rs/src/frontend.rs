@@ -4391,6 +4391,15 @@ fn exec_move(
     // resolve a FUNCTION source into a temp field, then MOVE through the ordinary field paths.
     let stmt = resolve_functions(stmt, fields)?;
     let stmt = &stmt[..];
+    // MOVE CORRESPONDING matches elementary leaves between two groups BY NAME. The flat field model keys
+    // every leaf by its bare name, so two groups with like-named children collide -- there is no way to
+    // tell `A OF G1` from `A OF G2`. Faithful CORRESPONDING needs qualified-name (OF/IN) support first, so
+    // fail closed rather than move a leaf onto itself. (Front-end sub-form gap; see COBOL-PARITY.md.)
+    if matches!(stmt.first(), Some(Tok::Word(w)) if w == "CORRESPONDING" || w == "CORR") {
+        return Err(RunError::Unsupported(
+            "MOVE CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support)".into(),
+        ));
+    }
     // split at TO.
     let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="TO"))
         .ok_or_else(|| RunError::Unsupported("MOVE without TO".into()))?;
@@ -6600,6 +6609,14 @@ fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has
 }
 
 fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+    // ADD/SUBTRACT CORRESPONDING pairs elementary leaves between two groups BY NAME -- same blocker as
+    // MOVE CORRESPONDING: the flat field model can't distinguish like-named children of different groups.
+    // Fail closed until qualified-name (OF/IN) support lands. (Front-end sub-form gap; see COBOL-PARITY.md.)
+    if matches!(stmt.first(), Some(Tok::Word(w)) if w == "CORRESPONDING" || w == "CORR") {
+        return Err(RunError::Unsupported(format!(
+            "{verb} CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support)"
+        )));
+    }
     // find a GIVING receiver if present.
     let giving = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="GIVING"));
     let kw = match verb {
