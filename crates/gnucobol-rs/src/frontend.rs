@@ -6775,3 +6775,27 @@ mod tests {
         assert_eq!(out, b"[HI   ]\n");
     }
 }
+
+#[cfg(test)]
+mod probe_tmp {
+    use crate::frontend::run_program_dialect_with_rc;
+    use crate::dialect::Dialect;
+    fn run(s: &str) -> Result<Vec<u8>, String> {
+        run_program_dialect_with_rc(s, Dialect::DEFAULT).map(|(o,_)| o).map_err(|e| format!("{e:?}"))
+    }
+    #[test]
+    fn probe_refmod() {
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 W PIC X(6) VALUE \"ABCDEF\".\n       PROCEDURE DIVISION.\n           DISPLAY W(2:3).\n           STOP RUN.\n";
+        eprintln!("REFMOD => {:?}", run(src));
+    }
+    #[test]
+    fn probe_length_table() {
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 E PIC 99 OCCURS 3 TIMES.\n       PROCEDURE DIVISION.\n           DISPLAY FUNCTION LENGTH(E).\n           DISPLAY FUNCTION LENGTH(E(1)).\n           STOP RUN.\n";
+        eprintln!("LENGTH-TABLE => {:?}", run(src));
+    }
+    #[test]
+    fn probe_group_occurs() {
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 TBL.\n         05 ENT OCCURS 3 TIMES.\n           10 EK PIC 9(3).\n           10 EV PIC XX.\n       PROCEDURE DIVISION.\n           DISPLAY \"X\".\n           STOP RUN.\n";
+        eprintln!("GROUP-OCCURS => {:?}", run(src));
+    }
+}

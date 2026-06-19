@@ -17,7 +17,7 @@ homepage.workspace = true
 crate-type = ["cdylib", "staticlib", "rlib"]
 
 [dependencies]
-gnucobol-rs = { path = "../gnucobol-rs" }
+gnucobol-rs = { path = "../gnucobol-rs", version = "0.8.8" }
 
 [lints.rust]
 # This crate is the C-ABI boundary -- it must use `unsafe` for raw cob_field pointers (the workspace
