@@ -485,6 +485,9 @@ enum FileOrg {
     /// `ORGANIZATION RELATIVE` -- records addressed by a 1-based relative record number (the RELATIVE KEY).
     /// Modelled position-indexed in `FileState.records`, where an empty slot means absent/deleted.
     Relative,
+    /// `ORGANIZATION INDEXED` -- records addressed by a RECORD KEY field within the record. Stored in
+    /// `FileState.records`; READ NEXT / START present them in ascending RECORD KEY order.
+    Indexed,
 }
 
 /// A declared file: its `SELECT` name, the `FD` record field it reads/writes through, the optional
@@ -499,6 +502,8 @@ struct FileDef {
     status: Option<String>,
     org: FileOrg,
     rel_key: Option<String>,
+    /// `RECORD KEY IS field` for an INDEXED file (the key field within the record).
+    record_key: Option<String>,
 }
 
 /// One printable report element: a `COLUMN n PIC p {SOURCE field | VALUE lit}` entry in a report group.
@@ -933,9 +938,9 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // added to the field table; each file's metadata becomes a FileDef.
     let file_control = parse_file_control(toks, start, proc_at);
     let (mut file_recs, file_rec, report_file) = parse_file_section(toks, start, proc_at)?;
-    let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key)| {
+    let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key, record_key)| {
         let record = file_rec.get(&name).cloned().unwrap_or_default();
-        FileDef { name, assign, record, status, org, rel_key }
+        FileDef { name, assign, record, status, org, rel_key, record_key }
     }).collect();
     let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
@@ -974,7 +979,7 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
 
 /// Parse `FILE-CONTROL` `SELECT name ASSIGN ... [ORGANIZATION [IS] {LINE SEQUENTIAL|SEQUENTIAL}]
 /// [FILE STATUS [IS] status]` entries -> `(name, org, status)`. Unknown clauses are skipped.
-fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, String, FileOrg, Option<String>, Option<String>)> {
+fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, String, FileOrg, Option<String>, Option<String>, Option<String>)> {
     let fc = match find_seq_in(toks, &["FILE-CONTROL"], start, end) {
         Some(i) => i + 1,
         None => return Vec::new(),
@@ -991,6 +996,7 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                 let mut org = FileOrg::Sequential;
                 let mut status = None;
                 let mut rel_key = None;
+                let mut record_key = None;
                 let mut assign = name.clone();
                 while i < end {
                     match toks.get(i) {
@@ -1016,6 +1022,9 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                             } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "RELATIVE") {
                                 org = FileOrg::Relative;
                                 i += 1;
+                            } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "INDEXED") {
+                                org = FileOrg::Indexed;
+                                i += 1;
                             } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") {
                                 org = FileOrg::Sequential;
                                 i += 1;
@@ -1028,6 +1037,13 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                             if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
                             if let Some(Tok::Word(w)) = toks.get(i) { rel_key = Some(w.clone()); i += 1; }
                         }
+                        // RECORD KEY [IS] field  (INDEXED)
+                        Some(Tok::Word(w)) if w == "RECORD" => {
+                            i += 1;
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "KEY") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                            if let Some(Tok::Word(w)) = toks.get(i) { record_key = Some(w.clone()); i += 1; }
+                        }
                         Some(Tok::Word(w)) if w == "STATUS" => {
                             i += 1;
                             if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
@@ -1036,7 +1052,7 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                         _ => i += 1,
                     }
                 }
-                out.push((name, assign, org, status, rel_key));
+                out.push((name, assign, org, status, rel_key, record_key));
             }
             None => break,
             _ => i += 1,
@@ -5836,24 +5852,62 @@ fn sort_key_span(record: &str, key: &str, reclen: usize, fields: &HashMap<String
     if kl == reclen { Some((0, reclen)) } else { None }
 }
 
-/// `DELETE file [RECORD]` -- remove the RELATIVE record at the current RELATIVE KEY (status `"23"` if no
-/// such record). DELETE on a sequential file is invalid (out of subset).
+/// (offset, length) of the RECORD KEY within an INDEXED file's record.
+fn indexed_key_span(def: &FileDef, reclen: usize, fields: &HashMap<String, Field>) -> Result<(usize, usize), RunError> {
+    let key = def.record_key.as_ref()
+        .ok_or_else(|| RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name)))?;
+    sort_key_span(&def.record, key, reclen, fields)
+        .ok_or_else(|| RunError::Unsupported(format!("INDEXED RECORD KEY `{key}` is not a field of the record")))
+}
+
+/// The RECORD KEY bytes of a stored record.
+fn rec_key_bytes(r: &[u8], koff: usize, klen: usize) -> &[u8] {
+    let s = koff.min(r.len());
+    let e = (koff + klen).min(r.len());
+    &r[s..e]
+}
+
+/// Indices of non-empty records in ascending RECORD KEY order (stable on ties).
+fn indexed_order(records: &[Vec<u8>], koff: usize, klen: usize) -> Vec<usize> {
+    let mut idx: Vec<usize> = (0..records.len()).filter(|&i| !records[i].is_empty()).collect();
+    idx.sort_by(|&a, &b| rec_key_bytes(&records[a], koff, klen).cmp(rec_key_bytes(&records[b], koff, klen)));
+    idx
+}
+
+/// `DELETE file [RECORD]` -- remove the record at the current key: the RELATIVE record at the current
+/// RELATIVE KEY, or the INDEXED record whose RECORD KEY equals the key field. Status `"23"` if no such
+/// record. DELETE on a sequential file is invalid (out of subset).
 fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
     let file = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("DELETE: missing file".into())) };
     let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("DELETE: `{file}` is not a declared file")))?.clone();
-    if def.org != FileOrg::Relative {
-        return Err(RunError::Unsupported("DELETE is only supported on a RELATIVE file in this subset".into()));
-    }
-    let pos = relative_key_value(&def, fields)?;
-    let deleted = {
-        let mut files = ctx.files.borrow_mut();
-        match files.get_mut(&fkey(ctx, &file)) {
-            Some(st) if pos <= st.records.len() && !st.records[pos - 1].is_empty() => {
-                st.records[pos - 1] = Vec::new();
-                true
+    let deleted = match def.org {
+        FileOrg::Relative => {
+            let pos = relative_key_value(&def, fields)?;
+            let mut files = ctx.files.borrow_mut();
+            match files.get_mut(&fkey(ctx, &file)) {
+                Some(st) if pos <= st.records.len() && !st.records[pos - 1].is_empty() => {
+                    st.records[pos - 1] = Vec::new();
+                    true
+                }
+                _ => false,
             }
-            _ => false,
         }
+        FileOrg::Indexed => {
+            let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+            let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
+            let want = read_field(fields, def.record_key.as_ref().unwrap())?.map(|f| f.bytes).unwrap_or_default();
+            let mut files = ctx.files.borrow_mut();
+            match files.get_mut(&fkey(ctx, &file)) {
+                Some(st) => {
+                    match st.records.iter().position(|r| !r.is_empty() && rec_key_bytes(r, koff, klen) == want.as_slice()) {
+                        Some(p) => { st.records[p] = Vec::new(); true }
+                        None => false,
+                    }
+                }
+                None => false,
+            }
+        }
+        _ => return Err(RunError::Unsupported("DELETE is only supported on a RELATIVE or INDEXED file in this subset".into())),
     };
     set_file_status(fields, &def, if deleted { "00" } else { "23" });
     Ok(())
@@ -5865,15 +5919,15 @@ fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
 fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
     let file = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("START: missing file".into())) };
     let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("START: `{file}` is not a declared file")))?.clone();
-    if def.org != FileOrg::Relative {
-        return Err(RunError::Unsupported("START is only supported on a RELATIVE file in this subset".into()));
+    if !matches!(def.org, FileOrg::Relative | FileOrg::Indexed) {
+        return Err(RunError::Unsupported("START is only supported on a RELATIVE or INDEXED file in this subset".into()));
     }
     if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "INVALID")) {
         return Err(RunError::Unsupported("START ... INVALID KEY not in subset".into()));
     }
-    // default: EQUAL on the current RELATIVE KEY value.
+    // Parse the relation (default `=`) and the optional named key field.
     let mut rel = "=".to_string();
-    let mut keyval = relative_key_value(&def, fields)?;
+    let mut key_field: Option<String> = None;
     if let Some(kp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "KEY")) {
         let mut i = kp + 1;
         if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
@@ -5896,32 +5950,56 @@ fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
             }
             other => return Err(RunError::Unsupported(format!("START KEY relation {other:?}"))),
         };
-        if let Some(Tok::Word(field)) = stmt.get(i) {
-            keyval = resolve_int(field, fields).map(|v| v.max(0) as usize).unwrap_or(keyval);
-        }
+        if let Some(Tok::Word(field)) = stmt.get(i) { key_field = Some(field.clone()); }
     }
-    let foundpos = {
-        let files = ctx.files.borrow();
-        let mut fp = None;
-        if let Some(st) = files.get(&fkey(ctx, &file)) {
-            for n in 1..=st.records.len() {
-                if st.records[n - 1].is_empty() { continue; }
-                let ok = match rel.as_str() {
-                    "=" => n == keyval,
-                    ">" => n > keyval,
-                    ">=" => n >= keyval,
-                    "<" => n < keyval,
-                    "<=" => n <= keyval,
-                    _ => false,
-                };
-                if ok { fp = Some(n); break; }
+    // foundpos is the `read_pos` value the next sequential READ should resume from: a record index for
+    // RELATIVE, an index into the ascending-key order for INDEXED.
+    let foundpos = match def.org {
+        FileOrg::Relative => {
+            let keyval = match &key_field {
+                Some(f) => resolve_int(f, fields).map(|v| v.max(0) as usize).unwrap_or(relative_key_value(&def, fields)?),
+                None => relative_key_value(&def, fields)?,
+            };
+            let files = ctx.files.borrow();
+            let mut fp = None;
+            if let Some(st) = files.get(&fkey(ctx, &file)) {
+                for n in 1..=st.records.len() {
+                    if st.records[n - 1].is_empty() { continue; }
+                    let ok = match rel.as_str() {
+                        "=" => n == keyval, ">" => n > keyval, ">=" => n >= keyval,
+                        "<" => n < keyval, "<=" => n <= keyval, _ => false,
+                    };
+                    if ok { fp = Some(n - 1); break; }
+                }
             }
+            fp
         }
-        fp
+        FileOrg::Indexed => {
+            let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+            let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
+            let kf = key_field.or_else(|| def.record_key.clone())
+                .ok_or_else(|| RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name)))?;
+            let want = read_field(fields, &kf)?.map(|f| f.bytes).unwrap_or_default();
+            let files = ctx.files.borrow();
+            let mut fp = None;
+            if let Some(st) = files.get(&fkey(ctx, &file)) {
+                let order = indexed_order(&st.records, koff, klen);
+                for (oi, &ri) in order.iter().enumerate() {
+                    let rk = rec_key_bytes(&st.records[ri], koff, klen);
+                    let ok = match rel.as_str() {
+                        "=" => rk == want.as_slice(), ">" => rk > want.as_slice(), ">=" => rk >= want.as_slice(),
+                        "<" => rk < want.as_slice(), "<=" => rk <= want.as_slice(), _ => false,
+                    };
+                    if ok { fp = Some(oi); break; }
+                }
+            }
+            fp
+        }
+        _ => None,
     };
     match foundpos {
-        Some(n) => {
-            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos = n - 1; }
+        Some(p) => {
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos = p; }
             set_file_status(fields, &def, "00");
         }
         None => set_file_status(fields, &def, "23"),
@@ -5999,6 +6077,27 @@ fn exec_read(
                 None => None,
             }
         }
+        // INDEXED random read: by the RECORD KEY field value (no position advance).
+        FileOrg::Indexed if !had_next => {
+            let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
+            let want = read_field(fields, def.record_key.as_ref().unwrap())?.map(|f| f.bytes).unwrap_or_default();
+            let files = ctx.files.borrow();
+            files.get(&fkey(ctx, &file)).and_then(|st|
+                st.records.iter().find(|r| !r.is_empty() && rec_key_bytes(r, koff, klen) == want.as_slice()).cloned())
+        }
+        // INDEXED sequential read: the next record in ascending RECORD KEY order.
+        FileOrg::Indexed => {
+            let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
+            let mut found = None;
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) {
+                let order = indexed_order(&st.records, koff, klen);
+                if st.read_pos < order.len() {
+                    found = Some(st.records[order[st.read_pos]].clone());
+                    st.read_pos += 1;
+                }
+            }
+            found
+        }
         // sequential / line-sequential: the next record.
         _ => {
             let bytes = { let files = ctx.files.borrow(); files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(st.read_pos).cloned()) };
@@ -6020,8 +6119,8 @@ fn exec_read(
             Ok(false)
         }
         None => {
-            // a relative random miss is "23" (record not found); a sequential/relative-next end is "10".
-            let code = if def.org == FileOrg::Relative && !had_next { "23" } else { "10" };
+            // a relative/indexed random miss is "23" (record not found); a sequential next-end is "10".
+            let code = if matches!(def.org, FileOrg::Relative | FileOrg::Indexed) && !had_next { "23" } else { "10" };
             set_file_status(fields, &def, code);
             if let Some(s) = at_end {
                 let mut p = s;
