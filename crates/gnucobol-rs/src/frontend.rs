@@ -3215,7 +3215,7 @@ fn exec_perform(
         if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "TIMES") {
             *pos += 1;
         } else {
-            return Err(RunError::Unsupported("PERFORM form (only `n TIMES` / `UNTIL cond` inline)".into()));
+            return Err(RunError::Unsupported("PERFORM form (subset: `n TIMES` / `UNTIL cond` inline)".into()));
         }
     }
 

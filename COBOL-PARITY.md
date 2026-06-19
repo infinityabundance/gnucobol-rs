@@ -167,16 +167,53 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end sub-form coverage (within DONE verbs)
 
-Verb-level status is verb-granular: a verb reads **DONE** once *any* of its forms run, which can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms explicitly -- **2 sealed** (proven byte-identical to cobc, anchored to the corpus program that proves it) and **4 open gap(s)** (still fail closed, anchored to the live guard in `src/frontend.rs`). It is reality-checked by the doc gate: a `sealed` row whose corpus vanishes, a `gap` row whose guard is gone (i.e. silently sealed), or a new `is not in the front-end subset` guard with no row here, all FAIL the gate. The doctrine is fail-closed -- an open gap is an explicit `RunError::Unsupported`, never a silent wrong answer.
+Verb-level status is verb-granular: a verb reads **DONE** the moment *any* of its forms run, which hides the forms WITHIN a wired verb that still fail closed. This section makes that explicit and exhaustive -- **2 sealed sub-form(s)** proven byte-identical to cobc, and the **complete 30-row fail-closed boundary inventory** scraped live from `src/frontend.rs`. The doctrine is fail-closed: every gap below is an explicit `RunError::Unsupported` (exit 2), never a silent wrong answer.
 
-| verb | sub-form | status | evidence / guard anchor |
-|---|---|:---:|---|
-| `IF` | sign condition `x IS [NOT] {POSITIVE|NEGATIVE|ZERO}` (incl. COMP-3) | **sealed** | `lab/corpus/frontend/p104_sign_cond.cob` |
-| `ADD/SUBTRACT/MULTIPLY/DIVIDE` | multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver) | **sealed** | `lab/corpus/frontend/p105_multi_receiver.cob` |
-| `MOVE` | `CORRESPONDING` (matches leaves by name across two groups) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `MOVE CORRESPONDING is not in the front-end subset` |
-| `ADD/SUBTRACT` | `CORRESPONDING` (same qualified-name blocker as MOVE CORR) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `{verb} CORRESPONDING is not in the front-end subset` |
-| `DIVIDE` | `REMAINDER` (the second, remainder result) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `DIVIDE ... REMAINDER is not in the front-end subset` |
-| `INITIALIZE` | `REPLACING` / `WITH` (category-targeted init: NUMERIC/ALPHANUMERIC/ALPHABETIC/edited) | gap | `crates/gnucobol-rs/src/frontend.rs` :: `no REPLACING/WITH` |
+### Sealed sub-forms (2) -- proven byte-identical to cobc
+
+Reality-checked against `FRONTEND_SUBFORMS`: the gate fails if a corpus anchor vanishes.
+
+| verb | sub-form | corpus proof |
+|---|---|---|
+| `IF` | sign condition `x IS [NOT] {POSITIVE\|NEGATIVE\|ZERO}` (incl. COMP-3) | `lab/corpus/frontend/p104_sign_cond.cob` |
+| `ADD/SUBTRACT/MULTIPLY/DIVIDE` | multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver) | `lab/corpus/frontend/p105_multi_receiver.cob` |
+
+### Complete fail-closed boundary inventory (30) -- the exact non-claims
+
+Scraped live from every `RunError::Unsupported` guard authored with `subset` in `src/frontend.rs` -- the precise forms `cobrun` refuses rather than mis-run. Source-derived, so sealing a form drops its row on the next regenerate (the doc gate enforces it). `<x>` marks a runtime value in the message.
+
+| verb / clause | fail-closed sub-form (the non-claim) |
+|---|---|
+| `ACCEPT` | ACCEPT FROM <x> (subset: DATE/DAY/TIME/DAY-OF-WEEK) |
+|  | ACCEPT subset is `ACCEPT id FROM DATE\|DAY\|TIME\|DAY-OF-WEEK` (terminal input not modelled) |
+| `DELETE` | DELETE is only supported on a RELATIVE file in this subset |
+| `DIVIDE` | DIVIDE ... REMAINDER is not in the front-end subset |
+| `EXAMINE` | EXAMINE TALLYING UNTIL ... REPLACING not in subset |
+| `EXHIBIT` | EXHIBIT CHANGED not in subset |
+| `IF / condition` | condition relop <x> (subset: = > < >= <= <> GREATER LESS EQUAL) |
+| `INITIALIZE` | INITIALIZE ... <x> (subset: elementary items, no REPLACING/WITH) |
+| `INSPECT` | INSPECT REPLACING <x> (subset: ALL/LEADING/FIRST x BY y) |
+|  | INSPECT TALLYING FOR <x> (subset: ALL/LEADING/CHARACTERS) |
+|  | INSPECT clause <x> (subset: TALLYING/REPLACING/CONVERTING) |
+|  | INSPECT operand `<x>` (subset: literal / SPACE / ZERO / identifier) |
+| `MOVE/ADD/SUBTRACT CORR` | <x> CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support) |
+|  | MOVE CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support) |
+| `OCCURS` | OCCURS DEPENDING ON on group `<x>` not in subset |
+|  | group-OCCURS `<x>` (<x>) not in subset |
+|  | group-OCCURS `<x>` has a nested group child (group-of-group) not in subset |
+| `OPEN` | OPEN <x> (subset: INPUT/OUTPUT/EXTEND/I-O) |
+| `PERFORM` | PERFORM form (subset: `n TIMES` / `UNTIL cond` inline) |
+| `REDEFINES` | REDEFINES write-through over group-OCCURS `<x>` not in subset |
+| `REPORT / ML GENERATE` | GENERATE: `<x>` is not a report group in the subset |
+|  | JSON/XML GENERATE NAME/SUPPRESS/EXCEPTION not in subset |
+| `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
+| `SORT/MERGE` | SORT/MERGE subset: a single KEY |
+| `START` | START ... INVALID KEY not in subset |
+|  | START is only supported on a RELATIVE file in this subset |
+| `UNSTRING` | UNSTRING ... <x> not in subset |
+|  | UNSTRING into non-alphanumeric `<x>` not in subset |
+| `USAGE` | USAGE <x> is not in the front-end subset |
+| `other` | FUNCTION <x>: not in the wired front-end subset |
 
 ## Provenance + method
 

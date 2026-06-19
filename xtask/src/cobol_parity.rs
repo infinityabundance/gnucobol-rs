@@ -66,7 +66,7 @@ const FILE_HEADER: &str = "\
 ";
 
 /// Build `FILE-PARITY.md` -- the per-file census of the whole GnuCOBOL 3.2 tree.
-fn build_files() -> String {
+fn build_files(root: &str) -> String {
     let m: Value = serde_json::from_str(FILES).unwrap_or(Value::Null);
     let files = m["files"].as_array().cloned().unwrap_or_default();
     let mut out = String::from(FILE_HEADER);
@@ -156,7 +156,7 @@ fn build_files() -> String {
 
     // The biggest PARTIAL file is the clean-room front-end interpreter itself; spell out, at sub-form
     // granularity, what it now DOES and what still fails closed -- so "PARTIAL" is not an opaque label.
-    out.push_str(&frontend_subforms_section());
+    out.push_str(&frontend_subforms_section(root));
 
     // every file, grouped by top-level directory.
     out.push_str("\n## Every file (grouped by directory)\n\n");
@@ -561,7 +561,7 @@ fn build(root: &str) -> String {
     );
 
     // ---- front-end sub-form coverage (within DONE verbs) ----
-    out.push_str(&frontend_subforms_section());
+    out.push_str(&frontend_subforms_section(root));
 
     // ---- provenance ----
     out.push_str("\n## Provenance + method\n\n");
@@ -576,32 +576,128 @@ fn build(root: &str) -> String {
     out
 }
 
-/// Render the front-end SUB-FORM coverage section (sealed sub-forms + the genuine within-verb gaps).
-/// Data-driven from `FRONTEND_SUBFORMS`; reality-checked in `reality_check` so it cannot go stale.
-fn frontend_subforms_section() -> String {
-    let sealed = FRONTEND_SUBFORMS.iter().filter(|r| r.2 == "sealed").count();
-    let gaps = FRONTEND_SUBFORMS.iter().filter(|r| r.2 == "gap").count();
+/// Render the front-end SUB-FORM coverage section: (1) the SEALED sub-forms proven byte-identical (with
+/// corpus anchors), then (2) the COMPLETE fail-closed boundary inventory scraped live from every deliberate
+/// `subset` guard in `src/frontend.rs`. Part 1 is reality-checked against `FRONTEND_SUBFORMS`; part 2 is
+/// source-derived so it is exhaustive and self-maintaining (seal a form -> its guard changes -> the row
+/// disappears on regenerate; the regeneration-equal gate fails on any drift).
+fn frontend_subforms_section(root: &str) -> String {
+    let sealed: Vec<_> = FRONTEND_SUBFORMS.iter().filter(|r| r.2 == "sealed").collect();
+    let inv = frontend_boundary_inventory(root);
+    let mut by_cat: std::collections::BTreeMap<String, Vec<String>> = std::collections::BTreeMap::new();
+    for (c, m) in inv { by_cat.entry(c).or_default().push(m); }
+    for v in by_cat.values_mut() { v.sort(); v.dedup(); }
+    let gap_total: usize = by_cat.values().map(|v| v.len()).sum();
+
     let mut s = String::new();
     s.push_str("\n## Front-end sub-form coverage (within DONE verbs)\n\n");
     s.push_str(&format!(
-        "Verb-level status is verb-granular: a verb reads **DONE** once *any* of its forms run, which \
-         can hide forms WITHIN a wired verb that still fail closed. This table tracks those sub-forms \
-         explicitly -- **{sealed} sealed** (proven byte-identical to cobc, anchored to the corpus program \
-         that proves it) and **{gaps} open gap(s)** (still fail closed, anchored to the live guard in \
-         `src/frontend.rs`). It is reality-checked by the doc gate: a `sealed` row whose corpus vanishes, \
-         a `gap` row whose guard is gone (i.e. silently sealed), or a new `{SUBFORM_MARKER}` guard with no \
-         row here, all FAIL the gate. The doctrine is fail-closed -- an open gap is an explicit \
-         `RunError::Unsupported`, never a silent wrong answer.\n\n"
+        "Verb-level status is verb-granular: a verb reads **DONE** the moment *any* of its forms run, which \
+         hides the forms WITHIN a wired verb that still fail closed. This section makes that explicit and \
+         exhaustive -- **{} sealed sub-form(s)** proven byte-identical to cobc, and the **complete {gap_total}-row \
+         fail-closed boundary inventory** scraped live from `src/frontend.rs`. The doctrine is fail-closed: \
+         every gap below is an explicit `RunError::Unsupported` (exit 2), never a silent wrong answer.\n\n",
+        sealed.len(),
     ));
-    s.push_str("| verb | sub-form | status | evidence / guard anchor |\n|---|---|:---:|---|\n");
-    for (verb, form, status, path, needle) in FRONTEND_SUBFORMS {
-        let badge = if *status == "sealed" { "**sealed**" } else { "gap" };
-        let anchor = if *status == "sealed" {
-            format!("`{path}`")
+
+    // (1) sealed -- what cobrun now DOES, each anchored to the corpus program that proves it.
+    s.push_str(&format!("### Sealed sub-forms ({}) -- proven byte-identical to cobc\n\n", sealed.len()));
+    s.push_str("Reality-checked against `FRONTEND_SUBFORMS`: the gate fails if a corpus anchor vanishes.\n\n");
+    s.push_str("| verb | sub-form | corpus proof |\n|---|---|---|\n");
+    for (verb, form, _status, path, _needle) in &sealed {
+        s.push_str(&format!("| `{verb}` | {} | `{path}` |\n", md_cell(form)));
+    }
+
+    // (2) the complete gap inventory -- every deliberate `subset` guard, grouped by verb/clause.
+    s.push_str(&format!("\n### Complete fail-closed boundary inventory ({gap_total}) -- the exact non-claims\n\n"));
+    s.push_str(
+        "Scraped live from every `RunError::Unsupported` guard authored with `subset` in `src/frontend.rs` \
+         -- the precise forms `cobrun` refuses rather than mis-run. Source-derived, so sealing a form drops \
+         its row on the next regenerate (the doc gate enforces it). `<x>` marks a runtime value in the \
+         message.\n\n",
+    );
+    s.push_str("| verb / clause | fail-closed sub-form (the non-claim) |\n|---|---|\n");
+    for (cat, forms) in &by_cat {
+        for (i, m) in forms.iter().enumerate() {
+            let label = if i == 0 { format!("`{cat}`") } else { String::new() };
+            s.push_str(&format!("| {label} | {} |\n", md_cell(m)));
+        }
+    }
+    s
+}
+
+/// Escape a string for safe rendering inside a markdown table cell (an unescaped `|` would split the row).
+fn md_cell(s: &str) -> String {
+    s.replace('|', "\\|")
+}
+
+/// Scrape EVERY deliberate front-end sub-form boundary from `src/frontend.rs`: each `RunError::Unsupported`
+/// message authored with the word `subset` is a precise non-claim. Returns `(category, cleaned message)`.
+/// Source-derived => COMPLETE and self-maintaining.
+fn frontend_boundary_inventory(root: &str) -> Vec<(String, String)> {
+    let body = std::fs::read_to_string(Path::new(root).join("crates/gnucobol-rs/src/frontend.rs")).unwrap_or_default();
+    let marker = "RunError::Unsupported(";
+    let mut out: Vec<(String, String)> = Vec::new();
+    let mut idx = 0;
+    while let Some(p) = body[idx..].find(marker) {
+        let start = idx + p + marker.len();
+        idx = start;
+        // first string literal after the call (handles both `Unsupported("..")` and `Unsupported(format!(".."))`).
+        let Some(q1) = body[start..].find('"') else { continue };
+        let s2 = start + q1 + 1;
+        let Some(q2) = body[s2..].find('"') else { continue };
+        let msg = &body[s2..s2 + q2];
+        if !msg.to_lowercase().contains("subset") {
+            continue;
+        }
+        out.push((boundary_category(msg), clean_boundary_msg(msg)));
+    }
+    out.sort();
+    out.dedup();
+    out
+}
+
+/// Category for a boundary message: the first COBOL keyword that appears anywhere in it (robust to a
+/// leading `{verb}`/`{name}` placeholder), else `other`.
+fn boundary_category(msg: &str) -> String {
+    const CATS: &[(&str, &str)] = &[
+        ("CORRESPONDING", "MOVE/ADD/SUBTRACT CORR"),
+        ("condition relop", "IF / condition"),
+        ("ACCEPT", "ACCEPT"), ("EXHIBIT", "EXHIBIT"), ("EXAMINE", "EXAMINE"),
+        ("INSPECT", "INSPECT"), ("INITIALIZE", "INITIALIZE"),
+        ("UNSTRING", "UNSTRING"), ("STRING", "STRING"),
+        ("SORT", "SORT/MERGE"), ("MERGE", "SORT/MERGE"),
+        ("PERFORM", "PERFORM"), ("SEARCH", "SEARCH"), ("COMPUTE", "COMPUTE"),
+        ("DIVIDE", "DIVIDE"), ("REDEFINES", "REDEFINES"), ("OCCURS", "OCCURS"),
+        ("OPEN", "OPEN"), ("START", "START"), ("DELETE", "DELETE"),
+        ("REWRITE", "REWRITE"), ("WRITE", "WRITE"), ("READ", "READ"),
+        ("USAGE", "USAGE"), ("SET", "SET"),
+        ("GENERATE", "REPORT / ML GENERATE"), ("JSON", "JSON/XML"), ("XML", "JSON/XML"),
+        ("ENTRY", "ENTRY"),
+    ];
+    for (needle, cat) in CATS {
+        if msg.contains(needle) {
+            return cat.to_string();
+        }
+    }
+    "other".to_string()
+}
+
+/// Replace `{...}` format placeholders with `<x>` so the scraped message reads cleanly in the doc.
+fn clean_boundary_msg(msg: &str) -> String {
+    let mut s = String::new();
+    let mut chars = msg.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == '{' {
+            for n in chars.by_ref() {
+                if n == '}' {
+                    break;
+                }
+            }
+            s.push_str("<x>");
         } else {
-            format!("`{path}` :: `{needle}`")
-        };
-        s.push_str(&format!("| `{verb}` | {form} | {badge} | {anchor} |\n"));
+            s.push(c);
+        }
     }
     s
 }
@@ -617,7 +713,7 @@ fn pct(done: usize, total: usize) -> f64 {
 pub fn run(cmd: &str, root: &str) -> i32 {
     let docs = [
         (Path::new(root).join("COBOL-PARITY.md"), build(root)),
-        (Path::new(root).join("FILE-PARITY.md"), build_files()),
+        (Path::new(root).join("FILE-PARITY.md"), build_files(root)),
     ];
     match cmd {
         "generate" => {
