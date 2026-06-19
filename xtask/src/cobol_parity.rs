@@ -54,6 +54,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p110_examine_until.cob", "REPLACING UNTIL FIRST"),
     ("COMPUTE", "`**` fractional / identifier exponent (e.g. `9 ** 0.5`), via the sealed cob_decimal_pow", "sealed",
         "lab/corpus/frontend/p111_exponent.cob", "9 ** 0.5"),
+    ("SET", "`SET cond TO FALSE` (the 88 `WHEN SET TO FALSE` value)", "sealed",
+        "lab/corpus/frontend/p113_set_false.cob", "WHEN SET TO FALSE"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

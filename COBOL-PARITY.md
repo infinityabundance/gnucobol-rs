@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **9 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 195 of them, de-duplicated from the 211 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 195: **28 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **157 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **10 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 197 of them, de-duplicated from the 213 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 197: **28 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **159 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,7 +185,7 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 37 front-end sub-forms have been identified -- **9 sealed** (byte-identical to cobc, section A) and **28 still open** (fail-closed guards, section B). **Depth completion = 9/37 = 24.3%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 38 front-end sub-forms have been identified -- **10 sealed** (byte-identical to cobc, section A) and **28 still open** (fail-closed guards, section B). **Depth completion = 10/38 = 26.3%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
@@ -205,9 +205,9 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | `SET` | 1 | 4% |
 | `SORT / MERGE` | 1 | 4% |
 | `USAGE` | 1 | 4% |
-| **TOTAL** | **28 open** (+ 9 sealed = 37 identified) | **24.3% complete** |
+| **TOTAL** | **28 open** (+ 10 sealed = 38 identified) | **26.3% complete** |
 
-### A. Sealed sub-forms (9) -- proven byte-identical to cobc
+### A. Sealed sub-forms (10) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -222,6 +222,7 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `UNSTRING` | `DELIMITER IN` / `COUNT IN` per receiver + `TALLYING IN` (added) | `lab/corpus/frontend/p109_unstring_delim.cob` |
 | `EXAMINE` | `UNTIL FIRST` (REPLACING + TALLYING...REPLACING), via the inspect CHARACTERS/BEFORE helper | `lab/corpus/frontend/p110_examine_until.cob` |
 | `COMPUTE` | `**` fractional / identifier exponent (e.g. `9 ** 0.5`), via the sealed cob_decimal_pow | `lab/corpus/frontend/p111_exponent.cob` |
+| `SET` | `SET cond TO FALSE` (the 88 `WHEN SET TO FALSE` value) | `lab/corpus/frontend/p113_set_false.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (28)
 
@@ -275,7 +276,7 @@ The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION,
 |  | FUNCTION <x>: COB_CURRENT_DATE has no year |
 |  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
 
-### D. Input-validation guards -- malformed input rejected (157)
+### D. Input-validation guards -- malformed input rejected (159)
 
 Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
 
@@ -285,6 +286,8 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | 88 condition-name is not a value operand |
 |  | 88 condition-name with no parent item |
 |  | SET <x> TO <value>: an 88 condition-name is only `SET ... TO TRUE` |
+|  | SET <x> TO FALSE: not an 88 condition-name |
+|  | SET <x> TO FALSE: the 88 has no `WHEN SET TO FALSE` value |
 |  | SET <x> TO TRUE: not an 88 condition-name |
 |  | cannot MOVE into an 88 condition-name |
 |  | expected condition-name after 88 |

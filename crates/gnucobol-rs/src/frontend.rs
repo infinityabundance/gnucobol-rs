@@ -108,8 +108,9 @@ enum Storage {
     /// The trailing `bool` is `BLANK WHEN ZERO` (the whole field becomes spaces when the value is zero).
     Edited(String, u8, bool, bool),
     /// An `88`-level condition-name: true when its `parent` field's value equals any of `values` (a single
-    /// value or a `lo THRU hi` range). Carries no storage of its own.
-    Condition { parent: String, values: Vec<CondVal> },
+    /// value or a `lo THRU hi` range). Carries no storage of its own. `false_value` is the `WHEN SET TO
+    /// FALSE <lit>` value (for `SET cond TO FALSE`), if declared.
+    Condition { parent: String, values: Vec<CondVal>, false_value: Option<String> },
     /// A group item: an ordered list of its elementary leaf field names. The group has no bytes of its own
     /// -- a read concatenates the leaves' current bytes, a write distributes the incoming bytes across them
     /// by length. (The leaves own their storage; the group is the aggregate view over the record.)
@@ -541,7 +542,7 @@ struct ProgItem {
     /// `NAME REDEFINES TARGET`: the field aliases `TARGET`'s storage (see [`Field::redefines`]).
     redefines: Option<String>,
     /// An `88`-level condition-name on a parent item: `Some((parent, values))`. A normal data item is None.
-    condition: Option<(String, Vec<CondVal>)>,
+    condition: Option<(String, Vec<CondVal>, Option<String>)>,
     /// `OCCURS ... INDEXED BY idx [idx ...]` -- the table's index name(s). Each becomes an integer index
     /// field; the first is the table's implicit SEARCH index.
     indexed_by: Vec<String>,
@@ -1272,11 +1273,23 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 }
             }
             let mut values: Vec<CondVal> = Vec::new();
+            let mut false_value: Option<String> = None;
             while k < end {
                 match toks.get(k) {
                     Some(Tok::Dot) => {
                         k += 1;
                         break;
+                    }
+                    // `WHEN SET TO FALSE <lit>` -- the value `SET cond TO FALSE` stores into the parent.
+                    Some(Tok::Word(w)) if w == "WHEN" => {
+                        k += 1;
+                        for kw in ["SET", "TO", "FALSE"] {
+                            if matches!(toks.get(k), Some(Tok::Word(x)) if x == kw) { k += 1; }
+                        }
+                        if let Some(t) = toks.get(k) {
+                            false_value = Some(tok_to_cond_word(t));
+                            k += 1;
+                        }
                     }
                     Some(t) => {
                         let lo = tok_to_cond_word(t);
@@ -1301,7 +1314,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 value: None,
                 occurs: 1,
                 redefines: None,
-                condition: Some((parent, values)),
+                condition: Some((parent, values, false_value)),
                 indexed_by: Vec::new(),
                 usage: None,
                 sign: (false, false),
@@ -1601,11 +1614,11 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     ALPHABETIC_FIELDS.with(|m| m.borrow_mut().clear());
     for (gi, it) in prog.ws.iter().enumerate() {
         // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
-        if let Some((parent, values)) = &it.condition {
+        if let Some((parent, values, false_value)) = &it.condition {
             fields.insert(
                 it.name.clone(),
                 Field {
-                    storage: Storage::Condition { parent: parent.clone(), values: values.clone() },
+                    storage: Storage::Condition { parent: parent.clone(), values: values.clone(), false_value: false_value.clone() },
                     bytes: Vec::new(),
                     occurs: 1,
                     redefines: None,
@@ -3362,7 +3375,7 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
         return Ok(sw.states[idx] == on);
     }
     // A bare 88-level condition-name: true when its parent's value equals any listed value or range.
-    if let Some(Field { storage: Storage::Condition { parent, values }, .. }) = f.get(&left) {
+    if let Some(Field { storage: Storage::Condition { parent, values, .. }, .. }) = f.get(&left) {
         for v in values {
             let hit = match v {
                 CondVal::Single(val) => cond_compare(parent, val, f, col)? == std::cmp::Ordering::Equal,
@@ -4509,6 +4522,25 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
         }
         return Ok(());
     }
+    // form: SET cond-name [...] TO FALSE  (store the 88's `WHEN SET TO FALSE` value into the parent).
+    if matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "FALSE") {
+        for name in &targets {
+            let (parent, fw) = match fields.get(name) {
+                Some(Field { storage: Storage::Condition { parent, false_value: Some(fw), .. }, .. }) => (parent.clone(), fw.clone()),
+                Some(Field { storage: Storage::Condition { false_value: None, .. }, .. }) =>
+                    return Err(RunError::Unsupported(format!("SET {name} TO FALSE: the 88 has no `WHEN SET TO FALSE` value"))),
+                Some(_) => return Err(RunError::Unsupported(format!("SET {name} TO FALSE: not an 88 condition-name"))),
+                None => return Err(RunError::UndefinedName(name.clone())),
+            };
+            let src = match fw.strip_prefix('\u{1}') {
+                Some(rest) => Tok::Str(rest.as_bytes().to_vec()),
+                None => Tok::Word(fw),
+            };
+            let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(parent)];
+            exec_move(&mv, fields, decimal_comma)?;
+        }
+        return Ok(());
+    }
     // form: SET idx [idx ...] TO value  (set an index/numeric item to a literal or another item's value).
     if !matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "TRUE") {
         let src = stmt.get(to + 1).cloned()
@@ -4530,7 +4562,7 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     // form: SET cond-name [cond-name ...] TO TRUE  (LEVEL-88 construction).
     for name in targets {
         let (parent, setword) = match fields.get(&name) {
-            Some(Field { storage: Storage::Condition { parent, values }, .. }) => {
+            Some(Field { storage: Storage::Condition { parent, values, .. }, .. }) => {
                 let v = values.first()
                     .ok_or_else(|| RunError::Unsupported(format!("88 {name} has no VALUE to SET")))?;
                 let w = match v { CondVal::Single(s) => s.clone(), CondVal::Range(lo, _) => lo.clone() };
