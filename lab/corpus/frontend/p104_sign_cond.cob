@@ -1,0 +1,18 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P104.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 N PIC S9(3) VALUE -5.
+       01 P PIC S9(3) VALUE 12.
+       01 Z PIC S9(3) VALUE 0.
+       01 C PIC S9(3)V99 COMP-3 VALUE -1.5.
+       PROCEDURE DIVISION.
+           IF N IS NEGATIVE DISPLAY "N-neg" END-IF.
+           IF N IS NOT POSITIVE DISPLAY "N-notpos" END-IF.
+           IF P IS POSITIVE DISPLAY "P-pos" END-IF.
+           IF P NOT NEGATIVE DISPLAY "P-notneg" END-IF.
+           IF Z IS ZERO DISPLAY "Z-zero" END-IF.
+           IF Z IS NOT NEGATIVE DISPLAY "Z-notneg" END-IF.
+           IF C IS NEGATIVE DISPLAY "C-neg" END-IF.
+           IF C NOT ZERO DISPLAY "C-nonzero" END-IF.
+           STOP RUN.

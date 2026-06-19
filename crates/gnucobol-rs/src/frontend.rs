@@ -3375,6 +3375,20 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
         neg = true;
         *p += 1;
     }
+    // Sign condition: `IF identifier [IS] [NOT] {POSITIVE | NEGATIVE | ZERO}` -- a unary test of the
+    // operand's numeric value against 0 (no right operand follows).
+    if let Some(signw) = w.get(*p).map(|s| s.as_str()) {
+        if matches!(signw, "POSITIVE" | "NEGATIVE" | "ZERO") {
+            *p += 1;
+            let ord = cond_compare(&left, "0", f, col)?;
+            let base = match signw {
+                "POSITIVE" => ord == std::cmp::Ordering::Greater,
+                "NEGATIVE" => ord == std::cmp::Ordering::Less,
+                _ => ord == std::cmp::Ordering::Equal, // ZERO
+            };
+            return Ok(if neg { !base } else { base });
+        }
+    }
     let op = match w.get(*p).map(|s| s.as_str()) {
         Some("=") => Rel::Eq,
         Some(">") => Rel::Gt,
