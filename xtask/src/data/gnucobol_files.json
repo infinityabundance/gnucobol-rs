@@ -1256,11 +1256,14 @@
   },
   {
    "path": "extras/CBL_OC_DUMP.cob",
-   "category": "extras",
-   "status": "REFERENCE",
-   "gap": "Optional extras (e.g. preprocessors, sample modules).",
-   "plan": "Evaluate per-item; not core parity.",
-   "evidence": "reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER)"
+   "category": "cobc front-end: COBOL program",
+   "status": "PARTIAL",
+   "gap": "A GnuCOBOL-shipped hex-dump utility program (CALLable module, USING linkage).",
+   "plan": "Front-end target: USAGE BINARY-CHAR/SHORT/LONG/DOUBLE (incl. UNSIGNED) and USAGE POINTER now parse; remaining blockers are USING-module execution + an 88-level condition form. Grow the interpreter to run it.",
+   "evidence": "PARTIAL: this is a COBOL PROGRAM (not doc/license); its USAGE BINARY-* + POINTER data division now parses in the native front-end (`crates/gnucobol-rs/src/frontend.rs` USAGE BINARY-CHAR/SHORT/LONG/DOUBLE). It does not yet RUN end-to-end (USING-module dispatch + condition forms pending) -- tracked in COBOL-PARITY.md, not silently omitted.",
+   "proof": [
+    "crates/gnucobol-rs/src/frontend.rs :: fn binary_native_usage"
+   ]
   },
   {
    "path": "extras/Makefile.am",
@@ -1528,11 +1531,11 @@
   },
   {
    "path": "lib/gettext.h",
-   "category": "build/portability aux",
-   "status": "OBVIATED",
-   "gap": "Autotools/gnulib portability + build helper.",
-   "plan": "None needed: Cargo + Rust std replace these.",
-   "evidence": "N/A by design: build-system file; Cargo.toml + xtask replace it (no Rust port is the correct state)"
+   "category": "localization (NLS)",
+   "status": "NON-CLAIM",
+   "gap": "The GNU gettext convenience header (NLS message-translation macros).",
+   "plan": "Off-oracle by design: localized runtime messages are an explicit non-claim (the pinned oracle runs under C.UTF-8 where gettext(_(s)) == s).",
+   "evidence": "Explicit non-claim: localization substrate. The port reproduces the admitted C.UTF-8 oracle, under which message translation is identity; localized (non-C.UTF-8) messages are an off-oracle non-claim (see docs/negative-capabilities.md), consistent with the po/*.po catalogs."
   },
   {
    "path": "lib/Makefile.am",

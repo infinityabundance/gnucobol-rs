@@ -1,0 +1,19 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P94.
+      *> USAGE BINARY-CHAR/SHORT/LONG/DOUBLE (signed + unsigned); fixed byte width 1/2/4/8.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 C USAGE BINARY-CHAR.
+       01 S USAGE BINARY-SHORT.
+       01 L BINARY-LONG.
+       01 D USAGE BINARY-DOUBLE.
+       01 U USAGE BINARY-LONG UNSIGNED.
+       01 G. 05 L2 BINARY-LONG. 05 M PIC X(3) VALUE "END".
+       PROCEDURE DIVISION.
+           MOVE 127 TO C. DISPLAY "C=" C.
+           MOVE -7 TO S. DISPLAY "S=" S.
+           MOVE 123456789 TO L. DISPLAY "L=" L.
+           MOVE 100 TO D. DISPLAY "D=" D.
+           MOVE 4000000000 TO U. DISPLAY "U=" U.
+           MOVE 1 TO L2. DISPLAY "G=" G.
+           STOP RUN.

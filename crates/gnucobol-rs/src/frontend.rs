@@ -608,6 +608,35 @@ fn usage_from_kw(w: &str) -> Option<Usage> {
     }
 }
 
+/// `USAGE BINARY-CHAR` / `BINARY-SHORT` / `BINARY-LONG` / `BINARY-DOUBLE` -> (fixed byte width, signed
+/// implied PIC, unsigned implied PIC). These COMP-5-family synonyms carry BOTH a usage and an implied
+/// PIC: the byte width is fixed by the synonym (1/2/4/8), while the implied PIC gives the display digit
+/// count (3/5/10/20 = the unsigned decimal capacity of that width). A trailing `SIGNED` (default) or
+/// `UNSIGNED` selects the `S9(n)` vs `9(n)` PIC; the unsigned form drops the sign flag for full range.
+fn binary_native_usage(w: &str) -> Option<(u8, &'static str, &'static str)> {
+    match w {
+        "BINARY-CHAR" => Some((1, "S9(3)", "9(3)")),
+        "BINARY-SHORT" => Some((2, "S9(5)", "9(5)")),
+        "BINARY-LONG" => Some((4, "S9(10)", "9(10)")),
+        "BINARY-DOUBLE" => Some((8, "S9(20)", "9(20)")),
+        _ => None,
+    }
+}
+
+/// After a `BINARY-*` keyword at `toks[k]`, consume an optional `SIGNED`/`UNSIGNED` qualifier and return
+/// the implied PIC to use (`UNSIGNED` -> the `9(n)` form, else the default signed `S9(n)`). Advances `k`.
+fn binary_native_pic(toks: &[Tok], k: &mut usize, signed_pic: &'static str, unsigned_pic: &'static str) -> &'static str {
+    if matches!(toks.get(*k), Some(Tok::Word(x)) if x == "UNSIGNED") {
+        *k += 1;
+        unsigned_pic
+    } else {
+        if matches!(toks.get(*k), Some(Tok::Word(x)) if x == "SIGNED") {
+            *k += 1;
+        }
+        signed_pic
+    }
+}
+
 /// A USAGE keyword for an opaque machine pointer: modelled as an 8-byte field (its value -- an address --
 /// is a non-claim, never displayed deterministically), so the byte width is faithful.
 fn is_pointer_usage(w: &str) -> bool {
@@ -1402,6 +1431,14 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         k += 1;
                     }
                     match toks.get(k) {
+                        // BINARY-CHAR/SHORT/LONG/DOUBLE set BOTH the usage (fixed-width native binary) and
+                        // the implied PIC (display digits) -- the only USAGE form that needs both.
+                        Some(Tok::Word(u)) if binary_native_usage(u).is_some() => {
+                            let (width, spic, upic) = binary_native_usage(u).unwrap();
+                            k += 1;
+                            synthetic = Some(binary_native_pic(toks, &mut k, spic, upic));
+                            usage = Some(Usage::CompNative(width));
+                        }
                         Some(Tok::Word(u)) if usage_from_kw(u).is_some() => {
                             usage = usage_from_kw(u);
                             k += 1;
@@ -1423,7 +1460,13 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         _ => return Err(RunError::Unsupported("USAGE with no form".into())),
                     }
                 }
-                // a bare usage keyword (no `USAGE` prefix), e.g. `PIC S9(5) COMP-3`.
+                // a bare usage keyword (no `USAGE` prefix), e.g. `PIC S9(5) COMP-3` or `BINARY-LONG`.
+                Some(Tok::Word(w)) if binary_native_usage(w).is_some() => {
+                    let (width, spic, upic) = binary_native_usage(w).unwrap();
+                    k += 1;
+                    synthetic = Some(binary_native_pic(toks, &mut k, spic, upic));
+                    usage = Some(Usage::CompNative(width));
+                }
                 Some(Tok::Word(w)) if usage_from_kw(w).is_some() => {
                     usage = usage_from_kw(w);
                     k += 1;

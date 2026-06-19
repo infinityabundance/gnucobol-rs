@@ -39,6 +39,11 @@ pub enum Usage {
     /// size `ceil(digits/2)`. (GnuCOBOL warns and converts a *signed* `S9(n)` COMP-6 to COMP-3, so
     /// signed COMP-6 is **not** this court.)
     Comp6,
+    /// `USAGE BINARY-CHAR` / `BINARY-SHORT` / `BINARY-LONG` / `BINARY-DOUBLE`: COMP-5-family native binary
+    /// integers with an implied PIC, whose byte width is **fixed by the synonym** (1/2/4/8) and is
+    /// **dialect-invariant** — NOT derived from the implied-PIC digit count via the binary-size table
+    /// (which would give 2/4/8/16). The `u8` carries that fixed byte width. Native order, full range.
+    CompNative(u8),
 }
 
 /// Storage bytes for `COMP`/`BINARY`/`COMP-5`, under the oracle's `binary-size: 1-2-4-8` config
@@ -336,6 +341,10 @@ pub fn build_field_dialect(
             dialect.binary_size.bytes(nines),
             COB_FLAG_REAL_BINARY,
         ),
+        // BINARY-CHAR/SHORT/LONG/DOUBLE: like COMP-5 (native, full range) but the width is FIXED by the
+        // synonym (carried in the variant) -- never the dialect binary-size table, so it stays 1/2/4/8
+        // across default/ibm/mf. `digits`/`scale` still come from the implied PIC, so DISPLAY is correct.
+        Usage::CompNative(w) => (COB_TYPE_NUMERIC_BINARY, w as usize, COB_FLAG_REAL_BINARY),
         Usage::CompX => (
             COB_TYPE_NUMERIC_BINARY,
             comp_x_size(nines),
