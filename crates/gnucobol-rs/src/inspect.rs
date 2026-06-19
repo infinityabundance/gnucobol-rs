@@ -97,16 +97,28 @@ pub enum ReplaceMode<'a> {
     Leading(&'a [u8], &'a [u8]),
     /// `REPLACING FIRST x BY y` — the first `x` in the region.
     First(&'a [u8], &'a [u8]),
+    /// `REPLACING CHARACTERS BY y` — every character position in the region becomes `y` (a single char).
+    Characters(&'a [u8]),
 }
 
 /// `INSPECT target REPLACING <mode> [<region>]` — the target bytes after replacement.
 pub fn inspect_replacing(target: &[u8], mode: ReplaceMode, region: Region) -> Vec<u8> {
     let (s, e) = region_bounds(target, region);
     let mut out = target.to_vec();
+    // CHARACTERS has no search operand: every position in the region becomes the (single) replacement byte.
+    if let ReplaceMode::Characters(y) = mode {
+        if let Some(&c) = y.first() {
+            for b in &mut out[s..e] {
+                *b = c;
+            }
+        }
+        return out;
+    }
     let (item, by, only_leading, only_first) = match mode {
         ReplaceMode::All(x, y) => (x, y, false, false),
         ReplaceMode::Leading(x, y) => (x, y, true, false),
         ReplaceMode::First(x, y) => (x, y, false, true),
+        ReplaceMode::Characters(_) => unreachable!("handled above"),
     };
     if item.is_empty() || item.len() != by.len() {
         return out;

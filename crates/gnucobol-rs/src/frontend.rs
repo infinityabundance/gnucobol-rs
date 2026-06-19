@@ -4790,17 +4790,25 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
         }
         Some(Tok::Word(w)) if w == "REPLACING" => {
             let modekw = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT REPLACING: missing mode".into())) };
-            if !matches!(modekw.as_str(), "ALL" | "LEADING" | "FIRST") {
-                return Err(RunError::Unsupported(format!("INSPECT REPLACING {modekw} (subset: ALL/LEADING/FIRST x BY y)")));
-            }
-            let x = inspect_operand(stmt.get(3), fields)?;
-            if !matches!(stmt.get(4), Some(Tok::Word(w)) if w == "BY") {
-                return Err(RunError::Unsupported("INSPECT REPLACING: expected BY".into()));
-            }
-            let y = inspect_operand(stmt.get(5), fields)?;
-            let (rk, d) = inspect_region(&stmt[6.min(stmt.len())..], fields)?;
+            // CHARACTERS BY y [region] has NO search operand; ALL/LEADING/FIRST take `x BY y`.
+            let (x, y, ystart) = if modekw == "CHARACTERS" {
+                if !matches!(stmt.get(3), Some(Tok::Word(w)) if w == "BY") {
+                    return Err(RunError::Unsupported("INSPECT REPLACING CHARACTERS: expected BY".into()));
+                }
+                (Vec::new(), inspect_operand(stmt.get(4), fields)?, 5)
+            } else if matches!(modekw.as_str(), "ALL" | "LEADING" | "FIRST") {
+                let x = inspect_operand(stmt.get(3), fields)?;
+                if !matches!(stmt.get(4), Some(Tok::Word(w)) if w == "BY") {
+                    return Err(RunError::Unsupported("INSPECT REPLACING: expected BY".into()));
+                }
+                (x, inspect_operand(stmt.get(5), fields)?, 6)
+            } else {
+                return Err(RunError::Unsupported(format!("INSPECT REPLACING: unrecognized mode `{modekw}` (expected CHARACTERS/ALL/LEADING/FIRST)")));
+            };
+            let (rk, d) = inspect_region(&stmt[ystart.min(stmt.len())..], fields)?;
             let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
             let mode = match modekw.as_str() {
+                "CHARACTERS" => ReplaceMode::Characters(&y),
                 "ALL" => ReplaceMode::All(&x, &y),
                 "LEADING" => ReplaceMode::Leading(&x, &y),
                 _ => ReplaceMode::First(&x, &y),

@@ -44,6 +44,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p106_divide_remainder.cob", "DIVIDE 17 BY 5 GIVING Q REMAINDER R"),
     ("INITIALIZE", "`REPLACING cat BY val` (NUMERIC/ALPHANUMERIC/ALPHABETIC/NUMERIC-EDITED, multi-category, PIC A vs X)", "sealed",
         "lab/corpus/frontend/p107_initialize_replacing.cob", "REPLACING NUMERIC DATA BY 7"),
+    ("INSPECT", "`REPLACING CHARACTERS BY y` (incl. BEFORE/AFTER region)", "sealed",
+        "lab/corpus/frontend/p108_inspect_chars.cob", "REPLACING CHARACTERS BY"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
