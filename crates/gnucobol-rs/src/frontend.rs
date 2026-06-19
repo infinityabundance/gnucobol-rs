@@ -3578,6 +3578,49 @@ fn make_field(
 }
 
 /// Initialize a field from a VALUE literal (a numeric literal word, or a string).
+/// A figurative constant -- a value that fills its receiver to the receiver's full width.
+#[derive(Clone, Copy)]
+enum Fig {
+    Space,
+    Zero,
+    HighValue,
+    LowValue,
+    Quote,
+}
+
+/// Recognise a figurative-constant word (singular + plural spellings). Figuratives are reserved words,
+/// so they never collide with a data name.
+fn figurative_kind(w: &str) -> Option<Fig> {
+    match w {
+        "SPACE" | "SPACES" => Some(Fig::Space),
+        "ZERO" | "ZEROS" | "ZEROES" => Some(Fig::Zero),
+        "HIGH-VALUE" | "HIGH-VALUES" => Some(Fig::HighValue),
+        "LOW-VALUE" | "LOW-VALUES" => Some(Fig::LowValue),
+        "QUOTE" | "QUOTES" => Some(Fig::Quote),
+        _ => None,
+    }
+}
+
+/// Fill `f` with a figurative constant across its full width: SPACE / HIGH-VALUE / LOW-VALUE / QUOTE are
+/// raw byte fills (0x20 / 0xFF / 0x00 / 0x22); ZERO is numeric 0 into a numeric/edited receiver, else a
+/// `'0'` fill (e.g. PIC X).
+fn fill_figurative(f: &mut Field, fig: Fig, decimal_comma: bool) -> Result<(), RunError> {
+    let n = f.bytes.len();
+    match fig {
+        Fig::Space => f.bytes = vec![b' '; n],
+        Fig::HighValue => f.bytes = vec![0xFFu8; n],
+        Fig::LowValue => f.bytes = vec![0x00u8; n],
+        Fig::Quote => f.bytes = vec![b'"'; n],
+        Fig::Zero => match &f.storage {
+            Storage::Numeric(_) | Storage::Edited(..) => {
+                return move_into(f, b"0", &lit_num_attr(1, 0, false), decimal_comma);
+            }
+            _ => f.bytes = vec![b'0'; n],
+        },
+    }
+    Ok(())
+}
+
 fn init_value(field: &mut Field, v: &Tok) -> Result<(), RunError> {
     match v {
         Tok::Str(s) => {
@@ -3585,7 +3628,10 @@ fn init_value(field: &mut Field, v: &Tok) -> Result<(), RunError> {
             store_alnum(field, &src)
         }
         Tok::Word(w) => {
-            // a numeric literal: digits with optional sign + decimal point.
+            // a figurative constant (SPACES/ZEROS/HIGH-VALUE/...) fills the field; else a numeric literal.
+            if let Some(fig) = figurative_kind(w) {
+                return fill_figurative(field, fig, false);
+            }
             let dec = parse_num_literal(w)?;
             store_decimal(field, &dec)
         }
@@ -4301,6 +4347,38 @@ fn exec_move(
         .iter()
         .filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None })
         .collect();
+    // `MOVE ALL <literal>` / `MOVE ALL <figurative>` -- repeat the unit to fill EACH receiver's width.
+    if matches!(src_tok, Tok::Word(w) if w == "ALL") {
+        match stmt.get(1) {
+            Some(Tok::Str(s)) if !s.is_empty() => {
+                let unit = s.clone();
+                for d in &dests {
+                    write_field(fields, d, |f| {
+                        f.bytes = unit.iter().copied().cycle().take(f.bytes.len()).collect();
+                        Ok(())
+                    })?;
+                }
+                return Ok(());
+            }
+            Some(Tok::Word(u)) if figurative_kind(u).is_some() => {
+                let fig = figurative_kind(u).unwrap();
+                for d in &dests {
+                    write_field(fields, d, |f| fill_figurative(f, fig, decimal_comma))?;
+                }
+                return Ok(());
+            }
+            _ => return Err(RunError::Unsupported("MOVE ALL: expected a non-empty literal or figurative".into())),
+        }
+    }
+    // A figurative-constant source (SPACES/ZEROS/HIGH-VALUE/...) fills EACH receiver to its own width.
+    if let Tok::Word(w) = src_tok {
+        if let Some(fig) = figurative_kind(w) {
+            for d in &dests {
+                write_field(fields, d, |f| fill_figurative(f, fig, decimal_comma))?;
+            }
+            return Ok(());
+        }
+    }
     // resolve the source value as (bytes, attr) once.
     let (sbytes, sattr) = operand_value(src_tok, fields)?;
     for d in dests {
