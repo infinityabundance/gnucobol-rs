@@ -1613,6 +1613,15 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // A group item (no PIC) is built after its leaves exist (second pass below) -- but a COMP-1/COMP-2
         // item also has no PIC yet is an elementary float leaf, so it must build here.
         if it.pic.is_empty() && it.float_kind.is_none() {
+            // A GROUP with OCCURS (a table of group items) needs an interleaved per-element array model the
+            // flat field model does not yet provide -- its children would be mis-indexed (a silent wrong
+            // answer). Fail CLOSED rather than mis-run; elementary OCCURS (`PIC ... OCCURS n`) is supported.
+            if it.occurs > 1 {
+                return Err(RunError::Unsupported(format!(
+                    "OCCURS on group item `{}` (table of group items) not in subset -- elementary OCCURS only",
+                    it.name
+                )));
+            }
             continue;
         }
         let mut f = match it.float_kind {
