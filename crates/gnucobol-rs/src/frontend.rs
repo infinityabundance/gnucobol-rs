@@ -2448,6 +2448,25 @@ fn run_block(
                     }
                     // Arithmetic verbs carry optional ON SIZE ERROR / NOT ON SIZE ERROR handler blocks
                     // (+ END-verb), so they are parsed here rather than via collect_operands/exec_stmt.
+                    // STRING carries optional ON OVERFLOW / NOT ON OVERFLOW handler blocks (+ END-STRING),
+                    // so it is parsed here (like the arithmetic verbs) rather than via exec_stmt.
+                    "STRING" => {
+                        let stmt = collect_arith_operands(toks, pos);
+                        let on_of = parse_on_overflow_handler(toks, pos, false);
+                        let not_of = parse_on_overflow_handler(toks, pos, true);
+                        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-STRING") {
+                            *pos += 1;
+                        }
+                        if exec {
+                            let overflow = exec_string(&stmt, fields, ctx.decimal_comma)?;
+                            let handler = if overflow { &on_of } else { &not_of };
+                            if let Some(block) = handler {
+                                if run_handler(block, fields, out, ctx)? {
+                                    return Ok(true);
+                                }
+                            }
+                        }
+                    }
                     "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" | "COMPUTE" => {
                         let stmt = collect_arith_operands(toks, pos);
                         let on_size = parse_on_size_handler(toks, pos, false);
@@ -2558,6 +2577,47 @@ fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<
     p += 3;
     let start = p;
     while p < toks.len() && !at_size_terminator(toks, p) {
+        p += 1;
+    }
+    let block = toks[start..p].to_vec();
+    *pos = p;
+    Some(block)
+}
+
+/// True when `toks[p]` ends a STRING `ON OVERFLOW` handler block: end of input, `.`, `END-STRING`, an
+/// outer scope terminator, or a following `NOT ON OVERFLOW` clause.
+fn at_overflow_terminator(toks: &[Tok], p: usize) -> bool {
+    match toks.get(p) {
+        None | Some(Tok::Dot) => true,
+        Some(Tok::Word(w)) if w == "END-STRING" || SCOPE_ENDERS.contains(&w.as_str()) => true,
+        Some(Tok::Word(w)) if w == "NOT"
+            && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON")
+            && matches!(toks.get(p + 2), Some(Tok::Word(x)) if x == "OVERFLOW") =>
+        {
+            true
+        }
+        _ => false,
+    }
+}
+
+/// Parse an `[NOT] ON OVERFLOW <statements>` handler at `*pos` (the STRING overflow clause). Returns the
+/// handler tokens and advances `*pos`; `None` if the clause is absent.
+fn parse_on_overflow_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<Vec<Tok>> {
+    let mut p = *pos;
+    if is_not {
+        if !matches!(toks.get(p), Some(Tok::Word(w)) if w == "NOT") {
+            return None;
+        }
+        p += 1;
+    }
+    if !(matches!(toks.get(p), Some(Tok::Word(w)) if w == "ON")
+        && matches!(toks.get(p + 1), Some(Tok::Word(w)) if w == "OVERFLOW"))
+    {
+        return None;
+    }
+    p += 2;
+    let start = p;
+    while p < toks.len() && !at_overflow_terminator(toks, p) {
         p += 1;
     }
     let block = toks[start..p].to_vec();
@@ -3753,7 +3813,9 @@ fn exec_stmt(
         "SET" => exec_set(stmt, fields, ctx.decimal_comma),
         "INITIALIZE" => exec_initialize(stmt, fields, ctx.decimal_comma),
         "INSPECT" => exec_inspect(stmt, fields, ctx.decimal_comma),
-        "STRING" => exec_string(stmt, fields, ctx.decimal_comma),
+        // STRING is normally dispatched in run_block (for its ON OVERFLOW handler); this arm is a
+        // type-safe fallback for any bare STRING reaching exec_stmt (the overflow flag is unused here).
+        "STRING" => exec_string(stmt, fields, ctx.decimal_comma).map(|_| ()),
         "UNSTRING" => exec_unstring(stmt, fields),
         "ACCEPT" => exec_accept(stmt, fields),
         "OPEN" => exec_open(stmt, fields, out, ctx),
@@ -4637,11 +4699,8 @@ fn exec_transform(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(
 /// `STRING <src [DELIMITED BY SIZE|lit]> ... INTO target [WITH POINTER p]` -- concatenate the sources into
 /// the target at the 1-based pointer, preserving the unwritten tail (`GNURUST.STRING.UNSTRING.1`). The
 /// `ON OVERFLOW` handler form is outside the subset (fails closed).
-fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<bool, RunError> {
     use crate::string_ops::{string_into, StringSource};
-    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "OVERFLOW")) {
-        return Err(RunError::Unsupported("STRING ... ON OVERFLOW not in subset".into()));
-    }
     let into = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
         .ok_or_else(|| RunError::Unsupported("STRING without INTO".into()))?;
     let target = match stmt.get(into + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("STRING: missing target".into())) };
@@ -4680,6 +4739,7 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
     }).collect();
     let prefill = read_field(fields, &target)?.ok_or_else(|| RunError::UndefinedName(target.clone()))?.bytes;
     let res = string_into(&prefill, &ss, pointer);
+    let overflow = res.overflow;
     let newb = res.target;
     write_field(fields, &target, |f| {
         if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
@@ -4689,7 +4749,7 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
         let mv = vec![Tok::Word(res.pointer.to_string()), Tok::Word("TO".to_string()), Tok::Word(pn)];
         exec_move(&mv, fields, decimal_comma)?;
     }
-    Ok(())
+    Ok(overflow) // `true` when the sources overran the target -> the ON OVERFLOW handler runs
 }
 
 /// `UNSTRING source [DELIMITED BY d] INTO f1 f2 ...` -- split the source by the delimiter (or by each
