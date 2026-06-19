@@ -40,8 +40,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "crates/gnucobol-rs/src/frontend.rs", "MOVE CORRESPONDING is not in the front-end subset"),
     ("ADD/SUBTRACT", "`CORRESPONDING` (same qualified-name blocker as MOVE CORR)", "gap",
         "crates/gnucobol-rs/src/frontend.rs", "{verb} CORRESPONDING is not in the front-end subset"),
-    ("DIVIDE", "`REMAINDER` (the second, remainder result)", "gap",
-        "crates/gnucobol-rs/src/frontend.rs", "DIVIDE ... REMAINDER is not in the front-end subset"),
+    ("DIVIDE", "`GIVING q REMAINDER r` (incl. ROUNDED quotient, signed/scaled, via the sealed GNURUST.REMAINDER.1 primitive)", "sealed",
+        "lab/corpus/frontend/p106_divide_remainder.cob", "DIVIDE 17 BY 5 GIVING Q REMAINDER R"),
     ("INITIALIZE", "`REPLACING` / `WITH` (category-targeted init: NUMERIC/ALPHANUMERIC/ALPHABETIC/edited)", "gap",
         "crates/gnucobol-rs/src/frontend.rs", "no REPLACING/WITH"),
 ];

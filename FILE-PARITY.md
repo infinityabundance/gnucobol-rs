@@ -76,7 +76,7 @@ These files ARE accounted for (the interpreter reproduces a sweep-verified subse
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **2 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 181 of them, de-duplicated from the 197 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 181: **38 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **133 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **3 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 186 of them, de-duplicated from the 202 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 186: **38 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **138 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -90,9 +90,9 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | USAGE forms | 10 | 9 | **90%** | 1 -- USAGE NATIONAL (unfinished in cobc -- boundary) |
 | **TOTAL (language breadth)** | **204** | **179** | **88%** | **25 left** |
 
-**Runtime engine: 100%** (13/13 libcob files + 110/110 intrinsics ported 1:1, oracle-sealed) -- the breadth figure above is the FRONT-END (interpreter) axis only. Excluding the boundary non-claims the oracle itself cannot run, the front-end runs **~100% of the *runnable* language surface**; the 204-item denominator above keeps those boundaries IN, so the honest front-end-of-everything figure is **88%**. **Depth:** within the wired verbs, **2 sub-form(s) byte-sealed** and **38 feature-gap form(s) still open** (section B) -- depth has no fixed denominator (the set of all sub-forms is unbounded), so it is tracked as an open-gap COUNT, not a percentage, to avoid a fabricated ratio.
+**Runtime engine: 100%** (13/13 libcob files + 110/110 intrinsics ported 1:1, oracle-sealed) -- the breadth figure above is the FRONT-END (interpreter) axis only. Excluding the boundary non-claims the oracle itself cannot run, the front-end runs **~100% of the *runnable* language surface**; the 204-item denominator above keeps those boundaries IN, so the honest front-end-of-everything figure is **88%**. **Depth:** within the wired verbs, **3 sub-form(s) byte-sealed** and **38 feature-gap form(s) still open** (section B) -- depth has no fixed denominator (the set of all sub-forms is unbounded), so it is tracked as an open-gap COUNT, not a percentage, to avoid a fabricated ratio.
 
-### A. Sealed sub-forms (2) -- proven byte-identical to cobc
+### A. Sealed sub-forms (3) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -100,6 +100,7 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 |---|---|---|
 | `IF` | sign condition `x IS [NOT] {POSITIVE\|NEGATIVE\|ZERO}` (incl. COMP-3) | `lab/corpus/frontend/p104_sign_cond.cob` |
 | `ADD/SUBTRACT/MULTIPLY/DIVIDE` | multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver) | `lab/corpus/frontend/p105_multi_receiver.cob` |
+| `DIVIDE` | `GIVING q REMAINDER r` (incl. ROUNDED quotient, signed/scaled, via the sealed GNURUST.REMAINDER.1 primitive) | `lab/corpus/frontend/p106_divide_remainder.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (38)
 
@@ -109,7 +110,7 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 |---|---|
 | `ACCEPT` | ACCEPT FROM <x> (subset: DATE/DAY/TIME/DAY-OF-WEEK) |
 |  | ACCEPT subset is `ACCEPT id FROM DATE\|DAY\|TIME\|DAY-OF-WEEK` (terminal input not modelled) |
-| `DIVIDE / arithmetic` | DIVIDE ... REMAINDER is not in the front-end subset |
+| `DIVIDE / arithmetic` | DIVIDE ... REMAINDER with ON SIZE ERROR (subset: REMAINDER without a size-error handler) |
 | `EXAMINE` | EXAMINE REPLACING <x> |
 |  | EXAMINE REPLACING mode |
 |  | EXAMINE TALLYING <x> |
@@ -163,7 +164,7 @@ The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION,
 |  | FUNCTION <x>: COB_CURRENT_DATE has no year |
 |  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
 
-### D. Input-validation guards -- malformed input rejected (133)
+### D. Input-validation guards -- malformed input rejected (138)
 
 Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
 
@@ -187,6 +188,11 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | string in COMPUTE |
 |  | trailing tokens in COMPUTE expr at <x> |
 |  | unexpected end of COMPUTE expr |
+| `DIVIDE / arithmetic` | DIVIDE ... REMAINDER requires GIVING |
+|  | DIVIDE ... REMAINDER: GIVING needs exactly one quotient + one remainder receiver |
+|  | DIVIDE ... REMAINDER: missing INTO/BY |
+|  | DIVIDE ... REMAINDER: missing dividend/divisor operand |
+|  | DIVIDE ... REMAINDER: receiver `<x>` must be a numeric (non-edited) item |
 | `EVALUATE` | EVALUATE without a subject |
 | `EXAMINE` | EXAMINE: expected TALLYING or REPLACING |
 |  | EXAMINE: missing field |
@@ -377,35 +383,35 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |---|---|---|
 | `cobc/ChangeLog` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `cobc/cobc.1` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `cobc/cobc.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
-| `cobc/cobc.h` | PARTIAL | PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
-| `cobc/codegen.c` | NON-CLAIM | Explicit non-claim: cobc emits C source (C code generation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost. |
-| `cobc/codeoptim.c` | NON-CLAIM | Explicit non-claim: cobc emits C source (generated-C peephole optimisation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost. |
+| `cobc/cobc.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
+| `cobc/cobc.h` | PARTIAL | PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
+| `cobc/codegen.c` | NON-CLAIM | Explicit non-claim: cobc emits C source (C code generation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost. |
+| `cobc/codeoptim.c` | NON-CLAIM | Explicit non-claim: cobc emits C source (generated-C peephole optimisation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost. |
 | `cobc/codeoptim.def` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `cobc/config.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/dialect.rs::from_conf` parses the dialect `.conf` files (copied verbatim into `config/`, COPIED+WIRED) and `-std=` selection mirrors `cobc -std=`; a subset of cobc’s full knob set. |
 | `cobc/config.def` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `cobc/error.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::RunError` is the interpreter’s error model (it fails CLOSED on anything outside the sealed subset). NOTE: cobc’s exact diagnostic TEXT format is NOT reproduced byte-for-byte -- a deliberate, explicit scope limit, not a silent omission. |
-| `cobc/field.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::parse_items` + `build_program_fields` build the runtime field table on the ported libcob field model (PIC/USAGE/OCCURS/REDEFINES/SYNC over the sealed subset); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
+| `cobc/field.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::parse_items` + `build_program_fields` build the runtime field table on the ported libcob field model (PIC/USAGE/OCCURS/REDEFINES/SYNC over the sealed subset); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
 | `cobc/flag.def` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `cobc/help.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` provides `--help`/`--version`/`-dumpversion` for the interpreter. NOTE: this is cobrun’s own usage, NOT a byte-for-byte reproduction of cobc’s help text. |
 | `cobc/Makefile.am` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 | `cobc/Makefile.in` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `cobc/parser.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed. |
-| `cobc/parser.h` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed. |
-| `cobc/parser.y` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed. |
-| `cobc/pplex.c` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
-| `cobc/pplex.l` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
-| `cobc/ppparse.c` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
+| `cobc/parser.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed. |
+| `cobc/parser.h` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed. |
+| `cobc/parser.y` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed. |
+| `cobc/pplex.c` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
+| `cobc/pplex.l` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
+| `cobc/ppparse.c` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
 | `cobc/ppparse.def` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
-| `cobc/ppparse.h` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
-| `cobc/ppparse.y` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
-| `cobc/replace.c` | PARTIAL | PARTIAL: COPY/REPLACING text substitution is reproduced by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The standalone REPLACE statement forms are a subset. |
+| `cobc/ppparse.h` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
+| `cobc/ppparse.y` | PARTIAL | PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset. |
+| `cobc/replace.c` | PARTIAL | PARTIAL: COPY/REPLACING text substitution is reproduced by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The standalone REPLACE statement forms are a subset. |
 | `cobc/reserved.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` carries the recognised verb set (`WIRED_STATEMENTS`) and intrinsic set (`WIRED_FUNCTIONS`) that drive the live COBOL-PARITY tracker; a subset of cobc’s full reserved list. |
-| `cobc/scanner.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc. |
-| `cobc/scanner.l` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc. |
+| `cobc/scanner.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc. |
+| `cobc/scanner.l` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc. |
 | `cobc/tree.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` carries a clean-room interpreter AST (`struct ProgramDef` / `struct ProgItem` / `struct Field`) -- an independent analog of cobc’s cb_tree, not a 1:1 port of it. |
 | `cobc/tree.h` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs` carries a clean-room interpreter AST (`struct ProgramDef` / `struct ProgItem` / `struct Field`) -- an independent analog of cobc’s cb_tree, not a 1:1 port of it. |
-| `cobc/typeck.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::exec_stmt` / `exec_compute` evaluate the typed operations directly on the ported libcob runtime (cob_move/cob_arith); verified byte-identical to cobc by the 105-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
+| `cobc/typeck.c` | PARTIAL | PARTIAL: `crates/gnucobol-rs/src/frontend.rs::exec_stmt` / `exec_compute` evaluate the typed operations directly on the ported libcob runtime (cob_move/cob_arith); verified byte-identical to cobc by the 106-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). |
 | `cobc/warning.def` | REFERENCE | reference (doc/license); the port carries its own generated docs (STATUS/CHANGELOG/COBOL-PARITY/FILE-PARITY/...) + COPYING(.LESSER) |
 
 ### `config/` (43 files)

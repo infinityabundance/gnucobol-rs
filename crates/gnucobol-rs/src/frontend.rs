@@ -20,7 +20,7 @@
 //! (`IF`/`PERFORM`/`EVALUATE`), `ACCEPT`, files, and any unlisted verb are out of subset and return a
 //! [`RunError`] rather than guessing.
 
-use crate::arith::{cob_arith, cob_divide, ArithError, Op, Round};
+use crate::arith::{cob_arith, cob_divide, cob_divide_remainder, ArithError, Op, Round};
 use crate::attr::{FieldAttr, COB_TYPE_NUMERIC_DISPLAY};
 use crate::edited::{edited_size, encode_edited_cfg};
 use crate::move_ops::{cob_move, cob_move_cfg};
@@ -6658,10 +6658,11 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         acc_attr = widen(&acc_attr, &a);
     }
 
-    // DIVIDE ... GIVING q REMAINDER r computes a second result we do not yet produce; rather than leave
-    // the remainder silently wrong, fail closed.
-    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "REMAINDER")) {
-        return Err(RunError::Unsupported("DIVIDE ... REMAINDER is not in the front-end subset".into()));
+    // DIVIDE ... GIVING q REMAINDER r -- wire the sealed `cob_divide_remainder` primitive
+    // (GNURUST.REMAINDER.1): quotient truncated toward zero to q's scale, r = dividend - (that quotient *
+    // divisor). ON SIZE ERROR on this form is a documented non-claim, so fail closed if a handler is present.
+    if verb == "DIVIDE" && stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "REMAINDER")) {
+        return exec_divide_remainder(stmt, kw, giving, kw_at, &acc, &acc_attr, fields, has_handler);
     }
 
     // Collect every receiver. A GIVING phrase stores one computed result into EACH named receiver
@@ -6762,6 +6763,86 @@ fn arith_compute(
         }
         _ => return Err(RunError::Unsupported(format!("{verb} form (target/giving)"))),
     })
+}
+
+/// `DIVIDE a {INTO|BY} b GIVING q REMAINDER r [ROUNDED]` -- wires the sealed `cob_divide_remainder`
+/// (GNURUST.REMAINDER.1). `acc` is the single source operand `a`; `b` is the operand after INTO/BY. The
+/// remainder uses the UN-rounded quotient (truncated toward zero to q's scale); a `ROUNDED` phrase rounds
+/// only the quotient STORE. Quotient/remainder receivers must be numeric; `ON SIZE ERROR` on this form is a
+/// documented non-claim (fail closed if a handler is attached).
+fn exec_divide_remainder(
+    stmt: &[Tok],
+    kw: &str,
+    giving: Option<usize>,
+    kw_at: Option<usize>,
+    acc: &[u8],
+    acc_attr: &FieldAttr,
+    fields: &mut HashMap<String, Field>,
+    has_handler: bool,
+) -> Result<bool, RunError> {
+    if has_handler {
+        return Err(RunError::Unsupported(
+            "DIVIDE ... REMAINDER with ON SIZE ERROR (subset: REMAINDER without a size-error handler)".into(),
+        ));
+    }
+    let gp = giving.ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER requires GIVING".into()))?;
+    let kp = kw_at.ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER: missing INTO/BY".into()))?;
+    // q = first data-name after GIVING (before REMAINDER), r = the data-name after REMAINDER.
+    let names: Vec<String> = stmt[gp + 1..].iter().filter_map(|t| match t {
+        Tok::Word(w) if !is_kw(w) => Some(w.clone()),
+        _ => None,
+    }).collect();
+    if names.len() != 2 {
+        return Err(RunError::Unsupported(
+            "DIVIDE ... REMAINDER: GIVING needs exactly one quotient + one remainder receiver".into(),
+        ));
+    }
+    let (qn, rn) = (names[0].clone(), names[1].clone());
+    // The dividend/divisor operand `b` sits between INTO/BY and GIVING.
+    let b_tok = stmt[kp + 1..gp]
+        .iter()
+        .find(|t| matches!(t, Tok::Str(_)) || matches!(t, Tok::Word(w) if !is_kw(w)))
+        .ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER: missing dividend/divisor operand".into()))?;
+    let (b_bytes, b_attr) = {
+        let (x, y) = operand_value(b_tok, fields)?;
+        to_arith_operand(&x, &y)?
+    };
+    // INTO: dividend = b, divisor = a;  BY: dividend = a, divisor = b.
+    let (lhs, la, rhs, ra): (&[u8], &FieldAttr, &[u8], &FieldAttr) = if kw == "INTO" {
+        (&b_bytes, &b_attr, acc, acc_attr)
+    } else {
+        (acc, acc_attr, &b_bytes, &b_attr)
+    };
+    let q_attr = numeric_receiver_attr(fields, &qn)?;
+    let r_attr = numeric_receiver_attr(fields, &rn)?;
+    let (qb, rb) = cob_divide_remainder(lhs, la, rhs, ra, &q_attr, &r_attr).map_err(map_arith_err)?;
+    // The remainder bytes are already in r's exact format (the primitive stored them); assign directly.
+    fields.get_mut(&rn).ok_or_else(|| RunError::UndefinedName(rn.clone()))?.bytes = rb;
+    // The quotient store honours ROUNDED (the remainder above still used the un-rounded quotient).
+    let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
+    if rounded {
+        let wide = lit_num_attr(36, 18, true);
+        let wide_q = cob_divide(lhs, la, rhs, ra, &wide, Round::Truncate).map_err(map_arith_err)?;
+        let dec = source_to_decimal(&wide_q, &wide)?;
+        let (nb, na) = decimal_as_display(&round_decimal(&dec, q_attr.scale));
+        let qf = fields.get_mut(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
+        move_into(qf, &nb, &na, false)?;
+    } else {
+        fields.get_mut(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?.bytes = qb;
+    }
+    Ok(false)
+}
+
+/// A field's numeric `FieldAttr` for use as a `DIVIDE ... REMAINDER` receiver; edited/group/alpha
+/// receivers are out of the sealed remainder subset and fail closed.
+fn numeric_receiver_attr(fields: &HashMap<String, Field>, name: &str) -> Result<FieldAttr, RunError> {
+    match fields.get(name) {
+        Some(Field { storage: Storage::Numeric(a), .. }) => Ok(*a),
+        Some(_) => Err(RunError::Unsupported(format!(
+            "DIVIDE ... REMAINDER: receiver `{name}` must be a numeric (non-edited) item"
+        ))),
+        None => Err(RunError::UndefinedName(name.to_string())),
+    }
 }
 
 /// Compute `op(a, b)` exactly into a wide numeric DISPLAY `(bytes, attr)` -- 18 integer digits plus a
