@@ -2963,19 +2963,28 @@ fn run_varying_nested(
     level: usize,
     fields: &mut HashMap<String, Field>,
     ctx: &Ctx,
+    test_after: bool,
     run_body: &mut dyn FnMut(&mut HashMap<String, Field>) -> Result<bool, RunError>,
 ) -> Result<bool, RunError> {
     let (id, from, by, cond) = &clauses[level];
     varying_set(id, from, fields)?;
     let mut guard = 0u32;
-    while !eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+    loop {
+        // WITH TEST BEFORE (default): test UNTIL before the body. WITH TEST AFTER: run the body first,
+        // then test (so the loop variable's final value is also processed once).
+        if !test_after && eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+            break;
+        }
         let halted = if level + 1 < clauses.len() {
-            run_varying_nested(clauses, level + 1, fields, ctx, run_body)?
+            run_varying_nested(clauses, level + 1, fields, ctx, test_after, run_body)?
         } else {
             run_body(fields)?
         };
         if halted {
             return Ok(true);
+        }
+        if test_after && eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+            break;
         }
         varying_step(id, by, fields)?;
         guard += 1;
@@ -2984,6 +2993,27 @@ fn run_varying_nested(
         }
     }
     Ok(false)
+}
+
+/// Consume an optional `[WITH] TEST {BEFORE|AFTER}` phrase (after `PERFORM [proc]`, before
+/// `VARYING`/`UNTIL`). Returns `true` for TEST AFTER, `false` otherwise (TEST BEFORE is the default).
+fn parse_with_test(toks: &[Tok], pos: &mut usize) -> bool {
+    let mut p = *pos;
+    if matches!(toks.get(p), Some(Tok::Word(w)) if w == "WITH") {
+        p += 1;
+    }
+    if matches!(toks.get(p), Some(Tok::Word(w)) if w == "TEST") {
+        p += 1;
+        if matches!(toks.get(p), Some(Tok::Word(w)) if w == "AFTER") {
+            *pos = p + 1;
+            return true;
+        }
+        if matches!(toks.get(p), Some(Tok::Word(w)) if w == "BEFORE") {
+            *pos = p + 1;
+            return false;
+        }
+    }
+    false // no WITH TEST phrase (cursor unmoved)
 }
 
 /// Set the VARYING loop variable to its FROM value.
@@ -3021,7 +3051,9 @@ fn exec_perform(
                 *pos += 1;
                 if let Some(Tok::Word(w)) = toks.get(*pos) { p2 = w.clone(); *pos += 1; }
             }
-            // PERFORM para [THRU para2] VARYING id FROM x BY y UNTIL cond [AFTER ...] (out-of-line, TEST BEFORE).
+            // optional `WITH TEST {BEFORE|AFTER}` (applies to the UNTIL/VARYING condition placement).
+            let test_after = parse_with_test(toks, pos);
+            // PERFORM para [THRU para2] [WITH TEST x] VARYING id FROM x BY y UNTIL cond [AFTER ...].
             if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
                 let clauses = parse_varying_clauses(toks, pos)?;
                 if !exec {
@@ -3030,7 +3062,7 @@ fn exec_perform(
                 let (start, end) = para_range(&p1, &p2)
                     .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
                 let mut body = |fields: &mut HashMap<String, Field>| run_range(toks, start, end, fields, out, ctx);
-                return run_varying_nested(&clauses, 0, fields, ctx, &mut body);
+                return run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body);
             }
             let mut times: Option<String> = None;
             let mut ucond: Vec<Tok> = Vec::new();
@@ -3058,8 +3090,10 @@ fn exec_perform(
                 .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
             if until {
                 let mut guard = 0u32;
-                while !eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                loop {
+                    if !test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
                     if run_range(toks, start, end, fields, out, ctx)? { return Ok(true); }
+                    if test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
                     guard += 1;
                     if guard > 1_000_000 { return Err(RunError::Runtime("PERFORM UNTIL exceeded 1e6 iterations".into())); }
                 }
@@ -3073,6 +3107,8 @@ fn exec_perform(
         }
     }
     // inline: PERFORM VARYING id FROM x BY y UNTIL cond [AFTER ...] ... END-PERFORM (TEST BEFORE).
+    // optional `WITH TEST {BEFORE|AFTER}` before the inline VARYING/UNTIL form.
+    let test_after = parse_with_test(toks, pos);
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
         let clauses = parse_varying_clauses(toks, pos)?;
         let body_start = *pos;
@@ -3084,7 +3120,7 @@ fn exec_perform(
                 let mut p = body_start;
                 run_block(toks, &mut p, fields, out, true, ctx)
             };
-            if run_varying_nested(&clauses, 0, fields, ctx, &mut body)? {
+            if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
                 return Ok(true);
             }
         }
@@ -3135,12 +3171,19 @@ fn exec_perform(
 
     if exec {
         if is_until {
-            // PERFORM UNTIL: test BEFORE each iteration (WITH TEST BEFORE, the default).
+            // PERFORM UNTIL: TEST BEFORE (default) tests before each iteration; TEST AFTER runs the body
+            // first, then tests (so the body always runs at least once).
             let mut guard = 0u32;
-            while !eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+            loop {
+                if !test_after && eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                    break;
+                }
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
                     return Ok(true);
+                }
+                if test_after && eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+                    break;
                 }
                 guard += 1;
                 if guard > 1_000_000 {
