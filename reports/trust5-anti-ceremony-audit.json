@@ -2,9 +2,9 @@
   "class_counts": {
     "A": 96,
     "B": 35,
-    "C": 6,
+    "C": 1,
     "D": 0,
-    "F": 0
+    "F": 5
   },
   "classes": {
     "A": [
@@ -143,15 +143,16 @@
       "TRUST.5"
     ],
     "C": [
+      "SUPPORT-PACKET.1"
+    ],
+    "D": [],
+    "F": [
       "KOBOLD.BANK.RECONCILE.1",
       "KOBOLD.DIFF.1",
       "KOBOLD.OPERATOR.1",
       "KOBOLD.PILOT-PACKET.1",
-      "KOBOLD.TOOLING.EXPORT.1",
-      "SUPPORT-PACKET.1"
-    ],
-    "D": [],
-    "F": []
+      "KOBOLD.TOOLING.EXPORT.1"
+    ]
   },
   "court": "TRUST.5",
   "courts": [
@@ -1820,11 +1821,13 @@
       "positive_claims": 4
     },
     {
-      "can_fail": true,
+      "can_fail": false,
       "can_fail_proof": "regenerate-and-compare freshness + no-new-truth refusal (mutate a source artifact -> stale check fails)",
-      "ceremonial_flags": [],
-      "class": "C",
-      "creates_new_truth": false,
+      "ceremonial_flags": [
+        "view_creates_new_truth"
+      ],
+      "class": "F",
+      "creates_new_truth": true,
       "damage_if_overclaimed_present": true,
       "fixtures": "tests/bank_reconcile.rs (2: matched view faithful + refuses truth; mismatch renders finding in view+SARIF)",
       "generated_from_named_evidence": true,
@@ -1996,11 +1999,13 @@
       "positive_claims": 3
     },
     {
-      "can_fail": true,
+      "can_fail": false,
       "can_fail_proof": "regenerate-and-compare freshness + no-new-truth refusal (mutate a source artifact -> stale check fails)",
-      "ceremonial_flags": [],
-      "class": "C",
-      "creates_new_truth": false,
+      "ceremonial_flags": [
+        "view_creates_new_truth"
+      ],
+      "class": "F",
+      "creates_new_truth": true,
       "damage_if_overclaimed_present": true,
       "fixtures": "tests/diff.rs (6: identical-passes+target-not-oracle, field/missing/extra, finding-set+control+hash drift, admitted-oracle claims authority, deterministic, allowed_comparisons gate)",
       "generated_from_named_evidence": true,
@@ -2076,11 +2081,13 @@
       "positive_claims": 2
     },
     {
-      "can_fail": true,
+      "can_fail": false,
       "can_fail_proof": "regenerate-and-compare freshness + no-new-truth refusal (mutate a source artifact -> stale check fails)",
-      "ceremonial_flags": [],
-      "class": "C",
-      "creates_new_truth": false,
+      "ceremonial_flags": [
+        "view_creates_new_truth"
+      ],
+      "class": "F",
+      "creates_new_truth": true,
       "damage_if_overclaimed_present": true,
       "fixtures": "5 operator tests (explain/totals/collision/dirty)",
       "generated_from_named_evidence": true,
@@ -2124,11 +2131,13 @@
       "positive_claims": 5
     },
     {
-      "can_fail": true,
+      "can_fail": false,
       "can_fail_proof": "regenerate-and-compare freshness + no-new-truth refusal (mutate a source artifact -> stale check fails)",
-      "ceremonial_flags": [],
-      "class": "C",
-      "creates_new_truth": false,
+      "ceremonial_flags": [
+        "view_creates_new_truth"
+      ],
+      "class": "F",
+      "creates_new_truth": true,
       "damage_if_overclaimed_present": true,
       "fixtures": "tests/pilot.rs (3: binds artifacts + hashes review notes (no cleartext leak), changed artifact changes the packet, missing required flagged)",
       "generated_from_named_evidence": true,
@@ -2268,11 +2277,13 @@
       "positive_claims": 3
     },
     {
-      "can_fail": true,
+      "can_fail": false,
       "can_fail_proof": "regenerate-and-compare freshness + no-new-truth refusal (mutate a source artifact -> stale check fails)",
-      "ceremonial_flags": [],
-      "class": "C",
-      "creates_new_truth": false,
+      "ceremonial_flags": [
+        "view_creates_new_truth"
+      ],
+      "class": "F",
+      "creates_new_truth": true,
       "damage_if_overclaimed_present": true,
       "fixtures": "tests/tooling.rs (3: maps provenance/courts/witness/non-claims, redacted field never leaks cleartext, deterministic)",
       "generated_from_named_evidence": true,

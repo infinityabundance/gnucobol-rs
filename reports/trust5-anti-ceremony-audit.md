@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 96  ·  **B** composed: 35  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
+- **A** hard (oracle/byte): 96  ·  **B** composed: 35  ·  **C** view: 1  ·  **D** staged: 0  ·  **F** ceremonial: **5**
 
 ## Classification
 
@@ -115,7 +115,7 @@
 | `GNURUST.VALUE.NEGZERO.EDGE.1` | A | ✅ | ✅ | ✅ no |
 | `KOBOLD.BANK.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.BANK.2` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.BANK.RECONCILE.1` | C | ✅ | ✅ | ✅ no |
+| `KOBOLD.BANK.RECONCILE.1` | F | ❌ | ✅ | ❌ yes |
 | `KOBOLD.BENCH.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.CORPUS.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.CURRENCY.PROFILE.1` | B | ✅ | ✅ | ✅ no |
@@ -126,15 +126,15 @@
 | `KOBOLD.DATA.6` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.DATE.PROFILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.DB2HOST.1` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.DIFF.1` | C | ✅ | ✅ | ✅ no |
+| `KOBOLD.DIFF.1` | F | ❌ | ✅ | ❌ yes |
 | `KOBOLD.ENTERPRISE.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.EXTRACT.PROFILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.FILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.LAYOUT.REDEFINES.2` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.OPERATOR.1` | C | ✅ | ✅ | ✅ no |
+| `KOBOLD.OPERATOR.1` | F | ❌ | ✅ | ❌ yes |
 | `KOBOLD.PERF.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.PERF.2` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.PILOT-PACKET.1` | C | ✅ | ✅ | ✅ no |
+| `KOBOLD.PILOT-PACKET.1` | F | ❌ | ✅ | ❌ yes |
 | `KOBOLD.PILOT.RUN.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.PILOT.WORKFLOW.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.POSTING.1` | B | ✅ | ✅ | ✅ no |
@@ -143,7 +143,7 @@
 | `KOBOLD.RECON.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.SCALE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.SENTINEL.PROFILE.1` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.TOOLING.EXPORT.1` | C | ✅ | ✅ | ✅ no |
+| `KOBOLD.TOOLING.EXPORT.1` | F | ❌ | ✅ | ❌ yes |
 | `NIST-STYLE-FIXTURE-FORMAT.1` | B | ✅ | ✅ | ✅ no |
 | `SIZE.ERROR.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `SUPPORT-PACKET.1` | C | ✅ | ✅ | ✅ no |

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MLIO.GENERATE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.85",
+  "crate_version": "0.8.8",
   "damage_if_overclaimed": "claiming the whole ML subsystem would hide that XML/JSON PARSE still needs libxml2/json-c, and that national encoding / pretty-print / overflow paths are unported",
   "hash_chain": {
-    "inputs_sha256": "c496f714e01e91c92425eda4444e841ffbe2d2b853cebfbbd0bf944ddf0431dd"
+    "inputs_sha256": "aa976314b1c226b252d88ae7a8ee0f06a41e886115e08a650bbc171f08a6968b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "77fdacb9641695201eec37d3e1e5ccde2ce944635daf1bad3cef57e8e9c76307",
-    "receipt_sha256": "0ebf6763f2ce9e575531013b467c8e6749b6c0e22726eecf928bfa33700b7d7c"
+    "receipt_sha256": "598c7eb22ae9e173e8dd80c14f13be08b182aea32e31bc072421a55bc08d8066"
   },
   "kind": "court-casefile",
   "lie_prevented": [

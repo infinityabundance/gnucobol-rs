@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.FRONTEND.1 — clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout
 
-**Verdict: FAIL** · replay `PASS=96 FAIL=0 (3.1.2 differential-matched=87)`
+**Verdict: FAIL** · replay `PASS=109 FAIL=0 (3.1.2 differential-matched=100)`
 
 | field | value |
 |-------|-------|

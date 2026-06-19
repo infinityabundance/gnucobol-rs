@@ -61,7 +61,7 @@ That stdout is byte-identical to `cobc -x demo.cob && ./demo`, gated by `cmp -s`
 
 ## What it does NOT claim
 
-The runtime port is **complete** (100% across all three parity views); the frontier is the interpreter, and these are its honest edges. `gnucobol-rs` distinguishes a **TODO** (latent work) from a **BOUNDARY** (a surface the GnuCOBOL 3.2 oracle itself cannot run, so there is no byte-truth to match).
+The runtime port is **complete** (100% across all three parity views); the frontier is the interpreter, and these are its honest edges. `gnucobol-rs` distinguishes a **latent-work item** (a future task) from a **BOUNDARY** (a surface the GnuCOBOL 3.2 oracle itself cannot run, so there is no byte-truth to match).
 
 - **No native code generation.** This crate *interprets* directly on the ported runtime; it does **not** reproduce `cobc`'s C-emission (`codegen.c` / `codeoptim.c`) — a deliberate non-goal. `cobrun <file>` equals `cobc -x <file>` only at observable stdout, never in artifacts.
 - **The front-end is a verified subset, not the whole grammar.** Group items, OCCURS/REDEFINES, non-01 levels, and unlisted verbs return a typed `RunError` and exit 2 — never a silent mis-run.

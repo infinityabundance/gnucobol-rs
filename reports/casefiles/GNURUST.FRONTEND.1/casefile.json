@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FRONTEND.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.7.85",
+  "crate_version": "0.8.8",
   "damage_if_overclaimed": "treating this as a full COBOL compiler would imply the whole language parses + runs + compiles to native code, when only the listed subset is interpreted to oracle-identical output",
   "hash_chain": {
-    "inputs_sha256": "2f39d3aea3d1c464b59a9f16e344b78bb9bbfc4872bbeaf9b7299211055b61d9"
+    "inputs_sha256": "044e888bd5a324bf96b1fa23323a7a1641fabb82fb3729531936e6c5a2cb1607"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1963b69fe6bead53c76b8962f4e6e3d6853ad3f28567af8a724f98d17778dfbf",
-    "receipt_sha256": "b17b21796884f7e9f7398f755b7a65eb555633aa38de2326f35db9a4ca4d4fba"
+    "receipt_sha256": "d4a63d45497ba90025f69aa809042cfcb3cad01d7d69997905d58fdba7032a8f"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -75,8 +75,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 23,
-    "total": 23,
+    "pass": 109,
+    "total": 109,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"

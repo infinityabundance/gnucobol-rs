@@ -139,16 +139,21 @@ note "future-risk register open/append-only; negative-capabilities registry pres
 grep -q 'GNURUST.1' CHANGELOG.md && grep -q 'GNURUST.2' CHANGELOG.md || bad "CHANGELOG missing GNURUST.1/GNURUST.2"
 note "CHANGELOG records GNURUST.1 and GNURUST.2"
 
-# 8b. ANTI-STALENESS: every SEALED campaign (one receipt per campaign) must be reflected in the
-#     README and the load-bearing docs. This is what stops the README/docs drifting behind the
-#     code as new courts are sealed (every doc is covered, not just src).
-SEALED_DOCS="README.md CHANGELOG.md docs/claim-boundary.md docs/compatibility-taxonomy.md docs/future-risk-register.md crates/gnucobol-rs/README.md"
+# 8b. ANTI-STALENESS: every SEALED campaign must appear in the DEEP ledger + the load-bearing docs, and
+#     the READMEs must LINK to that ledger (not enumerate every court -- a full per-court list in a README
+#     is spam; the authoritative enumeration lives in docs/sealed-courts.md). This still stops docs drifting
+#     behind the code: a new court must land in the deep ledger + CHANGELOG or the gate fails.
+SEALED_DOCS="CHANGELOG.md docs/claim-boundary.md docs/compatibility-taxonomy.md docs/future-risk-register.md docs/sealed-courts.md"
 for code in $GCODES; do
   for doc in $SEALED_DOCS; do
     grep -q "$code" "$doc" || bad "sealed campaign $code is NOT referenced in $doc — that doc is STALE"
   done
 done
-note "every sealed campaign (from the claim-ladder) is reflected in README + all load-bearing docs"
+# The READMEs carry a LINK to the full ledger, not a per-court list (avoid spam; the deep doc is authoritative).
+for rdme in README.md crates/gnucobol-rs/README.md; do
+  grep -q 'sealed-courts.md' "$rdme" || bad "$rdme must link to docs/sealed-courts.md (the full sealed-court ledger), not list every court"
+done
+note "every sealed campaign is in the deep ledger (docs/sealed-courts.md) + load-bearing docs; READMEs link to it"
 
 # 8c. The future-risk register's 'Sealed today' line must name each sealed campaign.
 for rc in reports/RECEIPT-GNURUST-*.md; do

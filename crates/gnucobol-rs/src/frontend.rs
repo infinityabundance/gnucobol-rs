@@ -3958,7 +3958,7 @@ fn exec_stmt(
         // ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE are handled in run_block (they carry ON SIZE ERROR clauses).
         // The remaining verbs are explicit boundary non-claims: GnuCOBOL itself needs a data-division
         // section the front-end's WORKING-STORAGE/FILE/REPORT model does not include, or the result is
-        // nondeterministic. Each fails closed with the specific reason (not a lazy TODO).
+        // nondeterministic. Each fails closed with the specific reason (not a lazy placeholder).
         // The COMMUNICATION SECTION (message control) is NOT IMPLEMENTED in the admitted GnuCOBOL 3.2
         // itself (`warning: COMMUNICATION SECTION is not implemented [-Wpending]` + "CD record missing"):
         // the oracle cannot compile/run these, so there is no output to be byte-identical to.
