@@ -4770,6 +4770,17 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
     let target_bytes = read_field(fields, &target)?
         .ok_or_else(|| RunError::UndefinedName(target.clone()))?
         .bytes;
+    // Multi-clause `INSPECT id TALLYING ... REPLACING ...`: the standard applies the TALLYING phrase then
+    // the REPLACING phrase as two operations on the ORIGINAL value. Split at REPLACING and run each (the
+    // tally pass leaves the field unchanged, so the replace pass still sees the original bytes).
+    if matches!(stmt.get(1), Some(Tok::Word(w)) if w == "TALLYING") {
+        if let Some(rp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")) {
+            exec_inspect(&stmt[..rp], fields, decimal_comma)?;
+            let mut rest = vec![Tok::Word(target.clone())];
+            rest.extend_from_slice(&stmt[rp..]);
+            return exec_inspect(&rest, fields, decimal_comma);
+        }
+    }
     match stmt.get(1) {
         Some(Tok::Word(w)) if w == "TALLYING" => {
             let counter = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT TALLYING: missing counter".into())) };
@@ -4839,7 +4850,7 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
                 else { Err(RunError::Runtime("INSPECT CONVERTING changed field length".into())) }
             })
         }
-        other => Err(RunError::Unsupported(format!("INSPECT clause {other:?} (subset: TALLYING/REPLACING/CONVERTING)"))),
+        other => Err(RunError::Unsupported(format!("INSPECT: unrecognized clause {other:?} (expected TALLYING/REPLACING/CONVERTING)"))),
     }
 }
 
