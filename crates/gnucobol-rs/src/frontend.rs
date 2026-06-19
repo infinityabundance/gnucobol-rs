@@ -568,6 +568,9 @@ struct ProgItem {
     sync: bool,
     /// `EXTERNAL` -- storage shared across the run unit (by name), zero-filled, VALUE ignored.
     external: bool,
+    /// `OCCURS ... ASCENDING|DESCENDING KEY` sort direction for a `SEARCH ALL` (binary search) table:
+    /// `Some(true)` = ascending, `Some(false)` = descending, `None` = no KEY clause (SEARCH ALL fails closed).
+    occurs_key: Option<bool>,
 }
 
 /// Resolve `USAGE` group inheritance in place: a data item with no stated `USAGE` inherits the nearest
@@ -1246,7 +1249,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 level: 66, name: rname, pic: String::new(), value: None, occurs: 1, redefines: None,
                 condition: None, indexed_by: Vec::new(), usage: None, sign: (false, false),
                 extra_flags: 0, float_kind: None, odo_counter: None,
-                renames: Some((start, end)), sync: false, external: false,
+                renames: Some((start, end)), sync: false, external: false, occurs_key: None,
             });
             continue;
         }
@@ -1308,6 +1311,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 renames: None,
                 sync: false,
                 external: false,
+                occurs_key: None,
             });
             continue;
         }
@@ -1349,6 +1353,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         let mut float_kind: Option<u16> = None;
         // OCCURS ... DEPENDING ON counter.
         let mut odo_counter: Option<String> = None;
+        let mut occurs_key: Option<bool> = None;
         // SYNCHRONIZED alignment.
         let mut sync = false;
         // EXTERNAL shared storage.
@@ -1390,6 +1395,20 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                             odo_counter = Some(c.clone());
                             k += 1;
                         }
+                    }
+                }
+                // `ASCENDING|DESCENDING [KEY] [IS] keyname...` -- the SEARCH ALL sort direction. Record the
+                // direction (the binary search reads the key from its WHEN condition); skip the key names.
+                Some(Tok::Word(w)) if w == "ASCENDING" || w == "DESCENDING" => {
+                    occurs_key = Some(w == "ASCENDING");
+                    k += 1;
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "KEY") { k += 1; }
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") { k += 1; }
+                    while let Some(Tok::Word(nm)) = toks.get(k) {
+                        if matches!(nm.as_str(), "PIC" | "PICTURE" | "VALUE" | "OCCURS" | "REDEFINES" | "TIMES" | "INDEXED" | "ASCENDING" | "DESCENDING") {
+                            break;
+                        }
+                        k += 1;
                     }
                 }
                 // `INDEXED BY idx [idx ...]` -- read the index name(s) until the next clause/period.
@@ -1550,6 +1569,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             renames: None,
             sync,
             external,
+            occurs_key,
         });
     }
     resolve_usage_inheritance(&mut items);
@@ -1620,6 +1640,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             if n == 0 {
                 TABLE_INDEX.with(|m| m.borrow_mut().insert(it.name.clone(), idx.clone()));
             }
+        }
+        // OCCURS ... ASCENDING|DESCENDING KEY: the table's sort direction, for SEARCH ALL (binary search).
+        if let Some(asc) = it.occurs_key {
+            TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
         }
         fields.insert(it.name.clone(), f);
     }
@@ -1751,6 +1775,9 @@ thread_local! {
     /// `OCCURS ... INDEXED BY` table -> its implicit SEARCH index name, populated as each program's fields
     /// are built. `SEARCH table` (without `VARYING`) varies this index.
     static TABLE_INDEX: std::cell::RefCell<HashMap<String, String>> = std::cell::RefCell::new(HashMap::new());
+    /// `OCCURS ... ASCENDING|DESCENDING KEY` table -> sort direction (`true` = ascending). Read by
+    /// `SEARCH ALL` to narrow the binary search. Absent = no KEY clause (SEARCH ALL fails closed).
+    static TABLE_KEY: std::cell::RefCell<HashMap<String, bool>> = std::cell::RefCell::new(HashMap::new());
     /// The stack of executing PROGRAM-IDs (top = current). Pushed/popped around each program body so
     /// `FUNCTION MODULE-ID` reads the running program and `FUNCTION MODULE-CALLER-ID` reads its caller.
     static PROGRAM_STACK: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
@@ -2593,14 +2620,18 @@ fn exec_search(
     exec: bool,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
+    // `SEARCH ALL table` -- binary search over a sorted (ASCENDING/DESCENDING KEY) table.
+    let is_all = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "ALL");
+    if is_all {
+        *pos += 1;
+    }
     let table = match toks.get(*pos) {
-        Some(Tok::Word(w)) if w == "ALL" => return Err(RunError::Unsupported("SEARCH ALL (binary search) not in subset".into())),
         Some(Tok::Word(w)) => w.clone(),
         _ => return Err(RunError::Unsupported("SEARCH: missing table name".into())),
     };
     *pos += 1;
     let mut varying: Option<String> = None;
-    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
+    if !is_all && matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
         *pos += 1;
         if let Some(Tok::Word(w)) = toks.get(*pos) { varying = Some(w.clone()); *pos += 1; }
     }
@@ -2641,6 +2672,9 @@ fn exec_search(
     if !exec {
         return Ok(false);
     }
+    if is_all {
+        return exec_search_all(toks, &idx_name, &table, occurs, at_end, &whens, fields, out, ctx);
+    }
     // serial search: vary the index from its current value until a WHEN matches or it runs off the table.
     loop {
         let iv = resolve_int(&idx_name, fields).unwrap_or(0);
@@ -2660,6 +2694,75 @@ fn exec_search(
         let mv = vec![Tok::Word((iv + 1).to_string()), Tok::Word("TO".to_string()), Tok::Word(idx_name.clone())];
         exec_move(&mv, fields, ctx.decimal_comma)?;
     }
+}
+
+/// `SEARCH ALL table [AT END imp] WHEN key=value [AND key2=value2...] imp END-SEARCH` -- a **binary
+/// search** over a table sorted by its `OCCURS ... ASCENDING|DESCENDING KEY`. From the WHEN key-equality
+/// condition: at each probe `mid` the index is set to `mid` and the full condition is tested for a match;
+/// the first key's `key < value` comparison narrows the half (combined with the sort direction). On no
+/// match, `AT END` runs. The WHEN must be key-equality (`=`), per the standard.
+#[allow(clippy::too_many_arguments)]
+fn exec_search_all(
+    toks: &[Tok],
+    idx_name: &str,
+    table: &str,
+    occurs: usize,
+    at_end: Option<usize>,
+    whens: &[(Vec<Tok>, usize)],
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    let (cond, bstart) = whens.first().ok_or_else(|| RunError::Unsupported("SEARCH ALL: missing WHEN".into()))?;
+    let asc = TABLE_KEY
+        .with(|m| m.borrow().get(table).copied())
+        .ok_or_else(|| RunError::Unsupported(format!("SEARCH ALL `{table}`: no ASCENDING/DESCENDING KEY")))?;
+    // the narrowing comparison: the first key's `=` turned into `<`.
+    let less = search_all_less(cond)
+        .ok_or_else(|| RunError::Unsupported("SEARCH ALL: WHEN must be a key equality (key = value)".into()))?;
+    let mut lo = 1i64;
+    let mut hi = occurs as i64;
+    while lo <= hi {
+        let mid = lo + (hi - lo) / 2;
+        let mv = vec![Tok::Word(mid.to_string()), Tok::Word("TO".to_string()), Tok::Word(idx_name.to_string())];
+        exec_move(&mv, fields, ctx.decimal_comma)?;
+        if eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+            // match: the index is left at `mid`; run the WHEN imperative.
+            let mut p = *bstart;
+            return run_block(toks, &mut p, fields, out, true, ctx);
+        }
+        // key(mid) < value ? Under ascending, true => search the upper half; descending reverses.
+        let key_less = eval_cond(&less, fields, &ctx.switches, ctx.collation.as_ref())?;
+        if key_less == asc {
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    // not found: run AT END if present (the index value is unspecified per the standard).
+    if let Some(s) = at_end {
+        let mut p = s;
+        if run_block(toks, &mut p, fields, out, true, ctx)? {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+/// Turn a `SEARCH ALL` WHEN condition into its first-key `<` narrowing comparison: take the first
+/// `AND`-segment and replace its equality (`=`/`EQUAL`) with `<`. `None` if the segment has no equality.
+fn search_all_less(cond: &[Tok]) -> Option<Vec<Tok>> {
+    let end = cond.iter().position(|t| matches!(t, Tok::Word(w) if w == "AND")).unwrap_or(cond.len());
+    let mut seg: Vec<Tok> = cond[..end].to_vec();
+    for t in seg.iter_mut() {
+        if let Tok::Word(w) = t {
+            if w == "=" || w == "EQUAL" || w == "EQUALS" {
+                *w = "<".to_string();
+                return Some(seg);
+            }
+        }
+    }
+    None
 }
 
 /// Whether the EVALUATE subject value matches a WHEN object: a single value (`subject = object`) or a
