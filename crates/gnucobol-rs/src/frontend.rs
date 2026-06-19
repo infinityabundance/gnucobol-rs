@@ -2802,14 +2802,12 @@ fn evaluate_value_match(
 /// Parse `VARYING <id> FROM <x> BY <y> UNTIL <cond>` (the cursor is at `VARYING`). Returns the loop
 /// variable, the FROM / BY operand tokens, and the UNTIL condition tokens. Nested `AFTER` varying is
 /// not in the subset (fails closed).
-fn parse_varying_clause(toks: &[Tok], pos: &mut usize) -> Result<(String, Tok, Tok, Vec<Tok>), RunError> {
-    *pos += 1; // skip VARYING
+type VaryingClause = (String, Tok, Tok, Vec<Tok>);
+
+/// Parse the `VARYING id FROM x BY y UNTIL cond [AFTER id2 FROM ... UNTIL ...]...` chain (cursor at
+/// `VARYING`). Returns one clause per VARYING/AFTER, outermost first; the last (innermost) varies fastest.
+fn parse_varying_clauses(toks: &[Tok], pos: &mut usize) -> Result<Vec<VaryingClause>, RunError> {
     let word = |p: usize| matches!(toks.get(p), Some(Tok::Word(_)) | Some(Tok::Str(_)));
-    let id = match toks.get(*pos) {
-        Some(Tok::Word(w)) => w.clone(),
-        _ => return Err(RunError::Unsupported("PERFORM VARYING: missing loop variable".into())),
-    };
-    *pos += 1;
     let expect = |toks: &[Tok], pos: &mut usize, kw: &str| -> Result<(), RunError> {
         if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == kw) {
             *pos += 1;
@@ -2818,34 +2816,80 @@ fn parse_varying_clause(toks: &[Tok], pos: &mut usize) -> Result<(String, Tok, T
             Err(RunError::Unsupported(format!("PERFORM VARYING: expected {kw}")))
         }
     };
-    expect(toks, pos, "FROM")?;
-    if !word(*pos) {
-        return Err(RunError::Unsupported("PERFORM VARYING: missing FROM value".into()));
-    }
-    let from = toks[*pos].clone();
-    *pos += 1;
-    expect(toks, pos, "BY")?;
-    if !word(*pos) {
-        return Err(RunError::Unsupported("PERFORM VARYING: missing BY value".into()));
-    }
-    let by = toks[*pos].clone();
-    *pos += 1;
-    expect(toks, pos, "UNTIL")?;
-    let mut cond = Vec::new();
-    while let Some(t) = toks.get(*pos) {
-        match t {
-            Tok::Dot => break,
-            Tok::Word(w) if w == "AFTER" => {
-                return Err(RunError::Unsupported("PERFORM VARYING ... AFTER (nested varying not in subset)".into()))
-            }
-            Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
-            _ => {
-                cond.push(t.clone());
-                *pos += 1;
+    let mut clauses = Vec::new();
+    loop {
+        *pos += 1; // skip the VARYING / AFTER keyword
+        let id = match toks.get(*pos) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => return Err(RunError::Unsupported("PERFORM VARYING: missing loop variable".into())),
+        };
+        *pos += 1;
+        expect(toks, pos, "FROM")?;
+        if !word(*pos) {
+            return Err(RunError::Unsupported("PERFORM VARYING: missing FROM value".into()));
+        }
+        let from = toks[*pos].clone();
+        *pos += 1;
+        expect(toks, pos, "BY")?;
+        if !word(*pos) {
+            return Err(RunError::Unsupported("PERFORM VARYING: missing BY value".into()));
+        }
+        let by = toks[*pos].clone();
+        *pos += 1;
+        expect(toks, pos, "UNTIL")?;
+        let mut cond = Vec::new();
+        let mut after = false;
+        while let Some(t) = toks.get(*pos) {
+            match t {
+                Tok::Dot => break,
+                Tok::Word(w) if w == "AFTER" => {
+                    after = true;
+                    break;
+                }
+                Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+                _ => {
+                    cond.push(t.clone());
+                    *pos += 1;
+                }
             }
         }
+        clauses.push((id, from, by, cond));
+        if !after {
+            return Ok(clauses);
+        }
+        // loop: parse the next AFTER clause (the `*pos += 1` at the top skips the AFTER keyword).
     }
-    Ok((id, from, by, cond))
+}
+
+/// Run a (possibly nested) `PERFORM VARYING ... AFTER ...`: at each level set the var to its FROM, test
+/// UNTIL (TEST BEFORE), recurse into the next level (or run the body at the innermost), then step by BY.
+/// Returns `true` if the body halted the program (STOP RUN).
+fn run_varying_nested(
+    clauses: &[VaryingClause],
+    level: usize,
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+    run_body: &mut dyn FnMut(&mut HashMap<String, Field>) -> Result<bool, RunError>,
+) -> Result<bool, RunError> {
+    let (id, from, by, cond) = &clauses[level];
+    varying_set(id, from, fields)?;
+    let mut guard = 0u32;
+    while !eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+        let halted = if level + 1 < clauses.len() {
+            run_varying_nested(clauses, level + 1, fields, ctx, run_body)?
+        } else {
+            run_body(fields)?
+        };
+        if halted {
+            return Ok(true);
+        }
+        varying_step(id, by, fields)?;
+        guard += 1;
+        if guard > 1_000_000 {
+            return Err(RunError::Runtime("PERFORM VARYING exceeded 1e6 iterations".into()));
+        }
+    }
+    Ok(false)
 }
 
 /// Set the VARYING loop variable to its FROM value.
@@ -2883,27 +2927,16 @@ fn exec_perform(
                 *pos += 1;
                 if let Some(Tok::Word(w)) = toks.get(*pos) { p2 = w.clone(); *pos += 1; }
             }
-            // PERFORM para [THRU para2] VARYING id FROM x BY y UNTIL cond (out-of-line, TEST BEFORE).
+            // PERFORM para [THRU para2] VARYING id FROM x BY y UNTIL cond [AFTER ...] (out-of-line, TEST BEFORE).
             if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
-                let (id, from, by, cond) = parse_varying_clause(toks, pos)?;
+                let clauses = parse_varying_clauses(toks, pos)?;
                 if !exec {
                     return Ok(false);
                 }
                 let (start, end) = para_range(&p1, &p2)
                     .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
-                varying_set(&id, &from, fields)?;
-                let mut guard = 0u32;
-                while !eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
-                    if run_range(toks, start, end, fields, out, ctx)? {
-                        return Ok(true);
-                    }
-                    varying_step(&id, &by, fields)?;
-                    guard += 1;
-                    if guard > 1_000_000 {
-                        return Err(RunError::Runtime("PERFORM VARYING exceeded 1e6 iterations".into()));
-                    }
-                }
-                return Ok(false);
+                let mut body = |fields: &mut HashMap<String, Field>| run_range(toks, start, end, fields, out, ctx);
+                return run_varying_nested(&clauses, 0, fields, ctx, &mut body);
             }
             let mut times: Option<String> = None;
             let mut ucond: Vec<Tok> = Vec::new();
@@ -2945,26 +2978,20 @@ fn exec_perform(
             return Ok(false);
         }
     }
-    // inline: PERFORM VARYING id FROM x BY y UNTIL cond ... END-PERFORM (TEST BEFORE, the default).
+    // inline: PERFORM VARYING id FROM x BY y UNTIL cond [AFTER ...] ... END-PERFORM (TEST BEFORE).
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
-        let (id, from, by, cond) = parse_varying_clause(toks, pos)?;
+        let clauses = parse_varying_clauses(toks, pos)?;
         let body_start = *pos;
         let mut scan = *pos;
         let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
         let body_end = scan;
         if exec {
-            varying_set(&id, &from, fields)?;
-            let mut guard = 0u32;
-            while !eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
+            let mut body = |fields: &mut HashMap<String, Field>| {
                 let mut p = body_start;
-                if run_block(toks, &mut p, fields, out, true, ctx)? {
-                    return Ok(true);
-                }
-                varying_step(&id, &by, fields)?;
-                guard += 1;
-                if guard > 1_000_000 {
-                    return Err(RunError::Runtime("PERFORM VARYING exceeded 1e6 iterations".into()));
-                }
+                run_block(toks, &mut p, fields, out, true, ctx)
+            };
+            if run_varying_nested(&clauses, 0, fields, ctx, &mut body)? {
+                return Ok(true);
             }
         }
         *pos = body_end;
