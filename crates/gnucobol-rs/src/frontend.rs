@@ -6627,26 +6627,6 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         return Err(RunError::Unsupported(format!("{verb}: no source operands")));
     }
 
-    let op = match verb {
-        "ADD" => Op::Add,
-        "SUBTRACT" => Op::Subtract,
-        "MULTIPLY" => Op::Multiply,
-        "DIVIDE" => Op::Divide,
-        _ => unreachable!(),
-    };
-
-    // the "target" operand (after kw): the in-place receiver, or the left/right side for GIVING.
-    let target_word = kw_at.and_then(|p| stmt[p + 1..].iter().find_map(|t| match t {
-        Tok::Word(w) if !is_kw(w) => Some(w.clone()),
-        _ => None,
-    }));
-
-    // GIVING receiver name.
-    let giving_name = giving.and_then(|p| stmt[p + 1..].iter().find_map(|t| match t {
-        Tok::Word(w) if !is_kw(w) => Some(w.clone()),
-        _ => None,
-    }));
-
     // Fold the source operands into a single decimal-bearing (bytes, attr) accumulator. Operands are
     // normalized so binary (COMP/COMP-5/COMP-X) sources participate (cob_arith's decode is DISPLAY+PACKED).
     let (mut acc, mut acc_attr) = {
@@ -6661,60 +6641,110 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         acc_attr = widen(&acc_attr, &a);
     }
 
-    // The receiver name is the GIVING field, else the in-place target.
-    let recv_name = giving_name.clone().or_else(|| target_word.clone())
-        .ok_or_else(|| RunError::Unsupported(format!("{verb}: no receiver")))?;
+    // DIVIDE ... GIVING q REMAINDER r computes a second result we do not yet produce; rather than leave
+    // the remainder silently wrong, fail closed.
+    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "REMAINDER")) {
+        return Err(RunError::Unsupported("DIVIDE ... REMAINDER is not in the front-end subset".into()));
+    }
 
-    // Compute the result as a WIDE numeric (bytes, attr); `move_into` then truncates/edits it into
-    // the receiver's exact format (numeric OR numeric-edited). This is the libcob pattern: arithmetic
-    // is exact, the store/edit is the rounding/formatting point.
-    let (rb, ra): (Vec<u8>, FieldAttr) = match (verb, &target_word, &giving_name) {
+    // Collect every receiver. A GIVING phrase stores one computed result into EACH named receiver
+    // (`ADD a b GIVING c d` -> c = d = a+b). The in-place TO/FROM/BY/INTO forms instead update each
+    // receiver by ITS OWN current value (`ADD 1 TO Y Z` -> Y+1 and Z+1; `MULTIPLY 3 BY Y Z` -> Y*3, Z*3).
+    let giving_names: Vec<String> = match giving {
+        Some(gp) => stmt[gp + 1..].iter().filter_map(|t| match t {
+            Tok::Word(w) if !is_kw(w) => Some(w.clone()),
+            _ => None,
+        }).collect(),
+        None => vec![],
+    };
+    let target_words: Vec<String> = match kw_at {
+        Some(kp) => {
+            let end = giving.unwrap_or(stmt.len());
+            stmt[kp + 1..end].iter().filter_map(|t| match t {
+                Tok::Word(w) if !is_kw(w) => Some(w.clone()),
+                _ => None,
+            }).collect()
+        }
+        None => vec![],
+    };
+
+    // (receiver, target-for-computation). GIVING: one value (computed from the single in-place operand,
+    // if any) into every receiver. In-place: each receiver is also its own computation target.
+    let receivers: Vec<(String, Option<String>)> = if !giving_names.is_empty() {
+        let t = target_words.first().cloned();
+        giving_names.iter().map(|g| (g.clone(), t.clone())).collect()
+    } else {
+        target_words.iter().map(|r| (r.clone(), Some(r.clone()))).collect()
+    };
+    if receivers.is_empty() {
+        return Err(RunError::Unsupported(format!("{verb}: no receiver")));
+    }
+
+    // A `ROUNDED` phrase rounds each result to its receiver's scale before the store (COBOL default
+    // mode: NEAREST, ties away from zero); otherwise the store truncates.
+    let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
+    let mut any_size_err = false;
+    for (recv_name, tgt) in &receivers {
+        // The result is a WIDE numeric (bytes, attr); the per-receiver store truncates/edits it into the
+        // receiver's exact format. libcob pattern: arithmetic is exact, the store is the rounding point.
+        let (rb, ra) = arith_compute(verb, kw, &acc, &acc_attr, tgt.as_deref(), fields)?;
+        let f = fields.get_mut(recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
+        let se = if rounded {
+            let dec = source_to_decimal(&rb, &ra)?;
+            let (nb, na) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
+            store_arith_result(f, &nb, &na, has_handler, false)?
+        } else {
+            store_arith_result(f, &rb, &ra, has_handler, false)?
+        };
+        any_size_err |= se;
+    }
+    Ok(any_size_err)
+}
+
+/// Compute the WIDE numeric result for one receiver of an arithmetic statement, given an optional
+/// in-place `target` operand. `ADD a... GIVING c` has no target (result = sum); the in-place / `TO t
+/// GIVING` forms supply the receiver (or the single TO/BY/INTO operand) as `target`.
+fn arith_compute(
+    verb: &str,
+    kw: &str,
+    acc: &[u8],
+    acc_attr: &FieldAttr,
+    target: Option<&str>,
+    fields: &HashMap<String, Field>,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
+    Ok(match (verb, target) {
         // ADD a... TO t [GIVING c]:  result = sum(a...) + t
-        ("ADD", Some(t), _) => {
-            let (tb, ta) = operand_value(&Tok::Word(t.clone()), fields)?;
-            wide_op(Op::Add, &acc, &acc_attr, &tb, &ta)?
+        ("ADD", Some(t)) => {
+            let (tb, ta) = operand_value(&Tok::Word(t.to_string()), fields)?;
+            wide_op(Op::Add, acc, acc_attr, &tb, &ta)?
         }
         // ADD a... GIVING c:  result = sum(a...)
-        ("ADD", None, Some(_)) => (acc.clone(), acc_attr),
+        ("ADD", None) => (acc.to_vec(), *acc_attr),
         // SUBTRACT a... FROM t [GIVING c]:  result = t - sum(a...)
-        ("SUBTRACT", Some(t), _) => {
-            let (tb, ta) = operand_value(&Tok::Word(t.clone()), fields)?;
-            wide_op(Op::Subtract, &tb, &ta, &acc, &acc_attr)?
+        ("SUBTRACT", Some(t)) => {
+            let (tb, ta) = operand_value(&Tok::Word(t.to_string()), fields)?;
+            wide_op(Op::Subtract, &tb, &ta, acc, acc_attr)?
         }
         // MULTIPLY a BY t [GIVING c]:  result = a * t
-        ("MULTIPLY", Some(t), _) => {
-            let (tb, ta) = operand_value(&Tok::Word(t.clone()), fields)?;
-            wide_op(Op::Multiply, &acc, &acc_attr, &tb, &ta)?
+        ("MULTIPLY", Some(t)) => {
+            let (tb, ta) = operand_value(&Tok::Word(t.to_string()), fields)?;
+            wide_op(Op::Multiply, acc, acc_attr, &tb, &ta)?
         }
         // DIVIDE a INTO t [GIVING c]: result = t / a ;  DIVIDE a BY t [GIVING c]: result = a / t
-        ("DIVIDE", Some(t), _) => {
-            let (tb, ta) = operand_value(&Tok::Word(t.clone()), fields)?;
+        ("DIVIDE", Some(t)) => {
+            let (tb, ta) = operand_value(&Tok::Word(t.to_string()), fields)?;
             let (num, na, den, da) = if kw == "INTO" {
-                (tb, ta, acc.clone(), acc_attr)
+                (tb, ta, acc.to_vec(), *acc_attr)
             } else {
-                (acc.clone(), acc_attr, tb, ta)
+                (acc.to_vec(), *acc_attr, tb, ta)
             };
-            let wide = lit_num_attr(36, 18, true); // generous quotient scale; move_into truncates.
+            let wide = lit_num_attr(36, 18, true); // generous quotient scale; the store truncates.
             let q = cob_divide(&num, &na, &den, &da, &wide, Round::Truncate)
                 .map_err(map_arith_err)?;
             (q, wide)
         }
         _ => return Err(RunError::Unsupported(format!("{verb} form (target/giving)"))),
-    };
-
-    // Store the wide result into the receiver -- cob_move (numeric) or encode_edited (edited).
-    let f = fields.get_mut(&recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
-    // A `ROUNDED` phrase rounds the result to the receiver's scale before the store (COBOL default
-    // mode: NEAREST, ties away from zero); otherwise the store truncates.
-    let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
-    if rounded {
-        let dec = source_to_decimal(&rb, &ra)?;
-        let (nb, na) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
-        return store_arith_result(f, &nb, &na, has_handler, false);
-    }
-    // arithmetic result is an already-decoded numeric value -> separator-independent store (with SIZE
-    // ERROR overflow detection).
-    store_arith_result(f, &rb, &ra, has_handler, false)
+    })
 }
 
 /// Compute `op(a, b)` exactly into a wide numeric DISPLAY `(bytes, attr)` -- 18 integer digits plus a
