@@ -3430,7 +3430,7 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
             *p -= 1;
             Rel::Eq
         }
-        other => return Err(RunError::Unsupported(format!("condition relop {other:?} (subset: = > < >= <= <> GREATER LESS EQUAL)"))),
+        other => return Err(RunError::Unsupported(format!("condition: unrecognized relational operator {other:?} (expected = > < >= <= <> GREATER LESS EQUAL)"))),
     };
     *p += 1;
     let right = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
@@ -4261,9 +4261,15 @@ fn parse_factor(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Re
     let (base, battr) = parse_primary(t, pos, f)?;
     if t.get(*pos).map(|s| s.as_str()) == Some("**") {
         *pos += 1;
-        let exp_word = t.get(*pos).ok_or_else(|| RunError::Unsupported("** without exponent".into()))?;
+        let exp_word = t.get(*pos).ok_or_else(|| RunError::Unsupported("** without exponent".into()))?.clone();
         *pos += 1;
-        let e: u32 = exp_word.parse().map_err(|_| RunError::Unsupported(format!("** non-integer exponent {exp_word}")))?;
+        // Non-negative integer exponent: exact repeated multiply (the sealed path). Anything else
+        // (fractional like 0.5, or an identifier exponent) goes through the sealed cob_decimal_pow engine.
+        let Ok(e) = exp_word.parse::<u32>() else {
+            let (eb, ea) = operand_value(&Tok::Word(exp_word), f)?;
+            let (rb, ra) = crate::intrinsic::cob_intr_pow(&base, &battr, &eb, &ea);
+            return Ok((rb, ra));
+        };
         // base ** e via repeated multiply; e==0 -> 1.
         if e == 0 {
             let (one, oa) = decimal_as_display(&Decimal { negative: false, digits: vec![1], scale: 0 });

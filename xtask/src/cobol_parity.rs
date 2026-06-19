@@ -50,6 +50,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p109_unstring_delim.cob", "DELIMITER IN D1 COUNT IN C1"),
     ("EXAMINE", "`UNTIL FIRST` (REPLACING + TALLYING...REPLACING), via the inspect CHARACTERS/BEFORE helper", "sealed",
         "lab/corpus/frontend/p110_examine_until.cob", "REPLACING UNTIL FIRST"),
+    ("COMPUTE", "`**` fractional / identifier exponent (e.g. `9 ** 0.5`), via the sealed cob_decimal_pow", "sealed",
+        "lab/corpus/frontend/p111_exponent.cob", "9 ** 0.5"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

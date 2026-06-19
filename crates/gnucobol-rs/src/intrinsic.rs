@@ -2955,6 +2955,16 @@ pub fn cob_intr_sqrt(src: &[u8], attr: &FieldAttr) -> IntrField {
     intr_decimal_result(d1)
 }
 
+/// `base ** exp` for a general (non-integer / fractional) exponent, via the sealed `cob_decimal_pow`
+/// (same engine as `FUNCTION SQRT`/`EXP10`). The COMPUTE front-end keeps its exact repeated-multiply path
+/// for non-negative integer exponents and routes everything else here.
+pub fn cob_intr_pow(base: &[u8], battr: &FieldAttr, exp: &[u8], eattr: &FieldAttr) -> IntrField {
+    let mut d1 = cob_decimal_set_field(base, battr);
+    let mut d2 = cob_decimal_set_field(exp, eattr);
+    cob_decimal_pow(&mut d1, &mut d2);
+    intr_decimal_result(d1)
+}
+
 /// `cob_intr_exp (srcfield)` (intrinsic.c): `FUNCTION EXP(x)` — `e^x`; `EXP(0) = 1`.
 pub fn cob_intr_exp(src: &[u8], attr: &FieldAttr) -> IntrField {
     let d1 = cob_decimal_set_field(src, attr);
