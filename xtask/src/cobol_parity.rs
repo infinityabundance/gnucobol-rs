@@ -58,6 +58,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p113_set_false.cob", "WHEN SET TO FALSE"),
     ("UNSTRING", "INTO DISPLAY-numeric receivers (alphanumeric->numeric per field)", "sealed",
         "lab/corpus/frontend/p114_unstring_num.cob", "INTO A B C"),
+    ("INITIALIZE", "over an OCCURS table (plain + REPLACING; expands to subscripted element leaves)", "sealed",
+        "lab/corpus/frontend/p115_init_occurs.cob", "INITIALIZE T1 REPLACING NUMERIC BY 7"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

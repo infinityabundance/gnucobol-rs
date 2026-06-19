@@ -4621,49 +4621,36 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
         return Err(RunError::Unsupported("INITIALIZE: no item named".into()));
     }
 
-    let Some(rp) = repl_pos else {
-        for name in &names {
-            init_default(name, fields, decimal_comma)?;
-        }
-        return Ok(());
+    // Both forms flatten the named items to their elementary leaves (OCCURS tables expand to subscripted
+    // element leaves). Without REPLACING each leaf gets its category default; with REPLACING only leaves of
+    // a named category get that category's value.
+    let repl = match repl_pos {
+        Some(rp) => Some(parse_initialize_replacing(&stmt[rp + 1..])?),
+        None => None,
     };
-
-    // REPLACING: parse `cat [DATA] BY val` pairs, then set every matching leaf to its category's value.
-    let repl = parse_initialize_replacing(&stmt[rp + 1..])?;
     for name in &names {
         let mut leaves = Vec::new();
         collect_init_leaves(name, fields, &mut leaves)?;
         for leaf in leaves {
-            let Some(cat) = init_field_category(&leaf, fields) else { continue };
-            if let Some((_, val)) = repl.iter().find(|(c, _)| *c == cat) {
-                let mv = vec![val.clone(), Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
-                exec_move(&mv, fields, decimal_comma)?;
-            }
+            let cat = init_field_category(&leaf, fields);
+            let src = match &repl {
+                Some(pairs) => match cat.and_then(|c| pairs.iter().find(|(cc, _)| *cc == c)) {
+                    Some((_, val)) => val.clone(),
+                    None => continue, // category not named -> leaf left unchanged
+                },
+                None => match cat {
+                    Some(InitCat::Numeric) => Tok::Word("0".to_string()),
+                    Some(_) => Tok::Str(vec![b' ']), // alphanumeric / alphabetic / edited -> spaces
+                    None => continue,                // 88 / group -> skip
+                },
+            };
+            let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
+            exec_move(&mv, fields, decimal_comma)?;
         }
     }
     Ok(())
 }
 
-/// Reset one item (recursing groups) to its category default -- the no-REPLACING INITIALIZE behaviour.
-fn init_default(name: &str, fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
-    let kind = match fields.get(name) {
-        Some(f) => f.storage.clone(),
-        None => return Err(RunError::UndefinedName(name.to_string())),
-    };
-    let src = match kind {
-        Storage::Numeric(_) => Tok::Word("0".to_string()),
-        Storage::Alpha(_) | Storage::Edited(..) => Tok::Str(vec![b' ']),
-        Storage::Condition { .. } => return Ok(()), // 88 has no storage; cobc does not reset it
-        Storage::Group { children } => {
-            for c in children {
-                init_default(&c, fields, decimal_comma)?;
-            }
-            return Ok(());
-        }
-    };
-    let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(name.to_string())];
-    exec_move(&mv, fields, decimal_comma)
-}
 
 /// Parse the `cat [DATA] BY val [cat [DATA] BY val ...]` tail of INITIALIZE REPLACING into (category, value).
 fn parse_initialize_replacing(toks: &[Tok]) -> Result<Vec<(InitCat, Tok)>, RunError> {
@@ -4709,9 +4696,10 @@ fn init_cat_from_kw(w: &str) -> Option<InitCat> {
 /// The INITIALIZE category of an elementary leaf: numeric, alphabetic (PIC A), alphanumeric (PIC X), or the
 /// two edited categories (split by whether the edited PIC carries an X/A). `None` for non-data leaves.
 fn init_field_category(name: &str, fields: &HashMap<String, Field>) -> Option<InitCat> {
-    match &fields.get(name)?.storage {
+    let base = split_subscript(name).0;
+    match &fields.get(base)?.storage {
         Storage::Numeric(_) => Some(InitCat::Numeric),
-        Storage::Alpha(_) => Some(if ALPHABETIC_FIELDS.with(|s| s.borrow().contains(name)) {
+        Storage::Alpha(_) => Some(if ALPHABETIC_FIELDS.with(|s| s.borrow().contains(base)) {
             InitCat::Alphabetic
         } else {
             InitCat::Alphanumeric
@@ -4731,10 +4719,45 @@ fn init_field_category(name: &str, fields: &HashMap<String, Field>) -> Option<In
 /// Flatten an INITIALIZE target into its elementary leaf names (recursing groups). OCCURS tables and
 /// group-OCCURS child views are out of the REPLACING subset and fail closed (no silent partial init).
 fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Vec<String>) -> Result<(), RunError> {
-    let f = fields.get(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
-    if f.occurs > 1 || group_child_lookup(name).is_some() {
+    let (base, sub) = split_subscript(name);
+    // An already-subscripted leaf (produced by OCCURS expansion below) is a single leaf.
+    if sub.is_some() {
+        out.push(name.to_string());
+        return Ok(());
+    }
+    let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+    // An OCCURS table expands to one subscripted leaf per element: an elementary table is `base(i)`; a
+    // single-level group table is each elementary child `child(i)`. Nested/complex tables fail closed.
+    if f.occurs > 1 {
+        match &f.storage {
+            Storage::Group { children } => {
+                let kids = children.clone();
+                for c in &kids {
+                    if !matches!(fields.get(c).map(|x| &x.storage),
+                        Some(Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..))) {
+                        return Err(RunError::Unsupported(format!(
+                            "INITIALIZE over nested/complex OCCURS group `{base}` not in subset"
+                        )));
+                    }
+                }
+                for i in 1..=f.occurs {
+                    for c in &kids {
+                        out.push(format!("{c}({i})"));
+                    }
+                }
+            }
+            Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..) => {
+                for i in 1..=f.occurs {
+                    out.push(format!("{base}({i})"));
+                }
+            }
+            _ => return Err(RunError::Unsupported(format!("INITIALIZE over OCCURS `{base}` not in subset"))),
+        }
+        return Ok(());
+    }
+    if group_child_lookup(base).is_some() {
         return Err(RunError::Unsupported(format!(
-            "INITIALIZE REPLACING over OCCURS table `{name}` not in subset"
+            "INITIALIZE over OCCURS child `{base}` must be subscripted -- not in subset"
         )));
     }
     match &f.storage {
@@ -4745,7 +4768,7 @@ fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Ve
             }
         }
         Storage::Condition { .. } => {}
-        _ => out.push(name.to_string()),
+        _ => out.push(base.to_string()),
     }
     Ok(())
 }
