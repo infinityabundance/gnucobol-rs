@@ -288,7 +288,7 @@
    "status": "PARTIAL",
    "gap": "The cobc compiler driver (main, option parsing, build pipeline).",
    "plan": "Grow cobrun toward the cobc option surface; native codegen pipeline is replaced by interpretation (a non-goal -- see codegen.c).",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
    "proof": [
     "crates/gnucobol-rs/examples/cobrun.rs :: run_program_redirected"
    ]
@@ -299,7 +299,7 @@
    "status": "PARTIAL",
    "gap": "The cobc compiler driver (main, option parsing, build pipeline).",
    "plan": "Grow cobrun toward the cobc option surface; native codegen pipeline is replaced by interpretation (a non-goal -- see codegen.c).",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/examples/cobrun.rs` is the native driver -- it parses + runs a program via `frontend::run_program_redirected` (cobc’s build-to-C-then-compile pipeline is replaced by direct interpretation); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
    "proof": [
     "crates/gnucobol-rs/examples/cobrun.rs :: run_program_redirected"
    ]
@@ -310,7 +310,7 @@
    "status": "NON-CLAIM",
    "gap": "cobc C code generation.",
    "plan": "Non-goal: gnucobol-rs does not emit C.",
-   "evidence": "Explicit non-claim: cobc emits C source (C code generation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost.",
+   "evidence": "Explicit non-claim: cobc emits C source (C code generation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn run_program_body",
     "lab/oracle/cobol_frontend_sweep.sh"
@@ -322,7 +322,7 @@
    "status": "NON-CLAIM",
    "gap": "cobc generated-C peephole optimisation.",
    "plan": "Non-goal: gnucobol-rs does not emit C.",
-   "evidence": "Explicit non-claim: cobc emits C source (generated-C peephole optimisation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost.",
+   "evidence": "Explicit non-claim: cobc emits C source (generated-C peephole optimisation) for the host C compiler to build; gnucobol-rs INTERPRETS the program directly on the ported libcob runtime, so C-emission is a deliberate non-goal. The runtime BEHAVIOUR codegen produces is reproduced by `crates/gnucobol-rs/src/frontend.rs::run_program_body` and verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh) -- no program-observable parity is lost.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn run_program_body",
     "lab/oracle/cobol_frontend_sweep.sh"
@@ -372,7 +372,7 @@
    "status": "PARTIAL",
    "gap": "Data-description / field layout (PIC, USAGE, OCCURS, REDEFINES, SYNC).",
    "plan": "Grow clause coverage; tracked live in COBOL-PARITY.md (data-description axis).",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::parse_items` + `build_program_fields` build the runtime field table on the ported libcob field model (PIC/USAGE/OCCURS/REDEFINES/SYNC over the sealed subset); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::parse_items` + `build_program_fields` build the runtime field table on the ported libcob field model (PIC/USAGE/OCCURS/REDEFINES/SYNC over the sealed subset); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_items",
     "crates/gnucobol-rs/src/frontend.rs :: fn build_program_fields"
@@ -419,7 +419,7 @@
    "status": "PARTIAL",
    "gap": "COBOL grammar / parser (bison).",
    "plan": "Extend the recursive-descent parser as the interpreted subset grows; tracked live in COBOL-PARITY.md.",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_one_program",
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_items"
@@ -431,7 +431,7 @@
    "status": "PARTIAL",
    "gap": "COBOL grammar / parser (bison).",
    "plan": "Extend the recursive-descent parser as the interpreted subset grows; tracked live in COBOL-PARITY.md.",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_one_program",
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_items"
@@ -443,7 +443,7 @@
    "status": "PARTIAL",
    "gap": "COBOL grammar / parser (bison).",
    "plan": "Extend the recursive-descent parser as the interpreted subset grows; tracked live in COBOL-PARITY.md.",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs` parses the sealed COBOL subset (`parse_one_program`/`parse_items`) and runs it; verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full grammar is larger; out-of-subset constructs fail closed.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_one_program",
     "crates/gnucobol-rs/src/frontend.rs :: fn parse_items"
@@ -455,7 +455,7 @@
    "status": "PARTIAL",
    "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
    "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
-   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
     "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
@@ -467,7 +467,7 @@
    "status": "PARTIAL",
    "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
    "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
-   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
     "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
@@ -479,7 +479,7 @@
    "status": "PARTIAL",
    "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
    "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
-   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
     "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
@@ -499,7 +499,7 @@
    "status": "PARTIAL",
    "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
    "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
-   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
     "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
@@ -511,7 +511,7 @@
    "status": "PARTIAL",
    "gap": "COBOL preprocessor: COPY/REPLACE + >> directives.",
    "plan": "Grow directive coverage (more >> forms, REPLACE statement) as needed.",
-   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
+   "evidence": "PARTIAL: the conditional-compilation `>>` directives are reproduced by `crates/gnucobol-rs/src/frontend.rs::preprocess` and COPY/REPLACING by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The full preprocessor directive set is a subset.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn preprocess",
     "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
@@ -523,7 +523,7 @@
    "status": "PARTIAL",
    "gap": "COPY ... REPLACING / REPLACE text replacement.",
    "plan": "Grow REPLACE/REPLACING form coverage as needed.",
-   "evidence": "PARTIAL: COPY/REPLACING text substitution is reproduced by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The standalone REPLACE statement forms are a subset.",
+   "evidence": "PARTIAL: COPY/REPLACING text substitution is reproduced by `crates/gnucobol-rs/src/copybook.rs::expand` (GNURUST.5 copy sweep); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The standalone REPLACE statement forms are a subset.",
    "proof": [
     "crates/gnucobol-rs/src/copybook.rs :: pub fn expand"
    ]
@@ -546,7 +546,7 @@
    "status": "PARTIAL",
    "gap": "COBOL lexical scanner (generated C).",
    "plan": "Grow the tokeniser as the interpreted language subset grows.",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn lex"
    ]
@@ -557,7 +557,7 @@
    "status": "PARTIAL",
    "gap": "COBOL lexical scanner (flex).",
    "plan": "Grow the tokeniser as the interpreted language subset grows.",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc.",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::lex` tokenises the COBOL subset the interpreter runs; verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh). The recognised lexel/reserved set is a subset of cobc.",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn lex"
    ]
@@ -592,7 +592,7 @@
    "status": "PARTIAL",
    "gap": "Type checking / semantic analysis of statements + expressions.",
    "plan": "Grow statement + expression coverage; tracked live in COBOL-PARITY.md (statement axis).",
-   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::exec_stmt` / `exec_compute` evaluate the typed operations directly on the ported libcob runtime (cob_move/cob_arith); verified byte-identical to cobc by the 90-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
+   "evidence": "PARTIAL: `crates/gnucobol-rs/src/frontend.rs::exec_stmt` / `exec_compute` evaluate the typed operations directly on the ported libcob runtime (cob_move/cob_arith); verified byte-identical to cobc by the {SWEEP}-program front-end sweep (lab/oracle/cobol_frontend_sweep.sh).",
    "proof": [
     "crates/gnucobol-rs/src/frontend.rs :: fn exec_stmt",
     "crates/gnucobol-rs/src/frontend.rs :: fn exec_compute"

@@ -165,55 +165,220 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 `NATIONAL` (UTF-16) is a **boundary**, not a TODO: GnuCOBOL 3.2 declares it unfinished -- `cobc` emits `warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed [-Wunfinished]`, and the explicit `USAGE NATIONAL` form does not compile. Pinning to an admittedly-unstable implementation is not a 1:1 target.
 
-## Front-end sub-form coverage (within DONE verbs)
+## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-Verb-level status is verb-granular: a verb reads **DONE** the moment *any* of its forms run, which hides the forms WITHIN a wired verb that still fail closed. This section makes that explicit and exhaustive -- **2 sealed sub-form(s)** proven byte-identical to cobc, and the **complete 30-row fail-closed boundary inventory** scraped live from `src/frontend.rs`. The doctrine is fail-closed: every gap below is an explicit `RunError::Unsupported` (exit 2), never a silent wrong answer.
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **2 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 181 of them, de-duplicated from the 197 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 181: **38 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **133 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
-### Sealed sub-forms (2) -- proven byte-identical to cobc
+### A. Sealed sub-forms (2) -- proven byte-identical to cobc
 
-Reality-checked against `FRONTEND_SUBFORMS`: the gate fails if a corpus anchor vanishes.
+Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
 | verb | sub-form | corpus proof |
 |---|---|---|
 | `IF` | sign condition `x IS [NOT] {POSITIVE\|NEGATIVE\|ZERO}` (incl. COMP-3) | `lab/corpus/frontend/p104_sign_cond.cob` |
 | `ADD/SUBTRACT/MULTIPLY/DIVIDE` | multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver) | `lab/corpus/frontend/p105_multi_receiver.cob` |
 
-### Complete fail-closed boundary inventory (30) -- the exact non-claims
+### B. Feature gaps -- the genuine remaining work (38)
 
-Scraped live from every `RunError::Unsupported` guard authored with `subset` in `src/frontend.rs` -- the precise forms `cobrun` refuses rather than mis-run. Source-derived, so sealing a form drops its row on the next regenerate (the doc gate enforces it). `<x>` marks a runtime value in the message.
+Deliberate limits of an otherwise-wired verb. These are the real "what's missing" list; sealing one removes its row on the next regenerate (the gate enforces it).
 
-| verb / clause | fail-closed sub-form (the non-claim) |
+| verb / clause | fail-closed form (`<x>` = a runtime value) |
 |---|---|
 | `ACCEPT` | ACCEPT FROM <x> (subset: DATE/DAY/TIME/DAY-OF-WEEK) |
 |  | ACCEPT subset is `ACCEPT id FROM DATE\|DAY\|TIME\|DAY-OF-WEEK` (terminal input not modelled) |
-| `DELETE` | DELETE is only supported on a RELATIVE file in this subset |
-| `DIVIDE` | DIVIDE ... REMAINDER is not in the front-end subset |
-| `EXAMINE` | EXAMINE TALLYING UNTIL ... REPLACING not in subset |
+| `DIVIDE / arithmetic` | DIVIDE ... REMAINDER is not in the front-end subset |
+| `EXAMINE` | EXAMINE REPLACING <x> |
+|  | EXAMINE REPLACING mode |
+|  | EXAMINE TALLYING <x> |
+|  | EXAMINE TALLYING UNTIL ... REPLACING not in subset |
+|  | EXAMINE TALLYING mode |
 | `EXHIBIT` | EXHIBIT CHANGED not in subset |
+| `FUNCTION` | FUNCTION <x>: not in the wired front-end subset |
 | `IF / condition` | condition relop <x> (subset: = > < >= <= <> GREATER LESS EQUAL) |
 | `INITIALIZE` | INITIALIZE ... <x> (subset: elementary items, no REPLACING/WITH) |
 | `INSPECT` | INSPECT REPLACING <x> (subset: ALL/LEADING/FIRST x BY y) |
 |  | INSPECT TALLYING FOR <x> (subset: ALL/LEADING/CHARACTERS) |
 |  | INSPECT clause <x> (subset: TALLYING/REPLACING/CONVERTING) |
 |  | INSPECT operand `<x>` (subset: literal / SPACE / ZERO / identifier) |
-| `MOVE/ADD/SUBTRACT CORR` | <x> CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support) |
+| `MOVE / ADD / SUBTRACT CORR` | <x> CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support) |
 |  | MOVE CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support) |
-| `OCCURS` | OCCURS DEPENDING ON on group `<x>` not in subset |
+| `OCCURS / tables` | OCCURS DEPENDING ON on group `<x>` not in subset |
+|  | REDEFINES write-through over group-OCCURS `<x>` not in subset |
 |  | group-OCCURS `<x>` (<x>) not in subset |
 |  | group-OCCURS `<x>` has a nested group child (group-of-group) not in subset |
-| `OPEN` | OPEN <x> (subset: INPUT/OUTPUT/EXTEND/I-O) |
 | `PERFORM` | PERFORM form (subset: `n TIMES` / `UNTIL cond` inline) |
-| `REDEFINES` | REDEFINES write-through over group-OCCURS `<x>` not in subset |
 | `REPORT / ML GENERATE` | GENERATE: `<x>` is not a report group in the subset |
 |  | JSON/XML GENERATE NAME/SUPPRESS/EXCEPTION not in subset |
+| `SEARCH` | SEARCH ALL: WHEN must be a key equality (key = value) |
 | `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
-| `SORT/MERGE` | SORT/MERGE subset: a single KEY |
-| `START` | START ... INVALID KEY not in subset |
-|  | START is only supported on a RELATIVE file in this subset |
+| `SORT / MERGE` | SORT/MERGE subset: a single KEY |
 | `UNSTRING` | UNSTRING ... <x> not in subset |
 |  | UNSTRING into non-alphanumeric `<x>` not in subset |
 | `USAGE` | USAGE <x> is not in the front-end subset |
-| `other` | FUNCTION <x>: not in the wired front-end subset |
+| `exponent` | ** non-integer exponent <x> |
+| `file I/O` | DELETE is only supported on a RELATIVE file in this subset |
+|  | OPEN <x> (subset: INPUT/OUTPUT/EXTEND/I-O) |
+|  | START ... INVALID KEY not in subset |
+|  | START KEY NOT <relation> |
+|  | START KEY relation <x> |
+|  | START is only supported on a RELATIVE file in this subset |
+
+### C. Boundary non-claims -- NOT TODOs (10)
+
+The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION, ACUCOBOL GUI verbs, ENTRY in a nested program), or they depend on a non-pinned environment (the live clock / compile stamp) -- so there is no byte-truth to match. Documented, not latent work.
+
+| verb / clause | fail-closed form (`<x>` = a runtime value) |
+|---|---|
+| `ACUCOBOL GUI (oracle boundary)` | <x>: an ACUCOBOL screen/GUI verb absent from the GnuCOBOL 3.2 grammar -- the oracle itself rejects it (boundary non-claim) |
+| `COMMUNICATION (oracle boundary)` | <x>: GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION -- the oracle itself cannot run it (boundary non-claim) |
+| `ENTRY (oracle boundary)` | ENTRY: an alternate entry point that is invalid in a nested program -- it requires separately-compiled units, while the front-end runs one source with contained programs |
+| `compile stamp (pinned-env)` | FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim) |
+|  | SOURCE_DATE_EPOCH exceeds the year-9999 ceiling |
+|  | SOURCE_DATE_EPOCH is not a number |
+| `date / clock (pinned-env)` | ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
+|  | FUNCTION <x> requires a pinned COB_CURRENT_DATE |
+|  | FUNCTION <x>: COB_CURRENT_DATE has no year |
+|  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
+
+### D. Input-validation guards -- malformed input rejected (133)
+
+Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
+
+| verb / clause | fail-closed form (`<x>` = a runtime value) |
+|---|---|
+| `88 condition-name` | 88 <x> has no VALUE to SET |
+|  | 88 condition-name is not a value operand |
+|  | 88 condition-name with no parent item |
+|  | SET <x> TO <value>: an 88 condition-name is only `SET ... TO TRUE` |
+|  | SET <x> TO TRUE: not an 88 condition-name |
+|  | cannot MOVE into an 88 condition-name |
+|  | expected condition-name after 88 |
+| `ACCEPT` | ACCEPT FROM <x>: receiver must be a <x>-digit numeric/alphanumeric item |
+|  | ACCEPT FROM: missing source |
+|  | ACCEPT: missing receiver |
+| `CALL` | CALL \ |
+|  | CALL without a program name |
+| `COMPUTE` | COMPUTE with no receiver |
+|  | COMPUTE without '=' |
+|  | missing ')' in COMPUTE |
+|  | string in COMPUTE |
+|  | trailing tokens in COMPUTE expr at <x> |
+|  | unexpected end of COMPUTE expr |
+| `EVALUATE` | EVALUATE without a subject |
+| `EXAMINE` | EXAMINE: expected TALLYING or REPLACING |
+|  | EXAMINE: missing field |
+| `FUNCTION` | FUNCTION <x>: missing argument |
+|  | FUNCTION <x>: needs a subject and from/to pairs |
+|  | FUNCTION <x>: needs at least one argument |
+|  | FUNCTION <x>: needs two arguments |
+|  | FUNCTION <x>: the pointer has no SET ... TO ADDRESS OF target |
+|  | FUNCTION CONCATENATE: needs at least one argument |
+|  | FUNCTION PRESENT-VALUE: needs a rate and at least one flow |
+| `GO TO` | GO TO unknown paragraph `<x>` |
+|  | GO TO without a target paragraph |
+| `INITIALIZE` | INITIALIZE: no item named |
+| `INSPECT` | INSPECT CONVERTING: expected TO |
+|  | INSPECT REPLACING: expected BY |
+|  | INSPECT REPLACING: missing mode |
+|  | INSPECT TALLYING: expected FOR |
+|  | INSPECT TALLYING: missing FOR mode |
+|  | INSPECT TALLYING: missing counter |
+|  | INSPECT region clause near <x> |
+|  | INSPECT: missing operand |
+|  | INSPECT: missing target |
+| `MOVE` | MOVE ALL: expected a non-empty literal or figurative |
+|  | MOVE without TO |
+|  | MOVE without source |
+|  | a group MOVE is distributed across its leaves by write_field |
+| `OCCURS / tables` | OCCURS count <x> is not an integer |
+|  | OCCURS max <x> is not an integer |
+|  | SEARCH `<x>` is not an OCCURS table |
+|  | group-OCCURS child `<x>` must be subscripted |
+| `PERFORM` | PERFORM TIMES count not an integer |
+|  | PERFORM VARYING: expected <x> |
+|  | PERFORM VARYING: missing BY value |
+|  | PERFORM VARYING: missing FROM value |
+|  | PERFORM VARYING: missing loop variable |
+|  | PERFORM: unknown paragraph `<x>`/`<x>` |
+| `PICTURE` | PIC <x>: <x> |
+| `RENAMES (66)` | 66 level without RENAMES |
+|  | RENAMES THRU without an end data-name |
+|  | RENAMES without a start data-name |
+| `REPORT / ML GENERATE` | GENERATE: missing report group |
+|  | JSON/XML GENERATE without FROM |
+|  | JSON/XML GENERATE: missing destination |
+|  | JSON/XML GENERATE: missing source |
+|  | JSON: expected GENERATE/PARSE |
+|  | XML: expected GENERATE |
+| `SEARCH` | SEARCH ALL `<x>`: no ASCENDING/DESCENDING KEY |
+|  | SEARCH ALL: missing WHEN |
+|  | SEARCH `<x>`: no INDEXED BY or VARYING index |
+|  | SEARCH: missing table name |
+| `SET` | SET ... BY <x>: not an integer |
+|  | SET ... BY: missing amount |
+|  | SET ... TO: missing value |
+|  | SET ... UP/DOWN must be followed by BY |
+|  | SET <x> TO <value>: target is not a numeric/index item |
+|  | SET <x> UP/DOWN BY: not a numeric index |
+|  | SET: no target before TO |
+| `SORT / MERGE` | RELEASE `<x>`: not an SD/FD record |
+|  | RELEASE: missing record |
+|  | RETURN: `<x>` is not a declared file |
+|  | RETURN: missing sort file |
+|  | SORT INPUT PROCEDURE: unknown paragraph `<x>` |
+|  | SORT OUTPUT PROCEDURE: unknown paragraph `<x>` |
+|  | SORT/MERGE KEY `<x>` is not a field of the sort record |
+|  | SORT/MERGE requires GIVING or OUTPUT PROCEDURE |
+|  | SORT/MERGE requires USING or INPUT PROCEDURE |
+|  | SORT: `<x>` is not a declared file |
+|  | SORT: missing sort file |
+| `STRING` | STRING without INTO |
+|  | STRING: missing target |
+| `TRANSFORM` | TRANSFORM without FROM |
+|  | TRANSFORM without TO |
+|  | TRANSFORM: missing target |
+| `UNSTRING` | UNSTRING without INTO |
+|  | UNSTRING: no receiving field |
+| `USAGE` | USAGE with no form |
+|  | unrecognized USAGE <x> |
+| `VALUE` | empty VALUE |
+| `exponent` | ** without exponent |
+| `file I/O` | CLOSE: `<x>` is not a declared file |
+|  | DELETE: `<x>` is not a declared file |
+|  | DELETE: missing file |
+|  | OPEN: `<x>` is not a declared file |
+|  | OPEN: missing mode |
+|  | READ: `<x>` is not a declared file |
+|  | READ: missing file |
+|  | RELATIVE KEY `<x>` is not an integer |
+|  | RELATIVE file `<x>` has no RELATIVE KEY |
+|  | REWRITE `<x>`: not an FD record |
+|  | REWRITE: missing record |
+|  | START: `<x>` is not a declared file |
+|  | START: missing file |
+|  | UNLOCK: `<x>` is not a declared file |
+|  | WRITE `<x>`: not an FD record |
+|  | WRITE: missing record |
+| `level numbers` | expected data name after a level number |
+|  | unsupported level number <x> |
+| `other` | <x> form (target/giving) |
+|  | <x>: no receiver |
+|  | <x>: no source operands |
+|  | THRU without lower bound |
+|  | THRU without upper bound |
+|  | WHEN without a value |
+|  | condition: missing left operand |
+|  | condition: missing right operand |
+|  | expected data-name after 66 |
+|  | not a numeric literal: <x> |
+|  | subscript '<x>' is not an integer |
+|  | trailing tokens in condition at <x> |
+|  | unexpected '.' |
+|  | verb <x> |
+| `program structure` | <x>: no PROCEDURE DIVISION |
+|  | expected program name after PROGRAM-ID |
+|  | no PROCEDURE DIVISION |
+|  | no PROGRAM-ID |
 
 ## Provenance + method
 

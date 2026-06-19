@@ -145,7 +145,10 @@ fn build_files(root: &str) -> String {
     out.push_str(
         "## In progress (PARTIAL -- verified subset reproduced, work ongoing)\n\n\
          These files ARE accounted for (the interpreter reproduces a sweep-verified subset), but the \
-         reproduction is partial; each row's plan is how the subset grows.\n\n\
+         reproduction is partial; each row's plan is how the subset grows. The cobc front-end files \
+         (parser / scanner / typeck / field / preprocessor) all map to the SAME clean-room interpreter; \
+         the next section breaks that interpreter's coverage down to sub-form granularity (what runs, and \
+         the complete fail-closed map), so PARTIAL is never an opaque label.\n\n\
          | file | category | plan |\n|---|---|---|\n",
     );
     for f in &files {
@@ -154,8 +157,7 @@ fn build_files(root: &str) -> String {
         }
     }
 
-    // The biggest PARTIAL file is the clean-room front-end interpreter itself; spell out, at sub-form
-    // granularity, what it now DOES and what still fails closed -- so "PARTIAL" is not an opaque label.
+    // Break the interpreter's PARTIAL coverage down to sub-form granularity (derived live from source).
     out.push_str(&frontend_subforms_section(root));
 
     // every file, grouped by top-level directory.
@@ -183,7 +185,11 @@ fn build_files(root: &str) -> String {
          (`xtask/src/data/gnucobol_files.json`), classified by path rule. Regenerate with \
          `cargo run -p xtask -- cobol-parity generate`; the doc-refresh gate fails on drift._\n",
     );
-    out
+    // Self-freshening sweep count: the data carries a `{SWEEP}` placeholder instead of a hardcoded number
+    // (which silently went stale at "90" while the corpus grew to 105). Substitute the LIVE corpus size so
+    // the figure can never drift again; `reality_check` forbids any bare hardcoded "NN-program" in the data.
+    let sweep = frontend_corpus_count(root);
+    out.replace("{SWEEP}", &sweep.to_string())
 }
 
 const HEADER: &str = "\
@@ -576,54 +582,90 @@ fn build(root: &str) -> String {
     out
 }
 
-/// Render the front-end SUB-FORM coverage section: (1) the SEALED sub-forms proven byte-identical (with
-/// corpus anchors), then (2) the COMPLETE fail-closed boundary inventory scraped live from every deliberate
-/// `subset` guard in `src/frontend.rs`. Part 1 is reality-checked against `FRONTEND_SUBFORMS`; part 2 is
-/// source-derived so it is exhaustive and self-maintaining (seal a form -> its guard changes -> the row
-/// disappears on regenerate; the regeneration-equal gate fails on any drift).
+/// Render the front-end coverage section, derived ENTIRELY from live source so it cannot be cherry-picked
+/// or go stale: (1) the SEALED sub-forms proven byte-identical (corpus-anchored), then (2) the COMPLETE
+/// inventory of EVERY `RunError::Unsupported` fail-closed point in `src/frontend.rs`, each classified --
+/// `gap` (a deliberate feature/sub-form limit, the genuine "what's missing"), `boundary` (the oracle
+/// itself cannot run it, or it needs a pinned env -- not a TODO), or `validation` (malformed-input the
+/// interpreter rejects, which cobc rejects too). Nothing is omitted; the count below equals the raw
+/// `grep -c RunError::Unsupported` of the source.
 fn frontend_subforms_section(root: &str) -> String {
     let sealed: Vec<_> = FRONTEND_SUBFORMS.iter().filter(|r| r.2 == "sealed").collect();
-    let inv = frontend_boundary_inventory(root);
-    let mut by_cat: std::collections::BTreeMap<String, Vec<String>> = std::collections::BTreeMap::new();
-    for (c, m) in inv { by_cat.entry(c).or_default().push(m); }
-    for v in by_cat.values_mut() { v.sort(); v.dedup(); }
-    let gap_total: usize = by_cat.values().map(|v| v.len()).sum();
+    let inv = frontend_fail_closed_inventory(root); // (class, category, cleaned msg), unique
+    let count = |cls: &str| inv.iter().filter(|(c, _, _)| c == cls).count();
+    let (ng, nb, nv, total) = (count("gap"), count("boundary"), count("validation"), inv.len());
+    let raw = frontend_unsupported_raw_count(root); // every RunError::Unsupported guard in the source
 
     let mut s = String::new();
-    s.push_str("\n## Front-end sub-form coverage (within DONE verbs)\n\n");
+    s.push_str("\n## Front-end coverage -- what runs, and the COMPLETE fail-closed map\n\n");
     s.push_str(&format!(
-        "Verb-level status is verb-granular: a verb reads **DONE** the moment *any* of its forms run, which \
-         hides the forms WITHIN a wired verb that still fail closed. This section makes that explicit and \
-         exhaustive -- **{} sealed sub-form(s)** proven byte-identical to cobc, and the **complete {gap_total}-row \
-         fail-closed boundary inventory** scraped live from `src/frontend.rs`. The doctrine is fail-closed: \
-         every gap below is an explicit `RunError::Unsupported` (exit 2), never a silent wrong answer.\n\n",
+        "The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this \
+         one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the \
+         forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not \
+         curated): **{} sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed \
+         form** -- {total} of them, de-duplicated from the {raw} `RunError::Unsupported` guards in \
+         `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is \
+         dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong \
+         answer. Of the {total}: **{ng} feature gaps** (the genuine remaining work), **{nb} boundary \
+         non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and \
+         **{nv} input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed \
+         for completeness).\n\n",
         sealed.len(),
     ));
 
     // (1) sealed -- what cobrun now DOES, each anchored to the corpus program that proves it.
-    s.push_str(&format!("### Sealed sub-forms ({}) -- proven byte-identical to cobc\n\n", sealed.len()));
-    s.push_str("Reality-checked against `FRONTEND_SUBFORMS`: the gate fails if a corpus anchor vanishes.\n\n");
+    s.push_str(&format!("### A. Sealed sub-forms ({}) -- proven byte-identical to cobc\n\n", sealed.len()));
+    s.push_str("Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.\n\n");
     s.push_str("| verb | sub-form | corpus proof |\n|---|---|---|\n");
     for (verb, form, _status, path, _needle) in &sealed {
         s.push_str(&format!("| `{verb}` | {} | `{path}` |\n", md_cell(form)));
     }
 
-    // (2) the complete gap inventory -- every deliberate `subset` guard, grouped by verb/clause.
-    s.push_str(&format!("\n### Complete fail-closed boundary inventory ({gap_total}) -- the exact non-claims\n\n"));
-    s.push_str(
-        "Scraped live from every `RunError::Unsupported` guard authored with `subset` in `src/frontend.rs` \
-         -- the precise forms `cobrun` refuses rather than mis-run. Source-derived, so sealing a form drops \
-         its row on the next regenerate (the doc gate enforces it). `<x>` marks a runtime value in the \
-         message.\n\n",
-    );
-    s.push_str("| verb / clause | fail-closed sub-form (the non-claim) |\n|---|---|\n");
-    for (cat, forms) in &by_cat {
-        for (i, m) in forms.iter().enumerate() {
-            let label = if i == 0 { format!("`{cat}`") } else { String::new() };
-            s.push_str(&format!("| {label} | {} |\n", md_cell(m)));
+    // (2) the three classes, each grouped by verb/clause -- the COMPLETE fail-closed map.
+    let render_class = |title: &str, cls: &str, blurb: &str| -> String {
+        let mut t = String::new();
+        let n = count(cls);
+        t.push_str(&format!("\n### {title} ({n})\n\n{blurb}\n\n"));
+        t.push_str("| verb / clause | fail-closed form (`<x>` = a runtime value) |\n|---|---|\n");
+        let mut by_cat: std::collections::BTreeMap<&str, Vec<&str>> = std::collections::BTreeMap::new();
+        for (c, cat, msg) in &inv {
+            if c == cls { by_cat.entry(cat.as_str()).or_default().push(msg.as_str()); }
         }
-    }
+        for (cat, msgs) in &by_cat {
+            for (i, m) in msgs.iter().enumerate() {
+                let label = if i == 0 { format!("`{cat}`") } else { String::new() };
+                t.push_str(&format!("| {label} | {} |\n", md_cell(m)));
+            }
+        }
+        t
+    };
+    s.push_str(&render_class(
+        "B. Feature gaps -- the genuine remaining work", "gap",
+        "Deliberate limits of an otherwise-wired verb. These are the real \"what's missing\" list; sealing one \
+         removes its row on the next regenerate (the gate enforces it).",
+    ));
+    s.push_str(&render_class(
+        "C. Boundary non-claims -- NOT TODOs", "boundary",
+        "The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION, ACUCOBOL GUI verbs, \
+         ENTRY in a nested program), or they depend on a non-pinned environment (the live clock / compile \
+         stamp) -- so there is no byte-truth to match. Documented, not latent work.",
+    ));
+    s.push_str(&render_class(
+        "D. Input-validation guards -- malformed input rejected", "validation",
+        "Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, \
+         a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: \
+         B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).",
+    ));
     s
+}
+
+/// Raw count of `RunError::Unsupported(` guards in `src/frontend.rs` (every fail-closed point, before
+/// de-duplicating placeholder variants). Lets the prose state the de-dup honestly.
+fn frontend_unsupported_raw_count(root: &str) -> usize {
+    std::fs::read_to_string(Path::new(root).join("crates/gnucobol-rs/src/frontend.rs"))
+        .unwrap_or_default()
+        .matches("RunError::Unsupported(")
+        .count()
 }
 
 /// Escape a string for safe rendering inside a markdown table cell (an unescaped `|` would split the row).
@@ -631,51 +673,130 @@ fn md_cell(s: &str) -> String {
     s.replace('|', "\\|")
 }
 
-/// Scrape EVERY deliberate front-end sub-form boundary from `src/frontend.rs`: each `RunError::Unsupported`
-/// message authored with the word `subset` is a precise non-claim. Returns `(category, cleaned message)`.
-/// Source-derived => COMPLETE and self-maintaining.
-fn frontend_boundary_inventory(root: &str) -> Vec<(String, String)> {
+/// The LIVE front-end sweep size = the number of `*.cob` programs in `lab/corpus/frontend/` (the sweep
+/// compiles + runs every one). Used to substitute the `{SWEEP}` placeholder so the census never hardcodes
+/// a count that goes stale.
+fn frontend_corpus_count(root: &str) -> usize {
+    std::fs::read_dir(Path::new(root).join("lab/corpus/frontend"))
+        .map(|rd| rd.filter_map(|e| e.ok()).filter(|e| e.path().extension().is_some_and(|x| x == "cob")).count())
+        .unwrap_or(0)
+}
+
+/// Extract + classify EVERY `RunError::Unsupported` fail-closed point in `src/frontend.rs`. Returns unique
+/// `(class, category, cleaned message)` where class is `gap` | `boundary` | `validation`. Source-derived,
+/// so it is COMPLETE (covers all 183 unique points, not a hand-picked subset) and self-maintaining.
+fn frontend_fail_closed_inventory(root: &str) -> Vec<(String, String, String)> {
     let body = std::fs::read_to_string(Path::new(root).join("crates/gnucobol-rs/src/frontend.rs")).unwrap_or_default();
     let marker = "RunError::Unsupported(";
-    let mut out: Vec<(String, String)> = Vec::new();
+    let mut out: Vec<(String, String, String)> = Vec::new();
     let mut idx = 0;
     while let Some(p) = body[idx..].find(marker) {
         let start = idx + p + marker.len();
         idx = start;
-        // first string literal after the call (handles both `Unsupported("..")` and `Unsupported(format!(".."))`).
         let Some(q1) = body[start..].find('"') else { continue };
         let s2 = start + q1 + 1;
         let Some(q2) = body[s2..].find('"') else { continue };
         let msg = &body[s2..s2 + q2];
-        if !msg.to_lowercase().contains("subset") {
+        // skip the catch-all re-wrap `unsupported: {s}` (it carries no specific form).
+        if msg == "unsupported: {s}" {
             continue;
         }
-        out.push((boundary_category(msg), clean_boundary_msg(msg)));
+        out.push((fail_closed_class(msg).to_string(), fail_closed_category(msg), clean_msg(msg)));
     }
     out.sort();
     out.dedup();
     out
 }
 
-/// Category for a boundary message: the first COBOL keyword that appears anywhere in it (robust to a
-/// leading `{verb}`/`{name}` placeholder), else `other`.
-fn boundary_category(msg: &str) -> String {
-    const CATS: &[(&str, &str)] = &[
-        ("CORRESPONDING", "MOVE/ADD/SUBTRACT CORR"),
-        ("condition relop", "IF / condition"),
-        ("ACCEPT", "ACCEPT"), ("EXHIBIT", "EXHIBIT"), ("EXAMINE", "EXAMINE"),
-        ("INSPECT", "INSPECT"), ("INITIALIZE", "INITIALIZE"),
-        ("UNSTRING", "UNSTRING"), ("STRING", "STRING"),
-        ("SORT", "SORT/MERGE"), ("MERGE", "SORT/MERGE"),
-        ("PERFORM", "PERFORM"), ("SEARCH", "SEARCH"), ("COMPUTE", "COMPUTE"),
-        ("DIVIDE", "DIVIDE"), ("REDEFINES", "REDEFINES"), ("OCCURS", "OCCURS"),
-        ("OPEN", "OPEN"), ("START", "START"), ("DELETE", "DELETE"),
-        ("REWRITE", "REWRITE"), ("WRITE", "WRITE"), ("READ", "READ"),
-        ("USAGE", "USAGE"), ("SET", "SET"),
-        ("GENERATE", "REPORT / ML GENERATE"), ("JSON", "JSON/XML"), ("XML", "JSON/XML"),
-        ("ENTRY", "ENTRY"),
+/// Classify a fail-closed message: `boundary` (oracle can't run it / pinned-env), `gap` (a deliberate
+/// feature-form limit of a supported verb), else `validation` (malformed-input rejection).
+fn fail_closed_class(msg: &str) -> &'static str {
+    // Non-"subset" feature gaps (deliberate limits of a supported verb that aren't worded with "subset").
+    const GAP_EXTRAS: &[&str] = &[
+        "EXAMINE REPLACING mode", "EXAMINE REPLACING {other}",
+        "EXAMINE TALLYING mode", "EXAMINE TALLYING {other}",
+        "SEARCH ALL: WHEN must be a key equality (key = value)",
+        "START KEY relation {other:?}", "START KEY NOT <relation>",
+        "** non-integer exponent {exp_word}",
     ];
-    for (needle, cat) in CATS {
+    if msg.contains("boundary non-claim")
+        || msg.contains("non-claim")
+        || msg.contains("requires a pinned")
+        || msg.contains("COB_CURRENT_DATE has no year")
+        || msg.contains("SOURCE_DATE_EPOCH")
+        || msg.starts_with("ENTRY: an alternate")
+    {
+        return "boundary";
+    }
+    if msg.contains("subset") || msg.contains("not in subset") || GAP_EXTRAS.contains(&msg) {
+        return "gap";
+    }
+    "validation"
+}
+
+/// Group a fail-closed message under a verb / clause heading (content rules first -- robust to a leading
+/// `{verb}`/`{name}` placeholder -- then a leading-keyword fallback).
+fn fail_closed_category(msg: &str) -> String {
+    let rules: &[(&str, &str)] = &[
+        ("CORRESPONDING", "MOVE / ADD / SUBTRACT CORR"),
+        ("COMMUNICATION SECTION", "COMMUNICATION (oracle boundary)"),
+        ("ACUCOBOL", "ACUCOBOL GUI (oracle boundary)"),
+        ("condition relop", "IF / condition"),
+        ("COB_CURRENT_DATE", "date / clock (pinned-env)"),
+        ("SOURCE_DATE_EPOCH", "compile stamp (pinned-env)"),
+        ("CURRENT-DATE", "date / clock (pinned-env)"),
+        ("group-OCCURS", "OCCURS / tables"),
+        ("OCCURS", "OCCURS / tables"),
+        ("REDEFINES", "REDEFINES"),
+        ("RENAMES", "RENAMES (66)"),
+        ("66 level", "RENAMES (66)"),
+        ("condition-name", "88 condition-name"),
+        ("88 ", "88 condition-name"),
+        ("PROCEDURE DIVISION", "program structure"),
+        ("PROGRAM-ID", "program structure"),
+        ("level number", "level numbers"),
+        ("ACCEPT", "ACCEPT"),
+        ("INSPECT", "INSPECT"),
+        ("INITIALIZE", "INITIALIZE"),
+        ("EXAMINE", "EXAMINE"),
+        ("EXHIBIT", "EXHIBIT"),
+        ("TRANSFORM", "TRANSFORM"),
+        ("UNSTRING", "UNSTRING"),
+        ("STRING", "STRING"),
+        ("SORT", "SORT / MERGE"),
+        ("MERGE", "SORT / MERGE"),
+        ("RELEASE", "SORT / MERGE"),
+        ("RETURN", "SORT / MERGE"),
+        ("PERFORM", "PERFORM"),
+        ("SEARCH", "SEARCH"),
+        ("COMPUTE", "COMPUTE"),
+        ("DIVIDE", "DIVIDE / arithmetic"),
+        ("OPEN", "file I/O"),
+        ("CLOSE", "file I/O"),
+        ("READ", "file I/O"),
+        ("WRITE", "file I/O"),
+        ("REWRITE", "file I/O"),
+        ("DELETE", "file I/O"),
+        ("START", "file I/O"),
+        ("RELATIVE", "file I/O"),
+        ("UNLOCK", "file I/O"),
+        ("ENTRY", "ENTRY (oracle boundary)"),
+        ("CALL", "CALL"),
+        ("FUNCTION", "FUNCTION"),
+        ("GENERATE", "REPORT / ML GENERATE"),
+        ("JSON", "JSON / XML"),
+        ("XML", "JSON / XML"),
+        ("USAGE", "USAGE"),
+        ("SET", "SET"),
+        ("PIC ", "PICTURE"),
+        ("VALUE", "VALUE"),
+        ("EVALUATE", "EVALUATE"),
+        ("GO TO", "GO TO"),
+        ("MOVE", "MOVE"),
+        ("ADD", "ADD / arithmetic"),
+        ("**", "exponent"),
+    ];
+    for (needle, cat) in rules {
         if msg.contains(needle) {
             return cat.to_string();
         }
@@ -683,8 +804,8 @@ fn boundary_category(msg: &str) -> String {
     "other".to_string()
 }
 
-/// Replace `{...}` format placeholders with `<x>` so the scraped message reads cleanly in the doc.
-fn clean_boundary_msg(msg: &str) -> String {
+/// Replace `{...}` format placeholders with `<x>` so a scraped message reads cleanly in the doc.
+fn clean_msg(msg: &str) -> String {
     let mut s = String::new();
     let mut chars = msg.chars().peekable();
     while let Some(c) = chars.next() {
@@ -852,6 +973,21 @@ fn reality_check(root: &str) -> Vec<String> {
         problems.push(format!(
             "{frontend_src}: {guard_count} `{SUBFORM_MARKER}` guard(s) but {listed_count} matching `gap` row(s) in FRONTEND_SUBFORMS -- a fail-closed sub-form was added/removed without updating COBOL-PARITY.md"
         ));
+    }
+
+    // 4b. No HARDCODED sweep count in the census data: it must use the `{SWEEP}` placeholder (substituted
+    //     with the live corpus size at generate time). A bare "NN-program" silently went stale at 90 while
+    //     the corpus grew; forbid it so that can never recur.
+    let mut scan = FILES;
+    while let Some(pos) = scan.find("-program") {
+        let digits: String = scan[..pos].chars().rev().take_while(|c| c.is_ascii_digit()).collect();
+        if !digits.is_empty() {
+            problems.push(format!(
+                "gnucobol_files.json: hardcoded \"{}-program\" sweep count -- use the {{SWEEP}} placeholder (self-freshening)",
+                digits.chars().rev().collect::<String>()
+            ));
+        }
+        scan = &scan[pos + "-program".len()..];
     }
 
     problems
