@@ -2521,6 +2521,25 @@ fn run_block(
                             }
                         }
                     }
+                    // UNSTRING carries optional ON OVERFLOW / NOT ON OVERFLOW handler blocks (+ END-UNSTRING),
+                    // parsed here like STRING. OVERFLOW = source characters remain after every receiver fills.
+                    "UNSTRING" => {
+                        let stmt = collect_arith_operands(toks, pos);
+                        let on_of = parse_on_overflow_handler(toks, pos, false);
+                        let not_of = parse_on_overflow_handler(toks, pos, true);
+                        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-UNSTRING") {
+                            *pos += 1;
+                        }
+                        if exec {
+                            let overflow = exec_unstring(&stmt, fields)?;
+                            let handler = if overflow { &on_of } else { &not_of };
+                            if let Some(block) = handler {
+                                if run_handler(block, fields, out, ctx)? {
+                                    return Ok(true);
+                                }
+                            }
+                        }
+                    }
                     "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" | "COMPUTE" => {
                         let stmt = collect_arith_operands(toks, pos);
                         let on_size = parse_on_size_handler(toks, pos, false);
@@ -2643,7 +2662,7 @@ fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<
 fn at_overflow_terminator(toks: &[Tok], p: usize) -> bool {
     match toks.get(p) {
         None | Some(Tok::Dot) => true,
-        Some(Tok::Word(w)) if w == "END-STRING" || SCOPE_ENDERS.contains(&w.as_str()) => true,
+        Some(Tok::Word(w)) if w == "END-STRING" || w == "END-UNSTRING" || SCOPE_ENDERS.contains(&w.as_str()) => true,
         Some(Tok::Word(w)) if w == "NOT"
             && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON")
             && matches!(toks.get(p + 2), Some(Tok::Word(x)) if x == "OVERFLOW") =>
@@ -3980,7 +3999,9 @@ fn exec_stmt(
         // STRING is normally dispatched in run_block (for its ON OVERFLOW handler); this arm is a
         // type-safe fallback for any bare STRING reaching exec_stmt (the overflow flag is unused here).
         "STRING" => exec_string(stmt, fields, ctx.decimal_comma).map(|_| ()),
-        "UNSTRING" => exec_unstring(stmt, fields),
+        // UNSTRING is normally dispatched in run_block (for its ON OVERFLOW handler); this arm is a
+        // type-safe fallback for any bare UNSTRING reaching exec_stmt (the overflow flag is unused here).
+        "UNSTRING" => exec_unstring(stmt, fields).map(|_| ()),
         "ACCEPT" => exec_accept(stmt, fields),
         "OPEN" => exec_open(stmt, fields, out, ctx),
         "CLOSE" => exec_close(stmt, fields, ctx),
@@ -5213,12 +5234,13 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
 
 /// `UNSTRING source [DELIMITED BY d] INTO f1 f2 ...` -- split the source by the delimiter (or by each
 /// receiver's width when absent) into the alphanumeric receiving fields (`GNURUST.STRING.UNSTRING.1`).
-/// `DELIMITER IN` / `COUNT IN` / `TALLYING IN` / `WITH POINTER` are supported; `ON OVERFLOW`,
-/// multi-delimiter (`OR`), and `DELIMITED BY ALL` fail closed.
-fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+/// `DELIMITER IN` / `COUNT IN` / `TALLYING IN` / `WITH POINTER` are supported; returns `true` when the
+/// OVERFLOW condition holds (source characters remain after every receiver is filled), for the caller's
+/// `ON OVERFLOW` / `NOT ON OVERFLOW` dispatch. Multi-delimiter (`OR`) and `DELIMITED BY ALL` fail closed.
+fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
     use crate::string_ops::unstring;
-    // Still non-claims: ON OVERFLOW, multi-delimiter (`OR`), `DELIMITED BY ALL`.
-    for bad in ["OVERFLOW", "OR", "ALL"] {
+    // Still non-claims: multi-delimiter (`OR`), `DELIMITED BY ALL`.
+    for bad in ["OR", "ALL"] {
         if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == bad)) {
             return Err(RunError::Unsupported(format!("UNSTRING ... {bad} not in subset")));
         }
@@ -5332,7 +5354,7 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<()
         let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(t)];
         exec_move(&mv, fields, false)?;
     }
-    Ok(())
+    Ok(res.overflow)
 }
 
 /// Day-of-year (1..366) for a Gregorian `(year, month, day)`.
@@ -8104,6 +8126,35 @@ mod tests {
         );
         assert_eq!(run(&prog("INITIALIZE G ALL TO VALUE")), b"G=[abcZZ42ZZ]\n");
         assert_eq!(run(&prog("INITIALIZE G WITH FILLER ALL TO VALUE")), b"G=[abcZZ42ZZ]\n");
+    }
+
+    #[test]
+    fn unstring_on_overflow_handler() {
+        // Oracle (cobc 3.2.0): 5 comma-segments into 2 receivers leaves source chars unexamined -> ON
+        // OVERFLOW (OVF1); a fully-consumed source ("X,Y") takes NOT ON OVERFLOW (OK2).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 SRC PIC X(12) VALUE \"A,B,C,D,E\".\n\
+                    01 R1 PIC X(3).\n\
+                    01 R2 PIC X(3).\n\
+                    PROCEDURE DIVISION.\n\
+                        UNSTRING SRC DELIMITED BY \",\" INTO R1 R2\n\
+                           ON OVERFLOW DISPLAY \"OVF1\"\n\
+                           NOT ON OVERFLOW DISPLAY \"OK1\"\n\
+                        END-UNSTRING.\n\
+                        DISPLAY \"R1=[\" R1 \"] R2=[\" R2 \"]\".\n\
+                        MOVE \"X,Y\" TO SRC.\n\
+                        UNSTRING SRC DELIMITED BY \",\" INTO R1 R2\n\
+                           ON OVERFLOW DISPLAY \"OVF2\"\n\
+                           NOT ON OVERFLOW DISPLAY \"OK2\"\n\
+                        END-UNSTRING.\n\
+                        DISPLAY \"R1=[\" R1 \"] R2=[\" R2 \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"OVF1\nR1=[A  ] R2=[B  ]\nOK2\nR1=[X  ] R2=[Y  ]\n");
     }
 }
 

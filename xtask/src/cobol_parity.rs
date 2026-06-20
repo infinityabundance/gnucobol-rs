@@ -78,6 +78,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p123_inspect_figurative.cob", "FOR ALL LOW-VALUE"),
     ("INITIALIZE", "`[WITH FILLER] ALL TO VALUE` -- restore each leaf to its VALUE clause; a no-VALUE leaf is left unchanged", "sealed",
         "lab/corpus/frontend/p124_initialize_to_value.cob", "ALL TO VALUE"),
+    ("UNSTRING", "`ON OVERFLOW` / `NOT ON OVERFLOW` handler (overflow = source characters remain after every receiver is filled)", "sealed",
+        "lab/corpus/frontend/p125_unstring_overflow.cob", "ON OVERFLOW DISPLAY"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
