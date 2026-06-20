@@ -5942,7 +5942,7 @@ fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
                 None => false,
             }
         }
-        _ => return Err(RunError::Unsupported("DELETE is only supported on a RELATIVE or INDEXED file in this subset".into())),
+        _ => return Err(RunError::Unsupported("DELETE requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL)".into())),
     };
     set_file_status(fields, &def, if deleted { "00" } else { "23" });
     Ok(())
@@ -6006,7 +6006,7 @@ fn exec_start(
     }
     let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("START: `{file}` is not a declared file")))?.clone();
     if !matches!(def.org, FileOrg::Relative | FileOrg::Indexed) {
-        return Err(RunError::Unsupported("START is only supported on a RELATIVE or INDEXED file in this subset".into()));
+        return Err(RunError::Unsupported("START requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL)".into()));
     }
     // Parse the relation (default `=`) and the optional named key field from the head.
     let mut rel = "=".to_string();
@@ -6031,7 +6031,7 @@ fn exec_start(
                 if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; }
                 r.into()
             }
-            other => return Err(RunError::Unsupported(format!("START KEY relation {other:?}"))),
+            other => return Err(RunError::Unsupported(format!("START KEY: unrecognized relation {other:?} (expected = > < >= <= NOT< NOT>)"))),
         };
         if let Some(Tok::Word(field)) = head.get(i) { key_field = Some(field.clone()); }
     }
