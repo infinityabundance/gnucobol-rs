@@ -1924,12 +1924,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             // Admit ONLY the oracle-confirmed subset (single level, fixed count, all-elementary children);
             // fail CLOSED on anything that would need a richer model than the flat field store provides.
             if it.occurs > 1 {
-                // Multi-dimension AND group-of-group tables are built via the recursive nested layout (pass 2).
-                // Still out of subset: OCCURS DEPENDING ON (variable length), and any REDEFINES / ODO /
-                // SYNCHRONIZED item ANYWHERE in the subtree (the nested model has no alias/slack/var-length).
-                if it.odo_counter.is_some() {
-                    return Err(RunError::Unsupported(format!("OCCURS DEPENDING ON on group `{}` not in subset", it.name)));
-                }
+                // A FLAT group-OCCURS supports OCCURS DEPENDING ON (built at MAX, truncated to the counter in
+                // pass 2 / read_field). Multi-dimension AND group-of-group tables go through the recursive
+                // nested layout (which has no var-length model -> ODO on a NESTED table fails closed there).
+                // Still out of subset everywhere: any REDEFINES / ODO / SYNCHRONIZED DESCENDANT in the subtree.
                 for sib in &prog.ws[gi + 1..] {
                     if sib.level <= it.level {
                         break;
@@ -2057,6 +2055,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // itself a sub-group (`A(i)` reaching a deeper leaf). Build the interleaved buffer via the recursive
         // layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
         if it.occurs > 1 && (has_occurs_child || has_subgroup_child) {
+            if it.odo_counter.is_some() {
+                return Err(RunError::Unsupported(format!("OCCURS DEPENDING ON on multi-dimension group `{}` not in subset", it.name)));
+            }
             // Skip the intermediate sub-groups in this subtree (their leaves are addressed via NESTED_LEAF).
             let mut k = i + 1;
             while k < prog.ws.len() && prog.ws[k].level > it.level {
@@ -2123,8 +2124,12 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 elem_image.extend_from_slice(&cb);
             }
             elem_image.resize(stride, b' ');
-            let buf = elem_image.repeat(it.occurs); // interleaved, n elements (same shape as elementary OCCURS)
+            let buf = elem_image.repeat(it.occurs); // interleaved, n elements (built at MAX for ODO)
             GROUP_OCCURS.with(|m| m.borrow_mut().insert(it.name.clone(), (stride, it.occurs)));
+            // OCCURS DEPENDING ON on the group: the live image length is counter*stride (built at MAX above).
+            if let Some(counter) = &it.odo_counter {
+                ODO_TABLES.with(|m| m.borrow_mut().insert(it.name.clone(), (counter.clone(), stride)));
+            }
             for (cname, coff, csz) in &child_views {
                 GROUP_CHILD.with(|m| m.borrow_mut().insert(cname.clone(), (it.name.clone(), *coff, *csz)));
                 if let Some(cf) = fields.get_mut(cname) {
@@ -5302,8 +5307,10 @@ fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Ve
         // not flat: fall through to the general recursion (a nested group-OCCURS).
     }
     if f.occurs <= 1 && group_child_lookup(base).is_some() {
+        // cobc COMPILE-rejects a bare table-element name here ("'K' requires one subscript"), so refusing it
+        // is faithful validation, not a feature gap.
         return Err(RunError::Unsupported(format!(
-            "INITIALIZE over OCCURS child `{base}` must be subscripted -- not in subset"
+            "INITIALIZE over OCCURS child `{base}`: a table element requires a subscript (cobc rejects the bare name)"
         )));
     }
     match &f.storage {
@@ -7416,7 +7423,16 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
         if let Some((_stride, occ)) = group_occurs_lookup(base) {
             let tbl = Field { storage: Storage::Group { children: children.clone() }, bytes: f.bytes.clone(), occurs: occ, redefines: None };
             return match sub {
-                None => Ok(Some(tbl)), // whole interleaved image (REDEFINES X(n) read / group DISPLAY/MOVE)
+                // whole interleaved image (REDEFINES X(n) read / group DISPLAY/MOVE). OCCURS DEPENDING ON:
+                // the LIVE image is counter*stride (built at MAX); subscripted ENT(i) still uses MAX above.
+                None => {
+                    if let Some((counter, st)) = odo_lookup(base) {
+                        let n = resolve_int(&counter, fields).unwrap_or(0).max(0) as usize;
+                        let live = (n * st).min(tbl.bytes.len());
+                        return Ok(Some(Field { storage: tbl.storage, bytes: tbl.bytes[..live].to_vec(), occurs: n, redefines: None }));
+                    }
+                    Ok(Some(tbl))
+                }
                 Some(s) => {
                     let idx = resolve_int(s, fields)
                         .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
@@ -7454,6 +7470,35 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
 
 /// Apply `apply` to a (possibly subscripted) field reference for WRITING: a bare `NAME` mutates the field;
 /// `NAME(i)` extracts the element, applies, and writes the element bytes back into the table.
+/// Overwrite the first `img.len()` bytes of `name`'s live image with `img`, preserving the tail -- the
+/// group-aware byte store used by REDEFINES write-through. Handles a group-OCCURS interleaved buffer, a
+/// plain group (distributes to leaves via put_group_bytes), and an elementary/aliased field. Non-generic
+/// (so it can be called from the generic `write_field` without recursive monomorphization).
+fn set_field_image(fields: &mut HashMap<String, Field>, name: &str, img: &[u8]) -> Result<(), RunError> {
+    if group_occurs_lookup(name).is_some() {
+        let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+        let n = img.len().min(f.bytes.len());
+        f.bytes[..n].copy_from_slice(&img[..n]);
+        return Ok(());
+    }
+    match fields.get(name).map(|f| f.storage.clone()) {
+        Some(Storage::Group { children }) => {
+            let mut cur = group_bytes(&children, fields);
+            let n = img.len().min(cur.len());
+            cur[..n].copy_from_slice(&img[..n]);
+            put_group_bytes(&children, cur, fields);
+            Ok(())
+        }
+        Some(_) => {
+            let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+            let n = img.len().min(f.bytes.len());
+            f.bytes[..n].copy_from_slice(&img[..n]);
+            Ok(())
+        }
+        None => Err(RunError::UndefinedName(name.to_string())),
+    }
+}
+
 fn write_field(
     fields: &mut HashMap<String, Field>,
     word: &str,
@@ -7551,23 +7596,20 @@ fn write_field(
     // storage over the target's bytes, apply, and copy the result back into the target.
     if sub.is_none() {
         if let Some(target) = fields.get(base).and_then(|f| f.redefines.clone()) {
-            // A REDEFINES write-through over a group-OCCURS interleaved buffer would corrupt the interleave
-            // (the alias view is flat). Read over the group is supported; write fails closed (out of subset).
-            if group_occurs_lookup(&target).is_some() {
-                return Err(RunError::Unsupported(format!("REDEFINES write-through over group-OCCURS `{target}` not in subset")));
-            }
+            // A REDEFINES field writes THROUGH its alias into the target's storage. Shape a temp with this
+            // field's storage over the target's live IMAGE (elementary bytes, or a group's concatenated /
+            // interleaved leaves), apply, then write the result back THROUGH the target via write_field --
+            // which is group-aware (distributes to leaves, or overwrites a group-OCCURS interleaved buffer).
             let f = fields.get(base).expect("base present");
             let storage = f.storage.clone();
             let size = f.bytes.len();
             let occ = f.occurs;
-            let mut bytes = fields.get(&target).map(|t| t.bytes.clone()).unwrap_or_default();
+            let mut bytes = read_field(fields, &target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
             bytes.resize(size, b' ');
             bytes.truncate(size);
             let mut tmp = Field { storage, bytes, occurs: occ, redefines: None };
             apply(&mut tmp)?;
-            let t = fields.get_mut(&target).ok_or_else(|| RunError::UndefinedName(target.clone()))?;
-            let n = tmp.bytes.len().min(t.bytes.len());
-            t.bytes[..n].copy_from_slice(&tmp.bytes[..n]);
+            set_field_image(fields, &target, &tmp.bytes)?; // the alias covers the target's first `size` bytes
             return Ok(());
         }
     }
@@ -8891,6 +8933,52 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"CUBE=[1100000000550088] C222=88 C212=55\n");
+    }
+
+    #[test]
+    fn occurs_depending_on_group() {
+        // Oracle (cobc 3.2.0): OCCURS DEPENDING ON on a group -> the live image (and LENGTH) is counter*elem
+        // (built at MAX), while subscripted access still reaches the physical MAX storage.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 CNT PIC 9 VALUE 2.\n\
+                    01 TBL.\n\
+                       05 ENT OCCURS 1 TO 4 DEPENDING ON CNT.\n\
+                          10 K PIC 99.\n\
+                          10 V PIC X.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE 11 TO K(1). MOVE \"a\" TO V(1).\n\
+                        MOVE 22 TO K(2). MOVE \"b\" TO V(2).\n\
+                        DISPLAY \"TBL=[\" TBL \"] LEN=\" FUNCTION LENGTH(TBL).\n\
+                        DISPLAY \"K2=\" K(2) \" V1=\" V(1).\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"TBL=[11a22b] LEN=000000006\nK2=22 V1=a\n");
+    }
+
+    #[test]
+    fn redefines_over_group_occurs_read_and_write() {
+        // Oracle (cobc 3.2.0): a REDEFINES alias over a group-OCCURS interleaved buffer reads it AND writes
+        // through it (MOVE "999999" TO R -> E(1..3) read back 99).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 G.\n\
+                       05 E PIC 99 OCCURS 3.\n\
+                    01 R REDEFINES G PIC X(6).\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE 12 TO E(1). MOVE 34 TO E(2). MOVE 56 TO E(3).\n\
+                        DISPLAY \"R=[\" R \"]\".\n\
+                        MOVE \"999999\" TO R.\n\
+                        DISPLAY \"E1=\" E(1) \" E2=\" E(2) \" E3=\" E(3).\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
     }
 }
 

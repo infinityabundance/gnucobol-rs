@@ -94,6 +94,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p135_table_3d.cob", "C PIC 99 OCCURS 2"),
     ("INITIALIZE", "over a nested / multi-dimension OCCURS table (every cell expanded across its dims)", "sealed",
         "lab/corpus/frontend/p136_initialize_2d.cob", "INITIALIZE T1"),
+    ("OCCURS / tables", "`OCCURS min TO max DEPENDING ON` on a GROUP (variable-length group table; live image + LENGTH = counter*elem, built at MAX)", "sealed",
+        "lab/corpus/frontend/p137_odo_group.cob", "OCCURS 1 TO 4 DEPENDING ON CNT"),
+    ("OCCURS / tables", "REDEFINES over a group-OCCURS interleaved buffer -- read AND write-through (the alias is a flat view of the buffer)", "sealed",
+        "lab/corpus/frontend/p138_redefines_group_occurs.cob", "R REDEFINES G PIC X(6)"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
