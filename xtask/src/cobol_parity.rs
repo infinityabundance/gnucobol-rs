@@ -72,6 +72,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p120_start_invalid.cob", "INVALID KEY DISPLAY"),
     ("UNSTRING", "`WITH POINTER p` scan cursor (read in, advanced past delimiters, written back), coexisting with `TALLYING IN`", "sealed",
         "lab/corpus/frontend/p121_unstring_pointer.cob", "WITH POINTER P TALLYING IN TC"),
+    ("DIVIDE", "`... GIVING q REMAINDER r` with `ON SIZE ERROR` / `NOT ON SIZE ERROR` (zero divisor + per-receiver overflow; receiver left unchanged with a handler)", "sealed",
+        "lab/corpus/frontend/p122_divide_remainder_size.cob", "GIVING Q REMAINDER R"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

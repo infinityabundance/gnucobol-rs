@@ -7189,7 +7189,7 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
 
     // DIVIDE ... GIVING q REMAINDER r -- wire the sealed `cob_divide_remainder` primitive
     // (GNURUST.REMAINDER.1): quotient truncated toward zero to q's scale, r = dividend - (that quotient *
-    // divisor). ON SIZE ERROR on this form is a documented non-claim, so fail closed if a handler is present.
+    // divisor). ON SIZE ERROR / NOT ON SIZE ERROR handlers are honored (divide-by-zero + receiver overflow).
     if verb == "DIVIDE" && stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "REMAINDER")) {
         return exec_divide_remainder(stmt, kw, giving, kw_at, &acc, &acc_attr, fields, has_handler);
     }
@@ -7297,8 +7297,9 @@ fn arith_compute(
 /// `DIVIDE a {INTO|BY} b GIVING q REMAINDER r [ROUNDED]` -- wires the sealed `cob_divide_remainder`
 /// (GNURUST.REMAINDER.1). `acc` is the single source operand `a`; `b` is the operand after INTO/BY. The
 /// remainder uses the UN-rounded quotient (truncated toward zero to q's scale); a `ROUNDED` phrase rounds
-/// only the quotient STORE. Quotient/remainder receivers must be numeric; `ON SIZE ERROR` on this form is a
-/// documented non-claim (fail closed if a handler is attached).
+/// only the quotient STORE. Quotient/remainder receivers must be numeric. `ON SIZE ERROR` / `NOT ON SIZE
+/// ERROR` are honored: a zero divisor (whole statement) or a receiver that loses high-order digits raises
+/// the size error; an overflowing receiver is left UNCHANGED with a handler, truncate-stored without one.
 fn exec_divide_remainder(
     stmt: &[Tok],
     kw: &str,
@@ -7309,11 +7310,6 @@ fn exec_divide_remainder(
     fields: &mut HashMap<String, Field>,
     has_handler: bool,
 ) -> Result<bool, RunError> {
-    if has_handler {
-        return Err(RunError::Unsupported(
-            "DIVIDE ... REMAINDER with ON SIZE ERROR (subset: REMAINDER without a size-error handler)".into(),
-        ));
-    }
     let gp = giving.ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER requires GIVING".into()))?;
     let kp = kw_at.ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER: missing INTO/BY".into()))?;
     // q = first data-name after GIVING (before REMAINDER), r = the data-name after REMAINDER.
@@ -7345,21 +7341,60 @@ fn exec_divide_remainder(
     let q_attr = numeric_receiver_attr(fields, &qn)?;
     let r_attr = numeric_receiver_attr(fields, &rn)?;
     let (qb, rb) = cob_divide_remainder(lhs, la, rhs, ra, &q_attr, &r_attr).map_err(map_arith_err)?;
-    // The remainder bytes are already in r's exact format (the primitive stored them); assign directly.
-    fields.get_mut(&rn).ok_or_else(|| RunError::UndefinedName(rn.clone()))?.bytes = rb;
-    // The quotient store honours ROUNDED (the remainder above still used the un-rounded quotient).
+
+    // ON SIZE ERROR: a receiver that would lose high-order integer digits raises EC-SIZE-OVERFLOW. The
+    // stored bytes stay the sealed primitive's (`qb`/`rb`); we re-derive the WIDE quotient (truncated to
+    // the quotient's scale at full integer precision) and the exact remainder ONLY to test each receiver's
+    // capacity. With a handler an overflowing receiver is left UNCHANGED; without one it truncate-stores
+    // (both match cobc). Divide-by-zero already propagated above as a SizeError (caught by the wrapper).
+    let qwide_attr = lit_num_attr(18 + q_attr.scale.max(0) as u16, q_attr.scale.max(0), true);
+    let q_wide = cob_divide(lhs, la, rhs, ra, &qwide_attr, Round::Truncate).map_err(map_arith_err)?;
+    let (prod, pa) = wide_op(Op::Multiply, &q_wide, &qwide_attr, rhs, ra)?;
+    let (r_wide, rwa) = wide_op(Op::Subtract, lhs, la, &prod, &pa)?;
+    let mut size_err = false;
+
+    // Remainder receiver: store the sealed `rb`, but leave it unchanged on overflow when a handler is present.
+    {
+        let rf = fields.get(&rn).ok_or_else(|| RunError::UndefinedName(rn.clone()))?;
+        let overflow = receiver_int_digits(rf).map_or(false, |cap| arith_overflows(&r_wide, &rwa, cap));
+        if overflow {
+            set_exception("EC-SIZE-OVERFLOW");
+            size_err = true;
+        }
+        if !overflow || !has_handler {
+            fields.get_mut(&rn).ok_or_else(|| RunError::UndefinedName(rn.clone()))?.bytes = rb;
+        }
+    }
+
+    // Quotient receiver: ROUNDED rounds only the quotient STORE (the remainder used the un-rounded quotient).
+    // The overflow test uses the value that will actually be stored (rounded when ROUNDED is present).
     let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
-    if rounded {
+    let rounded_q: Option<(Vec<u8>, FieldAttr)> = if rounded {
         let wide = lit_num_attr(36, 18, true);
         let wide_q = cob_divide(lhs, la, rhs, ra, &wide, Round::Truncate).map_err(map_arith_err)?;
         let dec = source_to_decimal(&wide_q, &wide)?;
-        let (nb, na) = decimal_as_display(&round_decimal(&dec, q_attr.scale));
-        let qf = fields.get_mut(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
-        move_into(qf, &nb, &na, false)?;
+        Some(decimal_as_display(&round_decimal(&dec, q_attr.scale)))
     } else {
-        fields.get_mut(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?.bytes = qb;
+        None
+    };
+    {
+        // Overflow is measured against the to-be-stored value: the rounded image, else the full-precision quotient.
+        let (chk_b, chk_a) = rounded_q.as_ref().map_or((q_wide.as_slice(), &qwide_attr), |(b, a)| (b.as_slice(), a));
+        let qf = fields.get(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
+        let overflow = receiver_int_digits(qf).map_or(false, |cap| arith_overflows(chk_b, chk_a, cap));
+        if overflow {
+            set_exception("EC-SIZE-OVERFLOW");
+            size_err = true;
+        }
+        if !overflow || !has_handler {
+            let qf = fields.get_mut(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
+            match &rounded_q {
+                Some((nb, na)) => move_into(qf, nb, na, false)?,
+                None => qf.bytes = qb,
+            }
+        }
     }
-    Ok(false)
+    Ok(size_err)
 }
 
 /// A field's numeric `FieldAttr` for use as a `DIVIDE ... REMAINDER` receiver; edited/group/alpha
@@ -7904,6 +7939,60 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R1=[AA   ]\nR2=[BBB  ]\nP=08 TC=02\n");
+    }
+
+    #[test]
+    fn divide_remainder_on_size_error_divide_by_zero() {
+        // Oracle (cobc 3.2.0): a normal divide takes NOT ON SIZE ERROR; a zero divisor takes ON SIZE ERROR
+        // and leaves BOTH the quotient and remainder receivers UNCHANGED (17/5 -> Q=003 R=002, then 17/0).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 N PIC 999 VALUE 17.\n\
+                    01 D PIC 999 VALUE 5.\n\
+                    01 Q PIC 999 VALUE 111.\n\
+                    01 R PIC 999 VALUE 222.\n\
+                    PROCEDURE DIVISION.\n\
+                        DIVIDE N BY D GIVING Q REMAINDER R\n\
+                           ON SIZE ERROR DISPLAY \"SE1\"\n\
+                           NOT ON SIZE ERROR DISPLAY \"OK1\"\n\
+                        END-DIVIDE.\n\
+                        DISPLAY \"Q=\" Q \" R=\" R.\n\
+                        MOVE 0 TO D.\n\
+                        DIVIDE N BY D GIVING Q REMAINDER R\n\
+                           ON SIZE ERROR DISPLAY \"SE2\"\n\
+                           NOT ON SIZE ERROR DISPLAY \"OK2\"\n\
+                        END-DIVIDE.\n\
+                        DISPLAY \"Q=\" Q \" R=\" R.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"OK1\nQ=003 R=002\nSE2\nQ=003 R=002\n");
+    }
+
+    #[test]
+    fn divide_remainder_on_size_error_per_receiver_overflow() {
+        // Oracle (cobc 3.2.0): 999/1 into a 1-digit quotient overflows -> ON SIZE ERROR; the quotient is left
+        // UNCHANGED (7) but the remainder (0, which fits) IS stored. With no handler the quotient truncate-stores.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 QS PIC 9 VALUE 7.\n\
+                    01 RS PIC 9 VALUE 8.\n\
+                    PROCEDURE DIVISION.\n\
+                        DIVIDE 999 BY 1 GIVING QS REMAINDER RS\n\
+                           ON SIZE ERROR DISPLAY \"SE3\"\n\
+                           NOT ON SIZE ERROR DISPLAY \"OK3\"\n\
+                        END-DIVIDE.\n\
+                        DISPLAY \"QS=\" QS \" RS=\" RS.\n\
+                        DIVIDE 888 BY 1 GIVING QS REMAINDER RS.\n\
+                        DISPLAY \"QS=\" QS \" RS=\" RS.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"SE3\nQS=7 RS=0\nQS=8 RS=0\n");
     }
 }
 
