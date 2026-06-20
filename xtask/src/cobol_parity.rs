@@ -102,6 +102,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p139_json_name_suppress.cob", "NAME ANUM IS \"id\""),
     ("INITIALIZE", "`{category} TO VALUE` (cobc ignores the category -> all valued leaves) and `ALL TO VALUE` over an OCCURS table (each element to its VALUE)", "sealed",
         "lab/corpus/frontend/p141_initialize_to_value_forms.cob", "NUMERIC TO VALUE"),
+    ("REPORT WRITER", "Layer 1: RD PAGE LIMIT/HEADING/FIRST DETAIL + TYPE REPORT HEADING / DETAIL (LINE abs/PLUS) / CONTROL FOOTING FINAL with SUM; INITIATE/GENERATE/TERMINATE page-buffer flush", "sealed",
+        "lab/corpus/frontend/p142_report_writer.cob", "TYPE CONTROL FOOTING FINAL"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

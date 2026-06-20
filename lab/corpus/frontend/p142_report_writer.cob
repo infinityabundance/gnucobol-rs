@@ -1,0 +1,47 @@
+      *> Report Writer Layer 1: RD PAGE LIMIT/HEADING/FIRST DETAIL, TYPE REPORT HEADING / DETAIL
+      *> (LINE PLUS, FIRST DETAIL bump) / CONTROL FOOTING FINAL with SUM; INITIATE/GENERATE/TERMINATE;
+      *> the page is flushed padded to PAGE LIMIT. Read back + DISPLAY to compare. Identical cobc/cobrun.
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P142.
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT RPT ASSIGN "rpt.txt" ORGANIZATION LINE SEQUENTIAL.
+           SELECT RIN ASSIGN "rpt.txt" ORGANIZATION LINE SEQUENTIAL.
+       DATA DIVISION.
+       FILE SECTION.
+       FD RPT REPORT IS SALES.
+       FD RIN.
+       01 RIN-REC PIC X(40).
+       WORKING-STORAGE SECTION.
+       01 WS-AMT PIC 999 VALUE 0.
+       01 WS-EOF PIC X VALUE "N".
+       REPORT SECTION.
+       RD SALES
+          PAGE LIMIT 10 LINE HEADING 1 FIRST DETAIL 3
+          CONTROLS FINAL.
+       01 TYPE REPORT HEADING.
+          05 LINE 1.
+             10 COLUMN 1 PIC X(11) VALUE "SALES-REPT".
+       01 DETLINE TYPE DETAIL.
+          05 LINE PLUS 1.
+             10 COLUMN 3 PIC ZZ9 SOURCE WS-AMT.
+       01 TYPE CONTROL FOOTING FINAL.
+          05 LINE PLUS 2.
+             10 COLUMN 1 PIC X(6) VALUE "TOTAL:".
+             10 COLUMN 8 PIC ZZ9 SUM WS-AMT.
+       PROCEDURE DIVISION.
+           OPEN OUTPUT RPT.
+           INITIATE SALES.
+           MOVE 10 TO WS-AMT. GENERATE DETLINE.
+           MOVE 25 TO WS-AMT. GENERATE DETLINE.
+           TERMINATE SALES.
+           CLOSE RPT.
+           OPEN INPUT RIN.
+           PERFORM UNTIL WS-EOF = "Y"
+              READ RIN AT END MOVE "Y" TO WS-EOF
+                 NOT AT END DISPLAY "[" RIN-REC "]"
+              END-READ
+           END-PERFORM.
+           CLOSE RIN.
+           STOP RUN.
