@@ -74,6 +74,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p121_unstring_pointer.cob", "WITH POINTER P TALLYING IN TC"),
     ("DIVIDE", "`... GIVING q REMAINDER r` with `ON SIZE ERROR` / `NOT ON SIZE ERROR` (zero divisor + per-receiver overflow; receiver left unchanged with a handler)", "sealed",
         "lab/corpus/frontend/p122_divide_remainder_size.cob", "GIVING Q REMAINDER R"),
+    ("INSPECT", "figurative-constant operands (`HIGH-VALUE` / `LOW-VALUE` / `QUOTE` as a 1-byte TALLYING/REPLACING comparand or replacement)", "sealed",
+        "lab/corpus/frontend/p123_inspect_figurative.cob", "FOR ALL LOW-VALUE"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

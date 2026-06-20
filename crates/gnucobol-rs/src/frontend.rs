@@ -4822,14 +4822,18 @@ fn pic_is_alphabetic(pic: &str) -> bool {
 fn inspect_operand(t: Option<&Tok>, fields: &HashMap<String, Field>) -> Result<Vec<u8>, RunError> {
     match t {
         Some(Tok::Str(s)) => Ok(s.clone()),
-        Some(Tok::Word(w)) => match w.as_str() {
-            "SPACE" | "SPACES" => Ok(vec![b' ']),
-            "ZERO" | "ZEROS" | "ZEROES" => Ok(vec![b'0']),
-            _ => match read_field(fields, w)? {
+        Some(Tok::Word(w)) => {
+            // A figurative constant is a single character here (SPACE / ZERO / HIGH-VALUE / LOW-VALUE /
+            // QUOTE -> 0x20 / 0x30 / 0xFF / 0x00 / 0x22); cobc treats it as a 1-byte comparand/replacement.
+            if let Some(fig) = figurative_kind(w) {
+                return Ok(vec![fig_byte(fig)]);
+            }
+            // Not a literal, figurative, or known field -> an undeclared data name (cobc rejects it too).
+            match read_field(fields, w)? {
                 Some(f) => Ok(f.bytes.clone()),
-                None => Err(RunError::Unsupported(format!("INSPECT operand `{w}` (subset: literal / SPACE / ZERO / identifier)"))),
-            },
-        },
+                None => Err(RunError::UndefinedName(w.clone())),
+            }
+        }
         _ => Err(RunError::Unsupported("INSPECT: missing operand".into())),
     }
 }
@@ -7993,6 +7997,32 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"SE3\nQS=7 RS=0\nQS=8 RS=0\n");
+    }
+
+    #[test]
+    fn inspect_figurative_constant_operands() {
+        // Oracle (cobc 3.2.0): figuratives are 1-byte operands in INSPECT. "AB" + LOW-VALUES*3 -> TALLYING
+        // ALL LOW-VALUE counts 3; REPLACING ALL LOW-VALUE BY "Z" then ALL "Z" BY QUOTE yields `AB"""`.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 G.\n\
+                       05 H PIC X(2).\n\
+                       05 L PIC X(3).\n\
+                    01 C PIC 99 VALUE 0.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE \"AB\" TO H.\n\
+                        MOVE LOW-VALUES TO L.\n\
+                        INSPECT G TALLYING C FOR ALL LOW-VALUE.\n\
+                        DISPLAY \"C=\" C.\n\
+                        INSPECT G REPLACING ALL LOW-VALUE BY \"Z\".\n\
+                        INSPECT G REPLACING ALL \"Z\" BY QUOTE.\n\
+                        DISPLAY \"G=[\" G \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"C=03\nG=[AB\"\"\"]\n");
     }
 }
 
