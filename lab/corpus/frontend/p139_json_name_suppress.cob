@@ -1,0 +1,20 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P139.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 REC.
+          05 ANUM PIC 99 VALUE 7.
+          05 ANM  PIC X(3) VALUE "abc".
+          05 SECRET PIC 99 VALUE 42.
+       01 OUT PIC X(120).
+       PROCEDURE DIVISION.
+           JSON GENERATE OUT FROM REC NAME ANUM IS "id" ANM IS "name".
+           DISPLAY "N=[" FUNCTION TRIM(OUT) "]".
+           MOVE SPACES TO OUT.
+           JSON GENERATE OUT FROM REC SUPPRESS SECRET.
+           DISPLAY "S=[" FUNCTION TRIM(OUT) "]".
+           MOVE SPACES TO OUT.
+           JSON GENERATE OUT FROM REC
+               NAME REC IS "rec" ANUM IS "id" SUPPRESS SECRET ANM.
+           DISPLAY "C=[" FUNCTION TRIM(OUT) "]".
+           STOP RUN.

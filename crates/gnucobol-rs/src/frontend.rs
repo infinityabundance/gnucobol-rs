@@ -2921,6 +2921,26 @@ fn run_block(
                             }
                         }
                     }
+                    // JSON / XML GENERATE: the SUPPRESS clause keyword is ALSO a Report-Writer verb, so the
+                    // generic collect_operands would stop there. Collect the whole statement (NAME / SUPPRESS
+                    // / COUNT clauses) up to the period / END-JSON / END-XML / a real boundary verb instead.
+                    "JSON" | "XML" => {
+                        let mut stmt = Vec::new();
+                        while let Some(t) = toks.get(*pos) {
+                            match t {
+                                Tok::Dot => break,
+                                Tok::Word(w) if w == "END-JSON" || w == "END-XML" => { *pos += 1; break; }
+                                Tok::Word(w) if is_boundary(w) && w != "SUPPRESS" => break,
+                                _ => { stmt.push(t.clone()); *pos += 1; }
+                            }
+                        }
+                        if exec {
+                            exec_stmt(&verb, &stmt, fields, out, ctx)?;
+                            if ctx.stop_run.get() {
+                                return Ok(true);
+                            }
+                        }
+                    }
                     "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" | "COMPUTE" => {
                         let stmt = collect_arith_operands(toks, pos);
                         let on_size = parse_on_size_handler(toks, pos, false);
@@ -6240,10 +6260,17 @@ fn trimmed_escaped(bytes: &[u8], escape: impl Fn(u8) -> Option<&'static str>) ->
 
 /// The JSON value of a field: `{...}` for a group, a trimmed number for numeric, a quoted escaped string
 /// otherwise -- recursively over the group tree (GnuCOBOL `JSON GENERATE`).
-fn json_value(name: &str, fields: &HashMap<String, Field>) -> String {
+fn json_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
     match fields.get(name).map(|f| f.storage.clone()) {
         Some(Storage::Group { children }) => {
-            let parts: Vec<String> = children.iter().map(|c| format!("\"{}\":{}", c, json_value(c, fields))).collect();
+            // `SUPPRESS c` omits a child; `NAME c IS "k"` renames its key.
+            let parts: Vec<String> = children.iter()
+                .filter(|c| !suppress.contains(*c))
+                .map(|c| {
+                    let key = rename.get(c).map(String::as_str).unwrap_or(c);
+                    format!("\"{}\":{}", key, json_value(c, fields, rename, suppress))
+                })
+                .collect();
             format!("{{{}}}", parts.join(","))
         }
         Some(Storage::Numeric(attr)) => {
@@ -6260,9 +6287,11 @@ fn json_value(name: &str, fields: &HashMap<String, Field>) -> String {
 
 /// The XML element of a field: `<name>...</name>` with children nested, numeric/alnum content (XML-escaped),
 /// recursively over the group tree (GnuCOBOL `XML GENERATE`, no declaration).
-fn xml_value(name: &str, fields: &HashMap<String, Field>) -> String {
+fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
     let inner = match fields.get(name).map(|f| f.storage.clone()) {
-        Some(Storage::Group { children }) => children.iter().map(|c| xml_value(c, fields)).collect::<String>(),
+        Some(Storage::Group { children }) => children.iter()
+            .filter(|c| !suppress.contains(*c))
+            .map(|c| xml_value(c, fields, rename, suppress)).collect::<String>(),
         Some(Storage::Numeric(attr)) => {
             let bytes = fields.get(name).map(|f| f.bytes.clone()).unwrap_or_default();
             source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
@@ -6273,19 +6302,56 @@ fn xml_value(name: &str, fields: &HashMap<String, Field>) -> String {
             trimmed_escaped(&bytes, esc)
         }
     };
-    format!("<{name}>{inner}</{name}>")
+    let tag = rename.get(name).map(String::as_str).unwrap_or(name);
+    format!("<{tag}>{inner}</{tag}>")
 }
 
 /// `{JSON|XML} GENERATE dest FROM source [COUNT IN c]` -- serialize the source group into `dest`. `NAME`/
 /// `SUPPRESS`/`ON EXCEPTION` are out of subset.
 fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx, xml: bool) -> Result<(), RunError> {
-    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "NAME" || w == "SUPPRESS" || w == "EXCEPTION")) {
-        return Err(RunError::Unsupported("JSON/XML GENERATE NAME/SUPPRESS/EXCEPTION not in subset".into()));
+    // ON EXCEPTION control flow and SUPPRESS WHEN <cond> stay out of subset (the rest of NAME/SUPPRESS is wired).
+    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "EXCEPTION")) {
+        return Err(RunError::Unsupported("JSON/XML GENERATE ON EXCEPTION not in subset".into()));
     }
     let dest = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing destination".into())) };
     let fp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")).ok_or_else(|| RunError::Unsupported("JSON/XML GENERATE without FROM".into()))?;
     let source = match stmt.get(fp + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing source".into())) };
-    let text = if xml { xml_value(&source, fields) } else { format!("{{\"{}\":{}}}", source, json_value(&source, fields)) };
+    // Clause boundaries (NAME / SUPPRESS / COUNT) after the source.
+    let pos_of = |kw: &str| stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == kw));
+    let (name_p, sup_p, cnt_p) = (pos_of("NAME"), pos_of("SUPPRESS"), pos_of("COUNT"));
+    let clause_end = |start: usize| [name_p, sup_p, cnt_p].into_iter().flatten().filter(|&p| p > start).min().unwrap_or(stmt.len());
+    // NAME data-name IS "key" [data-name IS "key"]... -> a key-rename map.
+    let mut rename: HashMap<String, String> = HashMap::new();
+    if let Some(np) = name_p {
+        let mut i = np + 1;
+        let end = clause_end(np);
+        while i < end {
+            if let Some(Tok::Word(f)) = stmt.get(i) {
+                let mut j = i + 1;
+                if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "IS") { j += 1; }
+                match stmt.get(j) {
+                    Some(Tok::Str(s)) => { rename.insert(f.clone(), String::from_utf8_lossy(s).to_string()); i = j + 1; }
+                    _ => return Err(RunError::Unsupported("JSON/XML GENERATE NAME: expected `data-name IS \"key\"`".into())),
+                }
+            } else {
+                i += 1;
+            }
+        }
+    }
+    // SUPPRESS data-name [data-name]... -> a set of omitted fields. (SUPPRESS WHEN <cond> is out of subset.)
+    let mut suppress: std::collections::HashSet<String> = std::collections::HashSet::new();
+    if let Some(sp) = sup_p {
+        let end = clause_end(sp);
+        for t in &stmt[sp + 1..end] {
+            match t {
+                Tok::Word(w) if w == "WHEN" => return Err(RunError::Unsupported("JSON/XML GENERATE SUPPRESS WHEN not in subset".into())),
+                Tok::Word(w) => { suppress.insert(w.clone()); }
+                _ => {}
+            }
+        }
+    }
+    let outer = rename.get(&source).map(String::as_str).unwrap_or(&source);
+    let text = if xml { xml_value(&source, fields, &rename, &suppress) } else { format!("{{\"{}\":{}}}", outer, json_value(&source, fields, &rename, &suppress)) };
     let bytes = text.into_bytes();
     let mv = vec![Tok::Str(bytes.clone()), Tok::Word("TO".to_string()), Tok::Word(dest)];
     exec_move(&mv, fields, ctx.decimal_comma)?;
@@ -8979,6 +9045,31 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
+    }
+
+    #[test]
+    fn json_generate_name_and_suppress() {
+        // Oracle (cobc 3.2.0): NAME renames JSON keys (incl. the outer via the source name); SUPPRESS omits
+        // fields. (Field names avoid the reserved word ID.)
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 REC.\n\
+                       05 ANUM PIC 99 VALUE 7.\n\
+                       05 ANM PIC X(3) VALUE \"abc\".\n\
+                       05 SECRET PIC 99 VALUE 42.\n\
+                    01 OUT PIC X(120).\n\
+                    PROCEDURE DIVISION.\n\
+                        JSON GENERATE OUT FROM REC NAME ANUM IS \"id\" ANM IS \"name\".\n\
+                        DISPLAY \"N=[\" FUNCTION TRIM(OUT) \"]\".\n\
+                        MOVE SPACES TO OUT.\n\
+                        JSON GENERATE OUT FROM REC NAME REC IS \"rec\" ANUM IS \"id\" SUPPRESS SECRET ANM.\n\
+                        DISPLAY \"C=[\" FUNCTION TRIM(OUT) \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"N=[{\"REC\":{\"id\":7,\"name\":\"abc\",\"SECRET\":42}}]\nC=[{\"rec\":{\"id\":7}}]\n");
     }
 }
 

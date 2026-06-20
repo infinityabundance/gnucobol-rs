@@ -98,6 +98,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p137_odo_group.cob", "OCCURS 1 TO 4 DEPENDING ON CNT"),
     ("OCCURS / tables", "REDEFINES over a group-OCCURS interleaved buffer -- read AND write-through (the alias is a flat view of the buffer)", "sealed",
         "lab/corpus/frontend/p138_redefines_group_occurs.cob", "R REDEFINES G PIC X(6)"),
+    ("JSON/XML GENERATE", "`NAME data-name IS \"key\"` key-rename (incl. the outer object) + `SUPPRESS data-name...` field omission", "sealed",
+        "lab/corpus/frontend/p139_json_name_suppress.cob", "NAME ANUM IS \"id\""),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
