@@ -964,6 +964,45 @@ fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
     (out, idx)
 }
 
+/// Re-glue a multi-subscript reference that the lexer split on internal whitespace (`N(I, J)` lexes as
+/// `N(I,` + `J)`). Only a token whose prefix before the first `(` is a declared DATA-NAME is glued -- a
+/// `FUNCTION name(...)` call keeps its split form (resolve_functions tracks paren depth across tokens).
+fn glue_subscripts(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
+    let unbalanced = |w: &str| w.matches('(').count() > w.matches(')').count();
+    if !toks.iter().any(|t| matches!(t, Tok::Word(w) if unbalanced(w))) {
+        return toks.to_vec();
+    }
+    let mut out = Vec::with_capacity(toks.len());
+    let mut i = 0;
+    while i < toks.len() {
+        if let Tok::Word(w) = &toks[i] {
+            if unbalanced(w) {
+                let prefix = &w[..w.find('(').unwrap()];
+                if !prefix.is_empty() && idx.by_name.contains_key(prefix) {
+                    let mut glued = w.clone();
+                    let mut depth = w.matches('(').count() as i64 - w.matches(')').count() as i64;
+                    let mut j = i + 1;
+                    while depth > 0 && j < toks.len() {
+                        if let Tok::Word(w2) = &toks[j] {
+                            glued.push_str(w2);
+                            depth += w2.matches('(').count() as i64 - w2.matches(')').count() as i64;
+                            j += 1;
+                        } else {
+                            break;
+                        }
+                    }
+                    out.push(Tok::Word(glued));
+                    i = j;
+                    continue;
+                }
+            }
+        }
+        out.push(toks[i].clone());
+        i += 1;
+    }
+    out
+}
+
 /// Rewrite every `name OF group [OF group...]` (and `IN`) reference in a token stream into a single resolved
 /// field-key token, using the static [`NameIndex`]. A bare name with one candidate is left as-is (its key
 /// equals the name); an unresolvable / ambiguous qualified reference is left untouched (it errors downstream
@@ -1143,6 +1182,7 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // the procedure body ONCE (qualification is purely a function of the declarations). A program with no
     // duplicate names and no OF/IN is returned unchanged, so existing behavior is byte-identical.
     let (ws, idx) = canonicalize_ws(&ws);
+    let proc_toks = glue_subscripts(&proc_toks, &idx);
     let proc_toks = collapse_qualified(&proc_toks, &idx);
 
     Ok((name, ProgramDef { ws, linkage, using, files, reports, proc_toks, is_initial }))
@@ -1793,11 +1833,74 @@ fn find_seq_in(toks: &[Tok], seq: &[&str], from: usize, to: usize) -> Option<usi
 
 /// Build a program's runtime field table (its WORKING-STORAGE items + the RETURN-CODE special register).
 /// LINKAGE fields are NOT created here -- a CALL fills them from the caller's arguments.
+/// A laid-out leaf of a (possibly multi-dimension) table: `(name, byte offset within ONE element of the
+/// subtree root, leaf size, dims)` where `dims` is `(occurs, stride)` outermost-first for the OCCURS levels
+/// at or below this subtree root that enclose the leaf.
+type LeafDesc = (String, usize, usize, Vec<(usize, usize)>);
+
+/// Recursively lay out the subtree rooted at `ws[idx]` over the already-built elementary `fields`, returning
+/// `(block_size, leaves)` -- `block_size` is the byte size of ONE instance of `ws[idx]` INCLUDING its own
+/// OCCURS, and each leaf's offset/dims are relative to that block. Immediate children are the items at the
+/// first deeper level; deeper items are consumed by recursion. (Scope: elementary leaves + sub-groups; the
+/// caller's gate keeps REDEFINES/ODO/SYNC/88 out of the subtree.)
+fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -> (usize, Vec<LeafDesc>) {
+    let it = &ws[idx];
+    let is_group = it.pic.is_empty() && it.float_kind.is_none();
+    if !is_group {
+        let f = fields.get(&it.name);
+        let occ = f.map(|f| f.occurs.max(1)).unwrap_or(it.occurs.max(1));
+        let esz = f.map(|f| f.bytes.len() / occ).unwrap_or(0);
+        if it.occurs > 1 {
+            (esz * it.occurs, vec![(it.name.clone(), 0, esz, vec![(it.occurs, esz)])])
+        } else {
+            (esz, vec![(it.name.clone(), 0, esz, vec![])])
+        }
+    } else {
+        let mut elem = 0usize;
+        let mut leaves: Vec<LeafDesc> = Vec::new();
+        let mut child_level: Option<u16> = None;
+        let mut j = idx + 1;
+        while j < ws.len() && ws[j].level > it.level {
+            if ws[j].level == 88 || ws[j].level == 66 {
+                j += 1;
+                continue;
+            }
+            let cl = *child_level.get_or_insert(ws[j].level);
+            if ws[j].level == cl {
+                let (cblock, cls) = nested_layout(ws, j, fields);
+                for (n, off, sz, dims) in cls {
+                    leaves.push((n, elem + off, sz, dims));
+                }
+                elem += cblock;
+                // skip past this child's whole subtree
+                j += 1;
+                while j < ws.len() && ws[j].level > cl {
+                    j += 1;
+                }
+            } else {
+                j += 1;
+            }
+        }
+        if it.occurs > 1 {
+            let occ = it.occurs;
+            let leaves2 = leaves.into_iter().map(|(n, off, sz, mut dims)| {
+                let mut d = vec![(occ, elem)];
+                d.append(&mut dims);
+                (n, off, sz, d)
+            }).collect();
+            (elem * occ, leaves2)
+        } else {
+            (elem, leaves)
+        }
+    }
+}
+
 fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, Field>, RunError> {
     let mut fields = HashMap::new();
     ODO_TABLES.with(|m| m.borrow_mut().clear()); // fresh per program build
     GROUP_OCCURS.with(|m| m.borrow_mut().clear());
     GROUP_CHILD.with(|m| m.borrow_mut().clear());
+    NESTED_LEAF.with(|m| m.borrow_mut().clear());
     ALPHABETIC_FIELDS.with(|m| m.borrow_mut().clear());
     FIELD_VALUES.with(|m| m.borrow_mut().clear());
     for (gi, it) in prog.ws.iter().enumerate() {
@@ -1835,10 +1938,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                     let cl = *child_level.get_or_insert(sib.level);
                     if sib.level == cl {
                         let is_group = sib.pic.is_empty() && sib.float_kind.is_none();
+                        // A child with its own OCCURS (an elementary 2-D table `C(i,j)`) IS now supported via
+                        // the recursive nested layout; only sub-group children / REDEFINES / ODO / SYNC stay out.
                         let why = if is_group {
                             Some("child is itself a group (group-of-group)")
-                        } else if sib.occurs > 1 {
-                            Some("child has nested OCCURS (multi-dimension)")
                         } else if sib.redefines.is_some() {
                             Some("child REDEFINES")
                         } else if sib.odo_counter.is_some() {
@@ -1917,6 +2020,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         let mut child_views: Vec<(String, usize, usize)> = Vec::new();
         let mut child_level: Option<u16> = None;
         let mut offset = 0usize;
+        let mut has_occurs_child = false;
         for sib in &prog.ws[i + 1..] {
             if sib.level <= it.level {
                 break;
@@ -1926,6 +2030,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             }
             let cl = *child_level.get_or_insert(sib.level);
             if sib.level == cl {
+                if sib.occurs > 1 {
+                    has_occurs_child = true;
+                }
                 let csize = fields.get(&sib.name).map(|f| f.bytes.len()).unwrap_or(0);
                 if sib.sync {
                     let align = fields.get(&sib.name).map(sync_align).unwrap_or(1);
@@ -1948,6 +2055,58 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 child_views.push((sib.name.clone(), offset, csize)); // offset BEFORE the += below
                 offset += csize;
             }
+        }
+        // A 2-D group-OCCURS: an immediate child has its OWN OCCURS (`C(i,j)`). Build the buffer via the
+        // recursive layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
+        if it.occurs > 1 && has_occurs_child {
+            let (block, leaves) = nested_layout(&prog.ws, i, &fields);
+            let stride = block / it.occurs.max(1);
+            let mut buf = vec![b' '; block];
+            for (name, off, sz, dims) in &leaves {
+                // the leaf's single-element VALUE/default image (pass-1 built it; an occurs leaf is tiled).
+                let img = fields.get(name).map(|f| {
+                    let occ = f.occurs.max(1);
+                    let esz = (f.bytes.len() / occ).max(*sz);
+                    f.bytes.get(..esz.min(f.bytes.len())).map(|s| s.to_vec()).unwrap_or_default()
+                }).unwrap_or_default();
+                let occs: Vec<usize> = dims.iter().map(|&(o, _)| o).collect();
+                let strides: Vec<usize> = dims.iter().map(|&(_, s)| s).collect();
+                let total: usize = occs.iter().product::<usize>().max(1);
+                for combo in 0..total {
+                    let mut rem = combo;
+                    let mut cell = *off;
+                    for d in (0..dims.len()).rev() {
+                        cell += (rem % occs[d]) * strides[d];
+                        rem /= occs[d];
+                    }
+                    let n = (*sz).min(img.len());
+                    if cell + n <= buf.len() {
+                        buf[cell..cell + n].copy_from_slice(&img[..n]);
+                    }
+                }
+                NESTED_LEAF.with(|m| m.borrow_mut().insert(name.clone(), (it.name.clone(), *off, *sz, dims.clone())));
+                if let Some(cf) = fields.get_mut(name) {
+                    cf.bytes.clear(); // the leaf is now a view into the parent buffer
+                    cf.occurs = 1;
+                }
+            }
+            GROUP_OCCURS.with(|m| m.borrow_mut().insert(it.name.clone(), (stride, it.occurs)));
+            for (n, idx) in it.indexed_by.iter().enumerate() {
+                fields.entry(idx.clone()).or_insert_with(|| make_return_code(0));
+                if n == 0 {
+                    TABLE_INDEX.with(|m| m.borrow_mut().insert(it.name.clone(), idx.clone()));
+                }
+            }
+            if let Some(asc) = it.occurs_key {
+                TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
+            }
+            fields.insert(it.name.clone(), Field {
+                storage: Storage::Group { children },
+                bytes: buf,
+                occurs: it.occurs,
+                redefines: None,
+            });
+            continue;
         }
         // A group with OCCURS n: build the live INTERLEAVED buffer [elem]*n and demote children to strided
         // views into it (the children own no bytes). The pass-1 gate already restricted this to the
@@ -2081,6 +2240,12 @@ thread_local! {
     /// A group-OCCURS CHILD name -> (parent group, offset within the element, child size). The child owns
     /// NO bytes; it is a strided view into the parent's interleaved buffer (read/written at stride).
     static GROUP_CHILD: std::cell::RefCell<HashMap<String, (String, usize, usize)>> = std::cell::RefCell::new(HashMap::new());
+    /// A MULTI-DIMENSION leaf name -> (base buffer group, byte offset at all-1 subscripts, leaf size,
+    /// dims). `dims` is `(occurs, stride)` per subscript, OUTERMOST first, so the address of `LEAF(s1..sk)`
+    /// is `offset + sum_d (s_d - 1) * stride_d` into the base group's interleaved buffer. Used for the 2-D
+    /// `C(i,j)` shape (outer group-OCCURS with an inner elementary-OCCURS child); the flat single-subscript
+    /// group-OCCURS stays on GROUP_CHILD. `dims.len()` is the required subscript count.
+    static NESTED_LEAF: std::cell::RefCell<HashMap<String, (String, usize, usize, Vec<(usize, usize)>)>> = std::cell::RefCell::new(HashMap::new());
     /// Names of fields whose PICTURE is ALPHABETIC (`PIC A...`, no `X`). At runtime PIC A and PIC X are both
     /// `Storage::Alpha` / `COB_TYPE_ALPHANUMERIC` (libcob has no distinct alphabetic type); cobc decides the
     /// category at COMPILE time from the PIC. We retain it here so `INITIALIZE ... REPLACING ALPHABETIC` vs
@@ -2250,6 +2415,42 @@ fn group_occurs_lookup(name: &str) -> Option<(usize, usize)> {
 /// `(parent group, offset within element, child size)` if `name` is a group-OCCURS child view, else `None`.
 fn group_child_lookup(name: &str) -> Option<(String, usize, usize)> {
     GROUP_CHILD.with(|m| m.borrow().get(name).cloned())
+}
+
+/// `(base buffer group, offset, leaf size, dims)` if `name` is a multi-dimension leaf, else `None`.
+#[allow(clippy::type_complexity)]
+fn nested_leaf_lookup(name: &str) -> Option<(String, usize, usize, Vec<(usize, usize)>)> {
+    NESTED_LEAF.with(|m| m.borrow().get(name).cloned())
+}
+
+/// The comma-separated subscripts of a reference inner (`"I,J"` -> `["I","J"]`); a single subscript
+/// (`"I"`) -> `["I"]`. Whitespace around each is trimmed.
+fn subscripts(inner: &str) -> Vec<&str> {
+    inner.split(',').map(|s| s.trim()).filter(|s| !s.is_empty()).collect()
+}
+
+/// Resolve a multi-dimension leaf reference `LEAF(s1,..,sk)` to its `(base_group, byte_offset, size)` in the
+/// base buffer. The subscript count must equal `dims.len()`; an out-of-range subscript follows the same
+/// EC-BOUND-SUBSCRIPT policy as [`table_element`] (caller returns a default element when checking is OFF).
+fn nested_addr(offset: usize, dims: &[(usize, usize)], subs: &[&str], fields: &HashMap<String, Field>) -> Result<Option<usize>, RunError> {
+    if subs.len() != dims.len() {
+        return Err(RunError::Unsupported(format!(
+            "multi-dimension leaf needs {} subscript(s), got {}", dims.len(), subs.len()
+        )));
+    }
+    let mut off = offset;
+    for (s, &(occ, stride)) in subs.iter().zip(dims.iter()) {
+        let idx = resolve_int(s, fields)
+            .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
+        if idx < 1 || idx as usize > occ {
+            if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+                return Err(RunError::Runtime(format!("subscript out of bounds: {idx} (maximum: {occ})")));
+            }
+            return Ok(None); // suppressed OOB -> caller substitutes a default element
+        }
+        off += (idx as usize - 1) * stride;
+    }
+    Ok(Some(off))
 }
 
 thread_local! {
@@ -4393,16 +4594,21 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_han
     }
     let mut size_err = false;
     for r in receivers {
-        let f = fields.get_mut(&r).ok_or_else(|| RunError::UndefinedName(r.clone()))?;
-        // COMPUTE result is an already-decoded numeric value -> separator-independent store. With
-        // ROUNDED, round the result to THIS receiver's scale before storing (default mode: ties away).
-        if rounded {
-            let dec = source_to_decimal(&val, &attr)?;
-            let (rval, rattr) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
-            size_err |= store_arith_result(f, &rval, &rattr, has_handler, false)?;
-        } else {
-            size_err |= store_arith_result(f, &val, &attr, has_handler, false)?;
-        }
+        // Store through write_field so a subscripted / multi-dimension receiver (`E(I)`, `N(I,J)`) works,
+        // not just a scalar. COMPUTE result is an already-decoded numeric value -> separator-independent
+        // store. With ROUNDED, round to THIS receiver's scale before storing (default mode: ties away).
+        let mut se = false;
+        write_field(fields, &r, |f| {
+            if rounded {
+                let dec = source_to_decimal(&val, &attr)?;
+                let (rval, rattr) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
+                se = store_arith_result(f, &rval, &rattr, has_handler, false)?;
+            } else {
+                se = store_arith_result(f, &val, &attr, has_handler, false)?;
+            }
+            Ok(())
+        })?;
+        size_err |= se;
     }
     Ok(size_err)
 }
@@ -7126,6 +7332,18 @@ fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
 /// a `REDEFINES` field reads its target's storage (so an alias sees the other field's current bytes).
 fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Field>, RunError> {
     let (base, sub) = split_subscript(word);
+    // MULTI-DIMENSION leaf: `C(i,j)` -- a strided cell of the base group-OCCURS buffer, addressed by dims.
+    if let Some((basef, offset, size, dims)) = nested_leaf_lookup(base) {
+        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let subs = sub.map(subscripts).unwrap_or_default();
+        return match nested_addr(offset, &dims, &subs, fields)? {
+            Some(off) => {
+                let pf = fields.get(&basef).ok_or_else(|| RunError::UndefinedName(basef.clone()))?;
+                Ok(Some(Field { storage: cstore, bytes: pf.bytes[off..off + size].to_vec(), occurs: 1, redefines: None }))
+            }
+            None => Ok(Some(default_element(&cstore, size))), // suppressed OOB
+        };
+    }
     // group-OCCURS CHILD: `EK(i)` is a single strided slice into the PARENT's interleaved buffer.
     if let Some((parent, coff, csz)) = group_child_lookup(base) {
         let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
@@ -7195,6 +7413,22 @@ fn write_field(
     apply: impl FnOnce(&mut Field) -> Result<(), RunError>,
 ) -> Result<(), RunError> {
     let (base, sub) = split_subscript(word);
+    // MULTI-DIMENSION leaf write-back: `C(i,j)` shapes a temp over the strided cell, applies, copies back.
+    if let Some((basef, offset, size, dims)) = nested_leaf_lookup(base) {
+        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let subs = sub.map(subscripts).unwrap_or_default();
+        let off = match nested_addr(offset, &dims, &subs, fields)? {
+            Some(o) => o,
+            None => return Ok(()), // suppressed OOB write -> no-op (cobc writes adjacent storage; UB)
+        };
+        let pf = fields.get(&basef).ok_or_else(|| RunError::UndefinedName(basef.clone()))?;
+        let mut tmp = Field { storage: cstore, bytes: pf.bytes[off..off + size].to_vec(), occurs: 1, redefines: None };
+        apply(&mut tmp)?;
+        let pf = fields.get_mut(&basef).expect("base present");
+        let n = tmp.bytes.len().min(size);
+        pf.bytes[off..off + n].copy_from_slice(&tmp.bytes[..n]);
+        return Ok(());
+    }
     // group-OCCURS CHILD write-back: `EK(i)` shapes a temp over the child's strided slice of the parent
     // buffer, applies, and copies the result back into the parent buffer.
     if let Some((parent, coff, csz)) = group_child_lookup(base) {
@@ -8508,6 +8742,63 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"IN=123 OUT=456\nOUT-AMT=123 OUT-NM=QQ\nIN-NM=in\n");
+    }
+
+    #[test]
+    fn two_dimensional_table_row_major() {
+        // Oracle (cobc 3.2.0): outer group-OCCURS ROW + inner elementary-OCCURS CEL -> CEL(i,j) row-major;
+        // the whole 01 image is the interleaved buffer.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 T1.\n\
+                       05 ROW OCCURS 2.\n\
+                          10 CEL PIC 99 OCCURS 3.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE 11 TO CEL(1,1). MOVE 12 TO CEL(1,2). MOVE 13 TO CEL(1,3).\n\
+                        MOVE 21 TO CEL(2,1). MOVE 22 TO CEL(2,2). MOVE 23 TO CEL(2,3).\n\
+                        DISPLAY \"CEL22=\" CEL(2,2) \" CEL13=\" CEL(1,3).\n\
+                        DISPLAY \"T1=[\" T1 \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"CEL22=22 CEL13=13\nT1=[111213212223]\n");
+    }
+
+    #[test]
+    fn two_dimensional_matrix_fill_and_sum() {
+        // Oracle (cobc 3.2.0): a row-table with a scalar TAG + an inner OCCURS N(i,j); filled by nested
+        // PERFORM VARYING + COMPUTE into the 2-D receiver, summed via ADD over both subscripts.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 GRID.\n\
+                       05 R OCCURS 3.\n\
+                          10 TAG PIC X.\n\
+                          10 N PIC 99 OCCURS 2.\n\
+                    01 I PIC 9.\n\
+                    01 J PIC 9.\n\
+                    01 S PIC 999 VALUE 0.\n\
+                    PROCEDURE DIVISION.\n\
+                        PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3\n\
+                           MOVE \"R\" TO TAG(I)\n\
+                           PERFORM VARYING J FROM 1 BY 1 UNTIL J > 2\n\
+                              COMPUTE N(I, J) = I * 10 + J\n\
+                           END-PERFORM\n\
+                        END-PERFORM.\n\
+                        PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3\n\
+                           PERFORM VARYING J FROM 1 BY 1 UNTIL J > 2\n\
+                              ADD N(I, J) TO S\n\
+                           END-PERFORM\n\
+                        END-PERFORM.\n\
+                        DISPLAY \"GRID=[\" GRID \"]\".\n\
+                        DISPLAY \"N32=\" N(3,2) \" TAG2=\" TAG(2) \" SUM=\" S.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"GRID=[R1112R2122R3132]\nN32=32 TAG2=R SUM=129\n");
     }
 }
 

@@ -88,6 +88,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p130_corresponding.cob", "MOVE CORRESPONDING G1 TO G2"),
     ("qualified names", "`name OF group [OF group...]` / `IN` resolution + duplicate child-name disambiguation across record layouts", "sealed",
         "lab/corpus/frontend/p131_qualified_names.cob", "AMT OF REC-IN"),
+    ("OCCURS / tables", "two-dimensional tables: outer group-OCCURS + inner elementary-OCCURS child, addressed `C(i,j)` row-major (read/write/COMPUTE-receiver)", "sealed",
+        "lab/corpus/frontend/p132_table_2d.cob", "CEL PIC 99 OCCURS 3"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
