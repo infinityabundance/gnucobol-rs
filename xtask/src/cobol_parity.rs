@@ -100,6 +100,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p138_redefines_group_occurs.cob", "R REDEFINES G PIC X(6)"),
     ("JSON/XML GENERATE", "`NAME data-name IS \"key\"` key-rename (incl. the outer object) + `SUPPRESS data-name...` field omission", "sealed",
         "lab/corpus/frontend/p139_json_name_suppress.cob", "NAME ANUM IS \"id\""),
+    ("INITIALIZE", "`{category} TO VALUE` (cobc ignores the category -> all valued leaves) and `ALL TO VALUE` over an OCCURS table (each element to its VALUE)", "sealed",
+        "lab/corpus/frontend/p141_initialize_to_value_forms.cob", "NUMERIC TO VALUE"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

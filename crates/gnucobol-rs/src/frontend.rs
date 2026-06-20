@@ -1989,8 +1989,12 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
         }
         // Capture the VALUE image (scalars only) for INITIALIZE ... ALL TO VALUE.
-        if it.value.is_some() && it.occurs <= 1 {
-            FIELD_VALUES.with(|m| m.borrow_mut().insert(it.name.clone(), f.bytes.clone()));
+        // Capture the per-ELEMENT VALUE image (the full bytes for a scalar; one element for an OCCURS table)
+        // for INITIALIZE ... TO VALUE -- which restores each occurrence to its VALUE.
+        if it.value.is_some() {
+            let occ = f.occurs.max(1);
+            let esz = f.bytes.len() / occ;
+            FIELD_VALUES.with(|m| m.borrow_mut().insert(it.name.clone(), f.bytes[..esz.min(f.bytes.len())].to_vec()));
         }
         fields.insert(it.name.clone(), f);
     }
@@ -5151,12 +5155,16 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
     if stmt.len() > tp + 2 {
         return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: trailing THEN/REPLACING clause not in subset".into()));
     }
-    // The modifier immediately before TO must be ALL (`category TO VALUE` is not in the subset).
-    if !matches!(stmt.get(tp.wrapping_sub(1)), Some(Tok::Word(w)) if w == "ALL") {
-        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE subset is `items [WITH FILLER] ALL TO VALUE`".into()));
+    // The modifier before TO is `ALL` or a category (NUMERIC/ALPHANUMERIC/...). cobc 3.2 IGNORES the
+    // category for TO VALUE -- every leaf with a VALUE is restored regardless -- so all forms are equivalent.
+    let modifier = matches!(stmt.get(tp.wrapping_sub(1)),
+        Some(Tok::Word(w)) if w == "ALL" || init_cat_from_kw(w).is_some());
+    if !modifier {
+        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE subset is `items [WITH FILLER] {ALL|category} TO VALUE`".into()));
     }
-    // Item names run up to the modifier region (`WITH FILLER` / `ALL`).
-    let mod_start = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "WITH" || w == "ALL")).unwrap_or(tp);
+    // Item names run up to the modifier region (`WITH FILLER` / `ALL` / a category keyword).
+    let mod_start = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "WITH" || w == "ALL" || init_cat_from_kw(w).is_some()))
+        .unwrap_or(tp);
     let names: Vec<String> = stmt[..mod_start].iter().filter_map(|t| match t {
         Tok::Word(w) => Some(w.clone()),
         _ => None,
@@ -5168,12 +5176,15 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
         let mut leaves = Vec::new();
         collect_init_leaves(name, fields, &mut leaves)?;
         for leaf in leaves {
-            if split_subscript(&leaf).1.is_some() {
-                return Err(RunError::Unsupported("INITIALIZE ... TO VALUE over an OCCURS table not in subset".into()));
-            }
-            // A leaf with a captured VALUE image is restored to it; one without is left unchanged.
-            if let Some(img) = FIELD_VALUES.with(|m| m.borrow().get(&leaf).cloned()) {
-                fields.get_mut(&leaf).ok_or_else(|| RunError::UndefinedName(leaf.clone()))?.bytes = img;
+            // For a table cell `E(i)` the VALUE image is captured under the base name `E` (one element); a
+            // scalar leaf is captured under its own name. A leaf with no VALUE is left unchanged.
+            let base = split_subscript(&leaf).0;
+            if let Some(img) = FIELD_VALUES.with(|m| m.borrow().get(base).cloned()) {
+                write_field(fields, &leaf, |f| {
+                    let n = img.len().min(f.bytes.len());
+                    f.bytes[..n].copy_from_slice(&img[..n]);
+                    Ok(())
+                })?;
             }
         }
     }
@@ -9070,6 +9081,33 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"N=[{\"REC\":{\"id\":7,\"name\":\"abc\",\"SECRET\":42}}]\nC=[{\"rec\":{\"id\":7}}]\n");
+    }
+
+    #[test]
+    fn initialize_to_value_category_and_table() {
+        // Oracle (cobc 3.2.0): `category TO VALUE` ignores the category (every valued leaf restored, like
+        // ALL TO VALUE); `ALL TO VALUE` over an OCCURS table restores each element to its VALUE.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 G.\n\
+                       05 A PIC X(3) VALUE \"abc\".\n\
+                       05 B PIC 99 VALUE 42.\n\
+                       05 C PIC X(2) VALUE \"yz\".\n\
+                    01 TB.\n\
+                       05 E PIC 99 VALUE 7 OCCURS 3.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE \"ZZZZZZ\" TO G.\n\
+                        INITIALIZE G NUMERIC TO VALUE.\n\
+                        DISPLAY \"NUM=[\" G \"]\".\n\
+                        MOVE 1 TO E(1). MOVE 2 TO E(2). MOVE 3 TO E(3).\n\
+                        INITIALIZE TB ALL TO VALUE.\n\
+                        DISPLAY \"TB=\" E(1) E(2) E(3).\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"NUM=[abc42yz]\nTB=070707\n");
     }
 }
 
