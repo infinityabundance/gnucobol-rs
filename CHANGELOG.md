@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.16]
+- **Report Writer Layers 2 + 3 (`GNURUST.FRONTEND.1`).** Page-break overflow (a body line past FOOTING/PAGE LIMIT flushes the page, starts a new one, re-emits PAGE HEADING, resumes at FIRST DETAIL; the final page is padded to PAGE LIMIT) and data CONTROL breaks (a CONTROLS field change emits the changed CONTROL FOOTINGs minor->major with per-control SUM subtotals that reset on break, then CONTROL HEADINGs major->minor; FINAL footing at TERMINATE), both proven BYTE-IDENTICAL to cobc (front-end sweep now 144 programs, FAIL=0). Also adds GENERATE to the statement-verb set so an inline `MOVE x TO y GENERATE g` parses.
+
 ## [0.8.15]
 - **Report Writer Layer 1 (`GNURUST.FRONTEND.1`).** A real page-buffer Report Writer (the prior model was flat DETAIL-only print): RD `PAGE LIMIT`/`HEADING`/`FIRST DETAIL`, report groups by `TYPE` (REPORT/PAGE HEADING/FOOTING, DETAIL, CONTROL FOOTING), `LINE` absolute/`PLUS` positioning with the FIRST DETAIL bump, `COLUMN` `SOURCE`/`VALUE`/`SUM`, and `INITIATE`/`GENERATE`/`TERMINATE` -- the page is built then flushed (padded to PAGE LIMIT, or to the high-water line when no PAGE clause), proven BYTE-IDENTICAL to cobc (front-end sweep now 142 programs, FAIL=0) via the FINAL control-footing SUM. Page-break overflow and data control breaks are the next layers.
 
