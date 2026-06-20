@@ -108,6 +108,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p143_report_page_break.cob", "PAGE LIMIT 6 LINE HEADING 1 FIRST DETAIL 3 FOOTING 5"),
     ("REPORT WRITER", "Layer 3: data CONTROL breaks -> CONTROL FOOTING (per-control SUM subtotal, minor->major, reset on break) + CONTROL HEADING (major->minor); FINAL at TERMINATE", "sealed",
         "lab/corpus/frontend/p144_report_control_break.cob", "TYPE CONTROL FOOTING GRP"),
+    ("UNSTRING", "`DELIMITED BY [ALL] d1 [OR [ALL] d2]...` multi-delimiter (earliest match splits, DELIMITER IN captures it, ALL collapses repeats)", "sealed",
+        "lab/corpus/frontend/p145_unstring_multi_delim.cob", "DELIMITED BY \",\" OR \";\""),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

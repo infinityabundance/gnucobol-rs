@@ -1827,7 +1827,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                             k += 1;
                         }
                         Some(Tok::Word(u)) if unsupported_usage_kw(u) => {
-                            return Err(RunError::Unsupported(format!("USAGE {u} is not in the front-end subset")));
+                            return Err(RunError::Unsupported(format!("USAGE {u}: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap")));
                         }
                         Some(Tok::Word(u)) => {
                             return Err(RunError::Unsupported(format!("unrecognized USAGE {u}")));
@@ -1855,7 +1855,7 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     k += 1;
                 }
                 Some(Tok::Word(w)) if unsupported_usage_kw(w) => {
-                    return Err(RunError::Unsupported(format!("USAGE {w} is not in the front-end subset")));
+                    return Err(RunError::Unsupported(format!("USAGE {w}: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap")));
                 }
                 // `JUSTIFIED [RIGHT]` / `JUST [RIGHT]` -- alphanumeric right-justification.
                 Some(Tok::Word(w)) if w == "JUSTIFIED" || w == "JUST" => {
@@ -5837,24 +5837,30 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
 /// receiver's width when absent) into the alphanumeric receiving fields (`GNURUST.STRING.UNSTRING.1`).
 /// `DELIMITER IN` / `COUNT IN` / `TALLYING IN` / `WITH POINTER` are supported; returns `true` when the
 /// OVERFLOW condition holds (source characters remain after every receiver is filled), for the caller's
-/// `ON OVERFLOW` / `NOT ON OVERFLOW` dispatch. Multi-delimiter (`OR`) and `DELIMITED BY ALL` fail closed.
+/// `ON OVERFLOW` / `NOT ON OVERFLOW` dispatch. `DELIMITED BY [ALL] d1 [OR [ALL] d2]...` multi-delimiter is
+/// supported (earliest match splits; `ALL` collapses repeats; `DELIMITER IN` captures the matched one).
 fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
-    use crate::string_ops::unstring;
-    // Still non-claims: multi-delimiter (`OR`), `DELIMITED BY ALL`.
-    for bad in ["OR", "ALL"] {
-        if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == bad)) {
-            return Err(RunError::Unsupported(format!("UNSTRING ... {bad} not in subset")));
-        }
-    }
+    use crate::string_ops::unstring_multi;
     let into = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
         .ok_or_else(|| RunError::Unsupported("UNSTRING without INTO".into()))?;
     let source = inspect_operand(stmt.first(), fields)?;
-    // optional DELIMITED BY d between the source and INTO
-    let mut delim: Option<Vec<u8>> = None;
+    // optional `DELIMITED BY [ALL] d1 [OR [ALL] d2]...` between the source and INTO -> (delimiter, all) list.
+    let mut delims: Vec<(Vec<u8>, bool)> = Vec::new();
     if let Some(dp) = stmt[..into].iter().position(|t| matches!(t, Tok::Word(w) if w == "DELIMITED")) {
         let mut j = dp + 1;
         if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
-        delim = Some(inspect_operand(stmt.get(j), fields)?);
+        loop {
+            let all = matches!(stmt.get(j), Some(Tok::Word(w)) if w == "ALL");
+            if all { j += 1; }
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "SIZE") {
+                j += 1; // DELIMITED BY SIZE: no delimiter for this alternative
+            } else {
+                delims.push((inspect_operand(stmt.get(j), fields)?, all));
+                j += 1;
+            }
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "OR") { j += 1; continue; }
+            break;
+        }
     }
     // `[WITH] POINTER p` (a 1-based scan cursor, read in and written back) sits after the receivers.
     let ptr_pos = stmt[into + 1..].iter().position(|t| matches!(t, Tok::Word(w) if w == "POINTER")).map(|p| into + 1 + p);
@@ -5928,7 +5934,7 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
         Some(f) => resolve_int(f, fields).map(|v| v.max(1) as usize).unwrap_or(1),
         None => 1,
     };
-    let res = unstring(&source, delim.as_deref(), &sizes, ptr_start);
+    let res = unstring_multi(&source, &delims, &sizes, ptr_start);
     if let Some(f) = &ptr_field {
         let mv = vec![Tok::Word(res.pointer.to_string()), Tok::Word("TO".to_string()), Tok::Word(f.clone())];
         exec_move(&mv, fields, false)?;
@@ -6037,7 +6043,7 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
         _ => return Err(RunError::Unsupported("ACCEPT: missing receiver".into())),
     };
     if !matches!(stmt.get(1), Some(Tok::Word(w)) if w == "FROM") {
-        return Err(RunError::Unsupported("ACCEPT subset is `ACCEPT id FROM DATE|DAY|TIME|DAY-OF-WEEK` (terminal input not modelled)".into()));
+        return Err(RunError::Unsupported("ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT".into()));
     }
     let src = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("ACCEPT FROM: missing source".into())) };
     // `ACCEPT id FROM ENVIRONMENT "name"` (or a name field): read the environment variable (deterministic
@@ -6073,7 +6079,7 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
             let cs = if cd.nanosecond >= 0 { cd.nanosecond / 10_000_000 } else { 0 };
             format!("{:02}{:02}{:02}{:02}", hh, mi, ss, cs)
         }
-        other => return Err(RunError::Unsupported(format!("ACCEPT FROM {other} (subset: DATE/DAY/TIME/DAY-OF-WEEK)"))),
+        other => return Err(RunError::Unsupported(format!("ACCEPT FROM {other}: a runtime non-claim (terminal/command-line input has no deterministic oracle); wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT"))),
     };
     let s = digits.into_bytes();
     let n = s.len();
@@ -7512,7 +7518,7 @@ fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>,
         }
         other => {
             return Err(RunError::Unsupported(format!(
-                "FUNCTION {other}: not in the wired front-end subset"
+                "FUNCTION {other}: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim"
             )))
         }
     };
@@ -9060,6 +9066,30 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"OVF1\nR1=[A  ] R2=[B  ]\nOK2\nR1=[X  ] R2=[Y  ]\n");
+    }
+
+    #[test]
+    fn unstring_multi_delimiter_or_and_all() {
+        // Oracle (cobc 3.2.0): DELIMITED BY "," OR ";" splits on the earliest of either (DELIMITER IN
+        // captures which); DELIMITED BY ALL "," collapses consecutive commas into one delimiter.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 SRC PIC X(12) VALUE \"A,B;C,D\".\n\
+                    01 R1 PIC X(3). 01 R2 PIC X(3). 01 R3 PIC X(3). 01 R4 PIC X(3).\n\
+                    01 D1 PIC X. 01 D2 PIC X.\n\
+                    01 S2 PIC X(8) VALUE \"A,,,B\".\n\
+                    01 Q1 PIC X(3). 01 Q2 PIC X(3).\n\
+                    PROCEDURE DIVISION.\n\
+                        UNSTRING SRC DELIMITED BY \",\" OR \";\" INTO R1 DELIMITER IN D1 R2 DELIMITER IN D2 R3 R4.\n\
+                        DISPLAY \"A=[\" R1 \"][\" D1 \"][\" R2 \"][\" D2 \"][\" R3 \"][\" R4 \"]\".\n\
+                        UNSTRING S2 DELIMITED BY ALL \",\" INTO Q1 Q2.\n\
+                        DISPLAY \"B=[\" Q1 \"][\" Q2 \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"A=[A  ][,][B  ][;][C  ][D  ]\nB=[A  ][B  ]\n");
     }
 
     #[test]

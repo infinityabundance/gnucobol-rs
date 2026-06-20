@@ -86,6 +86,15 @@ pub struct UnstringResult {
 /// `UNSTRING <source> [DELIMITED BY d] INTO <fields> [...] [WITH POINTER p]`. `delimiter` is `None` for the
 /// no-delimiter form (each field takes its own size in chars); `field_sizes` are the receiving field widths.
 pub fn unstring(source: &[u8], delimiter: Option<&[u8]>, field_sizes: &[usize], pointer: usize) -> UnstringResult {
+    let delims: Vec<(Vec<u8>, bool)> = delimiter.map(|d| vec![(d.to_vec(), false)]).unwrap_or_default();
+    unstring_multi(source, &delims, field_sizes, pointer)
+}
+
+/// `UNSTRING ... DELIMITED BY [ALL] d1 [OR [ALL] d2]... INTO ...` -- the multi-delimiter form. `delims` is
+/// each `(delimiter bytes, all)` (empty = the no-delimiter form, each field takes its own width). At each
+/// receiver the EARLIEST-matching delimiter splits the field; `DELIMITER IN` captures that delimiter; an
+/// `ALL` delimiter additionally collapses its consecutive repetitions into one.
+pub fn unstring_multi(source: &[u8], delims: &[(Vec<u8>, bool)], field_sizes: &[usize], pointer: usize) -> UnstringResult {
     let mut pos = pointer.saturating_sub(1);
     let mut fields = Vec::new();
     let mut tally = 0usize;
@@ -95,30 +104,33 @@ pub fn unstring(source: &[u8], delimiter: Option<&[u8]>, field_sizes: &[usize], 
             fields.push(UnstringField { data: vec![b' '; fsize], count: 0, delimiter: Vec::new() });
             continue;
         }
-        let (field_bytes, delim): (&[u8], Vec<u8>) = match delimiter {
-            None => {
-                let end = (pos + fsize).min(source.len());
-                let fb = &source[pos..end];
-                pos = end;
-                (fb, Vec::new())
+        let (field_end, delim, advance): (usize, Vec<u8>, usize) = if delims.is_empty() {
+            let end = (pos + fsize).min(source.len());
+            (end, Vec::new(), end)
+        } else {
+            // earliest match of ANY delimiter at/after pos.
+            let mut best: Option<(usize, usize)> = None; // (abs match pos, delim index)
+            for (di, (d, _)) in delims.iter().enumerate() {
+                if d.is_empty() { continue; }
+                if let Some(rel) = find(&source[pos..], d) {
+                    let ap = pos + rel;
+                    if best.map(|(bp, _)| ap < bp).unwrap_or(true) { best = Some((ap, di)); }
+                }
             }
-            Some(d) => match find(&source[pos..], d) {
-                Some(rel) => {
-                    let dp = pos + rel;
-                    let fb = &source[pos..dp];
-                    pos = dp + d.len();
-                    (fb, d.to_vec())
+            match best {
+                Some((dp, di)) => {
+                    let (d, all) = &delims[di];
+                    let mut np = dp + d.len();
+                    if *all { while source[np..].starts_with(d.as_slice()) { np += d.len(); } }
+                    (dp, d.clone(), np)
                 }
-                None => {
-                    let fb = &source[pos..];
-                    pos = source.len();
-                    (fb, Vec::new())
-                }
-            },
+                None => (source.len(), Vec::new(), source.len()),
+            }
         };
-        let count = field_bytes.len();
-        let mut data = field_bytes.to_vec();
+        let count = field_end - pos;
+        let mut data = source[pos..field_end].to_vec();
         data.resize(fsize, b' '); // pad with spaces / truncate to the field width
+        pos = advance;
         fields.push(UnstringField { data, count, delimiter: delim });
         tally += 1;
     }

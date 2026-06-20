@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **38 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 206 of them, de-duplicated from the 224 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 206: **16 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **180 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **39 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 205 of them, de-duplicated from the 223 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 205: **11 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **180 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,21 +185,18 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 54 front-end sub-forms have been identified -- **38 sealed** (byte-identical to cobc, section A) and **16 still open** (fail-closed guards, section B). **Depth completion = 38/54 = 70.4%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 50 front-end sub-forms have been identified -- **39 sealed** (byte-identical to cobc, section A) and **11 still open** (fail-closed guards, section B). **Depth completion = 39/50 = 78.0%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
-| `INITIALIZE` | 3 | 19% |
-| `REPORT / ML GENERATE` | 3 | 19% |
-| `UNSTRING` | 3 | 19% |
-| `ACCEPT` | 2 | 12% |
-| `OCCURS / tables` | 2 | 12% |
-| `FUNCTION` | 1 | 6% |
-| `SET` | 1 | 6% |
-| `USAGE` | 1 | 6% |
-| **TOTAL** | **16 open** (+ 38 sealed = 54 identified) | **70.4% complete** |
+| `INITIALIZE` | 3 | 27% |
+| `REPORT / ML GENERATE` | 3 | 27% |
+| `OCCURS / tables` | 2 | 18% |
+| `UNSTRING` | 2 | 18% |
+| `SET` | 1 | 9% |
+| **TOTAL** | **11 open** (+ 39 sealed = 50 identified) | **78.0% complete** |
 
-### A. Sealed sub-forms (38) -- proven byte-identical to cobc
+### A. Sealed sub-forms (39) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -243,16 +240,14 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `REPORT WRITER` | Layer 1: RD PAGE LIMIT/HEADING/FIRST DETAIL + TYPE REPORT HEADING / DETAIL (LINE abs/PLUS) / CONTROL FOOTING FINAL with SUM; INITIATE/GENERATE/TERMINATE page-buffer flush | `lab/corpus/frontend/p142_report_writer.cob` |
 | `REPORT WRITER` | Layer 2: PAGE LIMIT/FOOTING overflow -> flush page at high-water, new page, re-emit PAGE HEADING (final page padded) | `lab/corpus/frontend/p143_report_page_break.cob` |
 | `REPORT WRITER` | Layer 3: data CONTROL breaks -> CONTROL FOOTING (per-control SUM subtotal, minor->major, reset on break) + CONTROL HEADING (major->minor); FINAL at TERMINATE | `lab/corpus/frontend/p144_report_control_break.cob` |
+| `UNSTRING` | `DELIMITED BY [ALL] d1 [OR [ALL] d2]...` multi-delimiter (earliest match splits, DELIMITER IN captures it, ALL collapses repeats) | `lab/corpus/frontend/p145_unstring_multi_delim.cob` |
 
-### B. Feature gaps -- the genuine remaining work (16)
+### B. Feature gaps -- the genuine remaining work (11)
 
 Deliberate limits of an otherwise-wired verb. These are the real "what's missing" list; sealing one removes its row on the next regenerate (the gate enforces it).
 
 | verb / clause | fail-closed form (`<x>` = a runtime value) |
 |---|---|
-| `ACCEPT` | ACCEPT FROM <x> (subset: DATE/DAY/TIME/DAY-OF-WEEK) |
-|  | ACCEPT subset is `ACCEPT id FROM DATE\|DAY\|TIME\|DAY-OF-WEEK` (terminal input not modelled) |
-| `FUNCTION` | FUNCTION <x>: not in the wired front-end subset |
 | `INITIALIZE` | INITIALIZE ... <x> (subset: items [REPLACING cat BY val ...]) |
 |  | INITIALIZE ... TO VALUE subset is `items [WITH FILLER] <x> TO VALUE` |
 |  | INITIALIZE ... TO VALUE: trailing THEN/REPLACING clause not in subset |
@@ -262,20 +257,22 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 |  | JSON/XML GENERATE ON EXCEPTION not in subset |
 |  | JSON/XML GENERATE SUPPRESS WHEN not in subset |
 | `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
-| `UNSTRING` | UNSTRING ... <x> not in subset |
-|  | UNSTRING into `<x>` (subset: alphanumeric, DISPLAY-numeric, or numeric-edited receivers) |
+| `UNSTRING` | UNSTRING into `<x>` (subset: alphanumeric, DISPLAY-numeric, or numeric-edited receivers) |
 |  | UNSTRING into binary/packed receiver `<x>` not in subset (physical-size vs digit-width) |
-| `USAGE` | USAGE <x> is not in the front-end subset |
 
-### C. Boundary non-claims -- NOT TODOs (10)
+### C. Boundary non-claims -- NOT TODOs (14)
 
 The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION, ACUCOBOL GUI verbs, ENTRY in a nested program), or they depend on a non-pinned environment (the live clock / compile stamp) -- so there is no byte-truth to match. Documented, not latent work.
 
 | verb / clause | fail-closed form (`<x>` = a runtime value) |
 |---|---|
+| `ACCEPT` | ACCEPT FROM <x>: a runtime non-claim (terminal/command-line input has no deterministic oracle); wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT |
+|  | ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT |
 | `ACUCOBOL GUI (oracle boundary)` | <x>: an ACUCOBOL screen/GUI verb absent from the GnuCOBOL 3.2 grammar -- the oracle itself rejects it (boundary non-claim) |
 | `COMMUNICATION (oracle boundary)` | <x>: GnuCOBOL 3.2 does not implement the COMMUNICATION SECTION -- the oracle itself cannot run it (boundary non-claim) |
 | `ENTRY (oracle boundary)` | ENTRY: an alternate entry point that is invalid in a nested program -- it requires separately-compiled units, while the front-end runs one source with contained programs |
+| `FUNCTION` | FUNCTION <x>: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim |
+| `USAGE` | USAGE <x>: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap |
 | `compile stamp (pinned-env)` | FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim) |
 |  | SOURCE_DATE_EPOCH exceeds the year-9999 ceiling |
 |  | SOURCE_DATE_EPOCH is not a number |
