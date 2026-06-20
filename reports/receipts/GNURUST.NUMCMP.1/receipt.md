@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.NUMCMP.1` |
 | court | numeric comparison cob_numeric_cmp (on the Mpz/cob_decimal 1:1 layer) |
-| crate_version | `0.8.11` |
+| crate_version | `0.8.12` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | two numeric field byte images -> -1/0/1 ordering verdict |
 | replay command | `bash lab/oracle/numcmp_sweep.sh` |

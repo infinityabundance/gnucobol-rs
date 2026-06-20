@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.12]
+- **OCCURS DEPENDING ON on a group + REDEFINES over a group-OCCURS (`GNURUST.FRONTEND.1`).** Finishing the OCCURS/tables cluster, both proven BYTE-IDENTICAL to cobc (front-end sweep now 138 programs, FAIL=0): a variable-length GROUP table (`ENT OCCURS 1 TO 4 DEPENDING ON CNT`) whose live image and `FUNCTION LENGTH` are counter*elem (built at MAX, subscripts still reach the physical storage); and a `REDEFINES` alias over a group-OCCURS interleaved buffer that now reads AND writes through it. `INITIALIZE <table-element>` (bare, unsubscripted) is reclassified as validation -- cobc compile-rejects it ("requires one subscript").
+
 ## [0.8.11]
 - **Group-of-group + N-dimensional tables (`GNURUST.FRONTEND.1`).** Completing the multi-dimension table engine: a group-OCCURS over a sub-group (`A(i)` reaching a deeper leaf), and N-dimensional `C(i,j,k)` from stacked OCCURS levels, all proven BYTE-IDENTICAL to cobc (front-end sweep now 136 programs, FAIL=0). `INITIALIZE` over a nested / multi-dimension table now expands every cell across its dims. The build gate admits any group-OCCURS whose subtree has no REDEFINES / OCCURS-DEPENDING / SYNCHRONIZED descendant (those remain narrowed gaps); the flat single-subscript group-OCCURS path is unchanged.
 
