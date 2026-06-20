@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.14]
+- **INITIALIZE `{category} TO VALUE` + `ALL TO VALUE` over a table (`GNURUST.FRONTEND.1`).** A category qualifier on `TO VALUE` (`NUMERIC TO VALUE`, etc.) is honored as cobc does -- the category is IGNORED, every valued leaf is restored -- and `ALL TO VALUE` over an OCCURS table restores each element to its VALUE, both proven BYTE-IDENTICAL to cobc (front-end sweep now 141 programs, FAIL=0). `THEN`/`REPLACING` after TO VALUE stays out of subset.
+
 ## [0.8.13]
 - **JSON/XML GENERATE NAME + SUPPRESS (`GNURUST.FRONTEND.1`).** `JSON GENERATE` / `XML GENERATE` now honor `NAME data-name IS "key"` (rename the emitted JSON key / XML tag, including the outer object via the source name) and `SUPPRESS data-name...` (omit those items), proven BYTE-IDENTICAL to cobc (front-end sweep now 140 programs, FAIL=0). `ON EXCEPTION` control flow and `SUPPRESS WHEN <cond>` stay out of subset.
 

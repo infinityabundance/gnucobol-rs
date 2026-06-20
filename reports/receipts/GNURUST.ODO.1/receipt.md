@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.ODO.1` |
 | court | OCCURS DEPENDING ON used length + bounded access |
-| crate_version | `0.8.13` |
+| crate_version | `0.8.14` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | controlling value + table -> used length / active element bytes |
 | replay command | `bash lab/oracle/odo_sweep.sh` |

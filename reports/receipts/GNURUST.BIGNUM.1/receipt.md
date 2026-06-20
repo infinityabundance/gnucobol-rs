@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.BIGNUM.1` |
 | court | MULTIPLY beyond i128 (exact 256-bit product) |
-| crate_version | `0.8.13` |
+| crate_version | `0.8.14` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | overflowing i128 product -> receiver bytes (low-digit truncation + ROUNDED) |
 | replay command | `bash lab/oracle/bignum_sweep.sh` |

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.IF.EVALUATE.SLICE.1` |
 | court | IF/EVALUATE execution slice (alphanumeric) |
-| crate_version | `0.8.13` |
+| crate_version | `0.8.14` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | execute IF/EVALUATE fragment over alphanumeric fields -> resulting storage bytes |
 | replay command | `bash lab/oracle/if_eval_sweep.sh` |
