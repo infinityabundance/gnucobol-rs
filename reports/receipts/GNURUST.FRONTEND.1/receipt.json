@@ -5,7 +5,7 @@
     "replay": "bash lab/oracle/cobol_frontend_sweep.sh"
   },
   "court": "clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
-  "crate_version": "0.8.14",
+  "crate_version": "0.8.15",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
@@ -23,7 +23,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=141 FAIL=0 (3.1.2 differential-matched=131)"
+    "sweep": "PASS=142 FAIL=0 (3.1.2 differential-matched=132)"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,

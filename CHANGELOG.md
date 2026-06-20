@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.15]
+- **Report Writer Layer 1 (`GNURUST.FRONTEND.1`).** A real page-buffer Report Writer (the prior model was flat DETAIL-only print): RD `PAGE LIMIT`/`HEADING`/`FIRST DETAIL`, report groups by `TYPE` (REPORT/PAGE HEADING/FOOTING, DETAIL, CONTROL FOOTING), `LINE` absolute/`PLUS` positioning with the FIRST DETAIL bump, `COLUMN` `SOURCE`/`VALUE`/`SUM`, and `INITIATE`/`GENERATE`/`TERMINATE` -- the page is built then flushed (padded to PAGE LIMIT, or to the high-water line when no PAGE clause), proven BYTE-IDENTICAL to cobc (front-end sweep now 142 programs, FAIL=0) via the FINAL control-footing SUM. Page-break overflow and data control breaks are the next layers.
+
 ## [0.8.14]
 - **INITIALIZE `{category} TO VALUE` + `ALL TO VALUE` over a table (`GNURUST.FRONTEND.1`).** A category qualifier on `TO VALUE` (`NUMERIC TO VALUE`, etc.) is honored as cobc does -- the category is IGNORED, every valued leaf is restored -- and `ALL TO VALUE` over an OCCURS table restores each element to its VALUE, both proven BYTE-IDENTICAL to cobc (front-end sweep now 141 programs, FAIL=0). `THEN`/`REPLACING` after TO VALUE stays out of subset.
 
