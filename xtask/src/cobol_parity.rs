@@ -84,6 +84,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p126_perform_inline_once.cob", "DISPLAY \"IN \" N"),
     ("EXHIBIT", "`CHANGED` keyword -- cobc 3.2 leaves the suppression unimplemented (runs as plain EXHIBIT); CHANGED-without-NAMED is value-only", "sealed",
         "lab/corpus/frontend/p127_exhibit_changed.cob", "EXHIBIT CHANGED NAMED A B"),
+    ("MOVE", "alphanumeric literal/source into a COMP/COMP-3/COMP-5 receiver (move.c indirect display path; previously yielded 0)", "sealed",
+        "lab/corpus/frontend/p128_move_alnum_to_binary.cob", "MOVE \"12\"   TO C1"),
+    ("UNSTRING", "into numeric-edited / scaled-DISPLAY receivers (the delimited substring is MOVEd; binary/packed still fail closed)", "sealed",
+        "lab/corpus/frontend/p129_unstring_edited.cob", "INTO E1 N1 A1"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

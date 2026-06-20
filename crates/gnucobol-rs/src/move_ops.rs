@@ -645,7 +645,6 @@ fn fill(buf: &mut [u8], src: &[u8]) {
 /// `indirect_move (func, src, dst, size, scale)` (move.c:1332): route `src` through a `size`/`scale`
 /// signed-DISPLAY intermediate (produced by `func`) before `cob_move`-ing into `dst` — used when a
 /// non-display source must be edited/stored via the display path.
-#[allow(dead_code)] // wired by the edited-MOVE batch (display_to_edited / edited_to_display routing)
 fn indirect_move<F>(func: F, src: &[u8], sa: &FieldAttr, dst: &mut [u8], da: &FieldAttr, size: usize, scale: i32) -> Result<(), DecimalError>
 where
     F: FnOnce(&[u8], &FieldAttr, &mut [u8], &FieldAttr),
@@ -906,7 +905,20 @@ pub fn cob_move(
         cob_move_alphanum_to_alphanum(src, dst, dst_attr);
         return Ok(());
     }
-    use crate::attr::COB_TYPE_NUMERIC_BINARY;
+    use crate::attr::{COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_PACKED};
+    // Alphanumeric source -> a non-DISPLAY numeric receiver (binary / packed): move.c routes this through a
+    // DISPLAY intermediate (indirect_move with cob_move_alphanum_to_display), NOT the decimal-setget path --
+    // an alphanumeric digit string can't be decoded by cob_decimal_setget_fld (it yields 0). The temp is a
+    // signed DISPLAY field of the receiver's digits/scale, then DISPLAY->binary/packed completes the move.
+    if src_attr.field_type == COB_TYPE_ALPHANUMERIC
+        && matches!(dst_attr.field_type, COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED)
+    {
+        return indirect_move(
+            |s, _sa, d, da| cob_move_alphanum_to_display(s, d, da),
+            src, src_attr, dst, dst_attr,
+            dst_attr.digits as usize, dst_attr.scale as i32,
+        );
+    }
     let src_bin = src_attr.field_type == COB_TYPE_NUMERIC_BINARY;
     let dst_bin = dst_attr.field_type == COB_TYPE_NUMERIC_BINARY;
 
@@ -1043,6 +1055,28 @@ mod tests {
         let mut dot = vec![0u8; 4];
         cob_move_cfg(src, &sattr, &mut dot, &dattr, false).unwrap();
         assert_eq!(&dot, b"3400", "dot mode: comma is a separator, 1234 truncates to 34.00");
+    }
+
+    #[test]
+    fn move_alphanum_to_binary_and_packed_via_indirect_display() {
+        // move.c routes an alphanumeric source into a binary/packed receiver through a DISPLAY intermediate
+        // (indirect_move), NOT cob_decimal_setget_fld (which can't parse alnum digits -> 0). Oracle (cobc
+        // 3.2.0): MOVE "12" -> 99 COMP = 12; MOVE "12" -> 99 COMP-3 = 12.
+        use crate::attr::{COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_PACKED};
+        let sattr = FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 2, scale: 0, flags: 0 };
+        // PIC 99 COMP -> 1 byte binary, value 12.
+        let battr = FieldAttr { field_type: COB_TYPE_NUMERIC_BINARY, digits: 2, scale: 0, flags: 0 };
+        let mut bin = vec![0u8; 1];
+        cob_move(b"12", &sattr, &mut bin, &battr).unwrap();
+        assert_eq!(cob_binary_mget_uint64(&bin, &battr), 12);
+        // PIC 99 COMP-3 -> packed 0x12 0x0F (unsigned nibble), value 12.
+        let pattr = FieldAttr { field_type: COB_TYPE_NUMERIC_PACKED, digits: 2, scale: 0, flags: 0 };
+        let mut pk = vec![0u8; 2];
+        cob_move(b"12", &sattr, &mut pk, &pattr).unwrap();
+        let mut back = vec![0u8; 2];
+        let dattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: 2, scale: 0, flags: 0 };
+        cob_move(&pk, &pattr, &mut back, &dattr).unwrap();
+        assert_eq!(&back, b"12");
     }
 
     #[test]

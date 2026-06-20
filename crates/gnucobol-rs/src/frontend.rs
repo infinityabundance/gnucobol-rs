@@ -5313,11 +5313,20 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
     let mut numeric = Vec::with_capacity(recvs.len());
     for (n, _, _) in &recvs {
         let f = read_field(fields, n)?.ok_or_else(|| RunError::UndefinedName(n.clone()))?;
+        // Alphanumeric receivers take the raw delimited bytes; DISPLAY-numeric (incl. scaled V) and
+        // numeric-edited receivers take the delimited substring by MOVE (the sealed alnum->numeric/edited
+        // conversion). For these the field's byte length IS its character/digit width, so the substring
+        // sizing is faithful. Binary/packed (COMP*) receivers fail closed: their PHYSICAL byte length is
+        // narrower than the digit width, so the delimited-segment truncation here would diverge from cobc.
         let is_num = match &f.storage {
             Storage::Alpha(_) => false,
             Storage::Numeric(a) if a.field_type == COB_TYPE_NUMERIC_DISPLAY => true,
+            Storage::Edited(..) => true,
+            Storage::Numeric(_) => return Err(RunError::Unsupported(format!(
+                "UNSTRING into binary/packed receiver `{n}` not in subset (physical-size vs digit-width)"
+            ))),
             _ => return Err(RunError::Unsupported(format!(
-                "UNSTRING into `{n}` (subset: alphanumeric or DISPLAY-numeric receivers)"
+                "UNSTRING into `{n}` (subset: alphanumeric, DISPLAY-numeric, or numeric-edited receivers)"
             ))),
         };
         sizes.push(f.bytes.len());
@@ -8207,6 +8216,49 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"3 hi\nA = 3 B = hi\nA = 3\nB = hi\n");
+    }
+
+    #[test]
+    fn move_alphanumeric_literal_to_binary_and_packed() {
+        // Oracle (cobc 3.2.0): MOVE of an alphanumeric literal into COMP/COMP-3/COMP-5 receivers goes
+        // through the move.c indirect display path -> the digit value is stored (previously yielded 0).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 C1 PIC 99 COMP.\n\
+                    01 P2 PIC 9(3)V9 COMP-3.\n\
+                    01 B5 PIC 9(4) COMP-5.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE \"12\" TO C1.\n\
+                        MOVE \"1234\" TO P2.\n\
+                        MOVE \"99\" TO B5.\n\
+                        DISPLAY \"C1=\" C1 \" P2=\" P2 \" B5=\" B5.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"C1=12 P2=234.0 B5=00099\n");
+    }
+
+    #[test]
+    fn unstring_into_edited_and_scaled_receivers() {
+        // Oracle (cobc 3.2.0): UNSTRING delimited substrings into a numeric-edited (ZZ9) and a scaled
+        // DISPLAY (9V9) receiver -> "12"->" 12", "34"->4.0, "56" raw into XX.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 SRC PIC X(8) VALUE \"12,34,56\".\n\
+                    01 E1 PIC ZZ9.\n\
+                    01 N1 PIC 9V9.\n\
+                    01 A1 PIC XX.\n\
+                    PROCEDURE DIVISION.\n\
+                        UNSTRING SRC DELIMITED BY \",\" INTO E1 N1 A1.\n\
+                        DISPLAY \"E1=[\" E1 \"] N1=\" N1 \" A1=[\" A1 \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"E1=[ 12] N1=4.0 A1=[56]\n");
     }
 }
 
