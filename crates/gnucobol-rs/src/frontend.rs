@@ -6045,7 +6045,9 @@ fn exec_start(
                 let r = match head.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
                     Some("<") | Some("LESS") => ">=",
                     Some(">") | Some("GREATER") => "<=",
-                    _ => return Err(RunError::Unsupported("START KEY NOT <relation>".into())),
+                    // `NOT =` / `NOT EQUAL` is not a legal START relation -- cobc rejects it at compile time
+                    // ("NOT EQUAL condition not allowed on START statement"), so refusing it is faithful.
+                    _ => return Err(RunError::Unsupported("START KEY: NOT EQUAL relation is not allowed on START (only NOT < / NOT >)".into())),
                 };
                 i += 1;
                 if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; }
