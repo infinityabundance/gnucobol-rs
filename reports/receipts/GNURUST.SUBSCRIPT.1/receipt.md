@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SUBSCRIPT.1` |
 | court | table subscript TABLE(i[,j]) |
-| crate_version | `0.8.12` |
+| crate_version | `0.8.13` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OCCURS table bytes + subscripts -> element bytes |
 | replay command | `bash lab/oracle/subscript_sweep.sh` |
