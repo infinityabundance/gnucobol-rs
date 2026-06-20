@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `SIZE.ERROR.ATLAS.1` |
 | court | arithmetic size-error behavior atlas |
-| crate_version | `0.8.9` |
+| crate_version | `0.8.10` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | observed receiver-written vs preserved + size_error_signaled for ADD/SUB/MUL/DIVIDE overflow + divide-by-zero (DISPLAY/COMP-3) |
 | replay command | `bash lab/oracle/size_error_atlas_sweep.sh` |

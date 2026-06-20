@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.CALL.LAYOUT.ATLAS.1` |
 | court | observed CALL parameter byte-layout atlas |
-| crate_version | `0.8.9` |
+| crate_version | `0.8.10` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | CALL USING parameter byte layout: BY REFERENCE address overlay (into adjacent storage), BY CONTENT sized copy, numeric length-mismatch leading-byte overlay |
 | replay command | `bash lab/oracle/call_layout_atlas_sweep.sh` |
