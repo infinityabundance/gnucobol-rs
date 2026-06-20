@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **23 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 202 of them, de-duplicated from the 219 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 202: **23 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **169 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **24 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 201 of them, de-duplicated from the 218 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 201: **22 feature gaps** (the genuine remaining work), **10 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **169 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,23 +185,22 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 46 front-end sub-forms have been identified -- **23 sealed** (byte-identical to cobc, section A) and **23 still open** (fail-closed guards, section B). **Depth completion = 23/46 = 50.0%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 46 front-end sub-forms have been identified -- **24 sealed** (byte-identical to cobc, section A) and **22 still open** (fail-closed guards, section B). **Depth completion = 24/46 = 52.2%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
-| `OCCURS / tables` | 8 | 35% |
-| `INITIALIZE` | 3 | 13% |
+| `OCCURS / tables` | 8 | 36% |
+| `INITIALIZE` | 3 | 14% |
 | `ACCEPT` | 2 | 9% |
 | `MOVE / ADD / SUBTRACT CORR` | 2 | 9% |
 | `REPORT / ML GENERATE` | 2 | 9% |
 | `UNSTRING` | 2 | 9% |
-| `EXHIBIT` | 1 | 4% |
-| `FUNCTION` | 1 | 4% |
-| `SET` | 1 | 4% |
-| `USAGE` | 1 | 4% |
-| **TOTAL** | **23 open** (+ 23 sealed = 46 identified) | **50.0% complete** |
+| `FUNCTION` | 1 | 5% |
+| `SET` | 1 | 5% |
+| `USAGE` | 1 | 5% |
+| **TOTAL** | **22 open** (+ 24 sealed = 46 identified) | **52.2% complete** |
 
-### A. Sealed sub-forms (23) -- proven byte-identical to cobc
+### A. Sealed sub-forms (24) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -230,8 +229,9 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `INITIALIZE` | `[WITH FILLER] ALL TO VALUE` -- restore each leaf to its VALUE clause; a no-VALUE leaf is left unchanged | `lab/corpus/frontend/p124_initialize_to_value.cob` |
 | `UNSTRING` | `ON OVERFLOW` / `NOT ON OVERFLOW` handler (overflow = source characters remain after every receiver is filled) | `lab/corpus/frontend/p125_unstring_overflow.cob` |
 | `PERFORM` | bare inline `PERFORM <stmts> END-PERFORM` (no TIMES/UNTIL/VARYING) runs the body exactly once | `lab/corpus/frontend/p126_perform_inline_once.cob` |
+| `EXHIBIT` | `CHANGED` keyword -- cobc 3.2 leaves the suppression unimplemented (runs as plain EXHIBIT); CHANGED-without-NAMED is value-only | `lab/corpus/frontend/p127_exhibit_changed.cob` |
 
-### B. Feature gaps -- the genuine remaining work (23)
+### B. Feature gaps -- the genuine remaining work (22)
 
 Deliberate limits of an otherwise-wired verb. These are the real "what's missing" list; sealing one removes its row on the next regenerate (the gate enforces it).
 
@@ -239,7 +239,6 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 |---|---|
 | `ACCEPT` | ACCEPT FROM <x> (subset: DATE/DAY/TIME/DAY-OF-WEEK) |
 |  | ACCEPT subset is `ACCEPT id FROM DATE\|DAY\|TIME\|DAY-OF-WEEK` (terminal input not modelled) |
-| `EXHIBIT` | EXHIBIT CHANGED not in subset |
 | `FUNCTION` | FUNCTION <x>: not in the wired front-end subset |
 | `INITIALIZE` | INITIALIZE ... <x> (subset: items [REPLACING cat BY val ...]) |
 |  | INITIALIZE ... TO VALUE subset is `items [WITH FILLER] ALL TO VALUE` |

@@ -82,6 +82,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p125_unstring_overflow.cob", "ON OVERFLOW DISPLAY"),
     ("PERFORM", "bare inline `PERFORM <stmts> END-PERFORM` (no TIMES/UNTIL/VARYING) runs the body exactly once", "sealed",
         "lab/corpus/frontend/p126_perform_inline_once.cob", "DISPLAY \"IN \" N"),
+    ("EXHIBIT", "`CHANGED` keyword -- cobc 3.2 leaves the suppression unimplemented (runs as plain EXHIBIT); CHANGED-without-NAMED is value-only", "sealed",
+        "lab/corpus/frontend/p127_exhibit_changed.cob", "EXHIBIT CHANGED NAMED A B"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

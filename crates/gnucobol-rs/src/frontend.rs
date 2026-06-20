@@ -5028,23 +5028,30 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
     }
 }
 
-/// `EXHIBIT [NAMED] name [name ...]` -- the OS/VS debug display: each item as `NAME = <display value>`,
-/// space-joined, one line. `CHANGED` (display-only-if-changed) is out of subset.
+/// `EXHIBIT [CHANGED] [NAMED] name [name ...]` -- the OS/VS debug display, space-joined on one line.
+/// cobc 3.2 does NOT implement the `CHANGED` (display-only-if-changed) suppression (`-Wpending`): it runs
+/// as plain EXHIBIT, so we ignore the suppression too. The only observable effect of the keywords is the
+/// item format: `NAME = <value>` UNLESS `CHANGED` is given WITHOUT `NAMED`, where just `<value>` is shown.
 fn exec_exhibit(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
     let mut i = 0;
+    let (mut named, mut changed) = (false, false);
     while let Some(Tok::Word(w)) = stmt.get(i) {
         match w.as_str() {
-            "CHANGED" => return Err(RunError::Unsupported("EXHIBIT CHANGED not in subset".into())),
-            "NAMED" => i += 1,
+            "CHANGED" => { changed = true; i += 1; }
+            "NAMED" => { named = true; i += 1; }
             _ => break,
         }
     }
+    // cobc prints `NAME = value` for plain/NAMED EXHIBIT; only `CHANGED` without `NAMED` drops the name.
+    let show_name = named || !changed;
     let names: Vec<String> = stmt[i..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
     let mut line = Vec::new();
     for (j, name) in names.iter().enumerate() {
         if j > 0 { line.push(b' '); }
-        line.extend_from_slice(name.as_bytes());
-        line.extend_from_slice(b" = ");
+        if show_name {
+            line.extend_from_slice(name.as_bytes());
+            line.extend_from_slice(b" = ");
+        }
         let f = read_field(fields, name)?.ok_or_else(|| RunError::UndefinedName(name.clone()))?;
         line.extend_from_slice(&display_bytes(&f, ctx.decimal_comma));
     }
@@ -8179,6 +8186,27 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"IN 1\nOUT 1\n");
+    }
+
+    #[test]
+    fn exhibit_changed_runs_as_plain_exhibit() {
+        // Oracle (cobc 3.2.0): CHANGED suppression is unimplemented (-Wpending) -> EXHIBIT CHANGED runs as
+        // plain EXHIBIT. Item format is `NAME = value` for plain/NAMED; only CHANGED-without-NAMED is value-only.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC 9 VALUE 3.\n\
+                    01 B PIC X(2) VALUE \"hi\".\n\
+                    PROCEDURE DIVISION.\n\
+                        EXHIBIT CHANGED A B.\n\
+                        EXHIBIT CHANGED NAMED A B.\n\
+                        EXHIBIT A.\n\
+                        EXHIBIT NAMED B.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"3 hi\nA = 3 B = hi\nA = 3\nB = hi\n");
     }
 }
 
