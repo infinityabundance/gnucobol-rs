@@ -579,10 +579,31 @@ mod tests {
     }
 
     #[test]
-    fn unsupported_pair_fails_closed() {
+    fn binary_to_alphanumeric_magnitude() {
+        // MOVE binary -> alphanumeric: the magnitude digit string, left-justified space-padded (was blank).
+        let bin = 1234u16.to_le_bytes();
+        let battr = FieldAttr { field_type: 0x11, digits: 4, scale: 0, flags: 0 };
+        let mut aln = [b'?'; 6];
+        cob_move(&bin, &battr, &mut aln, &FieldAttr { field_type: 0x21, digits: 6, scale: 0, flags: 0 }).unwrap();
+        assert_eq!(&aln, b"1234  ");
+    }
+
+    #[test]
+    fn packed_to_packed_roundtrips() {
+        // packed -> packed is supported (via the decimal layer): +12 round-trips byte-for-byte.
         let src = [0x01, 0x2c];
         let mut dst = [0u8; 2];
-        let err = cob_move(&src, &packed(3, 0, true), &mut dst, &packed(3, 0, true)).unwrap_err();
+        cob_move(&src, &packed(3, 0, true), &mut dst, &packed(3, 0, true)).unwrap();
+        assert_eq!(dst, [0x01, 0x2c]);
+    }
+
+    #[test]
+    fn unsupported_pair_fails_closed() {
+        // a numeric-EDITED destination (0x24) is not a cob_move leaf (the front-end does editing) -> fails closed.
+        let src = [0x01, 0x2c];
+        let mut dst = [0u8; 4];
+        let edited = FieldAttr { field_type: 0x24, digits: 3, scale: 0, flags: 0 };
+        let err = cob_move(&src, &packed(3, 0, true), &mut dst, &edited).unwrap_err();
         assert!(matches!(err, DecimalError::UnsupportedConversion { .. }));
     }
 

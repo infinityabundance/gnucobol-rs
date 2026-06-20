@@ -919,6 +919,18 @@ pub fn cob_move(
             dst_attr.digits as usize, dst_attr.scale as i32,
         );
     }
+    // A binary / packed numeric source -> ALPHANUMERIC: move.c routes through a DISPLAY intermediate (only
+    // DISPLAY->alphanumeric has a direct routine). The temp is UNSIGNED (an alphanumeric move drops the sign
+    // -> the magnitude digit string, e.g. packed -123 -> "0123"), digits/scale of the source.
+    if dst_attr.field_type == COB_TYPE_ALPHANUMERIC
+        && matches!(src_attr.field_type, COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED)
+    {
+        let tattr = FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits: src_attr.digits.max(1), scale: src_attr.scale, flags: 0 };
+        let mut buff = vec![b'0'; tattr.digits as usize];
+        cob_move(src, src_attr, &mut buff, &tattr)?;
+        cob_move_display_to_alphanum(&buff, &tattr, dst, dst_attr);
+        return Ok(());
+    }
     let src_bin = src_attr.field_type == COB_TYPE_NUMERIC_BINARY;
     let dst_bin = dst_attr.field_type == COB_TYPE_NUMERIC_BINARY;
 
@@ -991,6 +1003,13 @@ pub fn cob_move(
         }
         (COB_TYPE_NUMERIC_PACKED, COB_TYPE_NUMERIC_DISPLAY) => {
             cob_move_packed_to_display(src, src_attr, dst, dst_attr);
+            Ok(())
+        }
+        // Packed -> packed: route through the decimal layer (no direct routine), as move.c does.
+        (COB_TYPE_NUMERIC_PACKED, COB_TYPE_NUMERIC_PACKED) => {
+            let bytes = crate::cob_decimal::cob_decimal_setget_fld(src, src_attr, dst_attr, dst.len(), crate::arith::Round::Truncate)
+                .map_err(|_| DecimalError::UnsupportedConversion { src_type: src_attr.field_type, dst_type: dst_attr.field_type })?;
+            dst.copy_from_slice(&bytes);
             Ok(())
         }
         // Alphanumeric leaves (move.c default src/dst dispatch).

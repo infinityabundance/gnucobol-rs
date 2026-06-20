@@ -110,6 +110,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p144_report_control_break.cob", "TYPE CONTROL FOOTING GRP"),
     ("UNSTRING", "`DELIMITED BY [ALL] d1 [OR [ALL] d2]...` multi-delimiter (earliest match splits, DELIMITER IN captures it, ALL collapses repeats)", "sealed",
         "lab/corpus/frontend/p145_unstring_multi_delim.cob", "DELIMITED BY \",\" OR \";\""),
+    ("MOVE", "conversion completeness -- binary/packed -> alphanumeric (magnitude digits via DISPLAY), packed -> packed, binary/packed -> numeric-edited (found by the MOVE cross-product differential)", "sealed",
+        "lab/corpus/frontend/p146_move_conversions.cob", "MOVE BC TO AX"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

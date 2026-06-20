@@ -8035,7 +8035,7 @@ fn move_into(
             let cur = *currency;
             let dc = *decimal_comma;
             let blank = *blank_zero;
-            let dec = source_to_decimal(sbytes, sattr)?;
+            let dec = decode_numeric_source(sbytes, sattr)?;
             // BLANK WHEN ZERO: a zero value blanks the whole edited field.
             f.bytes = if blank && dec_is_zero(&dec) {
                 vec![b' '; f.bytes.len()]
@@ -8070,6 +8070,22 @@ fn move_into(
 }
 
 /// Decode a numeric DISPLAY (or alnum-of-digits) source `(bytes, attr)` to a [`Decimal`].
+/// Decode any numeric source to a [`Decimal`]: DISPLAY / alphanumeric digit strings go straight through
+/// [`source_to_decimal`]; a binary (COMP/COMP-5) / packed (COMP-3) / float source -- which that function
+/// cannot read -- is first converted to a signed DISPLAY intermediate via the sealed `cob_move`.
+fn decode_numeric_source(bytes: &[u8], attr: &FieldAttr) -> Result<Decimal, RunError> {
+    use crate::attr::{COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_PACKED};
+    let needs_convert = matches!(attr.field_type, COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED)
+        || matches!(attr.field_type, 0x13 | 0x14 | 0x15); // COMP-1 / COMP-2 / extended float
+    if !needs_convert {
+        return source_to_decimal(bytes, attr);
+    }
+    let tattr = lit_num_attr(attr.digits.max(1), attr.scale.max(0), true);
+    let mut buff = vec![b'0'; tattr.digits as usize];
+    crate::move_ops::cob_move(bytes, attr, &mut buff, &tattr).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+    source_to_decimal(&buff, &tattr)
+}
+
 fn source_to_decimal(bytes: &[u8], attr: &FieldAttr) -> Result<Decimal, RunError> {
     let mut digits = Vec::new();
     let mut negative = false;
