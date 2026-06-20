@@ -66,6 +66,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p117_indexed.cob", "ORGANIZATION IS INDEXED"),
     ("file I/O", "READ ... NOT AT END / NOT INVALID KEY handler (success branch in one statement)", "sealed",
         "lab/corpus/frontend/p118_read_handlers.cob", "NOT AT END DISPLAY"),
+    ("ACCEPT", "`FROM ENVIRONMENT \"name\"` (read a pinned environment variable)", "sealed",
+        "lab/corpus/frontend/p119_accept_env.cob", "FROM ENVIRONMENT"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

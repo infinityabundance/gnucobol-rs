@@ -5330,6 +5330,20 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
         return Err(RunError::Unsupported("ACCEPT subset is `ACCEPT id FROM DATE|DAY|TIME|DAY-OF-WEEK` (terminal input not modelled)".into()));
     }
     let src = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("ACCEPT FROM: missing source".into())) };
+    // `ACCEPT id FROM ENVIRONMENT "name"` (or a name field): read the environment variable (deterministic
+    // under the pinned harness env) and MOVE its value into the receiver; an unset variable yields spaces.
+    if src == "ENVIRONMENT" {
+        let name = match stmt.get(3) {
+            Some(Tok::Str(s)) => String::from_utf8_lossy(s).to_string(),
+            Some(Tok::Word(w)) => read_field(fields, w)?
+                .map(|f| String::from_utf8_lossy(&f.bytes).trim_end().to_string())
+                .unwrap_or_else(|| w.clone()),
+            _ => return Err(RunError::Unsupported("ACCEPT FROM ENVIRONMENT: missing variable name".into())),
+        };
+        let val = std::env::var(&name).unwrap_or_default();
+        let mv = vec![Tok::Str(val.into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        return exec_move(&mv, fields, false);
+    }
     let long_year = matches!(stmt.get(3), Some(Tok::Word(w)) if w == "YYYYMMDD" || w == "YYYYDDD");
     let raw = std::env::var("COB_CURRENT_DATE").map_err(|_| RunError::Unsupported(
         "ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)".into()))?;
