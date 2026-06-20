@@ -70,6 +70,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p119_accept_env.cob", "FROM ENVIRONMENT"),
     ("file I/O", "START ... INVALID KEY / NOT INVALID KEY handler clauses", "sealed",
         "lab/corpus/frontend/p120_start_invalid.cob", "INVALID KEY DISPLAY"),
+    ("UNSTRING", "`WITH POINTER p` scan cursor (read in, advanced past delimiters, written back), coexisting with `TALLYING IN`", "sealed",
+        "lab/corpus/frontend/p121_unstring_pointer.cob", "WITH POINTER P TALLYING IN TC"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

@@ -5155,11 +5155,12 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
 
 /// `UNSTRING source [DELIMITED BY d] INTO f1 f2 ...` -- split the source by the delimiter (or by each
 /// receiver's width when absent) into the alphanumeric receiving fields (`GNURUST.STRING.UNSTRING.1`).
-/// `DELIMITER IN` / `COUNT IN` / `TALLYING` / `POINTER` / `OVERFLOW` and multi-delimiter forms fail closed.
+/// `DELIMITER IN` / `COUNT IN` / `TALLYING IN` / `WITH POINTER` are supported; `ON OVERFLOW`,
+/// multi-delimiter (`OR`), and `DELIMITED BY ALL` fail closed.
 fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
     use crate::string_ops::unstring;
-    // Still non-claims: WITH POINTER, ON OVERFLOW, multi-delimiter (`OR`), `DELIMITED BY ALL`.
-    for bad in ["POINTER", "OVERFLOW", "OR", "ALL"] {
+    // Still non-claims: ON OVERFLOW, multi-delimiter (`OR`), `DELIMITED BY ALL`.
+    for bad in ["OVERFLOW", "OR", "ALL"] {
         if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == bad)) {
             return Err(RunError::Unsupported(format!("UNSTRING ... {bad} not in subset")));
         }
@@ -5174,10 +5175,16 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<()
         if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
         delim = Some(inspect_operand(stmt.get(j), fields)?);
     }
-    // The receiver list runs from INTO to TALLYING (or end). Each receiver is `name [DELIMITER IN d]
-    // [COUNT IN c]`; an optional trailing `TALLYING IN t` counts the filled fields (added to t).
+    // `[WITH] POINTER p` (a 1-based scan cursor, read in and written back) sits after the receivers.
+    let ptr_pos = stmt[into + 1..].iter().position(|t| matches!(t, Tok::Word(w) if w == "POINTER")).map(|p| into + 1 + p);
+    let ptr_field: Option<String> = ptr_pos.and_then(|p| match stmt.get(p + 1) { Some(Tok::Word(w)) => Some(w.clone()), _ => None });
+    // The clause is written `[WITH] POINTER p`; the receiver list must stop before the optional `WITH`.
+    let ptr_clause = ptr_pos.map(|p| if matches!(stmt.get(p - 1), Some(Tok::Word(w)) if w == "WITH") { p - 1 } else { p });
+    // The receiver list runs from INTO to TALLYING / POINTER (or end). Each receiver is `name [DELIMITER IN
+    // d] [COUNT IN c]`; an optional trailing `TALLYING IN t` counts the filled fields (added to t).
     let tally_pos = stmt[into + 1..].iter().position(|t| matches!(t, Tok::Word(w) if w == "TALLYING")).map(|p| into + 1 + p);
-    let seg = &stmt[into + 1..tally_pos.unwrap_or(stmt.len())];
+    let seg_end = tally_pos.unwrap_or(stmt.len()).min(ptr_clause.unwrap_or(stmt.len()));
+    let seg = &stmt[into + 1..seg_end];
     let mut recvs: Vec<(String, Option<String>, Option<String>)> = Vec::new();
     let mut i = 0;
     while i < seg.len() {
@@ -5226,7 +5233,16 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<()
         sizes.push(f.bytes.len());
         numeric.push(is_num);
     }
-    let res = unstring(&source, delim.as_deref(), &sizes, 1);
+    // The scan begins at the POINTER's current value (default 1); the final pointer is written back after.
+    let ptr_start = match &ptr_field {
+        Some(f) => resolve_int(f, fields).map(|v| v.max(1) as usize).unwrap_or(1),
+        None => 1,
+    };
+    let res = unstring(&source, delim.as_deref(), &sizes, ptr_start);
+    if let Some(f) = &ptr_field {
+        let mv = vec![Tok::Word(res.pointer.to_string()), Tok::Word("TO".to_string()), Tok::Word(f.clone())];
+        exec_move(&mv, fields, false)?;
+    }
     for (((n, din, cin), fld), is_num) in recvs.iter().zip(res.fields.iter()).zip(numeric.iter()) {
         if *is_num {
             // A DISPLAY-numeric receiver takes the delimited substring (its `count` chars) by MOVE, which
@@ -7841,6 +7857,53 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"[HI   ]\n");
+    }
+
+    #[test]
+    fn unstring_with_pointer_scans_from_cursor_and_writes_back() {
+        // Oracle (cobc 3.2.0): P=4 -> scan starts at the 4th byte of "AA,BBB,CC,DDD"; "BBB" then "CC"
+        // are split out and the pointer advances past the last delimiter to 11. Matches `lab` differential.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 SRC PIC X(20) VALUE \"AA,BBB,CC,DDD\".\n\
+                    01 R1 PIC X(5).\n\
+                    01 R2 PIC X(5).\n\
+                    01 P  PIC 99 VALUE 4.\n\
+                    PROCEDURE DIVISION.\n\
+                        UNSTRING SRC DELIMITED BY \",\" INTO R1 R2 WITH POINTER P.\n\
+                        DISPLAY \"R1=[\" R1 \"]\".\n\
+                        DISPLAY \"R2=[\" R2 \"]\".\n\
+                        DISPLAY \"P=\" P.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"R1=[BBB  ]\nR2=[CC   ]\nP=11\n");
+    }
+
+    #[test]
+    fn unstring_pointer_then_tallying_clauses_coexist() {
+        // Oracle (cobc 3.2.0): `WITH POINTER P TALLYING IN TC` -- P starts at 1, two fields filled, so
+        // P advances to 8 (past "AA,BBB,") and TC counts the 2 receivers filled. Clause order POINTER<TALLYING.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 SRC PIC X(20) VALUE \"AA,BBB,CC,DDD\".\n\
+                    01 R1 PIC X(5).\n\
+                    01 R2 PIC X(5).\n\
+                    01 P  PIC 99 VALUE 1.\n\
+                    01 TC PIC 99 VALUE 0.\n\
+                    PROCEDURE DIVISION.\n\
+                        UNSTRING SRC DELIMITED BY \",\" INTO R1 R2 WITH POINTER P TALLYING IN TC.\n\
+                        DISPLAY \"R1=[\" R1 \"]\".\n\
+                        DISPLAY \"R2=[\" R2 \"]\".\n\
+                        DISPLAY \"P=\" P \" TC=\" TC.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"R1=[AA   ]\nR2=[BBB  ]\nP=08 TC=02\n");
     }
 }
 
