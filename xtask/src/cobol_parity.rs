@@ -36,10 +36,6 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p104_sign_cond.cob", "IS NEGATIVE"),
     ("ADD/SUBTRACT/MULTIPLY/DIVIDE", "multiple receivers (`ADD 1 TO Y Z`, `... GIVING C D`, in-place per-receiver)", "sealed",
         "lab/corpus/frontend/p105_multi_receiver.cob", "GIVING C D"),
-    ("MOVE", "`CORRESPONDING` (matches leaves by name across two groups)", "gap",
-        "crates/gnucobol-rs/src/frontend.rs", "MOVE CORRESPONDING is not in the front-end subset"),
-    ("ADD/SUBTRACT", "`CORRESPONDING` (same qualified-name blocker as MOVE CORR)", "gap",
-        "crates/gnucobol-rs/src/frontend.rs", "{verb} CORRESPONDING is not in the front-end subset"),
     ("DIVIDE", "`GIVING q REMAINDER r` (incl. ROUNDED quotient, signed/scaled, via the sealed GNURUST.REMAINDER.1 primitive)", "sealed",
         "lab/corpus/frontend/p106_divide_remainder.cob", "DIVIDE 17 BY 5 GIVING Q REMAINDER R"),
     ("INITIALIZE", "`REPLACING cat BY val` (NUMERIC/ALPHANUMERIC/ALPHABETIC/NUMERIC-EDITED, multi-category, PIC A vs X)", "sealed",
@@ -88,6 +84,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p128_move_alnum_to_binary.cob", "MOVE \"12\"   TO C1"),
     ("UNSTRING", "into numeric-edited / scaled-DISPLAY receivers (the delimited substring is MOVEd; binary/packed still fail closed)", "sealed",
         "lab/corpus/frontend/p129_unstring_edited.cob", "INTO E1 N1 A1"),
+    ("MOVE/ADD/SUBTRACT", "`CORRESPONDING` -- like-named elementary leaves matched between two groups (MOVE all; ADD/SUBTRACT numeric pairs)", "sealed",
+        "lab/corpus/frontend/p130_corresponding.cob", "MOVE CORRESPONDING G1 TO G2"),
+    ("qualified names", "`name OF group [OF group...]` / `IN` resolution + duplicate child-name disambiguation across record layouts", "sealed",
+        "lab/corpus/frontend/p131_qualified_names.cob", "AMT OF REC-IN"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

@@ -1,0 +1,17 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P131.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 REC-IN.
+          05 AMT PIC 999 VALUE 123.
+          05 NM  PIC X(2) VALUE "in".
+       01 REC-OUT.
+          05 AMT PIC 999 VALUE 456.
+          05 NM  PIC X(2) VALUE "ot".
+       PROCEDURE DIVISION.
+           DISPLAY "IN=" AMT OF REC-IN " OUT=" AMT OF REC-OUT.
+           MOVE AMT OF REC-IN TO AMT OF REC-OUT.
+           MOVE "QQ" TO NM IN REC-OUT.
+           DISPLAY "OUT-AMT=" AMT OF REC-OUT " OUT-NM=" NM OF REC-OUT.
+           DISPLAY "IN-NM=" NM OF REC-IN.
+           STOP RUN.

@@ -534,6 +534,7 @@ struct FileState {
 
 /// One `01`-level elementary item (its name, PIC, and optional VALUE literal) -- the field is built at run
 /// time (so a CALL can build the callee's fields under the same dialect).
+#[derive(Clone)]
 struct ProgItem {
     /// The COBOL level number (01..49, or 77). Determines group nesting; an item is a GROUP when the next
     /// item has a higher level number and this item has no PIC.
@@ -877,6 +878,170 @@ fn uppercase_outside_quotes(s: &str) -> String {
 }
 
 /// Split the token stream at `PROGRAM-ID` boundaries into a registry of programs; the first is the MAIN.
+/// A static qualified-name resolution index built per program: maps each declared data-name to the list of
+/// `(canonical_key, parent_chain)` it can refer to (parent chain immediate-first). Used by
+/// [`collapse_qualified`] to rewrite `name OF group [OF group...]` into a single resolved field key, and to
+/// disambiguate duplicate child names across record layouts (the foundation for `MOVE/ADD/SUBTRACT CORR`).
+struct NameIndex {
+    by_name: std::collections::HashMap<String, Vec<(String, Vec<String>)>>,
+}
+
+/// The bare data-name underlying a (possibly canonicalized) field key: a colliding leaf is stored under
+/// `"name\u{1}parent\u{1}..."`, so the bare name is the prefix before the first `\u{1}`.
+fn bare_name(key: &str) -> &str {
+    key.split('\u{1}').next().unwrap_or(key)
+}
+
+/// Whether `needles` appear in `hay` as an ordered subsequence (used to match `OF` qualifiers against an
+/// item's parent chain: `A OF G1 OF GG` requires G1 then GG to appear, in containing order).
+fn is_ordered_subseq(needles: &[String], hay: &[String]) -> bool {
+    let mut hi = hay.iter();
+    needles.iter().all(|n| hi.any(|h| h == n))
+}
+
+/// Assign canonical field keys + build the qualified-name index for a program's WORKING-STORAGE. A
+/// data-name that collides with another (two record layouts sharing a child name) is renamed to a unique
+/// key `"name\u{1}<parent chain>"` -- BUT only when every occurrence is a simple elementary scalar and the
+/// name is not referenced by REDEFINES / OCCURS DEPENDING / RENAMES / INDEXED BY / an 88 (those stay bare,
+/// preserving today's behavior). A program with no duplicate names is returned UNCHANGED (key == name), so
+/// existing behavior is byte-identical. Returns the (possibly rewritten) items and the resolution index.
+fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
+    use std::collections::{HashMap, HashSet};
+    // Parent chain per item (immediate-first), via a level stack.
+    let mut chains: Vec<Vec<String>> = Vec::with_capacity(ws.len());
+    let mut stack: Vec<(u16, String)> = Vec::new();
+    for it in ws {
+        if it.level == 88 {
+            chains.push(Vec::new());
+            continue;
+        }
+        while matches!(stack.last(), Some(&(lvl, _)) if it.level <= lvl) {
+            stack.pop();
+        }
+        chains.push(stack.iter().rev().map(|(_, n)| n.clone()).collect());
+        if it.level != 66 {
+            stack.push((it.level, it.name.clone()));
+        }
+    }
+    // Names that collide (appear on >1 field-producing item).
+    let mut counts: HashMap<&str, usize> = HashMap::new();
+    for it in ws {
+        if it.level != 88 {
+            *counts.entry(it.name.as_str()).or_insert(0) += 1;
+        }
+    }
+    // Names pinned to their bare key (referenced by a cross-clause that uses the bare name).
+    let mut pinned: HashSet<String> = HashSet::new();
+    for it in ws {
+        if let Some(t) = &it.redefines { pinned.insert(t.clone()); }
+        if let Some(c) = &it.odo_counter { pinned.insert(c.clone()); }
+        if let Some((s, e)) = &it.renames { pinned.insert(s.clone()); pinned.insert(e.clone()); }
+        for ib in &it.indexed_by { pinned.insert(ib.clone()); }
+        if it.level == 88 {
+            if let Some((p, _, _)) = &it.condition { pinned.insert(p.clone()); }
+        }
+    }
+    let simple = |it: &ProgItem| {
+        it.level != 88 && it.level != 66 && !it.pic.is_empty() && it.occurs <= 1
+            && it.redefines.is_none() && it.float_kind.is_none() && it.indexed_by.is_empty()
+            && it.odo_counter.is_none()
+    };
+    let mut out = ws.to_vec();
+    let mut idx = NameIndex { by_name: HashMap::new() };
+    for (i, it) in ws.iter().enumerate() {
+        if it.level == 88 {
+            continue;
+        }
+        let colliding = counts.get(it.name.as_str()).copied().unwrap_or(0) > 1;
+        let key = if colliding && !pinned.contains(&it.name) && simple(it) && !chains[i].is_empty() {
+            format!("{}\u{1}{}", it.name, chains[i].join("\u{1}"))
+        } else {
+            it.name.clone()
+        };
+        out[i].name = key.clone();
+        idx.by_name.entry(it.name.clone()).or_default().push((key, chains[i].clone()));
+    }
+    (out, idx)
+}
+
+/// Rewrite every `name OF group [OF group...]` (and `IN`) reference in a token stream into a single resolved
+/// field-key token, using the static [`NameIndex`]. A bare name with one candidate is left as-is (its key
+/// equals the name); an unresolvable / ambiguous qualified reference is left untouched (it errors downstream
+/// as before). No-op when the program has no duplicate names AND the stream has no `OF`/`IN`.
+fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
+    let has_renames = idx.by_name.iter().any(|(b, v)| v.iter().any(|(k, _)| k != b));
+    let has_of = toks.iter().any(|t| matches!(t, Tok::Word(w) if w == "OF" || w == "IN"));
+    if !has_renames && !has_of {
+        return toks.to_vec();
+    }
+    let mut out = Vec::with_capacity(toks.len());
+    let mut i = 0;
+    while i < toks.len() {
+        if let Tok::Word(w) = &toks[i] {
+            let (base, sub) = split_subscript(w);
+            let mut quals: Vec<String> = Vec::new();
+            let mut j = i + 1;
+            while matches!(toks.get(j), Some(Tok::Word(q)) if q == "OF" || q == "IN") {
+                if let Some(Tok::Word(q2)) = toks.get(j + 1) {
+                    quals.push(q2.clone());
+                    j += 2;
+                } else {
+                    break;
+                }
+            }
+            if let Some(cands) = idx.by_name.get(base) {
+                let resolved: Option<String> = if !quals.is_empty() {
+                    let m: Vec<&String> = cands.iter()
+                        .filter(|(_, chain)| is_ordered_subseq(&quals, chain))
+                        .map(|(k, _)| k)
+                        .collect();
+                    if m.len() == 1 { Some(m[0].clone()) } else { None }
+                } else if cands.len() == 1 {
+                    Some(cands[0].0.clone())
+                } else {
+                    None
+                };
+                if let Some(key) = resolved {
+                    let nw = match sub { Some(s) => format!("{key}({s})"), None => key };
+                    out.push(Tok::Word(nw));
+                    i = j;
+                    continue;
+                }
+            }
+        }
+        out.push(toks[i].clone());
+        i += 1;
+    }
+    out
+}
+
+/// The elementary leaf children of a group field, as `(canonical_key, bare_name)` pairs (skipping nested
+/// groups and SYNC slack FILLERs) -- the candidate set for a `CORRESPONDING` match.
+fn corr_leaves(fields: &HashMap<String, Field>, group: &str) -> Result<Vec<(String, String)>, RunError> {
+    match fields.get(group).map(|f| &f.storage) {
+        Some(Storage::Group { children }) => Ok(children.iter()
+            .filter(|c| !c.starts_with('\u{3}') && !matches!(fields.get(*c).map(|f| &f.storage), Some(Storage::Group { .. })))
+            .map(|c| (c.clone(), bare_name(c).to_string()))
+            .collect()),
+        Some(_) => Err(RunError::Unsupported(format!("CORRESPONDING operand `{group}` is not a group item"))),
+        None => Err(RunError::UndefinedName(group.to_string())),
+    }
+}
+
+/// The `(src_key, dst_key)` pairs for `CORRESPONDING src dst`: elementary leaves present in BOTH groups
+/// under the same bare name (matched in src declaration order).
+fn corr_pairs(fields: &HashMap<String, Field>, src: &str, dst: &str) -> Result<Vec<(String, String)>, RunError> {
+    let sc = corr_leaves(fields, src)?;
+    let dc = corr_leaves(fields, dst)?;
+    let mut pairs = Vec::new();
+    for (sk, sb) in &sc {
+        if let Some((dk, _)) = dc.iter().find(|(_, db)| db == sb) {
+            pairs.push((sk.clone(), dk.clone()));
+        }
+    }
+    Ok(pairs)
+}
+
 fn parse_programs(toks: &[Tok]) -> Result<(String, HashMap<String, ProgramDef>), RunError> {
     let starts: Vec<usize> = toks
         .iter()
@@ -973,6 +1138,12 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // proc body: from here to END PROGRAM (or the range end).
     let body_end = find_seq_in(toks, &["END", "PROGRAM"], p, end).unwrap_or(end);
     let proc_toks = toks[p..body_end].to_vec();
+
+    // Statically canonicalize duplicate WORKING-STORAGE data-names and collapse `name OF group` qualifiers in
+    // the procedure body ONCE (qualification is purely a function of the declarations). A program with no
+    // duplicate names and no OF/IN is returned unchanged, so existing behavior is byte-identical.
+    let (ws, idx) = canonicalize_ws(&ws);
+    let proc_toks = collapse_qualified(&proc_toks, &idx);
 
     Ok((name, ProgramDef { ws, linkage, using, files, reports, proc_toks, is_initial }))
 }
@@ -4496,9 +4667,16 @@ fn exec_move(
     // tell `A OF G1` from `A OF G2`. Faithful CORRESPONDING needs qualified-name (OF/IN) support first, so
     // fail closed rather than move a leaf onto itself. (Front-end sub-form gap; see COBOL-PARITY.md.)
     if matches!(stmt.first(), Some(Tok::Word(w)) if w == "CORRESPONDING" || w == "CORR") {
-        return Err(RunError::Unsupported(
-            "MOVE CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support)".into(),
-        ));
+        // MOVE CORRESPONDING g1 TO g2: move each elementary leaf of g1 to the like-named leaf of g2.
+        let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO"))
+            .ok_or_else(|| RunError::Unsupported("MOVE CORRESPONDING without TO".into()))?;
+        let src = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("MOVE CORRESPONDING: missing source group".into())) };
+        let dst = match stmt.get(to + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("MOVE CORRESPONDING: missing target group".into())) };
+        for (sk, dk) in corr_pairs(fields, &src, &dst)? {
+            let mv = vec![Tok::Word(sk), Tok::Word("TO".to_string()), Tok::Word(dk)];
+            exec_move(&mv, fields, decimal_comma)?;
+        }
+        return Ok(());
     }
     // split at TO.
     let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="TO"))
@@ -7239,13 +7417,29 @@ fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has
 }
 
 fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
-    // ADD/SUBTRACT CORRESPONDING pairs elementary leaves between two groups BY NAME -- same blocker as
-    // MOVE CORRESPONDING: the flat field model can't distinguish like-named children of different groups.
-    // Fail closed until qualified-name (OF/IN) support lands. (Front-end sub-form gap; see COBOL-PARITY.md.)
+    // ADD/SUBTRACT CORRESPONDING pairs elementary leaves between two groups BY NAME: `ADD CORR g1 TO g2`
+    // does `g2.leaf += g1.leaf` for each like-named NUMERIC pair; `SUBTRACT CORR g1 FROM g2` subtracts.
+    // (MULTIPLY/DIVIDE have no CORR form.) Only numeric leaves participate; others are skipped.
     if matches!(stmt.first(), Some(Tok::Word(w)) if w == "CORRESPONDING" || w == "CORR") {
-        return Err(RunError::Unsupported(format!(
-            "{verb} CORRESPONDING is not in the front-end subset (needs qualified-name OF/IN support)"
-        )));
+        let conn = if verb == "SUBTRACT" { "FROM" } else { "TO" };
+        if verb != "ADD" && verb != "SUBTRACT" {
+            return Err(RunError::Unsupported(format!("{verb} CORRESPONDING is not a valid form")));
+        }
+        let cp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == conn))
+            .ok_or_else(|| RunError::Unsupported(format!("{verb} CORRESPONDING without {conn}")))?;
+        let src = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported(format!("{verb} CORRESPONDING: missing source group"))) };
+        let dst = match stmt.get(cp + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported(format!("{verb} CORRESPONDING: missing target group"))) };
+        let mut any_se = false;
+        for (sk, dk) in corr_pairs(fields, &src, &dst)? {
+            let both_numeric = matches!(fields.get(&sk).map(|f| &f.storage), Some(Storage::Numeric(_)))
+                && matches!(fields.get(&dk).map(|f| &f.storage), Some(Storage::Numeric(_)));
+            if !both_numeric {
+                continue; // CORR arithmetic applies only to numeric leaves
+            }
+            let pair = vec![Tok::Word(sk), Tok::Word(conn.to_string()), Tok::Word(dk)];
+            any_se |= exec_arith_inner(verb, &pair, fields, has_handler)?;
+        }
+        return Ok(any_se);
     }
     // find a GIVING receiver if present.
     let giving = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="GIVING"));
@@ -8259,6 +8453,61 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"E1=[ 12] N1=4.0 A1=[56]\n");
+    }
+
+    #[test]
+    fn move_add_subtract_corresponding() {
+        // Oracle (cobc 3.2.0): CORRESPONDING matches like-named elementary leaves between two groups.
+        // MOVE: A2<-11, B2<-"abc", D2 untouched (no D in G1). ADD: A2 11+11=22. SUBTRACT: A2 22-11=11.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 G1.\n\
+                       05 A PIC 99 VALUE 11.\n\
+                       05 B PIC X(3) VALUE \"abc\".\n\
+                       05 C PIC 99 VALUE 5.\n\
+                    01 G2.\n\
+                       05 A PIC 99 VALUE 99.\n\
+                       05 B PIC X(3) VALUE \"zzz\".\n\
+                       05 D PIC 99 VALUE 7.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE CORRESPONDING G1 TO G2.\n\
+                        DISPLAY \"MOVE A2=\" A OF G2 \" B2=\" B OF G2 \" D2=\" D OF G2.\n\
+                        ADD CORRESPONDING G1 TO G2.\n\
+                        DISPLAY \"ADD A2=\" A OF G2.\n\
+                        SUBTRACT CORRESPONDING G1 FROM G2.\n\
+                        DISPLAY \"SUB A2=\" A OF G2.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"MOVE A2=11 B2=abc D2=07\nADD A2=22\nSUB A2=11\n");
+    }
+
+    #[test]
+    fn qualified_names_disambiguate_duplicate_children() {
+        // Oracle (cobc 3.2.0): `AMT OF REC-IN` vs `AMT OF REC-OUT` resolve to distinct fields despite the
+        // shared child names; reads and writes each address the right one.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 REC-IN.\n\
+                       05 AMT PIC 999 VALUE 123.\n\
+                       05 NM PIC X(2) VALUE \"in\".\n\
+                    01 REC-OUT.\n\
+                       05 AMT PIC 999 VALUE 456.\n\
+                       05 NM PIC X(2) VALUE \"ot\".\n\
+                    PROCEDURE DIVISION.\n\
+                        DISPLAY \"IN=\" AMT OF REC-IN \" OUT=\" AMT OF REC-OUT.\n\
+                        MOVE AMT OF REC-IN TO AMT OF REC-OUT.\n\
+                        MOVE \"QQ\" TO NM IN REC-OUT.\n\
+                        DISPLAY \"OUT-AMT=\" AMT OF REC-OUT \" OUT-NM=\" NM OF REC-OUT.\n\
+                        DISPLAY \"IN-NM=\" NM OF REC-IN.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"IN=123 OUT=456\nOUT-AMT=123 OUT-NM=QQ\nIN-NM=in\n");
     }
 }
 
