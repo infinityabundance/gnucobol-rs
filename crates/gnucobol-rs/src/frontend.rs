@@ -1924,10 +1924,12 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             // Admit ONLY the oracle-confirmed subset (single level, fixed count, all-elementary children);
             // fail CLOSED on anything that would need a richer model than the flat field store provides.
             if it.occurs > 1 {
+                // Multi-dimension AND group-of-group tables are built via the recursive nested layout (pass 2).
+                // Still out of subset: OCCURS DEPENDING ON (variable length), and any REDEFINES / ODO /
+                // SYNCHRONIZED item ANYWHERE in the subtree (the nested model has no alias/slack/var-length).
                 if it.odo_counter.is_some() {
                     return Err(RunError::Unsupported(format!("OCCURS DEPENDING ON on group `{}` not in subset", it.name)));
                 }
-                let mut child_level: Option<u16> = None;
                 for sib in &prog.ws[gi + 1..] {
                     if sib.level <= it.level {
                         break;
@@ -1935,34 +1937,22 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                     if sib.level == 88 {
                         continue;
                     }
-                    let cl = *child_level.get_or_insert(sib.level);
-                    if sib.level == cl {
-                        let is_group = sib.pic.is_empty() && sib.float_kind.is_none();
-                        // A child with its own OCCURS (an elementary 2-D table `C(i,j)`) IS now supported via
-                        // the recursive nested layout; only sub-group children / REDEFINES / ODO / SYNC stay out.
-                        let why = if is_group {
-                            Some("child is itself a group (group-of-group)")
-                        } else if sib.redefines.is_some() {
-                            Some("child REDEFINES")
-                        } else if sib.odo_counter.is_some() {
-                            Some("child OCCURS DEPENDING ON")
-                        } else if sib.sync {
-                            Some("SYNCHRONIZED child")
-                        } else {
-                            None
-                        };
-                        if let Some(reason) = why {
-                            return Err(RunError::Unsupported(format!(
-                                "group-OCCURS `{}` ({}) not in subset", it.name, reason
-                            )));
-                        }
-                    } else if sib.level > cl {
+                    let bad = if sib.redefines.is_some() {
+                        Some("REDEFINES")
+                    } else if sib.odo_counter.is_some() {
+                        Some("OCCURS DEPENDING ON")
+                    } else if sib.sync {
+                        Some("SYNCHRONIZED")
+                    } else {
+                        None
+                    };
+                    if let Some(b) = bad {
                         return Err(RunError::Unsupported(format!(
-                            "group-OCCURS `{}` has a nested group child (group-of-group) not in subset", it.name
+                            "group-OCCURS `{}` has a {b} descendant -- not in subset", it.name
                         )));
                     }
                 }
-                // eligible: the GROUP field (interleaved buffer + child views) is built in pass 2.
+                // eligible: the interleaved buffer + per-leaf nested layout is built in pass 2.
             }
             continue;
         }
@@ -2011,8 +2001,11 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // SYNCHRONIZED children get a synthetic slack FILLER inserted before them to reach their natural
     // boundary (offset relative to the group start -- the flat-record case).
     let mut slack_n = 0usize;
+    // Sub-group items consumed by a nested-table build (descendants of a multi-dimension group-OCCURS) are
+    // skipped: their leaves are addressed via NESTED_LEAF, so the intermediate groups own no field.
+    let mut consumed: std::collections::HashSet<usize> = std::collections::HashSet::new();
     for (i, it) in prog.ws.iter().enumerate() {
-        if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() {
+        if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() || consumed.contains(&i) {
             continue;
         }
         let mut children = Vec::new();
@@ -2021,6 +2014,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         let mut child_level: Option<u16> = None;
         let mut offset = 0usize;
         let mut has_occurs_child = false;
+        let mut has_subgroup_child = false;
         for sib in &prog.ws[i + 1..] {
             if sib.level <= it.level {
                 break;
@@ -2032,6 +2026,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             if sib.level == cl {
                 if sib.occurs > 1 {
                     has_occurs_child = true;
+                }
+                if sib.pic.is_empty() && sib.float_kind.is_none() {
+                    has_subgroup_child = true;
                 }
                 let csize = fields.get(&sib.name).map(|f| f.bytes.len()).unwrap_or(0);
                 if sib.sync {
@@ -2056,9 +2053,16 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 offset += csize;
             }
         }
-        // A 2-D group-OCCURS: an immediate child has its OWN OCCURS (`C(i,j)`). Build the buffer via the
-        // recursive layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
-        if it.occurs > 1 && has_occurs_child {
+        // A multi-dimension / group-of-group table: an immediate child has its OWN OCCURS (`C(i,j)`) or is
+        // itself a sub-group (`A(i)` reaching a deeper leaf). Build the interleaved buffer via the recursive
+        // layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
+        if it.occurs > 1 && (has_occurs_child || has_subgroup_child) {
+            // Skip the intermediate sub-groups in this subtree (their leaves are addressed via NESTED_LEAF).
+            let mut k = i + 1;
+            while k < prog.ws.len() && prog.ws[k].level > it.level {
+                consumed.insert(k);
+                k += 1;
+            }
             let (block, leaves) = nested_layout(&prog.ws, i, &fields);
             let stride = block / it.occurs.max(1);
             let mut buf = vec![b' '; block];
@@ -5217,6 +5221,23 @@ fn init_field_category(name: &str, fields: &HashMap<String, Field>) -> Option<In
 
 /// Flatten an INITIALIZE target into its elementary leaf names (recursing groups). OCCURS tables and
 /// group-OCCURS child views are out of the REPLACING subset and fail closed (no silent partial init).
+/// Push `base(s1,..,sk)` for every subscript combination of a multi-dimension leaf's `dims`
+/// (`(occurs, stride)` outermost-first) -- used to expand a nested table for INITIALIZE.
+fn enumerate_combos(base: &str, dims: &[(usize, usize)], out: &mut Vec<String>) {
+    let occs: Vec<usize> = dims.iter().map(|&(o, _)| o).collect();
+    let total: usize = occs.iter().product::<usize>().max(1);
+    for combo in 0..total {
+        let mut rem = combo;
+        let mut subs = vec![0usize; dims.len()];
+        for d in (0..dims.len()).rev() {
+            subs[d] = rem % occs[d] + 1;
+            rem /= occs[d];
+        }
+        let s = subs.iter().map(|x| x.to_string()).collect::<Vec<_>>().join(",");
+        out.push(format!("{base}({s})"));
+    }
+}
+
 fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Vec<String>) -> Result<(), RunError> {
     let (base, sub) = split_subscript(name);
     // An already-subscripted leaf (produced by OCCURS expansion below) is a single leaf.
@@ -5224,37 +5245,63 @@ fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Ve
         out.push(name.to_string());
         return Ok(());
     }
-    let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
-    // An OCCURS table expands to one subscripted leaf per element: an elementary table is `base(i)`; a
-    // single-level group table is each elementary child `child(i)`. Nested/complex tables fail closed.
-    if f.occurs > 1 {
-        match &f.storage {
-            Storage::Group { children } => {
-                let kids = children.clone();
-                for c in &kids {
-                    if !matches!(fields.get(c).map(|x| &x.storage),
-                        Some(Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..))) {
-                        return Err(RunError::Unsupported(format!(
-                            "INITIALIZE over nested/complex OCCURS group `{base}` not in subset"
-                        )));
-                    }
-                }
-                for i in 1..=f.occurs {
-                    for c in &kids {
-                        out.push(format!("{c}({i})"));
-                    }
-                }
-            }
-            Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..) => {
-                for i in 1..=f.occurs {
-                    out.push(format!("{base}({i})"));
-                }
-            }
-            _ => return Err(RunError::Unsupported(format!("INITIALIZE over OCCURS `{base}` not in subset"))),
+    // A multi-dimension leaf expands to one subscripted leaf per (i,j[,k]) combination.
+    if let Some((_, _, _, dims)) = nested_leaf_lookup(base) {
+        enumerate_combos(base, &dims, out);
+        return Ok(());
+    }
+    // A nested-table BASE group (the outer group-OCCURS that owns the interleaved buffer): enumerate ALL its
+    // multi-dimension leaves across their dims. (Its intermediate sub-groups own no field, so we cannot
+    // recurse the children list -- the leaves come straight from NESTED_LEAF, in deterministic name order.)
+    let mut nleaves: Vec<(String, Vec<(usize, usize)>)> = NESTED_LEAF.with(|m| {
+        m.borrow().iter()
+            .filter(|(_, (b, _, _, _))| b == base)
+            .map(|(n, (_, _, _, dims))| (n.clone(), dims.clone()))
+            .collect()
+    });
+    if !nleaves.is_empty() {
+        nleaves.sort();
+        for (leaf, dims) in nleaves {
+            enumerate_combos(&leaf, &dims, out);
         }
         return Ok(());
     }
-    if group_child_lookup(base).is_some() {
+    let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+    // A FLAT OCCURS table expands to one subscripted leaf per element: an elementary table is `base(i)`; a
+    // single-level group-OCCURS of elementary children is each `child(i)`. A table with nested-leaf or
+    // sub-group children is NOT flat -- it falls through to the general recursion (each nested leaf is
+    // enumerated via the multi-dimension branch above; each sub-group recurses).
+    if f.occurs > 1 {
+        let flat = match &f.storage {
+            Storage::Group { children } => children.iter().all(|c| {
+                nested_leaf_lookup(c).is_none()
+                    && matches!(fields.get(c).map(|x| &x.storage),
+                        Some(Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..)))
+            }),
+            Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..) => true,
+            _ => false,
+        };
+        if flat {
+            match &f.storage {
+                Storage::Group { children } => {
+                    let kids = children.clone();
+                    for i in 1..=f.occurs {
+                        for c in &kids {
+                            out.push(format!("{c}({i})"));
+                        }
+                    }
+                }
+                _ => {
+                    for i in 1..=f.occurs {
+                        out.push(format!("{base}({i})"));
+                    }
+                }
+            }
+            return Ok(());
+        }
+        // not flat: fall through to the general recursion (a nested group-OCCURS).
+    }
+    if f.occurs <= 1 && group_child_lookup(base).is_some() {
         return Err(RunError::Unsupported(format!(
             "INITIALIZE over OCCURS child `{base}` must be subscripted -- not in subset"
         )));
@@ -8799,6 +8846,51 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"GRID=[R1112R2122R3132]\nN32=32 TAG2=R SUM=129\n");
+    }
+
+    #[test]
+    fn group_of_group_table_and_initialize() {
+        // Oracle (cobc 3.2.0): a group-OCCURS over a sub-group -> leaves A(i)/B(i) (one subscript reaches a
+        // deeper leaf); INITIALIZE zeros the numeric leaf and spaces the alphanumeric.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 GOG.\n\
+                       05 GRP OCCURS 2.\n\
+                          10 SUB.\n\
+                             15 A PIC X(2).\n\
+                             15 B PIC 9.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE \"ab\" TO A(1). MOVE 1 TO B(1).\n\
+                        MOVE \"cd\" TO A(2). MOVE 2 TO B(2).\n\
+                        DISPLAY \"GOG=[\" GOG \"] A2=\" A(2) \" B1=\" B(1).\n\
+                        INITIALIZE GOG.\n\
+                        DISPLAY \"AFTER=[\" GOG \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"GOG=[ab1cd2] A2=cd B1=1\nAFTER=[  0  0]\n");
+    }
+
+    #[test]
+    fn three_dimensional_table() {
+        // Oracle (cobc 3.2.0): C(i,j,k) over PL OCCURS 2 / RW OCCURS 2 / C OCCURS 2 (strides 8/4/2).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 CUBE.\n\
+                       05 PL OCCURS 2.\n\
+                          10 RW OCCURS 2.\n\
+                             15 C PIC 99 OCCURS 2.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE 11 TO C(1,1,1). MOVE 88 TO C(2,2,2). MOVE 55 TO C(2,1,2).\n\
+                        DISPLAY \"CUBE=[\" CUBE \"] C222=\" C(2,2,2) \" C212=\" C(2,1,2).\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"CUBE=[1100000000550088] C222=88 C212=55\n");
     }
 }
 

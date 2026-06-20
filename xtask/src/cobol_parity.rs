@@ -90,6 +90,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p131_qualified_names.cob", "AMT OF REC-IN"),
     ("OCCURS / tables", "two-dimensional tables: outer group-OCCURS + inner elementary-OCCURS child, addressed `C(i,j)` row-major (read/write/COMPUTE-receiver)", "sealed",
         "lab/corpus/frontend/p132_table_2d.cob", "CEL PIC 99 OCCURS 3"),
+    ("OCCURS / tables", "group-of-group tables (outer group-OCCURS over a sub-group; deep leaves `A(i)`) and N-dimensional `C(i,j,k)`, via the recursive nested layout", "sealed",
+        "lab/corpus/frontend/p135_table_3d.cob", "C PIC 99 OCCURS 2"),
+    ("INITIALIZE", "over a nested / multi-dimension OCCURS table (every cell expanded across its dims)", "sealed",
+        "lab/corpus/frontend/p136_initialize_2d.cob", "INITIALIZE T1"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
