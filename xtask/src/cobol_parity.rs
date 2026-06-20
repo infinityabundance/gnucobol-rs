@@ -112,6 +112,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p145_unstring_multi_delim.cob", "DELIMITED BY \",\" OR \";\""),
     ("MOVE", "conversion completeness -- binary/packed -> alphanumeric (magnitude digits via DISPLAY), packed -> packed, binary/packed -> numeric-edited (found by the MOVE cross-product differential)", "sealed",
         "lab/corpus/frontend/p146_move_conversions.cob", "MOVE BC TO AX"),
+    ("DIVIDE", "binary/packed operands + uninitialized binary/packed zero -- DIVIDE with a COMP/COMP-3 operand normalizes to DISPLAY (was InvalidAttr); a no-VALUE COMP/COMP-3 reads as 0, not '0'-byte garbage (found by the arithmetic cross-product differential)", "sealed",
+        "lab/corpus/frontend/p147_arith_binary.cob", "DIVIDE A INTO B GIVING G ROUNDED"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

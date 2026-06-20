@@ -4214,6 +4214,17 @@ fn make_field(
             attr.flags |= extra_flags;
             let storage = if is_alpha { Storage::Alpha(attr) } else { Storage::Numeric(attr) };
             let mut field = Field { storage, bytes, occurs: 1, redefines: None };
+            // Uninitialized binary/packed/float zero is NOT '0' chars (0x30...) -- that decodes as garbage.
+            // Encode a proper zero for those usages (cobc default-inits COMP/COMP-3/COMP-1/2 to numeric 0).
+            let non_display_numeric = !is_alpha && attr.field_type != COB_TYPE_NUMERIC_DISPLAY;
+            if value.is_none() && non_display_numeric {
+                let zd = lit_num_attr(attr.digits.max(1), attr.scale.max(0), attr.have_sign());
+                let zsrc = vec![b'0'; zd.digits as usize];
+                let mut dst = field.bytes.clone();
+                if crate::move_ops::cob_move(&zsrc, &zd, &mut dst, &attr).is_ok() {
+                    field.bytes = dst;
+                }
+            }
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -8289,6 +8300,9 @@ fn arith_compute(
         // DIVIDE a INTO t [GIVING c]: result = t / a ;  DIVIDE a BY t [GIVING c]: result = a / t
         ("DIVIDE", Some(t)) => {
             let (tb, ta) = operand_value(&Tok::Word(t.to_string()), fields)?;
+            // Normalize a binary (COMP/COMP-5/COMP-X) operand to zoned DISPLAY -- cob_divide's decoder
+            // handles only DISPLAY+PACKED (a raw binary operand would be InvalidAttr).
+            let (tb, ta) = to_arith_operand(&tb, &ta)?;
             let (num, na, den, da) = if kw == "INTO" {
                 (tb, ta, acc.to_vec(), *acc_attr)
             } else {
