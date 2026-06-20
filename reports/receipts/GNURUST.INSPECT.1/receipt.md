@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INSPECT.1` |
 | court | INSPECT byte effects + tally bytes |
-| crate_version | `0.8.17` |
+| crate_version | `0.8.18` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | INSPECT TALLYING/REPLACING/CONVERTING target bytes + tally receiver bytes |
 | replay command | `bash lab/oracle/inspect_sweep.sh` |

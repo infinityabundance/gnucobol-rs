@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.18]
+- **MOVE conversion-matrix completeness (`GNURUST.MOVE.*` / runtime move.c).** A MOVE cross-product differential battery (every USAGE x category source into every destination, signed/scaled/zero/large) against the admitted cobc surfaced real conversion bugs the doxygen *symbol* parity does not cover -- now BYTE-IDENTICAL: a binary/packed source into an ALPHANUMERIC receiver (magnitude digits via a DISPLAY intermediate; was blank/UnsupportedConversion), `packed -> packed` (via the decimal layer; was UnsupportedConversion), and a binary/packed/float source into a numeric-EDITED receiver (decoded through the runtime instead of the DISPLAY-only path that gave garbage). Front-end sweep 146/0.
+
 ## [0.8.17]
 - **UNSTRING multi-delimiter (`GNURUST.FRONTEND.1`).** `UNSTRING ... DELIMITED BY [ALL] d1 [OR [ALL] d2]...` -- the earliest-matching delimiter splits each receiver, `DELIMITER IN` captures which one matched, and an `ALL` delimiter collapses its consecutive repetitions; proven BYTE-IDENTICAL to cobc (front-end sweep now 145 programs, FAIL=0).
 - **Ledger accuracy:** four sub-form rows that cobc itself cannot run -- `USAGE NATIONAL` (cobc `-Wunfinished`), the unwired intrinsic `FUNCTION`s (compile-rejects / live-clock / locale / GMP-PRNG non-claims), and `ACCEPT FROM` terminal/console input (no deterministic oracle) -- are reclassified from feature gaps to boundary non-claims, so the depth ledger names only genuinely-buildable remaining work.
