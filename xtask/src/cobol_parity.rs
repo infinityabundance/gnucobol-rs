@@ -80,6 +80,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p124_initialize_to_value.cob", "ALL TO VALUE"),
     ("UNSTRING", "`ON OVERFLOW` / `NOT ON OVERFLOW` handler (overflow = source characters remain after every receiver is filled)", "sealed",
         "lab/corpus/frontend/p125_unstring_overflow.cob", "ON OVERFLOW DISPLAY"),
+    ("PERFORM", "bare inline `PERFORM <stmts> END-PERFORM` (no TIMES/UNTIL/VARYING) runs the body exactly once", "sealed",
+        "lab/corpus/frontend/p126_perform_inline_once.cob", "DISPLAY \"IN \" N"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

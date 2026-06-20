@@ -3041,8 +3041,9 @@ fn evaluate_value_match(
     Ok(cond_compare(subj, val, fields, col)? == Ordering::Equal)
 }
 
-/// `PERFORM <n> TIMES <stmts> END-PERFORM` or `PERFORM UNTIL <cond> <stmts> END-PERFORM` (the inline
-/// forms). Out-of-line `PERFORM <paragraph>` is not in the subset (fail closed).
+/// `exec_perform` runs all wired forms: out-of-line `PERFORM para [THRU para2]` (with `n TIMES` / `UNTIL` /
+/// `VARYING`), and the inline `PERFORM [n TIMES | UNTIL cond | VARYING ...] <stmts> END-PERFORM` -- including
+/// the bare `PERFORM <stmts> END-PERFORM` that runs the body exactly once.
 /// Parse `VARYING <id> FROM <x> BY <y> UNTIL <cond>` (the cursor is at `VARYING`). Returns the loop
 /// variable, the FROM / BY operand tokens, and the UNTIL condition tokens. Nested `AFTER` varying is
 /// not in the subset (fails closed).
@@ -3296,17 +3297,17 @@ fn exec_perform(
                 }
             }
         }
-    } else {
-        // PERFORM <n> TIMES
+    } else if matches!(toks.get(*pos), Some(Tok::Word(_)))
+        && matches!(toks.get(*pos + 1), Some(Tok::Word(w)) if w == "TIMES")
+    {
+        // PERFORM <n> TIMES ... END-PERFORM
         if let Some(Tok::Word(w)) = toks.get(*pos) {
             times_word = Some(w.clone());
-            *pos += 1;
         }
-        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "TIMES") {
-            *pos += 1;
-        } else {
-            return Err(RunError::Unsupported("PERFORM form (subset: `n TIMES` / `UNTIL cond` inline)".into()));
-        }
+        *pos += 2; // skip the count and TIMES
+    } else {
+        // Bare inline `PERFORM <body> END-PERFORM` -- run the body exactly once (times_word stays None,
+        // which the executor reads as a count of 1). The cursor is already at the body's first token.
     }
 
     // record the body's start; we re-run it per iteration.
@@ -3341,10 +3342,12 @@ fn exec_perform(
                 }
             }
         } else {
-            let n = times_word
-                .as_deref()
-                .and_then(|w| resolve_int(w, fields))
-                .ok_or_else(|| RunError::Unsupported("PERFORM TIMES count not an integer".into()))?;
+            // No times_word -> the bare inline form runs the body once.
+            let n = match &times_word {
+                Some(w) => resolve_int(w, fields)
+                    .ok_or_else(|| RunError::Unsupported("PERFORM TIMES count not an integer".into()))?,
+                None => 1,
+            };
             for _ in 0..n {
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
@@ -8155,6 +8158,27 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"OVF1\nR1=[A  ] R2=[B  ]\nOK2\nR1=[X  ] R2=[Y  ]\n");
+    }
+
+    #[test]
+    fn perform_bare_inline_runs_body_once() {
+        // Oracle (cobc 3.2.0): a bare inline `PERFORM <body> END-PERFORM` (no TIMES/UNTIL/VARYING) runs the
+        // body exactly once -> N incremented to 1.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 N PIC 9 VALUE 0.\n\
+                    PROCEDURE DIVISION.\n\
+                        PERFORM\n\
+                           ADD 1 TO N\n\
+                           DISPLAY \"IN \" N\n\
+                        END-PERFORM.\n\
+                        DISPLAY \"OUT \" N.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"IN 1\nOUT 1\n");
     }
 }
 
