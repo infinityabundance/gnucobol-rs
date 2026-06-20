@@ -9,6 +9,10 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.17]
+- **UNSTRING multi-delimiter (`GNURUST.FRONTEND.1`).** `UNSTRING ... DELIMITED BY [ALL] d1 [OR [ALL] d2]...` -- the earliest-matching delimiter splits each receiver, `DELIMITER IN` captures which one matched, and an `ALL` delimiter collapses its consecutive repetitions; proven BYTE-IDENTICAL to cobc (front-end sweep now 145 programs, FAIL=0).
+- **Ledger accuracy:** four sub-form rows that cobc itself cannot run -- `USAGE NATIONAL` (cobc `-Wunfinished`), the unwired intrinsic `FUNCTION`s (compile-rejects / live-clock / locale / GMP-PRNG non-claims), and `ACCEPT FROM` terminal/console input (no deterministic oracle) -- are reclassified from feature gaps to boundary non-claims, so the depth ledger names only genuinely-buildable remaining work.
+
 ## [0.8.16]
 - **Report Writer Layers 2 + 3 (`GNURUST.FRONTEND.1`).** Page-break overflow (a body line past FOOTING/PAGE LIMIT flushes the page, starts a new one, re-emits PAGE HEADING, resumes at FIRST DETAIL; the final page is padded to PAGE LIMIT) and data CONTROL breaks (a CONTROLS field change emits the changed CONTROL FOOTINGs minor->major with per-control SUM subtotals that reset on break, then CONTROL HEADINGs major->minor; FINAL footing at TERMINATE), both proven BYTE-IDENTICAL to cobc (front-end sweep now 144 programs, FAIL=0). Also adds GENERATE to the statement-verb set so an inline `MOVE x TO y GENERATE g` parses.
 
