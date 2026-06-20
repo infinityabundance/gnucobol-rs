@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.11]
+- **Group-of-group + N-dimensional tables (`GNURUST.FRONTEND.1`).** Completing the multi-dimension table engine: a group-OCCURS over a sub-group (`A(i)` reaching a deeper leaf), and N-dimensional `C(i,j,k)` from stacked OCCURS levels, all proven BYTE-IDENTICAL to cobc (front-end sweep now 136 programs, FAIL=0). `INITIALIZE` over a nested / multi-dimension table now expands every cell across its dims. The build gate admits any group-OCCURS whose subtree has no REDEFINES / OCCURS-DEPENDING / SYNCHRONIZED descendant (those remain narrowed gaps); the flat single-subscript group-OCCURS path is unchanged.
+
 ## [0.8.10]
 - **Two-dimensional tables (`GNURUST.FRONTEND.1`).** A group-OCCURS whose child has its own OCCURS (`05 ROW OCCURS n. 10 CEL PIC.. OCCURS m.`) is now a real 2-D table: `CEL(i,j)` resolves row-major for reads, writes, and as a COMPUTE receiver, proven BYTE-IDENTICAL to cobc (front-end sweep now 133 programs, FAIL=0) including nested-PERFORM matrix fill and ADD over both subscripts. A recursive layout engine lays each leaf out with its full (occurs, stride) dims; the flat single-subscript group-OCCURS path is unchanged. Sub-group / REDEFINES / OCCURS-DEPENDING / SYNC children remain narrowed gaps.
 - **Latent fix:** `COMPUTE` now stores through the general write path, so a subscripted / multi-dimension receiver (`E(I)`, `N(I,J)`) works as a COMPUTE target (was scalar-only).
