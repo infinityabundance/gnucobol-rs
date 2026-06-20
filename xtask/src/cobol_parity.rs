@@ -104,6 +104,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p141_initialize_to_value_forms.cob", "NUMERIC TO VALUE"),
     ("REPORT WRITER", "Layer 1: RD PAGE LIMIT/HEADING/FIRST DETAIL + TYPE REPORT HEADING / DETAIL (LINE abs/PLUS) / CONTROL FOOTING FINAL with SUM; INITIATE/GENERATE/TERMINATE page-buffer flush", "sealed",
         "lab/corpus/frontend/p142_report_writer.cob", "TYPE CONTROL FOOTING FINAL"),
+    ("REPORT WRITER", "Layer 2: PAGE LIMIT/FOOTING overflow -> flush page at high-water, new page, re-emit PAGE HEADING (final page padded)", "sealed",
+        "lab/corpus/frontend/p143_report_page_break.cob", "PAGE LIMIT 6 LINE HEADING 1 FIRST DETAIL 3 FOOTING 5"),
+    ("REPORT WRITER", "Layer 3: data CONTROL breaks -> CONTROL FOOTING (per-control SUM subtotal, minor->major, reset on break) + CONTROL HEADING (major->minor); FINAL at TERMINATE", "sealed",
+        "lab/corpus/frontend/p144_report_control_break.cob", "TYPE CONTROL FOOTING GRP"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

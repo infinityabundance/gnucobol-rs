@@ -572,8 +572,12 @@ struct ReportRun {
     line: usize,
     page: Vec<Vec<u8>>,
     rh_done: bool,
-    detail_seen: bool,
-    sums: HashMap<String, Decimal>,
+    page_first: bool,
+    // SUM accumulators keyed by (CONTROL FOOTING control name, SUM source data-name): each control level
+    // has its own running total, reset when that control breaks (FINAL only at TERMINATE).
+    sums: HashMap<(String, String), Decimal>,
+    // The control data-name values as of the last GENERATE (to detect a control break).
+    ctrl_prev: HashMap<String, Vec<u8>>,
 }
 
 /// The live state of an OPEN file: its logical records, the next READ position, and the open mode.
@@ -2836,7 +2840,7 @@ const STMT_VERBS: &[&str] = &[
     "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
     "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
     "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
+    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
 ];
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
@@ -3049,7 +3053,8 @@ fn run_block(
                             match t {
                                 Tok::Dot => break,
                                 Tok::Word(w) if w == "END-JSON" || w == "END-XML" => { *pos += 1; break; }
-                                Tok::Word(w) if is_boundary(w) && w != "SUPPRESS" => break,
+                                // GENERATE/PARSE are the JSON/XML sub-verbs, SUPPRESS a clause keyword -- none ends the statement here.
+                                Tok::Word(w) if is_boundary(w) && !matches!(w.as_str(), "SUPPRESS" | "GENERATE" | "PARSE") => break,
                                 _ => { stmt.push(t.clone()); *pos += 1; }
                             }
                         }
@@ -6514,9 +6519,12 @@ fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Resul
 
 /// Render one report element to its display bytes: a SUM element shows the accumulated total, else the
 /// SOURCE field value or the literal VALUE (via [`format_relem`]).
-fn render_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx, sums: &HashMap<String, Decimal>) -> Result<Vec<u8>, RunError> {
+/// Render one report element to display bytes: a SUM element shows the accumulated total for its CONTROL
+/// FOOTING's control level; else the SOURCE field value or the literal VALUE (via [`format_relem`]).
+fn render_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx, run: &ReportRun, control: &str) -> Result<Vec<u8>, RunError> {
     if let Some(s) = &el.sum {
-        let dec = sums.get(s).cloned().unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
+        let dec = run.sums.get(&(control.to_string(), s.clone())).cloned()
+            .unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
         let mut temp = make_field(&el.pic, None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false), 0)?;
         let (b, a) = decimal_as_display(&dec);
         move_into(&mut temp, &b, &a, ctx.decimal_comma)?;
@@ -6525,21 +6533,73 @@ fn render_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx, sums: &H
     format_relem(el, fields, ctx)
 }
 
-/// Place one report group's lines into the report's page buffer at their computed LINE positions. `first`
-/// is true when this is the first DETAIL on the page (its first line is bumped to the RD FIRST DETAIL line).
-fn place_group(run: &mut ReportRun, def: &ReportDef, group: &RGroup, first: bool, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let mut first_line = true;
+/// The last line a body group (DETAIL / CONTROL FOOTING/HEADING) may occupy before a page break: RD FOOTING,
+/// else PAGE LIMIT, else no limit.
+fn report_body_limit(def: &ReportDef) -> usize {
+    if def.footing > 0 { def.footing } else if def.page_limit > 0 { def.page_limit } else { usize::MAX }
+}
+
+/// A fresh per-report run state: current line below HEADING, an empty (or PAGE-LIMIT-sized) page, all SUM
+/// accumulators zeroed.
+fn fresh_report_run(def: &ReportDef) -> ReportRun {
+    let mut sums: HashMap<(String, String), Decimal> = HashMap::new();
+    for g in &def.groups {
+        if let GType::ControlFooting(c) = &g.gtype {
+            for l in &g.lines {
+                for e in &l.elems {
+                    if let Some(s) = &e.sum { sums.insert((c.clone(), s.clone()), Decimal { negative: false, digits: vec![0], scale: 0 }); }
+                }
+            }
+        }
+    }
+    ReportRun { line: def.heading.saturating_sub(1), page: Vec::new(), rh_done: false, page_first: true, sums, ctrl_prev: HashMap::new() }
+}
+
+/// Flush the current page buffer to the report's file: padded to PAGE LIMIT (`pad`, the final page at
+/// TERMINATE) or to the high-water line (a mid-report page break); trailing-trimmed for LINE SEQUENTIAL.
+fn flush_page(run: &ReportRun, def: &ReportDef, ctx: &Ctx, pad: bool) {
+    let org = ctx.file_defs.get(&def.file).map(|d| d.org).unwrap_or(FileOrg::LineSequential);
+    let limit = if pad && def.page_limit > 0 { def.page_limit.max(run.page.len()) } else { run.page.len() };
+    let mut files = ctx.files.borrow_mut();
+    let st = files.entry(fkey(ctx, &def.file)).or_default();
+    for n in 0..limit {
+        let mut buf = run.page.get(n).cloned().unwrap_or_default();
+        if org == FileOrg::LineSequential { while buf.last() == Some(&b' ') { buf.pop(); } }
+        st.records.push(buf);
+    }
+}
+
+/// Advance to a new page: flush the current page (high-water, no pad), reset the buffer, emit PAGE HEADING.
+fn page_advance(run: &mut ReportRun, def: &ReportDef, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    flush_page(run, def, ctx, false);
+    run.page = Vec::new();
+    run.line = def.heading.saturating_sub(1);
+    run.page_first = true;
+    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::PageHeading) {
+        place_group(run, def, g, fields, ctx)?;
+    }
+    Ok(())
+}
+
+/// Place one report group's lines into the page buffer at their LINE positions, handling page-break overflow
+/// (a body line past FOOTING/PAGE LIMIT advances the page) and the FIRST DETAIL bump for the first body line.
+fn place_group(run: &mut ReportRun, def: &ReportDef, group: &RGroup, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+    let control = match &group.gtype {
+        GType::ControlFooting(c) | GType::ControlHeading(c) => c.clone(),
+        _ => String::new(),
+    };
+    let is_body = !matches!(group.gtype, GType::ReportHeading | GType::PageHeading | GType::PageFooting);
     for rl in &group.lines {
-        let mut pos = match rl.spec {
-            LineSpec::Abs(n) => n,
-            LineSpec::Plus(k) => run.line + k,
-        };
-        if first && first_line && pos < def.first_detail {
-            pos = def.first_detail;
+        let mut pos = match rl.spec { LineSpec::Abs(n) => n, LineSpec::Plus(k) => run.line + k };
+        if is_body && run.page_first && pos < def.first_detail { pos = def.first_detail; }
+        if is_body && def.page_limit > 0 && pos > report_body_limit(def) {
+            page_advance(run, def, fields, ctx)?;
+            pos = match rl.spec { LineSpec::Abs(n) => n, LineSpec::Plus(k) => run.line + k };
+            if pos < def.first_detail { pos = def.first_detail; }
         }
         let mut buf: Vec<u8> = Vec::new();
         for el in &rl.elems {
-            let val = render_relem(el, fields, ctx, &run.sums)?;
+            let val = render_relem(el, fields, ctx, run, &control)?;
             let s = el.column.saturating_sub(1);
             let e = s + val.len();
             if buf.len() < e { buf.resize(e, b' '); }
@@ -6550,97 +6610,106 @@ fn place_group(run: &mut ReportRun, def: &ReportDef, group: &RGroup, first: bool
             run.page[pos - 1] = buf;
         }
         run.line = pos;
-        first_line = false;
+        if is_body { run.page_first = false; }
     }
     Ok(())
 }
 
-/// Find the report (name, def-clone) whose groups contain a DETAIL group named `gname`.
+/// Find the report whose groups contain a DETAIL group named `gname`.
 fn report_of_detail<'a>(ctx: &'a Ctx, gname: &str) -> Option<(&'a String, &'a ReportDef)> {
     ctx.reports.iter().find(|(_, rd)| rd.groups.iter().any(|g| g.name.as_deref() == Some(gname) && g.gtype == GType::Detail))
 }
 
-/// `INITIATE report` -- begin a report: reset its page buffer (PAGE LIMIT lines), current line, heading
-/// flag, and SUM accumulators (zeroed for every SUM source).
-fn exec_initiate(stmt: &[Tok], ctx: &Ctx) -> Result<(), RunError> {
-    let rname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Ok(()) };
-    let Some(def) = ctx.reports.get(&rname) else { return Ok(()) };
-    let mut sums: HashMap<String, Decimal> = HashMap::new();
+/// The current bytes of a control data-name (for control-break detection).
+fn control_value(name: &str, fields: &HashMap<String, Field>) -> Vec<u8> {
+    read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default()
+}
+
+/// Add every CONTROL FOOTING's SUM source into its (control, source) running total.
+fn accumulate_sums(run: &mut ReportRun, def: &ReportDef, fields: &HashMap<String, Field>) {
     for g in &def.groups {
+        let GType::ControlFooting(c) = &g.gtype else { continue };
         for l in &g.lines {
             for e in &l.elems {
-                if let Some(s) = &e.sum { sums.insert(s.clone(), Decimal { negative: false, digits: vec![0], scale: 0 }); }
+                let Some(src) = &e.sum else { continue };
+                let Ok((b, a)) = operand_value(&Tok::Word(src.clone()), fields) else { continue };
+                let key = (c.clone(), src.clone());
+                let cur = run.sums.get(&key).cloned().unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
+                let (cb, ca) = decimal_as_display(&cur);
+                if let Ok((rb, ra)) = wide_op(Op::Add, &cb, &ca, &b, &a) {
+                    if let Ok(nd) = source_to_decimal(&rb, &ra) { run.sums.insert(key, nd); }
+                }
             }
         }
     }
-    REPORT_STATE.with(|m| m.borrow_mut().insert(rname, ReportRun {
-        line: def.heading.saturating_sub(1),
-        page: vec![Vec::new(); def.page_limit],
-        rh_done: false,
-        detail_seen: false,
-        sums,
-    }));
+}
+
+/// `INITIATE report` -- begin a report: fresh page buffer, current line, SUM accumulators.
+fn exec_initiate(stmt: &[Tok], ctx: &Ctx) -> Result<(), RunError> {
+    let rname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Ok(()) };
+    let Some(def) = ctx.reports.get(&rname) else { return Ok(()) };
+    let run = fresh_report_run(def);
+    REPORT_STATE.with(|m| m.borrow_mut().insert(rname, run));
     Ok(())
 }
 
-/// `GENERATE detail-group` -- on the first GENERATE emit the REPORT/PAGE HEADING; accumulate each SUM
-/// source; then place the named DETAIL group into the page buffer (Layer 1: single page, FINAL controls).
+/// `GENERATE detail-group` -- on first GENERATE emit REPORT/PAGE HEADING + the opening CONTROL HEADINGs; on a
+/// control break emit the changed CONTROL FOOTINGs (minor->major, with subtotals) then CONTROL HEADINGs
+/// (major->minor); accumulate SUMs; then place the DETAIL (with page-break overflow handling).
 fn exec_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
     let gname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("GENERATE: missing report group".into())) };
     let (rname, def) = match report_of_detail(ctx, &gname) {
         Some((n, d)) => (n.clone(), d.clone()),
         None => return Err(RunError::Unsupported(format!("GENERATE: `{gname}` is not a report group in the subset"))),
     };
-    // Take the run state (INITIATE seeds it; default to a fresh page if GENERATE precedes INITIATE).
-    let mut run = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)).unwrap_or_else(|| ReportRun {
-        line: def.heading.saturating_sub(1), page: vec![Vec::new(); def.page_limit], rh_done: false, detail_seen: false, sums: HashMap::new(),
-    });
-    // First GENERATE: emit REPORT HEADING then PAGE HEADING (once).
+    let mut run = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)).unwrap_or_else(|| fresh_report_run(&def));
+    let data_controls: Vec<String> = def.controls.iter().filter(|c| c.as_str() != "FINAL").cloned().collect();
+    let find = |pred: GType| def.groups.iter().find(move |g| g.gtype == pred);
     if !run.rh_done {
-        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportHeading) { place_group(&mut run, &def, g, false, fields, ctx)?; }
-        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::PageHeading) { place_group(&mut run, &def, g, false, fields, ctx)?; }
+        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportHeading) { place_group(&mut run, &def, g, fields, ctx)?; }
+        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::PageHeading) { place_group(&mut run, &def, g, fields, ctx)?; }
         run.rh_done = true;
-    }
-    // Accumulate every SUM source (FINAL control footing) by the current source value.
-    let sources: Vec<String> = run.sums.keys().cloned().collect();
-    for s in sources {
-        if let Ok((b, a)) = operand_value(&Tok::Word(s.clone()), fields) {
-            if let Ok(d) = source_to_decimal(&b, &a) {
-                let cur = run.sums.get(&s).cloned().unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
-                let (sb, sa) = decimal_as_display(&cur);
-                let sum = wide_op(Op::Add, &sb, &sa, &b, &a).and_then(|(rb, ra)| source_to_decimal(&rb, &ra));
-                if let Ok(nd) = sum { run.sums.insert(s, nd); } else { let _ = d; }
+        if let Some(g) = find(GType::ControlHeading("FINAL".into())) { place_group(&mut run, &def, g, fields, ctx)?; }
+        for c in &data_controls { if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlHeading(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; } }
+        for c in &def.controls { run.ctrl_prev.insert(c.clone(), control_value(c, fields)); }
+    } else {
+        let mut bl: Option<usize> = None;
+        for (idx, c) in data_controls.iter().enumerate() {
+            if control_value(c, fields) != *run.ctrl_prev.get(c).cloned().get_or_insert_with(Vec::new) { bl = Some(idx); break; }
+        }
+        if let Some(bl) = bl {
+            for c in data_controls[bl..].iter().rev() {
+                if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; }
+                let keys: Vec<(String, String)> = run.sums.keys().filter(|(cc, _)| cc == c).cloned().collect();
+                for k in keys { run.sums.insert(k, Decimal { negative: false, digits: vec![0], scale: 0 }); }
             }
+            for c in data_controls[bl..].iter() {
+                if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlHeading(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; }
+            }
+            for c in &data_controls { run.ctrl_prev.insert(c.clone(), control_value(c, fields)); }
         }
     }
-    // Place the DETAIL group.
+    accumulate_sums(&mut run, &def, fields);
     if let Some(g) = def.groups.iter().find(|g| g.name.as_deref() == Some(gname.as_str()) && g.gtype == GType::Detail) {
-        let first = !run.detail_seen;
-        place_group(&mut run, &def, g, first, fields, ctx)?;
-        run.detail_seen = true;
+        place_group(&mut run, &def, g, fields, ctx)?;
     }
     REPORT_STATE.with(|m| m.borrow_mut().insert(rname, run));
     Ok(())
 }
 
-/// `TERMINATE report` -- emit the FINAL CONTROL FOOTING (with SUM totals) and REPORT FOOTING, then flush the
-/// page buffer (all PAGE LIMIT lines, blank-padded) to the report's file. (Layer 1: single page.)
+/// `TERMINATE report` -- emit the CONTROL FOOTINGs (data minor->major, then FINAL) and REPORT FOOTING, then
+/// flush the final page (padded to PAGE LIMIT).
 fn exec_terminate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
     let rname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Ok(()) };
     let Some(def) = ctx.reports.get(&rname).cloned() else { return Ok(()) };
     let Some(mut run) = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)) else { return Ok(()) };
-    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting("FINAL".into())) { place_group(&mut run, &def, g, false, fields, ctx)?; }
-    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportFooting) { place_group(&mut run, &def, g, false, fields, ctx)?; }
-    // Flush the page: every line 1..=PAGE LIMIT, content or blank (LINE SEQUENTIAL trims trailing spaces).
-    let org = ctx.file_defs.get(&def.file).map(|d| d.org).unwrap_or(FileOrg::LineSequential);
-    let limit = def.page_limit.max(run.page.len());
-    let mut files = ctx.files.borrow_mut();
-    let st = files.entry(fkey(ctx, &def.file)).or_default();
-    for n in 0..limit {
-        let mut buf = run.page.get(n).cloned().unwrap_or_default();
-        if org == FileOrg::LineSequential { while buf.last() == Some(&b' ') { buf.pop(); } }
-        st.records.push(buf);
+    let data_controls: Vec<String> = def.controls.iter().filter(|c| c.as_str() != "FINAL").cloned().collect();
+    for c in data_controls.iter().rev() {
+        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; }
     }
+    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting("FINAL".into())) { place_group(&mut run, &def, g, fields, ctx)?; }
+    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportFooting) { place_group(&mut run, &def, g, fields, ctx)?; }
+    flush_page(&run, &def, ctx, true);
     Ok(())
 }
 
