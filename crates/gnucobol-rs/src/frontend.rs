@@ -2395,6 +2395,11 @@ fn run_block(
                             return Ok(true);
                         }
                     }
+                    "START" => {
+                        if exec_start(toks, pos, fields, out, exec, ctx)? {
+                            return Ok(true);
+                        }
+                    }
                     "RETURN" => {
                         if exec_return(toks, pos, fields, out, exec, ctx)? {
                             return Ok(true);
@@ -3972,7 +3977,6 @@ fn exec_stmt(
         "WRITE" => exec_write(stmt, fields, ctx),
         "REWRITE" => exec_rewrite(stmt, fields, ctx),
         "DELETE" => exec_delete(stmt, fields, ctx),
-        "START" => exec_start(stmt, fields, ctx),
         // MERGE of already-ordered inputs yields the same globally-ordered output as SORT over the union.
         "SORT" | "MERGE" => exec_sort(stmt, fields, out, ctx),
         "RELEASE" => exec_release(stmt, fields, ctx),
@@ -5944,44 +5948,92 @@ fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
     Ok(())
 }
 
-/// `START file [KEY [IS] {= | > | >= | < | <= | NOT < | NOT >} key-field]` -- position a RELATIVE file so
-/// the next sequential READ returns the first record whose relative number satisfies the relation (default
-/// `=` on the current RELATIVE KEY). Status `"23"` if no record qualifies. `INVALID KEY` is out of subset.
-fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let file = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("START: missing file".into())) };
+/// A START handler block (`INVALID KEY` / `NOT INVALID KEY`) or the relation head ends at END-START, an
+/// outer scope terminator, a period, or a following `NOT INVALID` clause.
+fn at_start_block_end(toks: &[Tok], p: usize) -> bool {
+    match toks.get(p) {
+        None | Some(Tok::Dot) => true,
+        Some(Tok::Word(w)) if w == "END-START" || SCOPE_ENDERS.contains(&w.as_str()) => true,
+        Some(Tok::Word(w)) if w == "NOT" && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "INVALID") => true,
+        _ => false,
+    }
+}
+
+/// `START file [KEY [IS] {= | > | >= | < | <= | NOT < | NOT >} key-field] [INVALID KEY imp] [NOT INVALID
+/// KEY imp] [END-START]` -- position a RELATIVE/INDEXED file so the next sequential READ returns the first
+/// record whose key satisfies the relation (default `=` on the current key). Status `"23"` if none qualifies;
+/// the INVALID KEY / NOT INVALID KEY imperatives run on miss / success.
+fn exec_start(
+    toks: &[Tok],
+    pos: &mut usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    exec: bool,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
+    let file = match toks.get(*pos) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("START: missing file".into())) };
+    *pos += 1;
+    // The relation head runs until END-START / INVALID KEY / NOT INVALID KEY / a scope boundary.
+    let head_start = *pos;
+    while *pos < toks.len()
+        && !at_start_block_end(toks, *pos)
+        && !matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INVALID")
+    {
+        *pos += 1;
+    }
+    let head: Vec<Tok> = toks[head_start..*pos].to_vec();
+    let mut invalid_blk: Option<Vec<Tok>> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INVALID") {
+        *pos += 1;
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "KEY") { *pos += 1; }
+        let s = *pos;
+        while *pos < toks.len() && !at_start_block_end(toks, *pos) { *pos += 1; }
+        invalid_blk = Some(toks[s..*pos].to_vec());
+    }
+    let mut not_invalid_blk: Option<Vec<Tok>> = None;
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NOT") {
+        *pos += 1;
+        for kw in ["INVALID", "KEY"] {
+            if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == kw) { *pos += 1; }
+        }
+        let s = *pos;
+        while *pos < toks.len() && !at_start_block_end(toks, *pos) { *pos += 1; }
+        not_invalid_blk = Some(toks[s..*pos].to_vec());
+    }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-START") { *pos += 1; }
+    if !exec {
+        return Ok(false);
+    }
     let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("START: `{file}` is not a declared file")))?.clone();
     if !matches!(def.org, FileOrg::Relative | FileOrg::Indexed) {
         return Err(RunError::Unsupported("START is only supported on a RELATIVE or INDEXED file in this subset".into()));
     }
-    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "INVALID")) {
-        return Err(RunError::Unsupported("START ... INVALID KEY not in subset".into()));
-    }
-    // Parse the relation (default `=`) and the optional named key field.
+    // Parse the relation (default `=`) and the optional named key field from the head.
     let mut rel = "=".to_string();
     let mut key_field: Option<String> = None;
-    if let Some(kp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "KEY")) {
+    if let Some(kp) = head.iter().position(|t| matches!(t, Tok::Word(w) if w == "KEY")) {
         let mut i = kp + 1;
-        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
-        rel = match stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
-            Some("=") | Some("EQUAL") => { i += 1; if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "TO") { i += 1; } "=".into() }
+        if matches!(head.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+        rel = match head.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
+            Some("=") | Some("EQUAL") => { i += 1; if matches!(head.get(i), Some(Tok::Word(w)) if w == "TO") { i += 1; } "=".into() }
             Some(">=") => { i += 1; ">=".into() }
             Some("<=") => { i += 1; "<=".into() }
-            Some(">") | Some("GREATER") => { i += 1; if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } ">".into() }
-            Some("<") | Some("LESS") => { i += 1; if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } "<".into() }
+            Some(">") | Some("GREATER") => { i += 1; if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } ">".into() }
+            Some("<") | Some("LESS") => { i += 1; if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } "<".into() }
             Some("NOT") => {
                 i += 1;
-                let r = match stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
+                let r = match head.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
                     Some("<") | Some("LESS") => ">=",
                     Some(">") | Some("GREATER") => "<=",
                     _ => return Err(RunError::Unsupported("START KEY NOT <relation>".into())),
                 };
                 i += 1;
-                if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; }
+                if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; }
                 r.into()
             }
             other => return Err(RunError::Unsupported(format!("START KEY relation {other:?}"))),
         };
-        if let Some(Tok::Word(field)) = stmt.get(i) { key_field = Some(field.clone()); }
+        if let Some(Tok::Word(field)) = head.get(i) { key_field = Some(field.clone()); }
     }
     // foundpos is the `read_pos` value the next sequential READ should resume from: a record index for
     // RELATIVE, an index into the ascending-key order for INDEXED.
@@ -6032,10 +6084,18 @@ fn exec_start(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         Some(p) => {
             if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos = p; }
             set_file_status(fields, &def, "00");
+            if let Some(b) = &not_invalid_blk {
+                return run_handler(b, fields, out, ctx);
+            }
         }
-        None => set_file_status(fields, &def, "23"),
+        None => {
+            set_file_status(fields, &def, "23");
+            if let Some(b) = &invalid_blk {
+                return run_handler(b, fields, out, ctx);
+            }
+        }
     }
-    Ok(())
+    Ok(false)
 }
 
 /// `READ file [NEXT] [RECORD] [INTO id] [AT END imperative] [END-READ]` -- read the next sequential record
