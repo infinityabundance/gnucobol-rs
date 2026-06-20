@@ -1628,6 +1628,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     GROUP_OCCURS.with(|m| m.borrow_mut().clear());
     GROUP_CHILD.with(|m| m.borrow_mut().clear());
     ALPHABETIC_FIELDS.with(|m| m.borrow_mut().clear());
+    FIELD_VALUES.with(|m| m.borrow_mut().clear());
     for (gi, it) in prog.ws.iter().enumerate() {
         // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
         if let Some((parent, values, false_value)) = &it.condition {
@@ -1724,6 +1725,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // OCCURS ... ASCENDING|DESCENDING KEY: the table's sort direction, for SEARCH ALL (binary search).
         if let Some(asc) = it.occurs_key {
             TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
+        }
+        // Capture the VALUE image (scalars only) for INITIALIZE ... ALL TO VALUE.
+        if it.value.is_some() && it.occurs <= 1 {
+            FIELD_VALUES.with(|m| m.borrow_mut().insert(it.name.clone(), f.bytes.clone()));
         }
         fields.insert(it.name.clone(), f);
     }
@@ -1910,6 +1915,11 @@ thread_local! {
     /// category at COMPILE time from the PIC. We retain it here so `INITIALIZE ... REPLACING ALPHABETIC` vs
     /// `REPLACING ALPHANUMERIC` can target the right leaves (an `ALPHANUMERIC` replace must skip PIC A).
     static ALPHABETIC_FIELDS: std::cell::RefCell<std::collections::HashSet<String>> = std::cell::RefCell::new(std::collections::HashSet::new());
+    /// The VALUE-clause image (initial bytes) of each elementary field that declared a `VALUE`, keyed by
+    /// field name. Captured at field-build time so `INITIALIZE ... ALL TO VALUE` can restore each leaf to
+    /// its VALUE (a leaf with no VALUE is absent here and left unchanged, matching cobc). Scalars only
+    /// (OCCURS tables are not captured; INITIALIZE TO VALUE over a table fails closed).
+    static FIELD_VALUES: std::cell::RefCell<HashMap<String, Vec<u8>>> = std::cell::RefCell::new(HashMap::new());
     /// The stack of executing PROGRAM-IDs (top = current). Pushed/popped around each program body so
     /// `FUNCTION MODULE-ID` reads the running program and `FUNCTION MODULE-CALLER-ID` reads its caller.
     static PROGRAM_STACK: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
@@ -4637,6 +4647,13 @@ enum InitCat {
 /// value (`cat` in {NUMERIC, ALPHANUMERIC, ALPHABETIC, NUMERIC-EDITED, ALPHANUMERIC-EDITED}); leaves of an
 /// unnamed category are left UNCHANGED. `WITH`/`THEN`/`TO VALUE` and OCCURS-table targets fail closed.
 fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    // `INITIALIZE items [WITH FILLER] ALL TO VALUE` -- restore each leaf to its VALUE clause (a leaf with no
+    // VALUE is left unchanged). Detected before the head parser, which otherwise rejects ALL/TO/WITH/FILLER.
+    if let Some(tp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO")) {
+        if matches!(stmt.get(tp + 1), Some(Tok::Word(w)) if w == "VALUE") {
+            return exec_initialize_to_value(stmt, tp, fields);
+        }
+    }
     let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"));
     let head = match repl_pos {
         Some(p) => &stmt[..p],
@@ -4688,6 +4705,43 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
     Ok(())
 }
 
+
+/// `INITIALIZE items [WITH FILLER] ALL TO VALUE` (`tp` is the `TO` position): each elementary leaf that
+/// declared a `VALUE` is restored to that VALUE image (captured in `FIELD_VALUES`); a leaf with no VALUE is
+/// left UNCHANGED -- matching cobc. The subset is `ALL TO VALUE` only; `category TO VALUE`, `TO DEFAULT`,
+/// a trailing `THEN`/`REPLACING`, and OCCURS-table targets fail closed.
+fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
+    if stmt.len() > tp + 2 {
+        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: trailing THEN/REPLACING clause not in subset".into()));
+    }
+    // The modifier immediately before TO must be ALL (`category TO VALUE` is not in the subset).
+    if !matches!(stmt.get(tp.wrapping_sub(1)), Some(Tok::Word(w)) if w == "ALL") {
+        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE subset is `items [WITH FILLER] ALL TO VALUE`".into()));
+    }
+    // Item names run up to the modifier region (`WITH FILLER` / `ALL`).
+    let mod_start = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "WITH" || w == "ALL")).unwrap_or(tp);
+    let names: Vec<String> = stmt[..mod_start].iter().filter_map(|t| match t {
+        Tok::Word(w) => Some(w.clone()),
+        _ => None,
+    }).collect();
+    if names.is_empty() {
+        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: no item named".into()));
+    }
+    for name in &names {
+        let mut leaves = Vec::new();
+        collect_init_leaves(name, fields, &mut leaves)?;
+        for leaf in leaves {
+            if split_subscript(&leaf).1.is_some() {
+                return Err(RunError::Unsupported("INITIALIZE ... TO VALUE over an OCCURS table not in subset".into()));
+            }
+            // A leaf with a captured VALUE image is restored to it; one without is left unchanged.
+            if let Some(img) = FIELD_VALUES.with(|m| m.borrow().get(&leaf).cloned()) {
+                fields.get_mut(&leaf).ok_or_else(|| RunError::UndefinedName(leaf.clone()))?.bytes = img;
+            }
+        }
+    }
+    Ok(())
+}
 
 /// Parse the `cat [DATA] BY val [cat [DATA] BY val ...]` tail of INITIALIZE REPLACING into (category, value).
 fn parse_initialize_replacing(toks: &[Tok]) -> Result<Vec<(InitCat, Tok)>, RunError> {
@@ -8025,6 +8079,31 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"C=03\nG=[AB\"\"\"]\n");
+    }
+
+    #[test]
+    fn initialize_all_to_value_restores_value_clauses() {
+        // Oracle (cobc 3.2.0): `INITIALIZE G ALL TO VALUE` sets each leaf WITH a VALUE clause to that VALUE
+        // (A->"abc", B->42) and leaves no-VALUE leaves UNCHANGED (N, M stay "ZZ"); WITH FILLER is identical
+        // here since the no-VALUE items have nothing to apply.
+        let prog = |verb: &str| format!(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 G.\n\
+                       05 A PIC X(3) VALUE \"abc\".\n\
+                       05 N PIC X(2).\n\
+                       05 B PIC 99 VALUE 42.\n\
+                       05 M PIC 99.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE \"ZZZZZZZZZ\" TO G.\n\
+                        {verb}.\n\
+                        DISPLAY \"G=[\" G \"]\".\n\
+                        STOP RUN.\n"
+        );
+        assert_eq!(run(&prog("INITIALIZE G ALL TO VALUE")), b"G=[abcZZ42ZZ]\n");
+        assert_eq!(run(&prog("INITIALIZE G WITH FILLER ALL TO VALUE")), b"G=[abcZZ42ZZ]\n");
     }
 }
 

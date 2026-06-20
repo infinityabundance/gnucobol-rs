@@ -76,6 +76,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p122_divide_remainder_size.cob", "GIVING Q REMAINDER R"),
     ("INSPECT", "figurative-constant operands (`HIGH-VALUE` / `LOW-VALUE` / `QUOTE` as a 1-byte TALLYING/REPLACING comparand or replacement)", "sealed",
         "lab/corpus/frontend/p123_inspect_figurative.cob", "FOR ALL LOW-VALUE"),
+    ("INITIALIZE", "`[WITH FILLER] ALL TO VALUE` -- restore each leaf to its VALUE clause; a no-VALUE leaf is left unchanged", "sealed",
+        "lab/corpus/frontend/p124_initialize_to_value.cob", "ALL TO VALUE"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
