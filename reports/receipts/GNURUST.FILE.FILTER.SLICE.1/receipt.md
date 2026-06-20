@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILE.FILTER.SLICE.1` |
 | court | filter (conditional) read-loop |
-| crate_version | `0.8.18` |
+| crate_version | `0.8.19` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | read-loop with a per-record IF gating the accumulation -> resulting WORKING-STORAGE |
 | replay command | `bash lab/oracle/file_filter_sweep.sh` |

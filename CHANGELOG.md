@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.19]
+- **DIVIDE binary/packed operands + zero-init binary/packed fields (`GNURUST.DIVIDE.*` / runtime).** The arithmetic cross-product differential battery (ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE over every USAGE combination) surfaced two real DIVIDE...GIVING bugs, now byte-identical to cobc: a binary (COMP/COMP-5) dividend/divisor normalizes to zoned DISPLAY before the divide (was a hard `InvalidAttr`), and a no-VALUE binary/packed/float field initializes to its proper numeric ZERO encoding rather than '0' chars (0x30..) which decoded as garbage (e.g. an uninitialized S9(6) COMP read as +464432). Front-end sweep 147/0; the comparison cross-product battery was already clean.
+
 ## [0.8.18]
 - **MOVE conversion-matrix completeness (`GNURUST.MOVE.*` / runtime move.c).** A MOVE cross-product differential battery (every USAGE x category source into every destination, signed/scaled/zero/large) against the admitted cobc surfaced real conversion bugs the doxygen *symbol* parity does not cover -- now BYTE-IDENTICAL: a binary/packed source into an ALPHANUMERIC receiver (magnitude digits via a DISPLAY intermediate; was blank/UnsupportedConversion), `packed -> packed` (via the decimal layer; was UnsupportedConversion), and a binary/packed/float source into a numeric-EDITED receiver (decoded through the runtime instead of the DISPLAY-only path that gave garbage). Front-end sweep 146/0.
 

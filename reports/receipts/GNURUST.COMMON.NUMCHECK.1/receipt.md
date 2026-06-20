@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.COMMON.NUMCHECK.1` |
 | court | Not-numeric runtime diagnostic + field-type explanation |
-| crate_version | `0.8.18` |
+| crate_version | `0.8.19` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a non-numeric value reaching arithmetic -> the exact not-numeric diagnostic message bytes (verified vs both oracles 3.1.2 + 3.2) |
 | replay command | `bash lab/oracle/numeric_check_sweep.sh` |
