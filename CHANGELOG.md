@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.30]
+- **Two FILE-PARITY feature gaps sealed (11 -> 9).** (1) UNSTRING into a binary (COMP/COMP-5) or packed (COMP-3) receiver: the delimited segment is sized by the receiver's DIGIT width and stored via the alnum->binary/packed MOVE (COUNT/DELIMITER and mixed receivers work). (2) JSON/XML GENERATE `[ON EXCEPTION imp] [NOT ON EXCEPTION imp]`: the handler blocks are parsed and dispatched -- on success cobc runs NOT ON EXCEPTION only when it is the sole handler (with both branches present it runs neither, a 3.2 quirk reproduced). Front-end sweep 160/0.
+
 ## [0.8.29]
 - **Subscripted / reference-modified FUNCTION arguments.** `FUNCTION MAX(A(1) A(2))`, `NUMVAL(D(1:5))`, `UPPER-CASE(S(1:4))` and mixed literal+identifier argument lists now work -- the argument parser splits at top-level separators only, keeping each argument's own parentheses (the old split mangled `A(1)` into `A(1`). `FUNCTION LENGTH`/`BYTE-LENGTH` of a reference-modified item returns the BASE item's length, matching cobc 3.2 (`LENGTH(S(2:4))` == `LENGTH OF S`). A nested FUNCTION as an argument remains a fail-closed boundary. Found by the wide-net + FUNCTION-arg batteries (date/format intrinsics, ALLOCATE/FREE, MOVE JUSTIFIED, STRING POINTER overflow, INSPECT TALLYING+REPLACING already byte-identical). Front-end sweep 158/0.
 

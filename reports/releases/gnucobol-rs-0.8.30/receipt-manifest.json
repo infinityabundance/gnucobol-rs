@@ -1,0 +1,579 @@
+{
+  "count": 95,
+  "crate": "gnucobol-rs",
+  "receipts": [
+    {
+      "campaign": "GNURUST.10",
+      "court": "OCCURS DEPENDING ON physical-max layout",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.11",
+      "court": "LEVEL-88 condition-name truth",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.12",
+      "court": "SET condition-name TO TRUE",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.12B",
+      "court": "SET 88 condition-name TO FALSE",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.14",
+      "court": "binary COMP/COMP-5/COMP-X storage + MOVE",
+      "result": "PASS=546 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.15",
+      "court": "cp500 EBCDIC DISPLAY decode",
+      "result": "PASS=256 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.16",
+      "court": "edited-picture decode (16a + 16b)",
+      "result": "PASS=92 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.16C",
+      "court": "edited-picture encode (numeric->edited 16c)",
+      "result": "PASS=153 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.17",
+      "court": "cp500 EBCDIC zoned-decimal numeric DISPLAY decode",
+      "result": "PASS=120 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.18",
+      "court": "COMP-6 unsigned packed storage + MOVE",
+      "result": "PASS=98 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.19",
+      "court": "DIVIDE receiving-field bytes",
+      "result": "PASS=736 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.2",
+      "court": "decimal MOVE (COMP-3/zoned/display)",
+      "result": "PASS=13152 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.3",
+      "court": "PIC field model (+P scaling)",
+      "result": "PASS=432 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.4",
+      "court": "record layout (+ODO physical-max)",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.5",
+      "court": "COPY / REPLACING expansion",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.7",
+      "court": "arithmetic ADD/SUB/MUL (+packed receiver)",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.8",
+      "court": "VALUE initial-record image",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.ACCEPT.DISPLAY.1",
+      "court": "DISPLAY emitted text + ACCEPT field bytes",
+      "result": "PASS=7 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.ACCEPT.DISPLAY.2",
+      "court": "DISPLAY of signed/V-scaled numeric",
+      "result": "PASS=8 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.BIGNUM.1",
+      "court": "MULTIPLY beyond i128 (exact 256-bit product)",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.BUILD.PROFILE.1",
+      "court": "oracle ABI/dialect/config profile",
+      "result": "PASS=1 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.CALL.EXTENSION.ATLAS.1",
+      "court": "observed CALL/linkage atlas",
+      "result": "PASS=5 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.CALL.LAYOUT.ATLAS.1",
+      "court": "observed CALL parameter byte-layout atlas",
+      "result": "PASS=5 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.CLASS.1",
+      "court": "class conditions IS NUMERIC/ALPHABETIC",
+      "result": "PASS=46 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.COMMON.BOUNDCHECK.1",
+      "court": "Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON)",
+      "result": "PASS=6 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.COMMON.CBL.1",
+      "court": "CBL_ logic / bit / case builtins (CBL_AND/OR/XOR/NOR/IMP/NIMP/EQ/NOT/TOUPPER/TOLOWER)",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.COMMON.NUMCHECK.1",
+      "court": "Not-numeric runtime diagnostic + field-type explanation",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.DECLARATIVES.ATLAS.1",
+      "court": "observed DECLARATIVES / USE error-handler atlas",
+      "result": "PASS=5 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+      "court": "observed dialect-runtime divergence atlas",
+      "result": "PASS=7 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+      "court": "observed compiler-directive byte-variance atlas",
+      "result": "PASS=6 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILE.FILTER.SLICE.1",
+      "court": "filter (conditional) read-loop",
+      "result": "PASS=4 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILE.FLOW.SLICE.1",
+      "court": "read-loop execution slice (file x control flow)",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILE.REWRITE.1",
+      "court": "sequential REWRITE in-place update",
+      "result": "PASS=1 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILE.SEQUENTIAL.1",
+      "court": "sequential file READ record bytes + file status",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILE.STATUS.1",
+      "court": "observed FILE STATUS bytes for declared file-operation fixtures",
+      "result": "PASS=7 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILE.WRITE.1",
+      "court": "sequential WRITE byte effects",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.INDEXED.1",
+      "court": "INDEXED organization (keyed store + record locking)",
+      "result": "PASS=18 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.LINESEQ.1",
+      "court": "line-sequential WRITE config matrix",
+      "result": "PASS=8 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.LINESEQ.2",
+      "court": "line-sequential READ config matrix",
+      "result": "PASS=12 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.MAPPING.1",
+      "court": "COBOL filename mapping (env resolution)",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.OPEN.1",
+      "court": "file runtime OPEN/CLOSE + lifecycle",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.RELATIVE.1",
+      "court": "RELATIVE organization keyed + sequential access",
+      "result": "PASS=4 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.SEQ.1",
+      "court": "RECORD SEQUENTIAL read/write incl. variable-length",
+      "result": "PASS=9 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.SORT.1",
+      "court": "SORT/MERGE record comparison",
+      "result": "PASS=1 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.SORTENGINE.1",
+      "court": "SORT/MERGE in-memory engine (4-queue natural merge)",
+      "result": "PASS=1 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.SYS.1",
+      "court": "CBL_* system file/directory routines",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FILEIO.VERB.1",
+      "court": "file verb open/access-mode preconditions",
+      "result": "PASS=7 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.FLOAT.1",
+      "court": "float fields COMP-1/COMP-2 + FLOAT-DECIMAL-16/34, both directions",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.FRONTEND.1",
+      "court": "clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
+      "result": "PASS=160 FAIL=0 (3.1.2 differential-matched=149)",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.IF.EVALUATE.SLICE.1",
+      "court": "IF/EVALUATE execution slice (alphanumeric)",
+      "result": "PASS=9 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.IF.NUMERIC.SLICE.1",
+      "court": "numeric IF/EVALUATE execution slice",
+      "result": "PASS=7 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INDEX.1",
+      "court": "USAGE INDEX storage + SET arithmetic",
+      "result": "PASS=41 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INDEXED.FILE.ATLAS.1",
+      "court": "observed indexed-file atlas",
+      "result": "PASS=9 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INITIALIZE.1",
+      "court": "INITIALIZE receiver byte effects",
+      "result": "PASS=6 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INSPECT.1",
+      "court": "INSPECT byte effects + tally bytes",
+      "result": "PASS=12 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTPOW.1",
+      "court": "integer exponentiation cob_s32_pow/cob_s64_pow",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.ATLAS.1",
+      "court": "observed intrinsic-function atlas",
+      "result": "PASS=19 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.CASE.1",
+      "court": "FUNCTION UPPER-CASE/LOWER-CASE/REVERSE",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.DATE.1",
+      "court": "date-conversion intrinsics",
+      "result": "PASS=30 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.INTEGER.1",
+      "court": "FUNCTION INTEGER (floor) / INTEGER-PART (truncate)",
+      "result": "PASS=20 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.LENGTH.1",
+      "court": "FUNCTION LENGTH storage byte length",
+      "result": "PASS=12 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.MOD-REM.1",
+      "court": "FUNCTION MOD/REM integer modulo/remainder",
+      "result": "PASS=20 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.NUMVAL-C.1",
+      "court": "FUNCTION NUMVAL-C currency parse",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.NUMVAL.1",
+      "court": "FUNCTION NUMVAL numeric parse",
+      "result": "PASS=14 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.INTRINSIC.ORD-CHAR.1",
+      "court": "FUNCTION ORD/CHAR 1-based ordinal/char",
+      "result": "PASS=15 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.LINEAGE.CORPUS.20M.0",
+      "court": "deterministic COBOL lineage corpus ENGINE (self-test)",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.LINEAGE.CORPUS.20M.1",
+      "court": "full 20M real-cobc COBOL-witness lineage run (complete)",
+      "result": "PASS=4000000 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+      "court": "200K real-cobc COBOL-witness lineage burn (pilot)",
+      "result": "PASS=200000 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.LOGICAL.1",
+      "court": "bit-logical B-AND/B-OR/B-XOR/B-NOT + shifts",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.MLIO.GENERATE.1",
+      "court": "XML / JSON GENERATE (native serializer)",
+      "result": "PASS=5 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.MLIO.PARSE.1",
+      "court": "XML PARSE (native state machine)",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.NUMCMP.1",
+      "court": "numeric comparison cob_numeric_cmp (on the Mpz/cob_decimal 1:1 layer)",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.ODO.1",
+      "court": "OCCURS DEPENDING ON used length + bounded access",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.PERFORM.SLICE.1",
+      "court": "PERFORM execution slice (TIMES/UNTIL/VARYING)",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+      "court": "observed control-flow atlas",
+      "result": "PASS=8 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.REFMOD.1",
+      "court": "reference modification field(start:length)",
+      "result": "PASS=16 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.RELATIVE.FILE.ATLAS.1",
+      "court": "observed relative-file atlas",
+      "result": "PASS=3 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.REMAINDER.1",
+      "court": "DIVIDE REMAINDER receiving-field bytes",
+      "result": "PASS=768 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.ROUND.1",
+      "court": "ROUNDED MODE IS (all eight rounding modes, cob_decimal + packed BCD paths)",
+      "result": "no-result",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.ACCEPT.1",
+      "court": "SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes",
+      "result": "PASS=12 FAIL=0 (3.1.2 differential-matched=12)",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.ACCEPT.2",
+      "court": "SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes",
+      "result": "PASS=11 FAIL=0 (3.1.2 differential-matched=11)",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.ATTR.1",
+      "court": "SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes",
+      "result": "PASS=10 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.COLOR.1",
+      "court": "SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes",
+      "result": "PASS=11 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.DISPLAY.2",
+      "court": "SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes)",
+      "result": "PASS=70 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.DISPLAY.3",
+      "court": "SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes",
+      "result": "PASS=21 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.INIT.1",
+      "court": "SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes)",
+      "result": "PASS=1 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.LINEDIFF.1",
+      "court": "multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes",
+      "result": "PASS=19 FAIL=0 (3.1.2 differential-matched=19)",
+      "verdict": "fail"
+    },
+    {
+      "campaign": "GNURUST.SCREENIO.NUMEDIT.1",
+      "court": "SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes",
+      "result": "PASS=14 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SEARCH.TABLE.1",
+      "court": "SEARCH / SEARCH ALL table lookup",
+      "result": "PASS=6 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SIZE.ERROR.1",
+      "court": "arithmetic SIZE ERROR truncation + condition",
+      "result": "PASS=12 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SORT.MERGE.ATLAS.1",
+      "court": "observed SORT/MERGE atlas",
+      "result": "PASS=2 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.STRING.UNSTRING.1",
+      "court": "STRING/UNSTRING byte effects",
+      "result": "PASS=7 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.SUBSCRIPT.1",
+      "court": "table subscript TABLE(i[,j])",
+      "result": "PASS=17 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.TABLE.PERFORM.SLICE.1",
+      "court": "table (OCCURS) PERFORM VARYING slice",
+      "result": "PASS=3 FAIL=0",
+      "verdict": "pass"
+    },
+    {
+      "campaign": "GNURUST.VALUE.NEGZERO.EDGE.1",
+      "court": "negative-zero VALUE sign edge (oracle-characterized)",
+      "result": "PASS=8 FAIL=0",
+      "verdict": "pass"
+    }
+  ],
+  "schema": "kobold-release-receipt-manifest-v1",
+  "trust2_doctrine": "receipts are generated from live replay",
+  "version": "0.8.30"
+}
