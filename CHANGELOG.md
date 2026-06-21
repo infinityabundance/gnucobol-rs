@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.31]
+- **`SET <switch-mnemonic> TO ON|OFF` -- runtime UPSI switch toggle.** A SPECIAL-NAMES `SWITCH-n IS <mnemonic> [ON STATUS IS c] [OFF STATUS IS c]` declaration now records the mnemonic (it was dropped, so `SET SW TO ON` failed as an undefined name). `SET <mnemonic> [...] TO ON|OFF` toggles the switch(es) at runtime and the ON/OFF STATUS condition-names read the live state (multi-target supported). Front-end sweep 161/0.
+
 ## [0.8.30]
 - **Two FILE-PARITY feature gaps sealed (11 -> 9).** (1) UNSTRING into a binary (COMP/COMP-5) or packed (COMP-3) receiver: the delimited segment is sized by the receiver's DIGIT width and stored via the alnum->binary/packed MOVE (COUNT/DELIMITER and mixed receivers work). (2) JSON/XML GENERATE `[ON EXCEPTION imp] [NOT ON EXCEPTION imp]`: the handler blocks are parsed and dispatched -- on success cobc runs NOT ON EXCEPTION only when it is the sole handler (with both branches present it runs neither, a 3.2 quirk reproduced). Front-end sweep 160/0.
 

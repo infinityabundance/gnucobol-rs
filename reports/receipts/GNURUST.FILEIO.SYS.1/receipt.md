@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.SYS.1` |
 | court | CBL_* system file/directory routines |
-| crate_version | `0.8.30` |
+| crate_version | `0.8.31` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | CBL_DELETE_FILE/COPY_FILE/RENAME_FILE/CREATE_DIR/DELETE_DIR/CHANGE_DIR/GET_CURRENT_DIR -> RETURN-CODE (0/35/128/129/-1) |
 | replay command | `bash lab/oracle/cob_sys_sweep.sh` |
