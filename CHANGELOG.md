@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.20]
+- **`ADD a b [c...] GIVING r` multi-operand fold (`GNURUST.ADD.*`).** The SIZE-ERROR/ROUNDED differential battery surfaced a real bug in the no-`TO` `ADD <operand-list> GIVING` form: the operands were folded into the FIRST operand's narrow width, truncating each partial sum before the accumulator widened (60+60 -> "20", 10+20+30 -> "060"), and `ON SIZE ERROR` was judged on the truncated value. The fold now widens-then-adds (the same 18-digit path the TO/BY/INTO forms use), so the sum is exact and the store is the single rounding/size-error point. Other arithmetic forms, the INSPECT clause cross-product, and the edited-PIC MOVE battery were all already byte-identical. Front-end sweep 148/0.
+
 ## [0.8.19]
 - **DIVIDE binary/packed operands + zero-init binary/packed fields (`GNURUST.DIVIDE.*` / runtime).** The arithmetic cross-product differential battery (ADD/SUBTRACT/MULTIPLY/DIVIDE/COMPUTE over every USAGE combination) surfaced two real DIVIDE...GIVING bugs, now byte-identical to cobc: a binary (COMP/COMP-5) dividend/divisor normalizes to zoned DISPLAY before the divide (was a hard `InvalidAttr`), and a no-VALUE binary/packed/float field initializes to its proper numeric ZERO encoding rather than '0' chars (0x30..) which decoded as garbage (e.g. an uninitialized S9(6) COMP read as +464432). Front-end sweep 147/0; the comparison cross-product battery was already clean.
 

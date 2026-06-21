@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.BUILD.PROFILE.1` |
 | court | oracle ABI/dialect/config profile |
-| crate_version | `0.8.19` |
+| crate_version | `0.8.20` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | cobc/libcob/config build profile (version, endianness, binary-byteorder, char signedness, C-long, sha256) |
 | replay command | `bash lab/oracle/build_profile_sweep.sh` |
