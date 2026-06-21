@@ -5936,15 +5936,18 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
         i += 1;
         let (mut din, mut cin) = (None, None);
         loop {
+            // `IN` is optional after DELIMITER / COUNT (cobc accepts `DELIMITER d` / `COUNT c` too).
             let in_at = |k: usize| matches!(seg.get(k), Some(Tok::Word(w)) if w == "IN");
             match seg.get(i) {
-                Some(Tok::Word(w)) if w == "DELIMITER" && in_at(i + 1) => {
-                    din = Some(match seg.get(i + 2) { Some(Tok::Word(d)) => d.clone(), _ => return Err(RunError::Unsupported("UNSTRING DELIMITER IN: missing field".into())) });
-                    i += 3;
+                Some(Tok::Word(w)) if w == "DELIMITER" => {
+                    let k = if in_at(i + 1) { i + 2 } else { i + 1 };
+                    din = Some(match seg.get(k) { Some(Tok::Word(d)) => d.clone(), _ => return Err(RunError::Unsupported("UNSTRING DELIMITER IN: missing field".into())) });
+                    i = k + 1;
                 }
-                Some(Tok::Word(w)) if w == "COUNT" && in_at(i + 1) => {
-                    cin = Some(match seg.get(i + 2) { Some(Tok::Word(c)) => c.clone(), _ => return Err(RunError::Unsupported("UNSTRING COUNT IN: missing field".into())) });
-                    i += 3;
+                Some(Tok::Word(w)) if w == "COUNT" => {
+                    let k = if in_at(i + 1) { i + 2 } else { i + 1 };
+                    cin = Some(match seg.get(k) { Some(Tok::Word(c)) => c.clone(), _ => return Err(RunError::Unsupported("UNSTRING COUNT IN: missing field".into())) });
+                    i = k + 1;
                 }
                 _ => break,
             }
