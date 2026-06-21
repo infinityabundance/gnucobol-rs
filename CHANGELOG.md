@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.24]
+- **Abbreviated combined conditions + `FUNCTION TRIM` LEADING/TRAILING.** The condition evaluator now threads a (subject, operator, negation) context, so a term after AND/OR may omit the subject (`A > B AND < C`) and the operator (`A = 1 OR 2 OR 5`), and a leading `NOT` negates a term (`NOT A = 5`, `A NOT = 1 AND 2`) -- ubiquitous COBOL idioms that previously errored. `FUNCTION TRIM(x LEADING|TRAILING)` parses the direction as a modifier (was a failing second argument). Found by the abbreviated-condition + intrinsic batteries (PERFORM forms, EVALUATE, ~60 math/date/string intrinsics already byte-identical). Front-end sweep 153/0.
+
 ## [0.8.23]
 - **UNSTRING `DELIMITER` / `COUNT` without the optional `IN`.** The receiver parser required `DELIMITER IN d` / `COUNT IN c`; cobc also accepts the IN-less `DELIMITER d` / `COUNT c`, which previously errored. `IN` is now optional. Found by the SEARCH / STRING / UNSTRING differential battery -- SEARCH, SEARCH ALL (ASCENDING KEY), PERFORM VARYING with INDEXED BY, and STRING WITH POINTER ... ON OVERFLOW were all already byte-identical. Front-end sweep 151/0.
 
