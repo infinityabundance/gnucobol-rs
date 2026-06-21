@@ -138,6 +138,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p159_unstring_binary_recv.cob", "INTO A COUNT C1 B C D"),
     ("(JSON/XML)", "GENERATE `[ON EXCEPTION imp] [NOT ON EXCEPTION imp]` -- the handler blocks are parsed + dispatched; on success cobc runs NOT ON EXCEPTION ONLY when it is the sole handler (with both present it runs neither -- a 3.2 quirk reproduced). Found by the FILE-PARITY section-B gap sweep", "sealed",
         "lab/corpus/frontend/p160_ml_generate_exception.cob", "NOT ON EXCEPTION"),
+    ("SET", "`SET <switch-mnemonic> [...] TO ON|OFF` -- toggle a SPECIAL-NAMES `SWITCH-n IS <mnemonic>` UPSI switch at runtime (multi-target); the ON/OFF STATUS condition-names read the live (RefCell) state. Found by the FILE-PARITY section-B gap sweep", "sealed",
+        "lab/corpus/frontend/p161_set_switch.cob", "SET SW1 SW2 TO ON"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

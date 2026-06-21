@@ -811,15 +811,22 @@ struct Ctx<'a> {
 /// The UPSI switch environment: the live switch states (from `COB_SWITCH_n`) and the `SPECIAL-NAMES`
 /// `SWITCH-n ON/OFF STATUS IS <name>` condition-name map.
 struct SwitchEnv {
-    /// `cob_switch[n]` -- index `n` from `SWITCH-n` (1-based); on/off.
-    states: [bool; crate::common_misc::COB_SWITCH_COUNT],
+    /// `cob_switch[n]` -- index `n` from `SWITCH-n`; on/off. RefCell so `SET <mnemonic> TO ON|OFF` can toggle
+    /// a switch at runtime and the condition-name predicates read the live state.
+    states: std::cell::RefCell<[bool; crate::common_misc::COB_SWITCH_COUNT]>,
     /// condition-name -> (switch index, expected ON when true).
     conds: HashMap<String, (usize, bool)>,
+    /// `SWITCH-n IS <mnemonic>` -- the user mnemonic name -> switch index (the `SET <mnemonic> TO ON|OFF` target).
+    mnemonics: HashMap<String, usize>,
 }
 
 impl Default for SwitchEnv {
     fn default() -> Self {
-        SwitchEnv { states: [false; crate::common_misc::COB_SWITCH_COUNT], conds: HashMap::new() }
+        SwitchEnv {
+            states: std::cell::RefCell::new([false; crate::common_misc::COB_SWITCH_COUNT]),
+            conds: HashMap::new(),
+            mnemonics: HashMap::new(),
+        }
     }
 }
 
@@ -828,11 +835,23 @@ impl Default for SwitchEnv {
 /// the default is off), mirroring `cob_init`.
 fn parse_switches(toks: &[Tok], before: usize) -> SwitchEnv {
     let mut conds: HashMap<String, (usize, bool)> = HashMap::new();
+    let mut mnemonics: HashMap<String, usize> = HashMap::new();
     let mut i = 0;
     while i < before {
         if let Some(Tok::Word(w)) = toks.get(i) {
             if let Some(n) = w.strip_prefix("SWITCH-").and_then(|s| s.parse::<usize>().ok()) {
                 let mut k = i + 1;
+                // optional `IS <mnemonic>` right after SWITCH-n (the SET target name).
+                if matches!(toks.get(k), Some(Tok::Word(x)) if x == "IS") {
+                    if let Some(Tok::Word(m)) = toks.get(k + 1) {
+                        if m != "ON" && m != "OFF" {
+                            if n < crate::common_misc::COB_SWITCH_COUNT {
+                                mnemonics.insert(m.clone(), n);
+                            }
+                            k += 2;
+                        }
+                    }
+                }
                 while k < before {
                     match toks.get(k) {
                         Some(Tok::Dot) => break,
@@ -869,7 +888,7 @@ fn parse_switches(toks: &[Tok], before: usize) -> SwitchEnv {
             *slot = v == "ON" || v == "1";
         }
     }
-    SwitchEnv { states, conds }
+    SwitchEnv { states: std::cell::RefCell::new(states), conds, mnemonics }
 }
 
 /// Parse `PROGRAM COLLATING SEQUENCE IS <alphabet>` (OBJECT-COMPUTER / SPECIAL-NAMES) before `before`,
@@ -4189,7 +4208,7 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     // A UPSI switch condition-name (SPECIAL-NAMES `SWITCH-n ON/OFF STATUS IS <name>`): its truth is the
     // switch's state matching the declared ON/OFF sense. No relational operator follows.
     if let Some(&(idx, on)) = sw.conds.get(&left) {
-        return Ok(neg ^ (sw.states[idx] == on));
+        return Ok(neg ^ (sw.states.borrow()[idx] == on));
     }
     // An 88-level condition-name: true when its parent's value equals any listed value or range.
     if let Some(Field { storage: Storage::Condition { parent, values, .. }, .. }) = f.get(&left) {
@@ -4769,7 +4788,7 @@ fn exec_stmt(
     match verb {
         "DISPLAY" => exec_display(stmt, fields, out, ctx),
         "MOVE" => exec_move(stmt, fields, ctx.decimal_comma),
-        "SET" => exec_set(stmt, fields, ctx.decimal_comma),
+        "SET" => exec_set(stmt, fields, ctx.decimal_comma, &ctx.switches),
         "INITIALIZE" => exec_initialize(stmt, fields, ctx.decimal_comma),
         "INSPECT" => exec_inspect(stmt, fields, ctx.decimal_comma),
         // STRING is normally dispatched in run_block (for its ON OVERFLOW handler); this arm is a
@@ -5369,7 +5388,7 @@ fn exec_move(
 /// (`GNURUST.12 SET ... TO TRUE`): construct the parent's bytes so the condition becomes true by MOVEing
 /// the condition's first `VALUE` (or a `THRU` range's lower bound) into the parent. Only `TO TRUE` is in
 /// the subset; `TO FALSE`, index/pointer SET, and `UP/DOWN BY` fail closed.
-fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool, switches: &SwitchEnv) -> Result<(), RunError> {
     // form: SET idx [idx ...] UP|DOWN BY n  (index arithmetic).
     if let Some(ud) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "UP" || w == "DOWN")) {
         let up = matches!(stmt.get(ud), Some(Tok::Word(w)) if w == "UP");
@@ -5398,6 +5417,22 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     }).collect();
     if targets.is_empty() {
         return Err(RunError::Unsupported("SET: no target before TO".into()));
+    }
+    // form: SET <switch-mnemonic> [...] TO ON|OFF -- toggle a SPECIAL-NAMES UPSI switch at runtime (the
+    // condition-name predicates then read the new state).
+    if let Some(Tok::Word(v)) = stmt.get(to + 1) {
+        if (v == "ON" || v == "OFF") && targets.iter().all(|t| switches.mnemonics.contains_key(t)) {
+            let on = v == "ON";
+            let mut st = switches.states.borrow_mut();
+            for t in &targets {
+                if let Some(&idx) = switches.mnemonics.get(t) {
+                    if idx < st.len() {
+                        st[idx] = on;
+                    }
+                }
+            }
+            return Ok(());
+        }
     }
     // form: SET ptr TO ADDRESS OF field -- record the pointer's target for FUNCTION CONTENT-OF/-LENGTH.
     if matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "ADDRESS")
