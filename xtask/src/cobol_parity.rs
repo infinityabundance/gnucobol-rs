@@ -142,6 +142,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p161_set_switch.cob", "SET SW1 SW2 TO ON"),
     ("INITIALIZE", "`... [WITH FILLER] {ALL|cat} TO VALUE [THEN] REPLACING cat BY val ...` -- TO VALUE restores each leaf that HAS a VALUE; the trailing REPLACING then sets each leaf WITHOUT a VALUE whose category is named (neither -> unchanged). Found by the FILE-PARITY section-B gap sweep", "sealed",
         "lab/corpus/frontend/p162_init_value_then_repl.cob", "TO VALUE THEN REPLACING"),
+    ("(tables)", "SPACE-separated multi-dimension subscripts -- `CELL(1 1)`, `CELL (3 2)` (space before paren), 3-D `C3(2 1 2)` -- cobc accepts space OR comma separators; the subscript gluer keeps them distinct (was concatenating `C(2`+`3)` into one `23` subscript). Relative subscripting `C(I + 1)` stays one subscript", "sealed",
+        "lab/corpus/frontend/p163_space_subscripts.cob", "CELL(1 1)"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

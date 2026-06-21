@@ -1065,29 +1065,47 @@ fn glue_subscripts(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
     if !toks.iter().any(|t| matches!(t, Tok::Word(w) if unbalanced(w))) {
         return toks.to_vec();
     }
+    // Glue `name(... )` (or `name (...)`) whose subscript list the lexer split on internal whitespace, into a
+    // single token. A SPACE is inserted between the joined fragments so space-separated subscripts survive
+    // (`C(2` + `3)` -> `C(2 3)`, NOT `C(23)`); the name stays attached to its `(`.
     let mut out = Vec::with_capacity(toks.len());
     let mut i = 0;
     while i < toks.len() {
         if let Tok::Word(w) = &toks[i] {
-            if unbalanced(w) {
+            // Case A: `NAME(...` -- the name and opening paren are in this token; it is unbalanced.
+            // Case B: `NAME (...` -- this token is a bare known name and the NEXT token opens the subscript.
+            let case_a = unbalanced(w) && {
                 let prefix = &w[..w.find('(').unwrap()];
-                if !prefix.is_empty() && idx.by_name.contains_key(prefix) {
-                    let mut glued = w.clone();
-                    let mut depth = w.matches('(').count() as i64 - w.matches(')').count() as i64;
-                    let mut j = i + 1;
-                    while depth > 0 && j < toks.len() {
-                        if let Tok::Word(w2) = &toks[j] {
-                            glued.push_str(w2);
-                            depth += w2.matches('(').count() as i64 - w2.matches(')').count() as i64;
-                            j += 1;
-                        } else {
-                            break;
-                        }
+                !prefix.is_empty() && idx.by_name.contains_key(prefix)
+            };
+            let case_b = !w.contains('(')
+                && idx.by_name.contains_key(w.as_str())
+                && matches!(toks.get(i + 1), Some(Tok::Word(w2)) if w2.starts_with('(') && unbalanced(w2));
+            if case_a || case_b {
+                // Seed `glued` with the name+paren start (case A: this token; case B: name directly + next token).
+                let (mut glued, mut j) = if case_a {
+                    (w.clone(), i + 1)
+                } else {
+                    let mut g = w.clone();
+                    if let Some(Tok::Word(w2)) = toks.get(i + 1) {
+                        g.push_str(w2);
                     }
-                    out.push(Tok::Word(glued));
-                    i = j;
-                    continue;
+                    (g, i + 2)
+                };
+                let mut depth = glued.matches('(').count() as i64 - glued.matches(')').count() as i64;
+                while depth > 0 && j < toks.len() {
+                    if let Tok::Word(w2) = &toks[j] {
+                        glued.push(' ');
+                        glued.push_str(w2);
+                        depth += w2.matches('(').count() as i64 - w2.matches(')').count() as i64;
+                        j += 1;
+                    } else {
+                        break;
+                    }
                 }
+                out.push(Tok::Word(glued));
+                i = j;
+                continue;
             }
         }
         out.push(toks[i].clone());
@@ -2601,7 +2619,16 @@ fn nested_leaf_lookup(name: &str) -> Option<(String, usize, usize, Vec<(usize, u
 /// The comma-separated subscripts of a reference inner (`"I,J"` -> `["I","J"]`); a single subscript
 /// (`"I"`) -> `["I"]`. Whitespace around each is trimmed.
 fn subscripts(inner: &str) -> Vec<&str> {
-    inner.split(',').map(|s| s.trim()).filter(|s| !s.is_empty()).collect()
+    // Subscripts are separated by commas OR spaces (`C(1, 2)` / `C(1 2)` / `C(I J)`). A single relative
+    // subscript `C(I + 1)` contains a `+`/`-` operator -- keep it whole (it has no comma and is one
+    // subscript) rather than splitting its spaces.
+    if inner.contains(',') {
+        inner.split(',').map(|s| s.trim()).filter(|s| !s.is_empty()).collect()
+    } else if inner.split_whitespace().any(|t| t == "+" || t == "-") {
+        vec![inner.trim()]
+    } else {
+        inner.split_whitespace().collect()
+    }
 }
 
 /// Resolve a multi-dimension leaf reference `LEAF(s1,..,sk)` to its `(base_group, byte_offset, size)` in the
