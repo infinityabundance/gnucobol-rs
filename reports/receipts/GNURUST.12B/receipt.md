@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.12B` |
 | court | SET 88 condition-name TO FALSE |
-| crate_version | `0.8.26` |
+| crate_version | `0.8.27` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | parent field-storage bytes |
 | replay command | `bash lab/oracle/set_false_sweep.sh` |

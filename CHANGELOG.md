@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.27]
+- **`EXIT PERFORM` / `EXIT PERFORM CYCLE` / `NEXT SENTENCE`.** EXIT PERFORM now breaks the nearest inline PERFORM and EXIT PERFORM CYCLE skips to its next iteration (the innermost loop of a VARYING/AFTER), via new control signals absorbed at each PERFORM loop site; nested performs behave correctly. NEXT SENTENCE transfers to the statement after the next period (distinct from CONTINUE). Found by the control-flow battery (EXIT PARAGRAPH, GOBACK, EVALUATE CONTINUE, nested PERFORM, INSPECT CONVERTING, sequential file I/O + FILE STATUS, MOVE CORRESPONDING all already byte-identical). Front-end sweep 156/0.
+
 ## [0.8.26]
 - **`ROUNDED MODE IS <mode>` on all arithmetic verbs.** The mode phrase was unparsed (`COMPUTE R ROUNDED MODE NEAREST-EVEN = ...` failed as "undefined data name: MODE"). All eight COBOL rounding modes are now honored on COMPUTE/ADD/SUBTRACT/MULTIPLY/DIVIDE -- TRUNCATION, NEAREST-AWAY-FROM-ZERO, AWAY-FROM-ZERO, NEAREST-TOWARD-ZERO, NEAREST-EVEN (banker's), TOWARD-GREATER (ceil), TOWARD-LESSER (floor), and PROHIBITED (size error when a non-zero digit is dropped). Found by the ROUNDED-MODE battery (COMP-1/COMP-2 float display + arithmetic already byte-identical). Front-end sweep 155/0.
 
