@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.LINEDIFF.1` |
 | court | multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes |
-| crate_version | `0.8.25` |
+| crate_version | `0.8.26` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | two same-row DISPLAY statements -> the exact ncurses doupdate/TransformLine refresh byte stream (reposition + changed run + clr_eol trailing-erase), on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_linediff_sweep.sh` |

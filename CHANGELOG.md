@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.26]
+- **`ROUNDED MODE IS <mode>` on all arithmetic verbs.** The mode phrase was unparsed (`COMPUTE R ROUNDED MODE NEAREST-EVEN = ...` failed as "undefined data name: MODE"). All eight COBOL rounding modes are now honored on COMPUTE/ADD/SUBTRACT/MULTIPLY/DIVIDE -- TRUNCATION, NEAREST-AWAY-FROM-ZERO, AWAY-FROM-ZERO, NEAREST-TOWARD-ZERO, NEAREST-EVEN (banker's), TOWARD-GREATER (ceil), TOWARD-LESSER (floor), and PROHIBITED (size error when a non-zero digit is dropped). Found by the ROUNDED-MODE battery (COMP-1/COMP-2 float display + arithmetic already byte-identical). Front-end sweep 155/0.
+
 ## [0.8.25]
 - **COMPUTE unary sign + right-associative exponentiation.** The expression tokenizer now peels a unary sign glued to an operand or parenthesis (`-A`, `-(A - B)`, nested `-(-(-3))`), and `**` is right-associative (`2 ** 3 ** 2` = 512). A non-negative integer exponent uses exact repeated multiply; otherwise the sealed decimal pow. Found by the COMPUTE-expression battery (GO TO ... DEPENDING ON, SET, and precedence cases already byte-identical). Front-end sweep 154/0.
 
