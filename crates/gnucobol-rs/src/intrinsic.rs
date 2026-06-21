@@ -1082,6 +1082,7 @@ pub fn cob_intr_numval_c(src: &[u8]) -> IntrField {
 /// (or `size + 1` when the field contains no digit at all). `chkcurr` enables `NUMVAL-C` currency/comma
 /// handling; `currency` overrides the symbol; `anycase` accepts lowercase `cr`/`db`. `dec_pt`/`currency_symbol`
 /// come from the current module (the oracle's default config: `'.'` and `'$'`).
+#[allow(unused_assignments)] // `break_needed` mirrors libcob's flag; some resets are redundant under Rust control flow
 pub fn cob_check_numval(
     src: &[u8],
     currency: Option<&[u8]>,
@@ -1315,6 +1316,7 @@ pub fn cob_intr_test_numval_c(src: &[u8], currency: Option<&[u8]>) -> IntrField 
 /// `cob_check_numval_f (srcfield)` (intrinsic.c): validate a floating-point numeric string (`NUMVAL-F`
 /// form: optional sign, digits, decimal point, then an `E±` exponent of up to 4 digits — the exponent sign
 /// is mandatory). Returns 0 when valid, else the 1-based position of the first offending character.
+#[allow(unused_assignments)] // `break_needed` mirrors libcob's flag; its initial reset is redundant under Rust control flow
 pub fn cob_check_numval_f(src: &[u8], dec_pt: u8) -> i32 {
     const COB_MAX_DIGITS: usize = 38;
     let size = src.len() as i32;

@@ -13,7 +13,7 @@
 
 use crate::accessors;
 use crate::attr::{
-    FieldAttr, COB_FLAG_BINARY_SWAP, COB_FLAG_HAVE_SIGN, COB_TYPE_ALPHANUMERIC, COB_TYPE_GROUP,
+    FieldAttr, COB_FLAG_BINARY_SWAP, COB_FLAG_HAVE_SIGN,
     COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_COMP5, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_DOUBLE,
     COB_TYPE_NUMERIC_FLOAT, COB_TYPE_NUMERIC_PACKED,
 };
@@ -909,6 +909,7 @@ pub fn cob_func(cache: &mut CallCache, name: &str, argc: i32) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::attr::COB_TYPE_ALPHANUMERIC; // used only by the tests below
 
     fn af(field_type: u16, digits: u16, scale: i16, flags: u16) -> FieldAttr {
         FieldAttr { field_type, digits, scale, flags }

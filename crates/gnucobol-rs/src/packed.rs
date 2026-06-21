@@ -621,6 +621,7 @@ const COB_STORE_ROUND: i32 = 1 << 0;
 const COB_STORE_KEEP_ON_OVERFLOW: i32 = 1 << 1;
 const COB_STORE_TRUNC_ON_OVERFLOW: i32 = 1 << 2;
 const COB_STORE_AWAY_FROM_ZERO: i32 = 1 << 4;
+#[allow(dead_code)] // kept for completeness of the libcob COB_STORE_* mode-bit set
 const COB_STORE_NEAR_AWAY_FROM_ZERO: i32 = 1 << 5;
 const COB_STORE_NEAR_EVEN: i32 = 1 << 6;
 const COB_STORE_NEAR_TOWARD_ZERO: i32 = 1 << 7;
@@ -1466,7 +1467,6 @@ mod tests {
                 Round::TowardGreater => ROUND | COB_STORE_TOWARD_GREATER,
                 Round::TowardLesser => ROUND | COB_STORE_TOWARD_LESSER,
                 Round::Prohibited => ROUND | COB_STORE_PROHIBITED,
-                _ => 0,
             }
         }
         let shapes: &[(u16, i16)] = &[(5, 0), (7, 2), (9, 0), (6, 3), (4, 1), (3, 0)];

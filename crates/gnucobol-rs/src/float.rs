@@ -20,9 +20,6 @@ struct BigU {
 }
 
 impl BigU {
-    fn zero() -> Self {
-        BigU { limbs: Vec::new() }
-    }
     fn from_u128(v: u128) -> Self {
         let mut limbs = vec![v as u64, (v >> 64) as u64];
         Self::trim(&mut limbs);

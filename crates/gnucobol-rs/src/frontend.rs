@@ -433,6 +433,8 @@ pub fn run_program_redirected(
     let mut out = Vec::new();
     EXTERNAL_STORE.with(|m| m.borrow_mut().clear()); // EXTERNAL storage is per run unit (before any build)
     POINTER_TARGETS.with(|m| m.borrow_mut().clear());
+    ENV_NAME_REG.with(|r| r.borrow_mut().clear());
+    ENV_OVERRIDE.with(|m| m.borrow_mut().clear());
     let mut fields = build_program_fields(main, &ctx)?;
     reset_exception(); // a fresh run starts with no raised exception
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
@@ -467,6 +469,9 @@ fn read_return_code(fields: &HashMap<String, Field>) -> i32 {
 /// names, and the procedure-body tokens.
 struct ProgramDef {
     ws: Vec<ProgItem>,
+    /// Parsed LINKAGE SECTION items (retained for structure/forensics; CALL binds USING by position, not by
+    /// these declarations yet).
+    #[allow(dead_code)]
     linkage: Vec<ProgItem>,
     using: Vec<String>,
     /// `SELECT ... ASSIGN` + `FD` declared files (the subset: sequential / line-sequential).
@@ -2401,6 +2406,13 @@ thread_local! {
     /// The stack of executing PROGRAM-IDs (top = current). Pushed/popped around each program body so
     /// `FUNCTION MODULE-ID` reads the running program and `FUNCTION MODULE-CALLER-ID` reads its caller.
     static PROGRAM_STACK: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// `DISPLAY x UPON ENVIRONMENT-NAME` sets this register; `DISPLAY y UPON ENVIRONMENT-VALUE` and
+    /// `ACCEPT z FROM ENVIRONMENT-VALUE` then act on the variable it names (none of these write stdout).
+    static ENV_NAME_REG: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
+    /// Per-run environment-variable overrides set via `DISPLAY ... UPON ENVIRONMENT-VALUE`; consulted before
+    /// the real process environment by `ACCEPT ... FROM ENVIRONMENT [-VALUE]` so a set-then-read round-trips
+    /// deterministically without mutating the host env.
+    static ENV_OVERRIDE: std::cell::RefCell<HashMap<String, Vec<u8>>> = std::cell::RefCell::new(HashMap::new());
 }
 
 /// The current PROGRAM-ID (top of the program stack), empty outside any program body.
@@ -3933,7 +3945,7 @@ fn exec_perform(
 
     // record the body's start; we re-run it per iteration.
     let body_start = *pos;
-    let mut body_end = *pos;
+    let body_end;
     // first pass: if not executing, just skip the body once to find END-PERFORM.
     {
         let mut scan = *pos;
@@ -5151,6 +5163,7 @@ fn exec_display(
     // does not declare it) is routed to the print redirect when active; UPON CONSOLE/SYSOUT and the
     // default stay on stdout.
     let mut upon_printer = false;
+    let mut upon_dev: Option<String> = None;
     let mut it = stmt.iter();
     while let Some(t) = it.next() {
         match t {
@@ -5159,6 +5172,7 @@ fn exec_display(
                 if w == "UPON" {
                     if let Some(Tok::Word(dev)) = it.next() {
                         upon_printer = dev == "PRINTER";
+                        upon_dev = Some(dev.clone());
                     }
                     continue;
                 }
@@ -5176,6 +5190,20 @@ fn exec_display(
                 operands.push((bytes, alnum_attr()));
             }
             Tok::Dot => {}
+        }
+    }
+    // DISPLAY ... UPON ENVIRONMENT-NAME / ENVIRONMENT-VALUE set the env-name register / a per-run env
+    // override; they produce NO stdout (cobc routes them to the runtime environment, not the terminal).
+    if let Some(dev) = upon_dev.as_deref() {
+        if dev == "ENVIRONMENT-NAME" || dev == "ENVIRONMENT-VALUE" {
+            let val: Vec<u8> = operands.iter().flat_map(|(b, _)| b.iter().copied()).collect();
+            if dev == "ENVIRONMENT-NAME" {
+                ENV_NAME_REG.with(|r| *r.borrow_mut() = String::from_utf8_lossy(&val).trim_end().to_string());
+            } else {
+                let name = ENV_NAME_REG.with(|r| r.borrow().clone());
+                ENV_OVERRIDE.with(|m| m.borrow_mut().insert(name, val));
+            }
+            return Ok(());
         }
     }
     let no_adv = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w=="ADVANCING"));
@@ -6252,16 +6280,24 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
     let src = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("ACCEPT FROM: missing source".into())) };
     // `ACCEPT id FROM ENVIRONMENT "name"` (or a name field): read the environment variable (deterministic
     // under the pinned harness env) and MOVE its value into the receiver; an unset variable yields spaces.
-    if src == "ENVIRONMENT" {
-        let name = match stmt.get(3) {
-            Some(Tok::Str(s)) => String::from_utf8_lossy(s).to_string(),
-            Some(Tok::Word(w)) => read_field(fields, w)?
-                .map(|f| String::from_utf8_lossy(&f.bytes).trim_end().to_string())
-                .unwrap_or_else(|| w.clone()),
-            _ => return Err(RunError::Unsupported("ACCEPT FROM ENVIRONMENT: missing variable name".into())),
+    if src == "ENVIRONMENT" || src == "ENVIRONMENT-VALUE" {
+        // ENVIRONMENT-VALUE reads the variable named by the env-name register (set via DISPLAY UPON
+        // ENVIRONMENT-NAME); ENVIRONMENT "name" reads the named variable. A per-run override (DISPLAY UPON
+        // ENVIRONMENT-VALUE) wins over the real process env; an unset variable yields spaces.
+        let name = if src == "ENVIRONMENT-VALUE" {
+            ENV_NAME_REG.with(|r| r.borrow().clone())
+        } else {
+            match stmt.get(3) {
+                Some(Tok::Str(s)) => String::from_utf8_lossy(s).to_string(),
+                Some(Tok::Word(w)) => read_field(fields, w)?
+                    .map(|f| String::from_utf8_lossy(&f.bytes).trim_end().to_string())
+                    .unwrap_or_else(|| w.clone()),
+                _ => return Err(RunError::Unsupported("ACCEPT FROM ENVIRONMENT: missing variable name".into())),
+            }
         };
-        let val = std::env::var(&name).unwrap_or_default();
-        let mv = vec![Tok::Str(val.into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        let val = ENV_OVERRIDE.with(|m| m.borrow().get(&name).cloned())
+            .unwrap_or_else(|| std::env::var(&name).unwrap_or_default().into_bytes());
+        let mv = vec![Tok::Str(val), Tok::Word("TO".to_string()), Tok::Word(target)];
         return exec_move(&mv, fields, false);
     }
     let long_year = matches!(stmt.get(3), Some(Tok::Word(w)) if w == "YYYYMMDD" || w == "YYYYDDD");

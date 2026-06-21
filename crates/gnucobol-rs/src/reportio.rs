@@ -987,6 +987,7 @@ mod tests {
     use super::*;
     use crate::attr::COB_FLAG_HAVE_SIGN;
 
+    #[allow(dead_code)] // test helper retained for symmetry with the numeric builders
     fn anum(b: &[u8]) -> (Vec<u8>, FieldAttr) {
         (b.to_vec(), FieldAttr { field_type: COB_TYPE_ALPHANUMERIC, digits: 0, scale: 0, flags: 0 })
     }

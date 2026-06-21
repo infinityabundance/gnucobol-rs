@@ -797,6 +797,7 @@ pub fn xml_parse(module: &mut MlModule, in_data: &[u8], flags: i32, state: &mut 
 /// "continue -- invoke the PROCESSING PROCEDURE with the current `XML-EVENT`", non-zero means parsing is
 /// finished (`next_saved_state` is then `None`, the memory freed). Faithful to the C dispatch, including
 /// the `END-OF-DOCUMENT` emitted when the end-of-input is reached with `XML-CODE == 0`.
+#[allow(unused_assignments)] // the terminal `state.state = Finished` mirrors the C state machine before return
 pub fn cob_xml_parse(
     module: &mut MlModule,
     saved: Option<XmlState>,

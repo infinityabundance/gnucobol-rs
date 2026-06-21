@@ -130,6 +130,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p155_rounded_modes.cob", "ROUNDED MODE NEAREST-EVEN"),
     ("EXIT", "`EXIT PERFORM` (break the nearest inline PERFORM), `EXIT PERFORM CYCLE` (skip to its next iteration -- innermost loop of a VARYING/AFTER), and `NEXT SENTENCE` (transfer to the statement after the next period, distinct from CONTINUE); found by the control-flow battery", "sealed",
         "lab/corpus/frontend/p156_exit_perform_next_sentence.cob", "EXIT PERFORM CYCLE"),
+    ("DISPLAY", "`DISPLAY ... UPON ENVIRONMENT-NAME` / `UPON ENVIRONMENT-VALUE` set the runtime environment (a per-run override) with NO stdout; `ACCEPT ... FROM ENVIRONMENT-VALUE` / `FROM ENVIRONMENT \"name\"` read it back (override before the real process env). Found by the SORT/ACCEPT battery", "sealed",
+        "lab/corpus/frontend/p157_display_accept_environment.cob", "UPON ENVIRONMENT-NAME"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

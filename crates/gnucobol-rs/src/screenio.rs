@@ -705,7 +705,7 @@ fn ld_transform(old: &[u8], new: &[u8], end_col: i32, row: i32) -> (Vec<u8>, i32
     let back = end_col - fc;
     // candidates: (cost, priority, bytes, end_cursor)
     let mut cands: Vec<(usize, u8, Vec<u8>, i32)> = Vec::new();
-    let mut add = |prio: u8, mv: &[u8], start: usize, cands: &mut Vec<(usize, u8, Vec<u8>, i32)>| {
+    let add = |prio: u8, mv: &[u8], start: usize, cands: &mut Vec<(usize, u8, Vec<u8>, i32)>| {
         let (body, end) = ld_emit_from(new, start, last);
         let mut bytes = mv.to_vec();
         bytes.extend_from_slice(&body);

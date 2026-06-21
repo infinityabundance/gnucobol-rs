@@ -659,10 +659,6 @@ pub fn cob_decimal_do_round(d: &mut CobDecimal, tgt: i32, round: Round) -> Resul
             let n = tgt + 1 - d.scale; shift_decimal(d, n);
             d.value = d.value.add(&s5);
         }
-        _ => {
-            let n = tgt + 1 - d.scale; shift_decimal(d, n);
-            d.value = d.value.add(&s5);
-        }
     }
     Ok(())
 }
@@ -1475,7 +1471,7 @@ mod tests {
         // cob_cmp_numdisp must agree with cob_cmp_int over DISPLAY fields, and the overpunch helpers
         // must decode the ASCII/EBCDIC trailing-sign tables.
         for &(digits, signed) in &[(5u16, false), (5, true), (3, true), (7, true)] {
-            let attr = disp(digits, 0, signed);
+            let _attr = disp(digits, 0, signed);
             for v in [0i64, 1, 7, 42, 999, 12345] {
                 if v >= 10i64.pow(digits as u32) {
                     continue;
