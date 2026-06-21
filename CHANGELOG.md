@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.28]
+- **DISPLAY/ACCEPT ENVIRONMENT + a clean build.** `DISPLAY ... UPON ENVIRONMENT-NAME` / `UPON ENVIRONMENT-VALUE` now set the runtime environment (a per-run override) with no stdout (previously printed to stdout); `ACCEPT ... FROM ENVIRONMENT-VALUE` / `FROM ENVIRONMENT "name"` read it back, so a set-then-get round-trips. Also a hygiene pass clearing all 12 compiler warnings (crate + test builds) -- unused imports/fn, dead initializers, unreachable arms; documentary constants and libcob-faithful flags kept under targeted #[allow]. SORT USING/GIVING and SEARCH ALL descending were already byte-identical. Front-end sweep 157/0.
+
 ## [0.8.27]
 - **`EXIT PERFORM` / `EXIT PERFORM CYCLE` / `NEXT SENTENCE`.** EXIT PERFORM now breaks the nearest inline PERFORM and EXIT PERFORM CYCLE skips to its next iteration (the innermost loop of a VARYING/AFTER), via new control signals absorbed at each PERFORM loop site; nested performs behave correctly. NEXT SENTENCE transfers to the statement after the next period (distinct from CONTINUE). Found by the control-flow battery (EXIT PARAGRAPH, GOBACK, EVALUATE CONTINUE, nested PERFORM, INSPECT CONVERTING, sequential file I/O + FILE STATUS, MOVE CORRESPONDING all already byte-identical). Front-end sweep 156/0.
 

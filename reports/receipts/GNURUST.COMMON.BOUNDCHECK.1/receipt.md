@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.COMMON.BOUNDCHECK.1` |
 | court | Runtime bounds-check diagnostics (subscript / reference-mod / OCCURS DEPENDING ON) |
-| crate_version | `0.8.27` |
+| crate_version | `0.8.28` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a bounds-check input -> the exact runtime EC-BOUND diagnostic message + hint bytes (verified vs both oracles 3.1.2 + 3.2) |
 | replay command | `bash lab/oracle/bounds_check_sweep.sh` |
