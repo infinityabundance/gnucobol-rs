@@ -3934,31 +3934,68 @@ fn eval_cond(
         })
         .collect();
     let mut p = 0;
-    let r = cond_or(&words, &mut p, fields, sw, col)?;
+    // `ctx` carries the last-stated (subject, operator, negation) for abbreviated combined conditions
+    // (`A = 1 OR 2`, `A > B AND < C`); it threads left-to-right through the whole condition.
+    let mut ctx: Option<(String, Rel, bool)> = None;
+    let r = cond_or(&words, &mut p, fields, sw, col, &mut ctx)?;
     if p != words.len() {
         return Err(RunError::Unsupported(format!("trailing tokens in condition at {}", words[p])));
     }
     Ok(r)
 }
 
-fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
-    let mut acc = cond_and(w, p, f, sw, col)?;
+type CondCtx = Option<(String, Rel, bool)>;
+
+fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>, ctx: &mut CondCtx) -> Result<bool, RunError> {
+    let mut acc = cond_and(w, p, f, sw, col, ctx)?;
     while w.get(*p).map(|s| s.as_str()) == Some("OR") {
         *p += 1;
-        let r = cond_and(w, p, f, sw, col)?;
+        let r = cond_and(w, p, f, sw, col, ctx)?;
         acc = acc || r;
     }
     Ok(acc)
 }
 
-fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
-    let mut acc = cond_rel(w, p, f, sw, col)?;
+fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>, ctx: &mut CondCtx) -> Result<bool, RunError> {
+    let mut acc = cond_rel(w, p, f, sw, col, ctx)?;
     while w.get(*p).map(|s| s.as_str()) == Some("AND") {
         *p += 1;
-        let r = cond_rel(w, p, f, sw, col)?;
+        let r = cond_rel(w, p, f, sw, col, ctx)?;
         acc = acc && r;
     }
     Ok(acc)
+}
+
+/// Consume a relational operator at `w[*p]` (`=` `>` `<` `>=` `<=` `<>`, or the worded `GREATER [THAN]` /
+/// `LESS [THAN]` / `EQUAL [TO]`), advancing `*p` past it. Returns `None` (without advancing) if `w[*p]` is
+/// not a relational operator.
+fn parse_relop(w: &[String], p: &mut usize) -> Option<Rel> {
+    let r = match w.get(*p).map(|s| s.as_str())? {
+        "=" => Rel::Eq,
+        ">" => Rel::Gt,
+        "<" => Rel::Lt,
+        ">=" => Rel::Ge,
+        "<=" => Rel::Le,
+        "<>" => Rel::Ne,
+        "GREATER" => {
+            *p += 1;
+            if w.get(*p).map(|s| s.as_str()) == Some("THAN") { *p += 1; }
+            return Some(Rel::Gt);
+        }
+        "LESS" => {
+            *p += 1;
+            if w.get(*p).map(|s| s.as_str()) == Some("THAN") { *p += 1; }
+            return Some(Rel::Lt);
+        }
+        "EQUAL" => {
+            *p += 1;
+            if w.get(*p).map(|s| s.as_str()) == Some("TO") { *p += 1; }
+            return Some(Rel::Eq);
+        }
+        _ => return None,
+    };
+    *p += 1;
+    Some(r)
 }
 
 /// `IS NUMERIC` for a packed (COMP-3) field: every digit nibble is 0-9 and the trailing sign nibble is a
@@ -3972,18 +4009,36 @@ fn packed_is_numeric(bytes: &[u8]) -> bool {
     (last >> 4) <= 9 && matches!(last & 0x0f, 0x0c | 0x0d | 0x0f)
 }
 
-fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
+fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>, ctx: &mut CondCtx) -> Result<bool, RunError> {
+    // A leading NOT negates the whole relation term (`IF NOT A = 5`; abbreviated `... AND NOT 2`).
+    let mut neg = false;
+    if w.get(*p).map(|s| s.as_str()) == Some("NOT") {
+        neg = true;
+        *p += 1;
+    }
+    // Operator-first abbreviation `[NOT] op object` -- reuse the last subject (`A > B AND < C`).
+    if ctx.is_some() {
+        let mut q = *p;
+        if let Some(op) = parse_relop(w, &mut q) {
+            let subject = ctx.as_ref().unwrap().0.clone();
+            let object = w.get(q).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
+            *p = q + 1;
+            *ctx = Some((subject.clone(), op, neg));
+            return Ok(rel_holds(op, cond_compare(&subject, &object, f, col)?, neg));
+        }
+    }
     let left = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?.clone();
     *p += 1;
-    // A bare UPSI switch condition-name (SPECIAL-NAMES `SWITCH-n ON/OFF STATUS IS <name>`): its truth is
-    // the switch's state matching the declared ON/OFF sense. No relational operator follows.
+    // A UPSI switch condition-name (SPECIAL-NAMES `SWITCH-n ON/OFF STATUS IS <name>`): its truth is the
+    // switch's state matching the declared ON/OFF sense. No relational operator follows.
     if let Some(&(idx, on)) = sw.conds.get(&left) {
-        return Ok(sw.states[idx] == on);
+        return Ok(neg ^ (sw.states[idx] == on));
     }
-    // A bare 88-level condition-name: true when its parent's value equals any listed value or range.
+    // An 88-level condition-name: true when its parent's value equals any listed value or range.
     if let Some(Field { storage: Storage::Condition { parent, values, .. }, .. }) = f.get(&left) {
+        let mut hit = false;
         for v in values {
-            let hit = match v {
+            hit = match v {
                 CondVal::Single(val) => cond_compare(parent, val, f, col)? == std::cmp::Ordering::Equal,
                 CondVal::Range(lo, hi) => {
                     cond_compare(parent, lo, f, col)? != std::cmp::Ordering::Less
@@ -3991,17 +4046,16 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
                 }
             };
             if hit {
-                return Ok(true);
+                break;
             }
         }
-        return Ok(false);
+        return Ok(neg ^ hit);
     }
     if w.get(*p).map(|s| s.as_str()) == Some("IS") {
         *p += 1;
     }
-    let mut neg = false;
     if w.get(*p).map(|s| s.as_str()) == Some("NOT") {
-        neg = true;
+        neg = !neg;
         *p += 1;
     }
     // Sign condition: `IF identifier [IS] [NOT] {POSITIVE | NEGATIVE | ZERO}` -- a unary test of the
@@ -4052,52 +4106,33 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
             return Ok(if neg { !base } else { base });
         }
     }
-    let op = match w.get(*p).map(|s| s.as_str()) {
-        Some("=") => Rel::Eq,
-        Some(">") => Rel::Gt,
-        Some("<") => Rel::Lt,
-        Some(">=") => Rel::Ge,
-        Some("<=") => Rel::Le,
-        Some("<>") => Rel::Ne,
-        Some("GREATER") => {
-            *p += 1;
-            if w.get(*p).map(|s| s.as_str()) == Some("THAN") {
-                *p += 1;
-            }
-            *p -= 1; // the loop below does +=1 once
-            Rel::Gt
-        }
-        Some("LESS") => {
-            *p += 1;
-            if w.get(*p).map(|s| s.as_str()) == Some("THAN") {
-                *p += 1;
-            }
-            *p -= 1;
-            Rel::Lt
-        }
-        Some("EQUAL") => {
-            *p += 1;
-            if w.get(*p).map(|s| s.as_str()) == Some("TO") {
-                *p += 1;
-            }
-            *p -= 1;
-            Rel::Eq
-        }
-        other => return Err(RunError::Unsupported(format!("condition: unrecognized relational operator {other:?} (expected = > < >= <= <> GREATER LESS EQUAL)"))),
-    };
-    *p += 1;
-    let right = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
-    *p += 1;
-    let ord = cond_compare(&left, &right, f, col)?;
+    // Full relation `subject [IS] [NOT] op object`.
+    if let Some(op) = parse_relop(w, p) {
+        let right = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
+        *p += 1;
+        *ctx = Some((left.clone(), op, neg));
+        return Ok(rel_holds(op, cond_compare(&left, &right, f, col)?, neg));
+    }
+    // Bare-object abbreviation `object` -- reuse the last subject AND operator (`A = 1 OR 2`); a local NOT
+    // toggles the reused negation (`A NOT = 1 AND 2` -> both negated).
+    if let Some((subject, op, prev_neg)) = ctx.clone() {
+        return Ok(rel_holds(op, cond_compare(&subject, &left, f, col)?, prev_neg ^ neg));
+    }
+    Err(RunError::Unsupported("condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)".into()))
+}
+
+/// Apply a relational operator to a comparison ordering, then the negation flag.
+fn rel_holds(op: Rel, ord: std::cmp::Ordering, neg: bool) -> bool {
+    use std::cmp::Ordering::{Equal, Greater, Less};
     let base = match op {
-        Rel::Eq => ord == std::cmp::Ordering::Equal,
-        Rel::Ne => ord != std::cmp::Ordering::Equal,
-        Rel::Gt => ord == std::cmp::Ordering::Greater,
-        Rel::Lt => ord == std::cmp::Ordering::Less,
-        Rel::Ge => ord != std::cmp::Ordering::Less,
-        Rel::Le => ord != std::cmp::Ordering::Greater,
+        Rel::Eq => ord == Equal,
+        Rel::Ne => ord != Equal,
+        Rel::Gt => ord == Greater,
+        Rel::Lt => ord == Less,
+        Rel::Ge => ord != Less,
+        Rel::Le => ord != Greater,
     };
-    Ok(if neg { !base } else { base })
+    if neg { !base } else { base }
 }
 
 #[derive(Clone, Copy)]
@@ -7643,6 +7678,24 @@ fn eval_function_call(
         }
         None => (raw.trim().to_ascii_uppercase(), Vec::new()),
     };
+    // FUNCTION TRIM(x [LEADING | TRAILING]) -- the optional direction keyword is a MODIFIER, not an argument
+    // (0 = both ends, 1 = leading, 2 = trailing). Handle it here so the keyword isn't evaluated as a value.
+    if name == "TRIM" {
+        let mut items = arg_strs.clone();
+        let dir = match items.last().map(|s| s.to_ascii_uppercase()).as_deref() {
+            Some("LEADING") => { items.pop(); 1 }
+            Some("TRAILING") => { items.pop(); 2 }
+            _ => 0,
+        };
+        let a = items.first().ok_or_else(|| RunError::Unsupported("FUNCTION TRIM: missing argument".into()))?;
+        let arg = if let Some(idx) = a.strip_prefix('\u{1}') {
+            let i: usize = idx.parse().unwrap_or(0);
+            (strs.get(i).cloned().unwrap_or_default(), alnum_attr())
+        } else {
+            operand_value(&Tok::Word(a.clone()), fields)?
+        };
+        return Ok((crate::intrinsic::cob_intr_trim(0, 0, &arg.0, &arg.1, dir), k));
+    }
     let mut args: Vec<(Vec<u8>, FieldAttr)> = Vec::new();
     for a in &arg_strs {
         if let Some(idx) = a.strip_prefix('\u{1}') {

@@ -120,6 +120,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p149_reference_modification.cob", "S(P:L)"),
     ("IF", "class conditions `IS [NOT] {NUMERIC | ALPHABETIC | ALPHABETIC-UPPER | ALPHABETIC-LOWER}` wired to the sealed `class` byte predicates; the NUMERIC variant chosen by usage (binary always numeric, packed nibble-validated, signed DISPLAY by sign convention incl. SIGN LEADING/TRAILING SEPARATE); found by the class-condition cross-product battery", "sealed",
         "lab/corpus/frontend/p150_class_conditions.cob", "IS NOT NUMERIC"),
+    ("IF", "abbreviated combined conditions -- a term after AND/OR may omit the subject (`A > B AND < C`) and the operator (`A = 1 OR 2`), reusing the last-stated subject/operator/negation; a leading NOT negates a term (`NOT A = 5`). Found by the abbreviated-condition battery", "sealed",
+        "lab/corpus/frontend/p152_abbreviated_conditions.cob", "A = 1 OR 2 OR 5"),
+    ("(intrinsic)", "FUNCTION TRIM(x [LEADING | TRAILING]) -- the optional direction keyword is parsed as a modifier (was evaluated as a second argument and failed); wired to the runtime cob_intr_trim direction", "sealed",
+        "lab/corpus/frontend/p153_trim_directions.cob", "TRIM(S LEADING)"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

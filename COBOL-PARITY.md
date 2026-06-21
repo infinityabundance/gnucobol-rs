@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **44 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 227 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **11 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **182 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **46 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 208 of them, de-duplicated from the 229 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 208: **11 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **183 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,7 +185,7 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 55 front-end sub-forms have been identified -- **44 sealed** (byte-identical to cobc, section A) and **11 still open** (fail-closed guards, section B). **Depth completion = 44/55 = 80.0%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 57 front-end sub-forms have been identified -- **46 sealed** (byte-identical to cobc, section A) and **11 still open** (fail-closed guards, section B). **Depth completion = 46/57 = 80.7%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
@@ -194,9 +194,9 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | `OCCURS / tables` | 2 | 18% |
 | `UNSTRING` | 2 | 18% |
 | `SET` | 1 | 9% |
-| **TOTAL** | **11 open** (+ 44 sealed = 55 identified) | **80.0% complete** |
+| **TOTAL** | **11 open** (+ 46 sealed = 57 identified) | **80.7% complete** |
 
-### A. Sealed sub-forms (44) -- proven byte-identical to cobc
+### A. Sealed sub-forms (46) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -246,6 +246,8 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `ADD` | `ADD a b [c...] GIVING r` multi-operand fold computes the sum at full width before the store (was folded into the first operand's narrow width -- 60+60 -> "20" -- and the ON SIZE ERROR was judged on the truncated value); found by the SIZE-ERROR/ROUNDED differential battery | `lab/corpus/frontend/p148_add_giving_fold.cob` |
 | `(refmod)` | reference modification `base(start:len)` / `base(start:)` -- alphanumeric substring, 1-based start, as a VALUE (DISPLAY/IF/MOVE-source/arith) and as a RECEIVER (MOVE/INSPECT/STRING target), with literal / data-name / subscripted bounds and a subscripted base `T(i)(s:l)`. Boundary: expression-valued bounds and refmod inside a FUNCTION argument fail closed | `lab/corpus/frontend/p149_reference_modification.cob` |
 | `IF` | class conditions `IS [NOT] {NUMERIC \| ALPHABETIC \| ALPHABETIC-UPPER \| ALPHABETIC-LOWER}` wired to the sealed `class` byte predicates; the NUMERIC variant chosen by usage (binary always numeric, packed nibble-validated, signed DISPLAY by sign convention incl. SIGN LEADING/TRAILING SEPARATE); found by the class-condition cross-product battery | `lab/corpus/frontend/p150_class_conditions.cob` |
+| `IF` | abbreviated combined conditions -- a term after AND/OR may omit the subject (`A > B AND < C`) and the operator (`A = 1 OR 2`), reusing the last-stated subject/operator/negation; a leading NOT negates a term (`NOT A = 5`). Found by the abbreviated-condition battery | `lab/corpus/frontend/p152_abbreviated_conditions.cob` |
+| `(intrinsic)` | FUNCTION TRIM(x [LEADING \| TRAILING]) -- the optional direction keyword is parsed as a modifier (was evaluated as a second argument and failed); wired to the runtime cob_intr_trim direction | `lab/corpus/frontend/p153_trim_directions.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (11)
 
@@ -286,7 +288,7 @@ The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION,
 |  | FUNCTION <x>: COB_CURRENT_DATE has no year |
 |  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
 
-### D. Input-validation guards -- malformed input rejected (182)
+### D. Input-validation guards -- malformed input rejected (183)
 
 Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
 
@@ -333,6 +335,7 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | FUNCTION <x>: the pointer has no SET ... TO ADDRESS OF target |
 |  | FUNCTION CONCATENATE: needs at least one argument |
 |  | FUNCTION PRESENT-VALUE: needs a rate and at least one flow |
+|  | FUNCTION TRIM: missing argument |
 | `GO TO` | GO TO unknown paragraph `<x>` |
 |  | GO TO without a target paragraph |
 | `INITIALIZE` | INITIALIZE ... TO VALUE: no item named |
@@ -460,7 +463,7 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | WHEN without a value |
 |  | condition: missing left operand |
 |  | condition: missing right operand |
-|  | condition: unrecognized relational operator <x> (expected = > < >= <= <> GREATER LESS EQUAL) |
+|  | condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL) |
 |  | expected data-name after 66 |
 |  | multi-dimension leaf needs <x> subscript(s), got <x> |
 |  | not a numeric literal: <x> |
