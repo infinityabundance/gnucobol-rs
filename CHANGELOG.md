@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.23]
+- **UNSTRING `DELIMITER` / `COUNT` without the optional `IN`.** The receiver parser required `DELIMITER IN d` / `COUNT IN c`; cobc also accepts the IN-less `DELIMITER d` / `COUNT c`, which previously errored. `IN` is now optional. Found by the SEARCH / STRING / UNSTRING differential battery -- SEARCH, SEARCH ALL (ASCENDING KEY), PERFORM VARYING with INDEXED BY, and STRING WITH POINTER ... ON OVERFLOW were all already byte-identical. Front-end sweep 151/0.
+
 ## [0.8.22]
 - **Class conditions `IS [NOT] {NUMERIC | ALPHABETIC | ALPHABETIC-UPPER | ALPHABETIC-LOWER}` (`GNURUST.CLASS.1`) wired into the front-end.** The sealed `class` byte predicates existed but were never reachable from the condition evaluator (`IF V IS NUMERIC` errored as an unrecognized relational operator). Now recognized in `IF`, with the NUMERIC variant chosen by usage: binary is always numeric, packed validates its nibbles, a signed DISPLAY uses the predicate for its sign convention (trailing overpunch, or SIGN LEADING/TRAILING [SEPARATE]), and alphanumeric/group is the digit-string test. Found by the class-condition cross-product battery (130 pairs). Front-end sweep 150/0.
 

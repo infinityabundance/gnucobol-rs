@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.SEQ.1` |
 | court | RECORD SEQUENTIAL read/write incl. variable-length |
-| crate_version | `0.8.22` |
+| crate_version | `0.8.23` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN + WRITE/READ (RECORD SEQUENTIAL) -> fixed full record / variable cob_varseq_type prefix + data + FILE STATUS |
 | replay command | `bash lab/oracle/seqrec_sweep.sh` |
