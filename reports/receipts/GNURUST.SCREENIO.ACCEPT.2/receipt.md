@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.ACCEPT.2` |
 | court | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes |
-| crate_version | `0.8.20` |
+| crate_version | `0.8.21` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_accept2_sweep.sh` |

@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.21]
+- **Reference modification `base(start:len)` (`GNURUST.REFMOD.1`) -- new front-end feature.** Previously unimplemented (`S(1:3)` resolved as an undefined data name). Now an alphanumeric SUBSTRING of the base item (1-based start, length-to-end if omitted) works both as a VALUE (DISPLAY / IF / MOVE-source / STRING / arithmetic / PERFORM) and as a RECEIVER (MOVE / INSPECT / STRING target), with literal, data-name, or computed-integer bounds, a numeric base (refmod is always category alphanumeric), and a subscripted base `T(i)(s:l)`. Boundary (fails closed): expression-valued bounds and refmod inside a FUNCTION argument. Front-end sweep 149/0.
+
 ## [0.8.20]
 - **`ADD a b [c...] GIVING r` multi-operand fold (`GNURUST.ADD.*`).** The SIZE-ERROR/ROUNDED differential battery surfaced a real bug in the no-`TO` `ADD <operand-list> GIVING` form: the operands were folded into the FIRST operand's narrow width, truncating each partial sum before the accumulator widened (60+60 -> "20", 10+20+30 -> "060"), and `ON SIZE ERROR` was judged on the truncated value. The fold now widens-then-adds (the same 18-digit path the TO/BY/INTO forms use), so the sum is exact and the store is the single rounding/size-error point. Other arithmetic forms, the INSPECT clause cross-product, and the edited-PIC MOVE battery were all already byte-identical. Front-end sweep 148/0.
 

@@ -1,0 +1,512 @@
+{
+  "crate": "gnucobol-rs",
+  "negatives": [
+    {
+      "id": "GNURUST.2",
+      "lie_prevented": "'a MOVE result is close enough' — every byte of the receiving field is proven",
+      "not_proven": "arithmetic; edited pictures; any other type pair"
+    },
+    {
+      "id": "GNURUST.3",
+      "lie_prevented": "'a PIC width can be eyeballed' — the field model matches cobc's own attrs",
+      "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3"
+    },
+    {
+      "id": "GNURUST.4",
+      "lie_prevented": "'offsets are obvious' — layout matches cobc's emitted offsets, not intuition",
+      "not_proven": "SYNCHRONIZED; REDEFINES larger than target"
+    },
+    {
+      "id": "GNURUST.5",
+      "lie_prevented": "'substring replacement is close enough' — COPY REPLACING is whole-text-word",
+      "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS"
+    },
+    {
+      "id": "GNURUST.6",
+      "lie_prevented": "'substring replacement is close enough' — REPLACING is whole-text-word",
+      "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands"
+    },
+    {
+      "id": "GNURUST.7",
+      "lie_prevented": "'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly",
+      "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum"
+    },
+    {
+      "id": "GNURUST.8",
+      "lie_prevented": "'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE",
+      "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE"
+    },
+    {
+      "id": "GNURUST.9",
+      "lie_prevented": "'P-scaling is just digits' — the asymmetric P digit/scale rule is exact",
+      "not_proven": "V+P; P at both ends; VALUE/MOVE on P field"
+    },
+    {
+      "id": "GNURUST.10",
+      "lie_prevented": "'LENGTH OF proves physical allocation' — ODO physical-max != logical length",
+      "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO"
+    },
+    {
+      "id": "GNURUST.11",
+      "lie_prevented": "'88 truth is a string compare' — padded/numeric/THRU semantics are exact",
+      "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution"
+    },
+    {
+      "id": "GNURUST.CLASS.1",
+      "lie_prevented": "'NUMERIC means parseable as a number' -- it means every byte is a digit (spaces/signs are NOT numeric)",
+      "not_proven": "user-defined CLASS names; national/UTF-8/DBCS classes; locale collating sequence; user-defined class-name on a group/numeric-edited item"
+    },
+    {
+      "id": "GNURUST.12",
+      "lie_prevented": "'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes",
+      "not_proven": "condition expressions; collating-sensitive ranges; Procedure Division execution"
+    },
+    {
+      "id": "GNURUST.12B",
+      "lie_prevented": "'SET FALSE writes any non-satisfying bytes' -- it writes cobc's canonical WHEN SET TO FALSE IS literal",
+      "not_proven": "condition-name expressions; collating-sensitive ranges; Procedure Division execution"
+    },
+    {
+      "id": "GNURUST.13",
+      "lie_prevented": "'packed add rounds like display' — cob_add_bcd keeps -0 on truncation",
+      "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float"
+    },
+    {
+      "id": "GNURUST.14",
+      "lie_prevented": "'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8",
+      "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float"
+    },
+    {
+      "id": "GNURUST.15",
+      "lie_prevented": "'EBCDIC conversion can be record-wide' — it is per-DISPLAY-field; binary/packed raw",
+      "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion"
+    },
+    {
+      "id": "GNURUST.16",
+      "lie_prevented": "'presentation string and numeric value are the same field truth' — they are separated",
+      "not_proven": "report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE"
+    },
+    {
+      "id": "GNURUST.16C",
+      "lie_prevented": "'an edited field can be produced from a value without pinning the exact cobc byte layout' -- the float-symbol position, zero-suppression fill, and sign placement are pinned byte-exact to the oracle",
+      "not_proven": "report writer; locale/currency CURRENCY SIGN; EBCDIC edited; edited arithmetic/VALUE"
+    },
+    {
+      "id": "GNURUST.17",
+      "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' — the C/D/F sign zones differ",
+      "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS"
+    },
+    {
+      "id": "GNURUST.18",
+      "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3",
+      "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2"
+    },
+    {
+      "id": "GNURUST.19",
+      "lie_prevented": "'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter",
+      "not_proven": "divide-by-zero / ON SIZE ERROR; REMAINDER; COMPUTE / expression evaluation; procedure control flow; float; binary/edited receivers; other rounding modes; business correctness"
+    },
+    {
+      "id": "GNURUST.REMAINDER.1",
+      "lie_prevented": "'remainder is just sign(dividend) times (dividend mod divisor)' -- the remainder depends on the QUOTIENT receiver's scale/truncation (dividend - stored-quotient * divisor), and the receiver bytes/sign/scale all matter",
+      "not_proven": "ON SIZE ERROR / NOT ON SIZE ERROR control flow; divide-by-zero (fail-closed); COMPUTE / expression evaluation; Procedure Division execution; float; binary/edited receivers; business correctness"
+    },
+    {
+      "id": "GNURUST.COVERAGE.1",
+      "lie_prevented": "'the data-representation courts are green, so GnuCOBOL is mostly ported' -- COVERAGE.1 shows 8 MISSING surfaces (file I/O, file status, intrinsics, INITIALIZE, INSPECT, STRING/UNSTRING, ACCEPT/DISPLAY, Procedure Division flow) and refuses the completeness reading",
+      "not_proven": "that GnuCOBOL is ported (sealed is only the data-representation spine; file I/O, intrinsics, Procedure Division mostly MISSING); that the surface list is exhaustive; that a status is a quality score; new truth"
+    },
+    {
+      "id": "GNURUST.FILE.SEQUENTIAL.1",
+      "lie_prevented": "'a sequential READ just gives you the record' -- a short final RECORD SEQUENTIAL read LEAKS the prior record's tail bytes (not spaces, not zeros), a long LINE SEQUENTIAL line is split across reads with status 06, and the initial buffer is low-values; the bytes and status both matter",
+      "not_proven": "indexed/relative/VSAM; WRITE/REWRITE/START/DELETE; OPEN I-O/EXTEND; file-status codes beyond 00/06/10; record locking; Procedure Division control flow"
+    },
+    {
+      "id": "GNURUST.FILE.STATUS.1",
+      "lie_prevented": "'byte-correct reads are enough' -- COBOL programs BRANCH on FILE STATUS; this records which status (35 missing, 46 past-EOF, 42 close-not-open, 10 EOF) arises from which OPEN/READ/CLOSE condition, and refuses host-weather (30) + non-reproducible (39) statuses",
+      "not_proven": "full file I/O parity; indexed/relative/VSAM; locking/sharing; host I/O error (30) generalization; attribute conflict (39); Procedure Division control flow; business completeness of the status set"
+    },
+    {
+      "id": "GNURUST.INITIALIZE.1",
+      "lie_prevented": "'INITIALIZE just zeroes/blanks everything and restores VALUE' -- it PRESERVES FILLER and redefiners, sets category defaults NOT the VALUE clause, uses sign nibble C(signed)/F(unsigned) for packed, and '0' digits (not low-values) for numeric DISPLAY",
+      "not_proven": "full Procedure Division execution; INITIALIZE REPLACING/TO VALUE/WITH FILLER; numeric-edited/JUSTIFIED/BLANK WHEN ZERO; ODO runtime active count; active REDEFINES view; all dialects; business defaults"
+    },
+    {
+      "id": "GNURUST.INSPECT.1",
+      "lie_prevented": "'INSPECT counts/replaces are obvious' -- ALL counts NON-OVERLAPPING left-to-right (AAAAAA FOR ALL AA = 3 not 5), LEADING stops at the first non-match, BEFORE/AFTER restrict the region (BEFORE an absent delimiter = the whole field), matching is exact bytes with no case folding",
+      "not_proven": "full Procedure Division execution; locale/case-folding; regex/pattern semantics; national/UTF-8 multibyte; unadmitted multi-clause ordering; business validation; all dialects"
+    },
+    {
+      "id": "GNURUST.REFMOD.1",
+      "lie_prevented": "'refmod is just a slice cobc and we agree on everywhere' -- out of bounds we FAIL CLOSED rather than read adjacent storage like cobc may",
+      "not_proven": "out-of-bounds refmod (fail-closed by design, NOT cobc's flag-dependent read-past); subscripted/table refmod; numeric-edited or national operands; refmod inside arithmetic"
+    },
+    {
+      "id": "GNURUST.STRING.UNSTRING.1",
+      "lie_prevented": "'STRING/UNSTRING just concatenate and split' -- STRING PRESERVES the target tail (does not space-fill) and keeps partial writes on overflow, the POINTER is 1-based, UNSTRING COUNT IN is the SOURCE length BEFORE truncation (a 7-char field into X(4) reports count 7), and DELIMITER IN is SPACE when the field ends at source exhaustion",
+      "not_proven": "full Procedure Division execution; national/UTF-8 multibyte; multi-delimiter/ALL generalization; locale/collation; business parsing correctness; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.ATLAS.1",
+      "lie_prevented": "'intrinsics are obvious' -- INTEGER is FLOOR not truncation (so INTEGER(-3.7)=-4 not -3), MOD takes the DIVISOR sign while REM takes the DIVIDEND sign (so MOD(-17,5)=+3 but REM(-17,5)=-2), ORD/CHAR are 1-based, and CURRENT-DATE/WHEN-COMPILED have only an admitted SHAPE not a value",
+      "not_proven": "all intrinsics (a declared subset); CURRENT-DATE/WHEN-COMPILED values; locale/collation in case/ordinal; national/UTF-8; that a candidate-court is implemented; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.LENGTH.1",
+      "lie_prevented": "'LENGTH is the digit count' -- for COMP-3 it is the PACKED byte count (S9(7)=4 bytes not 7), for binary the storage width (9(4) COMP=2), and the field model and the runtime intrinsic agree byte-for-byte",
+      "not_proven": "LENGTH of group/table/reference-modified operand; LENGTH OF variant; national/UTF-8 character length; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.NUMVAL.1",
+      "lie_prevented": "NUMVAL just reads the number -- a TRAILING sign and CR/DB both mean NEGATIVE (NUMVAL of 123.45 CR = -123.45), leading/trailing spaces are stripped, and a leading dot is allowed; currency/comma grouping is NUMVAL-C, NOT admitted here",
+      "not_proven": "NUMVAL-C (currency/thousands); locale decimal/comma swap; national/UTF-8; malformed-input error semantics; all dialects"
+    },
+    {
+      "id": "GNURUST.ACCEPT.DISPLAY.1",
+      "lie_prevented": "DISPLAY is not just a print -- it CONCATENATES operands with NO separator and adds exactly one newline; ACCEPT MOVEs the line (pad/truncate) not a free read; and DISPLAY of a SIGNED numeric reformats (+/- prefix), which is a non-claim here",
+      "not_proven": "DISPLAY of signed numeric (GnuCOBOL prefixes +/-) or V-scaled/edited numeric (reformats); DISPLAY UPON / WITH NO ADVANCING; ACCEPT FROM DATE/TIME/environment/screen; device/console specifics; all dialects"
+    },
+    {
+      "id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
+      "lie_prevented": "gnucobol-rs ports COBOL -- NO: it does NOT execute Procedure Division; this atlas OBSERVES control-flow semantics (PERFORM VARYING leaves the control variable one step PAST the limit; GO TO skips intervening statements) but runs no program. Execution is the loudest non-claim of the whole project",
+      "not_proven": "Procedure Division execution; control-flow execution; branch/path coverage; loop termination analysis; general condition evaluation; that an observed statement is implemented; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.MOD-REM.1",
+      "lie_prevented": "MOD and REM are the same -- NO: on negatives they DIFFER (MOD takes the DIVISOR sign, REM the DIVIDEND sign), so MOD(-17,5)=3 but REM(-17,5)=-2; using one for the other flips the sign of a modulo result",
+      "not_proven": "non-integer operands; MOD/REM by zero; MOD and REM interchangeable; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.INTEGER.1",
+      "lie_prevented": "INTEGER just drops the decimals -- NO: INTEGER is FLOOR not truncation, so INTEGER(-3.7)=-4 (one LESS than INTEGER-PART(-3.7)=-3); using INTEGER where INTEGER-PART is meant biases negatives downward",
+      "not_proven": "non-numeric arguments; i128 out-of-range magnitudes; INTEGER and INTEGER-PART interchangeable; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.CASE.1",
+      "lie_prevented": "UPPER-CASE uppercases everything -- NO: only ASCII a-z fold (digits/spaces/punctuation and any non-ASCII byte are UNCHANGED), and REVERSE reverses raw BYTES including trailing spaces (not a logical trim-then-reverse)",
+      "not_proven": "locale/national case folding (non-ASCII); multibyte/UTF-8 REVERSE; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.ORD-CHAR.1",
+      "lie_prevented": "ORD('A') is 65 -- NO: ORD is 1-BASED so ORD('A')=66 (the byte value PLUS ONE), and CHAR(66)='A' (byte 65); off-by-one between ORD/CHAR and a raw byte value is the classic trap",
+      "not_proven": "non-default collating sequences; national/UTF-8; CHAR(n) outside 1..256; all dialects"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.NUMVAL-C.1",
+      "lie_prevented": "NUMVAL and NUMVAL-C are the same -- NO: NUMVAL-C additionally strips the currency symbol and thousands commas (NUMVAL would NOT parse a $1,234.56 string), while still honoring the trailing-sign/CR/DB negative convention",
+      "not_proven": "non-default currency symbol (2-arg form); DECIMAL-POINT IS COMMA / locale comma-decimal; national/UTF-8; all dialects"
+    },
+    {
+      "id": "GNURUST.ACCEPT.DISPLAY.2",
+      "lie_prevented": "DISPLAY shows the stored bytes -- NO: for a SIGNED numeric it prints a +/- SIGN CHARACTER (not the overpunched last byte) so the width grows by one, and a positive/zero value shows +; a V-scaled field shows a . that is not stored",
+      "not_proven": "numeric-edited PICs (Z/,/*/$/CR/DB -- that is GNURUST.16); BLANK WHEN ZERO; JUSTIFIED / floating-point USAGE; all dialects"
+    },
+    {
+      "id": "GNURUST.SIZE.ERROR.1",
+      "lie_prevented": "overflow drops the LOW digits -- NO: it drops the HIGH-order (most-significant) digits, keeping the LOW-order ones (1998 into 9(3) is 998 not 199), and ON SIZE ERROR LEAVES THE RECEIVER UNCHANGED rather than storing a partial result",
+      "not_proven": "the arithmetic itself (GNURUST.7/13/19); ROUNDED; intermediate-result precision; SIZE ERROR on MOVE; floating-point receivers; all dialects"
+    },
+    {
+      "id": "GNURUST.FILE.WRITE.1",
+      "lie_prevented": "WRITE just dumps the record bytes -- NO: LINE SEQUENTIAL STRIPS trailing spaces and adds a newline (so an X(8) holding AB writes 3 bytes, and an all-spaces record writes just a newline), while RECORD SEQUENTIAL writes the FULL fixed padded record with no delimiter -- the two organizations produce different bytes for the same record",
+      "not_proven": "variable-length records; WRITE ADVANCING/BEFORE/AFTER; REWRITE; indexed/relative organizations; all dialects (COB_LS_FIXED/COB_LS_NULLS line modes now sealed by GNURUST.FILEIO.LINESEQ.1)"
+    },
+    {
+      "id": "GNURUST.FILE.REWRITE.1",
+      "lie_prevented": "REWRITE rewrites the whole file -- NO: it overwrites ONLY the current record in place (same length); the bytes of every other record are untouched, so a REWRITE is a surgical single-record update not a file rewrite",
+      "not_proven": "LINE SEQUENTIAL REWRITE; length-changing rewrites; DELETE; indexed/relative organizations; read-before-rewrite sequencing/status; all dialects"
+    },
+    {
+      "id": "GNURUST.FILEIO.LINESEQ.1",
+      "lie_prevented": "the COB_LS_* line modes are cosmetic -- NO: COB_LS_FIXED keeps trailing spaces (changes the record length), COB_LS_NULLS injects 0x00 bytes (changes the byte stream), and default COB_LS_VALIDATE rejects control bytes outright (status 71, nothing written) -- each config produces a materially different file, and the source IS_BAD_CHAR exclusions do not match the compiled binary",
+      "not_proven": "WRITE ADVANCING (opt != 0, the cob_*_write_opt family + LINAGE); the Windows CR/LF text-mode path (cob_ls_uses_cr, a platform boundary, off on Unix); COB_LS_VALIDATE>1 printable-check (COB_EXPERIMENTAL); CODE-SET conversion; variable-length records; lineseq_read / lineseq_rewrite; record/relative/indexed organizations; the actual fd/FILE* syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.LINESEQ.2",
+      "lie_prevented": "READ just splits on newline -- NO: \\r\\n folds but a lone \\r is data, a long line splits (06) or truncates (04) by COB_LS_SPLIT, a bad control byte raises status 09 while the line is still delivered, and -- unlike WRITE -- TAB/BS/FF/SI/ESC are accepted (the IS_BAD_CHAR exclusions are live on read, dead on write)",
+      "not_proven": "the multi-file open_next chain; CODE-SET conversion (sort_collating); COB_LS_VALIDATE>1 printable-check (COB_EXPERIMENTAL); the COB_LS_NULLS error-recovery path after status 71; lineseq_rewrite; record/relative/indexed organizations; the fd/FILE* reads (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.SEQ.1",
+      "lie_prevented": "variable-length records are just data -- NO: each is framed by a length prefix whose width AND byte order depend on COB_VARSEQ_FORMAT (2 or 4 bytes; big-endian, little-endian, or BE16+NUL pad), and a fixed short-final read leaks the prior record's tail rather than zero/space filling",
+      "not_proven": "WRITE ADVANCING (cob_seq_write_opt); CODE-SET conversion; the over-long record bytes_to_skip seek-past; multi-file concatenation; relative/indexed organizations; the fd read/write/lseek syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.RELATIVE.1",
+      "lie_prevented": "a relative file is a packed array of records -- NO: each record is a fixed slot prefixed by an 8-byte native-endian length header, a DELETE only zeroes that header (the data bytes survive), an empty/deleted slot READs as status 23, and writing key N zero-fills the gap up to slot N-1",
+      "not_proven": "variable-length relative records; the READ FIRST/LAST/PREVIOUS directions of read_next; COB_READ_MASK option bits; the SEQUENTIAL-access RELATIVE KEY write-back on append; OPEN EXTEND / file-sharing and record locking; the EXTFH external file handler path; the actual fd lseek/read/write syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.VERB.1",
+      "lie_prevented": "a COBOL verb runs regardless of how the file was opened -- NO: WRITE to an INPUT file is 48, READ from an OUTPUT file is 47, REWRITE/DELETE outside I-O is 49, a sequential REWRITE/DELETE without a prior READ is 43, and a sequential READ past EOF is 46 -- each verb checks the open and access mode first",
+      "not_proven": "the organization dispatch itself (sealed separately by the LINESEQ/SEQ/RELATIVE courts); the compile-time START-on-RANDOM rejection (cobc rejects it before runtime); LINE SEQUENTIAL validate-71 at the verb layer; CODE-SET conversion; the variable_record size resolution; EOP / exception side effects; the indexed suppressed-key skip; the fd read/write syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.SORT.1",
+      "lie_prevented": "a SORT just orders records left-to-right -- NO: each key is an independent byte range, ASCENDING and DESCENDING keys mix within one SORT, a DESCENDING key inverts the byte compare, and equal-key records keep their input order (a STABLE sort), not an arbitrary one",
+      "not_proven": "numeric keys (routed through cob_numeric_cmp, a declared composition with GNURUST.NUMCMP.1); the SORT engine's tempfile merge / queues / chunking; INPUT/OUTPUT PROCEDURE (RELEASE/RETURN); MERGE of multiple files; DUPLICATES IN ORDER beyond the stable tiebreak; the EXTFH sort path; the fd tempfile syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.SORTENGINE.1",
+      "lie_prevented": "a SORT is just any sort that puts records in key order -- NO: libcob uses a specific 4-queue natural merge whose equal-key tiebreak is the input order (the unique counter), so the output is the STABLE permutation, byte-reproducible record-for-record, not merely key-ordered",
+      "not_proven": "the temp-file spill path (switch_to_file/files_used/cob_get_sort_tempfile/cob_read_item/cob_write_block/cob_create_tmpfile, taken only above COB_SORT_MEMORY -- the declared OS boundary); the EXTFH variants (cob_file_sort_using_extfh/giving_extfh); numeric-key ordering (a declared composition with GNURUST.NUMCMP.1); INPUT/OUTPUT PROCEDURE (RELEASE/RETURN); MERGE-sequence checking; the actual fd tempfile syscalls"
+    },
+    {
+      "id": "GNURUST.FILEIO.INDEXED.1",
+      "lie_prevented": "an INDEXED file is just a keyed map -- NO: WRITE of a duplicate primary key is 22 (not an overwrite), REWRITE of an absent key is 21 (not 23), READ NEXT is strictly key-ordered, START positions by a relational condition, and a record locked by another open is 51",
+      "not_proven": "the on-disk index file format (BDB/VBISAM/EXTFH -- the declared OS boundary, the model is in-memory); ALTERNATE RECORD KEYs and WITH DUPLICATES (only the primary key is the court); READ PREVIOUS / descending traversal; the actual cross-process BDB lock environment (52 deadlock and 30 permanent-error are BDB-internal); variable-length indexed records; the bdb_*/EXTFH substrate functions; concurrent multi-process contention beyond the in-process model"
+    },
+    {
+      "id": "GNURUST.FILEIO.SYS.1",
+      "lie_prevented": "the CBL_* routines all just succeed -- NO: each returns a specific status (128 on any failure, 35 when a copy source is missing, 129 for GET_CURRENT_DIR flags, -1 for a missing parameter), and GET_CURRENT_DIR double-quotes a path containing a space and fails 128 if it does not fit the field",
+      "not_proven": "the localtime-dependent CBL_CHECK_FILE_EXIST + cob_sys_file_info date/time formatting; the file-lock / file_dev open parameters; the ACUCOBOL hyphen / filename-mapping path; non-UTF-8 path bytes; the exact errno->status mapping beyond 35/128; concurrent filesystem races; the handle value matching libcob's raw fd (a safe registry index is used instead); the underlying syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.OPEN.1",
+      "lie_prevented": "OPEN/CLOSE always succeed -- NO: re-opening an open file is 41, closing a closed file is 42, opening a file that was CLOSE WITH LOCK is 38, a missing OPEN INPUT is 35 (05 if OPTIONAL), and an empty/bad-quoted name is 31; CLOSE of an output file flushes the written image to disk",
+      "not_proven": "the indexed/BDB and SORT organizations' open/close (substrate boundary); record/file locking semantics beyond no-op success; OPEN EXTEND positioning details; the file-sharing modes; concat (multi-file) input; the EXTFH open path; cob_cache_file / file_cache list management; the actual fd open/close syscalls (declared OS boundary)"
+    },
+    {
+      "id": "GNURUST.FILEIO.MAPPING.1",
+      "lie_prevented": "a COBOL ASSIGN name is the filename -- NO: a bare name is first resolved through DD_<name>/dd_<name>/<name> environment variables (with '.'->'_' mangling), an absolute env value replaces it, and otherwise COB_FILE_PATH is prefixed; a leading '.'/'-'/digit or a $/quote changes the rule",
+      "not_proven": "the complex multi-element path mapping (per-slash-element $ / DD_ resolution); COB_ENV_MANGLE non-default; the ACU repeated-resolution recursion; the dialect flag_filename_mapping=off case; concatenated (multi-file) input names; the actual getenv ordering beyond the three prefixes"
+    },
+    {
+      "id": "GNURUST.MLIO.GENERATE.1",
+      "lie_prevented": "XML/JSON GENERATE needs libxml2/cJSON -- NO: the byte output is a deterministic walk of the cob_ml_tree (element brackets, &/</> escaping, leading-zero-stripped scaled numerics, quoted JSON strings) that a native Rust serializer reproduces exactly, no C library linked",
+      "not_proven": "XML PARSE is sealed separately (GNURUST.MLIO.PARSE.1); JSON PARSE does not exist in GnuCOBOL 3.2; attributes/namespaces beyond the basic name=\"value\" form; the NATIONAL / UTF-16 content path; pretty-printing / indentation options; non-ASCII multibyte content escaping; the exact bytes of the WITH XML-DECLARATION prolog (only the no-declaration path is oracle-swept); CDATA / comments / processing-instructions / DOCTYPE in the output; SUPPRESS WHEN conditional predicates beyond the unconditional is_suppressed flag"
+    },
+    {
+      "id": "GNURUST.MLIO.PARSE.1",
+      "lie_prevented": "XML PARSE needs libxml2 -- NO: GnuCOBOL 3.2 XML PARSE does not actually parse; its observable behaviour is a fixed START-OF-DOCUMENT -> END-OF-INPUT -> END-OF-DOCUMENT event walk that a native Rust state machine reproduces exactly, no C library linked. Writing a real parser would be LESS faithful, not more.",
+      "not_proven": "an actual XML tree/attribute/content parse (GnuCOBOL 3.2 does not parse, so neither claim nor port exists); JSON PARSE (no such statement in GnuCOBOL 3.2 mlio.c); the COMPAT (non-XMLNSS) full-document XML-TEXT delivery beyond the modelled path; multi-chunk streaming; schema VALIDATING against a real schema"
+    },
+    {
+      "id": "GNURUST.SCREENIO.INIT.1",
+      "lie_prevented": "SCREEN SECTION needs ncurses linked -- NO (for the framing + a positioned DISPLAY): the terminal byte stream is deterministic for a fixed terminal, so a native Rust emitter reproduces it exactly, no ncurses linked. The honest scope is the admitted terminal; the bytes are terminfo-dependent and that dependence is declared, not hidden",
+      "not_proven": "the ncurses mvcur cursor-cost model (CUP vs VPA vs CHA vs space-fill for arbitrary moves -- only the VPA+space-fill case is swept); multi-field layout + field ordering; color / attribute SGR (BLANK/HIGHLIGHT/REVERSE/UNDERLINE/colors); numeric-edited + JUSTIFIED field display; ACCEPT input / key handling / cursor navigation; any terminal other than TERM=xterm; any ncurses build other than the admitted 6.6 (the byte stream is terminfo-dependent -- this is the explicit terminal-dependence boundary)"
+    },
+    {
+      "id": "GNURUST.SCREENIO.DISPLAY.2",
+      "lie_prevented": "reproducing ncurses cursor optimization needs ncurses linked -- NO: the mvcur byte choice is deterministic for a fixed terminal, and the native emitter reproduces it exactly across the swept grid, no ncurses linked. The claim is bounded to the swept positions + admitted terminal, not all of mvcur",
+      "not_proven": "positions outside the swept grid (LINE > 10 or COLUMN > 40, untested -- the rule generalizes the observed pattern but only the grid is swept); MULTI-FIELD DISPLAY with inter-field moves whose origin is not the home position (a follow-on court); color / attribute SGR; numeric-edited + JUSTIFIED field display; ACCEPT input; any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent boundary)"
+    },
+    {
+      "id": "GNURUST.SCREENIO.DISPLAY.3",
+      "lie_prevented": "multi-field screen layout needs ncurses linked -- NO (for non-overlapping layouts): the inter-field mvcur byte choice is deterministic for a fixed terminal and reproduced exactly across the swept pairs, no ncurses linked. The curses refresh line-diff (overlapping erase) is honestly carved out as a separate unsealed mechanism",
+      "not_proven": "overlapping same-row layouts where a later field sits LEFT of an earlier field's cells -- those trigger ncurses's REFRESH LINE-DIFF (clr_eol \\e[K erase of the now-stale earlier cells via the curses TransformLine algorithm), a separate mechanism that is a declared follow-on court (NOT the cursor-move model sealed here); 3+ field interactions beyond the swept pairs; color / attribute SGR; numeric-edited / JUSTIFIED display; ACCEPT input; any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+    },
+    {
+      "id": "GNURUST.SCREENIO.ATTR.1",
+      "lie_prevented": "screen display attributes need ncurses linked -- NO (for the monochrome attributes): each is a deterministic SGR on/off wrap reproduced exactly, no ncurses linked. The colour-repaint path is honestly carved out as unsealed",
+      "not_proven": "COLOUR attributes (FOREGROUND-COLOR / BACKGROUND-COLOR) -- those trigger a whole-screen colour repaint (the terminfo bce path with an extra clear/\\e[J/\\e[K), a separate mechanism NOT sealed here; COMBINED attributes (e.g. HIGHLIGHT UNDERLINE together); attributes on multi-field or numeric-edited displays; ACCEPT-side prompt/secure attributes; any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+    },
+    {
+      "id": "GNURUST.SCREENIO.COLOR.1",
+      "lie_prevented": "the colour-repaint path was the explicit non-claim of GNURUST.SCREENIO.ATTR.1; this seals the SINGLE-field colour repaint byte-exactly (no ncurses linked) while honestly carving out the general multi-field line-diff and the LINE==1 edge as still unsealed",
+      "not_proven": "the LINE==1 single-row-screen colour case (a different \\e[A-based positioning, a documented edge); MULTIPLE colour fields in one DISPLAY (the general doupdate/TransformLine line-diff across an arbitrary screen delta -- the overlapping same-row clr_eol case); combined colour+monochrome attributes; colour on numeric-edited displays; ACCEPT-side colour; any terminal other than TERM=xterm or ncurses other than the admitted 6.6 (terminfo-dependent)"
+    },
+    {
+      "id": "GNURUST.SCREENIO.NUMEDIT.1",
+      "lie_prevented": "numeric-edited screen display needs ncurses linked -- NO: the edited image composes the sealed editor and the screen POSITIONING is a deterministic leading-blank-skip reproduced exactly, no ncurses linked. The editing rule itself stays the move.c court's claim; the `*`-fill and multi-field cases are honestly carved out",
+      "not_proven": "the numeric editing itself (the move.c court; this court proves the screen POSITIONING of an already-edited image); a pathological PIC with a long (5+) interior/trailing blank run that ncurses would cursor-skip rather than space-fill; the `*` check-protection zero-fill rule (a separate edited.rs follow-on); MULTIPLE edited fields in one DISPLAY (the general multi-field line-diff); numeric-edited COLOUR/attributes; ACCEPT-side numeric-edited input; any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
+    },
+    {
+      "id": "GNURUST.SCREENIO.ACCEPT.1",
+      "lie_prevented": "screen ACCEPT input needs ncurses linked -- NO (for the width<=6 non-overflow envelope): the prompt + reposition + echo + field-full are deterministic bytes reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. The `rep` prompt, overflow editing, and field keys are honestly carved out",
+      "not_proven": "width >= 7 fields (ncurses then paints the prompt with the `rep` capability `\\e[<W-1>b` and the post-rep reposition is terminfo-internal + position-dependent); OVERFLOW input (typing past the field width bells `\\a` + overwrites -- a separate input-editing state machine); field editing keys (arrows / backspace-during-input / function keys); numeric or USING-validation fields; multi-field ACCEPT; ACCEPT colour/attributes; any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
+    },
+    {
+      "id": "GNURUST.SCREENIO.ACCEPT.2",
+      "lie_prevented": "ACCEPT overflow needs ncurses linked -- NO: the BEL + conditional-overwrite tail is a deterministic byte sequence reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. It removes the overflow non-claim that GNURUST.SCREENIO.ACCEPT.1 had carved out",
+      "not_proven": "width >= 7 fields (the `rep`-painted prompt + terminfo-internal reposition); field editing keys (arrows / backspace-during-input / function keys); numeric or USING-validation fields; multi-field ACCEPT; ACCEPT colour/attributes; any terminal other than TERM=xterm or ncurses other than the admitted 6.6"
+    },
+    {
+      "id": "GNURUST.SCREENIO.LINEDIFF.1",
+      "lie_prevented": "the overlapping same-row refresh line-diff needs ncurses linked -- NO (for two same-row DISPLAYs): the doupdate/TransformLine reposition cost search + clr_eol + rep are deterministic bytes reproduced exactly and cross-checked against TWO GnuCOBOL versions, no ncurses linked. The 3+/distant/multi-row doupdate sub-cases are honestly carved out",
+      "not_proven": "THREE or more same-row DISPLAYs (a DISPLAY's clear-to-EOL batches differently across 3+ refreshes -- the trailing erase is deferred when another write to the row follows); distant isolated survivors needing a jump + single space; the MULTI-ROW diff (vertical mvcur between changed rows); insert/delete-character optimizations (ncurses ich/dch when the new line shifts content); scroll-region (DECSTBM) interactions within the diff; attributes or colour on the diffed text (the bce repaint interacting with TransformLine); a numeric-edited or FROM field as the diffed content; the LINE==1 single-row-screen diff; any terminal other than TERM=xterm; any ncurses other than the admitted 6.6"
+    },
+    {
+      "id": "GNURUST.INTRINSIC.DATE.1",
+      "lie_prevented": "COBOL dates use a Unix or 1900 epoch -- NO: the integer date counts days from 1600-12-31 so 1601-01-01 is 1, and it is PROLEPTIC GREGORIAN (no Julian-calendar cutover), so a wrong epoch or calendar offsets every converted date",
+      "not_proven": "validation of malformed dates; environment-sensitive CURRENT-DATE/WHEN-COMPILED; business date arithmetic / Y2K windowing; non-Gregorian calendars; all dialects"
+    },
+    {
+      "id": "GNURUST.IF.EVALUATE.SLICE.1",
+      "lie_prevented": "a COBOL interpreter is all-or-nothing -- NO: this is a TIGHTLY BOUNDED execution slice (alphanumeric IF/EVALUATE with MOVE branches) that composes already-sealed compare+MOVE courts and produces oracle-identical storage; everything outside the slice (numeric conditions, AND/OR, nesting, non-MOVE branches) fails closed rather than being guessed",
+      "not_proven": "numeric/packed comparison and numeric MOVE; compound conditions (AND/OR/NOT); class conditions (NUMERIC/ALPHABETIC); 88-level (GNURUST.11); non-MOVE branch statements; nested IF/PERFORM/GO TO; THRU/range WHEN; all dialects"
+    },
+    {
+      "id": "GNURUST.FRONTEND.1",
+      "lie_prevented": "'gnucobol-rs is a COBOL compiler' is the lie this prevents being overstated -- what is PROVEN is parse+EXECUTE of a small, explicit subset to cobc-identical stdout (an interpreter over the sealed runtime), with everything outside the subset failing closed; native-code compilation of the full language is NOT claimed",
+      "not_proven": "this is an INTERPRETER over the runtime, NOT a native-code compiler (no codegen to machine code / no .o/.so emission); group items / OCCURS / REDEFINES / level numbers other than 01; COMPUTE ROUNDED + ON SIZE ERROR; non-integer ** exponents; receiver scale deeper than the wide intermediate's ~18 fractional digits; EVALUATE / GO TO / ALTER; paragraphs + out-of-line / PERFORM THRU / PERFORM VARYING; the combined-word relops (GREATER THAN OR EQUAL TO) + class/sign/88-level conditions; ACCEPT and file I/O; ON SIZE ERROR / ROUNDED modes beyond truncate; multiple programs / CALL; the full PICTURE and statement grammar; any verb or clause outside the listed subset; all dialects and non-default runtime config"
+    },
+    {
+      "id": "GNURUST.PERFORM.SLICE.1",
+      "lie_prevented": "PERFORM VARYING stops AT the limit -- NO: it tests BEFORE and the control variable ends ONE STEP PAST the limit (FROM 1 BY 1 UNTIL I>4 leaves I=5, not 4), and a TEST-BEFORE loop whose condition is already true runs the body ZERO times; off-by-one here corrupts every loop-bounded computation",
+      "not_proven": "signed/packed/binary counters; numeric SIZE ERROR on the body; non-ADD body statements; compound/class conditions; PERFORM THRU / out-of-line paragraph; WITH TEST AFTER; nested PERFORM/GO TO; all dialects"
+    },
+    {
+      "id": "GNURUST.FILE.FLOW.SLICE.1",
+      "lie_prevented": "a read-loop is just a for-each -- NO: it is a PRIMING-READ plus READ-AT-BOTTOM controlled by a TEST-BEFORE PERFORM UNTIL the AT-END switch, so each record is processed EXACTLY ONCE and an empty file processes ZERO records; a mis-structured loop double-processes the first/last record or runs the body on AT END",
+      "not_proven": "indexed/relative organizations; signed/packed accumulators; numeric SIZE ERROR on accumulators; per-record IF/MOVE/general statements; WRITE/REWRITE in the loop; multi-file loops; file-status beyond AT END; READ INTO; all dialects"
+    },
+    {
+      "id": "GNURUST.FILE.FILTER.SLICE.1",
+      "lie_prevented": "filtering is the same whether the field is numeric or text -- NO: a NUMERIC filter compares VALUES (R-AMT>=50 keeps 100 and 200) while an ALPHANUMERIC filter compares BYTES (where '5' > '10'), so applying the wrong comparison kind silently selects the wrong records",
+      "not_proven": "compound conditions (AND/OR); signed/packed numeric filter; per-record MOVE/transform; multi-branch EVALUATE filter; indexed/relative; all dialects"
+    },
+    {
+      "id": "GNURUST.IF.NUMERIC.SLICE.1",
+      "lie_prevented": "a numeric IF is the same as an alphanumeric IF -- NO: a numeric comparison compares VALUES (50 > 100 is false, 5 > 9 is false) while the alphanumeric slice compares BYTES (where the padded strings can order differently); using the wrong slice on a field takes the wrong branch",
+      "not_proven": "signed/packed/V-scaled numerics; MOVE field TO field; numeric SIZE ERROR; compound/class conditions; 88-level; range/THRU WHEN; non-MOVE branches; nested flow; all dialects"
+    },
+    {
+      "id": "GNURUST.TABLE.PERFORM.SLICE.1",
+      "lie_prevented": "COBOL subscripts are 0-based like C -- NO: TABLE(I) is 1-BASED, so TABLE(1) is the FIRST element (at offset 0) and TABLE(0) is out of range; an off-by-one in the subscript reads the wrong element or past the table",
+      "not_proven": "multi-dimensional/nested OCCURS; OCCURS DEPENDING ON; subscript out-of-bounds; INDEXED BY / SEARCH / SET; signed/packed/V elements; numeric SIZE ERROR; non-sum bodies; all dialects"
+    },
+    {
+      "id": "GNURUST.PUBLIC.CORPUS.1",
+      "lie_prevented": "we tested 25 public COBOL datasets -- NO: this court admits the SOURCES for gap discovery, fetches/compiles/runs NOTHING, and claims NO parity; the running + failure-classification is the future GNURUST.PUBLIC.GAP.1, and behavioral parity is reached by court admission up the ladder, never by a speculative interpreter",
+      "not_proven": "parity over any corpus; that any corpus was fetched/compiled/run; the recorded commit hashes or licenses (unverified at index time); that the declared feature flags were verified by a code scan; exhaustiveness of the public-COBOL universe"
+    },
+    {
+      "id": "GNURUST.BUILD.PROFILE.1",
+      "lie_prevented": "COMP is big-endian (or little-endian) universally -- NO: COMP byte order is the CONFIG binary-byteorder (BIG-endian here) NOT the host order (LITTLE-endian), COMP-5/COMP-X follow native, char is signed by a build flag, so byte parity is a claim ABOUT A SPECIFIC BUILD PROFILE, not COBOL in the abstract; a different profile changes the bytes",
+      "not_proven": "other builds/dialects/configs; cross-architecture ABI; that the profile transfers to a different binary-byteorder; compiler-internal struct layout beyond the recorded fields; all dialects"
+    },
+    {
+      "id": "GNURUST.PUBLIC.GAP.1",
+      "lie_prevented": "we cover the GnuCOBOL testsuite -- NO: this is a VERB-PRESENCE scan that finds 7 MISSING surfaces (CALL the biggest at 959x); it compiles/runs/proves NOTHING and the missing-court board is a candidate set, not a roadmap commitment",
+      "not_proven": "compilation/execution/parity over any test; that a verb's presence proves a court is needed for full behavior; that the missing set is a roadmap commitment (candidates); multi-corpus coverage (one corpus); exhaustiveness of surfaces"
+    },
+    {
+      "id": "GNURUST.CALL.EXTENSION.ATLAS.1",
+      "lie_prevented": "CALL parameters all pass the same way -- NO: BY REFERENCE SHARES the caller's bytes (callee writes are visible) while BY CONTENT passes a COPY (caller unchanged), so the passing mode decides whether a subprogram can mutate the caller's storage; and gnucobol-rs EXECUTES no subprogram -- multi-module runtime is the summit (L8), not claimed",
+      "not_proven": "subprogram execution; dynamic linking / .so loading; C$ extension implementation; BY VALUE to a reference param (undefined); recursion/reentrancy; CANCEL state machine; all dialects"
+    },
+    {
+      "id": "GNURUST.INDEXED.FILE.ATLAS.1",
+      "lie_prevented": "an indexed file is records in insertion order with an index on the side -- NO: records are RETRIEVED IN KEY ORDER (AAA,BBB,CCC even though inserted CCC,BBB), a duplicate primary key is REJECTED (status 22), and the on-disk format is a BACKEND-SPECIFIC ISAM/BDB structure (not the fixed-record bytes) -- so KOBOLD's fixed-record evidence does NOT cover indexed files, and the on-disk index/page integrity is a separate (unbuilt) storage court",
+      "not_proven": "the on-disk ISAM/BDB/VBISAM index format; page checksum / atomicity; alternate keys / DUPLICATES; concurrent access / locking; indexed file execution; relative files; all dialects"
+    },
+    {
+      "id": "GNURUST.SEARCH.TABLE.1",
+      "lie_prevented": "SEARCH and SEARCH ALL are interchangeable lookups -- NO: serial SEARCH scans FORWARD FROM THE CURRENT INDEX (so it MISSES a match before the start index), while SEARCH ALL is a BINARY search that requires the table sorted ASCENDING and finds the key anywhere; using one for the other (or SEARCH ALL on unsorted data) returns the wrong index or AT END",
+      "not_proven": "multi-key/DESCENDING keys; alphanumeric/signed/V-scaled keys; VARYING/AT END/WHEN control flow (only the landing index); SEARCH ALL on an unsorted table (undefined); OCCURS DEPENDING ON; all dialects"
+    },
+    {
+      "id": "GNURUST.SUBSCRIPT.1",
+      "lie_prevented": "'COBOL subscripts are 0-based like C' -- NO, TABLE(1) is the FIRST element at offset 0; an off-by-one reads the wrong element",
+      "not_proven": "out-of-bounds subscript (fail-closed by design, NOT cobc's flag-dependent read); OCCURS DEPENDING ON variable length; INDEXED BY index-names; subscript arithmetic expressions; signed/packed element decode"
+    },
+    {
+      "id": "GNURUST.ODO.1",
+      "lie_prevented": "'an ODO group is always its maximum length' -- NO, its used length is fixed_prefix + N*element_size and only N elements are active",
+      "not_proven": "element access beyond the active count (fail-closed by design); nested/2-D ODO; ODO in a file record with VARYING; SET of the controlling field mid-access; signed/packed elements"
+    },
+    {
+      "id": "GNURUST.COMMON.BOUNDCHECK.1",
+      "lie_prevented": "the runtime bounds diagnostics are GnuCOBOL-internal and unportable -- NO: the message text is a deterministic function of the bounds inputs, reproduced byte-identically and proven stable across two GnuCOBOL versions",
+      "not_proven": "the cob_runtime_error PREFIX framing (libcob: <file>:<line>: error: / note:) which is the runtime wrapper, not the check (the check produces the core text); cob_check_numeric's not-numeric message (octal/hex byte escaping -- a follow-on); the actual cob_hard_failure abort + exit code; the EC exception numeric ids; the 2.0-ABI cannot_check_subscript global state path beyond the modelled zero-subscript case"
+    },
+    {
+      "id": "GNURUST.COMMON.NUMCHECK.1",
+      "lie_prevented": "the not-numeric runtime diagnostic is GnuCOBOL-internal and unportable -- NO: its text is a deterministic function of the field name/type/bytes, reproduced byte-identically and proven stable across two GnuCOBOL versions",
+      "not_proven": "the cob_is_numeric VALIDITY decision itself (the per-type digit/sign/BCD/float-finite check -- this court takes the numeric verdict as input and reproduces the MESSAGE; cob_is_numeric is a follow-on); the libcob: <file>:<line>: error: prefix framing; the cob_hard_failure abort + exit; NATIONAL/UTF-16 byte widths in the escaping"
+    },
+    {
+      "id": "GNURUST.COMMON.CBL.1",
+      "lie_prevented": "the CBL_ builtins are libcob-internal -- NO: each is a deterministic byte transform reproduced byte-identically and proven stable across two GnuCOBOL versions",
+      "not_proven": "the COB_CHK_PARMS parameter-count runtime check (the wrong-arg-count diagnostic); CBL_GC_PRINTABLE's optional locale (cob_locale_ctype) + custom dot-replacement-char variadic argument beyond the default; cob_sys_x91 (the switch/param multiplexer -- a follow-on); the OS/process CBL routines (getpid/system/fork/nanosleep)"
+    },
+    {
+      "id": "GNURUST.INDEX.1",
+      "lie_prevented": "'an INDEX item stores a byte offset (occurrence*element_size)' -- NO, it stores the plain occurrence number; the stride multiply happens at subscript time, not in the index word",
+      "not_proven": "8-byte INDEX on LP64 builds where cob index width != 4; SEARCH/SEARCH ALL execution (observed separately); index used as a subscript (the (idx-1)*stride multiply lives in GNURUST.SUBSCRIPT.1); relation conditions between index items; SET index TO pointer/address"
+    },
+    {
+      "id": "GNURUST.ROUND.1",
+      "lie_prevented": "'ROUNDED always means round-half-up' -- NO, COBOL has eight distinct ROUNDED MODE IS settings; NEAREST-EVEN rounds 2.5 to 2 while the default rounds 2.5 to 3, and ceiling/floor follow +/-infinity not magnitude",
+      "not_proven": "bignum values beyond i128 (38-digit COMPUTE intermediates); floating-point COMP-1/COMP-2 rounding; intermediate-result rounding rules"
+    },
+    {
+      "id": "GNURUST.SORT.MERGE.ATLAS.1",
+      "lie_prevented": "SORT is a simple in-memory reorder -- NO: it is a RUNTIME SORT ENGINE over a sort-merge work file (SD) driven by USING/GIVING or INPUT/OUTPUT PROCEDUREs, gnucobol-rs executes none of it, and the order of EQUAL keys is not a modeled guarantee; the atlas observes the key-ordered output, not the sort",
+      "not_proven": "SORT execution; INPUT/OUTPUT PROCEDURE (RELEASE/RETURN); MERGE; multiple keys; sort stability for equal keys; custom collating sequence; all dialects"
+    },
+    {
+      "id": "GNURUST.RELATIVE.FILE.ATLAS.1",
+      "lie_prevented": "a relative file is records in order with a number -- NO: records sit at FIXED SLOTS by relative number (an unwritten slot reads status 23, gaps are real), distinct from indexed (key-sorted) and sequential (insertion order); and gnucobol-rs runs no relative I/O",
+      "not_proven": "relative file execution; the on-disk slotted format; sequential/dynamic access modes; REWRITE/DELETE/START; indexed files; all dialects"
+    },
+    {
+      "id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+      "lie_prevented": "COBOL dialect changes the record bytes -- NO: the STORED zoned-sign bytes are dialect-INVARIANT (so a record decode is not dialect-sensitive for zoned sign); what DIVERGES is the DISPLAY *presentation* (IBM/MVS/BS2000/RM/GCOS put the sign TRAILING '0123-' while default/MF put it LEADING '-0123') and the COMPILE-acceptance of extensions -- and 'GnuCOBOL -std=ibm' is NOT IBM Enterprise COBOL, only GnuCOBOL's approximation of it",
+      "not_proven": "non-default dialect implementation (gnucobol-rs runs only the default dialect); vendor-compiler parity (the -std modes are GnuCOBOL approximations of IBM/Micro Focus/MVS/BS2000/RM/GCOS, never the vendor compilers); the -std mode being the vendor dialect itself; a complete enumeration of every cross-dialect divergence (this samples sign placement, presentation, and compile-acceptance); decoding the DISPLAY presentation form back to a value; the screen-routed dialects (acu/realia route DISPLAY through a terminal); runtime portability across platforms"
+    },
+    {
+      "id": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+      "lie_prevented": "a COBOL binary's record bytes are fixed by the copybook alone -- NO: a COMPILER DIRECTIVE shifts them: -fbinary-size=2-4-8 makes a small COMP field 2 bytes (mis-offsetting every later field), -fbinary-byteorder=native flips multi-byte COMP endianness, and -fno-binary-truncate changes what a MOVE stores -- so a correct decode REQUIRES the producer's build profile (BUILD.PROFILE.1), it cannot be inferred from the copybook",
+      "not_proven": "implementation of non-default directives (gnucobol-rs decodes under the BUILD.PROFILE.1 default only); auto-detection of a binary's build profile from its bytes; a complete enumeration of every cobc directive; dialect-selection flags (-std, owned by GNURUST.DIALECT.RUNTIME.ATLAS.1); code-generation/optimization directives; runtime environment variables (COB_*); vendor-specific directives"
+    },
+    {
+      "id": "GNURUST.DECLARATIVES.ATLAS.1",
+      "lie_prevented": "a file error aborts the COBOL program (or is silently ignored) -- NO: a failing I/O INVOKES the file's USE AFTER STANDARD ERROR declarative with the FILE STATUS visible inside it, and then execution RESUMES at the next statement (the program does NOT abort, rc=0); the handler is bound PER FILE and a successful op fires nothing -- so the error path is a structured, resumable, per-file branch, not a crash and not a no-op",
+      "not_proven": "executing a declarative (gnucobol-rs runs NO Procedure Division / declaratives -- the L8 multi-statement summit); USE FOR DEBUGGING; non-file exceptions (arithmetic/SIZE ERROR declaratives); GLOBAL declaratives across nested programs; the precedence ordering when multiple declaratives could match; whether non-file exceptions resume or terminate; all dialects"
+    },
+    {
+      "id": "GNURUST.CALL.LAYOUT.ATLAS.1",
+      "lie_prevented": "a CALL parameter is length-checked and a mismatch is truncated or padded -- NO: BY REFERENCE is a raw ADDRESS OVERLAY with NO bounds, so a callee item longer than the caller's field silently reads (and a write corrupts) ADJACENT caller storage -- a mismatched-length copybook does not error, it reads the neighboring field; BY CONTENT instead copies (caller safe) and an over-read past that copy is UNDEFINED, not space-padded",
+      "not_proven": "subprogram execution (gnucobol-rs runs no subprograms -- multi-module runtime is L8); the value of a BY CONTENT over-read past the copy (undefined / uninitialized memory); BY VALUE byte layout; OCCURS DEPENDING ON across the linkage boundary; OPTIONAL / OMITTED parameters; the RETURNING phrase; all dialects"
+    },
+    {
+      "id": "GNURUST.LINEAGE.CORPUS.20M.0",
+      "lie_prevented": "an engine that 'works' is not the same as one whose evidence is REPLAYABLE -- this engine's rows are Merkle-bound and byte-identical on stratified replay, and a parallel-compile race that poisoned replay was caught BY the replay gate before any scale; the engine seals NO burn results, only the machinery",
+      "not_proven": "any BURN result (the 200K burn is GNURUST.LINEAGE.CORPUS.20M.SMOKE; the full 20M is GNURUST.LINEAGE.CORPUS.20M.1, launched detached); full GnuCOBOL parity / standard conformance; all dialects; public-corpus execution parity; business correctness; compiler replacement; automatic build-profile detection; the families not yet emitting (v0 emits storage + directive of 15 planned, the rest logged as dropped buckets)"
+    },
+    {
+      "id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+      "lie_prevented": "'we ran 20M COBOL tests' is the cheap claim -- this is a 200K REAL-cobc pilot whose every mismatch is shrunk+filed and whose evidence is Merkle-bound + replay-deterministic + injected-fault-guarded; the 200K counts real compiled COBOL witnesses, not Rust iterations, and the one harvested divergence is shown, not hidden",
+      "not_proven": "the full 20M run (this is a 200K PILOT; the full 20M is GNURUST.LINEAGE.CORPUS.20M.1, launched detached and sealed progressively); full GnuCOBOL parity / standard conformance; all dialects; public-corpus execution parity; business correctness; the negative-zero finding being FIXED (filed as a candidate edge court, a blanket fix was reverted as shape-sensitive); families not yet emitting (storage + directive only in v0)"
+    },
+    {
+      "id": "GNURUST.LINEAGE.CORPUS.20M.1",
+      "lie_prevented": "'we ran 20M COBOL tests' would overclaim -- the 20M INDEX SPACE was swept but the v0 engine EMITS 4M real-cobc witnesses (storage+directive); the other 16M are honestly logged as dropped buckets, NOT counted as witnesses; every one of the 4M is Merkle-bound + replay-deterministic + classified, with the one divergence shown (1056 hits -> 1 finding), not hidden; the run is sealed by its OWN gate, the gate's load-bearingness proven by .SMOKE's 4/4 injected-fault tests (same gate code)",
+      "not_proven": "full GnuCOBOL parity / standard conformance; all dialects; public-corpus execution parity; business correctness; compiler replacement; auto build-profile detection; the negative-zero finding being FIXED (candidate GNURUST.VALUE.NEGZERO.EDGE.1, not patched); the not-yet-emitting families (4M of 20M = storage+directive only; the other 13 families are dropped buckets, NOT covered)"
+    },
+    {
+      "id": "GNURUST.VALUE.NEGZERO.EDGE.1",
+      "lie_prevented": "'just canonicalize negative zero' is WRONG and was proven so (the blanket parse_num fix regressed value_sweep 391/392) -- the rule is shape-sensitive ON THE LITERAL FORM: cobc canonicalizes -0 to positive ONLY for COMP-3 integer-form literals, while PRESERVING the sign for decimal-form COMP-3 and for ALL DISPLAY; so the divergence is a narrow, exactly-located edge (4 cells), not a blanket bug, and GNURUST.8 is bounded accordingly",
+      "not_proven": "negative-zero semantics GENERALLY (the patch fixes VALUE INITIALIZATION only -- the COMP-3 integer-form packed sign nibble; a blanket parse_num canonicalization was tried first and REVERTED because it would wrongly canonicalize the decimal-form and DISPLAY cells); negative-zero under arithmetic/MOVE/COMPUTE (the arithmetic -0 path is GNURUST.13, separate and deliberate); figurative ZERO; other usages/dialects; the broader signed-zero space beyond VALUE initialization"
+    },
+    {
+      "id": "GNURUST.BIGNUM.1",
+      "lie_prevented": "'38-digit COBOL arithmetic always fits a 128-bit integer' -- NO, a single MULTIPLY of two large operands yields up to 76 digits; failing closed there silently drops results libcob computes",
+      "not_proven": "ADD/SUBTRACT operand upscale overflow (a separate path); DIVIDE overflow; chained-COMPUTE single-expression GMP precision (gnucobol-rs evaluates op-by-op); a single operand exceeding 38 digits (not valid COBOL)"
+    },
+    {
+      "id": "GNURUST.INTPOW.1",
+      "lie_prevented": "'(-1) ** odd = -1' -- NO, libcob's POW_IMPL returns 1 for base==-1 regardless of the power; a 'correct' math result is a divergence from the oracle",
+      "not_proven": "the decimal `**` operator (cob_decimal_pow lives in intrinsic.c, a separate court); fractional exponents; 0 ** negative (fails closed rather than SIGFPE-crashing)"
+    },
+    {
+      "id": "GNURUST.LOGICAL.1",
+      "lie_prevented": "'B-AND(-1, x) = x because -1 is all-ones' -- NO, mpz_get_ui takes |-1| = 1, so the result is 1 & x; the sign is discarded, not sign-extended",
+      "not_proven": "fractional operands (the scale is dropped, only the unscaled magnitude's low 64 bits are used); operands beyond 64 bits (truncated); cob_logical_left_c/right_c size-bounded variants; boolean/bit data items as such"
+    },
+    {
+      "id": "GNURUST.FLOAT.1",
+      "lie_prevented": "'decimal-to-float conversion rounds to nearest like every modern parser' -- NO, libcob TRUNCATES TOWARD ZERO through GMP mpf_get_d, so 0.1 in a COMP-2 is 1 ULP BELOW Rust's/C's correctly-rounded 0.1; assuming round-to-nearest silently diverges on most inexact decimals",
+      "not_proven": "float ARITHMETIC (cob_add over float receivers -- a separate composition); cob_cmp_float epsilon comparison; long double (COMP-2 extended) and binary FP_BIN32/64/128 usages; Inf/NaN handling beyond decode-refusal; locale-dependent display of floats; the mpf 2048-bit intermediate itself (only its observable truncate-toward-zero result)"
+    },
+    {
+      "id": "GNURUST.NUMCMP.1",
+      "lie_prevented": "'comparing two COBOL numerics is just comparing their raw bytes' -- NO, fields of different usage/scale must be decoded to a common decimal and scale-aligned first; a byte compare gives the wrong verdict whenever usages or scales differ",
+      "not_proven": "float-vs-float epsilon comparison edge cases (cob_cmp_float specifics); the optimized cob_cmp_packed/cmp_uint/cmp_llint fast-path code (verified only that the verdict matches); negative scale packed compare; National/DBCS comparison"
+    }
+  ],
+  "schema": "negative-capabilities-snapshot-v1",
+  "version": "0.8.21"
+}

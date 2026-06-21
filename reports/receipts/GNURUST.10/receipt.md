@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.10` |
 | court | OCCURS DEPENDING ON physical-max layout |
-| crate_version | `0.8.20` |
+| crate_version | `0.8.21` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | generated-C storage size b_REC[size] |
 | replay command | `bash lab/oracle/odo_sweep.sh` |

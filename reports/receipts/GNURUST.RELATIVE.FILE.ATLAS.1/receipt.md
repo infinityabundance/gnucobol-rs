@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.RELATIVE.FILE.ATLAS.1` |
 | court | observed relative-file atlas |
-| crate_version | `0.8.20` |
+| crate_version | `0.8.21` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | RELATIVE random access by record number + status (23 empty slot) |
 | replay command | `bash lab/oracle/relative_file_atlas_sweep.sh` |
