@@ -2124,13 +2124,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                             "group-OCCURS `{}` cannot contain an OCCURS DEPENDING ON item -- cobc rejects a table of variable-length items", it.name
                         )));
                     }
-                    // SYNCHRONIZED descendant (per-element alignment slack inside the strided buffer) is the
-                    // one remaining feature gap here; REDEFINES descendants are handled by the nested layout.
-                    if sib.sync {
-                        return Err(RunError::Unsupported(format!(
-                            "group-OCCURS `{}` has a SYNCHRONIZED descendant -- not in subset", it.name
-                        )));
-                    }
+                    // (SYNCHRONIZED descendants are handled by the FLAT branch's per-element alignment slack +
+                    // trailing element padding below; the MULTI-DIMENSION branch -- whose nested layout has no
+                    // alignment model -- guards SYNC itself.)
                 }
                 // eligible: the interleaved buffer + per-leaf nested layout is built in pass 2.
             }
@@ -2199,6 +2195,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         let mut offset = 0usize;
         let mut has_occurs_child = false;
         let mut has_subgroup_child = false;
+        let mut max_align = 1usize; // largest SYNCHRONIZED alignment among children (1 = none)
         for sib in &prog.ws[i + 1..] {
             if sib.level <= it.level {
                 break;
@@ -2217,6 +2214,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 let csize = fields.get(&sib.name).map(|f| f.bytes.len()).unwrap_or(0);
                 if sib.sync {
                     let align = fields.get(&sib.name).map(sync_align).unwrap_or(1);
+                    max_align = max_align.max(align);
                     let rem = offset % align;
                     if rem != 0 {
                         let slack = align - rem;
@@ -2249,6 +2247,13 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // itself a sub-group (`A(i)` reaching a deeper leaf). Build the interleaved buffer via the recursive
         // layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
         if it.occurs > 1 && (has_occurs_child || has_subgroup_child) {
+            // A SYNCHRONIZED leaf inside a MULTI-DIMENSION table would need per-element alignment in the
+            // recursive nested layout (which models none); fail closed (the FLAT case is handled below).
+            if max_align > 1 {
+                return Err(RunError::Unsupported(format!(
+                    "group-OCCURS `{}` has a SYNCHRONIZED descendant in a multi-dimension table -- not in subset", it.name
+                )));
+            }
             // Skip the intermediate sub-groups in this subtree (their leaves are addressed via NESTED_LEAF).
             let mut k = i + 1;
             while k < prog.ws.len() && prog.ws[k].level > it.level {
@@ -2314,7 +2319,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // views into it (the children own no bytes). The pass-1 gate already restricted this to the
         // supported subset (single level, fixed count, all-elementary children).
         if it.occurs > 1 {
-            let stride = offset; // the group element size
+            // The element size, padded up to the largest SYNCHRONIZED alignment so every occurrence keeps its
+            // SYNC fields aligned (cobc: an element with a 4-byte-SYNC field is padded to a multiple of 4).
+            let stride = if max_align > 1 { offset.div_ceil(max_align) * max_align } else { offset };
             let mut elem_image = Vec::with_capacity(stride);
             for (cname, _o, csz) in &child_views {
                 let cb = fields.get(cname).map(|f| f.bytes.clone()).unwrap_or_else(|| vec![b' '; *csz]);

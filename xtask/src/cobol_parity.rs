@@ -148,6 +148,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p164_odo_multidim.cob", "OCCURS 1 TO 3 DEPENDING ON N"),
     ("OCCURS / tables", "REDEFINES descendant inside a table element -- the redefining item overlays its target at the same element offset across all occurrences (flat group-OCCURS and multi-dimension); the layout places it at the target's offset and does not advance the element size. Found by the FILE-PARITY section-B gap sweep", "sealed",
         "lab/corpus/frontend/p165_redefines_in_table.cob", "PARTS REDEFINES FULL"),
+    ("OCCURS / tables", "SYNCHRONIZED descendant of a table element -- slack before each SYNC field aligns it to its boundary, and the element is padded up to the largest SYNC alignment so every occurrence stays aligned (e.g. `X` + `S9(9) COMP SYNC` + `X` -> 12-byte element). Found by the FILE-PARITY section-B gap sweep", "sealed",
+        "lab/corpus/frontend/p166_sync_in_table.cob", "COMP SYNC"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
