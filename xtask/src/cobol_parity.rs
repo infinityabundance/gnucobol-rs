@@ -144,6 +144,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p162_init_value_then_repl.cob", "TO VALUE THEN REPLACING"),
     ("(tables)", "SPACE-separated multi-dimension subscripts -- `CELL(1 1)`, `CELL (3 2)` (space before paren), 3-D `C3(2 1 2)` -- cobc accepts space OR comma separators; the subscript gluer keeps them distinct (was concatenating `C(2`+`3)` into one `23` subscript). Relative subscripting `C(I + 1)` stays one subscript", "sealed",
         "lab/corpus/frontend/p163_space_subscripts.cob", "CELL(1 1)"),
+    ("OCCURS / tables", "OCCURS DEPENDING ON the OUTER dimension of a multi-dimension group (`05 ROW OCCURS 1 TO 3 DEPENDING ON N. 10 CELL ... OCCURS 2.`): the interleaved buffer is built at MAX, element addressing uses the fixed MAX strides, and the LIVE image / FUNCTION LENGTH is counter*stride. Found by the FILE-PARITY section-B gap sweep", "sealed",
+        "lab/corpus/frontend/p164_odo_multidim.cob", "OCCURS 1 TO 3 DEPENDING ON N"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

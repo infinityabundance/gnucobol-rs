@@ -2230,9 +2230,6 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // itself a sub-group (`A(i)` reaching a deeper leaf). Build the interleaved buffer via the recursive
         // layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
         if it.occurs > 1 && (has_occurs_child || has_subgroup_child) {
-            if it.odo_counter.is_some() {
-                return Err(RunError::Unsupported(format!("OCCURS DEPENDING ON on multi-dimension group `{}` not in subset", it.name)));
-            }
             // Skip the intermediate sub-groups in this subtree (their leaves are addressed via NESTED_LEAF).
             let mut k = i + 1;
             while k < prog.ws.len() && prog.ws[k].level > it.level {
@@ -2271,6 +2268,12 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 }
             }
             GROUP_OCCURS.with(|m| m.borrow_mut().insert(it.name.clone(), (stride, it.occurs)));
+            // OCCURS DEPENDING ON on the OUTER dimension of a multi-dimension group: the buffer is built at
+            // MAX (above) and element addressing uses the fixed MAX strides; the LIVE image is counter*stride
+            // (so LENGTH / group reads truncate). The inner fixed dimension(s) are part of the stride.
+            if let Some(counter) = &it.odo_counter {
+                ODO_TABLES.with(|m| m.borrow_mut().insert(it.name.clone(), (counter.clone(), stride)));
+            }
             for (n, idx) in it.indexed_by.iter().enumerate() {
                 fields.entry(idx.clone()).or_insert_with(|| make_return_code(0));
                 if n == 0 {
