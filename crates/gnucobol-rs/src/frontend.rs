@@ -4862,12 +4862,20 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_han
 /// Split a word into expression tokens, peeling leading `(` and trailing `)` (which may glue to an
 /// operand, e.g. `(A` or `B)`); `**` / `+` / `-` / `*` / `/` and bare names pass through.
 fn split_parens(w: &str, out: &mut Vec<String>) {
-    let mut s = w;
-    // Peel leading GROUPING '(' (e.g. `(E(1)` -> a group-open, then the operand).
-    while let Some(rest) = s.strip_prefix('(') {
-        out.push("(".into());
-        s = rest;
+    // Peel a leading unary sign glued to the operand (`-A`, `+5`, `-(A-B)`): a name cannot begin with a sign,
+    // so a leading `-`/`+` on a multi-char word is always unary. (A lone `-`/`+` is the binary operator and
+    // is left intact.) parse_primary then applies the unary minus/plus.
+    if w.len() > 1 && (w.starts_with('-') || w.starts_with('+')) {
+        out.push(w[..1].to_string());
+        return split_parens(&w[1..], out);
     }
+    // Peel a leading GROUPING '(' then RECURSE, so a sign or further paren after it is re-handled
+    // (`(-A)`, `-(-(-3))`).
+    if let Some(rest) = w.strip_prefix('(') {
+        out.push("(".into());
+        return split_parens(rest, out);
+    }
+    let mut s = w;
     // If what remains is a name-prefixed subscript/refmod `NAME(...)`, keep that operand WHOLE -- its own
     // parens belong to it, not to grouping -- so parse_primary -> operand_value resolves the element; any
     // parens after its matching `)` are trailing grouping closes.
@@ -4963,33 +4971,34 @@ fn parse_term(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Resu
     Ok((acc, aattr))
 }
 
-/// `factor := primary ('**' integer)?` -- exponentiation by an integer literal (repeated multiply).
+/// `factor := primary ('**' factor)?` -- exponentiation, RIGHT-associative (`2 ** 3 ** 2` = `2 ** (3 ** 2)`
+/// = 512). A non-negative integer exponent uses exact repeated multiply (the sealed path); anything else
+/// (fractional like 0.5, negative, or an identifier exponent) goes through the sealed cob_decimal_pow engine.
 fn parse_factor(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
     let (base, battr) = parse_primary(t, pos, f)?;
     if t.get(*pos).map(|s| s.as_str()) == Some("**") {
         *pos += 1;
-        let exp_word = t.get(*pos).ok_or_else(|| RunError::Unsupported("** without exponent".into()))?.clone();
-        *pos += 1;
-        // Non-negative integer exponent: exact repeated multiply (the sealed path). Anything else
-        // (fractional like 0.5, or an identifier exponent) goes through the sealed cob_decimal_pow engine.
-        let Ok(e) = exp_word.parse::<u32>() else {
-            let (eb, ea) = operand_value(&Tok::Word(exp_word), f)?;
-            let (rb, ra) = crate::intrinsic::cob_intr_pow(&base, &battr, &eb, &ea);
-            return Ok((rb, ra));
-        };
-        // base ** e via repeated multiply; e==0 -> 1.
-        if e == 0 {
-            let (one, oa) = decimal_as_display(&Decimal { negative: false, digits: vec![1], scale: 0 });
-            return Ok((one, oa));
+        let (eb, ea) = parse_factor(t, pos, f)?; // right-associative
+        let ed = source_to_decimal(&eb, &ea)?;
+        if !ed.negative && ed.scale <= 0 {
+            let e = dec_to_i64(&ed);
+            if (0..=1024).contains(&e) {
+                if e == 0 {
+                    let (one, oa) = decimal_as_display(&Decimal { negative: false, digits: vec![1], scale: 0 });
+                    return Ok((one, oa));
+                }
+                let mut acc = base.clone();
+                let mut acc_attr = battr;
+                for _ in 1..e {
+                    let (r, ra) = wide_op(Op::Multiply, &acc, &acc_attr, &base, &battr)?;
+                    acc = r;
+                    acc_attr = ra;
+                }
+                return Ok((acc, acc_attr));
+            }
         }
-        let mut acc = base.clone();
-        let mut acc_attr = battr;
-        for _ in 1..e {
-            let (r, ra) = wide_op(Op::Multiply, &acc, &acc_attr, &base, &battr)?;
-            acc = r;
-            acc_attr = ra;
-        }
-        return Ok((acc, acc_attr));
+        let (rb, ra) = crate::intrinsic::cob_intr_pow(&base, &battr, &eb, &ea);
+        return Ok((rb, ra));
     }
     Ok((base, battr))
 }

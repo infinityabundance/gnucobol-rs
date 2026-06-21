@@ -124,6 +124,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p152_abbreviated_conditions.cob", "A = 1 OR 2 OR 5"),
     ("(intrinsic)", "FUNCTION TRIM(x [LEADING | TRAILING]) -- the optional direction keyword is parsed as a modifier (was evaluated as a second argument and failed); wired to the runtime cob_intr_trim direction", "sealed",
         "lab/corpus/frontend/p153_trim_directions.cob", "TRIM(S LEADING)"),
+    ("COMPUTE", "unary sign glued to an operand or paren (`-A`, `-(A-B)`, nested `-(-(-3))`) and RIGHT-associative exponentiation (`2 ** 3 ** 2` = 512, non-negative integer exponent = exact repeated multiply, else the sealed decimal pow); found by the COMPUTE-expression battery", "sealed",
+        "lab/corpus/frontend/p154_compute_unary_pow.cob", "2 ** 3 ** 2"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
