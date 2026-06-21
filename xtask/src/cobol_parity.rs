@@ -126,6 +126,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p153_trim_directions.cob", "TRIM(S LEADING)"),
     ("COMPUTE", "unary sign glued to an operand or paren (`-A`, `-(A-B)`, nested `-(-(-3))`) and RIGHT-associative exponentiation (`2 ** 3 ** 2` = 512, non-negative integer exponent = exact repeated multiply, else the sealed decimal pow); found by the COMPUTE-expression battery", "sealed",
         "lab/corpus/frontend/p154_compute_unary_pow.cob", "2 ** 3 ** 2"),
+    ("ROUNDED", "`ROUNDED MODE [IS] <mode>` on COMPUTE/ADD/SUBTRACT/MULTIPLY/DIVIDE -- all eight modes (TRUNCATION, NEAREST-AWAY-FROM-ZERO, AWAY-FROM-ZERO, NEAREST-TOWARD-ZERO, NEAREST-EVEN, TOWARD-GREATER, TOWARD-LESSER, PROHIBITED=size-error-on-drop) via the mode-aware round_decimal_mode; found by the ROUNDED-MODE differential battery", "sealed",
+        "lab/corpus/frontend/p155_rounded_modes.cob", "ROUNDED MODE NEAREST-EVEN"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

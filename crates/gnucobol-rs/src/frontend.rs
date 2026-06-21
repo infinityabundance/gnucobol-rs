@@ -4808,15 +4808,15 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_han
         .ok_or_else(|| RunError::Unsupported("COMPUTE without '='".into()))?;
     // receivers = the names before '='; a `ROUNDED` keyword rounds every receiver's store to its own
     // scale (COBOL default mode: NEAREST, ties away from zero).
+    // receivers = the names before `ROUNDED` (or `=`); `ROUNDED [MODE [IS] <mode>]` rounds every receiver's
+    // store to its own scale (default mode: NEAREST-AWAY-FROM-ZERO).
+    let round_mode = round_mode_of(&stmt[..eq]);
     let mut receivers = Vec::new();
-    let mut rounded = false;
     for t in &stmt[..eq] {
-        if let Tok::Word(w) = t {
-            if w == "ROUNDED" {
-                rounded = true;
-            } else {
-                receivers.push(w.clone());
-            }
+        match t {
+            Tok::Word(w) if w == "ROUNDED" => break, // ROUNDED + the MODE phrase that follows are not receivers
+            Tok::Word(w) => receivers.push(w.clone()),
+            _ => {}
         }
     }
     if receivers.is_empty() {
@@ -4845,10 +4845,15 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_han
         // store. With ROUNDED, round to THIS receiver's scale before storing (default mode: ties away).
         let mut se = false;
         write_field(fields, &r, |f| {
-            if rounded {
+            if let Some(mode) = round_mode {
                 let dec = source_to_decimal(&val, &attr)?;
-                let (rval, rattr) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
-                se = store_arith_result(f, &rval, &rattr, has_handler, false)?;
+                let (rdec, prohibited) = round_decimal_mode(&dec, receiver_scale(f), mode);
+                if prohibited {
+                    se = true; // MODE PROHIBITED + a dropped non-zero digit -> size error, receiver unchanged
+                } else {
+                    let (rval, rattr) = decimal_as_display(&rdec);
+                    se = store_arith_result(f, &rval, &rattr, has_handler, false)?;
+                }
             } else {
                 se = store_arith_result(f, &val, &attr, has_handler, false)?;
             }
@@ -8417,19 +8422,24 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         return Err(RunError::Unsupported(format!("{verb}: no receiver")));
     }
 
-    // A `ROUNDED` phrase rounds each result to its receiver's scale before the store (COBOL default
-    // mode: NEAREST, ties away from zero); otherwise the store truncates.
-    let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
+    // A `ROUNDED [MODE [IS] <mode>]` phrase rounds each result to its receiver's scale before the store
+    // (default mode: NEAREST-AWAY-FROM-ZERO); otherwise the store truncates.
+    let round_mode = round_mode_of(stmt);
     let mut any_size_err = false;
     for (recv_name, tgt) in &receivers {
         // The result is a WIDE numeric (bytes, attr); the per-receiver store truncates/edits it into the
         // receiver's exact format. libcob pattern: arithmetic is exact, the store is the rounding point.
         let (rb, ra) = arith_compute(verb, kw, &acc, &acc_attr, tgt.as_deref(), fields)?;
         let f = fields.get_mut(recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
-        let se = if rounded {
+        let se = if let Some(mode) = round_mode {
             let dec = source_to_decimal(&rb, &ra)?;
-            let (nb, na) = decimal_as_display(&round_decimal(&dec, receiver_scale(f)));
-            store_arith_result(f, &nb, &na, has_handler, false)?
+            let (rdec, prohibited) = round_decimal_mode(&dec, receiver_scale(f), mode);
+            if prohibited {
+                true // MODE PROHIBITED + dropped non-zero digit -> size error, receiver unchanged
+            } else {
+                let (nb, na) = decimal_as_display(&rdec);
+                store_arith_result(f, &nb, &na, has_handler, false)?
+            }
         } else {
             store_arith_result(f, &rb, &ra, has_handler, false)?
         };
@@ -8645,7 +8655,70 @@ fn to_arith_operand(bytes: &[u8], attr: &FieldAttr) -> Result<(Vec<u8>, FieldAtt
 
 /// Is `w` an arithmetic keyword (not an operand name)?
 fn is_kw(w: &str) -> bool {
-    matches!(w, "TO" | "FROM" | "BY" | "INTO" | "GIVING" | "ROUNDED" | "REMAINDER")
+    matches!(w, "TO" | "FROM" | "BY" | "INTO" | "GIVING" | "ROUNDED" | "REMAINDER"
+        | "MODE" | "TRUNCATION" | "NEAREST-AWAY-FROM-ZERO" | "AWAY-FROM-ZERO"
+        | "NEAREST-TOWARD-ZERO" | "NEAREST-EVEN" | "TOWARD-GREATER" | "TOWARD-LESSER" | "PROHIBITED")
+}
+
+/// Parse the `ROUNDED [MODE [IS] <mode-name>]` phrase from an arithmetic statement's tokens. Returns
+/// `None` when there is no `ROUNDED` (the store truncates), `Some(mode)` otherwise (plain `ROUNDED` = the
+/// default NEAREST-AWAY-FROM-ZERO).
+fn round_mode_of(stmt: &[Tok]) -> Option<Round> {
+    let pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"))?;
+    let mut i = pos + 1;
+    if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "MODE") {
+        i += 1;
+        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IS") {
+            i += 1;
+        }
+        if let Some(Tok::Word(name)) = stmt.get(i) {
+            return Some(match name.as_str() {
+                "TRUNCATION" => Round::Truncate,
+                "AWAY-FROM-ZERO" => Round::AwayFromZero,
+                "NEAREST-TOWARD-ZERO" => Round::NearTowardZero,
+                "NEAREST-EVEN" => Round::NearEven,
+                "TOWARD-GREATER" => Round::TowardGreater,
+                "TOWARD-LESSER" => Round::TowardLesser,
+                "PROHIBITED" => Round::Prohibited,
+                _ => Round::NearAwayFromZero, // NEAREST-AWAY-FROM-ZERO + any unrecognized
+            });
+        }
+    }
+    Some(Round::NearAwayFromZero)
+}
+
+/// Round `dec` to `target_scale` fractional digits under a COBOL rounding mode. Returns the rounded value
+/// and whether `MODE PROHIBITED` was violated (a non-zero digit was dropped) -- the caller raises a size
+/// error and leaves the receiver unchanged.
+fn round_decimal_mode(dec: &Decimal, target_scale: i16, mode: Round) -> (Decimal, bool) {
+    let ts = target_scale.max(0);
+    if dec.scale <= ts {
+        return (dec.clone(), false);
+    }
+    let drop = (dec.scale - ts) as usize;
+    let keep = dec.digits.len().saturating_sub(drop);
+    let first = dec.digits[keep];
+    let rest_nonzero = dec.digits[keep + 1..].iter().any(|&d| d != 0);
+    let any_nonzero = first != 0 || rest_nonzero;
+    let mut kept: Vec<u8> = dec.digits[..keep].to_vec();
+    let last_kept = kept.last().copied().unwrap_or(0);
+    let round_up = match mode {
+        Round::Truncate | Round::Prohibited => false,
+        Round::NearAwayFromZero => first >= 5,
+        Round::AwayFromZero => any_nonzero,
+        Round::NearTowardZero => first > 5 || (first == 5 && rest_nonzero),
+        Round::NearEven => first > 5 || (first == 5 && (rest_nonzero || last_kept % 2 == 1)),
+        Round::TowardGreater => any_nonzero && !dec.negative,
+        Round::TowardLesser => any_nonzero && dec.negative,
+    };
+    let prohibited_violation = matches!(mode, Round::Prohibited) && any_nonzero;
+    if round_up {
+        kept = inc_magnitude(kept);
+    }
+    if kept.is_empty() {
+        kept.push(0);
+    }
+    (Decimal { negative: dec.negative, digits: kept, scale: ts }, prohibited_violation)
 }
 
 /// Find the index of a contiguous keyword sequence (e.g. `["PROCEDURE","DIVISION"]`).
