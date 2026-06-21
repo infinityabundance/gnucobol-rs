@@ -132,6 +132,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p156_exit_perform_next_sentence.cob", "EXIT PERFORM CYCLE"),
     ("DISPLAY", "`DISPLAY ... UPON ENVIRONMENT-NAME` / `UPON ENVIRONMENT-VALUE` set the runtime environment (a per-run override) with NO stdout; `ACCEPT ... FROM ENVIRONMENT-VALUE` / `FROM ENVIRONMENT \"name\"` read it back (override before the real process env). Found by the SORT/ACCEPT battery", "sealed",
         "lab/corpus/frontend/p157_display_accept_environment.cob", "UPON ENVIRONMENT-NAME"),
+    ("(intrinsic)", "FUNCTION arguments that are subscripted `f(A(i))` or reference-modified `f(S(s:l))`, and mixed literal+identifier lists -- the arg parser splits at top-level separators only, keeping each argument's own parens; `FUNCTION LENGTH` of a refmod is the BASE item length (cobc ignores the refmod). Boundary: a nested FUNCTION as an argument fails closed. Found by the FUNCTION-complex-arg battery", "sealed",
+        "lab/corpus/frontend/p158_function_complex_args.cob", "MAX(A(1) A(2) A(3) A(4))"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

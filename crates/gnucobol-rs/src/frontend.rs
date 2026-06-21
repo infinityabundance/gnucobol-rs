@@ -7814,12 +7814,24 @@ fn eval_function_call(
     let (name, arg_strs): (String, Vec<String>) = match raw.find('(') {
         Some(o) => {
             let close = raw.rfind(')').unwrap_or(raw.len());
-            let args = raw[o + 1..close]
-                .split([' ', ','])
-                .map(|s| s.trim_matches(|c| c == '(' || c == ')'))
-                .filter(|s| !s.is_empty())
-                .map(|s| s.to_string())
-                .collect();
+            // Split the argument list at TOP-LEVEL spaces/commas only, so a subscripted or reference-modified
+            // argument keeps its own parens intact -- `MAX(A(1) A(2))`, `NUMVAL(D(1:5))`, `UPPER-CASE(S(1:4))`.
+            // (A naive split + paren-trim would mangle `A(1)` into `A(1`.)
+            let inner = &raw[o + 1..close];
+            let mut args: Vec<String> = Vec::new();
+            let mut cur = String::new();
+            let mut depth = 0i32;
+            for ch in inner.chars() {
+                match ch {
+                    '(' => { depth += 1; cur.push(ch); }
+                    ')' => { depth -= 1; cur.push(ch); }
+                    ' ' | ',' if depth == 0 => { if !cur.is_empty() { args.push(std::mem::take(&mut cur)); } }
+                    _ => cur.push(ch),
+                }
+            }
+            if !cur.is_empty() {
+                args.push(cur);
+            }
             (raw[..o].trim().to_ascii_uppercase(), args)
         }
         None => (raw.trim().to_ascii_uppercase(), Vec::new()),
@@ -7849,6 +7861,18 @@ fn eval_function_call(
             args.push((strs.get(i).cloned().unwrap_or_default(), alnum_attr()));
         } else {
             args.push(operand_value(&Tok::Word(a.clone()), fields)?);
+        }
+    }
+    // cobc's LENGTH/BYTE-LENGTH of a reference-modified item is the BASE item's length -- the refmod is
+    // ignored (`FUNCTION LENGTH(S(2:4))` == LENGTH OF S). Resolve the base and fold/compute its length.
+    if matches!(name.as_str(), "LENGTH" | "BYTE-LENGTH") {
+        if let Some((base, _, _)) = arg_strs.first().and_then(|a| parse_refmod(a)) {
+            let n = read_field(fields, base)?.map(|f| f.bytes.len()).unwrap_or(0);
+            return if is_variable_length(base, fields) {
+                Ok((crate::intrinsic::cob_intr_length(n), k))
+            } else {
+                Ok((decimal_as_display(&Decimal { negative: false, digits: digits_of(n as u128), scale: 0 }), k))
+            };
         }
     }
     // LENGTH/BYTE-LENGTH of a VARIABLE-length item (one with an OCCURS DEPENDING ON in its subtree) is a
