@@ -5527,7 +5527,7 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
     // VALUE is left unchanged). Detected before the head parser, which otherwise rejects ALL/TO/WITH/FILLER.
     if let Some(tp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO")) {
         if matches!(stmt.get(tp + 1), Some(Tok::Word(w)) if w == "VALUE") {
-            return exec_initialize_to_value(stmt, tp, fields);
+            return exec_initialize_to_value(stmt, tp, fields, decimal_comma);
         }
     }
     let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"));
@@ -5586,10 +5586,23 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
 /// declared a `VALUE` is restored to that VALUE image (captured in `FIELD_VALUES`); a leaf with no VALUE is
 /// left UNCHANGED -- matching cobc. The subset is `ALL TO VALUE` only; `category TO VALUE`, `TO DEFAULT`,
 /// a trailing `THEN`/`REPLACING`, and OCCURS-table targets fail closed.
-fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
-    if stmt.len() > tp + 2 {
-        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: trailing THEN/REPLACING clause not in subset".into()));
-    }
+fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+    // Trailing `[THEN] REPLACING cat BY val ...` after TO VALUE: TO VALUE sets each leaf that HAS a VALUE to
+    // its VALUE; REPLACING then sets each leaf WITHOUT a VALUE whose category is named to that value (a leaf
+    // with neither is left unchanged). Any other trailing clause (e.g. TO DEFAULT) is out of subset.
+    let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")).filter(|&p| p > tp);
+    let repl = match repl_pos {
+        Some(rp) => Some(parse_initialize_replacing(&stmt[rp + 1..])?),
+        None => {
+            // allow only an optional `THEN` token between VALUE and end; anything else is out of subset.
+            let trailing_ok = stmt.len() <= tp + 2
+                || (stmt.len() == tp + 3 && matches!(stmt.get(tp + 2), Some(Tok::Word(w)) if w == "THEN"));
+            if !trailing_ok {
+                return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: trailing clause not in subset (only `[THEN] REPLACING ...`)".into()));
+            }
+            None
+        }
+    };
     // The modifier before TO is `ALL` or a category (NUMERIC/ALPHANUMERIC/...). cobc 3.2 IGNORES the
     // category for TO VALUE -- every leaf with a VALUE is restored regardless -- so all forms are equivalent.
     let modifier = matches!(stmt.get(tp.wrapping_sub(1)),
@@ -5612,15 +5625,24 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
         collect_init_leaves(name, fields, &mut leaves)?;
         for leaf in leaves {
             // For a table cell `E(i)` the VALUE image is captured under the base name `E` (one element); a
-            // scalar leaf is captured under its own name. A leaf with no VALUE is left unchanged.
+            // scalar leaf is captured under its own name.
             let base = split_subscript(&leaf).0;
             if let Some(img) = FIELD_VALUES.with(|m| m.borrow().get(base).cloned()) {
+                // has a VALUE -> restore it (TO VALUE wins over REPLACING).
                 write_field(fields, &leaf, |f| {
                     let n = img.len().min(f.bytes.len());
                     f.bytes[..n].copy_from_slice(&img[..n]);
                     Ok(())
                 })?;
+            } else if let Some(pairs) = &repl {
+                // no VALUE -> a trailing REPLACING sets it by category; an unnamed category is left unchanged.
+                let cat = init_field_category(&leaf, fields);
+                if let Some((_, val)) = cat.and_then(|c| pairs.iter().find(|(cc, _)| *cc == c)) {
+                    let mv = vec![val.clone(), Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
+                    exec_move(&mv, fields, decimal_comma)?;
+                }
             }
+            // no VALUE and no matching REPLACING -> left unchanged.
         }
     }
     Ok(())
