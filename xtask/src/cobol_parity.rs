@@ -128,6 +128,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p154_compute_unary_pow.cob", "2 ** 3 ** 2"),
     ("ROUNDED", "`ROUNDED MODE [IS] <mode>` on COMPUTE/ADD/SUBTRACT/MULTIPLY/DIVIDE -- all eight modes (TRUNCATION, NEAREST-AWAY-FROM-ZERO, AWAY-FROM-ZERO, NEAREST-TOWARD-ZERO, NEAREST-EVEN, TOWARD-GREATER, TOWARD-LESSER, PROHIBITED=size-error-on-drop) via the mode-aware round_decimal_mode; found by the ROUNDED-MODE differential battery", "sealed",
         "lab/corpus/frontend/p155_rounded_modes.cob", "ROUNDED MODE NEAREST-EVEN"),
+    ("EXIT", "`EXIT PERFORM` (break the nearest inline PERFORM), `EXIT PERFORM CYCLE` (skip to its next iteration -- innermost loop of a VARYING/AFTER), and `NEXT SENTENCE` (transfer to the statement after the next period, distinct from CONTINUE); found by the control-flow battery", "sealed",
+        "lab/corpus/frontend/p156_exit_perform_next_sentence.cob", "EXIT PERFORM CYCLE"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

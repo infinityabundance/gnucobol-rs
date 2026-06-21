@@ -419,6 +419,9 @@ pub fn run_program_redirected(
         print_redirect: redirect_printer,
         printer: RefCell::new(Vec::new()),
         stop_run: Cell::new(false),
+        exit_perform: Cell::new(false),
+        exit_cycle: Cell::new(false),
+        next_sentence: Cell::new(false),
         call_state: RefCell::new(HashMap::new()),
         goto: RefCell::new(None),
         file_defs,
@@ -774,6 +777,15 @@ struct Ctx<'a> {
     /// PROGRAM` only end the current program body and return to the caller. The flag carries the STOP-RUN
     /// decision back across the CALL boundary, where the plain "this body ended" bool cannot distinguish them.
     stop_run: Cell<bool>,
+    /// `EXIT PERFORM` / `EXIT PERFORM CYCLE` signals. An inline PERFORM body that executes one of these
+    /// returns like a halt (`Ok(true)`); the nearest enclosing PERFORM loop absorbs the signal -- BREAK the
+    /// loop (`exit_perform`) or skip to its next iteration (`exit_cycle`) -- so it does not end the program.
+    exit_perform: Cell<bool>,
+    exit_cycle: Cell<bool>,
+    /// `NEXT SENTENCE` signal: the executing block returns like a halt (`Ok(true)`); the enclosing
+    /// paragraph/range loop skips to the statement AFTER the next period (not merely past the END-IF, which
+    /// is what CONTINUE does).
+    next_sentence: Cell<bool>,
     /// Each CALLed contained program's persisted WORKING-STORAGE (COBOL static storage: a subprogram's WS
     /// survives between CALLs). Keyed by program name; absent = never called or CANCELed (next CALL rebuilds
     /// from VALUE clauses). INITIAL programs are never stored here. CANCEL removes the entry.
@@ -2732,6 +2744,13 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
             continue;
         }
         if run_block(toks, &mut pos, fields, out, true, ctx)? {
+            // NEXT SENTENCE: skip to the statement after the next period instead of halting.
+            if ctx.next_sentence.get() {
+                ctx.next_sentence.set(false);
+                while pos < end && !matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
+                if pos < end { pos += 1; }
+                continue;
+            }
             return Ok(true);
         }
         if matches!(toks.get(pos), Some(Tok::Dot)) {
@@ -2774,6 +2793,13 @@ fn run_program_body(
         }
         let halted = run_block(proc, &mut pos, fields, out, true, ctx)?;
         if halted {
+            // NEXT SENTENCE: skip to the statement after the next period; not a real halt.
+            if ctx.next_sentence.get() {
+                ctx.next_sentence.set(false);
+                while pos < proc.len() && !matches!(proc.get(pos), Some(Tok::Dot)) { pos += 1; }
+                if pos < proc.len() { pos += 1; }
+                continue;
+            }
             // A pending GO TO is not a real halt: resume at the named paragraph. STOP/GOBACK/EXIT leave
             // `goto` clear and genuinely end the body.
             let target = ctx.goto.borrow_mut().take();
@@ -2940,14 +2966,51 @@ fn run_block(
                         }
                     }
                     "EXIT" => {
-                        // EXIT PROGRAM ends the body; a bare EXIT (paragraph exit) is a no-op.
-                        let rest = collect_operands(toks, pos);
-                        let is_prog = rest.iter().any(|t| matches!(t, Tok::Word(w) if w == "PROGRAM"));
-                        if exec && is_prog {
+                        // EXIT PROGRAM ends the body; EXIT PERFORM [CYCLE] signals the nearest PERFORM loop;
+                        // a bare EXIT / EXIT PARAGRAPH / EXIT SECTION is a no-op (paragraph fall-through).
+                        // (Peeked directly: PERFORM is a STMT_VERB, so collect_operands would stop before it.)
+                        let qual = toks.get(*pos).and_then(|t| match t { Tok::Word(w) => Some(w.as_str()), _ => None });
+                        match qual {
+                            Some("PROGRAM") => {
+                                *pos += 1;
+                                if exec {
+                                    return Ok(true);
+                                }
+                            }
+                            Some("PERFORM") => {
+                                *pos += 1;
+                                let cycle = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "CYCLE");
+                                if cycle {
+                                    *pos += 1;
+                                }
+                                if exec {
+                                    if cycle {
+                                        ctx.exit_cycle.set(true);
+                                    } else {
+                                        ctx.exit_perform.set(true);
+                                    }
+                                    return Ok(true);
+                                }
+                            }
+                            Some("PARAGRAPH") | Some("SECTION") => {
+                                *pos += 1; // no-op (fall through to the end of the paragraph/section)
+                            }
+                            _ => { /* bare EXIT: no-op */ }
+                        }
+                    }
+                    "CONTINUE" => { /* no-op */ }
+                    "NEXT" => {
+                        // NEXT SENTENCE: control transfers to the statement after the next period. Consume
+                        // SENTENCE, then (when executing) signal the paragraph loop and end this block.
+                        let is_sentence = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "SENTENCE");
+                        if is_sentence {
+                            *pos += 1;
+                        }
+                        if exec && is_sentence {
+                            ctx.next_sentence.set(true);
                             return Ok(true);
                         }
                     }
-                    "CONTINUE" | "NEXT" => { /* no-op */ }
                     // GO TO <paragraph>: set the pending-jump and end this block like a halt; the program
                     // body loop resolves the label and resumes there. `GO TO ... DEPENDING ON` is out of subset.
                     "GO" => {
@@ -3274,7 +3337,7 @@ fn exec_if(
     while let Some(t) = toks.get(*pos) {
         match t {
             Tok::Dot => break,
-            Tok::Word(w) if w == "THEN" || STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+            Tok::Word(w) if w == "THEN" || w == "NEXT" || STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
             _ => {
                 cond.push(t.clone());
                 *pos += 1;
@@ -3634,6 +3697,26 @@ fn parse_varying_clauses(toks: &[Tok], pos: &mut usize) -> Result<Vec<VaryingCla
 /// Run a (possibly nested) `PERFORM VARYING ... AFTER ...`: at each level set the var to its FROM, test
 /// UNTIL (TEST BEFORE), recurse into the next level (or run the body at the innermost), then step by BY.
 /// Returns `true` if the body halted the program (STOP RUN).
+/// How a PERFORM loop should react to a body that returned `Ok(true)` (a halt-like signal): an `EXIT
+/// PERFORM` breaks the loop, `EXIT PERFORM CYCLE` skips to the next iteration, anything else (STOP RUN /
+/// GO TO / GOBACK) is a real halt that propagates. The exit signals are consumed here.
+enum PerfFlow {
+    Break,
+    Continue,
+    Halt,
+}
+fn perform_flow(ctx: &Ctx) -> PerfFlow {
+    if ctx.exit_perform.get() {
+        ctx.exit_perform.set(false);
+        PerfFlow::Break
+    } else if ctx.exit_cycle.get() {
+        ctx.exit_cycle.set(false);
+        PerfFlow::Continue
+    } else {
+        PerfFlow::Halt
+    }
+}
+
 fn run_varying_nested(
     clauses: &[VaryingClause],
     level: usize,
@@ -3657,7 +3740,13 @@ fn run_varying_nested(
             run_body(fields)?
         };
         if halted {
-            return Ok(true);
+            // EXIT PERFORM CYCLE at THIS (innermost) level: skip to this loop's next iteration. EXIT PERFORM
+            // and real halts propagate (the top-level exec_perform absorbs EXIT PERFORM).
+            if level + 1 == clauses.len() && ctx.exit_cycle.get() {
+                ctx.exit_cycle.set(false);
+            } else {
+                return Ok(true);
+            }
         }
         if test_after && eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
             break;
@@ -3738,7 +3827,10 @@ fn exec_perform(
                 let (start, end) = para_range(&p1, &p2)
                     .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
                 let mut body = |fields: &mut HashMap<String, Field>| run_range(toks, start, end, fields, out, ctx);
-                return run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body);
+                if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
+                    if let PerfFlow::Halt = perform_flow(ctx) { return Ok(true); } // EXIT PERFORM absorbed
+                }
+                return Ok(false);
             }
             let mut times: Option<String> = None;
             let mut ucond: Vec<Tok> = Vec::new();
@@ -3768,7 +3860,9 @@ fn exec_perform(
                 let mut guard = 0u32;
                 loop {
                     if !test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
-                    if run_range(toks, start, end, fields, out, ctx)? { return Ok(true); }
+                    if run_range(toks, start, end, fields, out, ctx)? {
+                        match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => {}, PerfFlow::Halt => return Ok(true) }
+                    }
                     if test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
                     guard += 1;
                     if guard > 1_000_000 { return Err(RunError::Runtime("PERFORM UNTIL exceeded 1e6 iterations".into())); }
@@ -3776,7 +3870,9 @@ fn exec_perform(
             } else {
                 let n = times.as_deref().and_then(|w| resolve_int(w, fields)).unwrap_or(1);
                 for _ in 0..n.max(0) {
-                    if run_range(toks, start, end, fields, out, ctx)? { return Ok(true); }
+                    if run_range(toks, start, end, fields, out, ctx)? {
+                        match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => continue, PerfFlow::Halt => return Ok(true) }
+                    }
                 }
             }
             return Ok(false);
@@ -3797,7 +3893,7 @@ fn exec_perform(
                 run_block(toks, &mut p, fields, out, true, ctx)
             };
             if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
-                return Ok(true);
+                if let PerfFlow::Halt = perform_flow(ctx) { return Ok(true); } // EXIT PERFORM absorbed
             }
         }
         *pos = body_end;
@@ -3856,7 +3952,7 @@ fn exec_perform(
                 }
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
-                    return Ok(true);
+                    match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => {}, PerfFlow::Halt => return Ok(true) }
                 }
                 if test_after && eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
                     break;
@@ -3876,7 +3972,7 @@ fn exec_perform(
             for _ in 0..n {
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
-                    return Ok(true);
+                    match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => continue, PerfFlow::Halt => return Ok(true) }
                 }
             }
         }
