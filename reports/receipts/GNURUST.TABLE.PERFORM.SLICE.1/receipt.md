@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.TABLE.PERFORM.SLICE.1` |
 | court | table (OCCURS) PERFORM VARYING slice |
-| crate_version | `0.8.24` |
+| crate_version | `0.8.25` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | PERFORM VARYING I over a 1-based OCCURS table accumulating TABLE(I) |
 | replay command | `bash lab/oracle/table_sweep.sh` |

@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.25]
+- **COMPUTE unary sign + right-associative exponentiation.** The expression tokenizer now peels a unary sign glued to an operand or parenthesis (`-A`, `-(A - B)`, nested `-(-(-3))`), and `**` is right-associative (`2 ** 3 ** 2` = 512). A non-negative integer exponent uses exact repeated multiply; otherwise the sealed decimal pow. Found by the COMPUTE-expression battery (GO TO ... DEPENDING ON, SET, and precedence cases already byte-identical). Front-end sweep 154/0.
+
 ## [0.8.24]
 - **Abbreviated combined conditions + `FUNCTION TRIM` LEADING/TRAILING.** The condition evaluator now threads a (subject, operator, negation) context, so a term after AND/OR may omit the subject (`A > B AND < C`) and the operator (`A = 1 OR 2 OR 5`), and a leading `NOT` negates a term (`NOT A = 5`, `A NOT = 1 AND 2`) -- ubiquitous COBOL idioms that previously errored. `FUNCTION TRIM(x LEADING|TRAILING)` parses the direction as a modifier (was a failing second argument). Found by the abbreviated-condition + intrinsic batteries (PERFORM forms, EVALUATE, ~60 math/date/string intrinsics already byte-identical). Front-end sweep 153/0.
 
