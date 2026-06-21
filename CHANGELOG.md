@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.36]
+- **SYNCHRONIZED descendant of a table element.** A SYNC field inside an OCCURS element now gets alignment slack before it (to its 2/4/8-byte boundary) and the element is padded up to the largest SYNC alignment so every occurrence stays aligned (e.g. `X` + `S9(9) COMP SYNC` + `X` -> a 12-byte element, not 9). The flat group-OCCURS branch tracks the max alignment and pads the stride; a SYNC field inside a multi-dimension table still fails closed. Front-end sweep 166/0.
+
 ## [0.8.35]
 - **REDEFINES descendant inside a table element; ODO-in-table reclassified.** A REDEFINES item inside an OCCURS group now overlays its target at the same element offset across all occurrences (flat group-OCCURS and multi-dimension; e.g. `FULL` -> `HI`/`LO`, or `CELL OCCURS` -> `RAW`). Separately, an OCCURS DEPENDING ON item *inside* a fixed table is a cobc compile error (a table of variable-length items is illegal), so that guard now fails closed as validation (cobc-also-rejects), not a feature gap. A SYNCHRONIZED descendant remains the one open gap there. Front-end sweep 165/0.
 
