@@ -8201,10 +8201,12 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
     };
     for s in &sources[1..] {
         let (b, a) = operand_value(s, fields)?;
-        let (b, a) = to_arith_operand(&b, &a)?;
-        acc = cob_arith(Op::Add, &acc, &acc_attr, &b, &a, Round::Truncate)
-            .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
-        acc_attr = widen(&acc_attr, &a);
+        // Widen-THEN-add (wide_op), not add-then-widen: cob_arith truncates the result to acc_attr's width,
+        // so folding into a narrow acc_attr (e.g. two 2-digit literals) dropped the carry digit (60+60 ->
+        // "20", then the SIZE ERROR was judged on the wrong value). wide_op widens acc to 18 digits first.
+        let (r, ra) = wide_op(Op::Add, &acc, &acc_attr, &b, &a)?;
+        acc = r;
+        acc_attr = ra;
     }
 
     // DIVIDE ... GIVING q REMAINDER r -- wire the sealed `cob_divide_remainder` primitive
@@ -8470,12 +8472,6 @@ fn to_arith_operand(bytes: &[u8], attr: &FieldAttr) -> Result<(Vec<u8>, FieldAtt
 
 
 
-/// Widen an accumulator attr to cover another operand (used while folding ADD sources).
-fn widen(a: &FieldAttr, b: &FieldAttr) -> FieldAttr {
-    let scale = a.scale.max(b.scale).max(0);
-    let int = (a.digits as i16 - a.scale).max(b.digits as i16 - b.scale).max(0);
-    lit_num_attr((int + scale) as u16 + 1, scale, true)
-}
 
 
 

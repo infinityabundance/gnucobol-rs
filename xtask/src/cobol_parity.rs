@@ -114,6 +114,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p146_move_conversions.cob", "MOVE BC TO AX"),
     ("DIVIDE", "binary/packed operands + uninitialized binary/packed zero -- DIVIDE with a COMP/COMP-3 operand normalizes to DISPLAY (was InvalidAttr); a no-VALUE COMP/COMP-3 reads as 0, not '0'-byte garbage (found by the arithmetic cross-product differential)", "sealed",
         "lab/corpus/frontend/p147_arith_binary.cob", "DIVIDE A INTO B GIVING G ROUNDED"),
+    ("ADD", "`ADD a b [c...] GIVING r` multi-operand fold computes the sum at full width before the store (was folded into the first operand's narrow width -- 60+60 -> \"20\" -- and the ON SIZE ERROR was judged on the truncated value); found by the SIZE-ERROR/ROUNDED differential battery", "sealed",
+        "lab/corpus/frontend/p148_add_giving_fold.cob", "ADD 60 60 GIVING R4"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
