@@ -1,0 +1,233 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "comment": "Derived from `cargo metadata`; no SPDX generator installed.",
+  "creationInfo": {
+    "created": "2026-06-21T02:10:02Z",
+    "creators": [
+      "Tool: kobold-release-packet (from cargo metadata)"
+    ]
+  },
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://github.com/infinityabundance/gnucobol-rs#0.8.22",
+  "name": "gnucobol-rs-0.8.22",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-aho-corasick-1-1-4",
+      "downloadLocation": "https://crates.io/crates/aho-corasick/1.1.4",
+      "licenseConcluded": "Unlicense OR MIT",
+      "name": "aho-corasick",
+      "versionInfo": "1.1.4"
+    },
+    {
+      "SPDXID": "SPDXRef-block-buffer-0-10-4",
+      "downloadLocation": "https://crates.io/crates/block-buffer/0.10.4",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "block-buffer",
+      "versionInfo": "0.10.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cfg-if-1-0-4",
+      "downloadLocation": "https://crates.io/crates/cfg-if/1.0.4",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "cfg-if",
+      "versionInfo": "1.0.4"
+    },
+    {
+      "SPDXID": "SPDXRef-cobc-oracle-rs-0-0-2",
+      "downloadLocation": "https://crates.io/crates/cobc-oracle-rs/0.0.2",
+      "licenseConcluded": "GPL-3.0-or-later",
+      "name": "cobc-oracle-rs",
+      "versionInfo": "0.0.2"
+    },
+    {
+      "SPDXID": "SPDXRef-cpufeatures-0-2-17",
+      "downloadLocation": "https://crates.io/crates/cpufeatures/0.2.17",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "cpufeatures",
+      "versionInfo": "0.2.17"
+    },
+    {
+      "SPDXID": "SPDXRef-crypto-common-0-1-7",
+      "downloadLocation": "https://crates.io/crates/crypto-common/0.1.7",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "crypto-common",
+      "versionInfo": "0.1.7"
+    },
+    {
+      "SPDXID": "SPDXRef-digest-0-10-7",
+      "downloadLocation": "https://crates.io/crates/digest/0.10.7",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "digest",
+      "versionInfo": "0.10.7"
+    },
+    {
+      "SPDXID": "SPDXRef-generic-array-0-14-7",
+      "downloadLocation": "https://crates.io/crates/generic-array/0.14.7",
+      "licenseConcluded": "MIT",
+      "name": "generic-array",
+      "versionInfo": "0.14.7"
+    },
+    {
+      "SPDXID": "SPDXRef-gnucobol-rs-0-8-22",
+      "downloadLocation": "https://crates.io/crates/gnucobol-rs/0.8.22",
+      "licenseConcluded": "LGPL-3.0-or-later",
+      "name": "gnucobol-rs",
+      "versionInfo": "0.8.22"
+    },
+    {
+      "SPDXID": "SPDXRef-gnucobol-rs-bdb-format-0-3-0",
+      "downloadLocation": "https://crates.io/crates/gnucobol-rs-bdb-format/0.3.0",
+      "licenseConcluded": "LGPL-3.0-or-later",
+      "name": "gnucobol-rs-bdb-format",
+      "versionInfo": "0.3.0"
+    },
+    {
+      "SPDXID": "SPDXRef-gnucobol-rs-ffi-0-1-0",
+      "downloadLocation": "https://crates.io/crates/gnucobol-rs-ffi/0.1.0",
+      "licenseConcluded": "LGPL-3.0-or-later",
+      "name": "gnucobol-rs-ffi",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-gnucobol-rs-port-index-0-1-0",
+      "downloadLocation": "https://crates.io/crates/gnucobol-rs-port-index/0.1.0",
+      "licenseConcluded": "LGPL-3.0-or-later",
+      "name": "gnucobol-rs-port-index",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-itoa-1-0-18",
+      "downloadLocation": "https://crates.io/crates/itoa/1.0.18",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "itoa",
+      "versionInfo": "1.0.18"
+    },
+    {
+      "SPDXID": "SPDXRef-libc-0-2-186",
+      "downloadLocation": "https://crates.io/crates/libc/0.2.186",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "libc",
+      "versionInfo": "0.2.186"
+    },
+    {
+      "SPDXID": "SPDXRef-memchr-2-8-1",
+      "downloadLocation": "https://crates.io/crates/memchr/2.8.1",
+      "licenseConcluded": "Unlicense OR MIT",
+      "name": "memchr",
+      "versionInfo": "2.8.1"
+    },
+    {
+      "SPDXID": "SPDXRef-proc-macro2-1-0-106",
+      "downloadLocation": "https://crates.io/crates/proc-macro2/1.0.106",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "proc-macro2",
+      "versionInfo": "1.0.106"
+    },
+    {
+      "SPDXID": "SPDXRef-quote-1-0-45",
+      "downloadLocation": "https://crates.io/crates/quote/1.0.45",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "quote",
+      "versionInfo": "1.0.45"
+    },
+    {
+      "SPDXID": "SPDXRef-regex-1-12-4",
+      "downloadLocation": "https://crates.io/crates/regex/1.12.4",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "regex",
+      "versionInfo": "1.12.4"
+    },
+    {
+      "SPDXID": "SPDXRef-regex-automata-0-4-14",
+      "downloadLocation": "https://crates.io/crates/regex-automata/0.4.14",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "regex-automata",
+      "versionInfo": "0.4.14"
+    },
+    {
+      "SPDXID": "SPDXRef-regex-syntax-0-8-11",
+      "downloadLocation": "https://crates.io/crates/regex-syntax/0.8.11",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "regex-syntax",
+      "versionInfo": "0.8.11"
+    },
+    {
+      "SPDXID": "SPDXRef-serde-1-0-228",
+      "downloadLocation": "https://crates.io/crates/serde/1.0.228",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "serde",
+      "versionInfo": "1.0.228"
+    },
+    {
+      "SPDXID": "SPDXRef-serde_core-1-0-228",
+      "downloadLocation": "https://crates.io/crates/serde_core/1.0.228",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "serde_core",
+      "versionInfo": "1.0.228"
+    },
+    {
+      "SPDXID": "SPDXRef-serde_derive-1-0-228",
+      "downloadLocation": "https://crates.io/crates/serde_derive/1.0.228",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "serde_derive",
+      "versionInfo": "1.0.228"
+    },
+    {
+      "SPDXID": "SPDXRef-serde_json-1-0-150",
+      "downloadLocation": "https://crates.io/crates/serde_json/1.0.150",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "serde_json",
+      "versionInfo": "1.0.150"
+    },
+    {
+      "SPDXID": "SPDXRef-sha2-0-10-9",
+      "downloadLocation": "https://crates.io/crates/sha2/0.10.9",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "sha2",
+      "versionInfo": "0.10.9"
+    },
+    {
+      "SPDXID": "SPDXRef-syn-2-0-117",
+      "downloadLocation": "https://crates.io/crates/syn/2.0.117",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "syn",
+      "versionInfo": "2.0.117"
+    },
+    {
+      "SPDXID": "SPDXRef-typenum-1-20-1",
+      "downloadLocation": "https://crates.io/crates/typenum/1.20.1",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "name": "typenum",
+      "versionInfo": "1.20.1"
+    },
+    {
+      "SPDXID": "SPDXRef-unicode-ident-1-0-24",
+      "downloadLocation": "https://crates.io/crates/unicode-ident/1.0.24",
+      "licenseConcluded": "(MIT OR Apache-2.0) AND Unicode-3.0",
+      "name": "unicode-ident",
+      "versionInfo": "1.0.24"
+    },
+    {
+      "SPDXID": "SPDXRef-version_check-0-9-5",
+      "downloadLocation": "https://crates.io/crates/version_check/0.9.5",
+      "licenseConcluded": "MIT/Apache-2.0",
+      "name": "version_check",
+      "versionInfo": "0.9.5"
+    },
+    {
+      "SPDXID": "SPDXRef-xtask-0-0-0",
+      "downloadLocation": "https://crates.io/crates/xtask/0.0.0",
+      "licenseConcluded": "UNKNOWN",
+      "name": "xtask",
+      "versionInfo": "0.0.0"
+    },
+    {
+      "SPDXID": "SPDXRef-zmij-1-0-21",
+      "downloadLocation": "https://crates.io/crates/zmij/1.0.21",
+      "licenseConcluded": "MIT",
+      "name": "zmij",
+      "versionInfo": "1.0.21"
+    }
+  ],
+  "spdxVersion": "SPDX-2.3"
+}

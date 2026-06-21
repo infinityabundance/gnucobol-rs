@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.22]
+- **Class conditions `IS [NOT] {NUMERIC | ALPHABETIC | ALPHABETIC-UPPER | ALPHABETIC-LOWER}` (`GNURUST.CLASS.1`) wired into the front-end.** The sealed `class` byte predicates existed but were never reachable from the condition evaluator (`IF V IS NUMERIC` errored as an unrecognized relational operator). Now recognized in `IF`, with the NUMERIC variant chosen by usage: binary is always numeric, packed validates its nibbles, a signed DISPLAY uses the predicate for its sign convention (trailing overpunch, or SIGN LEADING/TRAILING [SEPARATE]), and alphanumeric/group is the digit-string test. Found by the class-condition cross-product battery (130 pairs). Front-end sweep 150/0.
+
 ## [0.8.21]
 - **Reference modification `base(start:len)` (`GNURUST.REFMOD.1`) -- new front-end feature.** Previously unimplemented (`S(1:3)` resolved as an undefined data name). Now an alphanumeric SUBSTRING of the base item (1-based start, length-to-end if omitted) works both as a VALUE (DISPLAY / IF / MOVE-source / STRING / arithmetic / PERFORM) and as a RECEIVER (MOVE / INSPECT / STRING target), with literal, data-name, or computed-integer bounds, a numeric base (refmod is always category alphanumeric), and a subscripted base `T(i)(s:l)`. Boundary (fails closed): expression-valued bounds and refmod inside a FUNCTION argument. Front-end sweep 149/0.
 
