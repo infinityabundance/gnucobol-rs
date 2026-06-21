@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.35]
+- **REDEFINES descendant inside a table element; ODO-in-table reclassified.** A REDEFINES item inside an OCCURS group now overlays its target at the same element offset across all occurrences (flat group-OCCURS and multi-dimension; e.g. `FULL` -> `HI`/`LO`, or `CELL OCCURS` -> `RAW`). Separately, an OCCURS DEPENDING ON item *inside* a fixed table is a cobc compile error (a table of variable-length items is illegal), so that guard now fails closed as validation (cobc-also-rejects), not a feature gap. A SYNCHRONIZED descendant remains the one open gap there. Front-end sweep 165/0.
+
 ## [0.8.34]
 - **OCCURS DEPENDING ON the outer dimension of a multi-dimension group (8 section-B gaps left).** `05 ROW OCCURS 1 TO 3 DEPENDING ON N. 10 CELL ... OCCURS 2.` now builds: the interleaved buffer is built at MAX and element addressing uses the fixed MAX strides (the inner dimension folds into the stride), while the LIVE image and FUNCTION LENGTH are counter*stride. Found by the FILE-PARITY section-B gap sweep. Front-end sweep 164/0.
 
