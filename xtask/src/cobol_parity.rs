@@ -118,6 +118,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p148_add_giving_fold.cob", "ADD 60 60 GIVING R4"),
     ("(refmod)", "reference modification `base(start:len)` / `base(start:)` -- alphanumeric substring, 1-based start, as a VALUE (DISPLAY/IF/MOVE-source/arith) and as a RECEIVER (MOVE/INSPECT/STRING target), with literal / data-name / subscripted bounds and a subscripted base `T(i)(s:l)`. Boundary: expression-valued bounds and refmod inside a FUNCTION argument fail closed", "sealed",
         "lab/corpus/frontend/p149_reference_modification.cob", "S(P:L)"),
+    ("IF", "class conditions `IS [NOT] {NUMERIC | ALPHABETIC | ALPHABETIC-UPPER | ALPHABETIC-LOWER}` wired to the sealed `class` byte predicates; the NUMERIC variant chosen by usage (binary always numeric, packed nibble-validated, signed DISPLAY by sign convention incl. SIGN LEADING/TRAILING SEPARATE); found by the class-condition cross-product battery", "sealed",
+        "lab/corpus/frontend/p150_class_conditions.cob", "IS NOT NUMERIC"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

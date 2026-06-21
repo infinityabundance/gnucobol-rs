@@ -3961,6 +3961,17 @@ fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     Ok(acc)
 }
 
+/// `IS NUMERIC` for a packed (COMP-3) field: every digit nibble is 0-9 and the trailing sign nibble is a
+/// valid sign (C/D positive/negative, F unsigned). A field built by the runtime is always valid; this guards
+/// raw/REDEFINES'd bytes.
+fn packed_is_numeric(bytes: &[u8]) -> bool {
+    let Some((last, rest)) = bytes.split_last() else { return false };
+    if rest.iter().any(|b| (b >> 4) > 9 || (b & 0x0f) > 9) {
+        return false;
+    }
+    (last >> 4) <= 9 && matches!(last & 0x0f, 0x0c | 0x0d | 0x0f)
+}
+
 fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>) -> Result<bool, RunError> {
     let left = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?.clone();
     *p += 1;
@@ -4003,6 +4014,40 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
                 "POSITIVE" => ord == std::cmp::Ordering::Greater,
                 "NEGATIVE" => ord == std::cmp::Ordering::Less,
                 _ => ord == std::cmp::Ordering::Equal, // ZERO
+            };
+            return Ok(if neg { !base } else { base });
+        }
+    }
+    // Class condition: `IF identifier [IS] [NOT] {NUMERIC | ALPHABETIC | ALPHABETIC-UPPER | ALPHABETIC-LOWER}`
+    // -- a byte predicate over the operand's raw storage (the sealed `class` module). The NUMERIC variant is
+    // chosen by the operand's usage: binary is always numeric; packed validates its nibbles; a signed DISPLAY
+    // uses the trailing-overpunch rule; everything else is the plain digit-string test.
+    if let Some(classw) = w.get(*p).map(|s| s.as_str()) {
+        if matches!(classw, "NUMERIC" | "ALPHABETIC" | "ALPHABETIC-UPPER" | "ALPHABETIC-LOWER") {
+            *p += 1;
+            let field = read_field(f, &left)?.ok_or_else(|| RunError::UndefinedName(left.clone()))?;
+            let bytes = &field.bytes;
+            let base = match classw {
+                "ALPHABETIC" => crate::class::is_alphabetic(bytes),
+                "ALPHABETIC-UPPER" => crate::class::is_alphabetic_upper(bytes),
+                "ALPHABETIC-LOWER" => crate::class::is_alphabetic_lower(bytes),
+                _ => match &field.storage {
+                    Storage::Numeric(a) => match a.field_type {
+                        crate::attr::COB_TYPE_NUMERIC_BINARY => true,
+                        crate::attr::COB_TYPE_NUMERIC_PACKED => packed_is_numeric(bytes),
+                        _ if a.flags & crate::attr::COB_FLAG_HAVE_SIGN != 0 => {
+                            // a signed DISPLAY field -- pick the predicate for its sign convention.
+                            match (a.sign_separate(), a.sign_leading()) {
+                                (true, true) => crate::class::is_numeric_sign_leading_separate(bytes),
+                                (true, false) => crate::class::is_numeric_sign_trailing_separate(bytes),
+                                (false, true) => crate::class::is_numeric_sign_leading(bytes),
+                                (false, false) => crate::class::is_numeric_signed_trailing(bytes),
+                            }
+                        }
+                        _ => crate::class::is_numeric(bytes),
+                    },
+                    _ => crate::class::is_numeric(bytes), // alphanumeric / group / edited: digit-string test
+                },
             };
             return Ok(if neg { !base } else { base });
         }
