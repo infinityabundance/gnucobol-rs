@@ -7691,6 +7691,24 @@ fn split_subscript(w: &str) -> (&str, Option<&str>) {
     (w, None)
 }
 
+/// Parse a reference-modification reference `base(start:len)` / `base(start:)`. The refmod is the LAST
+/// parenthesized group and is the one containing `:`; `base` is everything before it and may itself carry a
+/// subscript (`T(i)(s:l)`). Returns `(base, start_expr, Some(len_expr) | None-for-to-end)`.
+fn parse_refmod(w: &str) -> Option<(&str, &str, Option<&str>)> {
+    if !w.ends_with(')') {
+        return None;
+    }
+    let open = w.rfind('(')?;
+    let inner = &w[open + 1..w.len() - 1];
+    let colon = inner.find(':')?;
+    let start = inner[..colon].trim();
+    let len = inner[colon + 1..].trim();
+    if start.is_empty() {
+        return None;
+    }
+    Some((&w[..open], start, if len.is_empty() { None } else { Some(len) }))
+}
+
 thread_local! {
     /// Whether `EC-BOUND-SUBSCRIPT` checking is ENABLED for this run. Default OFF -- matching cobc, whose
     /// default emits NO subscript check (an out-of-range read is undefined, reading adjacent storage).
@@ -7771,6 +7789,22 @@ fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
 /// when `word` names no field (e.g. it is a numeric literal). The subscript may itself be a field (`E(I)`);
 /// a `REDEFINES` field reads its target's storage (so an alias sees the other field's current bytes).
 fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Field>, RunError> {
+    // Reference modification `base(start:len)` / `base(start:)` -- an alphanumeric SUBSTRING of the base item
+    // (which may itself carry a subscript, e.g. T(i)(s:l)). Always category alphanumeric, 1-based start.
+    if let Some((base, start_s, len_s)) = parse_refmod(word) {
+        let Some(basef) = read_field(fields, base)? else { return Ok(None) };
+        let total = basef.bytes.len();
+        let start = resolve_int(start_s, fields)
+            .ok_or_else(|| RunError::Unsupported(format!("reference-modification start '{start_s}' is not an integer")))?;
+        let len = match len_s {
+            Some(l) => resolve_int(l, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("reference-modification length '{l}' is not an integer")))?,
+            None => total as i64 - start + 1, // `(start:)` runs to the end of the item
+        };
+        let s = (start - 1).clamp(0, total as i64) as usize;
+        let e = (s as i64 + len.max(0)).clamp(0, total as i64) as usize;
+        return Ok(Some(Field { storage: Storage::Alpha(alnum_attr()), bytes: basef.bytes[s..e].to_vec(), occurs: 1, redefines: None }));
+    }
     let (base, sub) = split_subscript(word);
     // MULTI-DIMENSION leaf: `C(i,j)` -- a strided cell of the base group-OCCURS buffer, addressed by dims.
     if let Some((basef, offset, size, dims)) = nested_leaf_lookup(base) {
@@ -7890,6 +7924,30 @@ fn write_field(
     word: &str,
     apply: impl FnOnce(&mut Field) -> Result<(), RunError>,
 ) -> Result<(), RunError> {
+    // Reference-modification RECEIVER `base(start:len)`: shape an alphanumeric temp over the substring, apply
+    // (the move/inspect stores left-justified, space-padded/truncated to len), splice the result back into
+    // the base bytes, then write the whole base back THROUGH write_field (so a subscripted/group base works).
+    if let Some((base, start_s, len_s)) = parse_refmod(word) {
+        let basef = read_field(fields, base)?.ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+        let total = basef.bytes.len();
+        let start = resolve_int(start_s, fields)
+            .ok_or_else(|| RunError::Unsupported(format!("reference-modification start '{start_s}' is not an integer")))?;
+        let len = match len_s {
+            Some(l) => resolve_int(l, fields)
+                .ok_or_else(|| RunError::Unsupported(format!("reference-modification length '{l}' is not an integer")))?,
+            None => total as i64 - start + 1,
+        };
+        let s = (start - 1).clamp(0, total as i64) as usize;
+        let e = (s as i64 + len.max(0)).clamp(0, total as i64) as usize;
+        let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: basef.bytes[s..e].to_vec(), occurs: 1, redefines: None };
+        apply(&mut tmp)?;
+        let mut newbytes = basef.bytes.clone();
+        let n = tmp.bytes.len().min(e - s);
+        newbytes[s..s + n].copy_from_slice(&tmp.bytes[..n]);
+        // write the spliced base image back via the non-generic helper (a generic write_field recursion would
+        // blow the monomorphization limit). Covers a plain or group base; a subscripted base fails closed.
+        return set_field_image(fields, base, &newbytes);
+    }
     let (base, sub) = split_subscript(word);
     // MULTI-DIMENSION leaf write-back: `C(i,j)` shapes a temp over the strided cell, applies, copies back.
     if let Some((basef, offset, size, dims)) = nested_leaf_lookup(base) {

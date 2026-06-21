@@ -116,6 +116,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p147_arith_binary.cob", "DIVIDE A INTO B GIVING G ROUNDED"),
     ("ADD", "`ADD a b [c...] GIVING r` multi-operand fold computes the sum at full width before the store (was folded into the first operand's narrow width -- 60+60 -> \"20\" -- and the ON SIZE ERROR was judged on the truncated value); found by the SIZE-ERROR/ROUNDED differential battery", "sealed",
         "lab/corpus/frontend/p148_add_giving_fold.cob", "ADD 60 60 GIVING R4"),
+    ("(refmod)", "reference modification `base(start:len)` / `base(start:)` -- alphanumeric substring, 1-based start, as a VALUE (DISPLAY/IF/MOVE-source/arith) and as a RECEIVER (MOVE/INSPECT/STRING target), with literal / data-name / subscripted bounds and a subscripted base `T(i)(s:l)`. Boundary: expression-valued bounds and refmod inside a FUNCTION argument fail closed", "sealed",
+        "lab/corpus/frontend/p149_reference_modification.cob", "S(P:L)"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
