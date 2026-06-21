@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.32]
+- **`INITIALIZE ... TO VALUE [THEN] REPLACING`.** The combined form now works: TO VALUE restores each leaf that HAS a VALUE clause to its VALUE, and the trailing REPLACING sets each leaf WITHOUT a VALUE whose category is named to that value (a leaf with neither is left unchanged) -- matching cobc 3.2. Found by the FILE-PARITY section-B gap sweep. Front-end sweep 162/0.
+
 ## [0.8.31]
 - **`SET <switch-mnemonic> TO ON|OFF` -- runtime UPSI switch toggle.** A SPECIAL-NAMES `SWITCH-n IS <mnemonic> [ON STATUS IS c] [OFF STATUS IS c]` declaration now records the mnemonic (it was dropped, so `SET SW TO ON` failed as an undefined name). `SET <mnemonic> [...] TO ON|OFF` toggles the switch(es) at runtime and the ON/OFF STATUS condition-names read the live state (multi-target supported). Front-end sweep 161/0.
 

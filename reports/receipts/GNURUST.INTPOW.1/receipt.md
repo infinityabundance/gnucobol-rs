@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTPOW.1` |
 | court | integer exponentiation cob_s32_pow/cob_s64_pow |
-| crate_version | `0.8.31` |
+| crate_version | `0.8.32` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | (base, power, width) -> integer result (wrapping) |
 | replay command | `bash lab/oracle/pow_sweep.sh` |

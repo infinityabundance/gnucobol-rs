@@ -5,14 +5,14 @@
       "kind": "generated_doc",
       "path": "STATUS.md",
       "present": true,
-      "sha256": "09414f73dbd9d7f10996cfbcb0fa16cfe6a694ff6b084f8f03d6e52fccc23a9e"
+      "sha256": "cf75eb0b84238c4f431403497d1b48f9ee656b1fe842b617fc2e48be778ccdd4"
     },
     {
       "id": "changelog",
       "kind": "generated_doc",
       "path": "CHANGELOG.md",
       "present": true,
-      "sha256": "d67a561bc4f72be3b3ecc52b35e497886fa4f5a77acb5e9e721e930adc314cd0"
+      "sha256": "90acb35a3f83ecc7f845ca447b232eb9ca167e9b3c06bbe06a2cdaf21af22aa6"
     },
     {
       "id": "claim_ladder",
@@ -1135,6 +1135,7 @@
         "gnucobol-rs-0.8.29",
         "gnucobol-rs-0.8.30",
         "gnucobol-rs-0.8.31",
+        "gnucobol-rs-0.8.32",
         "gnucobol-rs-0.8.5",
         "gnucobol-rs-0.8.6",
         "gnucobol-rs-0.8.7",
@@ -1203,7 +1204,7 @@
   ],
   "court": "SUPPORT-PACKET.1",
   "crate_versions": {
-    "gnucobol-rs": "0.8.31 (this repo)",
+    "gnucobol-rs": "0.8.32 (this repo)",
     "kobold-attest": "external repo: github.com/infinityabundance/kobold-attest (Apache-2.0; cargo install kobold-attest)",
     "kobold-bench": "sibling repo (bench/scale receipts)",
     "kobold-data-shim": "sibling repo (see its Cargo.toml/crates.io)"
