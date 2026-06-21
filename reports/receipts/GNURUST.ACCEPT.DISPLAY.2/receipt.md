@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.ACCEPT.DISPLAY.2` |
 | court | DISPLAY of signed/V-scaled numeric |
-| crate_version | `0.8.33` |
+| crate_version | `0.8.34` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | DISPLAY numeric: signed +/- prefix + V decimal point |
 | replay command | `bash lab/oracle/accept_display2_sweep.sh` |

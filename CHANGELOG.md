@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.34]
+- **OCCURS DEPENDING ON the outer dimension of a multi-dimension group (8 section-B gaps left).** `05 ROW OCCURS 1 TO 3 DEPENDING ON N. 10 CELL ... OCCURS 2.` now builds: the interleaved buffer is built at MAX and element addressing uses the fixed MAX strides (the inner dimension folds into the stride), while the LIVE image and FUNCTION LENGTH are counter*stride. Found by the FILE-PARITY section-B gap sweep. Front-end sweep 164/0.
+
 ## [0.8.33]
 - **Space-separated multi-dimension subscripts.** `CELL(1 1)`, `CELL (3 2)` (space before paren), and 3-D `C3(2 1 2)` now work -- cobc accepts space OR comma subscript separators, but the subscript gluer was concatenating the lexer's split fragments with no separator (`C(2`+`3)` -> one subscript `23`). The gluer now keeps fragments distinct and handles a space before the paren; `subscripts()` splits on spaces or commas while keeping a relative `C(I + 1)` whole. Comma and 1-D forms unchanged. Front-end sweep 163/0.
 

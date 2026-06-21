@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.DIALECT.RUNTIME.ATLAS.1` |
 | court | observed dialect-runtime divergence atlas |
-| crate_version | `0.8.33` |
+| crate_version | `0.8.34` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | cross-dialect divergence: stored zoned-sign bytes (invariant) vs DISPLAY presentation sign placement (leading/trailing camps) vs compile-acceptance of extensions |
 | replay command | `bash lab/oracle/dialect_runtime_atlas_sweep.sh` |
