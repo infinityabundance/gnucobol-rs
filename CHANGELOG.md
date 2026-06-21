@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.29]
+- **Subscripted / reference-modified FUNCTION arguments.** `FUNCTION MAX(A(1) A(2))`, `NUMVAL(D(1:5))`, `UPPER-CASE(S(1:4))` and mixed literal+identifier argument lists now work -- the argument parser splits at top-level separators only, keeping each argument's own parentheses (the old split mangled `A(1)` into `A(1`). `FUNCTION LENGTH`/`BYTE-LENGTH` of a reference-modified item returns the BASE item's length, matching cobc 3.2 (`LENGTH(S(2:4))` == `LENGTH OF S`). A nested FUNCTION as an argument remains a fail-closed boundary. Found by the wide-net + FUNCTION-arg batteries (date/format intrinsics, ALLOCATE/FREE, MOVE JUSTIFIED, STRING POINTER overflow, INSPECT TALLYING+REPLACING already byte-identical). Front-end sweep 158/0.
+
 ## [0.8.28]
 - **DISPLAY/ACCEPT ENVIRONMENT + a clean build.** `DISPLAY ... UPON ENVIRONMENT-NAME` / `UPON ENVIRONMENT-VALUE` now set the runtime environment (a per-run override) with no stdout (previously printed to stdout); `ACCEPT ... FROM ENVIRONMENT-VALUE` / `FROM ENVIRONMENT "name"` read it back, so a set-then-get round-trips. Also a hygiene pass clearing all 12 compiler warnings (crate + test builds) -- unused imports/fn, dead initializers, unreachable arms; documentary constants and libcob-faithful flags kept under targeted #[allow]. SORT USING/GIVING and SEARCH ALL descending were already byte-identical. Front-end sweep 157/0.
 

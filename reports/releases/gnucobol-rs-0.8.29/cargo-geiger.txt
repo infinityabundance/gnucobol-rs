@@ -1,0 +1,15 @@
+status: not_run
+generated_at: 2026-06-21T20:10:42Z
+note: every shipped crate is #![forbid(unsafe_code)]
+
+
+     Removed 3300 files, 1.1GiB total
+    Checking gnucobol-rs-bdb-format v0.3.0
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/gnucobol_rs_bdb_format-830501674df76e84.d","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/libgnucobol_rs_bdb_format-830501674df76e84.rmeta","emit":"metadata"}
+    Checking gnucobol-rs v0.8.29 (/home/one/gnucobol-rs/crates/gnucobol-rs)
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/gnucobol_rs-e96eeea5fdf82bdf.d","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"/home/one/gnucobol-rs/target/debug/deps/libgnucobol_rs-e96eeea5fdf82bdf.rmeta","emit":"metadata"}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.09s
+error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" }, "/home/one/gnucobol-rs/crates/cobol-decimal-rs/src/lib.rs")
+
