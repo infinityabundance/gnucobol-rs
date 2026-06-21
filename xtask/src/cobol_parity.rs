@@ -134,6 +134,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p157_display_accept_environment.cob", "UPON ENVIRONMENT-NAME"),
     ("(intrinsic)", "FUNCTION arguments that are subscripted `f(A(i))` or reference-modified `f(S(s:l))`, and mixed literal+identifier lists -- the arg parser splits at top-level separators only, keeping each argument's own parens; `FUNCTION LENGTH` of a refmod is the BASE item length (cobc ignores the refmod). Boundary: a nested FUNCTION as an argument fails closed. Found by the FUNCTION-complex-arg battery", "sealed",
         "lab/corpus/frontend/p158_function_complex_args.cob", "MAX(A(1) A(2) A(3) A(4))"),
+    ("UNSTRING", "into binary (COMP/COMP-5) and packed (COMP-3) receivers -- the delimited segment is sized by the receiver's DIGIT width (not its physical byte length) and stored via the sealed alnum->binary/packed MOVE; COUNT/DELIMITER and mixed receiver lists work. Found by the FILE-PARITY section-B gap sweep", "sealed",
+        "lab/corpus/frontend/p159_unstring_binary_recv.cob", "INTO A COUNT C1 B C D"),
+    ("(JSON/XML)", "GENERATE `[ON EXCEPTION imp] [NOT ON EXCEPTION imp]` -- the handler blocks are parsed + dispatched; on success cobc runs NOT ON EXCEPTION ONLY when it is the sole handler (with both present it runs neither -- a 3.2 quirk reproduced). Found by the FILE-PARITY section-B gap sweep", "sealed",
+        "lab/corpus/frontend/p160_ml_generate_exception.cob", "NOT ON EXCEPTION"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

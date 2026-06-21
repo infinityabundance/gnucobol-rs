@@ -3127,16 +3127,34 @@ fn run_block(
                         while let Some(t) = toks.get(*pos) {
                             match t {
                                 Tok::Dot => break,
-                                Tok::Word(w) if w == "END-JSON" || w == "END-XML" => { *pos += 1; break; }
+                                Tok::Word(w) if w == "END-JSON" || w == "END-XML" => break,
+                                // ON EXCEPTION / NOT ON EXCEPTION begin the handler section (parsed below).
+                                Tok::Word(w) if w == "ON" && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "EXCEPTION") => break,
+                                Tok::Word(w) if w == "NOT" && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "ON") => break,
                                 // GENERATE/PARSE are the JSON/XML sub-verbs, SUPPRESS a clause keyword -- none ends the statement here.
                                 Tok::Word(w) if is_boundary(w) && !matches!(w.as_str(), "SUPPRESS" | "GENERATE" | "PARSE") => break,
                                 _ => { stmt.push(t.clone()); *pos += 1; }
                             }
                         }
+                        let on_exc = parse_ml_exception_handler(toks, pos, false);
+                        let not_exc = parse_ml_exception_handler(toks, pos, true);
+                        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-JSON" || w == "END-XML") {
+                            *pos += 1;
+                        }
                         if exec {
+                            // The supported JSON/XML GENERATE subset does not raise an exception. On success
+                            // cobc runs the NOT ON EXCEPTION handler ONLY when it is the SOLE handler; when an
+                            // ON EXCEPTION clause is also present cobc runs NEITHER branch (a 3.2 quirk we match).
                             exec_stmt(&verb, &stmt, fields, out, ctx)?;
                             if ctx.stop_run.get() {
                                 return Ok(true);
+                            }
+                            if on_exc.is_none() {
+                                if let Some(block) = &not_exc {
+                                    if run_handler(block, fields, out, ctx)? {
+                                        return Ok(true);
+                                    }
+                                }
                             }
                         }
                     }
@@ -3233,6 +3251,37 @@ fn at_size_terminator(toks: &[Tok], p: usize) -> bool {
 
 /// Parse an `[NOT] ON SIZE ERROR <statements>` handler at `*pos` (when `is_not`, the `NOT ON SIZE ERROR`
 /// form). Returns the handler statement tokens and advances `*pos` past them; `None` if the clause is absent.
+/// Parse a `[NOT] ON EXCEPTION <imperative>` handler block for JSON/XML GENERATE, mirroring
+/// [`parse_on_size_handler`]. The block runs to END-JSON / END-XML / `.` / a scope terminator / the other
+/// (`NOT ON`) handler.
+fn parse_ml_exception_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<Vec<Tok>> {
+    let mut p = *pos;
+    if is_not {
+        if !matches!(toks.get(p), Some(Tok::Word(w)) if w == "NOT") {
+            return None;
+        }
+        p += 1;
+    }
+    if !(matches!(toks.get(p), Some(Tok::Word(w)) if w == "ON")
+        && matches!(toks.get(p + 1), Some(Tok::Word(w)) if w == "EXCEPTION"))
+    {
+        return None;
+    }
+    p += 2;
+    let start = p;
+    while p < toks.len() {
+        match toks.get(p) {
+            None | Some(Tok::Dot) => break,
+            Some(Tok::Word(w)) if w.starts_with("END-") || SCOPE_ENDERS.contains(&w.as_str()) => break,
+            Some(Tok::Word(w)) if w == "NOT" && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON") => break,
+            _ => p += 1,
+        }
+    }
+    let block = toks[start..p].to_vec();
+    *pos = p;
+    Some(block)
+}
+
 fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<Vec<Tok>> {
     let mut p = *pos;
     if is_not {
@@ -6147,18 +6196,20 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
         // conversion). For these the field's byte length IS its character/digit width, so the substring
         // sizing is faithful. Binary/packed (COMP*) receivers fail closed: their PHYSICAL byte length is
         // narrower than the digit width, so the delimited-segment truncation here would diverge from cobc.
-        let is_num = match &f.storage {
-            Storage::Alpha(_) => false,
-            Storage::Numeric(a) if a.field_type == COB_TYPE_NUMERIC_DISPLAY => true,
-            Storage::Edited(..) => true,
-            Storage::Numeric(_) => return Err(RunError::Unsupported(format!(
-                "UNSTRING into binary/packed receiver `{n}` not in subset (physical-size vs digit-width)"
-            ))),
+        // (is_numeric_move, split_width). The split width is the receiver's CHARACTER/DIGIT count: for
+        // alphanumeric/DISPLAY/edited that is its byte length, but for binary/packed (COMP*) the physical
+        // byte length is narrower than the digit width, so the digit width drives the delimited-segment
+        // truncation; the segment is then stored via MOVE (the sealed alnum->binary/packed conversion).
+        let (is_num, width) = match &f.storage {
+            Storage::Alpha(_) => (false, f.bytes.len()),
+            Storage::Numeric(a) if a.field_type == COB_TYPE_NUMERIC_DISPLAY => (true, f.bytes.len()),
+            Storage::Edited(..) => (true, f.bytes.len()),
+            Storage::Numeric(a) => (true, (a.digits as usize).max(1)),
             _ => return Err(RunError::Unsupported(format!(
-                "UNSTRING into `{n}` (subset: alphanumeric, DISPLAY-numeric, or numeric-edited receivers)"
+                "UNSTRING into `{n}` (subset: alphanumeric, numeric, or numeric-edited receivers)"
             ))),
         };
-        sizes.push(f.bytes.len());
+        sizes.push(width);
         numeric.push(is_num);
     }
     // The scan begins at the POINTER's current value (default 1); the final pointer is written back after.
@@ -6688,10 +6739,8 @@ fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<Strin
 /// `{JSON|XML} GENERATE dest FROM source [COUNT IN c]` -- serialize the source group into `dest`. `NAME`/
 /// `SUPPRESS`/`ON EXCEPTION` are out of subset.
 fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx, xml: bool) -> Result<(), RunError> {
-    // ON EXCEPTION control flow and SUPPRESS WHEN <cond> stay out of subset (the rest of NAME/SUPPRESS is wired).
-    if stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "EXCEPTION")) {
-        return Err(RunError::Unsupported("JSON/XML GENERATE ON EXCEPTION not in subset".into()));
-    }
+    // ON EXCEPTION / NOT ON EXCEPTION are parsed + dispatched by the caller (this `stmt` is the core form);
+    // SUPPRESS WHEN <cond> stays out of subset (the rest of NAME/SUPPRESS is wired).
     let dest = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing destination".into())) };
     let fp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")).ok_or_else(|| RunError::Unsupported("JSON/XML GENERATE without FROM".into()))?;
     let source = match stmt.get(fp + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing source".into())) };

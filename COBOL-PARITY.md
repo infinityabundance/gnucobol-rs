@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **51 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 228 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **11 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **182 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **53 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 205 of them, de-duplicated from the 226 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 205: **9 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **182 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,18 +185,18 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 62 front-end sub-forms have been identified -- **51 sealed** (byte-identical to cobc, section A) and **11 still open** (fail-closed guards, section B). **Depth completion = 51/62 = 82.3%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 62 front-end sub-forms have been identified -- **53 sealed** (byte-identical to cobc, section A) and **9 still open** (fail-closed guards, section B). **Depth completion = 53/62 = 85.5%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
-| `INITIALIZE` | 3 | 27% |
-| `REPORT / ML GENERATE` | 3 | 27% |
-| `OCCURS / tables` | 2 | 18% |
-| `UNSTRING` | 2 | 18% |
-| `SET` | 1 | 9% |
-| **TOTAL** | **11 open** (+ 51 sealed = 62 identified) | **82.3% complete** |
+| `INITIALIZE` | 3 | 33% |
+| `OCCURS / tables` | 2 | 22% |
+| `REPORT / ML GENERATE` | 2 | 22% |
+| `SET` | 1 | 11% |
+| `UNSTRING` | 1 | 11% |
+| **TOTAL** | **9 open** (+ 53 sealed = 62 identified) | **85.5% complete** |
 
-### A. Sealed sub-forms (51) -- proven byte-identical to cobc
+### A. Sealed sub-forms (53) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -253,8 +253,10 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `EXIT` | `EXIT PERFORM` (break the nearest inline PERFORM), `EXIT PERFORM CYCLE` (skip to its next iteration -- innermost loop of a VARYING/AFTER), and `NEXT SENTENCE` (transfer to the statement after the next period, distinct from CONTINUE); found by the control-flow battery | `lab/corpus/frontend/p156_exit_perform_next_sentence.cob` |
 | `DISPLAY` | `DISPLAY ... UPON ENVIRONMENT-NAME` / `UPON ENVIRONMENT-VALUE` set the runtime environment (a per-run override) with NO stdout; `ACCEPT ... FROM ENVIRONMENT-VALUE` / `FROM ENVIRONMENT "name"` read it back (override before the real process env). Found by the SORT/ACCEPT battery | `lab/corpus/frontend/p157_display_accept_environment.cob` |
 | `(intrinsic)` | FUNCTION arguments that are subscripted `f(A(i))` or reference-modified `f(S(s:l))`, and mixed literal+identifier lists -- the arg parser splits at top-level separators only, keeping each argument's own parens; `FUNCTION LENGTH` of a refmod is the BASE item length (cobc ignores the refmod). Boundary: a nested FUNCTION as an argument fails closed. Found by the FUNCTION-complex-arg battery | `lab/corpus/frontend/p158_function_complex_args.cob` |
+| `UNSTRING` | into binary (COMP/COMP-5) and packed (COMP-3) receivers -- the delimited segment is sized by the receiver's DIGIT width (not its physical byte length) and stored via the sealed alnum->binary/packed MOVE; COUNT/DELIMITER and mixed receiver lists work. Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p159_unstring_binary_recv.cob` |
+| `(JSON/XML)` | GENERATE `[ON EXCEPTION imp] [NOT ON EXCEPTION imp]` -- the handler blocks are parsed + dispatched; on success cobc runs NOT ON EXCEPTION ONLY when it is the sole handler (with both present it runs neither -- a 3.2 quirk reproduced). Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p160_ml_generate_exception.cob` |
 
-### B. Feature gaps -- the genuine remaining work (11)
+### B. Feature gaps -- the genuine remaining work (9)
 
 Deliberate limits of an otherwise-wired verb. These are the real "what's missing" list; sealing one removes its row on the next regenerate (the gate enforces it).
 
@@ -266,11 +268,9 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 | `OCCURS / tables` | OCCURS DEPENDING ON on multi-dimension group `<x>` not in subset |
 |  | group-OCCURS `<x>` has a <x> descendant -- not in subset |
 | `REPORT / ML GENERATE` | GENERATE: `<x>` is not a report group in the subset |
-|  | JSON/XML GENERATE ON EXCEPTION not in subset |
 |  | JSON/XML GENERATE SUPPRESS WHEN not in subset |
 | `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
-| `UNSTRING` | UNSTRING into `<x>` (subset: alphanumeric, DISPLAY-numeric, or numeric-edited receivers) |
-|  | UNSTRING into binary/packed receiver `<x>` not in subset (physical-size vs digit-width) |
+| `UNSTRING` | UNSTRING into `<x>` (subset: alphanumeric, numeric, or numeric-edited receivers) |
 
 ### C. Boundary non-claims -- NOT TODOs (14)
 
