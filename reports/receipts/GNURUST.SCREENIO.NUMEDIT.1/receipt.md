@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.NUMEDIT.1` |
 | court | SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes |
-| crate_version | `0.8.32` |
+| crate_version | `0.8.33` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a numeric-edited positioned single-field DISPLAY (edited PIC FROM a numeric source) -> the exact ncurses byte stream that skips leading blanks + writes the edited run, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_numedit_sweep.sh` |

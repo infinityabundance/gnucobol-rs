@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.33]
+- **Space-separated multi-dimension subscripts.** `CELL(1 1)`, `CELL (3 2)` (space before paren), and 3-D `C3(2 1 2)` now work -- cobc accepts space OR comma subscript separators, but the subscript gluer was concatenating the lexer's split fragments with no separator (`C(2`+`3)` -> one subscript `23`). The gluer now keeps fragments distinct and handles a space before the paren; `subscripts()` splits on spaces or commas while keeping a relative `C(I + 1)` whole. Comma and 1-D forms unchanged. Front-end sweep 163/0.
+
 ## [0.8.32]
 - **`INITIALIZE ... TO VALUE [THEN] REPLACING`.** The combined form now works: TO VALUE restores each leaf that HAS a VALUE clause to its VALUE, and the trailing REPLACING sets each leaf WITHOUT a VALUE whose category is named to that value (a leaf with neither is left unchanged) -- matching cobc 3.2. Found by the FILE-PARITY section-B gap sweep. Front-end sweep 162/0.
 

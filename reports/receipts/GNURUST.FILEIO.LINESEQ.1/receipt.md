@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.LINESEQ.1` |
 | court | line-sequential WRITE config matrix |
-| crate_version | `0.8.32` |
+| crate_version | `0.8.33` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN OUTPUT + WRITE (LINE SEQUENTIAL) under COB_LS_FIXED/NULLS/VALIDATE -> appended bytes + FILE STATUS (00/71) |
 | replay command | `bash lab/oracle/lineseq_write_sweep.sh` |
