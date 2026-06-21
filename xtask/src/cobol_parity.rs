@@ -146,6 +146,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p163_space_subscripts.cob", "CELL(1 1)"),
     ("OCCURS / tables", "OCCURS DEPENDING ON the OUTER dimension of a multi-dimension group (`05 ROW OCCURS 1 TO 3 DEPENDING ON N. 10 CELL ... OCCURS 2.`): the interleaved buffer is built at MAX, element addressing uses the fixed MAX strides, and the LIVE image / FUNCTION LENGTH is counter*stride. Found by the FILE-PARITY section-B gap sweep", "sealed",
         "lab/corpus/frontend/p164_odo_multidim.cob", "OCCURS 1 TO 3 DEPENDING ON N"),
+    ("OCCURS / tables", "REDEFINES descendant inside a table element -- the redefining item overlays its target at the same element offset across all occurrences (flat group-OCCURS and multi-dimension); the layout places it at the target's offset and does not advance the element size. Found by the FILE-PARITY section-B gap sweep", "sealed",
+        "lab/corpus/frontend/p165_redefines_in_table.cob", "PARTS REDEFINES FULL"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

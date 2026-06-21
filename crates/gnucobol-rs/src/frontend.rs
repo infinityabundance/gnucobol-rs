@@ -2029,6 +2029,7 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
         let mut elem = 0usize;
         let mut leaves: Vec<LeafDesc> = Vec::new();
         let mut child_level: Option<u16> = None;
+        let mut child_off: HashMap<String, usize> = HashMap::new(); // child name -> start offset (for REDEFINES)
         let mut j = idx + 1;
         while j < ws.len() && ws[j].level > it.level {
             if ws[j].level == 88 || ws[j].level == 66 {
@@ -2037,11 +2038,20 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
             }
             let cl = *child_level.get_or_insert(ws[j].level);
             if ws[j].level == cl {
+                // A REDEFINES child overlays its target at the SAME offset and does NOT advance the element
+                // size (cobc requires the redefining item to be no larger). Others lay out sequentially.
+                let start = match &ws[j].redefines {
+                    Some(tgt) => *child_off.get(tgt).unwrap_or(&elem),
+                    None => elem,
+                };
                 let (cblock, cls) = nested_layout(ws, j, fields);
                 for (n, off, sz, dims) in cls {
-                    leaves.push((n, elem + off, sz, dims));
+                    leaves.push((n, start + off, sz, dims));
                 }
-                elem += cblock;
+                child_off.insert(ws[j].name.clone(), start);
+                if ws[j].redefines.is_none() {
+                    elem += cblock;
+                }
                 // skip past this child's whole subtree
                 j += 1;
                 while j < ws.len() && ws[j].level > cl {
@@ -2106,18 +2116,19 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                     if sib.level == 88 {
                         continue;
                     }
-                    let bad = if sib.redefines.is_some() {
-                        Some("REDEFINES")
-                    } else if sib.odo_counter.is_some() {
-                        Some("OCCURS DEPENDING ON")
-                    } else if sib.sync {
-                        Some("SYNCHRONIZED")
-                    } else {
-                        None
-                    };
-                    if let Some(b) = bad {
+                    // An OCCURS DEPENDING ON item INSIDE a fixed table is a cobc COMPILE ERROR ("'<group>'
+                    // cannot have an OCCURS clause due to '<item>'") -- a table of variable-length items is
+                    // not allowed; we fail closed the same way (validation, not a feature gap).
+                    if sib.odo_counter.is_some() {
                         return Err(RunError::Unsupported(format!(
-                            "group-OCCURS `{}` has a {b} descendant -- not in subset", it.name
+                            "group-OCCURS `{}` cannot contain an OCCURS DEPENDING ON item -- cobc rejects a table of variable-length items", it.name
+                        )));
+                    }
+                    // SYNCHRONIZED descendant (per-element alignment slack inside the strided buffer) is the
+                    // one remaining feature gap here; REDEFINES descendants are handled by the nested layout.
+                    if sib.sync {
+                        return Err(RunError::Unsupported(format!(
+                            "group-OCCURS `{}` has a SYNCHRONIZED descendant -- not in subset", it.name
                         )));
                     }
                 }
@@ -2221,9 +2232,17 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                         offset += slack;
                     }
                 }
+                // A REDEFINES child overlays its target at the SAME element offset and does NOT advance the
+                // element size; others are placed sequentially.
+                let this_off = match &sib.redefines {
+                    Some(tgt) => child_views.iter().find(|(n, _, _)| n == tgt).map(|(_, o, _)| *o).unwrap_or(offset),
+                    None => offset,
+                };
                 children.push(sib.name.clone());
-                child_views.push((sib.name.clone(), offset, csize)); // offset BEFORE the += below
-                offset += csize;
+                child_views.push((sib.name.clone(), this_off, csize));
+                if sib.redefines.is_none() {
+                    offset += csize;
+                }
             }
         }
         // A multi-dimension / group-of-group table: an immediate child has its OWN OCCURS (`C(i,j)`) or is
