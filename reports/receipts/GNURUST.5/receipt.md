@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.5` |
 | court | COPY / REPLACING expansion |
-| crate_version | `0.8.36` |
+| crate_version | `0.8.37` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | expanded source text-word stream |
 | replay command | `bash lab/oracle/copy_sweep.sh` |

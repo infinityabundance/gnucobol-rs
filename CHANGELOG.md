@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.37]
+- **XML GENERATE `SUPPRESS id WHEN {ZERO|SPACE|LOW-VALUE|HIGH-VALUE}` (7 section-B gaps left).** An XML element is now omitted only when its value matches the figurative (per-element conditional suppression). JSON GENERATE SUPPRESS WHEN is a cobc compile error, so it fails closed as validation. Also fixed a hang where `WHEN` (a scope terminator) ended the JSON/XML statement collector early and left stray tokens that spun the body loop. Front-end sweep 167/0.
+
 ## [0.8.36]
 - **SYNCHRONIZED descendant of a table element.** A SYNC field inside an OCCURS element now gets alignment slack before it (to its 2/4/8-byte boundary) and the element is padded up to the largest SYNC alignment so every occurrence stays aligned (e.g. `X` + `S9(9) COMP SYNC` + `X` -> a 12-byte element, not 9). The flat group-OCCURS branch tracks the max alignment and pads the stride; a SYNC field inside a multi-dimension table still fails closed. Front-end sweep 166/0.
 

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.8` |
 | court | VALUE initial-record image |
-| crate_version | `0.8.36` |
+| crate_version | `0.8.37` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | record-storage bytes |
 | replay command | `bash lab/oracle/value_sweep.sh` |
