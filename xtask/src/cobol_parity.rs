@@ -154,6 +154,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p167_xml_suppress_when.cob", "SUPPRESS A WHEN ZERO"),
     ("(JSON/XML)", "GENERATE content rendering -- an all-spaces alphanumeric keeps ONE space (`{\"A\":\" \"}` / `<A> </A>`, never empty), and XML element content escapes the double-quote (`&quot;`) as well as `& < >`. Found by the JSON/XML rendering battery", "sealed",
         "lab/corpus/frontend/p168_ml_content_render.cob", "&quot;"),
+    ("(JSON/XML)", "GENERATE over an elementary OCCURS table emits only the FIRST occurrence (cobc 3.2 behaviour -- `T OCCURS 3` -> `{\"T\":<T(1)>}`). A group-OCCURS source fails closed (the strided element-1 children are not addressable by the renderer). Found by the JSON/XML table battery", "sealed",
+        "lab/corpus/frontend/p169_ml_occurs.cob", "T PIC 99 OCCURS 3"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

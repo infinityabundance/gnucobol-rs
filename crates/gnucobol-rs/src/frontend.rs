@@ -6822,14 +6822,37 @@ fn json_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<Stri
             format!("{{{}}}", parts.join(","))
         }
         Some(Storage::Numeric(attr)) => {
-            let bytes = fields.get(name).map(|f| f.bytes.clone()).unwrap_or_default();
+            let bytes = ml_first_elem(fields.get(name)); // an elementary OCCURS emits only its first element
             source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
         }
         _ => {
-            let bytes = read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+            let bytes = ml_first_elem(read_field(fields, name).ok().flatten().as_ref());
             let esc = |b: u8| match b { b'"' => Some("\\\""), b'\\' => Some("\\\\"), 0x08 => Some("\\b"), 0x0c => Some("\\f"), b'\n' => Some("\\n"), b'\r' => Some("\\r"), b'\t' => Some("\\t"), _ => None };
             format!("\"{}\"", trimmed_escaped(&bytes, esc))
         }
+    }
+}
+
+/// The first-element bytes of a field for JSON/XML GENERATE: an elementary OCCURS table emits only its FIRST
+/// occurrence (cobc 3.2 behaviour), a scalar its whole value.
+fn ml_first_elem(f: Option<&Field>) -> Vec<u8> {
+    match f {
+        Some(f) => {
+            let occ = f.occurs.max(1);
+            let es = f.bytes.len() / occ;
+            f.bytes.get(..es).map(|s| s.to_vec()).unwrap_or_else(|| f.bytes.clone())
+        }
+        None => Vec::new(),
+    }
+}
+
+/// True if `name` or any descendant is a group-OCCURS (an OCCURS of a GROUP). cobc emits only the first
+/// occurrence, but the strided child-view model would render the wrong element, so JSON/XML GENERATE over a
+/// source containing one fails closed (elementary OCCURS, handled by [`ml_first_elem`], is fine).
+fn ml_has_group_occurs(name: &str, fields: &HashMap<String, Field>) -> bool {
+    match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
+        Some((Storage::Group { children }, occ)) => occ > 1 || children.iter().any(|c| ml_has_group_occurs(c, fields)),
+        _ => false,
     }
 }
 
@@ -6859,11 +6882,11 @@ fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<Strin
             .filter(|c| !suppress.contains(*c))
             .map(|c| xml_value(c, fields, rename, suppress)).collect::<String>(),
         Some(Storage::Numeric(attr)) => {
-            let bytes = fields.get(name).map(|f| f.bytes.clone()).unwrap_or_default();
+            let bytes = ml_first_elem(fields.get(name));
             source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
         }
         _ => {
-            let bytes = read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+            let bytes = ml_first_elem(read_field(fields, name).ok().flatten().as_ref());
             let esc = |b: u8| match b { b'&' => Some("&amp;"), b'<' => Some("&lt;"), b'>' => Some("&gt;"), b'"' => Some("&quot;"), _ => None };
             trimmed_escaped(&bytes, esc)
         }
@@ -6931,6 +6954,11 @@ fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx
                 i += 1;
             }
         }
+    }
+    // An elementary OCCURS emits only its first element (ml_first_elem); a group-OCCURS (OCCURS of a GROUP)
+    // would need the strided element-1 children, which the renderers cannot address -- fail closed.
+    if ml_has_group_occurs(&source, fields) {
+        return Err(RunError::Unsupported(format!("JSON/XML GENERATE: source `{source}` contains a group-OCCURS table (only an elementary OCCURS / scalar subset is supported)")));
     }
     let outer = rename.get(&source).map(String::as_str).unwrap_or(&source);
     let text = if xml { xml_value(&source, fields, &rename, &suppress) } else { format!("{{\"{}\":{}}}", outer, json_value(&source, fields, &rename, &suppress)) };
@@ -7109,7 +7137,7 @@ fn exec_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -
     let gname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("GENERATE: missing report group".into())) };
     let (rname, def) = match report_of_detail(ctx, &gname) {
         Some((n, d)) => (n.clone(), d.clone()),
-        None => return Err(RunError::Unsupported(format!("GENERATE: `{gname}` is not a report group in the subset"))),
+        None => return Err(RunError::Unsupported(format!("GENERATE: `{gname}` is not a report group -- cobc rejects GENERATE of a non-report item (\"data item is not part of a report\")"))),
     };
     let mut run = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)).unwrap_or_else(|| fresh_report_run(&def));
     let data_controls: Vec<String> = def.controls.iter().filter(|c| c.as_str() != "FINAL").cloned().collect();

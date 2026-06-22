@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **61 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 206 of them, de-duplicated from the 227 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 206: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **185 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **62 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 228 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **186 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,18 +185,17 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 68 front-end sub-forms have been identified -- **61 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 61/68 = 89.7%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 69 front-end sub-forms have been identified -- **62 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 62/69 = 89.9%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
 | `INITIALIZE` | 3 | 43% |
-| `OCCURS / tables` | 1 | 14% |
-| `REPORT / ML GENERATE` | 1 | 14% |
+| `OCCURS / tables` | 2 | 29% |
 | `SET` | 1 | 14% |
 | `UNSTRING` | 1 | 14% |
-| **TOTAL** | **7 open** (+ 61 sealed = 68 identified) | **89.7% complete** |
+| **TOTAL** | **7 open** (+ 62 sealed = 69 identified) | **89.9% complete** |
 
-### A. Sealed sub-forms (61) -- proven byte-identical to cobc
+### A. Sealed sub-forms (62) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -263,6 +262,7 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `OCCURS / tables` | SYNCHRONIZED descendant of a table element -- slack before each SYNC field aligns it to its boundary, and the element is padded up to the largest SYNC alignment so every occurrence stays aligned (e.g. `X` + `S9(9) COMP SYNC` + `X` -> 12-byte element). Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p166_sync_in_table.cob` |
 | `(JSON/XML)` | XML GENERATE `SUPPRESS id WHEN {ZERO\|SPACE\|LOW-VALUE\|HIGH-VALUE}` -- the element is omitted only when its value matches the figurative (per-element conditional suppression). JSON GENERATE SUPPRESS WHEN is a cobc compile error, so it fails closed as validation. Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p167_xml_suppress_when.cob` |
 | `(JSON/XML)` | GENERATE content rendering -- an all-spaces alphanumeric keeps ONE space (`{"A":" "}` / `<A> </A>`, never empty), and XML element content escapes the double-quote (`&quot;`) as well as `& < >`. Found by the JSON/XML rendering battery | `lab/corpus/frontend/p168_ml_content_render.cob` |
+| `(JSON/XML)` | GENERATE over an elementary OCCURS table emits only the FIRST occurrence (cobc 3.2 behaviour -- `T OCCURS 3` -> `{"T":<T(1)>}`). A group-OCCURS source fails closed (the strided element-1 children are not addressable by the renderer). Found by the JSON/XML table battery | `lab/corpus/frontend/p169_ml_occurs.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (7)
 
@@ -273,8 +273,8 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 | `INITIALIZE` | INITIALIZE ... <x> (subset: items [REPLACING cat BY val ...]) |
 |  | INITIALIZE ... TO VALUE subset is `items [WITH FILLER] <x> TO VALUE` |
 |  | INITIALIZE ... TO VALUE: trailing clause not in subset (only `[THEN] REPLACING ...`) |
-| `OCCURS / tables` | group-OCCURS `<x>` has a SYNCHRONIZED descendant in a multi-dimension table -- not in subset |
-| `REPORT / ML GENERATE` | GENERATE: `<x>` is not a report group in the subset |
+| `OCCURS / tables` | JSON/XML GENERATE: source `<x>` contains a group-OCCURS table (only an elementary OCCURS / scalar subset is supported) |
+|  | group-OCCURS `<x>` has a SYNCHRONIZED descendant in a multi-dimension table -- not in subset |
 | `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
 | `UNSTRING` | UNSTRING into `<x>` (subset: alphanumeric, numeric, or numeric-edited receivers) |
 
@@ -299,7 +299,7 @@ The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION,
 |  | FUNCTION <x>: COB_CURRENT_DATE has no year |
 |  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
 
-### D. Input-validation guards -- malformed input rejected (185)
+### D. Input-validation guards -- malformed input rejected (186)
 
 Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
 
@@ -397,7 +397,8 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 | `RENAMES (66)` | 66 level without RENAMES |
 |  | RENAMES THRU without an end data-name |
 |  | RENAMES without a start data-name |
-| `REPORT / ML GENERATE` | GENERATE: missing report group |
+| `REPORT / ML GENERATE` | GENERATE: `<x>` is not a report group -- cobc rejects GENERATE of a non-report item (\ |
+|  | GENERATE: missing report group |
 |  | JSON GENERATE SUPPRESS WHEN: cobc rejects WHEN on a JSON SUPPRESS (a compile error) |
 |  | JSON/XML GENERATE NAME: expected `data-name IS \ |
 |  | JSON/XML GENERATE without FROM |
