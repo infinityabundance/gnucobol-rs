@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **59 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 205 of them, de-duplicated from the 226 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 205: **8 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **183 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **60 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 206 of them, de-duplicated from the 227 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 206: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **185 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,18 +185,18 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 67 front-end sub-forms have been identified -- **59 sealed** (byte-identical to cobc, section A) and **8 still open** (fail-closed guards, section B). **Depth completion = 59/67 = 88.1%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 67 front-end sub-forms have been identified -- **60 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 60/67 = 89.6%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
-| `INITIALIZE` | 3 | 38% |
-| `REPORT / ML GENERATE` | 2 | 25% |
-| `OCCURS / tables` | 1 | 12% |
-| `SET` | 1 | 12% |
-| `UNSTRING` | 1 | 12% |
-| **TOTAL** | **8 open** (+ 59 sealed = 67 identified) | **88.1% complete** |
+| `INITIALIZE` | 3 | 43% |
+| `OCCURS / tables` | 1 | 14% |
+| `REPORT / ML GENERATE` | 1 | 14% |
+| `SET` | 1 | 14% |
+| `UNSTRING` | 1 | 14% |
+| **TOTAL** | **7 open** (+ 60 sealed = 67 identified) | **89.6% complete** |
 
-### A. Sealed sub-forms (59) -- proven byte-identical to cobc
+### A. Sealed sub-forms (60) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -261,8 +261,9 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `OCCURS / tables` | OCCURS DEPENDING ON the OUTER dimension of a multi-dimension group (`05 ROW OCCURS 1 TO 3 DEPENDING ON N. 10 CELL ... OCCURS 2.`): the interleaved buffer is built at MAX, element addressing uses the fixed MAX strides, and the LIVE image / FUNCTION LENGTH is counter*stride. Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p164_odo_multidim.cob` |
 | `OCCURS / tables` | REDEFINES descendant inside a table element -- the redefining item overlays its target at the same element offset across all occurrences (flat group-OCCURS and multi-dimension); the layout places it at the target's offset and does not advance the element size. Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p165_redefines_in_table.cob` |
 | `OCCURS / tables` | SYNCHRONIZED descendant of a table element -- slack before each SYNC field aligns it to its boundary, and the element is padded up to the largest SYNC alignment so every occurrence stays aligned (e.g. `X` + `S9(9) COMP SYNC` + `X` -> 12-byte element). Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p166_sync_in_table.cob` |
+| `(JSON/XML)` | XML GENERATE `SUPPRESS id WHEN {ZERO\|SPACE\|LOW-VALUE\|HIGH-VALUE}` -- the element is omitted only when its value matches the figurative (per-element conditional suppression). JSON GENERATE SUPPRESS WHEN is a cobc compile error, so it fails closed as validation. Found by the FILE-PARITY section-B gap sweep | `lab/corpus/frontend/p167_xml_suppress_when.cob` |
 
-### B. Feature gaps -- the genuine remaining work (8)
+### B. Feature gaps -- the genuine remaining work (7)
 
 Deliberate limits of an otherwise-wired verb. These are the real "what's missing" list; sealing one removes its row on the next regenerate (the gate enforces it).
 
@@ -273,7 +274,6 @@ Deliberate limits of an otherwise-wired verb. These are the real "what's missing
 |  | INITIALIZE ... TO VALUE: trailing clause not in subset (only `[THEN] REPLACING ...`) |
 | `OCCURS / tables` | group-OCCURS `<x>` has a SYNCHRONIZED descendant in a multi-dimension table -- not in subset |
 | `REPORT / ML GENERATE` | GENERATE: `<x>` is not a report group in the subset |
-|  | JSON/XML GENERATE SUPPRESS WHEN not in subset |
 | `SET` | SET subset is `SET name ... TO <x>` / `SET idx UP\|DOWN BY n` |
 | `UNSTRING` | UNSTRING into `<x>` (subset: alphanumeric, numeric, or numeric-edited receivers) |
 
@@ -298,7 +298,7 @@ The admitted GnuCOBOL 3.2 oracle itself cannot run these (COMMUNICATION SECTION,
 |  | FUNCTION <x>: COB_CURRENT_DATE has no year |
 |  | FUNCTION CURRENT-DATE requires a pinned COB_CURRENT_DATE (the live clock is a non-claim) |
 
-### D. Input-validation guards -- malformed input rejected (183)
+### D. Input-validation guards -- malformed input rejected (185)
 
 Not feature gaps: these reject malformed / incomplete source (a missing operand, an undeclared file, a non-integer subscript) that cobc also rejects. Listed so the inventory is provably COMPLETE: B + C + D together account for every distinct fail-closed form in the source (nothing cherry-picked).
 
@@ -397,11 +397,13 @@ Not feature gaps: these reject malformed / incomplete source (a missing operand,
 |  | RENAMES THRU without an end data-name |
 |  | RENAMES without a start data-name |
 | `REPORT / ML GENERATE` | GENERATE: missing report group |
+|  | JSON GENERATE SUPPRESS WHEN: cobc rejects WHEN on a JSON SUPPRESS (a compile error) |
 |  | JSON/XML GENERATE NAME: expected `data-name IS \ |
 |  | JSON/XML GENERATE without FROM |
 |  | JSON/XML GENERATE: missing destination |
 |  | JSON/XML GENERATE: missing source |
 |  | JSON: expected GENERATE/PARSE |
+|  | XML GENERATE SUPPRESS ... WHEN: expected a figurative (ZERO/SPACE/LOW-VALUE/HIGH-VALUE) |
 |  | XML: expected GENERATE |
 | `SEARCH` | SEARCH ALL `<x>`: no ASCENDING/DESCENDING KEY |
 |  | SEARCH ALL: WHEN must be a key equality (key = value) |

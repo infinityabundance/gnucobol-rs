@@ -3207,7 +3207,9 @@ fn run_block(
                                 Tok::Word(w) if w == "ON" && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "EXCEPTION") => break,
                                 Tok::Word(w) if w == "NOT" && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "ON") => break,
                                 // GENERATE/PARSE are the JSON/XML sub-verbs, SUPPRESS a clause keyword -- none ends the statement here.
-                                Tok::Word(w) if is_boundary(w) && !matches!(w.as_str(), "SUPPRESS" | "GENERATE" | "PARSE") => break,
+                                // SUPPRESS / GENERATE / PARSE are sub-verbs/clauses, and WHEN is the SUPPRESS
+                                // ... WHEN <fig> qualifier (a SCOPE_ENDER elsewhere) -- none ends the statement.
+                                Tok::Word(w) if is_boundary(w) && !matches!(w.as_str(), "SUPPRESS" | "GENERATE" | "PARSE" | "WHEN") => break,
                                 _ => { stmt.push(t.clone()); *pos += 1; }
                             }
                         }
@@ -6828,6 +6830,24 @@ fn json_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<Stri
     }
 }
 
+/// `XML GENERATE ... SUPPRESS id WHEN {ZERO | SPACE | LOW-VALUE | HIGH-VALUE}` -- true when `id`'s value
+/// matches the figurative, so the element is omitted. (JSON GENERATE does not allow SUPPRESS WHEN -- cobc
+/// rejects it at compile time; the caller fails that closed as validation.)
+fn ml_suppress_when(name: &str, fig: &str, fields: &HashMap<String, Field>) -> bool {
+    let Some(f) = read_field(fields, name).ok().flatten() else { return false };
+    let b = &f.bytes;
+    match fig {
+        "ZERO" | "ZEROS" | "ZEROES" => match &f.storage {
+            Storage::Numeric(a) => source_to_decimal(b, a).map(|d| dec_is_zero(&d)).unwrap_or(false),
+            _ => !b.is_empty() && b.iter().all(|&c| c == b'0' || c == b' '),
+        },
+        "SPACE" | "SPACES" => !b.is_empty() && b.iter().all(|&c| c == b' '),
+        "LOW-VALUE" | "LOW-VALUES" => !b.is_empty() && b.iter().all(|&c| c == 0x00),
+        "HIGH-VALUE" | "HIGH-VALUES" => !b.is_empty() && b.iter().all(|&c| c == 0xFF),
+        _ => false,
+    }
+}
+
 /// The XML element of a field: `<name>...</name>` with children nested, numeric/alnum content (XML-escaped),
 /// recursively over the group tree (GnuCOBOL `XML GENERATE`, no declaration).
 fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
@@ -6879,15 +6899,33 @@ fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx
             }
         }
     }
-    // SUPPRESS data-name [data-name]... -> a set of omitted fields. (SUPPRESS WHEN <cond> is out of subset.)
+    // SUPPRESS data-name [WHEN fig] [data-name ...] -> a set of omitted fields. A bare data-name is always
+    // suppressed; `id WHEN {ZERO|SPACE|LOW-VALUE|HIGH-VALUE}` suppresses it only when its value matches (XML
+    // only -- cobc rejects SUPPRESS WHEN for JSON GENERATE, so we fail that closed as validation).
     let mut suppress: std::collections::HashSet<String> = std::collections::HashSet::new();
     if let Some(sp) = sup_p {
-        let end = clause_end(sp);
-        for t in &stmt[sp + 1..end] {
-            match t {
-                Tok::Word(w) if w == "WHEN" => return Err(RunError::Unsupported("JSON/XML GENERATE SUPPRESS WHEN not in subset".into())),
-                Tok::Word(w) => { suppress.insert(w.clone()); }
-                _ => {}
+        let seg: Vec<&Tok> = stmt[sp + 1..clause_end(sp)].iter().collect();
+        let mut i = 0;
+        while i < seg.len() {
+            if let Tok::Word(id) = seg[i] {
+                i += 1;
+                if matches!(seg.get(i), Some(Tok::Word(w)) if *w == "WHEN") {
+                    if !xml {
+                        return Err(RunError::Unsupported("JSON GENERATE SUPPRESS WHEN: cobc rejects WHEN on a JSON SUPPRESS (a compile error)".into()));
+                    }
+                    let fig = match seg.get(i + 1) {
+                        Some(Tok::Word(w)) => w.clone(),
+                        _ => return Err(RunError::Unsupported("XML GENERATE SUPPRESS ... WHEN: expected a figurative (ZERO/SPACE/LOW-VALUE/HIGH-VALUE)".into())),
+                    };
+                    i += 2;
+                    if ml_suppress_when(id, &fig, fields) {
+                        suppress.insert(id.clone());
+                    }
+                } else {
+                    suppress.insert(id.clone());
+                }
+            } else {
+                i += 1;
             }
         }
     }
