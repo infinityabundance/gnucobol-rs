@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.43]
+- **MOVE CORRESPONDING now excludes FILLER** (as cobc does). cobrun matched FILLER items by name, so a blank source FILLER overwrote a separator FILLER in the target -- e.g. MOVE CORR of a `yyyy-mm-dd` date group blanked the `-` separators. Found running the real-world opencbs corpus (DF29 now matches; opencbs 26 -> 27 of 39). Front-end sweep 172/0.
+
 ## [0.8.42]
 - **A group-OCCURS table that REDEFINES a VALUE-bearing group now works** (the classic "table initialised via a redefinition" idiom). The redefining table previously got its own empty buffer, so subscripted reads saw spaces and SEARCH never matched. An authoritative descendant of a REDEFINES group (a group-OCCURS buffer or an elementary leaf) is now aliased to the redefined target's live image at its offset -- reads see the literal entries, SEARCH finds them, and a write through the redefinition lands in the shared storage. Found running the real-world opencbs corpus (DF08/DF23/DF26 now match cobc; opencbs 22 -> 26 of 39). Front-end sweep 171/0.
 
