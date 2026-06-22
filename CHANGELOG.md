@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.44]
+- **Fix a 0.8.40 regression: a multi-line expression continued with a leading `/` lost the divide.** The fixed-format comment detection treated any line-leading `*`/`/` as a full-line comment, but a deeply-indented line-leading `/` is the DIVISION operator continuing a multi-line `COMPUTE`. The comment indicator is now bounded to column <= 7, so `**** ...` banner comments still drop while an indented continuation `/` survives. Found running the real-world opencbs corpus (DF36 now matches; opencbs 27 -> 28 of 39). Front-end sweep 173/0.
+
 ## [0.8.43]
 - **MOVE CORRESPONDING now excludes FILLER** (as cobc does). cobrun matched FILLER items by name, so a blank source FILLER overwrote a separator FILLER in the target -- e.g. MOVE CORR of a `yyyy-mm-dd` date group blanked the `-` separators. Found running the real-world opencbs corpus (DF29 now matches; opencbs 26 -> 27 of 39). Front-end sweep 172/0.
 
