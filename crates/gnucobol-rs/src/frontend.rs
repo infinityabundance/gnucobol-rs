@@ -6793,6 +6793,9 @@ fn num_to_json(dec: &Decimal) -> String {
 fn trimmed_escaped(bytes: &[u8], escape: impl Fn(u8) -> Option<&'static str>) -> String {
     let mut end = bytes.len();
     while end > 0 && bytes[end - 1] == b' ' { end -= 1; }
+    // An all-spaces (non-empty) alphanumeric keeps ONE space, not the empty string -- cobc renders
+    // `{"A":" "}` / `<A> </A>`, never `{"A":""}` / `<A></A>`.
+    if end == 0 && !bytes.is_empty() { end = 1; }
     let mut s = String::new();
     for &b in &bytes[..end] {
         match escape(b) {
@@ -6861,7 +6864,7 @@ fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<Strin
         }
         _ => {
             let bytes = read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
-            let esc = |b: u8| match b { b'&' => Some("&amp;"), b'<' => Some("&lt;"), b'>' => Some("&gt;"), _ => None };
+            let esc = |b: u8| match b { b'&' => Some("&amp;"), b'<' => Some("&lt;"), b'>' => Some("&gt;"), b'"' => Some("&quot;"), _ => None };
             trimmed_escaped(&bytes, esc)
         }
     };
