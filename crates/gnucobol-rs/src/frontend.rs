@@ -165,6 +165,19 @@ enum Tok {
     Dot,
 }
 
+/// True if every byte from the start of the current line up to `i` is whitespace -- i.e. `bytes[i]` is the
+/// first non-blank character of its line (so a `*`/`/` there is a full-line comment indicator).
+fn line_blank_before(bytes: &[u8], i: usize) -> bool {
+    let mut j = i;
+    while j > 0 && bytes[j - 1] != b'\n' {
+        if !bytes[j - 1].is_ascii_whitespace() {
+            return false;
+        }
+        j -= 1;
+    }
+    true
+}
+
 fn lex(src: &str) -> Vec<Tok> {
     let mut toks = Vec::new();
     let bytes = src.as_bytes();
@@ -180,8 +193,10 @@ fn lex(src: &str) -> Vec<Tok> {
             }
             continue;
         }
-        if c == b'*' && (i == 0 || bytes[i - 1] == b'\n') {
-            // a full-line comment (col-1 '*' in free form, or a comment line); skip to EOL.
+        if (c == b'*' || c == b'/') && line_blank_before(bytes, i) {
+            // A full-line comment: `*` or `/` as the FIRST non-blank char of the line -- col-1 in free form
+            // AND the fixed-format column-7 indicator (`      *...` / `      /...`). A `/` elsewhere (DIVIDE)
+            // is not line-leading, so it tokenizes normally. Skip to end of line.
             while i < bytes.len() && bytes[i] != b'\n' {
                 i += 1;
             }
@@ -6501,6 +6516,61 @@ fn fkey(ctx: &Ctx, name: &str) -> String {
     ctx.file_defs.get(name).map(|d| d.assign.clone()).filter(|a| !a.is_empty()).unwrap_or_else(|| name.to_string())
 }
 
+/// Resolve a file's `ASSIGN` target to a real path on disk, mirroring cobc: an environment variable named
+/// exactly like the assign target overrides the path (cobc's `dd_`/env mapping), otherwise the target is a
+/// filename looked up in the current directory and then each `COB_FILE_PATH` entry. Returns the first that
+/// exists. Used to let `OPEN INPUT` read a pre-existing real data file (the in-memory store is the default).
+fn resolve_disk_file(assign: &str) -> Option<std::path::PathBuf> {
+    if assign.is_empty() {
+        return None;
+    }
+    let candidate = std::env::var(assign).unwrap_or_else(|_| assign.to_string());
+    let direct = std::path::Path::new(&candidate);
+    if direct.is_file() {
+        return Some(direct.to_path_buf());
+    }
+    if let Ok(fp) = std::env::var("COB_FILE_PATH") {
+        for dir in fp.split([':', ';']).filter(|d| !d.is_empty()) {
+            let c = std::path::Path::new(dir).join(&candidate);
+            if c.is_file() {
+                return Some(c);
+            }
+        }
+    }
+    None
+}
+
+/// Load a pre-existing real data file into logical records for `OPEN INPUT`/`I-O`: LINE SEQUENTIAL splits on
+/// newlines (CRLF tolerated), record-sequential / relative / indexed splits into fixed record-length chunks;
+/// each record is padded/truncated to the FD record width. Returns `None` when no such file exists on disk
+/// (the caller then keeps the deterministic in-memory behaviour -- a "file not found" status). READ-ONLY: it
+/// never writes the host filesystem, and the sweep's self-contained fixtures (no external files) are
+/// unaffected.
+fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option<Vec<Vec<u8>>> {
+    let path = resolve_disk_file(&def.assign)?;
+    let data = std::fs::read(path).ok()?;
+    let reclen = fields.get(&def.record).map(|f| f.bytes.len()).filter(|&n| n > 0)?;
+    let fit = |bytes: &[u8]| -> Vec<u8> {
+        let mut r = bytes.to_vec();
+        r.resize(reclen, b' '); // pad short / truncate long to the fixed record width
+        r
+    };
+    let records = match def.org {
+        FileOrg::LineSequential => {
+            let mut v: Vec<Vec<u8>> = data
+                .split(|&b| b == b'\n')
+                .map(|line| fit(line.strip_suffix(b"\r").unwrap_or(line)))
+                .collect();
+            if data.last() == Some(&b'\n') {
+                v.pop(); // a trailing newline yields a spurious empty final record
+            }
+            v
+        }
+        _ => data.chunks(reclen.max(1)).map(fit).collect(),
+    };
+    Some(records)
+}
+
 /// Set a file's `FILE STATUS` field (if declared) to a 2-character code (`"00"` ok, `"10"` end-of-file).
 fn set_file_status(fields: &mut HashMap<String, Field>, def: &FileDef, code: &str) {
     // FUNCTION EXCEPTION-FILE reflects the LAST I/O operation (regardless of a FILE STATUS clause).
@@ -6527,6 +6597,18 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
         // found": status "35", then any DECLARATIVES USE handler for the file runs.
         let exists = ctx.files.borrow().contains_key(&fkey(ctx, &name));
         if (mode == 1 || mode == 4) && !exists {
+            // Not in the in-memory store: load a pre-existing REAL file from disk if one exists (read-only,
+            // resolved from the ASSIGN target / COB_FILE_PATH). Absent -> the deterministic "file not found".
+            if let Some(records) = load_file_from_disk(&def, fields) {
+                let mut files = ctx.files.borrow_mut();
+                let st = files.entry(fkey(ctx, &name)).or_default();
+                st.records = records;
+                st.read_pos = 0;
+                st.mode = mode;
+                drop(files);
+                set_file_status(fields, &def, "00");
+                continue;
+            }
             set_file_status(fields, &def, "35");
             run_use_handler(&name, fields, out, ctx)?;
             continue;
@@ -9214,6 +9296,29 @@ mod tests {
 
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
+    }
+
+    #[test]
+    fn line_leading_star_slash_comment_is_dropped() {
+        // Fixed-format column-7 comment (`*`/`/` as the first non-blank char of the line), not just column 1.
+        // These real-world programs carry `      **** ... ****` banner lines; they must be dropped, not lexed.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n      **** banner level 77 verb ****\n      / page eject\n       PROCEDURE DIVISION.\n           DISPLAY \"OK\".\n           STOP RUN.\n";
+        assert_eq!(run(src), b"OK\n");
+    }
+
+    #[test]
+    fn open_input_reads_real_disk_file() {
+        use std::io::Write;
+        // OPEN INPUT of a pre-existing real file on disk (resolved via an env-named ASSIGN target) loads it
+        // into fixed records and READ returns them -- the safe real-file read (no host writes).
+        let path = std::env::temp_dir().join(format!("gcrs_fileread_{}.dat", std::process::id()));
+        std::fs::File::create(&path).unwrap().write_all(b"ABC       DEF       ").unwrap(); // 2 x 10-byte recs
+        std::env::set_var("GCRSTESTFILE", &path);
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO GCRSTESTFILE ORGANIZATION SEQUENTIAL FILE STATUS IS ST.\n       DATA DIVISION. FILE SECTION.\n       FD F. 01 R PIC X(10).\n       WORKING-STORAGE SECTION. 01 ST PIC XX. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY R(1:3) END-READ\n           END-PERFORM.\n           CLOSE F. STOP RUN.\n";
+        let out = run_program(src).expect("run");
+        std::env::remove_var("GCRSTESTFILE");
+        std::fs::remove_file(&path).ok();
+        assert_eq!(out, b"ABC\nDEF\n", "got {:?}", String::from_utf8_lossy(&out));
     }
 
     #[test]
