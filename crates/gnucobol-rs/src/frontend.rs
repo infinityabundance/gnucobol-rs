@@ -1069,7 +1069,13 @@ fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
             continue;
         }
         let colliding = counts.get(it.name.as_str()).copied().unwrap_or(0) > 1;
-        let key = if colliding && !pinned.contains(&it.name) && simple(it) && !chains[i].is_empty() {
+        let key = if it.name == "FILLER" {
+            // FILLER is never referenced by name, but two FILLERs under the SAME group share both the bare
+            // name AND the parent chain -- so a chain-based key still collides in the flat field map, which
+            // corrupts a group's byte distribution when the FILLERs differ in size (one field's length is
+            // used for every FILLER slot). Give each a UNIQUE key (bare_name stays "FILLER" via the \u{1}).
+            format!("FILLER\u{1}\u{4}{i}")
+        } else if colliding && !pinned.contains(&it.name) && simple(it) && !chains[i].is_empty() {
             format!("{}\u{1}{}", it.name, chains[i].join("\u{1}"))
         } else {
             it.name.clone()
@@ -10282,6 +10288,31 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
+    }
+
+    #[test]
+    fn multiple_different_sized_fillers_keep_group_offsets() {
+        // Oracle (cobc 3.2.0): a group MOVE into a record with several DIFFERENT-sized FILLERs lands each
+        // named child at the right offset (date splits 2021/09/15). Regression for FILLER key collision.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 WS-IN PIC X(19) VALUE '2021 09 15'.\n\
+                    01 WS-DATE.\n\
+                       05 YYYY PIC 9(04) VALUE ZERO.\n\
+                       05 FILLER PIC X(01) VALUE SPACES.\n\
+                       05 MM PIC 9(02) VALUE ZERO.\n\
+                       05 FILLER PIC X(01) VALUE SPACES.\n\
+                       05 DD PIC 9(02) VALUE ZERO.\n\
+                       05 FILLER PIC X(09) VALUE SPACES.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE WS-IN TO WS-DATE.\n\
+                        DISPLAY YYYY \"/\" MM \"/\" DD.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"2021/09/15\n");
     }
 
     #[test]

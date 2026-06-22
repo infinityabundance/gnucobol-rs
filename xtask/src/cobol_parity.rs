@@ -168,6 +168,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p174_leadingdot_decimal.cob", "U * .08"),
     ("(groups)", "a qualified name `X OF Y` as a COMPUTE target and as a PARENTHESISED operand `(X OF Z * .08)`: the qualified-name collapser strips the leading `(` the lexer glued onto the operand so the inner name still resolves to the right record. Found running the real-world opencbs corpus (DF06 qualified COMPUTE)", "sealed",
         "lab/corpus/frontend/p175_qualified_compute_operand.cob", "SALES-AMOUNT OF SALES-RECORD"),
+    ("(groups)", "several FILLERs of DIFFERENT sizes in one group each occupy their own slot -- they get unique field keys, so a group MOVE distributes bytes to the named children at the correct offsets (two same-parent FILLERs previously collided to one field, and the wrong length shifted every later child). Found running the real-world opencbs corpus (DF19 splits a `2021 09 15` date)", "sealed",
+        "lab/corpus/frontend/p176_multi_filler_group_move.cob", "FILLER PIC X(09)"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
