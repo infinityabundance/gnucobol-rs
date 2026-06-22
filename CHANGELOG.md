@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.38]
+- **JSON/XML GENERATE content rendering.** An all-spaces alphanumeric now renders as a single space (cobc: `{"A":" "}` / `<A> </A>`, never empty), and XML element content escapes the double quote as `&quot;` in addition to `& < >`. Found by a JSON/XML rendering battery (trailing-space trimming, signed/scaled numerics, edited fields, and `& < >` escaping were already byte-identical). Front-end sweep 168/0.
+
 ## [0.8.37]
 - **XML GENERATE `SUPPRESS id WHEN {ZERO|SPACE|LOW-VALUE|HIGH-VALUE}` (7 section-B gaps left).** An XML element is now omitted only when its value matches the figurative (per-element conditional suppression). JSON GENERATE SUPPRESS WHEN is a cobc compile error, so it fails closed as validation. Also fixed a hang where `WHEN` (a scope terminator) ended the JSON/XML statement collector early and left stray tokens that spun the body loop. Front-end sweep 167/0.
 

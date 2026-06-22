@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.OPEN.1` |
 | court | file runtime OPEN/CLOSE + lifecycle |
-| crate_version | `0.8.37` |
+| crate_version | `0.8.38` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | OPEN/WRITE/READ NEXT/CLOSE over a CobFile -> on-disk file image bytes + open/close FILE STATUS (00/05/31/35/38/41/42) |
 | replay command | `bash lab/oracle/open_sweep.sh` |
