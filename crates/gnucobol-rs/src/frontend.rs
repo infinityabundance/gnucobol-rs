@@ -165,8 +165,11 @@ enum Tok {
     Dot,
 }
 
-/// True if every byte from the start of the current line up to `i` is whitespace -- i.e. `bytes[i]` is the
-/// first non-blank character of its line (so a `*`/`/` there is a full-line comment indicator).
+/// True if `bytes[i]` is a full-line comment INDICATOR: the first non-blank character of its line AND within
+/// the fixed-format indicator area (column <= 7, i.e. at most 6 leading blanks -- the 6-column sequence area
+/// then the column-7 indicator). The column bound matters for `/`: a line-leading `/` in the indicator area
+/// is a fixed-format page-eject comment, but a deeply-indented `/` is the DIVISION operator continuing a
+/// multi-line expression (`COMPUTE r = (a * 100)` <newline> `   / (b - 1)`), which must NOT be dropped.
 fn line_blank_before(bytes: &[u8], i: usize) -> bool {
     let mut j = i;
     while j > 0 && bytes[j - 1] != b'\n' {
@@ -175,7 +178,7 @@ fn line_blank_before(bytes: &[u8], i: usize) -> bool {
         }
         j -= 1;
     }
-    true
+    i - j <= 6 // column (0-based) of `bytes[i]` is <= 6, i.e. column 7 or earlier
 }
 
 fn lex(src: &str) -> Vec<Tok> {
@@ -10270,6 +10273,29 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
+    }
+
+    #[test]
+    fn compute_slash_continuation_line_is_division_not_comment() {
+        // A continuation line beginning (deeply indented) with `/` is the DIVISION operator, not a
+        // fixed-format page-eject comment -- the divide must survive (regression for the column-7 indicator
+        // bound). (A * 100) / (B - 1) = 1202454651 / 11674329.16 ~= 103.00.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 A PIC S9(14)V99 VALUE 12024546.51.\n\
+                    01 B PIC S9(14)V99 VALUE 11674330.16.\n\
+                    01 R PIC S9(3)V99 VALUE ZERO COMP-3.\n\
+                    PROCEDURE DIVISION.\n\
+                        COMPUTE R ROUNDED = (A * 100)\n            / (B - 1.0)\n            END-COMPUTE.\n\
+                        DISPLAY \"R=\" R.\n\
+                        STOP RUN.\n",
+        );
+        // (the `/` and END-COMPUTE carry explicit leading spaces so Rust's `\`-continuation, which strips
+        // leading whitespace, leaves the `/` indented past column 7 -- a division operator, not a comment.)
+        assert_eq!(out, b"R=+103.00\n");
     }
 
     #[test]
