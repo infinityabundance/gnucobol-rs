@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.45]
+- **Leading-zero-less decimal literals (`.08`) and qualified operands in parentheses.** Found running the real-world opencbs corpus (DF06): `.08` (= 0.08, accepted by cobc) had its leading `.` lexed as a sentence terminator (truncating a COMPUTE); the lexer now keeps a `.` directly followed by a digit as the start of the literal. And a qualified name inside a parenthesised operand `(X OF Y ...)` lexes with the `(` glued on, so the qualified-name collapser now strips a leading `(` before resolving. DF06 now matches (opencbs 28 -> 29 of 39). Front-end sweep 175/0.
+
 ## [0.8.44]
 - **Fix a 0.8.40 regression: a multi-line expression continued with a leading `/` lost the divide.** The fixed-format comment detection treated any line-leading `*`/`/` as a full-line comment, but a deeply-indented line-leading `/` is the DIVISION operator continuing a multi-line `COMPUTE`. The comment indicator is now bounded to column <= 7, so `**** ...` banner comments still drop while an indented continuation `/` survives. Found running the real-world opencbs corpus (DF36 now matches; opencbs 27 -> 28 of 39). Front-end sweep 173/0.
 
