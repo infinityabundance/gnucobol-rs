@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **63 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 228 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **186 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **64 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 229 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **186 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,7 +185,7 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 70 front-end sub-forms have been identified -- **63 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 63/70 = 90.0%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 71 front-end sub-forms have been identified -- **64 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 64/71 = 90.1%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
@@ -193,9 +193,9 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | `OCCURS / tables` | 2 | 29% |
 | `SET` | 1 | 14% |
 | `UNSTRING` | 1 | 14% |
-| **TOTAL** | **7 open** (+ 63 sealed = 70 identified) | **90.0% complete** |
+| **TOTAL** | **7 open** (+ 64 sealed = 71 identified) | **90.1% complete** |
 
-### A. Sealed sub-forms (63) -- proven byte-identical to cobc
+### A. Sealed sub-forms (64) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -264,6 +264,7 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `(JSON/XML)` | GENERATE content rendering -- an all-spaces alphanumeric keeps ONE space (`{"A":" "}` / `<A> </A>`, never empty), and XML element content escapes the double-quote (`&quot;`) as well as `& < >`. Found by the JSON/XML rendering battery | `lab/corpus/frontend/p168_ml_content_render.cob` |
 | `(JSON/XML)` | GENERATE over an elementary OCCURS table emits only the FIRST occurrence (cobc 3.2 behaviour -- `T OCCURS 3` -> `{"T":<T(1)>}`). A group-OCCURS source fails closed (the strided element-1 children are not addressable by the renderer). Found by the JSON/XML table battery | `lab/corpus/frontend/p169_ml_occurs.cob` |
 | `(tables)` | a SPACE before a balanced subscript -- `E (I)`, `C (2)` -- is glued to the name (the gluer previously joined only lexer-SPLIT subscripts like `(1 1)`, not a balanced `(I)` after a space). Found running the real-world opencbs corpus (SEARCH / EVALUATE over `name (sub)`) | `lab/corpus/frontend/p170_space_before_subscript.cob` |
+| `OCCURS / tables` | a group-OCCURS table that REDEFINES a VALUE-bearing group (the classic "table initialised via a redefinition" idiom): the OCCURS descendants ALIAS the redefined target's live image at their offset -- reads see the literal entries, SEARCH matches them, and a write through the redefining table lands in the shared storage. Found running the real-world opencbs corpus (DF08/DF23/DF26 SEARCH a redefined table) | `lab/corpus/frontend/p171_redefines_group_occurs.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (7)
 

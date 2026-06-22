@@ -2103,6 +2103,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     NESTED_LEAF.with(|m| m.borrow_mut().clear());
     ALPHABETIC_FIELDS.with(|m| m.borrow_mut().clear());
     FIELD_VALUES.with(|m| m.borrow_mut().clear());
+    REDEF_VIEW.with(|m| m.borrow_mut().clear());
     for (gi, it) in prog.ws.iter().enumerate() {
         // An 88-level condition-name carries no storage -- record its parent + values for cond_rel.
         if let Some((parent, values, false_value)) = &it.condition {
@@ -2406,6 +2407,41 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             });
         }
     }
+    // REDEFINES over a GROUP: register each authoritative descendant store of a redefining GROUP so reads /
+    // writes alias the redefined target at the descendant's offset (e.g. a group-OCCURS table that REDEFINES
+    // a VALUE-bearing group -- the classic "table initialised via a redefinition" idiom). Only DIRECT
+    // children that are a group-OCCURS buffer or an elementary leaf are mapped (the common shape); a deeper
+    // plain sub-group is left as-is (no regression, just not aliased).
+    for (i, it) in prog.ws.iter().enumerate() {
+        let Some(target) = &it.redefines else { continue };
+        if !it.pic.is_empty() || it.float_kind.is_some() {
+            continue; // only a GROUP redefinition propagates to descendants
+        }
+        let mut child_level: Option<u16> = None;
+        let mut off = 0usize;
+        for sib in &prog.ws[i + 1..] {
+            if sib.level <= it.level {
+                break;
+            }
+            if sib.level == 88 {
+                continue;
+            }
+            let cl = *child_level.get_or_insert(sib.level);
+            if sib.level != cl {
+                continue;
+            }
+            let csz = field_len(&sib.name, &fields);
+            let is_group_occurs = group_occurs_lookup(&sib.name).is_some();
+            let is_leaf = fields.get(&sib.name).is_some_and(|f| !matches!(f.storage, Storage::Group { .. }));
+            if (is_group_occurs || is_leaf) && group_child_lookup(&sib.name).is_none() && nested_leaf_lookup(&sib.name).is_none() {
+                REDEF_VIEW.with(|m| m.borrow_mut().insert(sib.name.clone(), (target.clone(), off)));
+            }
+            // A nested REDEFINES child overlays at the same offset and does not advance it.
+            if sib.redefines.is_none() {
+                off += csz;
+            }
+        }
+    }
     // EXTERNAL items: VALUE is ignored and the storage is run-unit-shared by name (zero-filled on first
     // use). Load the shared value if another program already created it, else zero-fill + register.
     for it in &prog.ws {
@@ -2498,6 +2534,12 @@ thread_local! {
     /// the real process environment by `ACCEPT ... FROM ENVIRONMENT [-VALUE]` so a set-then-read round-trips
     /// deterministically without mutating the host env.
     static ENV_OVERRIDE: std::cell::RefCell<HashMap<String, Vec<u8>>> = std::cell::RefCell::new(HashMap::new());
+    /// REDEFINES over a GROUP: an authoritative descendant store of a redefining group (a group-OCCURS buffer
+    /// or an elementary leaf) -> (redefined target name, byte offset within that target). Reads and writes of
+    /// the descendant go through the target's live image at the offset, so a group-OCCURS table that
+    /// REDEFINES a VALUE-bearing group (the classic "table initialised via a redefinition" idiom) sees the
+    /// real values -- and a write through the redefinition lands in the shared storage.
+    static REDEF_VIEW: std::cell::RefCell<HashMap<String, (String, usize)>> = std::cell::RefCell::new(HashMap::new());
 }
 
 /// The current PROGRAM-ID (top of the program stack), empty outside any program body.
@@ -8354,6 +8396,35 @@ fn table_element(f: &Field, idx: usize, name: &str) -> Result<Field, RunError> {
     Ok(Field { storage: f.storage.clone(), bytes: f.bytes[start..start + elem].to_vec(), occurs: 1, redefines: None })
 }
 
+/// The live authoritative buffer for `name` -- normally `own` (its own bytes), but for a descendant store of
+/// a REDEFINES group (registered in [`REDEF_VIEW`]) the redefined target's current image sliced at the
+/// stored offset, padded/truncated to `own`'s length. So a group-OCCURS table that REDEFINES a VALUE-bearing
+/// group reads the live values, not its own (empty) buffer.
+fn redef_buffer(fields: &HashMap<String, Field>, name: &str, own: &[u8]) -> Vec<u8> {
+    if let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) {
+        let img = read_field(fields, &target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
+        let mut b = img.get(off..).map(|s| s.to_vec()).unwrap_or_default();
+        b.resize(own.len(), b' ');
+        return b;
+    }
+    own.to_vec()
+}
+
+/// Write `slice` at byte `local` within `name`'s authoritative storage. For a descendant store of a
+/// REDEFINES group (registered in [`REDEF_VIEW`]) this lands in the redefined target's shared image at the
+/// recorded offset and returns `Ok(true)`; otherwise `Ok(false)` and the caller performs its own write.
+fn redef_write(fields: &mut HashMap<String, Field>, name: &str, local: usize, slice: &[u8]) -> Result<bool, RunError> {
+    let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) else { return Ok(false) };
+    let mut img = read_field(fields, &target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
+    let at = off + local;
+    let n = slice.len().min(img.len().saturating_sub(at));
+    if n > 0 {
+        img[at..at + n].copy_from_slice(&slice[..n]);
+        set_field_image(fields, &target, &img)?;
+    }
+    Ok(true)
+}
+
 /// The bytes a field's storage operates on -- its own, or, for a `REDEFINES` alias, the target field's
 /// bytes viewed at this field's size (the first `size` bytes; REDEFINES width <= target width). A single
 /// alias hop (the common 01-level case).
@@ -8421,15 +8492,17 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
             }
             return Ok(Some(default_element(&cstore, csz)));
         }
-        let pf = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?;
+        let own = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?.bytes.clone();
+        let buf = redef_buffer(fields, &parent, &own); // alias the redefined target, if this group-OCCURS redefines one
         let start = (idx - 1) * stride + coff;
-        return Ok(Some(Field { storage: cstore, bytes: pf.bytes[start..start + csz].to_vec(), occurs: 1, redefines: None }));
+        return Ok(Some(Field { storage: cstore, bytes: buf[start..start + csz].to_vec(), occurs: 1, redefines: None }));
     }
     let Some(f) = fields.get(base) else { return Ok(None) };
     if let Storage::Group { children } = &f.storage {
         // group-OCCURS TABLE: bytes are the live interleaved buffer; `ENT(i)` via the unchanged table_element.
         if let Some((_stride, occ)) = group_occurs_lookup(base) {
-            let tbl = Field { storage: Storage::Group { children: children.clone() }, bytes: f.bytes.clone(), occurs: occ, redefines: None };
+            let buf = redef_buffer(fields, base, &f.bytes); // alias the redefined target, if this table redefines one
+            let tbl = Field { storage: Storage::Group { children: children.clone() }, bytes: buf, occurs: occ, redefines: None };
             return match sub {
                 // whole interleaved image (REDEFINES X(n) read / group DISPLAY/MOVE). OCCURS DEPENDING ON:
                 // the LIVE image is counter*stride (built at MAX); subscripted ENT(i) still uses MAX above.
@@ -8459,6 +8532,9 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
         }));
     }
     let mut f = aliased(fields, f);
+    if REDEF_VIEW.with(|m| m.borrow().contains_key(base)) {
+        f.bytes = redef_buffer(fields, base, &f.bytes); // elementary leaf of a REDEFINES group aliases the target
+    }
     // OCCURS DEPENDING ON: the live image is only `counter * elem` bytes (the field is built at MAX).
     if let Some((counter, elem)) = odo_lookup(base) {
         let n = resolve_int(&counter, fields).unwrap_or(0).max(0) as usize;
@@ -8483,6 +8559,16 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
 /// plain group (distributes to leaves via put_group_bytes), and an elementary/aliased field. Non-generic
 /// (so it can be called from the generic `write_field` without recursive monomorphization).
 fn set_field_image(fields: &mut HashMap<String, Field>, name: &str, img: &[u8]) -> Result<(), RunError> {
+    // A descendant store of a REDEFINES group: splice the image into the redefined target at the offset.
+    if let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) {
+        let mut t = read_field(fields, &target).ok().flatten().map(|x| x.bytes).unwrap_or_default();
+        let n = img.len().min(t.len().saturating_sub(off));
+        if n > 0 {
+            t[off..off + n].copy_from_slice(&img[..n]);
+            set_field_image(fields, &target, &t)?;
+        }
+        return Ok(());
+    }
     if group_occurs_lookup(name).is_some() {
         let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
         let n = img.len().min(f.bytes.len());
@@ -8570,24 +8656,30 @@ fn write_field(
             return Ok(());
         }
         let start = (idx - 1) * stride + coff;
-        let pf = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?;
-        let mut tmp = Field { storage: cstore, bytes: pf.bytes[start..start + csz].to_vec(), occurs: 1, redefines: None };
+        let own = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?.bytes.clone();
+        let cur = redef_buffer(fields, &parent, &own); // current element bytes (aliased target, if redefining)
+        let mut tmp = Field { storage: cstore, bytes: cur[start..start + csz].to_vec(), occurs: 1, redefines: None };
         apply(&mut tmp)?;
-        let pf = fields.get_mut(&parent).expect("parent present");
         let n = tmp.bytes.len().min(csz);
-        pf.bytes[start..start + n].copy_from_slice(&tmp.bytes[..n]);
+        if !redef_write(fields, &parent, start, &tmp.bytes[..n])? {
+            let pf = fields.get_mut(&parent).expect("parent present");
+            pf.bytes[start..start + n].copy_from_slice(&tmp.bytes[..n]);
+        }
         return Ok(());
     }
     // group-OCCURS TABLE write (whole image, or `ENT(i)` element), BEFORE the group-distribute branch.
     if let Some((stride, occ)) = group_occurs_lookup(base) {
         match sub {
             None => {
-                let f = fields.get(base).expect("present");
-                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: f.bytes.clone(), occurs: occ, redefines: None };
+                let own = fields.get(base).expect("present").bytes.clone();
+                let cur = redef_buffer(fields, base, &own);
+                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: cur, occurs: occ, redefines: None };
                 apply(&mut tmp)?;
-                let f = fields.get_mut(base).expect("present");
-                let n = tmp.bytes.len().min(f.bytes.len());
-                f.bytes[..n].copy_from_slice(&tmp.bytes[..n]);
+                let n = tmp.bytes.len().min(own.len());
+                if !redef_write(fields, base, 0, &tmp.bytes[..n])? {
+                    let f = fields.get_mut(base).expect("present");
+                    f.bytes[..n].copy_from_slice(&tmp.bytes[..n]);
+                }
                 return Ok(());
             }
             Some(s) => {
@@ -8601,13 +8693,16 @@ fn write_field(
                 }
                 // The whole group element is moved with alphanumeric (byte-copy) semantics -- shape an
                 // Alpha temp over the element bytes so move_into does a raw left-justified store.
-                let f = fields.get(base).expect("present");
+                let own = fields.get(base).expect("present").bytes.clone();
+                let cur = redef_buffer(fields, base, &own);
                 let start = (idx - 1) * stride;
-                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: f.bytes[start..start + stride].to_vec(), occurs: 1, redefines: None };
+                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: cur[start..start + stride].to_vec(), occurs: 1, redefines: None };
                 apply(&mut tmp)?;
-                let f = fields.get_mut(base).expect("present");
                 let n = tmp.bytes.len().min(stride);
-                f.bytes[start..start + n].copy_from_slice(&tmp.bytes[..n]);
+                if !redef_write(fields, base, start, &tmp.bytes[..n])? {
+                    let f = fields.get_mut(base).expect("present");
+                    f.bytes[start..start + n].copy_from_slice(&tmp.bytes[..n]);
+                }
                 return Ok(());
             }
         }
@@ -8644,6 +8739,37 @@ fn write_field(
             set_field_image(fields, &target, &tmp.bytes)?; // the alias covers the target's first `size` bytes
             return Ok(());
         }
+    }
+    // A descendant elementary leaf (incl. an elementary OCCURS leaf) of a REDEFINES group writes THROUGH to
+    // the redefined target's shared storage at the recorded offset (the read path already aliases it).
+    if REDEF_VIEW.with(|m| m.borrow().contains_key(base)) {
+        let f0 = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+        let (storage, occ_field, own) = (f0.storage.clone(), f0.occurs, f0.bytes.clone());
+        let occ = occ_field.max(1);
+        let elem = own.len() / occ;
+        let cur = redef_buffer(fields, base, &own);
+        match sub {
+            None => {
+                let mut tmp = Field { storage, bytes: cur, occurs: occ_field, redefines: None };
+                apply(&mut tmp)?;
+                redef_write(fields, base, 0, &tmp.bytes)?;
+            }
+            Some(s) => {
+                let idx = resolve_int(s, fields)
+                    .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize;
+                if idx < 1 || idx > occ {
+                    if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
+                        return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+                    }
+                    return Ok(());
+                }
+                let start = (idx - 1) * elem;
+                let mut tmp = Field { storage, bytes: cur[start..start + elem].to_vec(), occurs: 1, redefines: None };
+                apply(&mut tmp)?;
+                redef_write(fields, base, start, &tmp.bytes)?;
+            }
+        }
+        return Ok(());
     }
     match sub {
         None => {
@@ -10141,6 +10267,32 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
+    }
+
+    #[test]
+    fn group_occurs_redefines_value_group_read_and_write() {
+        // Oracle (cobc 3.2.0): a group-OCCURS table that REDEFINES a VALUE-bearing group reads the entries
+        // through the redefinition (902/903), and a write through the table lands in the shared storage (E5).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 G.\n\
+                       05 D.\n\
+                          10 E1 PIC X(3) VALUE '901'.\n\
+                          10 E2 PIC X(3) VALUE '902'.\n\
+                          10 E3 PIC X(3) VALUE '903'.\n\
+                    01 R REDEFINES G.\n\
+                       05 ENT OCCURS 3.\n\
+                          10 V PIC X(3).\n\
+                    PROCEDURE DIVISION.\n\
+                        DISPLAY \"v2=\" V(2) \" v3=\" V(3).\n\
+                        MOVE 'ZZZ' TO V(3).\n\
+                        DISPLAY \"E3=\" E3 \" v3=\" V(3).\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"v2=902 v3=903\nE3=ZZZ v3=ZZZ\n");
     }
 
     #[test]
