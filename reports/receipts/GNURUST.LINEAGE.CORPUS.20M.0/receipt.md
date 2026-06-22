@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.LINEAGE.CORPUS.20M.0` |
 | court | deterministic COBOL lineage corpus ENGINE (self-test) |
-| crate_version | `0.8.39` |
+| crate_version | `0.8.40` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | meta-engine: deterministic gen + Merkle + replay + isolation + findings path (no burn) |
 | replay command | `bash lab/oracle/lineage_engine_sweep.sh` |

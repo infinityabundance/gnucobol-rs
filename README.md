@@ -24,7 +24,7 @@ COBOL's bedrock is its *byte layout* — COMP-3, zoned decimal, edited PICTURE, 
 - A **C-ABI shim** (`gnucobol-rs-ffi`) — drop it in where you would link `libcob` (`cob_move`, `cob_get_int`, …).
 - A **compatibility court** — 137 sealed courts, each backed by a forensic case file and a one-command replay.
 
-> As of **gnucobol-rs 0.8.39** (2026-06): **13/13 `libcob` files** ported 1:1 · **110/110 intrinsics** in the runtime · **137 sealed courts** · MSRV **1.74**. The living current-state authority is [`STATUS.md`](STATUS.md) — when it disagrees with this page, it wins.
+> As of **gnucobol-rs 0.8.40** (2026-06): **13/13 `libcob` files** ported 1:1 · **110/110 intrinsics** in the runtime · **137 sealed courts** · MSRV **1.74**. The living current-state authority is [`STATUS.md`](STATUS.md) — when it disagrees with this page, it wins.
 
 ---
 
@@ -85,7 +85,7 @@ Prefer the runtime as a library? The same packed-decimal and MOVE semantics are 
 
 Live coverage is **generated and gated**, never hand-asserted — see [`COBOL-PARITY.md`](COBOL-PARITY.md) (every verb / intrinsic / clause and what runs) and [`FILE-PARITY.md`](FILE-PARITY.md) (every GnuCOBOL 3.2 source file, accounted for).
 
-> **As of gnucobol-rs 0.8.39 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 137 sealed courts.
+> **As of gnucobol-rs 0.8.40 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 137 sealed courts.
 
 | Layer | State |
 |---|---|

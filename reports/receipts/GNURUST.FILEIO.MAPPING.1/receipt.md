@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.MAPPING.1` |
 | court | COBOL filename mapping (env resolution) |
-| crate_version | `0.8.39` |
+| crate_version | `0.8.40` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a COBOL ASSIGN name + environment (DD_*/COB_FILE_PATH) -> the resolved filesystem path |
 | replay command | `bash lab/oracle/map_sweep.sh` |
