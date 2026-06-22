@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.41]
+- **A space before a balanced subscript (`E (I)`, `C (2)`) is now glued to the name.** Found running the real-world opencbs corpus: SEARCH / EVALUATE / PERFORM UNTIL over `name (sub)` (a space before the subscript) failed to parse because the subscript gluer only joined subscripts the lexer had split on internal whitespace, never a balanced `(I)` token after a space. Front-end sweep 170/0.
+
 ## [0.8.40]
 - **Real-world COBOL: external-file reads + fixed-format comments.** Validated end-to-end against cobc on the opencbs `DF*.CBL` suite -- byte-identical matches rose from 8 to 21 of 39. (1) `OPEN INPUT`/`I-O` now loads a pre-existing real data file from disk when present (resolved from the ASSIGN target / an env var of that name / `COB_FILE_PATH`), split into fixed records or lines sized to the FD; READ-ONLY (never writes the host FS), and absent files keep the deterministic in-memory behaviour so the sweep is unaffected. (2) The lexer treats `*`/`/` as a full-line comment when it is the first non-blank character of the line (the fixed-format column-7 indicator), not only at column 1. Front-end sweep 169/0; 955 lib tests.
 
