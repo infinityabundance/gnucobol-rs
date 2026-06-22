@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.46]
+- **Multiple different-sized FILLERs in one group no longer corrupt a group MOVE.** Two FILLERs under the same group collided to one field key, so the byte distribution used one FILLER's length for every FILLER slot and shifted all later children (e.g. MOVE `'2021 09 15'` into a yyyy/-/mm/-/dd record left mm/dd at zero). Each FILLER now gets a unique key. Found running the real-world opencbs corpus (DF19 date validity; opencbs 29 -> 30 of 39). Front-end sweep 176/0.
+
 ## [0.8.45]
 - **Leading-zero-less decimal literals (`.08`) and qualified operands in parentheses.** Found running the real-world opencbs corpus (DF06): `.08` (= 0.08, accepted by cobc) had its leading `.` lexed as a sentence terminator (truncating a COMPUTE); the lexer now keeps a `.` directly followed by a digit as the start of the literal. And a qualified name inside a parenthesised operand `(X OF Y ...)` lexes with the `(` glued on, so the qualified-name collapser now strips a leading `(` before resolving. DF06 now matches (opencbs 28 -> 29 of 39). Front-end sweep 175/0.
 

@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.ATTR.1` |
 | court | SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes |
-| crate_version | `0.8.45` |
+| crate_version | `0.8.46` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | an attributed positioned DISPLAY -> the exact ncurses SGR-wrapped field byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_attr_sweep.sh` |

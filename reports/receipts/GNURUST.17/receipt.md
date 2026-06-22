@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.17` |
 | court | cp500 EBCDIC zoned-decimal numeric DISPLAY decode |
-| crate_version | `0.8.45` |
+| crate_version | `0.8.46` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | raw EBCDIC zoned field bytes -> value |
 | replay command | `bash lab/oracle/ebcdic_num_sweep.sh` |

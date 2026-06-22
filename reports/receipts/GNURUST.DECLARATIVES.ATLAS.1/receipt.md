@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.DECLARATIVES.ATLAS.1` |
 | court | observed DECLARATIVES / USE error-handler atlas |
-| crate_version | `0.8.45` |
+| crate_version | `0.8.46` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | DECLARATIVES/USE runtime control: which op fires the handler, per-file binding, FILE STATUS visibility inside, resume-after-handler |
 | replay command | `bash lab/oracle/declaratives_atlas_sweep.sh` |
