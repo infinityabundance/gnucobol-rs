@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.42]
+- **A group-OCCURS table that REDEFINES a VALUE-bearing group now works** (the classic "table initialised via a redefinition" idiom). The redefining table previously got its own empty buffer, so subscripted reads saw spaces and SEARCH never matched. An authoritative descendant of a REDEFINES group (a group-OCCURS buffer or an elementary leaf) is now aliased to the redefined target's live image at its offset -- reads see the literal entries, SEARCH finds them, and a write through the redefinition lands in the shared storage. Found running the real-world opencbs corpus (DF08/DF23/DF26 now match cobc; opencbs 22 -> 26 of 39). Front-end sweep 171/0.
+
 ## [0.8.41]
 - **A space before a balanced subscript (`E (I)`, `C (2)`) is now glued to the name.** Found running the real-world opencbs corpus: SEARCH / EVALUATE / PERFORM UNTIL over `name (sub)` (a space before the subscript) failed to parse because the subscript gluer only joined subscripts the lexer had split on internal whitespace, never a balanced `(I)` token after a space. Front-end sweep 170/0.
 
