@@ -156,6 +156,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p168_ml_content_render.cob", "&quot;"),
     ("(JSON/XML)", "GENERATE over an elementary OCCURS table emits only the FIRST occurrence (cobc 3.2 behaviour -- `T OCCURS 3` -> `{\"T\":<T(1)>}`). A group-OCCURS source fails closed (the strided element-1 children are not addressable by the renderer). Found by the JSON/XML table battery", "sealed",
         "lab/corpus/frontend/p169_ml_occurs.cob", "T PIC 99 OCCURS 3"),
+    ("(tables)", "a SPACE before a balanced subscript -- `E (I)`, `C (2)` -- is glued to the name (the gluer previously joined only lexer-SPLIT subscripts like `(1 1)`, not a balanced `(I)` after a space). Found running the real-world opencbs corpus (SEARCH / EVALUATE over `name (sub)`)", "sealed",
+        "lab/corpus/frontend/p170_space_before_subscript.cob", "E (I)"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

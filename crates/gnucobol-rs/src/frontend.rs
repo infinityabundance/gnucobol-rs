@@ -1077,7 +1077,9 @@ fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
 /// `FUNCTION name(...)` call keeps its split form (resolve_functions tracks paren depth across tokens).
 fn glue_subscripts(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
     let unbalanced = |w: &str| w.matches('(').count() > w.matches(')').count();
-    if !toks.iter().any(|t| matches!(t, Tok::Word(w) if unbalanced(w))) {
+    // Any '(' may be a subscript needing a glue (a split `C(2`/`3)`, OR a `name (WS-SUB)` whose balanced
+    // subscript token follows a space) -- so process whenever the stream has a paren at all.
+    if !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.contains('('))) {
         return toks.to_vec();
     }
     // Glue `name(... )` (or `name (...)`) whose subscript list the lexer split on internal whitespace, into a
@@ -1093,9 +1095,11 @@ fn glue_subscripts(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
                 let prefix = &w[..w.find('(').unwrap()];
                 !prefix.is_empty() && idx.by_name.contains_key(prefix)
             };
+            // Case B: a bare known name, then a separate token opening the subscript -- whether the lexer
+            // split it unbalanced (`(1`/`1)`) or kept it balanced (`(WS-SUB)`) after a space.
             let case_b = !w.contains('(')
                 && idx.by_name.contains_key(w.as_str())
-                && matches!(toks.get(i + 1), Some(Tok::Word(w2)) if w2.starts_with('(') && unbalanced(w2));
+                && matches!(toks.get(i + 1), Some(Tok::Word(w2)) if w2.starts_with('('));
             if case_a || case_b {
                 // Seed `glued` with the name+paren start (case A: this token; case B: name directly + next token).
                 let (mut glued, mut j) = if case_a {
