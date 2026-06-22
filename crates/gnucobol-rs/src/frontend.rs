@@ -1190,6 +1190,9 @@ fn corr_leaves(fields: &HashMap<String, Field>, group: &str) -> Result<Vec<(Stri
     match fields.get(group).map(|f| &f.storage) {
         Some(Storage::Group { children }) => Ok(children.iter()
             .filter(|c| !c.starts_with('\u{3}') && !matches!(fields.get(*c).map(|f| &f.storage), Some(Storage::Group { .. })))
+            // FILLER never participates in CORRESPONDING (cobc excludes unnamed items) -- so a separator
+            // FILLER in the target keeps its own value (e.g. the `-` in a `yyyy-mm-dd` trailer date).
+            .filter(|c| bare_name(c) != "FILLER")
             .map(|c| (c.clone(), bare_name(c).to_string()))
             .collect()),
         Some(_) => Err(RunError::Unsupported(format!("CORRESPONDING operand `{group}` is not a group item"))),
@@ -10267,6 +10270,31 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
+    }
+
+    #[test]
+    fn move_corresponding_skips_filler() {
+        // Oracle (cobc 3.2.0): MOVE CORR moves like-NAMED leaves only; FILLER never corresponds, so the
+        // target's `-` separators survive (a blank source FILLER must NOT overwrite them).
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 S.\n\
+                       05 YYYY PIC 9(4) VALUE 2021.\n\
+                       05 FILLER PIC X VALUE SPACE.\n\
+                       05 MM PIC 9(2) VALUE 09.\n\
+                    01 D.\n\
+                       05 YYYY PIC 9(4) VALUE ZERO.\n\
+                       05 FILLER PIC X VALUE '-'.\n\
+                       05 MM PIC 9(2) VALUE ZERO.\n\
+                    PROCEDURE DIVISION.\n\
+                        MOVE CORRESPONDING S TO D.\n\
+                        DISPLAY \"D=[\" D \"]\".\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"D=[2021-09]\n");
     }
 
     #[test]

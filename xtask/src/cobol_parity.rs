@@ -160,6 +160,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p170_space_before_subscript.cob", "E (I)"),
     ("OCCURS / tables", "a group-OCCURS table that REDEFINES a VALUE-bearing group (the classic \"table initialised via a redefinition\" idiom): the OCCURS descendants ALIAS the redefined target's live image at their offset -- reads see the literal entries, SEARCH matches them, and a write through the redefining table lands in the shared storage. Found running the real-world opencbs corpus (DF08/DF23/DF26 SEARCH a redefined table)", "sealed",
         "lab/corpus/frontend/p171_redefines_group_occurs.cob", "REDEFINES WS-TABLE"),
+    ("(groups)", "MOVE CORRESPONDING moves only like-NAMED elementary leaves -- FILLER never corresponds, so a separator FILLER in the target keeps its own value (the `-` in a `yyyy-mm-dd` trailer date survives, instead of being overwritten by the source's blank FILLER). Found running the real-world opencbs corpus (DF29 MOVE CORR a date group)", "sealed",
+        "lab/corpus/frontend/p172_move_corr_skips_filler.cob", "MOVE CORRESPONDING WS-SRC"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
