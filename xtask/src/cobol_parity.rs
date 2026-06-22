@@ -164,6 +164,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p172_move_corr_skips_filler.cob", "MOVE CORRESPONDING WS-SRC"),
     ("(arithmetic)", "a multi-line arithmetic expression whose continuation line BEGINS with the division operator `/` (indented past the indicator area) keeps the divide -- cobc treats a deeply-indented line-leading `/` as DIVISION, only a column-7 `/` is a fixed-format page-eject comment. The comment-indicator detection is bounded to column <= 7. Found running the real-world opencbs corpus (DF36 split COMPUTE)", "sealed",
         "lab/corpus/frontend/p173_compute_slash_continuation.cob", "/ (B - 1.0)"),
+    ("(arithmetic)", "a numeric literal written with no leading zero (`.08` = 0.08, `.5` = 0.5) -- cobc accepts it; the lexer now keeps a `.` that is directly followed by a digit as the start of the literal instead of emitting it as a sentence terminator. Found running the real-world opencbs corpus (DF06 `COMPUTE ... * .08`)", "sealed",
+        "lab/corpus/frontend/p174_leadingdot_decimal.cob", "U * .08"),
+    ("(groups)", "a qualified name `X OF Y` as a COMPUTE target and as a PARENTHESISED operand `(X OF Z * .08)`: the qualified-name collapser strips the leading `(` the lexer glued onto the operand so the inner name still resolves to the right record. Found running the real-world opencbs corpus (DF06 qualified COMPUTE)", "sealed",
+        "lab/corpus/frontend/p175_qualified_compute_operand.cob", "SALES-AMOUNT OF SALES-RECORD"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

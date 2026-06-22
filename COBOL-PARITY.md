@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **66 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 229 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **186 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **68 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 207 of them, de-duplicated from the 229 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 207: **7 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **186 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,7 +185,7 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 73 front-end sub-forms have been identified -- **66 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 66/73 = 90.4%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 75 front-end sub-forms have been identified -- **68 sealed** (byte-identical to cobc, section A) and **7 still open** (fail-closed guards, section B). **Depth completion = 68/75 = 90.7%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
@@ -193,9 +193,9 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 | `OCCURS / tables` | 2 | 29% |
 | `SET` | 1 | 14% |
 | `UNSTRING` | 1 | 14% |
-| **TOTAL** | **7 open** (+ 66 sealed = 73 identified) | **90.4% complete** |
+| **TOTAL** | **7 open** (+ 68 sealed = 75 identified) | **90.7% complete** |
 
-### A. Sealed sub-forms (66) -- proven byte-identical to cobc
+### A. Sealed sub-forms (68) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -267,6 +267,8 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `OCCURS / tables` | a group-OCCURS table that REDEFINES a VALUE-bearing group (the classic "table initialised via a redefinition" idiom): the OCCURS descendants ALIAS the redefined target's live image at their offset -- reads see the literal entries, SEARCH matches them, and a write through the redefining table lands in the shared storage. Found running the real-world opencbs corpus (DF08/DF23/DF26 SEARCH a redefined table) | `lab/corpus/frontend/p171_redefines_group_occurs.cob` |
 | `(groups)` | MOVE CORRESPONDING moves only like-NAMED elementary leaves -- FILLER never corresponds, so a separator FILLER in the target keeps its own value (the `-` in a `yyyy-mm-dd` trailer date survives, instead of being overwritten by the source's blank FILLER). Found running the real-world opencbs corpus (DF29 MOVE CORR a date group) | `lab/corpus/frontend/p172_move_corr_skips_filler.cob` |
 | `(arithmetic)` | a multi-line arithmetic expression whose continuation line BEGINS with the division operator `/` (indented past the indicator area) keeps the divide -- cobc treats a deeply-indented line-leading `/` as DIVISION, only a column-7 `/` is a fixed-format page-eject comment. The comment-indicator detection is bounded to column <= 7. Found running the real-world opencbs corpus (DF36 split COMPUTE) | `lab/corpus/frontend/p173_compute_slash_continuation.cob` |
+| `(arithmetic)` | a numeric literal written with no leading zero (`.08` = 0.08, `.5` = 0.5) -- cobc accepts it; the lexer now keeps a `.` that is directly followed by a digit as the start of the literal instead of emitting it as a sentence terminator. Found running the real-world opencbs corpus (DF06 `COMPUTE ... * .08`) | `lab/corpus/frontend/p174_leadingdot_decimal.cob` |
+| `(groups)` | a qualified name `X OF Y` as a COMPUTE target and as a PARENTHESISED operand `(X OF Z * .08)`: the qualified-name collapser strips the leading `(` the lexer glued onto the operand so the inner name still resolves to the right record. Found running the real-world opencbs corpus (DF06 qualified COMPUTE) | `lab/corpus/frontend/p175_qualified_compute_operand.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (7)
 

@@ -231,9 +231,14 @@ fn lex(src: &str) -> Vec<Tok> {
             continue;
         }
         if c == b'.' {
-            toks.push(Tok::Dot);
-            i += 1;
-            continue;
+            // A `.` directly followed by a digit begins a numeric literal written with no leading zero
+            // (`.08` = 0.08, which cobc accepts) -- fall through to word-scanning so the whole literal is one
+            // token. Otherwise the `.` is a sentence/clause terminator.
+            if !matches!(bytes.get(i + 1), Some(n) if n.is_ascii_digit()) {
+                toks.push(Tok::Dot);
+                i += 1;
+                continue;
+            }
         }
         // a word: letters, digits, '-', '(', ')', '$', and PIC symbols up to whitespace/'.'/quote.
         let start = i;
@@ -1150,7 +1155,10 @@ fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
     let mut i = 0;
     while i < toks.len() {
         if let Tok::Word(w) = &toks[i] {
-            let (base, sub) = split_subscript(w);
+            // Strip any leading `(` the lexer glued on (a parenthesised operand `(SALES-AMOUNT OF REC ...`);
+            // it is re-attached after the qualified name is resolved, so the arithmetic parser still sees it.
+            let lp = w.bytes().take_while(|&b| b == b'(').count();
+            let (base, sub) = split_subscript(&w[lp..]);
             let mut quals: Vec<String> = Vec::new();
             let mut j = i + 1;
             while matches!(toks.get(j), Some(Tok::Word(q)) if q == "OF" || q == "IN") {
@@ -1174,7 +1182,8 @@ fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
                     None
                 };
                 if let Some(key) = resolved {
-                    let nw = match sub { Some(s) => format!("{key}({s})"), None => key };
+                    let inner = match sub { Some(s) => format!("{key}({s})"), None => key };
+                    let nw = if lp > 0 { format!("{}{}", "(".repeat(lp), inner) } else { inner };
                     out.push(Tok::Word(nw));
                     i = j;
                     continue;
@@ -10273,6 +10282,25 @@ mod tests {
                         STOP RUN.\n",
         );
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
+    }
+
+    #[test]
+    fn leading_dot_decimal_literal_and_qualified_compute_operand() {
+        // Oracle (cobc 3.2.0): `.08` is the numeric literal 0.08 (the leading `.` is not a terminator), and a
+        // qualified name resolves both as a COMPUTE target and inside a parenthesised operand.
+        let out = run(
+            "       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    DATA DIVISION.\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 SR. 05 SA PIC 9(4)V99 VALUE 200.00.\n\
+                    01 DL. 05 SA PIC 9(4)V99 VALUE ZERO.\n\
+                    PROCEDURE DIVISION.\n\
+                        COMPUTE SA OF DL = (SA OF SR * .08).\n\
+                        DISPLAY \"AMT=\" SA OF SR \" TAX=\" SA OF DL.\n\
+                        STOP RUN.\n",
+        );
+        assert_eq!(out, b"AMT=0200.00 TAX=0016.00\n");
     }
 
     #[test]
