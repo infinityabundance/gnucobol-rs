@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.39]
+- **JSON/XML GENERATE over an OCCURS table.** A table now emits only its FIRST occurrence, matching cobc 3.2 (`T OCCURS 3` -> `{"T":<T(1)>}`); cobrun was concatenating the whole table into one value. A group-OCCURS source fails closed. Separately, GENERATE of a non-report data item is reclassified as validation (cobc rejects it: "data item is not part of a report"). Front-end sweep 169/0.
+
 ## [0.8.38]
 - **JSON/XML GENERATE content rendering.** An all-spaces alphanumeric now renders as a single space (cobc: `{"A":" "}` / `<A> </A>`, never empty), and XML element content escapes the double quote as `&quot;` in addition to `& < >`. Found by a JSON/XML rendering battery (trailing-space trimming, signed/scaled numerics, edited fields, and `& < >` escaping were already byte-identical). Front-end sweep 168/0.
 

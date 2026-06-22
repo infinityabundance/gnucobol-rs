@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A reviewer/operator evidence bundle gathered from **existing generated artifacts**. It creates **no** new truth, certification, compliance, production approval, or customer acceptance.
 
-- crate (this repo): `gnucobol-rs 0.8.38`
+- crate (this repo): `gnucobol-rs 0.8.39`
 - artifacts gathered: **10** committed + pointers to runtime/operator artifacts
 - casefiles: **137**
 
@@ -17,8 +17,8 @@
 
 | id | path | sha256 |
 |---|---|---|
-| `status` | [`STATUS.md`](../../STATUS.md) | `958f3940abd2ed4e…` |
-| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `68b696c1f5536f8b…` |
+| `status` | [`STATUS.md`](../../STATUS.md) | `1382ed3c3f928552…` |
+| `changelog` | [`CHANGELOG.md`](../../CHANGELOG.md) | `f9f5e687f5278278…` |
 | `claim_ladder` | [`reports/claim-ladder.json`](../claim-ladder.json) | `828006a7fdd0fce1…` |
 | `negative_capabilities` | [`reports/negative-capabilities.json`](../negative-capabilities.json) | `ba21ad8dc55fb187…` |
 | `dsse_verification` | [`reports/signing/verification-report.json`](../signing/verification-report.json) | `daf501bd75de5e18…` |
