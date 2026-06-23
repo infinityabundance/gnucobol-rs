@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.CLASS.1 (court-casefile)
 
-**Verdict: PASS** · 46/46 pass, 0 fail · crate `gnucobol-rs` 0.8.49
+**Verdict: PASS** · 46/46 pass, 0 fail · crate `gnucobol-rs` 0.8.50
 
 - **Oracle:** cobc IF data-item IS <class> branch
 - **Byte domain(s):** alphanumeric field bytes -> class-condition truth

@@ -6,19 +6,20 @@
 # runs it without a `cobrun:` boundary error, stdout is byte-identical, AND exit codes agree.
 #
 # HONESTY: every non-MATCH outcome is either an explicit, reason-tagged SKIP or a real FAIL -- nothing is
-# silently dropped. Two committed allowlists keyed by program basename:
+# silently dropped. Three committed allowlists keyed by program basename:
 #   NOORACLE = deliberately-broken defect snippets the suite ships that cobc ITSELF cannot compile (no oracle
 #              baseline exists -> out of scope, not a port gap).
-#   NOTYET   = cobc-compilable programs cobrun does not YET match. Investigation (see the plan / receipt
-#              non_claims) shows every one is DOABLE -- cobc runs them all observably, so these are unbuilt
-#              targets, NOT permanent boundaries: external CALL to a module that genuinely does not exist
-#              (the faithful behaviour is a module-not-found error -- reproducible); variable-length / I-O /
-#              INDEXED real-file access (file-model work); a qualified+subscripted compound condition (parser
-#              work). The goal is to drive NOTYET to empty (MATCH 30->39), one verified conversion at a time.
-#              A NOTYET program is EXPECTED to NOT match yet; if one ever MATCHES, cobrun has grown to handle
-#              it -> the run FAILs as NOTYET-NOW-MATCHES, forcing a deliberate promotion (remove it from
-#              NOTYET + raise the receipt ratchet). The allowlist cannot mask a regression, and shrinking
-#              scope cannot inflate MATCH.
+#   BOUNDARY = cobc-compilable programs whose ONLY divergence is a surface the project explicitly DECLARES a
+#              non-claim, so matching them would contradict the thesis -- NOT deferred work. Currently the
+#              three external-CALL-to-a-missing-module programs: cobc runs the DISPLAYs then prints a libcob
+#              runtime DIAGNOSTIC on stderr + exits 1; the interpreter deliberately has its OWN error model
+#              (README: "cobc's diagnostic text is not reproduced byte-for-byte"), so reproducing libcob's
+#              stderr message verbatim is out of scope BY DESIGN.
+#   NOTYET   = cobc-compilable programs cobrun does not YET match but which ARE doable (a future conversion).
+#              Currently EMPTY -- every doable opencbs program has been driven to MATCH (DF22/02/03/05/25/46).
+#   A BOUNDARY/NOTYET program is EXPECTED to NOT match; if one ever MATCHES, the run FAILs as
+#   {BOUNDARY,NOTYET}-NOW-MATCHES, forcing a deliberate reclassification (and, for NOTYET, a receipt ratchet
+#   bump). The allowlists cannot mask a regression, and shrinking scope cannot inflate MATCH.
 #
 # Real third-party programs legitimately evolve across GnuCOBOL versions, so there is NO 3.1.2 differential
 # here (it would be brittle for zero conformance value); the court targets the admitted 3.2 oracle only.
@@ -33,32 +34,56 @@ CORPUS="$ROOT/lab/corpus/opencbs/repo/COBOL_Programs"
 COPYBOOKS="$ROOT/lab/corpus/opencbs/repo/COBOL_Copybooks"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 
-# Deliberately-broken / placeholder snippets that the admitted cobc itself rejects -> no oracle baseline.
+# Deliberately-broken DEFECT-DEMONSTRATION snippets the suite ships -- genuine COBOL errors (missing
+# PROGRAM-ID, syntax errors, undefined names) that the admitted cobc ITSELF rejects, so there is no oracle
+# baseline. Making them compile would mean editing the third-party fixtures to fix the very bugs they exist
+# to demonstrate, so they are out of scope (NOT a port gap).
 declare -A NOORACLE=(
-  [DF12TEST]="defect snippet: does not compile under cobc"  [DF13TEST]="defect snippet: does not compile under cobc"
-  [DF14TEST]="defect snippet: does not compile under cobc"  [DF15TEST]="defect snippet: does not compile under cobc"
-  [DF18TEST]="defect snippet: does not compile under cobc"  [DF20TEST]="defect snippet: does not compile under cobc"
-  [DF27TEST]="defect snippet: does not compile under cobc"  [DF31TEST]="defect snippet: does not compile under cobc"
-  [DF34TEST]="defect snippet: does not compile under cobc"  [DF35TEST]="defect snippet: does not compile under cobc"
-  [DF40TEST]="defect snippet: does not compile under cobc"  [DF41TEST]="defect snippet: does not compile under cobc"
-  [DF42TEST]="defect snippet: does not compile under cobc"  [DF45TEST]="defect snippet: does not compile under cobc"
+  [DF12TEST]="defect demo: syntax error (cobc rejects)"     [DF13TEST]="defect demo: undefined paragraph (cobc rejects)"
+  [DF14TEST]="defect demo: syntax error (cobc rejects)"     [DF15TEST]="defect demo: syntax error (cobc rejects)"
+  [DF20TEST]="defect demo: PROGRAM-ID header missing (cobc rejects)"  [DF27TEST]="defect demo: syntax error (cobc rejects)"
+  [DF34TEST]="defect demo: syntax error / bad level (cobc rejects)"   [DF35TEST]="defect demo: syntax error (cobc rejects)"
+  [DF40TEST]="defect demo: syntax error (cobc rejects)"     [DF41TEST]="defect demo: syntax error (cobc rejects)"
+  [DF42TEST]="defect demo: syntax error (cobc rejects)"
 )
-# cobc-compilable programs cobrun does not YET match -- all DOABLE targets (see header). Expected NON-MATCH for now.
-declare -A NOTYET=(
-  [DF18CALL]="CALL to a missing module: cobc emits a libcob 'module not found' DIAGNOSTIC on stderr -- reproducing a libcob runtime message byte-for-byte is a declared non-claim (soft boundary), so deferred"
-  [DF31CALL]="CALL to a missing module: libcob error-message reproduction is a declared non-claim (soft boundary), deferred"
-  [DF45CALL]="CALL to a missing module: libcob error-message reproduction is a declared non-claim (soft boundary), deferred"
-  [DF25TEST]="OPEN I-O: cobc leaves the FD record area as LOW-VALUES past the record so READ INTO carries a NUL tail; needs FD-record-area NUL init + physical-MAX-buffer READ-INTO semantics"
+# CALLEE SUBPROGRAMS (PROCEDURE DIVISION USING) -- not standalone-runnable, so cobc compiles them as MODULES
+# (cobc -m) and they are exercised through their callers (DF18/31/45CALL). cobrun runs them via separate-file
+# CALL resolution. SKIP'd as standalone; if one ever runs standalone-clean it FAILs SUBPROGRAM-RAN-STANDALONE.
+declare -A SUBPROGRAM=(
+  [DF18TEST]="callee subprogram of DF18CALL (compiled as a module; exercised via the caller)"
+  [DF31TEST]="callee subprogram of DF31CALL (compiled as a module; exercised via the caller)"
+  [DF45TEST]="callee subprogram of DF45CALL (compiled as a module; exercised via the caller)"
 )
+# Declared NON-CLAIM boundaries. EMPTY: the former external-CALL boundaries are now real separate-file CALLs.
+declare -A BOUNDARY=()
+# Doable-but-not-yet-converted programs. EMPTY: every doable opencbs program now MATCHes (39/39).
+declare -A NOTYET=()
+
+# Build the callee subprograms as cobc MODULES so the caller's CALL resolves them at runtime (cobc loads the
+# .so from COB_LIBRARY_PATH); cobrun resolves the same callees from their .CBL source via separate-file CALL.
+MODLIB="$TMP/modules"; mkdir -p "$MODLIB"
+for sp in "${!SUBPROGRAM[@]}"; do
+  cobc -m -fixed -I "$COPYBOOKS" -o "$MODLIB/$sp.so" "$CORPUS/$sp.CBL" 2>/dev/null || true
+done
+export COB_LIBRARY_PATH="$MODLIB"
 
 PASS=0; FAIL=0; SKIP=0
 shopt -s nullglob
 for cob in "$CORPUS"/DF*.CBL; do
   name="$(basename "$cob" .CBL)"
 
-  # 1. Out-of-scope: cobc itself cannot compile it (deliberately-broken snippet). Honest SKIP.
+  # 1. Out-of-scope: cobc itself cannot compile it (deliberately-broken defect demo). Honest SKIP.
   if [ -n "${NOORACLE[$name]:-}" ]; then
     echo "$name: SKIP (no-oracle: ${NOORACLE[$name]})"; SKIP=$((SKIP+1)); continue
+  fi
+  # 1b. Callee subprogram: compiled as a module above (exercised via its caller), not a standalone test.
+  if [ -n "${SUBPROGRAM[$name]:-}" ]; then
+    if [ -f "$MODLIB/$name.so" ]; then
+      echo "$name: SKIP (subprogram: ${SUBPROGRAM[$name]})"; SKIP=$((SKIP+1))
+    else
+      echo "$name: subprogram module FAILED to compile (cobc -m)"; FAIL=$((FAIL+1))
+    fi
+    continue
   fi
 
   # 2. Compile with cobc (fixed format; copybooks on cobc's -I, NOT cobrun's). A compile failure for a
@@ -87,7 +112,17 @@ for cob in "$CORPUS"/DF*.CBL; do
   matched=0
   [ -z "$(cat "$TMP/r.err")" ] && cmp -s "$TMP/o.out" "$TMP/r.out" && [ "$oec" = "$rec" ] && matched=1
 
-  # 4. NOT-YET-built (doable) target: expected NON-MATCH. If it now MATCHES, cobrun grew -> deliberate promotion.
+  # 4a. DECLARED NON-CLAIM boundary: expected NON-MATCH by design. If one ever MATCHES, the design changed ->
+  #     FAIL as BOUNDARY-NOW-MATCHES (force a deliberate reclassification, never a silent scope grab).
+  if [ -n "${BOUNDARY[$name]:-}" ]; then
+    if [ "$matched" = 1 ]; then
+      echo "$name: BOUNDARY-NOW-MATCHES ($name now matches cobc -- reclassify it out of BOUNDARY)"; FAIL=$((FAIL+1))
+    else
+      echo "$name: SKIP (boundary, non-claim: ${BOUNDARY[$name]})"; SKIP=$((SKIP+1))
+    fi
+    continue
+  fi
+  # 4b. NOT-YET-built (doable) target: expected NON-MATCH. If it now MATCHES, cobrun grew -> deliberate promotion.
   if [ -n "${NOTYET[$name]:-}" ]; then
     if [ "$matched" = 1 ]; then
       echo "$name: NOTYET-NOW-MATCHES ($name now matches cobc -- promote it out of NOTYET and raise min_match)"; FAIL=$((FAIL+1))

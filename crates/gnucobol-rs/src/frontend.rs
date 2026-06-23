@@ -6851,6 +6851,16 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     };
     for name in stmt[1..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
         let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?.clone();
+        // A VARIABLE-length FD record area is LOW-VALUES (NUL) until written -- cobc does not space-init it,
+        // and READ ... INTO later moves the PHYSICAL buffer (its tail past the record included). Reset the
+        // record's storage leaf to NUL at OPEN so a freshly-read short record carries cobc's NUL tail.
+        if def.varying_dep.is_some() {
+            let leaf = match fields.get(&def.record).map(|f| f.storage.clone()) {
+                Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.record.clone()),
+                _ => def.record.clone(),
+            };
+            if let Some(lf) = fields.get_mut(&leaf) { lf.bytes.iter_mut().for_each(|b| *b = 0); }
+        }
         // OPEN INPUT / I-O on a file that was never created (never OPEN OUTPUT'd / written) is "file not
         // found": status "35", then any DECLARATIVES USE handler for the file runs.
         let exists = ctx.files.borrow().contains_key(&fkey(ctx, &name));
@@ -8019,14 +8029,16 @@ fn exec_read(
                     if lf.bytes.len() < n {
                         lf.bytes.resize(n, b' ');
                     }
-                    lf.bytes[..n].copy_from_slice(&bytes);
+                    lf.bytes[..n].copy_from_slice(&bytes); // overwrite the front; the tail (LOW-VALUES from OPEN) persists
                 }
-                // READ ... INTO: an alphanumeric MOVE of the n record characters into the receiver,
-                // left-justified and space-padded/truncated to the receiver's width, driven from the raw
-                // record bytes (independent of how the FD record's ODO group reconstructs).
+                // READ ... INTO moves the PHYSICAL record area (its low-values tail past the just-read record
+                // included), NOT the logical recsize -- cobc copies the whole record buffer, so for a freshly
+                // read variable record the receiver carries cobc's NUL tail. Capped/space-padded to the
+                // receiver width (a longer receiver). Falls back to the raw record bytes if the leaf is absent.
                 if let Some(id) = &into {
-                    let tlen = read_field(fields, id)?.map(|f| f.bytes.len()).filter(|&n| n > 0).unwrap_or(n);
-                    let mut v = bytes.clone();
+                    let area = fields.get(&leaf).map(|f| f.bytes.clone()).unwrap_or_else(|| bytes.clone());
+                    let tlen = read_field(fields, id)?.map(|f| f.bytes.len()).filter(|&n| n > 0).unwrap_or(area.len());
+                    let mut v = area;
                     v.resize(tlen, b' ');
                     set_field_image(fields, id, &v)?;
                 }
@@ -8569,13 +8581,33 @@ fn resolve_functions(
     toks: &[Tok],
     fields: &mut HashMap<String, Field>,
 ) -> Result<Vec<Tok>, RunError> {
-    if !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION"))) {
+    let is_len = |t: Option<&Tok>| matches!(t, Some(Tok::Word(w)) if w.eq_ignore_ascii_case("LENGTH") || w.eq_ignore_ascii_case("BYTE-LENGTH"));
+    let has_len_of = toks.windows(2).any(|w| is_len(Some(&w[0])) && matches!(&w[1], Tok::Word(b) if b.eq_ignore_ascii_case("OF")));
+    if !has_len_of && !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION"))) {
         return Ok(toks.to_vec());
     }
     let mut out = Vec::new();
     let mut i = 0;
     let mut n = 0usize;
     while i < toks.len() {
+        // `LENGTH OF id` / `BYTE-LENGTH OF id` -- the special-register form (no FUNCTION keyword), usable as a
+        // numeric operand in ADD/COMPUTE/etc. Route it through the same intrinsic evaluator as FUNCTION LENGTH.
+        if is_len(Some(&toks[i]))
+            && matches!(toks.get(i + 1), Some(Tok::Word(w)) if w.eq_ignore_ascii_case("OF"))
+            && matches!(toks.get(i + 2), Some(Tok::Word(_)))
+        {
+            let fname = if let Tok::Word(w) = &toks[i] { w.clone() } else { unreachable!() };
+            let refw = if let Tok::Word(w) = &toks[i + 2] { w.clone() } else { unreachable!() };
+            let synth = vec![Tok::Word("FUNCTION".into()), Tok::Word(fname), Tok::Word(format!("({refw})")), Tok::Dot];
+            let ((bytes, attr), _next) = eval_function_call(&synth, 0, fields)?;
+            let name = format!("\u{2}FN{n}");
+            n += 1;
+            let storage = if attr.field_type >= 0x20 { Storage::Alpha(attr) } else { Storage::Numeric(attr) };
+            fields.insert(name.clone(), Field { storage, bytes, occurs: 0, redefines: None });
+            out.push(Tok::Word(name));
+            i += 3;
+            continue;
+        }
         if matches!(&toks[i], Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION")) {
             let ((bytes, attr), next) = eval_function_call(toks, i, fields)?;
             // \u{2} prefix (not \u{1}, which eval_cond reserves for string-literal markers).
@@ -9207,6 +9239,10 @@ fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has
 }
 
 fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+    // Resolve any FUNCTION reference or `LENGTH OF id` register in the operands into a temp field first, so
+    // `ADD LENGTH OF X TO Y` / `COMPUTE`-free arithmetic over intrinsics works (no-op if none present).
+    let stmt = resolve_functions(stmt, fields)?;
+    let stmt = &stmt[..];
     // ADD/SUBTRACT CORRESPONDING pairs elementary leaves between two groups BY NAME: `ADD CORR g1 TO g2`
     // does `g2.leaf += g1.leaf` for each like-named NUMERIC pair; `SUBTRACT CORR g1 FROM g2` subtracts.
     // (MULTIPLY/DIVIDE have no CORR form.) Only numeric leaves participate; others are skipped.

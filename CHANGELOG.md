@@ -9,6 +9,13 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.50]
+- **opencbs ELITE-REPLAY is now 39/39 -- every cobc-runnable program is byte-identical to cobc 3.2; NOTYET and BOUNDARY are EMPTY.** The remaining non-matches are 11 deliberately-broken DEFECT-DEMONSTRATION snippets that cobc itself rejects (missing PROGRAM-ID / syntax errors / undefined names) -- out of scope, not a port gap.
+- **Real separate-file CALL** (the former external-CALL "boundary" was wrong): on `CALL "NAME"` to a program not contained in the current source, cobrun resolves the sibling `NAME.CBL` file and runs it as another program unit (USING args bound by reference) -- mirroring cobc compiling the callee as a module and linking it. Drives DF18/31/45CALL to MATCH; the callees (DF18/31/45TEST) are subprograms compiled with `cobc -m`. (Not error-message faking -- the programs actually run.)
+- **`LENGTH OF` / `BYTE-LENGTH OF` special register** (no FUNCTION keyword) usable as a numeric operand in ADD/SUBTRACT/etc.; arithmetic verbs now resolve FUNCTION / register operands like COMPUTE does. Guard p185.
+- **`DF25TEST` (`OPEN I-O` + `READ ... INTO`):** a variable-length FD record area is LOW-VALUES (NUL) until written, and READ INTO moves the PHYSICAL record buffer (its NUL tail past the just-read record included), byte-identical to cobc.
+- The opencbs sweep gained a 3rd allowlist (SUBPROGRAM, callee modules) + builds them as `cobc -m`; the ELITE-REPLAY ratchet is raised to min_match 39. opencbs 39/0; front-end sweep 184/0; 970 lib tests; gates green.
+
 ## [0.8.49]
 - **Four more opencbs real-program conversions (ELITE-REPLAY MATCH 31 -> 35), all reading programs proven byte-identical to cobc 3.2:** `DF05TEST` (SORT with INPUT/OUTPUT PROCEDUREs over a real file), `DF02TEST` (a qualified+subscripted compound condition over a REDEFINES group-OCCURS), `DF03TEST` (`ORGANIZATION INDEXED` read of a real Berkeley DB file), and `DF46TEST` (`OPEN I-O` + `REWRITE`).
 - **Sound differential for writing programs + no corpus pollution.** The opencbs sweep now snapshots each `*TEST` program's data files, runs cobc, RESTORES them, then runs cobrun -- so both sides read byte-identical input even when cobc's REWRITE/WRITE mutates the on-disk fixture (cobrun is read-only to disk). DATA-generator programs still persist their fixtures.

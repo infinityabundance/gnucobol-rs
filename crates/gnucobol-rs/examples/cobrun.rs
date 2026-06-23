@@ -158,7 +158,112 @@ fn main() {
             std::process::exit(2);
         }
     };
-    let src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
+    return run_after_read(raw, path, fixed, dialect);
+}
+
+/// The `PROGRAM-ID name` units already present in `src` (uppercased), so a CALL to one of them is NOT
+/// resolved to a file (it is in-source / contained).
+fn program_units(src: &str) -> std::collections::HashSet<String> {
+    let up = src.to_ascii_uppercase();
+    let mut set = std::collections::HashSet::new();
+    let mut rest = up.as_str();
+    while let Some(p) = rest.find("PROGRAM-ID") {
+        rest = &rest[p + "PROGRAM-ID".len()..];
+        // skip the optional '.' and whitespace, then take the identifier (letters/digits/-).
+        let bytes = rest.as_bytes();
+        let mut i = 0;
+        while i < bytes.len() && (bytes[i].is_ascii_whitespace() || bytes[i] == b'.') {
+            i += 1;
+        }
+        let start = i;
+        while i < bytes.len() && (bytes[i].is_ascii_alphanumeric() || bytes[i] == b'-') {
+            i += 1;
+        }
+        if i > start {
+            set.insert(rest[start..i].to_string());
+        }
+        rest = &rest[i..];
+    }
+    set
+}
+
+/// Every `CALL "literal"` / `CALL 'literal'` program name in `src` (uppercased). `CALL identifier` (a
+/// data-name target) is skipped -- only a literal names a resolvable separate file.
+fn call_literals(src: &str) -> Vec<String> {
+    let up = src.to_ascii_uppercase();
+    let mut out = Vec::new();
+    let mut rest = up.as_str();
+    let mut off = 0usize;
+    while let Some(p) = rest[off..].find("CALL") {
+        let at = off + p;
+        // require a word boundary before CALL (start or non-identifier char) so we don't match inside a word.
+        let prev_ok = at == 0 || !(up.as_bytes()[at - 1].is_ascii_alphanumeric() || up.as_bytes()[at - 1] == b'-');
+        let mut j = at + 4;
+        let b = up.as_bytes();
+        while j < b.len() && b[j].is_ascii_whitespace() {
+            j += 1;
+        }
+        if prev_ok && j < b.len() && (b[j] == b'"' || b[j] == b'\'') {
+            let q = b[j];
+            let s = j + 1;
+            let mut e = s;
+            while e < b.len() && b[e] != q {
+                e += 1;
+            }
+            if e <= b.len() {
+                let name = up[s..e].trim().to_string();
+                if !name.is_empty() {
+                    out.push(name);
+                }
+            }
+        }
+        off = at + 4;
+    }
+    out
+}
+
+/// Resolve separate-file CALLs by appending each called sibling source as an extra program unit.
+fn resolve_separate_calls(mut src: String, dir: &std::path::Path, fixed: bool) -> String {
+    let exts = ["CBL", "cbl", "COB", "cob", "Cob", "Cbl"];
+    let mut present: std::collections::HashSet<String> = program_units(&src);
+    loop {
+        let mut added = false;
+        for name in call_literals(&src) {
+            if present.contains(&name) {
+                continue;
+            }
+            for ext in &exts {
+                let cand = dir.join(format!("{name}.{ext}"));
+                if cand.is_file() {
+                    if let Ok(raw) = std::fs::read_to_string(&cand) {
+                        let unit = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
+                        src.push('\n');
+                        src.push_str(&unit);
+                        present.insert(name.clone());
+                        added = true;
+                    }
+                    break;
+                }
+            }
+            // mark as seen even if no file found, so an external (.so-only) CALL is not retried each pass.
+            present.insert(name);
+        }
+        if !added {
+            break;
+        }
+    }
+    src
+}
+
+fn run_after_read(raw: String, path: String, fixed: bool, dialect: Dialect) -> ! {
+    let mut src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
+    // Separate-file CALL: a `CALL "NAME"` to a program that is not a unit in THIS source is resolved to a
+    // sibling NAME.<ext> file (mirroring cobc compiling the callee as a module and linking it at the CALL).
+    // Append each resolved callee as another program unit so cobrun's CALL dispatch executes the real
+    // subprogram (USING args bound by position). Transitive + cycle-safe.
+    if let Some(dir) = std::path::Path::new(&path).parent() {
+        src = resolve_separate_calls(src, dir, fixed);
+    }
     // Record the source path for FUNCTION MODULE-SOURCE (cobc embeds the source name it was given).
     gnucobol_rs::frontend::set_source_file(&path);
     // DISPLAY ... UPON PRINTER redirect: when COB_DISPLAY_PRINT_FILE is set, libcob diverts UPON PRINTER

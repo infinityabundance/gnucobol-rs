@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SIZE.ERROR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.49",
+  "crate_version": "0.8.50",
   "damage_if_overclaimed": "assuming overflow keeps the high digits (or that ON SIZE ERROR still stores something) corrupts amounts silently when a computed value exceeds its PICTURE",
   "hash_chain": {
-    "inputs_sha256": "30e2624a5a7eef45a50f2927d457f5fd08e4ce786f856ea3b14e4d9dac22c96f"
+    "inputs_sha256": "8fc2fe61c8d7a02d3e0b2ea840adba06bfa75b7809988eaa8c110b8e6cddc943"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "2fb1c70dfb1fe0e46a7455925ca0718731e1e3b150fa7a566e0241e5468fd766",
-    "receipt_sha256": "e77270915e4a71bfc0ef0600c09029d6a56615c4141289985fcf134b335b5ed7"
+    "receipt_sha256": "4ee9316fd537479d5eec3513f11a7472b953102b90b8964f80f212b2ecb45e86"
   },
   "kind": "court-casefile",
   "lie_prevented": [
