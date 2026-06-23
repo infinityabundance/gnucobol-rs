@@ -302,6 +302,13 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
   else
     bad "GAP-ANALYSIS.md: drift (run \`cargo run -p xtask -- gap-analysis generate\`)"; cat /tmp/_ga_check
   fi
+  # ARCHIVE-ARCHAEOLOGY: the curated, copyright-stripped Archive.org findings atlas is generated from
+  # reports/archaeology/archive-findings.json (no committed verbatim quotes) and must stay fresh.
+  if ( cd "$ROOT" && cargo run -q -p xtask -- archaeology check ) >/tmp/_arch_check 2>&1; then
+    note "ARCHIVE-ARCHAEOLOGY: curated Archive.org findings atlas fresh (no committed source quotes)"
+  else
+    bad "ARCHIVE-ARCHAEOLOGY.md: drift (run \`cargo run -p xtask -- archaeology generate\`)"; cat /tmp/_arch_check
+  fi
   # Config custody: root config/ is the byte-for-byte GnuCOBOL-3.2 config tree at the repo root
   # (mirrors the GnuCOBOL distribution layout). The crate bundles the runtime subset, proven to parse
   # natively by the `config_files_parse_natively` test; verify every config file the crate ships is
