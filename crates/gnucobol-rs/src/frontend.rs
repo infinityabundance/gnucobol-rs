@@ -2068,6 +2068,7 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
     } else {
         let mut elem = 0usize;
         let mut leaves: Vec<LeafDesc> = Vec::new();
+        let mut max_align = 1usize; // largest SYNCHRONIZED alignment among descendants (1 = none)
         let mut child_level: Option<u16> = None;
         let mut child_off: HashMap<String, usize> = HashMap::new(); // child name -> start offset (for REDEFINES)
         let mut j = idx + 1;
@@ -2078,6 +2079,18 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
             }
             let cl = *child_level.get_or_insert(ws[j].level);
             if ws[j].level == cl {
+                // A SYNCHRONIZED elementary child aligns the running offset (slack before it) to its natural
+                // boundary, and bumps the element's max alignment so the element size is padded below -- so
+                // every occurrence of a multi-dimension table keeps its SYNC fields aligned (cobc layout).
+                if ws[j].sync {
+                    let align = fields.get(&ws[j].name).map(sync_align).unwrap_or(1);
+                    if align > 1 {
+                        max_align = max_align.max(align);
+                        if ws[j].redefines.is_none() {
+                            elem = elem.div_ceil(align) * align;
+                        }
+                    }
+                }
                 // A REDEFINES child overlays its target at the SAME offset and does NOT advance the element
                 // size (cobc requires the redefining item to be no larger). Others lay out sequentially.
                 let start = match &ws[j].redefines {
@@ -2100,6 +2113,10 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
             } else {
                 j += 1;
             }
+        }
+        // Pad the element to its largest SYNC alignment so each occurrence stays aligned (no-op when none).
+        if max_align > 1 {
+            elem = elem.div_ceil(max_align) * max_align;
         }
         if it.occurs > 1 {
             let occ = it.occurs;
@@ -2288,13 +2305,7 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         // itself a sub-group (`A(i)` reaching a deeper leaf). Build the interleaved buffer via the recursive
         // layout and register each leaf with its full (occurs, stride) dims in NESTED_LEAF.
         if it.occurs > 1 && (has_occurs_child || has_subgroup_child) {
-            // A SYNCHRONIZED leaf inside a MULTI-DIMENSION table would need per-element alignment in the
-            // recursive nested layout (which models none); fail closed (the FLAT case is handled below).
-            if max_align > 1 {
-                return Err(RunError::Unsupported(format!(
-                    "group-OCCURS `{}` has a SYNCHRONIZED descendant in a multi-dimension table -- not in subset", it.name
-                )));
-            }
+            // (SYNCHRONIZED descendants are now handled by nested_layout, which inserts per-element slack.)
             // Skip the intermediate sub-groups in this subtree (their leaves are addressed via NESTED_LEAF).
             let mut k = i + 1;
             while k < prog.ws.len() && prog.ws[k].level > it.level {
