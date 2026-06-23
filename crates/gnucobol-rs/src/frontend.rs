@@ -6399,11 +6399,18 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
         // truncation; the segment is then stored via MOVE (the sealed alnum->binary/packed conversion).
         let (is_num, width) = match &f.storage {
             Storage::Alpha(_) => (false, f.bytes.len()),
+            // A GROUP receiver is treated as alphanumeric over its full byte image: cobc stores the
+            // delimited segment left-justified, space-padded to the group's byte length -- identical to a
+            // PIC X of the same size. Sized by the group's byte length and written raw (the else branch).
+            Storage::Group { .. } => (false, f.bytes.len()),
             Storage::Numeric(a) if a.field_type == COB_TYPE_NUMERIC_DISPLAY => (true, f.bytes.len()),
             Storage::Edited(..) => (true, f.bytes.len()),
             Storage::Numeric(a) => (true, (a.digits as usize).max(1)),
+            // Every UNSTRING-able receiver kind is now handled (alphanumeric, DISPLAY/binary/packed
+            // numeric, numeric-edited, group). Anything left here is a target cobc itself rejects at
+            // compile (e.g. an 88 condition-name or an index) -- so refusing it is faithful validation.
             _ => return Err(RunError::Unsupported(format!(
-                "UNSTRING into `{n}` (subset: alphanumeric, numeric, or numeric-edited receivers)"
+                "UNSTRING into `{n}`: target must be an elementary or group data item (cobc rejects other targets)"
             ))),
         };
         sizes.push(width);
