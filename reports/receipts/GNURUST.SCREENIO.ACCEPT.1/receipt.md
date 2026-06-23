@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.SCREENIO.ACCEPT.1 — SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes
 
-**Verdict: FAIL** · replay `PASS=12 FAIL=0 (3.1.2 differential-matched=12)`
+**Verdict: PASS** · replay `PASS=12 FAIL=0 (3.1.2 differential-matched=12)`
 
 | field | value |
 |-------|-------|

@@ -53,7 +53,19 @@ fn build(root: &str, code: &str, stamp: &str, git_commit: &str) -> Value {
     let man = manifest(root);
     let m = &man["campaigns"][code];
     let result = run_sweep(root, m["sweep"].as_str().unwrap_or(""), m["arg"].as_str());
-    let verdict = if result.ends_with("FAIL=0") { "pass" } else if result.contains("not-built") { "oracle-not-built" } else { "fail" };
+    // FAIL-token-aware (not ends_with) so a sweep whose terminal line carries extra counters after FAIL=0
+    // (e.g. `PASS=.. FAIL=0 SKIP=.. MATCH=..`) still verdicts correctly. Backward-compatible: every existing
+    // clean line contains the token `FAIL=0`.
+    let fail_clean = result.split_whitespace().any(|t| t == "FAIL=0");
+    let mut verdict = if fail_clean { "pass" } else if result.contains("not-built") { "oracle-not-built" } else { "fail" };
+    // RATCHET: if the manifest sets `min_match`, the sweep's `MATCH=` count must not drop below it. MATCH can
+    // only ever rise; raising the floor is a deliberate `min_match` bump + regenerate (never a silent drift).
+    if verdict == "pass" {
+        if let Some(min) = m.get("min_match").and_then(|v| v.as_i64()) {
+            let got = result.split_whitespace().find_map(|t| t.strip_prefix("MATCH=")).and_then(|n| n.parse::<i64>().ok());
+            if matches!(got, Some(g) if g < min) { verdict = "fail"; }
+        }
+    }
     let mut oracle = json!({"name": "GnuCOBOL", "version": oracle_version(root)});
     if let Some(dr) = dialect_ref(root).as_object() {
         for (k, v) in dr { oracle[k] = v.clone(); }

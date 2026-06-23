@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.SCREENIO.ACCEPT.2 — SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes
 
-**Verdict: FAIL** · replay `PASS=11 FAIL=0 (3.1.2 differential-matched=11)`
+**Verdict: PASS** · replay `PASS=11 FAIL=0 (3.1.2 differential-matched=11)`
 
 | field | value |
 |-------|-------|

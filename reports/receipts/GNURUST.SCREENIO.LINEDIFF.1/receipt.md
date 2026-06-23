@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.SCREENIO.LINEDIFF.1 — multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes
 
-**Verdict: FAIL** · replay `PASS=19 FAIL=0 (3.1.2 differential-matched=19)`
+**Verdict: PASS** · replay `PASS=19 FAIL=0 (3.1.2 differential-matched=19)`
 
 | field | value |
 |-------|-------|

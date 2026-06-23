@@ -223,6 +223,14 @@ if [ -x "$PREFIX/bin/cobc" ] && [ -x "$ROOT/lab/oracle/decimal_harness" ]; then
     *"FAIL=0") note "oracle freshness: front-end byte sweep $FESWEEP (proves FILE-PARITY sealed sub-forms + depth)" ;;
     *) bad "oracle freshness: front-end sweep not clean ($FESWEEP) -- a FILE-PARITY sealed/depth claim regressed" ;;
   esac
+  # GNURUST.ELITE-REPLAY.1: the REAL public opencbs DF*.CBL programs must stay byte-identical (stdout+exit)
+  # through cobc vs cobrun. Gating it here proves the real-program court alongside the synthetic one; the
+  # MATCH ratchet (receipt min_match) is enforced by the receipt check below, this asserts FAIL=0 directly.
+  OCBSSWEEP=$(bash "$ROOT/lab/oracle/opencbs_sweep.sh" 2>/dev/null | grep -oE 'PASS=[0-9]+ FAIL=[0-9]+ SKIP=[0-9]+ MATCH=[0-9]+')
+  case "$OCBSSWEEP" in
+    *"FAIL=0"*) note "oracle freshness: opencbs real-program replay $OCBSSWEEP (cobc==cobrun on in-scope programs)" ;;
+    *) bad "oracle freshness: opencbs replay not clean ($OCBSSWEEP) -- GNURUST.ELITE-REPLAY regressed" ;;
+  esac
   # TRUST.2: generated receipts must be current (live replay) + .md == render(.json), no manual edits.
   if ( cd "$ROOT" && cargo run -q -p xtask -- receipt check ) >/tmp/_rec_check 2>&1; then
     note "TRUST.2: receipts reproducible (generated == live replay, no hand-edits)"
