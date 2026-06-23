@@ -1,0 +1,31 @@
+{
+  "byte_domain": "a real public COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc; the GREEN invariant is that cobrun is byte-identical wherever it runs and fails-closed everywhere else (never a silent wrong answer)",
+  "campaign": "GNURUST.ELITE-REPLAY.2",
+  "command": {
+    "replay": "bash lab/oracle/elite_replay2_sweep.sh"
+  },
+  "court": "broad public-corpus replay -- the GCC-COBOL testsuite + the hand-authored front-end corpus run through cobc 3.2 AND cobrun; observable behaviour (stdout bytes + process exit) must agree, with cobrun failing CLOSED (never wrong) wherever it cannot run a program",
+  "crate_version": "0.8.50",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "MATCH 281/718: programs cobrun runs byte-identical to cobc. The rest are categorized, never silently wrong: ~233 no-oracle (cobc 3.2 itself cannot compile / the GCC-COBOL-built oracle crashes -> no baseline), ~182 boundary (cobrun fails CLOSED with a typed cobrun: error -- a construct outside the sealed subset).",
+    "22 KNOWN silent divergences are committed + tracked in lab/oracle/elite_replay2_known.txt (each a real cobrun bug/gap with a reason) and driven down to empty -- the ratchet; an UN-tracked divergence FAILs the sweep, so a regression can never hide.",
+    "this is the BROAD public differential; the focused opencbs real-program court is GNURUST.ELITE-REPLAY.1 (39/39). NIST CCVS-85 (524 programs) is held under a separate custody gate and is the path to a 1000+ program corpus (CCVS-format extraction is a follow-on).",
+    "no file/DB-state differential yet (stdout + exit only); programs requiring external data files run from their own directory"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=281 FAIL=0 SKIP=437 MATCH=281"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

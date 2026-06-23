@@ -1,0 +1,27 @@
+# GNURUST.ELITE-REPLAY.2 known silent divergences -- each a tracked cobrun bug/gap to DRIVE DOWN to
+# empty (the ratchet). Format: <relative path>  # <reason>. The sweep FAILs on any divergence NOT
+# listed here; a listed program that starts MATCHing should be removed (it no longer diverges).
+# These are real gaps surfaced by the broad public-corpus differential -- honest, not swept under.
+
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/data1.cob  # DISPLAY of a group with mixed init -- output empty vs cobc value
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group1/comp5.cob  # COMP-5 (native binary) display/edge
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group1/multiple-compares.cob  # chained relational comparison edge
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group1/packed.cob  # COMP-3 packed-decimal display edge
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/BLANK_WHEN_ZERO.cob  # BLANK WHEN ZERO clause
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/CDF_IS_NOT_DEFINED.cob  # >>IF / CDF compiler-directive conditional
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/CDF__3__ALL_NUMERIC_COMPARISONS.cob  # >>DEFINE CDF constant in numeric comparisons
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/EVALUATE_WHEN_NEGATIVE.cob  # EVALUATE with negative/range WHEN
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/EVALUATE__A__OR__a_.cob  # EVALUATE WHEN a OR b literal list
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/EVALUATE_doubled_WHEN.cob  # EVALUATE multiple WHEN per branch + case
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/FUNCTION_BYTE-LENGTH.cob  # FUNCTION BYTE-LENGTH of a hex-literal item
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/FUNCTION_EXCEPTION-STATUS.cob  # FUNCTION EXCEPTION-STATUS text
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Hexadecimal_literal.cob  # hexadecimal literal X'..' decoding
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/MOVE_X_000203_.cob  # MOVE of a hex literal X'..'
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Quick_check_of_PIC_XX_COMP-5.cob  # PIC XX COMP-5 reinterpret
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/REDEFINES__chained.cob  # chained REDEFINES (A redefines B redefines C)
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Recursive_PERFORM_paragraph.cob  # recursive PERFORM accumulation edge
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/STOP_RUN_WITH_ERROR_STATUS.cob  # STOP RUN ... ERROR <n> process exit status
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Simple_COMP-X.cob  # COMP-X display edge
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Simple_floating-point_MOVE.cob  # COMP-1/COMP-2 float MOVE formatting
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Simple_p-scaling.cob  # PIC P scaling display edge
+lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/floating-point_DIVIDE_FORMAT_2.cob  # floating-point DIVIDE formatting
