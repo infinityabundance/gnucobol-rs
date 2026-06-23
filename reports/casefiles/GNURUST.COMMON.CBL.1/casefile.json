@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COMMON.CBL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.48",
+  "crate_version": "0.8.49",
   "damage_if_overclaimed": "claiming 'the CBL_ library' would hide that the parameter-count checks, the x91 multiplexer, the locale path, and the OS/process routines are unported",
   "hash_chain": {
-    "inputs_sha256": "22a7d9ff366124d95f4d6a1066b8826d7411486f8f4e7fc6902d8b7151440f27"
+    "inputs_sha256": "ba24fff870ce553038dd9279df380f22d30cb7e80852ce1284b524086a08ebca"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "c195666c374275e2855fa2af8135689a6a8b63edc303a3e830b2adaf98e8d1bb",
-    "receipt_sha256": "03db5340c95856a1ef295cc1e70bb7efd4a0fbb46e2723da1028e7530c043bb7"
+    "receipt_sha256": "a25e0bb72fe363afb1d04f3c17346426f1def0207ec2397bd05b36fc954b8308"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -5,7 +5,7 @@
     "GNURUST.ELITE-REPLAY.1": {
       "court": "opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree",
       "sweep": "opencbs_sweep.sh",
-      "min_match": 31,
+      "min_match": 35,
       "byte_domain": "a real third-party COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc, for every in-scope program; a ratchet floors the MATCH count so it can only rise",
       "non_claims": [
         "the NOT-YET-built set below is DOABLE, not a permanent boundary (cobc runs them all observably); each is a target driven toward MATCH one verified conversion at a time",

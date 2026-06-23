@@ -2,13 +2,13 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.ELITE-REPLAY.1 — opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree
 
-**Verdict: PASS** · replay `PASS=31 FAIL=0 SKIP=22 MATCH=31`
+**Verdict: PASS** · replay `PASS=35 FAIL=0 SKIP=18 MATCH=35`
 
 | field | value |
 |-------|-------|
 | campaign | `GNURUST.ELITE-REPLAY.1` |
 | court | opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree |
-| crate_version | `0.8.48` |
+| crate_version | `0.8.49` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a real third-party COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc, for every in-scope program; a ratchet floors the MATCH count so it can only rise |
 | replay command | `bash lab/oracle/opencbs_sweep.sh` |

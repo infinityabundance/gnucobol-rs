@@ -5,7 +5,7 @@
     "replay": "bash lab/oracle/opencbs_sweep.sh"
   },
   "court": "opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree",
-  "crate_version": "0.8.48",
+  "crate_version": "0.8.49",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",
@@ -24,7 +24,7 @@
   },
   "receipt_status": "current",
   "results": {
-    "sweep": "PASS=31 FAIL=0 SKIP=22 MATCH=31"
+    "sweep": "PASS=35 FAIL=0 SKIP=18 MATCH=35"
   },
   "schema": "gnurust-replay-receipt-v1",
   "superseded_by": null,

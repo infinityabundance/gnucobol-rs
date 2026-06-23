@@ -540,6 +540,10 @@ struct FileDef {
     /// record). On READ the field is set to the record's actual length; on disk-load each record is kept at
     /// its true length rather than padded to a fixed width.
     varying_dep: Option<String>,
+    /// `ACCESS MODE IS RANDOM|DYNAMIC` (vs the default SEQUENTIAL): when true, a plain `READ` of a RELATIVE
+    /// / INDEXED file is a keyed (random) read; when false every `READ` is sequential (next in key order).
+    /// `READ NEXT` is always sequential regardless.
+    access_random: bool,
 }
 
 /// One printable report element: a `COLUMN n PIC p {SOURCE field | VALUE lit | SUM field}` entry.
@@ -1169,18 +1173,27 @@ fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
             // Strip any leading `(` the lexer glued on (a parenthesised operand `(SALES-AMOUNT OF REC ...`);
             // it is re-attached after the qualified name is resolved, so the arithmetic parser still sees it.
             let lp = w.bytes().take_while(|&b| b == b'(').count();
-            let (base, sub) = split_subscript(&w[lp..]);
+            let (base0, base_sub) = split_subscript(&w[lp..]);
+            let base = base0.to_string();
+            // The subscript of a qualified reference syntactically follows the LAST qualifier:
+            // `LEAF OF GROUP (sub)` (glued by glue_subscripts to `... GROUP(sub)`) -- so a subscript carried
+            // by a qualifier token belongs to the whole resolved reference, not to that group name.
+            let mut sub: Option<String> = base_sub.map(|s| s.to_string());
             let mut quals: Vec<String> = Vec::new();
             let mut j = i + 1;
             while matches!(toks.get(j), Some(Tok::Word(q)) if q == "OF" || q == "IN") {
                 if let Some(Tok::Word(q2)) = toks.get(j + 1) {
-                    quals.push(q2.clone());
+                    let (qbase, qsub) = split_subscript(q2);
+                    quals.push(qbase.to_string());
+                    if let Some(qs) = qsub {
+                        sub = Some(qs.to_string());
+                    }
                     j += 2;
                 } else {
                     break;
                 }
             }
-            if let Some(cands) = idx.by_name.get(base) {
+            if let Some(cands) = idx.by_name.get(base.as_str()) {
                 let resolved: Option<String> = if !quals.is_empty() {
                     let m: Vec<&String> = cands.iter()
                         .filter(|(_, chain)| is_ordered_subseq(&quals, chain))
@@ -1193,7 +1206,7 @@ fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
                     None
                 };
                 if let Some(key) = resolved {
-                    let inner = match sub { Some(s) => format!("{key}({s})"), None => key };
+                    let inner = match &sub { Some(s) => format!("{key}({s})"), None => key };
                     let nw = if lp > 0 { format!("{}{}", "(".repeat(lp), inner) } else { inner };
                     out.push(Tok::Word(nw));
                     i = j;
@@ -1298,10 +1311,10 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // added to the field table; each file's metadata becomes a FileDef.
     let file_control = parse_file_control(toks, start, proc_at);
     let (mut file_recs, file_rec, report_file, file_varying) = parse_file_section(toks, start, proc_at)?;
-    let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key, record_key)| {
+    let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key, record_key, access_random)| {
         let record = file_rec.get(&name).cloned().unwrap_or_default();
         let varying_dep = file_varying.get(&name).cloned();
-        FileDef { name, assign, record, status, org, rel_key, record_key, varying_dep }
+        FileDef { name, assign, record, status, org, rel_key, record_key, varying_dep, access_random }
     }).collect();
     let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
@@ -1347,7 +1360,8 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
 
 /// Parse `FILE-CONTROL` `SELECT name ASSIGN ... [ORGANIZATION [IS] {LINE SEQUENTIAL|SEQUENTIAL}]
 /// [FILE STATUS [IS] status]` entries -> `(name, org, status)`. Unknown clauses are skipped.
-fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, String, FileOrg, Option<String>, Option<String>, Option<String>)> {
+#[allow(clippy::type_complexity)]
+fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, String, FileOrg, Option<String>, Option<String>, Option<String>, bool)> {
     let fc = match find_seq_in(toks, &["FILE-CONTROL"], start, end) {
         Some(i) => i + 1,
         None => return Vec::new(),
@@ -1365,6 +1379,7 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                 let mut status = None;
                 let mut rel_key = None;
                 let mut record_key = None;
+                let mut access_random = false; // ACCESS RANDOM/DYNAMIC -> a plain READ is keyed; default (SEQUENTIAL) = next
                 let mut assign = name.clone();
                 while i < end {
                     match toks.get(i) {
@@ -1417,10 +1432,19 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                             if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
                             if let Some(Tok::Word(w)) = toks.get(i) { status = Some(w.clone()); i += 1; }
                         }
+                        // ACCESS [MODE] [IS] {SEQUENTIAL|RANDOM|DYNAMIC} -- only RANDOM/DYNAMIC make a plain
+                        // READ keyed; SEQUENTIAL (the default) makes every READ a next-in-key-order read.
+                        Some(Tok::Word(w)) if w == "ACCESS" => {
+                            i += 1;
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "MODE") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "RANDOM" || w == "DYNAMIC") { access_random = true; i += 1; }
+                            else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") { i += 1; }
+                        }
                         _ => i += 1,
                     }
                 }
-                out.push((name, assign, org, status, rel_key, record_key));
+                out.push((name, assign, org, status, rel_key, record_key, access_random));
             }
             None => break,
             _ => i += 1,
@@ -2954,6 +2978,48 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
         if matches!(toks.get(pos), Some(Tok::Dot)) {
             pos += 1;
         }
+    }
+    Ok(false)
+}
+
+/// Like [`run_range`] but GO-TO-aware WITHIN `[start, end)`: a pending `GO TO` to a paragraph whose label
+/// falls inside the range resumes there (so a paragraph that loops via `GO TO` -- e.g. a SORT INPUT/OUTPUT
+/// PROCEDURE's `READ ... GO TO same-para` gather loop -- iterates instead of running once). A real halt
+/// (STOP RUN / GOBACK / EXIT PROGRAM) or a GO TO that targets a label OUTSIDE the range ends the runner
+/// (the latter is non-conforming for a sort procedure -- control may not leave its range -- so its pending
+/// jump is dropped). Returns `true` if a real halt propagated.
+fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+    // paragraph label -> token index, restricted to those inside this range (the legal GO TO targets here).
+    let in_range: HashMap<String, usize> = CUR_PARAS.with(|c| {
+        c.borrow().0.iter().filter(|(_, ix)| *ix >= start && *ix < end).map(|(n, ix)| (n.clone(), *ix)).collect()
+    });
+    let mut pos = start;
+    let mut guard = 0u64;
+    while pos < end {
+        if matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; continue; }
+        if run_block(toks, &mut pos, fields, out, true, ctx)? {
+            if ctx.next_sentence.get() {
+                ctx.next_sentence.set(false);
+                while pos < end && !matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
+                if pos < end { pos += 1; }
+                continue;
+            }
+            // A pending GO TO into this range resumes there; STOP/GOBACK/EXIT or an out-of-range jump ends it.
+            let target = ctx.goto.borrow().clone();
+            if let Some(label) = target {
+                if let Some(&ix) = in_range.get(&label) {
+                    ctx.goto.borrow_mut().take();
+                    pos = ix;
+                    guard += 1;
+                    if guard > 10_000_000 { return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into())); }
+                    continue;
+                }
+                ctx.goto.borrow_mut().take(); // out-of-range jump from a sort procedure: drop it, end the runner
+                return Ok(false);
+            }
+            return Ok(true); // real halt (STOP RUN / GOBACK / EXIT PROGRAM)
+        }
+        if matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
     }
     Ok(false)
 }
@@ -6730,7 +6796,10 @@ fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option
         }
         return Some(records);
     }
-    let reclen = fields.get(&def.record).map(|f| f.bytes.len()).filter(|&n| n > 0)?;
+    // The FD record width: use read_field (reconstructs a GROUP record from its leaves) rather than the
+    // group field's own `bytes` (which is empty for a group whose children hold the storage) -- so a
+    // group-structured FD record (e.g. `01 R. 05 A PIC X(13). 05 FILLER PIC X(67).`) loads correctly.
+    let reclen = read_field(fields, &def.record).ok().flatten().map(|f| f.bytes.len()).filter(|&n| n > 0)?;
     let fit = |bytes: &[u8]| -> Vec<u8> {
         let mut r = bytes.to_vec();
         r.resize(reclen, b' '); // pad short / truncate long to the fixed record width
@@ -6746,6 +6815,14 @@ fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option
                 v.pop(); // a trailing newline yields a spurious empty final record
             }
             v
+        }
+        // ORGANIZATION INDEXED: the on-disk file is a Berkeley DB B-tree (the same format cobc/libcob use).
+        // Parse it with the pure-Rust gnucobol-rs-bdb-format reader and load each record (the value of each
+        // key->record pair); exec_read's INDEXED branch then presents them in RECORD KEY order (READ NEXT)
+        // or by key (random READ). The keys are intrinsic to the records, so only the values are stored.
+        FileOrg::Indexed => {
+            let db = gnucobol_rs_bdb_format::BdbFile::parse(&data).ok()?;
+            db.records().ok()?.into_iter().map(|(_k, v)| fit(&v)).collect()
         }
         _ => data.chunks(reclen.max(1)).map(fit).collect(),
     };
@@ -6976,7 +7053,7 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
         ctx.files.borrow_mut().entry(fkey(ctx, &sf)).or_default().records.clear();
         let (start, end) = para_range(p1, p2)
             .ok_or_else(|| RunError::Unsupported(format!("SORT INPUT PROCEDURE: unknown paragraph `{p1}`")))?;
-        run_range(&proc, start, end, fields, out, ctx)?;
+        run_range_goto(&proc, start, end, fields, out, ctx)?;
         recs = ctx.files.borrow().get(&fkey(ctx, &sf)).map(|st| st.records.clone()).unwrap_or_default();
     } else if !using.is_empty() {
         let files = ctx.files.borrow();
@@ -7016,7 +7093,7 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
         set_file_status(fields, &sd_def, "00");
         let (start, end) = para_range(p3, p4)
             .ok_or_else(|| RunError::Unsupported(format!("SORT OUTPUT PROCEDURE: unknown paragraph `{p3}`")))?;
-        run_range(&proc, start, end, fields, out, ctx)?;
+        run_range_goto(&proc, start, end, fields, out, ctx)?;
     } else if !giving.is_empty() {
         let mut files = ctx.files.borrow_mut();
         for f in &giving {
@@ -7891,8 +7968,9 @@ fn exec_read(
                 None => None,
             }
         }
-        // INDEXED random read: by the RECORD KEY field value (no position advance).
-        FileOrg::Indexed if !had_next => {
+        // INDEXED random read: by the RECORD KEY field value (no position advance). Only when ACCESS is
+        // RANDOM/DYNAMIC -- under ACCESS SEQUENTIAL a plain READ is a sequential next-in-key-order read.
+        FileOrg::Indexed if !had_next && def.access_random => {
             let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
             let want = read_field(fields, def.record_key.as_ref().unwrap())?.map(|f| f.bytes).unwrap_or_default();
             let files = ctx.files.borrow();
@@ -7967,8 +8045,12 @@ fn exec_read(
             Ok(false)
         }
         None => {
-            // a relative/indexed random miss is "23" (record not found); a sequential next-end is "10".
-            let code = if matches!(def.org, FileOrg::Relative | FileOrg::Indexed) && !had_next { "23" } else { "10" };
+            // a RANDOM-read miss is "23" (record not found); a SEQUENTIAL next-end is "10" (EOF). A read is
+            // random only for RELATIVE plain READ, or INDEXED plain READ under ACCESS RANDOM/DYNAMIC -- an
+            // INDEXED ACCESS-SEQUENTIAL plain READ runs off the end as EOF, not as a not-found miss.
+            let random_read = (matches!(def.org, FileOrg::Relative) && !had_next)
+                || (matches!(def.org, FileOrg::Indexed) && !had_next && def.access_random);
+            let code = if random_read { "23" } else { "10" };
             set_file_status(fields, &def, code);
             if let Some(b) = &at_end {
                 return run_handler(b, fields, out, ctx);

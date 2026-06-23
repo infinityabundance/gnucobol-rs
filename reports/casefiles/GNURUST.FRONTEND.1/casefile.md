@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FRONTEND.1 (court-casefile)
 
-**Verdict: PASS** · 183/183 pass, 0 fail · crate `gnucobol-rs` 0.8.48
+**Verdict: PASS** · 184/184 pass, 0 fail · crate `gnucobol-rs` 0.8.49
 
 - **Oracle:** cobc -x compiling+running the same source (cobc front-end + libcob), stdout captured and diffed
 - **Byte domain(s):** a COBOL program (sealed subset) -> the exact stdout bytes it writes, byte-identical to cobc

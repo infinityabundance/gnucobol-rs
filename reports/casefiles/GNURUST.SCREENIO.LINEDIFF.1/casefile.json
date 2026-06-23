@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.LINEDIFF.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.48",
+  "crate_version": "0.8.49",
   "damage_if_overclaimed": "claiming 'the screen line-diff works' would hide that only the TWO-DISPLAY same-row refresh is proven -- 3+ displays, distant survivors, multi-row diffs, attributed text, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "d61840d6648581752f12278cf3624db2a7da5590dfb4c4b5fb2b87c1767c6e20"
+    "inputs_sha256": "f997ef7a7b13091c52abfbf7c73efede24f24ba1205d22bac0e53058427d6b36"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "78efde7959736fe845b1d06621e110db3dcc337b39e3e8dbd8770048d888ba18",
-    "receipt_sha256": "c616088c6992afa412da58ed57ddeaee44731f6b6da1e70e96e0861b89ffb940"
+    "receipt_sha256": "5c6645852be4f8a4e8eeaa84dd3c6108f9e69a2e595928c3ce7df6d972b423a0"
   },
   "kind": "court-casefile",
   "lie_prevented": [

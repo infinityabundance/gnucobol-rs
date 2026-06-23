@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.REMAINDER.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.48",
+  "crate_version": "0.8.49",
   "damage_if_overclaimed": "a wrong remainder (wrong quotient-scale dependence, sign, or receiver bytes) misstates reconciliation residuals, allocation leftovers, or check digits while looking plausible",
   "hash_chain": {
-    "inputs_sha256": "74f6d8caba499743cd8141509c98502b1d1e778e733ca72818f3d356b251af80"
+    "inputs_sha256": "2aa49a2ed7a49a64b92d801f2ae416b508f2d56911fc9fec904de925d667d4a1"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "38de8a222dd5da2fd66b32f14feabf81932120a62537dfc74f7566989ad30cc0",
-    "receipt_sha256": "fba5a33822bd06729b3eb00b77ead7f7a5db1a7467d6816e22332bfba05be3bd"
+    "receipt_sha256": "9d5cb09276f912983bdfb6a6dc74f207c548c71565b773a6399064db2a7e99fb"
   },
   "kind": "court-casefile",
   "lie_prevented": [

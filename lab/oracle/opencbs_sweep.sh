@@ -45,14 +45,10 @@ declare -A NOORACLE=(
 )
 # cobc-compilable programs cobrun does not YET match -- all DOABLE targets (see header). Expected NON-MATCH for now.
 declare -A NOTYET=(
-  [DF18CALL]="CALL to a missing module: reproduce libcob module-not-found (stdout+exit 1)"
-  [DF31CALL]="CALL to a missing module: reproduce libcob module-not-found (stdout+exit 1)"
-  [DF45CALL]="CALL to a missing module: reproduce libcob module-not-found (stdout+exit 1)"
-  [DF02TEST]="qualified+subscripted compound condition operand (cond-parser work)"
-  [DF03TEST]="ORGANIZATION INDEXED: wire the pure-Rust gnucobol-rs-bdb-format backend"
-  [DF05TEST]="SORT USING a real input file (file-model + sort-from-file)"
-  [DF25TEST]="OPEN I-O across two real files (file-model read-back)"
-  [DF46TEST]="REWRITE over a real I-O file (file-model rewrite)"
+  [DF18CALL]="CALL to a missing module: cobc emits a libcob 'module not found' DIAGNOSTIC on stderr -- reproducing a libcob runtime message byte-for-byte is a declared non-claim (soft boundary), so deferred"
+  [DF31CALL]="CALL to a missing module: libcob error-message reproduction is a declared non-claim (soft boundary), deferred"
+  [DF45CALL]="CALL to a missing module: libcob error-message reproduction is a declared non-claim (soft boundary), deferred"
+  [DF25TEST]="OPEN I-O: cobc leaves the FD record area as LOW-VALUES past the record so READ INTO carries a NUL tail; needs FD-record-area NUL init + physical-MAX-buffer READ-INTO semantics"
 )
 
 PASS=0; FAIL=0; SKIP=0
@@ -72,7 +68,20 @@ for cob in "$CORPUS"/DF*.CBL; do
   fi
 
   # 3. Run BOTH from the corpus dir so OPEN INPUT disk reads resolve the same DFxxFILE files on each side.
+  #    A *TEST program may WRITE its data files (REWRITE / OPEN OUTPUT): cobc persists those writes to disk
+  #    while cobrun is read-only to disk, so cobrun would otherwise read cobc's mutations. SNAPSHOT the data
+  #    files, run cobc, RESTORE them, then run cobrun -- so both sides read byte-identical input and the
+  #    committed corpus is left unmutated. DATA-generator programs are NOT isolated: their cobc writes must
+  #    persist to provide the on-disk fixtures the TEST programs consume.
+  snap=""
+  case "$name" in
+    *TEST)
+      snap="$TMP/snap"; rm -rf "$snap"; mkdir -p "$snap"
+      for d in "$CORPUS"/*; do case "$d" in *.CBL|*.cbl) ;; *) [ -f "$d" ] && cp -p "$d" "$snap"/ ;; esac; done
+      ;;
+  esac
   ( cd "$CORPUS" && "$TMP/p" </dev/null >"$TMP/o.out" 2>/dev/null ); oec=$?
+  if [ -n "$snap" ]; then for f in "$snap"/*; do [ -f "$f" ] && cp -p "$f" "$CORPUS"/; done; fi
   ( cd "$CORPUS" && "$COBRUN" -fixed "$cob" </dev/null >"$TMP/r.out" 2>"$TMP/r.err" ); rec=$?
 
   matched=0
