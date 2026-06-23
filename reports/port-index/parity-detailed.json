@@ -1,6 +1,6 @@
 [
   {
-    "active_ported": 99,
+    "active_ported": 98,
     "compiled": 104,
     "compiled_parity_pct": 100.0,
     "disabled": 1,
@@ -406,7 +406,7 @@
         "function": "handle_bcd_rounding",
         "preprocessor_status": "compiled",
         "rust_module": "packed",
-        "rust_status": "active"
+        "rust_status": "inactive_mirror"
       },
       {
         "function": "count_leading_zeros",
@@ -638,13 +638,13 @@
       }
     ],
     "gap": [],
-    "inactive_mirrors": 5,
+    "inactive_mirrors": 6,
     "missing": 0,
     "source_funcs": 105,
     "test_only": 0
   },
   {
-    "active_ported": 56,
+    "active_ported": 57,
     "compiled": 57,
     "compiled_parity_pct": 100.0,
     "disabled": 0,
@@ -763,7 +763,7 @@
         "function": "indirect_move",
         "preprocessor_status": "compiled",
         "rust_module": "move_ops",
-        "rust_status": "inactive_mirror"
+        "rust_status": "active"
       },
       {
         "function": "cob_move_all",
@@ -995,7 +995,7 @@
       }
     ],
     "gap": [],
-    "inactive_mirrors": 1,
+    "inactive_mirrors": 0,
     "missing": 0,
     "source_funcs": 57,
     "test_only": 0
@@ -7044,7 +7044,7 @@
       {
         "function": "print_runtime_conf",
         "preprocessor_status": "compiled",
-        "rust_module": "common_signal",
+        "rust_module": "common_runtimeconf",
         "rust_status": "active"
       },
       {

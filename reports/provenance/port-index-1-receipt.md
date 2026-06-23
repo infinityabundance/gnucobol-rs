@@ -24,8 +24,8 @@ Rust counterpart its **exact C name** (or adding the named wrapper).
 
 | libcob file | source | compiled | active | inactive | doc-only | missing | active parity |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `numeric.c` | 105 | 104 | 99 | 5 | 1 | 0 | 100.0% |
-| `move.c` | 57 | 57 | 56 | 1 | 0 | 0 | 100.0% |
+| `numeric.c` | 105 | 104 | 98 | 6 | 1 | 0 | 100.0% |
+| `move.c` | 57 | 57 | 57 | 0 | 0 | 0 | 100.0% |
 | `strings.c` | 34 | 34 | 34 | 0 | 0 | 0 | 100.0% |
 | `intrinsic.c` | 238 | 238 | 233 | 5 | 0 | 0 | 100.0% |
 | `cconv.c` | 9 | 9 | 9 | 0 | 0 | 0 | 100.0% |

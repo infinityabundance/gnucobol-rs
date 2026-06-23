@@ -18,8 +18,8 @@ oracle-backed *byte* parity is the separate per-court sweeps.
 
 | libcob file | source | compiled | disabled | active | inactive | test | doc-only | missing | active parity |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| `numeric.c` | 105 | 104 | 1 | 99 | 5 | 0 | 1 | 0 | 100.0% |
-| `move.c` | 57 | 57 | 0 | 56 | 1 | 0 | 0 | 0 | 100.0% |
+| `numeric.c` | 105 | 104 | 1 | 98 | 6 | 0 | 1 | 0 | 100.0% |
+| `move.c` | 57 | 57 | 0 | 57 | 0 | 0 | 0 | 0 | 100.0% |
 | `strings.c` | 34 | 34 | 0 | 34 | 0 | 0 | 0 | 0 | 100.0% |
 | `intrinsic.c` | 238 | 238 | 0 | 233 | 5 | 0 | 0 | 0 | 100.0% |
 | `cconv.c` | 9 | 9 | 0 | 9 | 0 | 0 | 0 | 0 | 100.0% |

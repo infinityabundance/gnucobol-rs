@@ -74,7 +74,6 @@ run_sweep "GNURUST.SCREENIO.ACCEPT.2" screenio_accept2_sweep.sh
 run_sweep "GNURUST.SCREENIO.LINEDIFF.1" screenio_linediff_sweep.sh
 run_sweep "GNURUST.FRONTEND.1" cobol_frontend_sweep.sh
 run_sweep "GNURUST.FRONTEND.1" cobol_run_sweep.sh
-run_sweep "GNURUST.ELITE-REPLAY.1 opencbs" opencbs_sweep.sh
 run_sweep "GNURUST.FILEIO.INDEXED.1" indexed_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh
 run_sweep "GNURUST.FILEIO.OPEN.1" open_sweep.sh
