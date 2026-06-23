@@ -5697,12 +5697,23 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
         Some(p) => &stmt[..p],
         None => stmt,
     };
+    // `WITH FILLER` includes FILLER leaves (a plain INITIALIZE excludes them, per cobc); a leading `THEN`
+    // before REPLACING is a no-op (`items THEN REPLACING` == `items REPLACING`). Strip both from the
+    // item-name region. A bare TO/THRU/ALL here (TO VALUE / TO DEFAULT / ALL TO VALUE are handled above) is
+    // a placement cobc itself rejects -- faithful validation, not a feature gap.
+    // NB: the canonicalize pass rewrites the `FILLER` clause keyword to a unique FILLER data-key
+    // (`FILLER\u{1}..`), so match it via `bare_name`, not the literal string.
+    let with_filler = head.windows(2).any(|w| {
+        matches!(&w[0], Tok::Word(a) if a.as_str() == "WITH")
+            && matches!(&w[1], Tok::Word(b) if bare_name(b) == "FILLER")
+    });
     let mut names: Vec<String> = Vec::new();
     for t in head {
         match t {
-            Tok::Word(w) if matches!(w.as_str(), "WITH" | "THEN" | "TO" | "THRU" | "ALL" | "FILLER") => {
+            Tok::Word(w) if w.as_str() == "WITH" || w.as_str() == "THEN" || bare_name(w) == "FILLER" => {}
+            Tok::Word(w) if matches!(w.as_str(), "TO" | "THRU" | "ALL") => {
                 return Err(RunError::Unsupported(format!(
-                    "INITIALIZE ... {w} (subset: items [REPLACING cat BY val ...])"
+                    "INITIALIZE ... {w}: cobc rejects this clause placement"
                 )));
             }
             Tok::Word(w) => names.push(w.clone()),
@@ -5724,6 +5735,10 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
         let mut leaves = Vec::new();
         collect_init_leaves(name, fields, &mut leaves)?;
         for leaf in leaves {
+            // A plain INITIALIZE leaves FILLER untouched; only `WITH FILLER` initializes it (cobc).
+            if !with_filler && bare_name(&leaf) == "FILLER" {
+                continue;
+            }
             let cat = init_field_category(&leaf, fields);
             let src = match &repl {
                 Some(pairs) => match cat.and_then(|c| pairs.iter().find(|(cc, _)| *cc == c)) {
@@ -5753,24 +5768,34 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
     // its VALUE; REPLACING then sets each leaf WITHOUT a VALUE whose category is named to that value (a leaf
     // with neither is left unchanged). Any other trailing clause (e.g. TO DEFAULT) is out of subset.
     let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")).filter(|&p| p > tp);
+    let mut to_default = false;
     let repl = match repl_pos {
         Some(rp) => Some(parse_initialize_replacing(&stmt[rp + 1..])?),
         None => {
-            // allow only an optional `THEN` token between VALUE and end; anything else is out of subset.
-            let trailing_ok = stmt.len() <= tp + 2
-                || (stmt.len() == tp + 3 && matches!(stmt.get(tp + 2), Some(Tok::Word(w)) if w == "THEN"));
-            if !trailing_ok {
-                return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: trailing clause not in subset (only `[THEN] REPLACING ...`)".into()));
+            // Trailing region after `TO VALUE` (THEN is a no-op connector): nothing, or `[THEN] TO DEFAULT`
+            // -- TO VALUE restores the valued leaves and TO DEFAULT then defaults the no-VALUE leaves. Any
+            // other trailing is a placement cobc itself rejects (faithful validation).
+            let rest: Vec<&Tok> = stmt[(tp + 2).min(stmt.len())..]
+                .iter()
+                .filter(|t| !matches!(t, Tok::Word(w) if w == "THEN"))
+                .collect();
+            match rest.as_slice() {
+                [] => {}
+                [Tok::Word(a), Tok::Word(b)] if a == "TO" && b == "DEFAULT" => to_default = true,
+                _ => return Err(RunError::Unsupported(
+                    "INITIALIZE ... TO VALUE: cobc rejects this trailing clause (only `[THEN] REPLACING ...` or `[THEN] TO DEFAULT`)".into())),
             }
             None
         }
     };
     // The modifier before TO is `ALL` or a category (NUMERIC/ALPHANUMERIC/...). cobc 3.2 IGNORES the
     // category for TO VALUE -- every leaf with a VALUE is restored regardless -- so all forms are equivalent.
+    // A bare `TO VALUE` with no ALL/category is a cobc syntax error ("unexpected VALUE, expecting DEFAULT"),
+    // so refusing it is faithful validation, not a feature gap.
     let modifier = matches!(stmt.get(tp.wrapping_sub(1)),
         Some(Tok::Word(w)) if w == "ALL" || init_cat_from_kw(w).is_some());
     if !modifier {
-        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE subset is `items [WITH FILLER] {ALL|category} TO VALUE`".into()));
+        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE requires ALL or a category before VALUE (cobc rejects a bare `TO VALUE`)".into()));
     }
     // Item names run up to the modifier region (`WITH FILLER` / `ALL` / a category keyword).
     let mod_start = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "WITH" || w == "ALL" || init_cat_from_kw(w).is_some()))
@@ -5803,8 +5828,17 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
                     let mv = vec![val.clone(), Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
                     exec_move(&mv, fields, decimal_comma)?;
                 }
+            } else if to_default && bare_name(&leaf) != "FILLER" {
+                // no VALUE + trailing `TO DEFAULT` -> set the leaf to its category default (FILLER excluded).
+                let src = match init_field_category(&leaf, fields) {
+                    Some(InitCat::Numeric) => Tok::Word("0".to_string()),
+                    Some(_) => Tok::Str(vec![b' ']),
+                    None => continue,
+                };
+                let mv = vec![src, Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
+                exec_move(&mv, fields, decimal_comma)?;
             }
-            // no VALUE and no matching REPLACING -> left unchanged.
+            // no VALUE and no matching REPLACING/TO DEFAULT -> left unchanged.
         }
     }
     Ok(())
