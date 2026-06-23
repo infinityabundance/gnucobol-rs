@@ -104,7 +104,7 @@ Of 66 COBOL verbs total, the runtime backs **51 (77%)** and the front-end runs *
 State the boundaries as loudly as the capabilities — they are the credibility. The runtime port is **complete** (100% across all three parity views); the remaining frontier is the interpreter front-end. Crucially, `gnucobol-rs` distinguishes a **latent-work item** (a future task) from a **BOUNDARY** (a surface the GnuCOBOL 3.2 oracle itself cannot run, so there is no byte-truth to match).
 
 - **No native code generation.** `gnucobol-rs` *interprets* directly on the ported runtime; it does **not** reproduce `cobc`'s C-emission (`codegen.c` / `codeoptim.c`) — a deliberate **non-goal**, not a gap. `cobrun <file>` equals `cobc -x <file>` only at **observable stdout**, never in artifacts. Correctness is oracle-judged, not self-asserted.
-- **The front-end is a verified subset, not the whole grammar.** The parser / scanner / preprocessor / typecheck reproduce a sweep-verified slice (byte-identical over the 182-program sweep). Out-of-subset constructs — group items, OCCURS/REDEFINES, non-01 levels, unlisted verbs — return a typed `RunError` and **exit 2**, never a silent mis-run.
+- **The front-end is a verified subset, not the whole grammar.** The parser / scanner / preprocessor / typecheck reproduce a sweep-verified slice (byte-identical over the 183-program sweep). Out-of-subset constructs — group items, OCCURS/REDEFINES, non-01 levels, unlisted verbs — return a typed `RunError` and **exit 2**, never a silent mis-run.
 - **16 intrinsics not wired** into the front-end — classified boundaries, not latent work: 15 have no fixed oracle output (`cobc` rejects them — DISPLAY-OF, NATIONAL-OF, BOOLEAN-OF-INTEGER, BINOP, STANDARD-COMPARE, separators; MODULE-PATH is a compiled-binary artifact), and **RANDOM** is a deliberate boundary (it depends on GMP's internal Mersenne-Twister; the port does not link or reproduce libgmp internals).
 - **8 verbs unrun** — every one an explicit **BOUNDARY** the 3.2 oracle itself cannot run (5 COMMUNICATION SECTION verbs, ACUCOBOL GUI `INQUIRE`/`MODIFY`, `ENTRY` in a nested program).
 - **`cobc`'s diagnostic / help text is not reproduced** byte-for-byte — the interpreter has its own error model (a deliberate scope limit). Localized (non-`C.UTF-8`) runtime messages are an explicit off-oracle non-claim. `cob-config` is documented but **not provided**; the `cobcrun` dynamic module loader / `CALL` dispatch reproduce a documented **subset**.
@@ -139,7 +139,7 @@ cargo run -p xtask -- receipt check         # receipts == live replay, no hand-e
 The front-end's own proof harness compiles **and** runs every program in `lab/corpus/frontend/` through both real `cobc` and `cobrun`, requiring byte-identical stdout (passing programs are *also* differentially checked against GnuCOBOL **3.1.2**, with documented per-program exemptions):
 
 ```sh
-bash lab/oracle/cobol_frontend_sweep.sh     # 182-program byte sweep, gate FAIL=0
+bash lab/oracle/cobol_frontend_sweep.sh     # 183-program byte sweep, gate FAIL=0
 ```
 
 **Reviewer entry points** — [`STATUS.md`](STATUS.md) (live current-state authority) · [`COBOL-PARITY.md`](COBOL-PARITY.md) / [`FILE-PARITY.md`](FILE-PARITY.md) (live language + file coverage) · [`GAP-ANALYSIS.md`](GAP-ANALYSIS.md) (105/105 catalogued gaps fixed, 0 open) · [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (non-claims) · [`reports/casefiles/`](reports/casefiles/) (137 forensic case files).
@@ -172,7 +172,7 @@ The **full 137-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts
 ## Breadth of verification
 
 - **107 differential oracle sweep scripts** (`lab/oracle/*sweep*.sh`), each byte-for-byte vs the admitted GnuCOBOL 3.2, spanning arithmetic/numeric, edited/PICTURE/encoding, data movement/tables, control flow, files/I-O, strings, screen I/O (9 native terminal-byte courts), intrinsics/dates, and CALL/interop.
-- **Corpus** (`lab/corpus/`): ~679 real COBOL programs across 7 subdirectories plus the 4.3 MB NIST COBOL-85 validation suite (`newcob.val.Z`, held under the `GNURUST.CCVS85.1` custody gate) — including 533 programs from a public GnuCOBOL test corpus, 53 from an open banking suite, and the 182 hand-authored front-end programs.
+- **Corpus** (`lab/corpus/`): ~679 real COBOL programs across 7 subdirectories plus the 4.3 MB NIST COBOL-85 validation suite (`newcob.val.Z`, held under the `GNURUST.CCVS85.1` custody gate) — including 533 programs from a public GnuCOBOL test corpus, 53 from an open banking suite, and the 183 hand-authored front-end programs.
 - **Three independent parity maps** cross-check so a doc-comment can never masquerade as a port: DOXYGEN-PARITY (998/998 fns), LIBCOB-PARITY / PORT-INDEX (typed C↔Rust symbols, 100% active), and CLANG-AST-PARITY (870 defs / 3240 call edges). See [`COBOL-PARITY.md`](COBOL-PARITY.md), [`FILE-PARITY.md`](FILE-PARITY.md), [`DOXYGEN-PARITY.md`](DOXYGEN-PARITY.md), [`LIBCOB-PARITY.md`](LIBCOB-PARITY.md), [`CLANG-AST-PARITY.md`](CLANG-AST-PARITY.md), [`FUNCTION-EVIDENCE.md`](FUNCTION-EVIDENCE.md), and the 0–7 [`PORTING-LADDER.md`](PORTING-LADDER.md) (level 7 = compiler replacement, explicitly **NOT CLAIMED**; level is evidence *shape*, not quality).
 
 ---

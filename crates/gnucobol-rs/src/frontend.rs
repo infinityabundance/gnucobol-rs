@@ -535,6 +535,11 @@ struct FileDef {
     rel_key: Option<String>,
     /// `RECORD KEY IS field` for an INDEXED file (the key field within the record).
     record_key: Option<String>,
+    /// `RECORD IS VARYING ... DEPENDING ON field` -- `Some(field)` marks a variable-length record-sequential
+    /// file (GnuCOBOL var-seq on-disk format: a 4-byte record header `[u16 BE length][0x0000]` before each
+    /// record). On READ the field is set to the record's actual length; on disk-load each record is kept at
+    /// its true length rather than padded to a fixed width.
+    varying_dep: Option<String>,
 }
 
 /// One printable report element: a `COLUMN n PIC p {SOURCE field | VALUE lit | SUM field}` entry.
@@ -1292,10 +1297,11 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // ENVIRONMENT FILE-CONTROL (SELECT ... ) + DATA FILE SECTION (FD + 01 record). The FD record items are
     // added to the field table; each file's metadata becomes a FileDef.
     let file_control = parse_file_control(toks, start, proc_at);
-    let (mut file_recs, file_rec, report_file) = parse_file_section(toks, start, proc_at)?;
+    let (mut file_recs, file_rec, report_file, file_varying) = parse_file_section(toks, start, proc_at)?;
     let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key, record_key)| {
         let record = file_rec.get(&name).cloned().unwrap_or_default();
-        FileDef { name, assign, record, status, org, rel_key, record_key }
+        let varying_dep = file_varying.get(&name).cloned();
+        FileDef { name, assign, record, status, org, rel_key, record_key, varying_dep }
     }).collect();
     let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
@@ -1425,10 +1431,11 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
 
 /// Parse the `FILE SECTION` `FD name [clauses]. 01 record ...` entries -> (the record items to add to the
 /// field table, and a file-name -> record-name map). The subset is one `01` record per file.
-fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, String>, HashMap<String, String>), RunError> {
+#[allow(clippy::type_complexity)]
+fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, String>, HashMap<String, String>, HashMap<String, String>), RunError> {
     let fs = match find_seq_in(toks, &["FILE", "SECTION"], start, end) {
         Some(i) => i + 2,
-        None => return Ok((Vec::new(), HashMap::new(), HashMap::new())),
+        None => return Ok((Vec::new(), HashMap::new(), HashMap::new(), HashMap::new())),
     };
     // the FILE SECTION ends at the next section (WORKING-STORAGE, LOCAL-STORAGE, LINKAGE, or REPORT).
     let ws_at = [
@@ -1439,6 +1446,7 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
     let mut recs = Vec::new();
     let mut file_rec = HashMap::new();
     let mut report_file = HashMap::new();
+    let mut file_varying = HashMap::new();
     let mut i = fs;
     while i < ws_at {
         match toks.get(i) {
@@ -1446,13 +1454,23 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
                 i += 1;
                 let fname = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => break };
                 i += 1;
-                // scan the FD clauses to the period; capture `REPORT[S] [IS|ARE] r1 [r2 ...]`.
+                // scan the FD clauses to the period; capture `REPORT[S] [IS|ARE] r1 [r2 ...]` and a
+                // `RECORD [IS] VARYING [IN SIZE] [FROM n] [TO m] [CHARACTERS] [DEPENDING [ON] field]` clause.
                 while i < ws_at && !matches!(toks.get(i), Some(Tok::Dot)) {
                     if matches!(toks.get(i), Some(Tok::Word(w)) if w == "REPORT" || w == "REPORTS") {
                         i += 1;
                         if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS" || w == "ARE") { i += 1; }
                         while let Some(Tok::Word(r)) = toks.get(i) {
                             report_file.insert(r.clone(), fname.clone());
+                            i += 1;
+                        }
+                        continue;
+                    }
+                    if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DEPENDING") {
+                        i += 1;
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "ON") { i += 1; }
+                        if let Some(Tok::Word(field)) = toks.get(i) {
+                            file_varying.insert(fname.clone(), field.clone());
                             i += 1;
                         }
                         continue;
@@ -1475,7 +1493,7 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
             _ => i += 1,
         }
     }
-    Ok((recs, file_rec, report_file))
+    Ok((recs, file_rec, report_file, file_varying))
 }
 
 /// Parse the `REPORT SECTION` `RD r1. 01 group [TYPE ...]. ... COLUMN n PIC p {SOURCE id | VALUE lit} ...`
@@ -4221,7 +4239,10 @@ fn exec_perform(
 fn resolve_int(w: &str, fields: &HashMap<String, Field>) -> Option<i64> {
     if let Some(f) = fields.get(w) {
         if let Storage::Numeric(a) = &f.storage {
-            let dec = source_to_decimal(&f.bytes, a).ok()?;
+            // decode_numeric_source (NOT the raw zoned source_to_decimal) so a COMP/COMP-5 (binary) or
+            // COMP-3 (packed) counter -- e.g. an OCCURS DEPENDING ON counter, subscript, or TIMES count --
+            // is decoded by value, not misread nibble-by-nibble as zoned display.
+            let dec = decode_numeric_source(&f.bytes, a).ok()?;
             let mut v: i64 = 0;
             for d in &dec.digits {
                 v = v.checked_mul(10)?.checked_add(*d as i64)?;
@@ -6692,6 +6713,23 @@ fn resolve_disk_file(assign: &str) -> Option<std::path::PathBuf> {
 fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option<Vec<Vec<u8>>> {
     let path = resolve_disk_file(&def.assign)?;
     let data = std::fs::read(path).ok()?;
+    if def.varying_dep.is_some() {
+        // GnuCOBOL variable-length record-sequential on-disk format: each record is preceded by a 4-byte
+        // header whose first two bytes are the record length (u16, big-endian); the record data follows at
+        // its true length and is kept UNPADDED here so READ can publish the DEPENDING ON length faithfully.
+        let mut records = Vec::new();
+        let mut p = 0usize;
+        while p + 4 <= data.len() {
+            let len = u16::from_be_bytes([data[p], data[p + 1]]) as usize;
+            p += 4;
+            if len == 0 || p + len > data.len() {
+                break;
+            }
+            records.push(data[p..p + len].to_vec());
+            p += len;
+        }
+        return Some(records);
+    }
     let reclen = fields.get(&def.record).map(|f| f.bytes.len()).filter(|&n| n > 0)?;
     let fit = |bytes: &[u8]| -> Vec<u8> {
         let mut r = bytes.to_vec();
@@ -7885,11 +7923,42 @@ fn exec_read(
     };
     match loaded {
         Some(mut bytes) => {
-            bytes.resize(reclen, b' ');
-            write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
-            if let Some(id) = into {
-                let mv = vec![Tok::Word(def.record.clone()), Tok::Word("TO".to_string()), Tok::Word(id)];
+            if let Some(dep) = &def.varying_dep {
+                // variable-length record: publish the DEPENDING ON length FIRST (so the FD record's OCCURS
+                // DEPENDING describes the live n-byte record area), then store the record image into it.
+                let n = bytes.len();
+                let mv = vec![Tok::Word(n.to_string()), Tok::Word("TO".to_string()), Tok::Word(dep.clone())];
                 exec_move(&mv, fields, ctx.decimal_comma)?;
+                // Store the record image into the FD record's elementary OCCURS DEPENDING leaf, overwriting
+                // its first n bytes IN PLACE (the leaf is built at MAX; set_field_image would shrink the
+                // physical buffer to the live size, so a later longer record would read truncated). A record
+                // read then truncates the MAX buffer to the live DEPENDING length = exactly these n bytes.
+                let leaf = match fields.get(&def.record).map(|f| f.storage.clone()) {
+                    Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.record.clone()),
+                    _ => def.record.clone(),
+                };
+                if let Some(lf) = fields.get_mut(&leaf) {
+                    if lf.bytes.len() < n {
+                        lf.bytes.resize(n, b' ');
+                    }
+                    lf.bytes[..n].copy_from_slice(&bytes);
+                }
+                // READ ... INTO: an alphanumeric MOVE of the n record characters into the receiver,
+                // left-justified and space-padded/truncated to the receiver's width, driven from the raw
+                // record bytes (independent of how the FD record's ODO group reconstructs).
+                if let Some(id) = &into {
+                    let tlen = read_field(fields, id)?.map(|f| f.bytes.len()).filter(|&n| n > 0).unwrap_or(n);
+                    let mut v = bytes.clone();
+                    v.resize(tlen, b' ');
+                    set_field_image(fields, id, &v)?;
+                }
+            } else {
+                bytes.resize(reclen, b' ');
+                write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
+                if let Some(id) = &into {
+                    let mv = vec![Tok::Word(def.record.clone()), Tok::Word("TO".to_string()), Tok::Word(id.clone())];
+                    exec_move(&mv, fields, ctx.decimal_comma)?;
+                }
             }
             set_file_status(fields, &def, "00");
             if let Some(b) = &not_end {

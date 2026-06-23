@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.ELITE-REPLAY.1 — opencbs real-program replay -- run the public third-party opencbs COBOL programs through cobc AND cobrun; observable behaviour (stdout bytes + process exit status + stderr-clean) must agree
 
-**Verdict: PASS** · replay `PASS=30 FAIL=0 SKIP=23 MATCH=30`
+**Verdict: PASS** · replay `PASS=31 FAIL=0 SKIP=22 MATCH=31`
 
 | field | value |
 |-------|-------|

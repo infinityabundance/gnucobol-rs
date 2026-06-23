@@ -51,7 +51,6 @@ declare -A NOTYET=(
   [DF02TEST]="qualified+subscripted compound condition operand (cond-parser work)"
   [DF03TEST]="ORGANIZATION INDEXED: wire the pure-Rust gnucobol-rs-bdb-format backend"
   [DF05TEST]="SORT USING a real input file (file-model + sort-from-file)"
-  [DF22TEST]="sequential OPEN INPUT of a VARYING-length real file (file-model work)"
   [DF25TEST]="OPEN I-O across two real files (file-model read-back)"
   [DF46TEST]="REWRITE over a real I-O file (file-model rewrite)"
 )
