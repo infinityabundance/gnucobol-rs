@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.CALL.EXTENSION.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.8",
+  "crate_version": "0.8.47",
   "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow",
   "hash_chain": {
-    "inputs_sha256": "e935a4990fb0797baa1cf59dd8ff6db6e0e294fa9fa8b18c8e8c473dca5ed991"
+    "inputs_sha256": "20c7bb2ee746a07e850347f0d8b1b2b10e2d0dacc1b6e2a4c4c1d017b3888469"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "31883b825d49a15de5862db4c93153f9397abc2f30ea9e478bdf2570f2f7c643",
-    "receipt_sha256": "775f55de0e7ec477d3a3769f48db4ecc04699c00063f7007ee07c8e05cbb270a"
+    "receipt_sha256": "561f01680ece8e8811df07677e858484dbb8e54fde9f31a90971fe58ac616d83"
   },
   "kind": "court-casefile",
   "lie_prevented": [

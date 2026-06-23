@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.8",
+  "crate_version": "0.8.47",
   "damage_if_overclaimed": "treating an observed control-flow fact as an execution engine would invite running real programs through a kernel that does no Procedure Division execution",
   "hash_chain": {
-    "inputs_sha256": "70a2d66184a9e660c426fe60a29761c98e10dfd3037b25a19fb8401001f9d0ed"
+    "inputs_sha256": "df4c3dacbffa3d36975541fb239e9135b692e69daf4fe49d813ebaa8896ed65a"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7034f04de5f8f7011b4c3808f34250d5ad8e158332e49e6ba223f40fd8730689",
-    "receipt_sha256": "3a081fdbe045f792eb7add59ea8dc40b3bc57c72c6c2c8d91c1cf87e905bb10d"
+    "receipt_sha256": "7c1dc640646acea1cc61663ea6dfe4f194b2977d477a8ea0ea966c6ac544debf"
   },
   "kind": "court-casefile",
   "lie_prevented": [

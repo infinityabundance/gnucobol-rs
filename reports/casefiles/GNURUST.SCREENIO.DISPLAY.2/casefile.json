@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.DISPLAY.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.8",
+  "crate_version": "0.8.47",
   "damage_if_overclaimed": "claiming 'positioned DISPLAY works everywhere' would hide that only the swept grid + single-field + the admitted terminal are proven; un-swept positions, multi-field layout, attributes, and other terminals are not",
   "hash_chain": {
-    "inputs_sha256": "2486410bd7ee53bde34f1d4c704e6aedf5224eff1e1db50789988eb8de27c031"
+    "inputs_sha256": "1d3d665eb87aa20dd28b3f07ca0e1be15a058599a2e9082c6136c74ac977c556"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "efc2368e8d58a3ee8ec01c0c7efb8636983c86574fffdbae93047f17da3d1e9e",
-    "receipt_sha256": "5c47b1771c0ecbc6502ec9103dbd4d9a6753136f13340b64b14f2b3e4b54407f"
+    "receipt_sha256": "d67c6bb11960f6874ad4734c7787c719461659412aaa9b5b5412e723dbe52178"
   },
   "kind": "court-casefile",
   "lie_prevented": [

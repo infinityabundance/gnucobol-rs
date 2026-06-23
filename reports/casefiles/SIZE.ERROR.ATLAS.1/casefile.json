@@ -9,14 +9,14 @@
   ],
   "case_id": "SIZE.ERROR.ATLAS.1",
   "crate": "kobold-data-shim",
-  "crate_version": "0.8.8",
+  "crate_version": "0.8.47",
   "damage_if_overclaimed": "assuming a money field was preserved (or written) on overflow when it was the opposite silently corrupts financial data",
   "hash_chain": {
-    "inputs_sha256": "5575fbff8b5aff403800273232c71575de17b5d52de79508cd441e63ad6bd2a7"
+    "inputs_sha256": "f645538501efeeeac693decc6a5db10c7ba8851205d4039a0df5c312c3f2e408"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d54824e5ac390c4c03f9ff62308349c15779303464667e721e8c0458fb8be36e",
-    "receipt_sha256": "6b9dea0820db91a2e6456252c13ae267488cbe3dec3705f9d28b32468e7723f1"
+    "receipt_sha256": "f6857544738bb3417b3d1ebce29a65007b027aaaf511b91a4ec9c908ddf0f767"
   },
   "kind": "court-casefile",
   "lie_prevented": [

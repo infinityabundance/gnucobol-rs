@@ -48,7 +48,7 @@ re-derives custody for any locally-present corpus and diffs it against the commi
 - source: git https://github.com/PhaseChangeSoftware/cobol-defects-suite
 - license: see repo LICENSE (Phase Change Software et al.)
 - custody: `a7a10bb0330c021c973792d1fd05275475bbcce1` (git-commit-sha)
-- counts: cobol=53, copybook=3, files=786, jcl=49, text=1
+- counts: cobol=53, copybook=3, files=798, jcl=49, text=1
 - claim: custody/index only; no conformance, suite-pass, or behaviour-parity claim
 
 ### X-COBOL — X-COBOL — Dataset of Open-Source COBOL Repositories (84 repos, 1255 files)
