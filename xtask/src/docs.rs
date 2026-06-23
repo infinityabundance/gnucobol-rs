@@ -92,6 +92,11 @@ fn machine_values(root: &str) -> BTreeMap<String, String> {
     m.insert("frontend_program_count".into(), frontend_progs.to_string());
     m.insert("sweep_count".into(), sweep_count.to_string());
     m.insert("runtime_file_count".into(), dox_files.to_string());
+    // whole-tree census (axis b of the three-axis claim ledger) -- from the SAME data as FILE-PARITY.md.
+    let (tree_built, tree_total) = crate::cobol_parity::tree_census();
+    m.insert("tree_built".into(), tree_built.to_string());
+    m.insert("tree_total".into(), tree_total.to_string());
+    m.insert("tree_built_pct".into(), format!("{:.0}", if tree_total == 0 { 0.0 } else { 100.0 * tree_built as f64 / tree_total as f64 }));
     m.insert("publish_note".into(), "(The git repo is the authority; crates.io may trail by a version under publish rate limits.)".into());
     m.insert("sealed_courts_table".into(), court_table(root, &courts, "Sealed courts (generated from `reports/claim-ladder.json`)", true));
     m.insert("gnurust_courts_table".into(), court_table(root, &gnurust, "Sealed GnuCOBOL data/arithmetic courts", false));

@@ -24,13 +24,13 @@ COBOL's bedrock is its *byte layout* — COMP-3, zoned decimal, edited PICTURE, 
 - A **C-ABI shim** (`gnucobol-rs-ffi`) — drop it in where you would link `libcob` (`cob_move`, `cob_get_int`, …).
 - A **compatibility court** — 137 sealed courts, each backed by a forensic case file and a one-command replay.
 
-> As of **gnucobol-rs 0.8.47** (2026-06): **13/13 `libcob` files** ported 1:1 · **110/110 intrinsics** in the runtime · **137 sealed courts** · MSRV **1.74**. The living current-state authority is [`STATUS.md`](STATUS.md) — when it disagrees with this page, it wins.
+> **Three axes, never conflated** (as of **gnucobol-rs 0.8.47**): **(1) the `libcob` runtime** — 13/13 files ported 1:1, oracle-sealed = **100%** · **(2) the whole GnuCOBOL 3.2 source tree** — 88/329 files built natively (**27%**), every file accounted-for (0 unevidenced gaps) · **(3) the `cobrun` front-end** — runs a *sweep-verified slice* of the language, every passing program byte-identical to `cobc`, boundaries marked. **“100%” on this page always means axis (1), the runtime — never the whole tree, never the full language.** Authorities: [`FILE-PARITY.md`](FILE-PARITY.md) (axis 2) · [`COBOL-PARITY.md`](COBOL-PARITY.md) (axis 3) · [`STATUS.md`](STATUS.md) (live current-state — wins on any disagreement). 137 sealed courts · MSRV 1.74.
 
 ---
 
 ## The scope, honestly
 
-Three independent parity views cross-check the runtime so a doc-comment can never masquerade as a port — all at 100% / 0 gaps:
+Three independent parity views cross-check **the `libcob` runtime — axis (1), not the whole 329-file tree (axis 2) or the full language (axis 3)** so a doc-comment can never masquerade as a port — all at **runtime-100% / 0 gaps**:
 
 - **13/13 `libcob` source files** ported 1:1 to safe Rust, oracle-sealed — `call`, `cconv`, `common`, `cobgetopt`, `fileio`, `intrinsic`, `mlio`, `move`, `numeric`, `reportio`, `screenio`, `strings`, `termio`. Not a subset of the runtime. The runtime.
 - **Doxygen C-parse view:** 998/998 functions.
@@ -171,7 +171,7 @@ The **full 137-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts
 
 ## Breadth of verification
 
-- **106 differential oracle sweep scripts** (`lab/oracle/*sweep*.sh`), each byte-for-byte vs the admitted GnuCOBOL 3.2, spanning arithmetic/numeric, edited/PICTURE/encoding, data movement/tables, control flow, files/I-O, strings, screen I/O (9 native terminal-byte courts), intrinsics/dates, and CALL/interop.
+- **107 differential oracle sweep scripts** (`lab/oracle/*sweep*.sh`), each byte-for-byte vs the admitted GnuCOBOL 3.2, spanning arithmetic/numeric, edited/PICTURE/encoding, data movement/tables, control flow, files/I-O, strings, screen I/O (9 native terminal-byte courts), intrinsics/dates, and CALL/interop.
 - **Corpus** (`lab/corpus/`): ~679 real COBOL programs across 7 subdirectories plus the 4.3 MB NIST COBOL-85 validation suite (`newcob.val.Z`, held under the `GNURUST.CCVS85.1` custody gate) — including 533 programs from a public GnuCOBOL test corpus, 53 from an open banking suite, and the 182 hand-authored front-end programs.
 - **Three independent parity maps** cross-check so a doc-comment can never masquerade as a port: DOXYGEN-PARITY (998/998 fns), LIBCOB-PARITY / PORT-INDEX (typed C↔Rust symbols, 100% active), and CLANG-AST-PARITY (870 defs / 3240 call edges). See [`COBOL-PARITY.md`](COBOL-PARITY.md), [`FILE-PARITY.md`](FILE-PARITY.md), [`DOXYGEN-PARITY.md`](DOXYGEN-PARITY.md), [`LIBCOB-PARITY.md`](LIBCOB-PARITY.md), [`CLANG-AST-PARITY.md`](CLANG-AST-PARITY.md), [`FUNCTION-EVIDENCE.md`](FUNCTION-EVIDENCE.md), and the 0–7 [`PORTING-LADDER.md`](PORTING-LADDER.md) (level 7 = compiler replacement, explicitly **NOT CLAIMED**; level is evidence *shape*, not quality).
 

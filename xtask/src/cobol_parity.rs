@@ -1029,6 +1029,19 @@ fn pct(done: usize, total: usize) -> f64 {
     }
 }
 
+/// Whole-tree census counts `(built_natively, total)` from the same `FILES` data that drives
+/// `FILE-PARITY.md` -- the single source of truth so the README three-axis ledger can never name a
+/// figure that disagrees with the file census. `built` = ported / copied+wired / partial.
+pub fn tree_census() -> (usize, usize) {
+    let m: Value = serde_json::from_str(FILES).unwrap_or(Value::Null);
+    let files = m["files"].as_array().cloned().unwrap_or_default();
+    let built = files
+        .iter()
+        .filter(|f| matches!(f["status"].as_str().unwrap_or(""), "PORTED" | "PORTED+EVIDENCED" | "PORTED-VIA" | "COPIED+WIRED" | "PARTIAL"))
+        .count();
+    (built, files.len())
+}
+
 /// Data-description clauses the cobrun front-end parses + applies (the rest are runtime-ready, not wired).
 fn fe_clause(c: &str) -> bool {
     matches!(
