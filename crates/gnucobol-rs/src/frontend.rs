@@ -5669,6 +5669,28 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
         if matches!(stmt.get(tp + 1), Some(Tok::Word(w)) if w == "VALUE") {
             return exec_initialize_to_value(stmt, tp, fields, decimal_comma);
         }
+        // `INITIALIZE items [ALL] TO DEFAULT [THEN] [REPLACING ...]` -- TO DEFAULT is the standard
+        // default behaviour (each leaf to its category default), identical to a bare INITIALIZE. Reduce
+        // it to the canonical `items [REPLACING ...]` and reuse the default path. (WITH FILLER, which
+        // would also init FILLER leaves, stays out of subset and falls through to the guard below.)
+        if matches!(stmt.get(tp + 1), Some(Tok::Word(w)) if w == "DEFAULT")
+            && !stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "FILLER"))
+        {
+            let mod_start = stmt
+                .iter()
+                .position(|t| matches!(t, Tok::Word(w) if w == "ALL" || w == "TO"))
+                .unwrap_or(tp);
+            let mut rebuilt: Vec<Tok> = stmt[..mod_start].to_vec();
+            if let Some(rp) = stmt
+                .iter()
+                .position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"))
+                .filter(|&p| p > tp)
+            {
+                rebuilt.push(Tok::Word("REPLACING".to_string()));
+                rebuilt.extend_from_slice(&stmt[rp + 1..]);
+            }
+            return exec_initialize(&rebuilt, fields, decimal_comma);
+        }
     }
     let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"));
     let head = match repl_pos {
