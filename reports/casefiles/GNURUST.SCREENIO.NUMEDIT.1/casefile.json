@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.NUMEDIT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.47",
+  "crate_version": "0.8.48",
   "damage_if_overclaimed": "claiming 'numeric-edited screen display works' would hide that only single-field Z-suppression positioning is proven -- star-fill, multi-field line-diff, edited colour/attributes, ACCEPT, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "2d4fb736f6f8c59f1b279fcf8efe49075b6ef3698a506719081949f9c3995ee6"
+    "inputs_sha256": "2715800c86288716cd0465dccdcc7003d851cb5f2a004a70ae0069d98819e5db"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0b31daed49f714a73910cc8db953fea535130a23ed82ab2ee23593a9260c49fa",
-    "receipt_sha256": "e21e7fa1189946738db100a77e119b710f2289c536d79082ea066b45a95f061d"
+    "receipt_sha256": "18affe036d4fc4d0c9020ba2953bca8bf0c5535aed1a1a2250212675e803ee8e"
   },
   "kind": "court-casefile",
   "lie_prevented": [

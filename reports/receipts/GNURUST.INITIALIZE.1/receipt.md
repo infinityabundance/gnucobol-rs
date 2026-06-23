@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INITIALIZE.1` |
 | court | INITIALIZE receiver byte effects |
-| crate_version | `0.8.47` |
+| crate_version | `0.8.48` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | INITIALIZE record -> changed/preserved receiver bytes (elementary/group/FILLER/REDEFINES/OCCURS/VALUE) |
 | replay command | `bash lab/oracle/initialize_sweep.sh` |

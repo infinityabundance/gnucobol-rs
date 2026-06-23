@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.ORD-CHAR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.47",
+  "crate_version": "0.8.48",
   "damage_if_overclaimed": "treating ORD as the raw byte value (or CHAR as 0-based) is a silent off-by-one in every character-code computation",
   "hash_chain": {
-    "inputs_sha256": "9e4ee24f43d61d57ff812c727db2cd8c3eee71fcdb3ddcf1de1d7802b80c94a1"
+    "inputs_sha256": "644c3233ffda501542f49caf120fd328763b360607fbb04650b7086a4cfdfe78"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "eb42ad9130eb549a3061d37f0eefcfb2763ffc62762677129fa17127b1885747",
-    "receipt_sha256": "a4245fc695af9ce734b1b101d0de5544154561fb53247719af060c8730fdf610"
+    "receipt_sha256": "d34a2d25d1597e17598906bbb730c454383f1342e30348ce90a74d22c8039748"
   },
   "kind": "court-casefile",
   "lie_prevented": [

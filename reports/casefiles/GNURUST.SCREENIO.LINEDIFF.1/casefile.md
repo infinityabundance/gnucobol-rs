@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SCREENIO.LINEDIFF.1 (court-casefile)
 
-**Verdict: PASS** · 19/19 pass, 0 fail · crate `gnucobol-rs` 0.8.47
+**Verdict: PASS** · 19/19 pass, 0 fail · crate `gnucobol-rs` 0.8.48
 
 - **Oracle:** cobc two DISPLAY ... LINE r COLUMN c statements to the same row (libcob/screenio.c via ncurses doupdate), captured under a pty with TERM=xterm; DIFFERENTIALLY against GnuCOBOL 3.2 AND 3.1.2
 - **Byte domain(s):** two same-row DISPLAY statements (col1/len1, col2/len2) -> the exact ncurses doupdate/TransformLine refresh byte stream, on the admitted terminal
