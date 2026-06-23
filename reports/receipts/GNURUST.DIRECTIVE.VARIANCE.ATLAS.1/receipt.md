@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.DIRECTIVE.VARIANCE.ATLAS.1` |
 | court | observed compiler-directive byte-variance atlas |
-| crate_version | `0.8.46` |
+| crate_version | `0.8.47` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | compiler-directive byte delta from the default profile: -fbinary-size (layout), -fbinary-byteorder (endianness), -fbinary-truncate (MOVE result) |
 | replay command | `bash lab/oracle/directive_variance_atlas_sweep.sh` |

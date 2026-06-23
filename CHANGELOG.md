@@ -9,6 +9,9 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/CHANGELOG.md`._
 
+## [0.8.47]
+- **Front-end feature gaps closed -- the COBOL-PARITY "genuine remaining work" list is now empty (0).** Sealed the last six deliberate sub-form limits, each proven byte-identical to the admitted cobc 3.2: `UNSTRING INTO` a group receiver (alphanumeric over the full byte image); the `INITIALIZE` verb (`TO DEFAULT`, `WITH FILLER`, a leading `THEN`, and `ALL TO VALUE [THEN] TO DEFAULT`) -- which also fixed a latent bug where a plain `INITIALIZE` reset FILLER leaves; the `SET` catch-all (reworded as validation, since a SET with no `TO`/`UP|DOWN` is a cobc syntax error); `JSON/XML GENERATE` from a source containing a flat group-OCCURS (renders the first occurrence's children, matching cobc's `-Wpending` behaviour); and a `SYNCHRONIZED` descendant inside a multi-dimension group-OCCURS table (the nested-table layout now models per-element SYNC alignment). Corpus p177-p182; front-end sweep 182/0; 960 lib tests.
+
 ## [0.8.46]
 - **Multiple different-sized FILLERs in one group no longer corrupt a group MOVE.** Two FILLERs under the same group collided to one field key, so the byte distribution used one FILLER's length for every FILLER slot and shifted all later children (e.g. MOVE `'2021 09 15'` into a yyyy/-/mm/-/dd record left mm/dd at zero). Each FILLER now gets a unique key. Found running the real-world opencbs corpus (DF19 date validity; opencbs 29 -> 30 of 39). Front-end sweep 176/0.
 
