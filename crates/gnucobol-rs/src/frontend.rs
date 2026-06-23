@@ -5549,8 +5549,10 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
         }
         return Ok(());
     }
+    // Every valid SET form has either `TO` or `UP|DOWN BY`; a SET with neither is a cobc syntax error
+    // ("unexpected ..."), so refusing it is faithful validation, not a feature gap.
     let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO"))
-        .ok_or_else(|| RunError::Unsupported("SET subset is `SET name ... TO {TRUE|value}` / `SET idx UP|DOWN BY n`".into()))?;
+        .ok_or_else(|| RunError::Unsupported("SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)".into()))?;
     let targets: Vec<String> = stmt[..to].iter().filter_map(|t| match t {
         Tok::Word(w) => Some(w.clone()),
         _ => None,
@@ -7021,24 +7023,35 @@ fn trimmed_escaped(bytes: &[u8], escape: impl Fn(u8) -> Option<&'static str>) ->
 /// The JSON value of a field: `{...}` for a group, a trimmed number for numeric, a quoted escaped string
 /// otherwise -- recursively over the group tree (GnuCOBOL `JSON GENERATE`).
 fn json_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
-    match fields.get(name).map(|f| f.storage.clone()) {
-        Some(Storage::Group { children }) => {
-            // `SUPPRESS c` omits a child; `NAME c IS "k"` renames its key.
+    json_value_occ(name, None, fields, rename, suppress)
+}
+
+/// JSON value of a field. `occ` is the element index to read when inside a group-OCCURS table (cobc 3.2
+/// renders only the FIRST occurrence -- `{"ROW":{<element-1 children>}}` -- a `-Wpending` behaviour).
+fn json_value_occ(name: &str, occ: Option<usize>, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
+    let read_occ = |n: &str| match occ {
+        Some(i) => read_field(fields, &format!("{n}({i})")).ok().flatten().map(|f| f.bytes).unwrap_or_default(),
+        None => ml_first_elem(read_field(fields, n).ok().flatten().as_ref()),
+    };
+    match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
+        Some((Storage::Group { children }, n)) => {
+            // A group-OCCURS renders element 1's children (occ=1); a plain group propagates the context.
+            let child_occ = if n > 1 && occ.is_none() { Some(1) } else { occ };
             let parts: Vec<String> = children.iter()
                 .filter(|c| !suppress.contains(*c))
                 .map(|c| {
                     let key = rename.get(c).map(String::as_str).unwrap_or(c);
-                    format!("\"{}\":{}", key, json_value(c, fields, rename, suppress))
+                    format!("\"{}\":{}", key, json_value_occ(c, child_occ, fields, rename, suppress))
                 })
                 .collect();
             format!("{{{}}}", parts.join(","))
         }
-        Some(Storage::Numeric(attr)) => {
-            let bytes = ml_first_elem(fields.get(name)); // an elementary OCCURS emits only its first element
+        Some((Storage::Numeric(attr), _)) => {
+            let bytes = match occ { Some(_) => read_occ(name), None => ml_first_elem(fields.get(name)) };
             source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
         }
         _ => {
-            let bytes = ml_first_elem(read_field(fields, name).ok().flatten().as_ref());
+            let bytes = read_occ(name);
             let esc = |b: u8| match b { b'"' => Some("\\\""), b'\\' => Some("\\\\"), 0x08 => Some("\\b"), 0x0c => Some("\\f"), b'\n' => Some("\\n"), b'\r' => Some("\\r"), b'\t' => Some("\\t"), _ => None };
             format!("\"{}\"", trimmed_escaped(&bytes, esc))
         }
@@ -7068,6 +7081,26 @@ fn ml_has_group_occurs(name: &str, fields: &HashMap<String, Field>) -> bool {
     }
 }
 
+/// True if the source contains a group-OCCURS the ML renderer cannot reduce to element 1: a group-OCCURS
+/// whose child is itself a group or another OCCURS (nested / multi-dimension). A FLAT group-OCCURS of
+/// elementary scalars is supported (the renderers read its element-1 children), so it is NOT complex.
+fn ml_group_occurs_complex(name: &str, fields: &HashMap<String, Field>) -> bool {
+    match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
+        Some((Storage::Group { children }, occ)) => {
+            if occ > 1 {
+                children.iter().any(|c| match fields.get(c).map(|f| (f.storage.clone(), f.occurs)) {
+                    Some((Storage::Group { .. }, _)) => true, // sub-group child
+                    Some((_, o)) => o > 1,                    // nested OCCURS child (multi-dim)
+                    None => true,
+                })
+            } else {
+                children.iter().any(|c| ml_group_occurs_complex(c, fields))
+            }
+        }
+        _ => false,
+    }
+}
+
 /// `XML GENERATE ... SUPPRESS id WHEN {ZERO | SPACE | LOW-VALUE | HIGH-VALUE}` -- true when `id`'s value
 /// matches the figurative, so the element is omitted. (JSON GENERATE does not allow SUPPRESS WHEN -- cobc
 /// rejects it at compile time; the caller fails that closed as validation.)
@@ -7089,16 +7122,28 @@ fn ml_suppress_when(name: &str, fig: &str, fields: &HashMap<String, Field>) -> b
 /// The XML element of a field: `<name>...</name>` with children nested, numeric/alnum content (XML-escaped),
 /// recursively over the group tree (GnuCOBOL `XML GENERATE`, no declaration).
 fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
-    let inner = match fields.get(name).map(|f| f.storage.clone()) {
-        Some(Storage::Group { children }) => children.iter()
-            .filter(|c| !suppress.contains(*c))
-            .map(|c| xml_value(c, fields, rename, suppress)).collect::<String>(),
-        Some(Storage::Numeric(attr)) => {
-            let bytes = ml_first_elem(fields.get(name));
+    xml_value_occ(name, None, fields, rename, suppress)
+}
+
+/// XML element of a field. `occ` is the element index inside a group-OCCURS table (cobc renders element 1).
+fn xml_value_occ(name: &str, occ: Option<usize>, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
+    let read_occ = |n: &str| match occ {
+        Some(i) => read_field(fields, &format!("{n}({i})")).ok().flatten().map(|f| f.bytes).unwrap_or_default(),
+        None => ml_first_elem(read_field(fields, n).ok().flatten().as_ref()),
+    };
+    let inner = match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
+        Some((Storage::Group { children }, n)) => {
+            let child_occ = if n > 1 && occ.is_none() { Some(1) } else { occ };
+            children.iter()
+                .filter(|c| !suppress.contains(*c))
+                .map(|c| xml_value_occ(c, child_occ, fields, rename, suppress)).collect::<String>()
+        }
+        Some((Storage::Numeric(attr), _)) => {
+            let bytes = match occ { Some(_) => read_occ(name), None => ml_first_elem(fields.get(name)) };
             source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
         }
         _ => {
-            let bytes = ml_first_elem(read_field(fields, name).ok().flatten().as_ref());
+            let bytes = read_occ(name);
             let esc = |b: u8| match b { b'&' => Some("&amp;"), b'<' => Some("&lt;"), b'>' => Some("&gt;"), b'"' => Some("&quot;"), _ => None };
             trimmed_escaped(&bytes, esc)
         }
@@ -7167,10 +7212,12 @@ fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx
             }
         }
     }
-    // An elementary OCCURS emits only its first element (ml_first_elem); a group-OCCURS (OCCURS of a GROUP)
-    // would need the strided element-1 children, which the renderers cannot address -- fail closed.
-    if ml_has_group_occurs(&source, fields) {
-        return Err(RunError::Unsupported(format!("JSON/XML GENERATE: source `{source}` contains a group-OCCURS table (only an elementary OCCURS / scalar subset is supported)")));
+    // cobc 3.2 renders only element 1 of an OCCURS (a `-Wpending` behaviour): a flat group-OCCURS of
+    // elementary children -> `{"ROW":{<element-1 children>}}` (now handled via the occ-threaded renderers).
+    // A nested / multi-dimension group-OCCURS (a sub-group or further-OCCURS child) would need deeper
+    // element-1 addressing the renderer does not do -- still fail closed.
+    if ml_group_occurs_complex(&source, fields) {
+        return Err(RunError::Unsupported(format!("JSON/XML GENERATE: source `{source}` has a nested or multi-dimension group-OCCURS (cobc handles only a flat group-OCCURS here; deeper nesting is -Wpending)")));
     }
     let outer = rename.get(&source).map(String::as_str).unwrap_or(&source);
     let text = if xml { xml_value(&source, fields, &rename, &suppress) } else { format!("{{\"{}\":{}}}", outer, json_value(&source, fields, &rename, &suppress)) };
