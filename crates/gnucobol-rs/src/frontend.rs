@@ -355,7 +355,10 @@ fn preprocess(source: &str) -> String {
                 stack.pop();
                 continue;
             }
-            // an unrecognized >> directive: pass it through (only if currently including).
+            // An unrecognized >> compiler directive (>>TURN ... CHECKING, >>SOURCE FORMAT, >>CALL-CONVENTION,
+            // >>PAGE, >>LISTING, >>D debug line, ...) carries no runtime tokens -- drop it rather than leak it
+            // into the statement stream. (Source FORMAT is governed by the -fixed/-free flag here.)
+            continue;
         }
         if including(&stack) {
             out.push_str(line);
@@ -3135,8 +3138,17 @@ const STMT_VERBS: &[&str] = &[
 /// Scope terminators that end a block.
 const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
 
+/// Explicit per-verb scope terminators that cobrun does not NEED (each verb parses its operands/handlers up
+/// to a boundary or the period already), so a standalone `END-X` is a no-op: it bounds the preceding verb's
+/// operand scan and is then skipped. Unlike SCOPE_ENDERS it does NOT end the enclosing block.
+const STMT_ENDERS: &[&str] = &[
+    "END-DISPLAY", "END-ACCEPT", "END-STRING", "END-UNSTRING", "END-COMPUTE", "END-ADD", "END-SUBTRACT",
+    "END-MULTIPLY", "END-DIVIDE", "END-CALL", "END-WRITE", "END-REWRITE", "END-DELETE", "END-START",
+    "END-UNLOCK", "END-DISABLE",
+];
+
 fn is_boundary(w: &str) -> bool {
-    STMT_VERBS.contains(&w) || SCOPE_ENDERS.contains(&w)
+    STMT_VERBS.contains(&w) || SCOPE_ENDERS.contains(&w) || STMT_ENDERS.contains(&w)
 }
 
 /// Execute (or, when `exec` is false, SKIP) a block of statements starting at `*pos`, stopping -- WITHOUT
@@ -3154,6 +3166,9 @@ fn run_block(
         match toks.get(*pos) {
             None | Some(Tok::Dot) => return Ok(false),
             Some(Tok::Word(w)) if SCOPE_ENDERS.contains(&w.as_str()) => return Ok(false),
+            // A stray explicit scope terminator (END-DISPLAY, END-ADD, ...) -- the verb it closed already
+            // ran (cobrun parses to a boundary), so skip it and continue this block.
+            Some(Tok::Word(w)) if STMT_ENDERS.contains(&w.as_str()) => { *pos += 1; continue; }
             Some(Tok::Word(w)) => {
                 // A paragraph label `NAME.` or section label `NAME SECTION.` in the run stream: skip it.
                 // The following period ends this (empty) block; the program-body loop resumes after it.
@@ -5109,7 +5124,9 @@ fn exec_call(
         Some(Tok::Word(w)) => w.clone(), // CALL <identifier> -- treat the literal word as the name
         _ => return Err(RunError::Unsupported("CALL without a program name".into())),
     };
-    let callee = ctx.programs.get(&name).ok_or_else(|| {
+    // Program-ids are case-insensitive: the registry keys are uppercased at parse, but a `CALL "literal"`
+    // keeps the literal's case, so match the name as-is and then uppercased.
+    let callee = ctx.programs.get(&name).or_else(|| ctx.programs.get(&name.to_uppercase())).ok_or_else(|| {
         RunError::Unsupported(format!("CALL \"{name}\": not a contained program (external CALL is a boundary)"))
     })?;
 

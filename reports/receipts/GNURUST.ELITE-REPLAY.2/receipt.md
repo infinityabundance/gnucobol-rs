@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.ELITE-REPLAY.2 — broad public-corpus replay -- the GCC-COBOL testsuite + the hand-authored front-end corpus run through cobc 3.2 AND cobrun; observable behaviour (stdout bytes + process exit) must agree, with cobrun failing CLOSED (never wrong) wherever it cannot run a program
 
-**Verdict: PASS** · replay `PASS=281 FAIL=0 SKIP=437 MATCH=281`
+**Verdict: PASS** · replay `PASS=327 FAIL=0 SKIP=391 MATCH=327`
 
 | field | value |
 |-------|-------|
