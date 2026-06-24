@@ -1,6 +1,6 @@
-# GNURUST.ELITE-REPLAY.2 known silent divergences -- real cobrun bugs/gaps being DRIVEN DOWN to empty
-# (the ratchet). An UN-listed divergence FAILs the sweep, so a regression can never hide. Each line is
-# a program cobrun runs clean but whose output != cobc -- a bug to fix, not a permanent boundary.
+# GNURUST.ELITE-REPLAY.2 known silent divergences -- real cobrun bugs being DRIVEN DOWN to empty (the
+# ratchet). An UN-listed divergence FAILs the sweep. Each is a program cobrun runs clean but whose
+# output != cobc -- a bug to fix, not a permanent boundary.
 
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/data1.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group1/comp5.cob
@@ -8,8 +8,6 @@ lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group1/multiple-compares.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group1/packed.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/ADD_CORRESPONDING.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Alphanumeric_and_binary_numeric.cob
-lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/BLANK_WHEN_ZERO.cob
-lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/CDF_IS_NOT_DEFINED.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/CDF__3__ALL_NUMERIC_COMPARISONS.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Concatenation_operator.cob
 lab/corpus/gcobol/gcc/gcc/testsuite/cobol.dg/group2/Context_sensitive_words__1_.cob

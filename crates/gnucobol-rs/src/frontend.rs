@@ -370,12 +370,21 @@ fn preprocess(source: &str) -> String {
 
 /// Evaluate a `>>IF` condition: `[NOT] name DEFINED`, or `name = value` (string-equal the defined value).
 fn eval_pp_cond(c: &str, defines: &HashMap<String, String>) -> bool {
-    let p: Vec<&str> = c.split_whitespace().collect();
+    // drop the optional `IS` so `name IS [NOT] DEFINED` normalises to `name [NOT] DEFINED`.
+    let p: Vec<&str> = c.split_whitespace().filter(|w| *w != "IS").collect();
+    // DEFINED test in any spelling: `NOT name DEFINED`, `name DEFINED`, `name NOT DEFINED`.
     if p.len() >= 3 && p[0] == "NOT" && p[2] == "DEFINED" {
         return !defines.contains_key(p[1]);
     }
+    if p.len() >= 3 && p[1] == "NOT" && p[2] == "DEFINED" {
+        return !defines.contains_key(p[0]);
+    }
     if p.len() >= 2 && p[1] == "DEFINED" {
         return defines.contains_key(p[0]);
+    }
+    // equality against the defined value: `name = value`, `name NOT = value`.
+    if p.len() >= 4 && p[1] == "NOT" && p[2] == "=" {
+        return defines.get(p[0]).map(|v| v != p[3]).unwrap_or(true);
     }
     if p.len() >= 3 && p[1] == "=" {
         return defines.get(p[0]).map(|v| v == p[2]).unwrap_or(false);
@@ -1656,7 +1665,7 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
             let (mut pic, mut source, mut value, mut sum) = (String::new(), None, None, None);
             while i < end && !matches!(toks.get(i), Some(Tok::Dot)) {
                 match word(i) {
-                    Some("PIC" | "PICTURE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } if let Some(p) = word(i) { pic = p.to_string(); i += 1; } }
+                    Some("PIC" | "PICTURE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } if let Some(p) = word(i) { pic = p.trim_end_matches([',', ';']).to_string(); i += 1; } }
                     Some("SOURCE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } if let Some(s) = word(i) { source = Some(s.to_string()); i += 1; } }
                     Some("SUM") => { i += 1; if let Some(s) = word(i) { sum = Some(s.to_string()); i += 1; } }
                     Some("VALUE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } value = toks.get(i).cloned(); i += 1; }
@@ -1926,7 +1935,9 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         k += 1;
                     }
                     if let Some(Tok::Word(p)) = toks.get(k) {
-                        pic = Some(p.clone());
+                        // a trailing ',' / ';' is a CLAUSE SEPARATOR, never picture editing (an insertion
+                        // comma must sit between digit positions) -- e.g. `PIC 9, BLANK WHEN ZERO`.
+                        pic = Some(p.trim_end_matches([',', ';']).to_string());
                         k += 1;
                     }
                 }
@@ -4354,7 +4365,7 @@ fn eval_cond(
     let t = resolve_functions(t, fields)?;
     let t = &t[..];
     let fields = &*fields;
-    let words: Vec<String> = t
+    let words0: Vec<String> = t
         .iter()
         .map(|tok| match tok {
             Tok::Word(w) => w.clone(),
@@ -4362,6 +4373,27 @@ fn eval_cond(
             Tok::Dot => ".".into(),
         })
         .collect();
+    // Collapse the figurative repeat `ALL <literal>` into a single operand token `\u{2}<unit-bytes>` -- it
+    // compares as the unit cycled to the OTHER operand's width (`IF d = ALL "9"`). `ALL <figurative>` (ALL
+    // SPACES) is just the figurative. A lone ALL is left as-is.
+    let mut words: Vec<String> = Vec::with_capacity(words0.len());
+    let mut wi = 0;
+    while wi < words0.len() {
+        if words0[wi] == "ALL" && wi + 1 < words0.len() {
+            let nxt = &words0[wi + 1];
+            if figurative_kind(nxt).is_some() {
+                words.push(nxt.clone()); // ALL SPACES == SPACES
+            } else if let Some(s) = nxt.strip_prefix('\u{1}') {
+                words.push(format!("\u{5}{s}")); // ALL "lit" -> repeat-unit marker (\u{5}; \u{2} is the FN temp)
+            } else {
+                words.push(format!("\u{5}{nxt}")); // ALL <other literal token>
+            }
+            wi += 2;
+            continue;
+        }
+        words.push(words0[wi].clone());
+        wi += 1;
+    }
     let mut p = 0;
     // `ctx` carries the last-stated (subject, operator, negation) for abbreviated combined conditions
     // (`A = 1 OR 2`, `A > B AND < C`); it threads left-to-right through the whole condition.
@@ -4585,13 +4617,16 @@ fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 
     }
     // alphanumeric compare: space-pad the shorter, byte compare. Under PROGRAM COLLATING SEQUENCE the
     // bytes are weighted through `col` first (e.g. EBCDIC order: lowercase < uppercase < digits). A
-    // figurative operand (SPACES/HIGH-VALUE/...) fills the OTHER operand's width with its byte.
+    // figurative operand (SPACES/HIGH-VALUE/...) fills the OTHER operand's width with its byte; an
+    // `ALL <literal>` repeat operand (\u{2}unit) fills it by cycling the unit bytes.
     let (fa, fb) = (figurative_kind(a), figurative_kind(b));
-    let ba = if fa.is_some() { Vec::new() } else { cond_bytes(a, f) };
-    let bb = if fb.is_some() { Vec::new() } else { cond_bytes(b, f) };
+    let (ra, rb) = (a.strip_prefix('\u{5}'), b.strip_prefix('\u{5}'));
+    let ba = if fa.is_some() || ra.is_some() { Vec::new() } else { cond_bytes(a, f) };
+    let bb = if fb.is_some() || rb.is_some() { Vec::new() } else { cond_bytes(b, f) };
     let width = ba.len().max(bb.len()).max(1);
-    let sa = match fa { Some(fig) => vec![fig_byte(fig); width], None => ba };
-    let sb = match fb { Some(fig) => vec![fig_byte(fig); width], None => bb };
+    let repeat = |u: &str, w: usize| -> Vec<u8> { let u = u.as_bytes(); if u.is_empty() { vec![b' '; w] } else { (0..w).map(|i| u[i % u.len()]).collect() } };
+    let sa = match (fa, ra) { (Some(fig), _) => vec![fig_byte(fig); width], (_, Some(u)) => repeat(u, width), _ => ba };
+    let sb = match (fb, rb) { (Some(fig), _) => vec![fig_byte(fig); width], (_, Some(u)) => repeat(u, width), _ => bb };
     let n = sa.len().max(sb.len());
     for i in 0..n {
         let ca = sa.get(i).copied().unwrap_or(b' ');
@@ -4628,8 +4663,8 @@ fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
     if let Some(field) = read_field(f, w).ok().flatten() {
         return field_to_decimal(&field);
     }
-    if w.starts_with('\u{1}') {
-        return None; // string literal -> alphanumeric
+    if w.starts_with('\u{1}') || w.starts_with('\u{5}') {
+        return None; // string literal / ALL-repeat -> alphanumeric
     }
     // figurative ZERO is the numeric value 0 (so `IF n = ZERO` compares numerically for any numeric usage).
     if matches!(w, "ZERO" | "ZEROS" | "ZEROES") {
