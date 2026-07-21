@@ -1,0 +1,25 @@
+name: Mirror to Codeberg
+
+on:
+  push:
+    branches: [ "main", "master" ] # Triggers on changes to these branches
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches full history, required for mirroring
+
+      - name: Push to Codeberg Remote
+        env:
+          CB_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          # Adds the authenticated Codeberg URL
+          git remote add codeberg https://x-access-token:${CB_TOKEN}@codeberg.org/infinityabundance/gnucobol-rs.git
+          
+          # Forces synchronization of all history, branches, and tags
+          git push codeberg --prune --force --all
+          git push codeberg --prune --force --tags
