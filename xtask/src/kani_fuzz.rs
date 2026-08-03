@@ -16,11 +16,14 @@ fn na_reason(cid: &str) -> Option<&'static str> {
         "GNURUST.LINEAGE.CORPUS.20M.SMOKE" => "meta: 200K real-cobc witness burn classified by the engine; no single Rust byte kernel",
         "GNURUST.LINEAGE.CORPUS.20M.1" => "meta: completed 4M real-cobc witness run; no single Rust byte kernel",
         "GNURUST.VALUE.NEGZERO.EDGE.1" => "characterization/regression-lock of the VALUE -0 oracle rule; exercises value_image which is kani+fuzz-covered under GNURUST.8",
+        "GNURUST.CCVS85.2" => "meta: NIST CCVS85 corpus materialization + real-GnuCOBOL oracle baseline; no single Rust byte kernel -- its own seal-grade gate is replay+all-512-accounted+raw-evidence",
+        "GNURUST.CCVS85.3" => "meta: NIST CCVS85 corpus cobrun baseline (isolated, no-delegation); no single Rust byte kernel -- its own seal-grade gate is replay+no-delegation+raw-evidence",
+        "GNURUST.CCVS85.4" => "meta: NIST CCVS85 differential comparison + per-unit classification; no single Rust byte kernel -- its own seal-grade gate is replay+classification-reconciliation",
         _ => return None,
     })
 }
 
-const IS_ATLAS_EXTRA: [&str; 9] = ["GNURUST.COVERAGE.1","GNURUST.FILE.STATUS.1","GNURUST.PUBLIC.CORPUS.1","GNURUST.BUILD.PROFILE.1","GNURUST.PUBLIC.GAP.1","GNURUST.LINEAGE.CORPUS.20M.0","GNURUST.LINEAGE.CORPUS.20M.SMOKE","GNURUST.LINEAGE.CORPUS.20M.1","GNURUST.VALUE.NEGZERO.EDGE.1"];
+const IS_ATLAS_EXTRA: [&str; 12] = ["GNURUST.COVERAGE.1","GNURUST.FILE.STATUS.1","GNURUST.PUBLIC.CORPUS.1","GNURUST.BUILD.PROFILE.1","GNURUST.PUBLIC.GAP.1","GNURUST.LINEAGE.CORPUS.20M.0","GNURUST.LINEAGE.CORPUS.20M.SMOKE","GNURUST.LINEAGE.CORPUS.20M.1","GNURUST.VALUE.NEGZERO.EDGE.1","GNURUST.CCVS85.2","GNURUST.CCVS85.3","GNURUST.CCVS85.4"];
 
 fn read_json(p: &Path) -> Value {
     std::fs::read_to_string(p).ok().and_then(|s| serde_json::from_str(&s).ok()).unwrap_or(Value::Null)

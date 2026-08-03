@@ -10,14 +10,16 @@
    "research/legacyreports/archaeology/ATLAS.md"
   ],
   "legacy_sha256": [
-   "10317a415ef6d3a255a6a9c3fceacf45651781cb3f06a3830817f11392bd2b83"
+   "db5add0a33027f3ed2ecdc0aea79f3c11d91cf8d2f14332f46c76a33c721d219"
   ],
   "information_superset": true,
   "legacy_claims_carried_forward": [
    "full original body embedded verbatim in body_template"
   ],
   "legacy_non_claims_carried_forward": [],
-  "legacy_notes_carried_forward": [],
+  "legacy_notes_carried_forward": [
+   "Archaeology legacy provenance: the byte-exact migration-era working-tree snapshot of this doc was not recoverable in the release environment (it existed only on the original machine). The pinned sha here is reconstructed from the doc's last pre-migration committed version (commit e8b01307a^, pre axis-letter rename). The doc's body is preserved in body_template and the generated document is an information superset (verified)."
+  ],
   "legacy_unstructured_notes": [],
   "missing_items": []
  }

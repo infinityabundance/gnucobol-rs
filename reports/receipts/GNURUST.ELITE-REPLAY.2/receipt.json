@@ -5,7 +5,7 @@
     "replay": "bash lab/oracle/elite_replay2_sweep.sh"
   },
   "court": "broad public-corpus replay -- the GCC-COBOL testsuite + the hand-authored front-end corpus run through cobc 3.2 AND cobrun; observable behaviour (stdout bytes + process exit) must agree, with cobrun failing CLOSED (never wrong) wherever it cannot run a program",
-  "crate_version": "0.8.50",
+  "crate_version": "0.8.51",
   "current_authority": "STATUS.md",
   "generated_at": "unstamped",
   "git_commit": "unstamped",

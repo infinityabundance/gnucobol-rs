@@ -8,7 +8,7 @@
   "statement truth",
   "program truth"
  ],
- "count": 573,
+ "count": 578,
  "negative_capabilities": [
   {
    "id": "NEG.38-DIGIT-BIGNUM",
@@ -6379,6 +6379,61 @@
    "owning_future_campaign": null,
    "evidence": [
     "GNURUST.FILE.SEQUENTIAL.1"
+   ]
+  },
+  {
+   "id": "NEG.KOBOLD.BANK.RECONCILE.NO_NEW_TRUTH",
+   "surface": "the BANK.RECONCILE view treated as ledger acceptance / correctness / new evidence",
+   "status": "not_admitted_view_only",
+   "guard": "BANK.RECONCILE.1 summarizes declared-vs-observed evidence and refuses every truth layer above record truth",
+   "risk_if_guessed": "an operator acting on a matched VIEW as ledger acceptance posts a batch on a summary; a STALE view over changed source casefiles misreports the evidence it claims to derive from",
+   "owning_future_campaign": null,
+   "evidence": [
+    "KOBOLD.BANK.RECONCILE.1"
+   ]
+  },
+  {
+   "id": "NEG.KOBOLD.DIFF.NO_NEW_TRUTH",
+   "surface": "a matched diff treated as correctness / approval / new evidence",
+   "status": "not_admitted_view_only",
+   "guard": "DIFF.1 proves equality to a DECLARED target under selected rules, nothing more",
+   "risk_if_guessed": "a matched diff sold as correctness/approval ratifies a wrong legacy system or an unvalidated export as truth",
+   "owning_future_campaign": null,
+   "evidence": [
+    "KOBOLD.DIFF.1"
+   ]
+  },
+  {
+   "id": "NEG.KOBOLD.OPERATOR.NO_NEW_TRUTH",
+   "surface": "the OPERATOR view treated as operational truth / new evidence",
+   "status": "not_admitted_view_only",
+   "guard": "OPERATOR.1 is a view over existing court evidence; it introduces no new truth",
+   "risk_if_guessed": "an operator relying on the view as first-hand evidence acts on a derived summary as if it were a source",
+   "owning_future_campaign": null,
+   "evidence": [
+    "KOBOLD.OPERATOR.1"
+   ]
+  },
+  {
+   "id": "NEG.KOBOLD.TOOLING.EXPORT.NO_NEW_TRUTH",
+   "surface": "the TOOLING.EXPORT view treated as new evidence / certification",
+   "status": "not_admitted_view_only",
+   "guard": "TOOLING.EXPORT.1 exports existing evidence artifacts; it creates no new truth",
+   "risk_if_guessed": "an exported bundle consumed as fresh proof double-counts derived artifacts as independent evidence",
+   "owning_future_campaign": null,
+   "evidence": [
+    "KOBOLD.TOOLING.EXPORT.1"
+   ]
+  },
+  {
+   "id": "NEG.KOBOLD.PILOT-PACKET.NO_NEW_TRUTH",
+   "surface": "the PILOT-PACKET view treated as new evidence / acceptance",
+   "status": "not_admitted_view_only",
+   "guard": "PILOT-PACKET.1 assembles existing evidence into a packet; it adds no new truth",
+   "risk_if_guessed": "a packet sold as acceptance/certification manufactures assurance that no court provides",
+   "owning_future_campaign": null,
+   "evidence": [
+    "KOBOLD.PILOT-PACKET.1"
    ]
   }
  ]

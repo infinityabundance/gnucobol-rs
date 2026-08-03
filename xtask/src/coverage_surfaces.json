@@ -628,5 +628,18 @@
   ],
   "future_campaign": null,
   "risk_if_unported": "a byte compare gives the wrong verdict when usages/scales differ -> flipped branches, mis-ordered SORT keys"
+ },
+ {
+  "surface": "ccvs85-differential-corpus",
+  "category": "differential corpus (NIST CCVS85 v4.0)",
+  "source_modules": [],
+  "status": "observed",
+  "courts": [
+   "GNURUST.CCVS85.2",
+   "GNURUST.CCVS85.3",
+   "GNURUST.CCVS85.4"
+  ],
+  "future_campaign": null,
+  "risk_if_unported": "the corpus-wide oracle-vs-candidate differential has no surface home; every indexed CCVS85 unit must stay explicitly classified"
  }
 ]

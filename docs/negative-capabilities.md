@@ -66,7 +66,7 @@ Because there is no compiler, the following compiler-shaped surfaces are also ex
 
 ### 3b. COBOL forms outside the verified subset — these FAIL CLOSED
 
-These are real COBOL constructs the interpreter **refuses** (typed `RunError`) rather than mis-run. The executable subset is **narrower than the sealed runtime byte-courts**, and **this list shrinks** as courts seal forms — the live, exact tracker is `reports/negative-capabilities.json` (573 entries) and the per-court non-claims in `reports/claim-ladder.json`, not this prose. Grouped by area, with the refusal site in `frontend.rs` (every guard below is a `RunError::Unsupported` unless noted):
+These are real COBOL constructs the interpreter **refuses** (typed `RunError`) rather than mis-run. The executable subset is **narrower than the sealed runtime byte-courts**, and **this list shrinks** as courts seal forms — the live, exact tracker is `reports/negative-capabilities.json` (578 entries) and the per-court non-claims in `reports/claim-ladder.json`, not this prose. Grouped by area, with the refusal site in `frontend.rs` (every guard below is a `RunError::Unsupported` unless noted):
 
 | Area | Representative refused forms | Guard (frontend.rs) |
 |---|---|---|

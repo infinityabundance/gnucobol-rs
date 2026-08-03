@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.COLOR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.50",
+  "crate_version": "0.8.51",
   "damage_if_overclaimed": "claiming 'screen colour works' would hide that only a single colour field on LINE>=2 is proven -- the general multi-field doupdate line-diff, the LINE==1 case, numeric-edited/ACCEPT colour, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "c2f4d2a1710bf7b46377ef29720ac8e73204a7397252267adaf30dacebfd7744"
+    "inputs_sha256": "2a3ffc3012cdabbd5f57f2b416e7c8ef6db24e6fe2dab7cbfe35c868e85a12ec"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "da8a8e7a2e37dabd9df14e9a480c8b9c12ddc0f2ddc595c0b9df0e213582a010",
-    "receipt_sha256": "b4842b7ba76017ffd34d1649cce34776c9ef045a13a409499bc1cd0c69943306"
+    "receipt_sha256": "60680581ece678aac6cc953766cabed96b0910f6153cd374bf1f7328baf353cb"
   },
   "kind": "court-casefile",
   "lie_prevented": [

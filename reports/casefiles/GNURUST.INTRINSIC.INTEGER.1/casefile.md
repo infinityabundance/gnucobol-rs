@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.INTEGER.1 (court-casefile)
 
-**Verdict: PASS** · 20/20 pass, 0 fail · crate `gnucobol-rs` 0.8.50
+**Verdict: PASS** · 20/20 pass, 0 fail · crate `gnucobol-rs` 0.8.51
 
 - **Oracle:** cobc FUNCTION INTEGER/INTEGER-PART (libcob/intrinsic.c)
 - **Byte domain(s):** FUNCTION INTEGER(x)=floor / INTEGER-PART(x)=trunc

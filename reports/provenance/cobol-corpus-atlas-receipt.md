@@ -39,7 +39,7 @@ re-derives custody for any locally-present corpus and diffs it against the commi
 - source: git https://gcc.gnu.org/git/gcc.git (gcc/testsuite/cobol.dg, gcc/cobol, libgcobol)
 - license: GPL-3.0-or-later with GCC Runtime Library Exception
 - custody: `f62f68e7c4bde0385fbd2dba3e926586dd2f1281` (git-commit-sha)
-- counts: cobol=533, copybook=20, files=2110, text=1
+- counts: cobol=533, copybook=20, files=159711, text=1031
 - claim: custody/index only; no conformance, suite-pass, or behaviour-parity claim
 
 ### OPEN-CBS — OpenCBS — Open-Source COBOL Defects Benchmark Suite (43 programs)
@@ -53,10 +53,10 @@ re-derives custody for any locally-present corpus and diffs it against the commi
 
 ### X-COBOL — X-COBOL — Dataset of Open-Source COBOL Repositories (84 repos, 1255 files)
 
-- gate: `GNURUST.XCOBOL.1`  ·  class: independent real-world corpus  ·  priority: medium  ·  status: **LOCAL**
+- gate: `GNURUST.XCOBOL.1`  ·  class: independent real-world corpus  ·  priority: medium  ·  status: **SOURCE-ONLY**
 - source: Zenodo doi:10.5281/zenodo.14269462 (full record archive)
 - license: per-repository upstream licenses (mined open-source)
-- custody: `14462d4443e06d159e3eb6af8d8be03f7733a5d851d0fa657d3fa94e023d97b3` (archive-sha256)
-- counts: archive_bytes=68427907, autotest=38, cobol=3, copybook=5, files=569, text=16
+- custody: `(files not local)` ()
+- counts: 
 - claim: custody/index only; no conformance, suite-pass, or behaviour-parity claim
 

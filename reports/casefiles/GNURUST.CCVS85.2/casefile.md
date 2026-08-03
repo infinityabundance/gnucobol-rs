@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.CCVS85.2 (court-casefile)
 
-**Verdict: PASS** · lab/corpus/ccvs85/newcob.val.Z (committed, hash-pinned) + lab/docker/ccvs85 + lab/ccvs85/run-docker.sh (one-command replay) · crate `gnucobol-rs` 0.8.50
+**Verdict: PASS** · lab/corpus/ccvs85/newcob.val.Z (committed, hash-pinned) + lab/docker/ccvs85 + lab/ccvs85/run-docker.sh (one-command replay) · crate `gnucobol-rs` 0.8.51
 
 - **Oracle:** pinned GnuCOBOL 3.2.0 built in-container from the admitted source tarball (sha256 8ecc77d0...); never a distribution package
 - **Byte domain(s):** corpus split + materialized unit bytes (hashes) + per-unit cobc compile/run outcomes, report bytes, and parsed CCVS85 verdict counts

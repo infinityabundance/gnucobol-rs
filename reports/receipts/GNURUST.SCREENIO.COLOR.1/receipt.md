@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.COLOR.1` |
 | court | SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes |
-| crate_version | `0.8.50` |
+| crate_version | `0.8.51` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a colour-attributed positioned single-field DISPLAY (LINE>=2) -> the exact ncurses whole-screen colour-repaint byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_color_sweep.sh` |

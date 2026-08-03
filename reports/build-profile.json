@@ -2,7 +2,7 @@
   "schema": "gnurust-build-profile-v1",
   "court": "GNURUST.BUILD.PROFILE.1",
   "gnucobol_version": "3.2.0",
-  "c_compiler": "C version 16.1.1 20260430",
+  "c_compiler": "C version 16.1.1 20260625",
   "build_environment": "x86_64-pc-linux-gnu",
   "host_endianness": "little-endian",
   "char_signedness": "signed",
@@ -15,8 +15,8 @@
     "numeric_pointer": "no"
   },
   "hashes": {
-    "cobc_sha256": "2d832ed22700c91d3ec78947e233b705859896587705b06359b15b2cefeefc79",
-    "libcob_sha256": "2f6bd6c3164ffa775eff94e3ac9b986fbc2760c2f168702a93707649ef6199dc",
+    "cobc_sha256": "5c821ed2ab5b544be5887acec2ebbe6c7daea84718e326cb809fc1038d0287ff",
+    "libcob_sha256": "c7f9f9bf596bca528def6e3d93e938071ae341ca5a886068d189782dfed74cf1",
     "config_sha256": "d736c8d5386b245f3ebcbfa76e82626ea0b3807fe93d098085379185d094e2fe"
   },
   "abi_sensitive_courts": [

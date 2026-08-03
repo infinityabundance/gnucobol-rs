@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.CCVS85.3 (court-casefile)
 
-**Verdict: PASS** · the CCVS85.2 materialized units (same bytes, same site adaptation) + crates/gnucobol-rs/examples/cobrun.rs · crate `gnucobol-rs` 0.8.50
+**Verdict: PASS** · the CCVS85.2 materialized units (same bytes, same site adaptation) + crates/gnucobol-rs/examples/cobrun.rs · crate `gnucobol-rs` 0.8.51
 
 - **Oracle:** the gnucobol-rs cobrun front-end itself (this gate measures it, it is not an oracle gate)
 - **Byte domain(s):** per-unit cobrun prepare/run/timeout outcomes + raw stdout/stderr + the no-delegation proof (candidate_phase_isolated, cobrun_links_no_libcob)

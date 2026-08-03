@@ -16,7 +16,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.8.50 · 104 GNURUST courts (82 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.8.51 · 104 GNURUST courts (82 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -199,7 +199,7 @@ Every byte court additionally carries a **Kani proof** of its sharp invariant an
 See [`docs/not-yet-ready.md`](docs/not-yet-ready.md). Headline: this is **not** a compiler, not
 `libcob`, not Procedure Division execution, not universal COBOL truth, not business-truth validation,
 not automatic migration, not dirty-data repair, not a proven AWS deployment. The full machine-readable
-non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (573 surfaces, incl.
+non-claim registry is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (578 surfaces, incl.
 18 banking operating-semantics refusals), and the **truth hierarchy** — bytes / record / posting /
 accounting / extraction / business — is [`docs/truth-boundaries.md`](docs/truth-boundaries.md).
 

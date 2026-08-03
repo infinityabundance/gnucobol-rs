@@ -10,14 +10,16 @@
       "research/legacyreports/reports/GNUCOBOL_COBOL_ATLAS_STATE_OF_INDUSTRY.md"
     ],
     "legacy_sha256": [
-      "e83794b6c7db7b301431be64651f90204a4bf31bde1744ace703799465904f29"
+      "0b0a1b065bec7e966d9075aa46976acdbeaecc96e724e707a9f542d1e2f52f9e"
     ],
     "information_superset": true,
     "legacy_claims_carried_forward": [
       "full original body embedded verbatim in body_template"
     ],
     "legacy_non_claims_carried_forward": [],
-    "legacy_notes_carried_forward": [],
+    "legacy_notes_carried_forward": [
+      "Archaeology legacy provenance: the byte-exact migration-era working-tree snapshot of this doc was not recoverable in the release environment (it existed only on the original machine). The pinned sha here is reconstructed from the doc's last pre-migration committed version (commit e8b01307a^). The generated document is an information superset (verified)."
+    ],
     "legacy_unstructured_notes": [],
     "missing_items": []
   }

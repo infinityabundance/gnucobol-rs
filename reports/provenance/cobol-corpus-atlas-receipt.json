@@ -50,8 +50,8 @@
       "counts": {
         "cobol": 533,
         "copybook": 20,
-        "files": 2110,
-        "text": 1
+        "files": 159711,
+        "text": 1031
       }
     },
     {
@@ -83,17 +83,10 @@
       "source": "Zenodo doi:10.5281/zenodo.14269462 (full record archive)",
       "license": "per-repository upstream licenses (mined open-source)",
       "claim": "custody/index only; no conformance, suite-pass, or behaviour-parity claim",
-      "status": "LOCAL",
-      "custody_id": "14462d4443e06d159e3eb6af8d8be03f7733a5d851d0fa657d3fa94e023d97b3",
-      "custody_kind": "archive-sha256",
-      "counts": {
-        "archive_bytes": 68427907,
-        "autotest": 38,
-        "cobol": 3,
-        "copybook": 5,
-        "files": 569,
-        "text": 16
-      }
+      "status": "SOURCE-ONLY",
+      "custody_id": "",
+      "custody_kind": "",
+      "counts": {}
     }
   ]
 }

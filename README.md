@@ -24,7 +24,7 @@ COBOL's bedrock is its *byte layout* — COMP-3, zoned decimal, edited PICTURE, 
 - A **C-ABI shim** (`gnucobol-rs-ffi`) — drop it in where you would link `libcob` (`cob_move`, `cob_get_int`, …).
 - A **compatibility court** — 140 sealed courts, each backed by a forensic case file and a one-command replay.
 
-> **Three axes, never conflated** (as of **gnucobol-rs 0.8.50**): **(1) the `libcob` runtime** — 13/13 files ported 1:1, oracle-sealed = **100%** · **(2) the whole GnuCOBOL 3.2 source tree** — 88/329 files built natively (**27%**), every file accounted-for (0 unevidenced gaps) · **(3) the `cobrun` front-end** — runs a *sweep-verified slice* of the language, every passing program byte-identical to `cobc`, boundaries marked. **“100%” on this page always means axis (1), the runtime — never the whole tree, never the full language.** Authorities: [`FILE-PARITY.md`](FILE-PARITY.md) (axis 2) · [`COBOL-PARITY.md`](COBOL-PARITY.md) (axis 3) · [`STATUS.md`](STATUS.md) (live current-state — wins on any disagreement). 140 sealed courts · MSRV 1.74.
+> **Three axes, never conflated** (as of **gnucobol-rs 0.8.51**): **(1) the `libcob` runtime** — 13/13 files ported 1:1, oracle-sealed = **100%** · **(2) the whole GnuCOBOL 3.2 source tree** — 88/329 files built natively (**27%**), every file accounted-for (0 unevidenced gaps) · **(3) the `cobrun` front-end** — runs a *sweep-verified slice* of the language, every passing program byte-identical to `cobc`, boundaries marked. **“100%” on this page always means axis (1), the runtime — never the whole tree, never the full language.** Authorities: [`FILE-PARITY.md`](FILE-PARITY.md) (axis 2) · [`COBOL-PARITY.md`](COBOL-PARITY.md) (axis 3) · [`STATUS.md`](STATUS.md) (live current-state — wins on any disagreement). 140 sealed courts · MSRV 1.74.
 
 ---
 
@@ -85,7 +85,7 @@ Prefer the runtime as a library? The same packed-decimal and MOVE semantics are 
 
 Live coverage is **generated and gated**, never hand-asserted — see [`COBOL-PARITY.md`](COBOL-PARITY.md) (every verb / intrinsic / clause and what runs) and [`FILE-PARITY.md`](FILE-PARITY.md) (every GnuCOBOL 3.2 source file, accounted for).
 
-> **As of gnucobol-rs 0.8.50 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 140 sealed courts.
+> **As of gnucobol-rs 0.8.51 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 140 sealed courts.
 
 | Layer | State |
 |---|---|
@@ -111,7 +111,7 @@ State the boundaries as loudly as the capabilities — they are the credibility.
 - **Declared non-goals:** `cobc`'s C codegen, and `USAGE NATIONAL` (UTF-16) — which GnuCOBOL 3.2 itself marks unfinished and won't compile in the explicit form.
 - **Independent project.** Reproduces GnuCOBOL 3.2; **not affiliated with or endorsed by the GNU project.** The runtime is a *faithful copyleft derivative*, **not** clean-room — see License & derivation below.
 
-The machine-readable registry of every refused surface is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (human ledger: [`docs/negative-capabilities.md`](docs/negative-capabilities.md)). A sealed governance invariant enforces that **negative claims must be ≥ positive claims** — currently **573** refused surfaces.
+The machine-readable registry of every refused surface is [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (human ledger: [`docs/negative-capabilities.md`](docs/negative-capabilities.md)). A sealed governance invariant enforces that **negative claims must be ≥ positive claims** — currently **578** refused surfaces.
 
 ---
 

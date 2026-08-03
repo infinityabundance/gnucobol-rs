@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 96  ·  **B** composed: 35  ·  **C** view: 1  ·  **D** staged: 0  ·  **F** ceremonial: **5**
+- **A** hard (oracle/byte): 99  ·  **B** composed: 35  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
 
 ## Classification
 
@@ -38,6 +38,9 @@
 | `GNURUST.BUILD.PROFILE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.CALL.EXTENSION.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.CALL.LAYOUT.ATLAS.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.CCVS85.2` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.CCVS85.3` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.CCVS85.4` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.CLASS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.BOUNDCHECK.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.CBL.1` | A | ✅ | ✅ | ✅ no |
@@ -115,7 +118,7 @@
 | `GNURUST.VALUE.NEGZERO.EDGE.1` | A | ✅ | ✅ | ✅ no |
 | `KOBOLD.BANK.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.BANK.2` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.BANK.RECONCILE.1` | F | ❌ | ✅ | ❌ yes |
+| `KOBOLD.BANK.RECONCILE.1` | C | ✅ | ✅ | ✅ no |
 | `KOBOLD.BENCH.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.CORPUS.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.CURRENCY.PROFILE.1` | B | ✅ | ✅ | ✅ no |
@@ -126,15 +129,15 @@
 | `KOBOLD.DATA.6` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.DATE.PROFILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.DB2HOST.1` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.DIFF.1` | F | ❌ | ✅ | ❌ yes |
+| `KOBOLD.DIFF.1` | C | ✅ | ✅ | ✅ no |
 | `KOBOLD.ENTERPRISE.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.EXTRACT.PROFILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.FILE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.LAYOUT.REDEFINES.2` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.OPERATOR.1` | F | ❌ | ✅ | ❌ yes |
+| `KOBOLD.OPERATOR.1` | C | ✅ | ✅ | ✅ no |
 | `KOBOLD.PERF.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.PERF.2` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.PILOT-PACKET.1` | F | ❌ | ✅ | ❌ yes |
+| `KOBOLD.PILOT-PACKET.1` | C | ✅ | ✅ | ✅ no |
 | `KOBOLD.PILOT.RUN.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.PILOT.WORKFLOW.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.POSTING.1` | B | ✅ | ✅ | ✅ no |
@@ -143,7 +146,7 @@
 | `KOBOLD.RECON.2` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.SCALE.1` | B | ✅ | ✅ | ✅ no |
 | `KOBOLD.SENTINEL.PROFILE.1` | B | ✅ | ✅ | ✅ no |
-| `KOBOLD.TOOLING.EXPORT.1` | F | ❌ | ✅ | ❌ yes |
+| `KOBOLD.TOOLING.EXPORT.1` | C | ✅ | ✅ | ✅ no |
 | `NIST-STYLE-FIXTURE-FORMAT.1` | B | ✅ | ✅ | ✅ no |
 | `SIZE.ERROR.ATLAS.1` | A | ✅ | ✅ | ✅ no |
 | `SUPPORT-PACKET.1` | C | ✅ | ✅ | ✅ no |

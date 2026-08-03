@@ -10,14 +10,14 @@
   ],
   "oracle_source": "lab/admit/gnucobol-3.2 (admitted GnuCOBOL 3.2 source)",
   "schema": "gnurust-coverage-v1",
-  "sealed_fraction": "31/43",
+  "sealed_fraction": "31/44",
   "status_counts": {
     "missing": 0,
     "negative": 3,
-    "observed": 9,
+    "observed": 10,
     "sealed": 31
   },
-  "surface_count": 43,
+  "surface_count": 44,
   "surfaces": [
     {
       "category": "data representation",
@@ -691,6 +691,20 @@
       "source_modules_present": true,
       "status": "sealed",
       "surface": "numeric-comparison"
+    },
+    {
+      "category": "differential corpus (NIST CCVS85 v4.0)",
+      "courts": [
+        "GNURUST.CCVS85.2",
+        "GNURUST.CCVS85.3",
+        "GNURUST.CCVS85.4"
+      ],
+      "future_campaign": null,
+      "risk_if_unported": "the corpus-wide oracle-vs-candidate differential has no surface home; every indexed CCVS85 unit must stay explicitly classified",
+      "source_modules": [],
+      "source_modules_present": true,
+      "status": "observed",
+      "surface": "ccvs85-differential-corpus"
     }
   ]
 }

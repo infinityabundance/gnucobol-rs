@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.IF.NUMERIC.SLICE.1` |
 | court | numeric IF/EVALUATE execution slice |
-| crate_version | `0.8.50` |
+| crate_version | `0.8.51` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | execute numeric IF/EVALUATE over 9(n) fields -> resulting storage bytes |
 | replay command | `bash lab/oracle/if_numeric_sweep.sh` |
