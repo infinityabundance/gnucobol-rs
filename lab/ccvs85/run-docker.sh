@@ -6,22 +6,42 @@
 # From a clean checkout with the committed corpus spine this:
 #   1. runs the storage + Docker-isolation preflight (aborts before any change on failure);
 #   2. starts/verifies the project-scoped isolated rootless dockerd (all state under
-#      $PROJECT_DOCKER_ROOT; the production daemon is never touched);
+#      $GNURUST_CCVS85_DOCKER_ROOT; the production daemon is never touched);
 #   3. imports the read-only minimal Ubuntu artifact (cached, hash-keyed) into the isolated daemon;
 #   4. builds the court image (oracle + toolchain + harness) in the isolated daemon;
 #   5. runs the full pipeline TWICE in two fresh containers (fresh run dirs);
 #   6. copies the evidence back into the repository (reports/ccvs85/*, receipts, raw evidence);
-#   7. runs the host-side determinism compare, receipt finalization, and `gate check`;
+#   7. runs the host-side determinism compare, evidence sanitization (symbolic storage aliases only),
+#      receipt finalization, privacy gate, and `gate check`;
 #   8. (optional) --require-no-regression compares against the committed baseline summary.
 #
 # Exit codes: 0 = evidence run complete (benchmark findings are NOT failures); nonzero = harness
-# failure (preflight, daemon, build, missing evidence, reconciliation, delegation, freshness).
+# failure (preflight, daemon, build, missing evidence, reconciliation, delegation, freshness,
+# privacy leak).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-PROJECT_DOCKER_ROOT="${PROJECT_DOCKER_ROOT:-/run/media/one/1tb_kingston1/docker/gnucobol-rs}"
-IMAGES_DIR="${CCVS85_IMAGES_DIR:-/run/media/one/toshiba4TB/images}"
-BASE_IMAGE_FILE="${CCVS85_BASE_IMAGE_FILE:-noble-server-cloudimg-amd64.img}"
+
+info() { printf '\n=== %s ===\n' "$*"; }
+fail() { echo "FATAL: $*" >&2; exit 1; }
+
+# ---- portable configuration ------------------------------------------------------------------
+# The storage root and the base-image artifact are HOST machine facts, not part of the benchmark's
+# reproducible identity, so they are never hardcoded here. Defaults follow XDG (a plain invocation
+# works against a rootless-style layout); real runs override with an explicit large filesystem and
+# a read-only minimal Ubuntu artifact. Private per-machine overrides live in lab/ccvs85/.env.local
+# (gitignored — NEVER committed). The committed evidence carries ONLY symbolic aliases for these
+# locations; the raw unsanitized facts are preserved under
+# $GNURUST_CCVS85_DOCKER_ROOT/run-evidence/ (outside git).
+# shellcheck disable=SC1091
+[ -f "$(dirname "$0")/.env.local" ] && . "$(dirname "$0")/.env.local"
+GNURUST_CCVS85_DOCKER_ROOT="${GNURUST_CCVS85_DOCKER_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/gnucobol-rs/ccvs85-docker}"
+GNURUST_CCVS85_BASE_IMAGE="${GNURUST_CCVS85_BASE_IMAGE:-}"
+GNURUST_CCVS85_MIN_FREE_GIB="${GNURUST_CCVS85_MIN_FREE_GIB:-100}"
+[ -n "$GNURUST_CCVS85_BASE_IMAGE" ] || fail "GNURUST_CCVS85_BASE_IMAGE is required: point it at the read-only minimal Ubuntu artifact (env or lab/ccvs85/.env.local)"
+
+PROJECT_DOCKER_ROOT="$GNURUST_CCVS85_DOCKER_ROOT"   # alias kept for the daemon scripts
+BASE_IMAGE="$GNURUST_CCVS85_BASE_IMAGE"
 BASE_SHA="18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172"
 RUST_TOOLCHAIN="${CCVS85_RUST_TOOLCHAIN:-1.96.0}"
 GIT_SHA="$(cd "$ROOT" && git rev-parse HEAD 2>/dev/null || echo unstamped)"
@@ -33,17 +53,15 @@ BASE_TAG="gnucobol-rs-ccvs85/ubuntu-base:$BASE_SHA"
 IMAGE_TAG="gnucobol-rs-ccvs85/court:$GIT_SHA"
 
 export DOCKER_HOST="$SOCKET"
-export PROJECT_DOCKER_ROOT
+export PROJECT_DOCKER_ROOT GNURUST_CCVS85_DOCKER_ROOT GNURUST_CCVS85_BASE_IMAGE GNURUST_CCVS85_MIN_FREE_GIB
 export TMPDIR="$PROJECT_DOCKER_ROOT/tmp" TEMP="$PROJECT_DOCKER_ROOT/tmp" TMP="$PROJECT_DOCKER_ROOT/tmp"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 export PATH="$PROJECT_DOCKER_ROOT/bin:$PATH"
 
-info() { printf '\n=== %s ===\n' "$*"; }
-fail() { echo "FATAL: $*" >&2; exit 1; }
-
-mkdir -p "$RUN_DIR" "$OUT_DIR" "$PROJECT_DOCKER_ROOT/tmp" "$PROJECT_DOCKER_ROOT/logs"
+mkdir -p "$RUN_DIR" "$OUT_DIR" "$PROJECT_DOCKER_ROOT/tmp" "$PROJECT_DOCKER_ROOT/logs" "$PROJECT_DOCKER_ROOT/run-evidence"
 echo "run-id: $RUN_ID"
 echo "project docker root: $PROJECT_DOCKER_ROOT"
+echo "base image artifact: $BASE_IMAGE"
 
 # ---------------------------------------------------------------------------------------------
 # 1. preflight
@@ -98,7 +116,7 @@ if ! docker image inspect "$BASE_TAG" >/dev/null 2>&1; then
     PART="$PROJECT_DOCKER_ROOT/tmp/noble-$BASE_SHA-root.part"
     ROOTFS_DIR="$PROJECT_DOCKER_ROOT/tmp/noble-$BASE_SHA-rootfs"
     rm -rf "$ROOTFS_DIR"; mkdir -p "$ROOTFS_DIR"
-    qemu-img convert -O raw "$IMAGES_DIR/$BASE_IMAGE_FILE" "$RAW"
+    qemu-img convert -O raw "$BASE_IMAGE" "$RAW"
     # root partition (partition 1 of the cloud image) — start/size from the GPT
     P1_START=$(sfdisk -d "$RAW" | awk -F'start=' '/raw1 :/{split($2,a,","); print a[1]}')
     P1_SIZE=$(sfdisk -d "$RAW" | awk -F'size=' '/raw1 :/{split($2,a,","); print a[1]}')
@@ -191,7 +209,7 @@ cp -r "$OUT_DIR/pass-a/raw/"* "$CCVS85_REP/raw/" 2>/dev/null || true
 cp "$OUT_DIR/pass-a/no-delegation.json" "$CCVS85_REP/no-delegation.json"
 
 # ---------------------------------------------------------------------------------------------
-# 7. host-side determinism compare + receipts-finalize + gate check
+# 7. host-side determinism compare + evidence sanitization + receipts-finalize + gate check
 # ---------------------------------------------------------------------------------------------
 info "host-side determinism compare + receipts + gate"
 HARNESS="$ROOT/target/release/gnucobol-rs-ccvs85"
@@ -209,7 +227,113 @@ set -e
 cat "$PROJECT_DOCKER_ROOT/logs/determinism.log"
 [ "$DET_RC" = "0" ] || fail "determinism check failed (see determinism.log)"
 
-# final meta (docker + environment + artifact hashes) -> receipts-finalize
+# privacy sanitizer: the COMMITTED evidence carries only symbolic aliases + storage invariants;
+# the raw unsanitized facts are preserved OUTSIDE git under
+# $GNURUST_CCVS85_DOCKER_ROOT/run-evidence/ (preflight.raw.json, determinism.raw.json).
+RAW_EVIDENCE="$PROJECT_DOCKER_ROOT/run-evidence"
+cp "$PROJECT_DOCKER_ROOT/logs/preflight.json" "$RAW_EVIDENCE/preflight.raw.json"
+cp "$CCVS85_REP/determinism.json" "$RAW_EVIDENCE/determinism.raw.json"
+
+python3 - "$CCVS85_REP" "$RUN_DIR" "$PROJECT_DOCKER_ROOT" <<'PYEOF'
+import hashlib, json, os, sys
+
+rep, rundir, root = sys.argv[1:4]
+ROOT_KEY = "$GNURUST_CCVS85_DOCKER_ROOT"
+BASE_KEY = "$GNURUST_CCVS85_BASE_IMAGE"
+
+def deny(text, label):
+    for pat in ("/home/", "/run/media/", "/mnt/", "/media/"):
+        if pat in text:
+            sys.exit("PRIVACY GATE: %s still contains %r" % (label, pat))
+
+# 1) sanitize the committed determinism doc in place (paths -> symbolic alias)
+det_path = os.path.join(rep, "determinism.json")
+with open(det_path) as f:
+    det = json.load(f)
+def sym(p):
+    return ROOT_KEY + p[len(root):] if isinstance(p, str) and p.startswith(root) else p
+for side in ("pass_a", "pass_b"):
+    if isinstance(det.get(side), dict) and "path" in det[side]:
+        det[side]["path"] = sym(det[side]["path"])
+det["path_notation"] = ("paths are symbolic: %s is the configured docker root at run time; the raw "
+                        "unsanitized record is preserved outside git under %s/run-evidence/"
+                        % (ROOT_KEY, ROOT_KEY))
+with open(det_path, "w") as f:
+    json.dump(det, f, indent=1)
+    f.write("\n")
+deny(json.dumps(det), "determinism")
+
+# 2) sanitized preflight + storage invariants (facts only; raw locations stay in run-evidence)
+with open(os.path.join(root, "logs/preflight.json")) as f:
+    pf = json.load(f)
+def dig(*ks):
+    cur = pf
+    for k in ks:
+        cur = cur.get(k) if isinstance(cur, dict) else None
+    return cur
+st = os.stat(root)
+fs_type = "unknown"
+best = ""
+with open("/proc/self/mounts") as f:
+    for line in f:
+        parts = line.split()
+        if len(parts) >= 3 and (parts[1] == root or root.startswith(parts[1] + "/")):
+            if len(parts[1]) > len(best):
+                best = parts[1]
+                fs_type = parts[2]
+sv = os.statvfs(root)
+fs_id = hashlib.sha256(("gnurust-ccvs85-fs-id-v1:%d" % st.st_dev).encode()).hexdigest()
+different = os.stat("/").st_dev != st.st_dev
+docker_storage = {
+    "configured_root": ROOT_KEY,
+    "daemon_data": "%s/daemon-data" % ROOT_KEY,
+    "socket": "%s/run/docker.sock" % ROOT_KEY,
+    "isolated_daemon": True,
+    "production_socket_used": False,
+    "same_filesystem_as_root": not different,
+}
+storage_filesystem = {
+    "different_from_root": different,
+    "device_identity_sha256": fs_id,
+    "filesystem_type": fs_type,
+    "available_bytes_at_start": sv.f_bavail * sv.f_frsize,
+}
+san = {
+    "schema": pf.get("schema", "gnurust-ccvs85-preflight-v1"),
+    "conditions": {k: (True if k == "7_docker_root_beneath_project" else v)
+                   for k, v in pf.get("conditions", {}).items()},
+    "base_image": {
+        "source": BASE_KEY,
+        "size_bytes": dig("base_image", "size_bytes"),
+        "file_type": dig("base_image", "file_type"),
+        "sha256": dig("base_image", "sha256"),
+        "release": dig("base_image", "release"),
+        "arch": dig("base_image", "arch"),
+        "read_only": True,
+    },
+    "storage": {"root": ROOT_KEY, "free_gb": dig("storage", "free_gb")},
+    "docker": {
+        "socket": "unix://%s/run/docker.sock" % ROOT_KEY,
+        "root": "%s/daemon-data" % ROOT_KEY,
+        "driver": dig("docker", "driver"),
+    },
+    "docker_storage": docker_storage,
+    "storage_filesystem": storage_filesystem,
+}
+deny(json.dumps(san), "preflight")
+with open(os.path.join(rundir, "preflight-sanitized.json"), "w") as f:
+    json.dump(san, f, indent=1)
+    f.write("\n")
+with open(os.path.join(rundir, "docker-extras.json"), "w") as f:
+    json.dump({"docker_storage": docker_storage, "storage_filesystem": storage_filesystem}, f, indent=1)
+    f.write("\n")
+print("sanitized preflight: fs type=%s different-from-root=%s device=%s..." % (fs_type, different, fs_id[:12]))
+PYEOF
+
+# symbolic aliases for the meta (single-quoted so the heredoc keeps them literal, never expanded)
+SYM_ROOT='$GNURUST_CCVS85_DOCKER_ROOT'
+
+# final meta (symbolic docker/preflight facts + environment + artifact hashes) -> receipts-finalize
 META_FINAL="$RUN_DIR/meta-final.json"
 cat > "$META_FINAL" <<EOF
 {
@@ -226,16 +350,17 @@ cat > "$META_FINAL" <<EOF
   "docker": {
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "daemon_root": "$DROOT",
+    "daemon_root": "$SYM_ROOT/daemon-data",
     "storage_driver": "$DRIVER",
-    "socket": "$SOCKET",
+    "socket": "unix://$SYM_ROOT/run/docker.sock",
     "base_image": "$BASE_TAG",
     "court_image": "$IMAGE_TAG",
     "run_id": "$RUN_ID",
     "containers": {"pass_a": "$CONTAINER_A", "pass_b": "$CONTAINER_B"},
-    "host_storage_root": "$PROJECT_DOCKER_ROOT"
+    "host_storage_root": "$SYM_ROOT",
+    $(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(json.dumps(d)[1:-1])' "$RUN_DIR/docker-extras.json")
   },
-  "preflight": $(cat "$PROJECT_DOCKER_ROOT/logs/preflight.json" 2>/dev/null | tr -d '\n'),
+  "preflight": $(cat "$RUN_DIR/preflight-sanitized.json" | tr -d '\n'),
   "determinism": $(cat "$CCVS85_REP/determinism.json" | tr -d '\n'),
   "no_delegation": $(cat "$CCVS85_REP/no-delegation.json" | tr -d '\n'),
   "artifacts": {
@@ -247,7 +372,20 @@ cat > "$META_FINAL" <<EOF
   }
 }
 EOF
+
+# mechanical privacy gate: no host path may survive into the committed meta
+if grep -qE '/home/|/run/media/|/mnt/|/media/' "$META_FINAL"; then
+  fail "PRIVACY GATE: a host path leaked into the receipt meta — inspect run-evidence/*.raw.json vs the sanitizer"
+fi
 "$HARNESS" receipts-finalize --root "$ROOT" --meta "$META_FINAL" || fail "receipts-finalize failed"
+
+# privacy gate over the committed evidence (receipts + ccvs85 reports)
+if grep -RInE '/home/|/run/media/|/mnt/|/media/' \
+    "$ROOT/reports/receipts/GNURUST.CCVS85.2" "$ROOT/reports/receipts/GNURUST.CCVS85.3" \
+    "$ROOT/reports/receipts/GNURUST.CCVS85.4" "$CCVS85_REP" 2>/dev/null; then
+  fail "PRIVACY GATE: a host path leaked into the committed CCVS85 evidence"
+fi
+echo "privacy gate: committed CCVS85 evidence carries only symbolic storage aliases"
 
 # gate check (host-side invariants; fails only on real problems, never on benchmark findings)
 set +e

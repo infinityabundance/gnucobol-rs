@@ -38,6 +38,10 @@ lab/oracle/intrinsic_harness
 lab/corpus/ccvs85/newcob.val
 reports/ccvs85/newcob.val
 
+# CCVS85: private per-machine replay override (docker root + base-image artifact paths are HOST
+# facts, never committed; only symbolic aliases appear in the committed evidence)
+/lab/ccvs85/.env.local
+
 # COBOL corpus atlas: large raw corpora are re-downloadable from permanent sources; commit custody only.
 lab/corpus/x-cobol/
 lab/corpus/gcobol/

@@ -18,11 +18,24 @@
 set -eu
 
 # ---- configuration (overridable for the replay) --------------------------------------------
-PROJECT_DOCKER_ROOT="${PROJECT_DOCKER_ROOT:-/run/media/one/1tb_kingston1/docker/gnucobol-rs}"
-IMAGES_DIR="${CCVS85_IMAGES_DIR:-/run/media/one/toshiba4TB/images}"
-BASE_IMAGE_FILE="${CCVS85_BASE_IMAGE_FILE:-noble-server-cloudimg-amd64.img}"
+# The storage root and the base-image artifact are HOST machine facts, not part of the benchmark's
+# reproducible identity, so they are never hardcoded here: portable XDG defaults + explicit
+# overrides. Private per-machine overrides live in lab/ccvs85/.env.local (gitignored, never
+# committed). The raw facts JSON records the real locations; only symbolic aliases ever reach the
+# committed evidence (see the sanitizer in run-docker.sh).
+# shellcheck disable=SC1091
+[ -f "$(dirname "$0")/.env.local" ] && . "$(dirname "$0")/.env.local"
+GNURUST_CCVS85_DOCKER_ROOT="${GNURUST_CCVS85_DOCKER_ROOT:-${XDG_DATA_HOME:-$HOME/.local/share}/gnucobol-rs/ccvs85-docker}"
+GNURUST_CCVS85_BASE_IMAGE="${GNURUST_CCVS85_BASE_IMAGE:-}"
+GNURUST_CCVS85_MIN_FREE_GIB="${GNURUST_CCVS85_MIN_FREE_GIB:-100}"
+if [ -z "$GNURUST_CCVS85_BASE_IMAGE" ]; then
+  echo "PREFLIGHT FAIL: GNURUST_CCVS85_BASE_IMAGE is required (set it in the environment or in lab/ccvs85/.env.local)" >&2
+  exit 1
+fi
+PROJECT_DOCKER_ROOT="$GNURUST_CCVS85_DOCKER_ROOT"
+BASE_IMAGE="$GNURUST_CCVS85_BASE_IMAGE"
 EXPECTED_BASE_SHA256="${CCVS85_BASE_SHA256:-18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172}"
-MIN_FREE_GB="${CCVS85_MIN_FREE_GB:-20}"
+MIN_FREE_GB="$GNURUST_CCVS85_MIN_FREE_GIB"
 PRIMARY_DRIVE_MARKERS="/ /var/lib/docker /var/run/docker.sock"
 
 FAIL=0
@@ -41,17 +54,18 @@ if [ ! -w "$PROJECT_DOCKER_ROOT" ]; then
 fi
 facts "1. project docker root writable: $PROJECT_DOCKER_ROOT"
 
-# 2. images dir read-only source
-if [ ! -d "$IMAGES_DIR" ]; then
-  die "images dir missing: $IMAGES_DIR"
+# 2. base image artifact present + readable (its directory is a read-only source)
+ART_DIR=$(dirname "$BASE_IMAGE")
+if [ ! -d "$ART_DIR" ]; then
+  die "base image artifact dir missing: $ART_DIR"
 fi
-if [ ! -r "$IMAGES_DIR/$BASE_IMAGE_FILE" ]; then
-  die "base image artifact unreadable: $IMAGES_DIR/$BASE_IMAGE_FILE"
+if [ ! -r "$BASE_IMAGE" ]; then
+  die "base image artifact unreadable: $BASE_IMAGE"
 fi
-facts "2. images dir present (read-only source): $IMAGES_DIR"
+facts "2. base image artifact readable (read-only source dir): $ART_DIR"
 
 # 3. selected artifact identity (path / type / size / sha256 / release / arch)
-ART="$IMAGES_DIR/$BASE_IMAGE_FILE"
+ART="$BASE_IMAGE"
 ART_SIZE=$(stat -c %s "$ART")
 ART_TYPE=$(file -b "$ART")
 ART_SHA=$(sha256sum "$ART" | cut -d' ' -f1)
@@ -118,7 +132,7 @@ fi
 # 10. temp/BuildKit state point to the storage drive
 for v in TMPDIR TEMP TMP; do
   val=$(eval "echo \${$v:-}")
-  if [ -n "$val" ] && [ "${val#/run/media/one/1tb_kingston1/docker/gnucobol-rs/}" = "$val" ] \
+  if [ -n "$val" ] && [ "${val#$PROJECT_DOCKER_ROOT/}" = "$val" ] \
      && [ "${val#/run/user/}" = "$val" ] && [ "${val#/tmp}" = "$val" ]; then
     die "TMP-related var $v points off the storage drive: $val"
   fi
@@ -158,6 +172,9 @@ cat > "$PROJECT_DOCKER_ROOT/logs/preflight.json" <<EOF
 }
 EOF
 facts "preflight facts written to $PROJECT_DOCKER_ROOT/logs/preflight.json"
+mkdir -p "$PROJECT_DOCKER_ROOT/run-evidence"
+cp "$PROJECT_DOCKER_ROOT/logs/preflight.json" "$PROJECT_DOCKER_ROOT/run-evidence/preflight.raw.json"
+facts "raw unsanitized preflight facts preserved outside git: $PROJECT_DOCKER_ROOT/run-evidence/preflight.raw.json"
 
 [ "$FAIL" -eq 0 ] || { echo "PREFLIGHT ABORTED: $FAIL condition(s) failed — no Docker operation performed." >&2; exit 1; }
 echo "PREFLIGHT OK"

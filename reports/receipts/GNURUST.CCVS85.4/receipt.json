@@ -15,13 +15,27 @@
       "pass_b": "ccvs85-20260803T143229Z-ee2300e1-b"
     },
     "court_image": "gnucobol-rs-ccvs85/court:ee2300e13307ce8de3c5cc86236a0796fb1e702f",
-    "daemon_root": "/run/.ro4108755338/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
-    "host_storage_root": "/run/media/one/1tb_kingston1/docker/gnucobol-rs",
+    "daemon_root": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
+    "docker_storage": {
+      "configured_root": "$GNURUST_CCVS85_DOCKER_ROOT",
+      "daemon_data": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
+      "isolated_daemon": true,
+      "production_socket_used": false,
+      "same_filesystem_as_root": false,
+      "socket": "$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock"
+    },
+    "host_storage_root": "$GNURUST_CCVS85_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
     "run_id": "20260803T143229Z-ee2300e1",
-    "socket": "unix:///run/media/one/1tb_kingston1/docker/gnucobol-rs/run/docker.sock",
-    "storage_driver": "overlay2"
+    "socket": "unix://$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock",
+    "storage_driver": "overlay2",
+    "storage_filesystem": {
+      "available_bytes_at_start": 489735835648,
+      "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
+      "different_from_root": true,
+      "filesystem_type": "ext4"
+    }
   },
   "environment": {
     "LANG": "C.UTF-8",
@@ -31,8 +45,8 @@
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "uname": "Linux 7.1.4-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-03T15:01:50Z",
-  "git_commit": "2c03dbeba1d83650f11d89469edac981416b11fe",
+  "generated_at": "2026-08-03T16:36:33Z",
+  "git_commit": "708efe870e98a1987a53165a4652bc51d917df71",
   "non_claims": [
     "no NIST certification",
     "no full COBOL-85 conformance claim",
@@ -53,10 +67,11 @@
     "base_image": {
       "arch": "x86_64",
       "file_type": "QEMU QCOW Image (v3), 3758096384 bytes (v3), 3758096384 bytes",
-      "path": "/run/media/one/toshiba4TB/images/noble-server-cloudimg-amd64.img",
+      "read_only": true,
       "release": "Ubuntu 24.04 noble server cloud image",
       "sha256": "18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
-      "size_bytes": 649265152
+      "size_bytes": 649265152,
+      "source": "$GNURUST_CCVS85_BASE_IMAGE"
     },
     "conditions": {
       "10_temp_state_on_storage": true,
@@ -66,19 +81,33 @@
       "4_project_layout_present": true,
       "5_free_space_ok_gb": 456,
       "6_isolated_socket_used": true,
-      "7_docker_root_beneath_project": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
+      "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
       "9_no_production_resources": true
     },
     "docker": {
       "driver": "overlay2",
-      "root": "/run/.ro4108755338/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
-      "socket": "unix:///run/media/one/1tb_kingston1/docker/gnucobol-rs/run/docker.sock"
+      "root": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
+      "socket": "unix://$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock"
+    },
+    "docker_storage": {
+      "configured_root": "$GNURUST_CCVS85_DOCKER_ROOT",
+      "daemon_data": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
+      "isolated_daemon": true,
+      "production_socket_used": false,
+      "same_filesystem_as_root": false,
+      "socket": "$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock"
     },
     "schema": "gnurust-ccvs85-preflight-v1",
     "storage": {
       "free_gb": 456,
-      "root": "/run/media/one/1tb_kingston1/docker/gnucobol-rs"
+      "root": "$GNURUST_CCVS85_DOCKER_ROOT"
+    },
+    "storage_filesystem": {
+      "available_bytes_at_start": 489735835648,
+      "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
+      "different_from_root": true,
+      "filesystem_type": "ext4"
     }
   },
   "receipt_status": "current",
@@ -101,13 +130,14 @@
     "determinism": {
       "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified",
       "pass_a": {
-        "path": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/outputs/20260803T143229Z-ee2300e1/pass-a/summary.json",
+        "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T143229Z-ee2300e1/pass-a/summary.json",
         "summary_sha256": "3a114d774a5a9b53939b73836babe4c2a1ae0f9351943d7216099d6460fd1de8"
       },
       "pass_b": {
-        "path": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/outputs/20260803T143229Z-ee2300e1/pass-b/summary.json",
+        "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T143229Z-ee2300e1/pass-b/summary.json",
         "summary_sha256": "0a81766dd3dbb00a4a1e974f7f8e515f7a4eddd257b5d3a7220ed623c8470f87"
       },
+      "path_notation": "paths are symbolic: $GNURUST_CCVS85_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_CCVS85_DOCKER_ROOT/run-evidence/",
       "report_byte_nondeterminism": [
         {
           "name": "NC214M",

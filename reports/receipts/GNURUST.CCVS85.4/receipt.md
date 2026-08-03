@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | per-unit oracle-vs-candidate observable comparison: raw output, canonical output, generated files, exit status, CCVS85 verdict counts |
 | replay command | `bash lab/ccvs85/run-docker.sh` |
-| generated_at | 2026-08-03T15:01:50Z |
-| git_commit | `2c03dbeba1d83650f11d89469edac981416b11fe` |
+| generated_at | 2026-08-03T16:36:33Z |
+| git_commit | `708efe870e98a1987a53165a4652bc51d917df71` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.
@@ -39,13 +39,14 @@
   "determinism": {
     "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified",
     "pass_a": {
-      "path": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/outputs/20260803T143229Z-ee2300e1/pass-a/summary.json",
+      "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T143229Z-ee2300e1/pass-a/summary.json",
       "summary_sha256": "3a114d774a5a9b53939b73836babe4c2a1ae0f9351943d7216099d6460fd1de8"
     },
     "pass_b": {
-      "path": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/outputs/20260803T143229Z-ee2300e1/pass-b/summary.json",
+      "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T143229Z-ee2300e1/pass-b/summary.json",
       "summary_sha256": "0a81766dd3dbb00a4a1e974f7f8e515f7a4eddd257b5d3a7220ed623c8470f87"
     },
+    "path_notation": "paths are symbolic: $GNURUST_CCVS85_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_CCVS85_DOCKER_ROOT/run-evidence/",
     "report_byte_nondeterminism": [
       {
         "name": "NC214M",
