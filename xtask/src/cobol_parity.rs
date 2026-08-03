@@ -170,6 +170,14 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p175_qualified_compute_operand.cob", "SALES-AMOUNT OF SALES-RECORD"),
     ("(groups)", "several FILLERs of DIFFERENT sizes in one group each occupy their own slot -- they get unique field keys, so a group MOVE distributes bytes to the named children at the correct offsets (two same-parent FILLERs previously collided to one field, and the wrong length shifted every later child). Found running the real-world opencbs corpus (DF19 splits a `2021 09 15` date)", "sealed",
         "lab/corpus/frontend/p176_multi_filler_group_move.cob", "FILLER PIC X(09)"),
+    ("file I/O", "multiple 01-level record descriptions beneath one FD -- every declared 01 is an alternative layout over ONE shared file record area (GnuCOBOL overlap semantics, oracle-verified); WRITE/REWRITE/RELEASE resolve the NAMED record (not only the first) and emit that record's own bytes/length; read-back shows both records in source order. Found by GNURUST.FILEIO.MULTI-RECORD-FD.1 (the CCVS85 `WRITE DUMMY-RECORD` report pattern was the original blocker)", "sealed",
+        "lab/corpus/frontend/p186_multifd_basic.cob", "01 SECOND-REC"),
+    ("file I/O", "alternative FD records of DIFFERENT lengths -- each WRITE emits the NAMED record's own length and the file auto-switches to the var-seq on-disk framing when lengths differ (oracle byte-identical)", "sealed",
+        "lab/corpus/frontend/p188_multifd_lengths.cob", "01 LONG-REC"),
+    ("file I/O", "GROUP records beneath one FD -- each WRITE serialises the named group's full nested layout from the shared record area", "sealed",
+        "lab/corpus/frontend/p189_multifd_groups.cob", "WRITE TOTAL-REC"),
+    ("file I/O", "the CCVS85 report shape -- WRITE of the SECOND FD record with `AFTER ADVANCING n LINES` (n x LF before the record, final LF at close); the 120-byte record + advancing bytes are asserted against the oracle by the sweep", "sealed",
+        "lab/corpus/frontend/p191_multifd_advancing.cob", "WRITE DUMMY-RECORD AFTER ADVANCING"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

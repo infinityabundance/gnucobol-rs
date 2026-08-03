@@ -167,7 +167,7 @@ All **110** intrinsic functions are ported 1:1 in the runtime (110/110 confirmed
 
 ## Front-end coverage -- what runs, and the COMPLETE fail-closed map
 
-The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **69 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 206 of them, de-duplicated from the 228 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 206: **0 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **192 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
+The 26 PARTIAL files above (the cobc parser / scanner / typeck / field / preprocessor) ARE this one clean-room interpreter (`src/frontend.rs` + `examples/cobrun.rs`). Verb-level status hides the forms WITHIN a wired verb, so here is the exhaustive picture, derived live from source (not curated): **73 sealed sub-form(s)** proven byte-identical to cobc, and **every distinct fail-closed form** -- 206 of them, de-duplicated from the 231 `RunError::Unsupported` guards in `src/frontend.rs` (placeholder variants such as `USAGE <x>` collapse; the catch-all re-wrap is dropped). The doctrine is fail-closed: each is an explicit error + exit 2, never a silent wrong answer. Of the 206: **0 feature gaps** (the genuine remaining work), **14 boundary non-claims** (the oracle itself cannot run them, or they need a pinned env -- not TODOs), and **192 input-validation guards** (malformed input cobc also rejects -- not feature gaps, listed for completeness).
 
 ### Completion scorecard
 
@@ -185,13 +185,13 @@ Two axes. **Breadth** -- can the front-end run the construct at all (the bounded
 
 ### Depth -- sub-forms within wired verbs
 
-**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 69 front-end sub-forms have been identified -- **69 sealed** (byte-identical to cobc, section A) and **0 still open** (fail-closed guards, section B). **Depth completion = 69/69 = 100.0%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
+**Breadth** (above) asks *can the verb run at all*; **depth** asks *which sub-forms of a wired verb run*. 73 front-end sub-forms have been identified -- **73 sealed** (byte-identical to cobc, section A) and **0 still open** (fail-closed guards, section B). **Depth completion = 73/73 = 100.0%**, climbing to 100% as the open gaps seal. The denominator is the IDENTIFIED forms (sealed + open), computed live from source -- *not* "% of all COBOL" and *not* a grammar-alternative count (the gap rows are edge-cases that do not line up 1:1 with `parser.y` alternatives). A new fail-closed guard raises the denominator, so this can never read 100% while any guard remains. Below: the open gaps per verb, **biggest movers first**.
 
 | verb / clause | open gaps (what's left) | share of the remaining work |
 |---|---:|---:|
-| **TOTAL** | **0 open** (+ 69 sealed = 69 identified) | **100.0% complete** |
+| **TOTAL** | **0 open** (+ 73 sealed = 73 identified) | **100.0% complete** |
 
-### A. Sealed sub-forms (69) -- proven byte-identical to cobc
+### A. Sealed sub-forms (73) -- proven byte-identical to cobc
 
 Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anchor vanishes.
 
@@ -266,6 +266,10 @@ Reality-checked against `FRONTEND_SUBFORMS`: the doc gate fails if a corpus anch
 | `(arithmetic)` | a numeric literal written with no leading zero (`.08` = 0.08, `.5` = 0.5) -- cobc accepts it; the lexer now keeps a `.` that is directly followed by a digit as the start of the literal instead of emitting it as a sentence terminator. Found running the real-world opencbs corpus (DF06 `COMPUTE ... * .08`) | `lab/corpus/frontend/p174_leadingdot_decimal.cob` |
 | `(groups)` | a qualified name `X OF Y` as a COMPUTE target and as a PARENTHESISED operand `(X OF Z * .08)`: the qualified-name collapser strips the leading `(` the lexer glued onto the operand so the inner name still resolves to the right record. Found running the real-world opencbs corpus (DF06 qualified COMPUTE) | `lab/corpus/frontend/p175_qualified_compute_operand.cob` |
 | `(groups)` | several FILLERs of DIFFERENT sizes in one group each occupy their own slot -- they get unique field keys, so a group MOVE distributes bytes to the named children at the correct offsets (two same-parent FILLERs previously collided to one field, and the wrong length shifted every later child). Found running the real-world opencbs corpus (DF19 splits a `2021 09 15` date) | `lab/corpus/frontend/p176_multi_filler_group_move.cob` |
+| `file I/O` | multiple 01-level record descriptions beneath one FD -- every declared 01 is an alternative layout over ONE shared file record area (GnuCOBOL overlap semantics, oracle-verified); WRITE/REWRITE/RELEASE resolve the NAMED record (not only the first) and emit that record's own bytes/length; read-back shows both records in source order. Found by GNURUST.FILEIO.MULTI-RECORD-FD.1 (the CCVS85 `WRITE DUMMY-RECORD` report pattern was the original blocker) | `lab/corpus/frontend/p186_multifd_basic.cob` |
+| `file I/O` | alternative FD records of DIFFERENT lengths -- each WRITE emits the NAMED record's own length and the file auto-switches to the var-seq on-disk framing when lengths differ (oracle byte-identical) | `lab/corpus/frontend/p188_multifd_lengths.cob` |
+| `file I/O` | GROUP records beneath one FD -- each WRITE serialises the named group's full nested layout from the shared record area | `lab/corpus/frontend/p189_multifd_groups.cob` |
+| `file I/O` | the CCVS85 report shape -- WRITE of the SECOND FD record with `AFTER ADVANCING n LINES` (n x LF before the record, final LF at close); the 120-byte record + advancing bytes are asserted against the oracle by the sweep | `lab/corpus/frontend/p191_multifd_advancing.cob` |
 
 ### B. Feature gaps -- the genuine remaining work (0)
 
