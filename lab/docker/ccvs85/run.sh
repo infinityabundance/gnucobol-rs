@@ -86,9 +86,11 @@ fi
 "$CARGO_HOME/bin/rustc" --version
 log "building gnucobol-rs (cobrun + ccvs85 harness)"
 cd /repo
-if [ ! -x "$COBRUN" ]; then
-  cargo build --release -p gnucobol-rs --example cobrun
-fi
+# ALWAYS rebuild cobrun from the checked-out source. /work/target is a persistent cache across
+# runs, so a `[ ! -x "$COBRUN" ]` guard would silently reuse a binary built from an OLD commit
+# after a front-end change -- the run would measure stale code and stamp it with the new git sha.
+# cargo's fingerprinting makes the no-change case a near-no-op, so there is no need for that guard.
+cargo build --release -p gnucobol-rs --example cobrun
 cargo build --release -p gnucobol-rs-ccvs85
 CCVS85_BIN=/work/target/release/gnucobol-rs-ccvs85
 COBRUN_VERSION=$("$COBRUN" --version 2>/dev/null | sed -n "1p" || echo "?")
