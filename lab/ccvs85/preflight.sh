@@ -136,7 +136,7 @@ cat > "$PROJECT_DOCKER_ROOT/logs/preflight.json" <<EOF
     "4_project_layout_present": true,
     "5_free_space_ok_gb": $AVAIL_GB,
     "6_isolated_socket_used": true,
-    "7_docker_root_beneath_project": ${CANON:+\"$CANON\"},
+    "7_docker_root_beneath_project": ${CANON:+"$CANON"}${CANON:-null},
     "8_no_primary_drive_state": true,
     "9_no_production_resources": true,
     "10_temp_state_on_storage": true

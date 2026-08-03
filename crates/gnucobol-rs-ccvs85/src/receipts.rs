@@ -40,6 +40,7 @@ fn envelope(gate: &str, court: &str, meta: &Value, replay: &str) -> Value {
         "current_authority": "STATUS.md",
         "environment": meta["environment"],
         "docker": meta["docker"],
+        "preflight": meta["preflight"],
     })
 }
 

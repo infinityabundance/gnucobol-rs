@@ -235,6 +235,7 @@ cat > "$META_FINAL" <<EOF
     "containers": {"pass_a": "$CONTAINER_A", "pass_b": "$CONTAINER_B"},
     "host_storage_root": "$PROJECT_DOCKER_ROOT"
   },
+  "preflight": $(cat "$PROJECT_DOCKER_ROOT/logs/preflight.json" 2>/dev/null | tr -d '\n'),
   "determinism": $(cat "$CCVS85_REP/determinism.json" | tr -d '\n'),
   "no_delegation": $(cat "$CCVS85_REP/no-delegation.json" | tr -d '\n'),
   "artifacts": {

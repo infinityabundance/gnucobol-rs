@@ -14,7 +14,7 @@
       "pass_a": "ccvs85-20260803T140006Z-183e21a4-a",
       "pass_b": "ccvs85-20260803T140006Z-183e21a4-b"
     },
-    "court_image": "gnucobol-rs-ccvs85/court:183e21a48b2917b128e2bbb86022ced7f2e1735f",
+    "court_image": "gnucobol-rs-ccvs85/court:40236823970679e8f24b9a4a29e0f3b510a219d8",
     "daemon_root": "/run/.ro4108755338/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
     "host_storage_root": "/run/media/one/1tb_kingston1/docker/gnucobol-rs",
     "isolated_daemon": true,
@@ -31,8 +31,8 @@
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "uname": "Linux 7.1.4-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-03T14:02:52Z",
-  "git_commit": "183e21a48b2917b128e2bbb86022ced7f2e1735f",
+  "generated_at": "2026-08-03T14:19:48Z",
+  "git_commit": "40236823970679e8f24b9a4a29e0f3b510a219d8",
   "non_claims": [
     "no claim about gnucobol-rs is made by this gate",
     "oracle acceptance/rejection is specific to the pinned GnuCOBOL 3.2 build and its dialect",
@@ -44,6 +44,38 @@
     "name": "GnuCOBOL",
     "source_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
     "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "preflight": {
+    "base_image": {
+      "arch": "x86_64",
+      "file_type": "QEMU QCOW Image (v3), 3758096384 bytes (v3), 3758096384 bytes",
+      "path": "/run/media/one/toshiba4TB/images/noble-server-cloudimg-amd64.img",
+      "release": "Ubuntu 24.04 noble server cloud image",
+      "sha256": "18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
+      "size_bytes": 649265152
+    },
+    "conditions": {
+      "10_temp_state_on_storage": true,
+      "1_storage_root_writable": true,
+      "2_images_dir_readonly_source": true,
+      "3_base_artifact_verified": true,
+      "4_project_layout_present": true,
+      "5_free_space_ok_gb": 456,
+      "6_isolated_socket_used": true,
+      "7_docker_root_beneath_project": null,
+      "8_no_primary_drive_state": true,
+      "9_no_production_resources": true
+    },
+    "docker": {
+      "driver": "n/a",
+      "root": "n/a",
+      "socket": "not-set-yet"
+    },
+    "schema": "gnurust-ccvs85-preflight-v1",
+    "storage": {
+      "free_gb": 456,
+      "root": "/run/media/one/1tb_kingston1/docker/gnucobol-rs"
+    }
   },
   "receipt_status": "current",
   "results": {
