@@ -12,10 +12,10 @@
   "crate_version": "0.8.52",
   "damage_if_overclaimed": "reporting multi-record FD support while WRITE still resolves only the first record would silently write the wrong record's bytes in the CCVS85 report-writer pattern",
   "hash_chain": {
-    "inputs_sha256": "a77f4c54590e9dd6031b9ccbf0f8a2f216c7719bdebc212db900639cb8209513"
+    "inputs_sha256": "97af3af7300c2865316625a5dccfe78ca133e68ea0711f7a70e4954ea5085ba6"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "f26cd15b4c091474dd710595b4caa14da71889ed57fc128cbd51224d68f27956",
+    "claim_ladder_entry_sha256": "1e0bd4e275299a30e5d6fbc5665593f0bacba3f1938a7657f6a6c214cba16947",
     "receipt_sha256": "d1d4a016b3b04d50765f53e77c6ca77b6a2a5e8e2c68ae31f093304963ccbc84"
   },
   "kind": "court-casefile",
