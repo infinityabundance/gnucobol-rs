@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | per-unit cobrun (native-Rust front-end + ported runtime) prepare/run/timeout outcomes with raw stdout/stderr preserved |
 | replay command | `bash lab/ccvs85/run-docker.sh` |
-| generated_at | 2026-08-03T14:19:48Z |
-| git_commit | `40236823970679e8f24b9a4a29e0f3b510a219d8` |
+| generated_at | 2026-08-03T14:35:16Z |
+| git_commit | `ee2300e13307ce8de3c5cc86236a0796fb1e702f` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.
@@ -23,7 +23,7 @@
 {
   "candidate_accepted": 15,
   "candidate_parse_fail": 2,
-  "candidate_results_sha256": "3559c9ded062d8efce692e80894979755993a2ee463da7b0df8e65b4e6f19fe1",
+  "candidate_results_sha256": "9878eafa05ab2e48bf0d3fd26f73e8a43ef4d9eeef33f282a356d1fa2622c971",
   "candidate_runtime_fail": 0,
   "candidate_timeout": 1,
   "candidate_unsupported": 374,

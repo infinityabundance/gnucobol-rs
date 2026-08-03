@@ -11,15 +11,15 @@
   "docker": {
     "base_image": "gnucobol-rs-ccvs85/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "ccvs85-20260803T140006Z-183e21a4-a",
-      "pass_b": "ccvs85-20260803T140006Z-183e21a4-b"
+      "pass_a": "ccvs85-20260803T143229Z-ee2300e1-a",
+      "pass_b": "ccvs85-20260803T143229Z-ee2300e1-b"
     },
-    "court_image": "gnucobol-rs-ccvs85/court:40236823970679e8f24b9a4a29e0f3b510a219d8",
+    "court_image": "gnucobol-rs-ccvs85/court:ee2300e13307ce8de3c5cc86236a0796fb1e702f",
     "daemon_root": "/run/.ro4108755338/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
     "host_storage_root": "/run/media/one/1tb_kingston1/docker/gnucobol-rs",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260803T140006Z-183e21a4",
+    "run_id": "20260803T143229Z-ee2300e1",
     "socket": "unix:///run/media/one/1tb_kingston1/docker/gnucobol-rs/run/docker.sock",
     "storage_driver": "overlay2"
   },
@@ -31,8 +31,8 @@
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "uname": "Linux 7.1.4-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-03T14:19:48Z",
-  "git_commit": "40236823970679e8f24b9a4a29e0f3b510a219d8",
+  "generated_at": "2026-08-03T14:35:16Z",
+  "git_commit": "ee2300e13307ce8de3c5cc86236a0796fb1e702f",
   "non_claims": [
     "no suite-pass claim: this gate records candidate outcomes, it does not certify them",
     "candidate rejection is fail-closed (unsupported constructs are never silently run)",
@@ -62,14 +62,14 @@
       "4_project_layout_present": true,
       "5_free_space_ok_gb": 456,
       "6_isolated_socket_used": true,
-      "7_docker_root_beneath_project": null,
+      "7_docker_root_beneath_project": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
       "8_no_primary_drive_state": true,
       "9_no_production_resources": true
     },
     "docker": {
-      "driver": "n/a",
-      "root": "n/a",
-      "socket": "not-set-yet"
+      "driver": "overlay2",
+      "root": "/run/.ro4108755338/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
+      "socket": "unix:///run/media/one/1tb_kingston1/docker/gnucobol-rs/run/docker.sock"
     },
     "schema": "gnurust-ccvs85-preflight-v1",
     "storage": {
@@ -81,7 +81,7 @@
   "results": {
     "candidate_accepted": 15,
     "candidate_parse_fail": 2,
-    "candidate_results_sha256": "3559c9ded062d8efce692e80894979755993a2ee463da7b0df8e65b4e6f19fe1",
+    "candidate_results_sha256": "9878eafa05ab2e48bf0d3fd26f73e8a43ef4d9eeef33f282a356d1fa2622c971",
     "candidate_runtime_fail": 0,
     "candidate_timeout": 1,
     "candidate_unsupported": 374,

@@ -126,6 +126,13 @@ done
 facts "10. TMPDIR/TEMP/TMP constrained to the project tree (or tmpfs /run/user)"
 
 # ---- write the preflight facts -------------------------------------------------------------
+# JSON-quote the daemon-root fact (docker's own report, normalized); `null` when the daemon is not
+# up yet. Built via printf so the value is ALWAYS properly quoted (heredoc-only expansion of
+# nested `${...:+"$CANON"}` alternate values misbehaves under bash's eager heredoc expansion).
+JSON_DAEMON_ROOT=null
+if [ -n "${CANON:-}" ]; then
+  JSON_DAEMON_ROOT=$(printf '"%s"' "$CANON")
+fi
 cat > "$PROJECT_DOCKER_ROOT/logs/preflight.json" <<EOF
 {
   "schema": "gnurust-ccvs85-preflight-v1",
@@ -136,7 +143,7 @@ cat > "$PROJECT_DOCKER_ROOT/logs/preflight.json" <<EOF
     "4_project_layout_present": true,
     "5_free_space_ok_gb": $AVAIL_GB,
     "6_isolated_socket_used": true,
-    "7_docker_root_beneath_project": ${CANON:+"$CANON"}${CANON:-null},
+    "7_docker_root_beneath_project": $JSON_DAEMON_ROOT,
     "8_no_primary_drive_state": true,
     "9_no_production_resources": true,
     "10_temp_state_on_storage": true

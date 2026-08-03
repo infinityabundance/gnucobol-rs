@@ -357,6 +357,41 @@ fn cmd_determinism(args: &[String]) -> i32 {
         "oracle_candidate_pair": sb["oracle_candidate_pair"],
     });
     let identical = stable_a == stable_b;
+
+    // ALSO compare the per-unit oracle REPORT bytes between the two fresh runs: the stable-summary
+    // gate tolerates timestamps, but a unit whose REPORT bytes differ run-to-run is a genuine
+    // nondeterminism that must be recorded and explicitly classified (never concealed by retries).
+    // GnuCOBOL's `COB_CURRENT_DATE` pins the date+time but the fractional-second field of ACCEPT
+    // FROM TIME still comes from the real clock; a CCVS85 TIME test prints it into its report.
+    let mut report_drift: Vec<serde_json::Value> = Vec::new();
+    if let (Some(oa), Some(ob)) = (
+        read_json_sibling(&pass_a, "oracle-results.json"),
+        read_json_sibling(&pass_b, "oracle-results.json"),
+    ) {
+        let oa_units = oa.as_array().cloned().unwrap_or_default();
+        let ob_units = ob.as_array().cloned().unwrap_or_default();
+        for ua in &oa_units {
+            let idx = ua["unit_index"].as_u64().unwrap_or(u64::MAX);
+            let name = ua["name"].as_str().unwrap_or("?");
+            let ha = ua["oracle"]["report_sha256"].as_str().unwrap_or("");
+            let Some(ub) = ob_units
+                .iter()
+                .find(|x| x["unit_index"].as_u64() == Some(idx))
+            else {
+                continue;
+            };
+            let hb = ub["oracle"]["report_sha256"].as_str().unwrap_or("");
+            if !ha.is_empty() && ha != hb {
+                report_drift.push(serde_json::json!({
+                    "unit_index": idx,
+                    "name": name,
+                    "pass_a_report_sha256": ha,
+                    "pass_b_report_sha256": hb,
+                    "note": "oracle REPORT bytes differ between two fresh runs (e.g. a TIME test printing real fractional seconds); the unit is explicitly classified nondeterministic"
+                }));
+            }
+        }
+    }
     let doc = serde_json::json!({
         "schema": "gnurust-ccvs85-determinism-v1",
         "pass_a": {
@@ -368,7 +403,8 @@ fn cmd_determinism(args: &[String]) -> i32 {
             "path": pass_b,
         },
         "stable_summary_identical": identical,
-        "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded)",
+        "report_byte_nondeterminism": report_drift,
+        "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified",
     });
     std::fs::write(
         out.join("determinism.json"),
@@ -376,8 +412,83 @@ fn cmd_determinism(args: &[String]) -> i32 {
     )
     .ok();
 
+    // Mark every drifted unit nondeterministic in the committed comparison ledger and recompute the
+    // summary so `nondeterministic` reconciles and the unit is visible in every report.
+    if !report_drift.is_empty() {
+        let ccvs85 = out.clone();
+        let comp_path = ccvs85.join("comparison-results.json");
+        if let Ok(text) = std::fs::read_to_string(&comp_path) {
+            if let Ok(mut comp) = serde_json::from_str::<serde_json::Value>(&text) {
+                if let Some(units) = comp["units"].as_array_mut() {
+                    for d in &report_drift {
+                        let idx = d["unit_index"].as_u64().unwrap_or(u64::MAX);
+                        if let Some(u) = units
+                            .iter_mut()
+                            .find(|x| x["unit_index"].as_u64() == Some(idx))
+                        {
+                            u["nondeterministic"] = serde_json::json!(true);
+                            u["determinism"] = serde_json::json!({
+                                "pass_a": d["pass_a_report_sha256"],
+                                "pass_b": d["pass_b_report_sha256"],
+                            });
+                        }
+                    }
+                    let _ = std::fs::write(
+                        &comp_path,
+                        serde_json::to_string_pretty(&comp).unwrap() + "\n",
+                    );
+                    // recompute the summary from the (now annotated) ledger
+                    let munits: Vec<model::MaterializedUnit> =
+                        std::fs::read_to_string(ccvs85.join("materialized-units.json"))
+                            .ok()
+                            .and_then(|s| serde_json::from_str(&s).ok())
+                            .unwrap_or_default();
+                    if !munits.is_empty() {
+                        let unit_results: Vec<model::UnitResult> = comp["units"]
+                            .as_array()
+                            .cloned()
+                            .unwrap_or_default()
+                            .iter()
+                            .filter_map(|u| serde_json::from_value(u.clone()).ok())
+                            .collect();
+                        let summary = compare::summarize(&unit_results, &munits);
+                        let meta = std::fs::read_to_string(ccvs85.join("summary.json"))
+                            .ok()
+                            .and_then(|s| serde_json::from_str::<serde_json::Value>(&s).ok())
+                            .unwrap_or_else(|| serde_json::json!({"generated_at": "unstamped"}));
+                        compare::write_summary_json(&ccvs85.join("summary.json"), &summary, &meta);
+                        let _ = std::fs::write(
+                            ccvs85.join("summary.md"),
+                            compare::render_summary_md(&summary, &meta),
+                        );
+                        let _ = std::fs::write(
+                            ccvs85.join("failure-buckets.md"),
+                            compare::render_failure_buckets(&unit_results, &summary),
+                        );
+                    }
+                }
+            }
+        }
+    }
+
     if identical {
-        println!("determinism: two fresh full runs produce identical stable summaries — PASS");
+        if report_drift.is_empty() {
+            println!("determinism: two fresh full runs produce identical stable summaries — PASS");
+        } else {
+            println!(
+                "determinism: stable summaries identical — PASS, with {} explicitly-classified report-byte nondeterminism(s):",
+                report_drift.len()
+            );
+            for d in &report_drift {
+                println!(
+                    "  u{} {}: report sha pass_a {} vs pass_b {}",
+                    d["unit_index"],
+                    d["name"],
+                    d["pass_a_report_sha256"],
+                    d["pass_b_report_sha256"]
+                );
+            }
+        }
         0
     } else {
         // Find which unit classifications differ between the two passes.
@@ -450,4 +561,12 @@ fn load_candidate(work: &Path) -> std::collections::BTreeMap<usize, model::Candi
             Some((idx, side))
         })
         .collect()
+}
+
+/// Read a JSON file that sits next to `path` (e.g. `oracle-results.json` beside `summary.json`).
+fn read_json_sibling(path: &Path, name: &str) -> Option<serde_json::Value> {
+    let sibling = path.parent().unwrap_or(Path::new(".")).join(name);
+    std::fs::read_to_string(&sibling)
+        .ok()
+        .and_then(|s| serde_json::from_str(&s).ok())
 }

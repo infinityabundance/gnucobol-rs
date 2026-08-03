@@ -874,11 +874,22 @@ pub fn render_failure_buckets(results: &[UnitResult], summary: &Summary) -> Stri
         s.push_str("(none)\n");
     } else {
         for r in nondet {
+            let note = r
+                .determinism
+                .as_ref()
+                .map(|d| {
+                    format!(
+                        "oracle REPORT bytes differ between the two fresh runs (pass A {} vs pass B {})",
+                        &d.pass_a[..12],
+                        &d.pass_b[..12]
+                    )
+                })
+                .unwrap_or_else(|| "oracle REPORT bytes differ between the two fresh runs".to_string());
             s.push_str(&format!(
-                "- `{}` — pass A {:?} vs pass B {:?}\n",
+                "- `{}` — explicitly classified nondeterministic ({}) — {}\n",
                 r.name,
-                r.determinism,
-                r.final_classification.as_str()
+                r.final_classification.as_str(),
+                note
             ));
         }
     }

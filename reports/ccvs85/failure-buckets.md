@@ -137,4 +137,4 @@ number.
 
 ## Explicitly classified nondeterministic units
 
-(none)
+- `NC214M` — explicitly classified nondeterministic (RUST_REJECT_UNSUPPORTED) — oracle REPORT bytes differ between the two fresh runs (pass A 9200edc52b2c vs pass B 0bc0394556c8)
