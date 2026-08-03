@@ -19,11 +19,14 @@
 - a WORKING-STORAGE 01 or unknown name still fails closed as 'not an FD record'
 - the oracle's line-control file bytes for AFTER ADVANCING n (n x LF before the record + a final LF at close) are asserted oracle-side
 
-## Negative claims (5) — negative capability is the trust surface
+## Negative claims (8) — negative capability is the trust surface
 - read-back of printer-style (ADVANCING-written) files -- outside the in-memory logical-record model (the line-control bytes are asserted on the oracle's file, not the front-end's stdout)
 - duplicate record names across files -- cobc rejects them as ambiguous ('needs qualification'), the front-end keeps first-declaration
 - deeper plain sub-groups inside an alternative record -- the REDEFINES-group alias maps direct leaves only (documented limitation)
-- multi-record key selection for INDEXED/RELATIVE beyond the primary record
+- multi-record key selection for INDEXED/RELATIVE beyond the primary record WRITE ... ADVANCING PAGE (form-feed page control) fails closed (a declared boundary, not implemented)
+- WRITE ... ADVANCING on a RELATIVE/INDEXED file fails closed (advancing is valid only on SEQUENTIAL / LINE SEQUENTIAL)
+- the in-memory READ-back of an ADVANCING-written (printer-style) file is outside the sealed subset -- the advancing LFs are file data (mirroring the oracle's disk bytes, which the --dump-files materialization reproduces byte-for-byte), so re-reading a print file is not modelled
+- no suite-pass or conformance claim from the CCVS85 differential court -- observation only.
 - lie prevented: that the FD records are independent buffers -- NO: they are alternative views of ONE record area (a MOVE into one is visible through every other, exactly as the oracle), and WRITE of a record emits the SHARED bytes at the NAMED record's length
 
 ## Damage if overclaimed

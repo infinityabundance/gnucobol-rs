@@ -138,6 +138,7 @@ fn place() -> Vec<(i64, &'static str)> {
         "GNURUST.FILEIO.SYS.1",
         "GNURUST.FILEIO.OPEN.1",
         "GNURUST.FILEIO.INDEXED.1",
+        "GNURUST.FILEIO.MULTI-RECORD-FD.1",
     ];
     let l5 = ["GNURUST.PROCEDURE.FLOW.ATLAS.1"];
     let l6 = [

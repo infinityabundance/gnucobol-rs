@@ -1,9 +1,9 @@
 {
   "court": "GNURUST.VERIFY.KANI-FUZZ.1",
-  "fuzz_covered": 82,
-  "impl_courts": 82,
-  "kani_covered": 82,
-  "na_courts": 55,
+  "fuzz_covered": 83,
+  "impl_courts": 83,
+  "kani_covered": 83,
+  "na_courts": 58,
   "rows": [
     {
       "court": "GNURUST.2",
@@ -606,6 +606,15 @@
       ]
     },
     {
+      "court": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
+      "fuzz": [
+        "frontend.rs"
+      ],
+      "kani": [
+        "frontend.rs"
+      ]
+    },
+    {
       "court": "GNURUST.FILEIO.LINESEQ.2",
       "fuzz": [
         "lineseq.rs"
@@ -1072,8 +1081,26 @@
       "kani": [
         "cob_decimal.rs"
       ]
+    },
+    {
+      "court": "GNURUST.CCVS85.2",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: NIST CCVS85 corpus materialization + real-GnuCOBOL oracle baseline; no single Rust byte kernel -- its own seal-grade gate is replay+all-512-accounted+raw-evidence"
+    },
+    {
+      "court": "GNURUST.CCVS85.3",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: NIST CCVS85 corpus cobrun baseline (isolated, no-delegation); no single Rust byte kernel -- its own seal-grade gate is replay+no-delegation+raw-evidence"
+    },
+    {
+      "court": "GNURUST.CCVS85.4",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: NIST CCVS85 differential comparison + per-unit classification; no single Rust byte kernel -- its own seal-grade gate is replay+classification-reconciliation"
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 137
+  "total_courts": 141
 }

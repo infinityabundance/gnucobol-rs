@@ -235,7 +235,7 @@
    "GNURUST.SIZE.ERROR.1"
   ],
   "future_campaign": null,
-  "risk_if_unported": "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal \u2014 silent corruption"
+  "risk_if_unported": "overflow writes truncated / divide-by-zero preserves the receiver, both WITHOUT signal — silent corruption"
  },
  {
   "surface": "file-io-sequential",
@@ -245,16 +245,17 @@
   ],
   "status": "sealed",
   "courts": [
+   "GNURUST.FILE.REWRITE.1",
    "GNURUST.FILE.SEQUENTIAL.1",
    "GNURUST.FILE.WRITE.1",
-   "GNURUST.FILE.REWRITE.1",
    "GNURUST.FILEIO.LINESEQ.1",
    "GNURUST.FILEIO.LINESEQ.2",
-   "GNURUST.FILEIO.SEQ.1",
-   "GNURUST.FILEIO.VERB.1",
-   "GNURUST.FILEIO.SYS.1",
+   "GNURUST.FILEIO.MAPPING.1",
+   "GNURUST.FILEIO.MULTI-RECORD-FD.1",
    "GNURUST.FILEIO.OPEN.1",
-   "GNURUST.FILEIO.MAPPING.1"
+   "GNURUST.FILEIO.SEQ.1",
+   "GNURUST.FILEIO.SYS.1",
+   "GNURUST.FILEIO.VERB.1"
   ],
   "future_campaign": null,
   "risk_if_unported": "sequential/line READ record bytes + AT END drive most batch COBOL logic"

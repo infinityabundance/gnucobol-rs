@@ -5,21 +5,21 @@
       "kind": "generated_doc",
       "path": "STATUS.md",
       "present": true,
-      "sha256": "2673329310cdb0617194d93a94c0904346979552c0379ddd08a910a1ddb77a5e"
+      "sha256": "00734434e964b70026f2fbc273c77e21286e3e6d0ce675a6facb9aec0ab42d4f"
     },
     {
       "id": "changelog",
       "kind": "generated_doc",
       "path": "CHANGELOG.md",
       "present": true,
-      "sha256": "fd7d1241865525f02b80cfd0d3b77a28887984e15affce72a1604826407ff07a"
+      "sha256": "f73f8a469f709d7a34ea7972e9c4d250cd468979373b6bb4dd5d6f720c635304"
     },
     {
       "id": "claim_ladder",
       "kind": "machine_spine",
       "path": "reports/claim-ladder.json",
       "present": true,
-      "sha256": "9bdd528132c0c0c32742a5e48ad3f8880ed4d10f0c19840d33dc66b8abb9aed7"
+      "sha256": "7e17607734f2363b6da1f38b2bd4534bf428d82c93df40e741aaabe9c296f263"
     },
     {
       "id": "negative_capabilities",
@@ -54,7 +54,7 @@
       "kind": "doctrine_doc",
       "path": "docs/future-risk-register.md",
       "present": true,
-      "sha256": "c9cb7050f0f8740e1cebbaa448146f4b259438908c038f0feb345c7cdc90d537"
+      "sha256": "a7638026cfac5a2900fa788b2b60622583074d935d7021f841182050b665aafe"
     },
     {
       "casefiles": [
@@ -395,6 +395,13 @@
           "sarif": true
         },
         {
+          "casefile_sha256": "00c27ae84341d8b84a4eeb71d230b9768798bdfaa4c928f8b67334b041be6adf",
+          "court": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
           "casefile_sha256": "492a0449a3150430dbb22e1f7f0a18bb5015c280ecf3b5868a14e9e055606ae0",
           "court": "GNURUST.FILEIO.OPEN.1",
           "dsse": true,
@@ -451,7 +458,7 @@
           "sarif": true
         },
         {
-          "casefile_sha256": "1deeb784d266a620072799df0a9ae3d0cb3f88afa24505fc6b657d0aeb6bb2b6",
+          "casefile_sha256": "aa2fc1b960fa89e925827e7b50433dc2075d4a211be485a5a082cf955e70c241",
           "court": "GNURUST.FRONTEND.1",
           "dsse": true,
           "intoto": true,
@@ -1039,7 +1046,7 @@
           "sarif": true
         }
       ],
-      "count": 140,
+      "count": 141,
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true

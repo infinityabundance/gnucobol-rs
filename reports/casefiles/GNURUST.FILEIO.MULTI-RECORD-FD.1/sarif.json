@@ -34,7 +34,28 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: multi-record key selection for INDEXED/RELATIVE beyond the primary record"
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: multi-record key selection for INDEXED/RELATIVE beyond the primary record WRITE ... ADVANCING PAGE (form-feed page control) fails closed (a declared boundary, not implemented)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: WRITE ... ADVANCING on a RELATIVE/INDEXED file fails closed (advancing is valid only on SEQUENTIAL / LINE SEQUENTIAL)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: the in-memory READ-back of an ADVANCING-written (printer-style) file is outside the sealed subset -- the advancing LFs are file data (mirroring the oracle's disk bytes, which the --dump-files materialization reproduces byte-for-byte), so re-reading a print file is not modelled"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: no suite-pass or conformance claim from the CCVS85 differential court -- observation only."
           },
           "ruleId": "NONCLAIM"
         },

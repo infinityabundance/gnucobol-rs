@@ -80,6 +80,7 @@ fn candidate_pass(work: &PathBuf, out: &[u8]) -> CandidateSide {
         run: "pass".into(),
         run_invocation: Some(inv),
         stdout_sha256: String::new(),
+        report_sha256: String::new(),
     }
 }
 

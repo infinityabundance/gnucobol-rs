@@ -1,6 +1,6 @@
 {
   "class_counts": {
-    "A": 99,
+    "A": 100,
     "B": 35,
     "C": 6,
     "D": 0,
@@ -51,6 +51,7 @@
       "GNURUST.FILEIO.LINESEQ.1",
       "GNURUST.FILEIO.LINESEQ.2",
       "GNURUST.FILEIO.MAPPING.1",
+      "GNURUST.FILEIO.MULTI-RECORD-FD.1",
       "GNURUST.FILEIO.OPEN.1",
       "GNURUST.FILEIO.RELATIVE.1",
       "GNURUST.FILEIO.SEQ.1",
@@ -925,6 +926,22 @@
       "negative_claims": 7,
       "negatives_ge_positives": true,
       "positive_claims": 4
+    },
+    {
+      "can_fail": true,
+      "can_fail_proof": "oracle sweep + receipt/casefile regen-equality (corrupt the receipt or sweep -> gate red)",
+      "ceremonial_flags": [],
+      "class": "A",
+      "creates_new_truth": false,
+      "damage_if_overclaimed_present": true,
+      "fixtures": "lab/corpus/frontend/p186-p191_multifd_*.cob + multirecord_fd_sweep.sh 7/0 + 10 self-contained front-end unit tests (fd_*)",
+      "generated_from_named_evidence": true,
+      "has_casefile": true,
+      "has_receipt": true,
+      "id": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
+      "negative_claims": 8,
+      "negatives_ge_positives": true,
+      "positive_claims": 8
     },
     {
       "can_fail": true,

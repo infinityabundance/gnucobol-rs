@@ -10098,7 +10098,7 @@ fn find_seq(toks: &[Tok], seq: &[&str]) -> Option<usize> {
 #[cfg(kani)]
 mod kani_proofs {
     use super::*;
-    // KANIFOR: GNURUST.FRONTEND.1
+    // KANIFOR: GNURUST.FRONTEND.1, GNURUST.FILEIO.MULTI-RECORD-FD.1
     /// The lexer is total: tokenizing any short ASCII byte sequence never panics (the front-end's
     /// parse entry must fail closed, never crash, on garbage). Bounded to a few bytes for tractability.
     #[kani::proof]
