@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.FILEIO.MULTI-RECORD-FD.1` |
 | court | multiple 01-level record descriptions beneath one FD (shared record area) |
-| crate_version | `0.8.52` |
+| crate_version | `0.8.53` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | WRITE/REWRITE of ANY declared FD record -> the NAMED record's bytes over ONE shared record area (GnuCOBOL union), byte-identical to cobc; different-length + group records; the CCVS85 WRITE ... AFTER ADVANCING shape |
 | replay command | `bash lab/oracle/multirecord_fd_sweep.sh` |

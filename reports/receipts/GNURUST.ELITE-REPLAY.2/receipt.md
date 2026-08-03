@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.ELITE-REPLAY.2` |
 | court | broad public-corpus replay -- the GCC-COBOL testsuite + the hand-authored front-end corpus run through cobc 3.2 AND cobrun; observable behaviour (stdout bytes + process exit) must agree, with cobrun failing CLOSED (never wrong) wherever it cannot run a program |
-| crate_version | `0.8.52` |
+| crate_version | `0.8.53` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a real public COBOL program -> its exact stdout bytes + process exit status, byte-identical to cobc; the GREEN invariant is that cobrun is byte-identical wherever it runs and fails-closed everywhere else (never a silent wrong answer) |
 | replay command | `bash lab/oracle/elite_replay2_sweep.sh` |

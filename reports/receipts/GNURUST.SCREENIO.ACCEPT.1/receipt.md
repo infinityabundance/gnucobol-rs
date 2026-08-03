@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.ACCEPT.1` |
 | court | SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes |
-| crate_version | `0.8.52` |
+| crate_version | `0.8.53` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a SCREEN SECTION ACCEPT of a width-1..6 alphanumeric field + the printable input (<= width) -> the exact ncurses prompt/reposition/echo/field-full byte stream, on the admitted terminal |
 | replay command | `bash lab/oracle/screenio_accept_sweep.sh` |

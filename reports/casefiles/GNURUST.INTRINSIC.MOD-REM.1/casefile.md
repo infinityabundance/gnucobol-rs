@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INTRINSIC.MOD-REM.1 (court-casefile)
 
-**Verdict: PASS** · 20/20 pass, 0 fail · crate `gnucobol-rs` 0.8.52
+**Verdict: PASS** · 20/20 pass, 0 fail · crate `gnucobol-rs` 0.8.53
 
 - **Oracle:** cobc FUNCTION MOD/REM (libcob/intrinsic.c)
 - **Byte domain(s):** FUNCTION MOD/REM(integer a, b) -> value

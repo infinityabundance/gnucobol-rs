@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.STATUS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.52",
+  "crate_version": "0.8.53",
   "damage_if_overclaimed": "assuming a status value that the host did not actually produce (e.g. generalizing 30, or guessing 39) sends a migration's error-handling branches down the wrong path",
   "hash_chain": {
-    "inputs_sha256": "ae7ad3496837e19daf04deb2b7ea059310b822562e89fb93e2fb385ab6fa677c"
+    "inputs_sha256": "a90bdecb1c78249f2b97a1b8b32eca2df930e7d4ebbe719d6de2e1edc601f6d3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1775ac57c2ba932310b37d17081b52e58b533a50c553976ce987121e0efafda2",
-    "receipt_sha256": "d63b202529ebbbbca9f5f6b40e534414f4c9677e03c65ae11613eb4fadbc93e4"
+    "receipt_sha256": "c8863163ed04e34b6ef373d22cbeb33f4a3650896f21be98b171ce74dc33c651"
   },
   "kind": "court-casefile",
   "lie_prevented": [

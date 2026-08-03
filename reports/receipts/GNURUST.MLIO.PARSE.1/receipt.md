@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.MLIO.PARSE.1` |
 | court | XML PARSE (native state machine) |
-| crate_version | `0.8.52` |
+| crate_version | `0.8.53` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | an XML PARSE input field + cross-call state -> the XML-EVENT / XML-CODE / XML-TEXT register sequence |
 | replay command | `bash lab/oracle/ml_parse_sweep.sh` |
