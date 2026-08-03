@@ -6,15 +6,15 @@
   },
   "conformance_claim": "NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.",
   "court": "CCVS85 differential comparison + per-unit classification",
-  "crate_version": "0.8.52",
+  "crate_version": "0.8.53",
   "current_authority": "STATUS.md",
   "docker": {
     "base_image": "gnucobol-rs-ccvs85/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "ccvs85-20260803T195332Z-a902ca8e-a",
-      "pass_b": "ccvs85-20260803T195332Z-a902ca8e-b"
+      "pass_a": "ccvs85-20260803T215114Z-c1fb0681-a",
+      "pass_b": "ccvs85-20260803T215114Z-c1fb0681-b"
     },
-    "court_image": "gnucobol-rs-ccvs85/court:a902ca8e8e4990827f5b4f86b30275919408348b",
+    "court_image": "gnucobol-rs-ccvs85/court:c1fb0681fc67e73c814da91f478d512228b473f7",
     "daemon_root": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_CCVS85_DOCKER_ROOT",
@@ -27,11 +27,11 @@
     "host_storage_root": "$GNURUST_CCVS85_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260803T195332Z-a902ca8e",
+    "run_id": "20260803T215114Z-c1fb0681",
     "socket": "unix://$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 484889419776,
+      "available_bytes_at_start": 483720278016,
       "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -45,8 +45,8 @@
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "uname": "Linux 7.1.4-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-03T19:56:02Z",
-  "git_commit": "a902ca8e8e4990827f5b4f86b30275919408348b",
+  "generated_at": "2026-08-03T21:53:59Z",
+  "git_commit": "c1fb0681fc67e73c814da91f478d512228b473f7",
   "non_claims": [
     "no NIST certification",
     "no full COBOL-85 conformance claim",
@@ -79,7 +79,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 451,
+      "5_free_space_ok_gb": 450,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -100,11 +100,11 @@
     },
     "schema": "gnurust-ccvs85-preflight-v1",
     "storage": {
-      "free_gb": 451,
+      "free_gb": 450,
       "root": "$GNURUST_CCVS85_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 484889419776,
+      "available_bytes_at_start": 483720278016,
       "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -128,24 +128,24 @@
       "RUST_REJECT_UNSUPPORTED": 161
     },
     "canonical_output_match": 0,
-    "comparison_results_sha256": "6b8ac37c1e20cef5081b9ddc1a2550672196fa9f62139f14b47c359d1944ad72",
+    "comparison_results_sha256": "cc31a0bd31e26da50082b7694a77989ea88298e9e2b4474053c4ea5a0dffcff7",
     "determinism": {
       "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified",
       "pass_a": {
-        "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T195332Z-a902ca8e/pass-a/summary.json",
-        "summary_sha256": "abff7443295199d92424dcf8c5a186c00e7eb09c584c329a8bc47d5a67669f00"
+        "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T215114Z-c1fb0681/pass-a/summary.json",
+        "summary_sha256": "29f28751b8b378b492fc653c28f38060a94cb2300d1117b9b4e5f8ff09277a9c"
       },
       "pass_b": {
-        "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T195332Z-a902ca8e/pass-b/summary.json",
-        "summary_sha256": "3e00359293473c2a0dfd0b1ee32edb7632256207b27f9131881ed2a38fa74039"
+        "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T215114Z-c1fb0681/pass-b/summary.json",
+        "summary_sha256": "3bc028f0b60ddb91c993dc6fbec43ca66048c239c24fd5e2048ce656b6ac6467"
       },
       "path_notation": "paths are symbolic: $GNURUST_CCVS85_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_CCVS85_DOCKER_ROOT/run-evidence/",
       "report_byte_nondeterminism": [
         {
           "name": "NC214M",
           "note": "oracle REPORT bytes differ between two fresh runs (e.g. a TIME test printing real fractional seconds); the unit is explicitly classified nondeterministic",
-          "pass_a_report_sha256": "c344dbb25a48ee23260bca3d41019c36de10bd50d010c90cd9fd238722e140cc",
-          "pass_b_report_sha256": "49e084051f8af882ac539d85e1bc0c35835d0b3a63430ae4137fdcef3683318e",
+          "pass_a_report_sha256": "49e084051f8af882ac539d85e1bc0c35835d0b3a63430ae4137fdcef3683318e",
+          "pass_b_report_sha256": "8cdad98ea6a07283fc47487e7fe503f7f3866f34c73b846c9b35debaa68e96a8",
           "unit_index": 269
         }
       ],
@@ -157,7 +157,7 @@
     "nondeterministic": 1,
     "output_mismatch": 42,
     "raw_output_match": 27,
-    "summary_json_sha256": "4db99e613bab60d11f98582797e4e491636579a683bdc2741c59116e019c7d41",
+    "summary_json_sha256": "bc72cef8a1c9087281672c17342a763ac4bb0b27de73e87b2dfd1cf42ee6013e",
     "units_accounted": 512
   },
   "schema": "gnurust-replay-receipt-v1",

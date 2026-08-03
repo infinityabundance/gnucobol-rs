@@ -168,7 +168,7 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
 ```json
 {
   "meta": {
-    "crate_version": "0.8.52",
+    "crate_version": "0.8.53",
     "environment": {
       "LANG": "C.UTF-8",
       "LC_ALL": "C.UTF-8",
@@ -177,8 +177,8 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
       "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
       "uname": "Linux 7.1.4-1-cachyos x86_64"
     },
-    "generated_at": "2026-08-03T19:54:52Z",
-    "git_commit": "a902ca8e8e4990827f5b4f86b30275919408348b",
+    "generated_at": "2026-08-03T21:52:49Z",
+    "git_commit": "c1fb0681fc67e73c814da91f478d512228b473f7",
     "oracle": {
       "built_prefix": "/work/oracle/prefix",
       "cobc_bin_sha256": "98dd2b1081a22cb6c70d2ac30e3c9a6138c8b63fbd25e17a5ed5274a99027a4a",

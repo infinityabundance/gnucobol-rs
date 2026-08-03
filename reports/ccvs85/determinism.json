@@ -1,19 +1,19 @@
 {
  "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified",
  "pass_a": {
-  "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T195332Z-a902ca8e/pass-a/summary.json",
-  "summary_sha256": "abff7443295199d92424dcf8c5a186c00e7eb09c584c329a8bc47d5a67669f00"
+  "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T215114Z-c1fb0681/pass-a/summary.json",
+  "summary_sha256": "29f28751b8b378b492fc653c28f38060a94cb2300d1117b9b4e5f8ff09277a9c"
  },
  "pass_b": {
-  "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T195332Z-a902ca8e/pass-b/summary.json",
-  "summary_sha256": "3e00359293473c2a0dfd0b1ee32edb7632256207b27f9131881ed2a38fa74039"
+  "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T215114Z-c1fb0681/pass-b/summary.json",
+  "summary_sha256": "3bc028f0b60ddb91c993dc6fbec43ca66048c239c24fd5e2048ce656b6ac6467"
  },
  "report_byte_nondeterminism": [
   {
    "name": "NC214M",
    "note": "oracle REPORT bytes differ between two fresh runs (e.g. a TIME test printing real fractional seconds); the unit is explicitly classified nondeterministic",
-   "pass_a_report_sha256": "c344dbb25a48ee23260bca3d41019c36de10bd50d010c90cd9fd238722e140cc",
-   "pass_b_report_sha256": "49e084051f8af882ac539d85e1bc0c35835d0b3a63430ae4137fdcef3683318e",
+   "pass_a_report_sha256": "49e084051f8af882ac539d85e1bc0c35835d0b3a63430ae4137fdcef3683318e",
+   "pass_b_report_sha256": "8cdad98ea6a07283fc47487e7fe503f7f3866f34c73b846c9b35debaa68e96a8",
    "unit_index": 269
   }
  ],
