@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COMMON.CBL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'the CBL_ library' would hide that the parameter-count checks, the x91 multiplexer, the locale path, and the OS/process routines are unported",
   "hash_chain": {
-    "inputs_sha256": "7369987e1231e4fc78c9938d70da38317e238bce7013bbac71727332fa67775f"
+    "inputs_sha256": "07bbabe9d9218f517b7598a2256779038bfeb1bd0d8656ca7939e38c972132db"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "c195666c374275e2855fa2af8135689a6a8b63edc303a3e830b2adaf98e8d1bb",
-    "receipt_sha256": "d9cccc29ad621cef4a489a93ce98e0569543c83f2855fa938de0c03cde7b4107"
+    "receipt_sha256": "7345784ce6fabfd24185baa680ccf7d472d166c1710904b25dd9bfc9642e26e8"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc CALL \"CBL_AND\"/.../\"CBL_TOLOWER\" (libcob/common.c cob_sys_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.COMMON.CBL.1"
   },

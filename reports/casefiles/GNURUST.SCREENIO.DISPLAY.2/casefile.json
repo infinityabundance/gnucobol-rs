@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.DISPLAY.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'positioned DISPLAY works everywhere' would hide that only the swept grid + single-field + the admitted terminal are proven; un-swept positions, multi-field layout, attributes, and other terminals are not",
   "hash_chain": {
-    "inputs_sha256": "e9a69e696abf8467775d6a5c1793dddf534548be9e7d0fd7c3e467d6ce65691a"
+    "inputs_sha256": "42f6e21c0aac08856f43f470cce32925b6dc64dcf31446f2344a997e8e3f625d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "efc2368e8d58a3ee8ec01c0c7efb8636983c86574fffdbae93047f17da3d1e9e",
-    "receipt_sha256": "6882c4958d4d48bdb80e7ac9e696d94e42da7ba5083210a378254189bad5c31b"
+    "receipt_sha256": "66604553757700bb3ca14b9aae1cb22ad619799673a6e5c5c46ee8e385ae7e94"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc SCREEN SECTION DISPLAY at varied LINE/COLUMN (libcob/screenio.c via ncurses 6.6 move/addstr/mvcur), captured under a pty with TERM=xterm",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SCREENIO.DISPLAY.2"
   },

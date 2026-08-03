@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.LINESEQ.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming one line-sequential byte image across configs corrupts framing under COB_LS_FIXED/NULLS or silently drops records the default validate would reject",
   "hash_chain": {
-    "inputs_sha256": "c5de57bfcfa36b8c8286e66319d96efe3086fd15614730b0bc1e7273b0bad1d6"
+    "inputs_sha256": "0fe6b65334633c9bc7083f344b2556689b2fbba7df5af5bd3ec091dcaac69828"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e44165046dbc9b34aef9295e4358dd146cf5ec06e365d089269d678d66e58a8e",
-    "receipt_sha256": "aa395f6d91cb6b719a271ecdac723d4ee2408275175d2b48c4ad3df2010b9de1"
+    "receipt_sha256": "9c4b54a3656046a7646b50d9b47211db45a8bcb87277b498439e1919aca3757c"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc OPEN OUTPUT/WRITE LINE SEQUENTIAL under COB_LS_* env (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.LINESEQ.1"
   },

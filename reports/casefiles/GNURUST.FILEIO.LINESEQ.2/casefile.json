@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.LINESEQ.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "mis-handling the split (06 vs 04), the \\r\\n fold, or the read-vs-write bad-char asymmetry corrupts record framing or wrongly accepts/rejects control data",
   "hash_chain": {
-    "inputs_sha256": "acab17d19f7a243d037370205923e99aa8bfd1b4db43a99416cf4faba8f0c302"
+    "inputs_sha256": "617e862900f15b52dfcd0a660a256058a706050a34ee747fdd379802f0c5f817"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "56555fe3a1c4867e7717181e668accfeac2d30b565f3a8118f5fe826cc3c401c",
-    "receipt_sha256": "fb0c668bef3d45a7891740c1ac77b90d96115ffb2bb89ee2d2399e003378ea9a"
+    "receipt_sha256": "b2dd3f13bf465bdda1d6b2802481f30acbe3efede64e5efb0ca9b71b22b0e411"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc OPEN INPUT/READ NEXT LINE SEQUENTIAL under COB_LS_* env (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.LINESEQ.2"
   },

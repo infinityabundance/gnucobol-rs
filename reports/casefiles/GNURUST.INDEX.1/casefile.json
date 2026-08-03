@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INDEX.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "mis-modelling an index as an offset (or wrong endianness) corrupts every SET/SEARCH and every index-driven table access",
   "hash_chain": {
-    "inputs_sha256": "6af7d60aeca35653fd7a619656277221c8861a9976afc16b7cd2fd4855a73d4c"
+    "inputs_sha256": "a0247a005943edf0d4ef286e0500019c9c624235648a1b60578cee5213a68e10"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "32390f4a24cda27370ddf89bed9f19e3fd8c17a616ed67004019fd22e2d2976f",
-    "receipt_sha256": "0793546ecd413d0ef26143fd5f65bb703d65104e853605e9e03644507f07147f"
+    "receipt_sha256": "06771b18b786c13fa313ef2c5ee5d15cef94e05fc6ce5b616275bda9f9a7e641"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc SET index-item TO/UP BY/DOWN BY; dumped via REDEFINES + FUNCTION ORD",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INDEX.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COMMON.BOUNDCHECK.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'runtime diagnostics' broadly would hide that only these three bounds messages are sealed (not the not-numeric message, the abort, or the libcob: prefix framing)",
   "hash_chain": {
-    "inputs_sha256": "d5b84c2eae3dec55b86f652d08f70151d6bca9b8f477eca408049b813fd913bd"
+    "inputs_sha256": "c707cf4f2b9f4d3584d614dba9fbaf6345887b51d9d99d2a63b12f9b52143a13"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7d1426cf4e7e23c1a487f837bbb866751eda45981427868074183a2bbb9895e8",
-    "receipt_sha256": "10ab0fae153a8078d4e1019a423267a84f342da58f8a93ca8fe691ea5f552c00"
+    "receipt_sha256": "fb441f4e7e1d3d7908e67faec6a236a30c909f794fb5019e435344d4990b12b8"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc -debug runtime bounds checks (libcob/common.c cob_check_*), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.COMMON.BOUNDCHECK.1"
   },

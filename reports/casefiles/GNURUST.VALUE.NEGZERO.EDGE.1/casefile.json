@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.VALUE.NEGZERO.EDGE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a blanket negative-zero fix corrupts the decimal-form and DISPLAY cells (which are correct); treating this as a broad VALUE bug overstates a 4-cell edge; conflating it with arithmetic -0 breaks GNURUST.13's deliberate sign-on-zero",
   "hash_chain": {
-    "inputs_sha256": "4eba7b2991d03bd454ee6d1df93dcc745c6bcbe4c2b1edffd7113dd908caee81"
+    "inputs_sha256": "ccb1ae6edd5f72984c1d639965a854bbeaab9e74056a1c24efaf944ce8db12ea"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "26013d00cc571ff1da6a4284cabdaec345496c8a218e90fa0645f509f8b47f91",
-    "receipt_sha256": "4aa865943275db1aa5d38c135d6e04db76e9a489e63d494d2030baa91f07fd8e"
+    "receipt_sha256": "3a8d9233cf50b7c366e134b04e1c5e879a177d45787b9e8dd68fabde21ab5bb1"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc VALUE initial image (cobc/typeck.c + libcob packed/zoned encode)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.VALUE.NEGZERO.EDGE.1"
   },

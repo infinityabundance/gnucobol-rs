@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.0",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating the lineage corpus as a parity/conformance proof, or the negative-zero finding as a fixed bug, or the engine as covering all 15 families, would each overclaim; the corpus reveals the oracle's observed shape and files divergences, it does not certify gnucobol-rs against all of GnuCOBOL",
   "hash_chain": {
-    "inputs_sha256": "7a4597103a184af3d9eb328da7014d842708588acfb7600a3b3b2bfa7083ded2"
+    "inputs_sha256": "3746941e5f6098799dad000887ab7dff96f898f1f1599bf41c35dcf578fc70d0"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "78af8b4414996ec714b3f4fb11ffbc65fe9d590e74a11c3c6788c70e7fb46b44",
-    "receipt_sha256": "0adc4db67d813eea49c0a0ca771c7237465eb6092bd6b2ec2b4e52858339a718"
+    "receipt_sha256": "0ff1ab0061db0deb5bf71f7408498d388935efb27c6bd26d0cbdada37bfc47d0"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -48,7 +48,7 @@
   "oracle": {
     "detail": "real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.0"
   },

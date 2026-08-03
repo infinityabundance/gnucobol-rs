@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.BIGNUM.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating an overflowing product as unsupported (or wrapping it) silently corrupts large-value multiplications that libcob handles exactly",
   "hash_chain": {
-    "inputs_sha256": "c5e7b67c820afd7a95953ad3f55b1b543ec65e95011ac19d04c427e23646e4fa"
+    "inputs_sha256": "5462bbd54329afead0ba79d82b6cee0cdf0d210bae4b4a83db3bcc5ea599f1ef"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "808cb61a588dbe4283b64e969feaad4b128f4cd839de5e06bef9f836e50b33ac",
-    "receipt_sha256": "0a37108921a587299cbe77afb976cf3aca7399aabf1002dce04041cee52ab3f5"
+    "receipt_sha256": "afd35fa944852e3b889359dc96727cddae9dd5facf293f176c448f35e080ea67"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "libcob cob_mul (GMP product) + cob_decimal_get_field truncating store",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.BIGNUM.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.16",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals",
   "hash_chain": {
-    "inputs_sha256": "b378a98b9934dedba9576a75da3d8b500d75b9478ef1cf1079ff7a65029b76f3"
+    "inputs_sha256": "f37cc0dee7d9ab90e8e208776481f021640fa75295daa7e7cc71e576ad95acdf"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7fc01ff60fc2ee104a3e969efda2a7f11c5fad14a5e4c4cda3c40743133d6a46",
-    "receipt_sha256": "92b1c49aff15d46c7efd50789ccbd859df920a236b0078feac2b293635d0614f"
+    "receipt_sha256": "480c6326900e9a62190605945648ca36cc7383d7affb7e8e9cafecc109ff1be2"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.16"
   },

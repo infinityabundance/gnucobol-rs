@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.17",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong zoned sign flips the sign of mainframe money",
   "hash_chain": {
-    "inputs_sha256": "0c7729ad0e8e8c1606ec7a1644d258defcd90fe61fe5f39899c84cb33b5dbd29"
+    "inputs_sha256": "45c56586c2dbcdb176d7d5dc3767edf7a1bfce6d44912985cd13125c4a7e9b14"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3cfcecf7c15e07cd6d998cbd6ae8abf605a10b5e54cf17705fe98c18fc755273",
-    "receipt_sha256": "dff13a661583ee250e22612571143a3c51fbe0a1e0c222b9b7661b73d1bf8ac5"
+    "receipt_sha256": "9676b79d2c479c7be2e3d8fbe7e80ef559bbdf01cf97c4600ddc680c1bd60a7c"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc -fsign=EBCDIC via edited intermediary",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.17"
   },

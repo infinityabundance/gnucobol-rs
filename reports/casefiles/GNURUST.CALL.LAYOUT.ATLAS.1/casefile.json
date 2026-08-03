@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.CALL.LAYOUT.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming CALL parameters are length-checked/truncated hides the real hazard -- a LINKAGE length that disagrees with the caller silently overlays adjacent storage (read and write); trusting a BY CONTENT over-read value reads uninitialized memory",
   "hash_chain": {
-    "inputs_sha256": "32d7a5f9fc1f462779ca0c374bc9ab4a754525c6471d46dcddb747fc6d67fdd1"
+    "inputs_sha256": "e7bf2561e8e9c38f1d386ff1c9b23c8c6a2ff120d0b0e6c518a0eaebc882e584"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7e8d7fb0cd27994d959d2ed3ddef173cb8b96b7112cc83e5673d89790e19d214",
-    "receipt_sha256": "f24d9d267c4641dfcfe989facd8cf79671c397af0ada680cec50173a6fc0ae31"
+    "receipt_sha256": "f730366d76967dce3acdfaf60d8fa7e6999c10c37faf064feff8e81fa2b9121a"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc CALL USING + LINKAGE parameter layout (libcob/call.c address passing)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.CALL.LAYOUT.ATLAS.1"
   },

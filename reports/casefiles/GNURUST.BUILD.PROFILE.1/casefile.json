@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.BUILD.PROFILE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "presenting byte parity as build-independent silently breaks on any oracle rebuilt with a different binary-byteorder / char-signedness / dialect -- the ABI abyss",
   "hash_chain": {
-    "inputs_sha256": "bc54895fe0e62f9bd4eb27d5414721dfda94ba33b936cdebb8c6d5d93d438815"
+    "inputs_sha256": "27e2a07bffcd969c17a9aee25e194040cb830e91387ce3a13530c26e522888d1"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "028db19fe3aef3c0ed31096ab254a6f56a6f21a4d246be4a5c37a641f9c389d4",
-    "receipt_sha256": "629dc8309b5348378f15f2dfb4b94b78027771c9e5ddc14e9df4e003797ea53f"
+    "receipt_sha256": "b540af80210c6d1d64b8232adf3f08d4190143aa5aef89931fc5c1fc14885369"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc --version / cobc -info / default.conf / libcob sha256",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.BUILD.PROFILE.1"
   },

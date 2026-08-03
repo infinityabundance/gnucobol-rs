@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.NUMVAL-C.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "using NUMVAL on currency-formatted input (or assuming a non-$ symbol/European decimal) misparses monetary amounts",
   "hash_chain": {
-    "inputs_sha256": "a609e9ff20ddf0a2a4f6302311b18fdb9a15f9fe3aea6dc7c57b7ae641ab1c12"
+    "inputs_sha256": "1fc239a09d56b24144c5a7b3b5f37e4ee115c973ef7a99ee12e7c2ed65ac7bdb"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "acb9c6266030014c1a687887f1b867c54fd9cded870433a227e9be7e01770ba6",
-    "receipt_sha256": "5187e7cf20345a2561f69f1510e996fcd4e9353621e4ed7a3805cba284c5bbad"
+    "receipt_sha256": "5e94886d08982a9d2372bd414e922dcb37875b808765f20def5874e8a90602db"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc FUNCTION NUMVAL-C (libcob/intrinsic.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INTRINSIC.NUMVAL-C.1"
   },

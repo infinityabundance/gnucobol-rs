@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.REWRITE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming REWRITE can change a record's length (it cannot for fixed records) or rewrites surrounding records corrupts a sequential file",
   "hash_chain": {
-    "inputs_sha256": "a11c7373ba6912a988561a9510ebca104f3f42272001dc8e05b969fb57b59156"
+    "inputs_sha256": "d4ba344fa264b3d9ab2701dff6629225ed3d0e158f71895b1c979ed845e69cb0"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d6ea4a80c875549a5b5cfced8385a78ba7f06123a8783d5944adc0aff8407e81",
-    "receipt_sha256": "929e28e5f2cc049d0ab4477eb94ca9bdeb4bc6668eb84de7b51a2246b78c4f4b"
+    "receipt_sha256": "0806f5dad2e86bb3eb925c329a884fb45533f1b4d36211dc677ea42f372a9f81"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc OPEN I-O/REWRITE (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILE.REWRITE.1"
   },

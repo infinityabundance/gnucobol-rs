@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "decoding a record produced under a non-default binary-size/byteorder/truncate with the default profile silently mis-offsets fields, reverses binary values, or mis-rounds MOVEs; assuming the profile can be auto-detected from bytes invents a build environment that was never recorded",
   "hash_chain": {
-    "inputs_sha256": "98e7482e9726b11c2b0e68eea34d90b4ee9c35723e7dba3a9b8a2941dcf72b2d"
+    "inputs_sha256": "68fc207f3acada48266ba3cc916b9bc64583f69344f36aea3a04e386c081836a"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "da3d04906bc9ae01c86fe78288220d0d3d2fd6928b57e174bea92af730a59af3",
-    "receipt_sha256": "58bb33043df7d3b26b7b6cfbc1b214dca0da428d5947d77c0f96d77ffbdb32b9"
+    "receipt_sha256": "0e4663c4eebcce4af29151f00269e9992fb90a68961d023c909d62c6001f783f"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc -f<directive> compile + run (cobc/config.c directive engine + libcob/move.c binary codec)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1"
   },

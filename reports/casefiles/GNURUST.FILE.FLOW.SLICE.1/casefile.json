@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.FLOW.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating this narrow read-accumulate slice as a general batch engine would run unsealed per-record logic / writes / multi-file joins whose semantics are not oracle-bound",
   "hash_chain": {
-    "inputs_sha256": "007af3050b1732bfa809546d2d75e748f9c7de954a08b2bcbfe4e8619255ea48"
+    "inputs_sha256": "9e3474ff63e63d604701b84fd2a742290083c8352fe2b26235d216009179b518"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "93141d699417787d53a680a0c6d1fe43f89d92babfde5501bc34bcb042c1c65d",
-    "receipt_sha256": "cd4989171cd4b51d9272a56f887cb9438c370ff794a89d70b4f9a699b19e0a50"
+    "receipt_sha256": "49e4facb07fbad5af9575b4015949824179e13c1d8431551a36b78175f13c56b"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -48,7 +48,7 @@
   "oracle": {
     "detail": "cobc file read-loop (libcob/fileio.c + cobc control flow)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILE.FLOW.SLICE.1"
   },

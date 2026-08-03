@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.FILTER.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "using byte comparison on a numeric amount filter (or vice versa) selects the wrong record set, corrupting every conditional total/extract",
   "hash_chain": {
-    "inputs_sha256": "4932a25b01156238dc04efac5677cf7b4f4043500071c45ffef13ee07fcf227e"
+    "inputs_sha256": "f9e440d8caa4db2f6d2337753fb9a1a9591f36a2ba7a52a72c39466f08ee0a64"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4d3290dc008e304c0cc04ca0f866821b6b275024d91196c169d61cf39f70ee88",
-    "receipt_sha256": "857e75f50068d018354c08e10eec3ce6eff37e4ba9c4f2d24e816f5c0686c71e"
+    "receipt_sha256": "13a59163b99c57ee5f9343682962b4b2ee17470a7b0cd40423f8c13d9294dac4"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc filter read-loop (libcob/fileio.c + cobc control flow)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILE.FILTER.SLICE.1"
   },

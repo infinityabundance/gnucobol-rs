@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LOGICAL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a two's-complement bit model diverges from GnuCOBOL on every negative operand and on shift counts at/above the word width",
   "hash_chain": {
-    "inputs_sha256": "d216e27144eef905fd62b1941a66edfb8930501a4797aa176e5ac4efa152cf33"
+    "inputs_sha256": "bc955d2fe5e1b5d9b4bba67548097e07bc45dd90092f3f3f606c99ff384c68e8"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0d7fc28a773ad4232845ce178266152fd339f71efe05407e795e2adc5ce5d148",
-    "receipt_sha256": "29f335d9c62f4e305c43692e75b96e3b4e9820afa36b837c4736d5e9c0d6d5bd"
+    "receipt_sha256": "a730745acb0077ebfb5c96a39197353877fba5e06a05be32c2d6bfdc8d3d73e7"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "libcob cob_logical_and/or/xor/not/left/right (over cob_decimal)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.LOGICAL.1"
   },

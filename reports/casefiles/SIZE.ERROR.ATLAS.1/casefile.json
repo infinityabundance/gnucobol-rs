@@ -9,14 +9,14 @@
   ],
   "case_id": "SIZE.ERROR.ATLAS.1",
   "crate": "kobold-data-shim",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming a money field was preserved (or written) on overflow when it was the opposite silently corrupts financial data",
   "hash_chain": {
-    "inputs_sha256": "bea8dfece38daac6fd28cb2e96ce0d06489c4aa75a8aacac1bc1d87674c7bf5a"
+    "inputs_sha256": "892658c3f55e959fb9da410afce40307a50fc50dc8897f738983ef08346b995f"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d54824e5ac390c4c03f9ff62308349c15779303464667e721e8c0458fb8be36e",
-    "receipt_sha256": "0d66374e1e53da7c2471a4b1d23fed408177ccb239f6d5e70ebeaf8f93c7a6f2"
+    "receipt_sha256": "64df669d0137b847d19e678192471d5f8db91e8dc6476af39a35ed59e5ec3977"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "bash lab/oracle/size_error_sweep.sh",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-rs-sealed-court",
     "upstream_court": null
   },

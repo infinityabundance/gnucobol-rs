@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ACCEPT.DISPLAY.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming DISPLAY separates operands (it does not) or that ACCEPT preserves an over-length line (it truncates) corrupts emitted/captured text in a ported program",
   "hash_chain": {
-    "inputs_sha256": "7851bd7cccb28bef1e9ceaaa308028dd5874639079625a53b3b761217e09da6d"
+    "inputs_sha256": "60445103ee78164f20c3fc9175916bc91d90bae936d718c024ec87c8493e8e20"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "9f30da8477cf484cb44a4a43fa408742b957cce6234fe44f0920fdb302699e91",
-    "receipt_sha256": "f52eb36b71649cc70cc14352e31cb0c1a24fb624f5952b1fd3cd3855339cab3b"
+    "receipt_sha256": "d4833c6caf9086ca53f08d2ddb7a5cfe8122535da75aa8461b657d489e1d16a7"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc DISPLAY/ACCEPT (libcob/termio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.ACCEPT.DISPLAY.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.RELATIVE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "mis-sizing the slot header (width/endianness) or treating a deleted slot as absent vs zero-data shifts or corrupts every relative record's addressing",
   "hash_chain": {
-    "inputs_sha256": "d786234b635a363c0f7398981bc0ecb822b0e72d83b2f3867c513aa6f289e123"
+    "inputs_sha256": "5bc98758e27e474cce143ae7bd73f722ce2d2f6d7bf9b1c8d705385547a5b55c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "ff2e2503bc1db43400da6c0ee45a3aa2ebcef12b72c6c740f47f395739f31036",
-    "receipt_sha256": "baceaca296d667d161a58186552d943d48685d24a4f2fc9cb621e261b3564bf1"
+    "receipt_sha256": "209eab783fa226ff48a3e9ad7672c06e1c518305d6dd44ee80b94c0ffb2dd267"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc OPEN/WRITE/READ/REWRITE/DELETE RELATIVE RANDOM+SEQUENTIAL (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.RELATIVE.1"
   },

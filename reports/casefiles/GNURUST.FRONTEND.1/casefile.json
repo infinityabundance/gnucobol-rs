@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FRONTEND.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating this as a full COBOL compiler would imply the whole language parses + runs + compiles to native code, when only the listed subset is interpreted to oracle-identical output",
   "hash_chain": {
-    "inputs_sha256": "31abb8208d030105b2610ad7f3b82f98b5d7639ff876185a2d37791e2350fb9f"
+    "inputs_sha256": "b02713bce8143698fb2f691ce021161dd9264f34d41d09f96e76a1136e976780"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1963b69fe6bead53c76b8962f4e6e3d6853ad3f28567af8a724f98d17778dfbf",
-    "receipt_sha256": "93ac32f4b1e025408480d822071798d144eda188372ae29132db3146d02146af"
+    "receipt_sha256": "4ce3697f0c5b4f7317d56040505e9f3c003cc41fb199c6237ee74d64361a7551"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -58,7 +58,7 @@
   "oracle": {
     "detail": "cobc -x compiling+running the same source (cobc front-end + libcob), stdout captured and diffed",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FRONTEND.1"
   },

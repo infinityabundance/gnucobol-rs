@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FLOAT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a correctly-rounded conversion writes a different COMP-2 byte image than GnuCOBOL for most non-representable decimals -- checksums, comparisons, and downstream arithmetic diverge one ULP at a time",
   "hash_chain": {
-    "inputs_sha256": "45ad481be698132125b3b23cacca2fc77003052ab2b43e7ac18df82178e8df6b"
+    "inputs_sha256": "2607e3948b9adf66598a2e30c3715297f8fcfd6e2410836056731bca225b42e4"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1e126e572345eca7489107bd255069c83b35be3895c7cc9c7b895b6233b11cdf",
-    "receipt_sha256": "e6ebd0dfc3e152254b62db66aab064396507afb3ed9d1b31d9f5e18791f42166"
+    "receipt_sha256": "ed74facd24b796e8ea7333d0578234f4298124ec82167223fb8805ac1dbf83a0"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "libcob cob_move via cob_decimal_get/set_double + get/set_ieee64dec/ieee128dec (numeric.c; constants coblocal.h:165-198)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FLOAT.1"
   },

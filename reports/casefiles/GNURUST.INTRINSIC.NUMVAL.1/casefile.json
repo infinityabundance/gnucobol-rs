@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.NUMVAL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "missing the trailing-sign/CR/DB negative convention flips the sign of a parsed amount; assuming NUMVAL strips commas mis-parses NUMVAL-C-shaped input",
   "hash_chain": {
-    "inputs_sha256": "b47dc02888ff34994003ad6b90d21326e5087998a44943bd05ee492bfd27ce26"
+    "inputs_sha256": "5e5f3977a5603607081ef41e74ff6dd48cb6ecdc61db82567046cd6c9902df9e"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b7f476117be9108c093210cdb3b018fe0a6d2cda40b74e0e55b0db40dddf86c9",
-    "receipt_sha256": "fe85bf882754125e0ca95ee7e599dbb7d82cdc251918051e15169a6ba7358361"
+    "receipt_sha256": "42ec8ead72e3f319bfda6eaa128c5ff2eaf6f5a17fd0e3e04f2f685c3f27be4d"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc FUNCTION NUMVAL (libcob/intrinsic.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INTRINSIC.NUMVAL.1"
   },

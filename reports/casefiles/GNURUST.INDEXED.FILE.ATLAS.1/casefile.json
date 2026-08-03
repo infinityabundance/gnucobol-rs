@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INDEXED.FILE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating an indexed file as a flat fixed-record file (insertion order, no key uniqueness) corrupts every keyed read; assuming the on-disk index is portable across backends silently breaks migration",
   "hash_chain": {
-    "inputs_sha256": "5322e1f7fad23d1dd20acdd0a3772771df740995cb1b9807bf06480219bde802"
+    "inputs_sha256": "fd61555feaecb3e4935e1fd437979ace1215fdd742c758fd2dd9248e91b3efec"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "b2d1e631f8874c0aaa7deb2c1fbf0bccbafb6ad6116663d55ca52a05fe4afcb9",
-    "receipt_sha256": "2fc164e597bf682d0d99001ef70b44b513338e19e76931f601b760395028ae1c"
+    "receipt_sha256": "0f873ee113eff93b36b40cfb6302a51899dac82d2059cf352f893e2b012a4892"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc INDEXED file I/O (libcob/fileio.c + ISAM backend)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INDEXED.FILE.ATLAS.1"
   },

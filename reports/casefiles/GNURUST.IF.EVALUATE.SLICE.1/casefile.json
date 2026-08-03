@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.IF.EVALUATE.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating this narrow slice as a general COBOL interpreter would run unsealed control flow whose semantics are not oracle-bound",
   "hash_chain": {
-    "inputs_sha256": "d32f0d1e811c042bf7ded6d402c5d5c7376d2b6cefbd948a31fdc48bb1d18dda"
+    "inputs_sha256": "597f58e5d76f69d9a01909532006661561a9fcc34c991ffae30bd3a12af85c21"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d0ef429f7fcdb528152cf28f8cd15d8d908f57ecd67cbdac514d548c288b0eda",
-    "receipt_sha256": "4761e70202035b3b6498e2bc8c71ed97c86f5c83cabeffa53b68e31f539b7465"
+    "receipt_sha256": "22a4e865dbf7e06188237445f228bbc961261ad4cb55a8bc76051a1a5149fa7f"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc IF/EVALUATE + MOVE (cobc/typeck.c + codegen.c, libcob/move.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.IF.EVALUATE.SLICE.1"
   },

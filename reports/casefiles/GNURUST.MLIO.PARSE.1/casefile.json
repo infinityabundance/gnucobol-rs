@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MLIO.PARSE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'XML PARSE works' would imply GnuCOBOL parses XML (it does not); the honest claim is byte-identity of the unimplemented-but-observable event stream",
   "hash_chain": {
-    "inputs_sha256": "27165bc4e83cc59e1dfd881a08ea43d89149564e91147da389b9fdefd5b8cb6c"
+    "inputs_sha256": "d074862f303ca7aa616a67e1e670baada9a6a78ecbe46add7ab4a2a0556c714f"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3ce5012f98958b4514fba08fb28c1d2694866914e57412bf2e3a48d0236c41e9",
-    "receipt_sha256": "61e71eabf25186ea6de9be1c45c16ebbcec3a107a71a806ab18fc1b438c6365d"
+    "receipt_sha256": "467d3946dada09a7a9a3d83cfbd61cb3b1cfca88f4f1f2312ea9071e36d0ad3f"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc XML PARSE ... PROCESSING PROCEDURE (libcob/mlio.c cob_xml_parse)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.MLIO.PARSE.1"
   },

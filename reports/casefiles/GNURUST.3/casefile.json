@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.3",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a mis-modeled field width mis-reads every downstream field in the record",
   "hash_chain": {
-    "inputs_sha256": "cec135957a73ed61bc04379110d97d37c39f96ccb1383ec35aea1f09c6dfbb85"
+    "inputs_sha256": "802c0d29d88eab1b58a6b2cca31b0d0caed5ffc05b028a15c0e5b4b3047b70d3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "5ad0e03f99d99067cf345dd1cc75bd9274ded915419a7cc7faa45712b9d6ac28",
-    "receipt_sha256": "e30ccd211df060b7eca1a95abf8fea53bb8da4c1c801bfe0e387ae4e44b4b112"
+    "receipt_sha256": "66d60ffcef9a2d24eab85e36a289cd25b26a12af139ccb1ccd2086337255fe4a"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -34,7 +34,7 @@
   "oracle": {
     "detail": "cobc -C attr witness",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.3"
   },

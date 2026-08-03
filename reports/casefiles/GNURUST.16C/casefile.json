@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.16C",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong edited byte layout (misplaced float symbol, wrong suppression fill, wrong sign) silently mis-prints financial figures on statements and reports",
   "hash_chain": {
-    "inputs_sha256": "66a6cc029c799017f79db2a4dea95e323eae31ab7cb9f73f0e912d4889550431"
+    "inputs_sha256": "d96585bf030ffd4cfb1f21bfcd27e0078bb665046bbb8c56bd4c55852c3d15fd"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "61efee6d95b6c74d3f9ef14ed39499064ca6be66a25f58052cac210b9f81fe28",
-    "receipt_sha256": "4a5e413d2ef6e4cca5bd46e45390636654523c2eb1a0096fa8a49aa0b55f4c45"
+    "receipt_sha256": "69b496d3d11a35e5be7488918eb8bce623b6700a61cb464bbd705e110c2d1c57"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc MOVE numeric -> edited, DISPLAY edited bytes (GnuCOBOL 3.2; complete-suppression cases differentially confirmed on 3.1.2)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.16C"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.MAPPING.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating the ASSIGN literal as the path ignores the DD_*/COB_FILE_PATH indirection every operational deployment relies on to place its files",
   "hash_chain": {
-    "inputs_sha256": "c04ada8d4d39091c1b20b9d1b77c674fb2094be7dbfec7bff7c51ab54220f647"
+    "inputs_sha256": "54f5b33d965d2959056758e84598d78b52a050536966f281cdec541cc29cedd7"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "f5f862e09021a70cefb0a0c7e014aa2cba8b4bb36f5748b20a77540cecfda5e2",
-    "receipt_sha256": "1c052dd245af61ea188bfbdedeb7b626785957dc9e48e1e1deec13ff3f772e04"
+    "receipt_sha256": "ad2c5a5589e0a19459e7d44d8238edd0d2ef56b52fd30518a590ddc5fdc5a37b"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc OPEN of files ASSIGNed names resolved via DD_*/COB_FILE_PATH env (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.MAPPING.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PERFORM.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming the control variable stops at the limit (or that the body always runs at least once) is an off-by-one in iteration counts and post-loop variable values",
   "hash_chain": {
-    "inputs_sha256": "fa767636c46b466013e7a463c93db7f83a219d7aa26dc34713be77ecf989bb6f"
+    "inputs_sha256": "1e93d02f07319ca0f816f35a439a374ac1c780a109d9a990dab696a1e0228fe6"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "fd3ca8edc744617f0791dfd048c66046b4be817c171e81b49e0856f2fc0a6300",
-    "receipt_sha256": "d3f4ae7c8a737099562d0d0b2372ab00527493175557cda0391fc1ec803e1aa7"
+    "receipt_sha256": "a892defaffa1050ddc938dc2b7e3e20a3e85e621a571c8cdbd6aeccf3d12f5c2"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc PERFORM (cobc/typeck.c + codegen.c, libcob)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.PERFORM.SLICE.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INSPECT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong overlap/leading/region/case assumption in an INSPECT-based cleanup or validation transform silently mis-counts or mis-mutates a field",
   "hash_chain": {
-    "inputs_sha256": "301f167616df41be6bdac922bf366322372dbe29a10b98af4d296cdc03d2a268"
+    "inputs_sha256": "e46a16ea3421e1af6670ece65e4da87bc29c086bc031fe8a1249d6ab11f1cea0"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "217f17ed9cae08ff22812167a0422588f39a8b11c298996e8ed643d21c826679",
-    "receipt_sha256": "e1b6c33c820eb98fa9bac656ba46f13a1696d79cd47e9c82b1632c5c2eb38903"
+    "receipt_sha256": "a56116b339c3aa1bbbf0250d66e3a251c0e2584e677b600c47beefef3222c6ad"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc INSPECT (program-shape, target + count-redefines dump)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INSPECT.1"
   },

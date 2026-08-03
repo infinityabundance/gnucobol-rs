@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SEARCH.TABLE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating serial SEARCH as position-independent (or running SEARCH ALL on an unsorted table) silently returns the wrong table element in a lookup",
   "hash_chain": {
-    "inputs_sha256": "971ae86d2f3e01da387c9b294631988fa7d585a6be7e0c50b34dd3df126039bd"
+    "inputs_sha256": "80d302019462d729fb89fb339ec020525655d57ada5f0a804d6f3e93e86fa952"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "752cd5c23ee3e8a788d9a04d63116018e0b17b8987d1e48b393c403ac12104ea",
-    "receipt_sha256": "6b54ab7ee7a7a060aae9ac1db653109a42621964b06b0d6ed4886f1672b15805"
+    "receipt_sha256": "9c6542b54d9d171b9ceb67ce53f55ea30b03349ccb546f045c7cc83a52173c74"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc SEARCH/SEARCH ALL (cobc/typeck.c + codegen.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SEARCH.TABLE.1"
   },

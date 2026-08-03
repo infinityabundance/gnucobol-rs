@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.MOD-REM.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "swapping MOD and REM (or assuming a language's % semantics) silently flips the sign of remainders in interest/allocation/check-digit logic on negative values",
   "hash_chain": {
-    "inputs_sha256": "4967addeddb63203d2dab6901ac4a086bc66c6874adc89617cd28fdf96b22751"
+    "inputs_sha256": "0e853e4b90a0bf42c1150c84d87dda72e0d856ee4786ba0251621310fc95afc9"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "18e5c80cc60e2db693972f6dd3f474d9641b3c52b5ceb09f0b21689ff3bf389a",
-    "receipt_sha256": "b999d06fb8317225df2e47a73e0e64c4d77f1e5b8795bfd6632aded8cd9121a0"
+    "receipt_sha256": "325b969b9f910c087c7a4a193c4b7490ed5e846a14dbc47b221b8831c896d0ab"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc FUNCTION MOD/REM (libcob/intrinsic.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INTRINSIC.MOD-REM.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ROUND.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong rounding mode silently mis-rounds money: NEAREST-EVEN vs the default differ on every exact tie, so a misapplied mode corrupts totals and interest across a whole ledger",
   "hash_chain": {
-    "inputs_sha256": "a22dd0ec6fc0d850c10874d1721548f2555c08d32db33f8a254691651b50c9dd"
+    "inputs_sha256": "8fcadcd8c0e041429fa61a629dd40a5d7032130b414419310ae8c8af4d3349fe"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "81cab46306b58d020adde3c300fa9faa94cb07f3cc9a9acc86a15ee1c8f60511",
-    "receipt_sha256": "5f00c2e0bd968d5d6c012484c6ab72c38d903190da142d5cc085b19c4f6b5696"
+    "receipt_sha256": "b604cd8a446c7b16d90fb0233b91c115b644eda28a698399aff901df1d392747"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,7 +36,7 @@
   "oracle": {
     "detail": "libcob cob_add with the COB_STORE_<mode> opt, DISPLAY and packed receivers (cob_decimal_do_round + cob_add_bcd)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.ROUND.1"
   },

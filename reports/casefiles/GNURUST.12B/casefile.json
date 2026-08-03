@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.12B",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong SET FALSE writes a status the program never intended",
   "hash_chain": {
-    "inputs_sha256": "ae1281e976864dc615e8fb24b46dc5711fcf71b48d982025de2ce725b61f4dec"
+    "inputs_sha256": "d22e41e75394c328b8ceb2fb1abdb8f4223deb182e408f038d376f730be07d1a"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "3095bc7f78e4ebfde4dd63cba344ed92bf70dc9315c3e667e06d6e7aaf8cc4e9",
-    "receipt_sha256": "ca292877e0738aca85bcb69d061aa2128d0606809176a89a08e1ef91a4a7140e"
+    "receipt_sha256": "e8753faed4e798f731f76f853154ca5816b33dbb1f34557d3a12db6a02424151"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,7 +36,7 @@
   "oracle": {
     "detail": "cobc SET ... TO FALSE final bytes",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.12B"
   },

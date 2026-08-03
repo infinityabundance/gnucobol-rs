@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.CASE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming locale/accented case folding, or that REVERSE trims spaces, corrupts text normalization in a ported program",
   "hash_chain": {
-    "inputs_sha256": "ebba029c443ec4e00a2d345f602def5e7c5d8e48ad074b064db491cb91ecf70c"
+    "inputs_sha256": "2c07fe49f371b269f860a020e965c990b87d73fa2803a27af4eba547a6cf0185"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4521552e098e8dada0feb3fe54c24a0903b5b9ef6a291ac3c3f3f129294d79a1",
-    "receipt_sha256": "f378dbe061a2c9a06932eabd44ae5d15e9c2726125916fd2d18182c20f0d2ba5"
+    "receipt_sha256": "d043311222c71831ea03f9049c5e6c761d528f112fe807b11b11250663961141"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,7 +36,7 @@
   "oracle": {
     "detail": "cobc FUNCTION UPPER-CASE/LOWER-CASE/REVERSE (libcob/intrinsic.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INTRINSIC.CASE.1"
   },

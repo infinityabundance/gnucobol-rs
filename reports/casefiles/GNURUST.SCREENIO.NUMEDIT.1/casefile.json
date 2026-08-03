@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.NUMEDIT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'numeric-edited screen display works' would hide that only single-field Z-suppression positioning is proven -- star-fill, multi-field line-diff, edited colour/attributes, ACCEPT, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "4e0c3123bc90885992339bb0a452542b12c972167af568c686addb18b23782c1"
+    "inputs_sha256": "e5798252a3833522a45184d7e9905da6db7e116dd285c72e6fb5648fafbcdacd"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0b31daed49f714a73910cc8db953fea535130a23ed82ab2ee23593a9260c49fa",
-    "receipt_sha256": "a5cb31b841559bf3189a8240b46ab5536ad2946b45893964d5bdc083d610232d"
+    "receipt_sha256": "5f2f5045e12b988fcb285802ce9301e807cc1ca50bce7ecaebf7e0de0d6cb658"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc SCREEN SECTION DISPLAY of a numeric-edited field FROM a numeric source (libcob/screenio.c via ncurses; the edited image from the move/edit engine), captured under a pty with TERM=xterm",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SCREENIO.NUMEDIT.1"
   },

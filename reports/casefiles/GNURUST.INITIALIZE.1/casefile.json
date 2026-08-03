@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INITIALIZE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming INITIALIZE cleared a FILLER/redefiner, restored a VALUE, or used low-values/spaces wrongly silently corrupts a record before it is written or compared",
   "hash_chain": {
-    "inputs_sha256": "5579cfdcc8cf2baf117cc73762375e41690b14cd15d72a32d91b4637aab8299e"
+    "inputs_sha256": "fe817e27154ed61bfb76f506152a3cc6aebb0e10b26e7954f0f6828cd22a1e35"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4f1fa4b6c8ec4901a09ed361dc64482199c1647f6f785cba3588027771b797f6",
-    "receipt_sha256": "9896fec9c84c1341829076c444666c394a3ede161d6d1ba7fc9ae02672457535"
+    "receipt_sha256": "dd21c1869f222002967583284976a3e3f9e8de67be9afb139151dbd0922dc8a0"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc INITIALIZE (program-shape, sentinel-prefill + REDEFINES dump)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INITIALIZE.1"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ODO.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating an ODO record as max-length over-reads or over-writes a variable-length record, corrupting the next record or trailing data",
   "hash_chain": {
-    "inputs_sha256": "ade718b28834db1a71b2dd384cef6ba1360a149f3d8be50dbfdf9548820dd685"
+    "inputs_sha256": "71b096901f30162ee1fac4b2358af78cf29a8878fc137bf9930ecb8262d00171"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "ba60036feb8647f177bedb48b23ce748e9193a988e08d971d5a0a05c5f19141a",
-    "receipt_sha256": "78a2dc64db12eaffa4dee0e7d067ff27d279e25e9cbbeeac3130e98b38153591"
+    "receipt_sha256": "3f1fda4618f06e24db39ff58a6a595ac0c79441b50d65172da25c665ba2db9d7"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc LENGTH OF / E(i) over an OCCURS DEPENDING ON group",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.ODO.1"
   },

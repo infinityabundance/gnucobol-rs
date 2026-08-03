@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.REFMOD.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "an out-of-bounds substring silently reads or corrupts neighbouring fields",
   "hash_chain": {
-    "inputs_sha256": "627fa1aab0746010db7bc29520ca92b6b30acd0bacbe1ffbcf9359126d78021a"
+    "inputs_sha256": "535db8906c80eeb4e30bfec624650263be7f054a5a9db478e42bd66b9259d8ff"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "408bf9bfea8eefe8a3c95d86692ab960d8485c2f9aa78f8c7026f360bc961eb1",
-    "receipt_sha256": "a1eaeaa2e57104494c7b993db8b2a27d82f57a1a23807650273fec7c5164a654"
+    "receipt_sha256": "9ed07764b0b6de47abc3bfb7a4da5e14a41970a37d750750e5e88baa2795525a"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc DISPLAY field(start:length) / MOVE TO field(start:length)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.REFMOD.1"
   },

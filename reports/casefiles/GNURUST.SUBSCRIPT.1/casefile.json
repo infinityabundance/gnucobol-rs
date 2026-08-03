@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SUBSCRIPT.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong subscript offset reads the wrong table element or adjacent storage, corrupting every table lookup",
   "hash_chain": {
-    "inputs_sha256": "3bd6e393f3d1caa8b93a07e14e72834c69c886d4fbf2cc0dd5abaca1abad653e"
+    "inputs_sha256": "ba5eeeb035e1ccc43504c06cb4aa3f141c980a887160da480c5492d3a94e2378"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "500a0afd1cd03ddbd0c6258f7098112caa67586c5a6f82fab3e2b78f05b7d0ae",
-    "receipt_sha256": "85f1f9cec56bbf95f94b15010b17b745a0003cbe6abdb0f62d3b3b4b511c094d"
+    "receipt_sha256": "1fd34615567c88fd625627228d67cf35f3c40e95267458d2b12fa8123ea7102e"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc DISPLAY TABLE(i[,j]) subscript",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SUBSCRIPT.1"
   },

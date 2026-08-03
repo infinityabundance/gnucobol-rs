@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.INTEGER.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "swapping INTEGER and INTEGER-PART silently off-by-one on every negative non-integer in date/age/allocation math",
   "hash_chain": {
-    "inputs_sha256": "547050a0dabc21b2650ecafcc7703a44c4e7f8f751010cd90c62952b8efb156d"
+    "inputs_sha256": "1f3f41db55017efd5564b7b001db6e16c2b79ca690a65fc42f65cb9e8b865c05"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "48a86be899dd7018dc39756602d711c730cbd44fe3883aaeb53c046c7934da15",
-    "receipt_sha256": "64d369518f6a503003b8cfd3254b2c568609c8575b037f7d7a0a43890b3f1f2b"
+    "receipt_sha256": "65236cae8b1b7f56c48a29685f604219cb04c3f2a58154fdd0ee22d0094f9467"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc FUNCTION INTEGER/INTEGER-PART (libcob/intrinsic.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INTRINSIC.INTEGER.1"
   },

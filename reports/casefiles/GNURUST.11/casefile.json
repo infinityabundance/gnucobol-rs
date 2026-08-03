@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.11",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)",
   "hash_chain": {
-    "inputs_sha256": "cb648d4b2bddf2f71beec99edbf31fcb7ba4f71cbbbaa2f16ac9cfb6d47577b9"
+    "inputs_sha256": "4ef73bf0f1f519eed95a59f57a59fa5785fdf1febe5ade8a7b2a6183ef755a9e"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "081c62a6e7b83c4b35bf111feb08ba68021faf0385fbf6a1f7478f4381844b8e",
-    "receipt_sha256": "4abdad0742770d0b42b66acb5bf95f316c46cf91ad4378ee5f8eac10ab632212"
+    "receipt_sha256": "97c84a7ac053b6db8e98f4b465b08d5153a52a06b696b1c6f84736ed0e58c595"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc IF truth matrix",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.11"
   },

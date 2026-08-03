@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.INDEXED.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating the in-memory model as the whole INDEXED runtime would hide the on-disk index format, alternate keys, and real cross-process locking that operational indexed files depend on",
   "hash_chain": {
-    "inputs_sha256": "2279b423ca7991d186320d75e5c4b03e1e81c85a1c53b4fafba32c6fba06eb82"
+    "inputs_sha256": "1a2e4a8aa75b29ed610640154905dffdf228c2ec61e66c8171543303bb18c0e3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "30cc2942040aa04219ba146a2e6ed223a87079930ff4617c344e558a4de1178b",
-    "receipt_sha256": "2cf28fcfc4a6caf9ba656d62703516eeac8c3e43907106751f7215a32b6ecb3d"
+    "receipt_sha256": "8f6467dec4b04da2b8ff2cc0760e08301bcc7126d1a0b696878609f23008a313"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc ORGANIZATION INDEXED RECORD KEY (libcob/fileio.c indexed_* handlers)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.INDEXED.1"
   },

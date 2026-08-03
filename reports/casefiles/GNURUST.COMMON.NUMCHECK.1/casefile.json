@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COMMON.NUMCHECK.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'numeric checking' would hide that only the DIAGNOSTIC MESSAGE is sealed here, not the cob_is_numeric validity decision, the abort, or the prefix framing",
   "hash_chain": {
-    "inputs_sha256": "b0f5ac8575005e87e9306f6a87e5dac64dc53967466e354ae98cf2311f6acbe5"
+    "inputs_sha256": "bb15bbd4532d05ed0f69263f27cabca030a8a2a2451913cfd640750730eddc8c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7a13e5d62305671839240e571a0f942deca95d82e2dbfd5081cb0158737854ba",
-    "receipt_sha256": "e07814b9d999117b3df14843f977a6d4b73c859bb6997343c7192e64f92b3acc"
+    "receipt_sha256": "40259cd1fe5d97c3253db701d0b741f2e2a7dc0c18a6f2c0bc1ed59503fe82c8"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc -debug EC-DATA-INCOMPATIBLE runtime check (libcob/common.c cob_check_numeric), captured from BOTH GnuCOBOL 3.1.2 and 3.2",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.COMMON.NUMCHECK.1"
   },

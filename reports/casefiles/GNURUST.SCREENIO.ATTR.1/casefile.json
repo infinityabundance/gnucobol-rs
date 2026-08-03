@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.ATTR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'screen attributes work' would hide that COLOUR (the whole-screen repaint), combined attributes, and ACCEPT-side attributes are unported, and that only the admitted terminal is proven",
   "hash_chain": {
-    "inputs_sha256": "f4d40ac373d95cb59fa149468244b0f0d2cb3ea50436412406e17415e0cec496"
+    "inputs_sha256": "10aca9fce0f9f424a5ce836cb7694d5197f934e60d9236c83cb3dfdd43206455"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "33cd8965aa8931f5a5300055afc85308416368e903992d1090d79d64163f9f52",
-    "receipt_sha256": "e181ec55ea35b76eee28369f696ea57abacfd67fb7f9335907ecebc368e8bced"
+    "receipt_sha256": "041c9aeac9374ceeba8af3d14a89384c2c203e5a33f46da7b22f8c4dafa7a661"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -40,7 +40,7 @@
   "oracle": {
     "detail": "cobc SCREEN SECTION DISPLAY ... HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE-VIDEO (libcob/screenio.c via ncurses 6.6 attrset), captured under a pty with TERM=xterm",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SCREENIO.ATTR.1"
   },

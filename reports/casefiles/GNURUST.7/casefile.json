@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.7",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total",
   "hash_chain": {
-    "inputs_sha256": "81ae38a3eaac141c5129ce7a020176f6eb06f6285d0d2e93ae86b6618d90b926"
+    "inputs_sha256": "400cbf46df6c172e36c14a980f72611ccb8a1e46ba6c31a3f4586a9d6fd220bb"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0313c6579ee7bc8fc7c70dc25e43145eb9ea4c2dbb51bea457b7d4a8696b2e96",
-    "receipt_sha256": "e40d0eaea15d49a56556c70a426d9727b29050a626c24b89f7b63ef0b18db87b"
+    "receipt_sha256": "14571bc91d3f27a860cae4ee94e9ffa854fda1da21628cfed6c8ef327888abda"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "libcob cob_add/cob_sub/cob_mul",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.7"
   },

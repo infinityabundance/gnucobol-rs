@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.COLOR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'screen colour works' would hide that only a single colour field on LINE>=2 is proven -- the general multi-field doupdate line-diff, the LINE==1 case, numeric-edited/ACCEPT colour, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "2a3ffc3012cdabbd5f57f2b416e7c8ef6db24e6fe2dab7cbfe35c868e85a12ec"
+    "inputs_sha256": "2b236b31b23836faa93b8a18610cae33b345afb03c86ebd851f4d5b388a7418c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "da8a8e7a2e37dabd9df14e9a480c8b9c12ddc0f2ddc595c0b9df0e213582a010",
-    "receipt_sha256": "60680581ece678aac6cc953766cabed96b0910f6153cd374bf1f7328baf353cb"
+    "receipt_sha256": "153052ca9f951d5005d45b7df4d3ed3eaa06f8c1637867b3264b17f2da9b1c2a"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc SCREEN SECTION DISPLAY of a field with FOREGROUND-COLOR/BACKGROUND-COLOR (libcob/screenio.c via ncurses 6.6 start_color/init_pair/wclear), captured under a pty with TERM=xterm",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SCREENIO.COLOR.1"
   },

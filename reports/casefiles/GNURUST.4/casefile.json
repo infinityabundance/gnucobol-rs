@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.4",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields",
   "hash_chain": {
-    "inputs_sha256": "fef75719e8d309cd74998b1f8501b66a3d4cbc9524a9f73b3759d997e11d4afe"
+    "inputs_sha256": "6c8f786306bc75fbecdc7d6e3340e3136243b8480151421c85b5f29a6dc352b5"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "77e59de252280871d807046cf1fc8a85c1081d2f074dc2235d477ce821d10855",
-    "receipt_sha256": "bdc0cca41435ca0e8d9a3069464eb50c9437a62c56d5660cb2324d1866cbd091"
+    "receipt_sha256": "54b6561915e961561d8afef62484964896e51d4bca42bb141831613a84abbc71"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -34,7 +34,7 @@
   "oracle": {
     "detail": "cobc -C f_M witness + LENGTH OF",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.4"
   },

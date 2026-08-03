@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.RELATIVE.FILE.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating relative slots as a dense sequential file ignores empty-slot gaps (status 23) and the by-number addressing",
   "hash_chain": {
-    "inputs_sha256": "7e74cc667df9cd86ecfe9fcdaa40d52198ccb3cb21e6f48ee476c6d06248a929"
+    "inputs_sha256": "56ffdffad126741151cc78e866c25bb9a3019c0ac67ee272e4e4804b68b97edd"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "c359fc205d32760d13cc406529312e8889ade12fd66d70efed8384add8f1c6e9",
-    "receipt_sha256": "593d4c5480b198a9449a23817c6fd8da96b4df288cdfc8c1c66a0d48a869c5a4"
+    "receipt_sha256": "3367b8e1e0bd5901279708a4be4cf9515e725b6d4bac3ec2017d94d433dec7f8"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc RELATIVE file I/O (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.RELATIVE.FILE.ATLAS.1"
   },

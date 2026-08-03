@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating the 200K pilot as the full 20M, or as a parity proof, or the negative-zero finding as fixed, each overclaims",
   "hash_chain": {
-    "inputs_sha256": "df824305388e3190303a580b80b028751c58258f97b725f72259530a93b638dd"
+    "inputs_sha256": "d35e99d4a7f355d1b27e766605d5c20f322a38e59f699c74f86eaf81e0b65569"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "957f3a305073436c3a4f05415a94efc5ebc0dfe15e9998ec1aae7f094a00e930",
-    "receipt_sha256": "edcd07450095ba1b9dfd22649f3d0720fc8db638a3ff1b5095068c2fd2183ef6"
+    "receipt_sha256": "e2e8a0ee508a71cec2cbf117f786d3057d0cdb9eea8a7181df647b4a8bec302b"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "real cobc/libcob compile+run over generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.SMOKE"
   },

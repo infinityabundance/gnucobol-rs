@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.PROCEDURE.FLOW.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating an observed control-flow fact as an execution engine would invite running real programs through a kernel that does no Procedure Division execution",
   "hash_chain": {
-    "inputs_sha256": "33c90fdd4b39dae7f7f72dc3da380a9dbca6340756d2980fbb287844f6d7b876"
+    "inputs_sha256": "0d183b1cf035160fe63caad5950337bc9d0c1f04da22ce5edca221d73caed1f9"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7034f04de5f8f7011b4c3808f34250d5ad8e158332e49e6ba223f40fd8730689",
-    "receipt_sha256": "ea90534193457f77b5287b8353be638db5dccbb93e475aa25df00f6a2781875f"
+    "receipt_sha256": "a42e907a0898b4c6fe7e6677a0f2842753734d69fd02622f18b5f7a68d8e87cf"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc Procedure Division control flow (cobc/typeck.c + codegen.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.PROCEDURE.FLOW.ATLAS.1"
   },

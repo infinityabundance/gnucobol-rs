@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.SYS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating a failed CBL_* call as success (ignoring 128/35) loses the very error a batch job's RETURN-CODE check depends on",
   "hash_chain": {
-    "inputs_sha256": "3d04a317ba1ed4c986aff6d6d2e17180c2ddc8b82e17a7079f119d0d73a55b52"
+    "inputs_sha256": "03e2b1bb5c19836c6d930d48b08c7c9f9612399c07fdacca7f5ac711f3bbc89c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "24a4e0cb7b5575caead5c32ee0daa46c9d897708f6f17c3becfeb6761a6b1b49",
-    "receipt_sha256": "edebbd2a6fc8e345588d2cc5e76c0dd841f181cdff5d35f299d11723abba0645"
+    "receipt_sha256": "190e8aad0007ff7421497e6594c133a341d1600a0832cf7fec0e82c8b460b8c8"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc CALL CBL_* system routines, RETURN-CODE after each (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.SYS.1"
   },

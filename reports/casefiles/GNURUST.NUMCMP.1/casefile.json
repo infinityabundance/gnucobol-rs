@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.NUMCMP.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong comparison flips IF/EVALUATE branches, mis-orders SORT keys, and breaks SEARCH ALL binary search -- silent control-flow and data corruption",
   "hash_chain": {
-    "inputs_sha256": "4978f21071b02c202db3d9de2c7e8a607cdd9ae6e76d6db6927ec79a9779afe1"
+    "inputs_sha256": "4de0c80b584b2801e1e026a5c08741b8ba2e91b2896d3777fbb33ba1bbf81f91"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "a1b998e2be35e83770ca381efefad81d5ad06ef041ccdc088ea20d2dd48d7fbb",
-    "receipt_sha256": "cc96a37208a23bfc6f389ee0317abc21d1deab577411fb1f4f46145d0d42f470"
+    "receipt_sha256": "07f5b66f7df2b560bb70a8826a3723d3724f6bbc6e2aec9db823cc975237d809"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "libcob cob_numeric_cmp (numeric.c) over real cob_fields (cmp_harness)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.NUMCMP.1"
   },

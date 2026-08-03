@@ -6,7 +6,7 @@
   },
   "conformance_claim": "NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.",
   "court": "CCVS85 differential comparison + per-unit classification",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "current_authority": "STATUS.md",
   "docker": {
     "base_image": "gnucobol-rs-ccvs85/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
@@ -45,8 +45,8 @@
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "uname": "Linux 7.1.4-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-03T16:36:33Z",
-  "git_commit": "708efe870e98a1987a53165a4652bc51d917df71",
+  "generated_at": "2026-08-03T16:51:34Z",
+  "git_commit": "110e66df805c9b950a247af1c79dffcea6b156d0",
   "non_claims": [
     "no NIST certification",
     "no full COBOL-85 conformance claim",

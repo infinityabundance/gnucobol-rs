@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.INTRINSIC.NUMVAL.1` |
 | court | FUNCTION NUMVAL numeric parse |
-| crate_version | `0.8.51` |
+| crate_version | `0.8.52` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | FUNCTION NUMVAL(narrow numeric string) -> parsed value |
 | replay command | `bash lab/oracle/numval_sweep.sh` |

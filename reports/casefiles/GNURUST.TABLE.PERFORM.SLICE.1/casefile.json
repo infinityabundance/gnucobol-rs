@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.TABLE.PERFORM.SLICE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "using 0-based subscript arithmetic on a COBOL table reads the wrong element (or adjacent storage), corrupting every table-driven total or lookup",
   "hash_chain": {
-    "inputs_sha256": "c9b267f0e2431b48a647b2a19bbb7909b83159d08abfbec9f1c5c3812eca3592"
+    "inputs_sha256": "60057966a77d00e922fe02ceba75e3845f0c74422360db9aa89033a00f0b9a8b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e5af6c1661beee6904e6cc0c837e0cc109a23c88fb3e09de1412baa24e285a76",
-    "receipt_sha256": "3b5211ad312fee696fac60746f6b319d60387fa4782d604aafc55de145694f07"
+    "receipt_sha256": "45e16a394ccf52f1aa2edb38e3b7ab58f544a102836da438b815f1b3141bf2c6"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc PERFORM VARYING + subscript (cobc/typeck.c + codegen.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.TABLE.PERFORM.SLICE.1"
   },

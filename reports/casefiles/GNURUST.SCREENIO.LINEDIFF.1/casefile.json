@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.LINEDIFF.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'the screen line-diff works' would hide that only the TWO-DISPLAY same-row refresh is proven -- 3+ displays, distant survivors, multi-row diffs, attributed text, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "f1c73deaaf6dfcf91ada848993898e55575fb844f5fe459945772498a1a9618e"
+    "inputs_sha256": "ee936a1f6e3b24ac5739f0dc9b696ef2028eba26eec8e511c2a89c80045f4564"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "78efde7959736fe845b1d06621e110db3dcc337b39e3e8dbd8770048d888ba18",
-    "receipt_sha256": "32e9634a8e404c1274a502188041f0da1f7dd5e8afc99d3d449a90afc9966760"
+    "receipt_sha256": "6f865fcdd746a449c43118bb987eef1889847ac0d73956529b84f23a8e3ad439"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -50,7 +50,7 @@
   "oracle": {
     "detail": "cobc two DISPLAY ... LINE r COLUMN c statements to the same row (libcob/screenio.c via ncurses doupdate), captured under a pty with TERM=xterm; DIFFERENTIALLY against GnuCOBOL 3.2 AND 3.1.2",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SCREENIO.LINEDIFF.1"
   },

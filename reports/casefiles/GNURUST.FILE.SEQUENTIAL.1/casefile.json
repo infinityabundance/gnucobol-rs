@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.SEQUENTIAL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "misreading a short final record (leaked prior-record tail) or a chunked long line, or branching on an unproven file status, silently corrupts a batch file pipeline",
   "hash_chain": {
-    "inputs_sha256": "7fafb5bfeff97fa9b30cffc5a369602d0bfaca05099fdcb56841d077a71583af"
+    "inputs_sha256": "f48958dc31f36f84e7adc467c5564c532f9190daa86ea37a8ad7d914ec16f74b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "a8978c1f8c8e2a9df11b31d1740ac9518396c2bf77a0885e20210530ee24a17e",
-    "receipt_sha256": "0eedf0439290cb519ef7c2f0a6399f13e092dcdf42fd545b0f16329604fea031"
+    "receipt_sha256": "a94363565c8d2af33a171ebcd123e22706f0721b67ba1b3320402be46ba3a94e"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc OPEN INPUT/READ NEXT (libcob/fileio.c, program-shape)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILE.SEQUENTIAL.1"
   },

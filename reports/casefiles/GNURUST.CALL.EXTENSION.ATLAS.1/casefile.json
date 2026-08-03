@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.CALL.EXTENSION.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming BY CONTENT shares storage (or BY REFERENCE copies) inverts who can mutate what across a CALL; treating the atlas as an execution engine would run unsealed inter-program control flow",
   "hash_chain": {
-    "inputs_sha256": "c2d645502cca5d651ff5648aa879a04ac25337fb3b3bdb05f066fcc0ce06e3e9"
+    "inputs_sha256": "1e0add247a9b5ce24dab126cd1a2820e28dfc6b836d6ab868560dbebff143019"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "31883b825d49a15de5862db4c93153f9397abc2f30ea9e478bdf2570f2f7c643",
-    "receipt_sha256": "6bb6d5ea2bb62c8d5cc1f77a09ec75f1d9e9fd45e8c65f23d1cdf7333d83b414"
+    "receipt_sha256": "ea7cd2194fcf7987902252ee998ddd866327234522b8722ac554d56d4570601f"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc CALL/CANCEL + linkage (libcob/call.c) + C$ system routines",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.CALL.EXTENSION.ATLAS.1"
   },

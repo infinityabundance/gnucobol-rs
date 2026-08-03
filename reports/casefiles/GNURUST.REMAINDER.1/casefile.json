@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.REMAINDER.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong remainder (wrong quotient-scale dependence, sign, or receiver bytes) misstates reconciliation residuals, allocation leftovers, or check digits while looking plausible",
   "hash_chain": {
-    "inputs_sha256": "caccdec4d988de6dba62b293bc56685eae38eae7fbd1c447a09190fdf16cfd8d"
+    "inputs_sha256": "dd9791436a1687a17ecbe7010953bc67cf4bd8348b31100e8bd4a304642ec632"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "38de8a222dd5da2fd66b32f14feabf81932120a62537dfc74f7566989ad30cc0",
-    "receipt_sha256": "abf9d659833ffb124ff5c028b5111aae73881e1747273f2e8f4ce070ea4fd7e8"
+    "receipt_sha256": "e843ca9730cfc917bcb20b738e864357dcc205b7b8d66f6205d32bb510e1ecfb"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc DIVIDE REMAINDER (program-shape)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.REMAINDER.1"
   },

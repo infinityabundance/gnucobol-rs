@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.DIALECT.RUNTIME.ATLAS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming a non-default -std mode is the real vendor compiler imports a false parity claim; conversely, assuming the stored record bytes shift with dialect would wrongly re-decode every zoned field; confusing the DISPLAY presentation (trailing sign) with the stored field corrupts both",
   "hash_chain": {
-    "inputs_sha256": "f9d02b5d99315c46563c5d87cda86d14beb2ea04c6275b0c5d7f9e1d77c33513"
+    "inputs_sha256": "eb52420d96f52fd8760c58f04c95b3068fcc393b4ca5a0ccc956c9b04035163b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7b16be0b81c7c35b03bb86516a099b04de76c1a8c2ec7c6c26d64892b3287195",
-    "receipt_sha256": "0ce265853519f744c625645e3380115e085e8b85558c6c022dc5dc6a6aab219d"
+    "receipt_sha256": "109624be1c69a76a8ac244a12a4e870c2604c6a76891dc6be14feb496946b82d"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc -std=<dialect> compile + run (cobc/config/*.conf dialect engine + libcob display)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.DIALECT.RUNTIME.ATLAS.1"
   },

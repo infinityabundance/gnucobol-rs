@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.FILEIO.MAPPING.1 (court-casefile)
 
-**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.8.51
+**Verdict: PASS** · 2/2 pass, 0 fail · crate `gnucobol-rs` 0.8.52
 
 - **Oracle:** cobc OPEN of files ASSIGNed names resolved via DD_*/COB_FILE_PATH env (libcob/fileio.c)
 - **Byte domain(s):** a COBOL ASSIGN name + environment (DD_*/COB_FILE_PATH) -> the resolved filesystem path

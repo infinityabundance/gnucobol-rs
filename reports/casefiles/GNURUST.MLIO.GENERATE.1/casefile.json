@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MLIO.GENERATE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming the whole ML subsystem would hide that XML/JSON PARSE still needs libxml2/json-c, and that national encoding / pretty-print / overflow paths are unported",
   "hash_chain": {
-    "inputs_sha256": "e27e73fdce5a265b7853e3716a701b3299d2f07d2a88688fb3d2a85e1ed5a7b0"
+    "inputs_sha256": "5394ca752036ef8e5958b721e327b50415a4ff1c71f75d0bb1b010e470618556"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "77fdacb9641695201eec37d3e1e5ccde2ce944635daf1bad3cef57e8e9c76307",
-    "receipt_sha256": "168396fd119d376d1af9e0ccb031930a5e29453d9924b8392db013a44fdda702"
+    "receipt_sha256": "09a1b40b8a6409e9168962a0a6aacbf3d116bf0a81c4acd98cccb58f0038efc8"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -48,7 +48,7 @@
   "oracle": {
     "detail": "cobc XML GENERATE / JSON GENERATE (libcob/mlio.c via libxml2 + json-c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.MLIO.GENERATE.1"
   },

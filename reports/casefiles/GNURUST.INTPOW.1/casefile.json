@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTPOW.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a 'nicer' power (correct sign, saturating instead of wrapping) diverges from generated GnuCOBOL code on every integer ** with a -1 base or an overflowing result",
   "hash_chain": {
-    "inputs_sha256": "908560bbd587a4b59ed8e11cfcb3fc3388e6eb6a38660db09f7a6fb32f2afb87"
+    "inputs_sha256": "badff71ebd9d8985d57e49bc3164ea53daf157f3c81c846f226ea900b061af9f"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "db4bc7327361ff94e3ea6833484223c2ab738da0667099a0dfa05c6b429d3db2",
-    "receipt_sha256": "0f1f2838953adc0bdea9b056ec0807167423517d1a81f0759a0f35719a8d42f6"
+    "receipt_sha256": "d90d595df928ba9e1c3112db48f40be8ded9cd5dda60571a92547d6bb5597e5b"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,7 +36,7 @@
   "oracle": {
     "detail": "libcob cob_s32_pow / cob_s64_pow",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.INTPOW.1"
   },

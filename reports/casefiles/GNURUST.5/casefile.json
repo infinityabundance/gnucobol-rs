@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.5",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with",
   "hash_chain": {
-    "inputs_sha256": "8bfcf0ef23cdd66c64126430de4586672ada2915d10f5d8d1beb7f4bdb215b65"
+    "inputs_sha256": "92fb30f000c65831c46c93a02027fb55ad3871417d5c64357d470b0a061970b9"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "8711eec34ed5583cd9cb0e1c455de87258c4d7b71e0f8799a2e5292ad9de7953",
-    "receipt_sha256": "dd9db4611508817ae4f6be939d8980322bcbafe18e56ed57c47fcb8d11496fad"
+    "receipt_sha256": "a4288b481fafb8f134dcfb5171920843f2c4220d88cae385d1f8ea04d2243d0d"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,7 +36,7 @@
   "oracle": {
     "detail": "cobc -P",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.5"
   },

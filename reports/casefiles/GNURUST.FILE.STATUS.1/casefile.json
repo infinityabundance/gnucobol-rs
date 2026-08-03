@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.STATUS.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming a status value that the host did not actually produce (e.g. generalizing 30, or guessing 39) sends a migration's error-handling branches down the wrong path",
   "hash_chain": {
-    "inputs_sha256": "8c004e21c7fd9fbdd0c66a38f3bbf6f09b9b8c9f0904269df6bbad1dab03e76f"
+    "inputs_sha256": "ae7ad3496837e19daf04deb2b7ea059310b822562e89fb93e2fb385ab6fa677c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1775ac57c2ba932310b37d17081b52e58b533a50c553976ce987121e0efafda2",
-    "receipt_sha256": "4e88d14060d46f36c5e1a83858dda0d454bee5f45f07520b2b26bfef7e59c8b4"
+    "receipt_sha256": "d63b202529ebbbbca9f5f6b40e534414f4c9677e03c65ae11613eb4fadbc93e4"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -44,7 +44,7 @@
   "oracle": {
     "detail": "cobc OPEN INPUT/READ NEXT/CLOSE (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILE.STATUS.1"
   },

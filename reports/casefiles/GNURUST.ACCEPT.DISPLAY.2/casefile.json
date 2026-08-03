@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.ACCEPT.DISPLAY.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming DISPLAY of a signed field equals its stored zoned bytes (it does not -- it de-overpunches to a sign prefix) mis-sizes and mis-reads captured DISPLAY output",
   "hash_chain": {
-    "inputs_sha256": "51d01a3f844b2b9429953e21ef5c39d8c231b41a7528c36a9b5e06125d172135"
+    "inputs_sha256": "ef530df0ff3123dbaea3afb9627918e6ac1cb4a927592b56c516a87c189e7ffb"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "19162280a143831ff3a934e767c7e2b8777795e76efb5025133ce7611c5323a2",
-    "receipt_sha256": "76c7df48b4b6251eaef6a5c761f55f102e665e796463bfa6eeef88e6fdd9f474"
+    "receipt_sha256": "5d9df6e741e8801ce0e6e9c2f15cc0f604dfd478f67c13675b4fa74c17ef678f"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -38,7 +38,7 @@
   "oracle": {
     "detail": "cobc DISPLAY of numeric (libcob/termio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.ACCEPT.DISPLAY.2"
   },

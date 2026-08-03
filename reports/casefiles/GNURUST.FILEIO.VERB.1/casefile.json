@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.VERB.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "skipping the mode preconditions would let an illegal verb corrupt or read a file the dialect would have rejected with a 4x status",
   "hash_chain": {
-    "inputs_sha256": "a859f7d0295851355bb1e742f6a2b05325ae109e0afa7524686384ed8da7bb47"
+    "inputs_sha256": "93f6c33464737529e764b6ff74d801b20278b7acbf8f79599abce297ad45d06c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "4a7cf1c294e4c2309a039c4d17c7fff36598cb5ece712b1f88e23d576e526f50",
-    "receipt_sha256": "d9d82139913ed2d9885c21f845e46820bed17238dba27d165238557a1a31380a"
+    "receipt_sha256": "91fa1e7103776241f0537878a4cc4f8c60884ab72097af3dff508d6ffea91874"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -46,7 +46,7 @@
   "oracle": {
     "detail": "cobc WRITE/READ/REWRITE/DELETE attempted in the wrong OPEN/ACCESS mode (libcob/fileio.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.FILEIO.VERB.1"
   },

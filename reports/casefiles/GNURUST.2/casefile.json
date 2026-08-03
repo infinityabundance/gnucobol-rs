@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.2",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong MOVE result posted as a real value corrupts a record silently",
   "hash_chain": {
-    "inputs_sha256": "b34358c62a3634c4d9ee4478cdb28c1b387f365276fdca2e85b0d6d063edee24"
+    "inputs_sha256": "8e3cf17e3e7166994190162733aedacc4284e3459c1a603e24b41d497ba93bce"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "16b16a9a154b1e44eb1baba81db40152792bd2c79bfa49d4c26579ff7a37c9b9",
-    "receipt_sha256": "4eae71d4da00dcd60e44938ca17de5fcd2fd169475d41e87d83138cb90e92787"
+    "receipt_sha256": "93dc8adc05826b422076a5f687018ba12977bb62a62166f83b78ad3e9ececce9"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -36,7 +36,7 @@
   "oracle": {
     "detail": "libcob cob_move (runtime harness)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.2"
   },

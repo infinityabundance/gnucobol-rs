@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SIZE.ERROR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "assuming overflow keeps the high digits (or that ON SIZE ERROR still stores something) corrupts amounts silently when a computed value exceeds its PICTURE",
   "hash_chain": {
-    "inputs_sha256": "8ec0f41621fe776c8f09b12f8d2c31e83c57d05bfaeb499adeacb8752620e9be"
+    "inputs_sha256": "2a94b6e5eff920f61a3968ccb33ab8910cb0237a72cfd9d6b62ff07e7f35b06d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "2fb1c70dfb1fe0e46a7455925ca0718731e1e3b150fa7a566e0241e5468fd766",
-    "receipt_sha256": "3a430c619c368245da7d379fb1c7cfd10e131ca5ece7abfd5f4e2316ea06bd6e"
+    "receipt_sha256": "934866c1cd10aa7c966664dc73b997fb5d9001b76233864d18fb5c533ea3786e"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc arithmetic SIZE ERROR (libcob/numeric.c)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SIZE.ERROR.1"
   },

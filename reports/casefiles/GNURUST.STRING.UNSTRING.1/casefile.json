@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.STRING.UNSTRING.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "a wrong pointer base, count-vs-truncation, tail-preservation, or delimiter assumption in a STRING/UNSTRING transform silently corrupts assembled/split fields",
   "hash_chain": {
-    "inputs_sha256": "ac4d9ce5452c07cadab56121af3a365480281f65822c60cc32b1208f9888e9ce"
+    "inputs_sha256": "44a4bf6fe0c8a1cfe786f446cdab55f786cdba0cd12673b5efc0fcdf06e06c85"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "14e648782542b508f7b522c3ff19fdb931fe8b4b4ffe734e88f784d25f235503",
-    "receipt_sha256": "72e19b01baac7caf27ae76693a6b9a27bedf5821444c317fc3edf7beaa913061"
+    "receipt_sha256": "7de6d4f9f38e8bc234c3103856a1d551d2fed731b5efd3991a26c1cd3c8751a7"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc STRING/UNSTRING (program-shape, FUNCTION HEX-OF result-record dump)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.STRING.UNSTRING.1"
   },

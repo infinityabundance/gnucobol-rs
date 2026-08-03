@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.DISPLAY.3",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "claiming 'multi-field DISPLAY works' would hide that overlapping same-row layouts (needing the clr_eol refresh diff), attributes, and ACCEPT are unported, and that only non-overlapping pairs on the admitted terminal are proven",
   "hash_chain": {
-    "inputs_sha256": "d5e19e0be0a96e352d4d5dbd4c89f28aa318742cb7c58cf916a5324a9d68239a"
+    "inputs_sha256": "fd0ea41dc9f5cb02edad83e07a244a8279390bbd2547724f68bdbe45a0d13f50"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "67e4a607e691e24c5b2e1bd7f5dd0a93342ffbfedf0037c599996b42a51acb03",
-    "receipt_sha256": "702a666a5ac750677f57f46d0ad2c32834631302db411a2ad93eb2c31a3ccb9b"
+    "receipt_sha256": "067932311fb62d7b4c2747b2c330011b9ed2fadc386fcd9acdb8b677b7d68d94"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -42,7 +42,7 @@
   "oracle": {
     "detail": "cobc SCREEN SECTION DISPLAY of multiple positioned fields (libcob/screenio.c via ncurses 6.6 mvcur), captured under a pty with TERM=xterm",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.SCREENIO.DISPLAY.3"
   },

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.LINEAGE.CORPUS.20M.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.51",
+  "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating 20M index sweep as 20M witnesses inflates the corpus 5x; treating the run as parity, or the negzero finding as fixed, overclaims; the 13 dropped families are future work, not coverage",
   "hash_chain": {
-    "inputs_sha256": "de08feca438abbb1fae03dab58ec9f79173e87a6e5bddf55b275a3e3c087582a"
+    "inputs_sha256": "f76963e492e7c7c744f61d9abadb5e3511341046a0c4c704d1c5513aed402c46"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "23aafd03662819084a420f8893079745eef88fb0d50b0a2a404c0e8fd6b11687",
-    "receipt_sha256": "2c3337b79b6d74c9c362bb009d7fb9a83ffe8ab1edc2b48ac6c032d8468753e9"
+    "receipt_sha256": "581c0105770e40edf7ef6f9b9554af7f3319293e3ebaf06943f03ce04739204e"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -48,7 +48,7 @@
   "oracle": {
     "detail": "real cobc/libcob compile+run over 4M generated COBOL witnesses (GNURUST.BUILD.PROFILE.1 profile)",
     "dialect_profile_id": "gnucobol-3.2.0-default",
-    "dialect_profile_sha256": "a321d7dfd4db4b492c1dfdaddc16eb876cf204d82630b8a54e5f6e01ab00c77c",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
     "oracle_kind": "gnucobol-3.2-admitted",
     "upstream_court": "GNURUST.LINEAGE.CORPUS.20M.1"
   },

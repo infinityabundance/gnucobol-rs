@@ -38,7 +38,10 @@ pub fn run_main(args: &[String]) -> i32 {
         let mut c = vec!["cargo"]; c.extend(args2.iter().copied());
         let (rc, o, e) = run(&c, &cwd);
         let (status, body) = match rc { Some(-1) => ("not_installed".to_string(), format!("cargo-{tool} not installed")), Some(0) => ("pass".to_string(), o.clone()), None => ("not_run".to_string(), "timed out".into()), _ => ("not_run".to_string(), format!("{o}\n{e}")) };
-        let _ = std::fs::write(out.join(file), format!("status: {status}\ngenerated_at: {st}\nnote: every shipped crate is #![forbid(unsafe_code)]\n\n{}\n", &body[..8000.min(body.len())]));
+        // Release packets are public evidence: never embed the build machine's absolute repo path
+        // (cargo geiger/audit artifact diagnostics carry it). Replace it with a symbolic alias.
+        let body_san = body.replace(repo, "$GNURUST_REPO");
+        let _ = std::fs::write(out.join(file), format!("status: {status}\ngenerated_at: {st}\nnote: every shipped crate is #![forbid(unsafe_code)]\n\n{}\n", &body_san[..8000.min(body_san.len())]));
     }
 
     // receipts + snapshots from the evidence repo
