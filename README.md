@@ -23,6 +23,10 @@ The goal, if useful, is:
 4. Deeper forensic receipt proofing and,
 5. The ability to emit ultra verbose forensic residuals at compile. This would allow shims to parse/replay data in new ways (hopefully useful).
 
+## NIST CCVS85 differential vs GnuCOBOL 3.2
+
+The admitted NIST CCVS85 v4.0 corpus — 512 units (459 COBOL + 51 CLBRY + 2 DATA) — is materialized and executed through both the pinned GnuCOBOL 3.2 oracle and the native-Rust `cobrun` front-end in an isolated Docker environment (GNURUST.CCVS85.2/.3/.4). The oracle compiles 370 of 391 executable candidates and runs 304 of them; `cobrun` accepts and executes 15 and fails closed on the rest, with **11 byte-identical raw-output matches** and 2 output divergences — every unit explicitly classified, none silently dropped, and the two-run determinism verified in fresh containers. One-command replay: `bash lab/ccvs85/run-docker.sh` · full ledger: [`reports/ccvs85/summary.md`](reports/ccvs85/summary.md).
+
 ---
 
 ## What it is, in one minute
