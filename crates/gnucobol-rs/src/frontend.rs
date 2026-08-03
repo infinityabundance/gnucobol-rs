@@ -415,7 +415,12 @@ pub fn run_program_redirected(
     let pre = preprocess(source);
     let up = uppercase_outside_quotes(&pre);
     // EC-BOUND-SUBSCRIPT checking is per-run state (>>TURN ... CHECKING ON/OFF); default OFF like cobc.
-    EC_BOUND_SUBSCRIPT_ON.with(|c| c.set(parse_ec_bound_check(&up)));
+    // Scan the RAW source, NOT the preprocessed text: the preprocessor drops unrecognized `>>`
+    // directives (>>SOURCE FORMAT, >>PAGE, >>LISTING, ...) as no-runtime-token lines, and >>TURN
+    // EC-BOUND-SUBSCRIPT is precisely one of them -- but it is NOT token-free for cobrun: it drives
+    // this very flag. (Regression from the ELITE-REPLAY.2 directive-drop; the
+    // `turn_ec_bound_subscript_is_honored` test guards it.)
+    EC_BOUND_SUBSCRIPT_ON.with(|c| c.set(parse_ec_bound_check(&uppercase_outside_quotes(source))));
     let mut toks = lex(&up);
 
     // ENVIRONMENT DIVISION / SPECIAL-NAMES of the first program: CURRENCY SIGN IS "x" + DECIMAL-POINT IS
