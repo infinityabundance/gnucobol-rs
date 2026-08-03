@@ -298,6 +298,39 @@ pub fn fixed_to_free(source: &str) -> String {
         }
         match chars[6] {
             '*' | '/' => out.push('\n'),              // comment / page-eject: drop the line
+            '-' => {
+                // Continuation line: the resumed text joins the PREVIOUS line flush (the CCVS85
+                // corpus splits VALUE literals across lines). Columns 73+ (sequence area) are never
+                // part of the text. Two cases, per the standard + cobc:
+                //  * NONNUMERIC-LITERAL continuation (the previous line ended inside an open
+                //    literal): the literal resumes at column 12, and the QUOTE at column 12 is the
+                //    continuation marker -- not part of the value (skipped). Trailing spaces to
+                //    column 72 ARE part of the literal.
+                //  * WORD continuation: the word resumes at column 8, rejoined flush.
+                let open_lit = {
+                    let prev_trim = out.trim_end();
+                    let q = prev_trim.chars().filter(|&c| c == '"').count();
+                    q % 2 == 1
+                };
+                let end = chars.len().min(72);
+                let text: String = if open_lit {
+                    // resume at column 12 (index 11); a quote exactly at column 12 is the marker.
+                    let mut s: String = chars.get(11..end).unwrap_or_default().iter().collect();
+                    if s.starts_with('"') { s.remove(0); }
+                    s
+                } else {
+                    chars[7..end].iter().collect()
+                };
+                if out.ends_with('\n') {
+                    // drop the trailing newline of the previous line, then append flush
+                    out.pop();
+                    out.push_str(&text);
+                    out.push('\n');
+                } else {
+                    out.push_str(&text);
+                    out.push('\n');
+                }
+            }
             _ => {
                 let end = chars.len().min(72);        // columns 8..=72 (0-indexed 7..72); 73+ ignored
                 out.extend(&chars[7..end]);
@@ -491,6 +524,7 @@ pub fn run_program_redirected(
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
     let rc = read_return_code(&fields);
     let printer = ctx.printer.borrow().clone();
+    dump_file_store(&ctx, &fields);
     Ok((out, printer, rc))
 }
 
@@ -671,6 +705,9 @@ struct FileState {
     read_pos: usize,
     /// 0 = closed, 1 = INPUT, 2 = OUTPUT, 3 = EXTEND, 4 = I-O.
     mode: u8,
+    /// `WRITE ... AFTER ADVANCING` leaves the line pending: GnuCOBOL emits a final `\n` at CLOSE
+    /// (libcob `cob_file_close` / `flag_needs_nl`), so the in-memory store mirrors the disk bytes.
+    pending_nl: bool,
 }
 
 /// One `01`-level elementary item (its name, PIC, and optional VALUE literal) -- the field is built at run
@@ -2674,6 +2711,57 @@ fn put_group_bytes(children: &[String], mut bytes: Vec<u8>, fields: &mut HashMap
         let _ = write_field(fields, c, |f| { f.bytes = slice; Ok(()) });
         off += len;
     }
+}
+
+// The directory the in-memory file store is materialized into when the run ends. A HOST diagnostic
+// (`cobrun --dump-files <dir>`): it writes each ASSIGN target as a file whose bytes mirror the
+// GnuCOBOL on-disk format, so a differential court can compare the program's file output. It is
+// never part of program semantics (the in-memory store remains the authoritative run model).
+thread_local! {
+    static FILE_DUMP_DIR: std::cell::RefCell<Option<std::path::PathBuf>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// Point the file-store materializer at `dir` for this run (see `FILE_DUMP_DIR`).
+pub fn set_file_dump_dir(dir: std::path::PathBuf) {
+    FILE_DUMP_DIR.with(|d| *d.borrow_mut() = Some(dir));
+}
+
+/// Materialize the in-memory file store into the dump dir (when one is set): each ASSIGN target
+/// becomes a file whose bytes mirror the GnuCOBOL on-disk format for the file's organization --
+/// line-sequential = records joined by LF; fixed sequential = concatenated records; variable-length
+/// (`RECORD IS VARYING` or differing declared record widths) = the var-seq 4-byte header framing
+/// `[u16 BE length][0x0000]`; relative/indexed = the records in store order (gaps omitted).
+fn dump_file_store(ctx: &Ctx, fields: &HashMap<String, Field>) {
+    FILE_DUMP_DIR.with(|d| {
+        let guard = d.borrow();
+        let Some(dir) = guard.as_ref() else { return };
+        let _ = std::fs::create_dir_all(dir);
+        for (assign, st) in ctx.files.borrow().iter() {
+            let def = ctx.file_defs.values().find(|f| &f.assign == assign);
+            let mut out_bytes: Vec<u8> = Vec::new();
+            let (org, var_seq) = match def {
+                Some(f) => {
+                    let widths: Vec<usize> = f.records.iter().map(|r| field_len(r, fields)).collect();
+                    let differing = widths.iter().any(|&w| w != widths[0]);
+                    (f.org, f.varying_dep.is_some() || differing)
+                }
+                None => (FileOrg::Sequential, false),
+            };
+            for r in &st.records {
+                if var_seq {
+                    let len = (r.len().min(u16::MAX as usize) as u16).to_be_bytes();
+                    out_bytes.extend_from_slice(&len);
+                    out_bytes.extend_from_slice(&[0, 0]);
+                }
+                out_bytes.extend_from_slice(r);
+                if org == FileOrg::LineSequential && !var_seq {
+                    out_bytes.push(b'\n');
+                }
+            }
+            let _ = std::fs::write(dir.join(assign), &out_bytes);
+        }
+    });
 }
 
 thread_local! {
@@ -7086,7 +7174,15 @@ fn run_use_handler(file: &str, fields: &mut HashMap<String, Field>, out: &mut Ve
 fn exec_close(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
     for name in stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
         let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("CLOSE: `{name}` is not a declared file")))?;
-        if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &name)) { st.mode = 0; }
+        if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &name)) {
+            // GnuCOBOL emits a final `\n` at close when the last write was AFTER ADVANCING
+            // (`flag_needs_nl`) -- mirror it so the store holds the oracle's disk bytes.
+            if st.pending_nl && matches!(def.org, FileOrg::Sequential | FileOrg::LineSequential) {
+                st.records.push(vec![b'\n']);
+                st.pending_nl = false;
+            }
+            st.mode = 0;
+        }
         set_file_status(fields, def, "00");
     }
     Ok(())
@@ -7101,6 +7197,38 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         if let Some(src) = stmt.get(fp + 1) {
             let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
             exec_move(&mv, fields, ctx.decimal_comma)?;
+        }
+    }
+    // Line control: `[BEFORE|AFTER] ADVANCING n [LINE|LINES]` -- the CCVS85 print-file shape. The
+    // oracle's model (admitted libcob fileio.c): AFTER n writes n x LF BEFORE the record (n = 0 writes
+    // CR); BEFORE n writes n x LF AFTER the record; a final LF is emitted at CLOSE when an AFTER left
+    // the line pending (`flag_needs_nl`). The advancing bytes are FILE data (they land in the store
+    // beside the record), never the record area itself. `ADVANCING PAGE` (form feed) fails closed.
+    let mut line_control: Option<(bool, usize)> = None; // (is_after, count)
+    for (i, t) in stmt.iter().enumerate().skip(1) {
+        if let Tok::Word(w) = t {
+            if (w == "AFTER" || w == "BEFORE")
+                && matches!(stmt.get(i + 1), Some(Tok::Word(x)) if x == "ADVANCING")
+            {
+                if matches!(stmt.get(i + 2), Some(Tok::Word(x)) if x == "PAGE") {
+                    return Err(RunError::Unsupported("WRITE ... ADVANCING PAGE: form-feed page control is a fail-closed boundary".into()));
+                }
+                let is_after = w == "AFTER";
+                // count: a literal / identifier up to LINE|LINES (bare ADVANCING = 1).
+                let cnt = stmt.get(i + 2)
+                    .filter(|t| !matches!(t, Tok::Word(x) if x == "LINE" || x == "LINES"));
+                let n = match cnt {
+                    Some(Tok::Word(c)) => resolve_int(c, fields).ok_or_else(|| {
+                        RunError::Unsupported(format!("WRITE ... ADVANCING: `{c}` is not an integer"))
+                    })?,
+                    _ => 1,
+                };
+                if n < 0 {
+                    return Err(RunError::Runtime("WRITE ... ADVANCING: negative count".into()));
+                }
+                line_control = Some((is_after, n as usize));
+                break;
+            }
         }
     }
     let def = {
@@ -7126,7 +7254,30 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         set_file_status(fields, &def, if occupied { "22" } else { "00" });
         return Ok(());
     }
-    ctx.files.borrow_mut().entry(def.assign.clone()).or_default().records.push(bytes);
+    if let Some((is_after, n)) = line_control {
+        if !matches!(def.org, FileOrg::Sequential | FileOrg::LineSequential) {
+            return Err(RunError::Unsupported("WRITE ... ADVANCING is valid only on SEQUENTIAL / LINE SEQUENTIAL files (a RELATIVE/INDEXED advancing write is a fail-closed boundary)".into()));
+        }
+        let mut chunk = Vec::with_capacity(n + bytes.len());
+        if is_after {
+            // AFTER n: n x LF BEFORE the record; n = 0 writes CR (the oracle's cob_file_write_opt).
+            for _ in 0..n { chunk.push(b'\n'); }
+            chunk.extend_from_slice(&bytes);
+        } else {
+            // BEFORE n: n x LF AFTER the record (the record then ends the line -- no pending newline).
+            chunk.extend_from_slice(&bytes);
+            for _ in 0..n { chunk.push(b'\n'); }
+        }
+        bytes = chunk;
+    }
+    {
+        let mut files = ctx.files.borrow_mut();
+        let st = files.entry(def.assign.clone()).or_default();
+        st.records.push(bytes);
+        if let Some((is_after, _)) = line_control {
+            if is_after { st.pending_nl = true; }
+        }
+    }
     set_file_status(fields, &def, "00");
     Ok(())
 }
@@ -11074,6 +11225,38 @@ mod tests {
         // completes and the PERFORM returns once (no unbounded body-level jump loop).
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 FLAG PIC X VALUE \"Y\".\n       01 N PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           PERFORM P1 THRU P3.\n           DISPLAY \"N=\".\n           DISPLAY N.\n           STOP RUN.\n       P1.\n           ADD 1 TO N.\n           IF FLAG = \"Y\" GO TO P3.\n           ADD 1 TO N.\n       P2.\n           ADD 1 TO N.\n       P3.\n           EXIT.\n";
         assert_eq!(run(src), b"N=\n1\n");
+    }
+
+    #[test]
+    fn fixed_to_free_merges_literal_continuation() {
+        // A col-7 `-` continuation of a NONNUMERIC literal joins the previous line FLUSH, the quote
+        // at column 12 being the continuation marker (not part of the value). The CCVS85 corpus splits
+        // VALUE literals this way (e.g. the HYPHEN-LINE / column-header records); the merged value
+        // must be the oracle's 24 + 41 = 65 asterisks, one display line.
+        let src = "000100 IDENTIFICATION DIVISION.\n000200 PROGRAM-ID. CT.\n000300 DATA DIVISION.\n000400 WORKING-STORAGE SECTION.\n000500 01  H.\n000600     02 FILLER PIC X(65) VALUE IS \"************************\n000700-    \"*****************************************\".\n000800 PROCEDURE DIVISION.\n000900     DISPLAY H.\n001000     STOP RUN.\n";
+        let conv = fixed_to_free(src);
+        assert!(conv.contains("VALUE IS \"*****************************************************************\"."), "merged literal: {conv:?}");
+        // run_program parses FREE format; fixed_to_free is the cobrun-side conversion under test.
+        assert_eq!(run(&conv), vec![b'*'; 65].into_iter().chain([b'\n']).collect::<Vec<u8>>());
+    }
+
+    #[test]
+    fn write_after_advancing_emits_oracle_line_control_bytes() {
+        // WRITE ... AFTER ADVANCING n writes n x LF before the record; CLOSE appends a final LF
+        // (GnuCOBOL flag_needs_nl). The dumped file store must equal the oracle's bytes
+        // (verified byte-identical against the built oracle for the CCVS85 report shape).
+        let dir = std::env::temp_dir().join(format!("gcrs_adv_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        set_file_dump_dir(dir.clone());
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO OUTFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F RECORD CONTAINS 120 CHARACTERS.\n       01 PRINT-REC PIC X(120).\n       01 DUMMY-RECORD PIC X(120).\n       WORKING-STORAGE SECTION. 01 H PIC X(120) VALUE \"HELLO\".\n       PROCEDURE DIVISION.\n           MOVE H TO DUMMY-RECORD.\n           OPEN OUTPUT F.\n           WRITE DUMMY-RECORD AFTER ADVANCING 1 LINES.\n           WRITE DUMMY-RECORD AFTER ADVANCING 2 LINES.\n           CLOSE F.\n           STOP RUN.\n";
+        run(src);
+        let bytes = std::fs::read(dir.join("OUTFILE")).expect("dump written");
+        let _ = std::fs::remove_dir_all(&dir);
+        // 1 LF + 120 + 2 LF + 120 + final LF at close = 244 (the sweep-pinned oracle size).
+        assert_eq!(bytes.len(), 244, "oracle line-control size");
+        assert_eq!(&bytes[..1], b"\n");
+        assert_eq!(&bytes[121..123], b"\n\n");
+        assert_eq!(bytes.last(), Some(&b'\n'));
     }
 
 }

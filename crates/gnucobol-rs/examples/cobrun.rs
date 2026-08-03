@@ -91,6 +91,10 @@ fn main() {
     for arg in std::env::args().skip(1) {
         if let Some(name) = arg.strip_prefix("-std=").or_else(|| arg.strip_prefix("--std=")) {
             dialect = Dialect::from_std(name);
+        } else if let Some(dir) = arg.strip_prefix("--dump-files=").or_else(|| arg.strip_prefix("-dump-files=")) {
+            // Host diagnostic: materialize the in-memory file store into `dir` after the run (mirrors
+            // the GnuCOBOL on-disk files so a differential court can compare file output bytes).
+            gnucobol_rs::frontend::set_file_dump_dir(std::path::PathBuf::from(dir));
         } else if arg == "-fixed" || arg == "--fixed" {
             fixed = true;
         } else if arg == "-free" || arg == "--free" {
@@ -127,6 +131,7 @@ fn main() {
                  Usage: cobrun [options] <file.cob>\n\n\
                  Options:\n  \
                  -free | -fixed              source format (default: free)\n  \
+                 --dump-files=<dir>          materialize the in-memory file store into <dir> (diagnostic)\n  \
                  -std=<name>                 dialect (default | ibm | mvs | mf | cobol2014 | ...)\n  \
                  -V, --version               version information and exit\n  \
                  -dumpversion                the targeted GnuCOBOL version (e.g. {}) and exit\n  \

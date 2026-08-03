@@ -180,6 +180,10 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p191_multifd_advancing.cob", "WRITE DUMMY-RECORD AFTER ADVANCING"),
     ("PERFORM", "performed-range GO TO semantics -- `PERFORM X THRU X-EXIT` whose body conditionally `GO TO X-EXIT` (jumping to the LAST paragraph of the range) keeps control INSIDE the range and returns to the statement after the PERFORM (the classic CCVS85 report idiom); an in-range jump never re-runs the following section via a body-level jump. Found by the multi-record FD CCVS85 re-run (units such as IC101A looped forever via the mis-resolved jump)", "sealed",
         "lab/corpus/frontend/p192_perform_range_goto.cob", "GO TO BAIL-OUT-EX"),
+    ("(fixed-format)", "col-7 `-` continuation of a NONNUMERIC literal joins the previous line FLUSH -- the literal runs to column 72 of the first line, the continuation resumes at column 12, and the QUOTE at column 12 is the continuation marker (not part of the value; trailing spaces to column 72 ARE part of it). The CCVS85 corpus splits VALUE literals this way; the front-end previously emitted the continuation as a separate line, breaking the VALUE. Found by the multi-record FD CCVS85 re-run (IC101A's HYPHEN-LINE / column-header records)", "sealed",
+        "lab/corpus/frontend/p193_fixed_continuation.cob", "VALUE IS \"************************"),
+    ("file I/O", "WRITE ... {AFTER|BEFORE} ADVANCING n [LINE|LINES] line control -- AFTER n writes n x LF before the record (n = 0 writes CR), BEFORE n writes n x LF after it, and CLOSE appends a final LF when an AFTER left the line pending (GnuCOBOL flag_needs_nl); the in-memory store + the --dump-files materialization mirror the oracle's disk bytes (p191's 244-byte report file, byte-verified)", "sealed",
+        "lab/corpus/frontend/p191_multifd_advancing.cob", "AFTER ADVANCING"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can
