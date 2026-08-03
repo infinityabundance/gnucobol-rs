@@ -4361,6 +4361,13 @@ fn exec_perform(
     exec: bool,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
+    // The performed range always runs against the CURRENT program body's tokens (CUR_PROC), never the
+    // `toks` we were handed: a PERFORM inside an imperative handler (SIZE ERROR / OVERFLOW / AT END /
+    // INVALID KEY) is dispatched from a copied token BLOCK, whose indexes do not match the body --
+    // para_range resolves body indexes, so running them against the copy mis-indexed (an unbounded
+    // loop in the CCVS85 `ON SIZE ERROR PERFORM PASS GO TO ...` idiom). In the normal flow `toks` IS
+    // the body, so this is identical there.
+    let body = CUR_PROC.with(|c| c.borrow().clone());
     // out-of-line form: PERFORM para [THRU para2] [ n TIMES | UNTIL cond ] -- run a named paragraph range.
     if let Some(Tok::Word(w)) = toks.get(*pos) {
         if para_exists(w) {
@@ -4381,7 +4388,7 @@ fn exec_perform(
                 }
                 let (start, end) = para_range(&p1, &p2)
                     .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
-                let mut body = |fields: &mut HashMap<String, Field>| run_range_perform(toks, start, end, fields, out, ctx);
+                let mut body = |fields: &mut HashMap<String, Field>| run_range_perform(&body, start, end, fields, out, ctx);
                 if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
                     if let PerfFlow::Halt = perform_flow(ctx) { return Ok(true); } // EXIT PERFORM absorbed
                 }
@@ -4415,7 +4422,7 @@ fn exec_perform(
                 let mut guard = 0u32;
                 loop {
                     if !test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
-                    if run_range_perform(toks, start, end, fields, out, ctx)? {
+                    if run_range_perform(&body, start, end, fields, out, ctx)? {
                         match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => {}, PerfFlow::Halt => return Ok(true) }
                     }
                     if test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
@@ -4425,7 +4432,7 @@ fn exec_perform(
             } else {
                 let n = times.as_deref().and_then(|w| resolve_int(w, fields)).unwrap_or(1);
                 for _ in 0..n.max(0) {
-                    if run_range_perform(toks, start, end, fields, out, ctx)? {
+                    if run_range_perform(&body, start, end, fields, out, ctx)? {
                         match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => continue, PerfFlow::Halt => return Ok(true) }
                     }
                 }
@@ -11225,6 +11232,17 @@ mod tests {
         // completes and the PERFORM returns once (no unbounded body-level jump loop).
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 FLAG PIC X VALUE \"Y\".\n       01 N PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           PERFORM P1 THRU P3.\n           DISPLAY \"N=\".\n           DISPLAY N.\n           STOP RUN.\n       P1.\n           ADD 1 TO N.\n           IF FLAG = \"Y\" GO TO P3.\n           ADD 1 TO N.\n       P2.\n           ADD 1 TO N.\n       P3.\n           EXIT.\n";
         assert_eq!(run(src), b"N=\n1\n");
+    }
+
+    #[test]
+    fn perform_inside_size_error_handler_runs_against_the_body() {
+        // The CCVS85 idiom `ON SIZE ERROR PERFORM PASS GO TO ...`: a PERFORM dispatched from an
+        // imperative HANDLER runs against the CURRENT program body (CUR_PROC) -- the handler's copied
+        // token block has no paragraph labels, so running it there mis-indexed and spun forever.
+        // The size error fires (99999 + 1 overflows 9(5)); the handler must run PASS and GO TO the
+        // write paragraph, and the run must finish (no 1e7-jump / timeout loop).
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 N-13 PIC 9(5) VALUE 99999.\n       01 N-10 PIC S9(5) VALUE -1.\n       01 PASS-CNT PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           SUBTRACT N-10 FROM N-13 ON SIZE ERROR\n               PERFORM PASS\n               GO TO SUB-WRITE.\n           DISPLAY \"FAILED\".\n           STOP RUN.\n       SUB-WRITE.\n           DISPLAY \"DONE \" PASS-CNT.\n           STOP RUN.\n       PASS.\n           ADD 1 TO PASS-CNT.\n";
+        assert_eq!(run(src), b"DONE 1\n");
     }
 
     #[test]
