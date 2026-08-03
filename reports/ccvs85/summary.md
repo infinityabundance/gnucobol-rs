@@ -23,16 +23,16 @@ COBOL-85 conformance, and does **not** turn unsupported or unexecuted units into
 | oracle run pass | 304 |
 | oracle run fail | 64 |
 | oracle timeout | 1 |
-| candidate accepted | 15 |
-| candidate unsupported | 374 |
-| candidate parse/layout/boundary reject | 2 |
+| candidate accepted | 87 |
+| candidate unsupported | 229 |
+| candidate parse/layout/boundary reject | 75 |
 | candidate runtime fail | 0 |
-| candidate timeout | 1 |
-| raw output match | 11 |
+| candidate timeout | 0 |
+| raw output match | 27 |
 | canonical output match | 0 |
-| output mismatch | 2 |
+| output mismatch | 42 |
 | exit-status mismatch | 0 |
-| generated-file mismatch | 0 |
+| generated-file mismatch | 16 |
 | harness-blocked | 1 |
 | dependency-blocked | 0 |
 | infrastructure error | 0 |
@@ -42,6 +42,7 @@ COBOL-85 conformance, and does **not** turn unsupported or unexecuted units into
 
 | classification | count |
 |---|---|
+| `GENERATED_FILE_MISMATCH` | 16 |
 | `HARNESS_BLOCKED` | 1 |
 | `NON_EXECUTABLE_DATA` | 2 |
 | `NON_EXECUTABLE_LIBRARY` | 119 |
@@ -49,10 +50,11 @@ COBOL-85 conformance, and does **not** turn unsupported or unexecuted units into
 | `ORACLE_COMPILE_REJECT` | 18 |
 | `ORACLE_RUN_FAIL` | 64 |
 | `ORACLE_TIMEOUT` | 1 |
-| `OUTPUT_MISMATCH` | 2 |
-| `RAW_OUTPUT_MATCH` | 11 |
-| `RUST_REJECT_PARSE` | 1 |
-| `RUST_REJECT_UNSUPPORTED` | 290 |
+| `OUTPUT_MISMATCH` | 42 |
+| `RAW_OUTPUT_MATCH` | 27 |
+| `RUST_REJECT_PARSE` | 55 |
+| `RUST_REJECT_RUNTIME_BOUNDARY` | 3 |
+| `RUST_REJECT_UNSUPPORTED` | 161 |
 
 ## By CCVS85 section (name prefix)
 
@@ -82,46 +84,46 @@ COBOL-85 conformance, and does **not** turn unsupported or unexecuted units into
 
 | reason | count |
 |---|---|
-| `COBRUN_UNSUPPORTED_WRITE_DUMMY_RECORD_NOT_RECORD` | 191 |
 | `SUBPROGRAM_BOUND_TO_MAIN` | 68 |
 | `ORACLE_RUN_NONZERO_EXIT` | 64 |
 | `LIBRARY_TEXT_UNIT` | 51 |
-| `COBRUN_UNSUPPORTED_PROCEDURE_DIVISION` | 34 |
-| `RAW_OUTPUT_IDENTICAL` | 11 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER` | 10 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THE` | 7 |
+| `OUTPUT_BYTES_DIFFER` | 42 |
+| `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO` | 36 |
+| `RAW_OUTPUT_IDENTICAL` | 27 |
+| `COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER` | 22 |
+| `GENERATED_FILES_DIFFER` | 16 |
+| `COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER` | 11 |
+| `COBRUN_UNDEFINED_DATA_NAME_IDX` | 9 |
+| `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION` | 6 |
+| `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL` | 5 |
 | `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL` | 5 |
 | `COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL` | 5 |
+| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER` | 5 |
+| `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINE_COUNTER` | 4 |
+| `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ZERO` | 4 |
+| `COBRUN_UNSUPPORTED_VERB_COPY` | 4 |
 | `COBC_CRASHED` | 3 |
 | `COBRUN_UNSUPPORTED_PIC_ABABX0A_UNSUPPORTEDSYMBOL` | 3 |
 | `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COPY` | 3 |
+| `COBRUN_UNSUPPORTED_VERB_SECT_001` | 3 |
 | `COBRUN_UNSUPPORTED_VERB_SORT_PARA` | 3 |
+| `COBRUN_RUNTIME_ERROR_PERFORM_UNTIL_EXCEEDED_1E6_ITERATIONS` | 2 |
+| `COBRUN_UNDEFINED_DATA_NAME_COUNTER00` | 2 |
+| `COBRUN_UNDEFINED_DATA_NAME_DN1` | 2 |
+| `COBRUN_UNDEFINED_DATA_NAME_DN2` | 2 |
+| `COBRUN_UNDEFINED_DATA_NAME_ENTRY` | 2 |
+| `COBRUN_UNDEFINED_DATA_NAME_TABLE2_NUM_INDEX2` | 2 |
+| `COBRUN_UNSUPPORTED_CALL_ID1_NOT_CONTAINED_PROGRAM_EXTERNAL` | 2 |
+| `COBRUN_UNSUPPORTED_CLOSE_REEL_NOT_DECLARED_FILE` | 2 |
+| `COBRUN_UNSUPPORTED_FUNCTION_RANDOM_COBC_DOES_NOT_IMPLEMENT` | 2 |
+| `COBRUN_UNSUPPORTED_OPEN_FS1_NOT_DECLARED_FILE` | 2 |
+| `COBRUN_UNSUPPORTED_OPEN_PRINT_FILE_NOT_DECLARED_FILE` | 2 |
 | `COBRUN_UNSUPPORTED_PIC_XXBXXBXX_UNSUPPORTEDSYMBOL` | 2 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THESE` | 2 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THIS` | 2 |
-| `COBRUN_UNSUPPORTED_VERB_COPY` | 2 |
-| `COBRUN_UNSUPPORTED_VERB_NUMBER1` | 2 |
-| `DATA_UNIT` | 2 |
-| `OUTPUT_BYTES_DIFFER` | 2 |
-| `COBRUN_UNDEFINED_DATA_NAME_TEST_RESULTS` | 1 |
-| `COBRUN_UNSUPPORTED_DISABLE_GNUCOBOL_DOES_NOT_IMPLEMENT_THE` | 1 |
-| `COBRUN_UNSUPPORTED_FUNCTION_RANDOM_COBC_DOES_NOT_IMPLEMENT` | 1 |
-| `COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_12345678` | 1 |
-| `COBRUN_UNSUPPORTED_OPEN_PRINT_FILE_NOT_DECLARED_FILE` | 1 |
-| `COBRUN_UNSUPPORTED_PIC_ABA_UNSUPPORTEDSYMBOL` | 1 |
-| `COBRUN_UNSUPPORTED_PIC_BADREPEAT` | 1 |
-| `COBRUN_UNSUPPORTED_PIC_UNSUPPORTEDSYMBOL` | 1 |
-| `COBRUN_UNSUPPORTED_PIC_XBX0XBX0X_UNSUPPORTEDSYMBOL` | 1 |
-| `COBRUN_UNSUPPORTED_PIC_XBXBXBX_UNSUPPORTEDSYMBOL` | 1 |
-| `COBRUN_UNSUPPORTED_PIC_XXBXX_UNSUPPORTEDSYMBOL` | 1 |
-| `COBRUN_UNSUPPORTED_SORT_MERGE_KEY_SORTKEY_NOT_FIELD` | 1 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_14003` | 1 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COMMUNICATION` | 1 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_FEATURE` | 1 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_REPLACE` | 1 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_ST102A` | 1 |
-| `COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_ST120A` | 1 |
-| `COBRUN_UNSUPPORTED_VERB_BEANO` | 1 |
+| `COBRUN_UNSUPPORTED_SET_TABLE2_REC_INDEX2_NOT_INTEGER` | 2 |
+| `COBRUN_UNSUPPORTED_SORT_MERGE_KEY_KEY_NOT_FIELD` | 2 |
+| `COBRUN_UNSUPPORTED_SORT_MERGE_KEY_NOT_FIELD_THE` | 2 |
+| `COBRUN_UNSUPPORTED_SUBSCRIPT_INDEX1_NOT_INTEGER` | 2 |
+| `COBRUN_UNSUPPORTED_TRAILING_TOKENS_CONDITION` | 2 |
 
 ## Oracle × candidate outcome pairs
 
@@ -131,14 +133,16 @@ COBOL-85 conformance, and does **not** turn unsupported or unexecuted units into
 | `oracle:bound-to-main / candidate:bound-to-main` | 68 |
 | `oracle:compile-pass / candidate:reject-unsupported` | 1 |
 | `oracle:error / candidate:reject-unsupported` | 3 |
+| `oracle:fail / candidate:reject-parse` | 15 |
 | `oracle:fail / candidate:reject-runtime-boundary` | 1 |
-| `oracle:fail / candidate:reject-unsupported` | 61 |
-| `oracle:fail / candidate:run-pass` | 1 |
-| `oracle:fail / candidate:timeout` | 1 |
-| `oracle:pass / candidate:reject-parse` | 1 |
-| `oracle:pass / candidate:reject-unsupported` | 290 |
-| `oracle:pass / candidate:run-pass` | 13 |
-| `oracle:reject / candidate:reject-unsupported` | 18 |
+| `oracle:fail / candidate:reject-unsupported` | 46 |
+| `oracle:fail / candidate:run-pass` | 2 |
+| `oracle:pass / candidate:reject-parse` | 55 |
+| `oracle:pass / candidate:reject-runtime-boundary` | 3 |
+| `oracle:pass / candidate:reject-unsupported` | 161 |
+| `oracle:pass / candidate:run-pass` | 85 |
+| `oracle:reject / candidate:reject-parse` | 1 |
+| `oracle:reject / candidate:reject-unsupported` | 17 |
 | `oracle:timeout / candidate:reject-unsupported` | 1 |
 
 ## Boundary
@@ -164,7 +168,7 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
 ```json
 {
   "meta": {
-    "crate_version": "0.8.50",
+    "crate_version": "0.8.52",
     "environment": {
       "LANG": "C.UTF-8",
       "LC_ALL": "C.UTF-8",
@@ -173,8 +177,8 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
       "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
       "uname": "Linux 7.1.4-1-cachyos x86_64"
     },
-    "generated_at": "2026-08-03T14:33:54Z",
-    "git_commit": "ee2300e13307ce8de3c5cc86236a0796fb1e702f",
+    "generated_at": "2026-08-03T19:54:52Z",
+    "git_commit": "a902ca8e8e4990827f5b4f86b30275919408348b",
     "oracle": {
       "built_prefix": "/work/oracle/prefix",
       "cobc_bin_sha256": "98dd2b1081a22cb6c70d2ac30e3c9a6138c8b63fbd25e17a5ed5274a99027a4a",
@@ -187,6 +191,7 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
   "schema": "gnurust-ccvs85-summary-v1",
   "summary": {
     "by_final_classification": {
+      "GENERATED_FILE_MISMATCH": 16,
       "HARNESS_BLOCKED": 1,
       "NON_EXECUTABLE_DATA": 2,
       "NON_EXECUTABLE_LIBRARY": 119,
@@ -194,19 +199,62 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
       "ORACLE_COMPILE_REJECT": 18,
       "ORACLE_RUN_FAIL": 64,
       "ORACLE_TIMEOUT": 1,
-      "OUTPUT_MISMATCH": 2,
-      "RAW_OUTPUT_MATCH": 11,
-      "RUST_REJECT_PARSE": 1,
-      "RUST_REJECT_UNSUPPORTED": 290
+      "OUTPUT_MISMATCH": 42,
+      "RAW_OUTPUT_MATCH": 27,
+      "RUST_REJECT_PARSE": 55,
+      "RUST_REJECT_RUNTIME_BOUNDARY": 3,
+      "RUST_REJECT_UNSUPPORTED": 161
     },
     "by_reason_code": {
       "COBC_CRASHED": 3,
-      "COBRUN_UNDEFINED_DATA_NAME_TEST_RESULTS": 1,
+      "COBRUN_RUNTIME_ERROR_PERFORM_UNTIL_EXCEEDED_1E6_ITERATIONS": 2,
+      "COBRUN_RUNTIME_ERROR_PERFORM_VARYING_EXCEEDED_1E6_ITERATIONS": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_9876543210": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_BORTED": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_COUNTER00": 2,
+      "COBRUN_UNDEFINED_DATA_NAME_DN1": 2,
+      "COBRUN_UNDEFINED_DATA_NAME_DN2": 2,
+      "COBRUN_UNDEFINED_DATA_NAME_ENTRY": 2,
+      "COBRUN_UNDEFINED_DATA_NAME_FIELD": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_FILE_RECORD_INFO_120": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_GLO_DATA": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_GRP_FOR_ADD_CORR": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_IDX": 9,
+      "COBRUN_UNDEFINED_DATA_NAME_IN3": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_INXEX2": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_OVERFLOW": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_RECORD2_INDEX2": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_REM_25ANS": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_SUBSCRIPTED_DATA": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_TABLE2_NUM_INDEX2": 2,
+      "COBRUN_UNDEFINED_DATA_NAME_TEST1": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_XRECORD_LENGTH": 1,
+      "COBRUN_UNDEFINED_DATA_NAME_XRECORD_NUMBER": 22,
+      "COBRUN_UNSUPPORTED_ACCEPT_FROM_TERMINAL_CONSOLE_INTERACTIVE_INPUT": 1,
+      "COBRUN_UNSUPPORTED_CALL_ID1_NOT_CONTAINED_PROGRAM_EXTERNAL": 2,
+      "COBRUN_UNSUPPORTED_CLOSE_REEL_NOT_DECLARED_FILE": 2,
+      "COBRUN_UNSUPPORTED_CONDITION_UNRECOGNIZED_RELATIONAL_OPERATOR_EXPECTED_GREATER": 11,
       "COBRUN_UNSUPPORTED_DISABLE_GNUCOBOL_DOES_NOT_IMPLEMENT_THE": 1,
-      "COBRUN_UNSUPPORTED_FUNCTION_RANDOM_COBC_DOES_NOT_IMPLEMENT": 1,
+      "COBRUN_UNSUPPORTED_DIVIDE_REMAINDER_RECEIVER_0009_MUST_NUMERIC": 1,
+      "COBRUN_UNSUPPORTED_FUNCTION_RANDOM_COBC_DOES_NOT_IMPLEMENT": 2,
+      "COBRUN_UNSUPPORTED_INSPECT_REGION_CLAUSE_NEAR_WORD_WRK": 1,
+      "COBRUN_UNSUPPORTED_MOVE_WITHOUT": 1,
+      "COBRUN_UNSUPPORTED_MULTI_DIMENSION_LEAF_NEEDS_SUBSCRIPT_GOT": 1,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL": 5,
       "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_12345678": 1,
       "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ALL": 5,
-      "COBRUN_UNSUPPORTED_OPEN_PRINT_FILE_NOT_DECLARED_FILE": 1,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FILE_RECORD_INFO": 36,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_FUNCTION": 6,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINAGE_COUNTER": 1,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_LINE_COUNTER": 4,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_S22": 1,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_WRK_2V1": 1,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_YEAR": 1,
+      "COBRUN_UNSUPPORTED_NOT_NUMERIC_LITERAL_ZERO": 4,
+      "COBRUN_UNSUPPORTED_OPEN_FS1_NOT_DECLARED_FILE": 2,
+      "COBRUN_UNSUPPORTED_OPEN_PRINT_FILE_NOT_DECLARED_FILE": 2,
+      "COBRUN_UNSUPPORTED_OPEN_TEST_FILE_NOT_DECLARED_FILE": 1,
+      "COBRUN_UNSUPPORTED_PIC_000000000000000020_BADREPEAT": 1,
       "COBRUN_UNSUPPORTED_PIC_ABABX0A_UNSUPPORTEDSYMBOL": 3,
       "COBRUN_UNSUPPORTED_PIC_ABA_UNSUPPORTEDSYMBOL": 1,
       "COBRUN_UNSUPPORTED_PIC_BADREPEAT": 1,
@@ -215,33 +263,47 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
       "COBRUN_UNSUPPORTED_PIC_XBXBXBX_UNSUPPORTEDSYMBOL": 1,
       "COBRUN_UNSUPPORTED_PIC_XXBXXBXX_UNSUPPORTEDSYMBOL": 2,
       "COBRUN_UNSUPPORTED_PIC_XXBXX_UNSUPPORTEDSYMBOL": 1,
-      "COBRUN_UNSUPPORTED_PROCEDURE_DIVISION": 34,
+      "COBRUN_UNSUPPORTED_PROCEDURE_DIVISION": 1,
+      "COBRUN_UNSUPPORTED_SET_TABLE2_REC_INDEX2_NOT_INTEGER": 2,
+      "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_KEY1_NOT_FIELD": 1,
+      "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_KEY_NOT_FIELD": 2,
+      "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_NOT_FIELD_THE": 2,
       "COBRUN_UNSUPPORTED_SORT_MERGE_KEY_SORTKEY_NOT_FIELD": 1,
+      "COBRUN_UNSUPPORTED_SUBSCRIPT_IN1_NOT_INTEGER": 1,
+      "COBRUN_UNSUPPORTED_SUBSCRIPT_INDEX1_NOT_INTEGER": 2,
+      "COBRUN_UNSUPPORTED_SUBSCRIPT_INDEX2_NOT_INTEGER": 1,
+      "COBRUN_UNSUPPORTED_SUBSCRIPT_NOT_INTEGER": 1,
+      "COBRUN_UNSUPPORTED_SUBSCRIPT_SUB_NOT_INTEGER": 1,
+      "COBRUN_UNSUPPORTED_TRAILING_TOKENS_CONDITION": 2,
+      "COBRUN_UNSUPPORTED_TRAILING_TOKENS_CONDITION_NEXT": 1,
       "COBRUN_UNSUPPORTED_UNRECOGNIZED_USAGE_COMPUTATIONAL": 5,
-      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER": 10,
+      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER": 5,
       "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_14003": 1,
       "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COMMUNICATION": 1,
       "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_COPY": 3,
       "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_FEATURE": 1,
       "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_REPLACE": 1,
-      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_ST102A": 1,
-      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_ST120A": 1,
-      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THE": 7,
-      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THESE": 2,
-      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THIS": 2,
+      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THE": 1,
+      "COBRUN_UNSUPPORTED_UNSUPPORTED_LEVEL_NUMBER_THIS": 1,
       "COBRUN_UNSUPPORTED_VERB_BEANO": 1,
-      "COBRUN_UNSUPPORTED_VERB_COPY": 2,
+      "COBRUN_UNSUPPORTED_VERB_COPY": 4,
+      "COBRUN_UNSUPPORTED_VERB_END": 1,
+      "COBRUN_UNSUPPORTED_VERB_HOUSEKEEPING": 1,
       "COBRUN_UNSUPPORTED_VERB_NUMBER1": 2,
+      "COBRUN_UNSUPPORTED_VERB_READ_REC": 1,
+      "COBRUN_UNSUPPORTED_VERB_SEC20": 1,
+      "COBRUN_UNSUPPORTED_VERB_SEC40": 1,
+      "COBRUN_UNSUPPORTED_VERB_SECT_001": 3,
       "COBRUN_UNSUPPORTED_VERB_SECT_IC219_0001": 1,
       "COBRUN_UNSUPPORTED_VERB_SORT_PARA": 3,
-      "COBRUN_UNSUPPORTED_WRITE_DUMMY_RECORD_NOT_RECORD": 191,
       "DATA_UNIT": 2,
       "EXEC85_DRIVER_REQUIRES_MODULE_LIBRARY": 1,
+      "GENERATED_FILES_DIFFER": 16,
       "LIBRARY_TEXT_UNIT": 51,
       "ORACLE_RUN_NONZERO_EXIT": 64,
       "ORACLE_RUN_TIMEOUT": 1,
-      "OUTPUT_BYTES_DIFFER": 2,
-      "RAW_OUTPUT_IDENTICAL": 11,
+      "OUTPUT_BYTES_DIFFER": 42,
+      "RAW_OUTPUT_IDENTICAL": 27,
       "SUBPROGRAM_BOUND_TO_MAIN": 68,
       "WORK_RUN_MATERIALIZED_ADAPTED_CM101M_COB_231_ERROR": 1,
       "WORK_RUN_MATERIALIZED_ADAPTED_CM102M_COB_279_ERROR": 1,
@@ -283,16 +345,16 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
       "SQ": 85,
       "ST": 40
     },
-    "candidate_accepted": 15,
-    "candidate_parse_fail": 2,
+    "candidate_accepted": 87,
+    "candidate_parse_fail": 75,
     "candidate_runtime_fail": 0,
-    "candidate_timeout": 1,
-    "candidate_unsupported": 374,
+    "candidate_timeout": 0,
+    "candidate_unsupported": 229,
     "canonical_output_match": 0,
     "dependency_blocked": 0,
     "executable_candidates": 391,
     "exit_status_mismatch": 0,
-    "generated_file_mismatch": 0,
+    "generated_file_mismatch": 16,
     "harness_blocked": 1,
     "infrastructure_error": 0,
     "non_executable_data": 2,
@@ -303,14 +365,16 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
       "oracle:bound-to-main / candidate:bound-to-main": 68,
       "oracle:compile-pass / candidate:reject-unsupported": 1,
       "oracle:error / candidate:reject-unsupported": 3,
+      "oracle:fail / candidate:reject-parse": 15,
       "oracle:fail / candidate:reject-runtime-boundary": 1,
-      "oracle:fail / candidate:reject-unsupported": 61,
-      "oracle:fail / candidate:run-pass": 1,
-      "oracle:fail / candidate:timeout": 1,
-      "oracle:pass / candidate:reject-parse": 1,
-      "oracle:pass / candidate:reject-unsupported": 290,
-      "oracle:pass / candidate:run-pass": 13,
-      "oracle:reject / candidate:reject-unsupported": 18,
+      "oracle:fail / candidate:reject-unsupported": 46,
+      "oracle:fail / candidate:run-pass": 2,
+      "oracle:pass / candidate:reject-parse": 55,
+      "oracle:pass / candidate:reject-runtime-boundary": 3,
+      "oracle:pass / candidate:reject-unsupported": 161,
+      "oracle:pass / candidate:run-pass": 85,
+      "oracle:reject / candidate:reject-parse": 1,
+      "oracle:reject / candidate:reject-unsupported": 17,
       "oracle:timeout / candidate:reject-unsupported": 1
     },
     "oracle_compile_error": 3,
@@ -319,8 +383,8 @@ INFRASTRUCTURE_ERROR units are never counted as passes.
     "oracle_run_fail": 64,
     "oracle_run_pass": 304,
     "oracle_timeout": 1,
-    "output_mismatch": 2,
-    "raw_output_match": 11,
+    "output_mismatch": 42,
+    "raw_output_match": 27,
     "units_by_kind": {
       "CLBRY": 51,
       "COBOL": 459,

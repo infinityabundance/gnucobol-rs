@@ -11,10 +11,10 @@
   "docker": {
     "base_image": "gnucobol-rs-ccvs85/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "ccvs85-20260803T143229Z-ee2300e1-a",
-      "pass_b": "ccvs85-20260803T143229Z-ee2300e1-b"
+      "pass_a": "ccvs85-20260803T195332Z-a902ca8e-a",
+      "pass_b": "ccvs85-20260803T195332Z-a902ca8e-b"
     },
-    "court_image": "gnucobol-rs-ccvs85/court:ee2300e13307ce8de3c5cc86236a0796fb1e702f",
+    "court_image": "gnucobol-rs-ccvs85/court:a902ca8e8e4990827f5b4f86b30275919408348b",
     "daemon_root": "$GNURUST_CCVS85_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_CCVS85_DOCKER_ROOT",
@@ -27,11 +27,11 @@
     "host_storage_root": "$GNURUST_CCVS85_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260803T143229Z-ee2300e1",
+    "run_id": "20260803T195332Z-a902ca8e",
     "socket": "unix://$GNURUST_CCVS85_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 489735835648,
+      "available_bytes_at_start": 484889419776,
       "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -45,8 +45,8 @@
     "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
     "uname": "Linux 7.1.4-1-cachyos x86_64"
   },
-  "generated_at": "2026-08-03T16:51:34Z",
-  "git_commit": "110e66df805c9b950a247af1c79dffcea6b156d0",
+  "generated_at": "2026-08-03T19:56:02Z",
+  "git_commit": "a902ca8e8e4990827f5b4f86b30275919408348b",
   "non_claims": [
     "no suite-pass claim: this gate records candidate outcomes, it does not certify them",
     "candidate rejection is fail-closed (unsupported constructs are never silently run)",
@@ -75,7 +75,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 456,
+      "5_free_space_ok_gb": 451,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -96,11 +96,11 @@
     },
     "schema": "gnurust-ccvs85-preflight-v1",
     "storage": {
-      "free_gb": 456,
+      "free_gb": 451,
       "root": "$GNURUST_CCVS85_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 489735835648,
+      "available_bytes_at_start": 484889419776,
       "device_identity_sha256": "403c944e0c3b03bcabde10d0aebaf5f77fc1ec2659160dfc603a81f7151b55a7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -108,15 +108,15 @@
   },
   "receipt_status": "current",
   "results": {
-    "candidate_accepted": 15,
-    "candidate_parse_fail": 2,
-    "candidate_results_sha256": "9878eafa05ab2e48bf0d3fd26f73e8a43ef4d9eeef33f282a356d1fa2622c971",
+    "candidate_accepted": 87,
+    "candidate_parse_fail": 75,
+    "candidate_results_sha256": "b4baf5c62ba58378561ee9d622d20ee8c1bd6b1c320b80c0ce8cfb4796d772af",
     "candidate_runtime_fail": 0,
-    "candidate_timeout": 1,
-    "candidate_unsupported": 374,
+    "candidate_timeout": 0,
+    "candidate_unsupported": 229,
     "no_delegation": {
       "candidate_binary_path": "/work/target/release/examples/cobrun",
-      "candidate_binary_sha256": "7f2f09cb3274465f1ed02406cdeb78f32e8072460e63331b8d22f517b2655b31",
+      "candidate_binary_sha256": "d0a7c6361ad30e3ee5d10918e60b82c6935f4a855333a0280afcafe8826b2edd",
       "candidate_phase_isolated": true,
       "candidate_phase_note": "candidate phase isolated from the oracle (no cobc, no libcob visible)",
       "cobc_unavailable_during_candidate_phase": true,
