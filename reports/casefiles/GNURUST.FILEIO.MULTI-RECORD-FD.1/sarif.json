@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: read-back of printer-style (ADVANCING-written) files -- outside the in-memory logical-record model (the line-control bytes are asserted on the oracle's file, not the front-end's stdout)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: duplicate record names across files -- cobc rejects them as ambiguous ('needs qualification'), the front-end keeps first-declaration"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: deeper plain sub-groups inside an alternative record -- the REDEFINES-group alias maps direct leaves only (documented limitation)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: multi-record key selection for INDEXED/RELATIVE beyond the primary record"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.FILEIO.MULTI-RECORD-FD.1 non-claim: lie prevented: that the FD records are independent buffers -- NO: they are alternative views of ONE record area (a MOVE into one is visible through every other, exactly as the oracle), and WRITE of a record emits the SHARED bytes at the NAMED record's length"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

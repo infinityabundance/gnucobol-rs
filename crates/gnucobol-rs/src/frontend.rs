@@ -446,6 +446,16 @@ pub fn run_program_redirected(
     let file_defs: HashMap<String, FileDef> = program_map.get(&main_name)
         .map(|p| p.files.iter().map(|f| (f.name.clone(), f.clone())).collect())
         .unwrap_or_default();
+    // Pre-resolved FD record -> owning file (first declaration wins on a duplicate name, matching the
+    // deterministic source order of the files list).
+    let mut record_files: HashMap<String, String> = HashMap::new();
+    if let Some(p) = program_map.get(&main_name) {
+        for f in &p.files {
+            for r in &f.records {
+                record_files.entry(r.clone()).or_insert_with(|| f.name.clone());
+            }
+        }
+    }
     let reports: HashMap<String, ReportDef> = program_map.get(&main_name)
         .map(|p| p.reports.clone())
         .unwrap_or_default();
@@ -465,6 +475,7 @@ pub fn run_program_redirected(
         call_state: RefCell::new(HashMap::new()),
         goto: RefCell::new(None),
         file_defs,
+        record_files,
         files: RefCell::new(HashMap::new()),
         reports,
     };
@@ -538,7 +549,7 @@ enum FileOrg {
     Indexed,
 }
 
-/// A declared file: its `SELECT` name, the `FD` record field it reads/writes through, the optional
+/// A declared file: its `SELECT` name, the `FD` record descriptions it reads/writes through, the optional
 /// `FILE STATUS` field, the organization, and (for RELATIVE) the RELATIVE KEY field name.
 #[derive(Debug, Clone)]
 struct FileDef {
@@ -546,7 +557,11 @@ struct FileDef {
     /// The `ASSIGN TO` target -- the in-memory file store is keyed by this, so two SELECTs on the same
     /// physical name share records (a report written then re-read: the disk semantics the oracle has).
     assign: String,
-    record: String,
+    /// The `01`-level record descriptions declared beneath this file's `FD`/`SD`, in source order. A file
+    /// may declare several ALTERNATIVE record descriptions; all of them share ONE record area (GnuCOBOL
+    /// union semantics -- see the FD-record pass in `build_program_fields`), any of them may be the subject
+    /// of `WRITE`/`REWRITE`/`RELEASE`, and the FIRST is the default receiving record for `READ`/`RETURN`.
+    records: Vec<String>,
     status: Option<String>,
     org: FileOrg,
     rel_key: Option<String>,
@@ -561,6 +576,18 @@ struct FileDef {
     /// / INDEXED file is a keyed (random) read; when false every `READ` is sequential (next in key order).
     /// `READ NEXT` is always sequential regardless.
     access_random: bool,
+}
+
+impl FileDef {
+    /// The default (first-declared) record -- the receiving record for `READ`/`RETURN`/`SORT` (and the
+    /// record used to size fixed-length disk loads). Empty when the FD declared no record descriptions.
+    fn primary_record(&self) -> &str {
+        self.records.first().map(String::as_str).unwrap_or("")
+    }
+    /// Whether `name` is one of this file's declared FD record descriptions.
+    fn has_record(&self, name: &str) -> bool {
+        self.records.iter().any(|r| r == name)
+    }
 }
 
 /// One printable report element: a `COLUMN n PIC p {SOURCE field | VALUE lit | SUM field}` entry.
@@ -852,6 +879,10 @@ struct Ctx<'a> {
     /// models files logically in memory (a self-contained WRITE-then-READ round-trips), so a program's file
     /// I/O is deterministic on stdout without touching the host filesystem.
     file_defs: HashMap<String, FileDef>,
+    /// Pre-resolved record ownership: `FD record name -> owning SELECT name`, built ONCE at run start. A
+    /// multi-record FD declares several records for one file; `WRITE`/`REWRITE`/`RELEASE` resolve the
+    /// owning file through this map in O(1) -- never by scanning every file at runtime.
+    record_files: HashMap<String, String>,
     files: RefCell<HashMap<String, FileState>>,
     /// `RD` report descriptions by report name (from the main program), for INITIATE/GENERATE/TERMINATE.
     reports: HashMap<String, ReportDef>,
@@ -1329,9 +1360,9 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     let file_control = parse_file_control(toks, start, proc_at);
     let (mut file_recs, file_rec, report_file, file_varying) = parse_file_section(toks, start, proc_at)?;
     let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key, record_key, access_random)| {
-        let record = file_rec.get(&name).cloned().unwrap_or_default();
+        let records = file_rec.get(&name).cloned().unwrap_or_default();
         let varying_dep = file_varying.get(&name).cloned();
-        FileDef { name, assign, record, status, org, rel_key, record_key, varying_dep, access_random }
+        FileDef { name, assign, records, status, org, rel_key, record_key, varying_dep, access_random }
     }).collect();
     let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
@@ -1471,9 +1502,10 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
 }
 
 /// Parse the `FILE SECTION` `FD name [clauses]. 01 record ...` entries -> (the record items to add to the
-/// field table, and a file-name -> record-name map). The subset is one `01` record per file.
+/// field table, and a file-name -> record-names map). A file may declare SEVERAL `01` record descriptions
+/// (alternative layouts over one shared record area); all of them are collected, in source order.
 #[allow(clippy::type_complexity)]
-fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, String>, HashMap<String, String>, HashMap<String, String>), RunError> {
+fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, Vec<String>>, HashMap<String, String>, HashMap<String, String>), RunError> {
     let fs = match find_seq_in(toks, &["FILE", "SECTION"], start, end) {
         Some(i) => i + 2,
         None => return Ok((Vec::new(), HashMap::new(), HashMap::new(), HashMap::new())),
@@ -1525,8 +1557,12 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
                     rec_end += 1;
                 }
                 let items = parse_items(toks, rec_start, rec_end)?;
-                if let Some(first) = items.first() {
-                    file_rec.insert(fname, first.name.clone());
+                // Every 01-level record description beneath this FD/SD belongs to the file. The items list
+                // is flat (each 01 followed by its subordinate levels), so the record names are the level-1
+                // entries in order; the subordinates attach to their nearest 01 during field building.
+                let record_names: Vec<String> = items.iter().filter(|it| it.level == 1).map(|it| it.name.clone()).collect();
+                if !record_names.is_empty() {
+                    file_rec.insert(fname, record_names);
                 }
                 recs.extend(items);
                 i = rec_end;
@@ -2532,6 +2568,58 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             // A nested REDEFINES child overlays at the same offset and does not advance it.
             if sib.redefines.is_none() {
                 off += csz;
+            }
+        }
+    }
+    // FD/SD record-area union: every `01` record description beneath ONE FD shares a single record area
+    // (GnuCOBOL semantics -- the file's records are ALTERNATIVE VIEWS of one buffer, sized to the LARGEST
+    // record; verified against the pinned oracle: `MOVE "11111" TO A` then `WRITE B` writes "11111", and
+    // `MOVE` into one record is visible through every other). Each non-owner record aliases the largest
+    // record's storage: an elementary record via `Field.redefines` (reads/writes reinterpret the owner's
+    // bytes through its own shape), a group record by mapping its DIRECT leaf children into REDEF_VIEW at
+    // their record-relative offsets (the same shape the REDEFINES-group pass maps; a deeper plain
+    // sub-group stays unaliased -- the documented REDEFINES limitation). `WRITE` of the NAMED record then
+    // emits the shared area sized to that record's own length, exactly like the oracle.
+    for file in &prog.files {
+        if file.records.len() < 2 {
+            continue;
+        }
+        // total live size of each record (elementary: its bytes; group: the concatenated leaves)
+        let sizes: Vec<(String, usize)> = file
+            .records
+            .iter()
+            .map(|r| (r.clone(), field_len(r, &fields)))
+            .collect();
+        let owner = sizes
+            .iter()
+            .max_by_key(|(_, s)| *s)
+            .map(|(n, _)| n.clone())
+            .unwrap_or_default();
+        if owner.is_empty() {
+            continue;
+        }
+        for (rec, _) in &sizes {
+            if rec == &owner {
+                continue;
+            }
+            let Some(f) = fields.get(rec) else { continue };
+            if let Storage::Group { children } = &f.storage {
+                // Direct elementary / group-OCCURS children of the alternative record alias the owner's
+                // area at their record-relative offsets (each record layout starts at offset 0 of the
+                // shared area).
+                let mut off = 0usize;
+                for c in children {
+                    let csz = field_len(c, &fields);
+                    let is_leaf = fields.get(c).is_some_and(|x| !matches!(x.storage, Storage::Group { .. }));
+                    let is_group_occurs = group_occurs_lookup(c).is_some();
+                    if (is_leaf || is_group_occurs) && group_child_lookup(c).is_none() && nested_leaf_lookup(c).is_none() {
+                        REDEF_VIEW.with(|m| m.borrow_mut().insert(c.clone(), (owner.clone(), off)));
+                    }
+                    off += csz;
+                }
+            } else if let Some(f) = fields.get_mut(rec) {
+                // Elementary alternative: alias the owner's storage through Field::redefines.
+                f.redefines = Some(owner.clone());
             }
         }
     }
@@ -6856,7 +6944,7 @@ fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option
     // The FD record width: use read_field (reconstructs a GROUP record from its leaves) rather than the
     // group field's own `bytes` (which is empty for a group whose children hold the storage) -- so a
     // group-structured FD record (e.g. `01 R. 05 A PIC X(13). 05 FILLER PIC X(67).`) loads correctly.
-    let reclen = read_field(fields, &def.record).ok().flatten().map(|f| f.bytes.len()).filter(|&n| n > 0)?;
+    let reclen = read_field(fields, def.primary_record()).ok().flatten().map(|f| f.bytes.len()).filter(|&n| n > 0)?;
     let fit = |bytes: &[u8]| -> Vec<u8> {
         let mut r = bytes.to_vec();
         r.resize(reclen, b' '); // pad short / truncate long to the fixed record width
@@ -6912,9 +7000,9 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
         // and READ ... INTO later moves the PHYSICAL buffer (its tail past the record included). Reset the
         // record's storage leaf to NUL at OPEN so a freshly-read short record carries cobc's NUL tail.
         if def.varying_dep.is_some() {
-            let leaf = match fields.get(&def.record).map(|f| f.storage.clone()) {
-                Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.record.clone()),
-                _ => def.record.clone(),
+            let leaf = match fields.get(def.primary_record()).map(|f| f.storage.clone()) {
+                Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.primary_record().to_string()),
+                _ => def.primary_record().to_string(),
             };
             if let Some(lf) = fields.get_mut(&leaf) { lf.bytes.iter_mut().for_each(|b| *b = 0); }
         }
@@ -6982,9 +7070,13 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
-    let def = ctx.file_defs.values().find(|d| d.record == rec)
-        .ok_or_else(|| RunError::Unsupported(format!("WRITE `{rec}`: not an FD record")))?
-        .clone();
+    let def = {
+        let fname = ctx.record_files.get(&rec)
+            .ok_or_else(|| RunError::Unsupported(format!("WRITE `{rec}`: not an FD record")))?;
+        ctx.file_defs.get(fname)
+            .ok_or_else(|| RunError::Unsupported(format!("WRITE `{rec}`: not an FD record")))?
+            .clone()
+    };
     let mut bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
     if def.org == FileOrg::LineSequential {
         while bytes.last() == Some(&b' ') { bytes.pop(); }
@@ -7028,9 +7120,13 @@ fn exec_rewrite(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) ->
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
-    let def = ctx.file_defs.values().find(|d| d.record == rec)
-        .ok_or_else(|| RunError::Unsupported(format!("REWRITE `{rec}`: not an FD record")))?
-        .clone();
+    let def = {
+        let fname = ctx.record_files.get(&rec)
+            .ok_or_else(|| RunError::Unsupported(format!("REWRITE `{rec}`: not an FD record")))?;
+        ctx.file_defs.get(fname)
+            .ok_or_else(|| RunError::Unsupported(format!("REWRITE `{rec}`: not an FD record")))?
+            .clone()
+    };
     let mut bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
     if def.org == FileOrg::LineSequential {
         while bytes.last() == Some(&b' ') { bytes.pop(); }
@@ -7067,7 +7163,7 @@ fn exec_unlock(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
 fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
     let sf = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("SORT: missing sort file".into())) };
     let sd_def = ctx.file_defs.get(&sf).ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?.clone();
-    let reclen = read_field(fields, &sd_def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+    let reclen = read_field(fields, sd_def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
     let kw = |w: &str| matches!(w, "ON" | "KEY" | "ASCENDING" | "DESCENDING" | "USING" | "GIVING" | "INPUT" | "OUTPUT" | "PROCEDURE" | "IS" | "THRU" | "THROUGH");
     // Each KEY records the ASCENDING/DESCENDING direction in effect when it was named (a SORT may mix
     // directions: `ASCENDING KEY a DESCENDING KEY b`). The keys compare in declared order.
@@ -7108,7 +7204,7 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     // (offset, length, descending) for each key, in declared (major-to-minor) order.
     let mut spans: Vec<(usize, usize, bool)> = Vec::with_capacity(keys.len());
     for (k, desc) in &keys {
-        let (off, len) = sort_key_span(&sd_def.record, k, reclen, fields)
+        let (off, len) = sort_key_span(sd_def.primary_record(), k, reclen, fields)
             .ok_or_else(|| RunError::Unsupported(format!("SORT/MERGE KEY `{k}` is not a field of the sort record")))?;
         spans.push((off, len, *desc));
     }
@@ -7652,9 +7748,13 @@ fn exec_release(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) ->
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
-    let def = ctx.file_defs.values().find(|d| d.record == rec)
-        .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?
-        .clone();
+    let def = {
+        let fname = ctx.record_files.get(&rec)
+            .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?;
+        ctx.file_defs.get(fname)
+            .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?
+            .clone()
+    };
     let bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
     ctx.files.borrow_mut().entry(def.assign.clone()).or_default().records.push(bytes);
     Ok(())
@@ -7692,7 +7792,7 @@ fn exec_return(
         return Ok(false);
     }
     let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("RETURN: `{file}` is not a declared file")))?.clone();
-    let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+    let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
     let next = {
         let files = ctx.files.borrow();
         files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(st.read_pos).cloned())
@@ -7701,9 +7801,9 @@ fn exec_return(
         Some(mut bytes) => {
             if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos += 1; }
             bytes.resize(reclen, b' ');
-            write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
+            write_field(fields, def.primary_record(), |f| { f.bytes = bytes; Ok(()) })?;
             if let Some(id) = into {
-                let mv = vec![Tok::Word(def.record.clone()), Tok::Word("TO".to_string()), Tok::Word(id)];
+                let mv = vec![Tok::Word(def.primary_record().to_string()), Tok::Word("TO".to_string()), Tok::Word(id)];
                 exec_move(&mv, fields, ctx.decimal_comma)?;
             }
             Ok(false)
@@ -7742,7 +7842,7 @@ fn sort_key_span(record: &str, key: &str, reclen: usize, fields: &HashMap<String
 fn indexed_key_span(def: &FileDef, reclen: usize, fields: &HashMap<String, Field>) -> Result<(usize, usize), RunError> {
     let key = def.record_key.as_ref()
         .ok_or_else(|| RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name)))?;
-    sort_key_span(&def.record, key, reclen, fields)
+    sort_key_span(def.primary_record(), key, reclen, fields)
         .ok_or_else(|| RunError::Unsupported(format!("INDEXED RECORD KEY `{key}` is not a field of the record")))
 }
 
@@ -7779,7 +7879,7 @@ fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
             }
         }
         FileOrg::Indexed => {
-            let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+            let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
             let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
             let want = read_field(fields, def.record_key.as_ref().unwrap())?.map(|f| f.bytes).unwrap_or_default();
             let mut files = ctx.files.borrow_mut();
@@ -7911,7 +8011,7 @@ fn exec_start(
             fp
         }
         FileOrg::Indexed => {
-            let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+            let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
             let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
             let kf = key_field.or_else(|| def.record_key.clone())
                 .ok_or_else(|| RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name)))?;
@@ -8003,7 +8103,7 @@ fn exec_read(
         return Ok(false);
     }
     let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("READ: `{file}` is not a declared file")))?.clone();
-    let reclen = read_field(fields, &def.record)?.map(|f| f.bytes.len()).unwrap_or(0);
+    let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
     let loaded: Option<Vec<u8>> = match def.org {
         // RELATIVE random read: by the RELATIVE KEY (no position advance).
         FileOrg::Relative if !had_next => {
@@ -8078,9 +8178,9 @@ fn exec_read(
                 // its first n bytes IN PLACE (the leaf is built at MAX; set_field_image would shrink the
                 // physical buffer to the live size, so a later longer record would read truncated). A record
                 // read then truncates the MAX buffer to the live DEPENDING length = exactly these n bytes.
-                let leaf = match fields.get(&def.record).map(|f| f.storage.clone()) {
-                    Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.record.clone()),
-                    _ => def.record.clone(),
+                let leaf = match fields.get(def.primary_record()).map(|f| f.storage.clone()) {
+                    Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.primary_record().to_string()),
+                    _ => def.primary_record().to_string(),
                 };
                 if let Some(lf) = fields.get_mut(&leaf) {
                     if lf.bytes.len() < n {
@@ -8099,11 +8199,29 @@ fn exec_read(
                     v.resize(tlen, b' ');
                     set_field_image(fields, id, &v)?;
                 }
-            } else {
+            } else if def.org == FileOrg::LineSequential {
+                // Line-sequential READ pads a short line with spaces (libcob lineseq_read memsets).
                 bytes.resize(reclen, b' ');
-                write_field(fields, &def.record, |f| { f.bytes = bytes; Ok(()) })?;
+                write_field(fields, def.primary_record(), |f| { f.bytes = bytes; Ok(()) })?;
                 if let Some(id) = &into {
-                    let mv = vec![Tok::Word(def.record.clone()), Tok::Word("TO".to_string()), Tok::Word(id.clone())];
+                    let mv = vec![Tok::Word(def.primary_record().to_string()), Tok::Word("TO".to_string()), Tok::Word(id.clone())];
+                    exec_move(&mv, fields, ctx.decimal_comma)?;
+                }
+            } else {
+                // Record-sequential / relative / indexed READ: the record area's tail beyond the read
+                // bytes is left AS-IS (GnuCOBOL cob_seq_read: "we leave the data not read as-is"). With
+                // several alternative FD records (or differing record lengths) the previously-read bytes
+                // stay visible through the shared record-area views -- verified against the oracle.
+                let mut area = bytes;
+                if area.len() < reclen {
+                    let prev = read_field(fields, def.primary_record())?.map(|f| f.bytes).unwrap_or_default();
+                    let tail = prev.get(area.len()..).map(|s| s.to_vec()).unwrap_or_default();
+                    area.extend_from_slice(&tail);
+                    area.truncate(reclen);
+                }
+                write_field(fields, def.primary_record(), |f| { f.bytes = area; Ok(()) })?;
+                if let Some(id) = &into {
+                    let mv = vec![Tok::Word(def.primary_record().to_string()), Tok::Word("TO".to_string()), Tok::Word(id.clone())];
                     exec_move(&mv, fields, ctx.decimal_comma)?;
                 }
             }
@@ -10824,6 +10942,88 @@ mod tests {
         );
         assert_eq!(out, b"NUM=[abc42yz]\nTB=070707\n");
     }
+    // ---- multiple 01-level records beneath one FD (GNURUST.FILEIO.MULTI-RECORD-FD.1) ----
+    // The front-end models FD record descriptions as ALTERNATIVE views of ONE shared record area
+    // (GnuCOBOL union semantics, verified against the pinned oracle): a MOVE into one record is visible
+    // through every other, and WRITE of the NAMED record emits the shared bytes at that record's length.
+
+    #[test]
+    fn fd_two_records_both_writeable_in_source_order() {
+        // Two alternative 01 records under one FD; WRITE of either emits its own bytes, in source order.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 FIRST-REC PIC X(5).\n       01 SECOND-REC PIC X(5).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"FIRST\" TO FIRST-REC.\n           WRITE FIRST-REC.\n           MOVE \"OTHER\" TO SECOND-REC.\n           WRITE SECOND-REC.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY FIRST-REC END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
+        assert_eq!(run(src), b"FIRST\nOTHER\n");
+    }
+
+    #[test]
+    fn fd_records_share_one_record_area() {
+        // The FD record descriptions are alternative views of ONE record area: a MOVE into one record is
+        // visible through every other, and WRITE of a record emits the shared bytes (oracle-verified:
+        // MOVE "11111" TO A then WRITE B writes "11111").
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 FIRST-REC PIC X(5).\n       01 SECOND-REC PIC X(5).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"11111\" TO FIRST-REC.\n           WRITE SECOND-REC.\n           MOVE \"22222\" TO SECOND-REC.\n           WRITE FIRST-REC.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY FIRST-REC END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
+        assert_eq!(run(src), b"11111\n22222\n");
+    }
+
+    #[test]
+    fn fd_three_records_preserve_source_order_and_lengths() {
+        // Three records with DIFFERENT lengths: each WRITE emits the NAMED record's own length, in source
+        // order; a read of a shorter view over a longer record shows the shared area's first bytes.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 S PIC X(3).\n       01 L PIC X(6).\n       01 M PIC X(4).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"ABC\" TO S.\n           WRITE S.\n           MOVE \"123456\" TO L.\n           WRITE L.\n           MOVE \"WXYZ\" TO M.\n           WRITE M.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY \"[\" S \"]\" END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
+        // read1 = "ABC" (S) -> "[ABC]"; read2 = "123456" (L) -> S shows "123"; read3 = "WXYZ" (M) -> S shows "WXY"
+        assert_eq!(run(src), b"[ABC]\n[123]\n[WXY]\n");
+    }
+
+    #[test]
+    fn fd_group_records_share_area_and_write_independently() {
+        // Group records beneath one FD: MOVE into one group is visible through the other (shared area),
+        // and WRITE of each emits the NAMED record's own layout length.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 DETAIL-REC.\n          05 ITEM-CODE PIC 9(3).\n          05 ITEM-TEXT PIC X(7).\n       01 TOTAL-REC.\n          05 ITEM-LABEL PIC X(6).\n          05 ITEM-AMOUNT PIC 9(5).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"123ABCDEFG\" TO DETAIL-REC.\n           WRITE DETAIL-REC.\n           MOVE \"TOTAL00042\" TO TOTAL-REC.\n           WRITE TOTAL-REC.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY \"[\" DETAIL-REC \"]\" END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
+        assert_eq!(run(src), b"[123ABCDEFG]\n[TOTAL00042]\n");
+    }
+
+    #[test]
+    fn fd_two_files_records_do_not_cross_associate() {
+        // Two FDs with structurally identical records: each WRITE resolves to the CORRECT owning file.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT FA ASSIGN TO MRA ORGANIZATION SEQUENTIAL.\n           SELECT FB ASSIGN TO MRB ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD FA.\n       01 REC-A PIC X(5).\n       01 DUP-REC PIC X(5).\n       FD FB.\n       01 REC-B PIC X(5).\n       01 DUP-REC PIC X(5).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT FA FB.\n           MOVE \"AAAAA\" TO DUP-REC.\n           WRITE DUP-REC.\n           MOVE \"BBBBB\" TO REC-B.\n           WRITE REC-B.\n           CLOSE FA FB.\n           OPEN INPUT FB.\n           PERFORM UNTIL E = \"Y\"\n              READ FB AT END MOVE \"Y\" TO E NOT AT END DISPLAY REC-B END-READ\n           END-PERFORM.\n           CLOSE FB.\n           STOP RUN.\n";
+        // The FIRST DUP-REC declaration owns the name (WRITE DUP-REC -> FA); REC-B -> FB.
+        assert_eq!(run(src), b"BBBBB\n");
+    }
+
+    #[test]
+    fn fd_write_working_storage_01_fails_closed() {
+        // A WORKING-STORAGE 01 is NOT an FD record: WRITE must fail closed, never silently redirect.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 A PIC X(5).\n       WORKING-STORAGE SECTION.\n       01 NOT-A-RECORD PIC X(5).\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"HELLO\" TO NOT-A-RECORD.\n           WRITE NOT-A-RECORD.\n           CLOSE F.\n           STOP RUN.\n";
+        let err = run_program(src).unwrap_err().to_string();
+        assert!(err.contains("not an FD record"), "got: {err}");
+    }
+
+    #[test]
+    fn fd_write_unknown_record_fails_closed() {
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 A PIC X(5).\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           WRITE NO-SUCH-RECORD.\n           CLOSE F.\n           STOP RUN.\n";
+        let err = run_program(src).unwrap_err().to_string();
+        assert!(err.contains("not an FD record"), "got: {err}");
+    }
+
+    #[test]
+    fn fd_rewrite_via_second_record() {
+        // REWRITE resolves any FD record of the file and replaces the last READ record with its bytes.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL FILE STATUS IS ST.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 FIRST-REC PIC X(5).\n       01 SECOND-REC PIC X(5).\n       WORKING-STORAGE SECTION. 01 ST PIC XX. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"AAAAA\" TO FIRST-REC.\n           WRITE FIRST-REC.\n           CLOSE F.\n           OPEN I-O F.\n           READ F.\n           MOVE \"ZZZZZ\" TO SECOND-REC.\n           REWRITE SECOND-REC.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY FIRST-REC END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
+        assert_eq!(run(src), b"ZZZZZ\n");
+    }
+
+    #[test]
+    fn fd_advancing_on_second_record_is_accepted() {
+        // The CCVS85 report shape: WRITE of the SECOND record with AFTER ADVANCING must parse and run.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F RECORD CONTAINS 120 CHARACTERS.\n       01 PRINT-REC PIC X(120).\n       01 DUMMY-RECORD PIC X(120).\n       WORKING-STORAGE SECTION. 01 H PIC X(120) VALUE \"HELLO\".\n       PROCEDURE DIVISION.\n           MOVE H TO DUMMY-RECORD.\n           OPEN OUTPUT F.\n           WRITE DUMMY-RECORD AFTER ADVANCING 1 LINES.\n           CLOSE F.\n           STOP RUN.\n";
+        assert_eq!(run(src), b"");
+    }
+
+    #[test]
+    fn fd_read_into_shared_area_visible_through_all_records() {
+        // A READ fills the shared record area: every record description sees the read bytes (union).
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 FIRST-REC PIC X(5).\n       01 SECOND-REC PIC X(5).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"ABCDE\" TO FIRST-REC.\n           WRITE FIRST-REC.\n           MOVE \"VWXYZ\" TO SECOND-REC.\n           WRITE SECOND-REC.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY FIRST-REC \";\" SECOND-REC END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
+        assert_eq!(run(src), b"ABCDE;ABCDE\nVWXYZ;VWXYZ\n");
+    }
+
 }
 
 #[cfg(test)]

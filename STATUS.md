@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-140-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-140-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-141-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-141-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.8.52 · 104 GNURUST courts (82 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.8.52 · 105 GNURUST courts (82 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -76,6 +76,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.FILE.WRITE.1` | sequential WRITE byte effects | ✅ pass | [`reports/casefiles/GNURUST.FILE.WRITE.1/`](reports/casefiles/GNURUST.FILE.WRITE.1/) |
 | `GNURUST.FILE.REWRITE.1` | sequential REWRITE in-place update | ✅ pass | [`reports/casefiles/GNURUST.FILE.REWRITE.1/`](reports/casefiles/GNURUST.FILE.REWRITE.1/) |
 | `GNURUST.FILEIO.LINESEQ.1` | line-sequential WRITE config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.1/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.1/) |
+| `GNURUST.FILEIO.MULTI-RECORD-FD.1` | multiple 01-level record descriptions beneath one FD (shared record area) | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.MULTI-RECORD-FD.1/`](reports/casefiles/GNURUST.FILEIO.MULTI-RECORD-FD.1/) |
 | `GNURUST.FILEIO.SEQ.1` | RECORD SEQUENTIAL read/write incl. variable-length | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.SEQ.1/`](reports/casefiles/GNURUST.FILEIO.SEQ.1/) |
 | `GNURUST.FILEIO.RELATIVE.1` | RELATIVE organization keyed + sequential access | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.RELATIVE.1/`](reports/casefiles/GNURUST.FILEIO.RELATIVE.1/) |
 | `GNURUST.FILEIO.VERB.1` | file verb open/access-mode preconditions | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.VERB.1/`](reports/casefiles/GNURUST.FILEIO.VERB.1/) |

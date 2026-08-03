@@ -1241,6 +1241,17 @@
     "no claim that library/data units are executable tests",
     "no conversion of blocked units into passes"
    ]
+  },
+  "GNURUST.FILEIO.MULTI-RECORD-FD.1": {
+   "court": "multiple 01-level record descriptions beneath one FD (shared record area)",
+   "sweep": "multirecord_fd_sweep.sh",
+   "byte_domain": "WRITE/REWRITE of ANY declared FD record -> the NAMED record's bytes over ONE shared record area (GnuCOBOL union), byte-identical to cobc; different-length + group records; the CCVS85 WRITE ... AFTER ADVANCING shape",
+   "non_claims": [
+    "read-back of printer-style (ADVANCING-written) files -- outside the in-memory logical-record model (the line-control bytes are asserted oracle-side)",
+    "duplicate record names across files -- cobc rejects them as ambiguous (needs qualification); the front-end keeps first-declaration",
+    "deeper plain sub-groups inside an alternative record -- the REDEFINES-group alias maps direct leaves only",
+    "multi-record key selection for INDEXED/RELATIVE beyond the primary record"
+   ]
   }
  }
 }

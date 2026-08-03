@@ -1,0 +1,31 @@
+{
+  "byte_domain": "WRITE/REWRITE of ANY declared FD record -> the NAMED record's bytes over ONE shared record area (GnuCOBOL union), byte-identical to cobc; different-length + group records; the CCVS85 WRITE ... AFTER ADVANCING shape",
+  "campaign": "GNURUST.FILEIO.MULTI-RECORD-FD.1",
+  "command": {
+    "replay": "bash lab/oracle/multirecord_fd_sweep.sh"
+  },
+  "court": "multiple 01-level record descriptions beneath one FD (shared record area)",
+  "crate_version": "0.8.52",
+  "current_authority": "STATUS.md",
+  "generated_at": "unstamped",
+  "git_commit": "unstamped",
+  "non_claims": [
+    "read-back of printer-style (ADVANCING-written) files -- outside the in-memory logical-record model (the line-control bytes are asserted oracle-side)",
+    "duplicate record names across files -- cobc rejects them as ambiguous (needs qualification); the front-end keeps first-declaration",
+    "deeper plain sub-groups inside an alternative record -- the REDEFINES-group alias maps direct leaves only",
+    "multi-record key selection for INDEXED/RELATIVE beyond the primary record"
+  ],
+  "oracle": {
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "name": "GnuCOBOL",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "sweep": "PASS=7 FAIL=0"
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

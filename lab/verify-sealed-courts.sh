@@ -73,6 +73,7 @@ run_sweep "GNURUST.SCREENIO.ACCEPT.1" screenio_accept_sweep.sh
 run_sweep "GNURUST.SCREENIO.ACCEPT.2" screenio_accept2_sweep.sh
 run_sweep "GNURUST.SCREENIO.LINEDIFF.1" screenio_linediff_sweep.sh
 run_sweep "GNURUST.FRONTEND.1" cobol_frontend_sweep.sh
+run_sweep "GNURUST.FILEIO.MULTI-RECORD-FD.1" multirecord_fd_sweep.sh
 run_sweep "GNURUST.FRONTEND.1" cobol_run_sweep.sh
 run_sweep "GNURUST.FILEIO.INDEXED.1" indexed_sweep.sh
 run_sweep "GNURUST.FILEIO.SYS.1" cob_sys_sweep.sh

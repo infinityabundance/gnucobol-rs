@@ -12,11 +12,11 @@
   "crate_version": "0.8.52",
   "damage_if_overclaimed": "treating this as a full COBOL compiler would imply the whole language parses + runs + compiles to native code, when only the listed subset is interpreted to oracle-identical output",
   "hash_chain": {
-    "inputs_sha256": "b02713bce8143698fb2f691ce021161dd9264f34d41d09f96e76a1136e976780"
+    "inputs_sha256": "394544f15268005e6ddafee8b2f7ef7d4376f416c324ff43d378e9cc3363a5df"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "1963b69fe6bead53c76b8962f4e6e3d6853ad3f28567af8a724f98d17778dfbf",
-    "receipt_sha256": "4ce3697f0c5b4f7317d56040505e9f3c003cc41fb199c6237ee74d64361a7551"
+    "receipt_sha256": "f6a97d3ceb575c3faec5da31af97cc6ea981c60ea028d3dd3c2025c77926b04c"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -75,8 +75,8 @@
   },
   "results": {
     "fail": 0,
-    "pass": 185,
-    "total": 185,
+    "pass": 191,
+    "total": 191,
     "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"
