@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CCVS85.3 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CCVS85.3 non-claim: no suite-pass claim"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CCVS85.3 non-claim: candidate rejection is fail-closed and is not conformance evidence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CCVS85.3 non-claim: no claim that acceptance implies COBOL-85 conformance"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CCVS85.3 non-claim: no claim about cobc/compiled-code equivalence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.CCVS85.3 non-claim: lie prevented: an unsupported-construct rejection recorded as a pass would fabricate conformance"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

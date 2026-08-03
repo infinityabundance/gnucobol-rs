@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-137-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-137-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-140-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-140-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.8.50 · 101 GNURUST courts (82 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.8.50 · 104 GNURUST courts (82 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -132,9 +132,12 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |
 | `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
 | `GNURUST.SCREENIO.ACCEPT.2` | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/) |
+| `GNURUST.CCVS85.2` | NIST CCVS85 materialization + real-GnuCOBOL 3.2 oracle baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.2/`](reports/casefiles/GNURUST.CCVS85.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.SCREENIO.DISPLAY.3` | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/) |
+| `GNURUST.CCVS85.3` | NIST CCVS85 gnucobol-rs (cobrun) execution baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.3/`](reports/casefiles/GNURUST.CCVS85.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
+| `GNURUST.CCVS85.4` | NIST CCVS85 differential comparison + per-unit classification | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.4/`](reports/casefiles/GNURUST.CCVS85.4/) |
 | `GNURUST.5` | COPY expansion | ✅ pass | [`reports/casefiles/GNURUST.5/`](reports/casefiles/GNURUST.5/) |
 | `GNURUST.6` | COPY ... REPLACING | ✅ pass | [`reports/casefiles/GNURUST.6/`](reports/casefiles/GNURUST.6/) |
 | `GNURUST.7` | arithmetic ADD/SUB/MUL | ✅ pass | [`reports/casefiles/GNURUST.7/`](reports/casefiles/GNURUST.7/) |

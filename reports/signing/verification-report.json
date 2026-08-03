@@ -1,5 +1,5 @@
 {
-  "casefiles": 131,
+  "casefiles": 140,
   "court": "KOBOLD.ENTERPRISE.2",
   "entries": [
     {
@@ -111,6 +111,18 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.CCVS85.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.CCVS85.3",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.CCVS85.4",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.CLASS.1",
       "signature_status": "unsigned_no_key_configured"
     },
@@ -212,6 +224,10 @@
     },
     {
       "court": "GNURUST.FLOAT.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.FRONTEND.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -343,7 +359,19 @@
       "signature_status": "unsigned_no_key_configured"
     },
     {
+      "court": "GNURUST.SCREENIO.ACCEPT.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.SCREENIO.ACCEPT.2",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
       "court": "GNURUST.SCREENIO.ATTR.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.SCREENIO.COLOR.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -356,6 +384,14 @@
     },
     {
       "court": "GNURUST.SCREENIO.INIT.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.SCREENIO.LINEDIFF.1",
+      "signature_status": "unsigned_no_key_configured"
+    },
+    {
+      "court": "GNURUST.SCREENIO.NUMEDIT.1",
       "signature_status": "unsigned_no_key_configured"
     },
     {
@@ -539,7 +575,7 @@
   "selftest_passed": true,
   "signing_mode": "unsigned",
   "summary": {
-    "unsigned_no_key_configured": 131
+    "unsigned_no_key_configured": 140
   },
   "tool": "kobold-attest (rust, ed25519-compact)",
   "tool_available": true

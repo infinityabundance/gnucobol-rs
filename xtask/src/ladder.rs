@@ -4,55 +4,231 @@ use serde_json::{json, Value};
 use std::path::Path;
 
 const LEVELS: [(i64, &str, &str); 8] = [
-    (0, "refused subsystem", "out of the data-evidence lane; refused with negative capabilities, never guessed"),
-    (1, "observed atlas", "behavior is recorded as observed evidence (a sweep), not a pure-kernel implementation"),
-    (2, "byte-equivalent helper", "a pure Rust function reproduces a storage/field/representation byte result"),
-    (3, "statement byte court", "a Procedure-Division statement's receiver bytes are reproduced byte-for-byte"),
-    (4, "file/runtime-status court", "file/runtime status observation bound to declared conditions"),
-    (5, "control-flow fragment", "control-flow surface OBSERVED as an atlas; execution is not claimed"),
-    (6, "program-execution slice", "executing a bounded control-flow fragment over the sealed primitives"),
-    (7, "compiler/runtime replacement", "NOT CLAIMED — gnucobol-rs is a compatibility court, not a compiler"),
+    (
+        0,
+        "refused subsystem",
+        "out of the data-evidence lane; refused with negative capabilities, never guessed",
+    ),
+    (
+        1,
+        "observed atlas",
+        "behavior is recorded as observed evidence (a sweep), not a pure-kernel implementation",
+    ),
+    (
+        2,
+        "byte-equivalent helper",
+        "a pure Rust function reproduces a storage/field/representation byte result",
+    ),
+    (
+        3,
+        "statement byte court",
+        "a Procedure-Division statement's receiver bytes are reproduced byte-for-byte",
+    ),
+    (
+        4,
+        "file/runtime-status court",
+        "file/runtime status observation bound to declared conditions",
+    ),
+    (
+        5,
+        "control-flow fragment",
+        "control-flow surface OBSERVED as an atlas; execution is not claimed",
+    ),
+    (
+        6,
+        "program-execution slice",
+        "executing a bounded control-flow fragment over the sealed primitives",
+    ),
+    (
+        7,
+        "compiler/runtime replacement",
+        "NOT CLAIMED — gnucobol-rs is a compatibility court, not a compiler",
+    ),
 ];
 
 fn place() -> Vec<(i64, &'static str)> {
-    let l2 = ["GNURUST.2","GNURUST.3","GNURUST.4","GNURUST.5","GNURUST.6","GNURUST.8","GNURUST.9","GNURUST.10","GNURUST.11","GNURUST.CLASS.1","GNURUST.INTRINSIC.LENGTH.1","GNURUST.INTRINSIC.NUMVAL.1","GNURUST.INTRINSIC.NUMVAL-C.1","GNURUST.INTRINSIC.MOD-REM.1","GNURUST.INTRINSIC.INTEGER.1","GNURUST.INTRINSIC.CASE.1","GNURUST.INTRINSIC.ORD-CHAR.1","GNURUST.INTRINSIC.DATE.1","GNURUST.14","GNURUST.15","GNURUST.16","GNURUST.16C","GNURUST.17","GNURUST.18","GNURUST.INDEX.1","GNURUST.LOGICAL.1","GNURUST.FLOAT.1","GNURUST.NUMCMP.1"];
-    let l3 = ["GNURUST.7","GNURUST.13","GNURUST.19","GNURUST.REMAINDER.1","GNURUST.ROUND.1","GNURUST.BIGNUM.1","GNURUST.INTPOW.1","GNURUST.FILE.SEQUENTIAL.1","GNURUST.FILE.WRITE.1","GNURUST.FILE.REWRITE.1","GNURUST.FILEIO.LINESEQ.1","GNURUST.FILEIO.LINESEQ.2","GNURUST.FILEIO.SEQ.1","GNURUST.FILEIO.RELATIVE.1","GNURUST.FILEIO.SORT.1","GNURUST.FILEIO.SORTENGINE.1","GNURUST.FILEIO.MAPPING.1","GNURUST.COMMON.CBL.1","GNURUST.MLIO.GENERATE.1","GNURUST.MLIO.PARSE.1","GNURUST.SCREENIO.INIT.1","GNURUST.SCREENIO.DISPLAY.2","GNURUST.SCREENIO.DISPLAY.3","GNURUST.SCREENIO.ATTR.1","GNURUST.SCREENIO.COLOR.1","GNURUST.SCREENIO.NUMEDIT.1","GNURUST.SCREENIO.ACCEPT.1","GNURUST.SCREENIO.ACCEPT.2","GNURUST.SCREENIO.LINEDIFF.1","GNURUST.12","GNURUST.12B","GNURUST.INITIALIZE.1","GNURUST.INSPECT.1","GNURUST.REFMOD.1","GNURUST.STRING.UNSTRING.1","GNURUST.ACCEPT.DISPLAY.1","GNURUST.ACCEPT.DISPLAY.2","GNURUST.SIZE.ERROR.1"];
-    let l1 = ["SIZE.ERROR.ATLAS.1","GNURUST.INTRINSIC.ATLAS.1","GNURUST.CALL.EXTENSION.ATLAS.1","GNURUST.INDEXED.FILE.ATLAS.1","GNURUST.SORT.MERGE.ATLAS.1","GNURUST.RELATIVE.FILE.ATLAS.1","GNURUST.DIALECT.RUNTIME.ATLAS.1","GNURUST.DIRECTIVE.VARIANCE.ATLAS.1","GNURUST.DECLARATIVES.ATLAS.1","GNURUST.CALL.LAYOUT.ATLAS.1","GNURUST.VALUE.NEGZERO.EDGE.1"];
-    let l4 = ["GNURUST.COMMON.BOUNDCHECK.1","GNURUST.COMMON.NUMCHECK.1","GNURUST.FILE.STATUS.1","GNURUST.FILEIO.VERB.1","GNURUST.FILEIO.SYS.1","GNURUST.FILEIO.OPEN.1","GNURUST.FILEIO.INDEXED.1"];
+    let l2 = [
+        "GNURUST.2",
+        "GNURUST.3",
+        "GNURUST.4",
+        "GNURUST.5",
+        "GNURUST.6",
+        "GNURUST.8",
+        "GNURUST.9",
+        "GNURUST.10",
+        "GNURUST.11",
+        "GNURUST.CLASS.1",
+        "GNURUST.INTRINSIC.LENGTH.1",
+        "GNURUST.INTRINSIC.NUMVAL.1",
+        "GNURUST.INTRINSIC.NUMVAL-C.1",
+        "GNURUST.INTRINSIC.MOD-REM.1",
+        "GNURUST.INTRINSIC.INTEGER.1",
+        "GNURUST.INTRINSIC.CASE.1",
+        "GNURUST.INTRINSIC.ORD-CHAR.1",
+        "GNURUST.INTRINSIC.DATE.1",
+        "GNURUST.14",
+        "GNURUST.15",
+        "GNURUST.16",
+        "GNURUST.16C",
+        "GNURUST.17",
+        "GNURUST.18",
+        "GNURUST.INDEX.1",
+        "GNURUST.LOGICAL.1",
+        "GNURUST.FLOAT.1",
+        "GNURUST.NUMCMP.1",
+    ];
+    let l3 = [
+        "GNURUST.7",
+        "GNURUST.13",
+        "GNURUST.19",
+        "GNURUST.REMAINDER.1",
+        "GNURUST.ROUND.1",
+        "GNURUST.BIGNUM.1",
+        "GNURUST.INTPOW.1",
+        "GNURUST.FILE.SEQUENTIAL.1",
+        "GNURUST.FILE.WRITE.1",
+        "GNURUST.FILE.REWRITE.1",
+        "GNURUST.FILEIO.LINESEQ.1",
+        "GNURUST.FILEIO.LINESEQ.2",
+        "GNURUST.FILEIO.SEQ.1",
+        "GNURUST.FILEIO.RELATIVE.1",
+        "GNURUST.FILEIO.SORT.1",
+        "GNURUST.FILEIO.SORTENGINE.1",
+        "GNURUST.FILEIO.MAPPING.1",
+        "GNURUST.COMMON.CBL.1",
+        "GNURUST.MLIO.GENERATE.1",
+        "GNURUST.MLIO.PARSE.1",
+        "GNURUST.SCREENIO.INIT.1",
+        "GNURUST.SCREENIO.DISPLAY.2",
+        "GNURUST.SCREENIO.DISPLAY.3",
+        "GNURUST.SCREENIO.ATTR.1",
+        "GNURUST.SCREENIO.COLOR.1",
+        "GNURUST.SCREENIO.NUMEDIT.1",
+        "GNURUST.SCREENIO.ACCEPT.1",
+        "GNURUST.SCREENIO.ACCEPT.2",
+        "GNURUST.SCREENIO.LINEDIFF.1",
+        "GNURUST.12",
+        "GNURUST.12B",
+        "GNURUST.INITIALIZE.1",
+        "GNURUST.INSPECT.1",
+        "GNURUST.REFMOD.1",
+        "GNURUST.STRING.UNSTRING.1",
+        "GNURUST.ACCEPT.DISPLAY.1",
+        "GNURUST.ACCEPT.DISPLAY.2",
+        "GNURUST.SIZE.ERROR.1",
+    ];
+    let l1 = [
+        "SIZE.ERROR.ATLAS.1",
+        "GNURUST.INTRINSIC.ATLAS.1",
+        "GNURUST.CALL.EXTENSION.ATLAS.1",
+        "GNURUST.INDEXED.FILE.ATLAS.1",
+        "GNURUST.SORT.MERGE.ATLAS.1",
+        "GNURUST.RELATIVE.FILE.ATLAS.1",
+        "GNURUST.DIALECT.RUNTIME.ATLAS.1",
+        "GNURUST.DIRECTIVE.VARIANCE.ATLAS.1",
+        "GNURUST.DECLARATIVES.ATLAS.1",
+        "GNURUST.CALL.LAYOUT.ATLAS.1",
+        "GNURUST.VALUE.NEGZERO.EDGE.1",
+    ];
+    let l4 = [
+        "GNURUST.COMMON.BOUNDCHECK.1",
+        "GNURUST.COMMON.NUMCHECK.1",
+        "GNURUST.FILE.STATUS.1",
+        "GNURUST.FILEIO.VERB.1",
+        "GNURUST.FILEIO.SYS.1",
+        "GNURUST.FILEIO.OPEN.1",
+        "GNURUST.FILEIO.INDEXED.1",
+    ];
     let l5 = ["GNURUST.PROCEDURE.FLOW.ATLAS.1"];
-    let l6 = ["GNURUST.IF.EVALUATE.SLICE.1","GNURUST.FRONTEND.1","GNURUST.IF.NUMERIC.SLICE.1","GNURUST.PERFORM.SLICE.1","GNURUST.TABLE.PERFORM.SLICE.1","GNURUST.SEARCH.TABLE.1","GNURUST.SUBSCRIPT.1","GNURUST.ODO.1","GNURUST.FILE.FLOW.SLICE.1","GNURUST.FILE.FILTER.SLICE.1"];
+    let l6 = [
+        "GNURUST.IF.EVALUATE.SLICE.1",
+        "GNURUST.FRONTEND.1",
+        "GNURUST.IF.NUMERIC.SLICE.1",
+        "GNURUST.PERFORM.SLICE.1",
+        "GNURUST.TABLE.PERFORM.SLICE.1",
+        "GNURUST.SEARCH.TABLE.1",
+        "GNURUST.SUBSCRIPT.1",
+        "GNURUST.ODO.1",
+        "GNURUST.FILE.FLOW.SLICE.1",
+        "GNURUST.FILE.FILTER.SLICE.1",
+    ];
     let mut v = Vec::new();
-    for c in l1 { v.push((1, c)); }
-    for c in l2 { v.push((2, c)); }
-    for c in l3 { v.push((3, c)); }
-    for c in l4 { v.push((4, c)); }
-    for c in l5 { v.push((5, c)); }
-    for c in l6 { v.push((6, c)); }
+    for c in l1 {
+        v.push((1, c));
+    }
+    for c in l2 {
+        v.push((2, c));
+    }
+    for c in l3 {
+        v.push((3, c));
+    }
+    for c in l4 {
+        v.push((4, c));
+    }
+    for c in l5 {
+        v.push((5, c));
+    }
+    for c in l6 {
+        v.push((6, c));
+    }
     v
 }
 
 fn read_json(p: &Path) -> Value {
-    std::fs::read_to_string(p).ok().and_then(|s| serde_json::from_str(&s).ok()).unwrap_or(Value::Null)
+    std::fs::read_to_string(p)
+        .ok()
+        .and_then(|s| serde_json::from_str(&s).ok())
+        .unwrap_or(Value::Null)
 }
 
-const EXCLUDED: [&str; 7] = ["GNURUST.COVERAGE.1","GNURUST.PUBLIC.CORPUS.1","GNURUST.BUILD.PROFILE.1","GNURUST.PUBLIC.GAP.1","GNURUST.LINEAGE.CORPUS.20M.0","GNURUST.LINEAGE.CORPUS.20M.SMOKE","GNURUST.LINEAGE.CORPUS.20M.1"];
+const EXCLUDED: [&str; 10] = [
+    "GNURUST.COVERAGE.1",
+    "GNURUST.PUBLIC.CORPUS.1",
+    "GNURUST.BUILD.PROFILE.1",
+    "GNURUST.PUBLIC.GAP.1",
+    "GNURUST.LINEAGE.CORPUS.20M.0",
+    "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+    "GNURUST.LINEAGE.CORPUS.20M.1",
+    "GNURUST.CCVS85.2",
+    "GNURUST.CCVS85.3",
+    "GNURUST.CCVS85.4",
+];
 
 fn gnucobol_courts(root: &str) -> Vec<String> {
     let cl = read_json(&Path::new(root).join("reports/claim-ladder.json"));
-    cl["courts"].as_array().map(|a| a.iter().filter_map(|c| c["id"].as_str()).filter(|id| {
-        (id.starts_with("GNURUST.") || id.contains("ATLAS")) && !EXCLUDED.contains(id)
-    }).map(String::from).collect()).unwrap_or_default()
+    cl["courts"]
+        .as_array()
+        .map(|a| {
+            a.iter()
+                .filter_map(|c| c["id"].as_str())
+                .filter(|id| {
+                    (id.starts_with("GNURUST.") || id.contains("ATLAS")) && !EXCLUDED.contains(id)
+                })
+                .map(String::from)
+                .collect()
+        })
+        .unwrap_or_default()
 }
 
 fn build(root: &str) -> Value {
     let cov = read_json(&Path::new(root).join("reports/gnurust-coverage.json"));
     let placed = place();
-    let levels: Vec<Value> = LEVELS.iter().map(|(lvl, name, desc)| {
-        let mut courts: Vec<&str> = placed.iter().filter(|(l, _)| l == lvl).map(|(_, c)| *c).collect();
-        courts.sort();
-        json!({"level": lvl, "name": name, "description": desc, "courts": courts})
-    }).collect();
-    let placed_map: serde_json::Map<String, Value> = placed.iter().map(|(l, c)| (c.to_string(), json!(l))).collect();
+    let levels: Vec<Value> = LEVELS
+        .iter()
+        .map(|(lvl, name, desc)| {
+            let mut courts: Vec<&str> = placed
+                .iter()
+                .filter(|(l, _)| l == lvl)
+                .map(|(_, c)| *c)
+                .collect();
+            courts.sort();
+            json!({"level": lvl, "name": name, "description": desc, "courts": courts})
+        })
+        .collect();
+    let placed_map: serde_json::Map<String, Value> = placed
+        .iter()
+        .map(|(l, c)| (c.to_string(), json!(l)))
+        .collect();
     json!({
         "schema": "gnurust-porting-ladder-v1", "court": "PORTING-LADDER",
         "placed": placed_map, "levels": levels,
@@ -76,8 +252,22 @@ fn render_md(b: &Value) -> String {
     ];
     for r in b["levels"].as_array().unwrap() {
         let courts = r["courts"].as_array().unwrap();
-        let cstr = if courts.is_empty() { "—".to_string() } else { courts.iter().map(|c| format!("`{}`", c.as_str().unwrap())).collect::<Vec<_>>().join(", ") };
-        l.push(format!("| **{}** | {} — {} | {} |", r["level"], r["name"].as_str().unwrap(), r["description"].as_str().unwrap(), cstr));
+        let cstr = if courts.is_empty() {
+            "—".to_string()
+        } else {
+            courts
+                .iter()
+                .map(|c| format!("`{}`", c.as_str().unwrap()))
+                .collect::<Vec<_>>()
+                .join(", ")
+        };
+        l.push(format!(
+            "| **{}** | {} — {} | {} |",
+            r["level"],
+            r["name"].as_str().unwrap(),
+            r["description"].as_str().unwrap(),
+            cstr
+        ));
     }
     l.extend(["".to_string(), "## Downstream composition".to_string(), String::new(), b["downstream"].as_str().unwrap().to_string(), String::new(),
         "## Non-claims".to_string(),
@@ -90,7 +280,13 @@ fn render_md(b: &Value) -> String {
 /// sub-court sweeps) return empty and are not gated.
 fn court_ids_in_label(label: &str) -> Vec<String> {
     let tok = label.split_whitespace().next().unwrap_or("");
-    if !tok.contains('.') || !tok.chars().next().map(|c| c.is_ascii_uppercase()).unwrap_or(false) {
+    if !tok.contains('.')
+        || !tok
+            .chars()
+            .next()
+            .map(|c| c.is_ascii_uppercase())
+            .unwrap_or(false)
+    {
         return vec![];
     }
     if let Some(slash) = tok.find('/') {
@@ -111,18 +307,23 @@ fn forensic_findings(root: &str) -> Vec<String> {
     let mut out = Vec::new();
     let cl = read_json(&Path::new(root).join("reports/claim-ladder.json"));
     let courts = cl["courts"].as_array().cloned().unwrap_or_default();
-    let ids: std::collections::HashSet<String> =
-        courts.iter().filter_map(|c| c["id"].as_str().map(String::from)).collect();
+    let ids: std::collections::HashSet<String> = courts
+        .iter()
+        .filter_map(|c| c["id"].as_str().map(String::from))
+        .collect();
 
     // (1) verifier-courts ⊆ ladder-courts
-    let verifier = std::fs::read_to_string(Path::new(root).join("lab/verify-sealed-courts.sh")).unwrap_or_default();
+    let verifier = std::fs::read_to_string(Path::new(root).join("lab/verify-sealed-courts.sh"))
+        .unwrap_or_default();
     for line in verifier.lines() {
         let line = line.trim_start();
         if !line.starts_with("run_sweep ") {
             continue;
         }
         let Some(open) = line.find('"') else { continue };
-        let Some(close) = line[open + 1..].find('"') else { continue };
+        let Some(close) = line[open + 1..].find('"') else {
+            continue;
+        };
         let label = &line[open + 1..open + 1 + close];
         for id in court_ids_in_label(label) {
             // EXCLUDED courts are intentionally off-ladder (coverage meta etc.)
@@ -149,7 +350,9 @@ fn forensic_findings(root: &str) -> Vec<String> {
     // (4) declared oracle matches the admitted GnuCOBOL version
     let oracle = cl["oracle"].as_str().unwrap_or("");
     if !oracle.contains("3.2") {
-        out.push(format!("claim-ladder oracle '{oracle}' does not name the admitted GnuCOBOL 3.2 build"));
+        out.push(format!(
+            "claim-ladder oracle '{oracle}' does not name the admitted GnuCOBOL 3.2 build"
+        ));
     }
     out
 }
@@ -158,7 +361,10 @@ pub fn run(cmd: &str, root: &str) -> i32 {
     match cmd {
         "generate" => {
             let b = build(root);
-            let _ = std::fs::write(Path::new(root).join("reports/porting-ladder.json"), serde_json::to_vec_pretty(&b).unwrap_or_default());
+            let _ = std::fs::write(
+                Path::new(root).join("reports/porting-ladder.json"),
+                serde_json::to_vec_pretty(&b).unwrap_or_default(),
+            );
             let _ = std::fs::write(Path::new(root).join("PORTING-LADDER.md"), render_md(&b));
             println!("PORTING-LADDER.md generated");
             0
@@ -171,8 +377,14 @@ pub fn run(cmd: &str, root: &str) -> i32 {
             }
             let fresh = build(root);
             let mut bad = 0;
-            let placed: std::collections::HashSet<String> = fresh["placed"].as_object().unwrap().keys().cloned().collect();
-            let allc: std::collections::HashSet<String> = gnucobol_courts(root).into_iter().collect();
+            let placed: std::collections::HashSet<String> = fresh["placed"]
+                .as_object()
+                .unwrap()
+                .keys()
+                .cloned()
+                .collect();
+            let allc: std::collections::HashSet<String> =
+                gnucobol_courts(root).into_iter().collect();
             let mut unplaced: Vec<&String> = allc.difference(&placed).collect();
             unplaced.sort();
             for c in unplaced {
@@ -198,7 +410,11 @@ pub fn run(cmd: &str, root: &str) -> i32 {
                 println!("!! {bad} PORTING-LADDER finding(s)");
                 return 1;
             }
-            println!("PORTING-LADDER: {} courts placed across {} levels; fresh", placed.len(), LEVELS.len());
+            println!(
+                "PORTING-LADDER: {} courts placed across {} levels; fresh",
+                placed.len(),
+                LEVELS.len()
+            );
             0
         }
         _ => {

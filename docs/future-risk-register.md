@@ -602,3 +602,10 @@ gets an audit note: a representation fact, not necessarily an accounting fact.
 
 `GNURUST.19` (DIVIDE receiving-field bytes, `reports/RECEIPT-GNURUST-DIVIDE-19.md`) — sealed 0.7.1; divide-by-zero / SIZE ERROR / REMAINDER / COMPUTE / float / binary receiver remain deferred.
 
+**External-corpus observation courts (not conformance):** `GNURUST.CCVS85.2` (materialization +
+real-GnuCOBOL 3.2 oracle baseline over the admitted NIST CCVS85 v4.0 corpus), `GNURUST.CCVS85.3`
+(`gnucobol-rs` cobrun execution baseline with the no-delegation proof), `GNURUST.CCVS85.4`
+(differential comparison + per-unit classification of all 512 indexed units). These record what
+each implementation does with the historical corpus; they carry **no NIST certification, no
+COBOL-85 conformance, and no `cobc`-replacement claim**.
+

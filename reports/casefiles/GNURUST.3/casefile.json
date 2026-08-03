@@ -19,36 +19,6 @@
     "receipt_sha256": "8035c33da9761f573857cf00207dbc191e93556e5f265342c9c1c7d9747c4006"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "PIC+USAGE -> {type,digits,scale,flags,size} matching cobc"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "edited pictures",
-      "usages beyond DISPLAY/COMP-3",
-      "lie prevented: 'a PIC width can be eyeballed' — the field model matches cobc's own attrs"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-PIC-3.md"
-    ],
-    "legacy_sha256": [
-      "6eefd688a42007f7e840c634c9797156a0dcb3cdd763126ebe77ab1a57cc65bc"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/pic_harness.sh` generates a program declaring each PIC as `01 F PIC … [USAGE] [SIGN].`, runs `cobc -C`, and parses the emitted `static const cob_field_attr a_N = {type,digits,scale,flags}` and `cob_field f_M = {size, …, &a_N}`. This is **generated C used only as the witness of the compiler's field-attribute computation** (`GNURUST.GENC.0`) — not a runtime semantic claim — and is cross-checked by runtime `LENGTH OF` (e.g. `S9(5)V99 COMP-3` → 4, `9(8)V9(4) COMP-3` → 7, `99P`→2).",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc` field attrs | **PASS=192 FAIL=0** (`lab/oracle/pic_sweep.sh`): int parts {0,1,2,3,5,8,9,12} × frac {0,1,2,4} × {unsigned, signed-overpunch, signed leading/trailing separate} × {DISPLAY, COMP-3} + alphanumeric `X(n)` widths | | Self-contained `cargo test` | 10/10 (oracle-captured samples; P & edited & garbage fail closed; DOS regression) | | Fuzz (`pic` target, arbitrary strings) | **5,000,000 runs, 0 crashes** after fixing 1 real bug the fuzzer found | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'a PIC width can be eyeballed' — the field model matches cobc's own attrs"
   ],

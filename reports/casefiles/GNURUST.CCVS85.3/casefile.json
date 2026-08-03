@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "per-unit cobrun prepare/run/timeout outcomes + raw stdout/stderr + the no-delegation proof (candidate_phase_isolated, cobrun_links_no_libcob)"
+  ],
+  "case_id": "GNURUST.CCVS85.3",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.50",
+  "damage_if_overclaimed": "presenting candidate acceptance as COBOL-85 support would mislead every migration decision built on this court",
+  "hash_chain": {
+    "inputs_sha256": "7fae19641579268c498c0604f105301f1d766bd848b80b1efaba5998479d78c2"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "93ac2fd23993a1830d6881cbe8a1f94e70244f0ac8a01d6daba1b000d50d8e27",
+    "receipt_sha256": "dbdcd9898758d7856bae54088e656a299d4a21ad4f5c30eb96046228c6c9d15a"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "an unsupported-construct rejection recorded as a pass would fabricate conformance"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-SUITE-PASS-CLAIM",
+    "NEG.CANDIDATE-REJECTION-IS-FAIL-CLOSED-AND-I",
+    "NEG.NO-CLAIM-THAT-ACCEPTANCE-IMPLIES-COBOL-8",
+    "NEG.NO-CLAIM-ABOUT-COBC-COMPILED-CODE-EQUIVA"
+  ],
+  "negative_claims": [
+    "no suite-pass claim",
+    "candidate rejection is fail-closed and is not conformance evidence",
+    "no claim that acceptance implies COBOL-85 conformance",
+    "no claim about cobc/compiled-code equivalence",
+    "lie prevented: an unsupported-construct rejection recorded as a pass would fabricate conformance"
+  ],
+  "oracle": {
+    "detail": "the gnucobol-rs cobrun front-end itself (this gate measures it, it is not an oracle gate)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CCVS85.3"
+  },
+  "positive_claims": [
+    "every applicable materialized CCVS85 unit is run through the current native-Rust front-end/runtime (the canonical cobrun path) with raw stdout/stderr preserved, timeouts and fail-closed rejections recorded, and the mechanical no-delegation proof (oracle prefix renamed away, cobc removed from PATH, cobrun's dynamic dependencies scanned: zero libcob/cobc linkage)"
+  ],
+  "replay": {
+    "command": "bash lab/ccvs85/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "the CCVS85.2 materialized units (same bytes, same site adaptation) + crates/gnucobol-rs/examples/cobrun.rs",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

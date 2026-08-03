@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.CCVS85.4",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.50",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "d2537cadd0d909d27704110d595b06d334a23b1f6ba13ad7d3c302e970bfa62b",
+      "receipt_sha256": "dbdcd9898758d7856bae54088e656a299d4a21ad4f5c30eb96046228c6c9d15a"
+    },
+    "negative_claim_count": 8,
+    "positive_claim_count": 4,
+    "replay": {
+      "command": "bash lab/ccvs85/run-docker.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "90cb47ce6131928f33de21fed99467e8a65ab8e3f39ecc184505875646ec500b"
+      },
+      "name": "reports/casefiles/GNURUST.CCVS85.4/casefile.json"
+    }
+  ]
+}

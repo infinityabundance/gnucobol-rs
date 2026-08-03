@@ -19,39 +19,6 @@
     "receipt_sha256": "a57a93fb5fcdeb4369fed704c6e14e6a0ae49a649c633dcbef960104735b726b"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "single trailing OCCURS DEPENDING ON physical maximum record size matching cobc allocation"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "active/logical occurrence count",
-      "sliding",
-      "runtime validation",
-      "multiple/nested ODO",
-      "lie prevented: 'LENGTH OF proves physical allocation' — ODO physical-max != logical length"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.10 admits ODO only as a physical maximum-layout fact: bytes and offsets are proven, the",
-      "active occurrence count and runtime record meaning remain non-claimed."
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-ODO-10.md"
-    ],
-    "legacy_sha256": [
-      "31487a262898adf5bf55f10564bee151c372c3253c2c5418a902bca952688676"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/odo_sweep.sh` builds one program per case and reads the record's **physical** storage allocation `b_REC[size]` from `cobc -free -C` — deliberately *not* runtime `LENGTH OF`, which returns the unclaimed **logical** length (it reflects the `DEPENDING ON` value, e.g. `0` at init). The Rust `lay_out` total is compared field-for-field.",
-      "[Evidence] | Check | Result | |-------|--------| | ODO physical-max differential sweep vs `cobc b_REC[size]` | **records=30 PASS=30 FAIL=0** (`lab/oracle/odo_sweep.sh`): elementary & group ODO, DISPLAY/COMP-3 elements, bounds `0..5/1..4/0..10/2..3/3..7`, with/without pre-ODO fixed fields | | GNURUST.4 fixed-layout regression sweep | **records=6 PASS=32 FAIL=0** (unchanged) | | Self-contained `cargo test` | layout: 4/4 (ODO physical-max for elementary + group; not-last / bad-depending / multiple-ODO fail closed) | | Fuzz (`layout`, now with ODO rules) | 4M+ runs, 0 crashes | | `fmt` / `clippy -D warnings`"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'LENGTH OF proves physical allocation' — ODO physical-max != logical length"
   ],

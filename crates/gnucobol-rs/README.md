@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-137-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-137-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-140-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-140-blueviolet)
 
 **The entire GnuCOBOL 3.2 `libcob` runtime — every admitted `.c` compilation unit — ported 1:1 to safe Rust and proven byte-identical to a pinned, locally-built GnuCOBOL 3.2 oracle, plus a clean-room interpreter (`cobrun`) that parses and *executes* COBOL programs on that runtime. No C is linked.** "Correct" never means "our reading of a spec" — it means byte-for-byte identical to the admitted oracle (`cobc` + `libcob`), built from pinned source. This crate is `#![forbid(unsafe_code)]`.
 
@@ -77,7 +77,7 @@ The full machine-readable registry of refused surfaces is `reports/negative-capa
 
 Every capability is sealed as a separately-admitted court — bytes, moves, the field model, record layout, files, intrinsics, the executing front-end — where no lower layer implies a higher one. Per-court prose, fixtures, and the exact byte domains are **not duplicated here**: see [`COBOL-PARITY.md`](https://crates.io/crates/gnucobol-rs) for live verb/intrinsic/clause coverage, the receipts under `reports/receipts/`, and the forensic case files under `reports/casefiles/` (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE per court).
 
-The full sealed-court ledger (137 courts) is in [`docs/sealed-courts.md`](https://github.com/infinityabundance/gnucobol-rs/blob/main/docs/sealed-courts.md); the machine-readable source is [`reports/claim-ladder.json`](https://github.com/infinityabundance/gnucobol-rs/blob/main/reports/claim-ladder.json).
+The full sealed-court ledger (140 courts) is in [`docs/sealed-courts.md`](https://github.com/infinityabundance/gnucobol-rs/blob/main/docs/sealed-courts.md); the machine-readable source is [`reports/claim-ladder.json`](https://github.com/infinityabundance/gnucobol-rs/blob/main/reports/claim-ladder.json).
 
 ---
 

@@ -19,43 +19,6 @@
     "receipt_sha256": "08bfa2df3b6c8b759309334426a3890cea7238c4c121a398d46014df3c641ca9"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "COMP-6 field model (PACKED+NO_SIGN_NIBBLE, size ceil(n/2))",
-      "DISPLAY<->COMP-6 MOVE bytes matching cobc/cob_move"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "signed COMP-6 (cobc converts to COMP-3)",
-      "COMP-6 arithmetic",
-      "malformed bytes",
-      "dialect portability",
-      "pre-3.2",
-      "lie prevented: 'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.18 admits COMP-6 only as GnuCOBOL 3.2 unsigned packed-decimal storage and MOVE byte",
-      "semantics: storage size, raw bytes, and DISPLAY round-trip are oracle-proven, while signed forms,",
-      "arithmetic, malformed bytes, dialect portability, and pre-3.2 behavior remain outside the claim."
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-COMP6-18.md"
-    ],
-    "legacy_sha256": [
-      "8c68cbfda83e573d70d801c51714e49c368b94b7614f07e907d8e485793f1360"
-    ],
-    "legacy_unstructured_notes": [
-      "[Versioning note] `pic::Usage` gains a `Comp6` variant — breaking for exhaustive downstream `match`es — so a **semver-minor** bump to **0.7.0**. `Usage` is now `#[non_exhaustive]`, so future usage variants are additive (patch).",
-      "[Versioning] `pic::Usage` gains a `Comp6` variant — breaking for exhaustive downstream `match`es — so a **semver-minor** bump to **0.7.0**. `Usage` is now `#[non_exhaustive]`, so future usage variants are additive (patch).",
-      "[Evidence] | Check | Result | |-------|--------| | COMP-6 field model vs `cobc` | **PASS=432 FAIL=0** (`pic_sweep.sh`; 16 COMP-6 cases over digit widths × scales) | | DISPLAY↔COMP-6 MOVE vs `cob_move` | **PASS=98 FAIL=0** (`comp6_sweep.sh`, both directions) | | `cargo test` (`comp6_field_model`) | green |"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3"
   ],

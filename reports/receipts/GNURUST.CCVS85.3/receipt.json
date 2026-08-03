@@ -1,0 +1,72 @@
+{
+  "byte_domain": "per-unit cobrun (native-Rust front-end + ported runtime) prepare/run/timeout outcomes with raw stdout/stderr preserved",
+  "campaign": "GNURUST.CCVS85.3",
+  "command": {
+    "replay": "bash lab/ccvs85/run-docker.sh"
+  },
+  "conformance_claim": "NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.",
+  "court": "gnucobol-rs execution baseline over the materialized CCVS85 units",
+  "crate_version": "0.8.50",
+  "current_authority": "STATUS.md",
+  "docker": {
+    "base_image": "gnucobol-rs-ccvs85/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
+    "containers": {
+      "pass_a": "ccvs85-20260803T140006Z-183e21a4-a",
+      "pass_b": "ccvs85-20260803T140006Z-183e21a4-b"
+    },
+    "court_image": "gnucobol-rs-ccvs85/court:183e21a48b2917b128e2bbb86022ced7f2e1735f",
+    "daemon_root": "/run/.ro4108755338/media/one/1tb_kingston1/docker/gnucobol-rs/daemon-data",
+    "host_storage_root": "/run/media/one/1tb_kingston1/docker/gnucobol-rs",
+    "isolated_daemon": true,
+    "production_daemon_untouched": true,
+    "run_id": "20260803T140006Z-183e21a4",
+    "socket": "unix:///run/media/one/1tb_kingston1/docker/gnucobol-rs/run/docker.sock",
+    "storage_driver": "overlay2"
+  },
+  "environment": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "SOURCE_DATE_EPOCH": "725846400",
+    "TZ": "UTC0",
+    "libc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.7) 2.39",
+    "uname": "Linux 7.1.4-1-cachyos x86_64"
+  },
+  "generated_at": "2026-08-03T14:02:52Z",
+  "git_commit": "183e21a48b2917b128e2bbb86022ced7f2e1735f",
+  "non_claims": [
+    "no suite-pass claim: this gate records candidate outcomes, it does not certify them",
+    "candidate rejection is fail-closed (unsupported constructs are never silently run)",
+    "no claim that candidate acceptance implies COBOL-85 conformance",
+    "candidate execution never invokes cobc and never links libcob (mechanically enforced and recorded)"
+  ],
+  "oracle": {
+    "built_prefix": "/work/oracle/prefix",
+    "name": "GnuCOBOL",
+    "source_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
+    "version": "cobc (GnuCOBOL) 3.2.0"
+  },
+  "receipt_status": "current",
+  "results": {
+    "candidate_accepted": 15,
+    "candidate_parse_fail": 2,
+    "candidate_results_sha256": "3559c9ded062d8efce692e80894979755993a2ee463da7b0df8e65b4e6f19fe1",
+    "candidate_runtime_fail": 0,
+    "candidate_timeout": 1,
+    "candidate_unsupported": 374,
+    "no_delegation": {
+      "candidate_binary_path": "/work/target/release/examples/cobrun",
+      "candidate_binary_sha256": "7f2f09cb3274465f1ed02406cdeb78f32e8072460e63331b8d22f517b2655b31",
+      "candidate_phase_isolated": true,
+      "candidate_phase_note": "candidate phase isolated from the oracle (no cobc, no libcob visible)",
+      "cobc_unavailable_during_candidate_phase": true,
+      "cobrun_ldd_libcob_hits": 0,
+      "cobrun_links_no_libcob": true,
+      "cobrun_readelf_libcob_hits": 0,
+      "cobrun_version": "cobrun (gnucobol-rs, reproducing GnuCOBOL) 3.2.0",
+      "schema": "gnurust-ccvs85-no-delegation-v1"
+    }
+  },
+  "schema": "gnurust-replay-receipt-v1",
+  "superseded_by": null,
+  "verdict": "pass"
+}

@@ -19,37 +19,6 @@
     "receipt_sha256": "4855d330954bcb4f2ea29d9b07cff574c56e93248c9816e45941a36c35673327"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "COPY <name>. splice matching cobc -P text-word stream (nested, cycle-detected, provenance-mapped)"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "inline/multi-line COPY",
-      "OF/IN library",
-      "SUPPRESS",
-      "lie prevented: 'substring replacement is close enough' — COPY REPLACING is whole-text-word"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-COPY-5.md"
-    ],
-    "legacy_sha256": [
-      "580c9237cf167d07da986b4c7bc01293fd8ea029a99b119e43daca0a1ab766d7"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `cobc -P=<file> -I <copydir> -fsyntax-only <prog.cob>` writes the preprocessed (COPY-expanded) source; the sweep strips its line-number column and tokenizes to text-words. The Rust mirror (`examples/copy_rows`) resolves copybooks from the same directory (mirroring `cobc`'s name+extension search) and tokenizes its expansion. (`cobc -P` is the GnuCOBOL preprocessor's own output — `GNURUST.GENC.0`-style witness of the COPY phase.)",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc -P` | **programs=3, PASS=3 FAIL=0** (`lab/oracle/copy_sweep.sh`): simple COPY, nested COPY (a copybook copying two others), multiple sequential COPYs | | Self-contained `cargo test` | copybook: 3/3 (splice + provenance; nested; recursive/missing/REPLACING fail closed) | | Fuzz (`copybook` target, arbitrary source+copybooks) | **3,000,000 runs, 0 crashes** — cycles / missing / deep nesting all yield typed `CopyError` | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'substring replacement is close enough' — COPY REPLACING is whole-text-word"
   ],

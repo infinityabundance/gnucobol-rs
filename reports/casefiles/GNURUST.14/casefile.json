@@ -19,44 +19,6 @@
     "receipt_sha256": "0c0d81a971de9ade3f054b3338315ef83a0b17bea259286a0427ab4cc37bfd02"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "binary field model",
-      "DISPLAY<->binary MOVE bytes matching cobc/cob_move"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "binary arithmetic",
-      "SYNCHRONIZED",
-      "host-portable endian",
-      "COMP-6",
-      "float",
-      "lie prevented: 'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.14 admits binary numeric usages only as storage and MOVE byte semantics for the admitted",
-      "GnuCOBOL oracle row; it does not claim binary arithmetic, host-portable endian behavior,",
-      "SYNCHRONIZED alignment, or expression semantics."
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-BINARY-14.md"
-    ],
-    "legacy_sha256": [
-      "5dc67b269cf534eb2d173cc01b02b5a4b90a3e46a4682981227a1dd491833c99"
-    ],
-    "legacy_unstructured_notes": [
-      "[Versioning note] `pic::Usage` gains `Comp`/`Comp5`/`CompX` variants — adding variants to a non-`#[non_exhaustive]` public enum can break exhaustive `match`es, so this is a **semver-minor (breaking, pre-1.0)** bump to **0.4.0**. Published companion crates pin `^0.3`, so they are unaffected.",
-      "[Versioning] `pic::Usage` gains `Comp`/`Comp5`/`CompX` variants — adding variants to a non-`#[non_exhaustive]` public enum can break exhaustive `match`es, so this is a **semver-minor (breaking, pre-1.0)** bump to **0.4.0**. Published companion crates pin `^0.3`, so they are unaffected.",
-      "[Oracle] `pic_sweep.sh` (generated-C `cob_field_attr` + `LENGTH OF`) for the field model; `binary_sweep.sh` (libcob `cob_move` via `decimal_harness`) for the MOVE bytes, both directions.",
-      "[Evidence] | Check | Result | |-------|--------| | PIC field-model sweep vs `cobc` | **PASS=416 FAIL=0** (`pic_sweep.sh`); 128 binary cases over the size boundaries × COMP/COMP-5/COMP-X × signed/unsigned × integer/V-scaled | | Binary MOVE sweep vs `cob_move` | **PASS=546 FAIL=0** (`binary_sweep.sh`): DISPLAY↔binary both directions, endian, truncation/masking, sign | | Self-contained `cargo test` | 32 tests incl. `pic::binary_field_model_matches_oracle` | | Fuzz (`cob_move`, binary on the surface) | **10,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8"
   ],

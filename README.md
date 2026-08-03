@@ -9,19 +9,11 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-137-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-137-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-140-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-140-blueviolet)
 
 **`gnucobol-rs` ports the entire GnuCOBOL 3.2 `libcob` runtime — all 13 admitted `.c` files — 1:1 into safe Rust, proven byte-identical to a pinned, locally-built GnuCOBOL 3.2 oracle, and ships a clean-room interpreter (`cobrun`) that parses and *executes* real COBOL programs on that runtime. No C is linked. It is not a library with tests; it is a *compatibility court* where "correct" never means "our reading of a spec" — it means byte-for-byte identical to the admitted cobc (GnuCOBOL) 3.2.0, where every claim is mechanically chained to a replayable receipt, and where every boundary is stated as loudly as every capability.**
 
 COBOL's bedrock is its *byte layout* — COMP-3, zoned decimal, edited PICTURE, fixed-record offsets — far more than its syntax. `gnucobol-rs` reproduces that bedrock exactly, then runs a verified slice of the language on top of it. The discipline is the product: nothing is asserted because we read the spec that way; a claim is admitted only when a live differential sweep against the built oracle produces identical bytes, and sealed only when its evidence — fixtures, receipt, SARIF, in-toto statement, and explicit non-claims — is committed and mechanically re-derivable. If the bytes would diverge today, the gate goes red and publishing is blocked. The core crate is `#![forbid(unsafe_code)]`.
-
-The goal, if useful, is:
-
-1. A parallel implementation following upstream for users that require memory safety,
-2. Performance increases,
-2. More compatible easier installation from crates.io on more OSs as well as,
-3. Deeper forensic receipt proofing and,
-4. The ability to emit ultra verbose forensic residuals at compile. This would allow shims to parse/replay data in new ways (hopefully useful).
 
 ---
 
@@ -30,9 +22,9 @@ The goal, if useful, is:
 - A **native-Rust `libcob`** — the GnuCOBOL 3.2 runtime, ported statement-by-statement and oracle-sealed.
 - A **turn-key interpreter** (`cobrun`) — feed it a `.cob` file, it runs, output matches `cobc -x` byte-for-byte across the corpus sweep. No `cobc`, no `libcob` linked.
 - A **C-ABI shim** (`gnucobol-rs-ffi`) — drop it in where you would link `libcob` (`cob_move`, `cob_get_int`, …).
-- A **compatibility court** — 137 sealed courts, each backed by a forensic case file and a one-command replay.
+- A **compatibility court** — 140 sealed courts, each backed by a forensic case file and a one-command replay.
 
-> **Three axes, never conflated** (as of **gnucobol-rs 0.8.50**): **(1) the `libcob` runtime** — 13/13 files ported 1:1, oracle-sealed = **100%** · **(2) the whole GnuCOBOL 3.2 source tree** — 88/329 files built natively (**27%**), every file accounted-for (0 unevidenced gaps) · **(3) the `cobrun` front-end** — runs a *sweep-verified slice* of the language, every passing program byte-identical to `cobc`, boundaries marked. **“100%” on this page always means axis (1), the runtime — never the whole tree, never the full language.** Authorities: [`FILE-PARITY.md`](FILE-PARITY.md) (axis 2) · [`COBOL-PARITY.md`](COBOL-PARITY.md) (axis 3) · [`STATUS.md`](STATUS.md) (live current-state — wins on any disagreement). 137 sealed courts · MSRV 1.74.
+> **Three axes, never conflated** (as of **gnucobol-rs 0.8.50**): **(1) the `libcob` runtime** — 13/13 files ported 1:1, oracle-sealed = **100%** · **(2) the whole GnuCOBOL 3.2 source tree** — 88/329 files built natively (**27%**), every file accounted-for (0 unevidenced gaps) · **(3) the `cobrun` front-end** — runs a *sweep-verified slice* of the language, every passing program byte-identical to `cobc`, boundaries marked. **“100%” on this page always means axis (1), the runtime — never the whole tree, never the full language.** Authorities: [`FILE-PARITY.md`](FILE-PARITY.md) (axis 2) · [`COBOL-PARITY.md`](COBOL-PARITY.md) (axis 3) · [`STATUS.md`](STATUS.md) (live current-state — wins on any disagreement). 140 sealed courts · MSRV 1.74.
 
 ---
 
@@ -93,7 +85,7 @@ Prefer the runtime as a library? The same packed-decimal and MOVE semantics are 
 
 Live coverage is **generated and gated**, never hand-asserted — see [`COBOL-PARITY.md`](COBOL-PARITY.md) (every verb / intrinsic / clause and what runs) and [`FILE-PARITY.md`](FILE-PARITY.md) (every GnuCOBOL 3.2 source file, accounted for).
 
-> **As of gnucobol-rs 0.8.50 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 137 sealed courts.
+> **As of gnucobol-rs 0.8.50 (2026-06):** 13/13 `libcob` files ported 1:1 · 110/110 intrinsics in the runtime · 140 sealed courts.
 
 | Layer | State |
 |---|---|
@@ -150,7 +142,7 @@ The front-end's own proof harness compiles **and** runs every program in `lab/co
 bash lab/oracle/cobol_frontend_sweep.sh     # 185-program byte sweep, gate FAIL=0
 ```
 
-**Reviewer entry points** — [`STATUS.md`](STATUS.md) (live current-state authority) · [`COBOL-PARITY.md`](COBOL-PARITY.md) / [`FILE-PARITY.md`](FILE-PARITY.md) (live language + file coverage) · [`GAP-ANALYSIS.md`](GAP-ANALYSIS.md) (105/105 catalogued gaps fixed, 0 open) · [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (non-claims) · [`reports/casefiles/`](reports/casefiles/) (137 forensic case files).
+**Reviewer entry points** — [`STATUS.md`](STATUS.md) (live current-state authority) · [`COBOL-PARITY.md`](COBOL-PARITY.md) / [`FILE-PARITY.md`](FILE-PARITY.md) (live language + file coverage) · [`GAP-ANALYSIS.md`](GAP-ANALYSIS.md) (105/105 catalogued gaps fixed, 0 open) · [`reports/negative-capabilities.json`](reports/negative-capabilities.json) (non-claims) · [`reports/casefiles/`](reports/casefiles/) (140 forensic case files).
 
 ---
 
@@ -169,9 +161,9 @@ bash lab/oracle/cobol_frontend_sweep.sh     # 185-program byte sweep, gate FAIL=
 | `GNURUST.LINEAGE.CORPUS.20M.1` | a completed 20M real-`cobc` COBOL-witness lineage run |
 | `GNURUST.FRONTEND.1` | the clean-room front-end: parse + **execute** a subset to `cobc`-identical stdout |
 
-Of the **137** sealed courts, **101** are `GNURUST.*` (the open LGPL runtime + front-end layer); **31** are `KOBOLD.*`; the remainder are framework courts. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json), and each court's full forensic record (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope) lives under [`reports/casefiles/`](reports/casefiles/). 
+Of the **140** sealed courts, **104** are `GNURUST.*` (the open LGPL runtime + front-end layer); **31** are `KOBOLD.*`; the remainder are framework courts. The machine-readable form is [`reports/claim-ladder.json`](reports/claim-ladder.json), and each court's full forensic record (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope) lives under [`reports/casefiles/`](reports/casefiles/). 
 
-The **full 137-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts.md).
+The **full 140-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts.md).
 
 > The `KOBOLD.*` courts belong to downstream, independently-written **Apache-2.0** crates that *use* this runtime (operator trust layer, fixed-record reconciliation, banking packets). They ship and are documented in their own repositories, not here.
 

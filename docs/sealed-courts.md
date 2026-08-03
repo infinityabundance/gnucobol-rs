@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. No legacy source (bo
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Born generated (no legacy source)._
 
-The complete, machine-generated ledger of every sealed court — **137** total (101 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
+The complete, machine-generated ledger of every sealed court — **140** total (104 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
 
 ### Sealed courts (generated from `reports/claim-ladder.json`)
 
@@ -97,9 +97,12 @@ The complete, machine-generated ledger of every sealed court — **137** total (
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |
 | `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
 | `GNURUST.SCREENIO.ACCEPT.2` | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/) |
+| `GNURUST.CCVS85.2` | NIST CCVS85 materialization + real-GnuCOBOL 3.2 oracle baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.2/`](reports/casefiles/GNURUST.CCVS85.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.SCREENIO.DISPLAY.3` | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/) |
+| `GNURUST.CCVS85.3` | NIST CCVS85 gnucobol-rs (cobrun) execution baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.3/`](reports/casefiles/GNURUST.CCVS85.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
+| `GNURUST.CCVS85.4` | NIST CCVS85 differential comparison + per-unit classification | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.4/`](reports/casefiles/GNURUST.CCVS85.4/) |
 | `GNURUST.5` | COPY expansion | ✅ pass | [`reports/casefiles/GNURUST.5/`](reports/casefiles/GNURUST.5/) |
 | `GNURUST.6` | COPY ... REPLACING | ✅ pass | [`reports/casefiles/GNURUST.6/`](reports/casefiles/GNURUST.6/) |
 | `GNURUST.7` | arithmetic ADD/SUB/MUL | ✅ pass | [`reports/casefiles/GNURUST.7/`](reports/casefiles/GNURUST.7/) |

@@ -10,22 +10,22 @@
 > false-confidence risk. (Direct evidence is a token reference; court & transitive evidence are
 > classified separately; byte parity remains the per-court oracle sweeps in `lab/verify-sealed-courts.sh`.)
 
-**Active ported: 1138** · direct 962 (incl. oracle-sweep 213) · transitive 150 · lifecycle 97 · **evidenced (any) 1138** · **unevidenced 0**.
+**Active ported: 1138** · direct 965 (incl. oracle-sweep 215) · transitive 147 · lifecycle 97 · **evidenced (any) 1138** · **unevidenced 0**.
 
 | libcob file | active | direct | oracle | transitive | lifecycle | evidenced | unevidenced |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `numeric.c` | 98 | 69 | 20 | 26 | 6 | 98 | 0 |
-| `move.c` | 56 | 39 | 23 | 15 | 2 | 56 | 0 |
+| `numeric.c` | 97 | 71 | 20 | 23 | 6 | 97 | 0 |
+| `move.c` | 57 | 40 | 23 | 15 | 2 | 57 | 0 |
 | `strings.c` | 34 | 24 | 0 | 8 | 8 | 34 | 0 |
 | `intrinsic.c` | 232 | 173 | 103 | 57 | 8 | 232 | 0 |
 | `cconv.c` | 9 | 8 | 4 | 0 | 2 | 9 | 0 |
-| `termio.c` | 18 | 15 | 3 | 2 | 1 | 18 | 0 |
+| `termio.c` | 18 | 15 | 4 | 2 | 1 | 18 | 0 |
 | `screenio.c` | 105 | 105 | 0 | 0 | 6 | 105 | 0 |
 | `call.c` | 67 | 58 | 1 | 6 | 5 | 67 | 0 |
 | `fileio.c` | 180 | 156 | 36 | 21 | 18 | 180 | 0 |
 | `mlio.c` | 43 | 38 | 5 | 3 | 2 | 43 | 0 |
 | `reportio.c` | 39 | 27 | 0 | 8 | 7 | 39 | 0 |
-| `common.c` | 253 | 249 | 17 | 1 | 31 | 253 | 0 |
+| `common.c` | 253 | 249 | 18 | 1 | 31 | 253 | 0 |
 | `cobgetopt.c` | 4 | 1 | 1 | 3 | 1 | 4 | 0 |
 
 ## Ported but unevidenced (no direct / transitive / lifecycle coverage)

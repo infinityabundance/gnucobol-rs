@@ -3,19 +3,19 @@
   "doctrine": "active parity (a real Rust fn exists) is upgraded to CLASSIFIED evidence parity. DIRECT = the fn name is referenced by a unit test, Kani proof, fuzz target, or oracle-sweep mirror. TRANSITIVE = it is called (per CLANG-AST-PARITY) by a directly-covered function, so it is exercised through that public oracle/test path. LIFECYCLE = an init/exit/free/alloc/cache setup routine (RAII / deliberate no-op in the port). UNEVIDENCED = none of these. Direct evidence is a token reference; court & transitive evidence are classified separately; byte parity remains the per-court oracle sweeps.",
   "files": [
     {
-      "active": 98,
-      "direct": 69,
-      "evidenced_any": 98,
+      "active": 97,
+      "direct": 71,
+      "evidenced_any": 97,
       "file": "numeric.c",
       "lifecycle": 6,
       "oracle": 20,
-      "transitive": 26,
+      "transitive": 23,
       "unevidenced": []
     },
     {
-      "active": 56,
-      "direct": 39,
-      "evidenced_any": 56,
+      "active": 57,
+      "direct": 40,
+      "evidenced_any": 57,
       "file": "move.c",
       "lifecycle": 2,
       "oracle": 23,
@@ -58,7 +58,7 @@
       "evidenced_any": 18,
       "file": "termio.c",
       "lifecycle": 1,
-      "oracle": 3,
+      "oracle": 4,
       "transitive": 2,
       "unevidenced": []
     },
@@ -118,7 +118,7 @@
       "evidenced_any": 253,
       "file": "common.c",
       "lifecycle": 31,
-      "oracle": 17,
+      "oracle": 18,
       "transitive": 1,
       "unevidenced": []
     },
@@ -141,11 +141,11 @@
   "schema": "gnurust-function-evidence-v2",
   "totals": {
     "active": 1138,
-    "direct": 962,
+    "direct": 965,
     "evidenced_any": 1138,
     "lifecycle": 97,
-    "oracle": 213,
-    "transitive": 150,
+    "oracle": 215,
+    "transitive": 147,
     "unevidenced": 0
   }
 }

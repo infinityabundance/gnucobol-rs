@@ -19,37 +19,6 @@
     "receipt_sha256": null
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "whole-text-word pseudo-text replacement matching cobc -P (composes across nesting)"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "REPLACE directive",
-      "LEADING/TRAILING",
-      "identifier operands",
-      "lie prevented: 'substring replacement is close enough' — REPLACING is whole-text-word"
-    ],
-    "legacy_notes_carried_forward": [
-      "(no doctrine blockquote)"
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-REPLACING-6.md"
-    ],
-    "legacy_sha256": [
-      "80a1ad44d0e0a220c116cbe8face7b125c2ad97f88b58f98abdbc3e47f92be19"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `cobc -P` (the GnuCOBOL preprocessor) expands `COPY ... REPLACING`; the sweep strips its line-number column and tokenizes to text-words. The Rust mirror tokenizes its expansion identically.",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc -P` | **programs=7, PASS=7 FAIL=0** (`lab/oracle/copy_sweep.sh`): plain COPY, nested COPY, multiple COPYs (GNURUST.5) + simple replacement, multiple pairs with whole-word non-match, nested composing replacement, multi-line REPLACING statement (GNURUST.6) | | Self-contained `cargo test` | copybook: 4/4 (whole-text-word; nested compose-but-not-operands; fail-closed forms) | | Fuzz (`copybook` target, arbitrary source+copybooks incl. REPLACING) | **4,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate | clean |"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'substring replacement is close enough' — REPLACING is whole-text-word"
   ],

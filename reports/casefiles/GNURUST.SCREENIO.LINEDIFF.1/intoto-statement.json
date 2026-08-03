@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.SCREENIO.LINEDIFF.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.50",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "78efde7959736fe845b1d06621e110db3dcc337b39e3e8dbd8770048d888ba18",
+      "receipt_sha256": "ace90dafb6b6307ebdf0a4806a66cb695df4a0a24cb75fdcc690a01ef7a0162a"
+    },
+    "negative_claim_count": 11,
+    "positive_claim_count": 8,
+    "replay": {
+      "command": "bash lab/oracle/screenio_linediff_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "a67f663f8c989b20a8bd8adc550ff0b3e9d268b2373b922746c6aaf112e4aeee"
+      },
+      "name": "reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/casefile.json"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[package]
+name = "gnucobol-rs-ccvs85"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+authors = ["infinityabundance"]
+description = "GNURUST.CCVS85.2/.3/.4 — NIST CCVS85 differential court harness (materialize, oracle baseline, rust candidate, classification, receipts, gates)"
+license = "LGPL-3.0-or-later"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"

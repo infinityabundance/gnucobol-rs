@@ -19,47 +19,6 @@
     "receipt_sha256": "3d3bd8f53096b511bf73a9fbdce322e910b0469e7b140a81bcb94f1d7370c1dc"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "DIVIDE a BY b GIVING c + a INTO b GIVING c receiver bytes (DISPLAY/COMP-3, signed/scaled/narrowing, truncate",
-      "ROUNDED) matching cobc"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "divide-by-zero / ON SIZE ERROR",
-      "REMAINDER",
-      "COMPUTE / expression evaluation",
-      "procedure control flow",
-      "float",
-      "binary/edited receivers",
-      "other rounding modes",
-      "business correctness",
-      "lie prevented: 'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.19 proves DIVIDE only at the storage boundary: for admitted numeric operands and receiving",
-      "fields, the Rust court writes the same receiver bytes as GnuCOBOL 3.2, while division-by-zero handling,",
-      "SIZE ERROR, REMAINDER, COMPUTE, procedure control flow, floating arithmetic, and business correctness",
-      "remain outside the claim."
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-DIVIDE-19.md"
-    ],
-    "legacy_sha256": [
-      "89935324f83c2633dafb42a60f32d5ac5af33e7c9da309bd1e6fb1a7271fd733"
-    ],
-    "legacy_unstructured_notes": [
-      "[Versioning note] `Op::Divide` + `cob_divide` + `ArithError::DivideByZero` are all **additive** (both enums are `#[non_exhaustive]`) — a **semver-PATCH** to **0.7.1**. This is the first patch demonstrating the 0.7.0 future-proofing: a new arithmetic court lands as a patch, not a minor.",
-      "[Versioning] `Op::Divide` + `cob_divide` + `ArithError::DivideByZero` are all **additive** (both enums are `#[non_exhaustive]`) — a **semver-PATCH** to **0.7.1**. This is the first patch demonstrating the 0.7.0 future-proofing: a new arithmetic court lands as a patch, not a minor.",
-      "[Evidence] | Check | Result | |-------|--------| | DIVIDE receiver bytes vs `cobc` | **PASS=736 FAIL=0** (`divide_sweep.sh`): BY/INTO × trunc/ROUNDED × DISPLAY/COMP-3 × ±/0/scaled/narrowing | | `cargo test` (`divide_*`: trunc, rounded-half-away, negative-toward-zero, half-scale, packed receiver, by-zero) | green |"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'DIVIDE is ordinary decimal division and a mathematically correct quotient is enough' -- receiver scale, truncation toward zero, ROUNDED, sign-of-zero, and receiver bytes all matter"
   ],

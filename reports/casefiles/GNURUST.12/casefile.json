@@ -19,41 +19,6 @@
     "receipt_sha256": "e5a859cbdcbf8259fedab7ef0b1f399112ec45211e6420cb2c9f2593ed11f46f"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "canonical parent bytes for SET condition TO TRUE (first VALUE / range lower bound) matching cobc",
-      "output satisfies eval_88"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "condition expressions",
-      "collating-sensitive ranges",
-      "Procedure Division execution",
-      "lie prevented: 'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.12 admits `SET condition-name TO TRUE` only as an oracle-proven parent-byte construction:",
-      "it computes the storage bytes GnuCOBOL writes to make the admitted LEVEL-88 condition true,",
-      "without claiming Procedure Division execution, FALSE-clause behavior, condition expressions, or",
-      "business validity beyond the selected `VALUE` clause."
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-SET88-12.md"
-    ],
-    "legacy_sha256": [
-      "1adf117e1b4ac341b2103dd2478ae203b26dee6198c522aae952a5f369b19250"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/set_sweep.sh` builds one program per case that `SET`s the condition TRUE and dumps the parent's raw bytes via a `REDEFINES X(size)` (`-free` to avoid the 72-column margin). The Rust mirror runs `set_88_true` and **also self-checks `eval_88`** on its own output before the byte comparison.",
-      "[Evidence] | Check | Result | |-------|--------| | `SET ... TO TRUE` differential sweep vs `cobc` final parent bytes | **total=52 PASS=52 FAIL=0** (`lab/oracle/set_sweep.sh`): alphanumeric single/multi(first)/range(lower); numeric DISPLAY single/multi/range, signed, `V`-scaled; COMP-3 single/range; every Rust output also passes the `eval_88` self-check | | Self-contained `cargo test` | cond: 4/4 (incl. `set_true_picks_first_and_round_trips`) | | Value-court regression after the shared `encode_numeric` refactor | value sweep `PASS=392 FAIL=0` (unchanged) | | Fuzz (`cond`, now also `set_88_true` + round-tr"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes"
   ],

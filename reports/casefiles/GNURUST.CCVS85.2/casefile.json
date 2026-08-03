@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "corpus split + materialized unit bytes (hashes) + per-unit cobc compile/run outcomes, report bytes, and parsed CCVS85 verdict counts"
+  ],
+  "case_id": "GNURUST.CCVS85.2",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.50",
+  "damage_if_overclaimed": "claiming oracle acceptance as conformance would certify a 1993 validation corpus against a compiler the suite was never designed to certify",
+  "hash_chain": {
+    "inputs_sha256": "1d6f3fa1e8f6310bd4ebb159926b9df457c18f70eccbdc9b9019fffe709d0680"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "314026f4eebffcf20bba357c1a9bd68a0e680f828f662f251f5e1f5610917d5b",
+    "receipt_sha256": "dbdcd9898758d7856bae54088e656a299d4a21ad4f5c30eb96046228c6c9d15a"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "an oracle compile rejection is only evidence about THIS GnuCOBOL build, never about the source's validity under other implementations"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-CLAIM-ABOUT-GNUCOBOL-RS-THAT-IS-CCVS8",
+    "NEG.ORACLE-ACCEPTANCE-REJECTION-IS-SPECIFIC",
+    "NEG.NO-NIST-CERTIFICATION",
+    "NEG.NO-COBOL-85-CONFORMANCE-CLAIM",
+    "NEG.CLBRY-DATA-UNITS-ARE-SUPPORT-UNITS-NOT-E"
+  ],
+  "negative_claims": [
+    "no claim about gnucobol-rs (that is CCVS85.3)",
+    "oracle acceptance/rejection is specific to this GnuCOBOL 3.2 build",
+    "no NIST certification",
+    "no COBOL-85 conformance claim",
+    "CLBRY/DATA* units are support units, not executable tests",
+    "lie prevented: an oracle compile rejection is only evidence about THIS GnuCOBOL build, never about the source's validity under other implementations"
+  ],
+  "oracle": {
+    "detail": "pinned GnuCOBOL 3.2.0 built in-container from the admitted source tarball (sha256 8ecc77d0...); never a distribution package",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.CCVS85.2"
+  },
+  "positive_claims": [
+    "the admitted CCVS85 v4.0 corpus is decompressed (hash-verified vs GNURUST.CCVS85.1), split into 512 units, materialized to stable files (SHA-256 per unit, fixed-format columns and col-73-80 tags byte-preserved), copybook/library/data dependencies derived, the documented site-adaptation applied (X-cards, deleted/obsolete markers, RERUN card, CCVS1 counter unification), and every applicable unit compiled and (where possible) executed by the pinned GnuCOBOL 3.2 oracle with per-unit compile/run/report/verdict evidence"
+  ],
+  "replay": {
+    "command": "bash lab/ccvs85/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "lab/corpus/ccvs85/newcob.val.Z (committed, hash-pinned) + lab/docker/ccvs85 + lab/ccvs85/run-docker.sh (one-command replay)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

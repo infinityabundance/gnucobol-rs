@@ -1,0 +1,13 @@
+{
+  "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded)",
+  "pass_a": {
+    "path": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/outputs/20260803T140006Z-183e21a4/pass-a/summary.json",
+    "summary_sha256": "62c737c3341dbc94ce4464ef82172975858c861cc1de87b5730f4fabc7e38f82"
+  },
+  "pass_b": {
+    "path": "/run/media/one/1tb_kingston1/docker/gnucobol-rs/outputs/20260803T140006Z-183e21a4/pass-b/summary.json",
+    "summary_sha256": "e3ba03ebb9ef0245f7b5dfd9cab8e660f064a531a60913909c807c86068aad9c"
+  },
+  "schema": "gnurust-ccvs85-determinism-v1",
+  "stable_summary_identical": true
+}

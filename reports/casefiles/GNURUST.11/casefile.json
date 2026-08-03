@@ -19,42 +19,6 @@
     "receipt_sha256": "0f58bd754c869df6ac8e8425cfdadc1dee5e0a6f152efcce4bc7d8d517be2419"
   },
   "kind": "court-casefile",
-  "legacy_preservation": {
-    "information_loss_review": {
-      "missing_items": [],
-      "reviewed_by": "generated-check (full original preserved byte-for-byte in legacyreports/)",
-      "verdict": "pass"
-    },
-    "legacy_claims_carried_forward": [
-      "condition-name truth vs parent bytes matching cobc IF (alnum padded compare",
-      "numeric value compare",
-      "THRU inclusive)"
-    ],
-    "legacy_information_preserved": true,
-    "legacy_non_claims_carried_forward": [
-      "SET",
-      "condition expressions",
-      "collating-sensitive ranges",
-      "Procedure Division execution",
-      "lie prevented: '88 truth is a string compare' — padded/numeric/THRU semantics are exact"
-    ],
-    "legacy_notes_carried_forward": [
-      "GNURUST.11 admits LEVEL-88 only as a parent-field byte predicate: it proves condition-name truth",
-      "against current storage bytes, not Procedure Division control flow, `SET` semantics, or business",
-      "validity beyond the admitted `VALUE` clauses."
-    ],
-    "legacy_paths": [
-      "research/legacyreports/reports/RECEIPT-GNURUST-COND-11.md"
-    ],
-    "legacy_sha256": [
-      "1e8ab316788719728ae37c4dadf9606ff638bcc357d8e71c0e631d270d1c3e58"
-    ],
-    "legacy_unstructured_notes": [
-      "[Oracle] `lab/oracle/cond_sweep.sh` builds one program per case that `MOVE`s the value into the parent and prints whether the `88` is true (`IF C DISPLAY \"T\" ELSE DISPLAY \"F\"`). The Rust mirror encodes the **same** parent bytes via the sealed `value_image` (`GNURUST.8`) and runs `eval_88` on them — so the predicate is tested against the exact bytes `cobc` evaluated.",
-      "[Evidence] | Check | Result | |-------|--------| | Differential sweep vs `cobc` `IF`-truth | **total=103 PASS=103 FAIL=0** (`lab/oracle/cond_sweep.sh`): alphanumeric single/multi/range (padded), numeric DISPLAY single/multi/range, signed, `V`-scaled, two-range, boundary (THRU inclusive), signed range crossing zero | | Self-contained `cargo test` | cond: 3/3 (alpha padded equality+range; numeric value+range incl. signed scaled; category-mismatch fail closed) | | Fuzz (`cond`, arbitrary parent bytes + value tables) | **6,000,000 runs, 0 crashes** | | `fmt` / `clippy -D warnings` / doc-gate (now runs the LE"
-    ],
-    "preservation_method": "full_file_preserved_plus_embedded_summary"
-  },
   "lie_prevented": [
     "'88 truth is a string compare' — padded/numeric/THRU semantics are exact"
   ],

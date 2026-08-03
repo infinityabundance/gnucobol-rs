@@ -1,0 +1,29 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "case_id": "GNURUST.SCREENIO.COLOR.1",
+    "crate": "gnucobol-rs",
+    "crate_version": "0.8.50",
+    "kind": "court-casefile",
+    "materials": {
+      "claim_ladder_entry_sha256": "da8a8e7a2e37dabd9df14e9a480c8b9c12ddc0f2ddc595c0b9df0e213582a010",
+      "receipt_sha256": "b4842b7ba76017ffd34d1649cce34776c9ef045a13a409499bc1cd0c69943306"
+    },
+    "negative_claim_count": 7,
+    "positive_claim_count": 2,
+    "replay": {
+      "command": "bash lab/oracle/screenio_color_sweep.sh",
+      "exit_code": 0
+    },
+    "verdict": "pass"
+  },
+  "predicateType": "https://kobold/forensic-casefile/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "26cef19db0865df190dd47fff453665195261e2c247b561df4f38518fb1c254d"
+      },
+      "name": "reports/casefiles/GNURUST.SCREENIO.COLOR.1/casefile.json"
+    }
+  ]
+}

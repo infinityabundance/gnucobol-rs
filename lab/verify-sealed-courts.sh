@@ -184,6 +184,12 @@ fi
 # GNURUST.CCVS85.1: external CCVS85 (NIST COBOL-85 validation) corpus CUSTODY -- compressed/decompressed
 # hashes + split-index metadata stable vs the committed receipt. Corpus-custody only; NO conformance claim.
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- ccvs85 check >/dev/null 2>&1 ) && row "GNURUST.CCVS85.1 corpus custody (NIST CCVS85)" "PASS" || { row "GNURUST.CCVS85.1 corpus custody (NIST CCVS85)" "FAIL"; RED=$((RED+1)); }
+# GNURUST.CCVS85.2/.3/.4: the differential court's COMMITTED evidence must pass the host-side gate
+# (corpus identity, all-512-accounted, reconciliation, no-delegation proof, raw evidence, receipt
+# freshness). This gate runs WITHOUT Docker against reports/ccvs85/* + reports/receipts/* and fails
+# only on real problems -- benchmark findings (oracle rejects, candidate unsupported, output
+# divergences) are findings, not failures. Full replay: bash lab/ccvs85/run-docker.sh
+( cd "$ROOT" && cargo run -q -p gnucobol-rs-ccvs85 -- gate check >/dev/null 2>&1 ) && row "GNURUST.CCVS85.2/.3/.4 differential court (evidence gate)" "PASS" || { row "GNURUST.CCVS85.2/.3/.4 differential court (evidence gate)" "FAIL"; RED=$((RED+1)); }
 # GNURUST.COBOL-CORPUS-ATLAS.1: the multi-corpus custody manifest (3 evidence classes) stable vs the
 # committed receipt; re-derives custody for any locally-present corpus (gitignored), green without them.
 ( cd "$ROOT" && cargo run -q -p gnucobol-rs-port-index -- corpus-atlas check >/dev/null 2>&1 ) && row "GNURUST.COBOL-CORPUS-ATLAS.1 (5-corpus custody atlas)" "PASS" || { row "GNURUST.COBOL-CORPUS-ATLAS.1 (5-corpus custody atlas)" "FAIL"; RED=$((RED+1)); }
