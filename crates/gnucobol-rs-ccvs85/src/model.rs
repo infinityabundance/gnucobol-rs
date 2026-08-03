@@ -124,6 +124,9 @@ pub struct CandidateSide {
     pub run_invocation: Option<Invocation>,
     /// The candidate's captured stdout sha256.
     pub stdout_sha256: String,
+    /// The candidate's PRINT-FILE / report bytes sha256 (the in-memory file store materialized by
+    /// `cobrun --dump-files`), when the unit wrote a file -- mirrors the oracle's `report_sha256`.
+    pub report_sha256: String,
 }
 
 /// The comparison of one unit's oracle vs candidate observable results.

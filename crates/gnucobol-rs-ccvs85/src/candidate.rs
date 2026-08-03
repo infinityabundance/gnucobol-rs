@@ -47,6 +47,9 @@ pub fn candidate_unit(
     let src = materialized_root.join(&unit.adapted_path);
     let mut argv = vec![cobrun.to_string_lossy().into_owned()];
     argv.push("-fixed".to_string());
+    // Materialize the in-memory file store into the run dir so the comparison sees the candidate's
+    // FILE output bytes (mirroring the oracle's disk files) -- stdout alone is empty for report units.
+    argv.push(format!("--dump-files={}", run_dir.display()));
     argv.push(src.to_string_lossy().into_owned());
 
     let stdin = if unit.data_dependencies.is_empty() {
@@ -70,6 +73,18 @@ pub fn candidate_unit(
     side.prepare_invocation_rc = inv.exit_code;
     side.stdout_sha256 = inv.stdout_sha256.clone();
     side.run_invocation = Some(inv.clone());
+
+    // The candidate's report file: the file store materialized into the run dir by --dump-files
+    // (the ASSIGN target of the PRINT-FILE, conventionally XXXXX055). Same lookup as the oracle side.
+    let report = crate::oracle::find_report_file(&run_dir);
+    if report.exists() {
+        if let Ok(b) = std::fs::read(&report) {
+            if !b.is_empty() {
+                use sha2::Digest;
+                side.report_sha256 = format!("{:x}", sha2::Sha256::digest(&b));
+            }
+        }
+    }
 
     // cobrun's exit contract: 0 = ran to STOP RUN (RETURN-CODE 0); n = program RETURN-CODE; 2 with
     // an `unsupported:`/`undefined data name:`/`runtime error:` message = fail-closed rejection.

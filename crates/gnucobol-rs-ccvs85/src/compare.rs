@@ -77,10 +77,22 @@ pub fn oracle_primary_output(side: &OracleSide, work_root: &Path) -> Vec<u8> {
     Vec::new()
 }
 
-/// The candidate's primary output: cobrun stdout.
+/// The candidate's primary output: the materialized file store's report (PRINT-FILE) when the unit
+/// wrote one -- mirrored from the oracle side (`--dump-files` puts the files in the run dir beside the
+/// evidence dir) -- else cobrun stdout.
 pub fn candidate_primary_output(side: &CandidateSide) -> Vec<u8> {
     if let Some(inv) = &side.run_invocation {
         if let Some(p) = &inv.stdout_path {
+            let run_dir = Path::new(p).parent().and_then(|e| e.parent()).unwrap_or(Path::new("."));
+            for name in ["REPORT", "XXXXX055"] {
+                let report = run_dir.join(name);
+                if report.exists() {
+                    let b = read_bytes(&report);
+                    if !b.is_empty() {
+                        return b;
+                    }
+                }
+            }
             return read_bytes(Path::new(p));
         }
     }
@@ -422,14 +434,18 @@ fn candidate_generated_files(
 ) -> Vec<String> {
     if let Some(inv) = &candidate.run_invocation {
         if let Some(ev) = &inv.stdout_path {
+            // The candidate's generated files are the materialized file store: `--dump-files` writes
+            // them into the RUN dir (the evidence dir's parent), mirroring the oracle's disk files.
             let ev_dir = Path::new(ev).parent().unwrap_or(work_root);
-            if let Ok(rd) = std::fs::read_dir(ev_dir) {
+            let run_dir = ev_dir.parent().unwrap_or(work_root);
+            if let Ok(rd) = std::fs::read_dir(run_dir) {
                 let mut out = Vec::new();
                 for e in rd.flatten() {
                     let p = e.path();
                     if p.is_file() {
                         if let Some(n) = p.file_name().map(|n| n.to_string_lossy().into_owned()) {
-                            if n != "stdout" && n != "stderr" && n != "REPORT" {
+                            // the report / harness files are the PRIMARY output, never "generated"
+                            if n != "stdout" && n != "stderr" && n != "REPORT" && n != "XXXXX055" {
                                 out.push(n);
                             }
                         }
