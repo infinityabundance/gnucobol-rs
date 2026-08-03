@@ -178,6 +178,8 @@ const FRONTEND_SUBFORMS: &[(&str, &str, &str, &str, &str)] = &[
         "lab/corpus/frontend/p189_multifd_groups.cob", "WRITE TOTAL-REC"),
     ("file I/O", "the CCVS85 report shape -- WRITE of the SECOND FD record with `AFTER ADVANCING n LINES` (n x LF before the record, final LF at close); the 120-byte record + advancing bytes are asserted against the oracle by the sweep", "sealed",
         "lab/corpus/frontend/p191_multifd_advancing.cob", "WRITE DUMMY-RECORD AFTER ADVANCING"),
+    ("PERFORM", "performed-range GO TO semantics -- `PERFORM X THRU X-EXIT` whose body conditionally `GO TO X-EXIT` (jumping to the LAST paragraph of the range) keeps control INSIDE the range and returns to the statement after the PERFORM (the classic CCVS85 report idiom); an in-range jump never re-runs the following section via a body-level jump. Found by the multi-record FD CCVS85 re-run (units such as IC101A looped forever via the mis-resolved jump)", "sealed",
+        "lab/corpus/frontend/p192_perform_range_goto.cob", "GO TO BAIL-OUT-EX"),
 ];
 
 /// The deliberate marker phrase every front-end sub-form fail-closed guard carries, so the gate can

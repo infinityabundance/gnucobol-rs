@@ -3131,6 +3131,39 @@ fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<S
     Ok(false)
 }
 
+/// Run a PERFORMed paragraph range with COBOL's performed-range GO TO semantics: a `GO TO` to a
+/// paragraph INSIDE the range resumes there (control stays within the performed procedure -- the
+/// classic CCVS85 `PERFORM X THRU X-EXIT` ... `GO TO X-EXIT` report idiom), so the PERFORM still
+/// returns to the statement after it when the range end is reached; a `GO TO` to a label OUTSIDE the
+/// range abandons the PERFORM and propagates as a body-level jump; a real halt (STOP RUN / GOBACK /
+/// EXIT PROGRAM) and the EXIT PERFORM / EXIT PERFORM CYCLE signals also propagate. Returns
+/// `Ok(true)` when the range must NOT complete normally (the caller inspects `ctx.goto` /
+/// `perform_flow`); `Ok(false)` when the range ran to its end.
+fn run_range_perform(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+    // paragraph label -> token index, restricted to those inside this range (the legal in-range GO TO targets).
+    let in_range: HashMap<String, usize> = CUR_PARAS.with(|c| {
+        c.borrow().0.iter().filter(|(_, ix)| *ix >= start && *ix < end).map(|(n, ix)| (n.clone(), *ix)).collect()
+    });
+    let mut pos = start;
+    let mut guard = 0u64;
+    loop {
+        if run_range(toks, pos, end, fields, out, ctx)? {
+            let target = ctx.goto.borrow().clone();
+            if let Some(label) = target {
+                if let Some(&ix) = in_range.get(&label) {
+                    ctx.goto.borrow_mut().take();
+                    pos = ix;
+                    guard += 1;
+                    if guard > 10_000_000 { return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into())); }
+                    continue;
+                }
+            }
+            return Ok(true); // real halt, EXIT PERFORM/CYCLE, or an out-of-range GO TO -- propagate
+        }
+        return Ok(false); // the range ran to its end (perform iteration complete)
+    }
+}
+
 /// Execute a program's PROCEDURE DIVISION against `fields`, writing output to `out`. Returns when the body
 /// ends (`STOP RUN` / `GOBACK` / `EXIT PROGRAM` / falling off the end).
 fn run_program_body(
@@ -4260,7 +4293,7 @@ fn exec_perform(
                 }
                 let (start, end) = para_range(&p1, &p2)
                     .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
-                let mut body = |fields: &mut HashMap<String, Field>| run_range(toks, start, end, fields, out, ctx);
+                let mut body = |fields: &mut HashMap<String, Field>| run_range_perform(toks, start, end, fields, out, ctx);
                 if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
                     if let PerfFlow::Halt = perform_flow(ctx) { return Ok(true); } // EXIT PERFORM absorbed
                 }
@@ -4294,7 +4327,7 @@ fn exec_perform(
                 let mut guard = 0u32;
                 loop {
                     if !test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
-                    if run_range(toks, start, end, fields, out, ctx)? {
+                    if run_range_perform(toks, start, end, fields, out, ctx)? {
                         match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => {}, PerfFlow::Halt => return Ok(true) }
                     }
                     if test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
@@ -4304,7 +4337,7 @@ fn exec_perform(
             } else {
                 let n = times.as_deref().and_then(|w| resolve_int(w, fields)).unwrap_or(1);
                 for _ in 0..n.max(0) {
-                    if run_range(toks, start, end, fields, out, ctx)? {
+                    if run_range_perform(toks, start, end, fields, out, ctx)? {
                         match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => continue, PerfFlow::Halt => return Ok(true) }
                     }
                 }
@@ -11022,6 +11055,25 @@ mod tests {
         // A READ fills the shared record area: every record description sees the read bytes (union).
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO MRFILE ORGANIZATION SEQUENTIAL.\n       DATA DIVISION. FILE SECTION.\n       FD F.\n       01 FIRST-REC PIC X(5).\n       01 SECOND-REC PIC X(5).\n       WORKING-STORAGE SECTION. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT F.\n           MOVE \"ABCDE\" TO FIRST-REC.\n           WRITE FIRST-REC.\n           MOVE \"VWXYZ\" TO SECOND-REC.\n           WRITE SECOND-REC.\n           CLOSE F.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY FIRST-REC \";\" SECOND-REC END-READ\n           END-PERFORM.\n           CLOSE F.\n           STOP RUN.\n";
         assert_eq!(run(src), b"ABCDE;ABCDE\nVWXYZ;VWXYZ\n");
+    }
+
+    #[test]
+    fn perform_thru_range_goto_last_paragraph_returns_after_perform() {
+        // The CCVS85 report idiom: `PERFORM X THRU X-EXIT` whose body conditionally `GO TO X-EXIT`
+        // (jumping to the LAST paragraph of the performed range). Control must stay INSIDE the performed
+        // range and return to the statement AFTER the PERFORM -- NOT resume linear execution at X-EXIT
+        // (which re-ran the following section forever; the front-end previously propagated the jump to
+        // the body level, an unbounded loop that only the 1e7-jump guard caught). Oracle-verified.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 CORRECT-A PIC X(5) VALUE SPACES.\n       01 N PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           PERFORM BAIL-OUT THRU BAIL-OUT-EX.\n           ADD 1 TO N.\n           DISPLAY \"AFTER \" N.\n           STOP RUN.\n       BAIL-OUT.\n           IF CORRECT-A EQUAL TO SPACE GO TO BAIL-OUT-EX.\n           DISPLAY \"BAIL WRITE\".\n       BAIL-OUT-EX.\n           EXIT.\n";
+        assert_eq!(run(src), b"AFTER 1\n");
+    }
+
+    #[test]
+    fn perform_thru_range_internal_goto_stays_in_range() {
+        // A GO TO to a MIDDLE paragraph of the performed range also stays inside the range; the range
+        // completes and the PERFORM returns once (no unbounded body-level jump loop).
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 FLAG PIC X VALUE \"Y\".\n       01 N PIC 9 VALUE 0.\n       PROCEDURE DIVISION.\n           PERFORM P1 THRU P3.\n           DISPLAY \"N=\".\n           DISPLAY N.\n           STOP RUN.\n       P1.\n           ADD 1 TO N.\n           IF FLAG = \"Y\" GO TO P3.\n           ADD 1 TO N.\n       P2.\n           ADD 1 TO N.\n       P3.\n           EXIT.\n";
+        assert_eq!(run(src), b"N=\n1\n");
     }
 
 }
