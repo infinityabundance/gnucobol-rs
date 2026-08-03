@@ -15,6 +15,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 COBOL's bedrock is its *byte layout* — COMP-3, zoned decimal, edited PICTURE, fixed-record offsets — far more than its syntax. `gnucobol-rs` reproduces that bedrock exactly, then runs a verified slice of the language on top of it. The discipline is the product: nothing is asserted because we read the spec that way; a claim is admitted only when a live differential sweep against the built oracle produces identical bytes, and sealed only when its evidence — fixtures, receipt, SARIF, in-toto statement, and explicit non-claims — is committed and mechanically re-derivable. If the bytes would diverge today, the gate goes red and publishing is blocked. The core crate is `#![forbid(unsafe_code)]`.
 
+The goal, if useful, is:
+
+1. A parallel implementation following upstream for users that require memory safety,
+2. Performance increases,
+3. More compatible easier installation from crates.io on more OSs as well as,
+4. Deeper forensic receipt proofing and,
+5. The ability to emit ultra verbose forensic residuals at compile. This would allow shims to parse/replay data in new ways (hopefully useful).
+
 ---
 
 ## What it is, in one minute
