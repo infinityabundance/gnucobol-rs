@@ -12,7 +12,7 @@ name = "cobc-rs"
 path = "src/main.rs"
 
 [dependencies]
-gnucobol-rs = { path = "../gnucobol-rs", version = "0.8.54" }
+gnucobol-rs = { path = "../gnucobol-rs", version = "0.8.55" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"

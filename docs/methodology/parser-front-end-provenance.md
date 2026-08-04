@@ -15,7 +15,7 @@ has used the word in two different places: correctly for the RUNTIME's opposite 
 derivative, see [`libcob-rust-port.md`](libcob-rust-port.md)) and as the author's claim for the
 PARSER. The audit below separates what the committed evidence proves from what it does not.
 
-> Generated document (TRUST.4.DOCS) at gnucobol-rs 0.8.54. Verdict in one line: the parser
+> Generated document (TRUST.4.DOCS) at gnucobol-rs 0.8.55. Verdict in one line: the parser
 > is **independently written per the author's committed origin claim**; **strict clean-room
 > process separation cannot be independently verified from the committed record** because the
 > tooling and consulted-materials history is UNKNOWN.
