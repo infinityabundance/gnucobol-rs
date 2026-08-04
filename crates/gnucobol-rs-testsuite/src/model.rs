@@ -85,6 +85,15 @@ pub struct TestResultRow {
     pub comparison: ComparisonView,
     pub primary_classification: String,
     pub reason_code: String,
+    /// Diagnostic tests (Phase-3.6 dimension): whether the CANDIDATE rejected the source the oracle
+    /// also rejected (`REJECT`) or accepted it (`ACCEPT`), or whether execution semantics apply
+    /// (`EXEC`). A rejection is the SEMANTICALLY correct verdict even when the message differs.
+    pub semantic_diagnostic_verdict: String,
+    /// Diagnostic tests (Phase-3.6 dimension): whether the candidate's stderr byte-matches the
+    /// oracle's expected stderr for the failing check (`MATCH`), differs (`DIFFERS`), or the check
+    /// did not compare stderr (`N/A`). Exact cobc wording is NOT required for a correct rejection;
+    /// this dimension reports the shape separately.
+    pub diagnostic_shape_parity: String,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

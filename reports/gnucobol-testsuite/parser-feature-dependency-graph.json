@@ -1,0 +1,1710 @@
+{
+ "nodes": [
+  "",
+  "cannot read prog.cob: No such file or directory (os error 2)",
+  "cannot read sub/prog.c: stream did not contain valid UTF-8",
+  "cobc-rs: -fformat=unknown: only fixed/free/auto are supporte",
+  "cobc-rs: COPY expansion failed (fail closed): copybook 'A' n",
+  "cobc-rs: COPY expansion failed (fail closed): copybook 'COPY",
+  "cobc-rs: unsupported: 66 level without RENAMES",
+  "cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integ",
+  "cobc-rs: unsupported: PERFORM VARYING: expected BY",
+  "cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')",
+  "cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat",
+  "cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')",
+  "cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')",
+  "cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')",
+  "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
+  "cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')",
+  "cobc-rs: unsupported: PIC VPP99: ScalingPDeferred",
+  "cobc-rs: unsupported: PIC X(9999999999): BadRepeat",
+  "cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION",
+  "cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
+  "cobc-rs: unsupported: expected data name after a level numbe",
+  "cobc-rs: unsupported: no PROCEDURE DIVISION",
+  "cobc-rs: unsupported: no PROGRAM-ID",
+  "cobc-rs: unsupported: not a numeric literal: ARE",
+  "cobc-rs: unsupported: unrecognized USAGE BIT",
+  "cobc-rs: unsupported: unrecognized USAGE FLOAT",
+  "cobc-rs: unsupported: unrecognized USAGE FLOAT-LONG",
+  "cobc-rs: unsupported: unrecognized USAGE HANDLE",
+  "cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPE",
+  "cobc-rs: unsupported: unsupported level number $SET",
+  "cobc-rs: unsupported: unsupported level number 78",
+  "cobc-rs: unsupported: unsupported level number HEAD",
+  "cobc-rs: unsupported: unsupported level number SCREEN",
+  "cobc-rs: unsupported: unsupported level number SCREEN-STORAG",
+  "cobc-rs: unsupported: verb $SET",
+  "cobc-rs: unsupported: verb A001-LOOP",
+  "cobc-rs: unsupported: verb AFTER",
+  "cobc-rs: unsupported: verb COMMENT",
+  "cobc-rs: unsupported: verb DEC-1",
+  "cobc-rs: unsupported: verb E1,",
+  "cobc-rs: unsupported: verb END-OF-FILE-SWITCH",
+  "cobc-rs: unsupported: verb END-OF-PAGE",
+  "cobc-rs: unsupported: verb IDENTIFICATION",
+  "cobc-rs: unsupported: verb INITIALISATION",
+  "cobc-rs: unsupported: verb KEY",
+  "cobc-rs: unsupported: verb NOT",
+  "cobc-rs: unsupported: verb NOT-DEFINED",
+  "cobc-rs: unsupported: verb P",
+  "cobc-rs: unsupported: verb SEC-1",
+  "cobc-rs: unsupported: verb SUB1",
+  "cobc-rs: unsupported: verb USE",
+  "cobc-rs: unsupported: verb |",
+  "cobc-rs: warning: cannot read dialect config \"cobol2014.conf",
+  "cobrun: undefined data name: 4",
+  "cobrun: undefined data name: ADDRESS",
+  "cobrun: undefined data name: CMP1,",
+  "cobrun: undefined data name: DEFAULT",
+  "cobrun: undefined data name: ENVIRONMENT",
+  "cobrun: undefined data name: FILLER",
+  "cobrun: undefined data name: FUNCTION",
+  "cobrun: undefined data name: L1-3-2(1,",
+  "cobrun: undefined data name: LCL-X",
+  "cobrun: undefined data name: MY-ASCII",
+  "cobrun: undefined data name: MY-FILLER(2:3)",
+  "cobrun: undefined data name: MY-FLD(1:2)",
+  "cobrun: undefined data name: MYFLD",
+  "cobrun: undefined data name: NOT",
+  "cobrun: undefined data name: NULL",
+  "cobrun: undefined data name: NUMS",
+  "cobrun: undefined data name: OMITTED",
+  "cobrun: undefined data name: PRM(1),",
+  "cobrun: undefined data name: RES-TAB(1)",
+  "cobrun: undefined data name: RSLTV2,",
+  "cobrun: undefined data name: SORT-RETURN",
+  "cobrun: undefined data name: TAB1-NR(K),",
+  "cobrun: undefined data name: WS-TRANSPORT-PAY,",
+  "cobrun: undefined data name: X(1),",
+  "cobrun: undefined data name: X-LEFT,",
+  "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
+  "cobrun: unsupported: ACCEPT FROM terminal/console: interacti",
+  "cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained prog",
+  "cobrun: unsupported: CALL \"C$GETPID\": not a contained progra",
+  "cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained progr",
+  "cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained progr",
+  "cobrun: unsupported: CALL \"C$NARG\": not a contained program ",
+  "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained pro",
+  "cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained pro",
+  "cobrun: unsupported: CALL \"C$TOLOWER\": not a contained progr",
+  "cobrun: unsupported: CALL \"C$TOUPPER\": not a contained progr",
+  "cobrun: unsupported: CALL \"CBL_AND\": not a contained program",
+  "cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained p",
+  "cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained ",
+  "cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained",
+  "cobrun: unsupported: CALL \"CBL_EQ\": not a contained program ",
+  "cobrun: unsupported: CALL \"CBL_IMP\": not a contained program",
+  "cobrun: unsupported: CALL \"CBL_NIMP\": not a contained progra",
+  "cobrun: unsupported: CALL \"CBL_NOT\": not a contained program",
+  "cobrun: unsupported: CALL \"D\": not a contained program (exte",
+  "cobrun: unsupported: CALL \"PROG-PTR\": not a contained progra",
+  "cobrun: unsupported: CALL \"STATIC\": not a contained program ",
+  "cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained p",
+  "cobrun: unsupported: CALL \"callee\": fewer USING args than th",
+  "cobrun: unsupported: CALL \"callee1\": not a contained program",
+  "cobrun: unsupported: CALL \"callee2\": not a contained program",
+  "cobrun: unsupported: CALL \"dump\": not a contained program (e",
+  "cobrun: unsupported: CALL \"ent1\": not a contained program (e",
+  "cobrun: unsupported: CALL \"module\": not a contained program ",
+  "cobrun: unsupported: CALL \"modulepart\": not a contained prog",
+  "cobrun: unsupported: CALL \"prog\": not a contained program (e",
+  "cobrun: unsupported: CALL \"setfilename\": not a contained pro",
+  "cobrun: unsupported: COMPUTE without '='",
+  "cobrun: unsupported: DELETE: `FILE` is not a declared file",
+  "cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pi",
+  "cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinn",
+  "cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implem",
+  "cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc",
+  "cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not",
+  "cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3",
+  "cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: ",
+  "cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.",
+  "cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: c",
+  "cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not impl",
+  "cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned",
+  "cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not ",
+  "cobrun: unsupported: INSPECT REPLACING: unrecognized mode `T",
+  "cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode",
+  "cobrun: unsupported: INSPECT region clause near Str([66])",
+  "cobrun: unsupported: MOVE ALL: expected a non-empty literal ",
+  "cobrun: unsupported: N literal: national/bit literals are a ",
+  "cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
+  "cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
+  "cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file",
+  "cobrun: unsupported: OPEN: `INFILE` is not a declared file",
+  "cobrun: unsupported: OPEN: `OUTPUT` is not a declared file",
+  "cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a",
+  "cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared f",
+  "cobrun: unsupported: OPEN: `TEST-FILE` is not a declared fil",
+  "cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a decl",
+  "cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V'",
+  "cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')",
+  "cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",
+  "cobrun: unsupported: PIC : Empty",
+  "cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')",
+  "cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')",
+  "cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')",
+  "cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')",
+  "cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')",
+  "cobrun: unsupported: PIC VP9: ScalingPDeferred",
+  "cobrun: unsupported: PIC VPP99: ScalingPDeferred",
+  "cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
+  "cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY",
+  "cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric i",
+  "cobrun: unsupported: SET CB TO <value>: target is not a nume",
+  "cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN S",
+  "cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target",
+  "cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WH",
+  "cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is ",
+  "cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cob",
+  "cobrun: unsupported: SORT: `ROW1` is not a declared file",
+  "cobrun: unsupported: SORT: `TBL` is not a declared file",
+  "cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONA",
+  "cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record",
+  "cobrun: unsupported: a group MOVE is distributed across its ",
+  "cobrun: unsupported: condition: missing left operand",
+  "cobrun: unsupported: condition: unrecognized relational oper",
+  "cobrun: unsupported: expected data name after a level number",
+  "cobrun: unsupported: expected program name after PROGRAM-ID",
+  "cobrun: unsupported: invalid hex digit in X literal",
+  "cobrun: unsupported: no PROCEDURE DIVISION",
+  "cobrun: unsupported: not a numeric literal: (2",
+  "cobrun: unsupported: not a numeric literal: -",
+  "cobrun: unsupported: not a numeric literal: /",
+  "cobrun: unsupported: not a numeric literal: 1,1,1",
+  "cobrun: unsupported: not a numeric literal: 1,23E0",
+  "cobrun: unsupported: not a numeric literal: 17:5",
+  "cobrun: unsupported: not a numeric literal: ALL",
+  "cobrun: unsupported: not a numeric literal: AT",
+  "cobrun: unsupported: not a numeric literal: B",
+  "cobrun: unsupported: not a numeric literal: FAILED",
+  "cobrun: unsupported: not a numeric literal: FOO,",
+  "cobrun: unsupported: not a numeric literal: FUNCTION",
+  "cobrun: unsupported: not a numeric literal: H",
+  "cobrun: unsupported: not a numeric literal: INVALID-LINE",
+  "cobrun: unsupported: not a numeric literal: JSON-CODE",
+  "cobrun: unsupported: not a numeric literal: NULL",
+  "cobrun: unsupported: not a numeric literal: ORT",
+  "cobrun: unsupported: not a numeric literal: PARM-STR",
+  "cobrun: unsupported: not a numeric literal: SIZE",
+  "cobrun: unsupported: not a numeric literal: SPACE",
+  "cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET",
+  "cobrun: unsupported: not a numeric literal: WHEN-COMPILED",
+  "cobrun: unsupported: not a numeric literal: WITHPAR(1)",
+  "cobrun: unsupported: not a numeric literal: X",
+  "cobrun: unsupported: not a numeric literal: X-ALL",
+  "cobrun: unsupported: not a numeric literal: Z",
+  "cobrun: unsupported: not a numeric literal: Z-ASC",
+  "cobrun: unsupported: reference-modification length 'REC-SIZE",
+  "cobrun: unsupported: subscript '(3 + 1) / 2' is not an integ",
+  "cobrun: unsupported: trailing tokens in condition at )",
+  "cobrun: unsupported: trailing tokens in condition at +",
+  "cobrun: unsupported: unrecognized USAGE BINARY-C-LONG",
+  "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+  "cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9",
+  "cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16",
+  "cobrun: unsupported: unrecognized USAGE FLOAT-LONG",
+  "cobrun: unsupported: unrecognized USAGE FLOAT-SHORT",
+  "cobrun: unsupported: unrecognized USAGE INT",
+  "cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER",
+  "cobrun: unsupported: unrecognized USAGE SIGNED-INT",
+  "cobrun: unsupported: unsupported level number $SET",
+  "cobrun: unsupported: unsupported level number --",
+  "cobrun: unsupported: unsupported level number 78",
+  "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
+  "cobrun: unsupported: unsupported level number TAT-FILE1",
+  "cobrun: unsupported: verb CHAINING",
+  "cobrun: unsupported: verb END",
+  "cobrun: unsupported: verb IDENTIFICATION",
+  "cobrun: unsupported: verb RETURNING",
+  "cobrun: unsupported: verb T"
+ ],
+ "edges": [
+  {
+   "diagnostic": "",
+   "at_source": "syn_misc.at",
+   "count": 62
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_file.at",
+   "count": 22
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_definition.at",
+   "count": 21
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_definition.at",
+   "count": 21
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_misc.at",
+   "count": 18
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_redefines.at",
+   "count": 14
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
+   "at_source": "syn_misc.at",
+   "count": 12
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_occurs.at",
+   "count": 11
+  },
+  {
+   "diagnostic": "",
+   "at_source": "run_misc.at",
+   "count": 11
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_literals.at",
+   "count": 10
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number 78",
+   "at_source": "run_file.at",
+   "count": 10
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_value.at",
+   "count": 9
+  },
+  {
+   "diagnostic": "",
+   "at_source": "run_extensions.at",
+   "count": 9
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number 78",
+   "at_source": "data_packed.at",
+   "count": 9
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_functions.at",
+   "count": 8
+  },
+  {
+   "diagnostic": "",
+   "at_source": "run_fundamental.at",
+   "count": 8
+  },
+  {
+   "diagnostic": "cobrun: unsupported: DELETE: `FILE` is not a declared file",
+   "at_source": "run_file.at",
+   "count": 8
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_move.at",
+   "count": 7
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number SCREEN",
+   "at_source": "syn_screen.at",
+   "count": 7
+  },
+  {
+   "diagnostic": "cobrun: unsupported: N literal: national/bit literals are a ",
+   "at_source": "run_fundamental.at",
+   "count": 7
+  },
+  {
+   "diagnostic": "cobrun: unsupported: no PROCEDURE DIVISION",
+   "at_source": "run_misc.at",
+   "count": 7
+  },
+  {
+   "diagnostic": "",
+   "at_source": "configuration.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_subscripts.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_file.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')",
+   "at_source": "syn_move.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_screen.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
+   "at_source": "run_fundamental.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+   "at_source": "run_fundamental.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+   "at_source": "data_packed.at",
+   "count": 6
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_reportwriter.at",
+   "count": 5
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb USE",
+   "at_source": "syn_misc.at",
+   "count": 5
+  },
+  {
+   "diagnostic": "",
+   "at_source": "used_binaries.at",
+   "count": 4
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file",
+   "at_source": "run_file.at",
+   "count": 4
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a decl",
+   "at_source": "run_reportwriter.at",
+   "count": 4
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: FUNCTION",
+   "at_source": "run_functions.at",
+   "count": 4
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number 78",
+   "at_source": "run_extensions.at",
+   "count": 4
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+   "at_source": "data_binary.at",
+   "count": 4
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_refmod.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_multiply.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_screen.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SORT: `TBL` is not a declared file",
+   "at_source": "run_misc.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: expected program name after PROGRAM-ID",
+   "at_source": "run_misc.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
+   "at_source": "run_misc.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: verb CHAINING",
+   "at_source": "run_file.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: FOO,",
+   "at_source": "run_reportwriter.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `OUTPUT` is not a declared file",
+   "at_source": "run_reportwriter.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OCCURS max UNBOUNDED is not an integer",
+   "at_source": "run_extensions.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
+   "at_source": "run_extensions.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
+   "at_source": "data_packed.at",
+   "count": 3
+  },
+  {
+   "diagnostic": "cannot read prog.cob: No such file or directory (os error 2)",
+   "at_source": "configuration.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROGRAM-ID",
+   "at_source": "syn_definition.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb USE",
+   "at_source": "syn_file.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb END-OF-FILE-SWITCH",
+   "at_source": "syn_reportwriter.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_reportwriter.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE HANDLE",
+   "at_source": "syn_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC VPP99: ScalingPDeferred",
+   "at_source": "syn_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE BIT",
+   "at_source": "syn_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number $SET",
+   "at_source": "syn_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_set.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROGRAM-ID",
+   "at_source": "syn_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: no PROCEDURE DIVISION",
+   "at_source": "syn_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
+   "at_source": "run_fundamental.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
+   "at_source": "run_fundamental.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-SHORT",
+   "at_source": "run_fundamental.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: ACCEPT FROM terminal/console: interacti",
+   "at_source": "run_accept.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
+   "at_source": "run_accept.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: NULL",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"callee\": fewer USING args than th",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET CB TO <value>: target is not a nume",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: verb RETURNING",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number 78",
+   "at_source": "run_misc.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
+   "at_source": "run_file.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_CREATE_DIR\": not a contained ",
+   "at_source": "run_file.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC : Empty",
+   "at_source": "run_reportwriter.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "",
+   "at_source": "run_reportwriter.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "",
+   "at_source": "run_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: Z",
+   "at_source": "run_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
+   "at_source": "run_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
+   "at_source": "run_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: SPACE",
+   "at_source": "run_functions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: NULL",
+   "at_source": "run_extensions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: expected program name after PROGRAM-ID",
+   "at_source": "run_extensions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: no PROCEDURE DIVISION",
+   "at_source": "run_extensions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: verb CHAINING",
+   "at_source": "run_extensions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$GETPID\": not a contained progra",
+   "at_source": "run_extensions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')",
+   "at_source": "run_extensions.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC VPP99: ScalingPDeferred",
+   "at_source": "run_ml.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number 78",
+   "at_source": "data_display.at",
+   "count": 2
+  },
+  {
+   "diagnostic": "cannot read sub/prog.c: stream did not contain valid UTF-8",
+   "at_source": "used_binaries.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cannot read prog.cob: No such file or directory (os error 2)",
+   "at_source": "used_binaries.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: warning: cannot read dialect config \"cobol2014.conf",
+   "at_source": "configuration.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: -fformat=unknown: only fixed/free/auto are supporte",
+   "at_source": "configuration.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: COPY expansion failed (fail closed): copybook 'COPY",
+   "at_source": "syn_copy.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb IDENTIFICATION",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb NOT-DEFINED",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PROG: no PROCEDURE DIVISION",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N')",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPE",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb INITIALISATION",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb KEY",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb USE",
+   "at_source": "syn_definition.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integ",
+   "at_source": "syn_occurs.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "",
+   "at_source": "syn_occurs.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: 66 level without RENAMES",
+   "at_source": "syn_redefines.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: not a numeric literal: ARE",
+   "at_source": "syn_value.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')",
+   "at_source": "syn_value.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')",
+   "at_source": "syn_value.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
+   "at_source": "syn_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb A001-LOOP",
+   "at_source": "syn_reportwriter.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
+   "at_source": "syn_refmod.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: expected data name after a level numbe",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC X(9999999999): BadRepeat",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb COMMENT",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb |",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb DEC-1",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE FLOAT",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb END-OF-PAGE",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: COPY expansion failed (fail closed): copybook 'A' n",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb SEC-1",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number SCREEN-STORAG",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb AFTER",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number HEAD",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb SUB1",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb $SET",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb P",
+   "at_source": "syn_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
+   "at_source": "syn_move.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N')",
+   "at_source": "syn_move.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unsupported level number 78",
+   "at_source": "syn_move.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: unrecognized USAGE FLOAT-LONG",
+   "at_source": "syn_move.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb NOT",
+   "at_source": "syn_screen.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb IDENTIFICATION",
+   "at_source": "syn_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: verb E1,",
+   "at_source": "syn_literals.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')",
+   "at_source": "syn_literals.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: 1,23E0",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X')",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number --",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: FAILED",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: ORT",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number 78",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"modulepart\": not a contained prog",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"module\": not a contained program ",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"PROG-PTR\": not a contained progra",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: FILLER",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WH",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: RES-TAB(1)",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: ENVIRONMENT",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE INT",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC VP9: ScalingPDeferred",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V'",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: condition: unrecognized relational oper",
+   "at_source": "run_fundamental.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: subscript '(3 + 1) / 2' is not an integ",
+   "at_source": "run_subscripts.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: FUNCTION",
+   "at_source": "run_subscripts.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: NOT",
+   "at_source": "run_subscripts.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cob",
+   "at_source": "run_subscripts.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: PARM-STR",
+   "at_source": "run_subscripts.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: expected data name after a level number",
+   "at_source": "run_refmod.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: X(1),",
+   "at_source": "run_initialize.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: MY-FILLER(2:3)",
+   "at_source": "run_initialize.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: MY-FLD(1:2)",
+   "at_source": "run_initialize.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+   "at_source": "run_initialize.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: 1,1,1",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: COMPUTE without '='",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: LCL-X",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: Z",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: -",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: verb T",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: X-ALL",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: trailing tokens in condition at +",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"callee1\": not a contained program",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: verb IDENTIFICATION",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained pro",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: MY-ASCII",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-LONG",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PERFORM VARYING: expected BY",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: condition: missing left operand",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: PRM(1),",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: TAB1-NR(K),",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SORT: `ROW1` is not a declared file",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"callee2\": not a contained program",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"ent1\": not a contained program (e",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is ",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: MYFLD",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: condition: unrecognized relational oper",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: ADDRESS",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"STATIC\": not a contained program ",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: Z-ASC",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric i",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: AT",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: INVALID-LINE",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"D\": not a contained program (exte",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: X-LEFT,",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"_SUB-PROG_NOW\": not a contained p",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: RSLTV2,",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number $SET",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: CMP1,",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE SIGNED-INT",
+   "at_source": "run_misc.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: OMITTED",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: expected program name after PROGRAM-ID",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not ",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `TEST-FILE` is not a declared fil",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `INFILE` is not a declared file",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: verb END",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_CREATE_FILE\": not a contained",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_COPY_FILE\": not a contained p",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: condition: missing left operand",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN S",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: trailing tokens in condition at )",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: reference-modification length 'REC-SIZE",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number TAT-FILE1",
+   "at_source": "run_file.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared f",
+   "at_source": "run_reportwriter.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a",
+   "at_source": "run_reportwriter.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: NUMS",
+   "at_source": "run_reportwriter.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: condition: unrecognized relational oper",
+   "at_source": "run_reportwriter.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: WS-TRANSPORT-PAY,",
+   "at_source": "run_reportwriter.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: MOVE ALL: expected a non-empty literal ",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONA",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pi",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinn",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: /",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: ",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: c",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not impl",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE FLOAT-LONG",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: (2",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: invalid hex digit in X literal",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: 17:5",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: WITHPAR(1)",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implem",
+   "at_source": "run_functions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: B",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: H",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: SIZE",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: WHEN-COMPILED",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: L1-3-2(1,",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: DEFAULT",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"setfilename\": not a contained pro",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: 4",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: expected data name after a level number",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"prog\": not a contained program (e",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: invalid hex digit in X literal",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$NARG\": not a contained program ",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$PARAMSIZE\": not a contained pro",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$CALLEDBY\": not a contained prog",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$JUSTIFY\": not a contained progr",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$PRINTABLE\": not a contained pro",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$MAKEDIR\": not a contained progr",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$TOUPPER\": not a contained progr",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"C$TOLOWER\": not a contained progr",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_AND\": not a contained program",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_IMP\": not a contained program",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_NIMP\": not a contained progra",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_NOT\": not a contained program",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"CBL_EQ\": not a contained program ",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-C-LONG",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unsupported level number LOCAL-STORAGE",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: undefined data name: SORT-RETURN",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L')",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: INSPECT REPLACING: unrecognized mode `T",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: INSPECT region clause near Str([66])",
+   "at_source": "run_extensions.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: X",
+   "at_source": "run_ml.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: ALL",
+   "at_source": "run_ml.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: JSON-CODE",
+   "at_source": "run_ml.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
+   "at_source": "data_binary.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: a group MOVE is distributed across its ",
+   "at_source": "data_display.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: unrecognized USAGE BINARY-INT",
+   "at_source": "data_display.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: PIC VPPP999: ScalingPDeferred",
+   "at_source": "data_display.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: CALL \"dump\": not a contained program (e",
+   "at_source": "data_packed.at",
+   "count": 1
+  },
+  {
+   "diagnostic": "cobrun: unsupported: not a numeric literal: NULL",
+   "at_source": "data_pointer.at",
+   "count": 1
+  }
+ ]
+}

@@ -122,6 +122,28 @@ fn classify_one(
         }
     };
 
+    // Phase-3.6 diagnostic dimensions: for a failing candidate check, the semantic verdict (the
+    // candidate REJECTED the source -- the correct call when the oracle also rejects invalid input)
+    // is reported separately from the diagnostic SHAPE (whether the stderr bytes match).
+    let (semantic_diagnostic_verdict, diagnostic_shape_parity) = match (oracle, candidate) {
+        (Some(_), Some(c)) if c.status == TestStatus::Fail => {
+            let rejected = matches!(
+                primary.as_str(),
+                "CANDIDATE_CHECK_REJECT"
+                    | "CANDIDATE_PARSE_REJECT"
+                    | "CANDIDATE_LAYOUT_REJECT"
+                    | "WRAPPER_OPTION_UNSUPPORTED"
+                    | "WRAPPER_INVOCATION_MALFORMED"
+                    | "CANDIDATE_UNSUPPORTED"
+                    | "CANDIDATE_MODULE_MODEL_UNSUPPORTED"
+            );
+            let verdict = if rejected { "REJECT" } else { "EXEC" };
+            let parity = stderr_shape_parity(&inputs.candidate_dir, c.number);
+            (verdict.to_string(), parity)
+        }
+        _ => ("N/A".to_string(), "N/A".to_string()),
+    };
+
     TestResultRow {
         test_id: format!("{n:04}"),
         number: n,
@@ -137,6 +159,52 @@ fn classify_one(
         comparison,
         primary_classification: primary,
         reason_code: reason,
+        semantic_diagnostic_verdict,
+        diagnostic_shape_parity,
+    }
+}
+
+/// Compare the candidate's stderr against the oracle's EXPECTED stderr for the first failing check
+/// (the Autotest diff's `---` side is the expected/oracle bytes, the `+++` side the candidate's).
+/// `MATCH` when both sides' stderr bodies are identical; `DIFFERS` when the candidate produced
+/// stderr but it differs; `N/A` when the failing check did not compare stderr.
+fn stderr_shape_parity(dir: &Path, n: usize) -> String {
+    let Some(text) = group_log_text(dir, n).map(|g| g.raw) else {
+        return "N/A".to_string();
+    };
+    let mut expected = Vec::new();
+    let mut actual = Vec::new();
+    let mut in_expected = false;
+    let mut in_actual = false;
+    for line in text.lines() {
+        if line.starts_with("--- ") {
+            in_expected = line.contains("stderr");
+            in_actual = false;
+            continue;
+        }
+        if line.starts_with("+++ ") {
+            in_actual = line.contains("stderr");
+            in_expected = false;
+            continue;
+        }
+        if in_expected && (line.starts_with("+") || line.starts_with("-") || line.starts_with("@@"))
+        {
+            let body = line.trim_start_matches(['+', '-']);
+            if !line.starts_with("@@") && !body.is_empty() {
+                expected.push(body.to_string());
+            }
+        }
+        if in_actual && line.starts_with('+') && !line.starts_with("+++") {
+            actual.push(line[1..].to_string());
+        }
+    }
+    if expected.is_empty() && actual.is_empty() {
+        return "N/A".to_string();
+    }
+    if expected == actual {
+        "MATCH".to_string()
+    } else {
+        "DIFFERS".to_string()
     }
 }
 
@@ -520,6 +588,8 @@ pub fn write_reports(
                 "candidate_status": r.candidate.run,
                 "primary_classification": r.primary_classification,
                 "reason_code": r.reason_code,
+                "semantic_diagnostic_verdict": r.semantic_diagnostic_verdict,
+                "diagnostic_shape_parity": r.diagnostic_shape_parity,
             })
         })
         .collect();

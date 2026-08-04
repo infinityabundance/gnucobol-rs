@@ -1,0 +1,221 @@
+diagnostic,phase,count,example_test_id
+,checker,221,0002
+cobc-rs: unsupported: no PROCEDURE DIVISION,checker,63,0073
+cobrun: unsupported: unsupported level number 78,data-layout,28,0532
+cobrun: unsupported: unrecognized USAGE BINARY-INT,data-layout,20,0570
+cobc-rs: unsupported: unsupported level number 78,data-layout,16,0129
+cobrun: unsupported: not a numeric literal: X,grammar,14,0530
+cobrun: unsupported: no PROCEDURE DIVISION,checker,9,0691
+cobc-rs: unsupported: verb USE,grammar,8,0136
+cobrun: unsupported: DELETE: `FILE` is not a declared file,semantic-check,8,0874
+cobc-rs: unsupported: unsupported level number SCREEN,data-layout,7,0422
+cobrun: unsupported: N literal: national/bit literals are a dialect extension boundary,checker,7,0562
+cobrun: unsupported: not a numeric literal: FUNCTION,grammar,7,0579
+cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X'),data-layout,6,0403
+"cobrun: unsupported: CALL ""dump"": not a contained program (external CALL is a boundary)",checker,6,0513
+cobrun: unsupported: not a numeric literal: ALL,grammar,6,0780
+cobrun: unsupported: expected program name after PROGRAM-ID,grammar,6,0790
+cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live cl,checker,5,0555
+cobrun: unsupported: unsupported level number LOCAL-STORAGE,data-layout,5,0677
+cobrun: unsupported: verb CHAINING,grammar,5,0867
+cobc-rs: unsupported: no PROGRAM-ID,checker,4,0096
+cobrun: unsupported: OPEN: `FILE-OPT` is not a declared file,semantic-check,4,0848
+"cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file",semantic-check,4,0960
+cobrun: undefined data name: FUNCTION,name-resolution,4,0991
+cannot read prog.cob: No such file or directory (os error 2),checker,3,0007
+cobrun: unsupported: condition: unrecognized relational operator (expected = > < >= <= <> ,semantic-check,3,0624
+cobrun: unsupported: not a numeric literal: Z,grammar,3,0689
+cobrun: unsupported: SORT: `TBL` is not a declared file,semantic-check,3,0749
+"cobrun: unsupported: not a numeric literal: FOO,",grammar,3,0958
+cobrun: unsupported: OPEN: `OUTPUT` is not a declared file,semantic-check,3,0967
+cobrun: unsupported: not a numeric literal: NULL,grammar,3,1117
+cobrun: unsupported: OCCURS max UNBOUNDED is not an integer,data-layout,3,1127
+cobc-rs: unsupported: verb IDENTIFICATION,grammar,2,0077
+cobc-rs: unsupported: verb END-OF-FILE-SWITCH,grammar,2,0231
+cobc-rs: unsupported: unrecognized USAGE HANDLE,data-layout,2,0292
+cobc-rs: unsupported: PIC VPP99: ScalingPDeferred,data-layout,2,0319
+cobc-rs: unsupported: unrecognized USAGE BIT,data-layout,2,0363
+cobc-rs: unsupported: unsupported level number $SET,data-layout,2,0375
+cobc-rs: unsupported: PIC N: UnsupportedSymbol('N'),data-layout,2,0409
+cobrun: unsupported: unrecognized USAGE FLOAT-SHORT,data-layout,2,0577
+cobrun: unsupported: expected data name after a level number,checker,2,0641
+cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-clai,checker,2,0649
+"cobrun: unsupported: CALL ""C$PARAMSIZE"": not a contained program (external CALL is a bound",checker,2,0709
+cobrun: undefined data name: NULL,name-resolution,2,0716
+cobrun: unsupported: unrecognized USAGE FLOAT-LONG,data-layout,2,0728
+cobrun: unsupported: condition: missing left operand,semantic-check,2,0735
+cobrun: unsupported: SET CB TO <value>: target is not a numeric/index item,checker,2,0774
+cobrun: unsupported: verb RETURNING,grammar,2,0801
+"cobrun: unsupported: CALL ""CBL_CREATE_DIR"": not a contained program (external CALL is a bo",checker,2,0885
+cobrun: unsupported: PIC : Empty,data-layout,2,0954
+cobrun: unsupported: not a numeric literal: SPACE,grammar,2,1089
+cobrun: unsupported: invalid hex digit in X literal,checker,2,1097
+"cobrun: unsupported: CALL ""C$GETPID"": not a contained program (external CALL is a boundary",checker,2,1169
+cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L'),data-layout,2,1209
+cobrun: unsupported: PIC VPP99: ScalingPDeferred,data-layout,2,1222
+cobrun: unsupported: PIC VPPP999: ScalingPDeferred,data-layout,2,1248
+cannot read sub/prog.c: stream did not contain valid UTF-8,checker,1,0005
+"cobc-rs: warning: cannot read dialect config ""cobol2014.conf""; using -std/default",checker,1,0029
+cobc-rs: -fformat=unknown: only fixed/free/auto are supported by the candidate (fail close,checker,1,0048
+cobc-rs: COPY expansion failed (fail closed): copybook 'COPY1' not found,checker,1,0055
+cobc-rs: unsupported: verb NOT-DEFINED,grammar,1,0083
+cobc-rs: unsupported: PROG: no PROCEDURE DIVISION,checker,1,0098
+cobc-rs: unsupported: PIC N(4): UnsupportedSymbol('N'),data-layout,1,0112
+cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION,checker,1,0119
+cobc-rs: unsupported: unrecognized USAGE SOME-VERY-LONG-TYPEDEF-NAME,data-layout,1,0132
+cobc-rs: unsupported: verb INITIALISATION,grammar,1,0134
+cobc-rs: unsupported: verb KEY,grammar,1,0135
+cobc-rs: unsupported: OCCURS count UNBOUNDED is not an integer,data-layout,1,0148
+cobc-rs: unsupported: 66 level without RENAMES,checker,1,0159
+cobc-rs: unsupported: not a numeric literal: ARE,grammar,1,0173
+cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N'),data-layout,1,0182
+cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X'),data-layout,1,0184
+cobc-rs: unsupported: verb A001-LOOP,grammar,1,0237
+cobc-rs: unsupported: expected data name after a level number,checker,1,0260
+cobc-rs: unsupported: PIC X(9999999999): BadRepeat,data-layout,1,0267
+cobc-rs: unsupported: verb COMMENT,grammar,1,0282
+cobc-rs: unsupported: verb |,grammar,1,0286
+cobc-rs: unsupported: verb DEC-1,grammar,1,0288
+cobc-rs: unsupported: unrecognized USAGE FLOAT,data-layout,1,0290
+cobc-rs: unsupported: verb END-OF-PAGE,grammar,1,0306
+cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found,checker,1,0308
+cobc-rs: unsupported: verb SEC-1,grammar,1,0311
+cobc-rs: unsupported: unsupported level number SCREEN-STORAGE,data-layout,1,0364
+cobc-rs: unsupported: verb AFTER,grammar,1,0365
+cobc-rs: unsupported: unsupported level number HEAD,data-layout,1,0366
+cobc-rs: unsupported: verb SUB1,grammar,1,0385
+cobc-rs: unsupported: verb $SET,grammar,1,0394
+cobc-rs: unsupported: verb P,grammar,1,0396
+cobc-rs: unsupported: PIC 0N: UnsupportedSymbol('N'),data-layout,1,0410
+cobc-rs: unsupported: unrecognized USAGE FLOAT-LONG,data-layout,1,0417
+cobc-rs: unsupported: verb NOT,grammar,1,0430
+"cobc-rs: unsupported: verb E1,",grammar,1,0462
+"cobrun: unsupported: not a numeric literal: 1,23E0",grammar,1,0512
+cobrun: unsupported: PIC 0XXXXXX: UnsupportedSymbol('X'),data-layout,1,0518
+cobrun: unsupported: unsupported level number --,data-layout,1,0519
+cobrun: unsupported: not a numeric literal: FAILED,grammar,1,0523
+cobrun: unsupported: not a numeric literal: ORT,grammar,1,0524
+"cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')",data-layout,1,0533
+"cobrun: unsupported: CALL ""modulepart"": not a contained program (external CALL is a bounda",checker,1,0536
+"cobrun: unsupported: CALL ""module"": not a contained program (external CALL is a boundary)",checker,1,0537
+"cobrun: unsupported: CALL ""PROG-PTR"": not a contained program (external CALL is a boundary",checker,1,0543
+cobrun: undefined data name: FILLER,name-resolution,1,0581
+cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WHEN SET TO FALSE` value,checker,1,0582
+cobrun: undefined data name: RES-TAB(1),name-resolution,1,0585
+cobrun: undefined data name: ENVIRONMENT,name-resolution,1,0596
+cobrun: unsupported: unrecognized USAGE INT,data-layout,1,0607
+cobrun: unsupported: PIC VP9: ScalingPDeferred,data-layout,1,0609
+"cobrun: unsupported: PIC $$$$,$$9V99-: UnsupportedSymbol('V')",data-layout,1,0621
+cobrun: unsupported: subscript '(3 + 1) / 2' is not an integer,checker,1,0630
+cobrun: undefined data name: NOT,name-resolution,1,0634
+cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither),checker,1,0636
+cobrun: unsupported: not a numeric literal: PARM-STR,grammar,1,0637
+"cobrun: undefined data name: X(1),",name-resolution,1,0657
+cobrun: undefined data name: MY-FILLER(2:3),name-resolution,1,0664
+cobrun: undefined data name: MY-FLD(1:2),name-resolution,1,0666
+"cobrun: unsupported: not a numeric literal: 1,1,1",grammar,1,0669
+cobrun: unsupported: COMPUTE without '=',checker,1,0674
+cobrun: undefined data name: LCL-X,name-resolution,1,0678
+cobrun: unsupported: not a numeric literal: -,grammar,1,0690
+cobrun: unsupported: verb T,grammar,1,0693
+cobrun: unsupported: not a numeric literal: X-ALL,grammar,1,0695
+cobrun: unsupported: trailing tokens in condition at +,checker,1,0697
+"cobrun: unsupported: CALL ""callee1"": not a contained program (external CALL is a boundary)",checker,1,0702
+cobrun: unsupported: verb IDENTIFICATION,grammar,1,0704
+cobrun: undefined data name: MY-ASCII,name-resolution,1,0713
+cobc-rs: unsupported: PERFORM VARYING: expected BY,checker,1,0729
+"cobrun: undefined data name: PRM(1),",name-resolution,1,0748
+"cobrun: undefined data name: TAB1-NR(K),",name-resolution,1,0750
+cobrun: unsupported: SORT: `ROW1` is not a declared file,semantic-check,1,0751
+"cobrun: unsupported: CALL ""callee2"": not a contained program (external CALL is a boundary)",checker,1,0761
+"cobrun: unsupported: CALL ""ent1"": not a contained program (external CALL is a boundary)",checker,1,0762
+cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is not a numeric/index item,checker,1,0763
+cobrun: undefined data name: MYFLD,name-resolution,1,0765
+cobrun: undefined data name: ADDRESS,name-resolution,1,0767
+"cobrun: unsupported: CALL ""callee"": fewer USING args than the 3 parameters",checker,1,0769
+"cobrun: unsupported: CALL ""STATIC"": not a contained program (external CALL is a boundary)",checker,1,0777
+"cobrun: unsupported: CALL ""callee"": fewer USING args than the 2 parameters",checker,1,0784
+cobrun: unsupported: not a numeric literal: Z-ASC,grammar,1,0788
+cobrun: unsupported: SET ADDRESS UP/DOWN BY: not a numeric index,checker,1,0795
+cobrun: unsupported: not a numeric literal: AT,grammar,1,0797
+cobrun: unsupported: not a numeric literal: INVALID-LINE,grammar,1,0798
+"cobrun: unsupported: CALL ""D"": not a contained program (external CALL is a boundary)",checker,1,0810
+cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat,data-layout,1,0812
+"cobrun: undefined data name: X-LEFT,",name-resolution,1,0815
+"cobrun: unsupported: CALL ""_SUB-PROG_NOW"": not a contained program (external CALL is a bou",checker,1,0817
+"cobrun: undefined data name: RSLTV2,",name-resolution,1,0824
+cobrun: unsupported: unsupported level number $SET,data-layout,1,0828
+cobrun: unsupported: unrecognized USAGE FLOAT-DECIMAL-16,data-layout,1,0834
+"cobrun: undefined data name: CMP1,",name-resolution,1,0835
+cobrun: unsupported: unrecognized USAGE SIGNED-INT,data-layout,1,0846
+cobrun: undefined data name: OMITTED,name-resolution,1,0868
+cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not a field of the record,checker,1,0873
+cobrun: unsupported: OPEN: `TEST-FILE` is not a declared file,semantic-check,1,0878
+cobrun: unsupported: OPEN: `INFILE` is not a declared file,semantic-check,1,0880
+cobrun: unsupported: WRITE `TWO-RECORD`: not an FD record,checker,1,0882
+cobrun: unsupported: verb END,grammar,1,0883
+"cobrun: unsupported: CALL ""CBL_CREATE_FILE"": not a contained program (external CALL is a b",checker,1,0887
+"cobrun: unsupported: CALL ""CBL_COPY_FILE"": not a contained program (external CALL is a bou",checker,1,0889
+cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value,checker,1,0901
+cobrun: unsupported: RELATIVE file `F` has no RELATIVE KEY,checker,1,0909
+cobrun: unsupported: trailing tokens in condition at ),checker,1,0910
+cobrun: unsupported: reference-modification length 'REC-SIZE - 2' is not an integer,checker,1,0911
+cobrun: unsupported: OPEN: `FILE-EXT` is not a declared file,semantic-check,1,0952
+cobrun: unsupported: unsupported level number TAT-FILE1,data-layout,1,0953
+"cobrun: unsupported: OPEN: `SALES-DATA,` is not a declared file",semantic-check,1,0964
+"cobrun: unsupported: OPEN: `PAYROLL-REGISTER-DATA,` is not a declared file",semantic-check,1,0965
+cobrun: undefined data name: NUMS,name-resolution,1,0972
+"cobrun: undefined data name: WS-TRANSPORT-PAY,",name-resolution,1,0981
+cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative,checker,1,0995
+cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) --,data-layout,1,0996
+cobrun: unsupported: FUNCTION DATE-TO-YYYYMMDD requires a pinned COB_CURRENT_DATE,checker,1,1004
+cobrun: unsupported: FUNCTION DAY-TO-YYYYDDD requires a pinned COB_CURRENT_DATE,checker,1,1006
+cobrun: unsupported: not a numeric literal: /,grammar,1,1025
+cobrun: unsupported: PIC N(9): UnsupportedSymbol('N'),data-layout,1,1030
+cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc 3.2 does not implement it (a ,checker,1,1034
+cobrun: unsupported: FUNCTION MODULE-PATH: cobc 3.2 does not implement it (a compile-rejec,checker,1,1051
+cobrun: unsupported: FUNCTION MONETARY-DECIMAL-POINT: cobc 3.2 does not implement it (a co,checker,1,1054
+cobrun: unsupported: FUNCTION MONETARY-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it,checker,1,1055
+cobrun: unsupported: FUNCTION NUMERIC-DECIMAL-POINT: cobc 3.2 does not implement it (a com,checker,1,1056
+cobrun: unsupported: FUNCTION NUMERIC-THOUSANDS-SEPARATOR: cobc 3.2 does not implement it ,checker,1,1057
+cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or,checker,1,1067
+cobrun: unsupported: not a numeric literal: (2,grammar,1,1096
+cobrun: unsupported: not a numeric literal: 17:5,grammar,1,1101
+cobrun: unsupported: FUNCTION YEAR-TO-YYYY requires a pinned COB_CURRENT_DATE,checker,1,1102
+cobrun: unsupported: not a numeric literal: SYSTEM-OFFSET,grammar,1,1104
+cobrun: unsupported: not a numeric literal: WITHPAR(1),grammar,1,1107
+cobrun: unsupported: FUNCTION FUNC: cobc 3.2 does not implement it (a compile-reject) or i,checker,1,1108
+cobrun: unsupported: not a numeric literal: B,grammar,1,1112
+cobrun: unsupported: not a numeric literal: H,grammar,1,1115
+cobrun: unsupported: not a numeric literal: SIZE,grammar,1,1119
+cobrun: unsupported: not a numeric literal: WHEN-COMPILED,grammar,1,1120
+"cobrun: undefined data name: L1-3-2(1,",name-resolution,1,1132
+cobrun: undefined data name: DEFAULT,name-resolution,1,1133
+"cobrun: unsupported: CALL ""setfilename"": not a contained program (external CALL is a bound",checker,1,1135
+cobrun: undefined data name: 4,name-resolution,1,1139
+"cobrun: unsupported: CALL ""prog"": not a contained program (external CALL is a boundary)",checker,1,1143
+"cobrun: unsupported: CALL ""C$NARG"": not a contained program (external CALL is a boundary)",checker,1,1163
+"cobrun: unsupported: CALL ""C$CALLEDBY"": not a contained program (external CALL is a bounda",checker,1,1165
+"cobrun: unsupported: CALL ""C$JUSTIFY"": not a contained program (external CALL is a boundar",checker,1,1166
+"cobrun: unsupported: CALL ""C$PRINTABLE"": not a contained program (external CALL is a bound",checker,1,1167
+"cobrun: unsupported: CALL ""C$MAKEDIR"": not a contained program (external CALL is a boundar",checker,1,1168
+"cobrun: unsupported: CALL ""C$TOUPPER"": not a contained program (external CALL is a boundar",checker,1,1170
+"cobrun: unsupported: CALL ""C$TOLOWER"": not a contained program (external CALL is a boundar",checker,1,1171
+"cobrun: unsupported: CALL ""CBL_AND"": not a contained program (external CALL is a boundary)",checker,1,1174
+"cobrun: unsupported: CALL ""CBL_IMP"": not a contained program (external CALL is a boundary)",checker,1,1176
+"cobrun: unsupported: CALL ""CBL_NIMP"": not a contained program (external CALL is a boundary",checker,1,1177
+"cobrun: unsupported: CALL ""CBL_NOT"": not a contained program (external CALL is a boundary)",checker,1,1178
+"cobrun: unsupported: CALL ""CBL_EQ"": not a contained program (external CALL is a boundary)",checker,1,1179
+cobrun: unsupported: unrecognized USAGE BINARY-C-LONG,data-layout,1,1183
+cobrun: unsupported: unrecognized USAGE PROCEDURE-POINTER,data-layout,1,1185
+cobrun: unsupported: SET ERR-PROC-ADDRESS TO <value>: target is not a numeric/index item,checker,1,1186
+cobrun: undefined data name: SORT-RETURN,name-resolution,1,1203
+cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9,data-layout,1,1206
+cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L'),data-layout,1,1207
+cobrun: unsupported: PIC LX(9): UnsupportedSymbol('L'),data-layout,1,1208
+cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L'),data-layout,1,1210
+cobrun: unsupported: INSPECT TALLYING FOR: unrecognized mode `TRAILING` (expected ALL/LEAD,checker,1,1212
+cobrun: unsupported: INSPECT REPLACING: unrecognized mode `TRAILING` (expected CHARACTERS/,checker,1,1213
+cobrun: unsupported: INSPECT region clause near Str([66]),checker,1,1214
+cobrun: unsupported: not a numeric literal: JSON-CODE,grammar,1,1227
+cobrun: unsupported: a group MOVE is distributed across its leaves by write_field,checker,1,1253
