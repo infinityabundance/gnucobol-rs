@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | per-unit oracle-vs-candidate observable comparison: raw output, canonical output, generated files, exit status, CCVS85 verdict counts |
 | replay command | `bash lab/ccvs85/run-docker.sh` |
-| generated_at | 2026-08-03T21:53:59Z |
-| git_commit | `c1fb0681fc67e73c814da91f478d512228b473f7` |
+| generated_at | 2026-08-04T16:44:33Z |
+| git_commit | `6c961627d8bfff765172661f8d232a56f36305a8` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.
@@ -22,7 +22,7 @@
 ```json
 {
   "by_final_classification": {
-    "GENERATED_FILE_MISMATCH": 16,
+    "GENERATED_FILE_MISMATCH": 8,
     "HARNESS_BLOCKED": 1,
     "NON_EXECUTABLE_DATA": 2,
     "NON_EXECUTABLE_LIBRARY": 119,
@@ -32,29 +32,29 @@
     "ORACLE_TIMEOUT": 1,
     "OUTPUT_MISMATCH": 42,
     "RAW_OUTPUT_MATCH": 27,
-    "RUST_REJECT_PARSE": 55,
-    "RUST_REJECT_RUNTIME_BOUNDARY": 3,
-    "RUST_REJECT_UNSUPPORTED": 161
+    "RUST_REJECT_PARSE": 36,
+    "RUST_REJECT_RUNTIME_BOUNDARY": 1,
+    "RUST_REJECT_UNSUPPORTED": 190
   },
   "canonical_output_match": 0,
-  "comparison_results_sha256": "cc31a0bd31e26da50082b7694a77989ea88298e9e2b4474053c4ea5a0dffcff7",
+  "comparison_results_sha256": "cee01525ba85d6d801069a61bd8bdb8302fec1da7547fd775c8f9489e0753a16",
   "determinism": {
     "note": "summary counts + classifications + reason buckets must be identical across two fresh full runs (timestamps deliberately excluded); per-unit oracle REPORT hashes are compared separately and any drift is recorded + explicitly classified",
     "pass_a": {
-      "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T215114Z-c1fb0681/pass-a/summary.json",
-      "summary_sha256": "29f28751b8b378b492fc653c28f38060a94cb2300d1117b9b4e5f8ff09277a9c"
+      "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260804T164214Z-6c961627/pass-a/summary.json",
+      "summary_sha256": "21fb5b26790a781cae01121c5cf513ef16353c7882ffd86266820f73ca269ccb"
     },
     "pass_b": {
-      "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260803T215114Z-c1fb0681/pass-b/summary.json",
-      "summary_sha256": "3bc028f0b60ddb91c993dc6fbec43ca66048c239c24fd5e2048ce656b6ac6467"
+      "path": "$GNURUST_CCVS85_DOCKER_ROOT/outputs/20260804T164214Z-6c961627/pass-b/summary.json",
+      "summary_sha256": "e4c0b07c36ea8c321d5938e72958f1186166b7e6597e2fb2828813c7fa0b4692"
     },
     "path_notation": "paths are symbolic: $GNURUST_CCVS85_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_CCVS85_DOCKER_ROOT/run-evidence/",
     "report_byte_nondeterminism": [
       {
         "name": "NC214M",
         "note": "oracle REPORT bytes differ between two fresh runs (e.g. a TIME test printing real fractional seconds); the unit is explicitly classified nondeterministic",
-        "pass_a_report_sha256": "49e084051f8af882ac539d85e1bc0c35835d0b3a63430ae4137fdcef3683318e",
-        "pass_b_report_sha256": "8cdad98ea6a07283fc47487e7fe503f7f3866f34c73b846c9b35debaa68e96a8",
+        "pass_a_report_sha256": "bf6988dc0cde779fcf3a74de49056cfffb439361539da910e48e681a27c0827a",
+        "pass_b_report_sha256": "cd939db4536a7852d14d7f7acd41c0b75668778f12104bd9eccc432f5cdd675d",
         "unit_index": 269
       }
     ],
@@ -62,11 +62,11 @@
     "stable_summary_identical": true
   },
   "exit_status_mismatch": 0,
-  "generated_file_mismatch": 16,
+  "generated_file_mismatch": 8,
   "nondeterministic": 1,
   "output_mismatch": 42,
   "raw_output_match": 27,
-  "summary_json_sha256": "bc72cef8a1c9087281672c17342a763ac4bb0b27de73e87b2dfd1cf42ee6013e",
+  "summary_json_sha256": "f2052993818aee0ea9557bb1b41040ba901a4246891f657837bbd204845b61fd",
   "units_accounted": 512
 }
 ```

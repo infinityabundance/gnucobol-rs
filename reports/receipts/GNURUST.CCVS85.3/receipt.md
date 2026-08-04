@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | per-unit cobrun (native-Rust front-end + ported runtime) prepare/run/timeout outcomes with raw stdout/stderr preserved |
 | replay command | `bash lab/ccvs85/run-docker.sh` |
-| generated_at | 2026-08-03T21:53:59Z |
-| git_commit | `c1fb0681fc67e73c814da91f478d512228b473f7` |
+| generated_at | 2026-08-04T16:44:33Z |
+| git_commit | `6c961627d8bfff765172661f8d232a56f36305a8` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted NIST CCVS85 corpus; no NIST certification, no full COBOL-85 conformance, no compiler-replacement claim.
@@ -21,15 +21,15 @@
 
 ```json
 {
-  "candidate_accepted": 87,
-  "candidate_parse_fail": 75,
-  "candidate_results_sha256": "166fabb67eac8a9aa9132409c41f8004276ba790b58955dfbbd765b29a10a75f",
+  "candidate_accepted": 78,
+  "candidate_parse_fail": 39,
+  "candidate_results_sha256": "41ee4aa5eb24365f71ff099f6fcae3f46db50b2eef70126d4e6bb8349cc58ad5",
   "candidate_runtime_fail": 0,
   "candidate_timeout": 0,
-  "candidate_unsupported": 229,
+  "candidate_unsupported": 274,
   "no_delegation": {
     "candidate_binary_path": "/work/target/release/examples/cobrun",
-    "candidate_binary_sha256": "18f2d3d437f70949ad8482b1dbc42bd0610fa89605c506e2ba032c497e2abced",
+    "candidate_binary_sha256": "8e238a489cc6f306c6b35b37d5f30c1b828e445b47a909bea445d59fe2e478e1",
     "candidate_phase_isolated": true,
     "candidate_phase_note": "candidate phase isolated from the oracle (no cobc, no libcob visible)",
     "cobc_unavailable_during_candidate_phase": true,
