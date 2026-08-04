@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.MODULE.CANCEL.1 (court-casefile)
 
-**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (cancel_resets_persisted_working_storage, cancel_of_active_program_is_fatal) · crate `gnucobol-rs` 0.8.54
+**Verdict: PASS** · crates/cobc-rs/tests/module_courts.rs (cancel_resets_persisted_working_storage, cancel_of_active_program_is_fatal) · crate `gnucobol-rs` 0.8.55
 
 - **Oracle:** the admitted suite's CANCEL tests (run_fundamental.at:2277-2341)
 - **Byte domain(s):** module state across CALL/CANCEL, fatal-error stderr + exit code

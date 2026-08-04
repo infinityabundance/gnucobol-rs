@@ -8,7 +8,7 @@
 |-------|-------|
 | campaign | `GNURUST.SCREENIO.DISPLAY.2` |
 | court | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) |
-| crate_version | `0.8.54` |
+| crate_version | `0.8.55` |
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | a positioned DISPLAY (LINE/COLUMN) -> the exact ncurses cursor-movement + field byte stream, across the swept position grid |
 | replay command | `bash lab/oracle/screenio_grid_sweep.sh` |

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MODULE.SEARCH.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "damage_if_overclaimed": "overclaiming search-path parity beyond the tested surface",
   "hash_chain": {
-    "inputs_sha256": "279f163e5988e4a50a0d75cadf98594ccf929020482acc4f777262c595809621"
+    "inputs_sha256": "f0fb90cb805fcbb46b54424d7cdefc40f6e6deb0062e39bbb4ea9ad1e8ba9e90"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "695f3c35c8c22a4ddb00ede0ed9c16ad2cfc831db46a386bcd300e03f21d9921",
-    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
   },
   "kind": "court-casefile",
   "lie_prevented": [

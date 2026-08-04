@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.INDEXED.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "damage_if_overclaimed": "treating the in-memory model as the whole INDEXED runtime would hide the on-disk index format, alternate keys, and real cross-process locking that operational indexed files depend on",
   "hash_chain": {
-    "inputs_sha256": "71d4edc4468d8b4e55cfd66989815cd879349bef8c0b2a7767fb983ba31c560a"
+    "inputs_sha256": "e43970e6fc5d7528870eea2989ab447c8bd15d02e9192e104bce9712d81aa5d3"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "30cc2942040aa04219ba146a2e6ed223a87079930ff4617c344e558a4de1178b",
-    "receipt_sha256": "02e8beb5c96c5c7f06acf422a6077dc1a0abfa87ce89f1d95291ce176794f75c"
+    "receipt_sha256": "2636eecf10d3b44a98a76dc6f1404f90923d868d39372ef7e8fed22a61608276"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "damage_if_overclaimed": "presenting reclassification as implementation would hide the real boundaries",
   "hash_chain": {
-    "inputs_sha256": "f0410e86740db3853291be0d03c814343f1a9cd7d216685f4a6e0411c70ce573"
+    "inputs_sha256": "1622ecf4ebbcb8002b00fc0ad97a7ed313b526023c76d590e0f25f6a832efc3c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "cf0b8ed1553295a04f3141459ebc98fe9e36c7559fa380f54096b0dbff06055d",
-    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.INDEXED.FILE.ATLAS.1 (court-casefile)
 
-**Verdict: PASS** · 9/9 pass, 0 fail · crate `gnucobol-rs` 0.8.54
+**Verdict: PASS** · 9/9 pass, 0 fail · crate `gnucobol-rs` 0.8.55
 
 - **Oracle:** cobc INDEXED file I/O (libcob/fileio.c + ISAM backend)
 - **Byte domain(s):** INDEXED keyed access: random READ by key, key-order retrieval, dup(22)/not-found(23) status, START, DELETE

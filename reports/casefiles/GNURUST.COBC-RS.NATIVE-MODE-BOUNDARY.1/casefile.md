@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1 (court-casefile)
 
-**Verdict: PASS** · docs/generated/cobc-rs-option-compatibility.md + reports/gnucobol-testsuite/unsupported-option-census.{json,md} · crate `gnucobol-rs` 0.8.54
+**Verdict: PASS** · docs/generated/cobc-rs-option-compatibility.md + reports/gnucobol-testsuite/unsupported-option-census.{json,md} · crate `gnucobol-rs` 0.8.55
 
 - **Oracle:** the admitted suite's native-mode tests (used_binaries.at -C/-S/-c)
 - **Byte domain(s):** wrapper option-policy registry + per-test classifications + the invocation census

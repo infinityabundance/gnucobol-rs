@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILEIO.OPEN.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "damage_if_overclaimed": "ignoring the OPEN/CLOSE status (41/42/38/35) lets a program write to an unopened file or silently re-open, corrupting the file or its sequence",
   "hash_chain": {
-    "inputs_sha256": "ee2fd2fa0a4e63d2bc74da0ea7099ec58fcb9172852e6939ee6de660b8150d8b"
+    "inputs_sha256": "2975cf317ed61ca500530028a76255785942701f035a6e521c1fdd36ae5a752d"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "e84c11517f4360b6ce4c81c7ae1500cb0b8838479bc9d9963fd6e9eb5bfd34d8",
-    "receipt_sha256": "f8c563bb40132779974c22417b388aefd42fcc553e235b7d3a35b787b8d20465"
+    "receipt_sha256": "7c2a4d4635d41b1e668abbd92fd443fa8de6157fc14195ee205c3351f5242625"
   },
   "kind": "court-casefile",
   "lie_prevented": [

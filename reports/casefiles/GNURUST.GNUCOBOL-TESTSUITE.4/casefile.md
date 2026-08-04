@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.GNUCOBOL-TESTSUITE.4 (court-casefile)
 
-**Verdict: PASS** · reports/gnucobol-testsuite/* + lab/gnucobol-testsuite/run-docker.sh · crate `gnucobol-rs` 0.8.54
+**Verdict: PASS** · reports/gnucobol-testsuite/* + lab/gnucobol-testsuite/run-docker.sh · crate `gnucobol-rs` 0.8.55
 
 - **Oracle:** the TESTSUITE.1 baseline (re-run, unchanged expectations)
 - **Byte domain(s):** the re-measured ledgers + raw rerun evidence + the boundary-reduction transitions

@@ -1,0 +1,15 @@
+status: not_run
+generated_at: 2026-08-04T18:07:56Z
+note: every shipped crate is #![forbid(unsafe_code)]
+
+
+     Removed 3779 files, 715$GNURUST_REPO1MiB total
+    Checking gnucobol-rs-bdb-format v0$GNURUST_REPO3$GNURUST_REPO0
+{"$message_type":"artifact","artifact":"/run/media/one/1tb_kingston1/gnucobol-rs/target/debug/deps/gnucobol_rs_bdb_format-830501674df76e84$GNURUST_REPOd","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"/run/media/one/1tb_kingston1/gnucobol-rs/target/debug/deps/libgnucobol_rs_bdb_format-830501674df76e84$GNURUST_REPOrmeta","emit":"metadata"}
+    Checking gnucobol-rs v0$GNURUST_REPO8$GNURUST_REPO55 (/run/media/one/1tb_kingston1/gnucobol-rs/crates/gnucobol-rs)
+{"$message_type":"artifact","artifact":"/run/media/one/1tb_kingston1/gnucobol-rs/target/debug/deps/gnucobol_rs-10ef658e7a332c76$GNURUST_REPOd","emit":"dep-info"}
+{"$message_type":"artifact","artifact":"/run/media/one/1tb_kingston1/gnucobol-rs/target/debug/deps/libgnucobol_rs-10ef658e7a332c76$GNURUST_REPOrmeta","emit":"metadata"}
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2$GNURUST_REPO43s
+error: Io(Os { code: 2, kind: NotFound, message: "No such file or directory" }, "/run/media/one/1tb_kingston1/gnucobol-rs/crates/gnucobol-rs-ccvs85/tests/dbg_test$GNURUST_REPOrs")
+

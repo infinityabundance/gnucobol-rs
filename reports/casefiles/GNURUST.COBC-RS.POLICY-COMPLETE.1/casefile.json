@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.COBC-RS.POLICY-COMPLETE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "damage_if_overclaimed": "claiming policy completeness without the census reconciliation",
   "hash_chain": {
-    "inputs_sha256": "e235e2351c8be6848b1b42d76b1191b53c0d1bc6e319a17b1ac8c3dcbce248b3"
+    "inputs_sha256": "fca59887c8ab7a9cde7c53c8f47e3c5d27ae5bab7e8dee1383a23162a0643a95"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "7acb0c00b1d1ebab00ef020a357a7ed9adcd6a207cbb7207859e484550c3729b",
-    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
   },
   "kind": "court-casefile",
   "lie_prevented": [

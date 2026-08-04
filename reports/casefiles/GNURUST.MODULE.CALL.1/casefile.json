@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.MODULE.CALL.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.54",
+  "crate_version": "0.8.55",
   "damage_if_overclaimed": "overclaiming the module model as native dynamic loading",
   "hash_chain": {
-    "inputs_sha256": "b69390c451a0676c1a86f4893cb101e088c3d4242e4df77b550edf4b7e37f32a"
+    "inputs_sha256": "71feed8dd91aa43aa5a0b69cd63e151ba184a6fd44f8e6c2652b9af8cf82713c"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d39f7e2267b2f9ee62fa39ef4cfc467f4a1df1e1235abe7d302b93089d6764fe",
-    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+    "receipt_sha256": "f85c93799367b951203de3f4a053a73c13048706aeb8ab5c015a3ac45b5f44cf"
   },
   "kind": "court-casefile",
   "lie_prevented": [
