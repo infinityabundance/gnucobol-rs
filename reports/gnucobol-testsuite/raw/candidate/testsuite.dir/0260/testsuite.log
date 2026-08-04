@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+260. syn_misc.at:902: testing INSPECT invalid size ...
+./syn_misc.at:931: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.787470954 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/260/stderr	2026-08-04 10:31:43.786846710 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:14: error: REPLACING operands differ in size
+-prog.cob:15: error: REPLACING operands differ in size
+-prog.cob:17: error: CONVERTING operands differ in size
+-prog.cob:18: error: CONVERTING operands differ in size
+-prog.cob:20: error: CONVERTING operands differ in size
+-prog.cob:23: error: CONVERTING operands differ in size
++cobc-rs: unsupported: expected data name after a level number
+ 
+260. syn_misc.at:902: 260. INSPECT invalid size (syn_misc.at:902): FAILED (syn_misc.at:931)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+816. run_misc.at:11600: testing PROGRAM-ID / CALL literal/variable with spaces ...
+./run_misc.at:11647: $COMPILE prog.cob
+--- -	2026-08-04 10:31:44.127241863 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/816/stderr	2026-08-04 10:31:44.126753082 +0000
+@@ -1,5 +1 @@
+-prog.cob:10: warning: ' SUB ' literal includes leading spaces which are omitted
+-prog.cob:10: warning: ' SUB ' literal includes trailing spaces which are omitted
+-prog.cob:21: warning: 'SUB ' literal includes trailing spaces which are omitted
+-prog.cob:30: warning: ' SUB' literal includes leading spaces which are omitted
+ 
+816. run_misc.at:11600: 816. PROGRAM-ID / CALL literal/variable with spaces (run_misc.at:11600): FAILED (run_misc.at:11647)

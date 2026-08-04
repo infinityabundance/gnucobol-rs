@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+763. run_misc.at:4182: testing Lookup ENTRY from main executable ...
+./run_misc.at:4217: $COMPILE prog.cob
+./run_misc.at:4218: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/763/stderr	2026-08-04 10:31:44.090063125 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: SET PROGRAM-LINK TO <value>: target is not a numeric/index item
+--- -	2026-08-04 10:31:44.091597956 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/763/stdout	2026-08-04 10:31:44.090929831 +0000
+@@ -1 +1 @@
+-subprogram+000000042
++
+./run_misc.at:4218: exit code was 2, expected 42
+763. run_misc.at:4182: 763. Lookup ENTRY from main executable (run_misc.at:4182): FAILED (run_misc.at:4218)

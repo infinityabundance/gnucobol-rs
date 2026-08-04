@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+71. syn_copy.at:997: testing COPY and REPLACE errors ...
+./syn_copy.at:1027: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.699720129 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/71/stderr	2026-08-04 10:31:43.699174142 +0000
+@@ -1,9 +1,2 @@
+-prog.cob:6: error: syntax error, unexpected Word or Literal, expecting .
+-prog.cob:7: error: syntax error, unexpected ==, expecting .
+-prog.cob:8: error: syntax error, unexpected ., expecting == or LEADING or TRAILING or Word or Literal
+-prog.cob:9: error: syntax error, unexpected ., expecting BY
+-prog.cob:10: error: syntax error, unexpected ., expecting Word or Literal
+-prog.cob:11: error: syntax error, unexpected BY, expecting == or IN or OF or Word or Literal
+-prog.cob:14: error: syntax error, unexpected REPLACING, expecting .
+-copy.inc:2: error: level number must begin with 01 or 77
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+ 
+71. syn_copy.at:997: 71. COPY and REPLACE errors (syn_copy.at:997): FAILED (syn_copy.at:1027)

@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+513. run_fundamental.at:105: testing Hexadecimal literal ...
+./run_fundamental.at:137: $COMPILE_MODULE dump.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/513/stdout	2026-08-04 10:31:43.921673474 +0000
+@@ -0,0 +1 @@
++dump.so
+513. run_fundamental.at:105: 513. Hexadecimal literal (run_fundamental.at:105): FAILED (run_fundamental.at:137)

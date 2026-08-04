@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+116. syn_definition.at:1335: testing OSVS register CURRENT-DATE and TIME-OF-DAY ...
+./syn_definition.at:1376: $COMPILE_ONLY -std=cobol85 prog1.cob
+./syn_definition.at:1380: $COMPILE_ONLY -std=ibm-strict prog1.cob
+./syn_definition.at:1384: $COMPILE_ONLY -std=mf prog1.cob
+./syn_definition.at:1389: $COMPILE_ONLY prog1.cob prog2.cob
+./syn_definition.at:1393: $COMPILE_ONLY -fregister=current-date,time-of-day \
+  prog1.cob prog2.cob prog3.cob
+--- -	2026-08-04 10:31:16.151141607 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/116/stderr	2026-08-04 10:31:16.150409532 +0000
+@@ -1,6 +1,7 @@
+-prog2.cob:6: warning: redefinition of 'CURRENT-DATE'
+-prog2.cob:8: error: 'CURRENT-DATE' is ambiguous; needs qualification
+-prog2.cob:8: note: 'CURRENT-DATE' is a special register
+-prog2.cob:6: note: 'CURRENT-DATE' defined here
+-prog3.cob:5: error: invalid MOVE statement
++configuration error:
++-fregister=current-date,time-of-day: special register 'CURRENT-DATE' is unknown, needs a definition
++special register 'TIME-OF-DAY' is unknown, needs a definition
++prog1.cob:8: error: 'CURRENT-DATE' is not defined
++prog1.cob:9: error: 'TIME-OF-DAY' is not defined
++prog3.cob:5: error: 'CURRENT-DATE' is not defined
+ 
+116. syn_definition.at:1335: 116. OSVS register CURRENT-DATE and TIME-OF-DAY (syn_definition.at:1335): expected failure (syn_definition.at:1393)

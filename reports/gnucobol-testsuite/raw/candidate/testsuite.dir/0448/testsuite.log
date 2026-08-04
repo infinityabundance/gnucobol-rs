@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+448. syn_functions.at:205: testing Empty function ...
+./syn_functions.at:225: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.885213485 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/448/stderr	2026-08-04 10:31:43.884571959 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:5: error: FUNCTION 'func' has no PROCEDURE DIVISION
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+448. syn_functions.at:205: 448. Empty function (syn_functions.at:205): FAILED (syn_functions.at:225)

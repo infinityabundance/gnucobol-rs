@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+868. run_file.at:1199: testing ASSIGN DYNAMIC with data item in LINKAGE ...
+./run_file.at:1350: $COMPILE prog.cob
+./run_file.at:1352: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/868/stderr	2026-08-04 10:31:44.165170560 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: OMITTED
+--- -	2026-08-04 10:31:44.166958112 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/868/stdout	2026-08-04 10:31:44.166559108 +0000
+@@ -1,8 +1 @@
+-Opened error: 31.
+-Opened file: foyasg.txt.
+-Output file: fooasg.txt - 00 #0001.
+-Output file: foxasg.txt - 00 #0001.
+-Output file: foozzz.txt - 00 #0001.
+-Extend file: fooasg.txt - 00 #0002.
+-Extend file: foxasg.txt - 00 #0002.
+ 
+./run_file.at:1352: exit code was 2, expected 0
+868. run_file.at:1199: 868. ASSIGN DYNAMIC with data item in LINKAGE (run_file.at:1199): FAILED (run_file.at:1352)

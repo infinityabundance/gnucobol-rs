@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+123. syn_definition.at:1761: testing PICTURE string with control character ...
+./syn_definition.at:1768: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.723437523 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/123/stderr	2026-08-04 10:31:43.722684449 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:2: error: 'P' is not defined
+-prog.cob:2: error: invalid PICTURE character ''
+-prog.cob:2: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+-prog.cob:2: error: PROGRAM-ID header missing
+-prog.cob:2: error: PROCEDURE DIVISION header missing
+-prog.cob:2: error: syntax error, unexpected PICTURE
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+123. syn_definition.at:1761: 123. PICTURE string with control character (syn_definition.at:1761): FAILED (syn_definition.at:1768)

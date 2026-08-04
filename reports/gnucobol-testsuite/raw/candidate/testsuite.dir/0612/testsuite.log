@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+612. run_fundamental.at:6493: testing abbreviated conditions with multiple words operators ...
+./run_fundamental.at:6514: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.985532610 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/612/stderr	2026-08-04 10:31:43.985000868 +0000
+@@ -1,2 +1 @@
+-prog.cob:8: error: syntax error, unexpected Identifier
+ 
+./run_fundamental.at:6514: exit code was 0, expected 1
+612. run_fundamental.at:6493: 612. abbreviated conditions with multiple words operators (run_fundamental.at:6493): FAILED (run_fundamental.at:6514)

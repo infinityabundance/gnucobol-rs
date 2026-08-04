@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+842. run_misc.at:13983: testing runtime checks within conditions ...
+./run_misc.at:14022: $COMPILE prog.cob
+./run_misc.at:14023: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/842/stderr	2026-08-04 10:31:44.145414912 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE BINARY-INT
+./run_misc.at:14023: exit code was 2, expected 0
+842. run_misc.at:13983: 842. runtime checks within conditions (run_misc.at:13983): FAILED (run_misc.at:14023)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1169. run_extensions.at:3410: testing System routine C$GETPID ...
+./run_extensions.at:3429: $COMPILE prog.cob
+./run_extensions.at:3430: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1169/stderr	2026-08-04 10:31:44.478819072 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "C$GETPID": not a contained program (external CALL is a boundary)
+./run_extensions.at:3430: exit code was 2, expected 0
+1169. run_extensions.at:3410: 1169. System routine C$GETPID (run_extensions.at:3410): FAILED (run_extensions.at:3430)

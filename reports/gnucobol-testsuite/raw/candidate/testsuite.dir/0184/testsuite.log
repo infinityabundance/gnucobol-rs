@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+184. syn_value.at:425: testing Alphanumeric-edited item ...
+./syn_value.at:441: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.751033508 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/184/stderr	2026-08-04 10:31:43.750250338 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:6: warning: alphanumeric value is expected
+-prog.cob:9: warning: value size exceeds data size
+-prog.cob:9: note: value size is 4
++cobc-rs: unsupported: PIC BXX: UnsupportedSymbol('X')
+ 
+./syn_value.at:441: exit code was 1, expected 0
+184. syn_value.at:425: 184. Alphanumeric-edited item (syn_value.at:425): FAILED (syn_value.at:441)

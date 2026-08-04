@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+423. syn_screen.at:92: testing Duplicate ACCEPT/DISPLAY clauses ...
+./syn_screen.at:109: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.872116280 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/423/stderr	2026-08-04 10:31:43.871434719 +0000
+@@ -1,8 +1 @@
+-prog.cob:8: error: duplicate LINE clause
+-prog.cob:8: error: duplicate HIGHLIGHT clause
+-prog.cob:9: error: cannot specify both AT screen-location and LINE or COLUMN
+-prog.cob:9: error: duplicate MODE IS BLOCK clause
+-prog.cob:10: error: duplicate LINE clause
+-prog.cob:10: error: duplicate HIGHLIGHT clause
+-prog.cob:11: error: cannot specify both AT screen-location and LINE or COLUMN
+ 
+./syn_screen.at:109: exit code was 0, expected 1
+423. syn_screen.at:92: 423. Duplicate ACCEPT/DISPLAY clauses (syn_screen.at:92): FAILED (syn_screen.at:109)

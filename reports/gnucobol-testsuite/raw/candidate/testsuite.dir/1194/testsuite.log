@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1194. run_extensions.at:4980: testing Conditional / define directives (4) ...
+./run_extensions.at:5000: $COMPILE -DACTIVATE2 prog.cob
+./run_extensions.at:5001: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1194/stdout	2026-08-04 10:31:44.500303183 +0000
+@@ -0,0 +1 @@
++NOTOK
+\ No newline at end of file
+1194. run_extensions.at:4980: 1194. Conditional / define directives (4) (run_extensions.at:4980): FAILED (run_extensions.at:5001)

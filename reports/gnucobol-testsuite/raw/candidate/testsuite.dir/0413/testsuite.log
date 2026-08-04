@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+413. syn_move.at:430: testing MOVE to erroneous field ...
+./syn_move.at:446: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.866904784 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/413/stderr	2026-08-04 10:31:43.866383032 +0000
+@@ -1,2 +1 @@
+-prog.cob:6: error: PICTURE clause required for 'INVALID-ITEM'
+ 
+./syn_move.at:446: exit code was 0, expected 1
+413. syn_move.at:430: 413. MOVE to erroneous field (syn_move.at:430): FAILED (syn_move.at:446)

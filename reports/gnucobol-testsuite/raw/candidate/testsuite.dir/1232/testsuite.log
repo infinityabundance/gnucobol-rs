@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1232. data_binary.at:23: testing BINARY: 2-4-8 big-endian ...
+./data_binary.at:41: sed -e 's/@USAGE@/BINARY/' "${TEMPLATE}/numeric-dump.cob" > prog.cob
+./data_binary.at:43: $COMPILE_MODULE dump.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1232/stdout	2026-08-04 10:31:44.533467337 +0000
+@@ -0,0 +1 @@
++dump.so
+1232. data_binary.at:23: 1232. BINARY: 2-4-8 big-endian (data_binary.at:23): FAILED (data_binary.at:43)

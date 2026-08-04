@@ -1,0 +1,17 @@
+{
+  "schema": "gnurust-gnucobol-testsuite-no-delegation-v1",
+  "candidate_phase_isolated": true,
+  "candidate_phase_note": "candidate phase isolated from the oracle (only /work/run/candidate-bin/cobc + /work/run/candidate-bin/cobcrun on PATH)",
+  "cobrun_links_no_libcob": true,
+  "cobrun_ldd_libcob_hits": 0,
+  "cobrun_readelf_libcob_hits": 0,
+  "cobc_rs_links_no_libcob": true,
+  "cobc_rs_ldd_libcob_hits": 0,
+  "cobc_rs_readelf_libcob_hits": 0,
+  "cobc_resolves_to_candidate_during_candidate_phase": true,
+  "cobcrun_resolves_to_candidate_during_candidate_phase": true,
+  "oracle_prefix_absent_during_candidate_phase": true,
+  "cobrun_version": "cobrun (gnucobol-rs, reproducing GnuCOBOL) 3.2.0",
+  "candidate_binary_sha256": "474ecd9046e4f41c8c2d23ae4f51ee87687ae8501f50a73dfe0dbbe91136d371",
+  "cobc_rs_binary_sha256": "3e27898f4284843cec26dbce8720fc9621338a2be5f668923c93d6d8f280c13f"
+}

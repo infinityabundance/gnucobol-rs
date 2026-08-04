@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+62. syn_copy.at:630: testing COPY: recursive replacement ...
+./syn_copy.at:654: $COMPILE prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/62/stderr	2026-08-04 10:31:43.696971155 +0000
+@@ -0,0 +1 @@
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./syn_copy.at:654: exit code was 1, expected 0
+62. syn_copy.at:630: 62. COPY: recursive replacement (syn_copy.at:630): FAILED (syn_copy.at:654)

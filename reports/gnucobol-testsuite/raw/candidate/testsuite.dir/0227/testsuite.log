@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+227. syn_file.at:2096: testing ALTERNATE RECORD definition omitting RECORD ...
+./syn_file.at:2118: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.772816746 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/227/stderr	2026-08-04 10:31:43.772097154 +0000
+@@ -1,2 +1 @@
+-prog.cob:12: error: 'RECORD' is mandatory here
+ 
+./syn_file.at:2118: exit code was 0, expected 1
+227. syn_file.at:2096: 227. ALTERNATE RECORD definition omitting RECORD (syn_file.at:2096): expected failure (syn_file.at:2118)

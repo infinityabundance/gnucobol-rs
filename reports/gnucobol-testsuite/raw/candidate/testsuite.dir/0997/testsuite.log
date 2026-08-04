@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+997. run_functions.at:547: testing FUNCTION CONTENT-LENGTH ...
+./run_functions.at:575: $COMPILE prog.cob
+./run_functions.at:576: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/997/stderr	2026-08-04 10:31:44.269195573 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: Z
+./run_functions.at:576: exit code was 2, expected 0
+997. run_functions.at:547: 997. FUNCTION CONTENT-LENGTH (run_functions.at:547): FAILED (run_functions.at:576)

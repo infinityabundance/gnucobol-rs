@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+464. syn_literals.at:1140: testing national literals ...
+./syn_literals.at:1155: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.892918088 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/464/stderr	2026-08-04 10:31:43.892132534 +0000
+@@ -1,9 +1 @@
+-prog.cob:5: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:6: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:7: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:8: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:9: warning: national-character literal used
+-prog.cob:9: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:10: warning: national-character literal used
+-prog.cob:10: warning: handling of national literal is unfinished; implementation is likely to be changed
+ 
+464. syn_literals.at:1140: 464. national literals (syn_literals.at:1140): FAILED (syn_literals.at:1155)

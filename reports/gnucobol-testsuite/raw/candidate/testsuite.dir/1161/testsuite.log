@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+1161. run_extensions.at:3097: testing Obsolete 2002 keywords with COBOL2014 ...
+./run_extensions.at:3112: $COMPILE -std=cobol2002 prog.cob
+--- -	2026-08-04 10:31:44.470486639 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1161/stderr	2026-08-04 10:31:44.470104356 +0000
+@@ -1,4 +1 @@
+-prog.cob:6: error: syntax error, unexpected TERMINAL
+-prog.cob:7: error: syntax error, unexpected SEND
+-prog.cob:9: error: syntax error, unexpected TERMINAL, expecting (
+ 
+./run_extensions.at:3112: exit code was 0, expected 1
+1161. run_extensions.at:3097: 1161. Obsolete 2002 keywords with COBOL2014 (run_extensions.at:3097): FAILED (run_extensions.at:3112)

@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+941. run_file.at:12817: testing Concatenated Files ...
+./run_file.at:12935: $COMPILE prog.cob
+./run_file.at:12937: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/941/stderr	2026-08-04 10:31:44.220493923 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+--- -	2026-08-04 10:31:44.221465044 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/941/stdout	2026-08-04 10:31:44.220925929 +0000
+@@ -1,3 +1 @@
+-OPEN I-O: file1+file2+file3                                Sts:35
+-OPEN INPUT: file1&file2&file3                                Sts:35
+ 
+./run_file.at:12937: exit code was 2, expected 0
+941. run_file.at:12817: 941. Concatenated Files (run_file.at:12817): FAILED (run_file.at:12937)

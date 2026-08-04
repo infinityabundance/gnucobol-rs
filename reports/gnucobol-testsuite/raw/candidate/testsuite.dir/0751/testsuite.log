@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+751. run_misc.at:3430: testing SORT: table (3) ...
+./run_misc.at:3513: $COMPILE prog.cob
+./run_misc.at:3514: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/751/stderr	2026-08-04 10:31:44.082500888 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: SORT: `ROW1` is not a declared file
+--- -	2026-08-04 10:31:44.083567406 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/751/stdout	2026-08-04 10:31:44.082704828 +0000
+@@ -1 +1 @@
+-0403020101020304
++
+./run_misc.at:3514: exit code was 2, expected 0
+751. run_misc.at:3430: 751. SORT: table (3) (run_misc.at:3430): FAILED (run_misc.at:3514)

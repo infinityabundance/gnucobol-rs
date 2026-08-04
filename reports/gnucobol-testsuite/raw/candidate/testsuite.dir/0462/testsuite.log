@@ -1,0 +1,27 @@
+#                             -*- compilation -*-
+462. syn_literals.at:998: testing floating-point literals ...
+./syn_literals.at:1060: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.892759623 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/462/stderr	2026-08-04 10:31:43.892132534 +0000
+@@ -1,19 +1,2 @@
+-prog.cob:11: error: 'D3' is not defined
+-prog.cob:12: error: '1E3' is not defined
+-prog.cob:13: error: 'BLAH' is not defined
+-prog.cob:14: error: invalid floating-point literal: '1.0E3.0'
+-prog.cob:14: note: exponent has decimal point
+-prog.cob:15: error: invalid floating-point literal: '-0.0E-0'
+-prog.cob:15: note: significand of 0 must be positive
+-prog.cob:15: note: exponent of 0 must be positive
+-prog.cob:16: error: invalid floating-point literal: '1.0E00003'
+-prog.cob:16: note: exponent has more than 4 digits
+-prog.cob:17: error: invalid floating-point literal: '.123456789012345678901234567890123 ...'
+-prog.cob:17: note: significand has more than 36 digits
+-prog.cob:19: error: invalid floating-point literal: '0.0E3'
+-prog.cob:19: note: exponent of 0 must be 0
+-prog.cob:22: error: invalid floating-point literal: '1.0E6145'
+-prog.cob:22: note: exponent not between -6143 and 6144
+-prog.cob:23: error: invalid floating-point literal: '1.0E-6144'
+-prog.cob:23: note: exponent not between -6143 and 6144
++cobc-rs: unsupported: verb E1,
+ 
+462. syn_literals.at:998: 462. floating-point literals (syn_literals.at:998): FAILED (syn_literals.at:1060)

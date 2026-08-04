@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+606. run_fundamental.at:6192: testing integer arithmetic on floating-point var ...
+./run_fundamental.at:6229: $COMPILE prog.cob
+./run_fundamental.at:6230: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/606/stderr	2026-08-04 10:31:43.984254537 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE FLOAT-SHORT
+./run_fundamental.at:6230: exit code was 2, expected 0
+606. run_fundamental.at:6192: 606. integer arithmetic on floating-point var (run_fundamental.at:6192): FAILED (run_fundamental.at:6230)

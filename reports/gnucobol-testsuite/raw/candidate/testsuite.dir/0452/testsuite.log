@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+452. syn_functions.at:324: testing Intrinsic functions: number of arguments ...
+./syn_functions.at:351: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.886852441 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/452/stderr	2026-08-04 10:31:43.885667001 +0000
+@@ -1,8 +1 @@
+-prog.cob:10: error: FUNCTION 'PI' has wrong number of arguments
+-prog.cob:11: error: FUNCTION 'ABS' has wrong number of arguments
+-prog.cob:13: error: FUNCTION 'ABS' has wrong number of arguments
+-prog.cob:14: error: FUNCTION 'DAY-TO-YYYYDDD' has wrong number of arguments
+-prog.cob:18: error: FUNCTION 'DAY-TO-YYYYDDD' has wrong number of arguments
+-prog.cob:19: error: FUNCTION 'MAX' has wrong number of arguments
+-prog.cob:21: error: FUNCTION 'SUBSTITUTE' has wrong number of arguments
+ 
+./syn_functions.at:351: exit code was 0, expected 1
+452. syn_functions.at:324: 452. Intrinsic functions: number of arguments (syn_functions.at:324): FAILED (syn_functions.at:351)

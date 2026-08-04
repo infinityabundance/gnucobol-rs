@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+417. syn_move.at:618: testing SET error ...
+./syn_move.at:644: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.868475132 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/417/stderr	2026-08-04 10:31:43.867946266 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:14: error: invalid SET statement
+-prog.cob:15: error: invalid SET statement
+-prog.cob:17: error: invalid SET statement
++cobc-rs: unsupported: unrecognized USAGE FLOAT-LONG
+ 
+417. syn_move.at:618: 417. SET error (syn_move.at:618): FAILED (syn_move.at:644)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1278. data_packed.at:2174: testing arithmetic truncation with USAGE PACKED-DECIMAL ...
+./data_packed.at:2230: $COMPILE prog.cob
+./data_packed.at:2231: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1278/stderr	2026-08-04 10:31:44.583663613 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./data_packed.at:2231: exit code was 2, expected 0
+1278. data_packed.at:2174: 1278. arithmetic truncation with USAGE PACKED-DECIMAL (data_packed.at:2174): FAILED (data_packed.at:2231)

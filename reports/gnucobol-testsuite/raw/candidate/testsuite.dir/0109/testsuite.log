@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+109. syn_definition.at:1132: testing Ambiguous reference to paragraph name ...
+./syn_definition.at:1148: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.717176361 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/109/stderr	2026-08-04 10:31:43.716672752 +0000
+@@ -1,5 +1 @@
+-prog.cob: in section 'S-3':
+-prog.cob:10: error: 'L' is ambiguous; needs qualification
+-prog.cob:6: note: 'L IN S-1' defined here
+-prog.cob:8: note: 'L IN S-2' defined here
+ 
+./syn_definition.at:1148: exit code was 0, expected 1
+109. syn_definition.at:1132: 109. Ambiguous reference to paragraph name (syn_definition.at:1132): FAILED (syn_definition.at:1148)

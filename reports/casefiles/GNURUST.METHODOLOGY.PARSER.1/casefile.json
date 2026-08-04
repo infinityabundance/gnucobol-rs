@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "the provenance records + the commit history they cite"
+  ],
+  "case_id": "GNURUST.METHODOLOGY.PARSER.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "a strict clean-room claim would be legally load-bearing and unverifiable from the record",
+  "hash_chain": {
+    "inputs_sha256": "e9cde0c69f883ee751572c07aa9f1d849932a4755111aa3cf04da8e5b522f769"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "9754077f3ce9beb516f47ef5a0ebb2700b8cd92d6d696b13930acd2860fe7784",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the parser is strict clean-room' is the lie this prevents -- the honest position is independently written per the author's claim"
+  ],
+  "negative_capability_ids": [
+    "NEG.STRICT-CLEAN-ROOM-SEPARATION-IS-NOT-CLAI",
+    "NEG.NO-CLAIM-THAT-COBC-SOURCE-WAS-NEVER-CONS"
+  ],
+  "negative_claims": [
+    "strict clean-room separation is NOT claimed",
+    "no claim that cobc source was never consulted (no evidence either way)",
+    "lie prevented: 'the parser is strict clean-room' is the lie this prevents -- the honest position is independently written per the author's claim"
+  ],
+  "oracle": {
+    "detail": "n/a (historical/process documentation)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.METHODOLOGY.PARSER.1"
+  },
+  "positive_claims": [
+    "docs/methodology/parser-front-end-provenance.md + reports/methodology/parser-provenance.json reconstruct the parser history from the committed record (origin commit 9357a7cac 'from-scratch (NOT cobc-derived)', 150+ follow-on commits, oracle-differential development), and state explicitly that the tooling and consulted-materials history is UNKNOWN -- so strict clean-room process separation cannot be independently verified, and the documentation qualifies the term accordingly"
+  ],
+  "replay": {
+    "command": "n/a (historical/process documentation)",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "docs/methodology/parser-front-end-provenance.md + reports/methodology/parser-provenance.json",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

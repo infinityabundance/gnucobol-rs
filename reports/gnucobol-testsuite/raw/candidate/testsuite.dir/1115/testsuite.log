@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+1115. run_extensions.at:188: testing Hexadecimal numeric literals ...
+./run_extensions.at:206: $COMPILE prog.cob
+./run_extensions.at:207: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1115/stderr	2026-08-04 10:31:44.424032679 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: H
+--- -	2026-08-04 10:31:44.425506958 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1115/stdout	2026-08-04 10:31:44.424597843 +0000
+@@ -1,3 +1 @@
+-00074565
+-16777215
+ 
+./run_extensions.at:207: exit code was 2, expected 0
+1115. run_extensions.at:188: 1115. Hexadecimal numeric literals (run_extensions.at:188): FAILED (run_extensions.at:207)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1275. data_packed.at:1671: testing COMP-3 vs. COMP-6 - BCD comparison ...
+./data_packed.at:1959: $COMPILE prog.cob
+./data_packed.at:1960: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1275/stderr	2026-08-04 10:31:44.582540890 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE BINARY-INT
+./data_packed.at:1960: exit code was 2, expected 0
+1275. data_packed.at:1671: 1275. COMP-3 vs. COMP-6 - BCD comparison (data_packed.at:1671): FAILED (data_packed.at:1960)

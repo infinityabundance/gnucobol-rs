@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+374. syn_misc.at:6832: testing DISPLAY directive (3) ...
+./syn_misc.at:6845: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.845774323 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/374/stdout	2026-08-04 10:31:43.845089857 +0000
+@@ -1,2 +1 @@
+-OK
+ 
+374. syn_misc.at:6832: 374. DISPLAY directive (3) (syn_misc.at:6832): FAILED (syn_misc.at:6845)

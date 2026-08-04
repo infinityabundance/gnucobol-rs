@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+880. run_file.at:3310: testing READ on OPTIONAL missing RELATIVE / SEQUENTIAL ...
+./run_file.at:3416: $COMPILE prog.cob
+./run_file.at:3418: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/880/stderr	2026-08-04 10:31:44.174871685 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `INFILE` is not a declared file
+--- -	2026-08-04 10:31:44.175892658 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/880/stdout	2026-08-04 10:31:44.175222709 +0000
+@@ -1,9 +1 @@
+-R: OPEN INPUT on missing optional file = 05 OK
+-S: OPEN INPUT on missing optional file = 05 OK
+-R: 1st READ on missing optional file = 10 OK
+-S: 1st READ on missing optional file = 10 OK
+-R: 2nd READ on missing optional file = 46 OK
+-S: 2nd READ on missing optional file = 46 OK
+-R: 3rd READ on missing optional file = 46 OK
+-S: 3rd READ on missing optional file = 46 OK
+ 
+./run_file.at:3418: exit code was 2, expected 0
+880. run_file.at:3310: 880. READ on OPTIONAL missing RELATIVE / SEQUENTIAL (run_file.at:3310): FAILED (run_file.at:3418)

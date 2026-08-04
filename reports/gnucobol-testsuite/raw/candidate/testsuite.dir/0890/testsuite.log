@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+890. run_file.at:4118: testing Default file external name ...
+./run_file.at:4183: $COMPILE_MODULE fexists_signed.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/890/stdout	2026-08-04 10:31:44.179523497 +0000
+@@ -0,0 +1 @@
++fexists_signed.so
+890. run_file.at:4118: 890. Default file external name (run_file.at:4118): FAILED (run_file.at:4183)

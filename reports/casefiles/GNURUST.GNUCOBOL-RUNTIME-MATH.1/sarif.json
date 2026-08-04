@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.1 verdict=pass"
+          },
+          "ruleId": "VERDICT"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.1 non-claim: no performance claim here"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.1 non-claim: correctness is the suite's AT_CHECK outcome in this environment"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.1 non-claim: lie prevented: 'the math tests pass' is the lie this prevents -- the classification shows exactly which math tests match, which fail closed, and which are module-model blocked"
+          },
+          "ruleId": "NONCLAIM"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/infinityabundance",
+          "name": "kobold-casefile",
+          "rules": [
+            {
+              "id": "NONCLAIM",
+              "shortDescription": {
+                "text": "A surface this court explicitly does NOT prove (fail-closed / out of scope)."
+              }
+            },
+            {
+              "id": "VERDICT",
+              "shortDescription": {
+                "text": "The court's replay verdict."
+              }
+            }
+          ],
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

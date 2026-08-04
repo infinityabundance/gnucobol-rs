@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+15. used_binaries.at:626: testing cobcrun -M directory/ default ...
+./used_binaries.at:654: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/15/stdout	2026-08-04 10:31:43.670165724 +0000
+@@ -0,0 +1 @@
++callee.so
+15. used_binaries.at:626: 15. cobcrun -M directory/ default (used_binaries.at:626): FAILED (used_binaries.at:654)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+156. syn_redefines.at:28: testing REDEFINES: not following entry-name ...
+./syn_redefines.at:40: $COMPILE_ONLY -ffree-redefines-position=error prog.cob
+--- -	2026-08-04 10:31:43.738583038 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/156/stderr	2026-08-04 10:31:43.738088816 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:7: error: REDEFINES clause not following entry-name used
++cobc-rs: -ffree-redefines-position=error: unsupported option (rejected-unsupported; free-format REDEFINES position rules: reject honestly): error
+ 
+156. syn_redefines.at:28: 156. REDEFINES: not following entry-name (syn_redefines.at:28): FAILED (syn_redefines.at:40)

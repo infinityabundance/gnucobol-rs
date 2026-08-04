@@ -1,0 +1,16 @@
+[package]
+name = "gnucobol-rs-testsuite"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+authors = ["infinityabundance"]
+description = "GNURUST.GNUCOBOL-TESTSUITE.{1,2,3} — GnuCOBOL 3.2 native Autotest-suite differential court harness (inventory, invocation census, baseline/candidate classification, determinism, receipts, gates)"
+license = "LGPL-3.0-or-later"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"

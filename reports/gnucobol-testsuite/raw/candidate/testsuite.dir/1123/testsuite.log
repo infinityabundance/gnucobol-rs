@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1123. run_extensions.at:609: testing Complex OCCURS DEPENDING ON (3) ...
+./run_extensions.at:664: $COMPILE -fodoslide prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1123/stderr	2026-08-04 10:31:44.430893039 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fodoslide: unsupported option (rejected-unsupported; OCCURS DEPENDING slide: not modeled; reject honestly): 
+./run_extensions.at:664: exit code was 1, expected 0
+1123. run_extensions.at:609: 1123. Complex OCCURS DEPENDING ON (3) (run_extensions.at:609): FAILED (run_extensions.at:664)

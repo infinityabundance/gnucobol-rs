@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+905. run_file.at:5775: testing SEQUENTIAL file with SHARING READ ONLY ...
+./run_file.at:5842: $COMPILE prog1.cob
+./run_file.at:5843: $COMPILE prog2.cob
+./run_file.at:5844: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/905/stderr	2026-08-04 10:31:44.194310062 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./run_file.at:5844: exit code was 2, expected 0
+905. run_file.at:5775: 905. SEQUENTIAL file with SHARING READ ONLY (run_file.at:5775): FAILED (run_file.at:5844)

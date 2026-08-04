@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+543. run_fundamental.at:1872: testing CALL program-pointer ...
+./run_fundamental.at:1956: $COMPILE prog.cob
+./run_fundamental.at:1957: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/543/stderr	2026-08-04 10:31:43.942877673 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "PROG-PTR": not a contained program (external CALL is a boundary)
+--- -	2026-08-04 10:31:43.944113797 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/543/stdout	2026-08-04 10:31:43.943141494 +0000
+@@ -1,3 +1 @@
+-12<
+-121<
+ 
+./run_fundamental.at:1957: exit code was 2, expected 0
+543. run_fundamental.at:1872: 543. CALL program-pointer (run_fundamental.at:1872): FAILED (run_fundamental.at:1957)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+551. run_fundamental.at:2341: testing CANCEL test (3) ...
+./run_fundamental.at:2371: $COMPILE prog.cob
+./run_fundamental.at:2372: $COMPILE_MODULE prog2.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/551/stdout	2026-08-04 10:31:43.946886696 +0000
+@@ -0,0 +1 @@
++prog2.so
+551. run_fundamental.at:2341: 551. CANCEL test (3) (run_fundamental.at:2341): FAILED (run_fundamental.at:2372)

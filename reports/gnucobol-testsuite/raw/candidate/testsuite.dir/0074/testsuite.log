@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+74. syn_definition.at:37: testing Invalid PROGRAM-ID ...
+./syn_definition.at:49: $COMPILE_ONLY SHORT.cob
+--- -	2026-08-04 10:31:43.702205913 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/74/stderr	2026-08-04 10:31:43.701686155 +0000
+@@ -1,2 +1 @@
+-SHORT.cob:3: error: invalid PROGRAM-ID 'short' - name duplicates a 'C' keyword
+ 
+./syn_definition.at:49: exit code was 0, expected 1
+74. syn_definition.at:37: 74. Invalid PROGRAM-ID (syn_definition.at:37): FAILED (syn_definition.at:49)

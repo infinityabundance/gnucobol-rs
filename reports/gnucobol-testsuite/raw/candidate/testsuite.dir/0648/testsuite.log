@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+648. run_refmod.at:388: testing MF SSRANGE and NOSSRANGE directives ...
+./run_refmod.at:413: $COBC -w -x -debug -std=mf prog.cob
+./run_refmod.at:414: $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:44.013761674 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/648/stdout	2026-08-04 10:31:44.012648580 +0000
+@@ -1 +1 @@
+- !
++ 
+648. run_refmod.at:388: 648. MF SSRANGE and NOSSRANGE directives (run_refmod.at:388): FAILED (run_refmod.at:414)

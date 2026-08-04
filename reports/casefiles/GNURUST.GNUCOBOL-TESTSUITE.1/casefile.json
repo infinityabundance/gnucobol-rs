@@ -1,0 +1,58 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "admitted source identity + fresh in-tree build + the generated testsuite.log + per-group logs + the invocation census (argv preserved)"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-TESTSUITE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "presenting the baseline as a certification would certify a compiler build the suite was not designed to certify",
+  "hash_chain": {
+    "inputs_sha256": "d61796c3364317a3c0650f5cf30752e665df375adfb76402f57b5f63e2eb4577"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "ccbc073a948c4475e4c74ef9f6119d048d217c02dce73724ef615e68f94efc19",
+    "receipt_sha256": "f37301aa0b40484d01e95b19ba91c5ee74f1c64b830f27968852c5babbd4d2db"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "an oracle-side pass/fail is evidence about THIS admitted build, never a claim about upstream quality"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-CLAIM-ABOUT-GNUCOBOL-RS-THAT-IS-TESTS",
+    "NEG.THE-BASELINE-MEASURES-THIS-BUILD-AND-ENV",
+    "NEG.ORACLE-SIDE-SKIPS-XFAILS-ARE-THE-SUITE-S"
+  ],
+  "negative_claims": [
+    "no claim about gnucobol-rs (that is TESTSUITE.2/.3)",
+    "the baseline measures THIS build and environment, not upstream",
+    "oracle-side skips/xfails are the suite's own declared conditions",
+    "lie prevented: an oracle-side pass/fail is evidence about THIS admitted build, never a claim about upstream quality"
+  ],
+  "oracle": {
+    "detail": "the ADMITTED GnuCOBOL 3.2 in-tree build (never a distribution package), configured identically in every tree",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-TESTSUITE.1"
+  },
+  "positive_claims": [
+    "the admitted gnucobol-3.2 source (sha256 8ecc77d0...) is built fresh in-tree per pass with a stock configuration (no -fpermissive, no compat -Wno-*), and the generated Autotest suite is run with the REAL admitted cobc via `make check TESTSUITEFLAGS=--jobs=12`, producing an oracle baseline of 1242 pass / 9 skip / 31 xfail / 0 fail in this environment, with a full invocation census (argv boundaries preserved: 0 cobc/cobcrun invocations) and the raw testsuite.log + per-group logs preserved"
+  ],
+  "replay": {
+    "command": "bash lab/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "gnucobol-3.2.tar.lz (admitted, sha256-pinned) + lab/gnucobol-testsuite/run-docker.sh (one-command replay) + lab/docker/gnucobol-testsuite",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

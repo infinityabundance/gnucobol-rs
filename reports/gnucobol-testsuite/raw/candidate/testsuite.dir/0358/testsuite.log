@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+358. syn_misc.at:5862: testing @OPTIONS parsing ...
+./syn_misc.at:5874: $COMPILE_ONLY valid.cob
+--- -	2026-08-04 10:31:43.837380656 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/358/stderr	2026-08-04 10:31:43.836961174 +0000
+@@ -1,3 +1,2 @@
+-valid.cob:2: warning: ignoring unknown directive: '@OPTIONS NOMAIN,APOST'
+-valid.cob:3: warning: ignoring unknown directive: '@OPTIONS APOST'
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+./syn_misc.at:5874: exit code was 1, expected 0
+358. syn_misc.at:5862: 358. @OPTIONS parsing (syn_misc.at:5862): FAILED (syn_misc.at:5874)

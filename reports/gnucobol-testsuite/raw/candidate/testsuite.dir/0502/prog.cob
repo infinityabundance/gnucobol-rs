@@ -1,0 +1,9 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       PROCEDURE        DIVISION.
+      *    DISPLAY 'COMMENTASTERISK'
+      /    DISPLAY 'COMMENTSLASH'
+*          DISPLAY 'MFCOMMENTASTERISK'
+/          DISPLAY 'MFCOMMENTSLASH'
+           STOP RUN.

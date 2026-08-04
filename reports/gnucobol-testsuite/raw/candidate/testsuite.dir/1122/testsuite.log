@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+1122. run_extensions.at:546: testing Complex OCCURS DEPENDING ON (2) ...
+./run_extensions.at:600: $COMPILE -std=mf prog.cob
+./run_extensions.at:601: $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:44.433031655 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1122/stdout	2026-08-04 10:31:44.432314589 +0000
+@@ -1,3 +1,3 @@
+-18181    22        333
+-1818  3    22      111
++0606122333
++1010  3  22111
+ 
+1122. run_extensions.at:546: 1122. Complex OCCURS DEPENDING ON (2) (run_extensions.at:546): FAILED (run_extensions.at:601)

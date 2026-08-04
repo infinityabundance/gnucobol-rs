@@ -182,7 +182,7 @@ fn read_json(p: &Path) -> Value {
         .unwrap_or(Value::Null)
 }
 
-const EXCLUDED: [&str; 10] = [
+const EXCLUDED: [&str; 19] = [
     "GNURUST.COVERAGE.1",
     "GNURUST.PUBLIC.CORPUS.1",
     "GNURUST.BUILD.PROFILE.1",
@@ -193,6 +193,15 @@ const EXCLUDED: [&str; 10] = [
     "GNURUST.CCVS85.2",
     "GNURUST.CCVS85.3",
     "GNURUST.CCVS85.4",
+    "GNURUST.GNUCOBOL-TESTSUITE.1",
+    "GNURUST.GNUCOBOL-TESTSUITE.2",
+    "GNURUST.GNUCOBOL-TESTSUITE.3",
+    "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+    "GNURUST.METHODOLOGY.LIBCOB.1",
+    "GNURUST.METHODOLOGY.PARSER.1",
+    "GNURUST.COBC-RS.ARGS.1",
+    "GNURUST.COBC-RS.LAUNCHER.1",
+    "GNURUST.COBC-RS.PARALLEL.1",
 ];
 
 fn gnucobol_courts(root: &str) -> Vec<String> {

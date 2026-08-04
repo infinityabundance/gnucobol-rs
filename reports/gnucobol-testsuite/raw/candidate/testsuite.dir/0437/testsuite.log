@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+437. syn_screen.at:616: testing Compiler-specific SCREEN SECTION clause rules ...
+./syn_screen.at:657: $COMPILE_ONLY -fscreen-section-rules=std prog.cob
+--- -	2026-08-04 10:31:43.880012810 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/437/stderr	2026-08-04 10:31:43.879420296 +0000
+@@ -1,13 +1,2 @@
+-prog.cob:12: error: 'no-clauses' needs a PIC, FROM, TO, USING, VALUE, BELL, BLANK or ERASE clause
+-prog.cob:13: error: 'no-required-clauses' needs a PIC, FROM, TO, USING, VALUE, BELL, BLANK or ERASE clause
+-prog.cob:14: error: 'only-line' needs a PIC, FROM, TO, USING, VALUE, BELL, BLANK or ERASE clause
+-prog.cob:16: error: 'only-pic' cannot have PIC without FROM, TO, USING or numeric VALUE
+-prog.cob:17: error: cannot have FROM, TO or USING without PIC
+-prog.cob:18: error: 'auto-without-from-to-using' cannot have PIC without FROM, TO, USING or numeric VALUE
+-prog.cob:20: error: cannot specify both FULL and JUSTIFIED
+-prog.cob:23: error: cannot have FROM, TO or USING without PIC
+-prog.cob:24: error: cannot have FROM, TO or USING without PIC
+-prog.cob:25: error: 'sign-no-clauses' cannot have PIC without FROM, TO, USING or numeric VALUE
+-prog.cob:26: error: VALUE may not contain a figurative constant
+-prog.cob:30: error: cannot have numeric VALUE without PIC
++cobc-rs: -fscreen-section-rules=std: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): std
+ 
+437. syn_screen.at:616: 437. Compiler-specific SCREEN SECTION clause rules (syn_screen.at:616): FAILED (syn_screen.at:657)

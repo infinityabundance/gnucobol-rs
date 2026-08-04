@@ -23,6 +23,12 @@
 pub trait CopyResolver {
     /// Return the copybook text for `name`, or `None` if it cannot be found.
     fn resolve(&self, name: &str) -> Option<String>;
+    /// Resolve `COPY name IN "dir"` (GnuCOBOL's search-path restriction to `dir`). The default
+    /// ignores the directory (falling back to the ordinary search), which keeps existing resolvers
+    /// compiling; a filesystem-backed resolver honors the restriction.
+    fn resolve_in(&self, name: &str, _dir: &str) -> Option<String> {
+        self.resolve(name)
+    }
 }
 
 /// Where an expanded line came from.
@@ -185,6 +191,8 @@ fn apply_chain(line: &str, chain: &[&[(Vec<Tok>, Vec<Tok>)]]) -> String {
 
 struct CopyStmt {
     name: String,
+    /// `COPY name IN "dir"` — the search-path restriction, when declared.
+    in_dir: Option<String>,
     pairs: Vec<(Vec<Tok>, Vec<Tok>)>,
 }
 
@@ -244,10 +252,39 @@ fn parse_copy_statement(stmt: &str) -> Result<CopyStmt, CopyError> {
     }
     skip_ws(&mut i);
 
+    // `COPY name [IN "dir"] [REPLACING ...] .`
+    let mut in_dir = None;
+    if i < chars.len() {
+        let save = i;
+        let w = read_word(&mut i);
+        if w.eq_ignore_ascii_case("IN") {
+            skip_ws(&mut i);
+            if i < chars.len() && (chars[i] == '"' || chars[i] == '\'') {
+                let q = chars[i];
+                i += 1;
+                let mut d = String::new();
+                while i < chars.len() && chars[i] != q {
+                    d.push(chars[i]);
+                    i += 1;
+                }
+                if i < chars.len() {
+                    i += 1; // closing quote
+                }
+                in_dir = Some(d);
+                skip_ws(&mut i);
+            } else {
+                i = save; // `IN` was a word-part of something else — treat as malformed later
+            }
+        } else {
+            i = save;
+        }
+    }
+
     // `COPY name.`
     if i < chars.len() && chars[i] == '.' {
         return Ok(CopyStmt {
             name: name.to_ascii_uppercase(),
+            in_dir,
             pairs: Vec::new(),
         });
     }
@@ -279,6 +316,7 @@ fn parse_copy_statement(stmt: &str) -> Result<CopyStmt, CopyError> {
     }
     Ok(CopyStmt {
         name: name.to_ascii_uppercase(),
+        in_dir,
         pairs,
     })
 }
@@ -345,7 +383,7 @@ fn expand_into(
                 return Err(CopyError::Recursive(stmt.name));
             }
             let body = resolver
-                .resolve(&stmt.name)
+                .resolve_in(&stmt.name, stmt.in_dir.as_deref().unwrap_or(""))
                 .ok_or_else(|| CopyError::Missing(stmt.name.clone()))?;
             stack.push(stmt.name.clone());
             // The nested copy is expanded with ITS OWN replacing innermost, then this chain — the
@@ -468,6 +506,36 @@ mod tests {
         assert_eq!(
             expand("COPY R REPLACING AAA BY BBB.", &r),
             Err(CopyError::ReplacingDeferred)
+        );
+    }
+
+    #[test]
+    fn in_dir_is_forwarded_to_the_resolver() {
+        // `COPY NAME IN "dir".` must reach the resolver's resolve_in with the dir; the default
+        // resolve_in falls back to resolve, and a dir-restricted resolver honors the restriction.
+        struct DirAware {
+            dirs: std::collections::HashMap<String, String>,
+        }
+        impl CopyResolver for DirAware {
+            fn resolve(&self, _name: &str) -> Option<String> {
+                None
+            }
+            fn resolve_in(&self, name: &str, dir: &str) -> Option<String> {
+                self.dirs.get(&format!("{dir}/{name}")).cloned()
+            }
+        }
+        let r = DirAware {
+            dirs: [("sub/PROC".to_string(), "05 P PIC X.".to_string())]
+                .into_iter()
+                .collect(),
+        };
+        let e = expand("01 G.\n       COPY PROC IN \"sub\".", &r).unwrap();
+        assert_eq!(e.lines, vec!["01 G.", "05 P PIC X."]);
+
+        // without IN, the resolver's plain resolve is used (None here -> Missing)
+        assert_eq!(
+            expand("COPY PROC.", &r),
+            Err(CopyError::Missing("PROC".into()))
         );
     }
 }

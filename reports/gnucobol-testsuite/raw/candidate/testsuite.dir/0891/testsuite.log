@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+891. run_file.at:4192: testing SEQUENTIAL basic I/O ...
+./run_file.at:4230: $COMPILE prog.cob
+./run_file.at:4231: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/891/stderr	2026-08-04 10:31:44.181874359 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: DELETE: `FILE` is not a declared file
+./run_file.at:4231: exit code was 2, expected 0
+891. run_file.at:4192: 891. SEQUENTIAL basic I/O (run_file.at:4192): FAILED (run_file.at:4231)

@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+399. syn_misc.at:8249: testing autodetect format ...
+./syn_misc.at:8282: printf '\357\273\277' > header.dom
+./syn_misc.at:8283: cat header.dom free.cob >> domfree.cob
+./syn_misc.at:8284: cat header.dom fixed1.cob >> domfixed.cob
+./syn_misc.at:8286: $COMPILE_ONLY -fformat=auto free.cob fixed1.cob fixed2.cob
+--- -	2026-08-04 10:31:43.863756696 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/399/stderr	2026-08-04 10:31:43.863142671 +0000
+@@ -1,2 +1,2 @@
+-free.cob:2: note: free format detected
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+./syn_misc.at:8286: exit code was 1, expected 0
+399. syn_misc.at:8249: 399. autodetect format (syn_misc.at:8249): FAILED (syn_misc.at:8286)

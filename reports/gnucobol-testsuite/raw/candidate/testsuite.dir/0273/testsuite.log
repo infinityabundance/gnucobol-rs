@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+273. syn_misc.at:1583: testing unexpected mnemonic-name location ...
+./syn_misc.at:1601: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.795900869 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/273/stderr	2026-08-04 10:31:43.795230289 +0000
+@@ -1,4 +1 @@
+-prog.cob:10: error: invalid mnemonic identifier
+-prog.cob:11: error: invalid mnemonic identifier
+-prog.cob:12: error: invalid mnemonic identifier
+ 
+./syn_misc.at:1601: exit code was 0, expected 1
+273. syn_misc.at:1583: 273. unexpected mnemonic-name location (syn_misc.at:1583): FAILED (syn_misc.at:1601)

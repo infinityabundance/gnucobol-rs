@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+533. run_fundamental.at:1317: testing GLOBAL identifiers from ENVIRONMENT DIVISION ...
+./run_fundamental.at:1390: $COMPILE prog.cob
+./run_fundamental.at:1391: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/533/stderr	2026-08-04 10:31:43.934377767 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')
+--- -	2026-08-04 10:31:43.936144501 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/533/stdout	2026-08-04 10:31:43.935559660 +0000
+@@ -1,2 +1 @@
+-0.0004,00Y
+ 
+./run_fundamental.at:1391: exit code was 2, expected 0
+533. run_fundamental.at:1317: 533. GLOBAL identifiers from ENVIRONMENT DIVISION (run_fundamental.at:1317): FAILED (run_fundamental.at:1391)

@@ -1,0 +1,80 @@
+#                             -*- compilation -*-
+44. configuration.at:731: testing runtime configuration: conf missing ...
+./configuration.at:742: $COBCRUN -c notthere.cfg --runtime-conf
+--- -	2026-08-04 10:31:43.686921090 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/44/stderr	2026-08-04 10:31:43.685652294 +0000
+@@ -1,3 +1 @@
+-configuration error:
+-notthere.cfg: No such file or directory
+ 
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/44/stdout	2026-08-04 10:31:43.685652294 +0000
+@@ -0,0 +1,66 @@
++GnuCOBOL 3.2.0 runtime configuration
++ via  /usr/local/share/gnucobol/config/runtime.cfg
++
++ CALL configuration
++    : COB_LOAD_CASE          : not set  
++    : COB_PHYSICAL_CANCEL    : no       (default)
++    : COB_LIBRARY_PATH       : not set  
++    : COB_PRE_LOAD           : not set  
++
++ File I/O configuration
++    : COB_FILE_PATH          : not set  
++    : COB_VARSEQ_FORMAT      : 0        (default)
++    : COB_LS_FIXED           : no       (default)
++    : COB_LS_VALIDATE        : yes      (default)
++    : COB_LS_NULLS           : no       (default)
++    : COB_LS_SPLIT           : yes      (default)
++    : COB_SEQ_CONCAT_NAME    : no       (default)
++    : COB_SEQ_CONCAT_SEP     : +        (default)
++    : COB_SORT_CHUNK         : 256K     (default)
++    : COB_SORT_MEMORY        : 128M     (default)
++    : COB_SYNC               : no       (default)
++    : DB_HOME                : not set  
++    : COB_COL_JUST_LRC       : yes      (default)
++
++ Screen I/O configuration
++    : COB_BELL               : BEEP     (default)
++    : COB_REDIRECT_DISPLAY   : no       (default)
++    : COB_SCREEN_ESC         : no       (default)
++    : COB_SCREEN_EXCEPTIONS  : no       (default)
++    : COB_TIMEOUT_SCALE      : 0        (default)
++    : COB_INSERT_MODE        : no       (default)
++    : COB_MOUSE_FLAGS        : 1        (default)
++    : COB_MOUSE_INTERVAL     : 100      (default)
++    : COB_DISPLAY_PRINT_PIPE : not set  
++    : COB_DISPLAY_PRINT_FILE : not set  
++    : COB_DISPLAY_PUNCH_FILE : not set  
++    : COB_LEGACY             : no       (default)
++    : COB_EXIT_WAIT          : yes      (default)
++    : COB_EXIT_MSG           : 'end of program, please press a key to exit' (default)
++
++ Miscellaneous
++    : COB_DISABLE_WARNINGS   : no       (default)
++    : COB_ENV_MANGLE         : no       (default)
++    : COB_SET_DEBUG          : no       (default)
++    : COB_SET_TRACE          : no       (default)
++    : COB_TRACE_FILE         : not set  
++    : COB_TRACE_FORMAT       : %P %S Line: %L (default)
++    : COB_STACKTRACE         : yes      (default)
++    : COB_CORE_ON_ERROR      : 0        (default)
++    : COB_CORE_FILENAME      : ./core.libcob (default)
++    : COB_DUMP_FILE          : not set  
++    : COB_DUMP_WIDTH         : 100      (default)
++    : COB_CURRENT_DATE       : not set  
++
++ System configuration
++    : USERNAME               : not set  
++    : LANG                   : not set  
++    : OSTYPE                 : not set  
++ env: TERM                   : 'dumb'  
++    : LOCALEDIR              : /usr/local/share/locale
++    : LC_CTYPE               : C
++    : LC_NUMERIC             : C
++    : LC_COLLATE             : C
++    : LC_MESSAGES            : C
++    : LC_MONETARY            : C
++    : LC_TIME                : C
+./configuration.at:742: exit code was 0, expected 1
+44. configuration.at:731: 44. runtime configuration: conf missing (configuration.at:731): FAILED (configuration.at:742)

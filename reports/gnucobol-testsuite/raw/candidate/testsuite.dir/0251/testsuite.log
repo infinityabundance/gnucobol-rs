@@ -1,0 +1,26 @@
+#                             -*- compilation -*-
+251. syn_misc.at:438: testing Invalid conditional expression (1) ...
+./syn_misc.at:527: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.784291126 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/251/stderr	2026-08-04 10:31:43.783612932 +0000
+@@ -1,18 +1,2 @@
+-prog.cob:10: error: incomplete expression
+-prog.cob:14: error: incomplete expression
+-prog.cob:18: error: incomplete expression
+-prog.cob:22: error: incomplete expression
+-prog.cob:26: error: incomplete expression
+-prog.cob:30: error: invalid conditional expression
+-prog.cob:35: error: incomplete expression
+-prog.cob:38: error: incomplete expression
+-prog.cob:41: error: incomplete expression
+-prog.cob:44: error: incomplete expression
+-prog.cob:47: error: incomplete expression
+-prog.cob:54: error: incomplete expression
+-prog.cob:60: error: incomplete expression
+-prog.cob:66: error: incomplete expression
+-prog.cob:72: error: incomplete expression
+-prog.cob:76: error: 'NOTDEFINED' is not defined
+-prog.cob:80: error: invalid expression: boolean expected with logical operator
++cobc-rs: unsupported: unsupported level number 78
+ 
+251. syn_misc.at:438: 251. Invalid conditional expression (1) (syn_misc.at:438): FAILED (syn_misc.at:527)

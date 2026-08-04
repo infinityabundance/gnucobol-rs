@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+7. used_binaries.at:364: testing source file not found ...
+./used_binaries.at:367: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.665181743 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/7/stderr	2026-08-04 10:31:43.664683675 +0000
+@@ -1,2 +1,2 @@
+-cobc: prog.cob: No such file or directory
++cannot read prog.cob: No such file or directory (os error 2)
+ 
+7. used_binaries.at:364: 7. source file not found (used_binaries.at:364): FAILED (used_binaries.at:367)

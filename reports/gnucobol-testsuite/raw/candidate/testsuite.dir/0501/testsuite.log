@@ -1,0 +1,30 @@
+#                             -*- compilation -*-
+501. listings.at:3689: testing Variable format ...
+./listings.at:3703: $COMPILE_LISTING0 -t- prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/501/stderr	2026-08-04 10:31:43.913049367 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.914603604 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/501/stdout	2026-08-04 10:31:43.914079878 +0000
+@@ -1,18 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001  000001 $SET SOURCEFORMAT "VARIABLE"
+-000002  000010 IDENTIFICATION DIVISION.
+-000003  000020 PROGRAM-ID. prog.
+-000004  000030* blah blah blah
+-000005  000040 PROCEDURE DIVISION.
+-000006  000050
+-000006+ DISPLAY "Hello!"
+-000007  000060     .
+-000008  000070 END PROGRAM prog.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:3703: exit code was 1, expected 0
+501. listings.at:3689: 501. Variable format (listings.at:3689): FAILED (listings.at:3703)

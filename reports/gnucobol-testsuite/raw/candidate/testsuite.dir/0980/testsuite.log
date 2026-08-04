@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+980. run_reportwriter.at:9345: testing Varying and Nested OCCURS ...
+./run_reportwriter.at:9469: $COMPILE -std=cobol2002 prog.cob
+./run_reportwriter.at:9471: PRINTOUT=tstdmrp.txt \
+$COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stderr	2026-08-04 10:31:44.251670413 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: NNNS
+--- -	2026-08-04 10:31:44.252849451 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stdout	2026-08-04 10:31:44.252234464 +0000
+@@ -1,5 +1 @@
+-Hello World 1
+-Hello World 2
+-Hello World 3
+-Hello World 4
+ 
+./run_reportwriter.at:9471: exit code was 2, expected 0
+980. run_reportwriter.at:9345: 980. Varying and Nested OCCURS (run_reportwriter.at:9345): expected failure (run_reportwriter.at:9471)

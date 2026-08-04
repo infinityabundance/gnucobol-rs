@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+126. syn_definition.at:1822: testing Edited monetary PICTURE strings ...
+./syn_definition.at:1845: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/126/stderr	2026-08-04 10:31:43.723810308 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_definition.at:1845: exit code was 1, expected 0
+126. syn_definition.at:1822: 126. Edited monetary PICTURE strings (syn_definition.at:1822): FAILED (syn_definition.at:1845)

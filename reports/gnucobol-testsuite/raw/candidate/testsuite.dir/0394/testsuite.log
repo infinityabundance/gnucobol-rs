@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+394. syn_misc.at:8025: testing AREACHECK / NOAREACHECK directives ...
+./syn_misc.at:8050: $COMPILE_ONLY -std=cobol85 prog.cob
+--- -	2026-08-04 10:31:43.856647623 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/394/stderr	2026-08-04 10:31:43.855966153 +0000
+@@ -1,5 +1,2 @@
+-prog.cob: in section 'MAIN-2':
+-prog.cob:13: error: start of statement in Area A
+-prog.cob:14: error: start of statement in Area A
+-prog.cob:15: error: start of statement in Area A
++cobc-rs: unsupported: verb $SET
+ 
+394. syn_misc.at:8025: 394. AREACHECK / NOAREACHECK directives (syn_misc.at:8025): FAILED (syn_misc.at:8050)

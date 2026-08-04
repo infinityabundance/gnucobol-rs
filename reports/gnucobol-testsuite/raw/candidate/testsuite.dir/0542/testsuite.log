@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+542. run_fundamental.at:1784: testing CALL alphanumeric data-name ...
+./run_fundamental.at:1856: $COMPILE -fno-program-name-redefinition prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/542/stderr	2026-08-04 10:31:43.939350437 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-program-name-redefinition: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_fundamental.at:1856: exit code was 1, expected 0
+542. run_fundamental.at:1784: 542. CALL alphanumeric data-name (run_fundamental.at:1784): FAILED (run_fundamental.at:1856)

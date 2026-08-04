@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+937. run_file.at:11485: testing INDEXED File READ/DELETE/READ ...
+./run_file.at:12161: $COMPILE prog.cob
+./run_file.at:12165: $COBCRUN_DIRECT ./prog 1>prog.out
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/937/stderr	2026-08-04 10:31:44.219738175 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./run_file.at:12165: exit code was 2, expected 0
+prog.out:
+937. run_file.at:11485: 937. INDEXED File READ/DELETE/READ (run_file.at:11485): FAILED (run_file.at:12165)

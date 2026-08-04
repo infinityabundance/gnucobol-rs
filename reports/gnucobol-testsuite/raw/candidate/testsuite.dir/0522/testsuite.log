@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+522. run_fundamental.at:567: testing Compare FLOAT-LONG with floating-point literal ...
+./run_fundamental.at:614: $COMPILE prog.cob
+./run_fundamental.at:615: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/522/stderr	2026-08-04 10:31:43.927332123 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: 9.899999999999E+304
+./run_fundamental.at:615: exit code was 2, expected 0
+522. run_fundamental.at:567: 522. Compare FLOAT-LONG with floating-point literal (run_fundamental.at:567): FAILED (run_fundamental.at:615)

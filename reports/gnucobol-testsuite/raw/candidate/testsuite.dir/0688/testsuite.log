@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+688. run_misc.at:711: testing MOVE X'00' ...
+./run_misc.at:739: $COMPILE_MODULE dump.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/688/stdout	2026-08-04 10:31:44.039103326 +0000
+@@ -0,0 +1 @@
++dump.so
+688. run_misc.at:711: 688. MOVE X'00' (run_misc.at:711): FAILED (run_misc.at:739)

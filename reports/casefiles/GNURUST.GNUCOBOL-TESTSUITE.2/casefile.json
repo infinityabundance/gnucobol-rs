@@ -1,0 +1,59 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "per-test candidate outcomes (parse/check/prepare/run), raw stdout+stderr, candidate census, execve trace, launcher manifests"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-TESTSUITE.2",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "treating the launcher as a native executable would misrepresent an interpreter as codegen",
+  "hash_chain": {
+    "inputs_sha256": "56f67d341fca8a20dedf2a45cef26fc9f7b8f8d5a640065706e65c3626216757"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "75c3d745a250f512afff900d902dbad8fa3886bf2495c9181a49833df0729254",
+    "receipt_sha256": "f37301aa0b40484d01e95b19ba91c5ee74f1c64b830f27968852c5babbd4d2db"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'cobc-rs is a drop-in cobc' is the lie this prevents -- the artifacts are interpreter launch manifests and the boundaries are explicit"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-PARITY-CLAIM-THAT-IS-TESTSUITE-3",
+    "NEG.NO-CLAIM-THAT-THE-LAUNCHER-IS-A-NATIVE-C",
+    "NEG.NO-CLAIM-THAT-REJECTED-OPTIONS-PRESERVE"
+  ],
+  "negative_claims": [
+    "no parity claim (that is TESTSUITE.3)",
+    "no claim that the launcher is a native COBOL executable",
+    "no claim that rejected options preserve semantics",
+    "lie prevented: 'cobc-rs is a drop-in cobc' is the lie this prevents -- the artifacts are interpreter launch manifests and the boundaries are explicit"
+  ],
+  "oracle": {
+    "detail": "none used during the candidate phase (isolation is mechanically enforced); the baseline is TESTSUITE.1",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-TESTSUITE.2"
+  },
+  "positive_claims": [
+    "the SAME generated suite runs with COBC=cobc-rs (the option-policy-driven compatibility driver) and COBCRUN=cobc-rs through the suite's own `make localcheck` + atlocal bootstrap, producing truthful launcher+manifest artifacts (never native COBOL executables), with the mechanical no-delegation proof (candidate PATH stripped of the oracle, oracle prefix absent in the container, cobrun/cobc-rs link no libcob -- ldd+readelf, plus an execve trace of candidate artifacts), the candidate invocation ledger, and every test accounted for",
+    "NO suite-pass claim"
+  ],
+  "replay": {
+    "command": "bash lab/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "crates/cobc-rs (the driver) + crates/gnucobol-rs-testsuite (the harness) + lab/gnucobol-testsuite",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

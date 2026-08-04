@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+309. syn_misc.at:3234: testing missing periods ...
+./syn_misc.at:3257: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.813760904 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/309/stderr	2026-08-04 10:31:43.813106975 +0000
+@@ -1,4 +1 @@
+-prog.cob: in section 'MAIN':
+-prog.cob:15: error: 'SEC-1' is not defined
+-prog.cob:15: error: syntax error, unexpected SECTION
+ 
+./syn_misc.at:3257: exit code was 0, expected 1
+309. syn_misc.at:3234: 309. missing periods (syn_misc.at:3234): FAILED (syn_misc.at:3257)

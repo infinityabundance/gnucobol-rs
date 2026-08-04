@@ -1,0 +1,6 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog4.
+       PROCEDURE        DIVISION.
+           MOVE 42 TO RETURN-CODE
+           GOBACK.

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+149. syn_occurs.at:359: testing OCCURS data-items for INDEXED and KEY ...
+./syn_occurs.at:377: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.734883040 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/149/stderr	2026-08-04 10:31:43.734273273 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:9: error: a subscripted data-item cannot be used here
+-prog.cob:12: error: a subscripted data-item cannot be used here
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+149. syn_occurs.at:359: 149. OCCURS data-items for INDEXED and KEY (syn_occurs.at:359): FAILED (syn_occurs.at:377)

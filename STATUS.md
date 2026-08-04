@@ -9,14 +9,14 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/docs/STATUS.md`._
 
-![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-141-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-141-blueviolet)
+![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-150-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-150-blueviolet)
 
 > [!IMPORTANT]
 > **This page wins.** README is orientation; receipts are evidence; historical close docs are seal
 > snapshots. **When any of them disagree with this page, this page is correct.** It answers one
 > question: *what may a user rely on today?*
 
-_gnucobol-rs 0.8.53 · 105 GNURUST courts (83 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
+_gnucobol-rs 0.8.54 · 114 GNURUST courts (83 sealed byte courts + observed atlases + meta), all byte courts Kani-proven + fuzzed · oracle: cobc (GnuCOBOL) 3.2.0 (admitted, built in lab)._
 _(The git repo is the authority; crates.io may trail by a version under publish rate limits.)_
 
 ## What may be relied on today
@@ -96,7 +96,7 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.SCREENIO.LINEDIFF.1` | multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/`](reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
 | `GNURUST.IF.EVALUATE.SLICE.1` | IF/EVALUATE execution slice (alphanumeric) | ✅ pass | [`reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/`](reports/casefiles/GNURUST.IF.EVALUATE.SLICE.1/) |
-| `GNURUST.FRONTEND.1` | clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout | ✅ pass | [`reports/casefiles/GNURUST.FRONTEND.1/`](reports/casefiles/GNURUST.FRONTEND.1/) |
+| `GNURUST.FRONTEND.1` | independently written COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout | ✅ pass | [`reports/casefiles/GNURUST.FRONTEND.1/`](reports/casefiles/GNURUST.FRONTEND.1/) |
 | `GNURUST.PERFORM.SLICE.1` | PERFORM execution slice (TIMES/UNTIL/VARYING) | ✅ pass | [`reports/casefiles/GNURUST.PERFORM.SLICE.1/`](reports/casefiles/GNURUST.PERFORM.SLICE.1/) |
 | `GNURUST.FILE.FLOW.SLICE.1` | read-loop execution slice (file x control flow) | ✅ pass | [`reports/casefiles/GNURUST.FILE.FLOW.SLICE.1/`](reports/casefiles/GNURUST.FILE.FLOW.SLICE.1/) |
 | `GNURUST.FILE.FILTER.SLICE.1` | filter (conditional) read-loop | ✅ pass | [`reports/casefiles/GNURUST.FILE.FILTER.SLICE.1/`](reports/casefiles/GNURUST.FILE.FILTER.SLICE.1/) |
@@ -128,15 +128,24 @@ in-toto + DSSE, TRUST.4), and appears green in `lab/verify-sealed-courts.sh`.
 | `GNURUST.LOGICAL.1` | bit-logical operations (B-AND/B-OR/B-XOR/B-NOT, bit shifts) | ✅ pass | [`reports/casefiles/GNURUST.LOGICAL.1/`](reports/casefiles/GNURUST.LOGICAL.1/) |
 | `GNURUST.FLOAT.1` | floating-point fields: COMP-1/COMP-2 + FLOAT-DECIMAL-16/34 | ✅ pass | [`reports/casefiles/GNURUST.FLOAT.1/`](reports/casefiles/GNURUST.FLOAT.1/) |
 | `GNURUST.NUMCMP.1` | numeric comparison (cob_numeric_cmp) across type pairs | ✅ pass | [`reports/casefiles/GNURUST.NUMCMP.1/`](reports/casefiles/GNURUST.NUMCMP.1/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.1` | GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.1/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.1/) |
+| `GNURUST.GNUCOBOL-RUNTIME-MATH.1` | GnuCOBOL runtime/mathematics correctness classification (math subset of the suite) | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-RUNTIME-MATH.1/`](reports/casefiles/GNURUST.GNUCOBOL-RUNTIME-MATH.1/) |
+| `GNURUST.METHODOLOGY.LIBCOB.1` | libcob runtime port methodology (faithful derivative, NOT clean-room) -- documented + machine-recorded | ✅ pass | [`reports/casefiles/GNURUST.METHODOLOGY.LIBCOB.1/`](reports/casefiles/GNURUST.METHODOLOGY.LIBCOB.1/) |
+| `GNURUST.METHODOLOGY.PARSER.1` | parser/front-end provenance audit (independently written per the author's committed claim; strict clean-room not independently verifiable) | ✅ pass | [`reports/casefiles/GNURUST.METHODOLOGY.PARSER.1/`](reports/casefiles/GNURUST.METHODOLOGY.PARSER.1/) |
+| `GNURUST.COBC-RS.ARGS.1` | cobc-rs argument-policy registry (every census option -> explicit policy; unknown fails closed) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.ARGS.1/`](reports/casefiles/GNURUST.COBC-RS.ARGS.1/) |
+| `GNURUST.COBC-RS.LAUNCHER.1` | cobc-rs truthful launcher+manifest artifact model (interpreter launch, never native codegen) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.LAUNCHER.1/`](reports/casefiles/GNURUST.COBC-RS.LAUNCHER.1/) |
+| `GNURUST.COBC-RS.PARALLEL.1` | cobc-rs concurrency safety (100+ parallel invocations, colliding basenames, no cross-test leakage) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.PARALLEL.1/`](reports/casefiles/GNURUST.COBC-RS.PARALLEL.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |
 | `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
 | `GNURUST.SCREENIO.ACCEPT.2` | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/) |
 | `GNURUST.CCVS85.2` | NIST CCVS85 materialization + real-GnuCOBOL 3.2 oracle baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.2/`](reports/casefiles/GNURUST.CCVS85.2/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.2` | GnuCOBOL-testsuite candidate execution (COBC=cobc-rs through the native harness, no delegation) | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.2/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.SCREENIO.DISPLAY.3` | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/) |
 | `GNURUST.CCVS85.3` | NIST CCVS85 gnucobol-rs (cobrun) execution baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.3/`](reports/casefiles/GNURUST.CCVS85.3/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.3` | GnuCOBOL-testsuite differential classification (baseline vs candidate, every test accounted) | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.3/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
 | `GNURUST.CCVS85.4` | NIST CCVS85 differential comparison + per-unit classification | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.4/`](reports/casefiles/GNURUST.CCVS85.4/) |
 | `GNURUST.5` | COPY expansion | ✅ pass | [`reports/casefiles/GNURUST.5/`](reports/casefiles/GNURUST.5/) |

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+285. syn_misc.at:1925: testing continuation of COBOL words ...
+./syn_misc.at:1936: $COMPILE_ONLY -std=cobol2014 prog.cob
+--- -	2026-08-04 10:31:43.801696093 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/285/stderr	2026-08-04 10:31:43.800961443 +0000
+@@ -1,2 +1 @@
+-prog.cob:6: warning: continuation of COBOL words is archaic in COBOL 2014
+ 
+285. syn_misc.at:1925: 285. continuation of COBOL words (syn_misc.at:1925): FAILED (syn_misc.at:1936)

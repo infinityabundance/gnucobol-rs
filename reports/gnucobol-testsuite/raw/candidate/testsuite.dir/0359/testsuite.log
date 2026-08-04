@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+359. syn_misc.at:5906: testing PROCESS / CBL parsing ...
+./syn_misc.at:5963: $COMPILE_ONLY valid.cob
+--- -	2026-08-04 10:31:43.838581174 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/359/stderr	2026-08-04 10:31:43.837724757 +0000
+@@ -1,3 +1,2 @@
+-valid.cob:2: warning: ignoring unknown directive: 'Process codepage(1047)'
+-valid.cob:3: warning: ignoring unknown directive: 'CBL CODEPAGE(1208)'
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+./syn_misc.at:5963: exit code was 1, expected 0
+359. syn_misc.at:5906: 359. PROCESS / CBL parsing (syn_misc.at:5906): FAILED (syn_misc.at:5963)

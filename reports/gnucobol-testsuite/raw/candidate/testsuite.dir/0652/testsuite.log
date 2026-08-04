@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+652. run_accept.at:283: testing ACCEPT DATE / DAY and intrinsic functions (1) ...
+./run_accept.at:316: $COMPILE prog.cob
+./run_accept.at:317: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/652/stderr	2026-08-04 10:31:44.015777853 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
+./run_accept.at:317: exit code was 2, expected 0
+652. run_accept.at:283: 652. ACCEPT DATE / DAY and intrinsic functions (1) (run_accept.at:283): FAILED (run_accept.at:317)

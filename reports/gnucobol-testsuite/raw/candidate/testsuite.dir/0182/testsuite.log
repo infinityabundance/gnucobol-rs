@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+182. syn_value.at:352: testing National item ...
+./syn_value.at:369: $COMPILE_ONLY -Wno-unfinished prog.cob
+--- -	2026-08-04 10:31:43.750753125 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/182/stderr	2026-08-04 10:31:43.750250338 +0000
+@@ -1,6 +1,2 @@
+-prog.cob:7: warning: value size exceeds data size
+-prog.cob:7: note: value size is 4
+-prog.cob:8: warning: value does not fit the picture string
+-prog.cob:9: warning: national value is expected
+-prog.cob:10: warning: national value is expected
++cobc-rs: unsupported: PIC NNN: UnsupportedSymbol('N')
+ 
+./syn_value.at:369: exit code was 1, expected 0
+182. syn_value.at:352: 182. National item (syn_value.at:352): FAILED (syn_value.at:369)

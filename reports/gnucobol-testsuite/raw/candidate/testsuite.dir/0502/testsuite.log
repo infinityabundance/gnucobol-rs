@@ -1,0 +1,33 @@
+#                             -*- compilation -*-
+502. listings.at:3726: testing MFCOMMENT ...
+./listings.at:3740: $COMPILE_LISTING0 -t- prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/502/stderr	2026-08-04 10:31:43.914594277 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.915667367 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/502/stdout	2026-08-04 10:31:43.914949549 +0000
+@@ -1,21 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         PROCEDURE        DIVISION.
+-000005        *    DISPLAY 'COMMENTASTERISK'
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000006        /    DISPLAY 'COMMENTSLASH'
+-000007  *          DISPLAY 'MFCOMMENTASTERISK'
+-000008  /          DISPLAY 'MFCOMMENTSLASH'
+-000009             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:3740: exit code was 1, expected 0
+502. listings.at:3726: 502. MFCOMMENT (listings.at:3726): FAILED (listings.at:3740)

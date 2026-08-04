@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+157. syn_redefines.at:53: testing REDEFINES: level 02 by 01 ...
+./syn_redefines.at:68: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.739299263 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/157/stderr	2026-08-04 10:31:43.738432888 +0000
+@@ -1,2 +1 @@
+-prog.cob:8: error: level number of REDEFINES entries must be identical
+ 
+./syn_redefines.at:68: exit code was 0, expected 1
+157. syn_redefines.at:53: 157. REDEFINES: level 02 by 01 (syn_redefines.at:53): FAILED (syn_redefines.at:68)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+667. run_initialize.at:596: testing INITIALIZE big table with VALUE ...
+./run_initialize.at:647: $COMPILE prog.cob
+./run_initialize.at:648: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/667/stderr	2026-08-04 10:31:44.024492438 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE BINARY-INT
+./run_initialize.at:648: exit code was 2, expected 0
+667. run_initialize.at:596: 667. INITIALIZE big table with VALUE (run_initialize.at:596): FAILED (run_initialize.at:648)

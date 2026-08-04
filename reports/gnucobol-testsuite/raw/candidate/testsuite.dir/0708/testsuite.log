@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+708. run_misc.at:1510: testing Recursive CALL with ON EXCEPTION ...
+./run_misc.at:1557: $COMPILE caller.cob
+./run_misc.at:1558: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/708/stdout	2026-08-04 10:31:44.055158246 +0000
+@@ -0,0 +1 @@
++callee.so
+708. run_misc.at:1510: 708. Recursive CALL with ON EXCEPTION (run_misc.at:1510): FAILED (run_misc.at:1558)

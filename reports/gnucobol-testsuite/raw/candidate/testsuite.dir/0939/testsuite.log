@@ -1,0 +1,47 @@
+#                             -*- compilation -*-
+939. run_file.at:12388: testing LINE SEQUENTIAL REWRITE ...
+./run_file.at:12582: $COMPILE prog.cob
+./run_file.at:12584: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/939/stderr	2026-08-04 10:31:44.218277191 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+--- -	2026-08-04 10:31:44.219677301 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/939/stdout	2026-08-04 10:31:44.218901144 +0000
+@@ -1,34 +1 @@
+-Loading sample program data file.
+-Sample program data file load complete.
+-Open Sts:00
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00010
+-Read  GAM00000 Trms:00013
+-Read  DEL00000 Trms:65535
+-Read  ALP00000 Trms:08240
+-REWRITE ALP00000 Sts 44 Trms:00010
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00010
+-REWRITE BET00000 Sts 00 Trms:00011
+-Read  GAM00000 Trms:00013
+-Read EPS00000 Sts:00
+-REWRITE EPS00000 Sts 00 Trms:08240
+-List back Open Sts:00
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00011
+-Read  GAM00000 Trms:00013
+-Read  DEL00000 Trms:65535
+-Read  EPS00000 Trms:08240
+-Read  FOR00000 Trms:00254
+-Read Status: 10
+-List after extend Open Sts:00
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00011
+-Read  GAM00000 Trms:00013
+-Read  DEL00000 Trms:65535
+-Read  EPS00000 Trms:08240
+-Read  FOR00000 Trms:00254
+-Read  ALP00000 Trms:08240
+-Read  BET00000 Trms:00010
+-Read Status: 10
+ 
+./run_file.at:12584: exit code was 2, expected 0
+939. run_file.at:12388: 939. LINE SEQUENTIAL REWRITE (run_file.at:12388): FAILED (run_file.at:12584)

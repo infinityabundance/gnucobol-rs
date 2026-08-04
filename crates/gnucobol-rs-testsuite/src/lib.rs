@@ -1,0 +1,11 @@
+//! `gnucobol-rs-testsuite` — the GNURUST.GNUCOBOL-TESTSUITE.{1,2,3} court harness.
+
+pub mod autotest;
+pub mod census;
+pub mod classify;
+pub mod compat;
+pub mod determinism;
+pub mod gate;
+pub mod math;
+pub mod model;
+pub mod receipts;

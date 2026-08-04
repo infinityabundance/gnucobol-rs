@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+1183. run_extensions.at:4257: testing System routine CBL_GC_HOSTED ...
+./run_extensions.at:4379: $COMPILE_MODULE test_errno.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1183/stdout	2026-08-04 10:31:44.488953374 +0000
+@@ -0,0 +1 @@
++test_errno.so
+1183. run_extensions.at:4257: 1183. System routine CBL_GC_HOSTED (run_extensions.at:4257): FAILED (run_extensions.at:4379)

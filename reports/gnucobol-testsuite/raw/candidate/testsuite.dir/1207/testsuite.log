@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1207. run_extensions.at:5610: testing PICTURE L (basic) ...
+./run_extensions.at:5732: $COMPILE prog.cob
+./run_extensions.at:5733: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1207/stderr	2026-08-04 10:31:44.511828278 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC LX(10): UnsupportedSymbol('L')
+./run_extensions.at:5733: exit code was 2, expected 0
+1207. run_extensions.at:5610: 1207. PICTURE L (basic) (run_extensions.at:5610): FAILED (run_extensions.at:5733)

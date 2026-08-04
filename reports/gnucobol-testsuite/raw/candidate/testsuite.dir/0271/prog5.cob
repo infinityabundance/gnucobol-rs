@@ -1,0 +1,8 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog5.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           CURRENCY ' T '
+           PICTURE SYMBOL ' '.

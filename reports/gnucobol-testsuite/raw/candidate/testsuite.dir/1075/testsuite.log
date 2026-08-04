@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1075. run_functions.at:3104: testing FUNCTION SIGN ...
+./run_functions.at:3142: $COMPILE prog.cob
+./run_functions.at:3143: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1075/stderr	2026-08-04 10:31:44.371860711 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE FLOAT-LONG
+./run_functions.at:3143: exit code was 2, expected 0
+1075. run_functions.at:3104: 1075. FUNCTION SIGN (run_functions.at:3104): FAILED (run_functions.at:3143)

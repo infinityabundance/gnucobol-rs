@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+134. syn_definition.at:2629: testing APPLY COMMIT clause ...
+./syn_definition.at:2721: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.728521631 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/134/stderr	2026-08-04 10:31:43.727953442 +0000
+@@ -1,8 +1,2 @@
+-prog.cob:29: warning: APPLY COMMIT is not implemented
+-prog.cob:27: error: 'not-there' is not defined
+-prog.cob:28: error: 'not-there-again' is not defined
+-prog.cob:27: error: duplicate APPLY COMMIT target: 'STCK-FILE'
+-prog.cob:28: error: APPLY COMMIT statement invalid for SORT file
+-prog.cob:29: error: 'RED-DATA' REDEFINES field not allowed here
+-prog.cob:29: error: 'SOME-DATA' not level 01 or 77
++cobc-rs: unsupported: verb INITIALISATION
+ 
+134. syn_definition.at:2629: 134. APPLY COMMIT clause (syn_definition.at:2629): FAILED (syn_definition.at:2721)

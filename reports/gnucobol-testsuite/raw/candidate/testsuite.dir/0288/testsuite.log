@@ -1,0 +1,28 @@
+#                             -*- compilation -*-
+288. syn_misc.at:2264: testing Segmentation Module ...
+./syn_misc.at:2307: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.801978148 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/288/stderr	2026-08-04 10:31:43.801485791 +0000
+@@ -1,20 +1,2 @@
+-prog.cob: in section 'DEC-1':
+-prog.cob:9: warning: section segments ignored
+-prog.cob: in section 'DEC-2':
+-prog.cob:12: warning: section segments ignored
+-prog.cob: in section 'SEC-1':
+-prog.cob:17: warning: section segments ignored
+-prog.cob: in section 'SEC-2':
+-prog.cob:20: warning: section segments ignored
+-prog.cob: in section 'SEC-3':
+-prog.cob:23: error: unsigned integer value expected
+-prog.cob:23: warning: section segments ignored
+-prog.cob: in section 'SEC-4':
+-prog.cob:26: warning: section segments ignored
+-prog.cob: in section 'SEC-5':
+-prog.cob:29: warning: section segments ignored
+-prog.cob: in section 'SEC-6':
+-prog.cob:32: warning: section segments ignored
+-prog.cob: in section 'SEC-7':
+-prog.cob:35: warning: section segments ignored
++cobc-rs: unsupported: verb DEC-1
+ 
+288. syn_misc.at:2264: 288. Segmentation Module (syn_misc.at:2264): FAILED (syn_misc.at:2307)

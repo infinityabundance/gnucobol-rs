@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1163. run_extensions.at:3170: testing System routine C$NARG ...
+./run_extensions.at:3237: $COMPILE caller.cob
+./run_extensions.at:3238: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1163/stdout	2026-08-04 10:31:44.473870226 +0000
+@@ -0,0 +1 @@
++callee.so
+1163. run_extensions.at:3170: 1163. System routine C$NARG (run_extensions.at:3170): FAILED (run_extensions.at:3238)

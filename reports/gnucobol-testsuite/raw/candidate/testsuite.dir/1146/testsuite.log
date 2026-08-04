@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+1146. run_extensions.at:2285: testing Redefining TALLY ...
+./run_extensions.at:2305: $COMPILE -std=ibm-strict prog.cob
+stderr:
+./run_extensions.at:2305: exit code was 0, expected 1
+1146. run_extensions.at:2285: 1146. Redefining TALLY (run_extensions.at:2285): FAILED (run_extensions.at:2305)

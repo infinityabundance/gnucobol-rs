@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+151. syn_occurs.at:436: testing OCCURS DEPENDING with wrong size ...
+./syn_occurs.at:455: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.735374065 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/151/stderr	2026-08-04 10:31:43.734572982 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:7: error: OCCURS TO must be greater than OCCURS FROM
+-prog.cob:9: error: unsigned integer value expected
+-prog.cob:11: error: unsigned integer value expected
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+151. syn_occurs.at:436: 151. OCCURS DEPENDING with wrong size (syn_occurs.at:436): FAILED (syn_occurs.at:455)

@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+323. syn_misc.at:3978: testing checking prototypes and definitions match ...
+./syn_misc.at:4100: $COMPILE_ONLY -Wno-unfinished -Wno-pending prog.cob
+--- -	2026-08-04 10:31:43.821777228 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/323/stderr	2026-08-04 10:31:43.821030686 +0000
+@@ -1,11 +1,2 @@
+-prog.cob:60: warning: prototype and definition of 'invalid-1' do not match
+-prog.cob:60: note: definition is a program but the prototype is a function
+-prog.cob:60: note: DECIMAL-POINT IS COMMA clauses differ
+-prog.cob:60: note: CURRENCY clauses differ
+-prog.cob:60: note: parameters #1 ('a-1' in the definition and 'x1' in the prototype) differ
+-prog.cob:60: note: returning items ('b' in the definition and 'y' in the prototype) differ
+-prog.cob:73: warning: prototype and definition of 'invalid-2' do not match
+-prog.cob:73: note: number of parameters differ
+-prog.cob:73: note: definition has a RETURNING item but protoype does not
+-prog.cob:106: error: prototypes must be come before any program/function definitions
++cobc-rs: unsupported: verb RETURNING
+ 
+323. syn_misc.at:3978: 323. checking prototypes and definitions match (syn_misc.at:3978): expected failure (syn_misc.at:4100)

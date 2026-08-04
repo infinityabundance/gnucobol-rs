@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+302. syn_misc.at:2950: testing ANY LENGTH item as BY VALUE formal parameter ...
+./syn_misc.at:2966: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.809373435 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/302/stderr	2026-08-04 10:31:43.808761454 +0000
+@@ -1,3 +1 @@
+-prog.cob:9: warning: handling of parameters passed BY VALUE is unfinished; implementation is likely to be changed
+-prog.cob:9: error: ANY LENGTH items may only be BY REFERENCE formal parameters
+ 
+./syn_misc.at:2966: exit code was 0, expected 1
+302. syn_misc.at:2950: 302. ANY LENGTH item as BY VALUE formal parameter (syn_misc.at:2950): FAILED (syn_misc.at:2966)

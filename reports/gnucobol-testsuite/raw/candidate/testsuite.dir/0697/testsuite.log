@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+697. run_misc.at:1060: testing Index and parenthesized expression ...
+./run_misc.at:1076: $COMPILE prog.cob
+./run_misc.at:1077: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/697/stderr	2026-08-04 10:31:44.046545720 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: trailing tokens in condition at +
+--- -	2026-08-04 10:31:44.047966619 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/697/stdout	2026-08-04 10:31:44.047523513 +0000
+@@ -1 +1 @@
+-OK
++
+./run_misc.at:1077: exit code was 2, expected 0
+697. run_misc.at:1060: 697. Index and parenthesized expression (run_misc.at:1060): FAILED (run_misc.at:1077)

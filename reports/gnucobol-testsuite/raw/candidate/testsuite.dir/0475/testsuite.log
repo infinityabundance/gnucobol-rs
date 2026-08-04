@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+475. listings.at:21: testing Minimal lines per listing pages ...
+./listings.at:75: $COMPILE_ONLY -t prog.lst -tlines=2 prog.cob
+--- -	2026-08-04 10:31:43.899731660 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/475/stderr	2026-08-04 10:31:43.898860646 +0000
+@@ -1,2 +1,2 @@
+-cobc: warning: 2 lines per listing page specified, using 20
++cobc-rs: -t: unsupported option (rejected-unsupported; listing file: no listing model; reject honestly): prog.lst
+ 
+./listings.at:75: exit code was 1, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+475. listings.at:21: 475. Minimal lines per listing pages (listings.at:21): FAILED (listings.at:75)

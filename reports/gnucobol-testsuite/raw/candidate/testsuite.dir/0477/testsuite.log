@@ -1,0 +1,43 @@
+#                             -*- compilation -*-
+477. listings.at:149: testing Replacement w/o strings ...
+./listings.at:169: $COMPILE_LISTING0 -t- -ftsymbols prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/477/stderr	2026-08-04 10:31:43.898860646 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.900033072 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/477/stdout	2026-08-04 10:31:43.899426531 +0000
+@@ -1,31 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         REPLACE   =="SOME"== BY =="MANY"==
+-000003                   =='SOME'== BY =="VERY MUCH"==
+-000004                   ==STUFF==  BY ==NEWSTUFF==.
+-000005         IDENTIFICATION   DIVISION.
+-000006         PROGRAM-ID.      prog.
+-000007         DATA             DIVISION.
+-000008         WORKING-STORAGE  SECTION.
+-000009         01 NEWSTUFF PIC X(80).
+-000010         PROCEDURE        DIVISION.
+-000011             DISPLAY NEWSTUFF " BENEFITS SOME PARTS FROM "
+-000012             "MANY" "STUFF" ", " "VERY MUCH" "GOOD" NEWSTUFF
+-000012+       -    "AND STUFF !"
+-000013                     NO ADVANCING
+-000014             END-DISPLAY.
+-000015             STOP RUN.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      WORKING-STORAGE SECTION
+-
+-00080 ALPHANUMERIC   01   NEWSTUFF                       X(80)
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:169: exit code was 1, expected 0
+477. listings.at:149: 477. Replacement w/o strings (listings.at:149): FAILED (listings.at:169)

@@ -1,0 +1,65 @@
+
+#include <stdio.h>
+#include <libcob.h>
+
+#ifndef NULL
+#define NULL (void*)0
+#endif
+
+int
+main (int argc, char **argv)
+{
+   /* for storing libcob return state */
+   int cob_ret;
+
+   /* initialize parameters */
+   void *cob_argv[3];
+
+   char *p1 = "A";
+   cob_argv[0] = p1;
+   cob_argv[1] = argv[2];
+   cob_argv[2] = NULL;
+
+   /* initialize the COBOL run-time library */
+   cob_init (argc, argv);
+
+   /* call COBOL program */
+   cob_ret = cob_call_with_exception_check (argv[1], 2, cob_argv);
+
+   switch (cob_ret) {
+   case 0:  /* program coming back */
+
+      /* Clean up and terminate runtime */
+      cob_runtime_hint ("program exited with return code %d",
+         cob_last_exit_code ());
+      cob_tidy ();
+      break;
+
+   case 1:  /* normal exit */
+      cob_runtime_hint ("STOP RUN with return code %d",
+         cob_last_exit_code ());
+      break;
+
+   case -1:  /* error exit */
+      cob_runtime_hint ("error exit with return code %d and error \"%s\"",
+         cob_last_exit_code (), cob_last_runtime_error ());
+      break;
+
+   case -2:  /* hard error exit */
+      cob_runtime_hint ("hard error exit with return code %d and error \"%s\"",
+         cob_last_exit_code (), cob_last_runtime_error ());
+      break;
+
+   case -3:  /* signal handler  exit */
+      cob_runtime_hint ("signal handler exit with signal %d and error \"%s\"",
+         cob_last_exit_code (), cob_last_runtime_error ());
+      break;
+
+   default:
+      cob_runtime_hint ("unexpected return from cob_call_with_exception_check, "
+         "last exit code %d, last error \"%s\"",
+         cob_last_exit_code (), cob_last_runtime_error ());
+      break;
+   }
+   return 0;
+}

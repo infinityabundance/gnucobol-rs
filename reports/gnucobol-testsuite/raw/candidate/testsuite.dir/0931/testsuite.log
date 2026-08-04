@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+931. run_file.at:9847: testing EXTFH: changing record address ...
+./run_file.at:10152: $COMPILE -fnotrunc progl.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/931/stderr	2026-08-04 10:31:44.212152574 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fnotrunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
+./run_file.at:10152: exit code was 1, expected 0
+931. run_file.at:9847: 931. EXTFH: changing record address (run_file.at:9847): FAILED (run_file.at:10152)

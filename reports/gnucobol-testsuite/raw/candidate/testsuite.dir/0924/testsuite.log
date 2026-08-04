@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+924. run_file.at:7373: testing EXTFH: using ISAM callback ...
+./run_file.at:8028: $COMPILE -fcallfh=TSTFH prog.cob cmod.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/924/stderr	2026-08-04 10:31:44.207719329 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fcallfh=TSTFH: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): TSTFH
+./run_file.at:8028: exit code was 1, expected 0
+924. run_file.at:7373: 924. EXTFH: using ISAM callback (run_file.at:7373): FAILED (run_file.at:8028)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1127. run_extensions.at:846: testing OCCURS UNBOUNDED (1) ...
+./run_extensions.at:900: $COBC -x -std=ibm prog.cob
+./run_extensions.at:901: $COMPILE prog.cob
+./run_extensions.at:903: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1127/stderr	2026-08-04 10:31:44.439643731 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OCCURS max UNBOUNDED is not an integer
+./run_extensions.at:903: exit code was 2, expected 0
+1127. run_extensions.at:846: 1127. OCCURS UNBOUNDED (1) (run_extensions.at:846): FAILED (run_extensions.at:903)

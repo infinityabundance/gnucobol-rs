@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+238. syn_reportwriter.at:521: testing PAGE LIMITS clause ...
+./syn_reportwriter.at:548: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.778356393 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/238/stderr	2026-08-04 10:31:43.777844809 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:19: error: duplicate HEADING clause
+-prog.cob:19: error: duplicate LINE LIMIT clause
+-prog.cob:22: error: cannot specify HEADING without number of lines on page
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+238. syn_reportwriter.at:521: 238. PAGE LIMITS clause (syn_reportwriter.at:521): FAILED (syn_reportwriter.at:548)

@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+449. syn_functions.at:232: testing Function definition inside program ...
+./syn_functions.at:248: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.886460229 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/449/stderr	2026-08-04 10:31:43.885667001 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:10: error: functions may not be defined within a program/function
+-prog.cob:11: error: FUNCTION 'f' has no PROCEDURE DIVISION
++cobc-rs: unsupported: verb IDENTIFICATION
+ 
+449. syn_functions.at:232: 449. Function definition inside program (syn_functions.at:232): FAILED (syn_functions.at:248)

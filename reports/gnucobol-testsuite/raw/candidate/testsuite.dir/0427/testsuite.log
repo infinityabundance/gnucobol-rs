@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+427. syn_screen.at:250: testing Incorrect USAGE clause ...
+./syn_screen.at:273: $COMPILE prog.cob
+--- -	2026-08-04 10:31:43.874554204 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/427/stderr	2026-08-04 10:31:43.874092924 +0000
+@@ -1,5 +1 @@
+-prog.cob:12: error: syntax error, unexpected BINARY
+-prog.cob:13: error: syntax error, unexpected BINARY, expecting DISPLAY or DISPLAY-1 or NATIONAL or UTF-8
+-prog.cob:14: error: syntax error, unexpected COMP-5
+-prog.cob:15: error: syntax error, unexpected COMP-2
+ 
+./syn_screen.at:273: exit code was 0, expected 1
+427. syn_screen.at:250: 427. Incorrect USAGE clause (syn_screen.at:250): FAILED (syn_screen.at:273)

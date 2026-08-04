@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+914. run_file.at:6358: testing INDEXED file with SHARING NO ...
+./run_file.at:6430: $COMPILE prog1.cob
+./run_file.at:6431: $COMPILE prog2.cob
+./run_file.at:6432: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/914/stderr	2026-08-04 10:31:44.201269656 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./run_file.at:6432: exit code was 2, expected 0
+914. run_file.at:6358: 914. INDEXED file with SHARING NO (run_file.at:6358): expected failure (run_file.at:6432)

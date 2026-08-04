@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+381. syn_misc.at:7083: testing conditional directives with lvl 78 (1) ...
+./syn_misc.at:7109: $COMPILE_ONLY -D X prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/381/stderr	2026-08-04 10:31:43.848550238 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: unsupported level number 78
+--- -	2026-08-04 10:31:43.850234478 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/381/stdout	2026-08-04 10:31:43.849801781 +0000
+@@ -1,2 +1 @@
+-X defined
+ 
+./syn_misc.at:7109: exit code was 1, expected 0
+381. syn_misc.at:7083: 381. conditional directives with lvl 78 (1) (syn_misc.at:7083): expected failure (syn_misc.at:7109)

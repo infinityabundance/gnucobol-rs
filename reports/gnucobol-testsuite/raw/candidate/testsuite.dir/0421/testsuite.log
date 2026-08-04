@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+421. syn_multiply.at:102: testing Category check of literals ...
+./syn_multiply.at:123: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.869774444 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/421/stderr	2026-08-04 10:31:43.869329504 +0000
+@@ -1,4 +1 @@
+-prog.cob:10: error: 'literal "a"' is not numeric
+-prog.cob:14: error: 'literal "a"' is not numeric
+-prog.cob:14: error: 'literal "b"' is not numeric
+ 
+./syn_multiply.at:123: exit code was 0, expected 1
+421. syn_multiply.at:102: 421. Category check of literals (syn_multiply.at:102): FAILED (syn_multiply.at:123)

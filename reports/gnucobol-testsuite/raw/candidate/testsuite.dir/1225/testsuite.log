@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1225. run_ml.at:532: testing JSON GENERATE general ...
+./run_ml.at:584: $COMPILE prog.cob
+./run_ml.at:585: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1225/stderr	2026-08-04 10:31:44.530310392 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: ALL
+./run_ml.at:585: exit code was 2, expected 0
+1225. run_ml.at:532: 1225. JSON GENERATE general (run_ml.at:532): FAILED (run_ml.at:585)

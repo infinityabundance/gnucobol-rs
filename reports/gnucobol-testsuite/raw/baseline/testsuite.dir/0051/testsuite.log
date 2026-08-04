@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+51. syn_copy.at:125: testing COPY: relative copybooks ...
+./syn_copy.at:131: mkdir -p SUB/SUB2/SUB3
+./syn_copy.at:158: mkdir -p SUBX
+./syn_copy.at:163: $COMPILE_ONLY -I. SUB/prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/51/stderr	2026-08-04 10:31:15.706485350 +0000
+@@ -0,0 +1,3 @@
++SUB/prog.cob:6: error: SUB2/copy.inc: No such file or directory
++SUB/prog.cob:8: error: 'TEST-VAR' is not defined
++SUB/prog.cob:8: error: 'TEST-VAR2' is not defined
+./syn_copy.at:163: exit code was 1, expected 0
+51. syn_copy.at:125: 51. COPY: relative copybooks (syn_copy.at:125): expected failure (syn_copy.at:163)

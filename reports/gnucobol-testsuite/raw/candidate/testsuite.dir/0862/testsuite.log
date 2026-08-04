@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+862. run_file.at:796: testing ASSIGN filename expansion ...
+./run_file.at:816: $COMPILE -ffilename-mapping prog.cob
+./run_file.at:817: DIR="." $COBCRUN_DIRECT ./prog
+./run_file.at:818: test -f "./FILENAME" && rm -f "./FILENAME"
+./run_file.at:818: exit code was 1, expected 0
+862. run_file.at:796: 862. ASSIGN filename expansion (run_file.at:796): FAILED (run_file.at:818)

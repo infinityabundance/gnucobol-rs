@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+256. syn_misc.at:773: testing one line program ...
+./syn_misc.at:779: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.785291261 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/256/stderr	2026-08-04 10:31:43.784559947 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:1: error: PROGRAM-ID header missing
+-prog.cob:1: error: PROCEDURE DIVISION header missing
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+256. syn_misc.at:773: 256. one line program (syn_misc.at:773): FAILED (syn_misc.at:779)

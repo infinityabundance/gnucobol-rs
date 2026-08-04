@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1281. data_packed.at:28746: testing BCD ADD and SUBTRACT, all ROUNDED MODEs ...
+./data_packed.at:34793: $COMPILE prog.cob
+./data_packed.at:34794: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1281/stderr	2026-08-04 10:31:44.599641913 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./data_packed.at:34794: exit code was 2, expected 0
+1281. data_packed.at:28746: 1281. BCD ADD and SUBTRACT, all ROUNDED MODEs (data_packed.at:28746): FAILED (data_packed.at:34794)

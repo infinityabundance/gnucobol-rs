@@ -2,7 +2,7 @@
      Evidence of record: casefile.json. Portable attestations: sarif.json, intoto-statement.json, dsse-envelope.json. -->
 # Forensic case file — GNURUST.SCREENIO.ACCEPT.2 (court-casefile)
 
-**Verdict: PASS** · 11/11 pass, 0 fail · crate `gnucobol-rs` 0.8.53
+**Verdict: PASS** · 11/11 pass, 0 fail · crate `gnucobol-rs` 0.8.54
 
 - **Oracle:** cobc SCREEN SECTION ACCEPT with over-width input (libcob/screenio.c via ncurses field input), input fed then EOF, captured under a pty with TERM=xterm; DIFFERENTIALLY against GnuCOBOL 3.2 AND 3.1.2
 - **Byte domain(s):** a SCREEN SECTION ACCEPT of a width-1..6 field + printable input LONGER than the field -> the exact ncurses BEL/overwrite overflow byte stream, on the admitted terminal

@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+786. run_misc.at:5363: testing STOP RUN WITH ERROR STATUS ...
+./run_misc.at:5375: $COMPILE prog.cob
+./run_misc.at:5376: $COBCRUN_DIRECT ./prog
+./run_misc.at:5376: exit code was 0, expected 1
+786. run_misc.at:5363: 786. STOP RUN WITH ERROR STATUS (run_misc.at:5363): FAILED (run_misc.at:5376)

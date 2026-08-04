@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+365. syn_misc.at:6396: testing CONTINUE statement ...
+./syn_misc.at:6423: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.841778033 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/365/stderr	2026-08-04 10:31:43.841243647 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:19: error: amount must be specified as a numeric expression
+-prog.cob:20: error: amount must be specified as a numeric expression
+-prog.cob:21: error: amount must be specified as a numeric expression
++cobc-rs: unsupported: verb AFTER
+ 
+365. syn_misc.at:6396: 365. CONTINUE statement (syn_misc.at:6396): FAILED (syn_misc.at:6423)

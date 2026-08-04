@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+3. used_binaries.at:179: testing compiler outputs (general) ...
+./used_binaries.at:193: $COBC -C prog.cob
+stderr:
+cobc-rs: -C: unsupported option (rejected-unsupported; generate C: the candidate is an interpreter, not a C emitter; reject honestly): 
+stdout:
+./used_binaries.at:193: exit code was 1, expected 0
+3. used_binaries.at:179: 3. compiler outputs (general) (used_binaries.at:179): FAILED (used_binaries.at:193)

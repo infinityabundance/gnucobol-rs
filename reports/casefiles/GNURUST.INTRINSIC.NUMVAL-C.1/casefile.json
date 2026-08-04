@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.NUMVAL-C.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.53",
+  "crate_version": "0.8.54",
   "damage_if_overclaimed": "using NUMVAL on currency-formatted input (or assuming a non-$ symbol/European decimal) misparses monetary amounts",
   "hash_chain": {
-    "inputs_sha256": "dec0f553a32f1df7e45a0626e3d20a929597808a04b1eaf5faa4f5f4b3efdf97"
+    "inputs_sha256": "6d2c55ab74e7701cf174a9b7a59608e99d685e0b1f7c529da94bf53488154d7b"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "acb9c6266030014c1a687887f1b867c54fd9cded870433a227e9be7e01770ba6",
-    "receipt_sha256": "4200fb06a18415bf575b9c1d059553e25398da844407d8f234da4adcebd34ee7"
+    "receipt_sha256": "5138c9a5fdaee7af834c6e0654fdf8ac194672167cd3c910f92484071cbd59c5"
   },
   "kind": "court-casefile",
   "lie_prevented": [

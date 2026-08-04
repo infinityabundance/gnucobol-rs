@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+650. run_accept.at:51: testing ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (1) ...
+./run_accept.at:112: $COMPILE prog.cob
+./run_accept.at:113: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/650/stderr	2026-08-04 10:31:44.014878065 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
+./run_accept.at:113: exit code was 2, expected 0
+650. run_accept.at:51: 650. ACCEPT FROM TIME / DATE / DAY / DAY-OF-WEEK (1) (run_accept.at:51): FAILED (run_accept.at:113)

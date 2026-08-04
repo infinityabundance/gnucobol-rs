@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+676. run_misc.at:221: testing CURRENCY SIGN WITH PICTURE SYMBOL ...
+./run_misc.at:258: $COMPILE prog.cob
+./run_misc.at:259: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/676/stderr	2026-08-04 10:31:44.030914240 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC U99V99: UnsupportedSymbol('U')
+--- -	2026-08-04 10:31:44.032304552 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/676/stdout	2026-08-04 10:31:44.031838363 +0000
+@@ -1,4 +1 @@
+-#EUR 12.34# equal #1,234 ct (EUR)#
+-Invoice amount #1 is  $US1,500.00.
+-Invoice amount #2 is     $US12.34.
+ 
+./run_misc.at:259: exit code was 2, expected 0
+676. run_misc.at:221: 676. CURRENCY SIGN WITH PICTURE SYMBOL (run_misc.at:221): expected failure (run_misc.at:259)

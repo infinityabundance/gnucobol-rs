@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+1096. run_functions.at:4083: testing FUNCTION TRIM with reference modding ...
+./run_functions.at:4100: $COMPILE prog.cob
+./run_functions.at:4101: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1096/stderr	2026-08-04 10:31:44.402017158 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: (2
+--- -	2026-08-04 10:31:44.403721966 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1096/stdout	2026-08-04 10:31:44.402891478 +0000
+@@ -1,3 +1 @@
+-#b.
+-a#b
+ 
+./run_functions.at:4101: exit code was 2, expected 0
+1096. run_functions.at:4083: 1096. FUNCTION TRIM with reference modding (run_functions.at:4083): FAILED (run_functions.at:4101)

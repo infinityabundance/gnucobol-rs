@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+864. run_file.at:999: testing ASSIGN with COB_FILE_PATH ...
+./run_file.at:1019: $COMPILE -ffilename-mapping prog.cob
+./run_file.at:1020: rm -rf "tstdir" && mkdir "tstdir"
+./run_file.at:1021: COB_FILE_PATH="tstdir" $COBCRUN_DIRECT ./prog
+./run_file.at:1022: test -f "tstdir/FILENAMEX" && rm -f "tstdir/FILENAMEX"
+./run_file.at:1022: exit code was 1, expected 0
+864. run_file.at:999: 864. ASSIGN with COB_FILE_PATH (run_file.at:999): FAILED (run_file.at:1022)

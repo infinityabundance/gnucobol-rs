@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1263. data_packed.at:639: testing MOVE PACKED-DECIMAL to DISPLAY ...
+./data_packed.at:819: $COMPILE prog.cob
+./data_packed.at:820: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1263/stderr	2026-08-04 10:31:44.564501240 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE BINARY-INT
+./data_packed.at:820: exit code was 2, expected 0
+1263. data_packed.at:639: 1263. MOVE PACKED-DECIMAL to DISPLAY (data_packed.at:639): FAILED (data_packed.at:820)

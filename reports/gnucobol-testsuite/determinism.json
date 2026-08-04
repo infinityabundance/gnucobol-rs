@@ -1,0 +1,15 @@
+{
+ "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
+ "pass_a": {
+  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T103103Z-9da27b98/pass-a/summary.json",
+  "summary_sha256": "0ef66c79bbd591a15f6a3ee94f400c3c80cf88c6746c920624e8fbfbe2ce7613"
+ },
+ "pass_b": {
+  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T103103Z-9da27b98/pass-b/summary.json",
+  "summary_sha256": "0ef66c79bbd591a15f6a3ee94f400c3c80cf88c6746c920624e8fbfbe2ce7613"
+ },
+ "per_test_classifications_identical": true,
+ "schema": "gnurust-gnucobol-testsuite-determinism-v1",
+ "stable_summary_identical": true,
+ "path_notation": "paths are symbolic: $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run-evidence/"
+}

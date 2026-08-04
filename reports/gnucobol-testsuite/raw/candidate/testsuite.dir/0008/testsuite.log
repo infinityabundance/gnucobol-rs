@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+8. used_binaries.at:374: testing temporary path invalid ...
+./used_binaries.at:390: TMPDIR="" TMP="notthere" TEMP="" $COMPILE prog.cob
+--- -	2026-08-04 10:31:43.666175496 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/8/stderr	2026-08-04 10:31:43.665264928 +0000
+@@ -1,2 +1 @@
+-libcob: warning: Temporary directory TMP is invalid, adjust TMPDIR!
+ 
+8. used_binaries.at:374: 8. temporary path invalid (used_binaries.at:374): FAILED (used_binaries.at:390)

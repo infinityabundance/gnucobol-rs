@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+500. listings.at:3245: testing Invalid PICTURE strings ...
+./listings.at:3348: $COMPILE_LISTING0 -t prog.lst -ftsymbols -Wno-pending -Wno-unfinished -fword-continuation=ok prog.cob
+stderr:
+cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+./listings.at:3684: diff expected.lst prog.lst
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/500/stderr	2026-08-04 10:31:43.914949549 +0000
+@@ -0,0 +1 @@
++diff: prog.lst: No such file or directory
+./listings.at:3684: exit code was 2, expected 0
+prog.lst:
+sed: can't read prog.lst: No such file or directory
+500. listings.at:3245: 500. Invalid PICTURE strings (listings.at:3245): FAILED (listings.at:3684)

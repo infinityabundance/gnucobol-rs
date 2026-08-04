@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+403. syn_move.at:90: testing MOVE alphabetic TO x ...
+./syn_move.at:116: $COMPILE_ONLY -Wno-unfinished prog.cob
+--- -	2026-08-04 10:31:43.861253840 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/403/stderr	2026-08-04 10:31:43.859880179 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:18: error: invalid MOVE statement
+-prog.cob:19: error: invalid MOVE statement
++cobc-rs: unsupported: PIC BX: UnsupportedSymbol('X')
+ 
+403. syn_move.at:90: 403. MOVE alphabetic TO x (syn_move.at:90): FAILED (syn_move.at:116)

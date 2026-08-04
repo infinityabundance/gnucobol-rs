@@ -1,0 +1,67 @@
+{
+  "generated_by": "gnucobol-rs-testsuite classify",
+  "pass": "a",
+  "schema": "gnurust-gnucobol-testsuite-summary-v1",
+  "summary": {
+    "candidate": {
+      "check_reject": 439,
+      "layout_reject": 0,
+      "module_model_unsupported": 407,
+      "nondeterministic": 0,
+      "not_reached": 0,
+      "parse_reject": 0,
+      "passed": 0,
+      "preprocess_reject": 0,
+      "runtime_fail": 2,
+      "skipped": 0,
+      "timeout": 0,
+      "unsupported": 22
+    },
+    "comparison": {
+      "exit_status_mismatch": 0,
+      "generated_file_mismatch": 0,
+      "observable_match": 173,
+      "stderr_mismatch": 0,
+      "stdout_mismatch": 0
+    },
+    "first_failure": {
+      "CANDIDATE_CHECK_REJECT": 439,
+      "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 407,
+      "CANDIDATE_RUNTIME_FAIL": 2,
+      "CANDIDATE_UNSUPPORTED": 22,
+      "OBSERVABLE_MATCH": 173,
+      "ORACLE_SKIP": 9,
+      "ORACLE_XFAIL": 31,
+      "WRAPPER_INVOCATION_MALFORMED": 26,
+      "WRAPPER_OPTION_UNSUPPORTED": 173
+    },
+    "oracle": {
+      "fail": 0,
+      "infra_error": 0,
+      "pass": 1242,
+      "skip": 9,
+      "timeout": 0,
+      "xfail": 31,
+      "xpass": 0
+    },
+    "reason_codes": {
+      "CANDIDATE_CHECK_REJECT": 439,
+      "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 407,
+      "CANDIDATE_RUNTIME_FAIL": 2,
+      "CANDIDATE_UNSUPPORTED": 22,
+      "OBSERVABLE_MATCH": 173,
+      "ORACLE_SKIP": 9,
+      "ORACLE_XFAIL": 31,
+      "WRAPPER_INVOCATION_MALFORMED": 26,
+      "WRAPPER_OPTION_UNSUPPORTED": 173
+    },
+    "total_tests": 1282,
+    "wrapper": {
+      "artifact_error": 0,
+      "invocation_malformed": 26,
+      "option_noop": 0,
+      "option_translated": 0,
+      "option_unsupported": 173
+    }
+  }
+}

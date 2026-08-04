@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+884. run_file.at:3586: testing DECLARATIVES procedure referencing (multiple) ...
+./run_file.at:3624: $COMPILE -fno-section-exit-check prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/884/stderr	2026-08-04 10:31:44.175222709 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-section-exit-check: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_file.at:3624: exit code was 1, expected 0
+884. run_file.at:3586: 884. DECLARATIVES procedure referencing (multiple) (run_file.at:3586): FAILED (run_file.at:3624)

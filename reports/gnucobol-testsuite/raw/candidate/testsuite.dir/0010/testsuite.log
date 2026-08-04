@@ -1,0 +1,39 @@
+#                             -*- compilation -*-
+10. used_binaries.at:427: testing C Compiler optimizations ...
+./used_binaries.at:439: $COMPILE -v -O  -o prog  prog.cob
+stderr:
+stdout:
+./used_binaries.at:440: $COBCRUN_DIRECT ./prog
+./used_binaries.at:442: $COMPILE -v -O2 -o prog2 prog.cob
+stderr:
+stdout:
+./used_binaries.at:443: $COBCRUN_DIRECT ./prog2
+./used_binaries.at:445: $COMPILE -v -Os -o progs prog.cob
+stderr:
+stdout:
+./used_binaries.at:446: $COBCRUN_DIRECT ./progs
+./used_binaries.at:448: $COMPILE -v -O3 -o prog3 prog.cob
+stderr:
+stdout:
+./used_binaries.at:449: $COBCRUN_DIRECT ./prog3
+./used_binaries.at:451: $COMPILE -v -O0  -o prog  prog.cob
+stderr:
+stdout:
+./used_binaries.at:452: $COBCRUN_DIRECT ./prog
+./used_binaries.at:455: mkdir -p sub
+./used_binaries.at:456: $COMPILE_MODULE -v -O2 -o $(_return_path "sub/prog") prog.cob
+stderr:
+stdout:
+sub/prog
+./used_binaries.at:457: $COBCRUN -M sub/ prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/10/stderr	2026-08-04 10:31:43.681588268 +0000
+@@ -0,0 +1 @@
++cobc-rs (cobcrun): module "sub/" not found in the build-local module registry (no sub/.so.cobr.json found)
+--- -	2026-08-04 10:31:43.682861201 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/10/stdout	2026-08-04 10:31:43.682294555 +0000
+@@ -1 +1 @@
+-OK
++
+./used_binaries.at:457: exit code was 2, expected 0
+10. used_binaries.at:427: 10. C Compiler optimizations (used_binaries.at:427): FAILED (used_binaries.at:457)

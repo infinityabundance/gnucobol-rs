@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+607. run_fundamental.at:6234: testing TYPEDEF application ...
+./run_fundamental.at:6280: $COMPILE caller.cob
+./run_fundamental.at:6281: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/607/stdout	2026-08-04 10:31:43.985343056 +0000
+@@ -0,0 +1 @@
++callee.so
+607. run_fundamental.at:6234: 607. TYPEDEF application (run_fundamental.at:6234): FAILED (run_fundamental.at:6281)

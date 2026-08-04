@@ -1,0 +1,51 @@
+#                             -*- compilation -*-
+488. listings.at:1269: testing Error/Warning messages ...
+./listings.at:1295: $COMPILE_LISTING -Wimplicit-define -t- prog.cob
+stderr:
+cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.907429310 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/488/stdout	2026-08-04 10:31:43.906679312 +0000
+@@ -1,42 +1 @@
+-GnuCOBOL V.R.P          prog.cob                                        Page 0001
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         COPY "copy.inc".
+-000001C
+-000002C        ENVIRONMENT    DIVISION.
+-000003C        INPUT-OUTPUT   SECTION.
+-000004C        FILE-CONTROL.
+-000005C            SELECT testfile
+-error: missing file description for FILE testfile
+-000006C                ASSIGN TO filename
+-000007C                ORGANIZATION RELATIVE
+-000008C                ACCESS IS sequentia
+-error: syntax error, unexpected Identifier, expecting DYNAMIC or RANDOM or
+-     + SEQUENTIAL
+-000009C                STATUS IS stat.
+-000005         DATA             DIVISION.
+-000006         WORKING-STORAGE  SECTION.
+-000007         PROCEDURE        DIVISION.
+-warning: variable 'filename' will be implicitly defined
+-000008             DISPLAY FIRST-MATCH NO ADVANCING
+-error: 'FIRST-MATCH' is not defined
+-000009             END-DISPLAY.
+-000010             STOP RUN.
+-
+-
+-GnuCOBOL V.R.P          prog.cob                                        Page 0002
+-
+-Error/Warning summary:
+-
+-copy.inc:5: error: missing file description for FILE testfile
+-copy.inc:8: error: syntax error, unexpected Identifier, expecting DYNAMIC or RANDOM or SEQUENTIAL
+-prog.cob:7: warning: variable 'filename' will be implicitly defined
+-prog.cob:8: error: 'FIRST-MATCH' is not defined
+-
+-1 warning in compilation group
+-3 errors in compilation group
+ 
+488. listings.at:1269: 488. Error/Warning messages (listings.at:1269): FAILED (listings.at:1295)

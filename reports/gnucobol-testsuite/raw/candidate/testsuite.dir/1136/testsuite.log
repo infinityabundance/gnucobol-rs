@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+1136. run_extensions.at:1761: testing CALL unusual PROGRAM-ID. ...
+./run_extensions.at:1815: $COMPILE_MODULE A@B.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1136/stdout	2026-08-04 10:31:44.448944700 +0000
+@@ -0,0 +1 @@
++A@B.so
+1136. run_extensions.at:1761: 1136. CALL unusual PROGRAM-ID. (run_extensions.at:1761): FAILED (run_extensions.at:1815)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+101. syn_definition.at:903: testing Ambiguous reference with qualification ...
+./syn_definition.at:922: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.713503184 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/101/stderr	2026-08-04 10:31:43.712797208 +0000
+@@ -1,4 +1 @@
+-prog.cob:13: error: 'Y IN X' is ambiguous; needs qualification
+-prog.cob:8: note: 'Y IN X IN G1' defined here
+-prog.cob:11: note: 'Y IN X IN G2' defined here
+ 
+./syn_definition.at:922: exit code was 0, expected 1
+101. syn_definition.at:903: 101. Ambiguous reference with qualification (syn_definition.at:903): FAILED (syn_definition.at:922)

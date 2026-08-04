@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+1189. run_extensions.at:4804: testing CALL own PROGRAM-ID and RECURSIVE attribute ...
+./run_extensions.at:4823: $COMPILE prog.cob
+--- -	2026-08-04 10:31:44.494951807 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1189/stderr	2026-08-04 10:31:44.493966440 +0000
+@@ -1,4 +1 @@
+-prog.cob: in paragraph 'T1':
+-prog.cob:12: warning: CALL to own PROGRAM-ID used
+-prog.cob:12: note: assuming RECURSIVE attribute
+ 
+1189. run_extensions.at:4804: 1189. CALL own PROGRAM-ID and RECURSIVE attribute (run_extensions.at:4804): FAILED (run_extensions.at:4823)

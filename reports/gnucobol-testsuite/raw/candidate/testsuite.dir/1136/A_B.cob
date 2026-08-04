@@ -1,0 +1,7 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      "A_B".
+       PROCEDURE        DIVISION.
+           DISPLAY "P4" NO ADVANCING
+           END-DISPLAY.
+           EXIT PROGRAM.

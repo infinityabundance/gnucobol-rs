@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+315. syn_misc.at:3555: testing COBOL-WORDS directive ...
+./syn_misc.at:3617: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.816337627 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/315/stderr	2026-08-04 10:31:43.815582129 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:9: error: 'BREAD' is not a default reserved word, so cannot be aliased
+-prog.cob:11: error: 'ID' is already reserved
+-prog.cob:18: error: 'BREAD' is not a default reserved word, so cannot be aliased
+-prog.cob:20: error: 'ID' is already reserved
+-prog.cob:30: error: 'BREAD' is not a reserved word, so cannot be removed
+-prog.cob:43: error: 'cat' is a reserved word, but isn't supported
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+315. syn_misc.at:3555: 315. COBOL-WORDS directive (syn_misc.at:3555): FAILED (syn_misc.at:3617)

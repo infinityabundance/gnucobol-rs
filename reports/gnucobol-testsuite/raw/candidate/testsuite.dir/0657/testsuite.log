@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+657. run_initialize.at:90: testing INITIALIZE OCCURS with SIGN LEADING / TRAILING ...
+./run_initialize.at:152: $COMPILE prog.cob
+./run_initialize.at:153: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/657/stderr	2026-08-04 10:31:44.016572895 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: X(1),
+--- -	2026-08-04 10:31:44.017621770 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/657/stdout	2026-08-04 10:31:44.016889515 +0000
+@@ -1,3 +1 @@
+-.123000000000000000+
+-.456000000000000000-
+ 
+./run_initialize.at:153: exit code was 2, expected 0
+657. run_initialize.at:90: 657. INITIALIZE OCCURS with SIGN LEADING / TRAILING (run_initialize.at:90): FAILED (run_initialize.at:153)

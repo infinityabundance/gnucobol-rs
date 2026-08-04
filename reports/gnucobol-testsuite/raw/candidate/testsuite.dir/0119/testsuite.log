@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+119. syn_definition.at:1444: testing Nested programs without END PROGRAM ...
+./syn_definition.at:1462: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/119/stderr	2026-08-04 10:31:43.720242497 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: PROG-3: no PROCEDURE DIVISION
+./syn_definition.at:1462: exit code was 1, expected 0
+119. syn_definition.at:1444: 119. Nested programs without END PROGRAM (syn_definition.at:1444): FAILED (syn_definition.at:1462)

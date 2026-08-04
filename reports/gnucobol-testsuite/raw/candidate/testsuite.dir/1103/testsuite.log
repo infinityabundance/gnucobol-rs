@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+1103. run_functions.at:4294: testing Formatted funcs w/ invalid variable format ...
+./run_functions.at:4358: $COMPILE prog.cob
+--- -	2026-08-04 10:31:44.412505771 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1103/stderr	2026-08-04 10:31:44.411190068 +0000
+@@ -1,8 +1 @@
+-prog.cob:11: warning: FUNCTION 'FORMATTED-CURRENT-DATE' has format in variable
+-prog.cob:18: warning: FUNCTION 'FORMATTED-DATE' has format in variable
+-prog.cob:24: warning: FUNCTION 'FORMATTED-DATETIME' has format in variable
+-prog.cob:31: warning: FUNCTION 'FORMATTED-TIME' has format in variable
+-prog.cob:37: warning: FUNCTION 'INTEGER-OF-FORMATTED-DATE' has format in variable
+-prog.cob:44: warning: FUNCTION 'SECONDS-FROM-FORMATTED-TIME' has format in variable
+-prog.cob:51: warning: FUNCTION 'TEST-FORMATTED-DATETIME' has format in variable
+ 
+1103. run_functions.at:4294: 1103. Formatted funcs w/ invalid variable format (run_functions.at:4294): FAILED (run_functions.at:4358)

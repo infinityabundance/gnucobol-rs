@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+127. syn_definition.at:1849: testing ALPHABET definition ...
+./syn_definition.at:1866: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.724914436 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/127/stderr	2026-08-04 10:31:43.724497519 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:7: error: duplicate character values in alphabet 'TESTME': x'00', A, B
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+127. syn_definition.at:1849: 127. ALPHABET definition (syn_definition.at:1849): FAILED (syn_definition.at:1866)

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.INTRINSIC.LENGTH.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.53",
+  "crate_version": "0.8.54",
   "damage_if_overclaimed": "using a digit count where the storage byte length is meant (COMP-3/binary fields) mis-sizes buffers and offsets",
   "hash_chain": {
-    "inputs_sha256": "9e65f2a949260f7a6a9cdd0fbcb02acf5c0c32aa3b1e5af5e30708a6603bae8e"
+    "inputs_sha256": "9633e4678577e1c554c3853c3dbebbc70ddbc5861813b9f98644e37d0113ace1"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "5376cc4743baf70a20e01ceb42865d1fe30aa8b099ca0c495f9600cdf1b14b59",
-    "receipt_sha256": "6f9dc25e7727351ae2d967fb9a5b7a566110b3907c5958c3a282e6fc8462e9d1"
+    "receipt_sha256": "f4d35830cf91ad63afaccfb54f1c43fff8235df32fce9308cfa2772fb17c2b25"
   },
   "kind": "court-casefile",
   "lie_prevented": [

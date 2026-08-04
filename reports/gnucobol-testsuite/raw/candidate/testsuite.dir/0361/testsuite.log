@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+361. syn_misc.at:6004: testing system routines with wrong number of parameters ...
+./syn_misc.at:6023: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.840019745 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/361/stderr	2026-08-04 10:31:43.839449001 +0000
+@@ -1,5 +1 @@
+-prog.cob:11: warning: wrong number of CALL parameters for 'X"91"', 4 given, 3 expected
+-prog.cob:12: error: wrong number of CALL parameters for 'X"91"', 1 given, 3 expected
+-prog.cob:13: warning: wrong number of CALL parameters for 'C$TOUPPER', 3 given, 2 expected
+-prog.cob:14: warning: wrong number of CALL parameters for 'CBL_GC_FORK', 1 given, 0 expected
+ 
+./syn_misc.at:6023: exit code was 0, expected 1
+361. syn_misc.at:6004: 361. system routines with wrong number of parameters (syn_misc.at:6004): FAILED (syn_misc.at:6023)

@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+605. run_fundamental.at:6080: testing Abbreviated Expressions ...
+./run_fundamental.at:6161: $COMPILE prog.cob
+--- -	2026-08-04 10:31:43.984281988 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/605/stderr	2026-08-04 10:31:43.983800040 +0000
+@@ -1,18 +1 @@
+-prog.cob: in paragraph 'MAIN-LINE':
+-prog.cob:47: warning: suggest parentheses around AND within OR
+-prog.cob:53: warning: expression '9' GREATER THAN '2' is always TRUE
+-prog.cob:53: warning: expression '9' GREATER THAN '7' is always TRUE
+-prog.cob:53: warning: expression '9' GREATER THAN '5' is always TRUE
+-prog.cob:53: warning: expression '9' GREATER THAN '1' is always TRUE
+-prog.cob:55: warning: expression '1' LESS THAN '2' is always TRUE
+-prog.cob:55: warning: expression '1' LESS THAN '5' is always TRUE
+-prog.cob:55: warning: expression '1' LESS THAN '7' is always TRUE
+-prog.cob:55: warning: expression '1' LESS THAN '9' is always TRUE
+-prog.cob:57: warning: expression '5' LESS THAN '2' is always FALSE
+-prog.cob:57: warning: expression '5' LESS THAN '1' is always FALSE
+-prog.cob:57: warning: expression '5' LESS THAN '9' is always TRUE
+-prog.cob:57: warning: expression '5' LESS THAN '7' is always TRUE
+-prog.cob:59: warning: expression '5' GREATER THAN '1' is always TRUE
+-prog.cob:59: warning: expression '5' LESS THAN '3' is always FALSE
+-prog.cob:59: warning: expression '5' LESS THAN '6' is always TRUE
+ 
+605. run_fundamental.at:6080: 605. Abbreviated Expressions (run_fundamental.at:6080): FAILED (run_fundamental.at:6161)

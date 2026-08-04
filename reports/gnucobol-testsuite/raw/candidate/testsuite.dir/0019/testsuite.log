@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+19. used_binaries.at:796: testing run job with unsuccessful compilation ...
+./used_binaries.at:808: $COMPILE -j prog.cob
+--- -	2026-08-04 10:31:43.673199380 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/19/stderr	2026-08-04 10:31:43.672743349 +0000
+@@ -1,2 +1 @@
+-prog.cob:6: error: syntax error, unexpected Identifier
+ 
+./used_binaries.at:808: exit code was 0, expected 1
+19. used_binaries.at:796: 19. run job with unsuccessful compilation (used_binaries.at:796): FAILED (used_binaries.at:808)

@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+780. run_misc.at:5157: testing ANY LENGTH (3) ...
+./run_misc.at:5191: $COMPILE prog.cob
+./run_misc.at:5192: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stderr	2026-08-04 10:31:44.102306759 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: ALL
+--- -	2026-08-04 10:31:44.103199995 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stdout	2026-08-04 10:31:44.102563759 +0000
+@@ -1,4 +1 @@
+-abcd
+-abcdabcd
+-aaaaaaaaaaaaaaaaaaaa
+ 
+./run_misc.at:5192: exit code was 2, expected 0
+780. run_misc.at:5157: 780. ANY LENGTH (3) (run_misc.at:5157): FAILED (run_misc.at:5192)

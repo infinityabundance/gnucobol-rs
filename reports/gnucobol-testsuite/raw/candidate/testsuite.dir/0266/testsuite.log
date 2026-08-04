@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+266. syn_misc.at:1068: testing EXAMINE invalid literals ...
+./syn_misc.at:1091: $COMPILE_ONLY -freserved=EXAMINE prog.cob
+--- -	2026-08-04 10:31:43.790488950 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/266/stderr	2026-08-04 10:31:43.789641781 +0000
+@@ -1,9 +1,2 @@
+-prog.cob:12: error: single-character literal or data item expected
+-prog.cob:12: error: single-character literal or data item expected
+-prog.cob:15: error: single-character literal or data item expected
+-prog.cob:16: error: single-character literal or data item expected
+-prog.cob:16: error: syntax error, unexpected (
+-prog.cob:17: error: single-character literal or data item expected
+-prog.cob:17: error: syntax error, unexpected (
+-prog.cob:18: error: syntax error, unexpected ALL
++cobc-rs: -freserved=EXAMINE: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): EXAMINE
+ 
+266. syn_misc.at:1068: 266. EXAMINE invalid literals (syn_misc.at:1068): FAILED (syn_misc.at:1091)

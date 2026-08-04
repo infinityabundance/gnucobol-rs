@@ -1,0 +1,43 @@
+#                             -*- compilation -*-
+478. listings.at:205: testing Partial replacement with literals ...
+./listings.at:232: $COMPILE_LISTING0 -fpartial-replace-when-literal-src=skip -t- prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/478/stderr	2026-08-04 10:31:43.899426531 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.900742965 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/478/stdout	2026-08-04 10:31:43.900150461 +0000
+@@ -1,31 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         1 W-DATA.
+-000007           3 X            PIC X(1) VALUE "X".
+-000008           3 XX           PIC X(2) VALUE "XX".
+-000009           3 Z            PIC X(1) VALUE "Z".
+-000010           3 ZZ           PIC X(2) VALUE "ZZ".
+-000011           3 Y            PIC X(1) VALUE "Y".
+-000012         PROCEDURE        DIVISION.
+-000013             REPLACE LEADING "X" BY SPACES
+-000014                     TRAILING "Z" BY SPACES
+-000015                     LEADING "Y" BY "X".
+-000016         MAIN.
+-000017             DISPLAY "XX: *" X "*"
+-000018             DISPLAY "X: *" X "*"
+-000019             DISPLAY "ZZ: *" ZZ "*"
+-000020             DISPLAY "Z: *" Z "*"
+-000021             DISPLAY "Y: *" X "*"
+-000022             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:232: exit code was 1, expected 0
+478. listings.at:205: 478. Partial replacement with literals (listings.at:205): FAILED (listings.at:232)

@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+897. run_file.at:4729: testing LINAGE and LINAGE-COUNTER sample ...
+./run_file.at:5007: $COMPILE prog.cob
+./run_file.at:5008: COB_CURRENT_DATE="2015/02/06 16:40:52" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/897/stderr	2026-08-04 10:31:44.185788796 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: ALL
+--- -	2026-08-04 10:31:44.186709934 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/897/stdout	2026-08-04 10:31:44.185788796 +0000
+@@ -1,2 +1 @@
+-Normal termination, ending status: 10
+ 
+./run_file.at:5008: exit code was 2, expected 0
+mini-report:
+sed: can't read mini-report: No such file or directory
+897. run_file.at:4729: 897. LINAGE and LINAGE-COUNTER sample (run_file.at:4729): FAILED (run_file.at:5008)

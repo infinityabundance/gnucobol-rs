@@ -1,0 +1,48 @@
+#                             -*- compilation -*-
+505. listings.at:3980: testing Listing-directive statements ...
+./listings.at:4001: $COMPILE_LISTING -t- -std=ibm prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/505/stderr	2026-08-04 10:31:43.914949549 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.915923334 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/505/stdout	2026-08-04 10:31:43.915429915 +0000
+@@ -1,36 +1 @@
+-GnuCOBOL lists IBM      prog.cob                                        Page 0001
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000002         IDENTIFICATION   DIVISION.
+-
+-
+-000004         PROGRAM-ID.      prog.
+-
+-
+-
+-000006         DATA             DIVISION.
+-
+-
+-
+-
+-000008         WORKING-STORAGE  SECTION.
+-000009         01  TITLE-01          PIC X(2).
+-000010         01  TITLE-02          PIC X(2).
+-here goes the code      prog.cob                                        Page 0002
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000012         PROCEDURE        DIVISION.
+-here goes the code      prog.cob                                        Page 0003
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000014             MOVE SPACE TO TITLE-01
+-000015                           TITLE-02.
+-000016             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:4001: exit code was 1, expected 0
+505. listings.at:3980: 505. Listing-directive statements (listings.at:3980): FAILED (listings.at:4001)

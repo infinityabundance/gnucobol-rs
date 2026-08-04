@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+310. syn_misc.at:3275: testing missing periods with COPYs ...
+./syn_misc.at:3314: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.816426032 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/310/stderr	2026-08-04 10:31:43.815582129 +0000
+@@ -1,6 +1,2 @@
+-sec-1.inc: in section 'MAIN':
+-sec-1.inc:2: error: 'SEC-1' is not defined
+-sec-1.inc:2: error: syntax error, unexpected SECTION
+-sec-2.inc:2: error: 'SEC-2' is not defined
+-sec-2.inc:2: error: syntax error, unexpected SECTION
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+ 
+310. syn_misc.at:3275: 310. missing periods with COPYs (syn_misc.at:3275): FAILED (syn_misc.at:3314)

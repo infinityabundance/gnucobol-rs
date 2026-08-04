@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+308. syn_misc.at:3204: testing redundant periods ...
+./syn_misc.at:3227: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.813787964 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/308/stderr	2026-08-04 10:31:43.813106975 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:6: warning: ignoring redundant .
+-prog.cob:12: warning: ignoring redundant .
++cobc-rs: COPY expansion failed (fail closed): copybook 'A' not found
+ 
+./syn_misc.at:3227: exit code was 1, expected 0
+308. syn_misc.at:3204: 308. redundant periods (syn_misc.at:3204): FAILED (syn_misc.at:3227)

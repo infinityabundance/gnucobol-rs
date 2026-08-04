@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+333. syn_misc.at:4481: testing USE FOR DEBUGGING duplicate targets ...
+./syn_misc.at:4522: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.825212672 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/333/stderr	2026-08-04 10:31:43.824406028 +0000
+@@ -1,8 +1,2 @@
+-prog.cob: in section 'test-DEBUG3':
+-prog.cob:26: error: duplicate USE DEBUGGING ON ALL PROCEDURES
+-prog.cob:27: error: duplicate DEBUGGING target: 'j'
+-prog.cob:28: error: duplicate DEBUGGING target: 'i'
+-prog.cob: in section 'test-DEBUG':
+-prog.cob:18: error: DEBUGGING target already specified with ALL PROCEDURES: 'MAIN'
+-prog.cob:18: error: duplicate DEBUGGING target: 'MAIN'
++cobc-rs: unsupported: verb USE
+ 
+333. syn_misc.at:4481: 333. USE FOR DEBUGGING duplicate targets (syn_misc.at:4481): FAILED (syn_misc.at:4522)

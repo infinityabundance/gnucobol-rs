@@ -1,0 +1,15 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog3.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           CURRENCY 'DOLLAR'
+           WITH PICTURE SYMBOL '$'.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       77 SOME-CASH     PIC 9(04).99$.
+       PROCEDURE        DIVISION.
+           MOVE 123.4 TO SOME-CASH
+           DISPLAY SOME-CASH END-DISPLAY.
+           STOP RUN.

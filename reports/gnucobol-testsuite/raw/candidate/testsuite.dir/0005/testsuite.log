@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+5. used_binaries.at:300: testing compiler outputs (path specified) ...
+./used_binaries.at:314: mkdir -p sub
+./used_binaries.at:315: $COBC prog.cob -o sub/prog.c
+./used_binaries.at:316: $COBC $(_return_path "sub/prog.c") -o $(_return_path "sub/prog.$COB_OBJECT_EXT")
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/5/stderr	2026-08-04 10:31:43.668070969 +0000
+@@ -0,0 +1 @@
++cannot read sub/prog.c: stream did not contain valid UTF-8
+./used_binaries.at:316: exit code was 1, expected 0
+5. used_binaries.at:300: 5. compiler outputs (path specified) (used_binaries.at:300): FAILED (used_binaries.at:316)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+698. run_misc.at:1082: testing Alphanumeric and binary numeric ...
+./run_misc.at:1100: $COMPILE prog.cob
+./run_misc.at:1101: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/698/stdout	2026-08-04 10:31:44.046809512 +0000
+@@ -0,0 +1,2 @@
++NG X-X <> X-9
++NG X-9 <> X-X
+698. run_misc.at:1082: 698. Alphanumeric and binary numeric (run_misc.at:1082): FAILED (run_misc.at:1101)

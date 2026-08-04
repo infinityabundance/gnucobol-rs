@@ -1,0 +1,29 @@
+#                             -*- compilation -*-
+469. syn_literals.at:1317: testing ACUCOBOL literals ...
+./syn_literals.at:1338: $COMPILE_ONLY -std=acu prog.cob
+--- -	2026-08-04 10:31:43.895483551 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/469/stderr	2026-08-04 10:31:43.894788705 +0000
+@@ -1,21 +1 @@
+-prog.cob:11: error: invalid B# literal: '1111111111111111111111111111111111 ...'
+-prog.cob:11: note: literal length 65 exceeds 64 characters
+-prog.cob:12: error: invalid O# literal: '11111111111111111111111'
+-prog.cob:12: note: literal length 23 exceeds 22 characters
+-prog.cob:12: error: invalid hexadecimal literal: '11111111111111111'
+-prog.cob:12: note: literal length 17 exceeds 16 characters
+-prog.cob:12: error: invalid hexadecimal literal: '22222222222222222'
+-prog.cob:12: note: literal length 17 exceeds 16 characters
+-prog.cob:14: error: invalid B# literal: '23'
+-prog.cob:14: note: literal contains invalid character '2'
+-prog.cob:14: note: literal contains invalid character '3'
+-prog.cob:14: error: invalid O# literal: '89'
+-prog.cob:14: note: literal contains invalid character '8'
+-prog.cob:14: note: literal contains invalid character '9'
+-prog.cob:14: error: invalid X# literal: 'GG'
+-prog.cob:14: note: literal contains invalid character 'G'
+-prog.cob:14: note: literal contains invalid character 'G'
+-prog.cob:14: error: invalid H# literal: 'HH'
+-prog.cob:14: note: literal contains invalid character 'H'
+-prog.cob:14: note: literal contains invalid character 'H'
+ 
+./syn_literals.at:1338: exit code was 0, expected 1
+469. syn_literals.at:1317: 469. ACUCOBOL literals (syn_literals.at:1317): FAILED (syn_literals.at:1338)

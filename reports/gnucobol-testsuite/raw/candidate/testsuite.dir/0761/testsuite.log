@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+761. run_misc.at:4085: testing COB_PRE_LOAD ...
+./run_misc.at:4104: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/761/stdout	2026-08-04 10:31:44.087647729 +0000
+@@ -0,0 +1 @@
++callee.so
+761. run_misc.at:4085: 761. COB_PRE_LOAD (run_misc.at:4085): FAILED (run_misc.at:4104)

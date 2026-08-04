@@ -1,0 +1,34 @@
+#                             -*- compilation -*-
+1261. data_packed.at:221: testing PACKED-DECIMAL used with MOVE ...
+./data_packed.at:432: $COMPILE prog.cob
+./data_packed.at:433: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stderr	2026-08-04 10:31:44.561851531 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+--- -	2026-08-04 10:31:44.562719439 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stdout	2026-08-04 10:31:44.561851531 +0000
+@@ -1,21 +1 @@
+-34
+-+34
+-234
+-+234
+-34
+--34
+-234
+--234
+-234
+--234
+-34
+-+34
+-234
+-+234
+-34
+--34
+-234
+--234
+-+000000000.000000000
+-+000000001.000000000
+ 
+./data_packed.at:433: exit code was 2, expected 0
+1261. data_packed.at:221: 1261. PACKED-DECIMAL used with MOVE (data_packed.at:221): FAILED (data_packed.at:433)

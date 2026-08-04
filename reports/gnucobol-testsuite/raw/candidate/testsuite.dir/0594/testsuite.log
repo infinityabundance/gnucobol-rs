@@ -1,0 +1,23 @@
+#                             -*- compilation -*-
+594. run_fundamental.at:5232: testing USE FOR DEBUGGING ON ALL PROCEDURES ...
+./run_fundamental.at:5262: $COMPILE prog.cob
+./run_fundamental.at:5263: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:43.977639325 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/594/stdout	2026-08-04 10:31:43.976788369 +0000
+@@ -1,15 +1,9 @@
+-       FIRST-PAR                                        START PROGRAM                 |
+ OK1
+-    16 SECOND-PAR                                                                     |
+ OK2
+-    18 THIRD-PAR                                        FALL THROUGH                  |
+ OK3
+-    21 FIRST-PAR                                        PERFORM LOOP                  |
+ OK1
+-    16 SECOND-PAR                                                                     |
+ OK2
+ OK4
+-    23 SECOND-PAR                                       PERFORM LOOP                  |
+ OK2
+ OK5
+ 
+594. run_fundamental.at:5232: 594. USE FOR DEBUGGING ON ALL PROCEDURES (run_fundamental.at:5232): FAILED (run_fundamental.at:5263)

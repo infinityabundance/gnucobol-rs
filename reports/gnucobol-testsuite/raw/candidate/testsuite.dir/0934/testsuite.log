@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+934. run_file.at:10688: testing EXTFH: reading two files with one FCD ...
+./run_file.at:10835: $COMPILE prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/934/stderr	2026-08-04 10:31:44.213029959 +0000
+@@ -0,0 +1 @@
++cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
+./run_file.at:10835: exit code was 1, expected 0
+934. run_file.at:10688: 934. EXTFH: reading two files with one FCD (run_file.at:10688): FAILED (run_file.at:10835)

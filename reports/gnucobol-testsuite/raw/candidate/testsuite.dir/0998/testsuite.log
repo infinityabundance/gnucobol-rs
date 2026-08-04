@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+998. run_functions.at:581: testing FUNCTION CONTENT-OF ...
+./run_functions.at:650: $COMPILE prog.cob
+./run_functions.at:651: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/998/stderr	2026-08-04 10:31:44.270009921 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: Z
+./run_functions.at:651: exit code was 2, expected 0
+998. run_functions.at:581: 998. FUNCTION CONTENT-OF (run_functions.at:581): FAILED (run_functions.at:651)

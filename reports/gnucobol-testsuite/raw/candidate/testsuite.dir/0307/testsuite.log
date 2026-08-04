@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+307. syn_misc.at:3179: testing wrong dialect hints ...
+./syn_misc.at:3196: $COMPILE_ONLY -std=cobol85 prog.cob
+--- -	2026-08-04 10:31:43.812880132 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/307/stderr	2026-08-04 10:31:43.811791783 +0000
+@@ -1,4 +1 @@
+-prog.cob:10: error: 'CONVERSION' is not defined, but is a reserved word in another dialect
+-prog.cob:11: error: syntax error, unexpected Identifier, expecting SECTION or .
+-prog.cob:11: note: unknown statement 'TRANSFORM'; it may exist in another dialect
+ 
+./syn_misc.at:3196: exit code was 0, expected 1
+307. syn_misc.at:3179: 307. wrong dialect hints (syn_misc.at:3179): FAILED (syn_misc.at:3196)

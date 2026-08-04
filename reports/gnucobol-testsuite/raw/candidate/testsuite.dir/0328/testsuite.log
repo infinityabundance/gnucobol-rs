@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+328. syn_misc.at:4290: testing dangling LINKAGE items ...
+./syn_misc.at:4337: $COMPILE_ONLY -Wlinkage prog.cob
+--- -	2026-08-04 10:31:43.823533321 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/328/stderr	2026-08-04 10:31:43.822951627 +0000
+@@ -1,5 +1,2 @@
+-prog.cob:17: warning: LINKAGE item 'D' is not a PROCEDURE USING parameter
+-prog.cob:22: warning: LINKAGE item 'E' is not a PROCEDURE USING parameter
+-prog.cob:30: warning: LINKAGE item 'F' is not a PROCEDURE USING parameter
+-prog.cob:34: warning: LINKAGE item 'G' is not a PROCEDURE USING parameter
++cobc-rs: unsupported: unsupported level number 78
+ 
+./syn_misc.at:4337: exit code was 1, expected 0
+328. syn_misc.at:4290: 328. dangling LINKAGE items (syn_misc.at:4290): FAILED (syn_misc.at:4337)

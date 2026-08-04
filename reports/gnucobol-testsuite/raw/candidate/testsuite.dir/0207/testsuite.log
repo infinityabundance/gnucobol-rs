@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+207. syn_file.at:1147: testing CODE-SET FOR clause ...
+./syn_file.at:1172: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.761535696 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/207/stderr	2026-08-04 10:31:43.760847854 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:16: warning: handling of CODE-SET is unfinished; implementation is likely to be changed
+-prog.cob:16: error: FOR item 'x' is a record
+-prog.cob:16: error: FOR item 'z' is in different record to 'x'
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+207. syn_file.at:1147: 207. CODE-SET FOR clause (syn_file.at:1147): FAILED (syn_file.at:1172)

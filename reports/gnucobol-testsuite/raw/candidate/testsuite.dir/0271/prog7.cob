@@ -1,0 +1,14 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog7.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           CURRENCY SIGN IS 'T'.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       77 SOME-CASH     PIC 9(04).99T.
+       PROCEDURE        DIVISION.
+           MOVE 123.4 TO SOME-CASH
+           DISPLAY SOME-CASH END-DISPLAY.
+           STOP RUN.

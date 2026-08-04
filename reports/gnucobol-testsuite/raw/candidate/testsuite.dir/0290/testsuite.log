@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+290. syn_misc.at:2382: testing ACUCOBOL USAGE FLOAT / DOUBLE ...
+./syn_misc.at:2400: $COMPILE_ONLY -std=acu-strict prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/290/stderr	2026-08-04 10:31:43.801650977 +0000
+@@ -0,0 +1 @@
++cobc-rs: unsupported: unrecognized USAGE FLOAT
+./syn_misc.at:2400: exit code was 1, expected 0
+290. syn_misc.at:2382: 290. ACUCOBOL USAGE FLOAT / DOUBLE (syn_misc.at:2382): FAILED (syn_misc.at:2400)

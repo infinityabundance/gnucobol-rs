@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+322. syn_misc.at:3951: testing use of program-prototype-names ...
+./syn_misc.at:3969: $COMPILE_ONLY -fprogram-prototypes=warning prog.cob
+--- -	2026-08-04 10:31:43.819673185 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/322/stderr	2026-08-04 10:31:43.819138629 +0000
+@@ -1,5 +1,2 @@
+-prog.cob:9: warning: PROGRAM phrase used
+-prog.cob:8: warning: no definition/prototype seen for PROGRAM 'test-prog'
+-prog.cob:11: warning: CALL/CANCEL with program-prototype-name used
+-prog.cob:12: warning: CALL/CANCEL with program-prototype-name used
++cobc-rs: -fprogram-prototypes=warning: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): warning
+ 
+./syn_misc.at:3969: exit code was 1, expected 0
+322. syn_misc.at:3951: 322. use of program-prototype-names (syn_misc.at:3951): FAILED (syn_misc.at:3969)

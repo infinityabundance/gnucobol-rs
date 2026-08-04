@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+231. syn_reportwriter.at:23: testing REPORT error/warning ...
+./syn_reportwriter.at:115: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.773726281 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/231/stderr	2026-08-04 10:31:43.772927953 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:67: error: 'CUSTOMER-REPORT' is not defined
+-prog.cob:67: error: 'CUSTOMER-REPORT' is not a valid report name
+-prog.cob:82: error: 'CUSTOMER-REPORT' is not a valid report name
++cobc-rs: unsupported: verb END-OF-FILE-SWITCH
+ 
+231. syn_reportwriter.at:23: 231. REPORT error/warning (syn_reportwriter.at:23): FAILED (syn_reportwriter.at:115)

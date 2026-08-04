@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+248. syn_misc.at:54: testing warn constant expressions ...
+./syn_misc.at:84: $COMPILE_ONLY -fdiagnostics-show-option -w -Wconstant-expression prog.cob
+--- -	2026-08-04 10:31:43.781481308 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/248/stderr	2026-08-04 10:31:43.781001914 +0000
+@@ -1,9 +1 @@
+-prog.cob:5: warning: expression '3' EQUALS '1' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:6: warning: expression '3' EQUALS '2' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:6: warning: expression '3' EQUALS '3' is always TRUE [-Wconstant-numlit-expression]
+-prog.cob:10: warning: expression '3' EQUALS '1' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:11: warning: expression '3' EQUALS '2' is always FALSE [-Wconstant-numlit-expression]
+-prog.cob:11: warning: expression '3' EQUALS '3' is always TRUE [-Wconstant-numlit-expression]
+-prog.cob:15: warning: expression 'a' EQUALS 'b' is always FALSE [-Wconstant-expression]
+-prog.cob:19: warning: expression 'c' EQUALS 'c    ' is always TRUE [-Wconstant-expression]
+ 
+248. syn_misc.at:54: 248. warn constant expressions (syn_misc.at:54): FAILED (syn_misc.at:84)

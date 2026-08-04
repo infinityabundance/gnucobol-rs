@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+267. syn_misc.at:1104: testing maximum data size ...
+./syn_misc.at:1126: test "$COB_HAS_64_BIT_POINTER" = "yes"
+./syn_misc.at:1126: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.791263785 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/267/stderr	2026-08-04 10:31:43.790507535 +0000
+@@ -1,5 +1,2 @@
+-prog.cob:6: error: 'SINGLE-ITEM' cannot be larger than 2147483646 bytes
+-prog.cob:8: error: 'FILLER 1' cannot be larger than 2147483646 bytes
+-prog.cob:7: error: 'GROUP-ITEM1' cannot be larger than 2147483646 bytes
+-prog.cob:9: error: 'GROUP-ITEM2' cannot be larger than 2147483646 bytes
++cobc-rs: unsupported: PIC X(9999999999): BadRepeat
+ 
+267. syn_misc.at:1104: 267. maximum data size (syn_misc.at:1104): FAILED (syn_misc.at:1126)

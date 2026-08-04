@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+343. syn_misc.at:5044: testing SYMBOLIC CONSTANT ...
+./syn_misc.at:5068: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.830543390 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/343/stderr	2026-08-04 10:31:43.829968007 +0000
+@@ -1,5 +1 @@
+-prog.cob: in paragraph 'MAIN':
+-prog.cob:18: warning: value size exceeds data size
+-prog.cob:18: note: value size is 6
+-prog.cob:13: note: 'SHORT-X' defined here as PIC X(5)
+ 
+343. syn_misc.at:5044: 343. SYMBOLIC CONSTANT (syn_misc.at:5044): FAILED (syn_misc.at:5068)

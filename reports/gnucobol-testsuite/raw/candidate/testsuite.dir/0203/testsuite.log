@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+203. syn_file.at:999: testing DECLARATIVES invalid procedure reference (2) ...
+./syn_file.at:1031: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.762118041 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/203/stderr	2026-08-04 10:31:43.761450647 +0000
+@@ -1,4 +1,2 @@
+-prog.cob: in section 'PP01':
+-prog.cob: in paragraph 'PP02':
+-prog.cob:26: error: invalid reference to 'P02' (in DECLARATIVES)
++cobc-rs: unsupported: verb USE
+ 
+203. syn_file.at:999: 203. DECLARATIVES invalid procedure reference (2) (syn_file.at:999): FAILED (syn_file.at:1031)

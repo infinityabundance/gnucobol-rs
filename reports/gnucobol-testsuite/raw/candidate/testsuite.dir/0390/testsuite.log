@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+390. syn_misc.at:7781: testing CONTROL: default section ...
+./syn_misc.at:7801: $COMPILE -fcontrol-division=ok prog.cob
+--- -	2026-08-04 10:31:43.853997893 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/390/stderr	2026-08-04 10:31:43.852951342 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:4: warning: ACCEPT statement in DEFAULT SECTION is not implemented
+-prog.cob:5: warning: DISPLAY statement in DEFAULT SECTION is not implemented
++cobc-rs: -fcontrol-division=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+ 
+./syn_misc.at:7801: exit code was 1, expected 0
+390. syn_misc.at:7781: 390. CONTROL: default section (syn_misc.at:7781): FAILED (syn_misc.at:7801)

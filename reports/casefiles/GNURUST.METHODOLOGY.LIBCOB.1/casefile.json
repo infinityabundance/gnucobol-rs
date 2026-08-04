@@ -1,0 +1,57 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "the provenance records + parity reports"
+  ],
+  "case_id": "GNURUST.METHODOLOGY.LIBCOB.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "mislabeling a derivative as clean-room would be a licensing/provenance error",
+  "hash_chain": {
+    "inputs_sha256": "f036d2f44c344fbf85940f96c4a3001ece31195f9a872d509a3e720d3ff3ce4e"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "983459e87791ea40dd5d2e3244bc6ed202cf0818436033bb2235ab1948127db6",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the runtime is a clean-room reimplementation' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.NOT-EVERY-LIBCOB-FUNCTION-IS-BEHAVIORALL",
+    "NEG.ONLY-THE-SEALED-CORPUS-IS"
+  ],
+  "negative_claims": [
+    "not every libcob function is behaviorally proven byte-equal",
+    "only the sealed corpus is",
+    "lie prevented: 'the runtime is a clean-room reimplementation' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "n/a (documentation + machine records, cross-checked against the parity tooling)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.METHODOLOGY.LIBCOB.1"
+  },
+  "positive_claims": [
+    "docs/methodology/libcob-rust-port.md + reports/methodology/libcob-port-provenance.json record the admitted source identity (gnucobol-3.2, sha256 8ecc77d0...), the 13 in-scope libcob files, the statement-by-statement translation method with upstream line citations, the 100%% symbol parity (LIBCOB-PARITY.md), the LGPL-3.0-or-later inheritance, and the explicit non-claims",
+    "the tooling history is recorded as UNKNOWN where the committed record does not show it"
+  ],
+  "replay": {
+    "command": "n/a (documentation + machine records, cross-checked against the parity tooling)",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "docs/methodology/libcob-rust-port.md + reports/methodology/libcob-port-provenance.json + LIBCOB-PARITY.md",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

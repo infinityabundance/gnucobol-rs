@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+1147. run_extensions.at:2321: testing PROCEDURE DIVISION USING BY ... ...
+./run_extensions.at:2365: $COMPILE caller.cob
+./run_extensions.at:2366: $COMPILE_MODULE callee.cob
+--- -	2026-08-04 10:31:44.459486573 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1147/stderr	2026-08-04 10:31:44.458847060 +0000
+@@ -1,2 +1 @@
+-callee.cob:10: warning: handling of parameters passed BY VALUE is unfinished; implementation is likely to be changed
+ 
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1147/stdout	2026-08-04 10:31:44.458847060 +0000
+@@ -0,0 +1 @@
++callee.so
+1147. run_extensions.at:2321: 1147. PROCEDURE DIVISION USING BY ... (run_extensions.at:2321): FAILED (run_extensions.at:2366)

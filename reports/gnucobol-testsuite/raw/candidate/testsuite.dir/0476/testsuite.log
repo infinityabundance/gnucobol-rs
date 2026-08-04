@@ -1,0 +1,29 @@
+#                             -*- compilation -*-
+476. listings.at:85: testing COPY within comment ...
+./listings.at:98: $COMPILE_LISTING0 -t- prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/476/stderr	2026-08-04 10:31:43.898860646 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.900293357 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/476/stdout	2026-08-04 10:31:43.899426531 +0000
+@@ -1,17 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006        *COPY "copy.inc".
+-000007         PROCEDURE        DIVISION.
+-000008             STOP RUN.
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:98: exit code was 1, expected 0
+476. listings.at:85: 476. COPY within comment (listings.at:85): FAILED (listings.at:98)

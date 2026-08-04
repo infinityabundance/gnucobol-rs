@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1252. data_display.at:127: testing DISPLAY: Sign EBCDIC ...
+./data_display.at:167: $COMPILE -fsign=ebcdic prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1252/stderr	2026-08-04 10:31:44.550442612 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fsign=ebcdic: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ebcdic
+./data_display.at:167: exit code was 1, expected 0
+1252. data_display.at:127: 1252. DISPLAY: Sign EBCDIC (data_display.at:127): FAILED (data_display.at:167)

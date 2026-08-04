@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+106. syn_definition.at:1043: testing Redefinition of section and paragraph names ...
+./syn_definition.at:1055: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.714605930 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/106/stderr	2026-08-04 10:31:43.713621424 +0000
+@@ -1,4 +1 @@
+-prog.cob: in section 'L':
+-prog.cob:6: error: redefinition of 'L'
+-prog.cob:5: note: 'L' previously defined here
+ 
+./syn_definition.at:1055: exit code was 0, expected 1
+106. syn_definition.at:1043: 106. Redefinition of section and paragraph names (syn_definition.at:1043): FAILED (syn_definition.at:1055)

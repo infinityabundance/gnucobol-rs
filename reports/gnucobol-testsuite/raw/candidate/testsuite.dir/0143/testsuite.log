@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+143. syn_occurs.at:29: testing OCCURS with level 01 and 77 ...
+./syn_occurs.at:45: $COMPILE_ONLY -std=cobol2014 prog.cob
+--- -	2026-08-04 10:31:43.733252130 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/143/stderr	2026-08-04 10:31:43.732501009 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:6: error: 01/77 OCCURS does not conform to COBOL 2014
+-prog.cob:7: error: 01/77 OCCURS does not conform to COBOL 2014
+-prog.cob:11: error: 01/77 OCCURS does not conform to COBOL 2014
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+143. syn_occurs.at:29: 143. OCCURS with level 01 and 77 (syn_occurs.at:29): FAILED (syn_occurs.at:45)

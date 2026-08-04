@@ -1,0 +1,29 @@
+#                             -*- compilation -*-
+70. syn_copy.at:923: testing COPY and REPLACE in same file ...
+./syn_copy.at:949: $COMPILE_ONLY -P- prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/70/stderr	2026-08-04 10:31:43.699174142 +0000
+@@ -0,0 +1 @@
++cobc-rs: -P-: unsupported option (rejected-unsupported; suppress COPY output during -E: not supported): 
+--- -	2026-08-04 10:31:43.700227165 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/70/stdout	2026-08-04 10:31:43.699539493 +0000
+@@ -1,17 +1 @@
+-     1 
+-     2  IDENTIFICATION   DIVISION.
+-     3  PROGRAM-ID.      prog.
+-     4  DATA             DIVISION.
+-     5  WORKING-STORAGE  SECTION.
+-     6  
+-     7  
+-     8 
+-     9  01 VAR-COMMA PIC X(2) VALUE "OK".
+-    10 
+-    11  PROCEDURE        DIVISION.
+-    12      DISPLAY VAR-COMMA NO ADVANCING
+-    13      END-DISPLAY.
+-    14      STOP RUN.
+-    15  
+-
+ 
+./syn_copy.at:949: exit code was 1, expected 0
+70. syn_copy.at:923: 70. COPY and REPLACE in same file (syn_copy.at:923): FAILED (syn_copy.at:949)

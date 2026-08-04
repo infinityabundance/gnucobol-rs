@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+99. syn_definition.at:852: testing Ambiguous reference to 02 items ...
+./syn_definition.at:869: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.712608536 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/99/stderr	2026-08-04 10:31:43.712049714 +0000
+@@ -1,4 +1 @@
+-prog.cob:11: error: 'X' is ambiguous; needs qualification
+-prog.cob:7: note: 'X IN G1' defined here
+-prog.cob:9: note: 'X IN G2' defined here
+ 
+./syn_definition.at:869: exit code was 0, expected 1
+99. syn_definition.at:852: 99. Ambiguous reference to 02 items (syn_definition.at:852): FAILED (syn_definition.at:869)

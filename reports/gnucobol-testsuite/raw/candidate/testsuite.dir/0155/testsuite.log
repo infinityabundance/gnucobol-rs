@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+155. syn_occurs.at:598: testing OCCURS size check ...
+./syn_occurs.at:616: $COMPILE_ONLY prog.cob
+stderr:
+cobc-rs: unsupported: no PROCEDURE DIVISION
+./syn_occurs.at:617: $COMPILE_ONLY prog.cob 2>&1 | \
+$GREP "prog.cob:11: error: numeric literal '9223372036854775808' exceeds limit"
+stdout:
+./syn_occurs.at:617: exit code was 1, expected 0
+155. syn_occurs.at:598: 155. OCCURS size check (syn_occurs.at:598): FAILED (syn_occurs.at:617)

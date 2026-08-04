@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+536. run_fundamental.at:1500: testing Entry point visibility (1) ...
+./run_fundamental.at:1525: $COMPILE prog.cob
+./run_fundamental.at:1526: $COMPILE_MODULE module.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/536/stdout	2026-08-04 10:31:43.937108458 +0000
+@@ -0,0 +1 @@
++module.so
+536. run_fundamental.at:1500: 536. Entry point visibility (1) (run_fundamental.at:1500): FAILED (run_fundamental.at:1526)

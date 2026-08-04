@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1137. run_extensions.at:1826: testing CALL / GOBACK with LOCAL-STORAGE ...
+./run_extensions.at:1866: $COMPILE prog_a.cob
+./run_extensions.at:1867: $COMPILE_MODULE prog_b.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1137/stdout	2026-08-04 10:31:44.448246178 +0000
+@@ -0,0 +1 @@
++prog_b.so
+1137. run_extensions.at:1826: 1137. CALL / GOBACK with LOCAL-STORAGE (run_extensions.at:1826): FAILED (run_extensions.at:1867)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+237. syn_reportwriter.at:428: testing REPORT with PLUS RIGHT/CENTER ...
+./syn_reportwriter.at:512: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.776066995 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/237/stderr	2026-08-04 10:31:43.775659976 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:46: warning: PLUS is ignored on first field of line
+-prog.cob:48: error: PLUS is not allowed with LEFT, RIGHT or CENTER
+-prog.cob:53: error: OCCURS and multi COLUMNs is not allowed
++cobc-rs: unsupported: verb A001-LOOP
+ 
+237. syn_reportwriter.at:428: 237. REPORT with PLUS RIGHT/CENTER (syn_reportwriter.at:428): FAILED (syn_reportwriter.at:512)

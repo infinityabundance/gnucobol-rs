@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+599. run_fundamental.at:5501: testing USE FOR DEBUGGING, time of execution ...
+./run_fundamental.at:5538: $COMPILE -w prog.cob
+./run_fundamental.at:5539: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:18.503640719 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/599/stdout	2026-08-04 10:31:18.501938300 +0000
+@@ -1,7 +1,7 @@
+     18 DATA-FIELD                                       """"""""""""""""""""""""""""""""""""""""|
+-    19 DATA-FIELD                                       ABCD                                    |
+ DEBUG
+     23 DATA-FIELD                                                                               |
+-    24 DATA-FIELD                                       ABCD                                    |
+ THIS IS FINE
++    26 DATA-FIELD                                       ABCD                                    |
++    26 DATA-FIELD                                       ABCD                                    |
+ 
+599. run_fundamental.at:5501: 599. USE FOR DEBUGGING, time of execution (run_fundamental.at:5501): expected failure (run_fundamental.at:5539)

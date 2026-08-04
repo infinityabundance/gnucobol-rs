@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+350. syn_misc.at:5591: testing Fall-Through to WHEN OTHER ...
+./syn_misc.at:5619: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.833990536 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/350/stderr	2026-08-04 10:31:43.833509359 +0000
+@@ -1,2 +1 @@
+-prog.cob:12: error: fall-through to WHEN OTHER is not allowed
+ 
+./syn_misc.at:5619: exit code was 0, expected 1
+350. syn_misc.at:5591: 350. Fall-Through to WHEN OTHER (syn_misc.at:5591): expected failure (syn_misc.at:5619)

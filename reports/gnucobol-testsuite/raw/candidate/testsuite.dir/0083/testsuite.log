@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+83. syn_definition.at:257: testing error handling in conditions ...
+./syn_definition.at:314: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.705541822 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/83/stderr	2026-08-04 10:31:43.704877454 +0000
+@@ -1,14 +1,2 @@
+-prog.cob:11: error: syntax error, unexpected Identifier
+-prog.cob:11: error: WHEN without imperative statement
+-prog.cob:16: error: syntax error, unexpected Identifier
+-prog.cob:24: error: syntax error, unexpected Literal
+-prog.cob:24: error: WHEN without imperative statement
+-prog.cob:30: error: syntax error, unexpected Identifier
+-prog.cob:30: error: WHEN without imperative statement
+-prog.cob:36: error: 'NOT-DEFINED' is not defined
+-prog.cob:42: error: syntax error, unexpected ELSE
+-prog.cob:42: error: syntax error, unexpected Identifier
+-prog.cob:42: error: WHEN without imperative statement
+-prog.cob:42: error: incomplete expression
+-prog.cob:47: error: 'broken' is not defined
++cobc-rs: unsupported: verb NOT-DEFINED
+ 
+83. syn_definition.at:257: 83. error handling in conditions (syn_definition.at:257): FAILED (syn_definition.at:314)

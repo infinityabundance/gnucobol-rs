@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+416. syn_move.at:582: testing invalid target for MOVE ...
+./syn_move.at:606: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.868032186 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/416/stderr	2026-08-04 10:31:43.867035288 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:7: warning: no definition/prototype seen for PROGRAM 'repo-prog'
+-prog.cob: in paragraph 'MAIN':
+-prog.cob:15: error: invalid MOVE target: MAIN
+-prog.cob:16: error: invalid MOVE target: repo-prog
+-prog.cob:17: error: invalid MOVE target: QUOTE
+-prog.cob:18: error: invalid MOVE target: literal "A"
++cobc-rs: unsupported: unsupported level number 78
+ 
+416. syn_move.at:582: 416. invalid target for MOVE (syn_move.at:582): FAILED (syn_move.at:606)

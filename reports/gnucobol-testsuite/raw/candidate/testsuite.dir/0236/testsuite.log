@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+236. syn_reportwriter.at:311: testing Incorrect REPORT NAME ...
+./syn_reportwriter.at:408: $COMPILE_ONLY -std=mf-strict prog.cob
+--- -	2026-08-04 10:31:43.775925822 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/236/stderr	2026-08-04 10:31:43.775230606 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:17: warning: LABEL RECORDS is obsolete in Micro Focus COBOL
+-prog.cob:19: warning: RECORD clause ignored for LINE SEQUENTIAL
+-prog.cob:20: warning: DATA RECORDS is obsolete in Micro Focus COBOL
+-prog.cob:34: warning: LABEL RECORDS is obsolete in Micro Focus COBOL
+-prog.cob:42: error: 'SOME-REPORT' is not defined
+-prog.cob:42: error: 'SOME-REPORT' is not a valid report name
++cobc-rs: unsupported: verb END-OF-FILE-SWITCH
+ 
+236. syn_reportwriter.at:311: 236. Incorrect REPORT NAME (syn_reportwriter.at:311): FAILED (syn_reportwriter.at:408)

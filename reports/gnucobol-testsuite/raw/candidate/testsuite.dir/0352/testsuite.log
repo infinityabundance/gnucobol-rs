@@ -1,0 +1,26 @@
+#                             -*- compilation -*-
+352. syn_misc.at:5653: testing ANY LENGTH/NUMERIC with incorrect PIC ...
+./syn_misc.at:5676: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.835992578 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/352/stderr	2026-08-04 10:31:43.834968268 +0000
+@@ -1,18 +1,2 @@
+-prog.cob:9: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
+-prog.cob:18: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
+-prog.cob:13: error: 'invalid-1' ANY LENGTH must be PIC X, PIC U, PIC N or PIC 1
+-prog.cob:14: error: 'invalid-2' ANY LENGTH must be PIC X, PIC U, PIC N or PIC 1
+-prog.cob:15: error: 'invalid-3' ANY LENGTH must be PIC X, PIC U, PIC N or PIC 1
+-prog.cob:16: error: 'invalid-4' ANY NUMERIC must be PIC 9
+-prog.cob:17: error: 'invalid-5' ANY LENGTH has invalid definition
+-prog.cob:18: error: 'invalid-6' ANY LENGTH has invalid definition
+-prog.cob:8: error: 'valid-1' ANY LENGTH item must be a formal parameter
+-prog.cob:9: error: 'valid-2' ANY LENGTH item must be a formal parameter
+-prog.cob:10: error: 'valid-3' ANY LENGTH item must be a formal parameter
+-prog.cob:13: error: 'invalid-1' ANY LENGTH item must be a formal parameter
+-prog.cob:14: error: 'invalid-2' ANY LENGTH item must be a formal parameter
+-prog.cob:15: error: 'invalid-3' ANY LENGTH item must be a formal parameter
+-prog.cob:16: error: 'invalid-4' ANY LENGTH item must be a formal parameter
+-prog.cob:17: error: 'invalid-5' ANY LENGTH item must be a formal parameter
+-prog.cob:18: error: 'invalid-6' ANY LENGTH item must be a formal parameter
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+352. syn_misc.at:5653: 352. ANY LENGTH/NUMERIC with incorrect PIC (syn_misc.at:5653): FAILED (syn_misc.at:5676)

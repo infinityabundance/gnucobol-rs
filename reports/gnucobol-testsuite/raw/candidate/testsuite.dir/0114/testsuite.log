@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+114. syn_definition.at:1269: testing Duplicate identification division header ...
+./syn_definition.at:1278: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.719050184 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/114/stderr	2026-08-04 10:31:43.718547788 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:3: error: syntax error, unexpected IDENTIFICATION, expecting FUNCTION-ID or PROGRAM-ID
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+114. syn_definition.at:1269: 114. Duplicate identification division header (syn_definition.at:1269): FAILED (syn_definition.at:1278)

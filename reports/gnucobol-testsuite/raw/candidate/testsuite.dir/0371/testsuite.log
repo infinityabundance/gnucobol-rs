@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+371. syn_misc.at:6766: testing Invalid parentheses around condition ...
+./syn_misc.at:6783: $COMPILE prog.cob
+--- -	2026-08-04 10:31:43.844144525 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/371/stderr	2026-08-04 10:31:43.843289952 +0000
+@@ -1,2 +1 @@
+-prog.cob:9: error: invalid expression: unfinished expression
+ 
+./syn_misc.at:6783: exit code was 0, expected 1
+371. syn_misc.at:6766: 371. Invalid parentheses around condition (syn_misc.at:6766): FAILED (syn_misc.at:6783)

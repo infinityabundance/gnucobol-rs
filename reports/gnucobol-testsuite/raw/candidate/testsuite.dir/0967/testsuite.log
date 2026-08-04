@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+967. run_reportwriter.at:3063: testing STUDENT REPORT with INITIAL ...
+./run_reportwriter.at:3171: $COMPILE prog.cob
+./run_reportwriter.at:3173: DD_STUDENT="./inp_data" DD_REPORT1="./report.txt" $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/967/stderr	2026-08-04 10:31:44.240890687 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: OPEN: `OUTPUT` is not a declared file
+./run_reportwriter.at:3173: exit code was 2, expected 0
+967. run_reportwriter.at:3063: 967. STUDENT REPORT with INITIAL (run_reportwriter.at:3063): FAILED (run_reportwriter.at:3173)

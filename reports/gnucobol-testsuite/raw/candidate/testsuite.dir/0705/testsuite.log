@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+705. run_misc.at:1355: testing Recursive CALL of RECURSIVE program ...
+./run_misc.at:1405: $COMPILE caller.cob
+./run_misc.at:1406: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/705/stdout	2026-08-04 10:31:44.050159717 +0000
+@@ -0,0 +1 @@
++callee.so
+705. run_misc.at:1355: 705. Recursive CALL of RECURSIVE program (run_misc.at:1355): FAILED (run_misc.at:1406)

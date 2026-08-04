@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+18. used_binaries.at:762: testing cobcrun error messages ...
+./used_binaries.at:765: $COBCRUN -q
+--- -	2026-08-04 10:31:43.670982617 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/18/stderr	2026-08-04 10:31:43.670165724 +0000
+@@ -1,3 +1,2 @@
+-cobcrun: missing PROGRAM name
+-Try 'cobcrun --help' for more information.
++cobc-rs (cobcrun): usage: cobcrun <module> [args] | --runtime-conf | ...
+ 
+18. used_binaries.at:762: 18. cobcrun error messages (used_binaries.at:762): FAILED (used_binaries.at:765)

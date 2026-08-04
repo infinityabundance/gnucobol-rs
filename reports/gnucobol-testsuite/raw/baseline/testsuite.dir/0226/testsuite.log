@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+226. syn_file.at:2066: testing ALTERNATE RECORD definition WITH NO DUPLICATES ...
+./syn_file.at:2089: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:16.481655780 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/226/stderr	2026-08-04 10:31:16.481065640 +0000
+@@ -1,2 +1,5 @@
+-prog.cob:15: error: non-standard 'NO DUPLICATES'
++prog.cob:7: error: missing file description for FILE TEST-FILE
++prog.cob:11: error: 'TESTKEY1' is not defined
++prog.cob:12: error: 'TESTKEY2' is not defined
++prog.cob:14: error: 'TESTKEY3' is not defined
+ 
+226. syn_file.at:2066: 226. ALTERNATE RECORD definition WITH NO DUPLICATES (syn_file.at:2066): expected failure (syn_file.at:2089)

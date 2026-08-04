@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+704. run_misc.at:1304: testing CALL m1. CALL m2. CALL m1. ...
+./run_misc.at:1346: $COMPILE_MODULE m1.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/704/stdout	2026-08-04 10:31:44.048769706 +0000
+@@ -0,0 +1 @@
++m1.so
+704. run_misc.at:1304: 704. CALL m1. CALL m2. CALL m1. (run_misc.at:1304): FAILED (run_misc.at:1346)

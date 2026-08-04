@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1172. run_extensions.at:3485: testing System routine CBL_OR ...
+./run_extensions.at:3506: $COMPILE prog.cob
+./run_extensions.at:3507: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1172/stderr	2026-08-04 10:31:44.480016985 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: X
+./run_extensions.at:3507: exit code was 2, expected 0
+1172. run_extensions.at:3485: 1172. System routine CBL_OR (run_extensions.at:3485): FAILED (run_extensions.at:3507)

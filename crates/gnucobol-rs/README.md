@@ -9,11 +9,11 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Legacy source preserved losslessly under `research/legacyreports/crates/gnucobol-rs/README.md`._
 
-[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-141-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-141-blueviolet)
+[![crates.io](https://img.shields.io/crates/v/gnucobol-rs.svg)](https://crates.io/crates/gnucobol-rs) ![license](https://img.shields.io/badge/license-LGPL--3.0--or--later-blue) ![unsafe](https://img.shields.io/badge/unsafe-forbidden-success) ![oracle](https://img.shields.io/badge/oracle-GnuCOBOL_3.2-orange) ![sealed courts](https://img.shields.io/badge/sealed_courts-150-brightgreen) ![casefiles](https://img.shields.io/badge/casefiles-150-blueviolet)
 
-**The entire GnuCOBOL 3.2 `libcob` runtime — every admitted `.c` compilation unit — ported 1:1 to safe Rust and proven byte-identical to a pinned, locally-built GnuCOBOL 3.2 oracle, plus a clean-room interpreter (`cobrun`) that parses and *executes* COBOL programs on that runtime. No C is linked.** "Correct" never means "our reading of a spec" — it means byte-for-byte identical to the admitted oracle (`cobc` + `libcob`), built from pinned source. This crate is `#![forbid(unsafe_code)]`.
+**The entire GnuCOBOL 3.2 `libcob` runtime — every admitted `.c` compilation unit — ported 1:1 to safe Rust and proven byte-identical to a pinned, locally-built GnuCOBOL 3.2 oracle, plus an independently written interpreter (`cobrun` — the author's from-scratch claim; strict clean-room provenance is not independently verifiable from the committed record, see [methodology](docs/methodology/parser-front-end-provenance.md)) that parses and *executes* COBOL programs on that runtime. No C is linked.** "Correct" never means "our reading of a spec" — it means byte-for-byte identical to the admitted oracle (`cobc` + `libcob`), built from pinned source. This crate is `#![forbid(unsafe_code)]`.
 
-This is `gnucobol-rs 0.8.53` (LGPL-3.0-or-later, MSRV 1.74). It is the open runtime + interpreter crate; the project-wide evidence, parity maps, and forensic case files live in the [repository root](https://crates.io/crates/gnucobol-rs).
+This is `gnucobol-rs 0.8.54` (LGPL-3.0-or-later, MSRV 1.74). It is the open runtime + interpreter crate; the project-wide evidence, parity maps, and forensic case files live in the [repository root](https://crates.io/crates/gnucobol-rs).
 
 ---
 
@@ -77,7 +77,7 @@ The full machine-readable registry of refused surfaces is `reports/negative-capa
 
 Every capability is sealed as a separately-admitted court — bytes, moves, the field model, record layout, files, intrinsics, the executing front-end — where no lower layer implies a higher one. Per-court prose, fixtures, and the exact byte domains are **not duplicated here**: see [`COBOL-PARITY.md`](https://crates.io/crates/gnucobol-rs) for live verb/intrinsic/clause coverage, the receipts under `reports/receipts/`, and the forensic case files under `reports/casefiles/` (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE per court).
 
-The full sealed-court ledger (141 courts) is in [`docs/sealed-courts.md`](https://github.com/infinityabundance/gnucobol-rs/blob/main/docs/sealed-courts.md); the machine-readable source is [`reports/claim-ladder.json`](https://github.com/infinityabundance/gnucobol-rs/blob/main/reports/claim-ladder.json).
+The full sealed-court ledger (150 courts) is in [`docs/sealed-courts.md`](https://github.com/infinityabundance/gnucobol-rs/blob/main/docs/sealed-courts.md); the machine-readable source is [`reports/claim-ladder.json`](https://github.com/infinityabundance/gnucobol-rs/blob/main/reports/claim-ladder.json).
 
 ---
 
@@ -89,7 +89,7 @@ Upstream **GnuCOBOL 3.2** (`cobc` + `libcob`) is the single source of truth, bui
 
 ## License
 
-`gnucobol-rs 0.8.53` is **LGPL-3.0-or-later**: a faithful, statement-by-statement, line-cited port of `libcob` (e.g. `// move.c:477`) — **not clean-room**; the license is inherited, not freely chosen. The `cobrun` front-end *is* clean-room but ships inside this LGPL crate. A distributed binary that statically links this crate is a Combined Work under LGPL-3.0 §4. FSF copyright and original-author credits (Nishida, While, Sobisch, et al.) are retained in every ported file header. See `docs/derivation-and-license.md` and `docs/license-boundaries.md`. This crate depends on `gnucobol-rs-bdb-format` (pure-safe-Rust Berkeley DB B-tree) for INDEXED organization.
+`gnucobol-rs 0.8.54` is **LGPL-3.0-or-later**: a faithful, statement-by-statement, line-cited port of `libcob` (e.g. `// move.c:477`) — **not clean-room**; the license is inherited, not freely chosen. The `cobrun` front-end *is* clean-room but ships inside this LGPL crate. A distributed binary that statically links this crate is a Combined Work under LGPL-3.0 §4. FSF copyright and original-author credits (Nishida, While, Sobisch, et al.) are retained in every ported file header. See `docs/derivation-and-license.md` and `docs/license-boundaries.md`. This crate depends on `gnucobol-rs-bdb-format` (pure-safe-Rust Berkeley DB B-tree) for INDEXED organization.
 
 ---
 

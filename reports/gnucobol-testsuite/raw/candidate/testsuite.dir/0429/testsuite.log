@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+429. syn_screen.at:315: testing Screen clauses ...
+./syn_screen.at:334: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.874070092 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/429/stderr	2026-08-04 10:31:43.873358185 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:11: warning: GRID is not implemented
++cobc-rs: unsupported: unsupported level number SCREEN
+ 
+./syn_screen.at:334: exit code was 1, expected 0
+429. syn_screen.at:315: 429. Screen clauses (syn_screen.at:315): FAILED (syn_screen.at:334)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+881. run_file.at:3432: testing READ on OPTIONAL missing INDEXED file ...
+./run_file.at:3476: $COMPILE prog.cob
+./run_file.at:3477: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/881/stderr	2026-08-04 10:31:44.174871685 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: DELETE: `FILE` is not a declared file
+./run_file.at:3477: exit code was 2, expected 0
+881. run_file.at:3432: 881. READ on OPTIONAL missing INDEXED file (run_file.at:3432): FAILED (run_file.at:3477)

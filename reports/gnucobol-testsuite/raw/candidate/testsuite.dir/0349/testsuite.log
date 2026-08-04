@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+349. syn_misc.at:5499: testing Missing imperative statements ...
+./syn_misc.at:5564: $COMPILE_ONLY -w -fmissing-statement=error prog.cob
+--- -	2026-08-04 10:31:43.834425767 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/349/stderr	2026-08-04 10:31:43.833898825 +0000
+@@ -1,10 +1,2 @@
+-prog.cob:15: error: IF without imperative statement used
+-prog.cob:20: error: IF without imperative statement used
+-prog.cob:27: error: IF without imperative statement used
+-prog.cob:25: error: IF without imperative statement used
+-prog.cob:38: error: WHEN OTHER without imperative statement used
+-prog.cob:42: error: inline PERFORM without imperative statement used
+-prog.cob:47: error: WHEN without imperative statement used
+-prog.cob:52: error: WHEN OTHER without imperative statement used
+-prog.cob:58: error: WHEN without imperative statement used
++cobc-rs: -fmissing-statement=error: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): error
+ 
+349. syn_misc.at:5499: 349. Missing imperative statements (syn_misc.at:5499): FAILED (syn_misc.at:5564)

@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+255. syn_misc.at:716: testing missing headers ...
+./syn_misc.at:743: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.784852703 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/255/stderr	2026-08-04 10:31:43.784030520 +0000
+@@ -1,8 +1,2 @@
+-prog.cob:2: error: PROGRAM-ID header missing
+-prog.cob:2: error: ENVIRONMENT DIVISION header missing
+-prog.cob:2: error: CONFIGURATION SECTION header missing
+-prog.cob:10: error: INPUT-OUTPUT SECTION header missing
+-prog.cob:10: error: FILE-CONTROL header missing
+-prog.cob:14: error: FILE SECTION header missing
+-prog.cob:17: error: PROCEDURE DIVISION header missing
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+255. syn_misc.at:716: 255. missing headers (syn_misc.at:716): FAILED (syn_misc.at:743)

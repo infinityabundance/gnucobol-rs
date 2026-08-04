@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+395. syn_misc.at:8065: testing AREACHECK / NOAREACHECK directives (2) ...
+./syn_misc.at:8089: $COMPILE_ONLY -std=cobol85 prog.cob
+--- -	2026-08-04 10:31:43.856685494 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/395/stderr	2026-08-04 10:31:43.855966153 +0000
+@@ -1,8 +1,2 @@
+-prog.cob:10: error: '01' should start in Area A
+-prog.cob:11: error: optional period used
+-prog.cob: in section 'MAIN-1':
+-prog.cob:17: error: optional period used
+-prog.cob: in section 'MAIN-2':
+-prog.cob:18: error: start of statement in Area A
+-prog.cob:19: error: start of statement in Area A
++cobc-rs: unsupported: unsupported level number $SET
+ 
+395. syn_misc.at:8065: 395. AREACHECK / NOAREACHECK directives (2) (syn_misc.at:8065): FAILED (syn_misc.at:8089)

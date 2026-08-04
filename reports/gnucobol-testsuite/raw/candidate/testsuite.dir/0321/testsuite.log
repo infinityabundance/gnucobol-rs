@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+321. syn_misc.at:3903: testing UNSTRING COUNT clause ...
+./syn_misc.at:3940: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.819572207 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/321/stderr	2026-08-04 10:31:43.819138629 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:26: error: COUNT item 'invalid-1' must be an integer
+-prog.cob:27: error: COUNT item 'invalid-2' must be an integer
+-prog.cob:28: error: COUNT item 'invalid-3' may not have PICTURE with P in it
+-prog.cob:29: error: COUNT item 'invalid-4' must be an integer
+-prog.cob:30: error: COUNT item 'invalid-5' must be an integer
+-prog.cob:31: error: condition-name not allowed here: 'invalid-6'
++cobc-rs: unsupported: PIC VPP99: ScalingPDeferred
+ 
+321. syn_misc.at:3903: 321. UNSTRING COUNT clause (syn_misc.at:3903): FAILED (syn_misc.at:3940)

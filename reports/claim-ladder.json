@@ -23,7 +23,7 @@
    "not_proven": "arithmetic; edited pictures; any other type pair",
    "breaks_claim": "non-ASCII host; EBCDIC sign mode; locale != C.UTF-8",
    "readiness": 4,
-   "lie_prevented": "'a MOVE result is close enough' — every byte of the receiving field is proven",
+   "lie_prevented": "'a MOVE result is close enough' \u2014 every byte of the receiving field is proven",
    "damage_if_overclaimed": "a wrong MOVE result posted as a real value corrupts a record silently"
   },
   {
@@ -37,7 +37,7 @@
    "not_proven": "edited pictures; usages beyond DISPLAY/COMP-3",
    "breaks_claim": "edited symbols; unsupported usage",
    "readiness": 4,
-   "lie_prevented": "'a PIC width can be eyeballed' — the field model matches cobc's own attrs",
+   "lie_prevented": "'a PIC width can be eyeballed' \u2014 the field model matches cobc's own attrs",
    "damage_if_overclaimed": "a mis-modeled field width mis-reads every downstream field in the record"
   },
   {
@@ -51,7 +51,7 @@
    "not_proven": "SYNCHRONIZED; REDEFINES larger than target",
    "breaks_claim": "alignment/SYNC; record-growth REDEFINES",
    "readiness": 4,
-   "lie_prevented": "'offsets are obvious' — layout matches cobc's emitted offsets, not intuition",
+   "lie_prevented": "'offsets are obvious' \u2014 layout matches cobc's emitted offsets, not intuition",
    "damage_if_overclaimed": "a wrong offset shifts an entire record, mis-attributing values to the wrong fields"
   },
   {
@@ -65,7 +65,7 @@
    "not_proven": "inline/multi-line COPY; OF/IN library; SUPPRESS",
    "breaks_claim": "non-line-oriented COPY",
    "readiness": 4,
-   "lie_prevented": "'substring replacement is close enough' — COPY REPLACING is whole-text-word",
+   "lie_prevented": "'substring replacement is close enough' \u2014 COPY REPLACING is whole-text-word",
    "damage_if_overclaimed": "a wrong COPY expansion lays out the file against a copybook the data was never written with"
   },
   {
@@ -79,7 +79,7 @@
    "not_proven": "REPLACE directive; LEADING/TRAILING; identifier operands",
    "breaks_claim": "substring replacement expectation; REPLACE directive",
    "readiness": 4,
-   "lie_prevented": "'substring replacement is close enough' — REPLACING is whole-text-word",
+   "lie_prevented": "'substring replacement is close enough' \u2014 REPLACING is whole-text-word",
    "damage_if_overclaimed": "a wrong REPLACING substitution silently changes field identities across a whole estate"
   },
   {
@@ -93,7 +93,7 @@
    "not_proven": "DIVIDE; other rounding modes; ON SIZE ERROR; >38-digit bignum",
    "breaks_claim": ">38 significant digits; float fields",
    "readiness": 3,
-   "lie_prevented": "'rounding/sign are details' — receiving bytes match cob_add/sub/mul exactly",
+   "lie_prevented": "'rounding/sign are details' \u2014 receiving bytes match cob_add/sub/mul exactly",
    "damage_if_overclaimed": "a wrong arithmetic result written back mis-states a balance or total"
   },
   {
@@ -107,7 +107,7 @@
    "not_proven": "VALUE under OCCURS/REDEFINES; non-fitting literals; no-VALUE records; figuratives beyond ZERO/SPACE",
    "breaks_claim": "P-scaled parent; edited PIC",
    "readiness": 4,
-   "lie_prevented": "'VALUE init is trivial' — the initial record bytes match cobc WORKING-STORAGE",
+   "lie_prevented": "'VALUE init is trivial' \u2014 the initial record bytes match cobc WORKING-STORAGE",
    "damage_if_overclaimed": "a wrong VALUE image mis-seeds an uninitialized record read as real data"
   },
   {
@@ -121,7 +121,7 @@
    "not_proven": "V+P; P at both ends; VALUE/MOVE on P field",
    "breaks_claim": "V combined with P",
    "readiness": 3,
-   "lie_prevented": "'P-scaling is just digits' — the asymmetric P digit/scale rule is exact",
+   "lie_prevented": "'P-scaling is just digits' \u2014 the asymmetric P digit/scale rule is exact",
    "damage_if_overclaimed": "a wrong P-scale mis-places the decimal point, off-by-10x on money"
   },
   {
@@ -135,7 +135,7 @@
    "not_proven": "active/logical occurrence count; sliding; runtime validation; multiple/nested ODO",
    "breaks_claim": "treating physical-max as logical length",
    "readiness": 4,
-   "lie_prevented": "'LENGTH OF proves physical allocation' — ODO physical-max != logical length",
+   "lie_prevented": "'LENGTH OF proves physical allocation' \u2014 ODO physical-max != logical length",
    "damage_if_overclaimed": "treating ODO physical-max as the live length over/under-reads variable records"
   },
   {
@@ -149,7 +149,7 @@
    "not_proven": "SET; condition expressions; collating-sensitive ranges; Procedure Division execution",
    "breaks_claim": "collating sequence; SET semantics",
    "readiness": 4,
-   "lie_prevented": "'88 truth is a string compare' — padded/numeric/THRU semantics are exact",
+   "lie_prevented": "'88 truth is a string compare' \u2014 padded/numeric/THRU semantics are exact",
    "damage_if_overclaimed": "a wrong LEVEL-88 truth mis-classifies account status (active/closed/delinquent)"
   },
   {
@@ -177,7 +177,7 @@
    "not_proven": "condition expressions; collating-sensitive ranges; Procedure Division execution",
    "breaks_claim": "SET FALSE expectation",
    "readiness": 4,
-   "lie_prevented": "'SET TRUE writes anything satisfying the 88' — it writes cobc's canonical bytes",
+   "lie_prevented": "'SET TRUE writes anything satisfying the 88' \u2014 it writes cobc's canonical bytes",
    "damage_if_overclaimed": "a wrong SET writes a status the program never intended"
   },
   {
@@ -205,7 +205,7 @@
    "not_proven": "DIVIDE; SIZE ERROR; other rounding modes; bignum; float",
    "breaks_claim": ">38 digits; SIZE ERROR control flow",
    "readiness": 3,
-   "lie_prevented": "'packed add rounds like display' — cob_add_bcd keeps -0 on truncation",
+   "lie_prevented": "'packed add rounds like display' \u2014 cob_add_bcd keeps -0 on truncation",
    "damage_if_overclaimed": "a wrong packed sign/rounding flips the sign of money on truncation"
   },
   {
@@ -219,7 +219,7 @@
    "not_proven": "transformed-record write-back; EBCDIC; edited PIC; line-sequential containers",
    "breaks_claim": "treating KOBOLD output as business truth beyond sealed fields",
    "readiness": 4,
-   "lie_prevented": "'decoded JSON is business truth' — it is record truth over sealed courts only",
+   "lie_prevented": "'decoded JSON is business truth' \u2014 it is record truth over sealed courts only",
    "damage_if_overclaimed": "treating decoded JSON as business truth acts on record-truth as if it were account state"
   },
   {
@@ -233,7 +233,7 @@
    "not_proven": "binary arithmetic; SYNCHRONIZED; host-portable endian; COMP-6; float",
    "breaks_claim": "big-endian host; SYNC alignment; binary arithmetic",
    "readiness": 3,
-   "lie_prevented": "'binary is one rule' — COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8",
+   "lie_prevented": "'binary is one rule' \u2014 COMP-X sizes tightly; IBM/MVS use 2-4-8, MF 1--8",
    "damage_if_overclaimed": "a wrong binary width/endian mis-reads a key, branch, or amount on the wrong platform"
   },
   {
@@ -247,7 +247,7 @@
    "not_proven": "cp037/other code pages; numeric EBCDIC zoned sign; national/DBCS; collation; binary/packed conversion",
    "breaks_claim": "non-cp500 page; treating EBCDIC as record-wide convert-everything",
    "readiness": 3,
-   "lie_prevented": "'EBCDIC conversion can be record-wide' — it is per-DISPLAY-field; binary/packed raw",
+   "lie_prevented": "'EBCDIC conversion can be record-wide' \u2014 it is per-DISPLAY-field; binary/packed raw",
    "damage_if_overclaimed": "a wrong EBCDIC decode silently garbles names, codes, and statuses"
   },
   {
@@ -261,7 +261,7 @@
    "not_proven": "report writer; locale/currency; EBCDIC edited; edited arithmetic/VALUE",
    "breaks_claim": "financial decorations; numeric->edited direction; edited under COMP/cp500",
    "readiness": 3,
-   "lie_prevented": "'presentation string and numeric value are the same field truth' — they are separated",
+   "lie_prevented": "'presentation string and numeric value are the same field truth' \u2014 they are separated",
    "damage_if_overclaimed": "reading an edited presentation string as the numeric value double-counts or mis-totals"
   },
   {
@@ -289,7 +289,7 @@
    "not_proven": "binary arithmetic; business truth",
    "breaks_claim": "binary fields text-converted",
    "readiness": 4,
-   "lie_prevented": "'binary fields are text under any encoding' — they are raw storage passthrough",
+   "lie_prevented": "'binary fields are text under any encoding' \u2014 they are raw storage passthrough",
    "damage_if_overclaimed": "reading a binary field as text under an encoding corrupts keys and amounts"
   },
   {
@@ -303,7 +303,7 @@
    "not_proven": "numeric DISPLAY under cp500 (EBCDIC zoned sign); business truth",
    "breaks_claim": "EBCDIC conversion touching COMP bytes",
    "readiness": 4,
-   "lie_prevented": "'EBCDIC touches all bytes' — binary/packed pass through untouched (proven)",
+   "lie_prevented": "'EBCDIC touches all bytes' \u2014 binary/packed pass through untouched (proven)",
    "damage_if_overclaimed": "converting binary/packed bytes as EBCDIC text destroys numeric values"
   },
   {
@@ -317,7 +317,7 @@
    "not_proven": "business truth; semantic validity; INITIALIZE/repair",
    "breaks_claim": "coercing dirty bytes; silent key collision",
    "readiness": 4,
-   "lie_prevented": "'a hand-written PASS table is evidence' — every value names its court + provenance",
+   "lie_prevented": "'a hand-written PASS table is evidence' \u2014 every value names its court + provenance",
    "damage_if_overclaimed": "trusting a value with no provenance trail means an auditor cannot defend it"
   },
   {
@@ -331,7 +331,7 @@
    "not_proven": "cp037; edited numeric under cp500; binary/packed via this path; mixed/auto-detect encodings; national/DBCS",
    "breaks_claim": "non-cp500 page; treating binary as EBCDIC zoned",
    "readiness": 3,
-   "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' — the C/D/F sign zones differ",
+   "lie_prevented": "'EBCDIC numeric decodes like ASCII zoned' \u2014 the C/D/F sign zones differ",
    "damage_if_overclaimed": "a wrong zoned sign flips the sign of mainframe money"
   },
   {
@@ -345,7 +345,7 @@
    "not_proven": "signed COMP-6 (cobc converts to COMP-3); COMP-6 arithmetic; malformed bytes; dialect portability; pre-3.2",
    "breaks_claim": "signed COMP-6; strict cobol85/2002 (reject it)",
    "readiness": 3,
-   "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' — COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3",
+   "lie_prevented": "'unsigned packed can reuse signed packed decoding with the sign nibble ignored' \u2014 COMP-6 size is ceil(n/2) (no sign byte) and signed COMP-6 is actually COMP-3",
    "damage_if_overclaimed": "treating signed COMP-6 as COMP-6 (it is COMP-3) mis-reads the field entirely"
   },
   {
@@ -1470,8 +1470,8 @@
   },
   {
    "id": "GNURUST.FRONTEND.1",
-   "name": "clean-room COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
-   "proven": "a from-scratch (NOT cobc-derived) COBOL front-end -- lexer + parser + executor in src/frontend.rs -- PARSES a whole COBOL program and EXECUTES it on the ported libcob runtime (no cobc, no libcob linked), with stdout proven BYTE-IDENTICAL to the admitted cobc over a 10-program corpus (cobol_frontend_sweep 23/0) plus a 3-program hand-wired corpus (cobol_run_sweep 3/0). This is the first parse+execute proof: it composes the sealed runtime (pic::build_field for PIC->attr, move_ops::cob_move, arith::cob_arith + cob_divide, edited::encode_edited, termio::cob_display) under a real reader. The sealed subset: WORKING-STORAGE 01 elementary items with PIC + VALUE (numeric 9/V/S/P, alphanumeric X/A, numeric-edited Z/*/$/+/-/,/./CR/DB); statements MOVE, ADD, SUBTRACT, MULTIPLY, DIVIDE (TO/FROM/BY/INTO/GIVING), COMPUTE (arithmetic expressions: + - * / ** with parentheses, unary minus, standard precedence), IF/ELSE/END-IF (relational + AND/OR/NOT conditions, numeric + alphanumeric, the period form), PERFORM n TIMES / PERFORM UNTIL cond (inline), DISPLAY, STOP RUN, CONTINUE. Anything outside the subset returns a RunError (fail closed -- never a silent mis-run). Corpus covers ADD/TO, ADD/GIVING, SUBTRACT, MULTIPLY GIVING, DIVIDE GIVING with V99 scale, signed arithmetic + signed edited move, alphanumeric VALUE, decimal V99 with floating-$ editing, numeric->edited MOVE, multi-statement/multi-operand DISPLAY, and COMPUTE expressions (precedence, parentheses, division with deep-fraction intermediate precision -- 22/7 to 8 places, percentage chains, exponent 2**10, signed; each binary op computed in a wide scale-18 numeric intermediate matching cobc's high-precision-then-store, truncated at the receiver).",
+   "name": "independently written COBOL front-end -- parse + EXECUTE a program subset to cobc-identical stdout",
+   "proven": "an independently written (per the author's from-scratch, NOT-cobc-derived origin claim in commit 9357a7cac; strict clean-room provenance is not independently verifiable from the committed record -- see docs/methodology/parser-front-end-provenance.md) COBOL front-end -- lexer + parser + executor in src/frontend.rs -- PARSES a whole COBOL program and EXECUTES it on the ported libcob runtime (no cobc, no libcob linked), with stdout proven BYTE-IDENTICAL to the admitted cobc over a 10-program corpus (cobol_frontend_sweep 23/0) plus a 3-program hand-wired corpus (cobol_run_sweep 3/0). This is the first parse+execute proof: it composes the sealed runtime (pic::build_field for PIC->attr, move_ops::cob_move, arith::cob_arith + cob_divide, edited::encode_edited, termio::cob_display) under a real reader. The sealed subset: WORKING-STORAGE 01 elementary items with PIC + VALUE (numeric 9/V/S/P, alphanumeric X/A, numeric-edited Z/*/$/+/-/,/./CR/DB); statements MOVE, ADD, SUBTRACT, MULTIPLY, DIVIDE (TO/FROM/BY/INTO/GIVING), COMPUTE (arithmetic expressions: + - * / ** with parentheses, unary minus, standard precedence), IF/ELSE/END-IF (relational + AND/OR/NOT conditions, numeric + alphanumeric, the period form), PERFORM n TIMES / PERFORM UNTIL cond (inline), DISPLAY, STOP RUN, CONTINUE. Anything outside the subset returns a RunError (fail closed -- never a silent mis-run). Corpus covers ADD/TO, ADD/GIVING, SUBTRACT, MULTIPLY GIVING, DIVIDE GIVING with V99 scale, signed arithmetic + signed edited move, alphanumeric VALUE, decimal V99 with floating-$ editing, numeric->edited MOVE, multi-statement/multi-operand DISPLAY, and COMPUTE expressions (precedence, parentheses, division with deep-fraction intermediate precision -- 22/7 to 8 places, percentage chains, exponent 2**10, signed; each binary op computed in a wide scale-18 numeric intermediate matching cobc's high-precision-then-store, truncated at the receiver).",
    "byte_domain": "a COBOL program (sealed subset) -> the exact stdout bytes it writes, byte-identical to cobc",
    "oracle": "cobc -x compiling+running the same source (cobc front-end + libcob), stdout captured and diffed",
    "fixtures": "cobol_frontend_sweep 23/0 (the cobrun binary over lab/corpus/frontend) + cobol_run_sweep 3/0 (hand-wired) + 5 unit tests (add/move/display, multiply-giving-edited, string-move, COMPUTE precedence+division, COMPUTE ROUNDED fail-closed, IF/ELSE + PERFORM UNTIL factorial)",
@@ -1985,6 +1985,132 @@
    "readiness": 1,
    "lie_prevented": "a raw-output match on a NULL-output program is reported as exactly that (empty-bytes match), never as proof of feature equivalence",
    "damage_if_overclaimed": "reporting the court as a certification would give a 1993 validation corpus an authority it never had"
+  },
+  {
+   "id": "GNURUST.GNUCOBOL-TESTSUITE.1",
+   "name": "GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census",
+   "proven": "the admitted gnucobol-3.2 source (sha256 8ecc77d0...) is built fresh in-tree per pass with a stock configuration (no -fpermissive, no compat -Wno-*), and the generated Autotest suite is run with the REAL admitted cobc via `make check TESTSUITEFLAGS=--jobs=12`, producing an oracle baseline of 1242 pass / 9 skip / 31 xfail / 0 fail in this environment, with a full invocation census (argv boundaries preserved: 0 cobc/cobcrun invocations) and the raw testsuite.log + per-group logs preserved",
+   "byte_domain": "admitted source identity + fresh in-tree build + the generated testsuite.log + per-group logs + the invocation census (argv preserved)",
+   "oracle": "the ADMITTED GnuCOBOL 3.2 in-tree build (never a distribution package), configured identically in every tree",
+   "fixtures": "gnucobol-3.2.tar.lz (admitted, sha256-pinned) + lab/gnucobol-testsuite/run-docker.sh (one-command replay) + lab/docker/gnucobol-testsuite",
+   "sealed_version": "0.8.54",
+   "not_proven": "no claim about gnucobol-rs (that is TESTSUITE.2/.3); the baseline measures THIS build and environment, not upstream; oracle-side skips/xfails are the suite's own declared conditions",
+   "breaks_claim": "source hash drift; a different GnuCOBOL build; non-deterministic build/run environment; a missing raw log",
+   "readiness": 1,
+   "lie_prevented": "an oracle-side pass/fail is evidence about THIS admitted build, never a claim about upstream quality",
+   "damage_if_overclaimed": "presenting the baseline as a certification would certify a compiler build the suite was not designed to certify"
+  },
+  {
+   "id": "GNURUST.GNUCOBOL-TESTSUITE.2",
+   "name": "GnuCOBOL-testsuite candidate execution (COBC=cobc-rs through the native harness, no delegation)",
+   "proven": "the SAME generated suite runs with COBC=cobc-rs (the option-policy-driven compatibility driver) and COBCRUN=cobc-rs through the suite's own `make localcheck` + atlocal bootstrap, producing truthful launcher+manifest artifacts (never native COBOL executables), with the mechanical no-delegation proof (candidate PATH stripped of the oracle, oracle prefix absent in the container, cobrun/cobc-rs link no libcob -- ldd+readelf, plus an execve trace of candidate artifacts), the candidate invocation ledger, and every test accounted for; NO suite-pass claim",
+   "byte_domain": "per-test candidate outcomes (parse/check/prepare/run), raw stdout+stderr, candidate census, execve trace, launcher manifests",
+   "oracle": "none used during the candidate phase (isolation is mechanically enforced); the baseline is TESTSUITE.1",
+   "fixtures": "crates/cobc-rs (the driver) + crates/gnucobol-rs-testsuite (the harness) + lab/gnucobol-testsuite",
+   "sealed_version": "0.8.54",
+   "not_proven": "no parity claim (that is TESTSUITE.3); no claim that the launcher is a native COBOL executable; no claim that rejected options preserve semantics",
+   "breaks_claim": "any candidate execution that invokes cobc/cobcrun or links libcob; a launcher misrepresented as native codegen; an unaccounted test",
+   "readiness": 1,
+   "lie_prevented": "'cobc-rs is a drop-in cobc' is the lie this prevents -- the artifacts are interpreter launch manifests and the boundaries are explicit",
+   "damage_if_overclaimed": "treating the launcher as a native executable would misrepresent an interpreter as codegen"
+  },
+  {
+   "id": "GNURUST.GNUCOBOL-TESTSUITE.3",
+   "name": "GnuCOBOL-testsuite differential classification (baseline vs candidate, every test accounted)",
+   "proven": "every generated test group receives exactly one final classification (reconciled: total == sum of all classes), with the oracle x candidate outcome pairs, first-failure attribution, raw evidence preserved, deterministic two-pass comparison, and honest totals in this environment: 173 OBSERVABLE_MATCH, 439 candidate check/parse rejects, 407 module-model unsupported, 173 wrapper-option unsupported, 26 wrapper-malformed, 22 candidate unsupported, 2 runtime fails, 0 timeouts, 0 not-reached; the runtime/math subset is reported separately (GNURUST.GNUCOBOL-RUNTIME-MATH.1)",
+   "byte_domain": "per-test classification + reason codes + the raw baseline/candidate outputs they rest on",
+   "oracle": "the TESTSUITE.1 baseline (real admitted cobc)",
+   "fixtures": "reports/gnucobol-testsuite/* (ledgers, summaries, raw logs, no-delegation, determinism) + reports/receipts/GNURUST.GNUCOBOL-TESTSUITE.{1,2,3}/",
+   "sealed_version": "0.8.54",
+   "not_proven": "OBSERVABLE_MATCH is the test's own AT_CHECK assertion outcome in this environment, not equivalence outside it; no GnuCOBOL test-suite parity claim; no COBOL conformance certification; no performance claim (see the runtime-math performance view)",
+   "breaks_claim": "a test with no final classification; a classification that hides an unsupported feature as a generic failure; a nondeterministic classification",
+   "readiness": 1,
+   "lie_prevented": "'the GnuCOBOL test-suite passes with gnucobol-rs' is the lie this prevents -- the honest surface is a classification, not a pass count",
+   "damage_if_overclaimed": "presenting the classification as full suite parity would certify coverage the candidate does not have"
+  },
+  {
+   "id": "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+   "name": "GnuCOBOL runtime/mathematics correctness classification (math subset of the suite)",
+   "proven": "the math/runtime subset (data_binary, data_display, data_packed, data_pointer, run_fundamental, run_functions, syn_multiply, syn_value, syn_literals) is classified from the SAME differential results as the whole suite (no favorable selection): 323 math tests with per-test oracle/candidate outcome pairs and first-failure attribution; performance is reported SEPARATELY and only for tests passing on both sides",
+   "byte_domain": "per-math-test classification + the underlying raw outputs",
+   "oracle": "the TESTSUITE.1 baseline",
+   "fixtures": "reports/gnucobol-runtime-tests/math-correctness.{json,md}",
+   "sealed_version": "0.8.54",
+   "not_proven": "no performance claim here; correctness is the suite's AT_CHECK outcome in this environment",
+   "breaks_claim": "a math test classified without a preserved raw output; a favorable-selection report",
+   "readiness": 1,
+   "lie_prevented": "'the math tests pass' is the lie this prevents -- the classification shows exactly which math tests match, which fail closed, and which are module-model blocked",
+   "damage_if_overclaimed": "claiming math parity from a favorable subset would be unscientific"
+  },
+  {
+   "id": "GNURUST.METHODOLOGY.LIBCOB.1",
+   "name": "libcob runtime port methodology (faithful derivative, NOT clean-room) -- documented + machine-recorded",
+   "proven": "docs/methodology/libcob-rust-port.md + reports/methodology/libcob-port-provenance.json record the admitted source identity (gnucobol-3.2, sha256 8ecc77d0...), the 13 in-scope libcob files, the statement-by-statement translation method with upstream line citations, the 100%% symbol parity (LIBCOB-PARITY.md), the LGPL-3.0-or-later inheritance, and the explicit non-claims; the tooling history is recorded as UNKNOWN where the committed record does not show it",
+   "byte_domain": "the provenance records + parity reports",
+   "oracle": "n/a (documentation + machine records, cross-checked against the parity tooling)",
+   "fixtures": "docs/methodology/libcob-rust-port.md + reports/methodology/libcob-port-provenance.json + LIBCOB-PARITY.md",
+   "sealed_version": "0.8.54",
+   "not_proven": "not every libcob function is behaviorally proven byte-equal; only the sealed corpus is",
+   "breaks_claim": "calling the runtime clean-room; claiming full behavioral equality beyond the sealed corpus",
+   "readiness": 1,
+   "lie_prevented": "'the runtime is a clean-room reimplementation' is the lie this prevents",
+   "damage_if_overclaimed": "mislabeling a derivative as clean-room would be a licensing/provenance error"
+  },
+  {
+   "id": "GNURUST.METHODOLOGY.PARSER.1",
+   "name": "parser/front-end provenance audit (independently written per the author's committed claim; strict clean-room not independently verifiable)",
+   "proven": "docs/methodology/parser-front-end-provenance.md + reports/methodology/parser-provenance.json reconstruct the parser history from the committed record (origin commit 9357a7cac 'from-scratch (NOT cobc-derived)', 150+ follow-on commits, oracle-differential development), and state explicitly that the tooling and consulted-materials history is UNKNOWN -- so strict clean-room process separation cannot be independently verified, and the documentation qualifies the term accordingly",
+   "byte_domain": "the provenance records + the commit history they cite",
+   "oracle": "n/a (historical/process documentation)",
+   "fixtures": "docs/methodology/parser-front-end-provenance.md + reports/methodology/parser-provenance.json",
+   "sealed_version": "0.8.54",
+   "not_proven": "strict clean-room separation is NOT claimed; no claim that cobc source was never consulted (no evidence either way)",
+   "breaks_claim": "asserting strict clean-room provenance without the tooling/materials record",
+   "readiness": 1,
+   "lie_prevented": "'the parser is strict clean-room' is the lie this prevents -- the honest position is independently written per the author's claim",
+   "damage_if_overclaimed": "a strict clean-room claim would be legally load-bearing and unverifiable from the record"
+  },
+  {
+   "id": "GNURUST.COBC-RS.ARGS.1",
+   "name": "cobc-rs argument-policy registry (every census option -> explicit policy; unknown fails closed)",
+   "proven": "the cobc-rs option-policy registry (crates/cobc-rs/src/policy.rs) assigns every option an explicit policy (translated / accepted-equivalent / accepted-proven-no-op / rejected-unsupported / rejected-ambiguous) and the generated option-compatibility table (docs/generated/cobc-rs-option-compatibility.md) maps EVERY option observed in the real invocation census to its policy, with the intentional unknowns (e.g. --thisoptiondoesntexist) failing closed; integration tests cover short/long/attached/separated values, --compat modes, malformed invocations, and the getopt_long --x == -x equivalence",
+   "byte_domain": "the policy registry + the generated compatibility table + the argument-parsing integration tests",
+   "oracle": "the real cobc/cobcrun invocation census of the admitted suite (behavioral reference for accepted spellings)",
+   "fixtures": "crates/cobc-rs/tests/cli.rs + docs/generated/cobc-rs-option-compatibility.md",
+   "sealed_version": "0.8.54",
+   "not_proven": "no claim that accepted no-op flags preserve semantics outside the admitted tests; no full cobc CLI replacement",
+   "breaks_claim": "a census option with no explicit policy that is silently ignored instead of failing closed",
+   "readiness": 1,
+   "lie_prevented": "'cobc-rs ignores unknown flags like cobc' is the lie this prevents -- every option has an explicit policy",
+   "damage_if_overclaimed": "silently dropping a semantic option would change program semantics without a record"
+  },
+  {
+   "id": "GNURUST.COBC-RS.LAUNCHER.1",
+   "name": "cobc-rs truthful launcher+manifest artifact model (interpreter launch, never native codegen)",
+   "proven": "cobc-rs -x/-m writes a launcher symlink + JSON manifest + expanded source (gnucobol-rs-launch-manifest-v1) with a self-hash that the launcher VERIFIES at run time (tampered manifests refuse to run, exit 2); the artifact is an interpreter launch manifest, explicitly NOT a native COBOL executable; RETURN-CODE -> exit status, program args tolerated, atomic writes; integration tests cover the lifecycle including the tamper guard",
+   "byte_domain": "the launcher manifest bytes + their self-hash + the run behavior they control",
+   "oracle": "n/a (artifact-model contract; cross-checked by the suite's executable lifecycle expectations)",
+   "fixtures": "crates/cobc-rs/tests/cli.rs (launcher_runs_program_and_propagates_exit_status, manifest_self_hash_refuses_tampering, manifest_hash_is_self_consistent_and_stable)",
+   "sealed_version": "0.8.54",
+   "not_proven": "the launcher is NOT a native-code-compiled COBOL executable; no shell-script generation; no claim that the launcher's runtime matches the oracle outside the sealed corpus; no claim that a launcher survives a mismatch between the manifest dialect/conf and the environment it runs in; no claim that RETURN-CODE propagation covers every cobc exit-code convention; the artifact lifecycle is proven for the admitted suite's usage shapes only",
+   "breaks_claim": "a launcher misrepresented as native codegen; a manifest that runs without its integrity check",
+   "readiness": 1,
+   "lie_prevented": "'cobc-rs produces native executables' is the lie this prevents",
+   "damage_if_overclaimed": "calling the launcher a native executable would misrepresent an interpreter as codegen"
+  },
+  {
+   "id": "GNURUST.COBC-RS.PARALLEL.1",
+   "name": "cobc-rs concurrency safety (100+ parallel invocations, colliding basenames, no cross-test leakage)",
+   "proven": "the integration test one_hundred_concurrent_invocations_colliding_basenames runs 100 concurrent cobc-rs compiles with the SAME basename in different directories and verifies each artifact runs its OWN program (no cross-test leakage, deterministic per-directory manifests); the wrapper has no globally shared mutable output names or fixed temp files (atomic write-and-rename)",
+   "byte_domain": "per-directory artifact correctness under concurrency",
+   "oracle": "n/a (concurrency contract of the wrapper itself)",
+   "fixtures": "crates/cobc-rs/tests/cli.rs (one_hundred_concurrent_invocations_colliding_basenames)",
+   "sealed_version": "0.8.54",
+   "not_proven": "no claim about the GnuCOBOL suite's own parallel behavior; only the wrapper's isolation",
+   "breaks_claim": "any cross-directory artifact contamination under --jobs concurrency",
+   "readiness": 1,
+   "lie_prevented": "'the wrapper is not safe under parallel testsuite runs' is the defect this prevents",
+   "damage_if_overclaimed": "a race in artifact generation would corrupt parallel test evidence"
   }
  ],
  "transform_vs_read": {

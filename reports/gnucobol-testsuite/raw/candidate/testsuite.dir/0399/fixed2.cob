@@ -1,0 +1,8 @@
+
+      * this is a comment
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       PROCEDURE        DIVISION.
+          DISPLAY "OK" NO ADVANCING
+          END-DISPLAY.
+          STOP RUN.

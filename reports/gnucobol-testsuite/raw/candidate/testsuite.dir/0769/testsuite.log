@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+769. run_misc.at:4390: testing CALL with OMITTED parameter ...
+./run_misc.at:4419: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/769/stdout	2026-08-04 10:31:44.092825244 +0000
+@@ -0,0 +1 @@
++callee.so
+769. run_misc.at:4390: 769. CALL with OMITTED parameter (run_misc.at:4390): FAILED (run_misc.at:4419)

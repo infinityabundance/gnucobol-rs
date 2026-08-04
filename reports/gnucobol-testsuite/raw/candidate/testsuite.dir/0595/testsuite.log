@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+595. run_fundamental.at:5283: testing USE FOR DEBUGGING ON procedure ...
+./run_fundamental.at:5313: $COMPILE prog.cob
+./run_fundamental.at:5314: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:43.977650496 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/595/stdout	2026-08-04 10:31:43.976788369 +0000
+@@ -1,12 +1,9 @@
+ OK1
+-    16 SECOND-PAR                                                                     |
+ OK2
+ OK3
+ OK1
+-    16 SECOND-PAR                                                                     |
+ OK2
+ OK4
+-    23 SECOND-PAR                                       PERFORM LOOP                  |
+ OK2
+ OK5
+ 
+595. run_fundamental.at:5283: 595. USE FOR DEBUGGING ON procedure (run_fundamental.at:5283): FAILED (run_fundamental.at:5314)

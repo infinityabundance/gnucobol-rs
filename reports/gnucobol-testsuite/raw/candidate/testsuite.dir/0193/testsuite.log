@@ -1,0 +1,16 @@
+#                             -*- compilation -*-
+193. syn_file.at:326: testing ASSIGN to variable ...
+./syn_file.at:416: $COMPILE_ONLY -fassign-variable=warning -fassign-using-variable=warning -fassign-ext-dyn=warning -fassign-disk-from=warning prog.cob
+--- -	2026-08-04 10:31:43.756280840 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/193/stderr	2026-08-04 10:31:43.755104336 +0000
+@@ -1,7 +1,2 @@
+-prog.cob:10: warning: ASSIGN USING/VARYING variable used
+-prog.cob:12: warning: ASSIGN USING/VARYING variable used
+-prog.cob:14: warning: ASSIGN USING/VARYING variable used
+-prog.cob:15: warning: ASSIGN EXTERNAL/DYNAMIC used
+-prog.cob:18: warning: ASSIGN DISK FROM used
+-prog.cob:7: warning: ASSIGN variable used
++cobc-rs: -fassign-variable=warning: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): warning
+ 
+./syn_file.at:416: exit code was 1, expected 0
+193. syn_file.at:326: 193. ASSIGN to variable (syn_file.at:326): FAILED (syn_file.at:416)

@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+318. syn_misc.at:3724: testing STRING / UNSTRING with invalid syntax ...
+./syn_misc.at:3774: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.818418316 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/318/stderr	2026-08-04 10:31:43.817784575 +0000
+@@ -1,11 +1 @@
+-prog.cob:12: error: syntax error, unexpected DELIMITED
+-prog.cob:15: error: syntax error, unexpected END-STRING, expecting INTO
+-prog.cob:17: error: syntax error, unexpected END-STRING, expecting Identifier
+-prog.cob:19: error: syntax error, unexpected DELIMITED
+-prog.cob:24: error: syntax error, unexpected DELIMITED, expecting INTO
+-prog.cob:32: error: syntax error, unexpected DELIMITED
+-prog.cob:34: error: syntax error, unexpected Identifier, expecting INTO
+-prog.cob:37: error: syntax error, unexpected END-UNSTRING, expecting Identifier
+-prog.cob:38: error: syntax error, unexpected DELIMITED
+-prog.cob:43: error: syntax error, unexpected DELIMITED, expecting INTO
+ 
+./syn_misc.at:3774: exit code was 0, expected 1
+318. syn_misc.at:3724: 318. STRING / UNSTRING with invalid syntax (syn_misc.at:3724): FAILED (syn_misc.at:3774)

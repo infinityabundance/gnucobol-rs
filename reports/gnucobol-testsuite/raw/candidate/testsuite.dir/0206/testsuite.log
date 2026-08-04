@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+206. syn_file.at:1097: testing CODE-SET clause ...
+./syn_file.at:1133: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.761888083 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/206/stderr	2026-08-04 10:31:43.761450647 +0000
+@@ -1,9 +1,2 @@
+-prog.cob:19: note: ignoring CODE-SET 'A'
+-prog.cob:22: error: 'foo' is not defined
+-prog.cob:22: error: 'foo' is not an alphabet-name
+-prog.cob:25: error: 'ebcdic' cannot be used here
+-prog.cob:25: error: 'ebcdic' is not an alphabet-name
+-prog.cob:28: warning: handling of CODE-SET is unfinished; implementation is likely to be changed
+-prog.cob:28: error: FOR item 'h-rec' is a record
+-prog.cob:28: error: FOR item 'h-rec' is not in a record associated with 'FILE i'
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+206. syn_file.at:1097: 206. CODE-SET clause (syn_file.at:1097): FAILED (syn_file.at:1133)

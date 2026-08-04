@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1247. data_binary.at:1961: testing MOVE BINARY to BINARY ...
+./data_binary.at:2137: $COMPILE prog.cob
+./data_binary.at:2138: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1247/stderr	2026-08-04 10:31:44.549274635 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE BINARY-INT
+./data_binary.at:2138: exit code was 2, expected 0
+1247. data_binary.at:1961: 1247. MOVE BINARY to BINARY (data_binary.at:1961): FAILED (data_binary.at:2138)

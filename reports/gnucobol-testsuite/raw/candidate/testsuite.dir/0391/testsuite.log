@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+391. syn_misc.at:7815: testing CONTROL: substitution & default section ...
+./syn_misc.at:7828: $COMPILE -fcontrol-division=ok empties.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/391/stderr	2026-08-04 10:31:43.854441290 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fcontrol-division=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+./syn_misc.at:7828: exit code was 1, expected 0
+391. syn_misc.at:7815: 391. CONTROL: substitution & default section (syn_misc.at:7815): FAILED (syn_misc.at:7828)

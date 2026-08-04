@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+906. run_file.at:5850: testing SEQUENTIAL file with blocked lock ...
+./run_file.at:5916: $COMPILE prog1.cob
+./run_file.at:5917: $COMPILE prog2.cob
+./run_file.at:5918: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/906/stderr	2026-08-04 10:31:44.194310062 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./run_file.at:5918: exit code was 2, expected 0
+906. run_file.at:5850: 906. SEQUENTIAL file with blocked lock (run_file.at:5850): expected failure (run_file.at:5918)

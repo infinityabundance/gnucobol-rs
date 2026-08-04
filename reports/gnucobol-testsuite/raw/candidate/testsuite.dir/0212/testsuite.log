@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+212. syn_file.at:1352: testing RECORD DELIMITER ...
+./syn_file.at:1446: $COMPILE_ONLY -frecord-delim-with-fixed-recs=warning prog.cob
+--- -	2026-08-04 10:31:43.764335415 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/212/stderr	2026-08-04 10:31:43.763849229 +0000
+@@ -1,10 +1,2 @@
+-prog.cob:25: warning: RECORD DELIMITER STANDARD-1 ignored
+-prog.cob:28: warning: RECORD DELIMITER THE-END-OF-THE-WORLD not recognized; will be ignored
+-prog.cob:33: error: ORGANIZATION INDEXED is incompatible with RECORD DELIMITER
+-prog.cob:39: error: RECORD DELIMITER LINE-SEQUENTIAL only allowed with (LINE) SEQUENTIAL files
+-prog.cob:36: error: RECORD clause is invalid for file 'bad-2' (file type)
+-prog.cob:43: error: RECORD DELIMITER BINARY-SEQUENTIAL only allowed with SEQUENTIAL files
+-prog.cob:47: error: RECORD DELIMITER STANDARD-1 only allowed with SEQUENTIAL files
+-prog.cob:76: warning: RECORD DELIMITER clause on file with fixed-length records used
+-prog.cob:88: warning: RECORD DELIMITER clause on file with fixed-length records used
++cobc-rs: -frecord-delim-with-fixed-recs=warning: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): warning
+ 
+212. syn_file.at:1352: 212. RECORD DELIMITER (syn_file.at:1352): FAILED (syn_file.at:1446)

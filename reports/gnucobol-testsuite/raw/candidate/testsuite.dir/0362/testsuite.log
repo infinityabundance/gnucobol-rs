@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+362. syn_misc.at:6033: testing invalid use of condition-name ...
+./syn_misc.at:6077: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.840069208 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/362/stderr	2026-08-04 10:31:43.839449001 +0000
+@@ -1,16 +1 @@
+-prog.cob:17: error: condition-name not allowed here: 'vnum-1'
+-prog.cob:19: error: condition-name not allowed here: 'val-i1'
+-prog.cob:20: error: condition-name not allowed here: 'val-i2'
+-prog.cob:21: error: condition-name not allowed here: 'val-i1'
+-prog.cob:23: error: condition-name not allowed here: 'val-i1'
+-prog.cob:24: error: condition-name not allowed here: 'val-i1'
+-prog.cob:25: error: condition-name not allowed here: 'val-i1'
+-prog.cob:28: error: condition-name not allowed here: 'vnum-9'
+-prog.cob:27: error: condition-name not allowed here: 'val-i1'
+-prog.cob:29: error: condition-name not allowed here: 'vnum-1'
+-prog.cob:30: error: condition-name not allowed here: 'vnum-1'
+-prog.cob:31: error: condition-name not allowed here: 'vnum-2'
+-prog.cob:33: error: condition-name not allowed here: 'val-i1'
+-prog.cob:34: error: condition-name not allowed here: 'val-i2'
+-prog.cob:32: error: 'val-i1 (MAIN SECTION:)' is not a procedure name
+ 
+./syn_misc.at:6077: exit code was 0, expected 1
+362. syn_misc.at:6033: 362. invalid use of condition-name (syn_misc.at:6033): FAILED (syn_misc.at:6077)

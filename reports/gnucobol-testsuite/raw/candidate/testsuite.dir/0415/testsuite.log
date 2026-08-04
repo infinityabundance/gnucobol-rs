@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+415. syn_move.at:552: testing invalid source for MOVE ...
+./syn_move.at:572: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.868248790 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/415/stderr	2026-08-04 10:31:43.867035288 +0000
+@@ -1,5 +1 @@
+-prog.cob:7: warning: no definition/prototype seen for PROGRAM 'repo-prog'
+-prog.cob: in paragraph 'MAIN':
+-prog.cob:13: error: 'MAIN' is not a field
+-prog.cob:14: error: 'repo-prog' is not a field
+ 
+./syn_move.at:572: exit code was 0, expected 1
+415. syn_move.at:552: 415. invalid source for MOVE (syn_move.at:552): FAILED (syn_move.at:572)

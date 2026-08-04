@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+1248. data_binary.at:2143: testing PPP COMP-5 ...
+./data_binary.at:2196: $COMPILE prog.cob
+./data_binary.at:2201: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stderr	2026-08-04 10:31:44.550161218 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC VPPP999: ScalingPDeferred
+--- -	2026-08-04 10:31:44.551107071 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stdout	2026-08-04 10:31:44.550442612 +0000
+@@ -1,11 +1 @@
+-INIT X-1 : 00091 .
+-INIT X-2 : 00092 .
+-INIT X-4 : 00128 .
+-INIT D-1 : 00095 .
+-MOVE X-1 : 00095 .
+-MOVE X-2 : 00095 .
+-MOVE X-4 : 00256 .
+-MOVE D-1 : 00095 .
+-MOVE X-1 : 00193:01930 .
+-MOVE X-2 : 00193:01930 .
+ 
+./data_binary.at:2201: exit code was 2, expected 0
+1248. data_binary.at:2143: 1248. PPP COMP-5 (data_binary.at:2143): FAILED (data_binary.at:2201)

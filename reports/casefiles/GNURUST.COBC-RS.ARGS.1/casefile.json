@@ -1,0 +1,57 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "the policy registry + the generated compatibility table + the argument-parsing integration tests"
+  ],
+  "case_id": "GNURUST.COBC-RS.ARGS.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "silently dropping a semantic option would change program semantics without a record",
+  "hash_chain": {
+    "inputs_sha256": "5b2829882b28fb769fc19ce5028332fcb80ebe380b3e6681b0d005583fa7ec88"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "a47299f2fd8dc3fac359bfcf6cfbfeb28a1b2b6077668895b732a34c23f7b875",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'cobc-rs ignores unknown flags like cobc' is the lie this prevents -- every option has an explicit policy"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-CLAIM-THAT-ACCEPTED-NO-OP-FLAGS-PRESE",
+    "NEG.NO-FULL-COBC-CLI-REPLACEMENT"
+  ],
+  "negative_claims": [
+    "no claim that accepted no-op flags preserve semantics outside the admitted tests",
+    "no full cobc CLI replacement",
+    "lie prevented: 'cobc-rs ignores unknown flags like cobc' is the lie this prevents -- every option has an explicit policy"
+  ],
+  "oracle": {
+    "detail": "the real cobc/cobcrun invocation census of the admitted suite (behavioral reference for accepted spellings)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COBC-RS.ARGS.1"
+  },
+  "positive_claims": [
+    "the cobc-rs option-policy registry (crates/cobc-rs/src/policy.rs) assigns every option an explicit policy (translated / accepted-equivalent / accepted-proven-no-op / rejected-unsupported / rejected-ambiguous) and the generated option-compatibility table (docs/generated/cobc-rs-option-compatibility.md) maps EVERY option observed in the real invocation census to its policy, with the intentional unknowns (e.g. --thisoptiondoesntexist) failing closed",
+    "integration tests cover short/long/attached/separated values, --compat modes, malformed invocations, and the getopt_long --x == -x equivalence"
+  ],
+  "replay": {
+    "command": "the real cobc/cobcrun invocation census of the admitted suite (behavioral reference for accepted spellings)",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "crates/cobc-rs/tests/cli.rs + docs/generated/cobc-rs-option-compatibility.md",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

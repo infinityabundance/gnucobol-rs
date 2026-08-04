@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+863. run_file.at:823: testing ASSIGN filename mapping ...
+./run_file.at:860: $COMPILE -fno-filename-mapping prog.cob
+./run_file.at:861: DD_FILENAME="x" $COBCRUN_DIRECT ./prog
+./run_file.at:862: test -f "x"
+./run_file.at:863: test -f "FILENAME"
+./run_file.at:865: $COMPILE -ffilename-mapping prog2.cob
+./run_file.at:866: DD_FILENAME2="x" $COBCRUN_DIRECT ./prog2
+./run_file.at:867: test -f "FILENAME2"
+./run_file.at:867: exit code was 0, expected 1
+863. run_file.at:823: 863. ASSIGN filename mapping (run_file.at:823): FAILED (run_file.at:867)

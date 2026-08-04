@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+676. run_misc.at:221: testing CURRENCY SIGN WITH PICTURE SYMBOL ...
+./run_misc.at:258: $COMPILE prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/676/stderr	2026-08-04 10:31:19.274689505 +0000
+@@ -0,0 +1,13 @@
++prog.cob:8: warning: separate currency symbol and currency string is not implemented
++prog.cob:9: error: duplicate CURRENCY clause
++prog.cob:9: warning: separate currency symbol and currency string is not implemented
++prog.cob:9: error: invalid character 'c' in currency symbol
++prog.cob:10: error: duplicate CURRENCY clause
++prog.cob:10: warning: separate currency symbol and currency string is not implemented
++prog.cob:15: error: C must be followed by R
++prog.cob:15: error: 9 cannot follow CR or DB
++prog.cob:15: error: , cannot follow CR or DB
++prog.cob:19: warning: alphanumeric value is expected
++prog.cob:14: note: 'EUROS' defined here as PIC U99V99
++prog.cob:20: error: 'EUROS' is not numeric
++prog.cob:22: error: 'Invoice-Amount' is not defined
+./run_misc.at:258: exit code was 1, expected 0
+676. run_misc.at:221: 676. CURRENCY SIGN WITH PICTURE SYMBOL (run_misc.at:221): expected failure (run_misc.at:258)

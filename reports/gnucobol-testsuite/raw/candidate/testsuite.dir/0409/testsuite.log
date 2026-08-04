@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+409. syn_move.at:293: testing MOVE national TO x ...
+./syn_move.at:321: $COMPILE_ONLY -Wno-unfinished prog.cob
+--- -	2026-08-04 10:31:43.863645288 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/409/stderr	2026-08-04 10:31:43.863142671 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:15: error: invalid MOVE statement
+-prog.cob:16: error: invalid MOVE statement
+-prog.cob:17: error: invalid MOVE statement
++cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')
+ 
+409. syn_move.at:293: 409. MOVE national TO x (syn_move.at:293): FAILED (syn_move.at:321)

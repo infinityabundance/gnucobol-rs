@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1164. run_extensions.at:3247: testing System routine C$PARAMSIZE ...
+./run_extensions.at:3282: $COMPILE caller.cob
+./run_extensions.at:3283: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1164/stdout	2026-08-04 10:31:44.474033631 +0000
+@@ -0,0 +1 @@
++callee.so
+1164. run_extensions.at:3247: 1164. System routine C$PARAMSIZE (run_extensions.at:3247): FAILED (run_extensions.at:3283)

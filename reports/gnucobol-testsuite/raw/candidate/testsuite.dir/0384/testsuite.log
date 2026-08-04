@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+384. syn_misc.at:7197: testing Invalid PERFORM statement ...
+./syn_misc.at:7221: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.850780886 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/384/stderr	2026-08-04 10:31:43.849801781 +0000
+@@ -1,3 +1 @@
+-prog.cob:10: error: syntax error, unexpected (
+-prog.cob:17: error: syntax error, unexpected ., expecting TIMES
+ 
+./syn_misc.at:7221: exit code was 0, expected 1
+384. syn_misc.at:7197: 384. Invalid PERFORM statement (syn_misc.at:7197): FAILED (syn_misc.at:7221)

@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+252. syn_misc.at:550: testing Invalid conditional expression (2) ...
+./syn_misc.at:604: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.784692034 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/252/stderr	2026-08-04 10:31:43.784030520 +0000
+@@ -1,10 +1 @@
+-prog.cob: in paragraph 'MAIN':
+-prog.cob:13: error: condition expression found where decimal expression was expected
+-prog.cob:18: error: condition expression found where decimal expression was expected
+-prog.cob:21: error: condition expression found where decimal expression was expected
+-prog.cob:30: error: condition expression found where decimal expression was expected
+-prog.cob:33: error: invalid expression: unfinished expression
+-prog.cob:40: error: condition-name not allowed here: 'WRKN-IS-ZERO'
+-prog.cob:43: error: condition-name not allowed here: 'WRKN-IS-ZERO'
+-prog.cob:46: error: condition expression found where decimal expression was expected
+ 
+./syn_misc.at:604: exit code was 0, expected 1
+252. syn_misc.at:550: 252. Invalid conditional expression (2) (syn_misc.at:550): FAILED (syn_misc.at:604)

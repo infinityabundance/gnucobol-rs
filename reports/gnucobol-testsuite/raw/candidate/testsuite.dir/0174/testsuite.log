@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+174. syn_value.at:76: testing OCCURS too many VALUEs ...
+./syn_value.at:140: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.746582510 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/174/stderr	2026-08-04 10:31:43.745648098 +0000
+@@ -1,4 +1 @@
+-prog.cob:15: error: elements in VALUE clause for 'MONTH-IN-YEAR' (15) exceed max amount (13)
+-prog.cob:26: error: elements in VALUE clause for 'MONTHS' (25) exceed max amount (24)
+-prog.cob:38: error: elements in VALUE clause for 'FLR' (9) exceed max amount (8)
+ 
+./syn_value.at:140: exit code was 0, expected 1
+174. syn_value.at:76: 174. OCCURS too many VALUEs (syn_value.at:76): FAILED (syn_value.at:140)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+869. run_file.at:1371: testing ASSIGN DYNAMIC with empty data item ...
+./run_file.at:1400: $COMPILE prog.cob
+./run_file.at:1401: $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:44.166488928 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/869/stderr	2026-08-04 10:31:44.165854425 +0000
+@@ -1,2 +1,2 @@
+-libcob: prog.cob:22: error: inconsistent file name (status = 31) for file test-file ('') on OPEN
++cobrun: unsupported: verb CHAINING
+ 
+./run_file.at:1401: exit code was 2, expected 1
+869. run_file.at:1371: 869. ASSIGN DYNAMIC with empty data item (run_file.at:1371): FAILED (run_file.at:1401)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1142. run_extensions.at:2126: testing Quoted PROGRAM-ID ...
+./run_extensions.at:2143: $COMPILE -w prog.cob
+./run_extensions.at:2144: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1142/stderr	2026-08-04 10:31:44.452230345 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: expected program name after PROGRAM-ID
+./run_extensions.at:2144: exit code was 2, expected 0
+1142. run_extensions.at:2126: 1142. Quoted PROGRAM-ID (run_extensions.at:2126): FAILED (run_extensions.at:2144)

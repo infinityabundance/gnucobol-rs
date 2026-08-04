@@ -1,0 +1,34 @@
+#                             -*- compilation -*-
+824. run_misc.at:12434: testing Default Arithmetic (1) ...
+./run_misc.at:12510: $COMPILE prog.cob
+./run_misc.at:12512: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stderr	2026-08-04 10:31:44.131596151 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: RSLTV2,
+--- -	2026-08-04 10:31:44.133099994 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stdout	2026-08-04 10:31:44.132233709 +0000
+@@ -1,21 +1 @@
+-Simple Compute  RSLT IS 400
+-Single Variable RSLT IS 188
+-Compute  RSLT    IS 188
+-Compute  RSLTv99 IS 188.00
+-Compute  RSLT    IS 188
+-Compute  RSLTv9  IS 188.0
+-Add      RSLT    IS 212
+-Add      RSLT    IS 621
+-Subtract RSLT    IS 408
+-Subtract RSLT    IS 019
+-Add      RSLTv9  IS 611.3
+-Multiply RSLT    IS 723
+-Multiply RSLT    IS 723
+-Divide   RSLT    IS 039
+-Divide   RSLTv9  IS 009.7
+-Divide   RSLT    IS 009
+-Simple   RSLT    IS 188 RSLTv9  IS 188.0
+-Complex  RSLT    IS 188 RSLTv9  IS 188.0
+-Reduced  RSLT    IS 188 RSLTv9  IS 188.0
+-Not Using ARITHMETIC-OSVS
+ 
+./run_misc.at:12512: exit code was 2, expected 0
+824. run_misc.at:12434: 824. Default Arithmetic (1) (run_misc.at:12434): FAILED (run_misc.at:12512)

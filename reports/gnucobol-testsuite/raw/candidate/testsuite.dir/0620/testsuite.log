@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+620. run_fundamental.at:7035: testing MOVE with de-editting to NUMERIC DISPLAY (2) ...
+./run_fundamental.at:7158: $COMPILE prog.cob
+./run_fundamental.at:7159: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/620/stdout	2026-08-04 10:31:43.992329911 +0000
+@@ -0,0 +1,13 @@
++3: DST-FIELD-1 <0000000000.0000> != 3456007
++4: DST-FIELD-1 <0000000000.0000> != 4567008
++5: DST-FIELD-2 <-0001234005.0000> != 1234005
++7: DST-FIELD-2 <+0000000000.0000> != -3456007
++8: DST-FIELD-2 <+0000000000.0000> != 45676008
++9: DST-FIELD-1 <0000000000.0000> != 1234005
++10: DST-FIELD-1 <0000000000.0000> != 2345006
++11: DST-FIELD-1 <0000000000.0000> != 3456007
++12: DST-FIELD-1 <0000000000.00001 != 45676008
++13: DST-FIELD-2 <+0000000000.0000> != 1234005
++14: DST-FIELD-2 <+0000000000.0000> != -2345006
++15: DST-FIELD-2 <+0000000000.0000> != -3456007
++16: DST-FIELD-2 <+0000000000.0000> != 4567008
+620. run_fundamental.at:7035: 620. MOVE with de-editting to NUMERIC DISPLAY (2) (run_fundamental.at:7035): FAILED (run_fundamental.at:7159)

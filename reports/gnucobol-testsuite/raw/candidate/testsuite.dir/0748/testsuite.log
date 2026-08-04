@@ -1,0 +1,33 @@
+#                             -*- compilation -*-
+748. run_misc.at:3201: testing UNSTRING with FUNCTION / literal ...
+./run_misc.at:3245: $COMPILE prog.cob
+./run_misc.at:3246: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/748/stderr	2026-08-04 10:31:44.080079624 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: PRM(1),
+--- -	2026-08-04 10:31:44.081229728 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/748/stdout	2026-08-04 10:31:44.080523261 +0000
+@@ -1,20 +1 @@
+-PRM(1) is The             :
+-PRM(2) is Quick           :
+-PRM(3) is Brown           :
+-PRM(4) is Fox             :
+-Now using UPPER-CASE
+-PRM(1) is THE             :
+-PRM(2) is QUICK           :
+-PRM(3) is BROWN           :
+-PRM(4) is FOX             :
+-Now using Literal
+-PRM(1) is Daddy           :
+-PRM(2) is was             :
+-PRM(3) is a               :
+-PRM(4) is Rolling stone   :
+-Now using Literal + LOWER-CASE
+-PRM(1) is daddy           :
+-PRM(2) is was             :
+-PRM(3) is a               :
+-PRM(4) is rolling stone   :
+ 
+./run_misc.at:3246: exit code was 2, expected 0
+748. run_misc.at:3201: 748. UNSTRING with FUNCTION / literal (run_misc.at:3201): FAILED (run_misc.at:3246)

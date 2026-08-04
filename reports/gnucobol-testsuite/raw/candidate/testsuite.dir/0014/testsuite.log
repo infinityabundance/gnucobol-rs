@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+14. used_binaries.at:540: testing cobcrun -M DSO entry argument ...
+./used_binaries.at:543: $COBCRUN -M "" nope
+--- -	2026-08-04 10:31:43.670156477 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/14/stderr	2026-08-04 10:31:43.669407030 +0000
+@@ -1,2 +1,2 @@
+-invalid module argument ''
++cobc-rs (cobcrun): module "" not found in the build-local module registry (no .so.cobr.json found)
+ 
+./used_binaries.at:543: exit code was 2, expected 1
+14. used_binaries.at:540: 14. cobcrun -M DSO entry argument (used_binaries.at:540): FAILED (used_binaries.at:543)

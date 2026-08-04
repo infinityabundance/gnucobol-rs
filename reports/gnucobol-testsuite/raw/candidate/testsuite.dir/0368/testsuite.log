@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+368. syn_misc.at:6553: testing OSVS I/O extensions ...
+./syn_misc.at:6601: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.843466130 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/368/stderr	2026-08-04 10:31:43.842815848 +0000
+@@ -1,15 +1 @@
+-prog.cob:10: warning: FILE-LIMIT is obsolete in GnuCOBOL
+-prog.cob:10: warning: TRACK-AREA is obsolete in GnuCOBOL
+-prog.cob:11: warning: TRACK-LIMIT is obsolete in GnuCOBOL
+-prog.cob:14: warning: ACTUAL KEY is obsolete in GnuCOBOL
+-prog.cob:18: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:19: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:20: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:21: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:22: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:23: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:24: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:25: warning: DOS/VS APPLY phrase is obsolete in GnuCOBOL
+-prog.cob:42: warning: OPEN LEAVE/REREAD/DISP is obsolete in GnuCOBOL
+-prog.cob:42: warning: OPEN LEAVE/REREAD/DISP is obsolete in GnuCOBOL
+ 
+368. syn_misc.at:6553: 368. OSVS I/O extensions (syn_misc.at:6553): FAILED (syn_misc.at:6601)

@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.SCREENIO.ATTR.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.53",
+  "crate_version": "0.8.54",
   "damage_if_overclaimed": "claiming 'screen attributes work' would hide that COLOUR (the whole-screen repaint), combined attributes, and ACCEPT-side attributes are unported, and that only the admitted terminal is proven",
   "hash_chain": {
-    "inputs_sha256": "1b0a8dcd3dc3895e89bcd2d2985647a25f0c870f409731ae5a3a4679066d6e49"
+    "inputs_sha256": "37baa8840709116c95559686ad83187d01d0aa41acdf716683853c407e7206ff"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "33cd8965aa8931f5a5300055afc85308416368e903992d1090d79d64163f9f52",
-    "receipt_sha256": "62ae750987c6ccb1a737913001e2de2ca68f9d54583bff9bd3e9035ad672c78d"
+    "receipt_sha256": "0b3c04cf572a600058e562b0ca0484622a8d8adb831b3d74d6eb6a30446d4520"
   },
   "kind": "court-casefile",
   "lie_prevented": [

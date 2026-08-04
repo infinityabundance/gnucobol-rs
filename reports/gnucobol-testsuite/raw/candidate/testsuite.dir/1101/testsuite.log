@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1101. run_functions.at:4216: testing FUNCTION WHEN-COMPILED ...
+./run_functions.at:4264: $COMPILE prog.cob
+./run_functions.at:4265: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1101/stderr	2026-08-04 10:31:44.411190068 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: 17:5
+./run_functions.at:4265: exit code was 2, expected 0
+1101. run_functions.at:4216: 1101. FUNCTION WHEN-COMPILED (run_functions.at:4216): FAILED (run_functions.at:4265)

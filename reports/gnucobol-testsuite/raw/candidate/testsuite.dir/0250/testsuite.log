@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+250. syn_misc.at:388: testing warn literal size in constant expr. (level 88) ...
+./syn_misc.at:420: $COMPILE_ONLY -fdiagnostics-show-option prog.cob
+--- -	2026-08-04 10:31:43.783739528 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/250/stderr	2026-08-04 10:31:43.783147054 +0000
+@@ -1,13 +1 @@
+-prog.cob:8: warning: literal '99' has more digits than 'x' [-Wconstant-expression]
+-prog.cob:8: warning: expression is always FALSE [-Wconstant-expression]
+-prog.cob:13: warning: literal '00' is longer than 'xx' [-Wconstant-expression]
+-prog.cob:13: warning: expression is always FALSE [-Wconstant-expression]
+-prog.cob:13: warning: literal 'cd' is longer than 'xx' [-Wconstant-expression]
+-prog.cob:13: warning: expression is always FALSE [-Wconstant-expression]
+-prog.cob:24: warning: value size exceeds data size [-Wtruncate]
+-prog.cob:24: note: value size is 2 [-Wtruncate]
+-prog.cob:11: note: 'xx' defined here as PIC X [-Wtruncate]
+-prog.cob:26: warning: value size exceeds data size [-Wtruncate]
+-prog.cob:26: note: value is 99 [-Wtruncate]
+-prog.cob:7: note: 'x' defined here as PIC 9 [-Wtruncate]
+ 
+250. syn_misc.at:388: 250. warn literal size in constant expr. (level 88) (syn_misc.at:388): FAILED (syn_misc.at:420)

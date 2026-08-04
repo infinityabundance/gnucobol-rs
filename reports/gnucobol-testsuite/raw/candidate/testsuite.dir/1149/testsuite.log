@@ -1,0 +1,6 @@
+#                             -*- compilation -*-
+1149. run_extensions.at:2497: testing STOP RUN RETURNING/GIVING ...
+./run_extensions.at:2538: $COMPILE prog1.cob
+./run_extensions.at:2539: $COBCRUN_DIRECT ./prog1
+./run_extensions.at:2539: exit code was 0, expected 11
+1149. run_extensions.at:2497: 1149. STOP RUN RETURNING/GIVING (run_extensions.at:2497): FAILED (run_extensions.at:2539)

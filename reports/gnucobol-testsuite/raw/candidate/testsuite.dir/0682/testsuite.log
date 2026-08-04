@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+682. run_misc.at:513: testing EXTERNAL data item size mismatch ...
+./run_misc.at:569: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/682/stdout	2026-08-04 10:31:44.034202239 +0000
+@@ -0,0 +1 @@
++callee.so
+682. run_misc.at:513: 682. EXTERNAL data item size mismatch (run_misc.at:513): expected failure (run_misc.at:569)

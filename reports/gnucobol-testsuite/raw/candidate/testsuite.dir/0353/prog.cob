@@ -1,0 +1,31 @@
+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. prog.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 DATA-COLLECTION.
+          03 DATA-ITEMS-A VOLATILE.
+             05 DATA-A1 PIC S9(9) BINARY.
+             05 DATA-A2 PIC S9(9) BINARY.
+          03 VOLATILE.
+             05 DATA-FILLER PIC S9(9) BINARY.
+          03 DATA-ITEMS-B.
+             05 DATA-B1 PIC S9(9).
+             05 DATA-B2 PIC S9(9) VOLATILE.
+          03 DATA-ITEMS-C.
+             05 DATA-C1 PIC S9(9).
+             05 DATA-C2 PIC S9(9).
+       01 STEP    PIC 9(8)  BINARY VALUE 0 EXTERNAL VOLATILE.
+      *01 WRONGY    PIC X.
+      *   88 TESTVAL-A VALUE 'A' VOLATILE.
+      *   88 TESTVAL-B VOLATILE VALUE 'B'.
+       LINKAGE SECTION.
+       01  XMYREC.
+          05  XFLD1   PIC 9(2) VOLATILE.
+      *SCREEN SECTION.
+      *01  WRONG-SCREEN.
+      *   05  WRONG-FIELD   PIC X VOLATILE.
+      *
+       PROCEDURE DIVISION.
+           MOVE DATA-ITEMS-B TO DATA-ITEMS-C.
+           STOP RUN.

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+771. run_misc.at:4507: testing direct CALL in from C w/wo error; no exit ...
+./run_misc.at:4618: $COMPILE caller.c
+./run_misc.at:4619: $COMPILE_MODULE callee.cob callee2.cob buggy.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/771/stdout	2026-08-04 10:31:44.095650872 +0000
+@@ -0,0 +1 @@
++callee.so
+771. run_misc.at:4507: 771. direct CALL in from C w/wo error; no exit (run_misc.at:4507): FAILED (run_misc.at:4619)

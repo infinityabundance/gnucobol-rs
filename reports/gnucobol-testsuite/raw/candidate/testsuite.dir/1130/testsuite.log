@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1130. run_extensions.at:1151: testing INITIALIZE OCCURS ODOSLIDE ...
+./run_extensions.at:1235: $COMPILE -fodoslide prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1130/stderr	2026-08-04 10:31:44.438575149 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fodoslide: unsupported option (rejected-unsupported; OCCURS DEPENDING slide: not modeled; reject honestly): 
+./run_extensions.at:1235: exit code was 1, expected 0
+1130. run_extensions.at:1151: 1130. INITIALIZE OCCURS ODOSLIDE (run_extensions.at:1151): FAILED (run_extensions.at:1235)

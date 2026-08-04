@@ -11,13 +11,13 @@ Evidence authority: the claim-ladder + generated casefiles. Legacy source preser
 
 A serious reviewer trusts a project that says **"no"** as precisely as it says **"yes."** This registry states, as loudly as each sealed capability, exactly what gnucobol-rs does **not** claim — *what* is rejected, *where*, with *which guard*, *why*, and *how* a surface earns its way off this list. It is the negative half of the same trust surface that `COBOL-PARITY.md` covers positively; read the two together, because a non-claim here is only meaningful against the sealed subset there.
 
-**Accuracy rule (binding).** Nothing sealed may appear below as a non-claim. A surface with a court ID and a green receipt is a *capability*, not a gap; listing it here would be a lie of omission in the other direction. Every entry below has been cross-checked against the 141-court claim ladder so that no sealed surface is mis-stated as a gap. The four non-claim **types** are kept in distinct sections, each with its own departure semantics: §3a deliberate non-goals, §3b fail-closed-and-shrinking forms, §4 true oracle boundaries, §5 genuinely-open work.
+**Accuracy rule (binding).** Nothing sealed may appear below as a non-claim. A surface with a court ID and a green receipt is a *capability*, not a gap; listing it here would be a lie of omission in the other direction. Every entry below has been cross-checked against the 150-court claim ladder so that no sealed surface is mis-stated as a gap. The four non-claim **types** are kept in distinct sections, each with its own departure semantics: §3a deliberate non-goals, §3b fail-closed-and-shrinking forms, §4 true oracle boundaries, §5 genuinely-open work.
 
 ---
 
 ## 1. Doctrine — fail closed
 
-gnucobol-rs is a clean-room (non-`cobc`-derived) COBOL reader + interpreter over a 1:1 Rust port of the GnuCOBOL 3.2 `libcob` runtime. **No `cobc` is invoked and no `libcob` is linked.** Correctness is judged solely by stdout bytes being byte-identical to the admitted `cobc` 3.2 oracle (and, where applicable, a second pinned 3.1.2 differential oracle).
+gnucobol-rs is an independently written (per the author's committed from-scratch claim — strict clean-room provenance is not independently verifiable from the committed record, see [methodology](docs/methodology/parser-front-end-provenance.md)) COBOL reader + interpreter over a 1:1 Rust port of the GnuCOBOL 3.2 `libcob` runtime. **No `cobc` is invoked and no `libcob` is linked.** Correctness is judged solely by stdout bytes being byte-identical to the admitted `cobc` 3.2 oracle (and, where applicable, a second pinned 3.1.2 differential oracle).
 
 The single governing rule:
 
@@ -124,7 +124,7 @@ These are **not gaps and not latent tasks.** GnuCOBOL 3.2 itself does not run th
 
 ## 5. Genuinely-open data / runtime non-claims that remain
 
-These are the surfaces confirmed **NOT sealed** — the honest residue after the 141 courts. Each fails closed today; each leaves by sealing a court (§6 route 1).
+These are the surfaces confirmed **NOT sealed** — the honest residue after the 150 courts. Each fails closed today; each leaves by sealing a court (§6 route 1).
 
 | Open surface | Why still a non-claim | How it leaves |
 |---|---|---|

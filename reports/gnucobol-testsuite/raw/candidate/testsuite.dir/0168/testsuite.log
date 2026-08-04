@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+168. syn_redefines.at:359: testing REDEFINES: with VALUE ...
+./syn_redefines.at:381: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.744302700 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/168/stderr	2026-08-04 10:31:43.743308176 +0000
+@@ -1,3 +1 @@
+-prog.cob:7: warning: initial VALUE clause ignored for REDEFINES item 'A'
+-prog.cob:9: warning: initial VALUE clause ignored for REDEFINES item 'B'
+ 
+168. syn_redefines.at:359: 168. REDEFINES: with VALUE (syn_redefines.at:359): FAILED (syn_redefines.at:381)

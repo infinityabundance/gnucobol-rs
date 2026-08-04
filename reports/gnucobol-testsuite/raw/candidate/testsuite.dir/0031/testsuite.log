@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+31. configuration.at:176: testing cobc configuration: recursive include ...
+./configuration.at:203: $COMPILE_ONLY -conf=test.conf prog.cob
+--- -	2026-08-04 10:31:43.680675527 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/31/stderr	2026-08-04 10:31:43.680155227 +0000
+@@ -1,6 +1 @@
+-configuration error:
+-test.conf: recursive inclusion
+-test3.conf:2: configuration file was included here
+-test2.conf:4: configuration file was included here
+-test.conf:3: configuration file was included here
+ 
+./configuration.at:203: exit code was 0, expected 1
+31. configuration.at:176: 31. cobc configuration: recursive include (configuration.at:176): FAILED (configuration.at:203)

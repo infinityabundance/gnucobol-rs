@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+13. used_binaries.at:500: testing cobcrun validation ...
+./used_binaries.at:533: $COMPILE_MODULE callee.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/13/stdout	2026-08-04 10:31:43.669407030 +0000
+@@ -0,0 +1 @@
++callee.so
+13. used_binaries.at:500: 13. cobcrun validation (used_binaries.at:500): FAILED (used_binaries.at:533)

@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+974. run_reportwriter.at:4435: testing Test Report dump DECLARATIVES ...
+./run_reportwriter.at:4553: $COMPILE -debug -fdump=ALL prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/974/stderr	2026-08-04 10:31:44.248314597 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fdump=ALL: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ALL
+./run_reportwriter.at:4553: exit code was 1, expected 0
+974. run_reportwriter.at:4435: 974. Test Report dump DECLARATIVES (run_reportwriter.at:4435): FAILED (run_reportwriter.at:4553)

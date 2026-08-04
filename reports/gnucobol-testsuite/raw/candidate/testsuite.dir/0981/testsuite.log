@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+981. run_reportwriter.at:9519: testing BEFORE REPORTING ...
+./run_reportwriter.at:9617: $COMPILE prog.cob
+./run_reportwriter.at:9619: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stderr	2026-08-04 10:31:44.254908078 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: WS-TRANSPORT-PAY,
+--- -	2026-08-04 10:31:44.255846427 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stdout	2026-08-04 10:31:44.255196446 +0000
+@@ -1,6 +1 @@
+-BEFORE DETAIL - SHOULD DISPLAY
+-==============================
+-BEFORE DETAIL - SHOULD DISPLAY
+-==============================
+-BEFORE FINAL - SHOULD DISPLAY
+ 
+./run_reportwriter.at:9619: exit code was 2, expected 0
+981. run_reportwriter.at:9519: 981. BEFORE REPORTING (run_reportwriter.at:9519): FAILED (run_reportwriter.at:9619)

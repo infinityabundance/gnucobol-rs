@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+436. syn_screen.at:592: testing FULL on numeric item ...
+./syn_screen.at:609: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.878570401 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/436/stderr	2026-08-04 10:31:43.877976063 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:11: warning: FULL has no effect on numeric items; you may want REQUIRED or PIC Z
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+./syn_screen.at:609: exit code was 1, expected 0
+436. syn_screen.at:592: 436. FULL on numeric item (syn_screen.at:592): FAILED (syn_screen.at:609)

@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+297. syn_misc.at:2800: testing adding/removing reserved words ...
+./syn_misc.at:2820: $COMPILE_ONLY -freserved=hello,foo,bars,background-color -fnot-reserved=file prog.cob
+--- -	2026-08-04 10:31:43.808122272 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/297/stderr	2026-08-04 10:31:43.807452353 +0000
+@@ -1,5 +1,2 @@
+-prog.cob:7: error: 'hello' is a reserved word, but isn't supported
+-prog.cob:8: error: 'foo' is a reserved word, but isn't supported
+-prog.cob:9: error: 'bars' is a reserved word, but isn't supported
+-prog.cob:11: error: syntax error, unexpected BACKGROUND-COLOR
++cobc-rs: -freserved=hello,foo,bars,background-color: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): hello,foo,bars,background-color
+ 
+297. syn_misc.at:2800: 297. adding/removing reserved words (syn_misc.at:2800): FAILED (syn_misc.at:2820)

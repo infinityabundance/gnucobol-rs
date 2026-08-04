@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+796. run_misc.at:7099: testing CALL RETURNING POINTER ...
+./run_misc.at:7160: $COMPILE -fno-gen-c-decl-static-call prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/796/stderr	2026-08-04 10:31:44.113607316 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-gen-c-decl-static-call: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_misc.at:7160: exit code was 1, expected 0
+796. run_misc.at:7099: 796. CALL RETURNING POINTER (run_misc.at:7099): FAILED (run_misc.at:7160)

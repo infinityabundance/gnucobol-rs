@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+424. syn_screen.at:121: testing AT clause ...
+./syn_screen.at:165: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.872871998 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/424/stderr	2026-08-04 10:31:43.872056498 +0000
+@@ -1,6 +1 @@
+-prog.cob:34: error: value in AT clause must have 4 or 6 digits
+-prog.cob:35: error: value in AT clause must have 4 or 6 digits
+-prog.cob:36: error: value in AT clause is not numeric
+-prog.cob:37: error: value in AT clause must have 4 or 6 digits
+-prog.cob:39: error: cannot specify figurative constant ZERO in AT clause
+ 
+./syn_screen.at:165: exit code was 0, expected 1
+424. syn_screen.at:121: 424. AT clause (syn_screen.at:121): FAILED (syn_screen.at:165)

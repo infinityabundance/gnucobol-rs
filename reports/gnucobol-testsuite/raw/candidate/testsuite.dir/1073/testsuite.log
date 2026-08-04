@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+1073. run_functions.at:3027: testing FUNCTION SECONDS-FROM-FORMATTED-TIME ...
+./run_functions.at:3076: $COMPILE prog.cob
+./run_functions.at:3077: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1073/stdout	2026-08-04 10:31:44.369818664 +0000
+@@ -0,0 +1,6 @@
++Test 1 failed: 00000000000000003723
++Test 2 failed: 00000000000000003723
++Test 3 failed: 00000000372304050607
++Test 4 failed: 00000000000000003723
++Test 5 failed: 00000000000000003723
++Test 6 failed: 00000000000000003723
+1073. run_functions.at:3027: 1073. FUNCTION SECONDS-FROM-FORMATTED-TIME (run_functions.at:3027): FAILED (run_functions.at:3077)

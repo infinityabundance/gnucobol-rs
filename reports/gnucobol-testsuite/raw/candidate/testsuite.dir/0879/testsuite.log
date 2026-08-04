@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+879. run_file.at:3234: testing START RELATIVE (3) ...
+./run_file.at:3305: $COMPILE prog.cob
+./run_file.at:3306: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/879/stderr	2026-08-04 10:31:44.173020343 +0000
+@@ -0,0 +1 @@
++cobrun: runtime error: RELATIVE KEY `FILE1-KEY` = 0 (< 1)
+./run_file.at:3306: exit code was 2, expected 0
+879. run_file.at:3234: 879. START RELATIVE (3) (run_file.at:3234): FAILED (run_file.at:3306)

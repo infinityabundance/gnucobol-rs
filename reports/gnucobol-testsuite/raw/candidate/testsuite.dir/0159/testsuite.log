@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+159. syn_redefines.at:96: testing REDEFINES: level 66 ...
+./syn_redefines.at:112: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.739917615 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/159/stderr	2026-08-04 10:31:43.739023939 +0000
+@@ -1,2 +1,2 @@
+-prog.cob:9: error: syntax error, unexpected REDEFINES, expecting RENAMES
++cobc-rs: unsupported: 66 level without RENAMES
+ 
+159. syn_redefines.at:96: 159. REDEFINES: level 66 (syn_redefines.at:96): FAILED (syn_redefines.at:112)

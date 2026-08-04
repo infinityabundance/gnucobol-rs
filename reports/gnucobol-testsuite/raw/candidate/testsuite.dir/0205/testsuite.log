@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+205. syn_file.at:1068: testing RECORDING MODE ...
+./syn_file.at:1091: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.761561905 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/205/stderr	2026-08-04 10:31:43.760847854 +0000
+@@ -1,2 +1 @@
+-prog.cob:12: error: RECORDING MODE U or S can only be used with RECORD SEQUENTIAL files
+ 
+./syn_file.at:1091: exit code was 0, expected 1
+205. syn_file.at:1068: 205. RECORDING MODE (syn_file.at:1068): FAILED (syn_file.at:1091)

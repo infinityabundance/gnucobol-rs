@@ -19,31 +19,79 @@ fn na_reason(cid: &str) -> Option<&'static str> {
         "GNURUST.CCVS85.2" => "meta: NIST CCVS85 corpus materialization + real-GnuCOBOL oracle baseline; no single Rust byte kernel -- its own seal-grade gate is replay+all-512-accounted+raw-evidence",
         "GNURUST.CCVS85.3" => "meta: NIST CCVS85 corpus cobrun baseline (isolated, no-delegation); no single Rust byte kernel -- its own seal-grade gate is replay+no-delegation+raw-evidence",
         "GNURUST.CCVS85.4" => "meta: NIST CCVS85 differential comparison + per-unit classification; no single Rust byte kernel -- its own seal-grade gate is replay+classification-reconciliation",
+        "GNURUST.GNUCOBOL-TESTSUITE.1" => "meta: admitted GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census; no Rust byte kernel -- its own seal-grade gate is replay+raw-evidence+census",
+        "GNURUST.GNUCOBOL-TESTSUITE.2" => "meta: candidate execution through the native harness (COBC=cobc-rs) with no-delegation proof; no single byte kernel -- its own seal-grade gate is replay+no-delegation+all-accounted",
+        "GNURUST.GNUCOBOL-TESTSUITE.3" => "meta: differential classification of the suite; no single byte kernel -- its own seal-grade gate is replay+classification-reconciliation",
+        "GNURUST.GNUCOBOL-RUNTIME-MATH.1" => "meta: math-subset classification derived from TESTSUITE.3 (no separate byte kernel); performance is separately labeled",
+        "GNURUST.METHODOLOGY.LIBCOB.1" => "meta: runtime port methodology/provenance documentation + machine records; no byte kernel",
+        "GNURUST.METHODOLOGY.PARSER.1" => "meta: parser provenance audit documentation + machine records; no byte kernel",
+        "GNURUST.COBC-RS.ARGS.1" => "covered by the cobc-rs argument-policy integration tests (crates/cobc-rs/tests/cli.rs) + the generated option-compatibility gate; kani/fuzz markers live in the gnucobol-rs byte kernel, not the driver",
+        "GNURUST.COBC-RS.LAUNCHER.1" => "covered by the cobc-rs launcher/manifest integration tests (tamper guard, self-hash, exit status); no kani/fuzz marker in the driver crate",
+        "GNURUST.COBC-RS.PARALLEL.1" => "covered by the cobc-rs 100-way parallel integration test; no kani/fuzz marker in the driver crate",
         _ => return None,
     })
 }
 
-const IS_ATLAS_EXTRA: [&str; 12] = ["GNURUST.COVERAGE.1","GNURUST.FILE.STATUS.1","GNURUST.PUBLIC.CORPUS.1","GNURUST.BUILD.PROFILE.1","GNURUST.PUBLIC.GAP.1","GNURUST.LINEAGE.CORPUS.20M.0","GNURUST.LINEAGE.CORPUS.20M.SMOKE","GNURUST.LINEAGE.CORPUS.20M.1","GNURUST.VALUE.NEGZERO.EDGE.1","GNURUST.CCVS85.2","GNURUST.CCVS85.3","GNURUST.CCVS85.4"];
+const IS_ATLAS_EXTRA: [&str; 21] = [
+    "GNURUST.COVERAGE.1",
+    "GNURUST.FILE.STATUS.1",
+    "GNURUST.PUBLIC.CORPUS.1",
+    "GNURUST.BUILD.PROFILE.1",
+    "GNURUST.PUBLIC.GAP.1",
+    "GNURUST.LINEAGE.CORPUS.20M.0",
+    "GNURUST.LINEAGE.CORPUS.20M.SMOKE",
+    "GNURUST.LINEAGE.CORPUS.20M.1",
+    "GNURUST.VALUE.NEGZERO.EDGE.1",
+    "GNURUST.CCVS85.2",
+    "GNURUST.CCVS85.3",
+    "GNURUST.CCVS85.4",
+    "GNURUST.GNUCOBOL-TESTSUITE.1",
+    "GNURUST.GNUCOBOL-TESTSUITE.2",
+    "GNURUST.GNUCOBOL-TESTSUITE.3",
+    "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+    "GNURUST.METHODOLOGY.LIBCOB.1",
+    "GNURUST.METHODOLOGY.PARSER.1",
+    "GNURUST.COBC-RS.ARGS.1",
+    "GNURUST.COBC-RS.LAUNCHER.1",
+    "GNURUST.COBC-RS.PARALLEL.1",
+];
 
 fn read_json(p: &Path) -> Value {
-    std::fs::read_to_string(p).ok().and_then(|s| serde_json::from_str(&s).ok()).unwrap_or(Value::Null)
+    std::fs::read_to_string(p)
+        .ok()
+        .and_then(|s| serde_json::from_str(&s).ok())
+        .unwrap_or(Value::Null)
 }
 
 fn scan_tags(dir: &Path, tag: &str) -> HashMap<String, Vec<String>> {
     let mut out: HashMap<String, Vec<String>> = HashMap::new();
     let mut files: Vec<std::path::PathBuf> = match std::fs::read_dir(dir) {
-        Ok(rd) => rd.flatten().map(|e| e.path()).filter(|p| p.extension().map(|x| x == "rs").unwrap_or(false)).collect(),
+        Ok(rd) => rd
+            .flatten()
+            .map(|e| e.path())
+            .filter(|p| p.extension().map(|x| x == "rs").unwrap_or(false))
+            .collect(),
         Err(_) => return out,
     };
     files.sort();
     for f in files {
-        let fname = f.file_name().and_then(|n| n.to_str()).unwrap_or("").to_string();
+        let fname = f
+            .file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("")
+            .to_string();
         for line in std::fs::read_to_string(&f).unwrap_or_default().lines() {
             if let Some(pos) = line.find(tag) {
-                let rest = line[pos + tag.len()..].trim_start().trim_start_matches(':').trim_start();
+                let rest = line[pos + tag.len()..]
+                    .trim_start()
+                    .trim_start_matches(':')
+                    .trim_start();
                 for cid in rest.split(|c: char| c == ',' || c.is_whitespace()) {
                     let cid = cid.trim().trim_end_matches('.');
-                    if cid.starts_with("GNURUST.") || cid.starts_with("KOBOLD.") || cid.starts_with("SIZE.") {
+                    if cid.starts_with("GNURUST.")
+                        || cid.starts_with("KOBOLD.")
+                        || cid.starts_with("SIZE.")
+                    {
                         out.entry(cid.to_string()).or_default().push(fname.clone());
                     }
                 }
@@ -76,8 +124,14 @@ fn build(root: &str) -> Value {
         }
     }
     let impl_rows: Vec<&Value> = rows.iter().filter(|r| r["kani"] != "n/a").collect();
-    let kani_cov = impl_rows.iter().filter(|r| !r["kani"].as_array().map(|a| a.is_empty()).unwrap_or(true)).count();
-    let fuzz_cov = impl_rows.iter().filter(|r| !r["fuzz"].as_array().map(|a| a.is_empty()).unwrap_or(true)).count();
+    let kani_cov = impl_rows
+        .iter()
+        .filter(|r| !r["kani"].as_array().map(|a| a.is_empty()).unwrap_or(true))
+        .count();
+    let fuzz_cov = impl_rows
+        .iter()
+        .filter(|r| !r["fuzz"].as_array().map(|a| a.is_empty()).unwrap_or(true))
+        .count();
     json!({
         "schema": "gnurust-kani-fuzz-coverage-v1", "court": "GNURUST.VERIFY.KANI-FUZZ.1",
         "total_courts": rows.len(),
@@ -92,23 +146,56 @@ pub fn run(cmd: &str, root: &str) -> i32 {
     let b = build(root);
     match cmd {
         "generate" => {
-            let _ = std::fs::write(Path::new(root).join("reports/kani-fuzz-coverage.json"), serde_json::to_vec_pretty(&b).unwrap_or_default());
-            println!("kani-fuzz coverage: {}/{} kani, {}/{} fuzz ({} n/a)", b["kani_covered"], b["impl_courts"], b["fuzz_covered"], b["impl_courts"], b["na_courts"]);
+            let _ = std::fs::write(
+                Path::new(root).join("reports/kani-fuzz-coverage.json"),
+                serde_json::to_vec_pretty(&b).unwrap_or_default(),
+            );
+            println!(
+                "kani-fuzz coverage: {}/{} kani, {}/{} fuzz ({} n/a)",
+                b["kani_covered"],
+                b["impl_courts"],
+                b["fuzz_covered"],
+                b["impl_courts"],
+                b["na_courts"]
+            );
             0
         }
         "check" => {
             let rows = b["rows"].as_array().unwrap();
-            let missing_k: Vec<&str> = rows.iter().filter(|r| r["kani"] != "n/a" && r["kani"].as_array().map(|a| a.is_empty()).unwrap_or(true)).map(|r| r["court"].as_str().unwrap()).collect();
-            let missing_f: Vec<&str> = rows.iter().filter(|r| r["kani"] != "n/a" && r["fuzz"].as_array().map(|a| a.is_empty()).unwrap_or(true)).map(|r| r["court"].as_str().unwrap()).collect();
-            for c in &missing_k { println!("   kani-missing: {c}"); }
-            for c in &missing_f { println!("   fuzz-missing: {c}"); }
+            let missing_k: Vec<&str> = rows
+                .iter()
+                .filter(|r| {
+                    r["kani"] != "n/a" && r["kani"].as_array().map(|a| a.is_empty()).unwrap_or(true)
+                })
+                .map(|r| r["court"].as_str().unwrap())
+                .collect();
+            let missing_f: Vec<&str> = rows
+                .iter()
+                .filter(|r| {
+                    r["kani"] != "n/a" && r["fuzz"].as_array().map(|a| a.is_empty()).unwrap_or(true)
+                })
+                .map(|r| r["court"].as_str().unwrap())
+                .collect();
+            for c in &missing_k {
+                println!("   kani-missing: {c}");
+            }
+            for c in &missing_f {
+                println!("   fuzz-missing: {c}");
+            }
             if !missing_k.is_empty() || !missing_f.is_empty() {
-                println!("!! kani-fuzz coverage incomplete: {} kani + {} fuzz missing", missing_k.len(), missing_f.len());
+                println!(
+                    "!! kani-fuzz coverage incomplete: {} kani + {} fuzz missing",
+                    missing_k.len(),
+                    missing_f.len()
+                );
                 return 1;
             }
             println!("kani-fuzz: all {} impl courts have BOTH a Kani proof and a fuzz target; {} n/a (declared)", b["impl_courts"], b["na_courts"]);
             0
         }
-        _ => { eprintln!("usage: kani-fuzz generate|check"); 2 }
+        _ => {
+            eprintln!("usage: kani-fuzz generate|check");
+            2
+        }
     }
 }

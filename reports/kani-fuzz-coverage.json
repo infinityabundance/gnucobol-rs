@@ -3,7 +3,7 @@
   "fuzz_covered": 83,
   "impl_courts": 83,
   "kani_covered": 83,
-  "na_courts": 58,
+  "na_courts": 67,
   "rows": [
     {
       "court": "GNURUST.2",
@@ -1099,8 +1099,62 @@
       "fuzz": "n/a",
       "kani": "n/a",
       "reason": "meta: NIST CCVS85 differential comparison + per-unit classification; no single Rust byte kernel -- its own seal-grade gate is replay+classification-reconciliation"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: admitted GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census; no Rust byte kernel -- its own seal-grade gate is replay+raw-evidence+census"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.2",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: candidate execution through the native harness (COBC=cobc-rs) with no-delegation proof; no single byte kernel -- its own seal-grade gate is replay+no-delegation+all-accounted"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-TESTSUITE.3",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: differential classification of the suite; no single byte kernel -- its own seal-grade gate is replay+classification-reconciliation"
+    },
+    {
+      "court": "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: math-subset classification derived from TESTSUITE.3 (no separate byte kernel); performance is separately labeled"
+    },
+    {
+      "court": "GNURUST.METHODOLOGY.LIBCOB.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: runtime port methodology/provenance documentation + machine records; no byte kernel"
+    },
+    {
+      "court": "GNURUST.METHODOLOGY.PARSER.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "meta: parser provenance audit documentation + machine records; no byte kernel"
+    },
+    {
+      "court": "GNURUST.COBC-RS.ARGS.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "covered by the cobc-rs argument-policy integration tests (crates/cobc-rs/tests/cli.rs) + the generated option-compatibility gate; kani/fuzz markers live in the gnucobol-rs byte kernel, not the driver"
+    },
+    {
+      "court": "GNURUST.COBC-RS.LAUNCHER.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "covered by the cobc-rs launcher/manifest integration tests (tamper guard, self-hash, exit status); no kani/fuzz marker in the driver crate"
+    },
+    {
+      "court": "GNURUST.COBC-RS.PARALLEL.1",
+      "fuzz": "n/a",
+      "kani": "n/a",
+      "reason": "covered by the cobc-rs 100-way parallel integration test; no kani/fuzz marker in the driver crate"
     }
   ],
   "schema": "gnurust-kani-fuzz-coverage-v1",
-  "total_courts": 141
+  "total_courts": 150
 }

@@ -1,0 +1,30 @@
+
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <libcob.h>
+
+/*
+ * Check file is present and correct by comparing
+ * its content to a given signature.
+ */
+COB_EXT_EXPORT int
+fexists_signed (char *fid, char *signature, int signature_size)
+{
+	char *bfr;
+	FILE *f;
+	int res = -1;
+
+	f = fopen (fid, "r");
+	if (f != NULL) {
+		 bfr = (char *) cob_malloc (signature_size);
+		 if (1 == fread (bfr, signature_size, 1, f)) {
+				if (!memcmp (signature, bfr, signature_size)) {
+					 res = 0;
+				}
+		 }
+		 free (bfr);
+	}
+	return res;
+}

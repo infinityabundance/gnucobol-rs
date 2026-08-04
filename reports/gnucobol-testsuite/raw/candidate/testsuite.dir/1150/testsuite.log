@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1150. run_extensions.at:2553: testing GOBACK/EXIT PROGRAM RETURNING/GIVING ...
+./run_extensions.at:2595: $COMPILE prog.cob prog1.cob prog2.cob
+./run_extensions.at:2596: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1150/stderr	2026-08-04 10:31:44.460960069 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: CALL "prog1": not a contained program (external CALL is a boundary)
+1150. run_extensions.at:2553: 1150. GOBACK/EXIT PROGRAM RETURNING/GIVING (run_extensions.at:2553): FAILED (run_extensions.at:2596)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+91. syn_definition.at:535: testing Redefinition of 88 items ...
+./syn_definition.at:548: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.708705510 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/91/stderr	2026-08-04 10:31:43.708236085 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:8: warning: redefinition of 'A'
+-prog.cob:7: note: 'A' previously defined here
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+./syn_definition.at:548: exit code was 1, expected 0
+91. syn_definition.at:535: 91. Redefinition of 88 items (syn_definition.at:535): FAILED (syn_definition.at:548)

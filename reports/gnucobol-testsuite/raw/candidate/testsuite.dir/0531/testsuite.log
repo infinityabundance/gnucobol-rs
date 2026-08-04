@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+531. run_fundamental.at:1184: testing GLOBAL at lower level ...
+./run_fundamental.at:1223: $COMPILE prog.cob
+./run_fundamental.at:1224: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/531/stderr	2026-08-04 10:31:43.934377767 +0000
+@@ -0,0 +1 @@
++cobrun: undefined data name: X
+--- -	2026-08-04 10:31:43.936269333 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/531/stdout	2026-08-04 10:31:43.935559660 +0000
+@@ -1,4 +1 @@
+-prog1
+-prog2
+-prog2
+ 
+./run_fundamental.at:1224: exit code was 2, expected 0
+531. run_fundamental.at:1184: 531. GLOBAL at lower level (run_fundamental.at:1184): FAILED (run_fundamental.at:1224)

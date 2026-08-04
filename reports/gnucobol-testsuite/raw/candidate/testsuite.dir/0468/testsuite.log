@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+468. syn_literals.at:1281: testing HP COBOL octal literals ...
+./syn_literals.at:1298: $COMPILE_ONLY -Wno-unfinished -fhp-octal-literals=ok prog.cob
+--- -	2026-08-04 10:31:43.894832347 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/468/stderr	2026-08-04 10:31:43.894346501 +0000
+@@ -1,6 +1,2 @@
+-prog.cob:9: error: invalid % literal: '11111111111111111111111'
+-prog.cob:9: note: literal length 23 exceeds 22 characters
+-prog.cob:10: error: invalid % literal: '89'
+-prog.cob:10: note: literal contains invalid character '8'
+-prog.cob:10: note: literal contains invalid character '9'
++cobc-rs: -fhp-octal-literals=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
+ 
+468. syn_literals.at:1281: 468. HP COBOL octal literals (syn_literals.at:1281): FAILED (syn_literals.at:1298)

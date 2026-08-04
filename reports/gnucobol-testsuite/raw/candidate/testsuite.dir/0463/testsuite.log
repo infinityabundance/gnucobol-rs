@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+463. syn_literals.at:1105: testing X literals ...
+./syn_literals.at:1121: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.893378847 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/463/stderr	2026-08-04 10:31:43.892607249 +0000
+@@ -1,6 +1 @@
+-prog.cob:9: error: invalid X literal: 'GH'
+-prog.cob:9: note: literal contains invalid character 'G'
+-prog.cob:9: note: literal contains invalid character 'H'
+-prog.cob:10: error: invalid X literal: '1'
+-prog.cob:10: note: literal does not have an even number of digits
+ 
+./syn_literals.at:1121: exit code was 0, expected 1
+463. syn_literals.at:1105: 463. X literals (syn_literals.at:1105): FAILED (syn_literals.at:1121)

@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+316. syn_misc.at:3629: testing MF reserved word directives ...
+./syn_misc.at:3675: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.817903446 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/316/stderr	2026-08-04 10:31:43.816924080 +0000
+@@ -1,11 +1,2 @@
+-prog.cob:8: error: 'BREAD' is not a default reserved word, so cannot be aliased
+-prog.cob:10: error: 'ID' is already reserved
+-prog.cob:10: note: you may want MAKESYN instead
+-prog.cob:15: error: 'BREAD' is not a default reserved word, so cannot be aliased
+-prog.cob:16: error: 'BREAD' is not a reserved word
+-prog.cob:16: note: you may want ADDSYN or OVERRIDE instead
+-prog.cob:21: error: 'BREAD' is not a default reserved word, so cannot be aliased
+-prog.cob:24: error: 'ID' is already reserved
+-prog.cob:24: note: you may want MAKESYN instead
+-prog.cob:37: error: 'cat' is a reserved word, but isn't supported
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+316. syn_misc.at:3629: 316. MF reserved word directives (syn_misc.at:3629): FAILED (syn_misc.at:3675)

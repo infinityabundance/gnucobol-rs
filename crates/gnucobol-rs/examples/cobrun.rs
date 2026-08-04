@@ -89,9 +89,15 @@ fn main() {
     let mut fixed = false;
     let mut path: Option<String> = None;
     for arg in std::env::args().skip(1) {
-        if let Some(name) = arg.strip_prefix("-std=").or_else(|| arg.strip_prefix("--std=")) {
+        if let Some(name) = arg
+            .strip_prefix("-std=")
+            .or_else(|| arg.strip_prefix("--std="))
+        {
             dialect = Dialect::from_std(name);
-        } else if let Some(dir) = arg.strip_prefix("--dump-files=").or_else(|| arg.strip_prefix("-dump-files=")) {
+        } else if let Some(dir) = arg
+            .strip_prefix("--dump-files=")
+            .or_else(|| arg.strip_prefix("-dump-files="))
+        {
             // Host diagnostic: materialize the in-memory file store into `dir` after the run (mirrors
             // the GnuCOBOL on-disk files so a differential court can compare file output bytes).
             gnucobol_rs::frontend::set_file_dump_dir(std::path::PathBuf::from(dir));
@@ -119,8 +125,9 @@ fn main() {
             // GnuCOBOL version it reproduces, in the GnuCOBOL --version block format.
             print!(
                 "cobrun (gnucobol-rs, reproducing GnuCOBOL) {ver}\n\
-                 A clean-room native-Rust reimplementation of the GnuCOBOL {ver} runtime + a COBOL\n\
-                 interpreter front-end, proven byte-identical to the admitted cobc oracle.\n\
+                 A faithful Rust port of the GnuCOBOL {ver} runtime (a derivative of libcob,\n\
+                 LGPL-3.0-or-later) plus an independently written COBOL interpreter front-end,\n\
+                 proven byte-identical to the admitted cobc oracle on the sealed corpus.\n\
                  License LGPL-3.0-or-later. Not GnuCOBOL; not affiliated with the GNU project.\n",
                 ver = target_version(),
             );
@@ -163,7 +170,7 @@ fn main() {
             std::process::exit(2);
         }
     };
-    return run_after_read(raw, path, fixed, dialect);
+    run_after_read(raw, path, fixed, dialect);
 }
 
 /// The `PROGRAM-ID name` units already present in `src` (uppercased), so a CALL to one of them is NOT
@@ -197,12 +204,13 @@ fn program_units(src: &str) -> std::collections::HashSet<String> {
 fn call_literals(src: &str) -> Vec<String> {
     let up = src.to_ascii_uppercase();
     let mut out = Vec::new();
-    let mut rest = up.as_str();
+    let rest = up.as_str();
     let mut off = 0usize;
     while let Some(p) = rest[off..].find("CALL") {
         let at = off + p;
         // require a word boundary before CALL (start or non-identifier char) so we don't match inside a word.
-        let prev_ok = at == 0 || !(up.as_bytes()[at - 1].is_ascii_alphanumeric() || up.as_bytes()[at - 1] == b'-');
+        let prev_ok = at == 0
+            || !(up.as_bytes()[at - 1].is_ascii_alphanumeric() || up.as_bytes()[at - 1] == b'-');
         let mut j = at + 4;
         let b = up.as_bytes();
         while j < b.len() && b[j].is_ascii_whitespace() {
@@ -241,7 +249,11 @@ fn resolve_separate_calls(mut src: String, dir: &std::path::Path, fixed: bool) -
                 let cand = dir.join(format!("{name}.{ext}"));
                 if cand.is_file() {
                     if let Ok(raw) = std::fs::read_to_string(&cand) {
-                        let unit = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
+                        let unit = if fixed {
+                            gnucobol_rs::frontend::fixed_to_free(&raw)
+                        } else {
+                            raw
+                        };
                         src.push('\n');
                         src.push_str(&unit);
                         present.insert(name.clone());
@@ -261,7 +273,11 @@ fn resolve_separate_calls(mut src: String, dir: &std::path::Path, fixed: bool) -
 }
 
 fn run_after_read(raw: String, path: String, fixed: bool, dialect: Dialect) -> ! {
-    let mut src = if fixed { gnucobol_rs::frontend::fixed_to_free(&raw) } else { raw };
+    let mut src = if fixed {
+        gnucobol_rs::frontend::fixed_to_free(&raw)
+    } else {
+        raw
+    };
     // Separate-file CALL: a `CALL "NAME"` to a program that is not a unit in THIS source is resolved to a
     // sibling NAME.<ext> file (mirroring cobc compiling the callee as a module and linking it at the CALL).
     // Append each resolved callee as another program unit so cobrun's CALL dispatch executes the real
@@ -283,8 +299,10 @@ fn run_after_read(raw: String, path: String, fixed: bool, dialect: Dialect) -> !
             if let Some(path) = print_file {
                 if !printer.is_empty() {
                     use std::io::Write as _;
-                    if let Ok(mut f) =
-                        std::fs::OpenOptions::new().create(true).append(true).open(&path)
+                    if let Ok(mut f) = std::fs::OpenOptions::new()
+                        .create(true)
+                        .append(true)
+                        .open(&path)
                     {
                         let _ = f.write_all(&printer);
                     }

@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+364. syn_misc.at:6315: testing BASED clause, ALLOCATE / FREE statements ...
+./syn_misc.at:6357: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.842148454 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/364/stderr	2026-08-04 10:31:43.841599200 +0000
+@@ -1,16 +1,2 @@
+-prog.cob:8: error: BASED only allowed at 01/77 level
+-prog.cob:16: error: PROCEDURE DIVISION header missing
+-prog.cob:16: error: syntax error, unexpected Identifier
+-prog.cob:17: error: syntax error, unexpected Identifier, expecting SECTION or .
+-prog.cob:17: note: unknown statement '01'
+-prog.cob:18: error: syntax error, unexpected Identifier, expecting SECTION or .
+-prog.cob:18: note: unknown statement '03'
+-prog.cob:20: error: syntax error, unexpected PROCEDURE
+-prog.cob:23: error: ALLOCATE CHARACTERS requires RETURNING clause
+-prog.cob:26: error: 'one' is not numeric
+-prog.cob:27: error: amount must be specified as a numeric expression
+-prog.cob:29: error: target of ALLOCATE must have BASED clause
+-prog.cob:30: error: INITIALIZED TO item is not alphanumeric
+-prog.cob:31: error: target 1 of FREE is not a BASED data item
+-prog.cob:32: error: target 1 of FREE is not a BASED data item
++cobc-rs: unsupported: unsupported level number SCREEN-STORAGE
+ 
+364. syn_misc.at:6315: 364. BASED clause, ALLOCATE / FREE statements (syn_misc.at:6315): FAILED (syn_misc.at:6357)

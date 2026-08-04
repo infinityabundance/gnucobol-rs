@@ -1,0 +1,10 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog.
+       DATA             DIVISION.
+       WORKING-STORAGE  SECTION.
+       01 CLI           PIC X(8).
+       PROCEDURE        DIVISION.
+           ACCEPT CLI FROM COMMAND-LINE
+           DISPLAY CLI WITH NO ADVANCING END-DISPLAY
+           STOP RUN WITH NORMAL STATUS.

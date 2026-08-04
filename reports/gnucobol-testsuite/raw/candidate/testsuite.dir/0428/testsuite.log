@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+428. syn_screen.at:283: testing SCREEN SECTION clause numbers ...
+./syn_screen.at:305: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.874340155 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/428/stderr	2026-08-04 10:31:43.873804016 +0000
+@@ -1,4 +1 @@
+-prog.cob:13: error: unsigned integer value expected
+-prog.cob:14: error: unsigned integer value expected
+-prog.cob:15: error: unsigned integer value expected
+ 
+./syn_screen.at:305: exit code was 0, expected 1
+428. syn_screen.at:283: 428. SCREEN SECTION clause numbers (syn_screen.at:283): FAILED (syn_screen.at:305)

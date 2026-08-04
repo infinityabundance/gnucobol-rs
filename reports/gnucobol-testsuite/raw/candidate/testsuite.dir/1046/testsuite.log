@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1046. run_functions.at:2286: testing FUNCTION MOD (invalid) ...
+./run_functions.at:2311: $COMPILE prog.cob
+./run_functions.at:2312: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1046/stderr	2026-08-04 10:31:44.330807229 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FUNCTION
+./run_functions.at:2312: exit code was 2, expected 0
+1046. run_functions.at:2286: 1046. FUNCTION MOD (invalid) (run_functions.at:2286): FAILED (run_functions.at:2312)

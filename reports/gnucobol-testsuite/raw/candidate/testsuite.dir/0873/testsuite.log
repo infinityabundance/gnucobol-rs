@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+873. run_file.at:2005: testing INDEXED file split keys WITH DUPLICATES ...
+./run_file.at:2159: $COMPILE prog.cob
+./run_file.at:2160: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/873/stderr	2026-08-04 10:31:44.167790835 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: INDEXED RECORD KEY `TEST-KEY-2` is not a field of the record
+./run_file.at:2160: exit code was 2, expected 0
+873. run_file.at:2005: 873. INDEXED file split keys WITH DUPLICATES (run_file.at:2005): FAILED (run_file.at:2160)

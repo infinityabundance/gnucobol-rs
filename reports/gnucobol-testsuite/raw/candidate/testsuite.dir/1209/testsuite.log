@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1209. run_extensions.at:5795: testing PICTURE L (MOVE CORRESPONDING) ...
+./run_extensions.at:5865: $COMPILE corr.cob
+./run_extensions.at:5866: $COBCRUN_DIRECT ./corr
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1209/stderr	2026-08-04 10:31:44.513128051 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')
+./run_extensions.at:5866: exit code was 2, expected 0
+1209. run_extensions.at:5795: 1209. PICTURE L (MOVE CORRESPONDING) (run_extensions.at:5795): FAILED (run_extensions.at:5866)

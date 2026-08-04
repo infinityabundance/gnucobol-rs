@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+528. run_fundamental.at:1071: testing ALPHABETIC-UPPER test ...
+./run_fundamental.at:1097: $COMPILE prog.cob
+./run_fundamental.at:1098: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/528/stdout	2026-08-04 10:31:43.931478021 +0000
+@@ -0,0 +1 @@
++Fail - Not alphabetic upper
+528. run_fundamental.at:1071: 528. ALPHABETIC-UPPER test (run_fundamental.at:1071): FAILED (run_fundamental.at:1098)

@@ -1,0 +1,43 @@
+#                             -*- compilation -*-
+482. listings.at:608: testing COPY separators ...
+./listings.at:631: $COMPILE_LISTING0 -t- -ftsymbols prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/482/stderr	2026-08-04 10:31:43.901399780 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
+--- -	2026-08-04 10:31:43.902750458 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/482/stdout	2026-08-04 10:31:43.902069178 +0000
+@@ -1,31 +1 @@
+-GnuCOBOL V.R.P               prog.cob
+-
+-LINE    PG/LN  A...B............................................................
+-
+-000001
+-000002         IDENTIFICATION   DIVISION.
+-000003         PROGRAM-ID.      prog.
+-000004         DATA             DIVISION.
+-000005         WORKING-STORAGE  SECTION.
+-000006         COPY "copy.inc"
+-000007            REPLACING ==TEST-VAR==, BY ==FIRST-MATCH==,
+-000008                   ,  ==TEST-VAR==; BY ==SECOND-MATCH==;
+-000009                   ;  ==TEST-VAR== , BY ==THIRD-MATCH==
+-000010                      ==TEST-VAR== ; BY ==FOURTH-MATCH==.
+-000001C
+-000002C        01 FIRST-MATCH PIC X(2) VALUE "OK".
+-000011         PROCEDURE        DIVISION.
+-000012             DISPLAY FIRST-MATCH NO ADVANCING
+-000013             END-DISPLAY.
+-000014             STOP RUN.
+-
+-SIZE  TYPE           LVL  NAME                           PICTURE
+-
+-      WORKING-STORAGE SECTION
+-
+-00002 ALPHANUMERIC   01   FIRST-MATCH                    X(2)
+-
+-
+-0 warnings in compilation group
+-0 errors in compilation group
+ 
+./listings.at:631: exit code was 1, expected 0
+482. listings.at:608: 482. COPY separators (listings.at:608): FAILED (listings.at:631)

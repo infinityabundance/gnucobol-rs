@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+653. run_accept.at:320: testing ACCEPT DATE / DAY and intrinsic functions (2) ...
+./run_accept.at:355: $COMPILE prog.cob
+./run_accept.at:356: COB_CURRENT_DATE='2020/06/12 18:45:22' \
+$COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/653/stderr	2026-08-04 10:31:44.015777853 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: ACCEPT FROM DATE: receiver must be a 8-digit numeric/alphanumeric item
+./run_accept.at:356: exit code was 2, expected 0
+653. run_accept.at:320: 653. ACCEPT DATE / DAY and intrinsic functions (2) (run_accept.at:320): FAILED (run_accept.at:356)

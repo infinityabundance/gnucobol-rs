@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+166. syn_redefines.at:280: testing REDEFINES: multiple redefinition ...
+./syn_redefines.at:297: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.742122887 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/166/stderr	2026-08-04 10:31:43.741474067 +0000
+@@ -1,2 +1 @@
+-prog.cob:10: error: 'B' is not the original definition
+ 
+./syn_redefines.at:297: exit code was 0, expected 1
+166. syn_redefines.at:280: 166. REDEFINES: multiple redefinition (syn_redefines.at:280): FAILED (syn_redefines.at:297)

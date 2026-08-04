@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+790. run_misc.at:5480: testing Computing of different USAGEs w/o decimal point ...
+./run_misc.at:5990: $COMPILE prog.cob
+./run_misc.at:5991: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/790/stderr	2026-08-04 10:31:44.108980791 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: expected program name after PROGRAM-ID
+./run_misc.at:5991: exit code was 2, expected 0
+790. run_misc.at:5480: 790. Computing of different USAGEs w/o decimal point (run_misc.at:5480): FAILED (run_misc.at:5991)

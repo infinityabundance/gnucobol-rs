@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+216. syn_file.at:1654: testing RECORD clause equal limits ...
+./syn_file.at:1686: $COMPILE_ONLY -Wadditional prog.cob
+--- -	2026-08-04 10:31:43.767434492 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/216/stderr	2026-08-04 10:31:43.766638528 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:15: warning: RECORD VARYING specified without limits, but implied limits are equal
+-prog.cob:19: error: RECORD clause invalid
+-prog.cob:22: error: RECORD clause invalid
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+216. syn_file.at:1654: 216. RECORD clause equal limits (syn_file.at:1654): FAILED (syn_file.at:1686)

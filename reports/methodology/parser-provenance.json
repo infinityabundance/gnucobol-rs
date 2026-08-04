@@ -1,0 +1,67 @@
+{
+  "schema": "gnurust-parser-provenance-v1",
+  "generated_at": "2026-08-04T00:00:00Z",
+  "documented_in": "docs/methodology/parser-front-end-provenance.md",
+  "verdict": "independently written per the author's committed origin claim; strict clean-room process separation NOT independently verifiable from the committed record (tooling + consulted-materials history UNKNOWN)",
+  "first_parser": {
+    "commit": "9357a7cac",
+    "date": "2026-06-16",
+    "author": "infinityabundance",
+    "claimed_origin": "from-scratch (NOT derived from cobc)",
+    "file": "crates/gnucobol-rs/src/frontend.rs",
+    "sealed_at": "b817d7011 (GNURUST.FRONTEND.1, v0.7.83)"
+  },
+  "extension_history": {
+    "commit_count_on_frontend_rs": "150+",
+    "examples": ["fc3d1cefc (COMPUTE, v0.7.84)", "df1035d82 (control flow, v0.7.85)"],
+    "earlier_parser_in_history": "none found (git history has no pre-frontend.rs parser/grammar/lexer)"
+  },
+  "consulted_materials": {
+    "cobol_specifications": "UNKNOWN - no committed record",
+    "gnucobol_documentation": "UNKNOWN - no committed record",
+    "gnucobol_parser_source_parser_y_scanner_tables": "UNKNOWN - no committed record of inspection; origin claim says NOT derived",
+    "external_cobol_grammars": "UNKNOWN - no committed record",
+    "oracle_outputs_as_behavioral_reference": "YES - lab/oracle sweeps + committed fixtures"
+  },
+  "tooling": {
+    "llm_usage": "UNKNOWN - no committed record; cannot be excluded",
+    "llm_training_exposure_risk": "UNKNOWN - model training is not auditable from this repository",
+    "code_generation_tools": "UNKNOWN - no committed record"
+  },
+  "dialect_and_handling": {
+    "intended_dialect": "COBOL-85 default (dialect knob selectable)",
+    "unsupported_forms": "typed RunError, fail closed (never guessed)",
+    "full_syntax_claim": "none - sealed-subset claim-ladder + explicit non-claims"
+  },
+  "evidence_for_independently_written": [
+    "author's committed origin claim (9357a7cac message)",
+    "no evidence of derivation in committed history",
+    "behavioral development against the oracle (not against cobc source)"
+  ],
+  "evidence_required_for_strict_clean_room": [
+    "verifiable tooling record (what wrote the code)",
+    "consulted-materials record (specs/docs read)",
+    "contemporaneous review trail",
+    "LLM-training exposure assessment (cannot be done retroactively)"
+  ],
+  "areas_strict_clean_room_cannot_be_established": [
+    "tooling history (UNKNOWN)",
+    "consulted-materials history (UNKNOWN)",
+    "LLM-training exposure (UNKNOWN)"
+  ],
+  "wording_policy": {
+    "supported_terms": ["independently written", "behaviorally reconstructed front end", "author's from-scratch claim"],
+    "unsupported_unqualified_term": "clean-room (requires demonstrable process separation)",
+    "commitment": "docs/README must qualify the parser term; the runtime is a derivative regardless"
+  },
+  "uncertainties": [
+    "UNKNOWN - which tools produced the first parser implementation",
+    "UNKNOWN - which specifications/documents were consulted",
+    "UNKNOWN - whether LLM-assisted code is present (training exposure)"
+  ],
+  "resolution_path": [
+    "commit per-phase provenance records (tooling, materials, LLM usage or explicit none)",
+    "author attestation (dated) where committed-process evidence is impossible",
+    "keep the oracle-differential evidence model as the strongest available evidence"
+  ]
+}

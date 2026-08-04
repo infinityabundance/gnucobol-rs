@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+295. syn_misc.at:2724: testing DISPLAY OMITTED ...
+./syn_misc.at:2737: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.807076513 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/295/stderr	2026-08-04 10:31:43.806633106 +0000
+@@ -1,3 +1 @@
+-prog.cob:5: warning: handling of DISPLAY OMITTED is unfinished; implementation is likely to be changed
+-prog.cob:6: warning: handling of DISPLAY OMITTED is unfinished; implementation is likely to be changed
+ 
+295. syn_misc.at:2724: 295. DISPLAY OMITTED (syn_misc.at:2724): FAILED (syn_misc.at:2737)

@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+776. run_misc.at:4974: testing CALL in from C with init missing / implicit ...
+./run_misc.at:5011: $COMPILE -o caller caller.c callee.cob
+./run_misc.at:5012: $COBCRUN_DIRECT ./caller
+--- -	2026-08-04 10:31:44.100125173 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/776/stderr	2026-08-04 10:31:44.099616755 +0000
+@@ -1,2 +1,2 @@
+-libcob: error: cob_init() has not been called
++cobrun: unsupported: no PROCEDURE DIVISION
+ 
+./run_misc.at:5012: exit code was 2, expected 1
+776. run_misc.at:4974: 776. CALL in from C with init missing / implicit (run_misc.at:4974): FAILED (run_misc.at:5012)

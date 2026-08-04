@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+411. syn_move.at:374: testing CORRESPONDING - Operands must be groups ...
+./syn_move.at:394: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.866203196 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/411/stderr	2026-08-04 10:31:43.865293941 +0000
+@@ -1,5 +1 @@
+-prog.cob:11: error: 'X' is not a group name
+-prog.cob:12: error: 'X' is not a group name
+-prog.cob:13: error: 'G-1 (1:1)' is not a group name
+-prog.cob:14: error: 'G-2 (1:1)' is not a group name
+ 
+./syn_move.at:394: exit code was 0, expected 1
+411. syn_move.at:374: 411. CORRESPONDING - Operands must be groups (syn_move.at:374): FAILED (syn_move.at:394)

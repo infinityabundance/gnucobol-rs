@@ -1,0 +1,21 @@
+[package]
+name = "cobc-rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+authors = ["infinityabundance"]
+description = "cobc-rs — a cobc-shaped compatibility driver for the gnucobol-rs interpreter: explicit option-policy registry, launch manifests (never native executables), syntax-only checking, capability introspection. NOT a native-code compiler."
+license = "LGPL-3.0-or-later"
+
+[[bin]]
+name = "cobc-rs"
+path = "src/main.rs"
+
+[dependencies]
+gnucobol-rs = { path = "../gnucobol-rs" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"

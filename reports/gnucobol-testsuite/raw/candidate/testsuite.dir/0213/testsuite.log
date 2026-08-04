@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+213. syn_file.at:1460: testing FILE STATUS ...
+./syn_file.at:1539: $COMPILE_ONLY -fodoslide prog.cob
+--- -	2026-08-04 10:31:43.764565123 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/213/stderr	2026-08-04 10:31:43.763849229 +0000
+@@ -1,14 +1,2 @@
+-prog.cob:57: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
+-prog.cob:18: error: 'non-existent' is not defined
+-prog.cob:9: warning: FILE STATUS 'gs' is a numeric field, but I-O status codes are not numeric in general
+-prog.cob:10: error: FILE STATUS 'hs' must be in WORKING-STORAGE, LOCAL-STORAGE or LINKAGE
+-prog.cob:11: error: FILE STATUS 'js' must be an alphanumeric or numeric field
+-prog.cob:12: warning: FILE STATUS 'ks' is a numeric field, but I-O status codes are not numeric in general
+-prog.cob:12: error: FILE STATUS 'ks' must be USAGE DISPLAY
+-prog.cob:13: error: FILE STATUS 'ls' may not be a decimal or have a PIC with a P
+-prog.cob:14: error: FILE STATUS 'ms' may not be a decimal or have a PIC with a P
+-prog.cob:15: error: FILE STATUS 'ns' must be 2 characters long
+-prog.cob:16: error: FILE STATUS 'os' may not be located after an OCCURS DEPENDING field
+-prog.cob:17: error: FILE STATUS 'ps' must be an alphanumeric or numeric field
+-prog.cob:19: error: FILE STATUS 'rs' is not a field
++cobc-rs: -fodoslide: unsupported option (rejected-unsupported; OCCURS DEPENDING slide: not modeled; reject honestly): 
+ 
+213. syn_file.at:1460: 213. FILE STATUS (syn_file.at:1460): FAILED (syn_file.at:1539)

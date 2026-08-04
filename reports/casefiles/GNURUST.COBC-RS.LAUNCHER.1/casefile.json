@@ -1,0 +1,68 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "the launcher manifest bytes + their self-hash + the run behavior they control"
+  ],
+  "case_id": "GNURUST.COBC-RS.LAUNCHER.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "calling the launcher a native executable would misrepresent an interpreter as codegen",
+  "hash_chain": {
+    "inputs_sha256": "6e58ca56f233860c2cb85ed2cb9428d29b30b5c7f80b4fbbcadddadcf322caa6"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "5882ac37c062135337210043bef689a71c4dd1ed2e6747a6bbad1d708d4e12f7",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'cobc-rs produces native executables' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.THE-LAUNCHER-IS-NOT-A-NATIVE-CODE-COMPIL",
+    "NEG.NO-SHELL-SCRIPT-GENERATION",
+    "NEG.NO-CLAIM-THAT-THE-LAUNCHER-S-RUNTIME-MAT",
+    "NEG.NO-CLAIM-THAT-A-LAUNCHER-SURVIVES-A-MISM",
+    "NEG.NO-CLAIM-THAT-RETURN-CODE-PROPAGATION-CO",
+    "NEG.THE-ARTIFACT-LIFECYCLE-IS-PROVEN-FOR-THE"
+  ],
+  "negative_claims": [
+    "the launcher is NOT a native-code-compiled COBOL executable",
+    "no shell-script generation",
+    "no claim that the launcher's runtime matches the oracle outside the sealed corpus",
+    "no claim that a launcher survives a mismatch between the manifest dialect/conf and the environment it runs in",
+    "no claim that RETURN-CODE propagation covers every cobc exit-code convention",
+    "the artifact lifecycle is proven for the admitted suite's usage shapes only",
+    "lie prevented: 'cobc-rs produces native executables' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "n/a (artifact-model contract; cross-checked by the suite's executable lifecycle expectations)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COBC-RS.LAUNCHER.1"
+  },
+  "positive_claims": [
+    "cobc-rs -x/-m writes a launcher symlink",
+    "JSON manifest + expanded source (gnucobol-rs-launch-manifest-v1) with a self-hash that the launcher VERIFIES at run time (tampered manifests refuse to run, exit 2)",
+    "the artifact is an interpreter launch manifest, explicitly NOT a native COBOL executable",
+    "RETURN-CODE -> exit status, program args tolerated, atomic writes",
+    "integration tests cover the lifecycle including the tamper guard"
+  ],
+  "replay": {
+    "command": "n/a (artifact-model contract; cross-checked by the suite's executable lifecycle expectations)",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "crates/cobc-rs/tests/cli.rs (launcher_runs_program_and_propagates_exit_status, manifest_self_hash_refuses_tampering, manifest_hash_is_self_consistent_and_stable)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

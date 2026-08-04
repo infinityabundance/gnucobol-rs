@@ -1,0 +1,18 @@
+
+#define TST_STRINGIFY(s)			#s
+#define TST_XSTRINGIFY(s)		TST_STRINGIFY (s)
+  { "test22", "2.2",    0 },
+/*  { "TestMatch1",
+		TST_XSTRINGIFY (__LIBCOB_VERSION) "."
+		TST_XSTRINGIFY (__LIBCOB_VERSION_MINOR) "."
+		TST_XSTRINGIFY (__LIBCOB_VERSION_PATCHLEVEL),
+    0}, */
+  { "TestMatch2",
+		TST_XSTRINGIFY (__LIBCOB_VERSION) "."
+		TST_XSTRINGIFY (__LIBCOB_VERSION_MINOR) "."
+      "0",
+    0},
+  { "TestMatch3",
+		TST_XSTRINGIFY (__LIBCOB_VERSION) "."
+		TST_XSTRINGIFY (__LIBCOB_VERSION_MINOR),
+    0 }

@@ -1,0 +1,25 @@
+#                             -*- compilation -*-
+832. run_misc.at:13066: testing 01 CONSTANT ...
+./run_misc.at:13127: $COMPILE prog.cob
+./run_misc.at:13129: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stderr	2026-08-04 10:31:44.138808155 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+--- -	2026-08-04 10:31:44.140040513 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stdout	2026-08-04 10:31:44.139568372 +0000
+@@ -1,12 +1 @@
+-CAT  is 'Cat '
+-Yard is 'Cat & Dog '
+-DIV1 is 33
+-HUN  is 143
+-HUN2 is 1855
+-78 VALUE has simple left to right precedence.
+-01 CONSTANT has normal operator precedence.
+-CON3 is 23
+-CON4 is 26 vs 3.141596 & -2.189 & +12
+-CON6 is 18.
+-My Dog's name is Piper;
+ 
+./run_misc.at:13129: exit code was 2, expected 0
+832. run_misc.at:13066: 832. 01 CONSTANT (run_misc.at:13066): FAILED (run_misc.at:13129)

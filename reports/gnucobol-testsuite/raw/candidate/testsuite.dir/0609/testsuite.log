@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+609. run_fundamental.at:6318: testing DISPLAY with P fields ...
+./run_fundamental.at:6348: $COMPILE prog.cob
+./run_fundamental.at:6349: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/609/stderr	2026-08-04 10:31:43.985000868 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: PIC VP9: ScalingPDeferred
+--- -	2026-08-04 10:31:43.986172833 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/609/stdout	2026-08-04 10:31:43.985343056 +0000
+@@ -1,5 +1 @@
+-00=00; 001=001; 00=00;
+-.00=.00; .000=.000; .123=.123; .00=.00; .000=.000;
+-00=00; .02=.02; .003=.003;
+-10=10;
+ 
+./run_fundamental.at:6349: exit code was 2, expected 0
+609. run_fundamental.at:6318: 609. DISPLAY with P fields (run_fundamental.at:6318): FAILED (run_fundamental.at:6349)

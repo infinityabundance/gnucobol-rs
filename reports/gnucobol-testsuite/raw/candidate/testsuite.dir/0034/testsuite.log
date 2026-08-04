@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+34. configuration.at:260: testing cobc compiler flag on command line (priority) ...
+./configuration.at:280: $COMPILE_ONLY \
+-fcomment-paragraphs=ok prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/34/stderr	2026-08-04 10:31:43.682000086 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fcomment-paragraphs=ok: unsupported option (rejected-unsupported; comment paragraphs: reject honestly): ok
+./configuration.at:280: exit code was 1, expected 0
+34. configuration.at:260: 34. cobc compiler flag on command line (priority) (configuration.at:260): FAILED (configuration.at:280)

@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+699. run_misc.at:1106: testing Non-numeric data in numeric items ...
+./run_misc.at:1149: $COMPILE prog.cob
+./run_misc.at:1150: $COBC -x -o unchecked_prog prog.cob
+./run_misc.at:1151: $COBCRUN_DIRECT ./unchecked_prog
+--- -	2026-08-04 10:31:44.049037155 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/699/stdout	2026-08-04 10:31:44.048300461 +0000
+@@ -1,2 +1,4 @@
++low-value is numeric
++SOH is numeric
+ test over
+ 
+699. run_misc.at:1106: 699. Non-numeric data in numeric items (run_misc.at:1106): FAILED (run_misc.at:1151)

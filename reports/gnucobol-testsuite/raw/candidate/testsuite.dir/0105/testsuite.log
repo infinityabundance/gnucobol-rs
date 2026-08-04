@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+105. syn_definition.at:1018: testing Redefinition of section names ...
+./syn_definition.at:1030: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.714172351 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/105/stderr	2026-08-04 10:31:43.713621424 +0000
+@@ -1,4 +1 @@
+-prog.cob: in section 'L':
+-prog.cob:6: error: redefinition of 'L'
+-prog.cob:5: note: 'L' previously defined here
+ 
+./syn_definition.at:1030: exit code was 0, expected 1
+105. syn_definition.at:1018: 105. Redefinition of section names (syn_definition.at:1018): FAILED (syn_definition.at:1030)

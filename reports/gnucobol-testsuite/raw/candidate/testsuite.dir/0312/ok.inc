@@ -1,0 +1,5 @@
+       01  REPLACE-ME
+       01  KO  PIC XX VALUE "KO".
+       PROCEDURE DIVISION.
+       MAIN SECTION.
+           PERFORM SEC-1

@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+983. run_returncode.at:49: testing RETURN-CODE passing ...
+./run_returncode.at:94: $COMPILE_MODULE mod1.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/983/stdout	2026-08-04 10:31:44.257917709 +0000
+@@ -0,0 +1 @@
++mod1.so
+983. run_returncode.at:49: 983. RETURN-CODE passing (run_returncode.at:49): FAILED (run_returncode.at:94)

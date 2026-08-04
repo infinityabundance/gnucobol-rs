@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+870. run_file.at:1411: testing ASSIGN DYNAMIC with unset implicit data item ...
+./run_file.at:1432: $COMPILE prog.cob
+./run_file.at:1433: $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:44.166815406 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/870/stderr	2026-08-04 10:31:44.166197995 +0000
+@@ -1,2 +1 @@
+-libcob: prog.cob:14: error: file does not exist (status = 35) for file test-file ('fpath') on OPEN
+ 
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/870/stdout	2026-08-04 10:31:44.166197995 +0000
+@@ -0,0 +1 @@
++Hello
+./run_file.at:1433: exit code was 0, expected 1
+870. run_file.at:1411: 870. ASSIGN DYNAMIC with unset implicit data item (run_file.at:1411): FAILED (run_file.at:1433)

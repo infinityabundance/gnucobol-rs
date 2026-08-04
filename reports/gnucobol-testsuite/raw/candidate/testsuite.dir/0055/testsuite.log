@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+55. syn_copy.at:342: testing COPY: recursive ...
+./syn_copy.at:371: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.693378447 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/55/stderr	2026-08-04 10:31:43.692747361 +0000
+@@ -1,6 +1,2 @@
+-in file included from prog.cob:6:
+-in file included from copy1.CPY:2:
+-in file included from copy2.CPY:3:
+-in file included from copy3.CPY:1:
+-copy1.CPY: error: recursive inclusion
++cobc-rs: COPY expansion failed (fail closed): copybook 'COPY1' not found
+ 
+55. syn_copy.at:342: 55. COPY: recursive (syn_copy.at:342): FAILED (syn_copy.at:371)

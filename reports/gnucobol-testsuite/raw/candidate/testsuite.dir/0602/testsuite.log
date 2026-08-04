@@ -1,0 +1,14 @@
+#                             -*- compilation -*-
+602. run_fundamental.at:5639: testing USE FOR DEBUGGING file ...
+./run_fundamental.at:5670: $COMPILE prog.cob
+./run_fundamental.at:5671: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:43.980874095 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/602/stdout	2026-08-04 10:31:43.980340691 +0000
+@@ -1,6 +1 @@
+-    21 TEST-FILE                                                                                |
+-    23 TEST-FILE                                                                                |
+-    24 TEST-FILE                                                                                |
+-    25 TEST-FILE                                        DEF                                     |
+-    26 TEST-FILE                                                                                |
+ 
+602. run_fundamental.at:5639: 602. USE FOR DEBUGGING file (run_fundamental.at:5639): FAILED (run_fundamental.at:5671)

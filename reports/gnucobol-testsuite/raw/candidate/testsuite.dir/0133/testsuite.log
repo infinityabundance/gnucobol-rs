@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+133. syn_definition.at:2571: testing LIKE clause ...
+./syn_definition.at:2617: $COMPILE_ONLY prog.cob
+./syn_definition.at:2618: $COMPILE_ONLY -std=mf-strict prog.cob
+--- -	2026-08-04 10:31:43.728860393 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/133/stderr	2026-08-04 10:31:43.727953442 +0000
+@@ -1,6 +1 @@
+-prog.cob:13: error: SAME AS clause does not conform to Micro Focus COBOL
+-prog.cob:15: error: SAME AS clause does not conform to Micro Focus COBOL
+-prog.cob:17: error: SAME AS clause does not conform to Micro Focus COBOL
+-prog.cob:19: error: SAME AS clause does not conform to Micro Focus COBOL
+-prog.cob:20: error: SAME AS clause does not conform to Micro Focus COBOL
+ 
+./syn_definition.at:2618: exit code was 0, expected 1
+133. syn_definition.at:2571: 133. LIKE clause (syn_definition.at:2571): expected failure (syn_definition.at:2618)

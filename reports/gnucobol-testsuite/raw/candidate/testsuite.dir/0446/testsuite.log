@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+446. syn_functions.at:135: testing Redundant REPOSITORY entries ...
+./syn_functions.at:161: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.884713343 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/446/stderr	2026-08-04 10:31:43.883906258 +0000
+@@ -1,9 +1,2 @@
+-prog.cob:14: warning: prototype has same name as current function and will be ignored
+-prog.cob:16: warning: duplicate REPOSITORY entry for 'prog'
+-prog.cob:17: error: duplicate REPOSITORY entries for 'prog' do not match
+-prog.cob:18: error: duplicate REPOSITORY entries for 'prog' do not match
+-prog.cob:19: warning: no definition/prototype seen for FUNCTION 'gamma'
+-prog.cob:19: error: redefinition of 'gamma'
+-prog.cob:11: note: 'gamma' previously defined here
+-prog.cob:21: error: FUNCTION 'alpha' has no PROCEDURE DIVISION
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+446. syn_functions.at:135: 446. Redundant REPOSITORY entries (syn_functions.at:135): FAILED (syn_functions.at:161)

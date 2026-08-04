@@ -1,0 +1,8 @@
+#                             -*- compilation -*-
+95. syn_definition.at:691: testing PROCEDURE DIVISION RETURNING OMITTED: main ...
+./syn_definition.at:703: $COMPILE_MODULE prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/95/stdout	2026-08-04 10:31:43.710052541 +0000
+@@ -0,0 +1 @@
++prog.so
+95. syn_definition.at:691: 95. PROCEDURE DIVISION RETURNING OMITTED: main (syn_definition.at:691): FAILED (syn_definition.at:703)

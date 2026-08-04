@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+370. syn_misc.at:6646: testing SEARCH ALL checks ...
+./syn_misc.at:6748: $COMPILE prog.cob
+--- -	2026-08-04 10:31:43.844204106 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/370/stderr	2026-08-04 10:31:43.843289952 +0000
+@@ -1,14 +1 @@
+-prog.cob: in section 'TESTING':
+-prog.cob:27: error: 'TAB-1-KEY' requires one subscript
+-prog.cob:51: error: syntax error, unexpected AT END
+-prog.cob:53: error: syntax error, unexpected END-SEARCH
+-prog.cob:58: error: syntax error, unexpected WHEN
+-prog.cob:64: error: 'TESTING' is not a field
+-prog.cob:70: error: SEARCH ALL requires comparision of KEY field
+-prog.cob:76: error: SEARCH ALL requires comparision of KEY field
+-prog.cob:82: error: SEARCH ALL requires comparision of KEY field
+-prog.cob:88: warning: expression 'AA' EQUALS 'BB' is always FALSE
+-prog.cob:88: error: invalid SEARCH ALL condition
+-prog.cob:91: error: SEARCH ALL requires KEY phrase
+-prog.cob:15: note: 'TAB-2-ENTRY' defined here
+ 
+./syn_misc.at:6748: exit code was 0, expected 1
+370. syn_misc.at:6646: 370. SEARCH ALL checks (syn_misc.at:6646): FAILED (syn_misc.at:6748)

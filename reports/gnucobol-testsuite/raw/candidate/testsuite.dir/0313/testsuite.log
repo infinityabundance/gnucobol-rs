@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+313. syn_misc.at:3473: testing IF-ELSE statement list with invalid syntax ...
+./syn_misc.at:3496: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.815483485 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/313/stderr	2026-08-04 10:31:43.814761439 +0000
+@@ -1,5 +1 @@
+-prog.cob:11: error: syntax error, unexpected Identifier
+-prog.cob:14: error: syntax error, unexpected END-ACCEPT
+-prog.cob:15: error: syntax error, unexpected ELSE
+-prog.cob:17: error: syntax error, unexpected END-IF
+ 
+./syn_misc.at:3496: exit code was 0, expected 1
+313. syn_misc.at:3473: 313. IF-ELSE statement list with invalid syntax (syn_misc.at:3473): FAILED (syn_misc.at:3496)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+600. run_fundamental.at:5551: testing USE FOR DEBUGGING, reference with OCCURS ...
+./run_fundamental.at:5576: $COMPILE prog.cob
+./run_fundamental.at:5577: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:43.978928498 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/600/stdout	2026-08-04 10:31:43.977648978 +0000
+@@ -1,2 +1 @@
+-    20 DATA-FIELD                     +0004 +0002 +0001 """"""""""""""""""""""""""""""""""""""""|
+ 
+600. run_fundamental.at:5551: 600. USE FOR DEBUGGING, reference with OCCURS (run_fundamental.at:5551): FAILED (run_fundamental.at:5577)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+572. run_fundamental.at:3648: testing Numeric operations (4) BINARY ...
+./run_fundamental.at:3877: $COMPILE -Wno-truncate prog.cob
+./run_fundamental.at:3878: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/572/stderr	2026-08-04 10:31:43.961900936 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unrecognized USAGE BINARY-INT
+./run_fundamental.at:3878: exit code was 2, expected 0
+572. run_fundamental.at:3648: 572. Numeric operations (4) BINARY (run_fundamental.at:3648): FAILED (run_fundamental.at:3878)

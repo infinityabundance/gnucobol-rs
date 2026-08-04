@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+366. syn_misc.at:6440: testing conflict markers ...
+./syn_misc.at:6471: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.842121243 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/366/stderr	2026-08-04 10:31:43.841599200 +0000
+@@ -1,10 +1,2 @@
+-prog.cob:8: error: version control conflict marker in file
+-prog.cob:10: error: version control conflict marker in file
+-prog.cob:12: error: version control conflict marker in file
+-prog.cob:15: error: version control conflict marker in file
+-prog.cob:17: error: version control conflict marker in file
+-prog.cob:18: error: version control conflict marker in file
+-prog.cob:20: error: invalid indicator '<' at column 7
+-prog.cob:22: error: invalid indicator '=' at column 7
+-prog.cob:24: warning: ignoring invalid directive: '>> some'
++cobc-rs: unsupported: unsupported level number HEAD
+ 
+366. syn_misc.at:6440: 366. conflict markers (syn_misc.at:6440): FAILED (syn_misc.at:6471)

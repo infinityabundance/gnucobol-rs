@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FRONTEND.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.53",
+  "crate_version": "0.8.54",
   "damage_if_overclaimed": "treating this as a full COBOL compiler would imply the whole language parses + runs + compiles to native code, when only the listed subset is interpreted to oracle-identical output",
   "hash_chain": {
-    "inputs_sha256": "32694941e8e93e71d0dfc02bb0c60d5d1fff55a54f523fe99f8676ad1ba08d67"
+    "inputs_sha256": "ccdd3690a8bed9bf8f8abc66cc3466f8e5ffc162f6694fc7826533a1c52a92db"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "1963b69fe6bead53c76b8962f4e6e3d6853ad3f28567af8a724f98d17778dfbf",
-    "receipt_sha256": "84c69d0d651e20361e53ee65ff612ca1e2e691c08036f0d6e31be2d8e1d74e8e"
+    "claim_ladder_entry_sha256": "2c6684f690760f65212a4a66cc0d82814a5e652b0ca773638a05080a33ed995f",
+    "receipt_sha256": "8640ea669fe9e1a28d476759fbab631b4c1560e9f0ced81cfacfa2441d44fa53"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -63,7 +63,8 @@
     "upstream_court": "GNURUST.FRONTEND.1"
   },
   "positive_claims": [
-    "a from-scratch (NOT cobc-derived) COBOL front-end -- lexer + parser + executor in src/frontend.rs -- PARSES a whole COBOL program and EXECUTES it on the ported libcob runtime (no cobc, no libcob linked), with stdout proven BYTE-IDENTICAL to the admitted cobc over a 10-program corpus (cobol_frontend_sweep 23/0) plus a 3-program hand-wired corpus (cobol_run_sweep 3/0). This is the first parse+execute proof: it composes the sealed runtime (pic::build_field for PIC->attr, move_ops::cob_move, arith::cob_arith + cob_divide, edited::encode_edited, termio::cob_display) under a real reader. The sealed subset: WORKING-STORAGE 01 elementary items with PIC",
+    "an independently written (per the author's from-scratch, NOT-cobc-derived origin claim in commit 9357a7cac",
+    "strict clean-room provenance is not independently verifiable from the committed record -- see docs/methodology/parser-front-end-provenance.md) COBOL front-end -- lexer + parser + executor in src/frontend.rs -- PARSES a whole COBOL program and EXECUTES it on the ported libcob runtime (no cobc, no libcob linked), with stdout proven BYTE-IDENTICAL to the admitted cobc over a 10-program corpus (cobol_frontend_sweep 23/0) plus a 3-program hand-wired corpus (cobol_run_sweep 3/0). This is the first parse+execute proof: it composes the sealed runtime (pic::build_field for PIC->attr, move_ops::cob_move, arith::cob_arith + cob_divide, edited::encode_edited, termio::cob_display) under a real reader. The sealed subset: WORKING-STORAGE 01 elementary items with PIC",
     "VALUE (numeric 9/V/S/P, alphanumeric X/A, numeric-edited Z/*/$/+/-/,/./CR/DB)",
     "statements MOVE, ADD, SUBTRACT, MULTIPLY, DIVIDE (TO/FROM/BY/INTO/GIVING), COMPUTE (arithmetic expressions: + - * / ** with parentheses, unary minus, standard precedence), IF/ELSE/END-IF (relational",
     "AND/OR/NOT conditions, numeric + alphanumeric, the period form), PERFORM n TIMES / PERFORM UNTIL cond (inline), DISPLAY, STOP RUN, CONTINUE. Anything outside the subset returns a RunError (fail closed -- never a silent mis-run). Corpus covers ADD/TO, ADD/GIVING, SUBTRACT, MULTIPLY GIVING, DIVIDE GIVING with V99 scale, signed arithmetic + signed edited move, alphanumeric VALUE, decimal V99 with floating-$ editing, numeric->edited MOVE, multi-statement/multi-operand DISPLAY, and COMPUTE expressions (precedence, parentheses, division with deep-fraction intermediate precision -- 22/7 to 8 places, percentage chains, exponent 2**10, signed",

@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+414. syn_move.at:453: testing Overlapping MOVE ...
+./syn_move.at:508: $COMPILE -w prog.cob
+./syn_move.at:510: $COMPILE -fdiagnostics-show-option prog.cob
+--- -	2026-08-04 10:31:43.868625853 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/414/stderr	2026-08-04 10:31:43.867946266 +0000
+@@ -1,14 +1 @@
+-prog.cob:20: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:23: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:25: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:26: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:32: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:34: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:39: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:40: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:42: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:43: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:46: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:48: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+-prog.cob:49: warning: overlapping MOVE may produce unpredictable results [-Woverlap]
+ 
+414. syn_move.at:453: 414. Overlapping MOVE (syn_move.at:453): FAILED (syn_move.at:510)

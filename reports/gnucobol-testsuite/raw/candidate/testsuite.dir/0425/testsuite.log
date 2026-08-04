@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+425. syn_screen.at:175: testing ACCEPT/DISPLAY extensions detection ...
+./syn_screen.at:207: $COMPILE_ONLY -faccept-display-extensions=error prog.cob
+--- -	2026-08-04 10:31:43.872924997 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/425/stderr	2026-08-04 10:31:43.872056498 +0000
+@@ -1,10 +1,2 @@
+-prog.cob:15: error: AT clause used
+-prog.cob:15: error: non-standard DISPLAY used
+-prog.cob:16: error: LINE 0 used
+-prog.cob:16: error: COLUMN 0 used
+-prog.cob:16: error: non-standard DISPLAY used
+-prog.cob:17: error: non-standard ACCEPT used
+-prog.cob:19: error: non-standard DISPLAY used
+-prog.cob:20: error: non-standard ACCEPT used
+-prog.cob:22: error: non-standard DISPLAY used
++cobc-rs: -faccept-display-extensions=error: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): error
+ 
+425. syn_screen.at:175: 425. ACCEPT/DISPLAY extensions detection (syn_screen.at:175): FAILED (syn_screen.at:207)

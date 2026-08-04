@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+420. syn_multiply.at:64: testing Category check of Format 2 ...
+./syn_multiply.at:86: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.869813116 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/420/stderr	2026-08-04 10:31:43.869155921 +0000
+@@ -1,10 +1 @@
+-prog.cob:10: error: '789' is not a numeric or numeric-edited name
+-prog.cob:11: error: 'literal "a"' is not numeric
+-prog.cob:11: error: 'literal "b"' is not numeric
+-prog.cob:12: error: 'literal "c"' is not a numeric or numeric-edited name
+-prog.cob:13: error: 'X-X' is not numeric
+-prog.cob:14: error: 'X-09' is not numeric
+-prog.cob:15: error: 'X-X' is not a numeric or numeric-edited name
+-prog.cob:16: error: 'X-09' is not numeric
+-prog.cob:16: error: 'X-X' is not numeric
+ 
+./syn_multiply.at:86: exit code was 0, expected 1
+420. syn_multiply.at:64: 420. Category check of Format 2 (syn_multiply.at:64): FAILED (syn_multiply.at:86)

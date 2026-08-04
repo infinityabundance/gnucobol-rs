@@ -1,0 +1,57 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "no-trust2-receipt"
+  },
+  "byte_domains": [
+    "per-math-test classification + the underlying raw outputs"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "claiming math parity from a favorable subset would be unscientific",
+  "hash_chain": {
+    "inputs_sha256": "bbeea310e9c26189e2c487453192f3703c1b7eb0dbc02918110ed049fe57a613"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "c7741599782efe55db65ccf52464fd39b3d5116c63a5d1798ac9312e58236c84",
+    "receipt_sha256": null
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the math tests pass' is the lie this prevents -- the classification shows exactly which math tests match, which fail closed, and which are module-model blocked"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-PERFORMANCE-CLAIM-HERE",
+    "NEG.CORRECTNESS-IS-THE-SUITE-S-AT-CHECK-OUTC"
+  ],
+  "negative_claims": [
+    "no performance claim here",
+    "correctness is the suite's AT_CHECK outcome in this environment",
+    "lie prevented: 'the math tests pass' is the lie this prevents -- the classification shows exactly which math tests match, which fail closed, and which are module-model blocked"
+  ],
+  "oracle": {
+    "detail": "the TESTSUITE.1 baseline",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-RUNTIME-MATH.1"
+  },
+  "positive_claims": [
+    "the math/runtime subset (data_binary, data_display, data_packed, data_pointer, run_fundamental, run_functions, syn_multiply, syn_value, syn_literals) is classified from the SAME differential results as the whole suite (no favorable selection): 323 math tests with per-test oracle/candidate outcome pairs and first-failure attribution",
+    "performance is reported SEPARATELY and only for tests passing on both sides"
+  ],
+  "replay": {
+    "command": "the TESTSUITE.1 baseline",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "reports/gnucobol-runtime-tests/math-correctness.{json,md}",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

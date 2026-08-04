@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+471. syn_literals.at:1412: testing zero-length literals ...
+./syn_literals.at:1438: $COMPILE_ONLY -Wno-unfinished prog.cob
+--- -	2026-08-04 10:31:43.898450802 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/471/stderr	2026-08-04 10:31:43.897749675 +0000
+@@ -1,12 +1,2 @@
+-prog.cob:12: warning: hexadecimal literal has zero length; X'00' will be assumed
+-prog.cob:13: error: invalid H literal: ''
+-prog.cob:13: note: H literals must contain at least one character
+-prog.cob:14: error: invalid Z literal: ''
+-prog.cob:14: note: Z literals must contain at least one character
+-prog.cob:15: error: invalid L literal: ''
+-prog.cob:15: note: L literals must contain at least one character
+-prog.cob:16: warning: national literal has zero length; a SPACE will be assumed
+-prog.cob:17: warning: hexadecimal literal has zero length; X'00' will be assumed
+-prog.cob:18: warning: boolean literal has zero length; B'0' will be assumed
+-prog.cob:19: warning: hexadecimal literal has zero length; X'00' will be assumed
++cobc-rs: unsupported: PIC N: UnsupportedSymbol('N')
+ 
+471. syn_literals.at:1412: 471. zero-length literals (syn_literals.at:1412): FAILED (syn_literals.at:1438)

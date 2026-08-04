@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+647. run_refmod.at:313: testing enable / disable ref-mod check ...
+./run_refmod.at:337: $COMPILE -w -fno-ec=BOUND-REF-MOD prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/647/stderr	2026-08-04 10:31:44.010655995 +0000
+@@ -0,0 +1 @@
++cobc-rs: -fno-ec=BOUND-REF-MOD: unsupported option (rejected-unsupported; exception-code checking: the candidate checks a fixed sealed set; reject honestly): BOUND-REF-MOD
+./run_refmod.at:337: exit code was 1, expected 0
+647. run_refmod.at:313: 647. enable / disable ref-mod check (run_refmod.at:313): FAILED (run_refmod.at:337)

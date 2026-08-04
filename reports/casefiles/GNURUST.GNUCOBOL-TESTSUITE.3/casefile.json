@@ -1,0 +1,61 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "per-test classification + reason codes + the raw baseline/candidate outputs they rest on"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-TESTSUITE.3",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "presenting the classification as full suite parity would certify coverage the candidate does not have",
+  "hash_chain": {
+    "inputs_sha256": "92b30e2330641ffde10919c5f0ec6d167036949fe2b0cea0abf2759afd3d115a"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "f3db33758ce79d2505690b65ac509e73f40df2e43701d711d41c4f6df7e2aa5f",
+    "receipt_sha256": "f37301aa0b40484d01e95b19ba91c5ee74f1c64b830f27968852c5babbd4d2db"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the GnuCOBOL test-suite passes with gnucobol-rs' is the lie this prevents -- the honest surface is a classification, not a pass count"
+  ],
+  "negative_capability_ids": [
+    "NEG.OBSERVABLE-MATCH-IS-THE-TEST-S-OWN-AT-CH",
+    "NEG.NO-GNUCOBOL-TEST-SUITE-PARITY-CLAIM",
+    "NEG.NO-COBOL-CONFORMANCE-CERTIFICATION",
+    "NEG.NO-PERFORMANCE-CLAIM-SEE-THE-RUNTIME-MAT"
+  ],
+  "negative_claims": [
+    "OBSERVABLE_MATCH is the test's own AT_CHECK assertion outcome in this environment, not equivalence outside it",
+    "no GnuCOBOL test-suite parity claim",
+    "no COBOL conformance certification",
+    "no performance claim (see the runtime-math performance view)",
+    "lie prevented: 'the GnuCOBOL test-suite passes with gnucobol-rs' is the lie this prevents -- the honest surface is a classification, not a pass count"
+  ],
+  "oracle": {
+    "detail": "the TESTSUITE.1 baseline (real admitted cobc)",
+    "dialect_profile_id": null,
+    "dialect_profile_sha256": null,
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-TESTSUITE.3"
+  },
+  "positive_claims": [
+    "every generated test group receives exactly one final classification (reconciled: total == sum of all classes), with the oracle x candidate outcome pairs, first-failure attribution, raw evidence preserved, deterministic two-pass comparison, and honest totals in this environment: 173 OBSERVABLE_MATCH, 439 candidate check/parse rejects, 407 module-model unsupported, 173 wrapper-option unsupported, 26 wrapper-malformed, 22 candidate unsupported, 2 runtime fails, 0 timeouts, 0 not-reached",
+    "the runtime/math subset is reported separately (GNURUST.GNUCOBOL-RUNTIME-MATH.1)"
+  ],
+  "replay": {
+    "command": "bash lab/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "reports/gnucobol-testsuite/* (ledgers, summaries, raw logs, no-delegation, determinism) + reports/receipts/GNURUST.GNUCOBOL-TESTSUITE.{1,2,3}/",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

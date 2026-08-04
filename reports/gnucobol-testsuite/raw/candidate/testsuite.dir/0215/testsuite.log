@@ -1,0 +1,13 @@
+#                             -*- compilation -*-
+215. syn_file.at:1603: testing INDEXED file PASSWORD clause ...
+./syn_file.at:1644: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.767027764 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/215/stderr	2026-08-04 10:31:43.766215320 +0000
+@@ -1,5 +1 @@
+-prog.cob:10: warning: PASSWORD clause is not implemented
+-prog.cob:15: warning: PASSWORD clause is not implemented
+-prog.cob:18: warning: PASSWORD clause is not implemented
+-prog.cob:15: error: PASSWORD 'PASS2' for EXTERNAL file 'file2' must have EXTERNAL attribute
+ 
+./syn_file.at:1644: exit code was 0, expected 1
+215. syn_file.at:1603: 215. INDEXED file PASSWORD clause (syn_file.at:1603): FAILED (syn_file.at:1644)

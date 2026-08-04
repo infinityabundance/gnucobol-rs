@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+1140. run_extensions.at:2019: testing CALL BY VALUE to C ...
+./run_extensions.at:2060: $COMPILE -Wno-unfinished caller.cob
+./run_extensions.at:2086: $COMPILE_MODULE callee32.c callee64.c
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1140/stdout	2026-08-04 10:31:44.450964556 +0000
+@@ -0,0 +1 @@
++callee32.so
+1140. run_extensions.at:2019: 1140. CALL BY VALUE to C (run_extensions.at:2019): FAILED (run_extensions.at:2086)

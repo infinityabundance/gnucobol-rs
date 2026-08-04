@@ -9,14 +9,14 @@
   ],
   "case_id": "GNURUST.FILE.REWRITE.1",
   "crate": "gnucobol-rs",
-  "crate_version": "0.8.53",
+  "crate_version": "0.8.54",
   "damage_if_overclaimed": "assuming REWRITE can change a record's length (it cannot for fixed records) or rewrites surrounding records corrupts a sequential file",
   "hash_chain": {
-    "inputs_sha256": "d82a0d5e1019046b28e3b03cf7ab9b6f56c2ab5af4540886b333a560b866ddab"
+    "inputs_sha256": "e42dcd6e5ac466b2d209dca8c30116b49fbcf40de541f2c4d0d09706887b6c10"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "d6ea4a80c875549a5b5cfced8385a78ba7f06123a8783d5944adc0aff8407e81",
-    "receipt_sha256": "754a50740e5a6e494a57e3605a2387b19368e966691e58f2accf34569c7a10a0"
+    "receipt_sha256": "41794504a9c78e3a27c6d34c39024ba5d477c476497e32ad1e01071f69a25800"
   },
   "kind": "court-casefile",
   "lie_prevented": [

@@ -528,6 +528,114 @@ pub fn run_program_redirected(
     Ok((out, printer, rc))
 }
 
+/// Parse + semantically check a COBOL program WITHOUT executing it — the `-fsyntax-only` path for
+/// the `cobc-rs` adapter. Runs the same phases as [`run_program_redirected`] (preprocessor, lexer,
+/// program split, switches, and the full WORKING-STORAGE / FILE / REPORT layout construction) and
+/// fails closed with the same [`RunError`]s on anything outside the sealed subset. The program body
+/// is NOT executed and no runtime state is touched, so a program that would write files, loop, or
+/// STOP at runtime is still only checked here.
+pub fn check_program(source: &str, dialect: crate::dialect::Dialect) -> Result<(), RunError> {
+    // Conditional-compilation preprocessor: resolve >>DEFINE / >>IF / >>ELSE / >>END-IF before lexing.
+    let pre = preprocess(source);
+    let up = uppercase_outside_quotes(&pre);
+    // EC-BOUND-SUBSCRIPT is per-run state; for a syntax-only check it is irrelevant, but the raw
+    // source scan keeps the flag consistent with a later run of the same source.
+    EC_BOUND_SUBSCRIPT_ON.with(|c| c.set(parse_ec_bound_check(&uppercase_outside_quotes(source))));
+    let mut toks = lex(&up);
+
+    // ENVIRONMENT DIVISION / SPECIAL-NAMES of the first program: CURRENCY SIGN + DECIMAL-POINT.
+    let first_proc = find_seq(&toks, &["PROCEDURE", "DIVISION"])
+        .ok_or_else(|| RunError::Unsupported("no PROCEDURE DIVISION".into()))?;
+    let currency = parse_currency_sign(&toks, first_proc);
+    let decimal_comma = parse_decimal_comma(&toks, first_proc);
+    if decimal_comma {
+        for t in toks.iter_mut() {
+            if let Tok::Word(w) = t {
+                if is_comma_decimal_literal(w) {
+                    *w = w.replace(',', ".");
+                }
+            }
+        }
+    }
+
+    let (main_name, program_map) = parse_programs(&toks)?;
+    let switches = parse_switches(&toks, first_proc);
+    let collation = parse_collation(&toks, first_proc);
+    let file_defs: HashMap<String, FileDef> = program_map.get(&main_name)
+        .map(|p| p.files.iter().map(|f| (f.name.clone(), f.clone())).collect())
+        .unwrap_or_default();
+    let mut record_files: HashMap<String, String> = HashMap::new();
+    if let Some(p) = program_map.get(&main_name) {
+        for f in &p.files {
+            for r in &f.records {
+                record_files.entry(r.clone()).or_insert_with(|| f.name.clone());
+            }
+        }
+    }
+    let reports: HashMap<String, ReportDef> = program_map.get(&main_name)
+        .map(|p| p.reports.clone())
+        .unwrap_or_default();
+    let ctx = Ctx {
+        programs: &program_map,
+        dialect,
+        currency,
+        decimal_comma,
+        collation,
+        switches,
+        print_redirect: false,
+        printer: RefCell::new(Vec::new()),
+        stop_run: Cell::new(false),
+        exit_perform: Cell::new(false),
+        exit_cycle: Cell::new(false),
+        next_sentence: Cell::new(false),
+        call_state: RefCell::new(HashMap::new()),
+        goto: RefCell::new(None),
+        file_defs,
+        record_files,
+        files: RefCell::new(HashMap::new()),
+        reports,
+    };
+    let main = ctx.programs.get(&main_name).expect("main program is registered");
+    // Build the full declaration/layout model (WORKING-STORAGE, FD records, reports) — this is the
+    // deepest static phase; the program body is never run.
+    let fields = build_program_fields(main, &ctx)?;
+    // Walk EVERY program's procedure body in skip mode with CHECK_MODE set: the statement walker
+    // validates the statement structure (IF/PERFORM/… scopes, operand collection) and rejects a
+    // statement that starts with a non-verb token, WITHOUT executing anything. This is what makes
+    // `cobc-rs -fsyntax-only` fail closed on unsupported syntax instead of accepting it.
+    CHECK_MODE.with(|c| c.set(true));
+    let body_check: Result<(), RunError> = (|| {
+        let names: Vec<String> = ctx.programs.keys().cloned().collect();
+        for name in names {
+            let prog = &ctx.programs[&name];
+            let mut fields = if name == main_name {
+                fields.clone()
+            } else {
+                build_program_fields(prog, &ctx)?
+            };
+            let mut p = 0usize;
+            while p < prog.proc_toks.len() {
+                let before = p;
+                if run_block(&prog.proc_toks, &mut p, &mut fields, &mut Vec::new(), false, &ctx)? {
+                    break;
+                }
+                if p == before {
+                    // run_block parked on a scope ender (END-READ/END-IF/...) without advancing:
+                    // skip it so the walk always makes progress.
+                    p += 1;
+                }
+                if matches!(prog.proc_toks.get(p), Some(Tok::Dot)) {
+                    p += 1;
+                }
+            }
+        }
+        Ok(())
+    })();
+    CHECK_MODE.with(|c| c.set(false));
+    body_check?;
+    Ok(())
+}
+
 /// Read the program's final `RETURN-CODE` register as the process exit code (`MOVE n TO RETURN-CODE` /
 /// `STOP RUN n`). Defaults to 0.
 fn read_return_code(fields: &HashMap<String, Field>) -> i32 {
@@ -617,10 +725,6 @@ impl FileDef {
     /// record used to size fixed-length disk loads). Empty when the FD declared no record descriptions.
     fn primary_record(&self) -> &str {
         self.records.first().map(String::as_str).unwrap_or("")
-    }
-    /// Whether `name` is one of this file's declared FD record descriptions.
-    fn has_record(&self, name: &str) -> bool {
-        self.records.iter().any(|r| r == name)
     }
 }
 
@@ -2891,6 +2995,16 @@ fn exception_status_field() -> (Vec<u8>, FieldAttr) {
 /// point), or `None` for a receiver that does not raise a SIZE ERROR (alphanumeric / non-sized).
 fn receiver_int_digits(f: &Field) -> Option<usize> {
     match &f.storage {
+        // Float receivers (COMP-1/COMP-2) do NOT size-check on decimal digit count: the IEEE range is
+        // the boundary (the oracle fires at ~2^127 for COMP-1), and the field's decimal "digits" are a
+        // conversion-intermediate width, not a storage capacity. Treating them as 9 digits raised a
+        // spurious EC-SIZE-OVERFLOW at ~2^30 (GnuCOBOL `FLOAT-SHORT with SIZE ERROR` divergence).
+        Storage::Numeric(a)
+            if a.field_type == crate::attr::COB_TYPE_NUMERIC_FLOAT
+                || a.field_type == crate::attr::COB_TYPE_NUMERIC_DOUBLE =>
+        {
+            None
+        }
         Storage::Numeric(a) => Some((a.digits as i32 - a.scale as i32).max(0) as usize),
         _ => None,
     }
@@ -3160,6 +3274,7 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
             pos += 1;
             continue;
         }
+        let before = pos;
         if run_block(toks, &mut pos, fields, out, true, ctx)? {
             // NEXT SENTENCE: skip to the statement after the next period instead of halting.
             if ctx.next_sentence.get() {
@@ -3169,6 +3284,12 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
                 continue;
             }
             return Ok(true);
+        }
+        if pos == before {
+            // run_block parked on a scope ender (e.g. a malformed EVALUATE WHEN clause leaves an
+            // `ELSE`/`WHEN` at the top) without advancing -- skip it so the range ALWAYS progresses
+            // (fail closed on the surrounding statement, never an infinite loop).
+            pos += 1;
         }
         if matches!(toks.get(pos), Some(Tok::Dot)) {
             pos += 1;
@@ -3192,6 +3313,7 @@ fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<S
     let mut guard = 0u64;
     while pos < end {
         if matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; continue; }
+        let before = pos;
         if run_block(toks, &mut pos, fields, out, true, ctx)? {
             if ctx.next_sentence.get() {
                 ctx.next_sentence.set(false);
@@ -3213,6 +3335,10 @@ fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<S
                 return Ok(false);
             }
             return Ok(true); // real halt (STOP RUN / GOBACK / EXIT PROGRAM)
+        }
+        if pos == before {
+            // progress guarantee (see run_range): never park on a scope ender.
+            pos += 1;
         }
         if matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
     }
@@ -3371,6 +3497,33 @@ const STMT_ENDERS: &[&str] = &[
     "END-MULTIPLY", "END-DIVIDE", "END-CALL", "END-WRITE", "END-REWRITE", "END-DELETE", "END-START",
     "END-UNLOCK", "END-DISABLE",
 ];
+
+/// Is `verb` a statement verb the front-end accepts (a real dispatch, a verified no-op, or a
+/// typed boundary rejection in [`exec_stmt`])? Used by the syntax-only check
+/// ([`check_program`]) to fail closed on a statement that starts with a non-verb token (e.g. a
+/// bare identifier like `NOT A STATEMENT.`) — the runtime rejects the same verb when executed.
+fn known_statement_verb(verb: &str) -> bool {
+    matches!(
+        verb,
+        "DISPLAY" | "MOVE" | "SET" | "INITIALIZE" | "INSPECT" | "STRING" | "UNSTRING"
+            | "ACCEPT" | "OPEN" | "CLOSE" | "WRITE" | "REWRITE" | "DELETE" | "SORT" | "MERGE"
+            | "RELEASE" | "JSON" | "XML" | "TRANSFORM" | "EXAMINE" | "EXHIBIT" | "ALTER"
+            | "GENERATE" | "INITIATE" | "TERMINATE" | "SUPPRESS" | "RAISE" | "VALIDATE"
+            | "DESTROY" | "READY" | "RESET" | "UNLOCK" | "COMMIT" | "ROLLBACK" | "CALL"
+            | "STOP" | "SEND" | "RECEIVE" | "PURGE" | "ENABLE" | "DISABLE" | "MODIFY"
+            | "INQUIRE" | "ALLOCATE" | "FREE" | "ENTRY" | "ADD" | "SUBTRACT" | "MULTIPLY"
+            | "DIVIDE" | "COMPUTE" | "IF" | "PERFORM" | "EVALUATE" | "SEARCH" | "READ"
+            | "START" | "RETURN" | "GOBACK" | "EXIT" | "CONTINUE" | "NEXT" | "GO" | "CANCEL"
+    )
+}
+
+thread_local! {
+    /// Syntax-only ([`check_program`]) mode: the statement walker rejects unknown statement verbs
+    /// even while SKIPPING branches, so the check fails closed on any statement the runtime could
+    /// not execute. Never set during an actual run (the runtime rejects unknown verbs only in the
+    /// branch it executes; a skipped branch is not executed and must not fail the program).
+    static CHECK_MODE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
 
 fn is_boundary(w: &str) -> bool {
     STMT_VERBS.contains(&w) || SCOPE_ENDERS.contains(&w) || STMT_ENDERS.contains(&w)
@@ -3654,9 +3807,9 @@ fn run_block(
                     }
                     "ADD" | "SUBTRACT" | "MULTIPLY" | "DIVIDE" | "COMPUTE" => {
                         let stmt = collect_arith_operands(toks, pos);
-                        let on_size = parse_on_size_handler(toks, pos, false);
-                        let not_size = parse_on_size_handler(toks, pos, true);
                         let end_kw = format!("END-{verb}");
+                        let on_size = parse_on_size_handler(toks, pos, false, &end_kw);
+                        let not_size = parse_on_size_handler(toks, pos, true, &end_kw);
                         if matches!(toks.get(*pos), Some(Tok::Word(w)) if *w == end_kw) {
                             *pos += 1;
                         }
@@ -3685,6 +3838,8 @@ fn run_block(
                             if ctx.stop_run.get() {
                                 return Ok(true);
                             }
+                        } else if CHECK_MODE.with(|c| c.get()) && !known_statement_verb(&verb) {
+                            return Err(RunError::Unsupported(format!("verb {verb}")));
                         }
                     }
                 }
@@ -3727,20 +3882,99 @@ fn collect_arith_operands(toks: &[Tok], pos: &mut usize) -> Vec<Tok> {
     toks[start..*pos].to_vec()
 }
 
-/// True when `toks[p]` ends an arithmetic SIZE-ERROR handler block: end of input, `.`, an `END-verb`, an
-/// outer scope terminator, or a following `NOT ON SIZE ERROR` clause.
-fn at_size_terminator(toks: &[Tok], p: usize) -> bool {
-    match toks.get(p) {
-        None | Some(Tok::Dot) => true,
-        Some(Tok::Word(w)) if w.starts_with("END-") || SCOPE_ENDERS.contains(&w.as_str()) => true,
-        Some(Tok::Word(w)) if w == "NOT"
-            && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON")
-            && matches!(toks.get(p + 2), Some(Tok::Word(x)) if x == "SIZE") =>
-        {
-            true
+/// Words that open a scoped statement with an `END-<w>` terminator. While scanning an imperative
+/// handler block, an occurrence of one of these only opens a scope when its matching `END-<w>`
+/// actually appears before the handler ends (see [`scoped_end_before`]); a bare/inline use (e.g.
+/// `PERFORM PASS` or a bare `READ f`) opens nothing.
+const SCOPE_OPENERS: &[&str] = &[
+    "IF", "EVALUATE", "PERFORM", "STRING", "UNSTRING", "SEARCH", "READ", "RETURN",
+    "SORT", "START", "REWRITE", "DELETE", "JSON", "XML", "CALL",
+];
+
+/// Is the construct opened by `w` at `from` scoped — i.e. does a matching `END-<w>` appear before
+/// the handler would end (`handler_ends`)? Returns the matching `END-<w>` position, else `None` (an
+/// inline/imperative use such as `PERFORM PASS` or a bare `READ f`). Nested uses of the SAME verb
+/// (`PERFORM` inside `PERFORM … END-PERFORM`) are counted, so only the OUTERMOST `END-<w>` matches.
+fn scoped_end_before(toks: &[Tok], from: usize, w: &str, handler_ends: impl Fn(usize) -> bool) -> Option<usize> {
+    let end = format!("END-{w}");
+    let mut depth = 1usize;
+    let mut p = from + 1;
+    while p < toks.len() {
+        match toks.get(p) {
+            None | Some(Tok::Dot) => return None,
+            Some(Tok::Word(x)) => {
+                let x = x.as_str();
+                if x == w && SCOPE_OPENERS.contains(&x) {
+                    depth += 1;
+                } else if x == end {
+                    depth -= 1;
+                    if depth == 0 {
+                        return Some(p);
+                    }
+                } else if depth == 1 && handler_ends(p) {
+                    return None;
+                }
+            }
+            _ => {}
         }
-        _ => false,
+        p += 1;
     }
+    None
+}
+
+/// Scan an imperative handler's statement block (`ON SIZE ERROR`, `AT END`, `ON OVERFLOW`,
+/// `ON EXCEPTION`, …) from `start`. Returns the index AT the block's terminator: the enclosing
+/// statement's `END-<verb>` (`end_at`), the other handler clause (`other_clause`), a period (ends
+/// the whole sentence), a depth-0 scope ender, or end of input. Nested scoped statements are
+/// consumed as balanced blocks, so a nested `END-IF` / `END-PERFORM` / `END-READ` … is never
+/// mistaken for the handler's own end (a real defect: `ON SIZE ERROR … IF … END-IF` truncated the
+/// handler at the nested `END-IF`, misaligning the enclosing PERFORM scope into a non-terminating
+/// loop — the GnuCOBOL `FLOAT-SHORT with SIZE ERROR` hang).
+fn scan_handler_block(
+    toks: &[Tok],
+    start: usize,
+    end_at: impl Fn(&str) -> bool,
+    other_clause: impl Fn(usize) -> bool,
+) -> usize {
+    let mut stack: Vec<String> = Vec::new();
+    let mut p = start;
+    while p < toks.len() {
+        match toks.get(p) {
+            None | Some(Tok::Dot) => break,
+            Some(Tok::Word(w)) => {
+                let w = w.as_str();
+                if w.starts_with("END-") {
+                    if stack.last().map(String::as_str) == Some(w) {
+                        stack.pop();
+                    } else if end_at(w) {
+                        // the handler's own END-<verb> (only legal at depth 0; a depth>0 hit is
+                        // malformed COBOL and fails closed here).
+                        break;
+                    } else if STMT_ENDERS.contains(&w) {
+                        // A nested NON-scoped statement's own terminator (END-DISPLAY / END-ADD /
+                        // END-STRING ...) inside the handler (at ANY depth): it closes that
+                        // statement, not the handler -- skip it and keep scanning.
+                    } else {
+                        // an unmatched scope ender (END-IF/END-PERFORM/...) whose opener was not
+                        // tracked: malformed COBOL -- fail closed.
+                        break;
+                    }
+                } else if SCOPE_OPENERS.contains(&w) {
+                    let handler_ends = |q: usize| other_clause(q) || matches!(toks.get(q), Some(Tok::Word(x)) if end_at(x));
+                    if scoped_end_before(toks, p, w, handler_ends).is_some() {
+                        stack.push(format!("END-{w}"));
+                    }
+                } else if stack.is_empty()
+                    && (end_at(w) || other_clause(p) || SCOPE_ENDERS.contains(&w))
+                {
+                    break;
+                }
+            }
+            _ => {}
+        }
+        p += 1;
+    }
+    p
 }
 
 /// Parse an `[NOT] ON SIZE ERROR <statements>` handler at `*pos` (when `is_not`, the `NOT ON SIZE ERROR`
@@ -3763,20 +3997,16 @@ fn parse_ml_exception_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Op
     }
     p += 2;
     let start = p;
-    while p < toks.len() {
-        match toks.get(p) {
-            None | Some(Tok::Dot) => break,
-            Some(Tok::Word(w)) if w.starts_with("END-") || SCOPE_ENDERS.contains(&w.as_str()) => break,
-            Some(Tok::Word(w)) if w == "NOT" && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON") => break,
-            _ => p += 1,
-        }
-    }
+    let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+        && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON");
+    let end_at = |w: &str| w == "END-JSON" || w == "END-XML";
+    p = scan_handler_block(toks, start, end_at, other);
     let block = toks[start..p].to_vec();
     *pos = p;
     Some(block)
 }
 
-fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<Vec<Tok>> {
+fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool, end_kw: &str) -> Option<Vec<Tok>> {
     let mut p = *pos;
     if is_not {
         if !matches!(toks.get(p), Some(Tok::Word(w)) if w == "NOT") {
@@ -3792,46 +4022,16 @@ fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Option<
     }
     p += 3;
     let start = p;
-    while p < toks.len() && !at_size_terminator(toks, p) {
-        p += 1;
-    }
+    let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+        && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON");
+    let end_at = move |w: &str| w == end_kw;
+    p = scan_handler_block(toks, start, end_at, other);
     let block = toks[start..p].to_vec();
     *pos = p;
     Some(block)
 }
 
-/// True when `toks[p]` ends a STRING `ON OVERFLOW` handler block: end of input, `.`, `END-STRING`, an
-/// outer scope terminator, or a following `NOT ON OVERFLOW` clause.
-fn at_overflow_terminator(toks: &[Tok], p: usize) -> bool {
-    match toks.get(p) {
-        None | Some(Tok::Dot) => true,
-        Some(Tok::Word(w)) if w == "END-STRING" || w == "END-UNSTRING" || SCOPE_ENDERS.contains(&w.as_str()) => true,
-        Some(Tok::Word(w)) if w == "NOT"
-            && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "ON")
-            && matches!(toks.get(p + 2), Some(Tok::Word(x)) if x == "OVERFLOW") =>
-        {
-            true
-        }
-        _ => false,
-    }
-}
 
-/// A READ handler block (`AT END` / `INVALID KEY` / `NOT AT END` / `NOT INVALID KEY`) ends at END-READ, an
-/// outer scope terminator, a period, or a following `NOT AT`/`NOT INVALID` clause. (Bare `NOT` is NOT a
-/// terminator -- it only ends the block when it begins a `NOT AT`/`NOT INVALID` handler -- so conditions
-/// containing `NOT` are unaffected.)
-fn at_read_terminator(toks: &[Tok], p: usize) -> bool {
-    match toks.get(p) {
-        None | Some(Tok::Dot) => true,
-        Some(Tok::Word(w)) if w == "END-READ" || SCOPE_ENDERS.contains(&w.as_str()) => true,
-        Some(Tok::Word(w)) if w == "NOT"
-            && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID") =>
-        {
-            true
-        }
-        _ => false,
-    }
-}
 
 /// Parse an `[NOT] ON OVERFLOW <statements>` handler at `*pos` (the STRING overflow clause). Returns the
 /// handler tokens and advances `*pos`; `None` if the clause is absent.
@@ -3850,9 +4050,10 @@ fn parse_on_overflow_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Opt
     }
     p += 2;
     let start = p;
-    while p < toks.len() && !at_overflow_terminator(toks, p) {
-        p += 1;
-    }
+    let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+        && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON");
+    let end_at = |w: &str| w == "END-STRING" || w == "END-UNSTRING";
+    p = scan_handler_block(toks, start, end_at, other);
     let block = toks[start..p].to_vec();
     *pos = p;
     Some(block)
@@ -7551,16 +7752,6 @@ fn ml_first_elem(f: Option<&Field>) -> Vec<u8> {
     }
 }
 
-/// True if `name` or any descendant is a group-OCCURS (an OCCURS of a GROUP). cobc emits only the first
-/// occurrence, but the strided child-view model would render the wrong element, so JSON/XML GENERATE over a
-/// source containing one fails closed (elementary OCCURS, handled by [`ml_first_elem`], is fine).
-fn ml_has_group_occurs(name: &str, fields: &HashMap<String, Field>) -> bool {
-    match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
-        Some((Storage::Group { children }, occ)) => occ > 1 || children.iter().any(|c| ml_has_group_occurs(c, fields)),
-        _ => false,
-    }
-}
-
 /// True if the source contains a group-OCCURS the ML renderer cannot reduce to element 1: a group-OCCURS
 /// whose child is itself a group or another OCCURS (nested / multi-dimension). A FLAT group-OCCURS of
 /// elementary scalars is supported (the renderers read its element-1 children), so it is NOT complex.
@@ -8275,7 +8466,9 @@ fn exec_read(
             *pos += 1;
             if w_eq(*pos, "END") || w_eq(*pos, "KEY") { *pos += 1; }
             let start = *pos;
-            while *pos < toks.len() && !at_read_terminator(toks, *pos) { *pos += 1; }
+            let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+                && matches!(toks.get(q + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID");
+            *pos = scan_handler_block(toks, start, |w: &str| w == "END-READ", other);
             at_end = Some(toks[start..*pos].to_vec());
         } else if w_eq(*pos, "NOT") {
             *pos += 1;
@@ -8283,7 +8476,9 @@ fn exec_read(
                 if w_eq(*pos, kw) { *pos += 1; }
             }
             let start = *pos;
-            while *pos < toks.len() && !at_read_terminator(toks, *pos) { *pos += 1; }
+            let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+                && matches!(toks.get(q + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID");
+            *pos = scan_handler_block(toks, start, |w: &str| w == "END-READ", other);
             not_end = Some(toks[start..*pos].to_vec());
         } else {
             break;

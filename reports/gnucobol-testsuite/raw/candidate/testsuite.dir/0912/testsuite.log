@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+912. run_file.at:6201: testing INDEXED file with LOCK MODE EXCLUSIVE ...
+./run_file.at:6273: $COMPILE prog1.cob
+./run_file.at:6274: $COMPILE prog2.cob
+./run_file.at:6275: $COBCRUN_DIRECT ./prog1
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/912/stderr	2026-08-04 10:31:44.199329218 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: unsupported level number 78
+./run_file.at:6275: exit code was 2, expected 0
+912. run_file.at:6201: 912. INDEXED file with LOCK MODE EXCLUSIVE (run_file.at:6201): expected failure (run_file.at:6275)

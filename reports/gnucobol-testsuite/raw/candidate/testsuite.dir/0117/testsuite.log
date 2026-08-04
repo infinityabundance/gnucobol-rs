@@ -1,0 +1,11 @@
+#                             -*- compilation -*-
+117. syn_definition.at:1405: testing Invalid ENVIRONMENT DIVISION order ...
+./syn_definition.at:1423: $COMPILE_ONLY -fincorrect-conf-sec-order=error prog.cob
+--- -	2026-08-04 10:31:43.720040911 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/117/stderr	2026-08-04 10:31:43.719534177 +0000
+@@ -1,3 +1,2 @@
+-prog.cob:10: error: duplicate SPECIAL-NAMES
+-prog.cob:13: error: SOURCE-COMPUTER incorrectly after SPECIAL-NAMES used
++cobc-rs: -fincorrect-conf-sec-order=error: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): error
+ 
+117. syn_definition.at:1405: 117. Invalid ENVIRONMENT DIVISION order (syn_definition.at:1405): FAILED (syn_definition.at:1423)

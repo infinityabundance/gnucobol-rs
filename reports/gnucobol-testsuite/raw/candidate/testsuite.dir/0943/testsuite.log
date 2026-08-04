@@ -1,0 +1,28 @@
+#                             -*- compilation -*-
+943. run_file.at:13011: testing File SORT, SEQUENTIAL variable records ...
+./run_file.at:13091: $COMPILE prog.cob
+./run_file.at:13092: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/943/stdout	2026-08-04 10:31:44.220925929 +0000
+@@ -0,0 +1,20 @@
++FAILED Test +000000001: 03 <> 03
++FAILED Test +000000001: A4X          <> A4X         
++FAILED Test +000000002: 04 <> 04
++FAILED Test +000000002: A3XX         <> A3XX        
++FAILED Test +000000003: 05 <> 05
++FAILED Test +000000003: A2XXX        <> A2XXX       
++FAILED Test +000000004: 06 <> 06
++FAILED Test +000000004: A1XXXX       <> A1XXXX      
++FAILED Test +000000005: 07 <> 07
++FAILED Test +000000005: A0XXXXX      <> A0XXXXX     
++FAILED Test +000000006: 08 <> 08
++FAILED Test +000000006: B2XXXXXX     <> B2XXXXXX    
++FAILED Test +000000007: 09 <> 09
++FAILED Test +000000007: B1XXXXXXX    <> B1XXXXXXX   
++FAILED Test +000000008: 10 <> 10
++FAILED Test +000000008: C2XXXXXXXX   <> C2XXXXXXXX  
++FAILED Test +000000009: 11 <> 11
++FAILED Test +000000009: C1XXXXXXXXX  <> C1XXXXXXXXX 
++FAILED Test +000000010: 12 <> 12
++FAILED Test +000000010: Z9XXXXXXXXXX <> Z9XXXXXXXXXX
+943. run_file.at:13011: 943. File SORT, SEQUENTIAL variable records (run_file.at:13011): FAILED (run_file.at:13092)

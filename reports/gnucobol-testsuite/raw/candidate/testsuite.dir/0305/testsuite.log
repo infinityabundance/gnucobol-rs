@@ -1,0 +1,9 @@
+#                             -*- compilation -*-
+305. syn_misc.at:3067: testing NOT ON EXCEPTION with STATIC CALL convention ...
+./syn_misc.at:3104: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.812647598 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/305/stderr	2026-08-04 10:31:43.811791783 +0000
+@@ -1,2 +1 @@
+-prog.cob:5: warning: ON EXCEPTION ignored because of STATIC CALL
+ 
+305. syn_misc.at:3067: 305. NOT ON EXCEPTION with STATIC CALL convention (syn_misc.at:3067): FAILED (syn_misc.at:3104)

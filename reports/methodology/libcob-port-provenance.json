@@ -1,0 +1,64 @@
+{
+  "schema": "gnurust-libcob-port-provenance-v1",
+  "generated_at": "2026-08-04T00:00:00Z",
+  "documented_in": "docs/methodology/libcob-rust-port.md",
+  "admitted_inputs": {
+    "upstream": "GnuCOBOL 3.2",
+    "source_artifact": "gnucobol-3.2.tar.lz",
+    "source_sha256": "8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb",
+    "in_scope_files": [
+      "libcob/numeric.c", "libcob/move.c", "libcob/strings.c", "libcob/intrinsic.c",
+      "libcob/cconv.c", "libcob/termio.c", "libcob/screenio.c", "libcob/call.c",
+      "libcob/fileio.c", "libcob/mlio.c", "libcob/reportio.c", "libcob/common.c",
+      "libcob/cobgetopt.c", "libcob/coblocal.h", "libcob/common.h"
+    ],
+    "oracle_build": "configure --prefix=<private-prefix> --with-db; make (per-court, pinned env)"
+  },
+  "method": {
+    "kind": "statement-by-statement source translation / faithful derivative port",
+    "clean_room": false,
+    "c_source_read_directly": true,
+    "names_and_control_flow_retained": true,
+    "upstream_line_citations_in_comments": true,
+    "mechanical_conversion_tool": "UNKNOWN - insufficient committed evidence",
+    "llm_usage": "UNKNOWN - insufficient committed evidence",
+    "review_process": "oracle differential sweeps + kani + fuzz + sealed-court receipts",
+    "undefined_behavior_handling": "reproduce observed oracle behavior exactly; otherwise fail closed",
+    "globals_and_mutable_state": "thread-local Cell/RefCell state, reset per run-unit",
+    "pointers_and_aliasing": "typed Field/FieldAttr models + owned byte buffers; no unsafe",
+    "unions": "typed storage enum (Storage::Numeric/Group/...)",
+    "allocation_and_lifetime": "owned Vec<u8> storage; no malloc/free",
+    "setjmp_longjmp_callbacks_signals_locale_fd_terminal": "explicit control-flow signals/Result unwinding at the interpreter boundary; per-court recorded environment"
+  },
+  "parity_evidence": {
+    "symbol_inventory": "LIBCOB-PARITY.md (100.0% compiled fns have a real Rust fn)",
+    "doxygen_diff": "reports/doxygen-parity.json (13 files, 0 missing)",
+    "byte_parity": "per-court oracle sweeps (lab/verify-sealed-courts.sh)",
+    "whole_tree_census": "reports/gnucobol-rs-source-tree-parity.md (or equivalent current census)"
+  },
+  "licenses": {
+    "inherited": "LGPL-3.0-or-later (libcob headers)",
+    "notices_retained": "FSF copyright + original author credits in ported file headers",
+    "cobc_driving_tooling": "GPL-3.0-or-later (drives cobc; copies no compiler source logic)"
+  },
+  "claims": [
+    "the runtime is a faithful copyleft derivative of the admitted libcob sources (NOT clean-room)",
+    "symbol-level 1:1 parity: every compiled libcob function has a real Rust counterpart",
+    "byte-identical behavior where a sealed court proves it (oracle differential)"
+  ],
+  "non_claims": [
+    "not every libcob function is behaviorally proven byte-equal; only the sealed corpus is",
+    "not a semantic reimplementation from the COBOL spec",
+    "the parser/front-end provenance is separate (reports/methodology/parser-provenance.json)",
+    "a Rust port is not 'the same binary' - environment is recorded per court"
+  ],
+  "uncertainties": [
+    "UNKNOWN - tooling used for the port is not recorded in committed evidence; this does not change the derivative status"
+  ],
+  "reviewer_reproduction": [
+    "cargo run -p gnucobol-rs-port-index -- parity",
+    "cargo run -p xtask -- doxygen (documented)",
+    "bash lab/verify-sealed-courts.sh",
+    "git log --follow crates/gnucobol-rs/src/<module>.rs (citation trail)"
+  ]
+}

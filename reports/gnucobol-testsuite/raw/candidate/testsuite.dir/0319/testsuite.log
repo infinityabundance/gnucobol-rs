@@ -1,0 +1,21 @@
+#                             -*- compilation -*-
+319. syn_misc.at:3789: testing STRING / UNSTRING POINTER clause ...
+./syn_misc.at:3847: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.818570750 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/319/stderr	2026-08-04 10:31:43.818107507 +0000
+@@ -1,13 +1,2 @@
+-prog.cob:31: error: POINTER item 'invalid-ptr-2' must be an integer
+-prog.cob:32: error: POINTER item 'invalid-ptr-3' must be an integer
+-prog.cob:33: error: POINTER item 'invalid-ptr-4' may not have PICTURE with P in it
+-prog.cob:34: error: POINTER item 'invalid-ptr-5' must be an integer
+-prog.cob:35: error: POINTER item 'invalid-ptr-6' must be an integer
+-prog.cob:36: error: 'invalid-ptr-7' is not an elementary item
+-prog.cob:43: error: POINTER item 'invalid-ptr-2' must be an integer
+-prog.cob:44: error: POINTER item 'invalid-ptr-3' must be an integer
+-prog.cob:45: error: POINTER item 'invalid-ptr-4' may not have PICTURE with P in it
+-prog.cob:46: error: POINTER item 'invalid-ptr-5' must be an integer
+-prog.cob:47: error: POINTER item 'invalid-ptr-6' must be an integer
+-prog.cob:48: error: 'invalid-ptr-7' is not an elementary item
++cobc-rs: unsupported: PIC VPP99: ScalingPDeferred
+ 
+319. syn_misc.at:3789: 319. STRING / UNSTRING POINTER clause (syn_misc.at:3789): FAILED (syn_misc.at:3847)

@@ -1,0 +1,8 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog6.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       SPECIAL-NAMES.
+           CURRENCY '+-'
+           PICTURE SYMBOL 'TT'.

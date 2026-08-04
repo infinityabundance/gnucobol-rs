@@ -1,0 +1,85 @@
+#                             -*- compilation -*-
+122. syn_definition.at:1501: testing Invalid PICTURE strings ...
+./syn_definition.at:1602: $COMPILE_ONLY -std=cobol2014 prog.cob
+--- -	2026-08-04 10:31:43.722866619 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/122/stderr	2026-08-04 10:31:43.722109257 +0000
+@@ -1,77 +1,2 @@
+-prog.cob:9: warning: continuation of COBOL words is archaic in COBOL 2014
+-prog.cob:11: warning: continuation of COBOL words is archaic in COBOL 2014
+-prog.cob:12: warning: continuation of COBOL words is archaic in COBOL 2014
+-prog.cob:13: warning: continuation of COBOL words is archaic in COBOL 2014
+-prog.cob:14: warning: continuation of COBOL words is archaic in COBOL 2014
+-prog.cob:82: warning: continuation of COBOL words is archaic in COBOL 2014
+-prog.cob:7: error: missing PICTURE string
+-prog.cob:8: error: PICTURE string may not contain more than 63 characters; contains 76 characters
+-prog.cob:10: error: PICTURE string may not contain more than 63 characters; contains 301 characters
+-prog.cob:16: error: CR or DB may only occur once in a PICTURE string
+-prog.cob:17: error: CR or DB may only occur once in a PICTURE string
+-prog.cob:18: error: S may only occur once in a PICTURE string
+-prog.cob:18: error: S must be at start of PICTURE string
+-prog.cob:19: error: . may only occur once in a PICTURE string
+-prog.cob:20: error: V may only occur once in a PICTURE string
+-prog.cob:21: error: a trailing +/- sign cannot follow a leading +/- sign
+-prog.cob:22: error: a leading +/- sign cannot follow a leading currency symbol
+-prog.cob:22: error: a trailing currency symbol cannot follow a leading currency symbol
+-prog.cob:22: error: a trailing +/- sign cannot follow a leading +/- sign
+-prog.cob:24: error: invalid PICTURE character 'K'
+-prog.cob:25: error: C must be followed by R
+-prog.cob:26: error: D must be followed by B
+-prog.cob:27: error: numeric field cannot be larger than 38 digits
+-prog.cob:28: error: only up to 10 significant digits are permitted within parentheses
+-prog.cob:29: error: parentheses must be preceded by a picture symbol
+-prog.cob:30: error: unbalanced parentheses
+-prog.cob:31: error: parentheses must be preceded by a picture symbol
+-prog.cob:32: error: parentheses must contain an unsigned integer
+-prog.cob:34: error: . cannot follow a P which is after the decimal point
+-prog.cob:35: error: . cannot follow V
+-prog.cob:36: error: cannot have both Z and * in PICTURE string
+-prog.cob:37: error: a trailing +/- sign cannot follow a floating +/- string which is before the decimal point
+-prog.cob:37: error: a trailing +/- sign may only occur once in a PICTURE string
+-prog.cob:38: error: a Z or * which is before the decimal point cannot follow a floating currency symbol string which is before the decimal point
+-prog.cob:39: error: a Z or * which is before the decimal point cannot follow a floating currency symbol string which is before the decimal point
+-prog.cob:40: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
+-prog.cob:40: error: A or X cannot follow N
+-prog.cob:41: warning: handling of USAGE NATIONAL is unfinished; implementation is likely to be changed
+-prog.cob:41: error: N cannot follow A or X
+-prog.cob:42: error: a Z or * which is before the decimal point cannot follow A or X
+-prog.cob:43: error: A or X cannot follow .
+-prog.cob:44: error: A or X cannot follow S
+-prog.cob:45: error: a leading +/- sign cannot follow B, 0 or /
+-prog.cob:45: error: a leading +/- sign cannot follow a floating currency symbol string which is before the decimal point
+-prog.cob:45: error: a leading +/- sign may only occur once in a PICTURE string
+-prog.cob:45: error: a trailing +/- sign cannot follow a leading +/- sign
+-prog.cob:45: error: a trailing +/- sign may only occur once in a PICTURE string
+-prog.cob:46: error: a trailing +/- sign cannot follow a floating +/- string which is before the decimal point
+-prog.cob:47: error: CR or DB cannot follow a leading +/- sign
+-prog.cob:48: error: CR or DB cannot follow a leading +/- sign
+-prog.cob:50: error: a leading +/- sign cannot follow B, 0 or /
+-prog.cob:51: error: a leading +/- sign cannot follow 9
+-prog.cob:52: error: B, 0 or / cannot follow CR or DB
+-prog.cob:53: error: 9 cannot follow CR or DB
+-prog.cob:54: error: a floating currency symbol string which is before the decimal point cannot follow 9
+-prog.cob:55: error: a leading currency symbol cannot follow 9
+-prog.cob:56: error: a leading currency symbol cannot follow B, 0 or /
+-prog.cob:57: error: P must be at start or end of PICTURE string
+-prog.cob:57: error: V cannot follow a P which is after the decimal point
+-prog.cob:59: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+-prog.cob:60: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+-prog.cob:61: error: PICTURE string must contain at least one of the set A, N, U, X, Z, 1, 9 and *; or at least two of the set +, - and the currency symbol
+-prog.cob:67: error: 'STR-CONSTANT' is not an unsigned positive integer
+-prog.cob:68: error: 'FLOAT-CONSTANT' is not an unsigned positive integer
+-prog.cob:69: error: 'SIGNED-CONSTANT' is not an unsigned positive integer
+-prog.cob:70: error: 'UNSEEN-CONSTANT' is not defined
+-prog.cob:81: warning: uncommon parentheses
+-prog.cob:86: warning: USAGE BIT is not implemented
+-prog.cob:87: warning: USAGE BIT is not implemented
+-prog.cob:88: warning: USAGE BIT is not implemented
+-prog.cob:89: warning: USAGE BIT is not implemented
+-prog.cob:90: warning: USAGE BIT is not implemented
+-prog.cob:91: warning: USAGE BIT is not implemented
+-prog.cob:92: warning: USAGE BIT is not implemented
+-prog.cob:93: warning: USAGE BIT is not implemented
+-prog.cob:96: warning: USAGE BIT is not implemented
++cobc-rs: unsupported: no PROCEDURE DIVISION
+ 
+122. syn_definition.at:1501: 122. Invalid PICTURE strings (syn_definition.at:1501): FAILED (syn_definition.at:1602)

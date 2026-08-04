@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1196. run_extensions.at:5035: testing Variable format ...
+./run_extensions.at:5049: $COMPILE prog.cob
+./run_extensions.at:5050: $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 10:31:44.503499351 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1196/stdout	2026-08-04 10:31:44.502321726 +0000
+@@ -1,2 +1 @@
+-Hello!
+ 
+1196. run_extensions.at:5035: 1196. Variable format (run_extensions.at:5035): FAILED (run_extensions.at:5050)

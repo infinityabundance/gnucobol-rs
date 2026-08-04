@@ -1,0 +1,19 @@
+#                             -*- compilation -*-
+208. syn_file.at:1180: testing WRITE / REWRITE FROM clause and FILE ...
+./syn_file.at:1226: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.762307414 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/208/stderr	2026-08-04 10:31:43.761915173 +0000
+@@ -1,11 +1 @@
+-prog.cob:22: error: condition-name not allowed here: 'SOME-VAL'
+-prog.cob:23: error: WRITE subject does not refer to a record name
+-prog.cob:26: error: WRITE requires a record name as subject
+-prog.cob:27: error: 'TEST-REC' is not a file name
+-prog.cob:28: error: WRITE FILE requires a FROM clause
+-prog.cob:31: error: condition-name not allowed here: 'SOME-VAL'
+-prog.cob:32: error: REWRITE subject does not refer to a record name
+-prog.cob:35: error: REWRITE requires a record name as subject
+-prog.cob:36: error: 'TEST-REC' is not a file name
+-prog.cob:37: error: REWRITE FILE requires a FROM clause
+ 
+./syn_file.at:1226: exit code was 0, expected 1
+208. syn_file.at:1180: 208. WRITE / REWRITE FROM clause and FILE (syn_file.at:1180): FAILED (syn_file.at:1226)

@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+292. syn_misc.at:2518: testing ACUCOBOL WINDOW statements ...
+./syn_misc.at:2572: $COMPILE_ONLY -std=acu-strict prog.cob
+--- -	2026-08-04 10:31:43.805129533 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/292/stderr	2026-08-04 10:31:43.804472809 +0000
+@@ -1,12 +1,2 @@
+-prog.cob: in paragraph 'MAIN':
+-prog.cob:11: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:15: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:21: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:22: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:24: error: HANDLE must be either a generic or a WINDOW HANDLE or X(10)
+-prog.cob:27: warning: GRAPHICAL CONTROL is not implemented
+-prog.cob:28: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:33: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:38: warning: GRAPHICAL WINDOW is not implemented
+-prog.cob:44: warning: GRAPHICAL CONTROL is not implemented
++cobc-rs: unsupported: unrecognized USAGE HANDLE
+ 
+292. syn_misc.at:2518: 292. ACUCOBOL WINDOW statements (syn_misc.at:2518): FAILED (syn_misc.at:2572)

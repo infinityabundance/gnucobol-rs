@@ -1,0 +1,17 @@
+#                             -*- compilation -*-
+331. syn_misc.at:4393: testing ADD / SUBTRACT TABLE ...
+./syn_misc.at:4423: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.824273100 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/331/stderr	2026-08-04 10:31:43.823615995 +0000
+@@ -1,9 +1 @@
+-prog.cob:18: warning: ADD TABLE is not implemented
+-prog.cob:19: warning: SUBTRACT TABLE is not implemented
+-prog.cob:20: warning: ADD TABLE is not implemented
+-prog.cob:21: warning: SUBTRACT TABLE is not implemented
+-prog.cob:22: warning: ADD TABLE is not implemented
+-prog.cob:23: warning: SUBTRACT TABLE is not implemented
+-prog.cob:24: warning: ADD TABLE is not implemented
+-prog.cob:24: error: 'tab2b-entry' is not numeric
+ 
+./syn_misc.at:4423: exit code was 0, expected 1
+331. syn_misc.at:4393: 331. ADD / SUBTRACT TABLE (syn_misc.at:4393): FAILED (syn_misc.at:4423)

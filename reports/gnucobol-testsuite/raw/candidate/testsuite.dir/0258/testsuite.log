@@ -1,0 +1,12 @@
+#                             -*- compilation -*-
+258. syn_misc.at:842: testing INITIALIZE constant ...
+./syn_misc.at:860: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.785815859 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/258/stderr	2026-08-04 10:31:43.785112838 +0000
+@@ -1,4 +1,2 @@
+-prog.cob:10: error: invalid INITIALIZE statement
+-prog.cob:12: error: invalid INITIALIZE statement
+-prog.cob:13: error: invalid INITIALIZE statement
++cobc-rs: unsupported: unsupported level number 78
+ 
+258. syn_misc.at:842: 258. INITIALIZE constant (syn_misc.at:842): FAILED (syn_misc.at:860)

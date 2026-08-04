@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+655. run_initialize.at:29: testing INITIALIZE group entry with OCCURS ...
+./run_initialize.at:51: $COMPILE prog.cob
+./run_initialize.at:52: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/655/stdout	2026-08-04 10:31:44.015777853 +0000
+@@ -0,0 +1 @@
++    
+\ No newline at end of file
+655. run_initialize.at:29: 655. INITIALIZE group entry with OCCURS (run_initialize.at:29): FAILED (run_initialize.at:52)

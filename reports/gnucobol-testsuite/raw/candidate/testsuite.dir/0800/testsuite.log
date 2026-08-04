@@ -1,0 +1,20 @@
+#                             -*- compilation -*-
+800. run_misc.at:7273: testing SET LAST EXCEPTION TO OFF ...
+./run_misc.at:7296: $COMPILE prog.cob
+./run_misc.at:7297: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/800/stderr	2026-08-04 10:31:44.115307716 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: FUNCTION
+--- -	2026-08-04 10:31:44.116565501 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/800/stdout	2026-08-04 10:31:44.115987984 +0000
+@@ -1,7 +1 @@
+-EC-SIZE-OVERFLOW
+-prog; ; 10
+-EC-SIZE-OVERFLOW
+-prog; ; 10
+-
+-
+ 
+./run_misc.at:7297: exit code was 2, expected 0
+800. run_misc.at:7273: 800. SET LAST EXCEPTION TO OFF (run_misc.at:7273): FAILED (run_misc.at:7297)

@@ -1,0 +1,10 @@
+#                             -*- compilation -*-
+1117. run_extensions.at:237: testing ADDRESS OF ...
+./run_extensions.at:281: $COMPILE prog.cob
+./run_extensions.at:282: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1117/stderr	2026-08-04 10:31:44.429155209 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: not a numeric literal: NULL
+./run_extensions.at:282: exit code was 2, expected 0
+1117. run_extensions.at:237: 1117. ADDRESS OF (run_extensions.at:237): FAILED (run_extensions.at:282)

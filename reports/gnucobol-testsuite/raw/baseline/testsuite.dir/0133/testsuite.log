@@ -1,0 +1,22 @@
+#                             -*- compilation -*-
+133. syn_definition.at:2571: testing LIKE clause ...
+./syn_definition.at:2617: $COMPILE_ONLY prog.cob
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/133/stderr	2026-08-04 10:31:16.110965453 +0000
+@@ -0,0 +1,14 @@
++prog.cob:13: warning: LIKE clause is not implemented
++prog.cob:13: error: PICTURE clause required for 'FILLER'
++prog.cob:15: warning: LIKE clause is not implemented
++prog.cob:15: error: PICTURE clause required for 'OUTPUT-VAL'
++prog.cob:16: warning: LIKE clause is not implemented
++prog.cob:16: error: PICTURE clause required for 'OUTPUT-VAL-P1'
++prog.cob:17: warning: LIKE clause is not implemented
++prog.cob:17: error: PICTURE clause required for 'OUTPUT-VAL-P1b'
++prog.cob:18: warning: LIKE clause is not implemented
++prog.cob:18: error: PICTURE clause required for 'OUTPUT-VAL-M2'
++prog.cob:20: warning: LIKE clause is not implemented
++prog.cob:20: error: PICTURE clause required for 'Z-MESSAGE-T2'
++prog.cob:22: warning: LIKE clause is not implemented
++prog.cob:22: error: PICTURE clause required for 'MT3'
+./syn_definition.at:2617: exit code was 1, expected 0
+133. syn_definition.at:2571: 133. LIKE clause (syn_definition.at:2571): expected failure (syn_definition.at:2617)

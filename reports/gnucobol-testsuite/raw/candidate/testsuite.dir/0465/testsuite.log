@@ -1,0 +1,18 @@
+#                             -*- compilation -*-
+465. syn_literals.at:1178: testing NX literals ...
+./syn_literals.at:1194: $COMPILE_ONLY prog.cob
+--- -	2026-08-04 10:31:43.893130134 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/465/stderr	2026-08-04 10:31:43.892607249 +0000
+@@ -1,10 +1 @@
+-prog.cob:6: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:7: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:10: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:10: error: invalid NX literal: 'GH'
+-prog.cob:10: note: literal contains invalid character 'G'
+-prog.cob:10: note: literal contains invalid character 'H'
+-prog.cob:11: warning: handling of national literal is unfinished; implementation is likely to be changed
+-prog.cob:11: error: invalid NX literal: '1'
+-prog.cob:11: note: literal does not have an even number of digits
+ 
+./syn_literals.at:1194: exit code was 0, expected 1
+465. syn_literals.at:1178: 465. NX literals (syn_literals.at:1178): FAILED (syn_literals.at:1194)

@@ -1,0 +1,24 @@
+#                             -*- compilation -*-
+418. syn_move.at:653: testing MOVE FIGURATIVE to NUMERIC ...
+./syn_move.at:685: $COMPILE_ONLY -std=cobol2002 -freserved=COMP-1:FLOAT prog.cob
+--- -	2026-08-04 10:31:43.869462432 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/418/stderr	2026-08-04 10:31:43.868399040 +0000
+@@ -1,16 +1,2 @@
+-prog.cob: in paragraph 'MAIN-1':
+-prog.cob:11: error: MOVE of figurative constant SPACE to numeric item used
+-prog.cob:12: warning: MOVE of figurative constant to numeric item is archaic in COBOL 2002
+-prog.cob:13: warning: MOVE of figurative constant to numeric item is archaic in COBOL 2002
+-prog.cob:14: warning: MOVE of figurative constant QUOTE to numeric item is archaic in COBOL 2002
+-prog.cob:15: warning: numeric value is expected
+-prog.cob:6: note: 'MYFLD' defined here as PIC 9(4)
+-prog.cob:17: warning: numeric value is expected
+-prog.cob:6: note: 'MYFLD' defined here as PIC 9(4)
+-prog.cob:19: error: invalid SET statement
+-prog.cob:20: error: invalid SET statement
+-prog.cob:23: warning: MOVE of figurative constant to numeric item is archaic in COBOL 2002
+-prog.cob:24: warning: MOVE of figurative constant QUOTE to numeric item is archaic in COBOL 2002
+-prog.cob:25: warning: numeric value is expected
+-prog.cob:7: note: 'BIGFLT' defined here as USAGE FLOAT
++cobc-rs: -freserved=COMP-1:FLOAT: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): COMP-1:FLOAT
+ 
+418. syn_move.at:653: 418. MOVE FIGURATIVE to NUMERIC (syn_move.at:653): FAILED (syn_move.at:685)
