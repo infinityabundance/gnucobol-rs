@@ -14,7 +14,7 @@
       "pass_a": "gnucobol-testsuite-20260804T103103Z-9da27b98-a",
       "pass_b": "gnucobol-testsuite-20260804T103103Z-9da27b98-a"
     },
-    "court_image": "gnucobol-rs-gnucobol-testsuite/court:9da27b98024ad436f14fab0eaceae058210974f0",
+    "court_image": "gnucobol-rs-gnucobol-testsuite/court:36b1a6d89",
     "daemon_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
@@ -52,8 +52,8 @@
     "os": "?",
     "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)"
   },
-  "generated_at": "2026-08-04T10:31:57Z",
-  "git_commit": "9da27b98024ad436f14fab0eaceae058210974f0",
+  "generated_at": "2026-08-04T11:20:36Z",
+  "git_commit": "36b1a6d8900ff54094e3ea2f306341959d402929",
   "non_claims": [
     "no full GnuCOBOL test-suite parity claim",
     "no native-code-generation comparison (cobrun interprets; cobc emits C/native)",
