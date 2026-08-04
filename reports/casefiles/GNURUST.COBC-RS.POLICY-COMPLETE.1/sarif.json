@@ -20,6 +20,27 @@
         {
           "level": "note",
           "message": {
+            "text": "GNURUST.COBC-RS.POLICY-COMPLETE.1 non-claim: no claim that a rejected option was translated"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.COBC-RS.POLICY-COMPLETE.1 non-claim: no claim that the allowlist covers dialects beyond GnuCOBOL 3.2"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.COBC-RS.POLICY-COMPLETE.1 non-claim: no claim that an observed token with no policy was silently handled (it fails closed)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
             "text": "GNURUST.COBC-RS.POLICY-COMPLETE.1 non-claim: lie prevented: 'cobc-rs ignores unknown flags safely' is the lie this prevents"
           },
           "ruleId": "NONCLAIM"

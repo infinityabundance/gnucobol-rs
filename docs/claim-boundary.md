@@ -118,3 +118,7 @@ certification, none establishes COBOL-85 conformance, none claims `cobc` replace
 converts unsupported or unexecuted units into passes. An oracle rejection is evidence only about
 the pinned GnuCOBOL 3.2 build; a raw-output match is evidence only about the tested environment.
 
+### Boundary-reduction courts (0.8.54+)
+
+The boundary-reduction work added: GNURUST.GNUCOBOL-TESTSUITE.4, GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1, GNURUST.MODULE.REGISTRY.1, GNURUST.MODULE.CALL.1, GNURUST.MODULE.CANCEL.1, GNURUST.MODULE.SEARCH.1, GNURUST.MODULE.PARALLEL.1, GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1, GNURUST.COBC-RS.POLICY-COMPLETE.1, GNURUST.GNUCOBOL-RUNTIME-MATH.2 -- the module lifecycle (GNURUST.MODULE.*), the native-mode/policy boundaries (GNURUST.COBC-RS.*), the re-measured suite court (GNURUST.GNUCOBOL-TESTSUITE.4), the before/after transition ledger (GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1) and the re-measured math campaign (GNURUST.GNUCOBOL-RUNTIME-MATH.2).
+

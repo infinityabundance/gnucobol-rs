@@ -7659,56 +7659,6 @@ fn binary_literal_bytes(w: &str, quote: Option<&Tok>) -> Result<Option<Vec<u8>>,
         Some(Tok::Str(s)) => s.clone(),
         _ => return Ok(None),
     };
-    let parse = |digits: &[u8], radix: u32, nibbles: bool| -> Result<Vec<u8>, RunError> {
-        if digits.is_empty() {
-            return Err(RunError::Unsupported(format!("empty {w} literal")));
-        }
-        if nibbles {
-            // hex digits -> bytes (odd count: low nibble last)
-            let mut out = Vec::new();
-            let mut hi: Option<u8> = None;
-            for &c in digits {
-                let v = (c as char).to_digit(16).ok_or_else(|| {
-                    RunError::Unsupported(format!("invalid hex digit in {w} literal"))
-                })? as u8;
-                match hi.take() {
-                    Some(h) => out.push((h << 4) | v),
-                    None => hi = Some(v),
-                }
-            }
-            if let Some(h) = hi {
-                out.push(h);
-            }
-            Ok(out)
-        } else {
-            // binary digits, right-aligned into bytes
-            let mut out = Vec::new();
-            let mut acc: u8 = 0;
-            let mut bits = 0usize;
-            for &c in digits {
-                let v = match c {
-                    b'0' => 0u8,
-                    b'1' => 1u8,
-                    _ => {
-                        return Err(RunError::Unsupported(format!(
-                            "invalid binary digit in {w} literal"
-                        )))
-                    }
-                };
-                acc = (acc << 1) | v;
-                bits += 1;
-                if bits == 8 {
-                    out.push(acc);
-                    acc = 0;
-                    bits = 0;
-                }
-            }
-            if bits > 0 {
-                out.push(acc << (8 - bits));
-            }
-            Ok(out)
-        }
-    };
     // cobc DISPLAYs a binary/hex literal as its DECIMAL value (B'0101' -> "5", BX'EC' -> "236").
     // A plain B literal is a BINARY NUMBER (bits folded directly, not byte-aligned); BX/X/H are
     // hexadecimal numbers (nibbles folded).
@@ -7740,7 +7690,6 @@ fn binary_literal_bytes(w: &str, quote: Option<&Tok>) -> Result<Option<Vec<u8>>,
         // normally); an actual N'...' literal in the source fails later at the numeric-literal path.
         _ => return Ok(None),
     }
-    let _ = parse;
     Ok(Some(value.to_string().into_bytes()))
 }
 
@@ -14014,7 +13963,6 @@ mod tests {
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
     }
-
 
     #[test]
     fn display_numeric_literals_match_cobc_format() {

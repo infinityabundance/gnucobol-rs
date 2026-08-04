@@ -116,10 +116,22 @@ const LWRUPR: &[ConfigEnum] = &[
     },
 ];
 const VARSEQOPTS: &[ConfigEnum] = &[
-    ConfigEnum { r#match: "0", value: "0" },
-    ConfigEnum { r#match: "1", value: "1" },
-    ConfigEnum { r#match: "2", value: "2" },
-    ConfigEnum { r#match: "3", value: "3" },
+    ConfigEnum {
+        r#match: "0",
+        value: "0",
+    },
+    ConfigEnum {
+        r#match: "1",
+        value: "1",
+    },
+    ConfigEnum {
+        r#match: "2",
+        value: "2",
+    },
+    ConfigEnum {
+        r#match: "3",
+        value: "3",
+    },
 ];
 const NEVER: &[ConfigEnum] = &[ConfigEnum {
     r#match: "never",

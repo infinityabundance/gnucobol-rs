@@ -5,7 +5,7 @@
 > [!IMPORTANT]
 > A court is **real** if corrupting/dropping/drifting/hand-editing its evidence can make a gate fail; **ceremonial** if it only restates that other evidence exists. This audit proves every court can fail.
 
-- **A** hard (oracle/byte): 103  ·  **B** composed: 41  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
+- **A** hard (oracle/byte): 113  ·  **B** composed: 41  ·  **C** view: 6  ·  **D** staged: 0  ·  **F** ceremonial: **0**
 
 ## Classification
 
@@ -44,7 +44,9 @@
 | `GNURUST.CLASS.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COBC-RS.ARGS.1` | B | ✅ | ✅ | ✅ no |
 | `GNURUST.COBC-RS.LAUNCHER.1` | B | ✅ | ✅ | ✅ no |
+| `GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COBC-RS.PARALLEL.1` | B | ✅ | ✅ | ✅ no |
+| `GNURUST.COBC-RS.POLICY-COMPLETE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.BOUNDCHECK.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.CBL.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.COMMON.NUMCHECK.1` | A | ✅ | ✅ | ✅ no |
@@ -73,9 +75,12 @@
 | `GNURUST.FLOAT.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.FRONTEND.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.GNUCOBOL-RUNTIME-MATH.1` | B | ✅ | ✅ | ✅ no |
+| `GNURUST.GNUCOBOL-RUNTIME-MATH.2` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.GNUCOBOL-TESTSUITE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.GNUCOBOL-TESTSUITE.2` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.GNUCOBOL-TESTSUITE.3` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.GNUCOBOL-TESTSUITE.4` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.IF.EVALUATE.SLICE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.IF.NUMERIC.SLICE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.INDEX.1` | A | ✅ | ✅ | ✅ no |
@@ -100,6 +105,11 @@
 | `GNURUST.METHODOLOGY.PARSER.1` | B | ✅ | ✅ | ✅ no |
 | `GNURUST.MLIO.GENERATE.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.MLIO.PARSE.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.MODULE.CALL.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.MODULE.CANCEL.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.MODULE.PARALLEL.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.MODULE.REGISTRY.1` | A | ✅ | ✅ | ✅ no |
+| `GNURUST.MODULE.SEARCH.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.NUMCMP.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.ODO.1` | A | ✅ | ✅ | ✅ no |
 | `GNURUST.PERFORM.SLICE.1` | A | ✅ | ✅ | ✅ no |

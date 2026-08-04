@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.SCREENIO.DISPLAY.2 — SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes)
 
-**Verdict: FAIL** · replay `PASS=69 FAIL=1`
+**Verdict: PASS** · replay `PASS=70 FAIL=0`
 
 | field | value |
 |-------|-------|

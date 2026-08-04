@@ -12,10 +12,10 @@
   "crate_version": "0.8.54",
   "damage_if_overclaimed": "presenting reclassification as implementation would hide the real boundaries",
   "hash_chain": {
-    "inputs_sha256": "8ae7fc56a11be88bd39429cc099abaee48a1d54598d5f3b71bdcaefca0b74a87"
+    "inputs_sha256": "f0410e86740db3853291be0d03c814343f1a9cd7d216685f4a6e0411c70ce573"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "4a301d9c1ad4adf979af35fe24fbabd5aaf72abb10dd3158a67fe60a6a113ee3",
+    "claim_ladder_entry_sha256": "cf0b8ed1553295a04f3141459ebc98fe9e36c7559fa380f54096b0dbff06055d",
     "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
   },
   "kind": "court-casefile",
@@ -23,12 +23,16 @@
     "'407 module tests are fixed' is the lie this prevents"
   ],
   "negative_capability_ids": [
-    "NEG.NO-CLAIM-THAT-A-BOUNDARY-REDUCTION-EQUAL",
-    "NEG.TRANSITIONS-ARE-RE-MEASURED-CLASSIFICATI"
+    "NEG.NO-CLAIM-THAT-A-TRANSITION-IS-A-PASS-IT",
+    "NEG.NO-CLAIM-THAT-THE-V0-8-54-BASELINE-WAS-O",
+    "NEG.NO-CLAIM-THAT-THE-REDUCTION-IS-COMPLETE",
+    "NEG.NO-CLAIM-THAT-RECLASSIFICATION-WITHOUT-R"
   ],
   "negative_claims": [
-    "no claim that a boundary reduction equals a pass",
-    "transitions are re-measured classifications",
+    "no claim that a transition is a pass (it is a re-measured classification)",
+    "no claim that the v0.8.54 baseline was overwritten (it is preserved in boundary-reduction-baseline.json)",
+    "no claim that the reduction is complete",
+    "no claim that reclassification without raw evidence is acceptable",
     "lie prevented: '407 module tests are fixed' is the lie this prevents"
   ],
   "oracle": {

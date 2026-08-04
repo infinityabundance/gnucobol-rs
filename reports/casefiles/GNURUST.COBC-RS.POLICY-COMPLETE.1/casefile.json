@@ -12,10 +12,10 @@
   "crate_version": "0.8.54",
   "damage_if_overclaimed": "claiming policy completeness without the census reconciliation",
   "hash_chain": {
-    "inputs_sha256": "7f6bda27bf461923a6f95e1d9fd78670b25e732278ce1f9905f671480f3acc7d"
+    "inputs_sha256": "e235e2351c8be6848b1b42d76b1191b53c0d1bc6e319a17b1ac8c3dcbce248b3"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "dd16e12f19f09605c40d2fcc0092df693a50c899e1c34b1bf762c629194abef8",
+    "claim_ladder_entry_sha256": "7acb0c00b1d1ebab00ef020a357a7ed9adcd6a207cbb7207859e484550c3729b",
     "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
   },
   "kind": "court-casefile",
@@ -23,10 +23,16 @@
     "'cobc-rs ignores unknown flags safely' is the lie this prevents"
   ],
   "negative_capability_ids": [
-    "NEG.NO-CLAIM-THAT-ACCEPTED-NO-OP-FLAGS-PRESE"
+    "NEG.NO-CLAIM-THAT-ACCEPTED-NO-OP-FLAGS-PRESE",
+    "NEG.NO-CLAIM-THAT-A-REJECTED-OPTION-WAS-TRAN",
+    "NEG.NO-CLAIM-THAT-THE-ALLOWLIST-COVERS-DIALE",
+    "NEG.NO-CLAIM-THAT-AN-OBSERVED-TOKEN-WITH-NO"
   ],
   "negative_claims": [
     "no claim that accepted no-op flags preserve semantics outside the admitted tests",
+    "no claim that a rejected option was translated",
+    "no claim that the allowlist covers dialects beyond GnuCOBOL 3.2",
+    "no claim that an observed token with no policy was silently handled (it fails closed)",
     "lie prevented: 'cobc-rs ignores unknown flags safely' is the lie this prevents"
   ],
   "oracle": {

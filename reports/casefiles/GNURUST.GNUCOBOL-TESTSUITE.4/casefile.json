@@ -12,10 +12,10 @@
   "crate_version": "0.8.54",
   "damage_if_overclaimed": "reporting projected unlocks as measured results",
   "hash_chain": {
-    "inputs_sha256": "17e2038d8be4880314bcaa6eb80f04e2d59b4e66500687de6523d0b82de3bc98"
+    "inputs_sha256": "8bdff89d87ca56185c9caa9d6686e4dc119c8645c4c0febbe3b91656c9febd15"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "24fcad93ba0ea75c6c92937f28da21e7c8b39ed6bf0870c857b91948d10869fe",
+    "claim_ladder_entry_sha256": "e56bf288b18f99e1cd03635e0fe5857b2acdb0b145d347e78a10abc2536f7a27",
     "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
   },
   "kind": "court-casefile",
@@ -24,13 +24,17 @@
   ],
   "negative_capability_ids": [
     "NEG.NO-CLAIM-THAT-A-BOUNDARY-REDUCTION-EQUAL",
-    "NEG.NO-FULL-SUITE-PARITY-CLAIM",
-    "NEG.NO-CONFORMANCE-CERTIFICATION"
+    "NEG.NO-CLAIM-OF-FULL-SUITE-PARITY",
+    "NEG.NO-COBOL-CONFORMANCE-CERTIFICATION",
+    "NEG.NO-CLAIM-THAT-A-TRANSITION-WAS-MEASURED",
+    "NEG.NO-CLAIM-THAT-THE-RERUN-CHANGED-THE-ORAC"
   ],
   "negative_claims": [
     "no claim that a boundary reduction equals a pass",
-    "no full suite-parity claim",
-    "no conformance certification",
+    "no claim of full suite parity",
+    "no COBOL conformance certification",
+    "no claim that a transition was measured without raw evidence",
+    "no claim that the rerun changed the oracle expectations",
     "lie prevented: 'the three boundaries were reduced' is the claim this court measures -- without the rerun it is projection"
   ],
   "oracle": {

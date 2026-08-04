@@ -20,7 +20,21 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.2 non-claim: no equivalence claim outside the tested environment"
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.2 non-claim: no claim that matching output proves equivalence outside the tested environment"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.2 non-claim: no claim that the math subset is a certification"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-RUNTIME-MATH.2 non-claim: no claim that a non-reconciling math ledger is acceptable (the generator fails)"
           },
           "ruleId": "NONCLAIM"
         },

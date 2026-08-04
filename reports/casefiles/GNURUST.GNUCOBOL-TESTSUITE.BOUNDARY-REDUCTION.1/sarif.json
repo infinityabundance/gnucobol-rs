@@ -13,14 +13,28 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 non-claim: no claim that a boundary reduction equals a pass"
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 non-claim: no claim that a transition is a pass (it is a re-measured classification)"
           },
           "ruleId": "NONCLAIM"
         },
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 non-claim: transitions are re-measured classifications"
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 non-claim: no claim that the v0.8.54 baseline was overwritten (it is preserved in boundary-reduction-baseline.json)"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 non-claim: no claim that the reduction is complete"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1 non-claim: no claim that reclassification without raw evidence is acceptable"
           },
           "ruleId": "NONCLAIM"
         },

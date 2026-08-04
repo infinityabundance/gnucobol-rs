@@ -72,7 +72,12 @@ struct ConfRow {
 // --- enum tables (common.c:448-457) ---------------------------------------------------------------
 const LWRUPR: &[(&str, &str)] = &[("LOWER", "1"), ("UPPER", "2"), ("not set", "0")];
 const NEVER: &[(&str, &str)] = &[("never", "!")];
-const BEEPOPTS: &[(&str, &str)] = &[("FLASH", "1"), ("SPEAKER", "2"), ("FALSE", "9"), ("BEEP", "0")];
+const BEEPOPTS: &[(&str, &str)] = &[
+    ("FLASH", "1"),
+    ("SPEAKER", "2"),
+    ("FALSE", "9"),
+    ("BEEP", "0"),
+];
 const TIMEOPTS: &[(&str, &str)] = &[("0", "1000"), ("1", "100"), ("2", "10"), ("3", "1")];
 const SYNCOPTS: &[(&str, &str)] = &[("P", "1")];
 const VARSEQOPTS: &[(&str, &str)] = &[("0", "0"), ("1", "1"), ("2", "2"), ("3", "3")];
@@ -82,55 +87,384 @@ const COEOPTS: &[(&str, &str)] = &[("0", "0"), ("1", "1"), ("2", "2"), ("3", "3"
 /// rows excluded by this build's `#ifdef`s (`_WIN32`-only `COB_UNIX_LF`/`OS`). `COB_MOUSE_INTERVAL`
 /// (`HAVE_MOUSEINTERVAL`) and `DB_HOME` (`WITH_DB`) are present, matching the admitted oracle.
 const GC_CONF_DISPLAY: &[ConfRow] = &[
-    ConfRow { env: "COB_LOAD_CASE", conf: "load_case", default: Some("0"), group: grp::CALL, kind: Uint, enums: Some(LWRUPR) },
-    ConfRow { env: "COB_PHYSICAL_CANCEL", conf: "physical_cancel", default: Some("0"), group: grp::CALL, kind: Bool, enums: Some(NEVER) },
-    ConfRow { env: "COB_LIBRARY_PATH", conf: "library_path", default: None, group: grp::CALL, kind: Path, enums: None },
-    ConfRow { env: "COB_PRE_LOAD", conf: "pre_load", default: None, group: grp::CALL, kind: Str, enums: None },
-    ConfRow { env: "COB_BELL", conf: "bell", default: Some("0"), group: grp::SCREEN, kind: Uint, enums: Some(BEEPOPTS) },
-    ConfRow { env: "COB_DISABLE_WARNINGS", conf: "disable_warnings", default: Some("0"), group: grp::MISC, kind: Bool, enums: None },
-    ConfRow { env: "COB_ENV_MANGLE", conf: "env_mangle", default: Some("0"), group: grp::MISC, kind: Bool, enums: None },
-    ConfRow { env: "COB_REDIRECT_DISPLAY", conf: "redirect_display", default: Some("0"), group: grp::SCREEN, kind: Bool, enums: None },
-    ConfRow { env: "COB_SCREEN_ESC", conf: "screen_esc", default: Some("0"), group: grp::SCREEN, kind: Bool, enums: None },
-    ConfRow { env: "COB_SCREEN_EXCEPTIONS", conf: "screen_exceptions", default: Some("0"), group: grp::SCREEN, kind: Bool, enums: None },
-    ConfRow { env: "COB_TIMEOUT_SCALE", conf: "timeout_scale", default: Some("0"), group: grp::SCREEN, kind: Uint, enums: Some(TIMEOPTS) },
-    ConfRow { env: "COB_INSERT_MODE", conf: "insert_mode", default: Some("0"), group: grp::SCREEN, kind: Bool, enums: None },
-    ConfRow { env: "COB_MOUSE_FLAGS", conf: "mouse_flags", default: Some("1"), group: grp::SCREEN, kind: Uint, enums: None },
-    ConfRow { env: "COB_MOUSE_INTERVAL", conf: "mouse_interval", default: Some("100"), group: grp::SCREEN, kind: Uint, enums: None },
-    ConfRow { env: "COB_SET_DEBUG", conf: "debugging_mode", default: Some("0"), group: grp::MISC, kind: Bool, enums: None },
-    ConfRow { env: "COB_SET_TRACE", conf: "set_trace", default: Some("0"), group: grp::MISC, kind: Bool, enums: None },
-    ConfRow { env: "COB_TRACE_FILE", conf: "trace_file", default: None, group: grp::MISC, kind: Path, enums: None },
-    ConfRow { env: "COB_TRACE_FORMAT", conf: "trace_format", default: Some("%P %S Line: %L"), group: grp::MISC, kind: Str, enums: None },
-    ConfRow { env: "COB_STACKTRACE", conf: "stacktrace", default: Some("1"), group: grp::MISC, kind: Bool, enums: None },
-    ConfRow { env: "COB_CORE_ON_ERROR", conf: "core_on_error", default: Some("0"), group: grp::MISC, kind: Uint, enums: Some(COEOPTS) },
-    ConfRow { env: "COB_CORE_FILENAME", conf: "core_filename", default: Some("./core.libcob"), group: grp::MISC, kind: Str, enums: None },
-    ConfRow { env: "COB_DUMP_FILE", conf: "dump_file", default: None, group: grp::MISC, kind: Path, enums: None },
-    ConfRow { env: "COB_DUMP_WIDTH", conf: "dump_width", default: Some("100"), group: grp::MISC, kind: Uint, enums: None },
+    ConfRow {
+        env: "COB_LOAD_CASE",
+        conf: "load_case",
+        default: Some("0"),
+        group: grp::CALL,
+        kind: Uint,
+        enums: Some(LWRUPR),
+    },
+    ConfRow {
+        env: "COB_PHYSICAL_CANCEL",
+        conf: "physical_cancel",
+        default: Some("0"),
+        group: grp::CALL,
+        kind: Bool,
+        enums: Some(NEVER),
+    },
+    ConfRow {
+        env: "COB_LIBRARY_PATH",
+        conf: "library_path",
+        default: None,
+        group: grp::CALL,
+        kind: Path,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_PRE_LOAD",
+        conf: "pre_load",
+        default: None,
+        group: grp::CALL,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_BELL",
+        conf: "bell",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Uint,
+        enums: Some(BEEPOPTS),
+    },
+    ConfRow {
+        env: "COB_DISABLE_WARNINGS",
+        conf: "disable_warnings",
+        default: Some("0"),
+        group: grp::MISC,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_ENV_MANGLE",
+        conf: "env_mangle",
+        default: Some("0"),
+        group: grp::MISC,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_REDIRECT_DISPLAY",
+        conf: "redirect_display",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SCREEN_ESC",
+        conf: "screen_esc",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SCREEN_EXCEPTIONS",
+        conf: "screen_exceptions",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_TIMEOUT_SCALE",
+        conf: "timeout_scale",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Uint,
+        enums: Some(TIMEOPTS),
+    },
+    ConfRow {
+        env: "COB_INSERT_MODE",
+        conf: "insert_mode",
+        default: Some("0"),
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_MOUSE_FLAGS",
+        conf: "mouse_flags",
+        default: Some("1"),
+        group: grp::SCREEN,
+        kind: Uint,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_MOUSE_INTERVAL",
+        conf: "mouse_interval",
+        default: Some("100"),
+        group: grp::SCREEN,
+        kind: Uint,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SET_DEBUG",
+        conf: "debugging_mode",
+        default: Some("0"),
+        group: grp::MISC,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SET_TRACE",
+        conf: "set_trace",
+        default: Some("0"),
+        group: grp::MISC,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_TRACE_FILE",
+        conf: "trace_file",
+        default: None,
+        group: grp::MISC,
+        kind: Path,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_TRACE_FORMAT",
+        conf: "trace_format",
+        default: Some("%P %S Line: %L"),
+        group: grp::MISC,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_STACKTRACE",
+        conf: "stacktrace",
+        default: Some("1"),
+        group: grp::MISC,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_CORE_ON_ERROR",
+        conf: "core_on_error",
+        default: Some("0"),
+        group: grp::MISC,
+        kind: Uint,
+        enums: Some(COEOPTS),
+    },
+    ConfRow {
+        env: "COB_CORE_FILENAME",
+        conf: "core_filename",
+        default: Some("./core.libcob"),
+        group: grp::MISC,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_DUMP_FILE",
+        conf: "dump_file",
+        default: None,
+        group: grp::MISC,
+        kind: Path,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_DUMP_WIDTH",
+        conf: "dump_width",
+        default: Some("100"),
+        group: grp::MISC,
+        kind: Uint,
+        enums: None,
+    },
     // System (env-driven; default NULL -- value supplied by SystemConf)
-    ConfRow { env: "USERNAME", conf: "username", default: None, group: grp::SYSENV, kind: Str, enums: None },
-    ConfRow { env: "LANG", conf: "lang", default: None, group: grp::SYSENV, kind: Str, enums: None },
-    ConfRow { env: "OSTYPE", conf: "ostype", default: None, group: grp::SYSENV, kind: Str, enums: None },
-    ConfRow { env: "TERM", conf: "term", default: None, group: grp::SYSENV, kind: Str, enums: None },
-    ConfRow { env: "COB_FILE_PATH", conf: "file_path", default: None, group: grp::FILE, kind: Path, enums: None },
-    ConfRow { env: "COB_VARSEQ_FORMAT", conf: "varseq_format", default: Some("0"), group: grp::FILE, kind: Uint, enums: Some(VARSEQOPTS) },
-    ConfRow { env: "COB_LS_FIXED", conf: "ls_fixed", default: Some("0"), group: grp::FILE, kind: Bool, enums: None },
-    ConfRow { env: "COB_LS_VALIDATE", conf: "ls_validate", default: Some("1"), group: grp::FILE, kind: Bool, enums: None },
-    ConfRow { env: "COB_LS_NULLS", conf: "ls_nulls", default: Some("0"), group: grp::FILE, kind: Bool, enums: None },
-    ConfRow { env: "COB_LS_SPLIT", conf: "ls_split", default: Some("1"), group: grp::FILE, kind: Bool, enums: None },
-    ConfRow { env: "COB_SEQ_CONCAT_NAME", conf: "seq_concat_name", default: Some("0"), group: grp::FILE, kind: Bool, enums: None },
-    ConfRow { env: "COB_SEQ_CONCAT_SEP", conf: "seq_concat_sep", default: Some("+"), group: grp::FILE, kind: Char, enums: None },
-    ConfRow { env: "COB_SORT_CHUNK", conf: "sort_chunk", default: Some("256K"), group: grp::FILE, kind: Size, enums: None },
-    ConfRow { env: "COB_SORT_MEMORY", conf: "sort_memory", default: Some("128M"), group: grp::FILE, kind: Size, enums: None },
-    ConfRow { env: "COB_SYNC", conf: "sync", default: Some("0"), group: grp::FILE, kind: Bool, enums: Some(SYNCOPTS) },
-    ConfRow { env: "DB_HOME", conf: "db_home", default: None, group: grp::FILE, kind: Path, enums: None },
-    ConfRow { env: "COB_COL_JUST_LRC", conf: "col_just_lrc", default: Some("true"), group: grp::FILE, kind: Bool, enums: None },
-    ConfRow { env: "COB_DISPLAY_PRINT_PIPE", conf: "display_print_pipe", default: None, group: grp::SCREEN, kind: Str, enums: None },
-    ConfRow { env: "COB_DISPLAY_PRINT_FILE", conf: "display_print_file", default: None, group: grp::SCREEN, kind: Str, enums: None },
-    ConfRow { env: "COB_DISPLAY_PUNCH_FILE", conf: "display_punch_file", default: None, group: grp::SCREEN, kind: Str, enums: None },
-    ConfRow { env: "COB_LEGACY", conf: "legacy", default: None, group: grp::SCREEN, kind: Bool, enums: None },
-    ConfRow { env: "COB_EXIT_WAIT", conf: "exit_wait", default: Some("1"), group: grp::SCREEN, kind: Bool, enums: None },
+    ConfRow {
+        env: "USERNAME",
+        conf: "username",
+        default: None,
+        group: grp::SYSENV,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "LANG",
+        conf: "lang",
+        default: None,
+        group: grp::SYSENV,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "OSTYPE",
+        conf: "ostype",
+        default: None,
+        group: grp::SYSENV,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "TERM",
+        conf: "term",
+        default: None,
+        group: grp::SYSENV,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_FILE_PATH",
+        conf: "file_path",
+        default: None,
+        group: grp::FILE,
+        kind: Path,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_VARSEQ_FORMAT",
+        conf: "varseq_format",
+        default: Some("0"),
+        group: grp::FILE,
+        kind: Uint,
+        enums: Some(VARSEQOPTS),
+    },
+    ConfRow {
+        env: "COB_LS_FIXED",
+        conf: "ls_fixed",
+        default: Some("0"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_LS_VALIDATE",
+        conf: "ls_validate",
+        default: Some("1"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_LS_NULLS",
+        conf: "ls_nulls",
+        default: Some("0"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_LS_SPLIT",
+        conf: "ls_split",
+        default: Some("1"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SEQ_CONCAT_NAME",
+        conf: "seq_concat_name",
+        default: Some("0"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SEQ_CONCAT_SEP",
+        conf: "seq_concat_sep",
+        default: Some("+"),
+        group: grp::FILE,
+        kind: Char,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SORT_CHUNK",
+        conf: "sort_chunk",
+        default: Some("256K"),
+        group: grp::FILE,
+        kind: Size,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SORT_MEMORY",
+        conf: "sort_memory",
+        default: Some("128M"),
+        group: grp::FILE,
+        kind: Size,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_SYNC",
+        conf: "sync",
+        default: Some("0"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: Some(SYNCOPTS),
+    },
+    ConfRow {
+        env: "DB_HOME",
+        conf: "db_home",
+        default: None,
+        group: grp::FILE,
+        kind: Path,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_COL_JUST_LRC",
+        conf: "col_just_lrc",
+        default: Some("true"),
+        group: grp::FILE,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_DISPLAY_PRINT_PIPE",
+        conf: "display_print_pipe",
+        default: None,
+        group: grp::SCREEN,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_DISPLAY_PRINT_FILE",
+        conf: "display_print_file",
+        default: None,
+        group: grp::SCREEN,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_DISPLAY_PUNCH_FILE",
+        conf: "display_punch_file",
+        default: None,
+        group: grp::SCREEN,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_LEGACY",
+        conf: "legacy",
+        default: None,
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_EXIT_WAIT",
+        conf: "exit_wait",
+        default: Some("1"),
+        group: grp::SCREEN,
+        kind: Bool,
+        enums: None,
+    },
     // default set in cob_init_screenio() -- supplied as the runtime default below.
-    ConfRow { env: "COB_EXIT_MSG", conf: "exit_msg", default: None, group: grp::SCREEN, kind: Str, enums: None },
-    ConfRow { env: "COB_CURRENT_DATE", conf: "current_date", default: None, group: grp::MISC, kind: Str, enums: None },
+    ConfRow {
+        env: "COB_EXIT_MSG",
+        conf: "exit_msg",
+        default: None,
+        group: grp::SCREEN,
+        kind: Str,
+        enums: None,
+    },
+    ConfRow {
+        env: "COB_CURRENT_DATE",
+        conf: "current_date",
+        default: None,
+        group: grp::MISC,
+        kind: Str,
+        enums: None,
+    },
 ];
 
 /// `cob_init_screenio()` sets the `COB_EXIT_MSG` default to this (common: the press-a-key prompt).
@@ -199,7 +533,11 @@ fn render_value(row: &ConfRow) -> String {
             Some(d) => translate_boolean_to_int(Some(d.as_bytes())),
             None => 0,
         };
-        let mut v = if n == 1 { "yes".to_string() } else { "no".to_string() };
+        let mut v = if n == 1 {
+            "yes".to_string()
+        } else {
+            "no".to_string()
+        };
         v = enum_translate(row, v);
         return v;
     }
@@ -227,7 +565,11 @@ fn enum_translate(row: &ConfRow, value: String) -> String {
     if let Some(enums) = row.enums {
         for (m, v) in enums {
             if value.eq_ignore_ascii_case(v) {
-                return if *m == "not set" { NOT_SET.to_string() } else { (*m).to_string() };
+                return if *m == "not set" {
+                    NOT_SET.to_string()
+                } else {
+                    (*m).to_string()
+                };
             }
         }
     }
@@ -239,7 +581,16 @@ fn enum_translate(row: &ConfRow, value: String) -> String {
 /// are independent, exactly as in the C: the `(set by X)` block (`set_by != 0`) and the default block
 /// (only when the row is *not* env-/config-/function-set). `env_prefix` selects ` env` vs `    `; the
 /// function-set (`getlogin()`) prefix is byte-identical to the default `    `, so it passes `false`.
-fn push_line(out: &mut Vec<u8>, hdlen: usize, min_conf: usize, env_name: &str, value: &str, env_prefix: bool, set_by: Option<&str>, run_default: bool) {
+fn push_line(
+    out: &mut Vec<u8>,
+    hdlen: usize,
+    min_conf: usize,
+    env_name: &str,
+    value: &str,
+    env_prefix: bool,
+    set_by: Option<&str>,
+    run_default: bool,
+) {
     // Prefix: env-set rows show " env", otherwise four spaces (default and function-set alike).
     if env_prefix {
         out.extend_from_slice(b" env");
@@ -334,9 +685,20 @@ pub fn print_runtime_conf(sys: &SystemConf) -> Vec<u8> {
                             UserOrigin::Logname => (true, Some("LOGNAME")),
                             UserOrigin::Getlogin => (false, Some("getlogin()")),
                         };
-                        push_line(&mut out, hdlen, min_conf, row.env, &format!("'{name}'"), env_prefix, set_by, false);
+                        push_line(
+                            &mut out,
+                            hdlen,
+                            min_conf,
+                            row.env,
+                            &format!("'{name}'"),
+                            env_prefix,
+                            set_by,
+                            false,
+                        );
                     }
-                    None => push_line(&mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true),
+                    None => push_line(
+                        &mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true,
+                    ),
                 },
                 "LANG" | "OSTYPE" | "TERM" => {
                     let envval = match row.env {
@@ -345,17 +707,39 @@ pub fn print_runtime_conf(sys: &SystemConf) -> Vec<u8> {
                         _ => &sys.term,
                     };
                     match envval {
-                        Some(v) => push_line(&mut out, hdlen, min_conf, row.env, &format!("'{v}'"), true, None, false),
-                        None => push_line(&mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true),
+                        Some(v) => push_line(
+                            &mut out,
+                            hdlen,
+                            min_conf,
+                            row.env,
+                            &format!("'{v}'"),
+                            true,
+                            None,
+                            false,
+                        ),
+                        None => push_line(
+                            &mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true,
+                        ),
                     }
                 }
                 "COB_EXIT_MSG" => {
                     // Runtime default from cob_init_screenio(): a quoted string, shown "(default)".
-                    push_line(&mut out, hdlen, min_conf, row.env, &format!("'{EXIT_MSG_DEFAULT}'"), false, None, true);
+                    push_line(
+                        &mut out,
+                        hdlen,
+                        min_conf,
+                        row.env,
+                        &format!("'{EXIT_MSG_DEFAULT}'"),
+                        false,
+                        None,
+                        true,
+                    );
                 }
                 _ => {
                     let value = render_value(row);
-                    push_line(&mut out, hdlen, min_conf, row.env, &value, false, None, true);
+                    push_line(
+                        &mut out, hdlen, min_conf, row.env, &value, false, None, true,
+                    );
                 }
             }
         }
@@ -403,7 +787,11 @@ fn render_resolved_value(row: &ConfRow, raw: &str) -> String {
         let stored = match row.kind {
             Bool => {
                 let lv = raw.to_ascii_lowercase();
-                let n = if matches!(lv.as_str(), "true" | "yes" | "on" | "1") { 1 } else { 0 };
+                let n = if matches!(lv.as_str(), "true" | "yes" | "on" | "1") {
+                    1
+                } else {
+                    0
+                };
                 StoredVal::Int(n)
             }
             Uint | Size => {
@@ -523,17 +911,30 @@ pub fn print_runtime_conf_resolved(sys: &SystemConf, overlay: &ConfOverlay) -> V
             match row.env {
                 "USERNAME" | "LANG" | "OSTYPE" | "TERM" if env_val.is_some() => {
                     let v = env_val.as_deref().unwrap_or("");
-                    push_line(&mut out, hdlen, min_conf, row.env, &format!("'{v}'"), true, None, false);
+                    push_line(
+                        &mut out,
+                        hdlen,
+                        min_conf,
+                        row.env,
+                        &format!("'{v}'"),
+                        true,
+                        None,
+                        false,
+                    );
                 }
                 _ if env_val.is_some() => {
                     let v = env_val.as_deref().unwrap_or("");
                     let value = render_resolved_value(row, v);
-                    push_line(&mut out, hdlen, min_conf, row.env, &value, true, None, false);
+                    push_line(
+                        &mut out, hdlen, min_conf, row.env, &value, true, None, false,
+                    );
                 }
                 _ if app_val.is_some() => {
                     let v = String::from_utf8_lossy(app_val.as_deref().unwrap_or(&[])).into_owned();
                     let value = render_resolved_value(row, &v);
-                    push_line(&mut out, hdlen, min_conf, row.env, &value, false, None, false);
+                    push_line(
+                        &mut out, hdlen, min_conf, row.env, &value, false, None, false,
+                    );
                 }
                 "USERNAME" => match &sys.username {
                     Some((name, origin)) => {
@@ -542,9 +943,20 @@ pub fn print_runtime_conf_resolved(sys: &SystemConf, overlay: &ConfOverlay) -> V
                             UserOrigin::Logname => (true, Some("LOGNAME")),
                             UserOrigin::Getlogin => (false, Some("getlogin()")),
                         };
-                        push_line(&mut out, hdlen, min_conf, row.env, &format!("'{name}'"), env_prefix, set_by, false);
+                        push_line(
+                            &mut out,
+                            hdlen,
+                            min_conf,
+                            row.env,
+                            &format!("'{name}'"),
+                            env_prefix,
+                            set_by,
+                            false,
+                        );
                     }
-                    None => push_line(&mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true),
+                    None => push_line(
+                        &mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true,
+                    ),
                 },
                 "LANG" | "OSTYPE" | "TERM" => {
                     let envval = match row.env {
@@ -553,16 +965,38 @@ pub fn print_runtime_conf_resolved(sys: &SystemConf, overlay: &ConfOverlay) -> V
                         _ => &sys.term,
                     };
                     match envval {
-                        Some(v) => push_line(&mut out, hdlen, min_conf, row.env, &format!("'{v}'"), true, None, false),
-                        None => push_line(&mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true),
+                        Some(v) => push_line(
+                            &mut out,
+                            hdlen,
+                            min_conf,
+                            row.env,
+                            &format!("'{v}'"),
+                            true,
+                            None,
+                            false,
+                        ),
+                        None => push_line(
+                            &mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true,
+                        ),
                     }
                 }
                 "COB_EXIT_MSG" => {
-                    push_line(&mut out, hdlen, min_conf, row.env, &format!("'{EXIT_MSG_DEFAULT}'"), false, None, true);
+                    push_line(
+                        &mut out,
+                        hdlen,
+                        min_conf,
+                        row.env,
+                        &format!("'{EXIT_MSG_DEFAULT}'"),
+                        false,
+                        None,
+                        true,
+                    );
                 }
                 _ => {
                     let value = render_value(row);
-                    push_line(&mut out, hdlen, min_conf, row.env, &value, false, None, true);
+                    push_line(
+                        &mut out, hdlen, min_conf, row.env, &value, false, None, true,
+                    );
                 }
             }
         }
@@ -613,18 +1047,25 @@ mod tests {
     #[test]
     fn header_and_via_line() {
         let s = String::from_utf8(print_runtime_conf(&clean_sys())).unwrap();
-        assert!(s.starts_with("GnuCOBOL 3.2.0 runtime configuration\n via  /p/share/gnucobol/config/runtime.cfg\n\n"));
+        assert!(s.starts_with(
+            "GnuCOBOL 3.2.0 runtime configuration\n via  /p/share/gnucobol/config/runtime.cfg\n\n"
+        ));
     }
 
     #[test]
     fn raw_default_echo_not_numeric_size() {
         // The trailing-block rule: a non-enum, non-bool field echoes its RAW default ("256K", not "256 KB").
         let s = String::from_utf8(print_runtime_conf(&clean_sys())).unwrap();
-        assert!(s.contains(": COB_SORT_CHUNK         : 256K     (default)\n"), "{s}");
+        assert!(
+            s.contains(": COB_SORT_CHUNK         : 256K     (default)\n"),
+            "{s}"
+        );
         assert!(s.contains(": COB_SORT_MEMORY        : 128M     (default)\n"));
         // Strings echo unquoted from the default; runtime-default COB_EXIT_MSG is quoted.
         assert!(s.contains(": COB_TRACE_FORMAT       : %P %S Line: %L (default)\n"));
-        assert!(s.contains(": COB_EXIT_MSG           : 'end of program, please press a key to exit' (default)\n"));
+        assert!(s.contains(
+            ": COB_EXIT_MSG           : 'end of program, please press a key to exit' (default)\n"
+        ));
     }
 
     #[test]

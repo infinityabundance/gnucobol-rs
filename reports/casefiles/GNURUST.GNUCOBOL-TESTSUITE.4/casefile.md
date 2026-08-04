@@ -16,10 +16,12 @@
 - no-delegation remains mechanically green
 - the math subset is regenerated from the same ledger
 
-## Negative claims (4) — negative capability is the trust surface
+## Negative claims (6) — negative capability is the trust surface
 - no claim that a boundary reduction equals a pass
-- no full suite-parity claim
-- no conformance certification
+- no claim of full suite parity
+- no COBOL conformance certification
+- no claim that a transition was measured without raw evidence
+- no claim that the rerun changed the oracle expectations
 - lie prevented: 'the three boundaries were reduced' is the claim this court measures -- without the rerun it is projection
 
 ## Damage if overclaimed

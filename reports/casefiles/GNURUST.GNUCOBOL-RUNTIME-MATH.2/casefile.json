@@ -12,10 +12,10 @@
   "crate_version": "0.8.54",
   "damage_if_overclaimed": "claiming math parity from a non-reconciling ledger",
   "hash_chain": {
-    "inputs_sha256": "7a5d88db0d46f1c640d9a123de3c26dc689f79ee94aa11eec12854877aa0a8ed"
+    "inputs_sha256": "0c0deb2ac1c95bbdf16c0d2145dc6508bda45dcfe85fed49e98b3a4ba0e75012"
   },
   "inputs": {
-    "claim_ladder_entry_sha256": "26ef997e4ca38b118a05c5a25c35f7efdca22d8f135c0412d76be7060144bee1",
+    "claim_ladder_entry_sha256": "012dcacde9b0379b02fe6762f38de6e792cc51996cbc5d804e67a171b9117970",
     "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
   },
   "kind": "court-casefile",
@@ -24,11 +24,15 @@
   ],
   "negative_capability_ids": [
     "NEG.NO-PERFORMANCE-CLAIM-FROM-END-TO-END-INT",
-    "NEG.NO-EQUIVALENCE-CLAIM-OUTSIDE-THE-TESTED"
+    "NEG.NO-CLAIM-THAT-MATCHING-OUTPUT-PROVES-EQU",
+    "NEG.NO-CLAIM-THAT-THE-MATH-SUBSET-IS-A-CERTI",
+    "NEG.NO-CLAIM-THAT-A-NON-RECONCILING-MATH-LED"
   ],
   "negative_claims": [
     "no performance claim from end-to-end interpreter-vs-native timing",
-    "no equivalence claim outside the tested environment",
+    "no claim that matching output proves equivalence outside the tested environment",
+    "no claim that the math subset is a certification",
+    "no claim that a non-reconciling math ledger is acceptable (the generator fails)",
     "lie prevented: 'the 22/21 wrapper-option discrepancy was cosmetic' is the lie this prevents -- the reconciliation is machine-enforced"
   ],
   "oracle": {

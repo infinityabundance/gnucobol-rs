@@ -393,12 +393,7 @@ fn runner(rest: &[String]) -> i32 {
     let args = match compile::CobcrunArgs::parse(rest) {
         Ok(a) => a,
         Err(msg) => {
-            // `invalid module argument ''` is cobcrun's own fatal diagnostic (no prefix)
-            if msg.starts_with("invalid module argument") {
-                eprintln!("{msg}");
-            } else {
-                eprintln!("{msg}");
-            }
+            eprintln!("{msg}");
             return 1;
         }
     };

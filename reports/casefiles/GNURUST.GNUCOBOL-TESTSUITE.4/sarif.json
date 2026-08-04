@@ -20,14 +20,28 @@
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.GNUCOBOL-TESTSUITE.4 non-claim: no full suite-parity claim"
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.4 non-claim: no claim of full suite parity"
           },
           "ruleId": "NONCLAIM"
         },
         {
           "level": "note",
           "message": {
-            "text": "GNURUST.GNUCOBOL-TESTSUITE.4 non-claim: no conformance certification"
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.4 non-claim: no COBOL conformance certification"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.4 non-claim: no claim that a transition was measured without raw evidence"
+          },
+          "ruleId": "NONCLAIM"
+        },
+        {
+          "level": "note",
+          "message": {
+            "text": "GNURUST.GNUCOBOL-TESTSUITE.4 non-claim: no claim that the rerun changed the oracle expectations"
           },
           "ruleId": "NONCLAIM"
         },

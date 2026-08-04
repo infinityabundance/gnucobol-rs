@@ -54,3 +54,7 @@ current non-claim lives in [`../reports/negative-claims.md`](../reports/negative
 | ext | **Historical corpus court** | does the differential CCVS85 court classify every unit honestly? | **observed** — `GNURUST.CCVS85.2` (oracle baseline), `GNURUST.CCVS85.3` (cobrun baseline), `GNURUST.CCVS85.4` (comparison + classification; no conformance claim) |
 — `GNURUST.GNUCOBOL-TESTSUITE.1` (admitted-suite baseline), `GNURUST.GNUCOBOL-TESTSUITE.2` (candidate execution), `GNURUST.GNUCOBOL-TESTSUITE.3` (differential classification; no parity or conformance claim) — plus the harness courts `GNURUST.GNUCOBOL-RUNTIME-MATH.1`, `GNURUST.METHODOLOGY.LIBCOB.1`, `GNURUST.METHODOLOGY.PARSER.1`, and the `cobc-rs` driver courts `GNURUST.COBC-RS.ARGS.1` / `GNURUST.COBC-RS.LAUNCHER.1` / `GNURUST.COBC-RS.PARALLEL.1` |
 
+### Boundary-reduction courts (0.8.54+)
+
+The boundary-reduction work added: GNURUST.GNUCOBOL-TESTSUITE.4, GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1, GNURUST.MODULE.REGISTRY.1, GNURUST.MODULE.CALL.1, GNURUST.MODULE.CANCEL.1, GNURUST.MODULE.SEARCH.1, GNURUST.MODULE.PARALLEL.1, GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1, GNURUST.COBC-RS.POLICY-COMPLETE.1, GNURUST.GNUCOBOL-RUNTIME-MATH.2 -- the module lifecycle (GNURUST.MODULE.*), the native-mode/policy boundaries (GNURUST.COBC-RS.*), the re-measured suite court (GNURUST.GNUCOBOL-TESTSUITE.4), the before/after transition ledger (GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1) and the re-measured math campaign (GNURUST.GNUCOBOL-RUNTIME-MATH.2).
+

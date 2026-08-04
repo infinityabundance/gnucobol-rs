@@ -2,7 +2,7 @@
      Regenerate: cargo run -p xtask -- receipt generate -->
 # GNURUST.SCREENIO.NUMEDIT.1 — SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes
 
-**Verdict: FAIL** · replay `PASS=13 FAIL=1`
+**Verdict: PASS** · replay `PASS=14 FAIL=0`
 
 | field | value |
 |-------|-------|

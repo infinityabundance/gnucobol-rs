@@ -15,9 +15,11 @@
 - the generator fails on any violation
 - performance is re-reported only for correctness-matched programs
 
-## Negative claims (3) — negative capability is the trust surface
+## Negative claims (5) — negative capability is the trust surface
 - no performance claim from end-to-end interpreter-vs-native timing
-- no equivalence claim outside the tested environment
+- no claim that matching output proves equivalence outside the tested environment
+- no claim that the math subset is a certification
+- no claim that a non-reconciling math ledger is acceptable (the generator fails)
 - lie prevented: 'the 22/21 wrapper-option discrepancy was cosmetic' is the lie this prevents -- the reconciliation is machine-enforced
 
 ## Damage if overclaimed

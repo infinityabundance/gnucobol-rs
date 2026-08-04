@@ -12,11 +12,11 @@
   "crate_version": "0.8.54",
   "damage_if_overclaimed": "claiming 'positioned DISPLAY works everywhere' would hide that only the swept grid + single-field + the admitted terminal are proven; un-swept positions, multi-field layout, attributes, and other terminals are not",
   "hash_chain": {
-    "inputs_sha256": "c7b73a777110c3c9296d226535bbc0c4689d5e2de7bbb7843740daa3dcedc3e4"
+    "inputs_sha256": "cca42154a30672bf12b3151e66c9608f77393eb071c902a2dc35fb05d0552fa8"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "efc2368e8d58a3ee8ec01c0c7efb8636983c86574fffdbae93047f17da3d1e9e",
-    "receipt_sha256": "216748e69f42bfeb7069d8604c2fb94aa40f9de9020357a83741be847c559937"
+    "receipt_sha256": "bf0110307eaa9c6ae28ca00fb93feea866bc2a00fca41377c708b757346b248d"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -57,10 +57,10 @@
     "exit_code": 0
   },
   "results": {
-    "fail": 1,
-    "pass": 69,
+    "fail": 0,
+    "pass": 70,
     "total": 70,
-    "verdict": "fail"
+    "verdict": "pass"
   },
   "schema": "kobold-forensic-casefile-v1"
 }

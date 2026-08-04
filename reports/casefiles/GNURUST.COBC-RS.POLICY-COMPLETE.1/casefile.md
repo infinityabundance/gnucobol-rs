@@ -14,8 +14,11 @@
 - the machine invariant 'observed options == explicit policy + intentional unknown-option tests + program args after the delimiter' holds
 - no unknown semantic option is silently discarded
 
-## Negative claims (2) — negative capability is the trust surface
+## Negative claims (5) — negative capability is the trust surface
 - no claim that accepted no-op flags preserve semantics outside the admitted tests
+- no claim that a rejected option was translated
+- no claim that the allowlist covers dialects beyond GnuCOBOL 3.2
+- no claim that an observed token with no policy was silently handled (it fails closed)
 - lie prevented: 'cobc-rs ignores unknown flags safely' is the lie this prevents
 
 ## Damage if overclaimed

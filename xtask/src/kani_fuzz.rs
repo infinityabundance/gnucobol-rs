@@ -22,6 +22,16 @@ fn na_reason(cid: &str) -> Option<&'static str> {
         "GNURUST.GNUCOBOL-TESTSUITE.1" => "meta: admitted GnuCOBOL 3.2 native Autotest suite custody + real-compiler baseline + invocation census; no Rust byte kernel -- its own seal-grade gate is replay+raw-evidence+census",
         "GNURUST.GNUCOBOL-TESTSUITE.2" => "meta: candidate execution through the native harness (COBC=cobc-rs) with no-delegation proof; no single byte kernel -- its own seal-grade gate is replay+no-delegation+all-accounted",
         "GNURUST.GNUCOBOL-TESTSUITE.3" => "meta: differential classification of the suite; no single byte kernel -- its own seal-grade gate is replay+classification-reconciliation",
+        "GNURUST.GNUCOBOL-TESTSUITE.4" => "meta: full suite re-measured after the boundary reductions; no single byte kernel -- replay+reconciliation+determinism is its gate",
+        "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1" => "meta: per-test before/after transition ledger over the rerun; no byte kernel -- ledger+raw-evidence is its gate",
+        "GNURUST.MODULE.REGISTRY.1" => "meta: interpreted module lifecycle (cobcrun-rs runner + module search + -m artifacts); end-to-end integration court, no single byte kernel -- crates/cobc-rs tests are its gate",
+        "GNURUST.MODULE.CALL.1" => "meta: CALL across separately compiled modules; integration court -- cobc-rs module courts are its gate",
+        "GNURUST.MODULE.CANCEL.1" => "meta: CANCEL semantics (state reset + active-program fatal); integration court -- cobc-rs module courts are its gate",
+        "GNURUST.MODULE.SEARCH.1" => "meta: cobcrun module search paths + error messages; integration court -- cobc-rs module courts are its gate",
+        "GNURUST.MODULE.PARALLEL.1" => "meta: parallel module isolation; integration/stress court -- the 100-way cobc-rs test is its gate",
+        "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1" => "meta: native-code-mode typed boundary (option policy); no byte kernel -- policy registry + census are its gate",
+        "GNURUST.COBC-RS.POLICY-COMPLETE.1" => "meta: option-policy registry completeness vs the invocation census; no byte kernel -- census reconciliation is its gate",
+        "GNURUST.GNUCOBOL-RUNTIME-MATH.2" => "meta: math subset re-measured from the full ledger; no byte kernel -- the 323 reconciliation invariant is its gate",
         "GNURUST.GNUCOBOL-RUNTIME-MATH.1" => "meta: math-subset classification derived from TESTSUITE.3 (no separate byte kernel); performance is separately labeled",
         "GNURUST.METHODOLOGY.LIBCOB.1" => "meta: runtime port methodology/provenance documentation + machine records; no byte kernel",
         "GNURUST.METHODOLOGY.PARSER.1" => "meta: parser provenance audit documentation + machine records; no byte kernel",
@@ -32,7 +42,7 @@ fn na_reason(cid: &str) -> Option<&'static str> {
     })
 }
 
-const IS_ATLAS_EXTRA: [&str; 21] = [
+const IS_ATLAS_EXTRA: [&str; 31] = [
     "GNURUST.COVERAGE.1",
     "GNURUST.FILE.STATUS.1",
     "GNURUST.PUBLIC.CORPUS.1",
@@ -48,6 +58,16 @@ const IS_ATLAS_EXTRA: [&str; 21] = [
     "GNURUST.GNUCOBOL-TESTSUITE.1",
     "GNURUST.GNUCOBOL-TESTSUITE.2",
     "GNURUST.GNUCOBOL-TESTSUITE.3",
+    "GNURUST.GNUCOBOL-TESTSUITE.4",
+    "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
+    "GNURUST.MODULE.REGISTRY.1",
+    "GNURUST.MODULE.CALL.1",
+    "GNURUST.MODULE.CANCEL.1",
+    "GNURUST.MODULE.SEARCH.1",
+    "GNURUST.MODULE.PARALLEL.1",
+    "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
+    "GNURUST.COBC-RS.POLICY-COMPLETE.1",
+    "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
     "GNURUST.GNUCOBOL-RUNTIME-MATH.1",
     "GNURUST.METHODOLOGY.LIBCOB.1",
     "GNURUST.METHODOLOGY.PARSER.1",

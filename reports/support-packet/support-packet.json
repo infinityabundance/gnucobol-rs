@@ -5,21 +5,21 @@
       "kind": "generated_doc",
       "path": "STATUS.md",
       "present": true,
-      "sha256": "c332c9134db172e4cfd57cb7e3a72892ba2fbdd489c19fb452a10f5c0ddeddbb"
+      "sha256": "e30844bee37e229c632fc6293afc213e2e91272f61c1c0463cf7b0c745d1fc0c"
     },
     {
       "id": "changelog",
       "kind": "generated_doc",
       "path": "CHANGELOG.md",
       "present": true,
-      "sha256": "47b0d36be02f4988e03117213251571e0f3209479c55e5a9e6b4b7418b05feea"
+      "sha256": "b1d0436d66918d11f3f0d234309235e7551e381a6e7b5be9c0b24b11b73ce734"
     },
     {
       "id": "claim_ladder",
       "kind": "machine_spine",
       "path": "reports/claim-ladder.json",
       "present": true,
-      "sha256": "f066eeb09d2b46eced81cef97e0b6b91246b0c76b7de491de0f4888c5df99cbc"
+      "sha256": "50e25430f8a79b5c5cea7cc49780ba974311d59838821d98a7f6c038c4892863"
     },
     {
       "id": "negative_capabilities",
@@ -54,7 +54,7 @@
       "kind": "doctrine_doc",
       "path": "docs/future-risk-register.md",
       "present": true,
-      "sha256": "43934ccb278a72e4cc13d8f8d0d904bcdfc92d95d7dd68067e02558471d91eb8"
+      "sha256": "06091017eed14c93c124cac9f452d4d2e267c8f7408d74f077129489462e4720"
     },
     {
       "casefiles": [
@@ -290,8 +290,22 @@
           "sarif": true
         },
         {
+          "casefile_sha256": "c8360deb092ebea21350ccab5d4f89ab877e5e7aaf5a70e03eea24fd8ebaa261",
+          "court": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
           "casefile_sha256": "d239514e491c8d75a8f691f9c0ae14d33c4087622ed2e6eefe70240e9db60759",
           "court": "GNURUST.COBC-RS.PARALLEL.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "5b7993448b35db742680b9e983a33c529294f6846486763d6ddc455062f74e89",
+          "court": "GNURUST.COBC-RS.POLICY-COMPLETE.1",
           "dsse": false,
           "intoto": false,
           "sarif": true
@@ -493,6 +507,13 @@
           "sarif": true
         },
         {
+          "casefile_sha256": "7f98c5926bd0f2fd6f0d1d38fe3d077b3e92afac9d83d3e2beb6c9ae3f34cd3d",
+          "court": "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
           "casefile_sha256": "62ff47b70448fbe9faff5e15f361308b81679f77d34b68c8114d0b1396aea2f7",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.1",
           "dsse": false,
@@ -509,6 +530,20 @@
         {
           "casefile_sha256": "f55f251e6b13fcab9c602f0969fa43ad2c43110097a703dce444b11e771b4044",
           "court": "GNURUST.GNUCOBOL-TESTSUITE.3",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "15b44556cb8f2abb7af1b909eae785837a90567aed572d97b6c3631fb9348937",
+          "court": "GNURUST.GNUCOBOL-TESTSUITE.4",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "24f8b3f12900a45a92471c87632e453d21a0f80d9f8e54abcdd77d87e1c34e9a",
+          "court": "GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1",
           "dsse": false,
           "intoto": false,
           "sarif": true
@@ -679,6 +714,41 @@
           "court": "GNURUST.MLIO.PARSE.1",
           "dsse": true,
           "intoto": true,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "aa71a2013a0487b4b979e697991cf6c7518391d72725dc15e5d8ae8c865f7f45",
+          "court": "GNURUST.MODULE.CALL.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "17c9ed3fba4372a73b68528556dc2ce692198fb8ca717f9dffc457bec2b11354",
+          "court": "GNURUST.MODULE.CANCEL.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "4e5601d4b2d5979b355e4e5bd272e3588457ecc5e4b06eefa64feb28b8031d48",
+          "court": "GNURUST.MODULE.PARALLEL.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "f091eebfd9bf1d1f88271ac1a982243bb20ff8b43752c7de865ac2469e1a81aa",
+          "court": "GNURUST.MODULE.REGISTRY.1",
+          "dsse": false,
+          "intoto": false,
+          "sarif": true
+        },
+        {
+          "casefile_sha256": "3b9f5e53c4dc14f880fd5a3d4bd708142eae78e97bf88e681cca9f8611822e9a",
+          "court": "GNURUST.MODULE.SEARCH.1",
+          "dsse": false,
+          "intoto": false,
           "sarif": true
         },
         {
@@ -1109,7 +1179,7 @@
           "sarif": true
         }
       ],
-      "count": 150,
+      "count": 160,
       "id": "casefile_index",
       "kind": "casefile_index",
       "present": true

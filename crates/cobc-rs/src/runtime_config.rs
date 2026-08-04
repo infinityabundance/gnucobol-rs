@@ -432,12 +432,11 @@ fn parse_size(v: &str) -> Option<i64> {
     num.trim().parse::<i64>().ok().map(|n| n * mult)
 }
 
+/// The resolved `--runtime-conf` overlay: (config file, applied values by conf_name, env overrides).
+pub type ConfSnapshot = (Option<String>, BTreeMap<String, Vec<u8>>, BTreeMap<String, String>);
+
 /// Read the resolved store for the `--runtime-conf` report.
-pub fn snapshot() -> (
-    Option<String>,
-    BTreeMap<String, Vec<u8>>,
-    BTreeMap<String, String>,
-) {
+pub fn snapshot() -> ConfSnapshot {
     let cfg = config_file().lock().unwrap().clone();
     let applied = store().lock().unwrap().clone();
     let env = env_overrides().lock().unwrap().clone();

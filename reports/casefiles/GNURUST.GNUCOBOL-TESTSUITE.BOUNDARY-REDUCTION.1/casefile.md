@@ -15,9 +15,11 @@
 - no test is unaccounted
 - transitions are measured, never projected
 
-## Negative claims (3) — negative capability is the trust surface
-- no claim that a boundary reduction equals a pass
-- transitions are re-measured classifications
+## Negative claims (5) — negative capability is the trust surface
+- no claim that a transition is a pass (it is a re-measured classification)
+- no claim that the v0.8.54 baseline was overwritten (it is preserved in boundary-reduction-baseline.json)
+- no claim that the reduction is complete
+- no claim that reclassification without raw evidence is acceptable
 - lie prevented: '407 module tests are fixed' is the lie this prevents
 
 ## Damage if overclaimed
