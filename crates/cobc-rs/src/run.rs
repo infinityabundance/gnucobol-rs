@@ -121,10 +121,26 @@ pub fn run_interpreted(opts: &RunOpts) -> i32 {
             rc
         }
         Err(e) => {
-            eprintln!("cobrun: {e}");
-            2
+            match e {
+                // libcob-shaped FATAL runtime error: `libcob: <file>:<line>: error: <msg>`, exit 1
+                // (cobcrun exits 1 on a runtime abort, matching the oracle).
+                gnucobol_rs::frontend::RunError::Fatal(body) => {
+                    eprintln!("libcob: {body}");
+                    1
+                }
+                other => {
+                    eprintln!("cobrun: {other}");
+                    2
+                }
+            }
         }
     }
+}
+
+/// Set the program command line (cobcrun module args...), read by `ACCEPT FROM COMMAND-LINE` /
+/// `ARGUMENT-VALUE` / `ARGUMENT-NUMBER` in the interpreter.
+pub fn set_program_args(args: &[String]) {
+    gnucobol_rs::frontend::set_command_line(args);
 }
 
 /// The `PROGRAM-ID name` units already present in `src` (uppercased), so a CALL to one of them is
@@ -196,20 +212,35 @@ pub fn resolve_separate_calls(mut src: String, dir: &Path, fixed: bool) -> Strin
             if present.contains(&name) {
                 continue;
             }
-            for ext in &exts {
-                let cand = dir.join(format!("{name}.{ext}"));
-                if cand.is_file() {
-                    if let Ok(raw) = std::fs::read_to_string(&cand) {
-                        let unit = if fixed {
-                            gnucobol_rs::frontend::fixed_to_free(&raw)
-                        } else {
-                            raw
-                        };
-                        src.push('\n');
-                        src.push_str(&unit);
-                        present.insert(name.clone());
-                        added = true;
+            // The CALL literal is uppercased by `call_literals`; the sibling file may be any case
+            // (the GnuCOBOL suite uses lowercase `callee.cob`), so try the common casings.
+            let mut casings: Vec<String> = vec![name.clone()];
+            for c in [name.to_lowercase(), title_case(&name)] {
+                if !casings.contains(&c) {
+                    casings.push(c);
+                }
+            }
+            let mut found = false;
+            for casing in &casings {
+                for ext in &exts {
+                    let cand = dir.join(format!("{casing}.{ext}"));
+                    if cand.is_file() {
+                        if let Ok(raw) = std::fs::read_to_string(&cand) {
+                            let unit = if fixed {
+                                gnucobol_rs::frontend::fixed_to_free(&raw)
+                            } else {
+                                raw
+                            };
+                            src.push('\n');
+                            src.push_str(&unit);
+                            present.insert(name.clone());
+                            added = true;
+                            found = true;
+                        }
+                        break;
                     }
+                }
+                if found {
                     break;
                 }
             }
@@ -220,4 +251,22 @@ pub fn resolve_separate_calls(mut src: String, dir: &Path, fixed: bool) -> Strin
         }
     }
     src
+}
+
+/// `CALLEE` -> `Callee` (the conventional COBOL file-name casing; covers `Callee.cob`).
+fn title_case(name: &str) -> String {
+    let mut out = String::new();
+    let mut upper = true;
+    for c in name.chars() {
+        if c == '-' {
+            out.push('-');
+            upper = true;
+        } else if upper {
+            out.extend(c.to_uppercase());
+            upper = false;
+        } else {
+            out.extend(c.to_lowercase());
+        }
+    }
+    out
 }

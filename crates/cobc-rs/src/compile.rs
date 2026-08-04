@@ -365,33 +365,193 @@ pub fn run_launcher(manifest_path: &Path, argv0_base: &str) -> i32 {
     run::run_interpreted(&opts)
 }
 
-/// cobcrun mode: `cobcrun <module> [args]` — resolve the build-local module registry (the manifest
-/// written by `cobc-rs -m`), or run `--runtime-conf` / other info modes.
-pub fn cobcrun_run(arg: &str, argv0_base: &str) -> i32 {
-    if let Some(p) = arg.strip_prefix("--") {
-        // --runtime-conf / --runtime-config handled by the caller (info mode); here: anything else
-        let _ = p;
-        eprintln!("cobc-rs ({argv0_base}): unsupported cobcrun argument {arg:?}");
-        return 2;
+/// cobcrun mode: `cobcrun [-M <dir>] [-c <cfg>] <program> [args...]` — resolve the build-local
+/// module registry (the manifest written by `cobc-rs -m`) and interpret the module, passing the
+/// remaining arguments to the program (COMMAND-LINE / ARGUMENT-VALUE). The `-M` value is a
+/// DIRECTORY (cobcrun appends `/` when missing); the module file is `<dir><program>.so`. This is a
+/// truthful interpreted-module model — never a native shared object.
+pub struct CobcrunArgs {
+    /// `-M <dir>` value (None when absent; Some even when empty — an empty value is the cobcrun
+    /// `invalid module argument ''` error).
+    pub module_dir: Option<String>,
+    /// `-c <cfg>` / `--config=<cfg>` runtime config file (None when absent).
+    pub config: Option<String>,
+    /// `-q` quiet.
+    pub quiet: bool,
+    /// `-v` verbose.
+    pub verbose: bool,
+    /// `-r` direct-run flag (accepted; the interpreter always runs directly).
+    pub run_flag: bool,
+    /// The program name (first non-option argument).
+    pub program: Option<String>,
+    /// Program arguments (everything after the program name).
+    pub args: Vec<String>,
+}
+
+impl CobcrunArgs {
+    /// Parse cobcrun argv (already without argv[0]). Option parsing stops at the first non-option
+    /// argument (the program name); everything after is passed to the program verbatim.
+    pub fn parse(argv: &[String]) -> Result<CobcrunArgs, String> {
+        let mut out = CobcrunArgs {
+            module_dir: None,
+            config: None,
+            quiet: false,
+            verbose: false,
+            run_flag: false,
+            program: None,
+            args: Vec::new(),
+        };
+        let mut i = 0usize;
+        let mut after_dd = false;
+        while i < argv.len() {
+            let a = &argv[i];
+            if after_dd || a == "-" || !a.starts_with('-') {
+                // first non-option = the program name; the rest are program args
+                if out.program.is_none() {
+                    out.program = Some(a.clone());
+                } else {
+                    out.args.push(a.clone());
+                }
+                i += 1;
+                continue;
+            }
+            if a == "--" {
+                after_dd = true;
+                i += 1;
+                continue;
+            }
+            let (opt, attached): (String, Option<String>) =
+                if let Some(v) = a.strip_prefix("--config=") {
+                    ("-c".to_string(), Some(v.to_string()))
+                } else if a.starts_with("-M") && a.len() > 2 {
+                    // `-M<value>` attached (GCC-style short option with an attached value); `-M` alone
+                    // falls through to the separated-value path below.
+                    ("-M".to_string(), Some(a[2..].to_string()))
+                } else if a.starts_with("-c") && a.len() > 2 && !a.starts_with("--") {
+                    // `-c<value>` attached; `-c` alone uses the next argument.
+                    ("-c".to_string(), Some(a[2..].to_string()))
+                } else {
+                    (a.clone(), None)
+                };
+            match opt.as_str() {
+                "-M" => {
+                    let attached_is_some = attached.is_some();
+                    let v = match attached.as_deref() {
+                        Some(v) if !v.is_empty() => v.to_string(),
+                        Some(_) => {
+                            return Err("invalid module argument ''".into());
+                        }
+                        None => match argv.get(i + 1) {
+                            Some(n) if !n.is_empty() => n.clone(),
+                            Some(_) => {
+                                return Err("invalid module argument ''".into());
+                            }
+                            None => {
+                                return Err("cobcrun: option requires an argument -- 'M'".into());
+                            }
+                        },
+                    };
+                    out.module_dir = Some(v);
+                    i += if attached_is_some { 1 } else { 2 };
+                    continue;
+                }
+                "-c" => {
+                    let attached_is_some = attached.is_some();
+                    let v = match attached.as_deref() {
+                        Some(v) => v.to_string(),
+                        None => match argv.get(i + 1) {
+                            Some(n) => n.clone(),
+                            None => {
+                                return Err("cobcrun: option requires an argument -- 'c'".into());
+                            }
+                        },
+                    };
+                    out.config = Some(v);
+                    i += if attached_is_some { 1 } else { 2 };
+                    continue;
+                }
+                "-q" => {
+                    out.quiet = true;
+                    i += 1;
+                    continue;
+                }
+                "-v" => {
+                    out.verbose = true;
+                    i += 1;
+                    continue;
+                }
+                "-r" => {
+                    out.run_flag = true;
+                    i += 1;
+                    continue;
+                }
+                _ => {
+                    // cobcrun's getopt-style diagnostic for an unknown short/long option
+                    if let Some(c) = a.strip_prefix("--") {
+                        return Err(format!("cobcrun: unrecognized option '--{c}'"));
+                    }
+                    let bytes = a.as_bytes();
+                    let c = bytes
+                        .get(1)
+                        .copied()
+                        .map(|b| (b as char).to_string())
+                        .unwrap_or_else(|| "?".to_string());
+                    return Err(format!("cobcrun: invalid option -- '{c}'"));
+                }
+            }
+        }
+        Ok(out)
     }
-    // module name: look for <name>.so.cobr.json then <name>.cobr.json in cwd
-    let mut candidates = vec![
-        PathBuf::from(format!("{arg}.so.cobr.json")),
-        PathBuf::from(format!("{arg}.cobr.json")),
-    ];
-    if let Ok(lib) = std::env::var("COB_LIBRARY_PATH") {
-        for p in lib.split(':') {
-            candidates.push(PathBuf::from(p).join(format!("{arg}.so.cobr.json")));
-            candidates.push(PathBuf::from(p).join(format!("{arg}.cobr.json")));
+}
+
+/// Resolve + run one cobcrun module invocation.
+pub fn cobcrun_run(args: &CobcrunArgs, argv0_base: &str) -> i32 {
+    let program = match &args.program {
+        Some(p) => p.clone(),
+        None => {
+            eprintln!("cobcrun: missing PROGRAM name\nTry 'cobcrun --help' for more information.");
+            return 1;
+        }
+    };
+    // module file candidates: `<dir><prog>.so` / `<dir><prog>` with the launch manifest next to it.
+    let dirs: Vec<String> = match &args.module_dir {
+        Some(d) => {
+            let d = if d.ends_with('/') {
+                d.clone()
+            } else {
+                format!("{d}/")
+            };
+            vec![d]
+        }
+        None => {
+            let mut dirs = vec![String::new()]; // cwd
+            if let Ok(lib) = std::env::var("COB_LIBRARY_PATH") {
+                for p in lib.split(':').filter(|p| !p.is_empty()) {
+                    dirs.push(format!("{p}/"));
+                }
+            }
+            dirs
+        }
+    };
+    let base = {
+        let p = std::path::Path::new(&program);
+        p.file_name()
+            .map(|f| f.to_string_lossy().into_owned())
+            .unwrap_or_else(|| program.clone())
+    };
+    for d in &dirs {
+        for cand in [
+            format!("{d}{base}.so.cobr.json"),
+            format!("{d}{base}.cobr.json"),
+        ] {
+            let cp = std::path::PathBuf::from(&cand);
+            if cp.is_file() {
+                // program args: set the interpreter command line, then run the module manifest.
+                run::set_program_args(&args.args);
+                return run_launcher(&cp, argv0_base);
+            }
         }
     }
-    for c in candidates {
-        if c.is_file() {
-            return run_launcher(&c, argv0_base);
-        }
-    }
-    eprintln!(
-        "cobc-rs ({argv0_base}): module {arg:?} not found in the build-local module registry (no {arg}.so.cobr.json found)"
-    );
-    2
+    eprintln!("cobcrun: cannot find module {program}");
+    1
 }

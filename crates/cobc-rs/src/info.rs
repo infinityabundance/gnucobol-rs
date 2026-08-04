@@ -69,10 +69,23 @@ pub fn info() -> String {
 }
 
 /// `--runtime-conf` / `--runtime-config`: the resolved runtime configuration (native-Rust port,
-/// byte-identical to `cobcrun --runtime-conf`).
+/// byte-identical to `cobcrun --runtime-conf`). When a config file was loaded for this process
+/// (`-c <cfg>` / `COB_RUNTIME_CONFIG` -- see [`crate::runtime_config`]), the report reflects the
+/// loaded file, applied values, env overrides and `${...}` expansion.
 pub fn runtime_conf() -> String {
     let sys = run::build_system_conf();
-    String::from_utf8(gnucobol_rs::common_runtimeconf::print_runtime_conf(&sys)).unwrap_or_default()
+    let (cfg, applied, env) = crate::runtime_config::snapshot();
+    if cfg.is_none() && applied.is_empty() && env.is_empty() {
+        return String::from_utf8(gnucobol_rs::common_runtimeconf::print_runtime_conf(&sys))
+            .unwrap_or_default();
+    }
+    let overlay = gnucobol_rs::common_runtimeconf::ConfOverlay {
+        config_file: cfg.as_deref(),
+        applied: &applied,
+        env: &env,
+    };
+    String::from_utf8(gnucobol_rs::common_runtimeconf::print_runtime_conf_resolved(&sys, &overlay))
+        .unwrap_or_default()
 }
 
 /// `--help`.

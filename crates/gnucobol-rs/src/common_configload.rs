@@ -102,16 +102,36 @@ pub struct ConfigEntry {
 }
 
 const LWRUPR: &[ConfigEnum] = &[
-    ConfigEnum { r#match: "LOWER", value: "1" },
-    ConfigEnum { r#match: "UPPER", value: "2" },
-    ConfigEnum { r#match: "not set", value: "0" },
+    ConfigEnum {
+        r#match: "LOWER",
+        value: "1",
+    },
+    ConfigEnum {
+        r#match: "UPPER",
+        value: "2",
+    },
+    ConfigEnum {
+        r#match: "not set",
+        value: "0",
+    },
 ];
-const NEVER: &[ConfigEnum] = &[ConfigEnum { r#match: "never", value: "!" }];
+const VARSEQOPTS: &[ConfigEnum] = &[
+    ConfigEnum { r#match: "0", value: "0" },
+    ConfigEnum { r#match: "1", value: "1" },
+    ConfigEnum { r#match: "2", value: "2" },
+    ConfigEnum { r#match: "3", value: "3" },
+];
+const NEVER: &[ConfigEnum] = &[ConfigEnum {
+    r#match: "never",
+    value: "!",
+}];
 
 /// A representative subset of `common.c:gc_conf[]` -- enough rows (across every data type: bool, uint,
 /// sint, size, str, char, path, file, and an enum-translated one) to drive [`cb_lookup_config`] and
 /// [`get_config_val`] faithfully. The full table is 50+ rows; the porting court matches by function name,
 /// and the lookup / format logic is row-count-independent, so a representative table is sufficient.
+/// Rows exercised by the GnuCOBOL suite's `configuration.at` (varseq_format) are appended below so the
+/// cobcrun runtime-config surface can validate them.
 pub const GC_CONF: &[ConfigEntry] = &[
     ConfigEntry {
         env_name: Some("COB_LOAD_CASE"),
@@ -200,6 +220,18 @@ pub const GC_CONF: &[ConfigEntry] = &[
         default_val: Some("+"),
         enums: &[],
         data_type: env::ENV_CHAR,
+        min_value: 0,
+        max_value: 0,
+    },
+    // Rows the cobcrun runtime-config surface needs (the GnuCOBOL suite's configuration.at): the
+    // representative subset above drives the pure ports; these rows are exercised by real config
+    // files and must resolve for value validation + the resolved `--runtime-conf` report.
+    ConfigEntry {
+        env_name: Some("COB_VARSEQ_FORMAT"),
+        conf_name: "varseq_format",
+        default_val: Some("0"),
+        enums: VARSEQOPTS,
+        data_type: env::ENV_UINT | env::ENV_ENUMVAL,
         min_value: 0,
         max_value: 0,
     },
@@ -436,8 +468,11 @@ pub fn cb_config_entry(
     let (keyword, value) = parse_keyword_value(buf);
 
     let kw_is = |s: &str| keyword.eq_ignore_ascii_case(s.as_bytes());
-    let is_special =
-        kw_is("reset") || kw_is("include") || kw_is("includeif") || kw_is("setenv") || kw_is("unsetenv");
+    let is_special = kw_is("reset")
+        || kw_is("include")
+        || kw_is("includeif")
+        || kw_is("setenv")
+        || kw_is("unsetenv");
 
     // non-special keyword must resolve
     if !is_special {
@@ -465,7 +500,10 @@ pub fn cb_config_entry(
             return ConfigDirective::WarningIgnored { keyword };
         }
         let expanded = cob_expand_env_string(&value2, getenv, pid, config_dir, copy_dir);
-        return ConfigDirective::SetEnv { name, value: expanded };
+        return ConfigDirective::SetEnv {
+            name,
+            value: expanded,
+        };
     }
 
     if kw_is("unsetenv") {
@@ -687,11 +725,7 @@ pub enum StoredVal<'a> {
 /// pre-translation value is remembered as `orgvalue` when it is neither `"0"` nor the default. The trailing
 /// `orgvalue` reconciliation (cleared unless it differs from the default and the value) is reproduced.
 /// Returns `(value, orgvalue)`.
-pub fn get_config_val(
-    stored: StoredVal,
-    pos: usize,
-    tbl: &[ConfigEntry],
-) -> (String, String) {
+pub fn get_config_val(stored: StoredVal, pos: usize, tbl: &[ConfigEntry]) -> (String, String) {
     let e = &tbl[pos];
     let data_type = e.data_type;
     let mut value: String;
@@ -705,7 +739,11 @@ pub fn get_config_val(
             if (data_type & env::ENV_NOT) != 0 {
                 numval = if numval == 0 { 1 } else { 0 };
             }
-            value = if numval != 0 { "yes".to_string() } else { "no".to_string() };
+            value = if numval != 0 {
+                "yes".to_string()
+            } else {
+                "no".to_string()
+            };
         }
     } else if (data_type & env::ENV_UINT) != 0 {
         // unsigned decimal: the C %llu over the stored value
@@ -884,7 +922,10 @@ mod tests {
         for entry in std::fs::read_dir(&dir).expect("config dir") {
             let p = entry.unwrap().path();
             let name = p.file_name().unwrap().to_string_lossy().to_string();
-            let ext = p.extension().map(|e| e.to_string_lossy().to_string()).unwrap_or_default();
+            let ext = p
+                .extension()
+                .map(|e| e.to_string_lossy().to_string())
+                .unwrap_or_default();
             match ext.as_str() {
                 // a dialect .conf must parse (resolving its include chain) without error; -strict/-inc
                 // fragments parse standalone too.
@@ -911,21 +952,37 @@ mod tests {
                         .flat_map(|l| l.split(|&b| b == b' ' || b == b'\t'))
                         .filter(|t| t.len() == 2 && t.iter().all(|c| c.is_ascii_hexdigit()))
                         .count();
-                    assert!(bytes >= 256, "config/{name}: expected >=256 hex bytes, got {bytes}");
+                    assert!(
+                        bytes >= 256,
+                        "config/{name}: expected >=256 hex bytes, got {bytes}"
+                    );
                     ttbls += 1;
                 }
                 "cfg" => {
-                    let _ = read(&name).unwrap().split(|&b| b == b'\n').map(classify_config_line).count();
+                    let _ = read(&name)
+                        .unwrap()
+                        .split(|&b| b == b'\n')
+                        .map(classify_config_line)
+                        .count();
                     cfgs += 1;
                 }
                 _ => {}
             }
         }
-        assert!(confs >= 13, "expected the dialect .conf files, parsed {confs}");
+        assert!(
+            confs >= 13,
+            "expected the dialect .conf files, parsed {confs}"
+        );
         assert!(words >= 10, "expected the .words files, parsed {words}");
-        assert_eq!(ttbls, 5, "expected 5 collation .ttbl tables, parsed {ttbls}");
+        assert_eq!(
+            ttbls, 5,
+            "expected 5 collation .ttbl tables, parsed {ttbls}"
+        );
         assert!(cfgs >= 1, "expected runtime.cfg, parsed {cfgs}");
-        assert!(reserved_total > 1000, "expected many reserved words, got {reserved_total}");
+        assert!(
+            reserved_total > 1000,
+            "expected many reserved words, got {reserved_total}"
+        );
     }
 
     fn no_env(_: &str) -> Option<String> {
@@ -956,63 +1013,147 @@ mod tests {
         assert_eq!(classify_config_line(b""), ConfigLineKind::Skip);
         assert_eq!(classify_config_line(b"   \n"), ConfigLineKind::Skip);
         assert_eq!(classify_config_line(b"# comment"), ConfigLineKind::Skip);
-        assert_eq!(classify_config_line(b"  # indented comment"), ConfigLineKind::Skip);
-        assert_eq!(classify_config_line(b"dump_width 80"), ConfigLineKind::Entry);
+        assert_eq!(
+            classify_config_line(b"  # indented comment"),
+            ConfigLineKind::Skip
+        );
+        assert_eq!(
+            classify_config_line(b"dump_width 80"),
+            ConfigLineKind::Entry
+        );
     }
 
     #[test]
     fn config_entry_plain_set() {
         let d = cb_config_entry(b"dump_width 80\n", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Set { pos: 3, value: b"80".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::Set {
+                pos: 3,
+                value: b"80".to_vec()
+            }
+        );
         // '=' and ':' separators, quoted value
-        let d = cb_config_entry(b"current_date = \"2020/01/01\"", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Set { pos: 6, value: b"2020/01/01".to_vec() });
+        let d = cb_config_entry(
+            b"current_date = \"2020/01/01\"",
+            GC_CONF,
+            &no_env,
+            0,
+            "/cfg",
+            "/copy",
+        );
+        assert_eq!(
+            d,
+            ConfigDirective::Set {
+                pos: 6,
+                value: b"2020/01/01".to_vec()
+            }
+        );
         // trailing comment dropped from unquoted value
-        let d = cb_config_entry(b"dump_width 80 # wide", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Set { pos: 3, value: b"80".to_vec() });
+        let d = cb_config_entry(
+            b"dump_width 80 # wide",
+            GC_CONF,
+            &no_env,
+            0,
+            "/cfg",
+            "/copy",
+        );
+        assert_eq!(
+            d,
+            ConfigDirective::Set {
+                pos: 3,
+                value: b"80".to_vec()
+            }
+        );
     }
 
     #[test]
     fn config_entry_unknown_and_empty() {
         // unknown tag -> fatal
         let d = cb_config_entry(b"bogus 1", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Error(ConfigEntryError::UnknownTag(b"bogus".to_vec())));
+        assert_eq!(
+            d,
+            ConfigDirective::Error(ConfigEntryError::UnknownTag(b"bogus".to_vec()))
+        );
         // known tag, no value -> warning ignored
         let d = cb_config_entry(b"dump_width", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::WarningIgnored { keyword: b"dump_width".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::WarningIgnored {
+                keyword: b"dump_width".to_vec()
+            }
+        );
         // include with no value -> fatal
         let d = cb_config_entry(b"include", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Error(ConfigEntryError::IncludeWithoutValue(b"include".to_vec())));
+        assert_eq!(
+            d,
+            ConfigDirective::Error(ConfigEntryError::IncludeWithoutValue(b"include".to_vec()))
+        );
     }
 
     #[test]
     fn config_entry_include_reset_unsetenv() {
         let d = cb_config_entry(b"include more.cfg", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Include { file: b"more.cfg".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::Include {
+                file: b"more.cfg".to_vec()
+            }
+        );
         let d = cb_config_entry(b"includeif maybe.cfg", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::IncludeIf { file: b"maybe.cfg".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::IncludeIf {
+                file: b"maybe.cfg".to_vec()
+            }
+        );
         // reset <name>
         let d = cb_config_entry(b"reset dump_width", GC_CONF, &no_env, 0, "/cfg", "/copy");
         assert_eq!(d, ConfigDirective::Reset { pos: 3 });
         // reset unknown -> fatal
         let d = cb_config_entry(b"reset bogus", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::Error(ConfigEntryError::UnknownTag(b"bogus".to_vec())));
+        assert_eq!(
+            d,
+            ConfigDirective::Error(ConfigEntryError::UnknownTag(b"bogus".to_vec()))
+        );
         // unsetenv
         let d = cb_config_entry(b"unsetenv COB_FOO", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::UnsetEnv { name: b"COB_FOO".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::UnsetEnv {
+                name: b"COB_FOO".to_vec()
+            }
+        );
     }
 
     #[test]
     fn config_entry_setenv() {
         // setenv NAME value
         let d = cb_config_entry(b"setenv MYVAR hello", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::SetEnv { name: b"MYVAR".to_vec(), value: b"hello".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::SetEnv {
+                name: b"MYVAR".to_vec(),
+                value: b"hello".to_vec()
+            }
+        );
         // setenv NAME=value (embedded '=')
         let d = cb_config_entry(b"setenv MYVAR=world", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::SetEnv { name: b"MYVAR".to_vec(), value: b"world".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::SetEnv {
+                name: b"MYVAR".to_vec(),
+                value: b"world".to_vec()
+            }
+        );
         // setenv with no value -> warning ignored
         let d = cb_config_entry(b"setenv MYVAR", GC_CONF, &no_env, 0, "/cfg", "/copy");
-        assert_eq!(d, ConfigDirective::WarningIgnored { keyword: b"setenv".to_vec() });
+        assert_eq!(
+            d,
+            ConfigDirective::WarningIgnored {
+                keyword: b"setenv".to_vec()
+            }
+        );
     }
 
     #[test]
@@ -1041,19 +1182,34 @@ mod tests {
         );
         // ${COB_CONFIG_DIR} special default when unset
         assert_eq!(
-            cob_expand_env_string(b"${COB_CONFIG_DIR}/runtime.cfg", &env, 7, "/etc/cfg", "/copy"),
+            cob_expand_env_string(
+                b"${COB_CONFIG_DIR}/runtime.cfg",
+                &env,
+                7,
+                "/etc/cfg",
+                "/copy"
+            ),
             b"/etc/cfg/runtime.cfg".to_vec()
         );
         // $$ -> pid
-        assert_eq!(cob_expand_env_string(b"f$$", &env, 4242, "/cfg", "/copy"), b"f4242".to_vec());
+        assert_eq!(
+            cob_expand_env_string(b"f$$", &env, 4242, "/cfg", "/copy"),
+            b"f4242".to_vec()
+        );
         // whitespace normalised to single space, plain bytes copied
-        assert_eq!(cob_expand_env_string(b"a\tb", &env, 0, "/cfg", "/copy"), b"a b".to_vec());
+        assert_eq!(
+            cob_expand_env_string(b"a\tb", &env, 0, "/cfg", "/copy"),
+            b"a b".to_vec()
+        );
     }
 
     #[test]
     fn set_get_value_width_roundtrip() {
         // 4-byte int: truncates to i32
-        assert_eq!(set_value(4, 0x1_0000_0001), (0x1_0000_0001i64 as i32) as i64);
+        assert_eq!(
+            set_value(4, 0x1_0000_0001),
+            (0x1_0000_0001i64 as i32) as i64
+        );
         assert_eq!(get_value(4, set_value(4, 100)), 100);
         // 2-byte short: 0xFFFF read back as -1
         assert_eq!(set_value(2, 0xFFFF), -1);
@@ -1179,9 +1335,15 @@ pub struct DialectWords {
 pub fn parse_dialect_words(bytes: &[u8]) -> DialectWords {
     let mut w = DialectWords::default();
     for raw in bytes.split(|&b| b == b'\n') {
-        let Some((kind, val)) = split_words_line(raw) else { continue };
+        let Some((kind, val)) = split_words_line(raw) else {
+            continue;
+        };
         // the word is the first token of the value (before whitespace or '=' alias separator).
-        let word: String = val.split(|c| c == ' ' || c == '\t' || c == '=').next().unwrap_or("").to_string();
+        let word: String = val
+            .split(|c| c == ' ' || c == '\t' || c == '=')
+            .next()
+            .unwrap_or("")
+            .to_string();
         if word.is_empty() {
             continue;
         }
@@ -1244,7 +1406,9 @@ pub fn cob_load_config_file(
         match classify_config_line(line) {
             ConfigLineKind::Skip => {}
             ConfigLineKind::Entry => {
-                out.push(cb_config_entry(line, tbl, getenv, pid, config_dir, copy_dir));
+                out.push(cb_config_entry(
+                    line, tbl, getenv, pid, config_dir, copy_dir,
+                ));
             }
         }
     }

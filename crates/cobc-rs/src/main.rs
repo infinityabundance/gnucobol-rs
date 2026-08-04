@@ -19,6 +19,7 @@ mod copy;
 mod info;
 mod policy;
 mod run;
+mod runtime_config;
 
 use std::path::PathBuf;
 
@@ -320,10 +321,8 @@ fn driver(rest: &[String]) -> i32 {
                         eprintln!("cobc-rs: {e}");
                         return EXIT_ERROR;
                     }
-                    // cobc prints the module name for -m on success
-                    if inv.mode == policy::Mode::Module {
-                        println!("{out}");
-                    }
+                    // NOTE: cobc -m / -x do NOT print the module name on success (a suite
+                    // AT_CHECK expects empty stdout); the artifact is written silently.
                     EXIT_OK
                 }
                 Err(e) => {
@@ -341,6 +340,25 @@ fn runner(rest: &[String]) -> i32 {
         .iter()
         .any(|a| a == "--runtime-conf" || a == "--runtime-config")
     {
+        // `-c <cfg>` / `--config=<cfg>` (before `--runtime-conf`) selects the runtime config file;
+        // otherwise COB_RUNTIME_CONFIG / COB_CONFIG_DIR/runtime.cfg (the report's `via` line must
+        // reflect the file the oracle loads at cob_init). The report then reflects the loaded
+        // file + applied values + env-string expansion.
+        let explicit = rest
+            .iter()
+            .position(|a| a == "-c" || a == "--config")
+            .and_then(|i| rest.get(i + 1))
+            .cloned()
+            .or_else(|| {
+                rest.iter()
+                    .find(|a| a.starts_with("--config="))
+                    .map(|a| a.trim_start_matches("--config=").to_string())
+            });
+        if let Some(path) = crate::runtime_config::resolve_config_file(explicit.as_deref()) {
+            if crate::runtime_config::load_for_run(&path).is_err() {
+                return 1;
+            }
+        }
         print!("{}", info::runtime_conf());
         return EXIT_OK;
     }
@@ -371,13 +389,33 @@ fn runner(rest: &[String]) -> i32 {
         eprintln!("cobc-rs (cobcrun): upstream-identical keyword lists are not provided by the candidate; failing closed");
         return EXIT_ERROR;
     }
-    // options are filtered (module name = first non-option argument)
-    let module = rest.iter().find(|a| !a.starts_with('-'));
-    match module {
-        Some(m) => compile::cobcrun_run(m, "cobcrun"),
+    // cobcrun option parsing (module + args; `-M` dir; `-c` config).
+    let args = match compile::CobcrunArgs::parse(rest) {
+        Ok(a) => a,
+        Err(msg) => {
+            // `invalid module argument ''` is cobcrun's own fatal diagnostic (no prefix)
+            if msg.starts_with("invalid module argument") {
+                eprintln!("{msg}");
+            } else {
+                eprintln!("{msg}");
+            }
+            return 1;
+        }
+    };
+    // `-c <cfg>` runtime config loading (errors are fatal, matching cobcrun).
+    if let Some(cfg) = &args.config {
+        if let Some(path) = crate::runtime_config::config_path_from_value(cfg) {
+            if crate::runtime_config::load_for_run(&path).is_err() {
+                return 1;
+            }
+        }
+    }
+    match &args.program {
+        Some(_) => compile::cobcrun_run(&args, "cobcrun"),
         None => {
-            eprintln!("cobc-rs (cobcrun): usage: cobcrun <module> [args] | --runtime-conf | ...");
-            EXIT_ERROR
+            // `cobcrun` with only options and no program name
+            eprintln!("cobcrun: missing PROGRAM name\nTry 'cobcrun --help' for more information.");
+            1
         }
     }
 }

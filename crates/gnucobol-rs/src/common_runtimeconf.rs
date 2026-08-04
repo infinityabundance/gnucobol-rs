@@ -17,7 +17,11 @@
 //! initialisation (`cob_init`, common.c:10096 -- `setlocale(LC_ALL,"")` then force `LC_NUMERIC`/
 //! `LC_CTYPE` to `"C"`) and its username resolution (`USERNAME` env, else `LOGNAME`, else `getlogin()`).
 
+use crate::common_configload::{
+    cb_lookup_config, cob_expand_env_string, get_config_val, StoredVal, GC_CONF,
+};
 use crate::common_misc::translate_boolean_to_int;
+use std::collections::BTreeMap;
 
 /// `gc_conf[].env_group` -- the section a setting prints under, in `print_runtime_conf` order.
 mod grp {
@@ -376,6 +380,211 @@ pub fn print_runtime_conf(sys: &SystemConf) -> Vec<u8> {
     tail(&mut out, "LC_MONETARY", &sys.lc_monetary);
     tail(&mut out, "LC_TIME", &sys.lc_time);
 
+    out
+}
+
+/// The overlay for a RESOLVED `--runtime-conf` report (the cobcrun `-c <cfg>` / env surface):
+/// config-file values by `conf_name`, env overrides by `env_name` (environment priority), and the
+/// config file the report's `via` line should name (the base report keeps the compiled default).
+pub struct ConfOverlay<'a> {
+    pub config_file: Option<&'a str>,
+    /// `conf_name` -> raw config-file value (already applied in file order; last wins).
+    pub applied: &'a BTreeMap<String, Vec<u8>>,
+    /// `env_name` -> value (process env or `setenv`-directive overrides; wins over config).
+    pub env: &'a BTreeMap<String, String>,
+}
+
+/// Render one applied/env value in libcob's `get_config_val` shape (bool yes/no, enum back-
+/// translation, size with K/M/G, quoted STR, bare FILE/PATH, `${...}` expansion for strings).
+fn render_resolved_value(row: &ConfRow, raw: &str) -> String {
+    let pos = cb_lookup_config(row.conf, GC_CONF);
+    if pos < GC_CONF.len() {
+        let e = &GC_CONF[pos];
+        let stored = match row.kind {
+            Bool => {
+                let lv = raw.to_ascii_lowercase();
+                let n = if matches!(lv.as_str(), "true" | "yes" | "on" | "1") { 1 } else { 0 };
+                StoredVal::Int(n)
+            }
+            Uint | Size => {
+                let n = parse_size_i64(raw).unwrap_or(0);
+                StoredVal::Int(n)
+            }
+            Char => StoredVal::Char(raw.bytes().next().unwrap_or(0)),
+            Str | Path => StoredVal::Str(Some(raw)),
+        };
+        let (mut value, _org) = get_config_val(stored, pos, GC_CONF);
+        if row.kind == Str || row.kind == Path {
+            // libcob expands `${...}` in string values when rendering the report
+            let expanded = cob_expand_env_string(
+                value.as_bytes(),
+                &|name: &str| std::env::var(name).ok(),
+                std::process::id() as i32,
+                "",
+                "",
+            );
+            value = String::from_utf8_lossy(&expanded).into_owned();
+            if row.kind == Str {
+                value = format!("'{value}'");
+            }
+        }
+        let _ = e;
+        value
+    } else {
+        // row not in the (representative) config table: a faithful fallback for the report
+        match row.kind {
+            Bool => {
+                let lv = raw.to_ascii_lowercase();
+                if matches!(lv.as_str(), "true" | "yes" | "on" | "1") {
+                    "yes".to_string()
+                } else {
+                    "no".to_string()
+                }
+            }
+            Char => raw.to_string(),
+            Str => format!("'{}'", expand_env_plain(raw)),
+            Path => expand_env_plain(raw),
+            _ => raw.to_string(),
+        }
+    }
+}
+
+fn expand_env_plain(raw: &str) -> String {
+    let expanded = cob_expand_env_string(
+        raw.as_bytes(),
+        &|name: &str| std::env::var(name).ok(),
+        std::process::id() as i32,
+        "",
+        "",
+    );
+    String::from_utf8_lossy(&expanded).into_owned()
+}
+
+fn parse_size_i64(v: &str) -> Option<i64> {
+    let v = v.trim();
+    let (num, mult) = if let Some(rest) = v.strip_suffix(['K', 'k']) {
+        (rest, 1024i64)
+    } else if let Some(rest) = v.strip_suffix(['M', 'm']) {
+        (rest, 1024i64 * 1024)
+    } else if let Some(rest) = v.strip_suffix(['G', 'g']) {
+        (rest, 1024i64 * 1024 * 1024)
+    } else {
+        (v, 1i64)
+    };
+    num.trim().parse::<i64>().ok().map(|n| n * mult)
+}
+
+/// The RESOLVED `cobcrun --runtime-conf` report: like [`print_runtime_conf`], but the `via` line and
+/// the per-row values reflect the loaded config file (`-c <cfg>` / `COB_RUNTIME_CONFIG`), applied
+/// config values, env overrides and `${...}` expansion. With an empty overlay this is byte-identical
+/// to [`print_runtime_conf`].
+pub fn print_runtime_conf_resolved(sys: &SystemConf, overlay: &ConfOverlay) -> Vec<u8> {
+    let mut out = Vec::new();
+    let ver = format!(
+        "{}.{}.{}",
+        crate::common::LIBCOB_VERSION,
+        crate::common::LIBCOB_VERSION_MINOR,
+        crate::common::LIBCOB_VERSION_PATCHLEVEL
+    );
+    out.extend_from_slice(format!("GnuCOBOL {ver} runtime configuration\n").as_bytes());
+    out.extend_from_slice(b" via  ");
+    match overlay.config_file {
+        Some(f) => out.extend_from_slice(f.as_bytes()),
+        None => out.extend_from_slice(sys.config_file.as_bytes()),
+    }
+    out.push(b'\n');
+    out.push(b'\n');
+
+    let mut hdlen = 15usize;
+    for r in GC_CONF_DISPLAY {
+        hdlen = hdlen.max(r.env.len()).max(r.conf.len());
+    }
+    let min_conf = {
+        let m = NOT_SET.len() + 1;
+        m.clamp(6, 15)
+    };
+
+    for j in 1..grp::MAX {
+        let mut dohdg = true;
+        for row in GC_CONF_DISPLAY {
+            if row.group != j {
+                continue;
+            }
+            if dohdg {
+                dohdg = false;
+                if j > 1 {
+                    out.push(b'\n');
+                }
+                out.extend_from_slice(format!(" {}\n", SETTING_GROUP[j as usize]).as_bytes());
+            }
+            // env override wins (environment priority), then the config-file value, then the default.
+            let env_val = overlay.env.get(row.env).cloned();
+            let app_val = overlay.applied.get(row.conf).cloned();
+            match row.env {
+                "USERNAME" | "LANG" | "OSTYPE" | "TERM" if env_val.is_some() => {
+                    let v = env_val.as_deref().unwrap_or("");
+                    push_line(&mut out, hdlen, min_conf, row.env, &format!("'{v}'"), true, None, false);
+                }
+                _ if env_val.is_some() => {
+                    let v = env_val.as_deref().unwrap_or("");
+                    let value = render_resolved_value(row, v);
+                    push_line(&mut out, hdlen, min_conf, row.env, &value, true, None, false);
+                }
+                _ if app_val.is_some() => {
+                    let v = String::from_utf8_lossy(app_val.as_deref().unwrap_or(&[])).into_owned();
+                    let value = render_resolved_value(row, &v);
+                    push_line(&mut out, hdlen, min_conf, row.env, &value, false, None, false);
+                }
+                "USERNAME" => match &sys.username {
+                    Some((name, origin)) => {
+                        let (env_prefix, set_by) = match origin {
+                            UserOrigin::Username => (true, None),
+                            UserOrigin::Logname => (true, Some("LOGNAME")),
+                            UserOrigin::Getlogin => (false, Some("getlogin()")),
+                        };
+                        push_line(&mut out, hdlen, min_conf, row.env, &format!("'{name}'"), env_prefix, set_by, false);
+                    }
+                    None => push_line(&mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true),
+                },
+                "LANG" | "OSTYPE" | "TERM" => {
+                    let envval = match row.env {
+                        "LANG" => &sys.lang,
+                        "OSTYPE" => &sys.ostype,
+                        _ => &sys.term,
+                    };
+                    match envval {
+                        Some(v) => push_line(&mut out, hdlen, min_conf, row.env, &format!("'{v}'"), true, None, false),
+                        None => push_line(&mut out, hdlen, min_conf, row.env, NOT_SET, false, None, true),
+                    }
+                }
+                "COB_EXIT_MSG" => {
+                    push_line(&mut out, hdlen, min_conf, row.env, &format!("'{EXIT_MSG_DEFAULT}'"), false, None, true);
+                }
+                _ => {
+                    let value = render_value(row);
+                    push_line(&mut out, hdlen, min_conf, row.env, &value, false, None, true);
+                }
+            }
+        }
+    }
+
+    let tail = |out: &mut Vec<u8>, name: &str, val: &str| {
+        out.extend_from_slice(b"    : ");
+        out.extend_from_slice(name.as_bytes());
+        for _ in name.len()..hdlen {
+            out.push(b' ');
+        }
+        out.extend_from_slice(b" : ");
+        out.extend_from_slice(val.as_bytes());
+        out.push(b'\n');
+    };
+    tail(&mut out, "LOCALEDIR", &sys.localedir);
+    tail(&mut out, "LC_CTYPE", &sys.lc_ctype);
+    tail(&mut out, "LC_NUMERIC", &sys.lc_numeric);
+    tail(&mut out, "LC_COLLATE", &sys.lc_collate);
+    tail(&mut out, "LC_MESSAGES", &sys.lc_messages);
+    tail(&mut out, "LC_MONETARY", &sys.lc_monetary);
+    tail(&mut out, "LC_TIME", &sys.lc_time);
     out
 }
 

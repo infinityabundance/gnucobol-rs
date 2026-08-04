@@ -74,11 +74,34 @@ pub enum RunError {
     UndefinedName(String),
     /// A runtime operation (move/arith/edit) failed (e.g. non-numeric operand).
     Runtime(String),
+    /// A FATAL runtime error (libcob's `libcob: <file>:<line>: error: <msg>` shape, exit 1): the
+    /// program must abort with the libcob-shaped diagnostic (e.g. "attempt to CANCEL active
+    /// program"). The run boundary renders it distinctly from the adapter's own `cobrun:` notes.
+    Fatal(String),
     /// An arithmetic SIZE ERROR condition (EC-SIZE-*): a divide-by-zero (or, in future, a result too
     /// large for the receiver). The receiver is left UNCHANGED and the statement's `ON SIZE ERROR`
     /// handler (if any) runs; with no handler, execution continues silently. Caught by `run_block` /
     /// the `exec_arith` / `exec_compute` wrappers -- it never propagates out as a fatal error.
     SizeError,
+}
+
+/// Build a [`RunError::Fatal`] carrying the source line for the libcob-shaped diagnostic
+/// (`libcob: <file>:<line>: error: <msg>`). The line comes from the token map; the file is the
+/// SOURCE_FILE set by the run boundary.
+pub fn fatal_with_line(line: usize, msg: String) -> RunError {
+    // libcob's runtime-error shape: `<file>:<line>: error: <msg>` (the run boundary prefixes
+    // `libcob: ` and exits 1).
+    RunError::Fatal(format!(
+        "{}:{}: error: {}",
+        crate::frontend::source_file_name(),
+        line,
+        msg
+    ))
+}
+
+/// The current source file name (for fatal-error rendering), empty when unset.
+pub fn source_file_name() -> String {
+    SOURCE_FILE.with(|s| s.borrow().clone())
 }
 
 impl core::fmt::Display for RunError {
@@ -87,6 +110,7 @@ impl core::fmt::Display for RunError {
             RunError::Unsupported(s) => write!(f, "unsupported: {s}"),
             RunError::UndefinedName(s) => write!(f, "undefined data name: {s}"),
             RunError::Runtime(s) => write!(f, "runtime error: {s}"),
+            RunError::Fatal(s) => write!(f, "runtime error: {s}"),
             RunError::SizeError => write!(f, "SIZE ERROR"),
         }
     }
@@ -182,7 +206,17 @@ fn line_blank_before(bytes: &[u8], i: usize) -> bool {
 }
 
 fn lex(src: &str) -> Vec<Tok> {
+    let (toks, lines) = lex_with_lines(src);
+    TOKEN_LINES.with(|l| *l.borrow_mut() = lines);
+    toks
+}
+
+/// `lex` plus a per-token source LINE map (1-based), used by fatal runtime-error reporting
+/// (libcob's `libcob: <file>:<line>: error: <msg>` shape). The line is the token's start line.
+fn lex_with_lines(src: &str) -> (Vec<Tok>, Vec<usize>) {
     let mut toks = Vec::new();
+    let mut lines = Vec::new();
+    let mut line = 1usize;
     let bytes = src.as_bytes();
     let mut i = 0;
     while i < bytes.len() {
@@ -206,6 +240,9 @@ fn lex(src: &str) -> Vec<Tok> {
             continue;
         }
         if c.is_ascii_whitespace() {
+            if c == b'\n' {
+                line += 1;
+            }
             i += 1;
             continue;
         }
@@ -228,6 +265,7 @@ fn lex(src: &str) -> Vec<Tok> {
                 i += 1;
             }
             toks.push(Tok::Str(s));
+            lines.push(line);
             continue;
         }
         if c == b'.' {
@@ -236,6 +274,7 @@ fn lex(src: &str) -> Vec<Tok> {
             // token. Otherwise the `.` is a sentence/clause terminator.
             if !matches!(bytes.get(i + 1), Some(n) if n.is_ascii_digit()) {
                 toks.push(Tok::Dot);
+                lines.push(line);
                 i += 1;
                 continue;
             }
@@ -259,8 +298,9 @@ fn lex(src: &str) -> Vec<Tok> {
             i += 1;
         }
         toks.push(Tok::Word(src[start..i].to_string()));
+        lines.push(line);
     }
-    toks
+    (toks, lines)
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -519,6 +559,9 @@ pub fn run_program_redirected(
     POINTER_TARGETS.with(|m| m.borrow_mut().clear());
     ENV_NAME_REG.with(|r| r.borrow_mut().clear());
     ENV_OVERRIDE.with(|m| m.borrow_mut().clear());
+    // NOTE: COMMAND_LINE is NOT cleared here -- the host (cobcrun) sets it BEFORE the run; a
+    // launcher/`./prog` execution leaves it at its thread-local empty default.
+    ARG_NUMBER_REG.with(|r| *r.borrow_mut() = 0);
     let mut fields = build_program_fields(main, &ctx)?;
     reset_exception(); // a fresh run starts with no raised exception
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
@@ -672,6 +715,9 @@ struct ProgramDef {
     /// `RD` report descriptions (REPORT SECTION) by report name.
     reports: HashMap<String, ReportDef>,
     proc_toks: Vec<Tok>,
+    /// Per-token source line map of `proc_toks` (threaded through the subscript-glue and
+    /// qualified-name transforms), for libcob-shaped fatal-error line reporting.
+    proc_lines: Vec<usize>,
     /// `PROGRAM-ID. name IS INITIAL` -- the program's WORKING-STORAGE is re-initialized to its VALUE
     /// clauses on EVERY entry, rather than persisting (static) across CALLs.
     is_initial: bool,
@@ -1287,17 +1333,18 @@ fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
 /// Re-glue a multi-subscript reference that the lexer split on internal whitespace (`N(I, J)` lexes as
 /// `N(I,` + `J)`). Only a token whose prefix before the first `(` is a declared DATA-NAME is glued -- a
 /// `FUNCTION name(...)` call keeps its split form (resolve_functions tracks paren depth across tokens).
-fn glue_subscripts(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
+fn glue_subscripts(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<Tok>, Vec<usize>) {
     let unbalanced = |w: &str| w.matches('(').count() > w.matches(')').count();
     // Any '(' may be a subscript needing a glue (a split `C(2`/`3)`, OR a `name (WS-SUB)` whose balanced
     // subscript token follows a space) -- so process whenever the stream has a paren at all.
     if !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.contains('('))) {
-        return toks.to_vec();
+        return (toks.to_vec(), lines.to_vec());
     }
     // Glue `name(... )` (or `name (...)`) whose subscript list the lexer split on internal whitespace, into a
     // single token. A SPACE is inserted between the joined fragments so space-separated subscripts survive
     // (`C(2` + `3)` -> `C(2 3)`, NOT `C(23)`); the name stays attached to its `(`.
     let mut out = Vec::with_capacity(toks.len());
+    let mut out_lines = Vec::with_capacity(toks.len());
     let mut i = 0;
     while i < toks.len() {
         if let Tok::Word(w) = &toks[i] {
@@ -1335,27 +1382,30 @@ fn glue_subscripts(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
                     }
                 }
                 out.push(Tok::Word(glued));
+                out_lines.push(lines[i]);
                 i = j;
                 continue;
             }
         }
         out.push(toks[i].clone());
+        out_lines.push(lines[i]);
         i += 1;
     }
-    out
+    (out, out_lines)
 }
 
 /// Rewrite every `name OF group [OF group...]` (and `IN`) reference in a token stream into a single resolved
 /// field-key token, using the static [`NameIndex`]. A bare name with one candidate is left as-is (its key
 /// equals the name); an unresolvable / ambiguous qualified reference is left untouched (it errors downstream
 /// as before). No-op when the program has no duplicate names AND the stream has no `OF`/`IN`.
-fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
+fn collapse_qualified(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<Tok>, Vec<usize>) {
     let has_renames = idx.by_name.iter().any(|(b, v)| v.iter().any(|(k, _)| k != b));
     let has_of = toks.iter().any(|t| matches!(t, Tok::Word(w) if w == "OF" || w == "IN"));
     if !has_renames && !has_of {
-        return toks.to_vec();
+        return (toks.to_vec(), lines.to_vec());
     }
     let mut out = Vec::with_capacity(toks.len());
+    let mut out_lines = Vec::with_capacity(toks.len());
     let mut i = 0;
     while i < toks.len() {
         if let Tok::Word(w) = &toks[i] {
@@ -1398,15 +1448,17 @@ fn collapse_qualified(toks: &[Tok], idx: &NameIndex) -> Vec<Tok> {
                     let inner = match &sub { Some(s) => format!("{key}({s})"), None => key };
                     let nw = if lp > 0 { format!("{}{}", "(".repeat(lp), inner) } else { inner };
                     out.push(Tok::Word(nw));
+                    out_lines.push(lines[i]);
                     i = j;
                     continue;
                 }
             }
         }
         out.push(toks[i].clone());
+        out_lines.push(lines[i]);
         i += 1;
     }
-    out
+    (out, out_lines)
 }
 
 /// The elementary leaf children of a group field, as `(canonical_key, bare_name)` pairs (skipping nested
@@ -1536,15 +1588,16 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // proc body: from here to END PROGRAM (or the range end).
     let body_end = find_seq_in(toks, &["END", "PROGRAM"], p, end).unwrap_or(end);
     let proc_toks = toks[p..body_end].to_vec();
+    let proc_lines = TOKEN_LINES.with(|l| l.borrow().get(p..body_end).unwrap_or(&[]).to_vec());
 
     // Statically canonicalize duplicate WORKING-STORAGE data-names and collapse `name OF group` qualifiers in
     // the procedure body ONCE (qualification is purely a function of the declarations). A program with no
     // duplicate names and no OF/IN is returned unchanged, so existing behavior is byte-identical.
     let (ws, idx) = canonicalize_ws(&ws);
-    let proc_toks = glue_subscripts(&proc_toks, &idx);
-    let proc_toks = collapse_qualified(&proc_toks, &idx);
+    let (proc_toks, proc_lines) = glue_subscripts(&proc_toks, &proc_lines, &idx);
+    let (proc_toks, proc_lines) = collapse_qualified(&proc_toks, &proc_lines, &idx);
 
-    Ok((name, ProgramDef { ws, linkage, using, files, reports, proc_toks, is_initial }))
+    Ok((name, ProgramDef { ws, linkage, using, files, reports, proc_toks, proc_lines, is_initial }))
 }
 
 /// Parse `FILE-CONTROL` `SELECT name ASSIGN ... [ORGANIZATION [IS] {LINE SEQUENTIAL|SEQUENTIAL}]
@@ -2903,6 +2956,15 @@ thread_local! {
     /// `DISPLAY x UPON ENVIRONMENT-NAME` sets this register; `DISPLAY y UPON ENVIRONMENT-VALUE` and
     /// `ACCEPT z FROM ENVIRONMENT-VALUE` then act on the variable it names (none of these write stdout).
     static ENV_NAME_REG: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
+    /// The per-run command line (set by the run boundary for `cobcrun module args...`): `ACCEPT ... FROM
+    /// COMMAND-LINE` / `ARGUMENT-VALUE n` / `ARGUMENT-NUMBER` read it. Empty = no program arguments.
+    static COMMAND_LINE: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// The ARGUMENT-NUMBER register (index of the argument ARGUMENT-VALUE reads; DISPLAY n UPON
+    /// ARGUMENT-NUMBER sets it, 1-based in GnuCOBOL).
+    static ARG_NUMBER_REG: std::cell::RefCell<usize> = const { std::cell::RefCell::new(0) };
+    /// Per-token source line map from the most recent `lex` (a fresh top-level run lexes once; the
+    /// map is reset at the run start). Used for libcob-shaped fatal-error line reporting.
+    static TOKEN_LINES: std::cell::RefCell<Vec<usize>> = const { std::cell::RefCell::new(Vec::new()) };
     /// Per-run environment-variable overrides set via `DISPLAY ... UPON ENVIRONMENT-VALUE`; consulted before
     /// the real process environment by `ACCEPT ... FROM ENVIRONMENT [-VALUE]` so a set-then-read round-trips
     /// deterministically without mutating the host env.
@@ -2931,6 +2993,14 @@ thread_local! {
 pub fn set_source_file(path: &str) {
     SOURCE_FILE.with(|s| *s.borrow_mut() = path.to_string());
 }
+
+/// Record the program command line (the run boundary sets it for `cobcrun module args...`; cleared
+/// at the start of each fresh top-level run). `ACCEPT ... FROM COMMAND-LINE` / `ARGUMENT-VALUE` /
+/// `ARGUMENT-NUMBER` read it.
+pub fn set_command_line(args: &[String]) {
+    COMMAND_LINE.with(|c| *c.borrow_mut() = args.to_vec());
+}
+
 
 thread_local! {
     /// The last raised arithmetic exception condition name (an `EC-SIZE-*`), STICKY: set when a SIZE ERROR
@@ -3203,6 +3273,9 @@ thread_local! {
     /// The current program body's tokens (`proc_toks`), so a verb that runs a paragraph range (SORT
     /// INPUT/OUTPUT PROCEDURE) can reach them. Saved/restored around each program body.
     static CUR_PROC: std::cell::RefCell<Vec<Tok>> = const { std::cell::RefCell::new(Vec::new()) };
+    /// The current program body's per-token source lines (threaded through the proc_toks transforms),
+    /// for libcob-shaped fatal-error line reporting. Saved/restored around each program body.
+    static CUR_PROC_LINES: std::cell::RefCell<Vec<usize>> = const { std::cell::RefCell::new(Vec::new()) };
     /// `ALTER`ed GO TO targets: the token index of a `GO` verb -> the paragraph it now proceeds to. Set by
     /// ALTER, consulted by the GO TO executor. Saved/restored per program body.
     static ALTERED: std::cell::RefCell<HashMap<usize, String>> = std::cell::RefCell::new(HashMap::new());
@@ -3395,6 +3468,7 @@ fn run_program_body(
     let paras_vec: Vec<(String, usize)> = labels.iter().map(|(n, s)| (n.clone(), *s)).collect();
     let prev_paras = CUR_PARAS.with(|c| c.replace((paras_vec, proc.len())));
     let prev_proc = CUR_PROC.with(|c| c.replace(proc.clone()));
+    let prev_proc_lines = CUR_PROC_LINES.with(|c| c.replace(prog.proc_lines.clone()));
     let prev_altered = ALTERED.with(|c| c.replace(HashMap::new()));
     // DECLARATIVES: register the USE error handlers and begin normal execution after END DECLARATIVES.
     let (use_procs, decl_start) = parse_declaratives(proc, &labels);
@@ -3439,6 +3513,7 @@ fn run_program_body(
     // restore the caller's paragraph table (normal return; an error aborts the whole run anyway).
     CUR_PARAS.with(|c| { *c.borrow_mut() = prev_paras; });
     CUR_PROC.with(|c| { *c.borrow_mut() = prev_proc; });
+    CUR_PROC_LINES.with(|c| { *c.borrow_mut() = prev_proc_lines; });
     ALTERED.with(|c| { *c.borrow_mut() = prev_altered; });
     USE_PROCS.with(|c| { *c.borrow_mut() = prev_use; });
     PROGRAM_STACK.with(|s| { s.borrow_mut().pop(); });
@@ -3709,6 +3784,8 @@ fn run_block(
                     }
                     // CANCEL "NAME" ... -- drop each named program's persisted WORKING-STORAGE, so its
                     // next CALL rebuilds from VALUE (libcob un-initializes + unloads the module).
+                    // CANCELing an ACTIVE (in-call-chain) program that is not INITIAL is a fatal
+                    // runtime error in libcob ("attempt to CANCEL active program").
                     "CANCEL" => {
                         let rest = collect_operands(toks, pos);
                         if exec {
@@ -3719,6 +3796,24 @@ fn run_block(
                                     Tok::Dot => None,
                                 };
                                 if let Some(nm) = nm {
+                                    let active = PROGRAM_STACK.with(|s| {
+                                        s.borrow().iter().any(|p| p.eq_ignore_ascii_case(&nm))
+                                    });
+                                    let initial = ctx
+                                        .programs
+                                        .get(&nm)
+                                        .or_else(|| ctx.programs.get(&nm.to_uppercase()))
+                                        .map(|p| p.is_initial)
+                                        .unwrap_or(false);
+                                    if active && !initial {
+                                        let line = CUR_PROC_LINES.with(|l| {
+                                            l.borrow().get(*pos).copied().unwrap_or(0)
+                                        });
+                                        return Err(fatal_with_line(
+                                            line,
+                                            "attempt to CANCEL active program".to_string(),
+                                        ));
+                                    }
                                     ctx.call_state.borrow_mut().remove(&nm);
                                 }
                             }
@@ -5979,6 +6074,9 @@ fn exec_display(
             let val: Vec<u8> = operands.iter().flat_map(|(b, _)| b.iter().copied()).collect();
             if dev == "ENVIRONMENT-NAME" {
                 ENV_NAME_REG.with(|r| *r.borrow_mut() = String::from_utf8_lossy(&val).trim_end().to_string());
+            } else if dev == "ARGUMENT-NUMBER" {
+                let n = String::from_utf8_lossy(&val).trim().parse::<usize>().unwrap_or(0);
+                ARG_NUMBER_REG.with(|r| *r.borrow_mut() = n);
             } else {
                 let name = ENV_NAME_REG.with(|r| r.borrow().clone());
                 ENV_OVERRIDE.with(|m| m.borrow_mut().insert(name, val));
@@ -7183,6 +7281,33 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
         let val = ENV_OVERRIDE.with(|m| m.borrow().get(&name).cloned())
             .unwrap_or_else(|| std::env::var(&name).unwrap_or_default().into_bytes());
         let mv = vec![Tok::Str(val), Tok::Word("TO".to_string()), Tok::Word(target)];
+        return exec_move(&mv, fields, false);
+    }
+    // COMMAND-LINE sources (the run boundary set the command line via set_command_line):
+    //   ACCEPT x FROM COMMAND-LINE            -> the whole argument string (args joined by spaces)
+    //   ACCEPT x FROM ARGUMENT-VALUE          -> the argument named by the ARGUMENT-NUMBER register
+    //   ACCEPT x FROM ARGUMENT-NUMBER         -> the count of arguments
+    // (cobcrun passes everything after the module name; the oracle behaves identically for a
+    // pinned argv, so this is deterministic under the suite.)
+    if src == "COMMAND-LINE" {
+        let joined = COMMAND_LINE.with(|c| c.borrow().join(" "));
+        let mv = vec![Tok::Str(joined.into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        return exec_move(&mv, fields, false);
+    }
+    if src == "ARGUMENT-VALUE" {
+        let n = ARG_NUMBER_REG.with(|r| r.borrow().clone());
+        let val = COMMAND_LINE.with(|c| {
+            c.borrow()
+                .get(n)
+                .cloned()
+                .unwrap_or_default()
+        });
+        let mv = vec![Tok::Str(val.into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        return exec_move(&mv, fields, false);
+    }
+    if src == "ARGUMENT-NUMBER" {
+        let n = COMMAND_LINE.with(|c| c.borrow().len());
+        let mv = vec![Tok::Str(n.to_string().into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
         return exec_move(&mv, fields, false);
     }
     let long_year = matches!(stmt.get(3), Some(Tok::Word(w)) if w == "YYYYMMDD" || w == "YYYYDDD");
