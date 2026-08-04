@@ -228,9 +228,18 @@ echo "cobrun: $("$COBRUN" --version 2>/dev/null | sed -n "1p" || echo "?")"
 log "candidate suite run (COBC=cobc-rs via make localcheck; oracle isolated away)"
 CAND_BIN="$RUN_ROOT/candidate-bin"
 mkdir -p "$CAND_BIN"
-ln -sfn /work/target/release/cobc-rs "$CAND_BIN/cobc"
-ln -sfn /work/target/release/cobc-rs "$CAND_BIN/cobcrun"
-chmod +x "$CAND_BIN/cobc" "$CAND_BIN/cobcrun"
+# Canonical candidate binaries: cobc-rs + cobcrun-rs (argv[0]-dispatched). The GnuCOBOL harness
+# requires PATH entries literally named `cobc` and `cobcrun`, so the candidate adapter dir carries
+# explicit symlinks: candidate-bin/cobc -> cobc-rs, candidate-bin/cobcrun -> cobcrun-rs. Their
+# identities (targets + sha256) are recorded in no-delegation.json so a reader can never confuse
+# them with the oracle binaries.
+ln -sfn /work/target/release/cobc-rs "$CAND_BIN/cobc-rs"
+ln -sfn /work/target/release/cobc-rs "$CAND_BIN/cobcrun-rs"
+ln -sfn cobc-rs "$CAND_BIN/cobc"
+ln -sfn cobcrun-rs "$CAND_BIN/cobcrun"
+chmod +x "$CAND_BIN/cobc-rs" "$CAND_BIN/cobcrun-rs" "$CAND_BIN/cobc" "$CAND_BIN/cobcrun"
+COBC_RS_SHA=$(sha256sum /work/target/release/cobc-rs | cut -d' ' -f1)
+COBRUN_SHA=$(sha256sum "$COBRUN" | cut -d' ' -f1)
 
 # bind-flicker watchdog: verify the candidate binary is visible through the pinned binds (the
 # rootless /run copy-up can transiently present an empty view on this machine); retry briefly.
@@ -278,7 +287,7 @@ ISOLATION_NOTE=$(candidate_isolation) || fail "candidate isolation check failed:
 
 cat > "$RUN_ROOT/no-delegation.json" <<EOF
 {
-  "schema": "gnurust-gnucobol-testsuite-no-delegation-v1",
+  "schema": "gnurust-gnucobol-testsuite-no-delegation-v2",
   "candidate_phase_isolated": true,
   "candidate_phase_note": "$ISOLATION_NOTE",
   "cobrun_links_no_libcob": true,
@@ -290,9 +299,15 @@ cat > "$RUN_ROOT/no-delegation.json" <<EOF
   "cobc_resolves_to_candidate_during_candidate_phase": true,
   "cobcrun_resolves_to_candidate_during_candidate_phase": true,
   "oracle_prefix_absent_during_candidate_phase": true,
+  "candidate_bin": {
+    "cobc": {"symlink_target": "cobc-rs", "resolves_to": "/work/target/release/cobc-rs"},
+    "cobcrun": {"symlink_target": "cobcrun-rs", "resolves_to": "/work/target/release/cobc-rs"},
+    "cobc_rs_sha256": "$COBC_RS_SHA",
+    "cobrun_sha256": "$COBRUN_SHA"
+  },
   "cobrun_version": "$("$COBRUN" --version 2>/dev/null | sed -n "1p" || echo "?")",
-  "candidate_binary_sha256": "$(sha256sum "$COBRUN" | cut -d' ' -f1)",
-  "cobc_rs_binary_sha256": "$(sha256sum /work/target/release/cobc-rs | cut -d' ' -f1)"
+  "candidate_binary_sha256": "$COBRUN_SHA",
+  "cobc_rs_binary_sha256": "$COBC_RS_SHA"
 }
 EOF
 cp "$RUN_ROOT/no-delegation.json" "$OUT/no-delegation.json"
