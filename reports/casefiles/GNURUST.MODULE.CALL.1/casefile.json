@@ -1,0 +1,57 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "caller/callee stdout, EXTERNAL storage flow, exit status"
+  ],
+  "case_id": "GNURUST.MODULE.CALL.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "overclaiming the module model as native dynamic loading",
+  "hash_chain": {
+    "inputs_sha256": "b69390c451a0676c1a86f4893cb101e088c3d4242e4df77b550edf4b7e37f32a"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "d39f7e2267b2f9ee62fa39ef4cfc467f4a1df1e1235abe7d302b93089d6764fe",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'dynamic CALL loads native modules' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-DYNAMIC-LOADING-OF-ARBITRARY-DSOS",
+    "NEG.MODULES-ARE-SOURCE-RESOLVED-NOT-DLOPEN-E"
+  ],
+  "negative_claims": [
+    "no dynamic loading of arbitrary DSOs",
+    "modules are source-resolved, not dlopen'ed",
+    "lie prevented: 'dynamic CALL loads native modules' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "the admitted suite's caller/callee module tests (baseline stdout)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.MODULE.CALL.1"
+  },
+  "positive_claims": [
+    "caller CALLs a separately compiled callee module (the suite's caller.cob/callee.cob pattern): the callee source is resolved at compile time and EXTERNAL items are shared across the call (run-unit store), producing the oracle's exact stdout (Hello/World)",
+    "exercised by GNURUST.MODULE.MULTI.1 and the suite rerun"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "crates/cobc-rs/tests/module_courts.rs (separately_compiled_callee_is_called_through_the_module)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

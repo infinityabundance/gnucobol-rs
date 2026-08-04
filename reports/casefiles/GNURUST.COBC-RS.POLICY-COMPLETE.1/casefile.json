@@ -1,0 +1,56 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "policy registry export + invocation census + the generated compatibility document"
+  ],
+  "case_id": "GNURUST.COBC-RS.POLICY-COMPLETE.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "claiming policy completeness without the census reconciliation",
+  "hash_chain": {
+    "inputs_sha256": "7f6bda27bf461923a6f95e1d9fd78670b25e732278ce1f9905f671480f3acc7d"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "dd16e12f19f09605c40d2fcc0092df693a50c899e1c34b1bf762c629194abef8",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'cobc-rs ignores unknown flags safely' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-CLAIM-THAT-ACCEPTED-NO-OP-FLAGS-PRESE"
+  ],
+  "negative_claims": [
+    "no claim that accepted no-op flags preserve semantics outside the admitted tests",
+    "lie prevented: 'cobc-rs ignores unknown flags safely' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "the real invocation census (argv boundaries preserved)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COBC-RS.POLICY-COMPLETE.1"
+  },
+  "positive_claims": [
+    "every option in the real invocation census maps to an explicit policy (translated / accepted-proven-no-op / rejected-unsupported / rejected-ambiguous)",
+    "the machine invariant 'observed options == explicit policy + intentional unknown-option tests + program args after the delimiter' holds",
+    "no unknown semantic option is silently discarded"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "docs/generated/cobc-rs-option-compatibility.md (freshness-gated)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

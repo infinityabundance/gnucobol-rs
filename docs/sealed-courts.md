@@ -9,7 +9,7 @@ Evidence authority: the claim-ladder + generated casefiles. No legacy source (bo
 
 > _Generated document (TRUST.4.DOCS). Machine authority: `reports/claim-ladder.json` + `reports/casefiles/`. Born generated (no legacy source)._
 
-The complete, machine-generated ledger of every sealed court — **150** total (114 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
+The complete, machine-generated ledger of every sealed court — **160** total (124 `GNURUST.*` + 31 `KOBOLD.*` + framework courts). Each row links to its forensic case file (`casefile.json` + SARIF 2.1.0 + in-toto v1 + DSSE envelope). The machine-readable source is [`reports/claim-ladder.json`](../reports/claim-ladder.json); this page is generated from it and gated against drift.
 
 ### Sealed courts (generated from `reports/claim-ladder.json`)
 
@@ -56,7 +56,7 @@ The complete, machine-generated ledger of every sealed court — **150** total (
 | `GNURUST.SCREENIO.INIT.1` | SCREEN SECTION init/teardown framing + positioned DISPLAY (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.INIT.1/`](reports/casefiles/GNURUST.SCREENIO.INIT.1/) |
 | `GNURUST.SCREENIO.ATTR.1` | SCREEN SECTION monochrome display attributes (HIGHLIGHT/LOWLIGHT/UNDERLINE/BLINK/REVERSE) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ATTR.1/`](reports/casefiles/GNURUST.SCREENIO.ATTR.1/) |
 | `GNURUST.SCREENIO.COLOR.1` | SCREEN SECTION colour DISPLAY (FOREGROUND-COLOR/BACKGROUND-COLOR) -- the whole-screen ncurses repaint, native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.COLOR.1/`](reports/casefiles/GNURUST.SCREENIO.COLOR.1/) |
-| `GNURUST.SCREENIO.NUMEDIT.1` | SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/`](reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/) |
+| `GNURUST.SCREENIO.NUMEDIT.1` | SCREEN SECTION numeric-edited field DISPLAY (zero-suppression / sign / CR-DB positioning) -- native terminal bytes | ❌ fail | [`reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/`](reports/casefiles/GNURUST.SCREENIO.NUMEDIT.1/) |
 | `GNURUST.SCREENIO.ACCEPT.1` | SCREEN SECTION ACCEPT of an alphanumeric input field (prompt / reposition / echo / field-full) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.1/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.1/) |
 | `GNURUST.SCREENIO.LINEDIFF.1` | multi-DISPLAY same-row refresh line-diff (ncurses doupdate/TransformLine) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/`](reports/casefiles/GNURUST.SCREENIO.LINEDIFF.1/) |
 | `GNURUST.INTRINSIC.DATE.1` | date-conversion intrinsics | ✅ pass | [`reports/casefiles/GNURUST.INTRINSIC.DATE.1/`](reports/casefiles/GNURUST.INTRINSIC.DATE.1/) |
@@ -100,19 +100,29 @@ The complete, machine-generated ledger of every sealed court — **150** total (
 | `GNURUST.COBC-RS.ARGS.1` | cobc-rs argument-policy registry (every census option -> explicit policy; unknown fails closed) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.ARGS.1/`](reports/casefiles/GNURUST.COBC-RS.ARGS.1/) |
 | `GNURUST.COBC-RS.LAUNCHER.1` | cobc-rs truthful launcher+manifest artifact model (interpreter launch, never native codegen) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.LAUNCHER.1/`](reports/casefiles/GNURUST.COBC-RS.LAUNCHER.1/) |
 | `GNURUST.COBC-RS.PARALLEL.1` | cobc-rs concurrency safety (100+ parallel invocations, colliding basenames, no cross-test leakage) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.PARALLEL.1/`](reports/casefiles/GNURUST.COBC-RS.PARALLEL.1/) |
+| `GNURUST.MODULE.REGISTRY.1` | interpreted module lifecycle -- cobcrun-rs runner + build-local module search (-M/cwd/COB_LIBRARY_PATH) + truthful -m artifacts | ✅ pass | [`reports/casefiles/GNURUST.MODULE.REGISTRY.1/`](reports/casefiles/GNURUST.MODULE.REGISTRY.1/) |
+| `GNURUST.MODULE.CALL.1` | CALL semantics across separately compiled modules (sibling resolution + EXTERNAL sharing) | ✅ pass | [`reports/casefiles/GNURUST.MODULE.CALL.1/`](reports/casefiles/GNURUST.MODULE.CALL.1/) |
+| `GNURUST.MODULE.CANCEL.1` | CANCEL semantics (persisted WORKING-STORAGE reset; active-program fatal) | ✅ pass | [`reports/casefiles/GNURUST.MODULE.CANCEL.1/`](reports/casefiles/GNURUST.MODULE.CANCEL.1/) |
+| `GNURUST.MODULE.SEARCH.1` | cobcrun module search paths (-M dir, cwd, COB_LIBRARY_PATH) + error messages | ✅ pass | [`reports/casefiles/GNURUST.MODULE.SEARCH.1/`](reports/casefiles/GNURUST.MODULE.SEARCH.1/) |
+| `GNURUST.MODULE.PARALLEL.1` | module lifecycle under parallel execution (same basenames in isolated directories) | ✅ pass | [`reports/casefiles/GNURUST.MODULE.PARALLEL.1/`](reports/casefiles/GNURUST.MODULE.PARALLEL.1/) |
+| `GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1` | native-code modes (-C/-S/-c) remain an honest typed boundary; adapter-compatible cases map truthfully | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1/`](reports/casefiles/GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1/) |
+| `GNURUST.COBC-RS.POLICY-COMPLETE.1` | wrapper option-policy registry completeness (every observed option has an explicit policy) | ✅ pass | [`reports/casefiles/GNURUST.COBC-RS.POLICY-COMPLETE.1/`](reports/casefiles/GNURUST.COBC-RS.POLICY-COMPLETE.1/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1` | three-boundary reduction ledger (module 407 / parser-check 439 / wrapper-option 173) -- before/after per test | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.BOUNDARY-REDUCTION.1/) |
 | `GNURUST.2` | decimal MOVE | ✅ pass | [`reports/casefiles/GNURUST.2/`](reports/casefiles/GNURUST.2/) |
 | `GNURUST.ACCEPT.DISPLAY.2` | DISPLAY of signed and V-scaled numeric fields | ✅ pass | [`reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/`](reports/casefiles/GNURUST.ACCEPT.DISPLAY.2/) |
 | `GNURUST.FILEIO.LINESEQ.2` | line-sequential READ config matrix | ✅ pass | [`reports/casefiles/GNURUST.FILEIO.LINESEQ.2/`](reports/casefiles/GNURUST.FILEIO.LINESEQ.2/) |
-| `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
+| `GNURUST.SCREENIO.DISPLAY.2` | SCREEN SECTION positioned DISPLAY -- the ncurses mvcur cursor-cost model (native terminal bytes) | ❌ fail | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.2/) |
 | `GNURUST.SCREENIO.ACCEPT.2` | SCREEN SECTION ACCEPT overflow input (typing past the field width: BEL + overwrite) -- native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/`](reports/casefiles/GNURUST.SCREENIO.ACCEPT.2/) |
 | `GNURUST.CCVS85.2` | NIST CCVS85 materialization + real-GnuCOBOL 3.2 oracle baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.2/`](reports/casefiles/GNURUST.CCVS85.2/) |
 | `GNURUST.GNUCOBOL-TESTSUITE.2` | GnuCOBOL-testsuite candidate execution (COBC=cobc-rs through the native harness, no delegation) | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.2/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.2/) |
+| `GNURUST.GNUCOBOL-RUNTIME-MATH.2` | runtime/mathematics campaign after the boundary-reduction work (math subset re-measured from the same full ledger) | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-RUNTIME-MATH.2/`](reports/casefiles/GNURUST.GNUCOBOL-RUNTIME-MATH.2/) |
 | `GNURUST.3` | PIC field model | ✅ pass | [`reports/casefiles/GNURUST.3/`](reports/casefiles/GNURUST.3/) |
 | `GNURUST.SCREENIO.DISPLAY.3` | SCREEN SECTION multi-field DISPLAY -- the general ncurses mvcur (inter-field moves), native terminal bytes | ✅ pass | [`reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/`](reports/casefiles/GNURUST.SCREENIO.DISPLAY.3/) |
 | `GNURUST.CCVS85.3` | NIST CCVS85 gnucobol-rs (cobrun) execution baseline | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.3/`](reports/casefiles/GNURUST.CCVS85.3/) |
 | `GNURUST.GNUCOBOL-TESTSUITE.3` | GnuCOBOL-testsuite differential classification (baseline vs candidate, every test accounted) | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.3/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.3/) |
 | `GNURUST.4` | record layout | ✅ pass | [`reports/casefiles/GNURUST.4/`](reports/casefiles/GNURUST.4/) |
 | `GNURUST.CCVS85.4` | NIST CCVS85 differential comparison + per-unit classification | ✅ pass | [`reports/casefiles/GNURUST.CCVS85.4/`](reports/casefiles/GNURUST.CCVS85.4/) |
+| `GNURUST.GNUCOBOL-TESTSUITE.4` | GnuCOBOL-testsuite rerun after the three-boundary reduction (module lifecycle + parser/check waves + wrapper policy) -- re-measured ledger | ✅ pass | [`reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.4/`](reports/casefiles/GNURUST.GNUCOBOL-TESTSUITE.4/) |
 | `GNURUST.5` | COPY expansion | ✅ pass | [`reports/casefiles/GNURUST.5/`](reports/casefiles/GNURUST.5/) |
 | `GNURUST.6` | COPY ... REPLACING | ✅ pass | [`reports/casefiles/GNURUST.6/`](reports/casefiles/GNURUST.6/) |
 | `GNURUST.7` | arithmetic ADD/SUB/MUL | ✅ pass | [`reports/casefiles/GNURUST.7/`](reports/casefiles/GNURUST.7/) |

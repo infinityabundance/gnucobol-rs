@@ -1,38 +1,55 @@
-# GnuCOBOL test-suite integration — maintainer-facing follow-up
+# GnuCOBOL test-suite integration — maintainer-facing follow-up (boundary-reduction work)
 
-> Evidence packet (GNURUST.GNUCOBOL-TESTSUITE.{1,2,3} + runtime/math + methodology). Read time ≈ 5–10 minutes.
-> Every number below is a MEASURED result from the isolated Docker court; nothing is projected.
+> Evidence packet (GNURUST.GNUCOBOL-TESTSUITE.{1,2,3,4,BOUNDARY-REDUCTION} + GNURUST.MODULE.* +
+> GNURUST.COBC-RS.* + GNURUST.GNUCOBOL-RUNTIME-MATH.{1,2}). Read time ≈ 5–10 minutes.
+> Every number below is a MEASURED result from the isolated Docker court (two fresh passes,
+> determinism-identical); nothing is projected.
 
-## 1. What was implemented
+## 1. What was implemented (after Simon's guidance)
 
-- A first-class `cobc-rs` compatibility driver (`crates/cobc-rs/`) driven by an explicit
-  option-policy registry (translated / accepted-equivalent / accepted-proven-no-op /
-  rejected-unsupported / rejected-ambiguous — never a silent "ignore unknown flags").
-- A truthful artifact model: `cobc-rs -x -o prog` writes a **launcher symlink + JSON manifest +
-  expanded source** — an interpreter launch artifact, **never** a native COBOL executable.
-- The GnuCOBOL 3.2 native Autotest suite runs with `COBC=cobc-rs` through its own machinery
-  (`make localcheck`, `GNUCOBOL_TEST_LOCAL=1`, atlocal bootstrap, `TESTSUITEFLAGS=--jobs=12`).
-- Host-side evidence pipeline: census → classify → determinism → receipts → privacy gate →
-  option-compatibility doc → runtime/math subset.
-- Methodology/provenance docs: `docs/methodology/{libcob-rust-port,parser-front-end-provenance}.md`
-  + machine records under `reports/methodology/`.
+- **First-failure attribution corrected.** The v0.8.54 "module-model" bucket (407 tests) was
+  dominated by `$COBCRUN_DIRECT ./prog` runs whose real first failure was a cobrun
+  parse/check/runtime diagnostic — the module-model check shadowed them. The classifier now
+  attributes each failure to its TRUE boundary (same diagnostic, same class, on the syntax-only
+  and the run path). This is re-measurement, not reclassification-for-counts: every move has raw
+  evidence.
+- **An interpreted module lifecycle.** `cobc-rs -m` is silent (cobc is silent); `cobcrun-rs`
+  resolves modules through `-M <dir>` (trailing slash appended, GnuCOBOL semantics), cwd and
+  `COB_LIBRARY_PATH`, passes program arguments to `ACCEPT FROM COMMAND-LINE`, emits cobcrun-shaped
+  diagnostics, loads runtime config files (`-c <cfg>` / `COB_RUNTIME_CONFIG` / `COB_CONFIG_DIR`)
+  with libcob-shaped errors and recursive-include detection, and `--runtime-conf` reflects applied
+  values, environment priority and `${...}` expansion.
+- **CALL/CANCEL semantics.** CALL across separately compiled modules (sibling resolution +
+  EXTERNAL sharing), CANCEL resets persisted WORKING-STORAGE, and CANCELing the active
+  non-INITIAL program raises the libcob-shaped fatal `attempt to CANCEL active program` (exit 1).
+- **Parser/check feature families** (measured, coherent, complete): cobc-exact DISPLAY of numeric /
+  E-notation / binary / hex literals; level-78 named constants and the `01 ... CONSTANT [GLOBAL]`
+  clause; USAGE BINARY-INT / FLOAT-SHORT / FLOAT-LONG / FLOAT-DOUBLE / FLOAT-EXTENDED / HANDLE.
+- **Diagnostic dimensions.** Each test now carries `semantic_diagnostic_verdict` (REJECT = the
+  candidate correctly rejected invalid source) and `diagnostic_shape_parity` (MATCH / DIFFERS vs
+  the oracle's expected stderr) — exact cobc wording is NOT required for a correct rejection.
 
 ## 2. Exact GnuCOBOL source identity
 
 - GnuCOBOL 3.2 tarball, sha256 `8ecc77d0a4c9401618b8b99adf2050adef14767916767c54bb42341f0ab504fb`
   (the repository's admitted oracle source; never a distribution package).
 - Configure: `./configure --prefix=/work/oracle/prefix --with-db BDB_CFLAGS=-I/usr/include/db5.3
-  BDB_LIBS=-ldb-5.3 CFLAGS="-O2 -std=gnu17 -fsigned-char"` — stock (no `-fpermissive`, no compat
-  `-Wno-*`), identical in the baseline and candidate trees.
+  BDB_LIBS=-ldb-5.3 CFLAGS="-O2 -std=gnu17 -fsigned-char"` — stock, identical in every tree.
 
-## 3. Exact commands
+## 3. Exact commands (unambiguous candidate identity)
 
 ```sh
 # baseline (real admitted cobc, in-tree)
 ( cd <baseline-tree> && make check TESTSUITEFLAGS="--jobs=12" )
 
-# candidate (COBC=cobc-rs through the native harness)
-( cd <candidate-tree>/tests && env COBC=.../cobc COBCRUN=.../cobcrun \
+# candidate (conceptual form — the candidate binaries are cobc-rs and cobcrun-rs)
+( cd <candidate-tree>/tests && env COBC=/work/candidate-bin/cobc-rs COBCRUN=/work/candidate-bin/cobcrun-rs \
+    make localcheck TESTSUITEFLAGS="--jobs=12" )
+
+# candidate (real form — the harness requires PATH entries named `cobc`/`cobcrun`;
+# candidate-bin/cobc is a symlink to cobc-rs and candidate-bin/cobcrun a symlink to cobcrun-rs;
+# both targets + sha256 are recorded in no-delegation.json — NEVER the oracle binaries)
+( cd <candidate-tree>/tests && env COBC=/work/candidate-bin/cobc COBCRUN=/work/candidate-bin/cobcrun \
     make localcheck TESTSUITEFLAGS="--jobs=12" )
 
 # one-command replay (public, configurable storage)
@@ -41,124 +58,128 @@ bash lab/gnucobol-testsuite/run-docker.sh
 
 ## 4. Baseline totals (real admitted cobc, in-tree, this environment)
 
-- **1242 pass · 9 skip · 31 xfail · 0 fail · 0 timeout** (1282 test groups reconciled). The baseline
-  is fully green under the stock configuration; the 31 xfails are the suite's own expected failures.
-- Full ledger: `reports/gnucobol-testsuite/summary.md`; raw logs: `reports/gnucobol-testsuite/raw/`.
+- **1242 pass · 9 skip · 31 xfail · 0 fail · 0 timeout** (1282 groups reconciled; re-run fresh for
+  every candidate measurement — the expectations never changed).
 
-## 5. Candidate totals (COBC=cobc-rs)
+## 5. Candidate totals (before → after)
 
-- **173 OBSERVABLE_MATCH** (the test's own AT_CHECK assertions held on both sides) ·
-  **439 candidate check/parse rejects** (fail closed) · **407 module-model unsupported** (`-m` /
-  `cobcrun -M` boundary) · **173 wrapper-option unsupported** (honest rejection of native-code
-  modes and unmodeled flags) · **26 wrapper-malformed** · **22 candidate unsupported** ·
-  **2 runtime fails** · **0 timeouts · 0 not-reached · 0 nondeterministic** — all 1282 accounted.
+| boundary | v0.8.54 | now | change |
+|---|---:|---:|---|
+| OBSERVABLE_MATCH | 173 | **193** | +20 |
+| module-model unsupported | 407 | **4** | −403 (re-attributed + implemented) |
+| candidate check/parse rejects | 439 | **683** | the honest re-attribution; 9 became matches, 7 became runtime-fails |
+| candidate runtime fails | 2 | **136** | the launcher-run failures now attributed to runtime |
+| candidate unsupported | 22 | 21 | −1 |
+| wrapper-option unsupported | 173 | 180 | +7 honest re-attribution (`-fbinary-size` etc. surface first) |
+| wrapper-invocation malformed | 26 | 25 | −1 |
+| timeout / nondeterministic / not-reached | 0 | **0** | unchanged |
 
-## 6. Runtime-test totals
+All 1282 groups reconcile exactly; two fresh passes are classification-identical.
 
-- The runtime subset (files, sequential I/O, report writer, extensions) is classified inside the
-  same 1282-test ledger; the math subset is reported separately (next section). Raw per-group logs
-  are preserved under `reports/gnucobol-testsuite/raw/`.
+## 6. Module boundary (407 → 4)
 
-## 7. Math-test totals
+Measured transitions (per-test in `boundary-reduction.json` / `classification-transitions.json`):
+- 9 → OBSERVABLE_MATCH (the genuine module tests now pass: `cobcrun -M`, CANCEL, runtime config).
+- 238 → check-reject, 30 → parse-reject, 127 → runtime-fail: honest first-failure re-attribution.
+- 4 remain module-model (cobcrun-side errors not yet matched, e.g. parts of 0040/0044).
 
-- **323 math tests** (data_binary / data_display / data_packed / data_pointer / run_fundamental /
-  run_functions / syn_multiply / syn_value / syn_literals), classified from the SAME results as the
-  whole suite (no favorable selection): **97 OBSERVABLE_MATCH · 52 check-reject · 147 module-model
-  unsupported · 22 wrapper-option · 0 malformed · 1 unsupported · 3 oracle-skip · 1 oracle-xfail**
-  (sum = 323, machine-enforced: the generator fails unless the math subset reconciles exactly;
-  the ledger confirms 22 WRAPPER_OPTION_UNSUPPORTED and 0 WRAPPER_INVOCATION_MALFORMED — an
-  earlier prose version claiming 21/1 was corrected against the ledger).
-  See `reports/gnucobol-runtime-tests/math-correctness.md`.
+Module semantics now supported (GNURUST.MODULE.{REGISTRY,CALL,CANCEL,SEARCH,PARALLEL}.1):
+- silent `-m` launcher+manifest artifacts (never native `.so`);
+- `cobcrun -M <dir> <program> [args]`, cwd + COB_LIBRARY_PATH search;
+- cobcrun error messages + exit codes (`missing PROGRAM name`, `invalid module argument ''`,
+  `cannot find module`);
+- CALL across separately compiled modules with EXTERNAL sharing;
+- CANCEL state reset + active-program fatal;
+- 100-way parallel same-basename isolation;
+- tampered-manifest refusal (self-hash).
 
-## 8. Correctness matches
+Remaining module boundaries: no native shared-object semantics, no ABI compatibility with real
+cobcrun, no dlopen — documented as non-claims.
 
-- **173 of 1282 suite tests** and **97 of 323 math tests** produced identical observable results on
-  both sides (the suite's own AT_CHECK assertions). 0 timeouts, 0 nondeterministic outcomes.
+## 7. Parser/check boundary (decomposed + first families)
 
-## 9. Performance findings (strict caveats)
+Census (`parser-reject-census.{json,md}`, `parser-feature-frequency.csv`,
+`parser-feature-dependency-graph.json`): 683 rejects by phase — checker 406, grammar 115,
+data-layout 98, semantic-check 33, name-resolution 31. Implemented families:
+- DISPLAY literals (numeric / sign / E-notation / B'…' / BX'…' as decimal) — cobc-exact;
+- level-78 named constants + `01 … CONSTANT [GLOBAL] …`;
+- USAGE BINARY-INT / FLOAT-SHORT / FLOAT-LONG / FLOAT-DOUBLE / FLOAT-EXTENDED / HANDLE.
+The remaining rejects are deliberately NOT chased as one-off grammar productions: they are a
+scatter of distinct constructs (diagnostic-shape tests on intentionally invalid sources,
+individual dialect forms), each with a documented reason code.
 
-- Performance is reported ONLY for programs proven output-identical on both sides, in three
-  SEPARATE views (A: end-to-end workflow, observational; B: repeated per-run; C: runtime-operation
-  microbenchmarks — a separately-designed court, not mixed into A/B). Measured on this pinned
-  machine/container (AMD Ryzen 7 9800X3D, 16 cores), N=200 after 20 warmups:
+## 8. Wrapper-option boundary (173 → 180, decomposed)
 
-  | program | View A native (compile+run, ms) | View A candidate (adapt+run, ms) | View B native (ms/run) | View B candidate (ms/run) |
-  |---|---|---|---:|---:|
-  | mixed_moves | 58 | 12 | 1.0 | 12.0 |
-  | packed_math | 58 | 12 | 1.0 | 11.1 |
-  | display_arith | 58 | 23 | 2.0 | 23.0 |
-  | packed_loop | 57 | 17 | 1.0 | 17.0 |
+Census (`unsupported-option-census.{json,md}`): 180 tests by option — 82 dialect/extension flags
+(`-fttitle` 35, `-fnotrunc` 9, `-fodoslide` 6, …), 35 listing (`-t-`/`-ftsymbols`/`-Xref`), 5
+native-code modes (`-C`, `-c`), plus `-j`/`-b`/long options. No unknown semantic option is
+silently discarded; native-code modes remain an honest typed boundary (no fake C/assembly/object
+files); every accepted no-op appears in the invocation ledger; the policy registry is
+machine-reconciled against the invocation census.
 
-- View A being faster for the candidate is compile-vs-parse work, not a runtime claim; View B shows
-  the interpreter (reparse included) slower per run, as expected. No "Rust is faster than
-  GnuCOBOL" claim is made or implied — the execution models differ and only per-workload measured
-  statements are made. Full methodology: `reports/gnucobol-runtime-tests/math-performance.md`.
+## 9. Math subset (exactly 323, machine-enforced)
 
-## 10. Largest candidate blockers
+The ledger confirms (and the generator FAILS unless this holds):
+`sum(math classification totals) == 323 == unique math ids`, ids ⊆ suite, one classification per
+test. Current distribution: **101 OBSERVABLE_MATCH · 126 check-reject · 28 wrapper-option ·
+7 parse-reject · 56 runtime-fail · 1 unsupported · 3 oracle-skip · 1 oracle-xfail** (= 323).
+The v0.8.54 prose discrepancy (a stale "21 wrapper-option / 1 malformed" claim vs the ledger's
+22/0) is corrected: the ledger is the only source, and a freshness test prevents prose drift.
 
-- **Module model (407 tests):** the suite's `$COBCRUN_DIRECT ./prog` / `-m` module lifecycle — the
-  candidate's manifest-based module resolution covers `-x` artifacts; the dynamic-module model is a
-  typed boundary (`CANDIDATE_MODULE_MODEL_UNSUPPORTED`).
-- **Parser/check rejects (439):** the sealed front-end subset rejects constructs the suite uses
-  (fail closed — never guessed).
-- **Wrapper-option unsupported (173):** native-code modes (`-C`, `-S`, `-c`, listings) and
-  unmodeled flags are rejected honestly.
-- **Float SIZE-ERROR semantics:** the candidate's decimal-domain float arithmetic does not raise the
-  IEEE-range SIZE ERROR at 2^127/2^1024 (a measured divergence, not a hang; three related
-  non-termination defects found during bring-up are FIXED — see the CHANGELOG).
+## 10. Performance (strict caveats — unchanged methodology)
+
+Performance is reported ONLY for programs proven output-identical on both sides, in three separate
+views; no "Rust is faster than GnuCOBOL" claim is made or implied. The execution models differ
+(native compile+run vs reparse+interpret); per-workload measured statements only.
 
 ## 11. GnuCOBOL-side observations
 
-- The baseline is fully green (0 real failures) under the stock configuration; 9 skips are the
-  suite's own `AT_SKIP_IF` conditions (e.g. `COB_HAS_ISAM`/screen availability) and 31 xfails are
-  suite-marked expected failures. See `reports/gnucobol-testsuite/upstream-observations.md`.
+The baseline is fully green (0 real failures) under the stock configuration; 9 skips and 31 xfails
+are the suite's own declared conditions. See `upstream-observations.md`. One observation from this
+work: `COBCRUN_DIRECT` is empty in the suite's atlocal (`$COBCRUN_DIRECT ./prog` == `./prog`), and
+`COB_RUNTIME_CONFIG` is exported to `<srcdir>/config/runtime_empty.cfg` in every mode while
+`COB_CONFIG_DIR` is exported only outside local mode — the candidate honors both.
 
 ## 12. `cobc-rs` option coverage
 
-- The generated `docs/generated/cobc-rs-option-compatibility.md` maps EVERY option observed in the
-  real invocation census (~2111 cobc/cobcrun invocations) to an explicit policy (translated /
-  accepted-proven-no-op / rejected-unsupported); only the suite's intentional-unknown options
-  (e.g. `--thisoptiondoesntexist`) and module program-args show NO POLICY and fail closed.
+`docs/generated/cobc-rs-option-compatibility.md` maps EVERY option in the real invocation census to
+an explicit policy (translated / accepted-proven-no-op / rejected-unsupported); only the suite's
+intentional-unknown options show NO POLICY and fail closed. The doc is freshness-gated.
 
 ## 13. How to reproduce
 
 ```sh
-export GNURUST_GNUCOBOL_TEST_DOCKER_ROOT=/path/on/a-large-filesystem/gnucobol-rs
+export GNURUST_GNUCOBOL_TEST_DOCKER_ROOT=/path/on-a-large-filesystem/gnucobol-rs
 export GNURUST_GNUCOBOL_TEST_BASE_IMAGE=/path/to/ubuntu-minimal-image.tar
 bash lab/gnucobol-testsuite/run-docker.sh
 ```
 
-The replay uses a dedicated rootless Docker daemon whose mutable state is stored beneath
-`$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT`; the harness verifies it never touches the production socket
-and that all daemon data/cache/temp/outputs stay beneath the configured root.
-
 ## 14. Raw evidence links
 
-- `reports/gnucobol-testsuite/raw/` — baseline + candidate `testsuite.log`, per-group dirs, census
-  JSONL, execve trace.
-- `reports/gnucobol-testsuite/{invocation-census,oracle-results,candidate-results,
-  comparison-results,summary,failure-buckets,no-delegation,determinism}.{json,md,csv}`.
-- `reports/receipts/GNURUST.GNUCOBOL-TESTSUITE.{1,2,3}/` — replay receipts.
+- `reports/gnucobol-testsuite/raw/` — baseline + candidate `testsuite.log`, per-group dirs, census,
+  execve trace; `boundary-reduction-baseline.json` binds the v0.8.54 snapshot (commit, identities,
+  ledger + raw hashes); `boundary-reduction.{json,md}` and `classification-transitions.{json,md}`
+  are the before/after ledger.
+- `reports/gnucobol-testsuite/{module-lifecycle-census,parser-reject-census,
+  unsupported-option-census}.{json,md}` + `no-delegation.json` + `determinism.json`.
+- `reports/receipts/GNURUST.GNUCOBOL-TESTSUITE.{1,2,3,4}/` + the GNURUST.MODULE.* and
+  GNURUST.COBC-RS.* receipts + `reports/casefiles/` (160 forensic casefiles).
 
 ## 15. Methodology documents
 
 - [`docs/methodology/libcob-rust-port.md`](../../docs/methodology/libcob-rust-port.md) — the
   runtime is a faithful LGPL-3.0-or-later **derivative** of the admitted `libcob` sources (not
-  clean-room); statement-by-statement with upstream line citations; 100% symbol parity.
+  clean-room).
 - [`docs/methodology/parser-front-end-provenance.md`](../../docs/methodology/parser-front-end-provenance.md) —
-  the parser is **independently written per the author's committed from-scratch claim**; strict
-  clean-room process separation is NOT independently verifiable from the committed record
-  (tooling/consulted-materials history UNKNOWN).
-- Machine records: `reports/methodology/{libcob-port-provenance,parser-provenance}.json`.
+  the parser is **independently written per the author's committed claim**; strict clean-room is
+  NOT independently verifiable (tooling history UNKNOWN).
 
 ## 16. Questions where further guidance would be valuable
 
-- Should `cobc-rs` grow a build-local **module registry** (so `-m` + `cobcrun -M <module>` resolve
-  through the candidate model) beyond the current manifest-based resolution? The suite's module
-  tests are currently classified `CANDIDATE_MODULE_MODEL_UNSUPPORTED` — an honest boundary, but a
-  registry would move a large bucket to executed-and-compared.
-- Diagnostic-shape parity: several suite tests assert cobc's EXACT stderr wording (e.g. "cobc:
-  unrecognized option '…'"). Matching those shapes is a distinct compatibility surface from
-  semantics — worth a dedicated court?
-- The `-fno-diagnostics-show-option`-style flags are proven no-ops for the admitted suite. The
-  allowlist is generated from the census; should it be re-derived per release?
+- The diagnostic-shape parity dimension (MATCH / DIFFERS) is now recorded per test; should the
+  suite's diagnostic tests (intentionally invalid sources) be reported as a separate headline
+  count, or kept inside check-reject with the verdict dimension?
+- The remaining 4 module-model tests need either a fuller cobcrun config-fidelity surface or an
+  explicit boundary — worth a dedicated follow-up court?
+- Should the listing flags (`-t-`, `-ftsymbols`, `-Xref`, 35 tests) get a first-class candidate
+  listing format (honest banner, never byte-claimed as cobc's), or stay a typed boundary?

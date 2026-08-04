@@ -1,0 +1,59 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "math-correctness.{json,md} + math-performance.{json,csv,md} + raw-samples/"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-RUNTIME-MATH.2",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "claiming math parity from a non-reconciling ledger",
+  "hash_chain": {
+    "inputs_sha256": "7a5d88db0d46f1c640d9a123de3c26dc689f79ee94aa11eec12854877aa0a8ed"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "26ef997e4ca38b118a05c5a25c35f7efdca22d8f135c0412d76be7060144bee1",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the 22/21 wrapper-option discrepancy was cosmetic' is the lie this prevents -- the reconciliation is machine-enforced"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-PERFORMANCE-CLAIM-FROM-END-TO-END-INT",
+    "NEG.NO-EQUIVALENCE-CLAIM-OUTSIDE-THE-TESTED"
+  ],
+  "negative_claims": [
+    "no performance claim from end-to-end interpreter-vs-native timing",
+    "no equivalence claim outside the tested environment",
+    "lie prevented: 'the 22/21 wrapper-option discrepancy was cosmetic' is the lie this prevents -- the reconciliation is machine-enforced"
+  ],
+  "oracle": {
+    "detail": "the TESTSUITE.1 baseline",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-RUNTIME-MATH.2"
+  },
+  "positive_claims": [
+    "the math subset is recomputed from the SAME full-suite ledger as every other test after the rerun",
+    "the machine invariant sum(math classifications) == math test count == 323 (unique ids, ids subset of the suite) holds",
+    "the generator fails on any violation",
+    "performance is re-reported only for correctness-matched programs"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "reports/gnucobol-runtime-tests/*",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

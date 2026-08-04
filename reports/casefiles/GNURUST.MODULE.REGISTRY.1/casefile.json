@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "module artifacts (launcher, manifest, expanded source), cobcrun stdout/stderr/exit, module search order"
+  ],
+  "case_id": "GNURUST.MODULE.REGISTRY.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "presenting an interpreted-module manifest as a shared object would break the no-native-artifact boundary",
+  "hash_chain": {
+    "inputs_sha256": "9f17ff708874be5408ec7a87cc9e0d30e8c8f249e0ab84775593bcf52a0c590c"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "7477179cb58e8aeda1603072abd659357e4ff045235b72d873d8cfe3aa068bf6",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'-m produces a GnuCOBOL module' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-NATIVE-SHARED-OBJECT-SEMANTICS",
+    "NEG.NO-ABI-COMPATIBILITY-WITH-REAL-COBCRUN",
+    "NEG.MODULE-STATE-IS-INTERPRETED-NOT-A-LOADED"
+  ],
+  "negative_claims": [
+    "no native shared-object semantics",
+    "no ABI compatibility with real cobcrun",
+    "module state is interpreted, not a loaded DSO",
+    "lie prevented: '-m produces a GnuCOBOL module' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "GnuCOBOL 3.2 cobcrun semantics as observed in the admitted suite's own module tests",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.MODULE.REGISTRY.1"
+  },
+  "positive_claims": [
+    "cobc-rs -m writes a silent launcher+manifest+expanded-source artifact (never a native .so)",
+    "cobcrun-rs resolves modules through the -M directory (trailing slash appended, GnuCOBOL semantics), the working directory and COB_LIBRARY_PATH, passes program arguments to ACCEPT FROM COMMAND-LINE, and emits cobcrun-shaped diagnostics (missing PROGRAM name / invalid module argument / cannot find module)",
+    "exercised end-to-end by crates/cobc-rs/tests/module_courts.rs (GNURUST.MODULE.* courts) and by the suite rerun"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "crates/cobc-rs/tests/module_courts.rs + reports/gnucobol-testsuite/module-lifecycle-census.{json,md}",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

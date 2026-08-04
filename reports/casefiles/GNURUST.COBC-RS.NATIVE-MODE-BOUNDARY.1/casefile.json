@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "wrapper option-policy registry + per-test classifications + the invocation census"
+  ],
+  "case_id": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "counterfeiting native artifacts would misrepresent the interpreter as a code generator",
+  "hash_chain": {
+    "inputs_sha256": "2e1a381258c1b1582dca1a51aa06dfed98a1179c401f00b341a2f0b194fddae2"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "30a2a8820da192eea9f144b62bc1926618e1611fbd2782a53d7aba647ad9d4d6",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'-c produces an object file' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-NATIVE-CODE-GENERATION",
+    "NEG.NO-C-ASSEMBLY-OBJECT-EMISSION",
+    "NEG.NO-LINKER-BEHAVIOR"
+  ],
+  "negative_claims": [
+    "no native code generation",
+    "no C/assembly/object emission",
+    "no linker behavior",
+    "lie prevented: '-c produces an object file' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "the admitted suite's native-mode tests (used_binaries.at -C/-S/-c)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.COBC-RS.NATIVE-MODE-BOUNDARY.1"
+  },
+  "positive_claims": [
+    "the option-policy registry rejects native-code modes rather than faking artifacts",
+    "adapter-compatible workflows (later executable semantics only) are mapped onto candidate manifests with the translation recorded",
+    "native-artifact tests (generated C/assembly/object structure, symbols, relocations, linker behavior) remain a typed boundary with no support claim"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "docs/generated/cobc-rs-option-compatibility.md + reports/gnucobol-testsuite/unsupported-option-census.{json,md}",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

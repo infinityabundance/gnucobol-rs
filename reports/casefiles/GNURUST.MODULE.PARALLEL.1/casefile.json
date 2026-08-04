@@ -1,0 +1,54 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "per-directory stdout correctness under concurrency"
+  ],
+  "case_id": "GNURUST.MODULE.PARALLEL.1",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "claiming concurrency safety without the stress court",
+  "hash_chain": {
+    "inputs_sha256": "dd17d57b04ae83cefcf4d1b393f412fb9aeb785b61778a4cfcbdbba8140d3a56"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "a36b5de6acd03b45a219478aab885325151ab99bad4d885d93ff549bcee87b8a",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'parallel tests corrupt each other's modules' is the lie this prevents"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-CLAIM-ABOUT-CONCURRENCY-INSIDE-A-SING"
+  ],
+  "negative_claims": [
+    "no claim about concurrency inside a single program's execution",
+    "lie prevented: 'parallel tests corrupt each other's modules' is the lie this prevents"
+  ],
+  "oracle": {
+    "detail": "deterministic per-directory expectation (each dir's own output)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.MODULE.PARALLEL.1"
+  },
+  "positive_claims": [
+    "100 concurrent cobc-rs/cobcrun-rs invocations with colliding source basenames in separate directories each see their OWN module (atomic manifest writes, no cross-test leakage, no shared mutable state)"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "crates/cobc-rs/tests/module_courts.rs (one_hundred_parallel_modules_with_colliding_basenames_stay_isolated)",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

@@ -1,0 +1,62 @@
+{
+  "authority": {
+    "current_authority": "STATUS.md",
+    "generated_by": "kobold-courts",
+    "receipt_status": "current"
+  },
+  "byte_domains": [
+    "the re-measured ledgers + raw rerun evidence + the boundary-reduction transitions"
+  ],
+  "case_id": "GNURUST.GNUCOBOL-TESTSUITE.4",
+  "crate": "gnucobol-rs",
+  "crate_version": "0.8.54",
+  "damage_if_overclaimed": "reporting projected unlocks as measured results",
+  "hash_chain": {
+    "inputs_sha256": "17e2038d8be4880314bcaa6eb80f04e2d59b4e66500687de6523d0b82de3bc98"
+  },
+  "inputs": {
+    "claim_ladder_entry_sha256": "24fcad93ba0ea75c6c92937f28da21e7c8b39ed6bf0870c857b91948d10869fe",
+    "receipt_sha256": "bc845785eb33489bf05340f337ecf9a596b804a29943ac6a2575d1c56a7a279f"
+  },
+  "kind": "court-casefile",
+  "lie_prevented": [
+    "'the three boundaries were reduced' is the claim this court measures -- without the rerun it is projection"
+  ],
+  "negative_capability_ids": [
+    "NEG.NO-CLAIM-THAT-A-BOUNDARY-REDUCTION-EQUAL",
+    "NEG.NO-FULL-SUITE-PARITY-CLAIM",
+    "NEG.NO-CONFORMANCE-CERTIFICATION"
+  ],
+  "negative_claims": [
+    "no claim that a boundary reduction equals a pass",
+    "no full suite-parity claim",
+    "no conformance certification",
+    "lie prevented: 'the three boundaries were reduced' is the claim this court measures -- without the rerun it is projection"
+  ],
+  "oracle": {
+    "detail": "the TESTSUITE.1 baseline (re-run, unchanged expectations)",
+    "dialect_profile_id": "gnucobol-3.2.0-default",
+    "dialect_profile_sha256": "d0cbb198670729af118ef7bd679febfee1876485fbcc05618322c4c2893f5aea",
+    "oracle_kind": "gnucobol-3.2-admitted",
+    "upstream_court": "GNURUST.GNUCOBOL-TESTSUITE.4"
+  },
+  "positive_claims": [
+    "the FULL suite reruns with the new cobc-rs/cobcrun-rs after each major boundary reduction",
+    "all 1282 test groups still reconcile exactly",
+    "the before/after ledger (boundary-reduction) attributes every v0.8.54 classification to its measured after-state",
+    "no-delegation remains mechanically green",
+    "the math subset is regenerated from the same ledger"
+  ],
+  "replay": {
+    "command": "bash lab/oracle/gnucobol-testsuite/run-docker.sh",
+    "exit_code": 0
+  },
+  "results": {
+    "fail": 0,
+    "note": "reports/gnucobol-testsuite/* + lab/gnucobol-testsuite/run-docker.sh",
+    "pass": null,
+    "total": null,
+    "verdict": "pass"
+  },
+  "schema": "kobold-forensic-casefile-v1"
+}

@@ -12,11 +12,11 @@
   "crate_version": "0.8.54",
   "damage_if_overclaimed": "claiming 'numeric-edited screen display works' would hide that only single-field Z-suppression positioning is proven -- star-fill, multi-field line-diff, edited colour/attributes, ACCEPT, and non-admitted terminals are not",
   "hash_chain": {
-    "inputs_sha256": "c143f06c2c36ac1763e7eef76291eebd5387500f40a888b92cb72bf4f3aca384"
+    "inputs_sha256": "3750354ccd7e623689a2951ce19e9f16650d72d9f011c8fcd1ea1dde553bee6f"
   },
   "inputs": {
     "claim_ladder_entry_sha256": "0b31daed49f714a73910cc8db953fea535130a23ed82ab2ee23593a9260c49fa",
-    "receipt_sha256": "32fed06e5a62e88939baeb591fb10f628b3570d9a96fcb63798cfb4e30d52ad6"
+    "receipt_sha256": "22c63b7a3f684cc5c3c0f1cd70b7f6ea7b404a9f42f18b30374550332241b86a"
   },
   "kind": "court-casefile",
   "lie_prevented": [
@@ -60,10 +60,10 @@
     "exit_code": 0
   },
   "results": {
-    "fail": 0,
-    "pass": 14,
+    "fail": 1,
+    "pass": 13,
     "total": 14,
-    "verdict": "pass"
+    "verdict": "fail"
   },
   "schema": "kobold-forensic-casefile-v1"
 }
