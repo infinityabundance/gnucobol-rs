@@ -417,6 +417,9 @@ mod tests {
 
     /// End-to-end: generate() over the COMMITTED inventory must succeed (323 reconciled) when the
     /// repo is present; skipped when the committed evidence is absent (standalone crate build).
+    /// The per-class distribution is NOT hardcoded (it is a measured ledger result that changes as
+    /// the candidate improves); the invariants (sum == 323, unique ids, subset, one classification
+    /// per test) and the JSON-vs-inventory consistency are what the test pins.
     #[test]
     fn committed_inventory_math_reconciles_to_323() {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
@@ -439,13 +442,25 @@ mod tests {
             323
         );
         assert!(doc["reconciliation"]["invariant_holds"].as_bool().unwrap());
-        let t = &doc["primary_classification_totals"];
-        assert_eq!(t["WRAPPER_OPTION_UNSUPPORTED"].as_u64().unwrap(), 22);
-        assert_eq!(
-            t.get("WRAPPER_INVOCATION_MALFORMED")
-                .map(|v| v.as_u64().unwrap()),
-            None
-        );
-        assert_eq!(t["CANDIDATE_UNSUPPORTED"].as_u64().unwrap(), 1);
+        // JSON totals must equal the inventory subset's per-class counts (no stale prose drift).
+        let v: Value = serde_json::from_str(&std::fs::read_to_string(&inv).unwrap()).unwrap();
+        let rows = v["tests"].as_array().unwrap();
+        let math_rows = collect(rows);
+        let mut expect: BTreeMap<&str, usize> = BTreeMap::new();
+        for r in &math_rows {
+            *expect
+                .entry(r["primary_classification"].as_str().unwrap_or("?"))
+                .or_insert(0) += 1;
+        }
+        for (k, n) in &expect {
+            assert_eq!(
+                doc["primary_classification_totals"][k].as_u64().unwrap() as usize,
+                *n,
+                "classification {k} totals must match the inventory subset"
+            );
+        }
+        // sanity: the current ledger's distribution is measured, not hardcoded -- but the v0.8.54
+        // discrepancy (22 vs a prose claim of 21) must never reappear as an inconsistency.
+        assert_eq!(math_rows.len(), 323);
     }
 }

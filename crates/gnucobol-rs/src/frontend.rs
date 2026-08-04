@@ -1137,6 +1137,9 @@ fn binary_native_usage(w: &str) -> Option<(u8, &'static str, &'static str)> {
         "BINARY-CHAR" => Some((1, "S9(3)", "9(3)")),
         "BINARY-SHORT" => Some((2, "S9(5)", "9(5)")),
         "BINARY-LONG" => Some((4, "S9(10)", "9(10)")),
+        // BINARY-INT is GnuCOBOL's 4-byte C-int form (the suite's arithmetic tables declare
+        // `FILLER USAGE BINARY-INT VALUE 0`); it maps to the BINARY-LONG width/PIC.
+        "BINARY-INT" => Some((4, "S9(10)", "9(10)")),
         "BINARY-DOUBLE" => Some((8, "S9(20)", "9(20)")),
         _ => None,
     }
@@ -1170,7 +1173,7 @@ fn is_pointer_usage(w: &str) -> bool {
 /// A synthetic PIC for a USAGE form with no PIC that the front-end models with an equivalent display
 /// field: POINTER -> an opaque 8-byte item; INDEX -> a signed binary integer cobc DISPLAYs as `S9(9)`.
 fn synthetic_usage_pic(w: &str) -> Option<&'static str> {
-    if is_pointer_usage(w) {
+    if is_pointer_usage(w) || w == "HANDLE" {
         Some("X(8)")
     } else if w == "INDEX" {
         Some("S9(9)")
@@ -1182,8 +1185,10 @@ fn synthetic_usage_pic(w: &str) -> Option<&'static str> {
 /// The IEEE field type for a `COMP-1` (32-bit float) / `COMP-2` (64-bit double) usage keyword.
 fn float_usage_kind(w: &str) -> Option<u16> {
     match w {
-        "COMP-1" | "COMPUTATIONAL-1" => Some(crate::attr::COB_TYPE_NUMERIC_FLOAT),
-        "COMP-2" | "COMPUTATIONAL-2" => Some(crate::attr::COB_TYPE_NUMERIC_DOUBLE),
+        "COMP-1" | "COMPUTATIONAL-1" | "FLOAT-SHORT" => Some(crate::attr::COB_TYPE_NUMERIC_FLOAT),
+        "COMP-2" | "COMPUTATIONAL-2" | "FLOAT-LONG" | "FLOAT-DOUBLE" | "FLOAT-EXTENDED" => {
+            Some(crate::attr::COB_TYPE_NUMERIC_DOUBLE)
+        }
         _ => None,
     }
 }
@@ -1193,6 +1198,11 @@ fn float_usage_kind(w: &str) -> Option<u16> {
 fn unsupported_usage_kw(w: &str) -> bool {
     matches!(w, "NATIONAL")
 }
+
+/// A named compile-time CONSTANT (`78 name VALUE x.` or `01 name CONSTANT [GLOBAL] x.`): stored as an
+/// Alpha field carrying the literal's display bytes. Frontend-local bit (libcob's attr bits 0x0008 /
+/// 0x0010 are COB_FLAG_BLANK_ZERO / COB_FLAG_JUSTIFIED; 0x2000 is free in this model).
+const FLAG_CONSTANT: u16 = 0x2000;
 
 /// Build a `COMP-1` (4-byte float) / `COMP-2` (8-byte double) field. The IEEE bytes drive display
 /// (`cob_display_common` reads the f32/f64 directly) and decimal<->float conversion (`cob_move`); a
@@ -2528,6 +2538,56 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         if level == "PROCEDURE" || level == "LINKAGE" || level == "DATA" || level == "REPORT" {
             break;
         }
+        // A `78`-level named constant: `78 name [GLOBAL] VALUE [IS] lit.` (a compile-time constant,
+        // usable wherever a literal is). Also produced by `01 name CONSTANT [GLOBAL] lit.` below.
+        if level == "78" {
+            k += 1;
+            let name = match toks.get(k) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "expected constant name after 78".into(),
+                    ))
+                }
+            };
+            k += 1;
+            while matches!(toks.get(k), Some(Tok::Word(w)) if w == "GLOBAL" || w == "CONSTANT") {
+                k += 1;
+            }
+            if matches!(toks.get(k), Some(Tok::Word(w)) if w == "VALUE" || w == "VALUES") {
+                k += 1;
+                if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS" || w == "ARE") {
+                    k += 1;
+                }
+            }
+            let value = toks.get(k).cloned();
+            while k < end && !matches!(toks.get(k), Some(Tok::Dot)) {
+                k += 1;
+            }
+            if matches!(toks.get(k), Some(Tok::Dot)) {
+                k += 1;
+            }
+            items.push(ProgItem {
+                level: 78,
+                name,
+                pic: String::new(),
+                value,
+                occurs: 1,
+                redefines: None,
+                condition: None,
+                indexed_by: Vec::new(),
+                usage: None,
+                sign: (false, false),
+                extra_flags: FLAG_CONSTANT,
+                float_kind: None,
+                odo_counter: None,
+                renames: None,
+                sync: false,
+                external: false,
+                occurs_key: None,
+            });
+            continue;
+        }
         // A `66`-level `RENAMES start [THRU|THROUGH end]` regrouping alias.
         if level == "66" {
             k += 1;
@@ -2692,6 +2752,41 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         };
         last_item = Some(name.clone());
         k += 1;
+        // `01 name CONSTANT [GLOBAL] lit.` -- a named compile-time constant (78-style): the value
+        // literal follows the clause (no VALUE keyword), then the '.'.
+        if matches!(toks.get(k), Some(Tok::Word(w)) if w == "CONSTANT") {
+            k += 1;
+            while matches!(toks.get(k), Some(Tok::Word(w)) if w == "GLOBAL") {
+                k += 1;
+            }
+            let value = toks.get(k).cloned();
+            while k < end && !matches!(toks.get(k), Some(Tok::Dot)) {
+                k += 1;
+            }
+            if matches!(toks.get(k), Some(Tok::Dot)) {
+                k += 1;
+            }
+            items.push(ProgItem {
+                level: 78,
+                name,
+                pic: String::new(),
+                value,
+                occurs: 1,
+                redefines: None,
+                condition: None,
+                indexed_by: Vec::new(),
+                usage: None,
+                sign: (false, false),
+                extra_flags: FLAG_CONSTANT,
+                float_kind: None,
+                odo_counter: None,
+                renames: None,
+                sync: false,
+                external: false,
+                occurs_key: None,
+            });
+            continue;
+        }
         // `NAME REDEFINES TARGET` -- the item aliases TARGET's storage.
         let mut redefines: Option<String> = None;
         if matches!(toks.get(k), Some(Tok::Word(w)) if w == "REDEFINES") {
@@ -3123,6 +3218,25 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             );
             continue;
         }
+        // A named CONSTANT (78 / 01 CONSTANT): an Alpha field initialized to the literal's display
+        // bytes (numeric constants keep their written digits, so arithmetic/display read them back).
+        if it.level == 78 || (it.extra_flags & FLAG_CONSTANT) != 0 {
+            let bytes = match &it.value {
+                Some(Tok::Str(s)) => s.clone(),
+                Some(Tok::Word(w)) => w.as_bytes().to_vec(),
+                _ => Vec::new(),
+            };
+            fields.insert(
+                it.name.clone(),
+                Field {
+                    storage: Storage::Alpha(alnum_attr()),
+                    bytes,
+                    occurs: 1,
+                    redefines: None,
+                },
+            );
+            continue;
+        }
         // A group item (no PIC) is built after its leaves exist (second pass below) -- but a COMP-1/COMP-2
         // item also has no PIC yet is an elementary float leaf, so it must build here.
         if it.pic.is_empty() && it.float_kind.is_none() {
@@ -3225,7 +3339,12 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // skipped: their leaves are addressed via NESTED_LEAF, so the intermediate groups own no field.
     let mut consumed: std::collections::HashSet<usize> = std::collections::HashSet::new();
     for (i, it) in prog.ws.iter().enumerate() {
-        if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() || consumed.contains(&i)
+        if it.level == 88
+            || it.level == 78
+            || (it.extra_flags & FLAG_CONSTANT) != 0
+            || !it.pic.is_empty()
+            || it.float_kind.is_some()
+            || consumed.contains(&i)
         {
             continue;
         }
@@ -13895,6 +14014,7 @@ mod tests {
     fn run(src: &str) -> Vec<u8> {
         run_program(src).expect("run")
     }
+
 
     #[test]
     fn display_numeric_literals_match_cobc_format() {
