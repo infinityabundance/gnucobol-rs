@@ -3,6 +3,8 @@
 323 math tests (of 1282 suite tests), classified from the SAME differential results as every
 other test — no favorable selection. Correctness is the suite's own AT_CHECK assertion
 outcome; performance is reported separately and only for tests passing on both sides.
+Reconciliation invariant (Phase-1, machine-enforced): sum of the classification totals ==
+323 == math test count; every math id is unique and a member of the full suite inventory.
 
 ## Totals by classification
 

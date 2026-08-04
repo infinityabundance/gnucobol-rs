@@ -167,6 +167,51 @@ pub fn gate_check(root: &Path) -> Gate {
         );
     }
 
+    // 5c. math-subset reconciliation (Phase-1 boundary-reduction invariant, prompt §1): the
+    //     committed math-correctness.json must reconcile to the math subset of the committed
+    //     inventory (323 == sum of classification totals == unique ids, ids ⊆ suite).
+    let runtime_rep = root.join("reports/gnucobol-runtime-tests");
+    if rep.join("test-inventory.json").is_file()
+        && runtime_rep.join("math-correctness.json").is_file()
+    {
+        let inv = read_json(&rep.join("test-inventory.json"));
+        let math = read_json(&runtime_rep.join("math-correctness.json"));
+        match (inv, math) {
+            (Ok(inv), Ok(math)) => {
+                let rows = inv["tests"].as_array().cloned().unwrap_or_default();
+                let math_rows = crate::math::collect(&rows);
+                let problems = crate::math::invariants(&rows, &math_rows);
+                if !problems.is_empty() {
+                    g.problems.push(format!(
+                        "math-subset reconciliation failed: {}",
+                        problems.join("; ")
+                    ));
+                } else {
+                    let declared = math["math_tests_total"].as_u64().unwrap_or(0) as usize;
+                    let sum = math["reconciliation"]["sum_of_classification_totals"]
+                        .as_u64()
+                        .unwrap_or(0) as usize;
+                    if declared != math_rows.len() || sum != math_rows.len() {
+                        g.problems.push(format!(
+                            "math-correctness.json declares {declared} tests / sum {sum}, but the inventory subset has {} tests",
+                            math_rows.len()
+                        ));
+                    } else {
+                        g.notes.push(format!(
+                            "math subset reconciles: {declared} tests == sum of classification totals"
+                        ));
+                    }
+                }
+            }
+            _ => g
+                .problems
+                .push("math-correctness.json or test-inventory.json unreadable".into()),
+        }
+    } else {
+        g.notes
+            .push("math-correctness evidence absent — math reconciliation not checked".into());
+    }
+
     // 6. privacy gate: no host-path patterns in the committed testsuite evidence.
     let pats = ["/home/", "/run/media/", "/mnt/", "/media/"];
     if let Ok(mut walk) = walk_files(&rep) {

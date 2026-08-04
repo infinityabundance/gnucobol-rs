@@ -3598,7 +3598,14 @@
     "ORACLE_XFAIL": 1,
     "WRAPPER_OPTION_UNSUPPORTED": 22
   },
-  "schema": "gnurust-gnucobol-runtime-math-correctness-v1",
+  "reconciliation": {
+    "enforced_by": "gnucobol-rs-testsuite math (generator fails on any invariant violation)",
+    "ids_subset_of_suite": true,
+    "invariant_holds": true,
+    "sum_of_classification_totals": 323,
+    "unique_test_ids": 323
+  },
+  "schema": "gnurust-gnucobol-runtime-math-correctness-v2",
   "source": "the SAME differential classification as the full suite (no favorable selection)",
   "suite_total": 1282
 }

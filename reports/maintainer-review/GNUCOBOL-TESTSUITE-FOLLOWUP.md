@@ -64,7 +64,10 @@ bash lab/gnucobol-testsuite/run-docker.sh
 - **323 math tests** (data_binary / data_display / data_packed / data_pointer / run_fundamental /
   run_functions / syn_multiply / syn_value / syn_literals), classified from the SAME results as the
   whole suite (no favorable selection): **97 OBSERVABLE_MATCH · 52 check-reject · 147 module-model
-  unsupported · 21 wrapper-option · 1 malformed · 1 unsupported · 3 oracle-skip · 1 oracle-xfail**.
+  unsupported · 22 wrapper-option · 0 malformed · 1 unsupported · 3 oracle-skip · 1 oracle-xfail**
+  (sum = 323, machine-enforced: the generator fails unless the math subset reconciles exactly;
+  the ledger confirms 22 WRAPPER_OPTION_UNSUPPORTED and 0 WRAPPER_INVOCATION_MALFORMED — an
+  earlier prose version claiming 21/1 was corrected against the ledger).
   See `reports/gnucobol-runtime-tests/math-correctness.md`.
 
 ## 8. Correctness matches

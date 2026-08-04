@@ -64,13 +64,26 @@ fn main() {
             }
         }
         "math" => {
+            // The math subset is derived from the FULL per-test inventory (the same ledger the
+            // Docker orchestrator passes: --results reports/gnucobol-testsuite/test-inventory.json),
+            // which carries the `group` + `reason_code` fields the subset filter needs.
             let results = arg_val(&args, "--results")
-                .unwrap_or_else(|| "reports/gnucobol-testsuite/comparison-results.json".into());
+                .unwrap_or_else(|| "reports/gnucobol-testsuite/test-inventory.json".into());
             let out =
                 arg_val(&args, "--out").unwrap_or_else(|| "reports/gnucobol-runtime-tests".into());
-            match math::generate(Path::new(&results), Path::new(&out)) {
+            let check = args.iter().any(|a| a == "--check");
+            let r = if check {
+                math::verify(Path::new(&results), Path::new(&out))
+            } else {
+                math::generate(Path::new(&results), Path::new(&out)).map(|_| ())
+            };
+            match r {
                 Ok(()) => {
-                    println!("math: correctness report written to {out}");
+                    if check {
+                        println!("math: committed math-correctness reports are fresh (regenerated == committed)");
+                    } else {
+                        println!("math: correctness report written to {out}");
+                    }
                     0
                 }
                 Err(e) => {
@@ -111,7 +124,7 @@ fn main() {
         }
         _ => {
             eprintln!(
-                "usage: gnucobol-rs-testsuite <census|classify|determinism|receipts-finalize|compat-doc|math|gate check> ..."
+                "usage: gnucobol-rs-testsuite <census|classify|determinism|receipts-finalize|compat-doc|math [--check]|gate check> ..."
             );
             2
         }
