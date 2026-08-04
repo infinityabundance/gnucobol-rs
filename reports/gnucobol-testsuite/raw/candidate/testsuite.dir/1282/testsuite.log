@@ -4,11 +4,11 @@
 ./data_pointer.at:43: test "$COB_HAS_64_BIT_POINTER" = "yes"
 ./data_pointer.at:43: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1282/stderr	2026-08-04 10:31:44.591475115 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1282/stderr	2026-08-04 14:46:26.898984630 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: NULL
---- -	2026-08-04 10:31:44.592929115 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1282/stdout	2026-08-04 10:31:44.591642004 +0000
+--- -	2026-08-04 14:46:26.900246232 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1282/stdout	2026-08-04 14:46:26.898984630 +0000
 @@ -1,4 +1 @@
 -0x0000000000000000
 -0x0000000000000001

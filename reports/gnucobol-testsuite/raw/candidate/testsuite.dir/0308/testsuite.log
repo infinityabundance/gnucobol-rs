@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 308. syn_misc.at:3204: testing redundant periods ...
 ./syn_misc.at:3227: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.813787964 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/308/stderr	2026-08-04 10:31:43.813106975 +0000
+--- -	2026-08-04 14:46:26.097543556 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/308/stderr	2026-08-04 14:46:26.097012916 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:6: warning: ignoring redundant .
 -prog.cob:12: warning: ignoring redundant .

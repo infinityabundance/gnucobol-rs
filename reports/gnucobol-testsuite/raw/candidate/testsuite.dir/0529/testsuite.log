@@ -3,7 +3,7 @@
 ./run_fundamental.at:1129: $COMPILE prog.cob
 ./run_fundamental.at:1130: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/529/stdout	2026-08-04 10:31:43.931478021 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/529/stdout	2026-08-04 14:46:26.222069274 +0000
 @@ -0,0 +1 @@
 +Fail - Not alphabetic lower
 529. run_fundamental.at:1103: 529. ALPHABETIC-LOWER test (run_fundamental.at:1103): FAILED (run_fundamental.at:1130)

@@ -1,0 +1,5 @@
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      mod2.
+       PROCEDURE        DIVISION.
+           EXIT PROGRAM.

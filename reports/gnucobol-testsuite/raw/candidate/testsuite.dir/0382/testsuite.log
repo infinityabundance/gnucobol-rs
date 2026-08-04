@@ -2,11 +2,11 @@
 382. syn_misc.at:7118: testing conditional directives with lvl 78 (2) ...
 ./syn_misc.at:7160: $COMPILE_ONLY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/382/stderr	2026-08-04 10:31:43.848650443 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/382/stderr	2026-08-04 14:46:26.136921372 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: unsupported level number 78
---- -	2026-08-04 10:31:43.850535729 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/382/stdout	2026-08-04 10:31:43.849801781 +0000
+--- -	2026-08-04 14:46:26.138139944 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/382/stdout	2026-08-04 14:46:26.137339802 +0000
 @@ -1,4 +1 @@
 -correct Y = Y2
 -correct Y < X

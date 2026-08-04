@@ -3,7 +3,7 @@
 ./run_misc.at:1898: $COMPILE prog.cob
 ./run_misc.at:1899: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/718/stdout	2026-08-04 10:31:44.058837895 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/718/stdout	2026-08-04 14:46:26.353434074 +0000
 @@ -0,0 +1 @@
 +2 - Z0ZYYXDXXEXX
 718. run_misc.at:1874: 718. INSPECT CONVERTING complex (run_misc.at:1874): FAILED (run_misc.at:1899)

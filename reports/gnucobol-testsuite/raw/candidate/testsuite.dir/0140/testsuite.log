@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 140. syn_subscripts.at:125: testing Subscripted item requires OCCURS clause ...
 ./syn_subscripts.at:143: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.731022223 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/140/stderr	2026-08-04 10:31:43.730370107 +0000
+--- -	2026-08-04 14:46:26.014892270 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/140/stderr	2026-08-04 14:46:26.014218573 +0000
 @@ -1,3 +1 @@
 -prog.cob:9: error: 'G' cannot be subscripted
 -prog.cob:11: error: 'X' cannot be subscripted

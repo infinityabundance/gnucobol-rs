@@ -3,7 +3,7 @@
 ./data_packed.at:1327: $COMPILE prog.cob
 ./data_packed.at:1328: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1268/stderr	2026-08-04 10:31:44.573142730 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1268/stderr	2026-08-04 14:46:26.881894803 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: X
 ./data_packed.at:1328: exit code was 2, expected 0

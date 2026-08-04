@@ -3,11 +3,11 @@
 ./run_extensions.at:4767: $COMPILE -std=mf prog.cob
 ./run_extensions.at:4768: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stderr	2026-08-04 10:31:44.493566344 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stderr	2026-08-04 14:46:26.801475068 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number LOCAL-STORAGE
---- -	2026-08-04 10:31:44.495145437 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stdout	2026-08-04 10:31:44.494467834 +0000
+--- -	2026-08-04 14:46:26.803164959 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1187/stdout	2026-08-04 14:46:26.802452841 +0000
 @@ -1,7 +1 @@
 -Program is starting
 -Error (interal): DemoErrProc; S1; 20-

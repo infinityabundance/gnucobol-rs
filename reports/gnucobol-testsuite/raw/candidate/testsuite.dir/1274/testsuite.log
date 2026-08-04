@@ -3,7 +3,7 @@
 ./data_packed.at:1659: $COMPILE prog.cob
 ./data_packed.at:1660: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1274/stderr	2026-08-04 10:31:44.578642151 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1274/stderr	2026-08-04 14:46:26.889913235 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unrecognized USAGE BINARY-INT
 ./data_packed.at:1660: exit code was 2, expected 0

@@ -3,7 +3,7 @@
 ./run_functions.at:2652: $COMPILE prog.cob
 ./run_functions.at:2653: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1058/stdout	2026-08-04 10:31:44.349099620 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1058/stdout	2026-08-04 14:46:26.650244144 +0000
 @@ -0,0 +1 @@
 +BAD1 ' 1. A-0B4.5       ' : +00000001.04500
 1058. run_functions.at:2585: 1058. FUNCTION NUMVAL (run_functions.at:2585): FAILED (run_functions.at:2653)

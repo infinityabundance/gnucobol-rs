@@ -1,8 +1,0 @@
-#                             -*- compilation -*-
-779. run_misc.at:5117: testing ANY LENGTH (2) ...
-./run_misc.at:5150: $COMPILE_MODULE callee.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/779/stdout	2026-08-04 10:31:44.099647592 +0000
-@@ -0,0 +1 @@
-+callee.so
-779. run_misc.at:5117: 779. ANY LENGTH (2) (run_misc.at:5117): FAILED (run_misc.at:5150)

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 342. syn_misc.at:4985: testing level 78 NEXT / START OF ...
 ./syn_misc.at:5028: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.831092664 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/342/stderr	2026-08-04 10:31:43.830206221 +0000
+--- -	2026-08-04 14:46:26.115669264 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/342/stderr	2026-08-04 14:46:26.115180383 +0000
 @@ -1,11 +1,2 @@
 -prog.cob:6: error: VALUE of 'POS0': NEXT target is invalid
 -prog.cob:6: error: no previous data-item found

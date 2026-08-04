@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 307. syn_misc.at:3179: testing wrong dialect hints ...
 ./syn_misc.at:3196: $COMPILE_ONLY -std=cobol85 prog.cob
---- -	2026-08-04 10:31:43.812880132 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/307/stderr	2026-08-04 10:31:43.811791783 +0000
+--- -	2026-08-04 14:46:26.097010362 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/307/stderr	2026-08-04 14:46:26.096347215 +0000
 @@ -1,4 +1 @@
 -prog.cob:10: error: 'CONVERSION' is not defined, but is a reserved word in another dialect
 -prog.cob:11: error: syntax error, unexpected Identifier, expecting SECTION or .

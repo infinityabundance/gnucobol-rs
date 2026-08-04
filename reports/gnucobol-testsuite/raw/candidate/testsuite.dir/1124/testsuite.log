@@ -2,7 +2,7 @@
 1124. run_extensions.at:673: testing Complex OCCURS DEPENDING ON (4) ...
 ./run_extensions.at:730: $COMPILE -fcomplex-odo prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1124/stderr	2026-08-04 10:31:44.433486193 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1124/stderr	2026-08-04 14:46:26.736178913 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fcomplex-odo: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
 ./run_extensions.at:730: exit code was 1, expected 0

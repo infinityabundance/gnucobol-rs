@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 76. syn_definition.at:106: testing invalid PROGRAM-ID type clause (2) ...
 ./syn_definition.at:116: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.703037243 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/76/stderr	2026-08-04 10:31:43.702413651 +0000
+--- -	2026-08-04 14:46:25.986497132 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/76/stderr	2026-08-04 14:46:25.985398384 +0000
 @@ -1,2 +1 @@
 -prog.cob:3: error: syntax error, unexpected RECURSIVE, expecting .
  

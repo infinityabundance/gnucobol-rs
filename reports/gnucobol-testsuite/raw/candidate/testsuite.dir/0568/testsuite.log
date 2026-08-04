@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+568. run_fundamental.at:3009: testing ROUNDED TRUNCATION ...
+./run_fundamental.at:3066: $COMPILE prog.cob
+./run_fundamental.at:3067: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/568/stderr	2026-08-04 14:46:26.247106710 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: N literal: national/bit literals are a dialect extension boundary
+--- -	2026-08-04 14:46:26.248776494 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/568/stdout	2026-08-04 14:46:26.247929404 +0000
+@@ -1 +1 @@
+-+2 -2 +2 -2 +3 -3 +3 -3 +3 -3
++
+./run_fundamental.at:3067: exit code was 2, expected 0
+568. run_fundamental.at:3009: 568. ROUNDED TRUNCATION (run_fundamental.at:3009): FAILED (run_fundamental.at:3067)

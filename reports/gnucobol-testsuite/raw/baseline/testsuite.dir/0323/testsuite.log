@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 323. syn_misc.at:3978: testing checking prototypes and definitions match ...
 ./syn_misc.at:4100: $COMPILE_ONLY -Wno-unfinished -Wno-pending prog.cob
---- -	2026-08-04 10:31:16.901042490 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/323/stderr	2026-08-04 10:31:16.899956493 +0000
+--- -	2026-08-04 14:45:47.225252412 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/323/stderr	2026-08-04 14:45:47.223822937 +0000
 @@ -3,9 +3,8 @@
  prog.cob:60: note: DECIMAL-POINT IS COMMA clauses differ
  prog.cob:60: note: CURRENCY clauses differ

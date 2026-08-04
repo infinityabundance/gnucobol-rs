@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 141. syn_subscripts.at:151: testing Number of subscripts ...
 ./syn_subscripts.at:178: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.731255948 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/141/stderr	2026-08-04 10:31:43.730765765 +0000
+--- -	2026-08-04 14:46:26.015599248 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/141/stderr	2026-08-04 14:46:26.014920342 +0000
 @@ -1,5 +1 @@
 -prog.cob:10: error: 'X' requires one subscript
 -prog.cob:14: error: 'X' requires one subscript

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 423. syn_screen.at:92: testing Duplicate ACCEPT/DISPLAY clauses ...
 ./syn_screen.at:109: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.872116280 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/423/stderr	2026-08-04 10:31:43.871434719 +0000
+--- -	2026-08-04 14:46:26.160891097 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/423/stderr	2026-08-04 14:46:26.160215918 +0000
 @@ -1,8 +1 @@
 -prog.cob:8: error: duplicate LINE clause
 -prog.cob:8: error: duplicate HIGHLIGHT clause

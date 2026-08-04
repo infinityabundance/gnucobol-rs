@@ -3,11 +3,11 @@
 ./run_extensions.at:5599: $COMPILE -std=gcos-strict prog.cob -Wno-unfinished
 ./run_extensions.at:5600: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stderr	2026-08-04 10:31:44.510060592 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stderr	2026-08-04 14:46:26.818895110 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unrecognized USAGE COMPUTATIONAL-9
---- -	2026-08-04 10:31:44.511858664 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stdout	2026-08-04 10:31:44.511439132 +0000
+--- -	2026-08-04 14:46:26.820123170 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1206/stdout	2026-08-04 14:46:26.819540223 +0000
 @@ -1,5 +1 @@
 --42
 -0

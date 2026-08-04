@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 365. syn_misc.at:6396: testing CONTINUE statement ...
 ./syn_misc.at:6423: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.841778033 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/365/stderr	2026-08-04 10:31:43.841243647 +0000
+--- -	2026-08-04 14:46:26.129048061 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/365/stderr	2026-08-04 14:46:26.128413548 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:19: error: amount must be specified as a numeric expression
 -prog.cob:20: error: amount must be specified as a numeric expression

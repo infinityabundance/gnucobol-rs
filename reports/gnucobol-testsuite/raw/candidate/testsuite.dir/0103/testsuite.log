@@ -2,8 +2,8 @@
 103. syn_definition.at:955: testing SYNCHRONIZED clause ...
 ./syn_definition.at:975: $COMPILE_ONLY -std=mf prog.cob
 ./syn_definition.at:977: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.714647998 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/103/stderr	2026-08-04 10:31:43.713621424 +0000
+--- -	2026-08-04 14:46:25.997742311 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/103/stderr	2026-08-04 14:46:25.996549507 +0000
 @@ -1,3 +1 @@
 -prog.cob:8: warning: SYNCHRONIZED LEFT/RIGHT is not implemented
 -prog.cob:9: warning: SYNCHRONIZED LEFT/RIGHT is not implemented

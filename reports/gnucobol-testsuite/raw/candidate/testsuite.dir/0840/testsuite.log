@@ -2,7 +2,7 @@
 840. run_misc.at:13804: testing Constant Expressions ...
 ./run_misc.at:13880: $COMPILE prog.cob -fconstant-folding -fremove-unreachable -w
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/840/stderr	2026-08-04 10:31:44.141522836 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/840/stderr	2026-08-04 14:46:26.439746057 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fconstant-folding: unsupported option (rejected-unsupported; constant folding: reject honestly): 
 ./run_misc.at:13880: exit code was 1, expected 0

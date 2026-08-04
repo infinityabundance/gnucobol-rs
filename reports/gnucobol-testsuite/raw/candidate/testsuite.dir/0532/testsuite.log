@@ -3,11 +3,11 @@
 ./run_fundamental.at:1306: $COMPILE prog.cob
 ./run_fundamental.at:1307: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/532/stderr	2026-08-04 10:31:43.936099397 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/532/stderr	2026-08-04 14:46:26.222507661 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 10:31:43.937253899 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/532/stdout	2026-08-04 10:31:43.936563782 +0000
+--- -	2026-08-04 14:46:26.223652987 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/532/stdout	2026-08-04 14:46:26.223211233 +0000
 @@ -1,5 +1 @@
 -GLOBP1GLOBV1
 -GLOBP2GLOBV2

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 368. syn_misc.at:6553: testing OSVS I/O extensions ...
 ./syn_misc.at:6601: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.843466130 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/368/stderr	2026-08-04 10:31:43.842815848 +0000
+--- -	2026-08-04 14:46:26.130024492 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/368/stderr	2026-08-04 14:46:26.129253524 +0000
 @@ -1,15 +1 @@
 -prog.cob:10: warning: FILE-LIMIT is obsolete in GnuCOBOL
 -prog.cob:10: warning: TRACK-AREA is obsolete in GnuCOBOL

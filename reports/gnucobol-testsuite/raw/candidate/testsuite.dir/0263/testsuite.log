@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 263. syn_misc.at:987: testing INSPECT repeated keywords ...
 ./syn_misc.at:1009: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.789941640 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/263/stderr	2026-08-04 10:31:43.788651124 +0000
+--- -	2026-08-04 14:46:26.075142005 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/263/stderr	2026-08-04 14:46:26.074378491 +0000
 @@ -1,9 +1 @@
 -prog.cob:14: error: missing value between ALL/LEADING/TRAILING words
 -prog.cob:15: error: missing value between ALL/LEADING/TRAILING words

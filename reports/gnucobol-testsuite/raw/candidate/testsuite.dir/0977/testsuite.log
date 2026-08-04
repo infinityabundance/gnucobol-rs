@@ -2,8 +2,8 @@
 977. run_reportwriter.at:4706: testing Missing INITIATE and TERMINATE ...
 ./run_reportwriter.at:4743: $COMPILE prog.cob
 ./run_reportwriter.at:4745: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
---- -	2026-08-04 10:31:44.251047531 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/977/stderr	2026-08-04 10:31:44.250372443 +0000
+--- -	2026-08-04 14:46:26.551329802 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/977/stderr	2026-08-04 14:46:26.550538647 +0000
 @@ -1,3 +1 @@
 -libcob: prog.cob:30: error: TERMINATE rp but no INITIATE was done
 -libcob: prog.cob:30: warning: implicit CLOSE of report-file ('PRINTOUT')

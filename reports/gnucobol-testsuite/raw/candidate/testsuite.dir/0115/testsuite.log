@@ -3,8 +3,8 @@
 ./syn_definition.at:1323: $COMPILE prog1.cob prog2.cob prog3.cob prog4.cob prog5.cob
 ./syn_definition.at:1325: $COMPILE -fnot-register=return-code \
 prog1.cob prog2.cob prog3.cob prog4.cob prog5.cob
---- -	2026-08-04 10:31:43.721510561 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/115/stderr	2026-08-04 10:31:43.720959804 +0000
+--- -	2026-08-04 14:46:26.005085543 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/115/stderr	2026-08-04 14:46:26.004525399 +0000
 @@ -1,4 +1,2 @@
 -prog1.cob:5: error: RETURNING/GIVING not allowed for non-returning runtime elements
 -prog2.cob:5: error: RETURNING/GIVING not allowed for non-returning runtime elements

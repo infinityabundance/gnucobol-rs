@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 410. syn_move.at:330: testing MOVE national-edited TO x ...
 ./syn_move.at:358: $COMPILE_ONLY -Wno-unfinished prog.cob
---- -	2026-08-04 10:31:43.864609916 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/410/stderr	2026-08-04 10:31:43.864095056 +0000
+--- -	2026-08-04 14:46:26.151272031 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/410/stderr	2026-08-04 14:46:26.150560274 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:15: error: invalid MOVE statement
 -prog.cob:16: error: invalid MOVE statement

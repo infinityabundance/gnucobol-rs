@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 345. syn_misc.at:5218: testing Constant Expressions (2) ...
 ./syn_misc.at:5260: $COMPILE_ONLY prog.cob 
---- -	2026-08-04 10:31:43.831296103 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/345/stderr	2026-08-04 10:31:43.830647804 +0000
+--- -	2026-08-04 14:46:26.116549956 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/345/stderr	2026-08-04 14:46:26.115562355 +0000
 @@ -1,9 +1,2 @@
 -prog.cob:15: warning: expression '115' EQUALS '200' is always FALSE
 -prog.cob:16: warning: expression '200' EQUALS '115' is always FALSE

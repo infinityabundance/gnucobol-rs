@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1190. run_extensions.at:4869: testing DISPLAY DIRECTIVE and $DISPLAY ...
 ./run_extensions.at:4892: $COMPILE prog.cob
---- -	2026-08-04 10:31:44.497105632 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1190/stdout	2026-08-04 10:31:44.496216454 +0000
+--- -	2026-08-04 14:46:26.804869367 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1190/stdout	2026-08-04 14:46:26.803794643 +0000
 @@ -1,6 +1 @@
 -MF compile time text # A.0-B;C
 -some.text-here

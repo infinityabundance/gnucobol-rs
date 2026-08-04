@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 294. syn_misc.at:2681: testing DISPLAY MESSAGE BOX ...
 ./syn_misc.at:2715: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 10:31:43.805960653 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/294/stderr	2026-08-04 10:31:43.805385781 +0000
+--- -	2026-08-04 14:46:26.090699604 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/294/stderr	2026-08-04 14:46:26.090047328 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:18: warning: handling of DISPLAY MESSAGE is unfinished; implementation is likely to be changed
 -prog.cob:22: warning: handling of DISPLAY MESSAGE is unfinished; implementation is likely to be changed

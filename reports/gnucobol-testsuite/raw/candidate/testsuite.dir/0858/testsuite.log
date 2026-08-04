@@ -3,7 +3,7 @@
 ./run_file.at:662: $COMPILE prog.cob
 ./run_file.at:663: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/858/stdout	2026-08-04 10:31:44.157532742 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/858/stdout	2026-08-04 14:46:26.454688119 +0000
 @@ -0,0 +1 @@
 +Expected 'C' - Got B
 858. run_file.at:601: 858. REWRITE a RELATIVE file with RANDOM access (run_file.at:601): FAILED (run_file.at:663)

@@ -14,3 +14,10 @@
               CALL "callee2" END-CALL
            END-IF.
            GOBACK.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      callee2.
+       PROCEDURE        DIVISION.
+           CALL "callee" END-CALL.
+           GOBACK.

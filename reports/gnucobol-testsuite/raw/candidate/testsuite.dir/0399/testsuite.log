@@ -4,8 +4,8 @@
 ./syn_misc.at:8283: cat header.dom free.cob >> domfree.cob
 ./syn_misc.at:8284: cat header.dom fixed1.cob >> domfixed.cob
 ./syn_misc.at:8286: $COMPILE_ONLY -fformat=auto free.cob fixed1.cob fixed2.cob
---- -	2026-08-04 10:31:43.863756696 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/399/stderr	2026-08-04 10:31:43.863142671 +0000
+--- -	2026-08-04 14:46:26.149877210 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/399/stderr	2026-08-04 14:46:26.148928291 +0000
 @@ -1,2 +1,2 @@
 -free.cob:2: note: free format detected
 +cobc-rs: unsupported: no PROCEDURE DIVISION

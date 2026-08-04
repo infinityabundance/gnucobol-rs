@@ -2,7 +2,7 @@
 1241. data_binary.at:1242: testing BINARY: 64bit signed negative constant range ...
 ./data_binary.at:1256: $COMPILE -fnotrunc prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1241/stderr	2026-08-04 10:31:44.540478367 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1241/stderr	2026-08-04 14:46:26.849135308 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fnotrunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
 ./data_binary.at:1256: exit code was 1, expected 0

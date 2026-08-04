@@ -2,11 +2,11 @@
 539. run_fundamental.at:1625: testing Contained program visibility (2) ...
 ./run_fundamental.at:1670: $COMPILE prog.cob
 ./run_fundamental.at:1671: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 10:31:43.939871158 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/539/stderr	2026-08-04 10:31:43.939350437 +0000
+--- -	2026-08-04 14:46:26.228065244 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/539/stderr	2026-08-04 14:46:26.227055732 +0000
 @@ -1,2 +1,2 @@
 -libcob: prog.cob:25: error: module 'prog3' not found
-+cobrun: undefined data name: X
++cobrun: unsupported: not a numeric literal: X
  
 ./run_fundamental.at:1671: exit code was 2, expected 1
 539. run_fundamental.at:1625: 539. Contained program visibility (2) (run_fundamental.at:1625): FAILED (run_fundamental.at:1671)

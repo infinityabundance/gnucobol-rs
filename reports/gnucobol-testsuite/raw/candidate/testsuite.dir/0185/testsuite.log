@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 185. syn_value.at:494: testing Implicit picture from value ...
 ./syn_value.at:514: $COMPILE_ONLY -frelax-syntax-checks prog.cob
---- -	2026-08-04 10:31:43.751382669 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/185/stderr	2026-08-04 10:31:43.750610409 +0000
+--- -	2026-08-04 14:46:26.035881197 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/185/stderr	2026-08-04 14:46:26.035231395 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:7: warning: defining implicit picture size 4 for 'IMPPIC'
 +cobc-rs: -frelax-syntax-checks: unsupported option (rejected-unsupported; relaxed syntax checks: the candidate parser has one sealed strictness; reject honestly): 

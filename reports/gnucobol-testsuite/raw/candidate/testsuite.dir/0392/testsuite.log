@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 392. syn_misc.at:7894: testing CONTROL DIVISION & AREACHECK ...
 ./syn_misc.at:7918: $COMPILE -std=gcos-strict prog.cob
---- -	2026-08-04 10:31:43.855775357 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/392/stderr	2026-08-04 10:31:43.855160621 +0000
+--- -	2026-08-04 14:46:26.143664095 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/392/stderr	2026-08-04 14:46:26.143010055 +0000
 @@ -1,7 +1 @@
 -prog.cob:9: warning: start of statement in Area A
 -prog.cob:9: warning: ACCEPT statement in DEFAULT SECTION is not implemented

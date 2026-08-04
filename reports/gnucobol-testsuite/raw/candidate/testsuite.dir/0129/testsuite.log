@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 129. syn_definition.at:2055: testing RENAMES item ...
 ./syn_definition.at:2110: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-04 10:31:43.725873915 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/129/stderr	2026-08-04 10:31:43.725450225 +0000
+--- -	2026-08-04 14:46:26.009812768 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/129/stderr	2026-08-04 14:46:26.009412351 +0000
 @@ -1,15 +1,2 @@
 -prog.cob:15: error: RENAMES of 01-, 66- and 77-level items does not conform to COBOL 2014
 -prog.cob:16: error: THRU item 'd' may not be subordinate to 'c'

@@ -2,7 +2,7 @@
 597. run_fundamental.at:5380: testing USE FOR DEBUGGING ON [ALL] REFERENCES OF field ...
 ./run_fundamental.at:5426: $COMPILE -fmissing-statement=ok prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/597/stderr	2026-08-04 10:31:43.976243373 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/597/stderr	2026-08-04 14:46:26.267481302 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fmissing-statement=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./run_fundamental.at:5426: exit code was 1, expected 0

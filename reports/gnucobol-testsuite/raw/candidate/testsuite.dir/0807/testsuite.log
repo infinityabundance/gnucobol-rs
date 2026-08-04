@@ -1,8 +1,10 @@
 #                             -*- compilation -*-
 807. run_misc.at:8074: testing Trace feature with subroutine ...
 ./run_misc.at:8103: $COMPILE_MODULE callsub.cob
+./run_misc.at:8708: $COMPILE -ftraceall prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/807/stdout	2026-08-04 10:31:44.121647342 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/807/stderr	2026-08-04 14:46:26.417912114 +0000
 @@ -0,0 +1 @@
-+callsub.so
-807. run_misc.at:8074: 807. Trace feature with subroutine (run_misc.at:8074): FAILED (run_misc.at:8103)
++cobc-rs: -ftraceall: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
+./run_misc.at:8708: exit code was 1, expected 0
+807. run_misc.at:8074: 807. Trace feature with subroutine (run_misc.at:8074): FAILED (run_misc.at:8708)

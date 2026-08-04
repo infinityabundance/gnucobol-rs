@@ -4,9 +4,9 @@
 ./run_misc.at:7229: $COMPILE prog.cob
 ./run_misc.at:7230: COB_EXIT_WAIT=0 $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/798/stderr	2026-08-04 10:31:44.114101948 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/798/stderr	2026-08-04 14:46:26.411204196 +0000
 @@ -0,0 +1 @@
-+cobrun: undefined data name: INVALID-LINE
++cobrun: unsupported: not a numeric literal: INVALID-LINE
 stdout:
 ./run_misc.at:7230: exit code was 2, expected 0
 798. run_misc.at:7194: 798. EC-SCREEN-LINE-NUMBER and -STARTING-COLUMN (run_misc.at:7194): FAILED (run_misc.at:7230)

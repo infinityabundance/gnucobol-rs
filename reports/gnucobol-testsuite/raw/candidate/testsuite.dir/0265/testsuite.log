@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 265. syn_misc.at:1045: testing INSPECT multiple BEFORE/AFTER clauses ...
 ./syn_misc.at:1062: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.790447022 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/265/stderr	2026-08-04 10:31:43.789641781 +0000
+--- -	2026-08-04 14:46:26.075182520 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/265/stderr	2026-08-04 14:46:26.074378491 +0000
 @@ -1,2 +1 @@
 -prog.cob:11: error: syntax error, unexpected BEFORE
  

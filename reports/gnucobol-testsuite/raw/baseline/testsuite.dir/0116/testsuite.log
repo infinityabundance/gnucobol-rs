@@ -6,8 +6,8 @@
 ./syn_definition.at:1389: $COMPILE_ONLY prog1.cob prog2.cob
 ./syn_definition.at:1393: $COMPILE_ONLY -fregister=current-date,time-of-day \
   prog1.cob prog2.cob prog3.cob
---- -	2026-08-04 10:31:16.151141607 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/116/stderr	2026-08-04 10:31:16.150409532 +0000
+--- -	2026-08-04 14:45:46.435595277 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/116/stderr	2026-08-04 14:45:46.434844367 +0000
 @@ -1,6 +1,7 @@
 -prog2.cob:6: warning: redefinition of 'CURRENT-DATE'
 -prog2.cob:8: error: 'CURRENT-DATE' is ambiguous; needs qualification

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 434. syn_screen.at:506: testing Screen item OCCURS w-/wo relative LINE/COL ...
 ./syn_screen.at:544: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.878181767 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/434/stderr	2026-08-04 10:31:43.877408666 +0000
+--- -	2026-08-04 14:46:26.165954820 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/434/stderr	2026-08-04 14:46:26.165133428 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:7: warning: OCCURS screen items is not implemented
 -prog.cob:7: error: relative LINE/COLUMN clause required with OCCURS

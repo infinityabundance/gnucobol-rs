@@ -3,7 +3,7 @@
 ./run_file.at:5558: $COMPILE prog.cob
 ./run_file.at:5559: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/901/stderr	2026-08-04 10:31:44.189790817 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/901/stderr	2026-08-04 14:46:26.488923787 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: SET EOF TO FALSE: the 88 has no `WHEN SET TO FALSE` value
 ./run_file.at:5559: exit code was 2, expected 0

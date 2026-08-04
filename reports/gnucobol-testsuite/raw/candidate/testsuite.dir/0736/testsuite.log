@@ -2,7 +2,7 @@
 736. run_misc.at:2592: testing PERFORM inline (1) ...
 ./run_misc.at:2612: $COMPILE -fmissing-statement=ok prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/736/stderr	2026-08-04 10:31:44.071822681 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/736/stderr	2026-08-04 14:46:26.363368679 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fmissing-statement=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./run_misc.at:2612: exit code was 1, expected 0

@@ -3,7 +3,7 @@
 ./run_extensions.at:6151: $COMPILE prog.cob
 ./run_extensions.at:6152: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1214/stderr	2026-08-04 10:31:44.520213519 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1214/stderr	2026-08-04 14:46:26.824795442 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: INSPECT region clause near Str([66])
 ./run_extensions.at:6152: exit code was 2, expected 0

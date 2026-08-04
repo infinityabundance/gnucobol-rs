@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 262. syn_misc.at:966: testing INSPECT missing keyword ...
 ./syn_misc.at:980: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.789502331 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/262/stderr	2026-08-04 10:31:43.788648018 +0000
+--- -	2026-08-04 14:46:26.074040230 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/262/stderr	2026-08-04 14:46:26.073615569 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: INSPECT missing ALL/FIRST/LEADING/TRAILING
  

@@ -20,3 +20,15 @@
               END-DISPLAY
            END-IF
            STOP RUN.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog1.
+       PROCEDURE        DIVISION.
+           EXIT PROGRAM RETURNING -1.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      prog2.
+       PROCEDURE        DIVISION.
+           GOBACK GIVING 2.

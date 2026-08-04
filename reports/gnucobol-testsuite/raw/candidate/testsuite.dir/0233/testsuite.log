@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 233. syn_reportwriter.at:177: testing Missing PICTURE for SOURCE ...
 ./syn_reportwriter.at:211: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.773732954 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/233/stderr	2026-08-04 10:31:43.772927953 +0000
+--- -	2026-08-04 14:46:26.058843814 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/233/stderr	2026-08-04 14:46:26.058183463 +0000
 @@ -1,2 +1 @@
 -prog.cob:25: error: PICTURE clause required for 'bad'
  

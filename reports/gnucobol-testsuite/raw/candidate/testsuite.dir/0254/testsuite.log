@@ -3,7 +3,7 @@
 ./syn_misc.at:710: $COMPILE_ONLY prog.cob
 ./syn_misc.at:711: $COMPILE_ONLY -fno-constant-folding prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/254/stderr	2026-08-04 10:31:43.785421784 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/254/stderr	2026-08-04 14:46:26.069505184 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fno-constant-folding: unsupported option (rejected-unsupported; constant folding: reject honestly): 
 ./syn_misc.at:711: exit code was 1, expected 0

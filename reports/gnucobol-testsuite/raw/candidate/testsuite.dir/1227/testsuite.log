@@ -3,8 +3,8 @@
 ./run_ml.at:688: $COMPILE prog.cob
 ./run_ml.at:689: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1227/stderr	2026-08-04 10:31:44.530310392 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1227/stderr	2026-08-04 14:46:26.837231862 +0000
 @@ -0,0 +1 @@
-+cobrun: undefined data name: JSON-CODE
++cobrun: unsupported: not a numeric literal: JSON-CODE
 ./run_ml.at:689: exit code was 2, expected 0
 1227. run_ml.at:628: 1227. JSON GENERATE exceptions (run_ml.at:628): FAILED (run_ml.at:689)

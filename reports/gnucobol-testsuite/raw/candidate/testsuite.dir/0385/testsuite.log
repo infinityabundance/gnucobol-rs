@@ -2,7 +2,7 @@
 385. syn_misc.at:7228: testing PERFORM THRU syntax checks ...
 ./syn_misc.at:7264: $COMPILE_ONLY -Wno-suspicious-perform-thru prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/385/stderr	2026-08-04 10:31:43.851217620 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/385/stderr	2026-08-04 14:46:26.137339802 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: verb SUB1
 ./syn_misc.at:7264: exit code was 1, expected 0

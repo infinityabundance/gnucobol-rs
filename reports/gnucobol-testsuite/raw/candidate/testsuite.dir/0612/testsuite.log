@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 612. run_fundamental.at:6493: testing abbreviated conditions with multiple words operators ...
 ./run_fundamental.at:6514: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.985532610 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/612/stderr	2026-08-04 10:31:43.985000868 +0000
+--- -	2026-08-04 14:46:26.276769251 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/612/stderr	2026-08-04 14:46:26.276089072 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: syntax error, unexpected Identifier
  

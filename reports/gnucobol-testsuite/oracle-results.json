@@ -75,7 +75,7 @@
       "number": 10,
       "status": "ORACLE_PASS",
       "test_id": "0010",
-      "title": "used_binaries.at:427: 10. C Compiler optimizations"
+      "title": "C Compiler optimizations"
     },
     {
       "detail": "ORACLE_OK",
@@ -96,7 +96,7 @@
       "number": 13,
       "status": "ORACLE_PASS",
       "test_id": "0013",
-      "title": "used_binaries.at:500: 13. cobcrun validation"
+      "title": "cobcrun validation"
     },
     {
       "detail": "ORACLE_OK",
@@ -110,7 +110,7 @@
       "number": 15,
       "status": "ORACLE_PASS",
       "test_id": "0015",
-      "title": "used_binaries.at:626: 15. cobcrun -M directory/ default"
+      "title": "cobcrun -M directory/ default"
     },
     {
       "detail": "ORACLE_OK",
@@ -278,7 +278,7 @@
       "number": 39,
       "status": "ORACLE_PASS",
       "test_id": "0039",
-      "title": "configuration.at:546: 39. runtime configuration"
+      "title": "runtime configuration"
     },
     {
       "detail": "ORACLE_OK",
@@ -292,21 +292,21 @@
       "number": 41,
       "status": "ORACLE_PASS",
       "test_id": "0041",
-      "title": "configuration.at:608: 41. runtime configuration: recursive include"
+      "title": "runtime configuration: recursive include"
     },
     {
       "detail": "ORACLE_OK",
       "number": 42,
       "status": "ORACLE_PASS",
       "test_id": "0042",
-      "title": "runtime configuration: environment priority"
+      "title": "configuration.at:637: 42. runtime configuration: environment priority"
     },
     {
       "detail": "ORACLE_OK",
       "number": 43,
       "status": "ORACLE_PASS",
       "test_id": "0043",
-      "title": "configuration.at:650: 43. runtime configuration: entries"
+      "title": "runtime configuration: entries"
     },
     {
       "detail": "ORACLE_OK",
@@ -320,7 +320,7 @@
       "number": 45,
       "status": "ORACLE_PASS",
       "test_id": "0045",
-      "title": "runtime configuration: conf optional"
+      "title": "configuration.at:760: 45. runtime configuration: conf optional"
     },
     {
       "detail": "ORACLE_OK",
@@ -3582,7 +3582,7 @@
       "number": 511,
       "status": "ORACLE_PASS",
       "test_id": "0511",
-      "title": "run_fundamental.at:25: 511. DISPLAY literals"
+      "title": "DISPLAY literals"
     },
     {
       "detail": "ORACLE_OK",
@@ -3848,7 +3848,7 @@
       "number": 549,
       "status": "ORACLE_PASS",
       "test_id": "0549",
-      "title": "run_fundamental.at:2277: 549. CANCEL test (1)"
+      "title": "CANCEL test (1)"
     },
     {
       "detail": "ORACLE_OK",
@@ -3862,7 +3862,7 @@
       "number": 551,
       "status": "ORACLE_PASS",
       "test_id": "0551",
-      "title": "run_fundamental.at:2341: 551. CANCEL test (3)"
+      "title": "CANCEL test (3)"
     },
     {
       "detail": "ORACLE_OK",
@@ -3939,49 +3939,49 @@
       "number": 562,
       "status": "ORACLE_PASS",
       "test_id": "0562",
-      "title": "ROUNDED AWAY-FROM-ZERO"
+      "title": "run_fundamental.at:2631: 562. ROUNDED AWAY-FROM-ZERO"
     },
     {
       "detail": "ORACLE_OK",
       "number": 563,
       "status": "ORACLE_PASS",
       "test_id": "0563",
-      "title": "ROUNDED NEAREST-AWAY-FROM-ZERO"
+      "title": "run_fundamental.at:2694: 563. ROUNDED NEAREST-AWAY-FROM-ZERO"
     },
     {
       "detail": "ORACLE_OK",
       "number": 564,
       "status": "ORACLE_PASS",
       "test_id": "0564",
-      "title": "ROUNDED NEAREST-EVEN"
+      "title": "run_fundamental.at:2757: 564. ROUNDED NEAREST-EVEN"
     },
     {
       "detail": "ORACLE_OK",
       "number": 565,
       "status": "ORACLE_PASS",
       "test_id": "0565",
-      "title": "ROUNDED NEAREST-TOWARD-ZERO"
+      "title": "run_fundamental.at:2820: 565. ROUNDED NEAREST-TOWARD-ZERO"
     },
     {
       "detail": "ORACLE_OK",
       "number": 566,
       "status": "ORACLE_PASS",
       "test_id": "0566",
-      "title": "ROUNDED TOWARD-GREATER"
+      "title": "run_fundamental.at:2883: 566. ROUNDED TOWARD-GREATER"
     },
     {
       "detail": "ORACLE_OK",
       "number": 567,
       "status": "ORACLE_PASS",
       "test_id": "0567",
-      "title": "ROUNDED TOWARD-LESSER"
+      "title": "run_fundamental.at:2946: 567. ROUNDED TOWARD-LESSER"
     },
     {
       "detail": "ORACLE_OK",
       "number": 568,
       "status": "ORACLE_PASS",
       "test_id": "0568",
-      "title": "ROUNDED TRUNCATION"
+      "title": "run_fundamental.at:3009: 568. ROUNDED TRUNCATION"
     },
     {
       "detail": "ORACLE_OK",
@@ -4765,7 +4765,7 @@
       "number": 680,
       "status": "ORACLE_PASS",
       "test_id": "0680",
-      "title": "run_misc.at:432: 680. EXTERNAL data item"
+      "title": "EXTERNAL data item"
     },
     {
       "detail": "ORACLE_OK",
@@ -4940,7 +4940,7 @@
       "number": 705,
       "status": "ORACLE_PASS",
       "test_id": "0705",
-      "title": "run_misc.at:1355: 705. Recursive CALL of RECURSIVE program"
+      "title": "Recursive CALL of RECURSIVE program"
     },
     {
       "detail": "ORACLE_OK",
@@ -5353,7 +5353,7 @@
       "number": 764,
       "status": "ORACLE_PASS",
       "test_id": "0764",
-      "title": "run_misc.at:4223: 764. COB_LOAD_CASE=UPPER"
+      "title": "COB_LOAD_CASE=UPPER"
     },
     {
       "detail": "ORACLE_OK",
@@ -5451,14 +5451,14 @@
       "number": 778,
       "status": "ORACLE_PASS",
       "test_id": "0778",
-      "title": "run_misc.at:5078: 778. ANY LENGTH (1)"
+      "title": "ANY LENGTH (1)"
     },
     {
       "detail": "ORACLE_OK",
       "number": 779,
       "status": "ORACLE_PASS",
       "test_id": "0779",
-      "title": "run_misc.at:5117: 779. ANY LENGTH (2)"
+      "title": "ANY LENGTH (2)"
     },
     {
       "detail": "ORACLE_OK",
@@ -5479,7 +5479,7 @@
       "number": 782,
       "status": "ORACLE_PASS",
       "test_id": "0782",
-      "title": "run_misc.at:5243: 782. ANY LENGTH (5)"
+      "title": "ANY LENGTH (5)"
     },
     {
       "detail": "ORACLE_OK",
@@ -7684,7 +7684,7 @@
       "number": 1097,
       "status": "ORACLE_PASS",
       "test_id": "1097",
-      "title": "FUNCTION TRIM zero length"
+      "title": "run_functions.at:4109: 1097. FUNCTION TRIM zero length"
     },
     {
       "detail": "ORACLE_OK",

@@ -3,7 +3,7 @@
 ./run_extensions.at:4117: $COMPILE prog.cob
 ./run_extensions.at:4118: $COBCRUN_DIRECT ./prog --version --verbose -jkl
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1180/stderr	2026-08-04 10:31:44.490662070 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1180/stderr	2026-08-04 14:46:26.798112688 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: NULL
 ./run_extensions.at:4118: exit code was 2, expected 0

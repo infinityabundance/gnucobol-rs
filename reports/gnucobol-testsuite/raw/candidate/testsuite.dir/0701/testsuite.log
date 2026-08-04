@@ -2,7 +2,7 @@
 701. run_misc.at:1201: testing Static call with static linking ...
 ./run_misc.at:1220: $COMPILE_MODULE -c callee.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/701/stderr	2026-08-04 10:31:44.047924010 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/701/stderr	2026-08-04 14:46:26.338114268 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -c: unsupported option (rejected-unsupported; compile to object: the candidate has no native object model (no C emission); reject honestly): 
 ./run_misc.at:1220: exit code was 1, expected 0

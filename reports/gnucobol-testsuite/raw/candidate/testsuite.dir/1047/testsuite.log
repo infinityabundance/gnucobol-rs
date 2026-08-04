@@ -2,8 +2,10 @@
 1047. run_functions.at:2317: testing FUNCTION MODULE-CALLER-ID ...
 ./run_functions.at:2344: $COMPILE prog.cob
 ./run_functions.at:2345: $COMPILE_MODULE prog2.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1047/stdout	2026-08-04 10:31:44.334004700 +0000
-@@ -0,0 +1 @@
-+prog2.so
-1047. run_functions.at:2317: 1047. FUNCTION MODULE-CALLER-ID (run_functions.at:2317): FAILED (run_functions.at:2345)
+./run_functions.at:2346: $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 14:46:26.633588988 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1047/stdout	2026-08-04 14:46:26.632961578 +0000
+@@ -1 +1 @@
+-prog
++PROG
+1047. run_functions.at:2317: 1047. FUNCTION MODULE-CALLER-ID (run_functions.at:2317): FAILED (run_functions.at:2346)

@@ -3,11 +3,11 @@
 ./run_file.at:6183: $COMPILE prog.cob
 ./run_file.at:6184: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/911/stderr	2026-08-04 10:31:44.197489729 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/911/stderr	2026-08-04 14:46:26.496794973 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: reference-modification length 'REC-SIZE - 2' is not an integer
---- -	2026-08-04 10:31:44.198826040 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/911/stdout	2026-08-04 10:31:44.197851143 +0000
+--- -	2026-08-04 14:46:26.498062347 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/911/stdout	2026-08-04 14:46:26.497498385 +0000
 @@ -1,12 +1 @@
 -22: >+12345678++12345678+<
 -21: >+12345678++12345678<

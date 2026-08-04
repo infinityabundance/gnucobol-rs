@@ -3,7 +3,7 @@
 ./run_file.at:13893: $COMPILE prog1.cob
 ./run_file.at:13895: $COBCRUN_DIRECT ./prog1 > prog1.txt
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/953/stderr	2026-08-04 10:31:44.230861671 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/953/stderr	2026-08-04 14:46:26.530547430 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number TAT-FILE1
 ./run_file.at:13895: exit code was 2, expected 0

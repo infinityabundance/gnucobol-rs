@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 315. syn_misc.at:3555: testing COBOL-WORDS directive ...
 ./syn_misc.at:3617: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.816337627 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/315/stderr	2026-08-04 10:31:43.815582129 +0000
+--- -	2026-08-04 14:46:26.101230461 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/315/stderr	2026-08-04 14:46:26.100542758 +0000
 @@ -1,7 +1,2 @@
 -prog.cob:9: error: 'BREAD' is not a default reserved word, so cannot be aliased
 -prog.cob:11: error: 'ID' is already reserved

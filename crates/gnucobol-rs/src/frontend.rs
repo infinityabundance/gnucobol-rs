@@ -7617,11 +7617,8 @@ fn binary_literal_bytes(w: &str, quote: Option<&Tok>) -> Result<Option<Vec<u8>>,
                 value = (value << 4) | v;
             }
         }
-        "N" | "NX" | "HB" => {
-            return Err(RunError::Unsupported(format!(
-                "{w} literal: national/bit literals are a dialect extension boundary"
-            )))
-        }
+        // N/NX/HB national/bit forms are NOT auto-detected here (a field named N must resolve
+        // normally); an actual N'...' literal in the source fails later at the numeric-literal path.
         _ => return Ok(None),
     }
     let _ = parse;
@@ -7669,27 +7666,26 @@ fn exec_display(
                     i += 1;
                     continue;
                 }
+                // A DECLARED FIELD always wins (a field named N or X followed by a string must not be
+                // mistaken for an N'/X' literal prefix -- the ROUNDED suites' `DISPLAY M " " N ...`).
+                if let Some(f) = read_field(fields, w)? {
+                    let bytes = if w == "RETURN-CODE" {
+                        display_return_code(&f)
+                    } else {
+                        display_bytes(&f, ctx.decimal_comma)
+                    };
+                    operands.push((bytes, alnum_attr()));
+                    i += 1;
+                    continue;
+                }
                 // binary/hexadecimal literal prefix + quoted digits: `DISPLAY B'0101'`
                 if let Some(bytes) = binary_literal_bytes(w, stmt.get(i + 1))? {
                     operands.push((bytes, alnum_attr()));
                     i += 2;
                     continue;
                 }
-                match read_field(fields, w)? {
-                    Some(f) => {
-                        let bytes = if w == "RETURN-CODE" {
-                            display_return_code(&f)
-                        } else {
-                            display_bytes(&f, ctx.decimal_comma)
-                        };
-                        operands.push((bytes, alnum_attr()));
-                    }
-                    None => {
-                        // A numeric / floating literal operand (`DISPLAY 123`, `DISPLAY +1.23E0`): not a
-                        // field -- render the literal's value.
-                        operands.push((display_literal_bytes(w)?, alnum_attr()));
-                    }
-                }
+                // A numeric / floating literal operand (`DISPLAY 123`, `DISPLAY +1.23E0`): render it.
+                operands.push((display_literal_bytes(w)?, alnum_attr()));
             }
             Tok::Dot => {}
         }

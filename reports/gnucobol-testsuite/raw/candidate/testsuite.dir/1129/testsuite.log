@@ -2,8 +2,8 @@
 1129. run_extensions.at:1048: testing INITIALIZE OCCURS UNBOUNDED ...
 ./run_extensions.at:1142: $COMPILE prog.cob
 ./run_extensions.at:1144: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 10:31:44.440841795 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1129/stderr	2026-08-04 10:31:44.439643731 +0000
+--- -	2026-08-04 14:46:26.743871316 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1129/stderr	2026-08-04 14:46:26.743176421 +0000
 @@ -1,2 +1,2 @@
 -libcob: prog.cob:89: error: length of 'a-table' out of bounds: 10, starting at: 20, maximum: 27
 +cobrun: unsupported: OCCURS max UNBOUNDED is not an integer

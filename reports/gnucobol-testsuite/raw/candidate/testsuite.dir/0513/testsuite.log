@@ -1,8 +1,17 @@
 #                             -*- compilation -*-
 513. run_fundamental.at:105: testing Hexadecimal literal ...
 ./run_fundamental.at:137: $COMPILE_MODULE dump.c
+./run_fundamental.at:138: $COMPILE prog.cob
+./run_fundamental.at:139: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/513/stdout	2026-08-04 10:31:43.921673474 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/513/stderr	2026-08-04 14:46:26.212615546 +0000
 @@ -0,0 +1 @@
-+dump.so
-513. run_fundamental.at:105: 513. Hexadecimal literal (run_fundamental.at:105): FAILED (run_fundamental.at:137)
++cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
+--- -	2026-08-04 14:46:26.213743209 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/513/stdout	2026-08-04 14:46:26.212615546 +0000
+@@ -1,2 +1 @@
+-123
+-00010200
++
+./run_fundamental.at:139: exit code was 2, expected 0
+513. run_fundamental.at:105: 513. Hexadecimal literal (run_fundamental.at:105): FAILED (run_fundamental.at:139)

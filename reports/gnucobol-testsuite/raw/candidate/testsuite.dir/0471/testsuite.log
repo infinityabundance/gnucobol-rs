@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 471. syn_literals.at:1412: testing zero-length literals ...
 ./syn_literals.at:1438: $COMPILE_ONLY -Wno-unfinished prog.cob
---- -	2026-08-04 10:31:43.898450802 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/471/stderr	2026-08-04 10:31:43.897749675 +0000
+--- -	2026-08-04 14:46:26.185713753 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/471/stderr	2026-08-04 14:46:26.185063371 +0000
 @@ -1,12 +1,2 @@
 -prog.cob:12: warning: hexadecimal literal has zero length; X'00' will be assumed
 -prog.cob:13: error: invalid H literal: ''

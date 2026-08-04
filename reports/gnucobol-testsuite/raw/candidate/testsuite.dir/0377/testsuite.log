@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 377. syn_misc.at:6975: testing conditional / define directives (2) ...
 ./syn_misc.at:6994: $COMPILE_ONLY -D X prog.cob
---- -	2026-08-04 10:31:43.848140444 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/377/stdout	2026-08-04 10:31:43.847575190 +0000
+--- -	2026-08-04 14:46:26.134838238 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/377/stdout	2026-08-04 14:46:26.134113707 +0000
 @@ -1,2 +1 @@
 -X defined
  

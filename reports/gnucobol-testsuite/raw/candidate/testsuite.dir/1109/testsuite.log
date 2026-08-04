@@ -2,7 +2,7 @@
 1109. run_functions.at:4551: testing UDF replacing intrinsic function ...
 ./run_functions.at:4585: $COMPILE -fnot-intrinsic=substitute prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1109/stderr	2026-08-04 10:31:44.420476169 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1109/stderr	2026-08-04 14:46:26.722671546 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fnot-intrinsic=substitute: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): substitute
 ./run_functions.at:4585: exit code was 1, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 173. syn_value.at:28: testing bad VALUES / VALUES ARE in format-1 ...
 ./syn_value.at:54: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.745897373 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/173/stderr	2026-08-04 10:31:43.745120144 +0000
+--- -	2026-08-04 14:46:26.030779935 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/173/stderr	2026-08-04 14:46:26.030097803 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:11: error: unexpected VALUES ARE
 -prog.cob:13: error: syntax error, unexpected ARE

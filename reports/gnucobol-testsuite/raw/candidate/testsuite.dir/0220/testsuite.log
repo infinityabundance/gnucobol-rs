@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 220. syn_file.at:1811: testing Undeclared FILE-ID variable ...
 ./syn_file.at:1829: $COMPILE_ONLY -Wimplicit-define prog.cob
---- -	2026-08-04 10:31:43.767916871 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/220/stderr	2026-08-04 10:31:43.767443649 +0000
+--- -	2026-08-04 14:46:26.052543486 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/220/stderr	2026-08-04 14:46:26.051843341 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: warning: VALUE OF is obsolete in GnuCOBOL
 -prog.cob:12: warning: variable 'fid-file1' will be implicitly defined

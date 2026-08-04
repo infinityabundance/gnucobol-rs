@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 134. syn_definition.at:2629: testing APPLY COMMIT clause ...
 ./syn_definition.at:2721: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.728521631 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/134/stderr	2026-08-04 10:31:43.727953442 +0000
+--- -	2026-08-04 14:46:26.013102452 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/134/stderr	2026-08-04 14:46:26.012143164 +0000
 @@ -1,8 +1,2 @@
 -prog.cob:29: warning: APPLY COMMIT is not implemented
 -prog.cob:27: error: 'not-there' is not defined

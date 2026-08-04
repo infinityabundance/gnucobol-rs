@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 426. syn_screen.at:221: testing FROM clause ...
 ./syn_screen.at:243: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.874020479 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/426/stderr	2026-08-04 10:31:43.873358185 +0000
+--- -	2026-08-04 14:46:26.162369093 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/426/stderr	2026-08-04 14:46:26.161781728 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:14: warning: 'SI4' has FROM, TO or USING without PIC; PIC will be implied
 +cobc-rs: unsupported: unsupported level number SCREEN

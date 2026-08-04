@@ -2,8 +2,17 @@
 770. run_misc.at:4426: testing direct CALL in from C w/wo error ...
 ./run_misc.at:4494: $COMPILE caller.c
 ./run_misc.at:4495: $COMPILE_MODULE callee.cob callee2.cob
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stdout	2026-08-04 10:31:44.095014095 +0000
-@@ -0,0 +1 @@
-+callee.so
-770. run_misc.at:4426: 770. direct CALL in from C w/wo error (run_misc.at:4426): FAILED (run_misc.at:4495)
+./run_misc.at:4496: $COBCRUN_DIRECT ./caller callee A
+--- -	2026-08-04 14:46:26.390732002 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stderr	2026-08-04 14:46:26.390014374 +0000
+@@ -1,2 +1,2 @@
+-note: program exited normally, without STOP RUN with status 0
++cobrun: unsupported: no PROCEDURE DIVISION
+ 
+--- -	2026-08-04 14:46:26.391220012 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/770/stdout	2026-08-04 14:46:26.390796142 +0000
+@@ -1 +1 @@
+-P1: A
++
+./run_misc.at:4496: exit code was 2, expected 0
+770. run_misc.at:4426: 770. direct CALL in from C w/wo error (run_misc.at:4426): FAILED (run_misc.at:4496)

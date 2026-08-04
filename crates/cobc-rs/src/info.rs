@@ -75,6 +75,61 @@ pub fn info() -> String {
 pub fn runtime_conf() -> String {
     let sys = run::build_system_conf();
     let (cfg, applied, env) = crate::runtime_config::snapshot();
+    // Environment priority (libcob): a set COB_* environment variable overrides both the default
+    // and any config-file value. The suite's tests set COB_* vars per check (e.g. 0042
+    // COB_PHYSICAL_CANCEL=false); the overlay must see them.
+    let mut env = env;
+    for name in [
+        "COB_LOAD_CASE",
+        "COB_PHYSICAL_CANCEL",
+        "COB_LIBRARY_PATH",
+        "COB_PRE_LOAD",
+        "COB_BELL",
+        "COB_DISABLE_WARNINGS",
+        "COB_ENV_MANGLE",
+        "COB_REDIRECT_DISPLAY",
+        "COB_SCREEN_ESC",
+        "COB_SCREEN_EXCEPTIONS",
+        "COB_TIMEOUT_SCALE",
+        "COB_INSERT_MODE",
+        "COB_MOUSE_FLAGS",
+        "COB_MOUSE_INTERVAL",
+        "COB_SET_DEBUG",
+        "COB_SET_TRACE",
+        "COB_TRACE_FILE",
+        "COB_TRACE_FORMAT",
+        "COB_STACKTRACE",
+        "COB_CORE_ON_ERROR",
+        "COB_CORE_FILENAME",
+        "COB_DUMP_FILE",
+        "COB_DUMP_WIDTH",
+        "COB_FILE_PATH",
+        "COB_VARSEQ_FORMAT",
+        "COB_LS_FIXED",
+        "COB_LS_VALIDATE",
+        "COB_LS_NULLS",
+        "COB_LS_SPLIT",
+        "COB_SEQ_CONCAT_NAME",
+        "COB_SEQ_CONCAT_SEP",
+        "COB_SORT_CHUNK",
+        "COB_SORT_MEMORY",
+        "COB_SYNC",
+        "DB_HOME",
+        "COB_COL_JUST_LRC",
+        "COB_DISPLAY_PRINT_PIPE",
+        "COB_DISPLAY_PRINT_FILE",
+        "COB_DISPLAY_PUNCH_FILE",
+        "COB_LEGACY",
+        "COB_EXIT_WAIT",
+        "COB_EXIT_MSG",
+        "COB_CURRENT_DATE",
+    ] {
+        if let Ok(v) = std::env::var(name) {
+            if !v.is_empty() {
+                env.entry(name.to_string()).or_insert(v);
+            }
+        }
+    }
     if cfg.is_none() && applied.is_empty() && env.is_empty() {
         return String::from_utf8(gnucobol_rs::common_runtimeconf::print_runtime_conf(&sys))
             .unwrap_or_default();

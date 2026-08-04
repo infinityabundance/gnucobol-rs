@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 122. syn_definition.at:1501: testing Invalid PICTURE strings ...
 ./syn_definition.at:1602: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-04 10:31:43.722866619 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/122/stderr	2026-08-04 10:31:43.722109257 +0000
+--- -	2026-08-04 14:46:26.007181822 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/122/stderr	2026-08-04 14:46:26.006602532 +0000
 @@ -1,77 +1,2 @@
 -prog.cob:9: warning: continuation of COBOL words is archaic in COBOL 2014
 -prog.cob:11: warning: continuation of COBOL words is archaic in COBOL 2014

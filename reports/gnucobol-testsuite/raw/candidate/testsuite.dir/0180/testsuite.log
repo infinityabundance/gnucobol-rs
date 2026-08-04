@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 180. syn_value.at:299: testing Alphanumeric item ...
 ./syn_value.at:315: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.749682800 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/180/stderr	2026-08-04 10:31:43.748906723 +0000
+--- -	2026-08-04 14:46:26.033917475 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/180/stderr	2026-08-04 14:46:26.033468678 +0000
 @@ -1,5 +1 @@
 -prog.cob:7: warning: value size exceeds data size
 -prog.cob:7: note: value size is 4

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 466. syn_literals.at:1216: testing binary literals ...
 ./syn_literals.at:1234: $COMPILE_ONLY -std=mf prog.cob
---- -	2026-08-04 10:31:43.893127819 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/466/stderr	2026-08-04 10:31:43.892607249 +0000
+--- -	2026-08-04 14:46:26.182303044 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/466/stderr	2026-08-04 14:46:26.181784437 +0000
 @@ -1,6 +1 @@
 -prog.cob:9: error: invalid B literal: '23'
 -prog.cob:9: note: literal contains invalid character '2'

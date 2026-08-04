@@ -3,11 +3,11 @@
 ./run_fundamental.at:5363: $COMPILE prog.cob
 ./run_fundamental.at:5364: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stderr	2026-08-04 10:31:43.976788369 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stderr	2026-08-04 14:46:26.265762978 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: ENVIRONMENT
---- -	2026-08-04 10:31:43.978324542 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stdout	2026-08-04 10:31:43.977630719 +0000
+--- -	2026-08-04 14:46:26.266805522 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/596/stdout	2026-08-04 14:46:26.266178402 +0000
 @@ -1,11 +1 @@
 -       FIRST-PAR                                        START PROGRAM                 |
 -OK1

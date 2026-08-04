@@ -2,8 +2,8 @@
 598. run_fundamental.at:5460: testing USE FOR DEBUGGING, reference within DEBUGGING ...
 ./run_fundamental.at:5486: $COMPILE -Wno-terminator prog.cob
 ./run_fundamental.at:5487: COB_SET_DEBUG=1 $COBCRUN_DIRECT ./prog
---- -	2026-08-04 10:31:43.978277655 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/598/stdout	2026-08-04 10:31:43.977630719 +0000
+--- -	2026-08-04 14:46:26.269678479 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/598/stdout	2026-08-04 14:46:26.268917209 +0000
 @@ -1,6 +1,2 @@
 -    19 DATA-FIELD                                       """"""""""""""""""""""""""""""""""""""""|
 -    19 DATA-FIELD                                       """"""""""""""""""""""""""""""""""""""""|

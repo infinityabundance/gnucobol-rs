@@ -2,7 +2,7 @@
 72. syn_copy.at:1041: testing COPY and REPLACE with reserved words ...
 ./syn_copy.at:1072: $COMPILE_ONLY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/72/stderr	2026-08-04 10:31:43.699866092 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/72/stderr	2026-08-04 14:46:25.982793386 +0000
 @@ -0,0 +1 @@
 +cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
 ./syn_copy.at:1072: exit code was 1, expected 0

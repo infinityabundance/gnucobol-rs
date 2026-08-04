@@ -3,7 +3,7 @@
 ./run_ml.at:623: $COMPILE prog.cob
 ./run_ml.at:624: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1226/stdout	2026-08-04 10:31:44.529852388 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1226/stdout	2026-08-04 14:46:26.836329670 +0000
 @@ -0,0 +1,2 @@
 +Test 1 failed: {"A":{"C":" "}}                                                                                     
 +Test 2 failed: {"X":{"Y":{}}}                                                                                      

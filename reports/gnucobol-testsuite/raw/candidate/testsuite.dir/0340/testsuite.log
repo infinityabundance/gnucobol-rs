@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 340. syn_misc.at:4890: testing 01 CONSTANT ...
 ./syn_misc.at:4909: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.829651206 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/340/stderr	2026-08-04 10:31:43.829072778 +0000
+--- -	2026-08-04 14:46:26.115137873 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/340/stderr	2026-08-04 14:46:26.114602415 +0000
 @@ -1,4 +1 @@
 -prog.cob:7: error: missing right parenthesis
 -prog.cob:8: error: missing left parenthesis

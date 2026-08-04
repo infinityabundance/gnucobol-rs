@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 455. syn_functions.at:433: testing invalid formatted date/time args ...
 ./syn_functions.at:494: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.887151158 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/455/stderr	2026-08-04 10:31:43.886453256 +0000
+--- -	2026-08-04 14:46:26.176943931 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/455/stderr	2026-08-04 14:46:26.176042680 +0000
 @@ -1,16 +1 @@
 -prog.cob:12: error: FUNCTION 'FORMATTED-DATE' has invalid date/time format
 -prog.cob:14: error: FUNCTION 'FORMATTED-TIME' has invalid date/time format

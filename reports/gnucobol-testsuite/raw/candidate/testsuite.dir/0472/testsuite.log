@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 472. syn_literals.at:1472: testing long literal in error message ...
 ./syn_literals.at:1497: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.898861338 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/472/stderr	2026-08-04 10:31:43.898184716 +0000
+--- -	2026-08-04 14:46:26.186489229 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/472/stderr	2026-08-04 14:46:26.185063371 +0000
 @@ -1,2 +1 @@
 -prog.cob:5: error: invalid MOVE target: literal " 1  c d e f g h i j k l m n 0 q. 2 ..."
  

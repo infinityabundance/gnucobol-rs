@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+567. run_fundamental.at:2946: testing ROUNDED TOWARD-LESSER ...
+./run_fundamental.at:3003: $COMPILE prog.cob
+./run_fundamental.at:3004: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/567/stderr	2026-08-04 14:46:26.245433390 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: N literal: national/bit literals are a dialect extension boundary
+--- -	2026-08-04 14:46:26.247397703 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/567/stdout	2026-08-04 14:46:26.246440588 +0000
+@@ -1 +1 @@
+-+2 -3 +2 -3 +3 -4 +3 -4 +3 -4
++
+./run_fundamental.at:3004: exit code was 2, expected 0
+567. run_fundamental.at:2946: 567. ROUNDED TOWARD-LESSER (run_fundamental.at:2946): FAILED (run_fundamental.at:3004)

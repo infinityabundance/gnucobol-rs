@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 432. syn_screen.at:402: testing Conflicting screen clauses ...
 ./syn_screen.at:432: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.875730768 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/432/stderr	2026-08-04 10:31:43.874650148 +0000
+--- -	2026-08-04 14:46:26.163821391 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/432/stderr	2026-08-04 14:46:26.163046927 +0000
 @@ -1,12 +1,2 @@
 -prog.cob:11: error: cannot specify both LOWLIGHT and HIGHLIGHT
 -prog.cob:12: error: cannot specify both ERASE EOS and ERASE EOL

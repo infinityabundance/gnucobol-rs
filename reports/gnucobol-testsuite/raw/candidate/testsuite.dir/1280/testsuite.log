@@ -3,7 +3,7 @@
 ./data_packed.at:20531: $COMPILE prog.cob
 ./data_packed.at:20532: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1280/stderr	2026-08-04 10:31:44.602641879 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1280/stderr	2026-08-04 14:46:26.915393064 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number 78
 ./data_packed.at:20532: exit code was 2, expected 0

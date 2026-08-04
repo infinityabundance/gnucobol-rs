@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 164. syn_redefines.at:219: testing REDEFINES: with variable occurrence ...
 ./syn_redefines.at:243: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.742122045 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/164/stderr	2026-08-04 10:31:43.741474067 +0000
+--- -	2026-08-04 14:46:26.025979714 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/164/stderr	2026-08-04 14:46:26.025248821 +0000
 @@ -1,4 +1 @@
 -prog.cob:8: error: 'Y' cannot be variable length
 -prog.cob:11: error: 'Y' cannot be variable length

@@ -2,8 +2,8 @@
 131. syn_definition.at:2155: testing SAME AS clause ...
 ./syn_definition.at:2201: $COMPILE_ONLY prog.cob
 ./syn_definition.at:2202: $COMPILE_ONLY -std=mf-strict prog.cob
---- -	2026-08-04 10:31:43.728332969 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/131/stderr	2026-08-04 10:31:43.727487613 +0000
+--- -	2026-08-04 14:46:26.012195201 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/131/stderr	2026-08-04 14:46:26.011634114 +0000
 @@ -1,6 +1 @@
 -prog.cob:13: error: SAME AS clause does not conform to Micro Focus COBOL
 -prog.cob:15: error: SAME AS clause does not conform to Micro Focus COBOL

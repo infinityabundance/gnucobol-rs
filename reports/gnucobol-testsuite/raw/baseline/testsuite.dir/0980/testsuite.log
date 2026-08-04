@@ -2,7 +2,7 @@
 980. run_reportwriter.at:9345: testing Varying and Nested OCCURS ...
 ./run_reportwriter.at:9469: $COMPILE -std=cobol2002 prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/980/stderr	2026-08-04 10:31:22.666036853 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/980/stderr	2026-08-04 14:45:53.432014974 +0000
 @@ -0,0 +1,4 @@
 +prog.cob:47: warning: RW VARYING clause is not implemented
 +prog.cob:55: warning: RW VARYING clause is not implemented

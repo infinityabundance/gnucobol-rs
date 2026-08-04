@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 291. syn_misc.at:2411: testing ACUCOBOL USAGE HANDLE ...
 ./syn_misc.at:2477: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 10:31:43.803674982 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/291/stderr	2026-08-04 10:31:43.802837360 +0000
+--- -	2026-08-04 14:46:26.088476549 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/291/stderr	2026-08-04 14:46:26.087678000 +0000
 @@ -1,17 +1,2 @@
 -prog.cob:19: error: unknown HANDLE type: bananas
 -prog.cob:20: error: unknown HANDLE type: apes

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 116. syn_definition.at:1335: testing OSVS register CURRENT-DATE and TIME-OF-DAY ...
 ./syn_definition.at:1376: $COMPILE_ONLY -std=cobol85 prog1.cob
---- -	2026-08-04 10:31:43.720761765 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/116/stderr	2026-08-04 10:31:43.720242497 +0000
+--- -	2026-08-04 14:46:26.003946810 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/116/stderr	2026-08-04 14:46:26.003168890 +0000
 @@ -1,3 +1 @@
 -prog1.cob:8: error: 'CURRENT-DATE' is not defined
 -prog1.cob:9: error: 'TIME-OF-DAY' is not defined

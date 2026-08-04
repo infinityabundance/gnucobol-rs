@@ -1,8 +1,16 @@
 #                             -*- compilation -*-
 801. run_misc.at:7309: testing void PROCEDURE ...
 ./run_misc.at:7331: $COMPILE_MODULE callee.cob
+./run_misc.at:7332: $COMPILE caller.cob
+./run_misc.at:7333: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stdout	2026-08-04 10:31:44.115987984 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stderr	2026-08-04 14:46:26.415037784 +0000
 @@ -0,0 +1 @@
-+callee.so
-801. run_misc.at:7309: 801. void PROCEDURE (run_misc.at:7309): FAILED (run_misc.at:7331)
++cobrun: unsupported: verb RETURNING
+--- -	2026-08-04 14:46:26.416417737 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stdout	2026-08-04 14:46:26.415765251 +0000
+@@ -1 +1 @@
+-+000000000
++
+./run_misc.at:7333: exit code was 2, expected 0
+801. run_misc.at:7309: 801. void PROCEDURE (run_misc.at:7309): FAILED (run_misc.at:7333)

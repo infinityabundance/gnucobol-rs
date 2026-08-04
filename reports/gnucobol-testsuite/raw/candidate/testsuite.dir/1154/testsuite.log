@@ -3,11 +3,11 @@
 ./run_extensions.at:2809: $COMPILE prog.cob
 ./run_extensions.at:2810: TEST_ENV=OK $COBCRUN_DIRECT ./prog CHECKPAR
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stderr	2026-08-04 10:31:44.463648351 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stderr	2026-08-04 14:46:26.768156510 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
---- -	2026-08-04 10:31:44.464714368 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stdout	2026-08-04 10:31:44.464009324 +0000
++cobrun: unsupported: invalid hex digit in X literal
+--- -	2026-08-04 14:46:26.769544438 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stdout	2026-08-04 14:46:26.768698040 +0000
 @@ -1,5 +1 @@
 -(OK  )
 -(RXW )

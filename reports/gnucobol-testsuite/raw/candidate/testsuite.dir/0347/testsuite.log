@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 347. syn_misc.at:5365: testing Constant Expressions (4) ...
 ./syn_misc.at:5389: $COMPILE_ONLY -fdiagnostics-show-option prog.cob
---- -	2026-08-04 10:31:43.832594633 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/347/stderr	2026-08-04 10:31:43.831798319 +0000
+--- -	2026-08-04 14:46:26.119358544 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/347/stderr	2026-08-04 14:46:26.118202237 +0000
 @@ -1,5 +1,2 @@
 -prog.cob:11: warning: expression '115' LESS THAN '16' is always FALSE [-Wconstant-numlit-expression]
 -prog.cob:13: warning: offset of 'var' out of bounds: -98 [-Wignored-error]

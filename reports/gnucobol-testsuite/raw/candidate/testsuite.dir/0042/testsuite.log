@@ -1,0 +1,7 @@
+#                             -*- compilation -*-
+42. configuration.at:637: testing runtime configuration: environment priority ...
+./configuration.at:644: COB_PHYSICAL_CANCEL=false $COBCRUN -c test.cfg --runtime-conf | \
+$GREP "COB_PHYSICAL_CANCEL" | $GREP "no"
+stdout:
+./configuration.at:644: exit code was 1, expected 0
+42. configuration.at:637: 42. runtime configuration: environment priority (configuration.at:637): FAILED (configuration.at:644)

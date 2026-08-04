@@ -3,11 +3,11 @@
 ./run_file.at:3089: $COMPILE prog.cob
 ./run_file.at:3091: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/876/stderr	2026-08-04 10:31:44.169800772 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/876/stderr	2026-08-04 14:46:26.467940059 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 10:31:44.171044771 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/876/stdout	2026-08-04 10:31:44.170315862 +0000
+--- -	2026-08-04 14:46:26.468951255 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/876/stdout	2026-08-04 14:46:26.468477701 +0000
 @@ -1,5 +1 @@
 -Loading sample program data file.
 -Sample program data file load complete.

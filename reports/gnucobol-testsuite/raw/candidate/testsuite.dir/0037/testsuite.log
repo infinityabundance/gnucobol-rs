@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 37. configuration.at:368: testing cobc configuration: conf optional ...
 ./configuration.at:396: $COMPILE_ONLY -conf=defunc.conf prog.cob
---- -	2026-08-04 10:31:43.684028187 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/37/stderr	2026-08-04 10:31:43.682996624 +0000
+--- -	2026-08-04 14:46:25.967126062 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/37/stderr	2026-08-04 14:46:25.966649523 +0000
 @@ -1,2 +1 @@
 -prog.cob:4: warning: AUTHOR is obsolete in GnuCOBOL
  

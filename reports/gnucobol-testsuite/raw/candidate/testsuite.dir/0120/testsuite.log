@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 120. syn_definition.at:1466: testing Nested programs not in procedure division ...
 ./syn_definition.at:1479: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.722359664 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/120/stderr	2026-08-04 10:31:43.721378044 +0000
+--- -	2026-08-04 14:46:26.005541824 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/120/stderr	2026-08-04 14:46:26.004525399 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:5: error: PROCEDURE DIVISION header missing
 +cobc-rs: unsupported: no PROCEDURE DIVISION

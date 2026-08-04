@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 163. syn_redefines.at:196: testing REDEFINES: with subscript ...
 ./syn_redefines.at:212: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.741465100 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/163/stderr	2026-08-04 10:31:43.740788108 +0000
+--- -	2026-08-04 14:46:26.025966649 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/163/stderr	2026-08-04 14:46:26.025248821 +0000
 @@ -1,2 +1 @@
 -prog.cob:9: error: 'X' cannot be subscripted here
  

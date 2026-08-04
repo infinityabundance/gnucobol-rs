@@ -2,8 +2,25 @@
 709. run_misc.at:1567: testing Multiple calls of INITIAL program ...
 ./run_misc.at:1606: $COMPILE caller.cob
 ./run_misc.at:1607: $COMPILE_MODULE callee.cob
+./run_misc.at:1608: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stdout	2026-08-04 10:31:44.055158246 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stderr	2026-08-04 14:46:26.346781890 +0000
 @@ -0,0 +1 @@
-+callee.so
-709. run_misc.at:1567: 709. Multiple calls of INITIAL program (run_misc.at:1567): FAILED (run_misc.at:1607)
++cobrun: unsupported: CALL "C$PARAMSIZE": not a contained program (external CALL is a boundary)
+--- -	2026-08-04 14:46:26.347647685 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/709/stdout	2026-08-04 14:46:26.347093411 +0000
+@@ -1,12 +1 @@
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-COUNTER = 001 LPARAM1 = 00000008 PARAM1 =  PARAM 1
+-PARAM1 =  PARAM 1
+ 
+./run_misc.at:1608: exit code was 2, expected 0
+709. run_misc.at:1567: 709. Multiple calls of INITIAL program (run_misc.at:1567): FAILED (run_misc.at:1608)

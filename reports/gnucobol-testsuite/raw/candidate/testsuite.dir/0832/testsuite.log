@@ -3,11 +3,11 @@
 ./run_misc.at:13127: $COMPILE prog.cob
 ./run_misc.at:13129: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stderr	2026-08-04 10:31:44.138808155 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stderr	2026-08-04 14:46:26.434830361 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 10:31:44.140040513 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stdout	2026-08-04 10:31:44.139568372 +0000
+--- -	2026-08-04 14:46:26.435835254 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stdout	2026-08-04 14:46:26.435201142 +0000
 @@ -1,12 +1 @@
 -CAT  is 'Cat '
 -Yard is 'Cat & Dog '

@@ -1,14 +1,10 @@
 #                             -*- compilation -*-
 23. used_binaries.at:872: testing compile from stdin ...
 ./used_binaries.at:882: cat prog.cob | $COMPILE_MODULE -
+./used_binaries.at:887: $COBCRUN a
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/23/stdout	2026-08-04 10:31:43.674971944 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/23/stderr	2026-08-04 14:46:25.960323087 +0000
 @@ -0,0 +1 @@
-+a.out
-./used_binaries.at:882: cat prog.cob | $COMPILE_MODULE -vv -
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/23/stderr	2026-08-04 10:31:43.676939472 +0000
-@@ -0,0 +1 @@
-+cobc-rs: -vv: unknown option (no explicit policy; failing closed — see --print-capabilities)
-./used_binaries.at:882: exit code was 1, expected 0
-23. used_binaries.at:872: 23. compile from stdin (used_binaries.at:872): FAILED (used_binaries.at:882)
++cobcrun: cannot find module a
+./used_binaries.at:887: exit code was 1, expected 0
+23. used_binaries.at:872: 23. compile from stdin (used_binaries.at:872): FAILED (used_binaries.at:887)

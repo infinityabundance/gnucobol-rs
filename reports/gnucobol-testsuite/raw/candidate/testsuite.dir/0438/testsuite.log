@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 438. syn_screen.at:774: testing MS-COBOL position-spec ...
 ./syn_screen.at:809: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.880612558 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/438/stderr	2026-08-04 10:31:43.879821814 +0000
+--- -	2026-08-04 14:46:26.168410709 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/438/stderr	2026-08-04 14:46:26.167848881 +0000
 @@ -1,7 +1 @@
 -prog.cob:10: error: 'LIN' is not defined
 -prog.cob:10: error: syntax error, unexpected COL

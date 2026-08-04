@@ -185,15 +185,28 @@ fn load_file(path: &Path, chain: &mut Vec<(PathBuf, u32)>, conf_err: &mut ConfEr
             }
             ConfigDirective::Include { file } => {
                 chain.push((path.to_path_buf(), lineno));
-                let inc = PathBuf::from(String::from_utf8_lossy(&file).into_owned());
-                if !load_file(&inc, chain, conf_err) {
+                if let Some(inc) = resolve_include(&file) {
+                    if !load_file(&inc, chain, conf_err) {
+                        ok = false;
+                    }
+                } else {
+                    // a missing include file is a configuration error (the C's fopen failure)
+                    let out = conf_runtime_error(
+                        conf_err,
+                        true,
+                        &SourceLocation {
+                            file: Some(String::from_utf8_lossy(&file).into_owned().into_bytes()),
+                            line: 0,
+                        },
+                        b"No such file or directory",
+                    );
+                    eprint!("{}", String::from_utf8_lossy(&out));
                     ok = false;
                 }
                 chain.pop();
             }
             ConfigDirective::IncludeIf { file } => {
-                let inc = PathBuf::from(String::from_utf8_lossy(&file).into_owned());
-                if inc.is_file() {
+                if let Some(inc) = resolve_include(&file) {
                     chain.push((path.to_path_buf(), lineno));
                     if !load_file(&inc, chain, conf_err) {
                         ok = false;
@@ -240,6 +253,24 @@ fn load_file(path: &Path, chain: &mut Vec<(PathBuf, u32)>, conf_err: &mut ConfEr
         }
     }
     ok
+}
+
+/// Resolve an `include`/`includeif` file name like the C's `cob_load_config_file`: as given (cwd),
+/// then `COB_CONFIG_DIR` (the suite's `configuration.at` tests include files that live in the
+/// configured config directory, e.g. `runtime_empty.cfg`).
+fn resolve_include(file: &[u8]) -> Option<PathBuf> {
+    let name = String::from_utf8_lossy(file).into_owned();
+    let p = PathBuf::from(&name);
+    if p.is_file() {
+        return Some(p);
+    }
+    if let Ok(dir) = std::env::var("COB_CONFIG_DIR") {
+        let c = PathBuf::from(dir).join(&name);
+        if c.is_file() {
+            return Some(c);
+        }
+    }
+    None
 }
 
 /// Validate + store one `Set` directive (libcob's `set_config_val` decision + errors).

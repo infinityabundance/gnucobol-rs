@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 361. syn_misc.at:6004: testing system routines with wrong number of parameters ...
 ./syn_misc.at:6023: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.840019745 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/361/stderr	2026-08-04 10:31:43.839449001 +0000
+--- -	2026-08-04 14:46:26.126242830 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/361/stderr	2026-08-04 14:46:26.125294733 +0000
 @@ -1,5 +1 @@
 -prog.cob:11: warning: wrong number of CALL parameters for 'X"91"', 4 given, 3 expected
 -prog.cob:12: error: wrong number of CALL parameters for 'X"91"', 1 given, 3 expected

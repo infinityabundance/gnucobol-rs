@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 462. syn_literals.at:998: testing floating-point literals ...
 ./syn_literals.at:1060: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.892759623 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/462/stderr	2026-08-04 10:31:43.892132534 +0000
+--- -	2026-08-04 14:46:26.181310433 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/462/stderr	2026-08-04 14:46:26.180834225 +0000
 @@ -1,19 +1,2 @@
 -prog.cob:11: error: 'D3' is not defined
 -prog.cob:12: error: '1E3' is not defined

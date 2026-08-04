@@ -8,3 +8,11 @@
            IF RETURN-CODE NOT = 42
               DISPLAY 'unexpected RETURN-CODE: ' RETURN-CODE.
            STOP RUN.
+
+
+       IDENTIFICATION   DIVISION.
+       PROGRAM-ID.      callee.
+       DATA             DIVISION.
+       PROCEDURE        DIVISION RETURNING OMITTED.
+           MOVE 43 TO RETURN-CODE
+           EXIT PROGRAM.

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 88. syn_definition.at:462: testing Redefinition of 02 items ...
 ./syn_definition.at:487: $COMPILE_ONLY prog2.cob
---- -	2026-08-04 10:31:43.708315763 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/88/stderr	2026-08-04 10:31:43.707671843 +0000
+--- -	2026-08-04 14:46:25.991508637 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/88/stderr	2026-08-04 14:46:25.990891146 +0000
 @@ -1,3 +1,2 @@
 -prog2.cob:8: warning: redefinition of 'X'
 -prog2.cob:7: note: 'X' previously defined here

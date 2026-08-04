@@ -3,11 +3,11 @@
 ./run_fundamental.at:284: $COMPILE prog.cob
 ./run_fundamental.at:285: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stderr	2026-08-04 10:31:43.923177928 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stderr	2026-08-04 14:46:26.211575987 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: UnsupportedSymbol('(')
---- -	2026-08-04 10:31:43.924112611 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stdout	2026-08-04 10:31:43.923477146 +0000
+--- -	2026-08-04 14:46:26.213138110 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/516/stdout	2026-08-04 14:46:26.212615546 +0000
 @@ -1,6 +1 @@
 ->    1<
 ->    0<

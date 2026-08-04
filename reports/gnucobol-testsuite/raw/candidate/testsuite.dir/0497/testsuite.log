@@ -2,11 +2,11 @@
 497. listings.at:2718: testing Symbols: OCCURS and REDEFINES ...
 ./listings.at:2762: $COMPILE_LISTING -fcomplex-odo -t- -fno-tsource -ftsymbols prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/497/stderr	2026-08-04 10:31:43.911933767 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/497/stderr	2026-08-04 14:46:26.200118603 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 10:31:43.912940484 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/497/stdout	2026-08-04 10:31:43.911933767 +0000
+--- -	2026-08-04 14:46:26.201570050 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/497/stdout	2026-08-04 14:46:26.200118603 +0000
 @@ -1,41 +1 @@
 -GnuCOBOL V.R.P          prog.cob                                        Page 0001
 -

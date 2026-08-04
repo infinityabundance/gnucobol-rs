@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 396. syn_misc.at:8117: testing optional dots ...
 ./syn_misc.at:8135: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.857262760 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/396/stderr	2026-08-04 10:31:43.856627345 +0000
+--- -	2026-08-04 14:46:26.144731886 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/396/stderr	2026-08-04 14:46:26.144203932 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:3: warning: optional period used
 -prog.cob:5: warning: optional period used

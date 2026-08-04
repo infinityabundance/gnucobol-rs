@@ -1,8 +1,19 @@
 #                             -*- compilation -*-
 762. run_misc.at:4111: testing COB_PRE_LOAD with entry points ...
 ./run_misc.at:4170: $COMPILE_MODULE prog.cob
+./run_misc.at:4171: $COMPILE_MODULE prog1.cob
+./run_misc.at:4172: $COMPILE main-prog.cob
+./run_misc.at:4173: COB_PRE_LOAD="prog"$PATHSEP"prog1" $COBCRUN_DIRECT ./main-prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stdout	2026-08-04 10:31:44.090063125 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stderr	2026-08-04 14:46:26.384602934 +0000
 @@ -0,0 +1 @@
-+prog.so
-762. run_misc.at:4111: 762. COB_PRE_LOAD with entry points (run_misc.at:4111): FAILED (run_misc.at:4170)
++cobrun: unsupported: CALL "ent1": not a contained program (external CALL is a boundary)
+--- -	2026-08-04 14:46:26.386340554 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/762/stdout	2026-08-04 14:46:26.385887920 +0000
+@@ -1,4 +1 @@
+-12abc
+-11
+-xxxxx
+ 
+./run_misc.at:4173: exit code was 2, expected 0
+762. run_misc.at:4111: 762. COB_PRE_LOAD with entry points (run_misc.at:4111): FAILED (run_misc.at:4173)

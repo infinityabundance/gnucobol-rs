@@ -3,11 +3,11 @@
 ./data_packed.at:2156: $COMPILE prog.cob
 ./data_packed.at:2158: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1277/stderr	2026-08-04 10:31:44.584503248 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1277/stderr	2026-08-04 14:46:26.894066640 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 10:31:44.585866780 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1277/stdout	2026-08-04 10:31:44.584642083 +0000
+--- -	2026-08-04 14:46:26.895448927 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1277/stdout	2026-08-04 14:46:26.894894223 +0000
 @@ -1,11 +1 @@
 -INIT X-1 : 091000 .
 -INIT X-2 : 092000 .

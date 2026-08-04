@@ -4,7 +4,7 @@
 ./run_file.at:5699: $COMPILE prog2.cob
 ./run_file.at:5700: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/903/stdout	2026-08-04 10:31:22.037898144 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/903/stdout	2026-08-04 14:45:52.770763178 +0000
 @@ -0,0 +1 @@
 +FAILED: 00
 903. run_file.at:5637: 903. SEQUENTIAL file with OPEN WITH LOCK (run_file.at:5637): expected failure (run_file.at:5700)

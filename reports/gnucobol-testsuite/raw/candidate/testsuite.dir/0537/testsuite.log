@@ -2,8 +2,12 @@
 537. run_fundamental.at:1532: testing Entry point visibility (2) ...
 ./run_fundamental.at:1557: $COMPILE prog.cob
 ./run_fundamental.at:1558: $COMPILE_MODULE module.c
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/537/stdout	2026-08-04 10:31:43.937836174 +0000
-@@ -0,0 +1 @@
-+module.so
-537. run_fundamental.at:1532: 537. Entry point visibility (2) (run_fundamental.at:1532): FAILED (run_fundamental.at:1558)
+./run_fundamental.at:1561: COB_DISABLE_WARNINGS=1 $COBCRUN_DIRECT ./prog
+--- -	2026-08-04 14:46:26.228774026 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/537/stderr	2026-08-04 14:46:26.228196118 +0000
+@@ -1,2 +1,2 @@
+-libcob: prog.cob:6: error: entry point 'module' not found
++cobrun: unsupported: CALL "module": not a contained program (external CALL is a boundary)
+ 
+./run_fundamental.at:1561: exit code was 2, expected 1
+537. run_fundamental.at:1532: 537. Entry point visibility (2) (run_fundamental.at:1532): FAILED (run_fundamental.at:1561)

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 841. run_misc.at:13893: testing ENTRY FOR GO TO / GO TO ENTRY ...
 ./run_misc.at:13932: $COMPILE -std=mf-strict prog.cob
---- -	2026-08-04 10:31:44.143663637 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/841/stderr	2026-08-04 10:31:44.142853056 +0000
+--- -	2026-08-04 14:46:26.442022652 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/841/stderr	2026-08-04 14:46:26.441118185 +0000
 @@ -1,9 +1 @@
 -prog.cob:10: error: ENTRY FOR GO TO does not conform to Micro Focus COBOL
 -prog.cob: in paragraph 'MAIN':

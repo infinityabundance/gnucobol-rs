@@ -1,0 +1,15 @@
+#                             -*- compilation -*-
+565. run_fundamental.at:2820: testing ROUNDED NEAREST-TOWARD-ZERO ...
+./run_fundamental.at:2877: $COMPILE prog.cob
+./run_fundamental.at:2878: $COBCRUN_DIRECT ./prog
+--- /dev/null	2026-07-25 02:24:41.287461448 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/565/stderr	2026-08-04 14:46:26.245433390 +0000
+@@ -0,0 +1 @@
++cobrun: unsupported: N literal: national/bit literals are a dialect extension boundary
+--- -	2026-08-04 14:46:26.247209602 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/565/stdout	2026-08-04 14:46:26.246440588 +0000
+@@ -1 +1 @@
+-+2 -2 +2 -2 +3 -3 +3 -3 +4 -4
++
+./run_fundamental.at:2878: exit code was 2, expected 0
+565. run_fundamental.at:2820: 565. ROUNDED NEAREST-TOWARD-ZERO (run_fundamental.at:2820): FAILED (run_fundamental.at:2878)

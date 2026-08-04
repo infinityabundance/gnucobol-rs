@@ -3,7 +3,7 @@
 ./run_functions.at:1877: $COMPILE -Wno-unfinished prog.cob
 ./run_functions.at:1878: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1030/stderr	2026-08-04 10:31:44.311374693 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1030/stderr	2026-08-04 14:46:26.611186755 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC N(9): UnsupportedSymbol('N')
 ./run_functions.at:1878: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 349. syn_misc.at:5499: testing Missing imperative statements ...
 ./syn_misc.at:5564: $COMPILE_ONLY -w -fmissing-statement=error prog.cob
---- -	2026-08-04 10:31:43.834425767 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/349/stderr	2026-08-04 10:31:43.833898825 +0000
+--- -	2026-08-04 14:46:26.119113457 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/349/stderr	2026-08-04 14:46:26.118202237 +0000
 @@ -1,10 +1,2 @@
 -prog.cob:15: error: IF without imperative statement used
 -prog.cob:20: error: IF without imperative statement used

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 75. syn_definition.at:89: testing Invalid PROGRAM-ID type clause (1) ...
 ./syn_definition.at:99: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.702335245 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/75/stderr	2026-08-04 10:31:43.701686155 +0000
+--- -	2026-08-04 14:46:25.986020654 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/75/stderr	2026-08-04 14:46:25.985398384 +0000
 @@ -1,2 +1 @@
 -prog.cob:3: error: COMMON may only be used in a contained program
  

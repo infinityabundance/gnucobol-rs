@@ -2,11 +2,11 @@
 501. listings.at:3689: testing Variable format ...
 ./listings.at:3703: $COMPILE_LISTING0 -t- prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/501/stderr	2026-08-04 10:31:43.913049367 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/501/stderr	2026-08-04 14:46:26.202955673 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 10:31:43.914603604 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/501/stdout	2026-08-04 10:31:43.914079878 +0000
+--- -	2026-08-04 14:46:26.203924770 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/501/stdout	2026-08-04 14:46:26.203225697 +0000
 @@ -1,18 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

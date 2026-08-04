@@ -2,7 +2,7 @@
 451. syn_functions.at:280: testing Intrinsic functions: replaced ...
 ./syn_functions.at:314: $COMPILE_ONLY -fnot-intrinsic=substitute prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/451/stderr	2026-08-04 10:31:43.885667001 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/451/stderr	2026-08-04 14:46:26.173798335 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fnot-intrinsic=substitute: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): substitute
 ./syn_functions.at:314: exit code was 1, expected 0

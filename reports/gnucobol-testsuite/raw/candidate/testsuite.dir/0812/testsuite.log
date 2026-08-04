@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 812. run_misc.at:11425: testing PICTURE with constant-name ...
 ./run_misc.at:11445: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:44.123811258 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/812/stderr	2026-08-04 10:31:44.123156107 +0000
+--- -	2026-08-04 14:46:26.420234845 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/812/stderr	2026-08-04 14:46:26.419436567 +0000
 @@ -1,2 +1,2 @@
 -prog.cob:11: warning: expression '16' NOT EQUAL '16' is always FALSE
 +cobc-rs: unsupported: PIC 9(FOO-BAR)9(FOO-BAR): BadRepeat

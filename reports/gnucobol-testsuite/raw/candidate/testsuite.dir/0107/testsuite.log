@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 107. syn_definition.at:1069: testing Redefinition of label and variable names ...
 ./syn_definition.at:1095: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-04 10:31:43.715831264 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/107/stderr	2026-08-04 10:31:43.714957836 +0000
+--- -	2026-08-04 14:46:25.999006017 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/107/stderr	2026-08-04 14:46:25.998583750 +0000
 @@ -1,5 +1,2 @@
 -prog.cob: in section 'main':
 -prog.cob:17: error: user-defined word re-used with different type does not conform to COBOL 2014

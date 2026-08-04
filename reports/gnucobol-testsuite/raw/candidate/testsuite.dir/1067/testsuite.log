@@ -3,7 +3,7 @@
 ./run_functions.at:2904: $COMPILE prog.cob
 ./run_functions.at:2905: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1067/stderr	2026-08-04 10:31:44.359644639 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1067/stderr	2026-08-04 14:46:26.661529587 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION RANDOM: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
 ./run_functions.at:2905: exit code was 2, expected 0

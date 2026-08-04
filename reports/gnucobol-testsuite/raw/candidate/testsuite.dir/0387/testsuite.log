@@ -3,7 +3,7 @@
 ./syn_misc.at:7524: COBC_GEN_DUMP_COMMENTS=1 \
   $COMPILE -C -fdump=all -w prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/387/stderr	2026-08-04 10:31:43.852951342 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/387/stderr	2026-08-04 14:46:26.139983051 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -C: unsupported option (rejected-unsupported; generate C: the candidate is an interpreter, not a C emitter; reject honestly): 
 ./syn_misc.at:7524: exit code was 1, expected 0

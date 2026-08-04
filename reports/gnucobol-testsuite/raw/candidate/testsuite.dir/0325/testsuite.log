@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 325. syn_misc.at:4167: testing SIGN clause checks ...
 ./syn_misc.at:4185: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.822414155 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/325/stderr	2026-08-04 10:31:43.821859461 +0000
+--- -	2026-08-04 14:46:26.106799365 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/325/stderr	2026-08-04 14:46:26.106074493 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:12: error: elementary items with SIGN clause must have S in PICTURE
 -prog.cob:13: error: elementary items with SIGN clause must be USAGE DISPLAY or NATIONAL

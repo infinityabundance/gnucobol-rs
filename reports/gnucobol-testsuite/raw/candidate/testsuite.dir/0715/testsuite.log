@@ -3,7 +3,7 @@
 ./run_misc.at:1824: $COMPILE prog.cob
 ./run_misc.at:1825: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/715/stdout	2026-08-04 10:31:44.055158246 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/715/stdout	2026-08-04 14:46:26.348536823 +0000
 @@ -0,0 +1 @@
 +BCA
 715. run_misc.at:1808: 715. INSPECT CONVERTING TO figurative constant (run_misc.at:1808): FAILED (run_misc.at:1825)

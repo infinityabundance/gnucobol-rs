@@ -2,8 +2,8 @@
 1050. run_functions.at:2401: testing FUNCTION MODULE-ID ...
 ./run_functions.at:2416: $COMPILE prog.cob
 ./run_functions.at:2417: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 10:31:44.337657549 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1050/stdout	2026-08-04 10:31:44.337136388 +0000
+--- -	2026-08-04 14:46:26.636597257 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1050/stdout	2026-08-04 14:46:26.635885360 +0000
 @@ -1 +1 @@
 -prog
 +PROG

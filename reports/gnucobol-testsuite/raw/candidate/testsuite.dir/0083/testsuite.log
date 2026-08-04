@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 83. syn_definition.at:257: testing error handling in conditions ...
 ./syn_definition.at:314: $COMPILE_ONLY prog.cob
---- -	2026-08-04 10:31:43.705541822 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/83/stderr	2026-08-04 10:31:43.704877454 +0000
+--- -	2026-08-04 14:46:25.988118045 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/83/stderr	2026-08-04 14:46:25.987552801 +0000
 @@ -1,14 +1,2 @@
 -prog.cob:11: error: syntax error, unexpected Identifier
 -prog.cob:11: error: WHEN without imperative statement

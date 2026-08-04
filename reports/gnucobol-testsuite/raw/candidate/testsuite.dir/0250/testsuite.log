@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 250. syn_misc.at:388: testing warn literal size in constant expr. (level 88) ...
 ./syn_misc.at:420: $COMPILE_ONLY -fdiagnostics-show-option prog.cob
---- -	2026-08-04 10:31:43.783739528 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/250/stderr	2026-08-04 10:31:43.783147054 +0000
+--- -	2026-08-04 14:46:26.068011278 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/250/stderr	2026-08-04 14:46:26.067582309 +0000
 @@ -1,13 +1 @@
 -prog.cob:8: warning: literal '99' has more digits than 'x' [-Wconstant-expression]
 -prog.cob:8: warning: expression is always FALSE [-Wconstant-expression]

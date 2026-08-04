@@ -3,7 +3,7 @@
 ./run_ml.at:732: $COMPILE prog.cob
 ./run_ml.at:733: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1228/stdout	2026-08-04 10:31:44.530310392 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1228/stdout	2026-08-04 14:46:26.838492964 +0000
 @@ -0,0 +1 @@
 +Failed 2: {"D":{"E":"abc000"}}
 1228. run_ml.at:693: 1228. JSON GENERATE record selection (run_ml.at:693): FAILED (run_ml.at:733)

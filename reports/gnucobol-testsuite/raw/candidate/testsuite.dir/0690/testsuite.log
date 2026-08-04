@@ -3,11 +3,11 @@
 ./run_misc.at:804: $COMPILE prog.cob
 ./run_misc.at:805: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/690/stderr	2026-08-04 10:31:44.040023321 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/690/stderr	2026-08-04 14:46:26.330086259 +0000
 @@ -0,0 +1 @@
-+cobrun: undefined data name: -
---- -	2026-08-04 10:31:44.041593088 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/690/stdout	2026-08-04 10:31:44.041031090 +0000
++cobrun: unsupported: not a numeric literal: -
+--- -	2026-08-04 14:46:26.331414806 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/690/stdout	2026-08-04 14:46:26.330709340 +0000
 @@ -1 +1 @@
 -OKOK
 +

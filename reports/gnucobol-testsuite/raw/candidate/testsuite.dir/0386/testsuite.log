@@ -2,7 +2,7 @@
 386. syn_misc.at:7276: testing VALIDATE parsing ...
 ./syn_misc.at:7417: $COMPILE_ONLY -Wno-pending -Wno-unfinished -free prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/386/stderr	2026-08-04 10:31:43.851981625 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/386/stderr	2026-08-04 14:46:26.138241714 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: unrecognized USAGE BIT
 ./syn_misc.at:7417: exit code was 1, expected 0

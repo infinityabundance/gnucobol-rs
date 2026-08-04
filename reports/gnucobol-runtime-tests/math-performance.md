@@ -9,10 +9,9 @@ N=200 after 20 warmups, monotonic ms timer, pinned machine/container.
 
 | program | View A native (compile+run, ms) | View A candidate (adapt+run, ms) | View B native (ms/run) | View B candidate (ms/run) |
 |---|---|---:|---:|---:|
-| mixed_moves | 58 | 12 | 1.0 | 12.0 |
-| packed_math | 58 | 12 | 1.0 | 11.115 |
-| display_arith | 58 | 23 | 2.0 | 23.0 |
-| packed_loop | 57 | 17 | 1.0 | 17.0 |
+| packed_math | 61 | 12 | 1.1 | 12.0 |
+| display_arith | 63 | 24 | 2.02 | 23.75 |
+| packed_loop | 63 | 18 | 1.025 | 17.26 |
 
 Caveats: these numbers describe THIS pinned machine/workload only; they are not a product
 comparison. View C (runtime-operation microbenchmarks over the admitted libcob C harness vs

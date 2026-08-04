@@ -2,8 +2,11 @@
 1235. data_binary.at:575: testing BINARY: 1-2-4-8 native ...
 ./data_binary.at:597: sed -e 's/@USAGE@/BINARY/' "${TEMPLATE}/numeric-dump.cob" > prog.cob
 ./data_binary.at:599: $COMPILE_MODULE dump.c
+./data_binary.at:600: $COMPILE -fbinary-size=1-2-4-8 \
+                   -fbinary-byteorder=native prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1235/stdout	2026-08-04 10:31:44.537103005 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1235/stderr	2026-08-04 14:46:26.844895222 +0000
 @@ -0,0 +1 @@
-+dump.so
-1235. data_binary.at:575: 1235. BINARY: 1-2-4-8 native (data_binary.at:575): FAILED (data_binary.at:599)
++cobc-rs: -fbinary-size=1-2-4-8: unsupported option (rejected-unsupported; binary size model: the dialect's binary-size knob is set by -std/-conf; a bare override is rejected): 1-2-4-8
+./data_binary.at:600: exit code was 1, expected 0
+1235. data_binary.at:575: 1235. BINARY: 1-2-4-8 native (data_binary.at:575): FAILED (data_binary.at:600)
