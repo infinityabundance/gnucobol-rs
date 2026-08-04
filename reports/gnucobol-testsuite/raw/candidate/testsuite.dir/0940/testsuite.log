@@ -3,11 +3,11 @@
 ./run_file.at:12798: $COMPILE prog.cob
 ./run_file.at:12800: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/940/stderr	2026-08-04 14:58:39.216818173 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/940/stderr	2026-08-04 15:05:44.006599460 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OCCURS count MAX-SUB is not an integer
---- -	2026-08-04 14:58:39.218331493 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/940/stdout	2026-08-04 14:58:39.217685048 +0000
+--- -	2026-08-04 15:05:44.008451318 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/940/stdout	2026-08-04 15:05:44.007971324 +0000
 @@ -1,12 +1 @@
 -MF Load data
 -MF Open Sts: 00

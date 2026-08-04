@@ -2,7 +2,7 @@
 65. syn_copy.at:739: testing COPY: simple partial match ...
 ./syn_copy.at:761: $COMPILE_ONLY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/65/stderr	2026-08-04 14:58:38.607929768 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/65/stderr	2026-08-04 15:05:43.385125797 +0000
 @@ -0,0 +1 @@
 +cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
 ./syn_copy.at:761: exit code was 1, expected 0

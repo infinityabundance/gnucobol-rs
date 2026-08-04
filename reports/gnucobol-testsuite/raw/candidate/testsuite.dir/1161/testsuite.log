@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1161. run_extensions.at:3097: testing Obsolete 2002 keywords with COBOL2014 ...
 ./run_extensions.at:3112: $COMPILE -std=cobol2002 prog.cob
---- -	2026-08-04 14:58:39.494850113 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1161/stderr	2026-08-04 14:58:39.493904261 +0000
+--- -	2026-08-04 15:05:44.302967168 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1161/stderr	2026-08-04 15:05:44.302253739 +0000
 @@ -1,4 +1 @@
 -prog.cob:6: error: syntax error, unexpected TERMINAL
 -prog.cob:7: error: syntax error, unexpected SEND

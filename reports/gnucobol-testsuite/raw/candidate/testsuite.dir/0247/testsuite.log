@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 247. syn_misc.at:23: testing ambiguous AND/OR ...
 ./syn_misc.at:46: $COMPILE_ONLY -Wno-constant-numlit-expression prog.cob
---- -	2026-08-04 14:58:38.704562686 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/247/stderr	2026-08-04 14:58:38.702862161 +0000
+--- -	2026-08-04 15:05:43.480912615 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/247/stderr	2026-08-04 15:05:43.480214625 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: warning: suggest parentheses around AND within OR
 -prog.cob:14: warning: suggest parentheses around OR within AND

@@ -3,7 +3,7 @@
 ./run_reportwriter.at:630: $COMPILE prog.cob
 ./run_reportwriter.at:632: DD_DATAIN="./inp_data" DD_SYSPRINT="./report.txt" $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/960/stderr	2026-08-04 14:58:39.239858847 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/960/stderr	2026-08-04 15:05:44.029237337 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OPEN: `TRANSACTION-DATA,` is not a declared file
 ./run_reportwriter.at:632: exit code was 2, expected 0

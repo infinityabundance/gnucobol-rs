@@ -357,11 +357,11 @@
     },
     {
       "number": 45,
-      "primary": "CANDIDATE_MODULE_MODEL_UNSUPPORTED",
-      "reason": "module lifecycle not supported by the candidate model: $COBCRUN -c defunc.cfg --runtime-conf",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0045",
-      "title": "configuration.at:760: 45. runtime configuration: conf optional"
+      "title": "runtime configuration: conf optional"
     },
     {
       "number": 46,

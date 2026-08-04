@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 125. syn_definition.at:1802: testing PICTURE strings invalid with USAGE ...
 ./syn_definition.at:1815: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.638759697 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/125/stderr	2026-08-04 14:58:38.637947423 +0000
+--- -	2026-08-04 15:05:43.416008077 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/125/stderr	2026-08-04 15:05:43.415272417 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:7: error: PICTURE clause not compatible with USAGE COMP-6
 -prog.cob:8: error: PICTURE clause not compatible with USAGE COMP-3

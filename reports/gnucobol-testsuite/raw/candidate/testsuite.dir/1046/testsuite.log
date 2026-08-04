@@ -3,7 +3,7 @@
 ./run_functions.at:2311: $COMPILE prog.cob
 ./run_functions.at:2312: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1046/stderr	2026-08-04 14:58:39.341929137 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1046/stderr	2026-08-04 15:05:44.144936937 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: FUNCTION
 ./run_functions.at:2312: exit code was 2, expected 0

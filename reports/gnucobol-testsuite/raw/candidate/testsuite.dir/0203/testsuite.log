@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 203. syn_file.at:999: testing DECLARATIVES invalid procedure reference (2) ...
 ./syn_file.at:1031: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.684276194 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/203/stderr	2026-08-04 14:58:38.683400542 +0000
+--- -	2026-08-04 15:05:43.457827044 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/203/stderr	2026-08-04 15:05:43.457082988 +0000
 @@ -1,4 +1,2 @@
 -prog.cob: in section 'PP01':
 -prog.cob: in paragraph 'PP02':

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 306. syn_misc.at:3115: testing NOT ON EXCEPTION phrases before ON EXCEPTION ...
 ./syn_misc.at:3171: $COMPILE_ONLY -std=cobol85 prog.cob
---- -	2026-08-04 14:58:38.737393884 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/306/stderr	2026-08-04 14:58:38.736683210 +0000
+--- -	2026-08-04 15:05:43.518279681 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/306/stderr	2026-08-04 15:05:43.516935428 +0000
 @@ -1,3 +1,2 @@
 -prog.cob:22: error: NOT AT END-OF-PAGE before AT END-OF-PAGE does not conform to COBOL 85
 -prog.cob:44: error: NOT EXCEPTION before EXCEPTION does not conform to COBOL 85

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 330. syn_misc.at:4367: testing duplicate CALL USING BY REFERENCE items ...
 ./syn_misc.at:4385: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.751214548 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/330/stderr	2026-08-04 14:58:38.750421650 +0000
+--- -	2026-08-04 15:05:43.533268494 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/330/stderr	2026-08-04 15:05:43.532481939 +0000
 @@ -1,4 +1 @@
 -prog.cob:9: warning: duplicate USING BY REFERENCE item 'p'
 -prog.cob:10: warning: duplicate USING BY REFERENCE item 'p'

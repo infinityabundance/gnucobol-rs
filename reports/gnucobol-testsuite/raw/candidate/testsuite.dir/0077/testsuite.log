@@ -2,7 +2,7 @@
 77. syn_definition.at:123: testing INITIAL / RECURSIVE before COMMON ...
 ./syn_definition.at:145: $COMPILE_ONLY containing-prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/77/stderr	2026-08-04 14:58:38.613065779 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/77/stderr	2026-08-04 15:05:43.389744337 +0000
 @@ -0,0 +1 @@
 +cobc-rs: unsupported: verb IDENTIFICATION
 ./syn_definition.at:145: exit code was 1, expected 0

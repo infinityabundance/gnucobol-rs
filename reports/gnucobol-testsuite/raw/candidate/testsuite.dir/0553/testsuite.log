@@ -3,7 +3,7 @@
 ./run_fundamental.at:2428: $COMPILE prog.cob
 ./run_fundamental.at:2429: $COMPILE_MODULE -fpretty-display prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/553/stderr	2026-08-04 14:58:38.891859868 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/553/stderr	2026-08-04 15:05:43.673178790 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fpretty-display: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
 ./run_fundamental.at:2429: exit code was 1, expected 0

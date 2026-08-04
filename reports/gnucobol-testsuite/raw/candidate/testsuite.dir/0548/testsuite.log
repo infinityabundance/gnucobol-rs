@@ -3,7 +3,7 @@
 ./run_fundamental.at:2271: $COMPILE -Wno-unsupported prog.cob
 ./run_fundamental.at:2272: COB_DISABLE_WARNINGS=1 $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/548/stdout	2026-08-04 14:58:38.892916268 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/548/stdout	2026-08-04 15:05:43.670192209 +0000
 @@ -0,0 +1 @@
 +Not OK
 548. run_fundamental.at:2225: 548. GLOBAL FD (4) (run_fundamental.at:2225): FAILED (run_fundamental.at:2272)

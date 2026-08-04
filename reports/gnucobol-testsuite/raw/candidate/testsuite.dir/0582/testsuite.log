@@ -3,7 +3,7 @@
 ./run_fundamental.at:4802: $COMPILE prog.cob
 ./run_fundamental.at:4803: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/582/stderr	2026-08-04 14:58:38.915530858 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/582/stderr	2026-08-04 15:05:43.697739639 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: SET MYFLD88 TO FALSE: the 88 has no `WHEN SET TO FALSE` value
 ./run_fundamental.at:4803: exit code was 2, expected 0

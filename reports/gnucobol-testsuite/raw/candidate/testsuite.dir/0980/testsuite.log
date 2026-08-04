@@ -4,11 +4,11 @@
 ./run_reportwriter.at:9471: PRINTOUT=tstdmrp.txt \
 $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stderr	2026-08-04 14:58:39.253969692 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stderr	2026-08-04 15:05:44.050429382 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: NNNS
---- -	2026-08-04 14:58:39.256477355 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stdout	2026-08-04 14:58:39.255347590 +0000
+--- -	2026-08-04 15:05:44.051846260 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/980/stdout	2026-08-04 15:05:44.051235333 +0000
 @@ -1,5 +1 @@
 -Hello World 1
 -Hello World 2

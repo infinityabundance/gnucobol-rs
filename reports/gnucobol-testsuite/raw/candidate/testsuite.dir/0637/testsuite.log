@@ -3,11 +3,11 @@
 ./run_subscripts.at:581: $COMPILE prog.cob
 ./run_subscripts.at:582: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stderr	2026-08-04 14:58:38.961142221 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stderr	2026-08-04 15:05:43.747674760 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: PARM-STR
---- -	2026-08-04 14:58:38.962825027 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stdout	2026-08-04 14:58:38.961958172 +0000
+--- -	2026-08-04 15:05:43.749088092 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/637/stdout	2026-08-04 15:05:43.747674760 +0000
 @@ -1 +1 @@
 -Hi, there!
 +

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 309. syn_misc.at:3234: testing missing periods ...
 ./syn_misc.at:3257: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.740849994 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/309/stderr	2026-08-04 14:58:38.740380710 +0000
+--- -	2026-08-04 15:05:43.518742022 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/309/stderr	2026-08-04 15:05:43.517797593 +0000
 @@ -1,4 +1 @@
 -prog.cob: in section 'MAIN':
 -prog.cob:15: error: 'SEC-1' is not defined

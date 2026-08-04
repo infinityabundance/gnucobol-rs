@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 206. syn_file.at:1097: testing CODE-SET clause ...
 ./syn_file.at:1133: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.684775855 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/206/stderr	2026-08-04 14:58:38.684278388 +0000
+--- -	2026-08-04 15:05:43.458822888 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/206/stderr	2026-08-04 15:05:43.457082988 +0000
 @@ -1,9 +1,2 @@
 -prog.cob:19: note: ignoring CODE-SET 'A'
 -prog.cob:22: error: 'foo' is not defined

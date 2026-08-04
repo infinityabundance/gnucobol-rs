@@ -3,7 +3,7 @@
 ./run_misc.at:11595: $COMPILE -Wno-truncate prog.cob
 ./run_misc.at:11596: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/815/stderr	2026-08-04 14:58:39.104175913 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/815/stderr	2026-08-04 15:05:43.898641757 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: X-LEFT,
 ./run_misc.at:11596: exit code was 2, expected 0

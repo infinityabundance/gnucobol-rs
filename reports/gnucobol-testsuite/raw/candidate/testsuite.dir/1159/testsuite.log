@@ -2,7 +2,7 @@
 1159. run_extensions.at:3006: testing Larger REDEFINES lengths ...
 ./run_extensions.at:3066: $COMPILE -flarger-redefines=ok -w prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1159/stderr	2026-08-04 14:58:39.494447062 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1159/stderr	2026-08-04 15:05:44.298764892 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -flarger-redefines=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./run_extensions.at:3066: exit code was 1, expected 0

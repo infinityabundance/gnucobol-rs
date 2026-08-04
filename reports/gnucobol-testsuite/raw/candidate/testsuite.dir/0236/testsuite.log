@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 236. syn_reportwriter.at:311: testing Incorrect REPORT NAME ...
 ./syn_reportwriter.at:408: $COMPILE_ONLY -std=mf-strict prog.cob
---- -	2026-08-04 14:58:38.701568276 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/236/stderr	2026-08-04 14:58:38.700836602 +0000
+--- -	2026-08-04 15:05:43.477011881 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/236/stderr	2026-08-04 15:05:43.475985189 +0000
 @@ -1,7 +1,2 @@
 -prog.cob:17: warning: LABEL RECORDS is obsolete in Micro Focus COBOL
 -prog.cob:19: warning: RECORD clause ignored for LINE SEQUENTIAL

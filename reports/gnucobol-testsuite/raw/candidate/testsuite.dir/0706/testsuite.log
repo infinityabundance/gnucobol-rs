@@ -4,13 +4,13 @@
 ./run_misc.at:1455: $COMPILE_MODULE callee.cob
 ./run_misc.at:1456: $COMPILE_MODULE callee2.cob
 ./run_misc.at:1457: $COBCRUN_DIRECT ./caller
---- -	2026-08-04 14:58:39.019624478 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/706/stderr	2026-08-04 14:58:39.018760077 +0000
+--- -	2026-08-04 15:05:43.804325928 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/706/stderr	2026-08-04 15:05:43.803583074 +0000
 @@ -1,2 +1 @@
 -libcob: callee2.cob:5: error: recursive CALL from 'callee2' to 'callee' which is NOT RECURSIVE
  
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/706/stdout	2026-08-04 14:58:39.018760077 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/706/stdout	2026-08-04 15:05:43.803583074 +0000
 @@ -0,0 +1 @@
 +INITIAL prog was called RECURSIVE
 706. run_misc.at:1413: 706. Recursive CALL of INITIAL program (run_misc.at:1413): FAILED (run_misc.at:1457)

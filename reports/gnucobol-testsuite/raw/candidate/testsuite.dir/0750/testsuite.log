@@ -3,11 +3,11 @@
 ./run_misc.at:3403: $COMPILE prog.cob
 ./run_misc.at:3404: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stderr	2026-08-04 14:58:39.049957572 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stderr	2026-08-04 15:05:43.840465158 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: TAB1-NR(K),
---- -	2026-08-04 14:58:39.051273113 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stdout	2026-08-04 14:58:39.050791796 +0000
+--- -	2026-08-04 15:05:43.841735493 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/750/stdout	2026-08-04 15:05:43.841028968 +0000
 @@ -1,22 +1 @@
 -SINGLE TABLE
 -04

@@ -3,7 +3,7 @@
 ./run_file.at:3665: $COMPILE prog.cob
 ./run_file.at:3666: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/885/stderr	2026-08-04 14:58:39.162627794 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/885/stderr	2026-08-04 15:05:43.956479294 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "CBL_CREATE_DIR": not a contained program (external CALL is a boundary)
 ./run_file.at:3666: exit code was 2, expected 0

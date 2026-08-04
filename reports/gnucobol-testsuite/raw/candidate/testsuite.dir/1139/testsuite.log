@@ -3,11 +3,11 @@
 ./run_extensions.at:1999: $COMPILE -Wno-unfinished prog.cob
 ./run_extensions.at:2001: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1139/stderr	2026-08-04 14:58:39.470852842 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1139/stderr	2026-08-04 15:05:44.280165235 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: 4
---- -	2026-08-04 14:58:39.472700579 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1139/stdout	2026-08-04 14:58:39.471937878 +0000
+--- -	2026-08-04 15:05:44.281542710 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1139/stdout	2026-08-04 15:05:44.280165235 +0000
 @@ -1,13 +1 @@
 -4: +0000000001
 -1: +002

@@ -3,8 +3,8 @@
 ./syn_misc.at:2005: $COMPILE prog.cob
 ./syn_misc.at:2007: $COBCRUN_DIRECT ./prog
 ./syn_misc.at:2013: $COMPILE_ONLY prog2.cob
---- -	2026-08-04 14:58:38.731186567 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/286/stderr	2026-08-04 14:58:38.730626053 +0000
+--- -	2026-08-04 15:05:43.510273481 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/286/stderr	2026-08-04 15:05:43.509265244 +0000
 @@ -1,3 +1,2 @@
 -prog2.cob:11: error: invalid indicator '$' at column 7
 -prog2.cob:15: error: invalid symbol '|' - skipping word

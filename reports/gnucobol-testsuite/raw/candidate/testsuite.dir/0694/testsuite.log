@@ -2,15 +2,15 @@
 694. run_misc.at:912: testing TURN directive ...
 ./run_misc.at:942: $COMPILE prog.cob
 ./run_misc.at:943: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:39.007282300 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/694/stderr	2026-08-04 14:58:39.006117048 +0000
+--- -	2026-08-04 15:05:43.792472854 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/694/stderr	2026-08-04 15:05:43.791029517 +0000
 @@ -1,3 +1,2 @@
 -libcob: prog.cob:20: error: subscript of 'y' out of bounds: 6
 -note: maximum subscript for 'y': 5
 +cobrun: runtime error: subscript of 'Y' out of bounds: 6 (maximum: 5)
  
---- -	2026-08-04 14:58:39.007786579 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/694/stdout	2026-08-04 14:58:39.007257393 +0000
+--- -	2026-08-04 15:05:43.793006037 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/694/stdout	2026-08-04 15:05:43.792502991 +0000
 @@ -1 +1 @@
 -!!
 +

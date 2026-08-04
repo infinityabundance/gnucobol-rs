@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 183. syn_value.at:389: testing Numeric-edited item ...
 ./syn_value.at:407: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.671948582 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/183/stderr	2026-08-04 14:58:38.671271210 +0000
+--- -	2026-08-04 15:05:43.445845501 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/183/stderr	2026-08-04 15:05:43.445185071 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: warning: value size exceeds data size
 -prog.cob:10: note: value size is 8

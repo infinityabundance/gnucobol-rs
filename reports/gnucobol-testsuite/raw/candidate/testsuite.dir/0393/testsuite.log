@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 393. syn_misc.at:7930: testing PICTURE L ...
 ./syn_misc.at:7944: $COMPILE_ONLY prog_extraneous_depending.cob
---- -	2026-08-04 14:58:38.789294907 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/393/stderr	2026-08-04 14:58:38.788020463 +0000
+--- -	2026-08-04 15:05:43.569741525 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/393/stderr	2026-08-04 15:05:43.568998391 +0000
 @@ -1,2 +1 @@
 -prog_extraneous_depending.cob:7: error: DEPENDING clause needs either an OCCURS clause or a variable-length PICTURE
  

@@ -2,7 +2,7 @@
 793. run_misc.at:6534: testing C/C++ reserved words/predefined identifiers ...
 ./run_misc.at:6982: $COMPILE_MODULE -fnot-reserved=double,float,new,volatile,xor callee.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/793/stderr	2026-08-04 14:58:39.086690280 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/793/stderr	2026-08-04 15:05:43.879520999 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fnot-reserved=double,float,new,volatile,xor: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): double,float,new,volatile,xor
 ./run_misc.at:6982: exit code was 1, expected 0

@@ -3,11 +3,11 @@
 ./data_binary.at:2196: $COMPILE prog.cob
 ./data_binary.at:2201: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stderr	2026-08-04 14:58:39.585799711 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stderr	2026-08-04 15:05:44.385187291 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC VPPP999: ScalingPDeferred
---- -	2026-08-04 14:58:39.587158252 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stdout	2026-08-04 14:58:39.585851447 +0000
+--- -	2026-08-04 15:05:44.386405981 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1248/stdout	2026-08-04 15:05:44.385581967 +0000
 @@ -1,11 +1 @@
 -INIT X-1 : 00091 .
 -INIT X-2 : 00092 .

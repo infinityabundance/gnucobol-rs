@@ -3,7 +3,7 @@
 ./run_file.at:7361: $COMPILE prog.cob
 ./run_file.at:7362: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/923/stdout	2026-08-04 14:58:05.856244089 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/923/stdout	2026-08-04 15:05:20.754707656 +0000
 @@ -0,0 +1 @@
 +FAILED: OPEN INPUT
 923. run_file.at:7275: 923. READ INPUT pipe & WRITE OUTPUT pipe (run_file.at:7275): expected failure (run_file.at:7362)

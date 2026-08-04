@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 458. syn_functions.at:568: testing FUNCTION LENGTH / BYTE-LENGTH ...
 ./syn_functions.at:585: $COMPILE -Wno-pending prog.cob
---- -	2026-08-04 14:58:38.827557246 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/458/stderr	2026-08-04 14:58:38.826804874 +0000
+--- -	2026-08-04 15:05:43.608497298 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/458/stderr	2026-08-04 15:05:43.607924090 +0000
 @@ -1,4 +1 @@
 -prog.cob:7: error: syntax error, unexpected Literal, expecting PHYSICAL or )
 -prog.cob:8: error: a non-numeric literal is expected here

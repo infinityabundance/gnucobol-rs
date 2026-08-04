@@ -4,7 +4,7 @@
 ./syn_copy.at:158: mkdir -p SUBX
 ./syn_copy.at:163: $COMPILE_ONLY -I. SUB/prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/51/stderr	2026-08-04 14:58:38.602437664 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/51/stderr	2026-08-04 15:05:43.379649058 +0000
 @@ -0,0 +1 @@
 +cobc-rs: COPY expansion failed (fail closed): malformed COPY statement
 ./syn_copy.at:163: exit code was 1, expected 0

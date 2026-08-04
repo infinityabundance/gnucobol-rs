@@ -3,11 +3,11 @@
 ./run_functions.at:1983: $COMPILE prog.cob
 ./run_functions.at:1984: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1034/stderr	2026-08-04 14:58:39.325790234 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1034/stderr	2026-08-04 15:05:44.119792092 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: FUNCTION LOCALE-TIME-FROM-SECONDS: cobc 3.2 does not implement it (a compile-reject) or it is a live-clock/locale/GMP-PRNG non-claim
---- -	2026-08-04 14:58:39.326805916 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1034/stdout	2026-08-04 14:58:39.325854602 +0000
+--- -	2026-08-04 15:05:44.122026172 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1034/stdout	2026-08-04 15:05:44.120799408 +0000
 @@ -1,2 +1 @@
 -OK
  

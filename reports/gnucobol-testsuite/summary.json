@@ -6,7 +6,7 @@
     "candidate": {
       "check_reject": 652,
       "layout_reject": 0,
-      "module_model_unsupported": 5,
+      "module_model_unsupported": 4,
       "nondeterministic": 0,
       "not_reached": 0,
       "parse_reject": 31,
@@ -20,17 +20,17 @@
     "comparison": {
       "exit_status_mismatch": 0,
       "generated_file_mismatch": 0,
-      "observable_match": 192,
+      "observable_match": 193,
       "stderr_mismatch": 0,
       "stdout_mismatch": 0
     },
     "first_failure": {
       "CANDIDATE_CHECK_REJECT": 652,
-      "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 5,
+      "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 4,
       "CANDIDATE_PARSE_REJECT": 31,
       "CANDIDATE_RUNTIME_FAIL": 136,
       "CANDIDATE_UNSUPPORTED": 21,
-      "OBSERVABLE_MATCH": 192,
+      "OBSERVABLE_MATCH": 193,
       "ORACLE_SKIP": 9,
       "ORACLE_XFAIL": 31,
       "WRAPPER_INVOCATION_MALFORMED": 25,
@@ -47,11 +47,11 @@
     },
     "reason_codes": {
       "CANDIDATE_CHECK_REJECT": 652,
-      "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 5,
+      "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 4,
       "CANDIDATE_PARSE_REJECT": 31,
       "CANDIDATE_RUNTIME_FAIL": 136,
       "CANDIDATE_UNSUPPORTED": 21,
-      "OBSERVABLE_MATCH": 192,
+      "OBSERVABLE_MATCH": 193,
       "ORACLE_SKIP": 9,
       "ORACLE_XFAIL": 31,
       "WRAPPER_INVOCATION_MALFORMED": 25,

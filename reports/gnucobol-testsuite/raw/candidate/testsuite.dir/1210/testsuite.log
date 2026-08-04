@@ -3,7 +3,7 @@
 ./run_extensions.at:5934: $COMPILE nested.cob
 ./run_extensions.at:5935: $COBCRUN_DIRECT ./nested
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1210/stderr	2026-08-04 14:58:39.542590814 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1210/stderr	2026-08-04 15:05:44.346698917 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC LX(3): UnsupportedSymbol('L')
 ./run_extensions.at:5935: exit code was 2, expected 0

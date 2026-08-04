@@ -2,11 +2,11 @@
 509. listings.at:6018: testing huge REPLACE ...
 ./listings.at:6143: $COMPILE_LISTING0 -t- prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/509/stderr	2026-08-04 14:58:38.861538327 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/509/stderr	2026-08-04 15:05:43.640515574 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 14:58:38.863015079 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/509/stdout	2026-08-04 14:58:38.861860232 +0000
+--- -	2026-08-04 15:05:43.641965714 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/509/stdout	2026-08-04 15:05:43.641069114 +0000
 @@ -1,429 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

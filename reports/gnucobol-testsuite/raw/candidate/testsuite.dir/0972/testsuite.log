@@ -3,7 +3,7 @@
 ./run_reportwriter.at:4193: $COMPILE prog.cob
 ./run_reportwriter.at:4195: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/972/stderr	2026-08-04 14:58:39.250655887 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/972/stderr	2026-08-04 15:05:44.039397236 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: NUMS
 ./run_reportwriter.at:4195: exit code was 2, expected 0

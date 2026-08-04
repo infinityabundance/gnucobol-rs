@@ -3,7 +3,7 @@
 ./data_display.at:8730: $COMPILE prog.cob
 ./data_display.at:8731: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1257/stderr	2026-08-04 14:58:39.619869767 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1257/stderr	2026-08-04 15:05:44.415392229 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number REPLACE
 ./data_display.at:8731: exit code was 2, expected 0

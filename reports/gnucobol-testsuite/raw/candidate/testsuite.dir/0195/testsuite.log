@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 195. syn_file.at:459: testing START on SEQUENTIAL file ...
 ./syn_file.at:488: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.678122937 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/195/stderr	2026-08-04 14:58:38.677076017 +0000
+--- -	2026-08-04 15:05:43.451550626 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/195/stderr	2026-08-04 15:05:43.450543199 +0000
 @@ -1,3 +1 @@
 -prog.cob:19: error: START not allowed on SEQUENTIAL files
 -prog.cob:21: error: START not allowed on SEQUENTIAL files

@@ -3,7 +3,7 @@
 ./run_extensions.at:6022: $COMPILE redefines.cob
 ./run_extensions.at:6023: $COBCRUN_DIRECT ./redefines
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1211/stderr	2026-08-04 14:58:39.544152264 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1211/stderr	2026-08-04 15:05:44.346698917 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC LX(5): UnsupportedSymbol('L')
 ./run_extensions.at:6023: exit code was 2, expected 0

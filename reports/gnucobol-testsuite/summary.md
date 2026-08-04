@@ -15,7 +15,7 @@ All 1282 generated test groups reconciled (each has exactly one final classifica
 
 - parse/check reject: 683
 - unsupported: 21
-- module-model unsupported: 5
+- module-model unsupported: 4
 - runtime fail: 136
 - timeout: 0
 - not reached: 0
@@ -23,7 +23,7 @@ All 1282 generated test groups reconciled (each has exactly one final classifica
 
 ## Comparison
 
-- observable match: 192
+- observable match: 193
 - stdout mismatch: 0
 - stderr mismatch: 0
 - exit-status mismatch: 0

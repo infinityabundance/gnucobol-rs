@@ -3,11 +3,11 @@
 ./run_misc.at:12510: $COMPILE prog.cob
 ./run_misc.at:12512: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stderr	2026-08-04 14:58:39.112717309 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stderr	2026-08-04 15:05:43.903171843 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: RSLTV2,
---- -	2026-08-04 14:58:39.113989109 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stdout	2026-08-04 14:58:39.112857186 +0000
+--- -	2026-08-04 15:05:43.904748188 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/824/stdout	2026-08-04 15:05:43.903900379 +0000
 @@ -1,21 +1 @@
 -Simple Compute  RSLT IS 400
 -Single Variable RSLT IS 188

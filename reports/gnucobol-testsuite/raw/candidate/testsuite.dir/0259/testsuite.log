@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 259. syn_misc.at:869: testing CLASS duplicate values ...
 ./syn_misc.at:895: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.711381522 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/259/stderr	2026-08-04 14:58:38.710752199 +0000
+--- -	2026-08-04 15:05:43.487575182 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/259/stderr	2026-08-04 15:05:43.487047309 +0000
 @@ -1,2 +1 @@
 -prog.cob:9: warning: duplicate character values in class 'CHECK-VALID'
  

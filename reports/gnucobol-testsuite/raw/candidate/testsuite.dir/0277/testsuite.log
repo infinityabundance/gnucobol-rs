@@ -2,7 +2,7 @@
 277. syn_misc.at:1686: testing ACCEPT WITH ( NO ) UPDATE / DEFAULT ...
 ./syn_misc.at:1706: $COMPILE_ONLY -faccept-update prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/277/stderr	2026-08-04 14:58:38.720861943 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/277/stderr	2026-08-04 15:05:43.496639822 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -faccept-update: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
 ./syn_misc.at:1706: exit code was 1, expected 0

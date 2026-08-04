@@ -529,16 +529,16 @@
       "title": "configuration.at:731: 44. runtime configuration: conf missing"
     },
     {
-      "candidate": "-",
-      "exit_status": "see raw group logs",
-      "files": "see raw group logs",
+      "candidate": "ok",
+      "exit_status": "same",
+      "files": "same",
       "number": 45,
       "oracle": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_MODULE_MODEL_UNSUPPORTED",
-      "stderr": "see raw group logs",
-      "stdout": "candidate failed with a group log; oracle has none",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "stderr": "same",
+      "stdout": "same",
       "test_id": "0045",
-      "title": "configuration.at:760: 45. runtime configuration: conf optional"
+      "title": "runtime configuration: conf optional"
     },
     {
       "candidate": "ok",

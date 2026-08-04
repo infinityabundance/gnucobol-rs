@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | cobc-rs adapter + cobrun interpreter outcomes per test, raw candidate testsuite.log + group logs, mechanical no-delegation proof (linkage scans + PATH isolation) |
 | replay command | `bash lab/gnucobol-testsuite/run-docker.sh` |
-| generated_at | 2026-08-04T15:00:05Z |
-| git_commit | `8d8c499e8ed9e5b9307d007b2a4168ee88106c3a` |
+| generated_at | 2026-08-04T15:07:09Z |
+| git_commit | `d95e32354538de5feef0e5f93b1a488fec145516` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.
@@ -21,10 +21,10 @@
 
 ```json
 {
-  "candidate_module_model_unsupported": 5,
+  "candidate_module_model_unsupported": 4,
   "candidate_not_reached": 0,
   "candidate_parse_check_reject": 683,
-  "candidate_results_sha256": "ce17077b6681f19d44d137b485462b9fc9912c5c01ab0def23ec2165cdd54be4",
+  "candidate_results_sha256": "f37a1563e9ab9691a758ea691d470c19171d3c109bb98cd09bcc105479eca173",
   "candidate_runtime_fail": 136,
   "candidate_skipped": 0,
   "candidate_timeout": 0,
@@ -35,7 +35,7 @@
         "resolves_to": "/work/target/release/cobc-rs",
         "symlink_target": "cobc-rs"
       },
-      "cobc_rs_sha256": "688ec489d3c5b76a500dfe4c03d1b1e71bbf4dfe6269db0fa498088b5e92a808",
+      "cobc_rs_sha256": "eb029f12c15b9fd2b444403cf1cb4b2d30b1b570fd36700be1a0a94bb4cb2858",
       "cobcrun": {
         "resolves_to": "/work/target/release/cobc-rs",
         "symlink_target": "cobcrun-rs"
@@ -46,7 +46,7 @@
     "candidate_phase_isolated": true,
     "candidate_phase_note": "candidate phase isolated from the oracle (only /work/run/candidate-bin/cobc + /work/run/candidate-bin/cobcrun on PATH)",
     "cobc_resolves_to_candidate_during_candidate_phase": true,
-    "cobc_rs_binary_sha256": "688ec489d3c5b76a500dfe4c03d1b1e71bbf4dfe6269db0fa498088b5e92a808",
+    "cobc_rs_binary_sha256": "eb029f12c15b9fd2b444403cf1cb4b2d30b1b570fd36700be1a0a94bb4cb2858",
     "cobc_rs_ldd_libcob_hits": 0,
     "cobc_rs_links_no_libcob": true,
     "cobc_rs_readelf_libcob_hits": 0,

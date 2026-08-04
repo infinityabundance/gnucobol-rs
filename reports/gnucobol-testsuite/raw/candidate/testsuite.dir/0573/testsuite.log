@@ -3,7 +3,7 @@
 ./run_fundamental.at:4112: $COMPILE -Wno-truncate prog.cob
 ./run_fundamental.at:4113: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/573/stderr	2026-08-04 14:58:38.911540142 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/573/stderr	2026-08-04 15:05:43.692554993 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number REPLACE
 ./run_fundamental.at:4113: exit code was 2, expected 0

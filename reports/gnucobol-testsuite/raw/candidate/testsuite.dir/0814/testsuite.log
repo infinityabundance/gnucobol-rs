@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 814. run_misc.at:11479: testing Numeric MOVE with/without -fbinary-truncate ...
 ./run_misc.at:11521: $COMPILE prog.cob
---- -	2026-08-04 14:58:39.105527482 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/814/stderr	2026-08-04 14:58:39.104175913 +0000
+--- -	2026-08-04 15:05:43.897475334 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/814/stderr	2026-08-04 15:05:43.896756125 +0000
 @@ -1,4 +1 @@
 -prog.cob:10: warning: value size exceeds data size
 -prog.cob:10: note: value is 30000

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 167. syn_redefines.at:308: testing REDEFINES: size exceeds ...
 ./syn_redefines.at:333: $COBC -fdiagnostics-plain-output -Wextra prog.cob
---- -	2026-08-04 14:58:38.664490324 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/167/stderr	2026-08-04 14:58:38.663435008 +0000
+--- -	2026-08-04 15:05:43.438742504 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/167/stderr	2026-08-04 15:05:43.438097452 +0000
 @@ -1,8 +1 @@
 -prog.cob:8: error: larger REDEFINES used
 -prog.cob:8: note: size of 'A' larger than size of 'X' [-Wdialect]

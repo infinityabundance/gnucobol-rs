@@ -3,11 +3,11 @@
 ./run_extensions.at:1556: $COBC -x -std=ibm prog.cob
 ./run_extensions.at:1558: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stderr	2026-08-04 14:58:39.463852927 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stderr	2026-08-04 15:05:44.270805755 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: L1-3-2(1,
---- -	2026-08-04 14:58:39.466518670 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stdout	2026-08-04 14:58:39.465271656 +0000
+--- -	2026-08-04 15:05:44.272197257 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1132/stdout	2026-08-04 15:05:44.271679603 +0000
 @@ -1,5 +1 @@
 -Length is +0000000222 with 03, 04, 00, 06, 01
 -"01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567.901234567890123456789012345+++901234567890123456789--2345678901234567890123456789012345678901234567890123456789012345678901"

@@ -2,8 +2,8 @@
 1116. run_extensions.at:217: testing Semi-parenthesized condition ...
 ./run_extensions.at:231: $COMPILE -Wno-constant-expression prog.cob
 ./run_extensions.at:232: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:39.445001564 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1116/stdout	2026-08-04 14:58:39.444116595 +0000
+--- -	2026-08-04 15:05:44.250646494 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1116/stdout	2026-08-04 15:05:44.249941712 +0000
 @@ -1 +1 @@
 -OK
 +

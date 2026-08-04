@@ -11,10 +11,10 @@
   "docker": {
     "base_image": "gnucobol-rs-gnucobol-testsuite/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "gnucobol-testsuite-20260804T145746Z-8d8c499e-a",
-      "pass_b": "gnucobol-testsuite-20260804T145746Z-8d8c499e-b"
+      "pass_a": "gnucobol-testsuite-20260804T150501Z-d95e3235-a",
+      "pass_b": "gnucobol-testsuite-20260804T150501Z-d95e3235-b"
     },
-    "court_image": "gnucobol-rs-gnucobol-testsuite/court:8d8c499e8ed9e5b9307d007b2a4168ee88106c3a",
+    "court_image": "gnucobol-rs-gnucobol-testsuite/court:d95e32354538de5feef0e5f93b1a488fec145516",
     "daemon_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
@@ -27,11 +27,11 @@
     "host_storage_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260804T145746Z-8d8c499e",
+    "run_id": "20260804T150501Z-d95e3235",
     "socket": "unix://$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 477573070848,
+      "available_bytes_at_start": 477470347264,
       "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -52,8 +52,8 @@
     "os": "?",
     "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)"
   },
-  "generated_at": "2026-08-04T15:00:05Z",
-  "git_commit": "8d8c499e8ed9e5b9307d007b2a4168ee88106c3a",
+  "generated_at": "2026-08-04T15:07:09Z",
+  "git_commit": "d95e32354538de5feef0e5f93b1a488fec145516",
   "non_claims": [
     "no suite-pass or parity claim: this gate records candidate outcomes, it does not certify them",
     "candidate rejection is fail-closed (unsupported constructs are never silently run)",
@@ -109,7 +109,7 @@
       "root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 477573070848,
+      "available_bytes_at_start": 477470347264,
       "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -117,10 +117,10 @@
   },
   "receipt_status": "current",
   "results": {
-    "candidate_module_model_unsupported": 5,
+    "candidate_module_model_unsupported": 4,
     "candidate_not_reached": 0,
     "candidate_parse_check_reject": 683,
-    "candidate_results_sha256": "ce17077b6681f19d44d137b485462b9fc9912c5c01ab0def23ec2165cdd54be4",
+    "candidate_results_sha256": "f37a1563e9ab9691a758ea691d470c19171d3c109bb98cd09bcc105479eca173",
     "candidate_runtime_fail": 136,
     "candidate_skipped": 0,
     "candidate_timeout": 0,
@@ -131,7 +131,7 @@
           "resolves_to": "/work/target/release/cobc-rs",
           "symlink_target": "cobc-rs"
         },
-        "cobc_rs_sha256": "688ec489d3c5b76a500dfe4c03d1b1e71bbf4dfe6269db0fa498088b5e92a808",
+        "cobc_rs_sha256": "eb029f12c15b9fd2b444403cf1cb4b2d30b1b570fd36700be1a0a94bb4cb2858",
         "cobcrun": {
           "resolves_to": "/work/target/release/cobc-rs",
           "symlink_target": "cobcrun-rs"
@@ -142,7 +142,7 @@
       "candidate_phase_isolated": true,
       "candidate_phase_note": "candidate phase isolated from the oracle (only /work/run/candidate-bin/cobc + /work/run/candidate-bin/cobcrun on PATH)",
       "cobc_resolves_to_candidate_during_candidate_phase": true,
-      "cobc_rs_binary_sha256": "688ec489d3c5b76a500dfe4c03d1b1e71bbf4dfe6269db0fa498088b5e92a808",
+      "cobc_rs_binary_sha256": "eb029f12c15b9fd2b444403cf1cb4b2d30b1b570fd36700be1a0a94bb4cb2858",
       "cobc_rs_ldd_libcob_hits": 0,
       "cobc_rs_links_no_libcob": true,
       "cobc_rs_readelf_libcob_hits": 0,

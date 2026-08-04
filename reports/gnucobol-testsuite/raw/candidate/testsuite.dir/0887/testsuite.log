@@ -2,8 +2,8 @@
 887. run_file.at:3769: testing System routines for files ...
 ./run_file.at:3953: $COMPILE prog.cob
 ./run_file.at:3954: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:39.170048491 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/887/stderr	2026-08-04 14:58:39.169156369 +0000
+--- -	2026-08-04 15:05:43.962019952 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/887/stderr	2026-08-04 15:05:43.960923250 +0000
 @@ -1,4 +1,2 @@
 -libcob: prog.cob:15: warning: call to CBL_CREATE_FILE with wrong file_lock: 11
 -libcob: prog.cob:15: warning: call to CBL_CREATE_FILE with wrong file_dev: 22

@@ -3,11 +3,11 @@
 ./run_misc.at:5072: $COMPILE -o caller caller.cob callee.c
 ./run_misc.at:5073: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/777/stderr	2026-08-04 14:58:39.072581880 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/777/stderr	2026-08-04 15:05:43.866289679 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "STATIC": not a contained program (external CALL is a boundary)
---- -	2026-08-04 14:58:39.073976709 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/777/stdout	2026-08-04 14:58:39.073029244 +0000
+--- -	2026-08-04 15:05:43.868114497 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/777/stdout	2026-08-04 15:05:43.867163737 +0000
 @@ -1 +1 @@
 -OK
 +

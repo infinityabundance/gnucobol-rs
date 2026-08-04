@@ -3,7 +3,7 @@
 ./run_extensions.at:510: $COMPILE prog.cob
 ./run_extensions.at:511: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1120/stderr	2026-08-04 14:58:39.449391935 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1120/stderr	2026-08-04 15:05:44.255766829 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: WHEN-COMPILED
 ./run_extensions.at:511: exit code was 2, expected 0

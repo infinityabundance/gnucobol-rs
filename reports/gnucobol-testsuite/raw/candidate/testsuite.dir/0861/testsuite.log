@@ -2,7 +2,7 @@
 861. run_file.at:753: testing ASSIGN directive ...
 ./run_file.at:790: $COMPILE -fassign-clause=dynamic prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/861/stderr	2026-08-04 14:58:39.140856847 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/861/stderr	2026-08-04 15:05:43.936391646 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fassign-clause=dynamic: unsupported option (rejected-unsupported; ASSIGN clause dialect: reject honestly): dynamic
 ./run_file.at:790: exit code was 1, expected 0

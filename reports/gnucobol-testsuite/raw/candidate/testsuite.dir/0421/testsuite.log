@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 421. syn_multiply.at:102: testing Category check of literals ...
 ./syn_multiply.at:123: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.804083415 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/421/stderr	2026-08-04 14:58:38.803605745 +0000
+--- -	2026-08-04 15:05:43.586221014 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/421/stderr	2026-08-04 15:05:43.585210111 +0000
 @@ -1,4 +1 @@
 -prog.cob:10: error: 'literal "a"' is not numeric
 -prog.cob:14: error: 'literal "a"' is not numeric

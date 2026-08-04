@@ -3,7 +3,7 @@
 ./run_file.at:6951: $COMPILE prog.cob
 ./run_file.at:6952: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/920/stdout	2026-08-04 14:58:39.195856179 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/920/stdout	2026-08-04 15:05:43.989009713 +0000
 @@ -0,0 +1,6 @@
 +FAILED: START key > 0
 +FAILED: START key < 99

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1162. run_extensions.at:3127: testing System routine with wrong number of parameters ...
 ./run_extensions.at:3159: $COMPILE wrong.cob
---- -	2026-08-04 14:58:39.497989303 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1162/stderr	2026-08-04 14:58:39.497318563 +0000
+--- -	2026-08-04 15:05:44.303926334 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1162/stderr	2026-08-04 15:05:44.302937292 +0000
 @@ -1,2 +1 @@
 -wrong.cob:8: error: wrong number of CALL parameters for 'CBL_OR', 1 given, 3 expected
  

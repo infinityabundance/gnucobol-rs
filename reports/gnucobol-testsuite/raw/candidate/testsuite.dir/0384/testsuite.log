@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 384. syn_misc.at:7197: testing Invalid PERFORM statement ...
 ./syn_misc.at:7221: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.782562923 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/384/stderr	2026-08-04 14:58:38.781122880 +0000
+--- -	2026-08-04 15:05:43.563812103 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/384/stderr	2026-08-04 15:05:43.562684804 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: error: syntax error, unexpected (
 -prog.cob:17: error: syntax error, unexpected ., expecting TIMES

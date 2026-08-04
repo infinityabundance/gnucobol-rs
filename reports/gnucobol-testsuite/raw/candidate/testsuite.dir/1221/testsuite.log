@@ -3,7 +3,7 @@
 ./run_ml.at:355: $COMPILE prog.cob
 ./run_ml.at:356: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1221/stdout	2026-08-04 14:58:39.554212701 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1221/stdout	2026-08-04 15:05:44.356095415 +0000
 @@ -0,0 +1 @@
 +Failed 2: <D><E>abc000</E></D>
 1221. run_ml.at:316: 1221. XML GENERATE record selection (run_ml.at:316): FAILED (run_ml.at:356)

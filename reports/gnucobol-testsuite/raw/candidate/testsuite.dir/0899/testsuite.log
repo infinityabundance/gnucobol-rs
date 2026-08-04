@@ -2,8 +2,8 @@
 899. run_file.at:5306: testing SEQUENTIAL file I/O with variable records ...
 ./run_file.at:5363: $COMPILE prog.cob
 ./run_file.at:5364: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:39.181538191 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/899/stdout	2026-08-04 14:58:39.181031557 +0000
+--- -	2026-08-04 15:05:43.972914651 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/899/stdout	2026-08-04 15:05:43.972107097 +0000
 @@ -1,12 +1,4 @@
 -20: >+12345678++12345678+<
 -19: >+12345678++12345678<

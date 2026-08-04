@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 181. syn_value.at:325: testing Alphanumeric group item ...
 ./syn_value.at:343: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.671139164 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/181/stderr	2026-08-04 14:58:38.670583528 +0000
+--- -	2026-08-04 15:05:43.445846413 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/181/stderr	2026-08-04 15:05:43.444814151 +0000
 @@ -1,4 +1 @@
 -prog.cob:6: warning: alphanumeric value is expected
 -prog.cob:10: warning: value size exceeds data size

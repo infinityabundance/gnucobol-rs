@@ -2,8 +2,8 @@
 849. run_file.at:89: testing variable-length SEQUENTIAL data integrity ...
 ./run_file.at:144: $COMPILE prog.cob
 ./run_file.at:145: DD_DATA=TEST1 $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:39.135860795 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/849/stdout	2026-08-04 14:58:39.135036730 +0000
+--- -	2026-08-04 15:05:43.927196512 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/849/stdout	2026-08-04 15:05:43.926442218 +0000
 @@ -1 +1 @@
 -OPEN ERROR: 39
 +OPEN ERROR: 35

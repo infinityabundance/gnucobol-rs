@@ -2,7 +2,7 @@
 133. syn_definition.at:2571: testing LIKE clause ...
 ./syn_definition.at:2617: $COMPILE_ONLY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/133/stderr	2026-08-04 14:57:59.149341508 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/133/stderr	2026-08-04 15:05:13.713801666 +0000
 @@ -0,0 +1,14 @@
 +prog.cob:13: warning: LIKE clause is not implemented
 +prog.cob:13: error: PICTURE clause required for 'FILLER'

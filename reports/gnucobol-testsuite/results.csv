@@ -43,7 +43,7 @@ test_id,number,title,group,oracle,candidate,primary_classification,reason_code
 0042,42,runtime configuration: environment priority,configuration.at:637,ORACLE_PASS,ok,OBSERVABLE_MATCH,oracle and candidate both satisfy the test's AT_CHECK assertions
 0043,43,runtime configuration: entries,configuration.at:650,ORACLE_PASS,ok,OBSERVABLE_MATCH,oracle and candidate both satisfy the test's AT_CHECK assertions
 0044,44,configuration.at:731: 44. runtime configuration: conf missing,configuration.at:731,ORACLE_PASS,-,CANDIDATE_MODULE_MODEL_UNSUPPORTED,module lifecycle not supported by the candidate model: $COBCRUN -c defunc.cfg --runtime-conf
-0045,45,configuration.at:760: 45. runtime configuration: conf optional,configuration.at:760,ORACLE_PASS,-,CANDIDATE_MODULE_MODEL_UNSUPPORTED,module lifecycle not supported by the candidate model: $COBCRUN -c defunc.cfg --runtime-conf
+0045,45,runtime configuration: conf optional,configuration.at:760,ORACLE_PASS,ok,OBSERVABLE_MATCH,oracle and candidate both satisfy the test's AT_CHECK assertions
 0046,46,runtime configuration: strings and environment,configuration.at:773,ORACLE_PASS,ok,OBSERVABLE_MATCH,oracle and candidate both satisfy the test's AT_CHECK assertions
 0047,47,configuration.at:787: 47. validation of COB_CONFIG_DIR,configuration.at:787,ORACLE_PASS,-,CANDIDATE_UNSUPPORTED,"candidate failed at an unclassified boundary: echo ""$PATHSEP"""
 0048,48,configuration.at:827: 48. cobc configuration: source format,configuration.at:827,ORACLE_PASS,-,CANDIDATE_CHECK_REJECT,candidate syntax check failed: $COMPILE_ONLY -fformat=unknown fixed.cob

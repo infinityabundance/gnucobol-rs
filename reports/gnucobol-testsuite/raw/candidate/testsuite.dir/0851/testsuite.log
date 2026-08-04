@@ -3,7 +3,7 @@
 ./run_file.at:252: $COMPILE prog.cob
 ./run_file.at:253: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/851/stdout	2026-08-04 14:58:39.135613865 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/851/stdout	2026-08-04 15:05:43.926442218 +0000
 @@ -0,0 +1 @@
 +STATUS OPENO 00
 851. run_file.at:224: 851. OUTPUT on SEQUENTIAL file to missing directory (run_file.at:224): FAILED (run_file.at:253)

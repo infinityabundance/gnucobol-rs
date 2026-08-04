@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 446. syn_functions.at:135: testing Redundant REPOSITORY entries ...
 ./syn_functions.at:161: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.820731076 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/446/stderr	2026-08-04 14:58:38.820117102 +0000
+--- -	2026-08-04 15:05:43.601763558 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/446/stderr	2026-08-04 15:05:43.600973306 +0000
 @@ -1,9 +1,2 @@
 -prog.cob:14: warning: prototype has same name as current function and will be ignored
 -prog.cob:16: warning: duplicate REPOSITORY entry for 'prog'

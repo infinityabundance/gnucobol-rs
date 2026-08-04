@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 419. syn_multiply.at:28: testing Category check of Format 1 ...
 ./syn_multiply.at:50: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.802961825 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/419/stderr	2026-08-04 14:58:38.801892282 +0000
+--- -	2026-08-04 15:05:43.585149008 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/419/stderr	2026-08-04 15:05:43.584383132 +0000
 @@ -1,8 +1 @@
 -prog.cob:10: error: '456' is not a numeric name
 -prog.cob:11: error: 'literal "a"' is not numeric

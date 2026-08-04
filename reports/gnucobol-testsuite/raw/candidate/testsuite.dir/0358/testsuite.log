@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 358. syn_misc.at:5862: testing @OPTIONS parsing ...
 ./syn_misc.at:5874: $COMPILE_ONLY valid.cob
---- -	2026-08-04 14:58:38.768186534 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/358/stderr	2026-08-04 14:58:38.766861385 +0000
+--- -	2026-08-04 15:05:43.546540920 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/358/stderr	2026-08-04 15:05:43.545749476 +0000
 @@ -1,3 +1,2 @@
 -valid.cob:2: warning: ignoring unknown directive: '@OPTIONS NOMAIN,APOST'
 -valid.cob:3: warning: ignoring unknown directive: '@OPTIONS APOST'

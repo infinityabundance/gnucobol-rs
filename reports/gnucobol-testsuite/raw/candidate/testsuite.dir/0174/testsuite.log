@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 174. syn_value.at:76: testing OCCURS too many VALUEs ...
 ./syn_value.at:140: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.666768299 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/174/stderr	2026-08-04 14:58:38.666188729 +0000
+--- -	2026-08-04 15:05:43.440951678 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/174/stderr	2026-08-04 15:05:43.440431319 +0000
 @@ -1,4 +1 @@
 -prog.cob:15: error: elements in VALUE clause for 'MONTH-IN-YEAR' (15) exceed max amount (13)
 -prog.cob:26: error: elements in VALUE clause for 'MONTHS' (25) exceed max amount (24)

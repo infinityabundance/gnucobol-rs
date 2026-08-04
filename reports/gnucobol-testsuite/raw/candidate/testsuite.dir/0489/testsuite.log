@@ -2,11 +2,11 @@
 489. listings.at:1590: testing Two source files ...
 ./listings.at:1613: $COMPILE_LISTING -t- prog.cob prog1.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/489/stderr	2026-08-04 14:58:38.849937721 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/489/stderr	2026-08-04 15:05:43.626787408 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 14:58:38.851249285 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/489/stdout	2026-08-04 14:58:38.850678711 +0000
+--- -	2026-08-04 15:05:43.629076221 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/489/stdout	2026-08-04 15:05:43.628446779 +0000
 @@ -1,33 +1 @@
 -GnuCOBOL V.R.P          prog.cob                                        Page 0001
 -

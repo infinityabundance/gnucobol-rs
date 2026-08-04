@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 227. syn_file.at:2096: testing ALTERNATE RECORD definition omitting RECORD ...
 ./syn_file.at:2118: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:57:59.534633817 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/227/stderr	2026-08-04 14:57:59.533152016 +0000
+--- -	2026-08-04 15:05:14.108688816 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/227/stderr	2026-08-04 15:05:14.108035860 +0000
 @@ -1,2 +1,4 @@
 -prog.cob:12: error: 'RECORD' is mandatory here
 +prog.cob:7: error: missing file description for FILE TEST-FILE

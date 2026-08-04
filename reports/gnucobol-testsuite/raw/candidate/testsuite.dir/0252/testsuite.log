@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 252. syn_misc.at:550: testing Invalid conditional expression (2) ...
 ./syn_misc.at:604: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.709656478 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/252/stderr	2026-08-04 14:58:38.708899437 +0000
+--- -	2026-08-04 15:05:43.484134104 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/252/stderr	2026-08-04 15:05:43.483124614 +0000
 @@ -1,10 +1 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:13: error: condition expression found where decimal expression was expected

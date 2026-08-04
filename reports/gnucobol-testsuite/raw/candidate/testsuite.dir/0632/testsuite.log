@@ -2,8 +2,8 @@
 632. run_subscripts.at:298: testing SEARCH ALL with OCCURS DEPENDING ON ...
 ./run_subscripts.at:342: $COMPILE prog.cob
 ./run_subscripts.at:343: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:38.957269014 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/632/stdout	2026-08-04 14:58:38.956210271 +0000
+--- -	2026-08-04 15:05:43.741388633 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/632/stdout	2026-08-04 15:05:43.740257387 +0000
 @@ -1,4 +1,4 @@
  END
 -FOUND

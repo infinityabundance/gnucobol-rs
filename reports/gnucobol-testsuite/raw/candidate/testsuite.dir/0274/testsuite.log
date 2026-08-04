@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 274. syn_misc.at:1610: testing wrong device for mnemonic-name ...
 ./syn_misc.at:1627: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.720723059 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/274/stderr	2026-08-04 14:58:38.719770675 +0000
+--- -	2026-08-04 15:05:43.496814377 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/274/stderr	2026-08-04 15:05:43.496045997 +0000
 @@ -1,3 +1 @@
 -prog.cob:8: error: 'SYSOUT' is not an input device
 -prog.cob:9: error: 'SYSIN' is not an output device

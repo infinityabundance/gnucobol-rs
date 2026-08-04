@@ -3,7 +3,7 @@
 ./run_functions.at:4502: $COMPILE prog.cob
 ./run_functions.at:4503: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1107/stderr	2026-08-04 14:58:39.434121009 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1107/stderr	2026-08-04 15:05:44.238677836 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: WITHPAR(1)
 ./run_functions.at:4503: exit code was 2, expected 0

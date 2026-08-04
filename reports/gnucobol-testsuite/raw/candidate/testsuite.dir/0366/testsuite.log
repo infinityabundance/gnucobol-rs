@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 366. syn_misc.at:6440: testing conflict markers ...
 ./syn_misc.at:6471: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.771734946 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/366/stderr	2026-08-04 14:58:38.770882177 +0000
+--- -	2026-08-04 15:05:43.552036755 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/366/stderr	2026-08-04 15:05:43.550739910 +0000
 @@ -1,10 +1,2 @@
 -prog.cob:8: error: version control conflict marker in file
 -prog.cob:10: error: version control conflict marker in file

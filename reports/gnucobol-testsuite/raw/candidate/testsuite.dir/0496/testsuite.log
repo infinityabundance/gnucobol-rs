@@ -2,11 +2,11 @@
 496. listings.at:2598: testing Symbols: multiple programs/functions ...
 ./listings.at:2643: $COMPILE_LISTING -t- -ftsymbols prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/496/stderr	2026-08-04 14:58:38.853102348 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/496/stderr	2026-08-04 15:05:43.631223870 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 14:58:38.854432937 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/496/stdout	2026-08-04 14:58:38.853725258 +0000
+--- -	2026-08-04 15:05:43.632840691 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/496/stdout	2026-08-04 15:05:43.631601163 +0000
 @@ -1,70 +1 @@
 -GnuCOBOL V.R.P          prog.cob                                        Page 0001
 -

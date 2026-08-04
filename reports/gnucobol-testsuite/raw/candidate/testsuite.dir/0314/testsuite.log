@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 314. syn_misc.at:3506: testing EVALUATE statement with invalid syntax ...
 ./syn_misc.at:3546: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.742208005 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/314/stderr	2026-08-04 14:58:38.741443550 +0000
+--- -	2026-08-04 15:05:43.521091668 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/314/stderr	2026-08-04 15:05:43.520584052 +0000
 @@ -1,5 +1 @@
 -prog.cob:19: error: invalid conditional expression
 -prog.cob:16: error: invalid expression: boolean expected with logical operator

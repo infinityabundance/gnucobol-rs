@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 313. syn_misc.at:3473: testing IF-ELSE statement list with invalid syntax ...
 ./syn_misc.at:3496: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.741878300 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/313/stderr	2026-08-04 14:58:38.741050117 +0000
+--- -	2026-08-04 15:05:43.520819250 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/313/stderr	2026-08-04 15:05:43.520170973 +0000
 @@ -1,5 +1 @@
 -prog.cob:11: error: syntax error, unexpected Identifier
 -prog.cob:14: error: syntax error, unexpected END-ACCEPT

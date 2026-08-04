@@ -532,16 +532,16 @@
       "title": "configuration.at:731: 44. runtime configuration: conf missing"
     },
     {
-      "candidate_status": "-",
-      "diagnostic_shape_parity": "DIFFERS",
+      "candidate_status": "ok",
+      "diagnostic_shape_parity": "N/A",
       "group": "configuration.at:760",
       "number": 45,
       "oracle_status": "ORACLE_PASS",
-      "primary_classification": "CANDIDATE_MODULE_MODEL_UNSUPPORTED",
-      "reason_code": "module lifecycle not supported by the candidate model: $COBCRUN -c defunc.cfg --runtime-conf",
-      "semantic_diagnostic_verdict": "REJECT",
+      "primary_classification": "OBSERVABLE_MATCH",
+      "reason_code": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "semantic_diagnostic_verdict": "N/A",
       "test_id": "0045",
-      "title": "configuration.at:760: 45. runtime configuration: conf optional"
+      "title": "runtime configuration: conf optional"
     },
     {
       "candidate_status": "ok",

@@ -3,7 +3,7 @@
 ./run_misc.at:14022: $COMPILE prog.cob
 ./run_misc.at:14023: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/842/stderr	2026-08-04 14:58:39.127005214 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/842/stderr	2026-08-04 15:05:43.919757740 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: 
 ./run_misc.at:14023: exit code was 2, expected 0

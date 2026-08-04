@@ -2,7 +2,7 @@
 1216. run_extensions.at:6216: testing EXAMINE REPLACING ...
 ./run_extensions.at:6246: $COMPILE -freserved=EXAMINE prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1216/stderr	2026-08-04 14:58:39.549851883 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1216/stderr	2026-08-04 15:05:44.353883015 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -freserved=EXAMINE: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): EXAMINE
 ./run_extensions.at:6246: exit code was 1, expected 0

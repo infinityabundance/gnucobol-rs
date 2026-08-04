@@ -3,11 +3,11 @@
 ./run_file.at:2398: $COMPILE prog.cob 
 ./run_file.at:2400: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/874/stderr	2026-08-04 14:58:39.153856689 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/874/stderr	2026-08-04 15:05:43.946261426 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: DELETE: `FILE` is not a declared file
---- -	2026-08-04 14:58:39.155587414 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/874/stdout	2026-08-04 14:58:39.154791702 +0000
+--- -	2026-08-04 15:05:43.947868919 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/874/stdout	2026-08-04 15:05:43.947206085 +0000
 @@ -1,42 +1 @@
 -delete file
 -delete file done

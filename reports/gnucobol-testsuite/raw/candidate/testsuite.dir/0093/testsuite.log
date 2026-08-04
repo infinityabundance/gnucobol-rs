@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 93. syn_definition.at:636: testing Redefinition of program-name within program ...
 ./syn_definition.at:653: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:58:38.621680832 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/93/stderr	2026-08-04 14:58:38.621031231 +0000
+--- -	2026-08-04 15:05:43.398400227 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/93/stderr	2026-08-04 15:05:43.397674716 +0000
 @@ -1,3 +1 @@
 -prog.cob:10: error: redefinition of 'prog'
 -prog.cob:7: note: 'prog' previously defined here

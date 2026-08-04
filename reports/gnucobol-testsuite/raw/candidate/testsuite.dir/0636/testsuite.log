@@ -2,15 +2,15 @@
 636. run_subscripts.at:506: testing SSRANGE and NOSSRANGE directives ...
 ./run_subscripts.at:532: $COMPILE -DTEST-SUBSCRIPT prog.cob
 ./run_subscripts.at:533: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:58:38.961728694 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/636/stderr	2026-08-04 14:58:38.961142221 +0000
+--- -	2026-08-04 15:05:43.747029157 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/636/stderr	2026-08-04 15:05:43.746068488 +0000
 @@ -1,3 +1,2 @@
 -libcob: prog.cob:17: error: subscript of 'y' out of bounds: 6
 -note: maximum subscript for 'y': 5
 +cobrun: unsupported: SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)
  
---- -	2026-08-04 14:58:38.962262529 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/636/stdout	2026-08-04 14:58:38.961548418 +0000
+--- -	2026-08-04 15:05:43.748658993 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/636/stdout	2026-08-04 15:05:43.747674760 +0000
 @@ -1,2 +1 @@
 -!
  
