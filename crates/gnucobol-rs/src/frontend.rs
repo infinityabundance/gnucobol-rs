@@ -34,12 +34,62 @@ use std::collections::HashMap;
 /// The generated parity tracker (`xtask cobol-parity`) reads this to report front-end coverage, so it
 /// stays honest as the subset grows. Keep this in sync with the dispatch in `exec_stmt` + `run_block`.
 pub const WIRED_STATEMENTS: &[&str] = &[
-    "DISPLAY", "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ACCEPT", "ADD", "SUBTRACT",
-    "MULTIPLY", "DIVIDE", "COMPUTE", "IF", "PERFORM", "STOP", "CONTINUE", "GOTO", "GOBACK", "EXIT", "CALL",
-    "CANCEL", "EVALUATE", "SEARCH", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START",
-    "UNLOCK", "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE",
-    "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
+    "DISPLAY",
+    "MOVE",
+    "SET",
+    "INITIALIZE",
+    "INSPECT",
+    "STRING",
+    "UNSTRING",
+    "ACCEPT",
+    "ADD",
+    "SUBTRACT",
+    "MULTIPLY",
+    "DIVIDE",
+    "COMPUTE",
+    "IF",
+    "PERFORM",
+    "STOP",
+    "CONTINUE",
+    "GOTO",
+    "GOBACK",
+    "EXIT",
+    "CALL",
+    "CANCEL",
+    "EVALUATE",
+    "SEARCH",
+    "OPEN",
+    "CLOSE",
+    "READ",
+    "WRITE",
+    "REWRITE",
+    "DELETE",
+    "START",
+    "UNLOCK",
+    "COMMIT",
+    "ROLLBACK",
+    "SORT",
+    "MERGE",
+    "RELEASE",
+    "RETURN",
+    "JSON",
+    "XML",
+    "TRANSFORM",
+    "RAISE",
+    "VALIDATE",
+    "DESTROY",
+    "READY",
+    "RESET",
+    "EXHIBIT",
+    "ALTER",
+    "GENERATE",
+    "INITIATE",
+    "TERMINATE",
+    "SUPPRESS",
+    "EXAMINE",
+    "ALLOCATE",
+    "FREE",
+    "USE",
 ];
 
 /// The intrinsic functions the front-end evaluates in `FUNCTION ...` references (DISPLAY / COMPUTE /
@@ -47,22 +97,101 @@ pub const WIRED_STATEMENTS: &[&str] = &[
 /// cobc. Names are the canonical hyphenated COBOL spellings; the COBOL-PARITY tracker parses this marker
 /// to count front-end intrinsic coverage. Keep in sync with `eval_intrinsic`.
 pub const WIRED_FUNCTIONS: &[&str] = &[
-    "LENGTH", "BYTE-LENGTH", "UPPER-CASE", "LOWER-CASE", "REVERSE", "TRIM", "NUMVAL", "NUMVAL-C",
-    "NUMVAL-F", "INTEGER", "INTEGER-PART", "FRACTION-PART", "ABS", "ABSOLUTE-VALUE", "FACTORIAL",
-    "SIGN", "ORD", "CHAR", "HEX-OF", "HEX-TO-CHAR", "BIT-OF", "BIT-TO-CHAR", "STORED-CHAR-LENGTH",
-    "MOD", "REM", "MAX", "MIN", "SUM", "MEAN", "MEDIAN", "RANGE", "MIDRANGE", "ORD-MAX", "ORD-MIN",
-    "VARIANCE", "STANDARD-DEVIATION", "ANNUITY", "PRESENT-VALUE", "CONCATENATE", "SUBSTITUTE",
-    "SUBSTITUTE-CASE", "CURRENCY-SYMBOL",
-    "SQRT", "EXP", "EXP10", "LOG", "LOG10", "SIN", "COS", "TAN", "ASIN", "ACOS", "ATAN", "PI", "E",
-    "INTEGER-OF-DATE", "INTEGER-OF-DAY", "DATE-OF-INTEGER", "DAY-OF-INTEGER", "TEST-DATE-YYYYMMDD",
-    "TEST-DAY-YYYYDDD", "TEST-NUMVAL", "TEST-NUMVAL-C", "TEST-NUMVAL-F", "LOWEST-ALGEBRAIC",
-    "HIGHEST-ALGEBRAIC", "CURRENT-DATE", "COMBINED-DATETIME", "FORMATTED-DATE", "FORMATTED-TIME",
-    "FORMATTED-DATETIME", "INTEGER-OF-FORMATTED-DATE", "TEST-FORMATTED-DATETIME",
-    "SECONDS-FROM-FORMATTED-TIME", "FORMATTED-CURRENT-DATE", "YEAR-TO-YYYY", "DATE-TO-YYYYMMDD", "DAY-TO-YYYYDDD",
-    "LOCALE-DATE", "LOCALE-TIME", "LOCALE-COMPARE", "MODULE-ID", "MODULE-CALLER-ID",
-    "WHEN-COMPILED", "MODULE-DATE", "MODULE-TIME", "MODULE-FORMATTED-DATE", "MODULE-SOURCE",
-    "EXCEPTION-STATUS", "EXCEPTION-STATEMENT", "EXCEPTION-LOCATION", "EXCEPTION-FILE",
-    "CONTENT-OF", "CONTENT-LENGTH", "SECONDS-PAST-MIDNIGHT",
+    "LENGTH",
+    "BYTE-LENGTH",
+    "UPPER-CASE",
+    "LOWER-CASE",
+    "REVERSE",
+    "TRIM",
+    "NUMVAL",
+    "NUMVAL-C",
+    "NUMVAL-F",
+    "INTEGER",
+    "INTEGER-PART",
+    "FRACTION-PART",
+    "ABS",
+    "ABSOLUTE-VALUE",
+    "FACTORIAL",
+    "SIGN",
+    "ORD",
+    "CHAR",
+    "HEX-OF",
+    "HEX-TO-CHAR",
+    "BIT-OF",
+    "BIT-TO-CHAR",
+    "STORED-CHAR-LENGTH",
+    "MOD",
+    "REM",
+    "MAX",
+    "MIN",
+    "SUM",
+    "MEAN",
+    "MEDIAN",
+    "RANGE",
+    "MIDRANGE",
+    "ORD-MAX",
+    "ORD-MIN",
+    "VARIANCE",
+    "STANDARD-DEVIATION",
+    "ANNUITY",
+    "PRESENT-VALUE",
+    "CONCATENATE",
+    "SUBSTITUTE",
+    "SUBSTITUTE-CASE",
+    "CURRENCY-SYMBOL",
+    "SQRT",
+    "EXP",
+    "EXP10",
+    "LOG",
+    "LOG10",
+    "SIN",
+    "COS",
+    "TAN",
+    "ASIN",
+    "ACOS",
+    "ATAN",
+    "PI",
+    "E",
+    "INTEGER-OF-DATE",
+    "INTEGER-OF-DAY",
+    "DATE-OF-INTEGER",
+    "DAY-OF-INTEGER",
+    "TEST-DATE-YYYYMMDD",
+    "TEST-DAY-YYYYDDD",
+    "TEST-NUMVAL",
+    "TEST-NUMVAL-C",
+    "TEST-NUMVAL-F",
+    "LOWEST-ALGEBRAIC",
+    "HIGHEST-ALGEBRAIC",
+    "CURRENT-DATE",
+    "COMBINED-DATETIME",
+    "FORMATTED-DATE",
+    "FORMATTED-TIME",
+    "FORMATTED-DATETIME",
+    "INTEGER-OF-FORMATTED-DATE",
+    "TEST-FORMATTED-DATETIME",
+    "SECONDS-FROM-FORMATTED-TIME",
+    "FORMATTED-CURRENT-DATE",
+    "YEAR-TO-YYYY",
+    "DATE-TO-YYYYMMDD",
+    "DAY-TO-YYYYDDD",
+    "LOCALE-DATE",
+    "LOCALE-TIME",
+    "LOCALE-COMPARE",
+    "MODULE-ID",
+    "MODULE-CALLER-ID",
+    "WHEN-COMPILED",
+    "MODULE-DATE",
+    "MODULE-TIME",
+    "MODULE-FORMATTED-DATE",
+    "MODULE-SOURCE",
+    "EXCEPTION-STATUS",
+    "EXCEPTION-STATEMENT",
+    "EXCEPTION-LOCATION",
+    "EXCEPTION-FILE",
+    "CONTENT-OF",
+    "CONTENT-LENGTH",
+    "SECONDS-PAST-MIDNIGHT",
 ];
 
 /// Why a program could not be run (fail closed -- the front-end never guesses).
@@ -134,7 +263,11 @@ enum Storage {
     /// An `88`-level condition-name: true when its `parent` field's value equals any of `values` (a single
     /// value or a `lo THRU hi` range). Carries no storage of its own. `false_value` is the `WHEN SET TO
     /// FALSE <lit>` value (for `SET cond TO FALSE`), if declared.
-    Condition { parent: String, values: Vec<CondVal>, false_value: Option<String> },
+    Condition {
+        parent: String,
+        values: Vec<CondVal>,
+        false_value: Option<String>,
+    },
     /// A group item: an ordered list of its elementary leaf field names. The group has no bytes of its own
     /// -- a read concatenates the leaves' current bytes, a write distributes the incoming bytes across them
     /// by length. (The leaves own their storage; the group is the aggregate view over the record.)
@@ -164,17 +297,30 @@ struct Field {
     redefines: Option<String>,
 }
 
-
 /// An alphanumeric literal/source attribute (`COB_TYPE_ALPHANUMERIC` = 0x21).
 fn alnum_attr() -> FieldAttr {
-    FieldAttr { field_type: 0x21, digits: 0, scale: 0, flags: 0 }
+    FieldAttr {
+        field_type: 0x21,
+        digits: 0,
+        scale: 0,
+        flags: 0,
+    }
 }
 
 /// Build a numeric `USAGE DISPLAY` attr for an integer/decimal literal of `digits` digits and
 /// `scale` fractional digits (sign per `signed`).
 fn lit_num_attr(digits: u16, scale: i16, signed: bool) -> FieldAttr {
-    let flags = if signed { crate::attr::COB_FLAG_HAVE_SIGN } else { 0 };
-    FieldAttr { field_type: COB_TYPE_NUMERIC_DISPLAY, digits, scale, flags }
+    let flags = if signed {
+        crate::attr::COB_FLAG_HAVE_SIGN
+    } else {
+        0
+    };
+    FieldAttr {
+        field_type: COB_TYPE_NUMERIC_DISPLAY,
+        digits,
+        scale,
+        flags,
+    }
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -337,7 +483,7 @@ pub fn fixed_to_free(source: &str) -> String {
             continue;
         }
         match chars[6] {
-            '*' | '/' => out.push('\n'),              // comment / page-eject: drop the line
+            '*' | '/' => out.push('\n'), // comment / page-eject: drop the line
             '-' => {
                 // Continuation line: the resumed text joins the PREVIOUS line flush (the CCVS85
                 // corpus splits VALUE literals across lines). Columns 73+ (sequence area) are never
@@ -356,7 +502,9 @@ pub fn fixed_to_free(source: &str) -> String {
                 let text: String = if open_lit {
                     // resume at column 12 (index 11); a quote exactly at column 12 is the marker.
                     let mut s: String = chars.get(11..end).unwrap_or_default().iter().collect();
-                    if s.starts_with('"') { s.remove(0); }
+                    if s.starts_with('"') {
+                        s.remove(0);
+                    }
                     s
                 } else {
                     chars[7..end].iter().collect()
@@ -372,7 +520,7 @@ pub fn fixed_to_free(source: &str) -> String {
                 }
             }
             _ => {
-                let end = chars.len().min(72);        // columns 8..=72 (0-indexed 7..72); 73+ ignored
+                let end = chars.len().min(72); // columns 8..=72 (0-indexed 7..72); 73+ ignored
                 out.extend(&chars[7..end]);
                 out.push('\n');
             }
@@ -516,8 +664,14 @@ pub fn run_program_redirected(
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
     let collation = parse_collation(&toks, first_proc);
-    let file_defs: HashMap<String, FileDef> = program_map.get(&main_name)
-        .map(|p| p.files.iter().map(|f| (f.name.clone(), f.clone())).collect())
+    let file_defs: HashMap<String, FileDef> = program_map
+        .get(&main_name)
+        .map(|p| {
+            p.files
+                .iter()
+                .map(|f| (f.name.clone(), f.clone()))
+                .collect()
+        })
         .unwrap_or_default();
     // Pre-resolved FD record -> owning file (first declaration wins on a duplicate name, matching the
     // deterministic source order of the files list).
@@ -525,11 +679,14 @@ pub fn run_program_redirected(
     if let Some(p) = program_map.get(&main_name) {
         for f in &p.files {
             for r in &f.records {
-                record_files.entry(r.clone()).or_insert_with(|| f.name.clone());
+                record_files
+                    .entry(r.clone())
+                    .or_insert_with(|| f.name.clone());
             }
         }
     }
-    let reports: HashMap<String, ReportDef> = program_map.get(&main_name)
+    let reports: HashMap<String, ReportDef> = program_map
+        .get(&main_name)
         .map(|p| p.reports.clone())
         .unwrap_or_default();
     let ctx = Ctx {
@@ -552,7 +709,10 @@ pub fn run_program_redirected(
         files: RefCell::new(HashMap::new()),
         reports,
     };
-    let main = ctx.programs.get(&main_name).expect("main program is registered");
+    let main = ctx
+        .programs
+        .get(&main_name)
+        .expect("main program is registered");
 
     let mut out = Vec::new();
     EXTERNAL_STORE.with(|m| m.borrow_mut().clear()); // EXTERNAL storage is per run unit (before any build)
@@ -604,18 +764,27 @@ pub fn check_program(source: &str, dialect: crate::dialect::Dialect) -> Result<(
     let (main_name, program_map) = parse_programs(&toks)?;
     let switches = parse_switches(&toks, first_proc);
     let collation = parse_collation(&toks, first_proc);
-    let file_defs: HashMap<String, FileDef> = program_map.get(&main_name)
-        .map(|p| p.files.iter().map(|f| (f.name.clone(), f.clone())).collect())
+    let file_defs: HashMap<String, FileDef> = program_map
+        .get(&main_name)
+        .map(|p| {
+            p.files
+                .iter()
+                .map(|f| (f.name.clone(), f.clone()))
+                .collect()
+        })
         .unwrap_or_default();
     let mut record_files: HashMap<String, String> = HashMap::new();
     if let Some(p) = program_map.get(&main_name) {
         for f in &p.files {
             for r in &f.records {
-                record_files.entry(r.clone()).or_insert_with(|| f.name.clone());
+                record_files
+                    .entry(r.clone())
+                    .or_insert_with(|| f.name.clone());
             }
         }
     }
-    let reports: HashMap<String, ReportDef> = program_map.get(&main_name)
+    let reports: HashMap<String, ReportDef> = program_map
+        .get(&main_name)
         .map(|p| p.reports.clone())
         .unwrap_or_default();
     let ctx = Ctx {
@@ -638,7 +807,10 @@ pub fn check_program(source: &str, dialect: crate::dialect::Dialect) -> Result<(
         files: RefCell::new(HashMap::new()),
         reports,
     };
-    let main = ctx.programs.get(&main_name).expect("main program is registered");
+    let main = ctx
+        .programs
+        .get(&main_name)
+        .expect("main program is registered");
     // Build the full declaration/layout model (WORKING-STORAGE, FD records, reports) — this is the
     // deepest static phase; the program body is never run.
     let fields = build_program_fields(main, &ctx)?;
@@ -659,7 +831,14 @@ pub fn check_program(source: &str, dialect: crate::dialect::Dialect) -> Result<(
             let mut p = 0usize;
             while p < prog.proc_toks.len() {
                 let before = p;
-                if run_block(&prog.proc_toks, &mut p, &mut fields, &mut Vec::new(), false, &ctx)? {
+                if run_block(
+                    &prog.proc_toks,
+                    &mut p,
+                    &mut fields,
+                    &mut Vec::new(),
+                    false,
+                    &ctx,
+                )? {
                     break;
                 }
                 if p == before {
@@ -922,7 +1101,9 @@ fn resolve_usage_inheritance(items: &mut [ProgItem]) {
             }
         }
         let stated = it.usage;
-        let effective = stated.or_else(|| stack.last().map(|&(_, u)| u)).unwrap_or(Usage::Display);
+        let effective = stated
+            .or_else(|| stack.last().map(|&(_, u)| u))
+            .unwrap_or(Usage::Display);
         // a stated usage encloses this item's nested children (popped when a <= level item appears).
         if let Some(u) = stated {
             stack.push((it.level, u));
@@ -963,7 +1144,12 @@ fn binary_native_usage(w: &str) -> Option<(u8, &'static str, &'static str)> {
 
 /// After a `BINARY-*` keyword at `toks[k]`, consume an optional `SIGNED`/`UNSIGNED` qualifier and return
 /// the implied PIC to use (`UNSIGNED` -> the `9(n)` form, else the default signed `S9(n)`). Advances `k`.
-fn binary_native_pic(toks: &[Tok], k: &mut usize, signed_pic: &'static str, unsigned_pic: &'static str) -> &'static str {
+fn binary_native_pic(
+    toks: &[Tok],
+    k: &mut usize,
+    signed_pic: &'static str,
+    unsigned_pic: &'static str,
+) -> &'static str {
     if matches!(toks.get(*k), Some(Tok::Word(x)) if x == "UNSIGNED") {
         *k += 1;
         unsigned_pic
@@ -1012,11 +1198,25 @@ fn unsupported_usage_kw(w: &str) -> bool {
 /// (`cob_display_common` reads the f32/f64 directly) and decimal<->float conversion (`cob_move`); a
 /// VALUE is encoded through the same path.
 fn make_float_field(kind: u16, value: Option<&Tok>) -> Result<Field, RunError> {
-    let size = if kind == crate::attr::COB_TYPE_NUMERIC_DOUBLE { 8 } else { 4 };
+    let size = if kind == crate::attr::COB_TYPE_NUMERIC_DOUBLE {
+        8
+    } else {
+        4
+    };
     // digits/scale are unused by the float display path; a generous decimal width lets the float operand
     // round-trip through the wide-decimal arithmetic intermediate (to_arith_operand).
-    let attr = FieldAttr { field_type: kind, digits: 18, scale: 9, flags: crate::attr::COB_FLAG_HAVE_SIGN };
-    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![0u8; size], occurs: 1, redefines: None };
+    let attr = FieldAttr {
+        field_type: kind,
+        digits: 18,
+        scale: 9,
+        flags: crate::attr::COB_FLAG_HAVE_SIGN,
+    };
+    let mut f = Field {
+        storage: Storage::Numeric(attr),
+        bytes: vec![0u8; size],
+        occurs: 1,
+        redefines: None,
+    };
     if let Some(v) = value {
         init_value(&mut f, v)?;
     }
@@ -1106,7 +1306,10 @@ fn parse_switches(toks: &[Tok], before: usize) -> SwitchEnv {
     let mut i = 0;
     while i < before {
         if let Some(Tok::Word(w)) = toks.get(i) {
-            if let Some(n) = w.strip_prefix("SWITCH-").and_then(|s| s.parse::<usize>().ok()) {
+            if let Some(n) = w
+                .strip_prefix("SWITCH-")
+                .and_then(|s| s.parse::<usize>().ok())
+            {
                 let mut k = i + 1;
                 // optional `IS <mnemonic>` right after SWITCH-n (the SET target name).
                 if matches!(toks.get(k), Some(Tok::Word(x)) if x == "IS") {
@@ -1155,7 +1358,11 @@ fn parse_switches(toks: &[Tok], before: usize) -> SwitchEnv {
             *slot = v == "ON" || v == "1";
         }
     }
-    SwitchEnv { states: std::cell::RefCell::new(states), conds, mnemonics }
+    SwitchEnv {
+        states: std::cell::RefCell::new(states),
+        conds,
+        mnemonics,
+    }
 }
 
 /// Parse `PROGRAM COLLATING SEQUENCE IS <alphabet>` (OBJECT-COMPUTER / SPECIAL-NAMES) before `before`,
@@ -1293,21 +1500,39 @@ fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
     // Names pinned to their bare key (referenced by a cross-clause that uses the bare name).
     let mut pinned: HashSet<String> = HashSet::new();
     for it in ws {
-        if let Some(t) = &it.redefines { pinned.insert(t.clone()); }
-        if let Some(c) = &it.odo_counter { pinned.insert(c.clone()); }
-        if let Some((s, e)) = &it.renames { pinned.insert(s.clone()); pinned.insert(e.clone()); }
-        for ib in &it.indexed_by { pinned.insert(ib.clone()); }
+        if let Some(t) = &it.redefines {
+            pinned.insert(t.clone());
+        }
+        if let Some(c) = &it.odo_counter {
+            pinned.insert(c.clone());
+        }
+        if let Some((s, e)) = &it.renames {
+            pinned.insert(s.clone());
+            pinned.insert(e.clone());
+        }
+        for ib in &it.indexed_by {
+            pinned.insert(ib.clone());
+        }
         if it.level == 88 {
-            if let Some((p, _, _)) = &it.condition { pinned.insert(p.clone()); }
+            if let Some((p, _, _)) = &it.condition {
+                pinned.insert(p.clone());
+            }
         }
     }
     let simple = |it: &ProgItem| {
-        it.level != 88 && it.level != 66 && !it.pic.is_empty() && it.occurs <= 1
-            && it.redefines.is_none() && it.float_kind.is_none() && it.indexed_by.is_empty()
+        it.level != 88
+            && it.level != 66
+            && !it.pic.is_empty()
+            && it.occurs <= 1
+            && it.redefines.is_none()
+            && it.float_kind.is_none()
+            && it.indexed_by.is_empty()
             && it.odo_counter.is_none()
     };
     let mut out = ws.to_vec();
-    let mut idx = NameIndex { by_name: HashMap::new() };
+    let mut idx = NameIndex {
+        by_name: HashMap::new(),
+    };
     for (i, it) in ws.iter().enumerate() {
         if it.level == 88 {
             continue;
@@ -1325,7 +1550,10 @@ fn canonicalize_ws(ws: &[ProgItem]) -> (Vec<ProgItem>, NameIndex) {
             it.name.clone()
         };
         out[i].name = key.clone();
-        idx.by_name.entry(it.name.clone()).or_default().push((key, chains[i].clone()));
+        idx.by_name
+            .entry(it.name.clone())
+            .or_default()
+            .push((key, chains[i].clone()));
     }
     (out, idx)
 }
@@ -1337,7 +1565,10 @@ fn glue_subscripts(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<Tok>,
     let unbalanced = |w: &str| w.matches('(').count() > w.matches(')').count();
     // Any '(' may be a subscript needing a glue (a split `C(2`/`3)`, OR a `name (WS-SUB)` whose balanced
     // subscript token follows a space) -- so process whenever the stream has a paren at all.
-    if !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.contains('('))) {
+    if !toks
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w.contains('(')))
+    {
         return (toks.to_vec(), lines.to_vec());
     }
     // Glue `name(... )` (or `name (...)`) whose subscript list the lexer split on internal whitespace, into a
@@ -1370,7 +1601,8 @@ fn glue_subscripts(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<Tok>,
                     }
                     (g, i + 2)
                 };
-                let mut depth = glued.matches('(').count() as i64 - glued.matches(')').count() as i64;
+                let mut depth =
+                    glued.matches('(').count() as i64 - glued.matches(')').count() as i64;
                 while depth > 0 && j < toks.len() {
                     if let Tok::Word(w2) = &toks[j] {
                         glued.push(' ');
@@ -1399,8 +1631,13 @@ fn glue_subscripts(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<Tok>,
 /// equals the name); an unresolvable / ambiguous qualified reference is left untouched (it errors downstream
 /// as before). No-op when the program has no duplicate names AND the stream has no `OF`/`IN`.
 fn collapse_qualified(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<Tok>, Vec<usize>) {
-    let has_renames = idx.by_name.iter().any(|(b, v)| v.iter().any(|(k, _)| k != b));
-    let has_of = toks.iter().any(|t| matches!(t, Tok::Word(w) if w == "OF" || w == "IN"));
+    let has_renames = idx
+        .by_name
+        .iter()
+        .any(|(b, v)| v.iter().any(|(k, _)| k != b));
+    let has_of = toks
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w == "OF" || w == "IN"));
     if !has_renames && !has_of {
         return (toks.to_vec(), lines.to_vec());
     }
@@ -1434,19 +1671,31 @@ fn collapse_qualified(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<To
             }
             if let Some(cands) = idx.by_name.get(base.as_str()) {
                 let resolved: Option<String> = if !quals.is_empty() {
-                    let m: Vec<&String> = cands.iter()
+                    let m: Vec<&String> = cands
+                        .iter()
                         .filter(|(_, chain)| is_ordered_subseq(&quals, chain))
                         .map(|(k, _)| k)
                         .collect();
-                    if m.len() == 1 { Some(m[0].clone()) } else { None }
+                    if m.len() == 1 {
+                        Some(m[0].clone())
+                    } else {
+                        None
+                    }
                 } else if cands.len() == 1 {
                     Some(cands[0].0.clone())
                 } else {
                     None
                 };
                 if let Some(key) = resolved {
-                    let inner = match &sub { Some(s) => format!("{key}({s})"), None => key };
-                    let nw = if lp > 0 { format!("{}{}", "(".repeat(lp), inner) } else { inner };
+                    let inner = match &sub {
+                        Some(s) => format!("{key}({s})"),
+                        None => key,
+                    };
+                    let nw = if lp > 0 {
+                        format!("{}{}", "(".repeat(lp), inner)
+                    } else {
+                        inner
+                    };
                     out.push(Tok::Word(nw));
                     out_lines.push(lines[i]);
                     i = j;
@@ -1463,23 +1712,39 @@ fn collapse_qualified(toks: &[Tok], lines: &[usize], idx: &NameIndex) -> (Vec<To
 
 /// The elementary leaf children of a group field, as `(canonical_key, bare_name)` pairs (skipping nested
 /// groups and SYNC slack FILLERs) -- the candidate set for a `CORRESPONDING` match.
-fn corr_leaves(fields: &HashMap<String, Field>, group: &str) -> Result<Vec<(String, String)>, RunError> {
+fn corr_leaves(
+    fields: &HashMap<String, Field>,
+    group: &str,
+) -> Result<Vec<(String, String)>, RunError> {
     match fields.get(group).map(|f| &f.storage) {
-        Some(Storage::Group { children }) => Ok(children.iter()
-            .filter(|c| !c.starts_with('\u{3}') && !matches!(fields.get(*c).map(|f| &f.storage), Some(Storage::Group { .. })))
+        Some(Storage::Group { children }) => Ok(children
+            .iter()
+            .filter(|c| {
+                !c.starts_with('\u{3}')
+                    && !matches!(
+                        fields.get(*c).map(|f| &f.storage),
+                        Some(Storage::Group { .. })
+                    )
+            })
             // FILLER never participates in CORRESPONDING (cobc excludes unnamed items) -- so a separator
             // FILLER in the target keeps its own value (e.g. the `-` in a `yyyy-mm-dd` trailer date).
             .filter(|c| bare_name(c) != "FILLER")
             .map(|c| (c.clone(), bare_name(c).to_string()))
             .collect()),
-        Some(_) => Err(RunError::Unsupported(format!("CORRESPONDING operand `{group}` is not a group item"))),
+        Some(_) => Err(RunError::Unsupported(format!(
+            "CORRESPONDING operand `{group}` is not a group item"
+        ))),
         None => Err(RunError::UndefinedName(group.to_string())),
     }
 }
 
 /// The `(src_key, dst_key)` pairs for `CORRESPONDING src dst`: elementary leaves present in BOTH groups
 /// under the same bare name (matched in src declaration order).
-fn corr_pairs(fields: &HashMap<String, Field>, src: &str, dst: &str) -> Result<Vec<(String, String)>, RunError> {
+fn corr_pairs(
+    fields: &HashMap<String, Field>,
+    src: &str,
+    dst: &str,
+) -> Result<Vec<(String, String)>, RunError> {
     let sc = corr_leaves(fields, src)?;
     let dc = corr_leaves(fields, dst)?;
     let mut pairs = Vec::new();
@@ -1515,7 +1780,11 @@ fn parse_programs(toks: &[Tok]) -> Result<(String, HashMap<String, ProgramDef>),
 }
 
 /// Parse one program from `toks[start..end]` (start is its `PROGRAM-ID`).
-fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, ProgramDef), RunError> {
+fn parse_one_program(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+) -> Result<(String, ProgramDef), RunError> {
     // PROGRAM-ID. NAME.
     let mut k = start + 1;
     if matches!(toks.get(k), Some(Tok::Dot)) {
@@ -1523,7 +1792,11 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     }
     let name = match toks.get(k) {
         Some(Tok::Word(w)) => w.clone(),
-        _ => return Err(RunError::Unsupported("expected program name after PROGRAM-ID".into())),
+        _ => {
+            return Err(RunError::Unsupported(
+                "expected program name after PROGRAM-ID".into(),
+            ))
+        }
     };
     // PROGRAM-ID. name [IS] [INITIAL | COMMON | RECURSIVE]. -- scan the paragraph (to its '.') for INITIAL.
     let mut is_initial = false;
@@ -1551,12 +1824,28 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     // ENVIRONMENT FILE-CONTROL (SELECT ... ) + DATA FILE SECTION (FD + 01 record). The FD record items are
     // added to the field table; each file's metadata becomes a FileDef.
     let file_control = parse_file_control(toks, start, proc_at);
-    let (mut file_recs, file_rec, report_file, file_varying) = parse_file_section(toks, start, proc_at)?;
-    let files: Vec<FileDef> = file_control.into_iter().map(|(name, assign, org, status, rel_key, record_key, access_random)| {
-        let records = file_rec.get(&name).cloned().unwrap_or_default();
-        let varying_dep = file_varying.get(&name).cloned();
-        FileDef { name, assign, records, status, org, rel_key, record_key, varying_dep, access_random }
-    }).collect();
+    let (mut file_recs, file_rec, report_file, file_varying) =
+        parse_file_section(toks, start, proc_at)?;
+    let files: Vec<FileDef> = file_control
+        .into_iter()
+        .map(
+            |(name, assign, org, status, rel_key, record_key, access_random)| {
+                let records = file_rec.get(&name).cloned().unwrap_or_default();
+                let varying_dep = file_varying.get(&name).cloned();
+                FileDef {
+                    name,
+                    assign,
+                    records,
+                    status,
+                    org,
+                    rel_key,
+                    record_key,
+                    varying_dep,
+                    access_random,
+                }
+            },
+        )
+        .collect();
     let reports = parse_report_section(toks, start, proc_at, &report_file);
     ws.append(&mut file_recs);
     let linkage = match link_at {
@@ -1571,7 +1860,9 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
         p += 1;
         while p < end {
             match toks.get(p) {
-                Some(Tok::Word(w)) if w == "BY" || w == "REFERENCE" || w == "CONTENT" || w == "VALUE" => {
+                Some(Tok::Word(w))
+                    if w == "BY" || w == "REFERENCE" || w == "CONTENT" || w == "VALUE" =>
+                {
                     p += 1;
                 }
                 Some(Tok::Word(w)) => {
@@ -1597,13 +1888,37 @@ fn parse_one_program(toks: &[Tok], start: usize, end: usize) -> Result<(String, 
     let (proc_toks, proc_lines) = glue_subscripts(&proc_toks, &proc_lines, &idx);
     let (proc_toks, proc_lines) = collapse_qualified(&proc_toks, &proc_lines, &idx);
 
-    Ok((name, ProgramDef { ws, linkage, using, files, reports, proc_toks, proc_lines, is_initial }))
+    Ok((
+        name,
+        ProgramDef {
+            ws,
+            linkage,
+            using,
+            files,
+            reports,
+            proc_toks,
+            proc_lines,
+            is_initial,
+        },
+    ))
 }
 
 /// Parse `FILE-CONTROL` `SELECT name ASSIGN ... [ORGANIZATION [IS] {LINE SEQUENTIAL|SEQUENTIAL}]
 /// [FILE STATUS [IS] status]` entries -> `(name, org, status)`. Unknown clauses are skipped.
 #[allow(clippy::type_complexity)]
-fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, String, FileOrg, Option<String>, Option<String>, Option<String>, bool)> {
+fn parse_file_control(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+) -> Vec<(
+    String,
+    String,
+    FileOrg,
+    Option<String>,
+    Option<String>,
+    Option<String>,
+    bool,
+)> {
     let fc = match find_seq_in(toks, &["FILE-CONTROL"], start, end) {
         Some(i) => i + 1,
         None => return Vec::new(),
@@ -1615,7 +1930,10 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
             Some(Tok::Word(w)) if w == "DATA" => break,
             Some(Tok::Word(w)) if w == "SELECT" => {
                 i += 1;
-                let name = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => break };
+                let name = match toks.get(i) {
+                    Some(Tok::Word(w)) => w.clone(),
+                    _ => break,
+                };
                 i += 1;
                 let mut org = FileOrg::Sequential;
                 let mut status = None;
@@ -1625,32 +1943,51 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                 let mut assign = name.clone();
                 while i < end {
                     match toks.get(i) {
-                        Some(Tok::Dot) => { i += 1; break; }
+                        Some(Tok::Dot) => {
+                            i += 1;
+                            break;
+                        }
                         // ASSIGN [TO] [DYNAMIC] {"path" | word} -- the physical file the store keys on.
                         Some(Tok::Word(w)) if w == "ASSIGN" => {
                             i += 1;
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "TO") { i += 1; }
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DYNAMIC" || w == "EXTERNAL") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "TO") {
+                                i += 1;
+                            }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DYNAMIC" || w == "EXTERNAL")
+                            {
+                                i += 1;
+                            }
                             match toks.get(i) {
-                                Some(Tok::Str(s)) => { assign = String::from_utf8_lossy(s).to_string(); i += 1; }
-                                Some(Tok::Word(w)) => { assign = w.clone(); i += 1; }
+                                Some(Tok::Str(s)) => {
+                                    assign = String::from_utf8_lossy(s).to_string();
+                                    i += 1;
+                                }
+                                Some(Tok::Word(w)) => {
+                                    assign = w.clone();
+                                    i += 1;
+                                }
                                 _ => {}
                             }
                         }
                         Some(Tok::Word(w)) if w == "ORGANIZATION" => {
                             i += 1;
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") {
+                                i += 1;
+                            }
                             if matches!(toks.get(i), Some(Tok::Word(w)) if w == "LINE") {
                                 org = FileOrg::LineSequential;
                                 i += 1;
-                                if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") { i += 1; }
+                                if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") {
+                                    i += 1;
+                                }
                             } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "RELATIVE") {
                                 org = FileOrg::Relative;
                                 i += 1;
                             } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "INDEXED") {
                                 org = FileOrg::Indexed;
                                 i += 1;
-                            } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") {
+                            } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL")
+                            {
                                 org = FileOrg::Sequential;
                                 i += 1;
                             }
@@ -1658,35 +1995,72 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
                         // RELATIVE KEY [IS] field
                         Some(Tok::Word(w)) if w == "RELATIVE" => {
                             i += 1;
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "KEY") { i += 1; }
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
-                            if let Some(Tok::Word(w)) = toks.get(i) { rel_key = Some(w.clone()); i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "KEY") {
+                                i += 1;
+                            }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") {
+                                i += 1;
+                            }
+                            if let Some(Tok::Word(w)) = toks.get(i) {
+                                rel_key = Some(w.clone());
+                                i += 1;
+                            }
                         }
                         // RECORD KEY [IS] field  (INDEXED)
                         Some(Tok::Word(w)) if w == "RECORD" => {
                             i += 1;
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "KEY") { i += 1; }
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
-                            if let Some(Tok::Word(w)) = toks.get(i) { record_key = Some(w.clone()); i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "KEY") {
+                                i += 1;
+                            }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") {
+                                i += 1;
+                            }
+                            if let Some(Tok::Word(w)) = toks.get(i) {
+                                record_key = Some(w.clone());
+                                i += 1;
+                            }
                         }
                         Some(Tok::Word(w)) if w == "STATUS" => {
                             i += 1;
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
-                            if let Some(Tok::Word(w)) = toks.get(i) { status = Some(w.clone()); i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") {
+                                i += 1;
+                            }
+                            if let Some(Tok::Word(w)) = toks.get(i) {
+                                status = Some(w.clone());
+                                i += 1;
+                            }
                         }
                         // ACCESS [MODE] [IS] {SEQUENTIAL|RANDOM|DYNAMIC} -- only RANDOM/DYNAMIC make a plain
                         // READ keyed; SEQUENTIAL (the default) makes every READ a next-in-key-order read.
                         Some(Tok::Word(w)) if w == "ACCESS" => {
                             i += 1;
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "MODE") { i += 1; }
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
-                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "RANDOM" || w == "DYNAMIC") { access_random = true; i += 1; }
-                            else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL") { i += 1; }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "MODE") {
+                                i += 1;
+                            }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS") {
+                                i += 1;
+                            }
+                            if matches!(toks.get(i), Some(Tok::Word(w)) if w == "RANDOM" || w == "DYNAMIC")
+                            {
+                                access_random = true;
+                                i += 1;
+                            } else if matches!(toks.get(i), Some(Tok::Word(w)) if w == "SEQUENTIAL")
+                            {
+                                i += 1;
+                            }
                         }
                         _ => i += 1,
                     }
                 }
-                out.push((name, assign, org, status, rel_key, record_key, access_random));
+                out.push((
+                    name,
+                    assign,
+                    org,
+                    status,
+                    rel_key,
+                    record_key,
+                    access_random,
+                ));
             }
             None => break,
             _ => i += 1,
@@ -1699,7 +2073,19 @@ fn parse_file_control(toks: &[Tok], start: usize, end: usize) -> Vec<(String, St
 /// field table, and a file-name -> record-names map). A file may declare SEVERAL `01` record descriptions
 /// (alternative layouts over one shared record area); all of them are collected, in source order.
 #[allow(clippy::type_complexity)]
-fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<ProgItem>, HashMap<String, Vec<String>>, HashMap<String, String>, HashMap<String, String>), RunError> {
+fn parse_file_section(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+) -> Result<
+    (
+        Vec<ProgItem>,
+        HashMap<String, Vec<String>>,
+        HashMap<String, String>,
+        HashMap<String, String>,
+    ),
+    RunError,
+> {
     let fs = match find_seq_in(toks, &["FILE", "SECTION"], start, end) {
         Some(i) => i + 2,
         None => return Ok((Vec::new(), HashMap::new(), HashMap::new(), HashMap::new())),
@@ -1709,7 +2095,11 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
         find_seq_in(toks, &["WORKING-STORAGE", "SECTION"], fs, end),
         find_seq_in(toks, &["REPORT", "SECTION"], fs, end),
         find_seq_in(toks, &["LINKAGE", "SECTION"], fs, end),
-    ].into_iter().flatten().min().unwrap_or(end);
+    ]
+    .into_iter()
+    .flatten()
+    .min()
+    .unwrap_or(end);
     let mut recs = Vec::new();
     let mut file_rec = HashMap::new();
     let mut report_file = HashMap::new();
@@ -1719,14 +2109,20 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
         match toks.get(i) {
             Some(Tok::Word(w)) if w == "FD" || w == "SD" => {
                 i += 1;
-                let fname = match toks.get(i) { Some(Tok::Word(w)) => w.clone(), _ => break };
+                let fname = match toks.get(i) {
+                    Some(Tok::Word(w)) => w.clone(),
+                    _ => break,
+                };
                 i += 1;
                 // scan the FD clauses to the period; capture `REPORT[S] [IS|ARE] r1 [r2 ...]` and a
                 // `RECORD [IS] VARYING [IN SIZE] [FROM n] [TO m] [CHARACTERS] [DEPENDING [ON] field]` clause.
                 while i < ws_at && !matches!(toks.get(i), Some(Tok::Dot)) {
-                    if matches!(toks.get(i), Some(Tok::Word(w)) if w == "REPORT" || w == "REPORTS") {
+                    if matches!(toks.get(i), Some(Tok::Word(w)) if w == "REPORT" || w == "REPORTS")
+                    {
                         i += 1;
-                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS" || w == "ARE") { i += 1; }
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "IS" || w == "ARE") {
+                            i += 1;
+                        }
                         while let Some(Tok::Word(r)) = toks.get(i) {
                             report_file.insert(r.clone(), fname.clone());
                             i += 1;
@@ -1735,7 +2131,9 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
                     }
                     if matches!(toks.get(i), Some(Tok::Word(w)) if w == "DEPENDING") {
                         i += 1;
-                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "ON") { i += 1; }
+                        if matches!(toks.get(i), Some(Tok::Word(w)) if w == "ON") {
+                            i += 1;
+                        }
                         if let Some(Tok::Word(field)) = toks.get(i) {
                             file_varying.insert(fname.clone(), field.clone());
                             i += 1;
@@ -1744,17 +2142,25 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
                     }
                     i += 1;
                 }
-                if matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
+                if matches!(toks.get(i), Some(Tok::Dot)) {
+                    i += 1;
+                }
                 let rec_start = i;
                 let mut rec_end = i;
-                while rec_end < ws_at && !matches!(toks.get(rec_end), Some(Tok::Word(w)) if w == "FD" || w == "SD") {
+                while rec_end < ws_at
+                    && !matches!(toks.get(rec_end), Some(Tok::Word(w)) if w == "FD" || w == "SD")
+                {
                     rec_end += 1;
                 }
                 let items = parse_items(toks, rec_start, rec_end)?;
                 // Every 01-level record description beneath this FD/SD belongs to the file. The items list
                 // is flat (each 01 followed by its subordinate levels), so the record names are the level-1
                 // entries in order; the subordinates attach to their nearest 01 during field building.
-                let record_names: Vec<String> = items.iter().filter(|it| it.level == 1).map(|it| it.name.clone()).collect();
+                let record_names: Vec<String> = items
+                    .iter()
+                    .filter(|it| it.level == 1)
+                    .map(|it| it.name.clone())
+                    .collect();
                 if !record_names.is_empty() {
                     file_rec.insert(fname, record_names);
                 }
@@ -1770,44 +2176,111 @@ fn parse_file_section(toks: &[Tok], start: usize, end: usize) -> Result<(Vec<Pro
 /// Parse the `REPORT SECTION` `RD r1. 01 group [TYPE ...]. ... COLUMN n PIC p {SOURCE id | VALUE lit} ...`
 /// into report definitions. Minimal subset: each report group is a set of column-placed elements, one
 /// output line per `LINE` clause (a group with no LINE clause is one line).
-fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &HashMap<String, String>) -> HashMap<String, ReportDef> {
+fn parse_report_section(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+    report_file: &HashMap<String, String>,
+) -> HashMap<String, ReportDef> {
     let mut reports: HashMap<String, ReportDef> = HashMap::new();
     let rs = match find_seq_in(toks, &["REPORT", "SECTION"], start, end) {
         Some(i) => i + 2,
         None => return reports,
     };
-    let word = |i: usize| -> Option<&str> { if let Some(Tok::Word(w)) = toks.get(i) { Some(w.as_str()) } else { None } };
+    let word = |i: usize| -> Option<&str> {
+        if let Some(Tok::Word(w)) = toks.get(i) {
+            Some(w.as_str())
+        } else {
+            None
+        }
+    };
     let mut cur_report: Option<String> = None;
     let mut i = rs;
     while i < end {
-        let w = match word(i) { Some(w) => w.to_string(), None => { i += 1; continue; } };
-        if w == "PROCEDURE" { break; }
+        let w = match word(i) {
+            Some(w) => w.to_string(),
+            None => {
+                i += 1;
+                continue;
+            }
+        };
+        if w == "PROCEDURE" {
+            break;
+        }
         if w == "RD" {
             i += 1;
             let rname = word(i).map(String::from).unwrap_or_default();
             let file = report_file.get(&rname).cloned().unwrap_or_default();
             // RD geometry defaults: no PAGE LIMIT (page_limit 0 -> the page is flushed at its high-water line,
             // no blank padding -- matching cobc when no PAGE clause is given), heading 1, details from line 1.
-            let mut def = ReportDef { file, page_limit: 0, heading: 1, first_detail: 1, footing: 0, controls: Vec::new(), groups: Vec::new() };
+            let mut def = ReportDef {
+                file,
+                page_limit: 0,
+                heading: 1,
+                first_detail: 1,
+                footing: 0,
+                controls: Vec::new(),
+                groups: Vec::new(),
+            };
             i += 1;
             // Parse the RD clauses up to the terminating '.'.
             while i < end && !matches!(toks.get(i), Some(Tok::Dot)) {
                 match word(i) {
                     Some("PAGE") => {
                         i += 1;
-                        while matches!(word(i), Some("LIMIT" | "LIMITS" | "IS" | "ARE")) { i += 1; }
-                        if let Some(n) = word(i).and_then(|s| s.parse::<usize>().ok()) { def.page_limit = n; i += 1; }
-                        while matches!(word(i), Some("LINE" | "LINES")) { i += 1; }
+                        while matches!(word(i), Some("LIMIT" | "LIMITS" | "IS" | "ARE")) {
+                            i += 1;
+                        }
+                        if let Some(n) = word(i).and_then(|s| s.parse::<usize>().ok()) {
+                            def.page_limit = n;
+                            i += 1;
+                        }
+                        while matches!(word(i), Some("LINE" | "LINES")) {
+                            i += 1;
+                        }
                     }
-                    Some("HEADING") => { i += 1; if let Some(n) = word(i).and_then(|s| s.parse().ok()) { def.heading = n; i += 1; } }
-                    Some("FIRST") => { i += 1; while matches!(word(i), Some("DETAIL" | "DE")) { i += 1; } if let Some(n) = word(i).and_then(|s| s.parse().ok()) { def.first_detail = n; i += 1; } }
-                    Some("LAST") => { i += 1; while matches!(word(i), Some("DETAIL" | "DE" | "CONTROL" | "HEADING")) { i += 1; } if word(i).and_then(|s| s.parse::<usize>().ok()).is_some() { i += 1; } }
-                    Some("FOOTING") => { i += 1; if let Some(n) = word(i).and_then(|s| s.parse().ok()) { def.footing = n; i += 1; } }
+                    Some("HEADING") => {
+                        i += 1;
+                        if let Some(n) = word(i).and_then(|s| s.parse().ok()) {
+                            def.heading = n;
+                            i += 1;
+                        }
+                    }
+                    Some("FIRST") => {
+                        i += 1;
+                        while matches!(word(i), Some("DETAIL" | "DE")) {
+                            i += 1;
+                        }
+                        if let Some(n) = word(i).and_then(|s| s.parse().ok()) {
+                            def.first_detail = n;
+                            i += 1;
+                        }
+                    }
+                    Some("LAST") => {
+                        i += 1;
+                        while matches!(word(i), Some("DETAIL" | "DE" | "CONTROL" | "HEADING")) {
+                            i += 1;
+                        }
+                        if word(i).and_then(|s| s.parse::<usize>().ok()).is_some() {
+                            i += 1;
+                        }
+                    }
+                    Some("FOOTING") => {
+                        i += 1;
+                        if let Some(n) = word(i).and_then(|s| s.parse().ok()) {
+                            def.footing = n;
+                            i += 1;
+                        }
+                    }
                     Some("CONTROL" | "CONTROLS") => {
                         i += 1;
-                        while matches!(word(i), Some("IS" | "ARE")) { i += 1; }
+                        while matches!(word(i), Some("IS" | "ARE")) {
+                            i += 1;
+                        }
                         while let Some(c) = word(i) {
-                            if matches!(c, "PAGE" | "HEADING" | "FIRST" | "LAST" | "FOOTING") { break; }
+                            if matches!(c, "PAGE" | "HEADING" | "FIRST" | "LAST" | "FOOTING") {
+                                break;
+                            }
                             def.controls.push(c.to_string());
                             i += 1;
                         }
@@ -1826,7 +2299,10 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
             // optional group data-name (absent when the very next token is TYPE).
             let mut name: Option<String> = None;
             if let Some(n) = word(i) {
-                if n != "TYPE" { name = Some(n.to_string()); i += 1; }
+                if n != "TYPE" {
+                    name = Some(n.to_string());
+                    i += 1;
+                }
             }
             let mut gtype = GType::Detail;
             // scan the rest of the header line for the TYPE clause.
@@ -1834,25 +2310,75 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
             while i < end && !matches!(toks.get(i), Some(Tok::Dot)) {
                 if matches!(word(i), Some("TYPE")) {
                     i += 1;
-                    if matches!(word(i), Some("IS")) { i += 1; }
+                    if matches!(word(i), Some("IS")) {
+                        i += 1;
+                    }
                     gtype = match word(i) {
-                        Some("REPORT") if matches!(word(i + 1), Some("HEADING")) => { i += 2; GType::ReportHeading }
-                        Some("REPORT") if matches!(word(i + 1), Some("FOOTING")) => { i += 2; GType::ReportFooting }
-                        Some("RH") => { i += 1; GType::ReportHeading }
-                        Some("RF") => { i += 1; GType::ReportFooting }
-                        Some("PAGE") if matches!(word(i + 1), Some("HEADING")) => { i += 2; GType::PageHeading }
-                        Some("PAGE") if matches!(word(i + 1), Some("FOOTING")) => { i += 2; GType::PageFooting }
-                        Some("PH") => { i += 1; GType::PageHeading }
-                        Some("PF") => { i += 1; GType::PageFooting }
-                        Some("DETAIL") | Some("DE") => { i += 1; GType::Detail }
+                        Some("REPORT") if matches!(word(i + 1), Some("HEADING")) => {
+                            i += 2;
+                            GType::ReportHeading
+                        }
+                        Some("REPORT") if matches!(word(i + 1), Some("FOOTING")) => {
+                            i += 2;
+                            GType::ReportFooting
+                        }
+                        Some("RH") => {
+                            i += 1;
+                            GType::ReportHeading
+                        }
+                        Some("RF") => {
+                            i += 1;
+                            GType::ReportFooting
+                        }
+                        Some("PAGE") if matches!(word(i + 1), Some("HEADING")) => {
+                            i += 2;
+                            GType::PageHeading
+                        }
+                        Some("PAGE") if matches!(word(i + 1), Some("FOOTING")) => {
+                            i += 2;
+                            GType::PageFooting
+                        }
+                        Some("PH") => {
+                            i += 1;
+                            GType::PageHeading
+                        }
+                        Some("PF") => {
+                            i += 1;
+                            GType::PageFooting
+                        }
+                        Some("DETAIL") | Some("DE") => {
+                            i += 1;
+                            GType::Detail
+                        }
                         Some("CONTROL") if matches!(word(i + 1), Some("HEADING" | "CH")) => {
-                            i += 2; let c = word(i).filter(|c| *c != ".").map(String::from).unwrap_or_else(|| "FINAL".into()); if word(i).is_some() { i += 1; } GType::ControlHeading(c)
+                            i += 2;
+                            let c = word(i)
+                                .filter(|c| *c != ".")
+                                .map(String::from)
+                                .unwrap_or_else(|| "FINAL".into());
+                            if word(i).is_some() {
+                                i += 1;
+                            }
+                            GType::ControlHeading(c)
                         }
                         Some("CONTROL") if matches!(word(i + 1), Some("FOOTING" | "CF")) => {
-                            i += 2; let c = word(i).map(String::from).unwrap_or_else(|| "FINAL".into()); i += 1; GType::ControlFooting(c)
+                            i += 2;
+                            let c = word(i).map(String::from).unwrap_or_else(|| "FINAL".into());
+                            i += 1;
+                            GType::ControlFooting(c)
                         }
-                        Some("CH") => { i += 1; let c = word(i).map(String::from).unwrap_or_else(|| "FINAL".into()); i += 1; GType::ControlHeading(c) }
-                        Some("CF") => { i += 1; let c = word(i).map(String::from).unwrap_or_else(|| "FINAL".into()); i += 1; GType::ControlFooting(c) }
+                        Some("CH") => {
+                            i += 1;
+                            let c = word(i).map(String::from).unwrap_or_else(|| "FINAL".into());
+                            i += 1;
+                            GType::ControlHeading(c)
+                        }
+                        Some("CF") => {
+                            i += 1;
+                            let c = word(i).map(String::from).unwrap_or_else(|| "FINAL".into());
+                            i += 1;
+                            GType::ControlFooting(c)
+                        }
                         _ => GType::Detail,
                     };
                 } else {
@@ -1863,7 +2389,11 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
             i += 1; // past '.'
             if let Some(rep) = &cur_report {
                 if let Some(rd) = reports.get_mut(rep) {
-                    rd.groups.push(RGroup { name, gtype, lines: Vec::new() });
+                    rd.groups.push(RGroup {
+                        name,
+                        gtype,
+                        lines: Vec::new(),
+                    });
                 }
             }
             continue;
@@ -1874,9 +2404,16 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
         {
             // skip the level and optional name to LINE
             i += 1;
-            while !matches!(word(i), Some("LINE")) && i < end && !matches!(toks.get(i), Some(Tok::Dot)) { i += 1; }
+            while !matches!(word(i), Some("LINE"))
+                && i < end
+                && !matches!(toks.get(i), Some(Tok::Dot))
+            {
+                i += 1;
+            }
             i += 1; // past LINE
-            while matches!(word(i), Some("NUMBER" | "IS")) { i += 1; }
+            while matches!(word(i), Some("NUMBER" | "IS")) {
+                i += 1;
+            }
             let spec = if matches!(word(i), Some("PLUS")) {
                 i += 1;
                 LineSpec::Plus(word(i).and_then(|s| s.parse().ok()).unwrap_or(1))
@@ -1886,7 +2423,12 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
             i += 1;
             if let Some(rep) = &cur_report {
                 if let Some(rd) = reports.get_mut(rep) {
-                    if let Some(g) = rd.groups.last_mut() { g.lines.push(RLine { spec, elems: Vec::new() }); }
+                    if let Some(g) = rd.groups.last_mut() {
+                        g.lines.push(RLine {
+                            spec,
+                            elems: Vec::new(),
+                        });
+                    }
                 }
             }
             continue;
@@ -1894,24 +2436,68 @@ fn parse_report_section(toks: &[Tok], start: usize, end: usize, report_file: &Ha
         // A `COLUMN n ... PIC p ... {SOURCE id | VALUE lit | SUM id}` element.
         if w == "COLUMN" || w == "COL" {
             i += 1;
-            while matches!(word(i), Some("NUMBER" | "IS" | "PLUS")) { i += 1; }
+            while matches!(word(i), Some("NUMBER" | "IS" | "PLUS")) {
+                i += 1;
+            }
             let column: usize = word(i).and_then(|s| s.parse().ok()).unwrap_or(1);
             i += 1;
             let (mut pic, mut source, mut value, mut sum) = (String::new(), None, None, None);
             while i < end && !matches!(toks.get(i), Some(Tok::Dot)) {
                 match word(i) {
-                    Some("PIC" | "PICTURE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } if let Some(p) = word(i) { pic = p.trim_end_matches([',', ';']).to_string(); i += 1; } }
-                    Some("SOURCE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } if let Some(s) = word(i) { source = Some(s.to_string()); i += 1; } }
-                    Some("SUM") => { i += 1; if let Some(s) = word(i) { sum = Some(s.to_string()); i += 1; } }
-                    Some("VALUE") => { i += 1; if matches!(word(i), Some("IS")) { i += 1; } value = toks.get(i).cloned(); i += 1; }
+                    Some("PIC" | "PICTURE") => {
+                        i += 1;
+                        if matches!(word(i), Some("IS")) {
+                            i += 1;
+                        }
+                        if let Some(p) = word(i) {
+                            pic = p.trim_end_matches([',', ';']).to_string();
+                            i += 1;
+                        }
+                    }
+                    Some("SOURCE") => {
+                        i += 1;
+                        if matches!(word(i), Some("IS")) {
+                            i += 1;
+                        }
+                        if let Some(s) = word(i) {
+                            source = Some(s.to_string());
+                            i += 1;
+                        }
+                    }
+                    Some("SUM") => {
+                        i += 1;
+                        if let Some(s) = word(i) {
+                            sum = Some(s.to_string());
+                            i += 1;
+                        }
+                    }
+                    Some("VALUE") => {
+                        i += 1;
+                        if matches!(word(i), Some("IS")) {
+                            i += 1;
+                        }
+                        value = toks.get(i).cloned();
+                        i += 1;
+                    }
                     _ => i += 1,
                 }
             }
             if let Some(rep) = &cur_report {
                 if let Some(rd) = reports.get_mut(rep) {
                     if let Some(g) = rd.groups.last_mut() {
-                        if g.lines.is_empty() { g.lines.push(RLine { spec: LineSpec::Plus(1), elems: Vec::new() }); }
-                        g.lines.last_mut().unwrap().elems.push(RElem { column, pic, source, value, sum });
+                        if g.lines.is_empty() {
+                            g.lines.push(RLine {
+                                spec: LineSpec::Plus(1),
+                                elems: Vec::new(),
+                            });
+                        }
+                        g.lines.last_mut().unwrap().elems.push(RElem {
+                            column,
+                            pic,
+                            source,
+                            value,
+                            sum,
+                        });
                     }
                 }
             }
@@ -1957,14 +2543,27 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             }
             let start = match toks.get(k) {
                 Some(Tok::Word(w)) => w.clone(),
-                _ => return Err(RunError::Unsupported("RENAMES without a start data-name".into())),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "RENAMES without a start data-name".into(),
+                    ))
+                }
             };
             k += 1;
-            let end = if matches!(toks.get(k), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
+            let end = if matches!(toks.get(k), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH")
+            {
                 k += 1;
                 match toks.get(k) {
-                    Some(Tok::Word(w)) => { let e = w.clone(); k += 1; e }
-                    _ => return Err(RunError::Unsupported("RENAMES THRU without an end data-name".into())),
+                    Some(Tok::Word(w)) => {
+                        let e = w.clone();
+                        k += 1;
+                        e
+                    }
+                    _ => {
+                        return Err(RunError::Unsupported(
+                            "RENAMES THRU without an end data-name".into(),
+                        ))
+                    }
                 }
             } else {
                 start.clone()
@@ -1973,10 +2572,23 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 k += 1;
             }
             items.push(ProgItem {
-                level: 66, name: rname, pic: String::new(), value: None, occurs: 1, redefines: None,
-                condition: None, indexed_by: Vec::new(), usage: None, sign: (false, false),
-                extra_flags: 0, float_kind: None, odo_counter: None,
-                renames: Some((start, end)), sync: false, external: false, occurs_key: None,
+                level: 66,
+                name: rname,
+                pic: String::new(),
+                value: None,
+                occurs: 1,
+                redefines: None,
+                condition: None,
+                indexed_by: Vec::new(),
+                usage: None,
+                sign: (false, false),
+                extra_flags: 0,
+                float_kind: None,
+                odo_counter: None,
+                renames: Some((start, end)),
+                sync: false,
+                external: false,
+                occurs_key: None,
             });
             continue;
         }
@@ -1985,12 +2597,16 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             k += 1;
             let cname = match toks.get(k) {
                 Some(Tok::Word(w)) => w.clone(),
-                _ => return Err(RunError::Unsupported("expected condition-name after 88".into())),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "expected condition-name after 88".into(),
+                    ))
+                }
             };
             k += 1;
-            let parent = last_item
-                .clone()
-                .ok_or_else(|| RunError::Unsupported("88 condition-name with no parent item".into()))?;
+            let parent = last_item.clone().ok_or_else(|| {
+                RunError::Unsupported("88 condition-name with no parent item".into())
+            })?;
             // VALUE [IS] v [THRU h] [v2 [THRU h2] ...] .
             if matches!(toks.get(k), Some(Tok::Word(w)) if w == "VALUE" || w == "VALUES") {
                 k += 1;
@@ -2010,7 +2626,9 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     Some(Tok::Word(w)) if w == "WHEN" => {
                         k += 1;
                         for kw in ["SET", "TO", "FALSE"] {
-                            if matches!(toks.get(k), Some(Tok::Word(x)) if x == kw) { k += 1; }
+                            if matches!(toks.get(k), Some(Tok::Word(x)) if x == kw) {
+                                k += 1;
+                            }
                         }
                         if let Some(t) = toks.get(k) {
                             false_value = Some(tok_to_cond_word(t));
@@ -2020,7 +2638,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     Some(t) => {
                         let lo = tok_to_cond_word(t);
                         k += 1;
-                        if matches!(toks.get(k), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
+                        if matches!(toks.get(k), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH")
+                        {
                             k += 1;
                             if let Some(ht) = toks.get(k) {
                                 values.push(CondVal::Range(lo, tok_to_cond_word(ht)));
@@ -2058,12 +2677,18 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
         if lvl == 0 || (lvl > 49 && lvl != 77) {
             // 01..49 group/elementary levels and 77 (independent elementary) are supported; 66 (RENAMES)
             // and other forms fail closed.
-            return Err(RunError::Unsupported(format!("unsupported level number {level}")));
+            return Err(RunError::Unsupported(format!(
+                "unsupported level number {level}"
+            )));
         }
         k += 1;
         let name = match toks.get(k) {
             Some(Tok::Word(w)) => w.clone(),
-            _ => return Err(RunError::Unsupported("expected data name after a level number".into())),
+            _ => {
+                return Err(RunError::Unsupported(
+                    "expected data name after a level number".into(),
+                ))
+            }
         };
         last_item = Some(name.clone());
         k += 1;
@@ -2141,10 +2766,25 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                 Some(Tok::Word(w)) if w == "ASCENDING" || w == "DESCENDING" => {
                     occurs_key = Some(w == "ASCENDING");
                     k += 1;
-                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "KEY") { k += 1; }
-                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") { k += 1; }
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "KEY") {
+                        k += 1;
+                    }
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "IS") {
+                        k += 1;
+                    }
                     while let Some(Tok::Word(nm)) = toks.get(k) {
-                        if matches!(nm.as_str(), "PIC" | "PICTURE" | "VALUE" | "OCCURS" | "REDEFINES" | "TIMES" | "INDEXED" | "ASCENDING" | "DESCENDING") {
+                        if matches!(
+                            nm.as_str(),
+                            "PIC"
+                                | "PICTURE"
+                                | "VALUE"
+                                | "OCCURS"
+                                | "REDEFINES"
+                                | "TIMES"
+                                | "INDEXED"
+                                | "ASCENDING"
+                                | "DESCENDING"
+                        ) {
                             break;
                         }
                         k += 1;
@@ -2157,7 +2797,10 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                         k += 1;
                     }
                     while let Some(Tok::Word(nm)) = toks.get(k) {
-                        if matches!(nm.as_str(), "PIC" | "PICTURE" | "VALUE" | "OCCURS" | "REDEFINES" | "TIMES") {
+                        if matches!(
+                            nm.as_str(),
+                            "PIC" | "PICTURE" | "VALUE" | "OCCURS" | "REDEFINES" | "TIMES"
+                        ) {
                             break;
                         }
                         indexed.push(nm.clone());
@@ -2270,7 +2913,8 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     if matches!(toks.get(k), Some(Tok::Word(w)) if w == "WHEN") {
                         k += 1;
                     }
-                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "ZERO" || w == "ZEROS" || w == "ZEROES") {
+                    if matches!(toks.get(k), Some(Tok::Word(w)) if w == "ZERO" || w == "ZEROS" || w == "ZEROES")
+                    {
                         k += 1;
                     }
                 }
@@ -2283,10 +2927,21 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
                     // LEADING/TRAILING, then optional SEPARATE [CHARACTER], in any of the allowed orders.
                     while let Some(Tok::Word(w)) = toks.get(k) {
                         match w.as_str() {
-                            "LEADING" => { sign.1 = true; k += 1; }
-                            "TRAILING" => { sign.1 = false; k += 1; }
-                            "SEPARATE" => { sign.0 = true; k += 1; }
-                            "CHARACTER" => { k += 1; }
+                            "LEADING" => {
+                                sign.1 = true;
+                                k += 1;
+                            }
+                            "TRAILING" => {
+                                sign.1 = false;
+                                k += 1;
+                            }
+                            "SEPARATE" => {
+                                sign.0 = true;
+                                k += 1;
+                            }
+                            "CHARACTER" => {
+                                k += 1;
+                            }
                             _ => break,
                         }
                     }
@@ -2301,7 +2956,14 @@ fn parse_items(toks: &[Tok], start: usize, end: usize) -> Result<Vec<ProgItem>, 
             None => synthetic.map(|s| s.to_string()).unwrap_or_default(),
         };
         items.push(ProgItem {
-            level: lvl, name, pic, value, occurs, redefines, condition: None, indexed_by: indexed,
+            level: lvl,
+            name,
+            pic,
+            value,
+            occurs,
+            redefines,
+            condition: None,
+            indexed_by: indexed,
             usage,
             sign,
             extra_flags,
@@ -2344,7 +3006,11 @@ type LeafDesc = (String, usize, usize, Vec<(usize, usize)>);
 /// OCCURS, and each leaf's offset/dims are relative to that block. Immediate children are the items at the
 /// first deeper level; deeper items are consumed by recursion. (Scope: elementary leaves + sub-groups; the
 /// caller's gate keeps REDEFINES/ODO/SYNC/88 out of the subtree.)
-fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -> (usize, Vec<LeafDesc>) {
+fn nested_layout(
+    ws: &[ProgItem],
+    idx: usize,
+    fields: &HashMap<String, Field>,
+) -> (usize, Vec<LeafDesc>) {
     let it = &ws[idx];
     let is_group = it.pic.is_empty() && it.float_kind.is_none();
     if !is_group {
@@ -2352,7 +3018,10 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
         let occ = f.map(|f| f.occurs.max(1)).unwrap_or(it.occurs.max(1));
         let esz = f.map(|f| f.bytes.len() / occ).unwrap_or(0);
         if it.occurs > 1 {
-            (esz * it.occurs, vec![(it.name.clone(), 0, esz, vec![(it.occurs, esz)])])
+            (
+                esz * it.occurs,
+                vec![(it.name.clone(), 0, esz, vec![(it.occurs, esz)])],
+            )
         } else {
             (esz, vec![(it.name.clone(), 0, esz, vec![])])
         }
@@ -2411,11 +3080,14 @@ fn nested_layout(ws: &[ProgItem], idx: usize, fields: &HashMap<String, Field>) -
         }
         if it.occurs > 1 {
             let occ = it.occurs;
-            let leaves2 = leaves.into_iter().map(|(n, off, sz, mut dims)| {
-                let mut d = vec![(occ, elem)];
-                d.append(&mut dims);
-                (n, off, sz, d)
-            }).collect();
+            let leaves2 = leaves
+                .into_iter()
+                .map(|(n, off, sz, mut dims)| {
+                    let mut d = vec![(occ, elem)];
+                    d.append(&mut dims);
+                    (n, off, sz, d)
+                })
+                .collect();
             (elem * occ, leaves2)
         } else {
             (elem, leaves)
@@ -2439,7 +3111,11 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             fields.insert(
                 it.name.clone(),
                 Field {
-                    storage: Storage::Condition { parent: parent.clone(), values: values.clone(), false_value: false_value.clone() },
+                    storage: Storage::Condition {
+                        parent: parent.clone(),
+                        values: values.clone(),
+                        false_value: false_value.clone(),
+                    },
                     bytes: Vec::new(),
                     occurs: 1,
                     redefines: None,
@@ -2483,7 +3159,16 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         }
         let mut f = match it.float_kind {
             Some(kind) => make_float_field(kind, it.value.as_ref())?,
-            None => make_field(&it.pic, it.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, it.usage.unwrap_or(Usage::Display), it.sign, it.extra_flags)?,
+            None => make_field(
+                &it.pic,
+                it.value.as_ref(),
+                ctx.currency,
+                ctx.decimal_comma,
+                ctx.dialect,
+                it.usage.unwrap_or(Usage::Display),
+                it.sign,
+                it.extra_flags,
+            )?,
         };
         // Retain the compile-time ALPHABETIC category (PIC A, no X) for INITIALIZE ... REPLACING.
         if matches!(f.storage, Storage::Alpha(_)) && pic_is_alphabetic(&it.pic) {
@@ -2495,7 +3180,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             let elem = f.bytes.clone();
             // OCCURS DEPENDING ON: physical size is MAX; record (counter, element size) for the live length.
             if let Some(counter) = &it.odo_counter {
-                ODO_TABLES.with(|m| m.borrow_mut().insert(it.name.clone(), (counter.clone(), elem.len())));
+                ODO_TABLES.with(|m| {
+                    m.borrow_mut()
+                        .insert(it.name.clone(), (counter.clone(), elem.len()))
+                });
             }
             f.bytes = elem.repeat(it.occurs);
             f.occurs = it.occurs;
@@ -2521,7 +3209,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         if it.value.is_some() {
             let occ = f.occurs.max(1);
             let esz = f.bytes.len() / occ;
-            FIELD_VALUES.with(|m| m.borrow_mut().insert(it.name.clone(), f.bytes[..esz.min(f.bytes.len())].to_vec()));
+            FIELD_VALUES.with(|m| {
+                m.borrow_mut()
+                    .insert(it.name.clone(), f.bytes[..esz.min(f.bytes.len())].to_vec())
+            });
         }
         fields.insert(it.name.clone(), f);
     }
@@ -2534,7 +3225,8 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // skipped: their leaves are addressed via NESTED_LEAF, so the intermediate groups own no field.
     let mut consumed: std::collections::HashSet<usize> = std::collections::HashSet::new();
     for (i, it) in prog.ws.iter().enumerate() {
-        if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() || consumed.contains(&i) {
+        if it.level == 88 || !it.pic.is_empty() || it.float_kind.is_some() || consumed.contains(&i)
+        {
             continue;
         }
         let mut children = Vec::new();
@@ -2569,12 +3261,15 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                         let slack = align - rem;
                         let sname = format!("\u{3}SYNC{slack_n}");
                         slack_n += 1;
-                        fields.insert(sname.clone(), Field {
-                            storage: Storage::Alpha(alnum_attr()),
-                            bytes: vec![0u8; slack],
-                            occurs: 1,
-                            redefines: None,
-                        });
+                        fields.insert(
+                            sname.clone(),
+                            Field {
+                                storage: Storage::Alpha(alnum_attr()),
+                                bytes: vec![0u8; slack],
+                                occurs: 1,
+                                redefines: None,
+                            },
+                        );
                         children.push(sname);
                         offset += slack;
                     }
@@ -2582,7 +3277,11 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 // A REDEFINES child overlays its target at the SAME element offset and does NOT advance the
                 // element size; others are placed sequentially.
                 let this_off = match &sib.redefines {
-                    Some(tgt) => child_views.iter().find(|(n, _, _)| n == tgt).map(|(_, o, _)| *o).unwrap_or(offset),
+                    Some(tgt) => child_views
+                        .iter()
+                        .find(|(n, _, _)| n == tgt)
+                        .map(|(_, o, _)| *o)
+                        .unwrap_or(offset),
                     None => offset,
                 };
                 children.push(sib.name.clone());
@@ -2608,11 +3307,17 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             let mut buf = vec![b' '; block];
             for (name, off, sz, dims) in &leaves {
                 // the leaf's single-element VALUE/default image (pass-1 built it; an occurs leaf is tiled).
-                let img = fields.get(name).map(|f| {
-                    let occ = f.occurs.max(1);
-                    let esz = (f.bytes.len() / occ).max(*sz);
-                    f.bytes.get(..esz.min(f.bytes.len())).map(|s| s.to_vec()).unwrap_or_default()
-                }).unwrap_or_default();
+                let img = fields
+                    .get(name)
+                    .map(|f| {
+                        let occ = f.occurs.max(1);
+                        let esz = (f.bytes.len() / occ).max(*sz);
+                        f.bytes
+                            .get(..esz.min(f.bytes.len()))
+                            .map(|s| s.to_vec())
+                            .unwrap_or_default()
+                    })
+                    .unwrap_or_default();
                 let occs: Vec<usize> = dims.iter().map(|&(o, _)| o).collect();
                 let strides: Vec<usize> = dims.iter().map(|&(_, s)| s).collect();
                 let total: usize = occs.iter().product::<usize>().max(1);
@@ -2628,7 +3333,10 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                         buf[cell..cell + n].copy_from_slice(&img[..n]);
                     }
                 }
-                NESTED_LEAF.with(|m| m.borrow_mut().insert(name.clone(), (it.name.clone(), *off, *sz, dims.clone())));
+                NESTED_LEAF.with(|m| {
+                    m.borrow_mut()
+                        .insert(name.clone(), (it.name.clone(), *off, *sz, dims.clone()))
+                });
                 if let Some(cf) = fields.get_mut(name) {
                     cf.bytes.clear(); // the leaf is now a view into the parent buffer
                     cf.occurs = 1;
@@ -2639,10 +3347,15 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             // MAX (above) and element addressing uses the fixed MAX strides; the LIVE image is counter*stride
             // (so LENGTH / group reads truncate). The inner fixed dimension(s) are part of the stride.
             if let Some(counter) = &it.odo_counter {
-                ODO_TABLES.with(|m| m.borrow_mut().insert(it.name.clone(), (counter.clone(), stride)));
+                ODO_TABLES.with(|m| {
+                    m.borrow_mut()
+                        .insert(it.name.clone(), (counter.clone(), stride))
+                });
             }
             for (n, idx) in it.indexed_by.iter().enumerate() {
-                fields.entry(idx.clone()).or_insert_with(|| make_return_code(0));
+                fields
+                    .entry(idx.clone())
+                    .or_insert_with(|| make_return_code(0));
                 if n == 0 {
                     TABLE_INDEX.with(|m| m.borrow_mut().insert(it.name.clone(), idx.clone()));
                 }
@@ -2650,12 +3363,15 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             if let Some(asc) = it.occurs_key {
                 TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
             }
-            fields.insert(it.name.clone(), Field {
-                storage: Storage::Group { children },
-                bytes: buf,
-                occurs: it.occurs,
-                redefines: None,
-            });
+            fields.insert(
+                it.name.clone(),
+                Field {
+                    storage: Storage::Group { children },
+                    bytes: buf,
+                    occurs: it.occurs,
+                    redefines: None,
+                },
+            );
             continue;
         }
         // A group with OCCURS n: build the live INTERLEAVED buffer [elem]*n and demote children to strided
@@ -2664,10 +3380,17 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
         if it.occurs > 1 {
             // The element size, padded up to the largest SYNCHRONIZED alignment so every occurrence keeps its
             // SYNC fields aligned (cobc: an element with a 4-byte-SYNC field is padded to a multiple of 4).
-            let stride = if max_align > 1 { offset.div_ceil(max_align) * max_align } else { offset };
+            let stride = if max_align > 1 {
+                offset.div_ceil(max_align) * max_align
+            } else {
+                offset
+            };
             let mut elem_image = Vec::with_capacity(stride);
             for (cname, _o, csz) in &child_views {
-                let cb = fields.get(cname).map(|f| f.bytes.clone()).unwrap_or_else(|| vec![b' '; *csz]);
+                let cb = fields
+                    .get(cname)
+                    .map(|f| f.bytes.clone())
+                    .unwrap_or_else(|| vec![b' '; *csz]);
                 elem_image.extend_from_slice(&cb);
             }
             elem_image.resize(stride, b' ');
@@ -2675,17 +3398,25 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             GROUP_OCCURS.with(|m| m.borrow_mut().insert(it.name.clone(), (stride, it.occurs)));
             // OCCURS DEPENDING ON on the group: the live image length is counter*stride (built at MAX above).
             if let Some(counter) = &it.odo_counter {
-                ODO_TABLES.with(|m| m.borrow_mut().insert(it.name.clone(), (counter.clone(), stride)));
+                ODO_TABLES.with(|m| {
+                    m.borrow_mut()
+                        .insert(it.name.clone(), (counter.clone(), stride))
+                });
             }
             for (cname, coff, csz) in &child_views {
-                GROUP_CHILD.with(|m| m.borrow_mut().insert(cname.clone(), (it.name.clone(), *coff, *csz)));
+                GROUP_CHILD.with(|m| {
+                    m.borrow_mut()
+                        .insert(cname.clone(), (it.name.clone(), *coff, *csz))
+                });
                 if let Some(cf) = fields.get_mut(cname) {
                     cf.bytes.clear(); // the child is now a view into the parent buffer
                 }
             }
             // INDEXED BY / ASCENDING|DESCENDING KEY are keyed on the GROUP name (for SEARCH / SEARCH ALL).
             for (n, idx) in it.indexed_by.iter().enumerate() {
-                fields.entry(idx.clone()).or_insert_with(|| make_return_code(0));
+                fields
+                    .entry(idx.clone())
+                    .or_insert_with(|| make_return_code(0));
                 if n == 0 {
                     TABLE_INDEX.with(|m| m.borrow_mut().insert(it.name.clone(), idx.clone()));
                 }
@@ -2693,25 +3424,33 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             if let Some(asc) = it.occurs_key {
                 TABLE_KEY.with(|m| m.borrow_mut().insert(it.name.clone(), asc));
             }
-            fields.insert(it.name.clone(), Field {
-                storage: Storage::Group { children }, // children retained for category/DISPLAY resolution
-                bytes: buf,                            // AUTHORITATIVE interleaved buffer
-                occurs: it.occurs,                     // n (not 1) -- unblocks SEARCH's occurs > 1 gate
-                redefines: None,
-            });
+            fields.insert(
+                it.name.clone(),
+                Field {
+                    storage: Storage::Group { children }, // children retained for category/DISPLAY resolution
+                    bytes: buf,                           // AUTHORITATIVE interleaved buffer
+                    occurs: it.occurs, // n (not 1) -- unblocks SEARCH's occurs > 1 gate
+                    redefines: None,
+                },
+            );
             continue;
         }
-        fields.insert(it.name.clone(), Field {
-            storage: Storage::Group { children },
-            bytes: Vec::new(),
-            occurs: 1,
-            redefines: None,
-        });
+        fields.insert(
+            it.name.clone(),
+            Field {
+                storage: Storage::Group { children },
+                bytes: Vec::new(),
+                occurs: 1,
+                redefines: None,
+            },
+        );
     }
     // Third pass: `66 RENAMES start [THRU end]` regrouping -- an alias over the contiguous leaf fields
     // from `start` to `end`, modelled as a Group so reads/writes distribute across them.
     for it in &prog.ws {
-        let Some((start, end)) = &it.renames else { continue };
+        let Some((start, end)) = &it.renames else {
+            continue;
+        };
         let s_idx = prog.ws.iter().position(|x| &x.name == start);
         let e_idx = prog.ws.iter().position(|x| &x.name == end);
         if let (Some(s), Some(e)) = (s_idx, e_idx) {
@@ -2722,12 +3461,15 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                     && fields.get(&x.name).is_some_and(|f| !matches!(f.storage, Storage::Group { .. })))
                 .map(|x| x.name.clone())
                 .collect();
-            fields.insert(it.name.clone(), Field {
-                storage: Storage::Group { children },
-                bytes: Vec::new(),
-                occurs: 1,
-                redefines: None,
-            });
+            fields.insert(
+                it.name.clone(),
+                Field {
+                    storage: Storage::Group { children },
+                    bytes: Vec::new(),
+                    occurs: 1,
+                    redefines: None,
+                },
+            );
         }
     }
     // REDEFINES over a GROUP: register each authoritative descendant store of a redefining GROUP so reads /
@@ -2736,7 +3478,9 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
     // children that are a group-OCCURS buffer or an elementary leaf are mapped (the common shape); a deeper
     // plain sub-group is left as-is (no regression, just not aliased).
     for (i, it) in prog.ws.iter().enumerate() {
-        let Some(target) = &it.redefines else { continue };
+        let Some(target) = &it.redefines else {
+            continue;
+        };
         if !it.pic.is_empty() || it.float_kind.is_some() {
             continue; // only a GROUP redefinition propagates to descendants
         }
@@ -2755,9 +3499,17 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             }
             let csz = field_len(&sib.name, &fields);
             let is_group_occurs = group_occurs_lookup(&sib.name).is_some();
-            let is_leaf = fields.get(&sib.name).is_some_and(|f| !matches!(f.storage, Storage::Group { .. }));
-            if (is_group_occurs || is_leaf) && group_child_lookup(&sib.name).is_none() && nested_leaf_lookup(&sib.name).is_none() {
-                REDEF_VIEW.with(|m| m.borrow_mut().insert(sib.name.clone(), (target.clone(), off)));
+            let is_leaf = fields
+                .get(&sib.name)
+                .is_some_and(|f| !matches!(f.storage, Storage::Group { .. }));
+            if (is_group_occurs || is_leaf)
+                && group_child_lookup(&sib.name).is_none()
+                && nested_leaf_lookup(&sib.name).is_none()
+            {
+                REDEF_VIEW.with(|m| {
+                    m.borrow_mut()
+                        .insert(sib.name.clone(), (target.clone(), off))
+                });
             }
             // A nested REDEFINES child overlays at the same offset and does not advance it.
             if sib.redefines.is_none() {
@@ -2804,9 +3556,14 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
                 let mut off = 0usize;
                 for c in children {
                     let csz = field_len(c, &fields);
-                    let is_leaf = fields.get(c).is_some_and(|x| !matches!(x.storage, Storage::Group { .. }));
+                    let is_leaf = fields
+                        .get(c)
+                        .is_some_and(|x| !matches!(x.storage, Storage::Group { .. }));
                     let is_group_occurs = group_occurs_lookup(c).is_some();
-                    if (is_leaf || is_group_occurs) && group_child_lookup(c).is_none() && nested_leaf_lookup(c).is_none() {
+                    if (is_leaf || is_group_occurs)
+                        && group_child_lookup(c).is_none()
+                        && nested_leaf_lookup(c).is_none()
+                    {
                         REDEF_VIEW.with(|m| m.borrow_mut().insert(c.clone(), (owner.clone(), off)));
                     }
                     off += csz;
@@ -2828,13 +3585,26 @@ fn build_program_fields(prog: &ProgramDef, ctx: &Ctx) -> Result<HashMap<String, 
             .with(|m| m.borrow().get(&it.name).cloned())
             .unwrap_or_else(|| vec![0u8; size]);
         set_item_bytes(&it.name, bytes, &mut fields);
-        let cur = read_field(&fields, &it.name).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+        let cur = read_field(&fields, &it.name)
+            .ok()
+            .flatten()
+            .map(|f| f.bytes)
+            .unwrap_or_default();
         EXTERNAL_STORE.with(|m| m.borrow_mut().insert(it.name.clone(), cur));
     }
     // RETURN-CODE: the signed special register, initialised to 0 (modelled as S9(9) DISPLAY).
     fields.insert("RETURN-CODE".to_string(), make_return_code(0));
     // TALLY: the EXAMINE count register (unsigned 9(5) DISPLAY).
-    if let Ok(t) = make_field("9(5)", None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false), 0) {
+    if let Ok(t) = make_field(
+        "9(5)",
+        None,
+        ctx.currency,
+        ctx.decimal_comma,
+        ctx.dialect,
+        Usage::Display,
+        (false, false),
+        0,
+    ) {
         fields.entry("TALLY".to_string()).or_insert(t);
     }
     Ok(fields)
@@ -2853,7 +3623,11 @@ fn group_bytes(children: &[String], fields: &HashMap<String, Field>) -> Vec<u8> 
 
 /// The total byte length of a field (a group recurses through `read_field`).
 fn field_len(name: &str, fields: &HashMap<String, Field>) -> usize {
-    read_field(fields, name).ok().flatten().map(|f| f.bytes.len()).unwrap_or(0)
+    read_field(fields, name)
+        .ok()
+        .flatten()
+        .map(|f| f.bytes.len())
+        .unwrap_or(0)
 }
 
 /// Distribute `bytes` (space-padded/truncated to the group's total length) across its immediate children by
@@ -2865,7 +3639,10 @@ fn put_group_bytes(children: &[String], mut bytes: Vec<u8>, fields: &mut HashMap
     let mut off = 0;
     for (c, len) in children.iter().zip(lens) {
         let slice = bytes[off..off + len].to_vec();
-        let _ = write_field(fields, c, |f| { f.bytes = slice; Ok(()) });
+        let _ = write_field(fields, c, |f| {
+            f.bytes = slice;
+            Ok(())
+        });
         off += len;
     }
 }
@@ -2899,7 +3676,8 @@ fn dump_file_store(ctx: &Ctx, fields: &HashMap<String, Field>) {
             let mut out_bytes: Vec<u8> = Vec::new();
             let (org, var_seq) = match def {
                 Some(f) => {
-                    let widths: Vec<usize> = f.records.iter().map(|r| field_len(r, fields)).collect();
+                    let widths: Vec<usize> =
+                        f.records.iter().map(|r| field_len(r, fields)).collect();
                     let differing = widths.iter().any(|&w| w != widths[0]);
                     (f.org, f.varying_dep.is_some() || differing)
                 }
@@ -2979,7 +3757,9 @@ thread_local! {
 
 /// The current PROGRAM-ID (top of the program stack), empty outside any program body.
 fn current_program_id() -> String {
-    PROGRAM_STACK.with(|s| s.borrow().last().cloned()).unwrap_or_default()
+    PROGRAM_STACK
+        .with(|s| s.borrow().last().cloned())
+        .unwrap_or_default()
 }
 
 thread_local! {
@@ -3000,7 +3780,6 @@ pub fn set_source_file(path: &str) {
 pub fn set_command_line(args: &[String]) {
     COMMAND_LINE.with(|c| *c.borrow_mut() = args.to_vec());
 }
-
 
 thread_local! {
     /// The last raised arithmetic exception condition name (an `EC-SIZE-*`), STICKY: set when a SIZE ERROR
@@ -3024,7 +3803,9 @@ fn set_file_exception(code: &str, select: &str) {
 /// The `FUNCTION EXCEPTION-FILE` field: the last I/O `<status><SELECT>`, or `"00"` before any I/O.
 fn exception_file_field() -> (Vec<u8>, FieldAttr) {
     FILE_EXCEPTION.with(|c| match c.borrow().as_ref() {
-        Some((code, name)) => crate::intrinsic::cob_intr_exception_file(Some((code.as_bytes(), name.as_bytes()))),
+        Some((code, name)) => {
+            crate::intrinsic::cob_intr_exception_file(Some((code.as_bytes(), name.as_bytes())))
+        }
         None => crate::intrinsic::cob_intr_exception_file(None),
     })
 }
@@ -3058,7 +3839,11 @@ fn exception_location_field() -> (Vec<u8>, FieldAttr) {
 /// The `FUNCTION EXCEPTION-STATUS` field: the current condition name in a 31-byte field, or spaces.
 fn exception_status_field() -> (Vec<u8>, FieldAttr) {
     let code = EXCEPTION_CODE.with(|c| c.get());
-    crate::intrinsic::cob_intr_exception_status(if code.is_empty() { None } else { Some(code.as_bytes()) })
+    crate::intrinsic::cob_intr_exception_status(if code.is_empty() {
+        None
+    } else {
+        Some(code.as_bytes())
+    })
 }
 
 /// The integer-digit capacity of an arithmetic receiver (digit positions left of the implied decimal
@@ -3166,7 +3951,11 @@ fn subscripts(inner: &str) -> Vec<&str> {
     // subscript `C(I + 1)` contains a `+`/`-` operator -- keep it whole (it has no comma and is one
     // subscript) rather than splitting its spaces.
     if inner.contains(',') {
-        inner.split(',').map(|s| s.trim()).filter(|s| !s.is_empty()).collect()
+        inner
+            .split(',')
+            .map(|s| s.trim())
+            .filter(|s| !s.is_empty())
+            .collect()
     } else if inner.split_whitespace().any(|t| t == "+" || t == "-") {
         vec![inner.trim()]
     } else {
@@ -3177,10 +3966,17 @@ fn subscripts(inner: &str) -> Vec<&str> {
 /// Resolve a multi-dimension leaf reference `LEAF(s1,..,sk)` to its `(base_group, byte_offset, size)` in the
 /// base buffer. The subscript count must equal `dims.len()`; an out-of-range subscript follows the same
 /// EC-BOUND-SUBSCRIPT policy as [`table_element`] (caller returns a default element when checking is OFF).
-fn nested_addr(offset: usize, dims: &[(usize, usize)], subs: &[&str], fields: &HashMap<String, Field>) -> Result<Option<usize>, RunError> {
+fn nested_addr(
+    offset: usize,
+    dims: &[(usize, usize)],
+    subs: &[&str],
+    fields: &HashMap<String, Field>,
+) -> Result<Option<usize>, RunError> {
     if subs.len() != dims.len() {
         return Err(RunError::Unsupported(format!(
-            "multi-dimension leaf needs {} subscript(s), got {}", dims.len(), subs.len()
+            "multi-dimension leaf needs {} subscript(s), got {}",
+            dims.len(),
+            subs.len()
         )));
     }
     let mut off = offset;
@@ -3189,7 +3985,9 @@ fn nested_addr(offset: usize, dims: &[(usize, usize)], subs: &[&str], fields: &H
             .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
         if idx < 1 || idx as usize > occ {
             if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
-                return Err(RunError::Runtime(format!("subscript out of bounds: {idx} (maximum: {occ})")));
+                return Err(RunError::Runtime(format!(
+                    "subscript out of bounds: {idx} (maximum: {occ})"
+                )));
             }
             return Ok(None); // suppressed OOB -> caller substitutes a default element
         }
@@ -3212,7 +4010,11 @@ thread_local! {
 
 /// Set an item's bytes -- distributing into a group's leaves, or replacing an elementary field's bytes.
 fn set_item_bytes(name: &str, bytes: Vec<u8>, fields: &mut HashMap<String, Field>) {
-    if let Some(Field { storage: Storage::Group { children }, .. }) = fields.get(name) {
+    if let Some(Field {
+        storage: Storage::Group { children },
+        ..
+    }) = fields.get(name)
+    {
         let children = children.clone();
         put_group_bytes(&children, bytes, fields);
     } else if let Some(f) = fields.get_mut(name) {
@@ -3232,8 +4034,12 @@ fn sync_external_to_store(fields: &HashMap<String, Field>) {
 
 /// Copy every EXTERNAL item from the shared store into `fields` (the shared values in).
 fn sync_store_to_external(fields: &mut HashMap<String, Field>) {
-    let entries: Vec<(String, Vec<u8>)> =
-        EXTERNAL_STORE.with(|m| m.borrow().iter().map(|(k, v)| (k.clone(), v.clone())).collect());
+    let entries: Vec<(String, Vec<u8>)> = EXTERNAL_STORE.with(|m| {
+        m.borrow()
+            .iter()
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect()
+    });
     for (name, bytes) in entries {
         if fields.contains_key(&name) {
             set_item_bytes(&name, bytes, fields);
@@ -3259,7 +4065,11 @@ fn is_variable_length(name: &str, fields: &HashMap<String, Field>) -> bool {
     if odo_lookup(base).is_some() {
         return true;
     }
-    if let Some(Field { storage: Storage::Group { children }, .. }) = fields.get(base) {
+    if let Some(Field {
+        storage: Storage::Group { children },
+        ..
+    }) = fields.get(base)
+    {
         return children.iter().any(|c| is_variable_length(c, fields));
     }
     false
@@ -3288,36 +4098,57 @@ thread_local! {
 /// end)` token range of its handler paragraph (the first label after the USE statement, up to the next
 /// label or `END DECLARATIVES`), and return the token index where normal execution starts. No DECLARATIVES
 /// -> empty.
-fn parse_declaratives(proc: &[Tok], labels: &HashMap<String, usize>) -> (HashMap<String, (usize, usize)>, usize) {
+fn parse_declaratives(
+    proc: &[Tok],
+    labels: &HashMap<String, usize>,
+) -> (HashMap<String, (usize, usize)>, usize) {
     let mut use_procs = HashMap::new();
-    let decl = match proc.iter().position(|t| matches!(t, Tok::Word(w) if w == "DECLARATIVES")) {
+    let decl = match proc
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "DECLARATIVES"))
+    {
         Some(d) => d,
         None => return (use_procs, 0),
     };
-    let end_decl = find_seq_in(proc, &["END", "DECLARATIVES"], decl, proc.len()).unwrap_or(proc.len());
+    let end_decl =
+        find_seq_in(proc, &["END", "DECLARATIVES"], decl, proc.len()).unwrap_or(proc.len());
     let mut i = decl;
     while i < end_decl {
         if matches!(proc.get(i), Some(Tok::Word(w)) if w == "USE") {
             let mut j = i + 1;
-            while j < end_decl && !matches!(proc.get(j), Some(Tok::Word(w)) if w == "ON") { j += 1; }
+            while j < end_decl && !matches!(proc.get(j), Some(Tok::Word(w)) if w == "ON") {
+                j += 1;
+            }
             j += 1;
             let mut files = Vec::new();
             while j < end_decl && !matches!(proc.get(j), Some(Tok::Dot)) {
                 if let Some(Tok::Word(f)) = proc.get(j) {
-                    if !matches!(f.as_str(), "FILE" | "INPUT" | "OUTPUT" | "I-O" | "EXTEND") { files.push(f.clone()); }
+                    if !matches!(f.as_str(), "FILE" | "INPUT" | "OUTPUT" | "I-O" | "EXTEND") {
+                        files.push(f.clone());
+                    }
                 }
                 j += 1;
             }
             // handler range: the first label after the USE statement, to the next label or END DECLARATIVES.
             if let Some(&start) = labels.values().filter(|&&p| p > j).min() {
-                let end = labels.values().copied().filter(|&p| p > start).min().unwrap_or(end_decl).min(end_decl);
-                for f in files { use_procs.insert(f, (start, end)); }
+                let end = labels
+                    .values()
+                    .copied()
+                    .filter(|&p| p > start)
+                    .min()
+                    .unwrap_or(end_decl)
+                    .min(end_decl);
+                for f in files {
+                    use_procs.insert(f, (start, end));
+                }
             }
         }
         i += 1;
     }
     let mut start = end_decl + 2;
-    if matches!(proc.get(start), Some(Tok::Dot)) { start += 1; }
+    if matches!(proc.get(start), Some(Tok::Dot)) {
+        start += 1;
+    }
     (use_procs, start)
 }
 
@@ -3333,14 +4164,26 @@ fn para_range(p1: &str, p2: &str) -> Option<(usize, usize)> {
         let (paras, plen) = &*c.borrow();
         let start = paras.iter().find(|(n, _)| n == p1).map(|(_, s)| *s)?;
         let p2start = paras.iter().find(|(n, _)| n == p2).map(|(_, s)| *s)?;
-        let end = paras.iter().map(|(_, s)| *s).filter(|&s| s > p2start).min().unwrap_or(*plen);
+        let end = paras
+            .iter()
+            .map(|(_, s)| *s)
+            .filter(|&s| s > p2start)
+            .min()
+            .unwrap_or(*plen);
         Some((start, end))
     })
 }
 
 /// Run the statements in `toks[start..end)` (a performed paragraph range). Returns `Ok(true)` if a halt
 /// (STOP RUN / GOBACK / EXIT PROGRAM / pending GO TO) propagated out.
-fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+fn run_range(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
     let mut pos = start;
     while pos < end {
         if matches!(toks.get(pos), Some(Tok::Dot)) {
@@ -3352,8 +4195,12 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
             // NEXT SENTENCE: skip to the statement after the next period instead of halting.
             if ctx.next_sentence.get() {
                 ctx.next_sentence.set(false);
-                while pos < end && !matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
-                if pos < end { pos += 1; }
+                while pos < end && !matches!(toks.get(pos), Some(Tok::Dot)) {
+                    pos += 1;
+                }
+                if pos < end {
+                    pos += 1;
+                }
                 continue;
             }
             return Ok(true);
@@ -3377,21 +4224,40 @@ fn run_range(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String
 /// (STOP RUN / GOBACK / EXIT PROGRAM) or a GO TO that targets a label OUTSIDE the range ends the runner
 /// (the latter is non-conforming for a sort procedure -- control may not leave its range -- so its pending
 /// jump is dropped). Returns `true` if a real halt propagated.
-fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+fn run_range_goto(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
     // paragraph label -> token index, restricted to those inside this range (the legal GO TO targets here).
     let in_range: HashMap<String, usize> = CUR_PARAS.with(|c| {
-        c.borrow().0.iter().filter(|(_, ix)| *ix >= start && *ix < end).map(|(n, ix)| (n.clone(), *ix)).collect()
+        c.borrow()
+            .0
+            .iter()
+            .filter(|(_, ix)| *ix >= start && *ix < end)
+            .map(|(n, ix)| (n.clone(), *ix))
+            .collect()
     });
     let mut pos = start;
     let mut guard = 0u64;
     while pos < end {
-        if matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; continue; }
+        if matches!(toks.get(pos), Some(Tok::Dot)) {
+            pos += 1;
+            continue;
+        }
         let before = pos;
         if run_block(toks, &mut pos, fields, out, true, ctx)? {
             if ctx.next_sentence.get() {
                 ctx.next_sentence.set(false);
-                while pos < end && !matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
-                if pos < end { pos += 1; }
+                while pos < end && !matches!(toks.get(pos), Some(Tok::Dot)) {
+                    pos += 1;
+                }
+                if pos < end {
+                    pos += 1;
+                }
                 continue;
             }
             // A pending GO TO into this range resumes there; STOP/GOBACK/EXIT or an out-of-range jump ends it.
@@ -3401,7 +4267,9 @@ fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<S
                     ctx.goto.borrow_mut().take();
                     pos = ix;
                     guard += 1;
-                    if guard > 10_000_000 { return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into())); }
+                    if guard > 10_000_000 {
+                        return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into()));
+                    }
                     continue;
                 }
                 ctx.goto.borrow_mut().take(); // out-of-range jump from a sort procedure: drop it, end the runner
@@ -3413,7 +4281,9 @@ fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<S
             // progress guarantee (see run_range): never park on a scope ender.
             pos += 1;
         }
-        if matches!(toks.get(pos), Some(Tok::Dot)) { pos += 1; }
+        if matches!(toks.get(pos), Some(Tok::Dot)) {
+            pos += 1;
+        }
     }
     Ok(false)
 }
@@ -3426,10 +4296,22 @@ fn run_range_goto(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<S
 /// EXIT PROGRAM) and the EXIT PERFORM / EXIT PERFORM CYCLE signals also propagate. Returns
 /// `Ok(true)` when the range must NOT complete normally (the caller inspects `ctx.goto` /
 /// `perform_flow`); `Ok(false)` when the range ran to its end.
-fn run_range_perform(toks: &[Tok], start: usize, end: usize, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+fn run_range_perform(
+    toks: &[Tok],
+    start: usize,
+    end: usize,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
     // paragraph label -> token index, restricted to those inside this range (the legal in-range GO TO targets).
     let in_range: HashMap<String, usize> = CUR_PARAS.with(|c| {
-        c.borrow().0.iter().filter(|(_, ix)| *ix >= start && *ix < end).map(|(n, ix)| (n.clone(), *ix)).collect()
+        c.borrow()
+            .0
+            .iter()
+            .filter(|(_, ix)| *ix >= start && *ix < end)
+            .map(|(n, ix)| (n.clone(), *ix))
+            .collect()
     });
     let mut pos = start;
     let mut guard = 0u64;
@@ -3441,7 +4323,9 @@ fn run_range_perform(toks: &[Tok], start: usize, end: usize, fields: &mut HashMa
                     ctx.goto.borrow_mut().take();
                     pos = ix;
                     guard += 1;
-                    if guard > 10_000_000 { return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into())); }
+                    if guard > 10_000_000 {
+                        return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into()));
+                    }
                     continue;
                 }
             }
@@ -3488,16 +4372,21 @@ fn run_program_body(
             // NEXT SENTENCE: skip to the statement after the next period; not a real halt.
             if ctx.next_sentence.get() {
                 ctx.next_sentence.set(false);
-                while pos < proc.len() && !matches!(proc.get(pos), Some(Tok::Dot)) { pos += 1; }
-                if pos < proc.len() { pos += 1; }
+                while pos < proc.len() && !matches!(proc.get(pos), Some(Tok::Dot)) {
+                    pos += 1;
+                }
+                if pos < proc.len() {
+                    pos += 1;
+                }
                 continue;
             }
             // A pending GO TO is not a real halt: resume at the named paragraph. STOP/GOBACK/EXIT leave
             // `goto` clear and genuinely end the body.
             let target = ctx.goto.borrow_mut().take();
             if let Some(label) = target {
-                pos = *labels.get(&label)
-                    .ok_or_else(|| RunError::Unsupported(format!("GO TO unknown paragraph `{label}`")))?;
+                pos = *labels.get(&label).ok_or_else(|| {
+                    RunError::Unsupported(format!("GO TO unknown paragraph `{label}`"))
+                })?;
                 guard += 1;
                 if guard > 10_000_000 {
                     return Err(RunError::Runtime("GO TO exceeded 1e7 jumps".into()));
@@ -3511,12 +4400,24 @@ fn run_program_body(
         }
     }
     // restore the caller's paragraph table (normal return; an error aborts the whole run anyway).
-    CUR_PARAS.with(|c| { *c.borrow_mut() = prev_paras; });
-    CUR_PROC.with(|c| { *c.borrow_mut() = prev_proc; });
-    CUR_PROC_LINES.with(|c| { *c.borrow_mut() = prev_proc_lines; });
-    ALTERED.with(|c| { *c.borrow_mut() = prev_altered; });
-    USE_PROCS.with(|c| { *c.borrow_mut() = prev_use; });
-    PROGRAM_STACK.with(|s| { s.borrow_mut().pop(); });
+    CUR_PARAS.with(|c| {
+        *c.borrow_mut() = prev_paras;
+    });
+    CUR_PROC.with(|c| {
+        *c.borrow_mut() = prev_proc;
+    });
+    CUR_PROC_LINES.with(|c| {
+        *c.borrow_mut() = prev_proc_lines;
+    });
+    ALTERED.with(|c| {
+        *c.borrow_mut() = prev_altered;
+    });
+    USE_PROCS.with(|c| {
+        *c.borrow_mut() = prev_use;
+    });
+    PROGRAM_STACK.with(|s| {
+        s.borrow_mut().pop();
+    });
     Ok(())
 }
 
@@ -3529,25 +4430,33 @@ fn paragraph_labels(proc: &[Tok]) -> HashMap<String, usize> {
     let mut at_start = true;
     while i < proc.len() {
         match &proc[i] {
-            Tok::Dot => { at_start = true; i += 1; }
-            Tok::Word(w) if at_start
-                && matches!(proc.get(i + 1), Some(Tok::Dot))
-                && !STMT_VERBS.contains(&w.as_str())
-                && !SCOPE_ENDERS.contains(&w.as_str()) =>
+            Tok::Dot => {
+                at_start = true;
+                i += 1;
+            }
+            Tok::Word(w)
+                if at_start
+                    && matches!(proc.get(i + 1), Some(Tok::Dot))
+                    && !STMT_VERBS.contains(&w.as_str())
+                    && !SCOPE_ENDERS.contains(&w.as_str()) =>
             {
                 m.entry(w.clone()).or_insert(i + 2);
                 i += 2;
                 at_start = true;
             }
-            Tok::Word(w) if at_start
-                && matches!(proc.get(i + 1), Some(Tok::Word(s)) if s == "SECTION")
-                && matches!(proc.get(i + 2), Some(Tok::Dot)) =>
+            Tok::Word(w)
+                if at_start
+                    && matches!(proc.get(i + 1), Some(Tok::Word(s)) if s == "SECTION")
+                    && matches!(proc.get(i + 2), Some(Tok::Dot)) =>
             {
                 m.entry(w.clone()).or_insert(i + 3);
                 i += 3;
                 at_start = true;
             }
-            _ => { at_start = false; i += 1; }
+            _ => {
+                at_start = false;
+                i += 1;
+            }
         }
     }
     m
@@ -3555,22 +4464,95 @@ fn paragraph_labels(proc: &[Tok]) -> HashMap<String, usize> {
 
 /// Statement verbs that begin a new statement (so an operand list ends when one is seen).
 const STMT_VERBS: &[&str] = &[
-    "MOVE", "SET", "INITIALIZE", "INSPECT", "STRING", "UNSTRING", "ADD", "SUBTRACT", "MULTIPLY", "DIVIDE",
-    "COMPUTE", "DISPLAY", "IF", "PERFORM", "STOP", "CONTINUE", "ACCEPT", "GO", "EVALUATE", "SEARCH", "CALL",
-    "GOBACK", "EXIT", "CANCEL", "OPEN", "CLOSE", "READ", "WRITE", "REWRITE", "DELETE", "START", "UNLOCK",
-    "COMMIT", "ROLLBACK", "SORT", "MERGE", "RELEASE", "RETURN", "JSON", "XML", "TRANSFORM", "RAISE",
-    "VALIDATE", "DESTROY", "READY", "RESET", "EXHIBIT", "ALTER", "GENERATE", "INITIATE", "TERMINATE", "SUPPRESS", "EXAMINE", "ALLOCATE", "FREE", "USE",
+    "MOVE",
+    "SET",
+    "INITIALIZE",
+    "INSPECT",
+    "STRING",
+    "UNSTRING",
+    "ADD",
+    "SUBTRACT",
+    "MULTIPLY",
+    "DIVIDE",
+    "COMPUTE",
+    "DISPLAY",
+    "IF",
+    "PERFORM",
+    "STOP",
+    "CONTINUE",
+    "ACCEPT",
+    "GO",
+    "EVALUATE",
+    "SEARCH",
+    "CALL",
+    "GOBACK",
+    "EXIT",
+    "CANCEL",
+    "OPEN",
+    "CLOSE",
+    "READ",
+    "WRITE",
+    "REWRITE",
+    "DELETE",
+    "START",
+    "UNLOCK",
+    "COMMIT",
+    "ROLLBACK",
+    "SORT",
+    "MERGE",
+    "RELEASE",
+    "RETURN",
+    "JSON",
+    "XML",
+    "TRANSFORM",
+    "RAISE",
+    "VALIDATE",
+    "DESTROY",
+    "READY",
+    "RESET",
+    "EXHIBIT",
+    "ALTER",
+    "GENERATE",
+    "INITIATE",
+    "TERMINATE",
+    "SUPPRESS",
+    "EXAMINE",
+    "ALLOCATE",
+    "FREE",
+    "USE",
 ];
 /// Scope terminators that end a block.
-const SCOPE_ENDERS: &[&str] = &["ELSE", "END-IF", "END-PERFORM", "WHEN", "END-EVALUATE", "END-SEARCH", "END-READ", "END-RETURN"];
+const SCOPE_ENDERS: &[&str] = &[
+    "ELSE",
+    "END-IF",
+    "END-PERFORM",
+    "WHEN",
+    "END-EVALUATE",
+    "END-SEARCH",
+    "END-READ",
+    "END-RETURN",
+];
 
 /// Explicit per-verb scope terminators that cobrun does not NEED (each verb parses its operands/handlers up
 /// to a boundary or the period already), so a standalone `END-X` is a no-op: it bounds the preceding verb's
 /// operand scan and is then skipped. Unlike SCOPE_ENDERS it does NOT end the enclosing block.
 const STMT_ENDERS: &[&str] = &[
-    "END-DISPLAY", "END-ACCEPT", "END-STRING", "END-UNSTRING", "END-COMPUTE", "END-ADD", "END-SUBTRACT",
-    "END-MULTIPLY", "END-DIVIDE", "END-CALL", "END-WRITE", "END-REWRITE", "END-DELETE", "END-START",
-    "END-UNLOCK", "END-DISABLE",
+    "END-DISPLAY",
+    "END-ACCEPT",
+    "END-STRING",
+    "END-UNSTRING",
+    "END-COMPUTE",
+    "END-ADD",
+    "END-SUBTRACT",
+    "END-MULTIPLY",
+    "END-DIVIDE",
+    "END-CALL",
+    "END-WRITE",
+    "END-REWRITE",
+    "END-DELETE",
+    "END-START",
+    "END-UNLOCK",
+    "END-DISABLE",
 ];
 
 /// Is `verb` a statement verb the front-end accepts (a real dispatch, a verified no-op, or a
@@ -3580,15 +4562,70 @@ const STMT_ENDERS: &[&str] = &[
 fn known_statement_verb(verb: &str) -> bool {
     matches!(
         verb,
-        "DISPLAY" | "MOVE" | "SET" | "INITIALIZE" | "INSPECT" | "STRING" | "UNSTRING"
-            | "ACCEPT" | "OPEN" | "CLOSE" | "WRITE" | "REWRITE" | "DELETE" | "SORT" | "MERGE"
-            | "RELEASE" | "JSON" | "XML" | "TRANSFORM" | "EXAMINE" | "EXHIBIT" | "ALTER"
-            | "GENERATE" | "INITIATE" | "TERMINATE" | "SUPPRESS" | "RAISE" | "VALIDATE"
-            | "DESTROY" | "READY" | "RESET" | "UNLOCK" | "COMMIT" | "ROLLBACK" | "CALL"
-            | "STOP" | "SEND" | "RECEIVE" | "PURGE" | "ENABLE" | "DISABLE" | "MODIFY"
-            | "INQUIRE" | "ALLOCATE" | "FREE" | "ENTRY" | "ADD" | "SUBTRACT" | "MULTIPLY"
-            | "DIVIDE" | "COMPUTE" | "IF" | "PERFORM" | "EVALUATE" | "SEARCH" | "READ"
-            | "START" | "RETURN" | "GOBACK" | "EXIT" | "CONTINUE" | "NEXT" | "GO" | "CANCEL"
+        "DISPLAY"
+            | "MOVE"
+            | "SET"
+            | "INITIALIZE"
+            | "INSPECT"
+            | "STRING"
+            | "UNSTRING"
+            | "ACCEPT"
+            | "OPEN"
+            | "CLOSE"
+            | "WRITE"
+            | "REWRITE"
+            | "DELETE"
+            | "SORT"
+            | "MERGE"
+            | "RELEASE"
+            | "JSON"
+            | "XML"
+            | "TRANSFORM"
+            | "EXAMINE"
+            | "EXHIBIT"
+            | "ALTER"
+            | "GENERATE"
+            | "INITIATE"
+            | "TERMINATE"
+            | "SUPPRESS"
+            | "RAISE"
+            | "VALIDATE"
+            | "DESTROY"
+            | "READY"
+            | "RESET"
+            | "UNLOCK"
+            | "COMMIT"
+            | "ROLLBACK"
+            | "CALL"
+            | "STOP"
+            | "SEND"
+            | "RECEIVE"
+            | "PURGE"
+            | "ENABLE"
+            | "DISABLE"
+            | "MODIFY"
+            | "INQUIRE"
+            | "ALLOCATE"
+            | "FREE"
+            | "ENTRY"
+            | "ADD"
+            | "SUBTRACT"
+            | "MULTIPLY"
+            | "DIVIDE"
+            | "COMPUTE"
+            | "IF"
+            | "PERFORM"
+            | "EVALUATE"
+            | "SEARCH"
+            | "READ"
+            | "START"
+            | "RETURN"
+            | "GOBACK"
+            | "EXIT"
+            | "CONTINUE"
+            | "NEXT"
+            | "GO"
+            | "CANCEL"
     )
 }
 
@@ -3621,7 +4658,10 @@ fn run_block(
             Some(Tok::Word(w)) if SCOPE_ENDERS.contains(&w.as_str()) => return Ok(false),
             // A stray explicit scope terminator (END-DISPLAY, END-ADD, ...) -- the verb it closed already
             // ran (cobrun parses to a boundary), so skip it and continue this block.
-            Some(Tok::Word(w)) if STMT_ENDERS.contains(&w.as_str()) => { *pos += 1; continue; }
+            Some(Tok::Word(w)) if STMT_ENDERS.contains(&w.as_str()) => {
+                *pos += 1;
+                continue;
+            }
             Some(Tok::Word(w)) => {
                 // A paragraph label `NAME.` or section label `NAME SECTION.` in the run stream: skip it.
                 // The following period ends this (empty) block; the program-body loop resumes after it.
@@ -3701,7 +4741,10 @@ fn run_block(
                         // EXIT PROGRAM ends the body; EXIT PERFORM [CYCLE] signals the nearest PERFORM loop;
                         // a bare EXIT / EXIT PARAGRAPH / EXIT SECTION is a no-op (paragraph fall-through).
                         // (Peeked directly: PERFORM is a STMT_VERB, so collect_operands would stop before it.)
-                        let qual = toks.get(*pos).and_then(|t| match t { Tok::Word(w) => Some(w.as_str()), _ => None });
+                        let qual = toks.get(*pos).and_then(|t| match t {
+                            Tok::Word(w) => Some(w.as_str()),
+                            _ => None,
+                        });
                         match qual {
                             Some("PROGRAM") => {
                                 *pos += 1;
@@ -3711,7 +4754,8 @@ fn run_block(
                             }
                             Some("PERFORM") => {
                                 *pos += 1;
-                                let cycle = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "CYCLE");
+                                let cycle =
+                                    matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "CYCLE");
                                 if cycle {
                                     *pos += 1;
                                 }
@@ -3734,7 +4778,8 @@ fn run_block(
                     "NEXT" => {
                         // NEXT SENTENCE: control transfers to the statement after the next period. Consume
                         // SENTENCE, then (when executing) signal the paragraph loop and end this block.
-                        let is_sentence = matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "SENTENCE");
+                        let is_sentence =
+                            matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "SENTENCE");
                         if is_sentence {
                             *pos += 1;
                         }
@@ -3750,11 +4795,17 @@ fn run_block(
                         if exec {
                             // GO TO l1 l2 ... lN DEPENDING ON id: jump to the id-th label (1-based); if id
                             // is < 1 or > N, fall through to the next statement (no jump), per the standard.
-                            if let Some(dep) = rest.iter().position(|t| matches!(t, Tok::Word(w) if w == "DEPENDING")) {
-                                let labels: Vec<String> = rest[..dep].iter().filter_map(|t| match t {
-                                    Tok::Word(w) if w != "TO" => Some(w.clone()),
-                                    _ => None,
-                                }).collect();
+                            if let Some(dep) = rest
+                                .iter()
+                                .position(|t| matches!(t, Tok::Word(w) if w == "DEPENDING"))
+                            {
+                                let labels: Vec<String> = rest[..dep]
+                                    .iter()
+                                    .filter_map(|t| match t {
+                                        Tok::Word(w) if w != "TO" => Some(w.clone()),
+                                        _ => None,
+                                    })
+                                    .collect();
                                 let id = rest[dep + 1..].iter().find_map(|t| match t {
                                     Tok::Word(w) if w != "ON" => Some(w.clone()),
                                     _ => None,
@@ -3762,7 +4813,9 @@ fn run_block(
                                 let idx = id.as_deref().and_then(|w| resolve_int(w, fields));
                                 if let Some(i) = idx {
                                     if i >= 1 && (i as usize) <= labels.len() {
-                                        ctx.goto.borrow_mut().replace(labels[(i - 1) as usize].clone());
+                                        ctx.goto
+                                            .borrow_mut()
+                                            .replace(labels[(i - 1) as usize].clone());
                                         return Ok(true);
                                     }
                                 }
@@ -3772,13 +4825,22 @@ fn run_block(
                             // an ALTERed GO TO (this verb's position is in the override map) proceeds to the
                             // altered target; otherwise the written target.
                             let altered = ALTERED.with(|c| c.borrow().get(&verb_pos).cloned());
-                            let label = altered.or_else(|| rest.iter().find_map(|t| match t {
-                                Tok::Word(w) if w != "TO" => Some(w.clone()),
-                                _ => None,
-                            }));
+                            let label = altered.or_else(|| {
+                                rest.iter().find_map(|t| match t {
+                                    Tok::Word(w) if w != "TO" => Some(w.clone()),
+                                    _ => None,
+                                })
+                            });
                             match label {
-                                Some(l) => { ctx.goto.borrow_mut().replace(l); return Ok(true); }
-                                None => return Err(RunError::Unsupported("GO TO without a target paragraph".into())),
+                                Some(l) => {
+                                    ctx.goto.borrow_mut().replace(l);
+                                    return Ok(true);
+                                }
+                                None => {
+                                    return Err(RunError::Unsupported(
+                                        "GO TO without a target paragraph".into(),
+                                    ))
+                                }
                             }
                         }
                     }
@@ -3806,9 +4868,8 @@ fn run_block(
                                         .map(|p| p.is_initial)
                                         .unwrap_or(false);
                                     if active && !initial {
-                                        let line = CUR_PROC_LINES.with(|l| {
-                                            l.borrow().get(*pos).copied().unwrap_or(0)
-                                        });
+                                        let line = CUR_PROC_LINES
+                                            .with(|l| l.borrow().get(*pos).copied().unwrap_or(0));
                                         return Err(fatal_with_line(
                                             line,
                                             "attempt to CANCEL active program".to_string(),
@@ -3869,18 +4930,40 @@ fn run_block(
                                 Tok::Dot => break,
                                 Tok::Word(w) if w == "END-JSON" || w == "END-XML" => break,
                                 // ON EXCEPTION / NOT ON EXCEPTION begin the handler section (parsed below).
-                                Tok::Word(w) if w == "ON" && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "EXCEPTION") => break,
-                                Tok::Word(w) if w == "NOT" && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "ON") => break,
+                                Tok::Word(w)
+                                    if w == "ON"
+                                        && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "EXCEPTION") =>
+                                {
+                                    break
+                                }
+                                Tok::Word(w)
+                                    if w == "NOT"
+                                        && matches!(toks.get(*pos + 1), Some(Tok::Word(x)) if x == "ON") =>
+                                {
+                                    break
+                                }
                                 // GENERATE/PARSE are the JSON/XML sub-verbs, SUPPRESS a clause keyword -- none ends the statement here.
                                 // SUPPRESS / GENERATE / PARSE are sub-verbs/clauses, and WHEN is the SUPPRESS
                                 // ... WHEN <fig> qualifier (a SCOPE_ENDER elsewhere) -- none ends the statement.
-                                Tok::Word(w) if is_boundary(w) && !matches!(w.as_str(), "SUPPRESS" | "GENERATE" | "PARSE" | "WHEN") => break,
-                                _ => { stmt.push(t.clone()); *pos += 1; }
+                                Tok::Word(w)
+                                    if is_boundary(w)
+                                        && !matches!(
+                                            w.as_str(),
+                                            "SUPPRESS" | "GENERATE" | "PARSE" | "WHEN"
+                                        ) =>
+                                {
+                                    break
+                                }
+                                _ => {
+                                    stmt.push(t.clone());
+                                    *pos += 1;
+                                }
                             }
                         }
                         let on_exc = parse_ml_exception_handler(toks, pos, false);
                         let not_exc = parse_ml_exception_handler(toks, pos, true);
-                        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-JSON" || w == "END-XML") {
+                        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-JSON" || w == "END-XML")
+                        {
                             *pos += 1;
                         }
                         if exec {
@@ -3970,7 +5053,9 @@ fn collect_arith_operands(toks: &[Tok], pos: &mut usize) -> Vec<Tok> {
     while let Some(t) = toks.get(*pos) {
         match t {
             Tok::Dot => break,
-            Tok::Word(w) if w == "ON" || w == "NOT" || w.starts_with("END-") || is_boundary(w) => break,
+            Tok::Word(w) if w == "ON" || w == "NOT" || w.starts_with("END-") || is_boundary(w) => {
+                break
+            }
             _ => *pos += 1,
         }
     }
@@ -3982,15 +5067,20 @@ fn collect_arith_operands(toks: &[Tok], pos: &mut usize) -> Vec<Tok> {
 /// actually appears before the handler ends (see [`scoped_end_before`]); a bare/inline use (e.g.
 /// `PERFORM PASS` or a bare `READ f`) opens nothing.
 const SCOPE_OPENERS: &[&str] = &[
-    "IF", "EVALUATE", "PERFORM", "STRING", "UNSTRING", "SEARCH", "READ", "RETURN",
-    "SORT", "START", "REWRITE", "DELETE", "JSON", "XML", "CALL",
+    "IF", "EVALUATE", "PERFORM", "STRING", "UNSTRING", "SEARCH", "READ", "RETURN", "SORT", "START",
+    "REWRITE", "DELETE", "JSON", "XML", "CALL",
 ];
 
 /// Is the construct opened by `w` at `from` scoped — i.e. does a matching `END-<w>` appear before
 /// the handler would end (`handler_ends`)? Returns the matching `END-<w>` position, else `None` (an
 /// inline/imperative use such as `PERFORM PASS` or a bare `READ f`). Nested uses of the SAME verb
 /// (`PERFORM` inside `PERFORM … END-PERFORM`) are counted, so only the OUTERMOST `END-<w>` matches.
-fn scoped_end_before(toks: &[Tok], from: usize, w: &str, handler_ends: impl Fn(usize) -> bool) -> Option<usize> {
+fn scoped_end_before(
+    toks: &[Tok],
+    from: usize,
+    w: &str,
+    handler_ends: impl Fn(usize) -> bool,
+) -> Option<usize> {
     let end = format!("END-{w}");
     let mut depth = 1usize;
     let mut p = from + 1;
@@ -4055,7 +5145,9 @@ fn scan_handler_block(
                         break;
                     }
                 } else if SCOPE_OPENERS.contains(&w) {
-                    let handler_ends = |q: usize| other_clause(q) || matches!(toks.get(q), Some(Tok::Word(x)) if end_at(x));
+                    let handler_ends = |q: usize| {
+                        other_clause(q) || matches!(toks.get(q), Some(Tok::Word(x)) if end_at(x))
+                    };
                     if scoped_end_before(toks, p, w, handler_ends).is_some() {
                         stack.push(format!("END-{w}"));
                     }
@@ -4092,8 +5184,10 @@ fn parse_ml_exception_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Op
     }
     p += 2;
     let start = p;
-    let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
-        && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON");
+    let other = |q: usize| {
+        matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+            && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON")
+    };
     let end_at = |w: &str| w == "END-JSON" || w == "END-XML";
     p = scan_handler_block(toks, start, end_at, other);
     let block = toks[start..p].to_vec();
@@ -4101,7 +5195,12 @@ fn parse_ml_exception_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Op
     Some(block)
 }
 
-fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool, end_kw: &str) -> Option<Vec<Tok>> {
+fn parse_on_size_handler(
+    toks: &[Tok],
+    pos: &mut usize,
+    is_not: bool,
+    end_kw: &str,
+) -> Option<Vec<Tok>> {
     let mut p = *pos;
     if is_not {
         if !matches!(toks.get(p), Some(Tok::Word(w)) if w == "NOT") {
@@ -4117,16 +5216,16 @@ fn parse_on_size_handler(toks: &[Tok], pos: &mut usize, is_not: bool, end_kw: &s
     }
     p += 3;
     let start = p;
-    let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
-        && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON");
+    let other = |q: usize| {
+        matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+            && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON")
+    };
     let end_at = move |w: &str| w == end_kw;
     p = scan_handler_block(toks, start, end_at, other);
     let block = toks[start..p].to_vec();
     *pos = p;
     Some(block)
 }
-
-
 
 /// Parse an `[NOT] ON OVERFLOW <statements>` handler at `*pos` (the STRING overflow clause). Returns the
 /// handler tokens and advances `*pos`; `None` if the clause is absent.
@@ -4145,8 +5244,10 @@ fn parse_on_overflow_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Opt
     }
     p += 2;
     let start = p;
-    let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
-        && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON");
+    let other = |q: usize| {
+        matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+            && matches!(toks.get(q + 1), Some(Tok::Word(w)) if w == "ON")
+    };
     let end_at = |w: &str| w == "END-STRING" || w == "END-UNSTRING";
     p = scan_handler_block(toks, start, end_at, other);
     let block = toks[start..p].to_vec();
@@ -4156,7 +5257,12 @@ fn parse_on_overflow_handler(toks: &[Tok], pos: &mut usize, is_not: bool) -> Opt
 
 /// Run an arithmetic SIZE-ERROR handler block (its own statement sequence). Returns `true` on `STOP RUN` /
 /// `GOBACK` inside it.
-fn run_handler(block: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+fn run_handler(
+    block: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
     let mut p = 0;
     while p < block.len() {
         if matches!(block.get(p), Some(Tok::Dot)) {
@@ -4188,7 +5294,14 @@ fn exec_if(
     while let Some(t) = toks.get(*pos) {
         match t {
             Tok::Dot => break,
-            Tok::Word(w) if w == "THEN" || w == "NEXT" || STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+            Tok::Word(w)
+                if w == "THEN"
+                    || w == "NEXT"
+                    || STMT_VERBS.contains(&w.as_str())
+                    || SCOPE_ENDERS.contains(&w.as_str()) =>
+            {
+                break
+            }
             _ => {
                 cond.push(t.clone());
                 *pos += 1;
@@ -4198,7 +5311,11 @@ fn exec_if(
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THEN") {
         *pos += 1;
     }
-    let truth = if exec { eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? } else { false };
+    let truth = if exec {
+        eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())?
+    } else {
+        false
+    };
 
     // THEN branch.
     let halted = run_block(toks, pos, fields, out, exec && truth, ctx)?;
@@ -4252,7 +5369,8 @@ fn exec_evaluate(
             }
         }
     }
-    let is_true = subject.len() == 1 && matches!(&subject[0], Tok::Word(w) if w == "TRUE" || w == "ANY");
+    let is_true =
+        subject.len() == 1 && matches!(&subject[0], Tok::Word(w) if w == "TRUE" || w == "ANY");
     let subject_word = subject.first().map(tok_to_cond_word);
     let mut matched = false;
 
@@ -4325,17 +5443,28 @@ fn exec_search(
     let mut varying: Option<String> = None;
     if !is_all && matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "VARYING") {
         *pos += 1;
-        if let Some(Tok::Word(w)) = toks.get(*pos) { varying = Some(w.clone()); *pos += 1; }
+        if let Some(Tok::Word(w)) = toks.get(*pos) {
+            varying = Some(w.clone());
+            *pos += 1;
+        }
     }
-    let occurs = fields.get(&table).map(|f| f.occurs).filter(|&o| o > 1)
+    let occurs = fields
+        .get(&table)
+        .map(|f| f.occurs)
+        .filter(|&o| o > 1)
         .ok_or_else(|| RunError::Unsupported(format!("SEARCH `{table}` is not an OCCURS table")))?;
-    let idx_name = varying.or_else(|| table_index_lookup(&table))
-        .ok_or_else(|| RunError::Unsupported(format!("SEARCH `{table}`: no INDEXED BY or VARYING index")))?;
+    let idx_name = varying
+        .or_else(|| table_index_lookup(&table))
+        .ok_or_else(|| {
+            RunError::Unsupported(format!("SEARCH `{table}`: no INDEXED BY or VARYING index"))
+        })?;
     // parse (do not yet run) the optional AT END block and the WHEN clauses, recording token ranges.
     let mut at_end: Option<usize> = None;
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "AT") {
         *pos += 1;
-        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") { *pos += 1; }
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") {
+            *pos += 1;
+        }
         at_end = Some(*pos);
         let mut scan = *pos;
         let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
@@ -4349,7 +5478,10 @@ fn exec_search(
             match t {
                 Tok::Dot => break,
                 Tok::Word(w) if is_boundary(w) => break,
-                _ => { cond.push(t.clone()); *pos += 1; }
+                _ => {
+                    cond.push(t.clone());
+                    *pos += 1;
+                }
             }
         }
         let block_start = *pos;
@@ -4365,7 +5497,9 @@ fn exec_search(
         return Ok(false);
     }
     if is_all {
-        return exec_search_all(toks, &idx_name, &table, occurs, at_end, &whens, fields, out, ctx);
+        return exec_search_all(
+            toks, &idx_name, &table, occurs, at_end, &whens, fields, out, ctx,
+        );
     }
     // serial search: vary the index from its current value until a WHEN matches or it runs off the table.
     loop {
@@ -4373,7 +5507,9 @@ fn exec_search(
         if iv < 1 || iv as usize > occurs {
             if let Some(s) = at_end {
                 let mut p = s;
-                if run_block(toks, &mut p, fields, out, true, ctx)? { return Ok(true); }
+                if run_block(toks, &mut p, fields, out, true, ctx)? {
+                    return Ok(true);
+                }
             }
             return Ok(false);
         }
@@ -4383,7 +5519,11 @@ fn exec_search(
                 return run_block(toks, &mut p, fields, out, true, ctx);
             }
         }
-        let mv = vec![Tok::Word((iv + 1).to_string()), Tok::Word("TO".to_string()), Tok::Word(idx_name.clone())];
+        let mv = vec![
+            Tok::Word((iv + 1).to_string()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(idx_name.clone()),
+        ];
         exec_move(&mv, fields, ctx.decimal_comma)?;
     }
 }
@@ -4405,18 +5545,27 @@ fn exec_search_all(
     out: &mut Vec<u8>,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
-    let (cond, bstart) = whens.first().ok_or_else(|| RunError::Unsupported("SEARCH ALL: missing WHEN".into()))?;
+    let (cond, bstart) = whens
+        .first()
+        .ok_or_else(|| RunError::Unsupported("SEARCH ALL: missing WHEN".into()))?;
     let asc = TABLE_KEY
         .with(|m| m.borrow().get(table).copied())
-        .ok_or_else(|| RunError::Unsupported(format!("SEARCH ALL `{table}`: no ASCENDING/DESCENDING KEY")))?;
+        .ok_or_else(|| {
+            RunError::Unsupported(format!("SEARCH ALL `{table}`: no ASCENDING/DESCENDING KEY"))
+        })?;
     // the narrowing comparison: the first key's `=` turned into `<`.
-    let less = search_all_less(cond)
-        .ok_or_else(|| RunError::Unsupported("SEARCH ALL: WHEN must be a key equality (key = value)".into()))?;
+    let less = search_all_less(cond).ok_or_else(|| {
+        RunError::Unsupported("SEARCH ALL: WHEN must be a key equality (key = value)".into())
+    })?;
     let mut lo = 1i64;
     let mut hi = occurs as i64;
     while lo <= hi {
         let mid = lo + (hi - lo) / 2;
-        let mv = vec![Tok::Word(mid.to_string()), Tok::Word("TO".to_string()), Tok::Word(idx_name.to_string())];
+        let mv = vec![
+            Tok::Word(mid.to_string()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(idx_name.to_string()),
+        ];
         exec_move(&mv, fields, ctx.decimal_comma)?;
         if eval_cond(cond, fields, &ctx.switches, ctx.collation.as_ref())? {
             // match: the index is left at `mid`; run the WHEN imperative.
@@ -4444,7 +5593,10 @@ fn exec_search_all(
 /// Turn a `SEARCH ALL` WHEN condition into its first-key `<` narrowing comparison: take the first
 /// `AND`-segment and replace its equality (`=`/`EQUAL`) with `<`. `None` if the segment has no equality.
 fn search_all_less(cond: &[Tok]) -> Option<Vec<Tok>> {
-    let end = cond.iter().position(|t| matches!(t, Tok::Word(w) if w == "AND")).unwrap_or(cond.len());
+    let end = cond
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "AND"))
+        .unwrap_or(cond.len());
     let mut seg: Vec<Tok> = cond[..end].to_vec();
     for t in seg.iter_mut() {
         if let Tok::Word(w) = t {
@@ -4470,13 +5622,19 @@ fn evaluate_value_match(
     let col = ctx.collation.as_ref();
     let words: Vec<String> = object.iter().map(tok_to_cond_word).collect();
     if let Some(i) = words.iter().position(|w| w == "THRU" || w == "THROUGH") {
-        let lo = words.first().ok_or_else(|| RunError::Unsupported("THRU without lower bound".into()))?;
-        let hi = words.get(i + 1).ok_or_else(|| RunError::Unsupported("THRU without upper bound".into()))?;
+        let lo = words
+            .first()
+            .ok_or_else(|| RunError::Unsupported("THRU without lower bound".into()))?;
+        let hi = words
+            .get(i + 1)
+            .ok_or_else(|| RunError::Unsupported("THRU without upper bound".into()))?;
         let ge = cond_compare(subj, lo, fields, col)? != Ordering::Less;
         let le = cond_compare(subj, hi, fields, col)? != Ordering::Greater;
         return Ok(ge && le);
     }
-    let val = words.first().ok_or_else(|| RunError::Unsupported("WHEN without a value".into()))?;
+    let val = words
+        .first()
+        .ok_or_else(|| RunError::Unsupported("WHEN without a value".into()))?;
     Ok(cond_compare(subj, val, fields, col)? == Ordering::Equal)
 }
 
@@ -4497,7 +5655,9 @@ fn parse_varying_clauses(toks: &[Tok], pos: &mut usize) -> Result<Vec<VaryingCla
             *pos += 1;
             Ok(())
         } else {
-            Err(RunError::Unsupported(format!("PERFORM VARYING: expected {kw}")))
+            Err(RunError::Unsupported(format!(
+                "PERFORM VARYING: expected {kw}"
+            )))
         }
     };
     let mut clauses = Vec::new();
@@ -4505,18 +5665,26 @@ fn parse_varying_clauses(toks: &[Tok], pos: &mut usize) -> Result<Vec<VaryingCla
         *pos += 1; // skip the VARYING / AFTER keyword
         let id = match toks.get(*pos) {
             Some(Tok::Word(w)) => w.clone(),
-            _ => return Err(RunError::Unsupported("PERFORM VARYING: missing loop variable".into())),
+            _ => {
+                return Err(RunError::Unsupported(
+                    "PERFORM VARYING: missing loop variable".into(),
+                ))
+            }
         };
         *pos += 1;
         expect(toks, pos, "FROM")?;
         if !word(*pos) {
-            return Err(RunError::Unsupported("PERFORM VARYING: missing FROM value".into()));
+            return Err(RunError::Unsupported(
+                "PERFORM VARYING: missing FROM value".into(),
+            ));
         }
         let from = toks[*pos].clone();
         *pos += 1;
         expect(toks, pos, "BY")?;
         if !word(*pos) {
-            return Err(RunError::Unsupported("PERFORM VARYING: missing BY value".into()));
+            return Err(RunError::Unsupported(
+                "PERFORM VARYING: missing BY value".into(),
+            ));
         }
         let by = toks[*pos].clone();
         *pos += 1;
@@ -4530,7 +5698,11 @@ fn parse_varying_clauses(toks: &[Tok], pos: &mut usize) -> Result<Vec<VaryingCla
                     after = true;
                     break;
                 }
-                Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+                Tok::Word(w)
+                    if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) =>
+                {
+                    break
+                }
                 _ => {
                     cond.push(t.clone());
                     *pos += 1;
@@ -4605,7 +5777,9 @@ fn run_varying_nested(
         varying_step(id, by, fields)?;
         guard += 1;
         if guard > 1_000_000 {
-            return Err(RunError::Runtime("PERFORM VARYING exceeded 1e6 iterations".into()));
+            return Err(RunError::Runtime(
+                "PERFORM VARYING exceeded 1e6 iterations".into(),
+            ));
         }
     }
     Ok(false)
@@ -4635,7 +5809,9 @@ fn parse_with_test(toks: &[Tok], pos: &mut usize) -> bool {
 /// Set the VARYING loop variable to its FROM value.
 fn varying_set(name: &str, src: &Tok, fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
     let (b, a) = operand_value(src, fields)?;
-    let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+    let f = fields
+        .get_mut(name)
+        .ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
     move_into(f, &b, &a, false)
 }
 
@@ -4644,7 +5820,9 @@ fn varying_step(name: &str, by: &Tok, fields: &mut HashMap<String, Field>) -> Re
     let (idb, ida) = operand_value(&Tok::Word(name.to_string()), fields)?;
     let (byb, bya) = operand_value(by, fields)?;
     let (rb, ra) = wide_op(Op::Add, &idb, &ida, &byb, &bya)?;
-    let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+    let f = fields
+        .get_mut(name)
+        .ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
     store_arith_result(f, &rb, &ra, false, false)?;
     Ok(())
 }
@@ -4672,7 +5850,10 @@ fn exec_perform(
             let mut p2 = p1.clone();
             if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "THRU" || w == "THROUGH") {
                 *pos += 1;
-                if let Some(Tok::Word(w)) = toks.get(*pos) { p2 = w.clone(); *pos += 1; }
+                if let Some(Tok::Word(w)) = toks.get(*pos) {
+                    p2 = w.clone();
+                    *pos += 1;
+                }
             }
             // optional `WITH TEST {BEFORE|AFTER}` (applies to the UNTIL/VARYING condition placement).
             let test_after = parse_with_test(toks, pos);
@@ -4682,11 +5863,16 @@ fn exec_perform(
                 if !exec {
                     return Ok(false);
                 }
-                let (start, end) = para_range(&p1, &p2)
-                    .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
-                let mut body = |fields: &mut HashMap<String, Field>| run_range_perform(&body, start, end, fields, out, ctx);
+                let (start, end) = para_range(&p1, &p2).ok_or_else(|| {
+                    RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`"))
+                })?;
+                let mut body = |fields: &mut HashMap<String, Field>| {
+                    run_range_perform(&body, start, end, fields, out, ctx)
+                };
                 if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
-                    if let PerfFlow::Halt = perform_flow(ctx) { return Ok(true); } // EXIT PERFORM absorbed
+                    if let PerfFlow::Halt = perform_flow(ctx) {
+                        return Ok(true);
+                    } // EXIT PERFORM absorbed
                 }
                 return Ok(false);
             }
@@ -4699,37 +5885,71 @@ fn exec_perform(
                 while let Some(t) = toks.get(*pos) {
                     match t {
                         Tok::Dot => break,
-                        Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
-                        _ => { ucond.push(t.clone()); *pos += 1; }
+                        Tok::Word(w)
+                            if STMT_VERBS.contains(&w.as_str())
+                                || SCOPE_ENDERS.contains(&w.as_str()) =>
+                        {
+                            break
+                        }
+                        _ => {
+                            ucond.push(t.clone());
+                            *pos += 1;
+                        }
                     }
                 }
             } else if matches!(toks.get(*pos), Some(Tok::Word(_)))
                 && matches!(toks.get(*pos + 1), Some(Tok::Word(t)) if t == "TIMES")
             {
-                if let Some(Tok::Word(w)) = toks.get(*pos) { times = Some(w.clone()); }
+                if let Some(Tok::Word(w)) = toks.get(*pos) {
+                    times = Some(w.clone());
+                }
                 *pos += 2;
             }
             if !exec {
                 return Ok(false);
             }
-            let (start, end) = para_range(&p1, &p2)
-                .ok_or_else(|| RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`")))?;
+            let (start, end) = para_range(&p1, &p2).ok_or_else(|| {
+                RunError::Unsupported(format!("PERFORM: unknown paragraph `{p1}`/`{p2}`"))
+            })?;
             if until {
                 let mut guard = 0u32;
                 loop {
-                    if !test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
-                    if run_range_perform(&body, start, end, fields, out, ctx)? {
-                        match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => {}, PerfFlow::Halt => return Ok(true) }
+                    if !test_after
+                        && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())?
+                    {
+                        break;
                     }
-                    if test_after && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())? { break; }
+                    if run_range_perform(&body, start, end, fields, out, ctx)? {
+                        match perform_flow(ctx) {
+                            PerfFlow::Break => break,
+                            PerfFlow::Continue => {}
+                            PerfFlow::Halt => return Ok(true),
+                        }
+                    }
+                    if test_after
+                        && eval_cond(&ucond, fields, &ctx.switches, ctx.collation.as_ref())?
+                    {
+                        break;
+                    }
                     guard += 1;
-                    if guard > 1_000_000 { return Err(RunError::Runtime("PERFORM UNTIL exceeded 1e6 iterations".into())); }
+                    if guard > 1_000_000 {
+                        return Err(RunError::Runtime(
+                            "PERFORM UNTIL exceeded 1e6 iterations".into(),
+                        ));
+                    }
                 }
             } else {
-                let n = times.as_deref().and_then(|w| resolve_int(w, fields)).unwrap_or(1);
+                let n = times
+                    .as_deref()
+                    .and_then(|w| resolve_int(w, fields))
+                    .unwrap_or(1);
                 for _ in 0..n.max(0) {
                     if run_range_perform(&body, start, end, fields, out, ctx)? {
-                        match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => continue, PerfFlow::Halt => return Ok(true) }
+                        match perform_flow(ctx) {
+                            PerfFlow::Break => break,
+                            PerfFlow::Continue => continue,
+                            PerfFlow::Halt => return Ok(true),
+                        }
                     }
                 }
             }
@@ -4751,7 +5971,9 @@ fn exec_perform(
                 run_block(toks, &mut p, fields, out, true, ctx)
             };
             if run_varying_nested(&clauses, 0, fields, ctx, test_after, &mut body)? {
-                if let PerfFlow::Halt = perform_flow(ctx) { return Ok(true); } // EXIT PERFORM absorbed
+                if let PerfFlow::Halt = perform_flow(ctx) {
+                    return Ok(true);
+                } // EXIT PERFORM absorbed
             }
         }
         *pos = body_end;
@@ -4769,7 +5991,11 @@ fn exec_perform(
         while let Some(t) = toks.get(*pos) {
             match t {
                 Tok::Dot => break,
-                Tok::Word(w) if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) => break,
+                Tok::Word(w)
+                    if STMT_VERBS.contains(&w.as_str()) || SCOPE_ENDERS.contains(&w.as_str()) =>
+                {
+                    break
+                }
                 _ => {
                     cond.push(t.clone());
                     *pos += 1;
@@ -4810,27 +6036,38 @@ fn exec_perform(
                 }
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
-                    match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => {}, PerfFlow::Halt => return Ok(true) }
+                    match perform_flow(ctx) {
+                        PerfFlow::Break => break,
+                        PerfFlow::Continue => {}
+                        PerfFlow::Halt => return Ok(true),
+                    }
                 }
                 if test_after && eval_cond(&cond, fields, &ctx.switches, ctx.collation.as_ref())? {
                     break;
                 }
                 guard += 1;
                 if guard > 1_000_000 {
-                    return Err(RunError::Runtime("PERFORM UNTIL exceeded 1e6 iterations".into()));
+                    return Err(RunError::Runtime(
+                        "PERFORM UNTIL exceeded 1e6 iterations".into(),
+                    ));
                 }
             }
         } else {
             // No times_word -> the bare inline form runs the body once.
             let n = match &times_word {
-                Some(w) => resolve_int(w, fields)
-                    .ok_or_else(|| RunError::Unsupported("PERFORM TIMES count not an integer".into()))?,
+                Some(w) => resolve_int(w, fields).ok_or_else(|| {
+                    RunError::Unsupported("PERFORM TIMES count not an integer".into())
+                })?,
                 None => 1,
             };
             for _ in 0..n {
                 let mut p = body_start;
                 if run_block(toks, &mut p, fields, out, true, ctx)? {
-                    match perform_flow(ctx) { PerfFlow::Break => break, PerfFlow::Continue => continue, PerfFlow::Halt => return Ok(true) }
+                    match perform_flow(ctx) {
+                        PerfFlow::Break => break,
+                        PerfFlow::Continue => continue,
+                        PerfFlow::Halt => return Ok(true),
+                    }
                 }
             }
         }
@@ -4917,14 +6154,24 @@ fn eval_cond(
     let mut ctx: Option<(String, Rel, bool)> = None;
     let r = cond_or(&words, &mut p, fields, sw, col, &mut ctx)?;
     if p != words.len() {
-        return Err(RunError::Unsupported(format!("trailing tokens in condition at {}", words[p])));
+        return Err(RunError::Unsupported(format!(
+            "trailing tokens in condition at {}",
+            words[p]
+        )));
     }
     Ok(r)
 }
 
 type CondCtx = Option<(String, Rel, bool)>;
 
-fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>, ctx: &mut CondCtx) -> Result<bool, RunError> {
+fn cond_or(
+    w: &[String],
+    p: &mut usize,
+    f: &HashMap<String, Field>,
+    sw: &SwitchEnv,
+    col: Option<&[u8; 256]>,
+    ctx: &mut CondCtx,
+) -> Result<bool, RunError> {
     let mut acc = cond_and(w, p, f, sw, col, ctx)?;
     while w.get(*p).map(|s| s.as_str()) == Some("OR") {
         *p += 1;
@@ -4934,7 +6181,14 @@ fn cond_or(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchE
     Ok(acc)
 }
 
-fn cond_and(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>, ctx: &mut CondCtx) -> Result<bool, RunError> {
+fn cond_and(
+    w: &[String],
+    p: &mut usize,
+    f: &HashMap<String, Field>,
+    sw: &SwitchEnv,
+    col: Option<&[u8; 256]>,
+    ctx: &mut CondCtx,
+) -> Result<bool, RunError> {
     let mut acc = cond_rel(w, p, f, sw, col, ctx)?;
     while w.get(*p).map(|s| s.as_str()) == Some("AND") {
         *p += 1;
@@ -4957,17 +6211,23 @@ fn parse_relop(w: &[String], p: &mut usize) -> Option<Rel> {
         "<>" => Rel::Ne,
         "GREATER" => {
             *p += 1;
-            if w.get(*p).map(|s| s.as_str()) == Some("THAN") { *p += 1; }
+            if w.get(*p).map(|s| s.as_str()) == Some("THAN") {
+                *p += 1;
+            }
             return Some(Rel::Gt);
         }
         "LESS" => {
             *p += 1;
-            if w.get(*p).map(|s| s.as_str()) == Some("THAN") { *p += 1; }
+            if w.get(*p).map(|s| s.as_str()) == Some("THAN") {
+                *p += 1;
+            }
             return Some(Rel::Lt);
         }
         "EQUAL" => {
             *p += 1;
-            if w.get(*p).map(|s| s.as_str()) == Some("TO") { *p += 1; }
+            if w.get(*p).map(|s| s.as_str()) == Some("TO") {
+                *p += 1;
+            }
             return Some(Rel::Eq);
         }
         _ => return None,
@@ -4980,14 +6240,23 @@ fn parse_relop(w: &[String], p: &mut usize) -> Option<Rel> {
 /// valid sign (C/D positive/negative, F unsigned). A field built by the runtime is always valid; this guards
 /// raw/REDEFINES'd bytes.
 fn packed_is_numeric(bytes: &[u8]) -> bool {
-    let Some((last, rest)) = bytes.split_last() else { return false };
+    let Some((last, rest)) = bytes.split_last() else {
+        return false;
+    };
     if rest.iter().any(|b| (b >> 4) > 9 || (b & 0x0f) > 9) {
         return false;
     }
     (last >> 4) <= 9 && matches!(last & 0x0f, 0x0c | 0x0d | 0x0f)
 }
 
-fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &SwitchEnv, col: Option<&[u8; 256]>, ctx: &mut CondCtx) -> Result<bool, RunError> {
+fn cond_rel(
+    w: &[String],
+    p: &mut usize,
+    f: &HashMap<String, Field>,
+    sw: &SwitchEnv,
+    col: Option<&[u8; 256]>,
+    ctx: &mut CondCtx,
+) -> Result<bool, RunError> {
     // A leading NOT negates the whole relation term (`IF NOT A = 5`; abbreviated `... AND NOT 2`).
     let mut neg = false;
     if w.get(*p).map(|s| s.as_str()) == Some("NOT") {
@@ -4999,13 +6268,19 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
         let mut q = *p;
         if let Some(op) = parse_relop(w, &mut q) {
             let subject = ctx.as_ref().unwrap().0.clone();
-            let object = w.get(q).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
+            let object = w
+                .get(q)
+                .ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?
+                .clone();
             *p = q + 1;
             *ctx = Some((subject.clone(), op, neg));
             return Ok(rel_holds(op, cond_compare(&subject, &object, f, col)?, neg));
         }
     }
-    let left = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?.clone();
+    let left = w
+        .get(*p)
+        .ok_or_else(|| RunError::Unsupported("condition: missing left operand".into()))?
+        .clone();
     *p += 1;
     // A UPSI switch condition-name (SPECIAL-NAMES `SWITCH-n ON/OFF STATUS IS <name>`): its truth is the
     // switch's state matching the declared ON/OFF sense. No relational operator follows.
@@ -5013,11 +6288,17 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
         return Ok(neg ^ (sw.states.borrow()[idx] == on));
     }
     // An 88-level condition-name: true when its parent's value equals any listed value or range.
-    if let Some(Field { storage: Storage::Condition { parent, values, .. }, .. }) = f.get(&left) {
+    if let Some(Field {
+        storage: Storage::Condition { parent, values, .. },
+        ..
+    }) = f.get(&left)
+    {
         let mut hit = false;
         for v in values {
             hit = match v {
-                CondVal::Single(val) => cond_compare(parent, val, f, col)? == std::cmp::Ordering::Equal,
+                CondVal::Single(val) => {
+                    cond_compare(parent, val, f, col)? == std::cmp::Ordering::Equal
+                }
                 CondVal::Range(lo, hi) => {
                     cond_compare(parent, lo, f, col)? != std::cmp::Ordering::Less
                         && cond_compare(parent, hi, f, col)? != std::cmp::Ordering::Greater
@@ -5055,9 +6336,13 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     // chosen by the operand's usage: binary is always numeric; packed validates its nibbles; a signed DISPLAY
     // uses the trailing-overpunch rule; everything else is the plain digit-string test.
     if let Some(classw) = w.get(*p).map(|s| s.as_str()) {
-        if matches!(classw, "NUMERIC" | "ALPHABETIC" | "ALPHABETIC-UPPER" | "ALPHABETIC-LOWER") {
+        if matches!(
+            classw,
+            "NUMERIC" | "ALPHABETIC" | "ALPHABETIC-UPPER" | "ALPHABETIC-LOWER"
+        ) {
             *p += 1;
-            let field = read_field(f, &left)?.ok_or_else(|| RunError::UndefinedName(left.clone()))?;
+            let field =
+                read_field(f, &left)?.ok_or_else(|| RunError::UndefinedName(left.clone()))?;
             let bytes = &field.bytes;
             let base = match classw {
                 "ALPHABETIC" => crate::class::is_alphabetic(bytes),
@@ -5070,8 +6355,12 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
                         _ if a.flags & crate::attr::COB_FLAG_HAVE_SIGN != 0 => {
                             // a signed DISPLAY field -- pick the predicate for its sign convention.
                             match (a.sign_separate(), a.sign_leading()) {
-                                (true, true) => crate::class::is_numeric_sign_leading_separate(bytes),
-                                (true, false) => crate::class::is_numeric_sign_trailing_separate(bytes),
+                                (true, true) => {
+                                    crate::class::is_numeric_sign_leading_separate(bytes)
+                                }
+                                (true, false) => {
+                                    crate::class::is_numeric_sign_trailing_separate(bytes)
+                                }
                                 (false, true) => crate::class::is_numeric_sign_leading(bytes),
                                 (false, false) => crate::class::is_numeric_signed_trailing(bytes),
                             }
@@ -5086,7 +6375,10 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     }
     // Full relation `subject [IS] [NOT] op object`.
     if let Some(op) = parse_relop(w, p) {
-        let right = w.get(*p).ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?.clone();
+        let right = w
+            .get(*p)
+            .ok_or_else(|| RunError::Unsupported("condition: missing right operand".into()))?
+            .clone();
         *p += 1;
         *ctx = Some((left.clone(), op, neg));
         return Ok(rel_holds(op, cond_compare(&left, &right, f, col)?, neg));
@@ -5094,9 +6386,16 @@ fn cond_rel(w: &[String], p: &mut usize, f: &HashMap<String, Field>, sw: &Switch
     // Bare-object abbreviation `object` -- reuse the last subject AND operator (`A = 1 OR 2`); a local NOT
     // toggles the reused negation (`A NOT = 1 AND 2` -> both negated).
     if let Some((subject, op, prev_neg)) = ctx.clone() {
-        return Ok(rel_holds(op, cond_compare(&subject, &left, f, col)?, prev_neg ^ neg));
+        return Ok(rel_holds(
+            op,
+            cond_compare(&subject, &left, f, col)?,
+            prev_neg ^ neg,
+        ));
     }
-    Err(RunError::Unsupported("condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)".into()))
+    Err(RunError::Unsupported(
+        "condition: unrecognized relational operator (expected = > < >= <= <> GREATER LESS EQUAL)"
+            .into(),
+    ))
 }
 
 /// Apply a relational operator to a comparison ordering, then the negation flag.
@@ -5110,7 +6409,11 @@ fn rel_holds(op: Rel, ord: std::cmp::Ordering, neg: bool) -> bool {
         Rel::Ge => ord != Less,
         Rel::Le => ord != Greater,
     };
-    if neg { !base } else { base }
+    if neg {
+        !base
+    } else {
+        base
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -5126,7 +6429,12 @@ enum Rel {
 /// Compare two condition operands (each a word: a field name, a numeric literal, or a `\u{1}`-marked
 /// string literal). If BOTH resolve to numeric values, compare by value; otherwise compare the display
 /// bytes space-padded to equal length (the COBOL alphanumeric collation).
-fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 256]>) -> Result<std::cmp::Ordering, RunError> {
+fn cond_compare(
+    a: &str,
+    b: &str,
+    f: &HashMap<String, Field>,
+    col: Option<&[u8; 256]>,
+) -> Result<std::cmp::Ordering, RunError> {
     let na = cond_numeric(a, f);
     let nb = cond_numeric(b, f);
     if let (Some(da), Some(db)) = (&na, &nb) {
@@ -5138,12 +6446,35 @@ fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 
     // `ALL <literal>` repeat operand (\u{2}unit) fills it by cycling the unit bytes.
     let (fa, fb) = (figurative_kind(a), figurative_kind(b));
     let (ra, rb) = (a.strip_prefix('\u{5}'), b.strip_prefix('\u{5}'));
-    let ba = if fa.is_some() || ra.is_some() { Vec::new() } else { cond_bytes(a, f) };
-    let bb = if fb.is_some() || rb.is_some() { Vec::new() } else { cond_bytes(b, f) };
+    let ba = if fa.is_some() || ra.is_some() {
+        Vec::new()
+    } else {
+        cond_bytes(a, f)
+    };
+    let bb = if fb.is_some() || rb.is_some() {
+        Vec::new()
+    } else {
+        cond_bytes(b, f)
+    };
     let width = ba.len().max(bb.len()).max(1);
-    let repeat = |u: &str, w: usize| -> Vec<u8> { let u = u.as_bytes(); if u.is_empty() { vec![b' '; w] } else { (0..w).map(|i| u[i % u.len()]).collect() } };
-    let sa = match (fa, ra) { (Some(fig), _) => vec![fig_byte(fig); width], (_, Some(u)) => repeat(u, width), _ => ba };
-    let sb = match (fb, rb) { (Some(fig), _) => vec![fig_byte(fig); width], (_, Some(u)) => repeat(u, width), _ => bb };
+    let repeat = |u: &str, w: usize| -> Vec<u8> {
+        let u = u.as_bytes();
+        if u.is_empty() {
+            vec![b' '; w]
+        } else {
+            (0..w).map(|i| u[i % u.len()]).collect()
+        }
+    };
+    let sa = match (fa, ra) {
+        (Some(fig), _) => vec![fig_byte(fig); width],
+        (_, Some(u)) => repeat(u, width),
+        _ => ba,
+    };
+    let sb = match (fb, rb) {
+        (Some(fig), _) => vec![fig_byte(fig); width],
+        (_, Some(u)) => repeat(u, width),
+        _ => bb,
+    };
     let n = sa.len().max(sb.len());
     for i in 0..n {
         let ca = sa.get(i).copied().unwrap_or(b' ');
@@ -5164,7 +6495,9 @@ fn cond_compare(a: &str, b: &str, f: &HashMap<String, Field>, col: Option<&[u8; 
 /// while a packed (COMP-3) / binary (COMP/COMP-5/COMP-X) field is normalised to zoned DISPLAY via
 /// `cob_move` first (so a comparison like `IF comp-3-field = 5` is correct, not a raw-byte mis-read).
 fn field_to_decimal(field: &Field) -> Option<Decimal> {
-    let Storage::Numeric(a) = &field.storage else { return None };
+    let Storage::Numeric(a) = &field.storage else {
+        return None;
+    };
     if a.field_type == COB_TYPE_NUMERIC_DISPLAY {
         return source_to_decimal(&field.bytes, a).ok();
     }
@@ -5185,7 +6518,11 @@ fn cond_numeric(w: &str, f: &HashMap<String, Field>) -> Option<Decimal> {
     }
     // figurative ZERO is the numeric value 0 (so `IF n = ZERO` compares numerically for any numeric usage).
     if matches!(w, "ZERO" | "ZEROS" | "ZEROES") {
-        return Some(Decimal { negative: false, digits: vec![0], scale: 0 });
+        return Some(Decimal {
+            negative: false,
+            digits: vec![0],
+            scale: 0,
+        });
     }
     parse_num_literal(w).ok()
 }
@@ -5220,7 +6557,11 @@ fn dec_cmp(a: &Decimal, b: &Decimal) -> std::cmp::Ordering {
     let na = a.negative && !za;
     let nb = b.negative && !zb;
     if na != nb {
-        return if na { Ordering::Less } else { Ordering::Greater };
+        return if na {
+            Ordering::Less
+        } else {
+            Ordering::Greater
+        };
     }
     // align scales, compare integer magnitudes as digit strings.
     let scale = a.scale.max(b.scale).max(0);
@@ -5273,8 +6614,17 @@ fn make_field(
             // JUSTIFIED / BLANK WHEN ZERO ride in the attr flags (COB_FLAG_JUSTIFIED / _BLANK_ZERO).
             let mut attr = pf.attr;
             attr.flags |= extra_flags;
-            let storage = if is_alpha { Storage::Alpha(attr) } else { Storage::Numeric(attr) };
-            let mut field = Field { storage, bytes, occurs: 1, redefines: None };
+            let storage = if is_alpha {
+                Storage::Alpha(attr)
+            } else {
+                Storage::Numeric(attr)
+            };
+            let mut field = Field {
+                storage,
+                bytes,
+                occurs: 1,
+                redefines: None,
+            };
             // Uninitialized binary/packed/float zero is NOT '0' chars (0x30...) -- that decodes as garbage.
             // Encode a proper zero for those usages (cobc default-inits COMP/COMP-3/COMP-1/2 to numeric 0).
             let non_display_numeric = !is_alpha && attr.field_type != COB_TYPE_NUMERIC_DISPLAY;
@@ -5291,7 +6641,8 @@ fn make_field(
             }
             Ok(field)
         }
-        Err(crate::pic::PicError::UnsupportedSymbol(_)) | Err(crate::pic::PicError::MixedCategory) => {
+        Err(crate::pic::PicError::UnsupportedSymbol(_))
+        | Err(crate::pic::PicError::MixedCategory) => {
             // treat as numeric-edited: storage is the edited image, sized by edited_size. A non-'$'
             // CURRENCY SIGN is normalized to '$' for the size computation (the width is the same; the
             // '.'/',' role swap of DECIMAL-POINT IS COMMA is width-invariant too).
@@ -5299,12 +6650,25 @@ fn make_field(
             let pic_norm: String = if cur == '$' {
                 pic.to_string()
             } else {
-                pic.chars().map(|c| if c.to_ascii_uppercase() == cur { '$' } else { c }).collect()
+                pic.chars()
+                    .map(|c| {
+                        if c.to_ascii_uppercase() == cur {
+                            '$'
+                        } else {
+                            c
+                        }
+                    })
+                    .collect()
             };
-            let size = edited_size(&pic_norm).map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
+            let size = edited_size(&pic_norm)
+                .map_err(|e| RunError::Unsupported(format!("PIC {pic}: {e:?}")))?;
             let blank_zero = extra_flags & crate::attr::COB_FLAG_BLANK_ZERO != 0;
-            let mut field =
-                Field { storage: Storage::Edited(pic.to_string(), currency, decimal_comma, blank_zero), bytes: vec![b' '; size], occurs: 1, redefines: None };
+            let mut field = Field {
+                storage: Storage::Edited(pic.to_string(), currency, decimal_comma, blank_zero),
+                bytes: vec![b' '; size],
+                occurs: 1,
+                redefines: None,
+            };
             if let Some(v) = value {
                 init_value(&mut field, v)?;
             }
@@ -5376,22 +6740,51 @@ fn init_value(field: &mut Field, v: &Tok) -> Result<(), RunError> {
     }
 }
 
-/// Parse a numeric literal like `-12.34` into a [`Decimal`].
+/// Parse a numeric literal like `-12.34` (or E-notation `+1.23E-2`, `1.7014118E+38`) into a
+/// [`Decimal`]. The E form's exponent is folded into the scale/digits exactly like the runtime's
+/// decimal parse of a floating literal (cob_decimal.c), so `12.3E-2` == `0.123`.
 fn parse_num_literal(w: &str) -> Result<Decimal, RunError> {
     let negative = w.starts_with('-');
-    let body = w.trim_start_matches(['+', '-']);
+    let mut body = w.trim_start_matches(['+', '-']).to_string();
+    // E-notation: split off the exponent, then fold it into the scale (a positive exponent shifts
+    // the decimal point right, a negative one left).
+    let mut exp: i64 = 0;
+    if let Some(e) = body.find(['e', 'E']) {
+        // a trailing 'E' with no exponent digits is not a numeric literal
+        let after = body.as_bytes().get(e + 1).copied();
+        let neg_exp = after == Some(b'-');
+        let exp_part = body[e + 1..].trim_start_matches(['+', '-']);
+        // parse the exponent magnitude
+        let mag: i64 = exp_part
+            .parse()
+            .map_err(|_| RunError::Unsupported(format!("not a numeric literal: {w}")))?;
+        exp = if neg_exp { -mag } else { mag };
+        body = body[..e].to_string();
+    }
     if body.is_empty() || !body.chars().all(|c| c.is_ascii_digit() || c == '.') {
         return Err(RunError::Unsupported(format!("not a numeric literal: {w}")));
     }
-    let (int_p, frac_p) = body.split_once('.').unwrap_or((body, ""));
+    let (int_p, frac_p) = body.split_once('.').unwrap_or((body.as_str(), ""));
     let mut digits: Vec<u8> = Vec::new();
     for c in int_p.chars().chain(frac_p.chars()) {
         if c.is_ascii_digit() {
             digits.push(c as u8 - b'0');
         }
     }
-    let scale = frac_p.chars().filter(|c| c.is_ascii_digit()).count() as i16;
-    Ok(Decimal { negative, digits, scale })
+    let mut scale = frac_p.chars().filter(|c| c.is_ascii_digit()).count() as i64 - exp;
+    // a positive exponent shifts the point right: pad trailing zeros so scale never goes negative
+    // (`1.7014118E+38` -> digits with 30 trailing zeros, scale 0).
+    if scale < 0 {
+        for _ in 0..(-scale) {
+            digits.push(0);
+        }
+        scale = 0;
+    }
+    Ok(Decimal {
+        negative,
+        digits,
+        scale: scale as i16,
+    })
 }
 
 /// Whether a decimal's magnitude is zero (all digits zero).
@@ -5428,7 +6821,8 @@ fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
             field.bytes = if blank && dec_is_zero(dec) {
                 vec![b' '; field.bytes.len()]
             } else {
-                encode_edited_cfg(&pic, dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?
+                encode_edited_cfg(&pic, dec, cur, dc)
+                    .map_err(|e| RunError::Runtime(format!("{e:?}")))?
             };
             Ok(())
         }
@@ -5442,7 +6836,8 @@ fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
             }
             let (src, src_attr) = decimal_as_display(dec);
             let mut dst = field.bytes.clone();
-            cob_move(&src, &src_attr, &mut dst, &attr).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            cob_move(&src, &src_attr, &mut dst, &attr)
+                .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             field.bytes = dst;
             Ok(())
         }
@@ -5451,8 +6846,12 @@ fn store_decimal(field: &mut Field, dec: &Decimal) -> Result<(), RunError> {
             let s: Vec<u8> = dec.digits.iter().map(|d| d + b'0').collect();
             store_alnum(field, &s)
         }
-        Storage::Group { .. } => Err(RunError::Unsupported("a group MOVE is distributed across its leaves by write_field".into())),
-        Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
+        Storage::Group { .. } => Err(RunError::Unsupported(
+            "a group MOVE is distributed across its leaves by write_field".into(),
+        )),
+        Storage::Condition { .. } => Err(RunError::Unsupported(
+            "cannot MOVE into an 88 condition-name".into(),
+        )),
     }
 }
 
@@ -5504,7 +6903,11 @@ fn round_decimal(dec: &Decimal, target_scale: i16) -> Decimal {
     if kept.is_empty() {
         kept.push(0);
     }
-    Decimal { negative: dec.negative, digits: kept, scale: ts }
+    Decimal {
+        negative: dec.negative,
+        digits: kept,
+        scale: ts,
+    }
 }
 
 /// Render a [`Decimal`] as a zoned `USAGE DISPLAY` source `(bytes, attr)` with a trailing sign
@@ -5530,9 +6933,26 @@ fn decimal_as_display(dec: &Decimal) -> (Vec<u8>, FieldAttr) {
 /// + 9 zero-padded digits, e.g. `+000000042`, reproduced by [`display_return_code`].)
 fn make_return_code(value: i64) -> Field {
     let attr = lit_num_attr(9, 0, true);
-    let mut f = Field { storage: Storage::Numeric(attr), bytes: vec![b'0'; 9], occurs: 1, redefines: None };
-    let mag: Vec<u8> = value.unsigned_abs().to_string().bytes().map(|b| b - b'0').collect();
-    let _ = store_decimal(&mut f, &Decimal { negative: value < 0, digits: mag, scale: 0 });
+    let mut f = Field {
+        storage: Storage::Numeric(attr),
+        bytes: vec![b'0'; 9],
+        occurs: 1,
+        redefines: None,
+    };
+    let mag: Vec<u8> = value
+        .unsigned_abs()
+        .to_string()
+        .bytes()
+        .map(|b| b - b'0')
+        .collect();
+    let _ = store_decimal(
+        &mut f,
+        &Decimal {
+            negative: value < 0,
+            digits: mag,
+            scale: 0,
+        },
+    );
     f
 }
 
@@ -5543,7 +6963,11 @@ fn display_return_code(f: &Field) -> Vec<u8> {
         Storage::Numeric(a) => source_to_decimal(&f.bytes, a).ok(),
         _ => None,
     }
-    .unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
+    .unwrap_or(Decimal {
+        negative: false,
+        digits: vec![0],
+        scale: 0,
+    });
     let mag_full: String = dec.digits.iter().map(|d| (d + b'0') as char).collect();
     let mag = mag_full.trim_start_matches('0');
     let mag = if mag.is_empty() { "0" } else { mag };
@@ -5573,12 +6997,17 @@ fn store_alnum(field: &mut Field, src: &[u8]) -> Result<(), RunError> {
         Storage::Alpha(attr) | Storage::Numeric(attr) => {
             let attr = *attr;
             let mut dst = field.bytes.clone();
-            cob_move(src, &src_attr, &mut dst, &attr).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+            cob_move(src, &src_attr, &mut dst, &attr)
+                .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
             field.bytes = dst;
             Ok(())
         }
-        Storage::Group { .. } => Err(RunError::Unsupported("a group MOVE is distributed across its leaves by write_field".into())),
-        Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
+        Storage::Group { .. } => Err(RunError::Unsupported(
+            "a group MOVE is distributed across its leaves by write_field".into(),
+        )),
+        Storage::Condition { .. } => Err(RunError::Unsupported(
+            "cannot MOVE into an 88 condition-name".into(),
+        )),
     }
 }
 
@@ -5678,9 +7107,15 @@ fn exec_call(
     };
     // Program-ids are case-insensitive: the registry keys are uppercased at parse, but a `CALL "literal"`
     // keeps the literal's case, so match the name as-is and then uppercased.
-    let callee = ctx.programs.get(&name).or_else(|| ctx.programs.get(&name.to_uppercase())).ok_or_else(|| {
-        RunError::Unsupported(format!("CALL \"{name}\": not a contained program (external CALL is a boundary)"))
-    })?;
+    let callee = ctx
+        .programs
+        .get(&name)
+        .or_else(|| ctx.programs.get(&name.to_uppercase()))
+        .ok_or_else(|| {
+            RunError::Unsupported(format!(
+                "CALL \"{name}\": not a contained program (external CALL is a boundary)"
+            ))
+        })?;
 
     // Parse the USING argument list with optional BY REFERENCE/CONTENT modifiers.
     let mut args: Vec<(String, bool)> = Vec::new(); // (caller field name, by_reference)
@@ -5714,7 +7149,7 @@ fn exec_call(
         build_program_fields(callee, ctx)?
     };
     sync_store_to_external(&mut cfields); // the callee sees the shared EXTERNAL values (fresh or persisted)
-    // RETURN-CODE is shared: seed the callee with the caller's current value.
+                                          // RETURN-CODE is shared: seed the callee with the caller's current value.
     if let Some(rc) = fields.get("RETURN-CODE") {
         cfields.insert("RETURN-CODE".to_string(), rc.clone());
     }
@@ -5775,7 +7210,11 @@ fn map_arith_err(e: ArithError) -> RunError {
 
 /// `COMPUTE` -- returns `true` if a SIZE ERROR (e.g. divide-by-zero) occurred, in which case the receiver
 /// is left UNCHANGED (the move never runs). The caller dispatches the `ON SIZE ERROR` handler.
-fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+fn exec_compute(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    has_handler: bool,
+) -> Result<bool, RunError> {
     match exec_compute_inner(stmt, fields, has_handler) {
         Ok(size_err) => Ok(size_err),
         Err(RunError::SizeError) => {
@@ -5786,8 +7225,14 @@ fn exec_compute(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: 
     }
 }
 
-fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
-    let eq = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "="))
+fn exec_compute_inner(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    has_handler: bool,
+) -> Result<bool, RunError> {
+    let eq = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "="))
         .ok_or_else(|| RunError::Unsupported("COMPUTE without '='".into()))?;
     // receivers = the names before '='; a `ROUNDED` keyword rounds every receiver's store to its own
     // scale (COBOL default mode: NEAREST, ties away from zero).
@@ -5819,7 +7264,10 @@ fn exec_compute_inner(stmt: &[Tok], fields: &mut HashMap<String, Field>, has_han
     let mut pos = 0;
     let (val, attr) = parse_expr(&etoks, &mut pos, fields)?;
     if pos != etoks.len() {
-        return Err(RunError::Unsupported(format!("trailing tokens in COMPUTE expr at {}", etoks[pos])));
+        return Err(RunError::Unsupported(format!(
+            "trailing tokens in COMPUTE expr at {}",
+            etoks[pos]
+        )));
     }
     let mut size_err = false;
     for r in receivers {
@@ -5913,7 +7361,11 @@ fn split_parens(w: &str, out: &mut Vec<String>) {
 }
 
 /// `expr := term (('+'|'-') term)*`.
-fn parse_expr(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn parse_expr(
+    t: &[String],
+    pos: &mut usize,
+    f: &HashMap<String, Field>,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     let (mut acc, mut aattr) = parse_term(t, pos, f)?;
     while let Some(op) = t.get(*pos).map(|s| s.as_str()) {
         let o = match op {
@@ -5931,7 +7383,11 @@ fn parse_expr(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Resu
 }
 
 /// `term := factor (('*'|'/') factor)*`.
-fn parse_term(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn parse_term(
+    t: &[String],
+    pos: &mut usize,
+    f: &HashMap<String, Field>,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     let (mut acc, mut aattr) = parse_factor(t, pos, f)?;
     while let Some(op) = t.get(*pos).map(|s| s.as_str()) {
         match op {
@@ -5962,7 +7418,11 @@ fn parse_term(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Resu
 /// `factor := primary ('**' factor)?` -- exponentiation, RIGHT-associative (`2 ** 3 ** 2` = `2 ** (3 ** 2)`
 /// = 512). A non-negative integer exponent uses exact repeated multiply (the sealed path); anything else
 /// (fractional like 0.5, negative, or an identifier exponent) goes through the sealed cob_decimal_pow engine.
-fn parse_factor(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn parse_factor(
+    t: &[String],
+    pos: &mut usize,
+    f: &HashMap<String, Field>,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     let (base, battr) = parse_primary(t, pos, f)?;
     if t.get(*pos).map(|s| s.as_str()) == Some("**") {
         *pos += 1;
@@ -5972,7 +7432,11 @@ fn parse_factor(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Re
             let e = dec_to_i64(&ed);
             if (0..=1024).contains(&e) {
                 if e == 0 {
-                    let (one, oa) = decimal_as_display(&Decimal { negative: false, digits: vec![1], scale: 0 });
+                    let (one, oa) = decimal_as_display(&Decimal {
+                        negative: false,
+                        digits: vec![1],
+                        scale: 0,
+                    });
                     return Ok((one, oa));
                 }
                 let mut acc = base.clone();
@@ -5992,7 +7456,11 @@ fn parse_factor(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Re
 }
 
 /// `primary := '(' expr ')' | '-' primary | operand`.
-fn parse_primary(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn parse_primary(
+    t: &[String],
+    pos: &mut usize,
+    f: &HashMap<String, Field>,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     match t.get(*pos).map(|s| s.as_str()) {
         Some("(") => {
             *pos += 1;
@@ -6007,7 +7475,11 @@ fn parse_primary(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> R
             *pos += 1;
             let (b, ba) = parse_primary(t, pos, f)?;
             // unary minus: 0 - b.
-            let (zero, za) = decimal_as_display(&Decimal { negative: false, digits: vec![0], scale: 0 });
+            let (zero, za) = decimal_as_display(&Decimal {
+                negative: false,
+                digits: vec![0],
+                scale: 0,
+            });
             wide_op(Op::Subtract, &zero, &za, &b, &ba)
         }
         Some("+") => {
@@ -6019,11 +7491,143 @@ fn parse_primary(t: &[String], pos: &mut usize, f: &HashMap<String, Field>) -> R
             *pos += 1;
             operand_value(&Tok::Word(w), f)
         }
-        None => Err(RunError::Unsupported("unexpected end of COMPUTE expr".into())),
+        None => Err(RunError::Unsupported(
+            "unexpected end of COMPUTE expr".into(),
+        )),
     }
 }
 
 /// `DISPLAY op [op ...]` -- concatenate each operand's display bytes, then a newline.
+/// The bytes a literal word contributes to DISPLAY: a numeric literal (incl. E-notation), or a
+/// binary/hexadecimal literal (`B'0101'`, `BX'EC'`, `X'EC'`, `H'...'`). Fails closed on a word that
+/// is neither a field nor a literal.
+fn display_literal_bytes(w: &str) -> Result<Vec<u8>, RunError> {
+    // cobc DISPLAYs a numeric literal with its written sign and a canonical point: leading integer
+    // zeros are dropped (`.123` for 0.123), the fraction keeps its digits, E-notation is folded.
+    let dec = parse_num_literal(w)?;
+    let mut out = Vec::new();
+    if dec.negative {
+        out.push(b'-');
+    } else if w.starts_with('+') {
+        out.push(b'+');
+    }
+    let scale = dec.scale.max(0) as usize;
+    let digits = &dec.digits;
+    let int_len = digits.len().saturating_sub(scale);
+    let int_part = &digits[..int_len.min(digits.len())];
+    let frac_part = &digits[int_len.min(digits.len())..];
+    let int_str: String = int_part.iter().map(|d| (b'0' + d) as char).collect();
+    let int_trim = int_str.trim_start_matches('0').to_string();
+    let frac_str: String = frac_part.iter().map(|d| (b'0' + d) as char).collect();
+    out.extend_from_slice(int_trim.as_bytes());
+    if !frac_str.is_empty() {
+        out.push(b'.');
+        out.extend_from_slice(frac_str.as_bytes());
+    }
+    if out.is_empty() || (out.len() == 1 && (out[0] == b'-' || out[0] == b'+')) {
+        out.push(b'0');
+    }
+    Ok(out)
+}
+
+/// `DISPLAY B'0101'` / `BX'EC'`: the lexer yields `Word("B")` + `Str("0101")`; the operand scanner
+/// pairs a literal-prefix word with the following string token. Returns `Some(bytes)` when `w` is a
+/// literal prefix (B/BX/X/H/N/NX/HB) and `quote` is the following token; `None` when `w` is not a
+/// prefix (the caller then treats it as a field or numeric literal).
+fn binary_literal_bytes(w: &str, quote: Option<&Tok>) -> Result<Option<Vec<u8>>, RunError> {
+    let up = w.to_ascii_uppercase();
+    let q = match quote {
+        Some(Tok::Str(s)) => s.clone(),
+        _ => return Ok(None),
+    };
+    let parse = |digits: &[u8], radix: u32, nibbles: bool| -> Result<Vec<u8>, RunError> {
+        if digits.is_empty() {
+            return Err(RunError::Unsupported(format!("empty {w} literal")));
+        }
+        if nibbles {
+            // hex digits -> bytes (odd count: low nibble last)
+            let mut out = Vec::new();
+            let mut hi: Option<u8> = None;
+            for &c in digits {
+                let v = (c as char).to_digit(16).ok_or_else(|| {
+                    RunError::Unsupported(format!("invalid hex digit in {w} literal"))
+                })? as u8;
+                match hi.take() {
+                    Some(h) => out.push((h << 4) | v),
+                    None => hi = Some(v),
+                }
+            }
+            if let Some(h) = hi {
+                out.push(h);
+            }
+            Ok(out)
+        } else {
+            // binary digits, right-aligned into bytes
+            let mut out = Vec::new();
+            let mut acc: u8 = 0;
+            let mut bits = 0usize;
+            for &c in digits {
+                let v = match c {
+                    b'0' => 0u8,
+                    b'1' => 1u8,
+                    _ => {
+                        return Err(RunError::Unsupported(format!(
+                            "invalid binary digit in {w} literal"
+                        )))
+                    }
+                };
+                acc = (acc << 1) | v;
+                bits += 1;
+                if bits == 8 {
+                    out.push(acc);
+                    acc = 0;
+                    bits = 0;
+                }
+            }
+            if bits > 0 {
+                out.push(acc << (8 - bits));
+            }
+            Ok(out)
+        }
+    };
+    // cobc DISPLAYs a binary/hex literal as its DECIMAL value (B'0101' -> "5", BX'EC' -> "236").
+    // A plain B literal is a BINARY NUMBER (bits folded directly, not byte-aligned); BX/X/H are
+    // hexadecimal numbers (nibbles folded).
+    let mut value: u64 = 0;
+    match up.as_str() {
+        "B" => {
+            for &c in &q {
+                value = (value << 1)
+                    | match c {
+                        b'0' => 0,
+                        b'1' => 1,
+                        _ => {
+                            return Err(RunError::Unsupported(format!(
+                                "invalid binary digit in {w} literal"
+                            )))
+                        }
+                    };
+            }
+        }
+        "BX" | "X" | "H" => {
+            for &c in &q {
+                let v = (c as char).to_digit(16).ok_or_else(|| {
+                    RunError::Unsupported(format!("invalid hex digit in {w} literal"))
+                })? as u64;
+                value = (value << 4) | v;
+            }
+        }
+        "N" | "NX" | "HB" => {
+            return Err(RunError::Unsupported(format!(
+                "{w} literal: national/bit literals are a dialect extension boundary"
+            )))
+        }
+        _ => return Ok(None),
+    }
+    let _ = parse;
+    Ok(Some(value.to_string().into_bytes()))
+}
+
 fn exec_display(
     stmt: &[Tok],
     fields: &mut HashMap<String, Field>,
@@ -6039,43 +7643,75 @@ fn exec_display(
     // default stay on stdout.
     let mut upon_printer = false;
     let mut upon_dev: Option<String> = None;
-    let mut it = stmt.iter();
-    while let Some(t) = it.next() {
+    let mut i = 0usize;
+    while i < stmt.len() {
+        let t = &stmt[i];
         match t {
             Tok::Str(s) => operands.push((s.clone(), alnum_attr())),
             Tok::Word(w) => {
                 if w == "UPON" {
-                    if let Some(Tok::Word(dev)) = it.next() {
+                    if let Some(Tok::Word(dev)) = stmt.get(i + 1) {
                         upon_printer = dev == "PRINTER";
                         upon_dev = Some(dev.clone());
+                        i += 1;
                     }
+                    i += 1;
                     continue;
                 }
                 if w == "WITH" || w == "NO" || w == "ADVANCING" {
                     // DISPLAY ... WITH NO ADVANCING handled below (no newline) -- mark it.
+                    i += 1;
                     continue;
                 }
                 // a figurative constant in DISPLAY is a single character (cobc displays it length 1).
                 if let Some(fig) = figurative_kind(w) {
                     operands.push((vec![fig_byte(fig)], alnum_attr()));
+                    i += 1;
                     continue;
                 }
-                let f = read_field(fields, w)?.ok_or_else(|| RunError::UndefinedName(w.clone()))?;
-                let bytes = if w == "RETURN-CODE" { display_return_code(&f) } else { display_bytes(&f, ctx.decimal_comma) };
-                operands.push((bytes, alnum_attr()));
+                // binary/hexadecimal literal prefix + quoted digits: `DISPLAY B'0101'`
+                if let Some(bytes) = binary_literal_bytes(w, stmt.get(i + 1))? {
+                    operands.push((bytes, alnum_attr()));
+                    i += 2;
+                    continue;
+                }
+                match read_field(fields, w)? {
+                    Some(f) => {
+                        let bytes = if w == "RETURN-CODE" {
+                            display_return_code(&f)
+                        } else {
+                            display_bytes(&f, ctx.decimal_comma)
+                        };
+                        operands.push((bytes, alnum_attr()));
+                    }
+                    None => {
+                        // A numeric / floating literal operand (`DISPLAY 123`, `DISPLAY +1.23E0`): not a
+                        // field -- render the literal's value.
+                        operands.push((display_literal_bytes(w)?, alnum_attr()));
+                    }
+                }
             }
             Tok::Dot => {}
         }
+        i += 1;
     }
     // DISPLAY ... UPON ENVIRONMENT-NAME / ENVIRONMENT-VALUE set the env-name register / a per-run env
     // override; they produce NO stdout (cobc routes them to the runtime environment, not the terminal).
     if let Some(dev) = upon_dev.as_deref() {
         if dev == "ENVIRONMENT-NAME" || dev == "ENVIRONMENT-VALUE" {
-            let val: Vec<u8> = operands.iter().flat_map(|(b, _)| b.iter().copied()).collect();
+            let val: Vec<u8> = operands
+                .iter()
+                .flat_map(|(b, _)| b.iter().copied())
+                .collect();
             if dev == "ENVIRONMENT-NAME" {
-                ENV_NAME_REG.with(|r| *r.borrow_mut() = String::from_utf8_lossy(&val).trim_end().to_string());
+                ENV_NAME_REG.with(|r| {
+                    *r.borrow_mut() = String::from_utf8_lossy(&val).trim_end().to_string()
+                });
             } else if dev == "ARGUMENT-NUMBER" {
-                let n = String::from_utf8_lossy(&val).trim().parse::<usize>().unwrap_or(0);
+                let n = String::from_utf8_lossy(&val)
+                    .trim()
+                    .parse::<usize>()
+                    .unwrap_or(0);
                 ARG_NUMBER_REG.with(|r| *r.borrow_mut() = n);
             } else {
                 let name = ENV_NAME_REG.with(|r| r.borrow().clone());
@@ -6084,7 +7720,9 @@ fn exec_display(
             return Ok(());
         }
     }
-    let no_adv = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w=="ADVANCING"));
+    let no_adv = stmt
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w=="ADVANCING"));
     let refs: Vec<(&[u8], &FieldAttr)> = operands.iter().map(|(b, a)| (b.as_slice(), a)).collect();
     if upon_printer && ctx.print_redirect {
         let mut p = ctx.printer.borrow_mut();
@@ -6117,7 +7755,7 @@ fn display_bytes(f: &Field, decimal_comma: bool) -> Vec<u8> {
         }
         Storage::Alpha(_) | Storage::Edited(..) => f.bytes.clone(),
         Storage::Group { .. } => f.bytes.clone(), // a group displays as its concatenated record image
-        Storage::Condition { .. } => Vec::new(), // a condition-name has no displayable value
+        Storage::Condition { .. } => Vec::new(),  // a condition-name has no displayable value
     }
 }
 
@@ -6136,10 +7774,26 @@ fn exec_move(
     // fail closed rather than move a leaf onto itself. (Front-end sub-form gap; see COBOL-PARITY.md.)
     if matches!(stmt.first(), Some(Tok::Word(w)) if w == "CORRESPONDING" || w == "CORR") {
         // MOVE CORRESPONDING g1 TO g2: move each elementary leaf of g1 to the like-named leaf of g2.
-        let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO"))
+        let to = stmt
+            .iter()
+            .position(|t| matches!(t, Tok::Word(w) if w == "TO"))
             .ok_or_else(|| RunError::Unsupported("MOVE CORRESPONDING without TO".into()))?;
-        let src = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("MOVE CORRESPONDING: missing source group".into())) };
-        let dst = match stmt.get(to + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("MOVE CORRESPONDING: missing target group".into())) };
+        let src = match stmt.get(1) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => {
+                return Err(RunError::Unsupported(
+                    "MOVE CORRESPONDING: missing source group".into(),
+                ))
+            }
+        };
+        let dst = match stmt.get(to + 1) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => {
+                return Err(RunError::Unsupported(
+                    "MOVE CORRESPONDING: missing target group".into(),
+                ))
+            }
+        };
         for (sk, dk) in corr_pairs(fields, &src, &dst)? {
             let mv = vec![Tok::Word(sk), Tok::Word("TO".to_string()), Tok::Word(dk)];
             exec_move(&mv, fields, decimal_comma)?;
@@ -6147,12 +7801,22 @@ fn exec_move(
         return Ok(());
     }
     // split at TO.
-    let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="TO"))
+    let to = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w=="TO"))
         .ok_or_else(|| RunError::Unsupported("MOVE without TO".into()))?;
-    let src_tok = stmt.first().ok_or_else(|| RunError::Unsupported("MOVE without source".into()))?;
+    let src_tok = stmt
+        .first()
+        .ok_or_else(|| RunError::Unsupported("MOVE without source".into()))?;
     let dests: Vec<String> = stmt[to + 1..]
         .iter()
-        .filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None })
+        .filter_map(|t| {
+            if let Tok::Word(w) = t {
+                Some(w.clone())
+            } else {
+                None
+            }
+        })
         .collect();
     // `MOVE ALL <literal>` / `MOVE ALL <figurative>` -- repeat the unit to fill EACH receiver's width.
     if matches!(src_tok, Tok::Word(w) if w == "ALL") {
@@ -6174,7 +7838,11 @@ fn exec_move(
                 }
                 return Ok(());
             }
-            _ => return Err(RunError::Unsupported("MOVE ALL: expected a non-empty literal or figurative".into())),
+            _ => {
+                return Err(RunError::Unsupported(
+                    "MOVE ALL: expected a non-empty literal or figurative".into(),
+                ))
+            }
         }
     }
     // A figurative-constant source (SPACES/ZEROS/HIGH-VALUE/...) fills EACH receiver to its own width.
@@ -6198,35 +7866,65 @@ fn exec_move(
 /// (`GNURUST.12 SET ... TO TRUE`): construct the parent's bytes so the condition becomes true by MOVEing
 /// the condition's first `VALUE` (or a `THRU` range's lower bound) into the parent. Only `TO TRUE` is in
 /// the subset; `TO FALSE`, index/pointer SET, and `UP/DOWN BY` fail closed.
-fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool, switches: &SwitchEnv) -> Result<(), RunError> {
+fn exec_set(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+    switches: &SwitchEnv,
+) -> Result<(), RunError> {
     // form: SET idx [idx ...] UP|DOWN BY n  (index arithmetic).
-    if let Some(ud) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "UP" || w == "DOWN")) {
+    if let Some(ud) = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "UP" || w == "DOWN"))
+    {
         let up = matches!(stmt.get(ud), Some(Tok::Word(w)) if w == "UP");
         if !matches!(stmt.get(ud + 1), Some(Tok::Word(w)) if w == "BY") {
-            return Err(RunError::Unsupported("SET ... UP/DOWN must be followed by BY".into()));
+            return Err(RunError::Unsupported(
+                "SET ... UP/DOWN must be followed by BY".into(),
+            ));
         }
         let amount = match stmt.get(ud + 2) {
             Some(Tok::Word(w)) => resolve_int(w, fields)
                 .ok_or_else(|| RunError::Unsupported(format!("SET ... BY {w}: not an integer")))?,
             _ => return Err(RunError::Unsupported("SET ... BY: missing amount".into())),
         };
-        for name in stmt[..ud].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
-            let cur = resolve_int(&name, fields)
-                .ok_or_else(|| RunError::Unsupported(format!("SET {name} UP/DOWN BY: not a numeric index")))?;
+        for name in stmt[..ud].iter().filter_map(|t| {
+            if let Tok::Word(w) = t {
+                Some(w.clone())
+            } else {
+                None
+            }
+        }) {
+            let cur = resolve_int(&name, fields).ok_or_else(|| {
+                RunError::Unsupported(format!("SET {name} UP/DOWN BY: not a numeric index"))
+            })?;
             let nv = if up { cur + amount } else { cur - amount };
-            let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(name)];
+            let mv = vec![
+                Tok::Word(nv.to_string()),
+                Tok::Word("TO".to_string()),
+                Tok::Word(name),
+            ];
             exec_move(&mv, fields, decimal_comma)?;
         }
         return Ok(());
     }
     // Every valid SET form has either `TO` or `UP|DOWN BY`; a SET with neither is a cobc syntax error
     // ("unexpected ..."), so refusing it is faithful validation, not a feature gap.
-    let to = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO"))
-        .ok_or_else(|| RunError::Unsupported("SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)".into()))?;
-    let targets: Vec<String> = stmt[..to].iter().filter_map(|t| match t {
-        Tok::Word(w) => Some(w.clone()),
-        _ => None,
-    }).collect();
+    let to = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "TO"))
+        .ok_or_else(|| {
+            RunError::Unsupported(
+                "SET: expected `TO` or `UP|DOWN BY` (cobc rejects a SET with neither)".into(),
+            )
+        })?;
+    let targets: Vec<String> = stmt[..to]
+        .iter()
+        .filter_map(|t| match t {
+            Tok::Word(w) => Some(w.clone()),
+            _ => None,
+        })
+        .collect();
     if targets.is_empty() {
         return Err(RunError::Unsupported("SET: no target before TO".into()));
     }
@@ -6261,10 +7959,31 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     if matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "FALSE") {
         for name in &targets {
             let (parent, fw) = match fields.get(name) {
-                Some(Field { storage: Storage::Condition { parent, false_value: Some(fw), .. }, .. }) => (parent.clone(), fw.clone()),
-                Some(Field { storage: Storage::Condition { false_value: None, .. }, .. }) =>
-                    return Err(RunError::Unsupported(format!("SET {name} TO FALSE: the 88 has no `WHEN SET TO FALSE` value"))),
-                Some(_) => return Err(RunError::Unsupported(format!("SET {name} TO FALSE: not an 88 condition-name"))),
+                Some(Field {
+                    storage:
+                        Storage::Condition {
+                            parent,
+                            false_value: Some(fw),
+                            ..
+                        },
+                    ..
+                }) => (parent.clone(), fw.clone()),
+                Some(Field {
+                    storage:
+                        Storage::Condition {
+                            false_value: None, ..
+                        },
+                    ..
+                }) => {
+                    return Err(RunError::Unsupported(format!(
+                        "SET {name} TO FALSE: the 88 has no `WHEN SET TO FALSE` value"
+                    )))
+                }
+                Some(_) => {
+                    return Err(RunError::Unsupported(format!(
+                        "SET {name} TO FALSE: not an 88 condition-name"
+                    )))
+                }
                 None => return Err(RunError::UndefinedName(name.clone())),
             };
             let src = match fw.strip_prefix('\u{1}') {
@@ -6278,17 +7997,36 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     }
     // form: SET idx [idx ...] TO value  (set an index/numeric item to a literal or another item's value).
     if !matches!(stmt.get(to + 1), Some(Tok::Word(w)) if w == "TRUE") {
-        let src = stmt.get(to + 1).cloned()
+        let src = stmt
+            .get(to + 1)
+            .cloned()
             .ok_or_else(|| RunError::Unsupported("SET ... TO: missing value".into()))?;
         for name in &targets {
             match fields.get(name) {
-                Some(Field { storage: Storage::Numeric(_), .. }) => {
-                    let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(name.clone())];
+                Some(Field {
+                    storage: Storage::Numeric(_),
+                    ..
+                }) => {
+                    let mv = vec![
+                        src.clone(),
+                        Tok::Word("TO".to_string()),
+                        Tok::Word(name.clone()),
+                    ];
                     exec_move(&mv, fields, decimal_comma)?;
                 }
-                Some(Field { storage: Storage::Condition { .. }, .. }) =>
-                    return Err(RunError::Unsupported(format!("SET {name} TO <value>: an 88 condition-name is only `SET ... TO TRUE`"))),
-                Some(_) => return Err(RunError::Unsupported(format!("SET {name} TO <value>: target is not a numeric/index item"))),
+                Some(Field {
+                    storage: Storage::Condition { .. },
+                    ..
+                }) => {
+                    return Err(RunError::Unsupported(format!(
+                        "SET {name} TO <value>: an 88 condition-name is only `SET ... TO TRUE`"
+                    )))
+                }
+                Some(_) => {
+                    return Err(RunError::Unsupported(format!(
+                        "SET {name} TO <value>: target is not a numeric/index item"
+                    )))
+                }
                 None => return Err(RunError::UndefinedName(name.clone())),
             }
         }
@@ -6297,13 +8035,24 @@ fn exec_set(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bo
     // form: SET cond-name [cond-name ...] TO TRUE  (LEVEL-88 construction).
     for name in targets {
         let (parent, setword) = match fields.get(&name) {
-            Some(Field { storage: Storage::Condition { parent, values, .. }, .. }) => {
-                let v = values.first()
-                    .ok_or_else(|| RunError::Unsupported(format!("88 {name} has no VALUE to SET")))?;
-                let w = match v { CondVal::Single(s) => s.clone(), CondVal::Range(lo, _) => lo.clone() };
+            Some(Field {
+                storage: Storage::Condition { parent, values, .. },
+                ..
+            }) => {
+                let v = values.first().ok_or_else(|| {
+                    RunError::Unsupported(format!("88 {name} has no VALUE to SET"))
+                })?;
+                let w = match v {
+                    CondVal::Single(s) => s.clone(),
+                    CondVal::Range(lo, _) => lo.clone(),
+                };
                 (parent.clone(), w)
             }
-            Some(_) => return Err(RunError::Unsupported(format!("SET {name} TO TRUE: not an 88 condition-name"))),
+            Some(_) => {
+                return Err(RunError::Unsupported(format!(
+                    "SET {name} TO TRUE: not an 88 condition-name"
+                )))
+            }
             None => return Err(RunError::UndefinedName(name)),
         };
         // decode the stored condition word back into a source token (the `\u{1}` prefix marks a string
@@ -6334,10 +8083,17 @@ enum InitCat {
 /// per the standard). With REPLACING, ONLY the leaves whose category is named are set to that category's
 /// value (`cat` in {NUMERIC, ALPHANUMERIC, ALPHABETIC, NUMERIC-EDITED, ALPHANUMERIC-EDITED}); leaves of an
 /// unnamed category are left UNCHANGED. `WITH`/`THEN`/`TO VALUE` and OCCURS-table targets fail closed.
-fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+fn exec_initialize(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
     // `INITIALIZE items [WITH FILLER] ALL TO VALUE` -- restore each leaf to its VALUE clause (a leaf with no
     // VALUE is left unchanged). Detected before the head parser, which otherwise rejects ALL/TO/WITH/FILLER.
-    if let Some(tp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO")) {
+    if let Some(tp) = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "TO"))
+    {
         if matches!(stmt.get(tp + 1), Some(Tok::Word(w)) if w == "VALUE") {
             return exec_initialize_to_value(stmt, tp, fields, decimal_comma);
         }
@@ -6346,7 +8102,9 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
         // it to the canonical `items [REPLACING ...]` and reuse the default path. (WITH FILLER, which
         // would also init FILLER leaves, stays out of subset and falls through to the guard below.)
         if matches!(stmt.get(tp + 1), Some(Tok::Word(w)) if w == "DEFAULT")
-            && !stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "FILLER"))
+            && !stmt
+                .iter()
+                .any(|t| matches!(t, Tok::Word(w) if w == "FILLER"))
         {
             let mod_start = stmt
                 .iter()
@@ -6364,7 +8122,9 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
             return exec_initialize(&rebuilt, fields, decimal_comma);
         }
     }
-    let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"));
+    let repl_pos = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"));
     let head = match repl_pos {
         Some(p) => &stmt[..p],
         None => stmt,
@@ -6382,7 +8142,8 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
     let mut names: Vec<String> = Vec::new();
     for t in head {
         match t {
-            Tok::Word(w) if w.as_str() == "WITH" || w.as_str() == "THEN" || bare_name(w) == "FILLER" => {}
+            Tok::Word(w)
+                if w.as_str() == "WITH" || w.as_str() == "THEN" || bare_name(w) == "FILLER" => {}
             Tok::Word(w) if matches!(w.as_str(), "TO" | "THRU" | "ALL") => {
                 return Err(RunError::Unsupported(format!(
                     "INITIALIZE ... {w}: cobc rejects this clause placement"
@@ -6430,16 +8191,23 @@ fn exec_initialize(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_co
     Ok(())
 }
 
-
 /// `INITIALIZE items [WITH FILLER] ALL TO VALUE` (`tp` is the `TO` position): each elementary leaf that
 /// declared a `VALUE` is restored to that VALUE image (captured in `FIELD_VALUES`); a leaf with no VALUE is
 /// left UNCHANGED -- matching cobc. The subset is `ALL TO VALUE` only; `category TO VALUE`, `TO DEFAULT`,
 /// a trailing `THEN`/`REPLACING`, and OCCURS-table targets fail closed.
-fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+fn exec_initialize_to_value(
+    stmt: &[Tok],
+    tp: usize,
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
     // Trailing `[THEN] REPLACING cat BY val ...` after TO VALUE: TO VALUE sets each leaf that HAS a VALUE to
     // its VALUE; REPLACING then sets each leaf WITHOUT a VALUE whose category is named to that value (a leaf
     // with neither is left unchanged). Any other trailing clause (e.g. TO DEFAULT) is out of subset.
-    let repl_pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")).filter(|&p| p > tp);
+    let repl_pos = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"))
+        .filter(|&p| p > tp);
     let mut to_default = false;
     let repl = match repl_pos {
         Some(rp) => Some(parse_initialize_replacing(&stmt[rp + 1..])?),
@@ -6472,12 +8240,17 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
     // Item names run up to the modifier region (`WITH FILLER` / `ALL` / a category keyword).
     let mod_start = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "WITH" || w == "ALL" || init_cat_from_kw(w).is_some()))
         .unwrap_or(tp);
-    let names: Vec<String> = stmt[..mod_start].iter().filter_map(|t| match t {
-        Tok::Word(w) => Some(w.clone()),
-        _ => None,
-    }).collect();
+    let names: Vec<String> = stmt[..mod_start]
+        .iter()
+        .filter_map(|t| match t {
+            Tok::Word(w) => Some(w.clone()),
+            _ => None,
+        })
+        .collect();
     if names.is_empty() {
-        return Err(RunError::Unsupported("INITIALIZE ... TO VALUE: no item named".into()));
+        return Err(RunError::Unsupported(
+            "INITIALIZE ... TO VALUE: no item named".into(),
+        ));
     }
     for name in &names {
         let mut leaves = Vec::new();
@@ -6497,7 +8270,11 @@ fn exec_initialize_to_value(stmt: &[Tok], tp: usize, fields: &mut HashMap<String
                 // no VALUE -> a trailing REPLACING sets it by category; an unnamed category is left unchanged.
                 let cat = init_field_category(&leaf, fields);
                 if let Some((_, val)) = cat.and_then(|c| pairs.iter().find(|(cc, _)| *cc == c)) {
-                    let mv = vec![val.clone(), Tok::Word("TO".to_string()), Tok::Word(leaf.clone())];
+                    let mv = vec![
+                        val.clone(),
+                        Tok::Word("TO".to_string()),
+                        Tok::Word(leaf.clone()),
+                    ];
                     exec_move(&mv, fields, decimal_comma)?;
                 }
             } else if to_default && bare_name(&leaf) != "FILLER" {
@@ -6532,16 +8309,21 @@ fn parse_initialize_replacing(toks: &[Tok]) -> Result<Vec<(InitCat, Tok)>, RunEr
             i += 1;
         }
         if !matches!(toks.get(i), Some(Tok::Word(w)) if w == "BY") {
-            return Err(RunError::Unsupported("INITIALIZE REPLACING: expected BY".into()));
+            return Err(RunError::Unsupported(
+                "INITIALIZE REPLACING: expected BY".into(),
+            ));
         }
         i += 1;
-        let val = toks.get(i).cloned()
-            .ok_or_else(|| RunError::Unsupported("INITIALIZE REPLACING: missing replacement value".into()))?;
+        let val = toks.get(i).cloned().ok_or_else(|| {
+            RunError::Unsupported("INITIALIZE REPLACING: missing replacement value".into())
+        })?;
         out.push((cat, val));
         i += 1;
     }
     if out.is_empty() {
-        return Err(RunError::Unsupported("INITIALIZE REPLACING: no category given".into()));
+        return Err(RunError::Unsupported(
+            "INITIALIZE REPLACING: no category given".into(),
+        ));
     }
     Ok(out)
 }
@@ -6594,12 +8376,20 @@ fn enumerate_combos(base: &str, dims: &[(usize, usize)], out: &mut Vec<String>) 
             subs[d] = rem % occs[d] + 1;
             rem /= occs[d];
         }
-        let s = subs.iter().map(|x| x.to_string()).collect::<Vec<_>>().join(",");
+        let s = subs
+            .iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<_>>()
+            .join(",");
         out.push(format!("{base}({s})"));
     }
 }
 
-fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Vec<String>) -> Result<(), RunError> {
+fn collect_init_leaves(
+    name: &str,
+    fields: &HashMap<String, Field>,
+    out: &mut Vec<String>,
+) -> Result<(), RunError> {
     let (base, sub) = split_subscript(name);
     // An already-subscripted leaf (produced by OCCURS expansion below) is a single leaf.
     if sub.is_some() {
@@ -6615,7 +8405,8 @@ fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Ve
     // multi-dimension leaves across their dims. (Its intermediate sub-groups own no field, so we cannot
     // recurse the children list -- the leaves come straight from NESTED_LEAF, in deterministic name order.)
     let mut nleaves: Vec<(String, Vec<(usize, usize)>)> = NESTED_LEAF.with(|m| {
-        m.borrow().iter()
+        m.borrow()
+            .iter()
             .filter(|(_, (b, _, _, _))| b == base)
             .map(|(n, (_, _, _, dims))| (n.clone(), dims.clone()))
             .collect()
@@ -6627,7 +8418,9 @@ fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Ve
         }
         return Ok(());
     }
-    let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+    let f = fields
+        .get(base)
+        .ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
     // A FLAT OCCURS table expands to one subscripted leaf per element: an elementary table is `base(i)`; a
     // single-level group-OCCURS of elementary children is each `child(i)`. A table with nested-leaf or
     // sub-group children is NOT flat -- it falls through to the general recursion (each nested leaf is
@@ -6636,8 +8429,10 @@ fn collect_init_leaves(name: &str, fields: &HashMap<String, Field>, out: &mut Ve
         let flat = match &f.storage {
             Storage::Group { children } => children.iter().all(|c| {
                 nested_leaf_lookup(c).is_none()
-                    && matches!(fields.get(c).map(|x| &x.storage),
-                        Some(Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..)))
+                    && matches!(
+                        fields.get(c).map(|x| &x.storage),
+                        Some(Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..))
+                    )
             }),
             Storage::Numeric(_) | Storage::Alpha(_) | Storage::Edited(..) => true,
             _ => false,
@@ -6712,16 +8507,23 @@ fn inspect_operand(t: Option<&Tok>, fields: &HashMap<String, Field>) -> Result<V
 
 /// Parse a trailing `INSPECT` region clause into `(kind, delim)` -- `0`=whole, `1`=`BEFORE INITIAL d`,
 /// `2`=`AFTER INITIAL d` -- returning the delimiter bytes owned so the caller can build a `Region`.
-fn inspect_region(rest: &[Tok], fields: &HashMap<String, Field>) -> Result<(u8, Vec<u8>), RunError> {
+fn inspect_region(
+    rest: &[Tok],
+    fields: &HashMap<String, Field>,
+) -> Result<(u8, Vec<u8>), RunError> {
     match rest.first() {
         None => Ok((0, Vec::new())),
         Some(Tok::Word(w)) if w == "BEFORE" || w == "AFTER" => {
             let kind = if w == "AFTER" { 2 } else { 1 };
             let mut i = 1;
-            if matches!(rest.get(i), Some(Tok::Word(x)) if x == "INITIAL") { i += 1; }
+            if matches!(rest.get(i), Some(Tok::Word(x)) if x == "INITIAL") {
+                i += 1;
+            }
             Ok((kind, inspect_operand(rest.get(i), fields)?))
         }
-        Some(t) => Err(RunError::Unsupported(format!("INSPECT region clause near {t:?}"))),
+        Some(t) => Err(RunError::Unsupported(format!(
+            "INSPECT region clause near {t:?}"
+        ))),
     }
 }
 
@@ -6729,8 +8531,14 @@ fn inspect_region(rest: &[Tok], fields: &HashMap<String, Field>) -> Result<(u8, 
 /// <ALL|LEADING|FIRST> x BY y [region] | CONVERTING from TO to [region]}` -- the byte effects of the
 /// sealed `GNURUST.INSPECT.1` court. A single clause is in the subset; multi-clause/`ALL`-counter-chains
 /// and figurative ranges fail closed.
-fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
-    use crate::inspect::{inspect_converting, inspect_replacing, inspect_tallying, Region, ReplaceMode, TallyMode};
+fn exec_inspect(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
+    use crate::inspect::{
+        inspect_converting, inspect_replacing, inspect_tallying, Region, ReplaceMode, TallyMode,
+    };
     let target = match stmt.first() {
         Some(Tok::Word(w)) => w.clone(),
         _ => return Err(RunError::Unsupported("INSPECT: missing target".into())),
@@ -6742,7 +8550,10 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
     // the REPLACING phrase as two operations on the ORIGINAL value. Split at REPLACING and run each (the
     // tally pass leaves the field unchanged, so the replace pass still sees the original bytes).
     if matches!(stmt.get(1), Some(Tok::Word(w)) if w == "TALLYING") {
-        if let Some(rp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")) {
+        if let Some(rp) = stmt
+            .iter()
+            .position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"))
+        {
             exec_inspect(&stmt[..rp], fields, decimal_comma)?;
             let mut rest = vec![Tok::Word(target.clone())];
             rest.extend_from_slice(&stmt[rp..]);
@@ -6751,18 +8562,38 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
     }
     match stmt.get(1) {
         Some(Tok::Word(w)) if w == "TALLYING" => {
-            let counter = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT TALLYING: missing counter".into())) };
+            let counter = match stmt.get(2) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "INSPECT TALLYING: missing counter".into(),
+                    ))
+                }
+            };
             if !matches!(stmt.get(3), Some(Tok::Word(w)) if w == "FOR") {
-                return Err(RunError::Unsupported("INSPECT TALLYING: expected FOR".into()));
+                return Err(RunError::Unsupported(
+                    "INSPECT TALLYING: expected FOR".into(),
+                ));
             }
-            let modekw = match stmt.get(4) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT TALLYING: missing FOR mode".into())) };
+            let modekw = match stmt.get(4) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "INSPECT TALLYING: missing FOR mode".into(),
+                    ))
+                }
+            };
             let (item, rstart) = match modekw.as_str() {
                 "CHARACTERS" => (Vec::new(), 5),
                 "ALL" | "LEADING" => (inspect_operand(stmt.get(5), fields)?, 6),
                 other => return Err(RunError::Unsupported(format!("INSPECT TALLYING FOR: unrecognized mode `{other}` (expected ALL/LEADING/CHARACTERS)"))),
             };
             let (rk, d) = inspect_region(&stmt[rstart.min(stmt.len())..], fields)?;
-            let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
+            let region = match rk {
+                1 => Region::Before(&d),
+                2 => Region::After(&d),
+                _ => Region::All,
+            };
             let mode = match modekw.as_str() {
                 "CHARACTERS" => TallyMode::Characters,
                 "ALL" => TallyMode::All(&item),
@@ -6770,28 +8601,47 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
             };
             let count = inspect_tallying(&target_bytes, mode, region) as i64;
             let nv = resolve_int(&counter, fields).unwrap_or(0) + count;
-            let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(counter)];
+            let mv = vec![
+                Tok::Word(nv.to_string()),
+                Tok::Word("TO".to_string()),
+                Tok::Word(counter),
+            ];
             exec_move(&mv, fields, decimal_comma)
         }
         Some(Tok::Word(w)) if w == "REPLACING" => {
-            let modekw = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("INSPECT REPLACING: missing mode".into())) };
+            let modekw = match stmt.get(2) {
+                Some(Tok::Word(w)) => w.clone(),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "INSPECT REPLACING: missing mode".into(),
+                    ))
+                }
+            };
             // CHARACTERS BY y [region] has NO search operand; ALL/LEADING/FIRST take `x BY y`.
             let (x, y, ystart) = if modekw == "CHARACTERS" {
                 if !matches!(stmt.get(3), Some(Tok::Word(w)) if w == "BY") {
-                    return Err(RunError::Unsupported("INSPECT REPLACING CHARACTERS: expected BY".into()));
+                    return Err(RunError::Unsupported(
+                        "INSPECT REPLACING CHARACTERS: expected BY".into(),
+                    ));
                 }
                 (Vec::new(), inspect_operand(stmt.get(4), fields)?, 5)
             } else if matches!(modekw.as_str(), "ALL" | "LEADING" | "FIRST") {
                 let x = inspect_operand(stmt.get(3), fields)?;
                 if !matches!(stmt.get(4), Some(Tok::Word(w)) if w == "BY") {
-                    return Err(RunError::Unsupported("INSPECT REPLACING: expected BY".into()));
+                    return Err(RunError::Unsupported(
+                        "INSPECT REPLACING: expected BY".into(),
+                    ));
                 }
                 (x, inspect_operand(stmt.get(5), fields)?, 6)
             } else {
                 return Err(RunError::Unsupported(format!("INSPECT REPLACING: unrecognized mode `{modekw}` (expected CHARACTERS/ALL/LEADING/FIRST)")));
             };
             let (rk, d) = inspect_region(&stmt[ystart.min(stmt.len())..], fields)?;
-            let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
+            let region = match rk {
+                1 => Region::Before(&d),
+                2 => Region::After(&d),
+                _ => Region::All,
+            };
             let mode = match modekw.as_str() {
                 "CHARACTERS" => ReplaceMode::Characters(&y),
                 "ALL" => ReplaceMode::All(&x, &y),
@@ -6800,25 +8650,45 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
             };
             let newb = inspect_replacing(&target_bytes, mode, region);
             write_field(fields, &target, |f| {
-                if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
-                else { Err(RunError::Runtime("INSPECT REPLACING changed field length".into())) }
+                if f.bytes.len() == newb.len() {
+                    f.bytes = newb;
+                    Ok(())
+                } else {
+                    Err(RunError::Runtime(
+                        "INSPECT REPLACING changed field length".into(),
+                    ))
+                }
             })
         }
         Some(Tok::Word(w)) if w == "CONVERTING" => {
             let from = inspect_operand(stmt.get(2), fields)?;
             if !matches!(stmt.get(3), Some(Tok::Word(w)) if w == "TO") {
-                return Err(RunError::Unsupported("INSPECT CONVERTING: expected TO".into()));
+                return Err(RunError::Unsupported(
+                    "INSPECT CONVERTING: expected TO".into(),
+                ));
             }
             let to = inspect_operand(stmt.get(4), fields)?;
             let (rk, d) = inspect_region(&stmt[5.min(stmt.len())..], fields)?;
-            let region = match rk { 1 => Region::Before(&d), 2 => Region::After(&d), _ => Region::All };
+            let region = match rk {
+                1 => Region::Before(&d),
+                2 => Region::After(&d),
+                _ => Region::All,
+            };
             let newb = inspect_converting(&target_bytes, &from, &to, region);
             write_field(fields, &target, |f| {
-                if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
-                else { Err(RunError::Runtime("INSPECT CONVERTING changed field length".into())) }
+                if f.bytes.len() == newb.len() {
+                    f.bytes = newb;
+                    Ok(())
+                } else {
+                    Err(RunError::Runtime(
+                        "INSPECT CONVERTING changed field length".into(),
+                    ))
+                }
             })
         }
-        other => Err(RunError::Unsupported(format!("INSPECT: unrecognized clause {other:?} (expected TALLYING/REPLACING/CONVERTING)"))),
+        other => Err(RunError::Unsupported(format!(
+            "INSPECT: unrecognized clause {other:?} (expected TALLYING/REPLACING/CONVERTING)"
+        ))),
     }
 }
 
@@ -6826,22 +8696,44 @@ fn exec_inspect(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
 /// cobc 3.2 does NOT implement the `CHANGED` (display-only-if-changed) suppression (`-Wpending`): it runs
 /// as plain EXHIBIT, so we ignore the suppression too. The only observable effect of the keywords is the
 /// item format: `NAME = <value>` UNLESS `CHANGED` is given WITHOUT `NAMED`, where just `<value>` is shown.
-fn exec_exhibit(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
+fn exec_exhibit(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
     let mut i = 0;
     let (mut named, mut changed) = (false, false);
     while let Some(Tok::Word(w)) = stmt.get(i) {
         match w.as_str() {
-            "CHANGED" => { changed = true; i += 1; }
-            "NAMED" => { named = true; i += 1; }
+            "CHANGED" => {
+                changed = true;
+                i += 1;
+            }
+            "NAMED" => {
+                named = true;
+                i += 1;
+            }
             _ => break,
         }
     }
     // cobc prints `NAME = value` for plain/NAMED EXHIBIT; only `CHANGED` without `NAMED` drops the name.
     let show_name = named || !changed;
-    let names: Vec<String> = stmt[i..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
+    let names: Vec<String> = stmt[i..]
+        .iter()
+        .filter_map(|t| {
+            if let Tok::Word(w) = t {
+                Some(w.clone())
+            } else {
+                None
+            }
+        })
+        .collect();
     let mut line = Vec::new();
     for (j, name) in names.iter().enumerate() {
-        if j > 0 { line.push(b' '); }
+        if j > 0 {
+            line.push(b' ');
+        }
         if show_name {
             line.extend_from_slice(name.as_bytes());
             line.extend_from_slice(b" = ");
@@ -6858,19 +8750,34 @@ fn exec_exhibit(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec
 /// paragraph: record the paragraph's GO-token index -> the new target, consulted when that GO TO runs.
 fn exec_alter(stmt: &[Tok]) -> Result<(), RunError> {
     let proc = CUR_PROC.with(|c| c.borrow().clone());
-    let words: Vec<String> = stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }).collect();
+    let words: Vec<String> = stmt
+        .iter()
+        .filter_map(|t| {
+            if let Tok::Word(w) = t {
+                Some(w.clone())
+            } else {
+                None
+            }
+        })
+        .collect();
     let mut i = 0;
     while i < words.len() {
         let para = words[i].clone();
         i += 1;
-        while i < words.len() && (words[i] == "TO" || words[i] == "PROCEED") { i += 1; }
-        if i >= words.len() { break; }
+        while i < words.len() && (words[i] == "TO" || words[i] == "PROCEED") {
+            i += 1;
+        }
+        if i >= words.len() {
+            break;
+        }
         let target = words[i].clone();
         i += 1;
         if let Some((start, end)) = para_range(&para, &para) {
             for gi in start..end.min(proc.len()) {
                 if matches!(proc.get(gi), Some(Tok::Word(w)) if w == "GO") {
-                    ALTERED.with(|c| { c.borrow_mut().insert(gi, target.clone()); });
+                    ALTERED.with(|c| {
+                        c.borrow_mut().insert(gi, target.clone());
+                    });
                     break;
                 }
             }
@@ -6882,9 +8789,17 @@ fn exec_alter(stmt: &[Tok]) -> Result<(), RunError> {
 /// `ALLOCATE {id | n CHARACTERS} [INITIALIZED] [RETURNING ptr]` -- obtain BASED storage. With `INITIALIZED`
 /// the based item is set to its category defaults (deterministic); the returned pointer address is a
 /// non-claim (not displayed). Raw `n CHARACTERS` allocation has no observable item.
-fn exec_allocate(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
-    let initialized = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "INITIALIZED"));
-    let is_chars = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "CHARACTERS" || w == "CHARACTER"));
+fn exec_allocate(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
+    let initialized = stmt
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w == "INITIALIZED"));
+    let is_chars = stmt
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w == "CHARACTERS" || w == "CHARACTER"));
     if !is_chars && initialized {
         if let Some(Tok::Word(id)) = stmt.first() {
             exec_initialize(&[Tok::Word(id.clone())], fields, decimal_comma)?;
@@ -6896,36 +8811,73 @@ fn exec_allocate(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comm
 /// `EXAMINE id TALLYING {ALL|LEADING|UNTIL FIRST} lit [REPLACING BY lit2]` / `EXAMINE id REPLACING
 /// {ALL|LEADING|FIRST} lit BY lit2` -- the COBOL-68 precursor of INSPECT (an OS/VS dialect verb). TALLYING
 /// sets the `TALLY` register; reuses the sealed INSPECT TALLYING/REPLACING courts.
-fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<(), RunError> {
+fn exec_examine(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<(), RunError> {
     use crate::inspect::{inspect_replacing, inspect_tallying, Region, ReplaceMode, TallyMode};
-    let target = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("EXAMINE: missing field".into())) };
-    let tbytes = read_field(fields, &target)?.map(|f| f.bytes).unwrap_or_default();
-    let pos_of = |kw: &str| stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == kw));
-    let write_target = |fields: &mut HashMap<String, Field>, newb: Vec<u8>| -> Result<(), RunError> {
-        write_field(fields, &target, |f| {
-            if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
-            else { Err(RunError::Runtime("EXAMINE changed field length".into())) }
-        })
+    let target = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("EXAMINE: missing field".into())),
     };
+    let tbytes = read_field(fields, &target)?
+        .map(|f| f.bytes)
+        .unwrap_or_default();
+    let pos_of = |kw: &str| {
+        stmt.iter()
+            .position(|t| matches!(t, Tok::Word(w) if w == kw))
+    };
+    let write_target =
+        |fields: &mut HashMap<String, Field>, newb: Vec<u8>| -> Result<(), RunError> {
+            write_field(fields, &target, |f| {
+                if f.bytes.len() == newb.len() {
+                    f.bytes = newb;
+                    Ok(())
+                } else {
+                    Err(RunError::Runtime("EXAMINE changed field length".into()))
+                }
+            })
+        };
     if let Some(tp) = pos_of("TALLYING") {
         let mut i = tp + 1;
-        let modekw = match stmt.get(i) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("EXAMINE TALLYING mode".into())) };
+        let modekw = match stmt.get(i) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => return Err(RunError::Unsupported("EXAMINE TALLYING mode".into())),
+        };
         i += 1;
-        if modekw == "UNTIL" && matches!(stmt.get(i), Some(Tok::Word(w)) if w == "FIRST") { i += 1; }
+        if modekw == "UNTIL" && matches!(stmt.get(i), Some(Tok::Word(w)) if w == "FIRST") {
+            i += 1;
+        }
         let lit = inspect_operand(stmt.get(i), fields)?;
         let tmode = match modekw.as_str() {
             "ALL" => TallyMode::All(&lit),
             "LEADING" => TallyMode::Leading(&lit),
             "UNTIL" => TallyMode::Characters,
-            other => return Err(RunError::Unsupported(format!("EXAMINE TALLYING: unrecognized mode `{other}` (expected ALL/LEADING/UNTIL FIRST)"))),
+            other => return Err(RunError::Unsupported(format!(
+                "EXAMINE TALLYING: unrecognized mode `{other}` (expected ALL/LEADING/UNTIL FIRST)"
+            ))),
         };
-        let region = if modekw == "UNTIL" { Region::Before(&lit) } else { Region::All };
+        let region = if modekw == "UNTIL" {
+            Region::Before(&lit)
+        } else {
+            Region::All
+        };
         let count = inspect_tallying(&tbytes, tmode, region) as i64;
-        let mv = vec![Tok::Word(count.to_string()), Tok::Word("TO".to_string()), Tok::Word("TALLY".to_string())];
+        let mv = vec![
+            Tok::Word(count.to_string()),
+            Tok::Word("TO".to_string()),
+            Tok::Word("TALLY".to_string()),
+        ];
         exec_move(&mv, fields, decimal_comma)?;
-        if let Some(rp) = stmt[tp..].iter().position(|t| matches!(t, Tok::Word(w) if w == "REPLACING")) {
+        if let Some(rp) = stmt[tp..]
+            .iter()
+            .position(|t| matches!(t, Tok::Word(w) if w == "REPLACING"))
+        {
             let mut j = tp + rp + 1;
-            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") {
+                j += 1;
+            }
             let lit2 = inspect_operand(stmt.get(j), fields)?;
             // The REPLACING mode mirrors the TALLYING mode; UNTIL FIRST replaces the chars before the
             // delimiter (the same span just tallied) via the CHARACTERS mode over the BEFORE region.
@@ -6933,7 +8885,11 @@ fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
                 "ALL" => (ReplaceMode::All(&lit, &lit2), Region::All),
                 "LEADING" => (ReplaceMode::Leading(&lit, &lit2), Region::All),
                 "UNTIL" => (ReplaceMode::Characters(&lit2), Region::Before(&lit)),
-                other => return Err(RunError::Unsupported(format!("EXAMINE TALLYING {other} REPLACING: unrecognized mode"))),
+                other => {
+                    return Err(RunError::Unsupported(format!(
+                        "EXAMINE TALLYING {other} REPLACING: unrecognized mode"
+                    )))
+                }
             };
             let newb = inspect_replacing(&tbytes, rmode, rregion);
             write_target(fields, newb)?;
@@ -6942,12 +8898,19 @@ fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
     }
     if let Some(rp) = pos_of("REPLACING") {
         let mut i = rp + 1;
-        let modekw = match stmt.get(i) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("EXAMINE REPLACING mode".into())) };
+        let modekw = match stmt.get(i) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => return Err(RunError::Unsupported("EXAMINE REPLACING mode".into())),
+        };
         i += 1;
-        if modekw == "UNTIL" && matches!(stmt.get(i), Some(Tok::Word(w)) if w == "FIRST") { i += 1; }
+        if modekw == "UNTIL" && matches!(stmt.get(i), Some(Tok::Word(w)) if w == "FIRST") {
+            i += 1;
+        }
         let lit = inspect_operand(stmt.get(i), fields)?;
         i += 1;
-        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") { i += 1; }
+        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") {
+            i += 1;
+        }
         let lit2 = inspect_operand(stmt.get(i), fields)?;
         let (rmode, rregion) = match modekw.as_str() {
             "ALL" => (ReplaceMode::All(&lit, &lit2), Region::All),
@@ -6960,38 +8923,67 @@ fn exec_examine(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma
         write_target(fields, newb)?;
         return Ok(());
     }
-    Err(RunError::Unsupported("EXAMINE: expected TALLYING or REPLACING".into()))
+    Err(RunError::Unsupported(
+        "EXAMINE: expected TALLYING or REPLACING".into(),
+    ))
 }
 
 /// `TRANSFORM target FROM from TO to` -- the legacy form of `INSPECT target CONVERTING from TO to` (a
 /// per-byte translation), reusing the sealed CONVERTING court.
 fn exec_transform(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), RunError> {
     use crate::inspect::{inspect_converting, Region};
-    let target = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("TRANSFORM: missing target".into())) };
-    let fp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")).ok_or_else(|| RunError::Unsupported("TRANSFORM without FROM".into()))?;
+    let target = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("TRANSFORM: missing target".into())),
+    };
+    let fp = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "FROM"))
+        .ok_or_else(|| RunError::Unsupported("TRANSFORM without FROM".into()))?;
     let from = inspect_operand(stmt.get(fp + 1), fields)?;
-    let tp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "TO")).ok_or_else(|| RunError::Unsupported("TRANSFORM without TO".into()))?;
+    let tp = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "TO"))
+        .ok_or_else(|| RunError::Unsupported("TRANSFORM without TO".into()))?;
     let to = inspect_operand(stmt.get(tp + 1), fields)?;
-    let tb = read_field(fields, &target)?.map(|f| f.bytes).unwrap_or_default();
+    let tb = read_field(fields, &target)?
+        .map(|f| f.bytes)
+        .unwrap_or_default();
     let newb = inspect_converting(&tb, &from, &to, Region::All);
     write_field(fields, &target, |f| {
-        if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
-        else { Err(RunError::Runtime("TRANSFORM changed field length".into())) }
+        if f.bytes.len() == newb.len() {
+            f.bytes = newb;
+            Ok(())
+        } else {
+            Err(RunError::Runtime("TRANSFORM changed field length".into()))
+        }
     })
 }
 
 /// `STRING <src [DELIMITED BY SIZE|lit]> ... INTO target [WITH POINTER p]` -- concatenate the sources into
 /// the target at the 1-based pointer, preserving the unwritten tail (`GNURUST.STRING.UNSTRING.1`). The
 /// `ON OVERFLOW` handler form is outside the subset (fails closed).
-fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma: bool) -> Result<bool, RunError> {
+fn exec_string(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    decimal_comma: bool,
+) -> Result<bool, RunError> {
     use crate::string_ops::{string_into, StringSource};
-    let into = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
+    let into = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
         .ok_or_else(|| RunError::Unsupported("STRING without INTO".into()))?;
-    let target = match stmt.get(into + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("STRING: missing target".into())) };
+    let target = match stmt.get(into + 1) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("STRING: missing target".into())),
+    };
     // optional WITH POINTER p (after the target)
     let mut pointer_name: Option<String> = None;
     let mut pointer = 1usize;
-    if let Some(rel) = stmt[into + 2..].iter().position(|t| matches!(t, Tok::Word(w) if w == "POINTER")) {
+    if let Some(rel) = stmt[into + 2..]
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "POINTER"))
+    {
         if let Some(Tok::Word(pn)) = stmt.get(into + 2 + rel + 1) {
             pointer = resolve_int(pn, fields).unwrap_or(1).max(1) as usize;
             pointer_name = Some(pn.clone());
@@ -7005,32 +8997,54 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
         match &stmt[i] {
             Tok::Word(w) if w == "DELIMITED" => {
                 i += 1;
-                if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") { i += 1; }
+                if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "BY") {
+                    i += 1;
+                }
                 let delim = match stmt.get(i) {
                     Some(Tok::Word(w)) if w == "SIZE" => None,
                     other => Some(inspect_operand(other, fields)?),
                 };
                 i += 1;
-                for op in pending.drain(..) { srcs.push((op, delim.clone())); }
+                for op in pending.drain(..) {
+                    srcs.push((op, delim.clone()));
+                }
             }
-            t => { pending.push(inspect_operand(Some(t), fields)?); i += 1; }
+            t => {
+                pending.push(inspect_operand(Some(t), fields)?);
+                i += 1;
+            }
         }
     }
-    for op in pending.drain(..) { srcs.push((op, None)); }
-    let ss: Vec<StringSource> = srcs.iter().map(|(b, d)| match d {
-        Some(d) => StringSource::Delimited(b, d),
-        None => StringSource::Size(b),
-    }).collect();
-    let prefill = read_field(fields, &target)?.ok_or_else(|| RunError::UndefinedName(target.clone()))?.bytes;
+    for op in pending.drain(..) {
+        srcs.push((op, None));
+    }
+    let ss: Vec<StringSource> = srcs
+        .iter()
+        .map(|(b, d)| match d {
+            Some(d) => StringSource::Delimited(b, d),
+            None => StringSource::Size(b),
+        })
+        .collect();
+    let prefill = read_field(fields, &target)?
+        .ok_or_else(|| RunError::UndefinedName(target.clone()))?
+        .bytes;
     let res = string_into(&prefill, &ss, pointer);
     let overflow = res.overflow;
     let newb = res.target;
     write_field(fields, &target, |f| {
-        if f.bytes.len() == newb.len() { f.bytes = newb; Ok(()) }
-        else { Err(RunError::Runtime("STRING changed target length".into())) }
+        if f.bytes.len() == newb.len() {
+            f.bytes = newb;
+            Ok(())
+        } else {
+            Err(RunError::Runtime("STRING changed target length".into()))
+        }
     })?;
     if let Some(pn) = pointer_name {
-        let mv = vec![Tok::Word(res.pointer.to_string()), Tok::Word("TO".to_string()), Tok::Word(pn)];
+        let mv = vec![
+            Tok::Word(res.pointer.to_string()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(pn),
+        ];
         exec_move(&mv, fields, decimal_comma)?;
     }
     Ok(overflow) // `true` when the sources overran the target -> the ON OVERFLOW handler runs
@@ -7044,41 +9058,73 @@ fn exec_string(stmt: &[Tok], fields: &mut HashMap<String, Field>, decimal_comma:
 /// supported (earliest match splits; `ALL` collapses repeats; `DELIMITER IN` captures the matched one).
 fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bool, RunError> {
     use crate::string_ops::unstring_multi;
-    let into = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
+    let into = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "INTO"))
         .ok_or_else(|| RunError::Unsupported("UNSTRING without INTO".into()))?;
     let source = inspect_operand(stmt.first(), fields)?;
     // optional `DELIMITED BY [ALL] d1 [OR [ALL] d2]...` between the source and INTO -> (delimiter, all) list.
     let mut delims: Vec<(Vec<u8>, bool)> = Vec::new();
-    if let Some(dp) = stmt[..into].iter().position(|t| matches!(t, Tok::Word(w) if w == "DELIMITED")) {
+    if let Some(dp) = stmt[..into]
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "DELIMITED"))
+    {
         let mut j = dp + 1;
-        if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") { j += 1; }
+        if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "BY") {
+            j += 1;
+        }
         loop {
             let all = matches!(stmt.get(j), Some(Tok::Word(w)) if w == "ALL");
-            if all { j += 1; }
+            if all {
+                j += 1;
+            }
             if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "SIZE") {
                 j += 1; // DELIMITED BY SIZE: no delimiter for this alternative
             } else {
                 delims.push((inspect_operand(stmt.get(j), fields)?, all));
                 j += 1;
             }
-            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "OR") { j += 1; continue; }
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "OR") {
+                j += 1;
+                continue;
+            }
             break;
         }
     }
     // `[WITH] POINTER p` (a 1-based scan cursor, read in and written back) sits after the receivers.
-    let ptr_pos = stmt[into + 1..].iter().position(|t| matches!(t, Tok::Word(w) if w == "POINTER")).map(|p| into + 1 + p);
-    let ptr_field: Option<String> = ptr_pos.and_then(|p| match stmt.get(p + 1) { Some(Tok::Word(w)) => Some(w.clone()), _ => None });
+    let ptr_pos = stmt[into + 1..]
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "POINTER"))
+        .map(|p| into + 1 + p);
+    let ptr_field: Option<String> = ptr_pos.and_then(|p| match stmt.get(p + 1) {
+        Some(Tok::Word(w)) => Some(w.clone()),
+        _ => None,
+    });
     // The clause is written `[WITH] POINTER p`; the receiver list must stop before the optional `WITH`.
-    let ptr_clause = ptr_pos.map(|p| if matches!(stmt.get(p - 1), Some(Tok::Word(w)) if w == "WITH") { p - 1 } else { p });
+    let ptr_clause = ptr_pos.map(|p| {
+        if matches!(stmt.get(p - 1), Some(Tok::Word(w)) if w == "WITH") {
+            p - 1
+        } else {
+            p
+        }
+    });
     // The receiver list runs from INTO to TALLYING / POINTER (or end). Each receiver is `name [DELIMITER IN
     // d] [COUNT IN c]`; an optional trailing `TALLYING IN t` counts the filled fields (added to t).
-    let tally_pos = stmt[into + 1..].iter().position(|t| matches!(t, Tok::Word(w) if w == "TALLYING")).map(|p| into + 1 + p);
-    let seg_end = tally_pos.unwrap_or(stmt.len()).min(ptr_clause.unwrap_or(stmt.len()));
+    let tally_pos = stmt[into + 1..]
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "TALLYING"))
+        .map(|p| into + 1 + p);
+    let seg_end = tally_pos
+        .unwrap_or(stmt.len())
+        .min(ptr_clause.unwrap_or(stmt.len()));
     let seg = &stmt[into + 1..seg_end];
     let mut recvs: Vec<(String, Option<String>, Option<String>)> = Vec::new();
     let mut i = 0;
     while i < seg.len() {
-        let Some(Tok::Word(name)) = seg.get(i) else { i += 1; continue };
+        let Some(Tok::Word(name)) = seg.get(i) else {
+            i += 1;
+            continue;
+        };
         let name = name.clone();
         i += 1;
         let (mut din, mut cin) = (None, None);
@@ -7088,12 +9134,26 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
             match seg.get(i) {
                 Some(Tok::Word(w)) if w == "DELIMITER" => {
                     let k = if in_at(i + 1) { i + 2 } else { i + 1 };
-                    din = Some(match seg.get(k) { Some(Tok::Word(d)) => d.clone(), _ => return Err(RunError::Unsupported("UNSTRING DELIMITER IN: missing field".into())) });
+                    din = Some(match seg.get(k) {
+                        Some(Tok::Word(d)) => d.clone(),
+                        _ => {
+                            return Err(RunError::Unsupported(
+                                "UNSTRING DELIMITER IN: missing field".into(),
+                            ))
+                        }
+                    });
                     i = k + 1;
                 }
                 Some(Tok::Word(w)) if w == "COUNT" => {
                     let k = if in_at(i + 1) { i + 2 } else { i + 1 };
-                    cin = Some(match seg.get(k) { Some(Tok::Word(c)) => c.clone(), _ => return Err(RunError::Unsupported("UNSTRING COUNT IN: missing field".into())) });
+                    cin = Some(match seg.get(k) {
+                        Some(Tok::Word(c)) => c.clone(),
+                        _ => {
+                            return Err(RunError::Unsupported(
+                                "UNSTRING COUNT IN: missing field".into(),
+                            ))
+                        }
+                    });
                     i = k + 1;
                 }
                 _ => break,
@@ -7107,8 +9167,17 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
     let tally_field = match tally_pos {
         Some(tp) => {
             let mut j = tp + 1;
-            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "IN") { j += 1; }
-            Some(match stmt.get(j) { Some(Tok::Word(n)) => n.clone(), _ => return Err(RunError::Unsupported("UNSTRING TALLYING IN: missing field".into())) })
+            if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "IN") {
+                j += 1;
+            }
+            Some(match stmt.get(j) {
+                Some(Tok::Word(n)) => n.clone(),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "UNSTRING TALLYING IN: missing field".into(),
+                    ))
+                }
+            })
         }
         None => None,
     };
@@ -7146,24 +9215,41 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
     }
     // The scan begins at the POINTER's current value (default 1); the final pointer is written back after.
     let ptr_start = match &ptr_field {
-        Some(f) => resolve_int(f, fields).map(|v| v.max(1) as usize).unwrap_or(1),
+        Some(f) => resolve_int(f, fields)
+            .map(|v| v.max(1) as usize)
+            .unwrap_or(1),
         None => 1,
     };
     let res = unstring_multi(&source, &delims, &sizes, ptr_start);
     if let Some(f) = &ptr_field {
-        let mv = vec![Tok::Word(res.pointer.to_string()), Tok::Word("TO".to_string()), Tok::Word(f.clone())];
+        let mv = vec![
+            Tok::Word(res.pointer.to_string()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(f.clone()),
+        ];
         exec_move(&mv, fields, false)?;
     }
     for (((n, din, cin), fld), is_num) in recvs.iter().zip(res.fields.iter()).zip(numeric.iter()) {
         if *is_num {
             // A DISPLAY-numeric receiver takes the delimited substring (its `count` chars) by MOVE, which
             // applies the alphanumeric->numeric conversion (right-justify, zero-fill) -- e.g. "12" -> 012.
-            let sub = fld.data.get(..fld.count.min(fld.data.len())).unwrap_or(&[]).to_vec();
-            let mv = vec![Tok::Str(sub), Tok::Word("TO".to_string()), Tok::Word(n.clone())];
+            let sub = fld
+                .data
+                .get(..fld.count.min(fld.data.len()))
+                .unwrap_or(&[])
+                .to_vec();
+            let mv = vec![
+                Tok::Str(sub),
+                Tok::Word("TO".to_string()),
+                Tok::Word(n.clone()),
+            ];
             exec_move(&mv, fields, false)?;
         } else {
             let data = fld.data.clone();
-            write_field(fields, n, |f| { f.bytes = data; Ok(()) })?;
+            write_field(fields, n, |f| {
+                f.bytes = data;
+                Ok(())
+            })?;
         }
         if let Some(d) = din {
             let dl = fld.delimiter.clone();
@@ -7176,13 +9262,21 @@ fn exec_unstring(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<bo
             })?;
         }
         if let Some(c) = cin {
-            let mv = vec![Tok::Word(fld.count.to_string()), Tok::Word("TO".to_string()), Tok::Word(c.clone())];
+            let mv = vec![
+                Tok::Word(fld.count.to_string()),
+                Tok::Word("TO".to_string()),
+                Tok::Word(c.clone()),
+            ];
             exec_move(&mv, fields, false)?;
         }
     }
     if let Some(t) = tally_field {
         let nv = resolve_int(&t, fields).unwrap_or(0) + res.tally as i64;
-        let mv = vec![Tok::Word(nv.to_string()), Tok::Word("TO".to_string()), Tok::Word(t)];
+        let mv = vec![
+            Tok::Word(nv.to_string()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(t),
+        ];
         exec_move(&mv, fields, false)?;
     }
     Ok(res.overflow)
@@ -7195,7 +9289,9 @@ fn day_of_year(y: i32, m: i32, d: i32) -> i32 {
     let mut s = 0;
     for (i, &md) in mdays.iter().enumerate().take((m - 1).max(0) as usize) {
         s += md;
-        if i == 1 && leap { s += 1; }
+        if i == 1 && leap {
+            s += 1;
+        }
     }
     s + d
 }
@@ -7205,7 +9301,11 @@ fn day_of_week(y: i32, m: i32, d: i32) -> i32 {
     let t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
     let yy = if m < 3 { y - 1 } else { y };
     let w = (yy + yy / 4 - yy / 100 + yy / 400 + t[(m - 1).max(0) as usize] + d) % 7; // 0 = Sunday
-    if w == 0 { 7 } else { w }
+    if w == 0 {
+        7
+    } else {
+        w
+    }
 }
 
 /// Civil (Gregorian) `(year, month, day)` from a count of days since 1970-01-01 (day 0). Howard
@@ -7235,17 +9335,30 @@ fn compile_tm() -> Result<(i64, u32, u32, u32, u32, u32), RunError> {
             "FUNCTION WHEN-COMPILED / MODULE-DATE / MODULE-TIME / MODULE-FORMATTED-DATE requires a pinned SOURCE_DATE_EPOCH (the live compile clock is a non-claim)".into(),
         )
     })?;
-    let digits: String = raw.trim().chars().take_while(|c| c.is_ascii_digit()).collect();
+    let digits: String = raw
+        .trim()
+        .chars()
+        .take_while(|c| c.is_ascii_digit())
+        .collect();
     let epoch: i64 = digits
         .parse()
         .map_err(|_| RunError::Unsupported("SOURCE_DATE_EPOCH is not a number".into()))?;
     if epoch > 253_402_300_799 {
-        return Err(RunError::Unsupported("SOURCE_DATE_EPOCH exceeds the year-9999 ceiling".into()));
+        return Err(RunError::Unsupported(
+            "SOURCE_DATE_EPOCH exceeds the year-9999 ceiling".into(),
+        ));
     }
     let days = epoch / 86400;
     let sod = epoch % 86400;
     let (y, mon, d) = civil_from_days(days - 1);
-    Ok((y, mon, d, (sod / 3600) as u32, ((sod / 60) % 60) as u32, (sod % 60) as u32))
+    Ok((
+        y,
+        mon,
+        d,
+        (sod / 3600) as u32,
+        ((sod / 60) % 60) as u32,
+        (sod % 60) as u32,
+    ))
 }
 
 /// `ACCEPT identifier FROM {DATE [YYYYMMDD] | DAY [YYYYDDD] | TIME | DAY-OF-WEEK}` -- the system date/time
@@ -7260,7 +9373,10 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
     if !matches!(stmt.get(1), Some(Tok::Word(w)) if w == "FROM") {
         return Err(RunError::Unsupported("ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT".into()));
     }
-    let src = match stmt.get(2) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("ACCEPT FROM: missing source".into())) };
+    let src = match stmt.get(2) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("ACCEPT FROM: missing source".into())),
+    };
     // `ACCEPT id FROM ENVIRONMENT "name"` (or a name field): read the environment variable (deterministic
     // under the pinned harness env) and MOVE its value into the receiver; an unset variable yields spaces.
     if src == "ENVIRONMENT" || src == "ENVIRONMENT-VALUE" {
@@ -7275,12 +9391,21 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
                 Some(Tok::Word(w)) => read_field(fields, w)?
                     .map(|f| String::from_utf8_lossy(&f.bytes).trim_end().to_string())
                     .unwrap_or_else(|| w.clone()),
-                _ => return Err(RunError::Unsupported("ACCEPT FROM ENVIRONMENT: missing variable name".into())),
+                _ => {
+                    return Err(RunError::Unsupported(
+                        "ACCEPT FROM ENVIRONMENT: missing variable name".into(),
+                    ))
+                }
             }
         };
-        let val = ENV_OVERRIDE.with(|m| m.borrow().get(&name).cloned())
+        let val = ENV_OVERRIDE
+            .with(|m| m.borrow().get(&name).cloned())
             .unwrap_or_else(|| std::env::var(&name).unwrap_or_default().into_bytes());
-        let mv = vec![Tok::Str(val), Tok::Word("TO".to_string()), Tok::Word(target)];
+        let mv = vec![
+            Tok::Str(val),
+            Tok::Word("TO".to_string()),
+            Tok::Word(target),
+        ];
         return exec_move(&mv, fields, false);
     }
     // COMMAND-LINE sources (the run boundary set the command line via set_command_line):
@@ -7291,23 +9416,30 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
     // pinned argv, so this is deterministic under the suite.)
     if src == "COMMAND-LINE" {
         let joined = COMMAND_LINE.with(|c| c.borrow().join(" "));
-        let mv = vec![Tok::Str(joined.into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        let mv = vec![
+            Tok::Str(joined.into_bytes()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(target),
+        ];
         return exec_move(&mv, fields, false);
     }
     if src == "ARGUMENT-VALUE" {
         let n = ARG_NUMBER_REG.with(|r| r.borrow().clone());
-        let val = COMMAND_LINE.with(|c| {
-            c.borrow()
-                .get(n)
-                .cloned()
-                .unwrap_or_default()
-        });
-        let mv = vec![Tok::Str(val.into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        let val = COMMAND_LINE.with(|c| c.borrow().get(n).cloned().unwrap_or_default());
+        let mv = vec![
+            Tok::Str(val.into_bytes()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(target),
+        ];
         return exec_move(&mv, fields, false);
     }
     if src == "ARGUMENT-NUMBER" {
         let n = COMMAND_LINE.with(|c| c.borrow().len());
-        let mv = vec![Tok::Str(n.to_string().into_bytes()), Tok::Word("TO".to_string()), Tok::Word(target)];
+        let mv = vec![
+            Tok::Str(n.to_string().into_bytes()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(target),
+        ];
         return exec_move(&mv, fields, false);
     }
     let long_year = matches!(stmt.get(3), Some(Tok::Word(w)) if w == "YYYYMMDD" || w == "YYYYDDD");
@@ -7315,7 +9447,9 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
         "ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)".into()))?;
     let cd = crate::common_signal::check_current_date(raw.as_bytes());
     if cd.invalid || cd.year < 0 || cd.month < 0 || cd.day < 0 {
-        return Err(RunError::Runtime("COB_CURRENT_DATE did not parse to a full date".into()));
+        return Err(RunError::Runtime(
+            "COB_CURRENT_DATE did not parse to a full date".into(),
+        ));
     }
     let (y, m, d) = (cd.year, cd.month, cd.day);
     let digits = match src.as_str() {
@@ -7334,15 +9468,24 @@ fn exec_accept(stmt: &[Tok], fields: &mut HashMap<String, Field>) -> Result<(), 
     let s = digits.into_bytes();
     let n = s.len();
     write_field(fields, &target, |f| match &f.storage {
-        Storage::Numeric(_) | Storage::Alpha(_) if f.bytes.len() == n => { f.bytes = s; Ok(()) }
-        _ => Err(RunError::Unsupported(format!("ACCEPT FROM {src}: receiver must be a {n}-digit numeric/alphanumeric item"))),
+        Storage::Numeric(_) | Storage::Alpha(_) if f.bytes.len() == n => {
+            f.bytes = s;
+            Ok(())
+        }
+        _ => Err(RunError::Unsupported(format!(
+            "ACCEPT FROM {src}: receiver must be a {n}-digit numeric/alphanumeric item"
+        ))),
     })
 }
 
 /// The in-memory file-store key for a COBOL file name: its ASSIGN target (so two SELECTs on the same
 /// physical name share storage), falling back to the name.
 fn fkey(ctx: &Ctx, name: &str) -> String {
-    ctx.file_defs.get(name).map(|d| d.assign.clone()).filter(|a| !a.is_empty()).unwrap_or_else(|| name.to_string())
+    ctx.file_defs
+        .get(name)
+        .map(|d| d.assign.clone())
+        .filter(|a| !a.is_empty())
+        .unwrap_or_else(|| name.to_string())
 }
 
 /// Resolve a file's `ASSIGN` target to a real path on disk, mirroring cobc: an environment variable named
@@ -7398,7 +9541,11 @@ fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option
     // The FD record width: use read_field (reconstructs a GROUP record from its leaves) rather than the
     // group field's own `bytes` (which is empty for a group whose children hold the storage) -- so a
     // group-structured FD record (e.g. `01 R. 05 A PIC X(13). 05 FILLER PIC X(67).`) loads correctly.
-    let reclen = read_field(fields, def.primary_record()).ok().flatten().map(|f| f.bytes.len()).filter(|&n| n > 0)?;
+    let reclen = read_field(fields, def.primary_record())
+        .ok()
+        .flatten()
+        .map(|f| f.bytes.len())
+        .filter(|&n| n > 0)?;
     let fit = |bytes: &[u8]| -> Vec<u8> {
         let mut r = bytes.to_vec();
         r.resize(reclen, b' '); // pad short / truncate long to the fixed record width
@@ -7421,7 +9568,11 @@ fn load_file_from_disk(def: &FileDef, fields: &HashMap<String, Field>) -> Option
         // or by key (random READ). The keys are intrinsic to the records, so only the values are stored.
         FileOrg::Indexed => {
             let db = gnucobol_rs_bdb_format::BdbFile::parse(&data).ok()?;
-            db.records().ok()?.into_iter().map(|(_k, v)| fit(&v)).collect()
+            db.records()
+                .ok()?
+                .into_iter()
+                .map(|(_k, v)| fit(&v))
+                .collect()
         }
         _ => data.chunks(reclen.max(1)).map(fit).collect(),
     };
@@ -7433,32 +9584,64 @@ fn set_file_status(fields: &mut HashMap<String, Field>, def: &FileDef, code: &st
     // FUNCTION EXCEPTION-FILE reflects the LAST I/O operation (regardless of a FILE STATUS clause).
     set_file_exception(code, &def.name);
     if let Some(s) = &def.status {
-        let mv = vec![Tok::Str(code.as_bytes().to_vec()), Tok::Word("TO".to_string()), Tok::Word(s.clone())];
+        let mv = vec![
+            Tok::Str(code.as_bytes().to_vec()),
+            Tok::Word("TO".to_string()),
+            Tok::Word(s.clone()),
+        ];
         let _ = exec_move(&mv, fields, false);
     }
 }
 
 /// `OPEN {INPUT|OUTPUT|EXTEND|I-O} file [file ...]` -- set each file's open mode (OUTPUT truncates the
 /// logical file). The subset is a single mode keyword per statement.
-fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
+fn exec_open(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
     let mode = match stmt.first() {
         Some(Tok::Word(w)) => match w.as_str() {
-            "INPUT" => 1u8, "OUTPUT" => 2, "EXTEND" => 3, "I-O" => 4,
-            other => return Err(RunError::Unsupported(format!("OPEN: unrecognized mode `{other}` (expected INPUT/OUTPUT/EXTEND/I-O)"))),
+            "INPUT" => 1u8,
+            "OUTPUT" => 2,
+            "EXTEND" => 3,
+            "I-O" => 4,
+            other => {
+                return Err(RunError::Unsupported(format!(
+                    "OPEN: unrecognized mode `{other}` (expected INPUT/OUTPUT/EXTEND/I-O)"
+                )))
+            }
         },
         _ => return Err(RunError::Unsupported("OPEN: missing mode".into())),
     };
-    for name in stmt[1..].iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
-        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?.clone();
+    for name in stmt[1..].iter().filter_map(|t| {
+        if let Tok::Word(w) = t {
+            Some(w.clone())
+        } else {
+            None
+        }
+    }) {
+        let def = ctx
+            .file_defs
+            .get(&name)
+            .ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?
+            .clone();
         // A VARIABLE-length FD record area is LOW-VALUES (NUL) until written -- cobc does not space-init it,
         // and READ ... INTO later moves the PHYSICAL buffer (its tail past the record included). Reset the
         // record's storage leaf to NUL at OPEN so a freshly-read short record carries cobc's NUL tail.
         if def.varying_dep.is_some() {
             let leaf = match fields.get(def.primary_record()).map(|f| f.storage.clone()) {
-                Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.primary_record().to_string()),
+                Some(Storage::Group { children }) => children
+                    .iter()
+                    .find(|c| !c.starts_with('\u{3}'))
+                    .cloned()
+                    .unwrap_or_else(|| def.primary_record().to_string()),
                 _ => def.primary_record().to_string(),
             };
-            if let Some(lf) = fields.get_mut(&leaf) { lf.bytes.iter_mut().for_each(|b| *b = 0); }
+            if let Some(lf) = fields.get_mut(&leaf) {
+                lf.bytes.iter_mut().for_each(|b| *b = 0);
+            }
         }
         // OPEN INPUT / I-O on a file that was never created (never OPEN OUTPUT'd / written) is "file not
         // found": status "35", then any DECLARATIVES USE handler for the file runs.
@@ -7483,7 +9666,9 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
         {
             let mut files = ctx.files.borrow_mut();
             let st = files.entry(fkey(ctx, &name)).or_default();
-            if mode == 2 { st.records.clear(); }
+            if mode == 2 {
+                st.records.clear();
+            }
             st.read_pos = 0;
             st.mode = mode;
         }
@@ -7493,7 +9678,12 @@ fn exec_open(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
 }
 
 /// Run the DECLARATIVES `USE ... ON file` handler paragraph (if any) after a file error on `file`.
-fn run_use_handler(file: &str, fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<bool, RunError> {
+fn run_use_handler(
+    file: &str,
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<bool, RunError> {
     let range = USE_PROCS.with(|c| c.borrow().get(file).cloned());
     if let Some((start, end)) = range {
         let proc = CUR_PROC.with(|c| c.borrow().clone());
@@ -7504,9 +9694,21 @@ fn run_use_handler(file: &str, fields: &mut HashMap<String, Field>, out: &mut Ve
 
 /// `CLOSE file [file ...]` -- mark each file closed (its logical records persist so a later OPEN INPUT can
 /// re-read them within the same run).
-fn exec_close(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    for name in stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
-        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("CLOSE: `{name}` is not a declared file")))?;
+fn exec_close(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    for name in stmt.iter().filter_map(|t| {
+        if let Tok::Word(w) = t {
+            Some(w.clone())
+        } else {
+            None
+        }
+    }) {
+        let def = ctx.file_defs.get(&name).ok_or_else(|| {
+            RunError::Unsupported(format!("CLOSE: `{name}` is not a declared file"))
+        })?;
         if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &name)) {
             // GnuCOBOL emits a final `\n` at close when the last write was AFTER ADVANCING
             // (`flag_needs_nl`) -- mirror it so the store holds the oracle's disk bytes.
@@ -7523,12 +9725,26 @@ fn exec_close(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
 
 /// `WRITE record [FROM id]` -- append the record's current bytes to its file (LINE SEQUENTIAL trims trailing
 /// spaces, matching the oracle). The operand is the FD record name.
-fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let rec = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("WRITE: missing record".into())) };
+fn exec_write(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let rec = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("WRITE: missing record".into())),
+    };
     // optional FROM id: MOVE id into the record first.
-    if let Some(fp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")) {
+    if let Some(fp) = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "FROM"))
+    {
         if let Some(src) = stmt.get(fp + 1) {
-            let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
+            let mv = vec![
+                src.clone(),
+                Tok::Word("TO".to_string()),
+                Tok::Word(rec.clone()),
+            ];
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
@@ -7548,16 +9764,21 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
                 }
                 let is_after = w == "AFTER";
                 // count: a literal / identifier up to LINE|LINES (bare ADVANCING = 1).
-                let cnt = stmt.get(i + 2)
+                let cnt = stmt
+                    .get(i + 2)
                     .filter(|t| !matches!(t, Tok::Word(x) if x == "LINE" || x == "LINES"));
                 let n = match cnt {
                     Some(Tok::Word(c)) => resolve_int(c, fields).ok_or_else(|| {
-                        RunError::Unsupported(format!("WRITE ... ADVANCING: `{c}` is not an integer"))
+                        RunError::Unsupported(format!(
+                            "WRITE ... ADVANCING: `{c}` is not an integer"
+                        ))
                     })?,
                     _ => 1,
                 };
                 if n < 0 {
-                    return Err(RunError::Runtime("WRITE ... ADVANCING: negative count".into()));
+                    return Err(RunError::Runtime(
+                        "WRITE ... ADVANCING: negative count".into(),
+                    ));
                 }
                 line_control = Some((is_after, n as usize));
                 break;
@@ -7565,24 +9786,35 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         }
     }
     let def = {
-        let fname = ctx.record_files.get(&rec)
+        let fname = ctx
+            .record_files
+            .get(&rec)
             .ok_or_else(|| RunError::Unsupported(format!("WRITE `{rec}`: not an FD record")))?;
-        ctx.file_defs.get(fname)
+        ctx.file_defs
+            .get(fname)
             .ok_or_else(|| RunError::Unsupported(format!("WRITE `{rec}`: not an FD record")))?
             .clone()
     };
-    let mut bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
+    let mut bytes = read_field(fields, &rec)?
+        .map(|f| f.bytes)
+        .unwrap_or_default();
     if def.org == FileOrg::LineSequential {
-        while bytes.last() == Some(&b' ') { bytes.pop(); }
+        while bytes.last() == Some(&b' ') {
+            bytes.pop();
+        }
     }
     if def.org == FileOrg::Relative {
         // place the record at the 1-based RELATIVE KEY position (empty slots = absent records).
         let pos = relative_key_value(&def, fields)?;
         let mut files = ctx.files.borrow_mut();
         let st = files.entry(def.assign.clone()).or_default();
-        if st.records.len() < pos { st.records.resize(pos, Vec::new()); }
+        if st.records.len() < pos {
+            st.records.resize(pos, Vec::new());
+        }
         let occupied = !st.records[pos - 1].is_empty();
-        if !occupied { st.records[pos - 1] = bytes; }
+        if !occupied {
+            st.records[pos - 1] = bytes;
+        }
         drop(files);
         set_file_status(fields, &def, if occupied { "22" } else { "00" });
         return Ok(());
@@ -7594,12 +9826,16 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         let mut chunk = Vec::with_capacity(n + bytes.len());
         if is_after {
             // AFTER n: n x LF BEFORE the record; n = 0 writes CR (the oracle's cob_file_write_opt).
-            for _ in 0..n { chunk.push(b'\n'); }
+            for _ in 0..n {
+                chunk.push(b'\n');
+            }
             chunk.extend_from_slice(&bytes);
         } else {
             // BEFORE n: n x LF AFTER the record (the record then ends the line -- no pending newline).
             chunk.extend_from_slice(&bytes);
-            for _ in 0..n { chunk.push(b'\n'); }
+            for _ in 0..n {
+                chunk.push(b'\n');
+            }
         }
         bytes = chunk;
     }
@@ -7608,7 +9844,9 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
         let st = files.entry(def.assign.clone()).or_default();
         st.records.push(bytes);
         if let Some((is_after, _)) = line_control {
-            if is_after { st.pending_nl = true; }
+            if is_after {
+                st.pending_nl = true;
+            }
         }
     }
     set_file_status(fields, &def, "00");
@@ -7617,36 +9855,60 @@ fn exec_write(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> R
 
 /// The current 1-based value of a RELATIVE file's RELATIVE KEY field (>= 1 required).
 fn relative_key_value(def: &FileDef, fields: &HashMap<String, Field>) -> Result<usize, RunError> {
-    let key = def.rel_key.as_ref()
-        .ok_or_else(|| RunError::Unsupported(format!("RELATIVE file `{}` has no RELATIVE KEY", def.name)))?;
+    let key = def.rel_key.as_ref().ok_or_else(|| {
+        RunError::Unsupported(format!("RELATIVE file `{}` has no RELATIVE KEY", def.name))
+    })?;
     let v = resolve_int(key, fields)
         .ok_or_else(|| RunError::Unsupported(format!("RELATIVE KEY `{key}` is not an integer")))?;
     if v < 1 {
-        return Err(RunError::Runtime(format!("RELATIVE KEY `{key}` = {v} (< 1)")));
+        return Err(RunError::Runtime(format!(
+            "RELATIVE KEY `{key}` = {v} (< 1)"
+        )));
     }
     Ok(v as usize)
 }
 
 /// `REWRITE record [FROM id]` -- replace the record last READ (under OPEN I-O) with the record buffer's
 /// current bytes. With no current record (no prior READ) it fails with status `"43"`.
-fn exec_rewrite(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let rec = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("REWRITE: missing record".into())) };
-    if let Some(fp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")) {
+fn exec_rewrite(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let rec = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("REWRITE: missing record".into())),
+    };
+    if let Some(fp) = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "FROM"))
+    {
         if let Some(src) = stmt.get(fp + 1) {
-            let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
+            let mv = vec![
+                src.clone(),
+                Tok::Word("TO".to_string()),
+                Tok::Word(rec.clone()),
+            ];
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
     let def = {
-        let fname = ctx.record_files.get(&rec)
+        let fname = ctx
+            .record_files
+            .get(&rec)
             .ok_or_else(|| RunError::Unsupported(format!("REWRITE `{rec}`: not an FD record")))?;
-        ctx.file_defs.get(fname)
+        ctx.file_defs
+            .get(fname)
             .ok_or_else(|| RunError::Unsupported(format!("REWRITE `{rec}`: not an FD record")))?
             .clone()
     };
-    let mut bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
+    let mut bytes = read_field(fields, &rec)?
+        .map(|f| f.bytes)
+        .unwrap_or_default();
     if def.org == FileOrg::LineSequential {
-        while bytes.last() == Some(&b' ') { bytes.pop(); }
+        while bytes.last() == Some(&b' ') {
+            bytes.pop();
+        }
     }
     let no_current = {
         let mut files = ctx.files.borrow_mut();
@@ -7665,9 +9927,21 @@ fn exec_rewrite(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) ->
 
 /// `UNLOCK file [file ...]` -- release record locks. The front-end's in-memory model holds no locks, so this
 /// is a faithful no-op (status `"00"`), matching libcob on a non-locked sequential file.
-fn exec_unlock(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    for name in stmt.iter().filter_map(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None }) {
-        let def = ctx.file_defs.get(&name).ok_or_else(|| RunError::Unsupported(format!("UNLOCK: `{name}` is not a declared file")))?;
+fn exec_unlock(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    for name in stmt.iter().filter_map(|t| {
+        if let Tok::Word(w) = t {
+            Some(w.clone())
+        } else {
+            None
+        }
+    }) {
+        let def = ctx.file_defs.get(&name).ok_or_else(|| {
+            RunError::Unsupported(format!("UNLOCK: `{name}` is not a declared file"))
+        })?;
         set_file_status(fields, def, "00");
     }
     Ok(())
@@ -7677,41 +9951,117 @@ fn exec_unlock(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
 /// read every record from the USING files, order them, and write them to the GIVING files. The subset is a
 /// single **whole-record** KEY (sub-field keys need group items) with USING/GIVING; INPUT/OUTPUT PROCEDURE
 /// (which drive RELEASE/RETURN) is out of subset.
-fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8>, ctx: &Ctx) -> Result<(), RunError> {
-    let sf = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("SORT: missing sort file".into())) };
-    let sd_def = ctx.file_defs.get(&sf).ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?.clone();
-    let reclen = read_field(fields, sd_def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
-    let kw = |w: &str| matches!(w, "ON" | "KEY" | "ASCENDING" | "DESCENDING" | "USING" | "GIVING" | "INPUT" | "OUTPUT" | "PROCEDURE" | "IS" | "THRU" | "THROUGH");
+fn exec_sort(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    out: &mut Vec<u8>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let sf = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("SORT: missing sort file".into())),
+    };
+    let sd_def = ctx
+        .file_defs
+        .get(&sf)
+        .ok_or_else(|| RunError::Unsupported(format!("SORT: `{sf}` is not a declared file")))?
+        .clone();
+    let reclen = read_field(fields, sd_def.primary_record())?
+        .map(|f| f.bytes.len())
+        .unwrap_or(0);
+    let kw = |w: &str| {
+        matches!(
+            w,
+            "ON" | "KEY"
+                | "ASCENDING"
+                | "DESCENDING"
+                | "USING"
+                | "GIVING"
+                | "INPUT"
+                | "OUTPUT"
+                | "PROCEDURE"
+                | "IS"
+                | "THRU"
+                | "THROUGH"
+        )
+    };
     // Each KEY records the ASCENDING/DESCENDING direction in effect when it was named (a SORT may mix
     // directions: `ASCENDING KEY a DESCENDING KEY b`). The keys compare in declared order.
     let mut cur_desc = false;
     let mut keys: Vec<(String, bool)> = vec![];
     let (mut using, mut giving): (Vec<String>, Vec<String>) = (vec![], vec![]);
-    let (mut in_proc, mut out_proc): (Option<(String, String)>, Option<(String, String)>) = (None, None);
-    let word = |i: usize| stmt.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.clone()) } else { None });
+    let (mut in_proc, mut out_proc): (Option<(String, String)>, Option<(String, String)>) =
+        (None, None);
+    let word = |i: usize| {
+        stmt.get(i).and_then(|t| {
+            if let Tok::Word(w) = t {
+                Some(w.clone())
+            } else {
+                None
+            }
+        })
+    };
     let mut i = 1;
     while i < stmt.len() {
         match word(i).as_deref() {
             Some("ON") | Some("KEY") => i += 1,
-            Some("ASCENDING") => { cur_desc = false; i += 1; }
-            Some("DESCENDING") => { cur_desc = true; i += 1; }
-            Some("USING") => { i += 1; while let Some(w) = word(i) { if kw(&w) { break; } using.push(w); i += 1; } }
-            Some("GIVING") => { i += 1; while let Some(w) = word(i) { if kw(&w) { break; } giving.push(w); i += 1; } }
+            Some("ASCENDING") => {
+                cur_desc = false;
+                i += 1;
+            }
+            Some("DESCENDING") => {
+                cur_desc = true;
+                i += 1;
+            }
+            Some("USING") => {
+                i += 1;
+                while let Some(w) = word(i) {
+                    if kw(&w) {
+                        break;
+                    }
+                    using.push(w);
+                    i += 1;
+                }
+            }
+            Some("GIVING") => {
+                i += 1;
+                while let Some(w) = word(i) {
+                    if kw(&w) {
+                        break;
+                    }
+                    giving.push(w);
+                    i += 1;
+                }
+            }
             Some("INPUT") | Some("OUTPUT") => {
                 let is_in = word(i).as_deref() == Some("INPUT");
                 i += 1;
-                if word(i).as_deref() == Some("PROCEDURE") { i += 1; }
-                if word(i).as_deref() == Some("IS") { i += 1; }
+                if word(i).as_deref() == Some("PROCEDURE") {
+                    i += 1;
+                }
+                if word(i).as_deref() == Some("IS") {
+                    i += 1;
+                }
                 let p1 = word(i).unwrap_or_default();
                 i += 1;
                 let mut p2 = p1.clone();
                 if matches!(word(i).as_deref(), Some("THRU") | Some("THROUGH")) {
                     i += 1;
-                    if let Some(w) = word(i) { p2 = w; i += 1; }
+                    if let Some(w) = word(i) {
+                        p2 = w;
+                        i += 1;
+                    }
                 }
-                if is_in { in_proc = Some((p1, p2)); } else { out_proc = Some((p1, p2)); }
+                if is_in {
+                    in_proc = Some((p1, p2));
+                } else {
+                    out_proc = Some((p1, p2));
+                }
             }
-            Some(w) => { keys.push((w.to_string(), cur_desc)); i += 1; }
+            Some(w) => {
+                keys.push((w.to_string(), cur_desc));
+                i += 1;
+            }
             None => i += 1,
         }
     }
@@ -7721,8 +10071,12 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     // (offset, length, descending) for each key, in declared (major-to-minor) order.
     let mut spans: Vec<(usize, usize, bool)> = Vec::with_capacity(keys.len());
     for (k, desc) in &keys {
-        let (off, len) = sort_key_span(sd_def.primary_record(), k, reclen, fields)
-            .ok_or_else(|| RunError::Unsupported(format!("SORT/MERGE KEY `{k}` is not a field of the sort record")))?;
+        let (off, len) =
+            sort_key_span(sd_def.primary_record(), k, reclen, fields).ok_or_else(|| {
+                RunError::Unsupported(format!(
+                    "SORT/MERGE KEY `{k}` is not a field of the sort record"
+                ))
+            })?;
         spans.push((off, len, *desc));
     }
     // the current body's tokens, for running INPUT/OUTPUT PROCEDURE ranges.
@@ -7730,25 +10084,42 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
     // ---- gather phase: INPUT PROCEDURE (RELEASE records into the sort file) or USING files ----
     let mut recs: Vec<Vec<u8>> = Vec::new();
     if let Some((p1, p2)) = &in_proc {
-        ctx.files.borrow_mut().entry(fkey(ctx, &sf)).or_default().records.clear();
-        let (start, end) = para_range(p1, p2)
-            .ok_or_else(|| RunError::Unsupported(format!("SORT INPUT PROCEDURE: unknown paragraph `{p1}`")))?;
+        ctx.files
+            .borrow_mut()
+            .entry(fkey(ctx, &sf))
+            .or_default()
+            .records
+            .clear();
+        let (start, end) = para_range(p1, p2).ok_or_else(|| {
+            RunError::Unsupported(format!("SORT INPUT PROCEDURE: unknown paragraph `{p1}`"))
+        })?;
         run_range_goto(&proc, start, end, fields, out, ctx)?;
-        recs = ctx.files.borrow().get(&fkey(ctx, &sf)).map(|st| st.records.clone()).unwrap_or_default();
+        recs = ctx
+            .files
+            .borrow()
+            .get(&fkey(ctx, &sf))
+            .map(|st| st.records.clone())
+            .unwrap_or_default();
     } else if !using.is_empty() {
         let files = ctx.files.borrow();
         for f in &using {
             if let Some(st) = files.get(&fkey(ctx, f)) {
                 for r in &st.records {
-                    if r.is_empty() { continue; }
+                    if r.is_empty() {
+                        continue;
+                    }
                     recs.push(r.clone());
                 }
             }
         }
     } else {
-        return Err(RunError::Unsupported("SORT/MERGE requires USING or INPUT PROCEDURE".into()));
+        return Err(RunError::Unsupported(
+            "SORT/MERGE requires USING or INPUT PROCEDURE".into(),
+        ));
     }
-    for r in recs.iter_mut() { r.resize(reclen, b' '); }
+    for r in recs.iter_mut() {
+        r.resize(reclen, b' ');
+    }
     recs.sort_by(|a, b| {
         for &(off, len, desc) in &spans {
             let (sa, ea) = (off.min(a.len()), (off + len).min(a.len()));
@@ -7771,25 +10142,39 @@ fn exec_sort(stmt: &[Tok], fields: &mut HashMap<String, Field>, out: &mut Vec<u8
             st.mode = 1;
         }
         set_file_status(fields, &sd_def, "00");
-        let (start, end) = para_range(p3, p4)
-            .ok_or_else(|| RunError::Unsupported(format!("SORT OUTPUT PROCEDURE: unknown paragraph `{p3}`")))?;
+        let (start, end) = para_range(p3, p4).ok_or_else(|| {
+            RunError::Unsupported(format!("SORT OUTPUT PROCEDURE: unknown paragraph `{p3}`"))
+        })?;
         run_range_goto(&proc, start, end, fields, out, ctx)?;
     } else if !giving.is_empty() {
         let mut files = ctx.files.borrow_mut();
         for f in &giving {
-            let gorg = ctx.file_defs.get(f).map(|d| d.org).unwrap_or(FileOrg::Sequential);
+            let gorg = ctx
+                .file_defs
+                .get(f)
+                .map(|d| d.org)
+                .unwrap_or(FileOrg::Sequential);
             let st = files.entry(fkey(ctx, f)).or_default();
-            st.records = recs.iter().map(|r| {
-                let mut b = r.clone();
-                if gorg == FileOrg::LineSequential { while b.last() == Some(&b' ') { b.pop(); } }
-                b
-            }).collect();
+            st.records = recs
+                .iter()
+                .map(|r| {
+                    let mut b = r.clone();
+                    if gorg == FileOrg::LineSequential {
+                        while b.last() == Some(&b' ') {
+                            b.pop();
+                        }
+                    }
+                    b
+                })
+                .collect();
             st.read_pos = 0;
             st.mode = 0;
         }
         set_file_status(fields, &sd_def, "00");
     } else {
-        return Err(RunError::Unsupported("SORT/MERGE requires GIVING or OUTPUT PROCEDURE".into()));
+        return Err(RunError::Unsupported(
+            "SORT/MERGE requires GIVING or OUTPUT PROCEDURE".into(),
+        ));
     }
     Ok(())
 }
@@ -7800,22 +10185,36 @@ fn num_to_json(dec: &Decimal) -> String {
     let scale = dec.scale.max(0) as usize;
     let total = dec.digits.len();
     let intlen = total.saturating_sub(scale);
-    let int_str: String = dec.digits[..intlen].iter().map(|d| (b'0' + d) as char).collect();
+    let int_str: String = dec.digits[..intlen]
+        .iter()
+        .map(|d| (b'0' + d) as char)
+        .collect();
     let int_t = int_str.trim_start_matches('0');
     let int_final = if int_t.is_empty() { "0" } else { int_t };
-    let frac: String = dec.digits[intlen..].iter().map(|d| (b'0' + d) as char).collect();
+    let frac: String = dec.digits[intlen..]
+        .iter()
+        .map(|d| (b'0' + d) as char)
+        .collect();
     let is_zero = int_final == "0" && frac.chars().all(|c| c == '0');
     let sign = if dec.negative && !is_zero { "-" } else { "" };
-    if scale > 0 { format!("{sign}{int_final}.{frac}") } else { format!("{sign}{int_final}") }
+    if scale > 0 {
+        format!("{sign}{int_final}.{frac}")
+    } else {
+        format!("{sign}{int_final}")
+    }
 }
 
 /// A field's alphanumeric value with trailing spaces trimmed, with the `escape` map applied per byte.
 fn trimmed_escaped(bytes: &[u8], escape: impl Fn(u8) -> Option<&'static str>) -> String {
     let mut end = bytes.len();
-    while end > 0 && bytes[end - 1] == b' ' { end -= 1; }
+    while end > 0 && bytes[end - 1] == b' ' {
+        end -= 1;
+    }
     // An all-spaces (non-empty) alphanumeric keeps ONE space, not the empty string -- cobc renders
     // `{"A":" "}` / `<A> </A>`, never `{"A":""}` / `<A></A>`.
-    if end == 0 && !bytes.is_empty() { end = 1; }
+    if end == 0 && !bytes.is_empty() {
+        end = 1;
+    }
     let mut s = String::new();
     for &b in &bytes[..end] {
         match escape(b) {
@@ -7828,37 +10227,71 @@ fn trimmed_escaped(bytes: &[u8], escape: impl Fn(u8) -> Option<&'static str>) ->
 
 /// The JSON value of a field: `{...}` for a group, a trimmed number for numeric, a quoted escaped string
 /// otherwise -- recursively over the group tree (GnuCOBOL `JSON GENERATE`).
-fn json_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
+fn json_value(
+    name: &str,
+    fields: &HashMap<String, Field>,
+    rename: &HashMap<String, String>,
+    suppress: &std::collections::HashSet<String>,
+) -> String {
     json_value_occ(name, None, fields, rename, suppress)
 }
 
 /// JSON value of a field. `occ` is the element index to read when inside a group-OCCURS table (cobc 3.2
 /// renders only the FIRST occurrence -- `{"ROW":{<element-1 children>}}` -- a `-Wpending` behaviour).
-fn json_value_occ(name: &str, occ: Option<usize>, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
+fn json_value_occ(
+    name: &str,
+    occ: Option<usize>,
+    fields: &HashMap<String, Field>,
+    rename: &HashMap<String, String>,
+    suppress: &std::collections::HashSet<String>,
+) -> String {
     let read_occ = |n: &str| match occ {
-        Some(i) => read_field(fields, &format!("{n}({i})")).ok().flatten().map(|f| f.bytes).unwrap_or_default(),
+        Some(i) => read_field(fields, &format!("{n}({i})"))
+            .ok()
+            .flatten()
+            .map(|f| f.bytes)
+            .unwrap_or_default(),
         None => ml_first_elem(read_field(fields, n).ok().flatten().as_ref()),
     };
     match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
         Some((Storage::Group { children }, n)) => {
             // A group-OCCURS renders element 1's children (occ=1); a plain group propagates the context.
             let child_occ = if n > 1 && occ.is_none() { Some(1) } else { occ };
-            let parts: Vec<String> = children.iter()
+            let parts: Vec<String> = children
+                .iter()
                 .filter(|c| !suppress.contains(*c))
                 .map(|c| {
                     let key = rename.get(c).map(String::as_str).unwrap_or(c);
-                    format!("\"{}\":{}", key, json_value_occ(c, child_occ, fields, rename, suppress))
+                    format!(
+                        "\"{}\":{}",
+                        key,
+                        json_value_occ(c, child_occ, fields, rename, suppress)
+                    )
                 })
                 .collect();
             format!("{{{}}}", parts.join(","))
         }
         Some((Storage::Numeric(attr), _)) => {
-            let bytes = match occ { Some(_) => read_occ(name), None => ml_first_elem(fields.get(name)) };
-            source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
+            let bytes = match occ {
+                Some(_) => read_occ(name),
+                None => ml_first_elem(fields.get(name)),
+            };
+            source_to_decimal(&bytes, &attr)
+                .map(|d| num_to_json(&d))
+                .unwrap_or_else(|_| "0".into())
         }
         _ => {
             let bytes = read_occ(name);
-            let esc = |b: u8| match b { b'"' => Some("\\\""), b'\\' => Some("\\\\"), 0x08 => Some("\\b"), 0x0c => Some("\\f"), b'\n' => Some("\\n"), b'\r' => Some("\\r"), b'\t' => Some("\\t"), _ => None };
+            let esc = |b: u8| match b {
+                b'"' => Some("\\\""),
+                b'\\' => Some("\\\\"),
+                0x08 => Some("\\b"),
+                0x0c => Some("\\f"),
+                b'\n' => Some("\\n"),
+                b'\r' => Some("\\r"),
+                b'\t' => Some("\\t"),
+                _ => None,
+            };
             format!("\"{}\"", trimmed_escaped(&bytes, esc))
         }
     }
@@ -7871,7 +10304,10 @@ fn ml_first_elem(f: Option<&Field>) -> Vec<u8> {
         Some(f) => {
             let occ = f.occurs.max(1);
             let es = f.bytes.len() / occ;
-            f.bytes.get(..es).map(|s| s.to_vec()).unwrap_or_else(|| f.bytes.clone())
+            f.bytes
+                .get(..es)
+                .map(|s| s.to_vec())
+                .unwrap_or_else(|| f.bytes.clone())
         }
         None => Vec::new(),
     }
@@ -7884,10 +10320,12 @@ fn ml_group_occurs_complex(name: &str, fields: &HashMap<String, Field>) -> bool 
     match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
         Some((Storage::Group { children }, occ)) => {
             if occ > 1 {
-                children.iter().any(|c| match fields.get(c).map(|f| (f.storage.clone(), f.occurs)) {
-                    Some((Storage::Group { .. }, _)) => true, // sub-group child
-                    Some((_, o)) => o > 1,                    // nested OCCURS child (multi-dim)
-                    None => true,
+                children.iter().any(|c| {
+                    match fields.get(c).map(|f| (f.storage.clone(), f.occurs)) {
+                        Some((Storage::Group { .. }, _)) => true, // sub-group child
+                        Some((_, o)) => o > 1,                    // nested OCCURS child (multi-dim)
+                        None => true,
+                    }
                 })
             } else {
                 children.iter().any(|c| ml_group_occurs_complex(c, fields))
@@ -7901,11 +10339,15 @@ fn ml_group_occurs_complex(name: &str, fields: &HashMap<String, Field>) -> bool 
 /// matches the figurative, so the element is omitted. (JSON GENERATE does not allow SUPPRESS WHEN -- cobc
 /// rejects it at compile time; the caller fails that closed as validation.)
 fn ml_suppress_when(name: &str, fig: &str, fields: &HashMap<String, Field>) -> bool {
-    let Some(f) = read_field(fields, name).ok().flatten() else { return false };
+    let Some(f) = read_field(fields, name).ok().flatten() else {
+        return false;
+    };
     let b = &f.bytes;
     match fig {
         "ZERO" | "ZEROS" | "ZEROES" => match &f.storage {
-            Storage::Numeric(a) => source_to_decimal(b, a).map(|d| dec_is_zero(&d)).unwrap_or(false),
+            Storage::Numeric(a) => source_to_decimal(b, a)
+                .map(|d| dec_is_zero(&d))
+                .unwrap_or(false),
             _ => !b.is_empty() && b.iter().all(|&c| c == b'0' || c == b' '),
         },
         "SPACE" | "SPACES" => !b.is_empty() && b.iter().all(|&c| c == b' '),
@@ -7917,30 +10359,58 @@ fn ml_suppress_when(name: &str, fig: &str, fields: &HashMap<String, Field>) -> b
 
 /// The XML element of a field: `<name>...</name>` with children nested, numeric/alnum content (XML-escaped),
 /// recursively over the group tree (GnuCOBOL `XML GENERATE`, no declaration).
-fn xml_value(name: &str, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
+fn xml_value(
+    name: &str,
+    fields: &HashMap<String, Field>,
+    rename: &HashMap<String, String>,
+    suppress: &std::collections::HashSet<String>,
+) -> String {
     xml_value_occ(name, None, fields, rename, suppress)
 }
 
 /// XML element of a field. `occ` is the element index inside a group-OCCURS table (cobc renders element 1).
-fn xml_value_occ(name: &str, occ: Option<usize>, fields: &HashMap<String, Field>, rename: &HashMap<String, String>, suppress: &std::collections::HashSet<String>) -> String {
+fn xml_value_occ(
+    name: &str,
+    occ: Option<usize>,
+    fields: &HashMap<String, Field>,
+    rename: &HashMap<String, String>,
+    suppress: &std::collections::HashSet<String>,
+) -> String {
     let read_occ = |n: &str| match occ {
-        Some(i) => read_field(fields, &format!("{n}({i})")).ok().flatten().map(|f| f.bytes).unwrap_or_default(),
+        Some(i) => read_field(fields, &format!("{n}({i})"))
+            .ok()
+            .flatten()
+            .map(|f| f.bytes)
+            .unwrap_or_default(),
         None => ml_first_elem(read_field(fields, n).ok().flatten().as_ref()),
     };
     let inner = match fields.get(name).map(|f| (f.storage.clone(), f.occurs)) {
         Some((Storage::Group { children }, n)) => {
             let child_occ = if n > 1 && occ.is_none() { Some(1) } else { occ };
-            children.iter()
+            children
+                .iter()
                 .filter(|c| !suppress.contains(*c))
-                .map(|c| xml_value_occ(c, child_occ, fields, rename, suppress)).collect::<String>()
+                .map(|c| xml_value_occ(c, child_occ, fields, rename, suppress))
+                .collect::<String>()
         }
         Some((Storage::Numeric(attr), _)) => {
-            let bytes = match occ { Some(_) => read_occ(name), None => ml_first_elem(fields.get(name)) };
-            source_to_decimal(&bytes, &attr).map(|d| num_to_json(&d)).unwrap_or_else(|_| "0".into())
+            let bytes = match occ {
+                Some(_) => read_occ(name),
+                None => ml_first_elem(fields.get(name)),
+            };
+            source_to_decimal(&bytes, &attr)
+                .map(|d| num_to_json(&d))
+                .unwrap_or_else(|_| "0".into())
         }
         _ => {
             let bytes = read_occ(name);
-            let esc = |b: u8| match b { b'&' => Some("&amp;"), b'<' => Some("&lt;"), b'>' => Some("&gt;"), b'"' => Some("&quot;"), _ => None };
+            let esc = |b: u8| match b {
+                b'&' => Some("&amp;"),
+                b'<' => Some("&lt;"),
+                b'>' => Some("&gt;"),
+                b'"' => Some("&quot;"),
+                _ => None,
+            };
             trimmed_escaped(&bytes, esc)
         }
     };
@@ -7950,16 +10420,48 @@ fn xml_value_occ(name: &str, occ: Option<usize>, fields: &HashMap<String, Field>
 
 /// `{JSON|XML} GENERATE dest FROM source [COUNT IN c]` -- serialize the source group into `dest`. `NAME`/
 /// `SUPPRESS`/`ON EXCEPTION` are out of subset.
-fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx, xml: bool) -> Result<(), RunError> {
+fn exec_ml_generate(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+    xml: bool,
+) -> Result<(), RunError> {
     // ON EXCEPTION / NOT ON EXCEPTION are parsed + dispatched by the caller (this `stmt` is the core form);
     // SUPPRESS WHEN <cond> stays out of subset (the rest of NAME/SUPPRESS is wired).
-    let dest = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing destination".into())) };
-    let fp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")).ok_or_else(|| RunError::Unsupported("JSON/XML GENERATE without FROM".into()))?;
-    let source = match stmt.get(fp + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("JSON/XML GENERATE: missing source".into())) };
+    let dest = match stmt.get(1) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => {
+            return Err(RunError::Unsupported(
+                "JSON/XML GENERATE: missing destination".into(),
+            ))
+        }
+    };
+    let fp = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "FROM"))
+        .ok_or_else(|| RunError::Unsupported("JSON/XML GENERATE without FROM".into()))?;
+    let source = match stmt.get(fp + 1) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => {
+            return Err(RunError::Unsupported(
+                "JSON/XML GENERATE: missing source".into(),
+            ))
+        }
+    };
     // Clause boundaries (NAME / SUPPRESS / COUNT) after the source.
-    let pos_of = |kw: &str| stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == kw));
+    let pos_of = |kw: &str| {
+        stmt.iter()
+            .position(|t| matches!(t, Tok::Word(w) if w == kw))
+    };
     let (name_p, sup_p, cnt_p) = (pos_of("NAME"), pos_of("SUPPRESS"), pos_of("COUNT"));
-    let clause_end = |start: usize| [name_p, sup_p, cnt_p].into_iter().flatten().filter(|&p| p > start).min().unwrap_or(stmt.len());
+    let clause_end = |start: usize| {
+        [name_p, sup_p, cnt_p]
+            .into_iter()
+            .flatten()
+            .filter(|&p| p > start)
+            .min()
+            .unwrap_or(stmt.len())
+    };
     // NAME data-name IS "key" [data-name IS "key"]... -> a key-rename map.
     let mut rename: HashMap<String, String> = HashMap::new();
     if let Some(np) = name_p {
@@ -7968,10 +10470,19 @@ fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx
         while i < end {
             if let Some(Tok::Word(f)) = stmt.get(i) {
                 let mut j = i + 1;
-                if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "IS") { j += 1; }
+                if matches!(stmt.get(j), Some(Tok::Word(w)) if w == "IS") {
+                    j += 1;
+                }
                 match stmt.get(j) {
-                    Some(Tok::Str(s)) => { rename.insert(f.clone(), String::from_utf8_lossy(s).to_string()); i = j + 1; }
-                    _ => return Err(RunError::Unsupported("JSON/XML GENERATE NAME: expected `data-name IS \"key\"`".into())),
+                    Some(Tok::Str(s)) => {
+                        rename.insert(f.clone(), String::from_utf8_lossy(s).to_string());
+                        i = j + 1;
+                    }
+                    _ => {
+                        return Err(RunError::Unsupported(
+                            "JSON/XML GENERATE NAME: expected `data-name IS \"key\"`".into(),
+                        ))
+                    }
                 }
             } else {
                 i += 1;
@@ -8016,16 +10527,37 @@ fn exec_ml_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx
         return Err(RunError::Unsupported(format!("JSON/XML GENERATE: source `{source}` has a nested or multi-dimension group-OCCURS (cobc handles only a flat group-OCCURS here; deeper nesting is -Wpending)")));
     }
     let outer = rename.get(&source).map(String::as_str).unwrap_or(&source);
-    let text = if xml { xml_value(&source, fields, &rename, &suppress) } else { format!("{{\"{}\":{}}}", outer, json_value(&source, fields, &rename, &suppress)) };
+    let text = if xml {
+        xml_value(&source, fields, &rename, &suppress)
+    } else {
+        format!(
+            "{{\"{}\":{}}}",
+            outer,
+            json_value(&source, fields, &rename, &suppress)
+        )
+    };
     let bytes = text.into_bytes();
-    let mv = vec![Tok::Str(bytes.clone()), Tok::Word("TO".to_string()), Tok::Word(dest)];
+    let mv = vec![
+        Tok::Str(bytes.clone()),
+        Tok::Word("TO".to_string()),
+        Tok::Word(dest),
+    ];
     exec_move(&mv, fields, ctx.decimal_comma)?;
     // optional COUNT IN counter -> the generated length.
-    if let Some(cp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "COUNT")) {
+    if let Some(cp) = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "COUNT"))
+    {
         let mut i = cp + 1;
-        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IN") { i += 1; }
+        if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "IN") {
+            i += 1;
+        }
         if let Some(Tok::Word(c)) = stmt.get(i) {
-            let mv = vec![Tok::Word(bytes.len().to_string()), Tok::Word("TO".to_string()), Tok::Word(c.clone())];
+            let mv = vec![
+                Tok::Word(bytes.len().to_string()),
+                Tok::Word("TO".to_string()),
+                Tok::Word(c.clone()),
+            ];
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
@@ -8040,8 +10572,21 @@ fn exec_ml_parse_noop() -> Result<(), RunError> {
 }
 
 /// The displayed bytes of a report element: a `PIC` field holding its SOURCE value (or VALUE literal).
-fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<Vec<u8>, RunError> {
-    let mut temp = make_field(&el.pic, el.value.as_ref(), ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false), 0)?;
+fn format_relem(
+    el: &RElem,
+    fields: &HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<Vec<u8>, RunError> {
+    let mut temp = make_field(
+        &el.pic,
+        el.value.as_ref(),
+        ctx.currency,
+        ctx.decimal_comma,
+        ctx.dialect,
+        Usage::Display,
+        (false, false),
+        0,
+    )?;
     if let Some(src) = &el.source {
         let (sb, sa) = operand_value(&Tok::Word(src.clone()), fields)?;
         move_into(&mut temp, &sb, &sa, ctx.decimal_comma)?;
@@ -8053,11 +10598,33 @@ fn format_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx) -> Resul
 /// SOURCE field value or the literal VALUE (via [`format_relem`]).
 /// Render one report element to display bytes: a SUM element shows the accumulated total for its CONTROL
 /// FOOTING's control level; else the SOURCE field value or the literal VALUE (via [`format_relem`]).
-fn render_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx, run: &ReportRun, control: &str) -> Result<Vec<u8>, RunError> {
+fn render_relem(
+    el: &RElem,
+    fields: &HashMap<String, Field>,
+    ctx: &Ctx,
+    run: &ReportRun,
+    control: &str,
+) -> Result<Vec<u8>, RunError> {
     if let Some(s) = &el.sum {
-        let dec = run.sums.get(&(control.to_string(), s.clone())).cloned()
-            .unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
-        let mut temp = make_field(&el.pic, None, ctx.currency, ctx.decimal_comma, ctx.dialect, Usage::Display, (false, false), 0)?;
+        let dec = run
+            .sums
+            .get(&(control.to_string(), s.clone()))
+            .cloned()
+            .unwrap_or(Decimal {
+                negative: false,
+                digits: vec![0],
+                scale: 0,
+            });
+        let mut temp = make_field(
+            &el.pic,
+            None,
+            ctx.currency,
+            ctx.decimal_comma,
+            ctx.dialect,
+            Usage::Display,
+            (false, false),
+            0,
+        )?;
         let (b, a) = decimal_as_display(&dec);
         move_into(&mut temp, &b, &a, ctx.decimal_comma)?;
         return Ok(display_bytes(&temp, ctx.decimal_comma));
@@ -8068,7 +10635,13 @@ fn render_relem(el: &RElem, fields: &HashMap<String, Field>, ctx: &Ctx, run: &Re
 /// The last line a body group (DETAIL / CONTROL FOOTING/HEADING) may occupy before a page break: RD FOOTING,
 /// else PAGE LIMIT, else no limit.
 fn report_body_limit(def: &ReportDef) -> usize {
-    if def.footing > 0 { def.footing } else if def.page_limit > 0 { def.page_limit } else { usize::MAX }
+    if def.footing > 0 {
+        def.footing
+    } else if def.page_limit > 0 {
+        def.page_limit
+    } else {
+        usize::MAX
+    }
 }
 
 /// A fresh per-report run state: current line below HEADING, an empty (or PAGE-LIMIT-sized) page, all SUM
@@ -8079,30 +10652,63 @@ fn fresh_report_run(def: &ReportDef) -> ReportRun {
         if let GType::ControlFooting(c) = &g.gtype {
             for l in &g.lines {
                 for e in &l.elems {
-                    if let Some(s) = &e.sum { sums.insert((c.clone(), s.clone()), Decimal { negative: false, digits: vec![0], scale: 0 }); }
+                    if let Some(s) = &e.sum {
+                        sums.insert(
+                            (c.clone(), s.clone()),
+                            Decimal {
+                                negative: false,
+                                digits: vec![0],
+                                scale: 0,
+                            },
+                        );
+                    }
                 }
             }
         }
     }
-    ReportRun { line: def.heading.saturating_sub(1), page: Vec::new(), rh_done: false, page_first: true, sums, ctrl_prev: HashMap::new() }
+    ReportRun {
+        line: def.heading.saturating_sub(1),
+        page: Vec::new(),
+        rh_done: false,
+        page_first: true,
+        sums,
+        ctrl_prev: HashMap::new(),
+    }
 }
 
 /// Flush the current page buffer to the report's file: padded to PAGE LIMIT (`pad`, the final page at
 /// TERMINATE) or to the high-water line (a mid-report page break); trailing-trimmed for LINE SEQUENTIAL.
 fn flush_page(run: &ReportRun, def: &ReportDef, ctx: &Ctx, pad: bool) {
-    let org = ctx.file_defs.get(&def.file).map(|d| d.org).unwrap_or(FileOrg::LineSequential);
-    let limit = if pad && def.page_limit > 0 { def.page_limit.max(run.page.len()) } else { run.page.len() };
+    let org = ctx
+        .file_defs
+        .get(&def.file)
+        .map(|d| d.org)
+        .unwrap_or(FileOrg::LineSequential);
+    let limit = if pad && def.page_limit > 0 {
+        def.page_limit.max(run.page.len())
+    } else {
+        run.page.len()
+    };
     let mut files = ctx.files.borrow_mut();
     let st = files.entry(fkey(ctx, &def.file)).or_default();
     for n in 0..limit {
         let mut buf = run.page.get(n).cloned().unwrap_or_default();
-        if org == FileOrg::LineSequential { while buf.last() == Some(&b' ') { buf.pop(); } }
+        if org == FileOrg::LineSequential {
+            while buf.last() == Some(&b' ') {
+                buf.pop();
+            }
+        }
         st.records.push(buf);
     }
 }
 
 /// Advance to a new page: flush the current page (high-water, no pad), reset the buffer, emit PAGE HEADING.
-fn page_advance(run: &mut ReportRun, def: &ReportDef, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+fn page_advance(
+    run: &mut ReportRun,
+    def: &ReportDef,
+    fields: &HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
     flush_page(run, def, ctx, false);
     run.page = Vec::new();
     run.line = def.heading.saturating_sub(1);
@@ -8115,61 +10721,104 @@ fn page_advance(run: &mut ReportRun, def: &ReportDef, fields: &HashMap<String, F
 
 /// Place one report group's lines into the page buffer at their LINE positions, handling page-break overflow
 /// (a body line past FOOTING/PAGE LIMIT advances the page) and the FIRST DETAIL bump for the first body line.
-fn place_group(run: &mut ReportRun, def: &ReportDef, group: &RGroup, fields: &HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
+fn place_group(
+    run: &mut ReportRun,
+    def: &ReportDef,
+    group: &RGroup,
+    fields: &HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
     let control = match &group.gtype {
         GType::ControlFooting(c) | GType::ControlHeading(c) => c.clone(),
         _ => String::new(),
     };
-    let is_body = !matches!(group.gtype, GType::ReportHeading | GType::PageHeading | GType::PageFooting);
+    let is_body = !matches!(
+        group.gtype,
+        GType::ReportHeading | GType::PageHeading | GType::PageFooting
+    );
     for rl in &group.lines {
-        let mut pos = match rl.spec { LineSpec::Abs(n) => n, LineSpec::Plus(k) => run.line + k };
-        if is_body && run.page_first && pos < def.first_detail { pos = def.first_detail; }
+        let mut pos = match rl.spec {
+            LineSpec::Abs(n) => n,
+            LineSpec::Plus(k) => run.line + k,
+        };
+        if is_body && run.page_first && pos < def.first_detail {
+            pos = def.first_detail;
+        }
         if is_body && def.page_limit > 0 && pos > report_body_limit(def) {
             page_advance(run, def, fields, ctx)?;
-            pos = match rl.spec { LineSpec::Abs(n) => n, LineSpec::Plus(k) => run.line + k };
-            if pos < def.first_detail { pos = def.first_detail; }
+            pos = match rl.spec {
+                LineSpec::Abs(n) => n,
+                LineSpec::Plus(k) => run.line + k,
+            };
+            if pos < def.first_detail {
+                pos = def.first_detail;
+            }
         }
         let mut buf: Vec<u8> = Vec::new();
         for el in &rl.elems {
             let val = render_relem(el, fields, ctx, run, &control)?;
             let s = el.column.saturating_sub(1);
             let e = s + val.len();
-            if buf.len() < e { buf.resize(e, b' '); }
+            if buf.len() < e {
+                buf.resize(e, b' ');
+            }
             buf[s..e].copy_from_slice(&val);
         }
         if pos >= 1 {
-            if run.page.len() < pos { run.page.resize(pos, Vec::new()); }
+            if run.page.len() < pos {
+                run.page.resize(pos, Vec::new());
+            }
             run.page[pos - 1] = buf;
         }
         run.line = pos;
-        if is_body { run.page_first = false; }
+        if is_body {
+            run.page_first = false;
+        }
     }
     Ok(())
 }
 
 /// Find the report whose groups contain a DETAIL group named `gname`.
 fn report_of_detail<'a>(ctx: &'a Ctx, gname: &str) -> Option<(&'a String, &'a ReportDef)> {
-    ctx.reports.iter().find(|(_, rd)| rd.groups.iter().any(|g| g.name.as_deref() == Some(gname) && g.gtype == GType::Detail))
+    ctx.reports.iter().find(|(_, rd)| {
+        rd.groups
+            .iter()
+            .any(|g| g.name.as_deref() == Some(gname) && g.gtype == GType::Detail)
+    })
 }
 
 /// The current bytes of a control data-name (for control-break detection).
 fn control_value(name: &str, fields: &HashMap<String, Field>) -> Vec<u8> {
-    read_field(fields, name).ok().flatten().map(|f| f.bytes).unwrap_or_default()
+    read_field(fields, name)
+        .ok()
+        .flatten()
+        .map(|f| f.bytes)
+        .unwrap_or_default()
 }
 
 /// Add every CONTROL FOOTING's SUM source into its (control, source) running total.
 fn accumulate_sums(run: &mut ReportRun, def: &ReportDef, fields: &HashMap<String, Field>) {
     for g in &def.groups {
-        let GType::ControlFooting(c) = &g.gtype else { continue };
+        let GType::ControlFooting(c) = &g.gtype else {
+            continue;
+        };
         for l in &g.lines {
             for e in &l.elems {
                 let Some(src) = &e.sum else { continue };
-                let Ok((b, a)) = operand_value(&Tok::Word(src.clone()), fields) else { continue };
+                let Ok((b, a)) = operand_value(&Tok::Word(src.clone()), fields) else {
+                    continue;
+                };
                 let key = (c.clone(), src.clone());
-                let cur = run.sums.get(&key).cloned().unwrap_or(Decimal { negative: false, digits: vec![0], scale: 0 });
+                let cur = run.sums.get(&key).cloned().unwrap_or(Decimal {
+                    negative: false,
+                    digits: vec![0],
+                    scale: 0,
+                });
                 let (cb, ca) = decimal_as_display(&cur);
                 if let Ok((rb, ra)) = wide_op(Op::Add, &cb, &ca, &b, &a) {
-                    if let Ok(nd) = source_to_decimal(&rb, &ra) { run.sums.insert(key, nd); }
+                    if let Ok(nd) = source_to_decimal(&rb, &ra) {
+                        run.sums.insert(key, nd);
+                    }
                 }
             }
         }
@@ -8178,8 +10827,13 @@ fn accumulate_sums(run: &mut ReportRun, def: &ReportDef, fields: &HashMap<String
 
 /// `INITIATE report` -- begin a report: fresh page buffer, current line, SUM accumulators.
 fn exec_initiate(stmt: &[Tok], ctx: &Ctx) -> Result<(), RunError> {
-    let rname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Ok(()) };
-    let Some(def) = ctx.reports.get(&rname) else { return Ok(()) };
+    let rname = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Ok(()),
+    };
+    let Some(def) = ctx.reports.get(&rname) else {
+        return Ok(());
+    };
     let run = fresh_report_run(def);
     REPORT_STATE.with(|m| m.borrow_mut().insert(rname, run));
     Ok(())
@@ -8188,41 +10842,108 @@ fn exec_initiate(stmt: &[Tok], ctx: &Ctx) -> Result<(), RunError> {
 /// `GENERATE detail-group` -- on first GENERATE emit REPORT/PAGE HEADING + the opening CONTROL HEADINGs; on a
 /// control break emit the changed CONTROL FOOTINGs (minor->major, with subtotals) then CONTROL HEADINGs
 /// (major->minor); accumulate SUMs; then place the DETAIL (with page-break overflow handling).
-fn exec_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let gname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("GENERATE: missing report group".into())) };
+fn exec_generate(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let gname = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => {
+            return Err(RunError::Unsupported(
+                "GENERATE: missing report group".into(),
+            ))
+        }
+    };
     let (rname, def) = match report_of_detail(ctx, &gname) {
         Some((n, d)) => (n.clone(), d.clone()),
         None => return Err(RunError::Unsupported(format!("GENERATE: `{gname}` is not a report group -- cobc rejects GENERATE of a non-report item (\"data item is not part of a report\")"))),
     };
-    let mut run = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)).unwrap_or_else(|| fresh_report_run(&def));
-    let data_controls: Vec<String> = def.controls.iter().filter(|c| c.as_str() != "FINAL").cloned().collect();
+    let mut run = REPORT_STATE
+        .with(|m| m.borrow_mut().remove(&rname))
+        .unwrap_or_else(|| fresh_report_run(&def));
+    let data_controls: Vec<String> = def
+        .controls
+        .iter()
+        .filter(|c| c.as_str() != "FINAL")
+        .cloned()
+        .collect();
     let find = |pred: GType| def.groups.iter().find(move |g| g.gtype == pred);
     if !run.rh_done {
-        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportHeading) { place_group(&mut run, &def, g, fields, ctx)?; }
-        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::PageHeading) { place_group(&mut run, &def, g, fields, ctx)?; }
+        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportHeading) {
+            place_group(&mut run, &def, g, fields, ctx)?;
+        }
+        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::PageHeading) {
+            place_group(&mut run, &def, g, fields, ctx)?;
+        }
         run.rh_done = true;
-        if let Some(g) = find(GType::ControlHeading("FINAL".into())) { place_group(&mut run, &def, g, fields, ctx)?; }
-        for c in &data_controls { if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlHeading(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; } }
-        for c in &def.controls { run.ctrl_prev.insert(c.clone(), control_value(c, fields)); }
+        if let Some(g) = find(GType::ControlHeading("FINAL".into())) {
+            place_group(&mut run, &def, g, fields, ctx)?;
+        }
+        for c in &data_controls {
+            if let Some(g) = def
+                .groups
+                .iter()
+                .find(|g| g.gtype == GType::ControlHeading(c.clone()))
+            {
+                place_group(&mut run, &def, g, fields, ctx)?;
+            }
+        }
+        for c in &def.controls {
+            run.ctrl_prev.insert(c.clone(), control_value(c, fields));
+        }
     } else {
         let mut bl: Option<usize> = None;
         for (idx, c) in data_controls.iter().enumerate() {
-            if control_value(c, fields) != *run.ctrl_prev.get(c).cloned().get_or_insert_with(Vec::new) { bl = Some(idx); break; }
+            if control_value(c, fields)
+                != *run.ctrl_prev.get(c).cloned().get_or_insert_with(Vec::new)
+            {
+                bl = Some(idx);
+                break;
+            }
         }
         if let Some(bl) = bl {
             for c in data_controls[bl..].iter().rev() {
-                if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; }
-                let keys: Vec<(String, String)> = run.sums.keys().filter(|(cc, _)| cc == c).cloned().collect();
-                for k in keys { run.sums.insert(k, Decimal { negative: false, digits: vec![0], scale: 0 }); }
+                if let Some(g) = def
+                    .groups
+                    .iter()
+                    .find(|g| g.gtype == GType::ControlFooting(c.clone()))
+                {
+                    place_group(&mut run, &def, g, fields, ctx)?;
+                }
+                let keys: Vec<(String, String)> =
+                    run.sums.keys().filter(|(cc, _)| cc == c).cloned().collect();
+                for k in keys {
+                    run.sums.insert(
+                        k,
+                        Decimal {
+                            negative: false,
+                            digits: vec![0],
+                            scale: 0,
+                        },
+                    );
+                }
             }
             for c in data_controls[bl..].iter() {
-                if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlHeading(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; }
+                if let Some(g) = def
+                    .groups
+                    .iter()
+                    .find(|g| g.gtype == GType::ControlHeading(c.clone()))
+                {
+                    place_group(&mut run, &def, g, fields, ctx)?;
+                }
             }
-            for c in &data_controls { run.ctrl_prev.insert(c.clone(), control_value(c, fields)); }
+            for c in &data_controls {
+                run.ctrl_prev.insert(c.clone(), control_value(c, fields));
+            }
         }
     }
     accumulate_sums(&mut run, &def, fields);
-    if let Some(g) = def.groups.iter().find(|g| g.name.as_deref() == Some(gname.as_str()) && g.gtype == GType::Detail) {
+    if let Some(g) = def
+        .groups
+        .iter()
+        .find(|g| g.name.as_deref() == Some(gname.as_str()) && g.gtype == GType::Detail)
+    {
         place_group(&mut run, &def, g, fields, ctx)?;
     }
     REPORT_STATE.with(|m| m.borrow_mut().insert(rname, run));
@@ -8231,39 +10952,92 @@ fn exec_generate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -
 
 /// `TERMINATE report` -- emit the CONTROL FOOTINGs (data minor->major, then FINAL) and REPORT FOOTING, then
 /// flush the final page (padded to PAGE LIMIT).
-fn exec_terminate(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let rname = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Ok(()) };
-    let Some(def) = ctx.reports.get(&rname).cloned() else { return Ok(()) };
-    let Some(mut run) = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)) else { return Ok(()) };
-    let data_controls: Vec<String> = def.controls.iter().filter(|c| c.as_str() != "FINAL").cloned().collect();
+fn exec_terminate(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let rname = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Ok(()),
+    };
+    let Some(def) = ctx.reports.get(&rname).cloned() else {
+        return Ok(());
+    };
+    let Some(mut run) = REPORT_STATE.with(|m| m.borrow_mut().remove(&rname)) else {
+        return Ok(());
+    };
+    let data_controls: Vec<String> = def
+        .controls
+        .iter()
+        .filter(|c| c.as_str() != "FINAL")
+        .cloned()
+        .collect();
     for c in data_controls.iter().rev() {
-        if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting(c.clone())) { place_group(&mut run, &def, g, fields, ctx)?; }
+        if let Some(g) = def
+            .groups
+            .iter()
+            .find(|g| g.gtype == GType::ControlFooting(c.clone()))
+        {
+            place_group(&mut run, &def, g, fields, ctx)?;
+        }
     }
-    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ControlFooting("FINAL".into())) { place_group(&mut run, &def, g, fields, ctx)?; }
-    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportFooting) { place_group(&mut run, &def, g, fields, ctx)?; }
+    if let Some(g) = def
+        .groups
+        .iter()
+        .find(|g| g.gtype == GType::ControlFooting("FINAL".into()))
+    {
+        place_group(&mut run, &def, g, fields, ctx)?;
+    }
+    if let Some(g) = def.groups.iter().find(|g| g.gtype == GType::ReportFooting) {
+        place_group(&mut run, &def, g, fields, ctx)?;
+    }
     flush_page(&run, &def, ctx, true);
     Ok(())
 }
 
 /// `RELEASE record [FROM id]` -- write a record to its sort file during a SORT INPUT PROCEDURE (the records
 /// accumulate, then SORT orders them).
-fn exec_release(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let rec = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("RELEASE: missing record".into())) };
-    if let Some(fp) = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "FROM")) {
+fn exec_release(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let rec = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("RELEASE: missing record".into())),
+    };
+    if let Some(fp) = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "FROM"))
+    {
         if let Some(src) = stmt.get(fp + 1) {
-            let mv = vec![src.clone(), Tok::Word("TO".to_string()), Tok::Word(rec.clone())];
+            let mv = vec![
+                src.clone(),
+                Tok::Word("TO".to_string()),
+                Tok::Word(rec.clone()),
+            ];
             exec_move(&mv, fields, ctx.decimal_comma)?;
         }
     }
     let def = {
-        let fname = ctx.record_files.get(&rec)
-            .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?;
-        ctx.file_defs.get(fname)
+        let fname = ctx.record_files.get(&rec).ok_or_else(|| {
+            RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record"))
+        })?;
+        ctx.file_defs
+            .get(fname)
             .ok_or_else(|| RunError::Unsupported(format!("RELEASE `{rec}`: not an SD/FD record")))?
             .clone()
     };
-    let bytes = read_field(fields, &rec)?.map(|f| f.bytes).unwrap_or_default();
-    ctx.files.borrow_mut().entry(def.assign.clone()).or_default().records.push(bytes);
+    let bytes = read_field(fields, &rec)?
+        .map(|f| f.bytes)
+        .unwrap_or_default();
+    ctx.files
+        .borrow_mut()
+        .entry(def.assign.clone())
+        .or_default()
+        .records
+        .push(bytes);
     Ok(())
 }
 
@@ -8277,40 +11051,69 @@ fn exec_return(
     exec: bool,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
-    let file = match toks.get(*pos) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("RETURN: missing sort file".into())) };
+    let file = match toks.get(*pos) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("RETURN: missing sort file".into())),
+    };
     *pos += 1;
-    while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "RECORD") { *pos += 1; }
+    while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "RECORD") {
+        *pos += 1;
+    }
     let mut into: Option<String> = None;
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INTO") {
         *pos += 1;
-        if let Some(Tok::Word(w)) = toks.get(*pos) { into = Some(w.clone()); *pos += 1; }
+        if let Some(Tok::Word(w)) = toks.get(*pos) {
+            into = Some(w.clone());
+            *pos += 1;
+        }
     }
     let mut at_end: Option<usize> = None;
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "AT") {
         *pos += 1;
-        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") { *pos += 1; }
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END") {
+            *pos += 1;
+        }
         at_end = Some(*pos);
         let mut scan = *pos;
         let _ = run_block(toks, &mut scan, fields, out, false, ctx)?;
         *pos = scan;
     }
-    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-RETURN") { *pos += 1; }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-RETURN") {
+        *pos += 1;
+    }
     if !exec {
         return Ok(false);
     }
-    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("RETURN: `{file}` is not a declared file")))?.clone();
-    let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
+    let def = ctx
+        .file_defs
+        .get(&file)
+        .ok_or_else(|| RunError::Unsupported(format!("RETURN: `{file}` is not a declared file")))?
+        .clone();
+    let reclen = read_field(fields, def.primary_record())?
+        .map(|f| f.bytes.len())
+        .unwrap_or(0);
     let next = {
         let files = ctx.files.borrow();
-        files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(st.read_pos).cloned())
+        files
+            .get(&fkey(ctx, &file))
+            .and_then(|st| st.records.get(st.read_pos).cloned())
     };
     match next {
         Some(mut bytes) => {
-            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos += 1; }
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) {
+                st.read_pos += 1;
+            }
             bytes.resize(reclen, b' ');
-            write_field(fields, def.primary_record(), |f| { f.bytes = bytes; Ok(()) })?;
+            write_field(fields, def.primary_record(), |f| {
+                f.bytes = bytes;
+                Ok(())
+            })?;
             if let Some(id) = into {
-                let mv = vec![Tok::Word(def.primary_record().to_string()), Tok::Word("TO".to_string()), Tok::Word(id)];
+                let mv = vec![
+                    Tok::Word(def.primary_record().to_string()),
+                    Tok::Word("TO".to_string()),
+                    Tok::Word(id),
+                ];
                 exec_move(&mv, fields, ctx.decimal_comma)?;
             }
             Ok(false)
@@ -8327,11 +11130,20 @@ fn exec_return(
 
 /// The byte offset + length of a SORT/MERGE key within the sort record: the whole record when the key
 /// names the record, otherwise the key leaf's position within the SD group.
-fn sort_key_span(record: &str, key: &str, reclen: usize, fields: &HashMap<String, Field>) -> Option<(usize, usize)> {
+fn sort_key_span(
+    record: &str,
+    key: &str,
+    reclen: usize,
+    fields: &HashMap<String, Field>,
+) -> Option<(usize, usize)> {
     if key == record {
         return Some((0, reclen));
     }
-    if let Some(Field { storage: Storage::Group { children }, .. }) = fields.get(record) {
+    if let Some(Field {
+        storage: Storage::Group { children },
+        ..
+    }) = fields.get(record)
+    {
         let mut off = 0;
         for c in children {
             let len = fields.get(c).map(|f| f.bytes.len()).unwrap_or(0);
@@ -8342,15 +11154,27 @@ fn sort_key_span(record: &str, key: &str, reclen: usize, fields: &HashMap<String
         }
     }
     let kl = fields.get(key).map(|f| f.bytes.len()).unwrap_or(0);
-    if kl == reclen { Some((0, reclen)) } else { None }
+    if kl == reclen {
+        Some((0, reclen))
+    } else {
+        None
+    }
 }
 
 /// (offset, length) of the RECORD KEY within an INDEXED file's record.
-fn indexed_key_span(def: &FileDef, reclen: usize, fields: &HashMap<String, Field>) -> Result<(usize, usize), RunError> {
-    let key = def.record_key.as_ref()
-        .ok_or_else(|| RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name)))?;
-    sort_key_span(def.primary_record(), key, reclen, fields)
-        .ok_or_else(|| RunError::Unsupported(format!("INDEXED RECORD KEY `{key}` is not a field of the record")))
+fn indexed_key_span(
+    def: &FileDef,
+    reclen: usize,
+    fields: &HashMap<String, Field>,
+) -> Result<(usize, usize), RunError> {
+    let key = def.record_key.as_ref().ok_or_else(|| {
+        RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name))
+    })?;
+    sort_key_span(def.primary_record(), key, reclen, fields).ok_or_else(|| {
+        RunError::Unsupported(format!(
+            "INDEXED RECORD KEY `{key}` is not a field of the record"
+        ))
+    })
 }
 
 /// The RECORD KEY bytes of a stored record.
@@ -8362,17 +11186,32 @@ fn rec_key_bytes(r: &[u8], koff: usize, klen: usize) -> &[u8] {
 
 /// Indices of non-empty records in ascending RECORD KEY order (stable on ties).
 fn indexed_order(records: &[Vec<u8>], koff: usize, klen: usize) -> Vec<usize> {
-    let mut idx: Vec<usize> = (0..records.len()).filter(|&i| !records[i].is_empty()).collect();
-    idx.sort_by(|&a, &b| rec_key_bytes(&records[a], koff, klen).cmp(rec_key_bytes(&records[b], koff, klen)));
+    let mut idx: Vec<usize> = (0..records.len())
+        .filter(|&i| !records[i].is_empty())
+        .collect();
+    idx.sort_by(|&a, &b| {
+        rec_key_bytes(&records[a], koff, klen).cmp(rec_key_bytes(&records[b], koff, klen))
+    });
     idx
 }
 
 /// `DELETE file [RECORD]` -- remove the record at the current key: the RELATIVE record at the current
 /// RELATIVE KEY, or the INDEXED record whose RECORD KEY equals the key field. Status `"23"` if no such
 /// record. DELETE on a sequential file is invalid (out of subset).
-fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> Result<(), RunError> {
-    let file = match stmt.first() { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("DELETE: missing file".into())) };
-    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("DELETE: `{file}` is not a declared file")))?.clone();
+fn exec_delete(
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    ctx: &Ctx,
+) -> Result<(), RunError> {
+    let file = match stmt.first() {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("DELETE: missing file".into())),
+    };
+    let def = ctx
+        .file_defs
+        .get(&file)
+        .ok_or_else(|| RunError::Unsupported(format!("DELETE: `{file}` is not a declared file")))?
+        .clone();
     let deleted = match def.org {
         FileOrg::Relative => {
             let pos = relative_key_value(&def, fields)?;
@@ -8386,21 +11225,34 @@ fn exec_delete(stmt: &[Tok], fields: &mut HashMap<String, Field>, ctx: &Ctx) -> 
             }
         }
         FileOrg::Indexed => {
-            let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
+            let reclen = read_field(fields, def.primary_record())?
+                .map(|f| f.bytes.len())
+                .unwrap_or(0);
             let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
-            let want = read_field(fields, def.record_key.as_ref().unwrap())?.map(|f| f.bytes).unwrap_or_default();
+            let want = read_field(fields, def.record_key.as_ref().unwrap())?
+                .map(|f| f.bytes)
+                .unwrap_or_default();
             let mut files = ctx.files.borrow_mut();
             match files.get_mut(&fkey(ctx, &file)) {
                 Some(st) => {
-                    match st.records.iter().position(|r| !r.is_empty() && rec_key_bytes(r, koff, klen) == want.as_slice()) {
-                        Some(p) => { st.records[p] = Vec::new(); true }
+                    match st.records.iter().position(|r| {
+                        !r.is_empty() && rec_key_bytes(r, koff, klen) == want.as_slice()
+                    }) {
+                        Some(p) => {
+                            st.records[p] = Vec::new();
+                            true
+                        }
                         None => false,
                     }
                 }
                 None => false,
             }
         }
-        _ => return Err(RunError::Unsupported("DELETE requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL)".into())),
+        _ => {
+            return Err(RunError::Unsupported(
+                "DELETE requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL)".into(),
+            ))
+        }
     };
     set_file_status(fields, &def, if deleted { "00" } else { "23" });
     Ok(())
@@ -8412,7 +11264,11 @@ fn at_start_block_end(toks: &[Tok], p: usize) -> bool {
     match toks.get(p) {
         None | Some(Tok::Dot) => true,
         Some(Tok::Word(w)) if w == "END-START" || SCOPE_ENDERS.contains(&w.as_str()) => true,
-        Some(Tok::Word(w)) if w == "NOT" && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "INVALID") => true,
+        Some(Tok::Word(w))
+            if w == "NOT" && matches!(toks.get(p + 1), Some(Tok::Word(x)) if x == "INVALID") =>
+        {
+            true
+        }
         _ => false,
     }
 }
@@ -8429,7 +11285,10 @@ fn exec_start(
     exec: bool,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
-    let file = match toks.get(*pos) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("START: missing file".into())) };
+    let file = match toks.get(*pos) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("START: missing file".into())),
+    };
     *pos += 1;
     // The relation head runs until END-START / INVALID KEY / NOT INVALID KEY / a scope boundary.
     let head_start = *pos;
@@ -8443,41 +11302,92 @@ fn exec_start(
     let mut invalid_blk: Option<Vec<Tok>> = None;
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INVALID") {
         *pos += 1;
-        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "KEY") { *pos += 1; }
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "KEY") {
+            *pos += 1;
+        }
         let s = *pos;
-        while *pos < toks.len() && !at_start_block_end(toks, *pos) { *pos += 1; }
+        while *pos < toks.len() && !at_start_block_end(toks, *pos) {
+            *pos += 1;
+        }
         invalid_blk = Some(toks[s..*pos].to_vec());
     }
     let mut not_invalid_blk: Option<Vec<Tok>> = None;
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NOT") {
         *pos += 1;
         for kw in ["INVALID", "KEY"] {
-            if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == kw) { *pos += 1; }
+            if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == kw) {
+                *pos += 1;
+            }
         }
         let s = *pos;
-        while *pos < toks.len() && !at_start_block_end(toks, *pos) { *pos += 1; }
+        while *pos < toks.len() && !at_start_block_end(toks, *pos) {
+            *pos += 1;
+        }
         not_invalid_blk = Some(toks[s..*pos].to_vec());
     }
-    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-START") { *pos += 1; }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-START") {
+        *pos += 1;
+    }
     if !exec {
         return Ok(false);
     }
-    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("START: `{file}` is not a declared file")))?.clone();
+    let def = ctx
+        .file_defs
+        .get(&file)
+        .ok_or_else(|| RunError::Unsupported(format!("START: `{file}` is not a declared file")))?
+        .clone();
     if !matches!(def.org, FileOrg::Relative | FileOrg::Indexed) {
-        return Err(RunError::Unsupported("START requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL)".into()));
+        return Err(RunError::Unsupported(
+            "START requires a RELATIVE or INDEXED file (invalid on SEQUENTIAL)".into(),
+        ));
     }
     // Parse the relation (default `=`) and the optional named key field from the head.
     let mut rel = "=".to_string();
     let mut key_field: Option<String> = None;
-    if let Some(kp) = head.iter().position(|t| matches!(t, Tok::Word(w) if w == "KEY")) {
+    if let Some(kp) = head
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "KEY"))
+    {
         let mut i = kp + 1;
-        if matches!(head.get(i), Some(Tok::Word(w)) if w == "IS") { i += 1; }
-        rel = match head.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
-            Some("=") | Some("EQUAL") => { i += 1; if matches!(head.get(i), Some(Tok::Word(w)) if w == "TO") { i += 1; } "=".into() }
-            Some(">=") => { i += 1; ">=".into() }
-            Some("<=") => { i += 1; "<=".into() }
-            Some(">") | Some("GREATER") => { i += 1; if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } ">".into() }
-            Some("<") | Some("LESS") => { i += 1; if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; } "<".into() }
+        if matches!(head.get(i), Some(Tok::Word(w)) if w == "IS") {
+            i += 1;
+        }
+        rel = match head.get(i).and_then(|t| {
+            if let Tok::Word(w) = t {
+                Some(w.as_str())
+            } else {
+                None
+            }
+        }) {
+            Some("=") | Some("EQUAL") => {
+                i += 1;
+                if matches!(head.get(i), Some(Tok::Word(w)) if w == "TO") {
+                    i += 1;
+                }
+                "=".into()
+            }
+            Some(">=") => {
+                i += 1;
+                ">=".into()
+            }
+            Some("<=") => {
+                i += 1;
+                "<=".into()
+            }
+            Some(">") | Some("GREATER") => {
+                i += 1;
+                if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") {
+                    i += 1;
+                }
+                ">".into()
+            }
+            Some("<") | Some("LESS") => {
+                i += 1;
+                if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") {
+                    i += 1;
+                }
+                "<".into()
+            }
             Some("NOT") => {
                 i += 1;
                 let r = match head.get(i).and_then(|t| if let Tok::Word(w) = t { Some(w.as_str()) } else { None }) {
@@ -8488,41 +11398,67 @@ fn exec_start(
                     _ => return Err(RunError::Unsupported("START KEY: NOT EQUAL relation is not allowed on START (only NOT < / NOT >)".into())),
                 };
                 i += 1;
-                if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") { i += 1; }
+                if matches!(head.get(i), Some(Tok::Word(w)) if w == "THAN") {
+                    i += 1;
+                }
                 r.into()
             }
-            other => return Err(RunError::Unsupported(format!("START KEY: unrecognized relation {other:?} (expected = > < >= <= NOT< NOT>)"))),
+            other => {
+                return Err(RunError::Unsupported(format!(
+                    "START KEY: unrecognized relation {other:?} (expected = > < >= <= NOT< NOT>)"
+                )))
+            }
         };
-        if let Some(Tok::Word(field)) = head.get(i) { key_field = Some(field.clone()); }
+        if let Some(Tok::Word(field)) = head.get(i) {
+            key_field = Some(field.clone());
+        }
     }
     // foundpos is the `read_pos` value the next sequential READ should resume from: a record index for
     // RELATIVE, an index into the ascending-key order for INDEXED.
     let foundpos = match def.org {
         FileOrg::Relative => {
             let keyval = match &key_field {
-                Some(f) => resolve_int(f, fields).map(|v| v.max(0) as usize).unwrap_or(relative_key_value(&def, fields)?),
+                Some(f) => resolve_int(f, fields)
+                    .map(|v| v.max(0) as usize)
+                    .unwrap_or(relative_key_value(&def, fields)?),
                 None => relative_key_value(&def, fields)?,
             };
             let files = ctx.files.borrow();
             let mut fp = None;
             if let Some(st) = files.get(&fkey(ctx, &file)) {
                 for n in 1..=st.records.len() {
-                    if st.records[n - 1].is_empty() { continue; }
+                    if st.records[n - 1].is_empty() {
+                        continue;
+                    }
                     let ok = match rel.as_str() {
-                        "=" => n == keyval, ">" => n > keyval, ">=" => n >= keyval,
-                        "<" => n < keyval, "<=" => n <= keyval, _ => false,
+                        "=" => n == keyval,
+                        ">" => n > keyval,
+                        ">=" => n >= keyval,
+                        "<" => n < keyval,
+                        "<=" => n <= keyval,
+                        _ => false,
                     };
-                    if ok { fp = Some(n - 1); break; }
+                    if ok {
+                        fp = Some(n - 1);
+                        break;
+                    }
                 }
             }
             fp
         }
         FileOrg::Indexed => {
-            let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
+            let reclen = read_field(fields, def.primary_record())?
+                .map(|f| f.bytes.len())
+                .unwrap_or(0);
             let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
-            let kf = key_field.or_else(|| def.record_key.clone())
-                .ok_or_else(|| RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name)))?;
-            let want = read_field(fields, &kf)?.map(|f| f.bytes).unwrap_or_default();
+            let kf = key_field
+                .or_else(|| def.record_key.clone())
+                .ok_or_else(|| {
+                    RunError::Unsupported(format!("INDEXED file `{}` has no RECORD KEY", def.name))
+                })?;
+            let want = read_field(fields, &kf)?
+                .map(|f| f.bytes)
+                .unwrap_or_default();
             let files = ctx.files.borrow();
             let mut fp = None;
             if let Some(st) = files.get(&fkey(ctx, &file)) {
@@ -8530,10 +11466,17 @@ fn exec_start(
                 for (oi, &ri) in order.iter().enumerate() {
                     let rk = rec_key_bytes(&st.records[ri], koff, klen);
                     let ok = match rel.as_str() {
-                        "=" => rk == want.as_slice(), ">" => rk > want.as_slice(), ">=" => rk >= want.as_slice(),
-                        "<" => rk < want.as_slice(), "<=" => rk <= want.as_slice(), _ => false,
+                        "=" => rk == want.as_slice(),
+                        ">" => rk > want.as_slice(),
+                        ">=" => rk >= want.as_slice(),
+                        "<" => rk < want.as_slice(),
+                        "<=" => rk <= want.as_slice(),
+                        _ => false,
                     };
-                    if ok { fp = Some(oi); break; }
+                    if ok {
+                        fp = Some(oi);
+                        break;
+                    }
                 }
             }
             fp
@@ -8542,7 +11485,9 @@ fn exec_start(
     };
     match foundpos {
         Some(p) => {
-            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos = p; }
+            if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) {
+                st.read_pos = p;
+            }
             set_file_status(fields, &def, "00");
             if let Some(b) = &not_invalid_blk {
                 return run_handler(b, fields, out, ctx);
@@ -8569,17 +11514,25 @@ fn exec_read(
     exec: bool,
     ctx: &Ctx,
 ) -> Result<bool, RunError> {
-    let file = match toks.get(*pos) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported("READ: missing file".into())) };
+    let file = match toks.get(*pos) {
+        Some(Tok::Word(w)) => w.clone(),
+        _ => return Err(RunError::Unsupported("READ: missing file".into())),
+    };
     *pos += 1;
     let mut had_next = false;
     while matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NEXT" || w == "RECORD") {
-        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NEXT") { had_next = true; }
+        if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "NEXT") {
+            had_next = true;
+        }
         *pos += 1;
     }
     let mut into: Option<String> = None;
     if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "INTO") {
         *pos += 1;
-        if let Some(Tok::Word(w)) = toks.get(*pos) { into = Some(w.clone()); *pos += 1; }
+        if let Some(Tok::Word(w)) = toks.get(*pos) {
+            into = Some(w.clone());
+            *pos += 1;
+        }
     }
     // Optional handlers: `AT END` / `INVALID KEY` run on a miss/EOF; `NOT AT END` / `NOT INVALID KEY` run
     // on a successful read. Each is collected as its own token block (bounded by `at_read_terminator`).
@@ -8589,38 +11542,58 @@ fn exec_read(
     loop {
         if w_eq(*pos, "AT") || w_eq(*pos, "INVALID") {
             *pos += 1;
-            if w_eq(*pos, "END") || w_eq(*pos, "KEY") { *pos += 1; }
+            if w_eq(*pos, "END") || w_eq(*pos, "KEY") {
+                *pos += 1;
+            }
             let start = *pos;
-            let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
-                && matches!(toks.get(q + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID");
+            let other = |q: usize| {
+                matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+                    && matches!(toks.get(q + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID")
+            };
             *pos = scan_handler_block(toks, start, |w: &str| w == "END-READ", other);
             at_end = Some(toks[start..*pos].to_vec());
         } else if w_eq(*pos, "NOT") {
             *pos += 1;
             for kw in ["AT", "END", "INVALID", "KEY"] {
-                if w_eq(*pos, kw) { *pos += 1; }
+                if w_eq(*pos, kw) {
+                    *pos += 1;
+                }
             }
             let start = *pos;
-            let other = |q: usize| matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
-                && matches!(toks.get(q + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID");
+            let other = |q: usize| {
+                matches!(toks.get(q), Some(Tok::Word(w)) if w == "NOT")
+                    && matches!(toks.get(q + 1), Some(Tok::Word(x)) if x == "AT" || x == "INVALID")
+            };
             *pos = scan_handler_block(toks, start, |w: &str| w == "END-READ", other);
             not_end = Some(toks[start..*pos].to_vec());
         } else {
             break;
         }
     }
-    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-READ") { *pos += 1; }
+    if matches!(toks.get(*pos), Some(Tok::Word(w)) if w == "END-READ") {
+        *pos += 1;
+    }
     if !exec {
         return Ok(false);
     }
-    let def = ctx.file_defs.get(&file).ok_or_else(|| RunError::Unsupported(format!("READ: `{file}` is not a declared file")))?.clone();
-    let reclen = read_field(fields, def.primary_record())?.map(|f| f.bytes.len()).unwrap_or(0);
+    let def = ctx
+        .file_defs
+        .get(&file)
+        .ok_or_else(|| RunError::Unsupported(format!("READ: `{file}` is not a declared file")))?
+        .clone();
+    let reclen = read_field(fields, def.primary_record())?
+        .map(|f| f.bytes.len())
+        .unwrap_or(0);
     let loaded: Option<Vec<u8>> = match def.org {
         // RELATIVE random read: by the RELATIVE KEY (no position advance).
         FileOrg::Relative if !had_next => {
             let pos = relative_key_value(&def, fields)?;
             let files = ctx.files.borrow();
-            files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(pos - 1)).filter(|r| !r.is_empty()).cloned()
+            files
+                .get(&fkey(ctx, &file))
+                .and_then(|st| st.records.get(pos - 1))
+                .filter(|r| !r.is_empty())
+                .cloned()
         }
         // RELATIVE sequential read: the next non-empty slot, setting the RELATIVE KEY to its number.
         FileOrg::Relative => {
@@ -8638,7 +11611,11 @@ fn exec_read(
             match found {
                 Some((relnum, bytes)) => {
                     if let Some(key) = &def.rel_key {
-                        let mv = vec![Tok::Word(relnum.to_string()), Tok::Word("TO".to_string()), Tok::Word(key.clone())];
+                        let mv = vec![
+                            Tok::Word(relnum.to_string()),
+                            Tok::Word("TO".to_string()),
+                            Tok::Word(key.clone()),
+                        ];
                         exec_move(&mv, fields, ctx.decimal_comma)?;
                     }
                     Some(bytes)
@@ -8650,10 +11627,16 @@ fn exec_read(
         // RANDOM/DYNAMIC -- under ACCESS SEQUENTIAL a plain READ is a sequential next-in-key-order read.
         FileOrg::Indexed if !had_next && def.access_random => {
             let (koff, klen) = indexed_key_span(&def, reclen, fields)?;
-            let want = read_field(fields, def.record_key.as_ref().unwrap())?.map(|f| f.bytes).unwrap_or_default();
+            let want = read_field(fields, def.record_key.as_ref().unwrap())?
+                .map(|f| f.bytes)
+                .unwrap_or_default();
             let files = ctx.files.borrow();
-            files.get(&fkey(ctx, &file)).and_then(|st|
-                st.records.iter().find(|r| !r.is_empty() && rec_key_bytes(r, koff, klen) == want.as_slice()).cloned())
+            files.get(&fkey(ctx, &file)).and_then(|st| {
+                st.records
+                    .iter()
+                    .find(|r| !r.is_empty() && rec_key_bytes(r, koff, klen) == want.as_slice())
+                    .cloned()
+            })
         }
         // INDEXED sequential read: the next record in ascending RECORD KEY order.
         FileOrg::Indexed => {
@@ -8670,9 +11653,16 @@ fn exec_read(
         }
         // sequential / line-sequential: the next record.
         _ => {
-            let bytes = { let files = ctx.files.borrow(); files.get(&fkey(ctx, &file)).and_then(|st| st.records.get(st.read_pos).cloned()) };
+            let bytes = {
+                let files = ctx.files.borrow();
+                files
+                    .get(&fkey(ctx, &file))
+                    .and_then(|st| st.records.get(st.read_pos).cloned())
+            };
             if bytes.is_some() {
-                if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) { st.read_pos += 1; }
+                if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &file)) {
+                    st.read_pos += 1;
+                }
             }
             bytes
         }
@@ -8683,14 +11673,22 @@ fn exec_read(
                 // variable-length record: publish the DEPENDING ON length FIRST (so the FD record's OCCURS
                 // DEPENDING describes the live n-byte record area), then store the record image into it.
                 let n = bytes.len();
-                let mv = vec![Tok::Word(n.to_string()), Tok::Word("TO".to_string()), Tok::Word(dep.clone())];
+                let mv = vec![
+                    Tok::Word(n.to_string()),
+                    Tok::Word("TO".to_string()),
+                    Tok::Word(dep.clone()),
+                ];
                 exec_move(&mv, fields, ctx.decimal_comma)?;
                 // Store the record image into the FD record's elementary OCCURS DEPENDING leaf, overwriting
                 // its first n bytes IN PLACE (the leaf is built at MAX; set_field_image would shrink the
                 // physical buffer to the live size, so a later longer record would read truncated). A record
                 // read then truncates the MAX buffer to the live DEPENDING length = exactly these n bytes.
                 let leaf = match fields.get(def.primary_record()).map(|f| f.storage.clone()) {
-                    Some(Storage::Group { children }) => children.iter().find(|c| !c.starts_with('\u{3}')).cloned().unwrap_or_else(|| def.primary_record().to_string()),
+                    Some(Storage::Group { children }) => children
+                        .iter()
+                        .find(|c| !c.starts_with('\u{3}'))
+                        .cloned()
+                        .unwrap_or_else(|| def.primary_record().to_string()),
                     _ => def.primary_record().to_string(),
                 };
                 if let Some(lf) = fields.get_mut(&leaf) {
@@ -8704,8 +11702,14 @@ fn exec_read(
                 // read variable record the receiver carries cobc's NUL tail. Capped/space-padded to the
                 // receiver width (a longer receiver). Falls back to the raw record bytes if the leaf is absent.
                 if let Some(id) = &into {
-                    let area = fields.get(&leaf).map(|f| f.bytes.clone()).unwrap_or_else(|| bytes.clone());
-                    let tlen = read_field(fields, id)?.map(|f| f.bytes.len()).filter(|&n| n > 0).unwrap_or(area.len());
+                    let area = fields
+                        .get(&leaf)
+                        .map(|f| f.bytes.clone())
+                        .unwrap_or_else(|| bytes.clone());
+                    let tlen = read_field(fields, id)?
+                        .map(|f| f.bytes.len())
+                        .filter(|&n| n > 0)
+                        .unwrap_or(area.len());
                     let mut v = area;
                     v.resize(tlen, b' ');
                     set_field_image(fields, id, &v)?;
@@ -8713,9 +11717,16 @@ fn exec_read(
             } else if def.org == FileOrg::LineSequential {
                 // Line-sequential READ pads a short line with spaces (libcob lineseq_read memsets).
                 bytes.resize(reclen, b' ');
-                write_field(fields, def.primary_record(), |f| { f.bytes = bytes; Ok(()) })?;
+                write_field(fields, def.primary_record(), |f| {
+                    f.bytes = bytes;
+                    Ok(())
+                })?;
                 if let Some(id) = &into {
-                    let mv = vec![Tok::Word(def.primary_record().to_string()), Tok::Word("TO".to_string()), Tok::Word(id.clone())];
+                    let mv = vec![
+                        Tok::Word(def.primary_record().to_string()),
+                        Tok::Word("TO".to_string()),
+                        Tok::Word(id.clone()),
+                    ];
                     exec_move(&mv, fields, ctx.decimal_comma)?;
                 }
             } else {
@@ -8725,14 +11736,26 @@ fn exec_read(
                 // stay visible through the shared record-area views -- verified against the oracle.
                 let mut area = bytes;
                 if area.len() < reclen {
-                    let prev = read_field(fields, def.primary_record())?.map(|f| f.bytes).unwrap_or_default();
-                    let tail = prev.get(area.len()..).map(|s| s.to_vec()).unwrap_or_default();
+                    let prev = read_field(fields, def.primary_record())?
+                        .map(|f| f.bytes)
+                        .unwrap_or_default();
+                    let tail = prev
+                        .get(area.len()..)
+                        .map(|s| s.to_vec())
+                        .unwrap_or_default();
                     area.extend_from_slice(&tail);
                     area.truncate(reclen);
                 }
-                write_field(fields, def.primary_record(), |f| { f.bytes = area; Ok(()) })?;
+                write_field(fields, def.primary_record(), |f| {
+                    f.bytes = area;
+                    Ok(())
+                })?;
                 if let Some(id) = &into {
-                    let mv = vec![Tok::Word(def.primary_record().to_string()), Tok::Word("TO".to_string()), Tok::Word(id.clone())];
+                    let mv = vec![
+                        Tok::Word(def.primary_record().to_string()),
+                        Tok::Word("TO".to_string()),
+                        Tok::Word(id.clone()),
+                    ];
                     exec_move(&mv, fields, ctx.decimal_comma)?;
                 }
             }
@@ -8760,7 +11783,10 @@ fn exec_read(
 
 /// Resolve a single operand token to `(bytes, attr)` (identifier -> its stored numeric/alnum form;
 /// string literal -> alnum; numeric literal -> zoned display).
-fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn operand_value(
+    t: &Tok,
+    fields: &HashMap<String, Field>,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     match t {
         Tok::Str(s) => Ok((s.clone(), alnum_attr())),
         Tok::Word(w) => {
@@ -8771,9 +11797,9 @@ fn operand_value(t: &Tok, fields: &HashMap<String, Field>) -> Result<(Vec<u8>, F
                     Storage::Edited(..) => Ok((f.bytes.clone(), alnum_attr())),
                     // a group is an alphanumeric value of its concatenated leaves (read_field filled bytes).
                     Storage::Group { .. } => Ok((f.bytes.clone(), alnum_attr())),
-                    Storage::Condition { .. } => {
-                        Err(RunError::Unsupported("88 condition-name is not a value operand".into()))
-                    }
+                    Storage::Condition { .. } => Err(RunError::Unsupported(
+                        "88 condition-name is not a value operand".into(),
+                    )),
                 }
             } else {
                 // a numeric literal operand.
@@ -8818,21 +11844,29 @@ fn dec_to_i64(d: &Decimal) -> i64 {
 /// reproduce cobc's *compile-time* constant fold (a minimal-width integer like `10`, not the 9-digit
 /// binary the runtime returns) because cobc never calls libcob for them. Names outside the wired subset
 /// fail closed.
-fn eval_intrinsic(name: &str, args: &[(Vec<u8>, FieldAttr)]) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn eval_intrinsic(
+    name: &str,
+    args: &[(Vec<u8>, FieldAttr)],
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     use crate::intrinsic as ix;
     let a0 = || {
         args.first()
             .ok_or_else(|| RunError::Unsupported(format!("FUNCTION {name}: missing argument")))
     };
-    let pair = |i: usize, j: usize| -> Result<(&(Vec<u8>, FieldAttr), &(Vec<u8>, FieldAttr)), RunError> {
-        match (args.get(i), args.get(j)) {
-            (Some(x), Some(y)) => Ok((x, y)),
-            _ => Err(RunError::Unsupported(format!("FUNCTION {name}: needs two arguments"))),
-        }
-    };
+    let pair =
+        |i: usize, j: usize| -> Result<(&(Vec<u8>, FieldAttr), &(Vec<u8>, FieldAttr)), RunError> {
+            match (args.get(i), args.get(j)) {
+                (Some(x), Some(y)) => Ok((x, y)),
+                _ => Err(RunError::Unsupported(format!(
+                    "FUNCTION {name}: needs two arguments"
+                ))),
+            }
+        };
     let list = || -> Result<Vec<(&[u8], &FieldAttr)>, RunError> {
         if args.is_empty() {
-            return Err(RunError::Unsupported(format!("FUNCTION {name}: needs at least one argument")));
+            return Err(RunError::Unsupported(format!(
+                "FUNCTION {name}: needs at least one argument"
+            )));
         }
         Ok(args.iter().map(|(b, at)| (b.as_slice(), at)).collect())
     };
@@ -9173,9 +12207,19 @@ fn eval_function_call(
             let mut depth = 0i32;
             for ch in inner.chars() {
                 match ch {
-                    '(' => { depth += 1; cur.push(ch); }
-                    ')' => { depth -= 1; cur.push(ch); }
-                    ' ' | ',' if depth == 0 => { if !cur.is_empty() { args.push(std::mem::take(&mut cur)); } }
+                    '(' => {
+                        depth += 1;
+                        cur.push(ch);
+                    }
+                    ')' => {
+                        depth -= 1;
+                        cur.push(ch);
+                    }
+                    ' ' | ',' if depth == 0 => {
+                        if !cur.is_empty() {
+                            args.push(std::mem::take(&mut cur));
+                        }
+                    }
                     _ => cur.push(ch),
                 }
             }
@@ -9191,18 +12235,29 @@ fn eval_function_call(
     if name == "TRIM" {
         let mut items = arg_strs.clone();
         let dir = match items.last().map(|s| s.to_ascii_uppercase()).as_deref() {
-            Some("LEADING") => { items.pop(); 1 }
-            Some("TRAILING") => { items.pop(); 2 }
+            Some("LEADING") => {
+                items.pop();
+                1
+            }
+            Some("TRAILING") => {
+                items.pop();
+                2
+            }
             _ => 0,
         };
-        let a = items.first().ok_or_else(|| RunError::Unsupported("FUNCTION TRIM: missing argument".into()))?;
+        let a = items
+            .first()
+            .ok_or_else(|| RunError::Unsupported("FUNCTION TRIM: missing argument".into()))?;
         let arg = if let Some(idx) = a.strip_prefix('\u{1}') {
             let i: usize = idx.parse().unwrap_or(0);
             (strs.get(i).cloned().unwrap_or_default(), alnum_attr())
         } else {
             operand_value(&Tok::Word(a.clone()), fields)?
         };
-        return Ok((crate::intrinsic::cob_intr_trim(0, 0, &arg.0, &arg.1, dir), k));
+        return Ok((
+            crate::intrinsic::cob_intr_trim(0, 0, &arg.0, &arg.1, dir),
+            k,
+        ));
     }
     let mut args: Vec<(Vec<u8>, FieldAttr)> = Vec::new();
     for a in &arg_strs {
@@ -9217,11 +12272,20 @@ fn eval_function_call(
     // ignored (`FUNCTION LENGTH(S(2:4))` == LENGTH OF S). Resolve the base and fold/compute its length.
     if matches!(name.as_str(), "LENGTH" | "BYTE-LENGTH") {
         if let Some((base, _, _)) = arg_strs.first().and_then(|a| parse_refmod(a)) {
-            let n = read_field(fields, base)?.map(|f| f.bytes.len()).unwrap_or(0);
+            let n = read_field(fields, base)?
+                .map(|f| f.bytes.len())
+                .unwrap_or(0);
             return if is_variable_length(base, fields) {
                 Ok((crate::intrinsic::cob_intr_length(n), k))
             } else {
-                Ok((decimal_as_display(&Decimal { negative: false, digits: digits_of(n as u128), scale: 0 }), k))
+                Ok((
+                    decimal_as_display(&Decimal {
+                        negative: false,
+                        digits: digits_of(n as u128),
+                        scale: 0,
+                    }),
+                    k,
+                ))
             };
         }
     }
@@ -9229,7 +12293,9 @@ fn eval_function_call(
     // RUNTIME call in cobc, not the compile-time constant fold -- so it displays as the 9-digit cob_intr
     // form, not a minimal integer.
     if matches!(name.as_str(), "LENGTH" | "BYTE-LENGTH")
-        && arg_strs.first().is_some_and(|a| is_variable_length(a, fields))
+        && arg_strs
+            .first()
+            .is_some_and(|a| is_variable_length(a, fields))
     {
         let n = args.first().map(|(b, _)| b.len()).unwrap_or(0);
         return Ok((crate::intrinsic::cob_intr_length(n), k));
@@ -9237,14 +12303,25 @@ fn eval_function_call(
     // CONTENT-OF(ptr [, len]) / CONTENT-LENGTH(ptr): dereference a USAGE POINTER (set via SET ptr TO
     // ADDRESS OF field) to its target's bytes / length.
     if matches!(name.as_str(), "CONTENT-OF" | "CONTENT-LENGTH") {
-        let target = arg_strs.first().and_then(|p| POINTER_TARGETS.with(|m| m.borrow().get(p).cloned()));
+        let target = arg_strs
+            .first()
+            .and_then(|p| POINTER_TARGETS.with(|m| m.borrow().get(p).cloned()));
         let target = target.ok_or_else(|| {
-            RunError::Unsupported(format!("FUNCTION {name}: the pointer has no SET ... TO ADDRESS OF target"))
+            RunError::Unsupported(format!(
+                "FUNCTION {name}: the pointer has no SET ... TO ADDRESS OF target"
+            ))
         })?;
         if name == "CONTENT-LENGTH" {
-            return Ok((crate::intrinsic::cob_intr_length(field_len(&target, fields)), k));
+            return Ok((
+                crate::intrinsic::cob_intr_length(field_len(&target, fields)),
+                k,
+            ));
         }
-        let bytes = read_field(fields, &target).ok().flatten().map(|f| f.bytes).unwrap_or_default();
+        let bytes = read_field(fields, &target)
+            .ok()
+            .flatten()
+            .map(|f| f.bytes)
+            .unwrap_or_default();
         let bytes = match args.get(1) {
             Some(lenarg) => {
                 let n = dec_to_i64(&source_to_decimal(&lenarg.0, &lenarg.1)?).max(0) as usize;
@@ -9268,8 +12345,14 @@ fn resolve_functions(
     fields: &mut HashMap<String, Field>,
 ) -> Result<Vec<Tok>, RunError> {
     let is_len = |t: Option<&Tok>| matches!(t, Some(Tok::Word(w)) if w.eq_ignore_ascii_case("LENGTH") || w.eq_ignore_ascii_case("BYTE-LENGTH"));
-    let has_len_of = toks.windows(2).any(|w| is_len(Some(&w[0])) && matches!(&w[1], Tok::Word(b) if b.eq_ignore_ascii_case("OF")));
-    if !has_len_of && !toks.iter().any(|t| matches!(t, Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION"))) {
+    let has_len_of = toks.windows(2).any(|w| {
+        is_len(Some(&w[0])) && matches!(&w[1], Tok::Word(b) if b.eq_ignore_ascii_case("OF"))
+    });
+    if !has_len_of
+        && !toks
+            .iter()
+            .any(|t| matches!(t, Tok::Word(w) if w.eq_ignore_ascii_case("FUNCTION")))
+    {
         return Ok(toks.to_vec());
     }
     let mut out = Vec::new();
@@ -9282,14 +12365,39 @@ fn resolve_functions(
             && matches!(toks.get(i + 1), Some(Tok::Word(w)) if w.eq_ignore_ascii_case("OF"))
             && matches!(toks.get(i + 2), Some(Tok::Word(_)))
         {
-            let fname = if let Tok::Word(w) = &toks[i] { w.clone() } else { unreachable!() };
-            let refw = if let Tok::Word(w) = &toks[i + 2] { w.clone() } else { unreachable!() };
-            let synth = vec![Tok::Word("FUNCTION".into()), Tok::Word(fname), Tok::Word(format!("({refw})")), Tok::Dot];
+            let fname = if let Tok::Word(w) = &toks[i] {
+                w.clone()
+            } else {
+                unreachable!()
+            };
+            let refw = if let Tok::Word(w) = &toks[i + 2] {
+                w.clone()
+            } else {
+                unreachable!()
+            };
+            let synth = vec![
+                Tok::Word("FUNCTION".into()),
+                Tok::Word(fname),
+                Tok::Word(format!("({refw})")),
+                Tok::Dot,
+            ];
             let ((bytes, attr), _next) = eval_function_call(&synth, 0, fields)?;
             let name = format!("\u{2}FN{n}");
             n += 1;
-            let storage = if attr.field_type >= 0x20 { Storage::Alpha(attr) } else { Storage::Numeric(attr) };
-            fields.insert(name.clone(), Field { storage, bytes, occurs: 0, redefines: None });
+            let storage = if attr.field_type >= 0x20 {
+                Storage::Alpha(attr)
+            } else {
+                Storage::Numeric(attr)
+            };
+            fields.insert(
+                name.clone(),
+                Field {
+                    storage,
+                    bytes,
+                    occurs: 0,
+                    redefines: None,
+                },
+            );
             out.push(Tok::Word(name));
             i += 3;
             continue;
@@ -9306,7 +12414,12 @@ fn resolve_functions(
             };
             fields.insert(
                 name.clone(),
-                Field { storage, bytes, occurs: 0, redefines: None },
+                Field {
+                    storage,
+                    bytes,
+                    occurs: 0,
+                    redefines: None,
+                },
             );
             out.push(Tok::Word(name));
             i = next;
@@ -9347,7 +12460,11 @@ fn parse_refmod(w: &str) -> Option<(&str, &str, Option<&str>)> {
     if start.is_empty() {
         return None;
     }
-    Some((&w[..open], start, if len.is_empty() { None } else { Some(len) }))
+    Some((
+        &w[..open],
+        start,
+        if len.is_empty() { None } else { Some(len) },
+    ))
 }
 
 thread_local! {
@@ -9380,9 +12497,17 @@ fn parse_ec_bound_check(src_upper: &str) -> bool {
 fn default_element(storage: &Storage, elem: usize) -> Field {
     let fill = match storage {
         Storage::Numeric(_) => b'0',
-        Storage::Alpha(_) | Storage::Edited(..) | Storage::Condition { .. } | Storage::Group { .. } => b' ',
+        Storage::Alpha(_)
+        | Storage::Edited(..)
+        | Storage::Condition { .. }
+        | Storage::Group { .. } => b' ',
     };
-    Field { storage: storage.clone(), bytes: vec![fill; elem], occurs: 1, redefines: None }
+    Field {
+        storage: storage.clone(),
+        bytes: vec![fill; elem],
+        occurs: 1,
+        redefines: None,
+    }
 }
 
 /// The element Field of an `OCCURS` table at 1-based subscript `idx` (a transient single-element Field).
@@ -9404,7 +12529,12 @@ fn table_element(f: &Field, idx: usize, name: &str) -> Result<Field, RunError> {
         return Ok(default_element(&f.storage, elem));
     }
     let start = (idx - 1) * elem;
-    Ok(Field { storage: f.storage.clone(), bytes: f.bytes[start..start + elem].to_vec(), occurs: 1, redefines: None })
+    Ok(Field {
+        storage: f.storage.clone(),
+        bytes: f.bytes[start..start + elem].to_vec(),
+        occurs: 1,
+        redefines: None,
+    })
 }
 
 /// The live authoritative buffer for `name` -- normally `own` (its own bytes), but for a descendant store of
@@ -9413,7 +12543,11 @@ fn table_element(f: &Field, idx: usize, name: &str) -> Result<Field, RunError> {
 /// group reads the live values, not its own (empty) buffer.
 fn redef_buffer(fields: &HashMap<String, Field>, name: &str, own: &[u8]) -> Vec<u8> {
     if let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) {
-        let img = read_field(fields, &target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
+        let img = read_field(fields, &target)
+            .ok()
+            .flatten()
+            .map(|t| t.bytes)
+            .unwrap_or_default();
         let mut b = img.get(off..).map(|s| s.to_vec()).unwrap_or_default();
         b.resize(own.len(), b' ');
         return b;
@@ -9424,9 +12558,20 @@ fn redef_buffer(fields: &HashMap<String, Field>, name: &str, own: &[u8]) -> Vec<
 /// Write `slice` at byte `local` within `name`'s authoritative storage. For a descendant store of a
 /// REDEFINES group (registered in [`REDEF_VIEW`]) this lands in the redefined target's shared image at the
 /// recorded offset and returns `Ok(true)`; otherwise `Ok(false)` and the caller performs its own write.
-fn redef_write(fields: &mut HashMap<String, Field>, name: &str, local: usize, slice: &[u8]) -> Result<bool, RunError> {
-    let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) else { return Ok(false) };
-    let mut img = read_field(fields, &target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
+fn redef_write(
+    fields: &mut HashMap<String, Field>,
+    name: &str,
+    local: usize,
+    slice: &[u8],
+) -> Result<bool, RunError> {
+    let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) else {
+        return Ok(false);
+    };
+    let mut img = read_field(fields, &target)
+        .ok()
+        .flatten()
+        .map(|t| t.bytes)
+        .unwrap_or_default();
     let at = off + local;
     let n = slice.len().min(img.len().saturating_sub(at));
     if n > 0 {
@@ -9446,10 +12591,19 @@ fn aliased(fields: &HashMap<String, Field>, f: &Field) -> Field {
             // Read the target's live IMAGE (not its raw `bytes`): an elementary target's image is its
             // bytes, but a GROUP target's bytes are empty -- its image is the concatenated/interleaved
             // leaves (so REDEFINES over a group, incl. a group-OCCURS interleaved buffer, sees real data).
-            let mut bytes = read_field(fields, target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
+            let mut bytes = read_field(fields, target)
+                .ok()
+                .flatten()
+                .map(|t| t.bytes)
+                .unwrap_or_default();
             bytes.resize(size, b' ');
             bytes.truncate(size);
-            Field { storage: f.storage.clone(), bytes, occurs: f.occurs, redefines: None }
+            Field {
+                storage: f.storage.clone(),
+                bytes,
+                occurs: f.occurs,
+                redefines: None,
+            }
         }
         None => f.clone(),
     }
@@ -9462,58 +12616,109 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
     // Reference modification `base(start:len)` / `base(start:)` -- an alphanumeric SUBSTRING of the base item
     // (which may itself carry a subscript, e.g. T(i)(s:l)). Always category alphanumeric, 1-based start.
     if let Some((base, start_s, len_s)) = parse_refmod(word) {
-        let Some(basef) = read_field(fields, base)? else { return Ok(None) };
+        let Some(basef) = read_field(fields, base)? else {
+            return Ok(None);
+        };
         let total = basef.bytes.len();
-        let start = resolve_int(start_s, fields)
-            .ok_or_else(|| RunError::Unsupported(format!("reference-modification start '{start_s}' is not an integer")))?;
+        let start = resolve_int(start_s, fields).ok_or_else(|| {
+            RunError::Unsupported(format!(
+                "reference-modification start '{start_s}' is not an integer"
+            ))
+        })?;
         let len = match len_s {
-            Some(l) => resolve_int(l, fields)
-                .ok_or_else(|| RunError::Unsupported(format!("reference-modification length '{l}' is not an integer")))?,
+            Some(l) => resolve_int(l, fields).ok_or_else(|| {
+                RunError::Unsupported(format!(
+                    "reference-modification length '{l}' is not an integer"
+                ))
+            })?,
             None => total as i64 - start + 1, // `(start:)` runs to the end of the item
         };
         let s = (start - 1).clamp(0, total as i64) as usize;
         let e = (s as i64 + len.max(0)).clamp(0, total as i64) as usize;
-        return Ok(Some(Field { storage: Storage::Alpha(alnum_attr()), bytes: basef.bytes[s..e].to_vec(), occurs: 1, redefines: None }));
+        return Ok(Some(Field {
+            storage: Storage::Alpha(alnum_attr()),
+            bytes: basef.bytes[s..e].to_vec(),
+            occurs: 1,
+            redefines: None,
+        }));
     }
     let (base, sub) = split_subscript(word);
     // MULTI-DIMENSION leaf: `C(i,j)` -- a strided cell of the base group-OCCURS buffer, addressed by dims.
     if let Some((basef, offset, size, dims)) = nested_leaf_lookup(base) {
-        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let cstore = fields
+            .get(base)
+            .map(|f| f.storage.clone())
+            .unwrap_or(Storage::Alpha(alnum_attr()));
         let subs = sub.map(subscripts).unwrap_or_default();
         return match nested_addr(offset, &dims, &subs, fields)? {
             Some(off) => {
-                let pf = fields.get(&basef).ok_or_else(|| RunError::UndefinedName(basef.clone()))?;
-                Ok(Some(Field { storage: cstore, bytes: pf.bytes[off..off + size].to_vec(), occurs: 1, redefines: None }))
+                let pf = fields
+                    .get(&basef)
+                    .ok_or_else(|| RunError::UndefinedName(basef.clone()))?;
+                Ok(Some(Field {
+                    storage: cstore,
+                    bytes: pf.bytes[off..off + size].to_vec(),
+                    occurs: 1,
+                    redefines: None,
+                }))
             }
             None => Ok(Some(default_element(&cstore, size))), // suppressed OOB
         };
     }
     // group-OCCURS CHILD: `EK(i)` is a single strided slice into the PARENT's interleaved buffer.
     if let Some((parent, coff, csz)) = group_child_lookup(base) {
-        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let cstore = fields
+            .get(base)
+            .map(|f| f.storage.clone())
+            .unwrap_or(Storage::Alpha(alnum_attr()));
         let (stride, occ) = group_occurs_lookup(&parent).unwrap_or((csz, 1));
         let idx = match sub {
-            Some(s) => resolve_int(s, fields)
-                .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize,
-            None => return Err(RunError::Unsupported(format!("group-OCCURS child `{base}` must be subscripted"))),
+            Some(s) => resolve_int(s, fields).ok_or_else(|| {
+                RunError::Unsupported(format!("subscript '{s}' is not an integer"))
+            })? as usize,
+            None => {
+                return Err(RunError::Unsupported(format!(
+                    "group-OCCURS child `{base}` must be subscripted"
+                )))
+            }
         };
         if idx < 1 || idx > occ {
             if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
-                return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+                return Err(RunError::Runtime(format!(
+                    "subscript of '{base}' out of bounds: {idx} (maximum: {occ})"
+                )));
             }
             return Ok(Some(default_element(&cstore, csz)));
         }
-        let own = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?.bytes.clone();
+        let own = fields
+            .get(&parent)
+            .ok_or_else(|| RunError::UndefinedName(parent.clone()))?
+            .bytes
+            .clone();
         let buf = redef_buffer(fields, &parent, &own); // alias the redefined target, if this group-OCCURS redefines one
         let start = (idx - 1) * stride + coff;
-        return Ok(Some(Field { storage: cstore, bytes: buf[start..start + csz].to_vec(), occurs: 1, redefines: None }));
+        return Ok(Some(Field {
+            storage: cstore,
+            bytes: buf[start..start + csz].to_vec(),
+            occurs: 1,
+            redefines: None,
+        }));
     }
-    let Some(f) = fields.get(base) else { return Ok(None) };
+    let Some(f) = fields.get(base) else {
+        return Ok(None);
+    };
     if let Storage::Group { children } = &f.storage {
         // group-OCCURS TABLE: bytes are the live interleaved buffer; `ENT(i)` via the unchanged table_element.
         if let Some((_stride, occ)) = group_occurs_lookup(base) {
             let buf = redef_buffer(fields, base, &f.bytes); // alias the redefined target, if this table redefines one
-            let tbl = Field { storage: Storage::Group { children: children.clone() }, bytes: buf, occurs: occ, redefines: None };
+            let tbl = Field {
+                storage: Storage::Group {
+                    children: children.clone(),
+                },
+                bytes: buf,
+                occurs: occ,
+                redefines: None,
+            };
             return match sub {
                 // whole interleaved image (REDEFINES X(n) read / group DISPLAY/MOVE). OCCURS DEPENDING ON:
                 // the LIVE image is counter*stride (built at MAX); subscripted ENT(i) still uses MAX above.
@@ -9521,22 +12726,33 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
                     if let Some((counter, st)) = odo_lookup(base) {
                         let n = resolve_int(&counter, fields).unwrap_or(0).max(0) as usize;
                         let live = (n * st).min(tbl.bytes.len());
-                        return Ok(Some(Field { storage: tbl.storage, bytes: tbl.bytes[..live].to_vec(), occurs: n, redefines: None }));
+                        return Ok(Some(Field {
+                            storage: tbl.storage,
+                            bytes: tbl.bytes[..live].to_vec(),
+                            occurs: n,
+                            redefines: None,
+                        }));
                     }
                     Ok(Some(tbl))
                 }
                 Some(s) => {
-                    let idx = resolve_int(s, fields)
-                        .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
+                    let idx = resolve_int(s, fields).ok_or_else(|| {
+                        RunError::Unsupported(format!("subscript '{s}' is not an integer"))
+                    })?;
                     Ok(Some(table_element(&tbl, idx as usize, base)?))
                 }
             };
         }
         // A non-OCCURS group reads as the concatenation of its leaves' current bytes (its live record image).
-        debug_assert!(group_occurs_lookup(base).is_none(), "group_bytes reached for group-OCCURS `{base}`");
+        debug_assert!(
+            group_occurs_lookup(base).is_none(),
+            "group_bytes reached for group-OCCURS `{base}`"
+        );
         let bytes = group_bytes(children, fields);
         return Ok(Some(Field {
-            storage: Storage::Group { children: children.clone() },
+            storage: Storage::Group {
+                children: children.clone(),
+            },
             bytes,
             occurs: 1,
             redefines: None,
@@ -9556,8 +12772,9 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
     match sub {
         None => Ok(Some(f)),
         Some(s) => {
-            let idx = resolve_int(s, fields)
-                .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?;
+            let idx = resolve_int(s, fields).ok_or_else(|| {
+                RunError::Unsupported(format!("subscript '{s}' is not an integer"))
+            })?;
             Ok(Some(table_element(&f, idx as usize, base)?))
         }
     }
@@ -9569,10 +12786,18 @@ fn read_field(fields: &HashMap<String, Field>, word: &str) -> Result<Option<Fiel
 /// group-aware byte store used by REDEFINES write-through. Handles a group-OCCURS interleaved buffer, a
 /// plain group (distributes to leaves via put_group_bytes), and an elementary/aliased field. Non-generic
 /// (so it can be called from the generic `write_field` without recursive monomorphization).
-fn set_field_image(fields: &mut HashMap<String, Field>, name: &str, img: &[u8]) -> Result<(), RunError> {
+fn set_field_image(
+    fields: &mut HashMap<String, Field>,
+    name: &str,
+    img: &[u8],
+) -> Result<(), RunError> {
     // A descendant store of a REDEFINES group: splice the image into the redefined target at the offset.
     if let Some((target, off)) = REDEF_VIEW.with(|m| m.borrow().get(name).cloned()) {
-        let mut t = read_field(fields, &target).ok().flatten().map(|x| x.bytes).unwrap_or_default();
+        let mut t = read_field(fields, &target)
+            .ok()
+            .flatten()
+            .map(|x| x.bytes)
+            .unwrap_or_default();
         let n = img.len().min(t.len().saturating_sub(off));
         if n > 0 {
             t[off..off + n].copy_from_slice(&img[..n]);
@@ -9581,7 +12806,9 @@ fn set_field_image(fields: &mut HashMap<String, Field>, name: &str, img: &[u8]) 
         return Ok(());
     }
     if group_occurs_lookup(name).is_some() {
-        let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+        let f = fields
+            .get_mut(name)
+            .ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
         let n = img.len().min(f.bytes.len());
         f.bytes[..n].copy_from_slice(&img[..n]);
         return Ok(());
@@ -9595,7 +12822,9 @@ fn set_field_image(fields: &mut HashMap<String, Field>, name: &str, img: &[u8]) 
             Ok(())
         }
         Some(_) => {
-            let f = fields.get_mut(name).ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
+            let f = fields
+                .get_mut(name)
+                .ok_or_else(|| RunError::UndefinedName(name.to_string()))?;
             let n = img.len().min(f.bytes.len());
             f.bytes[..n].copy_from_slice(&img[..n]);
             Ok(())
@@ -9613,18 +12842,30 @@ fn write_field(
     // (the move/inspect stores left-justified, space-padded/truncated to len), splice the result back into
     // the base bytes, then write the whole base back THROUGH write_field (so a subscripted/group base works).
     if let Some((base, start_s, len_s)) = parse_refmod(word) {
-        let basef = read_field(fields, base)?.ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+        let basef =
+            read_field(fields, base)?.ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
         let total = basef.bytes.len();
-        let start = resolve_int(start_s, fields)
-            .ok_or_else(|| RunError::Unsupported(format!("reference-modification start '{start_s}' is not an integer")))?;
+        let start = resolve_int(start_s, fields).ok_or_else(|| {
+            RunError::Unsupported(format!(
+                "reference-modification start '{start_s}' is not an integer"
+            ))
+        })?;
         let len = match len_s {
-            Some(l) => resolve_int(l, fields)
-                .ok_or_else(|| RunError::Unsupported(format!("reference-modification length '{l}' is not an integer")))?,
+            Some(l) => resolve_int(l, fields).ok_or_else(|| {
+                RunError::Unsupported(format!(
+                    "reference-modification length '{l}' is not an integer"
+                ))
+            })?,
             None => total as i64 - start + 1,
         };
         let s = (start - 1).clamp(0, total as i64) as usize;
         let e = (s as i64 + len.max(0)).clamp(0, total as i64) as usize;
-        let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: basef.bytes[s..e].to_vec(), occurs: 1, redefines: None };
+        let mut tmp = Field {
+            storage: Storage::Alpha(alnum_attr()),
+            bytes: basef.bytes[s..e].to_vec(),
+            occurs: 1,
+            redefines: None,
+        };
         apply(&mut tmp)?;
         let mut newbytes = basef.bytes.clone();
         let n = tmp.bytes.len().min(e - s);
@@ -9636,14 +12877,24 @@ fn write_field(
     let (base, sub) = split_subscript(word);
     // MULTI-DIMENSION leaf write-back: `C(i,j)` shapes a temp over the strided cell, applies, copies back.
     if let Some((basef, offset, size, dims)) = nested_leaf_lookup(base) {
-        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let cstore = fields
+            .get(base)
+            .map(|f| f.storage.clone())
+            .unwrap_or(Storage::Alpha(alnum_attr()));
         let subs = sub.map(subscripts).unwrap_or_default();
         let off = match nested_addr(offset, &dims, &subs, fields)? {
             Some(o) => o,
             None => return Ok(()), // suppressed OOB write -> no-op (cobc writes adjacent storage; UB)
         };
-        let pf = fields.get(&basef).ok_or_else(|| RunError::UndefinedName(basef.clone()))?;
-        let mut tmp = Field { storage: cstore, bytes: pf.bytes[off..off + size].to_vec(), occurs: 1, redefines: None };
+        let pf = fields
+            .get(&basef)
+            .ok_or_else(|| RunError::UndefinedName(basef.clone()))?;
+        let mut tmp = Field {
+            storage: cstore,
+            bytes: pf.bytes[off..off + size].to_vec(),
+            occurs: 1,
+            redefines: None,
+        };
         apply(&mut tmp)?;
         let pf = fields.get_mut(&basef).expect("base present");
         let n = tmp.bytes.len().min(size);
@@ -9654,22 +12905,39 @@ fn write_field(
     // buffer, applies, and copies the result back into the parent buffer.
     if let Some((parent, coff, csz)) = group_child_lookup(base) {
         let Some(s) = sub else {
-            return Err(RunError::Unsupported(format!("group-OCCURS child `{base}` must be subscripted")));
+            return Err(RunError::Unsupported(format!(
+                "group-OCCURS child `{base}` must be subscripted"
+            )));
         };
         let idx = resolve_int(s, fields)
-            .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize;
+            .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?
+            as usize;
         let (stride, occ) = group_occurs_lookup(&parent).unwrap_or((csz, 1));
-        let cstore = fields.get(base).map(|f| f.storage.clone()).unwrap_or(Storage::Alpha(alnum_attr()));
+        let cstore = fields
+            .get(base)
+            .map(|f| f.storage.clone())
+            .unwrap_or(Storage::Alpha(alnum_attr()));
         if idx < 1 || idx > occ {
             if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
-                return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+                return Err(RunError::Runtime(format!(
+                    "subscript of '{base}' out of bounds: {idx} (maximum: {occ})"
+                )));
             }
             return Ok(());
         }
         let start = (idx - 1) * stride + coff;
-        let own = fields.get(&parent).ok_or_else(|| RunError::UndefinedName(parent.clone()))?.bytes.clone();
+        let own = fields
+            .get(&parent)
+            .ok_or_else(|| RunError::UndefinedName(parent.clone()))?
+            .bytes
+            .clone();
         let cur = redef_buffer(fields, &parent, &own); // current element bytes (aliased target, if redefining)
-        let mut tmp = Field { storage: cstore, bytes: cur[start..start + csz].to_vec(), occurs: 1, redefines: None };
+        let mut tmp = Field {
+            storage: cstore,
+            bytes: cur[start..start + csz].to_vec(),
+            occurs: 1,
+            redefines: None,
+        };
         apply(&mut tmp)?;
         let n = tmp.bytes.len().min(csz);
         if !redef_write(fields, &parent, start, &tmp.bytes[..n])? {
@@ -9684,7 +12952,12 @@ fn write_field(
             None => {
                 let own = fields.get(base).expect("present").bytes.clone();
                 let cur = redef_buffer(fields, base, &own);
-                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: cur, occurs: occ, redefines: None };
+                let mut tmp = Field {
+                    storage: Storage::Alpha(alnum_attr()),
+                    bytes: cur,
+                    occurs: occ,
+                    redefines: None,
+                };
                 apply(&mut tmp)?;
                 let n = tmp.bytes.len().min(own.len());
                 if !redef_write(fields, base, 0, &tmp.bytes[..n])? {
@@ -9694,11 +12967,14 @@ fn write_field(
                 return Ok(());
             }
             Some(s) => {
-                let idx = resolve_int(s, fields)
-                    .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize;
+                let idx = resolve_int(s, fields).ok_or_else(|| {
+                    RunError::Unsupported(format!("subscript '{s}' is not an integer"))
+                })? as usize;
                 if idx < 1 || idx > occ {
                     if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
-                        return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+                        return Err(RunError::Runtime(format!(
+                            "subscript of '{base}' out of bounds: {idx} (maximum: {occ})"
+                        )));
                     }
                     return Ok(());
                 }
@@ -9707,7 +12983,12 @@ fn write_field(
                 let own = fields.get(base).expect("present").bytes.clone();
                 let cur = redef_buffer(fields, base, &own);
                 let start = (idx - 1) * stride;
-                let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: cur[start..start + stride].to_vec(), occurs: 1, redefines: None };
+                let mut tmp = Field {
+                    storage: Storage::Alpha(alnum_attr()),
+                    bytes: cur[start..start + stride].to_vec(),
+                    occurs: 1,
+                    redefines: None,
+                };
                 apply(&mut tmp)?;
                 let n = tmp.bytes.len().min(stride);
                 if !redef_write(fields, base, start, &tmp.bytes[..n])? {
@@ -9722,9 +13003,17 @@ fn write_field(
     // group's current concatenation, apply, then split the bytes back into the leaves by length.
     if sub.is_none() {
         if let Some(Storage::Group { children }) = fields.get(base).map(|f| f.storage.clone()) {
-            debug_assert!(group_occurs_lookup(base).is_none(), "group_bytes write reached for group-OCCURS `{base}`");
+            debug_assert!(
+                group_occurs_lookup(base).is_none(),
+                "group_bytes write reached for group-OCCURS `{base}`"
+            );
             let concat = group_bytes(&children, fields);
-            let mut tmp = Field { storage: Storage::Alpha(alnum_attr()), bytes: concat, occurs: 1, redefines: None };
+            let mut tmp = Field {
+                storage: Storage::Alpha(alnum_attr()),
+                bytes: concat,
+                occurs: 1,
+                redefines: None,
+            };
             apply(&mut tmp)?;
             put_group_bytes(&children, tmp.bytes, fields);
             return Ok(());
@@ -9742,10 +13031,19 @@ fn write_field(
             let storage = f.storage.clone();
             let size = f.bytes.len();
             let occ = f.occurs;
-            let mut bytes = read_field(fields, &target).ok().flatten().map(|t| t.bytes).unwrap_or_default();
+            let mut bytes = read_field(fields, &target)
+                .ok()
+                .flatten()
+                .map(|t| t.bytes)
+                .unwrap_or_default();
             bytes.resize(size, b' ');
             bytes.truncate(size);
-            let mut tmp = Field { storage, bytes, occurs: occ, redefines: None };
+            let mut tmp = Field {
+                storage,
+                bytes,
+                occurs: occ,
+                redefines: None,
+            };
             apply(&mut tmp)?;
             set_field_image(fields, &target, &tmp.bytes)?; // the alias covers the target's first `size` bytes
             return Ok(());
@@ -9754,28 +13052,43 @@ fn write_field(
     // A descendant elementary leaf (incl. an elementary OCCURS leaf) of a REDEFINES group writes THROUGH to
     // the redefined target's shared storage at the recorded offset (the read path already aliases it).
     if REDEF_VIEW.with(|m| m.borrow().contains_key(base)) {
-        let f0 = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+        let f0 = fields
+            .get(base)
+            .ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
         let (storage, occ_field, own) = (f0.storage.clone(), f0.occurs, f0.bytes.clone());
         let occ = occ_field.max(1);
         let elem = own.len() / occ;
         let cur = redef_buffer(fields, base, &own);
         match sub {
             None => {
-                let mut tmp = Field { storage, bytes: cur, occurs: occ_field, redefines: None };
+                let mut tmp = Field {
+                    storage,
+                    bytes: cur,
+                    occurs: occ_field,
+                    redefines: None,
+                };
                 apply(&mut tmp)?;
                 redef_write(fields, base, 0, &tmp.bytes)?;
             }
             Some(s) => {
-                let idx = resolve_int(s, fields)
-                    .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))? as usize;
+                let idx = resolve_int(s, fields).ok_or_else(|| {
+                    RunError::Unsupported(format!("subscript '{s}' is not an integer"))
+                })? as usize;
                 if idx < 1 || idx > occ {
                     if EC_BOUND_SUBSCRIPT_ON.with(|c| c.get()) {
-                        return Err(RunError::Runtime(format!("subscript of '{base}' out of bounds: {idx} (maximum: {occ})")));
+                        return Err(RunError::Runtime(format!(
+                            "subscript of '{base}' out of bounds: {idx} (maximum: {occ})"
+                        )));
                     }
                     return Ok(());
                 }
                 let start = (idx - 1) * elem;
-                let mut tmp = Field { storage, bytes: cur[start..start + elem].to_vec(), occurs: 1, redefines: None };
+                let mut tmp = Field {
+                    storage,
+                    bytes: cur[start..start + elem].to_vec(),
+                    occurs: 1,
+                    redefines: None,
+                };
                 apply(&mut tmp)?;
                 redef_write(fields, base, start, &tmp.bytes)?;
             }
@@ -9784,14 +13097,18 @@ fn write_field(
     }
     match sub {
         None => {
-            let f = fields.get_mut(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+            let f = fields
+                .get_mut(base)
+                .ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
             apply(f)
         }
         Some(s) => {
-            let idx = resolve_int(s, fields)
-                .ok_or_else(|| RunError::Unsupported(format!("subscript '{s}' is not an integer")))?
-                as usize;
-            let f = fields.get(base).ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
+            let idx = resolve_int(s, fields).ok_or_else(|| {
+                RunError::Unsupported(format!("subscript '{s}' is not an integer"))
+            })? as usize;
+            let f = fields
+                .get(base)
+                .ok_or_else(|| RunError::UndefinedName(base.to_string()))?;
             let occ = f.occurs.max(1);
             let elem = f.bytes.len() / occ;
             if idx < 1 || idx > occ {
@@ -9834,7 +13151,8 @@ fn move_into(
             f.bytes = if blank && dec_is_zero(&dec) {
                 vec![b' '; f.bytes.len()]
             } else {
-                encode_edited_cfg(&pic, &dec, cur, dc).map_err(|e| RunError::Runtime(format!("{e:?}")))?
+                encode_edited_cfg(&pic, &dec, cur, dc)
+                    .map_err(|e| RunError::Runtime(format!("{e:?}")))?
             };
             Ok(())
         }
@@ -9846,7 +13164,11 @@ fn move_into(
         Storage::Numeric(attr) | Storage::Alpha(attr) => {
             let attr = *attr;
             // BLANK WHEN ZERO on a numeric receiver: a zero value blanks the field.
-            if attr.blank_when_zero() && source_to_decimal(sbytes, sattr).map(|d| dec_is_zero(&d)).unwrap_or(false) {
+            if attr.blank_when_zero()
+                && source_to_decimal(sbytes, sattr)
+                    .map(|d| dec_is_zero(&d))
+                    .unwrap_or(false)
+            {
                 f.bytes = vec![b' '; f.bytes.len()];
                 return Ok(());
             }
@@ -9858,8 +13180,12 @@ fn move_into(
             f.bytes = dst;
             Ok(())
         }
-        Storage::Group { .. } => Err(RunError::Unsupported("a group MOVE is distributed across its leaves by write_field".into())),
-        Storage::Condition { .. } => Err(RunError::Unsupported("cannot MOVE into an 88 condition-name".into())),
+        Storage::Group { .. } => Err(RunError::Unsupported(
+            "a group MOVE is distributed across its leaves by write_field".into(),
+        )),
+        Storage::Condition { .. } => Err(RunError::Unsupported(
+            "cannot MOVE into an 88 condition-name".into(),
+        )),
     }
 }
 
@@ -9869,14 +13195,17 @@ fn move_into(
 /// cannot read -- is first converted to a signed DISPLAY intermediate via the sealed `cob_move`.
 fn decode_numeric_source(bytes: &[u8], attr: &FieldAttr) -> Result<Decimal, RunError> {
     use crate::attr::{COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_PACKED};
-    let needs_convert = matches!(attr.field_type, COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED)
-        || matches!(attr.field_type, 0x13 | 0x14 | 0x15); // COMP-1 / COMP-2 / extended float
+    let needs_convert = matches!(
+        attr.field_type,
+        COB_TYPE_NUMERIC_BINARY | COB_TYPE_NUMERIC_PACKED
+    ) || matches!(attr.field_type, 0x13 | 0x14 | 0x15); // COMP-1 / COMP-2 / extended float
     if !needs_convert {
         return source_to_decimal(bytes, attr);
     }
     let tattr = lit_num_attr(attr.digits.max(1), attr.scale.max(0), true);
     let mut buff = vec![b'0'; tattr.digits as usize];
-    crate::move_ops::cob_move(bytes, attr, &mut buff, &tattr).map_err(|e| RunError::Runtime(format!("{e:?}")))?;
+    crate::move_ops::cob_move(bytes, attr, &mut buff, &tattr)
+        .map_err(|e| RunError::Runtime(format!("{e:?}")))?;
     source_to_decimal(&buff, &tattr)
 }
 
@@ -9906,14 +13235,23 @@ fn source_to_decimal(bytes: &[u8], attr: &FieldAttr) -> Result<Decimal, RunError
         digits.push(0);
     }
     let scale = attr.scale.max(0);
-    Ok(Decimal { negative, digits, scale })
+    Ok(Decimal {
+        negative,
+        digits,
+        scale,
+    })
 }
 
 /// `ADD/SUBTRACT/MULTIPLY/DIVIDE ...` -- the `TO`/`FROM`/`BY`/`INTO`/`GIVING` forms over numeric
 /// receivers, dispatched onto the sealed arithmetic primitives.
 /// `ADD`/`SUBTRACT`/`MULTIPLY`/`DIVIDE` -- returns `true` if a SIZE ERROR (e.g. DIVIDE by zero) occurred,
 /// leaving the receiver UNCHANGED. The caller dispatches the `ON SIZE ERROR` handler.
-fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+fn exec_arith(
+    verb: &str,
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    has_handler: bool,
+) -> Result<bool, RunError> {
     match exec_arith_inner(verb, stmt, fields, has_handler) {
         Ok(size_err) => Ok(size_err),
         Err(RunError::SizeError) => {
@@ -9924,7 +13262,12 @@ fn exec_arith(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has
     }
 }
 
-fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field>, has_handler: bool) -> Result<bool, RunError> {
+fn exec_arith_inner(
+    verb: &str,
+    stmt: &[Tok],
+    fields: &mut HashMap<String, Field>,
+    has_handler: bool,
+) -> Result<bool, RunError> {
     // Resolve any FUNCTION reference or `LENGTH OF id` register in the operands into a temp field first, so
     // `ADD LENGTH OF X TO Y` / `COMPUTE`-free arithmetic over intrinsics works (no-op if none present).
     let stmt = resolve_functions(stmt, fields)?;
@@ -9935,16 +13278,39 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
     if matches!(stmt.first(), Some(Tok::Word(w)) if w == "CORRESPONDING" || w == "CORR") {
         let conn = if verb == "SUBTRACT" { "FROM" } else { "TO" };
         if verb != "ADD" && verb != "SUBTRACT" {
-            return Err(RunError::Unsupported(format!("{verb} CORRESPONDING is not a valid form")));
+            return Err(RunError::Unsupported(format!(
+                "{verb} CORRESPONDING is not a valid form"
+            )));
         }
-        let cp = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == conn))
+        let cp = stmt
+            .iter()
+            .position(|t| matches!(t, Tok::Word(w) if w == conn))
             .ok_or_else(|| RunError::Unsupported(format!("{verb} CORRESPONDING without {conn}")))?;
-        let src = match stmt.get(1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported(format!("{verb} CORRESPONDING: missing source group"))) };
-        let dst = match stmt.get(cp + 1) { Some(Tok::Word(w)) => w.clone(), _ => return Err(RunError::Unsupported(format!("{verb} CORRESPONDING: missing target group"))) };
+        let src = match stmt.get(1) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => {
+                return Err(RunError::Unsupported(format!(
+                    "{verb} CORRESPONDING: missing source group"
+                )))
+            }
+        };
+        let dst = match stmt.get(cp + 1) {
+            Some(Tok::Word(w)) => w.clone(),
+            _ => {
+                return Err(RunError::Unsupported(format!(
+                    "{verb} CORRESPONDING: missing target group"
+                )))
+            }
+        };
         let mut any_se = false;
         for (sk, dk) in corr_pairs(fields, &src, &dst)? {
-            let both_numeric = matches!(fields.get(&sk).map(|f| &f.storage), Some(Storage::Numeric(_)))
-                && matches!(fields.get(&dk).map(|f| &f.storage), Some(Storage::Numeric(_)));
+            let both_numeric = matches!(
+                fields.get(&sk).map(|f| &f.storage),
+                Some(Storage::Numeric(_))
+            ) && matches!(
+                fields.get(&dk).map(|f| &f.storage),
+                Some(Storage::Numeric(_))
+            );
             if !both_numeric {
                 continue; // CORR arithmetic applies only to numeric leaves
             }
@@ -9954,7 +13320,9 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         return Ok(any_se);
     }
     // find a GIVING receiver if present.
-    let giving = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w=="GIVING"));
+    let giving = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w=="GIVING"));
     let kw = match verb {
         "ADD" => "TO",
         "SUBTRACT" => "FROM",
@@ -9999,27 +13367,46 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
     // DIVIDE ... GIVING q REMAINDER r -- wire the sealed `cob_divide_remainder` primitive
     // (GNURUST.REMAINDER.1): quotient truncated toward zero to q's scale, r = dividend - (that quotient *
     // divisor). ON SIZE ERROR / NOT ON SIZE ERROR handlers are honored (divide-by-zero + receiver overflow).
-    if verb == "DIVIDE" && stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "REMAINDER")) {
-        return exec_divide_remainder(stmt, kw, giving, kw_at, &acc, &acc_attr, fields, has_handler);
+    if verb == "DIVIDE"
+        && stmt
+            .iter()
+            .any(|t| matches!(t, Tok::Word(w) if w == "REMAINDER"))
+    {
+        return exec_divide_remainder(
+            stmt,
+            kw,
+            giving,
+            kw_at,
+            &acc,
+            &acc_attr,
+            fields,
+            has_handler,
+        );
     }
 
     // Collect every receiver. A GIVING phrase stores one computed result into EACH named receiver
     // (`ADD a b GIVING c d` -> c = d = a+b). The in-place TO/FROM/BY/INTO forms instead update each
     // receiver by ITS OWN current value (`ADD 1 TO Y Z` -> Y+1 and Z+1; `MULTIPLY 3 BY Y Z` -> Y*3, Z*3).
     let giving_names: Vec<String> = match giving {
-        Some(gp) => stmt[gp + 1..].iter().filter_map(|t| match t {
-            Tok::Word(w) if !is_kw(w) => Some(w.clone()),
-            _ => None,
-        }).collect(),
+        Some(gp) => stmt[gp + 1..]
+            .iter()
+            .filter_map(|t| match t {
+                Tok::Word(w) if !is_kw(w) => Some(w.clone()),
+                _ => None,
+            })
+            .collect(),
         None => vec![],
     };
     let target_words: Vec<String> = match kw_at {
         Some(kp) => {
             let end = giving.unwrap_or(stmt.len());
-            stmt[kp + 1..end].iter().filter_map(|t| match t {
-                Tok::Word(w) if !is_kw(w) => Some(w.clone()),
-                _ => None,
-            }).collect()
+            stmt[kp + 1..end]
+                .iter()
+                .filter_map(|t| match t {
+                    Tok::Word(w) if !is_kw(w) => Some(w.clone()),
+                    _ => None,
+                })
+                .collect()
         }
         None => vec![],
     };
@@ -10028,9 +13415,15 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
     // if any) into every receiver. In-place: each receiver is also its own computation target.
     let receivers: Vec<(String, Option<String>)> = if !giving_names.is_empty() {
         let t = target_words.first().cloned();
-        giving_names.iter().map(|g| (g.clone(), t.clone())).collect()
+        giving_names
+            .iter()
+            .map(|g| (g.clone(), t.clone()))
+            .collect()
     } else {
-        target_words.iter().map(|r| (r.clone(), Some(r.clone()))).collect()
+        target_words
+            .iter()
+            .map(|r| (r.clone(), Some(r.clone())))
+            .collect()
     };
     if receivers.is_empty() {
         return Err(RunError::Unsupported(format!("{verb}: no receiver")));
@@ -10044,7 +13437,9 @@ fn exec_arith_inner(verb: &str, stmt: &[Tok], fields: &mut HashMap<String, Field
         // The result is a WIDE numeric (bytes, attr); the per-receiver store truncates/edits it into the
         // receiver's exact format. libcob pattern: arithmetic is exact, the store is the rounding point.
         let (rb, ra) = arith_compute(verb, kw, &acc, &acc_attr, tgt.as_deref(), fields)?;
-        let f = fields.get_mut(recv_name).ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
+        let f = fields
+            .get_mut(recv_name)
+            .ok_or_else(|| RunError::UndefinedName(recv_name.clone()))?;
         let se = if let Some(mode) = round_mode {
             let dec = source_to_decimal(&rb, &ra)?;
             let (rdec, prohibited) = round_decimal_mode(&dec, receiver_scale(f), mode);
@@ -10103,11 +13498,15 @@ fn arith_compute(
                 (acc.to_vec(), *acc_attr, tb, ta)
             };
             let wide = lit_num_attr(36, 18, true); // generous quotient scale; the store truncates.
-            let q = cob_divide(&num, &na, &den, &da, &wide, Round::Truncate)
-                .map_err(map_arith_err)?;
+            let q =
+                cob_divide(&num, &na, &den, &da, &wide, Round::Truncate).map_err(map_arith_err)?;
             (q, wide)
         }
-        _ => return Err(RunError::Unsupported(format!("{verb} form (target/giving)"))),
+        _ => {
+            return Err(RunError::Unsupported(format!(
+                "{verb} form (target/giving)"
+            )))
+        }
     })
 }
 
@@ -10127,16 +13526,22 @@ fn exec_divide_remainder(
     fields: &mut HashMap<String, Field>,
     has_handler: bool,
 ) -> Result<bool, RunError> {
-    let gp = giving.ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER requires GIVING".into()))?;
-    let kp = kw_at.ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER: missing INTO/BY".into()))?;
+    let gp = giving
+        .ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER requires GIVING".into()))?;
+    let kp = kw_at
+        .ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER: missing INTO/BY".into()))?;
     // q = first data-name after GIVING (before REMAINDER), r = the data-name after REMAINDER.
-    let names: Vec<String> = stmt[gp + 1..].iter().filter_map(|t| match t {
-        Tok::Word(w) if !is_kw(w) => Some(w.clone()),
-        _ => None,
-    }).collect();
+    let names: Vec<String> = stmt[gp + 1..]
+        .iter()
+        .filter_map(|t| match t {
+            Tok::Word(w) if !is_kw(w) => Some(w.clone()),
+            _ => None,
+        })
+        .collect();
     if names.len() != 2 {
         return Err(RunError::Unsupported(
-            "DIVIDE ... REMAINDER: GIVING needs exactly one quotient + one remainder receiver".into(),
+            "DIVIDE ... REMAINDER: GIVING needs exactly one quotient + one remainder receiver"
+                .into(),
         ));
     }
     let (qn, rn) = (names[0].clone(), names[1].clone());
@@ -10144,7 +13549,9 @@ fn exec_divide_remainder(
     let b_tok = stmt[kp + 1..gp]
         .iter()
         .find(|t| matches!(t, Tok::Str(_)) || matches!(t, Tok::Word(w) if !is_kw(w)))
-        .ok_or_else(|| RunError::Unsupported("DIVIDE ... REMAINDER: missing dividend/divisor operand".into()))?;
+        .ok_or_else(|| {
+            RunError::Unsupported("DIVIDE ... REMAINDER: missing dividend/divisor operand".into())
+        })?;
     let (b_bytes, b_attr) = {
         let (x, y) = operand_value(b_tok, fields)?;
         to_arith_operand(&x, &y)?
@@ -10157,7 +13564,8 @@ fn exec_divide_remainder(
     };
     let q_attr = numeric_receiver_attr(fields, &qn)?;
     let r_attr = numeric_receiver_attr(fields, &rn)?;
-    let (qb, rb) = cob_divide_remainder(lhs, la, rhs, ra, &q_attr, &r_attr).map_err(map_arith_err)?;
+    let (qb, rb) =
+        cob_divide_remainder(lhs, la, rhs, ra, &q_attr, &r_attr).map_err(map_arith_err)?;
 
     // ON SIZE ERROR: a receiver that would lose high-order integer digits raises EC-SIZE-OVERFLOW. The
     // stored bytes stay the sealed primitive's (`qb`/`rb`); we re-derive the WIDE quotient (truncated to
@@ -10165,27 +13573,36 @@ fn exec_divide_remainder(
     // capacity. With a handler an overflowing receiver is left UNCHANGED; without one it truncate-stores
     // (both match cobc). Divide-by-zero already propagated above as a SizeError (caught by the wrapper).
     let qwide_attr = lit_num_attr(18 + q_attr.scale.max(0) as u16, q_attr.scale.max(0), true);
-    let q_wide = cob_divide(lhs, la, rhs, ra, &qwide_attr, Round::Truncate).map_err(map_arith_err)?;
+    let q_wide =
+        cob_divide(lhs, la, rhs, ra, &qwide_attr, Round::Truncate).map_err(map_arith_err)?;
     let (prod, pa) = wide_op(Op::Multiply, &q_wide, &qwide_attr, rhs, ra)?;
     let (r_wide, rwa) = wide_op(Op::Subtract, lhs, la, &prod, &pa)?;
     let mut size_err = false;
 
     // Remainder receiver: store the sealed `rb`, but leave it unchanged on overflow when a handler is present.
     {
-        let rf = fields.get(&rn).ok_or_else(|| RunError::UndefinedName(rn.clone()))?;
-        let overflow = receiver_int_digits(rf).map_or(false, |cap| arith_overflows(&r_wide, &rwa, cap));
+        let rf = fields
+            .get(&rn)
+            .ok_or_else(|| RunError::UndefinedName(rn.clone()))?;
+        let overflow =
+            receiver_int_digits(rf).map_or(false, |cap| arith_overflows(&r_wide, &rwa, cap));
         if overflow {
             set_exception("EC-SIZE-OVERFLOW");
             size_err = true;
         }
         if !overflow || !has_handler {
-            fields.get_mut(&rn).ok_or_else(|| RunError::UndefinedName(rn.clone()))?.bytes = rb;
+            fields
+                .get_mut(&rn)
+                .ok_or_else(|| RunError::UndefinedName(rn.clone()))?
+                .bytes = rb;
         }
     }
 
     // Quotient receiver: ROUNDED rounds only the quotient STORE (the remainder used the un-rounded quotient).
     // The overflow test uses the value that will actually be stored (rounded when ROUNDED is present).
-    let rounded = stmt.iter().any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
+    let rounded = stmt
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"));
     let rounded_q: Option<(Vec<u8>, FieldAttr)> = if rounded {
         let wide = lit_num_attr(36, 18, true);
         let wide_q = cob_divide(lhs, la, rhs, ra, &wide, Round::Truncate).map_err(map_arith_err)?;
@@ -10196,15 +13613,22 @@ fn exec_divide_remainder(
     };
     {
         // Overflow is measured against the to-be-stored value: the rounded image, else the full-precision quotient.
-        let (chk_b, chk_a) = rounded_q.as_ref().map_or((q_wide.as_slice(), &qwide_attr), |(b, a)| (b.as_slice(), a));
-        let qf = fields.get(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
-        let overflow = receiver_int_digits(qf).map_or(false, |cap| arith_overflows(chk_b, chk_a, cap));
+        let (chk_b, chk_a) = rounded_q
+            .as_ref()
+            .map_or((q_wide.as_slice(), &qwide_attr), |(b, a)| (b.as_slice(), a));
+        let qf = fields
+            .get(&qn)
+            .ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
+        let overflow =
+            receiver_int_digits(qf).map_or(false, |cap| arith_overflows(chk_b, chk_a, cap));
         if overflow {
             set_exception("EC-SIZE-OVERFLOW");
             size_err = true;
         }
         if !overflow || !has_handler {
-            let qf = fields.get_mut(&qn).ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
+            let qf = fields
+                .get_mut(&qn)
+                .ok_or_else(|| RunError::UndefinedName(qn.clone()))?;
             match &rounded_q {
                 Some((nb, na)) => move_into(qf, nb, na, false)?,
                 None => qf.bytes = qb,
@@ -10216,9 +13640,15 @@ fn exec_divide_remainder(
 
 /// A field's numeric `FieldAttr` for use as a `DIVIDE ... REMAINDER` receiver; edited/group/alpha
 /// receivers are out of the sealed remainder subset and fail closed.
-fn numeric_receiver_attr(fields: &HashMap<String, Field>, name: &str) -> Result<FieldAttr, RunError> {
+fn numeric_receiver_attr(
+    fields: &HashMap<String, Field>,
+    name: &str,
+) -> Result<FieldAttr, RunError> {
     match fields.get(name) {
-        Some(Field { storage: Storage::Numeric(a), .. }) => Ok(*a),
+        Some(Field {
+            storage: Storage::Numeric(a),
+            ..
+        }) => Ok(*a),
         Some(_) => Err(RunError::Unsupported(format!(
             "DIVIDE ... REMAINDER: receiver `{name}` must be a numeric (non-edited) item"
         ))),
@@ -10229,7 +13659,13 @@ fn numeric_receiver_attr(fields: &HashMap<String, Field>, name: &str) -> Result<
 /// Compute `op(a, b)` exactly into a wide numeric DISPLAY `(bytes, attr)` -- 18 integer digits plus a
 /// scale generous enough to be exact for add/subtract (max operand scale) and multiply (sum of
 /// scales); the receiver store is the truncation point.
-fn wide_op(op: Op, a: &[u8], aa: &FieldAttr, b: &[u8], ba: &FieldAttr) -> Result<(Vec<u8>, FieldAttr), RunError> {
+fn wide_op(
+    op: Op,
+    a: &[u8],
+    aa: &FieldAttr,
+    b: &[u8],
+    ba: &FieldAttr,
+) -> Result<(Vec<u8>, FieldAttr), RunError> {
     let scale = match op {
         Op::Multiply => (aa.scale.max(0) + ba.scale.max(0)).max(0),
         _ => aa.scale.max(ba.scale).max(0),
@@ -10252,7 +13688,10 @@ fn wide_op(op: Op, a: &[u8], aa: &FieldAttr, b: &[u8], ba: &FieldAttr) -> Result
 /// arithmetic paths without extending the runtime decode.
 fn to_arith_operand(bytes: &[u8], attr: &FieldAttr) -> Result<(Vec<u8>, FieldAttr), RunError> {
     use crate::attr::COB_TYPE_NUMERIC_PACKED;
-    if matches!(attr.field_type, COB_TYPE_NUMERIC_DISPLAY | COB_TYPE_NUMERIC_PACKED) {
+    if matches!(
+        attr.field_type,
+        COB_TYPE_NUMERIC_DISPLAY | COB_TYPE_NUMERIC_PACKED
+    ) {
         return Ok((bytes.to_vec(), *attr));
     }
     let disp = lit_num_attr(attr.digits.max(1), attr.scale.max(0), true);
@@ -10261,24 +13700,35 @@ fn to_arith_operand(bytes: &[u8], attr: &FieldAttr) -> Result<(Vec<u8>, FieldAtt
     Ok((out, disp))
 }
 
-
-
-
-
-
-
 /// Is `w` an arithmetic keyword (not an operand name)?
 fn is_kw(w: &str) -> bool {
-    matches!(w, "TO" | "FROM" | "BY" | "INTO" | "GIVING" | "ROUNDED" | "REMAINDER"
-        | "MODE" | "TRUNCATION" | "NEAREST-AWAY-FROM-ZERO" | "AWAY-FROM-ZERO"
-        | "NEAREST-TOWARD-ZERO" | "NEAREST-EVEN" | "TOWARD-GREATER" | "TOWARD-LESSER" | "PROHIBITED")
+    matches!(
+        w,
+        "TO" | "FROM"
+            | "BY"
+            | "INTO"
+            | "GIVING"
+            | "ROUNDED"
+            | "REMAINDER"
+            | "MODE"
+            | "TRUNCATION"
+            | "NEAREST-AWAY-FROM-ZERO"
+            | "AWAY-FROM-ZERO"
+            | "NEAREST-TOWARD-ZERO"
+            | "NEAREST-EVEN"
+            | "TOWARD-GREATER"
+            | "TOWARD-LESSER"
+            | "PROHIBITED"
+    )
 }
 
 /// Parse the `ROUNDED [MODE [IS] <mode-name>]` phrase from an arithmetic statement's tokens. Returns
 /// `None` when there is no `ROUNDED` (the store truncates), `Some(mode)` otherwise (plain `ROUNDED` = the
 /// default NEAREST-AWAY-FROM-ZERO).
 fn round_mode_of(stmt: &[Tok]) -> Option<Round> {
-    let pos = stmt.iter().position(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"))?;
+    let pos = stmt
+        .iter()
+        .position(|t| matches!(t, Tok::Word(w) if w == "ROUNDED"))?;
     let mut i = pos + 1;
     if matches!(stmt.get(i), Some(Tok::Word(w)) if w == "MODE") {
         i += 1;
@@ -10332,7 +13782,14 @@ fn round_decimal_mode(dec: &Decimal, target_scale: i16, mode: Round) -> (Decimal
     if kept.is_empty() {
         kept.push(0);
     }
-    (Decimal { negative: dec.negative, digits: kept, scale: ts }, prohibited_violation)
+    (
+        Decimal {
+            negative: dec.negative,
+            digits: kept,
+            scale: ts,
+        },
+        prohibited_violation,
+    )
 }
 
 /// Find the index of a contiguous keyword sequence (e.g. `["PROCEDURE","DIVISION"]`).
@@ -10444,6 +13901,41 @@ mod tests {
     }
 
     #[test]
+    fn display_numeric_literals_match_cobc_format() {
+        // GnuCOBOL 3.2 DISPLAY of numeric literals (run_fundamental.at:25): written sign preserved,
+        // leading integer zeros dropped (`.123`), E-notation folded, binary/hex shown as decimal.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. p.\n       PROCEDURE DIVISION.\n           DISPLAY 123.\n           DISPLAY +123.\n           DISPLAY -123.\n           DISPLAY 12.3.\n           DISPLAY 1.23E0.\n           DISPLAY 12.3E-2.\n           DISPLAY B'0101'.\n           DISPLAY BX'EC'.\n           STOP RUN.\n";
+        let out = String::from_utf8(run(src)).unwrap();
+        assert_eq!(out, "123\n+123\n-123\n12.3\n1.23\n.123\n5\n236\n");
+    }
+
+    #[test]
+    fn cancel_of_active_program_is_fatal_libcob_error() {
+        // run_fundamental.at:2277 -- CANCELing the currently-executing (non-INITIAL) program is a
+        // fatal runtime error carrying the source line, exit 1.
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. prog.\n       PROCEDURE DIVISION.\n           CANCEL \"notthere\".\n           CANCEL \"prog\".\n           DISPLAY \"NG\" NO ADVANCING END-DISPLAY.\n           STOP RUN.\n";
+        set_source_file("prog.cob");
+        let err = run_program(src).unwrap_err();
+        set_source_file("");
+        let msg = err.to_string();
+        assert!(
+            msg.contains("attempt to CANCEL active program"),
+            "got: {msg}"
+        );
+    }
+
+    #[test]
+    fn command_line_accept_reads_host_args() {
+        // cobcrun module arg1 arg2 -> ACCEPT FROM COMMAND-LINE / ARGUMENT-VALUE / ARGUMENT-NUMBER.
+        set_command_line(&["job123".to_string()]);
+        let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. p.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 CLI PIC X(20).\n       PROCEDURE DIVISION.\n           ACCEPT CLI FROM COMMAND-LINE\n           DISPLAY CLI WITH NO ADVANCING END-DISPLAY.\n           STOP RUN.\n";
+        let out = String::from_utf8(run(src)).unwrap();
+        set_command_line(&[]);
+        // PIC X(20) receiver: the value is stored left-justified and DISPLAYed padded to 20.
+        assert_eq!(out, "job123              ");
+    }
+
+    #[test]
     fn line_leading_star_slash_comment_is_dropped() {
         // Fixed-format column-7 comment (`*`/`/` as the first non-blank char of the line), not just column 1.
         // These real-world programs carry `      **** ... ****` banner lines; they must be dropped, not lexed.
@@ -10457,13 +13949,21 @@ mod tests {
         // OPEN INPUT of a pre-existing real file on disk (resolved via an env-named ASSIGN target) loads it
         // into fixed records and READ returns them -- the safe real-file read (no host writes).
         let path = std::env::temp_dir().join(format!("gcrs_fileread_{}.dat", std::process::id()));
-        std::fs::File::create(&path).unwrap().write_all(b"ABC       DEF       ").unwrap(); // 2 x 10-byte recs
+        std::fs::File::create(&path)
+            .unwrap()
+            .write_all(b"ABC       DEF       ")
+            .unwrap(); // 2 x 10-byte recs
         std::env::set_var("GCRSTESTFILE", &path);
         let src = "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       ENVIRONMENT DIVISION. INPUT-OUTPUT SECTION. FILE-CONTROL.\n           SELECT F ASSIGN TO GCRSTESTFILE ORGANIZATION SEQUENTIAL FILE STATUS IS ST.\n       DATA DIVISION. FILE SECTION.\n       FD F. 01 R PIC X(10).\n       WORKING-STORAGE SECTION. 01 ST PIC XX. 01 E PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN INPUT F.\n           PERFORM UNTIL E = \"Y\"\n              READ F AT END MOVE \"Y\" TO E NOT AT END DISPLAY R(1:3) END-READ\n           END-PERFORM.\n           CLOSE F. STOP RUN.\n";
         let out = run_program(src).expect("run");
         std::env::remove_var("GCRSTESTFILE");
         std::fs::remove_file(&path).ok();
-        assert_eq!(out, b"ABC\nDEF\n", "got {:?}", String::from_utf8_lossy(&out));
+        assert_eq!(
+            out,
+            b"ABC\nDEF\n",
+            "got {:?}",
+            String::from_utf8_lossy(&out)
+        );
     }
 
     #[test]
@@ -10490,10 +13990,17 @@ mod tests {
         let (out, _rc) = run_program_dialect_with_rc(&prog(""), Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"OK\n");
         // >>TURN EC-BOUND-SUBSCRIPT CHECKING ON: the SAME out-of-range subscript now RAISES (honored).
-        let on = run_program_dialect_with_rc(&prog(">>TURN EC-BOUND-SUBSCRIPT CHECKING ON\n"), Dialect::DEFAULT);
-        assert!(on.is_err(), "EC-BOUND-SUBSCRIPT ON must raise on an out-of-range subscript");
+        let on = run_program_dialect_with_rc(
+            &prog(">>TURN EC-BOUND-SUBSCRIPT CHECKING ON\n"),
+            Dialect::DEFAULT,
+        );
+        assert!(
+            on.is_err(),
+            "EC-BOUND-SUBSCRIPT ON must raise on an out-of-range subscript"
+        );
         // EC-ALL CHECKING ON also enables it.
-        let all = run_program_dialect_with_rc(&prog(">>TURN EC-ALL CHECKING ON\n"), Dialect::DEFAULT);
+        let all =
+            run_program_dialect_with_rc(&prog(">>TURN EC-ALL CHECKING ON\n"), Dialect::DEFAULT);
         assert!(all.is_err());
     }
 
@@ -10598,7 +14105,8 @@ mod tests {
         let (out, _rc) = run_program_dialect_with_rc(&prog("STOP RUN."), Dialect::DEFAULT).unwrap();
         assert_eq!(out, b"A\nS\n");
         // STOP RUN 9 in the callee -> exit code 9 propagates to the run boundary.
-        let (out2, rc2) = run_program_dialect_with_rc(&prog("STOP RUN 9."), Dialect::DEFAULT).unwrap();
+        let (out2, rc2) =
+            run_program_dialect_with_rc(&prog("STOP RUN 9."), Dialect::DEFAULT).unwrap();
         assert_eq!(out2, b"A\nS\n");
         assert_eq!(rc2, 9);
         // GOBACK in the callee -> returns to caller, "B" prints.
@@ -10613,11 +14121,19 @@ mod tests {
             let src = format!(
                 "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. T.\n       PROCEDURE DIVISION.\n{body}"
             );
-            run_program_dialect_with_rc(&src, Dialect::DEFAULT).unwrap().1
+            run_program_dialect_with_rc(&src, Dialect::DEFAULT)
+                .unwrap()
+                .1
         };
         // MOVE n TO RETURN-CODE -> process exit code n (oracle: 5->5, 42->42).
-        assert_eq!(rc("           MOVE 42 TO RETURN-CODE.\n           STOP RUN."), 42);
-        assert_eq!(rc("           MOVE 5 TO RETURN-CODE.\n           STOP RUN."), 5);
+        assert_eq!(
+            rc("           MOVE 42 TO RETURN-CODE.\n           STOP RUN."),
+            42
+        );
+        assert_eq!(
+            rc("           MOVE 5 TO RETURN-CODE.\n           STOP RUN."),
+            5
+        );
         // default 0.
         assert_eq!(rc("           DISPLAY \"X\".\n           STOP RUN."), 0);
         // STOP RUN n sets the exit code directly (oracle: STOP RUN 7 -> 7).
@@ -10656,15 +14172,20 @@ mod tests {
     #[test]
     fn garbage_fails_closed_never_panics() {
         // The fail-closed contract: arbitrary non-program input returns an Err, not a panic.
-        for s in ["", "garbage tokens here", "MOVE", "01 X PIC", "PROCEDURE DIVISION."] {
+        for s in [
+            "",
+            "garbage tokens here",
+            "MOVE",
+            "01 X PIC",
+            "PROCEDURE DIVISION.",
+        ] {
             let _ = run_program(s); // must not panic
         }
     }
 
     #[test]
     fn add_move_display() {
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10675,15 +14196,13 @@ mod tests {
                         ADD WS-A TO WS-B.\n\
                         MOVE WS-B TO WS-RES.\n\
                         DISPLAY \"TOTAL=\" WS-RES.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"TOTAL=   350\n");
     }
 
     #[test]
     fn multiply_giving() {
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10693,16 +14212,14 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         MULTIPLY P BY Q GIVING R.\n\
                         DISPLAY \"P=\" R.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"P= 48\n");
     }
 
     #[test]
     fn compute_precedence_and_div() {
         // COMPUTE with operator precedence + division intermediate precision.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10712,16 +14229,14 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         COMPUTE R = A / B.\n\
                         DISPLAY \"PI=\" R.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"PI=3.14285714\n"); // 22/7 truncated to 8 fractional digits
     }
 
     #[test]
     fn if_else_and_perform() {
         // IF/ELSE branch selection + PERFORM UNTIL loop (factorial) + alphanumeric compare.
-        let fac = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let fac = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10735,12 +14250,10 @@ mod tests {
                         END-PERFORM.\n\
                         MOVE F TO R.\n\
                         DISPLAY R.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(fac, b"     120\n"); // 5! = 120
 
-        let branch = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let branch = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10749,8 +14262,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         IF A > 5 MOVE \"BIG\" TO R ELSE MOVE \"LOW\" TO R END-IF.\n\
                         DISPLAY R.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(branch, b"LOW\n");
     }
 
@@ -10777,8 +14289,7 @@ mod tests {
 
     #[test]
     fn string_move_and_display() {
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10786,8 +14297,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         MOVE \"HI\" TO WS-N.\n\
                         DISPLAY \"[\" WS-N \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"[HI   ]\n");
     }
 
@@ -10795,8 +14305,7 @@ mod tests {
     fn unstring_with_pointer_scans_from_cursor_and_writes_back() {
         // Oracle (cobc 3.2.0): P=4 -> scan starts at the 4th byte of "AA,BBB,CC,DDD"; "BBB" then "CC"
         // are split out and the pointer advances past the last delimiter to 11. Matches `lab` differential.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10809,8 +14318,7 @@ mod tests {
                         DISPLAY \"R1=[\" R1 \"]\".\n\
                         DISPLAY \"R2=[\" R2 \"]\".\n\
                         DISPLAY \"P=\" P.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"R1=[BBB  ]\nR2=[CC   ]\nP=11\n");
     }
 
@@ -10818,8 +14326,7 @@ mod tests {
     fn unstring_pointer_then_tallying_clauses_coexist() {
         // Oracle (cobc 3.2.0): `WITH POINTER P TALLYING IN TC` -- P starts at 1, two fields filled, so
         // P advances to 8 (past "AA,BBB,") and TC counts the 2 receivers filled. Clause order POINTER<TALLYING.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10833,8 +14340,7 @@ mod tests {
                         DISPLAY \"R1=[\" R1 \"]\".\n\
                         DISPLAY \"R2=[\" R2 \"]\".\n\
                         DISPLAY \"P=\" P \" TC=\" TC.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"R1=[AA   ]\nR2=[BBB  ]\nP=08 TC=02\n");
     }
 
@@ -10842,8 +14348,7 @@ mod tests {
     fn divide_remainder_on_size_error_divide_by_zero() {
         // Oracle (cobc 3.2.0): a normal divide takes NOT ON SIZE ERROR; a zero divisor takes ON SIZE ERROR
         // and leaves BOTH the quotient and remainder receivers UNCHANGED (17/5 -> Q=003 R=002, then 17/0).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10863,8 +14368,7 @@ mod tests {
                            NOT ON SIZE ERROR DISPLAY \"OK2\"\n\
                         END-DIVIDE.\n\
                         DISPLAY \"Q=\" Q \" R=\" R.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"OK1\nQ=003 R=002\nSE2\nQ=003 R=002\n");
     }
 
@@ -10872,8 +14376,7 @@ mod tests {
     fn divide_remainder_on_size_error_per_receiver_overflow() {
         // Oracle (cobc 3.2.0): 999/1 into a 1-digit quotient overflows -> ON SIZE ERROR; the quotient is left
         // UNCHANGED (7) but the remainder (0, which fits) IS stored. With no handler the quotient truncate-stores.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10887,8 +14390,7 @@ mod tests {
                         DISPLAY \"QS=\" QS \" RS=\" RS.\n\
                         DIVIDE 888 BY 1 GIVING QS REMAINDER RS.\n\
                         DISPLAY \"QS=\" QS \" RS=\" RS.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"SE3\nQS=7 RS=0\nQS=8 RS=0\n");
     }
 
@@ -10896,8 +14398,7 @@ mod tests {
     fn inspect_figurative_constant_operands() {
         // Oracle (cobc 3.2.0): figuratives are 1-byte operands in INSPECT. "AB" + LOW-VALUES*3 -> TALLYING
         // ALL LOW-VALUE counts 3; REPLACING ALL LOW-VALUE BY "Z" then ALL "Z" BY QUOTE yields `AB"""`.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10913,8 +14414,7 @@ mod tests {
                         INSPECT G REPLACING ALL LOW-VALUE BY \"Z\".\n\
                         INSPECT G REPLACING ALL \"Z\" BY QUOTE.\n\
                         DISPLAY \"G=[\" G \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"C=03\nG=[AB\"\"\"]\n");
     }
 
@@ -10923,8 +14423,9 @@ mod tests {
         // Oracle (cobc 3.2.0): `INITIALIZE G ALL TO VALUE` sets each leaf WITH a VALUE clause to that VALUE
         // (A->"abc", B->42) and leaves no-VALUE leaves UNCHANGED (N, M stay "ZZ"); WITH FILLER is identical
         // here since the no-VALUE items have nothing to apply.
-        let prog = |verb: &str| format!(
-            "       IDENTIFICATION DIVISION.\n\
+        let prog = |verb: &str| {
+            format!(
+                "       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10938,17 +14439,20 @@ mod tests {
                         {verb}.\n\
                         DISPLAY \"G=[\" G \"]\".\n\
                         STOP RUN.\n"
-        );
+            )
+        };
         assert_eq!(run(&prog("INITIALIZE G ALL TO VALUE")), b"G=[abcZZ42ZZ]\n");
-        assert_eq!(run(&prog("INITIALIZE G WITH FILLER ALL TO VALUE")), b"G=[abcZZ42ZZ]\n");
+        assert_eq!(
+            run(&prog("INITIALIZE G WITH FILLER ALL TO VALUE")),
+            b"G=[abcZZ42ZZ]\n"
+        );
     }
 
     #[test]
     fn unstring_on_overflow_handler() {
         // Oracle (cobc 3.2.0): 5 comma-segments into 2 receivers leaves source chars unexamined -> ON
         // OVERFLOW (OVF1); a fully-consumed source ("X,Y") takes NOT ON OVERFLOW (OK2).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -10967,8 +14471,7 @@ mod tests {
                            NOT ON OVERFLOW DISPLAY \"OK2\"\n\
                         END-UNSTRING.\n\
                         DISPLAY \"R1=[\" R1 \"] R2=[\" R2 \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"OVF1\nR1=[A  ] R2=[B  ]\nOK2\nR1=[X  ] R2=[Y  ]\n");
     }
 
@@ -11000,8 +14503,7 @@ mod tests {
     fn perform_bare_inline_runs_body_once() {
         // Oracle (cobc 3.2.0): a bare inline `PERFORM <body> END-PERFORM` (no TIMES/UNTIL/VARYING) runs the
         // body exactly once -> N incremented to 1.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11012,8 +14514,7 @@ mod tests {
                            DISPLAY \"IN \" N\n\
                         END-PERFORM.\n\
                         DISPLAY \"OUT \" N.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"IN 1\nOUT 1\n");
     }
 
@@ -11021,8 +14522,7 @@ mod tests {
     fn exhibit_changed_runs_as_plain_exhibit() {
         // Oracle (cobc 3.2.0): CHANGED suppression is unimplemented (-Wpending) -> EXHIBIT CHANGED runs as
         // plain EXHIBIT. Item format is `NAME = value` for plain/NAMED; only CHANGED-without-NAMED is value-only.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11033,8 +14533,7 @@ mod tests {
                         EXHIBIT CHANGED NAMED A B.\n\
                         EXHIBIT A.\n\
                         EXHIBIT NAMED B.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"3 hi\nA = 3 B = hi\nA = 3\nB = hi\n");
     }
 
@@ -11042,8 +14541,7 @@ mod tests {
     fn move_alphanumeric_literal_to_binary_and_packed() {
         // Oracle (cobc 3.2.0): MOVE of an alphanumeric literal into COMP/COMP-3/COMP-5 receivers goes
         // through the move.c indirect display path -> the digit value is stored (previously yielded 0).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11055,8 +14553,7 @@ mod tests {
                         MOVE \"1234\" TO P2.\n\
                         MOVE \"99\" TO B5.\n\
                         DISPLAY \"C1=\" C1 \" P2=\" P2 \" B5=\" B5.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"C1=12 P2=234.0 B5=00099\n");
     }
 
@@ -11064,8 +14561,7 @@ mod tests {
     fn unstring_into_edited_and_scaled_receivers() {
         // Oracle (cobc 3.2.0): UNSTRING delimited substrings into a numeric-edited (ZZ9) and a scaled
         // DISPLAY (9V9) receiver -> "12"->" 12", "34"->4.0, "56" raw into XX.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11076,8 +14572,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         UNSTRING SRC DELIMITED BY \",\" INTO E1 N1 A1.\n\
                         DISPLAY \"E1=[\" E1 \"] N1=\" N1 \" A1=[\" A1 \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"E1=[ 12] N1=4.0 A1=[56]\n");
     }
 
@@ -11085,8 +14580,7 @@ mod tests {
     fn move_add_subtract_corresponding() {
         // Oracle (cobc 3.2.0): CORRESPONDING matches like-named elementary leaves between two groups.
         // MOVE: A2<-11, B2<-"abc", D2 untouched (no D in G1). ADD: A2 11+11=22. SUBTRACT: A2 22-11=11.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11105,8 +14599,7 @@ mod tests {
                         DISPLAY \"ADD A2=\" A OF G2.\n\
                         SUBTRACT CORRESPONDING G1 FROM G2.\n\
                         DISPLAY \"SUB A2=\" A OF G2.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"MOVE A2=11 B2=abc D2=07\nADD A2=22\nSUB A2=11\n");
     }
 
@@ -11114,8 +14607,7 @@ mod tests {
     fn qualified_names_disambiguate_duplicate_children() {
         // Oracle (cobc 3.2.0): `AMT OF REC-IN` vs `AMT OF REC-OUT` resolve to distinct fields despite the
         // shared child names; reads and writes each address the right one.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11131,8 +14623,7 @@ mod tests {
                         MOVE \"QQ\" TO NM IN REC-OUT.\n\
                         DISPLAY \"OUT-AMT=\" AMT OF REC-OUT \" OUT-NM=\" NM OF REC-OUT.\n\
                         DISPLAY \"IN-NM=\" NM OF REC-IN.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"IN=123 OUT=456\nOUT-AMT=123 OUT-NM=QQ\nIN-NM=in\n");
     }
 
@@ -11140,8 +14631,7 @@ mod tests {
     fn two_dimensional_table_row_major() {
         // Oracle (cobc 3.2.0): outer group-OCCURS ROW + inner elementary-OCCURS CEL -> CEL(i,j) row-major;
         // the whole 01 image is the interleaved buffer.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11153,8 +14643,7 @@ mod tests {
                         MOVE 21 TO CEL(2,1). MOVE 22 TO CEL(2,2). MOVE 23 TO CEL(2,3).\n\
                         DISPLAY \"CEL22=\" CEL(2,2) \" CEL13=\" CEL(1,3).\n\
                         DISPLAY \"T1=[\" T1 \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"CEL22=22 CEL13=13\nT1=[111213212223]\n");
     }
 
@@ -11162,8 +14651,7 @@ mod tests {
     fn two_dimensional_matrix_fill_and_sum() {
         // Oracle (cobc 3.2.0): a row-table with a scalar TAG + an inner OCCURS N(i,j); filled by nested
         // PERFORM VARYING + COMPUTE into the 2-D receiver, summed via ADD over both subscripts.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11188,8 +14676,7 @@ mod tests {
                         END-PERFORM.\n\
                         DISPLAY \"GRID=[\" GRID \"]\".\n\
                         DISPLAY \"N32=\" N(3,2) \" TAG2=\" TAG(2) \" SUM=\" S.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"GRID=[R1112R2122R3132]\nN32=32 TAG2=R SUM=129\n");
     }
 
@@ -11197,8 +14684,7 @@ mod tests {
     fn group_of_group_table_and_initialize() {
         // Oracle (cobc 3.2.0): a group-OCCURS over a sub-group -> leaves A(i)/B(i) (one subscript reaches a
         // deeper leaf); INITIALIZE zeros the numeric leaf and spaces the alphanumeric.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11213,16 +14699,14 @@ mod tests {
                         DISPLAY \"GOG=[\" GOG \"] A2=\" A(2) \" B1=\" B(1).\n\
                         INITIALIZE GOG.\n\
                         DISPLAY \"AFTER=[\" GOG \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"GOG=[ab1cd2] A2=cd B1=1\nAFTER=[  0  0]\n");
     }
 
     #[test]
     fn three_dimensional_table() {
         // Oracle (cobc 3.2.0): C(i,j,k) over PL OCCURS 2 / RW OCCURS 2 / C OCCURS 2 (strides 8/4/2).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11233,8 +14717,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         MOVE 11 TO C(1,1,1). MOVE 88 TO C(2,2,2). MOVE 55 TO C(2,1,2).\n\
                         DISPLAY \"CUBE=[\" CUBE \"] C222=\" C(2,2,2) \" C212=\" C(2,1,2).\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"CUBE=[1100000000550088] C222=88 C212=55\n");
     }
 
@@ -11242,8 +14725,7 @@ mod tests {
     fn occurs_depending_on_group() {
         // Oracle (cobc 3.2.0): OCCURS DEPENDING ON on a group -> the live image (and LENGTH) is counter*elem
         // (built at MAX), while subscripted access still reaches the physical MAX storage.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11257,8 +14739,7 @@ mod tests {
                         MOVE 22 TO K(2). MOVE \"b\" TO V(2).\n\
                         DISPLAY \"TBL=[\" TBL \"] LEN=\" FUNCTION LENGTH(TBL).\n\
                         DISPLAY \"K2=\" K(2) \" V1=\" V(1).\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"TBL=[11a22b] LEN=000000006\nK2=22 V1=a\n");
     }
 
@@ -11266,8 +14747,7 @@ mod tests {
     fn redefines_over_group_occurs_read_and_write() {
         // Oracle (cobc 3.2.0): a REDEFINES alias over a group-OCCURS interleaved buffer reads it AND writes
         // through it (MOVE "999999" TO R -> E(1..3) read back 99).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11279,8 +14759,7 @@ mod tests {
                         DISPLAY \"R=[\" R \"]\".\n\
                         MOVE \"999999\" TO R.\n\
                         DISPLAY \"E1=\" E(1) \" E2=\" E(2) \" E3=\" E(3).\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"R=[123456]\nE1=99 E2=99 E3=99\n");
     }
 
@@ -11288,8 +14767,7 @@ mod tests {
     fn multiple_different_sized_fillers_keep_group_offsets() {
         // Oracle (cobc 3.2.0): a group MOVE into a record with several DIFFERENT-sized FILLERs lands each
         // named child at the right offset (date splits 2021/09/15). Regression for FILLER key collision.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11304,8 +14782,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         MOVE WS-IN TO WS-DATE.\n\
                         DISPLAY YYYY \"/\" MM \"/\" DD.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"2021/09/15\n");
     }
 
@@ -11313,8 +14790,7 @@ mod tests {
     fn leading_dot_decimal_literal_and_qualified_compute_operand() {
         // Oracle (cobc 3.2.0): `.08` is the numeric literal 0.08 (the leading `.` is not a terminator), and a
         // qualified name resolves both as a COMPUTE target and inside a parenthesised operand.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11323,8 +14799,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         COMPUTE SA OF DL = (SA OF SR * .08).\n\
                         DISPLAY \"AMT=\" SA OF SR \" TAX=\" SA OF DL.\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"AMT=0200.00 TAX=0016.00\n");
     }
 
@@ -11355,8 +14830,7 @@ mod tests {
     fn move_corresponding_skips_filler() {
         // Oracle (cobc 3.2.0): MOVE CORR moves like-NAMED leaves only; FILLER never corresponds, so the
         // target's `-` separators survive (a blank source FILLER must NOT overwrite them).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11371,8 +14845,7 @@ mod tests {
                     PROCEDURE DIVISION.\n\
                         MOVE CORRESPONDING S TO D.\n\
                         DISPLAY \"D=[\" D \"]\".\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"D=[2021-09]\n");
     }
 
@@ -11380,8 +14853,7 @@ mod tests {
     fn group_occurs_redefines_value_group_read_and_write() {
         // Oracle (cobc 3.2.0): a group-OCCURS table that REDEFINES a VALUE-bearing group reads the entries
         // through the redefinition (902/903), and a write through the table lands in the shared storage (E5).
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11397,8 +14869,7 @@ mod tests {
                         DISPLAY \"v2=\" V(2) \" v3=\" V(3).\n\
                         MOVE 'ZZZ' TO V(3).\n\
                         DISPLAY \"E3=\" E3 \" v3=\" V(3).\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"v2=902 v3=903\nE3=ZZZ v3=ZZZ\n");
     }
 
@@ -11424,15 +14895,17 @@ mod tests {
                         DISPLAY \"C=[\" FUNCTION TRIM(OUT) \"]\".\n\
                         STOP RUN.\n",
         );
-        assert_eq!(out, b"N=[{\"REC\":{\"id\":7,\"name\":\"abc\",\"SECRET\":42}}]\nC=[{\"rec\":{\"id\":7}}]\n");
+        assert_eq!(
+            out,
+            b"N=[{\"REC\":{\"id\":7,\"name\":\"abc\",\"SECRET\":42}}]\nC=[{\"rec\":{\"id\":7}}]\n"
+        );
     }
 
     #[test]
     fn initialize_to_value_category_and_table() {
         // Oracle (cobc 3.2.0): `category TO VALUE` ignores the category (every valued leaf restored, like
         // ALL TO VALUE); `ALL TO VALUE` over an OCCURS table restores each element to its VALUE.
-        let out = run(
-            "       IDENTIFICATION DIVISION.\n\
+        let out = run("       IDENTIFICATION DIVISION.\n\
                     PROGRAM-ID. T.\n\
                     DATA DIVISION.\n\
                     WORKING-STORAGE SECTION.\n\
@@ -11449,8 +14922,7 @@ mod tests {
                         MOVE 1 TO E(1). MOVE 2 TO E(2). MOVE 3 TO E(3).\n\
                         INITIALIZE TB ALL TO VALUE.\n\
                         DISPLAY \"TB=\" E(1) E(2) E(3).\n\
-                        STOP RUN.\n",
-        );
+                        STOP RUN.\n");
         assert_eq!(out, b"NUM=[abc42yz]\nTB=070707\n");
     }
     // ---- multiple 01-level records beneath one FD (GNURUST.FILEIO.MULTI-RECORD-FD.1) ----
@@ -11573,9 +15045,20 @@ mod tests {
         // must be the oracle's 24 + 41 = 65 asterisks, one display line.
         let src = "000100 IDENTIFICATION DIVISION.\n000200 PROGRAM-ID. CT.\n000300 DATA DIVISION.\n000400 WORKING-STORAGE SECTION.\n000500 01  H.\n000600     02 FILLER PIC X(65) VALUE IS \"************************\n000700-    \"*****************************************\".\n000800 PROCEDURE DIVISION.\n000900     DISPLAY H.\n001000     STOP RUN.\n";
         let conv = fixed_to_free(src);
-        assert!(conv.contains("VALUE IS \"*****************************************************************\"."), "merged literal: {conv:?}");
+        assert!(
+            conv.contains(
+                "VALUE IS \"*****************************************************************\"."
+            ),
+            "merged literal: {conv:?}"
+        );
         // run_program parses FREE format; fixed_to_free is the cobrun-side conversion under test.
-        assert_eq!(run(&conv), vec![b'*'; 65].into_iter().chain([b'\n']).collect::<Vec<u8>>());
+        assert_eq!(
+            run(&conv),
+            vec![b'*'; 65]
+                .into_iter()
+                .chain([b'\n'])
+                .collect::<Vec<u8>>()
+        );
     }
 
     #[test]
@@ -11596,15 +15079,16 @@ mod tests {
         assert_eq!(&bytes[121..123], b"\n\n");
         assert_eq!(bytes.last(), Some(&b'\n'));
     }
-
 }
 
 #[cfg(test)]
 mod probe_tmp {
-    use crate::frontend::run_program_dialect_with_rc;
     use crate::dialect::Dialect;
+    use crate::frontend::run_program_dialect_with_rc;
     fn run(s: &str) -> Result<Vec<u8>, String> {
-        run_program_dialect_with_rc(s, Dialect::DEFAULT).map(|(o,_)| o).map_err(|e| format!("{e:?}"))
+        run_program_dialect_with_rc(s, Dialect::DEFAULT)
+            .map(|(o, _)| o)
+            .map_err(|e| format!("{e:?}"))
     }
     #[test]
     fn probe_refmod() {

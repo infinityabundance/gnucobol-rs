@@ -331,13 +331,6 @@ fn attribute_candidate_failure(c: &TestRecord, inputs: &Inputs) -> (String, Stri
             format!("launcher/manifest problem in: {cmd}"),
         );
     }
-    // Module model (-m / cobcrun).
-    if cmd.contains("-m") || cmd.contains("$COBCRUN") || cmd.contains("cobcrun") {
-        return reason(
-            "CANDIDATE_MODULE_MODEL_UNSUPPORTED",
-            format!("module build/run not supported by the candidate model: {cmd}"),
-        );
-    }
     // Syntax-only compiles.
     if cmd.contains("-fsyntax-only") || cmd.contains("$COMPILE_ONLY") {
         if lower.contains("cobrun: unsupported") {
@@ -355,8 +348,8 @@ fn attribute_candidate_failure(c: &TestRecord, inputs: &Inputs) -> (String, Stri
     if cmd.contains("-x") || cmd.contains("$COMPILE") || cmd.contains("$COBC ") {
         if lower.contains("cobrun: unsupported") {
             return reason(
-                "CANDIDATE_UNSUPPORTED",
-                format!("front end rejected: {cmd}"),
+                "CANDIDATE_CHECK_REJECT",
+                format!("parser/checker rejected: {cmd}"),
             );
         }
         if lower.contains("cobrun: undefined data name") {
@@ -370,19 +363,22 @@ fn attribute_candidate_failure(c: &TestRecord, inputs: &Inputs) -> (String, Stri
             format!("candidate compile-phase failure: {cmd}"),
         );
     }
-    // Program runs (./prog / COBCRUN_DIRECT).
+    // Program runs (./prog / $COBCRUN_DIRECT). The launcher RAN and the interpreter failed: the
+    // true first boundary is the cobrun diagnostic, NOT the module model -- the pre-reduction
+    // attribution shadowed ~400 `$COBCRUN_DIRECT ./prog` failures behind the module bucket. The
+    // same front-end diagnostic gets the same classification as in the syntax-only path.
     if cmd.contains("./") || cmd.contains("COBCRUN_DIRECT") || cmd.contains("$COBCRUN_DIRECT") {
-        if lower.contains("cobrun: unsupported") {
-            let note = extract_note(&raw, "unsupported");
-            return reason("CANDIDATE_UNSUPPORTED", format!("{note} ({cmd})"));
-        }
         if lower.contains("cobrun: undefined data name") {
             return reason(
                 "CANDIDATE_PARSE_REJECT",
                 format!("undefined data name at run ({cmd})"),
             );
         }
-        if lower.contains("cobrun: runtime error") {
+        if lower.contains("cobrun: unsupported") {
+            let note = extract_note(&raw, "unsupported");
+            return reason("CANDIDATE_CHECK_REJECT", format!("{note} ({cmd})"));
+        }
+        if lower.contains("cobrun: runtime error") || lower.contains("libcob:") {
             return reason(
                 "CANDIDATE_RUNTIME_FAIL",
                 format!("runtime error during execution ({cmd})"),
@@ -397,6 +393,32 @@ fn attribute_candidate_failure(c: &TestRecord, inputs: &Inputs) -> (String, Stri
         return reason(
             "CANDIDATE_RUNTIME_FAIL",
             format!("candidate program run failed ({cmd})"),
+        );
+    }
+    // Genuine cobcrun module lifecycle (module search / args / runtime config). A cobcrun
+    // invocation whose MODULE RAN and then failed at the interpreter is attributed by the cobrun
+    // diagnostic (same rule as a direct run); only cobcrun-side failures (module not found,
+    // invalid module argument, missing PROGRAM name, runtime-config errors) stay module-model.
+    if cmd.contains("cobcrun") || cmd.contains("$COBCRUN") || cmd.contains("-m") {
+        if lower.contains("cobrun: undefined data name") {
+            return reason(
+                "CANDIDATE_PARSE_REJECT",
+                format!("undefined data name in called module ({cmd})"),
+            );
+        }
+        if lower.contains("cobrun: unsupported") {
+            let note = extract_note(&raw, "unsupported");
+            return reason("CANDIDATE_CHECK_REJECT", format!("{note} ({cmd})"));
+        }
+        if lower.contains("cobrun: runtime error") || lower.contains("libcob:") {
+            return reason(
+                "CANDIDATE_RUNTIME_FAIL",
+                format!("runtime error in called module ({cmd})"),
+            );
+        }
+        return reason(
+            "CANDIDATE_MODULE_MODEL_UNSUPPORTED",
+            format!("module lifecycle not supported by the candidate model: {cmd}"),
         );
     }
     reason(
