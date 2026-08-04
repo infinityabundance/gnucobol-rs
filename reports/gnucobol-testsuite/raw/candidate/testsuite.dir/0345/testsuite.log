@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 345. syn_misc.at:5218: testing Constant Expressions (2) ...
 ./syn_misc.at:5260: $COMPILE_ONLY prog.cob 
---- -	2026-08-04 14:46:26.116549956 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/345/stderr	2026-08-04 14:46:26.115562355 +0000
+--- -	2026-08-04 14:58:38.760718968 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/345/stderr	2026-08-04 14:58:38.760019114 +0000
 @@ -1,9 +1,2 @@
 -prog.cob:15: warning: expression '115' EQUALS '200' is always FALSE
 -prog.cob:16: warning: expression '200' EQUALS '115' is always FALSE
@@ -12,7 +12,7 @@
 -prog.cob:29: warning: expression '115' GREATER THAN '16' is always TRUE
 -prog.cob:23: warning: expression '115' EQUALS '15' is always FALSE
 -prog.cob:24: warning: expression '115' EQUALS '115' is always TRUE
-+cobc-rs: unsupported: unsupported level number 78
++cobc-rs: unsupported: PIC X(CONST1): BadRepeat
  
 ./syn_misc.at:5260: exit code was 1, expected 0
 345. syn_misc.at:5218: 345. Constant Expressions (2) (syn_misc.at:5218): FAILED (syn_misc.at:5260)

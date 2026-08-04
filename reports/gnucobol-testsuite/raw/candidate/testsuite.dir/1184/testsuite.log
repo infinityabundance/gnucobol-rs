@@ -3,11 +3,11 @@
 ./run_extensions.at:4454: $COMPILE prog.cob
 ./run_extensions.at:4455: PATH=.:$PATH $COBCRUN_DIRECT prog "start"
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stderr	2026-08-04 14:46:26.796730631 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stderr	2026-08-04 14:58:39.518181038 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb CHAINING
---- -	2026-08-04 14:46:26.797746024 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stdout	2026-08-04 14:46:26.797177204 +0000
+--- -	2026-08-04 14:58:39.519430347 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1184/stdout	2026-08-04 14:58:39.518607854 +0000
 @@ -1,38 +1 @@
 -Test #1:
 -  CALL 'SYSTEM' with prog 1:

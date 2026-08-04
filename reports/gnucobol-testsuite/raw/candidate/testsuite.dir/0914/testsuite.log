@@ -4,8 +4,8 @@
 ./run_file.at:6431: $COMPILE prog2.cob
 ./run_file.at:6432: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/914/stderr	2026-08-04 14:46:26.500147465 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/914/stderr	2026-08-04 14:58:39.195688019 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
 ./run_file.at:6432: exit code was 2, expected 0
 914. run_file.at:6358: 914. INDEXED file with SHARING NO (run_file.at:6358): expected failure (run_file.at:6432)

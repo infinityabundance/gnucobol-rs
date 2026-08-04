@@ -3,8 +3,8 @@
 ./data_binary.at:1589: $COMPILE prog.cob
 ./data_binary.at:1590: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1244/stderr	2026-08-04 14:46:26.854623211 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1244/stderr	2026-08-04 14:58:39.579935112 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unrecognized USAGE BINARY-INT
++cobrun: unsupported: unsupported level number REPLACE
 ./data_binary.at:1590: exit code was 2, expected 0
 1244. data_binary.at:1409: 1244. MOVE DISPLAY to BINARY (data_binary.at:1409): FAILED (data_binary.at:1590)

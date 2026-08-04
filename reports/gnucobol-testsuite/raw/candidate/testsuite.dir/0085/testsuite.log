@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 85. syn_definition.at:376: testing GO TO sections and foreign paragraphs ...
 ./syn_definition.at:397: $COBC -fdiagnostics-plain-output -fsyntax-only prog.cob
---- -	2026-08-04 14:46:25.989212916 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/85/stderr	2026-08-04 14:46:25.988605414 +0000
+--- -	2026-08-04 14:58:38.620131295 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/85/stderr	2026-08-04 14:58:38.619196362 +0000
 @@ -1,3 +1 @@
 -prog.cob: in section 'S-1':
 -prog.cob:6: warning: GO TO SECTION 'S-2' [-Wgoto-section]

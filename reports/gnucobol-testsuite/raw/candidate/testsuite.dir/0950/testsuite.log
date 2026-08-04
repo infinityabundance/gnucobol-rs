@@ -3,7 +3,7 @@
 ./run_file.at:13544: $COMPILE prog.cob
 ./run_file.at:13545: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/950/stderr	2026-08-04 14:46:34.664308542 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/950/stderr	2026-08-04 14:58:47.179759274 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: PERFORM VARYING exceeded 1e6 iterations
 ./run_file.at:13545: exit code was 2, expected 0

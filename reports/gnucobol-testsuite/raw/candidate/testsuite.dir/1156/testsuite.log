@@ -2,14 +2,10 @@
 1156. run_extensions.at:2843: testing 78 Level (2) ...
 ./run_extensions.at:2861: $COMPILE prog.cob
 ./run_extensions.at:2862: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1156/stderr	2026-08-04 14:46:26.771101261 +0000
-@@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 14:46:26.773111219 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1156/stdout	2026-08-04 14:46:26.771394632 +0000
-@@ -1,2 +1 @@
+--- -	2026-08-04 14:58:39.492130235 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1156/stdout	2026-08-04 14:58:39.490973850 +0000
+@@ -1,2 +1,2 @@
 -OKOKOK
++OKOKOKOK
  
-./run_extensions.at:2862: exit code was 2, expected 0
 1156. run_extensions.at:2843: 1156. 78 Level (2) (run_extensions.at:2843): FAILED (run_extensions.at:2862)

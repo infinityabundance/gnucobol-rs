@@ -256,18 +256,35 @@ fn load_file(path: &Path, chain: &mut Vec<(PathBuf, u32)>, conf_err: &mut ConfEr
 }
 
 /// Resolve an `include`/`includeif` file name like the C's `cob_load_config_file`: as given (cwd),
-/// then `COB_CONFIG_DIR` (the suite's `configuration.at` tests include files that live in the
-/// configured config directory, e.g. `runtime_empty.cfg`).
+/// then `COB_CONFIG_DIR`, then the directory of `COB_RUNTIME_CONFIG` (the suite always exports
+/// `COB_RUNTIME_CONFIG=<srcdir>/config/runtime_empty.cfg`; the baseline resolves the include through
+/// the exported `COB_CONFIG_DIR=<srcdir>/config`, which the candidate's local mode lacks -- the
+/// runtime-config directory is the same physical dir, so it is the faithful fallback).
 fn resolve_include(file: &[u8]) -> Option<PathBuf> {
     let name = String::from_utf8_lossy(file).into_owned();
     let p = PathBuf::from(&name);
     if p.is_file() {
         return Some(p);
     }
+    // COB_CONFIG_DIR is a DIRECTORY; COB_RUNTIME_CONFIG names a FILE whose directory is the same
+    // physical config dir the baseline resolves includes through (the suite exports
+    // COB_RUNTIME_CONFIG=<srcdir>/config/runtime_empty.cfg in every mode).
     if let Ok(dir) = std::env::var("COB_CONFIG_DIR") {
-        let c = PathBuf::from(dir).join(&name);
-        if c.is_file() {
-            return Some(c);
+        if !dir.is_empty() {
+            let c = PathBuf::from(&dir).join(&name);
+            if c.is_file() {
+                return Some(c);
+            }
+        }
+    }
+    if let Ok(cfg) = std::env::var("COB_RUNTIME_CONFIG") {
+        if !cfg.is_empty() {
+            if let Some(dir) = Path::new(&cfg).parent() {
+                let c = dir.join(&name);
+                if c.is_file() {
+                    return Some(c);
+                }
+            }
         }
     }
     None

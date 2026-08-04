@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 973. run_reportwriter.at:4217: testing Report CODE and LIMIT COLUMNS ...
 ./run_reportwriter.at:4310: $COMPILE -std=cobol2002 -fassign-ext-dyn=ok progv.cob
---- -	2026-08-04 14:46:26.550202530 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/973/stderr	2026-08-04 14:46:26.549523043 +0000
+--- -	2026-08-04 14:58:39.250141258 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/973/stderr	2026-08-04 14:58:39.249588858 +0000
 @@ -1,2 +1,2 @@
 -progv.cob:38: warning: RW VARYING clause is not implemented
 +cobc-rs: -fassign-ext-dyn=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok

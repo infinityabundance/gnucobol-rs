@@ -3,11 +3,11 @@
 ./run_reportwriter.at:9617: $COMPILE prog.cob
 ./run_reportwriter.at:9619: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stderr	2026-08-04 14:46:26.552002777 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stderr	2026-08-04 14:58:39.254615896 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: WS-TRANSPORT-PAY,
---- -	2026-08-04 14:46:26.553185042 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stdout	2026-08-04 14:46:26.552669420 +0000
+--- -	2026-08-04 14:58:39.256125719 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/981/stdout	2026-08-04 14:58:39.255082606 +0000
 @@ -1,6 +1 @@
 -BEFORE DETAIL - SHOULD DISPLAY
 -==============================

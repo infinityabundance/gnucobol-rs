@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 109. syn_definition.at:1132: testing Ambiguous reference to paragraph name ...
 ./syn_definition.at:1148: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.000415535 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/109/stderr	2026-08-04 14:46:25.999908129 +0000
+--- -	2026-08-04 14:58:38.630663220 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/109/stderr	2026-08-04 14:58:38.630144173 +0000
 @@ -1,5 +1 @@
 -prog.cob: in section 'S-3':
 -prog.cob:10: error: 'L' is ambiguous; needs qualification

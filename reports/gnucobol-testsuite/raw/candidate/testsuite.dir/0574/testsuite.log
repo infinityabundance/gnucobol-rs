@@ -4,11 +4,11 @@
 ./run_fundamental.at:4172: $COMPILE prog.cob
 ./run_fundamental.at:4173: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/574/stderr	2026-08-04 14:46:26.253586653 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/574/stderr	2026-08-04 14:58:38.911859625 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "dump": not a contained program (external CALL is a boundary)
---- -	2026-08-04 14:46:26.254701381 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/574/stdout	2026-08-04 14:46:26.253952084 +0000
+--- -	2026-08-04 14:58:38.914344387 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/574/stdout	2026-08-04 14:58:38.913259295 +0000
 @@ -1 +1 @@
 -05108855
 +

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 264. syn_misc.at:1023: testing INSPECT incomplete clause ...
 ./syn_misc.at:1039: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.074898481 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/264/stderr	2026-08-04 14:46:26.074378491 +0000
+--- -	2026-08-04 14:58:38.716289638 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/264/stderr	2026-08-04 14:58:38.715044428 +0000
 @@ -1,2 +1 @@
 -prog.cob:11: error: TALLYING clause is incomplete
  

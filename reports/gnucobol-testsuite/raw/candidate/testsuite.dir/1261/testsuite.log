@@ -3,11 +3,11 @@
 ./data_packed.at:432: $COMPILE prog.cob
 ./data_packed.at:433: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stderr	2026-08-04 14:46:26.869747483 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stderr	2026-08-04 14:58:39.600109666 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 14:46:26.871674666 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stdout	2026-08-04 14:46:26.870730586 +0000
++cobrun: unsupported: not a numeric literal: FENCE
+--- -	2026-08-04 14:58:39.602041556 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1261/stdout	2026-08-04 14:58:39.601375705 +0000
 @@ -1,21 +1 @@
 -34
 -+34

@@ -3,7 +3,7 @@
 ./run_functions.at:1512: $COMPILE prog.cob
 ./run_functions.at:1513: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1021/stdout	2026-08-04 14:46:26.602432331 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1021/stdout	2026-08-04 14:58:39.308867710 +0000
 @@ -0,0 +1 @@
 +Test 1 failed:            
 1021. run_functions.at:1487: 1021. FUNCTION FORMATTED-TIME DP.COMMA (run_functions.at:1487): FAILED (run_functions.at:1513)

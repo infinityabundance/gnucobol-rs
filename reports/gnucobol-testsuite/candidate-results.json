@@ -333,11 +333,11 @@
     },
     {
       "number": 42,
-      "primary": "CANDIDATE_MODULE_MODEL_UNSUPPORTED",
-      "reason": "module lifecycle not supported by the candidate model: COB_PHYSICAL_CANCEL=false $COBCRUN -c test.cfg --runtime-conf | \\",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0042",
-      "title": "configuration.at:637: 42. runtime configuration: environment priority"
+      "title": "runtime configuration: environment priority"
     },
     {
       "number": 43,
@@ -365,11 +365,11 @@
     },
     {
       "number": 46,
-      "primary": "CANDIDATE_UNSUPPORTED",
-      "reason": "candidate failed at an unclassified boundary: unset greet name ; \\",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0046",
-      "title": "configuration.at:773: 46. runtime configuration: strings and environment"
+      "title": "runtime configuration: strings and environment"
     },
     {
       "number": 47,
@@ -4254,7 +4254,7 @@
     {
       "number": 532,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: GLOB-PATH2 ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0532",
       "title": "run_fundamental.at:1233: 532. GLOBAL CONSTANT"
@@ -4493,59 +4493,59 @@
     },
     {
       "number": 562,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0562",
-      "title": "run_fundamental.at:2631: 562. ROUNDED AWAY-FROM-ZERO"
+      "title": "ROUNDED AWAY-FROM-ZERO"
     },
     {
       "number": 563,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0563",
-      "title": "run_fundamental.at:2694: 563. ROUNDED NEAREST-AWAY-FROM-ZERO"
+      "title": "ROUNDED NEAREST-AWAY-FROM-ZERO"
     },
     {
       "number": 564,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0564",
-      "title": "run_fundamental.at:2757: 564. ROUNDED NEAREST-EVEN"
+      "title": "ROUNDED NEAREST-EVEN"
     },
     {
       "number": 565,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0565",
-      "title": "run_fundamental.at:2820: 565. ROUNDED NEAREST-TOWARD-ZERO"
+      "title": "ROUNDED NEAREST-TOWARD-ZERO"
     },
     {
       "number": 566,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0566",
-      "title": "run_fundamental.at:2883: 566. ROUNDED TOWARD-GREATER"
+      "title": "ROUNDED TOWARD-GREATER"
     },
     {
       "number": 567,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0567",
-      "title": "run_fundamental.at:2946: 567. ROUNDED TOWARD-LESSER"
+      "title": "ROUNDED TOWARD-LESSER"
     },
     {
       "number": 568,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: N literal: national/bit literals are a dialect extension boundary ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0568",
-      "title": "run_fundamental.at:3009: 568. ROUNDED TRUNCATION"
+      "title": "ROUNDED TRUNCATION"
     },
     {
       "number": 569,
@@ -4558,7 +4558,7 @@
     {
       "number": 570,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0570",
       "title": "run_fundamental.at:3108: 570. Numeric operations (2) DISPLAY"
@@ -4566,7 +4566,7 @@
     {
       "number": 571,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0571",
       "title": "run_fundamental.at:3344: 571. Numeric operations (3) PACKED-DECIMAL"
@@ -4574,7 +4574,7 @@
     {
       "number": 572,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0572",
       "title": "run_fundamental.at:3648: 572. Numeric operations (4) BINARY"
@@ -4582,7 +4582,7 @@
     {
       "number": 573,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0573",
       "title": "run_fundamental.at:3883: 573. Numeric operations (5) COMP-5"
@@ -4613,8 +4613,8 @@
     },
     {
       "number": 577,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE FLOAT-SHORT ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_RUNTIME_FAIL",
+      "reason": "candidate program run failed ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0577",
       "title": "run_fundamental.at:4518: 577. ADD CORRESPONDING"
@@ -4822,7 +4822,7 @@
     {
       "number": 603,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0603",
       "title": "run_fundamental.at:5682: 603. Simple Expressions with figurative constants"
@@ -4830,7 +4830,7 @@
     {
       "number": 604,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0604",
       "title": "run_fundamental.at:6025: 604. Expression numeric vs. DISPLAY"
@@ -4845,8 +4845,8 @@
     },
     {
       "number": 606,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE FLOAT-SHORT ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_RUNTIME_FAIL",
+      "reason": "candidate program run failed ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0606",
       "title": "run_fundamental.at:6192: 606. integer arithmetic on floating-point var"
@@ -5334,7 +5334,7 @@
     {
       "number": 667,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: ALL ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0667",
       "title": "run_initialize.at:596: 667. INITIALIZE big table with VALUE"
@@ -5750,7 +5750,7 @@
     {
       "number": 719,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: INSPECT region clause near Str([50]) ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0719",
       "title": "run_misc.at:1903: 719. INSPECT numeric signed"
@@ -5821,11 +5821,11 @@
     },
     {
       "number": 728,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE FLOAT-LONG ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "0728",
-      "title": "run_misc.at:2337: 728. PERFORM VARYING Float"
+      "title": "PERFORM VARYING Float"
     },
     {
       "number": 729,
@@ -6646,15 +6646,15 @@
     {
       "number": 831,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: DOGGY ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0831",
       "title": "run_misc.at:12998: 831. 78 VALUE"
     },
     {
       "number": 832,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_RUNTIME_FAIL",
+      "reason": "candidate program run failed ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0832",
       "title": "run_misc.at:13066: 832. 01 CONSTANT"
@@ -6733,8 +6733,8 @@
     },
     {
       "number": 842,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0842",
       "title": "run_misc.at:13983: 842. runtime checks within conditions"
@@ -6974,7 +6974,7 @@
     {
       "number": 872,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: OCCURS count MAX-SUB is not an integer ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0872",
       "title": "run_file.at:1485: 872. INDEXED file sparse/split keys"
@@ -6998,7 +6998,7 @@
     {
       "number": 875,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: PIC 99X99: UnsupportedSymbol('X') ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0875",
       "title": "run_file.at:2447: 875. INDEXED sample"
@@ -7006,7 +7006,7 @@
     {
       "number": 876,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: OCCURS count MAX-SUB is not an integer ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0876",
       "title": "run_file.at:2948: 876. WRITE + REWRITE FILE name"
@@ -7238,7 +7238,7 @@
     {
       "number": 905,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog1)",
+      "reason": "unsupported: unsupported: CALL \"SYSTEM\": not a contained program (external CALL is a boundary) ($COBCRUN_DIRECT ./prog1)",
       "status": "-",
       "test_id": "0905",
       "title": "run_file.at:5775: 905. SEQUENTIAL file with SHARING READ ONLY"
@@ -7342,7 +7342,7 @@
     {
       "number": 918,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog1)",
+      "reason": "unsupported: unsupported: CALL \"SYSTEM\": not a contained program (external CALL is a boundary) ($COBCRUN_DIRECT ./prog1)",
       "status": "-",
       "test_id": "0918",
       "title": "run_file.at:6696: 918. INDEXED file with LOCK AUTOMATIC (2)"
@@ -7486,7 +7486,7 @@
     {
       "number": 936,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: OCCURS count MAX-SUB is not an integer ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0936",
       "title": "run_file.at:11235: 936. RELATIVE Multi-Record"
@@ -7494,7 +7494,7 @@
     {
       "number": 937,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog 1>prog.out)",
+      "reason": "unsupported: unsupported: OCCURS count MAX-SUB is not an integer ($COBCRUN_DIRECT ./prog 1>prog.out)",
       "status": "-",
       "test_id": "0937",
       "title": "run_file.at:11485: 937. INDEXED File READ/DELETE/READ"
@@ -7510,7 +7510,7 @@
     {
       "number": 939,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: OCCURS count MAX-SUB is not an integer ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0939",
       "title": "run_file.at:12388: 939. LINE SEQUENTIAL REWRITE"
@@ -7518,15 +7518,15 @@
     {
       "number": 940,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: OCCURS count MAX-SUB is not an integer ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0940",
       "title": "run_file.at:12660: 940. LINE SEQUENTIAL data"
     },
     {
       "number": 941,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_PARSE_REJECT",
+      "reason": "undefined data name at run ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "0941",
       "title": "run_file.at:12817: 941. Concatenated Files"
@@ -8597,11 +8597,11 @@
     },
     {
       "number": 1075,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE FLOAT-LONG ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "1075",
-      "title": "run_functions.at:3104: 1075. FUNCTION SIGN"
+      "title": "FUNCTION SIGN"
     },
     {
       "number": 1076,
@@ -8773,11 +8773,11 @@
     },
     {
       "number": 1097,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: invalid hex digit in X literal ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "1097",
-      "title": "run_functions.at:4109: 1097. FUNCTION TRIM zero length"
+      "title": "FUNCTION TRIM zero length"
     },
     {
       "number": 1098,
@@ -8942,7 +8942,7 @@
     {
       "number": 1118,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: LENGTH ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1118",
       "title": "run_extensions.at:287: 1118. LENGTH OF"
@@ -9229,35 +9229,35 @@
     },
     {
       "number": 1154,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: invalid hex digit in X literal (TEST_ENV=OK $COBCRUN_DIRECT ./prog CHECKPAR)",
+      "primary": "CANDIDATE_RUNTIME_FAIL",
+      "reason": "candidate program run failed (TEST_ENV=OK $COBCRUN_DIRECT ./prog CHECKPAR)",
       "status": "-",
       "test_id": "1154",
       "title": "run_extensions.at:2774: 1154. Environment/Argument variable"
     },
     {
       "number": 1155,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "1155",
-      "title": "run_extensions.at:2820: 1155. 78 Level (1)"
+      "title": "78 Level (1)"
     },
     {
       "number": 1156,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "primary": "CANDIDATE_RUNTIME_FAIL",
+      "reason": "candidate program run failed ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1156",
       "title": "run_extensions.at:2843: 1156. 78 Level (2)"
     },
     {
       "number": 1157,
-      "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
-      "status": "-",
+      "primary": "OBSERVABLE_MATCH",
+      "reason": "oracle and candidate both satisfy the test's AT_CHECK assertions",
+      "status": "ok",
       "test_id": "1157",
-      "title": "run_extensions.at:2869: 1157. 78 Level (3)"
+      "title": "78 Level (3)"
     },
     {
       "number": 1158,
@@ -9950,7 +9950,7 @@
     {
       "number": 1244,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1244",
       "title": "data_binary.at:1409: 1244. MOVE DISPLAY to BINARY"
@@ -9958,7 +9958,7 @@
     {
       "number": 1245,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1245",
       "title": "data_binary.at:1595: 1245. MOVE PACKED-DECIMAL to BINARY"
@@ -9966,7 +9966,7 @@
     {
       "number": 1246,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1246",
       "title": "data_binary.at:1781: 1246. MOVE BINARY to PACKED-DECIMAL"
@@ -9974,7 +9974,7 @@
     {
       "number": 1247,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1247",
       "title": "data_binary.at:1961: 1247. MOVE BINARY to BINARY"
@@ -10030,7 +10030,7 @@
     {
       "number": 1254,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1254",
       "title": "data_display.at:226: 1254. MOVE DISPLAY to DISPLAY"
@@ -10054,7 +10054,7 @@
     {
       "number": 1257,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1257",
       "title": "data_display.at:533: 1257. DISPLAY: ADD and SUBTRACT w/o SIZE ERROR"
@@ -10062,7 +10062,7 @@
     {
       "number": 1258,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1258",
       "title": "data_display.at:16940: 1258. DISPLAY: ADD and SUBTRACT, all ROUNDED MODEs"
@@ -10086,7 +10086,7 @@
     {
       "number": 1261,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: FENCE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1261",
       "title": "data_packed.at:221: 1261. PACKED-DECIMAL used with MOVE"
@@ -10094,7 +10094,7 @@
     {
       "number": 1262,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1262",
       "title": "data_packed.at:459: 1262. MOVE PACKED-DECIMAL to PACKED-DECIMAL"
@@ -10102,7 +10102,7 @@
     {
       "number": 1263,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1263",
       "title": "data_packed.at:639: 1263. MOVE PACKED-DECIMAL to DISPLAY"
@@ -10110,7 +10110,7 @@
     {
       "number": 1264,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1264",
       "title": "data_packed.at:825: 1264. MOVE DISPLAY to PACKED-DECIMAL"
@@ -10126,7 +10126,7 @@
     {
       "number": 1266,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: FENCE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1266",
       "title": "data_packed.at:1063: 1266. PACKED-DECIMAL arithmetic"
@@ -10134,7 +10134,7 @@
     {
       "number": 1267,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1267",
       "title": "data_packed.at:1187: 1267. PACKED-DECIMAL comparison"
@@ -10174,7 +10174,7 @@
     {
       "number": 1272,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: FENCE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1272",
       "title": "data_packed.at:1474: 1272. COMP-6 arithmetic"
@@ -10190,7 +10190,7 @@
     {
       "number": 1274,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1274",
       "title": "data_packed.at:1609: 1274. COMP-6 comparison"
@@ -10198,7 +10198,7 @@
     {
       "number": 1275,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unrecognized USAGE BINARY-INT ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1275",
       "title": "data_packed.at:1671: 1275. COMP-3 vs. COMP-6 - BCD comparison"
@@ -10206,7 +10206,7 @@
     {
       "number": 1276,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: FENCE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1276",
       "title": "data_packed.at:1971: 1276. PPP COMP-3"
@@ -10214,7 +10214,7 @@
     {
       "number": 1277,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: FENCE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1277",
       "title": "data_packed.at:2083: 1277. PPP COMP-6"
@@ -10222,7 +10222,7 @@
     {
       "number": 1278,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: not a numeric literal: FENCE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1278",
       "title": "data_packed.at:2174: 1278. arithmetic truncation with USAGE PACKED-DECIMAL"
@@ -10230,7 +10230,7 @@
     {
       "number": 1279,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1279",
       "title": "data_packed.at:2236: 1279. MOVE between several BCD fields"
@@ -10238,7 +10238,7 @@
     {
       "number": 1280,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1280",
       "title": "data_packed.at:12326: 1280. BCD ADD and SUBTRACT w/o SIZE ERROR"
@@ -10246,7 +10246,7 @@
     {
       "number": 1281,
       "primary": "CANDIDATE_CHECK_REJECT",
-      "reason": "unsupported: unsupported: unsupported level number 78 ($COBCRUN_DIRECT ./prog)",
+      "reason": "unsupported: unsupported: unsupported level number REPLACE ($COBCRUN_DIRECT ./prog)",
       "status": "-",
       "test_id": "1281",
       "title": "data_packed.at:28746: 1281. BCD ADD and SUBTRACT, all ROUNDED MODEs"

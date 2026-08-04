@@ -8,11 +8,11 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 
 ## Totals by classification
 
-- CANDIDATE_CHECK_REJECT: 137
+- CANDIDATE_CHECK_REJECT: 126
 - CANDIDATE_PARSE_REJECT: 7
-- CANDIDATE_RUNTIME_FAIL: 54
+- CANDIDATE_RUNTIME_FAIL: 56
 - CANDIDATE_UNSUPPORTED: 1
-- OBSERVABLE_MATCH: 92
+- OBSERVABLE_MATCH: 101
 - ORACLE_SKIP: 3
 - ORACLE_XFAIL: 1
 - WRAPPER_OPTION_UNSUPPORTED: 28
@@ -118,13 +118,13 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 0559 | Context sensitive words (6) | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 0560 | run_fundamental.at:2577: 560. Context sensitive words (7) | run_fundamental | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 0561 | Context sensitive words (8) | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
-| 0562 | run_fundamental.at:2631: 562. ROUNDED AWAY-FROM-ZERO | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0563 | run_fundamental.at:2694: 563. ROUNDED NEAREST-AWAY-FROM-ZERO | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0564 | run_fundamental.at:2757: 564. ROUNDED NEAREST-EVEN | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0565 | run_fundamental.at:2820: 565. ROUNDED NEAREST-TOWARD-ZERO | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0566 | run_fundamental.at:2883: 566. ROUNDED TOWARD-GREATER | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0567 | run_fundamental.at:2946: 567. ROUNDED TOWARD-LESSER | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0568 | run_fundamental.at:3009: 568. ROUNDED TRUNCATION | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 0562 | ROUNDED AWAY-FROM-ZERO | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
+| 0563 | ROUNDED NEAREST-AWAY-FROM-ZERO | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
+| 0564 | ROUNDED NEAREST-EVEN | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
+| 0565 | ROUNDED NEAREST-TOWARD-ZERO | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
+| 0566 | ROUNDED TOWARD-GREATER | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
+| 0567 | ROUNDED TOWARD-LESSER | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
+| 0568 | ROUNDED TRUNCATION | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 0569 | Numeric operations (1) | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 0570 | run_fundamental.at:3108: 570. Numeric operations (2) DISPLAY | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0571 | run_fundamental.at:3344: 571. Numeric operations (3) PACKED-DECIMAL | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
@@ -133,7 +133,7 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 0574 | run_fundamental.at:4118: 574. Numeric operations (6) | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0575 | Numeric operations (7) | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 0576 | run_fundamental.at:4468: 576. Numeric operations (8) | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0577 | run_fundamental.at:4518: 577. ADD CORRESPONDING | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 0577 | run_fundamental.at:4518: 577. ADD CORRESPONDING | run_fundamental | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 0578 | run_fundamental.at:4566: 578. ADD CORRESPONDING no match | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0579 | run_fundamental.at:4616: 579. SYNC in OCCURS | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0580 | 88 level with THRU | run_fundamental | ORACLE_PASS | ok | OBSERVABLE_MATCH |
@@ -162,7 +162,7 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 0603 | run_fundamental.at:5682: 603. Simple Expressions with figurative constants | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0604 | run_fundamental.at:6025: 604. Expression numeric vs. DISPLAY | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0605 | run_fundamental.at:6080: 605. Abbreviated Expressions | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 0606 | run_fundamental.at:6192: 606. integer arithmetic on floating-point var | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 0606 | run_fundamental.at:6192: 606. integer arithmetic on floating-point var | run_fundamental | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 0607 | run_fundamental.at:6234: 607. TYPEDEF application | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0608 | run_fundamental.at:6286: 608. Alphanumeric VALUE longer than PIC | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
 | 0609 | run_fundamental.at:6318: 609. DISPLAY with P fields | run_fundamental | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
@@ -271,7 +271,7 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 1072 | run_functions.at:3004: 1072. FUNCTION REVERSE with reference modding | run_functions | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 1073 | run_functions.at:3027: 1073. FUNCTION SECONDS-FROM-FORMATTED-TIME | run_functions | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 1074 | FUNCTION SECONDS-PAST-MIDNIGHT | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
-| 1075 | run_functions.at:3104: 1075. FUNCTION SIGN | run_functions | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 1075 | FUNCTION SIGN | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1076 | FUNCTION SIN | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1077 | FUNCTION SQRT | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1078 | FUNCTION STANDARD-DEVIATION | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
@@ -293,7 +293,7 @@ Reconciliation invariant (Phase-1, machine-enforced): sum of the classification 
 | 1094 | FUNCTION TEST-NUMVAL-F | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1095 | FUNCTION TRIM | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1096 | run_functions.at:4083: 1096. FUNCTION TRIM with reference modding | run_functions | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
-| 1097 | run_functions.at:4109: 1097. FUNCTION TRIM zero length | run_functions | ORACLE_PASS | - | CANDIDATE_CHECK_REJECT |
+| 1097 | FUNCTION TRIM zero length | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1098 | FUNCTION UPPER-CASE | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |
 | 1099 | run_functions.at:4161: 1099. FUNCTION UPPER-CASE with reference modding | run_functions | ORACLE_PASS | - | CANDIDATE_RUNTIME_FAIL |
 | 1100 | FUNCTION VARIANCE | run_functions | ORACLE_PASS | ok | OBSERVABLE_MATCH |

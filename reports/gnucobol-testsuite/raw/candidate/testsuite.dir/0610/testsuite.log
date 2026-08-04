@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 610. run_fundamental.at:6404: testing condition IS ZERO AND ...
 ./run_fundamental.at:6440: $COMPILE prog.cob
---- -	2026-08-04 14:46:26.276824454 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/610/stderr	2026-08-04 14:46:26.276089072 +0000
+--- -	2026-08-04 14:58:38.938148234 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/610/stderr	2026-08-04 14:58:38.936907221 +0000
 @@ -1,2 +1 @@
 -prog.cob:21: warning: unsigned 'W' may not be LESS THAN ZERO
  

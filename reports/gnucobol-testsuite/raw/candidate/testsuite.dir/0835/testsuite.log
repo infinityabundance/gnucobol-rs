@@ -3,11 +3,11 @@
 ./run_misc.at:13590: $COMPILE prog.cob
 ./run_misc.at:13592: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/835/stderr	2026-08-04 14:46:26.437713467 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/835/stderr	2026-08-04 14:58:39.123568249 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: CMP1,
---- -	2026-08-04 14:46:26.439097517 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/835/stdout	2026-08-04 14:46:26.438133590 +0000
+--- -	2026-08-04 14:58:39.125230046 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/835/stdout	2026-08-04 14:58:39.124198604 +0000
 @@ -1,24 +1 @@
 ---- COMP-1 ---
 -A: 9216587

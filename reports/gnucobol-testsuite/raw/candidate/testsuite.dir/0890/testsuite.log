@@ -4,7 +4,7 @@
 ./run_file.at:4184: $COMPILE prog.cob
 ./run_file.at:4185: unset COB_FILE_PATH ; ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/890/stderr	2026-08-04 14:46:26.479131096 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/890/stderr	2026-08-04 14:58:39.171118064 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: ACCEPT FROM DATE/TIME requires a pinned COB_CURRENT_DATE (the live clock is a non-claim)
 ./run_file.at:4185: exit code was 2, expected 0

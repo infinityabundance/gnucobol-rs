@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 437. syn_screen.at:616: testing Compiler-specific SCREEN SECTION clause rules ...
 ./syn_screen.at:657: $COMPILE_ONLY -fscreen-section-rules=std prog.cob
---- -	2026-08-04 14:46:26.167832080 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/437/stderr	2026-08-04 14:46:26.167183551 +0000
+--- -	2026-08-04 14:58:38.819413441 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/437/stderr	2026-08-04 14:58:38.816860778 +0000
 @@ -1,13 +1,2 @@
 -prog.cob:12: error: 'no-clauses' needs a PIC, FROM, TO, USING, VALUE, BELL, BLANK or ERASE clause
 -prog.cob:13: error: 'no-required-clauses' needs a PIC, FROM, TO, USING, VALUE, BELL, BLANK or ERASE clause

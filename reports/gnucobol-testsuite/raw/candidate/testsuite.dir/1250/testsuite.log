@@ -2,7 +2,7 @@
 1250. data_display.at:22: testing DISPLAY: Sign ASCII ...
 ./data_display.at:64: $COMPILE -fsign=ascii prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1250/stderr	2026-08-04 14:46:26.858122897 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1250/stderr	2026-08-04 14:58:39.585799711 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fsign=ascii: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ascii
 ./data_display.at:64: exit code was 1, expected 0

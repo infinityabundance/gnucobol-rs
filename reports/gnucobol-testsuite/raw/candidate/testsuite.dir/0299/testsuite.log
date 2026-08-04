@@ -2,7 +2,7 @@
 299. syn_misc.at:2864: testing overriding default words ...
 ./syn_misc.at:2876: $COMPILE_ONLY -freserved=COMP-1=DISPLAY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/299/stderr	2026-08-04 14:46:26.091619399 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/299/stderr	2026-08-04 14:58:38.734169365 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -freserved=COMP-1=DISPLAY: unsupported option (rejected-unsupported; reserved-word changes: reject honestly): COMP-1=DISPLAY
 ./syn_misc.at:2876: exit code was 1, expected 0

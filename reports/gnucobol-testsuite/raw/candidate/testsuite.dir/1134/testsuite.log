@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1134. run_extensions.at:1625: testing MOVE of non-integer to alphanumeric ...
 ./run_extensions.at:1695: $COMPILE -std=mf prog.cob
---- -	2026-08-04 14:46:26.747577237 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1134/stderr	2026-08-04 14:46:26.747008226 +0000
+--- -	2026-08-04 14:58:39.464842016 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1134/stderr	2026-08-04 14:58:39.463817847 +0000
 @@ -1,13 +1 @@
 -prog.cob: in paragraph 'S-03':
 -prog.cob:36: warning: MOVE of non-integer to alphanumeric

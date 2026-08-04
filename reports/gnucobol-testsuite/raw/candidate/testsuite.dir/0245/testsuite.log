@@ -1,15 +1,15 @@
 #                             -*- compilation -*-
 245. syn_refmod.at:123: testing constant-folding out of bounds ...
 ./syn_refmod.at:147: $COMPILE_ONLY -fdiagnostics-show-option -Wno-constant-numlit-expression prog.cob
---- -	2026-08-04 14:46:26.064605778 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/245/stderr	2026-08-04 14:46:26.063771392 +0000
+--- -	2026-08-04 14:58:38.703460602 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/245/stderr	2026-08-04 14:58:38.702656954 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:10: warning: offset of 'X' out of bounds: 0 [-Wignored-error]
 -prog.cob:11: warning: length of 'X' out of bounds: 0 [-Wignored-error]
 -prog.cob:12: warning: offset of 'X' out of bounds: 5 [-Wignored-error]
 -prog.cob:13: warning: length of 'X' out of bounds: 5 [-Wignored-error]
 -prog.cob:15: warning: CONVERTING operands differ in size [-Wignored-error]
-+cobc-rs: unsupported: unsupported level number 78
++cobc-rs: unsupported: PIC X(VAR-LEN): BadRepeat
  
 ./syn_refmod.at:147: exit code was 1, expected 0
 245. syn_refmod.at:123: 245. constant-folding out of bounds (syn_refmod.at:123): FAILED (syn_refmod.at:147)

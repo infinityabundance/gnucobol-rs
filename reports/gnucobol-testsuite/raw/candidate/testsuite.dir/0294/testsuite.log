@@ -1,13 +1,11 @@
 #                             -*- compilation -*-
 294. syn_misc.at:2681: testing DISPLAY MESSAGE BOX ...
 ./syn_misc.at:2715: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 14:46:26.090699604 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/294/stderr	2026-08-04 14:46:26.090047328 +0000
-@@ -1,4 +1,2 @@
+--- -	2026-08-04 14:58:38.730743472 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/294/stderr	2026-08-04 14:58:38.730246205 +0000
+@@ -1,4 +1 @@
 -prog.cob:18: warning: handling of DISPLAY MESSAGE is unfinished; implementation is likely to be changed
 -prog.cob:22: warning: handling of DISPLAY MESSAGE is unfinished; implementation is likely to be changed
 -prog.cob:23: warning: handling of DISPLAY MESSAGE is unfinished; implementation is likely to be changed
-+cobc-rs: unsupported: unsupported level number 78
  
-./syn_misc.at:2715: exit code was 1, expected 0
 294. syn_misc.at:2681: 294. DISPLAY MESSAGE BOX (syn_misc.at:2681): FAILED (syn_misc.at:2715)

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 161. syn_redefines.at:146: testing REDEFINES: lower level number ...
 ./syn_redefines.at:163: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.025122054 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/161/stderr	2026-08-04 14:46:26.024492260 +0000
+--- -	2026-08-04 14:58:38.660024973 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/161/stderr	2026-08-04 14:58:38.658862695 +0000
 @@ -1,2 +1 @@
 -prog.cob:10: error: 'X' is not defined in 'G3'
  

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 158. syn_redefines.at:74: testing REDEFINES: level 03 by 02 ...
 ./syn_redefines.at:90: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.023746850 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/158/stderr	2026-08-04 14:46:26.023177418 +0000
+--- -	2026-08-04 14:58:38.659072248 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/158/stderr	2026-08-04 14:58:38.658014537 +0000
 @@ -1,2 +1 @@
 -prog.cob:9: error: 'X' is not defined in 'G1'
  

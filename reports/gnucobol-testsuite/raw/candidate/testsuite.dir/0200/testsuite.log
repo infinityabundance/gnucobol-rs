@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 200. syn_file.at:697: testing variable record length ...
 ./syn_file.at:779: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.043653089 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/200/stderr	2026-08-04 14:46:26.043076423 +0000
+--- -	2026-08-04 14:58:38.681003235 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/200/stderr	2026-08-04 14:58:38.680470372 +0000
 @@ -1,2 +1 @@
 -prog.cob:13: error: duplicate RECORD clause
  

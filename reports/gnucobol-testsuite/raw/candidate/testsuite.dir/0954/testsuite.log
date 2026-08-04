@@ -3,7 +3,7 @@
 ./run_reportwriter.at:82: $COMPILE prog.cob
 ./run_reportwriter.at:84: DD_PRINTOUT="./report.txt" $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/954/stderr	2026-08-04 14:46:26.529641842 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/954/stderr	2026-08-04 14:58:39.231078185 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC : Empty
 ./run_reportwriter.at:84: exit code was 2, expected 0

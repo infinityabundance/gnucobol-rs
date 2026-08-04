@@ -11,10 +11,10 @@
   "docker": {
     "base_image": "gnucobol-rs-gnucobol-testsuite/ubuntu-base:18a42173dc0c9a02c8230212c978b14cc3bbcff173f95dfa954cdaaa04f4a172",
     "containers": {
-      "pass_a": "gnucobol-testsuite-20260804T144533Z-93ec073d-a",
-      "pass_b": "gnucobol-testsuite-20260804T144533Z-93ec073d-a"
+      "pass_a": "gnucobol-testsuite-20260804T145746Z-8d8c499e-a",
+      "pass_b": "gnucobol-testsuite-20260804T145746Z-8d8c499e-b"
     },
-    "court_image": "gnucobol-rs-gnucobol-testsuite/court:93ec073d2fd28565c0241c5868a0352c39b14360",
+    "court_image": "gnucobol-rs-gnucobol-testsuite/court:8d8c499e8ed9e5b9307d007b2a4168ee88106c3a",
     "daemon_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/daemon-data",
     "docker_storage": {
       "configured_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
@@ -27,11 +27,11 @@
     "host_storage_root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT",
     "isolated_daemon": true,
     "production_daemon_untouched": true,
-    "run_id": "20260804T144533Z-93ec073d",
+    "run_id": "20260804T145746Z-8d8c499e",
     "socket": "unix://$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run/docker.sock",
     "storage_driver": "overlay2",
     "storage_filesystem": {
-      "available_bytes_at_start": 477762445312,
+      "available_bytes_at_start": 477573070848,
       "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -52,8 +52,8 @@
     "os": "?",
     "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)"
   },
-  "generated_at": "2026-08-04T14:46:50Z",
-  "git_commit": "93ec073d2fd28565c0241c5868a0352c39b14360",
+  "generated_at": "2026-08-04T15:00:05Z",
+  "git_commit": "8d8c499e8ed9e5b9307d007b2a4168ee88106c3a",
   "non_claims": [
     "no claim about gnucobol-rs is made by this gate",
     "oracle results are specific to this admitted build + environment (stock configuration, no -fpermissive)",
@@ -85,7 +85,7 @@
       "2_images_dir_readonly_source": true,
       "3_base_artifact_verified": true,
       "4_project_layout_present": true,
-      "5_free_space_ok_gb": 445,
+      "5_free_space_ok_gb": 444,
       "6_isolated_socket_used": true,
       "7_docker_root_beneath_project": true,
       "8_no_primary_drive_state": true,
@@ -106,11 +106,11 @@
     },
     "schema": "gnurust-gnucobol-testsuite-preflight-v1",
     "storage": {
-      "free_gb": 445,
+      "free_gb": 444,
       "root": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT"
     },
     "storage_filesystem": {
-      "available_bytes_at_start": 477762445312,
+      "available_bytes_at_start": 477573070848,
       "device_identity_sha256": "e42aacca4fb09e08e32a44a0b0ccc9d4867b5015261f4c25c4c8bd7ac12082f7",
       "different_from_root": true,
       "filesystem_type": "ext4"
@@ -118,12 +118,12 @@
   },
   "receipt_status": "current",
   "results": {
-    "invocation_census_sha256": "4c56db1778eafee727ceb1a14172cc7414518a65075a07e143d6c5f2d9b53be3",
+    "invocation_census_sha256": "591abbb428b721e10c358f08ff3ec49e99e07a828f5c3f9fe99a50b0a07bd6d7",
     "invocation_census_total": 2111,
     "oracle_fail": 0,
     "oracle_not_reached": 0,
     "oracle_pass": 1242,
-    "oracle_results_sha256": "d0ad0e2167a0bf81e459fce285ef4383d07ef9d909969c64783e70f3d55776c7",
+    "oracle_results_sha256": "8f4098324e0b546a50f8a6fed9686a3b8f0a693ecba021b03e39dc84f161305a",
     "oracle_skip": 9,
     "oracle_xfail": 31,
     "oracle_xpass": 0,

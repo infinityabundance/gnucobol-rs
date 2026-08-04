@@ -2,8 +2,8 @@
 648. run_refmod.at:388: testing MF SSRANGE and NOSSRANGE directives ...
 ./run_refmod.at:413: $COBC -w -x -debug -std=mf prog.cob
 ./run_refmod.at:414: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:46:26.304194920 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/648/stdout	2026-08-04 14:46:26.303249998 +0000
+--- -	2026-08-04 14:58:38.973513825 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/648/stdout	2026-08-04 14:58:38.972187143 +0000
 @@ -1 +1 @@
 - !
 + 

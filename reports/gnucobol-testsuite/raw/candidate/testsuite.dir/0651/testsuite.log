@@ -4,11 +4,11 @@
 ./run_accept.at:262: COB_CURRENT_DATE='2015/04/05 18:45:22.123400056' \
 $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/651/stderr	2026-08-04 14:46:26.303812557 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/651/stderr	2026-08-04 14:58:38.972187143 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: ACCEPT FROM MICROSECOND-TIME: a runtime non-claim (terminal/command-line input has no deterministic oracle); wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT
---- -	2026-08-04 14:46:26.305360965 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/651/stdout	2026-08-04 14:46:26.304699120 +0000
+--- -	2026-08-04 14:58:38.974573559 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/651/stdout	2026-08-04 14:58:38.972858885 +0000
 @@ -1,4 +1 @@
 -PROCESS DATE/TIME : 04/05/15 18:45:22 MICROSECOND-TIME 00184522123400.
 -PROCESS BIG TIME : 00000018452212

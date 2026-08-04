@@ -3,11 +3,11 @@
 ./run_misc.at:5191: $COMPILE prog.cob
 ./run_misc.at:5192: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stderr	2026-08-04 14:46:26.397040355 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stderr	2026-08-04 14:58:39.074044275 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: ALL
---- -	2026-08-04 14:46:26.398222940 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stdout	2026-08-04 14:46:26.397040355 +0000
+--- -	2026-08-04 14:58:39.076203148 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/780/stdout	2026-08-04 14:58:39.075378351 +0000
 @@ -1,4 +1 @@
 -abcd
 -abcdabcd

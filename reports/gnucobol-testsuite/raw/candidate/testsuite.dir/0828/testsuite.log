@@ -3,11 +3,11 @@
 ./run_misc.at:12832: $COMPILE -std=mf prog.cob
 ./run_misc.at:12836: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stderr	2026-08-04 14:46:26.432989548 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stderr	2026-08-04 14:58:39.116545483 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: unsupported level number $SET
---- -	2026-08-04 14:46:26.434828707 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stdout	2026-08-04 14:46:26.433954287 +0000
+--- -	2026-08-04 14:58:39.118038605 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/828/stdout	2026-08-04 14:58:39.116545483 +0000
 @@ -1,5 +1 @@
 -Your Dog's name is Barky;
 -The Dog's name is Barky ;

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 394. syn_misc.at:8025: testing AREACHECK / NOAREACHECK directives ...
 ./syn_misc.at:8050: $COMPILE_ONLY -std=cobol85 prog.cob
---- -	2026-08-04 14:46:26.143925402 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/394/stderr	2026-08-04 14:46:26.143408338 +0000
+--- -	2026-08-04 14:58:38.789828852 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/394/stderr	2026-08-04 14:58:38.788488836 +0000
 @@ -1,5 +1,2 @@
 -prog.cob: in section 'MAIN-2':
 -prog.cob:13: error: start of statement in Area A

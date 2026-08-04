@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 463. syn_literals.at:1105: testing X literals ...
 ./syn_literals.at:1121: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.180681249 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/463/stderr	2026-08-04 14:46:26.180010389 +0000
+--- -	2026-08-04 14:58:38.833467189 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/463/stderr	2026-08-04 14:58:38.832778746 +0000
 @@ -1,6 +1 @@
 -prog.cob:9: error: invalid X literal: 'GH'
 -prog.cob:9: note: literal contains invalid character 'G'

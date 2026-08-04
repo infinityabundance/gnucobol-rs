@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 525. run_fundamental.at:874: testing Overlapping MOVE (GnuCOBOL) ...
 ./run_fundamental.at:904: $COMPILE prog.cob
---- -	2026-08-04 14:46:26.219531001 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/525/stderr	2026-08-04 14:46:26.218847917 +0000
+--- -	2026-08-04 14:58:38.875606592 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/525/stderr	2026-08-04 14:58:38.874670749 +0000
 @@ -1,3 +1 @@
 -prog.cob:11: warning: overlapping MOVE may produce unpredictable results
 -prog.cob:17: warning: overlapping MOVE may produce unpredictable results

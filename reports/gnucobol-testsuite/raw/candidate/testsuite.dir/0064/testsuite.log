@@ -2,7 +2,7 @@
 64. syn_copy.at:686: testing REPLACE: partial replacement BY SPACE ...
 ./syn_copy.at:703: $COMPILE_ONLY -fpartial-replace-when-literal-src=ok prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/64/stderr	2026-08-04 14:46:25.980293835 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/64/stderr	2026-08-04 14:58:38.607329810 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fpartial-replace-when-literal-src=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./syn_copy.at:703: exit code was 1, expected 0

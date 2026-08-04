@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 475. listings.at:21: testing Minimal lines per listing pages ...
 ./listings.at:75: $COMPILE_ONLY -t prog.lst -tlines=2 prog.cob
---- -	2026-08-04 14:46:26.188028820 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/475/stderr	2026-08-04 14:46:26.187347339 +0000
+--- -	2026-08-04 14:58:38.841421251 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/475/stderr	2026-08-04 14:58:38.840656376 +0000
 @@ -1,2 +1,2 @@
 -cobc: warning: 2 lines per listing page specified, using 20
 +cobc-rs: -t: unsupported option (rejected-unsupported; listing file: no listing model; reject honestly): prog.lst

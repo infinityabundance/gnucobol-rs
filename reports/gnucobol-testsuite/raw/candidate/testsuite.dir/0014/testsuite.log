@@ -5,11 +5,11 @@
 ./used_binaries.at:603: $COMPILE_MODULE caller.cob
 ./used_binaries.at:604: $COBCRUN -M ./caller inside again
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/14/stderr	2026-08-04 14:46:25.953403543 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/14/stderr	2026-08-04 14:58:38.578799676 +0000
 @@ -0,0 +1 @@
 +cobcrun: cannot find module inside
---- -	2026-08-04 14:46:25.955461131 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/14/stdout	2026-08-04 14:46:25.954692968 +0000
+--- -	2026-08-04 14:58:38.579806513 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/14/stdout	2026-08-04 14:58:38.578863666 +0000
 @@ -1,4 +1 @@
 -Aloha
 -World

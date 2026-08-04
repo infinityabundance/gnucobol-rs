@@ -11,8 +11,8 @@
 | oracle | cobc (GnuCOBOL) 3.2.0 |
 | byte_domain | per-test oracle-vs-candidate observable comparison, first-failure attribution, all-tests-accounted reconciliation, failure buckets |
 | replay command | `bash lab/gnucobol-testsuite/run-docker.sh` |
-| generated_at | 2026-08-04T14:46:50Z |
-| git_commit | `93ec073d2fd28565c0241c5868a0352c39b14360` |
+| generated_at | 2026-08-04T15:00:05Z |
+| git_commit | `8d8c499e8ed9e5b9307d007b2a4168ee88106c3a` |
 | receipt_status | current |
 
 **Conformance claim:** NONE — differential observation over the admitted GnuCOBOL 3.2 native Autotest suite in this environment; no GnuCOBOL test-suite parity claim, no COBOL conformance certification, no compiler-replacement claim.
@@ -21,16 +21,16 @@
 
 ```json
 {
-  "comparison_results_sha256": "d7205a9aac83c16892102349099b6bc4dd70d20c3f347640e9ca83e6c74284fd",
+  "comparison_results_sha256": "32ff9d14f96afaa0919b3bb35133c7474d1138259f31e4a9cb1651a94a161772",
   "determinism": {
     "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
     "pass_a": {
-      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T144533Z-93ec073d/pass-a/summary.json",
-      "summary_sha256": "eb28968bda6580321f9e45fe57691fa526a788a0bd424ae1bc93ec5ac44791d1"
+      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T145746Z-8d8c499e/pass-a/summary.json",
+      "summary_sha256": "df75eb50ab88a801b563cfc9bedbbb6bb8175b608ae64406105a8285616b754a"
     },
     "pass_b": {
-      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T144533Z-93ec073d/pass-b/summary.json",
-      "summary_sha256": "eb28968bda6580321f9e45fe57691fa526a788a0bd424ae1bc93ec5ac44791d1"
+      "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T145746Z-8d8c499e/pass-b/summary.json",
+      "summary_sha256": "90abba39ca8dc4bc4e1b08128d8717cb19151850ded4e23a7709d8cd7a8292e0"
     },
     "path_notation": "paths are symbolic: $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT is the configured docker root at run time; the raw unsanitized record is preserved outside git under $GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/run-evidence/",
     "per_test_classifications_identical": true,
@@ -39,22 +39,22 @@
   },
   "exit_status_mismatch": 0,
   "first_failure": {
-    "CANDIDATE_CHECK_REJECT": 671,
-    "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 6,
-    "CANDIDATE_PARSE_REJECT": 29,
-    "CANDIDATE_RUNTIME_FAIL": 131,
-    "CANDIDATE_UNSUPPORTED": 22,
-    "OBSERVABLE_MATCH": 178,
+    "CANDIDATE_CHECK_REJECT": 652,
+    "CANDIDATE_MODULE_MODEL_UNSUPPORTED": 5,
+    "CANDIDATE_PARSE_REJECT": 31,
+    "CANDIDATE_RUNTIME_FAIL": 136,
+    "CANDIDATE_UNSUPPORTED": 21,
+    "OBSERVABLE_MATCH": 192,
     "ORACLE_SKIP": 9,
     "ORACLE_XFAIL": 31,
     "WRAPPER_INVOCATION_MALFORMED": 25,
     "WRAPPER_OPTION_UNSUPPORTED": 180
   },
   "generated_file_mismatch": 0,
-  "observable_match": 178,
+  "observable_match": 192,
   "stderr_mismatch": 0,
   "stdout_mismatch": 0,
-  "summary_json_sha256": "eb28968bda6580321f9e45fe57691fa526a788a0bd424ae1bc93ec5ac44791d1",
+  "summary_json_sha256": "df75eb50ab88a801b563cfc9bedbbb6bb8175b608ae64406105a8285616b754a",
   "tests_accounted": 1282
 }
 ```

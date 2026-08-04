@@ -2,7 +2,7 @@
 1205. run_extensions.at:5496: testing Bit Shift Operations ...
 ./run_extensions.at:5547: $COMPILE -std=mf -fno-trunc prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1205/stderr	2026-08-04 14:46:26.817965717 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1205/stderr	2026-08-04 14:58:39.538878847 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fno-trunc: unsupported option (rejected-unsupported; no binary truncation: the candidate's arithmetic model is fixed; reject honestly): 
 ./run_extensions.at:5547: exit code was 1, expected 0

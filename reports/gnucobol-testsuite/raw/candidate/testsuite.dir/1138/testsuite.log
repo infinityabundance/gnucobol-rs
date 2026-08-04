@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1138. run_extensions.at:1877: testing CALL BY VALUE alphanumeric item ...
 ./run_extensions.at:1905: $COMPILE prog.cob
---- -	2026-08-04 14:46:26.753926225 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1138/stderr	2026-08-04 14:46:26.753303344 +0000
+--- -	2026-08-04 14:58:39.472168277 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1138/stderr	2026-08-04 14:58:39.470852842 +0000
 @@ -1,3 +1 @@
 -prog.cob:8: warning: BY CONTENT assumed for alphanumeric item 'X'
 -prog.cob:19: warning: handling of parameters passed BY VALUE is unfinished; implementation is likely to be changed

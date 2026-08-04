@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 189. syn_file.at:108: testing Duplicated FD ...
 ./syn_file.at:131: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.036935793 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/189/stderr	2026-08-04 14:46:26.036125162 +0000
+--- -	2026-08-04 14:58:38.673127649 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/189/stderr	2026-08-04 14:58:38.671862537 +0000
 @@ -1,2 +1 @@
 -prog.cob:15: error: duplicate file description for FILE file1
  

@@ -2,11 +2,11 @@
 20. used_binaries.at:815: testing run job after compilation ...
 ./used_binaries.at:826: $COMPILE -jd prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/20/stderr	2026-08-04 14:46:25.953221054 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/20/stderr	2026-08-04 14:58:38.577700077 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -jd: unsupported option (rejected-unsupported; debug job: requires the shared-memory job model; reject honestly): 
---- -	2026-08-04 14:46:25.954780652 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/20/stdout	2026-08-04 14:46:25.953403543 +0000
+--- -	2026-08-04 14:58:38.579227484 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/20/stdout	2026-08-04 14:58:38.577863678 +0000
 @@ -1 +1 @@
 -job
 +

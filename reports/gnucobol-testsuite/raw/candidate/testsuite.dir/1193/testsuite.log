@@ -2,8 +2,8 @@
 1193. run_extensions.at:4952: testing Conditional / define directives (3) ...
 ./run_extensions.at:4974: $COMPILE -DACTIVATE2 prog.cob
 ./run_extensions.at:4975: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:46:26.807048180 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1193/stdout	2026-08-04 14:46:26.806238360 +0000
+--- -	2026-08-04 14:58:39.527969368 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1193/stdout	2026-08-04 14:58:39.526852163 +0000
 @@ -1 +1 @@
 -OK
 +NOTOK

@@ -4,14 +4,14 @@
 ./run_extensions.at:4380: $COMPILE_MODULE test_stdio.c
 ./run_extensions.at:4381: $COMPILE prog.cob
 ./run_extensions.at:4382: $COBCRUN_DIRECT ./prog 1ARG
---- -	2026-08-04 14:46:26.799234550 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1183/stderr	2026-08-04 14:46:26.798463192 +0000
+--- -	2026-08-04 14:58:39.520068816 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1183/stderr	2026-08-04 14:58:39.519067290 +0000
 @@ -1 +1,2 @@
 -ERR
 +cobrun: unsupported: unrecognized USAGE BINARY-C-LONG
 +
---- -	2026-08-04 14:46:26.799925588 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1183/stdout	2026-08-04 14:46:26.799418703 +0000
+--- -	2026-08-04 14:58:39.520589927 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1183/stdout	2026-08-04 14:58:39.520060551 +0000
 @@ -1 +1 @@
 -OUT
 +

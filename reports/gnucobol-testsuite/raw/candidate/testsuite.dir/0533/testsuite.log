@@ -3,11 +3,11 @@
 ./run_fundamental.at:1390: $COMPILE prog.cob
 ./run_fundamental.at:1391: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/533/stderr	2026-08-04 14:46:26.222507661 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/533/stderr	2026-08-04 14:58:38.878582277 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC 9.9999,99Y: UnsupportedSymbol('Y')
---- -	2026-08-04 14:46:26.223977823 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/533/stdout	2026-08-04 14:46:26.223300630 +0000
+--- -	2026-08-04 14:58:38.879547245 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/533/stdout	2026-08-04 14:58:38.879072200 +0000
 @@ -1,2 +1 @@
 -0.0004,00Y
  

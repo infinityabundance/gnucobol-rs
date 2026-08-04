@@ -4,11 +4,11 @@
 ./run_file.at:2775: rm -f "indexed-file.*"
 ./run_file.at:2776: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stderr	2026-08-04 14:46:26.469277262 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stderr	2026-08-04 14:58:39.160018722 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 14:46:26.470506515 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stdout	2026-08-04 14:46:26.469798154 +0000
++cobrun: unsupported: PIC 99X99: UnsupportedSymbol('X')
+--- -	2026-08-04 14:58:39.161744608 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/875/stdout	2026-08-04 14:58:39.161146954 +0000
 @@ -1,29 +1 @@
 -Read all 00b02 keys sequentially
 -Reading: 00b02

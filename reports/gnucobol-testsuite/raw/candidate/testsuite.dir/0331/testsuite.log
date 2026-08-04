@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 331. syn_misc.at:4393: testing ADD / SUBTRACT TABLE ...
 ./syn_misc.at:4423: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.109996637 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/331/stderr	2026-08-04 14:46:26.109452222 +0000
+--- -	2026-08-04 14:58:38.753251193 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/331/stderr	2026-08-04 14:58:38.752720344 +0000
 @@ -1,9 +1 @@
 -prog.cob:18: warning: ADD TABLE is not implemented
 -prog.cob:19: warning: SUBTRACT TABLE is not implemented

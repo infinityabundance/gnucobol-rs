@@ -3,11 +3,11 @@
 ./used_binaries.at:843: mkdir -p sub
 ./used_binaries.at:844: $COMPILE_MODULE -jd -o $(_return_path "sub/prog") prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/21/stderr	2026-08-04 14:46:25.958164612 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/21/stderr	2026-08-04 14:58:38.581397076 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -jd: unsupported option (rejected-unsupported; debug job: requires the shared-memory job model; reject honestly): 
---- -	2026-08-04 14:46:25.959618974 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/21/stdout	2026-08-04 14:46:25.958706783 +0000
+--- -	2026-08-04 14:58:38.582988582 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/21/stdout	2026-08-04 14:58:38.582238945 +0000
 @@ -1 +1 @@
 -job
 +

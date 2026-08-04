@@ -2,15 +2,15 @@
 938. run_file.at:12291: testing TURN EC-I-O ...
 ./run_file.at:12369: $COMPILE prog.cob 
 ./run_file.at:12370: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:46:26.517656493 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/938/stderr	2026-08-04 14:46:26.517112849 +0000
+--- -	2026-08-04 14:58:39.218727270 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/938/stderr	2026-08-04 14:58:39.217855912 +0000
 @@ -1,3 +1,2 @@
 -libcob: prog.cob:61: error: end of file (status = 10) for file g ('out.txt') on READ
 -libcob: prog.cob:61: warning: implicit CLOSE of g ('out.txt')
 +cobrun: unsupported: OPEN: `F` is not a declared file
  
---- -	2026-08-04 14:46:26.518276559 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/938/stdout	2026-08-04 14:46:26.517722697 +0000
+--- -	2026-08-04 14:58:39.220243015 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/938/stdout	2026-08-04 14:58:39.217855912 +0000
 @@ -1,10 +1 @@
 -a
 -a

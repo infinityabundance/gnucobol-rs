@@ -2,13 +2,13 @@
 625. run_subscripts.at:26: testing Subscript out of bounds ...
 ./run_subscripts.at:43: $COMPILE prog.cob
 ./run_subscripts.at:44: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:46:26.286631540 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/625/stderr	2026-08-04 14:46:26.285621778 +0000
+--- -	2026-08-04 14:58:38.952251053 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/625/stderr	2026-08-04 14:58:38.951384939 +0000
 @@ -1,2 +1 @@
 -libcob: prog.cob:10: error: subscript of 'X' out of bounds: 0
  
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/625/stdout	2026-08-04 14:46:26.285621778 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/625/stdout	2026-08-04 14:58:38.951384939 +0000
 @@ -0,0 +1 @@
 + 
 ./run_subscripts.at:44: exit code was 0, expected 1

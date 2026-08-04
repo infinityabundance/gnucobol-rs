@@ -4,7 +4,7 @@
 ./run_accept.at:389: $COMPILE prog.cob
 ./run_accept.at:390: $COBCRUN_DIRECT ./prog < input.txt
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/654/stderr	2026-08-04 14:46:26.304699120 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/654/stderr	2026-08-04 14:58:38.972858885 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: ACCEPT FROM terminal/console: interactive input is a runtime non-claim (no deterministic oracle); the wired sources are DATE/DAY/TIME/DAY-OF-WEEK/ENVIRONMENT
 stdout:

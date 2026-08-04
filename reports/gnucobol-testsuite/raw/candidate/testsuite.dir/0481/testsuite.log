@@ -2,11 +2,11 @@
 481. listings.at:517: testing COPY replacement order ...
 ./listings.at:538: $COMPILE_LISTING0 -t- -ftsymbols prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/481/stderr	2026-08-04 14:46:26.189677444 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/481/stderr	2026-08-04 14:58:38.841271151 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 14:46:26.190922746 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/481/stdout	2026-08-04 14:46:26.190157940 +0000
+--- -	2026-08-04 14:58:38.842933108 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/481/stdout	2026-08-04 14:58:38.841684321 +0000
 @@ -1,29 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

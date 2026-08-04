@@ -1,12 +1,12 @@
 {
  "note": "stable summary counts + per-test classifications must be identical across two fresh full runs (timestamps deliberately excluded)",
  "pass_a": {
-  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T144533Z-93ec073d/pass-a/summary.json",
-  "summary_sha256": "eb28968bda6580321f9e45fe57691fa526a788a0bd424ae1bc93ec5ac44791d1"
+  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T145746Z-8d8c499e/pass-a/summary.json",
+  "summary_sha256": "df75eb50ab88a801b563cfc9bedbbb6bb8175b608ae64406105a8285616b754a"
  },
  "pass_b": {
-  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T144533Z-93ec073d/pass-b/summary.json",
-  "summary_sha256": "eb28968bda6580321f9e45fe57691fa526a788a0bd424ae1bc93ec5ac44791d1"
+  "path": "$GNURUST_GNUCOBOL_TEST_DOCKER_ROOT/outputs/20260804T145746Z-8d8c499e/pass-b/summary.json",
+  "summary_sha256": "90abba39ca8dc4bc4e1b08128d8717cb19151850ded4e23a7709d8cd7a8292e0"
  },
  "per_test_classifications_identical": true,
  "schema": "gnurust-gnucobol-testsuite-determinism-v1",

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 143. syn_occurs.at:29: testing OCCURS with level 01 and 77 ...
 ./syn_occurs.at:45: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-04 14:46:26.017564993 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/143/stderr	2026-08-04 14:46:26.016779819 +0000
+--- -	2026-08-04 14:58:38.650385811 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/143/stderr	2026-08-04 14:58:38.649781325 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:6: error: 01/77 OCCURS does not conform to COBOL 2014
 -prog.cob:7: error: 01/77 OCCURS does not conform to COBOL 2014

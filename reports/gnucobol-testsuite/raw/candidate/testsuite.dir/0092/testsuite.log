@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 92. syn_definition.at:556: testing Redefinition of program-name by other programs ...
 ./syn_definition.at:613: $COMPILE_ONLY --ffold-call=upper -fdiagnostics-show-option prog.cob
---- -	2026-08-04 14:46:25.992070695 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/92/stderr	2026-08-04 14:46:25.991388273 +0000
+--- -	2026-08-04 14:58:38.620588507 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/92/stderr	2026-08-04 14:58:38.620001352 +0000
 @@ -1,10 +1,2 @@
 -prog.cob:7: warning: redefinition of 'prog' [-Wredefinition]
 -prog.cob:3: note: 'prog' previously defined here [-Wredefinition]

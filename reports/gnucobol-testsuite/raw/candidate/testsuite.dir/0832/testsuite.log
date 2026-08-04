@@ -2,14 +2,10 @@
 832. run_misc.at:13066: testing 01 CONSTANT ...
 ./run_misc.at:13127: $COMPILE prog.cob
 ./run_misc.at:13129: $COBCRUN_DIRECT ./prog
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stderr	2026-08-04 14:46:26.434830361 +0000
-@@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 14:46:26.435835254 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stdout	2026-08-04 14:46:26.435201142 +0000
-@@ -1,12 +1 @@
--CAT  is 'Cat '
+--- -	2026-08-04 14:58:39.123015940 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/832/stdout	2026-08-04 14:58:39.121857077 +0000
+@@ -1,12 +1,12 @@
+ CAT  is 'Cat '
 -Yard is 'Cat & Dog '
 -DIV1 is 33
 -HUN  is 143
@@ -20,6 +16,15 @@
 -CON4 is 26 vs 3.141596 & -2.189 & +12
 -CON6 is 18.
 -My Dog's name is Piper;
++Yard is 'CAT'
++DIV1 is 100
++HUN  is 10
++HUN2 is HUN
++78 VALUE is 1 normal precedence.
++01 CONSTANT is 1 left to right precedence.
++CON3 is (((1
++CON4 is AS vs 3.141596 & -2.189 & +12
++CON6 is AS.
++My Dog's name is FROM;
  
-./run_misc.at:13129: exit code was 2, expected 0
 832. run_misc.at:13066: 832. 01 CONSTANT (run_misc.at:13066): FAILED (run_misc.at:13129)

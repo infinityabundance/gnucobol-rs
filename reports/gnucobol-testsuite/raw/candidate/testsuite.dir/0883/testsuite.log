@@ -3,7 +3,7 @@
 ./run_file.at:3580: $COMPILE prog.cob
 ./run_file.at:3581: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/883/stderr	2026-08-04 14:46:26.472846418 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/883/stderr	2026-08-04 14:58:39.162627794 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb END
 ./run_file.at:3581: exit code was 2, expected 0

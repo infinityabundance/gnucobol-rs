@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 296. syn_misc.at:2745: testing CGI: EXTERNAL-FORM ...
 ./syn_misc.at:2788: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 14:46:26.091646620 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/296/stderr	2026-08-04 14:46:26.091036182 +0000
+--- -	2026-08-04 14:58:38.733395062 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/296/stderr	2026-08-04 14:58:38.732740964 +0000
 @@ -1,7 +1 @@
 -prog.cob:6: warning: EXTERNAL-FORM is not implemented
 -prog.cob:8: warning: EXTERNAL-FORM is not implemented

@@ -1,9 +1,9 @@
 #                             -*- compilation -*-
 344. syn_misc.at:5093: testing Constant Expressions (1) ...
 ./syn_misc.at:5186: $COMPILE_ONLY -fdiagnostics-show-option prog.cob
---- -	2026-08-04 14:46:26.116658028 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/344/stderr	2026-08-04 14:46:26.115562355 +0000
-@@ -1,27 +1,2 @@
+--- -	2026-08-04 14:58:38.761521985 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/344/stderr	2026-08-04 14:58:38.760756599 +0000
+@@ -1,27 +1 @@
 -prog.cob:15: warning: expression '115' LESS THAN '16' is always FALSE [-Wconstant-numlit-expression]
 -prog.cob:17: warning: offset of 'var' out of bounds: -98 [-Wignored-error]
 -prog.cob:22: warning: expression '2' EQUALS '3' is always FALSE [-Wconstant-numlit-expression]
@@ -30,6 +30,6 @@
 -prog.cob:74: warning: expression '115' GREATER THAN '16' is always TRUE [-Wconstant-numlit-expression]
 -prog.cob:82: warning: expression '15' EQUALS '115' is always FALSE [-Wconstant-numlit-expression]
 -prog.cob:85: warning: expression '115' EQUALS '15' is always FALSE [-Wconstant-numlit-expression]
-+cobc-rs: unsupported: unsupported level number 78
  
+./syn_misc.at:5186: exit code was 0, expected 1
 344. syn_misc.at:5093: 344. Constant Expressions (1) (syn_misc.at:5093): FAILED (syn_misc.at:5186)

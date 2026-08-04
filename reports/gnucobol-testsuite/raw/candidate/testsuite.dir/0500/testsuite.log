@@ -5,7 +5,7 @@ stderr:
 cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
 ./listings.at:3684: diff expected.lst prog.lst
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/500/stderr	2026-08-04 14:46:26.203817370 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/500/stderr	2026-08-04 14:58:38.859218524 +0000
 @@ -0,0 +1 @@
 +diff: prog.lst: No such file or directory
 ./listings.at:3684: exit code was 2, expected 0

@@ -3,7 +3,7 @@
 ./run_extensions.at:1619: $COMPILE prog.cob
 ./run_extensions.at:1620: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1133/stderr	2026-08-04 14:46:26.746104501 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1133/stderr	2026-08-04 14:58:39.463852927 +0000
 @@ -0,0 +1 @@
 +cobrun: undefined data name: DEFAULT
 ./run_extensions.at:1620: exit code was 2, expected 0

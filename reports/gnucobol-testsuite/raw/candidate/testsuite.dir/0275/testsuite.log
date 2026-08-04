@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 275. syn_misc.at:1635: testing missing mnemonic-name declaration ...
 ./syn_misc.at:1649: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.080361637 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/275/stderr	2026-08-04 14:46:26.079842379 +0000
+--- -	2026-08-04 14:58:38.721676356 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/275/stderr	2026-08-04 14:58:38.720643751 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: unknown device 'mnemonic-name'; not defined in SPECIAL-NAMES
  

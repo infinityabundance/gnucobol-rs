@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 31. configuration.at:176: testing cobc configuration: recursive include ...
 ./configuration.at:203: $COMPILE_ONLY -conf=test.conf prog.cob
---- -	2026-08-04 14:46:25.962113615 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/31/stderr	2026-08-04 14:46:25.961499711 +0000
+--- -	2026-08-04 14:58:38.586687525 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/31/stderr	2026-08-04 14:58:38.585955461 +0000
 @@ -1,6 +1 @@
 -configuration error:
 -test.conf: recursive inclusion

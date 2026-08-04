@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 402. syn_move.at:64: testing MOVE ZERO TO alphabetic item ...
 ./syn_move.at:78: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.149035851 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/402/stderr	2026-08-04 14:46:26.148591052 +0000
+--- -	2026-08-04 14:58:38.793221614 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/402/stderr	2026-08-04 14:58:38.792338048 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: invalid MOVE statement
  

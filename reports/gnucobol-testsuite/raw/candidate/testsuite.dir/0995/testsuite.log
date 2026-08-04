@@ -3,7 +3,7 @@
 ./run_functions.at:410: $COMPILE prog.cob
 ./run_functions.at:411: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/995/stderr	2026-08-04 14:46:26.569890321 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/995/stderr	2026-08-04 14:58:39.272855245 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: MOVE ALL: expected a non-empty literal or figurative
 ./run_functions.at:411: exit code was 2, expected 0

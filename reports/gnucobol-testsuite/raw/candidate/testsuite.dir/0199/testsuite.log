@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 199. syn_file.at:633: testing INDEXED file invalid key items ...
 ./syn_file.at:683: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.042392338 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/199/stderr	2026-08-04 14:46:26.041858923 +0000
+--- -	2026-08-04 14:58:38.678656191 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/199/stderr	2026-08-04 14:58:38.677746947 +0000
 @@ -1,9 +1 @@
 -prog.cob:10: error: 'TEST-P2' is not defined
 -prog.cob:11: error: 'TEST-P1' is not defined

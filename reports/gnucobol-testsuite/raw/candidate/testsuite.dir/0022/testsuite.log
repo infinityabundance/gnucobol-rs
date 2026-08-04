@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 22. used_binaries.at:850: testing run job with optional arguments ...
 ./used_binaries.at:865: $COMPILE -j="job 123" prog.cob
---- -	2026-08-04 14:46:25.958482464 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/22/stdout	2026-08-04 14:46:25.957928822 +0000
+--- -	2026-08-04 14:58:38.582450570 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/22/stdout	2026-08-04 14:58:38.581928196 +0000
 @@ -1 +1 @@
 -job 123 
 +

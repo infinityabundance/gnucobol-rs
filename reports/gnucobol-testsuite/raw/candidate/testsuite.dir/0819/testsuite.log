@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 819. run_misc.at:11763: testing C-API (param based) ...
 ./run_misc.at:11928: $COMPILE -Wno-unfinished prog.cob cmod.c
---- -	2026-08-04 14:46:26.425878438 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/819/stderr	2026-08-04 14:46:26.425361104 +0000
+--- -	2026-08-04 14:58:39.108863829 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/819/stderr	2026-08-04 14:58:39.108116857 +0000
 @@ -1,4 +1 @@
 -prog.cob:31: warning: BY CONTENT assumed for alphanumeric item 'CHRX'
 -prog.cob:32: warning: BY CONTENT assumed for alphanumeric item 'CHRX'

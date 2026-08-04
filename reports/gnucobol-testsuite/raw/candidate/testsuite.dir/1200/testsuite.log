@@ -2,8 +2,8 @@
 1200. run_extensions.at:5246: testing MF FREE format (X/Open) ...
 ./run_extensions.at:5263: $COMPILE -free -o prog-free prog.cob
 ./run_extensions.at:5264: $COBCRUN_DIRECT ./prog-free
---- -	2026-08-04 14:46:26.813337086 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1200/stdout	2026-08-04 14:46:26.812688858 +0000
+--- -	2026-08-04 14:58:39.535534646 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1200/stdout	2026-08-04 14:58:39.534138965 +0000
 @@ -1 +1 @@
 -42
 +06

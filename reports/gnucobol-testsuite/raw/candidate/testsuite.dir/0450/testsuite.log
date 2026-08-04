@@ -2,8 +2,8 @@
 450. syn_functions.at:255: testing Intrinsic functions: dialect ...
 ./syn_functions.at:271: $COMPILE_ONLY prog.cob
 ./syn_functions.at:272: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 14:46:26.175044679 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/450/stderr	2026-08-04 14:46:26.174225512 +0000
+--- -	2026-08-04 14:58:38.825730883 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/450/stderr	2026-08-04 14:58:38.825067727 +0000
 @@ -1,3 +1 @@
 -prog.cob:9: error: FUNCTION 'STORED-CHAR-LENGTH' unknown
 -prog.cob:10: error: FUNCTION 'SUBSTITUTE' unknown

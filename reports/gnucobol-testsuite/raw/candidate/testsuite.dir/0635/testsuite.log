@@ -4,14 +4,14 @@
 ./run_subscripts.at:494: $COMPILE progn.cob
 ./run_subscripts.at:495: $COMPILE progn2.cob
 ./run_subscripts.at:496: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:46:26.296387722 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/635/stderr	2026-08-04 14:46:26.295656559 +0000
+--- -	2026-08-04 14:58:38.963660163 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/635/stderr	2026-08-04 14:58:38.962869079 +0000
 @@ -1,3 +1 @@
 -libcob: prog.cob:14: error: subscript of 'y' out of bounds: 6
 -note: maximum subscript for 'y': 5
  
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/635/stdout	2026-08-04 14:46:26.295656559 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/635/stdout	2026-08-04 14:58:38.962869079 +0000
 @@ -0,0 +1 @@
 + 
 \ No newline at end of file

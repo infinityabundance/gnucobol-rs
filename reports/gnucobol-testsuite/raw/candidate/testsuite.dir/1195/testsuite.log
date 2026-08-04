@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 1195. run_extensions.at:5006: testing Invalid source format ...
 ./run_extensions.at:5024: $COMPILE unknown.cob
---- -	2026-08-04 14:46:26.809739218 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1195/stderr	2026-08-04 14:46:26.809192168 +0000
+--- -	2026-08-04 14:58:39.530299440 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1195/stderr	2026-08-04 14:58:39.528852138 +0000
 @@ -1,2 +1 @@
 -unknown.cob:2: error: invalid SOURCE directive option 'UNKNOWN'
  

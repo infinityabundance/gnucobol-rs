@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 19. used_binaries.at:796: testing run job with unsuccessful compilation ...
 ./used_binaries.at:808: $COMPILE -j prog.cob
---- -	2026-08-04 14:46:25.954044128 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/19/stderr	2026-08-04 14:46:25.953221054 +0000
+--- -	2026-08-04 14:58:38.578249942 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/19/stderr	2026-08-04 14:58:38.577700077 +0000
 @@ -1,2 +1 @@
 -prog.cob:6: error: syntax error, unexpected Identifier
  

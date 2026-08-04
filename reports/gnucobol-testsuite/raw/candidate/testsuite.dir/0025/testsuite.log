@@ -2,8 +2,8 @@
 25. used_binaries.at:924: testing cobc diagnostics show caret ...
 ./used_binaries.at:944: cat progprep.cob | tr -d '#' > prog.cob
 ./used_binaries.at:946: $COBC -fdiagnostics-plain-output -Wall prog.cob
---- -	2026-08-04 14:46:25.960919218 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/25/stderr	2026-08-04 14:46:25.960323087 +0000
+--- -	2026-08-04 14:58:38.584901106 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/25/stderr	2026-08-04 14:58:38.584004525 +0000
 @@ -1,4 +1,2 @@
 -prog.cob:7: error: CRUD.CPY: No such file or directory
 -prog.cob:6: warning: numeric value is expected [-Wothers]

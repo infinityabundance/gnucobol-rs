@@ -299,7 +299,7 @@
       "number": 42,
       "status": "ORACLE_PASS",
       "test_id": "0042",
-      "title": "configuration.at:637: 42. runtime configuration: environment priority"
+      "title": "runtime configuration: environment priority"
     },
     {
       "detail": "ORACLE_OK",
@@ -327,7 +327,7 @@
       "number": 46,
       "status": "ORACLE_PASS",
       "test_id": "0046",
-      "title": "configuration.at:773: 46. runtime configuration: strings and environment"
+      "title": "runtime configuration: strings and environment"
     },
     {
       "detail": "ORACLE_OK",
@@ -3939,49 +3939,49 @@
       "number": 562,
       "status": "ORACLE_PASS",
       "test_id": "0562",
-      "title": "run_fundamental.at:2631: 562. ROUNDED AWAY-FROM-ZERO"
+      "title": "ROUNDED AWAY-FROM-ZERO"
     },
     {
       "detail": "ORACLE_OK",
       "number": 563,
       "status": "ORACLE_PASS",
       "test_id": "0563",
-      "title": "run_fundamental.at:2694: 563. ROUNDED NEAREST-AWAY-FROM-ZERO"
+      "title": "ROUNDED NEAREST-AWAY-FROM-ZERO"
     },
     {
       "detail": "ORACLE_OK",
       "number": 564,
       "status": "ORACLE_PASS",
       "test_id": "0564",
-      "title": "run_fundamental.at:2757: 564. ROUNDED NEAREST-EVEN"
+      "title": "ROUNDED NEAREST-EVEN"
     },
     {
       "detail": "ORACLE_OK",
       "number": 565,
       "status": "ORACLE_PASS",
       "test_id": "0565",
-      "title": "run_fundamental.at:2820: 565. ROUNDED NEAREST-TOWARD-ZERO"
+      "title": "ROUNDED NEAREST-TOWARD-ZERO"
     },
     {
       "detail": "ORACLE_OK",
       "number": 566,
       "status": "ORACLE_PASS",
       "test_id": "0566",
-      "title": "run_fundamental.at:2883: 566. ROUNDED TOWARD-GREATER"
+      "title": "ROUNDED TOWARD-GREATER"
     },
     {
       "detail": "ORACLE_OK",
       "number": 567,
       "status": "ORACLE_PASS",
       "test_id": "0567",
-      "title": "run_fundamental.at:2946: 567. ROUNDED TOWARD-LESSER"
+      "title": "ROUNDED TOWARD-LESSER"
     },
     {
       "detail": "ORACLE_OK",
       "number": 568,
       "status": "ORACLE_PASS",
       "test_id": "0568",
-      "title": "run_fundamental.at:3009: 568. ROUNDED TRUNCATION"
+      "title": "ROUNDED TRUNCATION"
     },
     {
       "detail": "ORACLE_OK",
@@ -5101,7 +5101,7 @@
       "number": 728,
       "status": "ORACLE_PASS",
       "test_id": "0728",
-      "title": "run_misc.at:2337: 728. PERFORM VARYING Float"
+      "title": "PERFORM VARYING Float"
     },
     {
       "detail": "ORACLE_OK",
@@ -7530,7 +7530,7 @@
       "number": 1075,
       "status": "ORACLE_PASS",
       "test_id": "1075",
-      "title": "run_functions.at:3104: 1075. FUNCTION SIGN"
+      "title": "FUNCTION SIGN"
     },
     {
       "detail": "ORACLE_OK",
@@ -7684,7 +7684,7 @@
       "number": 1097,
       "status": "ORACLE_PASS",
       "test_id": "1097",
-      "title": "run_functions.at:4109: 1097. FUNCTION TRIM zero length"
+      "title": "FUNCTION TRIM zero length"
     },
     {
       "detail": "ORACLE_OK",
@@ -8090,7 +8090,7 @@
       "number": 1155,
       "status": "ORACLE_PASS",
       "test_id": "1155",
-      "title": "run_extensions.at:2820: 1155. 78 Level (1)"
+      "title": "78 Level (1)"
     },
     {
       "detail": "ORACLE_OK",
@@ -8104,7 +8104,7 @@
       "number": 1157,
       "status": "ORACLE_PASS",
       "test_id": "1157",
-      "title": "run_extensions.at:2869: 1157. 78 Level (3)"
+      "title": "78 Level (3)"
     },
     {
       "detail": "ORACLE_OK",

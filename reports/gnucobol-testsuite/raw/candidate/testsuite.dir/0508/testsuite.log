@@ -2,11 +2,11 @@
 508. listings.at:5716: testing Report Writer ...
 ./listings.at:5827: $COMPILE_LISTING0 -t- -ftsymbols -Xref prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/508/stderr	2026-08-04 14:46:26.206476669 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/508/stderr	2026-08-04 14:58:38.860790344 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fttitle=GnuCOBOL_V.R.P: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): GnuCOBOL_V.R.P
---- -	2026-08-04 14:46:26.207401473 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/508/stdout	2026-08-04 14:46:26.206839295 +0000
+--- -	2026-08-04 14:58:38.862178791 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/508/stdout	2026-08-04 14:58:38.861538327 +0000
 @@ -1,186 +1 @@
 -GnuCOBOL V.R.P               prog.cob
 -

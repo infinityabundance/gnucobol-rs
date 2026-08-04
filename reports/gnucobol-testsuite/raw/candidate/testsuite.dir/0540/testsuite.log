@@ -3,7 +3,7 @@
 ./run_fundamental.at:1723: $COMPILE prog.cob
 ./run_fundamental.at:1724: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/540/stderr	2026-08-04 14:46:26.228196118 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/540/stderr	2026-08-04 14:58:38.882859977 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: X
 ./run_fundamental.at:1724: exit code was 2, expected 0

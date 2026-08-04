@@ -4,8 +4,8 @@
 ./run_file.at:6782: $COMPILE prog2.cob
 ./run_file.at:6783: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/918/stderr	2026-08-04 14:46:26.502762571 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/918/stderr	2026-08-04 14:58:39.196856167 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
 ./run_file.at:6783: exit code was 2, expected 0
 918. run_file.at:6696: 918. INDEXED file with LOCK AUTOMATIC (2) (run_file.at:6696): FAILED (run_file.at:6783)

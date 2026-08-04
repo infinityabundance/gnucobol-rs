@@ -1,9 +1,9 @@
 #                             -*- compilation -*-
 129. syn_definition.at:2055: testing RENAMES item ...
 ./syn_definition.at:2110: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-04 14:46:26.009812768 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/129/stderr	2026-08-04 14:46:26.009412351 +0000
-@@ -1,15 +1,2 @@
+--- -	2026-08-04 14:58:38.640607480 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/129/stderr	2026-08-04 14:58:38.639886206 +0000
+@@ -1,15 +1 @@
 -prog.cob:15: error: RENAMES of 01-, 66- and 77-level items does not conform to COBOL 2014
 -prog.cob:16: error: THRU item 'd' may not be subordinate to 'c'
 -prog.cob:17: error: THRU item 'd' may not come before 'e'
@@ -18,6 +18,6 @@
 -prog.cob:39: error: 78 VALUE does not conform to COBOL 2014
 -prog.cob:40: error: a constant may not be used here - 'my-ext-const'
 -prog.cob:43: error: a constant may not be used here - 'my-std-const'
-+cobc-rs: unsupported: unsupported level number 78
  
+./syn_definition.at:2110: exit code was 0, expected 1
 129. syn_definition.at:2055: 129. RENAMES item (syn_definition.at:2055): FAILED (syn_definition.at:2110)

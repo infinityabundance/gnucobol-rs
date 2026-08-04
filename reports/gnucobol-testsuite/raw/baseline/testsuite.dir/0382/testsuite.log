@@ -2,11 +2,11 @@
 382. syn_misc.at:7118: testing conditional directives with lvl 78 (2) ...
 ./syn_misc.at:7160: $COMPILE_ONLY prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/382/stderr	2026-08-04 14:45:47.466866070 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/382/stderr	2026-08-04 14:58:00.243003189 +0000
 @@ -0,0 +1 @@
 +prog.cob:14: error: syntax error, unexpected =
---- -	2026-08-04 14:45:47.468548407 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/382/stdout	2026-08-04 14:45:47.467232663 +0000
+--- -	2026-08-04 14:58:00.245320227 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/382/stdout	2026-08-04 14:58:00.244620923 +0000
 @@ -1,4 +1,4 @@
 -correct Y = Y2
 -correct Y < X

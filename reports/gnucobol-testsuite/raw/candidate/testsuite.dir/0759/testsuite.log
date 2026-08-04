@@ -2,7 +2,7 @@
 759. run_misc.at:4008: testing PERFORM type OSVS ...
 ./run_misc.at:4037: $COMPILE -fperform-osvs prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/759/stderr	2026-08-04 14:46:26.379835494 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/759/stderr	2026-08-04 14:58:39.056340776 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fperform-osvs: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): prog.cob
 ./run_misc.at:4037: exit code was 1, expected 0

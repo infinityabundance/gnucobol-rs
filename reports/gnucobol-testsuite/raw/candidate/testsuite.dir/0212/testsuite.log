@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 212. syn_file.at:1352: testing RECORD DELIMITER ...
 ./syn_file.at:1446: $COMPILE_ONLY -frecord-delim-with-fixed-recs=warning prog.cob
---- -	2026-08-04 14:46:26.048466384 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/212/stderr	2026-08-04 14:46:26.047897623 +0000
+--- -	2026-08-04 14:58:38.687569590 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/212/stderr	2026-08-04 14:58:38.686727010 +0000
 @@ -1,10 +1,2 @@
 -prog.cob:25: warning: RECORD DELIMITER STANDARD-1 ignored
 -prog.cob:28: warning: RECORD DELIMITER THE-END-OF-THE-WORLD not recognized; will be ignored

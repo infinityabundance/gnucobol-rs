@@ -2,7 +2,7 @@
 49. configuration.at:885: testing cobc configuration: ebcdic-table ...
 ./configuration.at:903: $COMPILE -C -febcdic-table=default prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/49/stderr	2026-08-04 14:46:25.971648765 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/49/stderr	2026-08-04 14:58:38.597024697 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -C: unsupported option (rejected-unsupported; generate C: the candidate is an interpreter, not a C emitter; reject honestly): 
 ./configuration.at:903: exit code was 1, expected 0

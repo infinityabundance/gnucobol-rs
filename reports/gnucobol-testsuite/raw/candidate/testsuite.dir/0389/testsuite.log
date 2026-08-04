@@ -2,7 +2,7 @@
 389. syn_misc.at:7755: testing CONTROL: empty default section ...
 ./syn_misc.at:7772: $COMPILE -fcontrol-division=ok prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/389/stderr	2026-08-04 14:46:26.140956346 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/389/stderr	2026-08-04 14:58:38.782526335 +0000
 @@ -0,0 +1 @@
 +cobc-rs: -fcontrol-division=ok: unsupported option (rejected-unsupported; dialect knob / feature flag not modeled by the sealed front end: rejected honestly (never silently dropped)): ok
 ./syn_misc.at:7772: exit code was 1, expected 0

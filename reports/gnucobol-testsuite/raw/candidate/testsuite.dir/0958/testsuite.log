@@ -3,7 +3,7 @@
 ./run_reportwriter.at:371: $COMPILE prog.cob
 ./run_reportwriter.at:373: DD_PRINTOUT=./report.txt $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/958/stderr	2026-08-04 14:46:26.530795503 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/958/stderr	2026-08-04 14:58:39.231773180 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: FOO,
 ./run_reportwriter.at:373: exit code was 2, expected 0

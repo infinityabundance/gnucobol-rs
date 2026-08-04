@@ -4,7 +4,7 @@
 ./run_file.at:6689: $COMPILE prog2.cob
 ./run_file.at:6690: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/917/stdout	2026-08-04 14:45:52.925761506 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/917/stdout	2026-08-04 14:58:05.901259766 +0000
 @@ -0,0 +1 @@
 +FAILED 2::r 00
 917. run_file.at:6605: 917. INDEXED file with LOCK AUTOMATIC (1) (run_file.at:6605): expected failure (run_file.at:6690)

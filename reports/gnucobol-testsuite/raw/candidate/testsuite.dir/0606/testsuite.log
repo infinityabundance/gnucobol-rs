@@ -3,8 +3,10 @@
 ./run_fundamental.at:6229: $COMPILE prog.cob
 ./run_fundamental.at:6230: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/606/stderr	2026-08-04 14:46:26.271557242 +0000
-@@ -0,0 +1 @@
-+cobrun: unsupported: unrecognized USAGE FLOAT-SHORT
-./run_fundamental.at:6230: exit code was 2, expected 0
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/606/stdout	2026-08-04 14:58:38.934859346 +0000
+@@ -0,0 +1,4 @@
++ADD wrong: 483.45599
++SUBTRACT wrong: 123.45599
++DIVIDE wrong: 61.728001
++MULTIPLY wrong: 123.456
 606. run_fundamental.at:6192: 606. integer arithmetic on floating-point var (run_fundamental.at:6192): FAILED (run_fundamental.at:6230)

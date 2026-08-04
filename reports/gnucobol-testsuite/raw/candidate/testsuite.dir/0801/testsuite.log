@@ -4,11 +4,11 @@
 ./run_misc.at:7332: $COMPILE caller.cob
 ./run_misc.at:7333: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stderr	2026-08-04 14:46:26.415037784 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stderr	2026-08-04 14:58:39.093857417 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: verb RETURNING
---- -	2026-08-04 14:46:26.416417737 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stdout	2026-08-04 14:46:26.415765251 +0000
+--- -	2026-08-04 14:58:39.095748609 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/801/stdout	2026-08-04 14:58:39.094903785 +0000
 @@ -1 +1 @@
 -+000000000
 +

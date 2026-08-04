@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 354. syn_misc.at:5743: testing SET SOURCEFORMAT syntax checks ...
 ./syn_misc.at:5760: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.122542290 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/354/stderr	2026-08-04 14:46:26.121902577 +0000
+--- -	2026-08-04 14:58:38.764956515 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/354/stderr	2026-08-04 14:58:38.764405889 +0000
 @@ -1,10 +1,2 @@
 -prog.cob:6: error: invalid SOURCEFORMAT directive option 'hi!'
 -prog.cob:7: error: invalid SOURCEFORMAT directive option ''

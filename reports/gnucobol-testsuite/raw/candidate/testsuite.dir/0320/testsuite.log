@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 320. syn_misc.at:3864: testing STRING with non-DISPLAY ...
 ./syn_misc.at:3892: $COMPILE -x -std=mf -debug -Wall prog.cob 
---- -	2026-08-04 14:46:26.103546219 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/320/stderr	2026-08-04 14:46:26.102769661 +0000
+--- -	2026-08-04 14:58:38.747371767 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/320/stderr	2026-08-04 14:58:38.746944070 +0000
 @@ -1,6 +1 @@
 -prog.cob: in paragraph 'MAIN-10':
 -prog.cob:19: error: STRING item 'I-X' must be USAGE DISPLAY or NATIONAL

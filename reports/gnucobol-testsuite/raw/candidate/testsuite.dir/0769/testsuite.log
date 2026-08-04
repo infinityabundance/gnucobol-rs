@@ -4,7 +4,7 @@
 ./run_misc.at:4420: $COMPILE caller.cob
 ./run_misc.at:4421: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/769/stderr	2026-08-04 14:46:26.388420191 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/769/stderr	2026-08-04 14:58:39.066488035 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "callee": fewer USING args than the 3 parameters
 ./run_misc.at:4421: exit code was 2, expected 0

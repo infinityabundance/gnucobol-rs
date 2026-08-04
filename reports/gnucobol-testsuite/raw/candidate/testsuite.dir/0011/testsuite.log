@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 11. used_binaries.at:464: testing invalid cobc option ...
 ./used_binaries.at:473: $COMPILE -q --thisoptiondoesntexist prog.cob
---- -	2026-08-04 14:46:25.947247094 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/11/stderr	2026-08-04 14:46:25.946780204 +0000
+--- -	2026-08-04 14:58:38.569170493 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/11/stderr	2026-08-04 14:58:38.568727949 +0000
 @@ -1,2 +1,2 @@
 -cobc: unrecognized option '--thisoptiondoesntexist'
 +cobc-rs: --thisoptiondoesntexist: unknown option (no explicit policy; failing closed — see --print-capabilities)

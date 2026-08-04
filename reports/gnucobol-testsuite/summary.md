@@ -13,17 +13,17 @@ All 1282 generated test groups reconciled (each has exactly one final classifica
 
 ## Candidate (cobc-rs + cobrun)
 
-- parse/check reject: 700
-- unsupported: 22
-- module-model unsupported: 6
-- runtime fail: 131
+- parse/check reject: 683
+- unsupported: 21
+- module-model unsupported: 5
+- runtime fail: 136
 - timeout: 0
 - not reached: 0
 - skipped: 0
 
 ## Comparison
 
-- observable match: 178
+- observable match: 192
 - stdout mismatch: 0
 - stderr mismatch: 0
 - exit-status mismatch: 0

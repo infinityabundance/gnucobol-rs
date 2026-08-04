@@ -2,7 +2,7 @@
 1114. run_extensions.at:127: testing HP COBOL octal literals ...
 ./run_extensions.at:180: $COMPILE -fhp-octal-literals=ok prog.cob
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/1114/stderr	2026-08-04 14:45:54.497744551 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/1114/stderr	2026-08-04 14:58:07.601239180 +0000
 @@ -0,0 +1,12 @@
 +prog.cob:7: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed
 +prog.cob:9: warning: handling of HP COBOL octal literals is unfinished; implementation is likely to be changed

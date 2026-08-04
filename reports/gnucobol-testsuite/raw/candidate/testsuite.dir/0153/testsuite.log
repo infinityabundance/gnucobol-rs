@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 153. syn_occurs.at:517: testing OCCURS with unmatched DEPENDING / TO phrases ...
 ./syn_occurs.at:537: $COMPILE_ONLY -std=cobol2014 prog.cob
---- -	2026-08-04 14:46:26.020468948 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/153/stderr	2026-08-04 14:46:26.019935433 +0000
+--- -	2026-08-04 14:58:38.654317608 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/153/stderr	2026-08-04 14:58:38.653465731 +0000
 @@ -1,4 +1 @@
 -prog.cob:8: error: OCCURS DEPENDING ON without TO phrase does not conform to COBOL 2014
 -prog.cob:10: error: TO phrase without DEPENDING phrase

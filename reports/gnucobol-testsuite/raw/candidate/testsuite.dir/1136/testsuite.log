@@ -7,11 +7,11 @@
 ./run_extensions.at:1819: $COMPILE -o caller caller.cob
 ./run_extensions.at:1821: $COBCRUN_DIRECT ./caller
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1136/stderr	2026-08-04 14:46:26.758119304 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1136/stderr	2026-08-04 14:58:39.475650326 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: expected program name after PROGRAM-ID
---- -	2026-08-04 14:46:26.759257246 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1136/stdout	2026-08-04 14:46:26.758363780 +0000
+--- -	2026-08-04 14:58:39.476670156 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1136/stdout	2026-08-04 14:58:39.475850028 +0000
 @@ -1 +1 @@
 -P1P2P3P4
 +

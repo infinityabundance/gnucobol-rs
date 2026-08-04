@@ -1,12 +1,12 @@
 #                             -*- compilation -*-
 341. syn_misc.at:4938: testing 78 VALUE ...
 ./syn_misc.at:4958: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.115138935 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/341/stderr	2026-08-04 14:46:26.114228297 +0000
-@@ -1,4 +1,2 @@
+--- -	2026-08-04 14:58:38.757227643 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/341/stderr	2026-08-04 14:58:38.755861518 +0000
+@@ -1,4 +1 @@
 -prog.cob:8: error: missing right parenthesis
 -prog.cob:9: error: missing left parenthesis
 -prog.cob:10: error: '/' operator misplaced
-+cobc-rs: unsupported: unsupported level number 78
  
+./syn_misc.at:4958: exit code was 0, expected 1
 341. syn_misc.at:4938: 341. 78 VALUE (syn_misc.at:4938): FAILED (syn_misc.at:4958)

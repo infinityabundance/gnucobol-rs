@@ -3,8 +3,8 @@
 ./run_fundamental.at:2329: $COMPILE prog.cob
 ./run_fundamental.at:2330: $COMPILE_MODULE prog2.cob
 ./run_fundamental.at:2331: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:46:26.236828695 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/550/stderr	2026-08-04 14:46:26.236394185 +0000
+--- -	2026-08-04 14:58:38.893364733 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/550/stderr	2026-08-04 14:58:38.891859868 +0000
 @@ -1,2 +1,2 @@
 -libcob: prog2.cob:7: error: attempt to CANCEL active program
 +libcob: prog.cob:17: error: attempt to CANCEL active program

@@ -1,9 +1,9 @@
 #                             -*- compilation -*-
 342. syn_misc.at:4985: testing level 78 NEXT / START OF ...
 ./syn_misc.at:5028: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.115669264 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/342/stderr	2026-08-04 14:46:26.115180383 +0000
-@@ -1,11 +1,2 @@
+--- -	2026-08-04 14:58:38.758655233 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/342/stderr	2026-08-04 14:58:38.757532581 +0000
+@@ -1,11 +1 @@
 -prog.cob:6: error: VALUE of 'POS0': NEXT target is invalid
 -prog.cob:6: error: no previous data-item found
 -prog.cob:10: error: VALUE of 'POS3': NEXT target is invalid
@@ -14,6 +14,6 @@
 -prog.cob:14: error: target must be in FILE SECTION or LINKAGE SECTION or have the EXTERNAL clause
 -prog.cob:25: error: VALUE of 'STRT4': START OF target 'FLD4' is invalid
 -prog.cob:25: error: target must be in FILE SECTION or LINKAGE SECTION or have the EXTERNAL clause
-+cobc-rs: unsupported: unsupported level number 78
  
+./syn_misc.at:5028: exit code was 0, expected 1
 342. syn_misc.at:4985: 342. level 78 NEXT / START OF (syn_misc.at:4985): FAILED (syn_misc.at:5028)

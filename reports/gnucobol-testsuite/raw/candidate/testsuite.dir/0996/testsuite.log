@@ -3,7 +3,7 @@
 ./run_functions.at:541: $COMPILE -Wno-unfinished prog.cob
 ./run_functions.at:542: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/996/stderr	2026-08-04 14:46:26.568706374 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/996/stderr	2026-08-04 14:58:39.273855233 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: USAGE NATIONAL: cobc 3.2 leaves NATIONAL unfinished (-Wunfinished) -- a non-claim, not a buildable front-end gap
 ./run_functions.at:542: exit code was 2, expected 0

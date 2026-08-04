@@ -3,7 +3,7 @@
 ./run_fundamental.at:6977: $COMPILE prog.cob
 ./run_fundamental.at:6978: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/618/stderr	2026-08-04 14:46:26.279443597 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/618/stderr	2026-08-04 14:58:38.945578480 +0000
 @@ -0,0 +1 @@
 +cobrun: runtime error: UnsupportedSymbol('(')
 ./run_fundamental.at:6978: exit code was 2, expected 0

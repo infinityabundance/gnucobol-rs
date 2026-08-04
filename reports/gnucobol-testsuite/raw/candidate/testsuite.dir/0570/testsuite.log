@@ -3,8 +3,8 @@
 ./run_fundamental.at:3338: $COMPILE -Wno-truncate prog.cob
 ./run_fundamental.at:3339: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/570/stderr	2026-08-04 14:46:26.247929404 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/570/stderr	2026-08-04 14:58:38.906842338 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unrecognized USAGE BINARY-INT
++cobrun: unsupported: unsupported level number REPLACE
 ./run_fundamental.at:3339: exit code was 2, expected 0
 570. run_fundamental.at:3108: 570. Numeric operations (2) DISPLAY (run_fundamental.at:3108): FAILED (run_fundamental.at:3339)

@@ -1,9 +1,9 @@
 #                             -*- compilation -*-
 249. syn_misc.at:120: testing warn literal size ...
 ./syn_misc.at:292: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.068046264 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/249/stderr	2026-08-04 14:46:26.067281668 +0000
-@@ -1,91 +1,2 @@
+--- -	2026-08-04 14:58:38.708952536 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/249/stderr	2026-08-04 14:58:38.708038112 +0000
+@@ -1,91 +1 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:23: warning: literal '1234567' is longer than 'GROUP-ITEM-X6'
 -prog.cob:23: warning: expression is always FALSE
@@ -94,7 +94,5 @@
 -prog.cob:161: warning: 'PIC-9-SIGNED-DECIMAL' may not be LESS THAN -99.99
 -prog.cob:162: warning: literal '-99.991' has more decimals than 'PIC-9-SIGNED-DECIMAL'
 -prog.cob:164: warning: 'XX' may not be GREATER THAN 99
-+cobc-rs: unsupported: unsupported level number 78
  
-./syn_misc.at:292: exit code was 1, expected 0
 249. syn_misc.at:120: 249. warn literal size (syn_misc.at:120): FAILED (syn_misc.at:292)

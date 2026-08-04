@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 316. syn_misc.at:3629: testing MF reserved word directives ...
 ./syn_misc.at:3675: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.100177908 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/316/stderr	2026-08-04 14:46:26.099459008 +0000
+--- -	2026-08-04 14:58:38.743825619 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/316/stderr	2026-08-04 14:58:38.743392883 +0000
 @@ -1,11 +1,2 @@
 -prog.cob:8: error: 'BREAD' is not a default reserved word, so cannot be aliased
 -prog.cob:10: error: 'ID' is already reserved

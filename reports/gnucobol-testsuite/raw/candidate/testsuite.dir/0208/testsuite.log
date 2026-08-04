@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 208. syn_file.at:1180: testing WRITE / REWRITE FROM clause and FILE ...
 ./syn_file.at:1226: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.046589474 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/208/stderr	2026-08-04 14:46:26.045893727 +0000
+--- -	2026-08-04 14:58:38.684761959 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/208/stderr	2026-08-04 14:58:38.684278388 +0000
 @@ -1,11 +1 @@
 -prog.cob:22: error: condition-name not allowed here: 'SOME-VAL'
 -prog.cob:23: error: WRITE subject does not refer to a record name

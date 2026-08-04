@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 166. syn_redefines.at:280: testing REDEFINES: multiple redefinition ...
 ./syn_redefines.at:297: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.026506907 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/166/stderr	2026-08-04 14:46:26.025767879 +0000
+--- -	2026-08-04 14:58:38.661256879 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/166/stderr	2026-08-04 14:58:38.660552476 +0000
 @@ -1,2 +1 @@
 -prog.cob:10: error: 'B' is not the original definition
  

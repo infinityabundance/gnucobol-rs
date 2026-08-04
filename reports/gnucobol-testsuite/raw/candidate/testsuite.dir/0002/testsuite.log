@@ -2,8 +2,8 @@
 2. used_binaries.at:51: testing compiler warnings ...
 ./used_binaries.at:69: $COBC -fsyntax-only prog.cob
 ./used_binaries.at:71: $COBC -fsyntax-only -fdiagnostics-plain-output -Wadditional prog.cob
---- -	2026-08-04 14:46:25.947382968 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/2/stderr	2026-08-04 14:46:25.946780204 +0000
+--- -	2026-08-04 14:58:38.569527368 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/2/stderr	2026-08-04 14:58:38.568059032 +0000
 @@ -1,2 +1 @@
 -prog.cob:9: warning: PERFORM FOREVER since UNTIL is always FALSE [-Wadditional]
  

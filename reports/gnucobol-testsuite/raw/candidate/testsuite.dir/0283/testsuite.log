@@ -2,8 +2,8 @@
 283. syn_misc.at:1833: testing line overflow in fixed-form / free-form ...
 ./syn_misc.at:1858: $SED -e 's/_$//' prog_tmpl.cob > prog.cob
 ./syn_misc.at:1860: $COBC -fsyntax-only -fdiagnostics-plain-output -fixed -Wextra prog.cob
---- -	2026-08-04 14:46:26.086126667 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/283/stderr	2026-08-04 14:46:26.085694121 +0000
+--- -	2026-08-04 14:58:38.728226772 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/283/stderr	2026-08-04 14:58:38.727648384 +0000
 @@ -1,4 +1 @@
 -prog.cob:7: warning: source text exceeds 512 bytes, will be truncated [-Wothers]
 -prog.cob:8: warning: source text exceeds 512 bytes, will be truncated [-Wothers]

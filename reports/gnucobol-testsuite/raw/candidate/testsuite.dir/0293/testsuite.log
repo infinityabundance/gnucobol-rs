@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 293. syn_misc.at:2603: testing ACUCOBOL GRAPHICAL controls ...
 ./syn_misc.at:2668: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 14:46:26.089675675 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/293/stderr	2026-08-04 14:46:26.088935395 +0000
+--- -	2026-08-04 14:58:38.729776840 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/293/stderr	2026-08-04 14:58:38.728861846 +0000
 @@ -1,8 +1,2 @@
 -prog.cob:16: warning: GRAPHICAL CONTROL is not implemented
 -prog.cob:21: warning: COLOR clause (SCREEN) is not implemented
@@ -11,7 +11,7 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:36: warning: GRAPHICAL WINDOW is not implemented
 -prog.cob:53: warning: GRAPHICAL WINDOW is not implemented
-+cobc-rs: unsupported: unrecognized USAGE HANDLE
++cobc-rs: unsupported: unsupported level number SCREEN
  
 ./syn_misc.at:2668: exit code was 1, expected 0
 293. syn_misc.at:2603: 293. ACUCOBOL GRAPHICAL controls (syn_misc.at:2603): FAILED (syn_misc.at:2668)

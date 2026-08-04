@@ -3,11 +3,11 @@
 ./run_extensions.at:1034: $COMPILE -std=ibm-strict -w ALLOC.cob
 ./run_extensions.at:1036: $COBCRUN_DIRECT ./ALLOC
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1128/stderr	2026-08-04 14:46:26.743528287 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1128/stderr	2026-08-04 14:58:39.459913101 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: OCCURS max UNBOUNDED is not an integer
---- -	2026-08-04 14:46:26.744711954 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1128/stdout	2026-08-04 14:46:26.744183038 +0000
+--- -	2026-08-04 14:58:39.461996393 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1128/stdout	2026-08-04 14:58:39.460852964 +0000
 @@ -1,7 +1 @@
 -First allocation, using 00322 bytes.
 -VARTAB(12) = "9999        0000"

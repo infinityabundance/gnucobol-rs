@@ -3,11 +3,11 @@
 ./run_fundamental.at:92: $COMPILE prog.cob
 ./run_fundamental.at:93: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stderr	2026-08-04 14:46:26.210790302 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stderr	2026-08-04 14:58:38.866084238 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: 1,23E0
---- -	2026-08-04 14:46:26.212334171 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stdout	2026-08-04 14:46:26.211575987 +0000
+--- -	2026-08-04 14:58:38.867186683 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/512/stdout	2026-08-04 14:58:38.866084238 +0000
 @@ -1,7 +1 @@
 -12,3
 -+12,3

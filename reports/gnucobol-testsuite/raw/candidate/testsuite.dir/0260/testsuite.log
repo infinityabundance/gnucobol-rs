@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 260. syn_misc.at:902: testing INSPECT invalid size ...
 ./syn_misc.at:931: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.073036338 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/260/stderr	2026-08-04 14:46:26.072329290 +0000
+--- -	2026-08-04 14:58:38.713498928 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/260/stderr	2026-08-04 14:58:38.712691734 +0000
 @@ -1,7 +1,2 @@
 -prog.cob:14: error: REPLACING operands differ in size
 -prog.cob:15: error: REPLACING operands differ in size

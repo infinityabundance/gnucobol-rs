@@ -1,9 +1,9 @@
 #                             -*- compilation -*-
 292. syn_misc.at:2518: testing ACUCOBOL WINDOW statements ...
 ./syn_misc.at:2572: $COMPILE_ONLY -std=acu-strict prog.cob
---- -	2026-08-04 14:46:26.088132588 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/292/stderr	2026-08-04 14:46:26.087678000 +0000
-@@ -1,12 +1,2 @@
+--- -	2026-08-04 14:58:38.729436857 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/292/stderr	2026-08-04 14:58:38.728724079 +0000
+@@ -1,12 +1 @@
 -prog.cob: in paragraph 'MAIN':
 -prog.cob:11: warning: GRAPHICAL WINDOW is not implemented
 -prog.cob:15: warning: GRAPHICAL WINDOW is not implemented
@@ -15,6 +15,6 @@
 -prog.cob:33: warning: GRAPHICAL WINDOW is not implemented
 -prog.cob:38: warning: GRAPHICAL WINDOW is not implemented
 -prog.cob:44: warning: GRAPHICAL CONTROL is not implemented
-+cobc-rs: unsupported: unrecognized USAGE HANDLE
  
+./syn_misc.at:2572: exit code was 0, expected 1
 292. syn_misc.at:2518: 292. ACUCOBOL WINDOW statements (syn_misc.at:2518): FAILED (syn_misc.at:2572)

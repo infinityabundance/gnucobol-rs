@@ -4,7 +4,7 @@
 ./used_binaries.at:315: $COBC prog.cob -o sub/prog.c
 ./used_binaries.at:316: $COBC $(_return_path "sub/prog.c") -o $(_return_path "sub/prog.$COB_OBJECT_EXT")
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/5/stderr	2026-08-04 14:46:25.948455127 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/5/stderr	2026-08-04 14:58:38.571052741 +0000
 @@ -0,0 +1 @@
 +cannot read sub/prog.c: stream did not contain valid UTF-8
 ./used_binaries.at:316: exit code was 1, expected 0

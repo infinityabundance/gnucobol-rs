@@ -3,8 +3,8 @@
 ./data_packed.at:1959: $COMPILE prog.cob
 ./data_packed.at:1960: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1275/stderr	2026-08-04 14:46:26.893159017 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1275/stderr	2026-08-04 14:58:39.624850973 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unrecognized USAGE BINARY-INT
++cobrun: unsupported: unsupported level number REPLACE
 ./data_packed.at:1960: exit code was 2, expected 0
 1275. data_packed.at:1671: 1275. COMP-3 vs. COMP-6 - BCD comparison (data_packed.at:1671): FAILED (data_packed.at:1960)

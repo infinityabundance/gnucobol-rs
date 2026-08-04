@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 111. syn_definition.at:1190: testing CALL BY VALUE alphanumeric item (extension) ...
 ./syn_definition.at:1205: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.001200699 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/111/stderr	2026-08-04 14:46:26.000775677 +0000
+--- -	2026-08-04 14:58:38.632325107 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/111/stderr	2026-08-04 14:58:38.631592111 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: warning: BY CONTENT assumed for alphanumeric item 'X'
  

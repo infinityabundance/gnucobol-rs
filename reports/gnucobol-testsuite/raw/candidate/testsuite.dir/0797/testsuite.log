@@ -4,7 +4,7 @@
 ./run_misc.at:7188: $COMPILE prog.cob
 ./run_misc.at:7189: COB_EXIT_WAIT=0 $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/797/stderr	2026-08-04 14:46:26.409076649 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/797/stderr	2026-08-04 14:58:39.092644575 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: not a numeric literal: AT
 stdout:

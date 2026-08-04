@@ -3,7 +3,7 @@
 ./run_extensions.at:5000: $COMPILE -DACTIVATE2 prog.cob
 ./run_extensions.at:5001: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1194/stdout	2026-08-04 14:46:26.808509224 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1194/stdout	2026-08-04 14:58:39.528852138 +0000
 @@ -0,0 +1 @@
 +NOTOK
 \ No newline at end of file

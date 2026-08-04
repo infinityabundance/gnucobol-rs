@@ -4,8 +4,8 @@
 ./run_file.at:5631: $COMPILE prog2.cob
 ./run_file.at:5632: $COBCRUN_DIRECT ./prog1
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/902/stderr	2026-08-04 14:46:26.490656738 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/902/stderr	2026-08-04 14:58:39.183060528 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
++cobrun: unsupported: CALL "SYSTEM": not a contained program (external CALL is a boundary)
 ./run_file.at:5632: exit code was 2, expected 0
 902. run_file.at:5567: 902. SEQUENTIAL file with LOCK MODE EXCLUSIVE (run_file.at:5567): expected failure (run_file.at:5632)

@@ -3,11 +3,11 @@
 ./run_file.at:1956: $COMPILE prog.cob
 ./run_file.at:1958: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stderr	2026-08-04 14:46:26.465283896 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stderr	2026-08-04 14:58:39.152508036 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 14:46:26.466724713 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stdout	2026-08-04 14:46:26.465965717 +0000
++cobrun: unsupported: OCCURS count MAX-SUB is not an integer
+--- -	2026-08-04 14:58:39.153642310 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/872/stdout	2026-08-04 14:58:39.152508036 +0000
 @@ -1,42 +1 @@
 -Loading sample data file.
 -Sample data file load complete.

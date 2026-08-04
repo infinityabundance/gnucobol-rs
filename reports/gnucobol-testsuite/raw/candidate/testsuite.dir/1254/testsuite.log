@@ -3,8 +3,8 @@
 ./data_display.at:402: $COMPILE prog.cob
 ./data_display.at:403: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1254/stderr	2026-08-04 14:46:26.865289590 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1254/stderr	2026-08-04 14:58:39.591851374 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unrecognized USAGE BINARY-INT
++cobrun: unsupported: unsupported level number REPLACE
 ./data_display.at:403: exit code was 2, expected 0
 1254. data_display.at:226: 1254. MOVE DISPLAY to DISPLAY (data_display.at:226): FAILED (data_display.at:403)

@@ -3,7 +3,7 @@
 ./run_ml.at:832: $COMPILE prog.cob
 ./run_ml.at:833: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1229/stderr	2026-08-04 14:46:26.840285105 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1229/stderr	2026-08-04 14:58:39.564996525 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: PIC VPP99: ScalingPDeferred
 ./run_ml.at:833: exit code was 2, expected 0

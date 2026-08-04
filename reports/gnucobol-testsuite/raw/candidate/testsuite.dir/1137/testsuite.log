@@ -4,11 +4,11 @@
 ./run_extensions.at:1867: $COMPILE_MODULE prog_b.cob
 ./run_extensions.at:1868: $COBCRUN_DIRECT ./prog_a
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1137/stderr	2026-08-04 14:46:26.754654283 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1137/stderr	2026-08-04 14:58:39.473333278 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: no PROCEDURE DIVISION
---- -	2026-08-04 14:46:26.755727023 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1137/stdout	2026-08-04 14:46:26.754886446 +0000
+--- -	2026-08-04 14:58:39.474567158 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1137/stdout	2026-08-04 14:58:39.473333278 +0000
 @@ -1,4 +1 @@
 -entered prog_b
 -exiting prog_b

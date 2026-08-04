@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 348. syn_misc.at:5399: testing Constant Expressions (5) ...
 ./syn_misc.at:5474: $COMPILE_ONLY -fdiagnostics-show-option -C -fno-remove-unreachable prog.cob
---- -	2026-08-04 14:46:26.118847380 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/348/stderr	2026-08-04 14:46:26.118202237 +0000
+--- -	2026-08-04 14:58:38.761432077 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/348/stderr	2026-08-04 14:58:38.760756599 +0000
 @@ -1,9 +1,2 @@
 -prog.cob: in paragraph 'MAIN-10':
 -prog.cob:17: warning: expression '115' GREATER THAN '16' is always TRUE [-Wconstant-numlit-expression]

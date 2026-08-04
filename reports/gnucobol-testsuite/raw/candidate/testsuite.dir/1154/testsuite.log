@@ -2,17 +2,14 @@
 1154. run_extensions.at:2774: testing Environment/Argument variable ...
 ./run_extensions.at:2809: $COMPILE prog.cob
 ./run_extensions.at:2810: TEST_ENV=OK $COBCRUN_DIRECT ./prog CHECKPAR
---- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stderr	2026-08-04 14:46:26.768156510 +0000
-@@ -0,0 +1 @@
-+cobrun: unsupported: invalid hex digit in X literal
---- -	2026-08-04 14:46:26.769544438 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stdout	2026-08-04 14:46:26.768698040 +0000
-@@ -1,5 +1 @@
--(OK  )
--(RXW )
+--- -	2026-08-04 14:58:39.487410740 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1154/stdout	2026-08-04 14:58:39.486823867 +0000
+@@ -1,5 +1,5 @@
+ (OK  )
+ (RXW )
 -(CHECKPAR)
 -(0001)
++(        )
++(0000)
  
-./run_extensions.at:2810: exit code was 2, expected 0
 1154. run_extensions.at:2774: 1154. Environment/Argument variable (run_extensions.at:2774): FAILED (run_extensions.at:2810)

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 210. syn_file.at:1265: testing RELATIVE KEY type validation ...
 ./syn_file.at:1314: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:26.047564362 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/210/stderr	2026-08-04 14:46:26.047131294 +0000
+--- -	2026-08-04 14:58:38.685412190 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/210/stderr	2026-08-04 14:58:38.684278388 +0000
 @@ -1,6 +1 @@
 -prog.cob:9: error: file FILE1: RELATIVE KEY FILE1-KEY is not numeric
 -prog.cob:12: error: file FILE2: RELATIVE KEY FILE2-KEY is not numeric

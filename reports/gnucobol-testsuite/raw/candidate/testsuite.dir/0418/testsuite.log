@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 418. syn_move.at:653: testing MOVE FIGURATIVE to NUMERIC ...
 ./syn_move.at:685: $COMPILE_ONLY -std=cobol2002 -freserved=COMP-1:FLOAT prog.cob
---- -	2026-08-04 14:46:26.156870460 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/418/stderr	2026-08-04 14:46:26.156057745 +0000
+--- -	2026-08-04 14:58:38.803411583 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/418/stderr	2026-08-04 14:58:38.801892282 +0000
 @@ -1,16 +1,2 @@
 -prog.cob: in paragraph 'MAIN-1':
 -prog.cob:11: error: MOVE of figurative constant SPACE to numeric item used

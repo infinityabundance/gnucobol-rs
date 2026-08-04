@@ -2,16 +2,16 @@
 938. run_file.at:12291: testing TURN EC-I-O ...
 ./run_file.at:12369: $COMPILE prog.cob 
 ./run_file.at:12370: $COBCRUN_DIRECT ./prog
---- -	2026-08-04 14:45:53.064573181 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/938/stderr	2026-08-04 14:45:53.063155918 +0000
+--- -	2026-08-04 14:58:06.042264839 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/938/stderr	2026-08-04 14:58:06.041258071 +0000
 @@ -1,3 +1,3 @@
 -libcob: prog.cob:61: error: end of file (status = 10) for file g ('out.txt') on READ
 -libcob: prog.cob:61: warning: implicit CLOSE of g ('out.txt')
 +libcob: prog.cob:64: error: end of file (status = 10) for file g ('out_txt' => out.txt) on READ
 +libcob: prog.cob:64: warning: implicit CLOSE of g ('out.txt')
  
---- -	2026-08-04 14:45:53.065145638 +0000
-+++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/938/stdout	2026-08-04 14:45:53.063760018 +0000
+--- -	2026-08-04 14:58:06.042866460 +0000
++++ /work/trees/a/baseline/tests/testsuite.dir/at-groups/938/stdout	2026-08-04 14:58:06.042258059 +0000
 @@ -1,10 +1,10 @@
  a
  a

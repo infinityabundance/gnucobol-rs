@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 474. syn_literals.at:1525: testing GCOS literals with EBCDIC symbols (syntax) ...
 ./syn_literals.at:1539: $COMPILE -febcdic-symbolic-characters prog.cob
---- -	2026-08-04 14:46:26.187687223 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/474/stderr	2026-08-04 14:46:26.186795210 +0000
+--- -	2026-08-04 14:58:38.841312348 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/474/stderr	2026-08-04 14:58:38.840656376 +0000
 @@ -1,6 +1,2 @@
 -prog.cob:5: error: character code 0 out of encoding range (1..256)
 -prog.cob:6: error: character code 257 out of encoding range (1..256)

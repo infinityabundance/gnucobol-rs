@@ -3,7 +3,7 @@
 ./run_misc.at:14341: $COMPILE prog.c
 ./run_misc.at:14342: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/845/stderr	2026-08-04 14:46:26.444398195 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/845/stderr	2026-08-04 14:58:39.130856968 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: no PROCEDURE DIVISION
 ./run_misc.at:14342: exit code was 2, expected 0

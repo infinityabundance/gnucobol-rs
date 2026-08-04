@@ -3,7 +3,7 @@
 ./run_file.at:6001: $COMPILE prog.cob
 ./run_file.at:6002: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/908/stderr	2026-08-04 14:46:26.492170600 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/908/stderr	2026-08-04 14:58:39.185635457 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: DELETE: `FILE` is not a declared file
 ./run_file.at:6002: exit code was 2, expected 0

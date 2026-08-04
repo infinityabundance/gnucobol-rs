@@ -5,8 +5,8 @@
 ./syn_misc.at:821: $COMPILE prog2.cob
 ./syn_misc.at:822: $COBC prog2.cob
 ./syn_misc.at:826: $COMPILE_ONLY prog3.cob
---- -	2026-08-04 14:46:26.074117104 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/257/stderr	2026-08-04 14:46:26.073615569 +0000
+--- -	2026-08-04 14:58:38.714922000 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/257/stderr	2026-08-04 14:58:38.714274834 +0000
 @@ -1,2 +1,2 @@
 -prog3.cob:1: error: PROGRAM-ID header missing
 +cobc-rs: unsupported: no PROCEDURE DIVISION

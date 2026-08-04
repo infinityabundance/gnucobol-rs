@@ -3,7 +3,7 @@
 ./run_extensions.at:3614: $COMPILE prog.cob
 ./run_extensions.at:3615: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1176/stderr	2026-08-04 14:46:26.791211830 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1176/stderr	2026-08-04 14:58:39.510432580 +0000
 @@ -0,0 +1 @@
 +cobrun: unsupported: CALL "CBL_IMP": not a contained program (external CALL is a boundary)
 ./run_extensions.at:3615: exit code was 2, expected 0

@@ -1,8 +1,8 @@
 #                             -*- compilation -*-
 79. syn_definition.at:173: testing Undefined group name ...
 ./syn_definition.at:187: $COMPILE_ONLY prog.cob
---- -	2026-08-04 14:46:25.986549550 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/79/stderr	2026-08-04 14:46:25.985996338 +0000
+--- -	2026-08-04 14:58:38.615034457 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/79/stderr	2026-08-04 14:58:38.614037800 +0000
 @@ -1,2 +1 @@
 -prog.cob:8: error: 'X IN G' is not defined
  

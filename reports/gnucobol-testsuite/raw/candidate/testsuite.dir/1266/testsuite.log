@@ -3,8 +3,8 @@
 ./data_packed.at:1181: $COMPILE prog.cob
 ./data_packed.at:1182: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1266/stderr	2026-08-04 14:46:26.878148027 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1266/stderr	2026-08-04 14:58:39.609061467 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
++cobrun: unsupported: not a numeric literal: FENCE
 ./data_packed.at:1182: exit code was 2, expected 0
 1266. data_packed.at:1063: 1266. PACKED-DECIMAL arithmetic (data_packed.at:1063): FAILED (data_packed.at:1182)

@@ -3,11 +3,11 @@
 ./run_extensions.at:445: $COMPILE -Wno-constant-expression prog.cob
 ./run_extensions.at:446: $COBCRUN_DIRECT ./prog
 --- /dev/null	2026-07-25 02:24:41.287461448 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stderr	2026-08-04 14:46:26.732647307 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stderr	2026-08-04 14:58:39.448384168 +0000
 @@ -0,0 +1 @@
-+cobrun: unsupported: unsupported level number 78
---- -	2026-08-04 14:46:26.733763769 +0000
-+++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stdout	2026-08-04 14:46:26.732647307 +0000
++cobrun: unsupported: not a numeric literal: LENGTH
+--- -	2026-08-04 14:58:39.449831875 +0000
++++ /work/trees/a/candidate/tests/testsuite.dir/at-groups/1118/stdout	2026-08-04 14:58:39.449084633 +0000
 @@ -1 +1 @@
 -165000
 +
