@@ -8,7 +8,7 @@ use gnucobol_rs_ccvs85::compare::{canonicalize, classify_unit};
 use gnucobol_rs_ccvs85::model::{
     CandidateSide, FinalClassification, Invocation, MaterializedUnit, OracleSide,
 };
-use std::path::PathBuf;
+use std::path::Path;
 
 fn unit(name: &str, kind: &str) -> MaterializedUnit {
     MaterializedUnit {
@@ -36,7 +36,7 @@ fn unit(name: &str, kind: &str) -> MaterializedUnit {
 /// (optionally) a REPORT file next to it (the layout `oracle_primary_output` reads). The oracle
 /// and candidate sides use DISTINCT dirs, mirroring the harness's `work/oracle/` vs
 /// `work/candidate/` separation.
-fn inv_with_output(work: &PathBuf, side: &str, stdout: &[u8], report: Option<&[u8]>) -> Invocation {
+fn inv_with_output(work: &Path, side: &str, stdout: &[u8], report: Option<&[u8]>) -> Invocation {
     let ev = work.join(format!("{side}/u0/run/evidence"));
     std::fs::create_dir_all(&ev).unwrap();
     std::fs::write(ev.join("stdout"), stdout).unwrap();
@@ -60,7 +60,7 @@ fn inv_with_output(work: &PathBuf, side: &str, stdout: &[u8], report: Option<&[u
     }
 }
 
-fn oracle_pass_run(work: &PathBuf, out: &[u8]) -> OracleSide {
+fn oracle_pass_run(work: &Path, out: &[u8]) -> OracleSide {
     OracleSide {
         compile: "pass".into(),
         compile_invocation: Some(Invocation::default()),
@@ -71,7 +71,7 @@ fn oracle_pass_run(work: &PathBuf, out: &[u8]) -> OracleSide {
     }
 }
 
-fn candidate_pass(work: &PathBuf, out: &[u8]) -> CandidateSide {
+fn candidate_pass(work: &Path, out: &[u8]) -> CandidateSide {
     let inv = inv_with_output(work, "candidate", out, None);
     CandidateSide {
         prepare: "accepted".into(),
@@ -128,16 +128,20 @@ fn timeout_classification_candidate_timeout() {
 fn oracle_compile_rejection_classified_separately() {
     let dir = tempfile::tempdir().unwrap();
     let work = dir.path().to_path_buf();
-    let mut o = OracleSide::default();
-    o.compile = "reject".into();
-    let mut inv = Invocation::default();
-    inv.stderr_path = Some(work.join("cobc-err").display().to_string());
+    let inv = Invocation {
+        stderr_path: Some(work.join("cobc-err").display().to_string()),
+        ..Default::default()
+    };
+    let o = OracleSide {
+        compile: "reject".into(),
+        compile_invocation: Some(inv),
+        ..Default::default()
+    };
     std::fs::write(
         work.join("cobc-err"),
         "file.cob:3: error: syntax error, unexpected ALL\n",
     )
     .unwrap();
-    o.compile_invocation = Some(inv);
     let r = classify_unit(
         &unit("IF999M", "COBOL"),
         &o,
@@ -155,18 +159,22 @@ fn oracle_compile_rejection_classified_separately() {
 fn candidate_unsupported_rejection_classified_separately() {
     let dir = tempfile::tempdir().unwrap();
     let work = dir.path().to_path_buf();
-    let mut c = CandidateSide::default();
-    c.prepare = "reject-unsupported".into();
-    c.run = "not-run".into();
-    let mut inv = Invocation::default();
-    inv.stderr_path = Some(work.join("cobrun-err").display().to_string());
+    let inv = Invocation {
+        stderr_path: Some(work.join("cobrun-err").display().to_string()),
+        ..Default::default()
+    };
+    let c = CandidateSide {
+        prepare: "reject-unsupported".into(),
+        run: "not-run".into(),
+        prepare_invocation: Some(inv),
+        prepare_invocation_rc: Some(2),
+        ..Default::default()
+    };
     std::fs::write(
         work.join("cobrun-err"),
         "cobrun: unsupported: WRITE `DUMMY-RECORD`: not an FD record\n",
     )
     .unwrap();
-    c.prepare_invocation = Some(inv);
-    c.prepare_invocation_rc = Some(2);
     let r = classify_unit(
         &unit("IC101A", "COBOL"),
         &oracle_pass_run(&work, b"r"),

@@ -7,6 +7,8 @@
 //! PORT-INDEX.1 milestone subcommands: `libcob-symbols`, `rust-symbols`, `parity`, `all`, `check`.
 //! Run from the repo root (cwd) or set `GNURUST_ROOT`.
 
+#![forbid(unsafe_code)]
+
 mod ccvs85;
 mod clang_index;
 mod corpus_atlas;
@@ -37,9 +39,18 @@ fn generate(root: &Path) -> bool {
     let idx_dir = root.join(paths::PORT_INDEX_DIR);
     let _ = std::fs::create_dir_all(&idx_dir);
 
-    write_json(&idx_dir.join("libcob-symbols.json"), &serde_json::to_value(&c_syms).unwrap());
-    write_json(&idx_dir.join("rust-symbols.json"), &serde_json::to_value(&rust.symbols).unwrap());
-    write_json(&idx_dir.join("parity-detailed.json"), &parity::detailed_json(&rows));
+    write_json(
+        &idx_dir.join("libcob-symbols.json"),
+        &serde_json::to_value(&c_syms).unwrap(),
+    );
+    write_json(
+        &idx_dir.join("rust-symbols.json"),
+        &serde_json::to_value(&rust.symbols).unwrap(),
+    );
+    write_json(
+        &idx_dir.join("parity-detailed.json"),
+        &parity::detailed_json(&rows),
+    );
     write_json(&root.join(LEGACY_JSON_REL), &parity::legacy_json(&rows));
     let _ = std::fs::write(root.join(MD_REL), parity::render_md(&rows));
     let _ = std::fs::write(root.join(RECEIPT_REL), parity::render_receipt(&rows));
@@ -70,7 +81,9 @@ fn check(root: &Path) -> i32 {
     let cur_receipt = std::fs::read_to_string(root.join(RECEIPT_REL)).unwrap_or_default();
     let mut bad = false;
     if cur_md != fresh_md {
-        eprintln!("PORT-INDEX.STALE: {MD_REL} != regeneration (run `gnucobol-rs-port-index parity`)");
+        eprintln!(
+            "PORT-INDEX.STALE: {MD_REL} != regeneration (run `gnucobol-rs-port-index parity`)"
+        );
         bad = true;
     }
     if cur_json != fresh_json {
@@ -98,7 +111,10 @@ fn main() {
             match libcob_symbols::index_all(&root) {
                 Some(s) => {
                     let dir = root.join(paths::PORT_INDEX_DIR);
-                    write_json(&dir.join("libcob-symbols.json"), &serde_json::to_value(&s).unwrap());
+                    write_json(
+                        &dir.join("libcob-symbols.json"),
+                        &serde_json::to_value(&s).unwrap(),
+                    );
                     println!("libcob-symbols: {} C functions indexed", s.len());
                 }
                 None => println!("libcob-symbols: admitted source absent — skipped"),
@@ -108,8 +124,14 @@ fn main() {
         "rust-symbols" => {
             let r = rust_symbols::index(&root);
             let dir = root.join(paths::PORT_INDEX_DIR);
-            write_json(&dir.join("rust-symbols.json"), &serde_json::to_value(&r.symbols).unwrap());
-            println!("rust-symbols: {} Rust fn definitions indexed", r.symbols.len());
+            write_json(
+                &dir.join("rust-symbols.json"),
+                &serde_json::to_value(&r.symbols).unwrap(),
+            );
+            println!(
+                "rust-symbols: {} Rust fn definitions indexed",
+                r.symbols.len()
+            );
             0
         }
         "parity" | "all" | "generate" => {
@@ -122,7 +144,10 @@ fn main() {
         "ccvs85" => {
             let sub = args.get(2).map(String::as_str).unwrap_or("");
             let flag = |name: &str| -> Option<std::path::PathBuf> {
-                args.iter().position(|a| a == name).and_then(|i| args.get(i + 1)).map(std::path::PathBuf::from)
+                args.iter()
+                    .position(|a| a == name)
+                    .and_then(|i| args.get(i + 1))
+                    .map(std::path::PathBuf::from)
             };
             match sub {
                 "ingest" => ccvs85::ingest(&root, flag("--input"), flag("--out")),

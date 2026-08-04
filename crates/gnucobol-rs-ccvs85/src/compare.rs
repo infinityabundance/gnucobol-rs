@@ -30,6 +30,7 @@ pub const CANONICAL_SCHEMA: &str = "gnurust-ccvs85-canonical-v1";
 ///   3. drop trailing blank lines;
 ///   4. normalize any run of blank lines to a single blank line (paragraph collapses);
 ///   5. keep everything else byte-exact (no case folding, no digit normalization, no sort).
+///
 /// Applied identically to oracle and candidate outputs. Versioned by [`CANONICAL_SCHEMA`].
 pub fn canonicalize(bytes: &[u8]) -> Vec<u8> {
     let mut out = Vec::new();
@@ -83,7 +84,10 @@ pub fn oracle_primary_output(side: &OracleSide, work_root: &Path) -> Vec<u8> {
 pub fn candidate_primary_output(side: &CandidateSide) -> Vec<u8> {
     if let Some(inv) = &side.run_invocation {
         if let Some(p) = &inv.stdout_path {
-            let run_dir = Path::new(p).parent().and_then(|e| e.parent()).unwrap_or(Path::new("."));
+            let run_dir = Path::new(p)
+                .parent()
+                .and_then(|e| e.parent())
+                .unwrap_or(Path::new("."));
             for name in ["REPORT", "XXXXX055"] {
                 let report = run_dir.join(name);
                 if report.exists() {
@@ -501,8 +505,10 @@ pub fn classify_all(
 
 /// Compute the summary counts + groupings. All 512 units must be accounted for exactly once.
 pub fn summarize(results: &[UnitResult], units: &[MaterializedUnit]) -> Summary {
-    let mut s = Summary::default();
-    s.units_total = units.len();
+    let mut s = Summary {
+        units_total: units.len(),
+        ..Default::default()
+    };
     for u in units {
         *s.units_by_kind.entry(u.kind.clone()).or_insert(0) += 1;
         if u.is_executable_candidate {
@@ -632,7 +638,7 @@ pub fn write_summary_json(path: &Path, summary: &Summary, meta: &serde_json::Val
 /// Render `summary.md` (the human-readable differential report with the mandated wording).
 pub fn render_summary_md(summary: &Summary, meta: &serde_json::Value) -> String {
     let mut s = String::new();
-    s.push_str(&format!(
+    s.push_str(
         "# GNURUST.CCVS85.4 — NIST CCVS85 differential execution report\n\n\
          **GENERATED** by `cargo run -p gnucobol-rs-ccvs85 -- classify` — do not edit by hand.\n\n\
          `GNURUST.CCVS85.4` is a differential execution report over the admitted NIST CCVS85 Version 4.0\n\
@@ -640,7 +646,7 @@ pub fn render_summary_md(summary: &Summary, meta: &serde_json::Value) -> String 
          units the current `gnucobol-rs` front-end accepts and executes, and where their observable\n\
          results agree or differ. It is **not** a NIST certification, does **not** establish complete\n\
          COBOL-85 conformance, and does **not** turn unsupported or unexecuted units into passes.\n\n"
-    ));
+    );
     s.push_str("## Totals\n\n| measure | count |\n|---|---|\n");
     s.push_str(&format!(
         "| units indexed (must reconcile) | **{}** |\n",

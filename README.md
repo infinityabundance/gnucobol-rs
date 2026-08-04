@@ -204,6 +204,9 @@ The **full 160-court ledger** is in [`docs/sealed-courts.md`](docs/sealed-courts
 | [`gnucobol-rs`](crates/gnucobol-rs) | `libcob/*.c` (move, numeric, common, intrinsic, fileio, …) | **LGPL-3.0-or-later** | the native-Rust `libcob` runtime (1:1, oracle-sealed) **+** the `cobrun` interpreter front-end | **forbid** |
 | [`gnucobol-rs-ffi`](crates/gnucobol-rs-ffi) | libcob `common.h` C ABI | **LGPL-3.0-or-later** | a `cob_field` C-ABI shim — link it where you would link `libcob` | allow (confined to the raw-pointer shim) |
 | [`cobc-oracle-rs`](crates/cobc-oracle-rs) | drives `cobc` (no GPL code copied) | **GPL-3.0-or-later** | spawns `cobc`, captures deterministic canonical-JSON receipts | forbid |
+| [`gnucobol-rs-ccvs85`](crates/gnucobol-rs-ccvs85) | none — court harness | **LGPL-3.0-or-later** | NIST CCVS85 differential court: materialize, oracle baseline, rust candidate, classification, receipts, gates | **forbid** |
+| [`gnucobol-rs-port-index`](crates/gnucobol-rs-port-index) | none — port-governance index | **LGPL-3.0-or-later** | typed C↔Rust symbol parity + the parity/doxygen/clang/evidence map generators | **forbid** |
+| [`gnucobol-rs-testsuite`](crates/gnucobol-rs-testsuite) | none — court harness | **LGPL-3.0-or-later** | GnuCOBOL 3.2 native Autotest-suite differential court: inventory, census, classification, determinism, gates | **forbid** |
 
 The runtime additionally depends on `gnucobol-rs-bdb-format` (a pure-safe-Rust Berkeley DB B-tree, for INDEXED organization).
 

@@ -14,6 +14,8 @@
 //! reports back into the repository and runs `determinism`, `receipts-finalize` and `gate check`
 //! on the host.
 
+#![forbid(unsafe_code)]
+
 use gnucobol_rs_testsuite::{
     autotest, census, classify, compat, determinism, gate, math, model, receipts,
 };

@@ -318,9 +318,9 @@ fn oracle_unit(
         // EXEC85 needs the 459-module callable library (a different execution mode). Compile is
         // recorded; the run is marked harness-blocked so it is never counted as a pass/fail.
         side.run = "harness-blocked".to_string();
-        warnings.lock().unwrap().push(format!(
-            "EXEC85: compile passed; run deferred (driver requires module library)"
-        ));
+        warnings.lock().unwrap().push(
+            "EXEC85: compile passed; run deferred (driver requires module library)".to_string(),
+        );
         return side;
     }
 

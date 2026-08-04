@@ -1,5 +1,7 @@
 //! `gnucobol-rs-testsuite` — the GNURUST.GNUCOBOL-TESTSUITE.{1,2,3} court harness.
 
+#![forbid(unsafe_code)]
+
 pub mod autotest;
 pub mod census;
 pub mod classify;

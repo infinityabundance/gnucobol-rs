@@ -245,7 +245,7 @@ pub fn mask_code_area(src: &str) -> String {
         // code area = 0-indexed [7, 72)
         let mut seg: Vec<char> = Vec::new();
         for (idx, c) in chars.iter().enumerate() {
-            if idx < 7 || idx >= 72 {
+            if !(7..72).contains(&idx) {
                 seg.push(' ');
             } else {
                 seg.push(*c);
@@ -647,7 +647,7 @@ pub fn site_adapt(raw: &[u8]) -> Vec<u8> {
         let mut line_out = String::new();
         let mut in_string: Option<char> = None;
         while i < chars.len() {
-            let in_code_area = i >= 7 && i < 72;
+            let in_code_area = (7..72).contains(&i);
             if in_code_area {
                 // string-literal guard: never substitute inside a literal
                 if let Some(q) = in_string {

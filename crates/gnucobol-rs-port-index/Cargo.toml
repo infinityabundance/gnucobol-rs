@@ -2,9 +2,12 @@
 name = "gnucobol-rs-port-index"
 version = "0.1.0"
 edition = "2021"
-publish = false
-description = "Port-governance index for the gnucobol-rs libcob port: typed C-vs-Rust symbol parity (replaces grep name-matching), #if 0 / preprocessor classification, and the generated LIBCOB-PARITY map. Proves the porting process itself; not published."
+rust-version = "1.74"
+authors = ["infinityabundance"]
+description = "Port-governance index for the gnucobol-rs libcob port: typed C-vs-Rust symbol parity (replaces grep name-matching), #if 0 / preprocessor classification, and the generated LIBCOB-PARITY / DOXYGEN-PARITY / CLANG-AST-PARITY / FUNCTION-EVIDENCE maps. Proves the porting process itself."
 license = "LGPL-3.0-or-later"
+repository.workspace = true
+homepage.workspace = true
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

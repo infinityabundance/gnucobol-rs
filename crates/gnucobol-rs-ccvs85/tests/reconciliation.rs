@@ -249,10 +249,12 @@ fn receipts_regenerate_and_are_fresh() {
         "no_delegation": {"candidate_phase_isolated": true},
         "determinism": {"identical": true}
     });
-    let mut summary = Summary::default();
-    summary.units_total = 512;
-    summary.oracle_compile_pass = 370;
-    summary.candidate_unsupported = 374;
+    let summary = Summary {
+        units_total: 512,
+        oracle_compile_pass: 370,
+        candidate_unsupported: 374,
+        ..Default::default()
+    };
     let receipts_dir = dir.path().join("receipts");
     let written = gnucobol_rs_ccvs85::receipts::write_receipts(&receipts_dir, &meta, &summary);
     assert_eq!(written.len(), 3);

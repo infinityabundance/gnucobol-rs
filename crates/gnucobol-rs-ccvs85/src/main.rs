@@ -14,6 +14,8 @@
 //! The `classify` step also writes the three receipts and the casefile inputs; the Docker host
 //! orchestrator copies the committed reports back into the repository.
 
+#![forbid(unsafe_code)]
+
 use gnucobol_rs_ccvs85::{candidate, compare, corpus, gate, model, oracle, receipts};
 
 use std::path::{Path, PathBuf};

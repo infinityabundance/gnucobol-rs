@@ -6,6 +6,8 @@ rust-version = "1.74"
 authors = ["infinityabundance"]
 description = "GNURUST.GNUCOBOL-TESTSUITE.{1,2,3} — GnuCOBOL 3.2 native Autotest-suite differential court harness (inventory, invocation census, baseline/candidate classification, determinism, receipts, gates)"
 license = "LGPL-3.0-or-later"
+repository.workspace = true
+homepage.workspace = true
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

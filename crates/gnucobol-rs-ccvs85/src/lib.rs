@@ -3,6 +3,8 @@
 //! The binary (`main.rs`) wires the CLI commands; this library exposes the phases so they can be
 //! unit/integration tested without a full benchmark run.
 
+#![forbid(unsafe_code)]
+
 pub mod candidate;
 pub mod compare;
 pub mod corpus;
