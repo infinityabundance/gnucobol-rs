@@ -18071,10 +18071,10 @@
    "action": "Improve handling of broken expressions (recovery, no hangs, correct reject)",
    "behavior": "Fixing bugs:#933 #938 #966 - handling of broken expressions",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "Rust has no null-deref class; the candidate rejects the same inputs fail-closed; court proves prompt termination",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "80673d0f40929789760c7e020e11bacb94f1172c",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -18368,10 +18368,10 @@
    "action": "Adopt mf dialect missing-statement configuration",
    "behavior": "mf dialect: adjusted missing-statement configuration (bugs:#965)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "mf-strict.conf custody-synced (missing-statement: ok); the knob itself is a compiler strictness not modeled by the fail-fast parser",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "80673d0f40929789760c7e020e11bacb94f1172c",
+   "integrated": true,
    "lane_adoption": false
   },
   {

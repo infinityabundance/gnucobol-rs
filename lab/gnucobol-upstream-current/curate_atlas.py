@@ -464,7 +464,9 @@ E("ed789c8a9bc2c66e3c314f82b47cc07c05b12f49", "PLATFORM_BEHAVIOR_INTEGRATED",
 
 E("a0937bf4920e68730746b89706a6edb1967184a9", "FRONTEND_REIMPLEMENTED",
   "Improve handling of broken expressions (recovery, no hangs, correct reject)",
-  "Fixing bugs:#933 #938 #966 - handling of broken expressions", "")
+  "Fixing bugs:#933 #938 #966 - handling of broken expressions",
+  "Rust has no null-deref class; the candidate rejects the same inputs fail-closed; court proves prompt termination",
+  evidence="80673d0f40929789760c7e020e11bacb94f1172c")
 
 E("1b8af634e882db9e0a80bce46d97f24ca0eb58fb", "NOT_APPLICABLE_WITH_PROOF",
   "None: BDB ABI comma fix (DB_VERSION_MAJOR >= 12)",
@@ -489,7 +491,9 @@ E("1ea4059c6547e62752e26debb3589ad7ddef8c55", "NOT_APPLICABLE_WITH_PROOF",
 
 E("4695ee78629d659ab9c1ca6cacd04952c3469786", "CONFIGURATION_INTEGRATED",
   "Adopt mf dialect missing-statement configuration",
-  "mf dialect: adjusted missing-statement configuration (bugs:#965)", "")
+  "mf dialect: adjusted missing-statement configuration (bugs:#965)",
+  "mf-strict.conf custody-synced (missing-statement: ok); the knob itself is a compiler strictness not modeled by the fail-fast parser",
+  evidence="80673d0f40929789760c7e020e11bacb94f1172c")
 
 E("6fd7c72cd16e6b1ed50fab065a4443cf9d67697b", "NOT_APPLICABLE_WITH_PROOF",
   "None: build fix (patches:#64)",
