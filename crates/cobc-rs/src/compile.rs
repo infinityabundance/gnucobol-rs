@@ -46,6 +46,16 @@ pub struct ExpandedSource {
 /// Build the expanded source for the first source of `inv`.
 pub fn expand_source(inv: &ParsedInvocation, source_path: &str) -> Result<ExpandedSource, String> {
     let raw = read_source(source_path)?;
+    // Upstream e36a124b2: `--copy <file>` pre-copies copybook text at the beginning of the source
+    // (before parsing), so it can carry REPLACEments or COBOL prototypes. The candidate prepends
+    // each file's text before preprocessing, exactly like the upstream "COPY file at beginning".
+    let mut raw = raw;
+    for cf in &inv.copy_files {
+        let text = std::fs::read_to_string(cf)
+            .map_err(|e| format!("cobc-rs: cannot read --copy file {cf}: {e}"))?;
+        raw = format!("{text}\n{raw}");
+    }
+    let _ = raw;
     let fixed = match inv.format.as_deref() {
         Some("fixed") => true,
         Some("free") => false,
@@ -209,6 +219,7 @@ pub fn write_artifacts(
         "conf": inv.conf.clone().unwrap_or_default(),
         "conf_overrides": inv.conf_overrides,
         "source_format": if expanded.fixed { "fixed" } else { "free" },
+        "diag_absolute_path": inv.diag_absolute_path,
         "main_program": null,
         "module_paths": [],
         "runtime_environment": {},
@@ -362,12 +373,14 @@ pub fn run_launcher(manifest_path: &Path, argv0_base: &str) -> i32 {
         .as_str()
         .unwrap_or("prog.cob")
         .to_string();
+    let diag_absolute_path = manifest["diag_absolute_path"].as_bool().unwrap_or(false);
     let dump_dir = Some(".".to_string());
     let opts = run::RunOpts {
         source: text,
         dialect,
         fixed,
         source_file,
+        diag_absolute_path,
         dump_dir,
     };
     run::run_interpreted(&opts)

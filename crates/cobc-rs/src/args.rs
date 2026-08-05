@@ -21,6 +21,10 @@ pub struct ParsedInvocation {
     pub includes: Vec<String>,
     /// `-ext=` copybook extension(s).
     pub extensions: Vec<String>,
+    /// `--copy <file>` copybooks prepended to each source before preprocessing (upstream e36a124b2).
+    pub copy_files: Vec<String>,
+    /// `-fdiagnostics-absolute-path`: render the source-file prefix of diagnostics as absolute.
+    pub diag_absolute_path: bool,
     /// `-D` defines (name -> value).
     pub defines: BTreeMap<String, String>,
     /// `-fdefaultbyte=` overlays applied on top of the dialect (config-line form).
@@ -227,6 +231,13 @@ fn apply_translated(
                 p.extensions.push(v.trim_start_matches('.').to_string());
             }
         }
+        "--copy" | "-copy" => {
+            // Upstream e36a124b2: --copy <file> pre-copies the copybook text before each source.
+            if let Some(v) = value {
+                p.copy_files.push(v.to_string());
+            }
+        }
+        "-fdiagnostics-absolute-path" => p.diag_absolute_path = true,
         "-D" => {
             if let Some(v) = value {
                 let (name, val) = match v.split_once('=') {

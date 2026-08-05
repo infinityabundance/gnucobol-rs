@@ -222,6 +222,105 @@ fn defines_are_applied_as_preprocessor_symbols() {
 }
 
 #[test]
+fn copy_option_prepends_copybook_before_preprocessing() {
+    // Upstream e36a124b2: `--copy <file>` pre-copies the file's text at the beginning of the
+    // source, before parsing/preprocessing (the use case is REPLACEments and prototypes). The
+    // candidate prepends the text before the conditional-compilation pass: a >>DEFINE carried by
+    // the copy file must be visible to a >>IF in the program.
+    let d = tempfile::tempdir().unwrap();
+    write(d.path(), "pre.cpy", "        >>DEFINE FROMCOPY AS 1\n");
+    write(
+        d.path(),
+        "prog.cob",
+        r#"       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       PROCEDURE DIVISION.
+       >>IF FROMCOPY DEFINED
+           DISPLAY "copy-present".
+       >>ELSE
+           DISPLAY "no-copy".
+       >>END-IF
+           STOP RUN.
+"#,
+    );
+    let o = run_in(
+        d.path(),
+        &["-x", "-o", "p1", "--copy", "pre.cpy", "prog.cob"],
+    );
+    assert_eq!(
+        o.status.code(),
+        Some(0),
+        "build with --copy: {}",
+        err_str(&o)
+    );
+    let run = Command::new(d.path().join("p1"))
+        .current_dir(d.path())
+        .output()
+        .unwrap();
+    assert_eq!(out_str(&run).trim(), "copy-present");
+    // control: without --copy the >>IF is false.
+    let o2 = run_in(d.path(), &["-x", "-o", "p2", "prog.cob"]);
+    assert_eq!(o2.status.code(), Some(0));
+    let run2 = Command::new(d.path().join("p2"))
+        .current_dir(d.path())
+        .output()
+        .unwrap();
+    assert_eq!(out_str(&run2).trim(), "no-copy");
+    // --include is a native-generated-C option: rejected honestly.
+    let o3 = run_in(d.path(), &["-x", "--include", "x.h", "prog.cob"]);
+    assert_ne!(
+        o3.status.code(),
+        Some(0),
+        "--include must be rejected (no generated C)"
+    );
+}
+
+#[test]
+fn diagnostics_absolute_path_renders_absolute_source_prefix() {
+    // Upstream 140a030d5: -fdiagnostics-absolute-path prints the full path within diagnostics.
+    // The candidate's fatal diagnostics carry the source-file prefix; with the flag the prefix is
+    // the absolute path (getcwd join), without it the literal source name.
+    let d = tempfile::tempdir().unwrap();
+    let fatal = r#"       IDENTIFICATION DIVISION.
+       PROGRAM-ID. prog.
+       PROCEDURE DIVISION.
+           CANCEL "prog".
+           STOP RUN.
+"#;
+    write(d.path(), "prog.cob", fatal);
+    let o = run_in(d.path(), &["-x", "-o", "r1", "prog.cob"]);
+    assert_eq!(o.status.code(), Some(0));
+    let run = Command::new(d.path().join("r1"))
+        .current_dir(d.path())
+        .output()
+        .unwrap();
+    let err = err_str(&run);
+    assert!(
+        err.contains("prog.cob:"),
+        "fatal diagnostic carries the source prefix: {err}"
+    );
+    assert!(
+        !err.contains(&d.path().to_string_lossy().into_owned()),
+        "relative prefix by default: {err}"
+    );
+
+    let o2 = run_in(
+        d.path(),
+        &["-x", "-fdiagnostics-absolute-path", "-o", "r2", "prog.cob"],
+    );
+    assert_eq!(o2.status.code(), Some(0));
+    let run2 = Command::new(d.path().join("r2"))
+        .current_dir(d.path())
+        .output()
+        .unwrap();
+    let err2 = err_str(&run2);
+    assert!(
+        err2.contains(&d.path().to_string_lossy().into_owned()),
+        "absolute path in diagnostics: {err2}"
+    );
+}
+
+#[test]
 fn copybook_resolution_via_include_path() {
     let d = tempfile::tempdir().unwrap();
     let inc = d.path().join("cpy");

@@ -90,6 +90,8 @@ pub enum OptCategory {
     Diagnostic,
     OptimizationDebug,
     TestHarness,
+    /// Native-code artifacts the candidate does not generate (C source, objects, assembly).
+    NativeArtifact,
 }
 
 impl OptCategory {
@@ -103,6 +105,7 @@ impl OptCategory {
             OptCategory::OutputSelection => "output-selection",
             OptCategory::CompileLinkMode => "compile-link-mode",
             OptCategory::RuntimeModule => "runtime-module",
+            OptCategory::NativeArtifact => "native-artifact",
             OptCategory::Diagnostic => "diagnostic",
             OptCategory::OptimizationDebug => "optimization-debug",
             OptCategory::TestHarness => "test-harness",
@@ -220,6 +223,12 @@ pub fn registry() -> Vec<Entry> {
           "copybook search path (repeatable; also consulted for `COPY name IN \"dir\"`)"),
         e("-ext", &["-ext"], OptionPolicy::Translated, OptCategory::IncludeCopybook, true,
           "copybook extension to try (-ext=cpy: look for name.cpy too)"),
+        e("--copy", &["--copy", "-copy"], OptionPolicy::Translated, OptCategory::IncludeCopybook, true,
+          "pre-copy a copybook before each source (upstream e36a124b2): its text is prepended to the source before preprocessing, so it can carry REPLACEments or prototypes"),
+        e("--include", &["--include", "-include"], OptionPolicy::RejectedUnsupported, OptCategory::NativeArtifact, true,
+          "include a C header in the generated C file: the candidate has no generated C (native-artifact boundary; reject honestly)"),
+        e("-fdiagnostics-absolute-path", &["-fdiagnostics-absolute-path"], OptionPolicy::Translated, OptCategory::Diagnostic, false,
+          "display full paths within diagnostics (upstream 140a030d5): the candidate's source-file diagnostic prefix is made absolute"),
         e("-ffilename-mapping", &["-ffilename-mapping", "-fno-filename-mapping"], OptionPolicy::AcceptedProvenNoOp, OptCategory::IncludeCopybook, false,
           "case-insensitive file mapping: the candidate resolves copybooks case-sensitively on the filesystem; recorded as no-op for the suite"),
         e("-ffold-copy", &["-ffold-copy"], OptionPolicy::AcceptedProvenNoOp, OptCategory::IncludeCopybook, true,

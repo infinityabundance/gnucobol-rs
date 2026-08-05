@@ -76,6 +76,8 @@ pub struct RunOpts {
     pub fixed: bool,
     /// The original source file path (for FUNCTION MODULE-SOURCE + sibling CALL resolution).
     pub source_file: String,
+    /// `-fdiagnostics-absolute-path`: render the source-file diagnostic prefix as absolute.
+    pub diag_absolute_path: bool,
     /// Directory for the per-run in-memory file-store dump (None = no dump).
     pub dump_dir: Option<String>,
 }
@@ -95,7 +97,19 @@ pub fn run_interpreted(opts: &RunOpts) -> i32 {
     if let Some(dir) = std::path::Path::new(&opts.source_file).parent() {
         src = resolve_separate_calls(src, dir, opts.fixed);
     }
-    gnucobol_rs::frontend::set_source_file(&opts.source_file);
+    // Upstream 140a030d5: -fdiagnostics-absolute-path renders the source-file prefix of
+    // diagnostics as an absolute path (cobc's print_error_prefix getcwd join).
+    let mut diag_file = opts.source_file.clone();
+    if opts.diag_absolute_path {
+        if let Ok(abs) = std::fs::canonicalize(&opts.source_file) {
+            diag_file = abs.to_string_lossy().into_owned();
+        } else if std::path::Path::new(&opts.source_file).is_relative() {
+            if let Ok(cwd) = std::env::current_dir() {
+                diag_file = cwd.join(&opts.source_file).to_string_lossy().into_owned();
+            }
+        }
+    }
+    gnucobol_rs::frontend::set_source_file(&diag_file);
     if let Some(dir) = &opts.dump_dir {
         gnucobol_rs::frontend::set_file_dump_dir(std::path::PathBuf::from(dir));
     }
