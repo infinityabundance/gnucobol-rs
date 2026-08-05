@@ -1032,7 +1032,9 @@ struct ReportRun {
 struct FileState {
     records: Vec<Vec<u8>>,
     read_pos: usize,
-    /// 0 = closed, 1 = INPUT, 2 = OUTPUT, 3 = EXTEND, 4 = I-O.
+    /// 0 = closed, 1 = INPUT, 2 = OUTPUT, 3 = EXTEND, 4 = I-O, 5 = locked (CLOSE WITH LOCK).
+    /// Since upstream 62b39805c, a LOCKED file behaves like CLOSED for CLOSE (status 42) and
+    /// READ/START (status 30) and rejects a re-OPEN with status 38.
     mode: u8,
     /// `WRITE ... AFTER ADVANCING` leaves the line pending: GnuCOBOL emits a final `\n` at CLOSE
     /// (libcob `cob_file_close` / `flag_needs_nl`), so the in-memory store mirrors the disk bytes.
@@ -9816,6 +9818,18 @@ fn exec_open(
             .get(&name)
             .ok_or_else(|| RunError::Unsupported(format!("OPEN: `{name}` is not a declared file")))?
             .clone();
+        // Upstream state guards (62b39805c / cob_open): a LOCKED file rejects any re-OPEN with
+        // status 38 (CLOSED WITH LOCK); an already-open file reports 41 (ALREADY OPEN).
+        if let Some(st) = ctx.files.borrow().get(&fkey(ctx, &name)) {
+            if st.mode == 5 {
+                set_file_status(fields, &def, "38");
+                continue;
+            }
+            if st.mode != 0 {
+                set_file_status(fields, &def, "41");
+                continue;
+            }
+        }
         // A VARIABLE-length FD record area is LOW-VALUES (NUL) until written -- cobc does not space-init it,
         // and READ ... INTO later moves the PHYSICAL buffer (its tail past the record included). Reset the
         // record's storage leaf to NUL at OPEN so a freshly-read short record carries cobc's NUL tail.
@@ -9888,9 +9902,16 @@ fn exec_close(
     fields: &mut HashMap<String, Field>,
     ctx: &Ctx,
 ) -> Result<(), RunError> {
+    let with_lock = stmt
+        .iter()
+        .any(|t| matches!(t, Tok::Word(w) if w == "LOCK"));
     for name in stmt.iter().filter_map(|t| {
         if let Tok::Word(w) = t {
-            Some(w.clone())
+            if w == "WITH" || w == "LOCK" {
+                None
+            } else {
+                Some(w.clone())
+            }
         } else {
             None
         }
@@ -9898,16 +9919,28 @@ fn exec_close(
         let def = ctx.file_defs.get(&name).ok_or_else(|| {
             RunError::Unsupported(format!("CLOSE: `{name}` is not a declared file"))
         })?;
-        if let Some(st) = ctx.files.borrow_mut().get_mut(&fkey(ctx, &name)) {
-            // GnuCOBOL emits a final `\n` at close when the last write was AFTER ADVANCING
-            // (`flag_needs_nl`) -- mirror it so the store holds the oracle's disk bytes.
-            if st.pending_nl && matches!(def.org, FileOrg::Sequential | FileOrg::LineSequential) {
-                st.records.push(vec![b'\n']);
-                st.pending_nl = false;
+        match ctx.files.borrow_mut().get_mut(&fkey(ctx, &name)) {
+            Some(st) if st.mode == 0 || st.mode == 5 => {
+                // Upstream 62b39805c (cob_close): CLOSED and LOCKED files report 42 (NOT OPEN);
+                // the backend is never called on a locked file (the old abend path).
+                set_file_status(fields, def, "42");
             }
-            st.mode = 0;
+            Some(st) => {
+                // GnuCOBOL emits a final `\n` at close when the last write was AFTER ADVANCING
+                // (`flag_needs_nl`) -- mirror it so the store holds the oracle's disk bytes.
+                if st.pending_nl && matches!(def.org, FileOrg::Sequential | FileOrg::LineSequential)
+                {
+                    st.records.push(vec![b'\n']);
+                    st.pending_nl = false;
+                }
+                st.mode = if with_lock { 5 } else { 0 };
+                set_file_status(fields, def, "00");
+            }
+            None => {
+                // Never opened in this run: closing a closed file is "42" per upstream.
+                set_file_status(fields, def, "42");
+            }
         }
-        set_file_status(fields, def, "00");
     }
     Ok(())
 }
@@ -10131,7 +10164,14 @@ fn exec_unlock(
         let def = ctx.file_defs.get(&name).ok_or_else(|| {
             RunError::Unsupported(format!("UNLOCK: `{name}` is not a declared file"))
         })?;
-        set_file_status(fields, def, "00");
+        // Upstream 62b39805c (cob_unlock): UNLOCK on a CLOSED or LOCKED file reports 42.
+        let is_not_open = ctx
+            .files
+            .borrow()
+            .get(&fkey(ctx, &name))
+            .map(|st| st.mode == 0 || st.mode == 5)
+            .unwrap_or(true);
+        set_file_status(fields, def, if is_not_open { "42" } else { "00" });
     }
     Ok(())
 }
@@ -11770,6 +11810,14 @@ fn exec_read(
         .get(&file)
         .ok_or_else(|| RunError::Unsupported(format!("READ: `{file}` is not a declared file")))?
         .clone();
+    // Upstream 62b39805c: READ on a CLOSED or LOCKED file reports status 30 (permanent error) and
+    // never touches the backend; no AT END handler runs (30 is not an end-of-file condition).
+    if let Some(st) = ctx.files.borrow().get(&fkey(ctx, &file)) {
+        if st.mode == 0 || st.mode == 5 {
+            set_file_status(fields, &def, "30");
+            return Ok(false);
+        }
+    }
     let reclen = read_field(fields, def.primary_record())?
         .map(|f| f.bytes.len())
         .unwrap_or(0);
@@ -14605,6 +14653,41 @@ mod tests {
                         DISPLAY \"G=[\" G \"]\".\n\
                         STOP RUN.\n");
         assert_eq!(out, b"C=03\nG=[AB\"\"\"]\n");
+    }
+
+    #[test]
+    fn close_with_lock_state_machine_matches_current_upstream() {
+        // Upstream 62b39805c (bugs:#914): CLOSE WITH LOCK puts the file in the LOCKED state;
+        // re-OPEN reports 38 (CLOSED WITH LOCK), READ reports 30 (permanent error), a second CLOSE
+        // reports 42 (NOT OPEN). Differential evidence: the STABLE 3.2 oracle reports 00/38/47/00
+        // (pre-fix: the backend close on a locked file ran, the READ slipped through as 47); the
+        // candidate follows current-upstream semantics 00/38/30/42.
+        let out = run("       IDENTIFICATION DIVISION.\n\
+                    PROGRAM-ID. T.\n\
+                    ENVIRONMENT DIVISION.\n\
+                    INPUT-OUTPUT SECTION.\n\
+                    FILE-CONTROL.\n\
+                        SELECT F ASSIGN TO \"tf2\" ORGANIZATION IS SEQUENTIAL\n\
+                               FILE STATUS IS WS.\n\
+                    DATA DIVISION.\n\
+                    FILE SECTION.\n\
+                    FD F. 01 R PIC X(4).\n\
+                    WORKING-STORAGE SECTION.\n\
+                    01 WS PIC XX.\n\
+                    PROCEDURE DIVISION.\n\
+                        OPEN OUTPUT F.\n\
+                        MOVE 'abcd' TO R.\n\
+                        WRITE R.\n\
+                        CLOSE F WITH LOCK.\n\
+                        DISPLAY 'S1=' WS.\n\
+                        OPEN INPUT F.\n\
+                        DISPLAY 'S2=' WS.\n\
+                        READ F.\n\
+                        DISPLAY 'S3=' WS.\n\
+                        CLOSE F.\n\
+                        DISPLAY 'S4=' WS.\n\
+                        STOP RUN.\n");
+        assert_eq!(out, b"S1=00\nS2=38\nS3=30\nS4=42\n");
     }
 
     #[test]
