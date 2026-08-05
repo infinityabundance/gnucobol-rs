@@ -49,8 +49,12 @@ pub struct LineSeqConfig {
 
 impl LineSeqConfig {
     /// libcob's out-of-the-box settings: `COB_LS_VALIDATE=1`, `COB_LS_SPLIT=1`, `COB_LS_FIXED=0`, `COB_LS_NULLS=0`.
-    pub const DEFAULT: LineSeqConfig =
-        LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: true, ls_split: true };
+    pub const DEFAULT: LineSeqConfig = LineSeqConfig {
+        ls_fixed: false,
+        ls_nulls: false,
+        ls_validate: true,
+        ls_split: true,
+    };
 }
 
 /// The outcome of one `WRITE` to a LINE SEQUENTIAL file: the FILE STATUS and the bytes appended.
@@ -121,7 +125,10 @@ pub fn lineseq_write(record: &[u8], cfg: &LineSeqConfig) -> LineWrite {
         if cfg.ls_validate {
             // validate && !flag_line_adv && !sort_collating (both declared off)
             if data.iter().any(|&b| is_bad_char(b)) {
-                return LineWrite { status: "71", bytes: Vec::new() };
+                return LineWrite {
+                    status: "71",
+                    bytes: Vec::new(),
+                };
             }
             out.extend_from_slice(data);
         } else if cfg.ls_nulls {
@@ -137,7 +144,10 @@ pub fn lineseq_write(record: &[u8], cfg: &LineSeqConfig) -> LineWrite {
     }
     // opt == 0, not LINAGE, not cob_ls_uses_cr -> add exactly one LF.
     out.push(b'\n');
-    LineWrite { status: "00", bytes: out }
+    LineWrite {
+        status: "00",
+        bytes: out,
+    }
 }
 
 /// `IS_BAD_CHAR` as the compiled 3.2 GA `libcob` behaves **on READ**: a byte below the space (`0x20`)
@@ -180,14 +190,24 @@ pub struct LineRead {
 /// **Non-claims:** the multi-file (concatenated-input) chain, CODE-SET conversion (`sort_collating`),
 /// `ls_validate > 1` printable-check, the `ls_nulls` error-recovery path after status `71`, and the
 /// actual `FILE *` reads (declared OS boundary).
-pub fn lineseq_read(data: &[u8], pos: &mut usize, record_max: usize, cfg: &LineSeqConfig) -> LineRead {
+pub fn lineseq_read(
+    data: &[u8],
+    pos: &mut usize,
+    record_max: usize,
+    cfg: &LineSeqConfig,
+) -> LineRead {
     let mut rec = vec![b' '; record_max];
     let mut i = 0usize;
     let mut sts = "00";
     loop {
         if *pos >= data.len() {
             if i == 0 {
-                return LineRead { at_end: true, record: Vec::new(), size: 0, status: "10" };
+                return LineRead {
+                    at_end: true,
+                    record: Vec::new(),
+                    size: 0,
+                    status: "10",
+                };
             }
             break;
         }
@@ -211,12 +231,22 @@ pub fn lineseq_read(data: &[u8], pos: &mut usize, record_max: usize, cfg: &LineS
             if n == 0 {
                 if *pos >= data.len() || data[*pos] >= b' ' {
                     // EOF or a non-control byte after 0x00 -> bad NULL encoding (declared non-claim).
-                    return LineRead { at_end: false, record: rec, size: i, status: "71" };
+                    return LineRead {
+                        at_end: false,
+                        record: rec,
+                        size: i,
+                        status: "71",
+                    };
                 }
                 n = data[*pos];
                 *pos += 1;
             } else if n < b' ' {
-                return LineRead { at_end: false, record: rec, size: i, status: "71" };
+                return LineRead {
+                    at_end: false,
+                    record: rec,
+                    size: i,
+                    status: "71",
+                };
             }
         }
         if i < record_max {
@@ -225,9 +255,21 @@ pub fn lineseq_read(data: &[u8], pos: &mut usize, record_max: usize, cfg: &LineS
             if i == record_max && cfg.ls_split {
                 // record full: peek for the line terminator, else put the byte(s) back and report 06.
                 let start = *pos;
-                let mut peek = if *pos < data.len() { let c = data[*pos]; *pos += 1; Some(c) } else { None };
+                let mut peek = if *pos < data.len() {
+                    let c = data[*pos];
+                    *pos += 1;
+                    Some(c)
+                } else {
+                    None
+                };
                 if peek == Some(b'\r') {
-                    peek = if *pos < data.len() { let c = data[*pos]; *pos += 1; Some(c) } else { None };
+                    peek = if *pos < data.len() {
+                        let c = data[*pos];
+                        *pos += 1;
+                        Some(c)
+                    } else {
+                        None
+                    };
                 }
                 if peek != Some(b'\n') {
                     *pos = start; // un-read the peeked byte(s)
@@ -240,7 +282,12 @@ pub fn lineseq_read(data: &[u8], pos: &mut usize, record_max: usize, cfg: &LineS
             sts = "04";
         }
     }
-    LineRead { at_end: false, record: rec, size: i, status: sts }
+    LineRead {
+        at_end: false,
+        record: rec,
+        size: i,
+        status: sts,
+    }
 }
 
 // COB_WRITE_* option bits (common.h): the WRITE ADVANCING encoding.
@@ -353,7 +400,12 @@ pub fn cob_copy_check(from: &[u8], to_size: usize) -> Vec<u8> {
 /// `(lin_lines, lin_foot, lin_top, lin_bot)` or `Err(())` (the C status `1`, which zeroes the counter).
 /// `lin_lines` must be `>= 1`; a present FOOTING must be `1..=lin_lines`; a present TOP/BOTTOM must be
 /// `>= 0`; an absent FOOTING/TOP/BOTTOM resolves to `0`.
-pub fn file_linage_check(lin_lines: i32, lin_foot: Option<i32>, lin_top: Option<i32>, lin_bot: Option<i32>) -> Result<(i32, i32, i32, i32), ()> {
+pub fn file_linage_check(
+    lin_lines: i32,
+    lin_foot: Option<i32>,
+    lin_top: Option<i32>,
+    lin_bot: Option<i32>,
+) -> Result<(i32, i32, i32, i32), ()> {
     if lin_lines < 1 {
         return Err(());
     }
@@ -390,13 +442,23 @@ pub fn is_suppressed_key_value(key_field: &[u8], suppress_char: u8, tf_suppress:
 /// `slotlen` is the original line's length (without its newline); the new `record[..size]` (NUL-encoded
 /// when `ls_nulls`) must fit, else status `"44"` (record overflow). It is written over the slot and the
 /// remainder is space-padded so the surrounding bytes are undisturbed.
-pub fn lineseq_rewrite(file: &[u8], record_off: usize, slotlen: usize, record: &[u8], size: usize, cfg: &LineSeqConfig) -> RelWrite {
+pub fn lineseq_rewrite(
+    file: &[u8],
+    record_off: usize,
+    slotlen: usize,
+    record: &[u8],
+    size: usize,
+    cfg: &LineSeqConfig,
+) -> RelWrite {
     let data = &record[..size.min(record.len())];
     // build the bytes to write (validate -> 71; nulls -> 0x00 prefix; else raw)
     let mut body = Vec::new();
     if cfg.ls_validate {
         if data.iter().any(|&b| is_bad_char(b)) {
-            return RelWrite { file: file.to_vec(), status: "71" };
+            return RelWrite {
+                file: file.to_vec(),
+                status: "71",
+            };
         }
         body.extend_from_slice(data);
     } else if cfg.ls_nulls {
@@ -410,17 +472,27 @@ pub fn lineseq_rewrite(file: &[u8], record_off: usize, slotlen: usize, record: &
         body.extend_from_slice(data);
     }
     if body.len() > slotlen {
-        return RelWrite { file: file.to_vec(), status: "44" };
+        return RelWrite {
+            file: file.to_vec(),
+            status: "44",
+        };
     }
     let mut out = file.to_vec();
     if record_off + slotlen <= out.len() {
         out[record_off..record_off + body.len()].copy_from_slice(&body);
         // pad the rest of the slot with spaces
-        for b in out.iter_mut().skip(record_off + body.len()).take(slotlen - body.len()) {
+        for b in out
+            .iter_mut()
+            .skip(record_off + body.len())
+            .take(slotlen - body.len())
+        {
             *b = b' ';
         }
     }
-    RelWrite { file: out, status: "00" }
+    RelWrite {
+        file: out,
+        status: "00",
+    }
 }
 
 /// Replay `OPEN INPUT` + repeated `READ NEXT ... AT END` over `data` for the declared `record_max` and
@@ -520,7 +592,11 @@ pub fn sequential_write(record: &[u8], size: usize, variable: bool, varseq_type:
 /// Port of `fileio.c:set_sequential_variable_length` — read the `cob_vsq_len`-byte record-length prefix
 /// at `data[*pos..]` (advancing the cursor) and return the record size, or a FILE STATUS on error
 /// (`"10"` EOF when no prefix bytes remain, `"39"` conflicting attribute on a malformed prefix).
-pub fn set_sequential_variable_length(data: &[u8], pos: &mut usize, varseq_type: u8) -> Result<usize, &'static str> {
+pub fn set_sequential_variable_length(
+    data: &[u8],
+    pos: &mut usize,
+    varseq_type: u8,
+) -> Result<usize, &'static str> {
     let vlen = cob_vsq_len(varseq_type);
     if *pos >= data.len() {
         return Err("10"); // bytesread == 0 -> end of file
@@ -579,7 +655,13 @@ pub fn sequential_read(
     let variable = record_min != record_max;
     if variable {
         match set_sequential_variable_length(data, pos, varseq_type) {
-            Err(s) => return SeqReadResult { at_end: s == "10", size: 0, status: s },
+            Err(s) => {
+                return SeqReadResult {
+                    at_end: s == "10",
+                    size: 0,
+                    status: s,
+                }
+            }
             Ok(sz) => {
                 want = sz;
                 if sz < record_min || sz > record_max {
@@ -593,14 +675,26 @@ pub fn sequential_read(
     let bytesread = avail.min(want);
     if bytesread == 0 {
         if !variable {
-            return SeqReadResult { at_end: true, size: 0, status: "10" };
+            return SeqReadResult {
+                at_end: true,
+                size: 0,
+                status: "10",
+            };
         }
-        return SeqReadResult { at_end: false, size: 0, status: "04" };
+        return SeqReadResult {
+            at_end: false,
+            size: 0,
+            status: "04",
+        };
     }
     record_buf[..bytesread].copy_from_slice(&data[*pos..*pos + bytesread]);
     *pos += bytesread;
     let size = if bytesread != want { bytesread } else { want };
-    SeqReadResult { at_end: false, size, status: ret }
+    SeqReadResult {
+        at_end: false,
+        size,
+        status: ret,
+    }
 }
 
 /// Port of `fileio.c:sequential_rewrite`: overwrite the just-read fixed record in place with
@@ -631,7 +725,11 @@ pub fn has_directory_separator(src: &[u8]) -> bool {
 /// Port of `fileio.c:looks_absolute` — does the name (after an optional surrounding quote) begin with a
 /// path separator? (The Win32 drive-letter case is a declared platform boundary.)
 pub fn looks_absolute(src: &[u8]) -> bool {
-    let s = if src.first() == Some(&0x22) || src.first() == Some(&0x27) { &src[1..] } else { src };
+    let s = if src.first() == Some(&0x22) || src.first() == Some(&0x27) {
+        &src[1..]
+    } else {
+        src
+    };
     s.first() == Some(&b'/') || s.first() == Some(&b'\\')
 }
 
@@ -657,7 +755,9 @@ pub fn cob_chk_file_env(src: &[u8]) -> Option<Vec<u8>> {
     if src.first() == Some(&b'.') || matches!(src.first(), Some(b'-') | Some(b'0'..=b'9')) {
         return None;
     }
-    let mangle = std::env::var("COB_ENV_MANGLE").map(|v| v == "1" || v.eq_ignore_ascii_case("true") || v.eq_ignore_ascii_case("yes")).unwrap_or(false);
+    let mangle = std::env::var("COB_ENV_MANGLE")
+        .map(|v| v == "1" || v.eq_ignore_ascii_case("true") || v.eq_ignore_ascii_case("yes"))
+        .unwrap_or(false);
     let name: String = src
         .iter()
         .map(|&c| {
@@ -781,9 +881,9 @@ pub fn classify_io_error(e: &std::io::Error) -> FileErrno {
         ErrorKind::NotFound => FileErrno::NotExist,
         ErrorKind::PermissionDenied => FileErrno::PermissionOrIsDir,
         _ => match e.raw_os_error() {
-            Some(2) => FileErrno::NotExist,                       // ENOENT
+            Some(2) => FileErrno::NotExist, // ENOENT
             Some(13) | Some(21) | Some(30) => FileErrno::PermissionOrIsDir, // EACCES / EISDIR / EROFS
-            Some(28) | Some(122) => FileErrno::NoSpaceOrQuota,    // ENOSPC / EDQUOT
+            Some(28) | Some(122) => FileErrno::NoSpaceOrQuota,              // ENOSPC / EDQUOT
             _ => FileErrno::Other,
         },
     }
@@ -1001,7 +1101,13 @@ pub fn cob_sys_create_file(name: &[u8], access: u8) -> (i32, i32) {
 /// Port of `fileio.c:cob_sys_read_file` (`CBL_READ_FILE`) — read `len` bytes at `offset` from `handle`
 /// into `buf`. With `flags & 0x80` it instead returns the file size in `(size, _)`. Status: `0` success,
 /// `10` end of file (0-byte read), `-1` on a bad handle/offset.
-pub fn cob_sys_read_file(handle: i32, offset: u64, len: usize, flags: u8, buf: &mut [u8]) -> (i32, u64) {
+pub fn cob_sys_read_file(
+    handle: i32,
+    offset: u64,
+    len: usize,
+    flags: u8,
+    buf: &mut [u8],
+) -> (i32, u64) {
     use std::io::{Read, Seek, SeekFrom};
     let mut reg = CBL_FILES.lock().unwrap();
     let Some(Some(f)) = reg.get_mut(handle as usize) else {
@@ -1144,8 +1250,18 @@ pub struct SortKey {
 }
 
 /// Port of `fileio.c:cob_file_sort_init_key` — append an alphanumeric key (in declaration order).
-pub fn cob_file_sort_init_key(keys: &mut Vec<SortKey>, offset: usize, size: usize, ascending: bool) {
-    keys.push(SortKey { offset, size, ascending, attr: None });
+pub fn cob_file_sort_init_key(
+    keys: &mut Vec<SortKey>,
+    offset: usize,
+    size: usize,
+    ascending: bool,
+) {
+    keys.push(SortKey {
+        offset,
+        size,
+        ascending,
+        attr: None,
+    });
 }
 
 /// Append a *typed* sort key. A numeric `attr` (`field_type & COB_TYPE_NUMERIC`) makes the key compare
@@ -1159,14 +1275,26 @@ pub fn cob_file_sort_init_key_typed(
     ascending: bool,
     attr: crate::attr::FieldAttr,
 ) {
-    keys.push(SortKey { offset, size, ascending, attr: Some(attr) });
+    keys.push(SortKey {
+        offset,
+        size,
+        ascending,
+        attr: Some(attr),
+    });
 }
 
 /// Port of the alphanumeric path of `fileio.c:cob_file_sort_compare` — order two records by the sort
 /// keys (each compared via [`sort_cmps`], negated for DESCENDING). A full key tie breaks by the records'
 /// insertion order (`u1`/`u2`, the `unique` field), giving a **stable** sort. (Numeric keys, which the C
 /// routes through `cob_numeric_cmp`, are a declared composition with `GNURUST.NUMCMP.1`.)
-pub fn cob_file_sort_compare(rec1: &[u8], u1: usize, rec2: &[u8], u2: usize, keys: &[SortKey], col: Option<&[u8; 256]>) -> Ordering {
+pub fn cob_file_sort_compare(
+    rec1: &[u8],
+    u1: usize,
+    rec2: &[u8],
+    u2: usize,
+    keys: &[SortKey],
+    col: Option<&[u8; 256]>,
+) -> Ordering {
     for k in keys {
         let a = &rec1[k.offset.min(rec1.len())..(k.offset + k.size).min(rec1.len())];
         let b = &rec2[k.offset.min(rec2.len())..(k.offset + k.size).min(rec2.len())];
@@ -1271,13 +1399,29 @@ impl CobSort {
 
     /// Port of `fileio.c:cob_file_sort_init_key` — append an alphanumeric sort key (in declaration order).
     pub fn cob_file_sort_init_key(&mut self, offset: usize, size: usize, ascending: bool) {
-        self.keys.push(SortKey { offset, size, ascending, attr: None });
+        self.keys.push(SortKey {
+            offset,
+            size,
+            ascending,
+            attr: None,
+        });
     }
 
     /// As [`Self::cob_file_sort_init_key`] but for a typed (e.g. numeric) key — see
     /// [`cob_file_sort_init_key_typed`].
-    pub fn cob_file_sort_init_key_typed(&mut self, offset: usize, size: usize, ascending: bool, attr: crate::attr::FieldAttr) {
-        self.keys.push(SortKey { offset, size, ascending, attr: Some(attr) });
+    pub fn cob_file_sort_init_key_typed(
+        &mut self,
+        offset: usize,
+        size: usize,
+        ascending: bool,
+        attr: crate::attr::FieldAttr,
+    ) {
+        self.keys.push(SortKey {
+            offset,
+            size,
+            ascending,
+            attr: Some(attr),
+        });
     }
 
     /// Port of `fileio.c:cob_file_sort_options` — record whether this is a MERGE (`parms[0] == 'M'`).
@@ -1293,7 +1437,12 @@ impl CobSort {
             self.arena[q].next = None;
             return q;
         }
-        self.arena.push(CobItem { item: vec![0u8; self.size], unique: 0, end_of_block: false, next: None });
+        self.arena.push(CobItem {
+            item: vec![0u8; self.size],
+            unique: 0,
+            end_of_block: false,
+            next: None,
+        });
         self.arena.len() - 1
     }
 
@@ -1302,7 +1451,14 @@ impl CobSort {
     fn compare(&self, k1: usize, k2: usize) -> i32 {
         let a = &self.arena[k1];
         let b = &self.arena[k2];
-        match cob_file_sort_compare(&a.item, a.unique, &b.item, b.unique, &self.keys, self.col.as_ref()) {
+        match cob_file_sort_compare(
+            &a.item,
+            a.unique,
+            &b.item,
+            b.unique,
+            &self.keys,
+            self.col.as_ref(),
+        ) {
             Ordering::Less => -1,
             Ordering::Greater => 1,
             Ordering::Equal => 0,
@@ -1319,7 +1475,10 @@ impl CobSort {
             self.queue[destination] = QueueStruct::default();
             self.queue[destination + 1] = QueueStruct::default();
             loop {
-                let mut end_of_block = [self.queue[source].count == 0, self.queue[source + 1].count == 0];
+                let mut end_of_block = [
+                    self.queue[source].count == 0,
+                    self.queue[source + 1].count == 0,
+                ];
                 if end_of_block[0] && end_of_block[1] {
                     break;
                 }
@@ -1329,8 +1488,15 @@ impl CobSort {
                     } else if end_of_block[1] {
                         0
                     } else {
-                        let res = self.compare(self.queue[source].first.unwrap(), self.queue[source + 1].first.unwrap());
-                        if res < 0 { 0 } else { 1 }
+                        let res = self.compare(
+                            self.queue[source].first.unwrap(),
+                            self.queue[source + 1].first.unwrap(),
+                        );
+                        if res < 0 {
+                            0
+                        } else {
+                            1
+                        }
                     };
                     let q = self.queue[source + move_].first.unwrap();
                     if self.arena[q].end_of_block {
@@ -1374,7 +1540,11 @@ impl CobSort {
         for b in &mut self.arena[q].item[n..] {
             *b = 0;
         }
-        let z = if self.queue[0].count <= self.queue[1].count { 0 } else { 1 };
+        let z = if self.queue[0].count <= self.queue[1].count {
+            0
+        } else {
+            1
+        };
         self.arena[q].next = self.queue[z].first;
         self.queue[z].first = Some(q);
         self.queue[z].count += 1;
@@ -1579,7 +1749,12 @@ impl IndexedStore {
 
     /// Port of `fileio.c:indexed_open` — open an empty (or existing) keyed store in `mode`; sets the
     /// `flag_nonexistent` used by `OPEN INPUT`/`I-O` of a missing file. The records map is the file image.
-    pub fn indexed_open(key_offset: usize, key_len: usize, access_mode: AccessMode, mode: OpenMode) -> IndexedStore {
+    pub fn indexed_open(
+        key_offset: usize,
+        key_len: usize,
+        access_mode: AccessMode,
+        mode: OpenMode,
+    ) -> IndexedStore {
         IndexedStore {
             key_offset,
             key_len,
@@ -1599,7 +1774,11 @@ impl IndexedStore {
     /// Returns the alternate key's 0-based index (the `i` in the on-disk `<base>.<i+1>` file). Must be
     /// called for every alternate key before records are written/loaded.
     pub fn indexed_add_alt_key(&mut self, offset: usize, len: usize, duplicates: bool) -> usize {
-        self.alt_keys.push(AltKeyDef { offset, len, duplicates });
+        self.alt_keys.push(AltKeyDef {
+            offset,
+            len,
+            duplicates,
+        });
         self.alt_index.push(std::collections::BTreeMap::new());
         self.alt_keys.len() - 1
     }
@@ -1615,7 +1794,10 @@ impl IndexedStore {
     fn alt_index_insert(&mut self, record: &[u8], primary: &[u8]) {
         for i in 0..self.alt_keys.len() {
             let v = self.alt_value_of(record, i);
-            self.alt_index[i].entry(v).or_default().push(primary.to_vec());
+            self.alt_index[i]
+                .entry(v)
+                .or_default()
+                .push(primary.to_vec());
         }
     }
 
@@ -1626,7 +1808,10 @@ impl IndexedStore {
     /// typed error if the bytes are not a B-tree DB file (e.g. an empty/never-written file). The
     /// BDB key is the COBOL record key; the BDB data is the full record image, matching this store's
     /// `recs` (record-key -> record).
-    pub fn indexed_load_bdb(&mut self, bytes: &[u8]) -> Result<usize, gnucobol_rs_bdb_format::BdbError> {
+    pub fn indexed_load_bdb(
+        &mut self,
+        bytes: &[u8],
+    ) -> Result<usize, gnucobol_rs_bdb_format::BdbError> {
         let db = gnucobol_rs_bdb_format::BdbFile::parse(bytes)?;
         let pairs = db.records()?;
         let n = pairs.len();
@@ -1645,8 +1830,11 @@ impl IndexedStore {
     /// ascending key order. A record set too large for a single leaf page returns a typed error (the
     /// multi-leaf writer is a follow-on), so the caller never writes a corrupt file.
     pub fn indexed_to_bdb(&self) -> Result<Vec<u8>, gnucobol_rs_bdb_format::BdbError> {
-        let pairs: Vec<(Vec<u8>, Vec<u8>)> =
-            self.recs.iter().map(|(k, v)| (k.clone(), v.clone())).collect();
+        let pairs: Vec<(Vec<u8>, Vec<u8>)> = self
+            .recs
+            .iter()
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect();
         gnucobol_rs_bdb_format::write_btree(&pairs, 4096)
     }
 
@@ -1655,7 +1843,10 @@ impl IndexedStore {
     /// key -- by the 4-byte **native-LE dupno** (`slot + 1`; `COB_DUPSWAP` is the identity on a
     /// little-endian host, the `|| 1` preserved historical bug). A unique alternate key stores the primary
     /// key alone (no dupno trailer). A genuine `cobc` can OPEN + READ the result.
-    pub fn indexed_alt_to_bdb(&self, i: usize) -> Result<Vec<u8>, gnucobol_rs_bdb_format::BdbError> {
+    pub fn indexed_alt_to_bdb(
+        &self,
+        i: usize,
+    ) -> Result<Vec<u8>, gnucobol_rs_bdb_format::BdbError> {
         let dups = self.alt_keys[i].duplicates;
         let mut pairs: Vec<(Vec<u8>, Vec<u8>)> = Vec::new();
         for (value, primaries) in &self.alt_index[i] {
@@ -1714,7 +1905,10 @@ impl IndexedStore {
     fn after(&self, k: &[u8]) -> CursorPos {
         match self
             .recs
-            .range((std::ops::Bound::Excluded(k.to_vec()), std::ops::Bound::Unbounded))
+            .range((
+                std::ops::Bound::Excluded(k.to_vec()),
+                std::ops::Bound::Unbounded,
+            ))
             .next()
         {
             Some((kk, _)) => CursorPos::NextKey(kk.clone()),
@@ -1778,10 +1972,20 @@ impl IndexedStore {
     /// result -- see `cli-runtime`/`indexed-altkeys` notes), so this never surfaces `02`.
     pub fn indexed_read_alt(&mut self, i: usize, value: &[u8]) -> (&'static str, Option<Vec<u8>>) {
         let v = value.to_vec();
-        match self.alt_index.get(i).and_then(|m| m.get(&v)).and_then(|ks| ks.first()).cloned() {
+        match self
+            .alt_index
+            .get(i)
+            .and_then(|m| m.get(&v))
+            .and_then(|ks| ks.first())
+            .cloned()
+        {
             Some(primary) => {
                 let rec = self.recs.get(&primary).cloned();
-                self.alt_cursor = Some(AltCursor { key_idx: i, value: v, dup: 0 });
+                self.alt_cursor = Some(AltCursor {
+                    key_idx: i,
+                    value: v,
+                    dup: 0,
+                });
                 match rec {
                     Some(r) => ("00", Some(r)),
                     None => ("23", None), // alt index points at a missing primary (corrupt) -> not found
@@ -1828,7 +2032,10 @@ impl IndexedStore {
             CursorPos::AtEnd => self.recs.keys().next_back().cloned(),
             CursorPos::NextKey(c) => self
                 .recs
-                .range::<Vec<u8>, _>((std::ops::Bound::Unbounded, std::ops::Bound::Excluded(c.clone())))
+                .range::<Vec<u8>, _>((
+                    std::ops::Bound::Unbounded,
+                    std::ops::Bound::Excluded(c.clone()),
+                ))
                 .next_back()
                 .map(|(k, _)| k.clone()),
         };
@@ -1845,7 +2052,10 @@ impl IndexedStore {
     /// Step the alternate-key cursor forward (`next = true`) or backward, two-hopping to the primary record.
     /// `10` at the corresponding end.
     fn alt_step(&mut self, next: bool) -> (&'static str, Option<Vec<u8>>) {
-        let cur = self.alt_cursor.clone().expect("alt_step requires an active alt cursor");
+        let cur = self
+            .alt_cursor
+            .clone()
+            .expect("alt_step requires an active alt cursor");
         let map = &self.alt_index[cur.key_idx];
         // Candidate next position: another dupno under the same value, else the adjacent value's edge slot.
         let pos = if next {
@@ -1853,22 +2063,32 @@ impl IndexedStore {
             if cur.dup + 1 < len {
                 Some((cur.value.clone(), cur.dup + 1))
             } else {
-                map.range::<Vec<u8>, _>((std::ops::Bound::Excluded(cur.value.clone()), std::ops::Bound::Unbounded))
-                    .next()
-                    .map(|(v, _)| (v.clone(), 0))
+                map.range::<Vec<u8>, _>((
+                    std::ops::Bound::Excluded(cur.value.clone()),
+                    std::ops::Bound::Unbounded,
+                ))
+                .next()
+                .map(|(v, _)| (v.clone(), 0))
             }
         } else if cur.dup > 0 {
             Some((cur.value.clone(), cur.dup - 1))
         } else {
-            map.range::<Vec<u8>, _>((std::ops::Bound::Unbounded, std::ops::Bound::Excluded(cur.value.clone())))
-                .next_back()
-                .map(|(v, ks)| (v.clone(), ks.len() - 1))
+            map.range::<Vec<u8>, _>((
+                std::ops::Bound::Unbounded,
+                std::ops::Bound::Excluded(cur.value.clone()),
+            ))
+            .next_back()
+            .map(|(v, ks)| (v.clone(), ks.len() - 1))
         };
         match pos {
             Some((value, dup)) => {
                 let primary = self.alt_index[cur.key_idx][&value][dup].clone();
                 let rec = self.recs.get(&primary).cloned();
-                self.alt_cursor = Some(AltCursor { key_idx: cur.key_idx, value, dup });
+                self.alt_cursor = Some(AltCursor {
+                    key_idx: cur.key_idx,
+                    value,
+                    dup,
+                });
                 match rec {
                     Some(r) => ("00", Some(r)),
                     None => ("23", None),
@@ -2074,7 +2294,10 @@ pub struct BdbFile {
 impl BdbFile {
     /// A BDB indexed file with `nkeys` (>=1) index cursors, all closed.
     pub fn new(nkeys: usize) -> BdbFile {
-        BdbFile { write_cursor_open: false, cursor_open: vec![false; nkeys.max(1)] }
+        BdbFile {
+            write_cursor_open: false,
+            cursor_open: vec![false; nkeys.max(1)],
+        }
     }
 
     /// Port of `fileio.c:bdb_open_cursor` — open the primary write cursor if not already open, returning
@@ -2272,7 +2495,11 @@ pub fn fcd3_to_fcd2(fcd: &Fcd3) -> Fcd2 {
         cur_rec_len: fcd.cur_rec_len as u16,
         min_rec_len: fcd.min_rec_len as u16,
         max_rec_len: fcd.max_rec_len as u16,
-        ref_key: if fcd.file_org == ORG_INDEXED { fcd.ref_key } else { fcd.line_count },
+        ref_key: if fcd.file_org == ORG_INDEXED {
+            fcd.ref_key
+        } else {
+            fcd.line_count
+        },
         eff_key_len: fcd.eff_key_len,
         fname_len: fcd.fname_len,
         rel_byte_adrs64: fcd.rel_byte_adrs,
@@ -2310,7 +2537,11 @@ pub fn update_file_to_fcd(f: &CobFile, fcd: &mut Fcd3, fnstatus: Option<[u8; 2]>
     fcd.min_rec_len = f.record_min as u32;
     fcd.max_rec_len = f.record_max as u32;
     fcd.cur_rec_len = f.record_max as u32;
-    fcd.record_mode = if f.record_min == f.record_max { REC_MODE_FIXED } else { REC_MODE_VARIABLE };
+    fcd.record_mode = if f.record_min == f.record_max {
+        REC_MODE_FIXED
+    } else {
+        REC_MODE_VARIABLE
+    };
     fcd.ref_key = [0, 0];
     match f.organization {
         Organization::Sequential | Organization::Sort => fcd.file_org = ORG_SEQ,
@@ -2544,12 +2775,17 @@ pub fn cob_extfh_read(f: &mut CobFile, key: Option<&[u8]>, read_opts: i32, callf
     let opcode = if key.is_none() {
         if read_opts & COB_READ_PREVIOUS != 0 {
             OP_READ_PREV
-        } else if f.organization == Organization::Relative && f.access_mode != AccessMode::Sequential {
+        } else if f.organization == Organization::Relative
+            && f.access_mode != AccessMode::Sequential
+        {
             OP_READ_RAN
         } else {
             OP_READ_SEQ
         }
-    } else if matches!(f.organization, Organization::Indexed | Organization::Relative) {
+    } else if matches!(
+        f.organization,
+        Organization::Indexed | Organization::Relative
+    ) {
         OP_READ_RAN
     } else {
         OP_READ_SEQ
@@ -2563,7 +2799,11 @@ pub fn cob_extfh_read(f: &mut CobFile, key: Option<&[u8]>, read_opts: i32, callf
 pub fn cob_extfh_read_next(f: &mut CobFile, read_opts: i32, callfh: &mut CallFh) {
     let mut fcd = Fcd3::default();
     copy_file_to_fcd(f, &mut fcd);
-    let opcode = if read_opts & COB_READ_PREVIOUS != 0 { OP_READ_PREV } else { OP_READ_SEQ };
+    let opcode = if read_opts & COB_READ_PREVIOUS != 0 {
+        OP_READ_PREV
+    } else {
+        OP_READ_SEQ
+    };
     callfh(opcode, &mut fcd);
     update_fcd_to_file(&fcd, f, 0);
 }
@@ -2605,7 +2845,12 @@ pub fn find_fcd(f: &CobFile) -> Fcd3 {
 /// its organization/access/record fields filled from the FCD via [`copy_fcd_to_file`]. The registry that
 /// caches the pairing + the file-name pointer are the declared boundary.
 pub fn find_file(fcd: &Fcd3) -> CobFile {
-    let mut f = CobFile::new(Organization::Sequential, AccessMode::Sequential, fcd.max_rec_len.max(1) as usize, "");
+    let mut f = CobFile::new(
+        Organization::Sequential,
+        AccessMode::Sequential,
+        fcd.max_rec_len.max(1) as usize,
+        "",
+    );
     f.open_mode = OpenMode::Closed;
     copy_fcd_to_file(fcd, &mut f);
     f
@@ -2643,7 +2888,11 @@ pub fn update_record_and_keys_if_necessary(_f: &mut CobFile, _fcd: &Fcd3) {}
 /// Port of `fileio.c:get_code_set_converted_data` — apply a `CODE-SET` translation table to a record: the
 /// whole record when no `CODE-SET FOR` regions are given, otherwise only the listed `(start, size)` byte
 /// ranges. Returns the converted copy (the record itself is left unchanged, as in the C).
-pub fn get_code_set_converted_data(record: &[u8], collating: &[u8; 256], convert_fields: &[(usize, usize)]) -> Vec<u8> {
+pub fn get_code_set_converted_data(
+    record: &[u8],
+    collating: &[u8; 256],
+    convert_fields: &[(usize, usize)],
+) -> Vec<u8> {
     let mut out = record.to_vec();
     if convert_fields.is_empty() {
         for b in out.iter_mut() {
@@ -2683,7 +2932,10 @@ pub fn open_next(nxt_filename: &str, sep: u8) -> Option<(String, String)> {
         return None;
     }
     Some(match nxt_filename.find(sep as char) {
-        Some(i) => (nxt_filename[..i].to_string(), nxt_filename[i + 1..].to_string()),
+        Some(i) => (
+            nxt_filename[..i].to_string(),
+            nxt_filename[i + 1..].to_string(),
+        ),
         None => (nxt_filename.to_string(), String::new()),
     })
 }
@@ -2701,7 +2953,12 @@ pub fn join_environment() -> i32 {
 pub fn copy_keys_fcd_to_file(key_descs: &[(usize, usize, bool)]) -> Vec<CobFileKey> {
     key_descs
         .iter()
-        .map(|&(offset, size, dups)| CobFileKey { duplicates: dups, offset, field_size: size, components: vec![] })
+        .map(|&(offset, size, dups)| CobFileKey {
+            duplicates: dups,
+            offset,
+            field_size: size,
+            components: vec![],
+        })
         .collect()
 }
 
@@ -2716,7 +2973,12 @@ pub fn get_dupno(max_existing_dupno: u32) -> u32 {
 /// `key_exists(idx, key_bytes)` probes the backend (the BDB `DB_GET` is the boundary), returning the
 /// existing record's bytes when that alternate key is present. On `rewrite`, a hit on the *same* primary
 /// record is allowed; otherwise any hit is a collision. Returns `true` when a collision is found.
-pub fn check_alt_keys(keys: &[CobFileKey], record: &[u8], rewrite: bool, mut key_exists: impl FnMut(usize, &[u8]) -> Option<Vec<u8>>) -> bool {
+pub fn check_alt_keys(
+    keys: &[CobFileKey],
+    record: &[u8],
+    rewrite: bool,
+    mut key_exists: impl FnMut(usize, &[u8]) -> Option<Vec<u8>>,
+) -> bool {
     for (i, key) in keys.iter().enumerate().skip(1) {
         if !key.duplicates {
             let kbytes = cob_savekey(record, key);
@@ -2773,7 +3035,11 @@ pub struct SortSpill {
 impl SortSpill {
     /// A spill manager whose items serialise to `r_size` bytes each.
     pub fn new(r_size: usize) -> SortSpill {
-        SortSpill { files: Vec::new(), read_pos: Vec::new(), r_size: r_size.max(1) }
+        SortSpill {
+            files: Vec::new(),
+            read_pos: Vec::new(),
+            r_size: r_size.max(1),
+        }
     }
 
     /// Port of `fileio.c:cob_create_tmpfile` — create a new spill file, returning its index. The OS temp
@@ -2880,7 +3146,11 @@ pub fn extfh_decode_opcode(opcd: u16) -> ExtfhOp {
 /// declared boundary; this returns the decoded operation (the caller's handler performs the I/O).
 #[allow(non_snake_case)]
 pub fn EXTFH3(opcode: &[u8; 2], fcd: &mut Fcd3) -> ExtfhOp {
-    let opcd = if opcode[0] == 0xFA { 0xFA00 | opcode[1] as u16 } else { opcode[1] as u16 };
+    let opcd = if opcode[0] == 0xFA {
+        0xFA00 | opcode[1] as u16
+    } else {
+        opcode[1] as u16
+    };
     let op = extfh_decode_opcode(opcd);
     if op == ExtfhOp::Unknown {
         fcd.file_status = [b'9', 161];
@@ -2944,7 +3214,12 @@ pub struct CobFile {
 
 impl CobFile {
     /// A closed file of the given organization with a fixed `record_max`-wide record.
-    pub fn new(organization: Organization, access_mode: AccessMode, record_max: usize, path: &str) -> CobFile {
+    pub fn new(
+        organization: Organization,
+        access_mode: AccessMode,
+        record_max: usize,
+        path: &str,
+    ) -> CobFile {
         CobFile {
             organization,
             access_mode,
@@ -3067,14 +3342,22 @@ pub fn cob_close(f: &mut CobFile, lock: bool) -> &'static str {
         // value, difference): ENOSPC/EDQUOT -> 34, EACCES/EISDIR/EROFS -> 37, else 30.
         if let Err(e) = std::fs::write(&f.path, &f.data) {
             f.dirty = false;
-            f.open_mode = if lock { OpenMode::Locked } else { OpenMode::Closed };
+            f.open_mode = if lock {
+                OpenMode::Locked
+            } else {
+                OpenMode::Closed
+            };
             let st = errno_cob_sts(classify_io_error(&e), "30");
             f.file_status = [st.as_bytes()[0], st.as_bytes()[1]];
             return st;
         }
         f.dirty = false;
     }
-    f.open_mode = if lock { OpenMode::Locked } else { OpenMode::Closed };
+    f.open_mode = if lock {
+        OpenMode::Locked
+    } else {
+        OpenMode::Closed
+    };
     f.file_status = *b"00";
     "00"
 }
@@ -3094,7 +3377,13 @@ pub fn cob_fd_file_open(f: &CobFile, mode: OpenMode) -> i32 {
     match mode {
         OpenMode::Input => FD_READ,
         OpenMode::Output => {
-            FD_CREATE | FD_TRUNC | if f.organization == Organization::Relative { FD_READ | FD_WRITE } else { FD_WRITE }
+            FD_CREATE
+                | FD_TRUNC
+                | if f.organization == Organization::Relative {
+                    FD_READ | FD_WRITE
+                } else {
+                    FD_WRITE
+                }
         }
         OpenMode::Io => FD_READ | FD_WRITE,
         OpenMode::Extend => FD_READ | FD_WRITE,
@@ -3160,7 +3449,11 @@ pub fn cob_rollback() {}
 /// Port of `fileio.c:cob_delete_file` — delete the named file from disk; status `"00"` on success,
 /// `"30"` on failure.
 pub fn cob_delete_file(f: &mut CobFile) -> &'static str {
-    let s = if std::fs::remove_file(&f.path).is_ok() { "00" } else { "30" };
+    let s = if std::fs::remove_file(&f.path).is_ok() {
+        "00"
+    } else {
+        "30"
+    };
     f.file_status = [s.as_bytes()[0], s.as_bytes()[1]];
     s
 }
@@ -3170,7 +3463,13 @@ impl CobFile {
     /// the FILE STATUS. (Supports RECORD/LINE SEQUENTIAL append and RELATIVE keyed write.)
     pub fn write_record(&mut self, record: &[u8], key: i64) -> &'static str {
         // the FD record area is record_max wide (the C uses f->record->size = the field size).
-        if let Some(s) = cob_write(self.open_mode, self.access_mode, self.record_max, self.record_min, self.record_max) {
+        if let Some(s) = cob_write(
+            self.open_mode,
+            self.access_mode,
+            self.record_max,
+            self.record_min,
+            self.record_max,
+        ) {
             self.file_status = [s.as_bytes()[0], s.as_bytes()[1]];
             return s;
         }
@@ -3212,7 +3511,14 @@ impl CobFile {
                 (r.status, r.record)
             }
             Organization::Sequential => {
-                let r = sequential_read(&self.data, &mut self.pos, &mut self.record_buf, self.record_min, self.record_max, self.varseq_type);
+                let r = sequential_read(
+                    &self.data,
+                    &mut self.pos,
+                    &mut self.record_buf,
+                    self.record_min,
+                    self.record_max,
+                    self.varseq_type,
+                );
                 if r.at_end {
                     self.flag_end_of_file = true;
                 }
@@ -3279,7 +3585,13 @@ pub enum Organization {
 /// Port of the precondition layer of `fileio.c:cob_write` — the FILE STATUS before the handler runs.
 /// In SEQUENTIAL access the file must be `OPEN OUTPUT`/`EXTEND`, otherwise `OUTPUT`/`I-O`, else `"48"`;
 /// a record outside `[record_min, record_max]` is `"44"`. `None` means proceed to the write handler.
-pub fn cob_write(open: OpenMode, access: AccessMode, rec_size: usize, record_min: usize, record_max: usize) -> Option<&'static str> {
+pub fn cob_write(
+    open: OpenMode,
+    access: AccessMode,
+    rec_size: usize,
+    record_min: usize,
+    record_max: usize,
+) -> Option<&'static str> {
     let ok = if access == AccessMode::Sequential {
         matches!(open, OpenMode::Output | OpenMode::Extend)
     } else {
@@ -3297,7 +3609,14 @@ pub fn cob_write(open: OpenMode, access: AccessMode, rec_size: usize, record_min
 /// Port of the precondition layer of `fileio.c:cob_rewrite`: the file must be `OPEN I-O` (`"49"`), a
 /// SEQUENTIAL-access REWRITE requires a prior successful READ (`"43"`), and a RECORD SEQUENTIAL rewrite
 /// must keep the record length (`"44"`). `None` means proceed.
-pub fn cob_rewrite(open: OpenMode, access: AccessMode, org: Organization, read_done: bool, rec_size: usize, record_size: usize) -> Option<&'static str> {
+pub fn cob_rewrite(
+    open: OpenMode,
+    access: AccessMode,
+    org: Organization,
+    read_done: bool,
+    rec_size: usize,
+    record_size: usize,
+) -> Option<&'static str> {
     if open != OpenMode::Io {
         return Some("49");
     }
@@ -3325,7 +3644,12 @@ pub fn cob_delete(open: OpenMode, access: AccessMode, read_done: bool) -> Option
 /// Port of the precondition layer of `fileio.c:cob_start`: the file must be `OPEN INPUT`/`I-O` and not
 /// RANDOM-access (`"47"`), must exist (`"23"`), and a supplied key size must be `1..=key.size` (`"23"`).
 /// `None` means proceed.
-pub fn cob_start(open: OpenMode, access: AccessMode, nonexistent: bool, keysize_valid: bool) -> Option<&'static str> {
+pub fn cob_start(
+    open: OpenMode,
+    access: AccessMode,
+    nonexistent: bool,
+    keysize_valid: bool,
+) -> Option<&'static str> {
     if !matches!(open, OpenMode::Io | OpenMode::Input) {
         return Some("47");
     }
@@ -3345,7 +3669,15 @@ pub fn cob_start(open: OpenMode, access: AccessMode, nonexistent: bool, keysize_
 /// INPUT`/`I-O` (`"47"`); a nonexistent optional file is `"10"` on the first read else `"23"`; a
 /// sequential read past end-of-file (or before begin, reading backwards) is `"46"`. `None` = proceed.
 #[allow(clippy::too_many_arguments)]
-pub fn cob_read(open: OpenMode, nonexistent: bool, first_read: bool, key_based: bool, end_of_file: bool, begin_of_file: bool, read_previous: bool) -> Option<&'static str> {
+pub fn cob_read(
+    open: OpenMode,
+    nonexistent: bool,
+    first_read: bool,
+    key_based: bool,
+    end_of_file: bool,
+    begin_of_file: bool,
+    read_previous: bool,
+) -> Option<&'static str> {
     if !matches!(open, OpenMode::Input | OpenMode::Io) {
         return Some("47");
     }
@@ -3365,7 +3697,14 @@ pub fn cob_read(open: OpenMode, nonexistent: bool, first_read: bool, key_based: 
 
 /// Port of the precondition layer of `fileio.c:cob_read_next`: like [`cob_read`] but a nonexistent file
 /// after the first read is `"46"` (not `"23"`), and the end/begin-of-file check always applies. `None` = proceed.
-pub fn cob_read_next(open: OpenMode, nonexistent: bool, first_read: bool, end_of_file: bool, begin_of_file: bool, read_previous: bool) -> Option<&'static str> {
+pub fn cob_read_next(
+    open: OpenMode,
+    nonexistent: bool,
+    first_read: bool,
+    end_of_file: bool,
+    begin_of_file: bool,
+    read_previous: bool,
+) -> Option<&'static str> {
     if !matches!(open, OpenMode::Input | OpenMode::Io) {
         return Some("47");
     }
@@ -3443,7 +3782,11 @@ pub fn indexed_restorekey(data: &mut [u8], savekey: &[u8], kd: &KeyDesc) {
 /// part by part (`memcmp`), up to `partlen` bytes (`<= 0` means the whole key). Returns the sign of the
 /// first differing byte (negative / zero / positive), like the C `memcmp` chain.
 pub fn indexed_cmpkey(data: &[u8], savekey: &[u8], kd: &KeyDesc, partlen: i32) -> i32 {
-    let mut remaining = if partlen <= 0 { indexed_keylen(kd) as i32 } else { partlen };
+    let mut remaining = if partlen <= 0 {
+        indexed_keylen(kd) as i32
+    } else {
+        partlen
+    };
     let mut totlen = 0usize;
     for p in &kd.parts {
         if remaining <= 0 {
@@ -3492,18 +3835,31 @@ pub struct CobFileKey {
 /// components the key is one part `(offset, field_size)`; otherwise each component becomes a part.
 pub fn indexed_keydesc(key: &CobFileKey) -> KeyDesc {
     let parts = if key.components.is_empty() {
-        vec![KeyPart { start: key.offset, leng: key.field_size }]
+        vec![KeyPart {
+            start: key.offset,
+            leng: key.field_size,
+        }]
     } else {
-        key.components.iter().map(|&(s, l)| KeyPart { start: s, leng: l }).collect()
+        key.components
+            .iter()
+            .map(|&(s, l)| KeyPart { start: s, leng: l })
+            .collect()
     };
-    KeyDesc { parts, duplicates: key.duplicates }
+    KeyDesc {
+        parts,
+        duplicates: key.duplicates,
+    }
 }
 
 /// Port of `fileio.c:cob_findkey_attr` — find the key index whose field matches the query key (matched
 /// by the field's record offset, the Rust analogue of the C's `key->data == kf->data` pointer identity),
 /// returning `(key_index, full_key_len, part_len)`, or `(-1, 0, 0)` if none. A single-component key
 /// matches by offset; a multi-component key matches the whole key or its first component.
-pub fn cob_findkey_attr(keys: &[CobFileKey], query_offset: usize, query_size: usize) -> (i32, usize, usize) {
+pub fn cob_findkey_attr(
+    keys: &[CobFileKey],
+    query_offset: usize,
+    query_size: usize,
+) -> (i32, usize, usize) {
     for (k, key) in keys.iter().enumerate() {
         if key.components.is_empty() && key.offset == query_offset {
             return (k as i32, key.field_size, query_size);
@@ -3512,7 +3868,11 @@ pub fn cob_findkey_attr(keys: &[CobFileKey], query_offset: usize, query_size: us
     for (k, key) in keys.iter().enumerate() {
         if !key.components.is_empty() {
             let whole = key.offset == query_offset && key.field_size == query_size;
-            let comp0 = key.components.first().map(|c| c.0 == query_offset).unwrap_or(false);
+            let comp0 = key
+                .components
+                .first()
+                .map(|c| c.0 == query_offset)
+                .unwrap_or(false);
             if whole || comp0 {
                 let fullkeylen: usize = key.components.iter().map(|c| c.1).sum();
                 let partlen = if whole { key.field_size } else { fullkeylen };
@@ -3544,7 +3904,12 @@ pub fn cob_init_fileio() {}
 /// `cob_file`/linage allocation is `CobFile`'s own construction; Rust frees on drop). Returns the keys.
 pub fn cob_file_malloc(nkeys: usize) -> Vec<CobFileKey> {
     (0..nkeys)
-        .map(|_| CobFileKey { duplicates: false, offset: 0, field_size: 0, components: vec![] })
+        .map(|_| CobFileKey {
+            duplicates: false,
+            offset: 0,
+            field_size: 0,
+            components: vec![],
+        })
         .collect()
 }
 
@@ -3620,7 +3985,13 @@ pub fn bdb_setkey(keys: &[CobFileKey], record: &[u8], idx: usize) -> Vec<u8> {
 /// Port of `fileio.c:bdb_cmpkey` — compare a saved key `keyarea` against key `idx` extracted from
 /// `record`, up to `partlen` bytes (`<= 0` = the whole key), returning the sign of the first differing
 /// byte (`memcmp` chain over the components).
-pub fn bdb_cmpkey(keys: &[CobFileKey], keyarea: &[u8], record: &[u8], idx: usize, partlen: i32) -> i32 {
+pub fn bdb_cmpkey(
+    keys: &[CobFileKey],
+    keyarea: &[u8],
+    record: &[u8],
+    idx: usize,
+    partlen: i32,
+) -> i32 {
     match keys.get(idx) {
         // C: memcmp(keyarea, extract(record)); indexed_cmpkey gives memcmp(extract(record), keyarea), so negate.
         Some(key) => -indexed_cmpkey(record, keyarea, &indexed_keydesc(key), partlen),
@@ -3630,7 +4001,12 @@ pub fn bdb_cmpkey(keys: &[CobFileKey], keyarea: &[u8], record: &[u8], idx: usize
 
 /// Port of `fileio.c:bdb_suppresskey` — is every byte of key `idx` (extracted from `record`) the
 /// `suppress` character? Returns `false` when the key has no SUPPRESS clause (`suppress` is `None`).
-pub fn bdb_suppresskey(keys: &[CobFileKey], record: &[u8], idx: usize, suppress: Option<u8>) -> bool {
+pub fn bdb_suppresskey(
+    keys: &[CobFileKey],
+    record: &[u8],
+    idx: usize,
+    suppress: Option<u8>,
+) -> bool {
     let ch = match suppress {
         Some(c) => c,
         None => return false,
@@ -3712,9 +4088,15 @@ pub fn save_fcd_status(fcd: &mut Fcd3, sts: i32) {
 /// Port of `fileio.c:cob_get_filename_print` — the diagnostic string for a file: `select_name ('env')`,
 /// or `select_name ('env' => resolved)` when `resolved_name` is given and differs from the ASSIGN/env
 /// name (`show_resolved_name`). This is what appears in libcob's I/O error messages.
-pub fn cob_get_filename_print(select_name: &str, open_env: &str, resolved_name: Option<&str>) -> String {
+pub fn cob_get_filename_print(
+    select_name: &str,
+    open_env: &str,
+    resolved_name: Option<&str>,
+) -> String {
     match resolved_name {
-        Some(resolved) if resolved != open_env => format!("{select_name} ('{open_env}' => {resolved})"),
+        Some(resolved) if resolved != open_env => {
+            format!("{select_name} ('{open_env}' => {resolved})")
+        }
         _ => format!("{select_name} ('{open_env}')"),
     }
 }
@@ -3743,7 +4125,11 @@ pub fn cob_str_from_fld(field: &[u8]) -> Vec<u8> {
         end -= 1;
     }
     // drop embedded quote (0x22) bytes from the trimmed content
-    field[..end].iter().copied().filter(|&b| b != 0x22).collect()
+    field[..end]
+        .iter()
+        .copied()
+        .filter(|&b| b != 0x22)
+        .collect()
 }
 
 // ======================================================================================================
@@ -3785,16 +4171,28 @@ pub struct RelWrite {
 /// data area, logical length `size`) at relative key `key`. The slot at `(key-1)*relsize` must be empty
 /// (header `0`); an occupied slot is status `"22"`, a key `< 1` is `"24"`. Gaps before the slot are
 /// zero-filled. The 8-byte native-endian size header precedes the `record_max` data bytes.
-pub fn relative_write(file: &[u8], record: &[u8], size: usize, record_max: usize, key: i64) -> RelWrite {
+pub fn relative_write(
+    file: &[u8],
+    record: &[u8],
+    size: usize,
+    record_max: usize,
+    key: i64,
+) -> RelWrite {
     let kindex = key - 1;
     if kindex < 0 {
-        return RelWrite { file: file.to_vec(), status: "24" };
+        return RelWrite {
+            file: file.to_vec(),
+            status: "24",
+        };
     }
     let rs = relsize(record_max);
     let off = kindex as usize * rs;
     let mut out = file.to_vec();
     if off + REL_SIZE_HEADER <= out.len() && read_rel_header(&out, off) > 0 {
-        return RelWrite { file: out, status: "22" };
+        return RelWrite {
+            file: out,
+            status: "22",
+        };
     }
     if off + rs > out.len() {
         out.resize(off + rs, 0);
@@ -3802,7 +4200,10 @@ pub fn relative_write(file: &[u8], record: &[u8], size: usize, record_max: usize
     write_rel_header(&mut out, off, size as u64);
     let n = record_max.min(record.len());
     out[off + REL_SIZE_HEADER..off + REL_SIZE_HEADER + n].copy_from_slice(&record[..n]);
-    RelWrite { file: out, status: "00" }
+    RelWrite {
+        file: out,
+        status: "00",
+    }
 }
 
 /// The outcome of a RELATIVE read: the `record_max`-wide record data, its logical size, and FILE STATUS.
@@ -3821,22 +4222,42 @@ pub struct RelRead {
 pub fn relative_read(file: &[u8], record_max: usize, key: i64) -> RelRead {
     let relnum = key - 1;
     if relnum < 0 {
-        return RelRead { data: Vec::new(), size: 0, status: "23" };
+        return RelRead {
+            data: Vec::new(),
+            size: 0,
+            status: "23",
+        };
     }
     let rs = relsize(record_max);
     let off = relnum as usize * rs;
     if off + REL_SIZE_HEADER > file.len() {
-        return RelRead { data: Vec::new(), size: 0, status: "23" };
+        return RelRead {
+            data: Vec::new(),
+            size: 0,
+            status: "23",
+        };
     }
     let size = read_rel_header(file, off) as usize;
     if size == 0 {
-        return RelRead { data: Vec::new(), size: 0, status: "23" };
+        return RelRead {
+            data: Vec::new(),
+            size: 0,
+            status: "23",
+        };
     }
     let dstart = off + REL_SIZE_HEADER;
     if dstart + record_max > file.len() {
-        return RelRead { data: Vec::new(), size: 0, status: "30" };
+        return RelRead {
+            data: Vec::new(),
+            size: 0,
+            status: "30",
+        };
     }
-    RelRead { data: file[dstart..dstart + record_max].to_vec(), size, status: "00" }
+    RelRead {
+        data: file[dstart..dstart + record_max].to_vec(),
+        size,
+        status: "00",
+    }
 }
 
 /// Port of `fileio.c:relative_read_next` for sequential `READ NEXT`: starting at slot `*slot` (advancing
@@ -3847,14 +4268,22 @@ pub fn relative_read_next(file: &[u8], slot: &mut usize, record_max: usize) -> R
     loop {
         let off = *slot * rs;
         if off + REL_SIZE_HEADER > file.len() {
-            return RelRead { data: Vec::new(), size: 0, status: "10" };
+            return RelRead {
+                data: Vec::new(),
+                size: 0,
+                status: "10",
+            };
         }
         let size = read_rel_header(file, off) as usize;
         *slot += 1;
         if size > 0 {
             let dstart = off + REL_SIZE_HEADER;
             let end = (dstart + record_max).min(file.len());
-            return RelRead { data: file[dstart..end].to_vec(), size, status: "00" };
+            return RelRead {
+                data: file[dstart..end].to_vec(),
+                size,
+                status: "00",
+            };
         }
     }
 }
@@ -3864,20 +4293,29 @@ pub fn relative_read_next(file: &[u8], slot: &mut usize, record_max: usize) -> R
 pub fn relative_rewrite(file: &[u8], record: &[u8], record_max: usize, key: i64) -> RelWrite {
     let relnum = key - 1;
     if relnum < 0 {
-        return RelWrite { file: file.to_vec(), status: "24" };
+        return RelWrite {
+            file: file.to_vec(),
+            status: "24",
+        };
     }
     let rs = relsize(record_max);
     let off = relnum as usize * rs;
     let mut out = file.to_vec();
     if off + REL_SIZE_HEADER > out.len() || read_rel_header(&out, off) == 0 {
-        return RelWrite { file: out, status: "23" };
+        return RelWrite {
+            file: out,
+            status: "23",
+        };
     }
     let dstart = off + REL_SIZE_HEADER;
     let n = record_max.min(record.len());
     if dstart + n <= out.len() {
         out[dstart..dstart + n].copy_from_slice(&record[..n]);
     }
-    RelWrite { file: out, status: "00" }
+    RelWrite {
+        file: out,
+        status: "00",
+    }
 }
 
 /// Port of `fileio.c:relative_delete`: tombstone the record at relative `key` by zeroing its size
@@ -3885,22 +4323,36 @@ pub fn relative_rewrite(file: &[u8], record: &[u8], record_max: usize, key: i64)
 pub fn relative_delete(file: &[u8], record_max: usize, key: i64) -> RelWrite {
     let relnum = key - 1;
     if relnum < 0 {
-        return RelWrite { file: file.to_vec(), status: "24" };
+        return RelWrite {
+            file: file.to_vec(),
+            status: "24",
+        };
     }
     let rs = relsize(record_max);
     let off = relnum as usize * rs;
     let mut out = file.to_vec();
     if off + REL_SIZE_HEADER > out.len() || read_rel_header(&out, off) == 0 {
-        return RelWrite { file: out, status: "23" };
+        return RelWrite {
+            file: out,
+            status: "23",
+        };
     }
     write_rel_header(&mut out, off, 0);
-    RelWrite { file: out, status: "00" }
+    RelWrite {
+        file: out,
+        status: "00",
+    }
 }
 
 /// Port of `fileio.c:relative_start` positioning: find the slot index satisfying `cond` relative to
 /// `key` over the file, returning the 0-based slot (for a following `READ NEXT`) or status `"23"` if no
 /// active record qualifies. `cond` is one of [`RelCond`].
-pub fn relative_start(file: &[u8], record_max: usize, cond: RelCond, key: i64) -> Result<usize, &'static str> {
+pub fn relative_start(
+    file: &[u8],
+    record_max: usize,
+    cond: RelCond,
+    key: i64,
+) -> Result<usize, &'static str> {
     let rs = relsize(record_max);
     if file.is_empty() {
         return Err("23");
@@ -3915,13 +4367,24 @@ pub fn relative_start(file: &[u8], record_max: usize, cond: RelCond, key: i64) -
     let kindex = (key - 1) as i64;
     // scan in the direction implied by the condition, from the starting index.
     let (mut idx, step): (i64, i64) = match cond {
-        RelCond::First | RelCond::Ge => (if matches!(cond, RelCond::First) { 0 } else { kindex.max(0) }, 1),
+        RelCond::First | RelCond::Ge => (
+            if matches!(cond, RelCond::First) {
+                0
+            } else {
+                kindex.max(0)
+            },
+            1,
+        ),
         RelCond::Gt => (kindex + 1, 1),
         RelCond::Last => (nslots as i64 - 1, -1),
         RelCond::Le => (kindex.min(nslots as i64 - 1), -1),
         RelCond::Lt => (kindex - 1, -1),
         RelCond::Eq => {
-            return if active(kindex) { Ok(kindex as usize) } else { Err("23") };
+            return if active(kindex) {
+                Ok(kindex as usize)
+            } else {
+                Err("23")
+            };
         }
     };
     while idx >= 0 && (idx as usize) < nslots {
@@ -3949,10 +4412,30 @@ pub enum RelCond {
 mod tests {
     use super::*;
 
-    const PLAIN: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false, ls_split: true };
-    const NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: false, ls_nulls: true, ls_validate: false, ls_split: true };
-    const FIXED: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: false, ls_validate: false, ls_split: true };
-    const FIXED_NULLS: LineSeqConfig = LineSeqConfig { ls_fixed: true, ls_nulls: true, ls_validate: false, ls_split: true };
+    const PLAIN: LineSeqConfig = LineSeqConfig {
+        ls_fixed: false,
+        ls_nulls: false,
+        ls_validate: false,
+        ls_split: true,
+    };
+    const NULLS: LineSeqConfig = LineSeqConfig {
+        ls_fixed: false,
+        ls_nulls: true,
+        ls_validate: false,
+        ls_split: true,
+    };
+    const FIXED: LineSeqConfig = LineSeqConfig {
+        ls_fixed: true,
+        ls_nulls: false,
+        ls_validate: false,
+        ls_split: true,
+    };
+    const FIXED_NULLS: LineSeqConfig = LineSeqConfig {
+        ls_fixed: true,
+        ls_nulls: true,
+        ls_validate: false,
+        ls_split: true,
+    };
 
     #[test]
     fn size_strips_trailing_spaces() {
@@ -3965,9 +4448,18 @@ mod tests {
     #[test]
     fn default_validate_strips_and_adds_lf() {
         // oracle: AB -> "AB\n", HELLO123 -> "HELLO123\n", SPACES -> "\n"
-        assert_eq!(lineseq_write(b"AB      ", &LineSeqConfig::DEFAULT).bytes, b"AB\n");
-        assert_eq!(lineseq_write(b"HELLO123", &LineSeqConfig::DEFAULT).bytes, b"HELLO123\n");
-        assert_eq!(lineseq_write(b"        ", &LineSeqConfig::DEFAULT).bytes, b"\n");
+        assert_eq!(
+            lineseq_write(b"AB      ", &LineSeqConfig::DEFAULT).bytes,
+            b"AB\n"
+        );
+        assert_eq!(
+            lineseq_write(b"HELLO123", &LineSeqConfig::DEFAULT).bytes,
+            b"HELLO123\n"
+        );
+        assert_eq!(
+            lineseq_write(b"        ", &LineSeqConfig::DEFAULT).bytes,
+            b"\n"
+        );
     }
 
     #[test]
@@ -3976,6 +4468,29 @@ mod tests {
         let w = lineseq_write(b"A\x09B     ", &LineSeqConfig::DEFAULT);
         assert_eq!(w.status, "71");
         assert!(w.bytes.is_empty());
+    }
+
+    #[test]
+    fn validate_checks_every_byte_position() {
+        // Upstream 8e2ec25c2 (bugs:#918): the C's IS_BAD_CHAR(*p++) macro-argument double-
+        // evaluation could skip positions, letting some bad bytes through. The candidate iterates
+        // cleanly: a bad byte at ANY position (start, middle, end, adjacent pair) is status 71.
+        for bad in [
+            &b"\x01"[..],
+            &b"A\x01B"[..],
+            &b"AB\x01"[..],
+            &b"\x1F\x01"[..],
+            &b"A\x00B"[..],
+        ] {
+            let w = lineseq_write(bad, &LineSeqConfig::DEFAULT);
+            assert_eq!(w.status, "71", "record {bad:02x?} must be rejected");
+            assert!(w.bytes.is_empty(), "record {bad:02x?} writes nothing");
+        }
+        // a fully clean record is written normally (status 00, LF-terminated)
+        assert_eq!(
+            lineseq_write(b"ABCDE", &LineSeqConfig::DEFAULT).status,
+            "00"
+        );
     }
 
     #[test]
@@ -3988,7 +4503,10 @@ mod tests {
     #[test]
     fn nulls_encodes_control_bytes() {
         // oracle (validate=0, nulls=1): "A\tB" -> 41 00 09 42 0a
-        assert_eq!(lineseq_write(b"A\x09B     ", &NULLS).bytes, &[0x41, 0x00, 0x09, 0x42, 0x0a]);
+        assert_eq!(
+            lineseq_write(b"A\x09B     ", &NULLS).bytes,
+            &[0x41, 0x00, 0x09, 0x42, 0x0a]
+        );
     }
 
     #[test]
@@ -4022,7 +4540,10 @@ mod tests {
         // narrower target -> truncate
         assert_eq!(cob_copy_check(b"ABCDEF", 4), b"ABCD");
         // linage validation
-        assert_eq!(file_linage_check(10, Some(8), Some(2), Some(2)), Ok((10, 8, 2, 2)));
+        assert_eq!(
+            file_linage_check(10, Some(8), Some(2), Some(2)),
+            Ok((10, 8, 2, 2))
+        );
         assert_eq!(file_linage_check(10, None, None, None), Ok((10, 0, 0, 0)));
         assert_eq!(file_linage_check(0, None, None, None), Err(())); // lines < 1
         assert_eq!(file_linage_check(10, Some(11), None, None), Err(())); // footing > lines
@@ -4032,12 +4553,20 @@ mod tests {
     #[test]
     fn linage_and_suppress() {
         // a 5-line page, top 1, bot 1, currently at line 2; ADVANCING PAGE finishes the page
-        let lin = Linage { lin_lines: 5, lin_top: 1, lin_bot: 1, counter: 2 };
+        let lin = Linage {
+            lin_lines: 5,
+            lin_top: 1,
+            lin_bot: 1,
+            counter: 2,
+        };
         let (bytes, ctr, sts) = cob_linage_write_opt(lin, COB_WRITE_PAGE);
         // counter 2..5 -> 3 newlines, +1 bottom, +1 top = 5 newlines, counter resets to 1
         assert_eq!((bytes.len(), ctr, sts), (5, 1, "00"));
         // counter 0 -> linage error
-        assert_eq!(cob_linage_write_opt(Linage { counter: 0, ..lin }, COB_WRITE_PAGE).2, "57");
+        assert_eq!(
+            cob_linage_write_opt(Linage { counter: 0, ..lin }, COB_WRITE_PAGE).2,
+            "57"
+        );
         // ADVANCING 2 LINES within the page -> n-1 = 1 newline
         let (b2, c2, _) = cob_linage_write_opt(lin, COB_WRITE_LINES | 2);
         assert_eq!((b2.len(), c2), (1, 4));
@@ -4051,17 +4580,28 @@ mod tests {
     fn lineseq_rewrite_in_place() {
         // file "OLDLINE\nNEXT\n", rewrite the first line (slotlen 7) with "HI"
         let file = b"OLDLINE\nNEXT\n";
-        let plain = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: false, ls_split: true };
+        let plain = LineSeqConfig {
+            ls_fixed: false,
+            ls_nulls: false,
+            ls_validate: false,
+            ls_split: true,
+        };
         let r = lineseq_rewrite(file, 0, 7, b"HI", 2, &plain);
         assert_eq!(r.status, "00");
         assert_eq!(r.file, b"HI     \nNEXT\n"); // "HI" + 5 spaces, newline + rest intact
-        // a record longer than the slot -> overflow 44
-        assert_eq!(lineseq_rewrite(file, 0, 7, b"WAYTOOLONG", 10, &plain).status, "44");
+                                                // a record longer than the slot -> overflow 44
+        assert_eq!(
+            lineseq_rewrite(file, 0, 7, b"WAYTOOLONG", 10, &plain).status,
+            "44"
+        );
     }
 
     #[test]
     fn write_sequence_stops_at_validation_failure() {
-        let (bytes, sts) = write_line_sequential(&[b"AB      ", b"A\x09B     ", b"XY      "], &LineSeqConfig::DEFAULT);
+        let (bytes, sts) = write_line_sequential(
+            &[b"AB      ", b"A\x09B     ", b"XY      "],
+            &LineSeqConfig::DEFAULT,
+        );
         assert_eq!(bytes, b"AB\n"); // wrote AB, then the tab record failed
         assert_eq!(sts, "71");
     }
@@ -4077,52 +4617,94 @@ mod tests {
 
     #[test]
     fn read_basic_and_crlf_fold() {
-        assert_eq!(rd(b"AB\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"AB\nCD\n", &LineSeqConfig::DEFAULT),
+            vec![(b"AB      ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]
+        );
         // \r\n folds to one line break
-        assert_eq!(rd(b"AB\r\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"AB\r\nCD\n", &LineSeqConfig::DEFAULT),
+            vec![(b"AB      ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]
+        );
     }
 
     #[test]
     fn read_validate_tab_ok_cr_bad() {
         // TAB (0x09) is an IS_BAD_CHAR exclusion -> status 00; lone CR (0x0d) is bad -> status 09 (kept as data)
-        assert_eq!(rd(b"A\x09B\n", &LineSeqConfig::DEFAULT), vec![(b"A\x09B     ".to_vec(), "00")]);
-        assert_eq!(rd(b"A\x0dB\n", &LineSeqConfig::DEFAULT), vec![(b"A\x0dB     ".to_vec(), "09")]);
+        assert_eq!(
+            rd(b"A\x09B\n", &LineSeqConfig::DEFAULT),
+            vec![(b"A\x09B     ".to_vec(), "00")]
+        );
+        assert_eq!(
+            rd(b"A\x0dB\n", &LineSeqConfig::DEFAULT),
+            vec![(b"A\x0dB     ".to_vec(), "09")]
+        );
     }
 
     #[test]
     fn read_plain_passes_control_raw() {
-        assert_eq!(rd(b"A\x0dB\n", &PLAIN), vec![(b"A\x0dB     ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"A\x0dB\n", &PLAIN),
+            vec![(b"A\x0dB     ".to_vec(), "00")]
+        );
     }
 
     #[test]
     fn read_nulls_decode() {
         // 41 00 09 42 00 09 42 00 00 0a -> "A\tB\tB\0" decoded
-        assert_eq!(rd(b"A\x00\x09B\x00\x09B\x00\x00\n", &NULLS), vec![(b"A\x09B\x09B\x00  ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"A\x00\x09B\x00\x09B\x00\x00\n", &NULLS),
+            vec![(b"A\x09B\x09B\x00  ".to_vec(), "00")]
+        );
     }
 
     #[test]
     fn read_split_long_line() {
         // "ABCDEFGHIJ\n" -> split on: 06 "ABCDEFGH", 00 "IJ"
-        assert_eq!(rd(b"ABCDEFGHIJ\n", &LineSeqConfig::DEFAULT), vec![(b"ABCDEFGH".to_vec(), "06"), (b"IJ      ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"ABCDEFGHIJ\n", &LineSeqConfig::DEFAULT),
+            vec![(b"ABCDEFGH".to_vec(), "06"), (b"IJ      ".to_vec(), "00")]
+        );
         // exactly record_max + \n -> single 00 (the \n is consumed at the boundary peek)
-        assert_eq!(rd(b"ABCDEFGH\n", &LineSeqConfig::DEFAULT), vec![(b"ABCDEFGH".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"ABCDEFGH\n", &LineSeqConfig::DEFAULT),
+            vec![(b"ABCDEFGH".to_vec(), "00")]
+        );
     }
 
     #[test]
     fn read_no_split_truncates_with_04() {
         // split OFF: "ABCDEFGHIJ\n" -> 04 "ABCDEFGH", the rest of the line is discarded (one record)
-        let nosplit = LineSeqConfig { ls_fixed: false, ls_nulls: false, ls_validate: true, ls_split: false };
-        assert_eq!(rd(b"ABCDEFGHIJ\n", &nosplit), vec![(b"ABCDEFGH".to_vec(), "04")]);
+        let nosplit = LineSeqConfig {
+            ls_fixed: false,
+            ls_nulls: false,
+            ls_validate: true,
+            ls_split: false,
+        };
+        assert_eq!(
+            rd(b"ABCDEFGHIJ\n", &nosplit),
+            vec![(b"ABCDEFGH".to_vec(), "04")]
+        );
     }
 
     #[test]
     fn read_trailing_and_empty() {
         // no trailing newline keeps the last line
-        assert_eq!(rd(b"AB", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"AB", &LineSeqConfig::DEFAULT),
+            vec![(b"AB      ".to_vec(), "00")]
+        );
         // empty file -> immediate AT END (no records)
         assert!(rd(b"", &LineSeqConfig::DEFAULT).is_empty());
         // a mid-file empty line is a record (all spaces)
-        assert_eq!(rd(b"AB\n\nCD\n", &LineSeqConfig::DEFAULT), vec![(b"AB      ".to_vec(), "00"), (b"        ".to_vec(), "00"), (b"CD      ".to_vec(), "00")]);
+        assert_eq!(
+            rd(b"AB\n\nCD\n", &LineSeqConfig::DEFAULT),
+            vec![
+                (b"AB      ".to_vec(), "00"),
+                (b"        ".to_vec(), "00"),
+                (b"CD      ".to_vec(), "00")
+            ]
+        );
     }
 
     // ---- RECORD SEQUENTIAL ----
@@ -4138,14 +4720,20 @@ mod tests {
     #[test]
     fn varseq_format_from_env_selects_the_prefix() {
         let pick = |v: Option<&str>| {
-            let g = |k: &str| if k == "COB_VARSEQ_FORMAT" { v.map(str::to_string) } else { None };
+            let g = |k: &str| {
+                if k == "COB_VARSEQ_FORMAT" {
+                    v.map(str::to_string)
+                } else {
+                    None
+                }
+            };
             cob_varseq_format_from_env(&g)
         };
         assert_eq!(pick(None), 0); // unset -> default 0
         assert_eq!(pick(Some("2")), 2);
         assert_eq!(pick(Some("3")), 3);
         assert_eq!(pick(Some("9")), 0); // out of range -> default
-        // end to end: the env-resolved type drives the emitted prefix (format 3 -> a 2-byte BE16).
+                                        // end to end: the env-resolved type drives the emitted prefix (format 3 -> a 2-byte BE16).
         let t = pick(Some("3"));
         assert_eq!(varseq_prefix(2, t), vec![0x00, 0x02]);
     }
@@ -4184,7 +4772,10 @@ mod tests {
         let mut p = 0usize;
         assert_eq!(set_sequential_variable_length(b"", &mut p, 0), Err("10")); // no bytes -> EOF
         let mut p = 0usize;
-        assert_eq!(set_sequential_variable_length(b"\x00\x02\x01\x00", &mut p, 0), Err("39")); // type 0 non-zero tail
+        assert_eq!(
+            set_sequential_variable_length(b"\x00\x02\x01\x00", &mut p, 0),
+            Err("39")
+        ); // type 0 non-zero tail
     }
 
     #[test]
@@ -4216,7 +4807,11 @@ mod tests {
     fn sequential_read_variable_roundtrip() {
         // write 3 variable records, read them back (record_min=1 record_max=8)
         let mut file = Vec::new();
-        for (d, s) in [(&b"AB      "[..], 2usize), (b"HELLO   ", 5), (b"XYZ12678", 8)] {
+        for (d, s) in [
+            (&b"AB      "[..], 2usize),
+            (b"HELLO   ", 5),
+            (b"XYZ12678", 8),
+        ] {
             file.extend_from_slice(&sequential_write(d, s, true, 0));
         }
         let mut buf = vec![b' '; 8];
@@ -4232,7 +4827,10 @@ mod tests {
 
     #[test]
     fn sequential_rewrite_in_place() {
-        assert_eq!(sequential_rewrite(b"AAAABBBBCCCC", 4, b"X1X1", 4), b"AAAAX1X1CCCC");
+        assert_eq!(
+            sequential_rewrite(b"AAAABBBBCCCC", 4, b"X1X1", 4),
+            b"AAAAX1X1CCCC"
+        );
     }
 
     // ---- RELATIVE ----
@@ -4247,16 +4845,28 @@ mod tests {
         let w5 = relative_write(&d1.file, b"EEEE", 4, 4, 5);
         // final file bytes == the oracle (8-byte LE header + 4 data per slot; deleted slot keeps data)
         let oracle: Vec<u8> = [
-            &[0u8, 0, 0, 0, 0, 0, 0, 0][..], b"AAAA", // slot0: deleted (size 0), data AAAA
-            &[0, 0, 0, 0, 0, 0, 0, 0], b"\x00\x00\x00\x00", // slot1: empty
-            &[4, 0, 0, 0, 0, 0, 0, 0], b"CCCC", // slot2: key3
-            &[0, 0, 0, 0, 0, 0, 0, 0], b"\x00\x00\x00\x00", // slot3: empty
-            &[4, 0, 0, 0, 0, 0, 0, 0], b"EEEE", // slot4: key5
+            &[0u8, 0, 0, 0, 0, 0, 0, 0][..],
+            b"AAAA", // slot0: deleted (size 0), data AAAA
+            &[0, 0, 0, 0, 0, 0, 0, 0],
+            b"\x00\x00\x00\x00", // slot1: empty
+            &[4, 0, 0, 0, 0, 0, 0, 0],
+            b"CCCC", // slot2: key3
+            &[0, 0, 0, 0, 0, 0, 0, 0],
+            b"\x00\x00\x00\x00", // slot3: empty
+            &[4, 0, 0, 0, 0, 0, 0, 0],
+            b"EEEE", // slot4: key5
         ]
         .concat();
         assert_eq!(w5.file, oracle);
         // read key3 -> CCCC/00; key2 (empty) -> 23; key1 (deleted) -> 23
-        assert_eq!(relative_read(&w5.file, 4, 3), RelRead { data: b"CCCC".to_vec(), size: 4, status: "00" });
+        assert_eq!(
+            relative_read(&w5.file, 4, 3),
+            RelRead {
+                data: b"CCCC".to_vec(),
+                size: 4,
+                status: "00"
+            }
+        );
         assert_eq!(relative_read(&w5.file, 4, 2).status, "23");
         assert_eq!(relative_read(&w5.file, 4, 1).status, "23");
     }
@@ -4291,16 +4901,40 @@ mod tests {
         let f1 = base.join("a.txt");
         std::fs::write(&f1, b"hello").unwrap();
         let f2 = base.join("b.txt");
-        assert_eq!(cob_sys_copy_file(f1.to_str().unwrap().as_bytes(), f2.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(
+            cob_sys_copy_file(
+                f1.to_str().unwrap().as_bytes(),
+                f2.to_str().unwrap().as_bytes()
+            ),
+            0
+        );
         assert_eq!(std::fs::read(&f2).unwrap(), b"hello");
         // copy a missing source -> 35
-        assert_eq!(cob_sys_copy_file(base.join("none").to_str().unwrap().as_bytes(), f2.to_str().unwrap().as_bytes()), 35);
+        assert_eq!(
+            cob_sys_copy_file(
+                base.join("none").to_str().unwrap().as_bytes(),
+                f2.to_str().unwrap().as_bytes()
+            ),
+            35
+        );
         let f3 = base.join("c.txt");
-        assert_eq!(cob_sys_rename_file(f2.to_str().unwrap().as_bytes(), f3.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(
+            cob_sys_rename_file(
+                f2.to_str().unwrap().as_bytes(),
+                f3.to_str().unwrap().as_bytes()
+            ),
+            0
+        );
         assert!(f3.exists() && !f2.exists());
         // C$COPY / C$DELETE wrappers route to copy_file / delete_file
         let f4 = base.join("d.txt");
-        assert_eq!(cob_sys_copyfile(f3.to_str().unwrap().as_bytes(), f4.to_str().unwrap().as_bytes()), 0);
+        assert_eq!(
+            cob_sys_copyfile(
+                f3.to_str().unwrap().as_bytes(),
+                f4.to_str().unwrap().as_bytes()
+            ),
+            0
+        );
         assert_eq!(cob_sys_file_delete(f4.to_str().unwrap().as_bytes()), 0);
         assert_eq!(cob_sys_delete_file(f3.to_str().unwrap().as_bytes()), 0);
         assert_eq!(cob_sys_delete_file(f3.to_str().unwrap().as_bytes()), 128); // already gone
@@ -4351,7 +4985,13 @@ mod tests {
         let mut keys = Vec::new();
         cob_file_sort_init_key(&mut keys, 0, 3, true);
         cob_file_sort_init_key(&mut keys, 3, 2, false);
-        let recs: Vec<&[u8]> = vec![b"BBB10xyz", b"AAA20xyz", b"BBB05xyz", b"AAA20abc", b"CCC00xyz"];
+        let recs: Vec<&[u8]> = vec![
+            b"BBB10xyz",
+            b"AAA20xyz",
+            b"BBB05xyz",
+            b"AAA20abc",
+            b"CCC00xyz",
+        ];
         // AAA before BBB before CCC; within AAA the key2 ties (20==20) -> stable insertion order (1,3);
         // within BBB key2 desc -> 10 before 05 (0,2)
         assert_eq!(sort_records(&recs, &keys, None), vec![1, 3, 0, 2, 4]);
@@ -4363,14 +5003,30 @@ mod tests {
         // The in-memory CobSort engine must reproduce the SORT.1-proven stable order (sort_records) for an
         // arbitrary multi-key, duplicate-laden set, across enough records to force several merge rounds.
         let recs: Vec<&[u8]> = vec![
-            b"BBB10p01", b"AAA20p02", b"BBB05p03", b"AAA20p04", b"CCC00p05", b"BBB10p06",
-            b"AAA20p07", b"DDD99p08", b"BBB05p09", b"CCC00p10", b"AAA10p11", b"BBB10p12",
-            b"AAA20p13", b"CCC50p14", b"DDD99p15", b"AAA10p16",
+            b"BBB10p01",
+            b"AAA20p02",
+            b"BBB05p03",
+            b"AAA20p04",
+            b"CCC00p05",
+            b"BBB10p06",
+            b"AAA20p07",
+            b"DDD99p08",
+            b"BBB05p09",
+            b"CCC00p10",
+            b"AAA10p11",
+            b"BBB10p12",
+            b"AAA20p13",
+            b"CCC50p14",
+            b"DDD99p15",
+            b"AAA10p16",
         ];
         let mut keys = Vec::new();
         cob_file_sort_init_key(&mut keys, 0, 3, true);
         cob_file_sort_init_key(&mut keys, 3, 2, false);
-        let want: Vec<Vec<u8>> = sort_records(&recs, &keys, None).into_iter().map(|i| recs[i].to_vec()).collect();
+        let want: Vec<Vec<u8>> = sort_records(&recs, &keys, None)
+            .into_iter()
+            .map(|i| recs[i].to_vec())
+            .collect();
 
         let mut s = CobSort::cob_file_sort_init(8, None);
         s.cob_file_sort_init_key(0, 3, true);
@@ -4412,7 +5068,7 @@ mod tests {
         assert_eq!(s.cob_file_return(&mut buf), "00");
         assert_eq!(buf, b"CC");
         assert_eq!(s.cob_file_return(&mut buf), "10"); // end
-        // RELEASE after retrieving begins -> 30
+                                                       // RELEASE after retrieving begins -> 30
         assert_eq!(s.cob_file_release(b"ZZ"), "30");
     }
 
@@ -4430,7 +5086,7 @@ mod tests {
         assert_eq!(s.indexed_write(&rec("BBB", "bbbbb")), "00");
         assert_eq!(s.indexed_write(&rec("AAA", "aaaaa")), "00");
         assert_eq!(s.indexed_write(&rec("BBB", "dupbb")), "22"); // duplicate primary key
-        // random read: hit -> 00 + record, miss -> 23
+                                                                 // random read: hit -> 00 + record, miss -> 23
         assert_eq!(s.indexed_read(b"AAA"), ("00", Some(rec("AAA", "aaaaa"))));
         assert_eq!(s.indexed_read(b"ZZZ"), ("23", None));
         // READ NEXT walks ascending key order from a low START
@@ -4466,8 +5122,18 @@ mod tests {
     fn bdb_key_helpers_and_set_dbt() {
         // single-component key at offset 2, length 3; multi-component key (0,2)+(5,1)
         let keys = vec![
-            CobFileKey { duplicates: false, offset: 2, field_size: 3, components: vec![] },
-            CobFileKey { duplicates: true, offset: 0, field_size: 3, components: vec![(0, 2), (5, 1)] },
+            CobFileKey {
+                duplicates: false,
+                offset: 2,
+                field_size: 3,
+                components: vec![],
+            },
+            CobFileKey {
+                duplicates: true,
+                offset: 0,
+                field_size: 3,
+                components: vec![(0, 2), (5, 1)],
+            },
         ];
         assert_eq!(bdb_keylen(&keys, 0), Some(3));
         assert_eq!(bdb_keylen(&keys, 1), Some(3));
@@ -4476,11 +5142,11 @@ mod tests {
         assert_eq!(bdb_savekey(&keys, record, 0), b"CDE".to_vec()); // offset 2..5
         assert_eq!(bdb_setkey(&keys, record, 0), b"CDE".to_vec());
         assert_eq!(bdb_savekey(&keys, record, 1), b"ABF".to_vec()); // (0,2)="AB" + (5,1)="F"
-        // cmpkey: equal -> 0, differing -> sign
+                                                                    // cmpkey: equal -> 0, differing -> sign
         let saved = bdb_savekey(&keys, record, 0);
         assert_eq!(bdb_cmpkey(&keys, &saved, record, 0, 0), 0);
         assert!(bdb_cmpkey(&keys, b"CDE", b"XXAAA", 0, 0) > 0); // "CDE" vs "AAA"
-        // suppresskey: key idx 0 = bytes [2,5); all '*' with suppress='*' -> true, else false
+                                                                // suppresskey: key idx 0 = bytes [2,5); all '*' with suppress='*' -> true, else false
         assert!(bdb_suppresskey(&keys, b"XX***ZZ", 0, Some(b'*')));
         assert!(!bdb_suppresskey(&keys, b"XX**XZZ", 0, Some(b'*')));
         assert!(!bdb_suppresskey(&keys, record, 0, None));
@@ -4551,7 +5217,12 @@ mod tests {
         assert_eq!(g.record_max, 80);
         assert_eq!(g.record_min, 80);
         // line-sequential with NULLS sets the FCD feature flag
-        let mut ls = CobFile::new(Organization::LineSequential, AccessMode::Sequential, 8, "l.dat");
+        let mut ls = CobFile::new(
+            Organization::LineSequential,
+            AccessMode::Sequential,
+            8,
+            "l.dat",
+        );
         ls.line_cfg.ls_nulls = true;
         let mut fcd2 = Fcd3::default();
         update_file_to_fcd(&ls, &mut fcd2, Some(*b"05"));
@@ -4573,7 +5244,12 @@ mod tests {
         assert_eq!(fcd.other_flags & OTH_NOT_OPTIONAL, 0);
         assert_eq!(fcd.file_org, ORG_INDEXED);
         assert_ne!(fcd.open_mode & OPEN_NOT_OPEN, 0);
-        let mut g = CobFile::new(Organization::Sequential, AccessMode::Sequential, 4, "ix.dat");
+        let mut g = CobFile::new(
+            Organization::Sequential,
+            AccessMode::Sequential,
+            4,
+            "ix.dat",
+        );
         copy_fcd_to_file(&fcd, &mut g);
         assert_eq!(g.organization, Organization::Indexed);
         assert_eq!(g.access_mode, AccessMode::Dynamic);
@@ -4583,7 +5259,11 @@ mod tests {
     #[test]
     fn extfh_wrappers_select_opcodes() {
         // a mock external file handler records the opcode it was given and returns status 00
-        fn run<F: FnOnce(&mut CobFile, &mut CallFh)>(org: Organization, am: AccessMode, body: F) -> u16 {
+        fn run<F: FnOnce(&mut CobFile, &mut CallFh)>(
+            org: Organization,
+            am: AccessMode,
+            body: F,
+        ) -> u16 {
             let mut f = CobFile::new(org, am, 8, "x.dat");
             let mut seen = 0u16;
             let mut callfh = |op: u16, fcd: &mut Fcd3| {
@@ -4594,17 +5274,72 @@ mod tests {
             body(&mut f, &mut callfh);
             seen
         }
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_open(f, OpenMode::Output, c)), OP_OPEN_OUTPUT);
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_open(f, OpenMode::Io, c)), OP_OPEN_IO);
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_close(f, 1, c)), OP_CLOSE_LOCK);
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_close(f, 0, c)), OP_CLOSE);
-        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_start(f, StartCond::Ge, c)), OP_START_GE);
-        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_read(f, Some(b"K"), 0, c)), OP_READ_RAN);
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_read(f, None, 0, c)), OP_READ_SEQ);
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_read_next(f, COB_READ_PREVIOUS, c)), OP_READ_PREV);
-        assert_eq!(run(Organization::Sequential, AccessMode::Sequential, |f, c| cob_extfh_write(f, c)), OP_WRITE);
-        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_rewrite(f, c)), OP_REWRITE);
-        assert_eq!(run(Organization::Indexed, AccessMode::Dynamic, |f, c| cob_extfh_delete(f, c)), OP_DELETE);
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_open(f, OpenMode::Output, c)
+            }),
+            OP_OPEN_OUTPUT
+        );
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_open(f, OpenMode::Io, c)
+            }),
+            OP_OPEN_IO
+        );
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_close(f, 1, c)
+            }),
+            OP_CLOSE_LOCK
+        );
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_close(f, 0, c)
+            }),
+            OP_CLOSE
+        );
+        assert_eq!(
+            run(Organization::Indexed, AccessMode::Dynamic, |f, c| {
+                cob_extfh_start(f, StartCond::Ge, c)
+            }),
+            OP_START_GE
+        );
+        assert_eq!(
+            run(Organization::Indexed, AccessMode::Dynamic, |f, c| {
+                cob_extfh_read(f, Some(b"K"), 0, c)
+            }),
+            OP_READ_RAN
+        );
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_read(f, None, 0, c)
+            }),
+            OP_READ_SEQ
+        );
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_read_next(f, COB_READ_PREVIOUS, c)
+            }),
+            OP_READ_PREV
+        );
+        assert_eq!(
+            run(Organization::Sequential, AccessMode::Sequential, |f, c| {
+                cob_extfh_write(f, c)
+            }),
+            OP_WRITE
+        );
+        assert_eq!(
+            run(Organization::Indexed, AccessMode::Dynamic, |f, c| {
+                cob_extfh_rewrite(f, c)
+            }),
+            OP_REWRITE
+        );
+        assert_eq!(
+            run(Organization::Indexed, AccessMode::Dynamic, |f, c| {
+                cob_extfh_delete(f, c)
+            }),
+            OP_DELETE
+        );
     }
 
     #[test]
@@ -4628,14 +5363,34 @@ mod tests {
             *c = i as u8;
         }
         col[b'A' as usize] = b'Z';
-        assert_eq!(get_code_set_converted_data(b"ABA", &col, &[]), b"ZBZ".to_vec());
-        assert_eq!(get_code_set_converted_data(b"ABA", &col, &[(0, 1)]), b"ZBA".to_vec());
+        assert_eq!(
+            get_code_set_converted_data(b"ABA", &col, &[]),
+            b"ZBZ".to_vec()
+        );
+        assert_eq!(
+            get_code_set_converted_data(b"ABA", &col, &[(0, 1)]),
+            b"ZBA".to_vec()
+        );
         // update_key_from_fcd reads refKey (big-endian) as the key index
         let keys = vec![
-            CobFileKey { duplicates: false, offset: 0, field_size: 3, components: vec![] },
-            CobFileKey { duplicates: true, offset: 3, field_size: 2, components: vec![] },
+            CobFileKey {
+                duplicates: false,
+                offset: 0,
+                field_size: 3,
+                components: vec![],
+            },
+            CobFileKey {
+                duplicates: true,
+                offset: 3,
+                field_size: 2,
+                components: vec![],
+            },
         ];
-        let mut fcd = Fcd3 { file_org: ORG_INDEXED, ref_key: [0, 1], ..Fcd3::default() };
+        let mut fcd = Fcd3 {
+            file_org: ORG_INDEXED,
+            ref_key: [0, 1],
+            ..Fcd3::default()
+        };
         assert_eq!(update_key_from_fcd(&keys, &fcd), Some(1));
         fcd.ref_key = [0, 9];
         assert_eq!(update_key_from_fcd(&keys, &fcd), None);
@@ -4648,10 +5403,20 @@ mod tests {
 
     #[test]
     fn open_next_concat_and_isam_position() {
-        assert_eq!(open_next("a.dat+b.dat", b'+'), Some(("a.dat".into(), "b.dat".into())));
-        assert_eq!(open_next("only.dat", b'+'), Some(("only.dat".into(), String::new())));
+        assert_eq!(
+            open_next("a.dat+b.dat", b'+'),
+            Some(("a.dat".into(), "b.dat".into()))
+        );
+        assert_eq!(
+            open_next("only.dat", b'+'),
+            Some(("only.dat".into(), String::new()))
+        );
         assert_eq!(open_next("", b'+'), None);
-        let mut c = IsamCursor { curkey: 0, readdir: 1, saverecnum: 0 };
+        let mut c = IsamCursor {
+            curkey: 0,
+            readdir: 1,
+            saverecnum: 0,
+        };
         savefileposition(&mut c, Some(42));
         assert_eq!(restorefileposition(&c), 42);
         c.curkey = -1;
@@ -4677,7 +5442,10 @@ mod tests {
     fn extfh_opcode_decode_and_dispatch() {
         assert_eq!(extfh_decode_opcode(OP_OPEN_INPUT), ExtfhOp::OpenInput);
         assert_eq!(extfh_decode_opcode(OP_READ_RAN), ExtfhOp::ReadRandom);
-        assert_eq!(extfh_decode_opcode(OP_START_GE), ExtfhOp::Start(StartCond::Ge));
+        assert_eq!(
+            extfh_decode_opcode(OP_START_GE),
+            ExtfhOp::Start(StartCond::Ge)
+        );
         assert_eq!(extfh_decode_opcode(0x1234), ExtfhOp::Unknown);
         // EXTFH3 composes the 0xFA-led opcode bytes and decodes; an unknown op sets 9/161
         let mut fcd = Fcd3::default();
@@ -4690,14 +5458,31 @@ mod tests {
 
     #[test]
     fn fd_open_flags_and_file_open_close() {
-        let mut f = CobFile::new(Organization::Relative, AccessMode::Dynamic, 8, "/nonexistent/xyz.dat");
+        let mut f = CobFile::new(
+            Organization::Relative,
+            AccessMode::Dynamic,
+            8,
+            "/nonexistent/xyz.dat",
+        );
         assert_eq!(cob_fd_file_open(&f, OpenMode::Input), FD_READ);
-        assert_eq!(cob_fd_file_open(&f, OpenMode::Output), FD_CREATE | FD_TRUNC | FD_READ | FD_WRITE);
+        assert_eq!(
+            cob_fd_file_open(&f, OpenMode::Output),
+            FD_CREATE | FD_TRUNC | FD_READ | FD_WRITE
+        );
         // a missing INPUT file is 35; OPTIONAL makes it 05; OUTPUT is 00
-        assert_eq!(cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Input), "35");
+        assert_eq!(
+            cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Input),
+            "35"
+        );
         f.optional = true;
-        assert_eq!(cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Input), "05");
-        assert_eq!(cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Output), "00");
+        assert_eq!(
+            cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Input),
+            "05"
+        );
+        assert_eq!(
+            cob_file_open(&mut f, "/nonexistent/xyz.dat", OpenMode::Output),
+            "00"
+        );
         assert_eq!(cob_file_close(&mut f, 0), "00");
         // sys file info: a missing file -> 35 / 128
         assert_eq!(cob_sys_check_file_exist("/nonexistent/xyz.dat").0, 35);
@@ -4750,9 +5535,18 @@ mod tests {
 
     #[test]
     fn filename_print_formats() {
-        assert_eq!(cob_get_filename_print("INF", "in.dat", None), "INF ('in.dat')");
-        assert_eq!(cob_get_filename_print("INF", "DD_IN", Some("in.dat")), "INF ('DD_IN' => in.dat)");
-        assert_eq!(cob_get_filename_print("INF", "in.dat", Some("in.dat")), "INF ('in.dat')");
+        assert_eq!(
+            cob_get_filename_print("INF", "in.dat", None),
+            "INF ('in.dat')"
+        );
+        assert_eq!(
+            cob_get_filename_print("INF", "DD_IN", Some("in.dat")),
+            "INF ('DD_IN' => in.dat)"
+        );
+        assert_eq!(
+            cob_get_filename_print("INF", "in.dat", Some("in.dat")),
+            "INF ('in.dat')"
+        );
     }
 
     #[test]
@@ -4798,7 +5592,12 @@ mod tests {
             flags: crate::attr::COB_FLAG_HAVE_SIGN,
         };
         let recs: Vec<&[u8]> = vec![b"03bbb", b"0uaaa", b"10ddd", b"0qccc"]; // +3, -5, +10, -1
-        let keys = [SortKey { offset: 0, size: 2, ascending: true, attr: Some(s9) }];
+        let keys = [SortKey {
+            offset: 0,
+            size: 2,
+            ascending: true,
+            attr: Some(s9),
+        }];
         let mut idx: Vec<usize> = (0..recs.len()).collect();
         idx.sort_by(|&i, &j| cob_file_sort_compare(recs[i], i, recs[j], j, &keys, None));
         let sorted: Vec<&[u8]> = idx.iter().map(|&i| recs[i]).collect();
@@ -4808,11 +5607,20 @@ mod tests {
             "numeric key must sort by value (-5,-1,+3,+10), matching cobc"
         );
         // and an alphanumeric (attr: None) key still sorts the same key bytes by raw bytes
-        let akeys = [SortKey { offset: 0, size: 2, ascending: true, attr: None }];
+        let akeys = [SortKey {
+            offset: 0,
+            size: 2,
+            ascending: true,
+            attr: None,
+        }];
         let mut aidx: Vec<usize> = (0..recs.len()).collect();
         aidx.sort_by(|&i, &j| cob_file_sort_compare(recs[i], i, recs[j], j, &akeys, None));
         let asorted: Vec<&[u8]> = aidx.iter().map(|&i| recs[i]).collect();
-        assert_eq!(asorted, vec![b"03bbb".as_slice(), b"0qccc", b"0uaaa", b"10ddd"], "bytewise order differs");
+        assert_eq!(
+            asorted,
+            vec![b"03bbb".as_slice(), b"0qccc", b"0uaaa", b"10ddd"],
+            "bytewise order differs"
+        );
     }
 
     #[test]
@@ -4852,14 +5660,19 @@ mod tests {
         assert_eq!(g.read_record(), ("00", b"AB      ".to_vec()));
         assert_eq!(g.read_record(), ("00", b"XY      ".to_vec()));
         assert_eq!(g.read_record().0, "10"); // AT END
-        // CLOSE then OPEN with lock -> a later OPEN is 38
+                                             // CLOSE then OPEN with lock -> a later OPEN is 38
         let _ = cob_close(&mut g, false);
         let mut h = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, ps);
         assert_eq!(cob_open(&mut h, OpenMode::Input), "00");
         assert_eq!(cob_close(&mut h, true), "00"); // close with lock
         assert_eq!(cob_open(&mut h, OpenMode::Input), "38"); // closed with lock
-        // OPEN INPUT a missing file -> 35; OPTIONAL -> 05
-        let mut m = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, base.join("none.dat").to_str().unwrap());
+                                                             // OPEN INPUT a missing file -> 35; OPTIONAL -> 05
+        let mut m = CobFile::new(
+            Organization::Sequential,
+            AccessMode::Sequential,
+            8,
+            base.join("none.dat").to_str().unwrap(),
+        );
         assert_eq!(cob_open(&mut m, OpenMode::Input), "35");
         m.optional = true;
         assert_eq!(cob_open(&mut m, OpenMode::Input), "05");
@@ -4869,7 +5682,7 @@ mod tests {
         let mut d = CobFile::new(Organization::Sequential, AccessMode::Sequential, 8, ps);
         assert_eq!(cob_delete_file(&mut d), "00");
         assert_eq!(cob_delete_file(&mut d), "30"); // already gone
-        // unlock / commit / rollback are no-op successes
+                                                   // unlock / commit / rollback are no-op successes
         assert_eq!(cob_unlock(&mut h), "00");
         cob_commit();
         cob_rollback();
@@ -4886,37 +5699,64 @@ mod tests {
         assert_eq!(cob_write(Output, Sequential, 4, 4, 4), None);
         assert_eq!(cob_write(Io, Random, 4, 4, 4), None); // random WRITE allows I-O
         assert_eq!(cob_write(Output, Sequential, 9, 4, 4), Some("44")); // too long
-        // READ on OUTPUT -> 47; on INPUT -> proceed
-        assert_eq!(cob_read(Output, false, false, false, false, false, false), Some("47"));
-        assert_eq!(cob_read(Input, false, false, false, false, false, false), None);
-        assert_eq!(cob_read(Input, false, false, false, true, false, false), Some("46")); // seq read at EOF
-        // REWRITE/DELETE need I-O; INPUT -> 49; I-O seq without read -> 43
-        assert_eq!(cob_rewrite(Input, Random, Organization::Relative, true, 4, 4), Some("49"));
-        assert_eq!(cob_rewrite(Io, Sequential, Organization::Relative, false, 4, 4), Some("43"));
-        assert_eq!(cob_rewrite(Io, Sequential, Organization::Sequential, true, 5, 4), Some("44")); // size change
+                                                                        // READ on OUTPUT -> 47; on INPUT -> proceed
+        assert_eq!(
+            cob_read(Output, false, false, false, false, false, false),
+            Some("47")
+        );
+        assert_eq!(
+            cob_read(Input, false, false, false, false, false, false),
+            None
+        );
+        assert_eq!(
+            cob_read(Input, false, false, false, true, false, false),
+            Some("46")
+        ); // seq read at EOF
+           // REWRITE/DELETE need I-O; INPUT -> 49; I-O seq without read -> 43
+        assert_eq!(
+            cob_rewrite(Input, Random, Organization::Relative, true, 4, 4),
+            Some("49")
+        );
+        assert_eq!(
+            cob_rewrite(Io, Sequential, Organization::Relative, false, 4, 4),
+            Some("43")
+        );
+        assert_eq!(
+            cob_rewrite(Io, Sequential, Organization::Sequential, true, 5, 4),
+            Some("44")
+        ); // size change
         assert_eq!(cob_delete(Input, Random, false), Some("49"));
         assert_eq!(cob_delete(Io, Sequential, false), Some("43"));
         assert_eq!(cob_delete(Io, Random, false), None); // random delete needs no prior read
-        // START: not INPUT/I-O -> 47; RANDOM -> 47; nonexistent -> 23
+                                                         // START: not INPUT/I-O -> 47; RANDOM -> 47; nonexistent -> 23
         assert_eq!(cob_start(Output, Sequential, false, true), Some("47"));
         assert_eq!(cob_start(Input, Random, false, true), Some("47"));
         assert_eq!(cob_start(Input, Sequential, true, true), Some("23"));
         assert_eq!(cob_start(Io, Dynamic, false, true), None);
         // read_next nonexistent non-first -> 46 (vs cob_read's 23)
-        assert_eq!(cob_read_next(Input, true, false, false, false, false), Some("46"));
-        assert_eq!(cob_read_next(Input, true, true, false, false, false), Some("10"));
+        assert_eq!(
+            cob_read_next(Input, true, false, false, false, false),
+            Some("46")
+        );
+        assert_eq!(
+            cob_read_next(Input, true, true, false, false, false),
+            Some("10")
+        );
     }
 
     // ---- indexed key descriptor ----
     #[test]
     fn indexed_key_ops() {
         // a 2-part key: bytes [2..5) and [8..10) of the record
-        let kd = KeyDesc { parts: vec![KeyPart { start: 2, leng: 3 }, KeyPart { start: 8, leng: 2 }], duplicates: false };
+        let kd = KeyDesc {
+            parts: vec![KeyPart { start: 2, leng: 3 }, KeyPart { start: 8, leng: 2 }],
+            duplicates: false,
+        };
         assert_eq!(indexed_keylen(&kd), 5);
         let rec = b"XXABCXXX12X";
         let key = indexed_savekey(rec, &kd);
         assert_eq!(key, b"ABC12"); // parts concatenated in order
-        // restore into a fresh record
+                                   // restore into a fresh record
         let mut rec2 = vec![b'.'; 11];
         indexed_restorekey(&mut rec2, &key, &kd);
         assert_eq!(&rec2[2..5], b"ABC");
@@ -4925,18 +5765,31 @@ mod tests {
         assert_eq!(indexed_cmpkey(rec, &key, &kd, 0), 0);
         assert_eq!(indexed_cmpkey(b"XXABDXXX12X", &key, &kd, 0), 1); // 'D' > 'C'
         assert_eq!(indexed_cmpkey(b"XXAAAXXX99X", &key, &kd, 0), -1); // 'A' < 'B'
-        // partial compare of only the first 3 bytes ignores the second part
+                                                                      // partial compare of only the first 3 bytes ignores the second part
         assert_eq!(indexed_cmpkey(b"XXABCXXX99X", &key, &kd, 3), 0);
     }
 
     #[test]
     fn indexed_keydesc_and_cob_savekey() {
         // single-field key: offset 2, size 4
-        let k1 = CobFileKey { duplicates: false, offset: 2, field_size: 4, components: vec![] };
-        assert_eq!(indexed_keydesc(&k1).parts, vec![KeyPart { start: 2, leng: 4 }]);
+        let k1 = CobFileKey {
+            duplicates: false,
+            offset: 2,
+            field_size: 4,
+            components: vec![],
+        };
+        assert_eq!(
+            indexed_keydesc(&k1).parts,
+            vec![KeyPart { start: 2, leng: 4 }]
+        );
         assert_eq!(cob_savekey(b"XXABCDXX", &k1), b"ABCD");
         // composite key: two components
-        let k2 = CobFileKey { duplicates: true, offset: 0, field_size: 0, components: vec![(0, 2), (5, 3)] };
+        let k2 = CobFileKey {
+            duplicates: true,
+            offset: 0,
+            field_size: 0,
+            components: vec![(0, 2), (5, 3)],
+        };
         let kd = indexed_keydesc(&k2);
         assert!(kd.duplicates && kd.parts.len() == 2);
         assert_eq!(cob_savekey(b"AB...XYZ..", &k2), b"ABXYZ");
@@ -4958,8 +5811,18 @@ mod tests {
     fn findkey_and_unique_copy() {
         // keys: a single key at offset 2 size 4, and a composite at components (0,2)+(8,3)
         let keys = vec![
-            CobFileKey { duplicates: false, offset: 2, field_size: 4, components: vec![] },
-            CobFileKey { duplicates: true, offset: 0, field_size: 0, components: vec![(0, 2), (8, 3)] },
+            CobFileKey {
+                duplicates: false,
+                offset: 2,
+                field_size: 4,
+                components: vec![],
+            },
+            CobFileKey {
+                duplicates: true,
+                offset: 0,
+                field_size: 0,
+                components: vec![(0, 2), (8, 3)],
+            },
         ];
         // single key matched by offset -> (index 0, fullkeylen 4, partlen = query size)
         assert_eq!(cob_findkey_attr(&keys, 2, 4), (0, 4, 4));
@@ -4991,10 +5854,22 @@ mod tests {
 
     #[test]
     fn indexed_keycmp_equality() {
-        let a = KeyDesc { parts: vec![KeyPart { start: 0, leng: 4 }], duplicates: false };
-        let b = KeyDesc { parts: vec![KeyPart { start: 0, leng: 4 }], duplicates: false };
-        let c = KeyDesc { parts: vec![KeyPart { start: 0, leng: 5 }], duplicates: false };
-        let d = KeyDesc { parts: vec![KeyPart { start: 0, leng: 4 }], duplicates: true };
+        let a = KeyDesc {
+            parts: vec![KeyPart { start: 0, leng: 4 }],
+            duplicates: false,
+        };
+        let b = KeyDesc {
+            parts: vec![KeyPart { start: 0, leng: 4 }],
+            duplicates: false,
+        };
+        let c = KeyDesc {
+            parts: vec![KeyPart { start: 0, leng: 5 }],
+            duplicates: false,
+        };
+        let d = KeyDesc {
+            parts: vec![KeyPart { start: 0, leng: 4 }],
+            duplicates: true,
+        };
         assert_eq!(indexed_keycmp(&a, &b), 0);
         assert_eq!(indexed_keycmp(&a, &c), 1); // different length
         assert_eq!(indexed_keycmp(&a, &d), 1); // different dup flag
@@ -5041,12 +5916,33 @@ mod tests {
         // classify_io_error keys an OPEN failure into the right FILE STATUS class (oracle: cobc OPEN
         // INPUT of a chmod-000 file -> status 37). NotFound->35, perm/isdir->37, nospace->34.
         use std::io::{Error, ErrorKind};
-        assert_eq!(classify_io_error(&Error::from(ErrorKind::NotFound)), FileErrno::NotExist);
-        assert_eq!(classify_io_error(&Error::from(ErrorKind::PermissionDenied)), FileErrno::PermissionOrIsDir);
-        assert_eq!(classify_io_error(&Error::from_raw_os_error(21)), FileErrno::PermissionOrIsDir); // EISDIR
-        assert_eq!(classify_io_error(&Error::from_raw_os_error(28)), FileErrno::NoSpaceOrQuota); // ENOSPC
-        assert_eq!(errno_cob_sts(classify_io_error(&Error::from(ErrorKind::PermissionDenied)), "35"), "37");
-        assert_eq!((dummy_delete(), dummy_read(), dummy_start()), ("91", "91", "91"));
+        assert_eq!(
+            classify_io_error(&Error::from(ErrorKind::NotFound)),
+            FileErrno::NotExist
+        );
+        assert_eq!(
+            classify_io_error(&Error::from(ErrorKind::PermissionDenied)),
+            FileErrno::PermissionOrIsDir
+        );
+        assert_eq!(
+            classify_io_error(&Error::from_raw_os_error(21)),
+            FileErrno::PermissionOrIsDir
+        ); // EISDIR
+        assert_eq!(
+            classify_io_error(&Error::from_raw_os_error(28)),
+            FileErrno::NoSpaceOrQuota
+        ); // ENOSPC
+        assert_eq!(
+            errno_cob_sts(
+                classify_io_error(&Error::from(ErrorKind::PermissionDenied)),
+                "35"
+            ),
+            "37"
+        );
+        assert_eq!(
+            (dummy_delete(), dummy_read(), dummy_start()),
+            ("91", "91", "91")
+        );
     }
 
     #[test]
@@ -5054,7 +5950,12 @@ mod tests {
         // cob_close flushes buffered data at close; writing to a path that IS a directory fails with
         // EISDIR (errno 21) -> classify_io_error -> 37 (structural, so deterministic even as root).
         // Proves the flush failure is surfaced as a FILE STATUS, not silently dropped (was `let _`).
-        let mut f = CobFile::new(Organization::LineSequential, AccessMode::Sequential, 10, "/tmp");
+        let mut f = CobFile::new(
+            Organization::LineSequential,
+            AccessMode::Sequential,
+            10,
+            "/tmp",
+        );
         f.open_mode = OpenMode::Output;
         f.dirty = true;
         f.flag_nonexistent = false;
@@ -5153,7 +6054,13 @@ mod kani_proofs {
     /// allowed open modes is always denied. Never panics.
     #[kani::proof]
     fn verb_precondition_total() {
-        let opens = [OpenMode::Closed, OpenMode::Input, OpenMode::Output, OpenMode::Io, OpenMode::Extend];
+        let opens = [
+            OpenMode::Closed,
+            OpenMode::Input,
+            OpenMode::Output,
+            OpenMode::Io,
+            OpenMode::Extend,
+        ];
         let oi: usize = kani::any();
         kani::assume(oi < 5);
         let open = opens[oi];
@@ -5171,8 +6078,16 @@ mod kani_proofs {
     fn sort_compare_consistent() {
         let a: [u8; 3] = kani::any();
         let b: [u8; 3] = kani::any();
-        let keys = [SortKey { offset: 0, size: 3, ascending: true, attr: None }];
-        assert_eq!(cob_file_sort_compare(&a, 0, &a, 0, &keys, None), Ordering::Equal);
+        let keys = [SortKey {
+            offset: 0,
+            size: 3,
+            ascending: true,
+            attr: None,
+        }];
+        assert_eq!(
+            cob_file_sort_compare(&a, 0, &a, 0, &keys, None),
+            Ordering::Equal
+        );
         let ab = cob_file_sort_compare(&a, 0, &b, 1, &keys, None);
         let ba = cob_file_sort_compare(&b, 1, &a, 0, &keys, None);
         assert_eq!(ab, ba.reverse());
@@ -5256,7 +6171,9 @@ mod kani_proofs {
         // cob_file_external_addr allocates the EXTERNAL file's key array.
         let keys = cob_file_external_addr(3);
         assert_eq!(keys.len(), 3);
-        assert!(keys.iter().all(|k| k.field_size == 0 && k.offset == 0 && !k.duplicates));
+        assert!(keys
+            .iter()
+            .all(|k| k.field_size == 0 && k.offset == 0 && !k.duplicates));
     }
 
     #[test]
