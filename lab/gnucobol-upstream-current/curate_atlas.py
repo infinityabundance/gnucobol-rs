@@ -221,16 +221,16 @@ E("8cec9fdb89c0c4d5caf83439df3c320b06cad2c5", "RUNTIME_PORTED",
 
 E("921108ea29fcc55ceaa60f98179cfec9f30f57e5", "RUNTIME_PORTED",
   "Fix out-of-bounds read in optimized move DISPLAY->edited (candidate edited move bounds)",
-  "Fix an out of bounds read access in optimized_move_display_to_edited", "")
-
+  "Fix an out of bounds read access in optimized_move_display_to_edited", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("cb5fe73262cf9b32852ad0aaa7ecaa349529e5d1", "RUNTIME_PORTED",
   "Fix STRING/UNSTRING/INSPECT source-overwrite bug (source fields must not be clobbered mid-operation)",
   "Fix a bug where the source of STRING/UNSTRING/INSPECT is overwritten", "")
 
 E("44c96d20a12e96e0802163fdb9a2d05bb41df578", "RUNTIME_PORTED",
   "BLANK WHEN ZERO on signed NUMERIC-EDITED fields: normalize numeric data in edited move; extend edited-move to sign variants",
-  "Fix BLANK WHEN ZERO not working on signed NUMERIC-EDITED fields", "")
-
+  "Fix BLANK WHEN ZERO not working on signed NUMERIC-EDITED fields", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("1c357b4a3894bd09940a01c7ee7e0a5ad90ceeb8", "NOT_APPLICABLE_WITH_PROOF",
   "None: BDB DBT app_data fix",
   "Fixed bugs:1032: app_data field of DBT structure not always copied in bdb_bt_compare",
@@ -251,8 +251,8 @@ E("7bddf706da7a96a5382c7523117ef792e1774490", "NOT_APPLICABLE_WITH_PROOF",
 E("87c1dd5799ff72425b6ede1efa3b2a789610e2a2", "RUNTIME_PORTED",
   "Fix move-to-edited regression with insertion symbols B, 0 and /; register COBOL2025 COB_EC_DATA_NULL and COB_EC_DATA_TRUNCATION exception definitions",
   "Fixed bugs:#1008 regression in move to numeric edited items; adds COB_EC_DATA_NULL + COB_EC_DATA_TRUNCATION",
-  "Exceptions are defined but currently unused upstream")
-
+  "Exceptions are defined but currently unused upstream",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("d5eb0eb02335042b507d69f86d48ed6cd79346a4", "BLOCKED_BY_NATIVE_ARTIFACT_BOUNDARY",
   "Track only: PANEL update (curses)",
   "Follow-up to r5369 - panel update", "")
@@ -371,8 +371,8 @@ E("71ea358aa9101faa5f2c3732d763e59934aacc94", "FRONTEND_REIMPLEMENTED",
 
 E("ec5562cfb9f610ce72029547b68a1999aaa0322a", "RUNTIME_PORTED",
   "Support the 2023 standard for edited numeric picture strings and fix bugs:#935 (picture-string validation + runtime edited move)",
-  "Adjustment to support the 2023 standard for edited numeric picture strings; fixes bugs:#935", "")
-
+  "Adjustment to support the 2023 standard for edited numeric picture strings; fixes bugs:#935", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("0fa2bf5f5238772b8eb46ace17f2ea958b7726d2", "FRONTEND_REIMPLEMENTED",
   "Increase dialect portability for Micro Focus and ACUCOBOL-GT (reserved words/config.def/parser)",
   "Increase portability for Micro Focus and ACUCOBOL-GT", "")
@@ -405,16 +405,16 @@ E("1fa8db0d0e6bd4411f0db864511fd3d9bb6963a5", "CONFIGURATION_INTEGRATED",
 
 E("435454f8df3808669bfe75ea985446c409877a53", "RUNTIME_PORTED",
   "Adjustment for move to edited numeric (frontend picture + runtime edit alignment)",
-  "Adjustment for move to edited numeric", "")
-
+  "Adjustment for move to edited numeric", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("e51b091b99211fc8a99f446156e90b4fdf9754c2", "RUNTIME_PORTED",
   "Fix default ROUNDED option behavior",
-  "Fix for bug 934 - default ROUNDED option", "")
-
+  "Fix for bug 934 - default ROUNDED option", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("d33f2ec97d726b9578cf5ef55f8acd89ec64e777", "RUNTIME_PORTED",
   "Implement CBL_GC_SCR_DUMP and CBL_GC_SCR_RESTORE as candidate runtime callable functions",
-  "Added two new functions CBL_GC_SCR_DUMP and CBL_GC_SCR_RESTORE", "")
-
+  "Added two new functions CBL_GC_SCR_DUMP and CBL_GC_SCR_RESTORE", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("026a651ee4063b380eaccc07f54aa585d5c86924", "NOT_APPLICABLE_WITH_PROOF",
   "None: errors caught by the GCC Sanitizer (C internal)",
   "Fix errors caught by the Sanitizer functionality of GCC",
@@ -426,8 +426,8 @@ E("b33a87961f0d11b2d9d371374efae94d97c7b557", "NOT_APPLICABLE_WITH_PROOF",
 
 E("7c7b55b9311b7edf3bdab5e3c630995f28249958", "RUNTIME_PORTED",
   "Adjustment for move to edited numeric (with tests)",
-  "Adjustment for move to edited numeric", "")
-
+  "Adjustment for move to edited numeric", "",
+  evidence="8c6a411faece296923e902964f5a9e5b2190db31")
 E("940f057e6522e4d25c5c4facbe7202c5ee0682e3", "NOT_APPLICABLE_WITH_PROOF",
   "None: Windows/MSVC build command fixes + atlocal_win path fixes",
   "Windows build fixes + ChangeLog cleanups", "Proof: Windows-only")
