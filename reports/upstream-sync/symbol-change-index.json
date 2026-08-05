@@ -1,0 +1,187 @@
+{
+ "schema": "gnurust-symbol-change-index-v1",
+ "symbols": {
+  "cob_is_test": {
+   "added_by": [
+    "a3accbe7616ca8ffd61662af1072812ba65cd523",
+    "02964e42e1fa1820210edae27116247ea96927e1"
+   ],
+   "removed_by": []
+  },
+  "is_test": {
+   "added_by": [
+    "2e620aa926b6f73953ff438812ed1cf3e9f62d55",
+    "7b6995042c4d224d7aed2827387278334b531d17"
+   ],
+   "removed_by": [
+    "a3accbe7616ca8ffd61662af1072812ba65cd523",
+    "02964e42e1fa1820210edae27116247ea96927e1"
+   ]
+  },
+  "cob_strcat": {
+   "added_by": [],
+   "removed_by": [
+    "da31b9286647245a5c4ac39c021a7ac231ce6771",
+    "b836c467e7ed3d93b87ffba1ca299846ca734043"
+   ]
+  },
+  "cob_strjoin": {
+   "added_by": [],
+   "removed_by": [
+    "da31b9286647245a5c4ac39c021a7ac231ce6771",
+    "b836c467e7ed3d93b87ffba1ca299846ca734043"
+   ]
+  },
+  "cob_setup_filename": {
+   "added_by": [
+    "a4be0beded8f1a0fd5f941ace568d9dde397462c",
+    "3dd1d88da6ff57acf462a392763118069b2c5670"
+   ],
+   "removed_by": []
+  },
+  "cob_runtime_warning_ss": {
+   "added_by": [
+    "68b82c88f548d4a9aa9fcd9a3df15e4cf3884e73",
+    "3f897122aacdd6610c14117b28442013a4574cde",
+    "0ac36ad45763304c9a9e7c2540a6468f66a82691"
+   ],
+   "removed_by": [
+    "68b82c88f548d4a9aa9fcd9a3df15e4cf3884e73",
+    "3f897122aacdd6610c14117b28442013a4574cde"
+   ]
+  },
+  "cob_cmp_strings": {
+   "added_by": [
+    "00f6832684d831a81078222934dc50a5babc0ee8",
+    "24ff1a9c93355660fecce5a44400459a51e24b62"
+   ],
+   "removed_by": []
+  },
+  "\tcob_open_logfile": {
+   "added_by": [
+    "2e620aa926b6f73953ff438812ed1cf3e9f62d55",
+    "7b6995042c4d224d7aed2827387278334b531d17"
+   ],
+   "removed_by": []
+  },
+  "cob_init_prof": {
+   "added_by": [
+    "2e620aa926b6f73953ff438812ed1cf3e9f62d55",
+    "7b6995042c4d224d7aed2827387278334b531d17"
+   ],
+   "removed_by": []
+  },
+  "cob_prof_end": {
+   "added_by": [
+    "2e620aa926b6f73953ff438812ed1cf3e9f62d55",
+    "7b6995042c4d224d7aed2827387278334b531d17"
+   ],
+   "removed_by": []
+  },
+  "cob_cmps": {
+   "added_by": [
+    "57133577c7e5524f14cf3cb868df3c1fdbc21ad7",
+    "106e7ce6c98c88bad50e7882a753db165065895f"
+   ],
+   "removed_by": []
+  },
+  "        cob_get_strerror": {
+   "added_by": [
+    "824f2a6445e0509068bb4639733de956632be151",
+    "44848f58b437cce2eac30106e79a7b943e899b7f"
+   ],
+   "removed_by": []
+  },
+  "cob_field_to_string": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ]
+  },
+  "cob_init_cconv": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": []
+  },
+  "cob_move_display_to_packed": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": []
+  },
+  "cob_move_packed_to_display": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": []
+  },
+  "cob_real_get_sign": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ]
+  },
+  "cob_tolower": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": []
+  },
+  "cob_toupper": {
+   "added_by": [
+    "1992539c4fde2605fb5d83da2cf215f16445db24"
+   ],
+   "removed_by": []
+  },
+  "cob_decimal_get_mpf": {
+   "added_by": [
+    "757ff9b2f769dd13e7f1d106d9af16536ee4ed8e"
+   ],
+   "removed_by": []
+  },
+  "cob_decimal_set_mpf": {
+   "added_by": [
+    "757ff9b2f769dd13e7f1d106d9af16536ee4ed8e"
+   ],
+   "removed_by": []
+  },
+  "cob_strndup": {
+   "added_by": [
+    "757ff9b2f769dd13e7f1d106d9af16536ee4ed8e",
+    "6fec839eae019e20a04b4bcb484bc92c67b9a314"
+   ],
+   "removed_by": [
+    "757ff9b2f769dd13e7f1d106d9af16536ee4ed8e"
+   ]
+  },
+  "cob_exit_screen_from_signal": {
+   "added_by": [
+    "0ac36ad45763304c9a9e7c2540a6468f66a82691"
+   ],
+   "removed_by": []
+  },
+  "cob_hard_failure_internal": {
+   "added_by": [],
+   "removed_by": [
+    "0ac36ad45763304c9a9e7c2540a6468f66a82691"
+   ]
+  },
+  "cob_set_field_to_uint": {
+   "added_by": [],
+   "removed_by": [
+    "6fec839eae019e20a04b4bcb484bc92c67b9a314"
+   ]
+  },
+  "cob_add_exception": {
+   "added_by": [
+    "e2505a60f8be5e38bdaaee1ebefefc0e44b5a105"
+   ],
+   "removed_by": []
+  }
+ }
+}
