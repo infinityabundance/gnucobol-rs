@@ -120,7 +120,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "568531bd417acf493158208426dc2ec346ca3fa1",
@@ -255,7 +257,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a672a26b52b594bd0ebfdcfe0200613c572018d5",
@@ -352,7 +356,9 @@
    "behavior": "Upstream expands special parser contexts beyond the 32-bit limit (new context enum replaces bitmask); context-sensitive reserved-word handling changes accepted/rejected behavior",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Do not copy the C bitmask macro implementation; Rust typed contexts, deterministic diagnostics",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "47dda86c0013505df0aae22a4f8bcbc420169e38",
@@ -425,7 +431,9 @@
    "behavior": "-ftab-width accepts a comma-separated list of widths; the final width repeats; single-width legacy behavior preserved",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Also WRAPPER side: cobc-rs flag parsing",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a3accbe7616ca8ffd61662af1072812ba65cd523",
@@ -479,7 +487,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "871f965fac8300d60c4f0f7d0a22574a4f9b64e9",
@@ -538,7 +548,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "326ce553416e3d1ec35ad72f915b9ed15d9cfacd",
@@ -573,7 +585,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "02964e42e1fa1820210edae27116247ea96927e1",
@@ -626,7 +640,9 @@
    "behavior": "libcob extern value is_test renamed to cob_is_test (public API rename)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Candidate has no C ABI export; rename the equivalent runtime symbol/metadata",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "253e5cc2602e6e420ff5a770f6f3d5b61aa9f94a",
@@ -732,7 +748,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "50b58f682700bdb1513f7b88769e1942fab73ef7",
@@ -812,7 +830,9 @@
    "behavior": "New boolean runtime config COB_LOAD_GLOBAL controls loading shared modules into the global symbol namespace",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Native DSO loading remains a typed non-claim",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9e0d66418efce0cfd7a429b4cd0ef1c0be2b3204",
@@ -866,7 +886,9 @@
    "behavior": "cobc no longer warns about ORGANIZATION INDEXED for EXTFH files even when built --without-db",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "EXCEPTION: indexed-file runtime remains unsupported; this is a checker-warning-only change",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3457bd5def5e23e0dcda2bf82a0665ff40065249",
@@ -901,7 +923,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "fb8f358e91ce2c5bf2e1d5e040507df22a8d364b",
@@ -936,7 +960,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "da31b9286647245a5c4ac39c021a7ac231ce6771",
@@ -1157,7 +1183,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "34efe755f6f4d6a8d3b9f2158609917ad21ece5d",
@@ -1228,7 +1256,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c4eea8102820f2d9becd2572a0f0b16edbb557d7",
@@ -1276,7 +1306,9 @@
    "behavior": "ENTRY areacheck corrected to area B",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4b72d0a9faac66b05e149d0b33d75a589f8863c9",
@@ -1373,7 +1405,9 @@
    "behavior": "Improve memory handling in edge-cases (cobc + libcob + tests)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Verify each touched path for observable behavior",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "bc234cd17f19637098182f29c4062dba23bfc7d7",
@@ -1408,7 +1442,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1fc514e9d166e606d56b3ab71043060532999b6a",
@@ -1450,7 +1486,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a98fcd30cef7d8eb7fd77307c62409b292ea0368",
@@ -1491,7 +1529,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "39ab4808c7e5365330c4d386db3a8e8fba391e5f",
@@ -1558,7 +1598,9 @@
    "behavior": "cobc listing header uses the basename of the source file only",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Listing shape parity is a separate dimension",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2c092ca140b49bc39289ed3ad72953c2a329b0dd",
@@ -1612,7 +1654,9 @@
    "behavior": "SET directives with trailing periods are checked (period permitted per upstream)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "deeadffbafb72a931c3aa5580e3995fee58e1d77",
@@ -1647,7 +1691,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a207a45955ec1b1932e994fcc4db12677963d19a",
@@ -1758,7 +1804,9 @@
    "behavior": "New runtime config COB_SIGNAL_REGIME allows skipping registration of the signal handler",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Unsupported platforms classified honestly",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f49bf5314302dfa36e0cc260a8e03d9f09ef4214",
@@ -1800,7 +1848,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d28f9fab8e2712918ec0c15ef1d1fc476be4bcb9",
@@ -1860,7 +1910,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8d7308d9284981a3f05dfae839eaafd6ba1b0160",
@@ -1919,7 +1971,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "eda8905e440494b7b0bb9cb47ea1bbcc3f4a5971",
@@ -1954,7 +2008,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b1275d4ee475cadf3a5e59c335a283108c481164",
@@ -1989,7 +2045,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "13963e15a2da604b7a0392a06f9a8ec81db9bf04",
@@ -2037,7 +2095,9 @@
    "behavior": "Full -ftcmd output using multiple continuation lines as necessary",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b836c467e7ed3d93b87ffba1ca299846ca734043",
@@ -2103,7 +2163,9 @@
    "behavior": "Cleanup memory handling in libcob for restart",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Module lifecycle semantics",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5e45c5e64f37049789fe83ed4ea41a9fa13a2155",
@@ -2158,7 +2220,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a3d9d6435401a2893c862e41b4dbc956796e8c35",
@@ -2212,7 +2276,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "31ba95f7a4c3c8711ce748c3b4d622df8092a79d",
@@ -2403,7 +2469,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8dd5b382cf01cf81a52fcebf71b6b3afe117d17d",
@@ -2495,7 +2563,9 @@
    "behavior": "Quoting adjustments for use of builddir in the testsuite harness",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "bc5c13b27467cdd64aed63f7850a73ba6c83ec1b",
@@ -2569,7 +2639,9 @@
    "behavior": "Portability updates (C)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native C portability",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "40ea3891c102db606464e3f1b1a49e206f312534",
@@ -2641,7 +2713,9 @@
    "behavior": "Doc update (ChangeLog, DEPENDENCIES, INSTALL, README, TODO)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0359d0a78f103046d6dc289ad4f40dbea28c671e",
@@ -2682,7 +2756,9 @@
    "behavior": "XML and JSON updates",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "bf0b5878a89808fc749023c063dfccc8887ffb09",
@@ -2756,7 +2832,9 @@
    "behavior": "XML and JSON updates",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "db111f65bd01b954e8b83f0c5dd1d1c1e3f13254",
@@ -2804,7 +2882,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d877fb362d20abcbf9914d9709f493791a985d22",
@@ -2851,7 +2931,9 @@
    "behavior": "Test runner: perf record addition and quote-fix",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1fb152e8b536377f1902b5672ed9aa84d773db07",
@@ -3030,7 +3112,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5bb0fbe1bb594dcfea7e6aa904b38f30b9fbb854",
@@ -3078,7 +3162,9 @@
    "behavior": "Fix CHAR and ORD intrinsics in presence of collating sequence",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "94efcf21578847415cf1338d9569bcda4255bee5",
@@ -3125,7 +3211,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "23f8503529f02002876d1cc9c99ae0f4cc017355",
@@ -3160,7 +3248,9 @@
    "behavior": "Better SD syntax validation and recovery",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Completed by 277a07c2e (tests + runtime)",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "277a07c2ee9c9a5302fe9a07c249ed55cfdfd5bc",
@@ -3227,7 +3317,9 @@
    "behavior": "SD syntax checks + testsuite coverage",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7b324f50ebbb05f4c56838e21112a0f8544c6488",
@@ -3319,7 +3411,9 @@
    "behavior": "Better recovery on incomplete source",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "94c8c561555ad6424a38aebe4c430b13f1ff0103",
@@ -3404,7 +3498,9 @@
    "behavior": "Fix #1142 build system support for embedded paths",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f50ab5754982d376315d2eae768f5da29ba7bccb",
@@ -3605,7 +3701,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f4ffd50ecd2497ee1d4f45a6e5d6ab42b8c9e573",
@@ -3689,7 +3787,9 @@
    "behavior": "Reserved word handling adjusted; -trace output updated",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8954b5fc10e63ce3029297822cf8e5628cd7d1d4",
@@ -3828,7 +3928,9 @@
    "behavior": "Code and testsuite cleanup across libcob and cobc/tree.c",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Verify no behavior drift vs the updated expectations",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f8a1a5c2766c4c346860a864b0c9d0f857728926",
@@ -3863,7 +3965,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "33057ad3e0521b9387647232b4dbdb7e86449cb3",
@@ -3898,7 +4002,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d8bd3f3a02c85392bf1898cab981d37146c94e67",
@@ -3933,7 +4039,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "adf35557a63adf7a36be9f9a14a4f8cf450b5611",
@@ -4192,7 +4300,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "26a5cba4eda9d8cee02878a2f745a808b9b47a48",
@@ -4227,7 +4337,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7fef5fde70afd9f865578cf20420566bb891a609",
@@ -4479,7 +4591,9 @@
    "behavior": "C89/C23 compatibility adjustments and updated gettext infrastructure for the C build",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: candidate is Rust; no C source compatibility surface; no observable COBOL behavior",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a006789fa627f40c7c0d91144354d59f45ecd8d9",
@@ -4515,7 +4629,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9d87cdbab8824674dd5c3cdf24ab34835e4fce75",
@@ -4550,7 +4666,9 @@
    "behavior": "libcob/mlio.c caters for the libxml2 ABI break (LIBXML_VERSION >= 21200)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: XML boundary is native-artifact-typed; no libxml2 in candidate",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a4be0beded8f1a0fd5f941ace568d9dde397462c",
@@ -4820,7 +4938,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3dd1d88da6ff57acf462a392763118069b2c5670",
@@ -4947,7 +5067,9 @@
    "behavior": "Initial (unfinished) support for XML PARSE",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Upstream itself marks it unfinished; candidate XML PARSE stays a typed boundary",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1fc700cc0cd9f1e55f011c8c6060c163e4369ddf",
@@ -5019,7 +5141,9 @@
    "behavior": "C89 compat adjustments in cobc",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native C source-compat only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ec76b500bb4f46cf30bbbee5b638c3cfa4f31b55",
@@ -5092,7 +5216,9 @@
    "behavior": "First VFILE update (libcob file backend)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: candidate file layer has no VFILE backend; runtime CALL to CBL_* VFILE functions cannot execute without it",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "410097c16722c3750abc1e533042b24e3c8fe727",
@@ -5191,7 +5317,9 @@
    "behavior": "New CBL functions for VFILE functionality consistent with Microfocus/Fujitsu",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: same backend dependency as ec76b500b",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a5253353db128332c515aac0d601b491194da1f2",
@@ -5314,7 +5442,9 @@
    "behavior": "Portability fixes (and more) for the C build",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native C portability only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "eb8536cfcd335924e92af7aac7f2b3d6fd94b78b",
@@ -5356,7 +5486,9 @@
    "behavior": "Follow-up to r5531: further adjustments to date computation from epoch",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Supersedes the intermediate states of 946f3e638/486565722",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d3a3a3e6102fbb39cdfa84ba321c57abfe531916",
@@ -5392,7 +5524,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b57d2f3b36e3e69ab29110280b34377db60e6a99",
@@ -5427,7 +5561,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "946f3e638c8f1d7c25abc098275faf515869e493",
@@ -5493,7 +5629,9 @@
    "behavior": "Simplifies and fixes computation of dates from epoch (off-by-one-day); tests run with TZ=UTC for reproducibility",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "TZ=UTC adoption is HARNESS_ADOPTED in the candidate test env",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1b2c19e0cae884bdeff36d30a674434b5ca7b345",
@@ -5611,7 +5749,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "486565722c48b21b50165f61e830442e1d5d97ad",
@@ -5728,7 +5868,9 @@
    "behavior": "SOURCE_DATE_EPOCH honored consistently; epoch conversion fixed; testsuite reduced sed usage",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0e2b41f2c63b3f3aa714c3e5c456d1f03884e5e7",
@@ -5769,7 +5911,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8c96392229ca61ff15c04b89b550d42930d0e3e5",
@@ -5823,7 +5967,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d90e2850e1ed0d52535562848388f150d9c37838",
@@ -5876,7 +6022,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "dca6c3e5ec0b2670bd5f9d290c0380389af571ab",
@@ -5986,7 +6134,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "da5c185222c78dbb2badb1f9dc209726db2fdb2e",
@@ -6095,7 +6245,9 @@
    "behavior": "Testing and overriding the diff command (configure DIFF override)",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "84359ec81a15b7a0e58397ee37c4c5ed4889e7ab",
@@ -6244,7 +6396,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "79c65d0ecf1a0752e96939979fe0b4210e960e36",
@@ -6367,7 +6521,9 @@
    "behavior": "Fix comparison with HIGH-VALUE in the presence of collating sequences",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Frontend collating tables + runtime strings.c equivalent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "dc0cddebe0f026adbe27e82f83563a9c88b58510",
@@ -6440,7 +6596,9 @@
    "behavior": "Fixes to the dependency generation feature from r5345; -fcopybook-deps made experimental",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "cdb87a8b3aa9125dc9f008da02fa20d4f75ca6db",
@@ -6476,7 +6634,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f2106ff244e7c6495df0d1fd6060b5e83f5ee937",
@@ -6511,7 +6671,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0a761c9fa42cbf4cc01aa5127e21c94991b44ef5",
@@ -6546,7 +6708,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c48824511397f644b2ac2f90e416a40992c11eab",
@@ -6798,7 +6962,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "54d4963026a1279a6fc5c2cff3dbd6a53f92dee5",
@@ -7036,7 +7202,9 @@
    "behavior": "Adds an EBCDIC/ASCII table generation feature (--gentable)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: candidate does not generate C source; tables are runtime-internal in Rust",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0cb3eab5945e9b59da8ff5eb77cc45a258f21b5d",
@@ -7167,7 +7335,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "aa297a7c6743706ba777dc0c86cd781c5540a899",
@@ -7209,7 +7379,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3f99dba4743214d4a44e2d7b6cd177aa1b343e2d",
@@ -7339,7 +7511,9 @@
    "behavior": "Minor, mostly build updates (autotools infrastructure)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build infra",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "080e75630cc4ba2635abd32b62721a05bf0ac357",
@@ -7375,7 +7549,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "140aed5814bc75e5a23a3685645c07a5589a9116",
@@ -7410,7 +7586,9 @@
    "behavior": "Remove erroneous ifdef/define in replace.c",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal preprocessor hygiene; candidate REPLACE layer is independent Rust",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "85c708085fadde0bf8696d9461bebb3f48f830f5",
@@ -7508,7 +7686,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "bba2a4ee7a73b04a1ee7cbf65c2fbaa8e77eb303",
@@ -7549,7 +7729,9 @@
    "behavior": "Help text of -fwinmain displayed on both Win32 and Cygwin",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8a7c349d13ad4484f1ba07ad9add8d88fa115351",
@@ -7640,7 +7822,9 @@
    "behavior": "FR #176: GC directive >>IMP INCLUDE to include C/C++ header files in generated C code",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Candidate has no generated C; directive is accepted and recorded, header inclusion is a native-code boundary \u2014 keep typed",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "369eb24f947e4534c58c60a74ebfd7e546c3663c",
@@ -7690,7 +7874,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6cc5a5803005ac5cba97f470a36df6b2bfe65de6",
@@ -7726,7 +7912,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f88c80ee1363f7620c4f5af0339bad0a08e4c22e",
@@ -7761,7 +7949,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7824bb9f16e4d98ccacce2952e9aedbac57c5013",
@@ -7803,7 +7993,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c265f251f14fe3c7e19bc96a49a318fa52d622a6",
@@ -7845,7 +8037,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3fb682569d9e1c69eba2a577d0a4e78bffb877ec",
@@ -7880,7 +8074,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6698c4bf0e946ad827310d6e15f01fab95f0f918",
@@ -7915,7 +8111,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "beeace4cded313a1404dbd58ce83f00a753bb866",
@@ -8002,7 +8200,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "23b5446c13ed379d4928b051c0fa576a2d72b67c",
@@ -8037,7 +8237,9 @@
    "behavior": "Fix bad typeck.c indentation introduced by r5112",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: whitespace only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "87500ead47bd937ee0388619be4aa1dc51245e1b",
@@ -8098,7 +8300,9 @@
    "behavior": "Fixed bugs:#961: Nested elements mishandled despite 'with attributes' specification",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a2e4627e6a485aaf61a42f1e68052b6a26d5770f",
@@ -8139,7 +8343,9 @@
    "behavior": "[GCOS dialect] Set init-justify to no",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Dialect config only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2f58e5ff7c5ab744ca464118e2f1fca21534cc7b",
@@ -8180,7 +8386,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "731b81a327fe7108ca28d024a5ca13c9457dbcdc",
@@ -8229,7 +8437,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "47ec5f5134164948f766106f6e3fc9934e36a2fd",
@@ -8277,7 +8487,9 @@
    "behavior": "Improve handling of partial keys in indexed_start_internal (BDB)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: BDB backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c4fbcc3050ad75de0b4736483cb1e3bb6c342971",
@@ -8319,7 +8531,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ff8f8953be8433cf3a02e95e452a04b059a0c517",
@@ -8360,7 +8574,9 @@
    "behavior": "Follow-up to r5369 - panel update",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Curses/panel native dependency",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3f34a2461a6a8677334c5691ea0b79a69ee4ac6e",
@@ -8409,7 +8625,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8cec9fdb89c0c4d5caf83439df3c320b06cad2c5",
@@ -8457,7 +8675,9 @@
    "behavior": "Improve display of floats (clean_double exponent leading zeros)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5086fdf05e340593eaeb30623b75d033ede69ecb",
@@ -8500,7 +8720,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "921108ea29fcc55ceaa60f98179cfec9f30f57e5",
@@ -8542,7 +8764,9 @@
    "behavior": "Fix an out of bounds read access in optimized_move_display_to_edited",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "afb68b34db69c6e4f9e1ad4985a3e37d13738815",
@@ -8609,7 +8833,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "cb5fe73262cf9b32852ad0aaa7ecaa349529e5d1",
@@ -8657,7 +8883,9 @@
    "behavior": "Fix a bug where the source of STRING/UNSTRING/INSPECT is overwritten",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "44c96d20a12e96e0802163fdb9a2d05bb41df578",
@@ -8717,7 +8945,9 @@
    "behavior": "Fix BLANK WHEN ZERO not working on signed NUMERIC-EDITED fields",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "47501705ee0203b3fa1512e39930ce4348c58610",
@@ -8766,7 +8996,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1c357b4a3894bd09940a01c7ee7e0a5ad90ceeb8",
@@ -8814,7 +9046,9 @@
    "behavior": "Fixed bugs:1032: app_data field of DBT structure not always copied in bdb_bt_compare",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: BDB backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d5abb19870d0207be58564c4da11e88b954a9de7",
@@ -8850,7 +9084,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "06d814688dbc4684cd4688ce4d440b8e4699e8c3",
@@ -8885,7 +9121,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "129abba07f9c65039de7d90aa277b33b07c5163a",
@@ -8961,7 +9199,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b162a03c3d9446b6c549b7c571fdc4f2272b0434",
@@ -9009,7 +9249,9 @@
    "behavior": "Minor update for sanitizers",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "dca86ab692a474a1e77c801119dcf42e3c9c207e",
@@ -9050,7 +9292,9 @@
    "behavior": "Follow-up to r5369 - panel update (portability fix)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "dda41815fe1fe00f0c58c6ab348f9ff94546017d",
@@ -9085,7 +9329,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7bddf706da7a96a5382c7523117ef792e1774490",
@@ -9120,7 +9366,9 @@
    "behavior": "Fix copy+paste error in r5389 (whitespace)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: cosmetic",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c2ee239a5209c0a99d5fae8b76ad86d4c7225103",
@@ -9162,7 +9410,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1be8d3f3493cd331e8e92f32149571b6c853ea82",
@@ -9336,7 +9586,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "87c1dd5799ff72425b6ede1efa3b2a789610e2a2",
@@ -9390,7 +9642,9 @@
    "behavior": "Fixed bugs:#1008 regression in move to numeric edited items; adds COB_EC_DATA_NULL + COB_EC_DATA_TRUNCATION",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Exceptions are defined but currently unused upstream",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "16e84a584d7edf41100db524ab9bb7e195d2004c",
@@ -9425,7 +9679,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "04916dd9371e476d1687a1b5ee56d8c1b0fd8f12",
@@ -9474,7 +9730,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d5eb0eb02335042b507d69f86d48ed6cd79346a4",
@@ -9523,7 +9781,9 @@
    "behavior": "Follow-up to r5369 - panel update",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a51ca02a68d5adedead306dfada270ff85582a0f",
@@ -9565,7 +9825,9 @@
    "behavior": "Follow-up to r5371 - panel update (refactoring; adds gcwindow.cpy copybook)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "45ce8f622930f34306f64839dd397b9c4c4a0c00",
@@ -9631,7 +9893,9 @@
    "behavior": "Follow-up to r5369 - panel update",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0bf2ceb38ea46378e45ea0c865ef75c0374d94d6",
@@ -9698,7 +9962,9 @@
    "behavior": "Follow-up to r5369 - panel update",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2a53351eae5a6c53f5408a2594d651fe3d47cdb2",
@@ -9829,7 +10095,9 @@
    "behavior": "Add PANEL functions from CURSES",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a6c4f2440452661e69004da5178196e835f387b9",
@@ -9871,7 +10139,9 @@
    "behavior": "Add XML/JSON GENERATE tests for PIC P",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3edbc6d1f70b0a642c07d056d3ecc2c215731665",
@@ -9906,7 +10176,9 @@
    "behavior": "Update .gitpod.yml",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: developer tooling only, no candidate surface",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ac862070c3e821e6c451e3f08e70882a17d271b4",
@@ -9954,7 +10226,9 @@
    "behavior": "Fixed bugs:#999 ACCEPT with TIMEOUT issue when looping through the verb",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0cc8207d14de2633fb80ebd790dc929e4be76f13",
@@ -9989,7 +10263,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "190139b8baee6e0d08f69ef57dc9c303e7d8a47c",
@@ -10024,7 +10300,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "68b82c88f548d4a9aa9fcd9a3df15e4cf3884e73",
@@ -10234,7 +10512,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b583a357302ad882fd2ac6565f823d9750b46e37",
@@ -10331,7 +10611,9 @@
    "behavior": "Build and test updates",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a23f0dc875f6adc6298b051334d29871cd7263d8",
@@ -10397,7 +10679,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7d4a2fd772a6dc6e8de09bf3aeed02d1081c550d",
@@ -10462,7 +10746,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "83ec07716d30732e050c0b6b96ecf5b462045e21",
@@ -10497,7 +10783,9 @@
    "behavior": "Portability fix for last commits (const qualification)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ef11be499f4c6f2a3f6907443d54590e1db6f659",
@@ -10538,7 +10826,9 @@
    "behavior": "Fix previous commit (duplicate include)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ca09f172185ffbfa821a01030c9a873e26d8dff1",
@@ -10591,7 +10881,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3f897122aacdd6610c14117b28442013a4574cde",
@@ -10644,7 +10936,9 @@
    "behavior": "Signal and stack handling update",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Feeds into COB_SIGNAL_REGIME work (a207a4595)",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "929b403b68ffedce147598f57eff79dc02590d6f",
@@ -10679,7 +10973,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c53ae5f803518dc7a0e1e88ee08ac060e423ca1b",
@@ -10740,7 +11036,9 @@
    "behavior": "Signal handler updates",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "88937849b8607f9f9b20a605d7f2bf65e9ed7427",
@@ -10833,7 +11131,9 @@
    "behavior": "New configure options for customized version string / bug report URL",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Native configure surface; candidate records its own identity",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3f7c44b6f51605eda7da480388f8ae2efdd92811",
@@ -10887,7 +11187,9 @@
    "behavior": "Improve stdin compilation",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "710f053fbd7c65a3e8cfa051f8a2fdb92ebeeec8",
@@ -10934,7 +11236,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "799c61376739bc99f48ddae5f03503e028292f29",
@@ -11001,7 +11305,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9b0259d78f87e479887f617206a002636c8e57cb",
@@ -11067,7 +11373,9 @@
    "behavior": "Support collating sequence for indexed file keys of alphanumeric class",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: indexed-file backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "61ffca26726ae77469d31c7057abb575940d6048",
@@ -11320,7 +11628,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "49da19a3dfc05fa7beaed1ac9c1d08a16ee7dd61",
@@ -11411,7 +11721,9 @@
    "behavior": "Add dependencies options and -fcopybook-deps",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a3e00bed1f21ce0f66315039be08c629574c9184",
@@ -11446,7 +11758,9 @@
    "behavior": "Fix bad line in r5343 (preprocessor)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "903ba84ff9db736109d025159ee368c6e47ddb99",
@@ -11582,7 +11896,9 @@
    "behavior": "Assorted updates (C cleanup + build)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof pending Phase-2 verification; if an observable behavior is found, the row is reclassified",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "10daa94c89368eac5c84c8ce68d29ecbe0dc5188",
@@ -11687,7 +12003,9 @@
    "behavior": "Build system update (libtool, m4)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build infra",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7b3047cb2616c6be935be3293e9bfeb377d10a13",
@@ -11754,7 +12072,9 @@
    "behavior": "Update for NIST85 (test-runner definitions)",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "482206f49af4fe8db9b23c97385fcb27283edc44",
@@ -11790,7 +12110,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e3283da760178d18ba30fde5fccaeda057b1682d",
@@ -11825,7 +12147,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f5989ba77c79b1f9c55f378ff713f376098446f2",
@@ -11894,7 +12218,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1104bda61e191efb343ba4fa13b71e484bf8b24f",
@@ -11949,7 +12275,9 @@
    "behavior": "Check for incompatible data only when a receiver is of category numeric in MOVE or SET",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7ba5f9fcb116490a2fbe3e5c2afb9100a3e92c18",
@@ -11990,7 +12318,9 @@
    "behavior": "Preparation for Multiple Window support by WINDOW pointer",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Full multi-window support is a follow-on; keep typed boundary for curses-native windows",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2c000f51a11e45a7e25c28eb795437e24587c0d1",
@@ -12037,7 +12367,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e807aed2c9c9994b3dfd8aff50dab80429ccf410",
@@ -12086,7 +12418,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7b09c750ff7d354f0637678a6c1db425650d8359",
@@ -12134,7 +12468,9 @@
    "behavior": "Fix bugs:#990 COBOL screen: problem positioning cursor on line 1",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "015735daa9c5e410f594fe97cbfad42a4bed9518",
@@ -12190,7 +12526,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "111d21f03445f7d6db0e5cfc93e5f49e9fa584ce",
@@ -12245,7 +12583,9 @@
    "behavior": "Minor adjustments (testsuite, ChangeLog entries, C89)",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f36f1506a16dc387dbb518806aa78f035454c549",
@@ -12399,7 +12739,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "cd346a66aab8791abd8bc821b9cd4e5c248bd7a8",
@@ -12453,7 +12795,9 @@
    "behavior": "Minor doc changes (gnucobol.texi, ABOUT-NLS, DEPENDENCIES)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a234462ff94b5f5feff62f87d2f097b1e7688a69",
@@ -12500,7 +12844,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "97668518028eda1174b2235cbe5c22d61fe9cf8a",
@@ -12566,7 +12912,9 @@
    "behavior": "Work on make checkmanual",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9744112d55609a6f9ac5992c49a4716db3200a29",
@@ -12638,7 +12986,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "42d9e7de0eb8c898cb0e4f13d6cef81319667c33",
@@ -12673,7 +13023,9 @@
    "behavior": "Missing changelog entry for r4915",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: prose only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "fe28973b030f13b34c52d36df6b928069de21f98",
@@ -12733,7 +13085,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e31b1ad2059a1f8b1b0c36d528ca1ef50d9ca176",
@@ -12768,7 +13122,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c566c4abc0f46ceec1d19eb088baf0d1765bd2ce",
@@ -12815,7 +13171,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "77522f50e0abb625ed2cca85c7a054786e14d888",
@@ -12850,7 +13208,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d4ea52e5afb03c68281d9ce6419be62cf78bc7d3",
@@ -12891,7 +13251,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e14cfcae03c249650a3ba2ce7a24ded1f9ef2c91",
@@ -12926,7 +13288,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "34d0bd4b354ffde3b12bd114044b6ca32bb878fe",
@@ -12961,7 +13325,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5be2d04b849265806d602fb2a2d4acefdfe402df",
@@ -12996,7 +13362,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "fed0e25ca1f968c0d78effdd8e1b3e53959016fb",
@@ -13031,7 +13399,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d45913dd76da5d3307e9bbc6fbe7bfababf210b6",
@@ -13078,7 +13448,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "803826741663820d5785570c828f1fd1a2165792",
@@ -13137,7 +13509,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c1665fc6e603e4117bbc52a28dc93457284668ce",
@@ -13172,7 +13546,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "dfb0c9c82f96ee8d95228fd84c5490100286e80a",
@@ -13207,7 +13583,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d9ef15191468f765997b3151ec2f3730c155fd2d",
@@ -13248,7 +13626,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d3c4e188dd30ab0e20af0d15d5c72cf26e4daa4f",
@@ -13283,7 +13663,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0226a4e160d3c256683f17f8c00d475e7a4323bd",
@@ -13351,7 +13733,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5a8666888fada0fdbbc904269ef809629fd93fbb",
@@ -13418,7 +13802,9 @@
    "behavior": "Fix bugs reported by the MSVC runtime checker (precedence table; explicit casts)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f13eede92da65e6a36bb94537d2a4e1f7a68f7ea",
@@ -13460,7 +13846,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "808c9be88a5066b2c9a9b3eb9e7d904ee797a187",
@@ -13501,7 +13889,9 @@
    "behavior": "Retrieve archive of NIST test suite from sourceforge instead of an out-dated URL",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d0ef5aa6e12449b9c216f39b4e87edbdcdfd7e3b",
@@ -13537,7 +13927,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7529ba38d84bcb886090d4028245546b7b85b446",
@@ -13572,7 +13964,9 @@
    "behavior": "Remove debugapi.h include from common.c",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: Windows-only, no candidate surface",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2ed1057b1d8648881cd7d8268951e9f41490182e",
@@ -13653,7 +14047,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "816bd2be16d88e9ea9f17f2e047fd08844d7f8c2",
@@ -13694,7 +14090,9 @@
    "behavior": "Disable Windows error popups in programs compiled with MSVC",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: MSVC-only, no candidate surface",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6bf47af0209e7cac2f395f71c6e99fd093e5afbc",
@@ -13774,7 +14172,9 @@
    "behavior": "[feature-request:#474] runtime configuration to hide cursor for extended screenio",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8b7350a27a7afc4d424dc3279ec4e30a73ed638e",
@@ -13809,7 +14209,9 @@
    "behavior": "Update .gitpod.yml",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: developer tooling only, no candidate surface",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "56a19214a986917c2de60dc3e824742b85b01211",
@@ -13928,7 +14330,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "41e2e4488de18f3aba4adc4085a63061159b124b",
@@ -13963,7 +14367,9 @@
    "behavior": "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL (C90 fix)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3e146193295e30c31ff0a50022204c9d91a1ef9b",
@@ -14018,7 +14424,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "71ea358aa9101faa5f2c3732d763e59934aacc94",
@@ -14129,7 +14537,9 @@
    "behavior": "Work on ALPHABET definitions, especially ALPHABET FOR NATIONAL",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "fabaca953a23f9ebbdd790acec65190de03e4b48",
@@ -14164,7 +14574,9 @@
    "behavior": "Update .gitignore",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: repository hygiene only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "04fe8aaf44d7d0976a70bffc5b68c9e1f35a1058",
@@ -14280,7 +14692,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1b01ffd2398e226e005382850e71d6708eb11f27",
@@ -14327,7 +14741,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a672fbba0388d30d25ea97e19bf37608ffc12de6",
@@ -14368,7 +14784,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "db0e8067d3e8d2b22285e726a4d3f229b68b72e9",
@@ -14403,7 +14821,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ec5562cfb9f610ce72029547b68a1999aaa0322a",
@@ -14476,7 +14896,9 @@
    "behavior": "Adjustment to support the 2023 standard for edited numeric picture strings; fixes bugs:#935",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0fa2bf5f5238772b8eb46ace17f2ea958b7726d2",
@@ -14536,7 +14958,9 @@
    "behavior": "Increase portability for Micro Focus and ACUCOBOL-GT",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "00f6832684d831a81078222934dc50a5babc0ee8",
@@ -14640,7 +15064,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4d51096de84399311fb811bfe88997675b5e209a",
@@ -14706,7 +15132,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "eb74013d3e4fec6049135ffe259957cb787f3e03",
@@ -14771,7 +15199,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9f1a64c32e11b60b6c157c2552905723882f1b76",
@@ -14862,7 +15292,9 @@
    "behavior": "[feature-requests:#448] state structures instead of state vars for strings",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Structural rework; must preserve STRING/UNSTRING/INSPECT semantics exactly",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7a173e6da655bee696bd22315b0ae51f6898dc9b",
@@ -14903,7 +15335,9 @@
    "behavior": "Adjustment for Sanitizer warning",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "24ff1a9c93355660fecce5a44400459a51e24b62",
@@ -14956,7 +15390,9 @@
    "behavior": "Allow keys of different length in the BDB backend (optional, flag-controlled)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: BDB backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "de6053aad23443ed38f763f4d3bf3b9606103937",
@@ -15175,7 +15611,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "73ad00d945450aba0c0da800494de15768785f2b",
@@ -15216,7 +15654,9 @@
    "behavior": "Adjustment for build without curses and fix C90 warnings",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build concerns",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "314adc1ca83055a5676a8e1329e01d6b565f24a3",
@@ -15269,7 +15709,9 @@
    "behavior": "Adjustment for build without curses and fix C90 warnings",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build concerns",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1fa8db0d0e6bd4411f0db864511fd3d9bb6963a5",
@@ -15388,7 +15830,9 @@
    "behavior": "Fix minor alignment/tab issues in config/*.conf",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "435454f8df3808669bfe75ea985446c409877a53",
@@ -15442,7 +15886,9 @@
    "behavior": "Adjustment for move to edited numeric",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e51b091b99211fc8a99f446156e90b4fdf9754c2",
@@ -15490,7 +15936,9 @@
    "behavior": "Fix for bug 934 - default ROUNDED option",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d33f2ec97d726b9578cf5ef55f8acd89ec64e777",
@@ -15543,7 +15991,9 @@
    "behavior": "Added two new functions CBL_GC_SCR_DUMP and CBL_GC_SCR_RESTORE",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "026a651ee4063b380eaccc07f54aa585d5c86924",
@@ -15590,7 +16040,9 @@
    "behavior": "Fix errors caught by the Sanitizer functionality of GCC",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal; verify no observable behavior delta",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b33a87961f0d11b2d9d371374efae94d97c7b557",
@@ -15638,7 +16090,9 @@
    "behavior": "Adjustment to READ PREVIOUS for VBISAM/VISAM",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7c7b55b9311b7edf3bdab5e3c630995f28249958",
@@ -15717,7 +16171,9 @@
    "behavior": "Adjustment for move to edited numeric",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "39344cf66085620e1dfdb16d54c7ba081efd1da8",
@@ -15772,7 +16228,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "940f057e6522e4d25c5c4facbe7202c5ee0682e3",
@@ -15826,7 +16284,9 @@
    "behavior": "Windows build fixes + ChangeLog cleanups",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: Windows-only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7225e55ddb07b786af5f0496af7fe62a670dd024",
@@ -15861,7 +16321,9 @@
    "behavior": "Add gitpod configuration",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: developer tooling only, no candidate surface",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "21b5d516ffd33e2e25b319680bdcf668b42ff935",
@@ -15990,7 +16452,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a4971637900ed693ade051aa20a9a5422b20366d",
@@ -16074,7 +16538,9 @@
    "behavior": "More warning fixes, additional improvement to build_windows",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: Windows/native",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d671493076c3c041d6139cd04034566d7266482d",
@@ -16116,7 +16582,9 @@
    "behavior": "Improving cobc handling with the MSVC assembler",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native assembly/linker surface",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "63cb06ce7b87d75a46e7533c0fb7f375bef90960",
@@ -16189,7 +16657,9 @@
    "behavior": "More compiler warnings fixed",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9261f40968684c3f642b7795011992ddf43badba",
@@ -16249,7 +16719,9 @@
    "behavior": "Minor cleanups and warning fixes",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal hygiene",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4907e0d0683e3a138ddd335c0fcd4f24d7d0a08b",
@@ -16285,7 +16757,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4f76d0a2021e3476d5cabeb6b40fa43e609c7137",
@@ -16320,7 +16794,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "70b4076e9e8d411b57619977f47c1e7356ddbea7",
@@ -16595,7 +17071,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "67f93f93c5b59aaab22917d76195940df1717e18",
@@ -16733,7 +17211,9 @@
    "behavior": "Fix building with MSVC",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: Windows/native",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "63bd0f81fa4d3033e8b960f8e1ad1ea6ed0d7e8b",
@@ -16781,7 +17261,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d2df58ad96850695b8564067afb1f2f4d40fe69a",
@@ -16932,7 +17414,9 @@
    "behavior": "Assorted minor cleanups",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal; Phase-2 verification required",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5ba97ae7594f589d4f55996f71c28dc6782852e1",
@@ -17106,7 +17590,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1daa3931493ba29cd649cd3ece9ea3621b3226a1",
@@ -17147,7 +17633,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "ed789c8a9bc2c66e3c314f82b47cc07c05b12f49",
@@ -17226,7 +17714,9 @@
    "behavior": "Win32 fixes, mostly testcases",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "Windows-only runtime parts are NOT_APPLICABLE to the candidate; test expectations adopted",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7c60012c019be8b4f42ab9345081f6bd7ae4b1d5",
@@ -17268,7 +17758,9 @@
    "behavior": "Fixing typo (testsuite)",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a0937bf4920e68730746b89706a6edb1967184a9",
@@ -17334,7 +17826,9 @@
    "behavior": "Fixing bugs:#933 #938 #966 - handling of broken expressions",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1b8af634e882db9e0a80bce46d97f24ca0eb58fb",
@@ -17369,7 +17863,9 @@
    "behavior": "Fixing r5244 fix (BDB 12 ABI break)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: BDB backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "442e6db6d430c208a42c1b25a6ccc870e5bddc12",
@@ -17435,7 +17931,9 @@
    "behavior": "Build and test fixes for Win32",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: Windows-only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "67f8f532e194db8d18365c20300c795e4fcf2c5b",
@@ -17476,7 +17974,9 @@
    "behavior": "Follow up to r5215: support COLLATING SEQUENCE clause on SELECT/INDEXED files",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: indexed backend absent",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6a23e2ce5a8c0f37073853953be261f525614ff9",
@@ -17517,7 +18017,9 @@
    "behavior": "Housekeeping (MinGW compat removal)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1ea4059c6547e62752e26debb3589ad7ddef8c55",
@@ -17572,7 +18074,9 @@
    "behavior": "Configure now uses pkg-config/ncurses-config for ncurses",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build infra",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4695ee78629d659ab9c1ca6cacd04952c3469786",
@@ -17613,7 +18117,9 @@
    "behavior": "mf dialect: adjusted missing-statement configuration (bugs:#965)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6fd7c72cd16e6b1ed50fab065a4443cf9d67697b",
@@ -17654,7 +18160,9 @@
    "behavior": "Build fix",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8366e1be1cf82b9ee5b6337f032e614dda31737c",
@@ -17703,7 +18211,9 @@
    "behavior": "Housekeeping",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build infra",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "87c4fb2905ed44a61b3b2cd3a947f2769275546d",
@@ -17759,7 +18269,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "82100d64de35c89ad5980d1b2c8d1ffdd3563570",
@@ -17814,7 +18326,9 @@
    "behavior": "Optimization of memory usage in replace.c",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: C internal performance only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2e620aa926b6f73953ff438812ed1cf3e9f62d55",
@@ -17974,7 +18488,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7b6995042c4d224d7aed2827387278334b531d17",
@@ -18133,7 +18649,9 @@
    "behavior": "Add a profiling feature (-fprof; cob_prof_function_call; COB_PROF_* runtime env)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "89c45a3bc80c2ca6302382bd40fdc585436d65f9",
@@ -18182,7 +18700,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "14f0d0908d985b7747ddcac00d8fbfc06092f1c4",
@@ -18230,7 +18750,9 @@
    "behavior": "Fix SEGFAULT in checking prototype arguments",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a2a51fd5ea7f5f04f9c73b6203baa5edb6fbfd28",
@@ -18285,7 +18807,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "61479ba0c7816ce62d9d559cce977f601d3dccc7",
@@ -18339,7 +18863,9 @@
    "behavior": "Fix bugs:#947: VALUE ALL \"-\" not working in SCREEN SECTION",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "57133577c7e5524f14cf3cb868df3c1fdbc21ad7",
@@ -18468,7 +18994,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "db7db96f8c08065e7b4d3c583799ce00ee24ce7b",
@@ -18517,7 +19045,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "300b542f3caab9dac639e3eb62f60fdedb6c10a2",
@@ -18565,7 +19095,9 @@
    "behavior": "fileio refactoring",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof pending Phase-2 verification",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4eece0f7ddccfe4ec685623bc6ea69b6b0eddc56",
@@ -18669,7 +19201,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e36a124b2b7247b0b9bcded694ac3e007e461a01",
@@ -18772,7 +19306,9 @@
    "behavior": "Add options --copy COPYBOOK and --include HEADER to cobc",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2ff35a3e37259b1105a36950f6687624d91d763c",
@@ -18840,7 +19376,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "47ffbd8363bf82482ef7ae3e6a8e9f53b24c1407",
@@ -18907,7 +19445,9 @@
    "behavior": "Improved performance for comparisons between numeric DISPLAY, numeric DISPLAY to literal, BCD + ZERO and to other",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: performance-only C change; verify no semantic delta via testsuite",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "824f2a6445e0509068bb4639733de956632be151",
@@ -19032,7 +19572,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f9596f55fe49c96f278d228db05306bf1042b43f",
@@ -19067,7 +19609,9 @@
    "behavior": "Fixing compilation of r5215 for !WITH_DB",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build conditional",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "93d5877e42b1dea360c5d2fce98765fbe55b7f01",
@@ -19109,7 +19653,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "106e7ce6c98c88bad50e7882a753db165065895f",
@@ -19225,7 +19771,9 @@
    "behavior": "FR #459: support COLLATING SEQUENCE clause on SELECT/INDEXED files (currently only for the BDB backend)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: indexed/BDB backend absent; the flag is indexed-file-only in effect",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f059c849512a098aeaa12c780596ae16e05ef38b",
@@ -19506,7 +20054,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5d0eecfbdd6d5301312cedaaa4c988a612963de7",
@@ -19547,7 +20097,9 @@
    "behavior": "Fix random segfaults in cob_call_with_exception_check on Windows",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: Windows-only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2f9892458c548344e115404979a3961bb86ae3c7",
@@ -19609,7 +20161,9 @@
    "behavior": "Fix bug #920: Codegen output of integer literals in generated C broken with MinGW",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native codegen",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "98a5c787c1e5e8ddcc868eaf64c74d35ec020ca6",
@@ -19769,7 +20323,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "12e31f960ebef69a1e8007b94734a53fcbad6168",
@@ -19837,7 +20393,9 @@
    "behavior": "Minor doc adjustments and build_windows/config.h adjustment for 3.3-dev",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native build",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6e358998b272e6bc82094483102ea634b4ec133f",
@@ -19872,7 +20430,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "44848f58b437cce2eac30106e79a7b943e899b7f",
@@ -19939,7 +20499,9 @@
    "behavior": "Minor fixes: save-temps with directory target; cob_get_strerror export; env expansion buffer overflow fix",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "140a030d52eefb0b197a2d994b52b3aefd020c35",
@@ -20012,7 +20574,9 @@
    "behavior": "New flag -fdiagnostics-absolute-path to display full paths within error locations",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "777852c35adf44d44bb615cb5b479115307365ce",
@@ -20054,7 +20618,9 @@
    "behavior": "Testcase for r5195 / bugs:#923",
    "court": "GNURUST.UPSTREAM.CURRENT-TESTSUITE.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "303917744a6c7ce1bfad31a54f2e787fb1c54821",
@@ -20107,7 +20673,9 @@
    "behavior": "Fix bugs:#923: generated modules init/clear unused decimal constants",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Module lifecycle + prepared-program constants",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f67da51cae38c4469e96af8d8c2339175ef61c79",
@@ -20155,7 +20723,9 @@
    "behavior": "Fix bug #917: segfault when accessing a decimal constant after calling a sub-program (CANCEL on subprogram)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "Module lifecycle semantics",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8e2ec25c26bcb09cb520431ee875bc2a13ddcc2d",
@@ -20204,7 +20774,9 @@
    "behavior": "Fix bugs:#918 partial broken COB_LS_VALIDATE",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9d4be36a13eabf0a9c4a48a927eb4b00c151afdb",
@@ -20239,7 +20811,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0b22d441757efc5fa1d18e0767bb54fb31203eb1",
@@ -20293,7 +20867,9 @@
    "behavior": "Fixing bugs:#913 DISPLAY and ACCEPT with simple attributes SIGSEGV",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "62b39805ca22be04c822267d2c90aaa6ef1e1610",
@@ -20341,7 +20917,9 @@
    "behavior": "Fixing bugs:#914 CLOSE LOCK abends program on OPEN",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "04614ac7afd2b26cdd4431987996726ffaa8004b",
@@ -20445,7 +21023,9 @@
    "behavior": "Optimizations and syntax checks for INSPECT related functions",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "28b02be15485a8802639b34c8381a4e785251ef6",
@@ -20486,7 +21066,9 @@
    "behavior": "Restore code disabled by the previous commit (numeric sign fix)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c3d5860bf219b0679e0771a0611cc91b61dbe3a1",
@@ -20539,7 +21121,9 @@
    "behavior": "Minor cleanup and optimizations in libcob (numeric.c: scale handling, sign checks)",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "85dccf1c72fb4cf4a7ab32e313e09c0d2fbc7e33",
@@ -20580,7 +21164,9 @@
    "behavior": "Missed commit of tree.h in r5185",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: content belongs to the r5185 native-codegen optimization; candidate has no native codegen",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "470f7db125a42594bcc187b60c2d6757731758f0",
@@ -20762,7 +21348,9 @@
    "behavior": "Adjusted error handling (cobc-wide; 25 files incl. tests)",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "Diagnostic wording parity remains a separate dimension; semantic accept/reject and exit statuses must match",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "60557e874decb307c3cec459ca0f49e2756b27c1",
@@ -20797,7 +21385,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8208acac177e7d50ba68e99aa661b2f26c5a787a",
@@ -20838,7 +21428,9 @@
    "behavior": "Missing commit for r5167 - version increase",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: native version string only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c140aafc1568a20ebfd33e681445529603712bf3",
@@ -20880,7 +21472,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0166302909e95c91105bcaa6b1d5b4b6c7647185",
@@ -20941,7 +21535,9 @@
    "behavior": "Fix bugs:#904 MOVE PACKED-DECIMAL unsigned to signed leads to bad sign",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c0d64addfd83baff21f089e0ab7c92609e291442",
@@ -21193,7 +21789,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0ab36fd83692291d5ba8356df989d9757fa718b8",
@@ -21444,7 +22042,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6b4405108a30455e4b460ee9f664c1cedb2e2899",
@@ -21627,7 +22227,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2a101a4bffdb4e51d43afbbdcc1323c6dc7a785e",
@@ -21852,7 +22454,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a4abf11bf1ccbac9e037f5743cd7b0747fdeea68",
@@ -21955,7 +22559,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4b8452abf1cafb904f1fe6966cbeeaa2a5f9d10a",
@@ -21997,7 +22603,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "57e7a2851308ba495fe974983e258dae5df8f2b9",
@@ -22230,7 +22838,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "743651ffd9714cb3a81500b59e9cfae99ea51db0",
@@ -22316,7 +22926,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "cb5f7fa19a6c325861e63ccda64469fc6e7bac86",
@@ -22500,7 +23112,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8caf9b25a444984ca4224e8b43662873479ba50c",
@@ -22542,7 +23156,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2dc28255dbc8f7d85c9230e04b9e875ee2c10d91",
@@ -22591,7 +23207,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7ba3fb5bf898b1640be14894a1471e9c4eaed32e",
@@ -22781,7 +23399,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8a0796d9f09a2f132893c03c17ba4fa947668cbb",
@@ -22816,7 +23436,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "cca51ff278372ede1944ab5a1a1fc5366649f7ec",
@@ -23079,7 +23701,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1992539c4fde2605fb5d83da2cf215f16445db24",
@@ -23342,7 +23966,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "fcd562f0f1cc35f1872dbeaa7d14a3b48bde5ff1",
@@ -23647,7 +24273,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7981d8aff1b1a16033fa260e0220d50327de8d5b",
@@ -23940,7 +24568,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "3d48698fb76e41cb6d198362b4010778279d966e",
@@ -24071,7 +24701,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "bdd8837832d4c17d7ed8e505e9fc73a708f8ecd0",
@@ -24139,7 +24771,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "2ca79d6ae9dde6d90b0c55dfac9134b06761875b",
@@ -24535,7 +25169,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "608eac1800e0fd59e6104aa12cf3bbdbd4dcae0f",
@@ -24570,7 +25206,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "200150f627aa7a585a48f8eca47f8ca1c7a10750",
@@ -24611,7 +25249,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b63bf71a12b42777a9204651ed782c76d0f959b2",
@@ -24653,7 +25293,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d4f364e44ee1411fecccc72c47bc9f28e9f12e45",
@@ -24701,7 +25343,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "7fd5d4936b2b996e43f756a027a3d1236f74b8b1",
@@ -24782,7 +25426,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "9df05779b4cd1058ee2acc18347e33f84d90509e",
@@ -24917,7 +25563,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d15d131af589322cb660fd19537f27d9078f36b0",
@@ -24965,7 +25613,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "db33c36f7670b928f8347233745bed6af3a817e9",
@@ -25360,7 +26010,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "f550c9b865f1c31109c67a41623aa4cc603594e5",
@@ -25414,7 +26066,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "516b813b3ca05ecbc732efdf359ca77db89af449",
@@ -26028,7 +26682,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "91b7781e801f1270c05011650060acab6bafbe90",
@@ -26095,7 +26751,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "fe93f0d3b36da7adfdf9968c14821effca40ef1d",
@@ -26498,7 +27156,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5a1ed6ffe5bdab7db8444523ef739cfc705fdaa9",
@@ -26553,7 +27213,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "757ff9b2f769dd13e7f1d106d9af16536ee4ed8e",
@@ -26658,7 +27320,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "62dd11b8b92d60fc0fb897bc4ebdeb763e44670a",
@@ -26964,7 +27628,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d3c0b2f18bfc441f0a71bef267d653b7090440f3",
@@ -26999,7 +27665,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "173790f1ef60789991ff2d417b83a466bce48a76",
@@ -27048,7 +27716,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0a62bc915695cfd1a12813c81e0ecd8505a21868",
@@ -27097,7 +27767,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "0ac36ad45763304c9a9e7c2540a6468f66a82691",
@@ -27939,7 +28611,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1c7abb41b18541391d83f55e8720c8b2380c2cdd",
@@ -27994,7 +28668,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6ff12e91dc106d5eff09874b138c7c9fbed40073",
@@ -28355,7 +29031,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "87051279e6a615eefe43b4a36272cb54e3fb09ac",
@@ -28478,7 +29156,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "24f2a1036db879bc7e333f69a9f83170c0de6c18",
@@ -28521,7 +29201,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b3afd7a81daea5a62c529a694e83629aedfe13fc",
@@ -28563,7 +29245,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a5ea0d5c93ec681e2552b903c27badc9c3aed2e3",
@@ -28709,7 +29393,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "41e53b7db427298bd95f86003ead2c1d3cf2d3ed",
@@ -28947,7 +29633,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "d7db95f773952dcaaabd7cc43f96a056f7e59b1b",
@@ -29089,7 +29777,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1c3569d3a8d39e6345e22db2cb24e060baa2257f",
@@ -29233,7 +29923,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "cc3f6677dd171884099758d12a80f917ff484a00",
@@ -29336,7 +30028,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6fec839eae019e20a04b4bcb484bc92c67b9a314",
@@ -29585,7 +30279,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a913f3c96decd62ffc8c13e84966867fac85c9be",
@@ -29816,7 +30512,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e2505a60f8be5e38bdaaee1ebefefc0e44b5a105",
@@ -30127,7 +30825,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "e07100c7ce2aa276175391a5dd5db447e7e06aca",
@@ -30451,7 +31151,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "4c04ed86e8371966bafc6f50a06a570aac496994",
@@ -30494,7 +31196,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "1dae6bf280a79dbc7a92539ec3acc46cafab0463",
@@ -30536,7 +31240,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6a24f9a47e65479de572b13acdfb0321f9254529",
@@ -30571,7 +31277,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8c6cafb8b4a4b5bd288d3fb14bc74a47c35e5a19",
@@ -30626,7 +31334,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "42008b0709600348a05026b813f402d6e5ea9d76",
@@ -30661,7 +31371,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "da9db1e4a01c90121afd67194ff461747e4f967b",
@@ -30708,7 +31420,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "6301de737d0787f250a41b5b56730f9eac1fb5f7",
@@ -30743,7 +31457,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "b203d95dc32977d0d72d030546c78ea2bfbfb76f",
@@ -30797,7 +31513,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a070a64abef88afd9c78b54d3445f32bc51355fd",
@@ -30832,7 +31550,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "c8c789911a52a39c9a52870c3fa7a47ffd6ecd8b",
@@ -31212,7 +31932,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "5b54e1c993e9ec4113f926f2f4993957ef3708ea",
@@ -31476,7 +32198,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "197398dfd15aa02d2471216bac38998ba7fba7ef",
@@ -31530,7 +32254,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "a86cb1055aeb9e8cc8cc52e6d39efd84fd58c732",
@@ -31565,7 +32291,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "8ea9ac449c986a65299ad015c9930c977bf909cb",
@@ -31628,7 +32356,9 @@
    "behavior": "Redispatch ChangeLog entries",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "Proof: prose only",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "289c9aef58a9acbb934eb2e69022b9fa6018baf8",
@@ -31720,7 +32450,9 @@
    "behavior": "[GCOS] Add GCOS configuration file",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   },
   {
    "sha": "27788c5941de36ab174fbe1ae179c1e933eafaab",
@@ -31786,7 +32518,9 @@
    "behavior": "no candidate-visible semantic change (mechanical default)",
    "court": "GNURUST.UPSTREAM.COMMIT-ATLAS.1",
    "residual": "",
-   "superseded_by": null
+   "superseded_by": null,
+   "evidence": null,
+   "integrated": false
   }
  ]
 }

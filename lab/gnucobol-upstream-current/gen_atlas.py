@@ -313,6 +313,8 @@ def main() -> int:
             row["court"] = "GNURUST.UPSTREAM.COMMIT-ATLAS.1"
             row["residual"] = ""
             row["superseded_by"] = None
+            row["evidence"] = None
+            row["integrated"] = False
         else:
             row["curated"] = True
             row["status"] = entry.get("status")
@@ -321,6 +323,8 @@ def main() -> int:
             row["court"] = entry.get("court", "")
             row["residual"] = entry.get("residual", "")
             row["superseded_by"] = entry.get("superseded_by")
+            row["evidence"] = entry.get("evidence")
+            row["integrated"] = bool(entry.get("evidence"))
             if row["status"] not in STATUSES:
                 print(f"FATAL: bad status {row['status']} for {sha}")
                 return 1
@@ -516,6 +520,17 @@ def write_markdown(rows: list[dict], invariants: dict) -> None:
             act = (r["action"] or "").replace("|", "/")
             add(f"| `{r['sha'][:12]}` | {r['author_date'][:10]} | {r['status']} | {subj} | {act} |")
         add("")
+    add("## Phase-2 integration evidence")
+    add("")
+    integrated = [r for r in rows if r.get("integrated")]
+    if integrated:
+        add("| upstream commit | upstream date | status | Rust integration commit |")
+        add("|---|---|---|---|")
+        for r in sorted(integrated, key=lambda r: r["author_date"]):
+            add(f"| `{r['sha'][:12]}` | {r['author_date'][:10]} | {r['status']} | `{r['evidence'][:12]}` |")
+    else:
+        add("_None integrated yet._")
+    add("")
     add("## Non-curated mechanical rows (CI / docs / build / test-only)")
     add("")
     mech = [r for r in rows if not r["curated"]]

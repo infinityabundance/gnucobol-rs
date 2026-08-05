@@ -101,6 +101,12 @@ pub struct Dialect {
     /// modification of itself) uses the IBM `MVC` byte-by-byte left-to-right *propagating* copy; when
     /// false (default/mf), the snapshot (memmove) copy. See [`crate::move_ops::cob_move_overlap`].
     pub move_ibm: bool,
+    /// `init-justify` -- the `INITIALIZE` alphanumeric justification policy (GCOS/ibm/mvs `yes` left-
+    /// justifies the initialized default; default/mf/cobol85 `no` right-justifies). Stored here from the
+    /// dialect `.conf`; the runtime effect lands in the `INITIALIZE` execution path, which remains a typed
+    /// later boundary (the sealed [`crate::initialize`] court models byte effects without full statement
+    /// execution).
+    pub init_justify: bool,
 }
 
 impl Dialect {
@@ -113,6 +119,7 @@ impl Dialect {
         odoslide: false,
         defaultbyte: DefaultByte::Init,
         move_ibm: false,
+        init_justify: false,
     };
     /// `-std=ibm` (`ibm.conf` -> `ibm-strict.conf`): `2-4-8`, no truncate, complex ODO + slide, defaultbyte 0.
     pub const IBM: Dialect = Dialect {
@@ -122,6 +129,7 @@ impl Dialect {
         odoslide: true,
         defaultbyte: DefaultByte::Fill(0),
         move_ibm: true,
+        init_justify: true,
     };
     /// `-std=mf` (`mf.conf` -> `mf-strict.conf`): `1--8` (tight), no truncate, complex ODO (no slide),
     /// defaultbyte space.
@@ -132,6 +140,7 @@ impl Dialect {
         odoslide: false,
         defaultbyte: DefaultByte::Fill(b' '),
         move_ibm: false,
+        init_justify: false,
     };
     /// `-std=mvs` (`mvs.conf` -> `mvs-strict.conf`): same five knobs as ibm.
     pub const MVS: Dialect = Dialect {
@@ -141,6 +150,7 @@ impl Dialect {
         odoslide: true,
         defaultbyte: DefaultByte::Fill(0),
         move_ibm: true,
+        init_justify: true,
     };
     /// `-std=cobol85` / `cobol2002` / `cobol2014`: the same field-model knobs as DEFAULT, but
     /// `defaultbyte: none` -- undefined storage, observed as 0x00.
@@ -151,6 +161,31 @@ impl Dialect {
         odoslide: false,
         defaultbyte: DefaultByte::Fill(0),
         move_ibm: false,
+        init_justify: false,
+    };
+    /// `-std=gcos` (`gcos.conf` -> `gcos-strict.conf` + `lax.conf-inc`): `2-4-8` with truncation kept
+    /// (GCOS keeps the PIC digit range), complex ODO *permitted* by `lax.conf-inc` (`complex-odo: yes`),
+    /// no slide, defaultbyte `0`, `init-justify: no` (upstream `a2e4627e6` corrected the GCOS dialect to
+    /// `no`).
+    pub const GCOS: Dialect = Dialect {
+        binary_size: BinarySize::Cob248,
+        binary_truncate: true,
+        complex_odo: true,
+        odoslide: false,
+        defaultbyte: DefaultByte::Fill(0),
+        move_ibm: false,
+        init_justify: false,
+    };
+    /// `-std=gcos-strict` (`gcos-strict.conf` alone): like [`Dialect::GCOS`] but `complex-odo: no`
+    /// (the strict file sets it `no` before `lax.conf-inc` re-enables it for the lax dialect).
+    pub const GCOS_STRICT: Dialect = Dialect {
+        binary_size: BinarySize::Cob248,
+        binary_truncate: true,
+        complex_odo: false,
+        odoslide: false,
+        defaultbyte: DefaultByte::Fill(0),
+        move_ibm: false,
+        init_justify: false,
     };
 
     /// Resolve a `-std=` name to its [`Dialect`] (the field-model subset). Unknown names fall back to
@@ -163,6 +198,8 @@ impl Dialect {
             "mf" | "mf-strict" => Dialect::MF,
             "mvs" | "mvs-strict" => Dialect::MVS,
             "cobol85" | "cobol2002" | "cobol2014" => Dialect::COBOL85,
+            "gcos" => Dialect::GCOS,
+            "gcos-strict" => Dialect::GCOS_STRICT,
             _ => Dialect::DEFAULT,
         }
     }
@@ -182,13 +219,20 @@ impl Dialect {
 }
 
 /// One overlay pass of a dialect `.conf` onto `d` (recursing on `include`). Cycle-guarded by `depth`.
-fn apply_conf(name: &str, read: &dyn Fn(&str) -> Option<Vec<u8>>, d: &mut Dialect, depth: u32) -> Option<()> {
+fn apply_conf(
+    name: &str,
+    read: &dyn Fn(&str) -> Option<Vec<u8>>,
+    d: &mut Dialect,
+    depth: u32,
+) -> Option<()> {
     if depth > 16 {
         return None;
     }
     let body = read(name)?;
     for raw in body.split(|&b| b == b'\n') {
-        let Some((key, val)) = parse_conf_line(raw) else { continue };
+        let Some((key, val)) = parse_conf_line(raw) else {
+            continue;
+        };
         match key.as_str() {
             "include" => {
                 // include "file" / include: "file" -- resolve recursively (settings apply in place). A
@@ -208,6 +252,7 @@ fn apply_conf(name: &str, read: &dyn Fn(&str) -> Option<Vec<u8>>, d: &mut Dialec
             "complex-odo" => d.complex_odo = val == "yes",
             "odoslide" => d.odoslide = val == "yes",
             "move-ibm" => d.move_ibm = val == "yes",
+            "init-justify" => d.init_justify = val == "yes",
             "defaultbyte" => {
                 d.defaultbyte = match val.as_str() {
                     "init" => DefaultByte::Init,
@@ -305,10 +350,25 @@ mod tests {
         // makes the config files genuinely wired in native Rust, not just copied.
         let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("config");
         let read = |fname: &str| std::fs::read(dir.join(fname)).ok();
-        for name in ["default", "ibm", "ibm-strict", "mf", "mvs", "cobol85", "cobol2002", "cobol2014"] {
+        for name in [
+            "default",
+            "ibm",
+            "ibm-strict",
+            "mf",
+            "mvs",
+            "cobol85",
+            "cobol2002",
+            "cobol2014",
+            "gcos",
+            "gcos-strict",
+        ] {
             let parsed = Dialect::from_conf(&format!("{name}.conf"), &read)
                 .unwrap_or_else(|| panic!("parse config/{name}.conf"));
-            assert_eq!(parsed, Dialect::from_std(name), "config/{name}.conf != from_std({name})");
+            assert_eq!(
+                parsed,
+                Dialect::from_std(name),
+                "config/{name}.conf != from_std({name})"
+            );
         }
         // the parser actually reads the file (not a silent default): ibm.conf -> the ibm knobs, distinct
         // from DEFAULT.
@@ -317,6 +377,51 @@ mod tests {
         assert_eq!(ibm.binary_size, BinarySize::Cob248);
         assert!(ibm.complex_odo && ibm.odoslide && ibm.move_ibm && !ibm.binary_truncate);
         assert_eq!(ibm.defaultbyte, DefaultByte::Fill(0));
+    }
+
+    #[test]
+    fn gcos_dialect_resolves_from_conf_chain() {
+        // Upstream 289c9aef5 (2022-02-04) added the GCOS dialect: config/gcos.conf (lax) includes
+        // gcos-strict.conf, gcos.words and lax.conf-inc; config/gcos-strict.conf alone is the strict
+        // dialect. The config files in this crate are custody-gated to the pinned upstream head.
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("config");
+        let read = |fname: &str| std::fs::read(dir.join(fname)).ok();
+        let lax = Dialect::from_conf("gcos.conf", &read).expect("parse config/gcos.conf");
+        let strict =
+            Dialect::from_conf("gcos-strict.conf", &read).expect("parse config/gcos-strict.conf");
+        assert_eq!(lax, Dialect::from_std("gcos"));
+        assert_eq!(strict, Dialect::from_std("gcos-strict"));
+        // Field model per gcos-strict.conf: binary-size 2-4-8, binary-truncate yes, complex-odo no,
+        // odoslide no, move-ibm no, defaultbyte 0, init-justify no.
+        assert_eq!(strict.binary_size, BinarySize::Cob248);
+        assert!(strict.binary_truncate);
+        assert!(!strict.complex_odo && !strict.odoslide && !strict.move_ibm);
+        assert_eq!(strict.defaultbyte, DefaultByte::Fill(0));
+        assert!(
+            !strict.init_justify,
+            "gcos-strict init-justify is 'no' (upstream a2e4627e6)"
+        );
+        // lax.conf-inc re-enables complex ODO for the lax GCOS dialect only.
+        assert!(lax.complex_odo);
+        // The gcos.words include is a reserved-word list: parsed-and-skipped by the field-model parser.
+        assert!(read("gcos.words").is_some());
+    }
+
+    #[test]
+    fn init_justify_knob_follows_dialect_confs() {
+        // init-justify is set per dialect: default/mf/cobol85 no, ibm/mvs yes.
+        assert!(!Dialect::DEFAULT.init_justify);
+        assert!(Dialect::IBM.init_justify);
+        assert!(Dialect::MVS.init_justify);
+        assert!(!Dialect::MF.init_justify);
+        assert!(!Dialect::COBOL85.init_justify);
+        // Typed boundary: the runtime INITIALIZE justification effect is a later boundary (the sealed
+        // initialize court models byte effects without statement execution); the knob is parsed and
+        // stored so it is never silently dropped.
+        assert_eq!(
+            Dialect::GCOS.init_justify,
+            Dialect::GCOS_STRICT.init_justify
+        );
     }
 
     #[test]
@@ -355,7 +460,13 @@ mod tests {
         // cobc -std=X on STANDALONE elementary items `01 A PIC X(3).` and `01 N PIC 9(3).`, hexdumped:
         //   numeric N is "000" (0x30) under EVERY dialect; only the alpha A changes:
         //   default/mf space (0x20), ibm/mvs/cobol85 0x00.
-        for d in [Dialect::DEFAULT, Dialect::IBM, Dialect::MVS, Dialect::MF, Dialect::COBOL85] {
+        for d in [
+            Dialect::DEFAULT,
+            Dialect::IBM,
+            Dialect::MVS,
+            Dialect::MF,
+            Dialect::COBOL85,
+        ] {
             assert_eq!(d.defaultbyte.byte(false), b'0', "numeric is always '0'");
         }
         assert_eq!(Dialect::DEFAULT.defaultbyte.byte(true), b' ');

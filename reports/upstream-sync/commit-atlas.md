@@ -659,6 +659,10 @@
 | `8dd5b382cf01` | 2025-11-17 | HARNESS_ADOPTED | quoting adjustments for use of builddir | Adopt the builddir quoting adjustments in the candidate testsuite harness |
 | `a207a45955ec` | 2025-11-20 | RUNTIME_PORTED | new runtime configuration COB_SIGNAL_REGIME, allows skipping registration of the signal handler | Implement COB_SIGNAL_REGIME: valid values; registration policy (do-not-register / register-only-if-unclaimed / any other admitted modes); do not clobber external handlers; Unix coverage; classify unsupported platforms; async-signal-safe; runtime reporting |
 
+## Phase-2 integration evidence
+
+_None integrated yet._
+
 ## Non-curated mechanical rows (CI / docs / build / test-only)
 
 - `27788c5941de` 2022-02-04 [CI_ONLY_ACCOUNTED] GIT-specific settings, with CI setup and github workflow for Ubuntu, Windows and Macos
