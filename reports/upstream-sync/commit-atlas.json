@@ -19009,10 +19009,10 @@
    "action": "Fix SEGFAULT when checking BY VALUE arguments of a prototype with ANY LENGTH (checker robustness)",
    "behavior": "Fix SEGFAULT in checking prototype arguments",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "Prototype units recognized (never main; CALL fails closed); the C segfault class is inapplicable to Rust; ANY LENGTH checks are inside the prototype boundary",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "f2531db27e639fad5b4d77757698ce7211394e34",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -19124,10 +19124,10 @@
    "action": "Fix VALUE ALL \"-\" in SCREEN SECTION (literal handling)",
    "behavior": "Fix bugs:#947: VALUE ALL \"-\" not working in SCREEN SECTION",
    "court": "GNURUST.UPSTREAM.FRONTEND-SYNC.1",
-   "residual": "",
+   "residual": "VALUE ALL implemented for every VALUE clause (Tok::AllLiteral, oracle-matched repeat-fill); numeric corner recorded",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "f2531db27e639fad5b4d77757698ce7211394e34",
+   "integrated": true,
    "lane_adoption": false
   },
   {

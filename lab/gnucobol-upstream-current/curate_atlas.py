@@ -509,11 +509,15 @@ E("7b6995042c4d224d7aed2827387278334b531d17", "RUNTIME_PORTED",
 
 E("14f0d0908d985b7747ddcac00d8fbfc06092f1c4", "FRONTEND_REIMPLEMENTED",
   "Fix SEGFAULT when checking BY VALUE arguments of a prototype with ANY LENGTH (checker robustness)",
-  "Fix SEGFAULT in checking prototype arguments", "")
+  "Fix SEGFAULT in checking prototype arguments",
+  "Prototype units recognized (never main; CALL fails closed); the C segfault class is inapplicable to Rust; ANY LENGTH checks are inside the prototype boundary",
+  evidence="f2531db27e639fad5b4d77757698ce7211394e34")
 
 E("61479ba0c7816ce62d9d559cce977f601d3dccc7", "FRONTEND_REIMPLEMENTED",
   "Fix VALUE ALL \"-\" in SCREEN SECTION (literal handling)",
-  "Fix bugs:#947: VALUE ALL \"-\" not working in SCREEN SECTION", "")
+  "Fix bugs:#947: VALUE ALL \"-\" not working in SCREEN SECTION",
+  "VALUE ALL implemented for every VALUE clause (Tok::AllLiteral, oracle-matched repeat-fill); numeric corner recorded",
+  evidence="f2531db27e639fad5b4d77757698ce7211394e34")
 
 E("300b542f3caab9dac639e3eb62f60fdedb6c10a2", "NOT_APPLICABLE_WITH_PROOF",
   "Verify in Phase 2: fileio refactoring (native C internals); no candidate-visible behavior expected",
