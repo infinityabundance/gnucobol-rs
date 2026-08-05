@@ -578,13 +578,15 @@ E("8e2ec25c26bcb09cb520431ee875bc2a13ddcc2d", "RUNTIME_PORTED",
 
 E("0b22d441757efc5fa1d18e0767bb54fb31203eb1", "RUNTIME_PORTED",
   "Fix DISPLAY and ACCEPT with simple attributes SIGSEGV (candidate screen statements with attribute handling)",
-  "Fixing bugs:#913 DISPLAY and ACCEPT with simple attributes SIGSEGV", "")
+  "Fixing bugs:#913 DISPLAY and ACCEPT with simple attributes SIGSEGV",
+  "screenio parms NULL guard is C-internal to a screen path the candidate does not model (pure byte display/accept); the cob_unlock LOCKED revert is integrated with 62b39805c",
+  evidence="ccf13403cfdb77a6671f157a56a21a45f49d4141")
 
 E("62b39805ca22be04c822267d2c90aaa6ef1e1610", "RUNTIME_PORTED",
   "Fix CLOSE LOCK abend on OPEN (file state handling)",
   "Fixing bugs:#914 CLOSE LOCK abends program on OPEN",
   "LOCKED state + 38/41/42/30 guards ported; indexed_close safeguards are an indexed-backend boundary",
-  evidence="ad8e5fbdef8de38da9e0f390271a7e61008ec194")
+  evidence="ccf13403cfdb77a6671f157a56a21a45f49d4141")
 
 E("04614ac7afd2b26cdd4431987996726ffaa8004b", "RUNTIME_PORTED",
   "INSPECT optimizations and syntax checks: frontend syntax validation + runtime INSPECT behavior alignment",

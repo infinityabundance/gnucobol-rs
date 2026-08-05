@@ -21153,10 +21153,10 @@
    "action": "Fix DISPLAY and ACCEPT with simple attributes SIGSEGV (candidate screen statements with attribute handling)",
    "behavior": "Fixing bugs:#913 DISPLAY and ACCEPT with simple attributes SIGSEGV",
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
-   "residual": "",
+   "residual": "screenio parms NULL guard is C-internal to a screen path the candidate does not model (pure byte display/accept); the cob_unlock LOCKED revert is integrated with 62b39805c",
    "superseded_by": null,
-   "evidence": null,
-   "integrated": false,
+   "evidence": "ccf13403cfdb77a6671f157a56a21a45f49d4141",
+   "integrated": true,
    "lane_adoption": false
   },
   {
@@ -21206,7 +21206,7 @@
    "court": "GNURUST.UPSTREAM.RUNTIME-SYNC.1",
    "residual": "LOCKED state + 38/41/42/30 guards ported; indexed_close safeguards are an indexed-backend boundary",
    "superseded_by": null,
-   "evidence": "ad8e5fbdef8de38da9e0f390271a7e61008ec194",
+   "evidence": "ccf13403cfdb77a6671f157a56a21a45f49d4141",
    "integrated": true,
    "lane_adoption": false
   },
