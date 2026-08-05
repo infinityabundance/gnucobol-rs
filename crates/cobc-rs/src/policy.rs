@@ -229,6 +229,8 @@ pub fn registry() -> Vec<Entry> {
           "include a C header in the generated C file: the candidate has no generated C (native-artifact boundary; reject honestly)"),
         e("-fdiagnostics-absolute-path", &["-fdiagnostics-absolute-path"], OptionPolicy::Translated, OptCategory::Diagnostic, false,
           "display full paths within diagnostics (upstream 140a030d5): the candidate's source-file diagnostic prefix is made absolute"),
+        e("-fprof", &["-fprof"], OptionPolicy::Translated, OptCategory::OptimizationDebug, false,
+          "profiling (upstream 7b6995042): the interpreted paragraph hooks are always present; the runtime setting COB_PROF_ENABLE activates them (the candidate has no codegen to gate)"),
         e("-ffilename-mapping", &["-ffilename-mapping", "-fno-filename-mapping"], OptionPolicy::AcceptedProvenNoOp, OptCategory::IncludeCopybook, false,
           "case-insensitive file mapping: the candidate resolves copybooks case-sensitively on the filesystem; recorded as no-op for the suite"),
         e("-ffold-copy", &["-ffold-copy"], OptionPolicy::AcceptedProvenNoOp, OptCategory::IncludeCopybook, true,

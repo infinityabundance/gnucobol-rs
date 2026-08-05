@@ -259,6 +259,11 @@ fn apply_translated(
                     .push(("defaultbyte".to_string(), v.to_string()));
             }
         }
+        "-fprof" => {
+            // upstream 7b6995042: -fprof gates the generated profiling calls; the candidate's
+            // paragraph hooks are always present and COB_PROF_ENABLE activates them, so the flag
+            // is recorded (translated) and needs no per-invocation state.
+        }
         "--version" | "--info" | "--dumpversion" | "--runtime-conf" | "--help" => {
             p.mode = Mode::Info;
             p.info_request = Some(canonical.to_string());

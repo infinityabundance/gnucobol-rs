@@ -222,6 +222,65 @@ fn defines_are_applied_as_preprocessor_symbols() {
 }
 
 #[test]
+fn profiling_report_is_deterministic_with_cob_prof_env() {
+    // Upstream 7b6995042: -fprof + COB_PROF_ENABLE=1 produce a per-procedure report in
+    // COB_PROF_FORMAT; under COB_IS_RUNNING_IN_TESTMODE the clock advances a fixed 1 ms per tick
+    // (deterministic) and %I prints 123456. The candidate's paragraph hooks are the interpreted
+    // equivalent of the generated cob_prof_function_call calls.
+    let d = tempfile::tempdir().unwrap();
+    write(
+        d.path(),
+        "prog.cob",
+        r#"       IDENTIFICATION DIVISION.
+       PROGRAM-ID. P.
+       PROCEDURE DIVISION.
+       PARA-A.
+           DISPLAY "A".
+       PARA-B.
+           DISPLAY "B".
+           STOP RUN.
+"#,
+    );
+    let o = run_in(d.path(), &["-x", "-o", "prog", "-fprof", "prog.cob"]);
+    assert_eq!(
+        o.status.code(),
+        Some(0),
+        "build with -fprof: {}",
+        err_str(&o)
+    );
+    let report = d.path().join("prof.csv");
+    let mut cmd = Command::new(d.path().join("prog"));
+    cmd.current_dir(d.path())
+        .env("COB_PROF_ENABLE", "1")
+        .env("COB_PROF_FILE", report.to_str().unwrap())
+        .env("COB_PROF_FORMAT", "%p,%n,%i")
+        .env("COB_IS_RUNNING_IN_TESTMODE", "1");
+    let run = cmd.output().unwrap();
+    assert_eq!(run.status.code(), Some(0));
+    assert_eq!(out_str(&run).trim(), "A\nB");
+    let text = std::fs::read_to_string(&report).unwrap();
+    // header line, then one line per entered paragraph with its call count and the test-mode pid
+    assert!(text.contains("paragraph,ncalls,pid"), "header: {text}");
+    assert!(
+        text.contains("PARA-A,1,123456"),
+        "PARA-A counted once: {text}"
+    );
+    assert!(
+        text.contains("PARA-B,1,123456"),
+        "PARA-B counted once: {text}"
+    );
+    // control: without COB_PROF_ENABLE no report is written
+    let report2 = d.path().join("noprof.csv");
+    let mut cmd2 = Command::new(d.path().join("prog"));
+    cmd2.current_dir(d.path())
+        .env("COB_PROF_FILE", report2.to_str().unwrap())
+        .env("COB_PROF_FORMAT", "%p,%n");
+    let run2 = cmd2.output().unwrap();
+    assert_eq!(run2.status.code(), Some(0));
+    assert!(!report2.exists(), "no report without COB_PROF_ENABLE");
+}
+
+#[test]
 fn copy_option_prepends_copybook_before_preprocessing() {
     // Upstream e36a124b2: `--copy <file>` pre-copies the file's text at the beginning of the
     // source, before parsing/preprocessing (the use case is REPLACEments and prototypes). The

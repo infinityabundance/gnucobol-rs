@@ -727,10 +727,15 @@ pub fn run_program_redirected(
     ARG_NUMBER_REG.with(|r| *r.borrow_mut() = 0);
     let mut fields = build_program_fields(main, &ctx)?;
     reset_exception(); // a fresh run starts with no raised exception
+                       // Profiling (upstream 7b6995042): the runtime setting activates it; the paragraph hooks below
+                       // are the interpreted equivalent of the generated cob_prof_function_call calls.
+    let env_get = |k: &str| std::env::var(k).ok();
+    crate::profiling::prof_start(&crate::profiling::prof_config(&env_get));
     run_program_body(main, &main_name, &ctx, &mut fields, &mut out)?;
     let rc = read_return_code(&fields);
     let printer = ctx.printer.borrow().clone();
     dump_file_store(&ctx, &fields);
+    crate::profiling::prof_report(&env_get, &source_file_name());
     Ok((out, printer, rc))
 }
 
@@ -4549,6 +4554,7 @@ fn run_program_body(
         }
     }
     // restore the caller's paragraph table (normal return; an error aborts the whole run anyway).
+    prof_end_body();
     CUR_PARAS.with(|c| {
         *c.borrow_mut() = prev_paras;
     });
@@ -4568,6 +4574,46 @@ fn run_program_body(
         s.borrow_mut().pop();
     });
     Ok(())
+}
+
+/// The currently-executing paragraph for profiling (upstream 7b6995042's procedure stack, the
+/// interpreted equivalent). `prof_switch` fires at each paragraph label in the run stream; the
+/// runtime setting (COB_PROF_ENABLE) decides whether anything accumulates.
+thread_local! {
+    static PROF_CUR: std::cell::RefCell<Option<crate::profiling::ProfProc>> =
+        const { std::cell::RefCell::new(None) };
+}
+
+/// A paragraph label in the run stream: leave the current paragraph (crediting its time), enter
+/// the new one (upstream cob_prof_enter_procedure / cob_prof_exit_procedure).
+fn prof_switch(name: &str, pos: usize) {
+    let new = crate::profiling::ProfProc {
+        module: PROGRAM_STACK
+            .with(|s| s.borrow().last().cloned())
+            .unwrap_or_default(),
+        paragraph: name.to_string(),
+        file: source_file_name(),
+        line: CUR_PROC_LINES
+            .with(|l| l.borrow().get(pos).copied())
+            .unwrap_or(0),
+    };
+    if let Some(cur) = PROF_CUR.with(|c| c.borrow().clone()) {
+        if cur != new {
+            crate::profiling::prof_exit(&cur);
+            PROF_CUR.with(|c| *c.borrow_mut() = Some(new.clone()));
+            crate::profiling::prof_enter(new);
+        }
+    } else {
+        PROF_CUR.with(|c| *c.borrow_mut() = Some(new.clone()));
+        crate::profiling::prof_enter(new);
+    }
+}
+
+/// A program body ended: close the current paragraph's accumulation.
+fn prof_end_body() {
+    if let Some(cur) = PROF_CUR.with(|c| c.borrow_mut().take()) {
+        crate::profiling::prof_exit(&cur);
+    }
 }
 
 /// Map each PROCEDURE DIVISION paragraph/section label -> the token index of its first statement. A label
@@ -4818,6 +4864,7 @@ fn run_block(
                     && !STMT_VERBS.contains(&w.as_str())
                     && !SCOPE_ENDERS.contains(&w.as_str())
                 {
+                    prof_switch(w, *pos);
                     *pos += 1;
                     return Ok(false);
                 }

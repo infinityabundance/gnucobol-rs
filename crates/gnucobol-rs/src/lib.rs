@@ -40,85 +40,86 @@
 
 #![forbid(unsafe_code)]
 
-pub mod arith;
-pub mod cconv;
-pub mod cob_decimal;
-pub mod float;
-pub mod gmp;
-pub mod int_pow;
-pub mod logical;
-pub mod accessors;
-pub mod call;
-pub mod common;
-pub mod common_alloc;
-pub mod common_exception;
-pub mod common_misc;
-pub mod common_cfg;
-pub mod common_datetime;
-pub mod common_env;
-pub mod common_trace;
-pub mod common_runerr;
-pub mod common_configload;
-pub mod common_stack;
-pub mod common_module;
-pub mod common_term;
-pub mod common_dump;
-pub mod common_cmdline;
-pub mod common_print;
-pub mod common_runtimeconf;
-pub mod common_proc;
-pub mod common_sign;
-pub mod common_allocate;
-pub mod common_signal;
-pub mod strings;
-pub mod cobgetopt;
-pub mod mpf;
-pub mod packed;
-pub mod file_flow_slice;
-pub mod file_seq;
-pub mod fileio;
-pub mod initialize;
-pub mod if_eval;
-pub mod if_numeric;
-pub mod inspect;
-pub mod frontend;
 pub mod accept_display;
-pub mod intrinsic;
-pub mod size_error;
-pub mod string_ops;
-pub mod table_slice;
-pub mod termio;
+pub mod accessors;
+pub mod arith;
 pub mod attr;
 mod binary;
-pub mod cond;
+pub mod call;
+pub mod cconv;
 pub mod class;
-pub mod refmod;
-pub mod reportio;
-pub mod subscript;
-pub mod odo;
-pub mod index_item;
+pub mod cob_decimal;
+pub mod cobgetopt;
+pub mod common;
+pub mod common_alloc;
+pub mod common_allocate;
+pub mod common_cfg;
+pub mod common_cmdline;
+pub mod common_configload;
+pub mod common_datetime;
+pub mod common_dump;
+pub mod common_env;
+pub mod common_exception;
+pub mod common_misc;
+pub mod common_module;
+pub mod common_print;
+pub mod common_proc;
+pub mod common_runerr;
+pub mod common_runtimeconf;
+pub mod common_sign;
+pub mod common_signal;
+pub mod common_stack;
+pub mod common_term;
+pub mod common_trace;
+pub mod cond;
 pub mod copybook;
+pub mod dialect;
 pub mod ebcdic;
 pub mod edited;
 pub mod error;
+pub mod file_flow_slice;
+pub mod file_seq;
+pub mod fileio;
+pub mod float;
+pub mod frontend;
+pub mod gmp;
+pub mod if_eval;
+pub mod if_numeric;
+pub mod index_item;
 pub mod init;
+pub mod initialize;
+pub mod inspect;
+pub mod int_pow;
+pub mod intrinsic;
 pub mod layout;
+pub mod logical;
 pub mod mlio;
 pub mod move_ops;
+pub mod mpf;
+pub mod odo;
+pub mod packed;
 pub mod perform_slice;
+pub mod pic;
+pub mod profiling;
+pub mod refmod;
+pub mod reportio;
 pub mod screenio;
+pub mod screenio_accept;
 pub mod screenio_color;
+pub mod screenio_curses;
+pub mod screenio_display;
+pub mod screenio_edit;
 pub mod screenio_field;
 pub mod screenio_geom;
 pub mod screenio_sys;
-pub mod screenio_curses;
-pub mod screenio_display;
-pub mod screenio_accept;
-pub mod screenio_edit;
 pub mod search;
-pub mod dialect;
-pub mod pic;
 mod sign;
+pub mod size_error;
+pub mod string_ops;
+pub mod strings;
+pub mod subscript;
+pub mod table_slice;
+pub mod termio;
 pub mod value;
 
 pub use arith::{cob_arith, ArithError, Op, Round};
@@ -127,25 +128,31 @@ pub use attr::{
     COB_FLAG_NO_SIGN_NIBBLE, COB_FLAG_REAL_BINARY, COB_FLAG_SIGN_LEADING, COB_FLAG_SIGN_SEPARATE,
     COB_TYPE_NUMERIC_BINARY, COB_TYPE_NUMERIC_DISPLAY, COB_TYPE_NUMERIC_PACKED,
 };
+pub use class::{
+    is_alphabetic, is_alphabetic_lower, is_alphabetic_upper, is_numeric, is_numeric_sign_leading,
+    is_numeric_sign_leading_separate, is_numeric_sign_trailing_separate,
+    is_numeric_signed_trailing,
+};
 pub use cond::{
-    apply_set_88_true, eval_88, set_88_true, set_88_false, CondLit, CondValue, Condition, ConditionError,
-    ConditionSetError,
+    apply_set_88_true, eval_88, set_88_false, set_88_true, CondLit, CondValue, Condition,
+    ConditionError, ConditionSetError,
 };
 pub use copybook::{expand, CopyError, CopyResolver, Expanded};
-pub use ebcdic::{decode_display, decode_display_bytes, ebcdic_collation, translate_byte, CodePage, EbcdicError};
-pub use refmod::{apply_ref_mod, ref_mod, ref_mod_to_end, RefModError};
-pub use subscript::{element_1d, element_2d, table_element, SubscriptError};
-pub use odo::{odo_element, odo_used_length, OdoError};
+pub use ebcdic::{
+    decode_display, decode_display_bytes, ebcdic_collation, translate_byte, CodePage, EbcdicError,
+};
+pub use edited::{decode_edited, edited_size, encode_edited, EditedDecode, EditedError};
+pub use error::DecimalError;
 pub use index_item::{
     index_store, index_value, set_index_down_by, set_index_to, set_index_up_by, INDEX_SIZE,
 };
-pub use class::{is_alphabetic, is_alphabetic_lower, is_alphabetic_upper, is_numeric, is_numeric_sign_leading, is_numeric_sign_leading_separate, is_numeric_sign_trailing_separate, is_numeric_signed_trailing};
-pub use edited::{decode_edited, edited_size, encode_edited, EditedDecode, EditedError};
-pub use error::DecimalError;
 pub use init::{value_image, InitError, Val, ValueItem};
 pub use layout::{lay_out, lay_out_dialect, record_used_length, Item, Laid, LayoutError, Odo};
 pub use move_ops::cob_move;
+pub use odo::{odo_element, odo_used_length, OdoError};
 pub use pic::{build_field, PicError, PicField, Usage};
+pub use refmod::{apply_ref_mod, ref_mod, ref_mod_to_end, RefModError};
+pub use subscript::{element_1d, element_2d, table_element, SubscriptError};
 pub use value::Decimal;
 
 /// Maximum decimal digits, as emitted by the built oracle's `selfcheck` (`GNURUST.NUMCONST.0`):
@@ -582,9 +589,25 @@ mod tests {
     fn binary_to_alphanumeric_magnitude() {
         // MOVE binary -> alphanumeric: the magnitude digit string, left-justified space-padded (was blank).
         let bin = 1234u16.to_le_bytes();
-        let battr = FieldAttr { field_type: 0x11, digits: 4, scale: 0, flags: 0 };
+        let battr = FieldAttr {
+            field_type: 0x11,
+            digits: 4,
+            scale: 0,
+            flags: 0,
+        };
         let mut aln = [b'?'; 6];
-        cob_move(&bin, &battr, &mut aln, &FieldAttr { field_type: 0x21, digits: 6, scale: 0, flags: 0 }).unwrap();
+        cob_move(
+            &bin,
+            &battr,
+            &mut aln,
+            &FieldAttr {
+                field_type: 0x21,
+                digits: 6,
+                scale: 0,
+                flags: 0,
+            },
+        )
+        .unwrap();
         assert_eq!(&aln, b"1234  ");
     }
 
@@ -602,7 +625,12 @@ mod tests {
         // a numeric-EDITED destination (0x24) is not a cob_move leaf (the front-end does editing) -> fails closed.
         let src = [0x01, 0x2c];
         let mut dst = [0u8; 4];
-        let edited = FieldAttr { field_type: 0x24, digits: 3, scale: 0, flags: 0 };
+        let edited = FieldAttr {
+            field_type: 0x24,
+            digits: 3,
+            scale: 0,
+            flags: 0,
+        };
         let err = cob_move(&src, &packed(3, 0, true), &mut dst, &edited).unwrap_err();
         assert!(matches!(err, DecimalError::UnsupportedConversion { .. }));
     }
@@ -640,7 +668,11 @@ pub fn __fuzz_string_ops(data: &[u8]) {
     let p = (data.first().copied().unwrap_or(1) as usize % 8) + 1;
     let prefill = vec![b'~'; p];
     let body: &[u8] = data.get(1..).unwrap_or(&[]);
-    let _ = string_ops::string_into(&prefill, &[string_ops::StringSource::Size(body)], (data.first().copied().unwrap_or(1) as usize % (p + 2)).max(1));
+    let _ = string_ops::string_into(
+        &prefill,
+        &[string_ops::StringSource::Size(body)],
+        (data.first().copied().unwrap_or(1) as usize % (p + 2)).max(1),
+    );
     let delim = data.first().map(std::slice::from_ref);
     let _ = string_ops::unstring(body, delim, &[2usize, 3, 1], 1);
 }
@@ -653,8 +685,20 @@ pub fn __fuzz_initialize(data: &[u8]) {
     let mut off = 0usize;
     for ch in data.chunks(2).take(8) {
         let size = (ch[0] as usize % 4) + 1;
-        let category = match ch[0] % 4 { 0 => InitCategory::Alphanumeric, 1 => InitCategory::NumericDisplay, 2 => InitCategory::Packed, _ => InitCategory::Binary };
-        fields.push(InitField { offset: off, size, category, signed: ch[0] & 8 == 0, is_filler: ch[0] & 16 == 0, is_redefiner: ch.get(1).is_some_and(|b| b & 1 == 0) });
+        let category = match ch[0] % 4 {
+            0 => InitCategory::Alphanumeric,
+            1 => InitCategory::NumericDisplay,
+            2 => InitCategory::Packed,
+            _ => InitCategory::Binary,
+        };
+        fields.push(InitField {
+            offset: off,
+            size,
+            category,
+            signed: ch[0] & 8 == 0,
+            is_filler: ch[0] & 16 == 0,
+            is_redefiner: ch.get(1).is_some_and(|b| b & 1 == 0),
+        });
         off += size;
     }
     let prefill = vec![0xAAu8; off];
@@ -664,14 +708,28 @@ pub fn __fuzz_initialize(data: &[u8]) {
 #[cfg(feature = "fuzzing")]
 #[doc(hidden)]
 pub fn __fuzz_inspect(data: &[u8]) {
-    if data.len() < 3 { return; }
+    if data.len() < 3 {
+        return;
+    }
     let pat = &data[0..1];
     let to = &data[1..2];
     let target = &data[2..];
     let _ = inspect::inspect_tallying(target, inspect::TallyMode::All(pat), inspect::Region::All);
-    let _ = inspect::inspect_tallying(target, inspect::TallyMode::Leading(pat), inspect::Region::Before(to));
-    let _ = inspect::inspect_tallying(target, inspect::TallyMode::Characters, inspect::Region::After(pat));
-    let _ = inspect::inspect_replacing(target, inspect::ReplaceMode::All(pat, to), inspect::Region::All);
+    let _ = inspect::inspect_tallying(
+        target,
+        inspect::TallyMode::Leading(pat),
+        inspect::Region::Before(to),
+    );
+    let _ = inspect::inspect_tallying(
+        target,
+        inspect::TallyMode::Characters,
+        inspect::Region::After(pat),
+    );
+    let _ = inspect::inspect_replacing(
+        target,
+        inspect::ReplaceMode::All(pat, to),
+        inspect::Region::All,
+    );
     let _ = inspect::inspect_converting(target, pat, to, inspect::Region::After(pat));
 }
 
@@ -681,7 +739,11 @@ pub fn __fuzz_inspect(data: &[u8]) {
 #[doc(hidden)]
 pub fn __fuzz_mlio(data: &[u8]) {
     use mlio::{cob_json_generate_new, cob_xml_generate_new, MlContent, MlTree};
-    let name = if data.is_empty() { b"N".to_vec() } else { data[..data.len().min(4)].to_vec() };
+    let name = if data.is_empty() {
+        b"N".to_vec()
+    } else {
+        data[..data.len().min(4)].to_vec()
+    };
     let leaf = MlTree {
         name: name.clone(),
         attrs: vec![],
@@ -689,11 +751,21 @@ pub fn __fuzz_mlio(data: &[u8]) {
         is_suppressed: data.first().copied().unwrap_or(0) & 1 == 0,
         children: vec![],
     };
-    let tree = MlTree { name, attrs: vec![], content: MlContent::None, is_suppressed: false, children: vec![leaf] };
+    let tree = MlTree {
+        name,
+        attrs: vec![],
+        content: MlContent::None,
+        is_suppressed: false,
+        children: vec![leaf],
+    };
     let _ = cob_xml_generate_new(&tree);
     let _ = cob_json_generate_new(&tree);
     let _ = mlio::get_hex_xml_data(data);
-    let _ = mlio::get_xml_num(data, data.len() / 2, data.first().copied().unwrap_or(0) & 1 == 0);
+    let _ = mlio::get_xml_num(
+        data,
+        data.len() / 2,
+        data.first().copied().unwrap_or(0) & 1 == 0,
+    );
 }
 
 /// Fuzz the CBL_ logic/bit builtins (`GNURUST.COMMON.CBL.1`): arbitrary buffers + lengths never panic.
@@ -727,7 +799,13 @@ pub fn __fuzz_common_cbl(data: &[u8]) {
 pub fn __fuzz_common_numcheck(data: &[u8]) {
     let ty = data.first().copied().unwrap_or(0);
     let _ = common::explain_field_type(ty, data.len() & 1 == 0, data.len() & 2 == 0);
-    let _ = common::cob_check_numeric(data.len() & 4 == 0, "X", "NUMERIC DISPLAY", data, data.len() & 8 == 0);
+    let _ = common::cob_check_numeric(
+        data.len() & 4 == 0,
+        "X",
+        "NUMERIC DISPLAY",
+        data,
+        data.len() & 8 == 0,
+    );
 }
 
 /// Fuzz the runtime bounds-check message generators (`GNURUST.COMMON.BOUNDCHECK.1`): arbitrary indices,
@@ -736,7 +814,13 @@ pub fn __fuzz_common_numcheck(data: &[u8]) {
 #[doc(hidden)]
 pub fn __fuzz_common_boundcheck(data: &[u8]) {
     let g = |o: usize| data.get(o).copied().unwrap_or(0) as i32 - 64;
-    let _ = common::cob_check_subscript(g(0), g(1), "F", data.first().copied().unwrap_or(0) & 1 == 0, data.first().copied().unwrap_or(0) & 2 == 0);
+    let _ = common::cob_check_subscript(
+        g(0),
+        g(1),
+        "F",
+        data.first().copied().unwrap_or(0) & 1 == 0,
+        data.first().copied().unwrap_or(0) & 2 == 0,
+    );
     let _ = common::cob_check_odo(g(2), g(3), g(4), "T", "N");
     let _ = common::cob_check_ref_mod(g(5), g(6), g(7), "F");
     let _ = common::cob_check_ref_mod_minimal("F", g(0), g(1));
@@ -762,8 +846,18 @@ pub fn __fuzz_screenio(data: &[u8]) {
         _ => None,
     };
     let items = vec![
-        ScreenItem { line, column, data: payload, attr },
-        ScreenItem { line: line2, column: column2, data: data.get(4..).unwrap_or(&[]).to_vec(), attr: None },
+        ScreenItem {
+            line,
+            column,
+            data: payload,
+            attr,
+        },
+        ScreenItem {
+            line: line2,
+            column: column2,
+            data: data.get(4..).unwrap_or(&[]).to_vec(),
+            attr: None,
+        },
     ];
     let out = display_and_stop(&items);
     debug_assert!(out.starts_with(screenio::INIT_PROLOGUE));
@@ -792,7 +886,13 @@ pub fn __fuzz_screenio(data: &[u8]) {
     // columns + payloads must still yield a well-formed prologue..epilogue envelope.
     let lc1 = (data.get(1).copied().unwrap_or(1) as i32 % 70) + 1;
     let lc2 = (data.get(2).copied().unwrap_or(1) as i32 % 70) + 1;
-    let lout = screenio::two_display_line_and_stop(2, lc1, data.get(3..6).unwrap_or(&[]), lc2, data.get(6..).unwrap_or(&[]));
+    let lout = screenio::two_display_line_and_stop(
+        2,
+        lc1,
+        data.get(3..6).unwrap_or(&[]),
+        lc2,
+        data.get(6..).unwrap_or(&[]),
+    );
     debug_assert!(lout.starts_with(screenio::INIT_PROLOGUE));
     debug_assert!(lout.ends_with(screenio::TEARDOWN_EPILOGUE));
 }
@@ -889,16 +989,31 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = fileio::relative_read_next(body, &mut slot, rmax);
     let _ = fileio::relative_start(body, rmax, fileio::RelCond::Ge, key);
     // verb preconditions (GNURUST.FILEIO.VERB.1): every mode combination decides without panicking.
-    let modes = [fileio::OpenMode::Closed, fileio::OpenMode::Input, fileio::OpenMode::Output, fileio::OpenMode::Io, fileio::OpenMode::Extend];
+    let modes = [
+        fileio::OpenMode::Closed,
+        fileio::OpenMode::Input,
+        fileio::OpenMode::Output,
+        fileio::OpenMode::Io,
+        fileio::OpenMode::Extend,
+    ];
     let om = modes[data.first().copied().unwrap_or(0) as usize % 5];
-    let am = [fileio::AccessMode::Sequential, fileio::AccessMode::Random, fileio::AccessMode::Dynamic][data.first().copied().unwrap_or(0) as usize % 3];
+    let am = [
+        fileio::AccessMode::Sequential,
+        fileio::AccessMode::Random,
+        fileio::AccessMode::Dynamic,
+    ][data.first().copied().unwrap_or(0) as usize % 3];
     let _ = fileio::cob_write(om, am, body.len(), 0, rmax);
     let _ = fileio::cob_read(om, false, true, false, true, false, false);
     let _ = fileio::cob_delete(om, am, false);
     let _ = fileio::cob_start(om, am, false, true);
     // SORT comparison (GNURUST.FILEIO.SORT.1): comparing/sorting arbitrary records never panics.
     let mut keys = Vec::new();
-    fileio::cob_file_sort_init_key(&mut keys, 0, rmax, data.first().copied().unwrap_or(0) & 1 == 0);
+    fileio::cob_file_sort_init_key(
+        &mut keys,
+        0,
+        rmax,
+        data.first().copied().unwrap_or(0) & 1 == 0,
+    );
     let chunks: Vec<&[u8]> = body.chunks(rmax.max(1)).collect();
     let _ = fileio::sort_records(&chunks, &keys, None);
     // SORT engine (GNURUST.FILEIO.SORTENGINE.1): submitting arbitrary records then draining never panics
@@ -910,9 +1025,16 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     debug_assert_eq!(drained.len(), chunks.len());
     se.cob_file_sort_close();
     // CBL_GET_CURRENT_DIR (GNURUST.FILEIO.SYS.1): read-only, never panics for any flags/length.
-    let _ = fileio::cob_sys_get_current_dir(data.first().copied().unwrap_or(0) as i32, body.len() % 8192);
+    let _ = fileio::cob_sys_get_current_dir(
+        data.first().copied().unwrap_or(0) as i32,
+        body.len() % 8192,
+    );
     // cob_open/cob_close (GNURUST.FILEIO.OPEN.1): the empty-path precondition paths do no I/O.
-    let orgs = [fileio::Organization::Sequential, fileio::Organization::LineSequential, fileio::Organization::Relative];
+    let orgs = [
+        fileio::Organization::Sequential,
+        fileio::Organization::LineSequential,
+        fileio::Organization::Relative,
+    ];
     let org = orgs[data.first().copied().unwrap_or(0) as usize % 3];
     let mut cf = fileio::CobFile::new(org, fileio::AccessMode::Sequential, rmax, "");
     let _ = fileio::cob_open(&mut cf, fileio::OpenMode::Output);
@@ -922,7 +1044,12 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = fileio::cob_chk_file_mapping(body);
     let _ = fileio::cob_chk_file_env(body);
     // INDEXED store (GNURUST.FILEIO.INDEXED.1): write/read/start/rewrite/delete over arbitrary records.
-    let mut ix = fileio::IndexedStore::indexed_open(0, rmax.min(body.len().max(1)).max(1), fileio::AccessMode::Dynamic, fileio::OpenMode::Io);
+    let mut ix = fileio::IndexedStore::indexed_open(
+        0,
+        rmax.min(body.len().max(1)).max(1),
+        fileio::AccessMode::Dynamic,
+        fileio::OpenMode::Io,
+    );
     for c in body.chunks(rmax.max(1)) {
         let _ = ix.indexed_write(c);
     }
@@ -941,7 +1068,12 @@ pub fn __fuzz_lineseq(data: &[u8]) {
     let _ = env.lock_file(&mut fl, &String::from_utf8_lossy(body));
     let _ = env.unlock_file(&mut fl);
     // bdb key helpers + set_dbt + filename print (never panic for any record/key bytes)
-    let keys = vec![fileio::CobFileKey { duplicates: false, offset: 0, field_size: rmax, components: vec![] }];
+    let keys = vec![fileio::CobFileKey {
+        duplicates: false,
+        offset: 0,
+        field_size: rmax,
+        components: vec![],
+    }];
     let _ = fileio::bdb_keylen(&keys, 0);
     let _ = fileio::bdb_savekey(&keys, body, 0);
     let _ = fileio::bdb_cmpkey(&keys, body, body, 0, 0);
@@ -963,10 +1095,23 @@ pub fn __fuzz_lineseq(data: &[u8]) {
         0
     };
     fileio::cob_extfh_open(&mut cf2, fileio::OpenMode::Io, &mut callfh);
-    fileio::cob_extfh_read(&mut cf2, Some(body), data.first().copied().unwrap_or(0) as i32, &mut callfh);
-    fileio::cob_extfh_read_next(&mut cf2, data.first().copied().unwrap_or(0) as i32, &mut callfh);
+    fileio::cob_extfh_read(
+        &mut cf2,
+        Some(body),
+        data.first().copied().unwrap_or(0) as i32,
+        &mut callfh,
+    );
+    fileio::cob_extfh_read_next(
+        &mut cf2,
+        data.first().copied().unwrap_or(0) as i32,
+        &mut callfh,
+    );
     fileio::cob_extfh_write(&mut cf2, &mut callfh);
-    fileio::cob_extfh_close(&mut cf2, data.first().copied().unwrap_or(0) as i32, &mut callfh);
+    fileio::cob_extfh_close(
+        &mut cf2,
+        data.first().copied().unwrap_or(0) as i32,
+        &mut callfh,
+    );
     let mut fcd = fileio::find_fcd(&cf2);
     let _ = fileio::find_file(&fcd);
     let _ = fileio::find_fcd2(&fileio::fcd3_to_fcd2(&fcd));
@@ -1011,7 +1156,10 @@ pub fn __fuzz_intrinsic(data: &[u8]) {
         let n = (b0 as u32 % 256) + 1;
         assert_eq!(intrinsic::intrinsic_ord(intrinsic::intrinsic_char(n)), n);
         let d = (b0 as i64) + 1;
-        assert_eq!(intrinsic::intrinsic_integer_of_date(intrinsic::intrinsic_date_of_integer(d)), d);
+        assert_eq!(
+            intrinsic::intrinsic_integer_of_date(intrinsic::intrinsic_date_of_integer(d)),
+            d
+        );
     }
 }
 
@@ -1020,17 +1168,28 @@ pub fn __fuzz_intrinsic(data: &[u8]) {
 pub fn __fuzz_accept_display(data: &[u8]) {
     let (a, b) = data.split_at(data.len() / 2);
     let _ = accept_display::display_line(&[a, b]);
-    let _ = accept_display::accept_field(data, (data.first().copied().unwrap_or(0) as usize % 16) + 1);
+    let _ =
+        accept_display::accept_field(data, (data.first().copied().unwrap_or(0) as usize % 16) + 1);
     let digits: Vec<u8> = data.iter().map(|&c| b'0' + (c % 10)).take(6).collect();
-    let scale = if digits.is_empty() { 0 } else { data.first().copied().unwrap_or(0) as usize % digits.len() };
-    let _ = accept_display::display_numeric(&digits, scale, data.len() % 2 == 0, data.len() % 3 == 0);
+    let scale = if digits.is_empty() {
+        0
+    } else {
+        data.first().copied().unwrap_or(0) as usize % digits.len()
+    };
+    let _ =
+        accept_display::display_numeric(&digits, scale, data.len() % 2 == 0, data.len() % 3 == 0);
 }
 
 #[cfg(feature = "fuzzing")]
 #[doc(hidden)]
 pub fn __fuzz_size_error(data: &[u8]) {
     let int_digits: Vec<u8> = data.iter().map(|&c| b'0' + (c % 10)).take(8).collect();
-    let frac_digits: Vec<u8> = data.iter().rev().map(|&c| b'0' + (c % 10)).take(4).collect();
+    let frac_digits: Vec<u8> = data
+        .iter()
+        .rev()
+        .map(|&c| b'0' + (c % 10))
+        .take(4)
+        .collect();
     let ri = (data.first().copied().unwrap_or(0) as usize % 6) + 1;
     let rs = data.get(1).copied().unwrap_or(0) as usize % 4;
     let _ = size_error::arith_size_error(&int_digits, &frac_digits, ri, rs);
@@ -1040,14 +1199,44 @@ pub fn __fuzz_size_error(data: &[u8]) {
 #[doc(hidden)]
 pub fn __fuzz_if_eval(data: &[u8]) {
     use if_eval::{Condition, MoveStmt, Operand, Relop, SliceField};
-    let fields = [SliceField { name: "A", offset: 0, size: 3 }, SliceField { name: "T", offset: 3, size: 4 }];
+    let fields = [
+        SliceField {
+            name: "A",
+            offset: 0,
+            size: 3,
+        },
+        SliceField {
+            name: "T",
+            offset: 3,
+            size: 4,
+        },
+    ];
     let mut rec = vec![b' '; 7];
-    for (i, &b) in data.iter().take(7).enumerate() { rec[i] = b; }
-    let op = match data.first().copied().unwrap_or(0) % 6 { 0 => Relop::Eq, 1 => Relop::Ne, 2 => Relop::Gt, 3 => Relop::Lt, 4 => Relop::Ge, _ => Relop::Le };
+    for (i, &b) in data.iter().take(7).enumerate() {
+        rec[i] = b;
+    }
+    let op = match data.first().copied().unwrap_or(0) % 6 {
+        0 => Relop::Eq,
+        1 => Relop::Ne,
+        2 => Relop::Gt,
+        3 => Relop::Lt,
+        4 => Relop::Ge,
+        _ => Relop::Le,
+    };
     let lit = data.get(1..3).unwrap_or(b"AB");
-    let cond = Condition { left: Operand::Field("A"), op, right: Operand::Literal(lit) };
-    let then = [MoveStmt { source: Operand::Literal(b"YES"), target: "T" }];
-    let els = [MoveStmt { source: Operand::Field("A"), target: "T" }];
+    let cond = Condition {
+        left: Operand::Field("A"),
+        op,
+        right: Operand::Literal(lit),
+    };
+    let then = [MoveStmt {
+        source: Operand::Literal(b"YES"),
+        target: "T",
+    }];
+    let els = [MoveStmt {
+        source: Operand::Field("A"),
+        target: "T",
+    }];
     let _ = if_eval::eval_if(&rec, &fields, &cond, &then, &els);
     let whens: Vec<(&[u8], &[MoveStmt])> = vec![(lit, &then[..])];
     let _ = if_eval::eval_evaluate(&rec, &fields, "A", &whens, &els);
@@ -1059,14 +1248,44 @@ pub fn __fuzz_if_numeric(data: &[u8]) {
     use if_eval::{Relop, SliceField};
     use if_numeric::MoveNum;
     use perform_slice::NumCond;
-    let fields = [SliceField { name: "N", offset: 0, size: 3 }, SliceField { name: "F", offset: 3, size: 2 }];
+    let fields = [
+        SliceField {
+            name: "N",
+            offset: 0,
+            size: 3,
+        },
+        SliceField {
+            name: "F",
+            offset: 3,
+            size: 2,
+        },
+    ];
     let mut rec = vec![b'0'; 5];
-    for (i, &b) in data.iter().take(5).enumerate() { rec[i] = b'0' + (b % 10); }
-    let op = match data.first().copied().unwrap_or(0) % 6 { 0 => Relop::Eq, 1 => Relop::Ne, 2 => Relop::Gt, 3 => Relop::Lt, 4 => Relop::Ge, _ => Relop::Le };
+    for (i, &b) in data.iter().take(5).enumerate() {
+        rec[i] = b'0' + (b % 10);
+    }
+    let op = match data.first().copied().unwrap_or(0) % 6 {
+        0 => Relop::Eq,
+        1 => Relop::Ne,
+        2 => Relop::Gt,
+        3 => Relop::Lt,
+        4 => Relop::Ge,
+        _ => Relop::Le,
+    };
     let v = data.get(1).copied().unwrap_or(0) as i64;
-    let cond = NumCond { field: "N", op, value: v };
-    let then = [MoveNum { value: 1, target: "F" }];
-    let els = [MoveNum { value: 9, target: "F" }];
+    let cond = NumCond {
+        field: "N",
+        op,
+        value: v,
+    };
+    let then = [MoveNum {
+        value: 1,
+        target: "F",
+    }];
+    let els = [MoveNum {
+        value: 9,
+        target: "F",
+    }];
     let _ = if_numeric::eval_if_numeric(&rec, &fields, &cond, &then, &els);
     let whens: Vec<(i64, &[MoveNum])> = vec![(v, &then[..])];
     let _ = if_numeric::eval_evaluate_numeric(&rec, &fields, "N", &whens, &els);
@@ -1077,15 +1296,52 @@ pub fn __fuzz_if_numeric(data: &[u8]) {
 pub fn __fuzz_perform_slice(data: &[u8]) {
     use if_eval::{Relop, SliceField};
     use perform_slice::{AddOp, NumCond, PerformForm};
-    let fields = [SliceField { name: "C", offset: 0, size: 3 }, SliceField { name: "I", offset: 3, size: 3 }];
+    let fields = [
+        SliceField {
+            name: "C",
+            offset: 0,
+            size: 3,
+        },
+        SliceField {
+            name: "I",
+            offset: 3,
+            size: 3,
+        },
+    ];
     let rec = vec![b'0'; 6];
     // body always makes progress (amount >= 1) and bounds are small -> guaranteed termination.
-    let body = [AddOp { target: "C", amount: (data.get(1).copied().unwrap_or(0) as i64 % 4) + 1 }];
+    let body = [AddOp {
+        target: "C",
+        amount: (data.get(1).copied().unwrap_or(0) as i64 % 4) + 1,
+    }];
     let n = data.first().copied().unwrap_or(0) as i64 % 20;
     let _ = perform_slice::eval_perform(&rec, &fields, &PerformForm::Times(n), &body);
-    let _ = perform_slice::eval_perform(&rec, &fields, &PerformForm::Until(NumCond { field: "C", op: Relop::Ge, value: n }), &body);
+    let _ = perform_slice::eval_perform(
+        &rec,
+        &fields,
+        &PerformForm::Until(NumCond {
+            field: "C",
+            op: Relop::Ge,
+            value: n,
+        }),
+        &body,
+    );
     let by = (data.get(2).copied().unwrap_or(0) as i64 % 3) + 1;
-    let _ = perform_slice::eval_perform(&rec, &fields, &PerformForm::Varying { var: "I", from: 1, by, until: NumCond { field: "I", op: Relop::Gt, value: n } }, &body);
+    let _ = perform_slice::eval_perform(
+        &rec,
+        &fields,
+        &PerformForm::Varying {
+            var: "I",
+            from: 1,
+            by,
+            until: NumCond {
+                field: "I",
+                op: Relop::Gt,
+                value: n,
+            },
+        },
+        &body,
+    );
 }
 
 #[cfg(feature = "fuzzing")]
@@ -1093,14 +1349,76 @@ pub fn __fuzz_perform_slice(data: &[u8]) {
 pub fn __fuzz_file_flow_slice(data: &[u8]) {
     use file_flow_slice::{FilterCond, LoopOp};
     use if_eval::{Relop, SliceField};
-    let rf = [SliceField { name: "R-ST", offset: 0, size: 1 }, SliceField { name: "R-AMT", offset: 1, size: 3 }];
-    let wf = [SliceField { name: "CNT", offset: 0, size: 3 }, SliceField { name: "SM", offset: 3, size: 5 }];
-    let body = [LoopOp::Count("CNT"), LoopOp::SumField { field: "R-AMT", into: "SM" }];
-    let _ = file_flow_slice::eval_read_loop(data, file_seq::FileOrg::RecordSequential, 4, &rf, b"00000000", &wf, &body);
-    let cn = FilterCond::Numeric { field: "R-AMT", op: Relop::Ge, value: data.first().copied().unwrap_or(0) as i64 };
-    let _ = file_flow_slice::eval_filter_loop(data, file_seq::FileOrg::RecordSequential, 4, &rf, b"00000000", &wf, &cn, &body);
-    let ca = FilterCond::Alpha { field: "R-ST", op: Relop::Eq, value: data.get(0..1).unwrap_or(b"A") };
-    let _ = file_flow_slice::eval_filter_loop(data, file_seq::FileOrg::LineSequential, 4, &rf, b"00000000", &wf, &ca, &body);
+    let rf = [
+        SliceField {
+            name: "R-ST",
+            offset: 0,
+            size: 1,
+        },
+        SliceField {
+            name: "R-AMT",
+            offset: 1,
+            size: 3,
+        },
+    ];
+    let wf = [
+        SliceField {
+            name: "CNT",
+            offset: 0,
+            size: 3,
+        },
+        SliceField {
+            name: "SM",
+            offset: 3,
+            size: 5,
+        },
+    ];
+    let body = [
+        LoopOp::Count("CNT"),
+        LoopOp::SumField {
+            field: "R-AMT",
+            into: "SM",
+        },
+    ];
+    let _ = file_flow_slice::eval_read_loop(
+        data,
+        file_seq::FileOrg::RecordSequential,
+        4,
+        &rf,
+        b"00000000",
+        &wf,
+        &body,
+    );
+    let cn = FilterCond::Numeric {
+        field: "R-AMT",
+        op: Relop::Ge,
+        value: data.first().copied().unwrap_or(0) as i64,
+    };
+    let _ = file_flow_slice::eval_filter_loop(
+        data,
+        file_seq::FileOrg::RecordSequential,
+        4,
+        &rf,
+        b"00000000",
+        &wf,
+        &cn,
+        &body,
+    );
+    let ca = FilterCond::Alpha {
+        field: "R-ST",
+        op: Relop::Eq,
+        value: data.get(0..1).unwrap_or(b"A"),
+    };
+    let _ = file_flow_slice::eval_filter_loop(
+        data,
+        file_seq::FileOrg::LineSequential,
+        4,
+        &rf,
+        b"00000000",
+        &wf,
+        &ca,
+        &body,
+    );
 }
 
 #[cfg(feature = "fuzzing")]
@@ -1109,7 +1427,11 @@ pub fn __fuzz_table_slice(data: &[u8]) {
     use if_eval::Relop;
     use table_slice::Table;
     let occurs = (data.first().copied().unwrap_or(1) as usize % 8) + 1;
-    let t = Table { base_offset: 0, elem_size: 3, occurs };
+    let t = Table {
+        base_offset: 0,
+        elem_size: 3,
+        occurs,
+    };
     let by = (data.get(1).copied().unwrap_or(0) as i64 % 3) + 1;
     let limit = data.get(2).copied().unwrap_or(0) as i64 % 10;
     let _ = table_slice::eval_table_loop(data, &t, 1, by, limit, None);
@@ -1123,7 +1445,12 @@ pub fn __fuzz_table_slice(data: &[u8]) {
 #[doc(hidden)]
 pub fn __fuzz_value(data: &[u8]) {
     use crate::value::Decimal;
-    for (pic, usage) in [("S9(5)", Usage::Comp), ("S9(5)", Usage::Comp5), ("S9(7)", Usage::Comp3), ("S9(5)", Usage::Display)] {
+    for (pic, usage) in [
+        ("S9(5)", Usage::Comp),
+        ("S9(5)", Usage::Comp5),
+        ("S9(7)", Usage::Comp3),
+        ("S9(5)", Usage::Display),
+    ] {
         if let Ok(f) = pic::build_field(pic, usage, false, false) {
             let _ = Decimal::from_binary(data, &f.attr);
             let _ = Decimal::from_packed(data, &f.attr);
@@ -1138,7 +1465,13 @@ pub fn __fuzz_value(data: &[u8]) {
 pub fn __fuzz_search(data: &[u8]) {
     use search::SearchTable;
     let occurs = (data.first().copied().unwrap_or(1) as usize % 8) + 1;
-    let t = SearchTable { base_offset: 0, elem_size: 3, key_offset: 0, key_size: 3, occurs };
+    let t = SearchTable {
+        base_offset: 0,
+        elem_size: 3,
+        key_offset: 0,
+        key_size: 3,
+        occurs,
+    };
     let target = data.get(1).copied().unwrap_or(0) as i64;
     let from = (data.get(2).copied().unwrap_or(0) as usize % (occurs + 2)) + 1;
     let _ = search::search_serial(data, &t, from, target);
